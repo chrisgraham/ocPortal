@@ -1332,6 +1332,28 @@ function form_input_radio($pretty_name,$description,$name,$content,$required=fal
 }
 
 /**
+ * Get the tempcode for a radio input. (You would gather together the outputs of several of these functions, then put them in as the $content in a form_input_radio function call).
+ *
+ * @param  string			The name of the radio button group this will be put in (i.e. the name the value presented here will be possibly matched against)
+ * @param  string			The value for this entry
+ * @param  boolean		Whether this entry is selected by default or not
+ * @param  mixed			The text associated with this choice (blank: just use name for text)
+ * @param  ?integer		The tab index of the field (NULL: not specified)
+ * @param  mixed			An additional long description (blank: no description)
+ * @return tempcode		The input field
+ */
+function form_input_radio_entry($name,$value,$selected=false,$text='',$tabindex=NULL,$description='')
+{
+	$tabindex=get_form_field_tabindex($tabindex);
+
+	if ((is_string($text)) && ($text=='')) $text=$name;
+
+	$selected=(filter_form_field_default($name,$selected?'1':'')=='1');
+
+	return do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array('_GUID'=>'e2fe4ba6e8b3f705651dba13ea27f61d','DESCRIPTION'=>$description,'CHECKED'=>$selected,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'VALUE'=>$value,'TEXT'=>$text));
+}
+
+/**
  * Get the tempcode to choose a picture from the given list of images in the theme image system, with sub-categorisation.
  *
  * @param  mixed			A human intelligible name for this input field
@@ -1889,27 +1911,5 @@ function get_form_field_tabindex($tabindex=NULL)
 		$TABINDEX++;
 	}
 	return $tabindex;
-}
-
-/**
- * Get the tempcode for a radio input. (You would gather together the outputs of several of these functions, then put them in as the $content in a form_input_radio function call).
- *
- * @param  string			The name of the radio button group this will be put in (i.e. the name the value presented here will be possibly matched against)
- * @param  string			The value for this entry
- * @param  boolean		Whether this entry is selected by default or not
- * @param  mixed			The text associated with this choice (blank: just use name for text)
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  mixed			An additional long description (blank: no description)
- * @return tempcode		The input field
- */
-function form_input_radio_entry($name,$value,$selected=false,$text='',$tabindex=NULL,$description='')
-{
-	$tabindex=get_form_field_tabindex($tabindex);
-
-	if ((is_string($text)) && ($text=='')) $text=$name;
-
-	$selected=(filter_form_field_default($name,$selected?'1':'')=='1');
-
-	return do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array('_GUID'=>'e2fe4ba6e8b3f705651dba13ea27f61d','DESCRIPTION'=>$description,'CHECKED'=>$selected,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'VALUE'=>$value,'TEXT'=>$text));
 }
 

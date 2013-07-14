@@ -36,6 +36,7 @@ class Hook_config_club_forum_parent_forum
 			'explanation'=>'CONFIG_OPTION_club_forum_parent_forum',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'ocf_clubs',
 		);

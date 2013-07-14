@@ -101,7 +101,7 @@ function load_options()
 	{
 		if ($GLOBALS['SITE_DB']->table_exists('config'))
 		{ // LEGACY: Has to use old naming from pre v10
-			$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('the_name AS c_name','config_value AS c_value','if(the_type=\'transline\' OR the_type=\'transtext\',1,0) AS c_needs_dereference','c_set'),NULL,'',NULL,NULL,true);
+			$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('the_name AS c_name','config_value AS c_value','if(the_type=\'transline\' OR the_type=\'transtext\' OR the_type=\'comcodeline\' OR the_type=\'comcodetext\',1,0) AS c_needs_dereference','c_set'),NULL,'',NULL,NULL,true);
 			if ($CONFIG_OPTIONS_CACHE===NULL)
 				critical_error('DATABASE_FAIL');
 		} else

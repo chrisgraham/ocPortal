@@ -36,6 +36,7 @@ class Hook_config_insult_points
 			'explanation'=>'CONFIG_OPTION_insult_points',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'oc_banter',
 		);

@@ -36,6 +36,7 @@ class Hook_config_reported_posts_forum
 			'explanation'=>'CONFIG_OPTION_reported_posts_forum',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'ocf_reported_posts',
 		);

@@ -36,6 +36,7 @@ class Hook_config_max_classified_listings_per_screen
 			'explanation'=>'CONFIG_OPTION_max_classified_listings_per_screen',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'classifieds',
 		);

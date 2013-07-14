@@ -30,7 +30,7 @@ class Hook_config_newsletter_text
 	{
 		return array(
 			'human_name'=>'PAGE_TEXT',
-			'type'=>'transtext',
+			'type'=>'comcodetext',
 			'category'=>'FEATURE',
 			'group'=>'NEWSLETTER',
 			'explanation'=>'CONFIG_OPTION_newsletter_text',

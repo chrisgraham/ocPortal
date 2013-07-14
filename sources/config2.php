@@ -124,7 +124,7 @@ function set_option($name,$value,$will_be_formally_set=1)
 		$ob=object_factory('Hook_config_'.$name);
 		$option=$ob->get_details();
 
-		$needs_dereference=($option['type']=='transtext' || $option['type']=='transline')?1:0;
+		$needs_dereference=($option['type']=='transtext' || $option['type']=='transline' || $option['type']=='comcodetext' || $option['type']=='comcodeline')?1:0;
 
 		$CONFIG_OPTIONS_CACHE[$name]=array(
 			'c_name'=>$name,

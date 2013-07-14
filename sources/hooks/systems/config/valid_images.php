@@ -36,6 +36,7 @@ class Hook_config_valid_images
 			'explanation'=>'CONFIG_OPTION_valid_images',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'core_configuration',
 		);

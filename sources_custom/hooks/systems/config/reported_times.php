@@ -36,6 +36,7 @@ class Hook_config_reported_times
 			'explanation'=>'CONFIG_OPTION_reported_times',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'reported_content',
 		);

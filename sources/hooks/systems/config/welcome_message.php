@@ -30,7 +30,7 @@ class Hook_config_welcome_message
 	{
 		return array(
 			'human_name'=>'WELCOME_MESSAGE',
-			'type'=>'transtext',
+			'type'=>'comcodetext',
 			'category'=>'BLOCKS',
 			'group'=>'GREETING',
 			'explanation'=>'CONFIG_OPTION_welcome_message',

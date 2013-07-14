@@ -36,6 +36,7 @@ class Hook_config_bookings_show_warnings_for_months
 			'explanation'=>'CONFIG_OPTION_bookings_show_warnings_for_months',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'booking',
 		);

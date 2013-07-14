@@ -36,6 +36,7 @@ class Hook_config_octhief_points
 			'explanation'=>'CONFIG_OPTION_octhief_points',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'oc_thief',
 		);

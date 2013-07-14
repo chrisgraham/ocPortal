@@ -30,7 +30,7 @@ class Hook_config_closed
 	{
 		return array(
 			'human_name'=>'MESSAGE',
-			'type'=>'transtext',
+			'type'=>'comcodetext',
 			'category'=>'SITE',
 			'group'=>'CLOSED_SITE',
 			'explanation'=>'CONFIG_OPTION_closed',

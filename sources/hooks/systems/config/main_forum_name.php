@@ -36,6 +36,7 @@ class Hook_config_main_forum_name
 			'explanation'=>'CONFIG_OPTION_main_forum_name',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'core_configuration',
 		);

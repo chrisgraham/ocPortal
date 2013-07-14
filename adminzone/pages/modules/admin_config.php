@@ -316,6 +316,17 @@ class Module_admin_config
 					$explanation=do_lang_tempcode($myrow['explanation']);
 				}
 
+				if (isset($myrow['required']))
+				{
+					$required=$myrow['required'];
+				} else
+				{
+					if ($myrow['type']=='integer') $required=true;
+					elseif ($myrow['type']=='float') $required=true;
+					elseif ($myrow['type']=='list') $required=true;
+					else $required=false;
+				}
+
 				// Render field inputter
 				switch ($myrow['type'])
 				{
@@ -340,24 +351,34 @@ class Module_admin_config
 						break;
 
 					case 'integer':
-						$out.=static_evaluate_tempcode(form_input_integer($human_name,$explanation,$name,intval(get_option($name)),false));
+						$out.=static_evaluate_tempcode(form_input_integer($human_name,$explanation,$name,intval(get_option($name)),$required));
 						break;
 
-					case 'colour':
-						$out.=static_evaluate_tempcode(form_input_colour($human_name,$explanation,$name,get_option($name),false,NULL,true));
+					case 'float':
+						$out.=static_evaluate_tempcode(form_input_float($human_name,$explanation,$name,floatval(get_option($name)),$required));
 						break;
 
 					case 'line':
 					case 'transline':
-						$out.=static_evaluate_tempcode(form_input_line($human_name,$explanation,$name,get_option($name),false));
+						$out.=static_evaluate_tempcode(form_input_line($human_name,$explanation,$name,get_option($name),$required));
 						break;
 
-					case 'username':
-						$out.=static_evaluate_tempcode(form_input_username($human_name,$explanation,$name,get_option($name),false,false));
+					case 'text':
+					case 'transtext':
+						$out.=static_evaluate_tempcode(form_input_text($human_name,$explanation,$name,get_option($name),$required,NULL,true));
+						break;
+
+					case 'comcodeline':
+						$out.=static_evaluate_tempcode(form_input_line_comcode($human_name,$explanation,$name,get_option($name),$required));
+						break;
+
+					case 'comcodetext':
+						$out.=static_evaluate_tempcode(form_input_text_comcode($human_name,$explanation,$name,get_option($name),$required,NULL,true));
 						break;
 
 					case 'list':
 						$list='';
+						if (!$required) $list.=static_evaluate_tempcode(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
 						$_value=get_option($name);
 						$values=explode('|',$myrow['list_options']);
 						foreach ($values as $value)
@@ -376,25 +397,23 @@ class Module_admin_config
 						$out.=static_evaluate_tempcode(form_input_list($human_name,$explanation,$name,make_string_tempcode($list),NULL,false,false));
 						break;
 
-					case 'text':
-					case 'transtext':
-						$out.=static_evaluate_tempcode(form_input_text($human_name,$explanation,$name,get_option($name),false,NULL,true));
-						break;
-
-					case 'float':
-						$out.=static_evaluate_tempcode(form_input_float($human_name,$explanation,$name,floatval(get_option($name)),false));
-						break;
-
 					case 'tick':
 						$out.=static_evaluate_tempcode(form_input_tick($human_name,$explanation,$name,get_option($name)=='1'));
 						break;
 
+					case 'username':
+						$out.=static_evaluate_tempcode(form_input_username($human_name,$explanation,$name,get_option($name),$required,false));
+						break;
+
+					case 'colour':
+						$out.=static_evaluate_tempcode(form_input_colour($human_name,$explanation,$name,get_option($name),$required,NULL,true));
+						break;
+
 					case 'date':
-						$out.=static_evaluate_tempcode(form_input_date($human_name,$explanation,$name,false,false,false,intval(get_option($name)),40,intval(date('Y'))-20,NULL,false));
+						$out.=static_evaluate_tempcode(form_input_date($human_name,$explanation,$name,$required,false,false,intval(get_option($name)),40,intval(date('Y'))-20,NULL,false));
 						break;
 
 					case 'forum':
-					case '?forum':
 						if ((get_forum_type()=='ocf') && (addon_installed('ocf_forum')))
 						{
 							$current_setting=get_option($name);
@@ -403,23 +422,23 @@ class Module_admin_config
 								$_current_setting=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$current_setting));
 								if (is_null($_current_setting))
 								{
-									if ($myrow['type']=='?forum')
-									{
-										$current_setting=NULL;
-									} else
+									if ($required)
 									{
 										$current_setting=strval(db_get_first_id());
 										attach_message(do_lang_tempcode('FORUM_CURRENTLY_UNSET',$human_name),'notice');
+									} else
+									{
+										$current_setting=NULL;
 									}
 								} else
 								{
 									$current_setting=strval($_current_setting);
 								}
 							}
-							$out.=static_evaluate_tempcode(form_input_tree_list($human_name,$explanation,$name,NULL,'choose_forum',array(),false,$current_setting));
+							$out.=static_evaluate_tempcode(form_input_tree_list($human_name,$explanation,$name,NULL,'choose_forum',array(),$required,$current_setting));
 						} else
 						{
-							$out.=static_evaluate_tempcode(form_input_line($human_name,$explanation,$name,get_option($name),false));
+							$out.=static_evaluate_tempcode(form_input_line($human_name,$explanation,$name,get_option($name),$required));
 						}
 						break;
 
@@ -429,11 +448,13 @@ class Module_admin_config
 							$tmp_value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('c_title'=>get_option($name)));
 
 							require_code('ocf_forums2');
-							$_list=ocf_nice_get_forum_groupings(NULL,$tmp_value);
+							$_list=new ocp_tempcode();
+							if (!$required) $list->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
+							$_list->attach(ocf_nice_get_forum_groupings(NULL,$tmp_value));
 							$out.=static_evaluate_tempcode(form_input_list($human_name,$explanation,$name,$_list));
 						} else
 						{
-							$out.=static_evaluate_tempcode(form_input_line($human_name,$explanation,$name,get_option($name),false));
+							$out.=static_evaluate_tempcode(form_input_line($human_name,$explanation,$name,get_option($name),$required));
 						}
 						break;
 
@@ -443,11 +464,13 @@ class Module_admin_config
 							$tmp_value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>get_option($name)));
 
 							require_code('ocf_groups');
-							$_list=ocf_nice_get_usergroups($tmp_value);
+							$_list=new ocp_tempcode();
+							if (!$required) $list->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
+							$_list->attach(ocf_nice_get_usergroups($tmp_value));
 							$out.=static_evaluate_tempcode(form_input_list($human_name,$explanation,$name,$_list));
 						} else
 						{
-							$out.=static_evaluate_tempcode(form_input_line($human_name,$explanation,$name,get_option($name),false));
+							$out.=static_evaluate_tempcode(form_input_line($human_name,$explanation,$name,get_option($name),$required));
 						}
 						break;
 

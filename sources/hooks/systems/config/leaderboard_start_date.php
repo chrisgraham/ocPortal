@@ -36,6 +36,7 @@ class Hook_config_leaderboard_start_date
 			'explanation'=>'CONFIG_OPTION_leaderboard_start_date',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'points',
 		);

@@ -1527,7 +1527,7 @@ function version_specific()
 				require_code('hooks/systems/config/'.filter_naughty($hook));
 				$ob=object_factory('Hook_config_'.$hook);
 				$option=$ob->get_details();
-				$needs_dereference=($option['type']=='transtext' || $option['type']=='transline')?1:0;
+				$needs_dereference=($option['type']=='transtext' || $option['type']=='transline' || $option['type']=='comcodetext' || $option['type']=='comcodeline')?1:0;
 				$GLOBALS['SITE_DB']->query_update('config',array('c_needs_dereference'=>$needs_dereference),array('c_name'=>$hook),'',1);
 			}
 		}

@@ -36,6 +36,7 @@ class Hook_config_channel_update_time
 			'explanation'=>'CONFIG_OPTION_channel_update_time',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'twitter_feed_integration_block',
 		);

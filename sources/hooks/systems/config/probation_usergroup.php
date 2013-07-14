@@ -36,6 +36,7 @@ class Hook_config_probation_usergroup
 			'explanation'=>'CONFIG_OPTION_probation_usergroup',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'core_ocf',
 		);

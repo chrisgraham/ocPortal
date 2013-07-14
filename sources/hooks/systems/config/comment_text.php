@@ -30,7 +30,7 @@ class Hook_config_comment_text
 	{
 		return array(
 			'human_name'=>'COMMENT_FORM_TEXT',
-			'type'=>'transtext',
+			'type'=>'comcodetext',
 			'category'=>'FEATURE',
 			'group'=>'USER_INTERACTION_COMMENTING',
 			'explanation'=>'CONFIG_OPTION_comment_text',

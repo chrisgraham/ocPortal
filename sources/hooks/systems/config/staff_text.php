@@ -30,7 +30,7 @@ class Hook_config_staff_text
 	{
 		return array(
 			'human_name'=>'PAGE_TEXT',
-			'type'=>'transtext',
+			'type'=>'comcodetext',
 			'category'=>'SECURITY',
 			'group'=>'STAFF',
 			'explanation'=>'CONFIG_OPTION_staff_text',

@@ -36,6 +36,7 @@ class Hook_config_messaging_forum_name
 			'explanation'=>'CONFIG_OPTION_messaging_forum_name',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'staff_messaging',
 		);

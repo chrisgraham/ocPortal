@@ -36,6 +36,7 @@ class Hook_config_valid_types
 			'explanation'=>'CONFIG_OPTION_valid_types',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'core_configuration',
 		);

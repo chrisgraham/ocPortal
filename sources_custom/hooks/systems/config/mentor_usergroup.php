@@ -36,6 +36,7 @@ class Hook_config_mentor_usergroup
 			'explanation'=>'CONFIG_OPTION_mentor_usergroup',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'required'=>true,
 
 			'addon'=>'oc_best_buddy',
 		);

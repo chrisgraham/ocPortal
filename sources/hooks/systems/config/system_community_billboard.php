@@ -30,7 +30,7 @@ class Hook_config_system_community_billboard
 	{
 		return array(
 			'human_name'=>'SYSTEM_COMMUNITY_BILLBOARD',
-			'type'=>'transline',
+			'type'=>'comcodeline',
 			'category'=>'FEATURE',
 			'group'=>'COMMUNITY_BILLBOARD',
 			'explanation'=>'CONFIG_OPTION_system_community_billboard',
