@@ -594,7 +594,9 @@ class Module_admin_config
 					if (is_null($hook->get_default())) continue;
 				} else
 				{
+					$GLOBALS['REQUIRE_LANG_LOOP']=10; // LEGACY Workaround for corrupt webhost installers
 					if (is_null(@eval($myrow['eval'].';'))) continue; // @'d in case default is corrupt, don't want it to give errors forever
+					$GLOBALS['REQUIRE_LANG_LOOP']=0; // LEGACY
 				}
 			}
 
@@ -894,7 +896,9 @@ class Module_admin_config
 					if (is_null($hook->get_default())) continue;
 				} else
 				{
+					$GLOBALS['REQUIRE_LANG_LOOP']=10; // LEGACY Workaround for corrupt webhost installers
 					if (is_null(@eval($myrow['eval'].';'))) continue; // @'d in case default is corrupt, don't want it to give errors forever
+					$GLOBALS['REQUIRE_LANG_LOOP']=0; // LEGACY
 				}
 			}
 
