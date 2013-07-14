@@ -180,6 +180,8 @@ class Hook_search_ocf_members
 
 		require_lang('ocf');
 
+		$indexes=collapse_2d_complexity('i_fields','i_name',$GLOBALS['FORUM_DB']->query_select('db_meta_indices',array('i_fields','i_name'),array('i_table'=>'f_member_custom_fields')));
+
 		// Calculate our where clause (search)
 		if ($author!='')
 		{
@@ -198,6 +200,8 @@ class Hook_search_ocf_members
 		require_code('fields');
 		foreach ($rows as $i=>$row)
 		{
+			if (!array_key_exists('field_'.strval($row['id']),$indexes)) continue;
+
 			$ob=get_fields_hook($row['cf_type']);
 			list(,,$storage_type)=$ob->get_field_value_row_bits($row);
 
