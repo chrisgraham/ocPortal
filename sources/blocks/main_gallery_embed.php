@@ -35,7 +35,7 @@ class Block_main_gallery_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','param','select','video_select','zone','max','title','sort','days','render_if_empty');
+		$info['parameters']=array('ocselect','param','select','video_select','zone','max','title','sort','days','render_if_empty','as_guest');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_gallery_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],get_param_integer(\'mge_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],get_param_integer(\'mge_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -125,8 +125,10 @@ class Block_main_gallery_embed
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
-			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','r');
-			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','r');
+			$as_guest=array_key_exists('as_guest',$map)?($map['as_guest']=='1'):false;
+			$viewing_member_id=$as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():mixed();
+			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','r',$viewing_member_id);
+			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','r',$viewing_member_id);
 			$extra_join_image.=$privacy_join_image;
 			$extra_join_video.=$privacy_join_video;
 			$extra_where_image.=$privacy_where_image;
