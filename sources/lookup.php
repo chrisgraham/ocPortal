@@ -112,7 +112,7 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 		$query.='ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\'';
 	}
 	$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE '.$query);
-	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,get,post,browser,operating_system FROM '.get_table_prefix().'stats WHERE '.$query.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,s_get,post,browser,operating_system FROM '.get_table_prefix().'stats WHERE '.$query.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 
 	$out=new ocp_tempcode();
 	require_code('templates_results_table');
