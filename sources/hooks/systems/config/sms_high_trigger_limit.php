@@ -36,6 +36,7 @@ class Hook_config_sms_high_trigger_limit
 			'explanation'=>'CONFIG_OPTION_sms_high_trigger_limit',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>7,
 
 			'addon'=>'sms',
 		);

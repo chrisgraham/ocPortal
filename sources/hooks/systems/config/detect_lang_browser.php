@@ -36,6 +36,7 @@ class Hook_config_detect_lang_browser
 			'explanation'=>'CONFIG_OPTION_detect_lang_browser',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'core_configuration',
 		);

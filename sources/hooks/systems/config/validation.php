@@ -36,6 +36,7 @@ class Hook_config_validation
 			'explanation'=>'CONFIG_OPTION_validation',
 			'shared_hosting_restricted'=>'1',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'core_validation',
 		);

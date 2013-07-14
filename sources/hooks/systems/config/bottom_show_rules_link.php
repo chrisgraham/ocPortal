@@ -32,7 +32,7 @@ class Hook_config_bottom_show_rules_link
 			'human_name'=>'RULES_LINK',
 			'type'=>'tick',
 			'category'=>'THEME',
-			'group'=>'BOTTOM_LINKS',
+			'group'=>'FOOTER_LINKS',
 			'explanation'=>'CONFIG_OPTION_bottom_show_rules_link',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',

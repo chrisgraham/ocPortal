@@ -36,6 +36,7 @@ class Hook_config_maximum_image_size
 			'explanation'=>'CONFIG_OPTION_maximum_image_size',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'galleries',
 		);

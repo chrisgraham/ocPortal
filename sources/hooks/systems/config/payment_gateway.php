@@ -36,6 +36,7 @@ class Hook_config_payment_gateway
 			'explanation'=>'CONFIG_OPTION_payment_gateway',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'ecommerce',
 		);

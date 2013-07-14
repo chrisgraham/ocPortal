@@ -36,6 +36,7 @@ class Hook_config_hack_ban_threshold
 			'explanation'=>'CONFIG_OPTION_hack_ban_threshold',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'core_configuration',
 		);

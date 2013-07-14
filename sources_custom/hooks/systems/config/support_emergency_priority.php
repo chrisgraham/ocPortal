@@ -36,6 +36,7 @@ class Hook_config_support_emergency_priority
 			'explanation'=>'CONFIG_OPTION_support_emergency_priority',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>9,
 
 			'addon'=>'ocportalcom_support_credits',
 		);

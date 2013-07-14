@@ -352,6 +352,15 @@ class Module_admin_version
 				'member_id'=>'*MEMBER',
 			));
 			add_privilege('SUBMISSION','view_private_content',false,true);
+
+			rename_config_option('ocp_show_conceded_mode_link','show_conceded_mode_link');
+			rename_config_option('ocp_show_personal_adminzone_link','show_personal_adminzone_link');
+			rename_config_option('ocp_show_personal_last_visit','show_personal_last_visit');
+			rename_config_option('ocp_show_personal_sub_links','show_personal_sub_links');
+			rename_config_option('ocp_show_personal_usergroup','show_personal_usergroup');
+			rename_config_option('ocp_show_staff_page_actions','show_staff_page_actions');
+			rename_config_option('ocp_show_su','show_su');
+			rename_config_option('ocp_show_avatar','show_avatar');
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

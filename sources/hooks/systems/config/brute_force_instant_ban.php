@@ -36,6 +36,7 @@ class Hook_config_brute_force_instant_ban
 			'explanation'=>'CONFIG_OPTION_brute_force_instant_ban',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core_configuration',
 		);

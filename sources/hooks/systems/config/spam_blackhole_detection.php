@@ -36,6 +36,7 @@ class Hook_config_spam_blackhole_detection
 			'explanation'=>'CONFIG_OPTION_spam_blackhole_detection',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>3,
 
 			'addon'=>'core_configuration',
 		);

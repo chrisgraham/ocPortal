@@ -36,6 +36,7 @@ class Hook_config_ipn
 			'explanation'=>'CONFIG_OPTION_ipn',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'ecommerce',
 		);

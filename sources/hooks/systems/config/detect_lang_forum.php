@@ -36,6 +36,7 @@ class Hook_config_detect_lang_forum
 			'explanation'=>'CONFIG_OPTION_detect_lang_forum',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>3,
 
 			'addon'=>'core_configuration',
 		);

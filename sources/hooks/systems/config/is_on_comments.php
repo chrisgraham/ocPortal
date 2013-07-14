@@ -36,6 +36,7 @@ class Hook_config_is_on_comments
 			'explanation'=>'CONFIG_OPTION_is_on_comments',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core_feedback_features',
 		);

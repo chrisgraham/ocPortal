@@ -36,6 +36,7 @@ class Hook_config_video_height_setting
 			'explanation'=>'CONFIG_OPTION_video_height_setting',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'galleries',
 		);

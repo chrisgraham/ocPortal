@@ -36,6 +36,7 @@ class Hook_config_twitter_api_secret
 			'explanation'=>'CONFIG_OPTION_twitter_api_secret',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'twitter_support',
 		);

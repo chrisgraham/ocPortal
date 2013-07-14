@@ -18,7 +18,7 @@
  * @package		core_configuration
  */
 
-class Hook_config_ocp_show_personal_sub_links
+class Hook_config_show_personal_last_visit
 {
 
 	/**
@@ -29,11 +29,11 @@ class Hook_config_ocp_show_personal_sub_links
 	function get_details()
 	{
 		return array(
-			'human_name'=>'PERSONAL_SUB_LINKS',
+			'human_name'=>'LAST_HERE',
 			'type'=>'tick',
 			'category'=>'BLOCKS',
 			'group'=>'PERSONAL_BLOCK',
-			'explanation'=>'CONFIG_OPTION_ocp_show_personal_sub_links',
+			'explanation'=>'CONFIG_OPTION_show_personal_last_visit',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 
@@ -48,7 +48,7 @@ class Hook_config_ocp_show_personal_sub_links
 	 */
 	function get_default()
 	{
-		return '1';
+		return has_no_forum()?NULL:'0';
 	}
 
 }

@@ -31,7 +31,7 @@ class Hook_config_breadcrumb_crop_length
 		return array(
 			'human_name'=>'BREADCRUMB_CROP_LENGTH',
 			'type'=>'integer',
-			'category'=>'FEATURE',
+			'category'=>'SITE',
 			'group'=>'BREADCRUMBS',
 			'explanation'=>'CONFIG_OPTION_breadcrumb_crop_length',
 			'shared_hosting_restricted'=>'0',

@@ -18,7 +18,7 @@
  * @package		core_configuration
  */
 
-class Hook_config_ocp_show_personal_adminzone_link
+class Hook_config_show_personal_usergroup
 {
 
 	/**
@@ -29,11 +29,11 @@ class Hook_config_ocp_show_personal_adminzone_link
 	function get_details()
 	{
 		return array(
-			'human_name'=>'ADMIN_ZONE_LINK',
+			'human_name'=>'_USERGROUP',
 			'type'=>'tick',
 			'category'=>'BLOCKS',
 			'group'=>'PERSONAL_BLOCK',
-			'explanation'=>'CONFIG_OPTION_ocp_show_personal_adminzone_link',
+			'explanation'=>'CONFIG_OPTION_show_personal_usergroup',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 
@@ -48,7 +48,7 @@ class Hook_config_ocp_show_personal_adminzone_link
 	 */
 	function get_default()
 	{
-		return '1';
+		return has_no_forum()?NULL:'0';
 	}
 
 }

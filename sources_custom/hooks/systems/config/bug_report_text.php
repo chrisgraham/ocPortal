@@ -36,6 +36,7 @@ class Hook_config_bug_report_text
 			'explanation'=>'CONFIG_OPTION_bug_report_text',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'tester',
 		);

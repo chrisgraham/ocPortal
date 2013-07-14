@@ -36,6 +36,7 @@ class Hook_config_ticket_text
 			'explanation'=>'CONFIG_OPTION_ticket_text',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'tickets',
 		);

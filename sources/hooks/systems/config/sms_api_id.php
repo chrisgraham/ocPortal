@@ -36,6 +36,7 @@ class Hook_config_sms_api_id
 			'explanation'=>'CONFIG_OPTION_sms_api_id',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'sms',
 		);

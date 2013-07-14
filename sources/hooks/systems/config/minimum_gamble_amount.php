@@ -36,6 +36,7 @@ class Hook_config_minimum_gamble_amount
 			'explanation'=>'CONFIG_OPTION_minimum_gamble_amount',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'pointstore',
 		);

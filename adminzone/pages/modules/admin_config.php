@@ -239,8 +239,8 @@ class Module_admin_config
 				{
 					if ($category==$option['category'])
 					{
-						if (!isset($option['c_order_in_category_group']))
-							$option['c_order_in_category_group']=1;
+						if (!isset($option['order_in_category_group']))
+							$option['order_in_category_group']=100;
 						$option['ob']=$ob;
 						$option['name']=$hook;
 						$rows[$hook]=$option;
@@ -252,14 +252,14 @@ class Module_admin_config
 		// Add in special ones
 		if ($category=='SITE')
 		{
-			$rows['timezone']=array('name'=>'timezone','human_name'=>'TIME_ZONE','c_value'=>'','type'=>'special','category'=>'SITE','group'=>'INTERNATIONALISATION','explanation'=>'DESCRIPTION_TIMEZONE_SITE','shared_hosting_restricted'=>0,'c_order_in_category_group'=>1);
+			$rows['timezone']=array('name'=>'timezone','human_name'=>'TIME_ZONE','c_value'=>'','type'=>'special','category'=>'SITE','group'=>'INTERNATIONALISATION','explanation'=>'DESCRIPTION_TIMEZONE_SITE','shared_hosting_restricted'=>0,'order_in_category_group'=>1);
 		}
 		require_code('files');
 		$upload_max_filesize=(ini_get('upload_max_filesize')=='0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('upload_max_filesize')));
 		$post_max_size=(ini_get('post_max_size')=='0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('post_max_size')));
 
 		// Sort generally, categorise into groups, sort the groups
-		sort_maps_by($rows,'c_order_in_category_group');
+		sort_maps_by($rows,'order_in_category_group');
 		$all_known_groups=array();
 		foreach ($rows as $myrow)
 		{
@@ -270,12 +270,13 @@ class Module_admin_config
 
 			$all_known_groups[$_group]=$myrow['group'];
 		}
+		$advanced_key=strtolower(trim(preg_replace('#(&.*;)|[^\w\d\s]#U','',do_lang('ADVANCED'))));
 		ksort($all_known_groups);
-		if (isset($all_known_groups[do_lang('ADVANCED')])) // Advanced goes last
+		if (isset($all_known_groups[$advanced_key])) // Advanced goes last
 		{
-			$temp=$all_known_groups[do_lang('ADVANCED')];
-			unset($all_known_groups[do_lang('ADVANCED')]);
-			$all_known_groups[do_lang('ADVANCED')]=$temp;
+			$temp=$all_known_groups[$advanced_key];
+			unset($all_known_groups[$advanced_key]);
+			$all_known_groups[$advanced_key]=$temp;
 		}
 		$groups=array();
 		foreach ($all_known_groups as $group_codename)

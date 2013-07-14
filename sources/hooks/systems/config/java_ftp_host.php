@@ -36,6 +36,7 @@ class Hook_config_java_ftp_host
 			'explanation'=>'CONFIG_OPTION_java_ftp_host',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'core_configuration',
 		);

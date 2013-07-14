@@ -36,6 +36,7 @@ class Hook_config_ldap_member_class
 			'explanation'=>'CONFIG_OPTION_ldap_member_class',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>7,
 
 			'addon'=>'ldap',
 		);

@@ -18,7 +18,7 @@
  * @package		core_configuration
  */
 
-class Hook_config_ocp_show_staff_page_actions
+class Hook_config_show_staff_page_actions
 {
 
 	/**
@@ -33,7 +33,7 @@ class Hook_config_ocp_show_staff_page_actions
 			'type'=>'tick',
 			'category'=>'THEME',
 			'group'=>'FOOTER_LINKS',
-			'explanation'=>'CONFIG_OPTION_ocp_show_staff_page_actions',
+			'explanation'=>'CONFIG_OPTION_show_staff_page_actions',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 

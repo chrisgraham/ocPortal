@@ -18,7 +18,7 @@
  * @package		core_configuration
  */
 
-class Hook_config_ocp_show_conceded_mode_link
+class Hook_config_show_avatar
 {
 
 	/**
@@ -29,11 +29,11 @@ class Hook_config_ocp_show_conceded_mode_link
 	function get_details()
 	{
 		return array(
-			'human_name'=>'CONCEDED_MODE_LINK',
+			'human_name'=>'AVATAR',
 			'type'=>'tick',
 			'category'=>'BLOCKS',
 			'group'=>'PERSONAL_BLOCK',
-			'explanation'=>'CONFIG_OPTION_ocp_show_conceded_mode_link',
+			'explanation'=>'CONFIG_OPTION_show_avatar',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 
@@ -48,7 +48,7 @@ class Hook_config_ocp_show_conceded_mode_link
 	 */
 	function get_default()
 	{
-		return '0';
+		return (has_no_forum() || ((get_forum_type()=='ocf') && (!addon_installed('ocf_member_avatars'))))?NULL:'0';
 	}
 
 }

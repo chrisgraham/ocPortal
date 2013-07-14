@@ -36,6 +36,7 @@ class Hook_config_support_credit_value
 			'explanation'=>'CONFIG_OPTION_support_credit_value',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'ocportalcom_support_credits',
 		);

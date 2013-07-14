@@ -36,6 +36,7 @@ class Hook_config_minimum_password_strength
 			'explanation'=>'CONFIG_OPTION_minimum_password_strength',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'1|2|3|4|5|6|7|8|9|10',
+			'order_in_category_group'=>3,
 
 			'addon'=>'core_ocf',
 		);

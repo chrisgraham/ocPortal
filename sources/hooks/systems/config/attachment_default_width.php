@@ -36,6 +36,7 @@ class Hook_config_attachment_default_width
 			'explanation'=>'CONFIG_OPTION_attachment_default_width',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core_rich_media',
 		);

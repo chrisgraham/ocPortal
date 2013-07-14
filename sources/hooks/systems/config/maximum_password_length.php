@@ -31,11 +31,12 @@ class Hook_config_maximum_password_length
 		return array(
 			'human_name'=>'MAXIMUM_PASSWORD_LENGTH',
 			'type'=>'integer',
-			'category'=>'USERS',
+			'category'=>'SECURITY',
 			'group'=>'USERNAMES_AND_PASSWORDS',
 			'explanation'=>'CONFIG_OPTION_maximum_password_length',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'core_ocf',
 		);

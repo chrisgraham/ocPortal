@@ -32,7 +32,7 @@ class Hook_config_bottom_show_realtime_rain_button
 			'human_name'=>'REALTIME_RAIN_BUTTON',
 			'type'=>'tick',
 			'category'=>'THEME',
-			'group'=>'BOTTOM_LINKS',
+			'group'=>'FOOTER_LINKS',
 			'explanation'=>'CONFIG_OPTION_bottom_show_realtime_rain_button',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',

@@ -36,6 +36,7 @@ class Hook_config_autoban
 			'explanation'=>'CONFIG_OPTION_autoban',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core',
 		);

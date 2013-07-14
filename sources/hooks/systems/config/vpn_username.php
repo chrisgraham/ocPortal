@@ -36,6 +36,7 @@ class Hook_config_vpn_username
 			'explanation'=>'CONFIG_OPTION_vpn_username',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>5,
 
 			'addon'=>'ecommerce',
 		);

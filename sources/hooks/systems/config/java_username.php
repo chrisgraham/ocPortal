@@ -36,6 +36,7 @@ class Hook_config_java_username
 			'explanation'=>'CONFIG_OPTION_java_username',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>4,
 
 			'addon'=>'core_configuration',
 		);

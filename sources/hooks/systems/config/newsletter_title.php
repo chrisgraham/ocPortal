@@ -36,6 +36,7 @@ class Hook_config_newsletter_title
 			'explanation'=>'CONFIG_OPTION_newsletter_title',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'newsletter',
 		);

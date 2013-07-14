@@ -36,6 +36,7 @@ class Hook_config_staff_address
 			'explanation'=>'CONFIG_OPTION_staff_address',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core_configuration',
 		);

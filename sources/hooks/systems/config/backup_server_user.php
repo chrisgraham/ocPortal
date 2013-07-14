@@ -36,6 +36,7 @@ class Hook_config_backup_server_user
 			'explanation'=>'CONFIG_OPTION_backup_server_user',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>5,
 
 			'addon'=>'backup',
 		);

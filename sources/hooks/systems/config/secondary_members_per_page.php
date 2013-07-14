@@ -36,6 +36,7 @@ class Hook_config_secondary_members_per_page
 			'explanation'=>'CONFIG_OPTION_secondary_members_per_page',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>4,
 
 			'addon'=>'core_ocf',
 		);

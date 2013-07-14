@@ -36,6 +36,7 @@ class Hook_config_invites_per_day
 			'explanation'=>'CONFIG_OPTION_invites_per_day',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>201,
 
 			'addon'=>'core_ocf',
 		);

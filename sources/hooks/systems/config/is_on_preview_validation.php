@@ -36,6 +36,7 @@ class Hook_config_is_on_preview_validation
 			'explanation'=>'CONFIG_OPTION_is_on_preview_validation',
 			'shared_hosting_restricted'=>'1',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core_configuration',
 		);

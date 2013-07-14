@@ -36,6 +36,7 @@ class Hook_config_transcoding_zencoder_api_key
 			'explanation'=>'CONFIG_OPTION_transcoding_zencoder_api_key',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>6,
 
 			'addon'=>'galleries',
 		);

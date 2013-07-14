@@ -31,7 +31,7 @@ class Hook_config_remember_me_by_default
 		return array(
 			'human_name'=>'REMEMBER_ME_BY_DEFAULT',
 			'type'=>'tick',
-			'category'=>'FEATURE',
+			'category'=>(get_forum_type()=='ocf')?'USERS':'FEATURE',
 			'group'=>'_LOGIN',
 			'explanation'=>'CONFIG_OPTION_remember_me_by_default',
 			'shared_hosting_restricted'=>'0',

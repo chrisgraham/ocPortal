@@ -36,6 +36,7 @@ class Hook_config_url_scheme
 			'explanation'=>'CONFIG_OPTION_url_scheme',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'RAW|PG|HTM|SIMPLE',
+			'order_in_category_group'=>3,
 
 			'addon'=>'core_configuration',
 		);

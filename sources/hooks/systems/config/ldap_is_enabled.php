@@ -36,6 +36,7 @@ class Hook_config_ldap_is_enabled
 			'explanation'=>'CONFIG_OPTION_ldap_is_enabled',
 			'shared_hosting_restricted'=>'1',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'ldap',
 		);

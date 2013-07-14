@@ -36,6 +36,7 @@ class Hook_config_proxy_port
 			'explanation'=>'CONFIG_OPTION_proxy_port',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>4,
 
 			'addon'=>'core_configuration',
 		);

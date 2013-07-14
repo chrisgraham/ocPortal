@@ -36,6 +36,7 @@ class Hook_config_bcc
 			'explanation'=>'CONFIG_OPTION_bcc',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>4,
 
 			'addon'=>'core_configuration',
 		);

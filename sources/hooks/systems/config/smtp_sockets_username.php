@@ -36,6 +36,7 @@ class Hook_config_smtp_sockets_username
 			'explanation'=>'CONFIG_OPTION_smtp_sockets_username',
 			'shared_hosting_restricted'=>'1',
 			'list_options'=>'',
+			'order_in_category_group'=>4,
 
 			'addon'=>'core_configuration',
 		);

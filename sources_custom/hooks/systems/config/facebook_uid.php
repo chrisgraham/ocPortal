@@ -36,6 +36,7 @@ class Hook_config_facebook_uid
 			'explanation'=>'CONFIG_OPTION_facebook_uid',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>3,
 
 			'addon'=>'facebook',
 		);

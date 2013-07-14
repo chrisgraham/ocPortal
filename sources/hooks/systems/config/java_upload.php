@@ -36,6 +36,7 @@ class Hook_config_java_upload
 			'explanation'=>'CONFIG_OPTION_java_upload',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core_configuration',
 		);

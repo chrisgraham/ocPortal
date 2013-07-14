@@ -36,6 +36,7 @@ class Hook_config_comment_text
 			'explanation'=>'CONFIG_OPTION_comment_text',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>3,
 
 			'addon'=>'core_configuration',
 		);

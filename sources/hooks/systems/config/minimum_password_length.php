@@ -31,11 +31,12 @@ class Hook_config_minimum_password_length
 		return array(
 			'human_name'=>'MINIMUM_PASSWORD_LENGTH',
 			'type'=>'integer',
-			'category'=>'USERS',
+			'category'=>'SECURITY',
 			'group'=>'USERNAMES_AND_PASSWORDS',
 			'explanation'=>'CONFIG_OPTION_minimum_password_length',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core_ocf',
 		);

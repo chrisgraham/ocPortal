@@ -36,6 +36,7 @@ class Hook_config_templates_store_revisions
 			'explanation'=>'CONFIG_OPTION_templates_store_revisions',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>1,
 
 			'addon'=>'core_themeing',
 		);

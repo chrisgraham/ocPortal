@@ -36,6 +36,7 @@ class Hook_config_is_on_timezone_detection
 			'explanation'=>'CONFIG_OPTION_is_on_timezone_detection',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>4,
 
 			'addon'=>'core_ocf',
 		);

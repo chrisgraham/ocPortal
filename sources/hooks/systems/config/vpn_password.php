@@ -36,6 +36,7 @@ class Hook_config_vpn_password
 			'explanation'=>'CONFIG_OPTION_vpn_password',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>6,
 
 			'addon'=>'ecommerce',
 		);

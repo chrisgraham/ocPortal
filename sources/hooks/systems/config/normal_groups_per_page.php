@@ -36,6 +36,7 @@ class Hook_config_normal_groups_per_page
 			'explanation'=>'CONFIG_OPTION_normal_groups_per_page',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>2,
 
 			'addon'=>'core_ocf',
 		);

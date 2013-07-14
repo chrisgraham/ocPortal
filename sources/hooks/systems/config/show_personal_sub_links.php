@@ -18,7 +18,7 @@
  * @package		core_configuration
  */
 
-class Hook_config_ocp_show_su
+class Hook_config_show_personal_sub_links
 {
 
 	/**
@@ -29,11 +29,11 @@ class Hook_config_ocp_show_su
 	function get_details()
 	{
 		return array(
-			'human_name'=>'SU',
+			'human_name'=>'PERSONAL_SUB_LINKS',
 			'type'=>'tick',
-			'category'=>'THEME',
-			'group'=>'FOOTER_LINKS',
-			'explanation'=>'CONFIG_OPTION_ocp_show_su',
+			'category'=>'BLOCKS',
+			'group'=>'PERSONAL_BLOCK',
+			'explanation'=>'CONFIG_OPTION_show_personal_sub_links',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 
@@ -48,7 +48,7 @@ class Hook_config_ocp_show_su
 	 */
 	function get_default()
 	{
-		return has_no_forum()?NULL:'1';
+		return '1';
 	}
 
 }

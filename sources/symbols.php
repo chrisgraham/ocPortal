@@ -851,7 +851,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value='0';
 				if (!is_guest())
 				{
-					$value=(get_option('ocp_show_su')=='1') && (has_privilege(get_member(),'assume_any_member'))?'1':'0';
+					$value=(get_option('show_su')=='1') && (has_privilege(get_member(),'assume_any_member'))?'1':'0';
 				}
 				break;
 
@@ -859,7 +859,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (!is_guest())
 				{
 					// Different types of page type for staff (debug view, etc)
-					if ((get_option('ocp_show_staff_page_actions')=='1') && (has_privilege(get_member(),'view_profiling_modes')) && (count($_POST)==0)) // We count POST because we don't want to allow double submits
+					if ((get_option('show_staff_page_actions')=='1') && (has_privilege(get_member(),'view_profiling_modes')) && (count($_POST)==0)) // We count POST because we don't want to allow double submits
 					{
 						require_code('site2');
 						$value=get_staff_actions_list();

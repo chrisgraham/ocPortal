@@ -36,6 +36,7 @@ class Hook_config_max_moniker_length
 			'explanation'=>'CONFIG_OPTION_max_moniker_length',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>5,
 
 			'addon'=>'core_configuration',
 		);

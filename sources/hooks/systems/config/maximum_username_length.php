@@ -31,11 +31,12 @@ class Hook_config_maximum_username_length
 		return array(
 			'human_name'=>'MAXIMUM_USERNAME_LENGTH',
 			'type'=>'integer',
-			'category'=>'USERS',
+			'category'=>'SECURITY',
 			'group'=>'USERNAMES_AND_PASSWORDS',
 			'explanation'=>'CONFIG_OPTION_maximum_username_length',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>5,
 
 			'addon'=>'core_ocf',
 		);

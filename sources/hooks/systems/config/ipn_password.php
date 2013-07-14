@@ -36,6 +36,7 @@ class Hook_config_ipn_password
 			'explanation'=>'CONFIG_OPTION_ipn_password',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
+			'order_in_category_group'=>4,
 
 			'addon'=>'ecommerce',
 		);

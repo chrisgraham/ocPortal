@@ -32,7 +32,7 @@ class Hook_config_bottom_show_admin_menu
 			'human_name'=>'ADMIN_MENU',
 			'type'=>'tick',
 			'category'=>'THEME',
-			'group'=>'BOTTOM_LINKS',
+			'group'=>'FOOTER_LINKS',
 			'explanation'=>'CONFIG_OPTION_bottom_show_admin_menu',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
