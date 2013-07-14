@@ -35,7 +35,7 @@ class Block_main_content
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','efficient','id','filter','filter_b','title','zone','no_links','give_context','include_breadcrumbs','render_if_empty','guid');
+		$info['parameters']=array('param','efficient','id','filter','filter_b','title','zone','no_links','give_context','include_breadcrumbs','render_if_empty','guid','as_guest');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_content
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'1\',array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'id\',$map)?$map[\'id\']:\'\',array_key_exists(\'efficient\',$map)?$map[\'efficient\']:\'_SEARCH\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
+		$info['cache_on']='addon_installed(\'content_privacy\')?NULL:array(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'1\',array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'id\',$map)?$map[\'id\']:\'\',array_key_exists(\'efficient\',$map)?$map[\'efficient\']:\'_SEARCH\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24; // Intentionally, do randomisation acts as 'of the day'
 		return $info;
 	}
@@ -63,16 +63,16 @@ class Block_main_content
 		$guid=isset($map['guid'])?$map['guid']:'';
 		if (isset($map['param']))
 		{
-			$type_id=$map['param'];
+			$content_type=$map['param'];
 		} else
 		{
 			if (addon_installed('downloads'))
 			{
-				$type_id='download';
+				$content_type='download';
 			} else
 			{
 				$hooks=find_all_hooks('systems','content_meta_aware');
-				$type_id=key($hooks);
+				$content_type=key($hooks);
 			}
 		}
 		$content_id=isset($map['id'])?$map['id']:NULL;
@@ -87,11 +87,11 @@ class Block_main_content
 		$give_context=(isset($map['give_context'])?$map['give_context']:'0')=='1';
 		$include_breadcrumbs=(isset($map['include_breadcrumbs'])?$map['include_breadcrumbs']:'0')=='1';
 
-		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true).'.php')))
-			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$type_id),'','red_alert');
+		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type,true).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type,true).'.php')))
+			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$content_type),'','red_alert');
 
 		require_code('content');
-		$object=get_content_object($type_id);
+		$object=get_content_object($content_type);
 		$info=$object->info();
 		if ($info===NULL) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
 		if (((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric'])) && ($content_id!==NULL) && (!is_numeric($content_id)))
@@ -152,7 +152,9 @@ class Block_main_content
 				if (addon_installed('content_privacy'))
 				{
 					require_code('content_privacy');
-					list($privacy_join,$privacy_where)=get_privacy_where_clause($type_id,'r');
+					$as_guest=array_key_exists('as_guest',$map)?($map['as_guest']=='1'):false;
+					$viewing_member_id=$as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():mixed();
+					list($privacy_join,$privacy_where)=get_privacy_where_clause($content_type,'r',$viewing_member_id);
 					$query.=$privacy_join;
 					$where.=$privacy_where;
 				}
@@ -267,7 +269,7 @@ class Block_main_content
 		// Select mode
 		else
 		{
-			if ($type_id=='comcode_page') // FUDGEFUDGE
+			if ($content_type=='comcode_page') // FUDGEFUDGE
 			{
 				// Try and force a parse of the page, so it's in the system
 				$bits=explode(':',$content_id);
