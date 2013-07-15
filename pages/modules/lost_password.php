@@ -142,7 +142,7 @@ class Module_lost_password
 
 		require_code('crypt');
 		$code=get_rand_password();
-		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>$code),array('id'=>$member_id),'',1);
+		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>$code.'__'.strval(get_session_id())),array('id'=>$member_id),'',1);
 
 		log_it('RESET_PASSWORD',strval($member_id),$code);
 
@@ -170,12 +170,12 @@ class Module_lost_password
 			$_SERVER['PHP_SELF']="/";
 			$_SERVER['SERVER_NAME']=$_SERVER['SERVER_ADDR'];
 
-			$email=get_option('website_email');
-			//$email='noreply@'.$_SERVER['SERVER_ADDR'];	Won't work on most hosting
+			$from_email=get_option('website_email');
+			//$from_email='noreply@'.$_SERVER['SERVER_ADDR'];	Won't work on most hosting
 			$from_name=do_lang('PASSWORD_RESET_ULTRA_FROM');
 			$subject=do_lang('PASSWORD_RESET_ULTRA_SUBJECT',$code);
 			$body=do_lang('PASSWORD_RESET_ULTRA_BODY',$code);
-			mail($email,$subject,$body,'From: '.$from_name.' <'.$email.'>'."\r\n".'Reply-To: '.$from_name.' <'.$email.'>');
+			mail($email,$subject,$body,'From: '.$from_name.' <'.$from_email.'>'."\r\n".'Reply-To: '.$from_name.' <'.$from_email.'>');
 
 			$_SERVER['PHP_SELF']=$old_php_self;
 			$_SERVER['SERVER_NAME']=$old_server_name;
@@ -250,11 +250,16 @@ class Module_lost_password
 			$reset_url=$_reset_url->evaluate();
 			warn_exit(do_lang_tempcode('PASSWORD_ALREADY_RESET',escape_html($reset_url),get_site_name()));
 		}
+		if (get_option('password_reset_process')=='ultra')
+		{
+			list($correct_code,$correct_session)=explode('__',$correct_code);
+			if (intval($correct_session)!=get_session_id()) warn_exit(do_lang_tempcode('WRONG_RESET_SESSION'));
+		}
 		if ($code!=$correct_code)
 		{
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','date_and_time',array('the_type'=>'RESET_PASSWORD','param_a'=>strval($member_id),'param_b'=>$code));
-			if (!is_null($test)) warn_exit(do_lang_tempcode('INCORRECT_PASSWORD_RESET_CODE'));
-			log_hack_attack_and_exit('HACK_ATTACK_PASSWORD_CHANGE');
+			if (!is_null($test)) warn_exit(do_lang_tempcode('INCORRECT_PASSWORD_RESET_CODE')); // Just an old code that has expired
+			log_hack_attack_and_exit('HACK_ATTACK_PASSWORD_CHANGE'); // Incorrect code, hack attack
 		}
 
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
