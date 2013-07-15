@@ -144,7 +144,7 @@ function erase_cached_language()
 	$langs=find_all_langs(true);
 	foreach (array_keys($langs) as $lang)
 	{
-		$path=get_custom_file_base().'/lang_cached/'.$lang;
+		$path=get_custom_file_base().'/caches/lang/'.$lang;
 		$_dir=@opendir($path);
 		if ($_dir===false)
 		{

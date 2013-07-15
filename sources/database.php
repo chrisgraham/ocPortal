@@ -483,7 +483,7 @@ class database_driver
 	{
 		global $FILECACHE_OBJECT;
 		require_code('database/xml');
-		$chain_db=new database_driver(get_custom_file_base().'/persistent_cache','','','',get_table_prefix(),false,object_factory('Database_Static_xml'));
+		$chain_db=new database_driver(get_custom_file_base().'/caches/persistent','','','',get_table_prefix(),false,object_factory('Database_Static_xml'));
 		$chain_connection=&$chain_db->connection_write;
 		if (count($chain_connection)>4) // Okay, we can't be lazy anymore
 		{

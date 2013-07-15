@@ -1366,7 +1366,7 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 			$is_dir=@is_dir($dir.$file);
 			if (!is_readable($dir.$file)) continue;
 
-			if ($rela=='lang_cached/') continue;
+			if ($rela=='caches/') continue;
 			if ($rela=='uploads/') continue;
 			if ($rela=='data_custom/modules/') continue;
 

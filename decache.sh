@@ -4,7 +4,7 @@ rm -f themes/*/templates_cached/*/*.tcd
 rm -f themes/*/templates_cached/*/*.tcp
 rm -f themes/*/templates_cached/*/*.js
 rm -f themes/*/templates_cached/*/*.css
-rm -f lang_cached/*/*.lcd
+rm -f caches/lang/*/*.lcd
 find . -name "*.gcd" -exec rm -f {} \;
 
 

@@ -68,10 +68,11 @@ function get_chmod_array($lang)
 	return array_merge(
 		$extra_files,
 		array(
-			'safe_mode_temp','persistent_cache','data_custom/modules/admin_backup','data_custom/modules/chat','data_custom/fields.xml','data_custom/breadcrumbs.xml','data_custom/modules/admin_stats','data_custom/spelling','data_custom/spelling/personal_dicts',
+			'safe_mode_temp','data_custom/modules/admin_backup','data_custom/modules/chat','data_custom/fields.xml','data_custom/breadcrumbs.xml','data_custom/modules/admin_stats','data_custom/spelling','data_custom/spelling/personal_dicts',
 			'themes/map.ini','text_custom','text_custom/'.$lang,
 			'data_custom/modules/chat/chat_last_msg.dat','data_custom/modules/chat/chat_last_event.dat',
-			'lang_cached','lang_cached/'.$lang,'lang_custom','lang_custom/'.$lang,
+			'caches/persistent','caches/lang','caches/lang/'.$lang,'caches/self_learning','caches/self_learning/'.$lang,'caches/guest_pages','caches/guest_pages/'.$lang,
+			'lang_custom','lang_custom/'.$lang,
 			'data_custom/errorlog.php','ocp_sitemap.xml','data_custom/permissioncheckslog.php',
 			'pages/html_custom','site/pages/html_custom','docs/pages/html_custom','adminzone/pages/html_custom','forum/pages/html_custom','cms/pages/html_custom',
 			'pages/html_custom/'.$lang,'site/pages/html_custom/'.$lang,'docs/pages/html_custom/'.$lang,'adminzone/pages/html_custom/'.$lang,'forum/pages/html_custom/'.$lang,'cms/pages/html_custom/'.$lang,

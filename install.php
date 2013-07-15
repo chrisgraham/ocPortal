@@ -1995,7 +1995,7 @@ function step_10()
 	}
 
 	// Empty persistent cache
-	$path=get_custom_file_base().'/persistent_cache/';
+	$path=get_custom_file_base().'/caches/persistent/';
 	$_dir=@opendir($path);
 	if ($_dir!==false)
 	{

@@ -70,7 +70,7 @@ function init__lang()
 		{
 			$key='script__'.md5(serialize(ocp_srv('PHP_SELF')));
 		}
-		$cache_path=get_custom_file_base().'/lang_cached/'.user_lang().'/'.filter_naughty($key,true).'.lcd';
+		$cache_path=get_custom_file_base().'/caches/lang/'.user_lang().'/'.filter_naughty($key,true).'.lcd';
 		if (!is_null($GLOBALS['MEM_CACHE']))
 		{
 			$PAGE_CACHE_LANG_LOADED=persistent_cache_get($cache_path);
@@ -419,7 +419,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 		if ($support_smart_decaching)
 		{
-			$cache_path=$cfb.'/lang_cached/'.$lang.'/'.$codename.'.lcd';
+			$cache_path=$cfb.'/caches/lang/'.$lang.'/'.$codename.'.lcd';
 			$lang_file_default=$fb.'/lang/'.$lang.'/'.$codename.'.ini';
 			if (!is_file($lang_file_default))
 			{
@@ -489,9 +489,9 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 
 	if (!isset($LANGUAGE_STRINGS_CACHE[$lang])) $LANGUAGE_STRINGS_CACHE[$lang]=array();
 
-	$cache_path=$cfb.'/lang_cached/'.$lang.'/'.$codename.'.lcd';
+	$cache_path=$cfb.'/caches/lang/'.$lang.'/'.$codename.'.lcd';
 
-	// Try lang_cached
+	// Try language cache
 	if ($GLOBALS['MEM_CACHE']!==NULL)
 	{
 		$desire_cache=true;
@@ -520,7 +520,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 		$desire_cache=(function_exists('get_option')) && ((get_option('is_on_lang_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
 		if ($desire_cache)
 		{
-			$cache_path=$cfb.'/lang_cached/'.$lang.'/'.$codename.'.lcd';
+			$cache_path=$cfb.'/caches/lang/'.$lang.'/'.$codename.'.lcd';
 			$lang_file_default=$fb.'/lang/'.$lang.'/'.$codename.'.ini';
 			if (!is_file($lang_file_default))
 			{

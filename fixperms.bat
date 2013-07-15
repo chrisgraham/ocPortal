@@ -11,8 +11,8 @@ cacls persistant_cache /e /g %user%:F
 cacls persistant_cache\* /e /g %user%:F
 cacls safe_mode_temp /e /g %user%:F
 cacls safe_mode_temp\* /e /g %user%:F
-cacls lang_cached /e /g %user%:F
-cacls lang_cached\* /e /g %user%:F
+cacls caches\lang /e /g %user%:F
+cacls caches\lang\* /e /g %user%:F
 cacls lang_custom /e /g %user%:F
 cacls lang_custom\* /e /g %user%:F
 cacls themes\map.ini /e /g %user%:F
@@ -150,8 +150,8 @@ icacls persistant_cache /grant %user%:(M)
 icacls persistant_cache\* /grant %user%:(M)
 icacls safe_mode_temp /grant %user%:(M)
 icacls safe_mode_temp\* /grant %user%:(M)
-icacls lang_cached /grant %user%:(M)
-icacls lang_cached\* /grant %user%:(M)
+icacls caches\lang /grant %user%:(M)
+icacls caches\lang\* /grant %user%:(M)
 icacls lang_custom /grant %user%:(M)
 icacls lang_custom\* /grant %user%:(M)
 icacls themes\map.ini /grant %user%:(M)

@@ -117,7 +117,7 @@ if (!function_exists('require_lang_compile'))
 			{
 				require_lang($codename,fallback_lang(),$type,$ignore_errors);
 				$REQUIRE_LANG_LOOP--;
-				$fallback_cache_path=get_custom_file_base().'/lang_cached/'.fallback_lang().'/'.$codename.'.lcd';
+				$fallback_cache_path=get_custom_file_base().'/caches/lang/'.fallback_lang().'/'.$codename.'.lcd';
 				if (file_exists($fallback_cache_path))
 				{
 					require_code('files');

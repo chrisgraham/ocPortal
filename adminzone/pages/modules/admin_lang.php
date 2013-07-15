@@ -61,7 +61,7 @@ class Module_admin_lang
 		$langs=find_all_langs(true);
 		foreach (array_keys($langs) as $lang)
 		{
-			deldir_contents(get_custom_file_base().'/lang_cached/'.$lang,true);
+			deldir_contents(get_custom_file_base().'/caches/lang/'.$lang,true);
 			// lang_custom purposely left
 		}
 	}
@@ -632,10 +632,10 @@ msgstr ""
 
 			afm_make_directory('lang_custom/'.$lang,true);
 
-			$cached_dir=get_custom_file_base().'/lang_cached/'.$lang;
+			$cached_dir=get_custom_file_base().'/caches/lang/'.$lang;
 			if (!file_exists($cached_dir))
 			{
-				afm_make_directory('lang_cached/'.$lang,true);
+				afm_make_directory('caches/lang/'.$lang,true);
 			}
 
 			// Make comcode page dirs

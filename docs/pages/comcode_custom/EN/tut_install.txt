@@ -90,8 +90,12 @@ Set the following to [b]777[/b]: (full directory permissions)
  - forum/pages/html_custom/<for-each-language>
  - forum/pages/html_custom
  - imports/addons
- - lang_cached
- - lang_cached/<for-each-language>
+ - caches/lang
+ - caches/lang/<for-each-language>
+ - caches/self_learning
+ - caches/self_learning/<for-each-language>
+ - caches/guest_pages
+ - caches/guest_pages/<for-each-language>
  - lang_custom
  - lang_custom/<for-each-language>
  - pages/comcode_custom

@@ -843,17 +843,17 @@ function do_site()
 		$bot_type=get_bot_type();
 		if ((($bot_type!==NULL) || ((isset($GLOBALS['SITE_INFO']['any_guest_cached_too'])) && ($GLOBALS['SITE_INFO']['any_guest_cached_too']=='1'))) && (can_fast_spider_cache()))
 		{
-			$fast_cache_path=get_custom_file_base().'/persistent_cache/'.md5(serialize(get_self_url_easy()));
+			$fast_cache_path=get_custom_file_base().'/caches/guest_pages/'.md5(serialize(get_self_url_easy()));
 			if ($bot_type===NULL) $fast_cache_path.='__non-bot';
 			if (!array_key_exists('js_on',$_COOKIE)) $fast_cache_path.='__no-js';
 			$fast_cache_path.='.gcd';
 
-			if (!is_dir(get_custom_file_base().'/persistent_cache/'))
+			if (!is_dir(get_custom_file_base().'/caches/guest_pages/'))
 			{
-				if (@mkdir(get_custom_file_base().'/persistent_cache/',0777))
+				if (@mkdir(get_custom_file_base().'/caches/guest_pages/',0777))
 				{
-					fix_permissions(get_custom_file_base().'/persistent_cache/',0777);
-					sync_file(get_custom_file_base().'/persistent_cache/');
+					fix_permissions(get_custom_file_base().'/caches/guest_pages/',0777);
+					sync_file(get_custom_file_base().'/caches/guest_pages/');
 				} else
 				{
 					intelligent_write_error($fast_cache_path);

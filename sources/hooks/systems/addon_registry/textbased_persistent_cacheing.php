@@ -74,8 +74,8 @@ class Hook_addon_registry_textbased_persistent_cacheing
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/textbased_persistent_cacheing.php',
-			'persistent_cache/.htaccess',
-			'persistent_cache/index.html',
+			'caches/persistent/.htaccess',
+			'caches/persistent/index.html',
 		);
 	}
 

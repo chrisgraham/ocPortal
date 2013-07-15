@@ -78,7 +78,7 @@ function init__caches()
 			$PERSISTENT_CACHE_OBJECTS_CACHE=wincache_ucache_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
 			if ($PERSISTENT_CACHE_OBJECTS_CACHE===false) $PERSISTENT_CACHE_OBJECTS_CACHE=array();
 		}
-		elseif (file_exists(get_custom_file_base().'/persistent_cache/'))
+		elseif (file_exists(get_custom_file_base().'/caches/persistent/'))
 		{
 			require_code('caches_filesystem');
 			require_code('files');

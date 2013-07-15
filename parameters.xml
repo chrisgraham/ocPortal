@@ -399,8 +399,18 @@
   </parameter> 
 
   <parameter
-    name="SetAclParameter13" description="Sets the ACL on the right file" defaultValue="{Application Path}/lang_cached/EN" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/lang_cached/EN" />
+    name="SetAclParameter13" description="Sets the ACL on the right file" defaultValue="{Application Path}/caches/lang/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/caches/lang/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter13" description="Sets the ACL on the right file" defaultValue="{Application Path}/caches/self_learning/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/caches/lang/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter13" description="Sets the ACL on the right file" defaultValue="{Application Path}/caches/guest_pages/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/caches/lang/EN" />
   </parameter>
 
   <parameter
