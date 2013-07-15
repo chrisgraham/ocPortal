@@ -53,7 +53,7 @@ function best_hash($to_hash,$salt)
  */
 function produce_salt()
 {
-	if ((function_exists('openssl_random_pseudo_bytes')) && (strtoupper(substr(PHP_OS,0,3))!='WIN')/*Implementation on Windows is very slow*/)
+	if ((function_exists('openssl_random_pseudo_bytes')) && (get_value('disable_openssl')!=='1'))
 	{
 		$u=substr(md5(openssl_random_pseudo_bytes(13)),0,13); // md5 so that we get nice ASCII characters
 	} else
@@ -124,7 +124,7 @@ function get_rand_password()
  */
 function get_secure_random_number()
 {
-	if ((function_exists('openssl_random_pseudo_bytes')) && (strtoupper(substr(PHP_OS,0,3))!='WIN')/*Implementation on Windows is very slow*/)
+	if ((function_exists('openssl_random_pseudo_bytes')) && (get_value('disable_openssl')!=='1'))
 	{
 		$code=intval(floor($max*(hexdec(bin2hex(openssl_random_pseudo_bytes(4)))/0xffffffff)));
 	} else

@@ -30,7 +30,7 @@ ocPortal requires:
 (*) Other database software may work, but is not supported
 
 ocPortal recommends:
- - A PHP environment with the FTP, GD FreeType, ZIP and XML extensions/integrated-functionality
+ - A PHP environment with the FTP, GD, FreeType, OpenSSL (raises security), ZIP and XML extensions/integrated-functionality
  - A PHP environment with Safe Mode disabled, but [tt]open_basedir[/tt] enabled -- or a suEXEC/IIS server
  - A PHP environment with a memory limit of at least 32MB
 
