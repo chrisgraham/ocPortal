@@ -299,7 +299,7 @@ function init__global2()
 		require_code('site'); // This powers the site (top level page generation)
 	}
 
-	// Our logging (change false to true for temporarily changing it so staff get logging)
+	// Our logging
 	if (get_option('log_php_errors')=='1')
 	{
 		@ini_set('log_errors','1');
