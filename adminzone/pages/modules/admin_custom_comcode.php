@@ -31,7 +31,39 @@ class Module_admin_custom_comcode extends standard_aed_module
 	var $select_name='TITLE';
 	var $non_integer_id=true;
 	var $menu_label='CUSTOM_COMCODE';
-	var $javascript="var tag=document.getElementById('tag'); var old=tag.value; tag.onblur=function() { var e=document.getElementById('example'); e.value=e.value.replace('['+old+' ','['+tag.value+' ').replace('['+old+']','['+tag.value+']').replace('[/'+old+']','[/'+tag.value+']'); old=tag.value; };";
+	var $javascript="
+		var update_func=function() {
+			var e=document.getElementById('example');
+			e.value='['+tag.value;
+			var i=0,param;
+			do
+			{
+				param=document.getElementById('parameters_'+i);
+				if ((param) && (param.value!=''))
+				{
+					e.value+=' '+param.value.replace('=','=\"')+'\"';
+				}
+				i++;
+			}
+			while (param!==null);
+			e.value+='][/'+tag.value+']';
+		};
+
+		var tag=document.getElementById('tag');
+		var i=0,param;
+		do
+		{
+			param=document.getElementById('parameters_'+i);
+			if (param) param.onblur=update_func;
+			i++;
+		}
+		while (param!==null);
+		tag.onblur=function() {
+			update_func();
+			var title=document.getElementById('title');
+			if (title.value=='') title.value=tag.value.substr(0,1).toUpperCase()+tag.value.substring(1,tag.value.length);
+		}
+		";
 	var $orderer='tag_title';
 	var $title_is_multi_lang=true;
 
@@ -235,12 +267,12 @@ class Module_admin_custom_comcode extends standard_aed_module
 		$fields->attach(form_input_codename(do_lang_tempcode('COMCODE_TAG'),do_lang_tempcode('DESCRIPTION_COMCODE_TAG'),'tag',$tag,true,NULL,MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TAG_TITLE'),'title',$title,true));
 		$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true));
+		$fields->attach(form_input_line_multi(do_lang_tempcode('PARAMETERS'),do_lang_tempcode('DESCRIPTION_COMCODE_PARAMETERS'),'parameters',explode(',',$parameters),0));
 		$fields->attach(form_input_text(do_lang_tempcode('COMCODE_REPLACE'),do_lang_tempcode('DESCRIPTION_COMCODE_REPLACE'),'replace',$replace,true));
-		$fields->attach(form_input_line(do_lang_tempcode('PARAMETERS'),do_lang_tempcode('DESCRIPTION_COMCODE_PARAMETERS'),'parameters',$parameters,false));
+		$fields->attach(form_input_line(do_lang_tempcode('EXAMPLE'),do_lang_tempcode('DESCRIPTION_COMCODE_EXAMPLE'),'example',$example,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('DANGEROUS_TAG'),do_lang_tempcode('DESCRIPTION_DANGEROUS_TAG'),'dangerous_tag',$dangerous_tag==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('BLOCK_TAG'),do_lang_tempcode('DESCRIPTION_BLOCK_TAG'),'block_tag',$block_tag==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('TEXTUAL_TAG'),do_lang_tempcode('DESCRIPTION_TEXTUAL_TAG'),'textual_tag',$textual_tag==1));
-		$fields->attach(form_input_line(do_lang_tempcode('EXAMPLE'),do_lang_tempcode('DESCRIPTION_COMCODE_EXAMPLE'),'example',$example,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),'','enabled',$enabled==1));
 
 		return $fields;
@@ -276,13 +308,22 @@ class Module_admin_custom_comcode extends standard_aed_module
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$tag));
 		if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
 
+		$parameters='';
+		foreach ($_POST as $key=>$val)
+		{
+			if (substr($key,0,11)!='parameters_') continue;
+			if ($val=='') continue;
+			if ($parameters!='') $parameters.=',';
+			$parameters.=$val;
+		}
+
 		$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
 			'tag_tag'=>$tag,
 			'tag_title'=>insert_lang(post_param('title'),3),
 			'tag_description'=>insert_lang(post_param('description'),3),
 			'tag_replace'=>post_param('replace'),
 			'tag_example'=>post_param('example'),
-			'tag_parameters'=>post_param('parameters'),
+			'tag_parameters'=>$parameters,
 			'tag_enabled'=>post_param_integer('enabled',0),
 			'tag_dangerous_tag'=>post_param_integer('dangerous_tag',0),
 			'tag_block_tag'=>post_param_integer('block_tag',0),
@@ -313,13 +354,22 @@ class Module_admin_custom_comcode extends standard_aed_module
 		$_title=$old[0]['tag_title'];
 		$_description=$old[0]['tag_description'];
 
+		$parameters='';
+		foreach ($_POST as $key=>$val)
+		{
+			if (substr($key,0,11)!='parameters_') continue;
+			if ($val=='') continue;
+			if ($parameters!='') $parameters.=',';
+			$parameters.=$val;
+		}
+
 		$GLOBALS['SITE_DB']->query_update('custom_comcode',array(
 			'tag_tag'=>$tag,
 			'tag_title'=>lang_remap($_title,post_param('title')),
 			'tag_description'=>lang_remap($_description,post_param('description')),
 			'tag_replace'=>post_param('replace'),
 			'tag_example'=>post_param('example'),
-			'tag_parameters'=>post_param('parameters'),
+			'tag_parameters'=>$parameters,
 			'tag_enabled'=>post_param_integer('enabled',0),
 			'tag_dangerous_tag'=>post_param_integer('dangerous_tag',0),
 			'tag_block_tag'=>post_param_integer('block_tag',0),

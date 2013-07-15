@@ -586,7 +586,7 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
 		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array('_GUID'=>'e2da34b7564cebfd83da2859e4abd020','CLASS'=>$class,'MAXLENGTH'=>get_field_restrict_property('maxlength',$name),'PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>$default)));
 		$i++;
 	}
-	$num_to_show_initially=has_js()?$num_required:max($num_required,10);
+	$num_to_show_initially=has_js()?max($num_required,count($default_array)+1):max($num_required,10);
 	for (;$i<$num_to_show_initially;$i++)
 	{
 		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array('_GUID'=>'10fcbe72e80ea1be07c3dd1fd9e0719e','CLASS'=>$class,'MAXLENGTH'=>get_field_restrict_property('maxlength',$name),'PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>($i>=$num_required)?'':'_required','DEFAULT'=>'')));
