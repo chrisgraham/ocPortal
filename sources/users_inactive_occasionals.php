@@ -99,7 +99,8 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 	if (is_null($restored_session)) // We're force to make a new one
 	{
 		// Generate random session
-		$new_session=mt_rand(0,mt_getrandmax()-1);
+		require_code('crypt');
+		$new_session=get_secure_random_number();
 
 		// Store session
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
@@ -268,8 +269,9 @@ function try_su_login($member)
 
 		if ((get_forum_type()=='ocf') && (get_param_integer('keep_su_online',0)==1))
 		{
+			require_code('crypt');
 			$new_session_row=array(
-				'the_session'=>mt_rand(0,mt_getrandmax()-1),
+				'the_session'=>get_secure_random_number(),
 				'last_activity'=>time(),
 				'member_id'=>$member,
 				'ip'=>get_ip_address(3),

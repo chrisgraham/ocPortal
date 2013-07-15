@@ -58,7 +58,7 @@ function produce_salt()
 		$u=substr(md5(openssl_random_pseudo_bytes(13)),0,13); // md5 so that we get nice ASCII characters
 	} else
 	{
-		$u=uniqid('',true);
+		$u=substr(md5(uniqid(strval(get_secure_random_number()),true)),0,13);
 	}
 	return $u;
 }
@@ -114,6 +114,22 @@ function check_master_password($password_given)
  */
 function get_rand_password()
 {
-	return substr(uniqid(strval(mt_rand(0,32767)),true),0,10);
+	return produce_salt();
 }
 
+/**
+ * Get a secure random number, the best this PHP version can do.
+ *
+ * @return integer		The randomised number
+ */
+function get_secure_random_number()
+{
+	if ((function_exists('openssl_random_pseudo_bytes')) && (strtoupper(substr(PHP_OS,0,3))!='WIN')/*Implementation on Windows is very slow*/)
+	{
+		$code=intval(floor($max*(hexdec(bin2hex(openssl_random_pseudo_bytes(4)))/0xffffffff)));
+	} else
+	{
+		$code=mt_rand(0,mt_getrandmax());
+	}
+	return $code;
+}

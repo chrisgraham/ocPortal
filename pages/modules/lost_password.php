@@ -92,9 +92,9 @@ class Module_lost_password
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
-		$temporary_passwords=(get_option('password_reset_process')=='temporary_password');
-		$text=do_lang_tempcode($temporary_passwords?'_PASSWORD_RESET_TEXT_TEMPORARY':'_PASSWORD_RESET_TEXT');
-		$submit_name=do_lang_tempcode('PROCEED');
+		$temporary_passwords=(get_option('password_reset_process')!='emailed');
+		$text=do_lang_tempcode('_PASSWORD_RESET_TEXT_'.get_option('password_reset_process'));
+		$submit_name=do_lang_tempcode('PASSWORD_RESET_BUTTON');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF');
 
 		breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
@@ -140,27 +140,66 @@ class Module_lost_password
 		$is_httpauth=ocf_is_httpauth_member($member_id);
 		if (($is_ldap)/* || ($is_httpauth  Actually covered more explicitly above - over mock-httpauth, like Facebook, may have passwords reset to break the integrations)*/) warn_exit(do_lang_tempcode('EXT_NO_PASSWORD_CHANGE'));
 
-		$code=mt_rand(0,mt_getrandmax());
-		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>strval($code)),array('id'=>$member_id),'',1);
+		require_code('crypt');
+		$code=get_rand_password();
+		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>$code),array('id'=>$member_id),'',1);
 
-		log_it('RESET_PASSWORD',strval($member_id),strval($code));
+		log_it('RESET_PASSWORD',strval($member_id),$code);
 
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		if ($email=='') warn_exit(do_lang_tempcode('MEMBER_NO_EMAIL_ADDRESS_RESET_TO'));
 
-		$temporary_passwords=(get_option('password_reset_process')=='temporary_password');
+		$temporary_passwords=(get_option('password_reset_process')!='emailed');
 
 		// Send confirm mail
-		$zone=get_module_zone('join');
-		$_url=build_url(array('page'=>'lost_password','type'=>'step3','code'=>$code,'member'=>$member_id),$zone,NULL,false,false,true);
-		$url=$_url->evaluate();
-		$_url_simple=build_url(array('page'=>'lost_password','type'=>'step3','code'=>NULL,'username'=>NULL,'member'=>NULL),$zone,NULL,false,false,true);
-		$url_simple=$_url_simple->evaluate();
-		$message=do_lang($temporary_passwords?'RESET_PASSWORD_TEXT_TEMPORARY':'RESET_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array($url,comcode_escape($url_simple),strval($member_id),strval($code)),get_lang($member_id));
-		require_code('mail');
-		mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
+		if (get_option('password_reset_process')!='ultra')
+		{
+			$zone=get_module_zone('lost_password');
+			$_url=build_url(array('page'=>'lost_password','type'=>'step3','code'=>$code,'member'=>$member_id),$zone,NULL,false,false,true);
+			$url=$_url->evaluate();
+			$_url_simple=build_url(array('page'=>'lost_password','type'=>'step3','code'=>NULL,'username'=>NULL,'member'=>NULL),$zone,NULL,false,false,true);
+			$url_simple=$_url_simple->evaluate();
+			$message=do_lang($temporary_passwords?'RESET_PASSWORD_TEXT_TEMPORARY':'RESET_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array($url,comcode_escape($url_simple),strval($member_id),$code),get_lang($member_id));
+			require_code('mail');
+			mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
+		} else
+		{
+			$old_php_self=$_SERVER['PHP_SELF'];
+			$old_server_name=$_SERVER['SERVER_NAME'];
 
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
+			$_SERVER['PHP_SELF']="/";
+			$_SERVER['SERVER_NAME']=$_SERVER['SERVER_ADDR'];
+
+			$email=get_option('website_email');
+			//$email='noreply@'.$_SERVER['SERVER_ADDR'];	Won't work on most hosting
+			$from_name=do_lang('PASSWORD_RESET_ULTRA_FROM');
+			$subject=do_lang('PASSWORD_RESET_ULTRA_SUBJECT',$code);
+			$body=do_lang('PASSWORD_RESET_ULTRA_BODY',$code);
+			mail($email,$subject,$body,'From: '.$from_name.' <'.$email.'>'."\r\n".'Reply-To: '.$from_name.' <'.$email.'>');
+
+			$_SERVER['PHP_SELF']=$old_php_self;
+			$_SERVER['SERVER_NAME']=$old_server_name;
+
+			// Input UI
+			$zone=get_module_zone('lost_password');
+			$_url=build_url(array('page'=>'lost_password','type'=>'step3','member'=>$member_id),$zone);
+			require_code('form_templates');
+			$fields=new ocp_tempcode();
+			$fields->attach(form_input_line(do_lang_tempcode('CODE'),'','code',NULL,true));
+			$submit_name=do_lang_tempcode('PROCEED');
+			return do_template('FORM_SCREEN',array(
+				'TITLE'=>$title,
+				'GET'=>true,
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>'',
+				'URL'=>$_url,
+				'FIELDS'=>$fields,
+				'TEXT'=>do_lang_tempcode('ENTER_CODE_FROM_EMAIL'),
+				'SUBMIT_NAME'=>$submit_name,
+			));
+		}
+
+		breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
 
 		return inform_screen($title,do_lang_tempcode('RESET_CODE_MAILED'));
 	}
@@ -174,13 +213,13 @@ class Module_lost_password
 	{
 		$title=get_screen_title('RESET_PASSWORD');
 
-		$code=get_param('code','');
+		$code=trim(get_param('code',''));
 		if ($code=='')
 		{
 			require_code('form_templates');
 			$fields=new ocp_tempcode();
 			$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),'','username',NULL,true));
-			$fields->attach(form_input_integer(do_lang_tempcode('CODE'),'','code',NULL,true));
+			$fields->attach(form_input_line(do_lang_tempcode('CODE'),'','code',NULL,true));
 			$submit_name=do_lang_tempcode('PROCEED');
 			return do_template('FORM_SCREEN',array(
 				'_GUID'=>'6e4db5c6f3c75faa999251339533d22a',
@@ -223,7 +262,7 @@ class Module_lost_password
 		require_code('crypt');
 		$new_password=get_rand_password();
 
-		$temporary_passwords=(get_option('password_reset_process')=='temporary_password');
+		$temporary_passwords=(get_option('password_reset_process')!='emailed');
 
 		if (!$temporary_passwords)
 		{

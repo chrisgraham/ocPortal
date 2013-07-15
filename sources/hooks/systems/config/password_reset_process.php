@@ -35,7 +35,7 @@ class Hook_config_password_reset_process
 			'group'=>'USERNAMES_AND_PASSWORDS',
 			'explanation'=>'CONFIG_OPTION_password_reset_process',
 			'shared_hosting_restricted'=>'0',
-			'list_options'=>'emailed|temporary',
+			'list_options'=>'emailed|temporary|ultra',
 
 			'addon'=>'core_ocf',
 		);
