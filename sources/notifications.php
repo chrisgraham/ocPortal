@@ -98,7 +98,7 @@ function _get_notification_ob_for_code($notification_code)
 	} else // Ah, we know already (file exists directly) - so quick route
 	{
 		require_code($path);
-		return object_factory('Hook_Notification_'.filter_naughty($notification_code));
+		return object_factory('Hook_Notification_'.filter_naughty(preg_replace('#\_\_\w*$#','',$notification_code)));
 	}
 	return NULL;
 	//return object_factory('Hook_Notification'); // default
