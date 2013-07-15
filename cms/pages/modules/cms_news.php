@@ -476,6 +476,13 @@ class Module_cms_news extends standard_crud_module
 		$main_news_category=$GLOBALS['SITE_DB']->query_select_value('news','news_category',array('id'=>$id));
 		$this->donext_type=$main_news_category;
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('news',strval($id),$privacy_level,$additional_access);
+		}
+
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
@@ -512,13 +519,6 @@ class Module_cms_news extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('news',strval($id));
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('news',strval($id),$privacy_level,$additional_access);
-		}
 
 		return strval($id);
 	}
@@ -602,6 +602,13 @@ class Module_cms_news extends standard_crud_module
 
 		$title=post_param('title',STRING_MAGIC_NULL);
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('news',strval($id),$privacy_level,$additional_access);
+		}
+
 		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
 		{
 			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
@@ -632,13 +639,6 @@ class Module_cms_news extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('news',strval($id));
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('news',strval($id),$privacy_level,$additional_access);
-		}
 	}
 
 	/**

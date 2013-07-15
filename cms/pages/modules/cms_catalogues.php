@@ -626,6 +626,13 @@ class Module_cms_catalogues extends standard_crud_module
 
 		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_data['add_time'],$meta_data['submitter'],NULL,$meta_data['views']);
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('catalogue_entry',strval($id),$privacy_level,$additional_access);
+		}
+
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access(get_modal_user(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_modal_user(),'catalogues_category',strval($category_id))) && (has_category_access(get_modal_user(),'catalogues_catalogue',$catalogue_name))))
@@ -652,13 +659,6 @@ class Module_cms_catalogues extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('catalogue_entry',strval($id));
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('catalogue_entry',strval($id),$privacy_level,$additional_access);
-		}
 
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
@@ -687,6 +687,13 @@ class Module_cms_catalogues extends standard_crud_module
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','c_name',array('id'=>$category_id));
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$map=$this->get_set_field_map($catalogue_name,$id);
+
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('catalogue_entry',strval($id),$privacy_level,$additional_access);
+		}
 
 		if ((has_actual_page_access(get_modal_user(),'catalogues')) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_modal_user(),'catalogues_category',strval($category_id))) && (has_category_access(get_modal_user(),'catalogues_catalogue',$catalogue_name))))
 		{
@@ -754,13 +761,6 @@ class Module_cms_catalogues extends standard_crud_module
 			}
 
 			unset($_GET['redirect']);
-		}
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('catalogue_entry',strval($id),$privacy_level,$additional_access);
 		}
 
 		$this->donext_category_id=$category_id;

@@ -886,6 +886,13 @@ class Module_cms_calendar extends standard_crud_module
 		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day_of_month);
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('event',strval($id),$privacy_level,$additional_access);
+		}
+
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access(get_modal_user(),'calendar')) && (has_category_access(get_modal_user(),'calendar',strval($type))))
@@ -908,13 +915,6 @@ class Module_cms_calendar extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('event',strval($id));
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('event',strval($id),$privacy_level,$additional_access);
-		}
 
 		return array(strval($id),$_description);
 	}
@@ -1034,6 +1034,13 @@ class Module_cms_calendar extends standard_crud_module
 			}
 		}
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('event',strval($id),$privacy_level,$additional_access);
+		}
+
 		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('calendar_events','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
 			if ((has_actual_page_access(get_modal_user(),'calendar')) && (has_category_access(get_modal_user(),'calendar',strval($type))))
@@ -1074,13 +1081,6 @@ class Module_cms_calendar extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('event',strval($id));
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('event',strval($id),$privacy_level,$additional_access);
-		}
 
 		return $_description;
 	}

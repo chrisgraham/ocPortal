@@ -710,6 +710,13 @@ class Module_cms_downloads extends standard_crud_module
 			$this->do_next_description=do_lang_tempcode('DOWNLOAD_ADDED',escape_html($add_image_url->evaluate()));
 		}
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
+		}
+
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
 			if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id))))
@@ -730,13 +737,6 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('download',strval($id));
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
-		}
 
 		return strval($id);
 	}
@@ -789,6 +789,13 @@ class Module_cms_downloads extends standard_crud_module
 
 		$this->donext_type=$category_id;
 
+		if (addon_installed('content_privacy'))
+		{
+			require_code('content_privacy2');
+			list($privacy_level,$additional_access)=read_privacy_fields();
+			save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
+		}
+
 		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('download_downloads','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id'=>$id));
@@ -822,13 +829,6 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			content_review_set('download',strval($id));
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
-		}
 	}
 
 	/**
