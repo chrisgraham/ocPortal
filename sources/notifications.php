@@ -218,6 +218,7 @@ class Notification_dispatcher
 			$message_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$id,'message_type'=>$type),get_module_zone('admin_messaging'),NULL,false,false,true);
 			$message=do_lang('MESSAGING_NOTIFICATION_WRAPPER',$message,$message_url->evaluate());
 
+			require_code('feedback');
 			actualise_post_comment(true,$type,$id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true);
 		}
 
