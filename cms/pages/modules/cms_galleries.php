@@ -2162,6 +2162,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$flow_mode_interface=post_param_integer('flow_mode_interface',0);
 		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$url=$urls[0];
+		if (($url!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
+			convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 		$watermark_top_left=get_url('','watermark_top_left','uploads/watermarks',0,OCP_UPLOAD_IMAGE);
 		$watermark_top_right=get_url('','watermark_top_right','uploads/watermarks',0,OCP_UPLOAD_IMAGE);
 		$watermark_bottom_left=get_url('','watermark_bottom_left','uploads/watermarks',0,OCP_UPLOAD_IMAGE);
@@ -2200,6 +2202,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 		{
 			$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 			$url=$urls[0];
+			if (($url!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
+				convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 			if (($url=='') && (post_param_integer('rep_image_unlink',0)!=1)) $url=NULL;
 
 			$watermark_top_left=get_url('','watermark_top_left','uploads/watermarks',0,OCP_UPLOAD_IMAGE);

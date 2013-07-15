@@ -158,7 +158,7 @@ class Module_admin
 			array('edit','modify','manage','change','control','moderate','update'),
 			array('delete','erase','remove','discard'),
 			array('restore','revert','undo'),
-			array('news','story','stories'),
+			array('news','story','stories','article'),
 			array('language','unicode','utf','utf8','utf-8','character','charset','24','clock','timezone','time-zone','time','date','translate'),
 			array('ldap','active directory'),
 			array('contact','feedback','ticket','message','issue'),

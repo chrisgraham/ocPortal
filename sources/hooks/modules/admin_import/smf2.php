@@ -1786,7 +1786,7 @@ class Hook_smf2
 		require_code('banners2');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'ads',NULL,NULL,true);
-		if (is_null($rows)) return; // Some kind of addon? Don't think this is core-SMF
+		if (is_null($rows)) return; // SMFAds addon not installed
 		foreach ($rows as $row)
 		{
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$row['NAME']));

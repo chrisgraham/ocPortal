@@ -206,6 +206,7 @@ function get_false_permissions()
 		array('GENERAL_SETTINGS','bypass_flood_control'),
 		array('GENERAL_SETTINGS','remove_page_split'),
 		array('GENERAL_SETTINGS','bypass_word_filter'),
+		array('SUBMISSION','perform_keyword_check'),
 	);
 }
 

@@ -23,11 +23,12 @@ class Hook_login_provider_facebook
 	 */
 	function try_login($member) // NB: if $member is set (but not Guest), then it will bind to that account
 	{
+		require_code('facebook_connect');
+
 		// Facebook connect
-		if (get_forum_type()=='ocf')
+		if ((get_forum_type()=='ocf') && (get_option('facebook_allow_signups')=='1'))
 		{
 			@ini_set('ocproducts.type_strictness','0');
-			require_code('facebook_connect');
 			global $FACEBOOK_CONNECT;
 			if (!is_null($FACEBOOK_CONNECT))
 			{

@@ -175,6 +175,8 @@ class Hook_search_ocf_members
 
 		require_lang('ocf');
 
+		$indexes=collapse_2d_complexity('i_fields','i_name',$GLOBALS['FORUM_DB']->query_select('db_meta_indices',array('i_fields','i_name'),array('i_table'=>'f_member_custom_fields')));
+
 		// Calculate our where clause (search)
 		if ($author!='')
 		{
@@ -193,6 +195,8 @@ class Hook_search_ocf_members
 		require_code('fields');
 		foreach ($rows as $i=>$row)
 		{
+			if (!array_key_exists('field_'.strval($row['id']),$indexes)) continue;
+
 			$ob=get_fields_hook($row['cf_type']);
 			list(,,$storage_type)=$ob->get_field_value_row_bits($row);
 
@@ -213,13 +217,18 @@ class Hook_search_ocf_members
 					$where_clause.=preg_replace('#\?#','t'.strval(count($trans_fields)+1).'.text_original',$temp);
 				} else
 				{
-					$where_clause.=preg_replace('#\?#','field_'.strval($row['id']),$temp);
+					if (count($raw_fields)<16) // MySQL limit for fulltext index querying
+						$where_clause.=preg_replace('#\?#','field_'.strval($row['id']),$temp);
 				}
 			}
 			if (strpos($storage_type,'_trans')===false)
-				$raw_fields[]='field_'.strval($row['id']);
-			else
+			{
+				if (count($raw_fields)<16) // MySQL limit for fulltext index querying
+					$raw_fields[]='field_'.strval($row['id']);
+			} else
+			{
 				$trans_fields[]='field_'.strval($row['id']);
+			}
 		}
 		$age_range=get_param('option__age_range',get_param('option__age_range_from','').'-'.get_param('option__age_range_to',''));
 		if (($age_range!='') && ($age_range!='-'))

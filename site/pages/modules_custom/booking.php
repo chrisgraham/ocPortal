@@ -36,7 +36,8 @@ class Module_booking
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=1;
+		$info['version']=2;
+		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
 	}
@@ -64,92 +65,107 @@ class Module_booking
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		$GLOBALS['SITE_DB']->create_table('bookable',array(
-			'id'=>'*AUTO',
-			//'num_available'=>'INTEGER',		Implied by number of bookable_codes attached to bookable_id
-			'title'=>'SHORT_TRANS',
-			'description'=>'LONG_TRANS',
-			'price'=>'REAL',
-			'categorisation'=>'SHORT_TRANS', // (will work as a heading, for the booking form)
-			'cycle_type'=>'ID_TEXT', // (same as event recurrences in the calendar addon; can be none [which would remove date chooser]) - a room cycles daily for example
-			'cycle_pattern'=>'SHORT_TEXT',
-			'user_may_choose_code'=>'BINARY',
-			'supports_notes'=>'BINARY',
-			'dates_are_ranges'=>'BINARY', // (if not, will only ask for a single date)
-			'calendar_type'=>'?AUTO_LINK', // (this is auto-added and synched on edits; type has no perms by default)
-			'add_date'=>'TIME',
-			'edit_date'=>'?TIME',
-			'submitter'=>'MEMBER',
-			'sort_order'=>'INTEGER',
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('bookable',array(
+				'id'=>'*AUTO',
+				//'num_available'=>'INTEGER',		Implied by number of bookable_codes attached to bookable_id
+				'title'=>'SHORT_TRANS',
+				'description'=>'LONG_TRANS',
+				'price'=>'REAL',
+				'categorisation'=>'SHORT_TRANS', // (will work as a heading, for the booking form)
+				'cycle_type'=>'ID_TEXT', // (same as event recurrences in the calendar addon; can be none [which would remove date chooser]) - a room cycles daily for example
+				'cycle_pattern'=>'SHORT_TEXT',
+				'user_may_choose_code'=>'BINARY',
+				'supports_notes'=>'BINARY',
+				'dates_are_ranges'=>'BINARY', // (if not, will only ask for a single date)
+				'calendar_type'=>'?AUTO_LINK', // (this is auto-added and synched on edits; type has no perms by default)
+				'add_date'=>'TIME',
+				'edit_date'=>'?TIME',
+				'submitter'=>'MEMBER',
+				'sort_order'=>'INTEGER',
 
-			'enabled'=>'BINARY',
+				'enabled'=>'BINARY',
 
-			// (useful for defining seasonable bookables- e.g. summer bookable costing more, or with more rooms)
-			'active_from_day'=>'SHORT_INTEGER',
-			'active_from_month'=>'SHORT_INTEGER',
-			'active_from_year'=>'INTEGER',
-			'active_to_day'=>'?SHORT_INTEGER',
-			'active_to_month'=>'?SHORT_INTEGER',
-			'active_to_year'=>'?INTEGER',
-		));
+				// (useful for defining seasonable bookables- e.g. summer bookable costing more, or with more rooms)
+				'active_from_day'=>'SHORT_INTEGER',
+				'active_from_month'=>'SHORT_INTEGER',
+				'active_from_year'=>'INTEGER',
+				'active_to_day'=>'?SHORT_INTEGER',
+				'active_to_month'=>'?SHORT_INTEGER',
+				'active_to_year'=>'?INTEGER',
+			));
 
-		$GLOBALS['SITE_DB']->create_table('bookable_blacked',array(
-			'id'=>'*AUTO',
-			'blacked_from_day'=>'SHORT_INTEGER',
-			'blacked_from_month'=>'SHORT_INTEGER',
-			'blacked_from_year'=>'INTEGER',
-			'blacked_to_day'=>'SHORT_INTEGER',
-			'blacked_to_month'=>'SHORT_INTEGER',
-			'blacked_to_year'=>'INTEGER',
-			'blacked_explanation'=>'LONG_TRANS',
-		));
+			$GLOBALS['SITE_DB']->create_table('bookable_blacked',array(
+				'id'=>'*AUTO',
+				'blacked_from_day'=>'SHORT_INTEGER',
+				'blacked_from_month'=>'SHORT_INTEGER',
+				'blacked_from_year'=>'INTEGER',
+				'blacked_to_day'=>'SHORT_INTEGER',
+				'blacked_to_month'=>'SHORT_INTEGER',
+				'blacked_to_year'=>'INTEGER',
+				'blacked_explanation'=>'LONG_TRANS',
+			));
 
-		$GLOBALS['SITE_DB']->create_table('bookable_blacked_for',array(
-			'bookable_id'=>'*AUTO_LINK',
-			'blacked_id'=>'*AUTO_LINK',
-		));
+			$GLOBALS['SITE_DB']->create_table('bookable_blacked_for',array(
+				'bookable_id'=>'*AUTO_LINK',
+				'blacked_id'=>'*AUTO_LINK',
+			));
 
-		$GLOBALS['SITE_DB']->create_table('bookable_codes',array(
-			'bookable_id'=>'*AUTO_LINK',
-			'code'=>'*ID_TEXT', // (room numbers, seats, etc) ; can be auto-generated if requested
-		));
+			$GLOBALS['SITE_DB']->create_table('bookable_codes',array(
+				'bookable_id'=>'*AUTO_LINK',
+				'code'=>'*ID_TEXT', // (room numbers, seats, etc) ; can be auto-generated if requested
+			));
 
-		$GLOBALS['SITE_DB']->create_table('bookable_supplement',array(
-			'id'=>'*AUTO',
-			'price'=>'REAL',
-			'price_is_per_period'=>'BINARY', // If this is the case, the supplement will actually be repeated out in separate records, each tied to a booking for that date
-			'supports_quantities'=>'BINARY',
-			'title'=>'SHORT_TRANS',
-			'promo_code'=>'ID_TEXT', // If non-blank, the user must enter this promo-code to purchase this
-			'supports_notes'=>'BINARY',
-			'sort_order'=>'INTEGER',
-		));
+			$GLOBALS['SITE_DB']->create_table('bookable_supplement',array(
+				'id'=>'*AUTO',
+				'price'=>'REAL',
+				'price_is_per_period'=>'BINARY', // If this is the case, the supplement will actually be repeated out in separate records, each tied to a booking for that date
+				'supports_quantities'=>'BINARY',
+				'title'=>'SHORT_TRANS',
+				'promo_code'=>'ID_TEXT', // If non-blank, the user must enter this promo-code to purchase this
+				'supports_notes'=>'BINARY',
+				'sort_order'=>'INTEGER',
+			));
 
-		$GLOBALS['SITE_DB']->create_table('bookable_supplement_for',array(
-			'supplement_id'=>'*AUTO_LINK',
-			'bookable_id'=>'*AUTO_LINK',
-		));
+			$GLOBALS['SITE_DB']->create_table('bookable_supplement_for',array(
+				'supplement_id'=>'*AUTO_LINK',
+				'bookable_id'=>'*AUTO_LINK',
+			));
 
-		$GLOBALS['SITE_DB']->create_table('booking',array(
-			'id'=>'*AUTO',
-			'bookable_id'=>'AUTO_LINK',
-			'member_id'=>'MEMBER',
-			'b_day'=>'SHORT_INTEGER',
-			'b_month'=>'SHORT_INTEGER',
-			'b_year'=>'INTEGER',
-			'code_allocation'=>'ID_TEXT', // These code allocations will be given out arbitrarily, which means later on if things get busy, things could be suboptimal (e.g. people's 'stay' split across different codes on different dates, whilst reorganising could solve that). So a human would probably reorganise this manually in some cases, and it should not be considered a real-world guarantee, or a necessary thing to make sure people get a full run-length on a single code
-			'notes'=>'LONG_TEXT',
-			'booked_at'=>'TIME', // time booking was made
-			'paid_at'=>'?TIME',
-			'paid_trans_id'=>'?AUTO_LINK',
-		));
+			$GLOBALS['SITE_DB']->create_table('booking',array(
+				'id'=>'*AUTO',
+				'bookable_id'=>'AUTO_LINK',
+				'member_id'=>'MEMBER',
+				'b_day'=>'SHORT_INTEGER',
+				'b_month'=>'SHORT_INTEGER',
+				'b_year'=>'INTEGER',
+				'code_allocation'=>'ID_TEXT', // These code allocations will be given out arbitrarily, which means later on if things get busy, things could be suboptimal (e.g. people's 'stay' split across different codes on different dates, whilst reorganising could solve that). So a human would probably reorganise this manually in some cases, and it should not be considered a real-world guarantee, or a necessary thing to make sure people get a full run-length on a single code
+				'notes'=>'LONG_TEXT',
+				'booked_at'=>'TIME', // time booking was made
+				'paid_at'=>'?TIME',
+				'paid_trans_id'=>'?AUTO_LINK',
+				'customer_name'=>'SHORT_TEXT',
+				'customer_email'=>'EMAIL',
+				'customer_mobile'=>'SHORT_TEXT',
+				'customer_phone'=>'SHORT_TEXT',
+			));
 
-		$GLOBALS['SITE_DB']->create_table('booking_supplement',array(
-			'booking_id'=>'*AUTO_LINK',
-			'supplement_id'=>'*AUTO_LINK',
-			'quantity'=>'INTEGER',
-			'notes'=>'LONG_TEXT',
-		));
+			$GLOBALS['SITE_DB']->create_table('booking_supplement',array(
+				'booking_id'=>'*AUTO_LINK',
+				'supplement_id'=>'*AUTO_LINK',
+				'quantity'=>'INTEGER',
+				'notes'=>'LONG_TEXT',
+			));
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<2))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('booking','customer_name','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('booking','customer_email','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('booking','customer_mobile','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('booking','customer_phone','SHORT_TEXT');
+		}
 	}
 
 	/**
@@ -240,13 +256,13 @@ class Module_booking
 			// Message if not currently active
 			if ($active_from>time())
 			{
-				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED',get_timezoned_date($active_from,false,true,true));
+				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED',get_timezoned_date($active_from,false,true,false,true));
 			}
 
 			// Message if becomes inactive within next 6 months
 			if ((!is_null($active_to)) && ($active_to<SHOW_WARNINGS_UNTIL))
 			{
-				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED',get_timezoned_date($active_to,false,true,true));
+				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED',get_timezoned_date($active_to,false,true,false,true));
 			}
 
 			// Message about any black-outs within next 6 months
@@ -267,8 +283,8 @@ class Module_booking
 				{
 					$messages[]=do_lang_tempcode(
 						($black_from==$black_to)?'NOTE_BOOKING_IMPOSSIBLE_BLACKED_ONEOFF':'NOTE_BOOKING_IMPOSSIBLE_BLACKED_PERIOD',
-						get_timezoned_date($black_from,false,true,true),
-						get_timezoned_date($black_to,false,true,true),
+						get_timezoned_date($black_from,false,true,false,true),
+						get_timezoned_date($black_to,false,true,false,true),
 						get_translated_tempcode($black['blacked_explanation'])
 					);
 				}
@@ -484,16 +500,36 @@ class Module_booking
 		$title=get_screen_title('CREATE_BOOKING');
 
 		// Check login: skip to thanks if logged in
-		if (!is_guest())
+		if (get_option('member_booking_only')=='1')
 		{
-			return $this->thanks();
+			if (!is_guest())
+			{
+				return $this->thanks();
+			}
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'done'),'_SELF');
 
-		list($javascript,$form)=ocf_join_form($url,true,false,false,false);
-
 		$hidden=build_keep_post_fields();
+
+		// Booking not related to members
+		if (get_option('member_booking_only')=='0')
+		{
+			require_code('form_templates');
+			$fields=new ocp_tempcode();
+			$fields->attach(form_input_line(do_lang_tempcode('YOUR_NAME'),'','customer_name',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),true));
+			$fields->attach(form_input_email(do_lang_tempcode('YOUR_EMAIL_ADDRESS'),'','customer_email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),true));
+			$fields->attach(form_input_line(do_lang_tempcode('YOUR_MOBILE_NUMBER'),'','customer_mobile','',false));
+			$fields->attach(form_input_line(do_lang_tempcode('YOUR_PHONE_NUMBER'),'','customer_phone','',true));
+			$submit_name=do_lang_tempcode('BOOK');
+			$form=do_template('FORM',array('TEXT'=>do_lang_tempcode('A_FEW_DETAILS'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$url));
+			$javascript='';
+		} else
+		{
+			// Integrated signup
+			list($javascript,$form)=ocf_join_form($url,true,false,false,false);
+		}
+
 		return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('_GUID'=>'b6e499588de8e2136122949478bac2e7','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'FORM'=>$form,'HIDDEN'=>$hidden));
 	}
 
@@ -507,7 +543,7 @@ class Module_booking
 		$title=get_screen_title('CREATE_BOOKING');
 
 		// Finish join operation, if applicable
-		if (is_guest())
+		if ((is_guest()) && (get_option('member_booking_only')=='1'))
 		{
 			list($messages)=ocf_join_actual(true,false,false,true,false,false,false,true);
 			if (!$messages->is_empty())
@@ -525,7 +561,8 @@ class Module_booking
 		send_booking_emails($request);
 
 		// Show success
-		return inform_screen($title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member(),true))));
+		$customer_name=post_param('customer_name',is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
+		return inform_screen($title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($customer_name)));
 	}
 
 }

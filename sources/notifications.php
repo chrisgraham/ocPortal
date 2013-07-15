@@ -131,7 +131,10 @@ function dispatch_notification($notification_code,$code_category,$subject,$messa
 
 	if ($subject=='') $subject='<'.$notification_code.' -- '.(is_null($code_category)?'':$code_category).'>';
 
+	if (running_script('install')) return;
+
 	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix);
+
 	if (get_param_integer('keep_debug_notifications',0)==1)
 	{
 		$dispatcher->dispatch();

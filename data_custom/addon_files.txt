@@ -2659,6 +2659,7 @@ booking
  - themes/default/images_custom/bigicons/supplement.png
  - sources_custom/hooks/systems/config/bookings_max_ahead_months.php
  - sources_custom/hooks/systems/config/bookings_show_warnings_for_months.php
+ - sources_custom/hooks/systems/config/member_booking_only.php
 
 columns
 -------

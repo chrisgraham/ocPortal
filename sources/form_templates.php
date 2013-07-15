@@ -654,7 +654,7 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
 		)));
 		$i++;
 	}
-	$num_to_show_initially=has_js()?$num_required:max($num_required,10);
+	$num_to_show_initially=has_js()?max($num_required,count($default_array)+1):max($num_required,10);
 	for (;$i<$num_to_show_initially;$i++)
 	{
 		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array(

@@ -1630,6 +1630,8 @@ class Module_cms_catalogues_cat extends standard_crud_module
 		if ($parent_id==-1) $parent_id=NULL;
 		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$rep_image=$urls[0];
+		if (($rep_image!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
+			convert_image(get_custom_base_url().'/'.$rep_image,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($rep_image)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
 		$move_days_lower=post_param_integer('move_days_lower',30);
 		$move_days_higher=post_param_integer('move_days_higher',60);
@@ -1689,6 +1691,8 @@ class Module_cms_catalogues_cat extends standard_crud_module
 		{
 			$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 			$rep_image=$urls[0];
+			if (($rep_image!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
+				convert_image(get_custom_base_url().'/'.$rep_image,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($rep_image)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 			if (($rep_image=='') && (post_param_integer('rep_image_unlink',0)!=1)) $rep_image=NULL;
 		} else $rep_image=STRING_MAGIC_NULL;
 

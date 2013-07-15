@@ -31,7 +31,39 @@ class Module_admin_custom_comcode extends standard_crud_module
 	var $select_name='TITLE';
 	var $non_integer_id=true;
 	var $menu_label='CUSTOM_COMCODE';
-	var $javascript="var tag=document.getElementById('tag'); var old=tag.value; tag.onblur=function() { var e=document.getElementById('example'); e.value=e.value.replace('['+old+' ','['+tag.value+' ').replace('['+old+']','['+tag.value+']').replace('[/'+old+']','[/'+tag.value+']'); old=tag.value; };";
+	var $javascript="
+		var update_func=function() {
+			var e=document.getElementById('example');
+			e.value='['+tag.value;
+			var i=0,param;
+			do
+			{
+				param=document.getElementById('parameters_'+i);
+				if ((param) && (param.value!=''))
+				{
+					e.value+=' '+param.value.replace('=','=\"')+'\"';
+				}
+				i++;
+			}
+			while (param!==null);
+			e.value+='][/'+tag.value+']';
+		};
+
+		var tag=document.getElementById('tag');
+		var i=0,param;
+		do
+		{
+			param=document.getElementById('parameters_'+i);
+			if (param) param.onblur=update_func;
+			i++;
+		}
+		while (param!==null);
+		tag.onblur=function() {
+			update_func();
+			var title=document.getElementById('title');
+			if (title.value=='') title.value=tag.value.substr(0,1).toUpperCase()+tag.value.substring(1,tag.value.length);
+		}
+		";
 	var $orderer='tag_title';
 	var $title_is_multi_lang=true;
 
@@ -236,12 +268,12 @@ class Module_admin_custom_comcode extends standard_crud_module
 		$fields->attach(form_input_codename(do_lang_tempcode('COMCODE_TAG'),do_lang_tempcode('DESCRIPTION_COMCODE_TAG'),'tag',$tag,true,NULL,MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TAG_TITLE'),'title',$title,true));
 		$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true));
+		$fields->attach(form_input_line_multi(do_lang_tempcode('PARAMETERS'),do_lang_tempcode('DESCRIPTION_COMCODE_PARAMETERS'),'parameters',explode(',',$parameters),0));
 		$fields->attach(form_input_text(do_lang_tempcode('COMCODE_REPLACE'),do_lang_tempcode('DESCRIPTION_COMCODE_REPLACE'),'replace',$replace,true));
-		$fields->attach(form_input_line(do_lang_tempcode('PARAMETERS'),do_lang_tempcode('DESCRIPTION_COMCODE_PARAMETERS'),'parameters',$parameters,false));
+		$fields->attach(form_input_line(do_lang_tempcode('EXAMPLE'),do_lang_tempcode('DESCRIPTION_COMCODE_EXAMPLE'),'example',$example,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('DANGEROUS_TAG'),do_lang_tempcode('DESCRIPTION_DANGEROUS_TAG'),'dangerous_tag',$dangerous_tag==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('BLOCK_TAG'),do_lang_tempcode('DESCRIPTION_BLOCK_TAG'),'block_tag',$block_tag==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('TEXTUAL_TAG'),do_lang_tempcode('DESCRIPTION_TEXTUAL_TAG'),'textual_tag',$textual_tag==1));
-		$fields->attach(form_input_line(do_lang_tempcode('EXAMPLE'),do_lang_tempcode('DESCRIPTION_COMCODE_EXAMPLE'),'example',$example,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),'','enabled',$enabled==1));
 
 		return $fields;
@@ -272,11 +304,20 @@ class Module_admin_custom_comcode extends standard_crud_module
 	function add_actualisation()
 	{
 		$tag=post_param('tag');
+
+		$parameters='';
+		foreach ($_POST as $key=>$val)
+		{
+			if (substr($key,0,11)!='parameters_') continue;
+			if ($val=='') continue;
+			if ($parameters!='') $parameters.=',';
+			$parameters.=$val;
+		}
+
 		$title=post_param('title');
 		$description=post_param('description');
 		$replace=post_param('replace');
 		$example=post_param('example');
-		$parameters=post_param('parameters');
 		$enabled=post_param_integer('enabled',0);
 		$dangerous_tag=post_param_integer('dangerous_tag',0);
 		$block_tag=post_param_integer('block_tag',0);
@@ -295,11 +336,20 @@ class Module_admin_custom_comcode extends standard_crud_module
 	function edit_actualisation($id)
 	{
 		$tag=post_param('tag');
+
+		$parameters='';
+		foreach ($_POST as $key=>$val)
+		{
+			if (substr($key,0,11)!='parameters_') continue;
+			if ($val=='') continue;
+			if ($parameters!='') $parameters.=',';
+			$parameters.=$val;
+		}
+
 		$title=post_param('title');
 		$description=post_param('description');
 		$replace=post_param('replace');
 		$example=post_param('example');
-		$parameters=post_param('parameters');
 		$enabled=post_param_integer('enabled',0);
 		$dangerous_tag=post_param_integer('dangerous_tag',0);
 		$block_tag=post_param_integer('block_tag',0);
