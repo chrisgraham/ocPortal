@@ -45,7 +45,7 @@ function init__global2()
 			}
 		}
 		$_SERVER['REQUEST_URI']=$_SERVER['HTTP_X_REWRITE_URL'];
-	} elseif ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV)))
+	} elseif ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS
 	{
 		$_SERVER['REQUEST_URI']=$_SERVER['PHP_SELF'];
 		$first=true;
@@ -297,9 +297,6 @@ function init__global2()
 		handle_logins();
 
 		require_code('site'); // This powers the site (top level page generation)
-
-		// Are we installed?
-		get_option('site_name');
 	}
 
 	// Our logging (change false to true for temporarily changing it so staff get logging)
@@ -337,7 +334,6 @@ function init__global2()
 			erase_persistent_cache();
 			if ($changed_base_url)
 			{
-				require_code('caches3');
 				erase_comcode_page_cache();
 				set_long_value('last_base_url',get_base_url(false));
 			}
@@ -439,13 +435,6 @@ function init__global2()
 		{
 			@ini_set('memory_limit',strval($memory_test).'M');
 		}
-	}
-
-	// Initialise site-wide IM
-	if ((get_option('sitewide_im',true)==='1') && (running_script('index')) /* i.e. not running script */ && (get_param('type','misc',true)!='room'))
-	{
-		require_code('chat_lobby');
-		enter_chat_lobby();
 	}
 
 	// Detect and deal with spammers that triggered the spam blackhole
