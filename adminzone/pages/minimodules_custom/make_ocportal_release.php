@@ -220,7 +220,7 @@ require_code('news');
 
 $summary="{$version_pretty} released. Read the full article for a list of changes, and upgrade information.";
 
-$article="Version {$version_pretty} has now been released. {$descrip}. Upgrading is {$needed}{$justification}.
+$article="Version {$version_pretty} has now been released. {$descrip}. Upgrading to this release is {$needed}{$justification}.
 
 To upgrade follow the steps in your website's [tt]http://mybaseurl/upgrader.php[/tt] script. You will need to copy the URL of the attached [tt]TAR[/tt] file (created via the form below) during step 3.
 {$major_release_1}

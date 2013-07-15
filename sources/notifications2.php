@@ -213,7 +213,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	require_all_lang();
 
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
-		'l_notification_code'=>$notification_code,
+		'l_notification_code'=>substr($notification_code,0,80),
 	));
 	if (!is_null($test)) warn_exit(do_lang_tempcode('NOTIFICATION_CODE_LOCKED_DOWN'));
 
@@ -424,13 +424,13 @@ function copy_notifications_to_new_child($notification_code,$id,$child_id)
 	$_start=0;
 	do
 	{
-		$notifications_to=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_member_id','l_setting'),array('l_notification_code'=>$notification_code,'l_code_category'=>$id),'',100,$_start);
+		$notifications_to=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_member_id','l_setting'),array('l_notification_code'=>substr($notification_code,0,80),'l_code_category'=>$id),'',100,$_start);
 
 		foreach ($notifications_to as $notification_to)
 		{
 			$GLOBALS['SITE_DB']->query_insert('notifications_enabled',array(
 				'l_member_id'=>$notification_to['l_member_id'],
-				'l_notification_code'=>$notification_code,
+				'l_notification_code'=>substr($notification_code,0,80),
 				'l_code_category'=>$child_id,
 				'l_setting'=>$notification_to['l_setting'],
 			));
