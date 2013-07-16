@@ -799,7 +799,7 @@
 			//  Dot pagination
 			this.opts.dots && this.dots();
 			
-			//  Little patch for fluid-width sliders. Screw those guys.
+			//  Little patch for fluid-width sliders.
 			if(this.opts.fluid) {
 				var resize = function() {
 					_.el.css('width', Math.min(Math.round((_.el.outerWidth() / _.el.parent().outerWidth()) * 100), 100) + '%');
@@ -833,6 +833,9 @@
 			var speed = cb ? 5 : this.opts.speed;
 			
 			if(!this.ul.is(':animated')) {			
+				_.stop();
+				_.start();
+
 				//  Handle those pesky dots
 				_.el.find('.dot:eq(' + index + ')').addClass('active').siblings().removeClass('active');
 

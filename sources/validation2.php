@@ -675,8 +675,8 @@ function init__validation2()
 		'base'=>array('href'), // XHTML-strict
 		//'html'=>array('xmlns'/*,'xml:lang' Not in XHTML5*/),
 		'meta'=>array('content'),
-		'style'=>array('type'),
-		'script'=>array('type'),
+		'style'=>array(/*'type'*/),
+		'script'=>array(/*'type'*/),
 		'bdo'=>array('dir'),
 		'basefont'=>array('size'),
 		//	'param'=>array('name'), Not needed in XHTML strict
