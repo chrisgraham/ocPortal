@@ -1,0 +1,87 @@
+.unslider {
+	position: relative;
+	width: 100%;
+	overflow: auto;
+
+	font-size: 18px;
+	line-height: 24px;
+	text-align: center;
+
+	color: rgba(255,255,255,.6);
+	text-shadow: 0 0 1px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.3);
+
+	background: #5b4d3d;
+	box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+
+.unslider ul {
+	list-style: none;
+	width: 300%;
+}
+.unslider ul li {
+	display: block;
+	float: left;
+	width: 33%;
+	padding: 160px 0 110px;
+
+	min-height: 350px;
+
+	{$BETA_CSS_PROPERTY,background-size: 100% 100%;}
+
+	box-shadow: inset 0 -3px 6px rgba(0,0,0,0.1);
+}
+
+.unslider h1, .unslider h2, .unslider h3, .unslider h4 {
+	font-size: 40px;
+	line-height: 52px;
+
+	color: #fff;
+}
+
+.unslider .dot {
+	{$BETA_CSS_PROPERTY,filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));}
+}
+
+.unslider .dots {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 20px;
+}
+.unslider .dots li {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	margin: 0 4px;
+
+	text-indent: -999em;
+
+	border: 2px solid #fff;
+	border-radius: 6px;
+
+	cursor: pointer;
+	opacity: 0.4;
+
+	{$BETA_CSS_PROPERTY,transition: background 0.5s, opacity 0.5s;}
+}
+.unslider .dots li.active {
+	background: #fff;
+	opacity: 1;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px), (max-width: 900px) {
+	.unslider h1, .unslider h2 {
+		font-size: 24px;
+		line-height: 30px;
+	}
+	.unslider ul li {
+		padding-top: 100px;
+		padding-bottom: 50px;
+		height: 240px;
+	}
+	.unslider p {
+		font-size: 15px;
+		width: 80%;
+		margin: 0 auto;
+	}
+}
