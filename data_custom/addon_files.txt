@@ -4521,6 +4521,8 @@ unslider
  - pages/comcode_custom/EN/_unslider_slide2.txt
  - pages/comcode_custom/EN/_unslider_slide3.txt
  - pages/comcode_custom/EN/_unslider_slide4.txt
+ - pages/comcode_custom/EN/_unslider_slide5.txt
+ - pages/comcode_custom/EN/_unslider_slide6.txt
  - lang_custom/EN/unslider.ini
  - themes/default/images_custom/unslider_backgrounds/index.html
  - themes/default/images_custom/unslider_backgrounds/shop.jpg

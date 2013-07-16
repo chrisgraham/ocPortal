@@ -306,4 +306,13 @@ RewriteCond %{DOCUMENT_ROOT}/git/$1 -f [OR]
 RewriteCond %{DOCUMENT_ROOT}/git/$1 -l [OR]
 RewriteCond %{DOCUMENT_ROOT}/git/$1 -d
 RewriteRule (.*) - [L]",,,,
-unslider,Graphical,Chris Graham,WTFPL License,"A new block, main_unslider, based on the Unslider jQuery plugin. It includes a number of slides and lets you move between them. Each slide is a specially-named ocPortal page.",,,,
+unslider,Graphical,Chris Graham,WTFPL License,"The addon contains a new block, main_unslider. The block is based on the Unslider jQuery plugin. It includes a number of slides and lets you move between them, either on a timer or manually. The contents of each slide is sourced from a specially-named ocPortal page.
+
+Here is an example of the block Comcode:
+[code][block pages=""slide1,slide2,slide3,slide4,slide5,slide6"" width=""100%"" height=""350px"" buttons=""1"" delay=""3000"" speed=""500"" keypresses=""0""]main_unslider[/block][/code]
+
+The [tt]pages[/tt] parameter refers to suffixes on a standard naming scheme. [tt]slide1[/tt] is the page [tt]_unslider_slide1[/tt].
+
+These six example slides/pages are bundled with the addon. 1-4 use background images and simple Comcode, 5 uses a Youtube video (but any video code should work), 6 uses an image. You will see that the image and video are auto-sized to fit the slider perfectly (taking precedence over the normal size of the video).
+
+If the [tt]delay[/tt] is set to blank or 0, it will disable automatic (timed) transition between slides. You may wish to do this if you include a video slide, although if the user hovers the mouse over the slider it will block automatic transitions also.",,,,

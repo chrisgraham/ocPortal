@@ -5,7 +5,7 @@
 <script>try { Typekit.load(); } catch(e){}</script>
 
 {+START,IF_NON_EMPTY,{WIDTH}}<div style="width: {WIDTH*}">{+END}
-	<div id="unslider" class="unslider{+START,IF_EMPTY,{WIDTH}} responsive{+END}"{+START,IF_NON_EMPTY,{HEIGHT}} style="min-height: {HEIGHT*}"{+END}>
+	<div id="unslider" class="unslider{+START,IF_EMPTY,{WIDTH}{HEIGHT}} responsive{+END}"{+START,IF_NON_EMPTY,{HEIGHT}} style="height: {HEIGHT*}"{+END}>
 		<ul>
 			{+START,LOOP,PAGES}
 				<li>

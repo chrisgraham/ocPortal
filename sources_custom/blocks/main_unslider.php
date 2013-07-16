@@ -56,7 +56,7 @@ class Block_main_unslider
 		require_lang('unslider');
 		require_css('unslider');
 
-		$pages=explode(',',isset($map['pages'])?$map['pages']:'slide1,slide2,slide3,slide4');
+		$pages=explode(',',isset($map['pages'])?$map['pages']:'slide1,slide2,slide3,slide4,slide5,slide6');
 		$width=isset($map['width'])?$map['width']:'100%';
 		if ($width=='100%') $width='';
 		$height=isset($map['height'])?$map['height']:'';
