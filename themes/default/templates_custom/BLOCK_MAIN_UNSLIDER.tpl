@@ -2,10 +2,10 @@
 {$REQUIRE_JAVASCRIPT,javascript_unslider}
 
 <script src="//use.typekit.net/vgf3zbf.js"></script>
-<script>try{Typekit.load();}catch(e){}</script>
+<script>try { Typekit.load(); } catch(e){}</script>
 
-{+START,IF_PASSED,WIDTH}<div style="width: {WIDTH*}">{+END}
-	<div id="unslider" class="unslider"{+START,IF_PASSED,HEIGHT} style="min-height: {HEIGHT*}"{+END}>
+{+START,IF_NON_EMPTY,{WIDTH}}<div style="width: {WIDTH*}">{+END}
+	<div id="unslider" class="unslider{+START,IF_EMPTY,{WIDTH}} responsive{+END}"{+START,IF_NON_EMPTY,{HEIGHT}} style="min-height: {HEIGHT*}"{+END}>
 		<ul>
 			{+START,LOOP,PAGES}
 				<li>

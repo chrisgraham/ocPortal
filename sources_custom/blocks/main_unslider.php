@@ -58,11 +58,13 @@ class Block_main_unslider
 
 		$pages=explode(',',isset($map['pages'])?$map['pages']:'slide1,slide2,slide3,slide4');
 		$width=isset($map['width'])?$map['width']:'100%';
-		$height=isset($map['height'])?$map['height']:'350px';
+		if ($width=='100%') $width='';
+		$height=isset($map['height'])?$map['height']:'';
 		if (is_numeric($width)) $width.='px';
 		if (is_numeric($height)) $height.='px';
 		$buttons=((isset($map['buttons'])?$map['buttons']:'1')=='1');
 		$delay=strval(intval(isset($map['delay'])?$map['delay']:'3000'));
+		if ($delay=='0') $delay='';
 		$speed=strval(intval(isset($map['speed'])?$map['speed']:'500'));
 		$keypresses=((isset($map['keypresses'])?$map['keypresses']:'0')=='1');
 

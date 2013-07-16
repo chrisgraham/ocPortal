@@ -1,5 +1,5 @@
 [semihtml]
-<div style="background-image: url('{$IMG;*,unslider_backgrounds/sunset}');">
+<div class="feature_background_image" style="background-image: url('{$IMG;*,unslider_backgrounds/sunset}');">
 	[title="2"]The ocPortal slider that just slides.[/title]
 
 	No unnecessary markup, no coding knowledge needed, and it’s less than 3kb.
