@@ -410,7 +410,7 @@ class forum_driver_smf extends forum_driver_base
 	 */
 	function forum_id_from_name($forum_name)
 	{
-		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('boards','ID_BOARD',array('name'=>$forum_name));
+		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('boards','ID_BOARD',array('name'=>escape_html($forum_name)));
 	}
 
 	/**
