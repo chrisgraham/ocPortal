@@ -26,7 +26,7 @@
 			</div>
 		</div>
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			window.pending_eval_function=function(ob) { // In webkit you can't get a node until it's been closed, so we need to set our code into a function and THEN run it
 				{+START,IF_PASSED,TICKER_TEXT}
 					window.setTimeout( function() {

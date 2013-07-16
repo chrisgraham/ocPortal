@@ -25,11 +25,11 @@
 		</div>
 	</form>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		document.getElementById('shoutbox_message').setAttribute('autocomplete','off');
 	//]]></script>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		var sb_room_id={ROOM_ID%};
 		add_event_listener_abstract(window,'load',function () {
 			{+START,IF_NON_EMPTY,{LAST_MESSAGE_ID}}

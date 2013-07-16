@@ -11,7 +11,7 @@
 
 {$,Tie into callback event to see when finished, for our slideshows}
 {$,API: http://code.google.com/apis/youtube/js_api_reference.html#Events}
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	function youtubeStateChanged(newState)
 	{
 		if (newState==0) player_stopped();

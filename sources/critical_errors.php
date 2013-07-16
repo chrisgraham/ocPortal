@@ -198,7 +198,7 @@ if (!function_exists('critical_error'))
 <html lang="EN">
 <head>
 	<title>Critical error</title>
-	<style type="text/css"><![CDATA[
+	<style><![CDATA[
 END;
 if (strpos($error,'Allowed memory')===false)
 {

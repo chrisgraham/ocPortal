@@ -2,7 +2,7 @@
 
 {FORM}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	document.getElementById('rules').onclick=function() { smooth_scroll(find_pos_y(document.getElementById('rules_set'))); };
 //]]></script>
 

@@ -30,7 +30,7 @@
 
 				<span class="vertical_alignment">
 					<input size="15" type="file" onchange="set_attachment('post',{I*},'');" id="file{I*}" name="file{I*}" />
-					<script type="text/javascript">// <![CDATA[
+					<script>// <![CDATA[
 						document.getElementById('file{I/;}').setAttribute('unselectable','on');
 					//]]></script>
 
@@ -42,7 +42,7 @@
 </table></div>
 
 {+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			preinitFileInput((typeof window.plUploadLoaded!='undefined')?'attachment_multi':'attachment','file{I}',null,'{POSTING_FIELD_NAME/;}');
 		} );

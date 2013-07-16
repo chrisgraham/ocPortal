@@ -65,7 +65,7 @@
 						</p>
 					</div>
 
-					<script type="text/javascript"> // <![CDATA[
+					<script> // <![CDATA[
 						var im_area_template='{IM_AREA_TEMPLATE;^/}';
 						var im_participant_template='{IM_PARTICIPANT_TEMPLATE;^/}';
 						var top_window=window;

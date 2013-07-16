@@ -4,7 +4,7 @@
 
 <span id="{$GET,countdown_id}" role="timer">{LANG}</span>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	window.setInterval(function()
 	{
 		countdown('{$GET,countdown_id}',{$?,{POSITIVE},-1*{DISTANCE_FOR_PRECISION*},+1*{DISTANCE_FOR_PRECISION*}},{TAILING%});

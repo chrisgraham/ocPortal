@@ -33,7 +33,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	load_previews();
 //]]></script>
 

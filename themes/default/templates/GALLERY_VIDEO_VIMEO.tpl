@@ -5,7 +5,7 @@
 </div>
 
 {$,Tie into callback event to see when finished, for our slideshows}
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'real_load',function () {
 		if (document.getElementById('next_slide'))
 		{

@@ -6,7 +6,7 @@
 
 {$SET,IMAGE_TYPES,{IMAGE_TYPES}}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	var attachment_template='{ATTACHMENT_TEMPLATE;^/}';
 //]]></script>
 
@@ -15,7 +15,7 @@
 </div>
 
 {+START,IF,{$JS_ON}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		var max_attachments={MAX_ATTACHMENTS#};
 		var num_attachments={NUM_ATTACHMENTS#};
 	//]]></script>

@@ -63,7 +63,7 @@
 
 							<input type="hidden" name="clearBtn_upload_{KEY*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}" id="clearBtn_upload_{KEY*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}" />
 							{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
-								<script type="text/javascript">// <![CDATA[
+								<script>// <![CDATA[
 									add_event_listener_abstract(window,'load',function () {
 										preinitFileInput('chat_effect_settings',"upload_{KEY}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID}{+END}",null,null,'mp3');
 									} );

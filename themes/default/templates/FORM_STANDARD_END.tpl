@@ -36,7 +36,7 @@
 
 {+START,IF_PASSED_AND_TRUE,PREVIEW}{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}
 	{+START,IF,{$FORCE_PREVIEWS}}
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			document.getElementById('submit_button').style.display='none';
 		//]]></script>
 	{+END}
@@ -44,7 +44,7 @@
 	<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} title="{!PREVIEW}" name="preview_iframe" id="preview_iframe" src="{$BASE_URL*}/uploads/index.html" class="hidden_preview_frame">{!PREVIEW}</iframe>
 {+END}{+END}{+END}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,"load",function() {
 		{+START,IF_PASSED,JAVASCRIPT}
 			{JAVASCRIPT`}

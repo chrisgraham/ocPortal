@@ -96,7 +96,7 @@
 									<td>
 										{+START,IF,{$JS_ON}}
 											<img id="review_bar_1__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_2__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_3__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_4__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_5__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" />
-											<script type="text/javascript">// <![CDATA[
+											<script>// <![CDATA[
 												function new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(review,first_time)
 												{
 													var i,bit;
@@ -248,7 +248,7 @@
 
 {+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}{+START,IF,{$NOT,{$VALUE_OPTION,xhtml_strict}}}
 	{+START,IF,{$FORCE_PREVIEWS}}
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			document.getElementById('submit_button').style.display='none';
 		//]]></script>
 	{+END}
@@ -258,7 +258,7 @@
 
 {+START,IF_PASSED,USE_CAPTCHA}
 	{+START,IF,{USE_CAPTCHA}}
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			var form=document.getElementById('comments_form');
 			add_captcha_validation(form);
 		//]]></script>

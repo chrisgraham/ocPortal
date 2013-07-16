@@ -47,7 +47,7 @@
 				<div id="tree_list__root_tree_list">
 					<!-- List put in here -->
 				</div>
-				<script type="text/javascript">// <![CDATA[
+				<script>// <![CDATA[
 					var current_selection='';
 					var site_tree=new tree_list('tree_list','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1','','',false,null,false,true);
 				//]]></script>
@@ -102,7 +102,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	var all_menus=[];
 	{+START,LOOP,ALL_MENUS}
 		all_menus.push('{_loop_var;/}');

@@ -14,7 +14,7 @@
 	</ul>
 {+END}
 
-<script type="text/javascript">
+<script>
 // <![CDATA[
 function on_login_completed_lobby()
 {

@@ -38,7 +38,7 @@ function bookmarks_script()
 			add_bookmark(get_member(),$folder,post_param('title'),post_param('page_link'));
 
 			$content=inform_screen($title,do_lang_tempcode('SUCCESS'));
-			$content->attach('<script type="text/javascript">// <![CDATA[
+			$content->attach('<script>// <![CDATA[
 				if (window.opener) window.close();
 			//]]></script>');
 			break;

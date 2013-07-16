@@ -10,7 +10,7 @@
 	<li>{!GOTO_CHAT_LOBBY_FOR_MORE,{$PAGE_LINK*,_SEARCH:chat}}</li>
 </ul>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	window.detect_if_chat_window_closed_checker=window.setInterval(function() {
 		if (typeof detect_if_chat_window_closed!='undefined') detect_if_chat_window_closed();
 	},5);

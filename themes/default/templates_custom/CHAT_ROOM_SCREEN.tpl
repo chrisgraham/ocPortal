@@ -44,7 +44,7 @@
 	{!USERS_IN_ROOM} <span id="chat_members_update" class="vertical_alignment"><img aria-busy="true" src="{$IMG*,loading}" title="{!LOADING}" alt="{!LOADING}" /> <span>{!LOADING}</span></span>
 </p>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 function on_login_completed_room()
 {
 	var messages=document.getElementById('messages_window');

@@ -22,12 +22,12 @@
 		{+END}
 	</select>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		setup_privilege_override_selector('access_{GROUP_ID%}',{DEFAULT_ACCESS%},'{PRIVILEGE%}','{TITLE/;}',{$?,{ALL_GLOBAL},true,false});
 	//]]></script>
 
 	{+START,IF,{$NOT,{ALL_GLOBAL}}}
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			var list=document.getElementById('access_{GROUP_ID*;}_presets');
 			// Test to see what we wouldn't have to make a change to get - and that is what we're set at
 			if (!copy_permission_presets('access_{GROUP_ID*;}','0',true)) list.selectedIndex=list.options.length-4;

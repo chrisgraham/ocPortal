@@ -10,7 +10,7 @@
 		{+START,IF_NON_EMPTY,{STDOUT}}<p class="text_output">{STDOUT*}</p>{+END}
 		{STDHTML}
 		{+START,IF_NON_EMPTY,{STDCOMMAND}}
-			<script type="text/javascript">// <![CDATA[
+			<script>// <![CDATA[
 				{STDCOMMAND}
 			//]]></script>
 		{+END}

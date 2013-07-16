@@ -85,7 +85,7 @@ function ce_do_header()
 <head>
 	<title>ocPortal Installation Options editor</title>
 	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-	<style type="text/css">
+	<style>
 ';
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
 echo '

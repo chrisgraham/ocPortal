@@ -1,5 +1,5 @@
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-<script type="text/javascript">// <![CDATA[
+<script src="http://www.google.com/jsapi"></script>
+<script>// <![CDATA[
 	var marker,map;
 	function google_map_users_initialize()
 	{

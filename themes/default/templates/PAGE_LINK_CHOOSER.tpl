@@ -7,7 +7,7 @@
 		<div id="tree_list__root_{NAME*}">
 			<!-- List put in here -->
 		</div>
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			new tree_list('{NAME*}','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1{+START,IF_PASSED,PAGE_TYPE}&page_type={PAGE_TYPE*}{+END}','','',false,null,false,true);
 		//]]></script>
 

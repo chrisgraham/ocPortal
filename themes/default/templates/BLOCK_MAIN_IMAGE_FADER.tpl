@@ -23,7 +23,7 @@
 	{+END}
 </noscript>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		var fp_animation=document.getElementById('image_fader_{$GET,RAND}');
 		var fp_animation_fader=document.createElement('img');

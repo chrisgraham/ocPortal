@@ -6,7 +6,7 @@
 	<!-- Block will load in here -->
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'real_load',function () {
 		call_block('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}','',document.getElementById('{$GET%,js_block_id}'));
 	} );

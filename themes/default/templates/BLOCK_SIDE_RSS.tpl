@@ -21,7 +21,7 @@
 	</section>
 
 	{+START,IF,{$JS_ON}}
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			handle_tray_cookie_setting('{TITLE|}');
 		//]]></script>
 	{+END}
@@ -43,7 +43,7 @@
 		{+END}
 	</div></section>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		var scroll_speed=60;
 		var scroller=document.getElementById('news_scroller{$GET%,side_news_id}');
 		if (scroller) {$,If there is a news post}

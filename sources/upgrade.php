@@ -610,7 +610,7 @@ function up_do_header()
 		<title>{$upgrader_title}</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 
-		<style type="text/css">/*<![CDATA[*/
+		<style>/*<![CDATA[*/
 END;
 @print(file_get_contents(css_enforce('global','default',false)));
 echo <<<END

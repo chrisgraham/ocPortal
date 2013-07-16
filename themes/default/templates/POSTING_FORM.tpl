@@ -47,7 +47,7 @@
 </form>
 
 {+START,IF,{$IS_A_COOKIE_LOGIN}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			if (typeof init_form_saving!='undefined') init_form_saving('posting_form');
 		} );

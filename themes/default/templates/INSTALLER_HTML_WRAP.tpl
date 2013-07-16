@@ -7,16 +7,16 @@
 		<meta name="description" content="ocPortal installer" />
 		<meta name="language" content="{$LANG*}" />
 		<link rel="icon" href="{$BRAND_BASE_URL*}/favicon.ico" type="image/x-icon" />
-		<link href="{CSS_URL*}" rel="stylesheet" type="text/css" />
-		<link href="{CSS_URL_2*}" rel="stylesheet" type="text/css" />
-		<style type="text/css">
+		<link href="{CSS_URL*}" rel="stylesheet" />
+		<link href="{CSS_URL_2*}" rel="stylesheet" />
+		<style>
 			{CSS_NOCACHE*}
 		</style>
 		<title>{!INSTALLER,ocPortal}</title>
 
 		<meta name="robots" content="noindex, nofollow" />
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			function install_stage_load()
 			{
 				//set_cookie('js_on',1,120);
@@ -158,7 +158,7 @@
 			<img alt="ocPortal" src="{LOGO_URL*}" width="324" height="89" />
 		</div>
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			window.setTimeout(function() {
 				if (window.alert===null)
 				{

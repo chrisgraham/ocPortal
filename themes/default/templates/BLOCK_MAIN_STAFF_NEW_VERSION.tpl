@@ -23,7 +23,7 @@
 </section>
 
 {+START,IF,{$JS_ON}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		handle_tray_cookie_setting('{!VERSION_ABOUT|,{VERSION}}');
 	//]]></script>
 {+END}

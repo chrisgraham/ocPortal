@@ -26,7 +26,7 @@
 
 <div id="cal{STUB#}Container" class="inline"></div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	var mindate=null,maxdate=null;
 
 	{+START,IF_PASSED,MIN_DATE_DAY}{+START,IF_PASSED,MIN_DATE_MONTH}{+START,IF_PASSED,MIN_DATE_YEAR}

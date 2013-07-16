@@ -5,7 +5,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	window.returnValue=true;
 
 	window.setTimeout(function () {

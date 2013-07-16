@@ -740,8 +740,8 @@ class Module_admin_themes
 		if (get_option('editarea')=='1')
 		{
 			attach_to_screen_header(make_string_tempcode('
-				<script language="javascript" type="text/javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
-				<script type="text/javascript">// <![CDATA[
+				<script language="javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
+				<script>// <![CDATA[
 				editAreaLoader.init({
 					id : "css"
 					,syntax: "css"
@@ -945,7 +945,7 @@ class Module_admin_themes
 		if (get_param_integer('save_and_stay',0)==1)
 		{
 			return inform_screen($title,protect_from_escaping('
-				<script type="text/javascript">// <![CDATA[
+				<script>// <![CDATA[
 					window.fauxmodal_alert(\''.addslashes(do_lang('SUCCESS')).'\');
 				//]]></script>
 			'));
@@ -1177,7 +1177,7 @@ class Module_admin_themes
 		if (get_option('editarea')=='1')
 		{
 			attach_to_screen_header(make_string_tempcode('
-				<script language="javascript" type="text/javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
+				<script language="javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
 			')); // XHTMLXHTML
 		}
 
@@ -1224,7 +1224,7 @@ class Module_admin_themes
 			if (get_option('editarea')=='1')
 			{
 				attach_to_screen_header('
-					<script type="text/javascript">// <![CDATA[
+					<script>// <![CDATA[
 					editAreaLoader.init({
 						id : "f'.$i.'_new"
 						,syntax: "'.$syntax.'"
@@ -1618,7 +1618,7 @@ class Module_admin_themes
 		if (get_param_integer('save_and_stay',0)==1)
 		{
 			return inform_screen($title,protect_from_escaping('
-				<script type="text/javascript">// <![CDATA[
+				<script>// <![CDATA[
 					window.fauxmodal_alert(\''.addslashes(do_lang('SUCCESS')).'\');
 				//]]></script>
 			'));

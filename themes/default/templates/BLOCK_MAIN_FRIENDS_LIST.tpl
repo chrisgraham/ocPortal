@@ -32,7 +32,7 @@
 			<p class="nothing_here">{!NO_ENTRIES}</p>
 		{+END}
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['.*'],{ },false,true);
 		//]]></script>
 		{+START,IF_NON_EMPTY,{PAGINATION}}

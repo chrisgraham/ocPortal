@@ -20,7 +20,7 @@
 				</div>
 			</form>
 
-			<script type="text/javascript">// <![CDATA[
+			<script>// <![CDATA[
 				require_javascript('javascript_ajax');
 				require_javascript('javascript_validation');
 			//]]></script>
@@ -29,7 +29,7 @@
 </div>
 
 {+START,IF,{$JS_ON}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		handle_tray_cookie_setting('{TITLE|}');
 	//]]></script>
 {+END}

@@ -30,7 +30,7 @@
 
 	{+START,LOOP,SYNDICATIONS}
 		{+START,IF_NON_EMPTY,{SYNDICATION_JAVASCRIPT}}
-			<script type="text/javascript">// <![CDATA[
+			<script>// <![CDATA[
 				{SYNDICATION_JAVASCRIPT/}
 			//]]></script>
 		{+END}

@@ -78,7 +78,7 @@
 		</tbody>
 	</table></div>
 
-	<script type="text/javascript">
+	<script>
 	// <![CDATA[
 		{+START,LOOP,FRIENDS}
 			{+START,IF,{$NEQ,{ONLINE_TEXT*},{!ACTIVE}}}

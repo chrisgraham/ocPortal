@@ -14,7 +14,7 @@
 	</ul>
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	document.getElementById('saved__{TITLE|}').getElementsByTagName('input')[1].onclick=function()
 	{
 		var form=this.form;

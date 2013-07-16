@@ -67,7 +67,7 @@
 	</div>
 {+END}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	function update_product_info_display()
 	{
 		var product=document.getElementById('product');

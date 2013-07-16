@@ -48,7 +48,7 @@
 	</div>
 </section>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		{+START,IF,{$JS_ON}}
 			handle_tray_cookie_setting('{!MEMBER|}');

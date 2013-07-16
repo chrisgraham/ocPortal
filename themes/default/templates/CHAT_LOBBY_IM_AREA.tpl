@@ -27,7 +27,7 @@
 		</div>
 	</form>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		window.setTimeout(function() { /* Needed for IE */
 			add_event_listener_abstract(window,'real_load',function () {
 				try

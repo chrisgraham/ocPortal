@@ -4,7 +4,7 @@
 
 <div class="ticker_wrap" role="marquee" id="ticktickticker{$GET,RAND_ID_TICKER}"></div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		var ticktickticker=document.getElementById('ticktickticker{$GET,RAND_ID_TICKER}');
 		if ((browser_matches('opera')) || (browser_matches('chrome'))) // Slower, but chrome does not support marquee's

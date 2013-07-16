@@ -43,7 +43,7 @@
 		</div>
 
 		{+START,IF_PASSED,SERIALIZED_OPTIONS}{+START,IF_PASSED,HASH}
-			<script type="text/javascript">// <![CDATA[
+			<script>// <![CDATA[
 				window.comments_serialized_options='{SERIALIZED_OPTIONS/;}';
 				window.comments_hash='{HASH/;}';
 			//]]></script>

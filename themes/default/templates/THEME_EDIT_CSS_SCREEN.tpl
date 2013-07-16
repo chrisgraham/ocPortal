@@ -432,7 +432,7 @@
 
 		{+START,IF_NON_EMPTY,{ENTRIES}}
 			<div id="colours_go_here">
-				<script type="text/javascript">// <![CDATA[
+				<script>// <![CDATA[
 					if (typeof window.do_color_chooser!='undefined')
 					{
 						{ENTRIES}
@@ -485,7 +485,7 @@
 	<iframe name="save_frame" id="save_frame" title="{!SAVE_AND_STAY}" class="hidden_save_frame" src="{$BASE_URL*}/uploads/index.html">{!SAVE_AND_STAY}</iframe>
 {+END}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		if (window.location.hash) window.setTimeout(function() {
 			document.getElementById('frame_css').contentWindow.editArea.execCommand('show_search');

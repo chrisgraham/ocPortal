@@ -1284,7 +1284,7 @@ function animate_frame_load(pf,frame,leave_gap_top)
 function illustrate_frame_load(pf,frame)
 {
 	{+START,IF,{$CONFIG_OPTION,enable_animations}}
-		var head='<style type="text/css">',cssText='';
+		var head='<style>',cssText='';
 		if (!browser_matches('ie8'))
 		{
 			for (var i=0;i<document.styleSheets.length;i++)
@@ -2615,7 +2615,7 @@ function set_inner_html(element,tHTML,append,force_dom)
 			{
 				var r_id='js_'+Math.random();
 				window['js_runs_test_'+r_id]=false;
-				element.innerHTML+='<script id="'+r_id+'" type="text/javascript">window[\'js_runs_test_'+r_id+'\']=true;</script>';
+				element.innerHTML+='<script id="'+r_id+'">window[\'js_runs_test_'+r_id+'\']=true;</script>';
 
 				window.setTimeout(function() {
 					if (!window['js_runs_test_'+r_id]) // If JS was not run by the above op

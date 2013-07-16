@@ -36,7 +36,7 @@
 		</div></div>
 	</div>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			start_realtime_rain();
 		} );

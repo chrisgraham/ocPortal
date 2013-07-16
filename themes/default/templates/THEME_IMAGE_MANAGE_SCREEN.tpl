@@ -2,7 +2,7 @@
 
 <h2>{!EDIT}</h2>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	window.main_form_very_simple=true;
 //]]></script>
 

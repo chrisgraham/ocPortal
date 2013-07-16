@@ -8,7 +8,7 @@
 	<div class="shocker_right" id="comcodeshocker{$GET,RAND_ID_SHOCKER}_right"></div>
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	if (typeof window.shocker_parts=='undefined')
 	{
 		window.shocker_parts=[];

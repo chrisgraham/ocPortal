@@ -11,7 +11,7 @@
 
 	{$REQUIRE_JAVASCRIPT,javascript_tag_cloud}
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			load_tag_cloud(document.getElementById('tag_sphere'));
 		} );

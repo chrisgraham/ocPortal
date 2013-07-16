@@ -32,7 +32,7 @@
 	</form>
 </div>
 
-<script type="text/javascript">//<![CDATA[
+<script>//<![CDATA[
 	if (jQuery('#fp_status_form').length!=0) {
 		jQuery('textarea','#fp_status_form').bind('focus',s_update_focus);
 		jQuery('textarea','#fp_status_form').bind('blur',s_update_blur);

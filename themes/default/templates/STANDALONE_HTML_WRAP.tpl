@@ -19,7 +19,7 @@
 
 		{$JS_TEMPCODE,footer}
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			if (window.parent)
 			{
 				add_event_listener_abstract(window,'real_load',function () {

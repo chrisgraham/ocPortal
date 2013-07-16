@@ -134,7 +134,7 @@
 <br />
 <br />
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	for (var i=0;i<20;i++)
 	{
 		var cookie_value=ReadCookie('doctray_'+i);

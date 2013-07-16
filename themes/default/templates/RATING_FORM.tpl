@@ -26,7 +26,7 @@
 								<img id="rating_bar_2__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_4__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_6__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_8__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_10__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" />
 							{+END}
 
-							<script type="text/javascript">// <![CDATA[
+							<script>// <![CDATA[
 								apply_rating_highlight_and_ajax_code({LIKES}==1,{RATING%},'{CONTENT_TYPE%}','{ID%}','{TYPE%}',{RATING%},'{CONTENT_URL;/}','{CONTENT_TITLE;/}',true);
 							//]]></script>
 						{+END}

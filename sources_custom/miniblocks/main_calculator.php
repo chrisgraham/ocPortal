@@ -26,7 +26,7 @@ foreach ($map as $key=>$val)
 }
 $uniqid=uniqid('',true);
 echo '
-	<script type="text/javascript">
+	<script>
 		function calculate_sum_'.$uniqid.'(elements)
 		{
 			var equation=\''.$equation.'\';

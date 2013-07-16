@@ -17,7 +17,7 @@
 
 {$,Tie into callback event to see when finished, for our slideshows}
 {$,API: http://developer.apple.com/library/safari/#documentation/QuickTime/Conceptual/QTScripting_JavaScript/bQTScripting_JavaScri_Document/QuickTimeandJavaScri.html}
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'real_load',function () {
 		if (document.getElementById('next_slide'))
 		{

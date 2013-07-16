@@ -176,7 +176,7 @@ foreach ($todo as $i=>$target_file)
 	echo '</li>';
 }
 echo '</ol>';
-echo '<script type="text/javascript">// <![CDATA[
+echo '<script>// <![CDATA[
 	window.scrollTo(0,document.getElementById("file_'.strval($file_offset).'").offsetTop-100);
 //]]></script>';
 if ($next_offset_url=='')
@@ -207,7 +207,7 @@ END;
 		<meta http-equiv="refresh" content="3;url={$_refresh_url}" />
 END;
 	echo <<<END
-		<style type="text/css">/*<![CDATA[*/
+		<style>/*<![CDATA[*/
 END;
 global $FILE_BASE;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($FILE_BASE.'/themes/default/css/global.css'))))));

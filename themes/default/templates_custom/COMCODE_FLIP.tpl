@@ -10,7 +10,7 @@
 	{$COMCODE,{PARAM}}
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		var _e=document.getElementById("flipbox_{$GET,RAND}");
 		_e.onclick=function() {

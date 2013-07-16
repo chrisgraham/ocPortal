@@ -333,14 +333,14 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 		<html>
 		<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" type="text/css" media="all" href="spell-check-style.css" />';
+		<link rel="stylesheet" media="all" href="spell-check-style.css" />';
 	}
 
 	$results=array();
 
 	if (trim($text)!='')
 	{
-		$varlines='<script type="text/javascript">var suggested_words={ ';
+		$varlines='<script>var suggested_words={ ';
 		$infolines='var spellcheck_info={';
 		$counter=0;
 		$suggest_count=0;

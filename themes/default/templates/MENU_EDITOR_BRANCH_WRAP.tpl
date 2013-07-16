@@ -26,7 +26,7 @@
 		<input class="horiz_field_sep" value="{!DELETE}" type="button" id="del_{I*}" name="del_{I*}" onclick="delete_menu_branch(this);" />
 	</div>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		document.getElementById('new_window_{I%}').value='{NEW_WINDOW%}';
 		document.getElementById('check_perms_{I%}').value='{CHECK_PERMS%}';
 		document.getElementById('branch_type_{I%}').selectedIndex={+START,IF,{$NOT,{CLICKABLE_SECTIONS}}}{BRANCH_TYPE%}{+END}{+START,IF,{CLICKABLE_SECTIONS}}({BRANCH_TYPE%}==0)?0:({BRANCH_TYPE%}-1){+END};

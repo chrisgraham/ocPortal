@@ -12,7 +12,7 @@
 
 		{$REPLACE, for=", for="second_,{$REPLACE, id=", id="second_,{FORM2}}}
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			function preview_generator_mouseover(event)
 			{
 				if (typeof event=='undefined') var event=window.event;

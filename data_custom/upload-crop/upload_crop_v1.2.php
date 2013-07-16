@@ -209,7 +209,7 @@ if (isset($_POST["upload_thumbnail"]) && strlen($large_photo_exists)>0) {
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<meta name="generator" content="WebMotionUK" />
 	<title>Thumbnail generator</title>
-	<link href="../../themes/default/templates_cached/EN/global.css" rel="stylesheet" type="text/css" />
+	<link href="../../themes/default/templates_cached/EN/global.css" rel="stylesheet" />
 	<script type="text/javascript" src="js/jquery-pack.js"></script>
 	<script type="text/javascript" src="js/jquery.imgareaselect.min.js"></script>
 </head>

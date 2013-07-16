@@ -1,6 +1,6 @@
 {$REQUIRE_JAVASCRIPT,javascript_ajax}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}{+START,IF_PASSED,EXTRA_GET_PARAMS}{EXTRA_GET_PARAMS/;}{+END}',document.getElementById('{$GET;,wrapper_id}'),['[^_]*_start','[^_]*_max'], { } );
 

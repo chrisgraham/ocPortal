@@ -30,7 +30,7 @@
 		<p>{!FIELDS_NEW_HELP}</p>
 		{FIELDS_NEW}
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			catalogue_field_change_watching();
 		//]]></script>
 

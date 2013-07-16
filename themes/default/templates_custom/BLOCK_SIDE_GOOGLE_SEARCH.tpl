@@ -3,8 +3,8 @@
 
 	<div id="cse-search-form" style="width: 100%;">Loading</div>
 
-	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-	<script type="text/javascript">// <![CDATA[
+	<script src="http://www.google.com/jsapi"></script>
+	<script>// <![CDATA[
 		var google_uid='{USER_SEARCH_ID}';
 		google.load('search', '1', {language : 'en'});
 		google.setOnLoadCallback(function(){
@@ -31,8 +31,8 @@
 		}, true);
 	//]]></script>
 
-	<link rel="stylesheet" href="http://www.google.com/cse/style/look/default.css" type="text/css" />
-	<style type="text/css">
+	<link rel="stylesheet" href="http://www.google.com/cse/style/look/default.css" />
+	<style>
 		.gsc-clear-button {
 			 display: none;
 		}

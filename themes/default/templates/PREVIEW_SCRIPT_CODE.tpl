@@ -1,4 +1,4 @@
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	var post=window.parent.document.getElementById('post');
 
 	// Replace Comcode

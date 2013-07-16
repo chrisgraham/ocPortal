@@ -6,7 +6,7 @@
 			{CONTENT}
 		</select>
 	</datalist>
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		document.getElementById('{NAME%}').onkeyup();
 		if (typeof window.HTMLDataListElement=='undefined') document.getElementById('{NAME%}').className='input_line';
 	//]]></script>

@@ -1,4 +1,4 @@
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function() {
 		replace_comments_form_with_ajax('{OPTIONS;^}','{HASH;^}','comments_form','comments_wrapper');
 

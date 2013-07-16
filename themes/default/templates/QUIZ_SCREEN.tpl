@@ -18,7 +18,7 @@
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 {+START,IF_NON_EMPTY,{TIMEOUT}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		setTimeout(function() { window.fauxmodal_alert('{!OUT_OF_TIME;;}',function() { document.getElementById('survey').submit(); } ); }, {TIMEOUT%}*1000);
 		setInterval(function() { var st=document.getElementById('survey_timer'); var new_value=window.parseInt(get_inner_html(st))-1; if (new_value>=0) set_inner_html(st,new_value); }, 1000);
 	//]]></script>
@@ -49,7 +49,7 @@
 	</div>
 </form>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	var e=get_elements_by_class_name(document.getElementById('survey'),'field_input');
 	for (var i=0;i<e.length;i++)
 		set_up_change_monitor(e[i].childNodes[0]);

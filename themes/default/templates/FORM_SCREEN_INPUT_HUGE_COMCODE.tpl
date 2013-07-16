@@ -24,7 +24,7 @@
 			<textarea tabindex="{TABINDEX*}" class="{+START,IF,{SCROLLS}}textarea_scroll{+END} input_text{_REQUIRED} wide_field" cols="70" rows="{ROWS*}" id="{NAME*}" name="{NAME*}">{DEFAULT*}</textarea>
 
 			{+START,IF,{$IN_STR,{REQUIRED},wysiwyg}}
-				<script type="text/javascript">// <![CDATA[
+				<script>// <![CDATA[
 					if (wysiwyg_on()) document.getElementById('{NAME*;}').readOnly=true;
 				//]]></script>
 			{+END}
@@ -33,7 +33,7 @@
 			{+END}
 		</div>
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			set_up_change_monitor('form_table_field_input__{$GET,randomised_id}');
 		//]]></script>
 	</td>

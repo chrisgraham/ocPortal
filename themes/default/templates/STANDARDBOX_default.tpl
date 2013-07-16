@@ -56,7 +56,7 @@
 </div>
 
 {+START,IF_IN_ARRAY,OPTIONS,tray_open,tray_closed}{+START,IF,{$JS_ON}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		handle_tray_cookie_setting('{TITLE|}');
 	//]]></script>
 {+END}{+END}

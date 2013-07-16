@@ -22,7 +22,7 @@
 					<!-- List put in here -->
 				</div>
 			</form>
-			<script type="text/javascript">// <![CDATA[
+			<script>// <![CDATA[
 				var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
 
 				var actions_tpl='{!ACTIONS;}:<ul role="navigation" class="actions_list">[1]<\/ul>';

@@ -9,7 +9,7 @@
 	</{$?,{$EQ,{$LCASE,{$SUBSTR,{URL},-4}},.mp3},audio,video}>
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	jwplayer("flv_container_{$GET%,rand_id}").setup({
 		autostart: false,
 		players: [

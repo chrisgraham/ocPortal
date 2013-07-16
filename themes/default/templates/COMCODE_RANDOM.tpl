@@ -1,7 +1,7 @@
 {$SET,RAND_ID_RANDOM,rand{$RAND}}
 
 <div id="comcoderandom{$GET,RAND_ID_RANDOM}"></div>
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	var parts={};
 	{PARTS}
 

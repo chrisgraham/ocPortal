@@ -177,7 +177,7 @@ It's acceptable to use inline Javascript (the 'script' tag) if it's only a short
 
 You should use 'CDATA' for your <script> tag, like:
 [code="HTML"]
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	...
 //]]></script>
 [/code]
@@ -200,7 +200,7 @@ This is a little example that does something completely pointless. This complex 
 
 In the template:
 [code="HTML"]
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 /* Store a template parameter into a global variable.
 Placing on the window object is the same as setting a global variable.
 Writing it like this just makes it more clear it's a global variable which reduces the risk of obscure bugs.

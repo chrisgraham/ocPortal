@@ -44,7 +44,7 @@
 				<div id="tree_list__root_tree_list" class="tree_list__root_tree_list pt_editor">
 					<!-- List put in here -->
 				</div>
-				<script type="text/javascript">// <![CDATA[
+				<script>// <![CDATA[
 					var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=1{$KEEP;}','','',true);
 					var column_color='{COLOR*;}';
 

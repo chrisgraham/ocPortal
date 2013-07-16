@@ -76,7 +76,7 @@
 				{+END}
 
 				{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
-					<script type="text/javascript">// <![CDATA[
+					<script>// <![CDATA[
 						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('{NAME*}').readOnly=true; /* Stop typing while it loads */
 
 						{+START,IF_PASSED,WORD_COUNTER}
@@ -138,7 +138,7 @@
 
 			<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
 
-			<script type="text/javascript">// <![CDATA[
+			<script>// <![CDATA[
 				initialise_dragdrop_upload('container_for_{NAME*;}','{NAME*;}');
 			//]]></script>
 		</td>

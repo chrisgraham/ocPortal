@@ -1,4 +1,4 @@
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	window.perm_serverid='{SERVER_ID;/}';
 //]]></script>
 

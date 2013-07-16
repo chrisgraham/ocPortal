@@ -2,7 +2,7 @@
 <input name="tick_on_form__{NAME*}" value="0" type="hidden" />
 
 {+START,IF,{$EQ,{NAME},delete}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			assign_tick_deletion_confirm('{NAME/;}');
 		} );

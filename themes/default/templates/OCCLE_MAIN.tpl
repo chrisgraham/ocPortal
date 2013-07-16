@@ -13,7 +13,7 @@
 			</div>
 		</form>
 	</div>
-	<script type="text/javascript">
+	<script>
 	// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			try { document.getElementById("occle_command").focus(); } catch (e) { }

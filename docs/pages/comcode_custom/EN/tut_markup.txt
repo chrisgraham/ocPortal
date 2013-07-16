@@ -506,8 +506,8 @@ What follows is an example XHTML document, utilising all of the above principles
 		<meta name="keywords" content="example document,XHTML,element,attribute" />
 		<meta name="author" content="ocProducts" />
 		<meta name="description" content="An example XHTML document." />
-		<script type="text/javascript" src="http://example.com/script.js" />
-		<link href="http://example.com/style.css" rel="stylesheet" media="all" type="text/css" />
+		<script src="http://example.com/script.js" />
+		<link href="http://example.com/style.css" rel="stylesheet" media="all" />
 		<link href="http://example.com/favicon.jpg" rel="icon" type="image/jpg" />
 		<link href="http://example.com/" rel="home" title="Home" />
 	</head>

@@ -23,7 +23,7 @@
 	</div>
 
 	{+START,IF_PASSED,AUTO_ADD}
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			add_event_listener_abstract(window,'load',function() {
 				var as=document.getElementById('donext_item_{$GET,rand_donextitem}').getElementsByTagName('a');
 				for (var i=0;i<as.length;i++)

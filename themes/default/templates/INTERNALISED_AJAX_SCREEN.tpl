@@ -5,7 +5,7 @@
 	{$REQUIRE_JAVASCRIPT,javascript_ajax}
 	{$REQUIRE_JAVASCRIPT,javascript_validation}
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			internalise_ajax_block_wrapper_links('{URL;/}',document.getElementById('{$GET;,wrapper_id}'),['.*'],{ },false,true);
 		} );
@@ -13,7 +13,7 @@
 </div>
 
 {+START,IF_PASSED,CHANGE_DETECTION_URL}{+START,IF_NON_EMPTY,{CHANGE_DETECTION_URL}}
-	<script type="text/javascript">
+	<script>
 	// <![CDATA[
 		if (typeof window.soundManager!='undefined')
 		{

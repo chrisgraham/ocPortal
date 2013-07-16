@@ -142,7 +142,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			</div>
 
 			{+START,IF,{$DEV_MODE}}
-				<script type="text/javascript">// <![CDATA[
+				<script>// <![CDATA[
 					try { window.scrollTo(0,1000000); } catch (e) {};
 					window.fauxmodal_alert('{!PLEASE_REVIEW_ERRORS_AT_BOTTOM;}'); // Before Firefox dies with an XHTML error, let the developer see what is wrong
 				//]]></script>
@@ -273,7 +273,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 		{+END}
 
 		{$JS_TEMPCODE,footer}
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			script_load_stuff();
 
 			{+START,IF,{$EQ,{$_GET,wide_print},1}}try { window.print(); } catch (e) {};{+END}

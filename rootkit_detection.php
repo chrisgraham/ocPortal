@@ -227,7 +227,7 @@ function rd_do_header()
 	<head>
 		<title>ocPortal rootkit detector</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-		<style type="text/css">/*<![CDATA[*/
+		<style>/*<![CDATA[*/
 END;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
 echo <<<END

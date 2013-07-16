@@ -6,7 +6,7 @@
 			<head>
 				<title><xsl:value-of select="/atom:feed/atom:title" disable-output-escaping="yes" /></title>
 				<meta name="GENERATOR" content="{$BRAND_NAME*}" />
-				<script type="text/javascript" src="{JAVASCRIPT_XSL_MOPUP*}"></script>
+				<script src="{JAVASCRIPT_XSL_MOPUP*}"></script>
 				<xsl:element name="meta">
 					<xsl:attribute name="name"><xsl:text>description</xsl:text></xsl:attribute>
 					<xsl:attribute name="content"><xsl:value-of select="/atom:feed/atom:subtitle" /></xsl:attribute>

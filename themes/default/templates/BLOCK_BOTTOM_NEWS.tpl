@@ -11,7 +11,7 @@
 {$SET,bottom_news_id,{$RAND}}
 
 <div class="ticker_wrap" role="marquee" id="ticktickticker_news{$GET%,bottom_news_id}"></div>
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	(function() {
 		var ticktickticker=document.getElementById('ticktickticker_news{$GET%,bottom_news_id}');
 		if ((browser_matches('opera')) || (browser_matches('chrome'))) // Slower, but chrome does not support marquee's

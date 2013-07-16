@@ -9,7 +9,7 @@
 	{+END}
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	{+START,IF_PASSED,SWITCH_TIME}
 		function move_between_big_tabs_{$FIX_ID,{PASS_ID|}}()
 		{

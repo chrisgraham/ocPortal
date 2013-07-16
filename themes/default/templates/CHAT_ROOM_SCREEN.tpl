@@ -115,7 +115,7 @@
 	</div></div>
 </form>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'real_load',function () {
 		chat_load({ROOM_ID%});
 	} );

@@ -4,7 +4,7 @@
 {+START,IF,{$IS_IN_GROUP,{$CONFIG_OPTION,ocjester_emoticon_magnet_shown_for}}}
 	{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
 	<div id="smilecrazy{UNIQID%}"></div>
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			if (typeof window.crazy_criters=='undefined')
 			{

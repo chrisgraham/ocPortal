@@ -1,6 +1,6 @@
 <div id="java_detect"></div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	var java_detect='';
 	java_detect+='	<object width="1" height="1" classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93" id="java_checker_1">';
 	java_detect+='		<param name="codebase" value="{$BASE_URL*}/data/javaupload/" />';

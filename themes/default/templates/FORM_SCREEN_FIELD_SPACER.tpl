@@ -5,7 +5,7 @@
 				<a class="toggleable_tray_button" id="fes{TITLE|}" onkeypress="return this.onclick.call(this,event);" onclick="toggle_subordinate_fields(this.getElementsByTagName('img')[0],'fes{TITLE|}_help'); return false;" href="#"><img class="vertical_alignment right" alt="{!CONTRACT}: {TITLE*}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
 
 				{+START,IF_PASSED,SECTION_HIDDEN}{+START,IF,{SECTION_HIDDEN}}
-					<script type="text/javascript">// <![CDATA[
+					<script>// <![CDATA[
 						add_event_listener_abstract(window,'load',function (event) {
 							document.getElementById('fes{TITLE|}').onclick(event);
 						} );

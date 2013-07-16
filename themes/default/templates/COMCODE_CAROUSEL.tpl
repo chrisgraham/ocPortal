@@ -14,7 +14,7 @@
 	{CONTENT}
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		initialise_carousel({$GET,carousel_id});
 	} );

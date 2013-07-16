@@ -42,7 +42,7 @@
 		</div>
 
 		<div class="trinav_mid text"><span>
-			<script type="text/javascript">// <![CDATA[
+			<script>// <![CDATA[
 				add_event_listener_abstract(window,'real_load',function () {
 					window.slideshow_current_position={_X%}-1;
 					window.slideshow_total_slides={_N%};

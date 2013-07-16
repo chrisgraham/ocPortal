@@ -43,7 +43,7 @@ $content='
 		'.$subdownloads->evaluate().'
 	</div>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,\'load\',function () {
 			initialise_carousel('.$carousel_id.');
 		} );

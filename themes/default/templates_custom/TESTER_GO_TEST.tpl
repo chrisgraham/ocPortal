@@ -7,7 +7,7 @@
 		<label for="test_{ID*}_0"><input type="radio" id="test_{ID*}_0" name="test_{ID*}" value="0" /> {!TEST_INCOMPLETE}</label>
 		<label for="test_{ID*}_1"><input type="radio" id="test_{ID*}_1" name="test_{ID*}" value="1" /> {!TEST_SUCCESSFUL}</label>
 		<label for="test_{ID*}_2"><input type="radio" id="test_{ID*}_2" name="test_{ID*}" value="2" /> {!TEST_FAILED}</label>
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			document.getElementById('test_{ID*}_{VALUE*}').checked=true;
 		//]]></script>
 	</td>

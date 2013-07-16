@@ -1,5 +1,5 @@
 {+START,IF_PASSED,JS}
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	{JS/}
 //]]></script>
 {+END}

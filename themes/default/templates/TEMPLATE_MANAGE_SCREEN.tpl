@@ -4,7 +4,7 @@
 
 {EDIT_FORM}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	window.current_theme='{THEME;~}';
 	load_template_previews();
 //]]></script>

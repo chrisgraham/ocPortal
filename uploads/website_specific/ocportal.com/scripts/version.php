@@ -41,7 +41,7 @@ header('Content-type: text/plain');
 if (get_param_integer('html',0)==1)
 {
 	header('Content-type: text/html');
-	echo '<script type="text/javascript" src="/themes/default/templates_cached/EN/javascript.js"></script>';
+	echo '<script src="/themes/default/templates_cached/EN/javascript.js"></script>';
 }
 
 // Different ways at looking at the version number

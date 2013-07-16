@@ -25,7 +25,7 @@
 			{$PARAGRAPH,{PREVIEW}}
 		{+END}
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			disable_preview_scripts(document.getElementById('view_{ID*}'));
 		//]]></script>
 	</div>
@@ -55,7 +55,7 @@
 				<textarea onchange="set_edited_panel(null,'{ID*;}');" rows="50" cols="20" class="{$?,{IS_PANEL},ze_textarea,ze_textarea_middle} textarea_scroll{CLASS*}" id="edit_{ID*}_textarea" name="{ID*}">{COMCODE*}</textarea>
 
 				{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
-					<script type="text/javascript">// <![CDATA[
+					<script>// <![CDATA[
 						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('edit_{ID*;}_textarea').readOnly=true;
 					//]]></script>
 				{+END}

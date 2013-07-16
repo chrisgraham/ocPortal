@@ -24,7 +24,7 @@
 	</section>
 
 	{+START,IF,{$JS_ON}}
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			handle_tray_cookie_setting('{!TIPS|}');
 		//]]></script>
 	{+END}
@@ -32,7 +32,7 @@
 	{$REQUIRE_JAVASCRIPT,javascript_ajax}
 	{$REQUIRE_JAVASCRIPT,javascript_validation}
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
 			internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['staff_tips_dismiss'],{ },false,true);
 		} );

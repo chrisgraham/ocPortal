@@ -36,7 +36,7 @@ if (!running_script('tracker'))
 			<iframe title="'.$title_tracker.'" frameborder="0" name="'.$frame_name.'" id="'.$frame_name.'" marginwidth="0" marginheight="0" class="expandable_iframe" scrolling="no" src="'.find_script('tracker').$params.'">'.$title_tracker.'</iframe>
 		</div>
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			window.setInterval(function() {
 				if ((typeof window.frames[\''.$frame_name.'\']!=\'undefined\') && (typeof window.frames[\''.$frame_name.'\'].trigger_resize!=\'undefined\')) resizeFrame(\''.$frame_name.'\');
 			}, 1000);

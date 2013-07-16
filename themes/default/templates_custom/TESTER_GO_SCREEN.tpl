@@ -18,7 +18,7 @@
 		</p>
 	</div>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		document.getElementById('test_form').elements['show_for_all'].checked={SHOW_FOR_ALL%};
 		document.getElementById('test_form').elements['show_successful'].checked={SHOW_SUCCESSFUL%};
 

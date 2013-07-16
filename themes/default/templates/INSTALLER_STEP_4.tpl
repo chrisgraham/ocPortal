@@ -22,7 +22,7 @@
 </form>
 
 {+START,IF_PASSED,JS}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		{JS/}
 
 		var domain=document.getElementById('domain');

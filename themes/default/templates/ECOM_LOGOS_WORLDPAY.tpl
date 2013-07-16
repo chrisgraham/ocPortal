@@ -1,4 +1,4 @@
-<script type="text/javascript" src="https://www.worldpay.com/cgenerator/cgenerator.php?instId={INST_ID*}"></script>
+<script src="https://www.worldpay.com/cgenerator/cgenerator.php?instId={INST_ID*}"></script>
 
 <!--
 

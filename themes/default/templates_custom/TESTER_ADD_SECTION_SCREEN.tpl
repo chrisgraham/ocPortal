@@ -9,7 +9,7 @@
 		</tbody></table></div>
 
 		<h2>{!TESTER_TESTS}</h2>
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			var add_template='{ADD_TEMPLATE;~/}';
 			var next_id=1;
 

@@ -4,7 +4,7 @@
 
 <div class="inline" id="comcodejumping{$GET,RAND_ID_JUMPING}"></div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		var my_id=parseInt(Math.random()*10000);
 		jumper_parts[my_id]=[{PARTS/}''];

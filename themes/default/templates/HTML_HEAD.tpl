@@ -1,5 +1,5 @@
 {$,Want a nice Google font? Try uncommenting the below}
-{$,<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet" type="text/css" />}
+{$,<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet" />}
 
 {$,The character set of the page}
 <meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
@@ -117,7 +117,7 @@
 
 {$,Google Analytics account, if one set up}
 {+START,IF_NON_EMPTY,{$CONFIG_OPTION,google_analytics}}{+START,IF,{$NOR,{$IS_STAFF},{$IS_ADMIN}}}
-	<script type="text/javascript">
+	<script>
 		var _gaq=_gaq || [];
 		_gaq.push(['_setAccount','{$TRIM,{$CONFIG_OPTION*;,google_analytics}}']);
 		_gaq.push(['_trackPageview']);
@@ -136,7 +136,7 @@
 {+END}{+END}
 
 {$,Detecting of Timezones and Javascript support}
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	{+START,IF,{$CONFIG_OPTION,detect_javascript}}
 		{+START,IF,{$AND,{$EQ,,{$_GET,keep_has_js}},{$NOT,{$JS_ON}}}}
 			if ((window.location.href.indexOf('upgrader.php')==-1) && (window.location.href.indexOf('webdav.php')==-1) && (window.location.search.indexOf('keep_has_js')==-1)) {$,Redirect with JS on, and then hopefully we can remove keep_has_js after one click. This code only happens if JS is marked off, no infinite loops can happen.}

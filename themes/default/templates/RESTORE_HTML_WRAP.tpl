@@ -4,9 +4,9 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 		<meta name="language" content="{$LANG*}" />
-		<link href="restore.php?type=css" rel="stylesheet" type="text/css" />
+		<link href="restore.php?type=css" rel="stylesheet" />
 		{+START,IF_NON_EMPTY,{CSS_NOCACHE}}
-			<style type="text/css">/*<![CDATA[*/
+			<style>/*<![CDATA[*/
 				{CSS_NOCACHE*}
 			/*]]>*/</style>
 		{+END}

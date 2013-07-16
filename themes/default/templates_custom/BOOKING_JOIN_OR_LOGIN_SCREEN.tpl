@@ -15,7 +15,7 @@
 {FORM}
 
 {+START,IF_PASSED,JAVASCRIPT}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		{JAVASCRIPT`}
 	//]]></script>
 {+END}

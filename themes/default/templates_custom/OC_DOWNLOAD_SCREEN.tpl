@@ -45,7 +45,7 @@
 
 <p style="margin-top: 3em"><a class="link_exempt" href="http://www.arvixe.com/5256-223-3-122.html" target="_blank" title="ocPortal hosting (this link will open in a new window)"><img src="{$IMG*,468.60.ocportal}" alt="" /></a></p>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	document.getElementById('s_download').style.display='none';
 	document.getElementById('s_transfer').style.display='none';
 

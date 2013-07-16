@@ -6,7 +6,7 @@ function require_javascript($javascript)
 	{
 		attach_to_screen_header('
 			<!-- Third party script for BrowserPlus runtime (Google Gears included in Gears runtime now) -->
-			<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+			<script src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
 		');
 
 		$javascript='javascript_plupload';

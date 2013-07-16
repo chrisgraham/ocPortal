@@ -75,7 +75,7 @@
 
 	<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} class="form_screen_iframe" title="{!EDIT}" name="iframe_under" id="iframe_under" src="{$BASE_URL*}/uploads/index.html">{!EDIT}</iframe>
 
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		if (typeof window.try_to_simplify_iframe_form!='undefined') try_to_simplify_iframe_form();
 		var non_iframe_url='{URL*;}';
 		var iframe_url='{IFRAME_URL*;}';
@@ -83,7 +83,7 @@
 	//]]></script>
 {+END}
 {+START,IF_NON_PASSED,IFRAME_URL}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		if (typeof window.try_to_simplify_iframe_form!='undefined') try_to_simplify_iframe_form();
 	//]]></script>
 {+END}

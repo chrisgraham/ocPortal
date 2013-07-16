@@ -8,7 +8,7 @@
 			{PREVIEW*}
 		</noscript>
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			window.setTimeout(function() {
 				var adjusted_preview='{PREVIEW;^/}'.replace(/<!DOCTYPE[^>]*>/i,'').replace(/<html[^>]*>/i,'').replace(/<\/html>/i,'');
 				var de=window.frames['preview_frame'].document.documentElement;

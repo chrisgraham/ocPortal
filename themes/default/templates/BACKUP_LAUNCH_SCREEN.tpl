@@ -10,7 +10,7 @@
 
 {FORM}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		var submit_button=document.getElementById('submit_button');
 		submit_button.old_onclick=submit_button.onclick;

@@ -53,7 +53,7 @@
 
 {$REQUIRE_JAVASCRIPT,javascript_staff}
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		set_task_hiding(true);
 		{+START,IF,{$JS_ON}}

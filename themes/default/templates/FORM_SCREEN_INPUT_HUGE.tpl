@@ -24,7 +24,7 @@
 			{+START,IF_PASSED_AND_TRUE,RAW}<input type="hidden" name="pre_f_{NAME*}" value="1" />{+END}
 		</div>
 
-		<script type="text/javascript">// <![CDATA[
+		<script>// <![CDATA[
 			set_up_change_monitor('form_table_field_input__{$GET,randomised_id}');
 		//]]></script>
 	</td>

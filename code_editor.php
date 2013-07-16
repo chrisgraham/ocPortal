@@ -113,7 +113,7 @@ function code_editor_do_header($type,$target='_top')
 <head>
 	<title>ocPortal code editor</title>
 	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-	<style type="text/css">
+	<style>
 ';
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
 echo '
@@ -121,7 +121,7 @@ echo '
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	</style>';
 	echo '
-		<script language="javascript" type="text/javascript" src="data/editarea/edit_area_full.js"></script>
+		<script language="javascript" src="data/editarea/edit_area_full.js"></script>
 
 		<meta name="robots" content="noindex, nofollow" />
 		';
@@ -140,7 +140,7 @@ function code_editor_do_footer()
 	echo <<<END
 </form>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 if (document.getElementById('file'))
 {
 	editAreaLoader.init({
@@ -425,7 +425,7 @@ echo <<<END
 END;
 echo code_editor_escape_html($contents).'</textarea>';
 echo <<<END
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	var file=document.getElementById('file');
 	file.scrollTop=Math.round((file.scrollHeight/{$lines})*{$line});
 //]]></script>
@@ -482,7 +482,7 @@ END;
 				if ($myfile===false)
 				{
 					echo <<<END
-<script language="Javascript" type="text/javascript">
+<script language="Javascript">
 var msg='Access denied. You probably should have specified FTP details.';
 if (window.alert!==null)
 {
@@ -499,7 +499,7 @@ END;
 				{
 					fclose($myfile);
 					echo <<<END
-<script language="Javascript" type="text/javascript">
+<script language="Javascript">
 var msg='Could not write to file, out of disk space?';
 if (window.alert!==null)
 {
@@ -524,7 +524,7 @@ END;
 				{
 					fclose($h);
 					echo <<<END
-<script language="Javascript" type="text/javascript">
+<script language="Javascript">
 var msg='Could not write to file, out of disk space?';
 if (window.alert!==null)
 {
@@ -544,7 +544,7 @@ END;
 				if ($ftp_success===false)
 				{
 					echo <<<END
-<script language="Javascript" type="text/javascript">
+<script language="Javascript">
 var msg='Could not save via FTP ['.@strval($php_errormsg).'].';
 if (window.alert!==null)
 {
@@ -612,7 +612,7 @@ END;
 		else
 			$message="Deleted ".code_editor_escape_html($save_path).". You may edit to recreate the file if you wish however.";
 		echo <<<END
-<script language="Javascript" type="text/javascript">
+<script language="Javascript">
 var msg='{$message}';
 if (window.alert!==null)
 {

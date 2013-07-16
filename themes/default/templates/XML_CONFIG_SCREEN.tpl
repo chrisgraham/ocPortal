@@ -11,8 +11,8 @@
 	</p>
 </form>
 
-<script language="javascript" type="text/javascript" src="{$BASE_URL*}/data/editarea/edit_area_full.js"></script>
-<script type="text/javascript">// <![CDATA[
+<script language="javascript" src="{$BASE_URL*}/data/editarea/edit_area_full.js"></script>
+<script>// <![CDATA[
 	editAreaLoader.init({
 		id : "xml"
 		,syntax: "xml"

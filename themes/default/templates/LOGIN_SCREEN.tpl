@@ -81,7 +81,7 @@
 	{+END}
 </div>
 
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	add_event_listener_abstract(window,'real_load',function () {
 		if ((typeof document.activeElement=='undefined') || (document.activeElement!=document.getElementById('password')))
 		{

@@ -68,7 +68,7 @@ if (!array_key_exists('type',$_GET))
 	echo '<!DOCTYPE html>'.chr(10);
 	if (count($_GET)==0) // Special code to skip checks if need-be. The XHTML here is invalid but unfortunately it does need to be.
 	{
-		echo '<script type="text/javascript">// <![CDATA[
+		echo '<script>// <![CDATA[
 			window.setTimeout(function() { if (!document.getElementsByTagName("div")[0]) window.location+="?skip_disk_checks=1"; }, 30000);
 			window.setInterval(function() { if ((!document.getElementsByTagName("div")[0]) && (document.body) && (document.body.innerHTML) && (document.body.innerHTML.indexOf("Maximum execution time")!=-1)) window.location+="?skip_disk_checks=1"; }, 500);
 		//]]></script>';

@@ -159,10 +159,10 @@ function _start_svg()
 	global $CSS_FILE_CONTENTS;
 	$CSS_FILE_CONTENTS=file_get_contents($css_file_path);
 	return '<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>
-<'.'?xml-stylesheet href="'.escape_html($css_file).'" type="text/css"?'.'>
+<'.'?xml-stylesheet href="'.escape_html($css_file).'"?'.'>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 '.float_to_raw_string(VIEWPORT_WIDTH).' '.float_to_raw_string(VIEWPORT_HEIGHT).'" preserveAspectRatio="XMinYMin meet" width="'.float_to_raw_string(SVG_WIDTH).'" height="'.float_to_raw_string(SVG_HEIGHT).'" version="1.1">
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 if (typeof window.addEventListenerAbstract==\'undefined\') addEventListenerAbstract=function(element,the_event,command,capture)
 {
 	if(element)
@@ -320,7 +320,7 @@ function create_bar_chart($data,$x_label='X axis',$y_label='Y axis',$x_units='',
 		// Bar and label
 		$plot.='<rect id="'.float_to_raw_string($x).float_to_raw_string($y).'_bar" x="'.float_to_raw_string($x).'" y="'.float_to_raw_string($y).'" width="'.float_to_raw_string(BAR_WIDTH).'" height="'.float_to_raw_string($height).'" style="fill: #'.($colour).';" class="bar_chart" />'.chr(10);
 		$labels.='<text style="fill: '.(($height==0.0)?'black':'white').'; font-weight: normal" id="'.float_to_raw_string($x).float_to_raw_string($y).'" transform="translate('.float_to_raw_string($x+TEXT_HEIGHT-3).','.float_to_raw_string(PLOT_HEIGHT+PLOT_HEIGHT_BIAS-TEXT_HEIGHT).') rotate(270)" class="bar_chart_text">'.escape_html($key).'</text>
-		<script type="text/javascript">
+		<script>
 		<![CDATA[
 			page_loaded=true;
 			addEventListenerAbstract(document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'"),"mouseover",function(event) { if (window.current_bar) window.current_bar.de_clarify(); window.current_bar=this; document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'").setAttribute("style","fill: red; background-color: black; z-index: 999999;"); },false);
@@ -417,7 +417,7 @@ function create_scatter_graph($data,$x_label='X Axis',$y_label='Y Axis',$x_units
 			if (($first) || (abs($x-$prev_x)>MIN_X_MARKER_DISTANCE))
 			{
 				$labels.='<text id="'.float_to_raw_string($x).float_to_raw_string($y).'" transform="translate('.float_to_raw_string($x+TEXT_HEIGHT/2).','.float_to_raw_string(PLOT_HEIGHT+X_AXIS_HEIGHT+PLOT_HEIGHT_BIAS).') rotate(270)" class="scatter_graph_text">'.escape_html($value['key']).'</text>
-				<script type="text/javascript">
+				<script>
 				<![CDATA[
 					page_loaded=true;
 					addEventListenerAbstract(document.getElementById("'.float_to_raw_string($x).float_to_raw_string($y).'"),"mouseover",function(event) { this.setAttribute("style","fill: red; stroke: red; background-color: black; z-index: 999999;"); },false);

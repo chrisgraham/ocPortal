@@ -1,4 +1,4 @@
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	if ((typeof window.im_area_template=='undefined') && (!window.load_from_room_id)) // Only if not in chat lobby or chat room, so as to avoid conflicts
 	{
 		var im_area_template='{IM_AREA_TEMPLATE;^/}';

@@ -37,7 +37,7 @@
 			<div id="tree_list__root_mtp_tree">
 				<!-- List put in here -->
 			</div>
-			<script type="text/javascript">// <![CDATA[
+			<script>// <![CDATA[
 				{$REQUIRE_JAVASCRIPT,javascript_ajax}
 				{$REQUIRE_JAVASCRIPT,javascript_tree_list}
 				{$REQUIRE_JAVASCRIPT,javascript_more}

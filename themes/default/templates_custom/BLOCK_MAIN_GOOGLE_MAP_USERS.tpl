@@ -1,8 +1,8 @@
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script src="http://www.google.com/jsapi"></script>
 {+START,IF,{$EQ,{CLUSTER},1}}
-	<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js"></script>
+	<script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js"></script>
 {+END}
-<script type="text/javascript">// <![CDATA[
+<script>// <![CDATA[
 	function google_map_users_initialize()
 	{
 		var bounds=new google.maps.LatLngBounds();

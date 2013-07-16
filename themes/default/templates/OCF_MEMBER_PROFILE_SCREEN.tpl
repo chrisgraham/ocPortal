@@ -21,7 +21,7 @@
 					{+START,IF_NON_PASSED,TAB_CONTENT}
 						<p class="ajax_tree_list_loading"><img class="vertical_alignment" src="{$IMG*,loading}" /></p>
 
-						<script type="text/javascript">// <![CDATA[
+						<script>// <![CDATA[
 							function load_tab__{TAB_CODE%}()
 							{
 								try { window.scrollTo(0,0); } catch (e) {};
@@ -50,7 +50,7 @@
 </div>
 
 {+START,IF,{$GT,{TABS},1}}
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 		// we do not want it to scroll down
 		var old_hash=window.location.hash;
 		window.location.hash='#';

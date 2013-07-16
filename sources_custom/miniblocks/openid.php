@@ -8,7 +8,7 @@ require_javascript('javascript_openid');
 
 $url=build_url(array('page'=>''),'');
 echo '
-	<script type="text/javascript">// <![CDATA[
+	<script>// <![CDATA[
 	$(function() {
 	  $("#openid").openid({
 		img_path: "{{ MEDIA_URL }}img/openid/",

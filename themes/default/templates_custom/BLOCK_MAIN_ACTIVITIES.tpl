@@ -28,7 +28,7 @@
 			{+END}
 		</div>
 
-		<script type="text/javascript">//<![CDATA[
+		<script>//<![CDATA[
 			window.activities_mode='{MODE;}';
 			window.activities_member_ids='{MEMBER_IDS;}';
 
