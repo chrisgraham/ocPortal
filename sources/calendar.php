@@ -712,7 +712,7 @@ function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_da
 		$found_ids[$id]=1;
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		$conflict=(($event['e_is_public']==1) || ($event['e_submitter']==get_member()))?make_string_tempcode(escape_html(get_translated_text($event['e_title']))):do_lang_tempcode('PRIVATE_HIDDEN');
+		$conflict=(($event['e_is_public']==1) || ($event['e_submitter']==get_member()))?make_string_tempcode(get_translated_text($event['e_title'])):do_lang_tempcode('PRIVATE_HIDDEN');
 		$out->attach(do_template('CALENDAR_EVENT_CONFLICT',array('_GUID'=>'2e209eae2dfe2ee74df61c0f4ffe1651','URL'=>$url,'ID'=>strval($id),'TITLE'=>$conflict)));
 	}
 
