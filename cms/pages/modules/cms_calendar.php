@@ -1091,7 +1091,7 @@ class Module_cms_calendar extends standard_crud_module
 
 		if (!fractional_edit())
 		{
-			$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$type,$member_calendar,DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE_IF_GLOBAL);
+			$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$type,$member_calendar,DETECT_CONFLICT_SCOPE_CALENDAR_WIDE);
 			$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUCCESS')):$conflicts;
 
 			/*

@@ -1635,7 +1635,7 @@ class Module_calendar
 			'TO_DAY'=>$to_day_formatted,
 			'RECURRENCE'=>$recurrence,
 			'IS_PUBLIC'=>$is_public,
-			'MEMBER_CALENDAR'=>is_null($event['e_member_calendar'])?'':strval($event['e_member_calendar']),
+			'MEMBER_CALENDAR'=>is_null($event['e_member_calendar'])?NULL:strval($event['e_member_calendar']),
 			'PRIORITY'=>strval($priority),
 			'PRIORITY_LANG'=>$priority_lang,
 			'TYPE'=>$type,
