@@ -1177,6 +1177,7 @@ class forum_driver_smf2 extends forum_driver_base
 			$rows[0]['pm_email_notify']=0;
 			$rows[0]['date_registered']=time();
 			$rows[0]['posts']=0;
+			$rows[0]['avatar']='';
 			$rows[0]['id_theme']=NULL;
 			$rows[0]['id_group']=0;
 			$rows[0]['additional_groups']='';
