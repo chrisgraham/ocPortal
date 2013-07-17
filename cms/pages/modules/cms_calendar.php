@@ -376,8 +376,7 @@ class Module_cms_calendar extends standard_crud_module
 			{
 				list($start_year,$start_month,$start_day)=array(NULL,NULL,NULL);
 			}
-			$type=get_param_integer('e_type',-1);
-			if ($type==-1) $type=NULL;
+			$type=get_param_integer('e_type',NULL);
 
 			// Get a nice default title for the event
 			$calendar_member_id=is_null($member_calendar)?get_member():$member_calendar;

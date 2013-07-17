@@ -426,11 +426,11 @@ function nice_get_event_types($it=NULL)
 		if (!has_category_access(get_member(),'calendar',strval($type['id']))) continue;
 		if (!has_submit_permission('low',get_member(),get_ip_address(),'cms_calendar',array('calendar',$type['id']))) continue;
 
-		if ($type['id']!=db_get_first_id())
+		if ($type['id']!=db_get_first_id()/*not the OcCLE-command event type*/)
 			$type_list->attach(form_input_list_entry(strval($type['id']),$type['id']==$it,get_translated_text($type['t_title'])));
 		else $first_type=$type;
 	}
-	if ((has_actual_page_access(get_member(),'admin_occle')) && (!is_null($first_type)) && (is_null($GLOBALS['CURRENT_SHARE_USER'])))
+	if ((addon_installed('occle')) && (has_actual_page_access(get_member(),'admin_occle')) && (!is_null($first_type)) && (is_null($GLOBALS['CURRENT_SHARE_USER'])))
 		$type_list->attach(form_input_list_entry(strval(db_get_first_id()),db_get_first_id()==$it,get_translated_text($first_type['t_title'])));
 
 	return $type_list;
