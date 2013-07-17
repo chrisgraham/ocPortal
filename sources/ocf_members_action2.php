@@ -1206,8 +1206,10 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	if ($striped_username!='') warn_exit(do_lang_tempcode('USERNAME_BAD_SYMBOLS'));*/
 
 	// Check it doesn't already exist
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
-	if ((!is_null($test)) && ($test!=$member_id))
+	$test=is_null($member_id)?NULL:$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username,'id'=>$member_id)); // Precedence on an ID match in case there are duplicate usernames and user is trying to fix that
+	if (is_null($test))
+		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
+	if ((!is_null($test)) && ($test!==$member_id))
 	{
 		if (get_option('signup_fullname')=='0')
 		{
