@@ -50,7 +50,7 @@
  * @param  BINARY				Whether the event may be rated
  * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
  * @param  BINARY				Whether the event may be trackbacked
- * @param  LONG_TEXT			Hidden notes pertaining to the download
+ * @param  LONG_TEXT			Hidden notes pertaining to the event
  * @param  ?MEMBER			The event submitter (NULL: current member)
  * @param  integer			The number of views so far
  * @param  ?TIME				The add time (NULL: now)
@@ -201,11 +201,11 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  ?MEMBER			The member's calendar it will be on (NULL: not on a specific member's calendar)
  * @param  SHORT_TEXT		Meta keywords
  * @param  LONG_TEXT			Meta description
- * @param  BINARY				Whether the download has been validated
- * @param  BINARY				Whether the download may be rated
+ * @param  ?BINARY			Whether the event has been validated (NULL: don't change)
+ * @param  BINARY				Whether the event may be rated
  * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY				Whether the download may be trackbacked
- * @param  LONG_TEXT			Hidden notes pertaining to the download
+ * @param  BINARY				Whether the event may be trackbacked
+ * @param  LONG_TEXT			Hidden notes pertaining to the event
  * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
  * @param  ?TIME				Add time (NULL: do not change)
  * @param  ?integer			Number of views (NULL: do not change)
@@ -267,7 +267,6 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'e_do_timezone_conv'=>$do_timezone_conv,
 		'e_priority'=>$priority,
 		'e_type'=>$type,
-		'validated'=>$validated,
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
@@ -275,6 +274,8 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'notes'=>$notes
 	)+$scheduling_map;
 
+	if (!is_null($validated))
+		$update_map['validated']=$validated;
 	$update_map['e_edit_date']=$edit_time;
 	if (!is_null($add_time))
 		$update_map['e_add_date']=$add_time;

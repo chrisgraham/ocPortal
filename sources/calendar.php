@@ -595,8 +595,11 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 			}
 		}
 	}
-	if ($where!='') $where.=' AND ';
-	$where.='validated=1';
+	if (!has_privilege($auth_member_id,'see_unvalidated'))
+	{
+		if ($where!='') $where.=' AND ';
+		$where.='(validated=1 OR e_member_calendar='.strval($auth_member_id).' OR e_submitter='.strval($auth_member_id).')';
+	}
 
 	if ((addon_installed('syndication_blocks')) && ($do_rss))
 	{

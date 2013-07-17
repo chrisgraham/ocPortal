@@ -436,6 +436,7 @@ class Hook_addon_registry_calendar
 							'T_TITLE'=>lorem_phrase(),
 							'TITLE'=>lorem_word(),
 							'DESCRIPTION'=>lorem_word_2(),
+							'VALIDATED'=>true,
 							'RECURRING'=>false
 						));
 						$_streams->attach(do_lorem_template('CALENDAR_DAY_STREAM_HOUR', array(
@@ -482,6 +483,7 @@ class Hook_addon_registry_calendar
 								'TITLE'=>lorem_word(),
 								'E'=>lorem_word(),
 								'ICON'=>'calendar/general',
+								'VALIDATED'=>true,
 								'RECURRING'=>false
 							));
 						}
@@ -544,7 +546,8 @@ class Hook_addon_registry_calendar
 							'TIME'=>placeholder_number(),
 							'TITLE'=>lorem_word(),
 							'URL'=>placeholder_url(),
-							'RECURRING'=>lorem_word()
+							'VALIDATED'=>true,
+							'RECURRING'=>false
 						)));
 					}
 
@@ -768,6 +771,7 @@ class Hook_addon_registry_calendar
 				'SUBSCRIBED'=>$subed,
 				'RATING_DETAILS'=>lorem_sentence_html(),
 				'TRACKBACK_DETAILS'=>lorem_sentence_html(),
+				'VALIDATED'=>true,
 				'COMMENT_DETAILS'=>$comment_details
 			)), NULL, '', true)
 		);

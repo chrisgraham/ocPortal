@@ -771,7 +771,7 @@ class Module_calendar
 			$description=(intval($down)<3)?new ocp_tempcode():(is_numeric($event['e_content'])?get_translated_tempcode($event['e_content']):$event['e_content']);
 			$priority_lang=do_lang_tempcode('PRIORITY_'.strval($event['e_priority']));
 			$priority_icon='calendar/priority_'.strval($event['e_priority']);
-			$streams[$found_stream][$from_h]=array('TPL'=>'CALENDAR_DAY_ENTRY','DESCRIPTION'=>$description,'DOWN'=>$down,'ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$title,'URL'=>$url,'PRIORITY_LANG'=>$priority_lang,'PRIORITY_ICON'=>$priority_icon,'RECURRING'=>$event['e_recurrence']!='none');
+			$streams[$found_stream][$from_h]=array('TPL'=>'CALENDAR_DAY_ENTRY','DESCRIPTION'=>$description,'DOWN'=>$down,'ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$title,'URL'=>$url,'PRIORITY_LANG'=>$priority_lang,'PRIORITY_ICON'=>$priority_icon,'RECURRING'=>$event['e_recurrence']!='none','VALIDATED'=>$event['validated']==1);
 			for ($h=$from_h+1;$h<$to_h;$h++)
 			{
 				$streams[$found_stream][$h]=array('TPL'=>'-1');
@@ -926,6 +926,7 @@ class Module_calendar
 							'TITLE'=>$title,
 							'URL'=>$url,
 							'RECURRING'=>$event['e_recurrence']!='none',
+							'VALIDATED'=>$event['validated']==1,
 						)));
 
 						if ($event['e_priority']<$worst_priority)
@@ -1168,6 +1169,7 @@ class Module_calendar
 						'TITLE'=>$title,
 						'URL'=>$url,
 						'RECURRING'=>$event['e_recurrence']!='none',
+						'VALIDATED'=>$event['validated']==1,
 					)));
 
 					if ($event['e_priority']<$worst_priority)
@@ -1432,7 +1434,7 @@ class Module_calendar
 		$warning_details=new ocp_tempcode();
 		if (($event['validated']==0) && (addon_installed('unvalidated')))
 		{
-			if (!has_privilege(get_member(),'jump_to_unvalidated'))
+			if ((!has_privilege(get_member(),'jump_to_unvalidated')) && ($event['e_submitter']!=get_member()) && ($event['e_member_calendar']!=get_member()))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
@@ -1650,6 +1652,7 @@ class Module_calendar
 			'RATING_DETAILS'=>$rating_details,
 			'TRACKBACK_DETAILS'=>$trackback_details,
 			'COMMENT_DETAILS'=>$comment_details,
+			'VALIDATED'=>$event['validated']==1,
 			'_GUID'=>'602e6f86f586ef0a24efed950eafd426',
 		);
 		if ($event['e_do_timezone_conv']==0)

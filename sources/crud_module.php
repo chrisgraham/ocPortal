@@ -95,6 +95,7 @@ class standard_crud_module
 	var $cached_max_rows=NULL;
 	var $lang_type=NULL;
 	var $permission_page_name=NULL;
+	var $edit_keep_validation=false;
 
 	// These only needed if we are generate nice_get_entries automatically
 	var $table_prefix='';
@@ -1368,10 +1369,18 @@ class standard_crud_module
 			$test=$this->handle_confirmations($title);
 			if (!is_null($test)) return $test;
 
-			if (($this->user_facing) && (!is_null($this->permissions_require)) && (addon_installed('unvalidated')) && (array_key_exists('validated',$_POST)))
+			if (($this->user_facing) && (!is_null($this->permissions_require)) && (addon_installed('unvalidated')))
 			{
-				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
-					$_POST['validated']='0';
+				if (array_key_exists('validated',$_POST))
+				{
+					if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
+					{
+						if (!$this->edit_keep_validation)
+							$_POST['validated']='0';
+						else
+							$_POST['validated']='-1';
+					}
+				}
 			}
 
 			if (!is_null($this->upload)) require_code('uploads');
