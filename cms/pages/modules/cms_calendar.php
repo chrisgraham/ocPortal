@@ -388,7 +388,12 @@ class Module_cms_calendar extends standard_crud_module
 			$adding=true;
 		} else $adding=false;
 
-		if (is_null($type)) $type=db_get_first_id()+1;
+		if (is_null($type))
+		{
+			$type=get_value('default_event_type');
+			if (is_null($type))
+				$type=db_get_first_id()+1;
+		}
 		if (is_null($start_month))
 		{
 			$start_year=intval(date('Y'));
