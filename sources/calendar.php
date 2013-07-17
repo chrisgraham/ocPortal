@@ -24,6 +24,12 @@
 function init__calendar()
 {
 	require_code('temporal2');
+
+	define('DETECT_CONFLICT_SCOPE_NONE',0);
+	define('DETECT_CONFLICT_SCOPE_SAME_MEMBER',1);
+	define('DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE_IF_GLOBAL',2);
+	define('DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE',2);
+	define('DETECT_CONFLICT_SCOPE_ALL',3);
 }
 
 /**
@@ -776,9 +782,10 @@ function nice_get_events($only_owned,$it,$edit_viewable_events=true)
 
 /**
  * Detect conflicts with an event at a certain time.
+ * NB: Only detects future conflicts, not conflicts on past scheduling.
  *
  * @param  MEMBER			The member to detect conflicts for
- * @param  AUTO_LINK		The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself)
+ * @param  ?AUTO_LINK	The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (NULL: not added yet)
  * @param  ?integer		The year the event starts at. This and the below are in server time (NULL: default)
  * @param  ?integer		The month the event starts at (NULL: default)
  * @param  ?integer		The day the event starts at (NULL: default)
@@ -795,10 +802,15 @@ function nice_get_events($only_owned,$it,$edit_viewable_events=true)
  * @param  ?integer		The minute the event ends at (NULL: not a multi day event)
  * @param  string			The event recurrence
  * @param  ?integer		The number of recurrences (NULL: none/infinite)
+ * @param  AUTO_LINK		The event type
+ * @param  ?MEMBER		The member calendar (NULL: none)
+ * @param  integer		The scope type, DETECT_CONFLICT_SCOPE_*
  * @return ?tempcode		Information about conflicts (NULL: none)
  */
-function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences)
+function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$type,$member_calendar,$scope_type)
 {
+	if ($scope_type==DETECT_CONFLICT_SCOPE_NONE) return NULL;
+
 	$our_times=find_periods_recurrence(get_users_timezone(),1,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
 
 	$conflicts=detect_happening_at($member_id,$skip_id,$our_times,!has_privilege(get_member(),'sense_personal_conflicts'));
@@ -813,6 +825,43 @@ function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_da
 		if (array_key_exists($id,$found_ids)) continue;
 		$found_ids[$id]=1;
 
+		if (is_null($event['e_member_calendar']))
+		{
+			switch ($scope_type)
+			{
+				case DETECT_CONFLICT_SCOPE_SAME_MEMBER:
+					continue 2; // Not on a member calendar, so do nothing
+					break;
+				case DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE_IF_GLOBAL:
+					if (is_null($member_calendar)) // if neither global
+					{
+						if ($type!=$event['e_type']) continue 2;
+					}
+					break;
+				case DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE:
+					if ($type!=$event['e_type'])/*we know it's not going to be same member, as event is not for a member*/ continue 2;
+					break;
+				case DETECT_CONFLICT_SCOPE_ALL:
+					// Always shows conflicts
+					break;
+			}
+		} else
+		{
+			switch ($scope_type)
+			{
+				case DETECT_CONFLICT_SCOPE_SAME_MEMBER:
+				case DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE_IF_GLOBAL:
+					if ($member_calendar!==$event['e_member_calendar']) continue 2; // we know one is not global, so we can do a direct compare, knowing NULL will not equal any member value
+					break;
+				case DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE:
+					if (($type!=$event['e_type']) && ($member_calendar!==$event['e_member_calendar']/*we know we don't need to consider a NULL to NULL match separately as it can't happen in this branch*/)) continue 2;
+					break;
+				case DETECT_CONFLICT_SCOPE_ALL:
+					// Always shows conflicts
+					break;
+			}
+		}
+
 		$protected=false;
 		if (addon_installed('content_privacy'))
 		{
@@ -821,7 +870,7 @@ function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_da
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		$conflict=(!$protected)?make_string_tempcode(escape_html(get_translated_text($event['e_title']))):do_lang_tempcode('PRIVATE_HIDDEN');
+		$conflict=(!$protected)?make_string_tempcode(get_translated_text($event['e_title'])):do_lang_tempcode('PRIVATE_HIDDEN');
 		$out->attach(do_template('CALENDAR_EVENT_CONFLICT',array('_GUID'=>'2e209eae2dfe2ee74df61c0f4ffe1651','URL'=>$url,'ID'=>strval($id),'TITLE'=>$conflict)));
 	}
 
@@ -1061,7 +1110,7 @@ function cal_utctime_to_usertime($utc_timestamp,$default_timezone,$show_in_users
  * Detect conflicts with an event in certain time periods.
  *
  * @param  MEMBER			The member to detect conflicts for
- * @param  AUTO_LINK		The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself)
+ * @param  ?AUTO_LINK	The event ID that we are detecting conflicts with (we need this so we don't think we conflict with ourself) (NULL: not added yet)
  * @param  array			List of pairs specifying our happening time (in time order)
  * @param  boolean		Whether to restrict only to viewable events for the current member
  * @param  ?TIME			The timestamp that found times must exceed. In user-time (NULL: use find_periods_recurrence default)
@@ -1074,7 +1123,7 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 
 	$conflicts=array();
 	$table='calendar_events e';
-	$where=is_null($skip_id)?'':('id<>'.strval($skip_id));
+	$where=is_null($skip_id)?'1=1':('id<>'.strval($skip_id));
 	if ($restrict)
 	{
 		if (addon_installed('content_privacy'))

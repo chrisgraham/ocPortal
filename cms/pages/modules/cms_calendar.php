@@ -776,6 +776,22 @@ class Module_cms_calendar extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('event',NULL);
 
+		$conflicts=detect_conflicts(get_member(),NULL,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$start_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$type,$member_calendar,DETECT_CONFLICT_SCOPE_CALENDAR_WIDE);
+		$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUBMIT_THANKYOU')):$conflicts;
+
+		/*
+		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+		{
+			if (!is_null($conflicts))
+			{
+				$tpl=globalise(warn_screen(get_screen_title('CONFLICTS_DETECTED'),protect_from_escaping($conflicts)),NULL,'',true);
+				$tpl->evaluate_echo();
+				$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
+				exit();
+			}
+		}
+		*/
+
 		$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['submitter'],$meta_data['views'],$meta_data['add_time'],$meta_data['edit_time']);
 
 		// Reminders
@@ -889,9 +905,6 @@ class Module_cms_calendar extends standard_crud_module
 		}
 
 		regenerate_event_reminder_jobs($id);
-
-		$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$start_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
-		$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUBMIT_THANKYOU')):$conflicts;
 
 		$this->donext_type=$type;
 		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
@@ -1076,15 +1089,31 @@ class Module_cms_calendar extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('event',strval($id));
 
+		if (!fractional_edit())
+		{
+			$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$type,$member_calendar,DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE_IF_GLOBAL);
+			$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUCCESS')):$conflicts;
+
+			/*
+			if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+			{
+				if (!is_null($conflicts))
+				{
+					$tpl=globalise(warn_screen(get_screen_title('CONFLICTS_DETECTED'),protect_from_escaping($conflicts)),NULL,'',true);
+					$tpl->evaluate_echo();
+					$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
+					exit();
+				}
+			}
+			*/
+		} else $_description=do_lang_tempcode('SUCCESS');
+
 		edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 
 		if (!fractional_edit())
 		{
-			$conflicts=detect_conflicts(get_member(),$id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
-			$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUCCESS')):$conflicts;
-
 			regenerate_event_reminder_jobs($id);
-		} else $_description=do_lang_tempcode('SUCCESS');
+		}
 
 		$this->donext_type=$type;
 		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
