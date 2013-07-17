@@ -416,6 +416,11 @@ function nice_get_event_types($it=NULL)
 	$type_list=new ocp_tempcode();
 	$types=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
 	$first_type=NULL;
+	foreach ($types as $i=>$type)
+	{
+		$types[$i]['t_title_deref']=get_translated_text($type['t_title']);
+	}
+	sort_maps_by($types,'t_title_deref');
 	foreach ($types as $type)
 	{
 		if (!has_category_access(get_member(),'calendar',strval($type['id']))) continue;
