@@ -1259,3 +1259,20 @@ function choose_language($title,$tip=false,$allow_all_selection=false)
 	require_code('lang3');
 	return _choose_language($title,$tip,$allow_all_selection);
 }
+
+/**
+ * Get the ordinal suffix (e.g. nd, rd, st) for a number.
+ *
+ * @param  integer		Number to do this for
+ * @return string			The suffix
+ */
+function get_ordinal_suffix($index)
+{
+	// Based on http://stackoverflow.com/questions/3109978/php-display-number-with-ordinal-suffix
+	$ends=array('th','st','nd','rd','th','th','th','th','th','th');
+	if (($index%100)>=11 && ($index%100)<=13)
+		$abbreviation='th';
+	else
+		$abbreviation=$ends[$index%10];
+	return $abbreviation;
+}
