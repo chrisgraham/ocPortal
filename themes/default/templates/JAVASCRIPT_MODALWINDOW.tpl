@@ -825,9 +825,7 @@ function ModalWindow()
 						'html': this.cancel_button,
 						'class': 'button_pageitem'
 					});
-					this.add_event(button,'click',function() { _this.option('cancel'); });
 					window.setTimeout(function() { _this.add_event(_this.box_wrapper,'click',_this.clickout_cancel); },1000);
-					this.button_container.appendChild(button);
 					break;
 			}
 
@@ -851,7 +849,7 @@ function ModalWindow()
 					});
 					container.appendChild(button);
 				}
-				this.add_event(button,'click',function() { _this.option('finished'); });
+				this.add_event(button,'click',function() { _this.option(this.cancel?'cancel':'finished'); });
 			}
 
 			// Put together
