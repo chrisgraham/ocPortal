@@ -890,7 +890,7 @@
 			if (name == 'dot') {
 				html = '<ol class="dots">';
 					$.each(_.li, function(index) {
-						html += '<li class="' + (index == _.i ? name + ' active' : name) + '">' + ++index + '</li>';
+						html += '<li class="' + (index == _.i ? name + ' active' : name) + '">' + (++index) + '</li>';
 					});
 				html += '</ol>';
 			} else {
