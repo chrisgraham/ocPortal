@@ -130,7 +130,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	function misc()
 	{
 		$also_url=build_url(array('page'=>'_SELF','type'=>'ecom_usage'),'_SELF');
-		attach_message(do_lang_tempcode('ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
+		attach_message(do_lang_tempcode('menus:ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
 
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_ECOMMERCE'),
@@ -153,7 +153,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		breadcrumb_set_parents(array());
 
 		$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		attach_message(do_lang_tempcode('ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
+		attach_message(do_lang_tempcode('menus:ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
 
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('ECOMMERCE'),comcode_lang_string('DOC_ECOMMERCE'),

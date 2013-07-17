@@ -139,7 +139,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 
 /* Global-level messages should stand out compared to other styling */
 {$THEME_WIZARD_COLOR,#ebe773,message_border,100% EBE773} /* Intentionally coloured on all themes */
-{$THEME_WIZARD_COLOR,#4b5a71,message_highlighted_part,70% standard_border + 30% BW}
+{$THEME_WIZARD_COLOR,#c4cdd9,message_highlighted_part,40% standard_border + 60% WB}
 
 /* Footer */
 {$THEME_WIZARD_COLOR,#8ba4ca,footer_tinting,61% seed + 39% WB}
