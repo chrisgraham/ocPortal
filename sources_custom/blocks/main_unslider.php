@@ -28,7 +28,7 @@ class Block_main_unslider
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('pages','width','height','buttons','delay','speed','keypresses');
+		$info['parameters']=array('pages','width','height','buttons','delay','speed','keypresses','slider_id');
 		return $info;
 	}
 
@@ -67,6 +67,7 @@ class Block_main_unslider
 		if ($delay=='0') $delay='';
 		$speed=strval(intval(isset($map['speed'])?$map['speed']:'500'));
 		$keypresses=((isset($map['keypresses'])?$map['keypresses']:'0')=='1');
+		$slider_id=isset($map['slider_id'])?$map['slider_id']:'unslider';
 
 		return do_template('BLOCK_MAIN_UNSLIDER',array(
 			'PAGES'=>$pages,
@@ -77,6 +78,7 @@ class Block_main_unslider
 			'DELAY'=>$delay,
 			'SPEED'=>$speed,
 			'KEYPRESSES'=>$keypresses,
+			'SLIDER_ID'=>$slider_id,
 		));
 	}
 

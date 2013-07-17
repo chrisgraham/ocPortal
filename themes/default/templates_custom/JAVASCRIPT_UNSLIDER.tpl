@@ -729,8 +729,8 @@
 			keys: f,      // keyboard shortcuts (boolean)
 			dots: f,      // display ••••o• pagination (boolean)
 			arrows: f,    // display prev/next arrows (boolean)
-			prev: '←',    // text or html inside prev button (string)
-			next: '→',    // same as for prev option
+			prev: '<',    // text or html inside prev button (string)
+			next: '>',    // same as for prev option
 			fluid: f,     // is it a percentage width? (boolean)
 			complete: f,  // invoke after animation (function with argument)
 			items: '>ul', // slides container selector

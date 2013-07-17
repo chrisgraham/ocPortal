@@ -890,7 +890,7 @@ function handle_symbol_preprocessing($bit,&$children)
 						{
 							$before=memory_get_usage();
 						}
-						$tp_value=request_page('panel_'.$param[0],false,array_key_exists(1,$param)?$param[1]:NULL,NULL);
+						$tp_value=request_page('panel_'.$param[0],false,array_key_exists(1,$param)?$param[1]:get_comcode_zone($param[0]),NULL);
 						if ((function_exists('memory_get_usage')) && (isset($_GET['keep_show_loading'])) && ($_GET['keep_show_loading']=='1'))
 						{
 							require_code('files');
