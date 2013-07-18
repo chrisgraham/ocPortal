@@ -3,6 +3,12 @@
 		<img src="{THUMB_URL*}" alt="{!IMAGE}" itemprop="contentURL" />
 	</div>
 
+	{+START,IF_PASSED,DESCRIPTION}
+		<div itemprop="caption">
+			{$PARAGRAPH,{DESCRIPTION}}
+		</div>
+	{+END}
+
 	<div class="float_surrounder lined_up_boxes">
 		<div class="gallery_entry_details right">
 			<section class="box box___gallery_flowmode_image"><div class="box_inner">
@@ -63,11 +69,5 @@
 		<div class="ratings right">
 			{RATING_DETAILS}
 		</div>
-
-		{+START,IF_PASSED,DESCRIPTION}
-			<div itemprop="caption">
-				{DESCRIPTION}
-			</div>
-		{+END}
 	</div>
 </div>

@@ -86,6 +86,14 @@
 
 /* Flow-mode only */
 
+.flow_mode_details .gallery_entry_details .box {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+.flow_mode_details .gallery_entry_details .box.staff_actions {
+	margin-top: 1em !important;
+}
+
 .flowmode_thumb {
 	display: inline;
 	{+START,IF,{$MOBILE}}
