@@ -913,7 +913,7 @@
 		return this.each(function(index) {
 			//  Cache a copy of $(this), so it
 			var me = $(this),
-				key = 'unslider' + (len > 1 ? '-' + ++index : ''),
+				key = 'unslider' + (len > 1 ? '-' + (++index) : ''),
 				instance = (new Unslider).init(me, o);
 
 			//  Invoke an Unslider instance
