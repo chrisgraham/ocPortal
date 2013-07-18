@@ -721,6 +721,7 @@
 
 		//  Set some options
 		_.o = {
+			balanceheight: !f,
 			speed: 500,   // animation speed, false for no transition (integer or boolean)
 			delay: 3000,  // delay between slides, false for no autoplay (integer or boolean)
 			init: 0,      // init delay, false for no delay (integer or boolean)
@@ -765,7 +766,9 @@
 			_.i = 0;
 
 			//  Set the main element
-			el.css({width: _.max[0], height: li.first().outerHeight(), overflow: 'hidden'});
+			var cssob = {width: _.max[0], overflow: 'hidden'};
+			if (o.balanceheight) cssob.height = li.first().outerHeight();
+			el.css(cssob);
 
 			//  Set the relative widths
 			ul.css({position: 'relative', left: 0, width: (len * 100) + '%'});
@@ -811,8 +814,8 @@
 					_.r && clearTimeout(_.r);
 
 					_.r = setTimeout(function() {
-						var styl = {height: li.eq(_.i).outerHeight()},
-							width = el.outerWidth();
+						var styl = {}, width = el.outerWidth();
+						if (o.balanceheight) styl.height = li.eq(_.i).outerHeight();
 
 						ul.css(styl);
 						styl['width'] = Math.min(Math.round((width / el.parent().width()) * 100), 100) + '%';
@@ -848,8 +851,8 @@
 			if (index < 0) index = li.length - 1;
 			target = li.eq(index);
 
-			var speed = callback ? 5 : o.speed | 0,
-				obj = {height: target.outerHeight()};
+			var speed = callback ? 5 : o.speed | 0, obj = {};
+			if (o.balanceheight) cssob.height = target.outerHeight();
 
 			if (!ul.queue('fx').length) {
 				//  Handle those pesky dots

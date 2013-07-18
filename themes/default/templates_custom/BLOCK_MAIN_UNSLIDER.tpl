@@ -9,7 +9,7 @@
 		<ul>
 			{+START,LOOP,PAGES}
 				<li>
-					{$LOAD_PAGE,_unslider_{_loop_var}}
+					{$TRIM,{$LOAD_PAGE,_unslider_{_loop_var}}}
 				</li>
 			{+END}
 		</ul>
@@ -21,6 +21,7 @@
 		fluid: {$?,{FLUID},true,false},
 		dots: {$?,{BUTTONS},true,false},
 		delay: {$?,{$IS_EMPTY,{DELAY}},false,{DELAY%}},
+		{+START,IF_NON_EMPTY,{HEIGHT}}balanceheight: false,{+END}
 		speed: {SPEED%}
 	});
 //]]></script>

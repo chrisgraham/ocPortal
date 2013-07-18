@@ -530,7 +530,7 @@ class Module_purchase
 			return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'859c31e8f0f02a2a46951be698dd22cf','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
 		}
 
-		return inform_screen(get_screen_title('PURCHASING'),do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'));
+		return inform_screen(get_screen_title('PURCHASING'),do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'),true);
 	}
 
 	/**

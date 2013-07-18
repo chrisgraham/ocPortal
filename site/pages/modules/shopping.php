@@ -604,8 +604,7 @@ class Module_shopping
 			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'6eafce1925e5069ceb438ec24754b47d','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
 		}
 
-		warn_exit(do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'));
-		return new ocp_tempcode(); // Will never get here
+		return inform_screen(get_screen_title('PURCHASING'),do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'),true);
 	}
 
 	/**
