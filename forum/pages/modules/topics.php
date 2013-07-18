@@ -2578,6 +2578,12 @@ END;
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$this->handle_topic_breadcrumbs($forum_id,$post_details[0]['p_topic_id'],$topic_info[0]['t_cache_first_title'],do_lang_tempcode('EDIT_POST'));
 
+		if (($topic_info[0]['t_cache_first_post_id']==$post_id) && ((ocf_may_moderate_forum($topic_info[0]['t_forum_id'])) || ($info[0]['t_cache_first_member_id']==get_member())))
+		{
+			$edit_topic_url=build_url(array('page'=>'topics','type'=>'edit_topic','id'=>$topic_info[0]['id']),get_module_zone('topics'));
+			attach_message(do_lang_tempcode('EDITING_FIRST_TOPIC_POST',escape_html($edit_topic_url->evaluate())),'inform');
+		}
+
 		$hidden_fields=new ocp_tempcode();
 		$intended_solely_for=$post_details[0]['p_intended_solely_for'];
 		if (!is_null($intended_solely_for))
