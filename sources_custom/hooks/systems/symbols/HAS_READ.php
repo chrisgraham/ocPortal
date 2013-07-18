@@ -6,6 +6,7 @@ class Hook_symbol_HAS_READ
 	{
 		if (!isset($param[1])) return '1'; // Not enough parameters
 		if (is_guest()) return '1'; // Guests can't be tracked, assume read (so no unread icon might show, which is the normal use-case for this feature)
+		if (!$GLOBALS['SITE_DB']->table_exists('content_read')) return '0'; // Not installed yet
 
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('content_read','r_time',array(
 			'r_content_type'=>$param[0],

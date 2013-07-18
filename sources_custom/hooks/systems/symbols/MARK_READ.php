@@ -24,7 +24,7 @@ class Hook_symbol_MARK_READ
 			'r_content_id'=>$param[1],
 			'r_member_id'=>get_member(),
 			'r_time'=>time(),
-		));
+		),false,true);
 
 		// Cleanup stale data
 		$cleanup_days=isset($param[2])?intval($param[2]):0;
