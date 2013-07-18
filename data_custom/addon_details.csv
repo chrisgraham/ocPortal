@@ -287,6 +287,7 @@ calendar_from_6am,Graphical,Chris Graham,Common Public Attribution License,"Only
 directory_protect,Admin Utilities,Chris Graham,Licensed on the same terms as ocPortal,"Protect the files in a directory by routing requests through an ocPortal script. ocPortal will search for the page containing the linked content and only grant access if the current user has access to that page. Developers could customise the code to apply different permission rules.
 
 You will need to add a new rule into your .htaccess file to control the routing. Assuming all the files were under a 'videos' directory:
+[code]
 RewriteRule ^(videos/.*)$ data_custom/directory_protect.php\?file=$1 [L,QSA]
 
 Put the rule above this part of the ocPortal default:
@@ -295,4 +296,6 @@ RewriteCond %{DOCUMENT_ROOT}/git/$1 -f [OR]
 RewriteCond %{DOCUMENT_ROOT}/git/$1 -l [OR]
 RewriteCond %{DOCUMENT_ROOT}/git/$1 -d
 RewriteRule (.*) - [L]
+[/code]
 ",,,,
+content_read_tracking,New Features,Chris Graham,Licensed on the same terms as ocPortal,"New [tt]MARK_READ[/tt] and [tt]HAS_READ[/tt] symbols allow you to track whether members have read any kind of content. Just place them in the appropriate templates. For example, [tt]{+START,IF,{$NOT,{$HAS_READ,news,{ID}}}}This is unread{+END}[/tt] in [tt]NEWS_BOX.tpl[/tt] and [tt]{$MARK_READ,news,{ID}}[/tt] in [tt]NEWS_ENTRY_SCREEN.tpl[/tt]."

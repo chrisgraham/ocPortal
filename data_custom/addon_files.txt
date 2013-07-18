@@ -4124,6 +4124,11 @@ twitter_feed_integration_block
  - themes/default/images_custom/twitter_feed/retweet_hover.png
  - themes/default/images_custom/twitter_feed/retweet_on.png
 
+content_read_tracking
+---------------------
+ - sources_custom/hooks/systems/symbols/MARK_READ.php
+ - sources_custom/hooks/systems/symbols/HAS_READ.php
+
 calendar_from_6am
 -----------------
 
