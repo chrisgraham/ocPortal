@@ -111,6 +111,12 @@
 	</div>
 
 	{+START,IF,{$NOT,{SLIDESHOW}}}
+		{+START,IF_NON_EMPTY,{COMMENTS}}
+			<div itemprop="caption">
+				{COMMENTS}
+			</div>
+		{+END}
+
 		{+START,IF,{$OR,{$NEQ,{MEDIA_TYPE},video},{$GT,{$META_DATA,video:width},500}}}
 			<div class="float_surrounder lined_up_boxes">
 				{$GET,boxes}
@@ -124,12 +130,6 @@
 			{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,video,{ID}}}
 		{+END}
 		{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
-
-		{+START,IF_NON_EMPTY,{COMMENTS}}
-			<div itemprop="caption">
-				{COMMENTS}
-			</div>
-		{+END}
 
 		{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
