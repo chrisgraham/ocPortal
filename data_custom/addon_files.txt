@@ -4016,6 +4016,7 @@ testing_platform
  - _tests/tests/testrss.cms
  - _tests/tests/unit_tests/.htaccess
  - _tests/tests/unit_tests/api_classes_documented.php
+ - _tests/tests/unit_tests/adminzone_search.php
  - _tests/tests/unit_tests/tracker_categories.php
  - _tests/tests/unit_tests/authors.php
  - _tests/tests/unit_tests/awards.php
