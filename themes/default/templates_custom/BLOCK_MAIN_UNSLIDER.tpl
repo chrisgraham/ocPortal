@@ -7,9 +7,9 @@
 {+START,IF_NON_EMPTY,{WIDTH}}<div style="width: {WIDTH*}">{+END}
 	<div id="{SLIDER_ID*}" class="unslider{+START,IF_EMPTY,{WIDTH}{HEIGHT}} responsive{+END}"{+START,IF_NON_EMPTY,{HEIGHT}} style="height: {HEIGHT*}"{+END}>
 		<ul>
-			{+START,LOOP,PAGES}
-				<li>
-					{$TRIM,{$LOAD_PAGE,_unslider_{_loop_var}}}
+			{+START,LOOP,BGCOLORS}
+				<li{+START,IF_NON_EMPTY,{_loop_var}} style="background-color: #{_loop_var%}"{+END}>
+					{$TRIM,{$LOAD_PAGE,_unslider_{_loop_key}}}
 				</li>
 			{+END}
 		</ul>

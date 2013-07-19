@@ -28,7 +28,7 @@ class Block_main_unslider
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('pages','width','height','buttons','delay','speed','keypresses','slider_id');
+		$info['parameters']=array('pages','width','height','buttons','delay','speed','keypresses','slider_id','bgcolor');
 		return $info;
 	}
 
@@ -69,6 +69,23 @@ class Block_main_unslider
 		$keypresses=((isset($map['keypresses'])?$map['keypresses']:'0')=='1');
 		$slider_id=isset($map['slider_id'])?$map['slider_id']:'unslider';
 
+		$bgcolor=isset($map['bgcolor'])?str_replace('#','',$map['bgcolor']):'';
+		$bgcolors=array();
+		if (strpos($bgcolor,',')===false)
+		{
+			for ($i=0;$i<count($pages);$i++)
+			{
+				$bgcolors[$pages[$i]]=$bgcolor;
+			}
+		} else
+		{
+			$_bgcolors=explode(',',$bgcolor);
+			for ($i=0;$i<count($pages);$i++)
+			{
+				$bgcolors[$pages[$i]]=isset($_bgcolors[$i])?$_bgcolors[$i]:'';
+			}
+		}
+		
 		return do_template('BLOCK_MAIN_UNSLIDER',array(
 			'PAGES'=>$pages,
 			'WIDTH'=>$width,
@@ -79,6 +96,7 @@ class Block_main_unslider
 			'SPEED'=>$speed,
 			'KEYPRESSES'=>$keypresses,
 			'SLIDER_ID'=>$slider_id,
+			'BGCOLORS'=>$bgcolors,
 		));
 	}
 
