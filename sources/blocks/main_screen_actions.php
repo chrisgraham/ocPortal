@@ -35,7 +35,7 @@ class Block_main_screen_actions
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('title');
+		$info['parameters']=array('title','url');
 		return $info;
 	}
 
@@ -53,7 +53,11 @@ class Block_main_screen_actions
 
 		require_lang('recommend');
 
-		$_map=array('page'=>'recommend','from'=>get_self_url(true));
+		$from=isset($map['url'])?$map['url']:'';
+		if ($from=='')
+			$from=get_self_url(true);
+
+		$_map=array('page'=>'recommend','from'=>$from);
 		if (array_key_exists('title',$map)) $_map['title']=$map['title'];
 		$recommend_url=build_url($_map,'_SEARCH');
 

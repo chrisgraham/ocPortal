@@ -1519,7 +1519,7 @@ class Module_topics
 		} else
 		{
 			$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-			breadcrumb_add_segment($breadcrumbs,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_title),array('',$doing)));
+			breadcrumb_add_segment($breadcrumbs,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_title),array('',protect_from_escaping('<span>'.escape_html($doing->evaluate()).'</span>'))));
 		}
 	}
 

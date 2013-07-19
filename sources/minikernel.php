@@ -85,7 +85,7 @@ function init__minikernel()
 
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 	@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-	//@header('Cache-Control: no-cache, must-revalidate'); // DISABLED AS MAKES IE RELOAD ON 'BACK' AND LOSE FORM CONTENTS
+	@header('Cache-Control: no-cache, must-revalidate, max-age=0');
 	@header('Pragma: no-cache'); // for proxies, and also IE
 }
 

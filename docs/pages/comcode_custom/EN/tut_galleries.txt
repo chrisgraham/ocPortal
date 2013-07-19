@@ -35,6 +35,8 @@ The index is not linked onto the menus by default but may be added via the entry
 
 When you add or edit a gallery you may choose watermarks to be automatically added to any of the 4 corners of any added images that you select to be watermarked. A watermark is just a semi-transparent image that is overlaid across images as an official mark, or to prevent unauthorised reproduction. If you wish to place a watermark on an edge, you simply make a corner watermark image that includes enough transparency to change the location for the main image to be placed.
 
+Watermarks will appear on your full image where-ever it is displayed. ocPortal will not save a copy of images without the watermarks applied. They are applied permanently when you add/edit new image files. You will therefore want to ensure you keep your own media archive should you wish to change how you do watermarking later on.
+
 Watermarks are actually 'inherited' in the tree structure: in other words, when adding an image, watermarks will be chosen from the first gallery back down towards the root gallery that actually defines watermarks.
 
 [title="2"]Teasers[/title]

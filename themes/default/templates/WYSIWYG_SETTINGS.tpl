@@ -1,5 +1,5 @@
 // Carefully work out toolbar
-var precision_editing=((typeof window.take_errors!='undefined') && window.take_errors) || (typeof get_elements_by_class_name(document.body,'comcode_button_box')[0]!='undefined'); // Look to see if this Comcode button is here as a hint whether we are doing an advanced editor. Unfortunately we cannot put contextual Tempcode inside a Javascript file, so this trick is needed.
+var precision_editing=((typeof window.take_errors!='undefined') && window.take_errors) || (typeof get_elements_by_class_name(document.body,'comcode_button_box').length>1); // Look to see if this Comcode button is here as a hint whether we are doing an advanced editor. Unfortunately we cannot put contextual Tempcode inside a Javascript file, so this trick is needed.
 var toolbar=[];
 if (precision_editing)
 	toolbar.push(['Source','-']);
@@ -7,7 +7,7 @@ toolbar.push(['Cut','Copy','Paste',precision_editing?'PasteText':null,precision_
 toolbar.push(['Undo','Redo',precision_editing?'-':null,precision_editing?'Find':null,precision_editing?'Replace':null,'-',precision_editing?'SelectAll':null,'RemoveFormat']);
 toolbar.push(['Link','Unlink']);
 toolbar.push(precision_editing?'/':'-');
-var formatting=['Bold','Italic','Strike','-','Subscript','Superscript'];
+var formatting=['Bold','Italic','Strike','-',precision_editing?'Subscript':null,precision_editing?'Superscript':null];
 toolbar.push(formatting);
 toolbar.push(['NumberedList','BulletedList',precision_editing?'-':null,precision_editing?'Outdent':null,precision_editing?'Indent':null]);
 if (precision_editing)
@@ -23,7 +23,7 @@ if (precision_editing)
 	toolbar.push(['HorizontalRule','SpecialChar']);
 var use_ocportal_toolbar=true;
 if (use_ocportal_toolbar)
-	toolbar.push(['ocportal_block','ocportal_comcode','ocportal_page','ocportal_quote','ocportal_box','ocportal_code']);
+	toolbar.push(['ocportal_block','ocportal_comcode',precision_editing?'ocportal_page':null,'ocportal_quote',precision_editing?'ocportal_box':null,'ocportal_code']);
 
 var editor_settings={
 	enterMode : CKEDITOR.ENTER_BR,
