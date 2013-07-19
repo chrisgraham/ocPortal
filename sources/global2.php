@@ -54,7 +54,7 @@ function init__global2()
 
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 	@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-	//@header('Cache-Control: no-cache, must-revalidate'); // DISABLED AS MAKES IE RELOAD ON 'BACK' AND LOSE FORM CONTENTS
+	@header('Cache-Control: no-cache, max-age=0');
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
 	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
@@ -635,7 +635,7 @@ function fast_spider_cache($bot=true)
 			if ($bot) // Only bots can do this, as they won't try to login and end up reaching a previously cached page
 			{
 				header("Pragma: public");
-				header("Cache-Control: maxage=".strval($expires));
+				header("Cache-Control: max-age=".strval($expires));
 				header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');
 				header('Last-Modified: '.gmdate('D, d M Y H:i:s',$mtime).' GMT');
 
