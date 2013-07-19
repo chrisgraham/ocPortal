@@ -44,8 +44,8 @@ function assign_referral_awards($referee,$trigger)
 	if (is_guest($referrer)) return;
 	$referrer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referrer);
 
-	$num_total_qualified_by_referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','COUNT(*)',array('i_inviter'=>$referrer,'i_taken'=>1),'ORDER BY i_time');
-	$num_total_by_referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','COUNT(*)',array('i_inviter'=>$referrer),'ORDER BY i_time');
+	$num_total_qualified_by_referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','COUNT(*)',array('i_inviter'=>$referrer,'i_taken'=>1),'GROUP BY i_email_address ORDER BY i_time');
+	$num_total_by_referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','COUNT(*)',array('i_inviter'=>$referrer),'GROUP BY i_email_address ORDER BY i_time');
 
 	foreach ($ini_file as $ini_file_section_name=>$ini_file_section)
 	{
@@ -436,12 +436,12 @@ function referrer_report_script($ret=false)
 	$data=array();
 	$table='f_invites i LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members referrer ON referrer.id=i_inviter LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members referee ON referee.m_email_address=i_email_address';
 	$referrals=$GLOBALS['FORUM_DB']->query(
-		'SELECT i_time AS time,referrer.id AS referrer_id,referrer.m_username AS referrer,referrer.m_email_address AS referrer_email,referee.id AS referee_id,referee.m_username AS referee,referee.m_email_address AS referee_email,i_taken AS qualified
+		'SELECT i_time AS time,referrer.id AS referrer_id,referrer.m_username AS referrer,referrer.m_email_address AS referrer_email,referee.id AS referee_id,referee.m_username AS referee,i_email_address AS referee_email,i_taken AS qualified
 		FROM '.
 		$GLOBALS['FORUM_DB']->get_table_prefix().$table.
 		' WHERE '.
 		$where.
-		' ORDER BY i_time DESC',
+		' GROUP BY i_email_address ORDER BY i_time DESC',
 		$max,
 		$start
 	);
@@ -461,7 +461,8 @@ function referrer_report_script($ret=false)
 			{
 				$data_row[do_lang('TYPE_REFERRER')]=is_null($ref['referrer_id'])?'':strval($ref['referrer_id']);
 			}
-			$data_row[do_lang('TYPE_REFERRER').' ('.do_lang('EMAIL_ADDRESS').')']=$ref['referrer_email'];
+			if (has_privilege(get_member(),'member_maintenance'))
+				$data_row[do_lang('TYPE_REFERRER').' ('.do_lang('EMAIL_ADDRESS').')']=$ref['referrer_email'];
 			if (is_null($ref['referrer_id']))
 			{
 				$data_row[do_lang('QUALIFIED_REFERRER',$scheme_name)]=do_lang('NA');
@@ -483,7 +484,8 @@ function referrer_report_script($ret=false)
 		{
 			$data_row[do_lang('REFEREE')]=is_null($ref['referee_id'])?'':strval($ref['referee_id']);
 		}
-		$data_row[do_lang('REFEREE').' ('.do_lang('EMAIL_ADDRESS').')']=is_null($ref['referee_email'])?'':$ref['referee_email'];
+		if (has_privilege(get_member(),'member_maintenance'))
+			$data_row[do_lang('REFEREE').' ('.do_lang('EMAIL_ADDRESS').')']=is_null($ref['referee_email'])?'':$ref['referee_email'];
 		$data_row[do_lang('QUALIFIED_REFERRAL',$scheme_name)]=do_lang(($ref['qualified']==1)?'YES':'NO');
 		$data[]=$data_row;
 	}
