@@ -852,7 +852,17 @@ function block_helper_script()
 		{
 			$submit_name=do_lang_tempcode('USE');
 		}
-		$text=do_lang_tempcode('BLOCK_HELPER_2',escape_html(cleanup_block_name($block)),escape_html(do_lang('BLOCK_'.$block.'_DESCRIPTION')),escape_html(do_lang('BLOCK_'.$block.'_USE')));
+		$block_description=do_lang('BLOCK_'.$block.'_DESCRIPTION',NULL,NULL,NULL,NULL,false);
+		if (is_null($block_description)) $block_description='';
+		$block_use=do_lang('BLOCK_'.$block.'_USE',NULL,NULL,NULL,NULL,false);
+		if (is_null($block_use)) $block_use='';
+		if (($block_description=='') && ($block_use==''))
+		{
+			$text=new ocp_tempcode();
+		} else
+		{
+			$text=do_lang_tempcode('BLOCK_HELPER_2',escape_html(cleanup_block_name($block)),escape_html($block_description),escape_html($block_use));
+		}
 		$hidden=form_input_hidden('block',$block);
 		$content=do_template('FORM_SCREEN',array('_GUID'=>'62f8688bf0ae4223a2ba1f76fef3b0b4','TITLE'=>$title,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>true,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 
