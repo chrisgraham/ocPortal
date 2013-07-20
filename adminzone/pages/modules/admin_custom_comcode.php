@@ -61,7 +61,7 @@ class Module_admin_custom_comcode extends standard_aed_module
 		tag.onblur=function() {
 			update_func();
 			var title=document.getElementById('title');
-			if (title.value=='') title.value=tag.value.substr(0,1).toUpperCase()+tag.value.substring(1,tag.value.length);
+			if (title.value=='') title.value=tag.value.substr(0,1).toUpperCase()+tag.value.substring(1,tag.value.length).replace(/\_/g,' ');
 		}
 		";
 	var $orderer='tag_title';

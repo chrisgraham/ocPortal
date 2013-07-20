@@ -452,7 +452,13 @@ class Module_admin_zones
 	{
 		require_lang('permissions');
 
-		$javascript='';
+		$javascript="
+			var zone=document.getElementById('zone');
+			zone.onblur=function() {
+				var title=document.getElementById('title');
+				if (title.value=='') title.value=zone.value.substr(0,1).toUpperCase()+zone.value.substring(1,zone.value.length).replace(/\_/g,' ');
+			}
+		";
 
 		$fields='';
 		$hidden=new ocp_tempcode();
@@ -552,7 +558,7 @@ class Module_admin_zones
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_NAME'),'zone','',true));
-		list($_fields,$hidden,)=$this->get_form_fields();
+		list($_fields,$hidden,$javascript)=$this->get_form_fields();
 		$fields->attach($_fields);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add'),'_SELF');
@@ -563,7 +569,7 @@ class Module_admin_zones
 
 		require_javascript('javascript_ajax');
 		$script=find_script('snippet');
-		$javascript="
+		$javascript.="
 			var form=document.getElementById('main_form');
 			form.old_submit=form.onsubmit;
 			form.onsubmit=function()

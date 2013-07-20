@@ -3433,7 +3433,7 @@ ul.nl, .nl ul {
 .menu_type__zone a:hover {
 	text-shadow: 0 0 10px {$GET,zone_jump_out_1_shadow};
 }
-.menu_type__zone li:last-child a:hover {
+.menu_type__zone li a[href*="adminzone"]:hover {
 	text-shadow: 0 0 10px {$GET,zone_jump_out_2_shadow};
 }
 

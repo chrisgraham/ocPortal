@@ -617,10 +617,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'HEADER_TEXT':
 				global $ZONE,$SEO_TITLE,$DISPLAYED_TITLE;
-				if ($ZONE===NULL)
-				{
-					warn_exit(do_lang_tempcode('ZONE_NOT_INSTALLED'));
-				}
 				if (($SEO_TITLE===NULL) || ($SEO_TITLE=='')) // Take from either zone header or page title
 				{
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
@@ -629,7 +625,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$value=strip_html($_displayed_title);
 					} else
 					{
-						$value=$ZONE['zone_header_text_trans'];
+						if ($ZONE!==NULL)
+							$value=$ZONE['zone_header_text_trans'];
 					}
 				} else // Take from SEO title
 				{

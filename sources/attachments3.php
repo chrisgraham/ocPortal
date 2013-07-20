@@ -40,7 +40,7 @@ function _delete_attachment($id,$connection)
 		$url=rawurldecode($attachment_info['a_url']);
 		@unlink(get_custom_file_base().'/'.$url);
 		sync_file($url);
-		if ($attachment_info['a_thumb_url']!='')
+		if (($attachment_info['a_thumb_url']!='') && (strpos($attachment_info['a_thumb_url'],'uploads/filedump/')===false))
 		{
 			$thumb_url=rawurldecode($attachment_info['a_thumb_url']);
 			@unlink(get_custom_file_base().'/'.$thumb_url);

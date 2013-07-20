@@ -16,7 +16,7 @@ shuffle($all_rows);
 foreach ($all_rows as $d_row)
 {
 	if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($d_row['text_original'])) $d_row['text_original']=get_translated_text($d_row['description']);
-	$d_url=build_url(array('page'=>'_SELF','type'=>'entry','id'=>$d_row['id']),'_SELF');
+	$d_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$d_row['id']),get_module_zone('downloads'));
 	if (addon_installed('galleries'))
 	{
 		$i_rows=$GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url','id'),array('cat'=>'download_'.strval($d_row['id'])),'',1,$d_row['default_pic']-1);

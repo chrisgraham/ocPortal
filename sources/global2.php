@@ -628,7 +628,7 @@ function fast_spider_cache($bot=true)
 	$fast_cache_path.='.gcd';
 	if (is_file($fast_cache_path))
 	{
-		$expires=60*60*intval($SITE_INFO['fast_spider_cache']);
+		$expires=(60.0*60.0*floatval($SITE_INFO['fast_spider_cache']));
 		$mtime=filemtime($fast_cache_path);
 		if ($mtime>time()-$expires)
 		{

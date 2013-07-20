@@ -386,6 +386,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 	$attachment['a_type']=$type;
 	$attachment['a_thumb']=array_key_exists('thumb',$attributes)?$attributes['thumb']:'1';
 	if ($attachment['a_thumb']!='0') $attachment['a_thumb']='1';
+	$attachment['a_thumb_url']=array_key_exists('thumb_url',$attributes)?$attributes['thumb_url']:$attachment['a_thumb_url'];
 
 	switch ($type)
 	{

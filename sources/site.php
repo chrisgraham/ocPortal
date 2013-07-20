@@ -672,7 +672,7 @@ function do_site()
 	}
 
 	// Cacheing for spiders
-	if ((running_script('index')) && (count($_POST)==0) && (isset($GLOBALS['SITE_INFO']['fast_spider_cache'])) && ($GLOBALS['SITE_INFO']['fast_spider_cache']=='1') && (is_guest()))
+	if ((running_script('index')) && (count($_POST)==0) && (isset($GLOBALS['SITE_INFO']['fast_spider_cache'])) && ($GLOBALS['SITE_INFO']['fast_spider_cache']!='0') && (is_guest()))
 	{
 		$bot_type=get_bot_type();
 		if ((($bot_type!==NULL) || ((isset($GLOBALS['SITE_INFO']['any_guest_cached_too'])) && ($GLOBALS['SITE_INFO']['any_guest_cached_too']=='1'))) && (can_fast_spider_cache()))

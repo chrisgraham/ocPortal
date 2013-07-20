@@ -55,9 +55,12 @@ class Hook_Profiles_Tabs_galleries
 		require_code('galleries');
 		require_css('galleries');
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member\_'.strval($member_id_of).'\_%').'\'');
+		$actual_rows=array();
 		foreach ($rows as $i=>$row)
 		{
-			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>show_gallery_box($row,'root',false,get_module_zone('galleries')))));
+			$gallery_rendered=show_gallery_box($row,'root',false,get_module_zone('galleries'));
+			if (!$gallery_rendered->is_empty()) $actual_rows[]=$row;
+			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>$gallery_rendered)));
 			$this->attach_gallery_subgalleries($row['name'],$galleries);
 		}
 
@@ -85,6 +88,17 @@ class Hook_Profiles_Tabs_galleries
 				if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('cat_mid',get_member(),get_ip_address(),'cms_galleries')))
 				{
 					$add_gallery_url=build_url(array('page'=>'cms_galleries','type'=>'ac','cat'=>$rows[0]['name']),get_module_zone('cms_galleries'));
+				}
+				if (count($actual_rows)==1)
+				{
+					if ($actual_rows[0]['accept_images']==1)
+					{
+						$add_image_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$actual_rows[0]['name']),get_module_zone('cms_galleries'));
+					}
+					if ($actual_rows[0]['accept_videos']==1)
+					{
+						$add_video_url=build_url(array('page'=>'cms_galleries','type'=>'av','cat'=>$actual_rows[0]['name']),get_module_zone('cms_galleries'));
+					}
 				}
 			}
 		}
