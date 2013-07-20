@@ -279,6 +279,7 @@ function find_available_addons($installed_too=true)
 		require_code('tar');
 		$tar=tar_open($full,'rb');
 		$info_file=tar_get_file($tar,'addon.inf',true);
+		if (is_null($info_file)) $info_file=tar_get_file($tar,'mod.inf'); // LEGACY
 		if (!is_null($info_file))
 		{
 			$info=better_parse_ini_file(NULL,$info_file['data']);
@@ -295,6 +296,21 @@ function find_available_addons($installed_too=true)
 			$info['tar_path']=$full;
 			$info['addon_name']=basename($file,'.tar');
 			$info['addon_description']=str_replace('\n',"\n",$info['description']);
+
+			foreach ($addons_available_for_installation as $i=>$a) // Deduplicate, may be multiple versions in imports/addons
+			{
+				if ((strtolower($a['name'])==strtolower($info['name'])) && (isset($a['version'])) && (isset($info['version'])))
+				{
+					if (version_compare($a['version'],$info['version'])>0)
+					{
+						continue 2;
+					} else
+					{
+						unset($addons_available_for_installation[$i]);
+						break;
+					}
+				}
+			}
 
 			$addons_available_for_installation[$file]=$info;
 		}
@@ -532,6 +548,7 @@ function install_addon($file,$files=NULL)
 	require_code('tar');
 	$tar=tar_open($full,'rb');
 	$info_file=tar_get_file($tar,'addon.inf');
+	if (is_null($info_file)) $info_file=tar_get_file($tar,'mod.inf'); // LEGACY
 	if (is_null($info_file)) warn_exit(do_lang_tempcode('NOT_ADDON'));
 	$info=better_parse_ini_file(NULL,$info_file['data']);
 	$directory=tar_get_directory($tar);
@@ -630,6 +647,7 @@ function install_addon($file,$files=NULL)
 		foreach ($directory as $dir)
 		{
 			$addon_file=$dir['path'];
+			if (substr(basename($addon_file),0,1)=='.') continue;
 
 			if ((is_null($files)) || (in_array($addon_file,$files)))
 			{
@@ -792,6 +810,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	$tar=tar_open($full,'rb');
 	$directory=tar_get_directory($tar);
 	$info_file=tar_get_file($tar,'addon.inf');
+	if (is_null($info_file)) $info_file=tar_get_file($tar,'mod.inf'); // LEGACY
 	if (is_null($info_file)) warn_exit(do_lang_tempcode('NOT_ADDON'));
 	$info=better_parse_ini_file(NULL,$info_file['data']);
 	$addon=$info['name'];
@@ -806,6 +825,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	foreach ($directory as $i=>$entry)
 	{
 		if ($entry['path']=='addon.inf') continue;
+		if ($entry['path']=='mod.inf') continue; // LEGACY
 		if ($entry['path']=='addon_install_code.php') continue;
 		if (substr($entry['path'],-1)=='/') continue;
 

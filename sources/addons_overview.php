@@ -28,10 +28,10 @@
  */
 function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 {
-	$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($addon_name).'.php';
+	$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($addon_name,true).'.php';
 	if (!is_file($path))
 	{
-		$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($addon_name).'.php';
+		$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($addon_name,true).'.php';
 	}
 
 	$addon_files=array();

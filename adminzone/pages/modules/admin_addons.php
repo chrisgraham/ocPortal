@@ -172,7 +172,7 @@ class Module_admin_addons
 			$description=$row['addon_description'];
 			$file_list=$row['addon_files'];
 			$pretty_name=do_template('ADDON_NAME',array('IMAGE_URL'=>find_addon_icon($row['addon_name'],false,NULL),'NAME'=>$row['addon_name']));
-			$_tpl_addons[$row['addon_name']]=do_template('ADDON_SCREEN_ADDON',array(
+			$_tpl_addons[$row['addon_name']]=array(
 				'_GUID'=>'9a06f5a9c9e3085c10ab7fb17c3efcd1',
 				'UPDATED_ADDONS'=>$updated,
 				'DESCRIPTION'=>$description,
@@ -188,7 +188,7 @@ class Module_admin_addons
 				'ACTIONS'=>$actions,
 				'TYPE'=>'uninstall',
 				'PASSTHROUGH'=>$row['addon_name'],
-			));
+			);
 		}
 
 		// Show addons available for installation
@@ -202,7 +202,7 @@ class Module_admin_addons
 				$file_list=$addon['files'];
 				if ($addon['version']=='(version-synched)') $addon['version']=float_to_raw_string(ocp_version_number());
 				$pretty_name=do_template('ADDON_NAME',array('IMAGE_URL'=>find_addon_icon($addon['name'],false,$addon['tar_path']),'NAME'=>$addon['name']));
-				$_tpl_addons[$addon['name']]=do_template('ADDON_SCREEN_ADDON',array(
+				$_tpl_addons[$addon['name']]=array(
 					'_GUID'=>'cb61bdb9ce0cef5cd520440c5f62008f',
 					'UPDATED_ADDONS'=>false,
 					'DESCRIPTION'=>$description,
@@ -218,7 +218,7 @@ class Module_admin_addons
 					'ACTIONS'=>$actions,
 					'TYPE'=>'install',
 					'PASSTHROUGH'=>$filename,
-				));
+				);
 			}
 		}
 
