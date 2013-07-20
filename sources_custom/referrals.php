@@ -367,6 +367,17 @@ function referrer_is_qualified($scheme,$member_id)
 		}
 	}
 
+	if ((isset($scheme['referrer_qualified_for__event'])) && ($scheme['referrer_qualified_for__event']=='1'))
+	{
+		if (!is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.get_table_prefix().'calendar_events WHERE (e_submitter='.strval($member_id).' OR e_member_calendar='.strval($member_id).') AND validated=1')))
+		{
+			$positive++;
+		} else
+		{
+			$negative++;
+		}
+	}
+
 	if (addon_installed('shopping'))
 	{
 		if ((isset($scheme['referrer_qualified_for__misc_purchase'])) && ($scheme['referrer_qualified_for__misc_purchase']=='1'))

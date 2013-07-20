@@ -852,7 +852,7 @@
 			target = li.eq(index);
 
 			var speed = callback ? 5 : o.speed | 0, obj = {};
-			if (o.balanceheight) cssob.height = target.outerHeight();
+			if (o.balanceheight) obj.height = target.outerHeight();
 
 			if (!ul.queue('fx').length) {
 				//  Handle those pesky dots
