@@ -135,6 +135,7 @@ class Module_admin_referrals
 
 		$member_id=get_param_integer('member_id');
 
+		list($old_referrals_count)=get_referral_scheme_stats_for($member_id,$scheme);
 		list($num_total_qualified_by_referrer)=get_referral_scheme_stats_for($member_id,$scheme,true);
 		$referrals_count=post_param_integer('referrals_count');
 		$referrals_dif=$referrals_count-$num_total_qualified_by_referrer;
@@ -151,6 +152,8 @@ class Module_admin_referrals
 			'o_referrals_dif'=>$referrals_dif,
 			'o_is_qualified'=>$is_qualified,
 		));
+
+		log_it('_MANUALLY_ADJUST_SCHEME_SETTINGS',$scheme,strval($referrals_count-$old_referrals_count));
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'));

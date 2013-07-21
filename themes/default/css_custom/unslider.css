@@ -50,7 +50,7 @@
 }
 
 .unslider>ul>li div.feature_image img,
-.unslider>ul>li div.feature_video object, .unslider>ul>li div.feature_video embed, .unslider>ul>li div.feature_video video,
+.unslider>ul>li div.feature_video iframe, .unslider>ul>li div.feature_video object, .unslider>ul>li div.feature_video embed, .unslider>ul>li div.feature_video video,
 .unslider>ul>li div.feature_image div, .unslider>ul>li div.feature_video div {
 	/* Takes precedence over anything in the HTML, i.e. like object.width */
 	width: 100% !important;

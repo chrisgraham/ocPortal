@@ -10,6 +10,9 @@ notify_if_join_but_no_referral=0
 ; if the referrer field at signup is visible (as opposed to hidden, relying on cookies/URL referrer)
 visible_referrer_field=1
 
+; Track referrals using cookies; this might have legal issues in the EU
+referrer_cookies=1
+
 ;; ==================
 ;; PARTICULAR SCHEMES
 ;; ==================
