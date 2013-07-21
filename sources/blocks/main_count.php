@@ -73,12 +73,14 @@ class Block_main_count
 
 		// Hit counter?
 		$hit_count=array_key_exists('hit_count',$map)?intval($map['hit_count']):1;
+		$update=mixed();
 		if ($hit_count==1)
 		{
-			update_stat($name,1);
+			//update_stat($name,1);	Actually, use AJAX
+			$update=$name;
 		}
 
-		return do_template('BLOCK_MAIN_COUNT',array('_GUID'=>'49d3ba8fb5b5544ac817f9a7d18f9d35','NAME'=>$name,'VALUE'=>strval($current_value+1)));
+		return do_template('BLOCK_MAIN_COUNT',array('_GUID'=>'49d3ba8fb5b5544ac817f9a7d18f9d35','NAME'=>$name,'UPDATE'=>$update,'VALUE'=>strval($current_value+1)));
 	}
 
 }

@@ -75,6 +75,7 @@ class Hook_addon_registry_counting_blocks
 			'sources/hooks/systems/addon_registry/counting_blocks.php',
 			'sources/blocks/main_count.php',
 			'sources/blocks/main_countdown.php',
+			'sources/hooks/systems/snippets/count.php',
 			'counting_blocks.css',
 			'BLOCK_MAIN_COUNTDOWN.tpl',
 			'BLOCK_MAIN_COUNT.tpl'
