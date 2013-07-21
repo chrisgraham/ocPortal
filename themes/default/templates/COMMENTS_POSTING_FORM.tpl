@@ -1,5 +1,5 @@
 {+START,IF_NON_EMPTY,{COMMENT_URL}}
-<form role="form" title="{TITLE*}" class="comments_form" id="comments_form" onsubmit="return ({+START,IF_PASSED,MORE_URL}(this.getAttribute('action')=='{MORE_URL*}') || {+END}(check_field_for_blankness(this.elements['post'],event)){+START,IF,{$AND,{GET_EMAIL},{$NOT,{EMAIL_OPTIONAL}}}} &amp;&amp; (check_field_for_blankness(this.elements['email'],event)){+END});" action="{COMMENT_URL*}{+START,IF_PASSED_AND_TRUE,COMMENTS}#last_comment{+END}" method="post" enctype="multipart/form-data">
+<form role="form" title="{TITLE*}" class="comments_form" id="comments_form" onsubmit="return ({+START,IF_PASSED,MORE_URL}(this.getAttribute('action')=='{MORE_URL*}') || {+END}(check_field_for_blankness(this.elements['post'],event)){+START,IF,{$AND,{GET_EMAIL},{$NOT,{EMAIL_OPTIONAL}}}} &amp;&amp; (check_field_for_blankness(this.elements['email'],event)){+END});" action="{COMMENT_URL*}{+START,IF_NON_EMPTY,{$GET,current_anchor}}#{$GET,current_anchor}{+END}{+START,IF_EMPTY,{$GET,current_anchor}}{+START,IF_PASSED_AND_TRUE,COMMENTS}#last_comment{+END}{+END}" method="post" enctype="multipart/form-data">
 	{$INSERT_SPAMMER_BLACKHOLE}
 	<input type="hidden" name="_comment_form_post" value="1" />
 {+END}
@@ -54,7 +54,7 @@
 
 								<td>
 									<div class="constrain_field">
-										<input maxlength="255" class="wide_field" value="" type="text" tabindex="1" id="title" name="title" />
+										<input maxlength="255" class="wide_field" value="" type="text" tabindex="2" id="title" name="title" />
 									</div>
 
 									<div id="error_title" style="display: none" class="input_error_here"></div>
@@ -70,7 +70,7 @@
 
 								<td>
 									<div class="constrain_field">
-										<input maxlength="255" class="wide_field{+START,IF,{$NOT,{EMAIL_OPTIONAL}}} input_text_required{+END}" id="email" type="text" tabindex="2" value="{$MEMBER_EMAIL*}" name="email" />
+										<input maxlength="255" class="wide_field{+START,IF,{$NOT,{EMAIL_OPTIONAL}}} input_text_required{+END}" id="email" type="text" tabindex="3" value="{$MEMBER_EMAIL*}" name="email" />
 									</div>
 
 									<div id="error_email" style="display: none" class="input_error_here"></div>
@@ -155,7 +155,7 @@
 													{EM}
 
 													{+START,IF,{$OCF}}
-														<p class="associated_link associated_links_block_group"><a rel="nofollow" tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a></p>
+														<p class="associated_link associated_links_block_group"><a rel="nofollow" tabindex="5" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a></p>
 													{+END}
 												</div>
 											</div></div>
@@ -166,7 +166,7 @@
 
 							<td>
 								<div class="constrain_field">
-									<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} accesskey="x" class="wide_field" onfocus="if ((this.value.replace(/\s/g,'')=='{POST_WARNING;^*}'.replace(/\s/g,'') &amp;&amp; '{POST_WARNING;^*}'!='') || (typeof this.strip_on_focus!='undefined' &amp;&amp; this.value==this.strip_on_focus)) this.value=''; this.style.color='black';" cols="42" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
+									<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} tabindex="4" accesskey="x" class="wide_field" onfocus="if ((this.value.replace(/\s/g,'')=='{POST_WARNING;^*}'.replace(/\s/g,'') &amp;&amp; '{POST_WARNING;^*}'!='') || (typeof this.strip_on_focus!='undefined' &amp;&amp; this.value==this.strip_on_focus)) this.value=''; this.style.color='black';" cols="42" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
 								</div>
 
 								<div id="error_post" style="display: none" class="input_error_here"></div>
@@ -202,10 +202,10 @@
 						{+END}{+END}{+END}
 						{+START,IF_PASSED,MORE_URL}
 							{+START,IF,{$JS_ON}}
-								<button tabindex="5" accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL*;}');" class="{$?,{$IS_EMPTY,{COMMENT_URL}},button_page,button_pageitem}" type="button">{!FULL_EDITOR}</button>
+								<button tabindex="6" accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL*;}');" class="{$?,{$IS_EMPTY,{COMMENT_URL}},button_page,button_pageitem}" type="button">{!FULL_EDITOR}</button>
 							{+END}
 						{+END}
-						<button onclick="handle_comments_posting_form_submit(this,event);" tabindex="4" accesskey="u" id="submit_button" class="{$?,{$IS_EMPTY,{COMMENT_URL}},button_page,button_pageitem}" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
+						<button onclick="handle_comments_posting_form_submit(this,event);" tabindex="7" accesskey="u" id="submit_button" class="{$?,{$IS_EMPTY,{COMMENT_URL}},button_page,button_pageitem}" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
 					</div>
 				</div>
 			</div>

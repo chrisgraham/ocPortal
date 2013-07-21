@@ -4125,6 +4125,12 @@ twitter_feed_integration_block
  - themes/default/images_custom/twitter_feed/retweet_hover.png
  - themes/default/images_custom/twitter_feed/retweet_on.png
 
+member_comments
+---------------
+ - sources_custom/hooks/systems/profiles_tabs/comments.php
+ - lang_custom/EN/member_comments.ini
+ - themes/default/templates_custom/OCF_MEMBER_PROFILE_COMMENTS.tpl
+
 content_read_tracking
 ---------------------
  - sources_custom/hooks/systems/symbols/MARK_READ.php
