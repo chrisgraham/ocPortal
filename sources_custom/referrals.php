@@ -4,7 +4,7 @@ function get_referral_scheme_stats_for($referrer,$scheme_name,$raw=false)
 {
 	$num_total_by_referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','COUNT(*)',array('i_inviter'=>$referrer),'GROUP BY i_email_address');
 	if (is_null($num_total_by_referrer)) $num_total_by_referrer=0;
-	$num_total_qualified_by_referrer=$GLOBALS['SITE_DB']->query_select_value('referrees_qualified_for','COUNT(*)',array('q_referee'=>$referrer,'q_scheme_name'=>$scheme_name));
+	$num_total_qualified_by_referrer=$GLOBALS['SITE_DB']->query_select_value('referees_qualified_for','COUNT(*)',array('q_referee'=>$referrer,'q_scheme_name'=>$scheme_name));
 
 	if (!$raw)
 	{
@@ -66,7 +66,7 @@ function assign_referral_awards($referee,$trigger)
 			$ini_file_section['name']=$ini_file_section_name;
 
 			list($num_total_qualified_by_referrer,$num_total_by_referrer)=get_referral_scheme_stats_for($referrer,$ini_file_section_name);
-			$one_trigger_already=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('referrees_qualified_for','q_referee',array('q_scheme_name'=>$ini_file_section_name,'q_referee'=>$referee)));
+			$one_trigger_already=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('referees_qualified_for','q_referee',array('q_scheme_name'=>$ini_file_section_name,'q_referee'=>$referee)));
 
 			$qualified_trigger=_assign_referral_awards(
 				$trigger,
@@ -112,7 +112,7 @@ function _assign_referral_awards(
 
 		if ((!$one_trigger_per_referee) || (!$one_trigger_already)) 
 		{
-			$GLOBALS['SITE_DB']->query_insert('referrees_qualified_for',array(
+			$GLOBALS['SITE_DB']->query_insert('referees_qualified_for',array(
 				'q_referee'=>$referee,
 				'q_referrer'=>$referrer,
 				'q_scheme_name'=>$scheme_name,
@@ -460,12 +460,15 @@ function referrer_report_script($ret=false)
 	$scheme_title=isset($scheme['title'])?$scheme['title']:$scheme_name;
 
 	$member_id=get_param_integer('member_id',NULL);
-	$is_self=($member_id==get_member());
+	$is_self=($member_id===get_member());
 	if ((!has_zone_access(get_member(),'adminzone')) && (!$is_self))
 		access_denied('ZONE_ACCESS','adminzone');
 
-	if (!referrer_is_qualified($scheme,$member_id))
-	warn_exit(do_lang_tempcode($is_self?'_MEMBER_NOT_ON_REFERRAL_SCHEME':'MEMBER_NOT_ON_REFERRAL_SCHEME',escape_html($scheme_title)));
+	if (!is_null($member_id))
+	{
+		if (!referrer_is_qualified($scheme,$member_id))
+			warn_exit(do_lang_tempcode($is_self?'_MEMBER_NOT_ON_REFERRAL_SCHEME':'MEMBER_NOT_ON_REFERRAL_SCHEME',escape_html($scheme_title)));
+	}
 
 	require_lang('referrals');
 	$csv=(get_param_integer('csv',0)==1);
@@ -495,8 +498,8 @@ function referrer_report_script($ret=false)
 		$max,
 		$start
 	);
-	$max_rows=$GLOBALS['FORUM_DB']->query_select_value('referrees_qualified_for','COUNT(*)',($member_id!==NULL)?array('q_referrer'=>$member_id):NULL)*2;
-	if ((count($referrals)==0) && (is_null($dif))) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+	$max_rows=$GLOBALS['FORUM_DB']->query_select_value('referees_qualified_for','COUNT(*)',($member_id!==NULL)?array('q_referrer'=>$member_id):NULL)*2;
+	if ((count($referrals)==0) && (is_null($dif))) inform_exit(do_lang_tempcode('NO_ENTRIES'),true);
 	foreach ($referrals as $ref)
 	{
 		$data_row=array();
@@ -525,7 +528,7 @@ function referrer_report_script($ret=false)
 		$qualifications=array();
 		if (($ref['qualified']==1) && (!is_null($ref['referee_id']))) // Clarify, are they really qualified?
 		{
-			$qualifications=$GLOBALS['SITE_DB']->query_select('referrees_qualified_for',array('q_time','q_action'),array('q_referee'=>$ref['referee_id'],'q_scheme_name'=>$scheme_name));
+			$qualifications=$GLOBALS['SITE_DB']->query_select('referees_qualified_for',array('q_time','q_action'),array('q_referee'=>$ref['referee_id'],'q_scheme_name'=>$scheme_name));
 			if (count($qualifications)==0) $ref['qualified']=0; // Not actually qualified for this scheme
 		}
 
@@ -546,7 +549,7 @@ function referrer_report_script($ret=false)
 
 		$data_row[do_lang('QUALIFIED_REFERRAL',$scheme_name)]=do_lang(($ref['qualified']==1)?'YES':'NO');
 
-		$data_row[do_lang('ACTION')]=do_lang('JOINED');
+		$data_row[do_lang('ACTION')]=do_lang('ocf:JOINED');
 
 		if ($ref['qualified']==0)
 		{

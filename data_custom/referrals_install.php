@@ -37,7 +37,7 @@ $GLOBALS['SITE_DB']->create_table('referrer_override',array(
 	'o_is_qualified'=>'?BINARY',
 ));
 
-$GLOBALS['SITE_DB']->create_table('referrees_qualified_for',array(
+$GLOBALS['SITE_DB']->create_table('referees_qualified_for',array(
 	'id'=>'*AUTO',
 	'q_referee'=>'MEMBER',
 	'q_referrer'=>'MEMBER',
@@ -58,7 +58,7 @@ foreach ($rows as $row)
 
 		foreach (array_keys($ini_file) as $scheme_name)
 		{
-			$GLOBALS['SITE_DB']->query_insert('referrees_qualified_for',array(
+			$GLOBALS['SITE_DB']->query_insert('referees_qualified_for',array(
 				'q_referee'=>$member_id,
 				'q_referrer'=>$row['i_inviter'],
 				'q_scheme_name'=>$scheme_name,
