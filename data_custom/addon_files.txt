@@ -2350,8 +2350,11 @@ referrals
  - sources_custom/hooks/systems/do_next_menus/referrals.php
  - sources_custom/hooks/modules/members/referrals.php
  - themes/default/images_custom/bigicons/referrals.png
- - adminzone/pages/minimodules_custom/admin_referrals.php
  - adminzone/pages/comcode_custom/EN/referrals.txt
+ - data_custom/referrals_install.php
+ - data_custom/referrals_uninstall.php
+ - adminzone/pages/modules_custom/admin_referrals.php
+ - sources_custom/hooks/systems/startup/referrals.php
 
 better_mail
 -----------

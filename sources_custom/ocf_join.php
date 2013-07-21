@@ -3,7 +3,15 @@
 function init__ocf_join($in=NULL)
 {
 	// More referral fields in form
-	$in=str_replace('list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups);','list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups); $fields->attach(get_referrer_field());',$in);
+	$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
+	if ((!isset($ini_file['visible_referrer_field'])) || ($ini_file['visible_referrer_field']=='1'))
+	{
+		$extra_code='$fields->attach(get_referrer_field(true));';
+	} else
+	{
+		$extra_code='$hidden->attach(get_referrer_field(false));';
+	}
+	$in=str_replace('list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups);','list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups); '.$extra_code,$in);
 
 	// Better referral detection, and proper qualification management
 	$in=str_replace("\$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>\$email_address,'i_taken'=>0),'',1);",'set_from_referrer_field();',$in);
@@ -14,19 +22,30 @@ function init__ocf_join($in=NULL)
 	return $in;
 }
 
-function get_referrer_field()
+function get_referrer_field($visible)
 {
 	require_lang('referrals');
-	$by_url=get_param('keep_referrer','');
-	if ($by_url!='')
+	$known_referrer=get_param('keep_referrer','');
+	if ($known_referrer!='')
 	{
-		if (is_numeric($by_url))
+		if (is_numeric($known_referrer))
 		{
-			$by_url=$GLOBALS['FORUM_DRIVER']->get_username($by_url);
-			if (is_null($by_url)) $by_url='';
+			$known_referrer=$GLOBALS['FORUM_DRIVER']->get_username($known_referrer);
+			if (is_null($known_referrer)) $known_referrer='';
 		}
+	} else
+	{
+		$known_referrer=ocp_admirecookie('referrer','');
 	}
-	$field=form_input_username(do_lang_tempcode('TYPE_REFERRER'),do_lang_tempcode('DESCRIPTION_TYPE_REFERRER'),'referrer',$by_url,false,true);
+
+	if ($visible)
+	{
+		$field=form_input_username(do_lang_tempcode('TYPE_REFERRER'),do_lang_tempcode('DESCRIPTION_TYPE_REFERRER'),'referrer',$known_referrer,false,true);
+	} else
+	{
+		$field=form_input_hidden('referrer',$known_referrer,false,true);
+	}
+
 	return $field;
 }
 
