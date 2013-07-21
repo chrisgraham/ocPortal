@@ -46,14 +46,6 @@ class Hook_members_referrals
 
 				$scheme_title=isset($scheme['title'])?$scheme['title']:$ini_file_section_name;
 
-				if (!referrer_is_qualified($scheme,$member_id)) continue;
-
-				$ret[]=array(
-					'usage',
-					make_string_tempcode(escape_html($scheme_title)),
-					find_script('referrer_report').'?scheme='.urlencode($scheme_name).'&member_id='.strval($member_id).$keep->evaluate()
-				);
-
 				if (has_zone_access(get_member(),'adminzone'))
 				{
 					$ret[]=array(
@@ -62,6 +54,14 @@ class Hook_members_referrals
 						build_url(array('page'=>'admin_referrals','type'=>'adjust','scheme'=>$scheme_name,'member_id'=>$member_id),get_module_zone('admin_referrals'))
 					);
 				}
+
+				if (!referrer_is_qualified($scheme,$member_id)) continue;
+
+				$ret[]=array(
+					'usage',
+					make_string_tempcode(escape_html($scheme_title)),
+					find_script('referrer_report').'?scheme='.urlencode($scheme_name).'&member_id='.strval($member_id).$keep->evaluate()
+				);
 			}
 		}
 
