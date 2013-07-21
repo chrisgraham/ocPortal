@@ -32,7 +32,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(10).'
 
 $GLOBALS['SITE_DB']->create_table('bank',array(
 	'id'=>'*AUTO',
-	'member_id'=>'INTEGER',
+	'member_id'=>'MEMBER',
 	'amount'=>'INTEGER',
 	'dividend'=>'INTEGER',
 	'add_time'=>'?TIME',
