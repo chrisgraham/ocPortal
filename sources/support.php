@@ -712,7 +712,7 @@ function array_peek($array,$depth_down=1)
  */
 function fix_id($param)
 {
-	if (preg_match('#^[A-Za-z][\w\-\.]*$#',$param)!=0) return $param; // Optimisation
+	if (preg_match('#^[A-Za-z][\w]*$#',$param)!=0) return $param; // Optimisation
 
 	$length=strlen($param);
 	$new='';

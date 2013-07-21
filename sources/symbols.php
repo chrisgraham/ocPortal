@@ -2080,7 +2080,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'FIX_ID':
 				if (isset($param[0]))
 				{
-					if (preg_match('#^[A-Za-z][\w\-\.]*$#',$param[0])!=0) // Optimisation
+					if (preg_match('#^[A-Za-z][\w]*$#',$param[0])!=0) // Optimisation
 					{
 						$value=$param[0];
 					} else

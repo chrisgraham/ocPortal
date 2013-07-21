@@ -4131,6 +4131,10 @@ member_comments
  - lang_custom/EN/member_comments.ini
  - themes/default/templates_custom/OCF_MEMBER_PROFILE_COMMENTS.tpl
 
+show_group_avatars
+------------------
+ - sources_custom/miniblocks/show_group_avatars.php
+
 content_read_tracking
 ---------------------
  - sources_custom/hooks/systems/symbols/MARK_READ.php

@@ -87,30 +87,30 @@
 
 									<td>
 										{+START,IF,{$JS_ON}}
-											<img id="review_bar_1__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_2__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_3__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_4__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_5__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" />
+											<img id="review_bar_1__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" alt="" src="{$IMG*,rating}" /><img id="review_bar_2__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" alt="" src="{$IMG*,rating}" /><img id="review_bar_3__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" alt="" src="{$IMG*,rating}" /><img id="review_bar_4__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" alt="" src="{$IMG*,rating}" /><img id="review_bar_5__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" alt="" src="{$IMG*,rating}" />
 											<script type="text/javascript">// <![CDATA[
-												function new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(review,first_time)
+												function new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{$FIX_ID,{ID}}(review,first_time)
 												{
 													var i,bit;
 													for (i=1;i<=5;i++)
 													{
-														bit=document.getElementById('review_bar_'+i+'__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}');
+														bit=document.getElementById('review_bar_'+i+'__{TYPE|}__{$FIX_ID,{REVIEW_TITLE}}__{ID|}');
 														bit.className=((review!=0) && (review/2>=i))?'rating_star_highlight':'rating_star';
 														if (first_time) bit.onmouseover=function(i) { return function()
 														{
-															new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(i*2,false);
+															new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{$FIX_ID,{ID}}(i*2,false);
 														} }(i);
 														if (first_time) bit.onmouseout=function(i) { return function()
 														{
-															new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(window.parseInt(document.getElementById('review_rating__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}').value),false);
+															new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{$FIX_ID,{ID}}(window.parseInt(document.getElementById('review_rating__{TYPE|}__{$FIX_ID,{REVIEW_TITLE}}__{ID|}').value),false);
 														} }(i);
 														if (first_time) bit.onclick=function(i) { return function()
 														{
-															document.getElementById('review_rating__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}').value=i*2;
+															document.getElementById('review_rating__{TYPE|}__{$FIX_ID,{REVIEW_TITLE}}__{ID|}').value=i*2;
 														} }(i);
 													}
 												}
-												new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(0,true);
+												new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{$FIX_ID,{ID}}(0,true);
 											//]]></script>
 											<input id="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" type="hidden" name="review_rating__{$FIX_ID,{REVIEW_TITLE}}" value="" />
 										{+END}

@@ -78,7 +78,7 @@ class Block_main_count
 			update_stat($name,1);
 		}
 
-		return do_template('BLOCK_MAIN_COUNT',array('_GUID'=>'49d3ba8fb5b5544ac817f9a7d18f9d35','NAME'=>$name,'VALUE'=>strval($current_value)));
+		return do_template('BLOCK_MAIN_COUNT',array('_GUID'=>'49d3ba8fb5b5544ac817f9a7d18f9d35','NAME'=>$name,'VALUE'=>strval($current_value+1)));
 	}
 
 }
