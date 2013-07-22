@@ -551,11 +551,11 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			$members_groups=is_null($member_id)?array():ocf_get_members_groups($member_id,false,false,false);
 			foreach ($rows as $group)
 			{
-				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_specific_permission(get_member(),'see_hidden_groups'))) continue;
+				if (($group['g_hidden']==1) && (!array_key_exists($group['id'],$members_groups)) && (!has_specific_permission(get_member(),'see_hidden_groups'))) continue;
 
-				if (($group['id']!=db_get_first_id()) && ($group['id']!=$current_primary_group) && ((in_array($group['id'],$members_groups)) || (has_specific_permission(get_member(),'assume_any_member')) || ($group['g_open_membership']==1)))
+				if (($group['id']!=db_get_first_id()) && ($group['id']!=$current_primary_group) && ((array_key_exists($group['id'],$members_groups)) || (has_specific_permission(get_member(),'assume_any_member')) || ($group['g_open_membership']==1)))
 				{
-					$selected=in_array($group['id'],$members_groups);
+					$selected=array_key_exists($group['id'],$members_groups);
 					$_groups2->attach(form_input_list_entry(strval($group['id']),$selected,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
 				}
 			}
