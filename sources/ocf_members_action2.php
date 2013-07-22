@@ -308,7 +308,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  ?MEMBER			The ID of the member we are handling (NULL: new member).
  * @param  ?array				A list of usergroups (NULL: default/current usergroups).
  * @param  SHORT_TEXT		The e-mail address.
- * @param  ?BINARY				Whether posts are previewed before they are made (NULL: calculate statistically).
+ * @param  ?BINARY			Whether posts are previewed before they are made (NULL: calculate statistically).
  * @param  ?integer			Day of date of birth (NULL: not known).
  * @param  ?integer			Month of date of birth (NULL: not known).
  * @param  ?integer			Year of date of birth (NULL: not known).
@@ -590,9 +590,9 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			{
 				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_privilege(get_member(),'see_hidden_groups'))) continue;
 
-				if (($group['id']!=db_get_first_id()) && ($group['id']!=$current_primary_group) && ((in_array($group['id'],$members_groups)) || (has_privilege(get_member(),'assume_any_member')) || ($group['g_open_membership']==1)))
+				if (($group['id']!=db_get_first_id()) && ($group['id']!=$current_primary_group) && ((array_key_exists($group['id'],$members_groups)) || (has_privilege(get_member(),'assume_any_member')) || ($group['g_open_membership']==1)))
 				{
-					$selected=in_array($group['id'],$members_groups);
+					$selected=array_key_exists($group['id'],$members_groups);
 					$_groups2->attach(form_input_list_entry(strval($group['id']),$selected,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
 				}
 			}

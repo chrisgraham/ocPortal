@@ -198,6 +198,7 @@ class Hook_Profiles_Tabs_Edit_settings
 					$members_groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id_of);
 					$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 					$groups=list_to_map('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),($group_count>200)?array('g_is_private_club'=>0):NULL));
+
 					foreach ($_POST['secondary_groups'] as $group_id)
 					{
 						$group=$groups[intval($group_id)];

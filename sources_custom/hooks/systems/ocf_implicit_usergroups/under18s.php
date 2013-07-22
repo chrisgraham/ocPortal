@@ -22,7 +22,7 @@ class Hook_implicit_usergroups_under18s
 	 */
 	function get_bound_group_ids()
 	{
-		return array(10);
+		return array(10); // Probation on standard install; customise as required
 	}
 
 	function _where()
