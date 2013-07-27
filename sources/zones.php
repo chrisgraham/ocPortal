@@ -627,7 +627,7 @@ function find_all_hooks($type,$entry)
  */
 function block_cache_default($codename)
 {
-	if ((cron_installed()) && (running_script('index')))
+	if (cron_installed())
 	{
 		if ($codename=='side_weather' || $codename=='side_rss' || $codename=='main_rss') // Special cases to stop external dependencies causing slowdowns
 		{
