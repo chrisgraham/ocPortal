@@ -26,6 +26,8 @@ class Hook_cron_staff_checklist_notify
 	 */
 	function run()
 	{
+		require_lang('staff_checklist');
+
 		$time=time();
 		$last_time=intval(get_value('last_staff_checklist_notify'));
 		if ($last_time>time()-24*60*60*7) return;

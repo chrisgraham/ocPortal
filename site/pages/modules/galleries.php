@@ -315,7 +315,7 @@ class Module_galleries
 					require_code('content_privacy');
 					list($privacy_join,$privacy_where)=get_privacy_where_clause('image','d');
 				}
-				$where='1=1'.$privacy_where;
+				$where=$privacy_where;
 				$image_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'images d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
 			}
 		}
@@ -334,7 +334,7 @@ class Module_galleries
 					require_code('content_privacy');
 					list($privacy_join,$privacy_where)=get_privacy_where_clause('video','d');
 				}
-				$where='1=1'.$privacy_where;
+				$where=$privacy_where;
 				$video_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'videos d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
 			}
 		}

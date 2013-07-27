@@ -31,6 +31,9 @@ class Hook_cron_site_cleanup
 		{
 			set_value('last_demo_set_time',strval(time()));
 
+			global $SITE_INFO;
+			if (!isset($SITE_INFO['mysql_root_password'])) return;
+
 			require_lang('ocpcom');
 
 			$servers=find_all_servers();
