@@ -155,6 +155,13 @@ function get_booking_request_from_form()
 				}
 			}
 
+			$customer_email=post_param('customer_email','');
+			$customer_email_confirm=post_param('customer_email_confirm',NULL);
+			if ((!is_null($customer_email_confirm)) && ($customer_email!=$customer_email_confirm))
+			{
+				warn_exit(do_lang_tempcode('EMAIL_ADDRESS_MISMATCH'));
+			}
+
 			$request[]=array(
 				'bookable_id'=>$bookable_id,
 				'start_day'=>$start_day,
@@ -167,7 +174,7 @@ function get_booking_request_from_form()
 				'notes'=>$notes,
 				'supplements'=>$supplements,
 				'customer_name'=>post_param('customer_name',''),
-				'customer_email'=>post_param('customer_email',''),
+				'customer_email'=>$customer_email,
 				'customer_mobile'=>post_param('customer_mobile',''),
 				'customer_phone'=>post_param('customer_phone',''),
 			);

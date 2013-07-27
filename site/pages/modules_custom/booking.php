@@ -146,7 +146,7 @@ class Module_booking
 				'paid_at'=>'?TIME',
 				'paid_trans_id'=>'?AUTO_LINK',
 				'customer_name'=>'SHORT_TEXT',
-				'customer_email'=>'EMAIL',
+				'customer_email'=>'SHORT_TEXT',
 				'customer_mobile'=>'SHORT_TEXT',
 				'customer_phone'=>'SHORT_TEXT',
 			));
@@ -519,6 +519,7 @@ class Module_booking
 			$fields=new ocp_tempcode();
 			$fields->attach(form_input_line(do_lang_tempcode('YOUR_NAME'),'','customer_name',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),true));
 			$fields->attach(form_input_email(do_lang_tempcode('YOUR_EMAIL_ADDRESS'),'','customer_email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),true));
+			$fields->attach(form_input_email(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('CONFIRM_EMAIL_ADDRESS')),'','customer_email_confirm',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),true));
 			$fields->attach(form_input_line(do_lang_tempcode('YOUR_MOBILE_NUMBER'),'','customer_mobile','',false));
 			$fields->attach(form_input_line(do_lang_tempcode('YOUR_PHONE_NUMBER'),'','customer_phone','',true));
 			$submit_name=do_lang_tempcode('BOOK');
