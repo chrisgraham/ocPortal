@@ -1,3 +1,9 @@
+password_censor
+---------------
+ - data_custom/password_censor.php
+ - sources_custom/password_censor.php
+ - sources_custom/hooks/systems/cron/password_censor.php
+
 simplified_emails
 -----------------
  - themes/default/templates_custom/MAIL.tpl
