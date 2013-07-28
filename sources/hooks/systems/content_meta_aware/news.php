@@ -29,7 +29,7 @@ class Hook_content_meta_aware_news
 	function info()
 	{
 		return array(
-			'content_type_label'=>'NEWS_ENTRY',
+			'content_type_label'=>'news:NEWS_ARTICLE',
 
 			'table'=>'news',
 			'id_field'=>'id',
