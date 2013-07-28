@@ -593,14 +593,18 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 	persistent_cache_delete('IP_BANS');
 	if ((is_writable_wrap(get_file_base().'/.htaccess')) && (is_null($ban_until)))
 	{
+		$myfile=fopen(get_file_base().'/.htaccess','rt');
+		flock($myfile,LOCK_SH);
 		$original_contents=file_get_contents(get_file_base().'/.htaccess');
+		flock($myfile,LOCK_UN);
+		fclose($myfile);
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$contents=str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)'.chr(10).'deny from '.$ip_cleaned,$original_contents);
-		if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) // Safer
+		if (function_exists('file_put_contents')) // Safer
 		{
-			if (file_put_contents(get_file_base().'/.htaccess',$contents,LOCK_EX)<strlen($contents))
+			if (file_put_contents(get_file_base().'/.htaccess',$contents,LOCK_EX)<strlen($contents)) // In case it ran out of disk space
 			{
 				file_put_contents(get_file_base().'/.htaccess',$original_contents,LOCK_EX);
 				warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));

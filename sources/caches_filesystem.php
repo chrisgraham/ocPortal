@@ -43,33 +43,13 @@ class filecache
 				return NULL;
 			}
 		}
-		if (function_exists('usleep'))
-		{
-			$its=0; // if we can't get after 10 iterations then we have to assume the OS does not support locks :(
-			if (!defined('PHALANGER'))
-			{
-				while ((!@flock($myfile,LOCK_SH)) && ($its!=10))
-				{
-					usleep(mt_rand(0,100)*1000); // Won't work on Windows for PHP4, but we wouldn't use this on that anyway
-					$its++;
-				}
-			}
-		}
+		flock($myfile,LOCK_SH);
 		$contents='';
 		while (!feof($myfile)) $contents.=fread($myfile,1024);
 
 		$ret=@unserialize($contents);
-		if (function_exists('usleep'))
-		{
-			if (($ret===false) || ($contents=='')) // Hmm, maybe still some kind of locking problem, so delay and try again
-			{
-				rewind($myfile);
-				usleep(500*1000); // Won't work on Windows for PHP4, but we wouldn't use this on that anyway
-				$contents='';
-				while (!feof($myfile)) $contents.=fread($myfile,1024);
-			}
-		}
 
+		flock($myfile,LOCK_UN);
 		fclose($myfile);
 
 		return $ret;
@@ -88,30 +68,24 @@ class filecache
 		unset($flags);
 		unset($expire_secs);
 
+		$to_write=serialize($data);
+
 		$path=get_custom_file_base().'/persistent_cache/'.md5($key).'.gcd';
 		$myfile=@fopen($path,'ab');
 		if ($myfile===false) return; // Failure
 
-		$to_write=serialize($data);
-
-		$its=0; // if we can't get after 10 iterations then we have to assume the OS does not support locks :(
-		if (!defined('PHALANGER'))
-		{
-			while ((!@flock($myfile,LOCK_EX)) && ($its!=10))
-			{
-				sleep(mt_rand(0,100));
-				$its++;
-			}
-		}
+		flock($myfile,LOCK_EX);
 		ftruncate($myfile,0);
 		if (fwrite($myfile,$to_write)!==false)
 		{
 			// Success
+			flock($myfile,LOCK_UN);
 			fclose($myfile);
 			fix_permissions($path);
 		} else
 		{
 			// Failure
+			flock($myfile,LOCK_UN);
 			fclose($myfile);
 			unlink($path);
 		}

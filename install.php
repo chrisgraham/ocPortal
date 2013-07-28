@@ -1166,12 +1166,12 @@ function step_5_ftp()
 
 		// Test tmp file isn't currently being used by another iteration of process (race issue, causing horrible corruption)
 		$lock_myfile=fopen(get_file_base().'/ocp_inst_tmp/tmp','ab');
-		if (!defined('PHALANGER'))
-			if (!flock($lock_myfile,LOCK_EX)) warn_exit(do_lang_tempcode('DATA_FILE_CONFLICT'));
+		if (!flock($lock_myfile,LOCK_EX)) warn_exit(do_lang_tempcode('DATA_FILE_CONFLICT'));
 		$file_size_before=@filesize(get_file_base().'/ocp_inst_tmp/tmp');
 		sleep(1);
 		$file_size_after=@filesize(get_file_base().'/ocp_inst_tmp/tmp');
 		if ($file_size_before!==$file_size_after) warn_exit(do_lang_tempcode('DATA_FILE_CONFLICT'));
+		flock($lock_myfile,LOCK_UN);
 		fclose($lock_myfile);
 	} else
 	{
