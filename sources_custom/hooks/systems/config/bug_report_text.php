@@ -49,7 +49,7 @@ class Hook_config_bug_report_text
 	 */
 	function get_default()
 	{
-		return do_lang('DEFAULT_BUG_REPORT_TEMPLATE');
+		return do_lang('tester:DEFAULT_BUG_REPORT_TEMPLATE');
 	}
 
 }

@@ -498,7 +498,7 @@ class Module_groups
 		$forum_id=NULL;
 		if ($club)
 		{
-			$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$group_name,'f_forum_grouping_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum'))));
+			$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$group_name,'f_forum_grouping_id'=>intval(get_option('club_forum_parent_forum_grouping')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum'))));
 		}
 
 		$tpl=do_template('OCF_VIEW_GROUP_SCREEN',array(

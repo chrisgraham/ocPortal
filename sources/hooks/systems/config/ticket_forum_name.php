@@ -50,7 +50,7 @@ class Hook_config_ticket_forum_name
 	 */
 	function get_default()
 	{
-		require_lang('tickets'); return do_lang('TICKET_FORUM_NAME','','','',get_site_default_lang());
+		return do_lang('tickets:TICKET_FORUM_NAME','','','',get_site_default_lang());
 	}
 
 }

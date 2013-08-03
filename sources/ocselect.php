@@ -205,6 +205,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 					'~='=>do_lang_tempcode('OCSELECT_OP_CO'),
 					'~'=>do_lang_tempcode('OCSELECT_OP_FT'),
 					'<>'=>do_lang_tempcode('OCSELECT_OP_NE'),
+					'!='=>do_lang_tempcode('OCSELECT_OP_NEE'),
 					'@'=>do_lang_tempcode('OCSELECT_OP_RANGE'),
 				)
 			);
@@ -433,7 +434,7 @@ function parse_ocselect($filter)
 	{
 		if ($bit!='')
 		{
-			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<>|<|>|=|==|~=|~|@|\#)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
+			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<>|!=|<|>|=|==|~=|~|@|\#)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
 			if (count($parts)==3)
 			{
 				$parts[0]=ltrim($parts[0]);
@@ -815,7 +816,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 			$filter_val=read_ocselect_parameter_from_env($matches[1]);
 		}
 
-		if (($filter_op!='==') && (!$is_join))
+		if (($filter_op!='==') && ($filter_op!='!=') && (!$is_join))
 		{
 			if ($filter_val=='') continue;
 		}
@@ -898,17 +899,21 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 					break;
 
 				case '<>':
+				case '!=':
 					if (($is_join) || ((is_numeric($filter_val)) && (($field_type=='integer') || ($field_type=='float') || ($field_type==''))))
 					{
-						if ($filter_val!='')
+						if (($filter_val!='') || ($filter_op=='!='))
 						{
 							if ($alt!='') $alt.=' OR ';
 							$alt.=$filter_key.'<>'.$filter_val;
 						}
 					} else
 					{
-						if ($alt!='') $alt.=' OR ';
-						$alt.=db_string_not_equal_to($filter_key,$filter_val);
+						if (($filter_val!='') || ($filter_op=='!='))
+						{
+							if ($alt!='') $alt.=' OR ';
+							$alt.=db_string_not_equal_to($filter_key,$filter_val);
+						}
 					}
 					break;
 

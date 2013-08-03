@@ -112,7 +112,7 @@ class Hook_fields_radiolist
 		$default=$field['cf_default'];
 		$list=explode('|',$default);
 		$_list=new ocp_tempcode();
-		if (($field['cf_required']==0) || ($actual_value==$default) || ($actual_value=='') || (is_null($actual_value)))
+		if (($field['cf_required']==0) || ($actual_value=='') || (is_null($actual_value)))
 		{
 			if ((array_key_exists(0,$list)) && ($list[0]==do_lang('NOT_DISCLOSED')))
 			{

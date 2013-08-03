@@ -49,7 +49,7 @@ class Hook_config_ticket_text
 	 */
 	function get_default()
 	{
-		return do_lang('NEW_TICKET_WELCOME');
+		return do_lang('tickets:NEW_TICKET_WELCOME');
 	}
 
 }

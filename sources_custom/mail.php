@@ -22,9 +22,10 @@
  * @param  boolean		Whether to bypass queueing, because this code is running as a part of the queue management tools
  * @param  ID_TEXT		The template used to show the email
  * @param  boolean		Whether to bypass queueing
+ * @param  ?array			Extra CC addresses to use (NULL: none)
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false)
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false,$extra_cc_addresses=NULL)
 {
 	if (get_option('smtp_sockets_use')=='0') return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
 
@@ -348,7 +349,32 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		->setBody($html_evaluated,'text/html',$charset)
 		->addPart($message_plain,'text/plain',$charset)
 		;
+	if (is_null($extra_cc_addresses)) $extra_cc_addresses=array();
+	$extra_cc_addresses[]=$cc_address;
 	if ($cc_address!='') $message->setCc($cc_address);
+
+	if ($extra_cc_addresses!==array())
+	{
+		if (get_option('bcc')=='0')
+		{
+			if (($cc_address!='') && (!in_array($cc_address,$to_email))) $extra_cc_addresses[]=$cc_address;
+		}
+		$message->setCc($extra_cc_addresses);
+	}
+	if (($extra_cc_addresses===array()) || (get_option('bcc')=='1'))
+	{
+		if (($cc_address!='') && (!in_array($cc_address,$to_email)))
+		{
+			if (get_option('bcc')=='1')
+			{
+				$message->setCc($cc_address);
+			} else
+			{
+				$message->setBcc($cc_address);
+			}
+		}
+	}
+
 
 	// Attachments
 	foreach ($real_attachments as $r)

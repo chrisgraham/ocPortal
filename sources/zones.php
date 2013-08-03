@@ -363,9 +363,10 @@ function load_minimodule_page($string)
  * The returned/output result is returned, in Tempcode form.
  *
  * @param  PATH			The relative path to the code file
+ * @param  ?array			The block parameters (NULL: none)
  * @return tempcode		The result of executing the code
  */
-function _load_mini_code($string)
+function _load_mini_code($string,$map=NULL)
 {
 	require_code('developer_tools');
 	destrictify();
@@ -954,7 +955,7 @@ function do_block_hunt_file($codename,$map=NULL)
 	{
 		if ((!in_safe_mode()) && (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php')))))
 		{
-			$object=static_evaluate_tempcode(_load_mini_code('sources_custom/miniblocks/'.$codename.'.php'));
+			$object=static_evaluate_tempcode(_load_mini_code('sources_custom/miniblocks/'.$codename.'.php',$map));
 
 			if (!isset($BLOCKS_AT_CACHE[$codename]))
 			{
@@ -964,7 +965,7 @@ function do_block_hunt_file($codename,$map=NULL)
 		}
 		elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/miniblocks/'.$codename.'.php'))))
 		{
-			$object=static_evaluate_tempcode(_load_mini_code('sources/miniblocks/'.$codename.'.php'));
+			$object=static_evaluate_tempcode(_load_mini_code('sources/miniblocks/'.$codename.'.php',$map));
 
 			if (!isset($BLOCKS_AT_CACHE[$codename]))
 			{

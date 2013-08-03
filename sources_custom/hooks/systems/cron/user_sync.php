@@ -35,11 +35,12 @@ class Hook_cron_user_sync
 				if ((time()-$last_time)<60*60*24) return;
 			}
 
-			require_code('user_sync');
 			$time=time();
-			user_sync__inbound($last_time);
-
 			set_long_value('last_cron_user_sync',strval($time));
+
+			require_code('user_sync');
+
+			user_sync__inbound($last_time);
 		}
 	}
 }

@@ -2504,15 +2504,15 @@ function mkdir($path,$mode,$context=NULL)
  * Get UNIX timestamp for a componentialised date.
  *
  * @param  integer	The hour.
- * @param  integer	The minute.
- * @param  integer	The second.
+ * @param  ?integer	The minute (NULL: now).
+ * @param  ?integer	The second (NULL: now).
  * @param  ?integer	The month (NULL: now).
  * @param  ?integer	The day (NULL: now).
  * @param  ?integer	The year (NULL: now).
  * @param  integer	Whether date is in DST (-1 meaning unknown/guess, 0 meaning no, 1 meaning yes).
  * @return TIME		The timestamp.
  */
-function mktime($hour,$minute,$second,$month=NULL,$day=NULL,$year=NULL,$is_dst=-1)
+function mktime($hour,$minute=NULL,$second=NULL,$month=NULL,$day=NULL,$year=NULL,$is_dst=-1)
 {
 	return 0;
 }

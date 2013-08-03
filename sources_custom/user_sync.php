@@ -25,6 +25,12 @@ function user_sync()
 
 	global $DO_USER_SYNC;
 	$DO_USER_SYNC=true;
+
+	global $SYNC_DELETES;
+	$SYNC_DELETES=false;
+
+	global $DO_USER_ONLY_ID;
+	$DO_USER_ONLY_ID=NULL;
 }
 
 /*
@@ -33,7 +39,7 @@ INBOUND
 
 function user_sync__inbound($since=NULL)
 {
-	global $USER_SYNC_IMPORT_LIMIT,$DO_USER_SYNC;
+	global $USER_SYNC_IMPORT_LIMIT,$DO_USER_SYNC,$DO_USER_ONLY_ID;
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -94,9 +100,16 @@ function user_sync__inbound($since=NULL)
 		$native_fields=user_sync_find_native_fields();
 
 		// Run query to gather remote data
-		$sql='SELECT * FROM '.$db_table;
+		$sql='SELECT * FROM '.$db_table.' WHERE 1=1';
 		if ((!is_null($time_field)) && (!is_null($since)))
-			$sql.=' WHERE '.$db_field_delim.$time_field.$db_field_delim.'>=\''.date('Y-m-d H:i:s',$since).'\'';
+			$sql.=' AND '.$db_field_delim.$time_field.$db_field_delim.'>='.$dbh->quote(date('Y-m-d H:i:s',$since));
+		if (!is_null($DO_USER_ONLY_ID))
+		{
+			foreach ($username_fields as $j=>$username_field)
+			{
+				$sql.=' AND '.$username_field.'='.$dbh->quote(is_array($DO_USER_ONLY_ID)?$DO_USER_ONLY_ID[$j]:$DO_USER_ONLY_ID);
+			}
+		}
 		$sth=$dbh->query($sql);
 
 		$i=0;
@@ -229,6 +242,16 @@ function user_sync__inbound($since=NULL)
 				$member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$cpf_values,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$check_correctness,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 			} else
 			{
+				// Delete?
+				if (function_exists('user_sync__handle_deletion'))
+				{
+					global $SYNC_DELETES;
+					if ($SYNC_DELETES)
+					{
+						if (user_sync__handle_deletion($dbh,$user_data,$member_id)) continue;
+					}
+				}
+
 				$password=NULL; // Passwords will not be re-synched
 				$last_visit_time=NULL;
 				$theme=NULL;
@@ -480,10 +503,10 @@ function user_sync__outbound($member_id)
 	$sql='SELECT * FROM '.$db_table.' WHERE CONCAT(';
 	foreach ($username_fields as $i=>$uf)
 	{
-		if ($i!=0) $sql.=',\' \',';
+		if ($i!=0) $sql.=','.$dbh->quote(' ').',';
 		$sql.=$uf;
 	}
-	$sql.=')=\''.addslashes($record['m_username']).'\'';
+	$sql.=')='.$dbh->quote($record['m_username']);
 	$sth=$dbh->query($sql);
 	$user=$sth->fetch(PDO::FETCH_ASSOC);
 
@@ -557,12 +580,12 @@ function user_sync__outbound($member_id)
 
 				case 'DATETIME':
 					$val=date('Y-m-d H:i:s',$val);
-					$sql.='\''.addslashes($val).'\'';
+					$sql.=$dbh->quote($val);
 					break;
 
 				case 'VARCHAR':
 				default:
-					$sql.='\''.addslashes($val).'\'';
+					$sql.=$dbh->quote($val);
 					break;
 			}
 		}

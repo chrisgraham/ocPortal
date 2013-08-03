@@ -126,7 +126,7 @@ function get_secure_random_number()
 {
 	if ((function_exists('openssl_random_pseudo_bytes')) && (get_value('disable_openssl')!=='1'))
 	{
-		$code=intval(floor($max*(hexdec(bin2hex(openssl_random_pseudo_bytes(4)))/0xffffffff)));
+		$code=intval(floor(PHP_INT_MAX*(hexdec(bin2hex(openssl_random_pseudo_bytes(4)))/0xffffffff)));
 		if ($code<0) $code=-$code;
 	} else
 	{

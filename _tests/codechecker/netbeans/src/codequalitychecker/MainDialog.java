@@ -186,7 +186,7 @@ public class MainDialog extends JFrame {
 	public void initiateFileSearch(String type) {
 		boolean sort_new = false, skip_custom = false;
 
-		String path = new String(Main.projectPath);
+		String path = new String(Main.projectPath.replace("\"", ""));
 		if ((path.equals(".")) || (path.equals("./")) || (path.equals(".\\"))) {
 			path = "";
 		}

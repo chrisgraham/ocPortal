@@ -645,6 +645,7 @@ function clear_caches_1() // These have to happen early - to prevent things that
 	require_code('caches3');
 	erase_cached_templates();
 	erase_cached_language();
+	delete_value('cdn');
 }
 
 /**

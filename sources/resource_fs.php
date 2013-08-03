@@ -1296,9 +1296,13 @@ class resource_fs_base
 	{
 		if ($this->is_folder_type($resource_type))
 		{
+			resourcefs_logging('Deleted the '.$path.'/'.$filename.' folder as requested','notice');
+
 			$status=$this->folder_delete($filename,$path);
 		} else
 		{
+			resourcefs_logging('Deleted the '.$path.'/'.$filename.' file as requested','notice');
+
 			$status=$this->file_delete($filename,$path);
 		}
 		return $status;
@@ -1873,6 +1877,8 @@ class resource_fs_base
 		$existing=($filename===NULL)?false:$this->file_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
+			resourcefs_logging('Added a new '.$path.'/'.$label.' file record (i.e. not an edit)','inform');
+
 			$resource_id=$this->file_add($label,$path,$properties,$search_label_as);
 			$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
 			return $resource_id;
@@ -1928,6 +1934,8 @@ class resource_fs_base
 		$existing=($filename===NULL)?false:$this->folder_load($filename,$search_path); // NB: Even if it has a wildcard path, it should be acceptable to file_load, as the path is not used for search, only for identifying resource type
 		if ($existing===false)
 		{
+			resourcefs_logging('Added a new '.$path.'/'.$label.' folder record (i.e. not an edit)','inform');
+
 			$resource_id=$this->folder_add($label,$path,$properties,$search_label_as);
 			$this->_log_if_save_matchup($search_label_as,$resource_id,$path,$properties);
 			return $resource_id;

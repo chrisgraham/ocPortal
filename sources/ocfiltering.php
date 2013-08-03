@@ -507,12 +507,18 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 			{
 				// MySQL should be smart enough to not enumerate the 'IN' clause here, which would be bad - instead it can jump into the embedded WHERE clause on each test iteration
 				$this_details=$db->query_select('catalogue_categories',array('cc_parent_id','c_name'),array('id'=>intval($matches[1])),'',1);
-				if ($this_details[0]['cc_parent_id']===NULL)
+				if (array_key_exists(0,$this_details))
 				{
-					$out_or.=db_string_equal_to('c_name',$this_details[0]['c_name']);
+					if ($this_details[0]['cc_parent_id']===NULL)
+					{
+						$out_or.=db_string_equal_to('c_name',$this_details[0]['c_name']);
+					} else
+					{
+						$out_or.=$parent_field_name.' IN (SELECT cc_id FROM '.$db->get_table_prefix().'catalogue_cat_treecache WHERE cc_ancestor_id='.strval(intval($matches[1])).')';
+					}
 				} else
 				{
-					$out_or.=$parent_field_name.' IN (SELECT cc_id FROM '.$db->get_table_prefix().'catalogue_cat_treecache WHERE cc_ancestor_id='.strval(intval($matches[1])).')';
+					$out_or='1=0';
 				}
 			} else
 			{

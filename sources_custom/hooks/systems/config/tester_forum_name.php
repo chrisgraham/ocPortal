@@ -50,7 +50,7 @@ class Hook_config_tester_forum_name
 	 */
 	function get_default()
 	{
-		return do_lang('DEFAULT_TESTER_FORUM');
+		return do_lang('tester:DEFAULT_TESTER_FORUM','','','',get_site_default_lang());
 	}
 
 }

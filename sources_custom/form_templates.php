@@ -87,7 +87,7 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
 			{
 				list($pretty_name,$name,$value,$_description,$_disabled)=$option;
 				$disabled=$_disabled?'1':'0';
-			}
+			} else fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 			$value=(filter_form_field_default($name,$value?'1':'0')=='1');
 

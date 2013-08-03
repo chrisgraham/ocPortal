@@ -1355,6 +1355,13 @@ class standard_crud_module
 
 			clear_ocp_autosave();
 
+			if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))
+			{
+				$url=make_string_tempcode(get_param('redirect'));
+
+				return redirect_screen($title,$url,do_lang_tempcode($success_message_str));
+			}
+
 			$description=is_null($this->do_next_description)?do_lang_tempcode($success_message_str):$this->do_next_description;
 
 			return $this->do_next_manager($title,$description,NULL);

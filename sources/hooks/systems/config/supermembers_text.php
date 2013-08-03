@@ -48,7 +48,7 @@ class Hook_config_supermembers_text
 	 */
 	function get_default()
 	{
-		return do_lang('SUPERMEMBERS_TEXT');
+		return do_lang('supermembers:SUPERMEMBERS_TEXT');
 	}
 
 }

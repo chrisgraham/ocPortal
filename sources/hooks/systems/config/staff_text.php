@@ -48,7 +48,7 @@ class Hook_config_staff_text
 	 */
 	function get_default()
 	{
-		return do_lang('POST_STAFF');
+		return do_lang('staff:POST_STAFF');
 	}
 
 }

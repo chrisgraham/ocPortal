@@ -825,7 +825,7 @@ function check_function($function)
 		{
 			foreach ($func['parameters'] as $x)
 			{
-				if ($x['name']==$p[1])
+				if ((isset($x['name'])) && ($x['name']==$p[1]))
 				{
 					set_ocportal_type($p[1],$x['type']);
 					break;
@@ -860,7 +860,7 @@ function check_function($function)
 	{
 		$ret=(isset($func['return']));
 		// Check a return is given if the function returns and the opposite
-		if (($ret) && (!isset($LOCAL_VARIABLES['__return'])))
+		if (($ret) && ($func['return']['type']!='mixed') && (!isset($LOCAL_VARIABLES['__return'])))
 		{
 			log_warning('Function \''.$function['name'].'\' is missing a return statement.',$function['offset']);
 		}

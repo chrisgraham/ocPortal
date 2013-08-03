@@ -206,9 +206,10 @@ http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
  * @param  boolean		Whether to bypass queueing, because this code is running as a part of the queue management tools
  * @param  ID_TEXT		The template used to show the email
  * @param  boolean		Whether to bypass queueing
+ * @param  ?array			Extra CC addresses to use (NULL: none)
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false)
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false,$extra_cc_addresses=NULL)
 {
 	if (running_script('stress_test_loader')) return NULL;
 
@@ -380,7 +381,25 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	$headers.='Return-Path: <'.$website_email.'>'.$line_term;
 	$headers.='X-Sender: <'.$website_email.'>'.$line_term;
 	$cc_address=$no_cc?'':get_option('cc_address');
-	if (($cc_address!='') && (!in_array($cc_address,$to_email))) $headers.=((get_option('bcc')=='1')?'Bcc: <':'Cc: <').$cc_address.'>'.$line_term;
+	if (is_null($extra_cc_addresses)) $extra_cc_addresses=array();
+	if ($extra_cc_addresses!==array())
+	{
+		$headers.='Cc: ';
+		foreach ($extra_cc_addresses as $i=>$extra_cc_address)
+		{
+			if ($i!=0) $headers.=', ';
+			$headers.='<'.$extra_cc_address.'>';
+		}
+		if (get_option('bcc')=='0')
+		{
+			if (($cc_address!='') && (!in_array($cc_address,$to_email))) $headers.=', <'.$cc_address.'>';
+		}
+		$headers.=$line_term;
+	}
+	if (($extra_cc_addresses===array()) || (get_option('bcc')=='1'))
+	{
+		if (($cc_address!='') && (!in_array($cc_address,$to_email))) $headers.=((get_option('bcc')=='1')?'Bcc: <':'Cc: <').$cc_address.'>'.$line_term;
+	}
 	$headers.='Message-ID: <'.$_boundary.'@'.get_domain().'>'.$line_term;
 	$headers.='X-Priority: '.strval($priority).$line_term;
 	$brand_name=get_value('rebrand_name');

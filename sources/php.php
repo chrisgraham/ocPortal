@@ -290,19 +290,38 @@ function get_php_file_api($filename,$include_code=true)
 		}
 	}
 
-	if (count($functions)!=0)
-	{
-		$classes[$current_class]=array('functions'=>$functions,'name'=>$current_class);
-	}
-
 	// See if there are any functions with blank lines above them
 	for ($i=0;array_key_exists($i,$lines);$i++)
 	{
 		$line=ltrim($lines[$i]);
 		if ((substr($line,0,9)=='function ') && ((trim($lines[$i-1])=='') || (trim($lines[$i-1])=='{')))
 		{
+			if (substr($lines[$i],0,9)=='function ') // Only if not class level (i.e. global)
+			{
+				$function_name=preg_replace('#function\s+(\w+)\s*\(.*#s','${1}',$line);
+				$parameters=array();
+				$num_parameters=substr_count($line,'$');
+				$num_parameters_defaulted=substr_count($line,'=');
+				for ($arg_counter=0;$arg_counter<$num_parameters;$arg_counter++)
+				{
+					$parameters[$arg_counter]['type']='mixed';
+					$parameters[$arg_counter]['description']='';
+					if ($arg_counter>=$num_parameters-$num_parameters_defaulted)
+						$parameters[$arg_counter]['default']='boolean-true';
+				}
+				$function=array('filename'=>$filename,'parameters'=>$parameters,'name'=>$function_name,'description'=>'','flags'=>array());
+				if ($include_code) $function['code']='';
+				$function['return']=array('type'=>'mixed');
+				$functions[$function_name]=$function;
+			}
+
 			fatal_exit(do_lang_tempcode('MISSING_FUNCTION_COMMENT',rtrim($line)));
 		}
+	}
+
+	if (count($functions)!=0)
+	{
+		$classes[$current_class/*will be global*/]=array('functions'=>$functions,'name'=>$current_class);
 	}
 
 	return $classes;

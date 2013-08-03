@@ -873,6 +873,8 @@ class forum_driver_ocf extends forum_driver_base
 				require_code('ocf_members');
 				$fields=ocf_get_custom_field_mappings($member_id);
 
+				$username_bak=$username;
+
 				$username=$generator;
 
 				$matches=array();
@@ -889,6 +891,9 @@ class forum_driver_ocf extends forum_driver_base
 				}
 
 				$username=preg_replace('# +#',' ',trim($username)); // Strip and double (or triple, etc) blanks, and leading/trailing blanks
+
+				if ($username=='')
+					$username=$username_bak;
 			}
 		}
 

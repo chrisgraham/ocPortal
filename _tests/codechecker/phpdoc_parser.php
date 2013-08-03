@@ -41,7 +41,10 @@ if (isset($_SERVER['argv']))
 
 require_code('php');
 
-$files=do_dir($OCPORTAL_PATH,true,true);
+$no_custom=true;
+if ((isset($_GET['allow_custom'])) && ($_GET['allow_custom']=='1'))
+	$no_custom=false;
+$files=do_dir($OCPORTAL_PATH,$no_custom,true);
 
 $classes=array();
 $global=array();
@@ -49,11 +52,6 @@ global $TO_USE;
 //$files=array($OCPORTAL_PATH.'/sources/global2.php'); For debugging
 foreach ($files as $filename)
 {
-	if (!isset($_GET['debug']))
-	{
-		if (strpos($filename,'_custom')!==false) continue;
-	}
-
 	if (basename($filename,'.php')=='tempcode__runtime') continue;
 	if (basename($filename,'.php')=='tempcode_compiler__runtime') continue;
 
@@ -62,15 +60,7 @@ foreach ($files as $filename)
 	$_filename=($OCPORTAL_PATH=='')?$filename:substr($filename,strlen($OCPORTAL_PATH)+1);
 	if ($_filename=='sources'.DIRECTORY_SEPARATOR.'minikernel.php') continue;
 	//echo 'SIGNATURES-DOING '.$_filename.cnl();
-	if (strpos($_filename,'_tests'.DIRECTORY_SEPARATOR)===0)
-	{
-		$result=array();
-	} else
-	{
-		$result=get_php_file_api($_filename,false);
-	}
-
-	if (strpos($filename,'_custom')!==false) continue;
+	$result=get_php_file_api($_filename,false);
 
 	foreach ($result as $i=>$r)
 	{

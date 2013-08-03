@@ -49,7 +49,7 @@ class Hook_config_messaging_forum_name
 	 */
 	function get_default()
 	{
-		return do_lang('MESSAGING_FORUM_NAME','','','',get_site_default_lang());
+		return do_lang('messaging:MESSAGING_FORUM_NAME','','','',get_site_default_lang());
 	}
 
 }

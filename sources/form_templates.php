@@ -1131,7 +1131,7 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 	$_required=($required)?'_required':'';
 	$is_image=false;
 	$existing_url='';
-	if (!is_null($default))
+	if ((!is_null($default)) && (count($default)>0))
 	{
 		require_code('images');
 		$is_image=is_image($default[0]);
