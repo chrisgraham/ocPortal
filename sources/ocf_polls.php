@@ -61,7 +61,7 @@ function ocf_may_attach_poll($topic_id,$topic_owner=NULL,$has_poll_already=NULL,
 	if (is_null($member_id)) $member_id=get_member();
 	if ($has_poll_already) return false;
 
-	if ($topic_owner==$member_id) return true;
+	if (($topic_owner==$member_id) && (!is_guest($member_id))) return true;
 	if (ocf_may_moderate_forum($forum_id,$member_id)) return true;
 
 	return false;
