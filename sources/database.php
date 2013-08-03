@@ -1379,7 +1379,7 @@ class database_driver
 			$tries++;
 			if ($locked)
 			{
-				sleep(1);
+				usleep(50000); // 50ms wait
 			}
 		}
 		while (($locked) && ($tries<5));
