@@ -571,7 +571,9 @@ class Module_admin
 					$null_test=$hook->get_default();
 				} else
 				{
+					$GLOBALS['REQUIRE_LANG_LOOP']=10; // LEGACY Workaround for corrupt webhost installers
 					$null_test=eval($p['eval']);
+					$GLOBALS['REQUIRE_LANG_LOOP']=0; // LEGACY
 				}
 
 				if (!is_null($null_test))
