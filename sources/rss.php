@@ -660,7 +660,7 @@ class rss
 									break;
 								case $prefix.'CATEGORY':
 									if (($data=='') && (array_key_exists('TERM',$attributes))) $data=$attributes['TERM'];
-									if ($data!='')
+									if (($data!='') && (strpos($data,'#')===false))
 									{
 										if (array_key_exists('category',$current_item))
 										{

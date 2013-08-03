@@ -836,7 +836,7 @@ function deinvolve_im(room,logs,is_not_window)
 		if (typeof body[0]!='undefined')
 		{
 			body[0].className+=' site_unloading';
-			set_inner_html(body[0],'<div class="spaced"><div aria-busy="true" class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span>{!LOADING;^}<\/span><\/div><\/div>');
+			set_inner_html(body[0],'<div class="spaced"><div aria-busy="true" class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span>{!LOADING;^}<\/span><\/div><\/div>');
 		}
 	}
 

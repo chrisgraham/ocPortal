@@ -189,9 +189,10 @@ class Module_cms_banners extends standard_aed_module
 	{
 		require_code('templates_results_table');
 
-		$current_ordering=get_param('sort','name ASC');
+		$current_ordering=get_param('sort','b_type ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
+		if ($current_ordering=='b_type ASC') $current_ordering='b_type ASC,name ASC';
 		$sortables=array(
 			'name'=>do_lang_tempcode('CODENAME'),
 			'b_type'=>do_lang_tempcode('_BANNER_TYPE'),

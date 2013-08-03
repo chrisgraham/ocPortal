@@ -238,6 +238,8 @@ function import_rss()
 					$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
 					$result=http_download_file($item['rep_image'],NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
 					fclose($target_handle);
+					sync_file($target_path);
+					fix_permissions($target_path);
 				}
 			}
 
@@ -479,6 +481,8 @@ function import_rss()
 		$myfile=fopen($item['path'],'wb');
 		fwrite($myfile,$contents);
 		fclose($myfile);
+		sync_file($item['path']);
+		fix_permissions($item['path']);
 		if (!is_null($item['parent_page']))
 		{
 			$parent_page=mixed();
@@ -880,6 +884,8 @@ function import_wordpress_db()
 		$myfile=fopen($item['path'],'wb');
 		fwrite($myfile,$contents);
 		fclose($myfile);
+		sync_file($item['path']);
+		fix_permissions($item['path']);
 		if (!is_null($item['parent_page']))
 		{
 			$parent_page=mixed();
@@ -1064,6 +1070,8 @@ function _news_import_grab_image(&$data,$url)
 	$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
 	$result=http_download_file($url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
 	fclose($target_handle);
+	sync_file($target_path);
+	fix_permissions($target_path);
 	if (!is_null($result))
 	{
 		$data=str_replace('"'.$url.'"',$target_url,$data);

@@ -48,7 +48,7 @@
 							 <input class="button_pageitem" type="submit" value="{!EDIT}" />
 							 <input class="button_pageitem" type="submit" name="delete" value="{!DELETE}" />
 
-							 <label class="horiz_field_sep vertical_alignment" for="bookmark_{ID*}">{!CHOOSE}:</label> <input onclick="handle_bookmark_selection(this,'{ID*}',event,'{POST_URL;}');" type="checkbox" id="bookmark_{ID*}" name="bookmark_{ID*}" value="1" />
+							 <label class="horiz_field_sep vertical_alignment" for="bookmark_{ID*}">{!CHOOSE}:</label> <input onclick="handle_bookmark_selection(this,'{ID;*}',event,'{POST_URL;}');" type="checkbox" id="bookmark_{ID*}" name="bookmark_{ID*}" value="1" />
 						</td>
 					</tr>
 				</tbody>
