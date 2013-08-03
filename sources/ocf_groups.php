@@ -144,9 +144,10 @@ function ocf_ensure_groups_cached($groups)
  * Get a rendered link to a usergroup.
  *
  * @param  GROUP		The ID of the group.
+ * @param  boolean	Whether to hide the name if it is a hidden group.
  * @return tempcode	The link.
  */
-function ocf_get_group_link($id)
+function ocf_get_group_link($id,$hide_hidden=true)
 {
 	$_row=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$_row)) return make_string_tempcode(do_lang('UNKNOWN'));
@@ -154,7 +155,7 @@ function ocf_get_group_link($id)
 
 	if ($row['id']==db_get_first_id()) return make_string_tempcode(escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])));
 
-	$name=ocf_get_group_name($row['id']);
+	$name=ocf_get_group_name($row['id'],$hide_hidden);
 
 	$see_hidden=has_specific_permission(get_member(),'see_hidden_groups');
 	if ((!$see_hidden) && ($row['g_hidden']==1))
@@ -169,11 +170,12 @@ function ocf_get_group_link($id)
  * Get a usergroup name.
  *
  * @param  GROUP		The ID of the group.
+ * @param  boolean	Whether to hide the name if it is a hidden group.
  * @return string		The usergroup name.
  */
-function ocf_get_group_name($group)
+function ocf_get_group_name($group,$hide_hidden=true)
 {
-	$name=ocf_get_group_property($group,'name');
+	$name=ocf_get_group_property($group,'name',$hide_hidden);
 	if (is_string($name)) return $name;
 	return get_translated_text($name,$GLOBALS['FORUM_DB']);
 }
@@ -183,16 +185,20 @@ function ocf_get_group_name($group)
  *
  * @param  GROUP		The ID of the group.
  * @param  ID_TEXT	The identifier of the property.
+ * @param  boolean	Whether to hide the name if it is a hidden group.
  * @return mixed		The property value.
  */
-function ocf_get_group_property($group,$property)
+function ocf_get_group_property($group,$property,$hide_hidden=true)
 {
 	ocf_ensure_groups_cached(array($group));
 	global $USER_GROUPS_CACHED;
 
-	if (($property=='name') && ($USER_GROUPS_CACHED[$group]['g_hidden']==1) && (!has_specific_permission(get_member(),'see_hidden_groups')))
+	if ($hide_hidden)
 	{
-		return do_lang('UNKNOWN');
+		if (($property=='name') && ($USER_GROUPS_CACHED[$group]['g_hidden']==1) && (!has_specific_permission(get_member(),'see_hidden_groups')))
+		{
+			return do_lang('UNKNOWN');
+		}
 	}
 
 	return $USER_GROUPS_CACHED[$group]['g_'.$property];
