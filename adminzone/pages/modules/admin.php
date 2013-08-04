@@ -409,7 +409,7 @@ class Module_admin
 					if (is_null($i)) continue;
 
 					$n=$i[3];
-					if (($this->_keyword_match(is_object($n)?$n->evaluate():$n)) && (has_actual_page_access(get_member(),$i[2][0],$i[2][2])))
+					if (($i[0]!='') && ($this->_keyword_match(is_object($n)?$n->evaluate():$n)) && (has_actual_page_access(get_member(),$i[2][0],$i[2][2])))
 					{
 						$_url=build_url(array('page'=>$i[2][0])+$i[2][1],$i[2][2]);
 						$breadcrumbs=new ocp_tempcode();
