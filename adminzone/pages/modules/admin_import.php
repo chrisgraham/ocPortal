@@ -278,6 +278,9 @@ class Module_admin_import
 		if ($session!=get_session_id())
 		{
 			// Remap given to current
+			$GLOBALS['SITE_DB']->query_delete('import_session',array('imp_session'=>get_session_id()),'',1);
+			$GLOBALS['SITE_DB']->query_delete('import_parts_done',array('imp_session'=>get_session_id()));
+			$GLOBALS['SITE_DB']->query_delete('import_id_remap',array('id_session'=>get_session_id()));
 			$GLOBALS['SITE_DB']->query_update('import_session',array('imp_session'=>get_session_id()),array('imp_session'=>$session),'',1);
 			$GLOBALS['SITE_DB']->query_update('import_parts_done',array('imp_session'=>get_session_id()),array('imp_session'=>$session));
 			$GLOBALS['SITE_DB']->query_update('import_id_remap',array('id_session'=>get_session_id()),array('id_session'=>$session));
@@ -548,7 +551,11 @@ class Module_admin_import
 	{
 		$refresh_url=get_self_url(true,false,array('type'=>'import'),true);
 		$refresh_time=either_param_integer('refresh_time',15); // Shouldn't default, but reported on some systems to do so
-		if (function_exists('set_time_limit')) @set_time_limit($refresh_time);
+		if (function_exists('set_time_limit'))
+		{
+			@set_time_limit($refresh_time);
+			@ini_set('display_errors','0'); // So that the timeout message does not show, which made the user not think the refresh was going to happen automatically, and could thus result in double-requests
+		}
 		header('Content-type: text/html; charset='.get_charset());
 		@ini_set('log_errors','0');
 		global $I_REFRESH_URL;

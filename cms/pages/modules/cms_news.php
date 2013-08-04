@@ -754,7 +754,7 @@ class Module_cms_news_cat extends standard_aed_module
 
 			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',$required,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
-			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$img,NULL,false);
+			$image_chooser_field=form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,NULL,$img,NULL,true);
 			$field_set->attach($image_chooser_field);
 
 			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));

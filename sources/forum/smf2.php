@@ -1036,7 +1036,6 @@ class forum_driver_smf2 extends forum_driver_base
 	function forum_md5($data,$key,$just_first=false)
 	{
 		$key=strtolower($key);
-
 		$new_key=str_pad(strlen($key)<=64?$key:pack('H*',md5($key)),64,chr(0x00));
 
 		$a=md5(($new_key^str_repeat(chr(0x5c),64)).pack('H*',md5(($new_key^str_repeat(chr(0x36),64)).$data))); // SMF 1.0 style

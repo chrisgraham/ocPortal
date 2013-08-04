@@ -105,9 +105,14 @@ function import_rss()
 	foreach ($rss->gleamed_items as $i=>$item)
 	{
 		// What is it, being imported?
+		$is_page=false;
 		$is_news=true;
-		if ((isset($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE'])) && ($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE']=='page'))
-			$is_news=false;
+		if (isset($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE']))
+		{
+			$is_page=($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE']=='page');
+			$is_news=($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE']=='post');
+		}
+		if ((!$is_page) && (!$is_news)) continue;
 
 		// Check for existing owner categories, if not create blog category for creator
 		if (($to_own_account==0) && (array_key_exists('author',$item)))

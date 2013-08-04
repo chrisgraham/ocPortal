@@ -616,7 +616,7 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 		} else
 		{
 			if ((((!is_null($cat['nc_owner'])) && (has_specific_permission(get_member(),'can_submit_to_others_categories'))) || (($cat['nc_owner']==get_member()) && (!is_guest()))) || ($show_all_personal_categories))
-				$categories->attach(form_input_list_entry(strval($cat['id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['id'],$it)),do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($cat['nc_owner'])).' (#'.strval($cat['id']).')'));
+				$categories->attach(form_input_list_entry(strval($cat['id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['id'],$it)),$cat['nice_title'].' (#'.strval($cat['id']).')'));
 		}
 	}
 

@@ -346,7 +346,17 @@ function ocf_make_boiler_custom_field($type)
 	global $CUSTOM_FIELD_CACHE;
 	$CUSTOM_FIELD_CACHE=array();
 
-	return ocf_make_custom_field(do_lang('DEFAULT_CPF_'.$type.'_NAME'),0,do_lang('DEFAULT_CPF_'.$type.'_DESCRIPTION'),'',$public_view,$owner_view,$owner_set,0,$_type,0,0,0,NULL,'',true);
+	if (substr($type,0,4)=='ocp_')
+	{
+		$title=do_lang('SPECIAL_CPF__'.$type);
+		$description='';
+	} else
+	{
+		$title=do_lang('DEFAULT_CPF_'.$type.'_NAME');
+		$description=do_lang('DEFAULT_CPF_'.$type.'_DESCRIPTION');
+	}
+
+	return ocf_make_custom_field($title,0,$description,'',$public_view,$owner_view,$owner_set,0,$_type,0,0,0,NULL,'',true);
 }
 
 /**

@@ -42,21 +42,19 @@ class Hook_ocf_auth_smf
 			}
 		} else
 		{
-			$usr=strtolower(post_param('login_username',NULL)); //prepare inputted username
-			$passwrd=strtr(stripslashes(post_param('password',NULL)), array_flip(get_html_translation_table(HTML_SPECIALCHARS, ENT_QUOTES)) + array('&#039;' => '\'', '&nbsp;' => ' ')); //prepare inputted password
+			$username=strtolower(post_param('login_username',NULL)); //prepare inputted username
+			$password_given=strtr(post_param('password',''),array_flip(get_html_translation_table(HTML_SPECIALCHARS,ENT_QUOTES))+array('&#039;'=>'\'','&nbsp;'=>' ')); //prepare inputted password
 
-			if (function_exists('sha1'))
+			$data=$password_given;
+			$key=strtolower($username);
+			$new_key=str_pad(strlen($key)<=64?$key:pack('H*',md5($key)),64,chr(0x00));
+
+			$a=md5(($new_key^str_repeat(chr(0x5c),64)).pack('H*',md5(($new_key^str_repeat(chr(0x36),64)).$data))); // SMF 1.0 style
+			$b=sha1($username.$password_given);
+
+			if (($a!=$row['m_pass_hash_salted']) && ($b!=$row['m_pass_hash_salted']))
 			{
-				if (sha1($usr.$passwrd)!=$row['m_pass_hash_salted'])
-				{
-					return do_lang_tempcode('USER_BAD_PASSWORD');
-				}
-			} else
-			{
-				if (md5($usr.$passwrd)!=$row['m_pass_hash_salted'])
-				{
-					return do_lang_tempcode('USER_BAD_PASSWORD');
-				}
+				return do_lang_tempcode('USER_BAD_PASSWORD');
 			}
 		}
 

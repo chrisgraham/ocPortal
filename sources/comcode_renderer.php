@@ -1998,6 +1998,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$temp_tpl=test_url($cite,'del',$cite,$source_member);
 			}
 
+			if (($attributes['param']=='') && (isset($attributes['author']))) $attributes['param']=$attributes['author']; // Compatibility with SMF
+
 			if ($attributes['param']!='')
 			{
 				if (is_numeric($attributes['param']))
