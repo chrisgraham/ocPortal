@@ -63,7 +63,7 @@ function get_fields_hook($type)
 			$ob=object_factory('Hook_fields_'.filter_naughty($hook));
 			if (method_exists($ob,'get_field_types'))
 			{
-				if (array_key_exists($type,$ob->get_field_types()))
+				if (array_key_exists($type,$ob->get_field_types($type)))
 				{
 					$fields_hook_cache[$type]=$ob;
 					return $ob;

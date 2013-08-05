@@ -24,14 +24,19 @@ class Hook_fields_reference_multi
 	/**
 	 * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
 	 *
+	 * @param  ?ID_TEXT		Only find if we can potential match this field type (NULL: no filter)
 	 * @return array			Map of field type to field type title
 	 */
-	function get_field_types()
+	function get_field_types($filter=NULL)
 	{
 		if (!addon_installed('catalogues')) return array();
 
+		if (($filter!==NULL) && (substr($filter,0,3)!='cx_')) return array(); // To avoid a wasteful query
+
 		require_lang('fields');
-		$cats=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
+		static $cats=NULL;
+		if (is_null($cats))
+			$cats=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
 		$ret=array();
 		foreach ($cats as $cat)
 		{
@@ -170,5 +175,4 @@ class Hook_fields_reference_multi
 	}
 
 }
-
 

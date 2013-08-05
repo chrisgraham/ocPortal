@@ -1214,7 +1214,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 
 	// Pre-caching of whole entry
 	static $catalogue_entry_cache=array();
-	if ((!isset($catalogue_entry_cache[$entry_id])) || ($GLOBALS['NO_QUERY_LIMIT']/*Implies resource-fs import*/))
+	if ((!isset($catalogue_entry_cache[$entry_id])) || (class_exists('resource_fs_base')/*Implies resource-fs import*/))
 	{
 		$catalogue_entry_cache[$entry_id]=array();
 		$query='';
@@ -1263,6 +1263,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 		}
 
 		$value=isset($catalogue_entry_cache[$entry_id][$field_id])?$catalogue_entry_cache[$entry_id][$field_id]:NULL;
+		if (class_exists('resource_fs_base')) $catalogue_entry_cache=array();
 	} else
 	{
 		if (!isset($catalogue_entry_cache[$entry_id][$field_id])) return '';
