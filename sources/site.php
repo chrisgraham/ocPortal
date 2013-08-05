@@ -646,6 +646,8 @@ function process_url_monikers($page,$redirect_if_non_canonical=true)
 					if ($test[0]['m_resource_type']=='')
 					{
 						$_GET['page']=$test[0]['m_resource_page'];
+						unset($_GET['type']);
+						unset($_GET['id']);
 					} else
 					{
 						$_GET['page']=$test[0]['m_resource_page'];
