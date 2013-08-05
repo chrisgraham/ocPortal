@@ -210,7 +210,7 @@ function site_tree_script()
 	// Loading
 	// =======
 
-	$default=get_param('default',NULL);
+	$default=get_param('default',NULL,true);
 
 	header('Content-Type: text/xml');
 	$permissions_needed=(get_param_integer('get_perms',0)==1); // Whether we are limiting our tree to permission-supporting

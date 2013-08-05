@@ -22,10 +22,11 @@
 {$,iPhone/Android/etc should know they have an optimised design heading to them}
 {+START,IF,{$MOBILE}}
 	{+START,IF,{$NOT,{$_GET,overlay}}}
-		<meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=0" />
+		{$,For this to work, fixed width must be removed or the device-width must be replaced with the fixed width and initial-scale removed}
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	{+END}
 	{+START,IF,{$_GET,overlay}}
-		<meta name="viewport" content="width=285, maximum-scale=1.0, user-scalable=0" />
+		<meta name="viewport" content="width=285, maximum-scale=1.0, user-scalable=no" />
 	{+END}
 {+END}
 {$,Uncomment if iPad should not be allowed to zoom}

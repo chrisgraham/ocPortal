@@ -761,7 +761,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'TRIM':
 				if (isset($param[0]))
 				{
-					$value=ocp_trim($param[0]);
+					$value=ocp_trim($param[0],isset($param[1]) && $param[1]=='1');
 				}
 				break;
 
