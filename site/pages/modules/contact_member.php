@@ -94,11 +94,15 @@ class Module_contact_member
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-		$fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),'','subject',get_param('subject',''),true));
 		$default_email=(is_guest())?'':$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_email_address');
 		$default_name=(is_guest())?'':$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_username');
-		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('_DESCRIPTION_NAME'),'name',$default_name,true));
-		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('YOUR_ADDRESS'),'email_address',$default_email,true));
+		$name_field=form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('_DESCRIPTION_NAME'),'name',$default_name,true);
+		if ($default_name=='')
+			$fields->attach($name_field);
+		$email_field=form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('YOUR_ADDRESS'),'email_address',$default_email,true);
+		if ($default_email=='')
+			$fields->attach($email_field);
+		$fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),'','subject',get_param('subject',''),true));
 		$fields->attach(form_input_text(do_lang_tempcode('MESSAGE'),'','message',get_param('message',''),true));
 		if (addon_installed('captcha'))
 		{
@@ -116,6 +120,19 @@ class Module_contact_member
 		{
 			handle_max_file_size($hidden);
 			$fields->attach(form_input_upload_multi(do_lang_tempcode('_ATTACHMENT'),do_lang_tempcode('EMAIL_ATTACHMENTS',integer_format($size)),'attachment',false));
+		}
+		if (!is_guest())
+		{
+			if (ini_get('suhosin.mail.protect')!='2')
+			{
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADVANCED'),'SECTION_HIDDEN'=>true)));
+				if ($default_name!='')
+					$fields->attach($name_field);
+				if ($default_email!='')
+					$fields->attach($email_field);
+				$fields->attach(form_input_line_multi(do_lang_tempcode('EMAIL_CC_ADDRESS'),do_lang_tempcode('DESCRIPTION_EMAIL_CC_ADDRESS'),'cc_',array(),0,NULL,'email'));
+				$fields->attach(form_input_line_multi(do_lang_tempcode('EMAIL_BCC_ADDRESS'),do_lang_tempcode('DESCRIPTION_EMAIL_BCC_ADDRESS'),'bcc_',array(),0,NULL,'email'));
+			}
 		}
 		$submit_name=do_lang_tempcode('SEND');
 		$redirect=get_param('redirect','');
@@ -165,6 +182,25 @@ class Module_contact_member
 		if (!is_valid_email_address($from_email)) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
 		$from_name=post_param('name');
 
+		$extra_cc_addresses=array();
+		$extra_bcc_addresses=array();
+		if (!is_guest())
+		{
+			foreach ($_POST as $key=>$val)
+			{
+				if ((substr($key,0,3)=='cc_') && ($val!=''))
+				{
+					$extra_cc_addresses[]=post_param($key);
+					if (!is_valid_email_address(post_param($key))) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
+				}
+				if ((substr($key,0,4)=='bcc_') && ($val!=''))
+				{
+					$extra_bcc_addresses[]=post_param($key);
+					if (!is_valid_email_address(post_param($key))) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
+				}
+			}
+		}
+
 		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id,true))));
 
 		require_code('mail');
@@ -189,7 +225,7 @@ class Module_contact_member
 		{
 			warn_exit(do_lang_tempcode('EXCEEDED_ATTACHMENT_SIZE',integer_format($size)));
 		}
-		mail_wrap(do_lang('EMAIL_MEMBER_SUBJECT',get_site_name(),post_param('subject'),NULL,get_lang($member_id)),post_param('message'),array($email_address),$to_name,$from_email,$from_name,3,$attachments,false,get_member(),false,false,false,'MAIL',count($attachments)!=0);
+		mail_wrap(do_lang('EMAIL_MEMBER_SUBJECT',get_site_name(),post_param('subject'),NULL,get_lang($member_id)),post_param('message'),array($email_address),$to_name,$from_email,$from_name,3,$attachments,false,get_member(),false,false,false,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses);
 
 		log_it('EMAIL',strval($member_id),$to_name);
 

@@ -23,11 +23,13 @@
  * @param  ID_TEXT		The template used to show the email
  * @param  boolean		Whether to bypass queueing
  * @param  ?array			Extra CC addresses to use (NULL: none)
+ * @param  ?array			Extra BCC addresses to use (NULL: none)
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false,$extra_cc_addresses=NULL)
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false,$extra_cc_addresses=NULL,$extra_bcc_addresses=NULL)
 {
-	if (get_option('smtp_sockets_use')=='0') return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
+	if (get_option('smtp_sockets_use')=='0')
+		return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue,$mail_template='MAIL',$bypass_queue,$extra_cc_addresses,$extra_bcc_addresses);
 
 	if (running_script('stress_test_loader')) return NULL;
 
@@ -41,12 +43,22 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 	if (is_null($as)) $as=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
+	if (count($attachments)==0) $attachments=NULL;
+	if (is_null($extra_cc_addresses)) $extra_cc_addresses=array();
+	if (is_null($extra_bcc_addresses)) $extra_bcc_addresses=array();
+
 	if (!$coming_out_of_queue)
 	{
 		if (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages'))
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
-		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
+		$through_queue=
+			(!$bypass_queue) && 
+			($attachments===NULL) && 
+			(count($extra_cc_addresses)==0) && 
+			(count($extra_bcc_addresses)==0) && 
+			((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && 
+			(cron_installed())));
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
 			'm_subject'=>$subject_line,
@@ -70,8 +82,6 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 		if ($through_queue) return NULL;
 	}
-
-	if (count($attachments)==0) $attachments=NULL;
 
 	global $SENDING_MAIL;
 	if ($SENDING_MAIL) return NULL;
@@ -349,31 +359,19 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		->setBody($html_evaluated,'text/html',$charset)
 		->addPart($message_plain,'text/plain',$charset)
 		;
-	if (is_null($extra_cc_addresses)) $extra_cc_addresses=array();
-	$extra_cc_addresses[]=$cc_address;
-	if ($cc_address!='') $message->setCc($cc_address);
 
-	if ($extra_cc_addresses!==array())
+	if ($cc_address!='')
 	{
 		if (get_option('bcc')=='0')
 		{
-			if (($cc_address!='') && (!in_array($cc_address,$to_email))) $extra_cc_addresses[]=$cc_address;
-		}
-		$message->setCc($extra_cc_addresses);
-	}
-	if (($extra_cc_addresses===array()) || (get_option('bcc')=='1'))
-	{
-		if (($cc_address!='') && (!in_array($cc_address,$to_email)))
+			$extra_cc_addresses[]=$cc_address;
+		} else
 		{
-			if (get_option('bcc')=='1')
-			{
-				$message->setCc($cc_address);
-			} else
-			{
-				$message->setBcc($cc_address);
-			}
+			$extra_bc_addresses[]=$cc_address;
 		}
 	}
+	$message->setCc(array_unique($extra_cc_addresses));
+	$message->setBcc(array_unique($extra_bcc_addresses));
 
 
 	// Attachments
