@@ -112,6 +112,8 @@ ocPortal has a special feature to help you diagnose problems with your permissio
 3) Bring up your website and add [tt]&keep_firephp=1[/tt] to the end of the URL
 You will then find that details of all the permission checks, templates, and queries, used to generate the ocPortal screen are logged to the Firebug/FirePHP Console. By looking to see what permission checks pass or fail you can work out what settings you might want to change.
 
+You can also create a writable [tt]data_custom/permissioncheckslog.php[/tt] file, and all permission checks will be logged to it. Just don't leave the file there or it'll get very big, very fast.
+
 [title="4"]Refreshing forms[/title]
 
 Be aware that privilege changes may require refreshing of any currently-open forms where the privilege may be used.

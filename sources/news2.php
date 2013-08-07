@@ -650,7 +650,7 @@ function import_wordpress_db()
 
 					// Content
 					$news='';
-					$news_article=import_foreign_news_html($post['post_content']);
+					$news_article=import_foreign_news_html(nl2br(trim($post['post_content'])));
 					if ($post['post_password']!='')
 					{
 						$news_article='[highlight]'.do_lang('POST_ACCESS_IS_RESTRICTED').'[/highlight]'."\n\n".'[if_in_group="Administrators"]'.$news_article.'[/if_in_group]';
@@ -720,7 +720,7 @@ function import_wordpress_db()
 
 					// Content
 					$_content="[title]".comcode_escape($post['post_title'])."[/title]\n\n";
-					$imp_con=import_foreign_news_html($post['post_content']);
+					$imp_con=import_foreign_news_html(nl2br(trim($post['post_content'])));
 					if ($imp_con!='') $_content.='[surround]'.$imp_con.'[/surround]'; else continue; /* Not a real page */
 					$_content.="\n\n[block]main_comcode_page_children[/block]";
 					if ($allow_comments==1)
@@ -815,7 +815,7 @@ function import_wordpress_db()
 							}
 							if ($comment_parent_id==0) $comment_parent_id=NULL;
 
-							$comment_content=import_foreign_news_html($comment['comment_content']);
+							$comment_content=import_foreign_news_html(nl2br(trim($comment['comment_content'])));
 
 							$comment_author_url=$comment['comment_author_url'];
 							$comment_author_email=$comment['comment_author_email'];
