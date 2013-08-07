@@ -53,20 +53,16 @@ You should now be able to log in to ocPortal using your new password.
 
 [title="3"]Via the disk[/title]
 
-If you open up sources/users.php in a text editor and go to line 407 you'll find an interesting line of code:
+If you need to 'hack' your way in to the site using your FTP access, you can place a temporary backdoor.
+
+Go to http://www.myipaddress.com/ and copy your IP address, then put it into your [tt]info.php[/tt] file ([tt]_config.php[/tt] in v10+).
 [codebox]
-   $backdoor_ip_address=mixed(); // Enable to a real IP address to force login from FTP access (if lost admin password)
+$SITE_INFO['backdoor_ip']='12.34.56.78'; // Enable to a real IP address to force login from FTP access (if lost admin password)
 [/codebox]
 
-All you need to do is to go to http://www.myipaddress.com/ and copy your IP address, with quotation marks, in substitution of false.
-For example:
-[codebox]
-   $backdoor_ip_address='12.45.56.78'; // Enable to a real IP address to force login from FTP access (if lost admin password)
-[/codebox]
+You will then be logged in as the first admin user there is. Additionally membership bans, probation, and flood control, will not apply when using the backdoor (so it is useful if your account was locked somehow, e.g. by a malicious other staff member).
 
-You will then be logged in as member 2, which is 'admin' on OCF. If you need a different member ID, change line 351.
-
-It should go without saying that you should only use this 'backdoor' for a short space of time and not disclose your IP address when doing it. ocProducts makes no claims to how secure this backdoor might be and you open it up entirely at your own risk.
+It should go without saying that you should only use this 'backdoor' for a short space of time and not disclose your IP address to third parties when doing it. ocProducts makes no claims to how secure this backdoor might be and you open it up entirely at your own risk.
 
 [title="2"]Unbanning an IP[/title]
 

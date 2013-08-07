@@ -1527,6 +1527,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		if (get_page_name()=='join') return;
 		if ((!running_script('index')) && (!running_script('iframe'))) return;
+		if ($GLOBALS['IS_VIA_BACKDOOR']) return;
 
 		require_code('ocf_groups');
 

@@ -50,6 +50,8 @@ function init__users()
 	$IS_A_COOKIE_LOGIN=false;
 	global $DOING_USERS_INIT;
 	$DOING_USERS_INIT=true;
+	global $IS_VIA_BACKDOOR;
+	$IS_VIA_BACKDOOR=true;
 
 	// Load all sessions into memory, if possible
 	if (get_value('session_prudence')!=='1')
@@ -223,7 +225,7 @@ function get_member($quick_only=false)
 
 			if (get_forum_type()=='ocf') $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
 
-			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
+			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member)) && (!$GLOBALS['IS_VIA_BACKDOOR'])) // All hands to the guns
 			{
 				warn_exit(do_lang_tempcode('USER_BANNED'));
 			}

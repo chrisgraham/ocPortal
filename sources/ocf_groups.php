@@ -265,7 +265,7 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 
 	if (is_null($member_id)) $member_id=get_member();
 
-	if ($handle_probation)
+	if (($handle_probation) && ((!$GLOBALS['IS_VIA_BACKDOOR']) || ($member_id!=get_member())))
 	{
 		$opt=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_on_probation_until');
 		if ((!is_null($opt)) && ($opt>time()))
