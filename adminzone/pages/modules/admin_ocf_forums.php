@@ -441,6 +441,9 @@ class Module_admin_ocf_forums extends standard_aed_module
 	 */
 	function fill_in_edit_form($id)
 	{
+		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('gsp p JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g ON g.id=group_id','g.id',array('module_the_name'=>'forums','category_name'=>$id,'the_value'=>'1','g_is_private_club'=>1)); // TODO: update in v10
+		if (!is_null($test)) attach_message(do_lang_tempcode('THIS_CLUB_FORUM'),'notice');
+
 		$m=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('id'=>intval($id)),'',1);
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
