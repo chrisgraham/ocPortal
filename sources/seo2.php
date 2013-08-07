@@ -141,50 +141,91 @@ function _seo_meta_find_data($keyword_sources,$description='')
 		if (ocp_mb_strtoupper($source)==$source) $source=ocp_mb_strtolower($source); // Don't leave in all caps, as is ugly, and also would break our Proper Noun detection
 
 		$i=0;
-		$len=ocp_mb_strlen($source);
+		$len_a=strlen($source);
+		$len_b=ocp_mb_strlen($source);
+		$len=$len_a;
+		$unicode=false;
+		if ($len_b>$len_a)
+		{
+			$len=$len_b;
+			$unicode=true;
+		}
 		$from=0;
 		$in_word=false;
 		$word_is_caps=false;
 		while ($i<$len)
 		{
-			$at=ocp_mb_substr($source,$i,1);
-			$is_word_char=in_array($at,$word_chars) || ocp_mb_strtolower($at)!=ocp_mb_strtoupper($at);
-
-			if ($in_word)
+			if ($unicode) // Slower :(
 			{
-				// Exiting word
-				if (($i==$len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at!=' ') || (/*continuation of Proper Noun*/ocp_mb_strtolower(ocp_mb_substr($source,$i+1,1))==ocp_mb_substr($source,$i+1,1)))))
+				$at=ocp_mb_substr($source,$i,1);
+				$is_word_char=array_key_exists($at,$word_chars_flip) || ocp_mb_strtolower($at)!=ocp_mb_strtoupper($at);
+
+				if ($in_word)
 				{
-					if (($i-$from)>=$min_word_length)
+					// Exiting word
+					if (($i==$len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at!=' ') || (/*continuation of Proper Noun*/ocp_mb_strtolower(ocp_mb_substr($sour$
 					{
-						while (ocp_mb_substr($this_word,-1)=='\'' || ocp_mb_substr($this_word,-1)=='-' || ocp_mb_substr($this_word,-1)=='.')
-							$this_word=ocp_mb_substr($this_word,0,ocp_mb_strlen($this_word)-1);
-						if (!in_array(ocp_mb_strtolower($this_word),$common_words))
+						if (($i-$from)>=$min_word_length)
 						{
-							if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
-							if ($must_use)
+							while (ocp_mb_substr($this_word,-1)=='\'' || ocp_mb_substr($this_word,-1)=='-' || ocp_mb_substr($this_word,-1)=='.')
+								$this_word=ocp_mb_substr($this_word,0,ocp_mb_strlen($this_word)-1);
+							if (!array_key_exists(ocp_mb_strtolower($this_word),$common_words_flip))
 							{
-								$keywords_must_use[$this_word]++;
-							} else
-							{
-								$keywords[$this_word]++;
+								if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
+								if ($must_use)
+								{
+									$keywords_must_use[$this_word]++;
+								} else
+								{
+									$keywords[$this_word]++;
+								}
 							}
 						}
+						$in_word=false;
+					} else
+					{
+						$this_word.=$at;
 					}
-					$in_word=false;
 				} else
 				{
-					$this_word.=$at;
+					// Entering word
+					if (($is_word_char) && ($at!='\'') && ($at!='-') && ($at!='.')/*Special latin cases, cannot start a word with a symbol*/)
+					{
+						$word_is_caps=(ocp_mb_strtolower($at)!=$at);
+						$from=$i;
+						$in_word=true;
+						$this_word=$at;
+					}
 				}
 			} else
 			{
-				// Entering word
-				if (($is_word_char) && ($at!='\'') && ($at!='-') && ($at!='.')/*Special latin cases, cannot start a word with a symbol*/)
+				$at=$source[$i];
+				$word_char=array_key_exists($at,$word_chars_flip);
+
+				if ($in_word)
 				{
-					$word_is_caps=(ocp_mb_strtolower($at)!=$at);
-					$from=$i;
-					$in_word=true;
-					$this_word=$at;
+					// Exiting word
+					if (!$word_char)
+					{
+						if (($i-$from)>=3)
+						{
+							$this_word=substr($source,$from,$i-$from);
+							if (!array_key_exists($this_word,$common_words_flip))
+							{
+								if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
+								$keywords[$this_word]++;
+							}
+						}
+						$in_word=false;
+					}
+				} else
+				{
+					// Entering word
+					if ($word_char)
+					{
+						$from=$i;
+						$in_word=true;
+					}
 				}
 			}
 			$i++;
