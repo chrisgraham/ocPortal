@@ -165,10 +165,10 @@ function _seo_meta_find_data($keyword_sources,$description='')
 					// Exiting word
 					if (($i==$len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at!=' ') || (/*continuation of Proper Noun*/ocp_mb_strtolower(ocp_mb_substr($source,$i+1,1))==ocp_mb_substr($source,$i+1,1)))))
 					{
+						while ((ocp_mb_strlen($this_word)!=0) && (ocp_mb_substr($this_word,-1)=='\'' || ocp_mb_substr($this_word,-1)=='-' || ocp_mb_substr($this_word,-1)=='.'))
+							$this_word=ocp_mb_substr($this_word,0,ocp_mb_strlen($this_word)-1);
 						if (($i-$from)>=$min_word_length)
 						{
-							while (ocp_mb_substr($this_word,-1)=='\'' || ocp_mb_substr($this_word,-1)=='-' || ocp_mb_substr($this_word,-1)=='.')
-								$this_word=ocp_mb_substr($this_word,0,ocp_mb_strlen($this_word)-1);
 							if (!array_key_exists(ocp_mb_strtolower($this_word),$common_words_flip))
 							{
 								if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
@@ -205,15 +205,23 @@ function _seo_meta_find_data($keyword_sources,$description='')
 				if ($in_word)
 				{
 					// Exiting word
-					if (!$word_char)
+					if (($i==$len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at!=' ') || (/*continuation of Proper Noun*/strtolower(substr($source,$i+1,1))==substr($source,$i+1,1)))))
 					{
-						if (($i-$from)>=3)
+						$this_word=substr($source,$from,$i-$from);
+						while ((strlen($this_word)!=0) && (substr($this_word,-1)=='\'' || substr($this_word,-1)=='-' || substr($this_word,-1)=='.'))
+							$this_word=substr($this_word,0,strlen($this_word)-1);
+						if (($i-$from)>=$min_word_length)
 						{
-							$this_word=substr($source,$from,$i-$from);
 							if (!array_key_exists($this_word,$common_words_flip))
 							{
 								if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
-								$keywords[$this_word]++;
+								if ($must_use)
+								{
+									$keywords_must_use[$this_word]++;
+								} else
+								{
+									$keywords[$this_word]++;
+								}
 							}
 						}
 						$in_word=false;
@@ -223,6 +231,7 @@ function _seo_meta_find_data($keyword_sources,$description='')
 					// Entering word
 					if ($word_char)
 					{
+						$word_is_caps=(strtolower($at)!=$at);
 						$from=$i;
 						$in_word=true;
 					}
