@@ -130,6 +130,9 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 
 	$keywords=array(); // This will be filled
 
+	$word_chars_flip=array_flip($word_chars);
+	$common_words_flip=array_flip($common_words);
+
 	foreach ($keyword_sources as $source) // Look in all our sources
 	{
 		$source=strip_comcode($source);
@@ -147,7 +150,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 		while ($i<$len)
 		{
 			$at=$source[$i];
-			$word_char=in_array($at,$word_chars);
+			$word_char=array_key_exists($at,$word_chars_flip);
 
 			if ($in_word)
 			{
@@ -157,7 +160,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 					if (($i-$from)>=3)
 					{
 						$this_word=substr($source,$from,$i-$from);
-						if (!in_array($this_word,$common_words))
+						if (!array_key_exists($this_word,$common_words_flip))
 						{
 							if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
 							$keywords[$this_word]++;
@@ -181,7 +184,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 		if (($in_word) && (($i-$from)>=3))
 		{
 			$this_word=substr($source,$from,$i-$from);
-			if (!in_array($this_word,$common_words))
+			if (!array_key_exists($this_word,$common_words_flip))
 			{
 				if (!array_key_exists($this_word,$keywords)) $keywords[$this_word]=0;
 				$keywords[$this_word]++;
