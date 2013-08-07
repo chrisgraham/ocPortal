@@ -196,6 +196,10 @@ function require_code($codename,$light_exit=false)
 					$test=call_user_func_array($init_func,array($orig));
 					if (is_string($test)) $orig=$test;
 					$done_init=true;
+					if ((count($functions_diff)==1) && (count($classes_diff)==0))
+					{
+						$pure=false;
+					}
 				}
 
 				if (!$doing_code_modifier_init && !$overlaps) // To make stack traces more helpful and help with opcode caching

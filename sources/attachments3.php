@@ -139,13 +139,16 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 	$_info=do_comcode_attachments($text,$type,$id,false,$connection,NULL,$for_member);
-	$text2=$_info['tempcode']->to_assembly();
+	$text2='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();
+	$remap=array('text_original'=>$_info['comcode'],'text_parsed'=>$text2);
+	if (ocp_admirecookie('use_wysiwyg','1')=='0')
+		$remap['source_user']=$member;
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{
-		$connection->query_update('translate',array('source_user'=>$member,'text_original'=>$_info['comcode'],'text_parsed'=>$text2),array('id'=>$lang_id,'language'=>user_lang()));
+		$connection->query_update('translate',$remap,array('id'=>$lang_id,'language'=>user_lang()));
 	} else // Darn, we'll have to save over whatever we did load from
 	{
-		$connection->query_update('translate',array('source_user'=>$member,'text_original'=>$_info['comcode'],'text_parsed'=>$text2),array('id'=>$lang_id));
+		$connection->query_update('translate',$remap,array('id'=>$lang_id));
 	}
 	return $lang_id;
 }
