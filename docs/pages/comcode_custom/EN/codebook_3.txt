@@ -137,6 +137,7 @@ The values you might want to manually change are:
  - [tt]mails_per_send[/tt] -- set this to the number of e-mails to send out in each e-mail send batch (default is 60).
  - [tt]primary_paypal_email[/tt] -- set this to your primary PayPal email address, if you have set up PayPal to work against a secondary PayPal address instead. Without it ocPortal will fail to validate payments, causing all eCommerce to fail.
  - [tt]simplify_wysiwyg_by_permissions[/tt] -- set this to '1' if you want to show a simpler WYSIWYG editor to members with limited Comcode permissions.
+ - [tt]edit_with_my_comcode_perms[/tt] -- set this to '1' if content you edit should render with your Comcode permissions. Only enable this if you trust yourself to spot XSS attacks.
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - [tt]stupidity_mode[/tt] -- set to 'leet' or 'bork', for a fun April Fools-style Comcode joke (clear the Comcode cache after you're done though)

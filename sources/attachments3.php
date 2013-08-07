@@ -141,7 +141,7 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 	$_info=do_comcode_attachments($text,$type,$id,false,$connection,NULL,$for_member);
 	$text2='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();
 	$remap=array('text_original'=>$_info['comcode'],'text_parsed'=>$text2);
-	if (ocp_admirecookie('use_wysiwyg','1')=='0')
+	if ((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1'))
 		$remap['source_user']=$member;
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{
