@@ -404,6 +404,7 @@ function init__validation2()
 	$TAG_ATTRIBUTES+=array(
 		'a.accesskey'=>$enforce_character,
 		'a.charset'=>'.+',
+		'a.download'=>'(download)',
 		'a.coords'=>'.+',
 		'a.href'=>$enforce_link,
 		'a.hreflang'=>$enforce_lang,
@@ -614,6 +615,7 @@ function init__validation2()
 		//'iframe.marginwidth'=>$enforce_pixels,
 	);
 	$TAG_ATTRIBUTES+=array(
+		'*.hidden'=>'(hidden)',
 		'*.class'=>$enforce_class,
 		'*.dir'=>$enforce_direction,
 		'*.id'=>$enforce_id,
