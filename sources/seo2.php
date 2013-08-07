@@ -163,7 +163,7 @@ function _seo_meta_find_data($keyword_sources,$description='')
 				if ($in_word)
 				{
 					// Exiting word
-					if (($i==$len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at!=' ') || (/*continuation of Proper Noun*/ocp_mb_strtolower(ocp_mb_substr($sour$
+					if (($i==$len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at!=' ') || (/*continuation of Proper Noun*/ocp_mb_strtolower(ocp_mb_substr($source,$i+1,1))==ocp_mb_substr($source,$i+1,1)))))
 					{
 						if (($i-$from)>=$min_word_length)
 						{
