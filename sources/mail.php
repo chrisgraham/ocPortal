@@ -484,6 +484,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$filename=basename($img);
 		if (!is_null($file_path_stub))
 		{
+			if (@filesize($file_path_stub)>1024*1024*5) continue; // Too large to process into an email
+
 			$file_contents=@file_get_contents($file_path_stub);
 		} else
 		{
@@ -513,6 +515,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 						{
 							$filename=$myrow['a_original_filename'];
 							require_code('mime_types');
+							if (filesize($_full)>1024*1024*5) continue; // Too large to process into an email
 							$file_contents=file_get_contents($_full);
 							$mime_type=get_mime_type(get_file_extension($filename));
 						}
@@ -521,8 +524,9 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			}
 			if ($file_contents===NULL)
 			{
-				$file_contents=http_download_file($img,NULL,false);
+				$file_contents=http_download_file($img,1024*1024*5,false);
 				if (is_null($file_contents)) continue;
+				if (strlen($file_contents)>=1024*1024*5) continue; // Too large to process into an email
 				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
 				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
 			}
