@@ -41,7 +41,7 @@ function init__form_templates()
 
 	require_css('forms');
 
-	if ((get_value('edit_with_my_comcode_perms')==='1') && ((strpos(get_param('type',''),'ed')!==false) || (strpos(get_param('type',''),'ec')!==false)))
+	if ((has_specific_permission(get_member(),'allow_html')) && (get_value('edit_with_my_comcode_perms')==='1') && ((strpos(get_param('type',''),'ed')!==false) || (strpos(get_param('type',''),'ec')!==false)))
 	{
 		attach_message('You have enabled content editing to assume your permissions via a hidden option. Be VERY careful to check whatever Comcode/HTML you edit.','warn');
 	}
