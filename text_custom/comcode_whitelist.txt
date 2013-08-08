@@ -6,3 +6,13 @@
 </blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8">
 </script>
+/<iframe width="\d+" height="\d+" src="(http:\/\/)?www\.(youtube-nocookie|youtube)\.com/embed/[^"]*" frameborder="0" allowfullscreen>/
+</iframe>
+/<object width="\d+" height="\d+">/
+/<param name="movie" value="(http:\/\/)?www\.(youtube-nocookie|youtube)\.com/v/[^"]*">/
+</param>
+<param name="allowFullScreen" value="true">
+<param name="allowscriptaccess" value="always">
+/<embed src="(http:\/\/)?www\.(youtube-nocookie|youtube)\.com/v/[^"]*" type="application/x-shockwave-flash"( allowscriptaccess="always")?( allowfullscreen="true")? width="\d+" height="\d+"( allowscriptaccess="always")?( allowfullscreen="true")?>/
+</embed>
+</object>

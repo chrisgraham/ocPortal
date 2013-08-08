@@ -308,7 +308,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 			{
 				if (!is_string($val)) continue;
 				$val=post_param($key);
-				if ((strlen($val)>10) && ((strpos($comcode,$val)===0) || (strpos($comcode,$val)==strlen($comcode)-strlen($val))))
+				if ((strlen($val)>10) && ((strpos($comcode,$val)===0) || (strpos($comcode,$val)===strlen($comcode)-strlen($val))))
 				{
 					$name=$key;
 					break;
