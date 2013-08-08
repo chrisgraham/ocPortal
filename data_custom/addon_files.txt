@@ -3,6 +3,10 @@ password_censor
  - data_custom/password_censor.php
  - sources_custom/password_censor.php
  - sources_custom/hooks/systems/cron/password_censor.php
+ - sources_custom/hooks/systems/comcode/encrypt.php
+ - sources_custom/notifications.php
+ - sources_custom/hooks/systems/startup/password_censor.php
+ - themes/default/templates_custom/COMCODE_ENCRYPT.tpl
 
 simplified_emails
 -----------------

@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2012
+ Copyright (c) ocProducts, 2004-2013
 
  See text/EN/licence.txt for full licencing information.
 
@@ -13,7 +13,14 @@
  * @package		password_censor
  */
 
-function password_censor($auto=false,$display=true,$days_ago=60)
+function init__password_censor()
+{
+	define('PASSWORD_CENSOR__PRE_SCAN',0);
+	define('PASSWORD_CENSOR__INTERACTIVE_SCAN',1);
+	define('PASSWORD_CENSOR__TIMEOUT_SCAN',2);
+}
+
+function password_censor($auto=false,$display=true,$days_ago=30)
 {
 	if ($display)
 	{
@@ -39,33 +46,11 @@ function password_censor($auto=false,$display=true,$days_ago=60)
 
 	foreach ($rows as $row)
 	{
-		$text=get_translated_text($row['id']);
-		$text_start=$text;
-		$matches=array();
-		$num_matches=preg_match_all('#([^\s]{5,30})#',$text,$matches);
-		for ($i=0;$i<$num_matches;$i++)
-		{
-			$m=$matches[1][$i];
-
-			if (strtolower($m)=='password') continue;
-			if (strtolower($m)=='username') continue;
-			if (strtolower($m)=='reminder') continue;
-
-			$c=0;
-			if (preg_match('#\d#',$m)!=0) $c++;
-			if (preg_match('#,+[A-Z]#',$m)!=0) $c++;
-			if (preg_match('#[a-z]#',$m)!=0) $c++;
-			if (preg_match('#[^\w]#',$m)!=0) $c++;
-			if ((is_numeric($m)) && (strlen($m)>6)) $c++;
-			if (preg_match('#(password|pass|pword|pw) ?:?=?\s+'.preg_quote($m,'#').'#i',$text)!=0) $c+=2;
-			if ($c>=3)
-			{
-				$text=str_replace($m,'(censored)',$text);
-			}
-		}
+		$text_start=get_translated_text($row['id']);
+		$text_after=_password_censor($text_start,PASSWORD_CENSOR__TIMEOUT_SCAN);
 		if ($text!=$text_start)
 		{
-			$update_query='UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate SET text_original=\''.addslashes($text).'\',text_parsed=\'\' WHERE id='.strval($row['id']);
+			$update_query='UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate SET text_original=\''.addslashes($text_after).'\',text_parsed=\'\' WHERE id='.strval($row['id']);
 
 			if ($auto)
 				$GLOBALS['FORUM_DB']->query($update_query);
@@ -74,4 +59,69 @@ function password_censor($auto=false,$display=true,$days_ago=60)
 				echo $text_start."\n\n-------->\n\n".$text."\n\n-------------\n\n".$update_query."\n\n<-----------\n\n\n\n\n";
 		}
 	}
+}
+
+function _password_censor($text,$scan_type=1,$explicit_only=false)
+{
+	if (($explicit_only) || (strpos($text,'[self_destruct')!==false) || (strpos($text,'[encrypt')!==false)) // Explicit control, Comcode writer knows what they're doing
+	{
+		if ($scan_type!=PASSWORD_CENSOR__PRE_SCAN)
+		{
+			$matches=array();
+			$num_matches=preg_match_all('#\[self_destruct[^\]]*\](.*)\[/self_destruct\]#Us',$text,$matches);
+			for ($i=0;$i<$num_matches;$i++)
+			{
+				$text=str_replace($matches[0][$i],($scan_type==PASSWORD_CENSOR__INTERACTIVE_SCAN)?'(auto-censored)':'(self-destructed)',$text);
+			}
+		}
+
+		$matches=array();
+		$num_matches=preg_match_all('#\[encrypt[^\]]*\](.*)\[/encrypt\]#Us',$text,$matches);
+		for ($i=0;$i<$num_matches;$i++)
+		{
+			if ($scan_type!=PASSWORD_CENSOR__PRE_SCAN)
+			{
+				$text=str_replace($matches[0][$i],'(encrypted)',$text);
+			} else
+			{
+				require_code('encryption');
+				if (is_encryption_enabled())
+				{
+					$text=str_replace($matches[0][$i],'[encrypt]'.encrypt_data($matches[1][$i]).'[/encrypt]',$text);
+				} else
+				{
+					$text=str_replace($matches[0][$i],'(encryption not available, cannot save)',$text);
+				}
+			}
+		}
+	} else // Try and detect things to censor
+	{
+		if ($scan_type!=PASSWORD_CENSOR__PRE_SCAN)
+		{
+			$matches=array();
+			$num_matches=preg_match_all('#([^\s]{5,30})#',$text,$matches);
+			for ($i=0;$i<$num_matches;$i++)
+			{
+				$m=$matches[1][$i];
+
+				if (strtolower($m)=='password') continue;
+				if (strtolower($m)=='username') continue;
+				if (strtolower($m)=='reminder') continue;
+
+				$c=0;
+				if (preg_match('#\d#',$m)!=0) $c++;
+				if (preg_match('#,+[A-Z]#',$m)!=0) $c++;
+				if (preg_match('#[a-z]#',$m)!=0) $c++;
+				if (preg_match('#[^\w]#',$m)!=0) $c++;
+				if ((is_numeric($m)) && (strlen($m)>6)) $c++;
+				if (preg_match('#(password|pass|pword|pw) ?:?=?\s+'.preg_quote($m,'#').'#i',$text)!=0) $c+=2;
+				if ($c>=3)
+				{
+					$text=str_replace($m,'(auto-censored)',$text);
+				}
+			}
+		}
+	}
+
+	return $text;
 }

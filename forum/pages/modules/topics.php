@@ -2558,19 +2558,6 @@ END;
 		if (!array_key_exists(0,$post_details)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$forum_id=$post_details[0]['p_cache_forum_id'];
-		if (!is_null($forum_id))
-		{
-			$_comments_forum=get_option('comments_forum_name');
-			if (is_numeric($_comments_forum))
-			{
-				$comments_forum=$_comments_forum;
-			} else
-			{
-				$comments_forum=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($_comments_forum);
-			}
-			if ((!has_category_access(get_member(),'forums',strval($forum_id))) && ($forum_id!=$comments_forum)) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
-		}
-
 		if (!ocf_may_edit_post_by($post_details[0]['p_poster'],$forum_id))
 			access_denied('I_ERROR');
 

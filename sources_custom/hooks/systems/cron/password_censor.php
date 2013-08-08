@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2012
+ Copyright (c) ocProducts, 2004-2013
 
  See text/EN/licence.txt for full licencing information.
 
@@ -27,7 +27,7 @@ class Hook_cron_password_censor
 			set_value('last_password_censor_time',strval(time()));
 
 			require_code('password_censor');
-			password_censor(true,false,60);
+			password_censor(true,false);
 		}
 	}
 
