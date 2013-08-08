@@ -169,7 +169,7 @@ class Module_news
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<4))
 		{
-			add_config_option('PING_URL','ping_url','text','return \'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}\';','FEATURE','NEWS_AND_RSS');
+			add_config_option('PING_URL','ping_url','text','return \'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}&chk_feedburner=on&chk_newsgator=on&chk_myyahoo=on&chk_google=on\';','FEATURE','NEWS_AND_RSS');
 			add_config_option('TOTAL_NEWS_ENTRIES','news_show_stats_count_total_posts','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('BLOGS','news_show_stats_count_blogs','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_ititle',array('title'));
