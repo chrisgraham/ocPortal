@@ -1262,7 +1262,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		if ($https===NULL)
 		{
 			require_code('urls');
-			if ((get_option('enable_https',true)=='0') || (!running_script('index')) && (!running_script('iframe')))
+			if ((get_option('enable_https',true)=='0') || (!running_script('index')) && (!running_script('iframe')) && (!running_script('preview')))
 			{
 				$https=false;
 			} else
@@ -1478,10 +1478,11 @@ function get_param($name,$default=false,$no_security=false)
 				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
 			}
 
-			$bu=get_base_url();
-			if ((looks_like_url($a)) && (substr($a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
+			$bu=get_base_url(false);
+			$_a=str_replace('https://','http://',$a);
+			if ((looks_like_url($_a)) && (substr($_a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
 			{
-				$a=get_base_url();
+				$a=get_base_url(false);
 			}
 		}
 	}

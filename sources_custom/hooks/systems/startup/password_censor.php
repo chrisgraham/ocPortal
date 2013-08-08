@@ -22,7 +22,7 @@ class Hook_startup_password_censor
 		{
 			if ((is_string($val)) && (strpos($val,'[encrypt')!==false))
 			{
-				$POST[$key]=_password_censor(post_param($key),PASSWORD_CENSOR__PRE_SCAN);
+				$_POST[$key]=_password_censor(post_param($key),PASSWORD_CENSOR__PRE_SCAN);
 			}
 		}
 	}

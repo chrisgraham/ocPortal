@@ -132,7 +132,7 @@ function decrypt_data($data,$passphrase)
 	}
 
 	// Remove the magic encryption marker and base64-decode it first
-	$data=base64_decode(remove_magic_encryption_marker($data));
+	$data=base64_decode(remove_magic_encryption_marker(str_replace('<br />','',$data)));
 
 	$key=openssl_pkey_get_private(array('file://'.get_option('decryption_key'),$passphrase));
 	if ($key===false)
@@ -141,14 +141,14 @@ function decrypt_data($data,$passphrase)
 		return '';
 	}
 
-	$maxlength=128;
+	$maxlength=(strpos(file_get_contents(get_option('decryption_key')),'AES')===false)?128:strlen($data);
 	$output='';
 	while (strlen($data)>0)
 	{
 		$input=substr($data,0,$maxlength);
 		$data=substr($data,$maxlength);
 		$decrypted='';
-		if (!openssl_private_decrypt($input,$decrypted,$passphrase))
+		if (!openssl_private_decrypt($input,$decrypted,$key))
 		{
 			attach_message(do_lang_tempcode('DECRYPTION_ERROR'),'warn');
 			return '';
