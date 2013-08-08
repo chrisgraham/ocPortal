@@ -51,7 +51,7 @@ function _handle_permission_check_logging($member,$op,$params,$result)
 	$show_all=(get_value('permission_log_success_too')=='1');
 	if (($PERMISSION_CHECK_LOGGER!==false) && (($show_all) || (!$result)))
 	{
-		fwrite($PERMISSION_CHECK_LOGGER,"\t".$str);
+		fwrite($PERMISSION_CHECK_LOGGER,"\t".($show_all?'':'! ').$str);
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 		if ($member!=get_member()) fwrite($PERMISSION_CHECK_LOGGER,' -- '.$username);
