@@ -2,7 +2,7 @@
 
 function get_referral_scheme_stats_for($referrer,$scheme_name,$raw=false)
 {
-	$num_total_by_referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','COUNT(*)',array('i_inviter'=>$referrer),'GROUP BY i_email_address');
+	$num_total_by_referrer=count($GLOBALS['FORUM_DB']->query_select('f_invites',array('*'),array('i_inviter'=>$referrer),'GROUP BY i_email_address'));
 	if (is_null($num_total_by_referrer)) $num_total_by_referrer=0;
 	$num_total_qualified_by_referrer=$GLOBALS['SITE_DB']->query_select_value('referees_qualified_for','COUNT(*)',array('q_referee'=>$referrer,'q_scheme_name'=>$scheme_name));
 
