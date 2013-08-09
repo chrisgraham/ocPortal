@@ -442,6 +442,7 @@ function init__global2()
 			require_code('view_modes');
 			erase_tempcode_cache();
 			erase_cached_templates(!$changed_base_url);
+			erase_comcode_cache();
 			erase_cached_language();
 			persistent_cache_empty();
 			if ($changed_base_url)

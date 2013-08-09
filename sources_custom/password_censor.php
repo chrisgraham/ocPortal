@@ -48,7 +48,7 @@ function password_censor($auto=false,$display=true,$days_ago=30)
 	{
 		$text_start=get_translated_text($row['id']);
 		$text_after=_password_censor($text_start,PASSWORD_CENSOR__TIMEOUT_SCAN);
-		if ($text!=$text_start)
+		if ($text_after!=$text_start)
 		{
 			$update_query='UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate SET text_original=\''.addslashes($text_after).'\',text_parsed=\'\' WHERE id='.strval($row['id']);
 
@@ -99,14 +99,19 @@ function _password_censor($text,$scan_type=1,$explicit_only=false)
 		if ($scan_type!=PASSWORD_CENSOR__PRE_SCAN)
 		{
 			$matches=array();
-			$num_matches=preg_match_all('#([^\s]{5,30})#',$text,$matches);
+			$num_matches=preg_match_all('#(^|[^\w])([^\s]{5,30})#',$text,$matches);
 			for ($i=0;$i<$num_matches;$i++)
 			{
-				$m=$matches[1][$i];
+				$m=$matches[2][$i];
+
+				$m=ltrim($m,'<[{(');
+				$m=rtrim($m,'>]})');
 
 				if (strtolower($m)=='password') continue;
 				if (strtolower($m)=='username') continue;
 				if (strtolower($m)=='reminder') continue;
+				if (!is_null($GLOBALS['FORUM_DRIVER']->get_member_from_username($m))) continue; // A username
+				if (preg_match('#://[^ ]*'.preg_quote($m,'#').'#',$text)!=0) continue; // Part of a URL
 
 				$c=0;
 				if (preg_match('#\d#',$m)!=0) $c++;
