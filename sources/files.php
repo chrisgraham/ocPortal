@@ -203,6 +203,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 		// Specially-recognised naming conventions
 		'_old'=>'.*',
+		'_old_backups'=>'.*',
 
 		// Syntax's used during ocPortal testing
 		'gibb'=>'.*',

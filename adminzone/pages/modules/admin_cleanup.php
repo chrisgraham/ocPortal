@@ -63,6 +63,7 @@ class Module_admin_cleanup
 		set_helper_panel_tutorial('tut_cleanup');
 
 		require_lang('cleanup');
+		require_code('caches3');
 
 		// Decide what we're doing
 		$type=get_param('type','misc');
