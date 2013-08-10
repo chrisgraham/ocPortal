@@ -1263,7 +1263,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		if ($https===NULL)
 		{
 			require_code('urls');
-			if ((get_option('enable_https',true)=='0') || (!running_script('index')) && (!running_script('iframe')) && (!running_script('preview')))
+			if (get_option('enable_https',true)=='0')
 			{
 				$https=false;
 			} else
