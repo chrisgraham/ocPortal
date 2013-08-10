@@ -118,6 +118,10 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 {
 	if (is_null($intro)) $intro=new ocp_tempcode();
 
+	require_code('failure');
+	$_text=_look_for_match_key_message(is_object($text)?$text->evaluate():$text,false,true);
+	if (!is_null($_text)) $text=$_text;
+
 	require_lang('do_next');
 
 	require_css('do_next');

@@ -263,17 +263,20 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
  *
  * @param  mixed			The error message (string or tempcode)
  * @param  ID_TEXT		Name of the terminal page template
- * @param  boolean		Whether match key messages / redirects should be supported
+ * @param  boolean		?Whether match key messages / redirects should be supported (NULL: detect)
  */
 function _generic_exit($text,$template,$support_match_key_messages=false)
 {
 	@ob_end_clean(); // Incase in minimodule
 
-	if ($support_match_key_messages)
+	$text_eval=is_object($text)?$text->evaluate():$text;
+
+	if (is_null($support_match_key_messages))
 	{
-		$tmp=_look_for_match_key_message();
-		if (!is_null($tmp)) $text=$tmp;
+		$support_match_key_messages=in_array($text_eval,array(do_lang('NO_ENTRIES'),do_lang('NO_CATEGORIES')));
 	}
+	$tmp=_look_for_match_key_message($text_eval,false,!$support_match_key_messages);
+	if (!is_null($tmp)) $text=$tmp;
 
 	global $WANT_TEXT_ERRORS;
 	if ($WANT_TEXT_ERRORS)
@@ -290,8 +293,6 @@ function _generic_exit($text,$template,$support_match_key_messages=false)
 	@header('Content-Disposition: inline');
 
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);		Disabled as causes weird crashes
-
-	$text_eval=is_object($text)?$text->evaluate():$text;
 
 	if ($GLOBALS['HTTP_STATUS_CODE']=='200')
 	{
@@ -1136,14 +1137,14 @@ function get_html_trace()
  * See if a match-key message affects the error context we are in. May also internally trigger a redirect.
  *
  * @param  boolean		Only if it is a zone-level match-key
+ * @param  boolean		Whether to only consider text matches, not match-key matches
  * @return ?tempcode		The message (NULL: none)
  */
-function _look_for_match_key_message($only_if_zone=false)
+function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_text_match=false)
 {
 	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'));
 	sort_maps_by__strlen($match_keys,'k_match_key');
 	$match_keys=array_reverse($match_keys);
-	$message=NULL;
 	foreach ($match_keys as $match_key)
 	{
 		if ($only_if_zone)
@@ -1151,7 +1152,31 @@ function _look_for_match_key_message($only_if_zone=false)
 			if ((substr($match_key['k_match_key'],-6)!=':_WILD') && (substr($match_key['k_match_key'],-2)!=':*')) continue;
 		}
 
-		if (match_key_match($match_key['k_match_key']))
+		$pass=false;
+
+		$matches=array();
+		if (preg_match('#^((.*) )?"(.*)"$#',$match_key['k_match_key'],$matches)!=0)
+		{
+			if (strpos($natural_text,$matches[3])!==false)
+			{
+				if ($matches[1]=='')
+				{
+					$pass=true;
+				} else
+				{
+					$pass=match_key_match($matches[1]); // An AND condition essentially
+				}
+			}
+		} else
+		{
+			if (!$only_text_match)
+			{
+				if (match_key_match($match_key['k_match_key']))
+					$pass=true;
+			}
+		}
+
+		if ($pass)
 		{
 			$message_raw=get_translated_text($match_key['k_message']);
 			$message=get_translated_tempcode($match_key['k_message']);
@@ -1179,7 +1204,7 @@ function _look_for_match_key_message($only_if_zone=false)
 			return $message;
 		}
 	}
-	return $message;
+	return NULL;
 }
 
 /**
@@ -1196,17 +1221,19 @@ function _access_denied($class,$param,$force_login)
 	require_lang('permissions');
 	require_lang('ocf_config');
 
-	$message=_look_for_match_key_message(strpos($class,'ZONE')!==false);
-	if (is_null($message))
+	if (strpos($class,' ')!==false)
 	{
-		if (strpos($class,' ')!==false)
-		{
-			$message=make_string_tempcode($class);
-		} else
-		{
-			if ($class=='PRIVILEGE') $param=do_lang('PRIVILEGE_'.$param);
-			$message=do_lang_tempcode('ACCESS_DENIED__'.$class,escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())),escape_html($param));
-		}
+		$message=make_string_tempcode($class);
+	} else
+	{
+		if ($class=='PRIVILEGE') $param=do_lang('PRIVILEGE_'.$param);
+		$message=do_lang_tempcode('ACCESS_DENIED__'.$class,escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())),escape_html($param));
+	}
+
+	$_message=_look_for_match_key_message($message->evaluate(),strpos($class,'ZONE')!==false);
+	if (!is_null($_message))
+	{
+		$message=$_message;
 	}
 
 	// Run hooks, if any exist

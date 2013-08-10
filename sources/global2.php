@@ -842,9 +842,9 @@ function running_script($is_this_running)
  * This is a intended to output an informational exit at the same time as terminating execution
  *
  * @param  mixed			The error message (string or tempcode)
- * @param  boolean		Whether match key messages / redirects should be supported
+ * @param  ?boolean		Whether match key messages / redirects should be supported (NULL: detect)
  */
-function inform_exit($text,$support_match_key_messages=false)
+function inform_exit($text,$support_match_key_messages=NULL)
 {
 	require_code('failure'); // It's in failure.php although this isn't REALLY failure. Still it's an exceptional event so we can't justify loading the code as global.
 	_generic_exit($text,'INFORM_SCREEN',$support_match_key_messages);
