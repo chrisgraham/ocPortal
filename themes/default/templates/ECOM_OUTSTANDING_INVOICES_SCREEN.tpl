@@ -23,7 +23,7 @@
 					<a href="{PROFILE_URL*}">{USERNAME*}</a>
 				</td>
 				<td>
-					{AMOUNT*}
+					{$CURRENCY_SYMBOL}{AMOUNT*}
 				</td>
 				<td>
 					{TIME*}
@@ -38,7 +38,7 @@
 			{+START,IF_NON_EMPTY,{NOTE}}
 				<tr class="{$GET,cycle}">
 					<td colspan="5">
-						{NOTE*}
+						<span class="field_name">{!NOTE}</span>: {NOTE*}
 					</td>
 				</tr>
 			{+END}
