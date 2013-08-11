@@ -1005,13 +1005,24 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 	{
 		if ($required)
 		{
-			require_code('site2');
-			$ret=page_not_found($codename,$zone);
-			$REQUEST_PAGE_NEST_LEVEL--;
-			return $ret;
+			if (get_option('url_scheme')=='SIMPLE')
+			{
+				$details=_request_page('404','',NULL,NULL,false);
+			}
 		}
-		$REQUEST_PAGE_NEST_LEVEL--;
-		return new ocp_tempcode();
+
+		if ($details===false)
+		{
+			if ($required)
+			{
+				require_code('site2');
+				$ret=page_not_found($codename,$zone);
+				$REQUEST_PAGE_NEST_LEVEL--;
+				return $ret;
+			}
+			$REQUEST_PAGE_NEST_LEVEL--;
+			return new ocp_tempcode();
+		}
 	}
 
 	switch ($details[0])
