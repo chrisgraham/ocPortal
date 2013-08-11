@@ -83,6 +83,8 @@ function get_ticket_forum_id($member=NULL,$ticket_type=NULL,$create=false,$silen
  */
 function is_ticket_forum($forum_id)
 {
+	if (is_null($forum_id)) return NULL;
+
 	$root_forum_id=get_ticket_forum_id(NULL,NULL,false,true);
 	if ($forum_id===$root_forum_id) return true;
 
