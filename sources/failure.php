@@ -1136,6 +1136,7 @@ function get_html_trace()
 /**
  * See if a match-key message affects the error context we are in. May also internally trigger a redirect.
  *
+ * @param  string			Message screen text that is about to be displayed
  * @param  boolean		Only if it is a zone-level match-key
  * @param  boolean		Whether to only consider text matches, not match-key matches
  * @return ?tempcode		The message (NULL: none)
