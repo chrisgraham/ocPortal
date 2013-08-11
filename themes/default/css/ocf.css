@@ -608,7 +608,7 @@ hr.ocf_sig_barrier {
 
 {+START,IF,{$NOT,{$MOBILE}}}
 	.ocf_member_column {
-		height: 8em;
+		height: 9em; /* 8em seems okay on Mac, 9em needed on Windows */
 	}
 {+END}
 
@@ -1231,7 +1231,7 @@ table.ocf_profile_statistics th {
 */
 
 .topic_list_topic {
-	margin-bottom: 1em;
+	margin: 0.5em 0;
 }
 
 .topic_list_title {
