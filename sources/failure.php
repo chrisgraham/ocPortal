@@ -860,16 +860,14 @@ function _fatal_exit($text,$return=false)
 	}
 
 	// To break any looping of errors
-//@var_dump(debug_backtrace());@exit($text); // Useful if things go a bit nuts and error won't come out
 	global $EXITING;
-	if ((!function_exists('do_header')) || (!function_exists('die_html_trace'))) $EXITING++; //exit(escape_html($text));
 	$EXITING++;
 	if (($EXITING>1) || (running_script('upgrader')) || (!class_exists('ocp_tempcode')))
 	{
-		if (($EXITING<3) && (function_exists('may_see_stack_dumps')) && (may_see_stack_dumps()) && ($GLOBALS['HAS_SET_ERROR_HANDLER']))
+		if (($EXITING==2) && (function_exists('may_see_stack_dumps')) && (may_see_stack_dumps()) && ($GLOBALS['HAS_SET_ERROR_HANDLER']))
 		{
 			die_html_trace(is_object($text)?$text->evaluate():escape_html($text));
-		} else
+		} else // Failed even in die_html_trace
 		{
 			critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
 		}
@@ -1053,7 +1051,7 @@ function put_value_in_stack_trace($value)
 			$_value=$value->evaluate();
 			if (strlen($_value)>1000) $_value=substr($_value,0,1000).'...';
 		}
-		elseif (is_array($value) || is_object($value))
+		elseif ((is_array($value)) || (is_object($value)))
 		{
 			$_value=serialize($value);
 		}

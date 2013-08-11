@@ -153,21 +153,21 @@ if (!function_exists('critical_error'))
 							$_value=gettype($value);
 						} else
 						{
-							if (strpos($error,'Allowed memory')!==false) // Actually we don't call this code path any more, as stack trace is useless (comes from the catch_fatal_errors function)
+							$_value=gettype($value);
+							switch ($_value)
 							{
-								$_value=gettype($value);
-								switch ($_value)
-								{
-									case 'integer':
-										$_value=strval($value);
-										break;
-									case 'string':
-										$_value=$value;
-										break;
-								}
-							} else
-							{
-								$_value=serialize($value);
+								case 'integer':
+									$_value=strval($value);
+									break;
+								case 'string':
+									$_value=$value;
+									break;
+								default:
+									if (strpos($error,'Allowed memory')===false) // Actually we don't call this code path for memory limit issues any more, as stack trace is useless (comes from the catch_fatal_errors function)
+									{
+										$_value=serialize($value);
+									}
+									break;
 							}
 						}
 					}
