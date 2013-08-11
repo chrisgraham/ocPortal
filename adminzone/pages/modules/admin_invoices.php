@@ -177,7 +177,7 @@ class Module_admin_invoices
 
 		log_it('CREATE_INVOICE',strval($id),$product);
 
-		send_invoice_mail($member_id,$id);
+		send_invoice_notification($member_id,$id);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'outstanding'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));

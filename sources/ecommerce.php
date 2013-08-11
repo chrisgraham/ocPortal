@@ -237,7 +237,7 @@ function make_cancel_button($purchase_id,$via)
  * @param  MEMBER		The member to send to.
  * @param  AUTO_LINK	The invoice ID.
  */
-function send_invoice_mail($member_id,$id)
+function send_invoice_notification($member_id,$id)
 {
 	// Send out notification
 	require_code('notifications');
