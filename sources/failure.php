@@ -141,8 +141,11 @@ function _param_invalid($name,$ret,$posted)
 		if (is_numeric($test)) return $test;
 	}
 
+	require_code('global3');
 	set_http_status_code('400');
 
+	require_code('lang');
+	require_code('tempcode');
 	require_lang('javascript');
 	warn_exit(do_lang_tempcode('NOT_INTEGER'));
 	return '';
@@ -1108,7 +1111,7 @@ function get_html_trace()
 				{
 					if (!((is_array($param)) && (array_key_exists('GLOBALS',$param)))) // Some versions of PHP give the full environment as parameters. This will cause a recursive issue when outputting due to GLOBALS->ENV chaining.
 					{
-						$__value=put_value_in_stack_trace($param);
+						$_value->attach(paragraph(put_value_in_stack_trace($param)));
 					}
 				}
 			} else
@@ -1137,10 +1140,11 @@ function get_html_trace()
  * @param  string			Message screen text that is about to be displayed
  * @param  boolean		Only if it is a zone-level match-key
  * @param  boolean		Whether to only consider text matches, not match-key matches
- * @return ?tempcode		The message (NULL: none)
+ * @return ?tempcode		The message (NULL: no change)
  */
 function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_text_match=false)
 {
+	if (!isset($GLOBALS['SITE_DB'])) return NULL;
 	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'));
 	sort_maps_by__strlen($match_keys,'k_match_key');
 	$match_keys=array_reverse($match_keys);
