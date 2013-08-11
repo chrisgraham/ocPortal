@@ -3267,6 +3267,8 @@ function keep_symbol($param)
 		if ((isset($param[0])) && ($param[0]=='1')) $first=true;
 		foreach ($get_vars as $key=>$val)
 		{
+			if (!is_string($key)) $key=strval($key);
+
 			if ((get_magic_quotes_gpc()) && (is_string($val))) $val=stripslashes($val);
 
 			if ((substr($key,0,5)=='keep_') && ((!skippable_keep($key,$val)) || (($key=='keep_session') && (is_null(get_bot_type())) && (isset($param[1])) && ($param[1]=='1'))) && (is_string($val)))

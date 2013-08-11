@@ -557,6 +557,8 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 
 			if ($val===SELF_REDIRECT) $val=get_self_url(true,true);
 
+			if (!is_string($key)) $key=strval($key);
+
 			// Add in
 			$url.=$symbol.$key.'='.(is_integer($val)?strval($val):/*ocp_*/urlencode($val/*,false*/));
 			$symbol='&';
