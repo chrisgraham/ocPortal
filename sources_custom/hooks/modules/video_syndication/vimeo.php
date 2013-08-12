@@ -127,7 +127,14 @@ class video_syndication_vimeo
 				$query_params['user_id']=$this->_request_token;
 				$api_method='vimeo.videos.getUploaded';
 
-				$result=$this->_vimeo_ob->call($api_method,$query_params);
+				try
+				{
+					$result=$this->_vimeo_ob->call($api_method,$query_params);
+				}
+				catch (VimeoAPIException $e)
+				{
+					$result=false;
+				}
 				if ($result===false) return $videos;
 			}
 
