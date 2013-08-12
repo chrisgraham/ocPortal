@@ -29,6 +29,8 @@ class Hook_cron_ocdeadpeople
 		if ($last_time>time()-24*60*60) return; // run it once a day
 		set_value('last_dead_time',strval($time));
 
+		require_lang('ocdeadpeople');
+
 		// get just disease that should spead and are enabled
 		$diseases_to_spread=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'diseases WHERE (last_spread_time<('.strval(time()).'-(spread_rate*60*60)) OR  last_spread_time=0) AND enabled=1',NULL,NULL,true);
 		if (is_null($diseases_to_spread)) return;

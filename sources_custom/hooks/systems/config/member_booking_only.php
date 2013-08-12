@@ -48,7 +48,7 @@ class Hook_config_member_booking_only
 	 */
 	function get_default()
 	{
-		return '1';
+		return '0';
 	}
 
 }
