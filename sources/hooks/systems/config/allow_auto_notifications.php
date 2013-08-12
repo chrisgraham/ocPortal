@@ -32,7 +32,7 @@ class Hook_config_allow_auto_notifications
 			'human_name'=>'ALLOW_AUTO_NOTIFICATIONS',
 			'type'=>'tick',
 			'category'=>'FEATURE',
-			'group'=>'USER_INTERACTION',
+			'group'=>'NOTIFICATIONS',
 			'explanation'=>'CONFIG_OPTION_allow_auto_notifications',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
