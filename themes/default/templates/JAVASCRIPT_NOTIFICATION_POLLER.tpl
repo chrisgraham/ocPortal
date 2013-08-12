@@ -153,6 +153,14 @@ function display_alert(notification)
 			if (notification_wrapper)
 			{
 				add_event_listener_abstract(window,'focus',function() { notification_wrapper.close(); } );
+
+				notification_wrapper.notification.onclick=function() {
+					try
+					{
+						window.focus();
+					}
+					catch (ex) {};
+				};
 			}
 		} else
 		{
@@ -343,6 +351,7 @@ function _toggle_messaging_box(event,name,hide)
 	}
 	function getWrapper(notification) {
 		return {
+			notification: notification,
 			close: function () {
 				if (notification) {
 					if (notification.close) {

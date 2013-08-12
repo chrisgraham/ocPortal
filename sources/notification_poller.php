@@ -60,7 +60,7 @@ function notification_script()
  */
 function notification_mark_all_read_script()
 {
-	$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('d_to_member_id'=>get_member()));
+	$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('d_read'=>0,'d_to_member_id'=>get_member()));
 }
 
 /**

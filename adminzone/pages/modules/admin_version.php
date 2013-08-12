@@ -290,6 +290,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_frequency',array('d_frequency'));
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_to_member_id',array('d_to_member_id'));
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_read',array('d_read'));
+			$GLOBALS['SITE_DB']->create_index('digestives_tin','unread',array('d_to_member_id','d_read'));
 			$GLOBALS['SITE_DB']->create_table('digestives_consumed',array(
 				'c_member_id'=>'*MEMBER',
 				'c_frequency'=>'*INTEGER', // e.g. A_DAILY_EMAIL_DIGEST
@@ -323,6 +324,8 @@ class Module_admin_version
 
 			$GLOBALS['SITE_DB']->add_table_field('digestives_tin','d_read','BINARY');
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'notifications_enabled SET l_setting=l_setting+'.strval(A_WEB_NOTIFICATION).' WHERE l_setting<>0');
+			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_read',array('d_read'));
+			$GLOBALS['SITE_DB']->create_index('digestives_tin','unread',array('d_to_member_id','d_read'));
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<17))

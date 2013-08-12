@@ -19,6 +19,15 @@ function get_tutorial_info($tut)
 {
 	switch ($tut)
 	{
+		case 'notifications':
+			$result=array(
+				"Notifications",
+				"An explanation of the different ways notifications can work.",
+				"Aug 2013",
+				"blue",
+				"Chris",
+			); break;
+
 		case 'designer_themes':
 			$result=array(
 				"Designer themes",
