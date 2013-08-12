@@ -1681,7 +1681,7 @@ function convert_tooltip(element)
 	{
 		element.title=''; // Remove old tooltip
 
-		if ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))) // Only put on new tooltip if there's nothing with a tooltip inside the element
+		if ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && ((!element.childNodes[0].title) || (element.childNodes[0].title=='')))) // Only put on new tooltip if there's nothing with a tooltip inside the element
 		{
 			if (element.innerText)
 			{

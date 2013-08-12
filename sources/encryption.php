@@ -141,7 +141,19 @@ function decrypt_data($data,$passphrase)
 		return '';
 	}
 
-	$maxlength=(strpos(file_get_contents(get_option('decryption_key')),'AES')===false)?128:strlen($data);
+	$maxlength=strlen($data);
+	$decryption_keyfile=file_get_contents(get_option('decryption_key'));
+	if (strpos($decryption_keyfile,'AES')===false)
+	{
+		$maxlength=128/*1024 bit key assumption*/;
+	} elseif (strpos($decryption_keyfile,'AES-256')!==false)
+	{
+		$maxlength=256;
+	} elseif (strpos($decryption_keyfile,'AES-512')!==false)
+	{
+		$maxlength=512;
+	}
+
 	$output='';
 	while (strlen($data)>0)
 	{
@@ -151,7 +163,7 @@ function decrypt_data($data,$passphrase)
 		if (!openssl_private_decrypt($input,$decrypted,$key))
 		{
 			attach_message(do_lang_tempcode('DECRYPTION_ERROR'),'warn');
-			return '';
+			return $output;
 		}
 
 		$output.=$decrypted;

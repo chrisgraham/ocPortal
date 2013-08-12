@@ -1440,8 +1440,8 @@ class Module_topics
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('topic'));
-			$specialisation->attach(get_award_fields('post'));
+			$specialisation2->attach(get_award_fields('topic'));
+			$specialisation2->attach(get_award_fields('post'));
 		}
 
 		// Render form

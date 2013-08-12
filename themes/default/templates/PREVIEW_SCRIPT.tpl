@@ -2,21 +2,27 @@
 	<div class="box box___preview_script"><div class="box_inner">
 		<h2>{!SPELLCHECK}</h2>
 
-		{SPELLING}
+		<div>
+			{SPELLING}
+		</div>
 	</div></div>
 {+END}
 {+START,IF_NON_EMPTY,{KEYWORD_DENSITY}}
 	<div class="box box___preview_script"><div class="box_inner">
 		<h2>{!KEYWORDCHECK}</h2>
 
-		{KEYWORD_DENSITY}
+		<div>
+			{KEYWORD_DENSITY}
+		</div>
 	</div></div>
 {+END}
 {+START,IF_NON_EMPTY,{VALIDATION}}
 	<div class="box box___preview_script"><div class="box_inner">
 		<h2>{!VALIDATION}</h2>
 
-		{VALIDATION}
+		<div>
+			{VALIDATION}
+		</div>
 	</div></div>
 {+END}
 {+START,IF_EMPTY,{VALIDATION}}

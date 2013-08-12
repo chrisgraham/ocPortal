@@ -369,6 +369,9 @@ body.website_body {
 	color: {$GET,slightly_seeded_text};
 	background: {$GET,main_background};
 }
+.email_body .box {
+	color: {$GET,slightly_seeded_text};
+}
 body.website_body.frame {
 	background: transparent; /* Don't assume too much for a frame, it may be nested inside a box for example */
 }
