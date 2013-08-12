@@ -226,7 +226,9 @@ function _toggle_messaging_box(event,name,hide)
 
 	if ((e.style.display=='none') && (!hide))
 	{
-		document.querySelectorAll('body>.tooltip')[0].style.display='none'; // Hide tooltip, to stop it being a mess
+		var tooltips=document.querySelectorAll('body>.tooltip');
+		if (typeof tooltips[0]!='undefined')
+			tooltips[0].style.display='none'; // Hide tooltip, to stop it being a mess
 
 		e.style.display='inline';
 	} else
