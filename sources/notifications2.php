@@ -325,6 +325,8 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
  */
 function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0,$force_change_children_to=NULL)
 {
+	static $done_get_change=false;
+
 	$_notification_categories=$ob->create_category_tree($notification_code,$id);
 
 	$statistical_notification_type=_find_member_statistical_notification_type(get_member());
@@ -340,14 +342,19 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 		$notification_category_being_changed=get_param('id',NULL);
 		if (($notification_category_being_changed===$notification_category) || ($force_change_children_to!==NULL))
 		{
-			if (($force_change_children_to===false/*If recursively disabling*/) || (($force_change_children_to===NULL) && ($current_setting!=A_NA)/*If explicitly toggling this one to disabled*/))
+			if (!$done_get_change)
 			{
-				enable_notifications($notification_code,$notification_category,NULL,A_NA);
-				$force_change_children_to_children=false;
-			} else
-			{
-				enable_notifications($notification_code,$notification_category);
-				$force_change_children_to_children=true;
+				if (($force_change_children_to===false/*If recursively disabling*/) || (($force_change_children_to===NULL) && ($current_setting!=A_NA)/*If explicitly toggling this one to disabled*/))
+				{
+					$done_get_change=true;
+					enable_notifications($notification_code,$notification_category,NULL,A_NA);
+					$force_change_children_to_children=false;
+				} else
+				{
+					$done_get_change=true;
+					enable_notifications($notification_code,$notification_category);
+					$force_change_children_to_children=true;
+				}
 			}
 		} else
 		{
