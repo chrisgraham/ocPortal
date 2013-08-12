@@ -24,79 +24,106 @@
 function init__ocf_notifications()
 {
 	global $PRIVATE_POST_ROWS_CACHE;
-	$PRIVATE_POST_ROWS_CACHE=NULL;
+	$PRIVATE_POST_ROWS_CACHE=array();
 }
 
 /**
  * Get the personal post rows for the current member.
  *
- * @param  integer	The maximum number of rows to get (gets newest first).
+ * @param  ?integer	The maximum number of rows to get (gets newest first) (NULL: no limit).
+ * @param  boolean	Whether to only get unread ones.
+ * @param  boolean	Whether to include inline personal posts.
+ * @param  ?TIME		Only since this date (NULL: no limit).
  * @return array		The personal post rows (with corresponding topic details).
  */
-function ocf_get_pp_rows($limit=5)
+function ocf_get_pp_rows($limit=5,$unread=true,$include_inline=true,$time_barrier=NULL)
 {
+	$cache_key=serialize(array($limit,$unread,$include_inline,$time_barrier));
+
 	global $PRIVATE_POST_ROWS_CACHE;
-	if (!is_null($PRIVATE_POST_ROWS_CACHE)) return $PRIVATE_POST_ROWS_CACHE;
+	if (isset($PRIVATE_POST_ROWS_CACHE[$cache_key])) return $PRIVATE_POST_ROWS_CACHE[$cache_key];
 
 	$member_id=get_member();
 
-//	return $GLOBALS['FORUM_DB']->query_select('f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.p_topic_id=t.id',array('*'),NULL,'',1); // For testing
 	$query='';
 
+	$unread_clause='';
+	if ($unread)
+	{
+		$unread_clause='
+			t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND 
+			(l_time IS NULL OR l_time < p_time) AND 
+		';
+	}
+
+	$time_clause='';
+	if (!is_null($time_barrier))
+	{
+		$time_clause='
+			t_cache_last_time>'.strval($time_barrier).' AND 
+		';
+	}
+
+	// NB: The "p_intended_solely_for" bit in the PT clauses is because inline private posts do not register as the t_cache_last_post_id even if they are the most recent post. We want to ensure we join to the most recent post.
+
+	// PT from
 	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
 	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
 	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
 	WHERE
-	t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
+	'.$unread_clause.$time_clause.'
 	t_pt_from ='.strval($member_id).'
-	AND (l_time IS NULL OR l_time < p_time)
 	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
 
 	$query.=' UNION ';
 
+	// PT to
 	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
 	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
 	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
 	WHERE
-	t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
+	'.$unread_clause.$time_clause.'
 	t_pt_to ='.strval($member_id).'
-	AND (l_time IS NULL OR l_time < p_time)
 	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
 
 	$query.=' UNION ';
 
-	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
-	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
-	WHERE
-	t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
-	p_intended_solely_for ='.strval($member_id).'
-	AND (l_time IS NULL OR l_time < p_time)
-	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
-
-	$query.=' UNION ';
-
+	// PT invited to
 	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
 	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_special_pt_access i ON (i.s_topic_id=t.id)
 	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
 	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
 	WHERE
-	t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
+	'.$unread_clause.$time_clause.'
 	i.s_member_id ='.strval($member_id).'
-	AND (l_time IS NULL OR l_time < p_time)
 	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
+
+	if ($include_inline)
+	{
+		$query.=' UNION ';
+
+		// Inline personal post to
+		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
+		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
+		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
+		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
+		WHERE
+		'.$unread_clause.$time_clause.'
+		p_intended_solely_for ='.strval($member_id).'
+		'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
+	}
 
 	$query.=' ORDER BY t_cache_last_time DESC';
 
-	$PRIVATE_POST_ROWS_CACHE=$GLOBALS['FORUM_DB']->query($query,$limit,NULL,false,true);
+	$ret=$GLOBALS['FORUM_DB']->query($query,$limit,NULL,false,true);
+	$ret=remove_duplicate_rows($ret,'t_id');
 
-	$PRIVATE_POST_ROWS_CACHE=remove_duplicate_rows($PRIVATE_POST_ROWS_CACHE,'t_id');
+	$PRIVATE_POST_ROWS_CACHE[$cache_key]=$ret;
 
-	return $PRIVATE_POST_ROWS_CACHE;
+	return $ret;
 }
 
 /**

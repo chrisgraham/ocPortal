@@ -50,7 +50,7 @@ class Module_notifications
 	{
 		if (get_forum_type()=='ocf') return array();
 		if (is_guest()) return array();
-		return array('misc'=>'NOTIFICATIONS');
+		return array('misc'=>'NOTIFICATION_MANAGEMENT','title'=>'NOTIFICATIONS');
 	}
 
 	/**
@@ -65,10 +65,81 @@ class Module_notifications
 
 		$type=get_param('type','misc');
 
+		if ($type=='browse') return $this->browse();
+		if ($type=='view') return $this->view();
+
 		if ($type=='misc') return $this->overall();
 		if ($type=='advanced') return $this->advanced();
 
 		return new ocp_tempcode();
+	}
+
+	/**
+	 * Show an overall notifications UI.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function browse()
+	{
+		$title=get_screen_title('NOTIFICATIONS');
+
+		$start=get_param_integer('n_start',0);
+		$max=get_param_integer('n_max',50);
+
+		require_code('notification_poller');
+		list($notifications,$max_rows)=get_web_notifications($max,$start);
+
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang('NOTIFICATIONS'),$start,'n_start',$max,'n_max',$max_rows);
+
+		return do_template('NOTIFICATION_BROWSE_SCREEN',array(
+			'TITLE'=>$title,
+			'NOTIFICATIONS'=>$notifications,
+			'PAGINATION'=>$pagination,
+		));
+	}
+
+	/**
+	 * Show an overall notifications UI.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function view()
+	{
+		$id=get_param_integer('id');
+
+		$rows=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('*'),array('id'=>$id),'',1);
+		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		$row=$rows[0];
+
+		$title=get_screen_title('NOTIFICATION_VIEW',true,array(escape_html($row['d_subject'])));
+
+		$member_id=$row['d_from_member_id'];
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+		$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
+		$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+
+		$_message=comcode_to_tempcode($row['d_message']);
+
+		if ($row['d_read']==0)
+			$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('id'=>$id),'',1);
+
+		return do_template('NOTIFICATION_VIEW_SCREEN',array(
+			'TITLE'=>$title,
+			'ID'=>strval($row['id']),
+			'SUBJECT'=>$row['d_subject'],
+			'MESSAGE'=>$_message,
+			'FROM_USERNAME'=>$username,
+			'FROM_MEMBER_ID'=>strval($member_id),
+			'FROM_URL'=>$url,
+			'FROM_AVATAR_URL'=>$avatar_url,
+			'PRIORITY'=>strval($row['d_priority']),
+			'DATE_TIMESTAMP'=>strval($row['d_date_and_time']),
+			'DATE_WRITTEN_TIME'=>get_timezoned_time($row['d_date_and_time']),
+			'NOTIFICATION_CODE'=>$row['d_notification_code'],
+			'CODE_CATEGORY'=>$row['d_code_category'],
+			'HAS_READ'=>($row['d_read']==1),
+		));
 	}
 
 	/**

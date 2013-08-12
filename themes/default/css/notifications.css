@@ -3,6 +3,107 @@
  Copyright (c) ocProducts, 2004-2013
 */
 
+/* Web UI */
+
+.top_notifications {
+	margin-left: 1.5em;
+	display: inline;
+}
+
+#web_notifications_button, #pts_button {
+	color: {$GET,heading_text};
+	display: inline-block;
+	margin-top: -3px;
+	position: relative;
+	top: 3px;
+	text-align: center;
+	min-width: 1.7em;
+	height: 1.3em;
+	font-size: 1.05em;
+	padding: 1px 0;
+	vertical-align: middle;
+	border: 1px solid {$GET,dark_border};
+	background-color: {$GET,area_background} !important;
+	background-repeat: no-repeat;
+	outline: 0;
+}
+#web_notifications_button {
+	background-image: url('{$IMG;,notifications/web_notifications}');
+	background-position: 2px 1px;
+}
+#pts_button {
+	background-image: url('{$IMG;,notifications/pts}');
+	background-position: 3px 2px;
+}
+
+#web_notifications_button span, #pts_button span {
+	visibility: hidden;
+}
+
+.count_0 {
+	{$BETA_CSS_PROPERTY,opacity: 0.5;}
+}
+
+#web_notifications_rel, #pts_rel {
+	position: absolute;
+	width: 22em;
+}
+#web_notifications_rel .box, #pts_rel .box {
+	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
+}
+
+.box.box_arrow {
+	overflow: visible;
+	margin-top: 9px; /* 7 +2px gap */
+}
+.box.box_arrow>span {
+	background: url('{$IMG;,box_arrow}') no-repeat;
+	margin-top: -7px;
+	display: inline-block;
+	width: 13px;
+	height: 7px;
+	margin-left: 20.48em;
+	position: absolute;
+}
+
+.notification+.notification, #web_notifications_spot+.associated_links_block_group, #pts_spot+.associated_links_block_group {
+	margin-top: 0.5em;
+	border-top: 1px solid {$GET,pale_border};
+	padding-top: 0.5em;
+}
+
+.notification {
+	margin: 0.5em 0;
+}
+
+.notification_subject {
+	font-weight: bold;
+	margin: 0;
+}
+
+.notification_subject * {
+	white-space: inherit !important;
+}
+
+.notification img, .topic_list_topic img {
+	width: 40px;
+}
+
+.notification_meta, .topic_list_meta {
+	margin-top: 0.8em !important;
+	width: auto !important;
+}
+
+.notification_meta {
+	font-size: 0.85em;
+}
+
+.notification_has_read {
+	opacity: 0.8;
+}
+
+/* Setting */
+
 .notifications_field_name_column {
 	width: 100%;
 }

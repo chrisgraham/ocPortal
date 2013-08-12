@@ -85,3 +85,4 @@ One very effective way to stop your messages being marked as spam is to persuade
  - [page="_SEARCH:tut_how_internet_works"]How the Internet works[/page]
  - [page="_SEARCH:tut_cookies"]Introduction to Cookies and sessions (and Javascript)[/page]
  - [page="_SEARCH:tut_domain_names"]How domain names work[/page]
+ - [page="_SEARCH:tut_notifications"]Notifications[/page]

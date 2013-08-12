@@ -284,10 +284,12 @@ class Module_admin_version
 				'd_notification_code'=>'ID_TEXT',
 				'd_code_category'=>'SHORT_TEXT',
 				'd_frequency'=>'INTEGER', // e.g. A_DAILY_EMAIL_DIGEST
+				'd_read'=>'BINARY',
 			));
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_date_and_time',array('d_date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_frequency',array('d_frequency'));
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_to_member_id',array('d_to_member_id'));
+			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_read',array('d_read'));
 			$GLOBALS['SITE_DB']->create_table('digestives_consumed',array(
 				'c_member_id'=>'*MEMBER',
 				'c_frequency'=>'*INTEGER', // e.g. A_DAILY_EMAIL_DIGEST
@@ -318,6 +320,9 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->alter_table_field('member_zone_access','active_until','?TIME');
 			$GLOBALS['SITE_DB']->alter_table_field('member_page_access','active_until','?TIME');
 			$GLOBALS['SITE_DB']->alter_table_field('member_category_access','active_until','?TIME');
+
+			$GLOBALS['SITE_DB']->add_table_field('digestives_tin','d_read','BINARY');
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'notifications_enabled SET l_setting=l_setting+'.strval(A_WEB_NOTIFICATION).' WHERE l_setting<>0');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<17))

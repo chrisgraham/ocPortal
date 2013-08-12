@@ -84,7 +84,19 @@ class Block_side_ocf_private_topics
 			$member_link=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['t_cache_last_member_id'],false,true);
 			$num_posts=$topic['t_cache_num_posts'];
 
-			$out->attach(do_template('TOPIC_LIST',array('_GUID'=>'55ae21a9f8d67ba6237c118a18b9657b','POSTER_URL'=>$member_link,'TOPIC_URL'=>$topic_url,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic['t_cache_last_time']),'USERNAME'=>$username,'NUM_POSTS'=>integer_format($num_posts))));
+			$is_unread=($topic['t_cache_last_time']>time()-60*60*24*intval(get_option('post_history_days'))) && ((is_null($topic['l_time'])) || ($topic['l_time']<$topic['p_time']));
+
+			$out->attach(do_template('TOPIC_LIST',array(
+				'POSTER_URL'=>$member_link,
+				'TOPIC_URL'=>$topic_url,
+				'TITLE'=>$title,
+				'DATE'=>$date,
+				'DATE_RAW'=>strval($topic['t_cache_last_time']),
+				'USERNAME'=>$username,
+				'POSTER_ID'=>strval($topic['t_cache_last_member_id']),
+				'NUM_POSTS'=>integer_format($num_posts),
+				'HAS_READ'=>!$is_unread,
+			)));
 		}
 		$send_url=build_url(array('page'=>'topics','type'=>'new_pt','redirect'=>SELF_REDIRECT),get_module_zone('topics'));
 		if (!ocf_may_make_private_topic()) $send_url=new ocp_tempcode();

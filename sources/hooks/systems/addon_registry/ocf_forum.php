@@ -418,7 +418,9 @@ class Hook_addon_registry_ocf_forum
 				'DATE'=>placeholder_time(),
 				'DATE_RAW'=>placeholder_date_raw(),
 				'USERNAME'=>lorem_word(),
-				'NUM_POSTS'=>placeholder_number()
+				'POSTER_ID'=>placeholder_id(),
+				'NUM_POSTS'=>placeholder_number(),
+				'HAS_READ'=>false,
 			)), NULL, '', true)
 		);
 	}
@@ -668,7 +670,9 @@ class Hook_addon_registry_ocf_forum
 				'DATE'=>placeholder_time(),
 				'DATE_RAW'=>placeholder_date_raw(),
 				'USERNAME'=>lorem_word(),
-				'NUM_POSTS'=>placeholder_number()
+				'POSTER_ID'=>placeholder_id(),
+				'NUM_POSTS'=>placeholder_number(),
+				'HAS_READ'=>true,
 			)));
 		}
 

@@ -78,6 +78,7 @@ Set the following to [b]777[/b]: (full directory permissions)
  - collaboration/pages/html_custom/<for-each-language>
  - collaboration/pages/html_custom
  - data_custom/modules/chat
+ - data_custom/modules/web_notifications
  - data_custom/modules/admin_stats
  - data_custom/modules/admin_backup
  - data_custom/spelling

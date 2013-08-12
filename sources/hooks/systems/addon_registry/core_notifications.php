@@ -98,6 +98,29 @@ class Hook_addon_registry_core_notifications
 			'sources/hooks/systems/do_next_menus/notifications.php',
 			'themes/default/images/bigicons/notifications.png',
 			'sources/hooks/systems/config/allow_auto_notifications.php',
+			'sources/hooks/systems/config/pt_notifications_as_web.php',
+			'sources/hooks/systems/config/notification_keep_days.php',
+			'sources/hooks/systems/config/web_notifications_enabled.php ',
+			'sources/hooks/systems/config/notification_poll_frequency.php',
+			'data/notifications.php',
+			'sources/blocks/top_notifications.php',
+			'sources/hooks/systems/startup/notification_poller_init.php',
+			'sources/notification_poller.php',
+			'themes/default/templates/JAVASCRIPT_NOTIFICATION_POLLER.tpl',
+			'themes/default/templates/NOTIFICATION_POLLER.tpl',
+			'themes/default/templates/NOTIFICATION_WEB.tpl',
+			'themes/default/templates/NOTIFICATION_WEB_DESKTOP.tpl',
+			'themes/default/templates/NOTIFICATION_PT_DESKTOP.tpl',
+			'themes/default/templates/BLOCK_TOP_NOTIFICATIONS.tpl',
+			'themes/default/templates/NOTIFICATION_BROWSE_SCREEN.tpl',
+			'themes/default/templates/NOTIFICATION_VIEW_SCREEN.tpl',
+			'themes/default/images/notifications/notifications.ico',
+			'themes/default/images/notifications/pts.png',
+			'themes/default/images/notifications/web_notifications.png',
+			'themes/default/images/notifications/index.html',
+			'data_custom/modules/web_notifications/.htaccess',
+			'data_custom/modules/web_notifications/index.html',
+			'data_custom/modules/web_notifications/latest.dat',
 		);
 	}
 
@@ -113,7 +136,199 @@ class Hook_addon_registry_core_notifications
 			'NOTIFICATIONS_MANAGE_SCREEN.tpl'=>'notifications_regular',
 			'NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl'=>'notifications_advanced',
 			'NOTIFICATIONS_TREE.tpl'=>'notifications_advanced',
-			'NOTIFICATION_TYPES.tpl'=>'notifications_regular'
+			'NOTIFICATION_TYPES.tpl'=>'notifications_regular',
+			'NOTIFICATION_WEB.tpl'=>'notification_web',
+			'NOTIFICATION_WEB_DESKTOP.tpl'=>'notification_web_desktop',
+			'NOTIFICATION_PT_DESKTOP.tpl'=>'notification_pt_desktop',
+			'BLOCK_TOP_NOTIFICATIONS.tpl'=>'block_top_notifications',
+			'NOTIFICATION_POLLER.tpl'=>'notification_poller',
+			'NOTIFICATION_BROWSE_SCREEN.tpl'=>'notification_browse_screen',
+			'NOTIFICATION_VIEW_SCREEN.tpl'=>'notification_view_screen',
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__notification_browse_screen()
+	{
+		$notifications=new ocp_tempcode();
+		$notifications->attach(
+			do_lorem_template('NOTIFICATION_WEB',array(
+				'ID'=>placeholder_id(),
+				'SUBJECT'=>lorem_phrase(),
+				'MESSAGE'=>lorem_paragraph(),
+				'FROM_USERNAME'=>lorem_phrase(),
+				'FROM_MEMBER_ID'=>placeholder_id(),
+				'FROM_URL'=>placeholder_url(),
+				'FROM_AVATAR_URL'=>placeholder_image_url(),
+				'PRIORITY'=>'3',
+				'DATE_TIMESTAMP'=>placeholder_date_raw(),
+				'DATE_WRITTEN_TIME'=>placeholder_time(),
+				'NOTIFICATION_CODE'=>placeholder_id(),
+				'CODE_CATEGORY'=>placeholder_id(),
+			))
+		);
+
+		return array(do_lorem_template('NOTIFICATION_BROWSE_SCREEN',array(
+			'TITLE'=>lorem_title(),
+			'NOTIFICATIONS'=>$notifications,
+		)));
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__notification_view_screen()
+	{
+		$out=do_lorem_template('NOTIFICATION_VIEW_SCREEN',array(
+			'TITLE'=>lorem_title(),
+			'ID'=>placeholder_id(),
+			'SUBJECT'=>lorem_phrase(),
+			'MESSAGE'=>lorem_paragraph(),
+			'FROM_USERNAME'=>lorem_phrase(),
+			'FROM_MEMBER_ID'=>placeholder_id(),
+			'FROM_URL'=>placeholder_url(),
+			'FROM_AVATAR_URL'=>placeholder_image_url(),
+			'PRIORITY'=>'3',
+			'DATE_TIMESTAMP'=>placeholder_date_raw(),
+			'DATE_WRITTEN_TIME'=>placeholder_time(),
+			'NOTIFICATION_CODE'=>placeholder_id(),
+			'CODE_CATEGORY'=>placeholder_id(),
+			'HAS_READ'=>true,
+		));
+
+		return array(
+			lorem_globalise($out, NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__notification_poller()
+	{
+		$out=do_lorem_template('NOTIFICATION_POLLER',array(
+		));
+
+		return array(
+			lorem_globalise($out, NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__notification_web()
+	{
+		$out=do_lorem_template('NOTIFICATION_WEB',array(
+			'ID'=>placeholder_id(),
+			'SUBJECT'=>lorem_phrase(),
+			'MESSAGE'=>lorem_paragraph(),
+			'FROM_USERNAME'=>lorem_phrase(),
+			'FROM_MEMBER_ID'=>placeholder_id(),
+			'FROM_URL'=>placeholder_url(),
+			'FROM_AVATAR_URL'=>placeholder_image_url(),
+			'PRIORITY'=>'3',
+			'DATE_TIMESTAMP'=>placeholder_date_raw(),
+			'DATE_WRITTEN_TIME'=>placeholder_time(),
+			'NOTIFICATION_CODE'=>placeholder_id(),
+			'CODE_CATEGORY'=>placeholder_id(),
+		));
+
+		return array(
+			lorem_globalise($out, NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__notification_web_desktop()
+	{
+		$out=do_lorem_template('NOTIFICATION_WEB_DESKTOP',array(
+			'ID'=>placeholder_id(),
+			'SUBJECT'=>lorem_phrase(),
+			'MESSAGE'=>lorem_paragraph(),
+			'FROM_USERNAME'=>lorem_phrase(),
+			'FROM_MEMBER_ID'=>placeholder_id(),
+			'FROM_URL'=>placeholder_url(),
+			'FROM_AVATAR_URL'=>placeholder_image_url(),
+			'PRIORITY'=>'3',
+			'DATE_TIMESTAMP'=>placeholder_date_raw(),
+			'DATE_WRITTEN_TIME'=>placeholder_time(),
+			'NOTIFICATION_CODE'=>placeholder_id(),
+			'CODE_CATEGORY'=>placeholder_id(),
+		));
+
+		return array(
+			lorem_globalise($out, NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__notification_pt_desktop()
+	{
+		$out=do_lorem_template('NOTIFICATION_PT_DESKTOP',array(
+			'ID'=>placeholder_id(),
+			'SUBJECT'=>lorem_phrase(),
+			'MESSAGE'=>lorem_paragraph(),
+			'FROM_USERNAME'=>lorem_phrase(),
+			'FROM_MEMBER_ID'=>placeholder_id(),
+			'URL'=>placeholder_url(),
+			'FROM_AVATAR_URL'=>placeholder_image_url(),
+			'DATE_TIMESTAMP'=>placeholder_date_raw(),
+			'DATE_WRITTEN_TIME'=>placeholder_time(),
+		));
+
+		return array(
+			lorem_globalise($out, NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_top_notifications()
+	{
+		$out=do_lorem_template('BLOCK_TOP_NOTIFICATIONS',array(
+			'NUM_UNREAD_NOTIFICATIONS'=>placeholder_number(),
+			'NOTIFICATIONS'=>'',
+			'MAX'=>'5',
+		));
+
+		return array(
+			lorem_globalise($out, NULL, '', true)
 		);
 	}
 

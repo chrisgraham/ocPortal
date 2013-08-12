@@ -52,6 +52,7 @@
   -->
 
   <setAcl path="ocportal/data_custom/modules/chat" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/data_custom/modules/web_notifications" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/data_custom/modules/admin_backup" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/data_custom/spelling" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/data_custom/spelling/personal_dicts" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />

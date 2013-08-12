@@ -46,7 +46,17 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 
 		if (!is_null($id))
 		{
-			if (substr($id,0,6)!='forum:') warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			if (substr($id,0,6)!='forum:')
+			{
+				$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_cache_first_title',array('id'=>intval($id)));
+
+				$pagelinks=array();
+				$pagelinks[]=array(
+					'id'=>$id,
+					'title'=>do_lang('A_TOPIC',$title),
+				);
+				return $pagelinks;
+			}
 			$id=substr($id,6);
 		}
 
@@ -242,7 +252,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 					$read_log_time=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_read_logs','l_time',array('l_member_id'=>$member_id,'l_topic_id'=>intval($category)));
 					if (!is_null($read_log_time)) // Has been visited at some point
 					{
-						$num_posts_since=$GLOBALS['FORUM_DB']->query_select_value_if_there_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_intended_solely_for IS NULL AND p_topic_id='.strval(intval($category)).' AND p_time>'.strval($read_log_time));
+						$num_posts_since=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_intended_solely_for IS NULL AND p_topic_id='.strval(intval($category)).' AND p_time>'.strval($read_log_time));
 						if ($num_posts_since<=1) // Ah, just this one new post, so we can notify
 						{
 							$members_new[$member_id]=$setting;

@@ -346,6 +346,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile and should not be included in shipped builds
 			'chat_last_full_check.dat'=>'data_custom/modules/chat',
 			'chat_last_msg.dat'=>'data_custom/modules/chat',
+			'latest.dat'=>'data_custom/modules/web_notifications',
 			'permissioncheckslog.php'=>'data_custom',
 		);
 	}

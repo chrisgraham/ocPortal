@@ -359,6 +359,11 @@
   </parameter>
 
   <parameter
+    name="SetAclParameter0" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/modules/web_notifications" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/modules/web_notifications" />
+  </parameter>
+
+  <parameter
     name="SetAclParameter1" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/modules/admin_backup" tags="Hidden">
     <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/modules/admin_backup" />
   </parameter>

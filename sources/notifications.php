@@ -48,20 +48,6 @@ function init__notifications()
 	// Notifications will be sent to one of the following if not to a specific list of member IDs
 	define('A_TO_ANYONE_ENABLED',NULL);
 
-	define('A_NA',0x0); // Not applicable				(0 in decimal)
-	//
-	define('A_INSTANT_EMAIL',0x2); //					(2 in decimal)
-	define('A_DAILY_EMAIL_DIGEST',0x4); //				(4 in decimal)
-	define('A_WEEKLY_EMAIL_DIGEST',0x8); //			(8 in decimal)
-	define('A_MONTHLY_EMAIL_DIGEST',0x10); //			(16 in decimal)
-	define('A_INSTANT_SMS',0x20); //						(32 in decimal)
-	define('A_INSTANT_PT',0x40); // Private topic	(64 in decimal)
-	// And...
-	define('A__ALL',0xFFFFFF);
-	// And...
-	define('A__STATISTICAL',-0x1); // This is magic, it will choose whatever the user probably wants, based on their existing settings
-	define('A__CHOICE',-0x2); // Never stored in DB, used as a flag inside admin_notifications module
-
 	global $NOTIFICATION_SETTING_CACHE;
 	$NOTIFICATION_SETTING_CACHE=array();
 
@@ -298,6 +284,13 @@ function _notification_setting_available($setting,$member_id=NULL)
 	$for_member=false;
 	switch ($setting)
 	{
+		case A_WEB_NOTIFICATION:
+			if (get_option('web_notifications_enabled')=='1')
+			{
+				$system_wide=true;
+				$for_member=true;
+			}
+			break;
 		case A_INSTANT_EMAIL:
 			$system_wide=true;
 			if ($system_wide && !is_null($member_id)) $for_member=($GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id)!='');
@@ -354,7 +347,7 @@ function _find_member_statistical_notification_type($to_member_id)
 	} else
 	{
 		$possible_settings=array();
-		foreach (array(A_INSTANT_SMS,A_INSTANT_EMAIL,A_DAILY_EMAIL_DIGEST,A_WEEKLY_EMAIL_DIGEST,A_MONTHLY_EMAIL_DIGEST,A_INSTANT_PT) as $possible_setting)
+		foreach (array(A_INSTANT_SMS,A_INSTANT_EMAIL,A_DAILY_EMAIL_DIGEST,A_WEEKLY_EMAIL_DIGEST,A_MONTHLY_EMAIL_DIGEST,A_INSTANT_PT,A_WEB_NOTIFICATION) as $possible_setting)
 		{
 			if (_notification_setting_available($possible_setting,$to_member_id))
 				$possible_settings[$possible_setting]=0;
@@ -378,6 +371,7 @@ function _find_member_statistical_notification_type($to_member_id)
 		if (is_null($setting)) $setting=A_INSTANT_EMAIL; // Nothing available, so save as an e-mail notification even though it cannot be received
 	}
 	$cache[$to_member_id]=$setting;
+	$setting|=A_WEB_NOTIFICATION;
 	return $setting;
 }
 
@@ -457,42 +451,47 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 		}
 	}
 
-	if (_notification_setting_available(A_DAILY_EMAIL_DIGEST,$to_member_id))
+	foreach (array(
+		A_DAILY_EMAIL_DIGEST,
+		A_WEEKLY_EMAIL_DIGEST,
+		A_MONTHLY_EMAIL_DIGEST,
+		A_WEB_NOTIFICATION,
+	) as $frequency)
 	{
-		if ((($setting & A_DAILY_EMAIL_DIGEST) !=0) || (($setting & A_WEEKLY_EMAIL_DIGEST) !=0) || (($setting & A_MONTHLY_EMAIL_DIGEST) !=0))
-		{
-			foreach (array(
-				A_DAILY_EMAIL_DIGEST,
-				A_WEEKLY_EMAIL_DIGEST,
-				A_MONTHLY_EMAIL_DIGEST
-			) as $frequency)
-			{
-				if (($setting & $frequency) !=0)
-				{
-					$GLOBALS['SITE_DB']->query_insert('digestives_tin',array(
-						'd_subject'=>$subject,
-						'd_message'=>$message,
-						'd_from_member_id'=>$from_member_id,
-						'd_to_member_id'=>$to_member_id,
-						'd_priority'=>$priority,
-						'd_no_cc'=>$no_cc?1:0,
-						'd_date_and_time'=>time(),
-						'd_notification_code'=>$notification_code,
-						'd_code_category'=>is_null($code_category)?'':$code_category,
-						'd_frequency'=>$frequency,
-					));
+		if (!_notification_setting_available($frequency,$to_member_id))
+			continue;
 
-					$GLOBALS['SITE_DB']->query_insert('digestives_consumed',array(
-						'c_member_id'=>$to_member_id,
-						'c_frequency'=>$frequency,
-						'c_time'=>time(),
-					),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
-				}
+		if (($setting & $frequency) !=0)
+		{
+			if ($frequency==A_WEB_NOTIFICATION)
+			{
+				if (($notification_code=='ocf_new_pt') && (get_option('pt_notifications_as_web')=='0')) continue;
+				@file_put_contents(get_custom_file_base().'/data_custom/modules/web_notifications/latest.dat',strval(time()));
 			}
 
-			$needs_manual_cc=false;
+			$GLOBALS['SITE_DB']->query_insert('digestives_tin',array(
+				'd_subject'=>$subject,
+				'd_message'=>$message,
+				'd_from_member_id'=>$from_member_id,
+				'd_to_member_id'=>$to_member_id,
+				'd_priority'=>$priority,
+				'd_no_cc'=>$no_cc?1:0,
+				'd_date_and_time'=>time(),
+				'd_notification_code'=>$notification_code,
+				'd_code_category'=>is_null($code_category)?'':$code_category,
+				'd_frequency'=>$frequency,
+				'd_read'=>0,
+			));
+
+			$GLOBALS['SITE_DB']->query_insert('digestives_consumed',array(
+				'c_member_id'=>$to_member_id,
+				'c_frequency'=>$frequency,
+				'c_time'=>time(),
+			),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
 		}
 	}
+
+	$needs_manual_cc=false;
 
 	if (_notification_setting_available(A_INSTANT_PT,$to_member_id))
 	{

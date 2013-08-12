@@ -100,6 +100,8 @@ class Module_topicview
 			}
 		}
 
+		$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('d_notification_code'=>'ocf_topic','d_code_category'=>strval($id),'d_to_member_id'=>get_member()));
+
 		if (!is_null($id))
 			set_feed_url('?mode=ocf_topicview&filter='.strval($id));
 

@@ -97,4 +97,5 @@ As inline personal posts are just enhanced posts, they are moderated and adminis
  - [page="_SEARCH:tut_chat"]Running chatrooms (features and advice)[/page]
  - [page="_SEARCH:tut_members"]ocPortal member system[/page]
  - [page="_SEARCH:tut_mod"]Basic forum moderation[/page]
+ - [page="_SEARCH:tut_notifications"]Notifications[/page]
 

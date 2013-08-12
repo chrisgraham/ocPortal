@@ -1563,6 +1563,7 @@ ocportal_tutorials
  - docs/pages/comcode_custom/EN/panel_top.txt
  - docs/pages/comcode_custom/EN/faq.txt
  - docs/pages/comcode_custom/EN/index.html
+ - docs/pages/comcode_custom/EN/tut_notifications.txt
  - docs/pages/comcode_custom/EN/tut_accessibility.txt
  - docs/pages/comcode_custom/EN/tut_adminzone.txt
  - docs/pages/comcode_custom/EN/tut_adv_comcode.txt

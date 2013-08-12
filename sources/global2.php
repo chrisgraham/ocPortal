@@ -28,6 +28,15 @@ function init__global2()
 		require_code('chat_poller');
 		chat_poller();
 	}
+	if ((running_script('notifications')) && (filemtime(get_custom_file_base().'/data_custom/modules/web_notifications/latest.dat')>=get_param_integer('time_barrier')))
+	{
+		prepare_for_known_ajax_response();
+
+		header('Content-Type: application/xml');
+
+		//  encoding="'.get_charset().'" not needed due to no data in it
+		$output='<?xml version="1.0" ?'.'><response><result></result></response>';
+	}
 
 	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$KNOWN_AJAX,$KNOWN_UTF8;
 

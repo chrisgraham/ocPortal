@@ -23,7 +23,10 @@ class Hook_Notification_ocf_new_pt extends Hook_Notification
 	 */
 	function allowed_settings($notification_code)
 	{
-		return A__ALL & ~A_INSTANT_PT;
+		$ret=A__ALL & ~A_INSTANT_PT;
+		if (get_option('pt_notifications_as_web')=='0')
+			$ret=$ret & ~A_WEB_NOTIFICATION;
+		return $ret;
 	}
 
 	/**

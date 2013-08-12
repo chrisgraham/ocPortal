@@ -118,6 +118,7 @@ This product includes:
  - Images partially derived from other sources, used under licence (some used under commercial license to ocProducts staff). Including:
   - sync.png icon, by David Vignoni
   - aggregate_types.png icon, by Everaldo Coelho
+  - Icons for notifications, by Everaldo Coelho (pts.png) and Janko Jovanovic (web_notifications.png) (LGPL licence / public domain)
  - Some public domain backgrounds from http://www.repeatxy.com/
  - Bitstream fonts (BSD-like licence)
  - Sound effects from Asterisk (Copyright Allison Smith, Creative Commons Attribution License)
@@ -136,6 +137,7 @@ This product includes:
   - cssmin (MIT licence)
   - SWF-upload (MIT licence)
   - Java FTP upload library (http://ftp-uploader.sourceforge.net/) (Apache licence)
+  - HTML5-Desktop-Notifications  (https://github.com/ttsvetko/HTML5-Desktop-Notifications) (Apache licence)
   - AreaEdit (remnants of spellchecker code, rest of code replaced by CKEditor) (BSD-like licence)
   - CKEditor WYSIWYG editor (MPL licence)
   - EditArea code editor (BSD-like licence)
@@ -148,7 +150,6 @@ This product includes:
   - mergesort implementation (from php.net comment by sreid, Creative Commons Attribution License)
   - GUID implementation (from php.net comment by Andrew Moore, Creative Commons Attribution License)
   - (adjust_pic_orientation function, from stackoverflow comment)
->>>>>>> v9
   - Javascript base-64 code (http://www.webtoolkit.info/, liberal custom licence)
   - JW-Player (used under commercial license)
 Some of our ocPortal packages remove or replace those elements used under non-free commercial licenses.

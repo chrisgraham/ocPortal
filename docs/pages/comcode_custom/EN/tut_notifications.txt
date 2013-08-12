@@ -1,0 +1,39 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Notifications[/title]
+
+ocPortal includes a highly-configurable notification system for members to be alerted on what is going on.
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Choosing notifications[/title]
+
+There are a wide number of notification types that members can receive.
+Some are set to be enabled by default, and some are only available based on privileges.
+
+Some notification types allow fine-grained control, allowing you to choose to receive them only for certain notification categories. For example, with forum topic notifications you can choose to receive them only for certain forums. This is similar to what some forum software calls 'tracking'.
+
+[title="2"]Forms of receipt[/title]
+
+You can receive notifications through a number of means:
+ - E-mail
+ - Digest e-mail (i.e. in batches)
+ - Private topics
+ - SMS (if configured, requires payment for each text message sent)
+ - As web notifications
+
+[title="3"]Web notifications[/title]
+
+Web notifications are particularly cool. If you have the website open (or pinned open, which some browsers support), then visitors will be notified directly through the ocPortal user interface within a matter of seconds. From the list of recent/unread notifications, you can view an overlay with the full notification details, or a full page detailing all enabled web notifications from the last period of days.
+
+Additionally, most platforms will allow native notification display:
+ - in the Windows notification center (except on Internet Explorer, which does not support this [at the time of writing, where IE9 is the latest], see below)
+ - in the MacOS notification center
+ - in the Internet Explorer pinned site notification area
+ - [s]in the main notification area of iPhone or Android phones[/s] -- unfortunately this doesn't work at the time of writing, as background pages don't run and most mobile browsers don't support HTML5 notifications
+
+(If you don't want the interface to support this, you can remove the [tt]top_notifications[/tt] block from the default [tt]GLOBAL_HTML_WRAP[/tt] template and disable web notifications.)
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_correspondance"]Correspondence between members[/page]
+ - [page="_SEARCH:tut_email"]Understanding and configuring e-mail[/page]
+ - [page="_SEARCH:tut_members"]ocPortal member system[/page]

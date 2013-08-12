@@ -221,3 +221,4 @@ The bookmark feature is particularly useful for:
  - [page="_SEARCH:tut_censor"]Policing a community site[/page]
  - [page="_SEARCH:tut_ldap"]Integrating ocPortal into a corporate network via LDAP[/page]
  - [page="_SEARCH:tut_httpauth"]Integrating ocPortal into a network via HTTP authentication[/page]
+ - [page="_SEARCH:tut_notifications"]Notifications[/page]

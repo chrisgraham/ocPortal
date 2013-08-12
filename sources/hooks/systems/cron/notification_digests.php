@@ -50,6 +50,7 @@ class Hook_cron_notification_digests
 					$messages=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('d_subject','d_message','d_date_and_time'),array(
 						'd_to_member_id'=>$to_member_id,
 						'd_frequency'=>$frequency,
+						'd_read'=>0,
 					),'ORDER BY d_date_and_time');
 					$GLOBALS['SITE_DB']->query_delete('digestives_tin',array(
 						'd_to_member_id'=>$to_member_id,
