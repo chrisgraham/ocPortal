@@ -513,6 +513,8 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		{
 			if ($val===NULL) continue; // NULL means skip
 
+			if (!is_string($key)) $key=strval($key);
+
 			if ($val===SELF_REDIRECT) $val=get_self_url(true,true);
 
 			// Add in

@@ -78,11 +78,13 @@ function get_ticket_forum_id($member=NULL,$ticket_type=NULL,$create=false,$silen
 /**
  * Returns whether the given forum ID is for a ticket forum (subforum of the root ticket forum).
  *
- * @param  AUTO_LINK		The forum ID
+ * @param  ?AUTO_LINK	The forum ID (NULL: private topics forum)
  * @return boolean		Whether the given forum is a ticket forum
  */
 function is_ticket_forum($forum_id)
 {
+	if (is_null($forum_id)) return NULL;
+
 	$root_forum_id=get_ticket_forum_id(NULL,NULL,false,true);
 	if (($root_forum_id=db_get_first_id()) && ($forum_id!=db_get_first_id())) return false; // If ticket forum (oddly) set as root, don't cascade it through all!
 	if ($forum_id===$root_forum_id) return true;
