@@ -2443,6 +2443,9 @@ dl.compact_list>dt {
 	margin: 0 0.5em 0 8px;
 	clear: both;
 }
+.global_side_panel .box dl.compact_list>dt {
+	margin-left: 0;
+}
 dl.compact_list>dt:after {
 	content: ":";
 }
