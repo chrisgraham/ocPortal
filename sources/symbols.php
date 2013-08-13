@@ -2939,6 +2939,7 @@ function keep_symbol($param)
  */
 function ocp_trim($text,$try_hard=false)
 {
+	if (memory_get_usage()>1024*1024*50) return trim($text); // Don't have enough memory
 	do
 	{
 		$before=$text;

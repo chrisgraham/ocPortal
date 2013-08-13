@@ -395,7 +395,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_specific_permission(get_member(),'member_maintenance')));
 		if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
 		{
-			$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
+			$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',!has_specific_permission(get_member(),'member_maintenance')));
 		}
 	}
 
