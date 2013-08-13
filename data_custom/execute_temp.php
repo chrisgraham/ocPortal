@@ -55,8 +55,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->add_table_field('booking','customer_name','SHORT_TEXT');
-	$GLOBALS['SITE_DB']->add_table_field('booking','customer_email','SHORT_TEXT');
-	$GLOBALS['SITE_DB']->add_table_field('booking','customer_mobile','SHORT_TEXT');
-	$GLOBALS['SITE_DB']->add_table_field('booking','customer_phone','SHORT_TEXT');
+require_code('notifications');
+dispatch_notification('ocf_topic','1','','');
 }
