@@ -168,9 +168,12 @@ function get_member($quick_only=false)
 	if ((is_string($backdoor_ip_address)) && ($backdoor_ip_address!='') && (get_ip_address()==$backdoor_ip_address))
 	{
 		require_code('users_active_actions');
-		$MEMBER_CACHED=restricted_manually_enabled_backdoor();
-		// Will have created a session in here already
-		return $MEMBER_CACHED;
+		if (function_exists('restricted_manually_enabled_backdoor')) // May be trying to check in safe mode when doing above require_code, so recurse
+		{
+			$MEMBER_CACHED=restricted_manually_enabled_backdoor();
+			// Will have created a session in here already
+			return $MEMBER_CACHED;
+		}
 	}
 
 	if ($GETTING_MEMBER)

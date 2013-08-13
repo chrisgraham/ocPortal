@@ -1390,7 +1390,8 @@ class forum_driver_ocf extends forum_driver_base
 		{
 			require_code('users_active_actions');
 			$lvt=$this->get_member_row_field($id,'m_last_visit_time');
-			ocp_setcookie('last_visit',is_null($lvt)?strval(time()):strval($lvt),true);
+			if (function_exists('ocp_setcookie')) // May be trying to check in safe mode when doing above require_code, so recurse
+				ocp_setcookie('last_visit',is_null($lvt)?strval(time()):strval($lvt),true);
 			$new_visit=true;
 		} else
 		{
