@@ -359,7 +359,7 @@ function update_permission_box(setting)
 					{
 						if (rows[k].id.substr(0,7)!='access_') continue;
 
-						group=rows[k].id.substring(7,rows[k].id.indexOf('_sp_container'));
+						group=rows[k].id.substring(7,rows[k].id.indexOf('_privilege_container'));
 
 						element=document.getElementById('access_'+group+'_privilege_'+privilege);
 						if (!element) // We haven't added it yet for one of the resources we're doing permissions for
