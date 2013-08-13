@@ -104,9 +104,15 @@ function _password_censor($text,$scan_type=1,$explicit_only=false)
 			{
 				$m=$matches[2][$i];
 
+				// Strip tags, so these aren't considered for passwords
+				$m=preg_replace('#\[[^\]]+\]#','',$m);
+				$m=preg_replace('#\<[^\>]+\>#','',$m);
+
+				// Strip brackets
 				$m=ltrim($m,'<[{(');
 				$m=rtrim($m,'>]})');
 
+				if ($m=='') continue;
 				if (strtolower($m)=='password') continue;
 				if (strtolower($m)=='username') continue;
 				if (strtolower($m)=='reminder') continue;
