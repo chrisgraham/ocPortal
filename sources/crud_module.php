@@ -63,6 +63,7 @@ class standard_crud_module
 	var $posting_form_title=NULL;
 	var $posting_form_text='';
 	var $posting_form_text_parsed=NULL;
+	var $posting_form_tabindex=NULL;
 	var $javascript=NULL;
 	var $type_code='d';
 	var $catalogue=false;
@@ -1211,7 +1212,7 @@ class standard_crud_module
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 		if (!is_null($this->posting_form_title))
 		{
-			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,NULL,$this->posting_field_required);
+			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$this->posting_form_tabindex,$this->posting_field_required);
 			return do_template('POSTING_SCREEN',array(
 				'_GUID'=>'841b9af3aa80bcab86b907e4b942786a'.get_class($this),
 				'PREVIEW'=>$this->do_preview,

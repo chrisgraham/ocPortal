@@ -250,6 +250,39 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function get_form_fields($id=NULL,$main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
 	{
+		if (is_null($id))
+		{
+			// Cloning support
+			$id=get_param_integer('id',NULL);
+			if (!is_null($id))
+			{
+				if (method_exists($this,'get_submitter'))
+				{
+					list($submitter)=$this->get_submitter($id);
+				} else
+				{
+					$submitter=NULL;
+				}
+
+				if (!is_null($this->permissions_require))
+				{
+					check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->permission_page_name);
+				}
+
+				$ret=$this->fill_in_edit_form($id);
+
+				$ret[2]=NULL; $ret[3]=NULL; $ret[4]=NULL; // These strictly only relate to edits
+
+				$this->posting_form_text=$ret[5];
+				$ret[5]=NULL;
+
+				$this->posting_form_text_parsed=$ret[7];
+				$ret[7]=NULL;
+
+				return $ret;
+			}
+		}
+
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
 		require_lang('menus');
