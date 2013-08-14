@@ -404,7 +404,7 @@ class Module_topics
 
 		$field_set->attach(form_input_tree_list(do_lang_tempcode('CHOOSE'),'','select_topic_id',NULL,'choose_forum_topic',array(),false));
 
-		$field_set->attach(form_input_integer(do_lang_tempcode('DESTINATION_TOPIC_ID'),do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),'manual_topic_id',NULL,false));
+		$field_set->attach(form_input_line(do_lang_tempcode('DESTINATION_TOPIC_ID'),do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),'manual_topic_id',NULL,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
@@ -474,7 +474,16 @@ class Module_topics
 				$to_topic_id=NULL;
 				$to_forum_id=post_param_integer('to_forum_id');
 				if ($to_forum_id==-1) warn_exit(do_lang_tempcode('MUST_MOVE_POSTS_SOMEWHERE'));
-			} else $to_topic_id=intval($_to_topic_id);
+			} else
+			{
+				if (!is_numeric($_to_topic_id))
+				{
+					$_to_topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok('url_id_monikers','m_resource_id',array('m_resource_page'=>'topicview','m_resource_type'=>'misc','m_moniker'=>urldecode($_to_topic_id)));
+					if (is_null($_to_topic_id))
+						warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+				}
+				$to_topic_id=intval($_to_topic_id);
+			}
 		}
 		$from_topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_topic_id',array('id'=>$posts[0]));
 		if (is_null($from_topic_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));

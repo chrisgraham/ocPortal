@@ -383,6 +383,11 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 	$test=$delete_if_empty?$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',array('p_topic_id'=>$from_topic_id)):1;
 	if ($test==0)
 	{
+		$num_view_count=0;
+		$num_view_count+=$GLOBALS['FORUM_DB']->query_value('f_topics','t_num_views',array('id'=>$from_topic_id));
+		$num_view_count+=$GLOBALS['FORUM_DB']->query_value('f_topics','t_num_views',array('id'=>$to_topic_id));
+		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_num_views'=>$num_view_count),array('id'=>$to_topic_id),'',1);
+
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
 		ocf_delete_topic($from_topic_id,do_lang('MOVE_POSTS'));
