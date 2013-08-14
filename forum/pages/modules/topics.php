@@ -1337,8 +1337,24 @@ class Module_topics
 		if ($redirect!='') $map['redirect']=$redirect;
 		$post_url=build_url($map,'_SELF');
 
+		// Cloning support
+		$clone_id=get_param_integer('clone_id',NULL);
+		$existing_title=post_param('title','');
+		$existing_description=post_param('description','');
+		$post=post_param('post','');
+		if (!is_null($clone_id))
+		{
+			$post_rows=$GLOBALS['FORUM_DB']->query_select('f_posts p JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t ON t.id=p.p_topic_id',array('p.*','t.t_description'),array('t.id'=>$clone_id),'',1);
+			if ((array_key_exists(0,$post_rows)) && ($post_rows[0]['p_cache_forum_id']!==NULL) && (has_category_access(get_member(),'forums',strval($post_rows[0]['p_cache_forum_id']))))
+			{
+				$existing_title=$post_rows[0]['p_title'];
+				$existing_description=$post_rows[0]['t_description'];
+				$post=get_translated_text($post_rows[0]['p_post']);
+			}
+		}
+
 		// Title
-		$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',''),true,1,120));
+		$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',$existing_title,true,1,120));
 
 		// Where it goes to
 		if ($private_topic)
@@ -1360,10 +1376,9 @@ class Module_topics
 
 		// Description
 		if ((get_option('is_on_topic_descriptions')=='1') && (!$threaded))
-			$specialisation->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),'','description',post_param('description',''),false,2));
+			$specialisation->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),'','description',$existing_description,false,2));
 
 		// Set up some post details
-		$post=post_param('post','');
 		$quote=get_param_integer('quote',-1);
 		if ($quote!=-1)
 		{
@@ -1433,11 +1448,11 @@ class Module_topics
 		require_code('fields');
 		if (has_tied_catalogue('topic'))
 		{
-			append_form_custom_fields('topic',NULL,$specialisation,$hidden_fields);
+			append_form_custom_fields('topic',$clone_id,$specialisation,$hidden_fields);
 		}
 		if (has_tied_catalogue('post'))
 		{
-			append_form_custom_fields('post',NULL,$specialisation,$hidden_fields);
+			append_form_custom_fields('post',$clone_id,$specialisation,$hidden_fields);
 		}
 
 		require_code('content2');
@@ -1446,7 +1461,7 @@ class Module_topics
 		if (addon_installed('content_reviews'))
 		{
 			require_code('content_reviews');
-			$specialisation2->attach(content_review_get_fields('topic'));
+			$specialisation2->attach(content_review_get_fields('topic',$clone_id));
 		}
 
 		if (is_null($text))
