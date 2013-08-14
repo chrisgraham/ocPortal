@@ -39,6 +39,15 @@ class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
 			if (isset($CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id]))
 			{
 				$map=$CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id];
+
+				if ((array_key_exists(1,$param)) && ($param[1]=='1'))
+				{
+					$value=$map['FIELDS']->evaluate();
+				} else
+				{
+					$_value=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$map+array('ENTRY_SCREEN'=>true),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
+					$value=$_value->evaluate();
+				}
 			} else
 			{
 				$entry=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$entry_id),'',1);

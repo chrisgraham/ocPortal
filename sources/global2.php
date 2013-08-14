@@ -1983,6 +1983,8 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 				unset($arr[$resource]); // Don't load up if unit already individually requested
 			}
 
+			if ((count($arr)==0) && (running_script('snippet'))) return NULL; // No need to load up merged, as we already have the merged one loaded; but we did successfully also skip loading was that were included in that merge
+
 			if ($resources!==array())
 				$arr[$grouping_codename]=0; // Add in merge one to load instead
 

@@ -1358,7 +1358,7 @@ class standard_crud_module
 
 			if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))
 			{
-				$url=make_string_tempcode(get_param('redirect'));
+				$url=make_string_tempcode(str_replace('__ID__',$id,get_param('redirect')));
 
 				return redirect_screen($title,$url,do_lang_tempcode($success_message_str));
 			}
