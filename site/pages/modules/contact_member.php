@@ -130,8 +130,8 @@ class Module_contact_member
 					$fields->attach($name_field);
 				if ($default_email!='')
 					$fields->attach($email_field);
-				$fields->attach(form_input_line_multi(do_lang_tempcode('EMAIL_CC_ADDRESS'),do_lang_tempcode('DESCRIPTION_EMAIL_CC_ADDRESS'),'cc_',array(),0,NULL,'email'));
-				$fields->attach(form_input_line_multi(do_lang_tempcode('EMAIL_BCC_ADDRESS'),do_lang_tempcode('DESCRIPTION_EMAIL_BCC_ADDRESS'),'bcc_',array(),0,NULL,'email'));
+				$fields->attach(form_input_username_multi(do_lang_tempcode('EMAIL_CC_ADDRESS'),do_lang_tempcode('DESCRIPTION_EMAIL_CC_ADDRESS'),'cc_',array(),0,false));
+				$fields->attach(form_input_username_multi(do_lang_tempcode('EMAIL_BCC_ADDRESS'),do_lang_tempcode('DESCRIPTION_EMAIL_BCC_ADDRESS'),'bcc_',array(),0,false));
 			}
 		}
 		$submit_name=do_lang_tempcode('SEND');
@@ -188,15 +188,25 @@ class Module_contact_member
 		{
 			foreach ($_POST as $key=>$val)
 			{
-				if ((substr($key,0,3)=='cc_') && ($val!=''))
+				if (($val!='') && ((substr($key,0,3)=='cc_') || (substr($key,0,4)=='bcc_')))
 				{
-					$extra_cc_addresses[]=post_param($key);
-					if (!is_valid_email_address(post_param($key))) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
-				}
-				if ((substr($key,0,4)=='bcc_') && ($val!=''))
-				{
-					$extra_bcc_addresses[]=post_param($key);
-					if (!is_valid_email_address(post_param($key))) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
+					$address=post_param($key);
+					if (!is_valid_email_address($address))
+					{
+						$address=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_email_address',array('m_username'=>$address));
+						if (is_null($address))
+							warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+						if (!is_valid_email_address($address))
+							warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
+					}
+					if (substr($key,0,3)=='cc_')
+					{
+						$extra_cc_addresses[]=$address;
+					}
+					if (substr($key,0,4)=='bcc_')
+					{
+						$extra_bcc_addresses[]=$address;
+					}
 				}
 			}
 		}
