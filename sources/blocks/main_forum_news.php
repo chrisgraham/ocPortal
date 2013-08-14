@@ -154,7 +154,7 @@ class Block_main_forum_news
 				'DATE'=>$date,
 				'DATE_RAW'=>strval($myrow[$date_key]),
 				'NEWS_TITLE'=>$news_title,
-				'EWS_TITLE_PLAIN'=>$news_title,
+				'NEWS_TITLE_PLAIN'=>$news_title,
 				'CATEGORY'=>'',
 				'IMG'=>'',
 				'_IMG'=>'',
