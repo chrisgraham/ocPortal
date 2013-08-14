@@ -2770,7 +2770,6 @@ ocportalcom_support_credits
  - lang_custom/EN/customers.ini
  - text_custom/EN/support_credits_licence.txt
  - sources_custom/hooks/modules/members/customers.php
- - sources_custom/hooks/systems/config/support_credit_value.php
  - sources_custom/hooks/systems/ecommerce/support_credits.php
  - sources_custom/hooks/systems/ocf_cpf_filter/customers.php
  - sources_custom/miniblocks/credit_exps.php
@@ -3864,7 +3863,6 @@ ocportalcom_support_credits
  - sources_custom/hooks/systems/symbols/MANTIS_SPONSOR_WEEK_ACTIVITY.php
  - sources_custom/mantis.php
  - sources_custom/miniblocks/main_mantis_tracker.php
- - tracker/TrackerTables.sql
 
 ocportalcom
 -----------
@@ -4211,8 +4209,6 @@ weather
 tester
 ------
 
- - sources_custom/hooks/systems/config/bug_report_text.php
- - sources_custom/hooks/systems/config/tester_forum_name.php
  - themes/default/css_custom/tester.css
  - sources_custom/hooks/systems/addon_registry/tester.php
  - themes/default/templates_custom/TESTER_ADD_SECTION_SCREEN.tpl
