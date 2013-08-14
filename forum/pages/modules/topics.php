@@ -1353,6 +1353,7 @@ class Module_topics
 		}*/
 
 		// Various kinds of tick options
+		$specialisation2=new ocp_tempcode();
 		if ((!$private_topic) && (ocf_may_moderate_forum($forum_id,get_member())))
 		{
 			$moderation_options=array(
@@ -1365,6 +1366,8 @@ class Module_topics
 			if (get_value('disable_sunk')!=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',false,do_lang_tempcode('DESCRIPTION_SUNK'));
 			if (!$private_topic) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));
+			if (addon_installed('calendar'))
+				$specialisation2->attach(form_input_date__scheduler(do_lang_tempcode('OCF_PUBLICATION_TIME'),do_lang_tempcode('OCF_DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true));
 		} else
 		{
 			$hidden_fields->attach(form_input_hidden('open','1'));
@@ -1384,7 +1387,6 @@ class Module_topics
 				$options[]=array(do_lang_tempcode('_MAKE_ANONYMOUS_POST'),'anonymous',false,do_lang_tempcode('MAKE_ANONYMOUS_POST_DESCRIPTION'));
 		}
 		$options[]=array(do_lang_tempcode('ADD_TOPIC_POLL'),'add_poll',false,do_lang_tempcode('DESCRIPTION_ADD_TOPIC_POLL'));
-		$specialisation2=new ocp_tempcode();
 		if (count($options)==1) // Oh, actually we know this was just the option to add a poll, so show simply
 		{
 			$specialisation->attach(form_input_tick(do_lang_tempcode('ADD_TOPIC_POLL'),do_lang_tempcode('DESCRIPTION_ADD_TOPIC_POLL'),'add_poll',false));
@@ -1954,6 +1956,28 @@ class Module_topics
 			{
 				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0));
 				$_title=get_screen_title('ADD_TOPIC');
+
+$_topic_id=strval($topic_id);
+$schedule_code=<<<END
+:\$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_first_time'=>time(),'t_validated'=>1),array('id'=>{$_topic_id}),'',1);
+END;
+
+				$schedule=get_input_date('schedule');
+
+				if ((!is_null($schedule)) && (addon_installed('calendar')))
+				{
+					require_code('calendar');
+					$start_year=post_param_integer('schedule_year');
+					$start_month=post_param_integer('schedule_month');
+					$start_day=post_param_integer('schedule_day');
+					$start_hour=post_param_integer('schedule_hour');
+					$start_minute=post_param_integer('schedule_minute');
+					require_code('calendar2');
+					$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('ADD_POST'),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+					regenerate_event_reminder_jobs($event_id);
+
+					$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_validated'=>0),array('id'=>$topic_id),'',1);
+				}
 
 				if (addon_installed('awards'))
 				{
