@@ -1694,7 +1694,7 @@ class Module_topics
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('post'));
+			$specialisation2->attach(get_award_fields('post'));
 		}
 
 		// Moderator reply
@@ -2670,7 +2670,7 @@ END;
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('post',strval($post_id)));
+			$specialisation2->attach(get_award_fields('post',strval($post_id)));
 		}
 
 		if (is_null(get_param('post',NULL)))

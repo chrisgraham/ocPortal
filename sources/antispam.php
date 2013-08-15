@@ -273,7 +273,7 @@ function rbl_resolve($ip,$rbl_domain,$page_level)
 		$arpa=implode('.',array_reverse(preg_split('//',$normalised_ip,NULL,PREG_SPLIT_NO_EMPTY)));
 	}
 
-	$lookup=str_replace('*',$arpa,$rbl_domain);
+	$lookup=str_replace('*',$arpa,$rbl_domain).'.';
 
 	$_result=gethostbyname($lookup);
 	$result=explode('.',$_result);

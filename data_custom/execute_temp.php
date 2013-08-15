@@ -55,6 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-require_code('notifications');
-dispatch_notification('ocf_topic','1','','');
+@print(gethostbyname('xxxxxershcka.135.127.1.82.dnsbl.httpbl.org.').'x');
 }
