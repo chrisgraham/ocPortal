@@ -890,7 +890,7 @@ class Module_cms_galleries extends standard_aed_module
 	/**
 	 * Get tempcode for an image adding/editing form.
 	 *
-	 * @param  SHORT_TEXT			The title
+	 * @param  SHORT_TEXT		The title
 	 * @param  ID_TEXT			The gallery
 	 * @param  LONG_TEXT			The image description
 	 * @param  URLPATH			URL to the image
@@ -1377,7 +1377,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 		}
 
 		$set_name='thumbnail';
-		$required=(!$no_thumb_needed) && (get_option('allow_audio_videos')=='0');
+		$required=false;//(!$no_thumb_needed) && (get_option('allow_audio_videos')=='0');	Youtube won't require one for example
 		$set_title=do_lang_tempcode('THUMBNAIL');
 		$field_set=alternate_fields_set__start($set_name);
 
