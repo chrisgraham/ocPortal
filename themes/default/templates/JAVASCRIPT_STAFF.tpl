@@ -4,8 +4,8 @@ function script_load_stuff_staff()
 {
 	// Navigation loading screen
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_animations}}}
-			if ((window.parent==window) && ((window.location+'').indexOf('js_cache=1')==-1) && (((window.location+'').indexOf('/cms/')!=-1) || ((window.location+'').indexOf('/adminzone/')!=-1)))
-				add_event_listener_abstract(window,'beforeunload',function() { staff_unload_action(); } );
+		if ((window.parent==window) && ((window.location+'').indexOf('js_cache=1')==-1) && (((window.location+'').indexOf('/cms/')!=-1) || ((window.location+'').indexOf('/adminzone/')!=-1)))
+			add_event_listener_abstract(window,'beforeunload',function() { staff_unload_action(); } );
 	{+END}
 
 	// Theme image editing hovers
@@ -40,6 +40,18 @@ function script_load_stuff_staff()
 			add_event_listener_abstract(inputs[i],'mouseover',handle_image_mouse_over,false);
 			add_event_listener_abstract(inputs[i],'mouseout',handle_image_mouse_out,false);
 			add_event_listener_abstract(inputs[i],'click',handle_image_click,false);
+		}
+	}
+	var all_e=document.getElementsByTagName('*');
+	var bg;
+	for (i=0;i<all_e.length;i++)
+	{
+		bg=abstract_get_computed_style(all_e[i],'background-image');
+		if ((all_e[i].className.indexOf('no_theme_img_click')==-1) && (bg!='none') && (bg.indexOf('url')!=-1))
+		{
+			add_event_listener_abstract(all_e[i],'mouseover',handle_image_mouse_over,false);
+			add_event_listener_abstract(all_e[i],'mouseout',handle_image_mouse_out,false);
+			add_event_listener_abstract(all_e[i],'click',handle_image_click,false);
 		}
 	}
 
@@ -323,29 +335,37 @@ function handle_image_mouse_over(event)
 	if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && target.previousSibling.className.indexOf('magic_image_edit_link')!=-1) return;
 	if (find_width(target)<130) return;
 
-	if (target.src.indexOf('/themes/')==-1) return;
+	var src=(typeof target.src=='undefined')?abstract_get_computed_style(target,'background-image'):target.src;
+	if ((typeof target.src=='undefined') && (!event.ctrlKey) && (!event.metaKey) && (!event.altKey)) return; // Needs ctrl key for background images
+	if (src.indexOf('/themes/')==-1) return;
 	if (window.location.href.indexOf('admin_themes')!=-1) return;
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_theme_img_buttons}}}
-		if ((typeof target.mo_link_out!='undefined') && (target.mo_link_out))
+		// Remove other edit links
+		var old=get_elements_by_class_name(document,'magic_image_edit_link');
+		for (var i=old.length-1;i>=0;i--)
 		{
-			window.clearInterval(target.mo_link_out);
-			target.mo_link_out=null;
+			old[i].parentNode.removeChild(old[i]);
 		}
 
-		target.mo_link=window.setInterval(function() {
-			if (!document.getElementById('editimg_'+target.id))
-			{
-				var ml=document.createElement('input');
-				ml.onclick=function(event) { handle_image_click(event,target,true); };
-				ml.type='button';
-				ml.id='editimg_'+target.id;
-				ml.value='{!themes:EDIT_THEME_IMAGE;}';
-				ml.className='magic_image_edit_link button_micro';
-				ml.style.position='absolute';
-				ml.style.zIndex=3000;
-				target.parentNode.insertBefore(ml,target);
-			}
+		// Add edit button
+		var ml=document.createElement('input');
+		ml.onclick=function(event) { handle_image_click(event,target,true); };
+		ml.type='button';
+		ml.id='editimg_'+target.id;
+		ml.value='{!themes:EDIT_THEME_IMAGE;}';
+		ml.className='magic_image_edit_link button_micro';
+		ml.style.position='absolute';
+		ml.style.left=find_pos_x(target)+'px';
+		ml.style.top=find_pos_y(target)+'px';
+		ml.style.zIndex=3000;
+		ml.style.display='none';
+		target.parentNode.insertBefore(ml,target);
+
+		if (target.mo_link)
+			window.clearTimeout(target.mo_link);
+		target.mo_link=window.setTimeout(function() {
+			if (ml) ml.style.display='block';
 		} , 2000);
 	{+END}
 
@@ -358,20 +378,22 @@ function handle_image_mouse_out(event)
 	var target=event.target || event.srcElement;
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_theme_img_buttons}}}
-		if ((typeof target.mo_link!='undefined') && (target.mo_link))
-		{
-			window.clearTimeout(target.mo_link);
-			target.mo_link=null;
-		}
-
 		if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && target.previousSibling.className.indexOf('magic_image_edit_link')!=-1)
 		{
-			target.mo_link=window.setInterval(function() {
+			if ((typeof target.mo_link!='undefined') && (target.mo_link)) // Clear timed display of new edit button
+			{
+				window.clearTimeout(target.mo_link);
+				target.mo_link=null;
+			}
+
+			// Time removal of edit button
+			if (target.mo_link)
+				window.clearTimeout(target.mo_link);
+			target.mo_link=window.setTimeout(function() {
 				if ((typeof target.edit_window=='undefined') || (!target.edit_window) || (target.edit_window.closed))
 				{
-					target.parentNode.removeChild(target.previousSibling);
-					window.clearTimeout(target.mo_link);
-					target.mo_link=null;
+					if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && target.previousSibling.className.indexOf('magic_image_edit_link')!=-1)
+						target.parentNode.removeChild(target.previousSibling);
 				}
 			} , 3000);
 		}
@@ -386,7 +408,7 @@ function handle_image_click(event,ob,force)
 	if (typeof event=='undefined') var event=window.event;
 	if ((typeof ob=='undefined') || (!ob)) var ob=this;
 
-	var src=ob.origsrc?ob.origsrc:ob.src;
+	var src=ob.origsrc?ob.origsrc:((typeof ob.src=='undefined')?abstract_get_computed_style(ob,'background-image').replace(/.*url\(['"]?(.*)['"]?\).*/,'$1'):ob.src);
 	if ((src) && ((force) || (magic_keypress(event))))
 	{
 		// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)

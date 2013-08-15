@@ -150,7 +150,7 @@ class Module_booking
 				'paid_at'=>'?TIME',
 				'paid_trans_id'=>'?AUTO_LINK',
 				'customer_name'=>'SHORT_TEXT',
-				'customer_email'=>'EMAIL',
+				'customer_email'=>'SHORT_TEXT',
 				'customer_mobile'=>'SHORT_TEXT',
 				'customer_phone'=>'SHORT_TEXT',
 			));

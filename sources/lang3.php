@@ -301,7 +301,7 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$so
 	if (is_null($source_member)) $source_member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
 
 	$remap=array('broken'=>0,'text_original'=>$text,'text_parsed'=>$text2);
-	if (((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_specific_permission($source_member,'allow_html')) || (!has_specific_permission($source_member,'use_very_dangerous_comcode')))
+	if ((function_exists('ocp_admirecookie')) && ((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_specific_permission($source_member,'allow_html')) || (!has_specific_permission($source_member,'use_very_dangerous_comcode')))
 		$remap['source_user']=$source_member;
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{

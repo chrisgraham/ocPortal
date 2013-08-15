@@ -541,8 +541,8 @@ function snippet_script()
 	$tempcode->handle_symbol_preprocessing();
 	$out=$tempcode->evaluate();
 
-	if (strpos($out,chr(10))!==false) // Is HTML
-	{
+	if ((strpos($out,chr(10))!==false) && ($hook!='css_compile')) // Is HTML
+	{ // TODO: We need a better way of encoding this
 		if ((!function_exists('simplexml_load_string')) || (@simplexml_load_string('<wrap>'.preg_replace('#&\w+;#','',$out).'</wrap>')===false)) // Optimisation-- check first via optimised native PHP function if possible
 		{
 			require_code('xhtml');

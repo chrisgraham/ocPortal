@@ -62,9 +62,8 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 		case 'mov':
 			$info=_get_mov_details($file);
 			break;
+		case 'f4v':
 		case 'mp4':
-			$info=_get_mov_details($file);
-			break;
 		case 'm4v':
 			$info=_get_mov_details($file);
 			break;

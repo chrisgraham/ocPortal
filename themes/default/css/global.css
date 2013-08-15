@@ -465,6 +465,7 @@ header h1 {
 	.global_navigation {
 		margin-top: 99px !important;
 		text-align: center !important;
+		min-height: 30px !important;
 	}
 	*/
 {+END}
