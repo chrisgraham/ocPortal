@@ -301,3 +301,8 @@ RewriteRule (.*) - [L]
 [/code]
 ",,,,
 content_read_tracking,New Features,Chris Graham,Licensed on the same terms as ocPortal,"New [tt]MARK_READ[/tt] and [tt]HAS_READ[/tt] symbols allow you to track whether members have read any kind of content. Just place them in the appropriate templates. For example, [tt]{+START,IF,{$NOT,{$HAS_READ,news,{ID}}}}This is unread{+END}[/tt] in [tt]NEWS_BOX.tpl[/tt] and [tt]{$MARK_READ,news,{ID}}[/tt] in [tt]NEWS_ENTRY_SCREEN.tpl[/tt]."
+downloads_followup_email,New Feature,Jason Verhagen,No License/No copyright asserted,"This addon adds follow-up email functionality to the ocPortal Downloads module. By default it will scan your download_logging database table for downloads for approximately the past 24 hours and send a follow-up email to each member that has downloaded any files. Members can enable, disable, or change the notification type and also do it on a per-category basis from their Profile page->Edit tab->Notifications tab and making the desired changes to the 'Downloads follow-up email' notification in the Content section of the Notifications tab. Admins can force the follow-up emails and/or private topics and prevent the members from changing the settings by making the necessary changes in the Admin Zone->Setup->Notification Lock-down->'Downloads follow-up email' in the Content section. 
+
+If you have any questions ask in the comments here or visit the official documentation and support topic at http://ocportal.com/forum/topicview/misc/addons/downloads-follow-up.htm
+
+Enjoy!",downloads,,,
