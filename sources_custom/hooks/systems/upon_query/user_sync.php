@@ -28,8 +28,8 @@ class upon_query_user_sync
 
 			$matches=array();
 			if (
-				(preg_match('#^UPDATE '.$prefix.'f_members .*WHERE id=(\d+)#',$query,$matches)!=0) || 
-				(preg_match('#^UPDATE '.$prefix.'f_member_custom_fields .*WHERE mf_member_id=(\d+)#',$query,$matches)!=0)
+				(preg_match('#^UPDATE '.$prefix.'f_members .*WHERE \(?id=(\d+)\)?#',$query,$matches)!=0) || 
+				(preg_match('#^UPDATE '.$prefix.'f_member_custom_fields .*WHERE \(?mf_member_id=(\d+)\)?#',$query,$matches)!=0)
 			)
 			{
 				require_code('user_sync');
