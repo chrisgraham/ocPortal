@@ -196,7 +196,11 @@ END;
 function save_zone_base_url($zone,$base_url)
 {
 	$config_path=get_custom_file_base().'/_config.php';
+	$tmp=fopen($config_path,'rb');
+	flock($tmp,LOCK_SH);
 	$config_file=file_get_contents($config_path);
+	flock($tmp,LOCK_UN);
+	fclose($tmp);
 	$config_file_before=$config_file;
 	$config_file=preg_replace('#\n?\$SITE_INFO[\'ZONE_MAPPING_'.preg_quote($zone,'#').'\']=array\(\'[^\']+\',\'[^\']+\'\);\n?#','',$config_file); // Strip any old entry
 	if ($base_url!='') // Add new entry, if appropriate
@@ -210,9 +214,12 @@ function save_zone_base_url($zone,$base_url)
 
 	if ($config_file!=$config_file_before)
 	{
-		$out=@fopen($config_path,'wb');
+		$out=@fopen($config_path,'ab');
 		if ($out===false) intelligent_write_error($config_path);
+		flock($out,LOCK_EX);
+		ftruncate($out,0);
 		fwrite($out,$config_file);
+		flock($out,LOCK_UN);
 		fclose($out);
 		sync_file($path);
 		fix_permissions($path);
