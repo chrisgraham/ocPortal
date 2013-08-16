@@ -718,6 +718,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 				if ((!is_null($cookies)) && (count($cookies)!=0)) curl_setopt($ch,CURLOPT_COOKIE,$_cookies);
 				$crt_path=get_file_base().'/data/curl-ca-bundle.crt';
+				if (get_value('disable_ssl_for__'.$url_parts['host'])==='1')
+					curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
 				curl_setopt($ch,CURLOPT_CAINFO,$crt_path);
 				curl_setopt($ch,CURLOPT_CAPATH,$crt_path);
 				//if (!$no_redirect) @curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true); // May fail with safe mode, meaning we can't follow Location headers. But we can do better ourselves anyway and protect against file:// exploits.
