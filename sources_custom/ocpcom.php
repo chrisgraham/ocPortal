@@ -326,7 +326,9 @@ function find_all_servers()
 function reset_info_php($server)
 {
 	$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/info.php';
-	$myfile=fopen($path,'wt');
+	$myfile=fopen($path,'at');
+	flock($myfile,LOCK_EX);
+	ftruncate($myfile,0);
 	$contents="<"."?php
 global \$SITE_INFO;
 \$SITE_INFO['default_lang']='EN';
@@ -376,6 +378,7 @@ global \$SITE_INFO;
 	}
 	$contents.="?".">";
 	fwrite($myfile,$contents);
+	flock($myfile,LOCK_UN);
 	fclose($myfile);
 }
 
@@ -401,8 +404,11 @@ function reset_aliases()
 		$text.=$site['s_codename'].'.3c.ms:'.'alias-myocp_'.$site['s_codename'].chr(10);
 		if ($site['s_domain_name']!='') $text.=$site['s_domain_name'].':'.'alias-myocp_'.$site['s_codename'].chr(10);
 	}
-	$myfile=fopen(special_myocp_dir().'/virtualdomains','wt');
+	$myfile=fopen(special_myocp_dir().'/virtualdomains','at');
+	flock($myfile,LOCK_EX);
+	ftruncate($myfile,0);
 	fwrite($myfile,$text);
+	flock($myfile,LOCK_UN);
 	fclose($myfile);
 
 	// Rebuild rcpthosts
@@ -420,8 +426,11 @@ function reset_aliases()
 		if ($site['s_domain_name']!='')
 			$hosts[$site['s_domain_name']]=1;
 	}
-	$myfile=fopen(special_myocp_dir().'/rcpthosts','wt');
+	$myfile=fopen(special_myocp_dir().'/rcpthosts','at');
+	flock($myfile,LOCK_EX);
+	ftruncate($myfile,0);
 	fwrite($myfile,implode(chr(10),array_keys($hosts)).chr(10));
+	flock($myfile,LOCK_UN);
 	fclose($myfile);
 
 	// Go through aliases directory and remove myOCP aliases
@@ -440,8 +449,11 @@ function reset_aliases()
 	$emails=$GLOBALS['SITE_DB']->query_select('sites_email',array('*'));
 	foreach ($emails as $email)
 	{
-		$myfile=fopen($a_path.'/.qmail-myocp_'.filter_naughty($email['s_codename']).'_'.filter_naughty(str_replace('.',':',$email['s_email_from'])),'wt');
+		$myfile=fopen($a_path.'/.qmail-myocp_'.filter_naughty($email['s_codename']).'_'.filter_naughty(str_replace('.',':',$email['s_email_from'])),'at');
+		flock($myfile,LOCK_EX);
+		ftruncate($myfile,0);
 		fwrite($myfile,'&'.$email['s_email_to']);
+		flock($myfile,LOCK_UN);
 		fclose($myfile);
 	}
 

@@ -36,8 +36,11 @@ class upon_query_user_export
 			(preg_match('#^UPDATE '.$prefix.'f_member_custom_fields .*WHERE \(?mf_member_id=(\d+)\)?#',$query,$matches)!=0)
 		)
 		{
-			require_code('user_export');
-			do_user_export__single_ipc(intval($matches[1]));
+			if (strpos($query,'m_email_address')!==false)
+			{
+				require_code('user_export');
+				do_user_export__single_ipc(intval($matches[1]));
+			}
 			return;
 		}
 

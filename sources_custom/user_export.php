@@ -40,7 +40,9 @@ function do_user_export($to_file=true)
 		@mkdir($outdir,0777);
 		fix_permissions($outdir,0777);
 		$tmp_path=$outdir.'/_temp.csv';
-		$outfile=fopen($tmp_path,'wb');
+		$outfile=fopen($tmp_path,'ab');
+		flock($outfile,LOCK_EX);
+		ftruncate($outfile,0);
 	} else
 	{
 		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) access_denied('ADMIN_ONLY');
@@ -84,6 +86,7 @@ function do_user_export($to_file=true)
 	}
 	while (count($rows)>0);
 
+	flock($outfile,LOCK_UN);
 	fclose($outfile);
 	if ($to_file)
 	{

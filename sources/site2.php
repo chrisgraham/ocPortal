@@ -283,7 +283,11 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
 	// Not cached :(
+	$tmp=fopen($file_base.'/'.$string,'rb');
+	flock($tmp,LOCK_SH);
 	$result=file_get_contents($file_base.'/'.$string);
+	flock($tmp,LOCK_UN);
+	fclose($tmp);
 
 	// Fix bad unicode
 	if (get_charset()=='utf-8')

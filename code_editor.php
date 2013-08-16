@@ -480,7 +480,7 @@ END;
 		{
 			if (is_null($conn)) // Via direct access
 			{
-				$myfile=@fopen($save_path,'wt');
+				$myfile=@fopen($save_path,'at');
 				if ($myfile===false)
 				{
 					echo <<<END
@@ -497,6 +497,8 @@ if (window.alert!==null)
 END;
 					return;
 				}
+				flock($myfile,LOCK_EX);
+				ftruncate($myfile,0);
 				if (fwrite($myfile,$file)===false)
 				{
 					fclose($myfile);
@@ -514,6 +516,7 @@ if (window.alert!==null)
 END;
 					return;
 				}
+				flock($myfile,LOCK_UN);
 				fclose($myfile);
 			} else // Via FTP
 			{

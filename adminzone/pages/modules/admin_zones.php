@@ -251,7 +251,11 @@ class Module_admin_zones
 				if (!file_exists($fullpath)) $fullpath=zone_black_magic_filterer((($page_info[0]=='comcode' || $pure)?get_file_base():get_custom_file_base()).'/'.$current_zone.'/pages/'.strtolower($page_info[0]).'/'.get_site_default_lang().'/'.$current_for.'.txt');
 				if (file_exists($fullpath))
 				{
+					$tmp=fopen($fullpath,'rb');
+					flock($tmp,LOCK_SH);
 					$comcode=file_get_contents($fullpath);
+					flock($tmp,LOCK_UN);
+					fclose($tmp);
 					$default_parsed=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true);
 				} else
 				{
@@ -411,8 +415,11 @@ class Module_admin_zones
 				}
 
 				// Save
-				$myfile=@fopen($fullpath,'wt') OR intelligent_write_error($fullpath);
+				$myfile=@fopen($fullpath,'at') OR intelligent_write_error($fullpath);
+				flock($myfile,LOCK_EX);
+				ftruncate($myfile,0);
 				if (fwrite($myfile,$comcode)<strlen($comcode)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				flock($myfile,LOCK_UN);
 				fclose($myfile);
 				fix_permissions($fullpath);
 				sync_file($fullpath);

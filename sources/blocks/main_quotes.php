@@ -90,6 +90,7 @@ class Block_main_quotes
 	{
 		$myfile=@fopen(filter_naughty($filename,true),'rt');
 		if ($myfile===false) return '';
+		flock($myfile,LOCK_SH);
 		$i=0;
 		$line=array();
 		while (true)
@@ -102,6 +103,7 @@ class Block_main_quotes
 		}
 		if ($i==0) return '';
 		$r=mt_rand(0,$i-1);
+		flock($myfile,LOCK_UN);
 		fclose($myfile);
 		return trim($line[$r]);
 	}

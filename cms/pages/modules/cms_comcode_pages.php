@@ -632,7 +632,11 @@ class Module_cms_comcode_pages
 				$file_base=get_file_base();
 			if (file_exists($file_base.'/'.$restore_from))
 			{
+				$tmp=fopen($file_base.'/'.$restore_from,'rb');
+				flock($tmp,LOCK_SH);
 				$contents=file_get_contents($file_base.'/'.$restore_from);
+				flock($tmp,LOCK_UN);
+				fclose($tmp);
 				if (is_null(get_param('restore_from',NULL)))
 				{
 					$string_index=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
@@ -994,10 +998,13 @@ class Module_cms_comcode_pages
 		$new=$_new['comcode'];
 		if ((!file_exists($fullpath)) || ($new!=file_get_contents($fullpath)))
 		{
-			$myfile=@fopen($fullpath,'wt');
+			$myfile=@fopen($fullpath,'at');
 			if ($myfile===false) intelligent_write_error($fullpath);
+			flock($myfile,LOCK_EX);
+			ftruncate($myfile,0);
 			final_attachments_from_preview($zone.':'.$file);
 			if (fwrite($myfile,$new)<strlen($new)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			flock($myfile,LOCK_UN);
 			fclose($myfile);
 			sync_file($fullpath);
 

@@ -355,8 +355,14 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		{
 			$_data=new ocp_tempcode();
 			$tcp_path=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.$lang.'/'.$_codename.$suffix.'.tcd';
-			$data=@file_get_contents($tcp_path);
-			if ($data==='') $data=false; // '' needed for PHP4 - weird
+			if (is_file($tcp_path))
+			{
+				$tmp=fopen($tcp_path,'rb');
+				flock($tmp,LOCK_SH);
+				$data=file_get_contents($tcp_path);
+				flock($tmp,LOCK_UN);
+				fclose($tmp);
+			} else $data=false;
 			if ($data!==false)
 			{
 				$_data->from_assembly($data);

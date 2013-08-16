@@ -1013,10 +1013,13 @@ class Module_admin_config
 	{
 		$title=get_screen_title('FIELD_FILTERS');
 
-		$myfile=@fopen(get_custom_file_base().'/data_custom/fields.xml','wt');
+		$myfile=@fopen(get_custom_file_base().'/data_custom/fields.xml','at');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/fields.xml');
+		flock($myfile,LOCK_EX);
+		ftruncate($myfile,0);
 		$xml=post_param('xml');
 		if (fwrite($myfile,$xml)<strlen($xml)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		flock($myfile,LOCK_UN);
 		fclose($myfile);
 		fix_permissions(get_custom_file_base().'/data_custom/fields.xml');
 		sync_file(get_custom_file_base().'/data_custom/fields.xml');
@@ -1050,10 +1053,13 @@ class Module_admin_config
 	{
 		$title=get_screen_title('BREADCRUMB_OVERRIDES');
 
-		$myfile=@fopen(get_custom_file_base().'/data_custom/breadcrumbs.xml','wt');
+		$myfile=@fopen(get_custom_file_base().'/data_custom/breadcrumbs.xml','at');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/breadcrumbs.xml');
+		flock($myfile,LOCK_EX);
+		ftruncate($myfile,0);
 		$xml=post_param('xml');
 		if (fwrite($myfile,$xml)<strlen($xml)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		flock($myfile,LOCK_UN);
 		fclose($myfile);
 		fix_permissions(get_custom_file_base().'/data_custom/breadcrumbs.xml');
 		sync_file(get_custom_file_base().'/data_custom/breadcrumbs.xml');

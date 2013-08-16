@@ -419,7 +419,9 @@ function do_set()
 	$path=$FILE_BASE.'/exports/file_backups/'.$info_file.'.'.strval(time());
 	$copied_ok=@copy($FILE_BASE.'/'.$info_file,$path);
 	if ($copied_ok!==false) co_sync_file($path);
-	$info=fopen($FILE_BASE.'/'.$info_file,'wt');
+	$info=fopen($FILE_BASE.'/'.$info_file,'at');
+	flock($info,LOCK_EX);
+	ftruncate($info,0);
 	if ($info===false) exit();
 	fwrite($info,"<"."?php\n");
 	foreach ($new as $key=>$val)
@@ -443,6 +445,7 @@ function do_set()
 			}
 		}
 	}
+	flock($info,LOCK_UN);
 	fclose($info);
 	co_sync_file($info_file);
 

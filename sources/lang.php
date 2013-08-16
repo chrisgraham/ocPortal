@@ -747,8 +747,11 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 					$contents=str_replace("'".$codename.'='.$value."'","'".$codename."'",$orig_contents);
 					if ($orig_contents!=$contents)
 					{
-						$myfile=fopen($inc,'wt');
+						$myfile=fopen($inc,'at');
+						flock($myfile,LOCK_EX);
+						ftruncate($myfile,0);
 						fwrite($myfile,$contents);
+						flock($myfile,LOCK_UN);
 						fclose($myfile);
 					}
 				}
