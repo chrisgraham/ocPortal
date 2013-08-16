@@ -1167,7 +1167,7 @@ function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_tex
 					$pass=true;
 				} else
 				{
-					$pass=match_key_match($matches[1]); // An AND condition essentially
+					$pass=match_key_match($matches[2]); // An AND condition essentially
 				}
 			}
 		} else
