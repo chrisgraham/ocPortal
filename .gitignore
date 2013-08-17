@@ -60,3 +60,5 @@ _tests/codechecker/functions.dat
 /closed.html
 /closed.html.old
 /sites
+data_custom/modules/user_export/out.csv
+
