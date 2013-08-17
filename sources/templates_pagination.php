@@ -131,6 +131,8 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 			$continues_left=new ocp_tempcode();
 		}
 
+		$bot=(is_guest()) && (!is_null(get_bot_type()));
+
 		// Show the page number jump links
 		for ($x=$from;$x<$to;$x++)
 		{
@@ -143,7 +145,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 			{
 				$rel=NULL;
 				if ($x==0) $rel='first';
-				$parts->attach(do_template('PAGINATION_PAGE_NUMBER_LINK',array('_GUID'=>'a6d1a0ba93e3b7deb6fe6f8f1c117c0f','REL'=>$rel,'TITLE'=>$title,'URL'=>$cat_url,'P'=>strval($x+1))));
+				$parts->attach(do_template('PAGINATION_PAGE_NUMBER_LINK',array('_GUID'=>'a6d1a0ba93e3b7deb6fe6f8f1c117c0f','NOFOLLOW'=>($x*$max>$max*5) && ($bot),'REL'=>$rel,'TITLE'=>$title,'URL'=>$cat_url,'P'=>strval($x+1))));
 			}
 		}
 
@@ -164,7 +166,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 			$p=($max==0)?1.0:($start/$max+2);
 			$rel=NULL;
 			if (($start+$max*2)>$max_rows) $rel='last';
-			$next=do_template('PAGINATION_NEXT_LINK',array('_GUID'=>'6da9b396bdd46b7ee18c05b5a7eb4d10','REL'=>$rel,'TITLE'=>$title,'NUM_PAGES'=>integer_format($num_pages),'P'=>integer_format(intval($p)),'URL'=>$cat_url));
+			$next=do_template('PAGINATION_NEXT_LINK',array('_GUID'=>'6da9b396bdd46b7ee18c05b5a7eb4d10','NOFOLLOW'=>($start+$max>$max*5) && ($bot),'REL'=>$rel,'TITLE'=>$title,'NUM_PAGES'=>integer_format($num_pages),'P'=>integer_format(intval($p)),'URL'=>$cat_url));
 		} else $next=do_template('PAGINATION_NEXT');
 
 		// Link to last
