@@ -162,7 +162,7 @@ class Hook_fields_picture
 			$temp=get_url('',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
 			$value=$temp[0];
 			if (($editing) && ($value=='') && (post_param_integer($tmp_name.'_unlink',0)!=1))
-				return '';
+				return is_null($old_value)?'':$old_value;
 
 			if ((!is_null($old_value)) && ($old_value!='') && (($value!='') || (post_param_integer('custom_'.strval($field['id']).'_value_unlink',0)==1)))
 			{
