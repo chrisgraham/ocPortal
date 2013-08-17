@@ -673,21 +673,22 @@ function init_form_saving(form_id)
 			cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
 			cookie_value=read_cookie(encodeURIComponent(cookie_name));
 
-			if ((cookie_value!='') && (cookie_value!='0'))
+			if ((cookie_value!='') && (cookie_value!='0')) // Fields are auto-saved individually, but e know if something was auto-saved via the cookie reference
 			{
 				result=do_ajax_request('{$FIND_SCRIPT;,autosave}?type=retrieve'+keep_stub(),false,'key='+window.encodeURIComponent(cookie_name));
 				if ((result) && (result.responseText) && (posting_form.elements[i].value.length<result.responseText.length))
 				{
-					fields_to_do[name]=result.responseText;
+					fields_to_do[name]=result.responseText.replace(/\u0000/g,'');
 					fields_to_do_counter++;
 					if (result.responseText.length>biggest_length_data.length)
 					{
-						biggest_length_data=result.responseText;
+						biggest_length_data=result.responseText; // The longest is what we quote to the user as being restored
 					}
 				}
 			}
 			window.last_autosave=new Date();
 			add_event_listener_abstract(posting_form.elements[i],'keypress',handle_form_saving);
+			add_event_listener_abstract(posting_form.elements[i],'blur',handle_form_saving);
 			posting_form.elements[i].externalonKeyPress=handle_form_saving;
 		}
 	}
@@ -728,10 +729,12 @@ function init_form_saving(form_id)
 
 function handle_form_saving(event,target,force)
 {
+	if (typeof force=='undefined') var force=(event.type=='blur');
+
 	var this_date=new Date();
 	if (!force)
 	{
-		if ((this_date.getTime()-window.last_autosave.getTime())<20000) return; // Only save every 20 seconds
+		if ((this_date.getTime()-window.last_autosave.getTime())<20*1000) return; // Only save every 20 seconds
 	}
 
 	if (typeof event=='undefined') var event=window.event;

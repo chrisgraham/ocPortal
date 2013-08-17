@@ -152,6 +152,7 @@ class Module_contact_member
 			'TEXT'=>$text,
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
+ 			'SUPPORT_AUTOSAVE'=>true,
 		));
 	}
 
@@ -240,6 +241,9 @@ class Module_contact_member
 		log_it('EMAIL',strval($member_id),$to_name);
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+		require_code('autosave');
+		clear_ocp_autosave();
 
 		$url=get_param('redirect');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));

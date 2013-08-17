@@ -280,7 +280,18 @@ class Module_recommend
 
 		$javascript=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'08a538ca8d78597b0417f464758a59fd','JAVASCRIPT'=>$javascript,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'08a538ca8d78597b0417f464758a59fd',
+			'JAVASCRIPT'=>$javascript,
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'HIDDEN'=>$hidden,
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'SUBMIT_NAME'=>$submit_name,
+			'TEXT'=>$text,
+ 			'SUPPORT_AUTOSAVE'=>true,
+		));
 	}
 
 	/**
@@ -664,6 +675,9 @@ class Module_recommend
 		}
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+		require_code('autosave');
+		clear_ocp_autosave();
 
 		return inform_screen($title,do_lang_tempcode('RECOMMENDATION_MADE'));
 	}
