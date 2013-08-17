@@ -4180,3 +4180,11 @@ user_simple_csv_sync
  - sources_custom/hooks/systems/upon_query/user_export.php
  - sources_custom/user_export.php
  - sources_custom/user_import.php
+
+downloads_followup_email
+------------------------
+ - lang_custom/EN/downloads_followup_email.ini
+ - sources_custom/hooks/systems/cron/downloads_followup_email.php
+ - sources_custom/hooks/systems/notifications/downloads_followup_email.php
+ - themes/default/templates_custom/DOWNLOADS_FOLLOWUP_EMAIL.tpl
+ - themes/default/templates_custom/DOWNLOADS_FOLLOWUP_EMAIL_DOWNLOAD_LIST.tpl
