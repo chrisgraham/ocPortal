@@ -120,7 +120,8 @@ function comcode_to_clean_text($message_plain)
 		}
 		while ($message_plain!=$before);
 
-		$message_plain=static_evaluate_tempcode(template_to_tempcode($message_plain,0,false,'',NULL,NULL,true));
+		if (strpos($message_plain,'{')!==false)
+			$message_plain=static_evaluate_tempcode(template_to_tempcode($message_plain,0,false,'',NULL,NULL,true));
 	}
 
 	$match=array();

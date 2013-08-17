@@ -133,13 +133,13 @@ function do_user_export__single_ipc($member_id,$delete=false)
 		{
 			if (USER_EXPORT_IPC_URL_DELETE!==NULL)
 			{
-				http_download_file(USER_EXPORT_IPC_URL_DELETE.'?'.$out,NULL,true);
+				http_download_file(USER_EXPORT_IPC_URL_DELETE.'?'.$out,NULL,false);
 			}
 		} else
 		{
 			if (USER_EXPORT_IPC_URL_EDIT!==NULL)
 			{
-				http_download_file(USER_EXPORT_IPC_URL_EDIT.'?'.$out,NULL,true);
+				http_download_file(USER_EXPORT_IPC_URL_EDIT.'?'.$out,NULL,false);
 			}
 
 			if (USER_EXPORT_EMAIL!==NULL)

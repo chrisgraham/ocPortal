@@ -22,16 +22,19 @@
 {$,iPhone/Android/etc should know they have an optimised design heading to them}
 {+START,IF,{$MOBILE}}
 	{+START,IF,{$NOT,{$_GET,overlay}}}
-		{$,For this to work, fixed width must be removed or the device-width must be replaced with the fixed width and initial-scale removed}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	{+END}
 	{+START,IF,{$_GET,overlay}}
-		<meta name="viewport" content="width=285, maximum-scale=1.0, user-scalable=no" />
+		<meta name="viewport" content="width=285, user-scalable=yes" />
 	{+END}
 {+END}
-{$,Uncomment if iPad should not be allowed to zoom}
 {+START,IF,{$NOT,{$MOBILE}}}
-	{$,<meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=0" />}
+	{+START,IF,{$CONFIG_OPTION,fixed_width}}
+		<meta name="viewport" content="width=982, user-scalable=yes" />
+	{+END}
+	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
+		<meta name="viewport" content="width=device-width, user-scalable=yes" />
+	{+END}
 {+END}
 
 {$,Meta data for the page: standard meta data, Dublin Core meta data, Facebook Open Graph, and ocPortal meta data extensions [OCPCORE]}

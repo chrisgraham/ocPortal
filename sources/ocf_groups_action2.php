@@ -263,6 +263,7 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 
 	if (ocf_get_group_property($id,'hidden')==0)
 	{
+		require_lang('ocf');
 		require_code('notifications');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 		$group_name=ocf_get_group_name($id);
