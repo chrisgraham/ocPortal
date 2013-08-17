@@ -2372,8 +2372,6 @@ div.wysiwyg_toolbar_color_finder {
 .comments_posting_form_inner {
 	text-align: {!en_left};
 	padding: 1em 0 0 0;
-	margin: 0 auto;
-	width: {$?,{$MOBILE},100%,525}px;
 	{+START,IF,{$MOBILE}}
 		overflow: hidden;
 	{+END}
