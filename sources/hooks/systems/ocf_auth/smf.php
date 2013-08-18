@@ -50,7 +50,7 @@ class Hook_ocf_auth_smf
 			$new_key=str_pad(strlen($key)<=64?$key:pack('H*',md5($key)),64,chr(0x00));
 
 			$a=md5(($new_key^str_repeat(chr(0x5c),64)).pack('H*',md5(($new_key^str_repeat(chr(0x36),64)).$data))); // SMF 1.0 style
-			$b=sha1($username.$password_given);
+			$b=function_exists('sha1')?sha1($username.$password_given):$a;
 
 			if (($a!=$row['m_pass_hash_salted']) && ($b!=$row['m_pass_hash_salted']))
 			{

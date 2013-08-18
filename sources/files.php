@@ -293,8 +293,8 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'txt'=>'(imports|exports)/.*',
 
 		// Cache files
-		'lcd'=>'lang_cached(/.*)?',
-		'gcd'=>'persistent_cache|persistant_cache', // LEGACY (persistant_cache)
+		'lcd'=>'(lang_cached|caches)(/.*)?', // TODO Future proof (v10)
+		'gcd'=>'persistent_cache|persistant_cache|caches/.*', // LEGACY (persistant_cache) TODO Future proof (v10)
 		'tcp'=>'themes/[^/]*/templates_cached/.*',
 		'tcd'=>'themes/[^/]*/templates_cached/.*',
 		'css'=>'themes/[^/]*/templates_cached/.*',

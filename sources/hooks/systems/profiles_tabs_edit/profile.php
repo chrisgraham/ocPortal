@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_Edit_profile
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		if (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')) || (has_specific_permission($member_id_viewing,'member_maintenance')));
+		if (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')) || (has_specific_permission($member_id_viewing,'member_maintenance')))
 		{
 			$mini_mode=false;
 			$groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id_of);
