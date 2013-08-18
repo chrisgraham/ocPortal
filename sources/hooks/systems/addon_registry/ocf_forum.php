@@ -1608,7 +1608,8 @@ class Hook_addon_registry_ocf_forum
 			'SCREEN_BUTTONS'=>$buttons,
 			'POSTS'=>$posts,
 			'MAY_CHANGE_MAX'=>lorem_word(),
-			'LAST_POSTER'=>placeholder_random()
+			'LAST_POSTER'=>placeholder_random(),
+			'FORUM_ID'=>placeholder_id(),
 		));
 
 		return array(

@@ -155,7 +155,9 @@ function delete_news_category($id)
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 
-	$min=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval((integer)$id));
+	$min=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT c.id FROM '.get_table_prefix().'news_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.nc_title WHERE c.id<>'.strval($id).' AND '.db_string_equal_to('text_original',do_lang('news:NC_general')));
+	if (is_null($min))
+		$min=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval((integer)$id));
 	if (is_null($min))
 	{
 		warn_exit(do_lang_tempcode('YOU_MUST_KEEP_ONE_NEWS_CAT'));

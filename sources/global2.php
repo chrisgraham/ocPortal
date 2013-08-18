@@ -537,20 +537,27 @@ function init__global2()
 
 	$default_memory_limit=get_value('memory_limit');
 	if ((is_null($default_memory_limit)) || ($default_memory_limit=='') || ($default_memory_limit=='0') || ($default_memory_limit=='-1'))
+	{
 		$default_memory_limit='64M';
-	if (substr($default_memory_limit,-2)=='MB') $default_memory_limit=substr($default_memory_limit,0,strlen($default_memory_limit)-1);
-	if ((is_numeric($default_memory_limit)) && (intval($default_memory_limit)<1024*1024*16)) $default_memory_limit.='M';
+	} else
+	{
+		if (substr($default_memory_limit,-2)=='MB') $default_memory_limit=substr($default_memory_limit,0,strlen($default_memory_limit)-1);
+		if ((is_numeric($default_memory_limit)) && (intval($default_memory_limit)<1024*1024*16)) $default_memory_limit.='M';
+	}
 	@ini_set('memory_limit',$default_memory_limit);
+	memory_limit_for_max_param('max');
 	if ((isset($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 	{
 		if (get_param_integer('keep_avoid_memory_limit',0)==1)
 		{
 			disable_php_memory_limit();
-		}
-		$memory_test=get_param_integer('keep_memory_limit_test',0);
-		if (($memory_test!=0) && ($memory_test<=32))
+		} else
 		{
-			@ini_set('memory_limit',strval($memory_test).'M');
+			$memory_test=get_param_integer('keep_memory_limit_test',0);
+			if (($memory_test!=0) && ($memory_test<=32))
+			{
+				@ini_set('memory_limit',strval($memory_test).'M');
+			}
 		}
 	}
 
@@ -664,6 +671,27 @@ function fast_spider_cache($bot=true)
 		{
 			@unlink($fast_cache_path);
 			sync_file($fast_cache_path);
+		}
+	}
+}
+
+/**
+ * Raise the PHP memory limit to cater for a requested large result set.
+ *
+ * @param  ID_TEXT		The max parameter name
+ */
+function memory_limit_for_max_param($max_param)
+{
+	$max=get_param_integer($max_param,NULL); // If making a large request and are an admin, raise PHP memory limit
+	if (($max!==NULL) && ($max>80) && (function_exists('has_specific_permission')))
+	{
+		if (has_specific_permission(get_member(),'remove_page_split'))
+		{
+			$shl=@ini_get('suhosin.memory_limit');
+			if (($shl===false) || ($shl=='') || ($shl=='0'))
+			{
+				@ini_set('memory_limit','128M');
+			}
 		}
 	}
 }

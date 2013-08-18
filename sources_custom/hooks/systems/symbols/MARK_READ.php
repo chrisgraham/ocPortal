@@ -9,7 +9,7 @@ class Hook_symbol_MARK_READ
 			$GLOBALS['SITE_DB']->create_table('content_read',array(
 				'r_content_type'=>'*ID_TEXT',
 				'r_content_id'=>'*ID_TEXT',
-				'r_member_id'=>'USER',
+				'r_member_id'=>'*USER',
 				'r_time'=>'TIME',
 			));
 			$GLOBALS['SITE_DB']->create_index('content_read','content_read',array('r_content_type','r_content_id'));
