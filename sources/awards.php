@@ -196,6 +196,11 @@ function handle_award_setting($content_type,$id)
 			$has_award=(!is_null($test)) && ($test===$id);
 			$will_have_award=(post_param_integer('award_'.strval($row['id']),0)==1);
 
+			if (($will_have_award) && ($has_award)) // Has to be recached
+			{
+				decache('main_awards');
+			}
+
 			if (($will_have_award) && (!$has_award)) // Set
 			{
 				give_award($row['id'],$id);

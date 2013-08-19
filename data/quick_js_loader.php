@@ -20,9 +20,9 @@
 
 @ini_set('zlib.output_compression','On');
 
-header("Pragma: public");
+header('Pragma: public');
 $time=400*60*60*24;
-header('Cache-Control: maxage='.strval(time()+$time));
+header('Cache-Control: max-age='.strval(time()+$time));
 header('Expires: '.gmdate('D, d M Y H:i:s',time()+$time).' GMT');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()-$time).' GMT');
 

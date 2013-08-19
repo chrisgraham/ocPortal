@@ -371,6 +371,9 @@ body.website_body {
 	color: {$GET,slightly_seeded_text};
 	background: {$GET,main_background};
 }
+.email_body .box {
+	color: {$GET,slightly_seeded_text};
+}
 body.website_body.frame {
 	background: transparent; /* Don't assume too much for a frame, it may be nested inside a box for example */
 }
@@ -473,6 +476,7 @@ header h1 {
 	.global_navigation {
 		margin-top: 99px !important;
 		text-align: center !important;
+		min-height: 30px !important;
 	}
 	*/
 {+END}
@@ -2486,6 +2490,9 @@ dl.compact_list>dt {
 	margin: 0 0.5em 0 8px;
 	clear: both;
 }
+.global_side_panel .box dl.compact_list>dt {
+	margin-left: 0;
+}
 dl.compact_list>dt:after {
 	content: ":";
 }
@@ -3493,7 +3500,7 @@ ul.nl, .nl ul {
 .menu_type__zone a:hover {
 	text-shadow: 0 0 10px {$GET,zone_jump_out_1_shadow};
 }
-.menu_type__zone li:last-child a:hover {
+.menu_type__zone li a[href*="adminzone"]:hover {
 	text-shadow: 0 0 10px {$GET,zone_jump_out_2_shadow};
 }
 

@@ -11,7 +11,7 @@
 						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{URL*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
 					{+END}
 					{+START,IF_NON_EMPTY,{WARNING}}
-						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event); var t=this; window.fauxmodal_confirm('{WARNING*;}',function(answer) { if (answer) click_link(t); }); return false;" href="{URL*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
+						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event); var t=this; window.fauxmodal_confirm('{WARNING;*}',function(answer) { if (answer) click_link(t); }); return false;" href="{URL*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
 					{+END}
 				</div>
 
@@ -39,7 +39,7 @@
 									if (test)
 									{
 										_this.href+=(_this.href.indexOf('?')!=-1)?'&':'?';
-										_this.href+='{AUTO_ADD*}=1';
+										_this.href+='{AUTO_ADD;/}=1';
 									}
 									click_link(_this);
 								}

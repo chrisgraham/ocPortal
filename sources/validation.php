@@ -1066,7 +1066,7 @@ function _get_next_tag()
 					$status=IN_TAG_BETWEEN_ATTRIBUTES;
 					if (isset($attribute_map[$current_attribute_name])) $errors[]=array('XML_TAG_DUPLICATED_ATTRIBUTES',$current_tag);
 					$attribute_map[$current_attribute_name]=$current_attribute_name;
-					$current_attribute_name='';
+					$current_attribute_name=$next;
 					$VALUE_RANGES[]=array($POS-1,$POS-1);
 				}
 				break;

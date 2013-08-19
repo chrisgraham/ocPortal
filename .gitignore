@@ -64,3 +64,4 @@ _tests/codechecker/functions.dat
 /sites
 /db.sql
 *.tempfile
+data_custom/modules/user_export/out.csv

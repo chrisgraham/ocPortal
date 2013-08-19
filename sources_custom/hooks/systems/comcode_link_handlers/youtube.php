@@ -36,7 +36,7 @@ class Hook_comcode_link_handler_youtube
 	 */
 	function bind($link,$link_captions_title,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits)
 	{
-		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$link)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$link)!=0))
+		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$link)!=0) || (preg_match('#^https?://youtu\.be/([\w\-]+)#',$link)!=0))
 		{
 			global $IMPORTED_CUSTOM_COMCODE;
 			if (!$IMPORTED_CUSTOM_COMCODE)

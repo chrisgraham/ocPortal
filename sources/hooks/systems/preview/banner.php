@@ -44,6 +44,7 @@ class Hook_Preview_banner
 
 		// Check according to banner type
 		$title_text=post_param('title_text','');
+		$direct_code=post_param('direct_code','');
 		$url_param_name='image_url';
 		$file_param_name='file';
 		require_code('uploads');
@@ -53,12 +54,15 @@ class Hook_Preview_banner
 		$banner_type_row=$_banner_type_rows[0];
 		if ($banner_type_row['t_is_textual']==0)
 		{
-			$urls=get_url($url_param_name,$file_param_name,'uploads/banners',0,$is_upload?OCP_UPLOAD_IMAGE:OCP_UPLOAD_ANYTHING);
-			$img_url=fixup_protocolless_urls($urls[0]);
-			if ($img_url=='')
+			if ($direct_code=='')
 			{
-				warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD_BANNERS'));
-			}
+				$urls=get_url($url_param_name,$file_param_name,'uploads/banners',0,$is_upload?OCP_UPLOAD_IMAGE:OCP_UPLOAD_ANYTHING);
+				$img_url=fixup_protocolless_urls($urls[0]);
+				if ($img_url=='')
+				{
+					warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD_BANNERS'));
+				}
+			} else $img_url='';
 		} else
 		{
 			$img_url='';

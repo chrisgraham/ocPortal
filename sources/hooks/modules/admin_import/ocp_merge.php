@@ -1538,7 +1538,7 @@ class Hook_ocp_merge
 		{
 			if (import_check_if_imported('catalogue_category',strval($row['id']))) continue;
 
-			if ((is_null($row['cc_parent_id'])) && ($GLOBALS['SITE_DB']->query_value('catalogues','c_is_tree',array('c_name'=>$row['c_name']))==1))
+			if ((is_null($row['cc_parent_id'])) && ($GLOBALS['SITE_DB']->query_select_value('catalogues','c_is_tree',array('c_name'=>$row['c_name']))==1))
 			{
 				$real_root=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_catalogues','id',array('cc_parent_id'=>NULL,'c_name'=>$row['c_name']));
 				if (!is_null($real_root))

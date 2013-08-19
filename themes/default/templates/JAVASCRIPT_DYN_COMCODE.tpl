@@ -225,6 +225,7 @@ function flip_page(to,pass_id,sections)
 
 					x.style.width='';
 					x.style.position='static';
+					x.style.zIndex=10;
 					set_opacity(x,1.0);
 				} else
 				{
@@ -233,6 +234,7 @@ function flip_page(to,pass_id,sections)
 						fade_transition(x,0,30,-5);
 					x.style.width=(find_width(x)-24)+'px'; // 24=lhs padding+rhs padding+lhs border+rhs border
 					x.style.position='absolute';
+					x.style.zIndex=-10;
 					x.style.top='0';
 					x.parentNode.style.position='relative';
 				}

@@ -60,9 +60,8 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 		case 'mov':
 			$info=_get_mov_details($file);
 			break;
+		case 'f4v':
 		case 'mp4':
-			$info=_get_mov_details($file);
-			break;
 		case 'm4v':
 			$info=_get_mov_details($file);
 			break;
@@ -1070,6 +1069,8 @@ function watermark_gallery_image($gallery,$file_path,$filename)
 	_watermark_corner($source,$watermark_bottom_right,1,1);
 
 	// Save
+	imagealphablending($source,false);
+	if (function_exists('imagesavealpha')) imagesavealpha($source,true);
 	if ($ext=='png') imagepng($source,$file_path);
 	elseif (($ext=='jpg') || ($ext=='jpeg')) imagejpeg($source,$file_path);
 	elseif ((function_exists('imagegif')) && ($ext=='gif')) imagegif($source,$file_path);

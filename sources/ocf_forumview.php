@@ -351,7 +351,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($moderator_actions);
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),$start,'forum_start',$max,'forum_max',$details['max_rows'],false,5,NULL,($type=='pt')?'tab__pts':'');
+		$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),$start,'forum_start',$max,'forum_max',$details['max_rows'],false,5,NULL,($type=='pt' && get_page_name()=='members')?'tab__pts':'');
 
 		$order=array_key_exists('order',$details)?$details['order']:'last_post';
 		$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array(
@@ -655,6 +655,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 		'MARKER'=>$marker,
 		'TOPIC_ROW_LINKS'=>$topic_row_links,
 		'TOPIC_ROW_MODIFIERS'=>$topic_row_modifiers,
+		'_TOPIC_ROW_MODIFIERS'=>$modifiers,
 		'POST'=>$post,
 		'EMOTICON'=>$emoticon,
 		'DESCRIPTION'=>$topic['description'],

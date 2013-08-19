@@ -11,13 +11,13 @@
 	window.setTimeout(function () {
 		var element;
 		var target_window=window.opener?window.opener:window.parent;
-		element=target_window.document.getElementById('{FIELD_NAME/;}');
+		element=target_window.document.getElementById('{FIELD_NAME;/}');
 		if (!element)
 		{
 			target_window=target_window.frames['iframe_page'];
-			element=target_window.document.getElementById('{FIELD_NAME/;}');
+			element=target_window.document.getElementById('{FIELD_NAME;/}');
 		}
-		element=ensure_true_id(element,'{FIELD_NAME/;}');
+		element=ensure_true_id(element,'{FIELD_NAME;/}');
 
 		var comcode,comcode_semihtml;
 		if (is_comcode_xml(element))
@@ -78,7 +78,10 @@
 					_comcode=_comcode.replace(rep_from,rep_to);
 				}
 
-				target_window.insert_textbox(element,_comcode,target_window.document.selection?target_window.document.selection:null,true,_comcode_semihtml);
+				if ((element.value.indexOf(comcode_semihtml)==-1) || (comcode.indexOf('[attachment')==-1)) // Don't allow attachments to add twice
+				{
+					target_window.insert_textbox(element,_comcode,target_window.document.selection?target_window.document.selection:null,true,_comcode_semihtml);
+				}
 			};
 			target_window.insert_comcode_tag();
 

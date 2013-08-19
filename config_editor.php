@@ -392,6 +392,8 @@ function do_set()
 	if ($copied_ok!==false) co_sync_file($path);
 	$config_file_handle=fopen($FILE_BASE.'/'.$config_file,'wt');
 	if ($config_file_handle===false) exit();
+	flock($config_file_handle,LOCK_EX);
+	ftruncate($config_file_handle,0);
 	fwrite($config_file_handle,"<"."?php\n");
 	foreach ($new as $key=>$val)
 	{
@@ -414,6 +416,7 @@ function do_set()
 			}
 		}
 	}
+	flock($config_file_handle,LOCK_UN);
 	fclose($config_file_handle);
 	co_sync_file($config_file);
 

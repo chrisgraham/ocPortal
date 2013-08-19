@@ -429,7 +429,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('email_confirm_join')=='0')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
 			if ((is_null($member_id)) && ($email_address=='') && (get_option('email_confirm_join')=='1'))
 			{
-				$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
+				$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',!has_privilege(get_member(),'member_maintenance')));
 			}
 		}
 	}
@@ -588,7 +588,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			$members_groups=is_null($member_id)?array():ocf_get_members_groups($member_id,false,false,false);
 			foreach ($rows as $group)
 			{
-				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_privilege(get_member(),'see_hidden_groups'))) continue;
+				if (($group['g_hidden']==1) && (!array_key_exists($group['id'],$members_groups)) && (!has_privilege(get_member(),'see_hidden_groups'))) continue;
 
 				if (($group['id']!=db_get_first_id()) && ($group['id']!=$current_primary_group) && ((array_key_exists($group['id'],$members_groups)) || (has_privilege(get_member(),'assume_any_member')) || ($group['g_open_membership']==1)))
 				{
@@ -1315,8 +1315,10 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	// Check it doesn't already exist
 	if (!is_null($username))
 	{
-		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username));
-		if ((!is_null($test)) && ($test!=$member_id))
+		$test=is_null($member_id)?NULL:$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username,'id'=>$member_id)); // Precedence on an ID match in case there are duplicate usernames and user is trying to fix that
+		if (is_null($test))
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username));
+		if ((!is_null($test)) && ($test!==$member_id))
 		{
 			if (get_option('signup_fullname')=='0')
 			{

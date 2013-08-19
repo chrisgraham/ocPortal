@@ -38,7 +38,7 @@
 		<div class="search_fields float_surrounder">
 			{+START,IF_NON_EMPTY,{$_GET,active_filter}}
 				<div class="search_button">
-					<input onclick="window.location.href='{$PAGE_LINK*;,_SELF:_SELF}';" class="button_pageitem" type="button" value="{!member_directory_boxes:RESET_FILTER}" />
+					<input onclick="window.location.href='{$PAGE_LINK;*,_SELF:_SELF}';" class="button_pageitem" type="button" value="{!member_directory_boxes:RESET_FILTER}" />
 				</div>
 			{+END}
 

@@ -790,8 +790,10 @@ msgstr ""
 			@copy($path,$path_backup) OR intelligent_write_error($path_backup);
 			sync_file($path_backup);
 		}
-		$myfile=@fopen($path,'wt');
+		$myfile=@fopen($path,'at');
 		if ($myfile===false) intelligent_write_error($path);
+		flock($myfile,LOCK_EX);
+		ftruncate($myfile,0);
 		fwrite($myfile,"[descriptions]\n");
 		foreach ($descriptions as $key=>$description)
 		{
@@ -808,6 +810,7 @@ msgstr ""
 				if (fwrite($myfile,$key.'='.str_replace(chr(10),'\n',$val)."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			}
 		}
+		flock($myfile,LOCK_UN);
 		fclose($myfile);
 		fix_permissions($path);
 		sync_file($path);
@@ -863,8 +866,10 @@ msgstr ""
 					@copy($path,$path_backup) OR intelligent_write_error($path_backup);
 					sync_file($path_backup);
 				}
-				$myfile=@fopen($path,'wt');
+				$myfile=@fopen($path,'at');
 				if ($myfile===false) intelligent_write_error($path);
+				flock($myfile,LOCK_EX);
+				ftruncate($myfile,0);
 				fwrite($myfile,"[descriptions]\n");
 				foreach ($descriptions as $key=>$description)
 				{
@@ -872,6 +877,7 @@ msgstr ""
 				}
 				fwrite($myfile,"\n[strings]\n");
 				fwrite($myfile,$out);
+				flock($myfile,LOCK_UN);
 				fclose($myfile);
 				fix_permissions($path);
 				sync_file($path);

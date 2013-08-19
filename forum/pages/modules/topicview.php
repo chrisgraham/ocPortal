@@ -786,6 +786,7 @@ class Module_topicview
 			'SCREEN_BUTTONS'=>$buttons,
 			'POSTS'=>$posts,
 			'THREADED'=>$threaded,
+			'FORUM_ID'=>is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']),
 		));
 
 		require_code('templates_internalise_screen');

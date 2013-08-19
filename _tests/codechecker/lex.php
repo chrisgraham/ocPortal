@@ -235,7 +235,7 @@ function lex($text=NULL)
 	if ((trim($between_all)!='') && (isset($GLOBALS['FILENAME'])))
 	{
 		global $WITHIN_PHP;
-		$WITHIN_PHP=($num_matches!=0);
+		$WITHIN_PHP=true;
 		require('xhtml.php');
 	}
 

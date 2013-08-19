@@ -412,7 +412,7 @@ class Module_topics
 
 		$field_set->attach(form_input_tree_list(do_lang_tempcode('CHOOSE'),'','select_topic_id',NULL,'choose_topic',array(),false));
 
-		$field_set->attach(form_input_integer(do_lang_tempcode('DESTINATION_TOPIC_ID'),do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),'manual_topic_id',NULL,false));
+		$field_set->attach(form_input_line(do_lang_tempcode('DESTINATION_TOPIC_ID'),do_lang_tempcode('DESCRIPTION_DESTINATION_TOPIC'),'manual_topic_id',NULL,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
@@ -500,7 +500,16 @@ class Module_topics
 				$to_topic_id=NULL;
 				$to_forum_id=post_param_integer('to_forum_id');
 				if ($to_forum_id==-1) warn_exit(do_lang_tempcode('MUST_MOVE_POSTS_SOMEWHERE'));
-			} else $to_topic_id=intval($_to_topic_id);
+			} else
+			{
+				if (!is_numeric($_to_topic_id))
+				{
+					$_to_topic_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('url_id_monikers','m_resource_id',array('m_resource_page'=>'topicview','m_resource_type'=>'misc','m_moniker'=>urldecode($_to_topic_id)));
+					if (is_null($_to_topic_id))
+						warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+				}
+				$to_topic_id=intval($_to_topic_id);
+			}
 		}
 		$from_topic_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_topic_id',array('id'=>$posts[0]));
 		if (is_null($from_topic_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -1400,6 +1409,7 @@ class Module_topics
 		}
 
 		// Various kinds of tick options
+		$specialisation2=new ocp_tempcode();
 		if ((!$private_topic) && (ocf_may_moderate_forum($forum_id,get_member())))
 		{
 			$moderation_options=array(
@@ -1412,6 +1422,8 @@ class Module_topics
 			if (get_option('enable_sunk')=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',false,do_lang_tempcode('DESCRIPTION_SUNK'));
 			if (!$private_topic) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));
+			if (addon_installed('calendar'))
+				$specialisation2->attach(form_input_date__scheduler(do_lang_tempcode('OCF_PUBLICATION_TIME'),do_lang_tempcode('OCF_DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true));
 		} else
 		{
 			$hidden_fields->attach(form_input_hidden('open','1'));
@@ -1431,7 +1443,6 @@ class Module_topics
 				$options[]=array(do_lang_tempcode('_MAKE_ANONYMOUS_POST'),'anonymous',false,do_lang_tempcode('MAKE_ANONYMOUS_POST_DESCRIPTION'));
 		}
 		$options[]=array(do_lang_tempcode('ADD_TOPIC_POLL'),'add_poll',false,do_lang_tempcode('DESCRIPTION_ADD_TOPIC_POLL'));
-		$specialisation2=new ocp_tempcode();
 		if (count($options)==1) // Oh, actually we know this was just the option to add a poll, so show simply
 		{
 			$specialisation->attach(form_input_tick(do_lang_tempcode('ADD_TOPIC_POLL'),do_lang_tempcode('DESCRIPTION_ADD_TOPIC_POLL'),'add_poll',false));
@@ -1448,11 +1459,11 @@ class Module_topics
 		require_code('fields');
 		if (has_tied_catalogue('topic'))
 		{
-			append_form_custom_fields('topic',$clone_id,$specialisation,$hidden_fields);
+			append_form_custom_fields('topic',is_null($clone_id)?NULL:strval($clone_id),$specialisation,$hidden_fields);
 		}
 		if (has_tied_catalogue('post'))
 		{
-			append_form_custom_fields('post',$clone_id,$specialisation,$hidden_fields);
+			append_form_custom_fields('post',is_null($clone_id)?NULL:strval($clone_id),$specialisation,$hidden_fields);
 		}
 
 		require_code('content2');
@@ -1461,7 +1472,7 @@ class Module_topics
 		if (addon_installed('content_reviews'))
 		{
 			require_code('content_reviews');
-			$specialisation2->attach(content_review_get_fields('topic',$clone_id));
+			$specialisation2->attach(content_review_get_fields('topic',is_null($clone_id)?NULL:strval($clone_id)));
 		}
 
 		if (is_null($text))
@@ -1496,8 +1507,8 @@ class Module_topics
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('topic'));
-			$specialisation->attach(get_award_fields('post'));
+			$specialisation2->attach(get_award_fields('topic'));
+			$specialisation2->attach(get_award_fields('post'));
 		}
 
 		// Render form
@@ -1577,7 +1588,7 @@ class Module_topics
 		} else
 		{
 			$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-			breadcrumb_add_segment($breadcrumbs,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_title),array('',$doing)));
+			breadcrumb_add_segment($breadcrumbs,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_title),array('',protect_from_escaping('<span>'.escape_html($doing->evaluate()).'</span>'))));
 		}
 	}
 
@@ -1742,7 +1753,7 @@ class Module_topics
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('post'));
+			$specialisation2->attach(get_award_fields('post'));
 		}
 
 		// Moderator reply
@@ -2038,6 +2049,28 @@ class Module_topics
 			{
 				$topic_id=ocf_make_topic($forum_id,post_param('description',''),post_param('emoticon',''),$topic_validated,post_param_integer('open',0),post_param_integer('pinned',0),$sunk,post_param_integer('cascading',0),NULL,NULL,true,$meta_data['views']);
 				$_title=get_screen_title('ADD_TOPIC');
+
+$_topic_id=strval($topic_id);
+$schedule_code=<<<END
+:\$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_cache_first_time'=>time(),'t_validated'=>1),array('id'=>{$_topic_id}),'',1);
+END;
+
+				$schedule=get_input_date('schedule');
+
+				if ((!is_null($schedule)) && (addon_installed('calendar')))
+				{
+					require_code('calendar');
+					$start_year=post_param_integer('schedule_year');
+					$start_month=post_param_integer('schedule_month');
+					$start_day=post_param_integer('schedule_day');
+					$start_hour=post_param_integer('schedule_hour');
+					$start_minute=post_param_integer('schedule_minute');
+					require_code('calendar2');
+					$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('ADD_POST'),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+					regenerate_event_reminder_jobs($event_id);
+
+					$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_validated'=>0),array('id'=>$topic_id),'',1);
+				}
 
 				if (addon_installed('awards'))
 				{
@@ -2677,25 +2710,18 @@ END;
 		if (!array_key_exists(0,$post_details)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$forum_id=$post_details[0]['p_cache_forum_id'];
-		if (!is_null($forum_id))
-		{
-			$_comments_forum=get_option('comments_forum_name');
-			if (is_numeric($_comments_forum))
-			{
-				$comments_forum=$_comments_forum;
-			} else
-			{
-				$comments_forum=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($_comments_forum);
-			}
-			if ((!has_category_access(get_member(),'forums',strval($forum_id))) && ($forum_id!=$comments_forum)) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
-		}
-
 		if (!ocf_may_edit_post_by($post_details[0]['p_poster'],$forum_id))
 			access_denied('I_ERROR');
 
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$post_details[0]['p_topic_id']),'',1);
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$this->handle_topic_breadcrumbs($forum_id,$post_details[0]['p_topic_id'],$topic_info[0]['t_cache_first_title'],do_lang_tempcode('EDIT_POST'));
+
+		if (($topic_info[0]['t_cache_first_post_id']==$post_id) && ((ocf_may_moderate_forum($topic_info[0]['t_forum_id'])) || ($topic_info[0]['t_cache_first_member_id']==get_member())))
+		{
+			$edit_topic_url=build_url(array('page'=>'topics','type'=>'edit_topic','id'=>$topic_info[0]['id']),get_module_zone('topics'));
+			attach_message(do_lang_tempcode('EDITING_FIRST_TOPIC_POST',escape_html($edit_topic_url->evaluate())),'inform');
+		}
 
 		$hidden_fields=new ocp_tempcode();
 		$intended_solely_for=$post_details[0]['p_intended_solely_for'];
@@ -2772,7 +2798,7 @@ END;
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('post',strval($post_id)));
+			$specialisation2->attach(get_award_fields('post',strval($post_id)));
 		}
 
 		if (is_null(get_param('post',NULL)))

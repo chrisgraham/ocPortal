@@ -662,10 +662,10 @@ function insert_textbox(element,text,sel,plain_insert,html)
 			}
 		}
 
+		var before=editor.getData();
+
 		try
 		{
-			var before=editor.getData();
-
 			if (!browser_matches('opera')) editor.focus(); // Needed on some browsers, but on Opera will defocus our selection
 			var selected_html=get_selected_html(editor);
 			if (browser_matches('opera')) editor.getSelection().getNative().getRangeAt(0).deleteContents();
@@ -685,7 +685,9 @@ function insert_textbox(element,text,sel,plain_insert,html)
 		}
 		catch (e) // Sometimes happens on Firefox in Windows, appending is a bit tamer (e.g. you cannot insert if you have the start of a h1 at cursor)
 		{
-			editor.document.getBody().appendHtml(insert);
+			var after=editor.getData();
+			if (after==before) // Could have just been a window.scrollBy popup-blocker exception, so only do this if the op definitely failed
+				editor.document.getBody().appendHtml(insert);
 		}
 		return;
 	}

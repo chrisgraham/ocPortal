@@ -34,8 +34,8 @@ The Comcode/managed menu system supports 'template sets' to allow different kind
 The template set to use is specified as one of the parameters to the '[tt]side_stored_menu[/tt]' block.
 
 The following template sets exist:
- - [b]tree[/b] (the default type, for side-placed menus where branches can be contracted and expanded as drawers; supports multiple-levels)
- - [b]embossed[/b] (a very simple single-layered type for side-placed menus; does not support multiple-levels)
+ - [b]embossed[/b] (the default type, a very simple single-layered type for side-placed menus; does not support multiple-levels)
+ - [b]tree[/b] (for side-placed menus where branches can be contracted and expanded as drawers; supports multiple-levels)
  - [b]popup[/b] (a very nice type for side-placed menus where branches may popup as overlays by hovering the mouse over other branches; supports multiple-levels)
  - [b]dropdown[/b] (a nice type for top-placed menus, similar to dropdown menus on Windows applications; supports multiple-levels)
  - [b]top[/b] (a very simple single-layered type for top-placed menus that provides the same look as the Admin Zone uses for navigation between sections; does not support multiple-levels)
@@ -139,6 +139,12 @@ It would not match URLs generated from the following page links:
  - [tt]:downloads:type=ed:wide=1[/tt]
  - [tt]adminzone:admin_downloads:type=ad[/tt]
  - [tt]adminzone:admin_downloads:type=ad:keep_novalidate=1[/tt]
+
+[title="2"]Indicating of the current page[/title]
+
+ocPortal will try and calculate the current page and pass this into the templating.
+However, it can only do this accurately while caching is enabled if each menu link goes to a different zone/page/type combination.
+If you have menu items that only vary based on some other parameter you will need to disable caching for your menu block.
 
 [title="2"]Chaining menus together / menu auto-generation (advanced)[/title]
 

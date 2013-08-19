@@ -86,6 +86,7 @@ function get_mime_type($extension)
 		'mpg'=>'video/mpeg',
 		'mpe'=>'video/mpeg',
 		'3gp'=>'video/3gpp',
+		'f4v'=>'video/mp4',
 		'mp4'=>'video/mp4',
 		'm4v'=>'video/mp4',
 		'mpeg'=>'video/mpeg',

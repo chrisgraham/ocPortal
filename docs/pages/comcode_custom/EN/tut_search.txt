@@ -78,6 +78,12 @@ The title fields, and meta keyword fields, get precedence when search results ar
 
 If you are using MySQL, also considering turning the [url="MySQL minimum word length"]http://dev.mysql.com/doc/refman/5.0/en/server-system-variables.html#sysvar_ft_min_word_len[/url] down to 3 (the default 4).
 
+[title="2"]MySQL[/title]
+
+Ultimately, full-text search effectiveness resides in MySQL (or whatever database you use), not ocPortal. For example, indexing does not work on very small words, very common words, and may split things up you did not expect to be (e.g. [tt]an-example[/tt] would split to two words).
+
+True boolean search is much more accurate, but also much slower due to a lack of indexing. ocPortal will only use true boolean search if boolean search is selected and it thinks MySQL's fulltext-based boolean search won't be able to handle the query itself (e.g. due to using short words). Programmers can alter this logic based on editing the [tt]is_under_radar[/tt] function.
+
 [concepts
  1_key="Boolean search"   1_value="A search carried out by testing for exact word or phrasal matches to a number of criteria"
 ]Concepts[/concepts]

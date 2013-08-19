@@ -390,9 +390,11 @@ class Module_cms_calendar extends standard_crud_module
 
 		if (is_null($type))
 		{
-			$type=get_value('default_event_type');
-			if (is_null($type))
+			$_type=get_value('default_event_type');
+			if (is_null($_type))
 				$type=db_get_first_id()+1;
+			else
+				$type=intval($_type);
 		}
 		if (is_null($start_month))
 		{
@@ -1316,7 +1318,7 @@ class Module_cms_calendar_cat extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('calendar_type',is_null($id)?NULL:strval($id)));
 		require_code('seo2');
-		$fields2->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
+		$fields->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
 
 		// Permissions
 		$fields->attach($this->get_permission_fields(is_null($id)?NULL:strval($id),NULL,($title=='')));

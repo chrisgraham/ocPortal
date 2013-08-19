@@ -4,7 +4,7 @@
 	<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} tabindex="{TABINDEX*}" class="input_text{REQUIRED*}{+START,IF,{SCROLLS}} textarea_scroll{+END} wide_field" cols="70" rows="{+START,IF_PASSED,ROWS}{ROWS*}{+END}{+START,IF_NON_PASSED,ROWS}7{+END}" id="{NAME*}" name="{NAME*}">{DEFAULT*}</textarea>
 	{+START,IF,{$IN_STR,{REQUIRED},wysiwyg}}
 		<script>// <![CDATA[
-			if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('{NAME*;}').readOnly=true;
+			if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('{NAME;*}').readOnly=true;
 		//]]></script>
 	{+END}
 	{+START,IF_PASSED,DEFAULT_PARSED}

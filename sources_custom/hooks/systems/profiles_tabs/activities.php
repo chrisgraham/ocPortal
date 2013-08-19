@@ -80,7 +80,7 @@ class Hook_Profiles_Tabs_activities
 						$url_map['syndicate_start__'.$hook]=1;
 						$oauth_url=build_url($url_map,'_SELF',NULL,false,false,false,'tab__activities');
 						$ob->auth_set($member_id_of,$oauth_url);
-					} elseif (($ob->auth_is_set($member_id_of)) && (either_param('oauth_in_progress',NULL)===NULL) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+					} elseif ((running_script('index')) && (!$leave_to_ajax_if_possible) && ($ob->auth_is_set($member_id_of)) && (either_param('oauth_in_progress',NULL)===NULL) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 					{
 						// Do a refresh to make sure the token is updated
 						$url_map=array('page'=>'_SELF','type'=>'view','id'=>$member_id_of,'oauth_in_progress'=>1);

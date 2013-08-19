@@ -274,8 +274,8 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'txt'=>'(imports|exports)/.*',
 
 		// Cache files
-		'lcd'=>'caches(/.*)?',
-		'gcd'=>'persistent_cache|persistant_cache', // LEGACY (persistant_cache)
+		'lcd'=>'(caches|lang_cached)/.*', // LEGACY
+		'gcd'=>'(caches|persistent_cache|persistant_cache)/.*', // LEGACY
 		'tcp'=>'themes/[^/]*/templates_cached/.*',
 		'tcd'=>'themes/[^/]*/templates_cached/.*',
 		'css'=>'themes/[^/]*/templates_cached/.*',
@@ -451,7 +451,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 	if (($bitmask & IGNORE_CUSTOM_ZONES)!=0)
 	{
-		if ((file_exists(get_file_base().$filepath.'/index.php')) && (file_exists(get_file_base().$filepath.'/pages')) && (!in_array(strtolower($filename),array('adminzone','collaboration','cms','forum','site'))))
+		if ((file_exists(get_file_base().'/'.$filepath.'/index.php')) && (file_exists(get_file_base().'/'.$filepath.'/pages')) && (!in_array(strtolower($filename),array('adminzone','collaboration','cms','forum','site'))))
 			return true;
 	}
 

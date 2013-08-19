@@ -102,23 +102,18 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 	{
 		$old_url=find_theme_image($id,true,true,$theme,($lang=='')?NULL:$lang);
 
-		$where_map=array('theme'=>$theme,'id'=>$id);
-		if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
-		$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
-
 		if (($old_url!=$path) && ($old_url!=''))
 		{
 			if (($theme=='default') || (strpos($old_url,'themes/default/')===false))
 			{
+				$where_map=array('theme'=>$theme,'id'=>$id);
+				if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
+				$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
+
 				require_code('themes3');
 				cleanup_theme_images($old_url);
 			}
 		}
-	} else
-	{
-		$where_map=array('theme'=>$theme,'id'=>$id);
-		if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
-		$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
 	}
 
 	if ($lang=='')
@@ -128,12 +123,28 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 	{
 		$langs=array($lang);
 	}
+
+	$where_map=array('theme'=>$theme,'id'=>$id);
+	if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
+	$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
+
 	foreach ($langs as $lang)
 	{
 		$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$id,'theme'=>$theme,'path'=>$path,'lang'=>$lang));
 	}
 
-	if (!$quick) log_it('EDIT_THEME_IMAGE',$id,$theme);
+	if (!$quick)
+	{
+		if ((function_exists('persistent_cache_delete')) && (!is_null($GLOBALS['MEM_CACHE'])))
+		{
+			persistent_cache_delete('THEME_IMG_DIMS');
+		} else
+		{
+			set_long_value('THEME_IMG_DIMS',NULL);
+		}
+
+		log_it('EDIT_THEME_IMAGE',$id,$theme);
+	}
 }
 
 /**

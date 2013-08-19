@@ -458,7 +458,8 @@ class Module_filedump
 		$file=$_FILES['file']['name'];
 		if (get_magic_quotes_gpc()) $file=stripslashes($file);
 
-		if (!has_privilege(get_member(),'upload_anything_filedump')) check_extension($file);
+		if ((!has_privilege(get_member(),'upload_anything_filedump')) || (get_file_base()!=get_custom_file_base()/*myocp*/))
+			check_extension($file);
 		$file=str_replace('.','-',basename($file,'.'.get_file_extension($file))).'.'.get_file_extension($file);
 
 		if (!file_exists(get_custom_file_base().'/uploads/filedump'.$place.$file))

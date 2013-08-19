@@ -719,7 +719,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'HEADER_TEXT':
 				global $ZONE,$SHORT_TITLE,$DISPLAYED_TITLE;
 				if ($ZONE===NULL) load_zone_data();
-				if ($ZONE===NULL) warn_exit(do_lang_tempcode('ZONE_NOT_INSTALLED'));
 				if ($SHORT_TITLE===NULL) // Take from either zone header or screen title
 				{
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
@@ -728,7 +727,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$value=strip_html($_displayed_title);
 					} else
 					{
-						$value=$ZONE['zone_header_text_trans'];
+						if ($ZONE!==NULL)
+							$value=$ZONE['zone_header_text_trans'];
 					}
 				} else // Take from short title
 				{
@@ -878,7 +878,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 							$value=trim($value);
 						} else
 						{
-							$value=ocp_trim($param[0]);
+							$value=ocp_trim($param[0],isset($param[1]) && $param[1]=='1');
 						}
 					}
 				}
@@ -2264,7 +2264,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'FIX_ID':
 				if (isset($param[0]))
 				{
-					if (preg_match('#^[A-Za-z][\w\-\.]*$#',$param[0])!=0) // Optimisation
+					if (preg_match('#^[A-Za-z][\w]*$#',$param[0])!=0) // Optimisation
 					{
 						$value=$param[0];
 					} else
@@ -2486,14 +2486,20 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 					require_code('feedback');
 					$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
-					if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
+					if ($rating!==NULL)
 					{
 						$value=isset($rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING'])?$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING']:'';
 					} else
 					{
-						$value=do_template('RATING_INLINE_STATIC',$rating);
+						if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
+						{
+							$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
+						} else
+						{
+							$value=do_template('RATING_INLINE_STATIC',$rating);
+						}
+						if (is_object($value)) $value=$value->evaluate();
 					}
-					if (is_object($value)) $value=$value->evaluate();
 
 					$cache_rating[$cache_key]=$value;
 				}
@@ -3290,6 +3296,7 @@ function keep_symbol($param)
  */
 function ocp_trim($text,$try_hard=false)
 {
+	if (memory_get_usage()>1024*1024*40) return trim($text); // Don't have enough memory
 	do
 	{
 		$before=$text;

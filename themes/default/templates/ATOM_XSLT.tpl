@@ -27,13 +27,13 @@
 				</div>
 
 				<div class="rss_main_inner">
-					<div class="box box___atom_xslt"><div class="box_inner">
+					<div class="box box___atom_xslt"><div class="box_inner"><div>
 						<h1><span name="decodeable"><xsl:value-of disable-output-escaping="yes" select="/atom:feed/atom:title" /></span></h1>
 
 						<p id="xslt_introduction">{!RSS_XSLT_INTRODUCTION}</p>
 						<xsl:apply-templates select="atom:feed" />
 						<p class="rss_copyright"><span name="decodeable"><xsl:value-of select="/atom:feed/atom:rights" disable-output-escaping="yes" /></span></p>
-					</div></div>
+					</div></div></div>
 				</div>
 			</body>
 		</html>

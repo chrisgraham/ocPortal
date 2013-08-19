@@ -200,11 +200,11 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						case '#':
 							$escaped[]=DQ_ESCAPED;
 							break;
-						case '~':
+						case '~': // New lines disappear
 							$escaped[]=NL_ESCAPED;
 							break;
 						case '^':
-							$escaped[]=NL2_ESCAPED;
+							$escaped[]=NL2_ESCAPED; // New lines go to \n
 							break;
 						case '|':
 							$escaped[]=ID_ESCAPED;
@@ -499,8 +499,17 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 										$fullpath=get_custom_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
 										if (!is_file($fullpath))
 											$fullpath=get_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
-										$filecontents=@file_get_contents($fullpath);
-										if ($filecontents===false) $filecontents='';
+										if (is_file($fullpath))
+										{
+											$tmp=fopen($fullpath,'rb');
+											flock($tmp,LOCK_SH);
+											$filecontents=file_get_contents($fullpath);
+											flock($tmp,LOCK_UN);
+											fclose($tmp);
+										} else
+										{
+											$filecontents='';
+										}
 										list($_current_level_data,$_preprocessable_bits)=compile_template($filecontents,$eval,$theme,$lang);
 										$current_level_data=array_merge($current_level_data,$_current_level_data);
 										$preprocessable_bits=array_merge($preprocessable_bits,$_preprocessable_bits);
@@ -598,7 +607,15 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	if (isset($FILE_ARRAY))
 	{
 		$html=unixify_line_format(file_array_get('themes/'.$theme.$path.$codename.$suffix));
-	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix));
+	} else
+	{
+		$_path=$base_dir.filter_naughty($theme.$path.$codename).$suffix;
+		$tmp=fopen($_path,'rb');
+		flock($tmp,LOCK_SH);
+		$html=unixify_line_format(file_get_contents($_path));
+		flock($tmp,LOCK_UN);
+		fclose($tmp);
+	}
 
 	if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($html,'.innerHTML')!==false) && (!running_script('install')) && (strpos($html,'Parser hint: .innerHTML okay')===false))
 	{
@@ -621,7 +638,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	if (($CACHE_TEMPLATES) && (!$IS_TEMPLATE_PREVIEW_OP_CACHE) && (($suffix=='.tpl') || ($codename=='no_cache')))
 	{
 		$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang).'/';
-		$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcp','wb');
+		$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcp','ab');
 		if ($myfile===false)
 		{
 			@mkdir(dirname($path2),0777);
@@ -638,16 +655,20 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 			}
 		} else
 		{
+			flock($myfile,LOCK_EX);
+			ftruncate($myfile,0);
 			$data_to_write='<'.'?php'.chr(10).$result->to_assembly($lang).chr(10).'?'.'>';
 			if (fwrite($myfile,$data_to_write)>=strlen($data_to_write))
 			{
 				// Success
+				flock($myfile,LOCK_UN);
 				fclose($myfile);
 				require_code('files');
 				fix_permissions($path2.filter_naughty($_codename).$suffix.'.tcp');
 			} else
 			{
 				// Failure
+				flock($myfile,LOCK_UN);
 				fclose($myfile);
 				@unlink($path2.filter_naughty($_codename).$suffix.'.tcp'); // Can't leave this around, would cause problems
 			}

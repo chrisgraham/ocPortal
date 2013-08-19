@@ -152,7 +152,7 @@ class Module_contact_member
 			'TEXT'=>$text,
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
- 			'SUPPORT_AUTOSAVE'=>true,
+			'SUPPORT_AUTOSAVE'=>true,
 		));
 	}
 

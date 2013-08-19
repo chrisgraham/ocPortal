@@ -48,13 +48,15 @@ function _handle_permission_check_logging($member,$op,$params,$result)
 		}
 	}
 
-	if (($PERMISSION_CHECK_LOGGER!==false) && (!$result))
+	$show_all=(get_value('permission_log_success_too')=='1');
+	if (($PERMISSION_CHECK_LOGGER!==false) && (($show_all) || (!$result)))
 	{
-		fwrite($PERMISSION_CHECK_LOGGER,"\t".$str);
+		fwrite($PERMISSION_CHECK_LOGGER,"\t".($show_all?'':'! ').$str);
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 		if ($member!=get_member()) fwrite($PERMISSION_CHECK_LOGGER,' -- '.$username);
-		//fwrite($PERMISSION_CHECK_LOGGER,' --> '.($result?do_lang('YES'):do_lang('NO')).chr(10));	Overly verbose
+		if ($show_all)
+			fwrite($PERMISSION_CHECK_LOGGER,' --> '.($result?do_lang('YES'):do_lang('NO')).chr(10));
 		fwrite($PERMISSION_CHECK_LOGGER,chr(10));
 		sync_file(get_custom_file_base().'/data_custom/permissioncheckslog.php');
 	}

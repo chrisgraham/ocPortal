@@ -680,9 +680,9 @@ function init_form_saving(form_id)
 				{
 					fields_to_do[name]=result.responseText.replace(/\u0000/g,'');
 					fields_to_do_counter++;
-					if (result.responseText.length>biggest_length_data.length)
+					if (result.responseText.length>biggest_length_data.length) // The longest is what we quote to the user as being restored
 					{
-						biggest_length_data=result.responseText; // The longest is what we quote to the user as being restored
+						biggest_length_data=result.responseText.replace(/\u0000/g,''); // https://code.google.com/p/chromium/issues/detail?id=274983
 					}
 				}
 			}

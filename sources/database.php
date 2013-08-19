@@ -1053,6 +1053,31 @@ class database_driver
 			}
 		}
 
+		// Run hooks, if any exist
+		if ($UPON_QUERY_HOOKS_CACHE===NULL)
+		{
+			$UPON_QUERY_HOOKS_CACHE=array();
+			if ((!running_script('restore')) && (function_exists('find_all_hooks')) && (!isset($GLOBALS['DOING_USERS_INIT'])/*can't check for safe mode meaning can't get a full hook list yet*/))
+			{
+				$UPON_QUERY_HOOKS_CACHE=array();
+				$hooks=find_all_hooks('systems','upon_query');
+				foreach (array_keys($hooks) as $hook)
+				{
+					require_code('hooks/systems/upon_query/'.filter_naughty($hook));
+					$UPON_QUERY_HOOKS_CACHE[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
+				}
+			}
+		}
+		if ($UPON_QUERY_HOOKS_CACHE!==NULL)
+		{
+			foreach ($UPON_QUERY_HOOKS_CACHE as $ob)
+			{
+				if (($ob!==NULL) && (method_exists($ob,'run_pre')))
+					$ob->run_pre($this,$query,$max,$start,$fail_ok,$get_insert_id);
+			}
+		}
+
+		// Run/log query
 		$ret=$this->static_ob->db_query($query,$connection,$max,$start,$fail_ok,$get_insert_id,false,$save_as_volatile);
 		if ($QUERY_LOG)
 		{
@@ -1063,25 +1088,13 @@ class database_driver
 		}
 
 		// Run hooks, if any exist
-		if ($UPON_QUERY_HOOKS_CACHE===NULL)
+		if ($UPON_QUERY_HOOKS_CACHE!==NULL)
 		{
-			if (!function_exists('find_all_hooks')) return $ret;
-
-			$UPON_QUERY_HOOKS_CACHE=array();
-			if (!running_script('restore'))
+			foreach ($UPON_QUERY_HOOKS_CACHE as $ob)
 			{
-				$hooks=find_all_hooks('systems','upon_query');
-				foreach (array_keys($hooks) as $hook)
-				{
-					require_code('hooks/systems/upon_query/'.filter_naughty($hook));
-					$UPON_QUERY_HOOKS_CACHE[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
-				}
+				if (($ob!==NULL) && (method_exists($ob,'run')))
+					$ob->run($this,$query,$max,$start,$fail_ok,$get_insert_id,$ret);
 			}
-		}
-		foreach ($UPON_QUERY_HOOKS_CACHE as $ob)
-		{
-			if ($ob!==NULL)
-				$ob->run($this,$query,$max,$start,$fail_ok,$get_insert_id,$ret);
 		}
 
 		// Copy results to lang cache, but only if not null AND unset to avoid any confusion

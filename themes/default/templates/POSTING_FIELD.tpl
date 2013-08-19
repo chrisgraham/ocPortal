@@ -34,7 +34,7 @@
 					{+END}{+END}
 					{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 						{+START,IF,{$JS_ON}}
-							<li><a id="toggle_wysiwyg_{NAME*}" href="#" onclick="return toggle_wysiwyg('{NAME*;}');"><abbr title="{!TOGGLE_WYSIWYG_2}">{!ENABLE_WYSIWYG}</abbr></a></li>
+							<li><a id="toggle_wysiwyg_{NAME*}" href="#" onclick="return toggle_wysiwyg('{NAME;*}');"><abbr title="{!TOGGLE_WYSIWYG_2}">{!ENABLE_WYSIWYG}</abbr></a></li>
 						{+END}
 					{+END}
 				</ul>
@@ -77,11 +77,11 @@
 
 				{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 					<script>// <![CDATA[
-						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('{NAME*}').readOnly=true; /* Stop typing while it loads */
+						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('{NAME;/}').readOnly=true; /* Stop typing while it loads */
 
 						{+START,IF_PASSED,WORD_COUNTER}
 							add_event_listener_abstract(window,'load',function () {
-								setup_word_counter(document.getElementById('post'),document.getElementById('word_count_{$GET*,word_count_id}'));
+								setup_word_counter(document.getElementById('post'),document.getElementById('word_count_{$GET;,word_count_id}'));
 							} );
 						{+END}
 					//]]></script>
@@ -93,7 +93,7 @@
 			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$OR,{$CONFIG_OPTION,is_on_emoticon_choosers},{$AND,{$OCF},{$JS_ON}}}}
 				<div{+START,IF,{$CONFIG_OPTION,is_on_emoticon_choosers}} class="emoticon_chooser box"{+END}>
 					{+START,IF,{$AND,{$OCF},{$JS_ON}}}
-						<span class="right horiz_field_sep associated_link"><a rel="nofollow" target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;" title="{!EMOTICONS_POPUP} {!LINK_NEW_WINDOW}">{$?,{$CONFIG_OPTION,is_on_emoticon_choosers},{!VIEW_ARCHIVE},{!EMOTICONS_POPUP}}</a></span>
+						<span class="right horiz_field_sep associated_link"><a rel="nofollow" target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME;*}{$KEEP;*,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT;*,emoticons}?field_name={NAME;*}{$KEEP;*,0,1}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;" title="{!EMOTICONS_POPUP} {!LINK_NEW_WINDOW}">{$?,{$CONFIG_OPTION,is_on_emoticon_choosers},{!VIEW_ARCHIVE},{!EMOTICONS_POPUP}}</a></span>
 						{$,<span class="right horiz_field_sep associated_link"><a rel="nofollow" href="#" onclick="if (document.getElementById('\{NAME*\}').value.substr(0,8)=='&lt;comcode') \{ window.fauxmodal_alert('\{!comcode:ALREADY_COMCODE_XML;\}'); return false; \} return convert_xml('\{NAME*\}');"><abbr title="\{!comcode:CONVERT_TO_XML_2\}">\{!comcode:CONVERT_TO_XML\}</abbr></a></span>}
 					{+END}
 
@@ -139,7 +139,7 @@
 			<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
 
 			<script>// <![CDATA[
-				initialise_dragdrop_upload('container_for_{NAME*;}','{NAME*;}');
+				initialise_dragdrop_upload('container_for_{NAME;*}','{NAME;*}');
 			//]]></script>
 		</td>
 	</tr>

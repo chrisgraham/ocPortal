@@ -7,7 +7,7 @@
 <title>{TITLE*}</title>
 {CSS}
 </head>
-<body style="font-size: 12px" class="mail_body">
+<body style="font-size: 12px" class="email_body">
 	<div style="font-size: 12px">
 		<p><a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed_logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a></p>
 

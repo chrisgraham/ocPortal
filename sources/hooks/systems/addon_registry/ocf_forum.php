@@ -1046,6 +1046,7 @@ class Hook_addon_registry_ocf_forum
 				'MARKER'=>$marker,
 				'TOPIC_ROW_LINKS'=>$topic_row_links,
 				'TOPIC_ROW_MODIFIERS'=>$topic_row_modifiers,
+				'_TOPIC_ROW_MODIFIERS'=>array(),
 				'POST'=>lorem_phrase(),
 				'EMOTICON'=>$emoticon,
 				'DESCRIPTION'=>lorem_paragraph(),
@@ -1739,7 +1740,8 @@ class Hook_addon_registry_ocf_forum
 			'SCREEN_BUTTONS'=>$buttons,
 			'POSTS'=>$posts,
 			'MAY_CHANGE_MAX'=>lorem_word(),
-			'LAST_POSTER'=>placeholder_random()
+			'LAST_POSTER'=>placeholder_random(),
+			'FORUM_ID'=>placeholder_id(),
 		));
 
 		return array(

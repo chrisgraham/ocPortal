@@ -200,12 +200,13 @@ function rd_do_dir($dir)
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if (!in_array($file,array('.','..','git','.svn','CVS','_vti_cnf')))
+			if (!in_array($file,array('.','..','website_specific')))
 			{
 				if (is_file($_dir.'/'.$file))
 				{
 					$path=$dir.(($dir!='')?'/':'').$file;
-					$out[]=$path;
+					if (substr($path,-4)=='.php')
+						$out[]=$path;
 				} elseif (is_dir($_dir.'/'.$file))
 				{
 					$out=array_merge($out,rd_do_dir($dir.(($dir!='')?'/':'').$file));

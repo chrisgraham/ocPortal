@@ -252,7 +252,11 @@ class Module_admin_zones
 				if (!file_exists($fullpath)) $fullpath=zone_black_magic_filterer((($page_info[0]=='comcode' || $pure)?get_file_base():get_custom_file_base()).'/'.$current_zone.'/pages/'.strtolower($page_info[0]).'/'.get_site_default_lang().'/'.$current_for.'.txt');
 				if (file_exists($fullpath))
 				{
+					$tmp=fopen($fullpath,'rb');
+					flock($tmp,LOCK_SH);
 					$comcode=file_get_contents($fullpath);
+					flock($tmp,LOCK_UN);
+					fclose($tmp);
 					$default_parsed=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true);
 				} else
 				{
@@ -431,8 +435,11 @@ class Module_admin_zones
 				}
 
 				// Save
-				$myfile=@fopen($fullpath,'wt') OR intelligent_write_error($fullpath);
+				$myfile=@fopen($fullpath,'at') OR intelligent_write_error($fullpath);
+				flock($myfile,LOCK_EX);
+				ftruncate($myfile,0);
 				if (fwrite($myfile,$comcode)<strlen($comcode)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				flock($myfile,LOCK_UN);
 				fclose($myfile);
 				fix_permissions($fullpath);
 				sync_file($fullpath);
@@ -472,7 +479,13 @@ class Module_admin_zones
 	{
 		require_lang('permissions');
 
-		$javascript='';
+		$javascript="
+			var zone=document.getElementById('zone');
+			zone.onblur=function() {
+				var title=document.getElementById('title');
+				if (title.value=='') title.value=zone.value.substr(0,1).toUpperCase()+zone.value.substring(1,zone.value.length).replace(/\_/g,' ');
+			}
+		";
 
 		$fields='';
 		$hidden=new ocp_tempcode();
@@ -589,7 +602,7 @@ class Module_admin_zones
 
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_NAME'),'zone','',true));
-		list($_fields,$hidden,)=$this->get_form_fields();
+		list($_fields,$hidden,$javascript)=$this->get_form_fields();
 		$fields->attach($_fields);
 
 		url_default_parameters__disable();
@@ -602,7 +615,7 @@ class Module_admin_zones
 
 		require_javascript('javascript_ajax');
 		$script=find_script('snippet');
-		$javascript="
+		$javascript.="
 			var form=document.getElementById('main_form');
 			form.old_submit=form.onsubmit;
 			form.onsubmit=function()

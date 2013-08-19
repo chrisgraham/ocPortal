@@ -1061,7 +1061,23 @@ function select_tab(id,tab,from_url)
 		element=document.getElementById(id+'_'+tabs[i]);
 		if (element)
 		{
-			element.style.display=(tabs[i]==tab)?'block':'none';
+			{+START,IF,{$ADDON_INSTALLED,plupload,1}}
+				element.style.display=(tabs[i]==tab)?'block':'none';
+			{+END}
+			{+START,IF,{$NOT,{$ADDON_INSTALLED,plupload,1}}}
+				if (tabs[i]==tab)
+				{
+					element.style.display='block';
+					element.style.visibility='';
+					element.style.width='';
+					element.style.height='';
+				} else
+				{
+					element.style.visibility='hidden'; // We are not using visibility:hidden due to https://code.google.com/p/swfupload/issues/detail?id=231
+					element.style.width='0';
+					element.style.height='0';
+				}
+			{+END}
 
 			if ((typeof window.fade_transition!='undefined') && (tabs[i]==tab))
 			{
@@ -1717,7 +1733,7 @@ function convert_tooltip(element)
 	{
 		element.title=''; // Remove old tooltip
 
-		if ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))) // Only put on new tooltip if there's nothing with a tooltip inside the element
+		if ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && ((!element.childNodes[0].title) || (element.childNodes[0].title=='')))) // Only put on new tooltip if there's nothing with a tooltip inside the element
 		{
 			if (element.innerText)
 			{

@@ -42,10 +42,10 @@ class Hook_ocf_auth_smf
 			}
 		} else
 		{
-			$usr=strtolower(post_param('login_username',NULL)); //prepare inputted username
-			$passwrd=strtr(stripslashes(post_param('password',NULL)), array_flip(get_html_translation_table(HTML_SPECIALCHARS, ENT_QUOTES)) + array('&#039;' => '\'', '&nbsp;' => ' ')); //prepare inputted password
+			$username=strtolower(post_param('login_username',NULL)); //prepare inputted username
+			$password_given=strtr(post_param('password',''),array_flip(get_html_translation_table(HTML_SPECIALCHARS,ENT_QUOTES))+array('&#039;'=>'\'','&nbsp;'=>' ')); //prepare inputted password
 
-			if (sha1($usr.$passwrd)!=$row['m_pass_hash_salted'])
+			if (sha1($username.$password_given)!=$row['m_pass_hash_salted'])
 			{
 				return do_lang_tempcode('MEMBER_BAD_PASSWORD');
 			}

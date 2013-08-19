@@ -630,10 +630,10 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$javascript=NULL;
 		$javascript_explicit_quote=NULL;
 
-		if ((array_key_exists('message_comcode',$_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (!array_key_exists('intended_solely_for',$map)))
+		if ((array_key_exists('message_comcode',$_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (strlen($_postdetails['message_comcode'])<1024*10/*10kb limit, for reasonable performance*/) && (!array_key_exists('intended_solely_for',$map)))
 		{
 			$replying_to_post=str_replace(chr(10),'\n',addslashes($_postdetails['message_comcode']));
-			$replying_to_post_plain=str_replace(chr(10),'\n',addslashes(strip_comcode($_postdetails['message_comcode'])));
+			$replying_to_post_plain=str_replace(chr(10),'\n',addslashes(($topic_info['is_threaded']==0)?'':strip_comcode($_postdetails['message_comcode'])));
 			$javascript='return topic_reply('.($topic_info['is_threaded']?'true':'false').',this,\''.strval($_postdetails['id']).'\',\''.addslashes($_postdetails['poster_username']).'\',\''.$replying_to_post.'\',\''.$replying_to_post_plain.'\');';
 			$javascript_explicit_quote='return topic_reply(false,this,\''.strval($_postdetails['id']).'\',\''.addslashes($_postdetails['poster_username']).'\',\''.$replying_to_post.'\',\''.$replying_to_post_plain.'\',true);';
 		}
@@ -670,7 +670,11 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	}
 	if (array_key_exists('may_edit',$_postdetails))
 	{
-		$map=array('page'=>'topics','type'=>'edit_post','id'=>$_postdetails['id'],'redirect'=>get_self_url(true));
+		$map=array('page'=>'topics','type'=>'edit_post','id'=>$_postdetails['id']);
+		if (get_page_name()=='tickets')
+			$map['redirect']=static_evaluate_tempcode(build_url(array('page'=>'tickets','type'=>'ticket','id'=>get_param('id')),get_module_zone('tickets'),NULL,false,false,false,'_top'));
+		else
+			$map['redirect']=get_self_url(true);
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 		$test=get_param_integer('threaded',-1);
@@ -682,7 +686,11 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	}
 	if (array_key_exists('may_delete',$_postdetails))
 	{
-		$map=array('page'=>'topics','type'=>'delete_post','id'=>$_postdetails['id'],'redirect'=>get_self_url(true));
+		$map=array('page'=>'topics','type'=>'delete_post','id'=>$_postdetails['id']);
+		if (get_page_name()=='tickets')
+			$map['redirect']=static_evaluate_tempcode(build_url(array('page'=>'tickets','type'=>'ticket','id'=>get_param('id')),get_module_zone('tickets'),NULL,false,false,false,'_top'));
+		else
+			$map['redirect']=get_self_url(true);
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 		$test=get_param_integer('threaded',-1);

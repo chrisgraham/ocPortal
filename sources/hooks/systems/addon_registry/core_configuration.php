@@ -119,7 +119,7 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config/infinite_scrolling.php',
 			'sources/hooks/systems/config/check_broken_urls.php',
 			'sources/hooks/systems/config/google_analytics.php',
-			'sources/hooks/systems/config/ocp_show_personal_sub_links.php',
+			'sources/hooks/systems/config/show_personal_sub_links.php',
 			'sources/hooks/systems/config/show_content_tagging.php',
 			'sources/hooks/systems/config/show_content_tagging_inline.php',
 			'sources/hooks/systems/config/show_screen_actions.php',

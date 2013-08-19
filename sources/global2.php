@@ -71,7 +71,7 @@ function init__global2()
 	// Don't want the browser caching PHP output, explicitly say this
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 	@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-	//@header('Cache-Control: no-cache, must-revalidate'); // DISABLED AS MAKES IE RELOAD ON 'BACK' AND LOSE FORM CONTENTS
+	@header('Cache-Control: no-cache, max-age=0');
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
 	// Closed site message
@@ -339,6 +339,7 @@ function init__global2()
 			require_code('caches3');
 			erase_block_cache();
 			erase_cached_templates(!$changed_base_url);
+			erase_comcode_cache();
 			erase_cached_language();
 			erase_persistent_cache();
 			if ($changed_base_url)
@@ -429,20 +430,27 @@ function init__global2()
 	// Reduce down memory limit / raise if requested
 	$default_memory_limit=get_value('memory_limit');
 	if ((is_null($default_memory_limit)) || ($default_memory_limit=='') || ($default_memory_limit=='0') || ($default_memory_limit=='-1'))
+	{
 		$default_memory_limit='64M';
-	if (substr($default_memory_limit,-2)=='MB') $default_memory_limit=substr($default_memory_limit,0,strlen($default_memory_limit)-1);
-	if ((is_numeric($default_memory_limit)) && (intval($default_memory_limit)<1024*1024*16)) $default_memory_limit.='M';
+	} else
+	{
+		if (substr($default_memory_limit,-2)=='MB') $default_memory_limit=substr($default_memory_limit,0,strlen($default_memory_limit)-1);
+		if ((is_numeric($default_memory_limit)) && (intval($default_memory_limit)<1024*1024*16)) $default_memory_limit.='M';
+	}
 	@ini_set('memory_limit',$default_memory_limit);
+	memory_limit_for_max_param('max');
 	if ((isset($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 	{
 		if (get_param_integer('keep_avoid_memory_limit',0)==1)
 		{
 			disable_php_memory_limit();
-		}
-		$memory_test=get_param_integer('keep_memory_limit_test',0);
-		if (($memory_test!=0) && ($memory_test<=32))
+		} else
 		{
-			@ini_set('memory_limit',strval($memory_test).'M');
+			$memory_test=get_param_integer('keep_memory_limit_test',0);
+			if (($memory_test!=0) && ($memory_test<=32))
+			{
+				@ini_set('memory_limit',strval($memory_test).'M');
+			}
 		}
 	}
 
@@ -529,14 +537,14 @@ function fast_spider_cache($bot=true)
 	$fast_cache_path.='.gcd';
 	if (is_file($fast_cache_path))
 	{
-		$expires=60*60*intval($SITE_INFO['fast_spider_cache']);
+		$expires=(60.0*60.0*floatval($SITE_INFO['fast_spider_cache']));
 		$mtime=filemtime($fast_cache_path);
 		if ($mtime>time()-$expires)
 		{
 			if ($bot) // Only bots can do this, as they won't try to login and end up reaching a previously cached page
 			{
 				header("Pragma: public");
-				header("Cache-Control: maxage=".strval($expires));
+				header("Cache-Control: max-age=".strval($expires));
 				header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');
 				header('Last-Modified: '.gmdate('D, d M Y H:i:s',$mtime).' GMT');
 
@@ -564,6 +572,27 @@ function fast_spider_cache($bot=true)
 		{
 			@unlink($fast_cache_path);
 			sync_file($fast_cache_path);
+		}
+	}
+}
+
+/**
+ * Raise the PHP memory limit to cater for a requested large result set.
+ *
+ * @param  ID_TEXT		The max parameter name
+ */
+function memory_limit_for_max_param($max_param)
+{
+	$max=get_param_integer($max_param,NULL); // If making a large request and are an admin, raise PHP memory limit
+	if (($max!==NULL) && ($max>80) && (function_exists('has_privilege')))
+	{
+		if (has_privilege(get_member(),'remove_page_split'))
+		{
+			$shl=@ini_get('suhosin.memory_limit');
+			if (($shl===false) || ($shl=='') || ($shl=='0'))
+			{
+				@ini_set('memory_limit','128M');
+			}
 		}
 	}
 }
@@ -779,6 +808,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 			global $REQUIRED_CODE;
 			if (!array_key_exists('failure',$REQUIRED_CODE))
 			{
+				@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy(),0); // We really want to know the URL where this is happening (normal PHP error logging does not include it)!
 				critical_error('EMERGENCY',$errstr.escape_html(' ['.$errfile.' at '.strval($errline).']'));
 			}
 		}
@@ -1104,7 +1134,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		if ($https===NULL)
 		{
 			require_code('urls');
-			if ((!addon_installed('ssl')) || (!running_script('index')))
+			if (!addon_installed('ssl'))
 			{
 				$https=tacit_https();
 			} else
@@ -1319,10 +1349,11 @@ function get_param($name,$default=false,$no_security=false)
 				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
 			}
 
-			$bu=get_base_url();
-			if ((looks_like_url($a)) && (substr($a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
+			$bu=get_base_url(false);
+			$_a=str_replace('https://','http://',$a);
+			if ((looks_like_url($_a)) && (substr($_a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
 			{
-				$a=get_base_url();
+				$a=get_base_url(false);
 			}
 		}
 	}

@@ -100,27 +100,26 @@ class Hook_addon_registry_core_notifications
 			'sources/hooks/systems/config/allow_auto_notifications.php',
 			'sources/hooks/systems/config/pt_notifications_as_web.php',
 			'sources/hooks/systems/config/notification_keep_days.php',
-			'sources/hooks/systems/config/web_notifications_enabled.php ',
+			'sources/hooks/systems/config/web_notifications_enabled.php',
 			'sources/hooks/systems/config/notification_poll_frequency.php',
 			'data/notifications.php',
 			'sources/blocks/top_notifications.php',
 			'sources/hooks/systems/startup/notification_poller_init.php',
 			'sources/notification_poller.php',
-			'themes/default/templates/JAVASCRIPT_NOTIFICATION_POLLER.tpl',
-			'themes/default/templates/NOTIFICATION_POLLER.tpl',
-			'themes/default/templates/NOTIFICATION_WEB.tpl',
-			'themes/default/templates/NOTIFICATION_WEB_DESKTOP.tpl',
-			'themes/default/templates/NOTIFICATION_PT_DESKTOP.tpl',
-			'themes/default/templates/BLOCK_TOP_NOTIFICATIONS.tpl',
-			'themes/default/templates/NOTIFICATION_BROWSE_SCREEN.tpl',
-			'themes/default/templates/NOTIFICATION_VIEW_SCREEN.tpl',
+			'JAVASCRIPT_NOTIFICATION_POLLER.tpl',
+			'NOTIFICATION_POLLER.tpl',
+			'NOTIFICATION_WEB.tpl',
+			'NOTIFICATION_WEB_DESKTOP.tpl',
+			'NOTIFICATION_PT_DESKTOP.tpl',
+			'BLOCK_TOP_NOTIFICATIONS.tpl',
+			'NOTIFICATION_BROWSE_SCREEN.tpl',
+			'NOTIFICATION_VIEW_SCREEN.tpl',
 			'themes/default/images/notifications/notifications.ico',
 			'themes/default/images/notifications/pts.png',
 			'themes/default/images/notifications/web_notifications.png',
 			'themes/default/images/notifications/index.html',
 			'data_custom/modules/web_notifications/.htaccess',
 			'data_custom/modules/web_notifications/index.html',
-			'data_custom/modules/web_notifications/latest.dat',
 		);
 	}
 
@@ -174,10 +173,14 @@ class Hook_addon_registry_core_notifications
 			))
 		);
 
-		return array(do_lorem_template('NOTIFICATION_BROWSE_SCREEN',array(
+		$out=do_lorem_template('NOTIFICATION_BROWSE_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'NOTIFICATIONS'=>$notifications,
-		)));
+		));
+
+		return array(
+			lorem_globalise($out, NULL, '', true)
+		);
 	}
 
 	/**
@@ -322,8 +325,10 @@ class Hook_addon_registry_core_notifications
 	function tpl_preview__block_top_notifications()
 	{
 		$out=do_lorem_template('BLOCK_TOP_NOTIFICATIONS',array(
-			'NUM_UNREAD_NOTIFICATIONS'=>placeholder_number(),
+			'NUM_UNREAD_WEB_NOTIFICATIONS'=>placeholder_number(),
+			'NUM_UNREAD_PTS'=>placeholder_number(),
 			'NOTIFICATIONS'=>'',
+			'PTS'=>'',
 			'MAX'=>'5',
 		));
 

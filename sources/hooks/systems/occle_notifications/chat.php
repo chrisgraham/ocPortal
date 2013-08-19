@@ -44,7 +44,8 @@ class Hook_occle_notification_chat
 				$rooms=array();
 				$messages=$room_messages[0]['cnt'];
 
-				$room_data=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','room_name',array('id'=>$room));
+				$room_data=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','room_name',array('id'=>$room));
+				if (is_null($room_data)) return false; // Selected room deleted
 				$rooms[$room_data]=build_url(array('page'=>'chat','type'=>'room','id'=>$room),get_module_zone('chat'));
 
 				return array(do_lang('SECTION_CHAT'),do_lang('NEW_MESSAGES'),do_template('OCCLE_CHAT_NOTIFICATION',array('_GUID'=>'2c63d91d1e3c88d5620b2122a73a8e1f','MESSAGE_COUNT'=>integer_format($messages),'ROOMS'=>$rooms)));

@@ -25,7 +25,7 @@
  */
 function restricted_manually_enabled_backdoor()
 {
-	global $IS_A_COOKIE_LOGIN;
+	global $IS_A_COOKIE_LOGIN,$IS_VIA_BACKDOOR;
 	$IS_A_COOKIE_LOGIN=true;
 
 	require_code('users_inactive_occasionals');
@@ -60,6 +60,8 @@ function restricted_manually_enabled_backdoor()
 	{
 		$ret=$GLOBALS['FORUM_DRIVER']->get_guest_id()+1;
 	}
+
+	$IS_VIA_BACKDOOR=true;
 
 	create_session($ret,1);
 

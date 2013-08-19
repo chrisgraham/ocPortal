@@ -323,6 +323,11 @@ class Module_vforums
 		$_buttons=new ocp_tempcode();
 		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(),true);
 		$_buttons->attach(do_template('SCREEN_BUTTON',array('_GUID'=>'8c928f1f703e9ba232a7033adee19a31','TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'all','IMMEDIATE'=>false,'URL'=>$archive_url)));
+		if ($title==do_lang('TOPICS_UNREAD'))
+		{
+			$mark_read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>db_get_first_id()),get_module_zone('topics'));
+			$_buttons->attach(do_template('SCREEN_BUTTON',array('TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'mark_read','IMMEDIATE'=>false,'URL'=>$mark_read_url)));
+		}
 
 		breadcrumb_add_segment($breadcrumbs);
 		$tpl_map=array(

@@ -212,6 +212,7 @@
 	width: 24em;
 	margin-{!en_right}: 0.5em;
 	border-{!en_right}: 1px solid {$GET,pale_border};
+	min-height: 28em;
 }
 
 .chat_lobby_convos_tabs {

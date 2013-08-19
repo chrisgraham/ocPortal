@@ -123,7 +123,9 @@ function delete_news_category($id)
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 
-	$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval($id));
+	$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT c.id FROM '.get_table_prefix().'news_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.nc_title WHERE c.id<>'.strval($id).' AND '.db_string_equal_to('text_original',do_lang('news:NC_general')));
+	if (is_null($min))
+		$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval($id));
 	if (is_null($min))
 	{
 		warn_exit(do_lang_tempcode('YOU_MUST_KEEP_ONE_NEWS_CAT'));
@@ -659,9 +661,14 @@ function import_rss()
 	foreach ($rss->gleamed_items as $i=>$item)
 	{
 		// What is it, being imported?
+		$is_page=false;
 		$is_news=true;
-		if ((isset($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE'])) && ($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE']=='page'))
-			$is_news=false;
+		if (isset($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE']))
+		{
+			$is_page=($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE']=='page');
+			$is_news=($item['extra']['HTTP://WORDPRESS.ORG/EXPORT/1.2/:POST_TYPE']=='post');
+		}
+		if ((!$is_page) && (!$is_news)) continue;
 
 		// Check for existing owner categories, if not create blog category for creator
 		if (($to_own_account==0) && (array_key_exists('author',$item)))
@@ -792,6 +799,8 @@ function import_rss()
 					$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
 					$result=http_download_file($item['rep_image'],NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
 					fclose($target_handle);
+					sync_file($target_path);
+					fix_permissions($target_path);
 				}
 			}
 
@@ -1033,6 +1042,8 @@ function import_rss()
 		$myfile=fopen($item['path'],'wb');
 		fwrite($myfile,$contents);
 		fclose($myfile);
+		sync_file($item['path']);
+		fix_permissions($item['path']);
 		if (!is_null($item['parent_page']))
 		{
 			$parent_page=mixed();
@@ -1195,7 +1206,7 @@ function import_wordpress_db()
 
 					// Content
 					$news='';
-					$news_article=import_foreign_news_html($post['post_content']);
+					$news_article=import_foreign_news_html(trim($post['post_content']),true);
 					if ($post['post_password']!='')
 					{
 						$news_article='[highlight]'.do_lang('POST_ACCESS_IS_RESTRICTED').'[/highlight]'."\n\n".'[if_in_group="Administrators"]'.$news_article.'[/if_in_group]';
@@ -1265,7 +1276,7 @@ function import_wordpress_db()
 
 					// Content
 					$_content="[title]".comcode_escape($post['post_title'])."[/title]\n\n";
-					$imp_con=import_foreign_news_html($post['post_content']);
+					$imp_con=import_foreign_news_html(trim($post['post_content']),true);
 					if ($imp_con!='') $_content.='[surround]'.$imp_con.'[/surround]'; else continue; /* Not a real page */
 					$_content.="\n\n[block]main_comcode_page_children[/block]";
 					if ($allow_comments==1)
@@ -1360,7 +1371,7 @@ function import_wordpress_db()
 							}
 							if ($comment_parent_id==0) $comment_parent_id=NULL;
 
-							$comment_content=import_foreign_news_html($comment['comment_content']);
+							$comment_content=import_foreign_news_html(trim($comment['comment_content']),true);
 
 							$comment_author_url=$comment['comment_author_url'];
 							$comment_author_email=$comment['comment_author_email'];
@@ -1434,6 +1445,8 @@ function import_wordpress_db()
 		$myfile=fopen($item['path'],'wb');
 		fwrite($myfile,$contents);
 		fclose($myfile);
+		sync_file($item['path']);
+		fix_permissions($item['path']);
 		if (!is_null($item['parent_page']))
 		{
 			$parent_page=mixed();
@@ -1513,10 +1526,14 @@ NEWS IMPORT UTILITY FUNCTIONS
  * Get data from wordpress DB.
  *
  * @param  string		HTML
+ * @param  boolean	Whether to add in HTML line breaks from whitespace ones.
  * @return string		Comcode
  */
-function import_foreign_news_html($html)
+function import_foreign_news_html($html,$force_linebreaks=false)
 {
+	if (($force_linebreaks) && (strpos($html,'<br')===false))
+		$html=nl2br($html);
+
 	// Wordpress images
 	$matches=array();
 	$num_matches=preg_match_all('#\[caption id="(\w+)" align="align(left|right|center|none)" width="(\d+)"\](.*)\[/caption\]#Us',$html,$matches);
@@ -1618,6 +1635,8 @@ function _news_import_grab_image(&$data,$url)
 	$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
 	$result=http_download_file($url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
 	fclose($target_handle);
+	sync_file($target_path);
+	fix_permissions($target_path);
 	if (!is_null($result))
 	{
 		$data=str_replace('"'.$url.'"',$target_url,$data);

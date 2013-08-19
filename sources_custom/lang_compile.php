@@ -205,18 +205,22 @@ if (!function_exists('require_lang_compile'))
 			// Cache
 			if ($desire_cache)
 			{
-				$file=@fopen($cache_path,'wt'); // Will fail if cache dir missing .. e.g. in quick installer
+				$file=@fopen($cache_path,'at'); // Will fail if cache dir missing .. e.g. in quick installer
 				if ($file)
 				{
+					flock($file,LOCK_EX);
+					ftruncate($file,0);
 					if (fwrite($file,serialize($load_target))>0)
 					{
 						// Success
+						flock($file,LOCK_UN);
 						fclose($file);
 						require_code('files');
 						fix_permissions($cache_path);
 					} else
 					{
 						// Failure
+						flock($file,LOCK_UN);
 						fclose($file);
 						@unlink($cache_path);
 					}

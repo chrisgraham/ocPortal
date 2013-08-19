@@ -1,3 +1,16 @@
+password_censor
+---------------
+ - data_custom/password_censor.php
+ - sources_custom/password_censor.php
+ - sources_custom/hooks/systems/cron/password_censor.php
+ - sources_custom/hooks/systems/comcode/encrypt.php
+ - sources_custom/hooks/systems/comcode/self_destruct.php
+ - sources_custom/notifications.php
+ - sources_custom/hooks/systems/startup/password_censor.php
+ - sources_custom/hooks/systems/symbols/DECRYPT.php
+ - themes/default/templates_custom/COMCODE_ENCRYPT.tpl
+ - themes/default/templates_custom/COMCODE_SELF_DESTRUCT.tpl
+
 simplified_emails
 -----------------
  - themes/default/templates_custom/MAIL.tpl
@@ -1403,6 +1416,7 @@ oc_whitelist
 ------------
  - adminzone/pages/comcode_custom/EN/comcode_whitelist.txt
  - sources_custom/comcode_renderer.php
+ - sources_custom/comcode_text.php
  - sources_custom/hooks/systems/do_next_menus/comcode_whitelist.php
  - text_custom/comcode_whitelist.txt
 
@@ -4115,6 +4129,7 @@ testing_platform
  - _tests/tests/unit_tests/auth.php
  - _tests/tests/unit_tests/api_classes_documented.php
  - _tests/tests/unit_tests/lang_ini_size.php
+ - _tests/tests/unit_tests/adminzone_search.php
  - _tests/tests/unit_tests/tracker_categories.php
  - _tests/tests/unit_tests/clean_reinstall.php
  - _tests/tests/unit_tests/authors.php
@@ -4312,6 +4327,21 @@ installprofile_generator
 ------------------------
  - sources_custom/hooks/systems/do_next_menus/installprofile_generator.php
  - adminzone/pages/minimodules_custom/installprofile_generator.php
+
+member_comments
+---------------
+ - sources_custom/hooks/systems/profiles_tabs/comments.php
+ - lang_custom/EN/member_comments.ini
+ - themes/default/templates_custom/OCF_MEMBER_PROFILE_COMMENTS.tpl
+
+show_group_avatars
+------------------
+ - sources_custom/miniblocks/show_group_avatars.php
+
+content_read_tracking
+---------------------
+ - sources_custom/hooks/systems/symbols/MARK_READ.php
+ - sources_custom/hooks/systems/symbols/HAS_READ.php
 
 calendar_from_6am
 -----------------
@@ -4539,3 +4569,24 @@ unslider
 content_oop_api
 ---------------
  - sources_custom/content3.php
+
+user_simple_csv_sync
+--------------------
+ - data_custom/modules/user_export/in.csv
+ - data_custom/modules/user_export/out.csv
+ - data_custom/user_export.php
+ - data_custom/user_import.php
+ - sources_custom/hooks/systems/cron/user_export.php
+ - sources_custom/hooks/systems/cron/user_import.php
+ - sources_custom/hooks/systems/upon_query/user_export.php
+ - sources_custom/user_export.php
+ - sources_custom/user_import.php
+
+downloads_followup_email
+------------------------
+ - lang_custom/EN/downloads_followup_email.ini
+ - sources_custom/hooks/systems/cron/downloads_followup_email.php
+ - sources_custom/hooks/systems/notifications/downloads_followup_email.php
+ - themes/default/templates_custom/DOWNLOADS_FOLLOWUP_EMAIL.tpl
+ - themes/default/templates_custom/DOWNLOADS_FOLLOWUP_EMAIL_DOWNLOAD_LIST.tpl
+>>>>>>> v9

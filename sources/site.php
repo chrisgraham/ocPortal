@@ -840,7 +840,7 @@ function do_site()
 	}
 
 	// Cacheing for spiders
-	if ((running_script('index')) && (count($_POST)==0) && (isset($GLOBALS['SITE_INFO']['fast_spider_cache'])) && ($GLOBALS['SITE_INFO']['fast_spider_cache']=='1') && (is_guest()))
+	if ((running_script('index')) && (count($_POST)==0) && (isset($GLOBALS['SITE_INFO']['fast_spider_cache'])) && ($GLOBALS['SITE_INFO']['fast_spider_cache']!='0') && (is_guest()))
 	{
 		$bot_type=get_bot_type();
 		if ((($bot_type!==NULL) || ((isset($GLOBALS['SITE_INFO']['any_guest_cached_too'])) && ($GLOBALS['SITE_INFO']['any_guest_cached_too']=='1'))) && (can_fast_spider_cache()))
@@ -864,7 +864,9 @@ function do_site()
 
 			$out_evaluated=$out->evaluate(NULL,false);
 
-			$myfile=@fopen($fast_cache_path,'wb') OR intelligent_write_error($fast_cache_path);
+			$myfile=@fopen($fast_cache_path,'ab') OR intelligent_write_error($fast_cache_path);
+			flock($myfile,LOCK_EX);
+			ftruncate($myfile,0);
 			if (function_exists('gzencode'))
 			{
 				fwrite($myfile,gzencode($out_evaluated,9));
@@ -872,6 +874,7 @@ function do_site()
 			{
 				fwrite($myfile,$out_evaluated);
 			}
+			flock($myfile,LOCK_UN);
 			fclose($myfile);
 			fix_permissions($fast_cache_path);
 			sync_file($fast_cache_path);

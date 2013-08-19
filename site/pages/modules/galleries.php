@@ -706,7 +706,7 @@ class Module_galleries
 			$where=db_string_equal_to('cat',$cat);
 			if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 			if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e '.$extra_join_video.' WHERE '.$where.$extra_where_video.' ORDER BY '.$sort,1,NULL,false,true);
+			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos r '.$extra_join_video.' WHERE '.$where.$extra_where_video.' ORDER BY '.$sort,1,NULL,false,true);
 			if (array_key_exists(0,$first_video))
 			{
 				$row=$first_video[0];
@@ -717,7 +717,7 @@ class Module_galleries
 				$where=db_string_equal_to('cat',$cat);
 				if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 				if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e '.$extra_join_image.' WHERE '.$where.$extra_where_image.' ORDER BY '.$sort,1,NULL,false,true);
+				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images r '.$extra_join_image.' WHERE '.$where.$extra_where_image.' ORDER BY '.$sort,1,NULL,false,true);
 				if (array_key_exists(0,$first_image))
 				{
 					$row=$first_image[0];
@@ -870,8 +870,8 @@ class Module_galleries
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND validated=1';
 		if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 		$max_entries=intval(get_option('gallery_entries_flow_per_page'));
-		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e '.$extra_join_video.' WHERE '.$where.$extra_where_video.' ORDER BY '.$sort,$max_entries,NULL,false,true);
-		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e '.$extra_join_image.' WHERE '.$where.$extra_where_image.' ORDER BY '.$sort,$max_entries,NULL,false,true);
+		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos r '.$extra_join_video.' WHERE '.$where.$extra_where_video.' ORDER BY '.$sort,$max_entries,NULL,false,true);
+		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images r '.$extra_join_image.' WHERE '.$where.$extra_where_image.' ORDER BY '.$sort,$max_entries,NULL,false,true);
 
 		// See if there is a numbering system to sort by
 		$all_are=NULL;

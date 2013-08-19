@@ -35,7 +35,7 @@
 {+START,IF_NON_EMPTY,{CODE}}
 	<div class="float_surrounder">
 		<div class="float_surrounder">
-			<a class="toggleable_tray_button ttb_left" title="{!VIEW_SOURCE_CODE}" href="#" onclick="return toggleable_tray('{CLASS*}.{FUNCTION*}');"><img alt="{!EXPAND}: {!VIEW_SOURCE_CODE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			<a class="toggleable_tray_button ttb_left" title="{!VIEW_SOURCE_CODE}" href="#" onclick="return toggleable_tray('{CLASS;*}.{FUNCTION;*}');"><img alt="{!EXPAND}: {!VIEW_SOURCE_CODE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 		</div>
 
 		<div class="toggleable_tray toggleable_tray_pulldown_spacer" id="{CLASS*}.{FUNCTION*}" style="display: {$JS_ON,none,block}" aria-expanded="false">

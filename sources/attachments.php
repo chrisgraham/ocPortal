@@ -368,6 +368,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 	$attachment['a_type']=$type;
 	$attachment['a_thumb']=array_key_exists('thumb',$attributes)?$attributes['thumb']:'1';
 	if ($attachment['a_thumb']!='0') $attachment['a_thumb']='1';
+	$attachment['a_thumb_url']=array_key_exists('thumb_url',$attributes)?$attributes['thumb_url']:$attachment['a_thumb_url'];
 
 	switch ($type)
 	{
@@ -399,6 +400,11 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 					$_url->attach('&for_session=');
 					$_url->attach(symbol_tempcode('SESSION_HASHED'));
 				}
+			} else
+			{
+				$url=$attachment['a_url'];
+				if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+				$_url=make_string_tempcode($url);
 			}
 
 			$temp_tpl=hyperlink($_url,($attachment['a_description']!='')?$attachment['a_description']:$attachment['a_original_filename'],true);

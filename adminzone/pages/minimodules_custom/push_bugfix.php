@@ -411,7 +411,7 @@ function create_hotfix_tar($tracker_id,$files)
 		fix_permissions($builds_path.'/builds/hotfixes',0777);
 	}
 	chdir($builds_path.'/builds/hotfixes');
-	$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'COPYFILE_DISABLE=1 tar');
+	$tar=((DIRECTORY_SEPARATOR=='\\')?('tar'):'COPYFILE_DISABLE=1 tar');
 	$tar_path=$builds_path.'/builds/hotfixes/hotfix-'.strval($tracker_id).', '.date('Y-m-d ga').'.tar';
 	$cmd=$tar.' cvf '.escapeshellarg(basename($tar_path)).' -C '.escapeshellarg(get_file_base()); // Windows doesn't allow absolute path for 'f' option so we need to use 'f' & 'C' to do it
 	foreach ($files as $file)

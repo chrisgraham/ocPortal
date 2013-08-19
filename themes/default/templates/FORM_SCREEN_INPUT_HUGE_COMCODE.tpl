@@ -25,7 +25,7 @@
 
 			{+START,IF,{$IN_STR,{REQUIRED},wysiwyg}}
 				<script>// <![CDATA[
-					if (wysiwyg_on()) document.getElementById('{NAME*;}').readOnly=true;
+					if (wysiwyg_on()) document.getElementById('{NAME;/}').readOnly=true;
 				//]]></script>
 			{+END}
 			{+START,IF_PASSED,DEFAULT_PARSED}

@@ -458,9 +458,12 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.filter_naughty($zone).'/pages/comcode_custom/'.filter_naughty($lang).'/'.filter_naughty($new_file).'.txt');
 	if ((!file_exists($fullpath)) || ($text!=file_get_contents($fullpath)))
 	{
-		$myfile=@fopen($fullpath,'wt');
+		$myfile=@fopen($fullpath,'at');
 		if ($myfile===false) intelligent_write_error($fullpath);
+		flock($myfile,LOCK_EX);
+		ftruncate($myfile,0);
 		if (fwrite($myfile,$text)<strlen($text)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		flock($myfile,LOCK_UN);
 		fclose($myfile);
 		sync_file($fullpath);
 		fix_permissions($fullpath);

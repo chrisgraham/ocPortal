@@ -19,8 +19,8 @@
 		{
 			stop_slideshow_timer('{!STOPPED;}');
 			window.setTimeout(function() {
-				add_event_listener_abstract(document.getElementById('{$GET*,player_id}'),'stateChange',function(newState) { if (newState==0) { player_stopped(); } } );
-				document.getElementById('{$GET*,player_id}').DoPlay();
+				add_event_listener_abstract(document.getElementById('{$GET;,player_id}'),'stateChange',function(newState) { if (newState==0) { player_stopped(); } } );
+				document.getElementById('{$GET;,player_id}').DoPlay();
 			}, 1000);
 		}
 	} );

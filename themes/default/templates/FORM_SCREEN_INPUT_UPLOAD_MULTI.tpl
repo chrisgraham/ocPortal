@@ -23,7 +23,7 @@
 		{+END}
 	{+END}
 
-	{+START,IF,{$JS_ON}}<button class="button_micro" type="button" id="clearBtn_{NAME_STUB*}_{I*}" onclick="var x=document.getElementById('{NAME_STUB*}_{I*;}'); x.value=''; if (typeof x.fakeonchange!='undefined' &amp;&amp; x.fakeonchange) x.fakeonchange(event); return false;">{!CLEAR}</button>{+END}
+	{+START,IF,{$JS_ON}}<button class="button_micro" type="button" id="clearBtn_{NAME_STUB*}_{I*}" onclick="var x=document.getElementById('{NAME_STUB;*}_{I;*}'); x.value=''; if (typeof x.fakeonchange!='undefined' &amp;&amp; x.fakeonchange) x.fakeonchange(event); return false;">{!CLEAR}</button>{+END}
 
 	<!--Additional uploaders will auto-append here-->
 </div>
@@ -31,7 +31,7 @@
 {+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput('upload_multi','{NAME_STUB*}_{I}',null,null,'{FILTER/;}');
+			preinitFileInput('upload_multi','{NAME_STUB;/}_{I}',null,null,'{FILTER;/}');
 		} );
 	//]]></script>
 {+END}{+END}

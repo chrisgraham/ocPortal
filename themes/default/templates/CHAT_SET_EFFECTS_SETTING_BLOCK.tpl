@@ -42,7 +42,7 @@
 								{+END}
 							</select>
 
-							<input type="button" onclick="var ob=document.getElementById('select_{KEY*;}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}'); var val=ob.options[ob.selectedIndex].value; if (val=='') window.fauxmodal_alert('{!PLEASE_SELECT_SOUND;}'); else play_sound_url(val); return false;" title="{EFFECT_TITLE*}" value="{!TEST_SOUND}" />
+							<input type="button" onclick="var ob=document.getElementById('select_{KEY;*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}'); var val=ob.options[ob.selectedIndex].value; if (val=='') window.fauxmodal_alert('{!PLEASE_SELECT_SOUND;}'); else play_sound_url(val); return false;" title="{EFFECT_TITLE*}" value="{!TEST_SOUND}" />
 						</td>
 					</tr>
 

@@ -41,7 +41,15 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	if (isset($FILE_ARRAY))
 	{
 		$html=unixify_line_format(file_array_get('themes/'.$theme.$path.$codename.$suffix));
-	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix));
+	} else
+	{
+		$_path=$base_dir.filter_naughty($theme.$path.$codename).$suffix;
+		$tmp=fopen($_path,'rb');
+		flock($tmp,LOCK_SH);
+		$html=unixify_line_format(file_get_contents($_path));
+		flock($tmp,LOCK_UN);
+		fclose($tmp);
+	}
 
 	if (strpos($html,'{$,Parser hint: pure}')!==false)
 	{
@@ -75,7 +83,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		} else
 		{
 			$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang).'/';
-			$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcd','wb');
+			$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcd','ab');
 			if ($myfile===false)
 			{
 				if (@mkdir($path2,0777))
@@ -91,7 +99,10 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 				}
 			} else
 			{
+				flock($myfile,LOCK_EX);
+				ftruncate($myfile,0);
 				fwrite($myfile,$result->to_assembly($lang));
+				flock($myfile,LOCK_UN);
 				fclose($myfile);
 				fix_permissions($path2.filter_naughty($_codename).$suffix.'.tcd');
 			}

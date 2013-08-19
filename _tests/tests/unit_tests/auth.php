@@ -25,6 +25,11 @@ class auth_test_set extends ocp_test_case
 		parent::setUp();
 	}
 
+	function testNoBackdoor()
+	{
+		$this->assertTrue(!isset($GLOBALS['SITE_INFO']['backdoor_ip']),'Backdoor to IP address present, may break other tests');
+	}
+
 	function testBadPasswordDoesFail()
 	{
 		$username='admin';
@@ -64,9 +69,7 @@ class auth_test_set extends ocp_test_case
 
 	function testCannotStealSession()
 	{
-		$fake_session_id=123454321;
-
-		$GLOBALS['SITE_DB']->query_delete('sessions',array('the_session'=>$fake_session_id));
+		$fake_session_id=1234543;
 
 		$ips=array();
 		$ips[preg_replace('#\.\d+$#','.*',$_SERVER['SERVER_ADDR'])]=true;
@@ -74,6 +77,9 @@ class auth_test_set extends ocp_test_case
 
 		foreach ($ips as $ip=>$pass_expected) // We actually test both pass and fail, to help ensure our test is actually not somehow getting a failure from something else
 		{
+			// Clean up
+			$GLOBALS['SITE_DB']->query_delete('sessions',array('the_session'=>$fake_session_id));
+
 			$new_session_row=array(
 				'the_session'=>$fake_session_id,
 				'last_activity'=>time(),
@@ -89,6 +95,7 @@ class auth_test_set extends ocp_test_case
 				'the_id'=>'',
 			);
 			$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row);
+			persistent_cache_delete('SESSION_CACHE');
 
 			require_code('files');
 			$result=http_download_file(static_evaluate_tempcode(build_url(array('page'=>'','keep_session'=>$fake_session_id),'adminzone',NULL,false,false,true)),NULL,false);
@@ -101,9 +108,6 @@ class auth_test_set extends ocp_test_case
 			{
 				$this->assertTrue($HTTP_MESSAGE=='401');
 			}
-
-			// Clean up
-			$GLOBALS['SITE_DB']->query_delete('sessions',array('the_session'=>$fake_session_id));
 		}
 	}
 

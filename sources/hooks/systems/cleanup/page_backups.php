@@ -79,10 +79,9 @@ class Hook_page_backups
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Move revision files from the given path, to a subdirectory.
 	 *
-	 * @param  tempcode	Results
-	 * @return tempcode	Results
+	 * @param  PATH		Path
 	 */
 	function process($path)
 	{

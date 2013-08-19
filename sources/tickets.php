@@ -78,17 +78,18 @@ function get_ticket_forum_id($member=NULL,$ticket_type=NULL,$create=false,$silen
 /**
  * Returns whether the given forum ID is for a ticket forum (subforum of the root ticket forum).
  *
- * @param  AUTO_LINK		The forum ID
+ * @param  ?AUTO_LINK	The forum ID (NULL: private topics forum)
  * @return boolean		Whether the given forum is a ticket forum
  */
 function is_ticket_forum($forum_id)
 {
-	if (is_null($forum_id)) return NULL;
+	if (is_null($forum_id)) return false;
 
-	$root_forum_id=get_ticket_forum_id(NULL,NULL,false,true);
-	if ($forum_id===$root_forum_id) return true;
+	$root_ticket_forum_id=get_ticket_forum_id(NULL,NULL,false,true);
+	if (($root_ticket_forum_id==db_get_first_id()) && ($forum_id!=db_get_first_id())) return false; // If ticket forum (oddly) set as root, don't cascade it through all!
+	if ($forum_id===$root_ticket_forum_id) return true;
 
-	$query='SELECT COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).' AND f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($root_forum_id).' OR f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($root_forum_id).'))';
+	$query='SELECT COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).' AND f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($root_ticket_forum_id).' OR f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($root_ticket_forum_id).'))';
 
 	$rows=$GLOBALS['FORUM_DB']->query($query);
 	return ($rows[0]['cnt']!=0);

@@ -1385,6 +1385,8 @@ class forum_driver_ocf extends forum_driver_base
 		if ($FLOOD_CONTROL_ONCE) return;
 		$FLOOD_CONTROL_ONCE=true;
 
+		if ($GLOBALS['IS_VIA_BACKDOOR']) return;
+
 		// Set last visit time session cookie if it doesn't exist
 		if ((!isset($_COOKIE['last_visit'])) && ($GLOBALS['FORUM_DRIVER']->get_guest_id()!=$id))
 		{

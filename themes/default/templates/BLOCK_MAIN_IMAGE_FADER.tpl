@@ -42,7 +42,7 @@
 			{+END}
 		{+END}
 		{+START,LOOP,IMAGES}
-			var url{_loop_key%}='{_loop_var/;}';
+			var url{_loop_key%}='{_loop_var;/}';
 			new Image().src=url{_loop_key%}; // precache
 			window.setTimeout(function()
 			{

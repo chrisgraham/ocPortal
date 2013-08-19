@@ -920,6 +920,7 @@ function get_text_templates()
 function is_plain_text_template($temp_name)
 {
 	return (
+		$temp_name=='BLOCK_TOP_NOTIFICATIONS' || // In header, and uses IDs, so can't be used except in isolation
 		substr($temp_name,0,5)=='MAIL_' ||
 		substr($temp_name,0,11)=='JAVASCRIPT_' && $temp_name!='JAVASCRIPT_NEED' && $temp_name!='JAVASCRIPT_NEED_INLINE' ||
 		$temp_name=='JAVASCRIPT.tpl' ||
@@ -950,6 +951,12 @@ function is_full_screen_template($temp_name=NULL,$tempcode=NULL)
 		return ($pos!==false) && ($pos<400);
 	}
 
-	return ($temp_name=='GLOBAL_HTML_WRAP' || $temp_name=='RESTORE_HTML_WRAP' || $temp_name=='BASIC_HTML_WRAP' || $temp_name=='STANDALONE_HTML_WRAP' || $temp_name=='MAIL');
+	return (
+		$temp_name=='GLOBAL_HTML_WRAP' || 
+		$temp_name=='RESTORE_HTML_WRAP' || 
+		$temp_name=='BASIC_HTML_WRAP' || 
+		$temp_name=='STANDALONE_HTML_WRAP' || 
+		$temp_name=='MAIL'
+	);
 }
 

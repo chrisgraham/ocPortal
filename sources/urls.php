@@ -386,6 +386,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 	if ($skip!==NULL) $arr[]=implode(',',array_keys($skip));
 
 	$ret=symbol_tempcode('PAGE_LINK',$arr);
+
 	global $SITE_INFO;
 	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1') && (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) && (strpos($id,'/')!==false))
 	{
@@ -517,7 +518,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		if (!$avoid_remap) $USE_REWRITE_PARAMS_CACHE=$use_rewrite_params;
 	} else $use_rewrite_params=$USE_REWRITE_PARAMS_CACHE;
 	$test_rewrite=NULL;
-	$self_page=((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_param('page',''))))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='_top') && (!$KNOWN_AJAX);
+	$self_page=((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_param('page',''))))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='#_top') && (!$KNOWN_AJAX);
 	if ($use_rewrite_params)
 	{
 		if ((!$self_page) || ($WHAT_IS_RUNNING_CACHE==='index'))
@@ -554,6 +555,8 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		foreach ($vars as $key=>$val)
 		{
 			if ($val===NULL) continue; // NULL means skip
+
+			if (!is_string($key)) $key=strval($key);
 
 			if ($val===SELF_REDIRECT) $val=get_self_url(true,true);
 

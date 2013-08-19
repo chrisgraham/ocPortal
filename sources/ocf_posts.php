@@ -67,12 +67,17 @@ function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL)
 
 	if (is_null($forum_id))
 	{
-		if (($resource_owner==$member_id) && (has_privilege($member_id,'edit_private_topic_posts'))) return true;
+		if (has_privilege($member_id,'moderate_personal_topic')) return true;
+		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) return false;
+	} else
+	{
+		$ticket_forum=get_option('ticket_forum_name',true);
+		$comments_forum=get_option('comments_forum_name',true);
+		if ((is_null($ticket_forum)) || (($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($ticket_forum)) && ($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($comments_forum))))
+		{
+			if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
+		}
 	}
-
-	if (is_null($forum_id)) return false;
-
-	if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
 
 	return has_edit_permission('low',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }
@@ -93,11 +98,15 @@ function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id=NULL)
 	{
 		if (has_privilege($member_id,'moderate_personal_topic')) return true;
 		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) return false;
+	} else
+	{
+		$ticket_forum=get_option('ticket_forum_name',true);
+		$comments_forum=get_option('comments_forum_name',true);
+		if ((is_null($ticket_forum)) || (($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($ticket_forum)) && ($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($comments_forum))))
+		{
+			if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
+		}
 	}
-
-	if (is_null($forum_id)) return false;
-
-	if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
 
 	return has_delete_permission('low',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }

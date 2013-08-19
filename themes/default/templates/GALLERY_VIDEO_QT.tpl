@@ -23,8 +23,8 @@
 		{
 			stop_slideshow_timer('{!STOPPED;}');
 			window.setTimeout(function() {
-				add_event_listener_abstract(document.getElementById('{$GET*,player_id}'),'qt_ended',function() { player_stopped(); } );
-				document.getElementById('{$GET*,player_id}').Play();
+				add_event_listener_abstract(document.getElementById('{$GET;,player_id}'),'qt_ended',function() { player_stopped(); } );
+				document.getElementById('{$GET;,player_id}').Play();
 			}, 1000);
 		}
 	} );

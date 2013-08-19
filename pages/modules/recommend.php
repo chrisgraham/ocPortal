@@ -290,7 +290,7 @@ class Module_recommend
 			'URL'=>$post_url,
 			'SUBMIT_NAME'=>$submit_name,
 			'TEXT'=>$text,
- 			'SUPPORT_AUTOSAVE'=>true,
+			'SUPPORT_AUTOSAVE'=>true,
 		));
 	}
 

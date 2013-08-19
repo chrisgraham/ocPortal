@@ -287,6 +287,8 @@ function semihtml_to_comcode($semihtml,$force=false)
 	$semihtml=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$semihtml);
 	$array_html_preg_replace=array();
 	$semihtml=str_replace('&#8203;','',$semihtml);
+	if (strtolower(get_charset())=='utf-8')
+		$semihtml=str_replace(chr(hexdec('e2')).chr(hexdec('80')).chr(hexdec('8b')),'',$semihtml);
 	$array_html_preg_replace[]=array('#^<kbd class="(ocp_keep|ocp_keep_block)"[^>]*>(.*)</kbd>$#siU',"\${2}");
 	$semihtml=array_html_preg_replace('kbd',$array_html_preg_replace,$semihtml);
 	$semihtml=str_replace('<!-- >','',$semihtml);

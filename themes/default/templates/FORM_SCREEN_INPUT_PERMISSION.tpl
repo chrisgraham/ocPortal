@@ -5,7 +5,7 @@
 			<label for="access_{GROUP_ID*}_presets">
 				<span class="accessibility_hidden">{!PINTERFACE_PRESETS} ({GROUP_NAME*})</span>
 
-				<select tabindex="{TABINDEX*}" id="access_{GROUP_ID*}_presets" name="access_{GROUP_ID*}_presets" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="this.onchange(event);" onchange="copy_permission_presets('access_{GROUP_ID*;}',this.options[this.selectedIndex].value); cleanup_permission_list('access_{GROUP_ID*;}')">
+				<select tabindex="{TABINDEX*}" id="access_{GROUP_ID*}_presets" name="access_{GROUP_ID*}_presets" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="this.onchange(event);" onchange="copy_permission_presets('access_{GROUP_ID;*}',this.options[this.selectedIndex].value); cleanup_permission_list('access_{GROUP_ID;*}')">
 					{+START,IF,{ALL_GLOBAL}}
 						<option selected="selected" value="-1">{!PINTERFACE_LEVEL_GLOBAL}</option>
 					{+END}
@@ -45,12 +45,12 @@
 
 		{+START,IF,{$NOT,{ALL_GLOBAL}}}
 			<script>// <![CDATA[
-				var list=document.getElementById('access_{GROUP_ID*;}_presets');
+				var list=document.getElementById('access_{GROUP_ID;*}_presets');
 				// Test to see what we wouldn't have to make a change to get - and that is what we're set at
 				if (!copy_permission_presets('access_{GROUP_ID*}','0',true)) list.selectedIndex=list.options.length-4;
-				else if (!copy_permission_presets('access_{GROUP_ID*;}','1',true)) list.selectedIndex=list.options.length-3;
-				else if (!copy_permission_presets('access_{GROUP_ID*;}','2',true)) list.selectedIndex=list.options.length-2;
-				else if (!copy_permission_presets('access_{GROUP_ID*;}','3',true)) list.selectedIndex=list.options.length-1;
+				else if (!copy_permission_presets('access_{GROUP_ID;*}','1',true)) list.selectedIndex=list.options.length-3;
+				else if (!copy_permission_presets('access_{GROUP_ID;*}','2',true)) list.selectedIndex=list.options.length-2;
+				else if (!copy_permission_presets('access_{GROUP_ID;*}','3',true)) list.selectedIndex=list.options.length-1;
 			//]]></script>
 		{+END}
 	</td>

@@ -3,8 +3,8 @@
 
 	{HIDDEN}
 	<div class="pagination_per_page">
-		<div class="accessibility_hidden"><label for="r_{$GET*;,RAND}">{!PER_PAGE}: {$GET*,TEXT_ID}</label></div>
-		<select id="r_{$GET*;,RAND}" name="{MAX_NAME*}">
+		<div class="accessibility_hidden"><label for="r_{$GET;*,RAND}">{!PER_PAGE}: {$GET*,TEXT_ID}</label></div>
+		<select id="r_{$GET;*,RAND}" name="{MAX_NAME*}">
 			{SELECTORS}
 		</select>
 		<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" title="{!PER_PAGE}: {$GET*,TEXT_ID}" value="{!PER_PAGE}" />

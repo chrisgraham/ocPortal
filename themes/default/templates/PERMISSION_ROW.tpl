@@ -1,7 +1,7 @@
 <tr class="{$CYCLE,zebra,zebra_0,zebra_1}">
 	<th>
 		{PERMISSION*}
-		{+START,IF_PASSED,DESCRIPTION}<img src="{$IMG*,help}" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{DESCRIPTION*;^}','auto');" alt="{!HELP}" />{+END}
+		{+START,IF_PASSED,DESCRIPTION}<img src="{$IMG*,help}" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{DESCRIPTION;^*}','auto');" alt="{!HELP}" />{+END}
 	</th>
 	{CELLS}
 	<td>

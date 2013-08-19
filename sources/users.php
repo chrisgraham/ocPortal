@@ -52,6 +52,8 @@ function init__users()
 	$IS_A_COOKIE_LOGIN=false;
 	global $DOING_USERS_INIT;
 	$DOING_USERS_INIT=true;
+	global $IS_VIA_BACKDOOR;
+	$IS_VIA_BACKDOOR=true;
 
 	// Load all sessions into memory, if possible
 	if (get_option('session_prudence')!='1')
@@ -233,7 +235,7 @@ function get_member($quick_only=false)
 			global $SESSION_CONFIRMED_CACHE;
 			$SESSION_CONFIRMED_CACHE=$member_row['session_confirmed'];
 
-			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
+			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member)) && (!$GLOBALS['IS_VIA_BACKDOOR'])) // All hands to the guns
 			{
 				warn_exit(do_lang_tempcode('MEMBER_BANNED'));
 			}

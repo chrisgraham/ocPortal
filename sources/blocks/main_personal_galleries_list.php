@@ -100,6 +100,17 @@ class Block_main_personal_galleries_list
 				{
 					$add_gallery_url=build_url(array('page'=>'cms_galleries','type'=>'ac','cat'=>$rows[0]['name']),get_module_zone('cms_galleries'));
 				}
+				if (count($rows)==1)
+				{
+					if ($rows[0]['accept_images']==1)
+					{
+						$add_image_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$rows[0]['name']),get_module_zone('cms_galleries'));
+					}
+					if ($rows[0]['accept_videos']==1)
+					{
+						$add_video_url=build_url(array('page'=>'cms_galleries','type'=>'av','cat'=>$rows[0]['name']),get_module_zone('cms_galleries'));
+					}
+				}
 			}
 		}
 

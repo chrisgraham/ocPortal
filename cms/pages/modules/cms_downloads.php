@@ -1045,7 +1045,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 
 		$fields->attach(meta_data_get_fields('download_category',is_null($id)?NULL:strval($id)));
 		require_code('seo2');
-		$fields2->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
+		$fields->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('download_category',is_null($id)?NULL:strval($id)));

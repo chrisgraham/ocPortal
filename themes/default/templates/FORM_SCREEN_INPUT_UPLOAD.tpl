@@ -7,12 +7,12 @@
 				{!UNLINK_EXISTING_UPLOAD}
 			{+END}
 			{+START,IF,{$AND,{IS_IMAGE},{$IS_NON_EMPTY,{EXISTING_URL}}}}
-				{!UNLINK_EXISTING_UPLOAD_IMAGE,&lt;img src=&quot;{EXISTING_URL*;^}&quot; title=&quot;&quot; alt=&quot;{!EXISTING;^}&quot; /&gt;}
+				{!UNLINK_EXISTING_UPLOAD_IMAGE,&lt;img src=&quot;{EXISTING_URL;^*}&quot; title=&quot;&quot; alt=&quot;{!EXISTING;^}&quot; /&gt;}
 			{+END}
 		</label>
 	{+END}
 
-	{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<button class="button_micro" type="button" id="clearBtn_{NAME*}" onclick="var x=document.getElementById('{NAME*;}'); x.value=''; if (typeof x.fakeonchange!='undefined' &amp;&amp; x.fakeonchange) x.fakeonchange(event); return false;" title="{!CLEAR}{+START,IF_PASSED,PRETTY_NAME}: {PRETTY_NAME*}{+END}">{!CLEAR}</button>{+END}
+	{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<button class="button_micro" type="button" id="clearBtn_{NAME*}" onclick="var x=document.getElementById('{NAME;*}'); x.value=''; if (typeof x.fakeonchange!='undefined' &amp;&amp; x.fakeonchange) x.fakeonchange(event); return false;" title="{!CLEAR}{+START,IF_PASSED,PRETTY_NAME}: {PRETTY_NAME*}{+END}">{!CLEAR}</button>{+END}
 </div>
 
 {+START,IF,{$CONFIG_OPTION,java_upload}}
@@ -25,7 +25,7 @@
 {+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput('upload','{NAME/;}',null,null,'{FILTER/;}');
+			preinitFileInput('upload','{NAME;/}',null,null,'{FILTER;/}');
 		} );
 	//]]></script>
 {+END}{+END}

@@ -406,7 +406,7 @@ class forum_driver_smf extends forum_driver_base
 	 */
 	function forum_id_from_name($forum_name)
 	{
-		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_select_value_if_there('boards','ID_BOARD',array('name'=>$forum_name));
+		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_select_value_if_there('boards','ID_BOARD',array('name'=>escape_html($forum_name)));
 	}
 
 	/**
@@ -1157,6 +1157,7 @@ class forum_driver_smf extends forum_driver_base
 			$rows[0]['pm_email_notify']=0;
 			$rows[0]['dateRegistered']=time();
 			$rows[0]['posts']=0;
+			$rows[0]['avatar']='';
 			$rows[0]['ID_THEME']=NULL;
 			$rows[0]['ID_GROUP']=0;
 			$rows[0]['additionalGroups']='';

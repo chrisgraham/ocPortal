@@ -30,7 +30,25 @@ class Hook_Profiles_Tabs_Edit_profile
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
+		if (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')))
+		{
+			$mini_mode=false;
+			$groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id_of);
+			$_custom_fields=ocf_get_all_custom_fields_match(
+				$groups,
+				($mini_mode || (is_null($member_id_of)) || ($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'view_any_profile_field')))?NULL:1, // public view
+				($mini_mode || (is_null($member_id_of)) || ($member_id_of!=$member_id_viewing) || (has_privilege($member_id_viewing,'view_any_profile_field')))?NULL:1, // owner view
+				($mini_mode || (is_null($member_id_of)) || ($member_id_of!=$member_id_viewing) || (has_privilege($member_id_viewing,'view_any_profile_field')))?NULL:1, // owner set
+				NULL,
+				NULL,
+				NULL,
+				0,
+				$mini_mode?true:NULL // show on join form
+			);
+			if (count($_custom_fields)==0) return false;
+			return true;
+		}
+		return false;
 	}
 
 	/**

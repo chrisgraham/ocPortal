@@ -129,9 +129,9 @@ function display_alert(notification)
 				window.soundManager.play('notification_ping');
 			};
 
-			if (!soundManager.setupOptions.url)
+			if (!window.soundManager.setupOptions.url)
 			{
-				soundManager.setup({onready: go_func, url: get_base_url()+'/data', debugMode: false});
+				window.soundManager.setup({onready: go_func, url: get_base_url()+'/data', debugMode: false});
 			} else
 			{
 				go_func();
@@ -142,7 +142,7 @@ function display_alert(notification)
 	// Show desktop notification
 	if (window.notify.isSupported)
 	{
-		var icon='{$IMG;,favicon}';
+		var icon='{$IMG;,favicon}'.replace(/^http:/,window.location.protocol);
 		var title='{!notifications:DESKTOP_NOTIFICATION_SUBJECT;}';
 		title=title.replace(/\\{1\\}/,notification.getAttribute('subject'));
 		title=title.replace(/\\{2\\}/,notification.getAttribute('from_username'));
@@ -304,7 +304,7 @@ function _toggle_messaging_box(event,name,hide)
 			var name, s;
 			for (name in source) {
 				s = source[name];
-				if (!(name in target) || (target[name] !== s && (!(name in empty) || empty[name] !== s))) {
+				if ((typeof target[name]=='undefined') || (!target.name) || (target[name] !== s && ((typeof empty[name]=='undefined') || (!empty[name]) || empty[name] !== s))) {
 					target[name] = s;
 				}
 			}

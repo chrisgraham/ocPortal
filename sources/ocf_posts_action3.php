@@ -125,16 +125,20 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	}
 
 	// Save in history
-	$GLOBALS['FORUM_DB']->query_insert('f_post_history',array(
-		'h_create_date_and_time'=>$post_info[0]['p_time'],
-		'h_action_date_and_time'=>is_null($edit_time)?time():$edit_time,
-		'h_owner_member_id'=>$post_owner,
-		'h_alterer_member_id'=>get_member(),
-		'h_post_id'=>$post_id,
-		'h_topic_id'=>$topic_id,
-		'h_before'=>get_translated_text($_postdetails,$GLOBALS['FORUM_DB']),
-		'h_action'=>'EDIT_POST'
-	));
+	$ticket_forum=get_option('ticket_forum_name',true);
+	if ((is_null($ticket_forum)) || ($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($ticket_forum)))
+	{
+		$GLOBALS['FORUM_DB']->query_insert('f_post_history',array(
+			'h_create_date_and_time'=>$post_info[0]['p_time'],
+			'h_action_date_and_time'=>$edit_time,
+			'h_owner_member_id'=>$post_owner,
+			'h_alterer_member_id'=>get_member(),
+			'h_post_id'=>$post_id,
+			'h_topic_id'=>$topic_id,
+			'h_before'=>get_translated_text($_postdetails,$GLOBALS['FORUM_DB']),
+			'h_action'=>'EDIT_POST'
+		));
+	}
 
 	require_code('attachments2');
 	require_code('attachments3');
@@ -445,6 +449,11 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 	$test=$delete_if_empty?$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_topic_id'=>$from_topic_id)):1;
 	if ($test==0)
 	{
+		$num_view_count=0;
+		$num_view_count+=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_num_views',array('id'=>$from_topic_id));
+		$num_view_count+=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_num_views',array('id'=>$to_topic_id));
+		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_num_views'=>$num_view_count),array('id'=>$to_topic_id),'',1);
+
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
 		ocf_delete_topic($from_topic_id,do_lang('MOVE_POSTS'));

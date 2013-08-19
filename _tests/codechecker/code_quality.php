@@ -35,6 +35,8 @@ Unsupported syntax:
 
 @ini_set('memory_limit','-1');
 
+ini_set('display_errors','1');
+
 $extra=array();
 if (isset($_SERVER['argv']))
 {

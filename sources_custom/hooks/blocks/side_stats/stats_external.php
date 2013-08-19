@@ -27,11 +27,10 @@ class Hook_stats_external
 		$url=get_base_url();
 		list($rank,$links,$speed)=getAlexaRank($url);
 		$page_rank=getPageRank($url);
-		if ($page_rank=='') $page_rank='?';
-		$map['Google PageRank']=$page_rank;
-		$map['Alexa rank']=$rank;
+		if ($page_rank!='') $map['Google PageRank']=$page_rank;
+		if ($rank!='') $map['Alexa rank']=$rank;
 		$map['Back links']=protect_from_escaping('<a title="Show back links" href="http://www.google.co.uk/search?as_lq='.urlencode($url).'">'.$links.'</a>');
-		$map['Speed']=$speed;
+		if ($speed!='') $map['Speed']=$speed;
 		foreach ($map as $key=>$val)
 		{
 			$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'fa391b1b773cd8a4b283cb6617af898b','KEY'=>$key,'VALUE'=>is_null($val)?'':$val)));

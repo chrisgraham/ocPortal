@@ -23,14 +23,7 @@
  */
 function init__notification_poller()
 {
-	$v=get_value('notification_poll_frequency');
-	if ($v===NULL)
-	{
-		define('NOTIFICATION_POLL_FREQUENCY',10);
-	} else
-	{
-		define('NOTIFICATION_POLL_FREQUENCY',intval($v));
-	}
+	define('NOTIFICATION_POLL_FREQUENCY',intval(get_option('notification_poll_frequency')));
 
 	define('NOTIFICATION_POLL_SAFETY_LAG_SECS',8); // Assume a request could have taken this long to happen, so we look back a little further even than NOTIFICATION_POLL_FREQUENCY
 }

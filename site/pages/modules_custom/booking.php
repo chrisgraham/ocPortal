@@ -553,6 +553,7 @@ class Module_booking
 
 		// Read request
 		$request=get_booking_request_from_form();
+		if (!array_key_exists(0,$request)) warn_exit(do_lang_tempcode('NOTHING_IN_BOOKING'));
 
 		// Save
 		$test=save_booking_form_to_db($request,array());

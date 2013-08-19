@@ -91,7 +91,7 @@
 			{REVISION_HISTORY}
 
 			<p class="right">
-				<input onclick="this.form.target='_blank'; this.form.action='{PREVIEW_URL*}';" accesskey="p" class="button_pageitem" type="submit" value="{!PREVIEW}" />
+				<input onclick="this.form.target='_blank'; this.form.action='{PREVIEW_URL;*}';" accesskey="p" class="button_pageitem" type="submit" value="{!PREVIEW}" />
 			</p>
 		</div>
 	</div></div>

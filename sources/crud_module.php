@@ -664,7 +664,7 @@ class standard_crud_module
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
-	 			'SUPPORT_AUTOSAVE'=>true,
+				'SUPPORT_AUTOSAVE'=>true,
 			)+$extra_tpl_params);
 		}
 	}
@@ -1242,7 +1242,7 @@ class standard_crud_module
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
-	 			'SUPPORT_AUTOSAVE'=>true,
+				'SUPPORT_AUTOSAVE'=>true,
 			)+$extra_tpl_params);
 		}
 	}

@@ -262,7 +262,7 @@ class Hook_Profiles_Tabs_about
 
 		require_code('ocf_groups');
 		$primary_group_id=ocf_get_member_primary_group($member_id_of);
-		$primary_group=ocf_get_group_link($primary_group_id);
+		$primary_group=ocf_get_group_link($primary_group_id,$member_id_of!=$member_id_viewing);
 
 		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
 
@@ -308,7 +308,7 @@ class Hook_Profiles_Tabs_about
 		if (count($secondary_groups)>0)
 		{
 			$_secondary_groups=array();
-			$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,false,false,array_keys($secondary_groups),$member_id_of);
+			$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list($member_id_of!=$member_id_viewing,false,false,array_keys($secondary_groups),$member_id_of);
 			foreach (array_keys($secondary_groups) as $key)
 			{
 				$_secondary_groups[$key]=$all_groups[$key];

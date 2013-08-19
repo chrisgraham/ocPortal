@@ -31,8 +31,7 @@ class Hook_content_meta_aware_news
 	{
 		return array(
 			'supports_custom_fields'=>true,
-
-			'content_type_label'=>'NEWS',
+			'content_type_label'=>'news:NEWS_ARTICLE',
 
 			'connection'=>$GLOBALS['SITE_DB'],
 			'table'=>'news',

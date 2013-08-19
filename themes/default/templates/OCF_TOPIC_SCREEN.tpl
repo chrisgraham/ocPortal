@@ -44,8 +44,8 @@
 
 		{+START,IF_PASSED,SERIALIZED_OPTIONS}{+START,IF_PASSED,HASH}
 			<script>// <![CDATA[
-				window.comments_serialized_options='{SERIALIZED_OPTIONS/;}';
-				window.comments_hash='{HASH/;}';
+				window.comments_serialized_options='{SERIALIZED_OPTIONS;/}';
+				window.comments_hash='{HASH;/}';
 			//]]></script>
 		{+END}{+END}
 	{+END}
@@ -197,6 +197,6 @@
 
 	{$REVIEW_STATUS,topic,{ID}}
 
-	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={TITLE}}{+END}{+END}
+	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={_TITLE}}{+END}{+END}
 </div>
 

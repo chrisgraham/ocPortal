@@ -23,17 +23,17 @@
 	</select>
 
 	<script>// <![CDATA[
-		setup_privilege_override_selector('access_{GROUP_ID%}',{DEFAULT_ACCESS%},'{PRIVILEGE%}','{TITLE/;}',{$?,{ALL_GLOBAL},true,false});
+		setup_privilege_override_selector('access_{GROUP_ID%}',{DEFAULT_ACCESS%},'{PRIVILEGE%}','{TITLE;/}',{$?,{ALL_GLOBAL},true,false});
 	//]]></script>
 
 	{+START,IF,{$NOT,{ALL_GLOBAL}}}
 		<script>// <![CDATA[
-			var list=document.getElementById('access_{GROUP_ID*;}_presets');
+			var list=document.getElementById('access_{GROUP_ID;/}_presets');
 			// Test to see what we wouldn't have to make a change to get - and that is what we're set at
-			if (!copy_permission_presets('access_{GROUP_ID*;}','0',true)) list.selectedIndex=list.options.length-4;
-			else if (!copy_permission_presets('access_{GROUP_ID*;}','1',true)) list.selectedIndex=list.options.length-3;
-			else if (!copy_permission_presets('access_{GROUP_ID*;}','2',true)) list.selectedIndex=list.options.length-2;
-			else if (!copy_permission_presets('access_{GROUP_ID*;}','3',true)) list.selectedIndex=list.options.length-1;
+			if (!copy_permission_presets('access_{GROUP_ID;/}','0',true)) list.selectedIndex=list.options.length-4;
+			else if (!copy_permission_presets('access_{GROUP_ID;/}','1',true)) list.selectedIndex=list.options.length-3;
+			else if (!copy_permission_presets('access_{GROUP_ID;/}','2',true)) list.selectedIndex=list.options.length-2;
+			else if (!copy_permission_presets('access_{GROUP_ID;/}','3',true)) list.selectedIndex=list.options.length-1;
 		//]]></script>
 	{+END}
 </td>

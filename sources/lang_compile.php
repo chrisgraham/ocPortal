@@ -150,18 +150,22 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 		// Cache
 		if ($desire_cache)
 		{
-			$file=@fopen($cache_path,'wt'); // Will fail if cache dir missing .. e.g. in quick installer
+			$file=@fopen($cache_path,'at'); // Will fail if cache dir missing .. e.g. in quick installer
 			if ($file)
 			{
+				flock($file,LOCK_EX);
+				ftruncate($file,0);
 				if (fwrite($file,serialize($load_target))>0)
 				{
 					// Success
+					flock($file,LOCK_UN);
 					fclose($file);
 					require_code('files');
 					fix_permissions($cache_path);
 				} else
 				{
 					// Failure
+					flock($file,LOCK_UN);
 					fclose($file);
 					@unlink($cache_path);
 				}
@@ -240,7 +244,11 @@ function _get_lang_file_map($b,&$entries,$descriptions=NULL,$given_whole_file=fa
 	{
 		if (!file_exists($b)) return;
 
+		$tmp=fopen($b,'rb');
+		flock($tmp,LOCK_SH);
 		$lines=file($b);
+		flock($tmp,LOCK_UN);
+		fclose($tmp);
 	} else $lines=explode(chr(10),unixify_line_format($b));
 
 	if ((!$given_whole_file) && ($b[strlen($b)-1]=='o')) // po file.

@@ -21,7 +21,7 @@
 		{+END}
 
 		{+START,IF_NON_EMPTY,{EMPTY_CART*}}
-			<input class="button_page" type="image" src="{$IMG*,page/cart_empty}" onclick="return confirm_empty('{!EMPTY_CONFIRM}','{EMPTY_CART*}',this.form);" alt="{!EMPTY_CART}" title="{!EMPTY_CART}"/>
+			<input class="button_page" type="image" src="{$IMG*,page/cart_empty}" onclick="return confirm_empty('{!EMPTY_CONFIRM}','{EMPTY_CART;*}',this.form);" alt="{!EMPTY_CART}" title="{!EMPTY_CART}"/>
 		{+END}
 
 		<input type="hidden" name="product_ids" id="product_ids" value="{PRO_IDS*}"/>

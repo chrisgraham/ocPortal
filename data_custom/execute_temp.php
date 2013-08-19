@@ -53,6 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->add_table_field('digestives_tin','d_read','BINARY');
-	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'notifications_enabled SET l_setting=l_setting+'.strval(A_WEB_NOTIFICATION).' WHERE l_setting<>0');
 }

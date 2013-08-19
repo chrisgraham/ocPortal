@@ -2021,7 +2021,7 @@ function parse_single_comcode_tag($data,$tag='\w+')
 				if ($next=='=')
 				{
 					$in_attribute=true;
-					if ($_attributes[$i+1]=='"') $i++; // Skip opening "
+					if (($i!=strlen($_attributes)-1) && ($_attributes[$i+1]=='"')) $i++; // Skip opening "
 					$current_value='';
 				} elseif ($next==']')
 				{

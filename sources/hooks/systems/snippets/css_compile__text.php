@@ -18,7 +18,7 @@
  * @package		core
  */
 
-class Hook_css_compile
+class Hook_css_compile__text
 {
 
 	/**

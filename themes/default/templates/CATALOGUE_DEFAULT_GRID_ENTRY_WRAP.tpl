@@ -12,7 +12,7 @@
 	{+START,IF_PASSED,FIELD_1_THUMB}
 		{+START,IF_NON_EMPTY,{FIELD_1_THUMB}}
 			<div class="catalogue_entry_box_thumbnail">
-				<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','500px');" href="{VIEW_URL*}">{FIELD_1_THUMB}</a>
+				<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET;^*,TOOLTIP}','500px');" href="{VIEW_URL*}">{FIELD_1_THUMB}</a>
 			</div>
 		{+END}
 

@@ -345,35 +345,23 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 
 		$sleep_multiplier=floatval($timeout)/10.0;
 
-		// Start looping
-		do
+		flock($fp,LOCK_EX);
+
+		// Read the current value
+		rewind($fp);
+		$old_id=intval(fgets($fp,1024));
+		// See if we should be updating the file (IDs increase numerically)
+		if ($force || ($old_id<$id))
 		{
-			// Try to lock the file
-			$can_write=flock($fp,LOCK_EX);
+			// If so then wipe the file (since we're in append mode,
+			// but we want to overwrite)
+			ftruncate($fp,0);
 
-			// If lock is not obtained sleep for 0 <-> $timeout/10 milliseconds,
-			// to avoid collision and CPU load
-			if (!$can_write) usleep(mt_rand(0,intval($sleep_multiplier)*1000)); // *1000 as usleep uses microseconds
+			// Save our new ID
+			fwrite($fp,strval($id));
 		}
-		while ((!$can_write) && ((microtime(true)-$start_time)<floatval($timeout)));
 
-		// File was locked so now we can store information
-		if ($can_write)
-		{
-			// Read the current value
-			rewind($fp);
-			$old_id=intval(fgets($fp,1024));
-			// See if we should be updating the file (IDs increase numerically)
-			if ($force || ($old_id<$id))
-			{
-				// If so then wipe the file (since we're in append mode,
-				// but we want to overwrite)
-				ftruncate($fp,0);
-
-				// Save our new ID
-				fwrite($fp,strval($id));
-			}
-		}
+		flock($fp,LOCK_UN);
 		fclose($fp);
 	} else
 	{

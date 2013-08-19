@@ -31,10 +31,10 @@
 				<span class="vertical_alignment">
 					<input size="15" type="file" onchange="set_attachment('post',{I*},'');" id="file{I*}" name="file{I*}" />
 					<script>// <![CDATA[
-						document.getElementById('file{I/;}').setAttribute('unselectable','on');
+						document.getElementById('file{I;/}').setAttribute('unselectable','on');
 					//]]></script>
 
-					{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<button class="button_micro" type="button" id="clearBtn_file{I*}" onclick="var new_contents=get_textbox(form.elements['post']).replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_{I*;}\\[/(attachment|attachment_safe)\\]'),''); set_textbox(form.elements['post'],new_contents,new_contents); document.getElementById('file{I/;}').value=''; return false;" title="{!CLEAR}: {!ATTACHMENT,{I*}}">{!CLEAR}</button>{+END}
+					{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<button class="button_micro" type="button" id="clearBtn_file{I*}" onclick="var new_contents=get_textbox(form.elements['post']).replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_{I;*}\\[/(attachment|attachment_safe)\\]'),''); set_textbox(form.elements['post'],new_contents,new_contents); document.getElementById('file{I;/}').value=''; return false;" title="{!CLEAR}: {!ATTACHMENT,{I*}}">{!CLEAR}</button>{+END}
 				</span>
 			</td>
 		</tr>
@@ -44,7 +44,7 @@
 {+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput((typeof window.plUploadLoaded!='undefined')?'attachment_multi':'attachment','file{I}',null,'{POSTING_FIELD_NAME/;}');
+			preinitFileInput((typeof window.plUploadLoaded!='undefined')?'attachment_multi':'attachment','file{I}',null,'{POSTING_FIELD_NAME;/}');
 		} );
 	//]]></script>
 {+END}

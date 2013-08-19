@@ -124,6 +124,9 @@ function _seo_meta_find_data($keyword_sources,$description='')
 		$common_words[$i]=ocp_mb_trim(ocp_mb_strtolower($common_word));
 	}
 
+	$word_chars_flip=array_flip($word_chars);
+	$common_words_flip=array_flip($common_words);
+
 	$min_word_length=3;
 
 	$keywords=array(); // This will be filled
@@ -200,7 +203,7 @@ function _seo_meta_find_data($keyword_sources,$description='')
 			} else
 			{
 				$at=$source[$i];
-				$word_char=array_key_exists($at,$word_chars_flip);
+				$is_word_char=array_key_exists($at,$word_chars_flip);
 
 				if ($in_word)
 				{
@@ -229,7 +232,7 @@ function _seo_meta_find_data($keyword_sources,$description='')
 				} else
 				{
 					// Entering word
-					if ($word_char)
+					if ($is_word_char)
 					{
 						$word_is_caps=(strtolower($at)!=$at);
 						$from=$i;

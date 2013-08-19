@@ -58,7 +58,7 @@
 			</div></section>
 		</div>
 
-		<div class="ratings left">
+		<div class="ratings right">
 			{RATING_DETAILS}
 		</div>
 	</div>

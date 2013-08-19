@@ -49,7 +49,7 @@ class Hook_config_ping_url
 	 */
 	function get_default()
 	{
-		return 'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}';
+		return 'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}&chk_feedburner=on&chk_newsgator=on&chk_myyahoo=on&chk_google=on';
 	}
 
 }

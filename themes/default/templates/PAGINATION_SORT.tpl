@@ -12,8 +12,8 @@
 			<label for="filter"><span class="field_name">{!SEARCH}:</span> <input value="{FILTER*}" name="filter" id="filter" size="10" /></label>
 		{+END}
 
-		<label {+START,IF_NON_PASSED,FILTER}class="accessibility_hidden" {+END}for="r_{$GET*;,RAND}">{!SORT_BY}: {$GET*,TEXT_ID}</label>
-		<select{+START,IF,{$NOR,{$GET,show_sort_button},{$NOT,{$JS_ON}}}} onchange="/*guarded*/this.form.submit();"{+END} id="r_{$GET*;,RAND}" name="{SORT*}">
+		<label {+START,IF_NON_PASSED,FILTER}class="accessibility_hidden" {+END}for="r_{$GET;*,RAND}">{!SORT_BY}: {$GET*,TEXT_ID}</label>
+		<select{+START,IF,{$NOR,{$GET,show_sort_button},{$NOT,{$JS_ON}}}} onchange="/*guarded*/this.form.submit();"{+END} id="r_{$GET;*,RAND}" name="{SORT*}">
 			{SELECTORS}
 		</select>
 

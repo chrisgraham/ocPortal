@@ -6,6 +6,6 @@
 
 <script>// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
-		standard_alternate_fields_within('{SET_NAME/;}',{$?,{REQUIRED},true,false});
+		standard_alternate_fields_within('{SET_NAME;/}',{$?,{REQUIRED},true,false});
 	} );
 //]]></script>
