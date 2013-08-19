@@ -451,7 +451,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 						'd_priority'=>$priority,
 						'd_no_cc'=>$no_cc?1:0,
 						'd_date_and_time'=>time(),
-						'd_notification_code'=>$notification_code,
+						'd_notification_code'=>substr($notification_code,0,80),
 						'd_code_category'=>is_null($code_category)?'':$code_category,
 						'd_frequency'=>$frequency,
 					));
