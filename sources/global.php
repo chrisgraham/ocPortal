@@ -25,7 +25,7 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 
 	header("Pragma: public");
 	$time=400*60*60*24;
-	header('Cache-Control: maxage='.strval(time()+$time));
+	header('Cache-Control: max-age='.strval(time()+$time));
 	header('Expires: '.gmdate('D, d M Y H:i:s',time()+$time).' GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()-$time).' GMT');
 

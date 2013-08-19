@@ -91,7 +91,7 @@ class Block_main_comments
 
 		$submitted=(post_param_integer('_comment_form_post',0)==1);
 
-		$self_url=get_self_url();
+		$self_url=build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true);
 		$self_title=$map['page'];
 		$test_changed=post_param('title',NULL);
 		if (!is_null($test_changed))

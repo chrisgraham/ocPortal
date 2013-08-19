@@ -54,7 +54,7 @@ function init__global2()
 
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 	@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-	//@header('Cache-Control: no-cache, must-revalidate'); // DISABLED AS MAKES IE RELOAD ON 'BACK' AND LOSE FORM CONTENTS
+	@header('Cache-Control: no-cache, max-age=0');
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
 	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
@@ -437,6 +437,7 @@ function init__global2()
 			require_code('view_modes');
 			erase_tempcode_cache();
 			erase_cached_templates(!$changed_base_url);
+			erase_comcode_cache();
 			erase_cached_language();
 			persistant_cache_empty();
 			if ($changed_base_url)
@@ -624,7 +625,7 @@ function fast_spider_cache($bot=true)
 			if ($bot) // Only bots can do this, as they won't try to login and end up reaching a previously cached page
 			{
 				header("Pragma: public");
-				header("Cache-Control: maxage=".strval($expires));
+				header("Cache-Control: max-age=".strval($expires));
 				header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');
 				header('Last-Modified: '.gmdate('D, d M Y H:i:s',$mtime).' GMT');
 
@@ -856,6 +857,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 			global $_REQUIRED_CODE;
 			if (!array_key_exists('failure',$_REQUIRED_CODE))
 			{
+				@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy(),0); // We really want to know the URL where this is happening (normal PHP error logging does not include it)!
 				critical_error('EMERGENCY',$errstr.escape_html(' ['.$errfile.' at '.strval($errline).']'));
 			}
 		}
@@ -1226,7 +1228,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$https=$CURRENTLY_HTTPS;
 		if ($https===NULL)
 		{
-			if ((get_option('enable_https',true)=='0') || (!running_script('index')))
+			if (get_option('enable_https',true)=='0')
 			{
 				$https=false;
 			} else
@@ -1442,10 +1444,11 @@ function get_param($name,$default=false,$no_security=false)
 				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
 			}
 
-			$bu=get_base_url();
-			if ((looks_like_url($a)) && (substr($a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
+			$bu=get_base_url(false);
+			$_a=str_replace('https://','http://',$a);
+			if ((looks_like_url($_a)) && (substr($_a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
 			{
-				$a=get_base_url();
+				$a=get_base_url(false);
 			}
 		}
 	}

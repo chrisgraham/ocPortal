@@ -1917,7 +1917,8 @@ function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_
 		$ahead=preg_replace('#((j[\\\\\s]*a[\\\\\s]*v[\\\\\s]*a[\\\\\s]*|v[\\\\\s]*b[\\\\\s]*)s[\\\\\s]*c[\\\\\s]*r[\\\\\s]*i[\\\\\s]*p[\\\\\s]*t[\\\\\s]*):#i','${1};',$ahead);
 
 		// Event vectors
-		$ahead=preg_replace('#\son#i',' &#111;n',$ahead);
+		$ahead=preg_replace('#\so(n|N)#',' &#111;${1}',$ahead);
+		$ahead=preg_replace('#\sO(n|N)#',' &#79;${1}',$ahead);
 
 		// Check tag balancing (we don't want to allow partial tags to compound together against separately checked chunks)
 		$len=strlen($ahead);
@@ -1991,7 +1992,7 @@ function parse_single_comcode_tag($data,$tag='\w+')
 				if ($next=='=')
 				{
 					$in_attribute=true;
-					if ($_attributes[$i+1]=='"') $i++; // Skip opening "
+					if (($i!=strlen($_attributes)-1) && ($_attributes[$i+1]=='"')) $i++; // Skip opening "
 					$current_value='';
 				} elseif ($next==']')
 				{

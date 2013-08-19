@@ -67,7 +67,10 @@
 				message='{!ADDED_COMCODE_ONLY;}';
 			}
 
-			target_window.insertTextbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
+			if ((element.value.indexOf(comcode_semihtml)==-1) || (comcode.indexOf('[attachment')==-1)) // Don't allow attachments to add twice
+			{
+				target_window.insertTextbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
+			}
 			window.fauxmodal_alert(
 				message,
 				function() {

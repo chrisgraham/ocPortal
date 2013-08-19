@@ -97,6 +97,7 @@ function ensureNextField(thisField)
 		nextField.setAttribute('tabindex',thisField.getAttribute('tabindex'));
 		nextField.setAttribute('id',nameStub+nextNum);
 		if (thisField.onfocus) nextField.onfocus=thisField.onfocus;
+		if (thisField.onblur) nextField.onblur=thisField.onblur;
 		if (thisField.onkeyup) nextField.onkeyup=thisField.onkeyup;
 		nextField.onkeypress=_ensureNextField;
 		if (thisField.onchange) nextField.onchange=thisField.onchange;

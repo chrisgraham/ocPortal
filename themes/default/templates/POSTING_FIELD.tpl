@@ -18,7 +18,7 @@
 
 			{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 				{+START,IF,{$JS_ON}}
-					&nbsp;&nbsp;&nbsp; [&nbsp;<a id="toggle_wysiwyg_{NAME*}" class="wysiwyg_button" href="#" onclick="return toggle_wysiwyg('{NAME*}');"><abbr title="{!TOGGLE_WYSIWYG_2}">{!ENABLE_WYSIWYG}</abbr></a>&nbsp;]
+					&nbsp;&nbsp;&nbsp; [&nbsp;<a id="toggle_wysiwyg_{NAME*}" class="wysiwyg_button" href="#" onclick="return toggle_wysiwyg('{NAME*;}');"><abbr title="{!TOGGLE_WYSIWYG_2}">{!ENABLE_WYSIWYG}</abbr></a>&nbsp;]
 				{+END}
 			{+END}
 		</div>
@@ -49,7 +49,7 @@
 				<textarea accesskey="x" class="{CLASS*}{+START,IF,{REQUIRED}} posting_required{+END} wide_field" tabindex="{TABINDEX_PF*}" id="{NAME*}" name="{NAME*}" cols="70" rows="17">{POST*}</textarea>
 				{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 					<script type="text/javascript">// <![CDATA[
-						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('{NAME*}').readOnly=true;
+						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('{NAME*;}').readOnly=true;
 					//]]></script>
 				{+END}
 			</div>
@@ -60,8 +60,8 @@
 				<div class="emoticon_chooser lightborder"><div class="float_surrounder">
 					{+START,IF,{$AND,{$OCF},{$JS_ON}}}
 						<div class="right">
-							[ <a rel="nofollow" target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;" class="posting_form_sup_link" title="{!EMOTICONS_POPUP} {!LINK_NEW_WINDOW}">{!VIEW_ARCHIVE}</a> ]
-							<!--<br />[ <a rel="nofollow" href="#" onclick="if (document.getElementById('{NAME*}').value.substr(0,8)=='&lt;comcode') { window.fauxmodal_alert('{!ALREADY_COMCODE_XML;}'); return false; } return convert_xml('{NAME*}');" class="posting_form_sup_link"><abbr title="{!CONVERT_TO_XML_2}">{!CONVERT_TO_XML}</abbr></a> ]-->
+							[ <a rel="nofollow" target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*;,emoticons}?field_name={NAME*;}{$KEEP*;,0,1}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;" class="posting_form_sup_link" title="{!EMOTICONS_POPUP} {!LINK_NEW_WINDOW}">{!VIEW_ARCHIVE}</a> ]
+							<!--<br />[ <a rel="nofollow" href="#" onclick="if (document.getElementById('{NAME*;}').value.substr(0,8)=='&lt;comcode') { window.fauxmodal_alert('{!ALREADY_COMCODE_XML;}'); return false; } return convert_xml('{NAME*;}');" class="posting_form_sup_link"><abbr title="{!CONVERT_TO_XML_2}">{!CONVERT_TO_XML}</abbr></a> ]-->
 						</div>
 					{+END}
 
@@ -103,7 +103,7 @@
 		{HIDDEN_FIELDS}
 
 		<script type="text/javascript">// <![CDATA[
-			initialise_dragdrop_upload('container_for_{NAME*}','{NAME*}');
+			initialise_dragdrop_upload('container_for_{NAME*}','{NAME*;}');
 		//]]></script>
 	</td>
 </tr>

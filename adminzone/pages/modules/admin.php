@@ -408,7 +408,7 @@ class Module_admin
 					if (is_null($i)) continue;
 
 					$n=$i[3];
-					if (($this->_keyword_match(is_object($n)?$n->evaluate():$n)) && (has_actual_page_access(get_member(),$i[2][0],$i[2][2])))
+					if (($i[0]!='') && ($this->_keyword_match(is_object($n)?$n->evaluate():$n)) && (has_actual_page_access(get_member(),$i[2][0],$i[2][2])))
 					{
 						$_url=build_url(array('page'=>$i[2][0])+$i[2][1],$i[2][2]);
 						$tree=new ocp_tempcode();
@@ -570,7 +570,9 @@ class Module_admin
 					$null_test=$hook->get_default();
 				} else
 				{
+					$GLOBALS['REQUIRE_LANG_LOOP']=10; // LEGACY Workaround for corrupt webhost installers
 					$null_test=eval($p['eval']);
+					$GLOBALS['REQUIRE_LANG_LOOP']=0; // LEGACY
 				}
 
 				if (!is_null($null_test))
@@ -868,7 +870,7 @@ class Module_admin
 				array('WIDE','DESCRIPTION_WIDE'),
 				array('REVEAL_AGE','DESCRIPTION_REVEAL_AGE'),
 				array('PREVIEW_POSTS','DESCRIPTION_PREVIEW_POSTS'),
-				array('AUTO_MONITOR_CONTRIB_CONTENT','DESCRIPTION_AUTO_MONITOR_CONTRIB_CONTENT'),
+				array('AUTO_NOTIFICATION_CONTRIB_CONTENT','DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),
 				array('PT_RULES_TEXT','PT_RULES_TEXT_DESCRIPTION'),
 			);
 			foreach ($applicable_langstrings as $_langstring)

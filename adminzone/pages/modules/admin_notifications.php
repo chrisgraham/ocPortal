@@ -203,7 +203,7 @@ class Module_admin_notifications
 					if ($new_setting!=A__CHOICE)
 					{
 						$GLOBALS['SITE_DB']->query_insert('notification_lockdown',array(
-							'l_notification_code'=>$notification_code['NOTIFICATION_CODE'],
+							'l_notification_code'=>substr($notification_code['NOTIFICATION_CODE'],0,80),
 							'l_setting'=>$new_setting,
 						));
 					}

@@ -90,7 +90,7 @@
 							 <input class="button_pageitem" type="submit" value="{!EDIT}" />
 							 <input class="button_pageitem" type="submit" name="delete" value="{!DELETE}" />
 
-							 <label class="button_options_spacer" for="bookmark_{ID*}">{!CHOOSE}:</label> <input onclick="handle_bookmark_selection(this,'{ID*}',event);" type="checkbox" id="bookmark_{ID*}" name="bookmark_{ID*}" value="1" />
+							 <label class="button_options_spacer" for="bookmark_{ID*}">{!CHOOSE}:</label> <input onclick="handle_bookmark_selection(this,'{ID*;}',event);" type="checkbox" id="bookmark_{ID*}" name="bookmark_{ID*}" value="1" />
 						</td>
 					</tr>
 				</tbody>

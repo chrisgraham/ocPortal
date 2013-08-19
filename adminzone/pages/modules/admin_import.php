@@ -278,6 +278,9 @@ class Module_admin_import
 		if ($session!=get_session_id())
 		{
 			// Remap given to current
+			$GLOBALS['SITE_DB']->query_delete('import_session',array('imp_session'=>get_session_id()),'',1);
+			$GLOBALS['SITE_DB']->query_delete('import_parts_done',array('imp_session'=>get_session_id()));
+			$GLOBALS['SITE_DB']->query_delete('import_id_remap',array('id_session'=>get_session_id()));
 			$GLOBALS['SITE_DB']->query_update('import_session',array('imp_session'=>get_session_id()),array('imp_session'=>$session),'',1);
 			$GLOBALS['SITE_DB']->query_update('import_parts_done',array('imp_session'=>get_session_id()),array('imp_session'=>$session));
 			$GLOBALS['SITE_DB']->query_update('import_id_remap',array('id_session'=>get_session_id()),array('id_session'=>$session));

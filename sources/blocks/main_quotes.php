@@ -47,7 +47,7 @@ class Block_main_quotes
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:do_lang(\'QUOTES\'),has_actual_page_access(get_member(),\'quotes\',\'adminzone\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'quotes\')';
+		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:\'-\',has_actual_page_access(get_member(),\'quotes\',\'adminzone\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'quotes\')';
 		$info['ttl']=5;
 		return $info;
 	}
@@ -60,11 +60,12 @@ class Block_main_quotes
 	 */
 	function run($map)
 	{
+		require_lang('quotes');
+
 		$file=array_key_exists('param',$map)?$map['param']:'quotes';
 		$title=array_key_exists('title',$map)?$map['title']:do_lang('QUOTES');
 
 		require_code('textfiles');
-		require_lang('quotes');
 
 		$place=_find_text_file_path($file,'');
 

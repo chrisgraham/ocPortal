@@ -769,7 +769,7 @@ class Module_galleries
 			$where=db_string_equal_to('cat',$cat);
 			if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
 			if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,1);
+			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos r WHERE '.$where.' ORDER BY '.$sort,1);
 			if (array_key_exists(0,$first_video))
 			{
 				$row=$first_video[0];
@@ -780,7 +780,7 @@ class Module_galleries
 				$where=db_string_equal_to('cat',$cat);
 				if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
 				if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
-				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,1);
+				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images r WHERE '.$where.' ORDER BY '.$sort,1);
 				if (array_key_exists(0,$first_image))
 				{
 					$row=$first_image[0];
@@ -897,8 +897,8 @@ class Module_galleries
 		if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 		$_max_entries=get_value('flow_mode_max');
 		if (is_null($_max_entries)) $max_entries=50; else $max_entries=intval($_max_entries);
-		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,$max_entries);
-		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,$max_entries);
+		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos r WHERE '.$where.' ORDER BY '.$sort,$max_entries);
+		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images r WHERE '.$where.' ORDER BY '.$sort,$max_entries);
 
 		// See if there is a numbering system to sort by
 		$all_are=NULL;
@@ -1374,13 +1374,13 @@ class Module_galleries
 		if ($days!='') $where.=' AND add_date>='.strval(time()-intval($days)*60*60*24);
 
 		require_code('ocfiltering');
-		$image_select_sql=ocfilter_to_sqlfragment($image_select,'e.id');
+		$image_select_sql=ocfilter_to_sqlfragment($image_select,'r.id');
 		$where_images=$where.' AND '.$image_select_sql;
-		$video_select_sql=ocfilter_to_sqlfragment($video_select,'e.id');
+		$video_select_sql=ocfilter_to_sqlfragment($video_select,'r.id');
 		$where_videos=$where.' AND '.$video_select_sql;
 
-		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images);
-		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where_videos);
+		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images r'.$join.' WHERE '.$where_images);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos r'.$join.' WHERE '.$where_videos);
 
 		// These will hopefully be replaced with proper values
 		$position=1;
@@ -1394,8 +1394,8 @@ class Module_galleries
 		$total=$total_videos+$total_images;
 		if ($total<500) // Not too many to navigate through
 		{
-			$rows_images=$GLOBALS['SITE_DB']->query('SELECT e.id,add_date,url'.$sql_suffix_images.',title FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images.' ORDER BY '.$sort);
-			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT e.id,add_date,url'.$sql_suffix_videos.',title FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where_videos.' ORDER BY '.$sort);
+			$rows_images=$GLOBALS['SITE_DB']->query('SELECT r.id,add_date,url'.$sql_suffix_images.',title FROM '.get_table_prefix().'images r'.$join.' WHERE '.$where_images.' ORDER BY '.$sort);
+			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT r.id,add_date,url'.$sql_suffix_videos.',title FROM '.get_table_prefix().'videos r'.$join.' WHERE '.$where_videos.' ORDER BY '.$sort);
 
 			list($_sort,$_dir)=explode(' ',$sort,2);
 

@@ -254,7 +254,7 @@ END;
 
 	if (($validated==1) && (get_option('site_closed')=='0') && (ocp_srv('HTTP_HOST')!='127.0.0.1') && (ocp_srv('HTTP_HOST')!='localhost') && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category_id))))
 	{
-		$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode(find_script('backend')),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
+		$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode(find_script('backend').'?type=rss&mode=news'),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
 		$ping_urls=explode(chr(10),$_ping_url);
 		foreach ($ping_urls as $ping_url)
 		{
@@ -496,7 +496,7 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 		} else
 		{
 			if ((((!is_null($cat['nc_owner'])) && (has_specific_permission(get_member(),'can_submit_to_others_categories'))) || (($cat['nc_owner']==get_member()) && (!is_guest()))) || ($show_all_personal_categories))
-				$categories->attach(form_input_list_entry(strval($cat['id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['id'],$it)),do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($cat['nc_owner'])).' (#'.strval($cat['id']).')'));
+				$categories->attach(form_input_list_entry(strval($cat['id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['id'],$it)),$cat['nice_title'].' (#'.strval($cat['id']).')'));
 		}
 	}
 

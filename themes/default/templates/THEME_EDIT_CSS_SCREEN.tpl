@@ -427,11 +427,11 @@
 
 		<div class="float_surrounder">
 			<div class="right">
-				<input id="save_button" onclick="disable_button_just_clicked(this); this.form.target='_self'; this.form.action='{URL*}';" class="button_page" type="submit" value="{!SAVE}" />
+				<input id="save_button" onclick="disable_button_just_clicked(this); this.form.target='_self'; this.form.action='{URL*;}';" class="button_page" type="submit" value="{!SAVE}" />
 			</div>
 			{+START,IF,{$JS_ON}}
 				<div class="right">
-					<input onclick="disable_button_just_clicked(this); this.form.target='save_frame'; this.form.action='{URL*}{$?,{$IN_STR,{URL},?},&amp;,?}save_and_stay=1';" class="button_page" type="submit" accesskey="U" value="{!SAVE_AND_STAY}" />
+					<input onclick="disable_button_just_clicked(this); this.form.target='save_frame'; this.form.action='{URL*;}{$?,{$IN_STR,{URL},?},&amp;,?}save_and_stay=1';" class="button_page" type="submit" accesskey="U" value="{!SAVE_AND_STAY}" />
 				</div>
 			{+END}
 		</div>

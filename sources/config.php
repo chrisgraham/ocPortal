@@ -352,7 +352,9 @@ function get_option($name,$missing_ok=false)
 					$OPTIONS=list_to_map('the_name',$OPTIONS);
 					$option=&$OPTIONS[$name];
 				}
+				$GLOBALS['REQUIRE_LANG_LOOP']=10; // LEGACY Workaround for corrupt webhost installers
 				$option['config_value_translated']=eval($option['eval'].';');
+				$GLOBALS['REQUIRE_LANG_LOOP']=0; // LEGACY
 				if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
 				if ((get_value('setup_wizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 				{
@@ -380,7 +382,9 @@ function get_option($name,$missing_ok=false)
 				$option=&$OPTIONS[$name];
 			}
 			require_code('lang');
+			$GLOBALS['REQUIRE_LANG_LOOP']=10; // LEGACY Workaround for corrupt webhost installers
 			$option['config_value']=eval($option['eval'].';');
+			$GLOBALS['REQUIRE_LANG_LOOP']=0; // LEGACY
 			if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 			{
 				require_code('config2');

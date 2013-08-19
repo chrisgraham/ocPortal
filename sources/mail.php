@@ -120,7 +120,8 @@ function comcode_to_clean_text($message_plain)
 		}
 		while ($message_plain!=$before);
 
-		$message_plain=static_evaluate_tempcode(template_to_tempcode($message_plain,0,false,'',NULL,NULL,true));
+		if (strpos($message_plain,'{')!==false)
+			$message_plain=static_evaluate_tempcode(template_to_tempcode($message_plain,0,false,'',NULL,NULL,true));
 	}
 
 	$match=array();
@@ -481,10 +482,13 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		$filename=basename($img);
 		if (!is_null($file_path_stub))
 		{
+			if (@filesize($file_path_stub)>1024*1024*5) continue; // Too large to process into an email
+
 			$file_contents=@file_get_contents($file_path_stub);
 		} else
 		{
 			$file_contents=http_download_file($img,NULL,false);
+			if (strlen($file_contents)>=1024*1024*5) continue; // Too large to process into an email
 			if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
 			if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
 		}

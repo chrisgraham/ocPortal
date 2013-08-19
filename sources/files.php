@@ -301,8 +301,8 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 	$ignore_extensions=array(
 		'tar'=>'(imports|exports)/.*',
 		'gz'=>'(imports|exports)/.*',
-		'lcd'=>'lang_cached(/.*)?',
-		'gcd'=>'persistant_cache',
+		'lcd'=>'(lang_cached|caches)(/.*)?', // TODO Future proof (v10)
+		'gcd'=>'persistent_cache|persistant_cache|caches/.*', // LEGACY (persistant_cache) TODO Future proof (v10)
 		'tcp'=>'themes/[^/]*/templates_cached/.*',
 		'tcd'=>'themes/[^/]*/templates_cached/.*',
 		'css'=>'themes/[^/]*/templates_cached/.*',
@@ -386,7 +386,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 
 	if (($bitmask & IGNORE_CUSTOM_ZONES)!=0)
 	{
-		if ((file_exists(get_file_base().$filepath.'/index.php')) && (file_exists(get_file_base().$filepath.'/pages')) && (!in_array($filename,array('adminzone','collaboration','cms','forum','site'))))
+		if ((file_exists(get_file_base().'/'.$filepath.'/index.php')) && (file_exists(get_file_base().$filepath.'/pages')) && (!in_array($filename,array('adminzone','collaboration','cms','forum','site'))))
 			return true;
 	}
 

@@ -211,7 +211,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	require_all_lang();
 
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
-		'l_notification_code'=>$notification_code,
+		'l_notification_code'=>substr($notification_code,0,80),
 	));
 	if (!is_null($test)) warn_exit(do_lang_tempcode('NOTIFICATION_CODE_LOCKED_DOWN'));
 
@@ -324,6 +324,8 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
  */
 function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0)
 {
+	static $done_get_change=false;
+
 	$_notification_categories=$ob->create_category_tree($notification_code,$id);
 
 	$statistical_notification_type=_find_member_statistical_notification_type(get_member());

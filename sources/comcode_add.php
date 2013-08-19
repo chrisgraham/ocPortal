@@ -304,7 +304,13 @@ function comcode_helper_script()
 		$embed_required=true;
 		if ($tag=='contents') $embed_required=false;
 
-		$tag_description=protect_from_escaping(do_lang('COMCODE_TAG_'.$tag));
+		if (isset($custom_tag_list[$tag]['tag_description']))
+		{
+			$tag_description=protect_from_escaping($custom_tag_list[$tag]['tag_description']);
+		} else
+		{
+			$tag_description=protect_from_escaping(do_lang('COMCODE_TAG_'.$tag));
+		}
 
 		if (array_key_exists($tag,$tag_list))
 		{
@@ -516,7 +522,7 @@ function comcode_helper_script()
 			foreach ($params as $param)
 			{
 				$description=new ocp_tempcode();
-				$fields->attach(form_input_line(preg_replace('#=.*$#','',ucwords(str_replace('_',' ',$param))),protect_from_escaping($description),$param,'',false));
+				$fields->attach(form_input_line(preg_replace('#=.*$#','',ucwords(str_replace('_',' ',$param))),protect_from_escaping($description),preg_replace('#=.*$#','',$param),preg_replace('#^.*=#U','',$param),false));
 			}
 			$tag_description=new ocp_tempcode();
 			$tag_description->attach(is_integer($_params['tag_description'])?get_translated_text($_params['tag_description']):$_params['tag_description']);
@@ -566,7 +572,8 @@ function comcode_helper_script()
 		{
 			if (!$done_tag_contents)
 			{
-				$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_EMBED');
+				$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_EMBED',NULL,NULL,NULL,NULL,false);
+				if (is_null($descriptiont)) $descriptiont='';
 				$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
 				$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
 				if ($supports_comcode)
@@ -658,7 +665,7 @@ function _get_preview_environment_comcode($tag)
 	} else
 	{
 		$_params=$custom_tag_list[$tag];
-		$parameters=explode(",",$_params['tag_parameters']);
+		$parameters=explode(',',preg_replace('#=[^,]*#','',$_params['tag_parameters']));
 	}
 
 	if (in_array('param',$parameters))

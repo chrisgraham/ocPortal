@@ -663,7 +663,7 @@ function init_form_saving()
 					fields_to_do_counter++;
 					if (result.responseText.length>biggest_length_data.length)
 					{
-						biggest_length_data=result.responseText;
+						biggest_length_data=result.responseText.replace(/\u0000/g,''); // https://code.google.com/p/chromium/issues/detail?id=274983
 					}
 				}
 			}

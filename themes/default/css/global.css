@@ -227,6 +227,9 @@ form { /* For IE6 */
 	margin: 0;
 	font-size: 0.8em;
 }
+.email_body .box {
+	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+}
 
 /* Consider .re_body as 'body': it is just we cannot put our styles directly on body because sometimes this gets used in things we should not mess with such as the WYSIWYG editors frame (which is #htmlarea) and e-mails */
 .re_body {

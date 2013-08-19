@@ -41,7 +41,7 @@ class Hook_choose_filedump_file
 
 		$out='';
 
-		if (has_actual_page_access(NULL,'filedump'))
+		if ((has_actual_page_access(NULL,'filedump')) && (file_exists($fullpath)))
 		{
 			$files=get_directory_contents($fullpath,'',false,false);
 			foreach ($files as $f)

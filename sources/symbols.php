@@ -1952,14 +1952,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('feedback');
 					$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
-					if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
+					if ($rating!==NULL)
 					{
-						$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
-					} else
-					{
-						$value=do_template('RATING_INLINE_STATIC',$rating);
+						if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
+						{
+							$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
+						} else
+						{
+							$value=do_template('RATING_INLINE_STATIC',$rating);
+						}
+						if (is_object($value)) $value=$value->evaluate();
 					}
-					if (is_object($value)) $value=$value->evaluate();
 				}
 				break;
 
@@ -2537,6 +2540,8 @@ function keep_symbol($param)
 		if ((isset($param[0])) && ($param[0]=='1')) $first=true;
 		foreach ($get_vars as $key=>$val)
 		{
+			if (!is_string($key)) $key=strval($key);
+
 			if ((get_magic_quotes_gpc()) && (is_string($val))) $val=stripslashes($val);
 
 			if ((substr($key,0,5)=='keep_') && (strpos($key,'_expand_')===false) && ((!skippable_keep($key,$val)) || (($key=='keep_session') && (is_null(get_bot_type())) && (isset($param[1])) && ($param[1]=='1'))) && (is_string($val)))

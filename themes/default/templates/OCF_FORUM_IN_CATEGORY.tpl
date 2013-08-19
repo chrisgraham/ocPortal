@@ -10,10 +10,10 @@
 			<span class="associated_details">(<a rel="edit" href="{EDIT_URL*}" title="{!EDIT}: {FORUM_NAME*}">{!EDIT}</a>)</span>
 		{+END}
 		{+START,IF_NON_EMPTY,{FORUM_RULES_URL}}
-			<span class="associated_details">(<a target="_blank" onclick="window.faux_open(maintain_theme_in_link('{FORUM_RULES_URL*}'),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;" href="{FORUM_RULES_URL*}" title="{!FORUM_RULES}: {FORUM_NAME*} {!LINK_NEW_WINDOW}">{!FORUM_RULES}</a>)</span>
+			<span class="associated_details">(<a target="_blank" onclick="window.faux_open(maintain_theme_in_link('{FORUM_RULES_URL*;}'),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;" href="{FORUM_RULES_URL*}" title="{!FORUM_RULES}: {FORUM_NAME*} {!LINK_NEW_WINDOW}">{!FORUM_RULES}</a>)</span>
 		{+END}
 		{+START,IF_NON_EMPTY,{INTRO_QUESTION_URL}}
-			<span class="associated_details">(<a target="_blank" onclick="window.faux_open(maintain_theme_in_link('{INTRO_QUESTION_URL*}'),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;" href="{INTRO_QUESTION_URL*}" title="{!INTRO_QUESTION}: {FORUM_NAME*} {!LINK_NEW_WINDOW}">{!INTRO_QUESTION}</a>)</span>
+			<span class="associated_details">(<a target="_blank" onclick="window.faux_open(maintain_theme_in_link('{INTRO_QUESTION_URL*;}'),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;" href="{INTRO_QUESTION_URL*}" title="{!INTRO_QUESTION}: {FORUM_NAME*} {!LINK_NEW_WINDOW}">{!INTRO_QUESTION}</a>)</span>
 		{+END}
 		{+START,IF_NON_EMPTY,{DESCRIPTION}}
 		<div class="ocf_forum_description">

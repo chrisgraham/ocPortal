@@ -768,7 +768,7 @@ function browser_matches(code)
 	switch (code)
 	{
 		case 'ios':
-			return browser.indexOf('iphone')!=-1;
+			return browser.indexOf('iphone')!=-1 || browser.indexOf('ipad')!=-1;
 		case 'android':
 			return browser.indexOf('android')!=-1;
 		case 'no_alpha_ie':
@@ -944,7 +944,23 @@ function select_tab(id,tab)
 		element=document.getElementById(id+'_'+tabs[i]);
 		if (element)
 		{
-			element.style.display=(tabs[i]==tab)?'block':'none';
+			{+START,IF,{$ADDON_INSTALLED,plupload,1}}
+				element.style.display=(tabs[i]==tab)?'block':'none';
+			{+END}
+			{+START,IF,{$NOT,{$ADDON_INSTALLED,plupload,1}}}
+				if (tabs[i]==tab)
+				{
+					element.style.display='block';
+					element.style.visibility='';
+					element.style.width='';
+					element.style.height='';
+				} else
+				{
+					element.style.visibility='hidden'; // We are not using visibility:hidden due to https://code.google.com/p/swfupload/issues/detail?id=231
+					element.style.width='0';
+					element.style.height='0';
+				}
+			{+END}
 
 			if ((typeof window.nereidFade!='undefined') && (tabs[i]==tab))
 			{
@@ -1185,7 +1201,7 @@ function illustrateFrameLoad(pf,frame)
 		var body=de.getElementsByTagName('body');
 		if (body.length==0)
 		{
-			setInnerHTML(de,'<head>'+head+'<\/head><body{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="re_body"><div class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div><\/body>');
+			setInnerHTML(de,'<head>'+head+'<\/head><body{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="re_body"><div class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*;,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div><\/body>');
 		} else
 		{
 			body[0].className='re_body';
@@ -1199,7 +1215,7 @@ function illustrateFrameLoad(pf,frame)
 
 			if (de.getElementsByTagName('style').length==0) {$,The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice}
 				setInnerHTML(head_element,head);
-			setInnerHTML(body[0],'<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div>');
+			setInnerHTML(body[0],'<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*;,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div>');
 		}
 		var the_frame=window.frames[frame];
 		window.setTimeout( // Stupid workaround for Google Chrome not loading an image on unload even if in cache

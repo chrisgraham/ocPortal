@@ -74,7 +74,7 @@
 		</p>
 	{+END}
 
-	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={TITLE}}{+END}{+END}
+	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={TITLE}}{+END}{+END}
 
 	{+START,IF,{$OR,{$IS_NON_EMPTY,{MODERATOR_ACTIONS}},{$AND,{$NOT,{$MOBILE}},{$IS_NON_EMPTY,{MARKED_POST_ACTIONS}}},{MAY_CHANGE_MAX}}}
 		<div class="medborder medborder_box ocf_topic_control_functions">

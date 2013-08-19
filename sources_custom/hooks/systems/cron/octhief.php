@@ -90,6 +90,9 @@ class Hook_cron_octhief
 				{
 					system_gift_transfer(do_lang('THIEF_GAVE_YOU').' '. strval($octhief_points).' point(-s)',$octhief_points,$give_to_member);
 
+					require_code('ocf_topic_action');
+					require_code('ocf_posts_action');
+
 					$subject=do_lang('THIEF_PT_TOPIC',strval($octhief_points),$GLOBALS['FORUM_DRIVER']->get_username($member['id']),$GLOBALS['FORUM_DRIVER']->get_username($give_to_member));
 					$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$member['id'],$give_to_member,false,0,NULL,'');
 
@@ -138,6 +141,9 @@ class Hook_cron_octhief
 				{
 					system_gift_transfer(do_lang('THIEF_GAVE_YOU').' '. strval($octhief_points).' point(-s)',$octhief_points,$give_to_member);
 
+					require_code('ocf_topic_action');
+					require_code('ocf_posts_action');
+
 					$subject=do_lang('THIEF_PT_TOPIC',strval($octhief_points));
 					$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$member_id,$give_to_member,false,0,NULL,'');
 
@@ -173,6 +179,9 @@ class Hook_cron_octhief
 				if ($give_to_member!=0)
 				{
 					system_gift_transfer(do_lang('THIEF_GAVE_YOU').' '. strval($octhief_points).' point(-s)',$octhief_points,$give_to_member);
+
+					require_code('ocf_topic_action');
+					require_code('ocf_posts_action');
 
 					$subject=do_lang('THIEF_PT_TOPIC',strval($octhief_points));
 					$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$member['id'],$give_to_member,false,0,NULL,'');

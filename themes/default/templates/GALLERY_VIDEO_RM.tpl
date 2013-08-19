@@ -19,8 +19,8 @@
 		{
 			stop_slideshow_timer('{!STOPPED;}');
 			window.setTimeout(function() {
-				addEventListenerAbstract(document.getElementById('{$GET*,player_id}'),'stateChange',function(newState) { if (newState==0) { playerStopped(); } } );
-				document.getElementById('{$GET*,player_id}').DoPlay();
+				addEventListenerAbstract(document.getElementById('{$GET*;,player_id}'),'stateChange',function(newState) { if (newState==0) { playerStopped(); } } );
+				document.getElementById('{$GET*;,player_id}').DoPlay();
 			}, 1000);
 		}
 	} );

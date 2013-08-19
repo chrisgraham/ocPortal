@@ -11,17 +11,17 @@
 		<form title="{!MESSAGE}" onsubmit="return false;" action="#" method="post" style="display: inline;">
 			<div style="display: inline;">
 				<p style="display: none;"><label for="post">{!MESSAGE}</label></p>
-				<textarea class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,'{ROOM_ID*}','post'); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="42" rows="1"></textarea>
+				<textarea class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,'{ROOM_ID*;}','post'); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="42" rows="1"></textarea>
 			</div>
 		</form>
 	</div>
 	<div class="left">
 		<form title="{SUBMIT_VALUE*}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
-			<input type="button" name="post_now" onclick="return chat_post(event,'{ROOM_ID*}','post');" value="{SUBMIT_VALUE*}" />
+			<input type="button" name="post_now" onclick="return chat_post(event,'{ROOM_ID*;}','post');" value="{SUBMIT_VALUE*}" />
 		</form>
 		&nbsp;
 		{+START,IF,{$OCF}}
-		<span class="associated_details">[ <a tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a> ]</span>
+		<span class="associated_details">[ <a tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*;,emoticons}?field_name=post{$KEEP*;}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a> ]</span>
 		{+END}
 	</div>
 	<div class="right">

@@ -37,7 +37,7 @@
 									if (test)
 									{
 										_this.href+=(_this.href.indexOf('?')!=-1)?'&':'?';
-										_this.href+='{AUTO_ADD*}=1';
+										_this.href+='{AUTO_ADD;}=1';
 									}
 									click_link(_this);
 								}

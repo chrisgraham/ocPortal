@@ -33,7 +33,7 @@
 			stop_slideshow_timer('{!STOPPED;}');
 
 			window.setTimeout(function() {
-				var player=document.getElementById('{$GET*,player_id}');
+				var player=document.getElementById('{$GET;,player_id}');
 
 				{$,WMP}
 				addEventListenerAbstract(player,'playstatechange',function(newState) { if (newState==1) { playerStopped(); } } );

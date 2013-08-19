@@ -141,7 +141,7 @@ function build_preview($multi_return=false)
 
 		if ((substr($key,0,14)=='review_rating') || (substr($key,0,7)=='rating')) $val.='/10';
 
-		$is_hidden=in_array($key,array('password','confirm_password','edit_password','MAX_FILE_SIZE','perform_validation','_validated','id','posting_ref_id','f_face','f_colour','f_size','http_referer')) || (strpos($key,'hour')!==false) || (strpos($key,'access_')!==false) || (strpos($key,'minute')!==false) || (strpos($key,'confirm')!==false) || (strpos($key,'pre_f_')!==false) || (strpos($key,'label_for__')!==false) || (strpos($key,'wysiwyg_version_of_')!==false) || (strpos($key,'is_wysiwyg')!==false) || (strpos($key,'require__')!==false) || (strpos($key,'tempcodecss__')!==false) || (strpos($key,'comcode__')!==false) || (strpos($key,'_parsed')!==false) || (preg_match('#^caption\d+$#',$key)!=0) || (preg_match('#^attachmenttype\d+$#',$key)!=0) || (substr($key,0,1)=='_') || (substr($key,0,9)=='hidFileID') || (substr($key,0,11)=='hidFileName');
+		$is_hidden=in_array($key,array('from_url','password','confirm_password','edit_password','MAX_FILE_SIZE','perform_validation','_validated','id','posting_ref_id','f_face','f_colour','f_size','http_referer')) || (strpos($key,'hour')!==false) || (strpos($key,'access_')!==false) || (strpos($key,'minute')!==false) || (strpos($key,'confirm')!==false) || (strpos($key,'pre_f_')!==false) || (strpos($key,'label_for__')!==false) || (strpos($key,'wysiwyg_version_of_')!==false) || (strpos($key,'is_wysiwyg')!==false) || (strpos($key,'require__')!==false) || (strpos($key,'tempcodecss__')!==false) || (strpos($key,'comcode__')!==false) || (strpos($key,'_parsed')!==false) || (preg_match('#^caption\d+$#',$key)!=0) || (preg_match('#^attachmenttype\d+$#',$key)!=0) || (substr($key,0,1)=='_') || (substr($key,0,9)=='hidFileID') || (substr($key,0,11)=='hidFileName');
 		if (substr($key,0,14)=='tick_on_form__')
 		{
 			if (post_param_integer(substr($key,14),0)==1) $is_hidden=true; else $key=substr($key,14);
@@ -168,7 +168,8 @@ function build_preview($multi_return=false)
 		{
 			if ($spellcheck)
 			{
-				$mispellings=spellchecklogic('check',$val,$words_skip,true);
+				require_code('comcode_from_html');
+				$mispellings=spellchecklogic('check',semihtml_to_comcode($val,true),$words_skip,true);
 				$_misspellings=array();
 				foreach ($mispellings as $misspelling)
 				{

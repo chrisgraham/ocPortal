@@ -10,8 +10,8 @@
 				<a onclick="window.fauxmodal_confirm('{$STRIP_TAGS,{!HELP_INSERT_DISTINGUISHING_TEMPCODE;}}',function(result) { if (result) { insertTextbox(document.getElementById('f{I*}_new'),'{'+'+START,IF,{'+'$EQ,{'+'_GUID},{GUID*}}}\n{'+'+END}'); } }); return false;" href="#">{!INSERT_DISTINGUISHING_TEMPCODE}</a>
 			</div>
 		{+END}
-		<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('f{I*}sdp','block'); return false;"><img id="e_f{I*}sdp" alt="{!EXPAND}: {!SYMBOLS_AND_DIRECTIVES}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-		<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('f{I*}sdp','block'); return false;">{!SYMBOLS_AND_DIRECTIVES}</a>
+		<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('f{I*;}sdp','block'); return false;"><img id="e_f{I*}sdp" alt="{!EXPAND}: {!SYMBOLS_AND_DIRECTIVES}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+		<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('f{I*;}sdp','block'); return false;">{!SYMBOLS_AND_DIRECTIVES}</a>
 		<div class="hide_button_spacing" style="display: {$JS_ON,none,block}" id="f{I*}sdp">
 			{PARAMETERS}
 			{DIRECTIVES}
@@ -71,7 +71,7 @@
 										{+END}
 									</td>
 									<td>
-										<a onclick="insertTextbox(document.getElementById('f{I*}_new'),'{'+'+START,IF,{'+'$EQ,{'+'_GUID},{THIS_GUID}}}\n{'+'+END}'); return false;" href="#">{THIS_GUID*}</a>
+										<a onclick="insertTextbox(document.getElementById('f{I*;}_new'),'{'+'+START,IF,{'+'$EQ,{'+'_GUID},{THIS_GUID}}}\n{'+'+END}'); return false;" href="#">{THIS_GUID*}</a>
 									</td>
 								</tr>
 							{+END}

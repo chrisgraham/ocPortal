@@ -590,7 +590,7 @@ function snippet_script()
 	$tempcode=$object->run();
 	$out=$tempcode->evaluate();
 
-	if (strpos($out,chr(10))!==false) // Is HTML
+	if ((strpos($out,chr(10))!==false) && ($hook!='css_compile')) // Is HTML
 	{
 		require_code('xhtml');
 		$out=xhtmlise_html($out,true);

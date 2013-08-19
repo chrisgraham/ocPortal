@@ -496,7 +496,11 @@ function add_ip_ban($ip,$descrip='')
 	persistant_cache_delete('IP_BANS');
 	if (is_writable_wrap(get_file_base().'/.htaccess'))
 	{
-		$original_contents=file_get_contents(get_file_base().'/.htaccess',FILE_TEXT);
+		$myfile=fopen(get_file_base().'/.htaccess','rt');
+		flock($myfile,LOCK_SH);
+		$original_contents=file_get_contents(get_file_base().'/.htaccess');
+		flock($myfile,LOCK_UN);
+		fclose($myfile);
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);

@@ -100,7 +100,7 @@
 											<td><img id="buddy_img_{MEMBER_ID*}" alt="" src="{$IMG*,menu_items/forum_navigation/members}" /></td>
 											<td>
 												{+START,IF,{CAN_IM}}
-													<a rel="friend" title="{USERNAME*}: {!START_IM}" href="#" onclick="start_im('{MEMBER_ID*}'); return false;">{USERNAME*}</a>
+													<a rel="friend" title="{USERNAME*}: {!START_IM}" href="#" onclick="start_im('{MEMBER_ID*;}'); return false;">{USERNAME*}</a>
 												{+END}
 												{+START,IF,{$NOT,{CAN_IM}}}
 													{USERNAME*}

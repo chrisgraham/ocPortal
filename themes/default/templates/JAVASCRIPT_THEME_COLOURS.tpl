@@ -208,7 +208,7 @@ function makeColourChooser(name,color,context,tabindex,label,className)
 	if ((color!='') && (color.substr(0,1)!='#') && (color.substr(0,3)!='rgb'))
 	{
 		if (color.match(/[A-Fa-f\d]{6}/)) color='#'+color;
-		elsecolor='#000000';
+		else color='#000000';
 	}
 
 	var t='';

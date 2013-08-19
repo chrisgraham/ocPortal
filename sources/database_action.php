@@ -194,6 +194,7 @@ function get_false_permissions()
 						array('SUBMISSION','delete_own_cat_midrange_content'),
 						array('SUBMISSION','delete_own_cat_lowrange_content'),
 						array('SUBMISSION','mass_import'),
+						array('SUBMISSION','perform_keyword_check'),
 
 					);
 }

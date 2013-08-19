@@ -416,7 +416,7 @@ class Hook_smf2
 									);
 				if ($row['website_url']!='')
 					$custom_fields[ocf_make_boiler_custom_field('website')]=$row['website_url'];
-				$signature=html_to_comcode($row['signature']);
+				$signature=str_replace(array('[html]','[/html]'),array('',''),html_to_comcode($row['signature']));
 				$signature=$this->fix_links($signature,$db,$table_prefix,$file_base);
 				$validated=1;
 				$reveal_age=0;
@@ -450,7 +450,7 @@ class Hook_smf2
 				$allow_emails = intval($row['instant_messages']) > 0? 1:0;
 
 				if ($row['date_registered']==0) $row['date_registered']=time();
-				$id_new=ocf_make_member($row['member_name'],$password,$row['email_address'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['time_offset']),$primary_group,$validated,$row['date_registered'],$row['last_login'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$allow_emails,1,'','','',false,$type,$salt,1);
+				$id_new=ocf_make_member($row['member_name'],$password,$row['email_address'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,($row['time_offset']==0)?'':strval($row['time_offset']),$primary_group,$validated,$row['date_registered'],$row['last_login'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$allow_emails,1,'','','',false,$type,$salt,1);
 
 				//cpf stuff
 				if($id_new){
@@ -642,7 +642,7 @@ class Hook_smf2
 
 		$avatar_path='';
 		$avatar_gallery_path='';
-		$avatar_path='attachments';
+		$avatar_path='members';
 
 		foreach ($options as $option)
 		{
@@ -677,7 +677,7 @@ class Hook_smf2
 				$avatar_url='';
 				if (!isset($row['avatar'])||(strlen($row['avatar'])==0))
 				{
-					$query_attachments='SELECT id_member,filename,width,height,size,attachment_type FROM '.$table_prefix.'attachments WHERE attachment_type=\'0\' AND id_member=\''.strval($row['id_member']).'\'';
+					$query_attachments='SELECT id_member,filename,width,height,size,attachment_type FROM '.$table_prefix.'attachments WHERE attachment_type=\'1\' AND id_member=\''.strval($row['id_member']).'\'';
 
 					$attachment_data=$db->query($query_attachments,1,0);
 					if (isset($attachment_data[0]['filename'])&&(strlen($attachment_data[0]['filename'])>0))
@@ -852,7 +852,7 @@ class Hook_smf2
 
 			$name=html_entity_decode($row['name'],ENT_QUOTES,get_charset());
 
-			$description=html_to_comcode($row['description']);
+			$description=str_replace(array('[html]','[/html]'),array('',''),html_to_comcode($row['description']));
 
 			$position=$row['board_order'];
 			$post_count_increment=1;
@@ -1056,7 +1056,7 @@ class Hook_smf2
 				$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
 
-				$post_description=html_to_comcode($row['body']);
+				$post_description=str_replace(array('[html]','[/html]'),array('',''),html_to_comcode($row['body']));
 
 
 				$post=$this->fix_links($post_description,$db,$table_prefix,$file_base);
@@ -1362,7 +1362,7 @@ class Hook_smf2
 					$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
 
-					$post_description=html_to_comcode($_post['body']);
+					$post_description=str_replace(array('[html]','[/html]'),array('',''),html_to_comcode($_post['body']));
 
 
 					$post=$this->fix_links($post_description,$db,$table_prefix,$old_base_dir);
@@ -1721,7 +1721,7 @@ class Hook_smf2
 				$attid = isset($atts[0]['id_attach'])? $atts[0]['id_attach']:0;
 				$att_imported = $attid > 0 && import_check_if_imported('post_files',strval($attid))? true:false;
 				$messages=$db->query('SELECT * FROM '.$table_prefix.'messages WHERE id_topic='.strval($row['id_topic']).' ORDER BY id_topic ASC');
-				$description=(isset($messages[0]['body'])&&($messages[0]['body']!=''))?html_to_comcode($messages[0]['body']):'';
+				$description=(isset($messages[0]['body'])&&($messages[0]['body']!=''))?str_replace(array('[html]','[/html]'),array('',''),html_to_comcode($messages[0]['body'])):'';
 			}
 			if($att_imported)
 			{

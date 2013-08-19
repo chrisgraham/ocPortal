@@ -39,7 +39,7 @@
 <a class="right" title="{!RETURN_TO_FUNCTION_INDEX}" href="#class_index_{CLASS*}" target="_self"><img class="inline_image" src="{$IMG*,top}" alt="{!RETURN_TO_FUNCTION_INDEX}" title=""/></a>
 
 {+START,IF_NON_EMPTY,{CODE}}
-<a class="hide_button" title="{!VIEW_SOURCE_CODE}" href="#" onclick="event.returnValue=false; toggleSectionInline('{CLASS*}.{FUNCTION*}','block'); return false;"><img alt="{!EXPAND}: {!VIEW_SOURCE_CODE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+<a class="hide_button" title="{!VIEW_SOURCE_CODE}" href="#" onclick="event.returnValue=false; toggleSectionInline('{CLASS*;}.{FUNCTION*;}','block'); return false;"><img alt="{!EXPAND}: {!VIEW_SOURCE_CODE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 <div class="hide_button_spacing" id="{CLASS*}.{FUNCTION*}" style="display: {$JS_ON,none,block}">
 	<span class="xhtml_validator_off">
 		{CODE`}

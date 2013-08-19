@@ -227,7 +227,10 @@ function handle_facebook_connection_login($current_logged_in_member)
 			exit();
 		} else // Actualiser
 		{
-			$member=ocf_member_external_linker(post_param('username',$username)/*user may have customised username*/,$facebook_uid,'facebook',false,$email_address,$dob_day,$dob_month,$dob_year,$timezone,$language,$avatar_url,$photo_url,$photo_thumb_url);
+			$username=post_param('username',$username)/*user may have customised username*/;
+			if ((count($_custom_fields)!=0) && (get_value('no_finish_profile')!=='1')) // Was not auto-generated, so needs to be checked
+				ocf_check_name_valid($username,NULL,NULL);
+			$member=ocf_member_external_linker($username,$facebook_uid,'facebook',false,$email_address,$dob_day,$dob_month,$dob_year,$timezone,$language,$avatar_url,$photo_url,$photo_thumb_url);
 		}
 	}
 

@@ -22,8 +22,8 @@
 		{
 			stop_slideshow_timer('{!STOPPED;}');
 			window.setTimeout(function() {
-				document.getElementById('{$GET*,player_id}').addEventListener('onStateChange','youtubeStateChanged');
-				document.getElementById('{$GET*,player_id}').playVideo();
+				document.getElementById('{$GET;,player_id}').addEventListener('onStateChange','youtubeStateChanged');
+				document.getElementById('{$GET;,player_id}').playVideo();
 			}, 1000);
 		}
 	} );

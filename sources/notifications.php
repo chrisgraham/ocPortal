@@ -217,6 +217,7 @@ class Notification_dispatcher
 			$message_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$id,'message_type'=>$type),get_module_zone('admin_messaging'),NULL,false,false,true);
 			$message=do_lang('MESSAGING_NOTIFICATION_WRAPPER',$message,$message_url->evaluate());
 
+			require_code('feedback');
 			actualise_post_comment(true,$type,$id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true);
 		}
 
@@ -449,7 +450,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 						'd_priority'=>$priority,
 						'd_no_cc'=>$no_cc?1:0,
 						'd_date_and_time'=>time(),
-						'd_notification_code'=>$notification_code,
+						'd_notification_code'=>substr($notification_code,0,80),
 						'd_code_category'=>is_null($code_category)?'':$code_category,
 						'd_frequency'=>$frequency,
 					));
@@ -522,12 +523,12 @@ function enable_notifications($notification_code,$notification_category,$member_
 
 	$db->query_delete('notifications_enabled',array(
 		'l_member_id'=>$member_id,
-		'l_notification_code'=>$notification_code,
+		'l_notification_code'=>substr($notification_code,0,80),
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	));
 	$db->query_insert('notifications_enabled',array(
 		'l_member_id'=>$member_id,
-		'l_notification_code'=>$notification_code,
+		'l_notification_code'=>substr($notification_code,0,80),
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 		'l_setting'=>$setting,
 	));
@@ -559,7 +560,7 @@ function disable_notifications($notification_code,$notification_category,$member
 
 	$db->query_delete('notifications_enabled',array(
 		'l_member_id'=>$member_id,
-		'l_notification_code'=>$notification_code,
+		'l_notification_code'=>substr($notification_code,0,80),
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	));
 
@@ -601,7 +602,7 @@ function notifications_setting($notification_code,$notification_category,$member
 
 	$specific_where=array(
 		'l_member_id'=>$member_id,
-		'l_notification_code'=>$notification_code,
+		'l_notification_code'=>substr($notification_code,0,80),
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	);
 
@@ -612,7 +613,7 @@ function notifications_setting($notification_code,$notification_category,$member
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
-		'l_notification_code'=>$notification_code,
+		'l_notification_code'=>substr($notification_code,0,80),
 	));
 	if (is_null($test))
 	{
@@ -622,7 +623,7 @@ function notifications_setting($notification_code,$notification_category,$member
 		{
 			$test=$db->query_value_null_ok('notifications_enabled','l_setting',array(
 				'l_member_id'=>$member_id,
-				'l_notification_code'=>$notification_code,
+				'l_notification_code'=>substr($notification_code,0,80),
 				'l_code_category'=>'',
 			));
 		}
@@ -650,7 +651,7 @@ function delete_all_notifications_on($notification_code,$notification_category)
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
 	$db->query_delete('notifications_enabled',array(
-		'l_notification_code'=>$notification_code,
+		'l_notification_code'=>substr($notification_code,0,80),
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	));
 }
@@ -715,7 +716,7 @@ class Hook_Notification
 		$notification_category=get_param('id',NULL);
 		$done_in_url=is_null($notification_category);
 
-		$map=array('l_notification_code'=>$notification_code);
+		$map=array('l_notification_code'=>substr($notification_code,0,80));
 		if (!$for_any_member)
 		{
 			$map['l_member_id']=get_member();
@@ -942,7 +943,7 @@ class Hook_Notification
 		$initial_setting=$this->get_initial_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category);
 		$has_by_default=($initial_setting!=A_NA);
 
-		$clause_1=db_string_equal_to('l_notification_code',$only_if_enabled_on__notification_code);
+		$clause_1=db_string_equal_to('l_notification_code',substr($only_if_enabled_on__notification_code,0,80));
 		$clause_2=is_null($only_if_enabled_on__category)?db_string_equal_to('l_code_category',''):('('.db_string_equal_to('l_code_category','').' OR '.db_string_equal_to('l_code_category',$only_if_enabled_on__category).')');
 
 		$clause_3='1=1';
@@ -961,7 +962,7 @@ class Hook_Notification
 		$db=(substr($only_if_enabled_on__notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
-			'l_notification_code'=>$only_if_enabled_on__notification_code,
+			'l_notification_code'=>substr($only_if_enabled_on__notification_code,0,80),
 		));
 		if ((!is_null($test)) && (get_forum_type()=='ocf'))
 		{
