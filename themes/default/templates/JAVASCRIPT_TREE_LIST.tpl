@@ -278,6 +278,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 					element.value=(this.use_server_id?node.getAttribute('serverid'):node.getAttribute('id')); // Copy in proper ID for what is selected, not relying on what we currently have as accurate
 					if (element.value!='')
 					{
+						if (typeof element.selected_title=='undefined') element.selected_title='';
 						if (element.selected_title!='') element.selected_title+=',';
 						element.selected_title+=node.getAttribute('title');
 					}
