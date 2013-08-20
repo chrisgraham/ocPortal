@@ -1358,7 +1358,7 @@ class Module_topics
 			{
 				$existing_title=$post_rows[0]['p_title'];
 				$existing_description=$post_rows[0]['t_description'];
-				$post=get_translated_text($post_rows[0]['p_post']);
+				$post=preg_replace('#\[staff_note\].*\[/staff_note\]#Us','',get_translated_text($post_rows[0]['p_post']));
 			}
 		}
 
