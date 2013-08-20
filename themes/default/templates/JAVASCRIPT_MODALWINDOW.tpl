@@ -165,7 +165,7 @@ function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 			text: escape_html(question).replace(/\n/g,'<br />'),
 			yes_button: '{!INPUTSYSTEM_OK;^}',
 			cancel_button: '{!INPUTSYSTEM_CANCEL;^}',
-			defaultValue: (this.defaultValue===null)?'':this.defaultValue,
+			defaultValue: (defaultValue===null)?'':defaultValue,
 			title: title,
 			yes: function(value) {
 				callback(value);

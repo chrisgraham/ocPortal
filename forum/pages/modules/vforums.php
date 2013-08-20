@@ -48,7 +48,7 @@ class Module_vforums
 	 */
 	function get_entry_points()
 	{
-		return is_guest()?array():array('misc'=>'POSTS_SINCE_LAST_VISIT','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ');
+		return is_guest()?array('misc'=>'POSTS_SINCE_LAST_VISIT'):array('unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ');
 	}
 
 	/**
@@ -60,8 +60,6 @@ class Module_vforums
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_forumview');
-
-		if (is_guest()) access_denied('NOT_AS_GUEST');
 
 		require_css('ocf');
 
@@ -111,6 +109,8 @@ class Module_vforums
 	 */
 	function unread_topics()
 	{
+		if (is_guest()) access_denied('NOT_AS_GUEST');
+
 		$title=do_lang('TOPICS_UNREAD');
 		$condition=array('l_time IS NOT NULL AND l_time<t_cache_last_time','l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))));
 
@@ -124,6 +124,8 @@ class Module_vforums
 	 */
 	function recently_read()
 	{
+		if (is_guest()) access_denied('NOT_AS_GUEST');
+
 		$title=do_lang('RECENTLY_READ');
 		$condition='l_time>'.strval(time()-60*60*24*2);
 

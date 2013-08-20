@@ -616,7 +616,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 		$breadcrumbs=new ocp_tempcode();
 	}
 
-	return do_template('OCF_FORUM_TOPIC_ROW',array('_GUID'=>'1aca672272132f390c9ec23eebe0d171','BREADCRUMBS'=>$breadcrumbs,'RAW_TIME'=>is_null($topic['first_time'])?'':strval($topic['first_time']),'UNREAD'=>in_array('unread',$modifiers),'ID'=>strval($topic['id']),'HOVER'=>$hover,'PAGES'=>$pages,'MARKER'=>$marker,'TOPIC_ROW_LINKS'=>$topic_row_links,'TOPIC_ROW_MODIFIERS'=>$topic_row_modifiers,'_TOPIC_ROW_MODIFIERS'=>$modifiers,'POST'=>$post,'EMOTICON'=>$emoticon,'DESCRIPTION'=>$topic['description'],'URL'=>$url,'TITLE'=>$title,'POSTER'=>$poster,'NUM_POSTS'=>integer_format($topic['num_posts']),'NUM_VIEWS'=>integer_format($topic['num_views']),'LAST_POST'=>$last_post));
+	return do_template('OCF_FORUM_TOPIC_ROW',array('_GUID'=>'1aca672272132f390c9ec23eebe0d171','BREADCRUMBS'=>$breadcrumbs,'RAW_TIME'=>is_null($topic['first_time'])?'':strval($topic['first_time']),'UNREAD'=>in_array('unread',$modifiers),'ID'=>strval($topic['id']),'HOVER'=>$hover,'PAGES'=>$pages,'MARKER'=>$marker,'TOPIC_ROW_LINKS'=>$topic_row_links,'TOPIC_ROW_MODIFIERS'=>$topic_row_modifiers,'_TOPIC_ROW_MODIFIERS'=>$modifiers,'POST'=>$post,'EMOTICON'=>$emoticon,'DESCRIPTION'=>$topic['description'],'URL'=>$url,'TITLE'=>$title,'_POSTER'=>strval($topic['first_member_id']),'POSTER'=>$poster,'NUM_POSTS'=>integer_format($topic['num_posts']),'NUM_VIEWS'=>integer_format($topic['num_views']),'LAST_POST'=>$last_post));
 }
 
 /**

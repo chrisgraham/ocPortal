@@ -915,7 +915,7 @@ class Hook_addon_registry_ocf_forum
 				'AT'=>lorem_phrase()
 			));
 
-			$post=do_lorem_template('OCF_PT_BETWEEN', array(
+			$poster=do_lorem_template('OCF_PT_BETWEEN', array(
 				'A'=>lorem_phrase(),
 				'B'=>$b
 			));
@@ -944,7 +944,8 @@ class Hook_addon_registry_ocf_forum
 				'DESCRIPTION'=>lorem_paragraph(),
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
-				'POSTER'=>$post,
+				'POSTER'=>$poster,
+				'_POSTER'=>placeholder_id(),
 				'NUM_POSTS'=>placeholder_number(),
 				'NUM_VIEWS'=>placeholder_number(),
 				'LAST_POST'=>$last_post
@@ -1224,7 +1225,7 @@ class Hook_addon_registry_ocf_forum
 					'AT'=>lorem_phrase()
 				));
 
-				$post=do_lorem_template('OCF_PT_BETWEEN', array(
+				$poster=do_lorem_template('OCF_PT_BETWEEN', array(
 					'A'=>lorem_phrase(),
 					'B'=>$b
 				));
@@ -1252,7 +1253,8 @@ class Hook_addon_registry_ocf_forum
 					'DESCRIPTION'=>lorem_paragraph(),
 					'URL'=>placeholder_url(),
 					'TITLE'=>lorem_phrase(),
-					'POSTER'=>$post,
+					'POSTER'=>$poster,
+					'_POSTER'=>placeholder_id(),
 					'NUM_POSTS'=>placeholder_number(),
 					'NUM_VIEWS'=>placeholder_number(),
 					'LAST_POST'=>$last_post

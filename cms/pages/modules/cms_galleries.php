@@ -200,7 +200,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		$fields=new ocp_tempcode();
 
-		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('must_accept_something'=>true,'purity'=>false,'filter'=>$condition,'member_id'=>$member_id),true,''));
+		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('must_accept_something'=>true,'purity'=>false,'addable_filter'=>true,'filter'=>$condition,'member_id'=>$member_id),true,''));
 
 		$submit_name=do_lang_tempcode('GALLERY_IMPORT');
 
