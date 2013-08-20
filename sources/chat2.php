@@ -94,8 +94,7 @@ function friend_add($likes,$liked,$time=NULL)
 
 		// Log the action
 		log_it('MAKE_FRIEND',strval($likes),strval($liked));
-		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
-		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);
+		syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_name,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes,false,$liked);
 	}
 }
 

@@ -71,7 +71,7 @@ function get_activity_querying_sql($viewer_id,$mode,$member_ids)
 					$_where_clause.=' AND a_member_id NOT IN ('.$blocking.')';
 				if (addon_installed('chat')) // Limit to stuff from this member's friends about them
 				{
-					$_where_clause.=' AND a_member_id IN (SELECT member_liked FROM '.get_table_prefix().'chat_buddies WHERE member_likes='.strval($viewer_id).')';
+					$_where_clause.=' AND a_member_id IN (SELECT member_liked FROM '.get_table_prefix().'chat_buddies WHERE member_likes='.strval($member_id).')';
 				}
 				$_where_clause.=')';
 				$_where_clause.=')';

@@ -46,10 +46,11 @@
 			{+END}
 		{+END}
 		{+START,IF,{$NEQ,{LANG_STRING},RAW_DUMP}}
-			{+START,IF,{$EQ,{MODE},all}}
+			{$SET,named,{$OR,{$NEQ,{$USERNAME,{MEMBER_IDS}},{USERNAME}},{$EQ,{MODE},all}}}
+			{+START,IF,{$GET,named}}
 				{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{BITS},0,1}}{$SUBSTR,{BITS},1}}
 			{+END}
-			{+START,IF,{$NEQ,{MODE},all}}
+			{+START,IF,{$NOT,{$GET,named}}}
 				{BITS}
 			{+END}
 		{+END}
