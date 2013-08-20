@@ -179,6 +179,10 @@ class Module_admin_messaging
 		{
 			$message_title=$_comments[0]['title'];
 			$message=$_comments[0]['message'];
+			if (isset($_comments[0]['message_comcode']))
+			{
+				$message=comcode_to_tempcode(str_replace('[/staff_note]','',str_replace('[staff_note]','',$_comments[0]['message_comcode']),$GLOBALS['FORUM_DRIVER']->get_guest_id()));
+			}
 			$by=$_comments[0]['username'];
 
 			foreach ($_comments as $i=>$comment)
