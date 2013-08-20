@@ -26,7 +26,7 @@
 							{+START,IF,{$AND,{$IS_GUEST},{$OCF}}}
 								<li>
 									<label for="poster_name_if_guest">{!ocf:GUEST_NAME}</label>
-									<input maxlength="255" size="24" value="" type="text" id="poster_name_if_guest" name="poster_name_if_guest" />
+									<input tabindex="1" maxlength="255" size="24" value="" type="text" id="poster_name_if_guest" name="poster_name_if_guest" />
 									{+START,IF_PASSED,JOIN_BITS}{+START,IF_NON_EMPTY,{JOIN_BITS}}
 										<span class="associated_link_to_small">({JOIN_BITS})</span>
 									{+END}{+END}
@@ -36,14 +36,14 @@
 							{+START,IF,{GET_TITLE}}
 								<li>
 									<label for="title">{!POST_TITLE}</label>
-									<input maxlength="255" class="wide_field" value="" type="text" id="title" name="title" />
+									<input tabindex="2" maxlength="255" class="wide_field" value="" type="text" id="title" name="title" />
 								</li>
 							{+END}
 
 							{+START,IF,{GET_EMAIL}}
 								<li>
 									<label for="email">{!EMAIL_ADDRESS}{+START,IF,{EMAIL_OPTIONAL}} ({!OPTIONAL}){+END}</label>
-									<input maxlength="255" class="wide_field{+START,IF,{$NOT,{EMAIL_OPTIONAL}}} input_text_required{+END}" id="email" type="text" value="{$MEMBER_EMAIL*}" name="email" />
+									<input tabindex="3" maxlength="255" class="wide_field{+START,IF,{$NOT,{EMAIL_OPTIONAL}}} input_text_required{+END}" id="email" type="text" value="{$MEMBER_EMAIL*}" name="email" />
 								</li>
 							{+END}
 
@@ -87,7 +87,7 @@
 
 									<td>
 										<label class="accessibility_hidden" for="poster_name_if_guest">{!ocf:GUEST_NAME}</label>
-										<input maxlength="255" size="24" value="" type="text" tabindex="1" id="poster_name_if_guest" name="poster_name_if_guest" />
+										<input tabindex="4" maxlength="255" size="24" value="" type="text" id="poster_name_if_guest" name="poster_name_if_guest" />
 										{+START,IF_PASSED,JOIN_BITS}{+START,IF_NON_EMPTY,{JOIN_BITS}}
 											<span class="associated_link_to_small">({JOIN_BITS})</span>
 										{+END}{+END}
@@ -104,7 +104,7 @@
 									<td>
 										<label class="accessibility_hidden" for="title">{!POST_TITLE}</label>
 										<div class="constrain_field">
-											<input maxlength="255" class="wide_field" value="" type="text" tabindex="1" id="title" name="title" />
+											<input tabindex="5" maxlength="255" class="wide_field" value="" type="text" id="title" name="title" />
 										</div>
 
 										<div id="error_title" style="display: none" class="input_error_here">&nbsp;</div>
@@ -121,7 +121,7 @@
 									<td>
 										<label class="accessibility_hidden" for="email">{!EMAIL_ADDRESS}</label>
 										<div class="constrain_field">
-											<input maxlength="255" class="wide_field{+START,IF,{$NOT,{EMAIL_OPTIONAL}}} input_text_required{+END}" id="email" type="text" tabindex="2" value="{$MEMBER_EMAIL*}" name="email" />
+											<input tabindex="6" maxlength="255" class="wide_field{+START,IF,{$NOT,{EMAIL_OPTIONAL}}} input_text_required{+END}" id="email" type="text" value="{$MEMBER_EMAIL*}" name="email" />
 										</div>
 
 										<div id="error_email" style="display: none" class="input_error_here">&nbsp;</div>
@@ -212,7 +212,7 @@
 													{EM}
 
 													{+START,IF,{$OCF}}
-														<p>[ <a rel="nofollow" tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a> ]</p>
+														<p>[ <a rel="nofollow" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a> ]</p>
 													{+END}
 												</div>
 											{+END}
@@ -223,7 +223,7 @@
 								<td>
 									<label class="accessibility_hidden" for="post">{!POST_COMMENT}</label>
 									<div class="constrain_field">
-										<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} accesskey="x" class="wide_field" onfocus="if ((this.value.replace(/\s/g,'')=='{POST_WARNING^*;}'.replace(/\s/g,'') &amp;&amp; '{POST_WARNING^*;}'!='') || (typeof this.strip_on_focus!='undefined' &amp;&amp; this.value==this.strip_on_focus)) this.value=''; this.style.color='black';" cols="42" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
+										<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} tabindex="7" accesskey="x" class="wide_field" onfocus="if ((this.value.replace(/\s/g,'')=='{POST_WARNING^*;}'.replace(/\s/g,'') &amp;&amp; '{POST_WARNING^*;}'!='') || (typeof this.strip_on_focus!='undefined' &amp;&amp; this.value==this.strip_on_focus)) this.value=''; this.style.color='black';" cols="42" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
 									</div>
 
 									<div id="error_post" style="display: none" class="input_error_here">&nbsp;</div>
@@ -249,7 +249,7 @@
 									{+START,IF,{$NOT,{$CONFIG_OPTION,css_captcha}}}
 										<img class="no_alpha" id="captcha" title="{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}" alt="{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}" src="{$FIND_SCRIPT*,securityimage}{$KEEP*,1,1}" />
 									{+END}
-									<input maxlength="6" size="6" class="input_text_required" value="" type="text" id="security_image" name="security_image" /><br />
+									<input tabindex="8" maxlength="6" size="6" class="input_text_required" value="" type="text" id="security_image" name="security_image" /><br />
 								{+END}
 							</div>
 						{+END}
@@ -262,11 +262,11 @@
 						{+END}{+END}{+END}
 						{+START,IF_PASSED,MORE_URL}
 							{+START,IF,{$JS_ON}}
-								<button tabindex="5" accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL*;}');" class="button_pageitem" type="button">{!FULL_EDITOR}</button>
+								<button accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL*;}');" class="button_pageitem" type="button">{!FULL_EDITOR}</button>
 								&nbsp;
 							{+END}
 						{+END}
-						<button onclick="handle_comments_posting_form_submit(this,event);" tabindex="4" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
+						<button tabindex="9" onclick="handle_comments_posting_form_submit(this,event);" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
 					</div>
 				</div>
 			</div>
