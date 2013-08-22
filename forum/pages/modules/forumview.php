@@ -223,7 +223,9 @@ class Module_forumview
 
 		$current_filter_cat=get_param('category','');
 
-		$max=get_param_integer('max',intval(get_option('forum_topics_per_page')));
+		$default_max=intval(get_option('forum_topics_per_page'));
+		$max=get_param_integer('max',$default_max);
+		if (($max>50) && (!has_specific_permission(get_member(),'remove_page_split'))) $max=$default_max;
 
 		$root=get_param_integer('keep_forum_root',db_get_first_id());
 

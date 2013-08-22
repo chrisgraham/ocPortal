@@ -352,7 +352,7 @@ class Module_calendar
 						if (is_null($row['title'])) $row['title']=get_translated_text($row['e_title']);
 
 						$pagelink=$pagelink_stub.'view:'.strval($row['id']);
-						call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
+						call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.6,$row['title'])); // Callback
 					}
 
 					$start+=500;
@@ -1382,7 +1382,7 @@ class Module_calendar
 			$event['allow_trackbacks'],
 			((get_option('is_on_strong_forum_tie')=='0') || ($event['e_is_public']==1))?1:0,
 			$event['e_submitter'],
-			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF',NULL,false,false,true),
+			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),
 			$_title,
 			get_value('comment_forum__calendar')
 		);

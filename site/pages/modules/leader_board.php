@@ -48,7 +48,7 @@ class Module_leader_board
 	 */
 	function get_entry_points()
 	{
-		return array('!'=>'POINT_LEADERBOARD');
+		return ($GLOBALS['SITE_DB']->query_value('leader_board','COUNT(*)')==0)?array():array('!'=>'POINT_LEADERBOARD');
 	}
 
 	/**

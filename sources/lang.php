@@ -846,7 +846,8 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				if ($REQUIRE_LANG_LOOP>=2) return ''; // Probably failing to load global.ini, so just output with some text missing
 				require_code('view_modes');
 				erase_cached_language();
-				fatal_exit(do_lang_tempcode('MISSING_LANG_ENTRY',escape_html($codename)));
+				attach_message(do_lang_tempcode('MISSING_LANG_ENTRY',escape_html($codename)),'warn');
+				return '';
 			} else
 			{
 				return NULL;

@@ -103,7 +103,9 @@
 							<div class="inline">
 								<label for="mpa_type">{!MARKED_POST_ACTIONS}:
 								<select id="mpa_type" name="type">
-									<option value="misc">-</option>
+									{+START,IF,{$GT,{$SUBSTR_COUNT,{MARKED_POST_ACTIONS},<option},1}}
+										<option value="misc">-</option>
+									{+END}
 									{MARKED_POST_ACTIONS}
 								</select>
 								</label>
