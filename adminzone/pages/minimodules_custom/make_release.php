@@ -179,7 +179,7 @@ function phase_1()
 	$descrip=post_param('descrip');
 	if (substr($descrip,-1)=='.') $descrip=substr($descrip,0,strlen($descrip)-1);
 	$bleeding_edge=($is_bleeding_edge?'1':'0');
-	$old_tree=($old_tree?'1':'0');
+	$old_tree=($is_old_tree?'1':'0');
 
 	if (post_param_integer('skip',0)==0)
 	{
