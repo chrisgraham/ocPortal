@@ -48,6 +48,11 @@ function sitemaps_build()
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
+	if (!is_guest())
+	{
+		warn_exit('Will not generate sitemap as non-Guest');
+	}
+
 	$path=get_custom_file_base().'/ocp_sitemap.xml';
 	if (!file_exists($path))
 	{

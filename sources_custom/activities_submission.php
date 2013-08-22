@@ -221,7 +221,9 @@ function activities_ajax_update_list_handler()
 			{
 				list($message,$memberpic,$datetime,$member_url)=render_activity($row);
 
-				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('_GUID'=>'02dfa8b02040f56d76b783ddb8fb382f','LANG_STRING'=>'RAW_DUMP','ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
+				$username=$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']);
+				if (is_null($username)) $username=do_lang('UNKNOWN');
+				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('_GUID'=>'02dfa8b02040f56d76b783ddb8fb382f','LANG_STRING'=>'RAW_DUMP','ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMBER_ID'=>strval($row['a_member_id']),'MEMPIC'=>$memberpic,'USERNAME'=>$username,'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
 				// We dump our response in CDATA, since that lets us work around the
 				// fact that our list elements aren't actually in a list, etc.
 				// However, we allow comcode but some tags make use of CDATA. Since

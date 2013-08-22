@@ -145,7 +145,7 @@ class Hook_Profiles_Tabs_about
 		}
 		if (addon_installed('ocf_contactmember'))
 		{
-			if ((($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_allow_emails')==1) || (get_option('allow_email_disable')=='0')) && (!is_guest($member_id_of)) && (has_actual_page_access($member_id_viewing,'contactmember')) && ($member_id_viewing!=$member_id_of))
+			if ((($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_allow_emails')==1) || (get_option('allow_email_disable')=='0')) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_email_address')!='') && (!is_guest($member_id_of)) && (has_actual_page_access($member_id_viewing,'contactmember')) && ($member_id_viewing!=$member_id_of))
 			{
 				$redirect=get_self_url(true);
 				$modules[]=array('contact',do_lang_tempcode('_EMAIL_MEMBER'),build_url(array('page'=>'contactmember','redirect'=>$redirect,'id'=>$member_id_of),get_module_zone('contactmember')),'reply');

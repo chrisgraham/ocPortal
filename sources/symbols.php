@@ -267,12 +267,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					if (get_option('is_on_rss',true)==='1')
 					{
+						if (addon_installed('news'))
+							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
 						if ($GLOBALS['FEED_URL']!==NULL)
 							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>$GLOBALS['FEED_URL'])));
 						if ($GLOBALS['FEED_URL_2']!==NULL)
 							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
-						if (addon_installed('news'))
-							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
 					}
 				}
 				$value=$feeds->evaluate();

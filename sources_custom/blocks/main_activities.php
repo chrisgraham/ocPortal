@@ -160,7 +160,9 @@ class Block_main_activities
 				foreach ($activities as $row)
 				{
 					list($message,$memberpic,$datetime,$member_url,$lang_string)=render_activity($row);
-					$content[]=array('LANG_STRING'=>$lang_string,'ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewing_member) || $can_remove_others)?'1':'0');
+					$username=$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']);
+					if (is_null($username)) $username=do_lang('UNKNOWN');
+					$content[]=array('LANG_STRING'=>$lang_string,'ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$username,'DATETIME'=>strval($datetime),'MEMBER_ID'=>strval($row['a_member_id']),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewing_member) || $can_remove_others)?'1':'0');
 				}
 			}
 		} else

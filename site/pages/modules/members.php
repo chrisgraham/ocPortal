@@ -78,7 +78,7 @@ class Module_members
 					if ($row['id']!=db_get_first_id())
 					{
 						$pagelink=$pagelink_stub.'view:'.strval($row['id']);
-						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',$row['m_join_time'],NULL,0.2,$row['title'])); // Callback
+						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',$row['m_join_time'],NULL,0.1,$row['title'])); // Callback
 					}
 				}
 

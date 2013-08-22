@@ -26,6 +26,8 @@ class Hook_cron_sitemap
 	 */
 	function run()
 	{
+		if (!is_guest()) return; // Bad idea
+
 		$time=time();
 		$last_time=intval(get_value('last_sitemap_time_calc'));
 

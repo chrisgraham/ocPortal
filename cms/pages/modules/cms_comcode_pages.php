@@ -1070,6 +1070,9 @@ class Module_cms_comcode_pages
 			$GLOBALS['SITE_DB']->query_update('comcode_pages',array(
 				'the_page'=>$new_file,
 			),array('the_zone'=>$zone,'the_page'=>$file),'',1);
+			$GLOBALS['SITE_DB']->query_update('comcode_pages',array(
+				'p_parent_page'=>$new_file,
+			),array('the_zone'=>$zone,'p_parent_page'=>$file));
 
 			foreach ($rename_map as $path=>$new_path)
 			{

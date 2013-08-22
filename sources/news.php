@@ -356,16 +356,32 @@ END;
 
 	if (($validated==1) && (get_option('site_closed')=='0') && (ocp_srv('HTTP_HOST')!='127.0.0.1') && (ocp_srv('HTTP_HOST')!='localhost') && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category_id))))
 	{
-		$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode(find_script('backend').'?type=rss&mode=news'),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
-		$ping_urls=explode(chr(10),$_ping_url);
-		foreach ($ping_urls as $ping_url)
-		{
-			$ping_url=trim($ping_url);
-			if ($ping_url!='') http_download_file($ping_url,NULL,false);
-		}
+		send_rss_ping(false);
 	}
 
 	return $id;
+}
+
+/**
+ * Send out a ping to configured services.
+ *
+ * @param  boolean			Whether to show errors
+ * @return string				HTTP result output
+ */
+function send_rss_ping($show_errors=true)
+{
+	$out='';
+	$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode(find_script('backend').'?type=rss&mode=news'),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
+	$ping_urls=explode(chr(10),$_ping_url);
+	foreach ($ping_urls as $ping_url)
+	{
+		$ping_url=trim($ping_url);
+		if ($ping_url!='')
+		{
+			$out.=http_download_file($ping_url,NULL,$show_errors);
+		}
+	}
+	return $out;
 }
 
 /**
@@ -469,13 +485,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	if (($validated==1) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category))))
 	{
-		$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode(find_script('backend')),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
-		$ping_urls=explode(',',$_ping_url);
-		foreach ($ping_urls as $ping_url)
-		{
-			$ping_url=trim($ping_url);
-			if ($ping_url!='') http_download_file($ping_url,NULL,false);
-		}
+		send_rss_ping(false);
 	}
 
 	require_code('feedback');

@@ -24,11 +24,9 @@
 
 <div class="activities_line">
 	{+START,SET,commented_out}
-		{+START,IF_PASSED,USERNAME}
-			<div class="activity_name left">
-				<a href="{MEMBER_URL*}">{USERNAME*}</a>
-			</div>
-		{+END}
+		<div class="activity_name left">
+			<a href="{MEMBER_URL*}">{USERNAME*}</a>
+		</div>
 	{+END}
 
 	<div class="activity_time right">
@@ -46,7 +44,9 @@
 			{+END}
 		{+END}
 		{+START,IF,{$NEQ,{LANG_STRING},RAW_DUMP}}
-			{$SET,named,{$OR,{$NEQ,{$USERNAME,{MEMBER_IDS}},{USERNAME}},{$EQ,{MODE},all}}}
+			{$,Because it is being included, the including templates preprocessor will hit the SET but without any data, so we have an IF_PASSED}
+			{+START,SET,named}{+START,IF_PASSED,MEMBER_ID}{$OR,{$NEQ,{MEMBER_IDS},{MEMBER_ID}},{$EQ,{MODE},all}}{+END}{+END}
+
 			{+START,IF,{$GET,named}}
 				{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{BITS},0,1}}{$SUBSTR,{BITS},1}}
 			{+END}

@@ -74,6 +74,7 @@ class Module_topicview
 		$max=get_param_integer('max',$default_max);
 		if ($max==0) $max=$default_max;
 		if ($max==0) $max=1;
+		if (($max>50) && (!has_specific_permission(get_member(),'remove_page_split'))) $max=$default_max;
 		$first_unread_id=-1;
 
 		global $NON_CANONICAL_PARAMS;
@@ -658,7 +659,7 @@ class Module_topicview
 		if (($max_rows>$max) && (!$threaded))
 		{
 			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode('FORUM_POSTS'),$id,$start,'start',$max,'max',$max_rows,NULL,'misc',true,false);
+			$pagination=pagination(do_lang_tempcode('FORUM_POSTS'),$id,$start,'start',$max,'max',$max_rows,NULL,'misc',true,false,7,array(10,25,50));
 		} else
 		{
 			$pagination=new ocp_tempcode();

@@ -602,7 +602,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 			if (($tag!='block') || (!is_file(get_file_base().'/sources_custom/miniblocks/'.$embed->evaluate().'.php'/*Won't have a defined editing UI*/)))
 			{
-				return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+				return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('comcode:COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('comcode:COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
 			} else
 			{
 				return make_string_tempcode('[block'.escape_html($params).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/block]');
@@ -651,7 +651,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					require_code('comcode_from_html');
 					$back_to_comcode=semihtml_to_comcode($embed->evaluate()); // Undo what's happened already
 					//$back_to_comcode=html_entity_decode($back_to_comcode,ENT_QUOTES,get_charset()); // Remove the escaping entities that were inside the code tag
-					$embed=comcode_to_tempcode($back_to_comcode,$source_member,$as_admin,80,$pass_id,$connection,true); // Re-parse (with full security)
+					$embed=comcode_to_tempcode($back_to_comcode,$source_member,$as_admin,80,$pass_id,$connection); // Re-parse (with full security)
 				}
 
 				$_embed=$embed->evaluate();
