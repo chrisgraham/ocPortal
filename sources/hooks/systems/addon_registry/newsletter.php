@@ -128,7 +128,7 @@ class Hook_addon_registry_newsletter
 				'NEWSLETTER_CONFIRM_WRAP.tpl'=>'administrative__newsletter_confirm_wrap',
 				'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl'=>'block_main_newsletter_signup_done',
 				'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl'=>'block_main_newsletter_signup',
-				'NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl'=>'newsletter_new_resource_fcomcode'
+				'NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl'=>'newsletter_new_resource_fcomcode',
 				'PERIODIC_NEWSLETTER_REMOVE.tpl'=>'periodic_newsletter_remove',
 				);
 	}
