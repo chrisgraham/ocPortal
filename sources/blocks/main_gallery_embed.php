@@ -205,6 +205,13 @@ class Block_main_gallery_embed
 
 						$entry_rating_details=($row_image['allow_rating']==1)?display_rating($view_url,get_translated_text($row_image['title']),'images',strval($row_image['id']),'RATING_INLINE_STATIC',$row_image['submitter']):NULL;
 
+						$_edit_url=new ocp_tempcode();
+						if (has_delete_permission('mid',get_member(),$row_image['submitter'],'cms_galleries',array('gallery',$row_image['cat'])))
+						{
+							$_edit_url=build_url(array('page'=>'cms_galleries','type'=>'__ed','id'=>$row_image['id'],'redirect'=>get_self_url(true)),get_module_zone('cms_galleries'));
+							if ($row_image['submitter']==get_member()) $GLOBALS['DO_NOT_CACHE_THIS']=true; // If delete was due to groups, groups is a cache key anyways
+						}
+
 						$entry_map=array(
 							'_GUID'=>($guid!='')?$guid:'043ac7d15ce02715ac02309f6e8340ff',
 							'RATING_DETAILS'=>$entry_rating_details,
@@ -223,6 +230,7 @@ class Block_main_gallery_embed
 							'ADD_DATE_RAW'=>strval($row_image['add_date']),
 							'EDIT_DATE_RAW'=>is_null($row_image['edit_date'])?'':strval($row_image['edit_date']),
 							'START'=>strval($start),
+							'_EDIT_URL'=>$_edit_url,
 						);
 						$entry=do_template('GALLERY_IMAGE',$entry_map);
 						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>($guid!='')?$guid:'13134830e1ebea158ab44885eeec0953','ENTRY'=>$entry)+$entry_map));
@@ -244,6 +252,13 @@ class Block_main_gallery_embed
 
 						$entry_rating_details=($row_video['allow_rating']==1)?display_rating($view_url,get_translated_text($row_video['title']),'videos',strval($row_video['id']),'RATING_INLINE_STATIC',$row_video['submitter']):NULL;
 
+						$_edit_url=new ocp_tempcode();
+						if (has_delete_permission('mid',get_member(),$row_video['submitter'],'cms_galleries',array('gallery',$row_video['cat'])))
+						{
+							$_edit_url=build_url(array('page'=>'cms_galleries','type'=>'__ev','id'=>$row_video['id'],'redirect'=>get_self_url(true)),get_module_zone('cms_galleries'));
+							if ($row_video['submitter']==get_member()) $GLOBALS['DO_NOT_CACHE_THIS']=true; // If delete was due to groups, groups is a cache key anyways
+						}
+
 						$entry_map=array(
 							'_GUID'=>($guid!='')?$guid:'66b7fb4d3b61ef79d6803c170d102cbf',
 							'RATING_DETAILS'=>$entry_rating_details,
@@ -262,6 +277,7 @@ class Block_main_gallery_embed
 							'ADD_DATE_RAW'=>strval($row_video['add_date']),
 							'EDIT_DATE_RAW'=>is_null($row_video['edit_date'])?'':strval($row_video['edit_date']),
 							'START'=>strval($start),
+							'_EDIT_URL'=>$_edit_url,
 						);
 						$entry=do_template('GALLERY_VIDEO',$entry_map);
 						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>($guid!='')?$guid:'a0ff010ae7fd1f7b3341993072ed23cf','ENTRY'=>$entry)+$entry_map));

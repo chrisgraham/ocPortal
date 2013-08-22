@@ -8,7 +8,6 @@
 		<input type="hidden" id="previous_slide" name="previous_slide" value="{SLIDESHOW_PREVIOUS_URL*}" />
 	{+END}
 
-	{$REQUIRE_JAVASCRIPT,javascript_galleries}
 	{$REQUIRE_JAVASCRIPT,javascript_ajax}
 
 	<div class="trinav_wrap">

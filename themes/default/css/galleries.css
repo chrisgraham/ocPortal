@@ -17,6 +17,29 @@
 	width: 16em;
 }
 
+.delete_cross_button, .delete_cross_button div {
+	display: inline;
+}
+.delete_cross_button input {
+	position: absolute;
+	right: 2px;
+	top: 2px;
+	{$BETA_CSS_PROPERTY,opacity: 0.0;}
+	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
+}
+.gallery_regular_thumb,
+.flowmode_thumb {
+	position: relative;
+}
+.gallery_regular_thumb:hover .delete_cross_button input,
+.flowmode_thumb:hover .delete_cross_button input {
+	{$BETA_CSS_PROPERTY,opacity: 0.5;}
+}
+.gallery_regular_thumb .delete_cross_button input:hover,
+.flowmode_thumb .delete_cross_button input:hover {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
+}
+
 /* Non flow-mode only */
 
 {$,Our standard ocPortal-wide thumbnail image size is defined by the thumb_width option}
@@ -94,13 +117,21 @@
 }
 
 .flowmode_thumb {
-	display: inline;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;}
+	display: inline-block;
 	{+START,IF,{$MOBILE}}
 		margin: 0.5em;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
 		margin: 0 1em;
 	{+END}
+}
+.flowmode_thumb:hover, body.touch_enabled .flowmode_thumb {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
+	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
+}
+.flowmode_thumb .img_thumb {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 
 .flowmode_thumb img {

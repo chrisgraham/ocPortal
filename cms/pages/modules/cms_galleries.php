@@ -961,6 +961,12 @@ class Module_cms_galleries extends standard_crud_module
 			$cat=get_param('cat','');
 		}
 
+		if (has_specific_permission(get_member(),'mass_import','cms_galleries'))
+		{
+			$mass_url=build_url(array('page'=>'_SELF','type'=>'gimp','cat'=>$cat),'_SELF');
+			attach_message(do_lang_tempcode('CAN_MASS_UPLOAD',escape_html($mass_url->evaluate())),'inform');
+		}
+
 		require_code('images');
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
@@ -1324,7 +1330,9 @@ class Module_cms_galleries extends standard_crud_module
 
 		$delete_status=post_param('delete','1');
 
-		$this->donext_type=post_param('cat');
+		$cat=post_param('cat',NULL);
+		if (!is_null($cat))
+			$this->donext_type=$cat;
 
 		delete_image($id,($delete_status=='2') || (get_option('cleanup_files')=='1'));
 
@@ -1894,7 +1902,9 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$delete_status=post_param('delete','1');
 
-		$this->donext_type=post_param('cat');
+		$cat=post_param('cat',NULL);
+		if (!is_null($cat))
+			$this->donext_type=$cat;
 
 		delete_video($id,($delete_status=='2') || (get_option('cleanup_files')=='1'));
 

@@ -410,6 +410,7 @@ class Module_galleries
 		require_lang('galleries');
 		require_code('feedback');
 		require_css('galleries');
+		require_javascript('javascript_galleries');
 
 		inform_non_canonical_parameter('days');
 
@@ -911,6 +912,10 @@ class Module_galleries
 				if ($thumb_url=='') $thumb_url=find_theme_image('na');
 				if (url_is_local($thumb_url)) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 			}
+
+			$_edit_url=new ocp_tempcode();
+			if (has_delete_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('gallery',$row['cat'])))
+				$_edit_url=build_url(array('page'=>'cms_galleries','type'=>($type=='image')?'__ed':'__ev','id'=>$row['id'],'redirect'=>get_self_url(true)),get_module_zone('cms_galleries'));
 
 			$class=(($type==$probe_type) && ($row['id']==$probe_id))?'currentimage':'';
 			$thumb=do_image_thumb($thumb_url,$entry_description);

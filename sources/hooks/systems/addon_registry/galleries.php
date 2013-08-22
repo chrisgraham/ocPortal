@@ -621,6 +621,7 @@ class Hook_addon_registry_galleries
 					'VIEWS'=>placeholder_number(),
 					'SUBMITTER'=>placeholder_id(),
 					'ID'=>placeholder_id(),
+					'_EDIT_URL'=>placeholder_url(),
 				)
 			),NULL,'',true),
 		);
@@ -639,7 +640,7 @@ class Hook_addon_registry_galleries
 		$entries=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$map=array('MEDIA_TYPE'=>'image','TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'ADD_DATE_RAW'=>lorem_word(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_id());
+			$map=array('MEDIA_TYPE'=>'image','TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'ADD_DATE_RAW'=>lorem_word(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_id(),'_EDIT_URL'=>placeholder_url());
 			$entry=do_lorem_template('GALLERY_IMAGE',$map);
 			$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 		}
@@ -846,7 +847,7 @@ class Hook_addon_registry_galleries
 		$entries=new ocp_tempcode();
 		foreach (placeholder_array(10) as $v)
 		{
-			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array('ID'=>lorem_word(),'VIEWS'=>placeholder_number(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_date_raw(),'SUBMITTER'=>lorem_word(),'CLASS'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'VIEW_URL_2'=>placeholder_url(),'TYPE'=>lorem_word())));
+			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array('ID'=>lorem_word(),'VIEWS'=>placeholder_number(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_date_raw(),'SUBMITTER'=>lorem_word(),'CLASS'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'VIEW_URL_2'=>placeholder_url(),'TYPE'=>lorem_word(),'_EDIT_URL'=>placeholder_url())));
 		}
 
 		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
@@ -902,13 +903,13 @@ class Hook_addon_registry_galleries
 		$tags=do_lorem_template('TAGS',array('LINK_FULLSCOPE'=>lorem_word(),'TAG'=>lorem_word(),'TAGS'=>placeholder_array(),'TYPE'=>NULL));
 
 		$entry=new ocp_tempcode();
-		$map=array('MEDIA_TYPE'=>'image','TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'EDIT_DATE_RAW'=>placeholder_time(),'ADD_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number());
+		$map=array('MEDIA_TYPE'=>'image','TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'EDIT_DATE_RAW'=>placeholder_time(),'ADD_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number(),'_EDIT_URL'=>placeholder_url());
 		$entry=do_lorem_template('GALLERY_IMAGE',$map);
 		$entries=new ocp_tempcode();
 		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 
 		$video_details=do_lorem_template('GALLERY_VIDEO_INFO',array('HEIGHT'=>placeholder_number(),'WIDTH'=>placeholder_number(),'LENGTH'=>placeholder_number()));
-		$map=array('MEDIA_TYPE'=>'video','TITLE'=>lorem_phrase(),'VIDEO_DETAILS'=>$video_details,'DESCRIPTION'=>lorem_phrase(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number(),'VIEW_URL'=>placeholder_url(),'SUBMITTER'=>placeholder_id(),'ID'=>placeholder_id(),'THUMB'=>placeholder_image());
+		$map=array('MEDIA_TYPE'=>'video','TITLE'=>lorem_phrase(),'VIDEO_DETAILS'=>$video_details,'DESCRIPTION'=>lorem_phrase(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number(),'VIEW_URL'=>placeholder_url(),'SUBMITTER'=>placeholder_id(),'ID'=>placeholder_id(),'THUMB'=>placeholder_image(),'_EDIT_URL'=>placeholder_url());
 		$entry=do_lorem_template('GALLERY_VIDEO',$map);
 		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 
