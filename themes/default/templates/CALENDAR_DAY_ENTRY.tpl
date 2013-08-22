@@ -9,7 +9,7 @@
 
 	{+START,IF_NON_EMPTY,{DESCRIPTION}}
 		<div class="calendar_day_entry_description">
-			{$TRUNCATE_SPREAD,{DESCRIPTION},{$MULT,{DOWN},20},,1}
+			{$TRUNCATE_LEFT,{DESCRIPTION},{$MULT,{DOWN},20},,1}
 		</div>
 	{+END}
 </div>

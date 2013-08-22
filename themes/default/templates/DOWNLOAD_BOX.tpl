@@ -16,7 +16,9 @@
 
 	<div class="meta_details" role="contentinfo">
 		<dl class="meta_details_list">
-			<dt class="field_name">{!BY}:</dt> <dd>{AUTHOR*}</dd>
+			{+START,IF_NON_EMPTY,{AUTHOR}}
+				<dt class="field_name">{!BY}:</dt> <dd>{AUTHOR*}</dd>
+			{+END}
 			{+START,IF,{$INLINE_STATS}}
 				<dt class="field_name">{!COUNT_DOWNLOADS}:</dt> <dd>{DOWNLOADS*}</dd>
 			{+END}

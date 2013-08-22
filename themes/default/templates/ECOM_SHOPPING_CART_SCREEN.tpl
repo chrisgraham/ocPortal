@@ -17,7 +17,7 @@
 	<div class="buttons_group" itemprop="significantLinks">
 		{$,Put first, so it associates with the enter key}
 		{+START,IF_NON_EMPTY,{PRO_IDS}}
-			<input class="button_page" type="image" name="update" src="{$IMG*,page/cart_update}" onclick="return update_cart('{PRO_IDS}');" alt="{!UPDATE}" title="{!UPDATE}"/>
+			<input class="button_page" type="image" name="update" src="{$IMG*,page/cart_update}" onclick="return update_cart('{PRO_IDS;*}');" alt="{!UPDATE}" title="{!UPDATE}"/>
 		{+END}
 
 		{+START,IF_NON_EMPTY,{EMPTY_CART*}}

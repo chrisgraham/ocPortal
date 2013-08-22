@@ -8,7 +8,6 @@
 			{DOWNLOADS}
 		{+END}
 
-
 		{+START,IF_EMPTY,{DOWNLOADS}}
 			<p class="nothing_here">{!NO_ENTRIES}</p>
 		{+END}

@@ -48,7 +48,7 @@ class Module_vforums
 	 */
 	function get_entry_points()
 	{
-		return is_guest()?array():array('misc'=>'POSTS_SINCE','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ','unanswered_topics'=>'UNANSWERED_TOPICS','involved_topics'=>'INVOLVED_TOPICS');
+		return is_guest()?array('misc'=>'POSTS_SINCE','unanswered_topics'=>'UNANSWERED_TOPICS'):array('misc'=>'POSTS_SINCE','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ','unanswered_topics'=>'UNANSWERED_TOPICS','involved_topics'=>'INVOLVED_TOPICS');
 	}
 
 	/**

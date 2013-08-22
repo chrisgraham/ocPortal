@@ -1222,7 +1222,14 @@ class Module_topics
 				if (($from!=get_member()) && ($to!=get_member()) && (!ocf_has_special_pt_access($_postdetails[0]['p_topic_id'])) && (!has_privilege(get_member(),'view_other_pt')))
 					access_denied('I_ERROR');
 			}
-			$post->attach(do_template('OCF_QUOTE_FCOMCODE',array('_GUID'=>'5542508cad43a0cd5798afbb06f9e616','ID'=>strval($quote),'TITLE'=>$_topic[0]['t_cache_first_title'],'POST'=>get_translated_text($_postdetails[0]['p_post'],$GLOBALS['FORUM_DB']),'BY'=>$_postdetails[0]['p_poster_name_if_guest'],'BY_ID'=>strval($_postdetails[0]['p_poster']))));
+			$post->attach(do_template('OCF_QUOTE_FCOMCODE',array(
+				'_GUID'=>'5542508cad43a0cd5798afbb06f9e616',
+				'ID'=>strval($quote),
+				'TITLE'=>$_topic[0]['t_cache_first_title'],
+				'POST'=>preg_replace('#\[staff_note\].*\[/staff_note\]#Us','',get_translated_text($_postdetails[0]['p_post'],$GLOBALS['FORUM_DB'])),
+				'BY'=>$_postdetails[0]['p_poster_name_if_guest'],
+				'BY_ID'=>strval($_postdetails[0]['p_poster']),
+			)));
 		}
 
 		return $post;
@@ -1854,7 +1861,7 @@ class Module_topics
 		$_postdetails=post_param('post',NULL);
 		if (is_null($_postdetails))
 		{
-			$__post=get_translated_text($post_info[0]['p_post'],$GLOBALS['FORUM_DB']);
+			$__post=preg_replace('#\[staff_note\].*\[/staff_note\]#Us','',get_translated_text($post_info[0]['p_post'],$GLOBALS['FORUM_DB']));
 			$post=do_template('OCF_REPORTED_POST_FCOMCODE',array('_GUID'=>'e0f65423f3cb7698d5f04431dbe52ddb','POST_ID'=>strval($post_id),'MEMBER'=>$member,'TOPIC_TITLE'=>$topic_info[0]['t_cache_first_title'],'POST'=>$__post,'POSTER'=>$poster));
 		} else $post=make_string_tempcode($_postdetails);
 

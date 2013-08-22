@@ -176,7 +176,7 @@ class Module_banners
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'BANNERS');
+		return is_guest()?array():array('misc'=>'BANNERS');
 	}
 
 	/**

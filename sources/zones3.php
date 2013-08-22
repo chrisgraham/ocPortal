@@ -422,6 +422,10 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 				$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$new_file),array('content_id'=>$file,'a_type_id'=>$type['id']));
 			}
 		}
+
+		$GLOBALS['SITE_DB']->query_update('comcode_pages',array(
+			'p_parent_page'=>$new_file,
+		),array('the_zone'=>$zone,'p_parent_page'=>$file));
 	}
 
 	// Set meta-data

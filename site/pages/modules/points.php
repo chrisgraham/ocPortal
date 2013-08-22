@@ -123,7 +123,10 @@ class Module_points
 	 */
 	function get_entry_points()
 	{
-		return (get_forum_type()=='ocf')?array():array('member'=>'POINTS','browser'=>'BROWSE_POINT_PROFILES','misc'=>'MEMBER_POINT_FIND');
+		if (get_forum_type()=='ocf') return array();
+		$ret=array('browser'=>'BROWSE_POINT_PROFILES','misc'=>'MEMBER_POINT_FIND');
+		if (!is_guest()) $ret['member']='POINTS';
+		return $ret;
 	}
 
 	/**

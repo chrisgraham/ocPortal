@@ -260,7 +260,7 @@ class Module_news
 							if (is_null($row['title'])) $row['title']=get_translated_text($row['title']);
 
 							$pagelink=$pagelink_stub.'view:'.strval($row['id']);
-							call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
+							call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.8,$row['title'])); // Callback
 						}
 					}
 

@@ -122,7 +122,7 @@ function get_page_warning_details($zone,$codename,$edit_url)
 	$warning_details=new ocp_tempcode();
 	if ((!has_privilege(get_member(),'jump_to_unvalidated')) && (addon_installed('unvalidated')))
 		access_denied('PRIVILEGE','jump_to_unvalidated');
-	$uv_warning=do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'); // Wear sun cream
+	$uv_warning=do_lang_tempcode((get_param_integer('redirected',0)==1)?'_UNVALIDATED_TEXT_NON_DIRECT':'_UNVALIDATED_TEXT',do_lang('PAGE')); // Wear sun cream
 	if (!$edit_url->is_empty())
 	{
 		$menu_links=$GLOBALS['SITE_DB']->query('SELECT DISTINCT i_menu FROM '.get_table_prefix().'menu_items WHERE '.db_string_equal_to('i_url',$zone.':'.$codename).' OR '.db_string_equal_to('i_url','_SEARCH:'.$codename));

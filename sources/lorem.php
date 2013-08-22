@@ -920,7 +920,7 @@ function get_text_templates()
 function is_plain_text_template($temp_name)
 {
 	return (
-		$temp_name=='BLOCK_TOP_NOTIFICATIONS' || // In header, and uses IDs, so can't be used except in isolation
+		$temp_name=='BLOCK_TOP_NOTIFICATIONS' || $temp_name=='MENU_BRANCH_zone' || $temp_name=='MENU_SPACER_zone' || $temp_name=='MENU_zone' || // In header, and uses IDs, so can't be used except in isolation
 		substr($temp_name,0,5)=='MAIL_' ||
 		substr($temp_name,0,11)=='JAVASCRIPT_' && $temp_name!='JAVASCRIPT_NEED' && $temp_name!='JAVASCRIPT_NEED_INLINE' ||
 		$temp_name=='JAVASCRIPT.tpl' ||

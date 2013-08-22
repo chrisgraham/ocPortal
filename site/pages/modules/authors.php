@@ -96,7 +96,7 @@ class Module_authors
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'VIEW_MY_AUTHOR_PROFILE');
+		return is_guest()?array():array('misc'=>'VIEW_MY_AUTHOR_PROFILE');
 	}
 
 	/**
@@ -126,8 +126,21 @@ class Module_authors
 	 */
 	function show_author()
 	{
-		$author=get_param('id',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		$author=get_param('id',NULL);
+		if (is_null($author))
+		{
+			if (is_guest())
+			{
+				global $EXTRA_HEAD;
+				$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
+				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			}
+
+			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		}
 		if ((is_null($author)) || ($author=='')) warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Really don't want to have to search on this
+
 		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 		{
 			require_code('awards');

@@ -277,6 +277,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if ((get_option('is_on_rss',true)==='1') && (addon_installed('syndication')))
 				{
 					$feeds=new ocp_tempcode();
+					if (addon_installed('news'))
+						$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'53e135b04502d6df64f1570b61310f30','FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
 					if ($GLOBALS['FEED_URL']!==NULL)
 					{
 						if (substr($GLOBALS['FEED_URL'],0,1)=='?') $GLOBALS['FEED_URL']=find_script('backend').$GLOBALS['FEED_URL'];
@@ -287,8 +289,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 						if (substr($GLOBALS['FEED_URL_2'],0,1)=='?') $GLOBALS['FEED_URL_2']=find_script('backend').$GLOBALS['FEED_URL_2'];
 						$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'fa8c7aaa3601c24d1986fa2598416558','FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
 					}
-					if (addon_installed('news'))
-						$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'53e135b04502d6df64f1570b61310f30','FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
 					$value=$feeds->evaluate();
 				}
 				break;

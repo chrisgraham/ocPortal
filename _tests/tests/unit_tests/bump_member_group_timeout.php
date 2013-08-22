@@ -22,6 +22,8 @@ class bump_member_group_timeout_test_set extends ocp_test_case
 	{
 		parent::setUp();
 
+		$GLOBALS['NO_QUERY_LIMIT']=true;
+
 		$GLOBALS['FORUM_DB']->query_delete('f_group_member_timeouts');
 
 		require_code('group_member_timeouts');

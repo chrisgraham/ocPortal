@@ -41,14 +41,14 @@ function results_launcher($title,$page,$category_id,$max,$max_rows,$type,$max_pa
 	if ($max<$max_rows) // If they don't all fit on one page
 	{
 		$part=new ocp_tempcode();
-		$num_pages=($max==0)?0:min(intval(ceil($max_rows/$max)),$max_page_links);
+		$num_pages=($max==0)?0:min(intval(ceil(floatval($max_rows)/floatval($max))),$max_page_links);
 		for ($x=0;$x<$num_pages;$x++)
 		{
 			$cat_url=build_url(array('page'=>$page,'type'=>$type,'start'=>($x==0)?NULL:($x*$max),'id'=>$category_id),get_module_zone($page));
 			$part->attach(do_template('RESULTS_LAUNCHER_PAGE_NUMBER_LINK',array('_GUID'=>'d19c001f3ecff62105f803d541f7d945','TITLE'=>$title,'URL'=>$cat_url,'P'=>strval($x+1))));
 		}
 
-		$num_pages=intval(ceil($max_rows/$max));
+		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));
 		if ($num_pages>$max_page_links)
 		{
 			$url_stub=build_url(array('page'=>$page,'type'=>$type,'id'=>$category_id),'_SELF');

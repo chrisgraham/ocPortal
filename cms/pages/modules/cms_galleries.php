@@ -204,7 +204,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		$fields=new ocp_tempcode();
 
-		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('must_accept_something'=>true,'purity'=>false,'filter'=>$condition,'member_id'=>$member_id),true,$cat));
+		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('must_accept_something'=>true,'purity'=>false,'addable_filter'=>true,'filter'=>$condition,'member_id'=>$member_id),true,$cat));
 
 		$submit_name=do_lang_tempcode('GALLERY_IMPORT');
 
@@ -961,7 +961,7 @@ class Module_cms_galleries extends standard_crud_module
 			$cat=get_param('cat','');
 		}
 
-		if (has_specific_permission(get_member(),'mass_import','cms_galleries'))
+		if (has_privilege(get_member(),'mass_import','cms_galleries'))
 		{
 			$mass_url=build_url(array('page'=>'_SELF','type'=>'gimp','cat'=>$cat),'_SELF');
 			attach_message(do_lang_tempcode('CAN_MASS_UPLOAD',escape_html($mass_url->evaluate())),'inform');
@@ -2041,7 +2041,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 						$parent_gallery_title=get_translated_text($_parent_gallery_title);
 					}
 				}
-				$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','purity'=>true),true,$parent_id,false,NULL,false,$parent_gallery_title));
+				$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','addable_filter'=>true/*HACKHACK: A little naughty, but it encodes roughly what we want and doesn't hurt staff; we have separate enable/disable images/videos settings in galleries, so permissions for adding entries can reasonably be a base requirement for permissions for adding categories*/,'purity'=>true),true,$parent_id,false,NULL,false,$parent_gallery_title));
 			} else
 			{
 				$hidden->attach(form_input_hidden('parent_id',$parent_id));

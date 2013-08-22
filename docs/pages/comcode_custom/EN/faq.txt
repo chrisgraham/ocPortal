@@ -13,10 +13,10 @@ ocPortal is a CMS (Content Management System) that allows you to create and mana
 [b]What does the name ocPortal mean?[/b]
 It stands for Online [jumping a="[b]Content[/b]" b="[b]Community[/b]" c="[b]Corporate[/b]" d="[b]Collaboration[/b]" e="[b]Commerce[/b]"]2000[/jumping] Portal.
 
-[html]<a id="oss"></a>[/html][b]How much does ocPortal cost?[/b]
+[html]<div></div><a id="oss"></a>[/html][b]How much does ocPortal cost?[/b]
 ocPortal is completely free under an OSI-approved Open Source licence (Common Public Attribution License). There are no restrictions on usage, and we don't keep away any 'pro' features from our users.
-The team has always been very pro Open Source. Given that software can be easily copied and therefore the value of ocPortal can be distributed across the world effortlessly, we think we have a social responsibility to take advantage of this and structure our business in a way that can work with it. Software has such great potential to empower individuals from all walks of life, so we believe wherever possible companies should not put the brakes on it by restricting the way things can be used via economic levies.
-Therefore we have structured our business so that ocProducts makes money from commercial projects. We also encourage other people to contribute to ocPortal, as a community project.
+The team has always been very pro Open Source. Given that software can be easily copied and therefore the value of ocPortal can be distributed across the world effortlessly, we think we have a social responsibility to take advantage of this and structure our business in a way that can work with it. Software has such great potential to empower individuals from all walks of life, so we believe wherever possible companies shouldn't put the brakes on it by restricting the way things can be used via economic levies.
+Therefore we have structured our business so that ocProducts makes money from commercial projects. We also encourage people outside our company to contribute to ocPortal, as a community project. Code is hosted on [url="GitHub"]/github[/url], commit access is available by request (after showing some skill and sincerity, e.g. by releasing a public addon). Coding standards are [url="defined in a spreadsheet"]/docs/standards-checklist.xls[/url].
 There is no requirement to display our logo or copyright notices on your website, we don't want to box people in from a design and marketing perspective either.
 
 [b]What features set it apart from other systems?[/b]
@@ -124,6 +124,9 @@ If your software is not supported and you want to send us a database dump it mig
 Alternatively it may be possible to import by first converting to some other software that we do have an importer from. You'd need to identify a software product we can import and which also can itself import what you currently have.
 Finally, we could give you a quote to have an importer developed.
 
+[b]Why isn't all the code Object Orientated?[/b]
+We do use a lot of OOP in ocPortal, but a lot of the code is not. Some programmers will strongly disagree with our way of coding, but it is done for performance reasons. For a number of reasons, heavy use of OOP adds performance costs to a dynamic language like PHP (code parse time, including memory, and execution time). Software like the Linux kernel or Wordpress don't use much OOP at all, and are wildly successful, and the promises of the software component revolution never really worked out in practice, so it is a good idea for programmers to consider practicalities over religion, with a proper cost/benefit analysis rather than an extreme/dismissive attitude.
+
 [title="2"]About ocProducts / Services[/title]
 
 [b]Who are ocProducts?[/b]
@@ -220,6 +223,13 @@ It may seem possible to perform this action by editing the _config.php file, but
 This is not supported.
 
 [title="2"]Common problems[/title]
+
+[b]My new install seems slow?[/b]
+A new install will be slow at first, while templates/CSS/Javascript/blocks compile. It should be fast the second time you come back to something. If things are slow and:
+1) you're not on ridiculously cheap hosting
+2) you haven't turned on a large number of blocks to display at once (compared to the amount of functionality comparable sites may show)
+3) you haven't disabled the caches
+...you can report performance issues as bugs.
 
 [b]Why is the text bigger/smaller than it should be?[/b]
 You accidentally enlarged the text size in the browser. Whilst most sites don't scale properly with browser text size (in Internet Explorer, at least), ocPortal is designed so that it does. This is why you only notice it in ocPortal -- the other sites don't adhere to the accessibility standards, and thus it is the other sites that are at fault.

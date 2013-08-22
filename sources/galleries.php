@@ -512,11 +512,12 @@ function only_member_galleries_of_id($cat,$member_id,$child_count)
  * @param  boolean		Whether to get a list of child galleries (not just direct ones, recursively), instead of just IDs
  * @param  ?MEMBER		Member we are filtering for (NULL: not needed)
  * @param  boolean		Whether to only show for what may be added to by the current member
+ * @param  boolean		Whether to only show for what may be edited by the current member
  * @return tempcode		The tree list
  */
-function nice_get_gallery_tree($it=NULL,$filter=NULL,$must_accept_images=false,$must_accept_videos=false,$purity=false,$use_compound_list=false,$member_id=NULL,$addable_filter=false)
+function nice_get_gallery_tree($it=NULL,$filter=NULL,$must_accept_images=false,$must_accept_videos=false,$purity=false,$use_compound_list=false,$member_id=NULL,$addable_filter=false,$editable_filter=false)
 {
-	$tree=get_gallery_tree('root','',NULL,false,$filter,$must_accept_images,$must_accept_videos,$purity,$use_compound_list,NULL,$member_id,$addable_filter);
+	$tree=get_gallery_tree('root','',NULL,false,$filter,$must_accept_images,$must_accept_videos,$purity,$use_compound_list,NULL,$member_id,$addable_filter,$editable_filter);
 	if ($use_compound_list) $tree=$tree[0];
 
 	$out=''; // XHTMLXHTML
@@ -548,9 +549,10 @@ function nice_get_gallery_tree($it=NULL,$filter=NULL,$must_accept_images=false,$
  * @param  ?integer		The number of recursive levels to search (NULL: all)
  * @param  ?MEMBER		Member we are filtering for (NULL: not needed)
  * @param  boolean		Whether to only show for what may be added to by the current member
+ * @param  boolean		Whether to only show for what may be edited by the current member
  * @return array			The tree structure, or if $use_compound_list, the tree structure built with pairs containing the compound list in addition to the child branches
  */
-function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL,$do_stats=true,$filter=NULL,$must_accept_images=false,$must_accept_videos=false,$purity=false,$use_compound_list=false,$levels=NULL,$member_id=NULL,$addable_filter=false)
+function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL,$do_stats=true,$filter=NULL,$must_accept_images=false,$must_accept_videos=false,$purity=false,$use_compound_list=false,$levels=NULL,$member_id=NULL,$addable_filter=false,$editable_filter=false)
 {
 	if ($levels==-1) return $use_compound_list?array(array(),''):array();
 
@@ -590,7 +592,15 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 		$children[0]['accept_images']=$gallery_info['accept_images'];
 		$children[0]['accept_videos']=$gallery_info['accept_videos'];
 		$children[0]['is_member_synched']=$gallery_info['is_member_synched'];
-		if ($addable_filter) $children[0]['addable']=has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$category_id));
+		if ($addable_filter)
+		{
+			$children[0]['addable']=(can_submit_to_gallery($category_id)!==false) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$category_id)));
+		}
+		if ($editable_filter)
+		{
+			$can_submit=can_submit_to_gallery($category_id);
+			$children[0]['editable']=has_edit_permission('cat_mid',get_member(),($can_submit===false)?NULL:$can_submit,'cms_galleries',array('galleries',$category_id));
+		}
 		if ($do_stats)
 		{
 			$good_row_count=0;
@@ -619,20 +629,18 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 		if ($child['name']=='root') continue;
 
 		$can_submit=can_submit_to_gallery($child['name']);
-		if ($can_submit===false) $can_submit=!$addable_filter;
-		if (($can_submit!==false) && ($can_submit!==true))
+		if (($can_submit!==false) && ($can_submit>0))
 		{
 			$found_own_gallery=true;
 			$found_member_galleries[$can_submit]=1;
 		}
 
-		if (($can_submit!==false) && (($levels!==0) || ($use_compound_list)))
+		if (($levels!==0) || ($use_compound_list))
 		{
 			$child_id=$child['name'];
-			//$child_title=$child['text_original'];
 			$child_breadcrumbs=$breadcrumbs;
 
-			$child_children=get_gallery_tree($child_id,$child_breadcrumbs,$child,$do_stats,$filter,$must_accept_images,$must_accept_videos,$purity,$use_compound_list,is_null($levels)?NULL:($levels-1),$member_id,$addable_filter);
+			$child_children=get_gallery_tree($child_id,$child_breadcrumbs,$child,$do_stats,$filter,$must_accept_images,$must_accept_videos,$purity,$use_compound_list,is_null($levels)?NULL:($levels-1),$member_id,$addable_filter,$editable_filter);
 			if ($use_compound_list)
 			{
 				list($child_children,$_compound_list)=$child_children;
@@ -710,6 +718,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 						$own_gallery['is_member_synched']=0;
 						$own_gallery['compound_list']=$compound_list;
 						$own_gallery['addable']=true;
+						$own_gallery['editable']=false;
 						$children[]=$own_gallery;
 						if ($member==get_member()) $found_own_gallery=true;
 					}
@@ -735,6 +744,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 				$own_gallery['accept_videos']=$gallery_info['accept_videos'];
 				$own_gallery['is_member_synched']=0;
 				$own_gallery['addable']=true;
+				$own_gallery['editable']=false;
 				$own_gallery['compound_list']=$compound_list;
 				$children[]=$own_gallery;
 			}

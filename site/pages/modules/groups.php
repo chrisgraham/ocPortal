@@ -73,7 +73,8 @@ class Module_groups
 			{
 				if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
-				$tree[]=array('_SELF:_SELF:type=view:id='.strval($row['id']),NULL,NULL,$row['text_original'],array());
+				if ($row['id']!=db_get_first_id())
+					$tree[]=array('_SELF:_SELF:type=view:id='.strval($row['id']),NULL,NULL,$row['text_original'],array());
 			}
 		}
 		return array($tree,$permission_page);
@@ -103,8 +104,11 @@ class Module_groups
 				{
 					if (is_null($row['title'])) $row['title']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
-					$pagelink=$pagelink_stub.'view:'.strval($row['id']);
-					call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',NULL,NULL,0.2,$row['title'])); // Callback
+					if ($row['id']!=db_get_first_id())
+					{
+						$pagelink=$pagelink_stub.'view:'.strval($row['id']);
+						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',NULL,NULL,0.2,$row['title'])); // Callback
+					}
 				}
 
 				$start+=500;

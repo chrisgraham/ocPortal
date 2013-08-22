@@ -229,48 +229,28 @@ class Hook_addon_registry_downloads
 		$subcategories=lorem_paragraph_html();
 
 		$downloads=new ocp_tempcode();
-		$download_items=array(
-			array(
-				'id'=>1,
-				'file_size'=>placeholder_number(),
-				'description'=>lorem_phrase(),
-				'add_date'=>placeholder_time(),
-				'category_id'=>placeholder_id(),
-				'default_pic'=>'',
-				'download_views'=>placeholder_number(),
-				'submitter'=>placeholder_id(),
-				'num_downloads'=>placeholder_number(),
-				'edit_date'=>placeholder_time(),
-				'name'=>lorem_phrase()
-			)
+		$map=array(
+			'ORIGINAL_FILENAME'=>lorem_phrase(),
+			'AUTHOR'=>lorem_phrase(),
+			'ID'=>placeholder_id(),
+			'VIEWS'=>placeholder_number(),
+			'SUBMITTER'=>placeholder_id(),
+			'DESCRIPTION'=>lorem_sentence(),
+			'FILE_SIZE'=>placeholder_number(),
+			'DOWNLOADS'=>placeholder_number(),
+			'DATE_RAW'=>placeholder_date_raw(),
+			'DATE'=>placeholder_date(),
+			'EDIT_DATE_RAW'=>'',
+			'SIZE'=>placeholder_number(),
+			'URL'=>placeholder_url(),
+			'NAME'=>lorem_phrase(),
+			'BREADCRUMBS'=>placeholder_breadcrumbs(),
+			'IMGCODE'=>'',
+			'GIVE_CONTEXT'=>false,
+			'MAY_DOWNLOAD'=>true,
 		);
-
-		foreach ($download_items as $download)
-		{
-			$map=array(
-				'ORIGINAL_FILENAME'=>lorem_phrase(),
-				'AUTHOR'=>lorem_phrase(),
-				'ID'=>placeholder_id(),
-				'VIEWS'=>placeholder_number(),
-				'SUBMITTER'=>placeholder_id(),
-				'DESCRIPTION'=>lorem_sentence(),
-				'FILE_SIZE'=>placeholder_number(),
-				'DOWNLOADS'=>placeholder_number(),
-				'DATE_RAW'=>placeholder_date_raw(),
-				'DATE'=>placeholder_date(),
-				'EDIT_DATE_RAW'=>'',
-				'SIZE'=>placeholder_number(),
-				'URL'=>placeholder_url(),
-				'NAME'=>lorem_phrase(),
-				'BREADCRUMBS'=>placeholder_breadcrumbs(),
-				'IMGCODE'=>'',
-				'GIVE_CONTEXT'=>false,
-				'MAY_DOWNLOAD'=>true,
-			);
-			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
-
-			$downloads->attach($tpl);
-		}
+		$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
+		$downloads->attach($tpl);
 
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_CATEGORY_SCREEN', array(
@@ -297,61 +277,40 @@ class Hook_addon_registry_downloads
 	 */
 	function tpl_preview__download_all_screen()
 	{
-		$downloads=new ocp_tempcode();
-		$download_items=array(
-			array(
-				'id'=>placeholder_id(),
-				'file_size'=>placeholder_number(),
-				'description'=>lorem_phrase(),
-				'add_date'=>placeholder_time(),
-				'category_id'=>placeholder_id(),
-				'default_pic'=>'',
-				'download_views'=>placeholder_number(),
-				'submitter'=>placeholder_id(),
-				'num_downloads'=>placeholder_number(),
-				'edit_date'=>placeholder_time(),
-				'name'=>lorem_phrase()
-			)
-		);
-
 		$subcats=array();
 		foreach (placeholder_array() as $cat)
 		{
-			foreach ($download_items as $download)
-			{
-				$map=array(
-					'AUTHOR'=>lorem_phrase(),
-					'ID'=>placeholder_id(),
-					'VIEWS'=>placeholder_number(),
-					'SUBMITTER'=>placeholder_id(),
-					'DESCRIPTION'=>lorem_sentence(),
-					'FILE_SIZE'=>placeholder_number(),
-					'DOWNLOADS'=>placeholder_number(),
-					'DATE_RAW'=>placeholder_date_raw(),
-					'DATE'=>placeholder_date(),
-					'EDIT_DATE_RAW'=>'',
-					'SIZE'=>placeholder_number(),
-					'URL'=>placeholder_url(),
-					'NAME'=>lorem_phrase(),
-					'BREADCRUMBS'=>placeholder_breadcrumbs(),
-					'IMGCODE'=>'',
-					'GIVE_CONTEXT'=>false,
-					'MAY_DOWNLOAD'=>true,
-				);
-				$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
+			$downloads=new ocp_tempcode();
+			$map=array(
+				'ORIGINAL_FILENAME'=>lorem_phrase(),
+				'AUTHOR'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'VIEWS'=>placeholder_number(),
+				'SUBMITTER'=>placeholder_id(),
+				'DESCRIPTION'=>lorem_sentence(),
+				'FILE_SIZE'=>placeholder_number(),
+				'DOWNLOADS'=>placeholder_number(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'DATE'=>placeholder_date(),
+				'EDIT_DATE_RAW'=>'',
+				'SIZE'=>placeholder_number(),
+				'URL'=>placeholder_url(),
+				'NAME'=>lorem_phrase(),
+				'BREADCRUMBS'=>placeholder_breadcrumbs(),
+				'IMGCODE'=>'',
+				'GIVE_CONTEXT'=>false,
+				'MAY_DOWNLOAD'=>true,
+			);
+			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
+			$downloads->attach($tpl);
 
-				$downloads->attach($tpl);
-			}
-
-			$data=array();
-			$data['DOWNLOADS']=$downloads;
+			$data=array('LETTER'=>lorem_word(),'DOWNLOADS'=>$downloads);
 			$subcats[]=$data;
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_ALL_SCREEN', array(
 				'TITLE'=>lorem_title(),
-				'LETTER'=>lorem_word(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),

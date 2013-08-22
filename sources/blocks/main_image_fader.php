@@ -96,8 +96,8 @@ class Block_main_image_fader
 			$extra_where_video.=$privacy_where_video;
 		}
 
-		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url,title,description FROM '.get_table_prefix().'images e '.$extra_join_image.' WHERE '.$cat_select.$extra_where_image.' ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
-		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos e '.$extra_join_video.' WHERE '.$cat_select.$extra_where_video.' ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
+		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url,title,description FROM '.get_table_prefix().'images e '.$extra_join_image.' WHERE '.$cat_select.$extra_where_image.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
+		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos e '.$extra_join_video.' WHERE '.$cat_select.$extra_where_video.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
 		$all_rows=array();
 		if ($order!='')
 		{

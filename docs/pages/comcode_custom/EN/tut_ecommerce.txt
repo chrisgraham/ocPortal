@@ -205,7 +205,7 @@ The ocPortal online store was introduced in version 4.2, and works via the exist
  - Tax rate -- the tax rate, a percentage chosen from a list (you may edit the catalogue to change what is shown in the list)
  - Weight -- the items weight, in units of your choosing (but all items must consistently use the same units); the weight will operate with the config option that specifies how much it costs to ship a unit of weight
  - Description -- a description for the item
-You may add additional fields, such as extra product images or specifications. However do [b]not[/b] re-order the original fields, as the system uses the order of these fields internally to know what they refer to. If you wish to change how they are shown do it via template editing.
+You may add additional fields, such as extra product images or specifications. However do [b]not[/b] re-order the original fields (or delete, or change the field type), as the system uses the order of these fields internally to know what they refer to. If you wish to change how they are shown do it via template editing.
 By default the catalogue is configured to allow product reviews, but you may turn these off if you wish.
 
 Once you are happy with your set of fields, you can add categories and entries to your catalogue. Once you have entries, and your eCommerce configuration is configured, users can start using your store. Point them to the catalogue to do their shopping, and from there they will be able to navigate to the shopping cart and finalise and pay for their order.

@@ -46,10 +46,13 @@
 			{+END}
 		{+END}
 		{+START,IF,{$NEQ,{LANG_STRING},RAW_DUMP}}
-			{+START,IF,{$EQ,{MODE},all}}
+			{$,Because it is being included, the including templates preprocessor will hit the SET but without any data, so we have an IF_PASSED}
+			{+START,SET,named}{+START,IF_PASSED,MEMBER_ID}{$OR,{$NEQ,{MEMBER_IDS},{MEMBER_ID}},{$EQ,{MODE},all}}{+END}{+END}
+
+			{+START,IF,{$GET,named}}
 				{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a>,{$LCASE,{$SUBSTR,{MESSAGE},0,1}}{$SUBSTR,{MESSAGE},1}}
 			{+END}
-			{+START,IF,{$NEQ,{MODE},all}}
+			{+START,IF,{$NOT,{$GET,named}}}
 				{MESSAGE}
 			{+END}
 		{+END}
