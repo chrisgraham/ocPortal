@@ -76,8 +76,8 @@ class Module_catalogues
 		$cf=$GLOBALS['SITE_DB']->query_value_null_ok('menu_items','id',array('i_menu'=>'collab_features','i_url'=>''));
 		if (!is_null($cf))
 			delete_menu_item($cf);
-		delete_menu_item_simple('_SEARCH:catalogues:id=projects:type=index');
-		delete_menu_item_simple('_SEARCH:cms_catalogues:catalogue_name=projects:type=add_entry');
+		delete_menu_item_simple('_SEARCH:catalogues:type=index:id=projects');
+		delete_menu_item_simple('_SEARCH:cms_catalogues:type=add_entry:catalogue_name=projects');
 	}
 
 	/**

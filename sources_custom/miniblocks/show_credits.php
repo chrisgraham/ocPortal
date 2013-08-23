@@ -13,19 +13,22 @@
  * @package		ocportalcom_support_credits
  */
 
+$existing_customer=!is_guest() && !is_null($GLOBALS['SITE_DB']->query_value_null_ok('credit_purchases','num_credits',array('member_id'=>get_member())));
+
 require_lang('customers');
 $whats_this = '';
 $guest_msg = '';
 $welcome_msg = '';
 $tickets_open_msg = '';
-$no_credits_link = '';
+$whats_this_link = '';
 $credits_message = '';
-	if (get_page_name()!='commercial_support')
-	{
-		$commercial_support_url=build_url(array('page'=>'commercial_support'),'site');
-		if (is_object($commercial_support_url)) $commercial_support_url=$commercial_support_url->evaluate();
-		$whats_this = do_lang_tempcode('SHOW_CREDITS_Whats_this',$commercial_support_url);
-	}
+
+if (get_page_name()!='commercial_support')
+{
+	$commercial_support_url=build_url(array('page'=>'commercial_support'),'site');
+	if (is_object($commercial_support_url)) $commercial_support_url=$commercial_support_url->evaluate();
+	$whats_this = do_lang_tempcode($existing_customer?'SHOW_CREDITS_Existing_customer':'SHOW_CREDITS_Whats_this',$commercial_support_url);
+}
 	
 
 if (is_guest())
@@ -65,7 +68,8 @@ if (is_object($logout_url)) $logout_url=$logout_url->evaluate();
 $welcome_msg = do_lang_tempcode('SHOW_CREDITS_WELCOME_MESSAGE',$username_link,$logout_url);
 if ($credits_available==0)
 {
-	$no_credits_link = do_lang_tempcode('SHOW_CREDITS_No_credits_link');
+	if (!$existing_customer)
+		$whats_this_link = do_lang_tempcode('SHOW_CREDITS_Whats_this_link');
 	$credits_message = do_lang_tempcode('SHOW_CREDITS_No_credits');
 } 
 else
@@ -75,5 +79,5 @@ else
 $tickets_url=build_url(array('page'=>'tickets','type'=>'misc'),get_module_zone('tickets'));
 if (is_object($tickets_url)) $tickets_url=$tickets_url->evaluate();
 $tickets_open_msg = do_lang_tempcode('SHOW_CREDITS_Tickets_open',number_format($tickets_open),$tickets_url);
-$tpl=do_template('SHOW_CREDITS_BAR',array('GUEST_MSG'=>$guest_msg,'WHATS_THIS'=>$whats_this,'WHATS_THIS_LINK'=>$no_credits_link,'WELCOME_MSG'=>$welcome_msg,'CREDITS_AVAILABLE'=>$credits_message));
+$tpl=do_template('SHOW_CREDITS_BAR',array('GUEST_MSG'=>$guest_msg,'WHATS_THIS'=>$whats_this,'WHATS_THIS_LINK'=>$whats_this_link,'WELCOME_MSG'=>$welcome_msg,'CREDITS_AVAILABLE'=>$credits_message));
 $tpl->evaluate_echo();

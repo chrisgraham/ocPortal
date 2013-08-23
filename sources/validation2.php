@@ -504,6 +504,7 @@ function init__validation2()
 		'link.rel'=>'.+',
 		'link.rev'=>'.+',
 		'link.type'=>'.+',
+		'link.sizes'=>'.+',
 	);
 	$TAG_ATTRIBUTES+=array(
 		'meta.content'=>'.*',

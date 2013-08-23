@@ -185,7 +185,9 @@ class standard_aed_module
 			{
 				if (($this->catalogue) && (either_param('catalogue_name','')!=''))
 				{
-					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>either_param('catalogue_name'))));
+					$_catalogue_title=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>either_param('catalogue_name')));
+					if (is_null($_catalogue_title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+					$catalogue_title=get_translated_text($_catalogue_title);
 					breadcrumb_set_parents(array(array('_SELF:_SELF:misc:catalogue_name='.either_param('catalogue_name',''),$catalogue_title)));
 				} else
 				{

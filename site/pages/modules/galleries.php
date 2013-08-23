@@ -532,8 +532,6 @@ class Module_galleries
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=galleries&filter='.$cat;
 		$root=get_param('root','root');
 
-		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
-
 		// Info on our gallery
 		$gallery_rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$cat),'',1);
 		$implied_existence=false;
@@ -560,6 +558,8 @@ class Module_galleries
 			$fullname=get_translated_text($myrow['fullname']);
 		}
 		if ($fullname=='') $fullname=$cat;
+
+		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
 		$description=get_translated_tempcode($myrow['description']);
 

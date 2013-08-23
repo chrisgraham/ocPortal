@@ -976,7 +976,18 @@ function assign_tick_deletion_confirm(name)
 				'{!ARE_YOU_SURE_DELETE;^}',
 				function(result)
 				{
-					if (!result) document.getElementById(name).checked=false;
+					var e=document.getElementById(name);
+					if (e)
+					{
+						if (result)
+						{
+							var form=e.form;
+							form.action=form.action.replace(/([&\?])redirect=[^&]*/,'$1');
+						} else
+						{
+							e.checked=false;
+						}
+					}
 				}
 			);
 		}
@@ -998,10 +1009,17 @@ function assign_radio_deletion_confirm(name)
 						'{!ARE_YOU_SURE_DELETE;^}',
 						function(result)
 						{
-							if (!result)
+							var e=document.getElementById('j_'+name+'_0');
+							if (e)
 							{
-								var e=document.getElementById('j_'+name+'_0');
-								if (e) e.checked=true;
+								if (result)
+								{
+									var form=e.form;
+									form.action=form.action.replace(/([&\?])redirect=[^&]*/,'$1');
+								} else
+								{
+									e.checked=true; // Check first radio
+								}
 							}
 						}
 					);
