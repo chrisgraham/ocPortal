@@ -274,6 +274,11 @@ if (@is_resource($MYFILE))
  */
 function step_1()
 {
+	// To stop previous installs interfering
+	require_code('view_modes');
+	erase_cached_templates();
+	erase_cached_language();
+
 	$warnings=new ocp_tempcode();
 	global $MYFILE;
 	if (!@is_resource($MYFILE)) // Do an integrity check - missing corrupt files

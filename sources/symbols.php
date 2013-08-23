@@ -1305,7 +1305,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'ADDON_INSTALLED':
-				if (isset($param[0]))
+				if ((isset($param[0])) && (!running_script('install')))
 				{
 					$value=(addon_installed($param[0],(array_key_exists(1,$param)) && ($param[1]=='1')))?'1':'0';
 				}

@@ -476,6 +476,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		if (strtolower($filepath)=='data_custom/addon_screenshots') return true; // Relating to addon build, but not defined in addons
 		if (strtolower($filepath)=='exports/static') return true; // Empty directory, so has to be a special exception
 		if (strtolower($filepath)=='exports/builds') return true; // Needed to stop build recursion
+		if (strtolower($filepath)=='_tests') return true; // Test set may have various temporary files buried within
 		if (file_exists(get_custom_file_base().'/data_custom/addon_files.txt'))
 		{
 			static $addon_list=NULL;
