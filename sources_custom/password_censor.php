@@ -125,7 +125,7 @@ function _password_censor($text,$scan_type=1,$explicit_only=false)
 				if (preg_match('#[a-z]#',$m)!=0) $c++;
 				if (preg_match('#[^\w]#',$m)!=0) $c++;
 				if ((is_numeric($m)) && (strlen($m)>6)) $c++;
-				if (preg_match('#(password|pass|pword|pw) ?:?=?\s+'.preg_quote($m,'#').'#i',$text)!=0) $c+=2;
+				if (preg_match('#(password|pass|pword|pw)\s*:?=?\s+'.preg_quote($m,'#').'#i',$text)!=0) $c+=2;
 				if ($c>=3)
 				{
 					$text=str_replace($m,'(auto-censored)',$text);
