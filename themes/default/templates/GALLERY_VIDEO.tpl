@@ -59,13 +59,11 @@
 
 {+START,IF,{$NEQ,{_GUID},carousel}}
 	<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET;^*,TOOLTIP}','auto',null,null,false,true);">
-		{+START,IF_NON_EMPTY,{_EDIT_URL}}
-			<form onsubmit="return confirm_gallery_delete(this);" class="delete_cross_button" title="{!DELETE} #{ID*}" action="{_EDIT_URL*}" method="post">
-				<div>
-					<input type="hidden" name="delete" value="2" />
-					<input type="image" alt="{!DELETE}" src="{$IMG*,results/delete}" />
-				</div>
-			</form>
+		{+START,IF,{$HAS_DELETE_PERMISSION,mid,{SUBMITTER},{$MEMBER},cms_galleries}}
+			{+START,INCLUDE,MASS_SELECT_MARKER}
+				TYPE={TYPE}
+				ID={ID}
+			{+END}
 		{+END}
 
 		<div class="img_thumb_wrap">

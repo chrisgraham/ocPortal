@@ -24,11 +24,11 @@
 	</div>
 	<div class="ocf_topic_post_area ocf_post_main_column" id="pe_{ID*}">
 		{+START,IF,{$AND,{$JS_ON},{STAFF_ACCESS}}}
-			<div id="cell_mark_{ID*}" class="ocf_off ocf_topic_marker">
+			<div id="cell_mark_{ID*}" class="ocf_off mass_select_marker">
 				<form class="xhtml_validator_off" title="{!MARKER}: {ID*}" method="post" action="index.php" id="form_mark_{ID*}">
 					<div>
 						{+START,IF,{$NOT,{$IS_GUEST}}}<div class="accessibility_hidden"><label for="mark_{ID*}">{!MARKER} #{ID*}</label></div>{+END}{$,Guests don't see this so search engines don't; hopefully people with screen-readers are logged in}
-						<input {+START,IF,{$NOT,{$IS_GUEST}}}title="{!MARKER} #{ID*}" {+END}value="1" type="checkbox" id="mark_{ID*}" name="mark_{ID*}" onclick="change_class(this,'cell_mark_{ID*}','ocf_on ocf_topic_marker','ocf_off ocf_topic_marker')" />
+						<input {+START,IF,{$NOT,{$IS_GUEST}}}title="{!MARKER} #{ID*}" {+END}value="1" type="checkbox" id="mark_{ID*}" name="mark_{ID*}" onclick="change_class(this,'cell_mark_{ID*}','ocf_on mass_select_marker','ocf_off mass_select_marker')" />
 					</div>
 				</form>
 			</div>

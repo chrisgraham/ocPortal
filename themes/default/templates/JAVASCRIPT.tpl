@@ -3167,3 +3167,41 @@ function set_up_change_monitor(id)
 		}
 	} );
 }
+
+/* Used by MASS_SELECT_MARKER.tpl */
+function prepare_mass_select_marker(set,type,id,checked)
+{
+	var mass_delete_form=document.getElementById('mass_select_form__'+set);
+	var key=type+'_'+id;
+	var hidden;
+	if (typeof mass_delete_form.elements[key]=='undefined')
+	{
+		hidden=document.createElement('input');
+		hidden.type='hidden';
+		hidden.name=key;
+		mass_delete_form.appendChild(hidden);
+	} else
+	{
+		hidden=mass_delete_form.elements[key];
+	}
+	hidden.value=checked?'1':'0';
+	mass_delete_form.style.display='block';
+}
+
+function confirm_delete(form,multi)
+{
+	if (typeof multi=='undefined') var multi=false;
+
+	window.fauxmodal_confirm(
+		multi?'{!_ARE_YOU_SURE_DELETE;^}':'{!ARE_YOU_SURE_DELETE;^}',
+		function(result)
+		{
+			if (result)
+			{
+				form.submit();
+			}
+		}
+	);
+	return false;
+}
+

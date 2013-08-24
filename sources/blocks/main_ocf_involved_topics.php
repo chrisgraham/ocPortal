@@ -73,6 +73,13 @@ class Block_main_ocf_involved_topics
 		{
 			$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(DISTINCT p_topic_id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_poster='.strval($member_id_of).$where_more,false,true);
 
+			$moderator_actions='';
+			$has_topic_marking=has_delete_permission('mid',get_member(),$member_id_of,'topics');
+			if ($has_topic_marking)
+			{
+				$moderator_actions.='<option value="delete_topics_and_posts">'.do_lang('DELETE_TOPICS_AND_POSTS').'</option>';
+			}
+
 			$where='';
 			foreach ($rows as $row)
 			{
@@ -90,10 +97,12 @@ class Block_main_ocf_involved_topics
 			foreach ($rows as $row)
 			{
 				if (array_key_exists($row['p_topic_id'],$topic_rows_map))
-					$topics->attach(ocf_render_topic(ocf_get_topic_array($topic_rows_map[$row['p_topic_id']],get_member(),$hot_topic_definition,true),false));
+					$topics->attach(ocf_render_topic(ocf_get_topic_array($topic_rows_map[$row['p_topic_id']],get_member(),$hot_topic_definition,true),$has_topic_marking));
 			}
 			if (!$topics->is_empty())
 			{
+				$action_url=build_url(array('page'=>'topics'),get_module_zone('topics'),NULL,false,true);
+
 				$forum_name=do_lang_tempcode('TOPICS_PARTICIPATED_IN',integer_format($start+1).'-'.integer_format($start+$max));
 				$marker='';
 				$breadcrumbs=new ocp_tempcode();
@@ -105,14 +114,14 @@ class Block_main_ocf_involved_topics
 					'MAX'=>'15',
 					'MAY_CHANGE_MAX'=>false,
 					'BREADCRUMBS'=>$breadcrumbs,
-					'ACTION_URL'=>get_self_url(),
+					'ACTION_URL'=>$action_url,
 					'BUTTONS'=>'',
 					'STARTER_TITLE'=>'',
 					'MARKER'=>$marker,
 					'FORUM_NAME'=>$forum_name,
 					'TOPICS'=>$topics,
 					'PAGINATION'=>$pagination,
-					'MODERATOR_ACTIONS'=>'',
+					'MODERATOR_ACTIONS'=>$moderator_actions,
 				));
 			}
 		}

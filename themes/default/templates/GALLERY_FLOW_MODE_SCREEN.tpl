@@ -20,6 +20,8 @@
 		<hr class="spaced_rule" />
 	{+END}
 
+	{$SET,support_mass_select,cms_galleries}
+
 	{+START,IF_NON_EMPTY,{ENTRIES}}
 		<div class="box box___gallery_flow_mode_screen__other"><div class="box_inner">
 			<h2>{!OTHER_IMAGES_IN_GALLERY}</h2>
@@ -51,8 +53,13 @@
 			</p>
 
 			{SORTING}
+
+			{+START,INCLUDE,MASS_SELECT_DELETE_FORM}
+			{+END}
 		</div></div>
 	{+END}
+
+	{$SET,support_mass_select,}
 
 	{+START,IF_EMPTY,{ENTRIES}{CURRENT_ENTRY}{CHILDREN}}
 		<p class="nothing_here">

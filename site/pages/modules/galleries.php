@@ -933,6 +933,7 @@ class Module_galleries
 				'THUMB'=>$thumb,
 				'VIEW_URL'=>$probe_url,
 				'VIEW_URL_2'=>$view_url_2,
+				'_EDIT_URL'=>$_edit_url,
 			)));
 		}
 

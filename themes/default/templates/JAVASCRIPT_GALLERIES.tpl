@@ -207,18 +207,3 @@ function slideshow_show_slide(slide)
 	else
 		document.getElementById('gallery_entry_screen').style.cursor='';
 }
-
-function confirm_gallery_delete(form)
-{
-	window.fauxmodal_confirm(
-		'{!ARE_YOU_SURE_DELETE;^}',
-		function(result)
-		{
-			if (result)
-			{
-				form.submit();
-			}
-		}
-	);
-	return false;
-}

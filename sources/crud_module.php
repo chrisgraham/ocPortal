@@ -274,6 +274,12 @@ class standard_crud_module
 			if ($type=='__edit_catalogue') return $this->alt_crud_module->__ed();
 		}
 
+		// Recursed across all types
+		if ($type=='mass_delete')
+		{
+			return $this->mass_delete();
+		}
+
 		return new ocp_tempcode();
 	}
 
@@ -1443,6 +1449,82 @@ class standard_crud_module
 		clear_ocp_autosave();
 
 		return $this->do_next_manager($title,$description,$id);
+	}
+
+	/**
+	 * Mass delete some entries/categories.
+	 *
+	 * @param  boolean	Whether this is a top level mass delete op (i.e. not a recursion)
+	 * @return ?tempcode	The UI (NULL: not top level)
+	 */
+	function mass_delete($top_level=true)
+	{
+		$delete=array();
+		foreach ($_POST as $key=>$val)
+		{
+			if (($val==='1') && (strpos($key,'_')!==false))
+			{
+				list($type,$id)=explode('_',$key,2);
+
+				if ($type==$this->award_type)
+				{
+					if (!is_null($this->permissions_require))
+					{
+						if (method_exists($this,'get_submitter'))
+						{
+							list($submitter,$date_and_time)=$this->get_submitter($id);
+						} else $submitter=NULL;
+						check_delete_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->permission_page_name);
+					}
+
+					$delete[]=$id; // Don't do right away, we want to check all permissions first so that we don't do a partial action
+				}
+			}
+		}
+		foreach ($delete as $id)
+		{
+			$this->delete_actualisation($id);
+		}
+		if ((!is_null($this->cat_crud_module)) && (!is_null($this->cat_crud_module->award_type)))
+		{
+			foreach ($_POST as $key=>$val)
+			{
+				if (($val==='1') && (strpos($key,'_')!==false))
+				{
+					$this->cat_crud_module->mass_delete(false);
+				}
+			}
+		}
+		if ((!is_null($this->alt_crud_module)) && (!is_null($this->alt_crud_module->award_type)))
+		{
+			foreach ($_POST as $key=>$val)
+			{
+				if (($val==='1') && (strpos($key,'_')!==false))
+				{
+					$this->alt_crud_module->mass_delete(false);
+				}
+			}
+		}
+
+		// UI
+		if ($top_level)
+		{
+			$title=get_screen_title('MASS_DELETE');
+
+			if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))
+			{
+				$url=make_string_tempcode(get_param('redirect'));
+
+				return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			}
+
+			$description=do_lang_tempcode('SUCCESS');
+
+			return $this->do_next_manager($title,$description,NULL);
+		}
+
+		// Not top level
+		return NULL;
 	}
 
 }

@@ -20,23 +20,39 @@
 .delete_cross_button, .delete_cross_button div {
 	display: inline;
 }
-.delete_cross_button input {
+.delete_cross_button input,
+.gallery_regular_thumb .mass_select_marker,
+.flowmode_thumb .mass_select_marker {
 	position: absolute;
 	right: 2px;
 	top: 2px;
+	{$BETA_CSS_PROPERTY,backface-visibility: hidden;} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 	{$BETA_CSS_PROPERTY,opacity: 0.0;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
+}
+.gallery_regular_thumb .mass_select_marker,
+.flowmode_thumb .mass_select_marker {
+	right: 7px !important;
+}
+.gallery_regular_thumb .mass_select_marker input,
+.flowmode_thumb .mass_select_marker input {
+	float: none !important;
+	margin: 0 0 0 0 !important;
 }
 .gallery_regular_thumb,
 .flowmode_thumb {
 	position: relative;
 }
 .gallery_regular_thumb:hover .delete_cross_button input,
-.flowmode_thumb:hover .delete_cross_button input {
+.flowmode_thumb:hover .delete_cross_button input,
+.gallery_regular_thumb:hover .mass_select_marker,
+.flowmode_thumb:hover .mass_select_marker {
 	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }
 .gallery_regular_thumb .delete_cross_button input:hover,
-.flowmode_thumb .delete_cross_button input:hover {
+.flowmode_thumb .delete_cross_button input:hover,
+.gallery_regular_thumb .mass_select_marker:hover,
+.flowmode_thumb .mass_select_marker:hover {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 

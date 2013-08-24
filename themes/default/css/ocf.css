@@ -183,13 +183,6 @@
 .ocf_off {
 }
 
-.ocf_topic_marker {
-	padding: 0.5em;
-	float: {!en_right};
-	border: 1px solid {$GET,standard_border};
-	margin-{!en_left}: 2em;
-}
-
 /*
 =========================
 =======Topic View========

@@ -90,6 +90,8 @@ class Module_topics
 			'_delete_topic',
 			'delete_topics',
 			'_delete_topics',
+			'delete_topics_and_posts',
+			'_delete_topics_and_posts',
 			'categorise_pts',
 			'_categorise_pts',
 			'move_topic',
@@ -1035,6 +1037,65 @@ class Module_topics
 			$forum_id=ocf_delete_topic($topic_id,post_param('reason'),NULL);
 		}
 		return $this->redirect_to_forum('DELETE_TOPICS',$forum_id);
+	}
+
+	/**
+	 * The UI to delete some topics / posts.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function delete_topics_and_posts() // Type
+	{
+		if (is_guest()) access_denied('NOT_AS_GUEST');
+
+		$topics=$this->get_markers();
+		if (count($topics)==0) warn_exit(do_lang_tempcode('NO_MARKERS_SELECTED'));
+
+		$topic_id=$topics[0];
+		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
+		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		//$this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'],$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('DELETE_TOPICS_AND_POSTS'));
+
+		return $this->relay_with_reason('DELETE_TOPICS_AND_POSTS');
+	}
+
+	/**
+	 * The actualiser to delete some topics / posts.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function _delete_topics_and_posts() // Type
+	{
+		if (is_guest()) access_denied('NOT_AS_GUEST');
+
+		$topics=$this->get_markers();
+		if (count($topics)==0) warn_exit(do_lang_tempcode('NO_MARKERS_SELECTED'));
+
+		require_code('ocf_topics_action');
+		require_code('ocf_topics_action2');
+		require_code('ocf_posts_action');
+		require_code('ocf_posts_action2');
+		require_code('ocf_posts_action3');
+
+		$reason=post_param('reason');
+
+		foreach ($topics as $topic_id)
+		{
+			$own_topic=($GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_member_id',array('id'=>$topic_id))==get_member());
+			if ($own_topic)
+			{
+				ocf_delete_topic($topic_id,$reason,NULL);
+			} else
+			{
+				$posts=collapse_1d_complexity('id',$GLOBALS['FORUM_DB']->query_select('f_posts',array('id'),array('p_poster'=>get_member(),'p_topic_id'=>$topic_id)));
+				ocf_delete_posts_topic($topic_id,$posts,$reason);
+			}
+		}
+
+		// Show it worked / Refresh
+		$title=get_screen_title('DELETE_TOPICS_AND_POSTS');
+		$url=build_url(array('page'=>'members','type'=>'view','id'=>get_member()),get_module_zone('members'));
+		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**

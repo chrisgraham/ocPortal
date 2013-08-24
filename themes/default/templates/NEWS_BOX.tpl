@@ -1,4 +1,11 @@
 <div class="box box___news_box"><div class="box_inner">
+	{+START,IF,{$HAS_DELETE_PERMISSION,mid,{SUBMITTER},{$MEMBER},cms_news}}
+		{+START,INCLUDE,MASS_SELECT_MARKER}
+			TYPE=news
+			ID={ID}
+		{+END}
+	{+END}
+
 	<h3>
 		{+START,IF,{GIVE_CONTEXT}}
 			{!CONTENT_IS_OF_TYPE,{!NEWS},{NEWS_TITLE}}

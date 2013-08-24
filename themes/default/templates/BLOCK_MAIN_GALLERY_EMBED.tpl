@@ -1,3 +1,5 @@
+{$SET,support_mass_select,cms_galleries}
+
 {+START,IF,{$NEQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
 	{+START,IF,{$NEQ,{_GUID},carousel}}
 		{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
@@ -57,6 +59,9 @@
 			}
 		//]]></script>
 	{+END}
+
+	{+START,INCLUDE,MASS_SELECT_DELETE_FORM}
+	{+END}
 {+END}
 
 {+START,IF,{$EQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
@@ -64,3 +69,5 @@
 
 	{PAGINATION}
 {+END}
+
+{$SET,support_mass_select,}

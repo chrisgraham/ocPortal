@@ -2974,6 +2974,14 @@ div.proceed_button_left_2 {
 	margin: 0;
 }
 
+.mass_select_marker {
+	padding: 0.5em;
+	float: {!en_right};
+	border: 1px solid {$GET,standard_border};
+	margin-{!en_left}: 2em;
+	margin-top: 1px; /* To get it past a possible overflow:hidden (may be a browser bug) */
+}
+
 /*
 Form buttons are wrapped in either:
  - .shunted_button

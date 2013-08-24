@@ -1,3 +1,5 @@
+{$SET,support_mass_select,cms_news}
+
 {+START,IF_NON_EMPTY,{RECENT_BLOG_POSTS}}
 	{RECENT_BLOG_POSTS}
 
@@ -6,7 +8,12 @@
 			{PAGINATION}
 		</div>
 	{+END}
+
+	{+START,INCLUDE,MASS_SELECT_DELETE_FORM}
+	{+END}
 {+END}
+
+{$SET,support_mass_select,}
 
 {+START,IF_EMPTY,{RECENT_BLOG_POSTS}}
 	<p class="nothing_here">{!NO_ENTRIES}</p>
