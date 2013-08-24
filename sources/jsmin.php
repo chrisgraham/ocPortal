@@ -79,7 +79,6 @@ class JSMin
 	var $input = '';
 	var $inputIndex = 0;
 	var $inputLength = 0;
-	var $lookAhead = NULL;
 	var $output = '';
 
 	// -- Public Instance Methods ------------------------------------------------
@@ -106,17 +105,18 @@ class JSMin
 	function action($d)
 	{
 		$chr_lf=10;
-		$chr_space=32;
 
 		switch($d)
 		{
-			case 1:
+			// Note how these cascade
+
+			case 1: // Absorb normal character
 				$this->output .= $this->a;
 
-			case 2:
+			case 2: // Handle next being a string
 				$this->a = $this->b;
 
-				if ($this->a === "'" || $this->a === '"')
+				if ($this->a === "'" || $this->a === '"') // Entering a quoted string, jump through it
 				{
 					while (true)
 					{
@@ -128,10 +128,10 @@ class JSMin
 							break;
 						}
 
-						if (ord($this->a) <= $chr_lf)
+						/*if (ord($this->a) <= $chr_lf)		We don't need to find this error
 						{
 							return array('Unterminated string literal.');
-						}
+						}*/
 
 						if ($this->a === '\\')
 						{
@@ -141,39 +141,47 @@ class JSMin
 					}
 				}
 
-			case 3:
-				$this->b = $this->next();
-				if (is_array($this->b)) return $this->b;
-
-				if ($this->b === '/' && (
-						$this->a === '(' || $this->a === ',' || $this->a === '=' ||
-						$this->a === ':' || $this->a === '[' || $this->a === '!' ||
-						$this->a === '&' || $this->a === '|' || $this->a === '?'))
+			case 3: // Handle next being a regexp, jump through it (NB: $this->b will be left unhandled after this, and will be used on next 'action' call)
+				$this->b = $this->get();
+				if ($this->b == '/')
 				{
+					$this->b = $this->next__bypass_comments($this->b);
+					//if (is_array($this->b)) return $this->b;
 
-					$this->output .= $this->a . $this->b;
-
-					while (true)
+					// Entering a regexp
+					if ($this->b === '/' && (
+							$this->a === '(' || $this->a === ',' || $this->a === '=' ||
+							$this->a === ':' || $this->a === '[' || $this->a === '!' ||
+							$this->a === '&' || $this->a === '|' || $this->a === '?'))
 					{
-						$this->a = $this->get();
 
-						if ($this->a === '/')
+						$this->output .= $this->a . $this->b;
+
+						while (true)
 						{
-							break;
-						} elseif ($this->a === '\\')
-						{
+							$this->a = $this->get();
+
+							if ($this->a === '/')
+							{
+								break;
+							} elseif ($this->a === '\\')
+							{
+								$this->output .= $this->a;
+								$this->a			 = $this->get();
+							} elseif (ord($this->a) <= $chr_lf)
+							{
+								//return array('Unterminated regular expression literal.');	We don't need to handle errors
+								break;
+							}
+
 							$this->output .= $this->a;
-							$this->a			 = $this->get();
-						} elseif (ord($this->a) <= $chr_lf)
-						{
-							return array('Unterminated regular expression literal.');
 						}
 
-						$this->output .= $this->a;
+						$this->b = $this->get();
+						if ($this->b == '/')
+							$this->b = $this->next__bypass_comments($this->b);
+						//if (is_array($this->b)) return $this->b;
 					}
-
-					$this->b = $this->next();
-					if (is_array($this->b)) return $this->b;
 				}
 		}
 
@@ -187,31 +195,37 @@ class JSMin
 	 */
 	function get()
 	{
-		$chr_space=32;
-
-		$c = $this->lookAhead;
-		$this->lookAhead = NULL;
-
-		if ($c === NULL)
+		$ptr = &$this->inputIndex;
+		if ($ptr < $this->inputLength)
 		{
-			if ($this->inputIndex < $this->inputLength)
+			$c = '';
+			do
 			{
-				$c = $this->input[$this->inputIndex];
-				$this->inputIndex += 1;
-			} else
-			{
-				$c = NULL;
+				$_c = $this->input[$ptr];
+				$o = ord($_c);
+				$alphanumeric = ($o>=65 && $o<=90 || $o>=97 && $o<=122 || $o>=48 && $o<=57 || $c=='\\' || $c=='_' || $c=='$' || $o>126);
+				if (($alphanumeric) || ($c == ''))
+				{
+					if ($c == '')
+						$_o = $o;
+					$c .= $_c;
+					$ptr++;
+				}
 			}
+			while ($alphanumeric);
+		} else
+		{
+			return NULL;
+		}
+
+		if ($c === "\n" || $_o >= 32/*$chr_space*/)
+		{
+			return $c;
 		}
 
 		if ($c === "\r")
 		{
 			return "\n";
-		}
-
-		if ($c === NULL || $c === "\n" || ord($c) >= $chr_space)
-		{
-			return $c;
 		}
 
 		return ' ';
@@ -226,7 +240,8 @@ class JSMin
 	function isAlphaNum($c)
 	{
 		if (is_null($c)) return false;
-		return ord($c) > 126 || $c == '\\' || preg_match('/^[\w\$]$/', $c) == 1;
+		$o = ord($c);
+		return $o>=65 && $o<=90 || $o>=97 && $o<=122 || $o>=48 && $o<=57 || $c=='\\' || $c=='_' || $c=='$' || $o>126;
 	}
 
 	/**
@@ -236,23 +251,25 @@ class JSMin
 	 */
 	function min()
 	{
-		$this->a = "\n";
-		$test = $this->action(3);
-		if (is_array($test)) return $this->input; // Error
+		$this->a = "\n"; // Something that does nothing
+		$test = $this->action(3); // Initialises $this->b, essentially
+		//if (is_array($test)) return $this->input; // Error
 
 		while ($this->a !== NULL)
 		{
+			// Handle various white-space scenarios, or process as normal
+
 			switch ($this->a)
 			{
 				case ' ':
 					if ($this->isAlphaNum($this->b))
 					{
-						$test = $this->action(1);
-						if (is_array($test)) return $this->input; // Error
+						$test = $this->action(1); // Keyword separation
+						//if (is_array($test)) return $this->input; // Error
 					} else
 					{
-						$test = $this->action(2);
-						if (is_array($test)) return $this->input; // Error
+						$test = $this->action(2); // May be ignored, load in $b
+						//if (is_array($test)) return $this->input; // Error
 					}
 					break;
 
@@ -264,25 +281,25 @@ class JSMin
 						case '(':
 						case '+':
 						case '-':
-							$test = $this->action(1);
-							if (is_array($test)) return $this->input; // Error
+							$test = $this->action(1); // Keyword separation
+							//if (is_array($test)) return $this->input; // Error
 							break;
 
 						case ' ':
-							$test = $this->action(3);
-							if (is_array($test)) return $this->input; // Error
+							$test = $this->action(3); // May be ignored, load in $b
+							//if (is_array($test)) return $this->input; // Error
 							break;
 
 						default:
 							if ($this->isAlphaNum($this->b))
 							{
-								$test = $this->action(1);
-								if (is_array($test)) return $this->input; // Error
+								$test = $this->action(1); // Keyword separation
+								//if (is_array($test)) return $this->input; // Error
 							}
 							else
 							{
-								$test = $this->action(2);
-								if (is_array($test)) return $this->input; // Error
+								$test = $this->action(2); // May be ignored, load in $b
+								//if (is_array($test)) return $this->input; // Error
 							}
 					}
 					break;
@@ -293,13 +310,13 @@ class JSMin
 						case ' ':
 							if ($this->isAlphaNum($this->a))
 							{
-								$test = $this->action(1);
-								if (is_array($test)) return $this->input; // Error
+								$test = $this->action(1); // Process $a then load in $b
+								//if (is_array($test)) return $this->input; // Error
 								break;
 							}
 
-							$test = $this->action(3);
-							if (is_array($test)) return $this->input; // Error
+							$test = $this->action(3); // May be ignored
+							//if (is_array($test)) return $this->input; // Error
 							break;
 
 						case "\n":
@@ -312,27 +329,27 @@ class JSMin
 								case '-':
 								case '"':
 								case "'":
-									$test = $this->action(1);
-									if (is_array($test)) return $this->input; // Error
+									$test = $this->action(1); // Keyword in $a, process $a then $b
+									//if (is_array($test)) return $this->input; // Error
 									break;
 
 								default:
 									if ($this->isAlphaNum($this->a))
 									{
 										$test = $this->action(1);
-										if (is_array($test)) return $this->input; // Error
+										//if (is_array($test)) return $this->input; // Error
 									}
 									else
 									{
 										$test = $this->action(3);
-										if (is_array($test)) return $this->input; // Error
+										//if (is_array($test)) return $this->input; // Error
 									}
 							}
 							break;
 
 						default:
-							$test = $this->action(1);
-							if (is_array($test)) return $this->input; // Error
+							$test = $this->action(1); // Process $a (this is the main code path, when the white-space cases of $a and $b have passed)
+							//if (is_array($test)) return $this->input; // Error
 							break;
 					}
 			}
@@ -342,21 +359,19 @@ class JSMin
 	}
 
 	/**
-	 * Get the next item in the stream
+	 * Get the next item in the stream (complex cases)
 	 *
+	 * @param 	string		Next item needing further processing
 	 * @return 	mixed			Next item or error (array)
 	 */
-	function next()
+	function next__bypass_comments($c)
 	{
-		$chr_lf=10;
-
-		$c = $this->get();
-
 		if ($c === '/')
 		{
 			switch($this->peek())
 			{
-				case '/':
+				case '/': // JS comment line
+					$chr_lf=10;
 					while (true)
 					{
 						$c = $this->get();
@@ -367,7 +382,7 @@ class JSMin
 						}
 					}
 
-				case '*':
+				case '*': // JS comment block
 					$this->get();
 
 					while (true)
@@ -383,7 +398,8 @@ class JSMin
 								break;
 
 							case NULL:
-								return array('Unterminated comment.');
+								return '';
+								//return array('Unterminated comment.');	We don't need to handle errors
 						}
 					}
 
@@ -402,7 +418,8 @@ class JSMin
 	 */
 	function peek()
 	{
-		$this->lookAhead = $this->get();
-		return $this->lookAhead;
+		$c = $this->get();
+		if ($c !== NULL) $this->inputIndex-=strlen($c);
+		return $c;
 	}
 }
