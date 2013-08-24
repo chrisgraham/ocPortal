@@ -694,8 +694,8 @@ class Module_galleries
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
-			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','e');
-			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','e');
+			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','r');
+			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','r');
 			$extra_join_image.=$privacy_join_image;
 			$extra_join_video.=$privacy_join_video;
 			$extra_where_image.=$privacy_where_image;
