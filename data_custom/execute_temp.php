@@ -55,5 +55,20 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-@print(gethostbyname('xxxxxershcka.135.127.1.82.dnsbl.httpbl.org.').'x');
+	@set_time_limit(100);
+	require_code('tempcode_compiler');
+	require_code('css_and_js');
+	for ($i=0;$i<1;$i++)
+	{
+		list($parts,$preprocessable_bits)=compile_template(file_get_contents(get_custom_file_base().'/themes/default/css/global.css'),'global.css','default','EN');
+
+		$myfunc='tcpfunc_GLOBALCSS';
+		$funcdef=build_closure_function($myfunc,$parts);
+
+		$ret=new ocp_tempcode(array($funcdef,array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'','')))); // Parameters will be bound in later.
+
+		$text=$ret->evaluate();
+		$result=css_minify($text);
+		@exit($result);
+	}
 }

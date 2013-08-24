@@ -61,7 +61,7 @@ class Hook_Profiles_Tabs_galleries
 			$gallery_rendered=show_gallery_box($row,'root',false,get_module_zone('galleries'),$member_id_of!=$member_id_viewing/*Hide if empty and not your own*/);
 			if (!$gallery_rendered->is_empty()) $actual_rows[]=$row;
 			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>$gallery_rendered)));
-			$this->attach_gallery_subgalleries($row['name'],$galleries);
+			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id_of,$member_id_viewing);
 		}
 
 		$add_gallery_url=new ocp_tempcode();
@@ -119,14 +119,16 @@ class Hook_Profiles_Tabs_galleries
 	 *
 	 * @param  ID_TEXT		Gallery name
 	 * @param  tempcode		The output goes in here (passed by reference)
+	 * @param  MEMBER			The ID of the member who is being viewed
+	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 */
-	function attach_gallery_subgalleries($gallery_name,&$galleries)
+	function attach_gallery_subgalleries($gallery_name,&$galleries,$member_id_of,$member_id_viewing)
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$gallery_name),'ORDER BY add_date DESC');
 		foreach ($rows as $i=>$row)
 		{
 			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>show_gallery_box($row,'root',false,get_module_zone('galleries'),$member_id_of!=$member_id_viewing/*Hide if empty and not your own*/))));
-			$this->attach_gallery_subgalleries($row['name'],$galleries);
+			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id_of,$member_id_viewing);
 		}
 	}
 

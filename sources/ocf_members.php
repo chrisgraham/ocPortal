@@ -248,22 +248,31 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 					}
 				}
 
-				if (strlen($cpf_permissions[0]['group_view'])>0)
+				if (!is_guest())
 				{
-					require_code('ocfiltering');
-
-					$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,false,NULL,$member_id);
-
-					$groups_to_search=array();
-					foreach (array_keys($groups) as $group_id)
-					{
-						$groups_to_search[$group_id]=NULL;
-					}
-					$matched_groups=ocfilter_to_idlist_using_memory($cpf_permissions[0]['group_view'],$groups_to_search);
-
-					if (count($matched_groups)>0)
+					if ($cpf_permissions[0]['group_view']=='all')
 					{
 						$display_cpf=true;
+					} else
+					{
+						if (strlen($cpf_permissions[0]['group_view'])>0)
+						{
+							require_code('ocfiltering');
+
+							$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,false,NULL,$member_id);
+
+							$groups_to_search=array();
+							foreach (array_keys($groups) as $group_id)
+							{
+								$groups_to_search[$group_id]=NULL;
+							}
+							$matched_groups=ocfilter_to_idlist_using_memory($cpf_permissions[0]['group_view'],$groups_to_search);
+
+							if (count($matched_groups)>0)
+							{
+								$display_cpf=true;
+							}
+						}
 					}
 				}
 			}
