@@ -406,6 +406,11 @@ body.website_body, #htmlarea {
 
 body#main_website {
 	margin: 0;
+
+	/* To stop it scaling down if we are applying "width=device-width" and forcing a page to displaying non-mobile */
+	{+START,IF,{$NOT,{$MOBILE}}}
+		min-width: 1000px;
+	{+END}
 }
 
 body#main_website #main_website_inner {
@@ -2717,7 +2722,10 @@ ul.associated_link>li {
 
 .associated_links_block_group>li{
 	margin: 0.5em 0 !important;
-	white-space: nowrap;
+	white-space: nowrap; /* To force breaking between links */
+}
+.global_side_panel .associated_links_block_group>li {
+	white-space: normal;
 }
 .buttons_group, .associated_links_block_group {
 	text-align: center;
