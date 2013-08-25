@@ -72,9 +72,6 @@ This notification hook was created using the classifieds notification hook as a 
 		else
 			$download_list_template='DOWNLOADS_FOLLOWUP_EMAIL_DOWNLOAD_LIST_CUSTOM';
 
-		// Create template object to hold download list
-		$download_list=new ocp_tempcode();
-
 		// Get all distinct member id's (except for guest) from download_logging table where the date_and_time is newer than the last runtime of this hook (or last 48 hours if hook hasn't been run recently)
 		$query="SELECT DISTINCT the_user FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."download_logging WHERE the_user>1 AND date_and_time>".$last;
 		if ($debug) echo "downloads_followup_email: distinct user query = $query \n";
@@ -83,6 +80,8 @@ This notification hook was created using the classifieds notification hook as a 
 		// For each distinct member id, send a download follow-up notification
 		foreach ($member_ids as $id) 
 		{
+			// Create template object to hold download list
+			$download_list=new ocp_tempcode();
 			$member_id='1';
 			$member_name='Guest';
 			$member_id=strval($id['the_user']);
