@@ -18,10 +18,10 @@
 					</th>
 
 					<td class="ocf_stats_usersonline_2">
-						<p class="users_online">{USERS_ONLINE}</p>
+						<p class="users_online ocf_group_colours">{USERS_ONLINE}</p>
 
 						{+START,IF_NON_EMPTY,{GROUPS}}
-							<div class="usergroups">
+							<div class="usergroups ocf_group_colours">
 								<p>
 									<span class="field_name">{!USERGROUPS}:</span>
 								</p>

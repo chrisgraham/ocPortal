@@ -156,7 +156,7 @@ class Module_shopping
 
 			$GLOBALS['SITE_DB']->create_index('shopping_logging','calculate_bandwidth',array('date_and_time'));
 
-			add_config_option('SHIPPING_COST_FACTOR','shipping_cost_factor','float','return \'0\';','ECOMMERCE','ECOMMERCE',1);
+			add_config_option('SHIPPING_COST_FACTOR','shipping_cost_factor','line','return \'0\';','ECOMMERCE','ECOMMERCE',1);
 			add_config_option('ALLOW_OPTING_OUT_OF_TAX','allow_opting_out_of_tax','tick','return \'1\';','ECOMMERCE','ECOMMERCE');
 
 			add_menu_item_simple('ecommerce_features',NULL,'ORDERS','_SEARCH:shopping:type=my_orders');

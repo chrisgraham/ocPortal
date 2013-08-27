@@ -710,10 +710,48 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			break;
 		case 'snapback':
 			require_lang('ocf');
+
 			$post_id=intval($embed->evaluate());
-			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id)):make_string_tempcode($attributes['param']);
+
+			$_date=mixed();
+			if (get_forum_type()=='ocf')
+			{
+				$_date=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_time',array('id'=>$post_id));
+			}
+
+			$s_title=mixed();
+			if ($attributes['param']=='')
+			{
+				if (get_forum_type()=='ocf')
+				{
+					$_s_title=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_title',array('id'=>$post_id));
+					if ($_s_title!='')
+					{
+						$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_cache_forum_id',array('id'=>$post_id));
+						if ((!is_null($forum_id)) && (has_category_access($source_member,'forums',strval($forum_id))))
+						{
+							$s_title=make_string_tempcode($_s_title);
+						}
+					}
+				}
+
+				if ($s_title===NULL)
+				{
+					$s_title=do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id));
+				}
+			} else
+			{
+				$s_title=make_string_tempcode($attributes['param']);
+			}
+
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
-			$temp_tpl=do_template('COMCODE_SNAPBACK',array('URL'=>$GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum,true),'TITLE'=>$s_title));
+
+			$temp_tpl=do_template('COMCODE_SNAPBACK',array(
+				'URL'=>$GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum,true),
+				'TITLE'=>$s_title,
+				'DATE'=>is_null($_date)?NULL:get_timezoned_date($_date,true,false,false,true),
+				'_DATE'=>is_null($_date)?NULL:strval($_date),
+			));
 			break;
 		case 'post':
 			require_lang('ocf');

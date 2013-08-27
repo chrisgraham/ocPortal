@@ -2924,7 +2924,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 		else if (post.value!='') post.value+='\n\n';
 
 		post.focus();
-		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
+		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[snapback]'+id+'[/snapback][/quote]\n\n';
 		//post.default_substring_to_strip=post.value;
 	}
 

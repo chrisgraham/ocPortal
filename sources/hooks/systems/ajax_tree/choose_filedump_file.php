@@ -60,7 +60,7 @@ class Hook_choose_filedump_file
 				{
 					$has_children=(count(get_directory_contents($fullpath.'/'.$f,'',false,false))>0);
 
-					$out.='<category id="'.xmlentities($f).'" title="'.xmlentities($f).'" has_children="'.($has_children?'true':'false').'" selectable="false"></category>';
+					$out.='<category id="'.xmlentities((($id=='')?'':($id.'/')).$f).'" title="'.xmlentities($f).'" has_children="'.($has_children?'true':'false').'" selectable="false"></category>';
 				} else
 				{
 					if ((!isset($options['only_images'])) || (!$options['only_images']) || (is_image($f)))
