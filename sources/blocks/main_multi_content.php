@@ -339,6 +339,45 @@ class Block_main_multi_content
 				case 'fixed_random ASC':
 					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.',(MOD(CAST(r.'.$first_id_field.' AS SIGNED),'.date('d').')) AS fixed_random '.$query.' ORDER BY fixed_random',$max,$start,false,true,$lang_fields);
 					break;
+				case 'recent_contents':
+				case 'recent_contents ASC':
+				case 'recent_contents DESC':
+					$hooks=find_all_hooks('systems','content_meta_aware');
+					$sort_combos=array();
+					foreach (array_keys($hooks) as $hook)
+					{
+						$other_ob=get_content_object($hook);
+						$other_info=$other_ob->info();
+						if (($hook!=$content_type) && (isset($other_info['parent_category_meta_aware_type'])) && ($other_info['parent_category_meta_aware_type']==$content_type) && (is_string($other_info['parent_category_field'])) && (isset($other_info['add_time_field'])))
+						{
+							$sort_combos[]=array($other_info['table'],$other_info['add_time_field'],$other_info['parent_category_field']);
+						}
+					}
+					if ($sort_combos!=array())
+					{
+						$order_by='GREATEST(';
+						foreach ($sort_combos as $i=>$sort_combo)
+						{
+							if ($i!=0) $order_by.=',';
+							list($other_table,$other_add_time_field,$other_category_field)=$sort_combo;
+							if ($sort=='recent_contents DESC')
+							{
+								$order_by.='IFNULL((SELECT MAX(';
+							} else
+							{
+								$order_by.='IFNULL((SELECT MIN(';
+							}
+							$order_by.=$other_add_time_field.') FROM '.$GLOBALS['SITE_DB']->get_table_prefix().$other_table.' x WHERE r.'.$info['id_field'].'=x.'.$other_category_field;
+							$order_by.='),'.(($sort=='recent_contents DESC')?'0':strval(PHP_INT_MAX)/*so empty galleries go to end of order*/).')';
+						}
+						$order_by.=')';
+
+						if ($sort=='recent_contents DESC') $order_by.=' DESC';
+
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$order_by,$max,$start);
+
+						break;
+					}
 				case 'recent':
 				case 'recent ASC':
 				case 'recent DESC':
