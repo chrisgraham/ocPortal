@@ -59,7 +59,7 @@
 	<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET;^*,TOOLTIP}','auto',null,null,false,true);">
 		{+START,IF,{$HAS_DELETE_PERMISSION,mid,{SUBMITTER},{$MEMBER},cms_galleries}}
 			{+START,INCLUDE,MASS_SELECT_MARKER}
-				TYPE={TYPE}
+				TYPE={MEDIA_TYPE}
 				ID={ID}
 			{+END}
 		{+END}
