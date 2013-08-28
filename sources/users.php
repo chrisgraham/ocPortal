@@ -51,7 +51,7 @@ function init__users()
 	global $DOING_USERS_INIT;
 	$DOING_USERS_INIT=true;
 	global $IS_VIA_BACKDOOR;
-	$IS_VIA_BACKDOOR=true;
+	$IS_VIA_BACKDOOR=false;
 
 	// Load all sessions into memory, if possible
 	if (get_value('session_prudence')!=='1')
