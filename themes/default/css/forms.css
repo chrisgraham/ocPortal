@@ -127,6 +127,9 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 	background-color: {$GET,area_background} !important; /* !important is so has priority over .de_th */
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}
 }
+.form_table_field_input>div:first-child>p:first-child {
+	margin-top: 0;
+}
 .form_table_field_input input {
 	margin-top: 0;
 }
