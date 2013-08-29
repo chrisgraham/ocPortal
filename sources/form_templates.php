@@ -1792,14 +1792,23 @@ function alternate_fields_set__start($set_name)
  * @param  mixed			The human-readable description for this field set
  * @param  tempcode		The field set tempcode
  * @param  boolean		Whether it is required that this field set be filled in
+ * @param  ?URLPATH		Image URL to show, of the existing selection for this field (NULL: N/A) (blank: N/A)
  * @return tempcode		The field set
  */
-function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required)
+function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required,$existing_image_preview_url=NULL)
 {
 	global $DOING_ALTERNATE_FIELDS_SET;
 	if ($DOING_ALTERNATE_FIELDS_SET===NULL) return $fields; // Didn't actually start set, probably because some logic said not to - so just flow to append as normal
 
-	$set=do_template('FORM_SCREEN_FIELDS_SET',array('_GUID'=>'ae81cf68280aef067de1e8e71b2919a7','FIELDS'=>$fields,'PRETTY_NAME'=>$pretty_name,'SET_NAME'=>$set_name,'REQUIRED'=>$required));
+	if ((!is_null($existing_image_preview_url)) && ($existing_image_preview_url!=''))
+	{
+		if (url_is_local($existing_image_preview_url))
+		{
+			$existing_image_preview_url=get_custom_base_url().'/'.$existing_image_preview_url;
+		}
+	}
+
+	$set=do_template('FORM_SCREEN_FIELDS_SET',array('_GUID'=>'ae81cf68280aef067de1e8e71b2919a7','FIELDS'=>$fields,'PRETTY_NAME'=>$pretty_name,'SET_NAME'=>$set_name,'REQUIRED'=>$required,'EXISTING_IMAGE_PREVIEW_URL'=>$existing_image_preview_url));
 	if (is_null($DOING_ALTERNATE_FIELDS_SET)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	$DOING_ALTERNATE_FIELDS_SET=NULL;
 	return _form_input('',$pretty_name,$description,$set,$required);

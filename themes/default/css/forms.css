@@ -165,6 +165,25 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,required_2_background}\, {$GET,required_background}) !important;}
 }
 
+/* Field sets */
+
+.innocuous_fieldset .preview {
+	float: right;
+	text-align: right;
+	width: 120px;
+	height: 100px;
+	position: relative;
+	top: 10px;
+}
+.innocuous_fieldset .preview img {
+	border: 1px solid {$GET,pale_border};
+	max-width: 100%;
+	max-height: 100%;
+}
+.innocuous_fieldset.has_preview .wide_field {
+	max-width: 300px;
+}
+
 /* Particular input types */
 
 .form_table select {

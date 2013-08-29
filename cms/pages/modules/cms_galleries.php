@@ -961,7 +961,7 @@ class Module_cms_galleries extends standard_crud_module
 			$cat=get_param('cat','');
 		}
 
-		if (has_privilege(get_member(),'mass_import','cms_galleries'))
+		if ((has_privilege(get_member(),'mass_import','cms_galleries')) && (is_null($id)))
 		{
 			$mass_url=build_url(array('page'=>'_SELF','type'=>'gimp','cat'=>$cat),'_SELF');
 			attach_message(do_lang_tempcode('CAN_MASS_UPLOAD',escape_html($mass_url->evaluate())),'inform');
@@ -1005,7 +1005,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
 
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$url));
 
 		if (get_option('is_on_gd')=='0')
 		{
@@ -1020,7 +1020,7 @@ class Module_cms_galleries extends standard_crud_module
 
 			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
 
-			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required));
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required,$thumb_url));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_ACCESSIBILITY'),'description',$description,false));
 		if ($validated==0)
@@ -1587,7 +1587,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
 
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('_DESCRIPTION_THUMBNAIL',integer_format($thumb_width)),$field_set,$required));
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('_DESCRIPTION_THUMBNAIL',integer_format($thumb_width)),$field_set,$required,$thumb_url));
 
 		if (!$no_thumb_needed)
 		{

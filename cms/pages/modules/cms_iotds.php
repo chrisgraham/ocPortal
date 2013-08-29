@@ -141,7 +141,7 @@ class Module_cms_iotds extends standard_crud_module
 
 		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
 
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$url));
 
 		if (get_option('is_on_gd')=='0')
 		{
@@ -156,7 +156,7 @@ class Module_cms_iotds extends standard_crud_module
 
 			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
 
-			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required));
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required,$thumb_url));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('CAPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'caption',$caption,false));
 		if (has_privilege(get_member(),'choose_iotd'))
