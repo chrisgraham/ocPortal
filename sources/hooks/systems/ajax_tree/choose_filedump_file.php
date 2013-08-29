@@ -39,6 +39,8 @@ class Hook_choose_filedump_file
 		if ($id!='')
 			$fullpath.='/'.$id;
 
+		$folder=((isset($options['folder'])) && ($options['folder'])); // We want to select folders, not files
+
 		$out='';
 
 		if ((has_actual_page_access(NULL,'filedump')) && (file_exists($fullpath)))
@@ -60,11 +62,25 @@ class Hook_choose_filedump_file
 				{
 					$has_children=(count(get_directory_contents($fullpath.'/'.$f,'',false,false))>0);
 
-					$out.='<category id="'.xmlentities((($id=='')?'':($id.'/')).$f).'" title="'.xmlentities($f).'" has_children="'.($has_children?'true':'false').'" selectable="false"></category>';
-				} else
+					$out.='<category id="'.xmlentities((($id=='')?'':($id.'/')).$f).'" title="'.xmlentities($f).'" has_children="'.($has_children?'true':'false').'" selectable="'.($folder?'true':'false').'"></category>';
+				} elseif (!$folder)
 				{
 					if ((!isset($options['only_images'])) || (!$options['only_images']) || (is_image($f)))
-						$out.='<entry id="'.xmlentities($entry_id).'" title="'.xmlentities($f).'" description="'.xmlentities(((is_null($description)) || (get_translated_text($description)==''))?$f:get_translated_text($description)).'" selectable="true"></entry>';
+					{
+						if ((is_null($description)) || (get_translated_text($description)==''))
+						{
+							$_description='';
+							if (is_image($f))
+							{
+								$url=get_custom_base_url().'/uploads/filedump/'.(($id=='')?'':($id.'/')).$f;
+								$_description=static_evaluate_tempcode(do_image_thumb($url,'',true,false,NULL,NULL,true));
+							}
+						} else
+						{
+							$_description=get_translated_text(escape_html($description));
+						}
+						$out.='<entry id="'.xmlentities($entry_id).'" title="'.xmlentities($f).'" description_html="'.xmlentities($_description).'" selectable="true"></entry>';
+					}
 				}
 			}
 

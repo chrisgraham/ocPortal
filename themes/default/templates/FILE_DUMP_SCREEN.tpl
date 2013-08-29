@@ -9,6 +9,20 @@
 	<p class="nothing_here">{!NO_ENTRIES}</p>
 {+END}
 
+{+START,IF,{$ADDON_INSTALLED,search}}
+	{$SET,search_url,{$PAGE_LINK,_SEARCH:search:results:filedump:specific=1:days=-1:search_under={$PREG_REPLACE,(^/|/$),,{PLACE}}}}
+	<form class="left" role="search" title="{!SEARCH}" onsubmit="if (typeof this.elements['content']=='undefined') { disable_button_just_clicked(this); return true; } if (check_field_for_blankness(this.elements['content'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{$URL_FOR_GET_FORM*,{$GET,search_url}}" method="get">
+		{$HIDDENS_FOR_GET_FORM,{$GET,search_url}}
+
+		<p>
+			<label class="accessibility_hidden" for="search_filedump">{!SEARCH}</label>
+			<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" onkeyup="update_ajax_search_list(this,event);" type="search" id="search_filedump" name="content" style="color: gray" onblur="if (this.value=='') { this.value='{!SEARCH;}'; this.style.color='gray'; }" onfocus="if (this.value=='{!SEARCH;}') this.value=''; this.style.color='black';" value="{!SEARCH}" />
+
+			<input class="button_micro" type="submit" value="{!SEARCH}" />
+		</p>
+	</form>
+{+END}
+
 {+START,INCLUDE,NOTIFICATION_BUTTONS}
 	NOTIFICATIONS_TYPE=filedump
 	NOTIFICATIONS_ID={PLACE}

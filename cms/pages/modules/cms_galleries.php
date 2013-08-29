@@ -1251,7 +1251,8 @@ class Module_cms_galleries_alt extends standard_aed_module
 			require_code('uploads');
 			if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 			{
-				list($_video_width,$_video_height,$_video_length)=get_video_details($_FILES['file']['tmp_name'],$_FILES['file']['name']);
+				$filename=$_FILES['file']['name'];
+				list($_video_width,$_video_height,$_video_length)=get_video_details($_FILES['file']['tmp_name'],$filename);
 			} else
 			{
 				$url=post_param('url','');
@@ -1268,13 +1269,26 @@ class Module_cms_galleries_alt extends standard_aed_module
 				}
 				if (!is_null($download_test))
 				{
-					list($_video_width,$_video_height,$_video_length)=get_video_details($temp_path,is_null($GLOBALS['HTTP_FILENAME'])?basename(urldecode($url)):$GLOBALS['HTTP_FILENAME']);
+					$filename=is_null($GLOBALS['HTTP_FILENAME'])?basename(urldecode($url)):$GLOBALS['HTTP_FILENAME'];
+					list($_video_width,$_video_height,$_video_length)=get_video_details($temp_path,$filename);
 				} else
 				{
+					$filename=mixed();
 					list($_video_width,$_video_height,$_video_length)=array(NULL,NULL,NULL);
 				}
+
 				if ($temp_path!='') @unlink($temp_path);
 			}
+
+			if (!is_null($filename))
+			{
+				if (substr(strtolower($filename),-4)=='.mp3')
+				{
+					$_video_width=300;
+					$_video_height=60;
+				}
+			}
+
 			if ($video_width==0)
 				$video_width=(is_null($_video_width))?intval(get_option('default_video_width')):$_video_width;
 			if ($video_height==0)

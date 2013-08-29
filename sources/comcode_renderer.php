@@ -751,6 +751,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				'TITLE'=>$s_title,
 				'DATE'=>is_null($_date)?NULL:get_timezoned_date($_date,true,false,false,true),
 				'_DATE'=>is_null($_date)?NULL:strval($_date),
+				'POST_ID'=>strval($post_id),
 			));
 			break;
 		case 'post':
@@ -1809,8 +1810,15 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=test_url($url_full,'flash',@html_entity_decode($given_url,ENT_QUOTES,get_charset()),$source_member);
 			if (($attributes['param']=='') || (strpos($attributes['param'],'x')===false))
 			{
-				if (!array_key_exists('width',$attributes)) $attributes['width']='300';
-				if (!array_key_exists('height',$attributes)) $attributes['height']='300';
+				if (substr(strtolower($_embed),-4)=='.mp3')
+				{
+					if (!array_key_exists('width',$attributes)) $attributes['width']='300';
+					if (!array_key_exists('height',$attributes)) $attributes['height']='60';
+				} else
+				{
+					if (!array_key_exists('width',$attributes)) $attributes['width']='300';
+					if (!array_key_exists('height',$attributes)) $attributes['height']='300';
+				}
 				$attributes['param']=$attributes['width'].'x'.$attributes['height'];
 			}
 			list($width,$height)=explode('x',$attributes['param'],2);

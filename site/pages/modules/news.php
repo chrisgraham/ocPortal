@@ -689,6 +689,9 @@ class Module_news
 		/*if ($filter!='*') $self_url_map['filter']=$filter;		Potentially makes URL too long for content topic to store, and we probably don't want to store this assumptive context anyway
 		if (($filter_and!='*') && ($filter_and!='')) $self_url_map['filter_and']=$filter_and;*/
 		if (!is_null($blog)) $self_url_map['blog']=$blog;
+		$comment_topic_forum=get_value('comment_forum__news__'.strval($myrow['news_category']));
+		if (is_null($comment_topic_forum))
+			$comment_topic_forum=get_value('comment_forum__news');
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
 			get_page_name(),
 			strval($id),
@@ -699,7 +702,7 @@ class Module_news
 			$myrow['submitter'],
 			build_url($self_url_map,'_SELF',NULL,false,false,true),
 			get_translated_text($myrow['title']),
-			get_value('comment_forum__news')
+			$comment_topic_forum
 		);
 
 		$date=get_timezoned_date($myrow['date_and_time']);

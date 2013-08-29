@@ -639,7 +639,8 @@ class Hook_addon_registry_core_rich_media
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_SNAPBACK', array(
 				'URL'=>placeholder_url(),
-				'TITLE'=>lorem_phrase()
+				'TITLE'=>lorem_phrase(),
+				'POST_ID'=>placeholder_id(),
 			)), NULL, '', true)
 		);
 	}

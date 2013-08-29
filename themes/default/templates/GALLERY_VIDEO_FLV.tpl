@@ -24,8 +24,8 @@
 	{$,Carefully tuned to avoid this problem: http://www.longtailvideo.com/support/forums/jw-player/setup-issues-and-embedding/8439/sound-but-no-video}
 	add_event_listener_abstract(window,'load',function () {
 		jwplayer("flv_container_{$GET%,rand_id}").setup({
-			width: {$?*,{$EQ,{$LCASE,{$SUBSTR,{URL},-4}},.mp3},{$MAX,320,{$IMAGE_WIDTH,{THUMB_URL}}},{WIDTH}},
-			height: {$?*,{$EQ,{$LCASE,{$SUBSTR,{URL},-4}},.mp3},{$IMAGE_HEIGHT,{THUMB_URL}},{HEIGHT}},
+			width: {$?*,{$EQ,{$LCASE,{$SUBSTR,{URL},-4}},.mp3},{$MAX,300,{$IMAGE_WIDTH,{THUMB_URL}}},{WIDTH}},
+			height: {$?*,{$EQ,{$LCASE,{$SUBSTR,{URL},-4}},.mp3},{$MAX,60,{$IMAGE_HEIGHT,{THUMB_URL}}},{HEIGHT}},
 			autostart: false,
 			duration: {LENGTH*},
 			players: [
