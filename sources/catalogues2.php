@@ -956,7 +956,14 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	}
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'catalogues',strval($id),$self_url,$title,get_value('comment_forum__catalogues__'.$catalogue_name));
+	update_spacer_post(
+		$allow_comments!=0,
+		'catalogues',
+		strval($id),
+		$self_url,
+		$title,
+		process_overridden_comment_forum('catalogues__'.$catalogue_name,strval($id),strval($category_id),strval($old_category_id))
+	);
 }
 
 /**

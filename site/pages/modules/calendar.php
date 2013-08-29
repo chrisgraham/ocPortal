@@ -1427,7 +1427,7 @@ class Module_calendar
 			$event['e_submitter'],
 			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),
 			$_title,
-			get_value('comment_forum__calendar')
+			find_overridden_comment_forum('calendar',strval($event['e_type']))
 		);
 
 		// Edit URL

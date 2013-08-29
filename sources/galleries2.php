@@ -439,6 +439,7 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 
 	$_comments=$GLOBALS['SITE_DB']->query_value('images','comments',array('id'=>$id));
 	$_title=$GLOBALS['SITE_DB']->query_value('images','title',array('id'=>$id));
+	$old_cat=$GLOBALS['SITE_DB']->query_value('images','cat',array('id'=>$id));
 
 	decache('main_gallery_embed');
 
@@ -478,7 +479,14 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 
 	require_lang('galleries');
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'images',strval($id),$self_url,do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'images',
+		strval($id),
+		$self_url,
+		do_lang('VIEW_IMAGE','','','',get_site_default_lang()),
+		process_overridden_comment_forum('images',strval($id),$cat,$old_cat)
+	);
 }
 
 /**
@@ -729,6 +737,7 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 
 	$_title=$GLOBALS['SITE_DB']->query_value('videos','title',array('id'=>$id));
 	$_comments=$GLOBALS['SITE_DB']->query_value('videos','comments',array('id'=>$id));
+	$old_cat=$GLOBALS['SITE_DB']->query_value('videos','cat',array('id'=>$id));
 
 	require_code('files2');
 	delete_upload('uploads/galleries','videos','url','id',$id,$url);
@@ -768,7 +777,14 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 
 	require_lang('galleries');
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'videos',strval($id),$self_url,do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'videos',
+		strval($id),
+		$self_url,
+		do_lang('VIEW_VIDEO','','','',get_site_default_lang()),
+		process_overridden_comment_forum('videos',strval($id),$cat,$old_cat)
+	);
 }
 
 /**
@@ -1083,7 +1099,14 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	decache('side_root_galleries');
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'galleries',$name,build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),$fullname,get_value('comment_forum__galleries'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'galleries',
+		$name,
+		build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),
+		$fullname,
+		process_overridden_comment_forum('galleries',$name,$name,$old_name)
+	);
 }
 
 /**

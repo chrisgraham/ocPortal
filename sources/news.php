@@ -406,7 +406,7 @@ function send_rss_ping($show_errors=true)
  */
 function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_categories,$meta_keywords,$meta_description,$image,$time=NULL)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article','submitter'),array('id'=>$id),'',1);
+	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article','submitter','news_category'),array('id'=>$id),'',1);
 	$_title=$rows[0]['title'];
 	$_news=$rows[0]['news'];
 	$_news_article=$rows[0]['news_article'];
@@ -489,7 +489,14 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	}
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'news',strval($id),$self_url,$title,get_value('comment_forum__news'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'news',
+		strval($id),
+		$self_url,
+		$title,
+		process_overridden_comment_forum('news',strval($id),strval($main_news_category),strval($rows[0]['news_category']))
+	);
 }
 
 /**

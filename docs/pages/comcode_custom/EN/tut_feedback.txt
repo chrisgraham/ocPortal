@@ -33,6 +33,11 @@ There is an ocPortal block named 'main_comments' that allows any Comcode page to
  - a guest-book (see the default 'guestbook' Comcode page)
  - documentation where users may make comments, adding to it, or directing staff to make improvements
 
+[title="2"]Placing comment topics[/title]
+
+By default, all comment topics all placed in the configured website comment topics forum.
+However, you can use the OcCLE [tt]set_comment_forum[/tt] command to set it so resources under specific content-types and categories have their comments into forums of your choice.
+
 [title="2"]The feedback block[/title]
 
 ocPortal also includes a feedback block, 'main_feedback', that allows you to have users leave messages that other users can't see. It works via a hidden comment topic, and is very useful as a way for staff to get private feedback without resorting to support tickets or e-mail.

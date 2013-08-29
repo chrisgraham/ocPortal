@@ -19,6 +19,79 @@
  */
 
 /**
+ * Set an overridden comment topic forum for a feedback scenario. Moves topics if required.
+ *
+ * @param  ID_TEXT		The feedback code to override the comment topic forum for
+ * @param  ?ID_TEXT		The category ID to override the comment topic forum for (NULL: none)
+ * @param  ID_TEXT		The new comment topic forum
+ */
+function set_comment_forum_for($feedback_code,$category_id,$forum_id)
+{
+	require_code('feedback');
+
+	$old_forum_id=find_overridden_comment_forum($feedback_code,$category_id);
+	$_old_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($old_forum_id);
+	$_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_id);
+	if (is_null($_forum_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+	$default_comment_topic_forum=$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('comments_forum_name'));
+	if (!is_null($category_id))
+	{
+		if ($default_comment_topic_forum==$_forum_id)
+		{
+			delete_value('comment_forum__'.$feedback_code.'__'.$category_id);
+		} else
+		{
+			set_value('comment_forum__'.$feedback_code.'__'.$category_id,strval($_forum_id));
+		}
+	} else
+	{
+		if ($default_comment_topic_forum==$_forum_id)
+		{
+			delete_value('comment_forum__'.$feedback_code);
+		} else
+		{
+			set_value('comment_forum__'.$feedback_code,strval($_forum_id));
+		}
+	}
+
+	// Move stuff
+	if (get_forum_type()=='ocf')
+	{
+		require_code('content');
+		$cma_hook=convert_ocportal_type_codes('feedback_type_code',$feedback_code,'cma_hook');
+		require_code('hooks/systems/content_meta_aware/'.$cma_hook);
+		$cma_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
+		$info=$cma_ob->info();
+		$category_is_string=(isset($info['category_is_string']) && $info['category_is_string']);
+		$topics=array();
+		$start=0;
+		do
+		{
+			$rows=$GLOBALS['SITE_DB']->query_select($info['table'],array($info['id_field']),array($info['parent_category_field']=>$category_is_string?$category_id:intval($category_id)),'',100,$start);
+			foreach ($rows as $row)
+			{
+				$id=$row[$info['id_field']];
+				$feedback_id=$feedback_code.'_'.(is_string($id)?$id:strval($id));
+				$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($old_forum_id,$feedback_id);
+				if (!is_null($topic_id))
+				{
+					$topics[]=$topic_id;
+				}
+			}
+			$start+=100;
+		}
+		while (count($rows)>0);
+
+		if (count($topics)>0)
+		{
+			require_code('ocf_topics_action2');
+			ocf_move_topics($_old_forum_id,$_forum_id,$topics,false);
+		}
+	}
+}
+
+/**
  * Output the trackback script and handle trackbacks.
  */
 function trackback_script()

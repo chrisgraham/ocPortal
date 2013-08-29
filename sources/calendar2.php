@@ -167,7 +167,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  */
 function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
 {
-	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','e_content','e_submitter'),array('id'=>$id),'',1);
+	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','e_content','e_submitter','e_type'),array('id'=>$id),'',1);
 	$myrow=$myrows[0];
 
 	require_code('urls2');
@@ -233,7 +233,14 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 	decache('side_calendar');
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'events',strval($id),$self_url,$title,get_value('comment_forum__calendar'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'events',
+		strval($id),
+		$self_url,
+		$title,
+		process_overridden_comment_forum('calendar',strval($id),strval($type),strval($myrow['e_type']))
+	);
 
 	log_it('EDIT_CALENDAR_EVENT',strval($id),$title);
 }

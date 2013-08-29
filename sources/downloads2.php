@@ -800,7 +800,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 		}
 	}
 
-	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','comments'),array('id'=>$id),'',1);
+	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','comments','category_id'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
@@ -856,7 +856,14 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 	decache('main_download_tease');
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'downloads',strval($id),$self_url,$name,get_value('comment_forum__downloads'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'downloads',
+		strval($id),
+		$self_url,
+		$name,
+		process_overridden_comment_forum('downloads',strval($id),strval($category_id),strval($myrow['category_id']))
+	);
 }
 
 /**

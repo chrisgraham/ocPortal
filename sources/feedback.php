@@ -41,6 +41,63 @@ function init__feedback()
 }
 
 /**
+ * Get the comment topic forum for a feedback scenario, and move an existing comment topic to a different forum if the category has moved and the categories have divergent configured comment topic forums (OCF only).
+ *
+ * @param  ID_TEXT		The feedback code, which we may have overridden the comment forum against
+ * @param  ID_TEXT		The resource ID whose comment topic may need moving
+ * @param  ID_TEXT		The new/current category ID, which we may have overridden the comment forum against
+ * @param  ID_TEXT		The old category ID, which we may have overridden the comment forum against
+ * @return ?ID_TEXT		The comment topic forum
+ */
+function process_overridden_comment_forum($feedback_code,$id,$category_id,$old_category_id)
+{
+	$forum_id=find_overridden_comment_forum($feedback_code,$category_id);
+
+	if (($category_id!=$old_category_id) && (get_forum_type()=='ocf'))
+	{
+		// Move if needed
+		$old_forum_id=find_overridden_comment_forum($feedback_code,$old_category_id);
+		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($old_forum_id,$feedback_code.'_'.$id);
+		if (!is_null($topic_id))
+		{
+			$_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_id);
+			$_old_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($old_forum_id);
+			require_code('ocf_topics_action2');
+			ocf_move_topics($_old_forum_id,$_forum_id,array($topic_id),false);
+		}
+	}
+
+	return $forum_id;
+}
+
+/**
+ * Get the comment topic forum for a feedback scenario.
+ *
+ * @param  ID_TEXT		The feedback code, which we may have overridden the comment forum against
+ * @param  ?ID_TEXT		The category ID, which we may have overridden the comment forum against (NULL: no category ID to override against)
+ * @return ?ID_TEXT		The comment topic forum (may be integer as string, or string forum name - so use forum_id_from_name on the result)
+ */
+function find_overridden_comment_forum($feedback_code,$category_id=NULL)
+{
+	if (!is_null($category_id))
+	{
+		$comment_topic_forum=get_value('comment_forum__'.$feedback_code.'__'.$category_id);
+		if (is_null($comment_topic_forum))
+			$comment_topic_forum=get_value('comment_forum__'.$feedback_code);
+	} else
+	{
+		$comment_topic_forum=get_value('comment_forum__'.$feedback_code);
+	}
+
+	if (is_null($comment_topic_forum))
+	{
+		$comment_topic_forum=get_option('comments_forum_name');
+	}
+
+	return $comment_topic_forum;
+}
+
+/**
  * Find who submitted a piece of feedbackable content.
  *
  * @param  ID_TEXT		Content type

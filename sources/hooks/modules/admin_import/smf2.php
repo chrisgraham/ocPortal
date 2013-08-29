@@ -1824,7 +1824,7 @@ class Hook_smf2
 			import_id_remap_put('news_category',strval($row['id']),$id_new);
 		}
 
-		$forum=(is_null(get_value('comment_forum__news')))?get_option('comments_forum_name'):get_value('comment_forum__news');
+		$forum=(is_null(find_overridden_comment_forum('news')))?get_option('comments_forum_name'):find_overridden_comment_forum('news');
 
 		require_code('files');
 

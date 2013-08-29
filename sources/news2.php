@@ -431,7 +431,7 @@ function import_rss()
 					$submitter=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$comment_author));
 					if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // If comment is made by a non-member, assign comment to guest account
 
-					$forum=(is_null(get_value('comment_forum__news')))?get_option('comments_forum_name'):get_value('comment_forum__news');
+					$forum=(is_null(find_overridden_comment_forum('news')))?get_option('comments_forum_name'):find_overridden_comment_forum('news');
 
 					$comment_parent_id=mixed();
 					if ((get_forum_type()=='ocf') && (!is_null($comment_parent)) && (isset($comment_mapping[$comment_parent])))
@@ -806,7 +806,7 @@ function import_wordpress_db()
 							$submitter=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$comment['comment_author']));
 							if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // If comment is made by a non-member, assign comment to guest account
 
-							$forum=(is_null(get_value('comment_forum__news')))?get_option('comments_forum_name'):get_value('comment_forum__news');
+							$forum=(is_null(find_overridden_comment_forum('news')))?get_option('comments_forum_name'):find_overridden_comment_forum('news');
 
 							$comment_parent_id=mixed();
 							if ((get_forum_type()=='ocf') && (!is_null($comment['comment_parent'])) && (isset($comment_mapping[$comment['comment_parent']])))
