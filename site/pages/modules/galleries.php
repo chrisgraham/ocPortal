@@ -369,7 +369,7 @@ class Module_galleries
 			{
 				if ($row['category_id']==$parent_attributes['id'])
 				{
-					$pagelink=$pagelink_stub.'image:'.strval($row['id']).':wide=1';
+					$pagelink=$pagelink_stub.'image:'.strval($row['id']).'';
 					if (is_null($row['title'])) $row['ntitle']=get_translated_text($row['title']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['ntitle'])); // Callback
 				}
@@ -378,7 +378,7 @@ class Module_galleries
 			{
 				if ($row['category_id']==$parent_attributes['id'])
 				{
-					$pagelink=$pagelink_stub.'video:'.strval($row['id']).':wide=1';
+					$pagelink=$pagelink_stub.'video:'.strval($row['id']).'';
 					if (is_null($row['title'])) $row['ntitle']=get_translated_text($row['title']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['ntitle'])); // Callback
 				}
