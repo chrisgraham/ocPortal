@@ -713,7 +713,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						curl_setopt($ch,CURLOPT_POSTFIELDS,$_postdetails_params);
 					} else
 					{
-						curl_setopt($ch,CURLOPT_POSTFIELDS,$post_params);
+						@curl_setopt($ch,CURLOPT_POSTFIELDS,$post_params); // PHP5.5 gives a deprecation warning
 					}
 				}
 				if ((!is_null($cookies)) && (count($cookies)!=0)) curl_setopt($ch,CURLOPT_COOKIE,$_cookies);
