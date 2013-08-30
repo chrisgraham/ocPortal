@@ -32,6 +32,7 @@ class Hook_choose_image
 	function run($id,$options,$default=NULL)
 	{
 		require_code('galleries');
+		require_code('images');
 
 		$only_owned=array_key_exists('only_owned',$options)?(is_null($options['only_owned'])?NULL:intval($options['only_owned'])):NULL;
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
@@ -47,7 +48,11 @@ class Hook_choose_image
 				foreach ($t['entries'] as $eid=>$etitle)
 				{
 					if (is_object($etitle)) $etitle=@html_entity_decode(strip_tags($etitle->evaluate()),ENT_QUOTES,get_charset());
-					$out.='<entry id="'.xmlentities(strval($eid)).'" title="'.xmlentities($etitle).'" selectable="true"></entry>';
+
+					$thumb_url=ensure_thumbnail($t['entries_rows'][$eid]['url'],$t['entries_rows'][$eid]['thumb_url'],'galleries','images',$eid);
+					$description=do_image_thumb($thumb_url,$etitle,false);
+
+					$out.='<entry id="'.xmlentities(strval($eid)).'" description_html="'.xmlentities($description->evaluate()).'" title="'.xmlentities($etitle).'" selectable="true"></entry>';
 				}
 				continue;
 			}

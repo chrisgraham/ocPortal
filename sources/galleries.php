@@ -917,14 +917,16 @@ function get_gallery_content_tree($table,$submitter=NULL,$gallery=NULL,$breadcru
 	$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('name','fullname'),array('parent_id'=>$gallery),'ORDER BY add_date DESC',300);
 	$where=array('cat'=>$gallery);
 	if (!is_null($submitter)) $where['submitter']=$submitter;
-	$erows=$GLOBALS['SITE_DB']->query_select($table,array('id','url','submitter','title'),$where,'ORDER BY add_date DESC',300);
+	$erows=$GLOBALS['SITE_DB']->query_select($table,array('id','url','submitter','title','thumb_url'),$where,'ORDER BY add_date DESC',300);
 	$children[0]['entries']=array();
+	$children[0]['entries_rows']=array();
 	foreach ($erows as $row)
 	{
 		if (($editable_filter) && (!has_edit_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('galleries',$gallery)))) continue;
 		$e_title=get_translated_text($row['title']);
 		if ($e_title=='') $e_title=basename($row['url']);
 		$children[0]['entries'][$row['id']]=$e_title;
+		$children[0]['entries_rows'][$row['id']]=$row;
 	}
 	$children[0]['child_entry_count']=count($children[0]['entries']);
 	if ($levels===0) // We throw them away now because they're not on the desired level
