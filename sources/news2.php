@@ -455,7 +455,11 @@ function import_rss()
 						1,
 						false,
 						$comment_author,
-						$comment_parent_id
+						$comment_parent_id,
+						false,
+						NULL,
+						NULL,
+						time()
 					);
 
 					if (get_forum_type()=='ocf')
@@ -856,7 +860,11 @@ function import_wordpress_db()
 								1,
 								false,
 								$comment['comment_author'],
-								$comment_parent_id
+								$comment_parent_id,
+								false,
+								NULL,
+								NULL,
+								time()
 							);
 
 							if (get_forum_type()=='ocf')

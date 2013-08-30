@@ -187,9 +187,10 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
  * @param  mixed			URL to view the content
  * @param  SHORT_TEXT	Content title
  * @param  ?string		Forum to post comments in (NULL: site-wide default)
+ * @param  ?TIME			Time of comment topic (NULL: now)
  * @return array			Tuple: Rating details, Comment details, Trackback details
  */
-function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$content_url,$content_title,$forum)
+function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$content_url,$content_title,$forum,$time=NULL)
 {
 	// Sign up original poster for notifications
 	if (get_forum_type()=='ocf')
@@ -212,7 +213,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 
 	actualise_rating($allow_rating==1,$page_name,$content_id,$content_url,$content_title);
 	if ((!is_null(post_param('title',NULL))) || ($validated==1))
-		actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum);
+		actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum,false,NULL,false,false,false,$time);
 	//actualise_post_trackback($allow_trackbacks==1,$page_name,$content_id);
 	$rating_details=get_rating_box($content_url,$content_title,$page_name,$content_id,$allow_rating==1,$submitter);
 	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,false,$submitter,$allow_comments==2);
@@ -220,7 +221,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 
 	if (is_object($content_url)) $content_url=$content_url->evaluate();
 
-	$serialized_options=serialize(array($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum));
+	$serialized_options=serialize(array($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time));
 	$hash=best_hash($serialized_options,get_site_salt()); // A little security, to ensure $serialized_options is not tampered with
 
 	// AJAX support
@@ -242,7 +243,7 @@ function post_comment_script()
 
 	// Read in context of what we're doing
 	$options=post_param('options');
-	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum)=unserialize($options);
+	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time)=unserialize($options);
 
 	// Check security
 	$hash=post_param('hash');
@@ -253,7 +254,7 @@ function post_comment_script()
 	}
 
 	// Post comment
-	actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum);
+	actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum,false,NULL,false,false,false,$time);
 
 	// Get new comments state
 	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,false,$submitter,$allow_comments==2);
@@ -698,9 +699,10 @@ function extract_topic_identifier($full_text)
  * @param  boolean		Whether to force allowance
  * @param  boolean		Whether to skip a success message
  * @param  boolean		Whether posts made should not be shared
+ * @param  ?TIME			Time of comment topic (NULL: now)
  * @return boolean		Whether a hidden post has been made
  */
-function actualise_post_comment($allow_comments,$content_type,$content_id,$content_url,$content_title,$forum=NULL,$avoid_captcha=false,$validated=NULL,$explicit_allow=false,$no_success_message=false,$private=false)
+function actualise_post_comment($allow_comments,$content_type,$content_id,$content_url,$content_title,$forum=NULL,$avoid_captcha=false,$validated=NULL,$explicit_allow=false,$no_success_message=false,$private=false,$time=NULL)
 {
 	if (!$explicit_allow)
 	{
@@ -725,14 +727,17 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	$post_title=post_param('title',NULL);
 	if ((is_null($post_title)) && (!$forum_tie)) return false;
 
-	$post=post_param('post',NULL);
-	if (($post=='') && ($post_title!==''))
+	$post=post_param('post','');
+	if (!is_null($post_title))
 	{
-		$post=$post_title;
-		$post_title='';
+		if (($post=='') && ($post_title!=''))
+		{
+			$post=$post_title;
+			$post_title='';
+		}
+		if ($post=='') warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','post'));
 	}
-	if ($post==='') warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','post'));
-	if (is_null($post)) $post='';
+
 	$email=trim(post_param('email',''));
 	if ($email!='')
 	{
@@ -769,7 +774,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		$content_url_flat,
 
 		// Define more about what is being posted,
-		NULL,
+		$time,
 		NULL,
 		$validated,
 		$explicit_allow?1:NULL,

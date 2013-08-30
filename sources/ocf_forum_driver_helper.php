@@ -74,7 +74,7 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
  * @param  string			The topic title; must be same as content title if this is for a comment topic
  * @param  string			This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
  * @param  ?URLPATH		URL to the content (NULL: do not make spacer post)
- * @param  ?TIME			The post time (NULL: use current time)
+ * @param  ?TIME			The topic time (NULL: use current time)
  * @param  ?IP				The post IP address (NULL: use current members IP address)
  * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
  * @param  ?BINARY		Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
@@ -84,9 +84,10 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
  * @param  boolean		Whether the reply is only visible to staff
  * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
  * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
+ * @param  ?TIME			The post time (NULL: use current time)
  * @return array			Topic ID (may be NULL), and whether a hidden post has been made
  */
-function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category)
+function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category,$time_post)
 {
 	if (is_null($time)) $time=time();
 	if (is_null($ip)) $ip=get_ip_address();
@@ -168,7 +169,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 	ocf_check_post($post,$topic_id,$member_id);
 	$poster_name=$poster_name_if_guest;
 	if ($poster_name=='') $poster_name=$this_ref->get_username($member_id);
-	$post_id=ocf_make_post($topic_id,$post_title,$post,0,$is_starter,$validated,0,$poster_name,$ip,$time,$member_id,($staff_only?$GLOBALS['FORUM_DRIVER']->get_guest_id():NULL),NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,$skip_post_checks,false,false,$parent_id,false);
+	$post_id=ocf_make_post($topic_id,$post_title,$post,0,$is_starter,$validated,0,$poster_name,$ip,$time_post,$member_id,($staff_only?$GLOBALS['FORUM_DRIVER']->get_guest_id():NULL),NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,$skip_post_checks,false,false,$parent_id,false);
 	$GLOBALS['LAST_POST_ID']=$post_id;
 
 	if ($is_new)

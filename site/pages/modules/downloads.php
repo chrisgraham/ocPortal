@@ -568,7 +568,8 @@ class Module_downloads
 			$myrow['submitter'],
 			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF',NULL,false,false,true),
 			$name,
-			find_overridden_comment_forum('downloads',strval($myrow['category_id']))
+			find_overridden_comment_forum('downloads',strval($myrow['category_id'])),
+			$myrow['add_date']
 		);
 
 		// Views
