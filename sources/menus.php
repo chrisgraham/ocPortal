@@ -237,7 +237,7 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 	{
 		if ($silent_failure) return new ocp_tempcode();
 		$redirect=get_self_url(true,true);
-		$_add_url=build_url(array('page'=>'admin_menus','type'=>'edit','id'=>$menu,'redirect'=>$redirect,'wide'=>1),'adminzone');
+		$_add_url=build_url(array('page'=>'admin_menus','type'=>'edit','id'=>$menu,'redirect'=>$redirect),'adminzone');
 		$add_url=$_add_url->evaluate();
 		return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'276e6600571b8b4717ca742b6e9da17a','MESSAGE'=>do_lang_tempcode('MISSING_MENU',escape_html($menu),escape_html($add_url))));
 	}
@@ -283,7 +283,7 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 	if (($menu[0]!='_') && (substr($menu,0,3)!='!!!') && (has_actual_page_access(get_member(),'admin_menus')))
 	{
 		$redirect=get_self_url(true,true);
-		$url=build_url(array('page'=>'admin_menus','type'=>'edit','id'=>$root['special'],'redirect'=>$redirect,'wide'=>1,'clickable_sections'=>(($type=='popup') || ($type=='dropdown'))?1:0),'adminzone');
+		$url=build_url(array('page'=>'admin_menus','type'=>'edit','id'=>$root['special'],'redirect'=>$redirect,'clickable_sections'=>(($type=='popup') || ($type=='dropdown'))?1:0),'adminzone');
 		$content->attach(do_template('MENU_STAFF_LINK',array('_GUID'=>'a5209ec65425bed1207e2f667d9116f6','TYPE'=>$type,'EDIT_URL'=>$url,'NAME'=>$menu)));
 	}
 

@@ -194,7 +194,7 @@ class Block_main_gallery_embed
 					case 'image':
 						// Display image
 						$row_image=$c[0];
-						$view_url=build_url(array('page'=>'galleries','type'=>'image','wide'=>1,'id'=>$row_image['id'],'root'=>$root),$zone);
+						$view_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row_image['id'],'root'=>$root),$zone);
 						$thumb_url=ensure_thumbnail($row_image['url'],$row_image['thumb_url'],'galleries','images',$row_image['id']);
 						$thumb=do_image_thumb($thumb_url,'',true);
 						$full_url=$row_image['url'];
@@ -240,7 +240,7 @@ class Block_main_gallery_embed
 					case 'video':
 						// Display video
 						$row_video=$c[0];
-						$view_url=build_url(array('page'=>'galleries','type'=>'video','wide'=>1,'id'=>$row_video['id'],'root'=>$root),$zone);
+						$view_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row_video['id'],'root'=>$root),$zone);
 						$thumb_url=$row_video['thumb_url'];
 						if (($thumb_url!='') && (url_is_local($thumb_url))) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 						if ($thumb_url=='') $thumb_url=find_theme_image('na');

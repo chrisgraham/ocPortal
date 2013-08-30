@@ -93,7 +93,7 @@ class Block_main_iotd
 		$image_url=$myrow['url'];
 		if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
 
-		$view_url=build_url(array('page'=>'iotds','wide'=>1,'type'=>'view','id'=>$myrow['id']),$zone);
+		$view_url=build_url(array('page'=>'iotds','type'=>'view','id'=>$myrow['id']),$zone);
 
 		$i_title=get_translated_tempcode($myrow['i_title']);
 		$caption=get_translated_tempcode($myrow['caption']);

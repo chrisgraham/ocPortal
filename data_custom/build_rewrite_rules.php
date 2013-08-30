@@ -40,9 +40,9 @@ $rewrite_rules=array(
 	array(
 		'PG STYLE: These have a specially reduce form (wide is implied)',
 		array(
-			array('^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$','$1index.php\?page=galleries&type=image&id=$2&wide=1$3',array('L','QSA'),true),
-			array('^([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$','$1index.php\?page=galleries&type=video&id=$2&wide=1$3',array('L','QSA'),true),
-			array('^([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$','$1index.php\?page=iotds&type=view&id=$2&wide=1$3',array('L','QSA'),true),
+			array('^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$','$1index.php\?page=galleries&type=image&id=$2$3',array('L','QSA'),true),
+			array('^([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$','$1index.php\?page=galleries&type=video&id=$2$3',array('L','QSA'),true),
+			array('^([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$','$1index.php\?page=iotds&type=view&id=$2$3',array('L','QSA'),true),
 		),
 	),
 
@@ -60,9 +60,9 @@ $rewrite_rules=array(
 		'PG STYLE: Now the same as the above sets, but without any additional parameters (and thus no index.php)',
 		array(
 			array('^([^=]*)pg/s/([^\&\?]*)$','$1index.php\?page=wiki&id=$2',array('L','QSA'),true),
-			array('^([^=]*)pg/galleries/image/([^\&\?]*)$','$1index.php\?page=galleries&type=image&id=$2&wide=1$3',array('L','QSA'),true),
-			array('^([^=]*)pg/galleries/video/([^\&\?]*)$','$1index.php\?page=galleries&type=video&id=$2&wide=1$3',array('L','QSA'),true),
-			array('^([^=]*)pg/iotds/view/([^\&\?]*)$','$1index.php\?page=iotds&type=view&id=$2&wide=1',array('L','QSA'),true),
+			array('^([^=]*)pg/galleries/image/([^\&\?]*)$','$1index.php\?page=galleries&type=image&id=$2$3',array('L','QSA'),true),
+			array('^([^=]*)pg/galleries/video/([^\&\?]*)$','$1index.php\?page=galleries&type=video&id=$2$3',array('L','QSA'),true),
+			array('^([^=]*)pg/iotds/view/([^\&\?]*)$','$1index.php\?page=iotds&type=view&id=$2',array('L','QSA'),true),
 			array('^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/$','$1index.php\?page=$2&type=$3&id=$4',array('L','QSA'),true),
 			array('^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)$','$1index.php\?page=$2&type=$3&id=$4',array('L','QSA'),true),
 			array('^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$','$1index.php\?page=$2&type=$3',array('L','QSA'),true),
@@ -74,9 +74,9 @@ $rewrite_rules=array(
 		'PG STYLE: And these for those nasty situations where index.php was missing and we couldn\'t do anything about it (usually due to keep_session creeping into a semi-cached URL)',
 		array(
 			array('^([^=]*)pg/s/([^\&\?\.]*)&(.*)$','$1index.php\?$3&page=wiki&id=$2',array('L','QSA'),true),
-			array('^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$','$1index.php\?$5&page=galleries&type=image&id=$2&wide=1&$3',array('L','QSA'),true),
-			array('^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$','$1index.php\?$5&page=galleries&type=video&id=$2&wide=1&$3',array('L','QSA'),true),
-			array('^([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$','$1index.php\?$3&page=iotds&type=view&id=$2&wide=1',array('L','QSA'),true),
+			array('^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$','$1index.php\?$5&page=galleries&type=image&id=$2&$3',array('L','QSA'),true),
+			array('^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$','$1index.php\?$5&page=galleries&type=video&id=$2&$3',array('L','QSA'),true),
+			array('^([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$','$1index.php\?$3&page=iotds&type=view&id=$2',array('L','QSA'),true),
 			array('^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$','$1index.php\?$5&page=$2&type=$3&id=$4',array('L','QSA'),true),
 			array('^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$','$1index.php\?$4&page=$2&type=$3',array('L','QSA'),true),
 			array('^([^=]*)pg/([^/\&\?\.]*)&(.*)$','$1index.php\?$3&page=$2',array('L','QSA'),true),
@@ -96,9 +96,9 @@ $rewrite_rules=array(
 	array(
 		'HTM STYLE: These have a specially reduce form (wide is implied)',
 		array(
-			array('^('.$zone_list.')/galleries/image/([^\&\?]*)\.htm$','$1/index.php\?page=galleries&type=image&id=$2&wide=1',array('L','QSA'),true),
-			array('^('.$zone_list.')/galleries/video/([^\&\?]*)\.htm$','$1/index.php\?page=galleries&type=video&id=$2&wide=1',array('L','QSA'),true),
-			array('^('.$zone_list.')/iotds/view/([^\&\?]*)\.htm$','$1/index.php\?page=iotds&type=view&id=$2&wide=1',array('L','QSA'),true),
+			array('^('.$zone_list.')/galleries/image/([^\&\?]*)\.htm$','$1/index.php\?page=galleries&type=image&id=$2',array('L','QSA'),true),
+			array('^('.$zone_list.')/galleries/video/([^\&\?]*)\.htm$','$1/index.php\?page=galleries&type=video&id=$2',array('L','QSA'),true),
+			array('^('.$zone_list.')/iotds/view/([^\&\?]*)\.htm$','$1/index.php\?page=iotds&type=view&id=$2',array('L','QSA'),true),
 		),
 	),
 
@@ -127,9 +127,9 @@ $rewrite_rules=array(
 	array(
 		'SIMPLE STYLE: These have a specially reduce form (wide is implied)',
 		array(
-			array('^('.$zone_list.')/galleries/image/([^\&\?]*)$','$1/index.php\?page=galleries&type=image&id=$2&wide=1',array('L','QSA'),false),
-			array('^('.$zone_list.')/galleries/video/([^\&\?]*)$','$1/index.php\?page=galleries&type=video&id=$2&wide=1',array('L','QSA'),false),
-			array('^('.$zone_list.')/iotds/view/([^\&\?]*)$','$1/index.php\?page=iotds&type=view&id=$2&wide=1',array('L','QSA'),false),
+			array('^('.$zone_list.')/galleries/image/([^\&\?]*)$','$1/index.php\?page=galleries&type=image&id=$2',array('L','QSA'),false),
+			array('^('.$zone_list.')/galleries/video/([^\&\?]*)$','$1/index.php\?page=galleries&type=video&id=$2',array('L','QSA'),false),
+			array('^('.$zone_list.')/iotds/view/([^\&\?]*)$','$1/index.php\?page=iotds&type=view&id=$2',array('L','QSA'),false),
 		),
 	),
 

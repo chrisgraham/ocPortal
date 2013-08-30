@@ -188,7 +188,7 @@ class Module_admin_menus
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
 		// Actualiser URL
-		$map=array('page'=>'_SELF','type'=>'edit','wide'=>1);
+		$map=array('page'=>'_SELF','type'=>'edit');
 		if (get_param('redirect','!')!='!') $map['redirect']=get_param('redirect');
 		$post_url=build_url($map,'_SELF',NULL,false,true);
 
@@ -455,7 +455,7 @@ class Module_admin_menus
 				$_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 			} else
 			{
-				$_url=build_url(array('page'=>'_SELF','type'=>'edit','wide'=>1,'id'=>$menu_id),'_SELF');
+				$_url=build_url(array('page'=>'_SELF','type'=>'edit','id'=>$menu_id),'_SELF');
 			}
 			$url=$_url->evaluate();
 		}

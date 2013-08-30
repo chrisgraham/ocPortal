@@ -764,7 +764,7 @@ class Module_galleries
 				$thumb_url=$row['thumb_url'];
 				$url=$row['url'];
 				$video_player=show_gallery_media($url,$thumb_url,$row['video_width'],$row['video_height'],$row['video_length']);
-				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 
 				// Some extra variables relating to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
@@ -828,7 +828,7 @@ class Module_galleries
 					$thumb_url=get_custom_base_url().'/'.$thumb_url;
 				} else $file_size='';
 				$full_url=$thumb_url;
-				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 
 				// Some extra variables relatin to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
@@ -902,7 +902,7 @@ class Module_galleries
 			$entry_description=get_translated_tempcode($row['description']);
 
 			$probe_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'flow_mode_interface'=>get_param_integer('flow_mode_interface',NULL),'probe_type'=>$type,'probe_id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
-			$view_url_2=build_url(array('page'=>'_SELF','wide'=>1,'type'=>$type,'id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+			$view_url_2=build_url(array('page'=>'_SELF','type'=>$type,'id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 			if (array_key_exists('url',$row))
 			{
 				$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
@@ -1573,7 +1573,7 @@ class Module_galleries
 		if (!is_null($back_id))
 		{
 			$slideshow_previous_url=build_url(array('page'=>'_SELF','type'=>$back_type,'wide_high'=>1,'id'=>$back_id,'slideshow'=>1,'ajax'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
-			$back_url=build_url(array('page'=>'_SELF','type'=>$back_type,'wide'=>1,'id'=>$back_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
+			$back_url=build_url(array('page'=>'_SELF','type'=>$back_type,'id'=>$back_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
 		} else
 		{
 			$slideshow_previous_url=new ocp_tempcode();
@@ -1582,7 +1582,7 @@ class Module_galleries
 		if (!is_null($next_id))
 		{
 			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'wide_high'=>1,'id'=>$next_id,'slideshow'=>1,'ajax'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
-			$next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'wide'=>1,'id'=>$next_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
+			$next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'id'=>$next_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
 		} else
 		{
 			$slideshow_next_url=new ocp_tempcode();

@@ -2644,9 +2644,9 @@ RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?p
 RewriteRule ^([^=]*)pg/s/([^\&\?]*)/index\.php$ $1index.php\?page=wiki&id=$2 [L,QSA]
 
 # PG STYLE: These have a specially reduce form (wide is implied)
-RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,QSA]
-RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,QSA]
-RewriteRule ^([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=iotds&type=view&id=$2&wide=1$3 [L,QSA]
+RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=image&id=$2$3 [L,QSA]
+RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=video&id=$2$3 [L,QSA]
+RewriteRule ^([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=iotds&type=view&id=$2$3 [L,QSA]
 
 # PG STYLE: These are standard patterns
 RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=$2&type=$3&id=$4$5 [L,QSA]
@@ -2656,9 +2656,9 @@ RewriteRule ^([^=]*)pg/index\.php(.*)$ $1index.php\?page=$3 [L,QSA]
 
 # PG STYLE: Now the same as the above sets, but without any additional parameters (and thus no index.php)
 RewriteRule ^([^=]*)pg/s/([^\&\?]*)$ $1index.php\?page=wiki&id=$2 [L,QSA]
-RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)$ $1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,QSA]
-RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)$ $1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,QSA]
-RewriteRule ^([^=]*)pg/iotds/view/([^\&\?]*)$ $1index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
+RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)$ $1index.php\?page=galleries&type=image&id=$2$3 [L,QSA]
+RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)$ $1index.php\?page=galleries&type=video&id=$2$3 [L,QSA]
+RewriteRule ^([^=]*)pg/iotds/view/([^\&\?]*)$ $1index.php\?page=iotds&type=view&id=$2 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/$ $1index.php\?page=$2&type=$3&id=$4 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)$ $1index.php\?page=$2&type=$3&id=$4 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$ $1index.php\?page=$2&type=$3 [L,QSA]
@@ -2666,9 +2666,9 @@ RewriteRule ^([^=]*)pg/([^/\&\?]*)$ $1index.php\?page=$2 [L,QSA]
 
 # PG STYLE: And these for those nasty situations where index.php was missing and we couldn't do anything about it (usually due to keep_session creeping into a semi-cached URL)
 RewriteRule ^([^=]*)pg/s/([^\&\?\.]*)&(.*)$ $1index.php\?$3&page=wiki&id=$2 [L,QSA]
-RewriteRule ^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=image&id=$2&wide=1&$3 [L,QSA]
-RewriteRule ^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=video&id=$2&wide=1&$3 [L,QSA]
-RewriteRule ^([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=iotds&type=view&id=$2&wide=1 [L,QSA]
+RewriteRule ^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=image&id=$2&$3 [L,QSA]
+RewriteRule ^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=video&id=$2&$3 [L,QSA]
+RewriteRule ^([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=iotds&type=view&id=$2 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=$2&type=$3&id=$4 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php\?$4&page=$2&type=$3 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=$2 [L,QSA]
@@ -2678,9 +2678,9 @@ RewriteRule ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm$ $1/inde
 RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=wiki&id=$1 [L,QSA]
 
 # HTM STYLE: These have a specially reduce form (wide is implied)
-RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,QSA]
-RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=image&id=$2 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=video&id=$2 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm$ $1/index.php\?page=iotds&type=view&id=$2 [L,QSA]
 
 # HTM STYLE: These are standard patterns
 RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$ $1/index.php\?page=$2&type=$3&id=$4 [L,QSA]
@@ -2695,9 +2695,9 @@ RewriteRule ^([^/\&\?]+)\.htm$ index.php\?page=$1 [L,QSA]
 #RewriteRule ^s/([^\&\?]*)$ index\.php\?page=wiki&id=$1 [L,QSA]
 
 # SIMPLE STYLE: These have a specially reduce form (wide is implied)
-#RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,QSA]
-#RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)$ $1/index.php\?page=galleries&type=video&id=$2&wide=1 [L,QSA]
-#RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)$ $1/index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)$ $1/index.php\?page=galleries&type=image&id=$2 [L,QSA]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)$ $1/index.php\?page=galleries&type=video&id=$2 [L,QSA]
+#RewriteRule ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)$ $1/index.php\?page=iotds&type=view&id=$2 [L,QSA]
 
 # SIMPLE STYLE: These are standard patterns
 #RewriteRule ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$ $1/index.php\?page=$2&type=$3&id=$4 [L,QSA]

@@ -47,12 +47,12 @@ function get_remappings($url_scheme)
 			}
 			if (addon_installed('galleries'))
 			{
-				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'pg/galleries/image/ID',false);
-				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'pg/galleries/video/ID',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL),'pg/galleries/image/ID',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL),'pg/galleries/video/ID',false);
 			}
 			if (addon_installed('iotds'))
 			{
-				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'pg/iotds/view/ID',false);
+				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL),'pg/iotds/view/ID',false);
 			}
 			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'pg/PAGE/TYPE/ID',false);
 			$rules[]=array(array('page'=>NULL,'type'=>NULL),'pg/PAGE/TYPE',false);
@@ -68,12 +68,12 @@ function get_remappings($url_scheme)
 			}
 			if (addon_installed('galleries'))
 			{
-				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'galleries/image/ID.htm',false);
-				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'galleries/video/ID.htm',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL),'galleries/image/ID.htm',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL),'galleries/video/ID.htm',false);
 			}
 			if (addon_installed('iotds'))
 			{
-				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'iotds/view/ID.htm',false);
+				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL),'iotds/view/ID.htm',false);
 			}
 			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID.htm',false);
 			$rules[]=array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE.htm',false);
@@ -89,12 +89,12 @@ function get_remappings($url_scheme)
 			}
 			if (addon_installed('galleries'))
 			{
-				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>'1'),'galleries/image/ID',false);
-				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>'1'),'galleries/video/ID',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL),'galleries/image/ID',false);
+				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL),'galleries/video/ID',false);
 			}
 			if (addon_installed('iotds'))
 			{
-				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>'1'),'iotds/view/ID',false);
+				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL),'iotds/view/ID',false);
 			}
 			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID',false);
 			$rules[]=array(array('page'=>NULL,'type'=>'misc'),'PAGE',false);

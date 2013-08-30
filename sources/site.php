@@ -1541,7 +1541,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		$redirect=get_self_url(true,false,array('redirect'=>NULL,'redirected'=>NULL));
 		if ((($codename=='panel_left') || ($codename=='panel_right')) && (has_js()) && (has_actual_page_access(get_member(),'admin_zones')))
 		{
-			$edit_url=build_url(array('page'=>'admin_zones','type'=>'_editor','id'=>get_zone_name(),'redirect'=>$redirect,'wide'=>1),get_module_zone('admin_zones'));
+			$edit_url=build_url(array('page'=>'admin_zones','type'=>'_editor','id'=>get_zone_name(),'redirect'=>$redirect),get_module_zone('admin_zones'));
 		} else
 		{
 			$edit_url=build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename,/*'lang'=>user_lang(),*/'redirect'=>$redirect),get_module_zone('cms_comcode_pages'));

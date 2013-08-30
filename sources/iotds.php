@@ -56,7 +56,7 @@ function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$giv
 	$image_url=url_is_local($myrow['url'])?(get_custom_base_url().'/'.$myrow['url']):$myrow['url'];
 	$thumb=do_image_thumb($thumb_url,'');
 
-	$view_url=build_url(array('page'=>'iotds','type'=>'view','wide'=>1,'id'=>$myrow['id']),$zone);
+	$view_url=build_url(array('page'=>'iotds','type'=>'view','id'=>$myrow['id']),$zone);
 
 	return do_template('IOTD_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'01162a9cc9bb6c4d0e79715f30aa141e',

@@ -2388,7 +2388,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 					NULL,				 // Add one
 					(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_galleries',array('galleries',$cat))))?NULL:array('_SELF',array('type'=>$video?'_ev':'_ed','id'=>$id),'_SELF'),			// Edit this
 					has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array('_SELF',array('type'=>$video?'ev':'ed'),'_SELF',do_lang($video?'EDIT_VIDEO':'EDIT_IMAGE')):NULL,							// Edit one
-					is_null($id)?NULL:array('galleries',array('type'=>$video?'video':'image','id'=>$id,'wide'=>1),get_module_zone('galleries')),	  // View this
+					is_null($id)?NULL:array('galleries',array('type'=>$video?'video':'image','id'=>$id),get_module_zone('galleries')),	  // View this
 					array('galleries',array('type'=>'misc'),get_module_zone('galleries'),do_lang_tempcode('GALLERIES')),							// View archive
 					array('_SELF',array('type'=>$video?'av':'ad'),'_SELF',do_lang($video?'ADD_VIDEO':'ADD_IMAGE')),		// Add to category
 					has_privilege(get_member(),'submit_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang('ADD_GALLERY')):NULL,				// Add one category
