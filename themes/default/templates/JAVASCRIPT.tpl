@@ -3172,6 +3172,7 @@ function set_up_change_monitor(id)
 function prepare_mass_select_marker(set,type,id,checked)
 {
 	var mass_delete_form=document.getElementById('mass_select_form__'+set);
+	if (!mass_delete_form) mass_delete_form=document.getElementById('mass_select_button').form;
 	var key=type+'_'+id;
 	var hidden;
 	if (typeof mass_delete_form.elements[key]=='undefined')
@@ -3188,7 +3189,7 @@ function prepare_mass_select_marker(set,type,id,checked)
 	mass_delete_form.style.display='block';
 }
 
-function confirm_delete(form,multi)
+function confirm_delete(form,multi,callback)
 {
 	if (typeof multi=='undefined') var multi=false;
 
@@ -3198,7 +3199,13 @@ function confirm_delete(form,multi)
 		{
 			if (result)
 			{
-				form.submit();
+				if (typeof callback!='undefined')
+				{
+					callback();
+				} else
+				{
+					form.submit();
+				}
 			}
 		}
 	);

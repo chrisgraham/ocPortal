@@ -37,6 +37,7 @@ class Module_cms_galleries extends standard_crud_module
 	var $award_type='image';
 	var $menu_label='GALLERIES';
 	var $table='images';
+	var $supports_mass_delete=true;
 
 	var $donext_type=NULL;
 
@@ -928,7 +929,7 @@ class Module_cms_galleries extends standard_crud_module
 		$archive_url=build_url(array('page'=>'galleries'),get_module_zone('galleries'));
 
 		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_galleries')?NULL:get_member();
-		$tree=form_input_tree_list(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_IMAGE'),'id',NULL,'choose_image',array('filter'=>'only_conventional_galleries','only_owned'=>$only_owned,'editable_filter'=>true),true);
+		$tree=form_input_tree_list(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_IMAGE'),'id',NULL,'choose_image',array('filter'=>'only_conventional_galleries','only_owned'=>$only_owned,'editable_filter'=>true),true,NULL,false,NULL,has_js() && $this->supports_mass_delete);
 		return array($tree,$search_url,$archive_url);
 	}
 
@@ -1375,6 +1376,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 	var $award_type='video';
 	var $menu_label='GALLERIES';
 	var $table='videos';
+	var $supports_mass_delete=true;
 
 	var $donext_type=NULL;
 
@@ -1481,7 +1483,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$archive_url=build_url(array('page'=>'galleries'),get_module_zone('galleries'));
 
 		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_galleries')?NULL:get_member();
-		$tree=form_input_tree_list(do_lang_tempcode('VIDEO'),'','id',NULL,'choose_video',array('only_owned'=>$only_owned,'editable_filter'=>true),true);
+		$tree=form_input_tree_list(do_lang_tempcode('VIDEO'),'','id',NULL,'choose_video',array('only_owned'=>$only_owned,'editable_filter'=>true),true,NULL,false,NULL,has_js() && $this->supports_mass_delete);
 		return array($tree,$search_url,$archive_url);
 	}
 

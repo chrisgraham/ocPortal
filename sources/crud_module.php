@@ -97,6 +97,7 @@ class standard_crud_module
 	var $lang_type=NULL;
 	var $permission_page_name=NULL;
 	var $edit_keep_validation=false;
+	var $supports_mass_delete=false;
 
 	// These only needed if we are generate nice_get_entries automatically
 	var $table_prefix='';
@@ -986,6 +987,12 @@ class standard_crud_module
 			$iframe_url.=$keep->evaluate();
 		}
 
+		$extra_buttons=mixed();
+		if ($this->supports_mass_delete)
+		{
+			$extra_buttons=do_template('MASS_SELECT_FORM_BUTTONS',array('TYPE'=>$this->award_type));
+		}
+
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'228a05e24253f324ea286ea8ac3d8b02'.get_class($this),
 			'GET'=>true,
@@ -997,6 +1004,7 @@ class standard_crud_module
 			'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
 			'SUBMIT_NAME'=>$submit_name,
 			'SKIP_VALIDATION'=>true,
+			'EXTRA_BUTTONS'=>$extra_buttons,
 		));
 	}
 

@@ -37,6 +37,7 @@ class Module_cms_downloads extends standard_crud_module
 	var $award_type='download';
 	var $menu_label='SECTION_DOWNLOADS';
 	var $table='download_downloads';
+	var $supports_mass_delete=true;
 
 	var $donext_type=NULL;
 
@@ -431,7 +432,7 @@ class Module_cms_downloads extends standard_crud_module
 		$archive_url=build_url(array('page'=>'downloads'),get_module_zone('downloads'));
 
 		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_downloads')?NULL:get_member();
-		$tree=form_input_tree_list(do_lang_tempcode('NAME'),'','id',NULL,'choose_download',array('only_owned'=>$only_owned,'editable_filter'=>true),true);
+		$tree=form_input_tree_list(do_lang_tempcode('NAME'),'','id',NULL,'choose_download',array('only_owned'=>$only_owned,'editable_filter'=>true),true,NULL,false,NULL,has_js() && $this->supports_mass_delete);
 		return array($tree,$search_url,$archive_url);
 	}
 

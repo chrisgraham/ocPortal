@@ -42,6 +42,7 @@ class Module_cms_catalogues extends standard_crud_module
 	var $orderer='ce_add_date';
 	var $table='catalogue_entries';
 	var $title_is_multi_lang=false;
+	var $supports_mass_delete=true;
 
 	var $donext_category_id;
 	var $donext_catalogue_name;
@@ -288,7 +289,7 @@ class Module_cms_catalogues extends standard_crud_module
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues'));
 
 		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_catalogues')?NULL:get_member();
-		$tree=form_input_tree_list(do_lang_tempcode('ENTRY'),'','id',NULL,'choose_catalogue_entry',array('catalogue_name'=>$catalogue_name,'only_owned'=>$only_owned,'editable_filter'=>true),true);
+		$tree=form_input_tree_list(do_lang_tempcode('ENTRY'),'','id',NULL,'choose_catalogue_entry',array('catalogue_name'=>$catalogue_name,'only_owned'=>$only_owned,'editable_filter'=>true),true,NULL,false,NULL,has_js() && $this->supports_mass_delete);
 		return array($tree,$search_url,$archive_url);
 	}
 
