@@ -35,7 +35,7 @@ function init__content3()
 
 abstract class capi_object
 {
-	var $entity_id;
+	var $entity_id=NULL;
 	var $properties=NULL;
 
 	function __construct($entity_id)
@@ -159,7 +159,7 @@ abstract class capi_catalogue_object extends capi_object
 	function _keyfield_entity_id_convert($id,$field)
 	{
 		$cf_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_fields f JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$field,'c_name'=>$this->catalogue));
-		return $GLOBALS['SITE_DB']->query_select_value('catalogue_efv_short','ce_id',array('cf_id'=>$cf_id,'cv_value'=>$id));
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_short','ce_id',array('cf_id'=>$cf_id,'cv_value'=>$id));
 	}
 
 	function set($property_label,$val)
