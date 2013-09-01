@@ -103,6 +103,10 @@ The purpose of this feature is to gradually advertise the features of your websi
 For welcome e-mails to work the ocPortal cron bridge must be configured as discussed in the [page="_SEARCH:tut_configuration"]Configuration tutorial[/page]
 [/surround]
 
+[title="3"]Referencing member-specific data[/title]
+
+As long as you have the newsletters addon installed, welcome emails will piggy-back off the newsletters templating code (regardless of whether the welcome email is being sent to members or to a newsletter). This functionality is as described in the [page="_SEARCH:tut_newsletter"]newsletters tutorial[/page] ("Templated newsletters"); essentially it means you can use things like [tt]{name}[/tt] in there.
+
 [title="2"]CSV files[/title]
 
 You can use [abbr="Comma-Separated-Values"]CSV[/abbr] files to put member data into your website, or to export it. This functionality is available from the 'Tools' section of the Admin Zone. There is full support for auto-creation of usergroups and custom profile fields as required to get the data imported.
