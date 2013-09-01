@@ -23,6 +23,9 @@ function user_sync()
 	global $USER_SYNC_IMPORT_LIMIT;
 	$USER_SYNC_IMPORT_LIMIT=NULL;
 
+	global $DO_USER_SYNC_OFFSET;
+	$DO_USER_SYNC_OFFSET=NULL;
+
 	global $DO_USER_SYNC;
 	$DO_USER_SYNC=true;
 
@@ -31,6 +34,9 @@ function user_sync()
 
 	global $DO_USER_ONLY_ID;
 	$DO_USER_ONLY_ID=NULL;
+
+	global $PROGRESS_UPDATE_GAP;
+	$PROGRESS_UPDATE_GAP=100;
 }
 
 /*
@@ -39,7 +45,7 @@ INBOUND
 
 function user_sync__inbound($since=NULL)
 {
-	global $USER_SYNC_IMPORT_LIMIT,$DO_USER_SYNC,$DO_USER_ONLY_ID;
+	global $USER_SYNC_IMPORT_LIMIT,$DO_USER_SYNC_OFFSET,$DO_USER_SYNC,$DO_USER_ONLY_ID,$PROGRESS_UPDATE_GAP;
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -99,6 +105,10 @@ function user_sync__inbound($since=NULL)
 		// Work out what fields there are
 		$native_fields=user_sync_find_native_fields();
 
+		$time_start=time();
+		$i=$DO_USER_SYNC_OFFSET;
+		$i2=$i;
+
 		// Run query to gather remote data
 		$sql='SELECT * FROM '.$db_table.' WHERE 1=1';
 		if ((!is_null($time_field)) && (!is_null($since)))
@@ -110,14 +120,22 @@ function user_sync__inbound($since=NULL)
 				$sql.=' AND '.$username_field.'='.$dbh->quote(is_array($DO_USER_ONLY_ID)?$DO_USER_ONLY_ID[$j]:$DO_USER_ONLY_ID);
 			}
 		}
+		$sql.=' LIMIT '.strval($DO_USER_SYNC_OFFSET).',18446744073709551615';
 		$sth=$dbh->query($sql);
 
-		$i=0;
-
 		// Handle each user
-		$time_start=time();
 		while (($user=$sth->fetch(PDO::FETCH_ASSOC))!==false)
 		{
+			if (($USER_SYNC_IMPORT_LIMIT!==NULL) && ($i2-$DO_USER_SYNC_OFFSET>=$USER_SYNC_IMPORT_LIMIT))
+			{
+				resourcefs_logging('Partial, got to '.strval($i2).' members','inform');
+				break;
+			}
+			$i2++;
+
+			if ($i!=0 && $i%$PROGRESS_UPDATE_GAP==0)
+				resourcefs_logging('Progress update: imported '.strval($i).' members','inform');
+
 			// Work out username
 			$username='';
 			foreach ($username_fields as $j=>$username_field)
@@ -131,8 +149,6 @@ function user_sync__inbound($since=NULL)
 				resourcefs_logging('Blank username cannot be imported.','warn');
 				continue;
 			}
-
-			if (($USER_SYNC_IMPORT_LIMIT!==NULL) && ($i>=$USER_SYNC_IMPORT_LIMIT)) continue;
 
 			// Bind to existing?
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
@@ -298,7 +314,8 @@ function user_sync__inbound($since=NULL)
 			$i++;
 		}
 		$time_end=time();
-		resourcefs_logging('Imported '.strval($i).' members in '.strval($time_end-$time_start).' seconds','notice');
+		if ($user===false)
+			resourcefs_logging('Imported '.strval($i-$DO_USER_SYNC_OFFSET).' members in '.strval($time_end-$time_start).' seconds','notice');
 	}
 
 	// Customised end code
