@@ -534,7 +534,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 	}
 
 	if ($out_or=='') return ($out_and=='')?'0=1':$out_and;
-	if ($out_and=='') return ($out_or=='')?'0=1':$out_or;
+	if ($out_and=='') return ($out_or=='')?'0=1':('('.$out_or.')');
 
 	return '('.$out_or.') AND ('.$out_and.')';
 }

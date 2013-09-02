@@ -276,7 +276,7 @@ class Module_admin_config
 			add_config_option('STOPFORUMSPAM_API_KEY','stopforumspam_api_key','line','return \'\';','SECURITY','SPAMMER_DETECTION');
 			add_config_option('TORNEVALL_API_USERNAME','tornevall_api_username','line','return class_exists(\'SoapClient\')?\'\':NULL;','SECURITY','SPAMMER_DETECTION');
 			add_config_option('TORNEVALL_API_PASSWORD','tornevall_api_password','line','return class_exists(\'SoapClient\')?\'\':NULL;','SECURITY','SPAMMER_DETECTION');
-			add_config_option('SPAM_BLOCK_LISTS','spam_block_lists','line','return \'*.opm.tornevall.org\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_BLOCK_LISTS','spam_block_lists','line','return \'\';','SECURITY','SPAMMER_DETECTION'); // Not listing "*.opm.tornevall.org" by default, because it keeps IPs for over 365 days, which is okay for blocking e-mail servers/proxies, but not for normal dynamic web IPs
 			add_config_option('SPAM_CACHE_TIME','spam_cache_time','integer','return \'60\';','SECURITY','SPAMMER_DETECTION');
 			add_config_option('SPAM_CHECK_EXCLUSIONS','spam_check_exclusions','line','return \'127.0.0.1,\'.ocp_srv(\'SERVER_ADDR\').\'\';','SECURITY','SPAMMER_DETECTION');
 			add_config_option('SPAM_STALE_THRESHOLD','spam_stale_threshold','integer','return \'31\';','SECURITY','SPAMMER_DETECTION');

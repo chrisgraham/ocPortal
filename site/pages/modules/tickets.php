@@ -778,7 +778,7 @@ class Module_tickets
 		if (is_null($catalogue_id)) return NULL;
 
 		// Category filter
-		$where_clause=db_string_equal_to('r.'.$info['category'],$catalogue_id);
+		$where_clause='r.'.$info['category'].'='.strval($catalogue_id);
 		$boolean_operator='OR';
 		$content_where=build_content_where($content,true,$boolean_operator);
 		$hook_results=$object->run($content,false,'ASC',$max,0,false,$content_where,'',NULL,NULL,'relevance',NULL,$boolean_operator,$where_clause,NULL,true);
@@ -787,6 +787,7 @@ class Module_tickets
 		foreach ($hook_results as $i=>$result)
 		{
 			$result['object']=$object;
+			$result['type']='catalogue_entries';
 			$hook_results[$i]=$result;
 		}
 
