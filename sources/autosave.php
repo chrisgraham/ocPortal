@@ -33,8 +33,8 @@ function clear_ocp_autosave()
 			if (strpos($key,'page'.get_page_name())!==false)
 			{
 				// Has to do both, due to inconsistencies with how PHP reads and sets cookies -- reading de-urlencodes (although not strictly needed), whilst setting does not urlencode; may differ between versions
-				ocp_setcookie(urlencode($key),'0',true);
-				ocp_setcookie($key,'0',true);
+				ocp_setcookie(urlencode($key),'0',false,false,0);
+				ocp_setcookie($key,'0',false,false,0);
 				if ($or_list!='') $or_list.=' OR ';
 				$or_list.=db_string_equal_to('a_key',$key);
 			}

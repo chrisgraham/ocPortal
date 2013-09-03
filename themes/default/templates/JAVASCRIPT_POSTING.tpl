@@ -669,8 +669,7 @@ function init_form_saving(form_id)
 		type=posting_form.elements[i].getAttribute('type');
 		if ((name!='') && ((posting_form.elements[i].nodeName.toLowerCase()=='textarea') || (type=='text') || (type=='color') || (type=='email') || (type=='number') || (type=='range') || (type=='search') || (type=='tel') || (type=='url')))
 		{
-			cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+name;
-			cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
+			cookie_name=get_autosave_cookie_name(name);
 			cookie_value=read_cookie(encodeURIComponent(cookie_name));
 
 			if ((cookie_value!='') && (cookie_value!='0')) // Fields are auto-saved individually, but e know if something was auto-saved via the cookie reference
@@ -717,9 +716,8 @@ function init_form_saving(form_id)
 					{
 						if (typeof fields_to_do[key]!='string') continue;
 
-						cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+key;
-						cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
-						set_cookie(encodeURIComponent(cookie_name),'0',0.1);
+						cookie_name=get_autosave_cookie_name(key);
+						set_cookie(encodeURIComponent(cookie_name),'0',0.167/*4 hours*/);
 					}
 				}
 			}
@@ -743,13 +741,20 @@ function handle_form_saving(event,target,force)
 		target=(event.target)?event.target:event.srcElement;
 	}
 
-	var cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+target.name;
-	cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
-	var value=get_textbox(target)+String.fromCharCode(event.keyCode?event.keyCode:event.charCode);
-	set_cookie(encodeURIComponent(cookie_name),'1',1);
+	var cookie_name=get_autosave_cookie_name(target.name);
+	var value=get_textbox(target)+((event.type=='focus')?'':String.fromCharCode(event.keyCode?event.keyCode:event.charCode));
+	if (value=='') return;
+	set_cookie(encodeURIComponent(cookie_name),'1',0.167/*4 hours*/);
 	require_javascript('javascript_ajax');
 	do_ajax_request('{$FIND_SCRIPT_NOHTTP;,autosave}?type=store'+keep_stub(),function() { },'key='+window.encodeURIComponent(cookie_name)+'&value='+window.encodeURIComponent(value));
 
 	window.last_autosave=this_date;
 }
 
+function get_autosave_cookie_name(field_name)
+{
+	var cookie_name='ocp_autosave_'+window.location.pathname;
+	if (window.location.search.indexOf('type=')!=-1) cookie_name+=window.location.search.replace(/[\?&]redirect=.*/,'');
+	cookie_name+=':'+field_name;
+	return cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
+}

@@ -256,9 +256,10 @@ function delete_session($session)
  * @param  string			The value to store in the cookie
  * @param  boolean		Whether it is a session cookie (gets removed once the browser window closes)
  * @param  boolean		Whether the cookie should not be readable by Javascript
+ * @param  ?integer		Days to store (NULL: default)
  * @return boolean		The result of the PHP setcookie command
  */
-function ocp_setcookie($name,$value,$session=false,$http_only=false)
+function ocp_setcookie($name,$value,$session=false,$http_only=false,$days=NULL)
 {
 	if (($GLOBALS['DEV_MODE']) && (!running_script('occle')) && (get_forum_type()=='ocf') && (get_param_integer('keep_debug_has_cookies',0)==0)) return true;
 
@@ -277,7 +278,7 @@ function ocp_setcookie($name,$value,$session=false,$http_only=false)
 		}
 	}
 
-	$time=$session?NULL:(time()+get_cookie_days()*24*60*60);
+	$time=$session?NULL:(time()+(is_null($days)?get_cookie_days():$days)*24*60*60);
 	if ($cookie_domain=='')
 	{
 		$output=@setcookie($name,$value,$time,$path);
