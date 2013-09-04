@@ -226,6 +226,7 @@ We also have the following which are either unlikely to be useful, or potentiall
   - [tt]min_lastvisit_frequency[/tt] -- set this to the number of seconds waited between the last-visit time being updated (performance tweak, minimises database writes)
   - [tt]no_flood_control[/tt] -- set this to '1' if you will not have flood control
   - [tt]implicit_usergroup_sync[/tt] -- set this to '1' to enable synching of implicit usergroups (see the advanced members tutorial for more information)
+  - [tt]shortened_tempcode[/tt] -- don't store parameter reference origins in Tempcode, which makes Tempcode use less memory/storage/CPU
  - Performance tuning (negative)
   - [tt]allow_admin_in_other_zones[/tt] -- set this to '1' if you want to allow admin and CMS modules to run in other zones (small performance cost)
  - Easter eggs

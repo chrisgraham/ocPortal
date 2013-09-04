@@ -318,6 +318,10 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=N
 						$escaped[]=NULL_ESCAPED;
 						break;
 
+					case '+':
+						$escaped[]=PURE_STRING;
+						break;
+
 					case '@':
 						if (in_array($text[$symbol_pos],array(':','&','/','^',';','~','#','}',',')))
 						{

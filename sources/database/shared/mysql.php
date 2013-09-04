@@ -167,8 +167,9 @@ class Database_super_mysql
 	 * @param  ID_TEXT		The table name
 	 * @param  array			A map of field names to ocPortal field types (with *#? encodings)
 	 * @param  array			The DB connection to make on
+	 * @param  ID_TEXT		The table name with no table prefix
 	 */
-	function db_create_table($table_name,$fields,$db)
+	function db_create_table($table_name,$fields,$db,$raw_table_name)
 	{
 		$type_remap=$this->db_get_type_remap();
 
@@ -197,7 +198,7 @@ class Database_super_mysql
 		$innodb=$this->using_innodb();
 		$table_type=($innodb?'INNODB':'MyISAM');
 		$type_key='engine';
-		if (substr($table_name,-8)=='sessions') $table_type='HEAP';
+		if ($raw_table_name=='sessions') $table_type='HEAP';
 
 		$query='CREATE TABLE '.$table_name.' ('.chr(10).$_fields.'
 			PRIMARY KEY ('.$keys.')

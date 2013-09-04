@@ -86,7 +86,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 	require_code('lang');
 	require_code('urls');
 	$cl=fallback_lang();
-	$bits=array_values(preg_split('#(?<!\\\\)(\{(?=[\dA-Z\$\+\!\_]+[\.`%\*=\;\#\-~\^\|\'&/@]*))|((?<!\\\\)\,)|((?<!\\\\)\})#',$data,-1,PREG_SPLIT_DELIM_CAPTURE));  // One error mail showed on a server it had weird indexes, somehow. Hence the array_values call to reindex it
+	$bits=array_values(preg_split('#(?<!\\\\)(\{(?=[\dA-Z\$\+\!\_]+[\.`%\*=\;\#\-~\^\|\'&/@+]*))|((?<!\\\\)\,)|((?<!\\\\)\})#',$data,-1,PREG_SPLIT_DELIM_CAPTURE));  // One error mail showed on a server it had weird indexes, somehow. Hence the array_values call to reindex it
 	$count=count($bits);
 	$stack=array();
 	$current_level_mode=PARSE_NO_MANS_LAND;
@@ -158,7 +158,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				}
 				$_first_param=$__first_param[0];
 
-				if ($bits[$i-1]=='') $current_level_data[]='""';
+				if (($bits[$i-1]=='') && (count($current_level_data)==0)) $current_level_data[]='""';
 
 				// Return to the previous level
 				$past_level_data=$current_level_data;
@@ -176,7 +176,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				}
 
 				// Handle the level we just closed
-				$_escaped=str_split(preg_replace('#[^:\.`%\*=\;\#\-~\^\|\'&/@]:?#','',$_first_param)); // :? is so that the ":" in lang strings does not get considered an escape
+				$_escaped=str_split(preg_replace('#[^:\.`%\*=\;\#\-~\^\|\'&/@+]:?#','',$_first_param)); // :? is so that the ":" in lang strings does not get considered an escape
 				$escaped=array();
 				foreach ($_escaped as $e)
 				{
@@ -224,8 +224,13 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						case '@':
 							$escaped[]=CC_ESCAPED;
 							break;
+						case '+':
+							$escaped[]=PURE_STRING; // A performance marker
+							break;
 						// This is used as a hint to not preprocess
 						case '-':
+						// NB: we're out of ASCII symbols now. We want to avoid []()<>" brackets, whitespace characters, and control codes, and others are used for Tempcode grammar or are valid identifier characters.
+						//  Actually +/$/! can be used at the end (+ is already taken)
 					}
 				}
 				$_opener_params='';
@@ -237,8 +242,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					$_opener_params.=implode('.',$param);
 				}
 
-				$escaping_symbols_from=array('`','%','*','=',';','#','-','~','^','|','\'','&','.','/','@');
-				$escaping_symbols_to=array('','','','','','','','','','','','','','','');
+				$escaping_symbols_from=array('`','%','*','=',';','#','-','~','^','|','\'','&','.','/','@','+');
+				$escaping_symbols_to=array('','','','','','','','','','','','','','','','');
 				$first_param=str_replace($escaping_symbols_from,$escaping_symbols_to,$_first_param);
 				switch ($past_level_mode)
 				{
@@ -338,29 +343,39 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					case PARSE_PARAMETER:
 						$parameter=str_replace('"','',str_replace("'",'',$first_param));
 						$parameter=preg_replace('#[^\w\_\d]#','',$parameter); // security to stop PHP injection
-						$temp='output_tempcode_parameter( isset ($bound_'.php_addslashes($parameter).')?$bound_'.php_addslashes($parameter).':NULL,"'.php_addslashes($parameter).'","'.php_addslashes($template_name).'")';
-						if ($escaped==array())
+						if ($escaped==array(PURE_STRING))
 						{
-							$current_level_data[]=$temp;
+							$current_level_data[]='$bound_'.php_addslashes($parameter);
 						} else
 						{
-							$s_escaped='';
-							foreach ($escaped as $esc)
+							$temp='otp(isset($bound_'.php_addslashes($parameter).')?$bound_'.php_addslashes($parameter).':NULL';
+							if (get_value('shortened_tempcode')!=='1')
+								$temp.=',"'.php_addslashes($parameter.'/'.$template_name).'"';
+							$temp.=')';
+
+							if ($escaped==array())
 							{
-								if ($s_escaped!='') $s_escaped.=',';
-								$s_escaped.=strval($esc);
-							}
-							if (($s_escaped==strval(ENTITY_ESCAPED)) && (!$GLOBALS['XSS_DETECT']))
-							{
-								$current_level_data[]='( isset ($bound_'.$parameter.')?(((isset($bound_'.$parameter.'->preprocessable_bits)) && ($bound_'.$parameter.'->pure_lang))?'.$temp.':str_replace($GLOBALS[\'HTML_ESCAPE_1_STRREP\'],$GLOBALS[\'HTML_ESCAPE_2\'],'.$temp.')):attach_message(do_lang_tempcode(\'MISSING_TEMPLATE_PARAMETER\',"'.php_addslashes($parameter).'","'.php_addslashes($template_name).'"),"warn"))';
+								$current_level_data[]=$temp;
 							} else
 							{
-								if ($s_escaped==strval(ENTITY_ESCAPED))
+								$s_escaped='';
+								foreach ($escaped as $esc)
 								{
-									$current_level_data[]='( isset ($bound_'.$parameter.')?(((isset($bound_'.$parameter.'->preprocessable_bits)) && ($bound_'.$parameter.'->pure_lang))?'.$temp.':apply_tempcode_escaping_inline(array('.$s_escaped.'),'.$temp.')):attach_message(do_lang_tempcode(\'MISSING_TEMPLATE_PARAMETER\',"'.php_addslashes($parameter).'","'.php_addslashes($template_name).'"),"warn"))';
+									if ($s_escaped!='') $s_escaped.=',';
+									$s_escaped.=strval($esc);
+								}
+								if (($s_escaped==strval(ENTITY_ESCAPED)) && (!$GLOBALS['XSS_DETECT']))
+								{
+									$current_level_data[]='((isset($bound_'.$parameter.'->pure_lang) && $bound_'.$parameter.'->pure_lang)?'.$temp.':str_replace($GLOBALS[\'HTML_ESCAPE_1_STRREP\'],$GLOBALS[\'HTML_ESCAPE_2\'],'.$temp.'))';
 								} else
 								{
-									$current_level_data[]='( isset ($bound_'.$parameter.')?apply_tempcode_escaping_inline(array('.$s_escaped.'),'.$temp.'):attach_message(do_lang_tempcode(\'MISSING_TEMPLATE_PARAMETER\',"'.php_addslashes($parameter).'","'.php_addslashes($template_name).'"),"warn"))';
+									if ($s_escaped==strval(ENTITY_ESCAPED))
+									{
+										$current_level_data[]='((isset($bound_'.$parameter.'->pure_lang) && $bound_'.$parameter.'->pure_lang)?'.$temp.':apply_tempcode_escaping_inline(array('.$s_escaped.'),'.$temp.'))';
+									} else
+									{
+										$current_level_data[]='apply_tempcode_escaping_inline(array('.$s_escaped.'),'.$temp.')';
+									}
 								}
 							}
 						}
@@ -465,13 +480,13 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								$current_level_data[]='(('.$first_directive_param.'==\'\')?('.implode('.',$past_level_data).'):\'\')';
 								break;
 							case 'WHILE':
-								$current_level_data[]='closure_while_loop(array($parameters,$cl),'.chr(10).'create_function(\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'.chr(10).'create_function(\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								$current_level_data[]='closure_while_loop(array($parameters,$cl),'.chr(10).'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'.chr(10).'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
 								break;
 							case 'PHP':
 								$current_level_data[]='closure_eval('.implode('.',$past_level_data).',$parameters)';
 								break;
 							case 'LOOP':
-								$current_level_data[]='closure_loop(array('.$directive_params.',\'vars\'=>$parameters),array($parameters,$cl),'.chr(10).'create_function(\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								$current_level_data[]='closure_loop(array('.$directive_params.',\'vars\'=>$parameters),array($parameters,$cl),'.chr(10).'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
 								break;
 							case 'IF_NON_EMPTY':
 								$current_level_data[]='(('.$first_directive_param.'!=\'\')?('.implode('.',$past_level_data).'):\'\')';
@@ -557,7 +572,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				}
 				break;
 			default:
-				$literal=php_addslashes(str_replace('\,',',',str_replace('\}','}',str_replace('\{','{',$next_token))));
+				$literal=php_addslashes(str_replace(array('\,','\}','\{'),array(',','}','{'),$next_token));
 				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($literal);
 
 				$current_level_data[]='"'.$literal.'"';
@@ -739,10 +754,10 @@ function build_closure_function($myfunc,$parts)
 	{
 		if (strpos($code,'$bound')===false)
 		{
-			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl',\"echo ".php_addslashes($code).";\");\n";
+			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"echo ".php_addslashes($code).";\");\n";
 		} else
 		{
-			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
+			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
 		}
 	} else
 	{

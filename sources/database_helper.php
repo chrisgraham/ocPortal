@@ -157,7 +157,7 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 		$this_ref->connection_write=call_user_func_array(array($this_ref->static_ob,'db_get_connection'),$this_ref->connection_write);
 		_general_db_init();
 	}
-	$this_ref->static_ob->db_create_table($this_ref->table_prefix.$table_name,$fields,$this_ref->connection_write);
+	$this_ref->static_ob->db_create_table($this_ref->table_prefix.$table_name,$fields,$this_ref->connection_write,$table_name);
 
 	// Considering tabes in a DB reference may be in multiple (if they point to same actual DB's), make sure all our DB objects have their cache cleared
 	if (isset($GLOBALS['SITE_DB'])) unset($GLOBALS['SITE_DB']->table_exists_cache[$table_name]);

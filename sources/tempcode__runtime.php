@@ -45,6 +45,7 @@ function init__tempcode__runtime()
 	define('CSS_ESCAPED',13); // To stop CSS injection
 	define('UL2_ESCAPED',14); // rawurlencode
 	define('TEMPCODE_VARIABLE_ESCAPED',15); // Commas become \,
+	define('PURE_STRING',16); // Used to indicating we just put something directly into the output. Works with __toString on PHP5 or normal strings. Does no escaping.
 
 	define('TC_SYMBOL',0);
 	define('TC_KNOWN',1); // Either tempcode or string

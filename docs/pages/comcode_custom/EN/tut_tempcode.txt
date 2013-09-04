@@ -57,7 +57,13 @@ Any Tempcode construct may be escaped (made to fit in an encoding scheme, such a
 [*][tt]%[/tt] Strict codenames
 	(e.g. [tt]ThiS[/tt] [html]&rarr;[/html] [tt]ThiS[/tt]   [i]but[/i]  [tt]This is[/tt]  --> \[\[hack attack]] triggered)
 [/list]
-You can also use [tt]?[/tt] to indicate that a symbol should not be pre-processed, which is very occasionally useful if you want to stop something like a block being preloaded if it is buried under a Tempcode IF directive and hence doesn't always run. Stopping pre-processing will stop any Javascript or [abbr="Cascading Style Sheets"]CSS[/abbr] dependencies being called up, however.
+You can also use [tt]-[/tt] to indicate that a symbol should not be pre-processed, which is very occasionally useful if you want to stop something like a block being preloaded if it is buried under a Tempcode IF directive and hence doesn't always run. Stopping pre-processing will stop any Javascript or [abbr="Cascading Style Sheets"]CSS[/abbr] dependencies being called up, however.
+
+An optimisation is to use [tt]+[/tt] as the only escaping symbol. This indicates that something:
+ - should not be escaped
+ - definitely is passed into the template (no user-friendly warnings will be given if it is not)
+ - should be output directly, the way PHP wants (so will not follows the normal rules for Tempcode display of boolean values or arrays)
+This is substantially faster in terms of the amount of memory, CPU time, and storage. However, it should only really be used by programmers knowing exactly what they are doing.
 
 It is absolutely crucial that Tempcode programmers use the proper escaping. Without it, all kinds of insecurities and unreliabilities can develop. About 50% of parameters in the default ocPortal templates actually use HTML escaping so that plain text placed inside a template does not interfere with the HTML structure itself and displays literally.
 

@@ -40,6 +40,7 @@ function init__tempcode()
 	define('CSS_ESCAPED',13); // To stop CSS injection
 	define('UL2_ESCAPED',14); // rawurlencode
 	define('TEMPCODE_VARIABLE_ESCAPED',15); // Commas become \,
+	define('PURE_STRING',16); // Used to indicating we just put something directly into the output. Works with __toString on PHP5 or normal strings. Does no escaping.
 
 	define('TC_SYMBOL',0);
 	define('TC_KNOWN',1); // Either tempcode or string
@@ -123,20 +124,31 @@ function fast_uniqid()
 }
 
 /**
- * Get a string (natural for Tempcode's stream-based processing-model) representation of a bound Tempcode variable
+ * Get a string (natural for Tempcode's stream-based processing-model) representation of a bound Tempcode variable (LEGACY)
  *
  * @param  mixed				Variable (or NULL if not set)
- * @param  ID_TEXT			The name of the parameter
- * @param  ID_TEXT			The name of the template
+ * @param  ID_TEXT			Where this parameter is referenced, in a compressed reference form
  * @return string				Value
  */
 function output_tempcode_parameter($var,$parameter,$template_name)
 {
+	$origin=$parameter.'/'.$template_name;
+	return otp($var,$origin);
+}
+
+/**
+ * Get a string (natural for Tempcode's stream-based processing-model) representation of a bound Tempcode variable
+ *
+ * @param  mixed				Variable (or NULL if not set)
+ * @param  ID_TEXT			Where this parameter is referenced, in a compressed reference form
+ * @return string				Value
+ */
+function otp($var,$origin='')
+{
 	switch (gettype($var))
 	{
 		case 'NULL':
-			if (strtolower($template_name)!=$template_name && (!is_file(get_file_base().'/themes/default/templates/'.$template_name.'.tpl'))) return ''; // Some kind of custom template, will be error prone
-			return attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$parameter,$template_name),'warn');
+			return missing_template_parameter($origin);
 		case 'string':
 			return $var;
 		case 'object':
@@ -147,6 +159,20 @@ function output_tempcode_parameter($var,$parameter,$template_name)
 	// Assuming array
 	$cnt=count($var);
 	return ($cnt==0)?'':strval($cnt);
+}
+
+/**
+ * Give an error about a missing template parameter
+ *
+ * @param  ID_TEXT			Where this parameter is referenced, in a slash-combined reference form
+ * @return string				Always ""
+ */
+function missing_template_parameter($origin)
+{
+	list($parameter,$template_name)=($origin=='')?array(do_lang('UNKNOWN'),do_lang('UNKNOWN')):explode('/',$origin,2);
+	if (strtolower($template_name)!=$template_name && (!is_file(get_file_base().'/themes/default/templates/'.$template_name.'.tpl'))) return ''; // Some kind of custom template, will be error prone
+	attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$parameter,$template_name),'warn');
+	return '';
 }
 
 /**
@@ -1606,6 +1632,16 @@ class ocp_tempcode
 	/**
 	 * Parses the current tempcode object, then return the parsed string
 	 *
+	 * @return string				The evaluated thing.
+	 */
+	function __toString()
+	{
+		return $this->evaluate();
+	}
+
+	/**
+	 * Parses the current tempcode object, then return the parsed string
+	 *
 	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current user's language)
 	 * @param  mixed				Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
 	 * @param  ?integer			Evaluate at least this much (NULL: evaluate all)
@@ -1728,6 +1764,23 @@ class ocp_tempcode
 		return $this->cached_output;
 	}
 
+}
+
+/**
+ * A template has not been structurally cached, so compile it and store in the cache.
+ *
+ * @param  string				A randomised unique ID
+ * @param  string				Parameters
+ * @return string				The function reference
+ */
+function recall_named_function($id,$parameters,$code)
+{
+	$k='TEMPCODE_FUNCTION__'.$id;
+	if (!isset($GLOBALS[$k]))
+	{
+		$GLOBALS[$k]=create_function($parameters,$code);
+	}
+	return $GLOBALS[$k];
 }
 
 /*f unction tempcode_profile_log($bit)
