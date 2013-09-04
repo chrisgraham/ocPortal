@@ -216,7 +216,7 @@ function edit_ping_script()
 }
 
 /**
- * AJAX script for HTML<>Comcode conversion (and Comcode-Text>Comcode-XML).
+ * AJAX script for HTML<>Comcode conversion.
  */
 function comcode_convert_script()
 {
@@ -239,17 +239,11 @@ function comcode_convert_script()
 		$fields->attach(form_input_tick('Comes from WYSIWYG','','data__is_wysiwyg',false));
 		$fields->attach(form_input_tick('Lax mode (less parse rules)','','lax',false));
 		$hidden=new ocp_tempcode();
-		$hidden->attach(form_input_hidden('to_comcode_xml',strval(either_param_integer('to_comcode_xml',0))));
 		$out2=globalise(do_template('FORM_SCREEN',array('_GUID'=>'dd82970fa1196132e07049871c51aab7','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('VIEW'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('comcode_convert',true),'FIELDS'=>$fields)),NULL,'',true);
 		$out2->evaluate_echo();
 		return;
 	}
-	if (either_param_integer('to_comcode_xml',0)==1)
-	{
-		require_code('comcode_conversion');
-		$out=comcode_text__to__comcode_xml($data);
-	}
-	elseif (either_param_integer('from_html',0)==1)
+	if (either_param_integer('from_html',0)==1)
 	{
 		require_code('comcode_from_html');
 		$out=trim(semihtml_to_comcode($data));

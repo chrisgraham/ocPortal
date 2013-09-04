@@ -108,11 +108,6 @@ class Hook_addon_registry_galleries
 			'sources/hooks/systems/content_meta_aware/video.php',
 			'sources/hooks/systems/content_meta_aware/gallery.php',
 			'sources/hooks/systems/occle_fs/galleries.php',
-			'sources/hooks/systems/video_embed/.htaccess',
-			'sources/hooks/systems/video_embed/index.html',
-			'sources/hooks/systems/video_embed/youtube.php',
-			'sources/hooks/systems/video_embed/vimeo.php',
-			'sources/hooks/systems/video_embed/facebook.php',
 			'sources/hooks/systems/meta/image.php',
 			'sources/hooks/systems/meta/video.php',
 			'sources/hooks/systems/meta/gallery.php',
@@ -125,14 +120,6 @@ class Hook_addon_registry_galleries
 			'GALLERY_ENTRY_WRAP.tpl',
 			'BLOCK_MAIN_GALLERY_EMBED.tpl',
 			'GALLERY_BOX.tpl',
-			'GALLERY_VIDEO_YOUTUBE.tpl',
-			'GALLERY_VIDEO_VIMEO.tpl',
-			'GALLERY_VIDEO_FACEBOOK.tpl',
-			'GALLERY_VIDEO_GENERAL.tpl',
-			'GALLERY_VIDEO_QT.tpl',
-			'GALLERY_VIDEO_RM.tpl',
-			'GALLERY_PDF.tpl',
-			'GALLERY_SWF.tpl',
 			'GALLERY_IMAGE_BOX.tpl',
 			'GALLERY_VIDEO_BOX.tpl',
 			'GALLERY_ENTRY_SCREEN.tpl',
@@ -256,14 +243,6 @@ class Hook_addon_registry_galleries
 				'GALLERY_REGULAR_MODE_SCREEN.tpl'=>'gallery_regular_mode_screen',
 				'GALLERY_ENTRY_SCREEN.tpl'=>'gallery_entry_screen',
 				'GALLERY_NAV.tpl'=>'gallery_entry_screen',
-				'GALLERY_VIDEO_YOUTUBE.tpl'=>'gallery_video_youtube',
-				'GALLERY_VIDEO_VIMEO.tpl'=>'gallery_video_vimeo',
-				'GALLERY_VIDEO_FACEBOOK.tpl'=>'gallery_video_facebook',
-				'GALLERY_VIDEO_GENERAL.tpl'=>'gallery_video_general',
-				'GALLERY_VIDEO_QT.tpl'=>'gallery_video_qt',
-				'GALLERY_VIDEO_RM.tpl'=>'gallery_video_rm',
-				'GALLERY_SWF.tpl'=>'gallery_swf',
-				'GALLERY_PDF.tpl'=>'gallery_pdf',
 				'OCF_MEMBER_PROFILE_GALLERIES.tpl'=>'ocf_member_profile_galleries',
 				'BLOCK_MAIN_PERSONAL_GALLERIES_LIST.tpl'=>'ocf_member_profile_galleries',
 				'GALLERY_VIDEO_BOX.tpl'=>'gallery_video_box',
@@ -363,160 +342,6 @@ class Hook_addon_registry_galleries
 		));
 		return array(
 			lorem_globalise($tab_content,NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__gallery_swf()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('GALLERY_SWF',array(
-					'URL'=>placeholder_url(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__gallery_pdf()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('GALLERY_PDF',array(
-					'URL'=>placeholder_url(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__gallery_video_rm()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('GALLERY_VIDEO_RM',array(
-					'URL'=>placeholder_url(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__gallery_video_qt()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('GALLERY_VIDEO_QT',array(
-					'URL'=>placeholder_url(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__gallery_video_general()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('GALLERY_VIDEO_GENERAL',array(
-					'URL'=>placeholder_url(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__gallery_video_youtube()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('GALLERY_VIDEO_YOUTUBE',array(
-					'URL'=>'4cpX1ZjuaiA',
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__gallery_video_vimeo()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('GALLERY_VIDEO_VIMEO',array(
-					'URL'=>'6636365',
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__gallery_video_facebook()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('GALLERY_VIDEO_FACEBOOK',array(
-					'URL'=>'10150307159560581',
-				)
-			),NULL,'',true),
 		);
 	}
 

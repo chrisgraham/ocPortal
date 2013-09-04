@@ -82,14 +82,6 @@ class Hook_addon_registry_core_rich_media
 			'ATTACHMENTS.tpl',
 			'ATTACHMENTS_BROWSER.tpl',
 			'ATTACHMENTS_BROWSER_ATTACHMENT.tpl',
-			'ATTACHMENT_DOWNLOAD.tpl',
-			'ATTACHMENT_DOWNLOAD_REMOTE.tpl',
-			'ATTACHMENT_IMG.tpl',
-			'ATTACHMENT_IMG_MINI.tpl',
-			'ATTACHMENT_MEDIA.tpl',
-			'ATTACHMENT_QT.tpl',
-			'ATTACHMENT_RM.tpl',
-			'ATTACHMENT_SWF.tpl',
 			'ATTACHMENT_LEFT.tpl',
 			'ATTACHMENT_RIGHT.tpl',
 			'themes/default/images/comcode_emoticon.png',
@@ -119,8 +111,6 @@ class Hook_addon_registry_core_rich_media
 			'COMCODE_EDITOR_MICRO_BUTTON.tpl',
 			'COMCODE_EDIT_SCREEN.tpl',
 			'COMCODE_EMAIL.tpl',
-			'COMCODE_EXP_REF.tpl',
-			'COMCODE_EXP_THUMB.tpl',
 			'COMCODE_FONT.tpl',
 			'COMCODE_TELETYPE.tpl',
 			'COMCODE_SAMP.tpl',
@@ -179,7 +169,6 @@ class Hook_addon_registry_core_rich_media
 			'COMCODE_TAB_HEAD.tpl',
 			'COMCODE_TAB_BODY.tpl',
 			'COMCODE_SNAPBACK.tpl',
-			'COMCODE_SWF.tpl',
 			'COMCODE_TOOLTIP.tpl',
 			'data/attachment.php',
 			'data/attachment_popup.php',
@@ -196,9 +185,7 @@ class Hook_addon_registry_core_rich_media
 			'sources/comcode_check.php',
 			'sources/comcode_from_html.php',
 			'sources/comcode_renderer.php',
-			'sources/comcode_conversion.php',
-			'sources/comcode_text.php',
-			'sources/comcode_xml.php',
+			'sources/comcode_compiler.php',
 			'sources/attachments.php',
 			'sources/attachments2.php',
 			'sources/attachments3.php',
@@ -291,11 +278,8 @@ class Hook_addon_registry_core_rich_media
 			'COMCODE_CONCEPT_INLINE.tpl'=>'comcode_concept_inline',
 			'COMCODE_CONCEPTS_CONCEPT.tpl'=>'comcode_concepts',
 			'COMCODE_CONCEPTS.tpl'=>'comcode_concepts',
-			'COMCODE_EXP_REF.tpl'=>'comcode_exp_ref',
-			'COMCODE_EXP_THUMB.tpl'=>'comcode_exp_thumb',
 			'COMCODE_THUMB.tpl'=>'comcode_thumb',
 			'COMCODE_IMG.tpl'=>'comcode_img',
-			'COMCODE_SWF.tpl'=>'comcode_swf',
 			'COMCODE_URL.tpl'=>'comcode_url',
 			'COMCODE_EMAIL.tpl'=>'comcode_email',
 			'COMCODE_REFERENCE.tpl'=>'comcode_reference',
@@ -336,17 +320,9 @@ class Hook_addon_registry_core_rich_media
 			'COMCODE_TAB_HEAD.tpl'=>'comcode_tab_body',
 			'ATTACHMENTS_BROWSER_ATTACHMENT.tpl'=>'attachments_browser',
 			'ATTACHMENTS_BROWSER.tpl'=>'attachments_browser',
-			'ATTACHMENT_IMG.tpl'=>'attachment_left',
-			'ATTACHMENT_IMG_MINI.tpl'=>'attachment_left',
 			'ATTACHMENT_LEFT.tpl'=>'attachment_left',
 			'ATTACHMENT_RIGHT.tpl'=>'attachment_right',
-			'ATTACHMENT_SWF.tpl'=>'attachment_swf',
-			'ATTACHMENT_QT.tpl'=>'attachment_qt',
-			'ATTACHMENT_RM.tpl'=>'attachment_rm',
-			'ATTACHMENT_MEDIA.tpl'=>'attachment_media',
 			'COMCODE_CODE.tpl'=>'comcode_code',
-			'ATTACHMENT_DOWNLOAD_REMOTE.tpl'=>'attachment_download_remote',
-			'ATTACHMENT_DOWNLOAD.tpl'=>'attachment_download',
 			'COMCODE_CODE_SCROLL.tpl'=>'comcode_table_screens'
 		);
 	}
@@ -1180,45 +1156,6 @@ class Hook_addon_registry_core_rich_media
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__comcode_exp_ref()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('COMCODE_EXP_REF', array(
-				'TEXT'=>lorem_sentence(),
-				'URL'=>placeholder_url()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__comcode_exp_thumb()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('COMCODE_EXP_THUMB', array(
-				'FLOAT'=>'left',
-				'TEXT'=>lorem_sentence(),
-				'URL_THUMB'=>placeholder_image_url(),
-				'URL_FULL'=>placeholder_url(),
-				'SCRIPT'=>'',
-				'SUP_PARAMS'=>'',
-				'ID'=>placeholder_id()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
 	function tpl_preview__comcode_thumb()
 	{
 		return array(
@@ -1249,24 +1186,6 @@ class Hook_addon_registry_core_rich_media
 				'URL'=>placeholder_image_url(),
 				'CAPTION'=>lorem_phrase(),
 				'TOOLTIP'=>lorem_word()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__comcode_swf()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('COMCODE_SWF', array(
-				'URL'=>placeholder_url(),
-				'WIDTH'=>placeholder_number(),
-				'HEIGHT'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -1845,36 +1764,9 @@ class Hook_addon_registry_core_rich_media
 	 */
 	function tpl_preview__attachment_left()
 	{
-		$temp_tpl=do_lorem_template('ATTACHMENT_IMG', array(
-			'A_DESCRIPTION'=>lorem_phrase(),
-			'SCRIPT'=>find_script('attachment'),
-
-			'ID'=>placeholder_id(),
-			'SUP_PARAMS'=>placeholder_id(),
-			'A_THUMB'=>placeholder_image_url(),
-			'FORUM_DB_BIN'=>lorem_word(),
-			'CLEAN_SIZE'=>placeholder_filesize(),
-
-			'A_WIDTH'=>placeholder_number(),
-			'A_HEIGHT'=>placeholder_number(),
-			'A_ORIGINAL_FILENAME'=>lorem_word()
-		));
-		$temp_tpl->attach(do_lorem_template('ATTACHMENT_IMG_MINI', array(
-			'A_DESCRIPTION'=>lorem_phrase(),
-			'SCRIPT'=>placeholder_url(),
-			'PASS_ID'=>placeholder_id(),
-			'ID'=>placeholder_id(),
-			'A_THUMB'=>placeholder_image_url(),
-			'A_URL'=>placeholder_url(),
-			'A_THUMB_URL'=>placeholder_image_url(),
-
-			'A_WIDTH'=>placeholder_number(),
-			'A_HEIGHT'=>placeholder_number(),
-			'A_ORIGINAL_FILENAME'=>lorem_word()
-		)));
 		return array(
 			lorem_globalise(do_lorem_template('ATTACHMENT_LEFT', array(
-				'CONTENT'=>$temp_tpl
+				'CONTENT'=>lorem_paragraph_html(),
 			)), NULL, '', true)
 		);
 	}
@@ -1888,119 +1780,9 @@ class Hook_addon_registry_core_rich_media
 	 */
 	function tpl_preview__attachment_right()
 	{
-		$temp_tpl=do_lorem_template('ATTACHMENT_IMG', array(
-			'A_DESCRIPTION'=>lorem_phrase(),
-			'SCRIPT'=>find_script('attachment'),
-			'ID'=>placeholder_id(),
-			'SUP_PARAMS'=>placeholder_id(),
-			'A_THUMB'=>placeholder_image_url(),
-			'FORUM_DB_BIN'=>lorem_word(),
-			'CLEAN_SIZE'=>placeholder_filesize(),
-
-			'A_WIDTH'=>placeholder_number(),
-			'A_HEIGHT'=>placeholder_number(),
-			'A_ORIGINAL_FILENAME'=>lorem_word()
-		));
 		return array(
 			lorem_globalise(do_lorem_template('ATTACHMENT_RIGHT', array(
-				'CONTENT'=>$temp_tpl
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__attachment_swf()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENT_SWF', array(
-				'SCRIPT'=>placeholder_url(),
-				'ID'=>placeholder_id(),
-				'A_WIDTH'=>placeholder_number(),
-				'A_HEIGHT'=>placeholder_number(),
-				'A_DESCRIPTION'=>lorem_paragraph_html(),
-				'SUP_PARAMS'=>placeholder_blank(),
-				'FORUM_DB_BIN'=>placeholder_blank()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__attachment_qt()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENT_QT', array(
-				'SCRIPT'=>placeholder_url(),
-				'ID'=>placeholder_id(),
-				'A_WIDTH'=>placeholder_number(),
-				'A_HEIGHT'=>placeholder_number(),
-				'A_DESCRIPTION'=>lorem_paragraph_html(),
-				'A_ORIGINAL_FILENAME'=>lorem_word(),
-				'CLEAN_SIZE'=>placeholder_random(),
-				'SUP_PARAMS'=>placeholder_blank(),
-				'FORUM_DB_BIN'=>placeholder_blank(),
-				'MIME_TYPE'=>lorem_word()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__attachment_rm()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENT_RM', array(
-				'SCRIPT'=>placeholder_url(),
-				'ID'=>placeholder_id(),
-				'A_WIDTH'=>placeholder_number(),
-				'A_HEIGHT'=>placeholder_number(),
-				'A_DESCRIPTION'=>lorem_paragraph_html(),
-				'A_ORIGINAL_FILENAME'=>lorem_word(),
-				'CLEAN_SIZE'=>placeholder_random(),
-				'SUP_PARAMS'=>placeholder_blank(),
-				'MIME_TYPE'=>placeholder_id(),
-				'FORUM_DB_BIN'=>placeholder_blank()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__attachment_media()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENT_MEDIA', array(
-				'SCRIPT'=>placeholder_url(),
-				'ID'=>placeholder_id(),
-				'A_WIDTH'=>placeholder_number(),
-				'A_HEIGHT'=>placeholder_number(),
-				'A_DESCRIPTION'=>lorem_paragraph_html(),
-				'A_ORIGINAL_FILENAME'=>lorem_word(),
-				'CLEAN_SIZE'=>placeholder_random(),
-				'SUP_PARAMS'=>placeholder_blank(),
-				'FORUM_DB_BIN'=>placeholder_blank(),
-				'MIME_TYPE'=>lorem_word()
+				'CONTENT'=>lorem_paragraph_html(),
 			)), NULL, '', true)
 		);
 	}
@@ -2020,49 +1802,6 @@ class Hook_addon_registry_core_rich_media
 				'TYPE'=>lorem_phrase(),
 				'CONTENT'=>lorem_phrase(),
 				'TITLE'=>lorem_phrase(),
-				'SUP_PARAMS'=>placeholder_blank(),
-				'FORUM_DB_BIN'=>placeholder_blank()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__attachment_download_remote()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENT_DOWNLOAD_REMOTE', array(
-				'A_DESCRIPTION'=>lorem_word(),
-				'A_ORIGINAL_FILENAME'=>lorem_word_2(),
-				'A_URL'=>placeholder_url(),
-				'ID'=>placeholder_id(),
-				'SUP_PARAMS'=>placeholder_blank(),
-				'FORUM_DB_BIN'=>placeholder_blank()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__attachment_download()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENT_DOWNLOAD', array(
-				'SCRIPT'=>placeholder_url(),
-				'A_DESCRIPTION'=>lorem_word(),
-				'A_ORIGINAL_FILENAME'=>lorem_word_2(),
-				'ID'=>placeholder_id(),
-				'CLEAN_SIZE'=>placeholder_random(),
 				'SUP_PARAMS'=>placeholder_blank(),
 				'FORUM_DB_BIN'=>placeholder_blank()
 			)), NULL, '', true)

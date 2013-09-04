@@ -18,6 +18,10 @@
  * @package		core_rich_media
  */
 
+/*
+Editing/deleting attachments.
+*/
+
 /**
  * Delete the specified attachment
  *

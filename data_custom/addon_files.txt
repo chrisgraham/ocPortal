@@ -1416,7 +1416,7 @@ oc_whitelist
 ------------
  - adminzone/pages/comcode_custom/EN/comcode_whitelist.txt
  - sources_custom/comcode_renderer.php
- - sources_custom/comcode_text.php
+ - sources_custom/comcode_compiler.php
  - sources_custom/hooks/systems/do_next_menus/comcode_whitelist.php
  - text_custom/comcode_whitelist.txt
 
@@ -2014,7 +2014,6 @@ ocportal_tutorials
  - data_custom/images/docs/permissions_Edit-specific-access.png
  - data_custom/images/docs/permissions_Edit-zone-permissions.png
  - data_custom/images/docs/permissions_Mass-checkbox-change.gif
- - data_custom/images/docs/permissions_Mass-checkbox-change.png
  - data_custom/images/docs/permissions_match_keys.png
  - data_custom/images/docs/permissions_Page-permissions-grid.png
  - data_custom/images/docs/permissions_Su.png
@@ -2255,17 +2254,10 @@ release_compile
 ---------------
  - data_custom/make_db_meta_file.php
 
-direct_video_link_posting
--------------------------
- - sources_custom/hooks/systems/comcode_link_handlers/facebook_video.php
- - sources_custom/hooks/systems/comcode_link_handlers/youtube.php
- - sources_custom/hooks/systems/comcode_link_handlers/vimeo.php
- - sources_custom/hooks/systems/comcode_link_handlers/mp3.php
- - sources_custom/hooks/systems/video_embed/cnn.php
- - sources_custom/hooks/systems/video_embed/index.html
- - sources_custom/hooks/systems/video_embed/.htaccess
- - sources_custom/hooks/systems/comcode_link_handlers/cnn.php
- - themes/default/templates_custom/GALLERY_VIDEO_CNN.tpl
+extended_media_rendering
+------------------------
+ - sources_custom/hooks/systems/media_rendering/index.html
+ - sources_custom/hooks/systems/media_rendering/video_cnn.php
 
 member_directory_boxes
 ----------------------

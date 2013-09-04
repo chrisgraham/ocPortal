@@ -215,7 +215,7 @@ function load_html_edit(posting_form,ajax_copy)
 		e=posting_form.elements[counter];
 		id=e.id;
 
-		if ((e.type=='textarea') && (e.className.indexOf('wysiwyg')!=-1) && (!is_comcode_xml(e)))
+		if ((e.type=='textarea') && (e.className.indexOf('wysiwyg')!=-1))
 		{
 			if (document.getElementById(id+'__is_wysiwyg'))
 			{
@@ -499,41 +499,6 @@ function find_tags_in_editor(editor,element)
 // NORMAL EDITOR
 // =============
 
-function is_comcode_xml(element)
-{
-	return (element.value.substr(0,8)=='<comcode');
-}
-
-function convert_xml(name)
-{
-	if (typeof window.do_ajax_request=='undefined') return false;
-	if (typeof window.merge_text_nodes=='undefined') return false;
-
-	var element=document.getElementById(name);
-
-	if (is_wysiwyg_field(element))
-	{
-		window.fauxmodal_alert('{!comcode:COMCODE_XML_CONVERT_NOT_WITH_WYSIWYG;^}');
-		return false;
-	}
-
-	var old_text=element.value;
-	var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?to_comcode_xml=1'+keep_stub());
-	if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
-	var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(old_text).replace(new RegExp(String.fromCharCode(8203),'g'),''));
-	var result=((request) && (request.responseXML) && (request.responseXML.documentElement))?request.responseXML.documentElement.getElementsByTagName('result')[0]:null;
-	if ((result) && (result.childNodes[0].data)) element.value=merge_text_nodes(result.childNodes);
-	else
-	{
-		var error_window=window.open();
-		error_window.document.write(request.responseText);
-		error_window.document.close();
-		window.fauxmodal_alert('{!comcode:COMCODE_XML_CONVERT_PARSE_ERROR;^}');
-	}
-
-	return false;
-}
-
 function do_emoticon(field_name,p,_opener)
 {
 	var element;
@@ -551,7 +516,7 @@ function do_emoticon(field_name,p,_opener)
 	if (title=='') title=p.getElementsByTagName('img')[0].alt; // Might be on image inside link instead
 	title=title.replace(/^.*: /,'');
 
-	var text=is_comcode_xml(element)?('<emoticon>'+escape_html(title)+'</emoticon>'):(' '+title+' ');
+	var text=' '+title+' ';
 
 	if (_opener)
 	{
@@ -572,13 +537,7 @@ function do_attachment(field_name,id,description)
 	element=ensure_true_id(element,field_name);
 
 	var comcode;
-	if (!is_comcode_xml(element))
-	{
-		comcode='\n\n[attachment type="island" description="'+escape_comcode(description)+'"]'+id+'[/attachment]';
-	} else
-	{
-		comcode='<br /><br /><attachment type="island"><attachmentDescription>'+description+'</attachmentDescription>'+id+'</attachment>';
-	}
+	comcode='\n\n[attachment type="island" description="'+escape_comcode(description)+'"]'+id+'[/attachment]';
 
 	insert_textbox_opener(element,comcode);
 }
@@ -643,7 +602,7 @@ function insert_textbox(element,text,sel,plain_insert,html)
 		{
 			var is_block=text.match(/^\s*\[block(.*)\](.*)\[\/block\]\s*$/);
 			var is_non_text_tag=false;
-			var non_text_tags=['section_controller','big_tab_controller','img','currency','contents','concepts','attachment','attachment_safe','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'];
+			var non_text_tags=['section_controller','big_tab_controller','img','currency','contents','concepts','attachment','attachment_safe','flash','media','audio','video','menu','email','reference','page','thumb','snapback','post','topic','include','random','jumping','shocker'];
 			for (var i=0;i<non_text_tags.length;i++)
 				is_non_text_tag=is_non_text_tag || text.match(new RegExp('^\s*\\['+non_text_tags[i]+'([ =].*)?\\](.*)\\[\/'+non_text_tags[i]+'\\]\s*$'));
 			if (is_block || is_non_text_tag)
@@ -766,15 +725,8 @@ function insert_textbox_wrapping(element,before_wrap_tag,after_wrap_tag)
 
 	if (after_wrap_tag=='')
 	{
-		if (!is_comcode_xml(element))
-		{
-			after_wrap_tag='[/'+before_wrap_tag+']';
-			before_wrap_tag='['+before_wrap_tag+']';
-		} else
-		{
-			after_wrap_tag='</'+before_wrap_tag+'>';
-			before_wrap_tag='<'+before_wrap_tag+'>';
-		}
+		after_wrap_tag='[/'+before_wrap_tag+']';
+		before_wrap_tag='['+before_wrap_tag+']';
 	}
 
 	if (is_wysiwyg_field(element))

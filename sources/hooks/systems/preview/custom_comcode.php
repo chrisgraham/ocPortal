@@ -39,7 +39,7 @@ class Hook_Preview_custom_comcode
 	 */
 	function run()
 	{
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 
 		$tag=post_param('tag');
 

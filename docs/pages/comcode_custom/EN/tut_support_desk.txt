@@ -1,6 +1,6 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Running a virtual support desk[/title]
 
-[exp_thumb="Configuring the support ticket and comment topic systems" float="right"]support_forum_config[/exp_thumb]
+[media width="150" description="Configuring the support ticket and comment topic systems" float="right"]data_custom/images/docs/support_forum_config.png[/media]
 ocPortal can be used as an effective support desk tool. For those unfamiliar with the concept of a support desk, or who may not relate their personal needs to being an application of such, these are some common properties of a support desk system:
  - PLACEMENT: the ability for issues to be placed, both by staff, and by the audience being supported
  - NOTIFICATION: notifications, for staff to be made aware of issues
@@ -22,11 +22,11 @@ Four different ocPortal systems may be used to provide such a support desk:
 
 [title="2"]The Support Ticket system[/title]
 [surround]
-[exp_thumb="Managing support ticket types" float="right"]support_ticket_types[/exp_thumb]
+[media width="150" description="Managing support ticket types" float="right"]data_custom/images/docs/support_ticket_types.png[/media]
 {!tickets:DOC_TICKETS}
 [/surround]
-[exp_thumb="Viewing support tickets as staff" float="right"]support_list_tickets[/exp_thumb]
-[exp_thumb="Viewing a support ticket" float="left"]support_show_ticket[/exp_thumb]
+[media width="150" description="Viewing support tickets as staff" float="right"]data_custom/images/docs/support_list_tickets.png[/media]
+[media width="150" description="Viewing a support ticket" float="left"]data_custom/images/docs/support_show_ticket.png[/media]
 However, if these two advantages are not significant, we recommend use of the Discussion Forum directly.
 
 To use the Support Ticket system, you must not be using the 'none' forum driver, and you must have created the support forum that is referenced in the ocPortal configuration (for [concept]OCF[/concept] it's auto-created). It is usual to use page access permissions to restrict access to the support ticket page so that only those that may request support may access the system. Support tickets are not linked to on the menu by default- use the entry point finder tool in the menu editor to create a link.
@@ -176,7 +176,7 @@ For more information on this, see the 'Running a discussion forum based help des
 
 [title="2"]The Feedback system[/title]
 
-[exp_thumb="The feedback commenting system in action" float="right"]support_feedback[/exp_thumb]
+[media width="150" description="The feedback commenting system in action" float="right"]data_custom/images/docs/support_feedback.png[/media]
 Most forms of ocPortal content support commenting, via the feedback system. For example, if enabled for a download, and in ocPortal, the download may have an attached discussion. This discussion is actually stored on the forum in a comment topic.
 
 The advantage of the feedback system over the Discussion Forums is simply that the discussion is attached directly to actual content. For most forms of content, these discussions are unlikely to be classifiable as 'support', but the download system in particular may contain questions and answers relating to the download itself.

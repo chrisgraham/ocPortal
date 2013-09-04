@@ -6,7 +6,7 @@
 
 [title="2"]Shared forum and members[/title]
 
-[exp_thumb="Choose this option if you want to run each site' discussion forum from its own code and URL" float="right"]msn_ocf_local[/exp_thumb]
+[media width="150" description="Choose this option if you want to run each site' discussion forum from its own code and URL" float="right"]data_custom/images/docs/msn_ocf_local.png[/media]
 All that needs to be done to create an M.S.N. is to install each ocPortal such that they all share a common forum driver and forum database. At its heart, this is all a M.S.N. is: ocPortal provides special features that allow this to work comfortably, but there is no specific 'M.S.N.' feature or setting in ocPortal, nor does ocPortal need such.
 
 If you are using a third-party forum, unless the forum itself is modified to work from different URLs, the forums interface will not be integrated into each site. However, all ocPortal functions that work through the forum driver (e.g. comment topics, or support tickets) may be completely customised for the individual websites.
@@ -44,15 +44,15 @@ ocPortal supports a sophisticated theme detection system, whereby ocPortal theme
 2) from the "forum-theme-name-to-ocPortal-theme" mapping of the member chosen forum-themes, if the logged in member has made a choice. In other words, if a member Bob selects a forum theme named ForumFoo, then the ocPortal theme would be whatever the map says that ForumFoo's ocPortal equivalent is (e.g. ocPortalFoo)
 3) from the "forum-theme-name-to-ocPortal-theme" mapping of the forum-theme titled after the name of your website name. In other words, if the forum contains a theme titled "My Site" and your website happens to be called "My Site", then then ocPortal theme would be whatever the map says that MySite's ocPortal equivalent is (e.g. MySiteTheme)
 4) the ocPortal 'default' theme
-[exp_thumb="Configuring the network link URL to point to the central network site" float="right"]msn_netlink_configure[/exp_thumb]
+[media width="150" description="Configuring the network link URL to point to the central network site" float="right"]data_custom/images/docs/msn_netlink_configure.png[/media]
 This system is complicated to understand and configure, and is optional, but it is useful for some websites. If you do not wish to use this system, simply manually select which themes to use for each zone, by editing the zone.
 
 Basically, ocPortal has a file, [tt]themes/map.ini[/tt], that contains entries that link forum-theme-codes to ocPortal-theme-codes. Note that the forum-theme-code is not the same as the forum-theme-title: the relationship between these vary between forums, but most forums define both a humanely readable title and a code-name.
 
 [title="2"]The netlink system[/title]
 
-[exp_thumb="The netlink block" float="left"]msn_netlink_block[/exp_thumb]
-[exp_thumb="Editing the netlink definition file" float="right"]msn_netlink_file[/exp_thumb]
+[media width="150" description="The netlink block" float="left"]data_custom/images/docs/msn_netlink_block.png[/media]
+[media width="150" description="Editing the netlink definition file" float="right"]data_custom/images/docs/msn_netlink_file.png[/media]
 The netlink is a simple but useful feature of multi-site-networks. It provides the navigation aid to move between sites on the network, via a simple drop-down list placed on to your panel via the 'side_network' block.
 
 The netlink system can be configured (from the Admin Zone Configuration module) so that all sites on the network point to a shared netlink definition file. The config option allows you to set the URL to the netlink of one of the network sites (usually the central site).
@@ -67,8 +67,8 @@ To share banners across your network, simply add all banners to the central site
 
 [title="2"]The staff system[/title]
 [surround]
-[exp_thumb="Configuring the staff system" float="left"]msn_staff[/exp_thumb]
-[exp_thumb="Managing staff" float="right"]msn_staff_2[/exp_thumb]
+[media width="150" description="Configuring the staff system" float="left"]data_custom/images/docs/msn_staff.png[/media]
+[media width="150" description="Managing staff" float="right"]data_custom/images/docs/msn_staff_2.png[/media]
 As permissions are set separately on each M.S.N. site (except for forum access permissions), it is possible to assign different staff access to key functions on different sites by usergroup. However, assigning staff is more than a permissive issue, it is also a presentation issue: for the staff page to work, there needs to be some way for ocPortal to actually list staff other than merely by usergroup permission. This is done via the 'staff filter' feature, available under security/usergroup configuration.
 
 The staff filter works by storing 'staff on' lists under all member profiles that would be staff if the filter was off. These are comma-separated lists of site-names the member is staff-on, and are stored as a hidden ocPortal custom profile field.

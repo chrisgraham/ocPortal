@@ -31,7 +31,7 @@ class Hook_occle_notification_occlechat
 		if (is_null($timestamp)) $timestamp=time();
 		$messages=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'occlechat WHERE c_incoming=1 AND c_timestamp>='.strval($timestamp));
 
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 
 		if (count($messages)>0)
 		{

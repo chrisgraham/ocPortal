@@ -45,7 +45,7 @@ The menus themselves aren't saved against how the data is to be used, but for us
 
 [title="2"]Panel pages[/title]
 
-[exp_thumb="Links to edit a panel page and to edit managed menus" float="right"]menus_edit_links[/exp_thumb]
+[media width="150" description="Links to edit a panel page and to edit managed menus" float="right"]data_custom/images/docs/menus_edit_links.png[/media]
 Please see the 'site structure' tutorial for more information on panel pages. This section is only intended to provide a brief orientation to help further clarify the menu relationship. Basically panel pages are pages beginning with the name 'panel_' in the zone of the page being viewed.
 
 Your panel pages by default are just Comcode pages that use the block tag for arrangement of blocks such as the 'login/personal-stats block' (side_personal_stats), and the managed menu block, 'side_stored_menu'. Blocks are described in the 'Advanced custom pages of information (via Comcode)' tutorial, but basically, you can use any of the blocks that begin with the name 'side_' on your panel pages to add dynamic elements, as well as any Comcode (Comcode menus are actually created using the Comcode 'menu' tag). To edit a panel page, make sure you are logged in as a staff member and click the 'edit page' link underneath the pages as they are seen.
@@ -58,7 +58,7 @@ These two statements may confuse you, but I thought it was important at this poi
 
 [title="2"]Adding and editing managed menus[/title]
 
-[exp_thumb="Adding a new menu" float="right"]menus_add_link[/exp_thumb]
+[media width="150" description="Adding a new menu" float="right"]data_custom/images/docs/menus_add_link.png[/media]
 The easiest way to add a new managed menu is to edit a panel page so as to include a 'side_stored_menu' block that uses a menu with a code-name of what you want to create. You can use the 'Add block' button to help you do this. When you view the saved panel ocPortal will detect the menu is missing, and place a link to create the menu there instead of the menu itself (in much the same way it detects a missing page and allows the creation of a new Comcode page). It is important to [b]not[/b] click to add a new menu from the Comcode page preview, unless you open the add link in a new window/tab: this is because the Comcode page editing will not have been confirmed, hence making you repeat the page editing process.
 
 The easiest way to edit a managed menu is to click the 'edit menu' link shown underneath, much like when clicking the 'edit page' link to edit the panel page.
@@ -80,7 +80,7 @@ To resolve this you will need to turn off the caching for the block by adding a 
 
 [title="2"]The menu editor[/title]
 
-[exp_thumb="The menu editor" float="right"]menus_editor[/exp_thumb]
+[media width="150" description="The menu editor" float="right"]data_custom/images/docs/menus_editor.png[/media]
 The menu editing interface is split into three main sections:
  - the actual menu tree structure
  - a form for editing a branch in the tree structure (invisible, until one of the branches is selected)

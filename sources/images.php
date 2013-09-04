@@ -1047,39 +1047,6 @@ function is_image($name)
 }
 
 /**
- * Find whether the video specified is actually a 'video', based on file extension
- *
- * @param  string			A URL or file path to the video
- * @param  boolean		Whether it really must be an actual video/audio, not some other kind of rich media which we may render in a video spot
- * @return boolean		Whether the string pointed to a file appeared to be a video
- */
-function is_video($name,$must_be_true_video=false)
-{
-	if ((addon_installed('galleries')) && (!$must_be_true_video))
-	{
-		$ve_hooks=find_all_hooks('systems','video_embed');
-		foreach (array_keys($ve_hooks) as $ve_hook)
-		{
-			require_code('hooks/systems/video_embed/'.$ve_hook);
-			$ve_ob=object_factory('Hook_video_embed_'.$ve_hook);
-			if (!is_null($ve_ob->get_template_name_and_id($name))) return true;
-		}
-	}
-
-	$ext=get_file_extension($name);
-	if (!$must_be_true_video)
-	{
-		if ($ext=='swf') return true;
-		if ($ext=='pdf') return true; // Galleries can render it as a video
-	}
-	if (($ext=='rm') || ($ext=='ram')) return true; // These have audio mime types, but may be videos
-
-	require_code('mime_types');
-	$mime_type=get_mime_type($ext);
-	return ((substr($mime_type,0,6)=='video/') || ((get_option('allow_audio_videos')=='1') && (substr($mime_type,0,6)=='audio/')));
-}
-
-/**
  * Use the image extension to determine if the specified image is of a format (extension) saveable by ocPortal or not.
  *
  * @param  string			A URL or file path to the image
@@ -1099,4 +1066,62 @@ function is_saveable_image($name)
 	} else return (($ext=='jpg') || ($ext=='jpeg') || ($ext=='png'));
 }
 
+/*
+What follows are other media types, not images. However, we define them here to avoid having to explicitly load the full media rendering API.
+*/
 
+/**
+ * Find whether the video specified is actually a 'video', based on file extension
+ *
+ * @param  string			A URL or file path to the video
+ * @param  boolean		Whether it really must be an actual video/audio, not some other kind of rich media which we may render in a video spot
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types
+ * @return boolean		Whether the string pointed to a file appeared to be a video
+ */
+function is_video($name,$must_be_true_video=false,$as_admin=false)
+{
+	$allow_audio=(get_option('allow_audio_videos')=='1');
+
+	if ($must_be_true_video)
+	{
+		require_code('mime_types');
+		$ext=get_file_extension($name);
+		if (($ext=='rm') || ($ext=='ram')) return true; // These have audio mime types, but may be videos
+		$mime_type=get_mime_type($ext,$as_admin);
+		return ((substr($mime_type,0,6)=='video/') || (($allow_audio) && (substr($mime_type,0,6)=='audio/')));
+	}
+
+	require_code('media_renderer');
+	$acceptable_media=$allow_audio?(MEDIA_TYPE_VIDEO | MEDIA_TYPE_AUDIO | MEDIA_TYPE_OTHER /* but not images */):MEDIA_TYPE_VIDEO;
+	$hooks=find_media_renderers($url,$as_admin,$acceptable_media);
+	return !is_null($hooks);
+}
+
+/**
+ * Find whether the video specified is actually a 'video', based on file extension
+ *
+ * @param  string			A URL or file path to the video
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types
+ * @return boolean		Whether the string pointed to a file appeared to be an audio file
+ */
+function is_audio($name,$as_admin=false)
+{
+	require_code('media_renderer');
+	$acceptable_media=MEDIA_TYPE_AUDIO;
+	$hooks=find_media_renderers($url,$as_admin,$acceptable_media);
+	return !is_null($hooks);
+}
+
+/**
+ * Find whether the video specified is actually a 'video', based on file extension
+ *
+ * @param  string			A URL or file path to the video
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types
+ * @return boolean		Whether the string pointed to a file appeared to be an audio file
+ */
+function is_media($name,$as_admin=false)
+{
+	require_code('media_renderer');
+	$hooks=find_media_renderers($url,$as_admin);
+	return !is_null($hooks);
+}

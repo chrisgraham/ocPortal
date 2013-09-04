@@ -39,13 +39,10 @@ function find_all_xml_tables()
  * Export ocPortal database tables to an equivalent XML format, automatically.
  *
  * @param  ?array			List of tables to export (NULL: all tables except those skippable)
- * @param  boolean		Whether to export Comcode as Comcode XML
  * @return string			Exported data in XML format
  */
-function export_to_xml($tables=NULL,$comcode_xml=true)
+function export_to_xml($tables=NULL)
 {
-	if ($comcode_xml) require_code('comcode_conversion');
-
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
@@ -60,7 +57,7 @@ function export_to_xml($tables=NULL,$comcode_xml=true)
 	$xml_data.='<ocportal origin="'.xmlentities(get_base_url()).'" version="'.xmlentities(float_format(ocp_version_number())).'">'.chr(10);
 	foreach ($tables as $table)
 	{
-		$table_xml=_export_table_to_xml($table,$comcode_xml);
+		$table_xml=_export_table_to_xml($table);
 		if ($table_xml!='') $xml_data.=_tab($table_xml).chr(10);
 	}
 	$xml_data=rtrim($xml_data).chr(10);
@@ -86,10 +83,9 @@ function _tab($in,$depth=1)
  * Export an ocPortal database table to an equivalent XML format.
  *
  * @param  ID_TEXT		Table to export
- * @param  boolean		Whether to export Comcode as Comcode XML
  * @return string			Exported data in XML format
  */
-function _export_table_to_xml($table,$comcode_xml)
+function _export_table_to_xml($table)
 {
 	$seo_type_code=mixed();
 	$permissions_type_code=mixed();
@@ -123,14 +119,14 @@ function _export_table_to_xml($table,$comcode_xml)
 		$rows=$GLOBALS['SITE_DB']->query_select($table,array('*'),$where,'',NULL,NULL,false,array());
 		foreach ($rows as $row) // Each row
 		{
-			$xml_data.=_export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$comcode_xml);
+			$xml_data.=_export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field);
 		}
 	} else
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select($table,array('*'),array($parent_field=>NULL),'',NULL,NULL,false,array());
 		foreach ($rows as $row) // Each row
 		{
-			$xml_data.=_export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$comcode_xml,$parent_field);
+			$xml_data.=_export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$parent_field);
 		}
 	}
 	return $xml_data;
@@ -145,20 +141,19 @@ function _export_table_to_xml($table,$comcode_xml)
  * @param  ID_TEXT		SEO type code
  * @param  ID_TEXT		Permission type code
  * @param  ID_TEXT		ID field name
- * @param  boolean		Whether to export Comcode as Comcode XML
  * @param  ID_TEXT		Parent ID field name
  * @return string			Exported data in XML format
  */
-function _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$comcode_xml,$parent_field)
+function _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$parent_field)
 {
 	$xml_data='';
-	$xml_data.=_export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$comcode_xml,false);
+	$xml_data.=_export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,false);
 	$rows=$GLOBALS['SITE_DB']->query_select($table,array('*'),array($parent_field=>$row[$id_field]),'',NULL,NULL,false,array());
 	foreach ($rows as $row) // Each row
 	{
 		$row[$parent_field]='PARENT_INSERT_ID';
 		$xml_data.=chr(10).chr(10);
-		$xml_data.=_tab(_export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$comcode_xml,$parent_field));
+		$xml_data.=_tab(_export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$parent_field));
 	}
 	$xml_data.='</'.$table.'>'.chr(10).chr(10);
 	return $xml_data;
@@ -173,11 +168,10 @@ function _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$per
  * @param  ?ID_TEXT		SEO type code (NULL: N/A)
  * @param  ?ID_TEXT		Permission type code (NULL: N/A)
  * @param  ?ID_TEXT		ID field name (NULL: N/A)
- * @param  boolean		Whether to export Comcode as Comcode XML
  * @param  boolean		Whether to include the end tag for the row
  * @return string			Exported data in XML format
  */
-function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$comcode_xml,$include_end=true)
+function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$include_end=true)
 {
 	$xml_data='';
 
@@ -193,7 +187,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 		$value='';
 		if ((strpos($field['m_type'],'TRANS')!==false) || (($table=='config') && ($name=='c_value') && ($row[$name]!='') && ($row['c_needs_dereference']==1))) // Translation layer integration.
 		{
-			$inner.=get_translated_text_xml($row[$name],$name,$GLOBALS['SITE_DB'],$comcode_xml);
+			$inner.=get_translated_text_xml($row[$name],$name,$GLOBALS['SITE_DB']);
 
 			if (strpos($field['m_type'],'*')!==false) // Special case if lang string forms key. We need to put in an extra attribute so we can bind an existing lang string code if it exists
 			{
@@ -251,7 +245,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('*'),array('meta_for_type'=>$seo_type_code,'meta_for_id'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]),'',1);
 		if (array_key_exists(0,$rows))
-			$xml_data.=_tab(_export_xml_row('seo_meta',array('meta_for_id'=>'LAST_INSERT_ID_'.$table)+$rows[0],$db_fields,NULL,NULL,NULL,$comcode_xml));
+			$xml_data.=_tab(_export_xml_row('seo_meta',array('meta_for_id'=>'LAST_INSERT_ID_'.$table)+$rows[0],$db_fields,NULL,NULL,NULL));
 	}
 
 	// Permissions
@@ -259,10 +253,10 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('module_the_name'=>$permissions_type_code,'category_name'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
 		foreach ($rows as $_row)
-			$xml_data.=_tab(_export_xml_row('group_category_access',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
+			$xml_data.=_tab(_export_xml_row('group_category_access',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL));
 		$rows=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name'=>$permissions_type_code,'category_name'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
 		foreach ($rows as $_row)
-			$xml_data.=_tab(_export_xml_row('group_privileges',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
+			$xml_data.=_tab(_export_xml_row('group_privileges',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL));
 	}
 
 	if ($include_end) $xml_data.='</'.$table.'>';
@@ -638,22 +632,15 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
  * @param  AUTO_LINK		Language ID
  * @param  ID_TEXT		The element name
  * @param  object			Database connection
- * @param  boolean		Whether to use Comcode XML
  * @return string			XML (no root tag)
  */
-function get_translated_text_xml($id,$name,$db,$comcode_xml=false)
+function get_translated_text_xml($id,$name,$db)
 {
 	$inner='';
 	$translate_rows=$db->query_select('translate',array('*'),array('id'=>$id));
 	foreach ($translate_rows as $t)
 	{
-		if (($comcode_xml) && ($t['text_parsed']!='') && ($t['text_original']!=''))
-		{
-			$value=chr(10)._tab(comcode_text__to__comcode_xml($t['text_original'])).chr(10);
-		} else
-		{
-			$value=xmlentities($t['text_original']);
-		}
+		$value=xmlentities($t['text_original']);
 
 		$inner.=_tab('<'.$name.' language="'.xmlentities($t['language']).'" importance_level="'.xmlentities(strval($t['importance_level'])).'" source_user="'.xmlentities(strval($t['source_user'])).'">'.$value.'</'.$name.'>').chr(10);
 	}

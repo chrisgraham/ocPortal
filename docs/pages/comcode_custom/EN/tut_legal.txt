@@ -6,7 +6,7 @@ If you are running a website, in particular a large or corporate website, there 
 
 [title="2"]Rules[/title]
 
-[exp_thumb="The default ocPortal 'rules' Comcode page if the Setup Wizard has not been run" float="right"]legal_rules[/exp_thumb]
+[media width="150" description="The default ocPortal 'rules' Comcode page if the Setup Wizard has not been run" float="right"]data_custom/images/docs/legal_rules.png[/media]
 It is important to develop a rules page that is consistent with the approach you will take to running your website. You can use rules to lay out guidelines for member behaviour and rationalise punitive action, and to an extent they can provide a legal defence as they demonstrate that you are trying to avoid illegal activities from your website.
 
 It is inevitable that some members will break the rules, maliciously or accidentally, but they are still a powerful tool. A good rules page will list offences of a balanced specificity, along with approximate associated punishments. It may also have a legal element, referencing law, and placing legal responsibility on the user.
@@ -15,7 +15,7 @@ ocPortal provides a number of default rules pages that can be chosen using the S
 
 [title="2"]Legal[/title]
 
-[exp_thumb="The default ocPortal 'legal' Comcode page" float="right"]legal_page[/exp_thumb]
+[media width="150" description="The default ocPortal 'legal' Comcode page" float="right"]data_custom/images/docs/legal_page.png[/media]
 Please note that legislature varies globally, so the information here may not all be applicable; it is biased towards UK law (where ocProducts is based and registered). In addition, ocProducts does not accept any responsibility for you or your site's compliance (or non-compliance!) with any laws: the information here is just an aid, and you may wish to consult a legal representative if you feel there may be complicated legal issues associated with your website.
 
 The sub-sections of this section briefly cover the main legal issues you are likely to need to consider.

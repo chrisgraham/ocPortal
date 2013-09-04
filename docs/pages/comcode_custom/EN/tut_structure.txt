@@ -22,7 +22,7 @@ And if you are using OCF, the following additional zones are usable:
 
 [title="2"]Pages[/title]
 
-[exp_thumb="This is a detailed annotated diagram that explains ocPortal site structure" float="right"]structure_main[/exp_thumb]
+[media width="150" description="This is a detailed annotated diagram that explains ocPortal site structure" float="right"]data_custom/images/docs/structure_main.png[/media]
 There are a few different types of ocPortal 'page':
  - [b]Comcode pages[/b] -- these are textual pages, written in Comcode (described in another tutorial)
  - [b]Modules[/b] -- these are formal code-based pages
@@ -88,12 +88,12 @@ Panel pages (by default) are Comcode pages that arrange blocks, some of which ar
 
 [title="2"]The Zone Editor[/title]
 
-[exp_thumb="The Zone Editor" float="right"]structure_zone_editor[/exp_thumb]
+[media width="150" description="The Zone Editor" float="right"]data_custom/images/docs/structure_zone_editor.png[/media]
 {!zones:DOC_ZONE_EDITOR}
 
 [title="2"]Templates[/title]
 
-[exp_thumb="This is a detailed annotated diagram that explains basic ocPortal template structure" float="left"]structure_templates[/exp_thumb]
+[media width="150" description="This is a detailed annotated diagram that explains basic ocPortal template structure" float="left"]data_custom/images/docs/structure_templates.png[/media]
 So far we have established that the website consists of zones, that contain pages (which may be of various types); and that some pages are panels, surrounding other pages, and that panels usually are made of blocks. This together, defines one view of the structure of an ocPortal-driven website.
 This might seem bewildering, but after you get used to it, it will make perfect sense.
 

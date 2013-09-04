@@ -194,7 +194,7 @@ function block_helper_script()
 
 	if ($type=='step2') // Ask for block fields
 	{
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		$defaults=parse_single_comcode_tag(get_param('parse_defaults','',true),'block');
 
 		$keep=symbol_tempcode('KEEP');
@@ -498,13 +498,12 @@ function block_helper_script()
 		}
 
 		$comcode='[block'.$bparameters.']'.$block.'[/block]';
-		$comcode_xml='<block>'.$bparameters_xml.$block.'</block>';
 		$tempcode='{$BLOCK,block='.$block.$bparameters_tempcode.'}';
 		if ($type_wanted=='template') $comcode=$tempcode; // This is what will be written in
 
 		$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
 
-		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'575d6c8120d6001c8156560be518f296','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$block,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
+		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'575d6c8120d6001c8156560be518f296','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$block,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
 	}
 
 	require_code('site');

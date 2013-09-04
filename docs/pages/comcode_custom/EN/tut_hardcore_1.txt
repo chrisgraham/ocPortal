@@ -18,8 +18,8 @@ If you have any questions or want to discuss solutions, we've created forums on 
 
 [title="2"]Files[/title]
 
-[exp_thumb="Use an environment you're comfortable in" float="left"]hardcore_windows[/exp_thumb]
-[exp_thumb="To be able to search through files efficiently is essential" float="right"]hardcore_search[/exp_thumb]
+[media width="150" description="Use an environment you're comfortable in" float="left"]data_custom/images/docs/hardcore_windows.png[/media]
+[media width="150" description="To be able to search through files efficiently is essential" float="right"]data_custom/images/docs/hardcore_search.png[/media]
 Personally I develop ocPortal on my own computer under Windows. I have a PHP webserver setup and I manipulate files directly on my hard disk. I have cacheing disabled on my ocPortal install so that I don't have to mess around decacheing when I change files directly.
 
 One of the most handy things about developing on the desktop is to be able to quickly run file contents searches in Windows to find out where stuff is done. Unfortunately though, by default Windows XP (and some other versions of Windows) will not search inside most non-Microsoft file types unless you do some special set up. Here is a [url="guide to what to do"]http://www.randyrants.com/2002/05/find_in_files_f.html[/url] to fix this -- use the technique for the ".php", ".css" and ".tpl" file types.
@@ -28,8 +28,8 @@ Once this is done you'll be able to quickly find things by opening up an explore
 ocPortal might seem a bit daunting with its (approximately) 4,000 files, but remember they are just files, and you don't need to understand everything to make changes -- you only need an understanding of the core stuff, and the stuff your changes interact with. If you take backups of a file, you can restore that file to a prior state just by restoring your backup. If you add a file and it breaks things, you can delete it if you really need to.
 
 PHP is a really fantastic language for beginners to develop for because you don't need to worry about compiling your code -- you just make edits and test them directly. Just use the simple Edit-Save-Refresh sequence.
-[exp_thumb="A good editor is essential" float="left"]hardcore_context[/exp_thumb]
-[exp_thumb="Firefox is probably the best browser to develop in, thanks to the great selection of powerful extensions" float="right"]hardcore_browser[/exp_thumb]
+[media width="150" description="A good editor is essential" float="left"]data_custom/images/docs/hardcore_context.png[/media]
+[media width="150" description="Firefox is probably the best browser to develop in, thanks to the great selection of powerful extensions" float="right"]data_custom/images/docs/hardcore_browser.png[/media]
 
 [title="2"]Making a counter block[/title]
 
@@ -75,7 +75,7 @@ Some famous event...
 [block="5 Apr 2063"]main_count[/block]
 [/code]
 
-[exp_thumb="A very simple countdown block -- but it'd be easy to style it and put it to work on useful tasks!" float="right"]hardcore_count[/exp_thumb]
+[media width="150" description="A very simple countdown block -- but it'd be easy to style it and put it to work on useful tasks!" float="right"]data_custom/images/docs/hardcore_count.png[/media]
 
 [title="2"]Exercises[/title]
 

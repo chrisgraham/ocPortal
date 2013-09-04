@@ -15,7 +15,7 @@ If you find a flaw in ocPortal's security please contact us so that we may have 
 
 ocPortal defines a large number of 'hack attack' situations, and in case of any of these situations occurring it will: stop the execution; send out an e-mail detailing the attack; and log the attack in the security log. These situations are varied, but the most common is when input is found that does not match input constraints (for example, a script parameter which should be a number is not).
 
-[exp_thumb="A security alert for a real hack-attempt" float="right"]security_attack[/exp_thumb]
+[media width="150" description="A security alert for a real hack-attempt" float="right"]data_custom/images/docs/security_attack.png[/media]
 If you get alerts that suggest someone is actively trying to hack into your website, it is advisable to ban their IP address at the web server level as soon as humanely possible (unless they have already been automatically banned). This is just a precaution, but it is possible (although unlikely) that a skilled hacker who is referring to ocPortal source code has only accidentally triggered an alert, and may have found an alternative vulnerability in your site already, or may find one soon. Of course we know of no such vulnerabilities, and we do in fact consider it unlikely that a direct vulnerability will be found in ocPortal, but it is always best to be cautious with regards security. You should also be aware that a hacker may change their IP address, simply by changing their Internet connection, or working through proxies: you may decide in this case of a serious attack, to consult authorities, passing them the IP address of the offender and the hack-attack e-mail.
 
 Most security logs are accidental (caused by mistyped URLs, or buggy software) or are caused by bots. The screen-shot shows a typical hack-attack by a bot that crawls the web looking for vulnerable scripts: in this case, the bot is trying to use a parameter of the ocPortal poll voting form to send an e-mail, on the basis that by trying to abuse every form it finds, it will eventually find one that does work as a spam relay: it would then latch on to this and use the victim website as a mass spam relay, for as long as it can. In this case it hit an ocPortal site, so was logged.
@@ -46,12 +46,12 @@ At the time of writing, the following types of alert are defined:
 
 [title="2"]Anti-spam measures[/title]
 
-[exp_thumb="In this config option that embeds an \"E-mail the staff\" link, the address is obfuscated so most bots won't understand it" float="right"]security_antispam[/exp_thumb]
+[media width="150" description="In this config option that embeds an \"E-mail the staff\" link, the address is obfuscated so most bots won't understand it" float="right"]data_custom/images/docs/security_antispam.png[/media]
 Throughout ocPortal, measures are taken to reduce the chance of e-mail addresses being harvested for use by spammers. Typically, spammers gather e-mail addresses by using bots to automatically scavenge text that looks like an e-mail address from web pages; however ocPortal does not display member e-mail addresses publicly at all, and instead provides a 'contact member' module. In addition, whenever the staff address, or a staff member's address , is shown, it is [concept]obfuscated[/concept], so as to make it unlikely to be picked up as an e-mail address.
 
 [title="2"]Failed logins[/title]
 
-[exp_thumb="Failed login attempts" float="right"]security_logins[/exp_thumb]
+[media width="150" description="Failed login attempts" float="right"]data_custom/images/docs/security_logins.png[/media]
 When a user tries to login ocPortal, but fails, it is logged. A proportion (approximately 15%) of these failures turn out to be real attempts to gain unauthorised access to the site, as demonstrated in the screen-shot.
 
 [title="2"]robots.txt[/title]
@@ -107,7 +107,7 @@ This section details some techniques to increase the security of your site. Most
 
 [title="3"]Guest access[/title]
 
-[exp_thumb="Securing the member joining process" float="right"]security_ocf_members[/exp_thumb]
+[media width="150" description="Securing the member joining process" float="right"]data_custom/images/docs/security_ocf_members.png[/media]
 In order to reduce the risk of hackers gaining unauthorised access to areas of your website, you could close down access to all possible areas except to vetted members. By default, ocPortal is set up to deny guest access to almost all of the site; however, security can be improved further by only allowing members to become fully joined after a manual vetting process.
 To force members to be vetted, you need to enable the 'Require member validation' option, as shown in the screen-shot.
 
@@ -133,7 +133,7 @@ Please be aware ocPortal can not function with a base URL that is HTTPS, or with
 
 [title="3"]Secured zones[/title]
 
-[exp_thumb="Securing a zone so that an explicitly logged-in session is required" float="right"]security_require_session[/exp_thumb]
+[media width="150" description="Securing a zone so that an explicitly logged-in session is required" float="right"]data_custom/images/docs/security_require_session.png[/media]
 It is possible to configure zones so that they require a session to access them. This means that a user can only access the zone if they have actively chosen, in the specific web browser window that is currently being used, to login: login cookies alone cannot gain them access.
 
 This might seem like a very strange thing to enforce, but there is a very good reason: it is very easy for someone to create a malicious website that contains a form with a target of your website, such that that form directs a malicious action when you are tricked to fill it in and click 'submit'. If a barrier of a required session was not imposed, this action could go unabated with your access level direct to perform some malicious action by proxy through you.
@@ -146,7 +146,7 @@ ocPortal does provide a secondary defence against this scenario, by checking ref
 
 [title="3"]Restricting logins[/title]
 
-[exp_thumb="Restricting login so it can only be done for IP addresses that are confirmed via e-mail" float="right"]security_ip_enquire[/exp_thumb]
+[media width="150" description="Restricting login so it can only be done for IP addresses that are confirmed via e-mail" float="right"]data_custom/images/docs/security_ip_enquire.png[/media]
 In [concept]OCF[/concept], it is possible to set usergroups so that members of those usergroups may only immediately login from IP addresses that have been confirmed as valid. To confirm an address as valid, an e-mail is sent out to the member with a confirmation link.
 
 This technique reduces the chance of someone gaining unauthorised access to an account, but is also very annoying for users who do not have a stable IP address.

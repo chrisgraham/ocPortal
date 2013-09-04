@@ -89,8 +89,8 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 |-
 | [color="green"]Comcode[/color]
 | [tt]sources/comcode.php[/tt]
-[tt]sources/comcode_text.php[/tt]
-| Needs [tt]require_code[/tt] if you need anything in [tt]comcode_text.php[/tt].
+[tt]sources/comcode_compiler.php[/tt]
+| Needs [tt]require_code[/tt] if you need anything in [tt]comcode_compiler.php[/tt].
 |-
 | [color="green"]Configuration[/color]
 | [tt]sources/config.php[/tt]
@@ -315,7 +315,7 @@ One confusing thing about stack traces is that the error chain is included withi
 
 [title="3"]How Tempcode works[/title]
 
-[exp_thumb="The Tempcode object structure" float="right"]tempcode_object[/exp_thumb]
+[media width="150" description="The Tempcode object structure" float="right"]data_custom/images/docs/tempcode_object.png[/media]
 The internals of Tempcode are enormously complex.
 
 It has to achieve a number of key design goals (these are implemented in ocPortal's Tempcode engine -- you don't need to worry about them, and that's part of the magic of Tempcode -- for documentation see the [page="docs:tut_tempcode"]ocPortal Tempcode programming tutorial[/page]):

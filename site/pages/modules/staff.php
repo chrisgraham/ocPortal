@@ -133,7 +133,7 @@ class Module_staff
 				$description=''; // Null should not happen, but sometimes things corrupt
 			} else
 			{
-				require_code('comcode_text');
+				require_code('comcode_compiler');
 				$description=apply_emoticons($role);
 			}
 
@@ -183,7 +183,7 @@ class Module_staff
 			$role=do_lang_tempcode('_UNKNOWN'); // Null should not happen, but sometimes things corrupt
 		} else
 		{
-			require_code('comcode_text');
+			require_code('comcode_compiler');
 			$role=make_string_tempcode(apply_emoticons($_role));
 		}
 		$email_address=obfuscate_email_address($GLOBALS['FORUM_DRIVER']->mrow_email($row_staff));

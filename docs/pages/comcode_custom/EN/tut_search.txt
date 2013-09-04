@@ -6,7 +6,7 @@ As you add content to your website, it becomes increasingly important that your 
 
 [title="2"]Simple searching[/title]
 
-[exp_thumb="The search block" float="right"]search_block[/exp_thumb]
+[media width="150" description="The search block" float="right"]data_custom/images/docs/search_block.png[/media]
 By default, there is a 'search' block that sits on a panel of the 'Site' zone of your website (assuming it was not disabled in the Setup Wizard). This is the easiest way to use the search. There is a text box where you can type what you're looking for. The 'Search Content' button will then search your entire website for matching content and results will be displayed on a results screen.
 
 [title="2"]Detailed searches[/title]
@@ -15,7 +15,7 @@ If you would like to carry out detailed searches, there is a 'More' button in th
 
 [title="3"]Search For[/title]
 
-[exp_thumb="Detailed searches" float="right"]search_details[/exp_thumb]
+[media width="150" description="Detailed searches" float="right"]data_custom/images/docs/search_details.png[/media]
 This is the text box where you type the content that you're searching for.
 
 [title="3"]Boolean Search[/title]
@@ -56,12 +56,12 @@ The Google search will carry out a search of the site using the index of the Goo
 
 [title="2"]Advanced searches[/title]
 [surround]
-[exp_thumb="Performing an advanced search for a specific content type" float="right"]search_advanced[/exp_thumb]
+[media width="150" description="Performing an advanced search for a specific content type" float="right"]data_custom/images/docs/search_advanced.png[/media]
 Many forms of content allow advanced searches which allow you to search underneath a chosen category. For members and catalogues you may also perform template searches. An advanced search limits you to that individual content type. The advanced searching screen is reached by clicking one of the 'Advanced' links on the main search screen.
 [/surround]
 [title="2"]Searching from the Forum[/title]
 [surround]
-[exp_thumb="The search button on the forum" float="left"]search_forum[/exp_thumb]
+[media width="150" description="The search button on the forum" float="left"]data_custom/images/docs/search_forum.png[/media]
 
 To initiate a search while in the forum (our own [concept]OCF[/concept] forum), you need to click the 'Search' button on the forum or use the contextual search box on the forum member bar. The contextual search will search beneath your current forum if you are on a forum-view screen, or within your current topic if you are on a topic-view screen.
 [/surround]

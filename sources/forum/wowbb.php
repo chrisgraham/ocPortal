@@ -196,7 +196,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_emoticon_chooser($field_name='post')
 	{
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		$emoticons=$this->connection->query_select('emoticons',array('*'));
 		$em=new ocp_tempcode();
 		foreach ($emoticons as $emo)

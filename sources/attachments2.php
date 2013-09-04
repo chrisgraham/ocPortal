@@ -18,6 +18,10 @@
  * @package		core_rich_media
  */
 
+/*
+Adding attachments.
+*/
+
 /**
  * Get an array containing new Comcode, and tempcode. The function wraps the normal comcode_to_tempcode function. The function will do attachment management, including deleting of attachments that have become unused due to editing of some Comcode and removing of the reference.
  *
@@ -57,8 +61,6 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 			if (is_null($insert_as_admin)) $insert_as_admin=true;
 		}
 	}
-
-	$comcode_text=(substr($original_comcode,0,8)!='<comcode');
 
 	// Handle data URLs for attachment embedding
 	if (function_exists('imagecreatefromstring'))
@@ -308,14 +310,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 								}
 							}
 
-							if ($comcode_text)
-							{
-								$original_comcode.=chr(10).chr(10).'[attachment type="'.comcode_escape(str_replace('_extract','',$atype)).'" description="'.comcode_escape($description).'" thumb="'.($is_thumb?'1':'0').'"]'.strval($attachment_id).'[/attachment]';
-							} else
-							{
-								require_code('comcode_xml');
-								//$original_comcode.=chr(10).chr(10).'<attachment type="'.comcode_escape(str_replace('_extract','',$atype)).'" thumb="'.($is_thumb?'1':'0').'"><attachmentDescription>'.comcode_text__to__comcode_xml($description).'</attachmentDescription>'.strval($attachment_id).'</attachment>';			Would go in bad spot
-							}
+							$original_comcode.=chr(10).chr(10).'[attachment type="'.comcode_escape(str_replace('_extract','',$atype)).'" description="'.comcode_escape($description).'" thumb="'.($is_thumb?'1':'0').'"]'.strval($attachment_id).'[/attachment]';
 						}
 					}
 					if ($arcext=='tar')
@@ -333,13 +328,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 				{
 					if ((preg_match('#\]\d+\[/attachment\]#',$original_comcode)==0) && (preg_match('#>\d+</attachment>#',$original_comcode)==0)) // Attachment could have already been put through (e.g. during a preview). If we have actual ID's referenced, it's almost certainly the case.
 					{
-						if ($comcode_text)
-						{
-							$original_comcode.=chr(10).chr(10).'[attachment]new_'.$matches[1].'[/attachment]';
-						} else
-						{
-							//$original_comcode.=chr(10).chr(10).'<attachment>new_'.$matches[1].'</attachment>';		Would go in bad spot
-						}
+						$original_comcode.=chr(10).chr(10).'[attachment]new_'.$matches[1].'[/attachment]';
 					}
 				}
 			}

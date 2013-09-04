@@ -32,7 +32,7 @@ ocPortal makes use of a number of client-side web technologies, including:
  - PNG -- for images
  - RSS, Atom and OPML -- (optional) feed technology, to export ocPortal news
  - XSLT -- (optional) technology to make RSS, Atom and OPML display in a web browser
- - XML Schema and XML -- for Comcode-XML
+ - XML -- for content import/export
 
 XHTML is like the glue that any supported browser will support. A lot of 'HTML' pages are actually technically XHTML, as an XHTML document is almost viewable on a pure-HTML (read: very old) browser.
 CSS and Javascript are potentially unavailable on text-mode/accessibility browsers, however they are not required in these contexts.

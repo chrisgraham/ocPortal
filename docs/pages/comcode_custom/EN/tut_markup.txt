@@ -26,7 +26,7 @@ ocPortal is built on top of standard web/Internet technologies. These technologi
 
 ocPortal includes some technologies of its own:
  - Tempcode -- this is ocPortal's template technology (ocPortal combines data with XHTML templates in order to construct XHTML web pages)
- - Comcode and Comcode XML -- this is ocPortal's easy-to-use content language (lumps of text are written in this, and there are optional ways of encoding sophisticated behaviours; it compiles to more complex XHTML/CSS/Javascript, via templates)
+ - Comcode -- this is ocPortal's easy-to-use content language (lumps of text are written in this, and there are optional ways of encoding sophisticated behaviours; it compiles to more complex XHTML/CSS/Javascript, via templates)
  - Dublin Core extensions -- ocPortal extends Dublin Core (described above)
  - OcCLE -- A command line interface to an ocPortal website
  - Page-links -- A simple technology for generating link between pages, that compiles to HTTP URLs; page-links are local to a website (i.e. they can only work to generate links within a site), and are consistent regardless of the SEO URL scheme employed (ocPortal supports URL rewriting, which can make the appearance of final URLs vary considerably)

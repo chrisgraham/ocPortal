@@ -9,14 +9,14 @@ ocPortal is designed to really help you with your website in every way possible,
 [box="Tip" width="25em" float="left"]A compromise between using the cleanup tools interface on a production site, and disabling caches on a development site, is to hold down the ctrl, alt and shift keys, and press your browser reset button. This will cause ocPortal to clear a number of caches, and also regenerate certain forms of information (for example, any Comcode referenced on the page being refreshed is re-parsed).[/box]
 For efficiency reasons, ocPortal defines a number of caches. During normal operation of ocPortal, these caches should be unnoticeable; if things are being edited from outside ocPortal theoretically ocPortal will automatically pick up on it, but you may sometimes need to force a cache flush. By default, all caches are enabled, except when ocPortal is installed on '[tt]localhost[/tt]'.
 
-[exp_thumb="Disabling caches" float="right"]cleanup_2[/exp_thumb]
+[media width="150" description="Disabling caches" float="right"]data_custom/images/docs/cleanup_2.png[/media]
 Some kinds of cache may be turned off in the configuration, but leaving them on gives vastly improved performance.
 
 If you can identify a situation where you need to rebuild or empty a cache that should not exist, please report it as a bug.
 
 [title="2"]Cleanup Tools[/title]
 
-[exp_thumb="The cleanup tools interface" float="right"]cleanup_1[/exp_thumb]
+[media width="150" description="The cleanup tools interface" float="right"]data_custom/images/docs/cleanup_1.png[/media]
 {!cleanup:DOC_CLEANUP_TOOLS}
 
 The cleanup tools interface includes support for mySQL database repairing and optimisation. If the database has become very corrupt, you may need to use a tool such as phpMyAdmin to repair a database from outside ocPortal.

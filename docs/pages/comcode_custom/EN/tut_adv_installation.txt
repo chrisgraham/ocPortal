@@ -83,7 +83,7 @@ The quick installer handles this automatically.
 
 [title="2"]Post installation tweaking[/title]
 
-[exp_thumb="The config editor" float="right"]adv_installation_config[/exp_thumb]
+[media width="150" description="The config editor" float="right"]data_custom/images/docs/adv_installation_config.png[/media]
 If you need to change ocPortal installation environment settings, you may use the config_editor.php script (located in your installation directory) to change the settings. To operate the script, you will need the admin password that you specified at installation. The configuration editor works upon a separate subsystem to the main ocPortal code, and is completely independent of any forum or database environment: in other words, if ocPortal fails to function (perhaps if you moved servers, and your database settings are no longer valid), the configuration editor will continue to work.
 
 [title="2"]Advice for web-hosts[/title]

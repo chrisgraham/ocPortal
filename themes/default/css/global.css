@@ -3628,52 +3628,34 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	background-color: {$GET,yellow_highlight_background};
 }
 
-.wiki_link, .comcode_exp_ref {
+.wiki_link, .comcode_concept {
 	color: {$GET,area_key_text};
 	font-size: 0.85em;
 }
 
-.comcode_exp_ref a {
+.comcode_concept a {
 	background-image: url('{$IMG;,arrow_box}') !important;
+}
+.comcode_concept a:hover {
+	background-image: url('{$IMG;,arrow_box_hover}') !important;
 }
 
 .wiki_link a {
 	background-image: url('{$IMG;,wiki_link}') !important;
 }
-
-.comcode_exp_ref a, .wiki_link a {
-	padding-{!en_right}: 17px !important;
-	background-repeat: no-repeat !important;
-	background-position: 100% 30% !important;
-}
-
-.comcode_exp_ref a:hover {
-	background-image: url('{$IMG;,arrow_box_hover}') !important;
-}
-
 .wiki_link a:hover {
 	background-image: url('{$IMG;,wiki_link_hover}') !important;
 }
 
-.comcode_exp_ref a:hover, .wiki_link a:hover {
+.comcode_concept a, .wiki_link a {
 	padding-{!en_right}: 17px !important;
 	background-repeat: no-repeat !important;
 	background-position: 100% 30% !important;
 }
-
-.comcode_exp_thumb {
-	width: 150px;
-	padding: 0.5em;
-}
-
-.comcode_exp_thumb p {
-	color: {$GET,area_text};
-	font-size: 0.85em;
-	margin: 0.5em;
-}
-
-.comcode_exp_thumb img {
-	margin: 1px;
+.comcode_concept a:hover, .wiki_link a:hover {
+	padding-{!en_right}: 17px !important;
+	background-repeat: no-repeat !important;
+	background-position: 100% 30% !important;
 }
 
 .comcode_concept_inline, a.comcode_concept_inline, a.comcode_concept_inline:visited, a.comcode_concept_inline:hover {

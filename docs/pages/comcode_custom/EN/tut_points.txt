@@ -1,13 +1,13 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Creating an economy/reward-system for members via points[/title]
 
-[exp_thumb="A logged-in member may see their points from the login block" float="right"]points_block[/exp_thumb]
+[media width="150" description="A logged-in member may see their points from the login block" float="right"]data_custom/images/docs/points_block.png[/media]
 {!points:DOC_POINTS}
 
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Earning points[/title]
 
-[exp_thumb="The points profile page for a member" float="right"]points_page[/exp_thumb]
+[media width="150" description="The points profile page for a member" float="right"]data_custom/images/docs/points_page.png[/media]
 There are many ways to earn points in ocPortal. You may not wish to tell your members the precise details for these, in order to avoid abuse and unbalanced member activity, although of course they could educate themselves by reading this tutorial.
 
 Methods of earning points include:
@@ -28,7 +28,7 @@ Most methods of earning points may be altered in the configuration (Admin Zone, 
 
 [title="3"]A note about how points are calculated[/title]
 
-[exp_thumb="Configuring the points balance" float="right"]points_config[/exp_thumb]
+[media width="150" description="Configuring the points balance" float="right"]data_custom/images/docs/points_config.png[/media]
 The number of points a member has is not stored in any place, so is not directly editable. Instead, a members points is dynamically calculated, according to various statistics. You may alter the number of points a member has by viewing their points profile and using either the 'charge' or 'give' features (both of which accept negative values if you are a member of staff). For example, you can charge a member points by charging them a positive number of points, or giving them a negative number (a negative gift would usually be used to reverse a gift that you thought should not have happened). Likewise, you can give a member points by giving them a positive number, or charging them a negative number of points (a negative charge would usually be used to provide a refund).
 
 The reason points are calculated in this way is that the forum driver system means that ocPortal has no way of determining when a member makes a forum post (the forum does not tell ocPortal, as it is often a third-party piece of software).
@@ -43,8 +43,8 @@ The main ramification of this is that if posts are deleted, the point count goes
  - A prize for winning a competition
  - A sign of appreciation for produce a high quality product that benefits the community
 [surround]
-[exp_thumb="Gift transactions should be monitored so as to pick up on cheating (mutual giving for example)" float="left"]points_admin_monitor[/exp_thumb]
-[exp_thumb="Those who give may get rewarded by the system (this encourages an active community)" float="right"]points_lucky[/exp_thumb]
+[media width="150" description="Gift transactions should be monitored so as to pick up on cheating (mutual giving for example)" float="left"]data_custom/images/docs/points_admin_monitor.png[/media]
+[media width="150" description="Those who give may get rewarded by the system (this encourages an active community)" float="right"]data_custom/images/docs/points_lucky.png[/media]
 Gift points are useless unless spent, so the only advantage to hoarding them is to give a large amount in some kind of special situation being awaited; once given, the gift point receiver has the total added to their actual point count. Obviously members could abuse this, by giving points to each other in some form of reciprocal arrangement ("you pat my back I'll pat yours"): this is why there is an admin interface to monitor all gift transactions for fraud (and selectively reverse transactions). You can reach this interface from the 'Usage' section of the Admin Zone.
 [/surround]
 [title="2"]The Point Store[/title]
@@ -67,12 +67,12 @@ The Point Store provides a number of products/services that members can access u
  - name highlighting ([concept]OCF[/concept] only)
  - topic pinning
 [surround]
-[exp_thumb="Configuring the Point Store" float="right"]points_pointstore_config[/exp_thumb]
+[media width="150" description="Configuring the Point Store" float="right"]data_custom/images/docs/points_pointstore_config.png[/media]
 {!pointstore:DOC_POINT_STORE}
 [/surround]
 [surround]
-[exp_thumb="Configuring the Point Store's prices" float="right"]points_prices[/exp_thumb]
-[exp_thumb="The Point Store shop-front" float="left"]points_pointstore[/exp_thumb]
+[media width="150" description="Configuring the Point Store's prices" float="right"]data_custom/images/docs/points_prices.png[/media]
+[media width="150" description="The Point Store shop-front" float="left"]data_custom/images/docs/points_pointstore.png[/media]
 
 When a member buys something from the Point Store, the staff are informed of it via e-mail of appropriate details. The exception to this is that community billboard message is simply placed in a queue that, if enabled, the staff are expected to keep a hold on manually).
 
@@ -89,10 +89,10 @@ Messages may be manually added in the Admin Zone, but regular users will be addi
 
 ([i]Formerly known as &ldquo;flagrant text messages&rdquo;[/i])
 
-[exp_thumb="Managing community billboard messages in the queue" float="left"]points_community_billboard_manage[/exp_thumb]
-[exp_thumb="Adding a community billboard message from the Admin Zone" float="left"]points_community_billboard_add[/exp_thumb]
-[exp_thumb="Configuring the default community billboard message" float="left"]points_default_community_billboard[/exp_thumb]
-[exp_thumb="The community billboard message is shown in this space" float="left"]points_community_billboard_actual[/exp_thumb]
+[media width="150" description="Managing community billboard messages in the queue" float="left"]data_custom/images/docs/points_community_billboard_manage.png[/media]
+[media width="150" description="Adding a community billboard message from the Admin Zone" float="left"]data_custom/images/docs/points_community_billboard_add.png[/media]
+[media width="150" description="Configuring the default community billboard message" float="left"]data_custom/images/docs/points_default_community_billboard.png[/media]
+[media width="150" description="The community billboard message is shown in this space" float="left"]data_custom/images/docs/points_community_billboard_actual.png[/media]
 [/surround]
 [title="3"]E-mail accounts and the Point Store[/title]
 
@@ -169,7 +169,7 @@ Note that rank changes are triggered by actions. Someone will not go up in rank 
 
 [title="2"]The leader-board[/title]
 [surround]
-[exp_thumb="The points leader-board" float="right"]points_leaderboard[/exp_thumb]
+[media width="150" description="The points leader-board" float="right"]data_custom/images/docs/points_leaderboard.png[/media]
 The leader-board is a block, and corresponding archive viewing module, for the displaying of the top point holders for a week. Like rank, this is another incentive for members to earn points.
 
 Please be aware that the leader-board is not entirely accurate, as it actually only calculates the point count of top post count holders, and orders according to this; the reason for this is that, as explained earlier, point count is not actually stored, and calculating it for all members simultaneously would not be efficient. This is unlikely to be noticed, however, because more post count holders are chosen for point calculation than point holders shown, hence a buffer zone exists to reduce the chance of error.

@@ -1,6 +1,6 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Custom structured content (via catalogues)[/title]
 
-[exp_thumb="Adding a catalogue" float="right"]catalogues_add[/exp_thumb]
+[media width="150" description="Adding a catalogue" float="right"]data_custom/images/docs/catalogues_add.png[/media]
 {!catalogues:DOC_CATALOGUES}
 The pre-made catalogues are:
  - Links
@@ -11,7 +11,7 @@ The pre-made catalogues are:
  - Contacts
 All the pre-made catalogues may be removed in the Setup Wizard, so depending on what you chose in that wizard, they may or may not currently be on your site.
 
-[exp_thumb="Choosing a catalogue to add an entry to" float="right"]catalogues_choose_to_add_to[/exp_thumb]
+[media width="150" description="Choosing a catalogue to add an entry to" float="right"]data_custom/images/docs/catalogues_choose_to_add_to.png[/media]
 Catalogues can be used to model most things required by large websites that would otherwise have to be implemented either as new modules, or hard-coded pages. Note that catalogues are designed to store records of which there are likely more than one, not as a container for all unstructured custom information (that is what Comcode pages are for).
 
 Catalogues are initially defined by the fields in them. 'Categories' are then made in the catalogue. Then categories are filled with 'entries'.
@@ -29,7 +29,7 @@ There are loads of features within the catalogue system, and there are more we c
 
 A catalogue consists of a number of fields.
 
-[exp_thumb="Adding an entry to a catalogue" float="right"]catalogues_add_entry[/exp_thumb]
+[media width="150" description="Adding an entry to a catalogue" float="right"]data_custom/images/docs/catalogues_add_entry.png[/media]
 Catalogues support the following field types:
  - [tt]short_text[/tt] -- A short piece of text (less than 255 characters)
  - [tt]long_text[/tt] -- A long piece of text. The first such field will support attachments.
@@ -48,7 +48,7 @@ Catalogues support the following field types:
  - [tt]auto_increment[/tt] -- An auto-incremented number (i.e. each entry in the catalogue is assigned a sequential number) (this is set automatically, and not visible when adding an entry)
  - [tt]random[/tt] -- A random 10 character alphanumeric code (this is set automatically, and not visible when adding an entry)
  - [i]and more[/i]
-[exp_thumb="There are a whole host of options available after catalogue activity" float="right"]catalogues_do_next[/exp_thumb]
+[media width="150" description="There are a whole host of options available after catalogue activity" float="right"]data_custom/images/docs/catalogues_do_next.png[/media]
 Programmers may add new field types by writing new hook code files.
 The '[tt]upload[/tt]' and '[tt]picture[/tt]' types actually allow entry submitters to upload files from their own computer.
 
@@ -63,7 +63,7 @@ You may also specify which fields may be used to search the catalogue (searching
 
 [title="2"]Modes of display[/title]
 
-[exp_thumb="A non-tree catalogue uses an index" float="right"]catalogues_view_index[/exp_thumb]
+[media width="150" description="A non-tree catalogue uses an index" float="right"]data_custom/images/docs/catalogues_view_index.png[/media]
 There are two options to set how a catalogue may display:
  - 'Display type' -- you can display entries in categories as lists, "field-maps" or in a table (full customisation is possible via templating).
  - 'Is tree' -- a tree catalogue has a full hierarchical category tree, much like the download system does; a non-tree catalogue just shows the categories from a single catalogue index.
@@ -71,9 +71,9 @@ There are two options to set how a catalogue may display:
 Note that if you set all fields of your catalogue to "Display in category-views" and disable comments and ratings and trackbacks, there will be no links to the entry view screen. This is due to there being little purpose in this screen because everything already displays on categories.
 
 [surround]
-[exp_thumb="A catalogue with 'own pages' enabled" float="left"]catalogues_own_pages[/exp_thumb]
-[exp_thumb="A catalogue without 'own pages' enabled" float="left"]catalogues_not_own_pages[/exp_thumb]
-[exp_thumb="Viewing a catalogue entry" float="right"]catalogues_view_entry[/exp_thumb]
+[media width="150" description="A catalogue with 'own pages' enabled" float="left"]data_custom/images/docs/catalogues_own_pages.png[/media]
+[media width="150" description="A catalogue without 'own pages' enabled" float="left"]data_custom/images/docs/catalogues_not_own_pages.png[/media]
+[media width="150" description="Viewing a catalogue entry" float="right"]data_custom/images/docs/catalogues_view_entry.png[/media]
 [/surround]
 [title="2"]Creating a tree catalogue, fast[/title]
 
@@ -91,7 +91,7 @@ To add a catalogue (amongst other functions) go to the 'Catalogues' icon in the 
 
 [title="2"]Editing a catalogue[/title]
 
-[exp_thumb="Editing a catalogue" float="right"]catalogues_edit[/exp_thumb]
+[media width="150" description="Editing a catalogue" float="right"]data_custom/images/docs/catalogues_edit.png[/media]
 You can edit a catalogue to change details, add, edit or remove fields.
 
 You cannot change field data types after you have created them (except between field types that have the same "storage" type) as this would affect the integrity of any data that may have already been entered into them. A workaround is to export to CSV, delete the field, create a new field with the same name and the new type, and reimport the CSV.

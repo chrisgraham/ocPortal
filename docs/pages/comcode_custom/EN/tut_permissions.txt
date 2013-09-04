@@ -10,7 +10,7 @@ For an overview of the ocPortal permission system, see the 'Advanced configurati
 
 [title="2"]Access control[/title]
 
-[exp_thumb="The Permissions Tree Editor" float="right"]permissions_tree_editor[/exp_thumb]
+[media width="150" description="The Permissions Tree Editor" float="right"]data_custom/images/docs/permissions_tree_editor.png[/media]
 To edit permissions in ocPortal you can either use:
  - The permissions tree editor
  - Manual configuration
@@ -23,20 +23,20 @@ The remainder of this section is concerned with manual permission setting.
 
 [i]This section describes editing from outside the Permissions Tree Editor. It is perhaps easier to centralise control from the Permissions Tree Editor. All the settings described here are also present in the Permissions Tree Editor.[/i]
 
-[exp_thumb="Setting zone permissions" float="left"]permissions_Edit-zone-permissions[/exp_thumb]
+[media width="150" description="Setting zone permissions" float="left"]data_custom/images/docs/permissions_Edit-zone-permissions.png[/media]
 You can edit zone permissions by editing the zone for which you want to change the permissions.
 
 Go the Admin Zone, then the 'Structure' section, then the 'Zones' icon. Choose a zone to edit (bear in mind that you can't change permissions for the Welcome Zone, as everybody is allowed to access it), and continue.
 [surround]
-[exp_thumb="Choosing a zone to edit" float="right"]permissions_Choose-zone-edit[/exp_thumb]
+[media width="150" description="Choosing a zone to edit" float="right"]data_custom/images/docs/permissions_Choose-zone-edit.png[/media]
 You will be presented with the zone editing form. Near the bottom are the options for usergroup access permissions: one binary 'can/can't' access permission per usergroup. Toggle the checkboxes as you see fit (if a checkbox is unchecked, the corresponding usergroup can't enter the zone, but if it is checked, the usergroup can enter the zone without problem), and submit the form.
 [/surround]
 [title="3"]Editing page permissions[/title]
 
 [i]This section describes editing from outside the Permissions Tree Editor. It is perhaps easier to centralise control from the Permissions Tree Editor. All the settings described here are also present in the Permissions Tree Editor.[/i]
 [surround]
-[exp_thumb="Editing page permissions" float="right"]permissions_Page-permissions-grid[/exp_thumb]
-Go to the Admin Zone, then the 'Structure' section, then the 'Permissions' icon. Choose 'Page permissions'. To edit a page's permissions manually, you need to go to the page permissions page. Once more, choose a zone to edit, and submit the form. You will be presented with a checkbox-grid of the permissions for every page in your selected zone. Along the top are the names of all the usergroups on your site, and down the side are the names of all the pages in your selected zone. In the middle is a checkbox-grid for the permissions, and down the right is a column of buttons for inverting a whole row of checkboxes at once [[exp_ref]permissions_Mass-checkbox-change[/exp_ref]].
+[media width="150" description="Editing page permissions" float="right"]data_custom/images/docs/permissions_Page-permissions-grid.png[/media]
+Go to the Admin Zone, then the 'Structure' section, then the 'Permissions' icon. Choose 'Page permissions'. To edit a page's permissions manually, you need to go to the page permissions page. Once more, choose a zone to edit, and submit the form. You will be presented with a checkbox-grid of the permissions for every page in your selected zone. Along the top are the names of all the usergroups on your site, and down the side are the names of all the pages in your selected zone. In the middle is a checkbox-grid for the permissions, and down the right is a column of buttons for inverting a whole row of checkboxes at once ([url="image" overlay="1"]data_custom/images/docs/permissions_Mass-checkbox-change.gif[/url]).
 
 Once all the access permissions are set as appropriate, submit the form.
 [/surround]
@@ -44,13 +44,13 @@ Once all the access permissions are set as appropriate, submit the form.
 
 [i]This section describes editing from outside the Permissions Tree Editor. It is perhaps easier to centralise control from the Permissions Tree Editor. All the settings described here are also present in the Permissions Tree Editor.[/i]
 
-[exp_thumb="Editing category permissions" float="left"]permissions_Edit-category-permissions[/exp_thumb]
+[media width="150" description="Editing category permissions" float="left"]data_custom/images/docs/permissions_Edit-category-permissions.png[/media]
 Usergroup access permissions exist for just about any type of category ocPortal provides: from calendar entry types to news categories, you can easily set the usergroup access permissions through the category edit page. In this example, we'll change the usergroup access permissions for a news category.
 
 Go to the Content Management Zone. Choose the icon for the content type you want to edit. Click the 'Edit one category' icon. Select the category to edit, and submit the form.
 
 Then, set the permissions as necessary, and submit the form once more.
-[exp_thumb="Choosing a category to edit" float="right"]permissions_Choose-category-edit[/exp_thumb]
+[media width="150" description="Choosing a category to edit" float="right"]data_custom/images/docs/permissions_Choose-category-edit.png[/media]
 
 The process is the same for editing the permissions of any type of category.
 
@@ -58,7 +58,7 @@ The process is the same for editing the permissions of any type of category.
 
 [b]For an explanation of [concept]match-key[/concept]s, see the [page="_SEARCH:tut_menus"]Customising what's on the menus[/page] tutorial.[/b]
 
-[exp_thumb="Here we have removed banner submission for guests. Normally we would restrict based on content visibility level, but that is less fine-grained." float="right"]permissions_match_keys[/exp_thumb]
+[media width="150" description="Here we have removed banner submission for guests. Normally we would restrict based on content visibility level, but that is less fine-grained." float="right"]data_custom/images/docs/permissions_match_keys.png[/media]
 {!permissions:DOC_PAGE_MATCH_KEY_ACCESS}
 
 [title="4"]Match-key error messages[/title]
@@ -71,7 +71,7 @@ If you put in some text between quote marks, matching will be done on the basis 
 
 [title="2"]Privileges[/title]
 
-[exp_thumb="Choosing a privilege section to edit permissions within" float="right"]permissions_Choose-specific-access[/exp_thumb]
+[media width="150" description="Choosing a privilege section to edit permissions within" float="right"]data_custom/images/docs/permissions_Choose-specific-access.png[/media]
 {!permissions:DOC_PRIVILEGES}
 
 The privileges are accessed through the "privileges" page. On this page is a list of permission sections; all the privileges are grouped into related sections for ease-of-configuration. Choose a section, and submit the form to see and change the related privileges. The page shows a checkbox-grid of the usergroups and the privileges in your selected section. Set up the privileges as appropriate, and submit the form to change them.
@@ -102,10 +102,10 @@ Similarly, you do not need view permissiosn on parent categories to view child c
 
 [title="2"]Testing access and privileges[/title]
 
-[exp_thumb="The SU feature is incredibly quick and easy: just enter a name and click a button" float="left"]permissions_Su[/exp_thumb]
+[media width="150" description="The SU feature is incredibly quick and easy: just enter a name and click a button" float="left"]data_custom/images/docs/permissions_Su.png[/media]
 To test access permissions and privileges, it's best to create a test user, or to assume the identity of a lower-ranking (non-administrator) member. This section is concerned with the use of the 'su' function.
 
-[exp_thumb="Setting privileges" float="right"]permissions_Edit-specific-access[/exp_thumb]
+[media width="150" description="Setting privileges" float="right"]data_custom/images/docs/permissions_Edit-specific-access.png[/media]
 The 'su' function allows an administrator to quickly and easily assume the identity of somebody else, for whatever nefarious or benevolent purposes he sees fit. To use 'su', simply enter the name of the member whose identity you would like to assume into the 'su' box (in your personal statistics block), and click the 'Su' button. A new window will open, presenting the same screen as seen by the specified user. You can navigate around as this user, experiencing the site through his/her eyes (so to speak), as all the permissions are as they are for this normal user. This can easily and effectively be used to test out permissions changes to make sure they are as required.
 
 Please note that when using 'su':

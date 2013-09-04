@@ -23,7 +23,7 @@
  */
 function init__comcode_from_html()
 {
-	require_code('comcode_text');
+	require_code('comcode_compiler');
 }
 
 /**

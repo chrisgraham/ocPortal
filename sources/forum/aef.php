@@ -199,7 +199,7 @@ class forum_driver_aef extends forum_driver_base
 	{
 		$emoticons=$this->connection->query_select('smileys',array('*'),array('smstatus'=>0));
 		$em=new ocp_tempcode();
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		foreach ($emoticons as $emo)
 		{
 			$code=$emo['smcode'];

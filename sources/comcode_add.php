@@ -57,9 +57,7 @@ function _get_details_comcode_tags()
 		'staff_note'=>array(),
 		'menu'=>array('param','type'),
 		'surround'=>array('param','style'),
-		'php'=>array('scroll','numbers'),
 		'codebox'=>array('param','numbers'),
-		'sql'=>array('scroll','numbers'),
 		'code'=>array('param','scroll','numbers'),
 		'tt'=>array(),
 		'no_parse'=>array(),
@@ -72,22 +70,18 @@ function _get_details_comcode_tags()
 		'shocker'=>array('left','right','min','max'),
 		'jumping'=>array('string'),
 		'sections'=>array('default','name'),
-		/*'section_controller'=>array(),*/
 		'big_tabs'=>array('default','switch_time','name'),
-		/*'big_tab_controller'=>array(),*/
-		/*'tab'=>array('param'),*/
 		'tabs'=>array('default','name'),
 		'carousel'=>array('param'),
 		'hide'=>array('param'),
 		'tooltip'=>array('param'),
 		'currency'=>array('param','bracket'),
-		/*'block'=>array(),*/
 		'if_in_group'=>array('param','type'),
 		'flash'=>array('param'),
+		'video'=>array('param'),
+		'audio'=>array(),
+		'media'=>array('param'),
 		'img'=>array('align','float','param','title','rollover','refresh_time'),
-		'upload'=>array('type','param'),
-		'exp_thumb'=>array('float'),
-		'exp_ref'=>array('param'),
 		'thumb'=>array('align','param','caption','float'),
 		'url'=>array('param','title','target','rel'),
 		'email'=>array('param','title','subject','body'),
@@ -107,13 +101,8 @@ function _get_details_comcode_tags()
 	unset($VALID_COMCODE_TAGS['big_tab']);
 	unset($VALID_COMCODE_TAGS['big_tab_cntroller']);
 	unset($VALID_COMCODE_TAGS['acronym']);
-	unset($VALID_COMCODE_TAGS['internal_table']);
-	unset($VALID_COMCODE_TAGS['external_table']);
-	unset($VALID_COMCODE_TAGS['acronym']);
 	unset($VALID_COMCODE_TAGS['block']);
-	unset($VALID_COMCODE_TAGS['attachment']);
 	unset($VALID_COMCODE_TAGS['attachment_safe']);
-	unset($VALID_COMCODE_TAGS['thread']);
 	foreach (array_keys($tag_list) as $tag)
 	{
 		global $VALID_COMCODE_TAGS;
@@ -176,10 +165,10 @@ function _get_group_tags($group=NULL)
 		'structure'=>array('title','contents','include','concepts','concept','staff_note','menu','surround'),
 		'formatting'=>array('list','indent','ins','del','b','u','i','s','sup','sub','size','color','highlight','font','align','left','center','right','abbr','box','quote'),
 		'semantic'=>array('cite','samp','q','var','dfn','address'),
-		'display_code'=>array('php','codebox','sql','code','tt','no_parse'),
+		'display_code'=>array('codebox','code','tt','no_parse'),
 		'execute_code'=>array('semihtml','html'),
-		'media'=>array('flash','img'/*Over complex,'upload','exp_thumb','exp_ref'*/,'thumb'),
-		'linking'=>array('url','email','reference','page','snapback','post','topic')
+		'media'=>array('flash','img','thumb','video','audio','media'),
+		'linking'=>array('url','email','reference','page','snapback','post','topic'),
 	);
 
 	if (addon_installed('filedump')) $group_tags['media'][]='attachment';
@@ -189,7 +178,7 @@ function _get_group_tags($group=NULL)
 	$not_found=array();
 	foreach (array_keys($all_tags[0]+$all_tags[1]) as $tag)
 	{
-		if (in_array($tag,array('exp_thumb','exp_ref','upload','attachment'))) continue; // Explicitly don't want to allow these (attachment will already be listed if allowed)
+		if (in_array($tag,array('attachment'))) continue; // Explicitly don't want to allow these (attachment will already be listed if allowed)
 		foreach ($group_tags as $_group)
 		{
 			if (in_array($tag,$_group))
@@ -208,13 +197,13 @@ function _get_group_tags($group=NULL)
 }
 
 /**
- * Get the non-WYSIWYG tags (ones the WYSWIWYG cannot do itself, so are needed even if it is on)
+ * Get the non-WYSIWYG tags (ones the WYSIWYG cannot do itself, so are needed even if it is on)
  *
  * @return array			List of non-WYSIWYG tags
  */
 function _get_non_wysiwyg_tags()
 {
-	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','upload','exp_thumb','exp_ref','thumb','reference','snapback','post','topic','attachment');
+	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','media','audio','video','thumb','reference','snapback','post','topic','attachment');
 	return $ret;
 }
 
@@ -228,7 +217,7 @@ function comcode_helper_script()
 
 	list($tag_list,$custom_tag_list)=_get_details_comcode_tags();
 
-	require_code('comcode_text');
+	require_code('comcode_compiler');
 
 	global $DANGEROUS_TAGS,$TEXTUAL_TAGS;
 
@@ -295,7 +284,7 @@ function comcode_helper_script()
 
 		$preview=true;
 
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		$defaults=parse_single_comcode_tag(get_param('parse_defaults','',true),$actual_tag);
 
 		if (array_key_exists('',$defaults))
@@ -662,14 +651,10 @@ function comcode_helper_script()
 		}
 
 		list($comcode,$bparameters)=_get_preview_environment_comcode($tag);
-		if ($tag=='sections' || $tag=='big_tabs' || $tag=='tabs' || $tag=='list')
-			$comcode_xml=$bparameters;
-		else
-			$comcode_xml='<'.$tag.$bparameters.'>'.post_param('tag_contents','').'</'.$tag.'>';
 
 		$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
 
-		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'d5d5888d89b764f81769823ac71d0827','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
+		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'d5d5888d89b764f81769823ac71d0827','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
 	}
 
 	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'c1f229be68a1137c5b418b0d5d8a7ccf','TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));

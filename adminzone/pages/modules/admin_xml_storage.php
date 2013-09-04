@@ -110,7 +110,6 @@ class Module_admin_xml_storage
 		}
 		require_lang('comcode');
 		$export_fields->attach(form_input_multi_list(do_lang_tempcode('TABLES'),do_lang_tempcode('DESCRIPTION_TABLES'),'tables',$nice_tables,NULL,15));
-		$export_fields->attach(form_input_tick(do_lang_tempcode('EXPORT_WITH_COMCODE_XML'),do_lang_tempcode('DESCRIPTION_EXPORT_WITH_COMCODE_XML'),'comcode_xml',false));
 		$export_form=do_template('FORM',array('_GUID'=>'fafc396037e375bdd84582ef8170ec1b','TABINDEX'=>strval(get_form_field_tabindex()),'URL'=>$export_url,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('XML_EXPORT_TEXT'),'FIELDS'=>$export_fields,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT')));
 
 		return do_template('XML_STORAGE_SCREEN',array('_GUID'=>'8618fbb96fe29689dbbf8edd60444b1e','TITLE'=>$title,'IMPORT_FORM'=>$import_form,'EXPORT_FORM'=>$export_form));
@@ -158,7 +157,7 @@ class Module_admin_xml_storage
 
 		if (!array_key_exists('tables',$_POST)) warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
-		$xml=export_to_xml($_POST['tables'],post_param_integer('comcode_xml',0)==1);
+		$xml=export_to_xml($_POST['tables']);
 
 		breadcrumb_set_self(do_lang_tempcode('_RESULTS'));
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('XML_DATA_MANAGEMENT'))));

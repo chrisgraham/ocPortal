@@ -94,7 +94,6 @@
 				<div{+START,IF,{$CONFIG_OPTION,is_on_emoticon_choosers}} class="emoticon_chooser box"{+END}>
 					{+START,IF,{$AND,{$OCF},{$JS_ON}}}
 						<span class="right horiz_field_sep associated_link"><a rel="nofollow" target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME;*}{$KEEP;*,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT;*,emoticons}?field_name={NAME;*}{$KEEP;*,0,1}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;" title="{!EMOTICONS_POPUP} {!LINK_NEW_WINDOW}">{$?,{$CONFIG_OPTION,is_on_emoticon_choosers},{!VIEW_ARCHIVE},{!EMOTICONS_POPUP}}</a></span>
-						{$,<span class="right horiz_field_sep associated_link"><a rel="nofollow" href="#" onclick="if (document.getElementById('\{NAME*\}').value.substr(0,8)=='&lt;comcode') \{ window.fauxmodal_alert('\{!comcode:ALREADY_COMCODE_XML;\}'); return false; \} return convert_xml('\{NAME*\}');"><abbr title="\{!comcode:CONVERT_TO_XML_2\}">\{!comcode:CONVERT_TO_XML\}</abbr></a></span>}
 					{+END}
 
 					{+START,IF,{$CONFIG_OPTION,is_on_emoticon_choosers}}

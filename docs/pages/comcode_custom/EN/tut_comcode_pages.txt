@@ -10,16 +10,16 @@ A Comcode page is a page written in Comcode, and thus is almost written in plain
 
 [title="2"]Making pages[/title]
 
-[exp_thumb="The WYSIWYG editor may be used to edit Comcode pages, although it provides less control" float="right"]comcode_pages_wysiwyg[/exp_thumb]
-[exp_thumb="Editing a Comcode page" float="right"]comcode_pages_edit[/exp_thumb]
+[media width="150" description="The WYSIWYG editor may be used to edit Comcode pages, although it provides less control" float="right"]data_custom/images/docs/comcode_pages_wysiwyg.png[/media]
+[media width="150" description="Editing a Comcode page" float="right"]data_custom/images/docs/comcode_pages_edit.png[/media]
 
 There are three supported ways to add a new Comcode page in ocPortal:
  - Go to the 'Structure' section of the Admin Zone and choose the 'Add-New-Page Wizard' icon. The wizard is the most user-friendly method and will actually automatically add a link to your page onto one of your menus if you wish.
  - Go to the Content Management Zone, choose the 'Comcode pages' icon, and give a new page name in the '<zone>:<page-name>' format ocPortal uses in the list of pages that already exist (where a page in the Welcome Zone would just be ':<page-name>').
  - Just to type in the URL to where you want the page to be, and click the given link to add the missing page.
 
-[exp_thumb="The easy way to add a Comcode page" float="left"]comcode_pages_easyadd[/exp_thumb]
-[exp_thumb="The edited Comcode page looks like this" float="right"]comcode_pages_view[/exp_thumb]
+[media width="150" description="The easy way to add a Comcode page" float="left"]data_custom/images/docs/comcode_pages_easyadd.png[/media]
+[media width="150" description="The edited Comcode page looks like this" float="right"]data_custom/images/docs/comcode_pages_view.png[/media]
 Once the Comcode page editor is open, you can pretty much just type your page in plain-text, with small diversions to indicate special formatting (most notably, the 'title' tag, which every page should include). It is beyond the scope of this tutorial to explain Comcode: see the Comcode tutorial for this.
 
 [title="2"]Blocks[/title]
@@ -29,7 +29,7 @@ More advanced pages, such as the default start page in the Welcome Zone, and the
 By 'dynamic element', I mean an element that automatically generates content that could not be prepared, such as a list of recent topics on a forum, or information about the currently logged in user.
 The actual block to use, is just the contents within the [tt][block][/tt] tag, and the parameters to the block are just the parameters given to the [tt][block][/tt] tag.
 [surround]
-[exp_thumb="An illustration to how blocks work" float="right"]comcode_pages_blocks[/exp_thumb]
+[media width="150" description="An illustration to how blocks work" float="right"]data_custom/images/docs/comcode_pages_blocks.png[/media]
 At the time of writing, ocPortal contains 67 blocks to choose from.
 Blocks can be classified into:
  - Main blocks (blocks inserted into the internal body of the site)

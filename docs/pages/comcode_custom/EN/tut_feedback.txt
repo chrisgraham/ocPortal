@@ -20,7 +20,7 @@ Feedback commenting is very similar to, and actually implemented as, a forum top
 
 [title="2"]Rating[/title]
 
-[exp_thumb="This content page demonstrates rating and comments" float="right"]feedback_poll_page[/exp_thumb]
+[media width="150" description="This content page demonstrates rating and comments" float="right"]data_custom/images/docs/feedback_poll_page.png[/media]
 The ocPortal rating system allows 'one rating per IP address'. Therefore, if a user gets a new IP address, they can rate again.
 
 Our own forum does not allow poll voting by guests, and hence more serious rating/poll situations may be handled there.
@@ -43,11 +43,11 @@ ocPortal includes a 'shout-box' block, which is essentially a little portion of 
 
 [title="2"]Polls[/title]
 
-[exp_thumb="Initially there is no poll, so the poll block displays like this" float="right"]feedback_no_poll[/exp_thumb]
+[media width="150" description="Initially there is no poll, so the poll block displays like this" float="right"]data_custom/images/docs/feedback_no_poll.png[/media]
 {!polls:DOC_POLLS}
 
-[exp_thumb="Adding a poll" float="left"]feedback_add_poll[/exp_thumb]
-[exp_thumb="The poll block, once a poll is chosen" float="right"]feedback_poll[/exp_thumb]
+[media width="150" description="Adding a poll" float="left"]data_custom/images/docs/feedback_add_poll.png[/media]
+[media width="150" description="The poll block, once a poll is chosen" float="right"]data_custom/images/docs/feedback_poll.png[/media]
 By default, the poll block is displayed on the front page (unless this was changed in the Setup Wizard), and set up to display whatever poll is currently selected from those that were added. On a fresh install, there is of course no poll yet, so a message about this is shown. When you add or edit a poll, you have the choice to select it as the current poll: the selection date is stored, and this allows ocPortal to display an archive of past polls.
 
 Members can only vote once in a poll. Guests may only vote once. IP addresses as well as member IDs are used to see who has previously voted. If a user chooses to view poll results before voting, they forfeit their vote. Once ocPortal has decided a user cannot vote (again), that user will only see the results whenever they see that poll.

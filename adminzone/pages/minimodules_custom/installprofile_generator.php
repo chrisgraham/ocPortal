@@ -187,7 +187,7 @@ require_code('zones2');
 $blocks=array_merge(find_blocks_in_page('start'),find_blocks_in_page('panel_left'),find_blocks_in_page('panel_right'));
 foreach ($blocks as $block=>$full_tag)
 {
-	require_code('comcode_text');
+	require_code('comcode_compiler');
 	$parameters=parse_single_comcode_tag($full_tag,'block');
 	$profile.="\t\t\t\t\"".php_addslashes($block)."\"=>array(\n";
 	foreach ($parameters as $key=>$val)

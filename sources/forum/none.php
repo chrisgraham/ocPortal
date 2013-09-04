@@ -155,7 +155,7 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_emoticon_chooser($field_name='post')
 	{
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		$emoticons=$GLOBALS['SITE_DB']->query_select('f_emoticons',array('*'),array('e_relevance_level'=>0));
 		$em=new ocp_tempcode();
 		foreach ($emoticons as $emo)

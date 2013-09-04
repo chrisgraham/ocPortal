@@ -199,7 +199,7 @@ class forum_driver_mybb extends forum_driver_base
 	 */
 	function get_emoticon_chooser($field_name='post')
 	{
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		$emoticons=$this->connection->query_select('smilies',array('*'),array('showclickable'=>'1'));
 		$em=new ocp_tempcode();
 		foreach ($emoticons as $emo)

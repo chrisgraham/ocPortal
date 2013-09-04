@@ -611,11 +611,37 @@ function delete_image($id,$delete_full=true)
  */
 function create_video_thumb($src_url,$expected_output_path=NULL)
 {
+	// Try to find a hook that can get a thumbnail easily
+	$hooks=find_media_renderers($url,$as_admin,$acceptable_media,$limit_to=NULL);
+	if (!is_null($hooks))
+	{
+		foreach ($hooks as $hook)
+		{
+			$ve_ob=object_factory('Hook_media_rendering_'.$hook);
+			if (method_exists($ob,'get_video_thumbnail'))
+			{
+				$ret=$ve_ob->get_video_thumbnail($src_url);
+				if (!is_null($ret))
+				{
+					if (is_null($expected_output_path))
+					{
+						$filename='thumb_'.md5(uniqid('',true)).'.png';
+						$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
+					}
+					require_code('files');
+					$_expected_output_path=fopen($expected_output_path,'wb');
+					http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
+					fclose($_expected_output_path);
+
+					return $ret;
+				}
+			}
+		}
+	}
+
 	// Audio ones should have automatic thumbnails
-	require_code('mime_types');
-	$file_ext=get_file_extension($src_url);
-	$input_mime_type=get_mime_type($file_ext);
-	if (preg_match('#audio\/#i',$input_mime_type)!=0)
+	require_code('images');
+	if (is_audio($src_url))
 	{
 		$ret=find_theme_image('audio_thumb',true);
 		if ($ret!='')
@@ -629,29 +655,6 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 			}
 		}
 		return $ret;
-	}
-
-	// Try one of the hooks for video types
-	$ve_hooks=find_all_hooks('systems','video_embed');
-	foreach (array_keys($ve_hooks) as $ve_hook)
-	{
-		require_code('hooks/systems/video_embed/'.$ve_hook);
-		$ve_ob=object_factory('Hook_video_embed_'.$ve_hook);
-		$ret=$ve_ob->get_video_thumbnail($src_url);
-		if (!is_null($ret))
-		{
-			if (is_null($expected_output_path))
-			{
-				$filename='thumb_'.md5(uniqid('',true)).'.png';
-				$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
-			}
-			require_code('files');
-			$_expected_output_path=fopen($expected_output_path,'wb');
-			http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
-			fclose($_expected_output_path);
-
-			return $ret;
-		}
 	}
 
 	// Ok, gonna try hard using what FFMPEG techniques we can...

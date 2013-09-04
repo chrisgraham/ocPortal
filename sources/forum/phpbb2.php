@@ -198,7 +198,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 	 */
 	function get_emoticon_chooser($field_name='post')
 	{
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		$emoticons=$this->connection->query_select('smilies',array('*'),NULL,'GROUP BY code');
 		$em=new ocp_tempcode();
 		foreach ($emoticons as $emo)

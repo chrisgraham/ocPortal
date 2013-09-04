@@ -17,7 +17,7 @@ Users can use HTML in Comcode, but it is subject to a security filter. There are
 
 ocPortal has had a dedicated menu editor since version 2.5. Before this, menus were written directly into Comcode rather than being tied to a menu-editor menu via a block. The old method of writing a 'Comcode menu' is still available though, and some users, especially those with disabilities, may prefer this method of menu generation.
 
-[exp_thumb="The example in action" float="right"]comcode_menu[/exp_thumb]
+[media width="150" description="The example in action" float="right"]data_custom/images/docs/comcode_menu.png[/media]
 The menu Comcode tag is only intended for use in the Comcode pages. It is designed to be a user friendly way of defining what links are on your site, but it is important to be careful not to break the syntactic rules for the menu formation.
 The menu tag takes a single parameter -- the codename assigned to the menu. Each menu should be assigned a different codename, and you may just make one up as you write the Comcode.
 
@@ -46,7 +46,7 @@ Menu entries are typed so that their indentation is equal to the indentation of 
 
 [title="2"]Custom Comcode[/title]
 
-[exp_thumb="Adding a Custom Comcode tag" float="right"]adv_comcode_custom[/exp_thumb]
+[media width="150" description="Adding a Custom Comcode tag" float="right"]data_custom/images/docs/adv_comcode_custom.png[/media]
 {!custom_comcode:DOC_CUSTOM_COMCODE}
 To add a custom tag, do as follows:
  - Enter the Admin Zone
@@ -78,31 +78,6 @@ Comcode can now support all major features of all the major BBCode-like language
 One of the original syntaxes that came before Comcode was similar to that of [concept]WIKI-Code[/concept], in that it was not a text-formatting based language, rather than a tag based language. The Comcode list and ruled-line syntaxes are examples of this.
 
 Since version 3 of ocPortal we have made a conscious decision to support a few other WIKI-Code conventions, in a way that is most similar to that of MediaWIKI. We have opted to maintain most similarity to BBCode though, and have not provided [concept]WIKI-Code[/concept] syntax where there was already support via existing Comcode syntax.
-
-[title="2"]Comcode-XML[/title]
-
-The form of Comcode that is documented and primarily used is now formally known as 'Comcode-Text'.
-
-Since version 3 of ocPortal we have introduced support for Comcode-XML. This is a formally specified XML language that is a bit harder to write, but is easier to integrate with other systems because a parser can be written using standard XML technology. If you do not know what XML is then you do not need to know about Comcode-XML because it won't provide any benefits to you.
-
-
-We do not intend to document Comcode-XML separately even though the set of tags and attributes is not exactly the same as Comcode-Text. Instead, we provide a schema that is available at {$BRAND_BASE_URL}/data/comcode4.xsd
-
-The following is an example of Comcode-XML:
-[code="XML"]
-<comcode>
-   Please leave us some product feedback.<br /><br />
-   <block>main_contact_us<blockParam key="param" value="product_feedback" /></block>
-</comcode>
-[/code]
-in Comcode-Text, it would have looked as follows:
-[code="Comcode"]
-Please leave us some product feedback.
-
-[block="product_feedback"]main_contact_us[/block]
-[/code]
-
-ocPortal contains a simple URL-based web service that can convert Comcode-Text into Comcode-XML, in preparation for integration.
 
 [title="2"]Semantics and accessibility[/title]
 

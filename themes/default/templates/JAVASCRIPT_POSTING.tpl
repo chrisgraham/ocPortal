@@ -38,7 +38,6 @@ function set_attachment(field_name,number,filename,multi)
 {
 	if (typeof multi=='undefined') var multi=false;
 
-	if (typeof window.is_comcode_xml=='undefined') return;
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.num_attachments=='undefined') return;
 	if (typeof window.max_attachments=='undefined') return;
@@ -195,7 +194,6 @@ function do_input_box(field_name)
 function do_input_menu(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
 		'{!ENTER_MENU_NAME;^,'+(document.getElementById(field_name).form.menu_items.value)+'}',
@@ -214,13 +212,7 @@ function do_input_menu(field_name)
 						var add;
 						var element=document.getElementById(field_name);
 						element=ensure_true_id(element,field_name);
-						if (is_comcode_xml(element))
-						{
-							add='<block><blockParam key=\"type\" val=\"tree\" /><blockParam key=\"caption\" val=\""+escape_html(vb)+"\" /><blockParam key=\"param\" val=\""+escape_html(va)+"\" />side_stored_menu</block>';
-						} else
-						{
-							add='[block=\""+escape_comcode(va)+"\" caption=\""+escape_comcode(vb)+"\" type=\"tree\"]side_stored_menu[/block]';
-						}
+						add='[block=\""+escape_comcode(va)+"\" caption=\""+escape_comcode(vb)+"\" type=\"tree\"]side_stored_menu[/block]';
 						insert_textbox(element,add);
 					},
 					'{!comcode:INPUT_COMCODE_menu;^}'
@@ -252,7 +244,6 @@ function do_input_comcode(field_name,tag)
 function do_input_list(field_name,add)
 {
 	if (typeof window.insert_textbox=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	if (typeof add=='undefined') var add=[];
 
@@ -271,31 +262,20 @@ function do_input_list(field_name,add)
 			}
 			if (add.length==0) return;
 			var i;
-			if (is_comcode_xml(post))
-			{
-				insert_textbox(post,'<list>\n')
-				for (i=0;i<add.length;i++)
-				{
-					insert_textbox(post,'<list_element>'+add[i]+'</list_element>\n')
-				}
-				insert_textbox(post,'</list>\n')
-			} else
+			if (post.value.indexOf('[semihtml')!=-1)
+				insert_textbox(post,'[list]\n')
+			for (i=0;i<add.length;i++)
 			{
 				if (post.value.indexOf('[semihtml')!=-1)
-					insert_textbox(post,'[list]\n')
-				for (i=0;i<add.length;i++)
 				{
-					if (post.value.indexOf('[semihtml')!=-1)
-					{
-						insert_textbox(post,'[*]'+add[i]+'\n')
-					} else
-					{
-						insert_textbox(post,' - '+add[i]+'\n')
-					}
+					insert_textbox(post,'[*]'+add[i]+'\n')
+				} else
+				{
+					insert_textbox(post,' - '+add[i]+'\n')
 				}
-				if (post.value.indexOf('[semihtml')!=-1)
-					insert_textbox(post,'[/list]\n')
 			}
+			if (post.value.indexOf('[semihtml')!=-1)
+				insert_textbox(post,'[/list]\n')
 		},
 		'{!comcode:INPUT_COMCODE_list;^}'
 	);
@@ -304,7 +284,6 @@ function do_input_list(field_name,add)
 function do_input_hide(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
 		'{!ENTER_WARNING;^}',
@@ -322,13 +301,7 @@ function do_input_hide(field_name)
 						element=ensure_true_id(element,field_name);
 						if (vb)
 						{
-							if (is_comcode_xml(element))
-							{
-								insert_textbox(element,'<hide><hideTitle>'+va+'</hideTitle>'+escape_html(vb)+'</hide>');
-							} else
-							{
-								insert_textbox(element,'[hide=\"'+escape_comcode(va)+'\"]'+escape_comcode(vb)+'[/hide]');
-							}
+							insert_textbox(element,'<hide><hideTitle>'+va+'</hideTitle>'+escape_html(vb)+'</hide>');
 						}
 					},
 					'{!comcode:INPUT_COMCODE_hide;^}'
@@ -342,7 +315,6 @@ function do_input_hide(field_name)
 function do_input_thumb(field_name,va)
 {
 	if (typeof window.insert_textbox=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
 		'{!ENTER_URL;^}',
@@ -375,22 +347,10 @@ function do_input_thumb(field_name,va)
 								element=ensure_true_id(element,field_name);
 								if (vb.toLowerCase()=='{!IMAGE;^}'.toLowerCase())
 								{
-									if (is_comcode_xml(element))
-									{
-										insert_textbox(element,'<img url=\"'+escape_html(va)+'\">'+escape_html(vc)+'</img>');
-									} else
-									{
-										insert_textbox(element,'[img=\"'+escape_comcode(vc)+'\"]'+escape_comcode(va)+'[/img]');
-									}
+									insert_textbox(element,'[img=\"'+escape_comcode(vc)+'\"]'+escape_comcode(va)+'[/img]');
 								} else
 								{
-									if (is_comcode_xml(element))
-									{
-										insert_textbox(element,'<thumb caption=\"'+escape_html(vc)+'\">'+escape_html(va)+'</thumb>');
-									} else
-									{
-										insert_textbox(element,'[thumb caption=\"'+escape_comcode(vc)+'\"]'+escape_comcode(va)+'[/thumb]');
-									}
+									insert_textbox(element,'[thumb caption=\"'+escape_comcode(vc)+'\"]'+escape_comcode(va)+'[/thumb]');
 								}
 							},
 							'{!comcode:INPUT_COMCODE_img;^}'
@@ -407,7 +367,6 @@ function do_input_thumb(field_name,va)
 function do_input_attachment(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
 		'{!ENTER_ATTACHMENT;^}',
@@ -421,13 +380,7 @@ function do_input_attachment(field_name)
 			{
 				var element=document.getElementById(field_name);
 				element=ensure_true_id(element,field_name);
-				if (is_comcode_xml(element))
-				{
-					insert_textbox(element,'<attachment>new_'+va+'</attachment>');
-				} else
-				{
-					insert_textbox(element,'[attachment]new_'+va+'[/attachment]');
-				}
+				insert_textbox(element,'[attachment]new_'+va+'[/attachment]');
 			}
 		},
 		'{!comcode:INPUT_COMCODE_attachment;^}'
@@ -437,7 +390,6 @@ function do_input_attachment(field_name)
 function do_input_url(field_name,va)
 {
 	if (typeof window.insert_textbox=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
 		'{!ENTER_URL;^}',
@@ -459,13 +411,7 @@ function do_input_url(field_name,va)
 					{
 						var element=document.getElementById(field_name);
 						element=ensure_true_id(element,field_name);
-						if (is_comcode_xml(element))
-						{
-							if (vb!=null) insert_textbox(element,'<url param=\"'+escape_html(va)+'\">'+escape_html(vb)+'</url>');
-						} else
-						{
-							if (vb!=null) insert_textbox(element,'[url=\"'+escape_comcode(vb)+'\"]'+escape_comcode(va)+'[/url]');
-						}
+						if (vb!=null) insert_textbox(element,'[url=\"'+escape_comcode(vb)+'\"]'+escape_comcode(va)+'[/url]');
 					},
 					'{!comcode:INPUT_COMCODE_url;^}'
 				);
@@ -478,7 +424,6 @@ function do_input_url(field_name,va)
 function do_input_page(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	var result;
 
@@ -544,19 +489,12 @@ function _do_input_page(field_name,result,vc)
 {
 	var element=document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
-	if (is_comcode_xml(element))
-	{
-		insert_textbox(element,'<page pageLink=\"'+escape_html(result)+'\">'+escape_html(vc)+'</page>');
-	} else
-	{
-		insert_textbox(element,'[page=\"'+escape_comcode(result)+'\"]'+escape_comcode(vc)+'[/page]');
-	}
+	insert_textbox(element,'[page=\"'+escape_comcode(result)+'\"]'+escape_comcode(vc)+'[/page]');
 }
 
 function do_input_email(field_name,va)
 {
 	if (typeof window.insert_textbox=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
 		'{!ENTER_ADDRESS;^}',
@@ -578,13 +516,7 @@ function do_input_email(field_name,va)
 					{
 						var element=document.getElementById(field_name);
 						element=ensure_true_id(element,field_name);
-						if (is_comcode_xml(element))
-						{
-							if (vb!==null) insert_textbox(element,'<email address=\"'+escape_html(va)+'\">'+escape_html(vb)+'</email>');
-						} else
-						{
-							if (vb!==null) insert_textbox(element,'[email=\"'+escape_comcode(vb)+'\"]'+escape_comcode(va)+'[/email]');
-						}
+						if (vb!==null) insert_textbox(element,'[email=\"'+escape_comcode(vb)+'\"]'+escape_comcode(va)+'[/email]');
 					},
 					'{!comcode:INPUT_COMCODE_email;^}'
 				);
@@ -615,7 +547,6 @@ function do_input_i(field_name)
 function do_input_font(field_name)
 {
 	if (typeof window.insert_textbox_wrapping=='undefined') return;
-	if (typeof window.is_comcode_xml=='undefined') return;
 
 	var element=document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
@@ -628,13 +559,7 @@ function do_input_font(field_name)
 		window.fauxmodal_alert('{!NO_FONT_SELECTED;^}');
 		return;
 	}
-	if (is_comcode_xml(element))
-	{
-		insert_textbox_wrapping(document.getElementById(field_name),'<font param=\"'+escape_html(face.value)+'\" color=\"'+escape_html(colour.value)+'\" size=\"'+escape_html(size.value)+'\">','</font>');
-	} else
-	{
-		insert_textbox_wrapping(document.getElementById(field_name),'[font=\"'+escape_comcode(face.value)+'\" color=\"'+escape_comcode(colour.value)+'\" size=\"'+escape_comcode(size.value)+'\"]','[/font]');
-	}
+	insert_textbox_wrapping(document.getElementById(field_name),'[font=\"'+escape_comcode(face.value)+'\" color=\"'+escape_comcode(colour.value)+'\" size=\"'+escape_comcode(size.value)+'\"]','[/font]');
 }
 
 function set_font_sizes(list)

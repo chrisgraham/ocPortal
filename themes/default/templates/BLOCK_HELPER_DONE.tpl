@@ -20,15 +20,8 @@
 		element=ensure_true_id(element,'{FIELD_NAME;/}');
 
 		var comcode,comcode_semihtml;
-		if (is_comcode_xml(element))
-		{
-			comcode='<br /><br />{COMCODE_XML;^/}';
-			comcode_semihtml=comcode;
-		} else
-		{
-			comcode='{COMCODE;^/}';
-			comcode_semihtml='{COMCODE_SEMIHTML;^/}';
-		}
+		comcode='{COMCODE;^/}';
+		comcode_semihtml='{COMCODE_SEMIHTML;^/}';
 		var win=window;
 		if ('{$_GET%,save_to_id}'!='')
 		{

@@ -122,17 +122,6 @@ class Module_admin_custom_comcode extends standard_crud_module
 			'tag_block_tag'=>'BINARY',
 			'tag_textual_tag'=>'BINARY'
 		));
-
-		require_lang('custom_comcode');
-
-		$ve_hooks=find_all_hooks('systems','video_embed');
-		foreach (array_keys($ve_hooks) as $ve_hook)
-		{
-			require_code('hooks/systems/video_embed/'.$ve_hook);
-			$ve_ob=object_factory('Hook_video_embed_'.$ve_hook);
-			if (method_exists($ve_ob,'add_custom_comcode_field'))
-				$ve_ob->add_custom_comcode_field();
-		}
 	}
 
 	/**
@@ -264,7 +253,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 	function get_form_fields($title='',$description='',$enabled=1,$tag='this',$replace='<span class="example" style="color: {color}">{content}</span>',$example='[this color="red"]blah[/this]',$parameters='color=black',$dangerous_tag=0,$block_tag=0,$textual_tag=1)
 	{
 		$fields=new ocp_tempcode();
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		$fields->attach(form_input_codename(do_lang_tempcode('COMCODE_TAG'),do_lang_tempcode('DESCRIPTION_COMCODE_TAG'),'tag',$tag,true,NULL,MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TAG_TITLE'),'title',$title,true));
 		$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true));

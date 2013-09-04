@@ -149,7 +149,7 @@ function comcode_to_clean_text($message_plain)
 	$message_plain=preg_replace_callback('#\[indent[^\]]*\](.*)\[/indent\]#Us','_indent_callback',$message_plain);
 	$message_plain=preg_replace_callback('#\[title([^\]]*)\](.*)\[/title\]#Us','_title_callback',$message_plain);
 	$message_plain=preg_replace_callback('#\[box="([^"]*)"[^\]]*\](.*)\[/box\]#Us','_box_callback',$message_plain);
-	$tags_to_strip_inards=array('if_in_group','snapback','post','thread','topic','include','staff_note','attachment','attachment_safe','contents','block','random');
+	$tags_to_strip_inards=array('if_in_group','snapback','post','topic','include','staff_note','attachment','attachment_safe','contents','block','random');
 	foreach ($tags_to_strip_inards as $s)
 	{
 		$message_plain=preg_replace('#\['.$s.'[^\]]*\].*\[/'.$s.'\]#Us','',$message_plain);

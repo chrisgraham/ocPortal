@@ -74,7 +74,7 @@ If you wish for the other system to appear directly inside ocPortal, much like a
 
 [title="3"]iframe[/title]
 
-[exp_thumb="Creating a new Comcode page to place the iframe" float="right"]integration_cc_page[/exp_thumb]
+[media width="150" description="Creating a new Comcode page to place the iframe" float="right"]data_custom/images/docs/integration_cc_page.png[/media]
 An iframe is an HTML construct that allows you to place one site inside a region ('frame') of another. There are two main drawbacks with frame based approaches however:
  - the browser back button will send the whole ocPortal site back, not the embedded site. In other words, if you have made clicks inside the embedded system, and then click 'back' in your browser, ocPortal will move back, with the likely result being the embedded section is no longer the display ocPortal page
  - sometimes web browser bugs can cause rendering problems, especially when it comes to scrollbars

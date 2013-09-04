@@ -8,7 +8,7 @@ A Super-Member is a member who is not staff, but is granted additional access ba
 
 [title="2"]Virtues of on-line collaboration[/title]
 
-[exp_thumb="The Collaboration Zone menu" float="right"]collaboration_menu[/exp_thumb]
+[media width="150" description="The Collaboration Zone menu" float="right"]data_custom/images/docs/collaboration_menu.png[/media]
 The Internet, combined with ocPortal, is a powerful tool for online-collaboration. It provides the ability for people across the world to work together; but even when used by people working in the same building it can still be a great aid in the sharing and organising of information.
 
 ocPortal can be used to organise shared documents, provide a forum for discussion, make announcements, structure information, chat from across the world, and a lot more.
@@ -25,11 +25,11 @@ These may be used, deleted, or moved, according to your specific needs.
 [surround]
 The file dump is a tool to allow sharing of files. It provides the ability to upload, download, and delete files, and organise files into folders.
 [box="Important note" width="25em" float="right"]There is nothing stopping ordinary users from downloading from the file/media library if they have the URL to a file. This is sometimes useful, but you should be aware that if files are given guessable filenames, they will not be secure.[/box]
-[exp_thumb="The File Dump" float="left"]collaboration_filedump[/exp_thumb]
+[media width="150" description="The File Dump" float="left"]data_custom/images/docs/collaboration_filedump.png[/media]
 [/surround]
 [title="2"]Other Super-members[/title]
 [surround]
-[exp_thumb="The Super-members fellows page" float="right"]collaboration_supermembers[/exp_thumb]
+[media width="150" description="The Super-members fellows page" float="right"]data_custom/images/docs/collaboration_supermembers.png[/media]
 The Collaboration Zone includes a page listing all members that have access, with links to information relating to them, and to contact them. It exists to make sure super-members are aware of each other, and to facilitate easy communication between them.
 [/surround]
 [title="2"]Additional resources that may be used[/title]

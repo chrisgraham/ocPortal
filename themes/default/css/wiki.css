@@ -34,11 +34,11 @@
 	margin-bottom: 1.5em;
 }
 
-.wiki_screen .wiki_exp_ref {
+.wiki_screen .wiki_link {
 	font-size: 1em !important;
 }
 
-.wiki_screen .wiki_exp_ref a {
+.wiki_screen .wiki_link a {
 	background: none !important;
 	padding: 0 !important;
 }

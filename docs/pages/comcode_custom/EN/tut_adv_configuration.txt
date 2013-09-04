@@ -43,7 +43,7 @@ ocPortal has a rich, multi-layered, permission system. In creation of this syste
  - ease-of-use
  - quickness of configuration
 
-[exp_thumb="Privileges are set like this" float="right"]adv_config_specific[/exp_thumb]
+[media width="150" description="Privileges are set like this" float="right"]data_custom/images/docs/adv_config_specific.png[/media]
 ocPortal has two main types of permission:
 1) privileges
 2) access permissions (for defining what may be viewed)
@@ -110,7 +110,7 @@ It is recommended that you never move pages because it complicates the upgrade p
 
 [title="2"].htaccess[/title]
 [surround]
-[exp_thumb="Finding how to change your settings" float="right"]phpsettings[/exp_thumb]
+[media width="150" description="Finding how to change your settings" float="right"]data_custom/images/docs/phpsettings.png[/media]
 You can try and get PHP and the web server to use an optimal configuration, via a special file named '.htaccess'. If you want the 'short URLs' option to be enabled, this step is necessary.
 Note that the file may already exist, potentially for either of two reasons:
 1) It was already there from before ocPortal was installed.

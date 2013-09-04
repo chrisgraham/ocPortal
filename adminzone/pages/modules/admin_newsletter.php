@@ -1447,7 +1447,7 @@ class Module_admin_newsletter extends standard_crud_module
 		if (post_param_integer('make_periodic',0)==1)
 			$preview_subject.=' - '.get_timezoned_date(time(),false,false,false,true);
 		$preview_subject=do_lang('NEWSLETTER_PREVIEW_SUBJECT',$preview_subject);
-		require_code('comcode_text');
+		require_code('comcode_compiler');
 		$preview=do_template('NEWSLETTER_CONFIRM_WRAP',array('_GUID'=>'02bd5a782620141f8589e647e2c6d90b','TEXT_PREVIEW'=>$text_preview,'PREVIEW'=>$_preview,'SUBJECT'=>$subject));
 
 		mail_wrap($preview_subject,($html_only==1)?$_preview->evaluate():$message,array($address),$username/*do_lang('NEWSLETTER_SUBSCRIBER',get_site_name())*/,$from_email,$from_name,3,NULL,true,NULL,true,$in_html);

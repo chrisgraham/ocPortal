@@ -13,7 +13,7 @@ ocPortal has a concept called a 'block'. Blocks are essentially building blocks 
 
 [title="2"]How to use a block[/title]
 
-[exp_thumb="Actual Comcode that references blocks" float="right"]adv_comcode_pages[/exp_thumb]
+[media width="150" description="Actual Comcode that references blocks" float="right"]data_custom/images/docs/adv_comcode_pages.png[/media]
 Unlike other systems that you may have experience with, ocPortal blocks (such as news blocks or poll blocks) are not arranged graphically. Usage of blocks is easiest shown by example. If you login to your site as your administrator user, and choose to edit the front page of the Welcome Zone, then you will see the page consists of Comcode: in particular, you will see that the '\[block]' tag is used many times in the page.
 To use a block, all you actually need to do is to use the Comcode '\[block]' tag, with the name of the block as the tag contents. Parameters passed to the block simply get placed as parameters for the block tag itself.
 
@@ -52,8 +52,8 @@ The '[tt]main_multi_content[/tt]', '[tt]main_cc_embed[/tt]', '[tt]main_gallery_e
 
 [title="2"]Exporting attachments[/title]
 
-[exp_thumb="Where to export a Comcode page from" float="left"]adv_comcode_export[/exp_thumb]
-[exp_thumb="An exported Comcode page consists of text like this" float="right"]adv_comcode_exported[/exp_thumb]
+[media width="150" description="Where to export a Comcode page from" float="left"]data_custom/images/docs/adv_comcode_export.png[/media]
+[media width="150" description="An exported Comcode page consists of text like this" float="right"]data_custom/images/docs/adv_comcode_exported.png[/media]
 Comcode pages support attachments, so that media may be arranged in the document to make a rich experience. When you create or edit your page, you have the option to add your attachments, and to arrange the Comcode attachment tags in your document, to perfect the layout.
 The Comcode system also has support for 'inline attachments', which are constructed in a similar way to how attachments are stored in e-mail addresses (technically, it is called base64-encoding). This feature is very useful if you want to give a Comcode page, complete with attachments (images, or downloads, for instance), to another ocPortal user (for example, we are using it to distribute tutorials). When 'inline attachments' are found, ocPortal will extract them, much like the extracting of an archive, and rewrite the page so as to reference the extracted files as if the attachments were uploading locally.
 To export a Comcode page with 'inline attachments', choose to edit the page, and click the 'Export page' link.

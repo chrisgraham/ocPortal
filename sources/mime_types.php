@@ -22,9 +22,10 @@
  * Find the mime type for the given file extension. It does not take into account whether the file type has been white-listed or not, and returns a binary download mime type for any unknown extensions.
  *
  * @param  string			The file extension (no dot)
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types
  * @return string			The MIME type
  */
-function get_mime_type($extension)
+function get_mime_type($extension,$as_admin=false)
 {
 	$mime_types=array(
 
@@ -37,8 +38,8 @@ function get_mime_type($extension)
 		'pdf'=>'application/pdf',
 		'rtf'=>'text/richtext',
 		'ps'=>'application/postscript',
-		'html'=>'application/octet-stream', // to prevent XSS
-		'htm'=>'application/octet-stream', // to prevent XSS
+		'html'=>$as_admin?'text/html':'application/octet-stream',
+		'htm'=>$as_admin?'text/html':'application/octet-stream',
 
 		// Open office
 		'odt'=>'application/vnd.oasis.opendocument.text',
@@ -53,17 +54,17 @@ function get_mime_type($extension)
 		'xlsx'=>'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 
 		// XML
-		'xml'=>'application/octet-stream', // to prevent XSS	// 'text/xml',
-		'rss'=>'application/octet-stream', // to prevent XSS	// 'application/rss+xm',
-		'atom'=>'application/octet-stream', // to prevent XSS	// 'application/atom+xml',
+		'xml'=>$as_admin?'text/xml':'application/octet-stream',
+		'rss'=>$as_admin?'application/rss+xml':'application/octet-stream',
+		'atom'=>$as_admin?'application/atom+xml':'application/octet-stream',
 
 		// Presentations/Animations/3D
 		'ppt'=>'application/powerpoint',
 		'pptx'=>'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-		'svg'=>'application/octet-stream', // to prevent XSS	//'image/svg+xml',
+		'svg'=>$as_admin?'image/svg+xml':'application/octet-stream',
 		'wrl'=>'model/vrml',
 		'vrml'=>'model/vrml',
-		'swf'=>'application/octet-stream', // to prevent XSS	// 'application/x-shockwave-flash',
+		'swf'=>$as_admin?'application/x-shockwave-flash':'application/octet-stream',
 
 		// Images
 		'png'=>'image/png',

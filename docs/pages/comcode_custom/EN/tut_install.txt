@@ -31,7 +31,7 @@ The second option is the manual installer. This option requires you to manually 
 
 [title="2"]Preparing files[/title]
 
-[exp_thumb="Example of \"Download Now\" link" float="left"]install_download[/exp_thumb]
+[media width="150" description="Example of \"Download Now\" link" float="left"]data_custom/images/docs/install_download.png[/media]
 To install ocPortal, you must first download it from our web site ({$BRAND_BASE_URL}). It is generally best to choose the latest version, and, as stated above, we also recommend choosing the "quick method".
 
 Download ocPortal from our website. Save it to a location where you'll be able to find it.
@@ -40,17 +40,17 @@ After it downloads, you'll need to extract the files. The exact methods for doin
 
 [title="3"]Using FTP[/title]
 
-[exp_thumb="File upload demonstration" float="right"]install_upload_ftp[/exp_thumb]
-[exp_thumb="Internet Explorer FTP login" float="right"]install_login_ftp[/exp_thumb]
+[media width="150" description="File upload demonstration" float="right"]data_custom/images/docs/install_upload_ftp.gif[/media]
+[media width="150" description="Internet Explorer FTP login" float="right"]data_custom/images/docs/install_login_ftp.png[/media]
 The next step is to upload the files to your web server. To do this you'll need an FTP client (such as [url="SmartFTP"]http://www.smartftp.com[/url] or [url="CuteFTP"]http://www.cuteftp.com[/url], or use the one that comes with Windows). The exact steps to upload the files depend slightly depending on which FTP client you choose.
 
-If you'd like to use the one bundled with windows, open a new Internet Explorer window, and in the address bar, type [tt]ftp://username@servername.com[/tt], replacing [tt]username[/tt] with your username and [tt]servername[/tt] with the servername given to you by your web host. You should be presented with a login screen (if not, you can access it by choosing File > Login As), where you can enter the username and password given to you by your web host [[exp_ref]install_login_ftp[/exp_ref]]. Then you'll need to navigate to your webroot (possibly in a folder called [tt]www[/tt] or [tt]httpdocs[/tt]). If you can't find your webroot, email your webhost for help.
+If you'd like to use the one bundled with windows, open a new Internet Explorer window, and in the address bar, type [tt]ftp://username@servername.com[/tt], replacing [tt]username[/tt] with your username and [tt]servername[/tt] with the servername given to you by your web host. You should be presented with a login screen (if not, you can access it by choosing File > Login As), where you can enter the username and password given to you by your web host ([url="image" overlay="1"]data_custom/images/docs/install_login_ftp.png[/url]). Then you'll need to navigate to your webroot (possibly in a folder called [tt]www[/tt] or [tt]httpdocs[/tt]). If you can't find your webroot, email your webhost for help.
 
 At this point you need to decide whether you want your website to reside in your root folder or not. If you choose to place it in your root folder (which is the recommended option), people will be able to access your site by going to [tt]http://www.mywebsite.com[/tt] (unless you don't own your own domain name). If you choose to place it in a subfolder (for example, "subfolder"), people will access your ocPortal installation by going to [tt]http://www.mywebsite.com/subfolder[/tt].
 
 When you successfully connect, find your webroot, and navigate into a subfolder if you chose to, you need to upload the files that were inside the zip package you downloaded. If you chose the quick installer, these files are called 'install.php', the other is called 'data.ocp'. If you chose the manual installer, there will be many more.
 
-Regardless whether or not you chose to make a new subfolder, you need to put these files in the same folder. This can usually be done by dragging and dropping the files from your computer to your web host in your FTP client [[exp_ref]install_upload_ftp[/exp_ref]]. If your FTP client presents a choice of whether to upload in 'Binary' or 'ASCII'/'Text' mode, choose 'Binary' mode.
+Regardless whether or not you chose to make a new subfolder, you need to put these files in the same folder. This can usually be done by dragging and dropping the files from your computer to your web host in your FTP client ([url="image" overlay="1"]data_custom/images/docs/install_upload_ftp.gif[/url]). If your FTP client presents a choice of whether to upload in 'Binary' or 'ASCII'/'Text' mode, choose 'Binary' mode.
 
 [title="2"]Permissions[/title]
 [box="Tip" width="25em" float="right"]Note for Linux-server users: If you are on a suexec-system (where the PHP script is run as your own user), the default 744 and 644 permissions should be suitable (with _config.php being 600 for additional security). The installer will tell you if you are on a suexec-system, otherwise assume you are not and you still will need to set the permissions.[/box]
@@ -63,7 +63,7 @@ If you don't have shell access, then you will need to manually set each folder t
 
 Here are the directories that need file permissions setting:
 
-[exp_thumb="Tick (check) the highlighted boxes for all the files/folders listed to the left. This screenshot was taken on a Mac using Cyberduck, but the process is similar for other software. Usually to get to a screen like this you right-click on a file/folder and choose something like 'Properties'." float="right"]install_chmod[/exp_thumb]
+[media width="150" description="Tick (check) the highlighted boxes for all the files/folders listed to the left. This screenshot was taken on a Mac using Cyberduck, but the process is similar for other software. Usually to get to a screen like this you right-click on a file/folder and choose something like 'Properties'." float="right"]data_custom/images/docs/install_chmod.png[/media]
 Set the following to [b]777[/b]: (full directory permissions)
  - adminzone/pages/comcode_custom
  - adminzone/pages/comcode_custom/<for-each-language>
@@ -159,7 +159,7 @@ Set the following to [b]666[/b]: (full read/write permissions)
 Remember -- if you chose the quick install option, it's likely that none of these permission settings are required.
 
 [title="2"]Installation[/title]
-[exp_thumb="The ocPortal installation screen" float="left"]install_step1[/exp_thumb]
+[media width="150" description="The ocPortal installation screen" float="left"]data_custom/images/docs/install_step1.png[/media]
 
 After you upload these files, you've completed the hardest part of the installation. The next step is to open your web browser and go to [tt]http://www.mywebsite.com/install.php[/tt] (substitute '[tt]http://www.mywebsite.com/[/tt]' as appropriate for your domain and install path). You should be greeted with a welcome screen, asking you which language you would like to use.
 
@@ -169,7 +169,7 @@ On step three, you are presented with a choice to choose which forum system you 
 
 If you would like your website to be one of many on one network, you can choose the option to install a multi-site-network. Read our [page="tut_msn"]multi-site-network[/page] tutorial for more information on this feature, and to decide whether or not you would like to use it.
 
-[exp_thumb="Step 4: primary configuration" float="left"]install_step4[/exp_thumb]
+[media width="150" description="Step 4: primary configuration" float="left"]data_custom/images/docs/install_step4.png[/media]
 
 On step 4 is where the core configuration settings are input. Fill out each of the configuration options to the best of your knowledge. If you chose the "No forums or members" option or the "ocPortal's own forum" choice, you will be presented with fewer options than shown in our example.
 
@@ -180,11 +180,11 @@ However, if you are installing a forum system, the password you choose here is s
 
 All of the database fields should be filled out with the information given to you by your webhost. If you would like to tweak the cookie settings, you can click the "Cookie Settings" link to open up several more options. Each other option is explained in detail on the configuration page, thus is will not be repeated here. When you finish, click the "Install ocPortal" link at the bottom of the screen.
 
-[exp_thumb="Step 5: success message" float="right"]install_step5[/exp_thumb]
+[media width="150" description="Step 5: success message" float="right"]data_custom/images/docs/install_step5.png[/media]
 
-[surround]Hopefully, at this point you'll receive this [exp_ref="success"]install_step5[/exp_ref] message. If you receive any errors, return to the previous page and correct them. Click the "Proceed" button to continue through the installation. There will be 4 more similar screens until you finish the installation.
+[surround]Hopefully, at this point you'll receive this [url="success message" overlay="1"]data_custom/images/docs/install_step5.png[/url]. If you receive any errors, return to the previous page and correct them. Click the "Proceed" button to continue through the installation. There will be 4 more similar screens until you finish the installation.
 
-[exp_thumb="Final screen" float="left"]install_done[/exp_thumb]
+[media width="150" description="Final screen" float="left"]data_custom/images/docs/install_done.png[/media]
 
 After you finish the installation, you are presented with one final screen, congratulating you on your successful installation, and giving you two choices -- you can either jump right to your new homepage, or go to the Setup Wizard. If you have never used ocPortal before, we suggest that you run the Setup Wizard, as it will guide you through the basic settings of your website and familiarise you with the way ocPortal works.
 

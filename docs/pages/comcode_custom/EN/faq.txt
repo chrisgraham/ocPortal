@@ -431,9 +431,6 @@ As of version 9, it is all in the [tt]GLOBAL_HTML_WRAP.tpl[/tt] template.
 [b]How do I edit ocPortal in an HTML editor?[/b]
 It is not possible to do this, as ocPortal screens are constructed by an amalgamation of many template files. It is possible, however, to construct HTML pages, using an HTML editor. HTML pages can be placed into ocPortal zones much like a Comcode page can: however, we would advise you use Comcode pages instead.
 
-[b]How can I include Flash?[/b]
-You may insert it using regular HTML via the 'html' Comcode tag, or you may use our 'flash' Comcode tag.
-
 [b]Can I include HTML?[/b]
 Yes, using the 'html' Comcode tag.
 

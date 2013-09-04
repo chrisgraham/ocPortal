@@ -37,14 +37,14 @@ This section will describe the format used to store [concept]language string[/co
 ocPortal language packs are made up of [tt].ini[/tt] files, containing mappings between special codes (based on the English) and the actual string as displayed. For example, a common string in the 'global' language file (the one containing common strings used throughout the portal), is coded as:
 [code]PROCEED=Proceed[/code]
 ocPortal is developed in British English, and this is technically known as the 'fall-back language', because it always has a complete set of language files and strings.
-[exp_thumb="Choosing a language and language file to edit in the language editor" float="right"]intl_trans_choose[/exp_thumb]
+[media width="150" description="Choosing a language and language file to edit in the language editor" float="right"]data_custom/images/docs/intl_trans_choose.png[/media]
 
 The .ini files for any translation are stored together in a directory that is named with the standard two-letter code to denote that language; for example, English is 'EN'. A list of these codes is in [tt]lang/langs.ini[/tt].
 
 All bundled languages packs are located in the 'lang' directory of ocPortal. There is also a 'lang_custom' directory which contains custom language packs, or language packs that 'override' those available in the 'lang' directory on a file-by-file basis. Whenever language files are edited in the Admin Zone, the file is automatically overridden to a lang_custom one if it has not been already.
 [surround]
 Not all language files need to be translated, and language files do not have to be complete, as if a string cannot be found and the fall-back language (English) isn't being used, ocPortal will look in the English language pack using the fall-back mechanism.
-[exp_thumb="Using the language editor to translate language strings" float="right"]intl_trans_screen[/exp_thumb][/surround]
+[media width="150" description="Using the language editor to translate language strings" float="right"]data_custom/images/docs/intl_trans_screen.png[/media][/surround]
 
 [title="2"]The language editor (i.e. how to change strings)[/title]
 
@@ -171,7 +171,7 @@ This generally does not matter a lot (because anything that you ask to store wil
 
 ocPortal 10+ uses utf-8 tables by default and utf-8 internally, so none of this is an issue. It should work automatically, but you should still have a basic understanding of how collations work.
 
-[exp_thumb="phpMyAdmin exports" float="right"]intl_phpmyadmin_settings[/exp_thumb]When ocPortal 9 or earlier installs, it will use latin1 (equivalent of ISO-8859-1) by default, because this is what the default English language pack uses. MySQL doesn't make it easy to convert the character set of the database, so the best way to do it is to export to an SQL dump, edit the dump in a text editor, and reimport into a new database:
+[media width="150" description="phpMyAdmin exports" float="right"]data_custom/images/docs/intl_phpmyadmin_settings.png[/media]When ocPortal 9 or earlier installs, it will use latin1 (equivalent of ISO-8859-1) by default, because this is what the default English language pack uses. MySQL doesn't make it easy to convert the character set of the database, so the best way to do it is to export to an SQL dump, edit the dump in a text editor, and reimport into a new database:
  - Use phpMyAdmin to export all the tables to a [tt].sql[/tt] file on your computer; if it asks what character set to make the file, choose UTF-8
   - Make sure to not include multiple rows in each [tt]INSERT[/tt] statement, as MySQL may not be able to reimport it on some servers (see the screenshot to the right for how to set this on phpMyAdmin, although it may vary from one version to another)
  - Do whatever you would normally do to backup your database; that will usually mean keeping a copy of the above file (but ensure it is complete before relying on it, sometimes SQL dumps don't download correctly)
@@ -228,10 +228,10 @@ Once you have a perfect translation on Launchpad, and have imported it into your
 
 [title="2"]Turning on a different language[/title]
 
-[exp_thumb="Changing the default site language" float="right"]intl_config_2[/exp_thumb]
+[media width="150" description="Changing the default site language" float="right"]data_custom/images/docs/intl_config_2.png[/media]
 To change the default language used on the whole site, use the [tt]http://yourbaseurl/config_editor.php[/tt] script (load up the URL, with [tt]yourbaseurl[/tt] substituted with your real base URL).
 
-[exp_thumb="Language configuration" float="right"]intl_config[/exp_thumb]
+[media width="150" description="Language configuration" float="right"]data_custom/images/docs/intl_config.png[/media]
 It is possible to configure ocPortal such that members may select which language to use on your site, and pages are then presented in this language. There are a number of ways a user may choose a language:
  - via the language block (which inserts a [tt]keep_lang[/tt] parameter into the URL, to preserve their choice until they close the browser window)
  - via their member profile (OCF supports this better than other language drivers, although the integration can be improved by editing the [tt]lang/map.ini[/tt] file)
@@ -257,7 +257,7 @@ If this is not what you thought was the case it might just tell you where your p
 
 [title="2"]Criticising language packs[/title]
 
-[exp_thumb="Choosing a language to criticise the translation of" float="right"]intl_crit_choose[/exp_thumb]
+[media width="150" description="Choosing a language to criticise the translation of" float="right"]data_custom/images/docs/intl_crit_choose.png[/media]
 {!lang:DOC_CRITICISE_LANGUAGE_PACK}
 
 [title="2"]Advanced: Translating content[/title]
