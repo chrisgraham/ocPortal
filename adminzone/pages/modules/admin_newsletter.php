@@ -1537,7 +1537,7 @@ class Module_admin_newsletter extends standard_aed_module
 				{
 					$send_details_string_exp.='"'.str_replace(chr(10),'\n',addslashes($key)).'"=>"'.str_replace(chr(10),'\n',addslashes($val)).'",';
 				}
-				$schedule_code=':require_code(\'newsletter\'); actual_send_newsletter("'.php_addslashes($message).'","'.php_addslashes($subject).'","'.php_addslashes($lang).'",array('.$send_details_string_exp.'),'.strval($html_only).',"'.php_addslashes($from_email).'","'.php_addslashes($from_name).'",'.strval($priority).',"'.php_addslashes($template).'");';
+				$schedule_code=':require_code(\'newsletter\'); actual_send_newsletter("'.php_addslashes($message).'","'.php_addslashes($subject).'","'.php_addslashes($lang).'",array('.$send_details_string_exp.'),'.strval($html_only).',"'.php_addslashes($from_email).'","'.php_addslashes($from_name).'",'.strval($priority).',"'.php_addslashes($csv_data).'","'.php_addslashes($template).'");';
 				$start_year=post_param_integer('schedule_year');
 				$start_month=post_param_integer('schedule_month');
 				$start_day=post_param_integer('schedule_day');
