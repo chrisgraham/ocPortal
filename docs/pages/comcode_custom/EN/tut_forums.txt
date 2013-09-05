@@ -65,8 +65,8 @@ If a user belongs to a another group that has the view access check box checked 
 By default, forum permissions are set so that members need their posts validating before they show up. This can be changed using ocPortal's standard permission functionality, but as it is a common task, we thought we'd explain it as an example...
 
 You'll need to enable the following global privilege:
- - 'Bypass validator for lowrange content', if a member is to be able to post without requiring validation
- - 'Bypass validator for midrange content', if a member is to be able to create a topic without requiring validation
+ - 'Avoid validation (approval) for lowrange content', if a member is to be able to post without requiring validation
+ - 'Avoid validation (approval) for midrange content', if a member is to be able to create a topic without requiring validation
 
 You can set them in 3 places (in order from highest level to lowest level):
 1) in the 'Submission' set of the global privilege settings (go to the Security section of the Admin Zone, then the 'Global privileges' icon, then the Submission section)
