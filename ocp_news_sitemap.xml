@@ -1,0 +1,186 @@
+
+		<?xml version="1.0" encoding="UTF-8"?>
+		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+	
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_7-010</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-09-06UTC13:33:44+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_7-009</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-09-06UTC13:33:29+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_7-008</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-09-06UTC13:33:19+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_6</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-09-06UTC13:33:03+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_5</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-09-06UTC13:32:39+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_4</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-09-06UTC13:31:28+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_3</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-09-06UTC13:31:04+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_2</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-08-29UTC13:28:41+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-08-29UTC13:18:47+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+						<news:geo_locations>Florida, USA</news:geo_locations>
+				
+					</news:news>
+			  </url>
+			
+		</urlset>
+	

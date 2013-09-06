@@ -30,6 +30,7 @@ cacls themes\default\templates_cached\* /e /g %user%:F
 cacls data_custom\fields.xml /e /g %user%:F
 cacls data_custom\errorlog.php /e /g %user%:F
 cacls data_custom\ocp_sitemap.xml /e /g %user%:F
+cacls data_custom\ocp_news_sitemap.xml /e /g %user%:F
 cacls data_custom\modules\admin_stats /e /g %user%:F
 cacls imports\* /e /g %user%:F
 cacls imports\addons\* /e /g %user%:F

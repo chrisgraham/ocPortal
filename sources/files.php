@@ -350,6 +350,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 			'download_tree_made.htm'=>'pages/html_custom/EN',
 			'cedi_tree_made.htm'=>'site/pages/html_custom/EN',
 			'ocp_sitemap.xml'=>'',
+			'ocp_news_sitemap.xml'=>'',
 			'errorlog.php'=>'data_custom',
 			'execute_temp.php'=>'data_custom',
 			// These two too, although in git we don't change these as builds will not rebuild them

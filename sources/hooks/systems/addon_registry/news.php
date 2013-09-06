@@ -132,7 +132,9 @@ class Hook_addon_registry_news
 			'sources/hooks/modules/admin_import/rss.php',
 			'sources/hooks/modules/admin_newsletter/news.php',
 			'sources/hooks/blocks/main_staff_checklist/blog.php',
-			'OCF_MEMBER_PROFILE_BLOG.tpl'
+			'OCF_MEMBER_PROFILE_BLOG.tpl',
+			'sources/news_sitemap.php',
+			'ocp_news_sitemap.xml',
 		);
 	}
 

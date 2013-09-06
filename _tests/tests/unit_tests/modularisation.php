@@ -33,6 +33,7 @@ class modularisation_test_set extends ocp_test_case
 		@touch(get_custom_file_base().'/site/pages/html_custom/EN/download_tree_made.htm');
 		@touch(get_custom_file_base().'/site/pages/html_custom/EN/cedi_tree_made.htm');
 		@touch(get_custom_file_base().'/ocp_sitemap.xml');
+		@touch(get_custom_file_base().'/ocp_news_sitemap.xml');
 
 		$addon_data=array();
 		$dh=opendir(get_file_base().'/sources/hooks/systems/addon_registry');

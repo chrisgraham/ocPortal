@@ -67,6 +67,16 @@ function sitemaps_build()
 	spawn_page_crawl('pagelink_to_sitemapsxml',$GLOBALS['FORUM_DRIVER']->get_guest_id(),NULL,DEPTH__ENTRIES);
 	sitemaps_xml_finished();
 
+	ping_sitemap(get_custom_base_url().'/ocp_sitemap.xml');
+}
+
+/**
+ * Ping search engines with an updated sitemap.
+ *
+ * @param  URLPATH 	Sitemap URL.
+ */
+function ping_sitemap($url)
+{
 	// Ping search engines
 	if (get_option('auto_submit_sitemap')=='1')
 	{
@@ -84,7 +94,7 @@ function sitemaps_build()
 			);
 			foreach ($services as $service)
 			{
-				http_download_file($service.urlencode(get_custom_base_url().'/ocp_sitemap.xml'),NULL,false);
+				http_download_file($service.urlencode($url),NULL,false);
 			}
 		}
 	}

@@ -356,7 +356,9 @@ END;
 
 	if (($validated==1) && (get_option('site_closed')=='0') && (ocp_srv('HTTP_HOST')!='127.0.0.1') && (ocp_srv('HTTP_HOST')!='localhost') && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category_id))))
 	{
-		send_rss_ping(false);
+		register_shutdown_function('send_rss_ping');
+		require_code('news_sitemap');
+		register_shutdown_function('build_news_sitemap');
 	}
 
 	return $id;
@@ -368,7 +370,7 @@ END;
  * @param  boolean			Whether to show errors
  * @return string				HTTP result output
  */
-function send_rss_ping($show_errors=true)
+function send_rss_ping($show_errors=false)
 {
 	$out='';
 	$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode(find_script('backend').'?type=rss&mode=news'),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
@@ -485,7 +487,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	if (($validated==1) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category))))
 	{
-		send_rss_ping(false);
+		register_shutdown_function('send_rss_ping');
 	}
 
 	require_code('feedback');

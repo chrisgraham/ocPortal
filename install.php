@@ -300,6 +300,7 @@ function step_1()
 					// Volatile files (see also list in make_release.php)
 					if ($file=='data_custom/errorlog.php') continue;
 					if ($file=='ocp_sitemap.xml') continue;
+					if ($file=='ocp_news_sitemap.xml') continue;
 					if ($file=='site/pages/html_custom/EN/download_tree_made.htm') continue;
 					if ($file=='site/pages/html_custom/EN/cedi_tree_made.htm') continue;
 					if ($file=='data_custom/execute_temp.php') continue;

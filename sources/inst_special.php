@@ -74,7 +74,7 @@ function get_chmod_array()
 						'themes/map.ini','text_custom','text_custom/'.$LANG,
 						'data_custom/modules/chat/chat_last_msg.dat','data_custom/modules/chat/chat_last_event.dat',
 						'lang_cached','lang_cached/'.$LANG,'lang_custom','lang_custom/'.$LANG,
-						'data_custom/errorlog.php','ocp_sitemap.xml','data_custom/permissioncheckslog.php',
+						'data_custom/errorlog.php','ocp_sitemap.xml','ocp_news_sitemap.xml','data_custom/permissioncheckslog.php',
 						'pages/html_custom','site/pages/html_custom','docs/pages/html_custom','adminzone/pages/html_custom','forum/pages/html_custom','cms/pages/html_custom',
 						'pages/html_custom/'.$LANG,'site/pages/html_custom/'.$LANG,'docs/pages/html_custom/'.$LANG,'adminzone/pages/html_custom/'.$LANG,'forum/pages/html_custom/'.$LANG,'cms/pages/html_custom/'.$LANG,
 						'pages/comcode_custom','site/pages/comcode_custom','docs/pages/comcode_custom','adminzone/pages/comcode_custom','forum/pages/comcode_custom','cms/pages/comcode_custom',

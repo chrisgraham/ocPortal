@@ -221,7 +221,7 @@ if ($type=='go')
 		{
 			foreach ($files as $file)
 			{
-				if (preg_match('#^(data\_custom/|ocp_sitemap.xml$|info.php$)#',$file)==0)
+				if (preg_match('#^info.php$#',$file)==0)
 				{
 					if (filemtime(get_file_base().'/'.$file)>$cutoff_point)
 					{

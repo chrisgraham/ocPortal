@@ -459,6 +459,11 @@
   </parameter> 
 
   <parameter
+    name="SetAclParameter132" description="Sets the ACL on the right file" defaultValue="{Application Path}/ocp_news_sitemap.xml" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/ocp_news_sitemap.xml" />
+  </parameter> 
+
+  <parameter
     name="SetAclParameter34" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/modules/admin_stats" tags="Hidden">
     <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/modules/admin_stats" />
   </parameter> 
