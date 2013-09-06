@@ -38,7 +38,6 @@ class Hook_media_rendering_video_cnn
 	 */
 	function recognises_mime_type($mime_type)
 	{
-		if ($mime_type=='TODO') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -50,8 +49,24 @@ class Hook_media_rendering_video_cnn
 	 */
 	function recognises_url($url)
 	{
-		if (preg_match('#TODO#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
+		if (preg_match('#^http://(edition\.)?cnn\.com/video/[\#\?]/(video/)?([\w/\.]+)#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
+	}
+
+	/**
+	 * If we can handle this URL, get the thumbnail URL.
+	 *
+	 * @param  URLPATH		Video URL
+	 * @return ?string		The thumbnail URL (NULL: no match).
+	 */
+	function get_video_thumbnail($src_url)
+	{
+		$matches=array();
+		if (preg_match('#^http://(edition\.)?cnn\.com/video/[\#\?]/(video/)?([\w/\.]+)#',$src_url,$matches)!=0)
+		{
+			return 'http://i.cdn.turner.com/cnn/video/'.$matches[3].'.214x122.jpg';
+		}
+		return NULL;
 	}
 
 	/**
@@ -63,7 +78,7 @@ class Hook_media_rendering_video_cnn
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('TODO',array('URL'=>$url));
+		return do_template('MEDIA_VIDEO_CNN',array('URL'=>$url));
 	}
 
 }

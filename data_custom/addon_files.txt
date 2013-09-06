@@ -17,7 +17,7 @@ simplified_emails
 
 oc_thumbs_up
 ------------
- - themes/default/templates_custom/ATTACHMENT_IMG_MINI.tpl
+ - themes/default/templates_custom/MEDIA_IMAGE_WEBSAFE.tpl
  - sources_custom/hooks/systems/cleanup/image_thumbs.php
  - sources_custom/hooks/systems/cleanup/index.html
  - sources_custom/hooks/systems/cleanup/.htaccess

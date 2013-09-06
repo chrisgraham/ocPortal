@@ -225,7 +225,7 @@ function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_i
 				if ($next=='[')
 				{
 					// Look ahead to make sure it's a valid tag. If it's not then it's considered normal user input, not a tag at all
-					$dif=(($pos<$len) && ($comcode[$pos]=='/'))?1:0;
+					$dif=(($pos<$len) && ($comcode[$pos]=='/'))?1:0; // '0' if it's an opening tag, '1' if it's a closing tag
 					$ahead=substr($comcode,$pos+$dif,MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH);
 					$equal_pos=strpos($ahead,'=');
 					$space_pos=strpos($ahead,' ');
@@ -1087,106 +1087,57 @@ function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_i
 								{
 									if ((!$in_semihtml) && ($next=='h') && ((substr($comcode,$pos-1,strlen('http://'))=='http://') || (substr($comcode,$pos-1,strlen('https://'))=='https://') || (substr($comcode,$pos-1,strlen('ftp://'))=='ftp://')))
 									{
-										$link_end_pos=strpos($comcode,' ',$pos-1);
-										$link_end_pos_2=strpos($comcode,chr(10),$pos-1);
-										$link_end_pos_3=strpos($comcode,'[',$pos-1);
-										$link_end_pos_4=strpos($comcode,')',$pos-1);
-										$link_end_pos_5=strpos($comcode,'"',$pos-1);
-										$link_end_pos_6=strpos($comcode,'>',$pos-1);
-										$link_end_pos_7=strpos($comcode,'<',$pos-1);
-										$link_end_pos_8=strpos($comcode,'.'.chr(10),$pos-1);
-										$link_end_pos_9=strpos($comcode,', ',$pos-1);
-										$link_end_pos_10=strpos($comcode,'. ',$pos-1);
-										$link_end_pos_11=strpos($comcode,"'",$pos-1);
-										if (($link_end_pos_2!==false) && (($link_end_pos===false) || ($link_end_pos_2<$link_end_pos))) $link_end_pos=$link_end_pos_2;
-										if (($link_end_pos_3!==false) && (($link_end_pos===false) || ($link_end_pos_3<$link_end_pos))) $link_end_pos=$link_end_pos_3;
-										if (($link_end_pos_4!==false) && (($link_end_pos===false) || ($link_end_pos_4<$link_end_pos))) $link_end_pos=$link_end_pos_4;
-										if (($link_end_pos_5!==false) && (($link_end_pos===false) || ($link_end_pos_5<$link_end_pos))) $link_end_pos=$link_end_pos_5;
-										if (($link_end_pos_6!==false) && (($link_end_pos===false) || ($link_end_pos_6<$link_end_pos))) $link_end_pos=$link_end_pos_6;
-										if (($link_end_pos_7!==false) && (($link_end_pos===false) || ($link_end_pos_7<$link_end_pos))) $link_end_pos=$link_end_pos_7;
-										if (($link_end_pos_8!==false) && (($link_end_pos===false) || ($link_end_pos_8<$link_end_pos))) $link_end_pos=$link_end_pos_8;
-										if (($link_end_pos_9!==false) && (($link_end_pos===false) || ($link_end_pos_9<$link_end_pos))) $link_end_pos=$link_end_pos_9;
-										if (($link_end_pos_10!==false) && (($link_end_pos===false) || ($link_end_pos_10<$link_end_pos))) $link_end_pos=$link_end_pos_10;
-										if (($link_end_pos_11!==false) && (($link_end_pos===false) || ($link_end_pos_11<$link_end_pos))) $link_end_pos=$link_end_pos_11;
-										if ($link_end_pos===false) $link_end_pos=strlen($comcode);
-										$auto_link=preg_replace('#(keep|for)_session=[\d\w]*#','filtered=1',substr($comcode,$pos-1,$link_end_pos-$pos+1));
-										if (substr($auto_link,-3)!='://')
+										// Find the full link portion in the upcoming Comcode
+										$link_end_pos=strlen($comcode);
+										foreach (array(' ',chr(10),'[',')','"','>','<','.'.chr(10),', ','. ',"'",) as $link_terminator_str)
 										{
-											if (substr($auto_link,-1)=='.')
+											$link_end_pos_x=strpos($comcode,$link_terminator_str,$pos-1);
+											if (($link_end_pos_x!==false) && ($link_end_pos_x<$link_end_pos)) $link_end_pos=$link_end_pos_x;
+										}
+										$auto_link=substr($comcode,$pos-1,$link_end_pos-$pos+1);
+
+										// Strip down the link, for security reasons
+										$auto_link=preg_replace('#([?&])(keep|for)_session=[\d\w]*#','${1}',$auto_link);
+
+										if (substr($auto_link,-3)!='://') // If it's not just a hanging protocol
+										{
+											if (substr($auto_link,-1)=='.') // Strip trailing dot (dots may be within, but not at the end)
 											{
 												$auto_link=substr($auto_link,0,strlen($auto_link)-1);
 												$link_end_pos--;
 											}
 
-											$auto_link_tempcode=new ocp_tempcode();
-											$auto_link_tempcode->attach($auto_link);
+											// Find a media renderer for this link
+											$embed_output=mixed();
 											if (!$check_only)
 											{
-												$link_captions_title=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>$auto_link));
-
-												if ((is_null($link_captions_title)) || (substr($link_captions_title,0,1)=='!'))
-												{
-													$GLOBALS['COMCODE_PARSE_URLS_CHECKED']++;
-													if (($GLOBALS['NO_LINK_TITLES']) || ($GLOBALS['COMCODE_PARSE_URLS_CHECKED']>=MAX_URLS_TO_READ))
-													{
-														$link_captions_title=$auto_link;
-													} else
-													{
-														$link_captions_title='';
-														$downloaded_at_link=http_download_file($auto_link,3000,false);
-														if ((is_string($downloaded_at_link)) && (strpos($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'],'html')!==false) && ($GLOBALS['HTTP_MESSAGE']=='200'))
-														{
-															$matches=array();
-															if (preg_match('#\s*<title[^>]*\s*>\s*(.*)\s*\s*<\s*/title\s*>#miU',$downloaded_at_link,$matches)!=0)
-															{
-																require_code('character_sets');
-
-																$link_captions_title=trim(str_replace('&ndash;','-',str_replace('&mdash;','-',@html_entity_decode(convert_to_internal_encoding($matches[1]),ENT_QUOTES,get_charset()))));
-																if (((strpos(strtolower($link_captions_title),'login')!==false) || (strpos(strtolower($link_captions_title),'log in')!==false)) && (substr($auto_link,0,strlen(get_base_url()))==get_base_url()))
-																	$link_captions_title=''; // don't show login screen titles for our own website. Better to see the link verbatim
-															}
-														}
-														$GLOBALS['SITE_DB']->query_insert('url_title_cache',array(
-															't_url'=>substr($auto_link,0,255),
-															't_title'=>substr($link_captions_title,0,255),
-														),false,true); // To stop weird race-like conditions
-													}
-												}
-												$embed_output=mixed();
 												$link_handlers=find_all_hooks('systems','comcode_link_handlers');
 												foreach (array_keys($link_handlers) as $link_handler)
 												{
 													require_code('hooks/systems/comcode_link_handlers/'.$link_handler);
 													$link_handler_ob=object_factory('Hook_comcode_link_handler_'.$link_handler,true);
 													if (is_null($link_handler_ob)) continue;
-													$embed_output=$link_handler_ob->bind($auto_link,$link_captions_title,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
+													$embed_output=$link_handler_ob->bind($auto_link,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
 													if (!is_null($embed_output)) break;
 												}
-												if (is_null($embed_output))
-												{
-													$page_link=url_to_pagelink($auto_link,true);
-													if ($link_captions_title=='') $link_captions_title=$auto_link;
-													if ($page_link!='')
-													{
-														$embed_output=_do_tags_comcode('page',array('param'=>$page_link),make_string_tempcode(escape_html($link_captions_title)),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
-													} else
-													{
-														$embed_output=_do_tags_comcode('url',array('param'=>$link_captions_title),$auto_link_tempcode,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
-													}
-												}
-											} else $embed_output=new ocp_tempcode();
-											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-											$tag_output->attach($continuation);
-											$continuation='';
-											if (!$semiparse_mode)
-											{
-												$tag_output->attach($embed_output);
-											} else
-											{
-												$tag_output->attach(escape_html($auto_link));
 											}
-											$pos+=$link_end_pos-$pos;
-											$differented=true;
+
+											// If it was successfully rendered as media, put this into the output stream rather than the written link
+											if (!is_null($embed_output))
+											{
+												if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
+												$tag_output->attach($continuation);
+												$continuation='';
+												if (!$semiparse_mode)
+												{
+													$tag_output->attach($embed_output);
+												} else
+												{
+													$tag_output->attach(escape_html($auto_link));
+												}
+												$pos+=$link_end_pos-$pos;
+												$differented=true;
+											}
 										}
 									}
 								}

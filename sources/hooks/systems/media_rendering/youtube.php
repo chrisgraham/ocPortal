@@ -38,7 +38,6 @@ class Hook_media_rendering_youtube
 	 */
 	function recognises_mime_type($mime_type)
 	{
-		if ($mime_type=='TODO') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -50,8 +49,25 @@ class Hook_media_rendering_youtube
 	 */
 	function recognises_url($url)
 	{
-		if (preg_match('#TODO#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
+		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$url)!=0) || (preg_match('#^https?://youtu\.be/([\w\-]+)#',$url)!=0))
+			return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
+	}
+
+	/**
+	 * If we can handle this URL, get the thumbnail URL.
+	 *
+	 * @param  URLPATH		Video URL
+	 * @return ?string		The thumbnail URL (NULL: no match).
+	 */
+	function get_video_thumbnail($src_url)
+	{
+		$matches=array();
+		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$src_url,$matches)!=0))
+		{
+			return 'http://img.youtube.com/vi/'.rawurldecode($matches[1]).'/0.jpg';
+		}
+		return NULL;
 	}
 
 	/**
@@ -63,7 +79,7 @@ class Hook_media_rendering_youtube
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('TODO',array('URL'=>$url));
+		return do_template('MEDIA_YOUTUBE',array('URL'=>$url));
 	}
 
 }

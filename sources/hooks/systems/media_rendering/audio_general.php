@@ -59,7 +59,6 @@ class Hook_media_rendering_audio_general
 	 */
 	function recognises_url($url)
 	{
-		if (preg_match('#TODO#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_MEDIUM;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -72,7 +71,7 @@ class Hook_media_rendering_audio_general
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('TODO',array('URL'=>$url));
+		return do_template('MEDIA_VIDEO_GENERAL',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height'],'LENGTH'=>$attributes['length'],'THUMB_URL'=>$attributes['thumb_url']));
 	}
 
 }

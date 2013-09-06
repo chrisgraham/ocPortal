@@ -38,7 +38,6 @@ class Hook_media_rendering_video_facebook
 	 */
 	function recognises_mime_type($mime_type)
 	{
-		if ($mime_type=='TODO') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -50,8 +49,28 @@ class Hook_media_rendering_video_facebook
 	 */
 	function recognises_url($url)
 	{
-		if (preg_match('#TODO#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
+		if (preg_match('#^http://www\.facebook\.com/video/video\.php\?v=(\w+)#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
+	}
+
+	/**
+	 * If we can handle this URL, get the thumbnail URL.
+	 *
+	 * @param  URLPATH		Video URL
+	 * @return ?string		The thumbnail URL (NULL: no match).
+	 */
+	function get_video_thumbnail($src_url)
+	{
+		$matches=array();
+		if (preg_match('#^http://www\.facebook\.com/video/video\.php\?v=(\w+)#',$src_url,$matches)!=0)
+		{
+			$contents=http_download_file($src_url);
+			if (preg_match('#addVariable\("thumb_url", "([^"]*)"\);#',$contents,$matches)!=0)
+			{
+				return rawurldecode(str_replace('\u0025','%',$matches[1]));
+			}
+		}
+		return NULL;
 	}
 
 	/**
@@ -63,7 +82,7 @@ class Hook_media_rendering_video_facebook
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('TODO',array('URL'=>$url));
+		return do_template('MEDIA_VIDEO_FACEBOOK',array('URL'=>$url));
 	}
 
 }

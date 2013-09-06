@@ -56,7 +56,6 @@ class Hook_media_rendering_video_websafe
 	 */
 	function recognises_url($url)
 	{
-		if (preg_match('#TODO#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -69,7 +68,7 @@ class Hook_media_rendering_video_websafe
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('TODO',array('URL'=>$url));
+		return do_template('MEDIA_VIDEO_WEBSAFE',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height'],'LENGTH'=>$attributes['length'],'THUMB_URL'=>$attributes['thumb_url']));
 	}
 
 }

@@ -38,7 +38,6 @@ class Hook_media_rendering_vimeo
 	 */
 	function recognises_mime_type($mime_type)
 	{
-		if ($mime_type=='TODO') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -50,8 +49,54 @@ class Hook_media_rendering_vimeo
 	 */
 	function recognises_url($url)
 	{
-		if (preg_match('#TODO#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
+		if (preg_match('#^https?://vimeo\.com/(\d+)#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
+	}
+
+	/**
+	 * If we can handle this URL, get the thumbnail URL.
+	 *
+	 * @param  URLPATH		Video URL
+	 * @return ?string		The thumbnail URL (NULL: no match).
+	 */
+	function get_video_thumbnail($src_url)
+	{
+		$matches=array();
+		if (preg_match('#^https?://vimeo\.com/(\d+)#',$src_url,$matches)!=0)
+		{
+			$test=get_long_value('vimeo_thumb_for__'.$matches[1]);
+			if ($test!==NULL) return $test;
+
+			// Vimeo API method
+			if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
+			{
+				require_code('hooks/modules/video_syndication/vimeo');
+				$ob=object_factory('video_syndication_vimeo');
+				if ($ob->is_active())
+				{
+					$result=$ob->get_remote_videos(NULL,$matches[1]);
+					if (count($result)!=0)
+					{
+						foreach ($result as $r)
+						{
+							return $r['thumb_url'];
+						}
+					}
+					return NULL;
+				}
+			}
+
+			// Lame method (not so reliable)
+			$html=http_download_file($src_url,NULL,false);
+			if (is_null($html)) return NULL;
+			$matches2=array();
+			if (preg_match('#<meta property="og:image" content="([^"]+)"#',$html,$matches2)!=0)
+			{
+				//set_long_value('vimeo_thumb_for__'.$matches[1],$matches2[1]);		Actually this only happens occasionally (on add/edit), so not needed. Caching would bung up DB and make editing a pain.
+				return $matches2[1];
+			}
+		}
+		return NULL;
 	}
 
 	/**
@@ -63,7 +108,7 @@ class Hook_media_rendering_vimeo
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('TODO',array('URL'=>$url));
+		return do_template('MEDIA_VIMEO',array('URL'=>$url));
 	}
 
 }

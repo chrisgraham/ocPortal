@@ -63,7 +63,7 @@ class Hook_media_rendering_flash
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('TODO',array('URL'=>$url));
+		return do_template('MEDIA_FLASH',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height']));
 	}
 
 }
