@@ -229,7 +229,7 @@ function get_enclosure_details($url,$enclosure_url)
 	{
 		$enclosure_length=strval(@filesize(get_custom_file_base().'/'.rawurldecode($url)));
 		require_code('mime_types');
-		$enclosure_type=get_mime_type(get_file_extension($url));
+		$enclosure_type=get_mime_type(get_file_extension($url),false);
 	} else
 	{
 		http_download_file($enclosure_url,0,false);

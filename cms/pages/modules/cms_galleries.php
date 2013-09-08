@@ -276,14 +276,14 @@ class Module_cms_galleries extends standard_crud_module
 			$there=array();
 			$_dir=opendir(get_custom_file_base().'/uploads/galleries/');
 			while (false!==($file=readdir($_dir)))
-				if (($file!='index.html') && (!is_dir(get_custom_file_base().'/uploads/galleries/'.$file)) && ((is_image($file)) || (is_video($file))))
+				if (($file!='index.html') && (!is_dir(get_custom_file_base().'/uploads/galleries/'.$file)) && ((is_image($file)) || (is_video($file,has_privilege(get_member(),'comcode_dangerous')))))
 					$there[$file]=filemtime(get_custom_file_base().'/uploads/galleries/'.$file);
 			closedir($_dir);
 			$_dir=@opendir(get_custom_file_base().'/uploads/galleries/'.filter_naughty($cat));
 			if ($_dir!==false)
 			{
 				while (false!==($file=readdir($_dir)))
-					if (($file!='index.html') && (!is_dir(get_custom_file_base().'/uploads/galleries/'.$cat.'/'.$file)) && ((is_image($file)) || (is_video($file))))
+					if (($file!='index.html') && (!is_dir(get_custom_file_base().'/uploads/galleries/'.$cat.'/'.$file)) && ((is_image($file)) || (is_video($file,has_privilege(get_member(),'comcode_dangerous')))))
 						$there[$cat.'/'.$file]=filemtime(get_custom_file_base().'/uploads/galleries/'.$cat.'/'.$file);
 				closedir($_dir);
 			}
@@ -404,7 +404,7 @@ class Module_cms_galleries extends standard_crud_module
 							while (($more!==false) && ($more!=''));
 							fclose($myfile2);
 
-							if ((is_image($_file)) || (is_video($_file)))
+							if ((is_image($_file)) || (is_video($_file,has_privilege(get_member(),'comcode_dangerous'))))
 							{
 								$this->store_from_archive($_file,$tmp_name_2,$cat,$i);
 								$i++;
@@ -441,7 +441,7 @@ class Module_cms_galleries extends standard_crud_module
 							if ($slash===false) $slash=strrpos($_file,"\\");
 							if ($slash!==false) $_file=substr($_file,$slash+1);
 
-							if ((is_image($_file)) || (is_video($_file)))
+							if ((is_image($_file)) || (is_video($_file,has_privilege(get_member(),'comcode_dangerous'))))
 							{
 								$this->store_from_archive($_file,$tmp_name_2,$cat,$i);
 								$i++;
@@ -453,7 +453,7 @@ class Module_cms_galleries extends standard_crud_module
 					}
 					break;
 				default:
-					if ((is_image($file)) || (is_video($file)))
+					if ((is_image($file)) || (is_video($file,has_privilege(get_member(),'comcode_dangerous'))))
 					{
 						$tmp_name_2=ocp_tempnam('bi');
 
@@ -541,7 +541,7 @@ class Module_cms_galleries extends standard_crud_module
 				$url='uploads/galleries/'.str_replace('%2F','/',rawurlencode($file));
 				$thumb_url='uploads/galleries_thumbs/'.str_replace('%2F','/',rawurlencode($file));
 				if (substr($thumb_url,-4,4)=='.gif') $thumb_url=substr($thumb_url,0,strlen($thumb_url)-4).'.png';
-				if (is_video($url))
+				if (is_video($url,has_privilege(get_member(),'comcode_dangerous')))
 				{
 					$ret=get_video_details(get_custom_file_base().'/uploads/galleries/'.filter_naughty($file),$file,true);
 					if ($ret!==false)
@@ -742,7 +742,7 @@ class Module_cms_galleries extends standard_crud_module
 		if (is_null($time)) $time=time();
 
 		if (substr($thumb_url,-4,4)=='.gif') $thumb_url=substr($thumb_url,0,strlen($thumb_url)-4).'.png';
-		if (is_video($url))
+		if (is_video($url,has_privilege(get_member(),'comcode_dangerous')))
 		{
 			$ret=get_video_details(get_custom_file_base().'/'.rawurldecode($url),$file,true);
 			if ($ret!==false)

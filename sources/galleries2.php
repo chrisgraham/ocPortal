@@ -86,7 +86,7 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 					if (isset($_info['meta']['onMetaData']['height'])) $info[1]=intval($_info['meta']['onMetaData']['height']);
 
 					require_code('mime_types');
-					$mime_type=get_mime_type($extension);
+					$mime_type=get_mime_type($extension,true);
 					if (substr($mime_type,0,6)=='audio/')
 					{
 						$info[0]=NULL;
@@ -102,7 +102,7 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 	if (is_null($info))
 	{
 		require_code('mime_types');
-		$mime_type=get_mime_type($extension);
+		$mime_type=get_mime_type($extension,true);
 		if (substr($mime_type,0,6)=='audio/')
 		{
 			$info=array(intval(get_option('video_width_setting')),20,NULL);
@@ -641,7 +641,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 
 	// Audio ones should have automatic thumbnails
 	require_code('images');
-	if (is_audio($src_url))
+	if (is_audio($src_url,true))
 	{
 		$ret=find_theme_image('audio_thumb',true);
 		if ($ret!='')

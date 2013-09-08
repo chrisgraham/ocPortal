@@ -303,7 +303,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 							if (addon_installed('galleries'))
 							{
 								require_code('images');
-								if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+								if ((is_video($url,true,true)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
 								{
 									require_code('transcoding');
 									transcode_video($url,'attachments',$attachment_id,'id','a_url','a_original_filename',NULL,NULL);

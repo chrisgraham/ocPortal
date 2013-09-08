@@ -523,7 +523,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	{
 		$sending_message.='--'.$boundary3.$line_term;
 		$file_path_stub=convert_url_to_path($img);
-		$mime_type=get_mime_type(get_file_extension($img));
+		$mime_type=get_mime_type(get_file_extension($img),has_privilege($as,'comcode_dangerous'));
 		$filename=basename($img);
 		if (!is_null($file_path_stub))
 		{
@@ -560,7 +560,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 							require_code('mime_types');
 							if (filesize($_full)>1024*1024*5) continue; // Too large to process into an email
 							$file_contents=file_get_contents($_full);
-							$mime_type=get_mime_type(get_file_extension($filename));
+							$mime_type=get_mime_type(get_file_extension($filename),has_privilege($as,'comcode_dangerous'));
 						}
 					}
 				}
@@ -591,7 +591,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		foreach ($attachments as $path=>$filename)
 		{
 			$sending_message.='--'.$boundary.$line_term;
-			$sending_message.='Content-Type: '.get_mime_type(get_file_extension($filename)).$line_term; // .'; name="'.str_replace("\r",'',str_replace("\n",'',$filename)).'"'   http://www.imc.org/ietf-822/old-archive2/msg02121.html
+			$sending_message.='Content-Type: '.get_mime_type(get_file_extension($filename),has_privilege($as,'comcode_dangerous')).$line_term; // .'; name="'.str_replace("\r",'',str_replace("\n",'',$filename)).'"'   http://www.imc.org/ietf-822/old-archive2/msg02121.html
 			$sending_message.='Content-Transfer-Encoding: base64'.$line_term;
 			$sending_message.='Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',$filename)).'"'.$line_term.$line_term;
 

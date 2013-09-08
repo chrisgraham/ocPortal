@@ -57,10 +57,8 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 
 			$test=false;
 
-			require_code('mime_types');
-			$extension='mp4';
-			if (substr(get_mime_type(get_file_extension($url)),0,6)=='audio/')
-				$extension='mp3';
+			require_code('images');
+			$extension=is_audio($url,true)?'mp3':'mp4';
 
 			$transcoded_filename=uniqid('transcoded',true).'--'.rawurldecode(preg_replace('#\.\w+$#','',basename($url))).'.'.$extension;
 			$xml='<'.'?xml version="1.0" encoding="UTF-8"?'.'>
@@ -157,7 +155,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 		// get_mime_type
 		require_code('mime_types');
 		$file_ext=get_file_extension($file_path);
-		$input_mime_type=get_mime_type($file_ext);
+		$input_mime_type=get_mime_type($file_ext,true);
 
 		if ((preg_match('#video\/#i',$input_mime_type)!=0) && ($ffmpeg_path!=''))
 		{
@@ -275,7 +273,7 @@ function store_transcoding_success($transcoder_id,$new_url=NULL)
 	// Update width/height, to what we specified we want to transcode to
 	$ext=get_file_extension($descript_row['t_output_filename']);
 	require_code('mime_types');
-	$mime_type=get_mime_type($ext);
+	$mime_type=get_mime_type($ext,true);
 	if (substr($mime_type,0,6)!='audio/')
 	{
 		if ($descript_row['t_width_field']!='') $row[$descript_row['t_width_field']]=intval(get_option('video_width_setting'));

@@ -1175,7 +1175,7 @@ class Module_chat
 					$url='-1';
 				} else
 				{
-					$url_bits=get_url('select_'.$effect.$suffix,'upload_'.$effect.$suffix,'uploads/personal_sound_effects',0,OCP_UPLOAD_MP3);
+					$url_bits=get_url('select_'.$effect.$suffix,'upload_'.$effect.$suffix,'uploads/personal_sound_effects',0,OCP_UPLOAD_AUDIO);
 					$url=$url_bits[0];
 				}
 

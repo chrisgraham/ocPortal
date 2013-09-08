@@ -726,7 +726,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 
 				require_code('mime_types');
-				$HTTP_DOWNLOAD_MIME_TYPE=get_mime_type(get_file_extension($file_path));
+				$HTTP_DOWNLOAD_MIME_TYPE=get_mime_type(get_file_extension($file_path),true);
 				$HTTP_DOWNLOAD_SIZE=filesize($file_path);
 				$HTTP_DOWNLOAD_MTIME=filemtime($file_path);
 				$HTTP_MESSAGE='200';

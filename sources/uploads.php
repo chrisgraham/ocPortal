@@ -30,8 +30,8 @@ function init__uploads()
 		define('OCP_UPLOAD_ANYTHING',0);
 		define('OCP_UPLOAD_IMAGE',1);
 		define('OCP_UPLOAD_VIDEO',2);
-		define('OCP_UPLOAD_MP3',3);
-		define('OCP_UPLOAD_IMAGE_OR_SWF',4);
+		define('OCP_UPLOAD_AUDIO',3);
+		define('OCP_UPLOAD_IMAGE_OR_SWF',4); // Banners
 	}
 }
 
@@ -149,11 +149,14 @@ function is_swf_upload($fake_prepopulation=false)
  * @param  boolean		Whether to accept upload errors
  * @param  boolean		Whether to give a (deferred?) error if no file was given at all
  * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
+ * @param  ?MEMBER		Member ID to run permissions with (NULL: current member)
  * @return array			An array of 4 URL bits (URL, thumb URL, URL original filename, thumb original filename)
  */
-function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false)
+function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false,$member_id=NULL)
 {
 	require_code('files2');
+
+	if (is_null($member_id)) $member_id=get_member();
 
 	$upload_folder=filter_naughty($upload_folder);
 	$out=array();
@@ -242,7 +245,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	}
 	if (($attach_name!='') && (array_key_exists($attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$attach_name]['tmp_name'])) || ($swf_uploaded))) // If we uploaded
 	{
-		if (!has_privilege(get_member(),'exceed_filesize_limit'))
+		if (!has_privilege($member_id,'exceed_filesize_limit'))
 		{
 			if ($_FILES[$attach_name]['size']>$max_size)
 			{
@@ -257,7 +260,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			}
 		}
 
-		$url=_get_upload_url($attach_name,$upload_folder,$enforce_type,$obfuscate,$accept_errors);
+		$url=_get_upload_url($member_id,$attach_name,$upload_folder,$enforce_type,$obfuscate,$accept_errors);
 		if ($url==array('','')) return array('','','','');
 
 		$is_image=is_image($_FILES[$attach_name]['name']);
@@ -266,7 +269,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	{
 		$is_image=is_image($_POST[$specify_name]);
 
-		$url=_get_specify_url($specify_name,$upload_folder,$enforce_type,$accept_errors);
+		$url=_get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type,$accept_errors);
 		if ($url==array('','')) return array('','','','');
 		if (($copy_to_server) && (!url_is_local($url[0])))
 		{
@@ -333,7 +336,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				$_file=$HTTP_FILENAME;
 				$place=get_custom_file_base().'/'.$upload_folder.'/'.$_file;
 			}
-			if (!has_privilege(get_member(),'exceed_filesize_limit'))
+			if (!has_privilege($member_id,'exceed_filesize_limit'))
 			{
 				$max_size=intval(get_option('max_download_size'))*1024;
 				if (strlen($file)>$max_size)
@@ -430,12 +433,12 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				}
 			}
 
-			$_thumb=_get_upload_url($thumb_attach_name,$thumb_folder,OCP_UPLOAD_IMAGE,0,$accept_errors);
+			$_thumb=_get_upload_url($member_id,$thumb_attach_name,$thumb_folder,OCP_UPLOAD_IMAGE,0,$accept_errors);
 			$thumb=$_thumb[0];
 		}
 		elseif (array_key_exists($thumb_specify_name,$_POST)) // If we specified
 		{
-			$_thumb=_get_specify_url($thumb_specify_name,$thumb_folder,OCP_UPLOAD_IMAGE,$accept_errors);
+			$_thumb=_get_specify_url($member_id,$thumb_specify_name,$thumb_folder,OCP_UPLOAD_IMAGE,$accept_errors);
 			$thumb=$_thumb[0];
 		} else
 		{
@@ -490,12 +493,12 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				}
 			}
 
-			$_thumb=_get_upload_url($thumb_attach_name,$thumb_folder,OCP_UPLOAD_IMAGE,0,$accept_errors);
+			$_thumb=_get_upload_url($member_id,$thumb_attach_name,$thumb_folder,OCP_UPLOAD_IMAGE,0,$accept_errors);
 			$thumb=$_thumb[0];
 		}
 		elseif (array_key_exists($thumb_specify_name,$_POST))
 		{
-			$_thumb=_get_specify_url($thumb_specify_name,$thumb_folder,OCP_UPLOAD_IMAGE,$accept_errors);
+			$_thumb=_get_specify_url($member_id,$thumb_specify_name,$thumb_folder,OCP_UPLOAD_IMAGE,$accept_errors);
 			$thumb=$_thumb[0];
 		}
 		if (!is_null($thumb))
@@ -513,13 +516,14 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 /**
  * Filters specified URLs to make sure we're really allowed to access them.
  *
+ * @param  MEMBER			Member ID to check permissions with.
  * @param  ID_TEXT		The name of the POST parameter storing the URL (if '', then no POST parameter). Parameter value may be blank.
  * @param  ID_TEXT		The folder name in uploads/ where we will put this upload
  * @param  integer		The type of upload it is (from an OCP_UPLOAD_* constant)
  * @param  boolean		Whether to accept upload errors
  * @return array			A pair: the URL and the filename
  */
-function _get_specify_url($specify_name,$upload_folder,$enforce_type=0,$accept_errors=false)
+function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=0,$accept_errors=false)
 {
 	// Security check against naughty url's
 	$url=array();
@@ -571,7 +575,10 @@ function _get_specify_url($specify_name,$upload_folder,$enforce_type=0,$accept_e
 		}
 	}
 
-	if ($url[0]!='') _check_enforcement_of_type($url[0],$enforce_type,$accept_errors);
+	if ($url[0]!='')
+	{
+		if (!_check_enforcement_of_type($member_id,$url[0],$enforce_type,$accept_errors)) return array('','');
+	}
 
 	return $url;
 }
@@ -579,36 +586,48 @@ function _get_specify_url($specify_name,$upload_folder,$enforce_type=0,$accept_e
 /**
  * Ensures a given filename is of the right file extension for the desired file type.
  *
+ * @param  MEMBER			Member ID to check permissions with.
  * @param  string			The filename.
  * @param  integer		The type of upload it is (from an OCP_UPLOAD_* constant)
  * @param  boolean		Whether to accept upload errors
+ * @return boolean		Success status
  */
-function _check_enforcement_of_type($file,$enforce_type,$accept_errors=false)
+function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_errors=false)
 {
 	require_code('images');
 	if (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (!is_image($file)) && (get_file_extension($file)!='swf'))
 	{
-		warn_exit(do_lang_tempcode('NOT_IMAGE'));
+		if ($accept_errors)
+			attach_message(do_lang_tempcode('NOT_IMAGE'),'warn');
+		else
+			warn_exit(do_lang_tempcode('NOT_IMAGE'));
+		return false;
 	}
 	if (($enforce_type==OCP_UPLOAD_IMAGE) && (!is_image($file)))
 	{
-//		if ($accept_errors)
-//			attach_message(do_lang_tempcode('NOT_IMAGE'),'warn');
-//		else
+		if ($accept_errors)
+			attach_message(do_lang_tempcode('NOT_IMAGE'),'warn');
+		else
 			warn_exit(do_lang_tempcode('NOT_IMAGE'));
+		return false;
 	}
-	if (($enforce_type==OCP_UPLOAD_VIDEO) && (!is_video($file)))
+	if (($enforce_type==OCP_UPLOAD_VIDEO) && (!is_video($file,has_privilege($member_id,'comcode_dangerous'),true)))
 	{
-//		if ($accept_errors)
-		require_lang('galleries');
-//			attach_message(do_lang_tempcode('NOT_VIDEO'),'warn');
-//		else
+		if ($accept_errors)
+			attach_message(do_lang_tempcode('NOT_VIDEO'),'warn');
+		else
 			warn_exit(do_lang_tempcode('NOT_VIDEO'));
+		return false;
 	}
-	if (($enforce_type==OCP_UPLOAD_MP3) && (get_file_extension($file)!='mp3'))
+	if (($enforce_type==OCP_UPLOAD_AUDIO) && (!is_audio($file,has_privilege($member_id,'comcode_dangerous'))))
 	{
-		warn_exit(do_lang_tempcode('NOT_FILE_TYPE','.mp3'));
+		if ($accept_errors)
+			attach_message(do_lang_tempcode('NOT_AUDIO'),'warn');
+		else
+			warn_exit(do_lang_tempcode('NOT_AUDIO'));
+		return false;
 	}
+	return true;
 }
 
 /**
@@ -622,7 +641,7 @@ function _check_enforcement_of_type($file,$enforce_type,$accept_errors=false)
  * @param  boolean		Whether to accept upload errors
  * @return array			A pair: the URL and the filename
  */
-function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=0,$accept_errors=false)
+function _get_upload_url($member_id,$attach_name,$upload_folder,$enforce_type=0,$obfuscate=0,$accept_errors=false)
 {
 	$file=$_FILES[$attach_name]['name'];
 	if (get_magic_quotes_gpc()) $file=stripslashes($file);
@@ -642,7 +661,7 @@ function _get_upload_url($attach_name,$upload_folder,$enforce_type=0,$obfuscate=
 		}
 	}
 
-	_check_enforcement_of_type($file,$enforce_type,$accept_errors);
+	if (!_check_enforcement_of_type($member_id,$file,$enforce_type,$accept_errors)) return array('','');
 
 	// If we are not obfuscating then we will need to search for an available filename
 	if (($obfuscate==0) || ($obfuscate==3))

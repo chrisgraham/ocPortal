@@ -1350,7 +1350,7 @@ class Module_galleries
 
 		$extension=get_file_extension($url);
 		require_code('mime_types');
-		$mime_type=get_mime_type($extension);
+		$mime_type=get_mime_type($extension,has_privilege($myrow['submitter'],'comcode_dangerous'));
 
 		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'video',get_param_integer('slideshow',0),get_param_integer('wide_high',0),get_param_integer('gallery_entries_start',0),get_param_integer('gallery_entries_max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,get_param('select','*'),get_param('video_select','*'));
 

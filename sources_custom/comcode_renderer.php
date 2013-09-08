@@ -27,7 +27,7 @@ if (!function_exists('init__comcode_renderer'))
 
 				\$description=post_param('caption'.\$_id,array_key_exists('description',\$attributes)?\$attributes['description']:'');
 
-				if (is_video(\$urls_gal[0]))
+				if (is_video(\$urls_gal[0],has_privilege(\$source_member,'comcode_dangerous')))
 				{
 					\$video_width=array_key_exists('width',\$attributes)?intval(\$attributes['width']):NULL;
 					\$video_height=array_key_exists('height',\$attributes)?intval(\$attributes['height']):NULL;

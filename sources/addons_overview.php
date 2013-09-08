@@ -67,7 +67,7 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 					{
 						require_code('mime_types');
 						$data=tar_get_file($tar_file,$file);
-						return 'data:'.get_mime_type(get_file_extension($file)).';base64,'.base64_encode($data['data']);
+						return 'data:'.get_mime_type(get_file_extension($file),true).';base64,'.base64_encode($data['data']);
 					}
 				}
 			}

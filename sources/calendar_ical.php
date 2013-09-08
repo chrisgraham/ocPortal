@@ -118,7 +118,7 @@ function output_ical()
 				{
 					$attachment=$attachments[0];
 					require_code('mime_types');
-					echo "ATTACH;FMTTYPE=".ical_escape(get_mime_type($attachment['a_original_filename'])).":".ical_escape(find_script('attachments').'?id='.strval($attachment['id']))."\n";
+					echo "ATTACH;FMTTYPE=".ical_escape(get_mime_type($attachment['a_original_filename'],has_privilege($event['e_submitter'],'comcode_dangerous'))).":".ical_escape(find_script('attachments').'?id='.strval($attachment['id']))."\n";
 				}
 			}
 			echo "DESCRIPTION:".ical_escape($description)."\n";

@@ -146,7 +146,7 @@ function dload_script()
 	if (get_option('immediate_downloads')=='1')
 	{
 		require_code('mime_types');
-		header('Content-Type: '.get_mime_type(get_file_extension($myrow['original_filename'])).'; authoritative=true;');
+		header('Content-Type: '.get_mime_type(get_file_extension($myrow['original_filename']),has_privilege($myrow['submitter'],'comcode_dangerous')).'; authoritative=true;');
 		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
 	} else
 	{

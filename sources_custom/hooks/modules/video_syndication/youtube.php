@@ -280,7 +280,7 @@ class video_syndication_youtube
 		}
 
 		require_code('mime_types');
-		$mime_type=get_mime_type(get_file_extension($url));
+		$mime_type=get_mime_type(get_file_extension($url),false);
 
 		return array($video_path,$is_temp_file,$mime_type);
 	}
@@ -485,7 +485,7 @@ class video_syndication_youtube
 		if (!is_null($file_to_upload))
 		{
 			require_code('mime_types');
-			$mime_type=get_mime_type(get_file_extension($file_to_upload));
+			$mime_type=get_mime_type(get_file_extension($file_to_upload),false);
 			$files=array($mime_type=>$file_to_upload);
 		}
 

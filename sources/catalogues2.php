@@ -112,7 +112,7 @@ function catalogue_file_script()
 		if (get_option('immediate_downloads',true)==='1')
 		{
 			require_code('mime_types');
-			header('Content-Type: '.get_mime_type(get_file_extension($original_filename)).'; authoritative=true;');
+			header('Content-Type: '.get_mime_type(get_file_extension($original_filename),has_privilege($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_submitter',array('id'=>$entry_id)),'comcode_dangerous')).'; authoritative=true;');
 			header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
 		} else
 		{

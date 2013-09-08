@@ -107,7 +107,7 @@ function attachments_script()
 	check_shared_bandwidth_usage($size);
 
 	require_code('mime_types');
-	$mime_type=get_mime_type($extension);
+	$mime_type=get_mime_type($extension,has_privilege($myrow['a_member_id'],'comcode_dangerous'));
 
 	// Send header
 	if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))

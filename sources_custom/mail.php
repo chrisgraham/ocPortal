@@ -205,7 +205,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	foreach ($CID_IMG_ATTACHMENT as $id=>$img)
 	{
 		$file_path_stub=convert_url_to_path($img);
-		$mime_type=get_mime_type(get_file_extension($img));
+		$mime_type=get_mime_type(get_file_extension($img),has_privilege($as,'comcode_dangerous'));
 		$filename=basename($img);
 
 		if (!is_null($file_path_stub))
@@ -246,7 +246,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 							$filename=$myrow['a_original_filename'];
 							require_code('mime_types');
 							$myfile=$_full;
-							$mime_type=get_mime_type(get_file_extension($filename));
+							$mime_type=get_mime_type(get_file_extension($filename),has_privilege($as,'comcode_dangerous'));
 						} else
 						{
 							continue;
@@ -282,7 +282,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	{
 		foreach ($attachments as $path=>$filename)
 		{
-			$mime_type=get_mime_type(get_file_extension($filename));
+			$mime_type=get_mime_type(get_file_extension($filename),has_privilege($as,'comcode_dangerous'));
 
 			if (strpos($path,'://')===false)
 			{

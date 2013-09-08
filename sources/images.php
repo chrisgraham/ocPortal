@@ -345,7 +345,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 				$from=str_replace(' ','%20',$full_url);
 				if (url_is_local($from)) $from=get_custom_base_url().'/'.$from;
 
-				if (is_video($from))
+				if (is_video($from,true))
 				{
 					require_code('galleries2');
 					create_video_thumb($full_url,$thumb_path);
@@ -388,7 +388,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 	if (url_is_local($from)) $from=get_custom_base_url().'/'.$from;
 	if (!file_exists($thumb_path))
 	{
-		if (is_video($from))
+		if (is_video($from,true))
 		{
 			require_code('galleries2');
 			create_video_thumb($full_url,$thumb_path);
@@ -1074,11 +1074,11 @@ What follows are other media types, not images. However, we define them here to 
  * Find whether the video specified is actually a 'video', based on file extension
  *
  * @param  string			A URL or file path to the video
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types (client-side risk only)
  * @param  boolean		Whether it really must be an actual video/audio, not some other kind of rich media which we may render in a video spot
- * @param  boolean		Whether there are admin privileges, to render dangerous media types
  * @return boolean		Whether the string pointed to a file appeared to be a video
  */
-function is_video($name,$must_be_true_video=false,$as_admin=false)
+function is_video($name,$as_admin,$must_be_true_video=false)
 {
 	$allow_audio=(get_option('allow_audio_videos')=='1');
 
@@ -1101,10 +1101,10 @@ function is_video($name,$must_be_true_video=false,$as_admin=false)
  * Find whether the video specified is actually a 'video', based on file extension
  *
  * @param  string			A URL or file path to the video
- * @param  boolean		Whether there are admin privileges, to render dangerous media types
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types (client-side risk only)
  * @return boolean		Whether the string pointed to a file appeared to be an audio file
  */
-function is_audio($name,$as_admin=false)
+function is_audio($name,$as_admin)
 {
 	require_code('media_renderer');
 	$acceptable_media=MEDIA_TYPE_AUDIO;
@@ -1116,10 +1116,10 @@ function is_audio($name,$as_admin=false)
  * Find whether the video specified is actually a 'video', based on file extension
  *
  * @param  string			A URL or file path to the video
- * @param  boolean		Whether there are admin privileges, to render dangerous media types
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types (client-side risk only)
  * @return boolean		Whether the string pointed to a file appeared to be an audio file
  */
-function is_media($name,$as_admin=false)
+function is_media($name,$as_admin)
 {
 	require_code('media_renderer');
 	$hooks=find_media_renderers($url,$as_admin);

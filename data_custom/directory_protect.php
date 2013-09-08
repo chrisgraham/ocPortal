@@ -79,7 +79,7 @@ if (!$okay) access_denied('PAGE_ACCESS');
 // Send header
 header('Content-Type: application/octet-stream'.'; authoritative=true;');
 require_code('mime_types');
-header('Content-Type: '.get_mime_type(get_file_extension($filename)).'; authoritative=true;');
+header('Content-Type: '.get_mime_type(get_file_extension($filename),false).'; authoritative=true;');
 header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 header('Accept-Ranges: bytes');
 

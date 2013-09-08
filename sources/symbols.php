@@ -238,7 +238,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						if (($file_size!==false) && (floatval($file_size)*1.4<32768.0-100.0)) /* 1.4 represents inflation ratio for base64 encoding */
 						{
 							require_code('mime_types');
-							$value='data:'.get_mime_type(get_file_extension($file_path)).';base64,'.base64_encode(file_get_contents($file_path));
+							$value='data:'.get_mime_type(get_file_extension($file_path),false).';base64,'.base64_encode(file_get_contents($file_path));
 							break;
 						}
 					}
