@@ -118,7 +118,7 @@ function init__comcode_compiler()
  * @param  ?MEMBER		The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
  * @return tempcode		The tempcode generated
  */
-function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits=NULL,$on_behalf_of_member=NULL)
+function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits=NULL,$on_behalf_of_member=NULL)
 {
 	global $ADVERTISING_BANNERS_CACHE,$ALLOWED_ENTITIES,$POTENTIALLY_EMPTY_TAGS,$CODE_TAGS,$REVERSABLE_TAGS,$PUREHTML_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE;
 
@@ -1051,7 +1051,7 @@ function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_i
 													$continuation='';
 													$differented=true;
 													$ad_text=show_banner($ad_bits['name'],$ad_bits['b_title_text'],get_translated_tempcode($ad_bits['caption']),$ad_bits['b_direct_code'],$ad_bits['img_url'],'',$ad_bits['site_url'],$ad_bits['b_type'],$ad_bits['submitter']);
-													$embed_output=_do_tags_comcode('tooltip',array('param'=>$ad_text,'url'=>(url_is_local($ad_bits['site_url']) && ($ad_bits['site_url']!=''))?(get_custom_base_url().'/'.$ad_bits['site_url']):$ad_bits['site_url']),substr($comcode,$pos-1,strlen($ad_trigger)),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
+													$embed_output=_do_tags_comcode('tooltip',array('param'=>$ad_text,'url'=>(url_is_local($ad_bits['site_url']) && ($ad_bits['site_url']!=''))?(get_custom_base_url().'/'.$ad_bits['site_url']):$ad_bits['site_url']),substr($comcode,$pos-1,strlen($ad_trigger)),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
 													$pos+=strlen($ad_trigger)-1;
 													$tag_output->attach($embed_output);
 												}
@@ -1073,7 +1073,7 @@ function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_i
 												$tag_output->attach($continuation);
 												$continuation='';
 												$differented=true;
-												$embed_output=_do_tags_comcode('highlight',array(),escape_html(substr($comcode,$pos-1,strlen($highlight_bit))),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
+												$embed_output=_do_tags_comcode('highlight',array(),escape_html(substr($comcode,$pos-1,strlen($highlight_bit))),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
 												$pos+=strlen($highlight_bit)-1;
 												$tag_output->attach($embed_output);
 												break;
@@ -1117,7 +1117,7 @@ function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_i
 													require_code('hooks/systems/comcode_link_handlers/'.$link_handler);
 													$link_handler_ob=object_factory('Hook_comcode_link_handler_'.$link_handler,true);
 													if (is_null($link_handler_ob)) continue;
-													$embed_output=$link_handler_ob->bind($auto_link,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
+													$embed_output=$link_handler_ob->bind($auto_link,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
 													if (!is_null($embed_output)) break;
 												}
 											}
@@ -1270,7 +1270,7 @@ function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_i
 								}
 								do
 								{
-									$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
+									$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
 									$in_code_tag=false;
 									$white_space_area=$_last[3];
 									$in_separate_parse_section=$_last[4];
@@ -1325,7 +1325,7 @@ function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_i
 							{
 								$_structure_sweep=!in_tag_stack($tag_stack,array('title'));
 							}
-							$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$_structure_sweep,$semiparse_mode,$highlight_bits,NULL,$in_semihtml,$is_all_semihtml);
+							$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$_structure_sweep,$semiparse_mode,$highlight_bits,NULL,$in_semihtml,$is_all_semihtml);
 						} else $embed_output=new ocp_tempcode();
 
 						$in_code_tag=false;
@@ -1635,7 +1635,7 @@ function comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_i
 			while (count($tag_stack)>0)
 			{
 				$_last=array_pop($tag_stack);
-				$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
+				$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
 				$in_code_tag=false;
 				$white_space_area=$_last[3];
 				$in_separate_parse_section=$_last[4];

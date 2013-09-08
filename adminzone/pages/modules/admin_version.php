@@ -83,7 +83,6 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('alternative_ids');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_privacy');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_primary__members');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('url_media_signatures');
 
 		delete_privilege('use_sms');
 		delete_privilege('sms_higher_limit');
@@ -371,12 +370,14 @@ class Module_admin_version
 			rename_config_option('ocp_show_su','show_su');
 			rename_config_option('ocp_show_avatar','show_avatar');
 
-			$GLOBALS['SITE_DB']->create_table('url_media_signatures',array(
-				'm_url'=>'*URLPATH',
-				'm_mime_type'=>'ID_TEXT',
-				'm_json_discovery'=>'URLPATH',
-				'm_xml_discovery'=>'URLPATH',
-			));
+			$GLOBALS['SITE_DB']->query_delete('url_title_cache');
+			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_meta_title','LONG_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_keywords','LONG_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_description','LONG_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_image_url','URLPATH');
+			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_mime_type','ID_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_json_discovery','URLPATH');
+			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_xml_discovery','URLPATH');
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
@@ -544,6 +545,14 @@ class Module_admin_version
 				'id'=>'*AUTO',
 				't_url'=>'URLPATH',
 				't_title'=>'SHORT_TEXT',
+				't_meta_title'=>'LONG_TEXT',
+				't_keywords'=>'LONG_TEXT',
+				't_description'=>'LONG_TEXT',
+				't_image_url'=>'URLPATH',
+				't_mime_type'=>'ID_TEXT',
+				// oEmbed...
+				't_json_discovery'=>'URLPATH',
+				't_xml_discovery'=>'URLPATH',
 			));
 			$GLOBALS['SITE_DB']->create_index('url_title_cache','t_url',array('t_url'));
 

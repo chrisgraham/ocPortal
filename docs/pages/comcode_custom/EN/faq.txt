@@ -240,9 +240,9 @@ If there is something about your server configuration that prevents PHP scripts 
 [b]How do I get more than <just a few megabytes> of upload support?[/b]
 PHP defines its own upload limits, which ocPortal can not exceed. Try renaming the bundled 'recommended.htaccess' file to '.htaccess'. If this fails read the answer to "Why does [tt]recommended.htaccess[/tt] not work?". If you still have problems you will need to persuade the server administrator to increase the limits defined in the PHP 'post_max_size' and 'upload_max_filesize' options.
 
-Please note that it is not advisable to try and upload more than around 10MB, regard of server limits. HTTP uploads (uploads from web forms) are very unreliable -- the smallest connection problem results in the entire download failing, as there is no error correction or resume support.
+Please note that it is not advisable to try and upload more than around 50MB, regard of server limits. HTTP uploads (uploads from web forms) are very unreliable -- the smallest connection problem results in the entire download failing, as there is no error correction or resume support.
 ocPortal provides ways to reference files uploaded via other means (e.g. [abbr="File Transfer Protocol"]FTP[/abbr]):
- - the Comcode [tt]attachment[/tt] tag can reference files by URL ([tt][attachment]url_<url>[/attachment][/tt])
+ - the Comcode [tt]media[/tt] tag can reference files by URL
  - the downloads addon supports referencing existing URLs, copying of existing remote URLs, and even batch importing from FTP directories
  - the galleries addon supports referencing existing URLs, and batch importing of files placed in the [tt]uploads/galleries[/tt] directory that aren't yet linked in
 

@@ -167,11 +167,9 @@ function _get_group_tags($group=NULL)
 		'semantic'=>array('cite','samp','q','var','dfn','address'),
 		'display_code'=>array('codebox','code','tt','no_parse'),
 		'execute_code'=>array('semihtml','html'),
-		'media'=>array('flash','img','thumb','video','audio','media'),
+		'media'=>array('img','thumb','flash','video','audio','media'),
 		'linking'=>array('url','email','reference','page','snapback','post','topic'),
 	);
-
-	if (addon_installed('filedump')) $group_tags['media'][]='attachment';
 
 	// Non-categorised ones
 	$all_tags=_get_details_comcode_tags();
@@ -439,14 +437,23 @@ function comcode_helper_script()
 						}
 						$descriptiont=preg_replace('#\s*'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\'](?-U)\.?(?U)#Ui','',$descriptiont);
 
-						if (($tag=='page') && ($param=='param') && (substr_count($default,':')==1))
+						if ((($tag=='attachment') || ($tag=='audio') || ($tag=='video') || ($tag=='media')) && ($param=='thumb_url') && (addon_installed('filedump')))
+						{
+							$set_name='thumbnail';
+							$required=false;
+							$set_title=do_lang_tempcode('THUMBNAIL');
+							$field_set=alternate_fields_set__start($set_name);
+
+							$field_set->attach(form_input_line(do_lang_tempcode('URL'),$default,'tag_contents',$default_embed,false));
+
+							$filedump_url=build_url(array('page'=>'filedump'),get_module_zone('filedump'));
+							$field_set->attach(form_input_tree_list(do_lang_tempcode('filedump:FILE_DUMP'),do_lang_tempcode('COMCODE_TAG_'.(($tag=='attachment')?'attachment':'media').'_PARAM_thumb_url',escape_html($filedump_url->evaluate())),'tag_contents','','choose_filedump_file',array('only_images'=>true),false,$default,false));
+
+							$fields_advanced->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$url));
+						}
+						elseif (($tag=='page') && ($param=='param') && (substr_count($default,':')==1))
 						{
 							$fields->attach(form_input_page_link($parameter_name,protect_from_escaping($descriptiont),$param,$default,true,NULL));
-						}
-						elseif (($tag=='attachment') && ($param=='thumb_url') && (addon_installed('filedump')))
-						{
-							$field=form_input_tree_list(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_thumb_url'),'thumb_url','','choose_filedump_file',array('only_images'=>true),false,$default,false);
-							$fields_advanced->attach($field);
 						} else
 						{
 							if (substr($descriptiont,0,12)=='0|1 &ndash; ')
@@ -531,24 +538,31 @@ function comcode_helper_script()
 			$tag_description->attach(paragraph(is_integer($_params['tag_example'])?get_translated_text($_params['tag_example']):$_params['tag_example']));
 		}
 
-		if ($tag=='attachment')
+		if ((($tag=='audio') || ($tag=='video') || ($tag=='media')) && (addon_installed('filedump')))
+		{
+			$set_name='file';
+			$required=true;
+			$set_title=do_lang_tempcode('FILE');
+			$field_set=alternate_fields_set__start($set_name);
+
+			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','tag_contents',$default_embed,true));
+
+			$filedump_url=build_url(array('page'=>'filedump'),get_module_zone('filedump'));
+			$field_set->attach(form_input_tree_list(do_lang_tempcode('filedump:FILE_DUMP'),do_lang_tempcode('COMCODE_TAG_media_EMBED_FILE',escape_html($filedump_url->evaluate())),'tag_contents','','choose_filedump_file',array(),true,'',false));
+
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$url));
+		}
+		elseif ($tag=='attachment')
 		{
 			if (get_option('eager_wysiwyg')=='0')
 			{
 				$javascript.="document.getElementById('type').onchange=function() { document.getElementById('_safe').checked=(this.options[this.selectedIndex].value=='inline'); };";
 			}
 
-			if (($default_embed!='') || (!addon_installed('filedump')))
-			{
-				$hidden->attach(form_input_hidden('tag_contents',$default_embed));
-				$tag_description=new ocp_tempcode();
+			$hidden->attach(form_input_hidden('tag_contents',$default_embed));
+			$tag_description=new ocp_tempcode();
 
-				if (substr($default_embed,0,4)=='new_') $preview=NULL;
-			} else
-			{
-				$filedump_url=build_url(array('page'=>'filedump'),get_module_zone('filedump'));
-				$fields->attach(form_input_tree_list(do_lang_tempcode('FILE'),do_lang_tempcode('COMCODE_TAG_attachment_EMBED_FILE',escape_html($filedump_url->evaluate())),'tag_contents','','choose_filedump_file',array('attachment_ready'=>true),true,'',false));
-			}
+			if (substr($default_embed,0,4)=='new_') $preview=NULL;
 		}
 		elseif (($tag=='sections') || ($tag=='big_tabs') || ($tag=='tabs') || ($tag=='list'))
 		{

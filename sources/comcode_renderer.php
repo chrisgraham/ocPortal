@@ -253,7 +253,7 @@ function _comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap
 
 	require_code('comcode_compiler');
 
-	$ret=comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
+	$ret=__comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
 
 	$STRUCTURE_LIST=$old_structure_list; // Restore, so that Comcode pages being loaded up in search results don't get skewed TOC's
 
@@ -536,7 +536,6 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
  * @param  boolean		Whether to check as arbitrary admin
  * @param  object			The database connection to use
  * @param  string			The whole chunk of Comcode
- * @param  boolean		Whether this is for WML output (no longer supported)
  * @param  boolean		Whether this is only a structure sweep
  * @param  boolean		Whether we are in semi-parse-mode (some tags might convert differently)
  * @param  ?array			A list of words to highlight (NULL: none)
@@ -545,7 +544,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
  * @param  boolean		Whether what we have came from semihtml mode
  * @return tempcode		The tempcode for the Comcode
  */
-function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$marker,$source_member,$as_admin,$connection,&$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits=NULL,$on_behalf_of_member=NULL,$in_semihtml=false,$is_all_semihtml=false)
+function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$marker,$source_member,$as_admin,$connection,&$comcode,$structure_sweep,$semiparse_mode,$highlight_bits=NULL,$on_behalf_of_member=NULL,$in_semihtml=false,$is_all_semihtml=false)
 {
 	if (($structure_sweep) && ($tag!='title')) return new ocp_tempcode();
 

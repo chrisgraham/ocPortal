@@ -79,29 +79,9 @@ class Hook_fields_url
 		if ($ev=='') return '';
 		if ($ev=='http://') return '';
 
-		$link_captions_title=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>$ev));
-
-		if ((is_null($link_captions_title)) || (substr($link_captions_title,0,1)=='!'))
-		{
-			$link_captions_title='';
-			$downloaded_at_link=http_download_file($ev,3000,false);
-			if ((is_string($downloaded_at_link)) && (strpos($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'],'html')!==false) && ($GLOBALS['HTTP_MESSAGE']=='200'))
-			{
-				$matches=array();
-				if (preg_match('#\s*<title[^>]*\s*>\s*(.*)\s*\s*<\s*/title\s*>#miU',$downloaded_at_link,$matches)!=0)
-				{
-					require_code('character_sets');
-
-					$link_captions_title=trim(str_replace('&ndash;','-',str_replace('&mdash;','-',@html_entity_decode(convert_to_internal_encoding($matches[1]),ENT_QUOTES,get_charset()))));
-					if (((strpos(strtolower($link_captions_title),'login')!==false) || (strpos(strtolower($link_captions_title),'log in')!==false)) && (substr($ev,0,strlen(get_base_url()))==get_base_url()))
-						$link_captions_title=''; // don't show login screen titles for our own website. Better to see the link verbatim
-				}
-			}
-			$GLOBALS['SITE_DB']->query_insert('url_title_cache',array(
-				't_url'=>$ev,
-				't_title'=>$link_captions_title,
-			),false,true); // To stop weird race-like conditions
-		}
+		require_code('files2');
+		$meta_details=get_webpage_meta_details($ev);
+		$link_captions_title=$meta_details['t_title'];
 
 		if ($link_captions_title=='')
 		{

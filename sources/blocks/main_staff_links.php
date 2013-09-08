@@ -145,27 +145,9 @@ class Block_main_staff_links
 						$link=$q;
 					}
 
-					$link_title=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>$link));
-
-					if ((is_null($link_title)) || (substr($link_title,0,1)=='!'))
-					{
-						$link_title='';
-						$downloaded_at_link=http_download_file($link,3000,false);
-						if (is_string($downloaded_at_link))
-						{
-							$matches=array();
-							if (preg_match('#\s*<title[^>]*\s*>\s*(.*)\s*\s*<\s*/title\s*>#mi',$downloaded_at_link,$matches)!=0)
-							{
-								require_code('character_sets');
-
-								$link_title=trim(str_replace('&ndash;','-',str_replace('&mdash;','-',@html_entity_decode(convert_to_internal_encoding($matches[1]),ENT_QUOTES,get_charset()))));
-							}
-						}
-						$GLOBALS['SITE_DB']->query_insert('url_title_cache',array(
-							't_url'=>$link,
-							't_title'=>$link_title,
-						),false,true); // To stop weird race-like conditions
-					}
+					require_code('files2');
+					$meta_details=get_webpage_meta_details($link);
+					$link_title=$meta_details['t_title'];
 
 					if (count($bits)==2)
 					{

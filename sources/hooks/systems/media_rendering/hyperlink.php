@@ -21,9 +21,9 @@
 class Hook_media_rendering_hyperlink
 {
 	/**
-	 * Find the media type this hook serves.
+	 * Find the media types this hook serves.
 	 *
-	 * @return integer	The media type
+	 * @return integer	The media type(s), as a bitmask
 	 */
 	function get_media_type()
 	{
@@ -57,55 +57,49 @@ class Hook_media_rendering_hyperlink
 	 *
 	 * @param  URLPATH	URL to render
 	 * @param  array		Attributes (e.g. width, height, length)
+	 * @param  ?MEMBER	Member to run as
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$attributes)
+	function render($url,$attributes,$source_member=NULL)
 	{
-		require_code('comcode_renderer');
-
 		// Try and find the link title
-		$link_captions_title=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>$url));
-		if ((is_null($link_captions_title)) || (substr($link_captions_title,0,1)=='!'))
-		{
-			$GLOBALS['COMCODE_PARSE_URLS_CHECKED']++;
-			if (($GLOBALS['NO_LINK_TITLES']) || ($GLOBALS['COMCODE_PARSE_URLS_CHECKED']>=MAX_URLS_TO_READ))
-			{
-				$link_captions_title=$url;
-			} else
-			{
-				$link_captions_title='';
-				$downloaded_at_link=http_download_file($url,3000,false);
-				if ((is_string($downloaded_at_link)) && (strpos($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'],'html')!==false) && ($GLOBALS['HTTP_MESSAGE']=='200'))
-				{
-					$matches=array();
-					if (preg_match('#\s*<title[^>]*\s*>\s*(.*)\s*\s*<\s*/title\s*>#miU',$downloaded_at_link,$matches)!=0)
-					{
-						require_code('character_sets');
+		require_code('files2');
+		$meta_details=get_webpage_meta_details($url);
 
-						$link_captions_title=trim(str_replace('&ndash;','-',str_replace('&mdash;','-',@html_entity_decode(convert_to_internal_encoding($matches[1]),ENT_QUOTES,get_charset()))));
-						if (((strpos(strtolower($link_captions_title),'login')!==false) || (strpos(strtolower($link_captions_title),'log in')!==false)) && (substr($url,0,strlen(get_base_url()))==get_base_url()))
-							$link_captions_title=''; // don't show login screen titles for our own website. Better to see the link verbatim
-					}
-				}
-				$GLOBALS['SITE_DB']->query_insert('url_title_cache',array(
-					't_url'=>substr($url,0,255),
-					't_title'=>substr($link_captions_title,0,255),
-				),false,true); // To stop weird race-like conditions
-			}
+		// Render as a nice preview box
+		if (($meta_details['t_description']!='') || ($meta_details['t_image_url']!=''))
+		{
+			$title=$meta_details['t_title'];
+			$meta_title=$meta_details['t_meta_title'];
+			if ($meta_title=='') $meta_title=escape_html($title);
+
+			return do_template('MEDIA_WEBPAGE_SEMANTIC',array(
+				'TITLE'=>$meta_details['t_title'],
+				'META_TITLE'=>$meta_title,
+				'DESCRIPTION'=>$meta_details['t_description'],
+				'IMAGE_URL'=>$meta_details['t_image_url'],
+				'URL'=>$meta_details['t_url'],
+			));
 		}
+
+		$link_captions_title=$meta_details['t_title'];
 		if ($link_captions_title=='') $link_captions_title=$url;
+
+		require_code('comcode_renderer');
+		if (is_null($source_member)) $source_member=get_member();
+		$comcode='';
 
 		// Render as a 'page' link?
 		$page_link=url_to_pagelink($url,true);
 		if ($page_link!='')
 		{
-			return _do_tags_comcode('page',array('param'=>$page_link),make_string_tempcode(escape_html($link_captions_title)),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
+			return _do_tags_comcode('page',array('param'=>$page_link),make_string_tempcode(escape_html($link_captions_title)),false,$comcode,0,$source_member,false,$GLOBALS['SITE_DB'],'',false,false,false);
 		}
 
 		// Okay, just render as a URL then
 		$url_tempcode=new ocp_tempcode();
 		$url_tempcode->attach($url);
-		return _do_tags_comcode('url',array('param'=>$link_captions_title),$url_tempcode,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
+		return _do_tags_comcode('url',array('param'=>$link_captions_title),$url_tempcode,false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false,false);
 	}
 
 }

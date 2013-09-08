@@ -21,9 +21,9 @@
 class Hook_media_rendering_youtube
 {
 	/**
-	 * Find the media type this hook serves.
+	 * Find the media types this hook serves.
 	 *
-	 * @return integer	The media type
+	 * @return integer	The media type(s), as a bitmask
 	 */
 	function get_media_type()
 	{
