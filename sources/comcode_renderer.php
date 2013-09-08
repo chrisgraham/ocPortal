@@ -1176,7 +1176,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 					$_POST['_specify_url']=$url; // Little hack, as we need to read it from a POST
 					if (get_magic_quotes_gpc()) $_POST['_specify_url']=addslashes($_POST['_specify_url']);
-					$urls=get_url('_specify_url','','uploads/filedump',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true);
+					$urls=get_url('_specify_url','','uploads/filedump',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true,true);
+					if ($urls[0]=='') return new ocp_tempcode();
 					$original_filename=rawurldecode(substr($url,strrpos($url,'/')+1));
 
 					if (url_is_local($urls[0]))

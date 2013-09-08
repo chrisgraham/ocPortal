@@ -48,6 +48,8 @@ class Hook_config_default_ping_url
 	 */
 	function get_default()
 	{
+		// http://blogsearch.google.com/ping?url={url} is the direct Google Blog search one
+		// Note that we also ping the major search engines directly with the RSS feed, as a sitemap; those do not need specifying in the ping URLs
 		return 'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}';
 	}
 

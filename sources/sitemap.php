@@ -74,10 +74,12 @@ function sitemaps_build()
  * Ping search engines with an updated sitemap.
  *
  * @param  URLPATH 	Sitemap URL.
+ * @return string		HTTP result output
  */
 function ping_sitemap($url)
 {
 	// Ping search engines
+	$out='';
 	if (get_option('auto_submit_sitemap')=='1')
 	{
 		$ping=true;
@@ -94,10 +96,11 @@ function ping_sitemap($url)
 			);
 			foreach ($services as $service)
 			{
-				http_download_file($service.urlencode($url),NULL,false);
+				$out.=http_download_file($service.urlencode($url),NULL,false);
 			}
 		}
 	}
+	return $out;
 }
 
 /**

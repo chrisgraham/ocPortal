@@ -1701,6 +1701,18 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	}
 
 	/**
+	 * Standard aed_module delete possibility checker.
+	 *
+	 * @param  ID_TEXT		The entry being potentially deleted
+	 * @return boolean		Whether it may be deleted
+	 */
+	function may_delete_this($id)
+	{		
+		if (substr($id,0,1)=='_') return false;
+		return true;
+	}
+
+	/**
 	 * Get tempcode for a catalogue adding/editing form.
 	 *
 	 * @param  ID_TEXT			The name of the catalogue
@@ -2086,7 +2098,15 @@ class Module_cms_catalogues_alt extends standard_aed_module
 			{
 				if (!((array_key_exists('delete',$field)) && ($field['delete']=='1'))) $num_fields++;
 			}
-			if ($num_fields==0) warn_exit(do_lang_tempcode('NO_FIELDS'));
+			if ($num_fields==0)
+			{
+				if (substr($old_name,0,1)=='_')
+				{
+					actual_delete_catalogue($old_name);
+					return;
+				}
+				warn_exit(do_lang_tempcode('NO_FIELDS'));
+			}
 		}
 
 		if (($is_tree==1) && ($was_tree==0))
