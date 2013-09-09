@@ -32,6 +32,25 @@ Additionally, most platforms will allow native notification display:
 
 (If you don't want the interface to support this, you can remove the [tt]top_notifications[/tt] block from the default [tt]GLOBAL_HTML_WRAP[/tt] template and disable web notifications.)
 
+[title="2"]Automatically monitor content you've touched[/title]
+
+This option works to automatically set up a member to receive notifications on content they have interacted with. This happens at the point of them making an interaction -- it automatically sets up a monitor. It is not retroactive.
+
+[title="2"]Smart Topic notification[/title]
+
+The "Smart Topic notification" option works to stop members being flooded with notifications for a topic, until they've caught up. It sends them just one notification until they have read it again.
+
+[title="2"]Debugging[/title]
+
+You may wish to see what notification e-mails are being sent out.
+
+The best way to debug notifications is to view the e-mail log, from Admin Zone > Audit > E-mail queue/log. You can see exactly what e-mails were sent out.
+
+To see if someone is set up for notifications on some content, use the SU feature (switch user) to pretend to be them. You will see their settings reflected in the interface.
+
+There's a config option, "Carbon-copy e-mail address". This address receives a copy of most e-mails the system sends out.
+Note that it will only CC a notification e-mail to this address once, not once per notification.
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_correspondance"]Correspondence between members[/page]

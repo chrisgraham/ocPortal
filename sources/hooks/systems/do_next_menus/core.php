@@ -53,7 +53,7 @@ class Hook_do_next_menus_core
 			addon_installed('errorlog')?array('usage','errorlog',array('admin_errorlog',array(),get_module_zone('admin_errorlog')),do_lang_tempcode('ERROR_LOG'),('DOC_ERROR_LOG')):NULL,
 			addon_installed('actionlog')?array('usage','actionlog',array('admin_actionlog',array('type'=>'misc'),get_module_zone('admin_actionlog')),do_lang_tempcode('VIEW_ACTION_LOGS'),('DOC_ACTION_LOG')):NULL,
 			addon_installed('securitylogging')?array('usage','securitylog',array('admin_security',array('type'=>'misc'),get_module_zone('admin_security')),do_lang_tempcode('SECURITY_LOGGING'),('DOC_SECURITY_LOGGING')):NULL,
-			(get_option('mail_queue_debug')!=='1')?NULL:array('usage','email',array('admin_emaillog',array('type'=>'misc'),get_module_zone('admin_emaillog')),do_lang_tempcode('EMAIL_QUEUE'),('DOC_EMAIL_QUEUE')),
+			array('usage','email',array('admin_emaillog',array('type'=>'misc'),get_module_zone('admin_emaillog')),do_lang_tempcode('EMAIL_LOG'),('DOC_EMAIL_LOG')),
 
 			array('style','manage_themes',array('admin_themes',array('type'=>'misc'),get_module_zone('admin_themes')),do_lang_tempcode('THEMES'),('DOC_THEMES')),
 			(get_forum_type()!='ocf')?NULL:array('style','emoticons',array('admin_ocf_emoticons',array('type'=>'misc'),get_module_zone('admin_ocf_emoticons')),do_lang_tempcode('EMOTICONS'),('DOC_EMOTICONS')),
