@@ -8,3 +8,9 @@
 	<embed src="http://i.cdn.turner.com/cnn/.element/apps/cvp/3.0/swf/cnn_416x234_embed.swf?context=embed_edition&videoId={URL*}" type="application/x-shockwave-flash" bgcolor="#000000" allowfullscreen="true" allowscriptaccess="always" width="416" wmode="transparent" height="374">
 	</embed>
 </object>
+
+{+START,IF_NON_EMPTY,{DESCRIPTION}}
+	<figcaption class="associated_details">
+		{$PARAGRAPH,{DESCRIPTION}}
+	</figcaption>
+{+END}

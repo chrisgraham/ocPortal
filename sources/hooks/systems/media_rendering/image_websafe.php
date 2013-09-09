@@ -64,7 +64,37 @@ class Hook_media_rendering_image_websafe
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_IMAGE_WEBSAFE',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height']));
+		// Put in defaults
+		if ((!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width'])))
+		{
+			$attributes['width']=get_option('thumb_width');
+			$auto_width=true;
+		} else $auto_width=false;
+		if ((!array_key_exists('height',$attributes)) || (!is_numeric($attributes['height'])))
+		{
+			$attributes['height']=get_option('thumb_width');
+			$auto_height=true;
+		} else $auto_height=false;
+		if ((!array_key_exists('thumb_url',$attributes)) || ($attributes['thumb_url']==''))
+		{
+			$new_name=$attributes['width'].'__'.url_to_filename($url);
+			require_code('images');
+			if (!is_saveable_image($new_name)) $new_name.='.png';
+			$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
+			if (!file_exists($file_thumb))
+			{
+				convert_image($url,$file_thumb,-1,-1,intval($attributes['width']),false);
+			}
+			$attributes['thumb_url']=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
+			if (function_exists('getimagesize'))
+			{
+				list($width,$height)=getimagesize($file_thumb);
+				if ($auto_width) $attributes['width']=strval($width);
+				if ($auto_height) $attributes['height']=strval($height);
+			}
+		}
+
+		return do_template('MEDIA_IMAGE_WEBSAFE',array('HOOK'=>'image_websafe')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

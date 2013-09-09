@@ -17,7 +17,7 @@
 
 	{+START,IF_NON_EMPTY,{DESCRIPTION}}
 		<figcaption class="associated_details">
-			{DESCRIPTION}
+			{$PARAGRAPH,{DESCRIPTION}}
 		</figcaption>
 	{+END}
 {+END}
@@ -26,6 +26,6 @@
 		{$GET,media}
 	</figure>
 {+END}
-{+START,IF_NON_PASSED_OR_TRUE,FRAMED}
+{+START,IF_NON_PASSED_OR_FALSE,FRAMED}
 	{$GET,media}
 {+END}

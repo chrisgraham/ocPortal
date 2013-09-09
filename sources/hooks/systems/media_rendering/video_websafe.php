@@ -68,7 +68,7 @@ class Hook_media_rendering_video_websafe
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_VIDEO_WEBSAFE',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height'],'LENGTH'=>$attributes['length'],'THUMB_URL'=>$attributes['thumb_url']));
+		return do_template('MEDIA_VIDEO_WEBSAFE',array('HOOK'=>'video_websafe')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

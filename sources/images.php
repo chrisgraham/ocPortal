@@ -491,7 +491,7 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
  * @param  ?array			This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (NULL: no details passed)
  * @return boolean		Success
  */
-function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=true,$ext2=NULL,$using_path=false,$only_make_smaller=false,$thumb_options=NULL)
+function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=true,$ext2=NULL,$using_path=false,$only_make_smaller=true,$thumb_options=NULL)
 {
 	disable_php_memory_limit();
 
@@ -1093,7 +1093,7 @@ function is_video($name,$as_admin,$must_be_true_video=false)
 
 	require_code('media_renderer');
 	$acceptable_media=$allow_audio?(MEDIA_TYPE_VIDEO | MEDIA_TYPE_AUDIO | MEDIA_TYPE_OTHER /* but not images */):MEDIA_TYPE_VIDEO;
-	$hooks=find_media_renderers($url,$as_admin,$acceptable_media);
+	$hooks=find_media_renderers($url,array(),$as_admin,$acceptable_media);
 	return !is_null($hooks);
 }
 
@@ -1108,7 +1108,7 @@ function is_audio($name,$as_admin)
 {
 	require_code('media_renderer');
 	$acceptable_media=MEDIA_TYPE_AUDIO;
-	$hooks=find_media_renderers($url,$as_admin,$acceptable_media);
+	$hooks=find_media_renderers($url,array(),$as_admin,$acceptable_media);
 	return !is_null($hooks);
 }
 
@@ -1122,6 +1122,6 @@ function is_audio($name,$as_admin)
 function is_media($name,$as_admin)
 {
 	require_code('media_renderer');
-	$hooks=find_media_renderers($url,$as_admin);
+	$hooks=find_media_renderers($url,array(),$as_admin);
 	return !is_null($hooks);
 }

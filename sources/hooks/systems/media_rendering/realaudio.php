@@ -50,6 +50,7 @@ class Hook_media_rendering_realaudio
 	 */
 	function recognises_url($url)
 	{
+		if (substr($url,0,7)=='rtsp://') return MEDIA_RECOG_PRECEDENCE_MEDIUM;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -62,7 +63,7 @@ class Hook_media_rendering_realaudio
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_REALMEDIA',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height'],'LENGTH'=>$attributes['length'],'THUMB_URL'=>$attributes['thumb_url']));
+		return do_template('MEDIA_REALMEDIA',array('HOOK'=>'realaudio')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

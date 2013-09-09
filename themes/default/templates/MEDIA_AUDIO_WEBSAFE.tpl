@@ -14,17 +14,13 @@
 
 	<meta itemprop="width" content="{WIDTH*}" />
 	<meta itemprop="height" content="{HEIGHT*}" />
-	<meta itemprop="duration" content="T{LENGTH*}S" />
+	{+START,IF_NON_EMPTY,{LENGTH}}
+		<meta itemprop="duration" content="T{LENGTH*}S" />
+	{+END}
 	<meta itemprop="thumbnailURL" content="{THUMB_URL*}" />
 	<meta itemprop="embedURL" content="{URL*}" />
 
-	<div class="xhtml_validator_off">
-		{$,Even use video for audio, as we have thumbnail to show}
-		<audio width="{WIDTH*}" height="{HEIGHT*}" id="{$GET%,player_id}" poster="{THUMB_URL*}">
-			<source src="{URL*}" itemprop="contentURL" />
-			{!AUDIO}
-		</audio>
-	</div>
+	<div class="xhtml_validator_off" id="{$GET%,player_id}"></div>
 
 	{$,API: http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5/12540/javascript-api-reference}
 
@@ -32,17 +28,17 @@
 		{$,Carefully tuned to avoid this problem: http://www.longtailvideo.com/support/forums/jw-player/setup-issues-and-embedding/8439/sound-but-no-video}
 		add_event_listener_abstract(window,'load',function () {
 			jwplayer('{$GET%,player_id}').setup({
-				width: {$?*,{$EQ,{$LCASE,{$SUBSTR,{URL},-4}},.mp3},{$MAX,320,{$IMAGE_WIDTH,{THUMB_URL}}},{WIDTH}},
-				height: {$?*,{$EQ,{$LCASE,{$SUBSTR,{URL},-4}},.mp3},{$IMAGE_HEIGHT,{THUMB_URL}},{HEIGHT}},
+				width: {WIDTH%},
+				height: {HEIGHT%},
 				autostart: false,
-				duration: {LENGTH*},
-				players: [
-					{ type: 'flash', src: '{$BASE_URL;}/data/flvplayer.swf{+START,IF,{$NOT,{$BROWSER_MATCHES,bot}}}?rand={$RAND*}{+END}' },
-					{ type: 'html5' }
-				],
-				provider: 'audio',
+				{+START,IF_NON_EMPTY,{LENGTH}}
+					duration: {LENGTH%},
+				{+END}
+				file: '{URL;/}',
+				image: '{THUMB_URL;/}',
+				flashplayer: '{$BASE_URL;/}/data/jwplayer.flash.swf{+START,IF,{$NOT,{$BROWSER_MATCHES,bot}}}?rand={$RAND;/}{+END}',
 				events: {
-					{+START,IF,{$NOT,{$INLINE_STATS}}}onPlay: function() { ga_track(null,'{!VIDEO;*}','{URL;*}'); },{+END}
+					{+START,IF,{$NOT,{$INLINE_STATS}}}onPlay: function() { ga_track(null,'{!AUDIO;/}','{URL;/}'); },{+END}
 					onComplete: function() { if (document.getElementById('next_slide')) player_stopped(); },
 					onReady: function() { if (document.getElementById('next_slide')) { stop_slideshow_timer(); jwplayer('{$GET%,player_id}').play(true); } }
 				}
@@ -52,17 +48,17 @@
 
 	{+START,IF_NON_EMPTY,{DESCRIPTION}}
 		<figcaption class="associated_details">
-			{DESCRIPTION}
+			{$PARAGRAPH,{DESCRIPTION}}
 		</figcaption>
 	{+END}
 
-	{$,Uncomment for a download link <ul class="actions_list" role="navigation"><li class="actions_list_strong"><a rel="enclosure" target="_blank" title="{!_DOWNLOAD,{ORIGINAL_FILENAME*}} {!LINK_NEW_WINDOW}" href="{URL*}">{!_DOWNLOAD,{ORIGINAL_FILENAME*}}</a> ({CLEAN_SIZE*}\{+START,IF_NON_PASSED_OR_FALSE,WYSIWYG_SAFE\}\{+START,IF,{$INLINE_STATS}\}\{+START,IF_PASSED,NUM_DOWNLOADS\}, {!DOWNLOADS_SO_FAR,{NUM_DOWNLOADS*}}\{+END\}\{+END\}\{+END\})</li></ul>}
+	{$,Uncomment for a download link \{+START,INCLUDE,MEDIA__DOWNLOAD_LINK\}\{+END\}}
 {+END}
 {+START,IF_PASSED_AND_TRUE,FRAMED}
 	<figure>
 		{$GET,media}
 	</figure>
 {+END}
-{+START,IF_NON_PASSED_OR_TRUE,FRAMED}
+{+START,IF_NON_PASSED_OR_FALSE,FRAMED}
 	{$GET,media}
 {+END}

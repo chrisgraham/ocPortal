@@ -79,7 +79,8 @@ class Hook_media_rendering_youtube
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_YOUTUBE',array('URL'=>$url));
+		$url=preg_replace('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#','${1}',$url);
+		return do_template('MEDIA_YOUTUBE',array('HOOK'=>'youtube')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

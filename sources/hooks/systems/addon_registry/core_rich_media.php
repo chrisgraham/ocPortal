@@ -237,6 +237,10 @@ class Hook_addon_registry_core_rich_media
 			'MEDIA_WEBPAGE_OEMBED_VIDEO.tpl',
 			'MEDIA_WEBPAGE_SEMANTIC.tpl',
 			'MEDIA_YOUTUBE.tpl',
+			'MEDIA_DOWNLOAD.tpl',
+			'MEDIA__DOWNLOAD_LINK.tpl',
+			'data/jwplayer.flash.swf',
+			'JAVASCRIPT_JWPLAYER.tpl',
 		);
 	}
 

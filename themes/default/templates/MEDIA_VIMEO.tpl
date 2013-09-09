@@ -1,8 +1,14 @@
 {$SET,player_id,player_{$RAND}}
 
 <div class="xhtml_validator_off">
-	<iframe id="{$GET*,player_id}" src="http://player.vimeo.com/video/{URL*}?api=1" {+START,IF,{$_GET,slideshow}}autoplay="1" {+END}width="425" height="350" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+	<iframe id="{$GET*,player_id}" src="http://player.vimeo.com/video/{URL*}?api=1" {+START,IF,{$_GET,slideshow}}autoplay="1" {+END}width="{WIDTH*}" height="{HEIGHT*}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 </div>
+
+{+START,IF_NON_EMPTY,{DESCRIPTION}}
+	<figcaption class="associated_details">
+		{$PARAGRAPH,{DESCRIPTION}}
+	</figcaption>
+{+END}
 
 {$,Tie into callback event to see when finished, for our slideshows}
 <script>// <![CDATA[

@@ -1631,10 +1631,15 @@ function _read_in_headers($line)
  */
 function get_webpage_meta_details($url)
 {
+	static $cache=array();
+
+	if (array_key_exists($url,$cache)) return $cache[$url];
 	$_meta_details=$GLOBALS['SITE_DB']->query_select('url_title_cache',array('*'),array('t_url'=>$url),'',1);
 	if (array_key_exists(0,$_meta_details))
 	{
-		return $_meta_details[0];
+		$meta_details=$_meta_details[0];
+		$cache[$url]=$meta_details;
+		return $meta_details;
 	}
 
 	$meta_details=array(
@@ -1706,7 +1711,16 @@ function get_webpage_meta_details($url)
 			$meta_details['t_image_url']=qualify_url($meta_details['t_image_url'],$url);
 
 		global $HTTP_DOWNLOAD_MIME_TYPE;
-		$meta_details['t_mime_type']=$HTTP_DOWNLOAD_MIME_TYPE;
+		if (($HTTP_DOWNLOAD_MIME_TYPE=='application/octet-stream') || ($HTTP_DOWNLOAD_MIME_TYPE==''))
+		{
+			// Lame, no real mime type - maybe the server is just not configured to know it - try and guess by using the file extension and our own ocPortal list
+			require_code('mime_types');
+			require_code('files');
+			$meta_details['t_mime_type']=get_mime_type(get_file_extension($url));
+		} else
+		{
+			$meta_details['t_mime_type']=$HTTP_DOWNLOAD_MIME_TYPE;
+		}
 
 		$matches=array();
 		$num_matches=preg_match_all('#<link\s+[^<>]*>#i',$html,$matches);
@@ -1730,5 +1744,6 @@ function get_webpage_meta_details($url)
 		$GLOBALS['SITE_DB']->query_insert('url_title_cache',$meta_details,false,true); // 'true' to stop race conditions
 	}
 
+	$cache[$url]=$meta_details;
 	return $meta_details;
 }

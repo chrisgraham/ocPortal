@@ -40,12 +40,13 @@ function init__media_renderer()
  * Find a media renderer hook for a URL.
  *
  * @param  URLPATH		The URL
+ * @param  array			Attributes (e.g. width, height, length)
  * @param  boolean		Whether there are admin privileges, to render dangerous media types
  * @param  integer		Bitmask of media that we will support
  * @param  ?ID_TEXT		Limit to a media rendering hook (NULL: no limit)
  * @return ?array			The hooks (NULL: cannot find one)
  */
-function find_media_renderers($url,$as_admin,$acceptable_media,$limit_to=NULL)
+function find_media_renderers($url,$attributes,$as_admin,$acceptable_media,$limit_to=NULL)
 {
 	$hooks=is_null($limit_to)?array_keys(find_all_hooks('systems','media_rendering')):array($limit_to);
 	$obs=array();
@@ -97,15 +98,21 @@ function find_media_renderers($url,$as_admin,$acceptable_media,$limit_to=NULL)
 
 	// Find via download (oEmbed / mime-type) - last resort, as it is more 'costly' to do
 	require_code('files2');
-	$media_signature=get_webpage_meta_details($url);
-	if ($media_signature['t_mime_type']!='')
+	$meta_details=get_webpage_meta_details($url);
+	if ((array_key_exists('mime_type',$attributes)) && ($attributes['mime_type']!=''))
 	{
-		$mime_type=$media_signature['t_mime_type'];
+		$mime_type=$attributes['mime_type'];
+	} else
+	{
+		$mime_type=$meta_details['t_mime_type'];
+	}
+	if ($meta_details['t_mime_type']!='')
+	{
 		foreach ($hooks as $hook)
 		{
 			if ((method_exists($obs[$hook],'recognises_mime_type')) && (($acceptable_media & $obs[$hook]->get_media_type()) != 0))
 			{
-				$result=$obs[$hook]->recognises_mime_type($mime_type,$media_signature);
+				$result=$obs[$hook]->recognises_mime_type($mime_type,$meta_details);
 				if ($result!=0)
 					$found[$hook]=$result;
 			}
@@ -133,9 +140,89 @@ function find_media_renderers($url,$as_admin,$acceptable_media,$limit_to=NULL)
  */
 function render_media_url($url,$attributes,$as_admin=false,$source_member=NULL,$acceptable_media=15,$limit_to=NULL)
 {
-	$hooks=find_media_renderers($url,$as_admin,$acceptable_media,$limit_to);
+	$hooks=find_media_renderers($url,$attributes,$as_admin,$acceptable_media,$limit_to);
 	if (is_null($hooks)) return NULL;
 	$hook=reset($hooks);
 	$ob=object_factory('Hook_media_rendering_'.$hook);
 	return $ob->render($url,$attributes,$source_member);
+}
+
+/**
+ * Turn standardised media parameters into standardised media template parameters.
+ *
+ * @param  URLPATH		The URL
+ * @param  array			Attributes (Any combination of: thumb_url, width, height, length, filename, mime_type, description, filesize, framed, wysiwyg_safe, expandable, num_downloads, click_url)
+ * @return array			Template-ready parameters
+ */
+function _create_media_template_parameters($url,$attributes)
+{
+	// Put in defaults
+	$no_width=(!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width']));
+	$no_height=(!array_key_exists('height',$attributes)) || (!is_numeric($attributes['height']));
+	if ($no_width || $no_height)
+	{
+		$width=intval(get_option('attachment_default_width'));
+		$height=intval(get_option('attachment_default_height'));
+		if ((function_exists('getimagesize')) && (array_key_exists('thumb_url',$attributes)) && ($attributes['thumb_url']!=''))
+		{
+			list($width,$height)=getimagesize($file_thumb);
+		}
+
+		if ($no_width)
+		{
+			$attributes['width']=strval($width);
+		}
+		if ($no_height)
+		{
+			$attributes['height']=strval($height);
+		}
+	}
+	if ((!array_key_exists('length',$attributes)) || (!is_numeric($attributes['length'])))
+		$attributes['length']='';
+	if ((!array_key_exists('thumb_url',$attributes)) || ($attributes['thumb_url']==''))
+		$attributes['thumb_url']='';
+	if ((!array_key_exists('filename',$attributes)) || ($attributes['filename']==''))
+		$attributes['filename']=urldecode(basename($url));
+	if ((!array_key_exists('mime_type',$attributes)) || ($attributes['mime_type']==''))
+	{
+		// As this is not necessarily a local file, we need to get the mime-type in the formal way.
+		//  If this was an uploaded file (i.e. new file in the JS security context) with a dangerous mime type, it would have been blocked by now.
+		require_code('files2');
+		$meta_details=get_webpage_meta_details($url);
+		$attributes['mime_type']=$meta_details['t_mime_type'];
+	}
+	if (!array_key_exists('description',$attributes))
+		$attributes['description']='';
+	if ((!array_key_exists('filesize',$attributes)) || (!is_numeric($attributes['filesize'])))
+		$attributes['filesize']='';
+
+	// Framing. NB: Framed is not used by media types that imply their own framing (e.g. external videos)
+	$framed=((!array_key_exists('framed',$attributes)) || ($attributes['framed']!='0'));
+
+	$wysiwyg_safe=((array_key_exists('wysiwyg_safe',$attributes)) && ($attributes['wysiwyg_safe']!='0'));
+
+	$expandable=((!array_key_exists('expandable',$attributes)) || ($attributes['expandable']!='0'));
+
+	// Put together template parameters
+	return array(
+		'URL'=>$url,
+		'THUMB_URL'=>$attributes['thumb_url'],
+		'FILENAME'=>$attributes['filename'],
+		'MIME_TYPE'=>$attributes['mime_type'],
+		'CLICK_URL'=>array_key_exists('click_url',$attributes)?$attributes['click_url']:NULL,
+
+		'WIDTH'=>$attributes['width'],
+		'HEIGHT'=>$attributes['height'],
+
+		'LENGTH'=>$attributes['length'],
+
+		'FILESIZE'=>$attributes['filesize'],
+		'CLEAN_FILESIZE'=>is_numeric($attributes['filesize'])?clean_file_size($attributes['filesize']):'',
+
+		'FRAMED'=>$framed,
+		'WYSIWYG_SAFE'=>$wysiwyg_safe,
+		'NUM_DOWNLOADS'=>array_key_exists('num_downloads',$attributes)?$attributes['num_downloads']:NULL,
+		'DESCRIPTION'=>$attributes['description'],
+		'EXPANDABLE'=>$expandable, // Meaning, the full version will open in an overlay
+	);
 }

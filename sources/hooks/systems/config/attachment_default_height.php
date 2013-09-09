@@ -49,7 +49,7 @@ class Hook_config_attachment_default_height
 	 */
 	function get_default()
 	{
-		return '216';
+		return '315'; // NB: This is for videos (etc), not images
 	}
 
 }

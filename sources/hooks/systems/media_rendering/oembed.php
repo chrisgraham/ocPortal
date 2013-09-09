@@ -21,6 +21,7 @@
 /*
 Notes...
  - The cache_age property is not supported. It would significantly complicate the API and hurt performance, and we don't know a use case for it. The spec says it is optional to support.
+ - Link/semantic-webpage rendering will not use passed description parameter, etc. This is intentional: the normal flow of rendering through a standardised media template is not used.
 */
 
 class Hook_media_rendering_oembed
@@ -161,16 +162,19 @@ class Hook_media_rendering_oembed
 		{
 			case 'photo':
 				if ((!array_key_exists('url',$data)) || (!array_key_exists('width',$data)) || (!array_key_exists('height',$data))) break;
+				$map=array('width'=>$data['width'],'height'=>$data['height'],'click_url'=>$url);
 				$url=$data['url'];
-				if (array_key_exists('media_url',$data)) $url=$data['media_url']; // noembed uses this, naughty
-				if (array_key_exists('thumbnail_url',$data)) $url=$data['thumbnail_url'];
-				$map=array('width'=>$data['width'],'height'=>$data['height']);
+				if (array_key_exists('media_url',$data)) $map['thumb_url']=$data['media_url']; // noembed uses this, naughty
+				if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url'];
 				if (array_key_exists('description',$data)) $map['description']=$data['description']; // not official, but embed.ly has it
 				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
 				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
 				if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];
+				/*require_code('mime_types');	$url should be the full image not to view the resource, so we don't need to trick the mime type
+				require_code('files');
+				$map['mime_type']=get_mime_type(get_file_extension($map['thumb_url']));*/
 				require_code('media_renderer');
-				return render_media_url($url,$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
+				return render_media_url($url,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
 
 			case 'video':
 				if ((!array_key_exists('width',$data)) || (!array_key_exists('height',$data))) break;
@@ -201,15 +205,14 @@ class Hook_media_rendering_oembed
 					return $this->_fallback_render($url,$attributes,$source_member,array_key_exists('title',$data)?$data['title']:'');
 
 				// embed.ly may show thumbnail details within a "link" type
-				$url=$data['thumbnail_url'];
-				$map=array();
+				$map=array('thumb_url'=>$data['thumbnail_url']);
 				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
 				if (array_key_exists('thumbnail_width',$data)) $map['height']=$data['thumbnail_height'];
 				if (array_key_exists('description',$data)) $map['description']=$data['description']; // not official, but embed.ly has it
 				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
 
 				require_code('media_renderer');
-				return render_media_url($url,$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
+				return render_media_url($url,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
 		}
 
 		// Should not get here

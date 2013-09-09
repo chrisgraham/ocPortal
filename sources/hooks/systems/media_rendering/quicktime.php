@@ -50,6 +50,7 @@ class Hook_media_rendering_quicktime
 	 */
 	function recognises_url($url)
 	{
+		if (substr($url,0,7)=='rtsp://') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -62,7 +63,7 @@ class Hook_media_rendering_quicktime
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_QUICKTIME',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height'],'LENGTH'=>$attributes['length']));
+		return do_template('MEDIA_QUICKTIME',array('HOOK'=>'quicktime')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

@@ -53,14 +53,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('hooks/systems/config/oembed_manual_patterns');
-	$ob=new Hook_config_oembed_manual_patterns();
-	set_option('oembed_manual_patterns',$ob->get_default());
-	require_code('hooks/systems/config/oembed_html_whitelist');
-	$ob=new Hook_config_oembed_html_whitelist();
-	set_option('oembed_html_whitelist',$ob->get_default());
-	require_code('hooks/systems/media_rendering/oembed');
-	$ob=new Hook_media_rendering_oembed();
-	$tpl=$ob->render('http://tinypic.com/view.php?pic=an0eig&s=3',array());
+	require_code('media_renderer');
+	$tpl=render_media_url('https://www.facebook.com/video/video.php?v=10100363037940934',array()); // video_facebook
+	if (is_null($tpl)) warn_exit('Failed to render.');
 	inform_exit(protect_from_escaping($tpl));
 }

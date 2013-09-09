@@ -62,7 +62,7 @@ class Hook_media_rendering_pdf
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_PDF',array('URL'=>$url));
+		return do_template('MEDIA_PDF',array('HOOK'=>'pdf')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

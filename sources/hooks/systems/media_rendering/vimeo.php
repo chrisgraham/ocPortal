@@ -108,7 +108,8 @@ class Hook_media_rendering_vimeo
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_VIMEO',array('URL'=>$url));
+		$url=preg_replace('#^https?://vimeo\.com/(\d+)#','${1}',$url);
+		return do_template('MEDIA_VIMEO',array('HOOK'=>'vimeo')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

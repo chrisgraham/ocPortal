@@ -18,6 +18,11 @@
  * @package		core_rich_media
  */
 
+/*
+Notes...
+ - Link rendering will not use passed description parameter, etc. This is intentional: the normal flow of rendering through a standardised media template is not used.
+*/
+
 class Hook_media_rendering_hyperlink
 {
 	/**
@@ -66,21 +71,40 @@ class Hook_media_rendering_hyperlink
 		require_code('files2');
 		$meta_details=get_webpage_meta_details($url);
 
-		// Render as a nice preview box
-		if (($meta_details['t_description']!='') || ($meta_details['t_image_url']!=''))
-		{
-			$title=$meta_details['t_title'];
-			$meta_title=$meta_details['t_meta_title'];
-			if ($meta_title=='') $meta_title=escape_html($title);
+		$defined_not_framed=((array_key_exists('framed',$attributes)) && ($attributes['framed']=='0'));
 
-			return do_template('MEDIA_WEBPAGE_SEMANTIC',array(
-				'TITLE'=>$meta_details['t_title'],
-				'META_TITLE'=>$meta_title,
-				'DESCRIPTION'=>$meta_details['t_description'],
-				'IMAGE_URL'=>$meta_details['t_image_url'],
-				'URL'=>$meta_details['t_url'],
-			));
-		}
+		// Render as a nice preview box
+		if (!$defined_not_framed)
+		{
+			if ((array_key_exists('mime_type',$attributes)) && ($attributes['mime_type']!=''))
+			{
+				$mime_type=$attributes['mime_type'];
+			} else
+			{
+				$mime_type=$meta_details['t_mime_type'];
+			}
+			if ($mime_type!='text/html' && $mime_type!='application/xhtml+xml') // A download, i.e. not a webpage. We assume we will never want to force a webpage as a download unless we specify a mime-type. Richer things like PDFs will have been claimed by a better hook
+			{
+				return do_template('MEDIA_DOWNLOAD',_create_media_template_parameters($url,$attributes));
+			}
+
+			if (($meta_details['t_description']!='') || ($meta_details['t_image_url']!=''))
+			{
+				$title=$meta_details['t_title'];
+				$meta_title=$meta_details['t_meta_title'];
+				if ($meta_title=='') $meta_title=escape_html($title);
+
+				return do_template('MEDIA_WEBPAGE_SEMANTIC',array(
+					'TITLE'=>$meta_details['t_title'],
+					'META_TITLE'=>$meta_title,
+					'DESCRIPTION'=>$meta_details['t_description'],
+					'IMAGE_URL'=>$meta_details['t_image_url'],
+					'URL'=>$meta_details['t_url'],
+				));
+			}
+
+			// Hmm, okay we'll proceed towards a plain link if it's not a download and has no meta data to box
+		} // Hmm, we explicitly said we want a plain link
 
 		$link_captions_title=$meta_details['t_title'];
 		if ($link_captions_title=='') $link_captions_title=$url;

@@ -49,7 +49,7 @@ class Hook_media_rendering_video_cnn
 	 */
 	function recognises_url($url)
 	{
-		if (preg_match('#^http://(edition\.)?cnn\.com/video/[\#\?]/(video/)?([\w/\.]+)#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
+		if (preg_match('#^https?://(edition\.)?cnn\.com/.*/video/(.*)\.html#',$url)!=0) return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -62,7 +62,7 @@ class Hook_media_rendering_video_cnn
 	function get_video_thumbnail($src_url)
 	{
 		$matches=array();
-		if (preg_match('#^http://(edition\.)?cnn\.com/video/[\#\?]/(video/)?([\w/\.]+)#',$src_url,$matches)!=0)
+		if (preg_match('#^https?://(edition\.)?cnn\.com/.*/video/(.*)\.html#',$src_url,$matches)!=0)
 		{
 			return 'http://i.cdn.turner.com/cnn/video/'.$matches[3].'.214x122.jpg';
 		}
@@ -78,7 +78,8 @@ class Hook_media_rendering_video_cnn
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_VIDEO_CNN',array('URL'=>$url));
+		$url=preg_replace('#^https?://(edition\.)?cnn\.com/.*/video/(.*)\.html#','${2}',$url);
+		return do_template('MEDIA_VIDEO_CNN',array('HOOK'=>'video_cnn')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

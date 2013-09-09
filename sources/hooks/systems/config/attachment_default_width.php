@@ -49,7 +49,7 @@ class Hook_config_attachment_default_width
 	 */
 	function get_default()
 	{
-		return '240';
+		return '560'; // NB: This is for videos (etc), not images
 	}
 
 }

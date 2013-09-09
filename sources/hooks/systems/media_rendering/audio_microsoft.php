@@ -50,6 +50,7 @@ class Hook_media_rendering_audio_microsoft
 	 */
 	function recognises_url($url)
 	{
+		if (substr($url,0,7)=='rtsp://') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -62,7 +63,17 @@ class Hook_media_rendering_audio_microsoft
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_VIDEO_GENERAL',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height'],'LENGTH'=>$attributes['length'],'THUMB_URL'=>$attributes['thumb_url']));
+		// Put in defaults
+		if ((!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width'])))
+		{
+			$attributes['width']=get_option('attachment_default_width');
+		}
+		if ((!array_key_exists('height',$attributes)) || (!is_numeric($attributes['height'])))
+		{
+			$attributes['height']='30';
+		}
+
+		return do_template('MEDIA_VIDEO_GENERAL',array('HOOK'=>'audio_microsoft')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

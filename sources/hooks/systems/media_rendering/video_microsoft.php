@@ -38,7 +38,7 @@ class Hook_media_rendering_video_microsoft
 	 */
 	function recognises_mime_type($mime_type)
 	{
-		if ($mime_type=='x-ms-wmv') return MEDIA_RECOG_PRECEDENCE_HIGH;
+		if ($mime_type=='video/x-ms-wmv') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		if ($mime_type=='video/x-ms-asf') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
@@ -51,6 +51,7 @@ class Hook_media_rendering_video_microsoft
 	 */
 	function recognises_url($url)
 	{
+		if (substr($url,0,7)=='rtsp://') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
 
@@ -63,7 +64,7 @@ class Hook_media_rendering_video_microsoft
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_VIDEO_GENERAL',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height'],'LENGTH'=>$attributes['length'],'THUMB_URL'=>$attributes['thumb_url']));
+		return do_template('MEDIA_VIDEO_GENERAL',array('HOOK'=>'video_microsoft')+_create_media_template_parameters($url,$attributes));
 	}
 
 }

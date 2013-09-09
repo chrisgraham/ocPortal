@@ -27,6 +27,8 @@
  */
 function get_mime_type($extension,$as_admin)
 {
+	$extension=strtolower($extension);
+
 	$mime_types=array(
 
 		// Plain text
@@ -84,8 +86,13 @@ function get_mime_type($extension,$as_admin)
 
 		// Movies
 		'avi'=>'video/mpeg',//'video/x-ms-asf' works with the plugin on Windows Firefox but nothing else,//'video/x-msvideo' is correct but does not get recognised by Microsoft Firefox WMV plugin and confuses RealMedia Player if it sees data transferred under that mime type,
+		'mp2'=>'video/mpeg',
+		'mpv2'=>'video/mpeg',
+		'm2v'=>'video/mpeg',
+		'mpa'=>'video/mpeg',
 		'mpg'=>'video/mpeg',
 		'mpe'=>'video/mpeg',
+		'3g2'=>'video/3gpp',
 		'3gp'=>'video/3gpp',
 		'f4v'=>'video/mp4',
 		'mp4'=>'video/mp4',
@@ -109,6 +116,9 @@ function get_mime_type($extension,$as_admin)
 		'mp3'=>'audio/x-mpeg',
 		'ogg'=>'audio/ogg',
 		'mid'=>'audio/midi',
+		'aif'=>'audio/x-aiff',
+		'aifc'=>'audio/x-aiff',
+		'aiff'=>'audio/x-aiff',
 
 		// File sharing
 		'torrent'=>'application/x-bittorrent',

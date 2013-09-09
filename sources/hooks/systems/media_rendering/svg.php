@@ -62,7 +62,7 @@ class Hook_media_rendering_svg
 	 */
 	function render($url,$attributes)
 	{
-		return do_template('MEDIA_SVG',array('URL'=>$url,'WIDTH'=>$attributes['width'],'HEIGHT'=>$attributes['height']));
+		return do_template('MEDIA_SVG',array('HOOK'=>'svg')+_create_media_template_parameters($url,$attributes));
 	}
 
 }
