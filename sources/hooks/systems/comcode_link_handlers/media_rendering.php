@@ -40,12 +40,12 @@ class Hook_comcode_link_handler_media_rendering
 	function bind($url,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits)
 	{
 		require_code('media_renderer');
-		$hooks=find_media_renderers($url,array(),$as_admin);
+		$hooks=find_media_renderers($url,array(),$as_admin,$source_member);
 		if ($hooks!==NULL)
 		{
 			$hook=reset($hooks);
 			$ob=object_factory('Hook_media_rendering_'.$hook);
-			return $ob->render($url,array(),$source_member);
+			return $ob->render($url,array(),$as_admin,$source_member);
 		}
 
 		return NULL;

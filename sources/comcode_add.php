@@ -78,9 +78,7 @@ function _get_details_comcode_tags()
 		'currency'=>array('param','bracket'),
 		'if_in_group'=>array('param','type'),
 		'flash'=>array('param'),
-		'video'=>array('param'),
-		'audio'=>array(),
-		'media'=>array('param'),
+		'media'=>array('description','thumb_url','width','height','framed','wysiwyg_editable','thumb','length','filename','mime_type','filesize','click_url','type','float'),
 		'img'=>array('align','float','param','title','rollover','refresh_time'),
 		'thumb'=>array('align','param','caption','float'),
 		'url'=>array('param','title','target','rel'),
@@ -90,9 +88,9 @@ function _get_details_comcode_tags()
 		'snapback'=>array('param','forum'),
 		'post'=>array('param','forum'),
 		'topic'=>array('param','forum'),
-		'attachment'=>array('description','filename','type','thumb','float','align','width','height','thumb_url'),
+		'attachment'=>array('description','thumb_url','width','height','framed','thumb','length','filename','mime_type','filesize','click_url','type','float'),
 	);
-	//'attachment_safe'=>array('description','filename','type','width','height','align','float','thumb_url'),	Merged into attachment in UI
+	//'attachment_safe'=>array('description','filename','type','width','height','float','thumb_url'),	Merged into attachment in UI
 	ksort($tag_list);
 	/* // Helps find missing tags
 	unset($VALID_COMCODE_TAGS['section']);
@@ -167,7 +165,7 @@ function _get_group_tags($group=NULL)
 		'semantic'=>array('cite','samp','q','var','dfn','address'),
 		'display_code'=>array('codebox','code','tt','no_parse'),
 		'execute_code'=>array('semihtml','html'),
-		'media'=>array('img','thumb','flash','video','audio','media'),
+		'media'=>array('img','thumb','flash','media'),
 		'linking'=>array('url','email','reference','page','snapback','post','topic'),
 	);
 
@@ -201,7 +199,7 @@ function _get_group_tags($group=NULL)
  */
 function _get_non_wysiwyg_tags()
 {
-	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','media','audio','video','thumb','reference','snapback','post','topic','attachment');
+	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','media','thumb','reference','snapback','post','topic','attachment');
 	return $ret;
 }
 
@@ -437,7 +435,7 @@ function comcode_helper_script()
 						}
 						$descriptiont=preg_replace('#\s*'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\'](?-U)\.?(?U)#Ui','',$descriptiont);
 
-						if ((($tag=='attachment') || ($tag=='audio') || ($tag=='video') || ($tag=='media')) && ($param=='thumb_url') && (addon_installed('filedump')))
+						if ((($tag=='attachment') || ($tag=='media')) && ($param=='thumb_url') && (addon_installed('filedump')))
 						{
 							$set_name='thumbnail';
 							$required=false;
@@ -469,20 +467,6 @@ function comcode_helper_script()
 									if (strpos($item,'=')!==false)
 									{
 										list($item,$label)=explode('=',$item,2);
-
-										// Simplify the choices
-										if ($tag=='attachment')
-										{
-											if (($item=='inline_extract') && (get_param_integer('is_archive',NULL)===0)) continue;
-											if (($item=='island_extract') && (get_param_integer('is_archive',NULL)===0)) continue;
-
-											if (($item=='island') && (get_param_integer('is_image',NULL)===0)) continue;
-											if (($item=='island') && (get_param_integer('is_image',NULL)===0)) continue;
-
-											if (($item=='code') && ((get_param_integer('is_image',NULL)===1) || (get_param_integer('is_archive',NULL)===1))) continue;
-
-											if (($item=='mail') && (get_param('default_type',NULL)!==NULL)) continue;
-										}
 
 										$list->attach(form_input_list_entry($item,($item==$default),protect_from_escaping($label)));
 									} else
@@ -538,7 +522,7 @@ function comcode_helper_script()
 			$tag_description->attach(paragraph(is_integer($_params['tag_example'])?get_translated_text($_params['tag_example']):$_params['tag_example']));
 		}
 
-		if ((($tag=='audio') || ($tag=='video') || ($tag=='media')) && (addon_installed('filedump')))
+		if (($tag=='media') && (addon_installed('filedump')))
 		{
 			$set_name='file';
 			$required=true;

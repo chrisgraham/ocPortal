@@ -18,7 +18,7 @@
  * @package		core_rich_media
  */
 
-class Hook_media_rendering_pdf
+class Hook_media_rendering_mail
 {
 	/**
 	 * Get the label for this media rendering type.
@@ -38,7 +38,7 @@ class Hook_media_rendering_pdf
 	 */
 	function get_media_type()
 	{
-		return MEDIA_TYPE_OTHER;
+		return MEDIA_TYPE_ALL;
 	}
 
 	/**
@@ -49,8 +49,7 @@ class Hook_media_rendering_pdf
 	 */
 	function recognises_mime_type($mime_type)
 	{
-		if ($mime_type=='application/pdf') return MEDIA_RECOG_PRECEDENCE_HIGH;
-		return MEDIA_RECOG_PRECEDENCE_NONE;
+		return MEDIA_RECOG_PRECEDENCE_TRIVIAL;
 	}
 
 	/**
@@ -61,7 +60,7 @@ class Hook_media_rendering_pdf
 	 */
 	function recognises_url($url)
 	{
-		return MEDIA_RECOG_PRECEDENCE_NONE;
+		return MEDIA_RECOG_PRECEDENCE_TRIVIAL;
 	}
 
 	/**
@@ -75,7 +74,14 @@ class Hook_media_rendering_pdf
 	 */
 	function render($url,$attributes,$as_admin=false,$source_member=NULL)
 	{
-		return do_template('MEDIA_PDF',array('HOOK'=>'pdf')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		require_code('mail');
+		global $EMAIL_ATTACHMENTS;
+		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+		if ((!array_key_exists('filename',$attributes)) || ($attributes['filename']==''))
+			$attributes['filename']=urldecode(basename($url));
+		$EMAIL_ATTACHMENTS[$url]=$attributes['filename'];
+
+		return new ocp_tempcode();
 	}
 
 }

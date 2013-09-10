@@ -23,10 +23,11 @@
  */
 function init__media_renderer()
 {
-	define('MEDIA_RECOG_PRECEDENCE_SUPER',15);
-	define('MEDIA_RECOG_PRECEDENCE_HIGH',10);
-	define('MEDIA_RECOG_PRECEDENCE_MEDIUM',5);
-	define('MEDIA_RECOG_PRECEDENCE_LOW',1);
+	define('MEDIA_RECOG_PRECEDENCE_SUPER',50);
+	define('MEDIA_RECOG_PRECEDENCE_HIGH',40);
+	define('MEDIA_RECOG_PRECEDENCE_MEDIUM',30);
+	define('MEDIA_RECOG_PRECEDENCE_LOW',20);
+	define('MEDIA_RECOG_PRECEDENCE_TRIVIAL',10);
 	define('MEDIA_RECOG_PRECEDENCE_NONE',0);
 
 	define('MEDIA_TYPE_IMAGE',1);
@@ -42,12 +43,16 @@ function init__media_renderer()
  * @param  URLPATH		The URL
  * @param  array			Attributes (e.g. width, height, length)
  * @param  boolean		Whether there are admin privileges, to render dangerous media types
+ * @param  ?MEMBER		Member to run as (NULL: current member)
  * @param  integer		Bitmask of media that we will support
  * @param  ?ID_TEXT		Limit to a media rendering hook (NULL: no limit)
  * @return ?array			The hooks (NULL: cannot find one)
  */
-function find_media_renderers($url,$attributes,$as_admin,$acceptable_media,$limit_to=NULL)
+function find_media_renderers($url,$attributes,$as_admin,$source_member,$acceptable_media,$limit_to=NULL)
 {
+	if (is_null($source_member)) $source_member=get_member();
+	if (has_privilege($source_member,'comcode_dangerous')) $as_admin=true;
+
 	$hooks=is_null($limit_to)?array_keys(find_all_hooks('systems','media_rendering')):array($limit_to);
 	$obs=array();
 	foreach ($hooks as $hook)
@@ -58,6 +63,9 @@ function find_media_renderers($url,$attributes,$as_admin,$acceptable_media,$limi
 		require_code('hooks/systems/media_rendering/'.$hook);
 		$obs[$hook]=object_factory('Hook_media_rendering_'.$hook);
 	}
+
+	if (($as_admin) && ($limit_to!==NULL)) // Don't check mime-types etc if admin and forced type
+		return array($limit_to);
 
 	$found=array();
 	$matches=array();
@@ -99,7 +107,7 @@ function find_media_renderers($url,$attributes,$as_admin,$acceptable_media,$limi
 	// Find via download (oEmbed / mime-type) - last resort, as it is more 'costly' to do
 	require_code('files2');
 	$meta_details=get_webpage_meta_details($url);
-	if ((array_key_exists('mime_type',$attributes)) && ($attributes['mime_type']!=''))
+	if ((array_key_exists('mime_type',$attributes)) && ($attributes['mime_type']!='') && ($as_admin))
 	{
 		$mime_type=$attributes['mime_type'];
 	} else
@@ -140,41 +148,53 @@ function find_media_renderers($url,$attributes,$as_admin,$acceptable_media,$limi
  */
 function render_media_url($url,$attributes,$as_admin=false,$source_member=NULL,$acceptable_media=15,$limit_to=NULL)
 {
-	$hooks=find_media_renderers($url,$attributes,$as_admin,$acceptable_media,$limit_to);
+	$hooks=find_media_renderers($url,$attributes,$as_admin,$source_member,$acceptable_media,$limit_to);
 	if (is_null($hooks)) return NULL;
 	$hook=reset($hooks);
 	$ob=object_factory('Hook_media_rendering_'.$hook);
-	return $ob->render($url,$attributes,$source_member);
+	$ret=$ob->render($url,$attributes,$as_admin,$source_member);
+	if (array_key_exists('float',$attributes))
+	{
+		if (($attributes['float']=='left') || ($attributes['float']=='right'))
+			$ret=do_template('MEDIA__'.strtoupper($attributes['align']),array('CONTENT'=>$ret));
+	}
+	return $ret;
 }
 
 /**
  * Turn standardised media parameters into standardised media template parameters.
  *
  * @param  URLPATH		The URL
- * @param  array			Attributes (Any combination of: thumb_url, width, height, length, filename, mime_type, description, filesize, framed, wysiwyg_safe, expandable, num_downloads, click_url)
+ * @param  array			Attributes (Any combination of: thumb_url, width, height, length, filename, mime_type, description, filesize, framed, wysiwyg_editable, num_downloads, click_url, thumb)
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types
+ * @param  ?MEMBER		Member to run as (NULL: current member)
  * @return array			Template-ready parameters
  */
-function _create_media_template_parameters($url,$attributes)
+function _create_media_template_parameters($url,$attributes,$as_admin=false,$source_member=NULL)
 {
+	if (is_null($source_member)) $source_member=get_member();
+	if (has_privilege($source_member,'comcode_dangerous')) $as_admin=true;
+
 	// Put in defaults
 	$no_width=(!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width']));
 	$no_height=(!array_key_exists('height',$attributes)) || (!is_numeric($attributes['height']));
 	if ($no_width || $no_height)
 	{
-		$width=intval(get_option('attachment_default_width'));
-		$height=intval(get_option('attachment_default_height'));
+		$_width=get_option('attachment_default_width');
+		$_height=get_option('attachment_default_height');
 		if ((function_exists('getimagesize')) && (array_key_exists('thumb_url',$attributes)) && ($attributes['thumb_url']!=''))
 		{
-			list($width,$height)=getimagesize($file_thumb);
+			require_code('images');
+			list($_width,$_height)=_symbol_image_dims(array($attributes['thumb_url']));
 		}
 
 		if ($no_width)
 		{
-			$attributes['width']=strval($width);
+			$attributes['width']=$_width;
 		}
 		if ($no_height)
 		{
-			$attributes['height']=strval($height);
+			$attributes['height']=$_height;
 		}
 	}
 	if ((!array_key_exists('length',$attributes)) || (!is_numeric($attributes['length'])))
@@ -183,7 +203,7 @@ function _create_media_template_parameters($url,$attributes)
 		$attributes['thumb_url']='';
 	if ((!array_key_exists('filename',$attributes)) || ($attributes['filename']==''))
 		$attributes['filename']=urldecode(basename($url));
-	if ((!array_key_exists('mime_type',$attributes)) || ($attributes['mime_type']==''))
+	if ((!array_key_exists('mime_type',$attributes)) || ($attributes['mime_type']=='') || (!$as_admin))
 	{
 		// As this is not necessarily a local file, we need to get the mime-type in the formal way.
 		//  If this was an uploaded file (i.e. new file in the JS security context) with a dangerous mime type, it would have been blocked by now.
@@ -199,9 +219,18 @@ function _create_media_template_parameters($url,$attributes)
 	// Framing. NB: Framed is not used by media types that imply their own framing (e.g. external videos)
 	$framed=((!array_key_exists('framed',$attributes)) || ($attributes['framed']!='0'));
 
-	$wysiwyg_safe=((array_key_exists('wysiwyg_safe',$attributes)) && ($attributes['wysiwyg_safe']!='0'));
+	$wysiwyg_editable=((array_key_exists('wysiwyg_editable',$attributes)) && ($attributes['wysiwyg_editable']!='0'));
 
-	$expandable=((!array_key_exists('expandable',$attributes)) || ($attributes['expandable']!='0'));
+	$use_thumb=(!array_key_exists('thumb',$attributes)) || ($attributes['thumb']=='1');
+
+	if (($url!='') && (url_is_local($url)))
+	{
+		$url=get_custom_base_url().'/'.$url;
+	}
+	if (($attributes['thumb_url']!='') && (url_is_local($attributes['thumb_url'])))
+	{
+		$attributes['thumb_url']=get_custom_base_url().'/'.$attributes['thumb_url'];
+	}
 
 	// Put together template parameters
 	return array(
@@ -219,10 +248,10 @@ function _create_media_template_parameters($url,$attributes)
 		'FILESIZE'=>$attributes['filesize'],
 		'CLEAN_FILESIZE'=>is_numeric($attributes['filesize'])?clean_file_size($attributes['filesize']):'',
 
+		'THUMB'=>$use_thumb,
 		'FRAMED'=>$framed,
-		'WYSIWYG_SAFE'=>$wysiwyg_safe,
+		'WYSIWYG_SAFE'=>$wysiwyg_editable,
 		'NUM_DOWNLOADS'=>array_key_exists('num_downloads',$attributes)?$attributes['num_downloads']:NULL,
-		'DESCRIPTION'=>$attributes['description'],
-		'EXPANDABLE'=>$expandable, // Meaning, the full version will open in an overlay
+		'DESCRIPTION'=>comcode_to_tempcode($attributes['description'],$source_member,$as_admin),
 	);
 }

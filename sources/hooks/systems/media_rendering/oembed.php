@@ -27,6 +27,17 @@ Notes...
 class Hook_media_rendering_oembed
 {
 	/**
+	 * Get the label for this media rendering type.
+	 *
+	 * @return string		The label
+	 */
+	function get_type_label()
+	{
+		require_lang('comcode');
+		return do_lang('MEDIA_TYPE_'.preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+	}
+
+	/**
 	 * Find the media types this hook serves.
 	 *
 	 * @return integer	The media type(s), as a bitmask

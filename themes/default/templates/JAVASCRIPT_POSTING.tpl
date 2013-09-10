@@ -62,12 +62,11 @@ function set_attachment(field_name,number,filename,multi)
 			filepath=document.getElementById('file'+number).value;
 		}
 
-		var is_archive=true,is_image=true;
+		var is_image=true;
 		if (filepath!='')
 		{
 			var ext=filepath.substr(filepath.length-4,4).toLowerCase();
 
-			is_archive=(ext=='.tar') || (ext=='.zip');
 			is_image=(ext=='.png') || (ext=='.jpg') || (ext=='jpeg') || (ext=='.gif');
 		} else return; // Upload error
 
@@ -80,7 +79,7 @@ function set_attachment(field_name,number,filename,multi)
 		url+='&tag='+(is_image?'attachment_safe':'attachment');
 		url+='&default=new_'+number;
 		url+='&default_thumb=1';
-		url+='&default_type='+(is_archive?'download':(is_image?'inline':'island'));
+		url+='&default_type=';
 		url+='&is_archive='+(is_archive?'1':'0');
 		url+='&is_image='+(is_image?'1':'0');
 		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path

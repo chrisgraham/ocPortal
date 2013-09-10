@@ -26,6 +26,17 @@ Notes...
 class Hook_media_rendering_hyperlink
 {
 	/**
+	 * Get the label for this media rendering type.
+	 *
+	 * @return string		The label
+	 */
+	function get_type_label()
+	{
+		require_lang('comcode');
+		return do_lang('MEDIA_TYPE_'.preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+	}
+
+	/**
 	 * Find the media types this hook serves.
 	 *
 	 * @return integer	The media type(s), as a bitmask
@@ -62,10 +73,11 @@ class Hook_media_rendering_hyperlink
 	 *
 	 * @param  URLPATH	URL to render
 	 * @param  array		Attributes (e.g. width, height, length)
-	 * @param  ?MEMBER	Member to run as
+	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
+	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$attributes,$source_member=NULL)
+	function render($url,$attributes,$as_admin=false,$source_member=NULL)
 	{
 		// Try and find the link title
 		require_code('files2');
@@ -85,7 +97,7 @@ class Hook_media_rendering_hyperlink
 			}
 			if ($mime_type!='text/html' && $mime_type!='application/xhtml+xml') // A download, i.e. not a webpage. We assume we will never want to force a webpage as a download unless we specify a mime-type. Richer things like PDFs will have been claimed by a better hook
 			{
-				return do_template('MEDIA_DOWNLOAD',_create_media_template_parameters($url,$attributes));
+				return do_template('MEDIA_DOWNLOAD',_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 			}
 
 			if (($meta_details['t_description']!='') || ($meta_details['t_image_url']!=''))

@@ -18,7 +18,7 @@
  * @package		core_rich_media
  */
 
-class Hook_media_rendering_pdf
+class Hook_media_rendering_code
 {
 	/**
 	 * Get the label for this media rendering type.
@@ -49,8 +49,7 @@ class Hook_media_rendering_pdf
 	 */
 	function recognises_mime_type($mime_type)
 	{
-		if ($mime_type=='application/pdf') return MEDIA_RECOG_PRECEDENCE_HIGH;
-		return MEDIA_RECOG_PRECEDENCE_NONE;
+		return MEDIA_RECOG_PRECEDENCE_TRIVIAL;
 	}
 
 	/**
@@ -61,7 +60,7 @@ class Hook_media_rendering_pdf
 	 */
 	function recognises_url($url)
 	{
-		return MEDIA_RECOG_PRECEDENCE_NONE;
+		return MEDIA_RECOG_PRECEDENCE_TRIVIAL;
 	}
 
 	/**
@@ -75,7 +74,29 @@ class Hook_media_rendering_pdf
 	 */
 	function render($url,$attributes,$as_admin=false,$source_member=NULL)
 	{
-		return do_template('MEDIA_PDF',array('HOOK'=>'pdf')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+		$file_contents=http_download_file($url,1024*1024*20/*reasonable limit*/);
+
+		require_code('files');
+		require_code('comcode_renderer');
+
+		if ((array_key_exists('filename',$attributes)) && ($attributes['filename']!=''))
+		{
+			$title=escape_html($attributes['filename']);
+			$extension=get_file_extension($attributes['filename']);
+		} else
+		{
+			$extension=get_file_extension(basename($url));
+		}
+		list($_embed,$title)=do_code_box($extension,make_string_tempcode($file_contents));
+
+		return do_template('COMCODE_CODE',array(
+			'_GUID'=>'b76f3383d31ad823f50124d59db6a8c3',
+			'STYLE'=>'',
+			'TYPE'=>$extension,
+			'CONTENT'=>$_embed,
+			'TITLE'=>$title,
+		));
 	}
 
 }

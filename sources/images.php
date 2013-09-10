@@ -1093,7 +1093,7 @@ function is_video($name,$as_admin,$must_be_true_video=false)
 
 	require_code('media_renderer');
 	$acceptable_media=$allow_audio?(MEDIA_TYPE_VIDEO | MEDIA_TYPE_AUDIO | MEDIA_TYPE_OTHER /* but not images */):MEDIA_TYPE_VIDEO;
-	$hooks=find_media_renderers($url,array(),$as_admin,$acceptable_media);
+	$hooks=find_media_renderers($url,array(),$as_admin,NULL,$acceptable_media);
 	return !is_null($hooks);
 }
 
@@ -1108,7 +1108,7 @@ function is_audio($name,$as_admin)
 {
 	require_code('media_renderer');
 	$acceptable_media=MEDIA_TYPE_AUDIO;
-	$hooks=find_media_renderers($url,array(),$as_admin,$acceptable_media);
+	$hooks=find_media_renderers($url,array(),$as_admin,NULL,$acceptable_media);
 	return !is_null($hooks);
 }
 
@@ -1122,6 +1122,6 @@ function is_audio($name,$as_admin)
 function is_media($name,$as_admin)
 {
 	require_code('media_renderer');
-	$hooks=find_media_renderers($url,array(),$as_admin);
+	$hooks=find_media_renderers($url,array(),$as_admin,NULL);
 	return !is_null($hooks);
 }

@@ -537,7 +537,7 @@ function do_attachment(field_name,id,description)
 	element=ensure_true_id(element,field_name);
 
 	var comcode;
-	comcode='\n\n[attachment type="island" description="'+escape_comcode(description)+'"]'+id+'[/attachment]';
+	comcode='\n\n[attachment description="'+escape_comcode(description)+'"]'+id+'[/attachment]';
 
 	insert_textbox_opener(element,comcode);
 }
@@ -602,7 +602,7 @@ function insert_textbox(element,text,sel,plain_insert,html)
 		{
 			var is_block=text.match(/^\s*\[block(.*)\](.*)\[\/block\]\s*$/);
 			var is_non_text_tag=false;
-			var non_text_tags=['section_controller','big_tab_controller','img','currency','contents','concepts','attachment','attachment_safe','flash','media','audio','video','menu','email','reference','page','thumb','snapback','post','topic','include','random','jumping','shocker'];
+			var non_text_tags=['section_controller','big_tab_controller','img','currency','contents','concepts','attachment','attachment_safe','flash','media','menu','email','reference','page','thumb','snapback','post','topic','include','random','jumping','shocker'];
 			for (var i=0;i<non_text_tags.length;i++)
 				is_non_text_tag=is_non_text_tag || text.match(new RegExp('^\s*\\['+non_text_tags[i]+'([ =].*)?\\](.*)\\[\/'+non_text_tags[i]+'\\]\s*$'));
 			if (is_block || is_non_text_tag)

@@ -240,7 +240,7 @@ class Module_tester
 					$section_notes=$GLOBALS['SITE_DB']->query_select_value('test_sections','s_notes',array('id'=>$test['t_inherit_section']));
 					if ($section_notes!='') $a_test->attach(paragraph(escape_html($section_notes)));
 
-					$a_test->attach(do_template('TESTER_TEST_SET',array('_GUID'=>'9f1b9f814c1e5c8dfbc051feffced72a','TESTS'=>map_keys_to_upper($_tests_2))));
+					$a_test->attach(do_template('TESTER_TEST_SET',array('_GUID'=>'9f1b9f814c1e5c8dfbc051feffced72a','TESTS'=>$this->map_keys_to_upper($_tests_2))));
 				}
 			}
 
@@ -647,6 +647,22 @@ class Module_tester
 		$post_url=build_url(array('page'=>'_SELF','type'=>'__ed','id'=>$id),'_SELF');
 
 		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'ee10a568b6dacd8baf1efeac3e7bcb40','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
+	}
+
+	/**
+	 * Turn keys of a map to upper case, and return modified map.
+	 *
+	 * @param  array			Input map
+	 * @return array			Adjusted map
+	 */
+	function map_keys_to_upper($array)
+	{
+		$out=array();
+		foreach ($array as $key=>$val)
+		{
+			$out[strtoupper($key)]=$val;
+		}
+		return $out;
 	}
 
 	/**

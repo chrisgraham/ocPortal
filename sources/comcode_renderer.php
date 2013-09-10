@@ -442,88 +442,6 @@ function test_url($url_full,$tag_type,$given_url,$source_member)
 }
 
 /**
- * Render a code box.
- *
- * @param  string			The data type (e.g. file extension) we are rendering.
- * @param  tempcode		Contents (code) to render.
- * @param  boolean		Whether to show line numbers.
- * @param  boolean		Whether what we have came from inside a semihtml tag
- * @param  boolean		Whether what we have came from semihtml mode
- * @return array			A pair: The tempcode for the code box, and the title of the box
- */
-function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semihtml=false)
-{
-	$_embed=mixed();
-	$title=mixed();
-	if ((file_exists(get_file_base().'/sources/geshi/'.filter_naughty(($type=='HTML')?'html4strict':strtolower($type)).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty(($type=='HTML')?'html4strict':strtolower($type)).'.php')))
-	{
-		$evaluated=$embed->evaluate();
-
-		if (($in_semihtml) || ($is_all_semihtml))
-		{
-			require_code('comcode_from_html');
-			$evaluated=semihtml_to_comcode($evaluated);
-		}
-
-		require_code('geshi');
-		if (class_exists('GeSHi'))
-		{
-			require_code('developer_tools');
-			destrictify(false);
-			$geshi=new GeSHi($evaluated,($type=='HTML')?'html4strict':strtolower($type));
-			$geshi->set_header_type(GESHI_HEADER_DIV);
-			if ($numbers) $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-			require_lang('comcode');
-			$title=do_lang_tempcode('comcode:CODE_IN_LANGUAGE',escape_html($type));
-			require_code('xhtml');
-			$_embed=xhtmlise_html($geshi->parse_code());
-			restrictify();
-		}
-	} else
-	{
-		switch (strtolower($type))
-		{
-			case 'php':
-				if (!function_exists('highlight_string')) break;
-
-				$evaluated=$embed->evaluate();
-
-				if (($in_semihtml) || ($is_all_semihtml))
-				{
-					require_code('comcode_from_html');
-					$evaluated=semihtml_to_comcode($evaluated);
-				}
-
-				if (strpos($evaluated,'<'.'?php')===false)
-				{
-					$strip=true;
-					$evaluated="<"."?php\n".$evaluated."\n?".">";
-				} else $strip=false;
-				require_code('xhtml');
-				if (defined('HIPHOP_PHP'))
-				{
-					$h_result=nl2br(escape_html($evaluated));
-				} else
-				{
-					ob_start();
-					highlight_string($evaluated);
-					$h_result=ob_get_clean();
-				}
-				$_embed=xhtmlise_html($h_result);
-				if ($strip)
-				{
-					$_embed=str_replace('&lt;?php<br />','',$_embed);
-					$_embed=str_replace('?&gt;','',$_embed);
-				}
-				$title=do_lang_tempcode('comcode:PHP_CODE');
-				break;
-		}
-	}
-
-	return array($_embed,$title);
-}
-
-/**
  * Get tempcode for a Comcode tag. This function should always return (errors should be placed in the Comcode output stream), for stability reasons (i.e. if you're submitting something, you can't have the whole submit process die half way through in an unstructured fashion).
  *
  * @param  string			The tag being converted
@@ -592,7 +510,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 	if ($semiparse_mode) // We have got to this point because we want to provide a special 'button' editing representation for these tags
 	{
-		$non_text_tags=array('attachment','section_controller','big_tab_controller','currency','block','contents','concepts','flash','media','audio','video','menu','email','reference','page','thumb','snapback','post','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
+		$non_text_tags=array('attachment','section_controller','big_tab_controller','currency','block','contents','concepts','flash','media','menu','email','reference','page','thumb','snapback','post','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
 		if ($tag=='attachment_safe')
 		{
 			if (preg_match('#^new\_\d+$#',$embed->evaluate())!=0)
@@ -665,7 +583,6 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				if ((!array_key_exists('scroll',$attributes)) && (strlen($_embed)>1000)) $attributes['scroll']=1;
 				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
-				$title=do_lang_tempcode('CODE');
 				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
 				{
 					$style='height: auto';
@@ -1825,6 +1742,87 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 }
 
 /**
+ * Render a code box.
+ *
+ * @param  string			The data type (e.g. file extension) we are rendering.
+ * @param  tempcode		Contents (code) to render.
+ * @param  boolean		Whether to show line numbers.
+ * @param  boolean		Whether what we have came from inside a semihtml tag
+ * @param  boolean		Whether what we have came from semihtml mode
+ * @return array			A pair: The tempcode for the code box, and the title of the box
+ */
+function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semihtml=false)
+{
+	$_embed=mixed();
+	$title=do_lang_tempcode('CODE');
+	if ((file_exists(get_file_base().'/sources/geshi/'.filter_naughty(($type=='HTML')?'html4strict':strtolower($type)).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty(($type=='HTML')?'html4strict':strtolower($type)).'.php')))
+	{
+		$evaluated=$embed->evaluate();
+
+		if (($in_semihtml) || ($is_all_semihtml))
+		{
+			require_code('comcode_from_html');
+			$evaluated=semihtml_to_comcode($evaluated);
+		}
+
+		require_code('geshi');
+		if (class_exists('GeSHi'))
+		{
+			require_code('developer_tools');
+			destrictify(false);
+			$geshi=new GeSHi($evaluated,($type=='HTML')?'html4strict':strtolower($type));
+			$geshi->set_header_type(GESHI_HEADER_DIV);
+			if ($numbers) $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+			$title=do_lang_tempcode('comcode:CODE_IN_LANGUAGE',escape_html($type));
+			require_code('xhtml');
+			$_embed=xhtmlise_html($geshi->parse_code());
+			restrictify();
+		}
+	} else
+	{
+		switch (strtolower($type))
+		{
+			case 'php':
+				if (!function_exists('highlight_string')) break;
+
+				$evaluated=$embed->evaluate();
+
+				if (($in_semihtml) || ($is_all_semihtml))
+				{
+					require_code('comcode_from_html');
+					$evaluated=semihtml_to_comcode($evaluated);
+				}
+
+				if (strpos($evaluated,'<'.'?php')===false)
+				{
+					$strip=true;
+					$evaluated="<"."?php\n".$evaluated."\n?".">";
+				} else $strip=false;
+				require_code('xhtml');
+				if (defined('HIPHOP_PHP'))
+				{
+					$h_result=nl2br(escape_html($evaluated));
+				} else
+				{
+					ob_start();
+					highlight_string($evaluated);
+					$h_result=ob_get_clean();
+				}
+				$_embed=xhtmlise_html($h_result);
+				if ($strip)
+				{
+					$_embed=str_replace('&lt;?php<br />','',$_embed);
+					$_embed=str_replace('?&gt;','',$_embed);
+				}
+				$title=do_lang_tempcode('comcode:PHP_CODE');
+				break;
+		}
+	}
+
+	return array($_embed,$title);
+}
+
+/**
  * Recursive algorithm to make table of contents.
  *
  * @param  array			The TOC (sub)tree
@@ -1850,22 +1848,6 @@ function _do_contents_level($tree_structure,$list_types,$base,$the_level=0)
 	}
 
 	return do_template('COMCODE_CONTENTS_LEVEL',array('_GUID'=>'cd2811bf69387ca05bf9612319db956b','TYPE'=>$list_types[max($the_level-$base,0)],'LINES'=>$lines));
-}
-
-/**
- * Turn keys of a map to upper case, and return modified map.
- *
- * @param  array			Input map
- * @return array			Adjusted map
- */
-function map_keys_to_upper($array)
-{
-	$out=array();
-	foreach ($array as $key=>$val)
-	{
-		$out[strtoupper($key)]=$val;
-	}
-	return $out;
 }
 
 /**

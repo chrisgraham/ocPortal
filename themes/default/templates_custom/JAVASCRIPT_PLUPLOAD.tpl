@@ -6228,7 +6228,7 @@ function build_upload_handler(request,fileProgress,attachmentBase,field_name)
 					progress.setStatus("{!SWFUPLOAD_FAILED^#}");
 				} else
 				{
-					insert_textbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name.replace(/"/g,'\'')+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
+					insert_textbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name.replace(/"/g,'\'')+"\"]new_"+attachmentBase+"[/attachment]\n");
 
 					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
 					progress.setProgress(100);

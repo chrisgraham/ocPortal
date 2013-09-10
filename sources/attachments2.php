@@ -48,19 +48,11 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	if ($for_member!==NULL)
 	{
 		$member=$for_member;
-		if (is_null($insert_as_admin)) $insert_as_admin=false;
 	} else
 	{
-		if (function_exists('get_member'))
-		{
-			$member=get_member();
-			if (is_null($insert_as_admin)) $insert_as_admin=false;
-		} else
-		{
-			$member=0;
-			if (is_null($insert_as_admin)) $insert_as_admin=true;
-		}
+		$member=get_member();
 	}
+	if (is_null($insert_as_admin)) $insert_as_admin=false;
 
 	// Handle data URLs for attachment embedding
 	if (function_exists('imagecreatefromstring'))
@@ -142,6 +134,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 		$original_comcode=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$original_comcode);
 	}
 
+	// Go through all uploaded attachments
 	$myfile=mixed();
 	foreach ($_FILES as $key=>$file)
 	{
@@ -152,15 +145,13 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 
 			// Handle attachment extraction
 			$matches_extract=array();
-			$is_extract=(preg_match('#\[attachment [^\]]*type="(\w)+_extract"[^\]]*\]new_'.$matches[1].'\[/#',$original_comcode,$matches_extract)!=0) || (preg_match('#<attachment [^>]*type="(\w+)_extract"[^>]*>new_'.$matches[1].'</#',$original_comcode,$matches_extract)!=0);
-			if ($is_extract)
+			if (preg_match('#\[attachment( [^\]]*)type="extract"[^\]]*( [^\]]*)?\]new_'.$matches[1].'\[/attachment\]#',$original_comcode,$matches_extract)!=0)
 			{
-				$atype=$matches_extract[1];
-
 				require_code('uploads');
 				require_code('files');
 				require_code('files2');
-				$is_thumb=(preg_match('#\[(attachment|attachment_safe) [^\]]*thumb="1"[^\]]*\]new_'.$matches[1].'\[/#',$original_comcode)!=0) || (preg_match('#<(attachment|attachment_safe) [^>]*thumb="1"[^>]*>new_'.$matches[1].'</#',$original_comcode)!=0);
+
+				$added_comcode='';
 
 				$arcext=get_file_extension($_FILES[$key]['name']);
 				if (($arcext=='tar') || ($arcext=='zip'))
@@ -282,8 +273,8 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 								} else $thumb_url='uploads/attachments/'.$_file;
 							}
 
+							// Create new attachment from extracted file
 							$url='uploads/attachments/'.$_file;
-
 							$attachment_id=$connection->query_insert('attachments',
 								array(
 									'a_member_id'=>get_member(),
@@ -299,7 +290,6 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 								true
 							);
 							$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
-
 							if (addon_installed('galleries'))
 							{
 								require_code('images');
@@ -310,7 +300,8 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 								}
 							}
 
-							$original_comcode.=chr(10).chr(10).'[attachment type="'.comcode_escape(str_replace('_extract','',$atype)).'" description="'.comcode_escape($description).'" thumb="'.($is_thumb?'1':'0').'"]'.strval($attachment_id).'[/attachment]';
+							// Append Comcode for this new attachment
+							$added_comcode.=chr(10).chr(10).'[attachment'.$matches_extract[1].$matches_extract[2].' type="" description="'.comcode_escape($description).'"]'.strval($attachment_id).'[/attachment]';
 						}
 					}
 					if ($arcext=='tar')
@@ -320,16 +311,18 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 					{
 						zip_close($myfile);
 					}
+
+					// Remove extract marker and put new Comcode in place
+					$original_comcode=str_replace($matches_extract[0],trim($added_comcode),$original_comcode);
 				}
-			} else
+			}
+
+			// Handle missing attachment markup for uploaded attachments
+			elseif ((strpos($original_comcode,']new_'.$matches[1].'[/attachment]')===false) && (strpos($original_comcode,']new_'.$matches[1].'[/attachment_safe]')===false))
 			{
-				// Handle missing attachment markup for uploaded attachments
-				if ((strpos($original_comcode,']new_'.$matches[1].'[/attachment]')===false) && (strpos($original_comcode,'>new_'.$matches[1].'</attachment>')===false) && (strpos($original_comcode,']new_'.$matches[1].'[/attachment_safe]')===false) && (strpos($original_comcode,'>new_'.$matches[1].'</attachment_safe>')===false))
+				if (preg_match('#\]\d+\[/attachment\]#',$original_comcode)==0) // Attachment could have already been put through (e.g. during a preview). If we have actual ID's referenced, it's almost certainly the case.
 				{
-					if ((preg_match('#\]\d+\[/attachment\]#',$original_comcode)==0) && (preg_match('#>\d+</attachment>#',$original_comcode)==0)) // Attachment could have already been put through (e.g. during a preview). If we have actual ID's referenced, it's almost certainly the case.
-					{
-						$original_comcode.=chr(10).chr(10).'[attachment]new_'.$matches[1].'[/attachment]';
-					}
+					$original_comcode.=chr(10).chr(10).'[attachment]new_'.$matches[1].'[/attachment]';
 				}
 			}
 		}

@@ -612,7 +612,7 @@ function delete_image($id,$delete_full=true)
 function create_video_thumb($src_url,$expected_output_path=NULL)
 {
 	// Try to find a hook that can get a thumbnail easily
-	$hooks=find_media_renderers($url,array(),$as_admin,$acceptable_media,$limit_to=NULL);
+	$hooks=find_media_renderers($url,array(),true,NULL,$acceptable_media,$limit_to=NULL);
 	if (!is_null($hooks))
 	{
 		foreach ($hooks as $hook)

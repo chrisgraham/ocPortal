@@ -47,13 +47,13 @@ function init__comcode_compiler()
 		'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
 
 		/*Handled in special way*/
-		'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'media'=>1,'audio'=>1,'video'=>1,'menu'=>1,'reference'=>1,'page'=>1,'thumb'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,
+		'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'media'=>1,'menu'=>1,'reference'=>1,'page'=>1,'thumb'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,
 	);
 	// These are not reversable, but we want them WYSIWYGABLE
 	global $PUREHTML_TAGS;
 	$PUREHTML_TAGS=array(/*'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
 	// The following could conceivably not need to be reversed, as they're pure HTML. However, it's better not to let the WYSIWYG'd HTML get too complex.
-	// 'tooltip'=>1,'section'=>1,'section_controller'=>1,'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,'carousel'=>1,'flash'=>1,'media'=>1,'audio'=>1,'video'=>1,'hide'=>1,'quote'=>1,'ticker'=>1,'jumping'=>1
+	// 'tooltip'=>1,'section'=>1,'section_controller'=>1,'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,'carousel'=>1,'flash'=>1,'media'=>1,'hide'=>1,'quote'=>1,'ticker'=>1,'jumping'=>1
 
 	// Any of these will cause free-for-all blacklist-filtered HTML to be disallowed, even if enabled via the hidden option
 	global $POTENTIALLY_EMPTY_TAGS;
@@ -73,7 +73,7 @@ function init__comcode_compiler()
 
 	// These tags have contents that are not interpreted as Comcode (so no HTML tags either), but are formatted for white-space
 	global $CODE_TAGS;
-	$CODE_TAGS=array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/'flash'=>1,'media'=>1,'audio'=>1,'video'=>1,'thumb'=>1,'menu'=>1,'no_parse'=>1,'code'=>1,'tt'=>1,'samp'=>1,'codebox'=>1,'staff_note'=>1);
+	$CODE_TAGS=array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/'flash'=>1,'media'=>1,'thumb'=>1,'menu'=>1,'no_parse'=>1,'code'=>1,'tt'=>1,'samp'=>1,'codebox'=>1,'staff_note'=>1);
 
 	// ALSO:
 	// See $non_text_tags list in comcode_renderer.php
@@ -575,7 +575,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 							{
 								if ($comcode_dangerous)
 								{
-									if ((!$in_code_tag) && ((!$semiparse_mode) || (in_tag_stack($tag_stack,array('url','img','flash','media','audio','video')))))
+									if ((!$in_code_tag) && ((!$semiparse_mode) || (in_tag_stack($tag_stack,array('url','img','flash','media')))))
 									{
 										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 										$tag_output->attach($continuation);

@@ -21,6 +21,17 @@
 class Hook_media_rendering_audio_websafe
 {
 	/**
+	 * Get the label for this media rendering type.
+	 *
+	 * @return string		The label
+	 */
+	function get_type_label()
+	{
+		require_lang('comcode');
+		return do_lang('MEDIA_TYPE_'.preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+	}
+
+	/**
 	 * Find the media types this hook serves.
 	 *
 	 * @return integer	The media type(s), as a bitmask
@@ -63,9 +74,11 @@ class Hook_media_rendering_audio_websafe
 	 *
 	 * @param  URLPATH	URL to render
 	 * @param  array		Attributes (e.g. width, height, length)
+	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
+	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$attributes)
+	function render($url,$attributes,$as_admin=false,$source_member=NULL)
 	{
 		// Put in defaults
 		if ((!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width'])))
@@ -77,7 +90,7 @@ class Hook_media_rendering_audio_websafe
 			$attributes['height']='30';
 		}
 
-		return do_template('MEDIA_AUDIO_WEBSAFE',array('HOOK'=>'audio_websafe')+_create_media_template_parameters($url,$attributes));
+		return do_template('MEDIA_AUDIO_WEBSAFE',array('HOOK'=>'audio_websafe')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
 }

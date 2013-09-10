@@ -2258,6 +2258,7 @@ extended_media_rendering
 ------------------------
  - sources_custom/hooks/systems/media_rendering/index.html
  - sources_custom/hooks/systems/media_rendering/video_cnn.php
+ - lang_custom/EN/video_cnn.ini
 
 member_directory_boxes
 ----------------------
