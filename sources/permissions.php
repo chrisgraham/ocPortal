@@ -339,7 +339,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 
 	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR;
 
-	if ((array_key_exists($module,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR)) && ($LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module]))
+	if (isset($LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module][$member]))
 		return;
 
 	if (!is_null($module))
@@ -362,7 +362,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 		$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.') UNION ALL SELECT '.$select.' FROM '.$db->get_table_prefix().'member_category_access WHERE '.$catclause.'(member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',NULL,NULL,false,true);
 	}
 
-	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module]=true;
+	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module][$member]=true;
 
 	$CATEGORY_ACCESS_CACHE[$member]=array();
 	foreach ($perhaps as $row)
@@ -400,7 +400,7 @@ function has_category_access($member,$module,$category)
 	$groups=_get_where_clause_groups($member);
 	if ($groups===NULL) return true;
 
-	if (array_key_exists($module,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR))
+	if (isset($LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module][$member]))
 	{
 		handle_permission_check_logging($member,'has_category_access',array($module,$category),false);
 		return false; // As we know $CATEGORY_ACCESS_CACHE would have had a true entry if we did have access
