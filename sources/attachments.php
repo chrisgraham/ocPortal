@@ -19,8 +19,134 @@
  */
 
 /*
-Viewing attachments (but not rendering - that is in media_rendering.php).
+Viewing attachments (but not direct rendering - that is in media_rendering.php).
 */
+
+/**
+ * Get tempcode for a Comcode rich-media attachment.
+ *
+ * @param  ID_TEXT		The attachment tag
+ * @set attachment attachment_safe
+ * @param  array			A map of the attributes (name=>val) for the tag
+ * @param  array			A map of the attachment properties (name=>val) for the attachment
+ * @param  string			A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
+ * @param  MEMBER			The member who is responsible for this Comcode
+ * @param  boolean		Whether to check as arbitrary admin
+ * @param  object			The database connection to use
+ * @param  ?array			A list of words to highlight (NULL: none)
+ * @param  ?MEMBER		The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
+ * @param  boolean		Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
+ * @return tempcode		The tempcode for the attachment
+ */
+function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_member,$as_admin,$connection,$highlight_bits=NULL,$on_behalf_of_member=NULL,$semiparse_mode=false)
+{
+	require_code('comcode_renderer');
+	require_code('media_renderer');
+	require_code('mime_types');
+
+	// Copy in some standardised media details from what we know by other means (i.e. not coming in as Comcode-attributes)
+	$attributes['filesize']=strval($attachment_row['a_file_size']);
+	$attributes['wysiwyg_editable']=($tag=='attachment_safe')?'1':'0';
+	$attributes['filename']=$attachment_row['a_original_filename'];
+	if ((!array_key_exists('thumb_url',$attributes)) || ($attributes['thumb_url']==''))
+		$attributes['thumb_url']=$attachment_row['thumb_url'];
+	$attributes['mime_type']=get_mime_type(get_file_extension($attachment_row['a_original_filename']),$as_admin || has_privilege($source_member,'comcode_dangerous'));
+
+	// Work out description
+	if (!array_key_exists('a_description',$attachment_row)) // All quite messy, because descriptions might source from attachments table (for existing attachments with no overridden Comcode description), from Comcode parameter (for attachments with description), or from POST environment (for new attachments)
+	{
+		if (!array_key_exists('description',$attributes)) $attributes['description']=$attachment_row['description'];
+		$attachment_row['a_description']=comcode_to_tempcode($attachment_row['description'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,NULL,$on_behalf_of_member);
+	}
+
+	// Make sure thumbnail still exists / create if missing
+	if (is_image($attachment_row['a_original_filename']))
+	{
+		require_code('images');
+		$attributes['thumb_url']=ensure_thumbnail($attributes['url'],$attributes['thumb_url'],'attachments','attachments',$attachment_row['id'],'a_thumb_url',NULL,true);
+	}
+
+	// Work out URL, going through the attachment frontend script
+	$url=mixed();
+	$url_safe=mixed();
+	if ($tag=='attachment')
+	{
+		$url=new ocp_tempcode();
+		$url->attach(find_script('attachment').'?id='.urlencode($attachment_row['id']));
+		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
+		{
+			$url->attach('&forum_db=1');
+			$attachment['num_downloads']=symbol_tempcode('ATTACHMENT_DOWNLOADS',array(strval($attachment_row['id']),'1'));
+		} else
+		{
+			$attachment['num_downloads']=symbol_tempcode('ATTACHMENT_DOWNLOADS',array(strval($attachment_row['id']),'0'));
+		}
+		$url_safe=new ocp_tempcode();
+		$url_safe->attach($url);
+		$keep=symbol_tempcode('KEEP');
+		$url->attach($keep);
+		if (get_option('anti_leech')=='1')
+		{
+			$url->attach('&for_session=');
+			$url->attach(symbol_tempcode('SESSION_HASHED'));
+		}
+
+		if ($attributes['thumb_url']!='')
+		{
+			$attributes['thumb_url']=new ocp_tempcode();
+			$attributes['thumb_url']->attach($url);
+			$attributes['thumb_url']->attach('&thumb=1&no_count=1');
+		}
+	} else
+	{
+		$url=$attachment_row['a_url'];
+		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+		$url_safe=$url;
+	}
+
+	// Render
+	return render_media_url(
+		$url,
+		$url_safe,
+		$attributes,
+		$as_admin,
+		$source_member,
+		MEDIA_TYPE_ALL,
+		array_key_exists('type',$attributes)?$attributes['type']:''
+	);
+}
+
+/**
+ * Find if the specified member has access to view the specified attachment.
+ *
+ * @param  MEMBER			The member being checked whether to have the access
+ * @param  AUTO_LINK		The ID code for the attachment being checked
+ * @param  ?object		The database connection to use (NULL: site DB)
+ * @return boolean		Whether the member has attachment access
+ */
+function has_attachment_access($member,$id,$connection=NULL)
+{
+	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
+
+	if ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)) return true;
+
+	$refs=$connection->query_select('attachment_refs',array('r_referer_type','r_referer_id'),array('a_id'=>$id));
+
+	foreach ($refs as $ref)
+	{
+		$type=$ref['r_referer_type'];
+		$ref_id=$ref['r_referer_id'];
+		if ((file_exists(get_file_base().'/sources/hooks/systems/attachments/'.filter_naughty_harsh($type).'.php')) || (file_exists(get_file_base().'/sources_custom/hooks/systems/attachments/'.filter_naughty_harsh($type).'.php')))
+		{
+			require_code('hooks/systems/attachments/'.filter_naughty_harsh($type));
+			$object=object_factory('Hook_attachments_'.filter_naughty_harsh($type));
+
+			if ($object->run($ref_id,$connection)) return true;
+		}
+	}
+
+	return false;
+}
 
 /**
  * Show the image of an attachment/thumbnail.
@@ -185,38 +311,6 @@ function attachments_script()
 		}
 		fclose($myfile);
 	}
-}
-
-/**
- * Find if the specified member has access to view the specified attachment.
- *
- * @param  MEMBER			The member being checked whether to have the access
- * @param  AUTO_LINK		The ID code for the attachment being checked
- * @param  ?object		The database connection to use (NULL: site DB)
- * @return boolean		Whether the member has attachment access
- */
-function has_attachment_access($member,$id,$connection=NULL)
-{
-	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
-
-	if ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)) return true;
-
-	$refs=$connection->query_select('attachment_refs',array('r_referer_type','r_referer_id'),array('a_id'=>$id));
-
-	foreach ($refs as $ref)
-	{
-		$type=$ref['r_referer_type'];
-		$ref_id=$ref['r_referer_id'];
-		if ((file_exists(get_file_base().'/sources/hooks/systems/attachments/'.filter_naughty_harsh($type).'.php')) || (file_exists(get_file_base().'/sources_custom/hooks/systems/attachments/'.filter_naughty_harsh($type).'.php')))
-		{
-			require_code('hooks/systems/attachments/'.filter_naughty_harsh($type));
-			$object=object_factory('Hook_attachments_'.filter_naughty_harsh($type));
-
-			if ($object->run($ref_id,$connection)) return true;
-		}
-	}
-
-	return false;
 }
 
 /**

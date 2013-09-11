@@ -185,8 +185,6 @@ class Hook_addon_registry_core_rich_media
 			'MEDIA_WEBPAGE_SEMANTIC.tpl',
 			'MEDIA_YOUTUBE.tpl',
 			'MEDIA_DOWNLOAD.tpl',
-			'MEDIA__LEFT.tpl',
-			'MEDIA__RIGHT.tpl',
 			'MEDIA__DOWNLOAD_LINK.tpl',
 			'big_tabs.css',
 			'comcode_mistakes.css',
@@ -362,8 +360,6 @@ class Hook_addon_registry_core_rich_media
 			'COMCODE_TAB_HEAD.tpl'=>'comcode_tab_body',
 			'ATTACHMENTS_BROWSER_ATTACHMENT.tpl'=>'attachments_browser',
 			'ATTACHMENTS_BROWSER.tpl'=>'attachments_browser',
-			'MEDIA__LEFT.tpl'=>'media__left',
-			'MEDIA__RIGHT.tpl'=>'media__right',
 			'COMCODE_CODE.tpl'=>'comcode_code',
 			'COMCODE_CODE_SCROLL.tpl'=>'comcode_table_screens'
 		);
@@ -1793,38 +1789,6 @@ class Hook_addon_registry_core_rich_media
 				'LIST'=>$list_cont,
 				'CONTENT'=>$content,
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__media__left()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('MEDIA__LEFT', array(
-				'CONTENT'=>lorem_paragraph_html(),
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__media__right()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('MEDIA__RIGHT', array(
-				'CONTENT'=>lorem_paragraph_html(),
 			)), NULL, '', true)
 		);
 	}

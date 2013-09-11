@@ -267,9 +267,8 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	}
 	elseif (post_param($specify_name,'')!='') // If we specified
 	{
-		$is_image=is_image($_POST[$specify_name]);
-
 		$url=_get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type,$accept_errors);
+		$is_image=is_image($url);
 		if ($url==array('','')) return array('','','','');
 		if (($copy_to_server) && (!url_is_local($url[0])))
 		{
@@ -577,6 +576,31 @@ function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=
 
 	if ($url[0]!='')
 	{
+		// oEmbed etc
+		if ((($enforce_type==OCP_UPLOAD_IMAGE) && (!is_image($url[0]))) || (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (!is_image($url[0])) && (get_file_extension($url[0])!='swf')))
+		{
+			require_code('files2');
+			$meta_details=get_webpage_meta_details($url[0]);
+			require_code('hooks/systems/media_rendering/oembed');
+			$oembed_ob=object_factory('Hook_media_rendering_oembed');
+			if ($oembed_ob->recognises_mime_type($meta_details['t_mime_type'],$meta_details))
+			{
+				$oembed=$oembed_ob->get_oembed_data_result($url[0],array('width'=>get_option('thumb_width'),'height'=>get_option('thumb_width')));
+				if (($oembed!==NULL) && ($oembed['type']=='photo'))
+				{
+					$url[0]=$oembed['url'];
+					$url[1]=basename(urldecode($url[0]));
+					return $url;
+				}
+			}
+			if ($meta_details['t_image_url']!='')
+			{
+				$url[0]=$meta_details['t_image_url'];
+				$url[1]=basename(urldecode($url[0]));
+				return $url;
+			}
+		}
+
 		if (!_check_enforcement_of_type($member_id,$url[0],$enforce_type,$accept_errors)) return array('','');
 	}
 

@@ -69,14 +69,18 @@ class Hook_media_rendering_image_websafe
 	/**
 	 * Provide code to display what is at the URL, in the most appropriate way.
 	 *
-	 * @param  URLPATH	URL to render
+	 * @param  mixed		URL to render
+	 * @param  mixed		URL to render (no sessions etc)
 	 * @param  array		Attributes (e.g. width, height, length)
 	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$attributes,$as_admin=false,$source_member=NULL)
+	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
+		$_url=is_object($url)?$url->evaluate():$url;
+		$_url_safe=is_object($_url_safe)?$url_safe->evaluate():$url_safe;
+
 		// Put in defaults
 		if ((!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width'])))
 		{
@@ -89,15 +93,16 @@ class Hook_media_rendering_image_websafe
 			$auto_height=true;
 		} else $auto_height=false;
 		$use_thumb=(!array_key_exists('thumb',$attributes)) || ($attributes['thumb']=='1');
-		if (!$use_thumb)
+		$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
+		if ((!$use_thumb) || (!$gd))
 		{
 			$attributes['thumb_url']=$url;
 		}
-		if ((!array_key_exists('thumb_url',$attributes)) || ($attributes['thumb_url']==''))
+		if ((!array_key_exists('thumb_url',$attributes)) || ((is_object($attributes['thumb_url'])) && ($attributes['thumb_url']->is_empty()) || (is_string($attributes['thumb_url'])) && ($attributes['thumb_url']=='')))
 		{
 			if ($use_thumb)
 			{
-				$new_name=$attributes['width'].'__'.url_to_filename($url);
+				$new_name=$attributes['width'].'__'.url_to_filename($_url_safe);
 				require_code('images');
 				if (!is_saveable_image($new_name)) $new_name.='.png';
 				$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
@@ -117,7 +122,7 @@ class Hook_media_rendering_image_websafe
 				if ((function_exists('getimagesize')) && (($auto_width) || ($auto_height)))
 				{
 					require_code('images');
-					list($_width,$_height)=_symbol_image_dims(array($url));
+					list($_width,$_height)=_symbol_image_dims(array($_url));
 					if ($auto_width) $attributes['width']=$_width;
 					if ($auto_height) $attributes['height']=$_height;
 				}

@@ -68,13 +68,14 @@ class Hook_media_rendering_audio_microsoft
 	/**
 	 * Provide code to display what is at the URL, in the most appropriate way.
 	 *
-	 * @param  URLPATH	URL to render
+	 * @param  mixed		URL to render
+	 * @param  mixed		URL to render (no sessions etc)
 	 * @param  array		Attributes (e.g. width, height, length)
 	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$attributes,$as_admin=false,$source_member=NULL)
+	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
 		// Put in defaults
 		if ((!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width'])))

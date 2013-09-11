@@ -396,6 +396,34 @@ function reinsert_parameters($attributes)
 }
 
 /**
+ * Make a given URL parameter an absolute URL; Fix any errors in it; Test it.
+ *
+ * @param  URLPATH		URL to fixup.
+ * @return URLPATH		Fixed URL.
+*/
+function absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$tag)
+{
+	$url=$given_url;
+
+	$url=remove_url_mistakes($url);
+
+	$url=check_naughty_javascript_url($source_member,$url,$as_admin);
+
+	if (substr($url,0,1)=='/') $url=substr($url,1);
+	if ((file_exists(get_file_base().'/'.$url)) && (!file_exists(get_custom_file_base().'/'.$url)))
+	{
+		$url=get_base_url().'/'.$url;
+	} else
+	{
+		$url=get_custom_base_url().'/'.$url;
+	}
+
+	$temp_tpl=test_url($url,$tag,$given_url,$source_member);
+
+	return $url;
+}
+
+/**
  * Test a URL as a broken link.
  *
  * @param  URLPATH		URL to test.
@@ -857,76 +885,6 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=do_template('COMCODE_SUB',array('_GUID'=>'515e310e00a6d7c30f7dca0a5956ebcf','CONTENT'=>$embed));
 			break;
 
-		case 'title':
-			if (($semiparse_mode) && (strpos($comcode,'[contents')!==false))
-			{
-				$temp_tpl=make_string_tempcode('[title'.reinsert_parameters($attributes).']'.$embed->evaluate().'[/title]');
-				break;
-			}
-
-			$level=($attributes['param']!='')?intval($attributes['param']):1;
-			if ($level==0) $level=1; // Stop crazy Comcode causing stack errors with the toc
-
-			$uniq_id=strval(count($STRUCTURE_LIST));
-			$STRUCTURE_LIST[]=array($level,$embed,$uniq_id);
-			if ($level==1) $template='SCREEN_TITLE';
-			elseif ($level==2) $template='COMCODE_SECTION_TITLE';
-			elseif ($level==3) $template='COMCODE_MINOR_TITLE';
-			elseif ($level==4) $template='COMCODE_VERY_MINOR_TITLE';
-			else $template='COMCODE_VERY_MINOR_TITLE';
-			if ($level==1)
-			{
-				if (is_null($COMCODE_PARSE_TITLE))
-				{
-					$COMCODE_PARSE_TITLE=$embed->evaluate();
-					if (is_object($COMCODE_PARSE_TITLE)) $COMCODE_PARSE_TITLE=$COMCODE_PARSE_TITLE->evaluate();
-				}
-			}
-
-			$base=array_key_exists('base',$attributes)?intval($attributes['base']):2;
-			if ((array_key_exists('number',$attributes)) && ($level>=$base))
-			{
-				$list_types=($attributes['number']=='')?array():explode(',',$attributes['number']);
-				$list_types+=array('decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','disc');
-				$numerals=array('i','ii','iii','iv','v','vi','viii','ix','x','xi','xii','xiii','xiv','xv','xvi','xvii','xviii','xix','xx');
-				$symbol_lookup=array('decimal'=>range(1,100),'lower-alpha'=>range('a','z'),'lower-roman'=>$numerals,'upper-alpha'=>range('A','Z'),'upper-roman'=>str_replace('i','I',str_replace('v','V',str_replace('x','X',$numerals))));
-
-				$level_text='';
-				$list_pos=count($STRUCTURE_LIST)-2;
-				for ($j=$level;$j>=$base;$j--)
-				{
-					$num_before=0;
-
-					for ($i=$list_pos;$i>=0;$i--)
-					{
-						$list_pos--;
-
-						if ($STRUCTURE_LIST[$i][0]==$j-1)
-						{
-							break;
-						}
-						if ($STRUCTURE_LIST[$i][0]==$j) $num_before++;
-					}
-
-					$level_number=strval($symbol_lookup[$list_types[$j-$base]][$num_before]);
-					$level_text=$level_number.(($level_text!='')?'.':'').$level_text;
-				}
-
-				$old_embed=$embed;
-				$embed=make_string_tempcode($level_text.' &ndash; ');
-				$embed->attach($old_embed);
-			}
-
-			if ($semiparse_mode)
-			{
-				$temp_tpl=make_string_tempcode('<h'.strval($level).(($level==1)?' class="screen_title"':'').'><span class="inner">'.$embed->evaluate().'</span></h'.strval($level).'>');
-				break;
-			}
-			$tpl_map=array('ID'=>(substr($pass_id,0,5)=='panel')?NULL:$uniq_id,'TITLE'=>$embed,'HELP_URL'=>'','HELP_TERM'=>'');
-			if (array_key_exists('sub',$attributes)) $tpl_map['SUB']=protect_from_escaping(comcode_to_tempcode($attributes['sub'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member));
-			$temp_tpl=do_template($template,$tpl_map);
-			break;
-
 		case 'include':
 			$codename=$embed->evaluate();
 			$zone=$attributes['param'];
@@ -1220,108 +1178,281 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=do_template('COMCODE_CONCEPTS',array('_GUID'=>'4c7a1d70753dc1d209b9951aa10f361a','TITLE'=>$title,'CONCEPTS'=>$concepts));
 			break;
 
-		case 'thumb':
-			$_embed=$embed->evaluate();
-			$_embed=remove_url_mistakes($_embed);
-			$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
-			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
-			if (url_is_local($_embed))
+		case 'hide':
+			if (array_key_exists('param',$attributes))
 			{
-				if ((file_exists(get_file_base().'/'.$_embed)) && (!file_exists(get_custom_file_base().'/'.$_embed)))
-				{
-					$url_full=get_base_url().'/'.$_embed;
-				} else
-				{
-					$url_full=get_custom_base_url().'/'.$_embed;
-				}
+				$text=comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
 			} else
 			{
-				$url_full=$_embed;
+				$text=do_lang_tempcode('EXPAND');
 			}
-			$align=array_key_exists('align',$attributes)?$attributes['align']:'bottom';
-			if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')) || ((!has_privilege($source_member,'draw_to_server')) && (!$as_admin)))
-			{
-				$url_thumb=$url_full;
-			} else
-			{
-				if ($attributes['param']!='')
-				{
-					$url_thumb=url_is_local($attributes['param'])?get_custom_base_url().'/'.$attributes['param']:$attributes['param'];
-				}
-				if (($attributes['param']=='') || ((url_is_local($attributes['param'])) && (!file_exists(get_custom_file_base().'/'.rawurldecode($attributes['param'])))))
-				{
-					$new_name=url_to_filename($url_full);
-					require_code('images');
-					if (!is_saveable_image($new_name)) $new_name.='.png';
-					if (is_null($new_name))
-					{
-						$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'cd326d51c536bd0ae235eb002afab192','WARNING'=>do_lang_tempcode('URL_THUMB_TOO_LONG')));
-						break;
-					}
-					$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
-					if ((!file_exists($file_thumb)) && (strpos($file_thumb,'{$')===false))
-					{
-						convert_image($url_full,$file_thumb,-1,-1,intval(get_option('thumb_width')),false);
-					}
-					$url_thumb=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
-				}
-			}
-			$caption=array_key_exists('caption',$attributes)?$attributes['caption']:'';
-			$temp_tpl=do_template('COMCODE_THUMB',array('_GUID'=>'1b0d25f72ef5f816091269e29c586d60','CAPTION'=>$caption,'ALIGN'=>$align,'PASS_ID'=>(intval($pass_id)<0)?strval(mt_rand(0,10000)):$pass_id,'URL_THUMB'=>$url_thumb,'URL_FULL'=>$url_full));
-
-			if (array_key_exists('float',$attributes)) $temp_tpl=do_template('FLOATER',array('_GUID'=>'cbc56770714a44f56676f43da282cc7a','FLOAT'=>$attributes['float'],'CONTENT'=>$temp_tpl));
+			$temp_tpl=do_template('COMCODE_HIDE',array('_GUID'=>'a591a0d1e6bb3dde0f22cebb9c7ab93e','TEXT'=>$text,'CONTENT'=>$embed));
 			break;
 
-		case 'img':
-			if (($semiparse_mode) && (array_key_exists('rollover',$attributes)))
+		case 'quote':
+			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
+			if (!is_null($cite))
 			{
-				$temp_tpl=make_string_tempcode('[img'.reinsert_parameters($attributes).']'.$embed->evaluate().'[/img]');
+				$temp_tpl=test_url($cite,'del',$cite,$source_member);
+			}
+
+			if (($attributes['param']=='') && (isset($attributes['author']))) $attributes['param']=$attributes['author']; // Compatibility with SMF
+
+			if ($attributes['param']!='')
+			{
+				$attributes['param']=protect_from_escaping(comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member));
+				$temp_tpl->attach(do_template('COMCODE_QUOTE_BY',array('_GUID'=>'18f55a548892ad08b0b50b3b586b5b95','CITE'=>$cite,'CONTENT'=>$embed,'BY'=>$attributes['param'],'SAIDLESS'=>array_key_exists('saidless',$attributes)?$attributes['saidless']:'0')));
+			} else
+			{
+				$temp_tpl->attach(do_template('COMCODE_QUOTE',array('_GUID'=>'fa275de59433c17da19b22814c17fdc5','CITE'=>$cite,'CONTENT'=>$embed)));
+			}
+			break;
+
+		case 'html':
+			$temp_tpl=$embed; // Plain HTML. But it's been filtered already
+			break;
+
+		case 'semihtml':
+			$temp_tpl=$embed; // Hybrid HTML. But it's been filtered already
+			break;
+
+		case 'block':
+			$attributes['block']=trim($embed->evaluate());
+			if (preg_match('#^[\w\-]*$#',$attributes['block'])==0)
+			{
+				$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'b5638d953c400b7f194b62bc34f89181','WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($attributes['block']))));
+				break; // Avoids a suspected hack attempt by just filtering early
+			}
+			$_attributes=array();
+			foreach ($attributes as $key=>$val)
+			{
+				$_attributes[]=$key.'='.$val;
+			}
+			$temp_tpl=symbol_tempcode('BLOCK',$_attributes);
+
+			break;
+
+		case 'title':
+			if (($semiparse_mode) && (strpos($comcode,'[contents')!==false))
+			{
+				$temp_tpl=make_string_tempcode('[title'.reinsert_parameters($attributes).']'.$embed->evaluate().'[/title]');
 				break;
 			}
 
-			$_embed=$embed->evaluate();
-			$given_url=$_embed;
-			$_embed=remove_url_mistakes($_embed);
-			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
-			$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
-			if (url_is_local($_embed))
-			{
-				if ((file_exists(get_file_base().'/'.$_embed)) && (!file_exists(get_custom_file_base().'/'.$_embed)))
-				{
-					$url_full=get_base_url().'/'.$_embed;
-				} else
-				{
-					$url_full=get_custom_base_url().'/'.$_embed;
-				}
-			} else
-			{
-				$url_full=$_embed;
-			}
-			$temp_tpl=test_url($url_full,'img',@html_entity_decode($given_url,ENT_QUOTES,get_charset()),$source_member);
-			$align=array_key_exists('align',$attributes)?$attributes['align']:'';
-			$caption=comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
-			if (array_key_exists('title',$attributes))
-			{
-				$tooltip=comcode_to_tempcode($attributes['title'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
-			} else
-			{
-				$tooltip=$caption;
-			}
-			$rollover=array_key_exists('rollover',$attributes)?$attributes['rollover']:NULL;
-			if ((!is_null($rollover)) && (url_is_local($rollover)))
-			{
-				if ((file_exists(get_file_base().'/'.$rollover)) && (!file_exists(get_custom_file_base().'/'.$rollover)))
-				{
-					$rollover=get_base_url().'/'.$rollover;
-				} else
-				{
-					$rollover=get_custom_base_url().'/'.$rollover;
-				}
-			}
-			$refresh_time=array_key_exists('refresh_time',$attributes)?strval(intval($attributes['refresh_time'])):'0';
-			$temp_tpl->attach(do_template('COMCODE_IMG',array('_GUID'=>'70166d8dbb0aff064b99c0dd30ed77a8','REFRESH_TIME'=>$refresh_time,'ROLLOVER'=>$rollover,'ALIGN'=>$align,'URL'=>$url_full,'TOOLTIP'=>$tooltip,'CAPTION'=>$caption)));
+			$level=($attributes['param']!='')?intval($attributes['param']):1;
+			if ($level==0) $level=1; // Stop crazy Comcode causing stack errors with the toc
 
-			if (array_key_exists('float',$attributes)) $temp_tpl=do_template('FLOATER',array('_GUID'=>'918162250c80e10212efd9a051545b9b','FLOAT'=>$attributes['float'],'CONTENT'=>$temp_tpl));
+			$uniq_id=strval(count($STRUCTURE_LIST));
+			$STRUCTURE_LIST[]=array($level,$embed,$uniq_id);
+			if ($level==1) $template='SCREEN_TITLE';
+			elseif ($level==2) $template='COMCODE_SECTION_TITLE';
+			elseif ($level==3) $template='COMCODE_MINOR_TITLE';
+			elseif ($level==4) $template='COMCODE_VERY_MINOR_TITLE';
+			else $template='COMCODE_VERY_MINOR_TITLE';
+			if ($level==1)
+			{
+				if (is_null($COMCODE_PARSE_TITLE))
+				{
+					$COMCODE_PARSE_TITLE=$embed->evaluate();
+					if (is_object($COMCODE_PARSE_TITLE)) $COMCODE_PARSE_TITLE=$COMCODE_PARSE_TITLE->evaluate();
+				}
+			}
+
+			$base=array_key_exists('base',$attributes)?intval($attributes['base']):2;
+			if ((array_key_exists('number',$attributes)) && ($level>=$base))
+			{
+				$list_types=($attributes['number']=='')?array():explode(',',$attributes['number']);
+				$list_types+=array('decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','disc');
+				$numerals=array('i','ii','iii','iv','v','vi','viii','ix','x','xi','xii','xiii','xiv','xv','xvi','xvii','xviii','xix','xx');
+				$symbol_lookup=array('decimal'=>range(1,100),'lower-alpha'=>range('a','z'),'lower-roman'=>$numerals,'upper-alpha'=>range('A','Z'),'upper-roman'=>str_replace('i','I',str_replace('v','V',str_replace('x','X',$numerals))));
+
+				$level_text='';
+				$list_pos=count($STRUCTURE_LIST)-2;
+				for ($j=$level;$j>=$base;$j--)
+				{
+					$num_before=0;
+
+					for ($i=$list_pos;$i>=0;$i--)
+					{
+						$list_pos--;
+
+						if ($STRUCTURE_LIST[$i][0]==$j-1)
+						{
+							break;
+						}
+						if ($STRUCTURE_LIST[$i][0]==$j) $num_before++;
+					}
+
+					$level_number=strval($symbol_lookup[$list_types[$j-$base]][$num_before]);
+					$level_text=$level_number.(($level_text!='')?'.':'').$level_text;
+				}
+
+				$old_embed=$embed;
+				$embed=make_string_tempcode($level_text.' &ndash; ');
+				$embed->attach($old_embed);
+			}
+
+			if ($semiparse_mode)
+			{
+				$temp_tpl=make_string_tempcode('<h'.strval($level).(($level==1)?' class="screen_title"':'').'><span class="inner">'.$embed->evaluate().'</span></h'.strval($level).'>');
+				break;
+			}
+			$tpl_map=array('ID'=>(substr($pass_id,0,5)=='panel')?NULL:$uniq_id,'TITLE'=>$embed,'HELP_URL'=>'','HELP_TERM'=>'');
+			if (array_key_exists('sub',$attributes)) $tpl_map['SUB']=protect_from_escaping(comcode_to_tempcode($attributes['sub'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member));
+			$temp_tpl=do_template($template,$tpl_map);
+			break;
+
+		case 'contents':
+			// Do structure sweep
+			$urls_for=array();
+
+			$old_structure_list=$STRUCTURE_LIST;
+			$STRUCTURE_LIST=array(); // reset for e.g. comcode_to_tempcode calls (which don't itself reset it, although _comcode_to_tempcode does for top level parses)
+
+			if ((array_key_exists('files',$attributes)) && ($comcode_dangerous))
+			{
+				$s_zone=array_key_exists('zone',$attributes)?$attributes['zone']:get_zone_name();
+
+				$pages=find_all_pages($s_zone,'comcode_custom/'.get_site_default_lang(),'txt')+find_all_pages($s_zone,'comcode/'.get_site_default_lang(),'txt');
+				$prefix=$attributes['files'];
+				foreach ($pages as $pg_name=>$pg_type)
+				{
+					if (substr($pg_name,0,strlen($prefix))==$prefix)
+					{
+						$i=count($STRUCTURE_LIST);
+						comcode_to_tempcode(file_get_contents(zone_black_magic_filterer(get_file_base().'/'.$s_zone.'/pages/'.$pg_type.'/'.$pg_name.'.txt')),$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
+						$page_url=build_url(array('page'=>$pg_name),$s_zone);
+						while (array_key_exists($i,$STRUCTURE_LIST))
+						{
+							$urls_for[]=$page_url;
+							$i++;
+						}
+					}
+				}
+
+				$base=array_key_exists('base',$attributes)?intval($attributes['base']):1;
+			} else
+			{
+				require_code('comcode_compiler');
+
+				comcode_to_tempcode($comcode,$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
+
+				$base=array_key_exists('base',$attributes)?intval($attributes['base']):2;
+			}
+
+			$_embed=$embed->evaluate();
+			if (preg_match('#^test\d+$#',$_embed)!=0) // Little bit of inbuilt test code, for a particularly dangerously wrong tree
+			{
+				if ($_embed=='test1')
+				{
+					$test_data=array(
+						2,
+						3,
+						2,
+						3,
+						4,
+						4,
+						4,
+						2,
+						3,
+						2,
+						1,
+						1,
+					);
+				}
+				elseif ($_embed=='test2')
+				{
+					$test_data=array(
+						1,
+						2,
+						3,
+						1,
+						2,
+						3,
+					);
+				} elseif ($_embed=='test3')
+				{
+					$test_data=array(
+						1,
+						4,
+						6,
+						1,
+						4,
+						6,
+					);
+				} else
+				{
+					$test_data=array(
+						6,
+						4,
+						1,
+						6,
+						4,
+						1,
+					);
+				}
+				$STRUCTURE_LIST=array();
+				foreach ($test_data as $t)
+				{
+					$STRUCTURE_LIST[]=array($t,make_string_tempcode(strval($t)),uniqid('',true));
+				}
+				$list_types=array();
+			} else
+			{
+				$list_types=($embed->evaluate()=='')?array():explode(',',$_embed);
+			}
+			$list_types+=array('decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','disc');
+
+			$levels_allowed=array_key_exists('levels',$attributes)?intval($attributes['levels']):NULL;
+
+			// Convert the list structure into a tree structure
+			$past_level_stack=array();
+			$subtree_stack=array(array('','','',array())); // Children will be gathered into a 4th entry in the tuple by the end of the stack unravelling process -- our result
+			$actual_past_stack_levels=0;
+			foreach ($STRUCTURE_LIST as $i=>$struct) // Really complex stack of trees algorithm
+			{
+				$level=$struct[0];
+				$title=$struct[1];
+				$_title=$title->evaluate();
+				$uniq_id=$struct[2];
+				$url=array_key_exists($i,$urls_for)?$urls_for[$i]:'';
+
+				if ((!is_null($levels_allowed)) && ($level>$levels_allowed)) continue;
+
+				// Going back up the tree, destroying levels that must have now closed off
+				while (($actual_past_stack_levels>0) && ($level<=$past_level_stack[$actual_past_stack_levels-1]))
+				{
+					array_pop($past_level_stack); // Value useless now, as the $actual_past_stack_levels is the true indicator and the $past_level_stack is just used as a navigation reference point for stack control
+					$subtree=array_pop($subtree_stack);
+					$actual_past_stack_levels--;
+
+					// Alter the last of the next level on stack so it is actually taking the closed off level as children
+					$subtree_stack[count($subtree_stack)-1][3][]=$subtree;
+				}
+
+				// Going down the tree
+				array_push($past_level_stack,$level);
+				array_push($subtree_stack,array($uniq_id,$_title,$url,array()));
+				$actual_past_stack_levels++;
+			}
+
+			// Close off all levels still open
+			while ($actual_past_stack_levels>0) // Pretty much the same as the while loop above
+			{
+				array_pop($past_level_stack); // Value useless now, as the $actual_past_stack_levels is the true indicator and the $past_level_stack is just used as a navigation reference point for stack control
+				$subtree=array_pop($subtree_stack);
+				$actual_past_stack_levels--;
+
+				// Alter the last of the next level on stack so it is actually taking the closed off level as children
+				$subtree_stack[count($subtree_stack)-1][3][]=$subtree;
+			}
+
+			// Now we have the structure to display
+			$levels_t=_do_contents_level($subtree_stack[0][3],$list_types,$base-1);
+
+			$temp_tpl=do_template('COMCODE_CONTENTS',array('_GUID'=>'ca2f5320fa930e2257a2e74e4f98e5a0','LEVELS'=>$levels_t));
+
+			$STRUCTURE_LIST=$old_structure_list; // Restore, so subsequent 'title' tags have correct numbering
 
 			break;
 
@@ -1502,212 +1633,402 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 			break;
 
-		case 'hide':
-			if (array_key_exists('param',$attributes))
+		case 'thumb':
+			$_embed=$embed->evaluate();
+			$given_url=$embed->evaluate();
+			$url_full=absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$tag);
+
+			$align=array_key_exists('align',$attributes)?$attributes['align']:'bottom';
+
+			if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')) || ((!has_privilege($source_member,'draw_to_server')) && (!$as_admin)))
 			{
-				$text=comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
+				$url_thumb=$url_full;
 			} else
 			{
-				$text=do_lang_tempcode('EXPAND');
-			}
-			$temp_tpl=do_template('COMCODE_HIDE',array('_GUID'=>'a591a0d1e6bb3dde0f22cebb9c7ab93e','TEXT'=>$text,'CONTENT'=>$embed));
-			break;
-
-		case 'quote':
-			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
-			if (!is_null($cite))
-			{
-				$temp_tpl=test_url($cite,'del',$cite,$source_member);
-			}
-
-			if (($attributes['param']=='') && (isset($attributes['author']))) $attributes['param']=$attributes['author']; // Compatibility with SMF
-
-			if ($attributes['param']!='')
-			{
-				$attributes['param']=protect_from_escaping(comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member));
-				$temp_tpl->attach(do_template('COMCODE_QUOTE_BY',array('_GUID'=>'18f55a548892ad08b0b50b3b586b5b95','CITE'=>$cite,'CONTENT'=>$embed,'BY'=>$attributes['param'],'SAIDLESS'=>array_key_exists('saidless',$attributes)?$attributes['saidless']:'0')));
-			} else
-			{
-				$temp_tpl->attach(do_template('COMCODE_QUOTE',array('_GUID'=>'fa275de59433c17da19b22814c17fdc5','CITE'=>$cite,'CONTENT'=>$embed)));
-			}
-			break;
-
-		case 'html':
-			$temp_tpl=$embed; // Plain HTML. But it's been filtered already
-			break;
-
-		case 'semihtml':
-			$temp_tpl=$embed; // Hybrid HTML. But it's been filtered already
-			break;
-
-		case 'block':
-			$attributes['block']=trim($embed->evaluate());
-			if (preg_match('#^[\w\-]*$#',$attributes['block'])==0)
-			{
-				$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'b5638d953c400b7f194b62bc34f89181','WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($attributes['block']))));
-				break; // Avoids a suspected hack attempt by just filtering early
-			}
-			$_attributes=array();
-			foreach ($attributes as $key=>$val)
-			{
-				$_attributes[]=$key.'='.$val;
-			}
-			$temp_tpl=symbol_tempcode('BLOCK',$_attributes);
-
-			break;
-
-		case 'contents':
-			// Do structure sweep
-			$urls_for=array();
-
-			$old_structure_list=$STRUCTURE_LIST;
-			$STRUCTURE_LIST=array(); // reset for e.g. comcode_to_tempcode calls (which don't itself reset it, although _comcode_to_tempcode does for top level parses)
-
-			if ((array_key_exists('files',$attributes)) && ($comcode_dangerous))
-			{
-				$s_zone=array_key_exists('zone',$attributes)?$attributes['zone']:get_zone_name();
-
-				$pages=find_all_pages($s_zone,'comcode_custom/'.get_site_default_lang(),'txt')+find_all_pages($s_zone,'comcode/'.get_site_default_lang(),'txt');
-				$prefix=$attributes['files'];
-				foreach ($pages as $pg_name=>$pg_type)
+				if ($attributes['param']!='')
 				{
-					if (substr($pg_name,0,strlen($prefix))==$prefix)
-					{
-						$i=count($STRUCTURE_LIST);
-						comcode_to_tempcode(file_get_contents(zone_black_magic_filterer(get_file_base().'/'.$s_zone.'/pages/'.$pg_type.'/'.$pg_name.'.txt')),$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
-						$page_url=build_url(array('page'=>$pg_name),$s_zone);
-						while (array_key_exists($i,$STRUCTURE_LIST))
-						{
-							$urls_for[]=$page_url;
-							$i++;
-						}
-					}
+					$url_thumb=url_is_local($attributes['param'])?get_custom_base_url().'/'.$attributes['param']:$attributes['param'];
 				}
+				if (($attributes['param']=='') || ((url_is_local($attributes['param'])) && (!file_exists(get_custom_file_base().'/'.rawurldecode($attributes['param'])))))
+				{
+					$new_name=url_to_filename($url_full);
+					require_code('images');
+					if (!is_saveable_image($new_name)) $new_name.='.png';
+					if (is_null($new_name))
+					{
+						$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'cd326d51c536bd0ae235eb002afab192','WARNING'=>do_lang_tempcode('URL_THUMB_TOO_LONG')));
+						break;
+					}
+					$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
+					if ((!file_exists($file_thumb)) && (strpos($file_thumb,'{$')===false))
+					{
+						convert_image($url_full,$file_thumb,-1,-1,intval(get_option('thumb_width')),false);
+					}
+					$url_thumb=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
+				}
+			}
 
-				$base=array_key_exists('base',$attributes)?intval($attributes['base']):1;
-			} else
+			$caption=array_key_exists('caption',$attributes)?$attributes['caption']:'';
+
+			$temp_tpl=do_template('COMCODE_THUMB',array('_GUID'=>'1b0d25f72ef5f816091269e29c586d60','CAPTION'=>$caption,'ALIGN'=>$align,'PASS_ID'=>(intval($pass_id)<0)?strval(mt_rand(0,10000)):$pass_id,'URL_THUMB'=>$url_thumb,'URL_FULL'=>$url_full));
+
+			if (array_key_exists('float',$attributes)) $temp_tpl=do_template('FLOATER',array('_GUID'=>'cbc56770714a44f56676f43da282cc7a','FLOAT'=>$attributes['float'],'CONTENT'=>$temp_tpl));
+			break;
+
+		case 'img':
+			if (($semiparse_mode) && (array_key_exists('rollover',$attributes)))
 			{
-				require_code('comcode_compiler');
-
-				comcode_to_tempcode($comcode,$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
-
-				$base=array_key_exists('base',$attributes)?intval($attributes['base']):2;
+				$temp_tpl=make_string_tempcode('[img'.reinsert_parameters($attributes).']'.$embed->evaluate().'[/img]');
+				break;
 			}
 
 			$_embed=$embed->evaluate();
-			if (preg_match('#^test\d+$#',$_embed)!=0) // Little bit of inbuilt test code, for a particularly dangerously wrong tree
+			$given_url=$embed->evaluate();
+			$url_full=absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$tag);
+
+			$align=array_key_exists('align',$attributes)?$attributes['align']:'';
+
+			$caption=comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
+
+			if (array_key_exists('title',$attributes))
 			{
-				if ($_embed=='test1')
-				{
-					$test_data=array(
-						2,
-						3,
-						2,
-						3,
-						4,
-						4,
-						4,
-						2,
-						3,
-						2,
-						1,
-						1,
-					);
-				}
-				elseif ($_embed=='test2')
-				{
-					$test_data=array(
-						1,
-						2,
-						3,
-						1,
-						2,
-						3,
-					);
-				} elseif ($_embed=='test3')
-				{
-					$test_data=array(
-						1,
-						4,
-						6,
-						1,
-						4,
-						6,
-					);
-				} else
-				{
-					$test_data=array(
-						6,
-						4,
-						1,
-						6,
-						4,
-						1,
-					);
-				}
-				$STRUCTURE_LIST=array();
-				foreach ($test_data as $t)
-				{
-					$STRUCTURE_LIST[]=array($t,make_string_tempcode(strval($t)),uniqid('',true));
-				}
-				$list_types=array();
+				$tooltip=comcode_to_tempcode($attributes['title'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
 			} else
 			{
-				$list_types=($embed->evaluate()=='')?array():explode(',',$_embed);
+				$tooltip=$caption;
 			}
-			$list_types+=array('decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','disc');
 
-			$levels_allowed=array_key_exists('levels',$attributes)?intval($attributes['levels']):NULL;
-
-			// Convert the list structure into a tree structure
-			$past_level_stack=array();
-			$subtree_stack=array(array('','','',array())); // Children will be gathered into a 4th entry in the tuple by the end of the stack unravelling process -- our result
-			$actual_past_stack_levels=0;
-			foreach ($STRUCTURE_LIST as $i=>$struct) // Really complex stack of trees algorithm
+			$rollover=array_key_exists('rollover',$attributes)?$attributes['rollover']:NULL;
+			if ((!is_null($rollover)) && (url_is_local($rollover)))
 			{
-				$level=$struct[0];
-				$title=$struct[1];
-				$_title=$title->evaluate();
-				$uniq_id=$struct[2];
-				$url=array_key_exists($i,$urls_for)?$urls_for[$i]:'';
-
-				if ((!is_null($levels_allowed)) && ($level>$levels_allowed)) continue;
-
-				// Going back up the tree, destroying levels that must have now closed off
-				while (($actual_past_stack_levels>0) && ($level<=$past_level_stack[$actual_past_stack_levels-1]))
+				if ((file_exists(get_file_base().'/'.$rollover)) && (!file_exists(get_custom_file_base().'/'.$rollover)))
 				{
-					array_pop($past_level_stack); // Value useless now, as the $actual_past_stack_levels is the true indicator and the $past_level_stack is just used as a navigation reference point for stack control
-					$subtree=array_pop($subtree_stack);
-					$actual_past_stack_levels--;
+					$rollover=get_base_url().'/'.$rollover;
+				} else
+				{
+					$rollover=get_custom_base_url().'/'.$rollover;
+				}
+			}
 
-					// Alter the last of the next level on stack so it is actually taking the closed off level as children
-					$subtree_stack[count($subtree_stack)-1][3][]=$subtree;
+			$refresh_time=array_key_exists('refresh_time',$attributes)?strval(intval($attributes['refresh_time'])):'0';
+
+			$temp_tpl->attach(do_template('COMCODE_IMG',array('_GUID'=>'70166d8dbb0aff064b99c0dd30ed77a8','REFRESH_TIME'=>$refresh_time,'ROLLOVER'=>$rollover,'ALIGN'=>$align,'URL'=>$url_full,'TOOLTIP'=>$tooltip,'CAPTION'=>$caption)));
+
+			if (array_key_exists('float',$attributes)) $temp_tpl=do_template('FLOATER',array('_GUID'=>'918162250c80e10212efd9a051545b9b','FLOAT'=>$attributes['float'],'CONTENT'=>$temp_tpl));
+
+			break;
+
+		case 'flash':
+			$given_url=$embed->evaluate();
+			$url_full=absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$tag);
+
+			if (strpos($attributes['param'],'x')!==false)
+			{
+				list($width,$height)=explode('x',$attributes['param'],2);
+				$attributes['width']=$width;
+				$attributes['height']=$height;
+			}
+
+			require_code('media_renderer');
+			$temp_tpl=render_media_url(
+				$url_full,
+				$url_full,
+				$attributes,
+				$as_admin,
+				$source_member,
+				MEDIA_TYPE_OTHER | MEDIA_TYPE_VIDEO | MEDIA_TYPE_AUDIO,
+				(strtolower(substr($given_url,-4)=='.swf')?'flash'):NULL // LEGACY: Really we should only allow Flash (because we have a 'media' tag), but we always used to support any media via this tag
+			);
+			break;
+
+		case 'media':
+			$given_url=$embed->evaluate();
+			$url_full=absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$tag);
+
+			require_code('media_renderer');
+			$temp_tpl=render_media_url(
+				$url_full,
+				$url_full,
+				$attributes,
+				$as_admin,
+				$source_member,
+				MEDIA_TYPE_ALL,
+				((array_key_exists('type',$attributes)) && ($attributes['type']!=''))?$attributes['type']:NULL
+			);
+			break;
+
+		case 'attachment':
+		case 'attachment_safe':
+			// Work out display type
+			$attributes['type']=array_key_exists('type',$attributes)?$attributes['type']:'';
+			if ($attributes['type']=='extract') $attributes['type']='';
+			// LEGACY
+			if ($attributes['type']=='inline' || $attributes['type']=='left_inline' || $attributes['type']=='right_inline')
+			{
+				$attributes['framed']='0';
+				$attributes['type']='';
+				if ($attributes['type']=='left_inline') $attributes['float']='left';
+				if ($attributes['type']=='right_inline') $attributes['float']='right';
+			}
+			elseif ($attributes['type']=='island' || $attributes['type']=='left_island' || $attributes['type']=='right_island')
+			{
+				$attributes['framed']='1';
+				$attributes['type']='';
+				if ($attributes['type']=='left_island') $attributes['float']='left';
+				if ($attributes['type']=='right_island') $attributes['float']='right';
+			}
+			elseif ($attributes['type']=='download')
+			{
+				$attributes['framed']='1';
+				$attributes['type']='hyperlink';
+			}
+
+			if (is_null($on_behalf_of_member)) $on_behalf_of_member=$source_member;
+
+			global $COMCODE_ATTACHMENTS;
+
+			$attachment_row=mixed();
+			$original_filename=mixed();
+			$id=$embed->evaluate();
+
+			// Check against quota. We work all this out before we do any downloads, to make sure orphaned files aren't dumped on the file system (possible hack method)
+			if ((!is_numeric($id)) && (!$as_admin) && (!has_privilege($source_member,'exceed_filesize_limit')))
+			{
+				if (get_forum_type()=='ocf')
+				{
+					require_code('ocf_groups');
+					$daily_quota=ocf_get_member_best_group_property($source_member,'max_daily_upload_mb');
+				} else
+				{
+					$daily_quota=5; // 5 is a hard coded default for non-OCF forums
+				}
+				if (!is_null($daily_quota))
+				{
+					$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval($source_member).' AND a_add_time>'.strval(time()-60*60*24));
+					if (is_null($_size_uploaded_today[0]['the_answer'])) $_size_uploaded_today[0]['the_answer']=0;
+					$size_uploaded_today=ceil(((float)$_size_uploaded_today[0]['the_answer'])/1024.0/1024.0);
+					$attach_size=0;
+					require_code('uploads');
+					is_swf_upload(true);
+					foreach ($_FILES as $_file)
+						$attach_size+=floatval($_file['size'])/1024.0/1024.0;
+					if (($size_uploaded_today+$attach_size)>floatval($daily_quota))
+					{
+						$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'89b7982164ccf8d98f3d0596ad425f78','WARNING'=>do_lang_tempcode('OVER_DAILY_QUOTA',integer_format($daily_quota),float_format($size_uploaded_today))));
+						break;
+					}
+				}
+			}
+
+			// New attachments: embedded attachments (base64)
+			if ((!is_numeric($id)) && (substr($id,0,4)!='new_'))
+			{
+				$file=base64_decode(str_replace(chr(10),'',$id));
+				if ($file===false)
+				{
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'422658aee3c0eea77ad85d8621af742b','WARNING'=>do_lang_tempcode('comcode:CORRUPT_ATTACHMENT')));
+					break;
+				}
+				$md5=md5(substr($file,0,30));
+				$original_filename=array_key_exists('filename',$attributes)?$attributes['filename']:($md5.'.dat');
+				if (get_file_extension($original_filename)!='dat')
+				{
+					require_code('files2');
+					check_extension($original_filename,true);
+					$new_filename=$md5.'.'.get_file_extension($original_filename).'.dat';
+				} else
+				{
+					$new_filename=$md5.'.'.get_file_extension($original_filename);
+				}
+				$path=get_custom_file_base().'/uploads/attachments/'.$new_filename;
+				$myfile=@fopen($path,'wb');
+				if ($myfile===false)
+				{
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'428a36aa6cea693d01429f3d21caac36','WARNING'=>intelligent_write_error_inline($path)));
+					break;
+				}
+				if (fwrite($myfile,$file)<strlen($file)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				fclose($myfile);
+				fix_permissions($path);
+				sync_file($path);
+				$_size=strlen($file);
+				$url='uploads/attachments/'.$new_filename;
+				if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $url=get_custom_base_url().'/'.$url;
+			}
+
+			// New attachments: uploads
+			elseif (!is_numeric($id))
+			{
+				if (substr($id,0,4)=='new_')
+				{
+					disable_php_memory_limit(); // In case needs lots of RAM for thumbnail generation
+
+					// Get/test ID
+					$_id=substr($id,4);
+					if (!is_numeric($_id))
+					{
+						$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'dd7035da4ad83b55fbd185267ab31fe6','WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
+						break;
+					}
+
+					// Grab actual file
+					require_code('uploads');
+					is_swf_upload(true);
+					$urls=get_url('','file'.$_id,'uploads/attachments',2,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($attributes['thumb_url']==''),'','',true,true,true,true,$source_member);
+					if ($urls[0]=='') return new ocp_tempcode();//warn_exit(do_lang_tempcode('ERROR_UPLOADING'));  Can't do this, because this might not be post-calculated if something went wrong once
+					$_size=$_FILES['file'.$_id]['size'];
+					$original_filename=$_FILES['file'.$_id]['name'];
+					if (get_magic_quotes_gpc()) $original_filename=stripslashes($original_filename);
+
+					// Special code to re-orientate JPEG images if required (browsers cannot do this)
+					if ((is_saveable_image($urls[0])) && (($attributes['type']=='') || ($attributes['image_websafe']=='')))
+					{
+						require_code('images');
+						$attachment_path=get_custom_file_base().'/'.rawurldecode($urls[0]);
+						convert_image($attachment_path,$attachment_path,-1,-1,100000/*Impossibly large size, so no resizing happens*/,false,NULL,true,true);
+					}
+				}
+				else // Should not get here
+				{
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'f7c0ead08bf7e19f3b78a536c755d6a5','WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
+					break;
 				}
 
-				// Going down the tree
-				array_push($past_level_stack,$level);
-				array_push($subtree_stack,array($uniq_id,$_title,$url,array()));
-				$actual_past_stack_levels++;
-			}
+				// If it did not work
+				if ($urls[0]=='')
+				{
+					require_code('images');
+					require_code('files2');
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'81dce25ce8c1e0a9a2407315df0cf99c','WARNING'=>do_lang_tempcode('ATTACHMENT_WOULD_NOT_UPLOAD',float_format(get_max_file_size()/1024/1024),float_format(get_max_image_size()/1024/1024))));
+					break;
+				}
 
-			// Close off all levels still open
-			while ($actual_past_stack_levels>0) // Pretty much the same as the while loop above
+				$url=$urls[0];
+				if ($attributes['thumb_url']=='')
+					$attributes['thumb_url']=array_key_exists(1,$urls)?$urls[1]:'';
+
+			// Existing attachments
+			} else
 			{
-				array_pop($past_level_stack); // Value useless now, as the $actual_past_stack_levels is the true indicator and the $past_level_stack is just used as a navigation reference point for stack control
-				$subtree=array_pop($subtree_stack);
-				$actual_past_stack_levels--;
+				$__id=intval($id);
 
-				// Alter the last of the next level on stack so it is actually taking the closed off level as children
-				$subtree_stack[count($subtree_stack)-1][3][]=$subtree;
+				// Load attachment
+				$attachment_rows=$connection->query_select('attachments',array('*'),array('id'=>$__id),'',1);
+				if (!array_key_exists(0,$attachment_rows)) // Missing attachment!
+				{
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'be1c9c26a8802a00955fbd7a55b08bd3','WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','attachment',escape_html(strval($__id)))));
+					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (running_script('index')))
+					{
+						require_code('failure');
+						relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','attachment',strval($__id)),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
+					}
+					break;
+				}
+				$attachment_row=$attachment_rows[0];
+
+				// Check permission
+				$already_referenced=array_key_exists($__id,$GLOBALS['ATTACHMENTS_ALREADY_REFERENCED']);
+				if (($already_referenced) || ($as_admin) || (/*Actually we just can't broker security between guest attachments so let's lower security on re-using them so long as they have access (!is_guest($source_member)) && */($source_member===$attachment_row['a_member_id'])) || (((has_privilege($source_member,'reuse_others_attachments')) || ($attachment_row['a_member_id']==$source_member)) && (has_attachment_access($source_member,$__id))))
+				{
+					if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
+					$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>$attachment_row['a_add_time'],'type'=>'existing','initial_id'=>$id,'id'=>$__id,'attachmenttype'=>$attributes['type'],'comcode'=>$comcode);
+				} else // No permission
+				{
+					require_lang('permissions');
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'af61f96b5cc6819979ce681d6f49b384','WARNING'=>do_lang_tempcode('permissions:ACCESS_DENIED__REUSE_ATTACHMENT',$GLOBALS['FORUM_DRIVER']->get_username($source_member))));
+					break;
+				}
 			}
 
-			// Now we have the structure to display
-			$levels_t=_do_contents_level($subtree_stack[0][3],$list_types,$base-1);
+			// New attachments need inserting
+			if (is_null($attachment_row))
+			{
+				// Thumbnail generation
+				if ($attributes['thumb_url']=='')
+				{
+					require_code('images');
+					if (is_image($original_filename))
+					{
+						$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
+						if ($gd)
+						{
+							require_code('images');
+							if (!is_saveable_image($url)) $ext='.png'; else $ext='.'.get_file_extension($original_filename);
+							$attributes['thumb_url']='uploads/attachments_thumbs/'.$md5.$ext;
+							convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/'.$attributes['thumb_url'],-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
-			$temp_tpl=do_template('COMCODE_CONTENTS',array('_GUID'=>'ca2f5320fa930e2257a2e74e4f98e5a0','LEVELS'=>$levels_t));
+							if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $attributes['thumb_url']=get_custom_base_url().'/'.$attributes['thumb_url'];
+						} else $attributes['thumb_url']=$url;
+					}
+					elseif ((addon_installed('galleries')) && (is_video($original_filename)) && (url_is_local($url)))
+					{
+						require_code('galleries2');
+						$attributes['thumb_url']=create_video_thumb(url_is_local($url)?(get_custom_base_url().'/'.$url):$url);
+					}
+				}
 
-			$STRUCTURE_LIST=$old_structure_list; // Restore, so subsequent 'title' tags have correct numbering
+				// Width/height auto-detection
+				if ((addon_installed('galleries')) && (is_video($original_filename)) && (url_is_local($url)))
+				{
+					require_code('galleries2');
+					$vid_details=get_video_details(get_custom_file_base().'/'.rawurldecode($url),$original_filename,true);
+					if ($vid_details!==false)
+					{
+						list($_width,$_height,)=$vid_details;
+						if ((!array_key_exists('width',$attributes)) || ($attributes['width']==''))
+							$attachment_row['width']=strval($_width);
+						if ((!array_key_exists('width',$attributes)) || ($attributes['height']==''))
+							$attachment_row['height']=strval($_height);
+					}
+				}
 
+				// Set URL correctly, if on an M.S.N.
+				if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
+				{
+					if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+					if (url_is_local($attributes['thumb_url'])) $attributes['thumb_url']=get_custom_base_url().'/'.$attributes['thumb_url'];
+				}
+
+				// Insert attachment
+				$attachment_row=array(
+					'a_member_id'=>$on_behalf_of_member,
+					'a_file_size'=>$_size,
+					'a_url'=>$url,
+					'a_thumb_url'=>$attributes['thumb_url'],
+					'a_original_filename'=>$original_filename,
+					'a_num_downloads'=>0,
+					'a_last_downloaded_time'=>NULL,
+					'a_add_time'=>time(),
+					'a_description'=>array_key_exists('description',$attributes)?$attributes['description']:'',
+				);
+				$attachment_row['id']=$connection->query_insert('attachments',$attachment_row,true);
+
+				// Transcode
+				if (addon_installed('galleries'))
+				{
+					require_code('images');
+					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					{
+						require_code('transcoding');
+						transcode_video($url,'attachments',$attachment_row['id'],'id','a_url','a_original_filename',NULL,NULL);
+					}
+				}
+
+				// Create and document attachment
+				$COMCODE_ATTACHMENTS[$pass_id][]=array('type'=>'new','initial_id'=>$id,'id'=>$attachment_row['id']); // Marker will allow us to search back and replace this with the added ID
+			}
+
+			// Lock it if we are doing a 'safe' attachment
+			if ($tag=='attachment_safe')
+			{
+				$connection->query_delete('attachment_refs',array('r_referer_type'=>'null','r_referer_id'=>'','a_id'=>$attachment_row['id']),'',1);
+				$connection->query_insert('attachment_refs',array('r_referer_type'=>'null','r_referer_id'=>'','a_id'=>$attachment_row['id']));
+			}
+
+			// Now, render it
+			// ==============
+			require_code('attachments');
+			$temp_tpl=render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_member,$as_admin,$connection,$highlight_bits,$on_behalf_of_member,$semiparse_mode);
 			break;
 	}
 

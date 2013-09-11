@@ -76,6 +76,8 @@ class Hook_addon_registry_core_fields
 			'sources/fields.php',
 			'sources/hooks/systems/addon_registry/core_fields.php',
 			'sources/hooks/systems/fields/.htaccess',
+			'sources/hooks/systems/fields/video.php',
+			'sources/hooks/systems/fields/video_multi.php',
 			'sources/hooks/systems/fields/content_link_multi.php',
 			'sources/hooks/systems/fields/picture_multi.php',
 			'sources/hooks/systems/fields/reference_multi.php',

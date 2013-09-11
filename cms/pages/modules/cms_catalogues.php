@@ -566,10 +566,11 @@ class Module_cms_catalogues extends standard_crud_module
 	 * Get a entry-id=>value map of what a submitted catalogue entry form has set
 	 *
 	 * @param  ID_TEXT		The name of the catalogue that was used
+	 * @param  MEMBER			The entry submitter
 	 * @param  ?AUTO_LINK	ID of entry being edited (NULL: not being edited)
 	 * @return array			The map
 	 */
-	function get_set_field_map($catalogue_name,$editing_id=NULL)
+	function get_set_field_map($catalogue_name,$submitter,$editing_id=NULL)
 	{
 		// Get field values
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
@@ -585,7 +586,7 @@ class Module_cms_catalogues extends standard_crud_module
 			$value=$object->inputted_to_field_value(!is_null($editing_id),$field,'uploads/catalogues',is_null($editing_id)?NULL:_get_catalogue_entry_field($field['id'],$editing_id,$storage_type));
 			if ((fractional_edit()) && ($value!=STRING_MAGIC_NULL))
 			{
-				$rendered=static_evaluate_tempcode($object->render_field_value($field,$value,0,NULL,'catalogue_efv_'.$storage_type,NULL,'ce_id','cv_value'));
+				$rendered=static_evaluate_tempcode($object->render_field_value($field,$value,0,NULL,'catalogue_efv_'.$storage_type,NULL,'ce_id','cv_value',$submitter));
 				$_POST['field_'.strval($field['id']).'__altered_rendered_output']=is_object($rendered)?$rendered->evaluate():$rendered;
 			}
 
@@ -614,7 +615,7 @@ class Module_cms_catalogues extends standard_crud_module
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','c_name',array('id'=>$category_id));
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$map=$this->get_set_field_map($catalogue_name);
+		$map=$this->get_set_field_map($catalogue_name,get_member());
 
 		if ((!is_guest()) && (addon_installed('points')))
 		{
@@ -685,9 +686,11 @@ class Module_cms_catalogues extends standard_crud_module
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_trackbacks=post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
+		$submitter=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_submitter',array('id'=>$id));
+
 		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','c_name',array('id'=>$category_id));
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$map=$this->get_set_field_map($catalogue_name,$id);
+		$map=$this->get_set_field_map($catalogue_name,$id,$submitter);
 
 		if (addon_installed('content_privacy'))
 		{
@@ -706,8 +709,6 @@ class Module_cms_catalogues extends standard_crud_module
 			}
 			if ($privacy_ok)
 			{
-				$submitter=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_submitter',array('id'=>$id));
-
 				require_code('activities');
 
 				$map_copy=$map;

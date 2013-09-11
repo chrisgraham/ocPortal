@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		galleries
+ * @package		core_fields
  */
 
 class Hook_fields_video
@@ -76,32 +76,44 @@ class Hook_fields_video
 	 * @param  ?AUTO_LINK	The ID of the row in the table (NULL: N/A)
 	 * @param  ?ID_TEXT		Name of the ID field in the table (NULL: N/A)
 	 * @param  ?ID_TEXT		Name of the URL field in the table (NULL: N/A)
+	 * @param  MEMBER			Submitter
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev,$i,$only_fields,$table=NULL,$id=NULL,$id_field=NULL,$url_field=NULL)
+	function render_field_value($field,$ev,$i,$only_fields,$table=NULL,$id=NULL,$id_field=NULL,$url_field=NULL,$submitter=NULL)
 	{
 		if (is_object($ev)) return $ev;
 
 		if ($ev=='') return '';
 
-		require_code('galleries');
-		require_code('galleries2');
-		require_code('transcoding');
+		if (is_null($submitter)) $submitter=get_member();
 
-		if ((!is_null($table)) && (!is_null($id)) && (!is_null($id_field)) && (!is_null($url_field)))
+		if (addon_installed('galleries'))
 		{
-			$ev=transcode_video($ev,$table,$id,$id_field,$url_field,NULL,NULL,NULL);
+			require_code('galleries');
+			require_code('galleries2');
+			require_code('transcoding');
 		}
 
-		$thumb_url=create_video_thumb($ev);
+		if (addon_installed('galleries'))
+		{
+			if ((!is_null($table)) && (!is_null($id)) && (!is_null($id_field)) && (!is_null($url_field)))
+			{
+				$ev=transcode_video($ev,$table,$id,$id_field,$url_field,NULL,NULL,NULL);
+			}
+
+			$thumb_url=create_video_thumb($ev);
+		} else
+		{
+			$thumb_url='';
+		}
 
 		$stripped_ev=$ev;
 		if (substr($stripped_ev,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/')
 			$stripped_ev=substr($stripped_ev,strlen(get_custom_base_url().'/'));
-		if (!url_is_local($stripped_ev))
+		if ((!url_is_local($stripped_ev)) || (!addon_installed('galleries')))
 		{
-			$width=intval(get_option('default_video_width'));
-			$height=intval(get_option('default_video_height'));
+			$width=intval(get_option('attachment_default_width'));
+			$height=intval(get_option('attachment_default_height'));
 			$length=0;
 		} else
 		{
@@ -117,7 +129,31 @@ class Hook_fields_video
 			$download_url=$ev;
 		}
 
-		return show_gallery_media($download_url,$thumb_url,$width,$height,$length);
+		require_code('media_renderer');
+		require_code('mime_types');
+		require_code('files');
+
+		$as_admin=has_privilege($submitter,'comcode_dangerous');
+
+		$attributes=array(
+			'thumb_url'=>$thumb_url,
+			'width'=>strval($width),
+			'height'=>strval($height),
+			'length'=>($length==0)?'':strval($length),
+			'mime_type'=>get_mime_type(get_file_extension($url),$as_admin), // will not render as dangerous stuff (swf's etc), unless admin
+		);
+
+		$media_type=MEDIA_TYPE_VIDEO | MEDIA_TYPE_OTHER | MEDIA_TYPE_AUDIO;
+
+		// Render
+		return render_media_url(
+			$download_url,
+			$download_url,
+			$attributes,
+			$as_admin,
+			$submitter,
+			$media_type
+		);
 	}
 
 	// ======================

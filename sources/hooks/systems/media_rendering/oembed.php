@@ -54,13 +54,13 @@ class Hook_media_rendering_oembed
 	 * @param  ?array		The media signature, so we can go on this on top of the mime-type (NULL: not known)
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_mime_type($mime_type,$media_signature=NULL)
+	function recognises_mime_type($mime_type,$meta_details=NULL)
 	{
 		if ($mime_type=='text/html' || $mime_type=='application/xhtml+xml')
 		{
-			if ($media_signature!==NULL)
+			if ($meta_details!==NULL)
 			{
-				if ((($media_signature['t_json_discovery']!='') && (function_exists('json_decode'))) || ($media_signature['t_xml_discovery']!=''))
+				if ((($meta_details['t_json_discovery']!='') && (function_exists('json_decode'))) || ($meta_details['t_xml_discovery']!=''))
 					return MEDIA_RECOG_PRECEDENCE_MEDIUM;
 			}
 		}
@@ -80,17 +80,16 @@ class Hook_media_rendering_oembed
 	}
 
 	/**
-	 * Provide code to display what is at the URL, in the most appropriate way.
+	 * Do an oEmbed lookup.
 	 *
 	 * @param  URLPATH	URL to render
-	 * @param  array		Attributes (e.g. width, height, length)
-	 * @param  ?MEMBER	Member to run as
-	 * @return tempcode	Rendered version
+	 * @param  array		Attributes (e.g. width, height)
+	 * @return ?array		Fully parsed/validated oEmbed result (NULL: fail)
 	 */
-	function render($url,$attributes,$source_member=NULL)
+	function get_oembed_data_result($url,$attributes)
 	{
 		$endpoint=$this->_find_oembed_endpoint($url);
-		if ($endpoint===NULL) return $this->_fallback_render($url,$attributes,$source_member);
+		if ($endpoint===NULL) return NULL;
 
 		// Work out the full endpoint URL to call
 		$format_in_path=(strpos($endpoint,'{format}')!==false);
@@ -123,7 +122,7 @@ class Hook_media_rendering_oembed
 		global $HTTP_DOWNLOAD_MIME_TYPE;
 		require_code('files');
 		$result=http_download_file($endpoint,NULL,false);
-		if ($result===NULL) return $this->_fallback_render($url,$attributes,$source_member);
+		if ($result===NULL) return NULL;
 
 		// Handle
 		require_code('character_sets');
@@ -150,7 +149,7 @@ class Hook_media_rendering_oembed
 				if (function_exists('json_decode'))
 				{
 					$_data=json_decode($result);
-					if ($_data===NULL) return $this->_fallback_render($url,$attributes,$source_member);
+					if ($_data===NULL) return NULL;
 					$data=array();
 					foreach ($_data as $key=>$val) // It's currently an object, we want an array
 					{
@@ -160,7 +159,7 @@ class Hook_media_rendering_oembed
 				}
 				break;
 			default:
-				return $this->_fallback_render($url,$attributes,$source_member);
+				return NULL;
 		}
 
 		// Validation
@@ -168,29 +167,22 @@ class Hook_media_rendering_oembed
 		{
 			$data['type']='link';
 		}
-		if (!array_key_exists('type',$data)) return $this->_fallback_render($url,$attributes,$source_member); // E.g. an error result, with an "error" value - but we don't show errors as we just fall back instead
+		if (!array_key_exists('type',$data)) return NULL; // E.g. an error result, with an "error" value - but we don't show errors as we just fall back instead
+		if ((!array_key_exists('thumbnail_url',$data)) && (array_key_exists('media_url',$data)))
+		{
+			$data['thumbnail_url']=$data['media_url']; // noembed uses this, naughty
+			unset($data['media_url']);
+		}
 		switch ($data['type'])
 		{
 			case 'photo':
-				if ((!array_key_exists('url',$data)) || (!array_key_exists('width',$data)) || (!array_key_exists('height',$data))) break;
-				$map=array('width'=>$data['width'],'height'=>$data['height'],'click_url'=>$url);
-				$url=$data['url'];
-				if (array_key_exists('media_url',$data)) $map['thumb_url']=$data['media_url']; // noembed uses this, naughty
-				if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url'];
-				if (array_key_exists('description',$data)) $map['description']=$data['description']; // not official, but embed.ly has it
-				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
-				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
-				if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];
-				/*require_code('mime_types');	$url should be the full image not to view the resource, so we don't need to trick the mime type
-				require_code('files');
-				$map['mime_type']=get_mime_type(get_file_extension($map['thumb_url']));*/
-				require_code('media_renderer');
-				return render_media_url($url,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
+				if ((!array_key_exists('url',$data)) || (!array_key_exists('width',$data)) || (!array_key_exists('height',$data))) return NULL;
+				break;
 
 			case 'video':
-				if ((!array_key_exists('width',$data)) || (!array_key_exists('height',$data))) break;
+				if ((!array_key_exists('width',$data)) || (!array_key_exists('height',$data))) return NULL;
 			case 'rich':
-				if (!array_key_exists('html',$data)) break;
+				if (!array_key_exists('html',$data)) return NULL;
 
 				// Check security
 				$url_details=parse_url($url);
@@ -203,6 +195,53 @@ class Hook_media_rendering_oembed
 					$data['html']=strip_tags($data['html']);
 				}
 
+				break;
+
+			case 'link':
+				break;
+
+			default:
+				return NULL;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Provide code to display what is at the URL, in the most appropriate way.
+	 *
+	 * @param  mixed		URL to render
+	 * @param  mixed		URL to render (no sessions etc)
+	 * @param  array		Attributes (e.g. width, height, length)
+	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
+	 * @param  ?MEMBER	Member to run as (NULL: current member)
+	 * @return tempcode	Rendered version
+	 */
+	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
+	{
+		if (is_object($url)) $url=$url->evaluate();
+
+		$data=$this->get_oembed_data_result($url);
+		if ($data===NULL) return $this->_fallback_render($url,$attributes,$source_member);
+
+		switch ($data['type'])
+		{
+			case 'photo':
+				$map=array('width'=>$data['width'],'height'=>$data['height'],'click_url'=>$url);
+				$url=$data['url'];
+				if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url'];
+				if (array_key_exists('description',$data)) $map['description']=$data['description']; // not official, but embed.ly has it
+				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
+				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
+				if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];
+				/*require_code('mime_types');	$url should be the full image not to view the resource, so we don't need to trick the mime type
+				require_code('files');
+				$map['mime_type']=get_mime_type(get_file_extension($map['thumb_url']));*/
+				require_code('media_renderer');
+				return render_media_url($url,$url_safe,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
+
+			case 'video':
+			case 'rich':
 				return do_template('MEDIA_WEBPAGE_OEMBED_'.strtoupper($data['type']),array(
 					'TITLE'=>array_key_exists('title',$data)?$data['title']:'',
 					'HTML'=>$data['html'],
@@ -223,17 +262,17 @@ class Hook_media_rendering_oembed
 				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
 
 				require_code('media_renderer');
-				return render_media_url($url,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
+				return render_media_url($url,$url_safe,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
 		}
 
 		// Should not get here
-		return $this->_fallback_render($url,$attributes,$source_member);
+		return new ocp_tempcode();
 	}
 
 	/**
 	 * Provide code to display what is at the URL, when we fail to render with oEmbed.
 	 *
-	 * @param  URLPATH	URL to render
+	 * @param  mixed		URL to render
 	 * @param  array		Attributes (e.g. width, height, length)
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @param  string		Text to show the link with
@@ -289,14 +328,14 @@ class Hook_media_rendering_oembed
 
 		// Auto-discovery
 		require_code('files2');
-		$media_signature=get_webpage_meta_details($url);
-		$mime_type=$media_signature['t_mime_type'];
+		$meta_details=get_webpage_meta_details($url);
+		$mime_type=$meta_details['t_mime_type'];
 		if ($mime_type=='text/html' || $mime_type=='application/xhtml+xml')
 		{
-			if (($media_signature['t_json_discovery']!='') && (function_exists('json_decode')))
-				return $media_signature['t_json_discovery'];
-			if ($media_signature['t_xml_discovery']!='')
-				return $media_signature['t_xml_discovery'];
+			if (($meta_details['t_json_discovery']!='') && (function_exists('json_decode')))
+				return $meta_details['t_json_discovery'];
+			if ($meta_details['t_xml_discovery']!='')
+				return $meta_details['t_xml_discovery'];
 		}
 
 		return NULL;

@@ -288,7 +288,7 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 
 		if ($display_cpf)
 		{
-			$rendered_value=$ob->render_field_value($field_to_show,$member_value,$i,NULL,'f_members',$member_id,'id','field_'.strval($field_to_show['id']));
+			$rendered_value=$ob->render_field_value($field_to_show,$member_value,$i,NULL,'f_members',$member_id,'id','field_'.strval($field_to_show['id']),$member_id);
 
 			$editability=mixed(); // If stays as NULL, not editable
 			if (in_array($field_to_show['cf_type'],array('long_text','long_trans','short_trans'))) $editability=true; // Editable: Supports Comcode

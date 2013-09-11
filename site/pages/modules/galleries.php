@@ -763,7 +763,7 @@ class Module_galleries
 				// Video HTML
 				$thumb_url=$row['thumb_url'];
 				$url=$row['url'];
-				$video_player=show_gallery_media($url,$thumb_url,$row['video_width'],$row['video_height'],$row['video_length']);
+				$video_player=show_gallery_video_media($url,$thumb_url,$row['video_width'],$row['video_height'],$row['video_length'],$row['submitter']);
 				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 
 				// Some extra variables relating to the currently selected entry
@@ -1346,7 +1346,7 @@ class Module_galleries
 		$edit_date=is_null($myrow['edit_date'])?'':get_timezoned_date($myrow['edit_date']);
 
 		// Video HTML
-		$video=show_gallery_media($url,$thumb_url,$myrow['video_width'],$myrow['video_height'],$myrow['video_length']);
+		$video=show_gallery_video_media($url,$thumb_url,$myrow['video_width'],$myrow['video_height'],$myrow['video_length'],$row['submitter']);
 
 		$extension=get_file_extension($url);
 		require_code('mime_types');

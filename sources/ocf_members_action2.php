@@ -246,7 +246,7 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
 		$value=$ob->inputted_to_field_value(true,$custom_field,'uploads/ocf_cpf_upload',$old_value);
 		if ((fractional_edit()) && ($value!=STRING_MAGIC_NULL))
 		{
-			$rendered=$ob->render_field_value($custom_field,$value,0,NULL,'f_members',$member_id,'id','field_'.strval($custom_field['id']));
+			$rendered=$ob->render_field_value($custom_field,$value,0,NULL,'f_members',$member_id,'id','field_'.strval($custom_field['id']),$member_id);
 			$_POST['field_'.strval($custom_field['id']).'__altered_rendered_output']=is_object($rendered)?$rendered->evaluate():$rendered;
 		}
 		$actual_custom_fields[$custom_field['id']]=$value;

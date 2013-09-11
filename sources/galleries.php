@@ -977,3 +977,49 @@ function get_allowed_video_file_types()
 	}
 	return $supported;
 }
+
+/**
+ * Show a gallery media entry (not an image, something more complex); all these will render under the 'video' type even if they're technically not.
+ *
+ * @param  URLPATH		URL to media
+ * @param  URLPATH		URL to thumbnail
+ * @param  integer		Width
+ * @param  integer		Height
+ * @param  integer		Length
+ * @param  MEMBER			The entry submitter
+ * @return tempcode		Displayed media
+ */
+function show_gallery_video_media($url,$thumb_url,$width,$height,$length,$submitter)
+{
+	require_code('media_renderer');
+	require_code('mime_types');
+	require_code('files');
+
+	$as_admin=has_privilege($submitter,'comcode_dangerous');
+
+	$attributes=array(
+		'thumb_url'=>$thumb_url,
+		'width'=>strval($width),
+		'height'=>strval($height),
+		'length'=>strval($length),
+		'mime_type'=>get_mime_type(get_file_extension($url),$as_admin), // will not render as dangerous stuff (swf's etc), unless admin
+	);
+
+	if (get_option('allow_audio_videos')=='1')
+	{
+		$media_type=MEDIA_TYPE_VIDEO | MEDIA_TYPE_OTHER | MEDIA_TYPE_AUDIO;
+	} else
+	{
+		$media_type=MEDIA_TYPE_VIDEO;
+	}
+
+	// Render
+	render_media_url(
+		$url,
+		$url,
+		$attributes,
+		$as_admin,
+		$submitter,
+		$media_type
+	);
+}

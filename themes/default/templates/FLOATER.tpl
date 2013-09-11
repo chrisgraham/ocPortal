@@ -1,3 +1,3 @@
-<div style="margin-{$?,{$EQ,{FLOAT},left},right,left}: 5px; float: {FLOAT*}">
+<div class="{FLOAT*} float_separation">
 	{CONTENT}
 </div>

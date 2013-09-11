@@ -71,17 +71,21 @@ class Hook_media_rendering_hyperlink
 	/**
 	 * Provide code to display what is at the URL, in the most appropriate way.
 	 *
-	 * @param  URLPATH	URL to render
+	 * @param  mixed		URL to render
+	 * @param  mixed		URL to render (no sessions etc)
 	 * @param  array		Attributes (e.g. width, height, length)
 	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$attributes,$as_admin=false,$source_member=NULL)
+	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
+		$_url=is_object($url)?$url->evaluate():$url;
+		$_url_safe=is_object($_url_safe)?$url_safe->evaluate():$url_safe;
+
 		// Try and find the link title
 		require_code('files2');
-		$meta_details=get_webpage_meta_details($url);
+		$meta_details=get_webpage_meta_details($_url);
 
 		$defined_not_framed=((array_key_exists('framed',$attributes)) && ($attributes['framed']=='0'));
 
@@ -119,22 +123,28 @@ class Hook_media_rendering_hyperlink
 		} // Hmm, we explicitly said we want a plain link
 
 		$link_captions_title=$meta_details['t_title'];
-		if ($link_captions_title=='') $link_captions_title=$url;
+		if ($link_captions_title=='') $link_captions_title=$_url_safe;
 
 		require_code('comcode_renderer');
 		if (is_null($source_member)) $source_member=get_member();
 		$comcode='';
 
 		// Render as a 'page' link?
-		$page_link=url_to_pagelink($url,true);
+		$page_link=url_to_pagelink($_url_safe,true);
 		if ($page_link!='')
 		{
 			return _do_tags_comcode('page',array('param'=>$page_link),make_string_tempcode(escape_html($link_captions_title)),false,$comcode,0,$source_member,false,$GLOBALS['SITE_DB'],'',false,false,false);
 		}
 
 		// Okay, just render as a URL then
-		$url_tempcode=new ocp_tempcode();
-		$url_tempcode->attach($url);
+		if (is_object($url))
+		{
+			$url_tempcode=$url;
+		} else
+		{
+			$url_tempcode=new ocp_tempcode();
+			$url_tempcode->attach($url);
+		}
 		return _do_tags_comcode('url',array('param'=>$link_captions_title),$url_tempcode,false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false,false);
 	}
 
