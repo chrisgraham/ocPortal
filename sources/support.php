@@ -1520,6 +1520,9 @@ function browser_matches($code)
 
 	switch ($code)
 	{
+		case 'itunes':
+			$BROWSER_MATCHES_CACHE[$code]=(get_param_integer('itunes',0)==1) || (strpos($browser,'itunes')!==false);
+			return $BROWSER_MATCHES_CACHE[$code];
 		case 'bot':
 			$BROWSER_MATCHES_CACHE[$code]=!is_null(get_bot_type());
 			return $BROWSER_MATCHES_CACHE[$code];

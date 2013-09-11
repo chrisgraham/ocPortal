@@ -55,7 +55,7 @@ class Hook_rss_galleries
 		}
 		$galleries=collapse_2d_complexity('name','text_original',$_galleries);
 		$rows1=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval((integer)$cutoff).' AND '.$filters.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1 ':'').' ORDER BY add_date DESC',$max);
-		$rows2=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'images WHERE add_date>'.strval((integer)$cutoff).' AND '.$filters.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1 ':'').' ORDER BY add_date DESC',$max);
+		$rows2=browser_matches('itunes')?array():$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'images WHERE add_date>'.strval((integer)$cutoff).' AND '.$filters.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1 ':'').' ORDER BY add_date DESC',$max);
 		$rows=array_merge($rows1,$rows2);
 		foreach ($rows as $row)
 		{
@@ -66,7 +66,13 @@ class Hook_rss_galleries
 			$news_date=date($date_string,$row['add_date']);
 			$edit_date=is_null($row['edit_date'])?'':date($date_string,$row['edit_date']);
 
-			$news_title=xmlentities(do_lang('THIS_WITH_SIMPLE',(array_key_exists('video_views',$row)?do_lang('VIDEO'):do_lang('IMAGE')),strval($row['id'])));
+			if (get_translated_text($row['title'])!='')
+			{
+				$news_title=xmlentities(get_translated_text($row['title']));
+			} else
+			{
+				$news_title=xmlentities(do_lang('THIS_WITH_SIMPLE',(array_key_exists('video_views',$row)?do_lang('VIDEO'):do_lang('IMAGE')),strval($row['id'])));
+			}
 			$_summary=get_translated_tempcode($row['comments']);
 			$summary=xmlentities($_summary->evaluate());
 			$news='';
@@ -82,16 +88,39 @@ class Hook_rss_galleries
 
 			$view_url=build_url(array('page'=>'galleries','type'=>array_key_exists('video_views',$row)?'video':'image','id'=>$row['id']),get_module_zone('galleries'),NULL,false,false,true);
 
-			if (($prefix=='RSS_') && (get_option('is_on_comments')=='1') && ($row['allow_comments']>='1'))
+			if (($prefix=='RSS_') && (get_option('is_on_comments')=='1') && ($row['allow_comments']>=1))
 			{
 				$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'65dc0cec8c75f565c58c95fa1667aa1e','COMMENT_URL'=>$view_url,'ID'=>strval($row['id'])));
 			} else $if_comments=new ocp_tempcode();
 
 			require_code('images');
-			$enclosure_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries',array_key_exists('video_views',$row)?'videos':'images',$row['id']);
+			$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries',array_key_exists('video_views',$row)?'videos':'images',$row['id']);
+			$enclosure_url=$row['url'];
+			if (url_is_local($enclosure_url)) $enclosure_url=get_custom_base_url().'/'.$enclosure_url;
 			list($enclosure_length,$enclosure_type)=get_enclosure_details($row['url'],$enclosure_url);
 
-			$content->attach(do_template($prefix.'ENTRY',array('ENCLOSURE_URL'=>$enclosure_url,'ENCLOSURE_LENGTH'=>$enclosure_length,'ENCLOSURE_TYPE'=>$enclosure_type,'VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
+			$meta=seo_meta_get_for(array_key_exists('video_views',$row)?'video':'image',strval($row['id']));
+			$keywords=trim($meta[0],', ');
+
+			$content->attach(do_template($prefix.'ENTRY',array(
+				'THUMB_URL'=>$thumb_url,
+				'ENCLOSURE_URL'=>$enclosure_url,
+				'ENCLOSURE_LENGTH'=>$enclosure_length,
+				'ENCLOSURE_TYPE'=>$enclosure_type,
+				'VIEW_URL'=>$view_url,
+				'SUMMARY'=>$summary,
+				'EDIT_DATE'=>$edit_date,
+				'IF_COMMENTS'=>$if_comments,
+				'TITLE'=>$news_title,
+				'CATEGORY_RAW'=>$category_raw,
+				'CATEGORY'=>$category,
+				'AUTHOR'=>$author,
+				'ID'=>$id,
+				'NEWS'=>$news,
+				'DATE'=>$news_date,
+				'DURATION'=>array_key_exists('video_length',$row)?(strval(intval(floor(floatval($row['video_length']))/60.0)).':'.strval($row['video_length']%60)):NULL,
+				'KEYWORDS'=>$keywords,
+			)));
 		}
 
 		require_lang('galleries');

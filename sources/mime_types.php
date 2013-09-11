@@ -105,7 +105,7 @@ function get_mime_type($extension)
 		'ra'=>'audio/x-pn-realaudio-plugin',
 		'wma'=>'audio/x-ms-wma',
 		'wav'=>'audio/x-wav',
-		'mp3'=>'audio/x-mpeg',
+		'mp3'=>'audio/mpeg',
 		'ogg'=>'audio/ogg',
 		'mid'=>'audio/midi',
 
