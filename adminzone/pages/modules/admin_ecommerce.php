@@ -645,12 +645,25 @@ class Module_admin_ecommerce extends standard_aed_module
 			$list->attach(form_input_list_entry($unit,$unit==$length_units,do_lang_tempcode('LENGTH_UNIT_'.$unit)));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('LENGTH_UNITS'),do_lang_tempcode('DESCRIPTION_LENGTH_UNITS'),'length_units',$list));
+
 		$list=new ocp_tempcode();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+		if (get_forum_type()=='ocf')
+		{
+			require_code('ocf_groups');
+			$default_groups=ocf_get_all_default_groups(true);
+		}
 		foreach ($groups as $id=>$group)
 		{
-			$list->attach(form_input_list_entry(strval($id),$id==$group_id,$group));
+			if (get_forum_type()=='ocf')
+			{
+				if ((in_array($id,$default_groups)) && ($id!==$group_id)) continue;
+			}
+
+			if ($id!=$GLOBALS['FORUM_DRIVER']->get_guest_id())
+				$list->attach(form_input_list_entry(strval($id),$id==$group_id,$group));
 		}
+
 		$fields->attach(form_input_integer(do_lang_tempcode('SUBSCRIPTION_LENGTH'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_LENGTH'),'length',$length,true));
 		$fields->attach(form_input_list(do_lang_tempcode('GROUP'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_GROUP'),'group_id',$list));
 		$fields->attach(form_input_tick(do_lang_tempcode('USES_PRIMARY'),do_lang_tempcode('DESCRIPTION_USES_PRIMARY'),'uses_primary',$uses_primary==1));
