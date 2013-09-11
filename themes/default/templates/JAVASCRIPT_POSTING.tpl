@@ -80,7 +80,6 @@ function set_attachment(field_name,number,filename,multi)
 		url+='&default=new_'+number;
 		url+='&default_thumb=1';
 		url+='&default_type=';
-		url+='&is_archive='+(is_archive?'1':'0');
 		url+='&is_image='+(is_image?'1':'0');
 		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path
 		url+='&multi='+(multi?'1':'0');

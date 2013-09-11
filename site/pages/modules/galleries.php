@@ -1346,7 +1346,7 @@ class Module_galleries
 		$edit_date=is_null($myrow['edit_date'])?'':get_timezoned_date($myrow['edit_date']);
 
 		// Video HTML
-		$video=show_gallery_video_media($url,$thumb_url,$myrow['video_width'],$myrow['video_height'],$myrow['video_length'],$row['submitter']);
+		$video=show_gallery_video_media($url,$thumb_url,$myrow['video_width'],$myrow['video_height'],$myrow['video_length'],$myrow['submitter']);
 
 		$extension=get_file_extension($url);
 		require_code('mime_types');

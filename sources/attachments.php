@@ -76,10 +76,10 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 		{
 			$url->attach('&forum_db=1');
-			$attachment['num_downloads']=symbol_tempcode('ATTACHMENT_DOWNLOADS',array(strval($attachment_row['id']),'1'));
+			$attributes['num_downloads']=symbol_tempcode('ATTACHMENT_DOWNLOADS',array(strval($attachment_row['id']),'1'));
 		} else
 		{
-			$attachment['num_downloads']=symbol_tempcode('ATTACHMENT_DOWNLOADS',array(strval($attachment_row['id']),'0'));
+			$attributes['num_downloads']=symbol_tempcode('ATTACHMENT_DOWNLOADS',array(strval($attachment_row['id']),'0'));
 		}
 		$url_safe=new ocp_tempcode();
 		$url_safe->attach($url);

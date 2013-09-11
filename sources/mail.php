@@ -398,7 +398,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			$extra_cc_addresses[]=$cc_address;
 		} else
 		{
-			$extra_bc_addresses[]=$cc_address;
+			$extra_bcc_addresses[]=$cc_address;
 		}
 	}
 	if ($extra_cc_addresses!==array())

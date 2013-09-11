@@ -1663,22 +1663,22 @@ function get_webpage_meta_details($url)
 				'<title[^>]*\s*>\s*(.*)\s*\s*<\s*/title\s*>',
 			),
 			't_meta_title'=>array(
-				'<meta\s+name="?DC\.Title"?\s+content="?([^"<>]*)"?\s*/?>',
-				'<meta\s+name="?twitter:title"?\s+content="?([^"<>]*)"?\s*/?>',
-				'<meta\s+property="?og:title"?\s+content="?([^"<>]*)"?\s*/?>',
+				'<meta\s+name="?DC\.Title"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+name="?twitter:title"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+property="?og:title"?\s+content="?([^"<>]*)"?\s*/?'.'>',
 			),
 			't_keywords'=>array(
-				'<meta\s+name="?keywords"?\s+content="?([^"<>]*)"?\s*/?>',
+				'<meta\s+name="?keywords"?\s+content="?([^"<>]*)"?\s*/?'.'>',
 			),
 			't_description'=>array(
-				'<meta\s+name="?description"?\s+content="?([^"<>]*)"?\s*/?>',
-				'<meta\s+name="?DC\.Description"?\s+content="?([^"<>]*)"?\s*/?>',
-				'<meta\s+name="?twitter:description"?\s+content="?([^"<>]*)"?\s*/?>',
-				'<meta\s+property="?og:description"?\s+content="?([^"<>]*)"?\s*/?>',
+				'<meta\s+name="?description"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+name="?DC\.Description"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+name="?twitter:description"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+property="?og:description"?\s+content="?([^"<>]*)"?\s*/?'.'>',
 			),
 			't_image_url'=>array(
-				'<meta\s+name="?twitter:image"?\s+content="?([^"<>]*)"?\s*/?>',
-				'<meta\s+property="?og:image"?\s+content="?([^"]*)"?\s*/?>',
+				'<meta\s+name="?twitter:image"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+property="?og:image"?\s+content="?([^"]*)"?\s*/?'.'>',
 			),
 		);
 
@@ -1716,7 +1716,7 @@ function get_webpage_meta_details($url)
 			// Lame, no real mime type - maybe the server is just not configured to know it - try and guess by using the file extension and our own ocPortal list
 			require_code('mime_types');
 			require_code('files');
-			$meta_details['t_mime_type']=get_mime_type(get_file_extension($url));
+			$meta_details['t_mime_type']=get_mime_type(get_file_extension($url),true);
 		} else
 		{
 			$meta_details['t_mime_type']=$HTTP_DOWNLOAD_MIME_TYPE;

@@ -54,6 +54,8 @@ class Hook_symbol_BETA_CSS_PROPERTY
 				$vendors=array('','-o-','-webkit-','-ms-','-moz-');
 				foreach ($vendors as $prefix)
 				{
+					if (($prefix=='') && (strpos($param[0],'backface-visibility')!==false)) continue;
+
 					if ((strpos($param[0],':')!==false) && (isset($is_supported[$prefix][substr($param[0],0,strpos($param[0],':'))]))) continue;
 
 					if (substr(trim($param[0]),-1)!=';') $value.='; ';

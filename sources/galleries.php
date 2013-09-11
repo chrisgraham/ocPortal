@@ -1014,12 +1014,5 @@ function show_gallery_video_media($url,$thumb_url,$width,$height,$length,$submit
 	}
 
 	// Render
-	render_media_url(
-		$url,
-		$url,
-		$attributes,
-		$as_admin,
-		$submitter,
-		$media_type
-	);
+	return render_media_url($url,$url,$attributes,$as_admin,$submitter,$media_type);
 }

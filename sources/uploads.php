@@ -268,7 +268,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	elseif (post_param($specify_name,'')!='') // If we specified
 	{
 		$url=_get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type,$accept_errors);
-		$is_image=is_image($url);
+		$is_image=is_image($url[0]);
 		if ($url==array('','')) return array('','','','');
 		if (($copy_to_server) && (!url_is_local($url[0])))
 		{
@@ -657,6 +657,7 @@ function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_error
 /**
  * Converts an uploaded file into a URL, by moving it to an appropriate place.
  *
+ * @param  MEMBER			Member ID to check permissions with.
  * @param  ID_TEXT		The name of the HTTP file parameter storing the upload (if '', then no HTTP file parameter). No file necessarily is uploaded under this.
  * @param  ID_TEXT		The folder name in uploads/ where we will put this upload
  * @param  integer		The type of upload it is (from an OCP_UPLOAD_* constant)

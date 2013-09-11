@@ -144,6 +144,7 @@ function init__validation()
 		'col'=>1,
 		'source'=>1,
 		'nobr'=>1,
+		'embed'=>1,
 	);
 
 	// B's may not appear under A
@@ -243,7 +244,7 @@ function init__validation()
 	$REQUIRE_ANCESTER=array(
 		'textarea'=>'form',
 		'input'=>'form',
-//		'button'=>'form',
+		//'button'=>'form',
 		'option'=>'form',
 		'optgroup'=>'form',
 		'select'=>'form',

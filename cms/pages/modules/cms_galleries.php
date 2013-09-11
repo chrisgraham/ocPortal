@@ -2058,7 +2058,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$hidden->attach(form_input_hidden('accept_videos','1'));
 		}
 		$gallery_mode_is=get_option('gallery_mode_is');
-		if (($name!='') && ($flow_mode_interface!=($gallery_mode_is=='flow')?'1':'0')) $gallery_mode_is=''; // Continue current
+		if (($name!='') && ($flow_mode_interface!=(($gallery_mode_is=='flow')?1:0))) $gallery_mode_is=''; // Continue current
 		if ($gallery_mode_is!='')
 		{
 			$hidden->attach(form_input_hidden('flow_mode_interface',($gallery_mode_is=='flow')?'1':'0'));
@@ -2103,7 +2103,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 
 		// Meta data
 		require_code('seo2');
-		$seo_fields=seo_get_fields($this->seo_type,($name=='')?NULL:$id,false);
+		$seo_fields=seo_get_fields($this->seo_type,($name=='')?NULL:$name,false);
 		if (get_option('gallery_feedback_fields')=='1')
 		{
 			require_code('feedback2');
@@ -2203,6 +2203,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 	function edit_actualisation($id)
 	{
 		$name=post_param('name',fractional_edit()?$id:'');
+		$fullname=post_param('fullname');
 		if ($name=='') $name=preg_replace('#[^\w\d\-]#','',$fullname);
 
 		$parent_id=post_param('parent_id',STRING_MAGIC_NULL);
@@ -2242,7 +2243,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		edit_gallery(
 			$id,
 			$name,
-			post_param('fullname'),
+			$fullname,
 			post_param('description',STRING_MAGIC_NULL),
 			post_param('notes',STRING_MAGIC_NULL),
 			$parent_id,

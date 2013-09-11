@@ -1,4 +1,4 @@
-<iframe src="https://www.facebook.com/video/embed?video_id={URL*}" width="{WIDTH*}" height="{HEIGHT*}" frameborder="0"></iframe>
+<iframe title="Facebook Video" src="https://www.facebook.com/video/embed?video_id={URL*}" width="{WIDTH*}" height="{HEIGHT*}" frameborder="0">Facebook Video</iframe>
 
 {+START,IF_NON_EMPTY,{DESCRIPTION}}
 	<figcaption class="associated_details">

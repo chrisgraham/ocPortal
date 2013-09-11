@@ -76,7 +76,7 @@ class Hook_fields_video
 	 * @param  ?AUTO_LINK	The ID of the row in the table (NULL: N/A)
 	 * @param  ?ID_TEXT		Name of the ID field in the table (NULL: N/A)
 	 * @param  ?ID_TEXT		Name of the URL field in the table (NULL: N/A)
-	 * @param  MEMBER			Submitter
+	 * @param  ?MEMBER		Submitter (NULL: current member)
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
 	function render_field_value($field,$ev,$i,$only_fields,$table=NULL,$id=NULL,$id_field=NULL,$url_field=NULL,$submitter=NULL)
@@ -140,7 +140,7 @@ class Hook_fields_video
 			'width'=>strval($width),
 			'height'=>strval($height),
 			'length'=>($length==0)?'':strval($length),
-			'mime_type'=>get_mime_type(get_file_extension($url),$as_admin), // will not render as dangerous stuff (swf's etc), unless admin
+			'mime_type'=>get_mime_type(get_file_extension($download_url),$as_admin), // will not render as dangerous stuff (swf's etc), unless admin
 		);
 
 		$media_type=MEDIA_TYPE_VIDEO | MEDIA_TYPE_OTHER | MEDIA_TYPE_AUDIO;

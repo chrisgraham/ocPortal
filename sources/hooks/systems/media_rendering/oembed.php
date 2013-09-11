@@ -293,7 +293,7 @@ class Hook_media_rendering_oembed
 		$comcode='';
 		$url_tempcode=new ocp_tempcode();
 		$url_tempcode->attach($url);
-		return _do_tags_comcode('url',array('param'=>$link_captions_title),$url_tempcode,false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false,false);
+		return _do_tags_comcode('url',array('param'=>$link_captions_title),$url_tempcode,false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false);
 	}
 
 	/**

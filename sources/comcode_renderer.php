@@ -399,6 +399,9 @@ function reinsert_parameters($attributes)
  * Make a given URL parameter an absolute URL; Fix any errors in it; Test it.
  *
  * @param  URLPATH		URL to fixup.
+ * @param  MEMBER			The member who is responsible for this Comcode
+ * @param  boolean		Whether to check as arbitrary admin
+ * @param  ID_TEXT		Comcode tag name.
  * @return URLPATH		Fixed URL.
 */
 function absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$tag)
@@ -1737,7 +1740,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$as_admin,
 				$source_member,
 				MEDIA_TYPE_OTHER | MEDIA_TYPE_VIDEO | MEDIA_TYPE_AUDIO,
-				(strtolower(substr($given_url,-4)=='.swf')?'flash'):NULL // LEGACY: Really we should only allow Flash (because we have a 'media' tag), but we always used to support any media via this tag
+				(strtolower(substr($given_url,-4))=='.swf')?'flash':NULL // LEGACY: Really we should only allow Flash (because we have a 'media' tag), but we always used to support any media via this tag
 			);
 			break;
 
@@ -1960,7 +1963,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 							if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $attributes['thumb_url']=get_custom_base_url().'/'.$attributes['thumb_url'];
 						} else $attributes['thumb_url']=$url;
 					}
-					elseif ((addon_installed('galleries')) && (is_video($original_filename)) && (url_is_local($url)))
+					elseif ((addon_installed('galleries')) && (is_video($original_filename,$as_admin)) && (url_is_local($url)))
 					{
 						require_code('galleries2');
 						$attributes['thumb_url']=create_video_thumb(url_is_local($url)?(get_custom_base_url().'/'.$url):$url);
@@ -1968,7 +1971,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 
 				// Width/height auto-detection
-				if ((addon_installed('galleries')) && (is_video($original_filename)) && (url_is_local($url)))
+				if ((addon_installed('galleries')) && (is_video($original_filename,$as_admin)) && (url_is_local($url)))
 				{
 					require_code('galleries2');
 					$vid_details=get_video_details(get_custom_file_base().'/'.rawurldecode($url),$original_filename,true);
@@ -2007,7 +2010,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if (addon_installed('galleries'))
 				{
 					require_code('images');
-					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					if ((is_video($url,$as_admin)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
 					{
 						require_code('transcoding');
 						transcode_video($url,'attachments',$attachment_row['id'],'id','a_url','a_original_filename',NULL,NULL);

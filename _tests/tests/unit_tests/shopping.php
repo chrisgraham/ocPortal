@@ -118,7 +118,7 @@ class shopping_test_set extends ocp_test_case
 			}
 		}
 
-		$map=$this->cms_cat->get_set_field_map($catalogue_name);
+		$map=$this->cms_cat->get_set_field_map($catalogue_name,get_member());
 
 		$this->product_id=actual_add_catalogue_entry($this->category_id,0,'test note',1,1,1,$map);
 	}

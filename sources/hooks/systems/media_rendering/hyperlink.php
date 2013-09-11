@@ -81,7 +81,7 @@ class Hook_media_rendering_hyperlink
 	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
 		$_url=is_object($url)?$url->evaluate():$url;
-		$_url_safe=is_object($_url_safe)?$url_safe->evaluate():$url_safe;
+		$_url_safe=is_object($url_safe)?$url_safe->evaluate():$url_safe;
 
 		// Try and find the link title
 		require_code('files2');
@@ -133,7 +133,7 @@ class Hook_media_rendering_hyperlink
 		$page_link=url_to_pagelink($_url_safe,true);
 		if ($page_link!='')
 		{
-			return _do_tags_comcode('page',array('param'=>$page_link),make_string_tempcode(escape_html($link_captions_title)),false,$comcode,0,$source_member,false,$GLOBALS['SITE_DB'],'',false,false,false);
+			return _do_tags_comcode('page',array('param'=>$page_link),make_string_tempcode(escape_html($link_captions_title)),false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false);
 		}
 
 		// Okay, just render as a URL then
@@ -145,7 +145,7 @@ class Hook_media_rendering_hyperlink
 			$url_tempcode=new ocp_tempcode();
 			$url_tempcode->attach($url);
 		}
-		return _do_tags_comcode('url',array('param'=>$link_captions_title),$url_tempcode,false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false,false);
+		return _do_tags_comcode('url',array('param'=>$link_captions_title),$url_tempcode,false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false);
 	}
 
 }

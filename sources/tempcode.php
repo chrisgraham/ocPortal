@@ -127,7 +127,8 @@ function fast_uniqid()
  * Get a string (natural for Tempcode's stream-based processing-model) representation of a bound Tempcode variable (LEGACY)
  *
  * @param  mixed				Variable (or NULL if not set)
- * @param  ID_TEXT			Where this parameter is referenced, in a compressed reference form
+ * @param  ID_TEXT			Parameter name
+ * @param  ID_TEXT			Template name
  * @return string				Value
  */
 function output_tempcode_parameter($var,$parameter,$template_name)
@@ -1771,6 +1772,7 @@ class ocp_tempcode
  *
  * @param  string				A randomised unique ID
  * @param  string				Parameters
+ * @param  string				Function code
  * @return string				The function reference
  */
 function recall_named_function($id,$parameters,$code)

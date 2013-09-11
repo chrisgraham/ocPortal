@@ -1774,9 +1774,35 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__mass_select_form_buttons()
 	{
+		$buttons=do_lorem_template('MASS_SELECT_FORM_BUTTONS', array(
+			'TYPE'=>placeholder_id(),
+		));
+
+		$fields=new ocp_tempcode();
+		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE', array(
+			'RAW'=>true,
+			'SCROLLS'=>'',
+			'DESCRIPTION_SIDE'=>lorem_sentence(),
+			'REQUIRED'=>'',
+			'_REQUIRED'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence(),
+			'NAME'=>placeholder_random_id(),
+			'DEFAULT'=>'',
+			'ROWS'=>"20"
+		)));
+
 		return array(
-			lorem_globalise(do_lorem_template('MASS_SELECT_FORM_BUTTONS', array(
-				'TYPE'=>placeholder_id(),
+			lorem_globalise(do_lorem_template('FORM', array(
+				'GET'=>NULL,
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>$buttons,
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>lorem_word(),
+				'TEXT'=>''
 			)), NULL, '', true)
 		);
 	}

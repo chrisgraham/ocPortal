@@ -1,6 +1,6 @@
 {+START,INCLUDE,MEDIA_IMAGE_WEBSAFE}{+END}
 
-{+START,IF_NON_PASSED_OR_FALSE,WYSIWYG_SAFE}
+{+START,IF_NON_PASSED_OR_FALSE,WYSIWYG_EDITABLE}
 	{+START,IF,{$NOT,{THUMB}}}
 		{+START,IF,{$HAS_ZONE_ACCESS,adminzone}}
 			<p class="associated_link associated_links_block_group">

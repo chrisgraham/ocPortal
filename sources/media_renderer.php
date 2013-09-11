@@ -48,7 +48,7 @@ function init__media_renderer()
  * @param  ?ID_TEXT		Limit to a media rendering hook (NULL: no limit)
  * @return ?array			The hooks (NULL: cannot find one)
  */
-function find_media_renderers($url,$attributes,$as_admin,$source_member,$acceptable_media,$limit_to=NULL)
+function find_media_renderers($url,$attributes,$as_admin,$source_member,$acceptable_media=15,$limit_to=NULL)
 {
 	if (is_null($source_member)) $source_member=get_member();
 	if (has_privilege($source_member,'comcode_dangerous')) $as_admin=true;
@@ -263,7 +263,7 @@ function _create_media_template_parameters($url,$attributes,$as_admin=false,$sou
 
 		'THUMB'=>$use_thumb,
 		'FRAMED'=>$framed,
-		'WYSIWYG_SAFE'=>$wysiwyg_editable,
+		'WYSIWYG_EDITABLE'=>$wysiwyg_editable,
 		'NUM_DOWNLOADS'=>array_key_exists('num_downloads',$attributes)?$attributes['num_downloads']:NULL,
 		'DESCRIPTION'=>comcode_to_tempcode($attributes['description'],$source_member,$as_admin),
 	);

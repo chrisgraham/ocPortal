@@ -79,7 +79,7 @@ class Hook_media_rendering_image_websafe
 	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
 		$_url=is_object($url)?$url->evaluate():$url;
-		$_url_safe=is_object($_url_safe)?$url_safe->evaluate():$url_safe;
+		$_url_safe=is_object($url_safe)?$url_safe->evaluate():$url_safe;
 
 		// Put in defaults
 		if ((!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width'])))

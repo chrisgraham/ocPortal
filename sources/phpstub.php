@@ -5497,6 +5497,18 @@ function disk_total_space($directory)
 }
 
 /**
+ * Create a function dynamically. Do not use unless absolutely needed.
+ *
+ * @param  string		Arguments.
+ * @param  string		Code to run.
+ * @return string  	Function reference.
+ */
+function create_function($args,$code)
+{
+	return '';
+}
+
+/**
  * Run some code. Do not use unless absolutely needed.
  *
  * @param  string		Code to run.

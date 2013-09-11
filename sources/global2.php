@@ -537,14 +537,14 @@ function fast_spider_cache($bot=true)
 	$fast_cache_path.='.gcd';
 	if (is_file($fast_cache_path))
 	{
-		$expires=(60.0*60.0*floatval($SITE_INFO['fast_spider_cache']));
+		$expires=intval(60.0*60.0*floatval($SITE_INFO['fast_spider_cache']));
 		$mtime=filemtime($fast_cache_path);
 		if ($mtime>time()-$expires)
 		{
 			if ($bot) // Only bots can do this, as they won't try to login and end up reaching a previously cached page
 			{
-				header("Pragma: public");
-				header("Cache-Control: max-age=".strval($expires));
+				header('Pragma: public');
+				header('Cache-Control: max-age='.strval($expires));
 				header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');
 				header('Last-Modified: '.gmdate('D, d M Y H:i:s',$mtime).' GMT');
 
