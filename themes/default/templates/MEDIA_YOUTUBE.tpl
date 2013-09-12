@@ -2,8 +2,8 @@
 
 <div class="xhtml_validator_off">
 	<embed id="{$GET,player_id}" type="application/x-shockwave-flash" width="{WIDTH*}" height="{HEIGHT*}"
-		src="http://www.youtube.com/v/{URL*}?enablejsapi=1"
-		data="http://www.youtube.com/v/{URL*}?enablejsapi=1"
+		src="http://www.youtube.com/v/{REMOTE_ID*}?enablejsapi=1"
+		data="http://www.youtube.com/v/{REMOTE_ID*}?enablejsapi=1"
 		wmode="transparent"
 		allowscriptaccess="always" allowfullscreen="true"
 	/>

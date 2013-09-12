@@ -248,6 +248,7 @@ function _create_media_template_parameters($url,$attributes,$as_admin=false,$sou
 	// Put together template parameters
 	return array(
 		'URL'=>$url,
+		'REMOTE_ID'=>array_key_exists('remote_id',$attributes)?$attributes['remote_id']:'',
 		'THUMB_URL'=>$attributes['thumb_url'],
 		'FILENAME'=>$attributes['filename'],
 		'MIME_TYPE'=>$attributes['mime_type'],

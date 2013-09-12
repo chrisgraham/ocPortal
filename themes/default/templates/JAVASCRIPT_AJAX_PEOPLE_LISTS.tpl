@@ -27,14 +27,16 @@ function close_down()
 	if (current) current.parentNode.removeChild(current);
 }
 
-add_event_listener_abstract(window,'load',function () {
-	var es=document.getElementsByTagName('input');
-	for (var i=0;i<es.length;i++)
-	{
-		if (es[i].getAttribute('autocomplete')=='off')
-			es[i].setAttribute('autocorrect','off');
-	}
-} );
+window.setTimeout(function() {
+	add_event_listener_abstract(window,'load',function () {
+		var es=document.getElementsByTagName('input');
+		for (var i=0;i<es.length;i++)
+		{
+			if (es[i].getAttribute('autocomplete')=='off')
+				es[i].setAttribute('autocorrect','off');
+		}
+	} );
+},0);
 
 function update_ajax_member_list(target,special,delayed,e)
 {

@@ -18,7 +18,7 @@
  * @package		core_rich_media
  */
 
-class Hook_media_rendering_mail
+class Hook_media_rendering_email
 {
 	/**
 	 * Get the label for this media rendering type.

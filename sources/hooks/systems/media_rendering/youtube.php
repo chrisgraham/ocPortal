@@ -94,7 +94,7 @@ class Hook_media_rendering_youtube
 	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
 		if (is_object($url)) $url=$url->evaluate();
-		$url=preg_replace('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#','${1}',$url);
+		$attributes['remote_id']=preg_replace('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#','${1}',$url);
 		return do_template('MEDIA_YOUTUBE',array('HOOK'=>'youtube')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 

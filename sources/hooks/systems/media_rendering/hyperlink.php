@@ -65,7 +65,7 @@ class Hook_media_rendering_hyperlink
 	 */
 	function recognises_url($url)
 	{
-		return MEDIA_RECOG_PRECEDENCE_NONE;
+		return MEDIA_RECOG_PRECEDENCE_LOW;
 	}
 
 	/**
@@ -113,9 +113,11 @@ class Hook_media_rendering_hyperlink
 				return do_template('MEDIA_WEBPAGE_SEMANTIC',array(
 					'TITLE'=>$meta_details['t_title'],
 					'META_TITLE'=>$meta_title,
-					'DESCRIPTION'=>$meta_details['t_description'],
-					'IMAGE_URL'=>$meta_details['t_image_url'],
+					'DESCRIPTION'=>((array_key_exists('description',$attributes)) && ($attributes['description']!=''))?$attributes['description']:$meta_details['t_description'],
+					'IMAGE_URL'=>((array_key_exists('thumb_url',$attributes)) && ($attributes['thumb_url']!=''))?$attributes['thumb_url']:$meta_details['t_image_url'],
 					'URL'=>$meta_details['t_url'],
+					'WIDTH'=>((array_key_exists('width',$attributes)) && ($attributes['width']!=''))?$attributes['width']:get_option('thumb_width'),
+					'HEIGHT'=>((array_key_exists('height',$attributes)) && ($attributes['height']!=''))?$attributes['height']:get_option('thumb_width'),
 				));
 			}
 

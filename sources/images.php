@@ -113,7 +113,8 @@ function _symbol_thumbnail($param)
 			$thumb_save_dir=dirname(rawurldecode(preg_replace('#'.preg_quote(get_custom_base_url().'/','#').'#','',$orig_url)));
 		}
 		if (!is_dir(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
-		$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
+		$filename=url_to_filename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
+		if (!is_saveable_image($filename)) $filename.='.png';
 		$file_prefix='/'.$thumb_save_dir.'/thumb__'.$dimensions.'__'.$algorithm;
 		if (isset($param[6])) $file_prefix.='__'.trim($param[6]);
 		if (isset($param[7])) $file_prefix.='__'.trim(str_replace('#','',$param[7]));

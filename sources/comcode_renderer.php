@@ -1745,8 +1745,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			break;
 
 		case 'media':
-			$given_url=$embed->evaluate();
-			$url_full=absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$tag);
+			$url_full=$embed->evaluate();
 
 			require_code('media_renderer');
 			$temp_tpl=render_media_url(

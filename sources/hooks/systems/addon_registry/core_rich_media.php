@@ -1978,6 +1978,7 @@ class Hook_addon_registry_core_rich_media
 		return array(
 			lorem_globalise(do_lorem_template($template, array(
 				'URL'=>placeholder_url(),
+				'REMOTE_ID'=>placeholder_id(),
 				'THUMB_URL'=>placeholder_image_url(),
 				'FILENAME'=>lorem_word(),
 				'MIME_TYPE'=>lorem_word(),
@@ -2139,42 +2140,6 @@ class Hook_addon_registry_core_rich_media
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__media_webpage_oembed_rich()
-	{
-		return $this->do_media_preview('MEDIA_WEBPAGE_OEMBED_RICH');
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__media_webpage_oembed_video()
-	{
-		return $this->do_media_preview('MEDIA_WEBPAGE_OEMBED_VIDEO');
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__media_webpage_semantic()
-	{
-		return $this->do_media_preview('MEDIA_WEBPAGE_SEMANTIC');
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
 	function tpl_preview__media_youtube()
 	{
 		return $this->do_media_preview('MEDIA_YOUTUBE');
@@ -2202,5 +2167,73 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__media__download_link()
 	{
 		return $this->do_media_preview('MEDIA__DOWNLOAD_LINK');
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__media_webpage_oembed_rich()
+	{
+		require_code('files');
+
+		return array(
+			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_OEMBED_RICH', array(
+				'TITLE'=>lorem_title(),
+				'HTML'=>lorem_paragraph_html(),
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number(),
+				'URL'=>placeholder_url(),
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__media_webpage_oembed_video()
+	{
+		require_code('files');
+
+		return array(
+			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_OEMBED_VIDEO', array(
+				'TITLE'=>lorem_title(),
+				'HTML'=>lorem_paragraph_html(),
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number(),
+				'URL'=>placeholder_url(),
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__media_webpage_semantic()
+	{
+		require_code('files');
+
+		return array(
+			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_SEMANTIC', array(
+				'TITLE'=>lorem_title(),
+				'META_TITLE'=>lorem_title(),
+				'DESCRIPTION'=>lorem_paragraph_html(),
+				'IMAGE_URL'=>placeholder_image_url(),
+				'URL'=>placeholder_url(),
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number(),
+			)), NULL, '', true)
+		);
 	}
 }

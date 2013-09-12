@@ -123,7 +123,7 @@ class Hook_media_rendering_vimeo
 	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
 		if (is_object($url)) $url=$url->evaluate();
-		$url=preg_replace('#^https?://vimeo\.com/(\d+)#','${1}',$url);
+		$attributes['remote_id']==preg_replace('#^https?://vimeo\.com/(\d+)#','${1}',$url);
 		return do_template('MEDIA_VIMEO',array('HOOK'=>'vimeo')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
