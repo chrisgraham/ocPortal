@@ -2261,7 +2261,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$allow_rating,
 			$allow_comments,
 			$meta_data['submitter'],
-			$meta_data['add_date'],
+			$meta_data['add_time'],
 			true
 		);
 

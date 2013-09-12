@@ -108,8 +108,10 @@ class Hook_media_rendering_oembed
 				$endpoint.='&url='.urlencode($url);
 			}
 		}
-		$endpoint.='&maxwidth='.urlencode(((array_key_exists('width',$attributes)) && ($attributes['width']!=''))?$attributes['width']:get_option('oembed_max_size'));
-		$endpoint.='&maxheight='.urlencode(((array_key_exists('height',$attributes)) && ($attributes['height']!=''))?$attributes['height']:get_option('oembed_max_size'));
+		if ((!array_key_exists('width',$attributes)) || ($attributes['width']!=''))
+			$endpoint.='&maxwidth='.urlencode(array_key_exists('width',$attributes)?$attributes['width']:get_option('oembed_max_size'));
+		if ((!array_key_exists('height',$attributes)) || ($attributes['height']!=''))
+			$endpoint.='&maxheight='.urlencode(array_key_exists('height',$attributes)?$attributes['height']:get_option('oembed_max_size'));
 		if (!$format_in_path)
 		{
 			if (strpos($endpoint,'&format=')===false)
@@ -228,8 +230,8 @@ class Hook_media_rendering_oembed
 		{
 			case 'photo':
 				$map=array('width'=>$data['width'],'height'=>$data['height'],'click_url'=>$url);
-				$url=$data['url'];
-				if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url'];
+				$url=$data['url']; // NB: This will also have been constrained to the maxwidth/maxheight (at least it is for Flickr)
+				//if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url'];	Cannot control the size, so we'll make our own inside image_websafe
 				if (array_key_exists('description',$data)) $map['description']=$data['description']; // not official, but embed.ly has it
 				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
 				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];

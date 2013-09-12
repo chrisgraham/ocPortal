@@ -579,13 +579,14 @@ function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=
 		// oEmbed etc
 		if ((($enforce_type==OCP_UPLOAD_IMAGE) && (!is_image($url[0]))) || (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (!is_image($url[0])) && (get_file_extension($url[0])!='swf')))
 		{
+			require_code('media_renderer');
 			require_code('files2');
 			$meta_details=get_webpage_meta_details($url[0]);
 			require_code('hooks/systems/media_rendering/oembed');
 			$oembed_ob=object_factory('Hook_media_rendering_oembed');
 			if ($oembed_ob->recognises_mime_type($meta_details['t_mime_type'],$meta_details))
 			{
-				$oembed=$oembed_ob->get_oembed_data_result($url[0],array('width'=>get_option('thumb_width'),'height'=>get_option('thumb_width')));
+				$oembed=$oembed_ob->get_oembed_data_result($url[0],array('width'=>'1280','height'=>'1024'));
 				if (($oembed!==NULL) && ($oembed['type']=='photo'))
 				{
 					$url[0]=$oembed['url'];
@@ -635,7 +636,7 @@ function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_error
 			warn_exit(do_lang_tempcode('NOT_IMAGE'));
 		return false;
 	}
-	if (($enforce_type==OCP_UPLOAD_VIDEO) && (!is_video($file,has_privilege($member_id,'comcode_dangerous'),true)))
+	if (($enforce_type==OCP_UPLOAD_VIDEO) && (!is_video($file,has_privilege($member_id,'comcode_dangerous'),false)))
 	{
 		if ($accept_errors)
 			attach_message(do_lang_tempcode('NOT_VIDEO'),'warn');

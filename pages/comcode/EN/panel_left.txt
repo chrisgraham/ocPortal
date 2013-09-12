@@ -2,5 +2,5 @@
 {+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
 [block="main_website" title="{$SITE_NAME}"]side_stored_menu[/block]
 [block="main_content" title="{!CONTENT}"]side_stored_menu[/block]
-[block="wiki_features" silent_failure="1" title="{!WIKI}"]side_stored_menu[/block]
+[block="wiki_features" silent_failure="1" title="{!wiki:WIKI}"]side_stored_menu[/block]
 {+END}
