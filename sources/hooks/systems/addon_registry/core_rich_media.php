@@ -1827,6 +1827,7 @@ class Hook_addon_registry_core_rich_media
 			'DESCRIPTION'=>lorem_sentence(),
 			'ID'=>placeholder_id(),
 			'MAY_DELETE'=>true,
+			'DELETE_URL'=>placeholder_url(),
 		));
 
 		return array(
