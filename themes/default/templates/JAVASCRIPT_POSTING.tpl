@@ -62,12 +62,13 @@ function set_attachment(field_name,number,filename,multi)
 			filepath=document.getElementById('file'+number).value;
 		}
 
-		var is_image=true;
+		var is_image=true,is_archive=false;
 		if (filepath!='')
 		{
 			var ext=filepath.substr(filepath.length-4,4).toLowerCase();
 
 			is_image=(ext=='.png') || (ext=='.jpg') || (ext=='jpeg') || (ext=='.gif');
+			is_archive=(ext=='.tar') || (ext=='.zip');
 		} else return; // Upload error
 
 		var wysiwyg=is_wysiwyg_field(document.getElementById(field_name));
@@ -76,11 +77,12 @@ function set_attachment(field_name,number,filename,multi)
 		var url='{$FIND_SCRIPT;,comcode_helper}';
 		url+='?field_name='+field_name;
 		url+='&type=step2';
-		url+='&tag='+(is_image?'attachment_safe':'attachment');
+		url+='&tag='+'attachment';//(is_image?'attachment_safe':'attachment');
 		url+='&default=new_'+number;
 		url+='&default_thumb=1';
 		url+='&default_type=';
 		url+='&is_image='+(is_image?'1':'0');
+		url+='&is_archive='+(is_archive?'1':'0');
 		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path
 		url+='&multi='+(multi?'1':'0');
 		if (wysiwyg) url+='&in_wysiwyg=1';

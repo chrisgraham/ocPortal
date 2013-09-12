@@ -34,7 +34,7 @@ Adding attachments.
  * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
  * @return array			A map containing 'Comcode' (after substitution for tying down the new attachments) and 'tempcode'
  */
-function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=false,$connection=NULL,$insert_as_admin=NULL,$for_member=NULL)
+function do_comcode_attachments($comcode,$type,$id,$previewing_only=false,$connection=NULL,$insert_as_admin=NULL,$for_member=NULL)
 {
 	require_lang('comcode');
 
@@ -55,54 +55,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	if (is_null($insert_as_admin)) $insert_as_admin=false;
 
 	// Handle data URLs for attachment embedding
-	if (function_exists('imagecreatefromstring'))
-	{
-		$matches=array();
-		$matches2=array();
-		$num_matches=preg_match_all('#<img (alt="" )?src="data:image/\w+;base64,([^"]*)" (title="" )?/?'.'>#',$original_comcode,$matches);
-		$num_matches2=preg_match_all('#\[img param=""\]data:image/\w+;base64,([^"]*)\[/img\]#',$original_comcode,$matches2);
-		for ($i=0;$i<$num_matches2;$i++)
-		{
-			$matches[0][$num_matches]=$matches2[0][$i];
-			$matches[1][$num_matches]=$matches2[1][$i];
-			$num_matches++;
-		}
-		for ($i=0;$i<$num_matches;$i++)
-		{
-			if (strpos($original_comcode,$matches[0][$i])!==false) // Check still here (if we have same image in multiple places, may have already been attachment-ified)
-			{
-				$data=@base64_decode($matches[1][$i]);
-				if ($data!==false)
-				{
-					$image=@imagecreatefromstring($data);
-					if ($image!==false)
-					{
-						do
-						{
-							$new_filename=uniqid('',true).'.png';
-							$new_path=get_custom_file_base().'/uploads/attachments/'.$new_filename;
-						}
-						while (file_exists($new_path));
-						imagepng($image,$new_path);
-
-						$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
-							'a_member_id'=>get_member(),
-							'a_file_size'=>strlen($data),
-							'a_url'=>'uploads/attachments/'.$new_filename,
-							'a_thumb_url'=>'',
-							'a_original_filename'=>basename($new_filename),
-							'a_num_downloads'=>0,
-							'a_last_downloaded_time'=>time(),
-							'a_description'=>'',
-							'a_add_time'=>time()),true);
-						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
-
-						$original_comcode=str_replace($original_comcode,$matches[0][$i],'[attachment type="inline" thumb="0"]'.strval($attachment_id).'[/attachment]');
-					}
-				}
-			}
-		}
-	}
+	_handle_data_url_attachments($comcode,$type,$id,$connection);
 
 	// Find out about attachments already involving this content
 	global $ATTACHMENTS_ALREADY_REFERENCED;
@@ -131,11 +84,10 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 		is_swf_upload(true);
 
 		require_code('comcode_from_html');
-		$original_comcode=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$original_comcode);
+		$comcode=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$comcode);
 	}
 
-	// Go through all uploaded attachments
-	$myfile=mixed();
+	// Go through all uploaded attachment files
 	foreach ($_FILES as $key=>$file)
 	{
 		$matches=array();
@@ -145,261 +97,329 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 
 			// Handle attachment extraction
 			$matches_extract=array();
-			if (preg_match('#\[attachment( [^\]]*)type="extract"[^\]]*( [^\]]*)?\]new_'.$matches[1].'\[/attachment\]#',$original_comcode,$matches_extract)!=0)
+			if (preg_match('#\[attachment( [^\]]*)type="extract"( [^\]]*)?\]new_'.$matches[1].'\[/attachment\]#',$comcode,$matches_extract)!=0)
 			{
-				require_code('uploads');
-				require_code('files');
-				require_code('files2');
-
-				$added_comcode='';
-
-				$arcext=get_file_extension($_FILES[$key]['name']);
-				if (($arcext=='tar') || ($arcext=='zip'))
-				{
-					if ($arcext=='tar')
-					{
-						require_code('tar');
-						$myfile=tar_open($file['tmp_name'],'rb');
-						$dir=tar_get_directory($myfile,true);
-					} elseif ($arcext=='zip')
-					{
-						if ((!function_exists('zip_open')) && (get_option('unzip_cmd')=='')) warn_exit(do_lang_tempcode('ZIP_NOT_ENABLED'));
-						if (!function_exists('zip_open'))
-						{
-							require_code('m_zip');
-							$mzip=true;
-						} else $mzip=false;
-
-						$myfile=zip_open($file['tmp_name']);
-						if (is_integer($myfile))
-						{
-							require_code('failure');
-							warn_exit(zip_error($myfile,$mzip));
-						}
-						$dir=array();
-						while (($zip_entry=zip_read($myfile))!==false)
-						{
-							$dir[]=array(
-								'zip_entry'=>$zip_entry,
-								'path'=>zip_entry_name($zip_entry),
-								'size'=>zip_entry_filesize($zip_entry),
-							);
-						}
-					}
-					if (count($dir)>100)
-					{
-						require_code('site');
-						attach_message(do_lang_tempcode('TOO_MANY_FILES_TO_EXTRACT'),'warn');
-					} else
-					{
-						require_code('files');
-
-						foreach ($dir as $entry)
-						{
-							if (substr($entry['path'],-1)=='/') continue; // Ignore folders
-
-							$_file=preg_replace('#\..*\.#','.',basename($entry['path']));
-
-							if (!check_extension($_file,false,NULL,true)) continue;
-							if (should_ignore_file($entry['path'],IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES)) continue;
-
-							$place=get_custom_file_base().'/uploads/attachments/'.$_file;
-							$i=2;
-							// Hunt with sensible names until we don't get a conflict
-							while (file_exists($place))
-							{
-								$_file=strval($i).basename($entry['path']);
-								$place=get_custom_file_base().'/uploads/attachments/'.$_file;
-								$i++;
-							}
-
-							$i=2;
-							$_file_thumb=basename($entry['path']);
-							$place_thumb=get_custom_file_base().'/uploads/attachments_thumbs/'.$_file_thumb;
-							// Hunt with sensible names until we don't get a conflict
-							while (file_exists($place_thumb))
-							{
-								$_file_thumb=strval($i).basename($entry['path']);
-								$place_thumb=get_custom_file_base().'/uploads/attachments_thumbs/'.$_file_thumb;
-								$i++;
-							}
-
-							if ($arcext=='tar')
-							{
-								$file_details=tar_get_file($myfile,$entry['path'],false,$place);
-							} elseif ($arcext=='zip')
-							{
-								zip_entry_open($myfile,$entry['zip_entry']);
-								$file_details=array(
-									'size'=>$entry['size'],
-								);
-
-								$out_file=@fopen($place,'wb') OR intelligent_write_error($place);
-								$more=mixed();
-								do
-								{
-									$more=zip_entry_read($entry['zip_entry']);
-									if ($more!==false)
-									{
-										if (fwrite($out_file,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-									}
-								}
-								while (($more!==false) && ($more!=''));
-								fclose($out_file);
-
-								zip_entry_close($entry['zip_entry']);
-							}
-
-							$description=do_lang('EXTRACTED_FILE');
-							if (strpos($entry['path'],'/')!==false)
-							{
-								$description=do_lang('EXTRACTED_FILE_PATH',dirname($entry['path']));
-							}
-
-							// Thumbnail
-							$thumb_url='';
-							require_code('images');
-							if (is_image($_file))
-							{
-								$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
-								if ($gd)
-								{
-									require_code('images');
-									if (!is_saveable_image($_file)) $ext='.png'; else $ext='.'.get_file_extension($_file);
-									$thumb_url='uploads/attachments_thumbs/'.$_file_thumb;
-									convert_image(get_custom_base_url().'/uploads/attachments/'.$_file,$place_thumb,-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
-
-									if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $thumb_url=get_custom_base_url().'/'.$thumb_url;
-								} else $thumb_url='uploads/attachments/'.$_file;
-							}
-
-							// Create new attachment from extracted file
-							$url='uploads/attachments/'.$_file;
-							$attachment_id=$connection->query_insert('attachments',
-								array(
-									'a_member_id'=>get_member(),
-									'a_file_size'=>$file_details['size'],
-									'a_url'=>$url,
-									'a_thumb_url'=>$thumb_url,
-									'a_original_filename'=>basename($entry['path']),
-									'a_num_downloads'=>0,
-									'a_last_downloaded_time'=>time(),
-									'a_description'=>$description,
-									'a_add_time'=>time()
-								),
-								true
-							);
-							$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
-							if (addon_installed('galleries'))
-							{
-								require_code('images');
-								if ((is_video($url,true,true)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
-								{
-									require_code('transcoding');
-									transcode_video($url,'attachments',$attachment_id,'id','a_url','a_original_filename',NULL,NULL);
-								}
-							}
-
-							// Append Comcode for this new attachment
-							$added_comcode.=chr(10).chr(10).'[attachment'.$matches_extract[1].$matches_extract[2].' type="" description="'.comcode_escape($description).'"]'.strval($attachment_id).'[/attachment]';
-						}
-					}
-					if ($arcext=='tar')
-					{
-						tar_close($myfile);
-					} elseif ($arcext=='zip')
-					{
-						zip_close($myfile);
-					}
-
-					// Remove extract marker and put new Comcode in place
-					$original_comcode=str_replace($matches_extract[0],trim($added_comcode),$original_comcode);
-				}
+				_handle_attachment_extraction($comcode,$key,$type,$id,$matches_extract,$connection);
 			}
 
 			// Handle missing attachment markup for uploaded attachments
-			elseif ((strpos($original_comcode,']new_'.$matches[1].'[/attachment]')===false) && (strpos($original_comcode,']new_'.$matches[1].'[/attachment_safe]')===false))
+			elseif ((strpos($comcode,']new_'.$matches[1].'[/attachment]')===false) && (strpos($comcode,']new_'.$matches[1].'[/attachment_safe]')===false))
 			{
-				if (preg_match('#\]\d+\[/attachment\]#',$original_comcode)==0) // Attachment could have already been put through (e.g. during a preview). If we have actual ID's referenced, it's almost certainly the case.
+				if (preg_match('#\]\d+\[/attachment\]#',$comcode)==0) // Attachment could have already been put through (e.g. during a preview). If we have actual ID's referenced, it's almost certainly the case.
 				{
-					$original_comcode.=chr(10).chr(10).'[attachment]new_'.$matches[1].'[/attachment]';
+					$comcode.=chr(10).chr(10).'[attachment]new_'.$matches[1].'[/attachment]';
 				}
 			}
 		}
 	}
 
-	// Parse to find details of (and add into the database) attachments
+	// Parse the Comcode to find details of attachments (and add into the database)
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
 	if ($has_one) $LAX_COMCODE=true; // We don't want a simple syntax error to cause us to lose our attachments
-	$tempcode=comcode_to_tempcode($original_comcode,$member,$insert_as_admin,60,$id,$connection,false,false,false,false,false,NULL,$for_member);
+	$tempcode=comcode_to_tempcode($comcode,$member,$insert_as_admin,60,$id,$connection,false,false,false,false,false,NULL,$for_member);
 	$LAX_COMCODE=$temp;
 	$ATTACHMENTS_ALREADY_REFERENCED=$old_already;
+	if (!array_key_exists($id,$COMCODE_ATTACHMENTS)) $COMCODE_ATTACHMENTS[$id]=array();
 
-	if ((array_key_exists($id,$COMCODE_ATTACHMENTS)) && (array_key_exists(0,$COMCODE_ATTACHMENTS[$id]))) // This is necessary if multiple items of Comcode were parsed in sequence, global variables can be tricky so we must keep good track
+	// Put in our new attachment IDs (replacing the new_* markers)
+	$ids_present=array();
+	for ($i=0;$i<count($COMCODE_ATTACHMENTS[$id]);$i++)
 	{
-		$original_comcode=$COMCODE_ATTACHMENTS[$id][0]['comcode'];
-	}
+		$attachment=$COMCODE_ATTACHMENTS[$id][$i];
 
-	$new_comcode=$original_comcode;
-
-	if (array_key_exists($id,$COMCODE_ATTACHMENTS))
-	{
-		// Put in correct attachment IDs
-		$ids_present=array();
-		for ($i=0;$i<count($COMCODE_ATTACHMENTS[$id]);$i++)
+		// If it's a new one, we need to change the comcode to reference the ID we made for it
+		if ($attachment['type']=='new')
 		{
-			$attachment=$COMCODE_ATTACHMENTS[$id][$i];
+			$marker_id=intval(substr($attachment['initial_id'],4)); // After 'new_'
 
-			// If it's a new one, we need to change the comcode to reference the ID we made for it
-			if ($attachment['type']=='new')
-			{
-				$marker_id=intval(substr($attachment['initial_id'],4)); // After 'new_'
+			$comcode=preg_replace('#(\[(attachment|attachment_safe)[^\]]*\])new_'.strval($marker_id).'(\[/)#','${1}'.strval($attachment['id']).'${3}',$comcode);
 
-				$new_comcode=preg_replace('#(\[(attachment|attachment_safe)[^\]]*\])new_'.strval($marker_id).'(\[/)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
-				$new_comcode=preg_replace('#(<(attachment|attachment_safe)[^>]*>)new_'.strval($marker_id).'(</)#','${1}'.strval($attachment['id']).'${3}',$new_comcode);
-
-				if (!is_null($type))
-					$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment['id']));
-			} else
-			{
-				// (Re-)Reference it
-				$connection->query_delete('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment['id']),'',1);
+			if (!is_null($type))
 				$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment['id']));
-			}
-
-			$ids_present[]=$attachment['id'];
-		}
-		// Tidy out any attachment references to files that clearly are not here
-		$new_comcode=preg_replace('#\[(attachment|attachment_safe)[^\]]*\]new_\d+\[/attachment\]#','',$new_comcode);
-		$new_comcode=preg_replace('#<(attachment|attachment_safe)[^>]*>new_\d+</attachment>#','',$new_comcode);
-
-		if (!$previewing_only)
+		} else
 		{
-			// Clear any de-referenced attachments
-			foreach ($before as $ref)
-			{
-				if ((!in_array($ref['a_id'],$ids_present)) && (strpos($new_comcode,'attachment.php?id=')===false) && (!multi_lang()))
-				{
-					// Delete reference (as it's not actually in the new comcode!)
-					$connection->query_delete('attachment_refs',array('id'=>$ref['id']),'',1);
+			// (Re-)Reference it
+			$connection->query_delete('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment['id']),'',1);
+			$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment['id']));
+		}
 
-					// Was that the last reference to this attachment? (if so -- delete attachment)
-					$test=$connection->query_select_value_if_there('attachment_refs','id',array('a_id'=>$ref['a_id']));
-					if (is_null($test))
-					{
-						require_code('attachments3');
-						_delete_attachment($ref['a_id'],$connection);
-					}
+		$ids_present[]=$attachment['id'];
+	}
+	// Tidy out any attachment references to files that clearly are not here
+	$comcode=preg_replace('#\[(attachment|attachment_safe)[^\]]*\]new_\d+\[/(attachment|attachment_safe)\]#','',$comcode);
+
+	if (!$previewing_only)
+	{
+		// Clear any de-referenced attachments
+		foreach ($before as $ref)
+		{
+			if ((!in_array($ref['a_id'],$ids_present)) && (strpos($comcode,'attachment.php?id=')===false) && (!multi_lang()))
+			{
+				// Delete reference (as it's not actually in the new comcode!)
+				$connection->query_delete('attachment_refs',array('id'=>$ref['id']),'',1);
+
+				// Was that the last reference to this attachment? (if so -- delete attachment)
+				$test=$connection->query_select_value_if_there('attachment_refs','id',array('a_id'=>$ref['a_id']));
+				if (is_null($test))
+				{
+					require_code('attachments3');
+					_delete_attachment($ref['a_id'],$connection);
 				}
 			}
 		}
 	}
 
 	return array(
-		'comcode'=>$new_comcode,
+		'comcode'=>$comcode,
 		'tempcode'=>$tempcode
 	);
+}
+
+/**
+ * Convert attachments embedded as data URLs (usually the result of pasting in) to real attachment Comcode.
+ *
+ * @param  string			Our Comcode
+ * @param  ID_TEXT		The type the attachment will be used for (e.g. download)
+ * @param  ID_TEXT		The ID the attachment will be used for
+ * @param  object			The database connection to use
+ */
+function _handle_data_url_attachments(&$comcode,$type,$id,$connection)
+{
+	if (function_exists('imagecreatefromstring'))
+	{
+		$matches=array();
+		$matches2=array();
+		$num_matches=preg_match_all('#<img (alt="" )?src="data:image/\w+;base64,([^"]*)" (title="" )?/?'.'>#',$comcode,$matches);
+		$num_matches2=preg_match_all('#\[img param=""\]data:image/\w+;base64,([^"]*)\[/img\]#',$comcode,$matches2);
+		for ($i=0;$i<$num_matches2;$i++)
+		{
+			$matches[0][$num_matches]=$matches2[0][$i];
+			$matches[1][$num_matches]=$matches2[1][$i];
+			$num_matches++;
+		}
+		for ($i=0;$i<$num_matches;$i++)
+		{
+			if (strpos($comcode,$matches[0][$i])!==false) // Check still here (if we have same image in multiple places, may have already been attachment-ified)
+			{
+				$data=@base64_decode($matches[1][$i]);
+				if ($data!==false)
+				{
+					$image=@imagecreatefromstring($data);
+					if ($image!==false)
+					{
+						do
+						{
+							$new_filename=uniqid('',true).'.png';
+							$new_path=get_custom_file_base().'/uploads/attachments/'.$new_filename;
+						}
+						while (file_exists($new_path));
+						imagepng($image,$new_path);
+
+						$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
+							'a_member_id'=>get_member(),
+							'a_file_size'=>strlen($data),
+							'a_url'=>'uploads/attachments/'.$new_filename,
+							'a_thumb_url'=>'',
+							'a_original_filename'=>basename($new_filename),
+							'a_num_downloads'=>0,
+							'a_last_downloaded_time'=>time(),
+							'a_description'=>'',
+							'a_add_time'=>time()),true);
+						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
+
+						$comcode=str_replace($comcode,$matches[0][$i],'[attachment framed="0" thumb="0"]'.strval($attachment_id).'[/attachment]');
+					}
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Convert attachments marked for 'extraction' to real attachment Comcode.
+ *
+ * @param  string			Our Comcode
+ * @param  string			The attachment file key
+ * @param  ID_TEXT		The type the attachment will be used for (e.g. download)
+ * @param  ID_TEXT		The ID the attachment will be used for
+ * @param  array			Reg-exp grabbed parameters from the extract marker attachment (we will re-use them for each individual attachment)
+ * @param  object			The database connection to use
+ */
+function _handle_attachment_extraction(&$comcode,$key,$type,$id,$matches_extract,$connection)
+{
+	require_code('uploads');
+	require_code('files');
+	require_code('files2');
+
+	$myfile=mixed();
+
+	$added_comcode='';
+
+	$file=$_FILES[$key];
+
+	$arcext=get_file_extension($file['name']);
+	if (($arcext=='tar') || ($arcext=='zip'))
+	{
+		if ($arcext=='tar')
+		{
+			require_code('tar');
+			$myfile=tar_open($file['tmp_name'],'rb');
+			$dir=tar_get_directory($myfile,true);
+		} elseif ($arcext=='zip')
+		{
+			if ((!function_exists('zip_open')) && (get_option('unzip_cmd')=='')) warn_exit(do_lang_tempcode('ZIP_NOT_ENABLED'));
+			if (!function_exists('zip_open'))
+			{
+				require_code('m_zip');
+				$mzip=true;
+			} else $mzip=false;
+
+			$myfile=zip_open($file['tmp_name']);
+			if (is_integer($myfile))
+			{
+				require_code('failure');
+				warn_exit(zip_error($myfile,$mzip));
+			}
+			$dir=array();
+			while (($zip_entry=zip_read($myfile))!==false)
+			{
+				$dir[]=array(
+					'zip_entry'=>$zip_entry,
+					'path'=>zip_entry_name($zip_entry),
+					'size'=>zip_entry_filesize($zip_entry),
+				);
+			}
+		}
+		if (count($dir)>100)
+		{
+			require_code('site');
+			attach_message(do_lang_tempcode('TOO_MANY_FILES_TO_EXTRACT'),'warn');
+		} else
+		{
+			require_code('files');
+
+			foreach ($dir as $entry)
+			{
+				if (substr($entry['path'],-1)=='/') continue; // Ignore folders
+
+				$_file=preg_replace('#\..*\.#','.',basename($entry['path']));
+
+				if (!check_extension($_file,false,NULL,true)) continue;
+				if (should_ignore_file($entry['path'],IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES)) continue;
+
+				$place=get_custom_file_base().'/uploads/attachments/'.$_file;
+				$i=2;
+				// Hunt with sensible names until we don't get a conflict
+				while (file_exists($place))
+				{
+					$_file=strval($i).basename($entry['path']);
+					$place=get_custom_file_base().'/uploads/attachments/'.$_file;
+					$i++;
+				}
+
+				$i=2;
+				$_file_thumb=basename($entry['path']);
+				$place_thumb=get_custom_file_base().'/uploads/attachments_thumbs/'.$_file_thumb;
+				// Hunt with sensible names until we don't get a conflict
+				while (file_exists($place_thumb))
+				{
+					$_file_thumb=strval($i).basename($entry['path']);
+					$place_thumb=get_custom_file_base().'/uploads/attachments_thumbs/'.$_file_thumb;
+					$i++;
+				}
+
+				if ($arcext=='tar')
+				{
+					$file_details=tar_get_file($myfile,$entry['path'],false,$place);
+				} elseif ($arcext=='zip')
+				{
+					zip_entry_open($myfile,$entry['zip_entry']);
+					$file_details=array(
+						'size'=>$entry['size'],
+					);
+
+					$out_file=@fopen($place,'wb') OR intelligent_write_error($place);
+					$more=mixed();
+					do
+					{
+						$more=zip_entry_read($entry['zip_entry']);
+						if ($more!==false)
+						{
+							if (fwrite($out_file,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+						}
+					}
+					while (($more!==false) && ($more!=''));
+					fclose($out_file);
+
+					zip_entry_close($entry['zip_entry']);
+				}
+
+				$description=do_lang('EXTRACTED_FILE');
+				if (strpos($entry['path'],'/')!==false)
+				{
+					$description=do_lang('EXTRACTED_FILE_PATH',dirname($entry['path']));
+				}
+
+				// Thumbnail
+				$thumb_url='';
+				require_code('images');
+				if (is_image($_file))
+				{
+					$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
+					if ($gd)
+					{
+						require_code('images');
+						if (!is_saveable_image($_file)) $ext='.png'; else $ext='.'.get_file_extension($_file);
+						$thumb_url='uploads/attachments_thumbs/'.$_file_thumb;
+						convert_image(get_custom_base_url().'/uploads/attachments/'.$_file,$place_thumb,-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
+
+						if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $thumb_url=get_custom_base_url().'/'.$thumb_url;
+					} else $thumb_url='uploads/attachments/'.$_file;
+				}
+
+				// Create new attachment from extracted file
+				$url='uploads/attachments/'.$_file;
+				$attachment_id=$connection->query_insert('attachments',
+					array(
+						'a_member_id'=>get_member(),
+						'a_file_size'=>$file_details['size'],
+						'a_url'=>$url,
+						'a_thumb_url'=>$thumb_url,
+						'a_original_filename'=>basename($entry['path']),
+						'a_num_downloads'=>0,
+						'a_last_downloaded_time'=>time(),
+						'a_description'=>$description,
+						'a_add_time'=>time()
+					),
+					true
+				);
+				$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
+				if (addon_installed('galleries'))
+				{
+					require_code('images');
+					if ((is_video($url,true,true)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					{
+						require_code('transcoding');
+						transcode_video($url,'attachments',$attachment_id,'id','a_url','a_original_filename',NULL,NULL);
+					}
+				}
+
+				// Append Comcode for this new attachment
+				$added_comcode.=chr(10).chr(10).'[attachment'.$matches_extract[1].$matches_extract[2].' type="" description="'.comcode_escape($description).'"]'.strval($attachment_id).'[/attachment]';
+			}
+		}
+		if ($arcext=='tar')
+		{
+			tar_close($myfile);
+		} elseif ($arcext=='zip')
+		{
+			zip_close($myfile);
+		}
+
+		// Remove extract marker and put new Comcode in place
+		$comcode=str_replace($matches_extract[0],trim($added_comcode),$comcode);
+	}
 }
 
 /**

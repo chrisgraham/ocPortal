@@ -335,23 +335,8 @@ function semihtml_to_comcode($semihtml,$force=false)
 	$semihtml=str_replace('[/html'.($force?']':''),$force?'':'[ / html',$semihtml);
 	$semihtml=str_replace('[/semihtml'.($force?']':''),$force?'':'[ / semihtml',$semihtml);
 
-	// Try and retain image attachments
-	$semihtml=preg_replace('#<script[^>]*>(//\s*<!\[CDATA\[)?(<!--)?\s*var te_[\d\w\-]*="[^"]*&for\_session=[^"]*";\s*(//\]\]>)?(-->)?</script>#','',$semihtml);
-	//if (get_option('anti_leech')=='1') // For anti-leech we have to do a hard convert. Although actually the attachment_safe tag is not made WYSIWYG-safe if anti-leech is on.. EDIT Actually best to always convert. We'll never let people edit the attachments in the WYSIWYG (read-only).
-	{
-		foreach (array('&amp;thumb=0[^"]*'=>' thumb="0"','&amp;thumb=1[^"]*'=>' thumb="1"',''=>'') as $thumb_bit=>$comcode_to)
-		{
-			$semihtml=preg_replace('#<div [^>]*class="attachment_left"[^>]*>\s*<img src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'(&amp;for_session=[\w\d]+)?" /></div>#i','[attachment_safe'.$comcode_to.' type="inline_left"]${1}[/attachment_safe]',$semihtml);
-			$semihtml=preg_replace('#<div [^>]*class="attachment_right"[^>]*>\s*<img src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'(&amp;for_session=[\w\d]+)?" /></div>#i','[attachment_safe'.$comcode_to.' type="inline_right"]${1}[/attachment_safe]',$semihtml);
-			$regexp='#';
-			$regexp.=($comcode_to==' thumb="1"')?'(<a [^>]*>)?\s*':'()';
-			$regexp.='<img [^>]*[^>]*src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'(&amp;for_session=[\w\d]+)?" [^>]*title="([^"]*)" [^>]*/?'.'>\s*';
-			$regexp.=($comcode_to==' thumb="1"')?'(</a>)?':'()';
-			$regexp.='#i';
-			$semihtml=preg_replace($regexp,'[attachment_safe'.$comcode_to.' type="inline" description="${4}"]${2}[/attachment_safe]',$semihtml);
-		}
-	}
-	$semihtml=preg_replace('#&amp;keep_session=[\d]*(&amp;for_session=[\w\d]*)?#','',$semihtml); // This is useful for generally stripping sensitive information anyway. Should be null-op if anti-leech was on, but worth doing just-in-case.
+	// This is useful for generally stripping sensitive information anyway. Should be null-op if anti-leech was on, but worth doing just-in-case.
+	$semihtml=preg_replace('#&amp;keep_session=[\d]*(&amp;for_session=[\w\d]*)?#','',$semihtml);
 
 	// We must protect anything that is in CDATA from whitespace/entity cleanup (HTML or XHTML - we have to use lowest common denominator)
 	$semihtml=preg_replace_callback('#(<script[^>]*>)(.*)(</script>)#siU','_cdata_protect',$semihtml);

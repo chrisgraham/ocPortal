@@ -541,11 +541,16 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 	if ($semiparse_mode) // We have got to this point because we want to provide a special 'button' editing representation for these tags
 	{
-		$non_text_tags=array('attachment','section_controller','big_tab_controller','currency','block','contents','concepts','flash','media','menu','email','reference','page','thumb','snapback','post','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
+		$non_text_tags=array('attachment','section_controller','big_tab_controller','currency','block','contents','concepts','flash','menu','email','reference','page','thumb','snapback','post','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
 		if ($tag=='attachment_safe')
 		{
 			if (preg_match('#^new\_\d+$#',$embed->evaluate())!=0)
 				$non_text_tags[]='attachment_safe';
+		}
+		elseif ($tag=='media')
+		{
+			if ((!array_key_exists('wysiwyg_editable',$attributes)) || ($attributes['wysiwyg_editable']=='0'))
+				$non_text_tags[]='media';
 		}
 		if (in_array($tag,$non_text_tags))
 		{
@@ -1732,6 +1737,11 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$attributes['height']=$height;
 			}
 
+			if (!$as_admin && !has_privilege($source_member,'comcode_dangerous'))
+			{
+				unset($attributes['mime_type']);
+			}
+
 			require_code('media_renderer');
 			$temp_tpl=render_media_url(
 				$url_full,
@@ -1746,6 +1756,11 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 		case 'media':
 			$url_full=$embed->evaluate();
+
+			if (!$as_admin && !has_privilege($source_member,'comcode_dangerous'))
+			{
+				unset($attributes['mime_type']);
+			}
 
 			require_code('media_renderer');
 			$temp_tpl=render_media_url(
@@ -1786,6 +1801,13 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 
 			if (is_null($on_behalf_of_member)) $on_behalf_of_member=$source_member;
+
+			if (!array_key_exists('thumb_url',$attributes)) $attributes['thumb_url']='';
+
+			if (!$as_admin && !has_privilege($source_member,'comcode_dangerous'))
+			{
+				unset($attributes['mime_type']);
+			}
 
 			global $COMCODE_ATTACHMENTS;
 

@@ -101,13 +101,13 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
 	if (count($found)!=0)
 	{
 		arsort($found);
-		return array_keys($found);
+		if (reset($found)>=MEDIA_RECOG_PRECEDENCE_HIGH) return array_keys($found);
 	}
 
 	// Find via download (oEmbed / mime-type) - last resort, as it is more 'costly' to do
 	require_code('files2');
 	$meta_details=get_webpage_meta_details($url);
-	if ((array_key_exists('mime_type',$attributes)) && ($attributes['mime_type']!='') && ($as_admin))
+	if ((array_key_exists('mime_type',$attributes)) && ($attributes['mime_type']!=''))
 	{
 		$mime_type=$attributes['mime_type'];
 	} else
@@ -140,7 +140,7 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
  *
  * @param  mixed			The URL
  * @param  mixed			URL to render (no sessions etc)
- * @param  array			Attributes (e.g. width, height, length)
+ * @param  array			Attributes (e.g. width, height, length). IMPORTANT NOTE: Only pass in 'mime_type' from user data if you have verified privileges to do so, no verification is done within the media API.
  * @param  boolean		Whether there are admin privileges, to render dangerous media types
  * @param  ?MEMBER		Member to run as (NULL: current member)
  * @param  integer		Bitmask of media that we will support
@@ -190,7 +190,7 @@ function _create_media_template_parameters($url,$attributes,$as_admin=false,$sou
 	// Put in defaults
 	$no_width=(!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width']));
 	$no_height=(!array_key_exists('height',$attributes)) || (!is_numeric($attributes['height']));
-	if ($no_width || $no_height)
+	if ($no_width || $no_height) // Try and work out the best default width/height, from the thumbnail if possible (image_websafe runs it's own code to do the equivalent, as that defaults to thumb_width rather than attachment_default_width&attachment_default_height)
 	{
 		$_width=get_option('attachment_default_width');
 		$_height=get_option('attachment_default_height');
@@ -215,7 +215,7 @@ function _create_media_template_parameters($url,$attributes,$as_admin=false,$sou
 		$attributes['thumb_url']='';
 	if ((!array_key_exists('filename',$attributes)) || ($attributes['filename']==''))
 		$attributes['filename']=urldecode(basename(preg_replace('#\?.*#','',$_url)));
-	if ((!array_key_exists('mime_type',$attributes)) || ($attributes['mime_type']=='') || (!$as_admin))
+	if ((!array_key_exists('mime_type',$attributes)) || ($attributes['mime_type']==''))
 	{
 		// As this is not necessarily a local file, we need to get the mime-type in the formal way.
 		//  If this was an uploaded file (i.e. new file in the JS security context) with a dangerous mime type, it would have been blocked by now.
@@ -260,7 +260,7 @@ function _create_media_template_parameters($url,$attributes,$as_admin=false,$sou
 		'LENGTH'=>$attributes['length'],
 
 		'FILESIZE'=>$attributes['filesize'],
-		'CLEAN_FILESIZE'=>is_numeric($attributes['filesize'])?clean_file_size($attributes['filesize']):'',
+		'CLEAN_FILESIZE'=>is_numeric($attributes['filesize'])?clean_file_size(intval($attributes['filesize'])):'',
 
 		'THUMB'=>$use_thumb,
 		'FRAMED'=>$framed,

@@ -43,14 +43,22 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 	require_code('comcode_renderer');
 	require_code('media_renderer');
 	require_code('mime_types');
+	require_code('images');
+
+	// Make sure formal thumbnail still exists / create if missing
+	if (is_image($attachment_row['a_original_filename']))
+	{
+		$attachment_row['a_thumb_url']=ensure_thumbnail($attachment_row['a_url'],$attachment_row['a_thumb_url'],'attachments','attachments',$attachment_row['id'],'a_thumb_url',NULL,true);
+	}
 
 	// Copy in some standardised media details from what we know by other means (i.e. not coming in as Comcode-attributes)
 	$attributes['filesize']=strval($attachment_row['a_file_size']);
 	$attributes['wysiwyg_editable']=($tag=='attachment_safe')?'1':'0';
 	$attributes['filename']=$attachment_row['a_original_filename'];
-	if ((!array_key_exists('thumb_url',$attributes)) || ($attributes['thumb_url']==''))
-		$attributes['thumb_url']=$attachment_row['thumb_url'];
-	$attributes['mime_type']=get_mime_type(get_file_extension($attachment_row['a_original_filename']),$as_admin || has_privilege($source_member,'comcode_dangerous'));
+	if ((!array_key_exists('mime_type',$attributes)) || ($attributes['mime_type']==''))
+	{
+		$attributes['mime_type']=get_mime_type(get_file_extension($attachment_row['a_original_filename']),$as_admin || has_privilege($source_member,'comcode_dangerous'));
+	}
 
 	// Work out description
 	if (!array_key_exists('a_description',$attachment_row)) // All quite messy, because descriptions might source from attachments table (for existing attachments with no overridden Comcode description), from Comcode parameter (for attachments with description), or from POST environment (for new attachments)
@@ -59,20 +67,14 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 		$attachment_row['a_description']=comcode_to_tempcode($attachment_row['description'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,NULL,$on_behalf_of_member);
 	}
 
-	// Make sure thumbnail still exists / create if missing
-	if (is_image($attachment_row['a_original_filename']))
-	{
-		require_code('images');
-		$attributes['thumb_url']=ensure_thumbnail($attributes['url'],$attributes['thumb_url'],'attachments','attachments',$attachment_row['id'],'a_thumb_url',NULL,true);
-	}
-
 	// Work out URL, going through the attachment frontend script
 	$url=mixed();
 	$url_safe=mixed();
 	if ($tag=='attachment')
 	{
 		$url=new ocp_tempcode();
-		$url->attach(find_script('attachment').'?id='.urlencode($attachment_row['id']));
+
+		$url->attach(find_script('attachment').'?id='.urlencode(strval($attachment_row['id'])));
 		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 		{
 			$url->attach('&forum_db=1');
@@ -91,7 +93,7 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 			$url->attach(symbol_tempcode('SESSION_HASHED'));
 		}
 
-		if ($attributes['thumb_url']!='')
+		if ((!array_key_exists('thumb_url',$attributes)) || ($attributes['thumb_url']==''))
 		{
 			$attributes['thumb_url']=new ocp_tempcode();
 			$attributes['thumb_url']->attach($url);
@@ -102,6 +104,9 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 		$url=$attachment_row['a_url'];
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 		$url_safe=$url;
+
+		if ((!array_key_exists('thumb_url',$attributes)) || ($attributes['thumb_url']==''))
+			$attributes['thumb_url']=$attachment_row['a_thumb_url'];
 	}
 
 	// Render
@@ -112,7 +117,7 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 		$as_admin,
 		$source_member,
 		MEDIA_TYPE_ALL,
-		array_key_exists('type',$attributes)?$attributes['type']:''
+		((array_key_exists('type',$attributes)) && ($attributes['type']!=''))?$attributes['type']:NULL
 	);
 }
 

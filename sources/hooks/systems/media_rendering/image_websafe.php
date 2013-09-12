@@ -82,14 +82,19 @@ class Hook_media_rendering_image_websafe
 		$_url_safe=is_object($url_safe)?$url_safe->evaluate():$url_safe;
 
 		// Put in defaults
+		$blank_thumbnail=(!array_key_exists('thumb_url',$attributes)) || ((is_object($attributes['thumb_url'])) && ($attributes['thumb_url']->is_empty()) || (is_string($attributes['thumb_url'])) && ($attributes['thumb_url']==''));
 		if ((!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width'])))
 		{
-			$attributes['width']=get_option('thumb_width');
+			if ($blank_thumbnail)
+				$attributes['width']=get_option('thumb_width');
+			// else: media_renderer will derive from the provided thumbnail
 			$auto_width=true;
 		} else $auto_width=false;
 		if ((!array_key_exists('height',$attributes)) || (!is_numeric($attributes['height'])))
 		{
-			$attributes['height']=get_option('thumb_width');
+			if ($blank_thumbnail)
+				$attributes['height']=get_option('thumb_width');
+			// else: media_renderer will derive from the provided thumbnail
 			$auto_height=true;
 		} else $auto_height=false;
 		$use_thumb=(!array_key_exists('thumb',$attributes)) || ($attributes['thumb']=='1');
@@ -98,7 +103,7 @@ class Hook_media_rendering_image_websafe
 		{
 			$attributes['thumb_url']=$url;
 		}
-		if ((!array_key_exists('thumb_url',$attributes)) || ((is_object($attributes['thumb_url'])) && ($attributes['thumb_url']->is_empty()) || (is_string($attributes['thumb_url'])) && ($attributes['thumb_url']=='')))
+		if ($blank_thumbnail)
 		{
 			if ($use_thumb)
 			{
@@ -108,7 +113,7 @@ class Hook_media_rendering_image_websafe
 				$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
 				if (!file_exists($file_thumb))
 				{
-					convert_image($url,$file_thumb,-1,-1,intval($attributes['width']),false);
+					convert_image($_url,$file_thumb,-1,-1,intval($attributes['width']),false);
 				}
 				$attributes['thumb_url']=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 				if ((function_exists('getimagesize')) && (($auto_width) || ($auto_height)))
