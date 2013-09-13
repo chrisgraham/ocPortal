@@ -374,12 +374,6 @@
 	margin: 1em 0;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
-	.ocf_topic_poster_more {
-		padding-{!en_left}: 0.5em;
-	}
-{+END}
-
 .ocf_topic_post_avatar {
 	margin: 0 auto;
 	max-width: 100px;
