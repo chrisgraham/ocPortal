@@ -1185,7 +1185,7 @@ class forum_driver_ocf extends forum_driver_base
 		$row=$this->connection->query_select('f_members',array('*'),array('m_username'=>$name),'',1);
 		if (!array_key_exists(0,$row))
 		{
-			if ((is_numeric($name)) && (!is_null($this->get_username($name)))) return intval($name);
+			if ((is_numeric($name)) && (!is_null($this->get_username(intval($name))))) return intval($name);
 			return NULL;
 		}
 		$id=$row[0]['id'];
