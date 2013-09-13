@@ -54,14 +54,14 @@ abstract class capi_object
 	}
 }
 
-function catalogue_find_options($field,$catalogue_name)
+function catalogue_find_options($field,$catalogue_name,$where='')
 {
 	$sx=$catalogue_name.'__'.$field;
 	global $CAPI_CATALOGUE_OPTIONS;
 	if (isset($CAPI_CATALOGUE_OPTIONS[$sx])) return $CAPI_CATALOGUE_OPTIONS[$sx];
 
 	$cf_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_fields f JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$field,'c_name'=>$catalogue_name));
-	$rows=$GLOBALS['SITE_DB']->query_select('catalogue_efv_short s JOIN '.get_table_prefix().'catalogue_entries e ON e.id=s.ce_id',array('s.*'),array('c_name'=>$catalogue_name,'cf_id'=>$cf_id),'ORDER BY cv_value');
+	$rows=$GLOBALS['SITE_DB']->query_select('catalogue_efv_short s JOIN '.get_table_prefix().'catalogue_entries e ON e.id=s.ce_id',array('s.*'),array('c_name'=>$catalogue_name,'cf_id'=>$cf_id),$where.' ORDER BY cv_value');
 	$out=array();
 	foreach ($rows as $row)
 	{
@@ -125,13 +125,17 @@ abstract class capi_catalogue_object extends capi_object
 {
 	var $field_refs=array();
 
-	function __construct($entity_id)
+	function __construct($entity_id,$missing_ok=false)
 	{
 		global $CAPI_CATALOGUE_OBJECT_CACHE;
 		if (!isset($CAPI_CATALOGUE_OBJECT_CACHE[$entity_id]))
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$entity_id),'',1);
-			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			if (!array_key_exists(0,$rows))
+			{
+				if ($missing_ok) return;
+				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			}
 			if ($rows[0]['c_name']!=$this->catalogue) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 			$this->properties=$rows[0];
