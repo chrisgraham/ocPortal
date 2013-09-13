@@ -1069,7 +1069,7 @@ function handle_has_checked_recently($id_code)
 	{
 		// Show when it was last tested
 		$GLOBALS['SITE_DB']->query_delete('url_title_cache',array('t_url'=>substr('!'.$id_code,0,255)),'',1); // To make sure it can insert below
-		$GLOBALS['SITE_DB']->query_insert('url_title_cache',array('t_title'=>'!'.strval(time()),'t_url'=>substr('!'.$id_code,0,255)),false,true); // To stop weird race-like conditions
+		$GLOBALS['SITE_DB']->query_insert('url_title_cache',array('t_meta_title'=>'','t_keywords'=>'','t_description'=>'','t_image_url'=>'','t_title'=>'!'.strval(time()),'t_url'=>substr('!'.$id_code,0,255)),false,true); // To stop weird race-like conditions
 
 		return false;
 	}

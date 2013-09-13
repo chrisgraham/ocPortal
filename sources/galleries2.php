@@ -539,6 +539,37 @@ function delete_image($id,$delete_full=true)
  */
 function create_video_thumb($src_url,$expected_output_path=NULL)
 {
+	if (get_value('media_api')=='1')
+	{
+		// Try to find a hook that can get a thumbnail easily
+		$hooks=find_media_renderers($src_url,array(),true,NULL);
+		if (!is_null($hooks))
+		{
+			foreach ($hooks as $hook)
+			{
+				$ve_ob=object_factory('Hook_media_rendering_'.$hook);
+				if (method_exists($ve_ob,'get_video_thumbnail'))
+				{
+					$ret=$ve_ob->get_video_thumbnail($src_url);
+					if (!is_null($ret))
+					{
+						if (is_null($expected_output_path))
+						{
+							$filename='thumb_'.md5(uniqid('',true)).'.png';
+							$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
+						}
+						require_code('files');
+						$_expected_output_path=fopen($expected_output_path,'wb');
+						http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
+						fclose($_expected_output_path);
+
+						return $ret;
+					}
+				}
+			}
+		}
+	}
+
 	// Audio ones should have automatic thumbnails
 	require_code('mime_types');
 	$file_ext=get_file_extension($src_url);

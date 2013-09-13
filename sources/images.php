@@ -113,7 +113,8 @@ function _symbol_thumbnail($param)
 			}
 			if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
 			if (!file_exists(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
-			$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
+			$filename=url_to_filename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
+			if (!is_saveable_image($filename)) $filename.='.png';
 			$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
 			$value=get_custom_base_url().'/'.$thumb_save_dir.'/'.rawurlencode($dimensions.'__'.$filename);
 
@@ -1063,11 +1064,31 @@ function is_image($name)
  * Find whether the video specified is actually a 'video', based on file extension
  *
  * @param  string			A URL or file path to the video
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types (client-side risk only)
  * @param  boolean		Whether it really must be an actual video/audio, not some other kind of rich media which we may render in a video spot
  * @return boolean		Whether the string pointed to a file appeared to be a video
  */
-function is_video($name,$must_be_true_video=false)
+function is_video($name,$as_admin=false,$must_be_true_video=false)
 {
+	if (get_value('media_api')=='1')
+	{
+		$allow_audio=(get_option('allow_audio_videos')=='1');
+
+		if ($must_be_true_video)
+		{
+			require_code('mime_types');
+			$ext=get_file_extension($name);
+			if (($ext=='rm') || ($ext=='ram')) return true; // These have audio mime types, but may be videos
+			$mime_type=get_mime_type($ext,$as_admin);
+			return ((substr($mime_type,0,6)=='video/') || (($allow_audio) && (substr($mime_type,0,6)=='audio/')));
+		}
+
+		require_code('media_renderer');
+		$acceptable_media=$allow_audio?(MEDIA_TYPE_VIDEO | MEDIA_TYPE_AUDIO | MEDIA_TYPE_OTHER /* but not images */):MEDIA_TYPE_VIDEO;
+		$hooks=find_media_renderers($name,array(),$as_admin,NULL,$acceptable_media);
+		return !is_null($hooks);
+	}
+
 	if ((addon_installed('galleries')) && (!$must_be_true_video))
 	{
 		$ve_hooks=find_all_hooks('systems','video_embed');
@@ -1090,6 +1111,35 @@ function is_video($name,$must_be_true_video=false)
 	require_code('mime_types');
 	$mime_type=get_mime_type($ext);
 	return ((substr($mime_type,0,6)=='video/') || ((get_option('allow_audio_videos')=='1') && (substr($mime_type,0,6)=='audio/')));
+}
+
+/**
+ * Find whether the video specified is actually a 'video', based on file extension
+ *
+ * @param  string			A URL or file path to the video
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types (client-side risk only)
+ * @return boolean		Whether the string pointed to a file appeared to be an audio file
+ */
+function is_audio($name,$as_admin=false)
+{
+	require_code('media_renderer');
+	$acceptable_media=MEDIA_TYPE_AUDIO;
+	$hooks=find_media_renderers($name,array(),$as_admin,NULL,$acceptable_media);
+	return !is_null($hooks);
+}
+
+/**
+ * Find whether the video specified is actually a 'video', based on file extension
+ *
+ * @param  string			A URL or file path to the video
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types (client-side risk only)
+ * @return boolean		Whether the string pointed to a file appeared to be an audio file
+ */
+function is_media($name,$as_admin=false)
+{
+	require_code('media_renderer');
+	$hooks=find_media_renderers($name,array(),$as_admin,NULL);
+	return !is_null($hooks);
 }
 
 /**

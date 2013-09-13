@@ -680,7 +680,9 @@ class ocp_simple_xml_reader
 		xml_set_element_handler($xml_parser,'startElement','endElement');
 		xml_set_character_data_handler($xml_parser,'startText');
 
-		$xml_data=unixify_line_format('<'.'?xml version="1.0" encoding="'.xmlentities($parser_charset).'"?'.'>'.$xml_data,$parser_charset); // Fixes Windows characters
+		if (strpos($xml_data,'<'.'?xml')===false)
+			$xml_data='<'.'?xml version="1.0" encoding="'.xmlentities($parser_charset).'"?'.'>'.$xml_data;
+		$xml_data=unixify_line_format($xml_data,$parser_charset); // Fixes Windows characters
 
 		if (xml_parse($xml_parser,$xml_data,true)==0)
 		{

@@ -1239,3 +1239,129 @@ function _read_in_headers($line)
 		}
 	}
 }
+
+/**
+ * Extract meta details from a URL.
+ *
+ * @param  URLPATH		Webpage URL
+ * @return array			A map of meta details extracted from the webpage
+ */
+function get_webpage_meta_details($url)
+{
+	static $cache=array();
+
+	if (array_key_exists($url,$cache)) return $cache[$url];
+	$_meta_details=$GLOBALS['SITE_DB']->query_select('url_title_cache',array('*'),array('t_url'=>$url),'',1);
+	if (array_key_exists(0,$_meta_details))
+	{
+		$meta_details=$_meta_details[0];
+		$cache[$url]=$meta_details;
+		return $meta_details;
+	}
+
+	$meta_details=array(
+		't_url'=>substr($url,0,255),
+		't_title'=>'',
+		't_meta_title'=>'',
+		't_keywords'=>'',
+		't_description'=>'',
+		't_image_url'=>'',
+		't_mime_type'=>'',
+		't_json_discovery'=>'',
+		't_xml_discovery'=>'',
+	);
+
+	$html=http_download_file($url,1024*10,false);
+	if (is_string($html))
+	{
+		// In ascending precedence
+		$headers=array(
+			't_title'=>array(
+				'<title[^>]*\s*>\s*(.*)\s*\s*<\s*/title\s*>',
+			),
+			't_meta_title'=>array(
+				'<meta\s+name="?DC\.Title"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+name="?twitter:title"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+property="?og:title"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+			),
+			't_keywords'=>array(
+				'<meta\s+name="?keywords"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+			),
+			't_description'=>array(
+				'<meta\s+name="?description"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+name="?DC\.Description"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+name="?twitter:description"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+property="?og:description"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+			),
+			't_image_url'=>array(
+				'<meta\s+name="?twitter:image"?\s+content="?([^"<>]*)"?\s*/?'.'>',
+				'<meta\s+property="?og:image"?\s+content="?([^"]*)"?\s*/?'.'>',
+			),
+		);
+
+		require_code('character_sets');
+		$html=convert_to_internal_encoding($html);
+
+		foreach ($headers as $header=>$regexps)
+		{
+			foreach ($regexps as $regexp)
+			{
+				$matches=array();
+				if (preg_match('#'.$regexp.'#isU',$html,$matches)!=0)
+				{
+					$value=str_replace('"','&quot;',stripslashes($matches[1]));
+
+					if ($header=='t_title' || $header=='t_image_url') // Non-HTML
+					{
+						$value=str_replace(array('&ndash;','&mdash;'),array('-','-'),$value);
+						$value=@html_entity_decode($value,ENT_QUOTES,get_charset());
+						$value=trim($value);
+						$value=substr($value,0,255);
+					}
+
+					if ($value!='') $meta_details[$header]=$value;
+				}
+			}
+		}
+
+		if ($meta_details['t_image_url']!='')
+			$meta_details['t_image_url']=qualify_url($meta_details['t_image_url'],$url);
+
+		global $HTTP_DOWNLOAD_MIME_TYPE;
+		if (($HTTP_DOWNLOAD_MIME_TYPE=='application/octet-stream') || ($HTTP_DOWNLOAD_MIME_TYPE==''))
+		{
+			// Lame, no real mime type - maybe the server is just not configured to know it - try and guess by using the file extension and our own ocPortal list
+			require_code('mime_types');
+			require_code('files');
+			$meta_details['t_mime_type']=get_mime_type(get_file_extension($url),true);
+		} else
+		{
+			$meta_details['t_mime_type']=$HTTP_DOWNLOAD_MIME_TYPE;
+		}
+
+		$matches=array();
+		$num_matches=preg_match_all('#<link\s+[^<>]*>#i',$html,$matches);
+		for ($i=0;$i<$num_matches;$i++)
+		{
+			$line=$matches[0][$i];
+			$matches2=array();
+			if ((preg_match('#\srel=["\']?alternate["\']?#i',$line)!=0) && (preg_match('#\shref=["\']?([^"\']+)["\']?#i',$line,$matches2)!=0))
+			{
+				if (preg_match('#\stype=["\']?application/json\+oembed["\']?#i',$line)!=0)
+				{
+					$meta_details['t_json_discovery']=@html_entity_decode($matches2[1],ENT_QUOTES,get_charset());
+				}
+				if (preg_match('#\stype=["\']?text/xml\+oembed["\']?#i',$line)!=0)
+				{
+					$meta_details['t_xml_discovery']=@html_entity_decode($matches2[1],ENT_QUOTES,get_charset());
+				}
+			}
+		}
+
+		$GLOBALS['SITE_DB']->query_insert('url_title_cache',$meta_details,false,true); // 'true' to stop race conditions
+	}
+
+	$cache[$url]=$meta_details;
+	return $meta_details;
+}
+

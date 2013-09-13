@@ -838,10 +838,41 @@ function get_gallery_content_tree($table,$submitter=NULL,$gallery=NULL,$breadcru
  * @param  integer		Height
  * @param  integer		Length
  * @param  ?ID_TEXT		Original filename of media file (NULL: find from URL)
+ * @param  ?MEMBER		Submitter (NULL: Guest)
  * @return tempcode		Displayed media
  */
-function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filename=NULL)
+function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filename=NULL,$submitter=NULL)
 {
+	if (get_value('media_api')=='1')
+	{
+		require_code('media_renderer');
+		require_code('mime_types');
+		require_code('files');
+
+		$as_admin=has_specific_permission($submitter,'comcode_dangerous');
+
+		$attributes=array(
+			'thumb_url'=>$thumb_url,
+			'width'=>strval($width),
+			'height'=>strval($height),
+			'length'=>strval($length),
+			'mime_type'=>get_mime_type(get_file_extension($url),$as_admin), // will not render as dangerous stuff (swf's etc), unless admin
+		);
+
+		if (get_option('allow_audio_videos')=='1')
+		{
+			$media_type=MEDIA_TYPE_VIDEO | MEDIA_TYPE_OTHER | MEDIA_TYPE_AUDIO;
+		} else
+		{
+			$media_type=MEDIA_TYPE_VIDEO;
+		}
+
+		// Render
+		return render_media_url($url,$url,$attributes,$as_admin,$submitter,$media_type);
+	}
+
+	if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
 	require_lang('galleries');
 
 	if (url_is_local($thumb_url)) $thumb_url=get_custom_base_url().'/'.$thumb_url;

@@ -55,4 +55,38 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$GLOBALS['SITE_DB']->query_delete('url_title_cache');
+	$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_meta_title','LONG_TEXT');
+	$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_keywords','LONG_TEXT');
+	$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_description','LONG_TEXT');
+	$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_image_url','URLPATH');
+	$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_mime_type','ID_TEXT');
+	$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_json_discovery','URLPATH');
+	$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_xml_discovery','URLPATH');
+
+	add_config_option('OEMBED_HTML_WHITELIST','oembed_html_whitelist','text','return "youtube.com\nyoutu.be\nvimeo.com\ndailymotion.com\nslideshare.net\nscribd.com\nsoundcloud.com\ntwitter.com\nembed.ly\nmaps.google.com\nmaps.google.co.uk\nimgur.com";','FEATURE','MEDIA');
+
+	$default='';
+	$default.="(https?://(www\.)?youtube\.com/watch\?v=.*|https?://youtu\.be/\..*) = http://www.youtube.com/oembed\n";
+	$default.="(https?://vimeo\.com/\d+) = http://vimeo.com/api/oembed.{format}\n";
+	$default.="(https?://(www\.)?dailymotion\.com/video/.*|https?://dai\.ly/.*) = http://www.dailymotion.com/services/oembed\n";
+	$default.="(https?://www\.slideshare\.net/.*/.*) = http://www.slideshare.net/api/oembed/2\n";
+	$default.="(https?://(www\.)?scribd\.com/doc/.*) = http://www.scribd.com/services/oembed\n";
+	$default.="(https?://.*\.flickr\.com/photos/.*|https?://flic\.kr/p/.*) = http://www.flickr.com/services/oembed\n";
+	$default.="(https?://instagram\.com/p/.*) = http://api.instagram.com/oembed\n";
+	$default.="(http?://i.*\.photobucket\.com/albums/.*|https?://gi.*\.photobucket\.com/groups/.*) = http://photobucket.com/oembed\n"; // NB: With this one you need to be really careful to get the *image* URL. Page URLs do not work, it's confusing!
+	$default.="(https?://soundcloud\.com/.*/.*) = http://soundcloud.com/oembed\n";
+	$default.="(https?://twitter\.com/.*/status/\d+) = https://api.twitter.com/1/statuses/oembed.{format}\n";
+	$default.="(https?://twitpic\.com/.*) = http://noembed.com/embed\n";
+	$default.="(https?://www\.imdb\.com/title/.*|http://twitpic\.com/.*) = http://api.embed.ly/1/oembed\n";
+	$default.="(https?://en\.wikipedia\.org/wiki/.*) = http://api.embed.ly/1/oembed\n";
+	$default.="(https?://edition\.cnn\.com/.*) = http://api.embed.ly/1/oembed\n";
+	$default.="(https?://maps\.google\.(co\.uk|com)/.*) = http://api.embed.ly/1/oembed\n";
+	$default.="(https?://xkcd\.com/\d+/?) = http://api.embed.ly/1/oembed\n";
+	$default.="(https?://imgur\.com/.*) = http://api.embed.ly/1/oembed\n";
+	$default.="(https?://tinypic.com/.*) = http://api.embed.ly/1/oembed\n";
+	add_config_option('OEMBED_MANUAL_PATTERNS','oembed_manual_patterns','text','return \'\';','FEATURE','MEDIA');
+	set_option('oembed_manual_patterns',$default);
+
+	add_config_option('OEMBED_MAX_SIZE','oembed_max_size','integer','return \'550\';','FEATURE','MEDIA');
 }

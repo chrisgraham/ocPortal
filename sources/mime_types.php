@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2012
+ Copyright (c) ocProducts, 2004-2013
 
  See text/EN/licence.txt for full licencing information.
 
@@ -22,10 +22,13 @@
  * Find the mime type for the given file extension. It does not take into account whether the file type has been white-listed or not, and returns a binary download mime type for any unknown extensions.
  *
  * @param  string			The file extension (no dot)
+ * @param  boolean		Whether there are admin privileges, to render dangerous media types (client-side risk only)
  * @return string			The MIME type
  */
-function get_mime_type($extension)
+function get_mime_type($extension,$as_admin=false)
 {
+	$extension=strtolower($extension);
+
 	$mime_types=array(
 
 		// Plain text
@@ -37,8 +40,8 @@ function get_mime_type($extension)
 		'pdf'=>'application/pdf',
 		'rtf'=>'text/richtext',
 		'ps'=>'application/postscript',
-		'html'=>'application/octet-stream', // to prevent XSS
-		'htm'=>'application/octet-stream', // to prevent XSS
+		'html'=>$as_admin?'text/html':'application/octet-stream',
+		'htm'=>$as_admin?'text/html':'application/octet-stream',
 
 		// Open office
 		'odt'=>'application/vnd.oasis.opendocument.text',
@@ -53,17 +56,17 @@ function get_mime_type($extension)
 		'xlsx'=>'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 
 		// XML
-		'xml'=>'application/octet-stream', // to prevent XSS	// 'text/xml',
-		'rss'=>'application/octet-stream', // to prevent XSS	// 'application/rss+xm',
-		'atom'=>'application/octet-stream', // to prevent XSS	// 'application/atom+xml',
+		'xml'=>$as_admin?'text/xml':'application/octet-stream',
+		'rss'=>$as_admin?'application/rss+xml':'application/octet-stream',
+		'atom'=>$as_admin?'application/atom+xml':'application/octet-stream',
 
 		// Presentations/Animations/3D
 		'ppt'=>'application/powerpoint',
 		'pptx'=>'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-		'svg'=>'application/octet-stream', // to prevent XSS	//'image/svg+xml',
+		'svg'=>$as_admin?'image/svg+xml':'application/octet-stream',
 		'wrl'=>'model/vrml',
 		'vrml'=>'model/vrml',
-		'swf'=>'application/octet-stream', // to prevent XSS	// 'application/x-shockwave-flash',
+		'swf'=>$as_admin?'application/x-shockwave-flash':'application/octet-stream',
 
 		// Images
 		'png'=>'image/png',
@@ -83,8 +86,13 @@ function get_mime_type($extension)
 
 		// Movies
 		'avi'=>'video/mpeg',//'video/x-ms-asf' works with the plugin on Windows Firefox but nothing else,//'video/x-msvideo' is correct but does not get recognised by Microsoft Firefox WMV plugin and confuses RealMedia Player if it sees data transferred under that mime type,
+		'mp2'=>'video/mpeg',
+		'mpv2'=>'video/mpeg',
+		'm2v'=>'video/mpeg',
+		'mpa'=>'video/mpeg',
 		'mpg'=>'video/mpeg',
 		'mpe'=>'video/mpeg',
+		'3g2'=>'video/3gpp',
 		'3gp'=>'video/3gpp',
 		'f4v'=>'video/mp4',
 		'mp4'=>'video/mp4',
@@ -105,9 +113,12 @@ function get_mime_type($extension)
 		'ra'=>'audio/x-pn-realaudio-plugin',
 		'wma'=>'audio/x-ms-wma',
 		'wav'=>'audio/x-wav',
-		'mp3'=>'audio/mpeg',
+		'mp3'=>'audio/x-mpeg',
 		'ogg'=>'audio/ogg',
 		'mid'=>'audio/midi',
+		'aif'=>'audio/x-aiff',
+		'aifc'=>'audio/x-aiff',
+		'aiff'=>'audio/x-aiff',
 
 		// File sharing
 		'torrent'=>'application/x-bittorrent',
