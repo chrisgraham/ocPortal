@@ -965,10 +965,10 @@ function get_gallery_content_tree($table,$submitter=NULL,$gallery=NULL,$breadcru
  */
 function get_allowed_video_file_types()
 {
-	$supported='3gp,asf,avi,flv,m4v,mov,mp4,mpe,mpeg,mpg,ogg,ogv,qt,ra,ram,rm,webm,wmv';
+	$supported='3gp,3g2,asf,avi,flv,f4v,m2v,mpv2,mp2,m4v,mov,mpa,mp4,mpe,mpeg,mpg,ogg,ogv,qt,ram,rm,webm,wmv';
 	if (get_option('allow_audio_videos')=='1')
 	{
-		$supported.=',mid,mp3,wav,wma';
+		$supported.=',ra,mid,mp3,wav,wma,aif,aifc,aiff';
 	}
 	$supported.=',pdf';
 	if (has_privilege(get_member(),'use_very_dangerous_comcode'))

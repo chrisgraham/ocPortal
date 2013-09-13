@@ -223,19 +223,21 @@ class Hook_media_rendering_oembed
 	{
 		if (is_object($url)) $url=$url->evaluate();
 
-		$data=$this->get_oembed_data_result($url);
+		$data=$this->get_oembed_data_result($url,$attributes);
 		if ($data===NULL) return $this->_fallback_render($url,$attributes,$source_member);
 
 		switch ($data['type'])
 		{
 			case 'photo':
+				unset($attributes['width']);
+				unset($attributes['height']);
 				$map=array('width'=>$data['width'],'height'=>$data['height'],'click_url'=>$url);
 				$url=$data['url']; // NB: This will also have been constrained to the maxwidth/maxheight (at least it is for Flickr)
-				//if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url'];	Cannot control the size, so we'll make our own inside image_websafe
+				/*if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url'];	Cannot control the size, so we'll make our own inside image_websafe
+				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
+				if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];*/
 				if (array_key_exists('description',$data)) $map['description']=$data['description']; // not official, but embed.ly has it
 				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
-				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
-				if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];
 				/*require_code('mime_types');	$url should be the full image not to view the resource, so we don't need to trick the mime type
 				require_code('files');
 				$map['mime_type']=get_mime_type(get_file_extension($map['thumb_url']));*/
@@ -258,8 +260,16 @@ class Hook_media_rendering_oembed
 
 				// embed.ly may show thumbnail details within a "link" type
 				$map=array('thumb_url'=>$data['thumbnail_url']);
-				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
-				if (array_key_exists('thumbnail_width',$data)) $map['height']=$data['thumbnail_height'];
+				if (array_key_exists('thumbnail_width',$data))
+				{
+					unset($attributes['width']);
+					$map['width']=$data['thumbnail_width'];
+				}
+				if (array_key_exists('thumbnail_height',$data))
+				{
+					unset($attributes['height']);
+					$map['height']=$data['thumbnail_height'];
+				}
 				if (array_key_exists('description',$data)) $map['description']=$data['description']; // not official, but embed.ly has it
 				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
 

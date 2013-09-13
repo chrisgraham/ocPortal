@@ -29,7 +29,7 @@ class Hook_Preview_video
 	function applies()
 	{
 		require_code('uploads');
-		$applies=(get_param('page','')=='cms_galleries') && ((get_param('type')=='_ev') || (get_param('type')=='av')) && ((is_swf_upload()) ||  (count($_FILES)!=0));
+		$applies=(get_param('page','')=='cms_galleries') && ((get_param('type')=='_ev') || (get_param('type')=='av'));
 		return array($applies,NULL,false);
 	}
 
@@ -44,7 +44,7 @@ class Hook_Preview_video
 
 		$cat=post_param('cat');
 
-		$urls=get_url('','file','uploads/galleries',0,OCP_UPLOAD_VIDEO,true,'','file2');
+		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_VIDEO,true,'','file2');
 		if ($urls[0]=='')
 		{
 			if (!is_null(post_param_integer('id',NULL)))
@@ -64,9 +64,23 @@ class Hook_Preview_video
 			$thumb_url=$urls[1];
 		}
 
-		require_code('images');
-		$thumb=do_image_thumb(url_is_local($thumb_url)?(get_custom_base_url().'/'.$thumb_url):$thumb_url,post_param('description'),true);
-		$preview=hyperlink(url_is_local($url)?(get_custom_base_url().'/'.$url):$url,$thumb);
+		$length=post_param_integer('video_length',NULL);
+		$width=post_param_integer('video_width',NULL);
+		$height=post_param_integer('video_height',NULL);
+		require_code('galleries');
+		require_code('galleries2');
+		$test=is_file(get_custom_base_url().'/'.rawurldecode($url))?get_video_details(get_custom_base_url().'/'.rawurldecode($url),basename($url)):false;
+		if ($test!==false)
+		{
+			list($_width,$_height,$_length)=$test;
+		} else
+		{
+			list($_width,$_height,$_length)=array(intval(get_option('video_width_setting')),intval(get_option('video_height_setting')),0);
+		}
+		if (is_null($length)) $length=$_length;
+		if (is_null($width)) $width=$_width;
+		if (is_null($height)) $height=$_height;
+		$preview=show_gallery_video_media($url,$thumb_url,$width,$height,$length,get_member());
 
 		return array($preview,NULL);
 	}
