@@ -24,7 +24,7 @@ class Hook_do_next_menus_gallery_syndication
 	function run()
 	{
 		require_lang('gallery_syndication');
-		require_lang('oauth2');
+		require_lang('oauth');
 
 		$menu_items=array();
 

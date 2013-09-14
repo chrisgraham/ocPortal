@@ -18,11 +18,12 @@
  * @package		gallery_syndication
  */
 
-require_code('oauth2');
+require_code('oauth');
 
 ensure_got_oauth_client_id('youtube',true);
 
-$auth_url='https://accounts.google.com/o/oauth2/auth?client_id=_CLIENT_ID_';
+$endpoint='https://accounts.google.com/o/oauth2';
+$auth_url=$endpoint.'/auth?client_id=_CLIENT_ID_';
 $auth_url.='&redirect_uri='.urlencode(static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,false,false,true)));
 $auth_url.='&response_type=code';
 $auth_url.='&approval_prompt=force';
@@ -30,4 +31,4 @@ $auth_url.='&scope='.urlencode('https://gdata.youtube.com');
 $auth_url.='&access_type=offline';
 $auth_url.='&state=authorized';
 
-handle_oauth('youtube','Youtube',$auth_url);
+retrieve_oauth2_token('youtube','Youtube',$auth_url,$endpoint);

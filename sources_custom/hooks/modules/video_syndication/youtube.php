@@ -434,7 +434,7 @@ class video_syndication_youtube
 
 	function _connect()
 	{
-		require_code('oauth2');
+		require_code('oauth');
 
 		// Read in settings. If unset, we won't get a token - but we will return to allow anonymous calls
 		$client_id=get_option('youtube_client_id');
@@ -444,8 +444,9 @@ class video_syndication_youtube
 		$refresh_token=get_long_value('youtube_refresh_token');
 		if ((is_null($refresh_token)) || ($refresh_token=='')) return true;
 
-		$auth_url='https://accounts.google.com/o/oauth2/token';
-		$this->_access_token=refresh_oauth('youtube',$auth_url,$client_id,$client_secret,$refresh_token);
+		$endpoint='https://accounts.google.com/o/oauth2';
+		$auth_url=$endpoint.'/token';
+		$this->_access_token=refresh_oauth2_token('youtube',$auth_url,$client_id,$client_secret,$refresh_token,$endpoint);
 
 		return !is_null($this->_access_token);
 	}

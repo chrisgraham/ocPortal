@@ -1,11 +1,11 @@
 <?php
 
-function init__oauth2()
+function init__oauth()
 {
-	require_lang('oauth2');
+	require_lang('oauth');
 }
 
-function ensure_got_oauth_client_id($service_name,$has_sep_key=false) // This is generic so can work with oauth1
+function ensure_got_oauth_client_id($service_name,$has_sep_key=false)
 {
 	$client_id=get_option($service_name.'_client_id');
 
@@ -24,7 +24,12 @@ function ensure_got_oauth_client_id($service_name,$has_sep_key=false) // This is
 	return $client_id;
 }
 
-function handle_oauth($service_name,$service_title,$auth_url)
+/*
+The following is ocPortal's oAuth2 implementation.
+oAuth2 is simpler than oAuth1, because SSL is used for encryption, rather than a complex native implementation.
+*/
+
+function retrieve_oauth2_token($service_name,$service_title,$auth_url,$endpoint)
 {
 	$title=get_screen_title('OAUTH_TITLE',true,array($service_name));
 
@@ -52,7 +57,7 @@ function handle_oauth($service_name,$service_title,$auth_url)
 			'grant_type'=>'authorization_code',
 		);
 
-		$result=http_download_file('https://accounts.google.com/o/oauth2/token',NULL,true,false,'ocPortal',$post_params);
+		$result=http_download_file($endpoint.'/token',NULL,true,false,'ocPortal',$post_params);
 		$parsed_result=json_decode($result);
 		set_long_value($service_name.'_refresh_token',$parsed_result->refresh_token);
 
@@ -67,7 +72,7 @@ function handle_oauth($service_name,$service_title,$auth_url)
 	$out->evaluate_echo();
 }
 
-function refresh_oauth($service_name,$url,$client_id,$client_secret,$refresh_token)
+function refresh_oauth2_token($service_name,$url,$client_id,$client_secret,$refresh_token,$endpoint)
 {
 	$post_params=array(
 		'client_id'=>get_option($service_name.'_client_id'),
@@ -78,7 +83,7 @@ function refresh_oauth($service_name,$url,$client_id,$client_secret,$refresh_tok
 
 	require_code('files');
 
-	$result=http_download_file('https://accounts.google.com/o/oauth2/token',NULL,true,false,'ocPortal',$post_params);
+	$result=http_download_file($endpoint.'/token',NULL,true,false,'ocPortal',$post_params);
 	$parsed_result=json_decode($result);
 
 	if (!array_key_exists('access_token',$parsed_result))

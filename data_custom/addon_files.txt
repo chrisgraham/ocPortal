@@ -4292,7 +4292,7 @@ gallery_syndication
  - adminzone/pages/minimodules_custom/vimeo_oauth.php
  - adminzone/pages/minimodules_custom/youtube_oauth.php
  - lang_custom/EN/gallery_syndication.ini
- - lang_custom/EN/oauth2.ini
+ - lang_custom/EN/oauth.ini
  - lang_custom/EN/gallery_syndication_youtube.ini
  - lang_custom/EN/gallery_syndication_vimeo.ini
  - sources_custom/gallery_syndication.php
@@ -4301,7 +4301,7 @@ gallery_syndication
  - sources_custom/hooks/modules/video_syndication/index.html
  - sources_custom/hooks/systems/cron/gallery_syndication.php
  - sources_custom/hooks/systems/do_next_menus/gallery_syndication.php
- - sources_custom/oauth2.php
+ - sources_custom/oauth.php
  - sources_custom/vimeo.php
  - sources_custom/hooks/systems/config/vimeo_client_id.php
  - sources_custom/hooks/systems/config/vimeo_client_secret.php

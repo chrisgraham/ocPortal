@@ -19,7 +19,6 @@
  */
 
 require_code('vimeo');
-require_code('oauth2'); // Contains some useful ocPortal-ties, for creating config options, etc, that applies to oauth1 also
 
 $service_name='vimeo';
 
