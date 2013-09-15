@@ -765,6 +765,8 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 					case 'VAR':
 						log_warning('Abstract keyword applied to memmber variable');
 						break;
+					case 'STATIC':
+						break;
 					default:
 						log_warning('The abstract keyword only applies to classes and methods, not '.pparse__parser_peek());
 						break;

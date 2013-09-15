@@ -4582,4 +4582,45 @@ downloads_followup_email
  - sources_custom/hooks/systems/notifications/downloads_followup_email.php
  - themes/default/templates_custom/DOWNLOADS_FOLLOWUP_EMAIL.tpl
  - themes/default/templates_custom/DOWNLOADS_FOLLOWUP_EMAIL_DOWNLOAD_LIST.tpl
->>>>>>> v9
+
+image_syndication
+-----------------
+ - sources_custom/photobucket/OAuth/Consumer.php
+ - sources_custom/photobucket/OAuth/Request.php
+ - sources_custom/photobucket/OAuth/Signature/hmac_sha1.php
+ - sources_custom/photobucket/OAuth/Signature/Interface.php
+ - sources_custom/photobucket/OAuth/Signature/plaintext.php
+ - sources_custom/photobucket/OAuth/Signature.php
+ - sources_custom/photobucket/OAuth/Token.php
+ - sources_custom/photobucket/OAuth/Utils.php
+ - sources_custom/photobucket/PBAPI/data/api-defs.yml
+ - sources_custom/photobucket/PBAPI/data/methods.dat
+ - sources_custom/photobucket/PBAPI/data/yml2phpserialize.php
+ - sources_custom/photobucket/PBAPI/Exception/Response.php
+ - sources_custom/photobucket/PBAPI/Exception.php
+ - sources_custom/photobucket/PBAPI/Methods/album.php
+ - sources_custom/photobucket/PBAPI/Methods/base.php
+ - sources_custom/photobucket/PBAPI/Methods/featured.php
+ - sources_custom/photobucket/PBAPI/Methods/findstuff.php
+ - sources_custom/photobucket/PBAPI/Methods/group.php
+ - sources_custom/photobucket/PBAPI/Methods/login.php
+ - sources_custom/photobucket/PBAPI/Methods/media.php
+ - sources_custom/photobucket/PBAPI/Methods/search.php
+ - sources_custom/photobucket/PBAPI/Methods/user.php
+ - sources_custom/photobucket/PBAPI/Methods.php
+ - sources_custom/photobucket/PBAPI/Request/curl.php
+ - sources_custom/photobucket/PBAPI/Request/fopenurl.php
+ - sources_custom/photobucket/PBAPI/Request/fsockopen.php
+ - sources_custom/photobucket/PBAPI/Request.php
+ - sources_custom/photobucket/PBAPI/Response/json.php
+ - sources_custom/photobucket/PBAPI/Response/phpserialize.php
+ - sources_custom/photobucket/PBAPI/Response/simplexml.php
+ - sources_custom/photobucket/PBAPI/Response/simplexmlarray.php
+ - sources_custom/photobucket/PBAPI/Response/xmlserializer.php
+ - sources_custom/photobucket/PBAPI/Response.php
+ - sources_custom/photobucket/PBAPI.php
+ - sources_custom/hooks/systems/upload_syndication/index.html
+ - sources_custom/hooks/systems/upload_syndication/photobucket.php
+ - sources_custom/hooks/systems/config/photobucket_client_id.php
+ - sources_custom/hooks/systems/config/photobucket_client_secret.php 
+ - lang_custom/EN/video_syndication_photobucket.ini

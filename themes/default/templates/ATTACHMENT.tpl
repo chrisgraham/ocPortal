@@ -36,6 +36,10 @@
 
 					{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<button class="button_micro" type="button" id="clearBtn_file{I*}" onclick="var new_contents=get_textbox(form.elements['post']).replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_{I;*}\\[/(attachment|attachment_safe)\\]'),''); set_textbox(form.elements['post'],new_contents,new_contents); document.getElementById('file{I;/}').value=''; return false;" title="{!CLEAR}: {!ATTACHMENT,{I*}}">{!CLEAR}</button>{+END}
 				</span>
+
+				{+START,IF_PASSED,SYNDICATION_JSON}
+					<div id="file{I*}_syndication_options" class="syndication_options"></div>
+				{+END}
 			</td>
 		</tr>
 	</tbody>
@@ -44,7 +48,15 @@
 {+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput((typeof window.plUploadLoaded!='undefined')?'attachment_multi':'attachment','file{I}',null,'{POSTING_FIELD_NAME;/}');
+			preinitFileInput((typeof window.plUploadLoaded!='undefined')?'attachment_multi':'attachment','file{I}',null,'{POSTING_FIELD_NAME;/}'{+START,IF_PASSED,FILTER},'{FILTER;/}'{+END});
+		} );
+	//]]></script>
+{+END}
+
+{+START,IF_PASSED,SYNDICATION_JSON}
+	<script>// <![CDATA[
+		add_event_listener_abstract(window,'load',function () {
+			show_upload_syndication_options('file{I;/}','{SYNDICATION_JSON;/}'{+START,IF_PASSED_AND_TRUE,NO_QUOTA},true{+END});
 		} );
 	//]]></script>
 {+END}

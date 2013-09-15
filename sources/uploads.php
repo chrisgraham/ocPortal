@@ -27,11 +27,11 @@ function init__uploads()
 
 	if (!defined('OCP_UPLOAD_ANYTHING'))
 	{
-		define('OCP_UPLOAD_ANYTHING',0);
 		define('OCP_UPLOAD_IMAGE',1);
 		define('OCP_UPLOAD_VIDEO',2);
-		define('OCP_UPLOAD_AUDIO',3);
-		define('OCP_UPLOAD_IMAGE_OR_SWF',4); // Banners
+		define('OCP_UPLOAD_AUDIO',4);
+		define('OCP_UPLOAD_SWF',8); // Banners
+		define('OCP_UPLOAD_ANYTHING',15);
 	}
 }
 
@@ -141,7 +141,7 @@ function is_swf_upload($fake_prepopulation=false)
  * @param  ID_TEXT		The folder name in uploads/ where we will put this upload
  * @param  integer		Whether to obfuscate file names so the URLs can not be guessed/derived (0=do not, 1=do, 2=make extension .dat as well, 3=only obfuscate if we need to)
  * @set    0 1 2 3
- * @param  integer		The type of upload it is (from an OCP_UPLOAD_* constant)
+ * @param  integer		The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
  * @param  boolean		Make a thumbnail (this only makes sense, if it is an image)
  * @param  ID_TEXT		The name of the POST parameter storing the thumb URL. As before
  * @param  ID_TEXT		The name of the HTTP file parameter storing the thumb upload. As before
@@ -152,7 +152,7 @@ function is_swf_upload($fake_prepopulation=false)
  * @param  ?MEMBER		Member ID to run permissions with (NULL: current member)
  * @return array			An array of 4 URL bits (URL, thumb URL, URL original filename, thumb original filename)
  */
-function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false,$member_id=NULL)
+function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=15,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false,$member_id=NULL)
 {
 	require_code('files2');
 
@@ -235,13 +235,13 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 
 	// Find URL
 	require_code('images');
-	if (($enforce_type==OCP_UPLOAD_IMAGE) || ($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF))
-	{
-		$max_size=get_max_image_size();
-	} else
+	if ((($enforce_type & OCP_UPLOAD_VIDEO)!=0) || (($enforce_type & OCP_UPLOAD_AUDIO)!=0))
 	{
 		require_code('files2');
 		$max_size=get_max_file_size();
+	} else
+	{
+		$max_size=get_max_image_size();
 	}
 	if (($attach_name!='') && (array_key_exists($attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$attach_name]['tmp_name'])) || ($swf_uploaded))) // If we uploaded
 	{
@@ -518,11 +518,11 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
  * @param  MEMBER			Member ID to check permissions with.
  * @param  ID_TEXT		The name of the POST parameter storing the URL (if '', then no POST parameter). Parameter value may be blank.
  * @param  ID_TEXT		The folder name in uploads/ where we will put this upload
- * @param  integer		The type of upload it is (from an OCP_UPLOAD_* constant)
+ * @param  integer		The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
  * @param  boolean		Whether to accept upload errors
  * @return array			A pair: the URL and the filename
  */
-function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=0,$accept_errors=false)
+function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=15,$accept_errors=false)
 {
 	// Security check against naughty url's
 	$url=array();
@@ -577,7 +577,7 @@ function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=
 	if ($url[0]!='')
 	{
 		// oEmbed etc
-		if ((($enforce_type==OCP_UPLOAD_IMAGE) && (!is_image($url[0]))) || (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (!is_image($url[0])) && (get_file_extension($url[0])!='swf')))
+		if ((($enforce_type & OCP_UPLOAD_ANYTHING)==0) && (($enforce_type & OCP_UPLOAD_IMAGE)!=0) && (!is_image($url[0])) && ((($enforce_type & OCP_UPLOAD_SWF)==0) || (get_file_extension($url[0])!='swf')))
 		{
 			require_code('media_renderer');
 			require_code('files2');
@@ -613,43 +613,90 @@ function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=
  *
  * @param  MEMBER			Member ID to check permissions with.
  * @param  string			The filename.
- * @param  integer		The type of upload it is (from an OCP_UPLOAD_* constant)
+ * @param  integer		The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
  * @param  boolean		Whether to accept upload errors
  * @return boolean		Success status
  */
 function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_errors=false)
 {
+	if (($enforce_type & OCP_UPLOAD_ANYTHING)!=0) return true;
+
 	require_code('images');
-	if (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (!is_image($file)) && (get_file_extension($file)!='swf'))
+	$ok=false;
+	if (($enforce_type & OCP_UPLOAD_SWF)!=0)
 	{
-		if ($accept_errors)
-			attach_message(do_lang_tempcode('NOT_IMAGE'),'warn');
-		else
-			warn_exit(do_lang_tempcode('NOT_IMAGE'));
-		return false;
+		if (get_file_extension($file)!='swf')
+		{
+			if ($enforce_type==OCP_UPLOAD_SWF)
+			{
+				if ($accept_errors)
+					attach_message(do_lang_tempcode('NOT_IMAGE'),'warn');
+				else
+					warn_exit(do_lang_tempcode('NOT_IMAGE'));
+				return false;
+			}
+		} else
+		{
+			$ok=true;
+		}
 	}
-	if (($enforce_type==OCP_UPLOAD_IMAGE) && (!is_image($file)))
+	if (($enforce_type & OCP_UPLOAD_IMAGE)!=0)
 	{
-		if ($accept_errors)
-			attach_message(do_lang_tempcode('NOT_IMAGE'),'warn');
-		else
-			warn_exit(do_lang_tempcode('NOT_IMAGE'));
-		return false;
+		if (!is_image($file))
+		{
+			if ($enforce_type==OCP_UPLOAD_IMAGE)
+			{
+				if ($accept_errors)
+					attach_message(do_lang_tempcode('NOT_IMAGE'),'warn');
+				else
+					warn_exit(do_lang_tempcode('NOT_IMAGE'));
+				return false;
+			}
+		} else
+		{
+			$ok=true;
+		}
 	}
-	if (($enforce_type==OCP_UPLOAD_VIDEO) && (!is_video($file,has_privilege($member_id,'comcode_dangerous'),false)))
+	if (($enforce_type & OCP_UPLOAD_VIDEO)!=0)
 	{
-		if ($accept_errors)
-			attach_message(do_lang_tempcode('NOT_VIDEO'),'warn');
-		else
-			warn_exit(do_lang_tempcode('NOT_VIDEO'));
-		return false;
+		if (!is_video($file,has_privilege($member_id,'comcode_dangerous'),false))
+		{
+			if ($enforce_type==OCP_UPLOAD_VIDEO)
+			{
+				if ($accept_errors)
+					attach_message(do_lang_tempcode('NOT_VIDEO'),'warn');
+				else
+					warn_exit(do_lang_tempcode('NOT_VIDEO'));
+				return false;
+			}
+		} else
+		{
+			$ok=true;
+		}
 	}
-	if (($enforce_type==OCP_UPLOAD_AUDIO) && (!is_audio($file,has_privilege($member_id,'comcode_dangerous'))))
+	if (($enforce_type & OCP_UPLOAD_AUDIO)!=0)
+	{
+		if (!is_audio($file,has_privilege($member_id,'comcode_dangerous')))
+		{
+			if ($enforce_type==OCP_UPLOAD_AUDIO)
+			{
+				if ($accept_errors)
+					attach_message(do_lang_tempcode('NOT_AUDIO'),'warn');
+				else
+					warn_exit(do_lang_tempcode('NOT_AUDIO'));
+				return false;
+			}
+		} else
+		{
+			$ok=true;
+		}
+	}
+	if (!$ok)
 	{
 		if ($accept_errors)
-			attach_message(do_lang_tempcode('NOT_AUDIO'),'warn');
+			attach_message(do_lang_tempcode('_NOT_FILE_TYPE'),'warn');
 		else
-			warn_exit(do_lang_tempcode('NOT_AUDIO'));
+			warn_exit(do_lang_tempcode('_NOT_FILE_TYPE'));
 		return false;
 	}
 	return true;
@@ -661,13 +708,13 @@ function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_error
  * @param  MEMBER			Member ID to check permissions with.
  * @param  ID_TEXT		The name of the HTTP file parameter storing the upload (if '', then no HTTP file parameter). No file necessarily is uploaded under this.
  * @param  ID_TEXT		The folder name in uploads/ where we will put this upload
- * @param  integer		The type of upload it is (from an OCP_UPLOAD_* constant)
+ * @param  integer		The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
  * @param  integer		Whether to obfuscate file names so the URLs can not be guessed/derived (0=do not, 1=do, 2=make extension .dat as well)
  * @set    0 1 2
  * @param  boolean		Whether to accept upload errors
  * @return array			A pair: the URL and the filename
  */
-function _get_upload_url($member_id,$attach_name,$upload_folder,$enforce_type=0,$obfuscate=0,$accept_errors=false)
+function _get_upload_url($member_id,$attach_name,$upload_folder,$enforce_type=15,$obfuscate=0,$accept_errors=false)
 {
 	$file=$_FILES[$attach_name]['name'];
 	if (get_magic_quotes_gpc()) $file=stripslashes($file);
@@ -743,7 +790,7 @@ function _get_upload_url($member_id,$attach_name,$upload_folder,$enforce_type=0,
 	sync_file($place);
 
 	// Special code to re-orientate JPEG images if required (browsers cannot do this)
-	if (($enforce_type==OCP_UPLOAD_IMAGE) || (($enforce_type==OCP_UPLOAD_IMAGE_OR_SWF) && (substr($place,-4)!='.swf')))
+	if ((($enforce_type & OCP_UPLOAD_ANYTHING)==0) && (($enforce_type & OCP_UPLOAD_IMAGE)!=0) && (is_image($place)))
 	{
 		require_code('images');
 		convert_image($place,$place,-1,-1,100000/*Impossibly large size, so no resizing happens*/,false,NULL,true,true);

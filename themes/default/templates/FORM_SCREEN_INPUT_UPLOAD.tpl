@@ -15,6 +15,10 @@
 	{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<button class="button_micro" type="button" id="clearBtn_{NAME*}" onclick="var x=document.getElementById('{NAME;*}'); x.value=''; if (typeof x.fakeonchange!='undefined' &amp;&amp; x.fakeonchange) x.fakeonchange(event); return false;" title="{!CLEAR}{+START,IF_PASSED,PRETTY_NAME}: {PRETTY_NAME*}{+END}">{!CLEAR}</button>{+END}
 </div>
 
+{+START,IF_PASSED,SYNDICATION_JSON}
+	<div id="{NAME*}_syndication_options" class="syndication_options"></div>
+{+END}
+
 {+START,IF,{$CONFIG_OPTION,java_upload}}
 	{+START,IF,{$NOT,{$GET,included_java_upload}}}
 		{+START,INCLUDE,JAVA_DETECT}{+END}
@@ -29,3 +33,11 @@
 		} );
 	//]]></script>
 {+END}{+END}
+
+{+START,IF_PASSED,SYNDICATION_JSON}
+	<script>// <![CDATA[
+		add_event_listener_abstract(window,'load',function () {
+			show_upload_syndication_options('{NAME;/}','{SYNDICATION_JSON;/}');
+		} );
+	//]]></script>
+{+END}

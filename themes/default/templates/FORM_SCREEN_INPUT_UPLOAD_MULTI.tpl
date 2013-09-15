@@ -28,6 +28,10 @@
 	<!--Additional uploaders will auto-append here-->
 </div>
 
+{+START,IF_PASSED,SYNDICATION_JSON}
+	<div id="{NAME_STUB*}_syndication_options" class="syndication_options"></div>
+{+END}
+
 {+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
@@ -35,3 +39,11 @@
 		} );
 	//]]></script>
 {+END}{+END}
+
+{+START,IF_PASSED,SYNDICATION_JSON}
+	<script>// <![CDATA[
+		add_event_listener_abstract(window,'load',function () {
+			show_upload_syndication_options('{NAME_STUB;/}','{SYNDICATION_JSON;/}');
+		} );
+	//]]></script>
+{+END}

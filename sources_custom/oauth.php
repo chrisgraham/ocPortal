@@ -27,6 +27,17 @@ function ensure_got_oauth_client_id($service_name,$has_sep_key=false)
 /*
 The following is ocPortal's oAuth2 implementation.
 oAuth2 is simpler than oAuth1, because SSL is used for encryption, rather than a complex native implementation.
+
+Our policy with oAuth is to use whatever oAuth is bundled with service APIs first, if there is one.
+(Most web services provide PHP APIs and include an oAuth implementation within them)
+If a service provides no oAuth implementation and isn't a simple oAuth2, we would probably use a further
+third party library.
+The requirements of all these third party APIs and implementations need codifying within the description
+of whatever ocPortal addon uses them, as it will typically exceed ocPortal base requirements.
+
+Because of all this, we can have no top level oAuth API in ocPortal. Hook systems will need to tie into
+whatever oAuth implementation happens to be used, on a case-by-case basis.
+We may, however, define some common conventions and language strings, and use these on a case-by-case basis.
 */
 
 function retrieve_oauth2_token($service_name,$service_title,$auth_url,$endpoint)

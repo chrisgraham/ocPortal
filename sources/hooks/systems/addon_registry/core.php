@@ -786,6 +786,10 @@ class Hook_addon_registry_core
 			'sources/themes.php',
 			'sources/type_validation.php',
 			'sources/uploads.php',
+			'sources/upload_syndication.php',
+			'data/upload_syndication_auth.php',
+			'lang/EN/upload_syndication.ini',
+			'UPLOAD_SYNDICATION_SETUP_SCREEN.tpl',
 			'sources/urls.php',
 			'sources/urls2.php',
 			'sources/users.php',
@@ -947,6 +951,7 @@ class Hook_addon_registry_core
 			'MASS_SELECT_MARKER.tpl'=>'mass_select_marker',
 			'MASS_SELECT_DELETE_FORM.tpl'=>'mass_select_delete_form',
 			'DELETE_MARKER.tpl'=>'delete_marker',
+			'UPLOAD_SYNDICATION_SETUP_SCREEN.tpl'=>'upload_syndication_setup_screen',
 		);
 	}
 
@@ -1827,6 +1832,21 @@ class Hook_addon_registry_core
 						'URL'=>placeholder_url()
 					)
 				)
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__upload_syndication_setup_screen()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('UPLOAD_SYNDICATION_SETUP_SCREEN', array(
 			)), NULL, '', true)
 		);
 	}

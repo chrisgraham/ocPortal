@@ -234,9 +234,23 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	margin-bottom: 1em !important;
 }
 
+.syndication_options {
+	overflow: hidden;
+	white-space: nowrap;
+}
+
 .various_ticks {
 	margin: -0.5em 0 -0.5em -0.5em;
 	white-space: nowrap;
+}
+
+.syndication_options span {
+	white-space: nowrap;
+	border-{!en_right}: 1px dotted {$GET,pale_border};
+	font-size: 0.9em;
+}
+.syndication_options span:last-child {
+	border-{!en_right}: 0;
 }
 
 .various_ticks .input_individual_tick, .various_ticks .input_other_tick {

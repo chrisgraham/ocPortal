@@ -1002,7 +1002,10 @@ class Module_cms_galleries extends standard_crud_module
 		$set_title=do_lang_tempcode('IMAGE');
 		$field_set=alternate_fields_set__start($set_name);
 
-		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		require_code('upload_syndication');
+		list($syndication_json,)=get_upload_syndication_json(OCP_UPLOAD_IMAGE);
+		$filter=str_replace(' ','',get_option('valid_images')); // We don't use the filter from get_upload_syndication_json because we're not restricted to what can syndicate
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,$filter,$syndication_json));
 
 		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
 
@@ -1186,6 +1189,9 @@ class Module_cms_galleries extends standard_crud_module
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
 		$description=post_param('description');
+
+		require_code('upload_syndication');
+		$urls[0]=handle_upload_syndication('file',$title,$description,$urls[0],$urls[2],false);
 
 		$this->donext_type=$cat;
 

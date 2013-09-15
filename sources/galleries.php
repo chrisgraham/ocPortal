@@ -959,26 +959,6 @@ function get_gallery_content_tree($table,$submitter=NULL,$gallery=NULL,$breadcru
 }
 
 /**
- * Get a comma-separated list of allowed file types for video upload.
- *
- * @return string			Allowed file types
- */
-function get_allowed_video_file_types()
-{
-	$supported='3gp,3g2,asf,avi,flv,f4v,m2v,mpv2,mp2,m4v,mov,mpa,mp4,mpe,mpeg,mpg,ogg,ogv,qt,ram,rm,webm,wmv';
-	if (get_option('allow_audio_videos')=='1')
-	{
-		$supported.=',ra,mid,mp3,wav,wma,aif,aifc,aiff';
-	}
-	$supported.=',pdf';
-	if (has_privilege(get_member(),'use_very_dangerous_comcode'))
-	{
-		$supported.=',swf';
-	}
-	return $supported;
-}
-
-/**
  * Show a gallery media entry (not an image, something more complex); all these will render under the 'video' type even if they're technically not.
  *
  * @param  URLPATH		URL to media

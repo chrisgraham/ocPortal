@@ -1126,3 +1126,45 @@ function is_media($name,$as_admin)
 	$hooks=find_media_renderers($name,array(),$as_admin,NULL);
 	return !is_null($hooks);
 }
+
+/**
+ * Get a comma-separated list of allowed file types for audio upload.
+ *
+ * @return string			Allowed file types
+ */
+function get_allowed_image_file_types()
+{
+	$supported=str_replace(' ','',get_option('valid_images'));
+	return $supported;
+}
+
+/**
+ * Get a comma-separated list of allowed file types for video upload.
+ *
+ * @return string			Allowed file types
+ */
+function get_allowed_video_file_types()
+{
+	$supported=str_replace(' ','',get_option('valid_videos'));
+	if (get_option('allow_audio_videos')=='1')
+	{
+		$supported.=','.get_allowed_audio_file_types();
+	}
+	$supported.=',pdf';
+	if (has_privilege(get_member(),'use_very_dangerous_comcode'))
+	{
+		$supported.=',swf';
+	}
+	return $supported;
+}
+
+/**
+ * Get a comma-separated list of allowed file types for audio upload.
+ *
+ * @return string			Allowed file types
+ */
+function get_allowed_audio_file_types()
+{
+	$supported=str_replace(' ','',get_option('valid_audios'));
+	return $supported;
+}

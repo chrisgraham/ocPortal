@@ -211,6 +211,8 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config/user_postsize_errors.php',
 			'sources/hooks/systems/config/users_online_time.php',
 			'sources/hooks/systems/config/valid_images.php',
+			'sources/hooks/systems/config/valid_videos.php',
+			'sources/hooks/systems/config/valid_audios.php',
 			'sources/hooks/systems/config/valid_types.php',
 			'sources/hooks/systems/config/website_email.php',
 			'sources/hooks/systems/config/long_google_cookies.php',

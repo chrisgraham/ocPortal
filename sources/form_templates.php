@@ -146,11 +146,21 @@ function get_attachments($posting_field_name)
 	require_javascript('javascript_swfupload');
 	require_css('swfupload');
 
+	require_code('upload_syndication');
+	list($syndication_json,$filter)=get_upload_syndication_json(OCP_UPLOAD_ANYTHING);
+
 	require_code('files2');
 	$max_attach_size=get_max_file_size(get_member(),$GLOBALS['SITE_DB']);
-	if (($max_attach_size==0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0))
+	$no_quota=($max_attach_size==0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0);
+	if ($no_quota)
 	{
-		return array(new ocp_tempcode(),new ocp_tempcode());
+		if (is_null($syndication_json))
+		{
+			return array(new ocp_tempcode(),new ocp_tempcode());
+		}
+	} else
+	{
+		$filter=mixed();
 	}
 	$attach_size_field=form_input_hidden('MAX_FILE_SIZE',strval($max_attach_size));
 
@@ -159,7 +169,14 @@ function get_attachments($posting_field_name)
 	$attachments=new ocp_tempcode();
 	for ($i=1;$i<=$num_attachments;$i++)
 	{
-		$attachments->attach(do_template('ATTACHMENT',array('_GUID'=>'c3b38ca70cbd1c5f9cf91bcae9ed1134','POSTING_FIELD_NAME'=>$posting_field_name,'I'=>strval($i))));
+		$attachments->attach(do_template('ATTACHMENT',array(
+			'_GUID'=>'c3b38ca70cbd1c5f9cf91bcae9ed1134',
+			'POSTING_FIELD_NAME'=>$posting_field_name,
+			'I'=>strval($i),
+			'SYNDICATION_JSON'=>$syndication_json,
+			'NO_QUOTA'=>$no_quota,
+			'FILTER'=>$filter,
+		)));
 	}
 
 	if (get_forum_type()=='ocf')
@@ -169,7 +186,14 @@ function get_attachments($posting_field_name)
 		$max_attachments=ocf_get_member_best_group_property(get_member(),'max_attachments_per_post');
 	} else $max_attachments=100;
 
-	$attachment_template=do_template('ATTACHMENT',array('_GUID'=>'c3b38ca70cbd1c5f9cf91bcae9ed11dsds','POSTING_FIELD_NAME'=>$posting_field_name,'I'=>'__num_attachments__'));
+	$attachment_template=do_template('ATTACHMENT',array(
+		'_GUID'=>'c3b38ca70cbd1c5f9cf91bcae9ed11dsds',
+		'POSTING_FIELD_NAME'=>$posting_field_name,
+		'I'=>'__num_attachments__',
+		'SYNDICATION_JSON'=>$syndication_json,
+		'NO_QUOTA'=>$no_quota,
+		'FILTER'=>$filter,
+	));
 	$attachments=do_template('ATTACHMENTS',array(
 		'_GUID'=>'054921e7c09412be479676759accf222',
 		'POSTING_FIELD_NAME'=>$posting_field_name,
@@ -1058,9 +1082,10 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  boolean		Whether swf-upload-style is preferred
  * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)
+ * @param  ?string		JSON structure of what uploader syndications there will be (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_upload($pretty_name,$description,$name,$required,$default=NULL,$tabindex=NULL,$swfupload=true,$filter='')
+function form_input_upload($pretty_name,$description,$name,$required,$default=NULL,$tabindex=NULL,$swfupload=true,$filter='',$syndication_json=NULL)
 {
 	require_lang('javascript');
 	if ($swfupload)
@@ -1104,6 +1129,7 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
 		'TABINDEX'=>strval($tabindex),
 		'REQUIRED'=>$_required,
 		'NAME'=>$name,
+		'SYNDICATION_JSON'=>$syndication_json,
 	));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
@@ -1119,9 +1145,10 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
  * @param  ?array			The default value for the field (NULL: none)
  * @param  boolean		Whether swf-upload-style is preferred
  * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)
+ * @param  ?string		JSON structure of what uploader syndications there will be (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL,$default=NULL,$swfupload=true,$filter='')
+function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL,$default=NULL,$swfupload=true,$filter='',$syndication_json=NULL)
 {
 	require_lang('javascript');
 	if ($swfupload)
@@ -1144,7 +1171,18 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
 		$edit=$default;
 	} else $edit=array();
-	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('_GUID'=>'e8712ede08591604738762ac03852ac1','TABINDEX'=>strval($tabindex),'EDIT'=>$edit,'FILTER'=>$filter,'REQUIRED'=>$_required,'SWFUPLOAD'=>$swfupload,'NAME'=>$name,'I'=>'1','NAME_STUB'=>$name));
+	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array(
+		'_GUID'=>'e8712ede08591604738762ac03852ac1',
+		'TABINDEX'=>strval($tabindex),
+		'EDIT'=>$edit,
+		'FILTER'=>$filter,
+		'REQUIRED'=>$_required,
+		'SWFUPLOAD'=>$swfupload,
+		'NAME'=>$name,
+		'I'=>'1',
+		'NAME_STUB'=>$name,
+		'SYNDICATION_JSON'=>$syndication_json,
+	));
 	return _form_input('',$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 

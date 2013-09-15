@@ -807,3 +807,62 @@ function set_selection_range(input,selectionStart,selectionEnd)
 	} else input.focus();
 }
 
+function show_upload_syndication_options(name,syndication_json,no_quota)
+{
+	if (typeof no_quota=='undefined') var no_quota=false;
+
+	var html_spot=document.getElementById(name+'_syndication_options');
+	var html='';
+	var num_checked=0;
+	var file_ob=document.getElementById(name);
+	var pre_disabled=file_ob.disabled
+
+	var syndication=JSON.parse(syndication_json),id,authorised,label,checked;
+	for (var hook in syndication)
+	{
+		id='upload_syndicate__'+hook+'__'+name;
+		authorised=syndication[hook].authorised;
+		label=syndication[hook].label;
+
+		if (authorised)
+		{
+			checked=true;
+			num_checked++;
+		} else
+		{
+			checked=false;
+		}
+
+		window.setTimeout(function(id,authorised) {
+			return function() {
+				document.getElementById(id).onclick=function() {
+					var e=document.getElementById(id);
+					if (e.checked)
+					{
+						if (!authorised)
+						{
+							e.checked=false;
+							var url='{$FIND_SCRIPT;,upload_syndication_auth}?hook='+window.encodeURIComponent(hook)+'&name='+window.encodeURIComponent(name)+keep_stub();
+							faux_open(url,null,'width=800;height=auto','_top');
+							if (!pre_disabled)
+							{
+								file_ob.disabled=false;
+							}
+						}
+					}
+				};
+			};
+		}(id,authorised),0);
+
+		html+='<span><label for="'+id+'"><input type="checkbox" '+(checked?'checked="checked" ':'')+'id="'+id+'" name="'+id+'" value="1" />{!upload_syndication:UPLOAD_TO} '+escape_html(label)+'</label></span>';
+	}
+
+	if ((no_quota) && (num_checked==0))
+	{
+		file_ob.disabled=true;
+	}
+
+	html='<div>'+html+'</div>';
+
+	set_inner_html(html_spot,html);
+}

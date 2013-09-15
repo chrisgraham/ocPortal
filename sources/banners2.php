@@ -151,7 +151,7 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
 	{
 		if ($direct_code=='')
 		{
-			$urls=get_url($url_param_name,$file_param_name,'uploads/banners',0,$is_upload?OCP_UPLOAD_IMAGE_OR_SWF:OCP_UPLOAD_ANYTHING);
+			$urls=get_url($url_param_name,$file_param_name,'uploads/banners',0,$is_upload?(OCP_UPLOAD_IMAGE | OCP_UPLOAD_SWF):OCP_UPLOAD_ANYTHING);
 			$url=fixup_protocolless_urls($urls[0]);
 			if ($url=='')
 			{
