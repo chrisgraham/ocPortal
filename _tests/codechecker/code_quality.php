@@ -1086,8 +1086,11 @@ function check_command($command,$depth,$function_guard='',$nogo_parameters=NULL)
 				break;
 			case 'TRY':
 				check_command($c[1],$depth+1,$function_guard,$nogo_parameters); // Goes first so that we get local variables defined inside loop for use in our loop conditional
-				add_variable_reference($c[2][1][0][1],$c_pos,false);
-				check_command($c[2][2],$depth+1,$function_guard); // Goes first so that we get local variables defined inside loop for use in our loop conditional
+				foreach ($c[2] as $catch)
+				{
+					add_variable_reference($catch[1][0][1],$c_pos,false);
+					check_command($catch[2],$depth+1,$function_guard); // Goes first so that we get local variables defined inside loop for use in our loop conditional
+				}
 				break;
 			case 'FOREACH_map':
 				$passes=ensure_type(array('array'),check_expression($c[1],false,false,$function_guard),$c_pos,'Foreach must take array');

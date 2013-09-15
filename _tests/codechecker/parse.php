@@ -411,28 +411,34 @@ function _parse_command_actual($no_term_needed=false)
 			$try_position=$GLOBALS['I'];
 			if (pparse__parser_peek() != 'CURLY_OPEN') parser_error('Expected code block after "try".');
 			$try=_parse_command();
-			pparse__parser_expect('CATCH');
-			$catch_position=$GLOBALS['I'];
 			$exception=NULL;
-			switch (pparse__parser_peek())
+			$catches=array();
+			do
 			{
-				case 'BRACKET_OPEN':
-					// We are catching something specific. Let's treat it as a
-					// function's parameter list for the moment, as that's simplest,
-					// although it accepts a bit too much
-					pparse__parser_expect('BRACKET_OPEN');
-					pparse__parser_expect('IDENTIFIER'); // E.g. 'EXCEPTION'
-					$exception=_parse_comma_parameters();
-					pparse__parser_expect('BRACKET_CLOSE');
-					if (pparse__parser_peek() != 'CURLY_OPEN') parser_error ('Expected code block after "catch".');
-				case 'CURLY_OPEN':
-					$catch=_parse_command();
-					$command=array('TRY',$try,array('CATCH',$exception,$catch,$catch_position),$try_position);
-					break;
-				default:
-					parser_error('Expected BRACKET_OPEN or CURLY_OPEN after "catch".');
-					break;
+				pparse__parser_expect('CATCH');
+				$catch_position=$GLOBALS['I'];
+				switch (pparse__parser_peek())
+				{
+					case 'BRACKET_OPEN':
+						// We are catching something specific. Let's treat it as a
+						// function's parameter list for the moment, as that's simplest,
+						// although it accepts a bit too much
+						pparse__parser_expect('BRACKET_OPEN');
+						pparse__parser_expect('IDENTIFIER'); // E.g. 'EXCEPTION'
+						$exception=_parse_comma_parameters();
+						pparse__parser_expect('BRACKET_CLOSE');
+						if (pparse__parser_peek() != 'CURLY_OPEN') parser_error ('Expected code block after "catch".');
+					case 'CURLY_OPEN':
+						$catch=_parse_command();
+						$catches[]=array('CATCH',$exception,$catch,$catch_position);
+						break;
+					default:
+						parser_error('Expected BRACKET_OPEN or CURLY_OPEN after "catch".');
+						break;
+				}
 			}
+			while (pparse__parser_peek()=='CATCH');
+			$command=array('TRY',$try,$catches,$try_position);
 			break;
 
 		case 'THROW':
