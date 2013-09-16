@@ -191,7 +191,10 @@ function ocf_get_forum_parent_or_list($forum_id,$parent_id=-1)
  */
 function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NULL,$start=true)
 {
-	if (is_null($end_point_forum))
+	static $cache=array();
+	if (isset($cache[$end_point_forum])) return $cache[$end_point_forum];
+
+	if (($start) && (is_null($end_point_forum)))
 	{
 		return new ocp_tempcode();
 	}
@@ -222,6 +225,9 @@ function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NU
 		if (!$out->is_empty()) $out->attach(do_template('BREADCRUMB_SEPARATOR'));
 	} else $out=new ocp_tempcode();
 	$out->attach($_this_name);
+
+	if ($start)
+		$cache[$end_point_forum]=$out;
 
 	return $out;
 }

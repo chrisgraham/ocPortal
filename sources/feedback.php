@@ -381,7 +381,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 				$calculated_rating=intval(round($rating/floatval($num_ratings)));
 				$overall_rating+=$calculated_rating;
 
-				$all_rating_criteria[$i]=array('NUM_RATINGS'=>integer_format($num_ratings),'RATING'=>make_string_tempcode(strval($calculated_rating)))+$all_rating_criteria[$i];
+				$all_rating_criteria[$i]=array('NUM_RATINGS'=>integer_format($num_ratings),'RATING'=>strval($calculated_rating))+$all_rating_criteria[$i];
 
 				$GLOBALS['META_DATA']['rating'.(($rating_criteria['TYPE']=='')?'':('_'.$rating_criteria['TYPE']))]=strval($calculated_rating);
 
@@ -418,7 +418,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 			'URL'=>$rate_url,
 			'ALL_RATING_CRITERIA'=>$all_rating_criteria,
 			'OVERALL_NUM_RATINGS'=>integer_format($overall_num_ratings),
-			'OVERALL_RATING'=>make_string_tempcode(strval(intval($overall_rating/floatval(count($all_rating_criteria))))),
+			'OVERALL_RATING'=>strval(intval($overall_rating/floatval(count($all_rating_criteria)))),
 			'HAS_RATINGS'=>$has_ratings,
 			'SIMPLISTIC'=>(count($all_rating_criteria)==1),
 			'LIKES'=>$likes,
