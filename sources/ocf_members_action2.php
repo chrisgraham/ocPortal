@@ -831,6 +831,9 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		$mail=do_lang('STAFF_USERNAME_CHANGED_MAIL',comcode_escape(get_site_name()),comcode_escape($username),comcode_escape($old_username),get_site_default_lang());
 		dispatch_notification('ocf_username_changed_staff',NULL,$subject,$mail);
 
+		if (addon_installed('news'))
+			$GLOBALS['SITE_DB']->query_update('news',array('author'=>$username),array('author'=>$old_username));
+
 		update_member_username_caching($member_id,$username);
 	}
 	if (!is_null($password))
