@@ -36,7 +36,8 @@ class Hook_Notification_ocf_birthday extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['ocf_birthday']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_ocf_birthday'));
+		if (get_value('disable_birthdays')!=='1')
+			$list['ocf_birthday']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_ocf_birthday'));
 		return $list;
 	}
 
