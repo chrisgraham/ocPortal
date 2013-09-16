@@ -31,7 +31,7 @@ class Hook_config_photobucket_client_id
 		return array(
 			'human_name'=>'PHOTOBUCKET_CLIENT_ID',
 			'type'=>'line',
-			'category'=>'FEATURES',
+			'category'=>'FEATURE',
 			'group'=>'UPLOADED_FILES',
 			'explanation'=>'CONFIG_OPTION_photobucket_client_id',
 			'shared_hosting_restricted'=>'0',

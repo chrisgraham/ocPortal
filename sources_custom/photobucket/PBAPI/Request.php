@@ -269,6 +269,7 @@ abstract class PBAPI_Request {
         $req = $this->oauth_token->getKey();
         
         $url = self::$web_login_url . '?oauth_token=' . $req;
+
         if ($extra) $url .= '&extra='.$extra;
 
         header('Location: '.$url);

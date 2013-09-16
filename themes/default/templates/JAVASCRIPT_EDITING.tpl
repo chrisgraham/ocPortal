@@ -841,9 +841,9 @@ function show_upload_syndication_options(name,syndication_json,no_quota)
 					{
 						if (!authorised)
 						{
-							e.checked=false;
+							//e.checked=false;	Better to assume success, not all oAuth support callback
 							var url='{$FIND_SCRIPT;,upload_syndication_auth}?hook='+window.encodeURIComponent(hook)+'&name='+window.encodeURIComponent(name)+keep_stub();
-							faux_open(url,null,'width=800;height=auto','_top');
+							faux_open(url,null,'width=960;height=500','_top');
 							if (!pre_disabled)
 							{
 								file_ob.disabled=false;

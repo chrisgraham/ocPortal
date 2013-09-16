@@ -127,7 +127,8 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
 
 	$new_url=$url;
 
-	if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+	$filepath=get_custom_file_base().'/'.rawurldecode($url);
+	$url=get_custom_base_url().'/'.$url;
 
 	$remote_urls=array();
 	$hooks=find_all_hooks('systems','upload_syndication');
@@ -142,7 +143,7 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
 				$hook_file_handling_types=$ob->get_file_handling_types();
 				if (_check_enforcement_of_type(get_member(),$filename,$hook_file_handling_types,true)) // Check the upload API agrees this file matches the filetype bitmask
 				{
-					$remote_url=$ob->syndicate($url,$filename,$title,$description);
+					$remote_url=$ob->syndicate($url,$filepath,$filename,$title,$description);
 					if (!is_null($remote_url))
 					{
 						$remote_urls[$hook]=array($remote_url,$ob->get_reference_precedence());

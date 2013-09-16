@@ -53,8 +53,11 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('media_renderer');
-	$tpl=render_media_url('https://www.facebook.com/video/video.php?v=10100363037940934',array()); // video_facebook
-	if (is_null($tpl)) warn_exit('Failed to render.');
-	inform_exit(protect_from_escaping($tpl));
+	require_code('hooks/systems/upload_syndication/photobucket');
+	$ob=new Hook_upload_syndication_photobucket();
+	$url='themes/default/images/EN/logo/-logo.png';
+	$filename='foo.png';
+	$title='test title';
+	$description='test descrip';
+	$ob->syndicate($url,get_custom_file_base().'/themes/default/images/EN/logo/-logo.png',$filename,$title,$description);
 }

@@ -240,7 +240,7 @@ class PBAPI {
             $this->method_stack = array();
         }
         if ($params) $this->params = array();
-        if ($auth && $this->request) $this->resetOAuthToken();
+        if ($auth && $this->request) $this->request->resetOAuthToken();
         return $this;
     }
 
