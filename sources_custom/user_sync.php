@@ -24,7 +24,7 @@ function user_sync()
 	$USER_SYNC_IMPORT_LIMIT=NULL;
 
 	global $DO_USER_SYNC_OFFSET;
-	$DO_USER_SYNC_OFFSET=NULL;
+	$DO_USER_SYNC_OFFSET=0;
 
 	global $DO_USER_SYNC;
 	$DO_USER_SYNC=true;
