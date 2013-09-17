@@ -262,8 +262,12 @@ function get_permissions_matrix($server_id,$access,$overridables,$specific_permi
 				if ($cat_support==0) continue;
 
 				$overrides->attach(do_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array('_GUID'=>'115fbf91873be9016c5e192f5a5e090b','FORCE_PRESETS'=>$no_outer,'GROUP_NAME'=>$group_name,'VIEW_ACCESS'=>$view_access,'TABINDEX'=>strval($tabindex),'GROUP_ID'=>strval($id),'SP'=>$override,'ALL_GLOBAL'=>$all_global,'TITLE'=>$lang_string,'DEFAULT_ACCESS'=>$default_access[$id][$override],'CODE'=>isset($specific_permissions[$override][$id])?$specific_permissions[$override][$id]:'-1')));
+
+				check_suhosin_request_quantity(1,strlen('access_'.strval($id).'_sp_'.$override));
 			}
 			$permission_rows->attach(do_template('FORM_SCREEN_INPUT_PERMISSION',array('_GUID'=>'e2c4459ae995d33376c07e498f1d973a','FORCE_PRESETS'=>$no_outer,'GROUP_NAME'=>$group_name,'OVERRIDES'=>$overrides->evaluate()/*FUDGEFUDGE*/,'ALL_GLOBAL'=>$all_global,'VIEW_ACCESS'=>$view_access,'TABINDEX'=>strval($tabindex),'GROUP_ID'=>strval($id),'PINTERFACE_VIEW'=>$pinterface_view)));
+
+			check_suhosin_request_quantity(2,strlen('access_'.strval($id)));
 		} else
 		{
 			$overridables_filtered=array();

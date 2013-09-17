@@ -500,6 +500,22 @@ function check_form(the_form,for_preview)
 			smooth_scroll(posy-50,null,null,function() { try { error_element.focus(); } catch(e) {}; /* Can have exception giving focus on IE for invisible fields */ } );
 	}
 
+	// Try and workaround max_input_vars problem if lots of usergroups
+	if (!erroneous)
+	{
+		var delete_e=document.getElementById('delete');
+		var is_delete=delete_e && delete_e.type=='checkbox' && delete_e.checked;
+		var es=document.getElementsByTagName('select'),e;
+		for (var i=0;i<es.length;i++)
+		{
+			e=es[i];
+			if ((e.name.match(/^access_\d+_sp_/)) && ((is_delete) || (e.options[e.selectedIndex].value=='-1'))) // TODO: Update in v10 to 'privilege' not 'sp'
+			{
+				e.disabled=true;
+			}
+		}
+	}
+
 	return !erroneous;
 }
 
