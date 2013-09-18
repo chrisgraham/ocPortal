@@ -31,6 +31,8 @@
 					{+END}
 
 					<tbody>
+						{$GET,EXTRA_COMMENTS_FIELDS_1}
+
 						{+START,IF,{$AND,{$IS_GUEST},{$OCF}}}
 							<tr>
 								<th class="de_th">
@@ -186,14 +188,13 @@
 
 							<td>
 								<div class="constrain_field">
-									<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} accesskey="x" class="wide_field" onfocus="if ((this.value.replace(/\s/g,'')=='{POST_WARNING;^*}'.replace(/\s/g,'') &amp;&amp; '{POST_WARNING;^*}'!='') || (typeof this.strip_on_focus!='undefined' &amp;&amp; this.value==this.strip_on_focus)) this.value=''; this.style.color='black';" cols="42" rows="11" name="post" id="post">{POST_WARNING*}{+START,IF_PASSED,DEFAULT_TEXT}{DEFAULT_TEXT*}{+END}</textarea>
+									<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} accesskey="x" class="wide_field" onfocus="if ((this.value.replace(/\s/g,'')=='{POST_WARNING;^*}'.replace(/\s/g,'') &amp;&amp; '{POST_WARNING;^*}'!='') || (typeof this.strip_on_focus!='undefined' &amp;&amp; this.value==this.strip_on_focus)) this.value=''; this.style.color='black';" cols="42" rows="{$?,{$IS_NON_EMPTY,{$GET,COMMENT_POSTING_ROWS}},{$GET,COMMENT_POSTING_ROWS},11}" name="post" id="post">{POST_WARNING*}{+START,IF_PASSED,DEFAULT_TEXT}{DEFAULT_TEXT*}{+END}</textarea>
 								</div>
 
 								<div id="error_post" style="display: none" class="input_error_here"></div>
 							</td>
 						</tr>
 
-						{$GET,EXTRA_COMMENTS_FIELDS_1}
 						{$GET,EXTRA_COMMENTS_FIELDS_2}
 					</tbody>
 				</table></div>

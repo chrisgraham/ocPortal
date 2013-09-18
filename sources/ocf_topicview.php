@@ -113,17 +113,18 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		$primary_group=db_get_first_id();
 	}
 
-	$post=array('id'=>$_postdetails['id'],
-					'topic_id'=>$_postdetails['p_topic_id'],
-					'title'=>$_postdetails['p_title'],
-					'post'=>$_postdetails['message'],
-					'time'=>$_postdetails['p_time'],
-					'time_string'=>get_timezoned_date($_postdetails['p_time']),
-					'validated'=>$_postdetails['p_validated'],
-					'is_emphasised'=>$_postdetails['p_is_emphasised'],
-					'poster_username'=>$_postdetails['p_poster_name_if_guest'],
-					'poster'=>$_postdetails['p_poster'],
-					'has_history'=>!is_null($_postdetails['h_post_id'])
+	$post=array(
+		'id'=>$_postdetails['id'],
+		'topic_id'=>$_postdetails['p_topic_id'],
+		'title'=>$_postdetails['p_title'],
+		'post'=>$_postdetails['message'],
+		'time'=>$_postdetails['p_time'],
+		'time_string'=>get_timezoned_date($_postdetails['p_time']),
+		'validated'=>$_postdetails['p_validated'],
+		'is_emphasised'=>$_postdetails['p_is_emphasised'],
+		'poster_username'=>$_postdetails['p_poster_name_if_guest'],
+		'poster'=>$_postdetails['p_poster'],
+		'has_history'=>!is_null($_postdetails['h_post_id'])
 	);
 
 	if (array_key_exists('message_comcode',$_postdetails))

@@ -80,6 +80,25 @@ Staff will see all open support tickets when they visit the support ticket page,
 </table>
 [/html]
 
+[title="3"]Integration with e-mail[/title]
+
+There is an option to allow people to e-mail in to the support ticket system. This requires the PHP IMAP extension to be installed.
+
+If you choose to enable this, there are a number of assumptions:
+ - Ticket categorisation is not very important
+ - All ticket users will be using the same language (e.g. English)
+ - Simple e-mails are preferred over stylised/configurable notifications
+
+E-mails are matched up via the ticket ID in the subject line. If there is no ticket ID, a new ticket is made.
+
+ocPortal makes some attempt to clean up the e-mail text, so that the tickets are not too much of a mess.
+
+E-mails can be forwarded to the integrated address. This is very useful when customers e-mail staff directly to try and subvert the support system: it prevents you having to lecture the customer on support processes, or break process to reply to them directly.
+ocPortal will try and match the original e-mailer for forwarded e-mails. You can explicitly set who the message should be detected from via putting it into the subject line between square brackets, for example:
+[tt]Fwd: How does this work? [SomeUsername][/tt]
+This is useful if ocPortal cannot match the originating e-mail address automatically. Often people have multiple e-mail addresses. ocPortal will learn, so you only need to do it once per person. If ocPortal can't find a match it will e-mail you back saying so, rather than logging the ticket against a Guest. You can override this behaviour via tagging against [tt][Guest][/tt].
+You can also use square brackets to specify the ticket type to log as. ocPortal "intelligently" matches things in square brackets against whatever it can.
+
 [title="2"]The Messaging system[/title]
 
 The Messaging system is designed to allow staff to easily receive messages and organise themselves with respect to those messages. It is different from the Support Ticket system because the Messaging system is designed around staff planning, and unlike support tickets there is no inbuilt reply mechanism to reply to messages received (although people may leave their contact details). It is optimised for managing feedback instead of maintaining customer relationships.
@@ -223,6 +242,10 @@ To use the feedback commenting system, you must not be using the 'none' forum dr
    </tr>
 </table>
 [/html]
+
+[title="2"]Support tracker[/title]
+
+ocPortal does not come with its own issue management database, but we have a non-bundled addon that includes an integrated modified version of Mantis.
 
 [concepts
  1_key="support desk"   1_value="A virtual support desk is the virtual equivalent to a companies real-world help-desk/support-department/reception/call centre."

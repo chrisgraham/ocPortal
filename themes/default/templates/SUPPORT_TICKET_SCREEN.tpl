@@ -51,17 +51,47 @@
 		{+START,INCLUDE,STAFF_ACTIONS}
 			1_URL={STAFF_DETAILS*}
 			1_TITLE={!VIEW_COMMENT_TOPIC}
+			{+START,IF_PASSED,TICKET_TYPE}{+START,IF,{$HAS_PRIVILEGE,assume_any_member}}
+				{+START,IF,{$NEQ,{USERNAME},{$USERNAME}}}
+					2_URL={$PAGE_LINK,_SEARCH:tickets:ticket:default={TICKET_TYPE}:post={!TICKET_SPLIT_POST&,{USERNAME}}:keep_su={USERNAME}}
+					2_TITLE={!STAFF_NEW_TICKET_AS,{USERNAME}}
+				{+END}{+END}
+				{+START,IF_PASSED,SUPPORT_OPERATOR_URL}
+					3_URL={SUPPORT_OPERATOR_URL}
+					3_TITLE={!SUPPORT_ACCOUNT_SWITCH}
+				{+END}
+			{+END}
 		{+END}
 	{+END}
 </div>
 
-{+START,IF_NON_EMPTY,{COMMENT_FORM}}
-	{+START,SET,EXTRA_COMMENTS_FIELDS_2}
-		{+START,IF_NON_EMPTY,{STAFF_ONLY}}
-			{STAFF_ONLY}
-		{+END}
+{+START,SET,EXTRA_COMMENTS_FIELDS_2}
+	{+START,IF,{STAFF_ONLY}}
+		<tr>
+			<th class="de_th">
+				<span class="field_name">{!TICKET_STAFF_ONLY}:</span>
+			</th>
+			<td>
+				<label for="staff_only"><input type="checkbox" id="staff_only" name="staff_only" value="1" /> {!TICKET_STAFF_ONLY_DESCRIPTION}</label>
+			</td>
+		</tr>
 	{+END}
 
+	{+START,IF,{$NOT,{CLOSED}}}{+START,IF,{$NOT,{NEW}}}{+START,IF,{$OCF}}
+		<tr>
+			<th class="de_th">
+				<span class="field_name">{!CLOSE_TICKET}:</span>
+			</th>
+			<td>
+				<label for="close"><input type="checkbox" id="close" name="close" value="1" /> {!DESCRIPTION_CLOSE_TICKET}</label>
+			</td>
+		</tr>
+	{+END}{+END}{+END}
+{+END}
+
+{$SET,COMMENT_POSTING_ROWS,20}
+
+{+START,IF_NON_EMPTY,{COMMENT_FORM}}
 	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (check_field_for_blankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type']) || (check_field_for_blankness(this.elements['ticket_type'],event)));" action="{URL*}" method="post" enctype="multipart/form-data" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
 		{COMMENT_FORM}
 	</form>

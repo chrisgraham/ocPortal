@@ -322,39 +322,76 @@ function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_ur
  * @param  mixed			The home URL (to view the ticket) (URLPATH or Tempcode URL)
  * @param  string			Ticket owner's e-mail address, in the case of a new ticket
  * @param  integer		The new ticket type, or -1 if it is a reply to an existing ticket
+ * @param  ?MEMBER		Posting member (NULL: current member)
+ * @param  boolean		Whether the ticket was auto-created
  */
-function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_type_if_new)
+function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticket_type_if_new,$poster=NULL,$auto_created=false)
 {
+	if (is_null($poster)) $poster=get_member();
+
 	require_lang('tickets');
 	require_code('notifications');
 
+	// Lookup user details
 	$_temp=explode('_',$ticket_id);
 	$uid=intval($_temp[0]);
-	$displayname=$GLOBALS['FORUM_DRIVER']->get_username($uid,true);
-	if (is_null($displayname)) $displayname=do_lang('UNKNOWN');
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($uid);
-	if (is_null($username)) $username=do_lang('UNKNOWN');
+	$uid_displayname=$GLOBALS['FORUM_DRIVER']->get_username($uid,true);
+	if (is_null($uid_displayname)) $uid_displayname=do_lang('UNKNOWN');
+	$uid_username=$GLOBALS['FORUM_DRIVER']->get_username($uid);
+	if (is_null($uid_username)) $uid_username=do_lang('UNKNOWN');
 
+	// Clarify some details about this ticket
+	if ($title=='') $title=do_lang('UNKNOWN');
 	$new_ticket=($ticket_type_if_new!=-1);
 
+	// Lookup ticket type details
 	$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
-
 	$ticket_type_text=mixed();
 
-	if (($uid!=get_member()) && (!is_guest($uid)))
+	if ($uid!=$poster)
 	{
 		// Reply from staff, notification to member
 		$ticket_type_text=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
-		$their_lang=get_lang($uid);
-		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,$their_lang);
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
-			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member(),true)),$post,comcode_escape($ticket_type_text),strval(get_member()),comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),$their_lang);
-			dispatch_notification('ticket_reply',strval($ticket_type_id),$subject,$message,array($uid));
+			$staff_displayname=$GLOBALS['FORUM_DRIVER']->get_username($poster,true);
+			$staff_username=$GLOBALS['FORUM_DRIVER']->get_username($poster);
+
+			if ((get_option('ticket_mail_on')=='1') && (cron_installed()) && (function_exists('imap_open')))
+			{
+				require_code('tickets_email_integration');
+				ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$title,$post,$uid_displayname,$uid_email,$staff_displayname);
+			} elseif (!is_guest($uid))
+			{
+				$uid_lang=get_lang($uid);
+
+				$subject=do_lang(
+					'TICKET_REPLY',
+					$ticket_type_text,
+					$ticket_type_text,
+					$title,
+					$uid_lang
+				);
+
+				$message=do_lang(
+					'TICKET_REPLY_MESSAGE',
+					comcode_escape($title),
+					comcode_escape($ticket_url),
+					array(
+						comcode_escape($staff_displayname),
+						$post,
+						comcode_escape($ticket_type_text),
+						strval($poster),
+						comcode_escape($staff_username)
+					),
+					$uid_lang
+				);
+
+				dispatch_notification('ticket_reply',strval($ticket_type_id),$subject,$message,array($uid));
+			}
 		}
-	}
-	elseif ($uid==get_member())
+	} else
 	{
 		// Reply from member, notification to staff
 		if (is_object($ticket_url)) $ticket_url=$ticket_url->evaluate();
@@ -364,15 +401,42 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 			$ticket_type_text=($ticket_type_if_new==-1)?'':get_translated_text($ticket_type_if_new);
 		}
 
-		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,NULL,get_site_default_lang());
-		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($displayname),$post,comcode_escape($ticket_type_text),strval(get_member()),comcode_escape($username)),get_site_default_lang());
+		$subject=do_lang(
+			$new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',
+			$ticket_type_text,
+			$title,
+			NULL,
+			get_site_default_lang()
+		);
+
+		$message=do_lang(
+			$new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',
+			comcode_escape($title),
+			comcode_escape($ticket_url),
+			array(
+				comcode_escape($uid_displayname),
+				$post,
+				comcode_escape($ticket_type_text),
+				strval($poster),
+				comcode_escape($uid_username)
+			),
+			get_site_default_lang()
+		);
+
 		dispatch_notification($new_ticket?'ticket_new_staff':'ticket_reply_staff',strval($ticket_type_id),$subject,$message);
 
 		// Tell member that their message was received
-		if ($email!='')
+		if ($uid_email!='')
 		{
-			require_code('mail');
-			mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',($title=='')?do_lang('UNKNOWN'):$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email),NULL,'','',3,NULL,false,get_member());
+			if ((get_option('ticket_mail_on')=='1') && (cron_installed()) && (function_exists('imap_open')) && ($new_ticket) && ($auto_created))
+			{
+				require_code('tickets_email_integration');
+				ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$title,$post,$uid_displayname,$uid_email,'',true);
+			} else
+			{
+				require_code('mail');
+				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($uid_email),NULL,'','',3,NULL,false,$poster);
+			}
 		}
 	}
 }

@@ -378,7 +378,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$server_spec='{'.$server.':'.strval($port).''.$server_special_details.'}';
 		} else
 		{
-			$server_special_details=($server=='imap.gmail.com')?'/ssl/novalidate-cert':'/novalidate-cert';
+			$server_special_details=($server=='imap.gmail.com' || $port==993)?'/ssl/novalidate-cert':'/novalidate-cert';
 			$server_spec='{'.$server.':'.strval($port).'/imap/readonly'.$server_special_details.'}';
 		}
 		$mbox=@imap_open($server_spec.'INBOX',$username,$password);

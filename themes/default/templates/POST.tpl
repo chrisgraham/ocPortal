@@ -17,9 +17,6 @@
 
 			<div class="float_surrounder">
 				{+START,IF_NON_EMPTY,{TITLE}}{+START,IF,{$NEQ,{TITLE},{$GET,topic_title}}}<h3 class="post_title" itemprop="name">{TITLE*}</h3>{+END}{+END}
-				{+START,IF_NON_EMPTY,{$AVATAR,{POSTER_ID}}}
-					<img class="post_avatar" src="{$AVATAR*,{POSTER_ID}}" alt="{!AVATAR}" />
-				{+END}
 
 				<div class="post_subline">
 					{+START,IF_NON_EMPTY,{POSTER_URL}}{!BY_SIMPLE,<a class="post_poster" href="{POSTER_URL*}">{$DISPLAYED_USERNAME*,{POSTER_NAME}}</a>} {+START,INCLUDE,MEMBER_TOOLTIP}SUBMITTER={POSTER_ID}{+END}{+END}

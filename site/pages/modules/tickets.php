@@ -36,7 +36,7 @@ class Module_tickets
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -49,6 +49,7 @@ class Module_tickets
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('ticket_types');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('tickets');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('ticket_known_emailers');
 
 		delete_privilege('view_others_tickets');
 		delete_privilege('support_operator');
@@ -67,6 +68,14 @@ class Module_tickets
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
 		require_lang('tickets');
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->create_table('ticket_known_emailers',array(
+				'email_address'=>'*SHORT_TEXT',
+				'member_id'=>'MEMBER',
+			));
+		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
@@ -398,8 +407,7 @@ class Module_tickets
 
 		$id=get_param('id',NULL);
 		if ($id=='') $id=NULL;
-
-		if (!is_null($id))
+		if (!is_null($id)) // Existing ticket
 		{
 			$_temp=explode('_',$id);
 			$ticket_owner=intval($_temp[0]);
@@ -407,10 +415,10 @@ class Module_tickets
 
 			if (is_guest()) access_denied('NOT_AS_GUEST');
 			$this->check_id($id);
-		} else
+		} else // New ticket, generate an ID
 		{
 			$ticket_owner=get_member();
-			$ticket_id=uniqid('',true);
+			$ticket_id=uniqid('');
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SUPPORT_TICKETS'))));
@@ -419,6 +427,7 @@ class Module_tickets
 		$new=true;
 		$serialized_options=mixed();
 		$hash=mixed();
+		$ticket_type=mixed();
 		if ((!is_guest()) || (is_null($id))) // If this isn't a guest posting their ticket
 		{
 			$member=get_member();
@@ -427,6 +436,7 @@ class Module_tickets
 			$num_to_show_limit=get_param_integer('max_comments',intval(get_option('comments_to_show_in_thread')));
 			$start=get_param_integer('start_comments',0);
 
+			// Find existing posts/info
 			if ($new)
 			{
 				$id=strval($member).'_'.$ticket_id;
@@ -451,12 +461,15 @@ class Module_tickets
 				breadcrumb_set_self($ticket_title);
 			}
 
+			// Help text
 			$ticket_page_text=comcode_to_tempcode(get_option('ticket_text'),NULL,true);
-			$staff_details=new ocp_tempcode();
-			$types=$this->build_types_list(get_param('default',''));
 
+			// Selection of ticket type
+			$types=$this->build_types_list(get_param_integer('default',NULL));
+
+			// Render existing posts/info
 			$pagination=NULL;
-
+			$staff_details=new ocp_tempcode();
 			if (!$new)
 			{
 				if (is_null($_comments)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -502,18 +515,15 @@ class Module_tickets
 				));
 
 				// "Staff only reply" tickbox
-				if ((get_forum_type()=='ocf') && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))
-				{
-					require_code('form_templates');
-					$staff_only=form_input_tick(do_lang('TICKET_STAFF_ONLY'),do_lang('TICKET_STAFF_ONLY_DESCRIPTION'),'staff_only',false);
-				} else $staff_only=new ocp_tempcode();
+				$staff_only=((get_forum_type()=='ocf') && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())));
 			} else
 			{
 				$comments=new ocp_tempcode();
-				$staff_only=new ocp_tempcode();
+				$staff_only=false;
 				$ticket_type_details=get_ticket_type(NULL);
 			}
 
+			// Posting form
 			if (($poster=='') || ($GLOBALS['FORUM_DRIVER']->get_guest_id()!=intval($poster))) // We can post a new ticket reply to an existing ticket that isn't from a guest
 			{
 				$em=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
@@ -535,6 +545,7 @@ class Module_tickets
 				} else $use_captcha=false;
 				$comment_form=do_template('COMMENTS_POSTING_FORM',array(
 					'_GUID'=>'aaa32620f3eb68d9cc820b18265792d7',
+					'DEFAULT_TEXT'=>get_param('post',NULL,true),
 					'JOIN_BITS'=>'',
 					'FIRST_POST_URL'=>'',
 					'FIRST_POST'=>'',
@@ -557,8 +568,7 @@ class Module_tickets
 				$comment_form=new ocp_tempcode();
 			}
 
-			$post_url=build_url(array('page'=>'_SELF','id'=>$id,'type'=>'post','redirect'=>get_param('redirect',NULL),'start_comments'=>get_param('start_comments',NULL),'max_comments'=>get_param('max_comments',NULL)),'_SELF');
-
+			// Show other tickets
 			require_code('form_templates');
 			require_code('feedback');
 			list($warning_details,$ping_url)=handle_conflict_resolution(NULL,true);
@@ -584,24 +594,43 @@ class Module_tickets
 				}
 			}
 
+			// Is it closed?
+			$closed=is_null($our_topic)?false:($our_topic['closed']==1);
 			$toggle_ticket_closed_url=NULL;
 			if ((get_forum_type()=='ocf') && (!$new))
 			{
 				$toggle_ticket_closed_url=build_url(array('page'=>'_SELF','type'=>'toggle_ticket_closed','id'=>$id),'_SELF');
 			}
+			if ($closed)
+			{
+				$new_ticket_url=build_url(array('page'=>'_SELF','type'=>'ticket','default'=>$ticket_type),'_SELF');
+				attach_message(do_lang_tempcode('TICKET_IS_CLOSED',$new_ticket_url),'notice');
+			}
 
+			// URL To add a new ticket
 			$map=array('page'=>'_SELF','type'=>'ticket');
 			if (get_param('default','')!='') $map['default']=get_param('default');
 			$add_ticket_url=build_url($map,'_SELF');
 
+			// Link to jump over to support operator
+			$support_operator_url=mixed();
+			if ((has_privilege(get_member(),'assume_any_member')) && (!is_null($GLOBALS['FORUM_DRIVER']->get_member_from_username(do_lang('SUPPORT_ACCOUNT')))) && ($GLOBALS['FORUM_DRIVER']->get_username(get_member())!=do_lang('SUPPORT_ACCOUNT')))
+			{
+				$support_operator_url=get_self_url(false,false,array('keep_su'=>do_lang('SUPPORT_ACCOUNT')));
+			}
+
+			// Render ticket screen
+			$post_url=build_url(array('page'=>'_SELF','id'=>$id,'type'=>'post','redirect'=>get_param('redirect',NULL),'start_comments'=>get_param('start_comments',NULL),'max_comments'=>get_param('max_comments',NULL)),'_SELF');
 			$tpl=do_template('SUPPORT_TICKET_SCREEN',array(
 				'_GUID'=>'d21a9d161008c6c44fe7309a14be2c5b',
 				'SERIALIZED_OPTIONS'=>$serialized_options,
 				'HASH'=>$hash,
 				'TOGGLE_TICKET_CLOSED_URL'=>$toggle_ticket_closed_url,
-				'CLOSED'=>is_null($our_topic)?'0':strval($our_topic['closed']),
+				'CLOSED'=>$closed,
 				'OTHER_TICKETS'=>$other_tickets,
 				'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($ticket_owner),
+				'TICKET_TYPE'=>is_null($ticket_type)?NULL:strval($ticket_type),
+				'SUPPORT_OPERATOR_URL'=>$support_operator_url,
 				'PING_URL'=>$ping_url,
 				'WARNING_DETAILS'=>$warning_details,
 				'NEW'=>$new,
@@ -696,7 +725,6 @@ class Module_tickets
 			}
 
 			$new_post=new ocp_tempcode();
-			$new_post->attach(do_lang('THIS_WITH_COMCODE',do_lang('TICKET_TYPE'),$type_string)."\n\n");
 			$email=trim(post_param('email',''));
 			if ($email!='')
 			{
@@ -738,6 +766,13 @@ class Module_tickets
 		{
 			if ($email=='') $email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 			send_ticket_email($id,$__title,$post,$home_url,$email,$ticket_type);
+		}
+
+		// Close ticket, if requested
+		if (post_param_integer('close',0)==1)
+		{
+			if (get_forum_type()=='ocf')
+				$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_is_open'=>0),array('id'=>$_topic_id),'',1);
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id),'_SELF');

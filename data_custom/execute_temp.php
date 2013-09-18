@@ -53,11 +53,12 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('hooks/systems/upload_syndication/photobucket');
-	$ob=new Hook_upload_syndication_photobucket();
-	$url='themes/default/images/EN/logo/-logo.png';
-	$filename='foo.png';
-	$title='test title';
-	$description='test descrip';
-	$ob->syndicate($url,get_custom_file_base().'/themes/default/images/EN/logo/-logo.png',$filename,$title,$description);
+	set_option('ticket_mail_on','1');
+	set_option('ticket_mail_server','imap.gmail.com');
+	set_option('ticket_mail_server_port','993');
+	set_option('ticket_mail_server_type','imaps');
+	set_option('ticket_mail_username','support@ocproducts.com');
+	//set_option('ticket_mail_password','TODO');
+	require_code('tickets_email_integration');
+	ticket_incoming_scan();
 }

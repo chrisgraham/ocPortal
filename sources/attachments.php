@@ -93,7 +93,7 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 			$url->attach(symbol_tempcode('SESSION_HASHED'));
 		}
 
-		if ((!array_key_exists('thumb_url',$attributes)) || ($attributes['thumb_url']==''))
+		if ((array_key_exists('thumb_url',$attributes)) && ($attributes['thumb_url']!=''))
 		{
 			$attributes['thumb_url']=new ocp_tempcode();
 			$attributes['thumb_url']->attach($url);

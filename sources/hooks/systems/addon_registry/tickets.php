@@ -105,6 +105,15 @@ class Hook_addon_registry_tickets
 			'sources/hooks/systems/notifications/ticket_reply.php',
 			'sources/hooks/systems/notifications/ticket_new_staff.php',
 			'sources/hooks/systems/notifications/ticket_reply_staff.php',
+			'sources/tickets_email_integration.php',
+			'sources/hooks/systems/cron/tickets_email_integration.php',
+			'sources/hooks/systems/config/ticket_mail_on.php',
+			'sources/hooks/systems/config/ticket_email_from.php',
+			'sources/hooks/systems/config/ticket_mail_server.php',
+			'sources/hooks/systems/config/ticket_mail_server_port.php',
+			'sources/hooks/systems/config/ticket_mail_server_type.php',
+			'sources/hooks/systems/config/ticket_mail_username.php',
+			'sources/hooks/systems/config/ticket_mail_password.php',
 		);
 	}
 
@@ -228,9 +237,11 @@ class Hook_addon_registry_tickets
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
 				'NEW'=>lorem_phrase(),
+				'TICKET_TYPE'=>NULL,
+				'SUPPORT_OPERATOR_URL'=>NULL,
 				'TICKET_PAGE_TEXT'=>lorem_sentence_html(),
 				'TYPES'=>placeholder_array(),
-				'STAFF_ONLY'=>placeholder_fields(),
+				'STAFF_ONLY'=>true,
 				'POSTER'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
 				'COMMENTS'=>$comments,

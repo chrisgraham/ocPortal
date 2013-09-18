@@ -1083,6 +1083,8 @@ function is_video($name,$as_admin,$must_be_true_video=false)
 {
 	$allow_audio=(get_option('allow_audio_videos')=='1');
 
+	if (is_image($name)) return false;
+
 	if ($must_be_true_video)
 	{
 		require_code('mime_types');

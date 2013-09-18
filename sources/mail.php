@@ -137,7 +137,10 @@ function comcode_to_clean_text($message_plain)
 		$message_plain=preg_replace('#(\[semihtml[^\]]*\]|\[/semihtml\])#Us','',$message_plain);
 	}
 
-	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1} (${3})',$message_plain);
+	$message_plain=preg_replace("#\(\[url=\"([^\"]*)\"([^\]]*)\]([^\[\]]*)\[/url\]\)#",'${3}',$message_plain);
+	$message_plain=preg_replace("#\[url=\"([^\"]*)\"([^\]]*)\]([^\[\]]*)\[/url\]#",'${1} (${3})',$message_plain);
+
+	$message_plain=preg_replace("#\[email[^\]]*\]([^\[\]]*)\[/email\]#",'${1}',$message_plain);
 
 	$message_plain=preg_replace("#\[img(.*)\]([^\[\]]*)\[/img\]#",'',$message_plain);
 
@@ -159,7 +162,7 @@ function comcode_to_clean_text($message_plain)
 	$tags_to_strip=array('surround','ticker','jumping','right','center','left','align','list','concepts','html','semihtml','concept','size','color','font','tt','address','sup','sub','box');
 	foreach ($tags_to_strip as $s)
 	{
-		$message_plain=preg_replace('#\['.$s.'[^\]]*\](.*)\[/'.$s.'\]#U','${1}',$message_plain);
+		$message_plain=preg_replace('#\['.$s.'[^\]]*\](.*)\[/'.$s.'\]#Us','${1}',$message_plain);
 	}
 	$message_plain=str_replace(
 		array('[/*]','[*]','[list]'.chr(10),chr(10).'[/list]','[list]','[/list]','[b]','[/b]','[i]','[/i]','[u]','[/u]','[highlight]','[/highlight]'),
@@ -310,10 +313,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	}
 	if ($from_email=='') $from_email=get_option('staff_address');
 	if ($from_name=='') $from_name=get_site_name();
-	$from_email=str_replace("\r",'',$from_email);
-	$from_email=str_replace("\n",'',$from_email);
-	$from_name=str_replace("\r",'',$from_name);
-	$from_name=str_replace("\n",'',$from_name);
+	$from_email=str_replace(array("\r","\n"),array('',''),$from_email);
+	$from_name=str_replace(array("\r","\n"),array('',''),$from_name);
 
 	$theme=method_exists($GLOBALS['FORUM_DRIVER'],'get_theme')?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
 	if ($theme=='default') // Sucks, probably due to sending from Admin Zone...
@@ -348,8 +349,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	// Our subject
 	$subject=do_template('MAIL_SUBJECT',array('_GUID'=>'44a57c666bb00f96723256e26aade9e5','SUBJECT_LINE'=>$subject_line),$lang,false,NULL,'.tpl','templates',$theme);
 	$tightened_subject=$subject->evaluate($lang); // Note that this is slightly against spec, because characters aren't forced to be printable us-ascii. But it's better we allow this (which works in practice) than risk incompatibility via charset-base64 encoding.
-	$tightened_subject=str_replace(chr(10),'',$tightened_subject);
-	$tightened_subject=str_replace(chr(13),'',$tightened_subject);
+	$tightened_subject=str_replace(array("\r","\n"),array('',''),$tightened_subject);
 
 	$regexp='#^[\x'.dechex(32).'-\x'.dechex(126).']*$#';
 	if (preg_match($regexp,$tightened_subject)==0) $tightened_subject='=?'.do_lang('charset',NULL,NULL,NULL,$lang).'?B?'.base64_encode($tightened_subject)."?=";

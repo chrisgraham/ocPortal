@@ -2383,7 +2383,7 @@ div.wysiwyg_toolbar_color_finder {
 
 .comments_posting_form_inner th {
 	font-weight: bold !important;
-	padding: 0.5em 1.5em 0.5em 0;
+	padding: 0.5em 1.5em 0.5em 0.5em;
 	border-right: 1px solid {$GET,pale_border};
 	text-align: right;
 }

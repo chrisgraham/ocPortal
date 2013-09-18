@@ -110,6 +110,7 @@ class Module_admin_tickets
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'),do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'),'guest_emails_mandatory',false));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'),do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'),'search_faq',false));
 		// Permissions
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PERMISSIONS'),'SECTION_HIDDEN'=>true)));
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 		foreach ($groups as $id=>$group_name)

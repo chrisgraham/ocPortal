@@ -215,17 +215,19 @@ function _handle_data_url_attachments(&$comcode,$type,$id,$connection)
 						}
 						while (file_exists($new_path));
 						imagepng($image,$new_path);
+						imagedestroy($image);
 
 						$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
 							'a_member_id'=>get_member(),
 							'a_file_size'=>strlen($data),
-							'a_url'=>'uploads/attachments/'.$new_filename,
+							'a_url'=>'uploads/attachments/'.rawurlencode($new_filename),
 							'a_thumb_url'=>'',
 							'a_original_filename'=>basename($new_filename),
 							'a_num_downloads'=>0,
 							'a_last_downloaded_time'=>time(),
 							'a_description'=>'',
-							'a_add_time'=>time()),true);
+							'a_add_time'=>time()
+						),true);
 						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
 
 						$comcode=str_replace($comcode,$matches[0][$i],'[attachment framed="0" thumb="0"]'.strval($attachment_id).'[/attachment]');
@@ -379,21 +381,18 @@ function _handle_attachment_extraction(&$comcode,$key,$type,$id,$matches_extract
 				}
 
 				// Create new attachment from extracted file
-				$url='uploads/attachments/'.$_file;
-				$attachment_id=$connection->query_insert('attachments',
-					array(
-						'a_member_id'=>get_member(),
-						'a_file_size'=>$file_details['size'],
-						'a_url'=>$url,
-						'a_thumb_url'=>$thumb_url,
-						'a_original_filename'=>basename($entry['path']),
-						'a_num_downloads'=>0,
-						'a_last_downloaded_time'=>time(),
-						'a_description'=>$description,
-						'a_add_time'=>time()
-					),
-					true
-				);
+				$url='uploads/attachments/'.rawurlencode($_file);
+				$attachment_id=$connection->query_insert('attachments',array(
+					'a_member_id'=>get_member(),
+					'a_file_size'=>$file_details['size'],
+					'a_url'=>$url,
+					'a_thumb_url'=>$thumb_url,
+					'a_original_filename'=>basename($entry['path']),
+					'a_num_downloads'=>0,
+					'a_last_downloaded_time'=>time(),
+					'a_description'=>$description,
+					'a_add_time'=>time()
+				),true);
 				$connection->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
 				if (addon_installed('galleries'))
 				{

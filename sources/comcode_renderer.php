@@ -412,13 +412,16 @@ function absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$t
 
 	$url=check_naughty_javascript_url($source_member,$url,$as_admin);
 
-	if (substr($url,0,1)=='/') $url=substr($url,1);
-	if ((file_exists(get_file_base().'/'.$url)) && (!file_exists(get_custom_file_base().'/'.$url)))
+	if (url_is_local($url))
 	{
-		$url=get_base_url().'/'.$url;
-	} else
-	{
-		$url=get_custom_base_url().'/'.$url;
+		if (substr($url,0,1)=='/') $url=substr($url,1);
+		if ((file_exists(get_file_base().'/'.$url)) && (!file_exists(get_custom_file_base().'/'.$url)))
+		{
+			$url=get_base_url().'/'.$url;
+		} else
+		{
+			$url=get_custom_base_url().'/'.$url;
+		}
 	}
 
 	$temp_tpl=test_url($url,$tag,$given_url,$source_member);
@@ -1954,6 +1957,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$attachment_row=$attachment_rows[0];
 
 				// Check permission
+				require_code('attachments');
 				$already_referenced=array_key_exists($__id,$GLOBALS['ATTACHMENTS_ALREADY_REFERENCED']);
 				if (($already_referenced) || ($as_admin) || (/*Actually we just can't broker security between guest attachments so let's lower security on re-using them so long as they have access (!is_guest($source_member)) && */($source_member===$attachment_row['a_member_id'])) || (((has_privilege($source_member,'reuse_others_attachments')) || ($attachment_row['a_member_id']==$source_member)) && (has_attachment_access($source_member,$__id))))
 				{
