@@ -18,7 +18,7 @@
  * @package		user_sync
  */
 
-function user_sync()
+function init__user_sync()
 {
 	global $USER_SYNC_IMPORT_LIMIT;
 	$USER_SYNC_IMPORT_LIMIT=NULL;
