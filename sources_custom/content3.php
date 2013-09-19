@@ -72,10 +72,10 @@ function catalogue_find_options($field,$catalogue_name,$where='')
 	return $out;
 }
 
-function catalogue_query_select($catalogue_name,$select,$where=NULL,$filters='')
+function catalogue_query_select($catalogue_name,$select,$where=NULL,$filters='',$max=NULL,$start=0)
 {
 	global $CAPI_CATALOGUE_QUERY_CACHE;
-	$sz=serialize(array($catalogue_name,$select,$where,$filters));
+	$sz=serialize(array($catalogue_name,$select,$where,$filters,$max,$start));
 	if (isset($CAPI_CATALOGUE_QUERY_CACHE[$sz])) return $CAPI_CATALOGUE_QUERY_CACHE[$sz];
 
 	require_code('catalogues');
@@ -92,7 +92,7 @@ function catalogue_query_select($catalogue_name,$select,$where=NULL,$filters='')
 	list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($filters),'catalogue_entry',$catalogue_name);
 
 	$query='SELECT r.*'.implode(',',$extra_select).' FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.db_string_equal_to('c_name',$catalogue_name).$extra_where;
-	$rows=$GLOBALS['SITE_DB']->query($query);
+	$rows=$GLOBALS['SITE_DB']->query($query,$max,$start);
 	$out=array();
 	foreach ($rows as $_row)
 	{
@@ -119,6 +119,25 @@ function catalogue_query_select($catalogue_name,$select,$where=NULL,$filters='')
 
 	$CAPI_CATALOGUE_QUERY_CACHE[$sz]=$out;
 	return $out;
+}
+
+function catalogue_query_select_count($catalogue_name,$where=NULL,$filters='')
+{
+	require_code('catalogues');
+
+	require_code('ocselect');
+	if (!is_null($where))
+	{
+		foreach ($where as $key=>$val)
+		{
+			if ($filters!='') $filters.=',';
+			$filters.=$key.'='.(is_string($val)?$val:strval($val));
+		}
+	}
+	list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($filters),'catalogue_entry',$catalogue_name);
+
+	$query='SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.db_string_equal_to('c_name',$catalogue_name).$extra_where;
+	return $GLOBALS['SITE_DB']->query_value_if_there($query);
 }
 
 abstract class capi_catalogue_object extends capi_object
