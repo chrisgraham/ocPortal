@@ -53,7 +53,7 @@ function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=fa
 			{
 				$num_members++;
 				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
-				$map=array('PROFILE_URL'=>$profile_url,'USERNAME'=>$username);
+				$map=array('PROFILE_URL'=>$profile_url,'USERNAME'=>$username,'MEMBER_ID'=>strval($member_id));
 				if (isset($at_details['the_title']))
 				{
 					if ((has_specific_permission(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id']==$id)))

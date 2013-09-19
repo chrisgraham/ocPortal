@@ -50,7 +50,7 @@ function init__comcode()
 	$OVERRIDE_SELF_ZONE=NULL; // This is not pretty, but needed to properly scope links for search results.
 
 	global $LAX_COMCODE;
-	$LAX_COMCODE=false;
+	$LAX_COMCODE=(get_option('complex_uploader')=='0'); // TODO: This should be a new accessibility option. It is bad to expect blind users to get Comcode precisely right, it's a lot harder when you can't scan visually.
 }
 
 /**

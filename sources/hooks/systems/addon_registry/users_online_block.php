@@ -125,6 +125,7 @@ class Hook_addon_registry_users_online_block
 				'AGE'=>placeholder_number(),
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_phrase(),
+				'MEMBER_ID'=>placeholder_id(),
 				'AT'=>lorem_phrase()
 			));
 			$birthdays->attach($birthday);

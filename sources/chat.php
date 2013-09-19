@@ -1001,7 +1001,7 @@ function get_chatters_in_room_tpl($users)
 					require_code('ocf_members');
 
 					$colour=get_group_colour(ocf_get_member_primary_group($member_id));
-					$usernames->attach(do_template('OCF_USER_MEMBER',array('PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),'USERNAME'=>$username,'COLOUR'=>$colour)));
+					$usernames->attach(do_template('OCF_USER_MEMBER',array('PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),'MEMBER_ID'=>strval($member_id),'USERNAME'=>$username,'COLOUR'=>$colour)));
 				} else
 				{
 					$usernames->attach($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$username));

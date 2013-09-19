@@ -12,7 +12,7 @@
 	{+END}
 
 	{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,onlinemembers},{$OCF}}}
-		<ul class="horizontal_links associated_links_block_group">
+		<ul class="horizontal_links associated_links_block_group force_margin">
 			<li><a href="{$PAGE_LINK*,_SEARCH:onlinemembers}" title="{!USERS_ONLINE}">{!DETAILS}</a></li>
 		</ul>
 	{+END}

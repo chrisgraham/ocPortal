@@ -655,6 +655,7 @@ class Hook_addon_registry_core_ocf
 				'COLOUR'=>'',
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_word(),
+				'MEMBER_ID'=>placeholder_id(),
 				'USERGROUP'=>lorem_word_2(),
 				'AT'=>lorem_phrase()
 			)), NULL, '', true)

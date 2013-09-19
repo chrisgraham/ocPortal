@@ -479,6 +479,7 @@ class Hook_addon_registry_chat
 				$usernames->attach(do_lorem_template('OCF_USER_MEMBER', array(
 					'PROFILE_URL'=>placeholder_url(),
 					'USERNAME'=>$user,
+					'MEMBER_ID'=>placeholder_id(),
 					'COLOUR'=>'black',
 					'AT'=>lorem_phrase()
 				)));
@@ -588,6 +589,7 @@ class Hook_addon_registry_chat
 			$usernames->attach(do_lorem_template('OCF_USER_MEMBER', array(
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>$user,
+				'MEMBER_ID'=>placeholder_id(),
 				'COLOUR'=>'black',
 				'AT'=>lorem_phrase()
 			)));

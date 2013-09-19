@@ -912,6 +912,7 @@ class Hook_addon_registry_ocf_forum
 				'COLOUR'=>lorem_word(),
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_word(),
+				'MEMBER_ID'=>placeholder_id(),
 				'AT'=>lorem_phrase()
 			));
 
@@ -963,6 +964,7 @@ class Hook_addon_registry_ocf_forum
 			{
 				$poster=do_lorem_template('OCF_USER_MEMBER', array(
 					'USERNAME'=>lorem_word(),
+					'MEMBER_ID'=>placeholder_id(),
 					'PROFILE_URL'=>placeholder_url(),
 					'AT'=>lorem_phrase()
 				));
@@ -1044,6 +1046,7 @@ class Hook_addon_registry_ocf_forum
 			$members_viewing->attach(do_lorem_template('OCF_USER_MEMBER', array(
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_word(),
+				'MEMBER_ID'=>placeholder_id(),
 				'AT'=>lorem_phrase(),
 				'COLOUR'=>lorem_word()
 			)));
@@ -1223,6 +1226,7 @@ class Hook_addon_registry_ocf_forum
 					'COLOUR'=>lorem_word(),
 					'PROFILE_URL'=>placeholder_url(),
 					'USERNAME'=>lorem_word(),
+					'MEMBER_ID'=>placeholder_id(),
 					'AT'=>lorem_phrase()
 				));
 
@@ -1343,6 +1347,7 @@ class Hook_addon_registry_ocf_forum
 				$members_viewing->attach(do_lorem_template('OCF_USER_MEMBER', array(
 					'PROFILE_URL'=>placeholder_url(),
 					'USERNAME'=>lorem_word(),
+					'MEMBER_ID'=>placeholder_id(),
 					'AT'=>lorem_phrase(),
 					'COLOUR'=>lorem_word()
 				)));

@@ -92,7 +92,7 @@ class Block_main_bottom_bar
 					$col=NULL;
 					$groups_seen=array();
 				}
-				$users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'a9cb1af2a04b14edd70749c944495bff','COLOUR'=>$col,'GID'=>strval($pgid),'PROFILE_URL'=>$url,'USERNAME'=>$username,'USERGROUP'=>$usergroup)));
+				$users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'a9cb1af2a04b14edd70749c944495bff','COLOUR'=>$col,'GID'=>strval($pgid),'PROFILE_URL'=>$url,'USERNAME'=>$username,'MEMBER_ID'=>strval($member),'USERGROUP'=>$usergroup)));
 				$num_members++;
 			}
 			if ($num_guests!=0)

@@ -324,7 +324,8 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 		$GLOBALS['HTTP_STATUS_CODE']='400';
 		if (!headers_sent())
 		{
-			if (/*(!browser_matches('ie')) && */(strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
+			// NB: Very important this doesn't run on IE. IE is supposed to show error screens literally if more than 512 bytes, and this is much more (irregardless of compression) - but sometimes seems to still hide it with a "friendly" error anyway
+			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
 		}
 	}
 
