@@ -161,21 +161,26 @@ function email_comcode_from_html($body)
 {
 	$body=unixify_line_format($body);
 
+	// We only want inside the body
 	$body=preg_replace('#.*<body[^<>]*>#is','',$body);
 	$body=preg_replace('#</body>.*#is','',$body);
 
+	// Cleanup some junk
 	$body=str_replace(array('<<','>>'),array('&lt;<','>&gt;'),$body);
-	$body=str_replace(array(' style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;"',' apple-width="yes" apple-height="yes"','<br clear="all">',' class="gmail_extra"',' class="gmail_quote"',' style="word-wrap:break-word"',' style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; "'),array('','','<br />','','','',''),$body);
+	$body=str_replace(array(' class="Apple-interchange-newline"',' style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;"',' apple-width="yes" apple-height="yes"','<br clear="all">',' class="gmail_extra"',' class="gmail_quote"',' style="word-wrap:break-word"',' style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; "'),array('','','','<br />','','','',''),$body);
 	$body=preg_replace('# style="text-indent:0px.*"#U','',$body); // Apple Mail long list of styles
 
+	// Convert quotes
 	$body=preg_replace('#<div[^<>]*>On (.*) wrote:</div><br[^<>]*><blockquote[^<>]*>#i','[quote="${1}"]',$body); // Apple Mail
 	$body=preg_replace('#(<div[^<>]*>)On (.*) wrote:<br[^<>]*><blockquote[^<>]*>#i','${1}[quote="${2}"]',$body); // gmail
 	$body=preg_replace('#(\[quote="[^"]*) &lt;<.*>&gt;#U','${1}',$body); // Remove e-mail address (Apple Mail)
 	$body=preg_replace('#(\[quote="[^"]*) <span[^<>]*>&lt;<.*>&gt;</span>#U','${1}',$body); // Remove e-mail address (gmail)
 	$body=preg_replace('#<blockquote[^<>]*>#i','[quote]',$body);
 	$body=preg_replace('#</blockquote>#i','[/quote]',$body);
+
 	$body=preg_replace('<img [^<>]*src="cid:[^"]*"[^<>]*>','',$body); // We will get this as an attachment instead
 
+	// Strip signature
 	do
 	{
 		$pos=strpos($body,'<div apple-content-edited="true">');
@@ -213,9 +218,9 @@ function email_comcode_from_html($body)
 	require_code('comcode_from_html');
 	$body=semihtml_to_comcode($body,true);
 
+	// Trim too much white-space
 	$body=preg_replace('#\[quote\](\s|<br />)+#s','[quote]',$body);
 	$body=preg_replace('#(\s|<br />)+\[/quote\]#s','[/quote]',$body);
-
 	$body=str_replace("\n\n\n","\n\n",$body);
 
 	// Tidy up the body
@@ -470,6 +475,8 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 			$subject=substr($subject,strlen($prefix));
 			$forwarded=true;
 			$body=preg_replace('#^(\[semihtml\])?(<br />\n)*Begin forwarded message:(\n|<br />)*#','${1}',$body);
+			$body=preg_replace('#^(\[semihtml\])?(<br />\n)*<div>Begin forwarded message:</div>(\n|<br />)*#','${1}',$body);
+			$body=preg_replace('#^(\[semihtml\])?(<br />\n)*<div>(<br />\n)*<div>Begin forwarded message:</div>(\n|<br />)*#','${1}<div>',$body);
 		}
 	}
 	if ($forwarded)
