@@ -1062,7 +1062,7 @@ function select_tab(id,tab)
 					element.style.height='';
 				} else
 				{
-					element.style.visibility='hidden'; // We are not using visibility:hidden due to https://code.google.com/p/swfupload/issues/detail?id=231
+					element.style.visibility='hidden'; // We are now using visibility:hidden due to https://code.google.com/p/swfupload/issues/detail?id=231
 					element.style.overflow='hidden';
 					element.style.width='0';
 					element.style.height='0';

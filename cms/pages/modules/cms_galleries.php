@@ -939,7 +939,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
-		if (get_option('is_on_gd')=='0')
+		if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
 		{
 			$thumb_width=get_option('thumb_width');
 
