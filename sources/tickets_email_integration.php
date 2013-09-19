@@ -536,6 +536,9 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 		'member_id'=>$member_id,
 	));
 
+	// Check there can be no forgery vulnerability
+	if (has_privilege($member_id,'comcode_dangerous')) $member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // Sorry, we can't let e-mail posting with staff permissions
+
 	// Add in attachments
 	foreach ($attachments as $filename=>$filedata)
 	{
@@ -564,6 +567,9 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 
 		$body.="\n\n".'[attachment framed="1" thumb="1"]'.strval($attachment_id).'[/attachment]';
 	}
+
+	// Mark that this was e-mailed in
+	$body.="\n\n".do_lang('TICKET_EMAILED_IN');
 
 	// Post
 	if (is_null($existing_ticket))
