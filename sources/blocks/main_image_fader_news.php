@@ -102,7 +102,7 @@ class Block_main_image_fader_news
 			$q_filter.=$privacy_where;
 		}
 
-		$query='SELECT p.id,news_image,title,news,news_article,date_and_time,submitter,author FROM '.get_table_prefix().'news p'.$join.' WHERE '.$ocfilter.$q_filter.' ORDER BY date_and_time DESC';
+		$query='SELECT p.id,news_image,title,news,news_article,date_and_time,submitter,author FROM '.get_table_prefix().'news p'.$join.' WHERE '.$ocfilter.$q_filter.' AND validated=1 ORDER BY date_and_time DESC';
 		$all_rows=$GLOBALS['SITE_DB']->query($query,100/*reasonable amount*/);
 		$news=array();
 		require_code('images');

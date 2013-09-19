@@ -35,6 +35,7 @@
 					duration: {LENGTH%},
 				{+END}
 				file: '{URL;/}',
+				type: '{$PREG_REPLACE*,.*\.,,{$LCASE,{FILENAME}}}',
 				image: '{THUMB_URL;/}',
 				flashplayer: '{$BASE_URL;/}/data/jwplayer.flash.swf{+START,IF,{$NOT,{$BROWSER_MATCHES,bot}}}?rand={$RAND;/}{+END}',
 				events: {

@@ -51,6 +51,7 @@ class Hook_media_rendering_audio_websafe
 	{
 		if ($mime_type=='audio/ogg') return MEDIA_RECOG_PRECEDENCE_HIGH;
 		if ($mime_type=='audio/x-mpeg') return MEDIA_RECOG_PRECEDENCE_HIGH;
+		if ($mime_type=='audio/mpeg') return MEDIA_RECOG_PRECEDENCE_HIGH;
 
 		// Sometimes an mp3 is put in an mp4 container
 		if ($mime_type=='video/mp4') return MEDIA_RECOG_PRECEDENCE_MEDIUM;
