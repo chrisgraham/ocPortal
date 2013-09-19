@@ -731,4 +731,20 @@ function require_css($css)
 {
 }
 
+/**
+ * Do a wildcard match by converting to a regular expression.
+ *
+ * @param  string			The haystack
+ * @param  string			The needle (a wildcard expression)
+ * @param  boolean		Whether full-coverance is required
+ * @return boolean		Whether we have a match
+ */
+function simulated_wildcard_match($context,$word,$full_cover=false)
+{
+	$rexp=str_replace('%','.*',str_replace('_','.',str_replace('\\?','.',str_replace('\\*','.*',preg_quote($word)))));
+	if ($full_cover) $rexp='^'.$rexp.'$';
+
+	return preg_match('#'.str_replace('#','\#',$rexp).'#i',$context)!=0;
+}
+
 

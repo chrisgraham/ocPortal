@@ -88,6 +88,8 @@ function init__database__xml()
 	{
 		$GLOBALS['XML_CHAIN_DB']=NULL;
 	}
+
+	if (function_exists('set_time_limit')) @set_time_limit(100); // XML DB is *slow*
 }
 
 /**
@@ -1180,7 +1182,7 @@ class Database_Static_xml
 					$possible_matches=$match;
 					foreach ($possible_matches as $match2)
 					{
-						if ($match=='') continue;
+						if ($match2=='') continue;
 
 						if (strpos($file_contents,xmlentities($match2))!==false)
 						{
@@ -1511,6 +1513,11 @@ class Database_Static_xml
 			// We don't actually do indexes, so do nothing
 		} elseif ($type=='TABLE')
 		{
+			if ($tokens[$at]=='IF')
+			{
+				$this->_parsing_read($at,$tokens,$query);
+				if (!$this->_parsing_expects($at,$tokens,'EXISTS',$query)) return NULL;
+			}
 			$table_name=$this->_parsing_read($at,$tokens,$query);
 			$this->db_drop_if_exists($table_name,$db);
 		} else
@@ -1620,6 +1627,7 @@ class Database_Static_xml
 					}
 					$this->_write_records($db,$table_name,$records,$fail_ok);
 
+					$this->_read_schema($db,$table_name); // Workaround where $SCHEMA_NAME[$table_name] has actually been set, but somehow PHP has not noticed
 					if (array_key_exists($table_name,$SCHEMA_CACHE))
 						$SCHEMA_CACHE[$table_name][$column_name]=$data_type;
 				}
