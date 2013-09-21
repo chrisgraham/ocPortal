@@ -140,7 +140,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				$view_by_members=($cpf_permissions[0]['member_view']==1);
 				$view_by_friends=($cpf_permissions[0]['friend_view']==1);
 				$view_by_groups=(strlen($cpf_permissions[0]['group_view'])>0)?array_map('intval',explode(',',$cpf_permissions[0]['group_view'])):array();
-				if (count($view_by_groups)==count($tmp_groups) || $view_by_members==1) $view_by_groups=array('all');
+				if (count($view_by_groups)==count($tmp_groups) || $view_by_members) $view_by_groups=array('all');
 			}
 
 			// Work out the CPF name
@@ -174,7 +174,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				{
 					if ($group==get_option('probation_usergroup')) continue;
 
-					$current_group_view=(in_array($gr_key,$view_by_groups));
+					$current_group_view=@(in_array($gr_key,$view_by_groups)); // @ is due to mixed key types, and ocProducts type strictness
 					$groups->attach(form_input_list_entry(strval($gr_key),$current_group_view,$group));
 				}
 

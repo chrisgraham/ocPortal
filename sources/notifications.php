@@ -203,7 +203,8 @@ class Notification_dispatcher
 		$ob=_get_notification_ob_for_code($this->notification_code);
 		if (is_null($ob))
 		{
-			fatal_exit('Missing notification code: '.$this->notification_code);
+			if (get_page_name()!='admin_setupwizard') // Setupwizard may have removed after register_shutdown_function was called
+				fatal_exit('Missing notification code: '.$this->notification_code);
 			return;
 		}
 

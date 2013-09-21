@@ -45,7 +45,7 @@ class Hook_cron_ocf_birthdays
 				require_code('notifications');
 
 				$subject=do_lang('BIRTHDAY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username);
-				$mail=do_lang('BIRTHDAY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array($member_url->evaluate(),$birthday_url->evaluate(),strval($_birthday['id']),get_base_url()));
+				$mail=do_lang('BIRTHDAY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array($member_url->evaluate(),$birthday_url->evaluate(),strval($_birthday['id']),get_base_url(),urlencode($username))); // TODO: Remember to update lang string {7} to {8} (I think) in v10
 
 				if (addon_installed('chat'))
 				{

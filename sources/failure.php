@@ -787,7 +787,7 @@ function _fatal_exit($text,$return=false)
 	// To break any looping of errors
 //@var_dump(debug_backtrace());@exit($text); // Useful if things go a bit nuts and error won't come out
 	global $EXITING;
-	if ((!function_exists('do_header')) || (!function_exists('die_html_trace'))) $EXITING++; //exit(escape_html($text));
+	if ((!function_exists('globalise')) || (!function_exists('die_html_trace'))) $EXITING++; //exit(escape_html($text));
 	$EXITING++;
 	if (($EXITING>1) || (running_script('upgrader')) || (!class_exists('ocp_tempcode')))
 	{
@@ -864,7 +864,6 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'_custom/')===false) && 
 		(strpos($text,'data/occle.php')===false) && 
 		(strpos($text,'/mini')===false) && 
-		(strpos($text,'&#')===false/*charset encoding issue*/) && 
 		(strpos($text,'has been disabled for security reasons')===false) && 
 		(strpos($text,'max_questions')/*mysql limit*/===false) && 
 		(strpos($text,'Error at offset')===false) && 

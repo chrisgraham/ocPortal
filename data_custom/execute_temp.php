@@ -55,4 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	echo function_exists('persistent_cache_get')?'yes':'no';
 }

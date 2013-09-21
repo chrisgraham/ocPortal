@@ -673,10 +673,20 @@ class Module_admin_setupwizard
 			delete_menu_item_simple('site:');
 
 			// Run any specific code for the profile
-			require_code('hooks/modules/admin_setupwizard_installprofiles/'.$installprofile);
-			$object=object_factory('Hook_admin_setupwizard_installprofiles_'.$installprofile);
-			$object->install_code();
-			$installprofileblocks=$object->default_blocks();
+			$object=mixed();
+			if ((is_file(get_file_base().'/sources/hooks/modules/admin_setupwizard_installprofiles/'.$installprofile.'.php')) || (is_file(get_file_base().'/sources_custom/hooks/modules/admin_setupwizard_installprofiles/'.$installprofile.'.php')))
+			{
+				require_code('hooks/modules/admin_setupwizard_installprofiles/'.$installprofile);
+				$object=object_factory('Hook_admin_setupwizard_installprofiles_'.$installprofile,true);
+			}
+			if (!is_null($object))
+			{
+				$object->install_code();
+				$installprofileblocks=$object->default_blocks();
+			} else // Hmm, we probably just uninstalled the install-profile hook as its addon was not chosen! Whoopsie, but do our best.
+			{
+				$installprofileblocks=array();
+			}
 		} else $installprofileblocks=array();
 
 		if ((post_param_integer('skip_8',0)==0) && (function_exists('imagecreatefromstring')) && (addon_installed('themewizard')))
@@ -770,8 +780,11 @@ class Module_admin_setupwizard
 						if (count($dependencies)==0)
 						{
 							// Archive it off to exports/addons
-							$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
-							create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+							if ($addon_row['addon_files']!='')
+							{
+								$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
+								create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+							}
 
 							uninstall_addon($addon_row['addon_name']);
 						}
@@ -850,13 +863,11 @@ class Module_admin_setupwizard
 			sync_file($fullpath);
 		}
 
-		$installprofile=post_param('installprofile','');
-		if ($installprofile!='')
+		$block_options=mixed();
+		if (($installprofile!='') && (!is_null($object)))
 		{
-			require_code('hooks/modules/admin_setupwizard_installprofiles/'.$installprofile);
-			$object=object_factory('Hook_admin_setupwizard_installprofiles_'.$installprofile);
 			$block_options=$object->block_options();
-		} else $block_options=NULL;
+		}
 
 		// Blocks
 		if (post_param_integer('skip_6',0)==0)
@@ -936,6 +947,8 @@ class Module_admin_setupwizard
 		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
 
 		require_code('templates_donext');
+
+		require_lang('zones');
 
 		// Show nice interface to start adding pages
 		return do_next_manager($title,do_lang_tempcode('SUCCESS'),
