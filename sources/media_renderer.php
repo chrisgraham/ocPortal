@@ -145,19 +145,23 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
  * @param  ?MEMBER		Member to run as (NULL: current member)
  * @param  integer		Bitmask of media that we will support
  * @param  ?ID_TEXT		Limit to a media rendering hook (NULL: no limit)
+ * @param  ?URLPATH		The URL to do media detection against (NULL: use $url)
  * @return ?tempcode		The rendered version (NULL: cannot render)
  */
-function render_media_url($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL,$acceptable_media=15,$limit_to=NULL)
+function render_media_url($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL,$acceptable_media=15,$limit_to=NULL,$url_to_scan_against=NULL)
 {
 	$hooks=find_media_renderers(
-		is_object($url)?$url->evaluate():$url,
+		is_null($url_to_scan_against)?(is_object($url)?$url->evaluate():$url):$url_to_scan_against,
 		$attributes,
 		$as_admin,
 		$source_member,
 		$acceptable_media,
 		$limit_to
 	);
-	if (is_null($hooks)) return NULL;
+	if (is_null($hooks))
+	{
+		return NULL;
+	}
 	$hook=reset($hooks);
 
 	$ob=object_factory('Hook_media_rendering_'.$hook);

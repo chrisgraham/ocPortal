@@ -111,6 +111,38 @@ function upload_syndication_auth_script()
 }
 
 /**
+ * Find if upload syndication will happen. Tell's us we do not need to worry about quota.
+ *
+ * @param  ID_TEXT		Upload field name.
+ * @return boolean		Whether it will?
+ */
+function upload_will_syndicate($name)
+{
+	$hooks=find_all_hooks('systems','upload_syndication');
+	foreach (array_keys($hooks) as $hook)
+	{
+		require_code('hooks/systems/upload_syndication/'.filter_naughty($hook));
+		$ob=object_factory('Hook_upload_syndication_'.$hook);
+		if ((post_param_integer('upload_syndicate__'.$hook.'__'.$name,0)==1) || ($ob->happens_always()))
+		{
+			if (($ob->is_enabled()) && ($ob->is_authorised()))
+			{
+				require_code('uploads');
+				is_swf_upload(true);
+
+				$hook_file_handling_types=$ob->get_file_handling_types();
+				$filename=isset($_FILES[$name]['name'])?$_FILES[$name]['name']:'';
+				if (_check_enforcement_of_type(get_member(),$filename,$hook_file_handling_types,true)) // Check the upload API agrees this file matches the filetype bitmask
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+/**
  * Do upload syndication (after an upload has been received, in-context).
  *
  * @param  ID_TEXT		Upload field name.
@@ -162,9 +194,9 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
 		$no_quota=(($max_attach_size==0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0));
 		if ($no_quota)
 		{
-			if (url_is_local($url))
+			if (url_is_local($new_url))
 			{
-				@unlink(get_custom_file_base().'/'.rawurldecode($url));
+				@unlink(get_custom_file_base().'/'.rawurldecode($new_url));
 			}
 
 			if (count($remote_urls)==0)
@@ -174,7 +206,7 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
 			}
 
 			sort_maps_by($remote_urls,1);
-			$new_url=end($remote_urls);
+			$new_url=reset(end($remote_urls)); // The first element (URL in URL pair) of the last URL pair element
 		}
 	}
 

@@ -818,6 +818,11 @@ function show_upload_syndication_options(name,syndication_json,no_quota)
 	var pre_disabled=file_ob.disabled
 
 	var syndication=JSON.parse(syndication_json),id,authorised,label,checked;
+	var num=0;
+	for (var hook in syndication)
+	{
+		num++;
+	}
 	for (var hook in syndication)
 	{
 		id='upload_syndicate__'+hook+'__'+name;
@@ -854,7 +859,7 @@ function show_upload_syndication_options(name,syndication_json,no_quota)
 			};
 		}(id,authorised),0);
 
-		html+='<span><label for="'+id+'"><input type="checkbox" '+(checked?'checked="checked" ':'')+'id="'+id+'" name="'+id+'" value="1" />{!upload_syndication:UPLOAD_TO} '+escape_html(label)+'</label></span>';
+		html+='<span><label for="'+id+'"><input type="checkbox" '+(checked?'checked="checked" ':'')+'id="'+id+'" name="'+id+'" value="1" />{!upload_syndication:UPLOAD_TO} '+escape_html(label)+(((no_quota) && (num==1))?' ({!_REQUIRED;})':'')+'</label></span>';
 	}
 
 	if ((no_quota) && (num_checked==0))

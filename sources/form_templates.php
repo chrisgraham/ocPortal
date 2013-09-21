@@ -24,6 +24,7 @@
 function init__form_templates()
 {
 	require_javascript('javascript_validation');
+	require_javascript('javascript_editing');
 
 	global $WYSIWYG_ATTACHED;
 	$WYSIWYG_ATTACHED=false;
@@ -150,8 +151,8 @@ function get_attachments($posting_field_name)
 	list($syndication_json,$filter)=get_upload_syndication_json(OCP_UPLOAD_ANYTHING);
 
 	require_code('files2');
-	$max_attach_size=get_max_file_size(get_member(),$GLOBALS['SITE_DB']);
-	$no_quota=($max_attach_size==0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0);
+	$max_attach_size=get_max_file_size(is_null($syndication_json)?get_member():NULL,$GLOBALS['SITE_DB']);
+	$no_quota=(ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0);
 	if ($no_quota)
 	{
 		if (is_null($syndication_json))
@@ -230,7 +231,6 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 {
 	require_lang('javascript');
 	require_javascript('javascript_posting');
-	require_javascript('javascript_editing');
 	require_javascript('javascript_ajax');
 	require_javascript('javascript_swfupload');
 	require_css('swfupload');
@@ -831,7 +831,6 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 
 	require_lang('comcode');
 
-	require_javascript('javascript_editing');
 	require_javascript('javascript_ajax');
 
 	$tabindex=get_form_field_tabindex($tabindex);
@@ -894,7 +893,6 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 {
 	require_lang('comcode');
 
-	require_javascript('javascript_editing');
 	require_javascript('javascript_ajax');
 
 	$tabindex=get_form_field_tabindex($tabindex);

@@ -99,7 +99,7 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 			$attributes['thumb_url']->attach($url);
 			$attributes['thumb_url']->attach('&thumb=1&no_count=1');
 		}
-	} else
+	} else // attachment_safe
 	{
 		$url=$attachment_row['a_url'];
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
@@ -110,15 +110,21 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 	}
 
 	// Render
-	return render_media_url(
+	$ret=render_media_url(
 		$url,
 		$url_safe,
 		$attributes,
 		$as_admin,
 		$source_member,
 		MEDIA_TYPE_ALL,
-		((array_key_exists('type',$attributes)) && ($attributes['type']!=''))?$attributes['type']:NULL
+		((array_key_exists('type',$attributes)) && ($attributes['type']!=''))?$attributes['type']:NULL,
+		$attachment_row['a_url']
 	);
+	if (is_null($ret))
+	{
+		$ret=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
+	}
+	return $ret;
 }
 
 /**

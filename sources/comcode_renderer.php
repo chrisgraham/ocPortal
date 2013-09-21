@@ -1819,7 +1819,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$id=$embed->evaluate();
 
 			// Check against quota. We work all this out before we do any downloads, to make sure orphaned files aren't dumped on the file system (possible hack method)
-			if ((!is_numeric($id)) && (!$as_admin) && (!has_privilege($source_member,'exceed_filesize_limit')))
+			if ((!is_numeric($id))/*=new upload*/ && (!$as_admin) && (!has_privilege($source_member,'exceed_filesize_limit')))
 			{
 				if (get_forum_type()=='ocf')
 				{
@@ -1829,7 +1829,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					$daily_quota=5; // 5 is a hard coded default for non-OCF forums
 				}
-				if (!is_null($daily_quota))
+				require_code('upload_syndication');
+				if ((!is_null($daily_quota)) && ((substr($id,0,4)!='new_') || (!upload_will_syndicate('file'.substr($id,4)))))
 				{
 					$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval($source_member).' AND a_add_time>'.strval(time()-60*60*24));
 					if (is_null($_size_uploaded_today[0]['the_answer'])) $_size_uploaded_today[0]['the_answer']=0;
@@ -1911,7 +1912,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$urls[0]=handle_upload_syndication('file'.$_id,'',array_key_exists('description',$attributes)?$attributes['description']:'',$urls[0],$original_filename,true);
 
 					// Special code to re-orientate JPEG images if required (browsers cannot do this)
-					if ((is_saveable_image($urls[0])) && (($attributes['type']=='') || ($attributes['image_websafe']=='')))
+					if ((is_saveable_image($urls[0])) && (url_is_local($urls[0])) && (($attributes['type']=='') || ($attributes['image_websafe']=='')))
 					{
 						require_code('images');
 						$attachment_path=get_custom_file_base().'/'.rawurldecode($urls[0]);

@@ -446,7 +446,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 		if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 		$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval($source_member).' AND a_add_time>'.strval(time()-60*60*24));
 		$size_uploaded_today=intval($_size_uploaded_today[0]['the_answer']);
-		$d=$daily_quota*1024*1024-$size_uploaded_today;
+		$d=max(0,$daily_quota*1024*1024-$size_uploaded_today);
 	}
 
 	if ($a!=0) $possibilities[]=$a;

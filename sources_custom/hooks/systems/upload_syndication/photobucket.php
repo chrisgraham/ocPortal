@@ -74,7 +74,8 @@ class Hook_upload_syndication_photobucket
 			// Okay, so we don't have an 'access' token yet, but we may have an authorised 'access' token to get one right away...
 
 			// Request the 'access' token, that may have been authorised for us already against a stored 'request' token
-			if (get_long_value('photobucket_oauth_key__'.strval(get_member()))!==NULL)
+			$req_key=get_long_value('photobucket_oauth_key__'.strval(get_member()));
+			if (($req_key!==NULL) && (substr($req_key,0,4)=='req_'))
 			{
 				$api=$this->_get_api();
 				$api->setOAuthToken(
@@ -90,6 +91,7 @@ class Hook_upload_syndication_photobucket
 				}
 				catch (PBAPI_Exception $e)
 				{
+					attach_message(do_lang_tempcode('PHOTOBUCKET_ERROR',escape_html($e->getCode()),escape_html($e->getMessage()),escape_html(get_site_name())),'warn');
 					return false; // Maybe our 'request' token had a stale authorisation, or was never authorised -- so we fail and receive_authorisation() would need calling
 				}
 				$token=$api->getOAuthToken();
@@ -97,8 +99,9 @@ class Hook_upload_syndication_photobucket
 				set_long_value('photobucket_oauth_secret__'.strval(get_member()),$token->getSecret());
 				set_long_value('photobucket_oauth_username__'.strval(get_member()),$api->getUsername());
 				set_long_value('photobucket_oauth_subdomain__'.strval(get_member()),$api->getSubdomain());
-				$this->_logged_in=true;
-				return true;
+
+				$api->reset(true,true,true,true); // Don't let a previous stale 'request' token we've set in _login() block us from getting a new one
+				return $this->_login();
 			}
 
 			return false;
@@ -184,11 +187,12 @@ class Hook_upload_syndication_photobucket
 			$api->upload($call_params);
 			$api->post();
 			$response=$api->getParsedResponse(true);
+
 			return $response['url'];
 		}
 		catch (PBAPI_Exception $e2)
 		{
-			attach_message(do_lang_tempcode('PHOTOBUCKET_ERROR',escape_html($e2->getCode()),escape_html($e2->getMessage()),escape_html(get_site_name())));
+			attach_message(do_lang_tempcode('PHOTOBUCKET_ERROR',escape_html($e2->getCode()),escape_html($e2->getMessage()),escape_html(get_site_name())),'warn');
 		}
 		
 		return NULL;
