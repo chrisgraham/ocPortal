@@ -50,13 +50,21 @@ class Hook_upload_syndication_photobucket
 
 	function _login()
 	{
-		if (get_long_value('photobucket_oauth_key__'.strval(get_member()))===NULL) return false; // No receive_authorisation() started yet
+		$req_key=get_long_value('photobucket_oauth_key__'.strval(get_member()));
+		if ($req_key===NULL) return false; // No receive_authorisation() started yet
 
 		if ($this->_logged_in) return true;
 
 		$api=$this->_get_api();
+
+		// Request the 'access' token, that may have been authorised for us already against a stored 'request' token
+		if (($req_key!==NULL) && (substr($req_key,0,4)=='req_'))
+		{
+			return $this->_get_access_token_then_login($api,$req_key);
+		}
+
 		$api->setOAuthToken(
-			get_long_value('photobucket_oauth_key__'.strval(get_member())),
+			$req_key,
 			get_long_value('photobucket_oauth_secret__'.strval(get_member()))
 		);
 		if (get_long_value('photobucket_oauth_subdomain__'.strval(get_member()))!==NULL)
@@ -71,43 +79,41 @@ class Hook_upload_syndication_photobucket
 		}
 		catch (PBAPI_Exception $e)
 		{
-			// Okay, so we don't have an 'access' token yet, but we may have an authorised 'access' token to get one right away...
-
-			// Request the 'access' token, that may have been authorised for us already against a stored 'request' token
-			$req_key=get_long_value('photobucket_oauth_key__'.strval(get_member()));
-			if (($req_key!==NULL) && (substr($req_key,0,4)=='req_'))
-			{
-				$api=$this->_get_api();
-				$api->setOAuthToken(
-					get_long_value('photobucket_oauth_key__'.strval(get_member())),
-					get_long_value('photobucket_oauth_secret__'.strval(get_member()))
-				);
-				$api->login('access');
-				$api->post();
-
-				try
-				{
-					$api->loadTokenFromResponse();
-				}
-				catch (PBAPI_Exception $e)
-				{
-					attach_message(do_lang_tempcode('PHOTOBUCKET_ERROR',escape_html($e->getCode()),escape_html($e->getMessage()),escape_html(get_site_name())),'warn');
-					return false; // Maybe our 'request' token had a stale authorisation, or was never authorised -- so we fail and receive_authorisation() would need calling
-				}
-				$token=$api->getOAuthToken();
-				set_long_value('photobucket_oauth_key__'.strval(get_member()),$token->getKey()); // Replace request token with access token
-				set_long_value('photobucket_oauth_secret__'.strval(get_member()),$token->getSecret());
-				set_long_value('photobucket_oauth_username__'.strval(get_member()),$api->getUsername());
-				set_long_value('photobucket_oauth_subdomain__'.strval(get_member()),$api->getSubdomain());
-
-				$api->reset(true,true,true,true); // Don't let a previous stale 'request' token we've set in _login() block us from getting a new one
-				return $this->_login();
-			}
-
 			return false;
 		}
 		$this->_logged_in=true;
 		return true;
+	}
+
+	function _get_access_token_then_login($api,$req_key)
+	{
+		$api->reset(true,true,true,true);
+
+		$api->setOAuthToken(
+			$req_key,
+			get_long_value('photobucket_oauth_secret__'.strval(get_member()))
+		);
+		$api->login('access');
+		$api->post();
+
+		try
+		{
+			$api->loadTokenFromResponse();
+		}
+		catch (PBAPI_Exception $e)
+		{
+			require_lang('video_syndication_photobucket');
+			attach_message(do_lang_tempcode('PHOTOBUCKET_ERROR',escape_html($e->getCode()),escape_html($e->getMessage()),escape_html(get_site_name())),'warn');
+			return false; // Maybe our 'request' token had a stale authorisation, or was never authorised -- so we fail and receive_authorisation() would need calling
+		}
+		$token=$api->getOAuthToken();
+		set_long_value('photobucket_oauth_key__'.strval(get_member()),$token->getKey()); // Replace request token with access token
+		set_long_value('photobucket_oauth_secret__'.strval(get_member()),$token->getSecret());
+		set_long_value('photobucket_oauth_username__'.strval(get_member()),$api->getUsername());
+		set_long_value('photobucket_oauth_subdomain__'.strval(get_member()),$api->getSubdomain());
+
+		$api->reset(true,true,true,true); // Don't let a previous stale 'request' token we've set in _login() block us from getting a new one
+		return $this->_login();
 	}
 
 	function receive_authorisation()

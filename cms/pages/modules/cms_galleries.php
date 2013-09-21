@@ -1244,6 +1244,9 @@ class Module_cms_galleries extends standard_crud_module
 	{
 		$id=intval($_id);
 
+		$title=post_param('title');
+		$description=post_param('description',STRING_MAGIC_NULL);
+
 		$cat=post_param('cat',STRING_MAGIC_NULL);
 		if ($cat!=STRING_MAGIC_NULL)
 		{
@@ -1265,6 +1268,9 @@ class Module_cms_galleries extends standard_crud_module
 				$thumb_url=$urls['thumb_url'];
 			} else
 			{
+				require_code('upload_syndication');
+				$urls[0]=handle_upload_syndication('file',$title,$description,$urls[0],$urls[2],false);
+
 				$url=$urls[0];
 				$thumb_url=$urls[1];
 			}
@@ -1277,12 +1283,10 @@ class Module_cms_galleries extends standard_crud_module
 		if ((substr($urls[0],0,8)!='uploads/') && ($urls[0]!='') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
-		$description=post_param('description',STRING_MAGIC_NULL);
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$notes=post_param('notes',fractional_edit()?STRING_MAGIC_NULL:'');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$title=post_param('title');
 
 		$this->donext_type=$cat;
 
