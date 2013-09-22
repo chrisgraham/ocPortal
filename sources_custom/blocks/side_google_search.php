@@ -22,13 +22,13 @@ class Block_side_google_search
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham';
+		$info['author']='Kamen / Chris Graham';
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('user_search_id','page_id');
+		$info['parameters']=array('page_name');
 		return $info;
 	}
 
@@ -40,7 +40,7 @@ class Block_side_google_search
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'user_search_id\',$map)?$map[\'user_search_id\']:\'\',array_key_exists(\'page_id\',$map)?$map[\'page_id\']:\'google_search\')';
+		$info['cache_on']='array(array_key_exists(\'page_name\',$map)?$map[\'page_name\']:\'google_search\')';
 		$info['ttl']=15;
 		return $info;
 	}
@@ -55,13 +55,9 @@ class Block_side_google_search
 	{
 		require_lang('google_search');
 
-		$user_search_id=!empty($map['user_search_id'])?$map['user_search_id']:'';
-		$page_id=!empty($map['page_id'])?$map['page_id']:'google_search';
+		$page_name=!empty($map['page_name'])?$map['page_name']:'_google_search';
 
-
-		$out=new ocp_tempcode();
-
-		return do_template('BLOCK_SIDE_GOOGLE_SEARCH',array('TITLE'=>do_lang_tempcode('BLOCK_GOOGLE_TITLE'),'CONTENT'=>$out,'USER_SEARCH_ID'=>$user_search_id,'PAGE_ID'=>$page_id));
+		return do_template('BLOCK_SIDE_GOOGLE_SEARCH',array('TITLE'=>do_lang_tempcode('BLOCK_GOOGLE_TITLE'),'PAGE_NAME'=>$page_name));
 	}
 
 }
