@@ -29,7 +29,7 @@ function open_link_as_overlay(ob,width,height,target)
 		if ((typeof height=='undefined') || (!height)) var height=520;
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
 		if ((typeof target=='undefined') || (!target)) var target='_top';
-		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1&overlay=1',null,'width='+width+';height='+height,target);
+		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,target);
 		return false;
 	{+END}
 
@@ -218,6 +218,11 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 					if (bits[0]=='unadorned') unadorned=((bits[1]=='yes') || (bits[1]=='1'));
 				}
 			}
+		}
+
+		if (url.indexOf(window.location.host)!=-1)
+		{
+			url+=((url.indexOf('?')==-1)?'?':'&')+'overlay=1';
 		}
 
 		var myFrame={

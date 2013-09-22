@@ -1621,7 +1621,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 	}
 
 	global $SITE_INFO;
-	if (((!isset($SITE_INFO['assume_full_mobile_support'])) || ($SITE_INFO['assume_full_mobile_support']=='0')) && (isset($GLOBALS['FORUM_DRIVER'])) && (!$truth) && (($theme=$GLOBALS['FORUM_DRIVER']->get_theme())!='default'))
+	if (((!isset($SITE_INFO['assume_full_mobile_support'])) || ($SITE_INFO['assume_full_mobile_support']=='0')) && (isset($GLOBALS['FORUM_DRIVER'])) && (!$truth) && (running_script('index')) && (($theme=$GLOBALS['FORUM_DRIVER']->get_theme())!='default'))
 	{
 		$ini_path=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.$theme.'/theme.ini';
 		if (is_file($ini_path))
