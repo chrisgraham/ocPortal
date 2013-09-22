@@ -492,12 +492,11 @@ function load_management_menu(type,no_confirm_needed)
 		set_opacity(img,0.4);
 		tmp_element=document.createElement('img');
 		tmp_element.style.position='absolute';
-		tmp_element.style.left=find_pos_x(img)+'px';
-		//tmp_element.style.top=find_pos_y(img)+'px'; Doesn't apply because the bottom is absolutely positioned itself (and hence, the reference point)
-		tmp_element.style.top='9px';
+		tmp_element.style.left=find_pos_x(img,true)+'px';
+		tmp_element.style.top=find_pos_y(img,true)+'px'; 
 		tmp_element.id=type+'_menu_img_loader';
 		tmp_element.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
-		img.parentNode.appendChild(tmp_element);
+		document.body.appendChild(tmp_element);
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_menu_popup');
@@ -520,11 +519,21 @@ function load_management_menu(type,no_confirm_needed)
 			var e=document.createElement('div');
 			e.setAttribute('id',type+'_menu_box');
 			e.style.zIndex=200;
-			var b=document.getElementById(type+'_menu_rel');
 			e.style.position='absolute';
-			e.style.bottom='10px';
+			document.body.style.position='relative';
+			var x=find_pos_x(img,true);
+			var y=find_pos_y(img,true);
+			if (y<200)
+			{
+				e.style.right=(get_window_width()-x-find_width(img))+'px';
+				e.style.top=(y+find_height(img)+3)+'px';
+			} else
+			{
+				e.style.left=x+'px';
+				e.style.bottom=(get_window_scroll_height()-y+3)+'px';
+			}
 			set_inner_html(e,load_snippet(type+'_menu'));
-			b.appendChild(e);
+			document.body.appendChild(e);
 		}
 
 		if (no_confirm_needed)

@@ -110,7 +110,9 @@ class Hook_addon_registry_users_online_block
 			$out->attach(do_lorem_template('BLOCK_SIDE_USERS_ONLINE_USER', array(
 				'URL'=>placeholder_url(),
 				'USERNAME'=>lorem_phrase(),
-				'COLOUR'=>lorem_word()
+				'COLOUR'=>lorem_word(),
+				'MEMBER_ID'=>placeholder_id(),
+				'AVATAR_URL'=>placeholder_image_url(),
 			)));
 		}
 

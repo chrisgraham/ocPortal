@@ -158,10 +158,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 							<li><a accesskey="g" href="#"><img width="20" height="20" title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,footer/top}" /></a></li>
 						{+END}
 						{+START,IF,{$ADDON_INSTALLED,bookmarks}}{+START,IF,{$NOT,{$IS_GUEST}}}
-							<li>
-								<span class="global_footer_button_ref_point" id="bookmarks_menu_rel"></span>
-								<a accesskey="n" id="bookmarks_menu_button" onclick="if (typeof window.load_management_menu=='undefined') { require_javascript('javascript_staff'); window.setTimeout(document.getElementById('bookmarks_menu_button').onclick,10); return false; } else return load_management_menu('bookmarks',true);" href="{$PAGE_LINK*,_SEARCH:bookmarks}&amp;url={$SELF_URL&*}"><img width="20" height="20" id="bookmarks_menu_img" class="no_theme_img_click" title="{!BOOKMARKS}" alt="{!BOOKMARKS}" src="{$IMG*,footer/bookmarksmenu}" /></a>
-							</li>
+							<li><a accesskey="n" id="bookmarks_menu_button" onclick="if (typeof window.load_management_menu=='undefined') { require_javascript('javascript_staff'); window.setTimeout(document.getElementById('bookmarks_menu_button').onclick,10); return false; } else return load_management_menu('bookmarks',true);" href="{$PAGE_LINK*,_SEARCH:bookmarks}&amp;url={$SELF_URL&*}"><img class="vertical_alignment" style="position: relative; top: 1px" width="20" height="20" id="bookmarks_menu_img" class="no_theme_img_click" title="{!BOOKMARKS}" alt="{!BOOKMARKS}" src="{$IMG*,footer/bookmarksmenu}" /></a></li>
 						{+END}{+END}
 						{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$ADDON_INSTALLED,realtime_rain}}{+START,IF,{$CONFIG_OPTION,bottom_show_realtime_rain_button}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_realtime_rain}}
 							<li><a id="realtime_rain_button" onclick="if (typeof window.load_realtime_rain!='undefined') return load_realtime_rain(); else return false;" href="{$PAGE_LINK*,adminzone:admin_realtime_rain}"><img width="20" height="20" id="realtime_rain_img" title="{!realtime_rain:REALTIME_RAIN}" alt="{!realtime_rain:REALTIME_RAIN}" src="{$IMG*,footer/realtime_rain}" /></a></li>
@@ -171,10 +168,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 								<li><a id="occle_button" accesskey="o" onclick="if (typeof window.load_occle!='undefined') return load_occle(); else return false;" href="{$PAGE_LINK*,adminzone:admin_occle}"><img width="20" height="20" id="occle_img" title="{!occle:OCCLE_DESCRIPTIVE_TITLE}" alt="{!occle:OCCLE_DESCRIPTIVE_TITLE}" src="{$IMG*,footer/occle}" /></a></li>
 							{+END}{+END}{+END}{+END}
 							{+START,IF,{$CONFIG_OPTION,bottom_show_admin_menu}}
-								<li>
-									<span class="global_footer_button_ref_point" id="management_menu_rel"></span>
-									<a accesskey="m" id="management_menu_button" onclick="if (typeof window.load_management_menu!='undefined') return load_management_menu(); else return false;" href="{$PAGE_LINK*,adminzone:admin}"><img width="20" height="20" id="management_menu_img" class="no_theme_img_click" title="{!_ADMIN_MENU}" alt="{!MENU}" src="{$IMG*,footer/managementmenu}" /></a>
-								</li>
+								<li><a accesskey="m" id="management_menu_button" onclick="if (typeof window.load_management_menu!='undefined') return load_management_menu(); else return false;" href="{$PAGE_LINK*,adminzone:admin}"><img width="20" height="20" id="management_menu_img" class="no_theme_img_click" title="{!_ADMIN_MENU}" alt="{!MENU}" src="{$IMG*,footer/managementmenu}" /></a></li>
 							{+END}
 							{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$EQ,{$BRAND_NAME},ocPortal}}
 								<li><a id="ocpchat_button" accesskey="-" onclick="if (typeof window.load_ocpchat!='undefined') return load_ocpchat(event); else return false;" href="#"><img width="20" height="20" id="ocpchat_img" title="{!OCP_CHAT}" alt="{!OCP_CHAT}" src="{$IMG*,footer/ocpchat}" /></a></li>

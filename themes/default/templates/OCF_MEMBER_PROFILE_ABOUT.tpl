@@ -123,7 +123,7 @@
 							{$SET,is_messenger_field,{$EQ,{NAME},{!DEFAULT_CPF_im_msn_NAME},{!DEFAULT_CPF_im_aim_NAME},{!DEFAULT_CPF_im_yahoo_NAME},{!DEFAULT_CPF_im_skype_NAME},{!DEFAULT_CPF_im_icq_NAME},{!DEFAULT_CPF_im_jabber_NAME},{!DEFAULT_CPF_sn_twitter_NAME},{!DEFAULT_CPF_sn_facebook_NAME},{!DEFAULT_CPF_sn_google_NAME}}}
 
 							{+START,IF,{$NOT,{$GET,is_messenger_field}}}
-								<tr>
+								<tr id="cpf_{$FIX_ID*,{NAME}}">
 									<th class="de_th">
 										{NAME*}:
 									</th>

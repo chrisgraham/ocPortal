@@ -1618,6 +1618,9 @@ function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 function find_width(obj,take_padding,take_margin,take_border)
 {
 	if (!obj) return 0;
+	if (typeof take_padding=='undefined') var take_padding=false;
+	if (typeof take_margin=='undefined') var take_margin=false;
+	if (typeof take_border=='undefined') var take_border=false;
 	var ret=obj.offsetWidth;
 	if (take_padding)
 	{
@@ -1639,6 +1642,9 @@ function find_width(obj,take_padding,take_margin,take_border)
 function find_height(obj,take_padding,take_margin,take_border)
 {
 	if (!obj) return 0;
+	if (typeof take_padding=='undefined') var take_padding=false;
+	if (typeof take_margin=='undefined') var take_margin=false;
+	if (typeof take_border=='undefined') var take_border=false;
 	var ret=obj.offsetHeight;
 	if (take_padding)
 	{
@@ -1792,6 +1798,13 @@ function convert_tooltip(element)
 //  force_width is set to true if you want width to not be a max width
 function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lights_off,force_width,win)
 {
+	if (typeof width=='undefined') var width='auto';
+	if (typeof pic=='undefined') var pic='';
+	if (typeof height=='undefined') var height='auto';
+	if (typeof bottom=='undefined') var bottom=false;
+	if (typeof no_delay=='undefined') var no_delay=false;
+	if (typeof lights_off=='undefined') var lights_off=false;
+	if (typeof force_width=='undefined') var force_width=false;
 	if (typeof win=='undefined') var win=window;
 
 	if (!page_loaded) return;
@@ -1835,7 +1848,14 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		{
 			tooltip_element.className+=' '+ac.className;
 		}
-		tooltip_element.style.width=width;
+		if (!force_width)
+		{
+			tooltip_element.style.maxWidth=width+'px';
+			tooltip_element.style.width='auto'; /* Needed for Opera, else it uses maxWidth for width too */
+		} else
+		{
+			tooltip_element.style.width=width+'px';
+		}
 		if ((height) && (height!='auto'))
 		{
 			tooltip_element.style.maxHeight=height;
@@ -1899,8 +1919,6 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 }
 function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width,win)
 {
-	if (typeof win=='undefined') var win=window;
-
 	if ((!starting) || (browser_matches('opera'))) // Real JS mousemove event, so we assume not a screen reader and have to remove natural tooltip
 	{
 		if (ac.getAttribute('title')) ac.setAttribute('title','');
@@ -1914,15 +1932,10 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 	if ((typeof tooltip_element=='undefined') || (!tooltip_element)) var tooltip_element=document.getElementById(ac.tooltip_id);
 	if (tooltip_element)
 	{
-		var width=find_width(tooltip_element);
-		if ((tooltip_element.style.maxWidth) && (tooltip_element.style.maxWidth.indexOf('px')!=-1)) width=window.parseInt(tooltip_element.style.maxWidth.replace('px',''));
-		if (tooltip_element.style.width.indexOf('px')!=-1) width=window.parseInt(tooltip_element.style.width.replace('px',''));
-		if ((!width) || ((tooltip_element.style.width=='auto') && (width<200))) width=360;
-		var height=find_height(tooltip_element);
-
 		var style__offset_x=18;
 		var style__offset_y=18;
 
+		// Find mouse position
 		var x,y;
 		x=get_mouse_x(event,win);
 		y=get_mouse_y(event,win);
@@ -1939,7 +1952,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 			}
 		}
 		catch(ignore) {};
-
+		// Maybe mouse position actually needs to be in parent document?
 		try
 		{
 			if ((typeof event.target!='undefined') || (typeof event.srcElement!='undefined'))
@@ -1953,28 +1966,20 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 		}
 		catch(ignore) {};
 
-		if (!force_width)
-		{
-			tooltip_element.style.maxWidth=width+'px';
-			tooltip_element.style.width='auto'; /* Needed for Opera, else it uses maxWidth for width too */
-		} else
-		{
-			tooltip_element.style.width=width+'px';
-		}
-
-		var _width=find_width(tooltip_element);
-		if ((_width==0) || (_width>width)) _width=width;
-		var x_excess=x-get_window_width(win)-get_window_scroll_x(win)+_width+20;
+		// Work out which direction to render in
+		var width=find_width(tooltip_element);
+		var height=find_height(tooltip_element);
+		var x_excess=x-get_window_width(win)-get_window_scroll_x(win)+width;
 		if (x_excess>0) /* Either we explicitly gave too much width, or the width auto-calculated exceeds what we THINK is the maximum width in which case we have to re-compensate with an extra contingency to stop CSS/JS vicious disagreement cycles */
 		{
-			x-=x_excess+20;
+			x-=x_excess+20+style__offset_x;
 		}
 		if (bottom)
 		{
 			tooltip_element.style.top=(y-height)+'px';
 		} else
 		{
-			var y_excess=y-get_window_height(win)-get_window_scroll_y(win)+height+10;
+			var y_excess=y-get_window_height(win)-get_window_scroll_y(win)+height+style__offset_y;
 			if (y_excess>0) y-=y_excess;
 			var scroll_y=get_window_scroll_y(win);
 			if (y<scroll_y) y=scroll_y;

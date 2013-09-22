@@ -102,6 +102,8 @@ class Block_side_users_online
 						'URL'=>$url,
 						'USERNAME'=>$username,
 						'COLOUR'=>$colour,
+						'MEMBER_ID'=>strval($member),
+						'AVATAR_URL'=>$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member),
 					)));
 					$_members++;
 				}

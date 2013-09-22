@@ -1605,6 +1605,14 @@ hr.spaced_rule {
 	margin-{!en_left}: 1em;
 }
 
+.inline_lined_up {
+	white-space: nowrap;
+}
+
+.inline_lined_up>* {
+	white-space: normal;
+}
+
 /* Something being shown for previewing, on its own so needs focus */
 .lonely_preview {
 	text-align: center;
@@ -1835,8 +1843,11 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	color: inherit !important;
 }
 .tooltip_fields {
-	border-collapse: collapse;
 	font-size: 0.85em;
+	display: inline-block;
+}
+.tooltip_fields table {
+	border-collapse: collapse;
 }
 .tooltip_fields th {
 	border-right: 1px solid {$GET,dark_border};
@@ -1848,6 +1859,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 .tooltip_fields td {
 	padding-left: 1em;
+	min-width: 18em;
 }
 .tooltip_with_img {
 	padding-right: 30px;

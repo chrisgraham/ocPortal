@@ -87,6 +87,7 @@ function pop_up_menu(id,place,menu,event)
 	var t=0;
 	var p=e.parentNode;
 
+	// Our own position computation as we are positioning relatively, as things expand out
 	if (abstract_get_computed_style(p.parentNode,'position')=='absolute')
 	{
 		l+=p.offsetLeft;
@@ -135,10 +136,9 @@ function pop_up_menu(id,place,menu,event)
 		if (l+find_width(e)+10>full_width) l=full_width-find_width(e)-10;
 		e.style.left=l+'px';
 	},0);
-	if ((find_pos_y(e.parentNode,true)+find_height(e)+10>full_height) && (t-find_height(e)>0)) t-=find_height(e)+26;
-	var ppp_id=e.parentNode.parentNode.parentNode.parentNode.id;
-	if (ppp_id.substr(ppp_id.length-9)=='_menu_box')
-		e.style.top=(t-e.clientHeight+20)+'px';
+	if ((find_pos_y(e.parentNode,true)+find_height(e)+10>full_height) && (t-find_height(e)>0)) t-=find_height(e)+find_height(e.parentNode,true,true,true);
+	if (t+find_height(e)>full_height)
+		e.style.top=(t-find_height(e,true,true,true)+find_height(e.parentNode)+1)+'px';
 	else
 		e.style.top=(t)+'px';
 	e.style.zIndex=200;
