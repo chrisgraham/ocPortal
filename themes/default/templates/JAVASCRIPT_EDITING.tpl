@@ -872,6 +872,11 @@ function show_upload_syndication_options(name,syndication_json,no_quota)
 		file_ob.disabled=true;
 	}
 
+	if ((html!='') && (!no_quota))
+	{
+		html+='<span><label for="force_remove_locally"><input type="checkbox" id="force_remove_locally" name="force_remove_locally" value="1" />{!upload_syndication:FORCE_REMOVE_LOCALLY}</label></span>';
+	}
+
 	html='<div>'+html+'</div>';
 
 	set_inner_html(html_spot,html);

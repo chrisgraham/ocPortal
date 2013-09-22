@@ -187,12 +187,14 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
 		}
 	}
 
-	if ($remove_locally_if_no_quota)
+	$force_remove_locally=(post_param_integer('force_remove_locally',0)==1);
+
+	if ($remove_locally_if_no_quota || $force_remove_locally)
 	{
 		require_code('files2');
 		$max_attach_size=get_max_file_size(get_member(),$GLOBALS['SITE_DB']);
 		$no_quota=(($max_attach_size==0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0));
-		if ($no_quota)
+		if ($no_quota || $force_remove_locally)
 		{
 			if (url_is_local($new_url))
 			{
