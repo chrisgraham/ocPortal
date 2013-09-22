@@ -268,10 +268,10 @@ class Hook_addon_registry_core
 			'JAVASCRIPT_MORE.tpl',
 			'JAVASCRIPT_TREE_LIST.tpl',
 			'JAVASCRIPT_XSL_MOPUP.tpl',
-			'JAVASCRIPT_YAHOO.tpl',
-			'JAVASCRIPT_YAHOO_2.tpl',
+			'JAVASCRIPT_YAHOO.tpl', // Used only for date chooser
+			'JAVASCRIPT_YAHOO_EVENTS.tpl', // Used only for date chooser
 			'JAVASCRIPT_COLOUR_PICKER.tpl',
-			'JAVASCRIPT_YAHOO_EVENTS.tpl',
+			'JAVASCRIPT_YAHOO_2.tpl', // Used only by colour picker
 			'BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl',
 			'BLOCK_SIDE_PERSONAL_STATS.tpl',
 			'BLOCK_SIDE_PERSONAL_STATS_LINE.tpl',
