@@ -653,8 +653,9 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 		{$BETA_CSS_PROPERTY,text-size-adjust: none;}
 	}
 
-	.overlay {
+	body.overlay {
 		width: 285px;
+		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	}
 
 	.overlay h1 {
