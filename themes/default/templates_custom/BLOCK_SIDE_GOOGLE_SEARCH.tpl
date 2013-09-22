@@ -22,7 +22,7 @@
 
 			if (!document.getElementById('cse')) // Not on the results page, so we need to direct the search to it
 			{
-				get_elements_by_class_name(cse_form,'gsc-search-box')[0].action='{$PAGE_LINK;/,_SELF:{PAGE_NAME}}';
+				get_elements_by_class_name(cse_form,'gsc-search-box')[0].action='{$PAGE_LINK;/,_SEARCH:{PAGE_NAME}}';
 				get_elements_by_class_name(cse_form,'gsc-search-box')[0].method='post';
 				get_elements_by_class_name(cse_form,'gsc-search-button')[0].onclick=function() {
 					get_elements_by_class_name(cse_form,'gsc-search-box')[0].submit();
@@ -35,7 +35,7 @@
 				};
 
 				{+START,IF_NON_EMPTY,{$_POST,search}}
-					customSearchControl.execute('{$_POST;/,search}'); // Relay trough search from prior page
+					customSearchControl.execute('{$_POST;/,search}'); // Relay through search from prior page
 				{+END}
 			}
 
