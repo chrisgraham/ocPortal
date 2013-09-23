@@ -1627,7 +1627,7 @@ class Database_Static_xml
 					}
 					$this->_write_records($db,$table_name,$records,$fail_ok);
 
-					$this->_read_schema($db,$table_name); // Workaround where $SCHEMA_NAME[$table_name] has actually been set, but somehow PHP has not noticed
+					$this->_read_schema($db,$table_name); // Workaround with caching. It might be the directory contents cache for the db_meta table is not updated at exactly the right times, as the execution order can be off. If the directory contents cache is not updated and the schema is read, it may miss the new field. Therefore we need to force it to read now, then extend it.
 					if (array_key_exists($table_name,$SCHEMA_CACHE))
 						$SCHEMA_CACHE[$table_name][$column_name]=$data_type;
 				}
