@@ -1153,6 +1153,7 @@ class Hook_addon_registry_ocf_forum
 		foreach (placeholder_array() as $_k=>$_v)
 		{
 			$members_viewing->attach(do_lorem_template('OCF_USER_MEMBER', array(
+				'FIRST'=>true,
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_word(),
 				'MEMBER_ID'=>placeholder_id(),
