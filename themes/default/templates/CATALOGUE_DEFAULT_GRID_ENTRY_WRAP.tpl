@@ -9,27 +9,39 @@
 		</table>
 	{+END}
 
+	{$SET,displayed_thumb,0}
+
 	{+START,IF_PASSED,FIELD_1_THUMB}
 		{+START,IF_NON_EMPTY,{FIELD_1_THUMB}}
 			<div class="catalogue_entry_box_thumbnail">
-				<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','500px');" href="{VIEW_URL*}">{FIELD_1_THUMB}</a>
-			</div>
-		{+END}
+				{+START,IF_NON_EMPTY,{VIEW_URL}}
+					<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','500px');" href="{VIEW_URL*}">{FIELD_1_THUMB}</a>
+				{+END}
 
-		{+START,IF_EMPTY,{FIELD_1_THUMB}}
+				{+START,IF_EMPTY,{VIEW_URL}}
+					<span onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','500px');">{FIELD_1_THUMB}</span>
+				{+END}
+			</div>
+
+			{$SET,displayed_thumb,1}
+		{+END}
+	{+END}
+
+	{+START,IF,{$NOT,{$GET,displayed_thumb}}}
+		{+START,IF_NON_EMPTY,{VIEW_URL}}
 			<p>
-				<a title="{$STRIP_TAGS,{FIELD_0}}" href="{VIEW_URL*}">{!VIEW}</a>
+				<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','500px');" href="{VIEW_URL*}">{!VIEW}</a>
 			</p>
 		{+END}
+
+		{+START,IF_EMPTY,{VIEW_URL}}
+			{$GET,TOOLTIP}
+		{+END}
 	{+END}
 
-	{+START,IF_NON_PASSED,FIELD_1_THUMB}
-		<p>
-			<a title="{$STRIP_TAGS,{FIELD_0}}" href="{VIEW_URL*}">{!VIEW}</a>
-		</p>
+	{+START,IF_NON_EMPTY,{RATING}}
+		<div class="ratings">
+			{RATING}
+		</div>
 	{+END}
-
-	<div class="ratings">
-		{RATING}
-	</div>
 </div></section>
