@@ -1120,7 +1120,7 @@ function _access_denied($class,$param,$force_login)
 		{
 			$middle=inform_screen(get_screen_title('ERROR_OCCURRED'),protect_from_escaping('
 				<script type="text/javascript">// <![CDATA[
-					window.fauxmodal_alert(\''.addslashes(html_entity_decode(strip_tags($message->evaluate()),ENT_QUOTES,get_charset())).'\');
+					window.fauxmodal_alert(\''.addslashes(strip_html($message->evaluate())).'\');
 				//]]></script>
 			'));
 			$echo=globalise($middle,NULL,'',true);

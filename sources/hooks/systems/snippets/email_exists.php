@@ -35,7 +35,7 @@ class Hook_email_exists
 
 		require_lang('ocf');
 
-		return make_string_tempcode(strip_tags(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('EMAIL_ADDRESS_IN_USE',escape_html(get_site_name())),ENT_QUOTES))));
+		return make_string_tempcode(strip_tags(strip_html(do_lang('EMAIL_ADDRESS_IN_USE',escape_html(get_site_name())))));
 	}
 
 }

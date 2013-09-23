@@ -27,8 +27,7 @@
 .activities_avatar_box {
 	width: 40px;
 	float: left;
-	margin-top: 5px;
-	margin-bottom: 5px;
+	margin-right: 1em;
 }
 
 .activities_line {
