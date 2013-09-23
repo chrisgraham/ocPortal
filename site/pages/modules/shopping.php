@@ -193,7 +193,7 @@ class Module_shopping
 	 */
 	function get_entry_points()
 	{
-		return array('my_orders'=>'MY_ORDERS','misc'=>'SHOPPING');
+		return is_guest()?array('misc'=>'SHOPPING'):array('my_orders'=>'MY_ORDERS','misc'=>'SHOPPING');
 	}
 
 	/**

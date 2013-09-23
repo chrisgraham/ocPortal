@@ -325,7 +325,8 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 		$GLOBALS['HTTP_STATUS_CODE']='400';
 		if (!headers_sent())
 		{
-			if (/*(!browser_matches('ie')) && */(strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
+			// NB: Very important this doesn't run on IE. IE is supposed to show error screens literally if more than 512 bytes, and this is much more (irregardless of compression) - but sometimes seems to still hide it with a "friendly" error anyway
+			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
 		}
 	}
 
@@ -1268,7 +1269,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 					$_POST['_specify_url']=$url; // Little hack, as we need to read it from a POST
 					if (get_magic_quotes_gpc()) $_POST['_specify_url']=addslashes($_POST['_specify_url']);
-					$urls=get_url('_specify_url','','uploads/filedump',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true);
+					$urls=get_url('_specify_url','','uploads/filedump',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true,true);
+					if ($urls[0]=='') return new ocp_tempcode();
 					$original_filename=rawurldecode(substr($url,strrpos($url,'/')+1));
 
 					if (url_is_local($urls[0]))
@@ -2345,7 +2347,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
 			if (!is_null($cite))
 			{
-				$temp_tpl=test_url($cite,'del',$cite,$source_member);
+				$temp_tpl=test_url($cite,'quote',$cite,$source_member);
 			}
 
 			if (($attributes['param']=='') && (isset($attributes['author']))) $attributes['param']=$attributes['author']; // Compatibility with SMF

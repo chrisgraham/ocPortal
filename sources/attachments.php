@@ -277,7 +277,7 @@ function attachment_popup_script()
 	{
 		$myrow['description']=$myrow['a_description'];
 		$tpl=render_attachment('attachment',array(),$myrow,uniqid('',true),get_member(),false,$connection,NULL,get_member());
-		$content->attach(do_template('ATTACHMENTS_BROWSER_ATTACHMENT',array('_GUID'=>'64356d30905c99325231d3bbee92128c','FIELD_NAME'=>$field_name,'TPL'=>$tpl,'DESCRIPTION'=>$myrow['a_description'],'ID'=>strval($myrow['id']))));
+		$content->attach(do_template('ATTACHMENTS_BROWSER_ATTACHMENT',array('_GUID'=>'64356d30905c99325231d3bbee92128c','FIELD_NAME'=>$field_name,'TPL'=>$tpl,'DESCRIPTION'=>$myrow['a_description'],'DELETE_URL'=>$post_url,'ID'=>strval($myrow['id']))));
 	}
 
 	$content=do_template('ATTACHMENTS_BROWSER',array('_GUID'=>'7773aad46fb0bfe563a142030beb1a36','LIST'=>$list,'CONTENT'=>$content,'URL'=>$post_url));

@@ -130,7 +130,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		attach_message(do_lang_tempcode('ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
 
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager(get_page_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_USERGROUP_SUBSCRIPTION'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_USERGROUP_SUBSCRIPTION')),

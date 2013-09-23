@@ -70,9 +70,10 @@ class Hook_Profiles_Tabs_Edit_privacy
 				} else
 				{
 					$_guests_view=post_param('guests_'.strval($field_id),NULL);
-					$_members_view=post_param('members_'.strval($field_id),NULL);
+					//$_members_view=post_param('members_'.strval($field_id),NULL);
 					$_friends_view=post_param('friends_'.strval($field_id),NULL);
 					$_groups_view=post_param('groups_'.strval($field_id),NULL);
+					$_members_view=($_groups_view=='all')?1:0;
 
 					$guests_view=(!is_null($_guests_view))?1:0;
 					$members_view=(!is_null($_members_view))?1:0;
@@ -85,11 +86,11 @@ class Hook_Profiles_Tabs_Edit_privacy
 				//if there are permissions saved already
 				if (array_key_exists(0,$cpf_permissions) && $cpf_permissions[0]['field_id']==$field_id)
 				{
-					$GLOBALS['FORUM_DB']->query_update('f_member_cpf_perms',array('guest_view'=>$guests_view,'member_view'=>$members_view,'friend_view'=>$friends_view,'group_view'=>$groups_view),array('member_id'=>$member_id_of, 'field_id'=>$field_id),'',1);
+					$GLOBALS['FORUM_DB']->query_update('f_member_cpf_perms',array('guest_view'=>$guests_view,'member_view'=>$members_view,'friend_view'=>$friends_view,'group_view'=>$groups_view),array('member_id'=>$member_id_of,'field_id'=>$field_id),'',1);
 				} else
 				{
 					//insert the custom permissions the user chose
-					$GLOBALS['FORUM_DB']->query_insert('f_member_cpf_perms',array('guest_view'=>$guests_view,'member_view'=>$members_view,'friend_view'=>$friends_view,'group_view'=>$groups_view,'member_id'=>$member_id_of, 'field_id'=>$field_id));
+					$GLOBALS['FORUM_DB']->query_insert('f_member_cpf_perms',array('guest_view'=>$guests_view,'member_view'=>$members_view,'friend_view'=>$friends_view,'group_view'=>$groups_view,'member_id'=>$member_id_of,'field_id'=>$field_id));
 				}
 			}
 
@@ -132,17 +133,14 @@ class Hook_Profiles_Tabs_Edit_privacy
 
 				$view_by_friends=true;
 
-				$view_by_groups=array();
-				foreach ($tmp_groups as $gr_key=>$group)
-				{
-					$view_by_groups[]=$gr_key;
-				}
+				$view_by_groups=array('all');
 			} else
 			{
 				$view_by_guests=($cpf_permissions[0]['guest_view']==1);
 				$view_by_members=($cpf_permissions[0]['member_view']==1);
 				$view_by_friends=($cpf_permissions[0]['friend_view']==1);
 				$view_by_groups=(strlen($cpf_permissions[0]['group_view'])>0)?array_map('intval',explode(',',$cpf_permissions[0]['group_view'])):array();
+				if (count($view_by_groups)==count($tmp_groups) || $view_by_members) $view_by_groups=array('all');
 			}
 
 			// Work out the CPF name
@@ -167,16 +165,17 @@ class Hook_Profiles_Tabs_Edit_privacy
 				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)))));
 
 				$fields->attach(form_input_tick(do_lang_tempcode('GUESTS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GUESTS'),'guests_'.strval($cpf_id),$view_by_guests));
-				$fields->attach(form_input_tick(do_lang_tempcode('MEMBERS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_MEMBERS'),'members_'.strval($cpf_id),$view_by_members));
+				//$fields->attach(form_input_tick(do_lang_tempcode('MEMBERS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_MEMBERS'),'members_'.strval($cpf_id),$view_by_members));	Same as 'all' in groups
 				$fields->attach(form_input_tick(do_lang_tempcode('FRIENDS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_FRIENDS'),'friends_'.strval($cpf_id),$view_by_friends));
 
 				$groups=new ocp_tempcode();
+				$groups->attach(form_input_list_entry('all',$view_by_groups==array('all'),do_lang_tempcode('_ALL')));
 				foreach ($tmp_groups as $gr_key=>$group)
 				{
 					if ($group==get_option('probation_usergroup')) continue;
 
-					$current_group_view=(in_array($gr_key,$view_by_groups));
-					$groups->attach(form_input_list_entry(strval($gr_key),$current_group_view,$group,false,false));
+					$current_group_view=@(in_array($gr_key,$view_by_groups)); // @ is due to mixed key types, and ocProducts type strictness
+					$groups->attach(form_input_list_entry(strval($gr_key),$current_group_view,$group));
 				}
 
 				$fields->attach(form_input_multi_list(do_lang_tempcode('GROUPS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GROUPS'),'groups_'.strval($cpf_id),$groups));

@@ -45,6 +45,16 @@ class Hook_search_filedump
 	}
 
 	/**
+	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
+	 *
+	 * @return array			A pair: the hook, and the options
+	 */
+	function ajax_tree()
+	{
+		return array('choose_filedump_file',array('compound_list'=>false,'folder'=>true));
+	}
+
+	/**
 	 * Standard modular run function for search results.
 	 *
 	 * @param  string			Search string
@@ -82,7 +92,12 @@ class Hook_search_filedump
 
 		require_code('files2');
 
-		$files=get_directory_contents(get_custom_file_base().'/uploads/filedump/');
+		if ($search_under=='!')
+		{
+			$search_under='';
+		}
+
+		$files=get_directory_contents(get_custom_file_base().'/uploads/filedump/'.(($search_under=='')?'':($search_under.'/')));
 		$_rows=$GLOBALS['SITE_DB']->query_select('filedump');
 		$rows=array();
 		foreach ($_rows as $row)
@@ -93,31 +108,55 @@ class Hook_search_filedump
 		$out=array();
 		foreach ($files as $_path)
 		{
+			if ($search_under!='') $_path=$search_under.'/'.$_path;
+
 			$path=get_custom_file_base().'/uploads/filedump/'.$_path;
 			if (filemtime($path)<$cutoff) continue;
 			if (in_memory_search_match(array('content'=>$content,'conjunctive_operator'=>$boolean_operator),$path))
 			{
 				$caption=array_key_exists($_path,$rows)?$rows[$_path]:$_path;
-				$tpl=paragraph(hyperlink(get_custom_base_url().'/uploads/filedump/'.$_path,escape_html($caption),true),'dfdsfu09wl;f');
-				$dirs=explode('/',substr($_path,0,strlen($_path)-1));
-				$i2=0;
-				$pre='';
-				$file_tree=new ocp_tempcode();
-				while (array_key_exists($i2,$dirs))
-				{
-					if ($i2>0) $d=$dirs[$i2]; else $d=do_lang('ROOT');
+				$dirs=explode('/',dirname($_path));
 
-					if (array_key_exists($i2+1,$dirs))
-					{
-						$tree_url=build_url(array('page'=>'filedump','place'=>$pre.$dirs[$i2].'/'),get_module_zone('filedump'));
-						if (!$file_tree->is_empty()) $file_tree->attach(do_template('BREADCRUMB',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c4')));
-						$file_tree->attach(hyperlink($tree_url,$d));
-					}
-					$pre.=$dirs[$i2].'/';
-					$i2++;
+				$pre='';
+				$file_breadcrumbs=new ocp_tempcode();
+				$breadcrumbs_url=build_url(array('page'=>'filedump','place'=>$pre.'/'),get_module_zone('filedump'));
+				$file_breadcrumbs->attach(hyperlink($breadcrumbs_url,do_lang('ROOT')));
+				foreach ($dirs as $dir)
+				{
+					$file_breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c4')));
+					$breadcrumbs_url=build_url(array('page'=>'filedump','place'=>$pre.$dir.'/'),get_module_zone('filedump'));
+					$file_breadcrumbs->attach(hyperlink($breadcrumbs_url,$dir));
+
+					$pre.=$dir.'/';
 				}
-				if (!$file_tree->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$file_tree)));
-				$out[$i]['template']=put_in_standard_box($tpl,do_lang_tempcode('FILE'));
+
+				$url=get_custom_base_url().'/uploads/filedump/'.$_path;
+
+				require_code('images');
+				if (!is_image($url))
+				{
+					$tpl=paragraph(hyperlink($url,escape_html($caption),true),'dfdsfu09wl;f');
+					if (!$file_breadcrumbs->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$file_breadcrumbs)));
+
+					$out[$i]['template']=do_template('SIMPLE_PREVIEW_BOX',array(
+						'_GUID'=>'51bc0cf751f4ccbd0b7f1a247b092368',
+						'TITLE'=>basename($_path),
+						'SUMMARY'=>$tpl,
+					));
+				} else
+				{
+					if (function_exists('set_time_limit')) @set_time_limit(5);
+
+					$tpl=do_image_thumb($url,$caption,true,false,NULL,NULL,true);
+
+					$out[$i]['template']=do_template('SIMPLE_PREVIEW_BOX',array(
+						'_GUID'=>'61bc0cf751f4ccbd0b7f1a247b092368',
+						'TITLE'=>basename($_path),
+						'SUMMARY'=>$tpl,
+						'BREADCRUMBS'=>$file_breadcrumbs,
+						'URL'=>$url,
+					));
+				}
 
 				if ($sort=='title') $out[$i]['orderer']=$path;
 				elseif ($sort=='add_date') $out[$i]['orderer']=filectime($path);

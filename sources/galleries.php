@@ -180,6 +180,7 @@ function get_member_id_from_gallery_name($gallery_name,$row=NULL,$only_if_person
 		if (is_null($row))
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('g_owner'),array('name'=>$gallery_name));
+			if (!isset($rows[0])) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$row=$rows[0];
 		}
 

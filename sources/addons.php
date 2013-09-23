@@ -587,8 +587,6 @@ function install_addon($file,$files=NULL)
  */
 function uninstall_addon($name)
 {
-	global $ADDON_INSTALLED_CACHE;
-
 	$addon_row=read_addon_info($name);
 
 	require_code('zones2');
@@ -643,9 +641,11 @@ function uninstall_addon($name)
 	$GLOBALS['SITE_DB']->query_delete('addons_dependencies',array('addon_name'=>$addon_row['addon_name']));
 	$GLOBALS['SITE_DB']->query_delete('addons',array('addon_name'=>$addon_row['addon_name']),'',1);
 
-	log_it('UNINSTALL_ADDON',$addon_row['addon_name']);
+	global $ADDON_INSTALLED_CACHE;
+	unset($ADDON_INSTALLED_CACHE[$addon_row['addon_name']]);
+	if (function_exists('persistent_cache_set')) persistent_cache_set('ADDONS_INSTALLED',$ADDON_INSTALLED_CACHE,true);
 
-	unset($ADDON_INSTALLED_CACHE[$name]);
+	log_it('UNINSTALL_ADDON',$addon_row['addon_name']);
 }
 
 /**

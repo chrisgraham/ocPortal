@@ -399,23 +399,28 @@ class Module_purchase
 
 		if ($temp[$product][0]==PRODUCT_SUBSCRIPTION)
 		{
-			$GLOBALS['SITE_DB']->query_delete('subscriptions',array(
+			$_purchase_id=$GLOBALS['SITE_DB']->query_value_null_ok('subscriptions','id',array(
 				's_type_code'=>$product,
 				's_member_id'=>get_member(),
 				's_state'=>'new'
 			));
-
-			$purchase_id=strval($GLOBALS['SITE_DB']->query_insert('subscriptions',array(
-				's_type_code'=>$product,
-				's_member_id'=>get_member(),
-				's_state'=>'new',
-				's_amount'=>$temp[$product][1],
-				's_special'=>$purchase_id,
-				's_time'=>time(),
-				's_auto_fund_source'=>'',
-				's_auto_fund_key'=>'',
-				's_via'=>get_option('payment_gateway'),
-			),true));
+			if (is_null($_purchase_id))
+			{
+				$purchase_id=strval($GLOBALS['SITE_DB']->query_insert('subscriptions',array(
+					's_type_code'=>$product,
+					's_member_id'=>get_member(),
+					's_state'=>'new',
+					's_amount'=>$temp[$product][1],
+					's_special'=>$purchase_id,
+					's_time'=>time(),
+					's_auto_fund_source'=>'',
+					's_auto_fund_key'=>'',
+					's_via'=>get_option('payment_gateway'),
+				),true));
+			} else
+			{
+				$purchase_id=strval($_purchase_id);
+			}
 
 			$length=array_key_exists('length',$temp[$product][3])?$temp[$product][3]['length']:1;
 			$length_units=array_key_exists('length_units',$temp[$product][3])?$temp[$product][3]['length_units']:'m';

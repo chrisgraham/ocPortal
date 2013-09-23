@@ -765,7 +765,6 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'_custom/')===false) && 
 		(strpos($text,'data/occle.php')===false) && 
 		(strpos($text,'/mini')===false) && 
-		(strpos($text,'&#')===false/*charset encoding issue*/) && 
 		(strpos($text,'has been disabled for security reasons')===false) && 
 		(strpos($text,'max_questions')/*mysql limit*/===false) && 
 		(strpos($text,'Error at offset')===false) && 

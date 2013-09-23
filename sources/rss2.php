@@ -147,7 +147,7 @@ function backend_script()
 
 	$site_about=xmlentities(get_option('description'));
 	$logo_url=xmlentities(find_theme_image('logo/trimmed-logo'));
-	$copyright=xmlentities(trim(str_replace('&copy;','',get_option('copyright'))));
+	$copyright=xmlentities(trim(str_replace('&copy;','',str_replace('$CURRENT_YEAR',date('Y'),get_option('copyright')))));
 
 	$cutoff=get_param_integer('cutoff',time()-60*60*24*get_param_integer('days',30));
 	$max=get_param_integer('max',100);

@@ -1026,7 +1026,9 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 
 	if ((!has_js()) || (get_option('tree_lists')=='0'))
 	{
-		$simple_content=$object->simple($root_id,$options,$default);
+		$simple_content=new ocp_tempcode();
+		$simple_content->attach(form_input_list_entry('',false,do_lang('NA')));
+		$simple_content->attach($object->simple($root_id,$options,$default));
 
 		if ($simple_content->is_empty())
 		{

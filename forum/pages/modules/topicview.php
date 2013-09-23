@@ -72,7 +72,7 @@ class Module_topicview
 		$max=get_param_integer('max',$default_max);
 		if ($max==0) $max=$default_max;
 		if ($max==0) $max=1;
-		if (($max>50) && (!has_specific_permission(get_member(),'remove_page_split'))) $max=$default_max;
+		if (($max>30) && (!has_specific_permission(get_member(),'remove_page_split'))) $max=$default_max;
 		$first_unread_id=-1;
 
 		global $NON_CANONICAL_PARAMS;
@@ -249,7 +249,7 @@ class Module_topicview
 
 				$post_url=$GLOBALS['FORUM_DRIVER']->post_url($_postdetails['id'],is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']),true);
 
-				if (array_key_exists('intended_solely_for',$_postdetails))
+				if ((array_key_exists('intended_solely_for',$_postdetails)) && ($_postdetails['intended_solely_for']==get_member()))
 				{
 					decache('side_ocf_personal_topics',array(get_member()));
 					decache('_new_pp',array(get_member()));
@@ -656,7 +656,7 @@ class Module_topicview
 		if (($max_rows>$max) && (!$threaded))
 		{
 			require_code('templates_results_browser');
-			$results_browser=results_browser(do_lang_tempcode('FORUM_POSTS'),$id,$start,'start',$max,'max',$max_rows,NULL,'misc',true,false,7,array(10,25,50));
+			$results_browser=results_browser(do_lang_tempcode('FORUM_POSTS'),$id,$start,'start',$max,'max',$max_rows,NULL,'misc',true,false,7,array(10,20,30));
 		} else
 		{
 			$results_browser=new ocp_tempcode();

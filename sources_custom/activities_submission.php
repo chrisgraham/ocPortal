@@ -106,7 +106,7 @@ function activities_ajax_submit_handler()
 	{
 		$map['STATUS']=trim(either_param('status', ''));
 
-		if ((post_param('zone', '')!='') && ($map['STATUS']!='') && ($map['STATUS']!=do_lang('TYPE_HERE')))
+		if ((post_param('zone', '')!='') && ($map['STATUS']!='') && ($map['STATUS']!=do_lang('activities:TYPE_HERE')))
 		{
 			comcode_to_tempcode($map['STATUS'],$guest_id,false,NULL);
 

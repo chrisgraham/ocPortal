@@ -722,7 +722,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 *
 	 * @param  string			The forum name / ID
 	 * @param  SHORT_TEXT	The topic identifier
-	 * @return integer		The topic ID
+	 * @return ?integer		The topic ID (NULL: not found)
 	 */
 	function find_topic_id_for_topic_identifier($forum,$topic_identifier)
 	{

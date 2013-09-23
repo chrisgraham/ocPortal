@@ -261,6 +261,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 	if ($from==$to) return; // That would be nuts, and interfere with our logic
 
 	require_code('notifications');
+	require_code('ocf_topics');
 	require_code('ocf_forums_action2');
 
 	$forum_name=ocf_ensure_forum_exists($to);
@@ -305,7 +306,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 		$topic_title=$topic_info[0]['t_cache_first_title'];
 		$post_count=$topic_info[0]['t_cache_num_posts'];
 		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_pt_from'=>NULL,'t_pt_to'=>NULL,'t_forum_id'=>$to),array('t_forum_id'=>$from,'id'=>$topics[0]),'',1); // Extra where constraint for added security
-		log_it('MOVE_TOPICS',$topic_title,$topics[0]);
+		log_it('MOVE_TOPICS',$topic_title,strval($topics[0]));
 		$or_list='id='.strval($topics[0]);
 		$or_list_2='p_topic_id='.strval($topics[0]);
 

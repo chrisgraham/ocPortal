@@ -1251,7 +1251,7 @@ class virtual_bash
 			if (($occle_output=='') && ($occle_eval_output!==false)) $occle_output=@strval($occle_eval_output);
 			ob_end_clean();
 
-			$occle_env_neglect=array('SITE_DB','FORUM_DB','FORUM_DRIVER','GLOBALS','_SERVER','_COOKIE','_GET','_POST','_ENV','_FILES','_REQUEST','_SESSION','this');
+			$occle_env_neglect=array('SITE_DB','FORUM_DB','FORUM_DRIVER','GLOBALS','_SERVER','_COOKIE','_GET','_POST','_ENV','_FILES','_REQUEST','_SESSION','this','php_errormsg');
 			$occle_env_after=get_defined_vars();
 			$occle_env_changes=array_diff(array_keys($occle_env_after),$occle_env_neglect);
 			$occle_state_diff=array();

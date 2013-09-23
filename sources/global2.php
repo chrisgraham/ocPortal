@@ -1922,6 +1922,8 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 
 	foreach ($css_to_do as $c)
 	{
+		if (is_integer($c)) $c=strval($c);
+
 		if ($seed!='')
 		{
 			$keep=symbol_tempcode('KEEP');

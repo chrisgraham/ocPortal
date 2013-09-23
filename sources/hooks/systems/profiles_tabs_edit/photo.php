@@ -67,7 +67,7 @@ class Hook_Profiles_Tabs_Edit_photo
 		require_code('form_templates');
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'photo_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'photo_url',$photo_url,false));
-		if (get_option('is_on_gd')=='0')
+		if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
 		{
 			$thumb_width=get_option('thumb_width');
 			$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),'photo_file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
