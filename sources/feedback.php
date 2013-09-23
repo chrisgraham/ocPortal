@@ -50,7 +50,7 @@ function init__feedback()
  * @param  ID_TEXT		The resource ID whose comment topic may need moving
  * @param  ID_TEXT		The new/current category ID, which we may have overridden the comment forum against
  * @param  ID_TEXT		The old category ID, which we may have overridden the comment forum against
- * @return ?ID_TEXT		The comment topic forum
+ * @return ID_TEXT		The comment topic forum
  */
 function process_overridden_comment_forum($feedback_code,$id,$category_id,$old_category_id)
 {
@@ -78,7 +78,7 @@ function process_overridden_comment_forum($feedback_code,$id,$category_id,$old_c
  *
  * @param  ID_TEXT		The feedback code, which we may have overridden the comment forum against
  * @param  ?ID_TEXT		The category ID, which we may have overridden the comment forum against (NULL: no category ID to override against)
- * @return ?ID_TEXT		The comment topic forum (may be integer as string, or string forum name - so use forum_id_from_name on the result)
+ * @return ID_TEXT		The comment topic forum (may be integer as string, or string forum name - so use forum_id_from_name on the result)
  */
 function find_overridden_comment_forum($feedback_code,$category_id=NULL)
 {

@@ -35,7 +35,7 @@ class Hook_exists_emoticon
 
 		require_lang('ocf');
 
-		return make_string_tempcode(strip_tags(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('CONFLICTING_EMOTICON_CODE',escape_html($val)),ENT_QUOTES))));
+		return make_string_tempcode(strip_tags(strip_html(do_lang('CONFLICTING_EMOTICON_CODE',escape_html($val)))));
 	}
 
 }

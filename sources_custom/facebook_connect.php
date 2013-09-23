@@ -283,7 +283,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 	{
 		if (!is_null($member_id))
 		{
-			set_long_value('facebook_oauth_token__'.strval($member_id),$FACEBOOK_CONNECT->getUserAccessToken());
+			set_long_value('facebook_oauth_token__'.strval($member_id),$FACEBOOK_CONNECT->getAccessToken());
 
 			if (get_option('facebook_member_syndicate_to_page')=='1')
 				set_long_value('facebook_syndicate_to_page__'.strval($member_id),'1');

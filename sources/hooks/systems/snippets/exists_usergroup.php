@@ -33,7 +33,7 @@ class Hook_exists_usergroup
 		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$val),'g.id');
 		if (is_null($test)) return new ocp_tempcode();
 
-		return make_string_tempcode(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('ALREADY_EXISTS',escape_html($val)),ENT_QUOTES)));
+		return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
 	}
 
 }

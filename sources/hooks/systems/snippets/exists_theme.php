@@ -33,7 +33,7 @@ class Hook_exists_theme
 		$test=file_exists(get_file_base().'/themes/'.$val) || file_exists(get_custom_file_base().'/themes/'.$val);
 		if (!$test) return new ocp_tempcode();
 
-		return make_string_tempcode(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('ALREADY_EXISTS',escape_html($val)),ENT_QUOTES)));
+		return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
 	}
 
 }

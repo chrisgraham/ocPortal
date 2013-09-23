@@ -31,7 +31,7 @@ class Hook_search_ocf_within_topic
 		if (get_forum_type()!='ocf') return NULL;
 
 		if (!has_actual_page_access(get_member(),'topicview')) return NULL;
-		if (get_param('search_under','')=='') return NULL;
+		if (get_param('search_under','',true)=='') return NULL;
 
 		require_lang('ocf');
 

@@ -33,7 +33,7 @@ class Hook_invite_missing
 		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_email_address',array('i_email_address'=>$val,'i_taken'=>0));
 		if (!is_null($test)) return new ocp_tempcode();
 
-		return make_string_tempcode(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('NO_INVITE'),ENT_QUOTES)));
+		return make_string_tempcode(strip_html(do_lang('NO_INVITE')));
 	}
 
 }
