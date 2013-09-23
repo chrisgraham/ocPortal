@@ -192,7 +192,7 @@ class Block_main_content
 				}
 				if ($category_field_access!==NULL)
 				{
-					if ($where!='') $where.=' AND ';
+					$where.=' AND ';
 					if ($info['category_type']==='<page>')
 					{
 						$where.='(a.group_id IS NULL) AND ('.str_replace('a.','a2.',$groups).') AND (a2.group_id IS NOT NULL)';
@@ -204,19 +204,19 @@ class Block_main_content
 				}
 				if (($category_field_filter!==NULL) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>'))
 				{
-					if ($where!='') $where.=' AND ';
+					$where.=' AND ';
 					$where.='(('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL) OR ((ma2.active_until IS NULL OR ma2.active_until>'.strval(time()).') AND ma2.member_id='.strval(get_member()).'))';
 				}
 				if (array_key_exists('where',$info))
 				{
-					if ($where!='') $where.=' AND ';
+					$where.=' AND ';
 					$where.=$info['where'];
 				}
 			}
 
 			if ((array_key_exists('validated_field',$info)) && ($info['validated_field']!=''))
 			{
-				if ($where!='') $where.=' AND ';
+				$where.=' AND ';
 				$where.=$info['validated_field'].'=1';
 			}
 

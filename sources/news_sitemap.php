@@ -62,7 +62,7 @@ function build_news_sitemap()
 		{
 			$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),$zone,NULL,false,false,true);
 
-			$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$row['news_category'])));
+			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$row['news_category'])));
 
 			$has_guest_category_access=has_category_access($guest_id,'news',strval($row['news_category']));
 			if (!is_null($modal_member_id))
@@ -102,7 +102,7 @@ function build_news_sitemap()
 			$categories=array();
 			foreach ($_categories as $category)
 			{
-				$categories[]=str_replace(' ','',get_translated_text($GLOBALS['SITE_DB']->query_value('news_categories','nc_title',array('id'=>$category))));
+				$categories[]=str_replace(' ','',get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_title',array('id'=>$category))));
 			}
 			foreach (array('PressRelease','Satire','OpEd','Opinion','UserGenerated') as $category)
 			{

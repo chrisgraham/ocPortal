@@ -169,7 +169,7 @@ class Block_main_multi_content
 			$category_type_filter=mixed();
 		}
 
-		$where='';
+		$where='1=1';
 		$query='FROM '.get_table_prefix().$info['table'].' r';
 		if ((!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (!$efficient))
 		{
@@ -206,7 +206,7 @@ class Block_main_multi_content
 			}
 			if ($category_field_access!==NULL)
 			{
-				if ($where!='') $where.=' AND ';
+				$where.=' AND ';
 				if ($info['category_type']==='<page>')
 				{
 					$where.='(a.group_id IS NULL) AND ('.str_replace('a.','a2.',$groups).') AND (a2.group_id IS NOT NULL)';
@@ -218,19 +218,19 @@ class Block_main_multi_content
 			}
 			if (($category_field_filter!==NULL) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='<page>'))
 			{
-				if ($where!='') $where.=' AND ';
+				$where.=' AND ';
 				$where.='(('.str_replace('a.group_id','a2.group_id',$groups).') AND (a2.group_id IS NOT NULL) OR ((ma2.active_until IS NULL OR ma2.active_until>'.strval(time()).') AND ma2.member_id='.strval(get_member()).'))';
 			}
 			if (array_key_exists('where',$info))
 			{
-				if ($where!='') $where.=' AND ';
+				$where.=' AND ';
 				$where.=$info['where'];
 			}
 		}
 
 		if ((array_key_exists('validated_field',$info)) && (addon_installed('unvalidated')) && ($info['validated_field']!='') && (has_privilege(get_member(),'see_unvalidated')))
 		{
-			if ($where!='') $where.=' AND ';
+			$where.=' AND ';
 			$where.='r.'.$info['validated_field'].'=1';
 		}
 
@@ -252,7 +252,7 @@ class Block_main_multi_content
 
 		if ($days!==NULL)
 		{
-			if ($where!='') $where.=' AND ';
+			$where.=' AND ';
 			$where.=$info['date_field'].'>='.strval(time()-60*60*24*$days);
 		}
 
@@ -261,7 +261,7 @@ class Block_main_multi_content
 		{
 			$block_cache_id=md5(serialize($map));
 			$query.=' LEFT JOIN '.$info['connection']->get_table_prefix().'feature_lifetime_monitor m ON m.content_id=r.'.$info['id_field'].' AND '.db_string_equal_to('m.block_cache_id',$block_cache_id);
-			if ($where!='') $where.=' AND ';
+			$where.=' AND ';
 			$where.='(m.run_period IS NULL OR m.run_period<'.strval($lifetime*60*60*24).')';
 		}
 
@@ -275,7 +275,7 @@ class Block_main_multi_content
 		}
 		if (array_key_exists('extra_where_sql',$info))
 		{
-			if ($where!='') $where.=' AND ';
+			$where.=' AND ';
 			$where.=$info['extra_where_sql'];
 		}
 

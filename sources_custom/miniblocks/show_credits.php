@@ -13,7 +13,7 @@
  * @package		ocportalcom_support_credits
  */
 
-$existing_customer=!is_guest() && !is_null($GLOBALS['SITE_DB']->query_value_null_ok('credit_purchases','num_credits',array('member_id'=>get_member())));
+$existing_customer=!is_guest() && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases','num_credits',array('member_id'=>get_member())));
 
 require_lang('customers');
 $whats_this=new ocp_tempcode();

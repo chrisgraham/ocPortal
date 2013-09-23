@@ -83,7 +83,14 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 		$rank_images=new ocp_tempcode();
 		foreach ($posters_groups as $group)
 		{
-			$rank_images->attach(do_template('OCF_RANK_IMAGE',array('_GUID'=>($guid!='')?$guid:'4b1724a9d97f93e097cf49b50eeafa66','GROUP_NAME'=>$group_name,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),'IMG'=>$rank_image,'IS_LEADER'=>$group_leader==$row['p_poster'])));
+			$rank_image=ocf_get_group_property($group,'rank_image');
+			$group_leader=ocf_get_group_property($group,'group_leader');
+			$group_name=ocf_get_group_name($group);
+			$rank_image_pri_only=ocf_get_group_property($group,'rank_image_pri_only');
+			if (($rank_image!='') && (($rank_image_pri_only==0) || ($group==$primary_group)))
+			{
+				$rank_images->attach(do_template('OCF_RANK_IMAGE',array('GROUP_NAME'=>$group_name,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),'IMG'=>$rank_image,'IS_LEADER'=>$group_leader==$row['p_poster'])));
+			}
 		}
 
 		// Poster details

@@ -364,7 +364,7 @@ class Module_purchase
 
 		if ($temp[$product][0]==PRODUCT_SUBSCRIPTION)
 		{
-			$_purchase_id=$GLOBALS['SITE_DB']->query_value_null_ok('subscriptions','id',array(
+			$_purchase_id=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','id',array(
 				's_type_code'=>$product,
 				's_member_id'=>get_member(),
 				's_state'=>'new'

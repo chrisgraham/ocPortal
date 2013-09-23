@@ -574,7 +574,7 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 	// Post
 	if (is_null($existing_ticket))
 	{
-		$new_ticket_id=strval($member_id).'_'.uniqid('');
+		$new_ticket_id=strval($member_id).'_'.uniqid('',false);
 
 		$_home_url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$new_ticket_id,'redirect'=>NULL),'_SELF',NULL,false,true,true);
 		$home_url=$_home_url->evaluate();

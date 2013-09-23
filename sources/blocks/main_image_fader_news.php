@@ -89,7 +89,7 @@ class Block_main_image_fader_news
 		}
 		if ($blogs!=-1)
 		{
-			$join=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON c.id=p.news_category';
+			$join=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON c.id=r.news_category';
 		} else $join='';
 
 		if (addon_installed('content_privacy'))
@@ -102,7 +102,7 @@ class Block_main_image_fader_news
 			$q_filter.=$privacy_where;
 		}
 
-		$query='SELECT p.id,news_image,title,news,news_article,date_and_time,submitter,author FROM '.get_table_prefix().'news p'.$join.' WHERE '.$ocfilter.$q_filter.' AND validated=1 ORDER BY date_and_time DESC';
+		$query='SELECT r.id,news_image,title,news,news_article,date_and_time,submitter,author FROM '.get_table_prefix().'news r'.$join.' WHERE '.$ocfilter.$q_filter.' AND validated=1 ORDER BY date_and_time DESC';
 		$all_rows=$GLOBALS['SITE_DB']->query($query,100/*reasonable amount*/);
 		$news=array();
 		require_code('images');

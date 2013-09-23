@@ -52,6 +52,8 @@ class Block_main_personal_galleries_list
 		$block_id=get_block_id($map);
 
 		$member_id=array_key_exists('member_id',$map)?intval($map['member_id']):get_member();
+		$member_id_viewing=get_member();
+
 		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):12);
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 
@@ -71,7 +73,7 @@ class Block_main_personal_galleries_list
 		foreach ($rows as $i=>$row)
 		{
 			$galleries->attach(render_gallery_box($row,'root',false,get_module_zone('galleries'),false,false,false,false));
-			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id_of,$member_id_viewing);
+			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id,$member_id_viewing);
 		}
 
 		// Management links
@@ -142,14 +144,14 @@ class Block_main_personal_galleries_list
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 */
-	function attach_gallery_subgalleries($gallery_name,&$galleries,$member_id_of,$member_id_viewing)
+	function attach_gallery_subgalleries($gallery_name,&$galleries,$member_id,$member_id_viewing)
 	{
 		// Not done via main_multi_content block due to need to custom query
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$gallery_name),'ORDER BY add_date DESC');
 		foreach ($rows as $i=>$row)
 		{
 			$galleries->attach(render_gallery_box($row,'root',false,get_module_zone('galleries'),true,false,false,false));
-			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id_of,$member_id_viewing);
+			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id,$member_id_viewing);
 		}
 	}
 
