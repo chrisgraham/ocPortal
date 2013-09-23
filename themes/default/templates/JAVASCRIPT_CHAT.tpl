@@ -154,7 +154,15 @@ function load_colour_picker()
 	window.picker_node.style.position='absolute';
 	window.picker_node.id='colour_picker';
 	text_colour.form.appendChild(window.picker_node);
-	window.picker=new YAHOO.widget.ColorPicker('colour_picker', { showhexsummary: false, showrgbcontrols: false, showwebsafe: false });
+	window.picker=new YAHOO.widget.ColorPicker("colour_picker", {
+		showhexsummary: false,
+		showrgbcontrols: false,
+		showwebsafe: false,
+		images: {
+	       PICKER_THUMB: "{$IMG#,colour_picker/picker_thumb}",
+	       HUE_THUMB: "{$IMG#,colour_picker/hue_thumb}"
+	   }
+	});
 	update_picker_colour();
 	window.picker.on("rgbChange",chat_on_rgb_change);
 	picker_node.ondblclick=function() { window.picker_node.style.visibility='hidden'; };

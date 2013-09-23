@@ -133,7 +133,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		attach_message(do_lang_tempcode('menus:ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
 
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager(get_screen_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_USERGROUP_SUBSCRIPTION'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_USERGROUP_SUBSCRIPTION')),
@@ -696,12 +696,25 @@ class Module_admin_ecommerce extends standard_crud_module
 			$list->attach(form_input_list_entry($unit,$unit==$length_units,do_lang_tempcode('LENGTH_UNIT_'.$unit)));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('LENGTH_UNITS'),do_lang_tempcode('DESCRIPTION_LENGTH_UNITS'),'length_units',$list));
+
 		$list=new ocp_tempcode();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+		if (get_forum_type()=='ocf')
+		{
+			require_code('ocf_groups');
+			$default_groups=ocf_get_all_default_groups(true);
+		}
 		foreach ($groups as $id=>$group)
 		{
-			$list->attach(form_input_list_entry(strval($id),$id==$group_id,$group));
+			if (get_forum_type()=='ocf')
+			{
+				if ((in_array($id,$default_groups)) && ($id!==$group_id)) continue;
+			}
+
+			if ($id!=$GLOBALS['FORUM_DRIVER']->get_guest_id())
+				$list->attach(form_input_list_entry(strval($id),$id==$group_id,$group));
 		}
+
 		$fields->attach(form_input_integer(do_lang_tempcode('SUBSCRIPTION_LENGTH'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_LENGTH'),'length',$length,true));
 		$fields->attach(form_input_list(do_lang_tempcode('GROUP'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_GROUP'),'group_id',$list));
 		$fields->attach(form_input_tick(do_lang_tempcode('USES_PRIMARY'),do_lang_tempcode('DESCRIPTION_USES_PRIMARY'),'uses_primary',$uses_primary==1));

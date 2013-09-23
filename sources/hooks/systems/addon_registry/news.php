@@ -139,6 +139,8 @@ class Hook_addon_registry_news
 			'sources/hooks/systems/config/enable_secondary_news.php',
 			'BLOCK_MAIN_IMAGE_FADER_NEWS.tpl',
 			'sources/blocks/main_image_fader_news.php',
+			'sources/news_sitemap.php',
+			'ocp_news_sitemap.xml',
 		);
 	}
 

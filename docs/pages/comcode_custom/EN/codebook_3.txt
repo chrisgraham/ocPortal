@@ -202,6 +202,8 @@ We also have the following which are either unlikely to be useful, or potentiall
   - [tt]resize_rep_images[/tt] -- set this to '0' if you do not want uploaded rep-images to be sized down automatically to the standard thumbnail size
   - [tt]default_event_type[/tt] -- set this to the ID of the default event type to select for new events
   - [tt]edit_with_my_comcode_perms[/tt] -- set this to '1' if content you edit should render with your Comcode permissions. Only enable this if you trust yourself to spot XSS attacks.
+  - [tt]site_location[/tt] -- an address for where your website is, sometimes used in meta-data.
+  - [tt]google_news_urls[/tt] -- set this to '1' if news URLs should contain a Google-News-friendly entry ID.
  - Performance tuning (positive) [not official options as will break normal expectations of how the system will behave / complicate things]
   - [tt]lots_of_data_in_*[/tt] -- set this to '1', with '*' replaced with a database table name, if you want the ocFilter mechanism to work with recursive db lookups rather than one huge flat lookup
   - [tt]disable_cat_cat_perms[/tt] -- set this to '1' if you want to disable catalogue category permissions

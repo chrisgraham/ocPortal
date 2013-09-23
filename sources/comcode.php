@@ -63,7 +63,7 @@ function init__comcode()
 	/** Set whether the lax Comcode parser should be used, which is important for any Comcode not being interactively added (i.e. existing Comcode should not cause errors, even if it is poor quality).
 	 * @global boolean $LAX_COMCODE
 	 */
-	$LAX_COMCODE=false;
+	$LAX_COMCODE=(get_option('lax_comcode')=='1');
 }
 
 /**

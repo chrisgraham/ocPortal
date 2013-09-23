@@ -332,7 +332,14 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 	decache('side_calendar');
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'events',strval($id),$self_url,$title,get_value('comment_forum__calendar'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'events',
+		strval($id),
+		$self_url,
+		$title,
+		process_overridden_comment_forum('calendar',strval($id),strval($type),strval($myrow['e_type']))
+	);
 
 	log_it('EDIT_CALENDAR_EVENT',strval($id),$title);
 

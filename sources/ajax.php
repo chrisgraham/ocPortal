@@ -91,7 +91,7 @@ function store_autosave()
 	$value=post_param('value');
 	$time=time();
 
-	$GLOBALS['SITE_DB']->query_insert('autosave',array(
+	$GLOBALS['SITE_DB']->query_insert('autosave',array( // Will duplicate against a_member_id/a_key, but DB space is not an issue - better to have the back-archive of it
 		'a_member_id'=>$member_id,
 		'a_key'=>$key,
 		'a_value'=>$value,

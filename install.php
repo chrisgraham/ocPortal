@@ -275,6 +275,11 @@ if (@is_resource($DATADOTOCP_FILE))
  */
 function step_1()
 {
+	// To stop previous installs interfering
+	require_code('view_modes');
+	erase_cached_templates();
+	erase_cached_language();
+
 	$warnings=new ocp_tempcode();
 	global $DATADOTOCP_FILE;
 	if (!@is_resource($DATADOTOCP_FILE)) // Do an integrity check - missing corrupt files
@@ -296,6 +301,7 @@ function step_1()
 					// Volatile files (see also list in make_release.php)
 					if ($file=='data_custom/errorlog.php') continue;
 					if ($file=='ocp_sitemap.xml') continue;
+					if ($file=='ocp_news_sitemap.xml') continue;
 					if ($file=='site/pages/html_custom/EN/download_tree_made.htm') continue;
 					if ($file=='site/pages/html_custom/EN/wiki_tree_made.htm') continue;
 					if ($file=='data_custom/execute_temp.php') continue;

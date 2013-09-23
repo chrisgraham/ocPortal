@@ -138,7 +138,7 @@ function output_ical()
 			$url=$_url->evaluate();
 			echo "URL:".ical_escape($url)."\n";
 
-			$forum=get_value('comment_forum__calendar');
+			$forum=find_overridden_comment_forum('calendar',strval($event['e_type']));
 			if (is_null($forum)) $forum=get_option('comments_forum_name');
 			$start=0;
 			do

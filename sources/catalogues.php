@@ -1021,7 +1021,8 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			$entry['ce_submitter'],
 			$self_url,
 			$c_value,
-			get_value('comment_forum__catalogues__'.$catalogue_name)
+			find_overridden_comment_forum('catalogues__'.$catalogue_name,strval($entry['cc_id'])),
+			$entry['ce_add_date']
 		);
 	}
 

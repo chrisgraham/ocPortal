@@ -1264,6 +1264,12 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
+			if ($row['id']==db_get_first_id())
+			{
+				import_id_remap_put('event_type',strval($row['id']),db_get_first_id());
+				continue;
+			}
+
 			if (import_check_if_imported('event_type',strval($row['id']))) continue;
 
 			$id_new=add_event_type($this->get_lang_string($db,$row['t_title']),$row['t_logo'],array_key_exists('t_external_feed',$row)?$row['t_external_feed']:'');

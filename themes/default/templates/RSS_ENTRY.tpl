@@ -2,10 +2,10 @@
 		<title>{TITLE}</title>
 		{+START,IF_NON_EMPTY,{SUMMARY}}
 			{+START,IF,{$NOT,{$BROWSER_MATCHES,itunes}}}
-			<description>{SUMMARY}</description>
+				<description>{SUMMARY}</description>
 			{+END}
 			{+START,IF,{$BROWSER_MATCHES,itunes}}
-			<itunes:summary>{SUMMARY}</itunes:summary>
+				<itunes:summary>{SUMMARY}</itunes:summary>
 			{+END}
 		{+END}
 		{+START,IF_NON_EMPTY,{DATE}}
@@ -14,11 +14,22 @@
 		<link>{VIEW_URL*}</link>
 		{+START,IF_NON_EMPTY,{AUTHOR}}
 			{+START,IF,{$NOT,{$BROWSER_MATCHES,itunes}}}
-			<author>{$STAFF_ADDRESS} ({AUTHOR*})</author>
+				<author>{$STAFF_ADDRESS} ({AUTHOR*})</author>
 			{+END}
 			{+START,IF,{$BROWSER_MATCHES,itunes}}
-			<itunes:author>{$STAFF_ADDRESS} ({AUTHOR*})</author>
+				<itunes:author>{$STAFF_ADDRESS} ({AUTHOR*})</itunes:author>
 			{+END}
+		{+END}
+		{+START,IF,{$BROWSER_MATCHES,itunes}}
+			{+START,IF_PASSED,THUMB_URL}
+				<itunes:image href="{THUMB_URL*}" />
+			{+END}
+			{+START,IF_PASSED,DURATION}
+				<itunes:duration>{DURATION*}</itunes:duration>
+			{+END}
+			{+START,IF_PASSED,KEYWORDS}{+START,IF_NON_EMPTY,{KEYWORDS}}
+				<itunes:keywords>{KEYWORDS*}</itunes:keywords>
+			{+END}{+END}
 		{+END}
 		{+START,IF_NON_EMPTY,{CATEGORY}}
 			<category>{CATEGORY*}</category>

@@ -287,7 +287,7 @@ function form_input_list_group($title,$entries)
  * Get the tempcode for a list entry. (You would gather together the outputs of several of these functions, then put them in as the $content in a form_input_list function call).
  *
  * @param  string			The value for this entry
- * @param  boolean		Whether this entry is selected by default or not
+ * @param  boolean		Whether this entry is selected by default or not (Note: if nothing else is selected and this is the first, it will be selected by default anyway)
  * @param  mixed			The text associated with this choice (blank: just use name for text)
  * @param  boolean		Whether this entry will be put as red (marking it as important somehow)
  * @param  boolean		Whether this list entry is disabled (like a header in a list)

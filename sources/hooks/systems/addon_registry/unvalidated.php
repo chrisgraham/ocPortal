@@ -47,7 +47,7 @@ class Hook_addon_registry_unvalidated
 	 */
 	function get_description()
 	{
-		return 'Manage the validation (approval) of content.';
+		return 'Subject member\'s to validation (approval) of their content submissions, and enable/disable content.';
 	}
 
 	/**

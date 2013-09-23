@@ -557,7 +557,8 @@ class Module_news
 			$myrow['submitter'],
 			build_url($self_url_map,'_SELF',NULL,false,false,true),
 			get_translated_text($myrow['title']),
-			get_value('comment_forum__news')
+			find_overridden_comment_forum('news',strval($myrow['news_category'])),
+			$myrow['date_and_time']
 		);
 
 		// Load details
@@ -614,9 +615,21 @@ class Module_news
 		if ($myrow['news_image']!='')
 		{
 			$img=$myrow['news_image'];
-			if (url_is_local($img)) $img=get_base_url().'/'.$img;
+			if ((url_is_local($img)) && ($img!='')) $img=get_base_url().'/'.$img;
 		}
 		$category=get_translated_text($news_cats[$myrow['news_category']]['nc_title']);
+
+		$og_img=$img;
+		if ($og_img=='')
+		{
+			$news_full_eval=$news_full->evaluate();
+			$matches=array();
+			if (preg_match('#<img\s[^<>]*src="([^"]*)"#',$news_full_eval,$matches)!=0)
+			{
+				$og_img=$matches[1];
+			}
+		}
+
 		$categories=array(strval($myrow['news_category'])=>$category);
 		$all_categories_for_this=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('*'),array('news_entry'=>$id));
 		$NEWS_CATS_CACHE=array();
@@ -653,7 +666,7 @@ class Module_news
 			'type'=>'News article',
 			'title'=>get_translated_text($myrow['title']),
 			'identifier'=>'_SEARCH:news:view:'.strval($id),
-			'image'=>$img,
+			'image'=>$og_img,
 			'description'=>strip_comcode(get_translated_text($myrow['news'])),
 			'category'=>$category,
 		));

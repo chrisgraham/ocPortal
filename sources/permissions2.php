@@ -290,6 +290,8 @@ function get_permissions_matrix($server_id,$access,$overridables,$privileges,$de
 					'DEFAULT_ACCESS'=>$default_access[$id][$override],
 					'CODE'=>isset($privileges[$override][$id])?$privileges[$override][$id]:'-1',
 				)));
+
+				check_suhosin_request_quantity(1,strlen('access_'.strval($id).'_privilege_'.$override));
 			}
 			$permission_rows->attach(do_template('FORM_SCREEN_INPUT_PERMISSION',array(
 				'_GUID'=>'e2c4459ae995d33376c07e498f1d973a',
@@ -302,6 +304,8 @@ function get_permissions_matrix($server_id,$access,$overridables,$privileges,$de
 				'GROUP_ID'=>strval($id),
 				'PINTERFACE_VIEW'=>$pinterface_view,
 			)));
+
+			check_suhosin_request_quantity(2,strlen('access_'.strval($id)));
 		} else
 		{
 			$overridables_filtered=array();

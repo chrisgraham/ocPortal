@@ -25,7 +25,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	{+END}
 	{+START,IF,{$_GET,overlay}}
-		<meta name="viewport" content="width=285, user-scalable=yes" />
+		<meta name="viewport" content="width=280, initial-scale=1.0, user-scalable=yes" />
 	{+END}
 {+END}
 {+START,IF,{$NOT,{$MOBILE}}}
@@ -102,9 +102,11 @@
 {$,NB: We also support standard metadata, schema.org, semantic HTML5, ARIA, OpenSearch, and OCPCORE}
 
 {$,Favicon and iOS icon for site, managed as theme images}
-<link rel="icon" href="{$IMG*,appleicon}" /> {$,Used on Opera speed dial}
+{+START,IF,{$NOT,{$BROWSER_MATCHES,chrome}}}
+	<link rel="icon" href="{$IMG*,appleicon}" sizes="64x64 128x128" /> {$,Used on Opera speed dial}
+{+END}
 <link rel="apple-touch-icon" href="{$IMG*,appleicon}" />
-<link rel="shortcut icon" href="{$IMG*,favicon}" type="image/x-icon" />
+<link rel="shortcut icon" href="{$IMG*,favicon}" type="image/x-icon" sizes="16x16 32x32" />
 
 {$,Inclusion of search semantic data, so smart browsers can automatically allow native-browser searching of the site}
 {+START,COMMENT,Commented out by default to save bandwidth}{+START,IF,{$ADDON_INSTALLED,search}}

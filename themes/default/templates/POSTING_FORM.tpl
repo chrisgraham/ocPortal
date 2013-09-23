@@ -2,7 +2,7 @@
 	<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
 {+END}
 
-<form autocomplete="off" title="{!PRIMARY_PAGE_FORM}" id="posting_form" method="post" enctype="multipart/form-data" action="{URL*}" {+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
+<form autocomplete="off" title="{!PRIMARY_PAGE_FORM}" id="posting_form" method="post" enctype="multipart/form-data" action="{URL*}"{+START,IF_PASSED_AND_TRUE,AUTOCOMPLETE} class="autocomplete"{+END}>
 	{$INSERT_SPAMMER_BLACKHOLE}
 
 	<div>

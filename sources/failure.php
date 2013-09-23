@@ -944,7 +944,6 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'_custom/')===false) && 
 		(strpos($text,'data/occle.php')===false) && 
 		(strpos($text,'/mini')===false) && 
-		(strpos($text,'&#')===false/*charset encoding issue*/) && 
 		(strpos($text,'has been disabled for security reasons')===false) && 
 		(strpos($text,'max_questions')/*mysql limit*/===false) && 
 		(strpos($text,'Error at offset')===false) && 
@@ -1260,6 +1259,18 @@ function _access_denied($class,$param,$force_login)
 
 	if (((is_guest()) && (running_script('index'))) || ($force_login)) // Show login screen if appropriate
 	{
+		if (get_param_integer('save_and_stay',0)==1)
+		{
+			$middle=inform_screen(get_screen_title('ERROR_OCCURRED'),protect_from_escaping('
+				<script type="text/javascript">// <![CDATA[
+					window.fauxmodal_alert(\''.addslashes(html_entity_decode(strip_tags($message->evaluate()),ENT_QUOTES,get_charset())).'\');
+				//]]></script>
+			'));
+			$echo=globalise($middle,NULL,'',true);
+			$echo->evaluate_echo();
+			exit();
+		}
+
 		@ob_end_clean();
 
 		$redirect=get_self_url(true,true,array('page'=>get_param('page',''))); // We have to pass in 'page' because an access-denied situation tells get_page_name() (which get_self_url() relies on) that we are on page ''.

@@ -293,7 +293,8 @@ class Module_polls
 			$myrow['submitter'],
 			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),
 			$_title,
-			get_value('comment_forum__polls')
+			find_overridden_comment_forum('polls'),
+			$myrow['add_date']
 		);
 
 		// Management links

@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core
+ * @package		core_configuration
  */
 
 class Hook_config_tree_lists
@@ -37,7 +37,7 @@ class Hook_config_tree_lists
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 
-			'addon'=>'core',
+			'addon'=>'core_configuration',
 		);
 	}
 

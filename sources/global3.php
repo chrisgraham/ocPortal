@@ -1873,6 +1873,9 @@ function browser_matches($code)
 
 	switch ($code)
 	{
+		case 'itunes':
+			$BROWSER_MATCHES_CACHE[$code]=(get_param_integer('itunes',0)==1) || (strpos($browser,'itunes')!==false);
+			return $BROWSER_MATCHES_CACHE[$code];
 		case 'bot':
 			$BROWSER_MATCHES_CACHE[$code]=(get_bot_type()!==NULL);
 			return $BROWSER_MATCHES_CACHE[$code];
@@ -1971,7 +1974,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 	}
 
 	global $SITE_INFO;
-	if (((!isset($SITE_INFO['assume_full_mobile_support'])) || ($SITE_INFO['assume_full_mobile_support']!='1')) && (isset($GLOBALS['FORUM_DRIVER'])) && (!$truth) && (($theme=$GLOBALS['FORUM_DRIVER']->get_theme())!='default'))
+	if (((!isset($SITE_INFO['assume_full_mobile_support'])) || ($SITE_INFO['assume_full_mobile_support']!='1')) && (isset($GLOBALS['FORUM_DRIVER'])) && (!$truth) && (running_script('index')) && (($theme=$GLOBALS['FORUM_DRIVER']->get_theme())!='default'))
 	{
 		$ini_path=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.$theme.'/theme.ini';
 		if (is_file($ini_path))

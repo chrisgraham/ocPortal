@@ -53,7 +53,7 @@ function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=fa
 			{
 				$num_members++;
 				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
-				$map=array('FIRST'=>$num_members==1,'PROFILE_URL'=>$profile_url,'USERNAME'=>$username);
+				$map=array('FIRST'=>$num_members==1,'PROFILE_URL'=>$profile_url,'USERNAME'=>$username,'MEMBER_ID'=>strval($member_id));
 				if (isset($at_details['the_title']))
 				{
 					if ((has_privilege(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id']==$id)))
@@ -447,7 +447,8 @@ function _log_it($type,$a=NULL,$b=NULL)
 			require_code('notifications');
 			$subject=do_lang('ACTIONLOG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),do_lang($type),array($a,$b));
 			$mail=do_lang('ACTIONLOG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(do_lang($type)),array(is_null($a)?'':comcode_escape($a),is_null($b)?'':comcode_escape($b)));
-			dispatch_notification('actionlog',$type,$subject,$mail);
+			if (addon_installed('actionlog'))
+				dispatch_notification('actionlog',$type,$subject,$mail);
 		}
 	}
 }

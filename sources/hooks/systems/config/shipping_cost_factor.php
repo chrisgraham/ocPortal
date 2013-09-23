@@ -30,7 +30,7 @@ class Hook_config_shipping_cost_factor
 	{
 		return array(
 			'human_name'=>'SHIPPING_COST_FACTOR',
-			'type'=>'float',
+			'type'=>'line',
 			'category'=>'ECOMMERCE',
 			'group'=>'SHOPPING',
 			'explanation'=>'CONFIG_OPTION_shipping_cost_factor',

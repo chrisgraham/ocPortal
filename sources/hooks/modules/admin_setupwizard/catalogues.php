@@ -83,7 +83,7 @@ class Hook_sw_catalogues
 				require_lang('catalogues');
 				delete_menu_item_simple(do_lang('DEFAULT_CATALOGUE_PROJECTS_TITLE'));
 				delete_menu_item_simple('_SEARCH:catalogues:id=projects:type=index');
-				delete_menu_item_simple('_SEARCH:cms_catalogues:catalogue_name=projects:type=add_entry');
+				delete_menu_item_simple('_SEARCH:cms_catalogues:type=add_entry:catalogue_name=projects');
 				delete_menu_item_simple('_SEARCH:catalogues:type=index:id=projects');
 			}
 		}

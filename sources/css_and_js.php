@@ -326,7 +326,7 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify=true)
  */
 function js_minify($js)
 {
-	if (strpos($js,'no minify')!==false) return str_replace('/*no minify*/','',$js);
+	if (strpos(substr($js,0,1000),'no minify')!==false) return str_replace('/*no minify*/','',$js);
 
 	require_code('jsmin');
 
@@ -368,15 +368,13 @@ function js_minify($js)
  */
 function css_minify($v) 
 {
-	$v=trim($v);
-	$v=str_replace("\r\n", "\n", $v);
-	$search=array("/\/\*[\d\D]*?\*\/|\t+/", "/\s+/", "/\}\s+/");
-	$replace=array('', " ", "}\n");
+	$search=array('/\/\*[\d\D]*?\*\/|\t+/', '/\s+/');
+	$replace=array('', ' ');
 	$v=preg_replace($search, $replace, $v);
-	$search=array("/\\;\s/", "/\s+\{\\s+/", "/\\:\s+\\#/", "/,\s+/i", "/\\:\s+\\\'/i", "/\\:\s+([0-9]+|[A-F]+)/i");
-	$replace=array(";", "{", ":#", ",", ":\'", ":$1");
+	$search=array('/\\;\s/', '/\s+\{\\s+/', '/\\:\s+\\#/', '/,\s+/i', '/\\:\s+\\\'/i', '/\\:\s+([0-9]+|[A-F]+)/i');
+	$replace=array(';', '{', ':#', ',', ':\'', ':$1');
 	$v=preg_replace($search, $replace, $v);
 	$v=str_replace("\n", '', $v);
-	return $v;	
+	return trim($v);	
 }
 

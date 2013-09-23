@@ -381,6 +381,7 @@ function attachment_popup_script()
 			'DESCRIPTION'=>$myrow['a_description'],
 			'ID'=>strval($myrow['id']),
 			'MAY_DELETE'=>$may_delete,
+			'DELETE_URL'=>$post_url,
 		)));
 	}
 
@@ -393,4 +394,3 @@ function attachment_popup_script()
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
-

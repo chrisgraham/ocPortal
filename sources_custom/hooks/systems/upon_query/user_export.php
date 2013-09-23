@@ -44,6 +44,8 @@ class upon_query_user_export
 	{
 		if (!isset($GLOBALS['FORUM_DB'])) return;
 
+		if (running_script('install')) return;
+
 		$prefix=preg_quote($GLOBALS['FORUM_DB']->get_table_prefix(),'#');
 
 		$matches=array();

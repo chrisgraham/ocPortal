@@ -44,6 +44,63 @@ function init__feedback()
 }
 
 /**
+ * Get the comment topic forum for a feedback scenario, and move an existing comment topic to a different forum if the category has moved and the categories have divergent configured comment topic forums (OCF only).
+ *
+ * @param  ID_TEXT		The feedback code, which we may have overridden the comment forum against
+ * @param  ID_TEXT		The resource ID whose comment topic may need moving
+ * @param  ID_TEXT		The new/current category ID, which we may have overridden the comment forum against
+ * @param  ID_TEXT		The old category ID, which we may have overridden the comment forum against
+ * @return ?ID_TEXT		The comment topic forum
+ */
+function process_overridden_comment_forum($feedback_code,$id,$category_id,$old_category_id)
+{
+	$forum_id=find_overridden_comment_forum($feedback_code,$category_id);
+
+	if (($category_id!=$old_category_id) && (get_forum_type()=='ocf'))
+	{
+		// Move if needed
+		$old_forum_id=find_overridden_comment_forum($feedback_code,$old_category_id);
+		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($old_forum_id,$feedback_code.'_'.$id);
+		if (!is_null($topic_id))
+		{
+			$_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_id);
+			$_old_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($old_forum_id);
+			require_code('ocf_topics_action2');
+			ocf_move_topics($_old_forum_id,$_forum_id,array($topic_id),false);
+		}
+	}
+
+	return $forum_id;
+}
+
+/**
+ * Get the comment topic forum for a feedback scenario.
+ *
+ * @param  ID_TEXT		The feedback code, which we may have overridden the comment forum against
+ * @param  ?ID_TEXT		The category ID, which we may have overridden the comment forum against (NULL: no category ID to override against)
+ * @return ?ID_TEXT		The comment topic forum (may be integer as string, or string forum name - so use forum_id_from_name on the result)
+ */
+function find_overridden_comment_forum($feedback_code,$category_id=NULL)
+{
+	if (!is_null($category_id))
+	{
+		$comment_topic_forum=get_value('comment_forum__'.$feedback_code.'__'.$category_id);
+		if (is_null($comment_topic_forum))
+			$comment_topic_forum=get_value('comment_forum__'.$feedback_code);
+	} else
+	{
+		$comment_topic_forum=get_value('comment_forum__'.$feedback_code);
+	}
+
+	if (is_null($comment_topic_forum))
+	{
+		$comment_topic_forum=get_option('comments_forum_name');
+	}
+
+	return $comment_topic_forum;
+}
+
+/**
  * Find who submitted a piece of feedbackable content.
  *
  * @param  ID_TEXT		Content type
@@ -132,9 +189,10 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
  * @param  mixed			URL to view the content
  * @param  SHORT_TEXT	Content title
  * @param  ?string		Forum to post comments in (NULL: site-wide default)
+ * @param  ?TIME			Time of comment topic (NULL: now)
  * @return array			Tuple: Rating details, Comment details, Trackback details
  */
-function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$content_url,$content_title,$forum)
+function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$content_url,$content_title,$forum,$time=NULL)
 {
 	// Sign up original poster for notifications
 	if (get_forum_type()=='ocf')
@@ -157,14 +215,14 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 
 	actualise_rating($allow_rating==1,$page_name,$content_id,$content_url,$content_title);
 	if ((!is_null(post_param('title',NULL))) || ($validated==1))
-		actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum);
+		actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum,false,NULL,false,false,false,NULL,NULL,$time);
 	$rating_details=get_rating_box($content_url,$content_title,$page_name,$content_id,$allow_rating==1,$submitter);
 	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,NULL,$submitter,$allow_comments==2);
 	$trackback_details=get_trackbacks($page_name,$content_id,$allow_trackbacks==1);
 
 	if (is_object($content_url)) $content_url=$content_url->evaluate();
 
-	$serialized_options=serialize(array($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum));
+	$serialized_options=serialize(array($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time));
 	require_code('crypt');
 	$hash=best_hash($serialized_options,get_site_salt()); // A little security, to ensure $serialized_options is not tampered with
 
@@ -189,7 +247,7 @@ function post_comment_script()
 
 	// Read in context of what we're doing
 	$options=either_param('options');
-	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum)=unserialize($options);
+	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time)=unserialize($options);
 
 	// Check security
 	$hash=either_param('hash');
@@ -201,7 +259,7 @@ function post_comment_script()
 	}
 
 	// Post comment
-	actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum);
+	actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum,false,NULL,false,false,false,NULL,NULL,$time);
 
 	// Get new comments state
 	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,NULL,$submitter,$allow_comments==2);
@@ -341,7 +399,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 				$calculated_rating=intval(round($rating/floatval($num_ratings)));
 				$overall_rating+=$calculated_rating;
 
-				$all_rating_criteria[$i]=array('NUM_RATINGS'=>integer_format($num_ratings),'RATING'=>make_string_tempcode(strval($calculated_rating)))+$all_rating_criteria[$i];
+				$all_rating_criteria[$i]=array('NUM_RATINGS'=>integer_format($num_ratings),'RATING'=>strval($calculated_rating))+$all_rating_criteria[$i];
 
 				$extra_meta_data=array();
 				$extra_meta_data['rating'.(($rating_criteria['TYPE']=='')?'':('_'.$rating_criteria['TYPE']))]=strval($calculated_rating);
@@ -383,7 +441,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 			'URL'=>$rate_url,
 			'ALL_RATING_CRITERIA'=>$all_rating_criteria,
 			'OVERALL_NUM_RATINGS'=>integer_format($overall_num_ratings),
-			'OVERALL_RATING'=>make_string_tempcode(strval(intval($overall_rating/floatval(count($all_rating_criteria))))),
+			'OVERALL_RATING'=>strval(intval($overall_rating/floatval(count($all_rating_criteria)))),
 			'HAS_RATINGS'=>$has_ratings,
 			'SIMPLISTIC'=>(count($all_rating_criteria)==1),
 			'LIKES'=>$likes,
@@ -696,9 +754,10 @@ function extract_topic_identifier($full_text)
  * @param  boolean		Whether posts made should not be shared
  * @param  ?string		Title of the post (NULL: lookup from POST environment)
  * @param  ?string		Body of the post (NULL: lookup from POST environment)
+ * @param  ?TIME			Time of comment topic (NULL: now)
  * @return boolean		Whether a hidden post has been made
  */
-function actualise_post_comment($allow_comments,$content_type,$content_id,$content_url,$content_title,$forum=NULL,$avoid_captcha=false,$validated=NULL,$explicit_allow=false,$no_success_message=false,$private=false,$post_title=NULL,$post=NULL)
+function actualise_post_comment($allow_comments,$content_type,$content_id,$content_url,$content_title,$forum=NULL,$avoid_captcha=false,$validated=NULL,$explicit_allow=false,$no_success_message=false,$private=false,$post_title=NULL,$post=NULL,$time=NULL)
 {
 	if (!$explicit_allow)
 	{
@@ -726,13 +785,19 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
 	if (is_null($post))
 		$post=post_param('post',NULL);
-	if (($post=='') && ($post_title!==''))
+	if (!is_null($post_title))
 	{
-		$post=$post_title;
-		$post_title='';
+		if (($post=='') && ($post_title!==''))
+		{
+			if (($post=='') && ($post_title!=''))
+			{
+				$post=$post_title;
+				$post_title='';
+			}
+			if ($post=='') warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','post'));
+		}
 	}
-	if ($post==='') warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','post'));
-	if (is_null($post)) $post='';
+
 	$email=trim(post_param('email',''));
 	if ($email!='')
 	{
@@ -769,7 +834,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		$content_url_flat,
 
 		// Define more about what is being posted,
-		NULL,
+		$time,
 		NULL,
 		$validated,
 		$explicit_allow?1:NULL,

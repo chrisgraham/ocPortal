@@ -520,6 +520,22 @@ function check_form(the_form,for_preview)
 			smooth_scroll(posy-50,null,null,function() { try { error_element.focus(); } catch(e) {}; /* Can have exception giving focus on IE for invisible fields */ } );
 	}
 
+	// Try and workaround max_input_vars problem if lots of usergroups
+	if (!erroneous)
+	{
+		var delete_e=document.getElementById('delete');
+		var is_delete=delete_e && delete_e.type=='checkbox' && delete_e.checked;
+		var es=document.getElementsByTagName('select'),e;
+		for (var i=0;i<es.length;i++)
+		{
+			e=es[i];
+			if ((e.name.match(/^access_\d+_privilege_/)) && ((is_delete) || (e.options[e.selectedIndex].value=='-1')))
+			{
+				e.disabled=true;
+			}
+		}
+	}
+
 	return !erroneous;
 }
 
@@ -1010,7 +1026,18 @@ function assign_tick_deletion_confirm(name)
 				'{!ARE_YOU_SURE_DELETE;^}',
 				function(result)
 				{
-					if (!result) document.getElementById(name).checked=false;
+					var e=document.getElementById(name);
+					if (e)
+					{
+						if (result)
+						{
+							var form=e.form;
+							form.action=form.action.replace(/([&\?])redirect=[^&]*/,'$1');
+						} else
+						{
+							e.checked=false;
+						}
+					}
 				}
 			);
 		}
@@ -1032,10 +1059,17 @@ function assign_radio_deletion_confirm(name)
 						'{!ARE_YOU_SURE_DELETE;^}',
 						function(result)
 						{
-							if (!result)
+							var e=document.getElementById('j_'+name+'_0');
+							if (e)
 							{
-								var e=document.getElementById('j_'+name+'_0');
-								if (e) e.checked=true;
+								if (result)
+								{
+									var form=e.form;
+									form.action=form.action.replace(/([&\?])redirect=[^&]*/,'$1');
+								} else
+								{
+									e.checked=true; // Check first radio
+								}
 							}
 						}
 					);

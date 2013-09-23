@@ -269,9 +269,10 @@ function get_max_image_size()
  * @param  boolean		Whether already a thumbnail (if not, function will make one)
  * @param  ?integer		Thumbnail width to use (NULL: default)
  * @param  ?integer		Thumbnail height to use (NULL: default)
+ * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return tempcode		The thumbnail
  */
-function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=true,$width=NULL,$height=NULL)
+function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=true,$width=NULL,$height=NULL,$only_make_smaller=false)
 {
 	if (is_object($caption))
 	{
@@ -285,7 +286,9 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
 
 	if (!$is_thumbnail_already)
 	{	
-		$new_name=strval($width).'_'.strval($height).'_'.url_to_filename($url);
+		$new_name=strval($width).'_'.strval($height).'_';
+		if ($only_make_smaller) $new_name.='only_smaller_';
+		$new_name.=url_to_filename($url);
 
 		if ((!is_saveable_image($new_name)) && (get_file_extension($new_name)!='svg')) $new_name.='.png';
 
@@ -295,7 +298,7 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
 
 		if (!file_exists($file_thumb))
 		{
-			convert_image($url,$file_thumb,$box_size?-1:$width,$box_size?-1:$height,$box_size?$width:-1,false);
+			convert_image($url,$file_thumb,$box_size?-1:$width,$box_size?-1:$height,$box_size?$width:-1,false,NULL,false,$only_make_smaller);
 			if (!file_exists($file_thumb)) $new_name.='.png';
 		}
 

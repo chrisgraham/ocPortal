@@ -53,12 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	set_option('ticket_mail_on','1');
-	set_option('ticket_mail_server','imap.gmail.com');
-	set_option('ticket_mail_server_port','993');
-	set_option('ticket_mail_server_type','imaps');
-	set_option('ticket_mail_username','support@ocproducts.com');
-	//set_option('ticket_mail_password','TODO');
-	require_code('tickets_email_integration');
-	ticket_incoming_scan();
 }

@@ -417,6 +417,11 @@ body.website_body, #htmlarea {
 
 body#main_website {
 	margin: 0;
+
+	/* To stop it scaling down if we are applying "width=device-width" and forcing a page to displaying non-mobile */
+	{+START,IF,{$NOT,{$MOBILE}}}
+		min-width: 1000px;
+	{+END}
 }
 
 body#main_website #main_website_inner {
@@ -595,13 +600,13 @@ header h1 {
 	font-weight: bold;
 }
 
-.breadcrumbs .sep:after {
+.breadcrumbs .sep:after, .associated_breadcrumbs .sep:after {
 	content: " \00A0\00BB " !important;
 	display: inline-block;
 	font-size: 0.9em;
 	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }
-.breadcrumbs .sep:last-child:after {
+.breadcrumbs .sep:last-child:after, .associated_breadcrumbs .sep:last-child:after {
 	content: "" !important;
 }
 
@@ -660,8 +665,9 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 		{$BETA_CSS_PROPERTY,text-size-adjust: none;}
 	}
 
-	.overlay {
+	body.overlay {
 		width: 285px;
+		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	}
 
 	.overlay h1 {
@@ -2772,7 +2778,10 @@ ul.associated_link>li {
 
 .associated_links_block_group>li{
 	margin: 0.5em 0 !important;
-	white-space: nowrap;
+	white-space: nowrap; /* To force breaking between links */
+}
+.global_side_panel .associated_links_block_group>li {
+	white-space: normal;
 }
 .buttons_group, .associated_links_block_group {
 	text-align: center;

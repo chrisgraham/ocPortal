@@ -194,7 +194,14 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
 	suggest_new_idmoniker_for('polls','view',strval($id),'',$question);
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'polls',strval($id),build_url(array('page'=>'polls','type'=>'view','id'=>$id),get_module_zone('polls'),NULL,false,false,true),$question,get_value('comment_forum__polls'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'polls',
+		strval($id),
+		build_url(array('page'=>'polls','type'=>'view','id'=>$id),get_module_zone('polls'),NULL,false,false,true),
+		$question,
+		find_overridden_comment_forum('polls')
+	);
 }
 
 /**

@@ -56,7 +56,7 @@
 				{POSTER}
 			</div>
 
-			<div class="ocf_topic_poster_more">
+			<div>
 				{POST_AVATAR}
 				{+START,IF_NON_EMPTY,{POSTER_TITLE}}<div class="ocf_topic_poster_title">{POSTER_TITLE*}</div>{+END}
 				{+START,IF_NON_EMPTY,{RANK_IMAGES}}<div class="ocf_topic_poster_rank_images">{RANK_IMAGES}</div>{+END}

@@ -945,6 +945,10 @@ class standard_crud_module
 			if ((array_key_exists(2,$table_result)) && (!is_null($table_result[2])))
 			{
 				$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_TABLE_EXTRA',escape_html($table_result[2]->evaluate()),escape_html($table_result[3]->evaluate())));
+			}
+			elseif ((array_key_exists(3,$table_result)) && (!is_null($table_result[3])))
+			{
+				$text=paragraph(do_lang_tempcode('_CHOOSE_EDIT_TABLE_EXTRA',escape_html($table_result[3]->evaluate())));
 			} else
 			{
 				$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_TABLE'));
@@ -960,7 +964,13 @@ class standard_crud_module
 
 			if (is_array($_entries))
 			{
-				$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($_entries[1]->evaluate()),escape_html($_entries[2]->evaluate())));
+				if (!is_null($_entries[1]))
+				{
+					$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($_entries[1]->evaluate()),escape_html($_entries[2]->evaluate())));
+				} else
+				{
+					$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($_entries[2]->evaluate())));
+				}
 				$entries=$_entries[0];
 			} else
 			{

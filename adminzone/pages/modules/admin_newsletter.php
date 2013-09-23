@@ -1582,12 +1582,12 @@ class Module_admin_newsletter extends standard_crud_module
 				{
 					$send_details_string_exp.='"'.str_replace(chr(10),'\n',addslashes($key)).'"=>"'.str_replace(chr(10),'\n',addslashes($val)).'",';
 				}
-				$schedule_code=':require_code(\'newsletter\'); actual_send_newsletter("'.php_addslashes($message).'","'.php_addslashes($subject).'","'.php_addslashes($lang).'",array('.$send_details_string_exp.'),'.strval($html_only).',"'.php_addslashes($from_email).'","'.php_addslashes($from_name).'",'.strval($priority).',"'.php_addslashes($template).'");';
-				$start_year=post_param_integer('schedule_year');
-				$start_month=post_param_integer('schedule_month');
-				$start_day=post_param_integer('schedule_day');
-				$start_hour=post_param_integer('schedule_hour');
-				$start_minute=post_param_integer('schedule_minute');
+				$schedule_code=':require_code(\'newsletter\'); actual_send_newsletter("'.php_addslashes($message).'","'.php_addslashes($subject).'","'.php_addslashes($lang).'",array('.$send_details_string_exp.'),'.strval($html_only).',"'.php_addslashes($from_email).'","'.php_addslashes($from_name).'",'.strval($priority).',"'.php_addslashes($csv_data).'","'.php_addslashes($template).'");';
+				$start_year=intval(date('Y',$schedule));
+				$start_month=intval(date('m',$schedule));
+				$start_day=intval(date('d',$schedule));
+				$start_hour=intval(date('H',$schedule));
+				$start_minute=intval(date('i',$schedule));
 				$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('NEWSLETTER_SEND',$subject),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 				regenerate_event_reminder_jobs($event_id);
 

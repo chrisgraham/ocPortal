@@ -905,6 +905,9 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		$mail=do_lang('STAFF_USERNAME_CHANGED_MAIL',comcode_escape(get_site_name()),comcode_escape($username),comcode_escape($old_username),get_site_default_lang());
 		dispatch_notification('ocf_username_changed_staff',NULL,$subject,$mail);
 
+		if (addon_installed('news'))
+			$GLOBALS['SITE_DB']->query_update('news',array('author'=>$username),array('author'=>$old_username));
+
 		update_member_username_caching($member_id,$username);
 	}
 	if (!is_null($password))
@@ -1594,6 +1597,8 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 			if ($old==$x) return; // Not changed, bomb out as we don't want to generate a thumbnail
 		}
 	}
+	// At this point in the code, we know a photo was uploaded.
+	//  If we don't have GD, we need them to have uploaded a thumbnail too.
 	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
 	{
 		if ((!is_swf_upload()) && ((!array_key_exists($upload_name.'2',$_FILES)) || (!is_uploaded_file($_FILES[$upload_name.'2']['tmp_name']))))

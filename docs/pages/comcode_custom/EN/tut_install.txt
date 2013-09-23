@@ -155,6 +155,7 @@ Set the following to [b]666[/b]: (full read/write permissions)
  - data_custom/permissioncheckslog.php (if it exists)
  - _config.php
  - ocp_sitemap.xml
+ - ocp_news_sitemap.xml
 
 Remember -- if you chose the quick install option, it's likely that none of these permission settings are required.
 

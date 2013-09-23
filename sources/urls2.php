@@ -529,6 +529,9 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=fa
 	{
 		$moniker=_choose_moniker($page,$type,$id,$moniker_src);
 		$moniker=_give_moniker_scope($page,$type,$id,$zone,$moniker);
+
+		if (($page=='news') && ($type=='view') && (get_value('google_news_urls')==='1'))
+			$moniker.='-'.str_pad($id,3,'0',STR_PAD_LEFT);
 	}
 
 	// Insert

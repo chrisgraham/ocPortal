@@ -476,6 +476,7 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	$_description=$GLOBALS['SITE_DB']->query_select_value('images','description',array('id'=>$id));
 	$_title=$GLOBALS['SITE_DB']->query_select_value('images','title',array('id'=>$id));
+	$old_cat=$GLOBALS['SITE_DB']->query_select_value('images','cat',array('id'=>$id));
 
 	decache('main_gallery_embed');
 
@@ -550,7 +551,14 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	require_lang('galleries');
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'images',strval($id),$self_url,do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'images',
+		strval($id),
+		$self_url,
+		do_lang('VIEW_IMAGE','','','',get_site_default_lang()),
+		process_overridden_comment_forum('images',strval($id),$cat,$old_cat)
+	);
 }
 
 /**
@@ -880,8 +888,8 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	$_title=$GLOBALS['SITE_DB']->query_select_value('videos','title',array('id'=>$id));
 	$_description=$GLOBALS['SITE_DB']->query_select_value('videos','description',array('id'=>$id));
-
 	$orig_url=$GLOBALS['SITE_DB']->query_select_value('videos','url',array('id'=>$id));
+	$old_cat=$GLOBALS['SITE_DB']->query_select_value('videos','cat',array('id'=>$id));
 
 	require_code('files2');
 	delete_upload('uploads/galleries','videos','url','id',$id,$url);
@@ -960,7 +968,14 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 
 	require_lang('galleries');
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'videos',strval($id),$self_url,do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'videos',
+		strval($id),
+		$self_url,
+		do_lang('VIEW_VIDEO','','','',get_site_default_lang()),
+		process_overridden_comment_forum('videos',strval($id),$cat,$old_cat)
+	);
 
 	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
 	{
@@ -1359,7 +1374,14 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 	decache('main_personal_galleries_list');
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'galleries',$name,build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),$fullname,get_value('comment_forum__galleries'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'galleries',
+		$name,
+		build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),
+		$fullname,
+		process_overridden_comment_forum('galleries',$name,$name,$old_name)
+	);
 
 	return $name;
 }

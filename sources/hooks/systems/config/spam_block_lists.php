@@ -49,7 +49,7 @@ class Hook_config_spam_block_lists
 	 */
 	function get_default()
 	{
-		return '*.opm.tornevall.org';
+		return ''; // Not listing "*.opm.tornevall.org" by default, because it keeps IPs for over 365 days, which is okay for blocking e-mail servers/proxies, but not for normal dynamic web IPs
 	}
 
 }

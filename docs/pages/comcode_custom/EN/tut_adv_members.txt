@@ -5,6 +5,32 @@ This tutorial will cover some of the more advanced features of the [concept]OCF[
 
 [contents]decimal,lower-alpha[/contents]
 
+[title="2"]Birthdays[/title]
+
+Unless disabled, member birthdays will be shown in the [tt]main_bottom_bar[/tt] block (shown at the bottom of the forum, by default).
+Additionally, members may choose to receive notifications for their friends birthdays, or the birthdays of all members.
+
+If members have chosen to reveal their age, their age will show, otherwise not.
+If members have not selected a date of birth, no birthday can show for them.
+
+OCF contains a feature to automatically create/link-to a shared birthday topic for a member. By default, this is linked both from [tt]main_bottom_bar[/tt] and the notifications.
+
+The [tt]OCF_BIRTHDAY_LINK[/tt] template controls how the [tt]main_bottom_bar[/tt] birthday links will be shown.
+You can change this to change what link is provided. For example, the ocGiftGiver addon replaces the topic link with a link to send an e-gifts.
+
+The notifications are sent using these language strings, defined in the [tt]ocf[/tt] language file:
+[code]
+BIRTHDAY_NOTIFICATION_MAIL_SUBJECT=It's {2}'s birthday
+BIRTHDAY_NOTIFICATION_MAIL=It's {{{2}}}'s birthday. Come congratulate them on {1}:\n{4}
+[/code]
+[tt]BIRTHDAY_NOTIFICATION_MAIL[/tt] takes these parameters:
+1) Your site name
+2) The username of the member whose birthday it is
+3) A URL to the member profile (not used by default)
+4) The URL to create/view the shared birthday topic for the member
+5) A member ID
+6) Base URL
+
 [title="2"]Merging members[/title]
 
 [media width="150" description="Merging members" float="left"]data_custom/images/docs/adv_members_merge.png[/media]
@@ -106,6 +132,10 @@ For welcome e-mails to work the ocPortal cron bridge must be configured as discu
 [title="3"]Why some CPFs are locked[/title]
 
 Some CPFS are only activated by certain addons. They are pre-installed as they may be shared between addons, yet may not be used by any. They show so you can know they are there, but are no made available for use to reduce feature-bloat. If no addons currently use them, they show in the list as unused and inaccessible. If you want them, you can install an addon that uses them, or simply add your own alternative CPF. The [tt]ecommerce[/tt] addon uses quite a few.
+
+[title="3"]Referencing member-specific data[/title]
+
+As long as you have the newsletters addon installed, welcome emails will piggy-back off the newsletters templating code (regardless of whether the welcome email is being sent to members or to a newsletter). This functionality is as described in the [page="_SEARCH:tut_newsletter"]newsletters tutorial[/page] ("Templated newsletters"); essentially it means you can use things like [tt]{name}[/tt] in there.
 
 [title="2"]CSV files[/title]
 

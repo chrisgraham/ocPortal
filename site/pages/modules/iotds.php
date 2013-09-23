@@ -226,7 +226,8 @@ class Module_iotds
 			$myrow['submitter'],
 			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),
 			get_translated_text($myrow['i_title']),
-			get_value('comment_forum__iotds')
+			find_overridden_comment_forum('iotds'),
+			$myrow['add_date']
 		);
 
 		// Views

@@ -540,11 +540,11 @@ class Module_cms_news extends standard_crud_module
 		{
 			require_code('calendar');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'_EVENT_TIMESTAMP\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
-			$start_year=post_param_integer('schedule_year');
-			$start_month=post_param_integer('schedule_month');
-			$start_day=post_param_integer('schedule_day');
-			$start_hour=post_param_integer('schedule_hour');
-			$start_minute=post_param_integer('schedule_minute');
+			$start_year=intval(date('Y',$schedule));
+			$start_month=intval(date('m',$schedule));
+			$start_day=intval(date('d',$schedule));
+			$start_hour=intval(date('H',$schedule));
+			$start_minute=intval(date('i',$schedule));
 			require_code('calendar2');
 			$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 			regenerate_event_reminder_jobs($event_id,true);
@@ -623,11 +623,11 @@ class Module_cms_news extends standard_crud_module
 			{
 				$validated=0;
 
-				$start_year=post_param_integer('schedule_year');
-				$start_month=post_param_integer('schedule_month');
-				$start_day=post_param_integer('schedule_day');
-				$start_hour=post_param_integer('schedule_hour');
-				$start_minute=post_param_integer('schedule_minute');
+				$start_year=intval(date('Y',$schedule));
+				$start_month=intval(date('m',$schedule));
+				$start_day=intval(date('d',$schedule));
+				$start_hour=intval(date('H',$schedule));
+				$start_minute=intval(date('i',$schedule));
 				$event_id=add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 				regenerate_event_reminder_jobs($event_id,true);
 			}

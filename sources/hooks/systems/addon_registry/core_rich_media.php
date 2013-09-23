@@ -675,7 +675,8 @@ class Hook_addon_registry_core_rich_media
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_SNAPBACK', array(
 				'URL'=>placeholder_url(),
-				'TITLE'=>lorem_phrase()
+				'TITLE'=>lorem_phrase(),
+				'POST_ID'=>placeholder_id(),
 			)), NULL, '', true)
 		);
 	}
@@ -1802,6 +1803,7 @@ class Hook_addon_registry_core_rich_media
 			'DESCRIPTION'=>lorem_sentence(),
 			'ID'=>placeholder_id(),
 			'MAY_DELETE'=>true,
+			'DELETE_URL'=>placeholder_url(),
 		));
 
 		return array(

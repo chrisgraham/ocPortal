@@ -340,9 +340,11 @@ END;
 		dispatch_news_notification($id,$title,$main_news_category_id);
 	}
 
-	if (($validated==1) && (get_option('site_closed')=='0') && (ocp_srv('HTTP_HOST')!='127.0.0.1') && (ocp_srv('HTTP_HOST')!='localhost') && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category_id))))
+	if ((!get_mass_import_mode()) && ($validated==1) && (get_option('site_closed')=='0') && (ocp_srv('HTTP_HOST')!='127.0.0.1') && (ocp_srv('HTTP_HOST')!='localhost') && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category_id))))
 	{
-		send_rss_ping(false);
+		register_shutdown_function('send_rss_ping');
+		require_code('news_sitemap');
+		register_shutdown_function('build_news_sitemap');
 	}
 
 	return $id;
@@ -356,9 +358,11 @@ END;
  */
 function send_rss_ping($show_errors=true)
 {
+	$url=find_script('backend').'?type=rss&mode=news';
+
 	require_code('files');
 	$out='';
-	$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode(find_script('backend').'?type=rss&mode=news'),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
+	$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode($url),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
 	$ping_urls=explode(chr(10),$_ping_url);
 	foreach ($ping_urls as $ping_url)
 	{
@@ -368,6 +372,10 @@ function send_rss_ping($show_errors=true)
 			$out.=http_download_file($ping_url,NULL,$show_errors);
 		}
 	}
+
+	require_code('sitemap');
+	$out.=ping_sitemap($url);
+
 	return $out;
 }
 
@@ -399,7 +407,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 {
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
 
-	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article','submitter'),array('id'=>$id),'',1);
+	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article','submitter','news_category'),array('id'=>$id),'',1);
 	$_title=$rows[0]['title'];
 	$_news=$rows[0]['news'];
 	$_news_article=$rows[0]['news_article'];
@@ -495,11 +503,18 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	if (($validated==1) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category))))
 	{
-		send_rss_ping(false);
+		register_shutdown_function('send_rss_ping');
 	}
 
 	require_code('feedback');
-	update_spacer_post($allow_comments!=0,'news',strval($id),$self_url,$title,get_value('comment_forum__news'));
+	update_spacer_post(
+		$allow_comments!=0,
+		'news',
+		strval($id),
+		$self_url,
+		$title,
+		process_overridden_comment_forum('news',strval($id),strval($main_news_category),strval($rows[0]['news_category']))
+	);
 }
 
 /**
@@ -998,7 +1013,7 @@ function import_rss()
 					$submitter=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$comment_author));
 					if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // If comment is made by a non-member, assign comment to guest account
 
-					$forum=(is_null(get_value('comment_forum__news')))?get_option('comments_forum_name'):get_value('comment_forum__news');
+					$forum=(is_null(find_overridden_comment_forum('news')))?get_option('comments_forum_name'):find_overridden_comment_forum('news');
 
 					$comment_parent_id=mixed();
 					if ((get_forum_type()=='ocf') && (!is_null($comment_parent)) && (isset($comment_mapping[$comment_parent])))
@@ -1022,7 +1037,11 @@ function import_rss()
 						1,
 						false,
 						$comment_author,
-						$comment_parent_id
+						$comment_parent_id,
+						false,
+						NULL,
+						NULL,
+						time()
 					);
 
 					if (get_forum_type()=='ocf')
@@ -1373,7 +1392,7 @@ function import_wordpress_db()
 							$submitter=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$comment['comment_author']));
 							if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // If comment is made by a non-member, assign comment to guest account
 
-							$forum=(is_null(get_value('comment_forum__news')))?get_option('comments_forum_name'):get_value('comment_forum__news');
+							$forum=(is_null(find_overridden_comment_forum('news')))?get_option('comments_forum_name'):find_overridden_comment_forum('news');
 
 							$comment_parent_id=mixed();
 							if ((get_forum_type()=='ocf') && (!is_null($comment['comment_parent'])) && (isset($comment_mapping[$comment['comment_parent']])))
@@ -1423,7 +1442,11 @@ function import_wordpress_db()
 								1,
 								false,
 								$comment['comment_author'],
-								$comment_parent_id
+								$comment_parent_id,
+								false,
+								NULL,
+								NULL,
+								time()
 							);
 
 							if (get_forum_type()=='ocf')

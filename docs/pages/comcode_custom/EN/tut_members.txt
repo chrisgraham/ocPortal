@@ -201,6 +201,13 @@ The bookmark feature is particularly useful for:
  - members who want to keep bookmarks for different websites separate
  - members who move between computers
 
+[title="2"]Last visit dates[/title]
+
+The forum shows the viewing user's last visit and the number of topics/posts since that last visit. Logging in/out triggers a new visit to count (also reopening the browser would).
+
+It works as follows:
+Essentially member profiles contain a last request date (in the database), which is maintained as you browse through the site. If you login, or open the browser, it copies that into a cookie that's value persists until you login again or reopen the browser. The cookie is the reference point which is used as the last visit date.
+
 [concepts
  1_key="profile"           1_value="Member profiles define details, including options, relating to members"
  2_key="Account"     2_value="The zone that a member manages and accesses settings and content related to themselves"

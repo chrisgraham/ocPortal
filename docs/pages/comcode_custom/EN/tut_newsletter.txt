@@ -58,7 +58,7 @@ This can be used in many ways, such as:
  - Splitting up the subscribers, to do split testing
  - Manually removing competitors from the list
  - Picking out certain members from the newsletter list based on some kind of characteristic (you might use extra software to correlate this against another database in some way)
- - Migrating the subscriber list to another piece of dedicated newsletter software, or sending it to an expert newsletter design company for targetting
+ - Migrating the subscriber list to another piece of dedicated newsletter software, or sending it to an expert newsletter design company for targeting
 
 You can also import from a CSV file. ocPortal is quite flexible in supporting different layouts-- it will try and auto-sense things.
 

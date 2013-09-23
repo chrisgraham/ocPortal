@@ -494,6 +494,7 @@ class Hook_addon_registry_chat
 					'FIRST'=>$usernames->is_empty(),
 					'PROFILE_URL'=>placeholder_url(),
 					'USERNAME'=>$user,
+					'MEMBER_ID'=>placeholder_id(),
 					'COLOUR'=>'black',
 					'AT'=>lorem_phrase()
 				)));
@@ -616,6 +617,7 @@ class Hook_addon_registry_chat
 				'FIRST'=>$usernames->is_empty(),
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>$user,
+				'MEMBER_ID'=>placeholder_id(),
 				'COLOUR'=>'black',
 				'AT'=>lorem_phrase()
 			)));

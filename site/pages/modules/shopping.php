@@ -163,7 +163,7 @@ class Module_shopping
 
 			add_menu_item_simple('ecommerce_features',NULL,'ORDERS','_SEARCH:shopping:type=my_orders');
 
-			//CPFs for ecommerce purchase
+			// CPFs for ecommerce purchase...
 
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('firstname',20,1,0,0,0,'','short_text');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('lastname',20,1,0,0,0,'','short_text');
@@ -190,7 +190,7 @@ class Module_shopping
 	 */
 	function get_entry_points()
 	{
-		return array('my_orders'=>'MY_ORDERS','misc'=>'SHOPPING');
+		return is_guest()?array('misc'=>'SHOPPING'):array('my_orders'=>'MY_ORDERS','misc'=>'SHOPPING');
 	}
 
 	/**

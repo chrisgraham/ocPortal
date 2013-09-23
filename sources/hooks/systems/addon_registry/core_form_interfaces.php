@@ -487,7 +487,6 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		require_lang('comcode');
 		require_lang('dates');
-		require_javascript('javascript_yahoo_2');
 		require_javascript('javascript_colour_picker');
 		require_javascript('javascript_theme_colours');
 

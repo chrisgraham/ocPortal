@@ -22,7 +22,7 @@ class Block_main_google_results
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham';
+		$info['author']='Kamen / Chris Graham';
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
@@ -55,9 +55,7 @@ class Block_main_google_results
 	{
 		require_lang('google_search');
 
-		$out=new ocp_tempcode();
-
-		return do_template('BLOCK_MAIN_GOOGLE_SEARCH_RESULTS',array('_GUID'=>'e2bd264817a6ad7852918583986bd373','TITLE'=>'','CONTENT'=>$out));
+		return do_template('BLOCK_MAIN_GOOGLE_SEARCH_RESULTS',array('_GUID'=>'e2bd264817a6ad7852918583986bd373'));
 	}
 
 }

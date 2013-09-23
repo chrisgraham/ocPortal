@@ -86,13 +86,6 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/symbols/BETA_CSS_PROPERTY.php',
 			'sources/antispam.php',
 			'sources/hooks/systems/notifications/spam_check_block.php',
-			'sources/hooks/systems/config/complex_uploader.php',
-			'sources/hooks/systems/config/wysiwyg.php',
-			'sources/hooks/systems/config/editarea.php',
-			'sources/hooks/systems/config/autoban.php',
-			'sources/hooks/systems/config/js_overlays.php',
-			'sources/hooks/systems/config/likes.php',
-			'sources/hooks/systems/config/tree_lists.php',
 			'sources/hooks/systems/notifications/low_disk_space.php',
 			'sources/hooks/systems/notifications/hack_attack.php',
 			'sources/hooks/systems/notifications/auto_ban.php',
@@ -284,10 +277,10 @@ class Hook_addon_registry_core
 			'JAVASCRIPT_MORE.tpl',
 			'JAVASCRIPT_TREE_LIST.tpl',
 			'JAVASCRIPT_XSL_MOPUP.tpl',
-			'JAVASCRIPT_YAHOO.tpl',
-			'JAVASCRIPT_YAHOO_2.tpl',
+			'JAVASCRIPT_YAHOO.tpl', // Used only for date chooser
+			'JAVASCRIPT_YAHOO_EVENTS.tpl', // Used only for date chooser
 			'JAVASCRIPT_COLOUR_PICKER.tpl',
-			'JAVASCRIPT_YAHOO_EVENTS.tpl',
+			'JAVASCRIPT_YAHOO_2.tpl', // Used only by colour picker
 			'BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl',
 			'BLOCK_SIDE_PERSONAL_STATS.tpl',
 			'BLOCK_SIDE_PERSONAL_STATS_LINE.tpl',

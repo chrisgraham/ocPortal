@@ -71,7 +71,7 @@ class Block_main_personal_galleries_list
 		foreach ($rows as $i=>$row)
 		{
 			$galleries->attach(render_gallery_box($row,'root',false,get_module_zone('galleries'),false,false,false,false));
-			$this->attach_gallery_subgalleries($row['name'],$galleries);
+			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id_of,$member_id_viewing);
 		}
 
 		// Management links
@@ -139,15 +139,17 @@ class Block_main_personal_galleries_list
 	 *
 	 * @param  ID_TEXT		Gallery name
 	 * @param  tempcode		The output goes in here (passed by reference)
+	 * @param  MEMBER			The ID of the member who is being viewed
+	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 */
-	function attach_gallery_subgalleries($gallery_name,&$galleries)
+	function attach_gallery_subgalleries($gallery_name,&$galleries,$member_id_of,$member_id_viewing)
 	{
 		// Not done via main_multi_content block due to need to custom query
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$gallery_name),'ORDER BY add_date DESC');
 		foreach ($rows as $i=>$row)
 		{
 			$galleries->attach(render_gallery_box($row,'root',false,get_module_zone('galleries'),true,false,false,false));
-			$this->attach_gallery_subgalleries($row['name'],$galleries);
+			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id_of,$member_id_viewing);
 		}
 	}
 

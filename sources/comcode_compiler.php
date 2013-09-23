@@ -1192,7 +1192,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 										}
 									} else
 									{
-										$continuation.=($semiparse_mode && !($mindless_mode && $in_code_tag))?$next:escape_html($next);
+										$continuation.=escape_html($next);
 									}
 								} else
 								{

@@ -508,7 +508,6 @@ $featuretree=array(
 				array('<abbr title="HyperText Markup Language">HTML</abbr> filtering'),
 				array('Protection against <abbr title="Cross-Site Request-Forgery">CSRF</abbr> attacks','You can temporarily &lsquo;Concede&rsquo; your admin access for added protection'),
 				array('Root-kit detection kit for developers (developers developers!)'),
-				array('Won\'t <a href="http://www.youtube.com/watch?v=z4vDClhnJjs" target="_blank" title="(Opens in new window)">crash the Internet</a>'),
 			),
 		),
 		'easeofuse'=>array(

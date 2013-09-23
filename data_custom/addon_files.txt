@@ -91,6 +91,9 @@ oc_gift_giver
  - uploads/ocgifts_addon/red-rose.jpg
  - uploads/ocgifts_addon/reporter_Happy_Valentine.gif
  - uploads/ocgifts_addon/Santa_Hat.jpg
+ - themes/default/templates_custom/OCF_BIRTHDAY_LINK.tpl
+ - themes/default/templates_custom/OCF_USER_MEMBER.tpl
+ - lang_custom/EN/ocf.ini 
 
 oc_for_the_win
 --------------
@@ -328,8 +331,8 @@ google_search
  - sources_custom/blocks/main_google_results.php
  - themes/default/templates_custom/BLOCK_SIDE_GOOGLE_SEARCH.tpl
  - themes/default/templates_custom/BLOCK_MAIN_GOOGLE_SEARCH_RESULTS.tpl
- - pages/comcode_custom/EN/google_search.txt
- - site/pages/comcode_custom/EN/results_page.txt
+ - themes/default/css_custom/google_search.css
+ - pages/comcode_custom/EN/_google_search.txt
 
 justgiving
 ----------

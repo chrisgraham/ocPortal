@@ -1069,11 +1069,13 @@ function select_tab(id,tab,from_url)
 				{
 					element.style.display='block';
 					element.style.visibility='';
+					element.style.overflow='';
 					element.style.width='';
 					element.style.height='';
 				} else
 				{
-					element.style.visibility='hidden'; // We are not using visibility:hidden due to https://code.google.com/p/swfupload/issues/detail?id=231
+					element.style.visibility='hidden'; // We are now using visibility:hidden due to https://code.google.com/p/swfupload/issues/detail?id=231
+					element.style.overflow='hidden';
 					element.style.width='0';
 					element.style.height='0';
 				}
@@ -3073,7 +3075,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 		else if (post.value!='') post.value+='\n\n';
 
 		post.focus();
-		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
+		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[snapback]'+id+'[/snapback][/quote]\n\n';
 		if (!explicit_quote) post.default_substring_to_strip=post.value;
 	}
 

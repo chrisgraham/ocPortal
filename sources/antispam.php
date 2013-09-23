@@ -121,7 +121,7 @@ function check_rbl($rbl,$user_ip,$we_have_a_result_already=false,$page_level=fal
 		$block=array(
 			'tornevall_abuse'=>true,			// TornevallRBL: Block on 'abuse'
 			'tornevall_anonymous'=>true,		// TornevallRBL: Block on anonymous access (anonymizers, TOR, etc)
-			'tornevall_blitzed'=>true,			// TornevallRBL: Block if host are found in the Blitzed RBL (R.I.P)
+			'tornevall_blitzed'=>false,		// TornevallRBL: Block if host are found in the Blitzed RBL (R.I.P)
 			'tornevall_checked'=>false,		// TornevallRBL: Block anything that has been checked
 			'tornevall_elite'=>true,			// TornevallRBL: Block elite proxies (proxies with high anonymity)
 			'tornevall_error'=>false,			// TornevallRBL: Block proxies that has been tested but failed

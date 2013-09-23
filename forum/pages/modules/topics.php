@@ -1864,7 +1864,7 @@ class Module_topics
 		}
 
 		$topic_posts=new ocp_tempcode();
-		$posts=$GLOBALS['FORUM_DB']->query('SELECT *,p.id AS id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.p_post WHERE p_topic_id='.strval($topic_id).' AND (p_intended_solely_for IS NULL OR p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).') AND p_validated=1 ORDER BY p_time DESC,p.id DESC',30);
+		$posts=$GLOBALS['FORUM_DB']->query('SELECT *,p.id AS id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.p_post WHERE p_topic_id='.strval($topic_id).' AND (p_intended_solely_for IS NULL OR p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).') AND p_validated=1 ORDER BY p_time DESC,p.id DESC',20);
 		foreach ($posts as $row)
 		{
 			$rendered_post=do_template('OCF_POSTING_SCREEN_POST',array(
@@ -2128,11 +2128,11 @@ END;
 				if ((!is_null($schedule)) && (addon_installed('calendar')))
 				{
 					require_code('calendar');
-					$start_year=post_param_integer('schedule_year');
-					$start_month=post_param_integer('schedule_month');
-					$start_day=post_param_integer('schedule_day');
-					$start_hour=post_param_integer('schedule_hour');
-					$start_minute=post_param_integer('schedule_minute');
+					$start_year=intval(date('Y',$schedule));
+					$start_month=intval(date('m',$schedule));
+					$start_day=intval(date('d',$schedule));
+					$start_hour=intval(date('H',$schedule));
+					$start_minute=intval(date('i',$schedule));
 					require_code('calendar2');
 					$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('ADD_POST'),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 					regenerate_event_reminder_jobs($event_id);
@@ -2204,11 +2204,11 @@ $schedule_code=<<<END
 :require_code('ocf_topics_action2'); require_code('ocf_topics_action'); ocf_edit_topic($topic_id,NULL,NULL,$validated,$open,$pinned,$sunk,$cascading,'',$_new_title); if (($to!=$forum_id) && (!is_null($to))) ocf_move_topics($forum_id,$to,array($topic_id)); \$post_id=ocf_make_post($topic_id,$__title,$_postdetails,$skip_sig,$_first_post,$validated,$is_emphasised,$_postdetailser_name_if_guest,NULL,NULL,NULL,$_intended_solely_for,NULL,NULL,false,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1); if (addon_installed('awards')) { require_code('awards'); handle_award_setting('post',strval(\$post_id)); }
 END;
 					require_code('calendar');
-					$start_year=post_param_integer('schedule_year');
-					$start_month=post_param_integer('schedule_month');
-					$start_day=post_param_integer('schedule_day');
-					$start_hour=post_param_integer('schedule_hour');
-					$start_minute=post_param_integer('schedule_minute');
+					$start_year=intval(date('Y',$schedule));
+					$start_month=intval(date('m',$schedule));
+					$start_day=intval(date('d',$schedule));
+					$start_hour=intval(date('H',$schedule));
+					$start_minute=intval(date('i',$schedule));
 					require_code('calendar2');
 					$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('ADD_POST'),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 					regenerate_event_reminder_jobs($event_id);

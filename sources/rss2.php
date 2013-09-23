@@ -140,7 +140,7 @@ function rss_backend_script()
 
 	$site_about=xmlentities(get_option('description'));
 	$logo_url=xmlentities(find_theme_image('logo/trimmed_logo'));
-	$copyright=xmlentities(trim(str_replace('&copy;','',get_option('copyright'))));
+	$copyright=xmlentities(trim(str_replace('&copy;','',str_replace('$CURRENT_YEAR',date('Y'),get_option('copyright')))));
 
 	$cutoff=get_param_integer('cutoff',time()-60*60*24*get_param_integer('days',30));
 	$max=get_param_integer('max',100);
@@ -211,7 +211,7 @@ function rss_backend_script()
 	// Firefox (and probably other browsers, but I didn't test) doesn't want to display Atom feeds inline if they're sent as text/xml+atom, even if the Content-Disposition is sent to inline :(
 	header('Content-Type: text/xml'); // application/rss+xml ?
 
-	$echo=do_template($prefix.'WRAPPER',array('FILTER'=>$filter,'CUTOFF'=>strval($cutoff),'MODE'=>$mode,'MODE_NICE'=>$mode_nice,'RSS_CLOUD'=>$rss_cloud,'VERSION'=>ocp_version_pretty(),'COPYRIGHT'=>$copyright,'DATE'=>$date,'LOGO_URL'=>$logo_url,'ABOUT'=>$site_about,'CONTENT'=>$content));
+	$echo=do_template($prefix.'WRAPPER',array('FILTER'=>$filter,'CUTOFF'=>strval($cutoff),'MODE'=>$mode,'MODE_NICE'=>$mode_nice,'RSS_CLOUD'=>$rss_cloud,'VERSION'=>ocp_version_pretty(),'COPYRIGHT'=>$copyright,'DATE'=>$date,'LOGO_URL'=>$logo_url,'ABOUT'=>$site_about,'CONTENT'=>$content,'SELF_URL'=>get_self_url_easy()));
 	$echo->evaluate_echo();
 }
 

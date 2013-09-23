@@ -362,6 +362,12 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	if (!running_script('comcode_convert')) // Don't want it running in background
 	{
 		set_http_status_code('400');
+
+		if (!headers_sent())
+		{
+			// NB: Very important this doesn't run on IE. IE is supposed to show error screens literally if more than 512 bytes, and this is much more (irregardless of compression) - but sometimes seems to still hide it with a "friendly" error anyway
+			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
+		}
 	}
 
 	// Output our error / correction form
@@ -515,7 +521,13 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				$params.=' '.$key.'="'.str_replace('"','\"',$val).'"';
 			}
-			return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+			if (($tag!='block') || (!is_file(get_file_base().'/sources_custom/miniblocks/'.$embed->evaluate().'.php'/*Won't have a defined editing UI*/)))
+			{
+				return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('comcode:COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('comcode:COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+			} else
+			{
+				return make_string_tempcode('[block'.escape_html($params).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/block]');
+			}
 		}
 		return do_template('WARNING_BOX',array('_GUID'=>'faea04a9d6f1e409d99b8485d28b2225','WARNING'=>do_lang_tempcode('comcode:NO_ACCESS_FOR_TAG',escape_html($tag),escape_html($username))));
 	}
@@ -615,7 +627,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					require_code('comcode_from_html');
 					$back_to_comcode=semihtml_to_comcode($embed->evaluate()); // Undo what's happened already
-					$embed=comcode_to_tempcode($back_to_comcode,$source_member,$as_admin,80,$pass_id,$connection); // Re-parse (with full security)
+					$embed=comcode_to_tempcode($back_to_comcode,$source_member,$as_admin,80,$pass_id,$connection,true); // Re-parse (with full security)
 				}
 
 				$_embed=$embed->evaluate();
@@ -675,10 +687,50 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 		case 'snapback':
 			require_lang('ocf');
+
 			$post_id=intval($embed->evaluate());
-			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id)):make_string_tempcode($attributes['param']);
+
+			$_date=mixed();
+			if (get_forum_type()=='ocf')
+			{
+				$_date=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_time',array('id'=>$post_id));
+			}
+
+			$s_title=mixed();
+			if ($attributes['param']=='')
+			{
+				if (get_forum_type()=='ocf')
+				{
+					$_s_title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_title',array('id'=>$post_id));
+					if ($_s_title!='')
+					{
+						$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_cache_forum_id',array('id'=>$post_id));
+						if ((!is_null($forum_id)) && (has_category_access($source_member,'forums',strval($forum_id))))
+						{
+							$s_title=make_string_tempcode($_s_title);
+						}
+					}
+				}
+
+				if ($s_title===NULL)
+				{
+					$s_title=do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id));
+				}
+			} else
+			{
+				$s_title=make_string_tempcode($attributes['param']);
+			}
+
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
-			$temp_tpl=do_template('COMCODE_SNAPBACK',array('_GUID'=>'af7b6920e58027256d536a8cdb8a164a','URL'=>$GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum,true),'TITLE'=>$s_title));
+
+			$temp_tpl=do_template('COMCODE_SNAPBACK',array(
+				'_GUID'=>'af7b6920e58027256d536a8cdb8a164a',
+				'URL'=>$GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum,true),
+				'TITLE'=>$s_title,
+				'DATE'=>is_null($_date)?NULL:get_timezoned_date($_date,true,false,false,true),
+				'_DATE'=>is_null($_date)?NULL:strval($_date),
+				'POST_ID'=>strval($post_id),
+			));
 			break;
 
 		case 'post':
@@ -1204,7 +1256,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
 			if (!is_null($cite))
 			{
-				$temp_tpl=test_url($cite,'del',$cite,$source_member);
+				$temp_tpl=test_url($cite,'quote',$cite,$source_member);
 			}
 
 			if (($attributes['param']=='') && (isset($attributes['author']))) $attributes['param']=$attributes['author']; // Compatibility with SMF
