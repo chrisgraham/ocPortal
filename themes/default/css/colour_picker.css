@@ -62,11 +62,6 @@ left: -2px;
     background-image: url('{$IMG;,colour_picker/picker_mask}');
 } 
 
-*html .yui-picker-bg {
-    background-image: none;
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{$IMG;,colour_picker/picker_mask}', sizingMethod='scale');
-}
-
 
 .yui-picker-mask { position:absolute; z-index: 1; top:0px; left:0px; } 
 
@@ -98,7 +93,6 @@ left: -2px;
 .yui-picker-controls a {
     font: 1em arial,helvetica,clean,sans-serif;
     display:block;
-    *display:inline-block; /* IE */
     padding: 0;
     color: #000;
 

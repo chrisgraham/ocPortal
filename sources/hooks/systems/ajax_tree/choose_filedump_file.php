@@ -77,7 +77,7 @@ class Hook_choose_filedump_file
 							}
 						} else
 						{
-							$_description=get_translated_text(escape_html($description));
+							$_description=escape_html(get_translated_text($description));
 						}
 						$out.='<entry id="'.xmlentities($entry_id).'" title="'.xmlentities($f).'" description_html="'.xmlentities($_description).'" selectable="true"></entry>';
 					}

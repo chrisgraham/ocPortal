@@ -2049,7 +2049,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
 			if (!is_null($cite))
 			{
-				$temp_tpl=test_url($cite,'del',$cite,$source_member);
+				$temp_tpl=test_url($cite,'quote',$cite,$source_member);
 			}
 
 			if (($attributes['param']=='') && (isset($attributes['author']))) $attributes['param']=$attributes['author']; // Compatibility with SMF

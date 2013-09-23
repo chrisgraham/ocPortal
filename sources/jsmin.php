@@ -191,7 +191,7 @@ class JSMin
 	/**
 	 * Get the next stream token
 	 *
-	 * @return 	string		Next stream token
+	 * @return 	?string		Next stream token (NULL: no token)
 	 */
 	function get()
 	{
