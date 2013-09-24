@@ -118,9 +118,13 @@ class Hook_media_rendering_image_websafe
 				$attributes['thumb_url']=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 				if ((function_exists('getimagesize')) && (($auto_width) || ($auto_height)))
 				{
-					list($width,$height)=getimagesize($file_thumb);
-					if ($auto_width) $attributes['width']=strval($width);
-					if ($auto_height) $attributes['height']=strval($height);
+					$size=@getimagesize($file_thumb);
+					if ($size!==false)
+					{
+						list($width,$height)=$size;
+						if ($auto_width) $attributes['width']=strval($width);
+						if ($auto_height) $attributes['height']=strval($height);
+					}
 				}
 			} else
 			{
