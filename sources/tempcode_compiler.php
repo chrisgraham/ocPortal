@@ -319,7 +319,13 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 						if ($first_param!='""') // If not a comment
 						{
-							$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
+							if (function_exists('ecv_'.$first_param))
+							{
+								$new_line='ecv_'.$first_param.'($cl,array('.implode(',',$escaped).'),array('.$_opener_params.'))';
+							} else
+							{
+								$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
+							}
 							if ((isset($compilable_symbols[$first_param])) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
 							{
 								$new_line='"'.php_addslashes(eval('return '.$new_line.';')).'"';
