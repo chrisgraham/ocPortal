@@ -53,7 +53,7 @@
 						var forms=document.getElementsByTagName('form');
 						for (var i=0;i<forms.length;i++)
 						{
-							if (forms[i].action.indexOf('{$PAGE_LINK*;,:login:logout}')!=-1)
+							if (forms[i].action.indexOf('{$PAGE_LINK;/,:login:logout}')!=-1)
 							{
 								forms[i].onsubmit=function(logout_link) { return function() {
 									FB.logout(function(response) {
