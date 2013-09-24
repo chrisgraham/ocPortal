@@ -29,6 +29,8 @@ function init__galleries()
 	$GALLERY_PAIRS_CACHE=NULL;
 	global $PT_PAIR_CACHE_G;
 	$PT_PAIR_CACHE_G=array();
+
+	require_code('images');
 }
 
 /**

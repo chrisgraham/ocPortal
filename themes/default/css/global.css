@@ -1015,7 +1015,7 @@ div.edited {
 .media_box a {
 	outline: 0;
 }
-.media_box img {
+.media_box>a>img,.media_box>img {
 	border: 1px solid {$GET,standard_border};
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}

@@ -61,6 +61,7 @@ class Hook_config_oembed_manual_patterns
 		//$default.="(https?://twitter\.yfrog\.com/.*) = http://www.yfrog.com/api/oembed\n";	Does not work
 		$default.="(https?://soundcloud\.com/.*/.*) = http://soundcloud.com/oembed\n";
 		$default.="(https?://twitter\.com/.*/status/\d+) = https://api.twitter.com/1/statuses/oembed.{format}\n";
+		$default.="(https?://(www\.)?ustream\.tv/.*) = http://www.ustream.tv/oembed\n";
 
 		$default.="(https?://twitpic\.com/.*) = http://noembed.com/embed\n";
 		/*
@@ -75,6 +76,7 @@ class Hook_config_oembed_manual_patterns
 		$default.="(https?://xkcd\.com/\d+/?) = http://api.embed.ly/1/oembed\n";
 		$default.="(https?://imgur\.com/.*) = http://api.embed.ly/1/oembed\n";
 		$default.="(https?://tinypic.com/.*) = http://api.embed.ly/1/oembed\n";
+		$default.="(https?://www\.justin\.tv/.*) = http://api.embed.ly/1/oembed\n";
 		/*
 		Embedly requires an API key for high usage. It's pretty good though. To use an API key, do e.g.:
 		$_oembed_manual_patterns.="(http://www\.imdb\.com/title/.*|http://twitpic\.com/.*) = http://api.embed.ly/1/oembed?key=xxxxxx\n";

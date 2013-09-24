@@ -80,6 +80,19 @@ class Hook_media_rendering_oembed
 	}
 
 	/**
+	 * If we can handle this URL, get the thumbnail URL.
+	 *
+	 * @param  URLPATH		Video URL
+	 * @return ?string		The thumbnail URL (NULL: no match).
+	 */
+	function get_video_thumbnail($src_url)
+	{
+		$data=$this->get_oembed_data_result($src_url,array());
+		if ((!is_null($data)) && (isset($data['thumbnail_url']))) return $data['thumbnail_url'];
+		return NULL;
+	}
+
+	/**
 	 * Do an oEmbed lookup.
 	 *
 	 * @param  URLPATH	URL to render
