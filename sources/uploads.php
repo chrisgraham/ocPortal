@@ -269,6 +269,10 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	{
 		$url=_get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type,$accept_errors);
 		$is_image=is_image($url[0]);
+		if ($url[0]!='')
+		{
+			if ($enforce_type==OCP_UPLOAD_IMAGE) $is_image=true; // Must be an image if it got to here. Maybe came from oEmbed and not having an image extension.
+		}
 		if ($url==array('','')) return array('','','','');
 		if (($copy_to_server) && (!url_is_local($url[0])))
 		{
@@ -577,22 +581,26 @@ function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=
 	if ($url[0]!='')
 	{
 		// oEmbed etc
-		if ((($enforce_type & OCP_UPLOAD_ANYTHING)==0) && (($enforce_type & OCP_UPLOAD_IMAGE)!=0) && (!is_image($url[0])) && ((($enforce_type & OCP_UPLOAD_SWF)==0) || (get_file_extension($url[0])!='swf')))
+		if (($enforce_type!=OCP_UPLOAD_ANYTHING) && (($enforce_type & OCP_UPLOAD_IMAGE)!=0) && (!is_image($url[0])) && ((($enforce_type & OCP_UPLOAD_SWF)==0) || (get_file_extension($url[0])!='swf')))
 		{
 			require_code('media_renderer');
 			require_code('files2');
 			$meta_details=get_webpage_meta_details($url[0]);
 			require_code('hooks/systems/media_rendering/oembed');
 			$oembed_ob=object_factory('Hook_media_rendering_oembed');
-			if ($oembed_ob->recognises_mime_type($meta_details['t_mime_type'],$meta_details))
+			if ($oembed_ob->recognises_mime_type($meta_details['t_mime_type'],$meta_details) || $oembed_ob->recognises_url($url[0]))
 			{
 				$oembed=$oembed_ob->get_oembed_data_result($url[0],array('width'=>'1280','height'=>'1024'));
 				if (($oembed!==NULL) && ($oembed['type']=='photo'))
 				{
-					$url[0]=$oembed['url'];
+					$url[0]=preg_replace('#.*(https?://)#','${1}',$oembed['thumbnail_url']); // Get thumbnail, but strip noembed.com (for example) resizer-proxy prefix if there
 					$url[1]=basename(urldecode($url[0]));
 					return $url;
 				}
+			}
+			if (substr($meta_details['t_mime_type'],0,6)=='image/')
+			{
+				return $url;
 			}
 			if ($meta_details['t_image_url']!='')
 			{
