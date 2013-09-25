@@ -271,23 +271,16 @@ class Hook_media_rendering_oembed
 				if (!array_key_exists('thumbnail_url',$data))
 					return $this->_fallback_render($url,$attributes,$source_member,array_key_exists('title',$data)?$data['title']:'');
 
-				// embed.ly may show thumbnail details within a "link" type
-				$map=array('thumb_url'=>$data['thumbnail_url']);
-				if (array_key_exists('thumbnail_width',$data))
-				{
-					unset($attributes['width']);
-					$map['width']=$data['thumbnail_width'];
-				}
-				if (array_key_exists('thumbnail_height',$data))
-				{
-					unset($attributes['height']);
-					$map['height']=$data['thumbnail_height'];
-				}
-				if (array_key_exists('description',$data)) $map['description']=$data['description']; // not official, but embed.ly has it
-				elseif (array_key_exists('title',$data)) $map['description']=$data['title'];
-
-				require_code('media_renderer');
-				return render_media_url($url,$url_safe,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
+				// embed.ly and Wordpress may show thumbnail details within a "link" type
+				return do_template('MEDIA_WEBPAGE_SEMANTIC',array(
+					'TITLE'=>array_key_exists('title',$attributes)?$attributes['title']:'', // not official, but embed.ly has it
+					'META_TITLE'=>array_key_exists('title',$data)?$data['title']:'', // not official, but embed.ly has it
+					'DESCRIPTION'=>array_key_exists('description',$data)?$data['description']:'',
+					'IMAGE_URL'=>$data['thumbnail_url'],
+					'URL'=>$url,
+					'WIDTH'=>((array_key_exists('thumbnail_width',$attributes)) && ($attributes['thumbnail_width']!=''))?$attributes['thumbnail_width']:get_option('thumb_width'),
+					'HEIGHT'=>((array_key_exists('thumbnail_height',$attributes)) && ($attributes['thumbnail_height']!=''))?$attributes['thumbnail_height']:get_option('thumb_width'),
+				));
 		}
 
 		// Should not get here
