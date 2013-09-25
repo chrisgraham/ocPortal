@@ -1477,6 +1477,10 @@ You can store and retrieve values in Tempcode variables. These work across templ
 		<td>Don't do any pre-processing under this directive. This improves performance for complex Tempcode trees (especially for conditionally displayed blocks), but it does mean that things like CSS and Javascript includes that are required by blocks may not be detected.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>CASES</td>
+		<td>Show different output based on the value of something</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>COMMENT</td>
 		<td>A comment (i.e. does nothing)</td>
 	</tr>
@@ -1578,6 +1582,19 @@ I threw [tt]{$SITE_NAME}[/tt] into the example just to demonstrate symbols are n
 Tempcode is extremely powerful, and hopefully now you can see how symbols, directives, and parameters, can come together to allow great things to happen!
 
 [box]See [tt]tempcode_test.tpl[/tt] for more examples on how to use symbols and directives.[/box]
+
+[title="3"]CASES[/title]
+
+[code]
+Capital city:
+{+START,CASES,{COUNTRY}}
+	UK=London
+	Ireland=Dublin
+	=Unknown
+{+END}
+[/code]
+
+Based on the value of "Country", a different value would be shown. We have coded cases for the UK and Ireland, and anything else would default to "Unknown".
 
 [title="2"]GUIDs[/title]
 

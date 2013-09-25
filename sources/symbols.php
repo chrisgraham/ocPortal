@@ -576,6 +576,27 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'COMMENT':
 				break;
 
+			case 'CASES':
+				if (isset($param[1]))
+				{
+					$value='';
+					$compare=$param[0]->evaluate();
+					$substring=(isset($param[2]) && $param[1]->evaluate()=='1');
+					$explode=explode(chr(10),trim($param[$substring?2:1]->evaluate()));
+					foreach ($explode as $i=>$case)
+					{
+						if (strpos($case,'=')===false) continue;
+						list($compare_case,$value_case)=explode('=',$case);
+						$compare_case=trim($compare_case);
+						if ((($compare_case=='') && (!isset($explode[$i+1]))) || ($compare_case==$compare) || (($substring) && (($compare=='') || (strpos($compare,$compare_case)!==false))))
+						{
+							$value=$value_case;
+							break;
+						}
+					}
+				}
+				break;
+
 			default:
 				require_code('site');
 				attach_message(do_lang_tempcode('UNKNOWN_DIRECTIVE',escape_html($name)),'warn');
