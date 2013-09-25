@@ -770,6 +770,7 @@ class Hook_addon_registry_core
 			'sources/textfiles.php',
 			'sources/autosave.php',
 			'sources/symbols.php',
+			'sources/symbols2.php',
 			'sources/tar.php',
 			'sources/tempcode.php',
 			'sources/tempcode_compiler.php',
@@ -1435,6 +1436,8 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__block_main_emoticon_codes()
 	{
+		require_code('comcode_renderer');
+
 		$smilies=placeholder_emoticons();
 		$entries=new ocp_tempcode();
 		global $EMOTICON_LEVELS;

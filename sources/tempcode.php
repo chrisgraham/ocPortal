@@ -209,6 +209,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 
 	$myfunc='do_runtime_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
 	$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"foreach (\\\$parameters as \\\$i=>\\\$p) { if (is_object(\\\$p)) \\\$parameters[\\\$i]=\\\$p->evaluate(); } echo ";
+	if ($name=='?') $name='TERNARY';
 	if (($type==TC_SYMBOL) && (function_exists('ecv_'.$name)))
 	{
 		$funcdef.="ecv_".$name."(\\\$cl,".($_escaping).",\\\$parameters);\";\n";

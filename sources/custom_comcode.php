@@ -36,6 +36,8 @@
  */
 function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify=false)
 {
+	require_code('comcode_compiler');
+
 	global $VALID_COMCODE_TAGS;
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
 	if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test)))
@@ -92,6 +94,8 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
  */
 function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify=false)
 {
+	require_code('comcode_compiler');
+
 	global $VALID_COMCODE_TAGS;
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
 	if ($old_tag==$tag) $test=NULL;

@@ -368,7 +368,7 @@ function handle_image_mouse_over(event)
 	{+END}
 
 	window.old_status_img=window.status;
-	window.status='{$SPECIAL_CLICK_TO_EDIT;}';
+	window.status='{!SPECIAL_CLICK_TO_EDIT;}';
 }
 
 function handle_image_mouse_out(event)

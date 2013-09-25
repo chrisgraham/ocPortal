@@ -37,6 +37,7 @@ Adding attachments.
 function do_comcode_attachments($comcode,$type,$id,$previewing_only=false,$connection=NULL,$insert_as_admin=NULL,$for_member=NULL)
 {
 	require_lang('comcode');
+	require_code('comcode_compiler');
 
 	if (function_exists('set_time_limit')) @set_time_limit(600); // Thumbnail generation etc can take some time
 

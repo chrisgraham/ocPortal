@@ -319,9 +319,11 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 						if ($first_param!='""') // If not a comment
 						{
-							if (function_exists('ecv_'.$first_param))
+							$name=preg_replace('#(^")|("$)#','',$first_param);
+							if ($name=='?') $name='TERNARY';
+							if (function_exists('ecv_'.$name))
 							{
-								$new_line='ecv_'.$first_param.'($cl,array('.implode(',',$escaped).'),array('.$_opener_params.'))';
+								$new_line='ecv_'.$name.'($cl,array('.implode(',',$escaped).'),array('.$_opener_params.'))';
 							} else
 							{
 								$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
@@ -585,7 +587,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				break;
 		}
 	}
-	if ((!array_key_exists('LAX_COMCODE',$GLOBALS)) || (!$GLOBALS['LAX_COMCODE']))
+	if ((!array_key_exists('LAX_COMCODE',$GLOBALS)) || ($GLOBALS['LAX_COMCODE']===false))
 	{
 		if ($stack!=array())
 		{

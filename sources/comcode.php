@@ -23,38 +23,8 @@
  */
 function init__comcode()
 {
-	global $VALID_COMCODE_TAGS;
-	/** A list of all valid Comcode tags that we recognise.
-	 * @global array $VALID_COMCODE_TAGS
-	 */
-	$VALID_COMCODE_TAGS=array(
-		'samp'=>1,'q'=>1,'var'=>1,'overlay'=>1,'tooltip'=>1,
-		'section'=>1,'section_controller'=>1,
-		'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,
-		'carousel'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'acronym'=>1,'abbr'=>1,'contents'=>1,'concepts'=>1,'list'=>1,
-		'flash'=>1,'media'=>1,'indent'=>1,'staff_note'=>1,'menu'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
-		'if_in_group'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'tt'=>1,'box'=>1,'img'=>1,
-		'url'=>1,'email'=>1,'reference'=>1,'page'=>1,'codebox'=>1,'no_parse'=>1,'code'=>1,'hide'=>1,
-		'quote'=>1,'block'=>1,'semihtml'=>1,'html'=>1,'concept'=>1,'thumb'=>1,
-		'attachment'=>1,'attachment_safe'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
-		'snapback'=>1,'post'=>1,'topic'=>1,'include'=>1,'random'=>1,'ticker'=>1,'jumping'=>1,'surround'=>1,'pulse'=>1,'shocker'=>1,
-	);
-	//if (addon_installed('ecommerce'))
-	{
-		$VALID_COMCODE_TAGS['currency']=1;
-	}
-
-	global $IMPORTED_CUSTOM_COMCODE,$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE;
-	$IMPORTED_CUSTOM_COMCODE=false;
-	$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE=array();
-
-	global $COMCODE_ATTACHMENTS,$ATTACHMENTS_ALREADY_REFERENCED;
-	$COMCODE_ATTACHMENTS=array();
-	$ATTACHMENTS_ALREADY_REFERENCED=array();
-
 	global $COMCODE_PARSE_URLS_CHECKED;
 	$COMCODE_PARSE_URLS_CHECKED=0;
-	if (!defined('MAX_URLS_TO_READ')) define('MAX_URLS_TO_READ',5);
 
 	global $OVERRIDE_SELF_ZONE;
 	$OVERRIDE_SELF_ZONE=NULL; // This is not pretty, but needed to properly scope links for search results.
@@ -63,7 +33,7 @@ function init__comcode()
 	/** Set whether the lax Comcode parser should be used, which is important for any Comcode not being interactively added (i.e. existing Comcode should not cause errors, even if it is poor quality).
 	 * @global boolean $LAX_COMCODE
 	 */
-	$LAX_COMCODE=(get_option('lax_comcode')=='1');
+	$LAX_COMCODE=NULL;
 }
 
 /**
@@ -108,18 +78,6 @@ function apply_emoticons($text)
 }
 
 /**
- * Turn a triple of emoticon parameters into some actual tempcode.
- *
- * @param  array			Parameter triple(template,src,code)
- * @return mixed			Either a tempcode result, or a string result, depending on $evaluate
- */
-function do_emoticon($imgcode)
-{
-	$tpl=do_template($imgcode[0],array('UNIQID'=>uniqid('',true),'SRC'=>$imgcode[1],'EMOTICON'=>$imgcode[2]));
-	return $tpl;
-}
-
-/**
  * Convert the specified Comcode (unknown format) into a tempcode tree. You shouldn't output the tempcode tree to the browser, as it looks really horrible. If you are in a rare case where you need to output directly (not through templates), you should call the evaluate method on the tempcode object, to convert it into a string.
  *
  * @param  LONG_TEXT		The Comcode to convert
@@ -145,7 +103,7 @@ function comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap_
 	if ($semiparse_mode) $wrap_pos=100000;
 
 	$attachments=(count($_FILES)!=0);
-	foreach($_POST as $key=>$value)
+	foreach ($_POST as $key=>$value)
 	{
 		if (preg_match('#^hidFileID\_#i',$key)!=0) $attachments=true;
 	}
@@ -185,10 +143,7 @@ function strip_comcode($text)
 		}
 	}
 
-	$text=str_replace('&hellip;','...',$text);
-	$text=str_replace('&middot;','-',$text);
-	$text=str_replace('&ndash;','-',$text);
-	$text=str_replace('&mdash;','-',$text);
+	$text=str_replace(array('&hellip;','&middot;','&ndash;','&mdash;'),array('...','-','-','-'),$text);
 
 	return $text;
 }

@@ -108,28 +108,38 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 			}
 
-			// A constant?
-			elseif (defined($name))
-			{
-				$value=constant($name);
-				if (!is_string($value)) $value=strval($value);
-
-				if ($escaped!=array())
-				{
-					if (is_object($value)) $value=$value->evaluate();
-					apply_tempcode_escaping($escaped,$value);
-				}
-			}
-
-			// Error :-(
 			else
 			{
-				$value='';
-				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-				if (!running_script('install'))
+				// A less common symbol?
+				require_code('symbols2');
+				if (function_exists('ecv2_'.$name))
 				{
-					require_code('site');
-					attach_message(do_lang_tempcode('MISSING_SYMBOL',escape_html($name)),'warn');
+					$value=call_user_func('ecv2_'.$name,$lang,$escaped,$param);
+				}
+
+				// A constant?
+				elseif (defined($name))
+				{
+					$value=constant($name);
+					if (!is_string($value)) $value=strval($value);
+
+					if ($escaped!=array())
+					{
+						if (is_object($value)) $value=$value->evaluate();
+						apply_tempcode_escaping($escaped,$value);
+					}
+				}
+
+				// Error :-(
+				else
+				{
+					$value='';
+					if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+					if (!running_script('install'))
+					{
+						require_code('site');
+						attach_message(do_lang_tempcode('MISSING_SYMBOL',escape_html($name)),'warn');
+					}
 				}
 			}
 		}
@@ -1043,23 +1053,6 @@ function ecv_META_DATA($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_SPECIAL_CLICK_TO_EDIT($lang,$escaped,$param)
-{
-	$_value=do_lang_tempcode('SPECIAL_CLICK_TO_EDIT');
-	$value=$_value->evaluate();
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_KEEP($lang,$escaped,$param)
 {
 	// What needs preserving in the URL
@@ -1263,38 +1256,6 @@ function ecv__GET($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_QUERY_STRING($lang,$escaped,$param)
-{
-	$value=ocp_srv('QUERY_STRING');
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_USER_AGENT($lang,$escaped,$param)
-{
-	$value=ocp_srv('HTTP_USER_AGENT');
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_STRIP_TAGS($lang,$escaped,$param)
 {
 	$value='';
@@ -1376,41 +1337,9 @@ function ecv_TRUNCATE_LEFT($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_TRUNCATE_RIGHT($lang,$escaped,$param)
-{
-	$value=symbol_truncator($param,'right');
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_TRUNCATE_SPREAD($lang,$escaped,$param)
 {
 	$value=symbol_truncator($param,'spread');
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_TRUNCATE_EXPAND($lang,$escaped,$param)
-{
-	$value=symbol_truncator($param,'expand');
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
@@ -1563,169 +1492,6 @@ function ecv_THEME($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_COMMA_LIST_REVERSE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=implode(',',array_reverse(explode(',',$param[0])));
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COMMA_LIST_FROM_BREADCRUMBS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$separator=do_template('BREADCRUMB_SEPARATOR',array('_GUID'=>'y28e21cdbc38a3037d083f619bb311ae',));
-		$value='='.str_replace($separator->evaluate(),',=',str_replace(',','&#44;',$param[0]));
-		if ((!array_key_exists(1,$param)) || ($param[1]=='0')) $value=strip_tags($value);
-		else $value=strip_tags($value,'<a>');
-		$value=trim($value);
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COMMA_LIST_POP($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=preg_replace('#(^|,)[^,]+$#','',$param[0]);
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COMMA_LIST_SHIFT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=preg_replace('#^[^,]+(,|$)#','',$param[0]);
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COMMA_LIST_PUSH($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=$param[0].','.str_replace(',','&#44;',$param[1]);
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COMMA_LIST_UNSHIFT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=str_replace(',','&#44;',$param[1]).','.$param[0];
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COMMA_LIST_NICIFY($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=html_entity_decode(str_replace(',',', ',preg_replace('#[^,=]*=#','',$param[0])),ENT_QUOTES,get_charset());
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_COMMA_LIST_GET($lang,$escaped,$param)
 {
 	$value='';
@@ -1736,31 +1502,6 @@ function ecv_COMMA_LIST_GET($lang,$escaped,$param)
 		require_code('blocks');
 		$values=block_params_str_to_arr($param[0]);
 		$value=isset($values[$param[1]])?$values[$param[1]]:'';
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COMMA_LIST_SET($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[2]))
-	{
-		require_code('blocks');
-		$values=block_params_str_to_arr($param[0]);
-		$values[$param[1]]=$param[2];
-		$value=block_params_arr_to_str($values);
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
@@ -2074,22 +1815,6 @@ function ecv_HEADER_TEXT($lang,$escaped,$param)
 		if (substr($value,strlen($stub))==$stub) $value=substr($value,strlen($stub));
 		if ($value==get_site_name()) $value='';
 	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_ZONE_HEADER_TEXT($lang,$escaped,$param)
-{
-	$value=$GLOBALS['ZONE']['zone_header_text_trans'];
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
@@ -2562,23 +2287,6 @@ function ecv_BANNER($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_FORUM_CONTEXT($lang,$escaped,$param)
-{
-	global $SET_CONTEXT_FORUM;
-	$value=is_null($SET_CONTEXT_FORUM)?'':strval($SET_CONTEXT_FORUM);
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_AVATAR($lang,$escaped,$param)
 {
 	$value=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url(isset($param[0])?intval($param[0]):get_member());
@@ -2608,19 +2316,6 @@ function ecv_IS_GUEST($lang,$escaped,$param)
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_USER($lang,$escaped,$param) // LEGACY
-{
-	return ecv_MEMBER($lang,$escaped,$param);
 }
 
 /**
@@ -2682,23 +2377,6 @@ function ecv_REQUIRE_CSS($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_MEMBER_OVERRIDE($lang,$escaped,$param)
-{
-	$value=get_param('id','');
-	if ((!is_numeric($value)) || ($value=='')) $value=strval(get_member());
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_IS_HTTPAUTH_LOGIN($lang,$escaped,$param)
 {
 	$value=is_httpauth_login()?'1':'0';
@@ -2719,6 +2397,7 @@ function ecv_MEMBER_PROFILE_URL($lang,$escaped,$param)
 {
 	$member_id=((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member();
 	$value=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
+	if (is_object($value)) $value=$value->evaluate();
 	if (is_null($value)) $value='';
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
@@ -3021,75 +2700,6 @@ function ecv_OCF_RANK_IMAGE($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_TOTAL_POINTS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (addon_installed('points'))
-	{
-		require_code('points');
-		$value=strval(total_points(isset($param[0])?intval($param[0]):get_member()));
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_POINTS_USED($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (addon_installed('points'))
-	{
-		require_code('points');
-		$value=strval(points_used(isset($param[0])?intval($param[0]):get_member()));
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_AVAILABLE_POINTS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (addon_installed('points'))
-	{
-		require_code('points');
-		$value=strval(available_points(isset($param[0])?intval($param[0]):get_member()));
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_URL_FOR_GET_FORM($lang,$escaped,$param)
 {
 	$value='';
@@ -3196,148 +2806,10 @@ function ecv_NOTIFICATIONS_AVAILABLE($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_DOCUMENT_HELP($lang,$escaped,$param) // LEGACY
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_HTTP_STATUS_CODE($lang,$escaped,$param)
-{
-	global $HTTP_STATUS_CODE;
-	$value=$HTTP_STATUS_CODE;
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_TEMPCODE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		require_code('tempcode_compiler');
-		$_value=template_to_tempcode($param[0]);
-		$value=$_value->evaluate();
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COMCODE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$_value=comcode_to_tempcode($param[0],NULL,true);
-		$value=$_value->evaluate();
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FLAGRANT($lang,$escaped,$param) // LEGACY
-{
-	return ecv_COMMUNITY_BILLBOARD($lang,$escaped,$param);
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_COMMUNITY_BILLBOARD($lang,$escaped,$param)
 {
 	$_value=get_community_billboard_message();
 	$value=$_value->evaluate();
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_CLEAN_FILE_SIZE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$bytes=is_numeric($param[0])?intval($param[0]):NULL;
-		require_code('files');
-		$value=clean_file_size($bytes);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_TIME_PERIOD($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=display_time_period(intval($param[0]));
-	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
@@ -3366,22 +2838,6 @@ function ecv_MAKE_RELATIVE_DATE($lang,$escaped,$param)
 			$value=display_time_period(time()-intval($param[0]));
 		}
 	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_TIMEZONE($lang,$escaped,$param)
-{
-	$value=make_nice_timezone_name(get_site_timezone());
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
@@ -3464,38 +2920,6 @@ function ecv_MATCH_KEY_MATCH($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_VERSION($lang,$escaped,$param)
-{
-	$value=strval(ocp_version());
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_PREVIEW_VALIDATION($lang,$escaped,$param)
-{
-	$value=(get_option('is_on_preview_validation')=='1')?'1':'0';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_BLOCK($lang,$escaped,$param)
 {
 	if (!$GLOBALS['STATIC_TEMPLATE_TEST_MODE']) // Normal operation
@@ -3526,89 +2950,6 @@ function ecv_BLOCK($lang,$escaped,$param)
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_CURRENCY($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (addon_installed('ecommerce'))
-	{
-		if (isset($param[0]))
-		{
-			require_code('currency');
-			$value=currency_convert(floatval(str_replace(',','',$param[0])),((isset($param[1])) && ($param[1]!=''))?$param[1]:get_option('currency'),((isset($param[2])) && ($param[2]!=''))?$param[2]:NULL,((isset($param[3])) && ($param[3]=='1')));
-			if (is_null($value)) $value=do_lang('INTERNAL_ERROR');
-		} else $value=get_option('currency');
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_CURRENCY_SYMBOL($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (addon_installed('ecommerce'))
-	{
-		require_code('ecommerce');
-		$value=ecommerce_get_currency_symbol();
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_GEOLOCATE($lang,$escaped,$param)
-{
-	require_code('global4');
-	$value=geolocate_ip(isset($param[0])?$param[0]:NULL);
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_NO_SAFE_MODE($lang,$escaped,$param)
-{
-	$value=(str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1')?'0':'1';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
 }
 
@@ -3741,29 +3082,6 @@ function ecv_HIDE_HELP_PANEL($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_URLISE_LANG($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$_value=urlise_lang($param[0],$param[1],isset($param[2])?$param[2]:'',isset($param[3])?($param[3]=='1'):false);
-		$value=$_value->evaluate();
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_FIND_SCRIPT_NOHTTP($lang,$escaped,$param)
 {
 	if ($GLOBALS['DEV_MODE']) // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode).
@@ -3844,64 +3162,6 @@ function ecv_VALID_FILE_TYPES($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_BROWSER_UA($lang,$escaped,$param)
-{
-	$browser=get_browser_string();
-	$value=$browser;
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_OS($lang,$escaped,$param)
-{
-	$os=get_os_string();
-	if (is_null($os)) $os='';
-	$value=$os;
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_ANCHOR($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$_value=do_template('ANCHOR',array('_GUID'=>'8795c70c9dd7c6217bb765264ac24092','NAME'=>$param[0]));
-		$value=$_value->evaluate();
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_CSS_TEMPCODE($lang,$escaped,$param)
 {
 	$temp_array=array();
@@ -3942,76 +3202,12 @@ function ecv_JS_TEMPCODE($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_PAD_LEFT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=str_pad($param[0],intval($param[1]),array_key_exists(2,$param)?$param[2]:'',STR_PAD_LEFT);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_PAD_RIGHT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=str_pad($param[0],intval($param[1]),array_key_exists(2,$param)?$param[2]:'',STR_PAD_RIGHT);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_PAGE_TITLE($lang,$escaped,$param)
 {
 	global $DISPLAYED_TITLE;
 	$value=is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate();
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_SET_TITLE($lang,$escaped,$param)
-{
-	if (isset($param[0]))
-	{
-		get_screen_title($param[0],false);
-	}
-
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
 }
 
@@ -4065,22 +3261,6 @@ function ecv_EXTRA_FOOT($lang,$escaped,$param)
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_IS_VIRTUALISED_REQUEST($lang,$escaped,$param)
-{
-	$value=$GLOBALS['IS_VIRTUALISED_REQUEST']?'1':'0';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
 }
 
@@ -4160,55 +3340,6 @@ function ecv_COPYRIGHT($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_STAFF_ADDRESS_PURE($lang,$escaped,$param)
-{
-	$value=get_option('staff_address');
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_STAFF_ADDRESS($lang,$escaped,$param)
-{
-	require_code('obfuscate');
-	$value=obfuscate_email_address(get_option('staff_address'));
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_DOMAIN($lang,$escaped,$param)
-{
-	$value=get_domain();
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_BRAND_NAME($lang,$escaped,$param)
 {
 	$value=brand_name();
@@ -4241,72 +3372,9 @@ function ecv_BRAND_BASE_URL($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_TUTORIAL_URL($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=get_tutorial_url($param[0]);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_SHOW_DOCS($lang,$escaped,$param)
-{
-	$value=(get_option('show_docs')==='0')?'0':'1';
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_MEMBER_EMAIL($lang,$escaped,$param)
 {
 	$value=$GLOBALS['FORUM_DRIVER']->get_member_email_address(isset($param[0])?intval($param[0]):get_member());
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_OCF_MEMBER_HTML($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (get_forum_type()=='ocf')
-	{
-		require_code('ocf_members');
-		require_code('ocf_members2');
-		$_value=render_member_box(isset($param[0])?intval($param[0]):get_member(),false,NULL,NULL,true,NULL,false);
-		$value=$_value->evaluate();
-	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
@@ -4364,95 +3432,6 @@ function ecv_HAS_ZONE_ACCESS($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_HAS_PAGE_ACCESS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if ((isset($param[0])) && (isset($param[1])) && (function_exists('has_page_access')))
-	{
-		$value=has_page_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1],((!is_null($param)) && (isset($param[3])))?($param[3]=='1'):false)?'1':'0';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_HAS_CATEGORY_ACCESS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if ((isset($param[0])) && (function_exists('has_category_access')))
-	{
-		$value=has_category_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1])?'1':'0';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_HAS_ATTACHMENT_ACCESS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		require_code('attachments');
-		$value=has_attachment_access(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_HAS_SUBMIT_PERMISSION($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')))
-	{
-		$value=has_submit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),((!is_null($param)) && (isset($param[2])))?$param[2]:get_ip_address(),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_HAS_DELETE_PERMISSION($lang,$escaped,$param)
 {
 	$value='';
@@ -4475,222 +3454,11 @@ function ecv_HAS_DELETE_PERMISSION($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_HAS_EDIT_PERMISSION($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')) && (isset($param[1])))
-	{
-		$value=has_edit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_ENTITY_DECODE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		static $charset=NULL;
-		if ($charset===NULL) $charset=get_charset();
-		$value=@html_entity_decode($param[0],ENT_QUOTES,$charset);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_RESET_CYCLE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		global $CYCLES;
-		$CYCLES[$param[0]]=0;
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_SITE_SCOPE($lang,$escaped,$param)
-{
-	$value=get_option('site_scope');
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_LAST_VISIT_TIME($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (get_forum_type()=='ocf')
-	{
-		$member_info=ocf_read_in_member_profile(get_member(),true);
-		$value=strval($member_info['last_visit_time']);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_NUM_NEW_TOPICS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (get_forum_type()=='ocf')
-	{
-		$member_info=ocf_read_in_member_profile(get_member(),true);
-		$_new_topics=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE NOT t_forum_id IS NULL AND t_cache_first_time>'.strval($member_info['last_visit_time']));
-		$new_topics=$_new_topics[0]['mycnt'];
-		$value=strval($new_topics);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_NUM_NEW_POSTS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (get_forum_type()=='ocf')
-	{
-		$member_info=ocf_read_in_member_profile(get_member(),true);
-		$_new_posts=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE NOT p_cache_forum_id IS NULL AND p_time>'.strval($member_info['last_visit_time']));
-		$new_posts=$_new_posts[0]['mycnt'];
-		$value=strval($new_posts);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_HAS_FORUM($lang,$escaped,$param)
-{
-	$value=has_no_forum()?'0':'1';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_OCF($lang,$escaped,$param)
 {
 	$value=(get_forum_type()=='ocf')?'1':'0';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FORUM_BASE_URL($lang,$escaped,$param)
-{
-	$value=get_forum_base_url();
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_DATE_AND_TIME($lang,$escaped,$param)
-{
-	$use_contextual_dates=(isset($param[0]) && ($param[0]=='1'));
-	$verbose=(isset($param[1]) && ($param[1]=='1'));
-	$server_time=(isset($param[2]) && ($param[2]=='1'));
-	$time=((isset($param[3])) && ($param[3]!=''))?intval($param[3]):time();
-	$member=isset($param[4])?intval($param[2]):NULL;
-	$value=get_timezoned_date($time,true,$verbose,$server_time,!$use_contextual_dates,$member);
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
 }
 
@@ -4743,28 +3511,6 @@ function ecv_TIME($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_SECONDS_PERIOD($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=display_seconds_period(intval($param[0]));
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_FROM_TIMESTAMP($lang,$escaped,$param)
 {
 	if (isset($param[0]))
@@ -4778,107 +3524,6 @@ function ecv_FROM_TIMESTAMP($lang,$escaped,$param)
 	{
 		$timestamp=time();
 		$value=strval($timestamp);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_TO_TIMESTAMP($lang,$escaped,$param)
-{
-	if (isset($param[0]))
-	{
-		$value=strval(strtotime($param[0]));
-		if ((array_key_exists(1,$param)) && ($param[1]=='1')) $value=strval(usertime_to_utctime(intval($value))); // '1' means date was in user-time so needs converting to a UTC timestamp
-	} else $value=strval(time());
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_SESSION_HASHED($lang,$escaped,$param)
-{
-	$value=md5(strval(get_session_id()));
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_SESSION($lang,$escaped,$param)
-{
-	$value=strval(get_session_id());
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_MULT($lang,$escaped,$param)
-{
-	$value='1';
-	foreach ($param as $p)
-	{
-		$value=float_to_raw_string(floatval($value)*floatval($p),20,true);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_ROUND($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$amount=isset($param[1])?intval($param[1]):0;
-		if ($amount>0)
-		{
-			$value=float_format(floatval($param[0]),$amount);
-		} else
-		{
-			$value=strval(intval(round(floatval($param[0]),$amount)));
-		}
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
@@ -4937,29 +3582,6 @@ function ecv_BROWSER_MATCHES($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_ISSET($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		global $TEMPCODE_SETGET;
-		$value=(isset($TEMPCODE_SETGET[$param[0]]))?'1':'0';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_INIT($lang,$escaped,$param)
 {
 	$value='';
@@ -4993,52 +3615,6 @@ function ecv_INC($lang,$escaped,$param)
 		global $TEMPCODE_SETGET;
 		if (!isset($TEMPCODE_SETGET[$param[0]])) $TEMPCODE_SETGET[$param[0]]='0';
 		$TEMPCODE_SETGET[$param[0]]=strval(intval($TEMPCODE_SETGET[$param[0]])+1);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_DEC($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		global $TEMPCODE_SETGET;
-		if (!isset($TEMPCODE_SETGET[$param[0]])) $TEMPCODE_SETGET[$param[0]]='0';
-		$TEMPCODE_SETGET[$param[0]]=strval(intval($TEMPCODE_SETGET[$param[0]])-1);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_PREG_MATCH($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=(preg_match('#'.str_replace('#','\#',$param[0]).'#'.(isset($param[2])?str_replace('e','',$param[2]):''),$param[1])!=0)?'1':'0';
 	}
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
@@ -5119,50 +3695,6 @@ function ecv_MIN($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_MOD($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=strval(max(intval($param[0]),-intval($param[0])));
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_REM($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=strval(intval($param[0])%intval($param[1]));
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_DIV_FLOAT($lang,$escaped,$param)
 {
 	$value='';
@@ -5213,100 +3745,6 @@ function ecv_DIV($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_DIV_CEIL($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		if (floatval($param[1])==0.0)
-		{
-			$value='divide-by-zero';
-		} else
-		{
-			$value=strval(intval(ceil(floatval($param[0])/floatval($param[1]))));
-		}
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_SUBTRACT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))-floatval(str_replace(',','',$param[1])),20,true);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_ADD($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))+floatval(str_replace(',','',$param[1])),20,true);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_WCASE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=ocp_mb_ucwords($param[0]);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_LCASE($lang,$escaped,$param)
 {
 	$value='';
@@ -5315,28 +3753,6 @@ function ecv_LCASE($lang,$escaped,$param)
 	if (isset($param[0]))
 	{
 		$value=ocp_mb_strtolower($param[0]);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_UCASE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=ocp_mb_strtoupper($param[0]);
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
@@ -5384,51 +3800,6 @@ function ecv_REPLACE($lang,$escaped,$param)
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_AT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=ocp_mb_substr($param[0],intval($param[1]),1);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_STRPOS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$t_value=strpos($param[0],$param[1]);
-		$value=($t_value===false)?'0':strval($t_value);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
 }
 
@@ -5523,51 +3894,6 @@ function ecv_SUBSTR($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_LENGTH($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=strval(ocp_mb_strlen($param[0]));
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_WORDWRAP($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$cut=isset($param[3]) && ($param[3]=='1');
-		$value=wordwrap($param[0],intval($param[1]),isset($param[2])?$param[2]:'<br />',$cut);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_ALTERNATOR_TRUNCATED($lang,$escaped,$param) // Alternate values according to whether some given text WOULD have been truncated. 0: text to check against, 1: the truncate length, 2:IF would not be do this, 3: if it would be do this, 4: whether given text is encoded as HTML (0=no [default, plain-text], 1=yes)
 {
 	$value='';
@@ -5581,33 +3907,6 @@ function ecv_ALTERNATOR_TRUNCATED($lang,$escaped,$param) // Alternate values acc
 		{
 			$value=$param[3];
 		} else $value=$param[2];
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_ESCAPE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$d_escaping=array(isset($param[1])?constant($param[1]):ENTITY_ESCAPED);
-		for ($i=0;$i<max(1,array_key_exists(2,$param)?intval($param[2]):1);$i++)
-		{
-			if (is_string($param[0])) apply_tempcode_escaping($d_escaping,$param[0]);
-		}
-		$value=$param[0];
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
@@ -5660,95 +3959,6 @@ function ecv_SESSION_COOKIE_NAME($lang,$escaped,$param)
 	$value=function_exists('get_session_cookie')?get_session_cookie():'';
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_IS_A_COOKIE_LOGIN($lang,$escaped,$param)
-{
-	global $IS_A_COOKIE_LOGIN;
-	$value=($IS_A_COOKIE_LOGIN && (ini_get('suhosin.cookie.max_name_length')!=='64'))?'1':'0';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_GROUP_ID($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(isset($param[1])?intval($param[1]):get_member());
-		$value=array_key_exists(intval($param[0]),$groups)?strval($groups[intval($param[0])]):'';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_GROUP_NAME($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(isset($param[1])?intval($param[1]):get_member());
-		if (array_key_exists(intval($param[0]),$groups))
-		{
-			$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-			$value=$all_usergroups[$groups[intval($param[0])]];
-		}
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_NEGATE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=strval(-intval($param[0]));
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
 }
 
@@ -5889,27 +4099,6 @@ function ecv_AND($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_XOR($lang,$escaped,$param)
-{
-	$count=0;
-	foreach ($param as $test)
-	{
-		if (($test=='1') || ($test=='1')) $count++;
-	}
-	$value=($count==1)?'1':'0';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_NOR($lang,$escaped,$param)
 {
 	$count=0;
@@ -5952,28 +4141,6 @@ function ecv_NAND($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_LT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=(intval($param[0])<intval($param[1]))?'1':'0';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_GT($lang,$escaped,$param)
 {
 	$value='';
@@ -5985,45 +4152,6 @@ function ecv_GT($lang,$escaped,$param)
 	}
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_COPPA_ON($lang,$escaped,$param)
-{
-	$value=(get_option('is_on_coppa')=='1')?'1':'0';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_OBFUSCATE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		require_code('obfuscate');
-		$value=obfuscate_entities($param[0]);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
 }
 
@@ -6181,59 +4309,6 @@ function ecv_INLINE_STATS($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_ATTACHMENT_DOWNLOADS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$db=$GLOBALS['SITE_DB'];
-		if ((isset($param[1])) && ($param[1]=='1')) $db=$GLOBALS['FORUM_DB'];
-		$_value=$db->query_select_value_if_there('attachments','a_num_downloads',array('id'=>intval($param[0])));
-		$value=is_null($_value)?'?':strval($_value);
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_CSS_DIMENSION_REDUCE($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=$param[0];
-		if (substr($value,-2)=='px')
-		{
-			$b=$param[1];
-			$value=strval(intval(substr($value,0,-2))-intval($b)).'px';
-		}
-		if ($value=='') $value='0px';
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_COMMENT_COUNT($lang,$escaped,$param)
 {
 	$value='';
@@ -6275,52 +4350,6 @@ function ecv_COMMENT_COUNT($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_CAN_SPELLCHECK($lang,$escaped,$param)
-{
-	$value=(function_exists('pspell_check'))?'1':'0';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_AWARD_ID($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		if ($param[0]!='')
-		{
-			static $awarded_content_ids=array();
-			if (!isset($awarded_content_ids[intval($param[0])]))
-			{
-				$awarded_content_ids[intval($param[0])]=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
-			}
-			$value=isset($awarded_content_ids[intval($param[0])])?$awarded_content_ids[intval($param[0])]:'';
-		}
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_SELF_URL($lang,$escaped,$param)
 {
 	$extra_params=NULL;
@@ -6343,436 +4372,6 @@ function ecv_SELF_URL($lang,$escaped,$param)
 		}
 	}
 	$value=get_self_url(true,(isset($param[0])) && ($param[0]=='1'),$extra_params,(isset($param[1])) && ($param[1]=='1'),(isset($param[2])) && ($param[2]=='1'));
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_NUMBER_FORMAT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=integer_format(intval($param[0]));
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FLOAT_FORMAT($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		$value=float_format(floatval($param[0]),isset($param[1])?intval($param[1]):2);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_CURRENTLY_INVISIBLE($lang,$escaped,$param)
-{
-	$value=is_invisible()?'1':'0';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_IS_FRIEND($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		if (addon_installed('chat'))
-		{
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
-			$value=is_null($test)?'0':'1';
-		} else
-		{
-			$value='0';
-		}
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_SSW($lang,$escaped,$param)
-{
-	$value=(get_option('ssw')=='1')?'1':'0';
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_ALREADY_RATED($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		require_code('feedback');
-		$value=(already_rated(array($param[0]),$param[1])?'1':'0');
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_RATING($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		static $cache_rating=array();
-		$cache_key=serialize($param);
-		if (isset($cache_rating[$cache_key]))
-		{
-			$value=$cache_rating[$cache_key];
-		} else
-		{
-			global $DISPLAYED_TITLE;
-
-			require_code('feedback');
-			$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
-			if ($rating!==NULL)
-			{
-				$value=isset($rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING'])?$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING']:'';
-			} else
-			{
-				if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
-				{
-					$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
-				} else
-				{
-					$value=do_template('RATING_INLINE_STATIC',$rating);
-				}
-				if (is_object($value)) $value=$value->evaluate();
-			}
-
-			$cache_rating[$cache_key]=$value;
-		}
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_NUM_RATINGS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		global $DISPLAYED_TITLE;
-
-		static $cache_num_ratings=array();
-		$cache_key=serialize($param);
-		if (isset($cache_num_ratings[$cache_key]))
-		{
-			$value=$cache_num_ratings[$cache_key];
-		} else
-		{
-			require_code('feedback');
-			$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
-			$value=$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['NUM_RATINGS'];
-
-			$cache_num_ratings[$cache_key]=$value;
-		}
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_VIEWS($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[2]))
-	{
-		$id_field=/*isset($param[4])?$param[4]:*/'id'; // Not allowed on fields other than 'id', for security reasons
-		if (preg_match('#^\w*views\w*$#',$param[1])!=0)
-		{
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there($param[0],$param[1],array($id_field=>$param[2]));
-			if ($test!==NULL) $value=integer_format($test);
-		}
-	}
-
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FIND_ID_VIA_URL_MONIKER($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		require_code('urls2');
-		$value=find_id_via_url_moniker($param[0],$param[1]);
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FIND_URL_MONIKER_VIA_ID($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		$value=find_id_moniker(array('page'=>$param[0],'type'=>$param[1],'id'=>$param[1]),array_key_exists(2,$param)?$param[2]:'');
-		if ($value===NULL) $value='';
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FIND_GUID_VIA_ID($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_guid_via_id($param[0],$param[1]);
-		if ($value===NULL) $value='';
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FIND_OCCLEFS_FILENAME_VIA_ID($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_occlefs_filename_via_id($param[0],$param[1]);
-		if ($value===NULL) $value='';
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FIND_LABEL_VIA_ID($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_label_via_id($param[0],$param[1]);
-		if ($value===NULL) $value='';
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FIND_ID_VIA_LABEL($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_id_via_label($param[0],$param[1],array_key_exists(2,$param)?$param[2]:NULL);
-		if ($value===NULL) $value='';
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FIND_ID_VIA_GUID($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[0]))
-	{
-		require_code('resource_fs');
-		$value=find_id_via_guid($param[0]);
-		if ($value===NULL) $value='';
-	}
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_FIND_ID_VIA_OCCLEFS_FILENAME($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_id_via_occlefs_filename($param[0],$param[1]);
-		if ($value===NULL) $value='';
-	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;

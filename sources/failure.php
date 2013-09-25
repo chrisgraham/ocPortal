@@ -262,6 +262,36 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 }
 
 /**
+ * Get the tempcode for a warn page.
+ *
+ * @param  tempcode		The title of the warn page
+ * @param  mixed			The text to put on the warn page (either tempcode or string)
+ * @param  boolean		Whether to provide a back button
+ * @param  boolean		Whether match key messages / redirects should be supported
+ * @return tempcode		The warn page
+ */
+function _warn_screen($title,$text,$provide_back=true,$support_match_key_messages=false)
+{
+	$tmp=_look_for_match_key_message(is_object($text)?$text->evaluate():$text,!$support_match_key_messages);
+	if (!is_null($tmp)) $text=$tmp;
+
+	$text_eval=is_object($text)?$text->evaluate():$text;
+
+	if ($text_eval==do_lang('MISSING_RESOURCE'))
+	{
+		set_http_status_code('404');
+		if (ocp_srv('HTTP_REFERER')!='')
+		{
+			relay_error_notification($text_eval.' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_resource');
+		}
+	}
+
+	if (get_param_integer('keep_fatalistic',0)==1) fatal_exit($text);
+
+	return do_template('WARN_SCREEN',array('_GUID'=>'a762a7ac8cd08623a0ed6413d9250d97','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'TEXT'=>$text,'PROVIDE_BACK'=>$provide_back));
+}
+
+/**
  * Do a terminal execution on a defined page type
  *
  * @param  mixed			The error message (string or tempcode)

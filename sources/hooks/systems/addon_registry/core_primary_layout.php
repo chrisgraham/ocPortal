@@ -261,8 +261,6 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			lorem_globalise(do_lorem_template('SCREEN_TITLE', array(
 				'TITLE'=>lorem_phrase(),
-				'HELP_URL'=>placeholder_url(),
-				'HELP_TERM'=>lorem_word(),
 				'AWARDS'=>$awards
 			)), NULL, '', true)
 		);

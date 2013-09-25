@@ -25,11 +25,17 @@ function init__comcode_renderer()
 {
 	require_code('comcode_compiler');
 
+	global $IMPORTED_CUSTOM_COMCODE,$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE;
+	$IMPORTED_CUSTOM_COMCODE=false;
+	$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE=array();
+
 	global $STRUCTURE_LIST;
 	$STRUCTURE_LIST=array();
 
 	global $DONT_CARE_MISSING_PAGES;
 	$DONT_CARE_MISSING_PAGES=array('topics','chat','forumview','topicview','search');
+
+	if (!defined('MAX_URLS_TO_READ')) define('MAX_URLS_TO_READ',5);
 }
 
 /**
@@ -87,6 +93,18 @@ function _apply_emoticons($text)
 	}
 
 	return $text;
+}
+
+/**
+ * Turn a triple of emoticon parameters into some actual tempcode.
+ *
+ * @param  array			Parameter triple(template,src,code)
+ * @return mixed			Either a tempcode result, or a string result, depending on $evaluate
+ */
+function do_emoticon($imgcode)
+{
+	$tpl=do_template($imgcode[0],array('UNIQID'=>uniqid('',true),'SRC'=>$imgcode[1],'EMOTICON'=>$imgcode[2]));
+	return $tpl;
 }
 
 /**

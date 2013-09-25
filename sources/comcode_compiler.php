@@ -38,6 +38,27 @@ function init__comcode_compiler()
 		define('MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH',30);
 	}
 
+	global $VALID_COMCODE_TAGS;
+	/** A list of all valid Comcode tags that we recognise.
+	 * @global array $VALID_COMCODE_TAGS
+	 */
+	$VALID_COMCODE_TAGS=array(
+		'samp'=>1,'q'=>1,'var'=>1,'overlay'=>1,'tooltip'=>1,
+		'section'=>1,'section_controller'=>1,
+		'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,
+		'carousel'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'acronym'=>1,'abbr'=>1,'contents'=>1,'concepts'=>1,'list'=>1,
+		'flash'=>1,'media'=>1,'indent'=>1,'staff_note'=>1,'menu'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
+		'if_in_group'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'tt'=>1,'box'=>1,'img'=>1,
+		'url'=>1,'email'=>1,'reference'=>1,'page'=>1,'codebox'=>1,'no_parse'=>1,'code'=>1,'hide'=>1,
+		'quote'=>1,'block'=>1,'semihtml'=>1,'html'=>1,'concept'=>1,'thumb'=>1,
+		'attachment'=>1,'attachment_safe'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
+		'snapback'=>1,'post'=>1,'topic'=>1,'include'=>1,'random'=>1,'ticker'=>1,'jumping'=>1,'surround'=>1,'pulse'=>1,'shocker'=>1,
+	);
+	//if (addon_installed('ecommerce'))
+	{
+		$VALID_COMCODE_TAGS['currency']=1;
+	}
+
 	// In theory, almost any tag is reversable. However these tags can be converted ROBUSTLY and hence the WYSIWYG editor can manipulate them as HTML rather than having to display as Comcode
 	// If the tag is mapped to a string that provides a regexp to say when it is NOT reversible. Usually this is done for certain parameters.
 	global $REVERSABLE_TAGS;
@@ -98,6 +119,10 @@ function init__comcode_compiler()
 
 	global $NO_LINK_TITLES;
 	$NO_LINK_TITLES=false;
+
+	global $COMCODE_ATTACHMENTS,$ATTACHMENTS_ALREADY_REFERENCED;
+	$COMCODE_ATTACHMENTS=array();
+	$ATTACHMENTS_ALREADY_REFERENCED=array();
 }
 
 /**
@@ -120,6 +145,9 @@ function init__comcode_compiler()
  */
 function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits=NULL,$on_behalf_of_member=NULL)
 {
+	global $LAX_COMCODE;
+	if ($LAX_COMCODE===NULL) $LAX_COMCODE=(get_option('lax_comcode')=='1');
+
 	global $ADVERTISING_BANNERS_CACHE,$ALLOWED_ENTITIES,$POTENTIALLY_EMPTY_TAGS,$CODE_TAGS,$REVERSABLE_TAGS,$PUREHTML_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE;
 
 	$wml=false; // removed feature from ocPortal now
@@ -169,7 +197,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 
 	// Our state
 	$status=CCP_NO_MANS_LAND;
-	$lax=$GLOBALS['LAX_COMCODE']; // if we don't want to produce errors for technically invalid Comcode
+	$lax=$LAX_COMCODE; // if we don't want to produce errors for technically invalid Comcode
 	if ((!$lax) && (substr($comcode,0,10)=='[semihtml]')) $lax=true;
 	$tag_stack=array();
 	$pos=0;

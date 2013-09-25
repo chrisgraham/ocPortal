@@ -95,14 +95,13 @@ function get_screen_title($title,$dereference_lang=true,$params=NULL,$user_onlin
 
 	if ($params===NULL) $params=array();
 
-	$our_help_term='';
-	$our_help_url='';
-
 	if ($dereference_lang)
 	{
-		$our_help_term=$title;
 		$_title=do_lang_tempcode($title,array_shift($params),array_shift($params),$params);
-	} else $_title=is_object($title)?$title:make_string_tempcode($title);
+	} else
+	{
+		$_title=is_object($title)?$title:make_string_tempcode($title);
+	}
 
 	if (function_exists('get_session_id'))
 	{
@@ -144,7 +143,7 @@ function get_screen_title($title,$dereference_lang=true,$params=NULL,$user_onlin
 
 	if ($awards===NULL) $awards=array();
 
-	return do_template('SCREEN_TITLE',array('_GUID'=>'847ffbe4823eca6d2d5eac42828ee552','AWARDS'=>$awards,'TITLE'=>$_title,'HELP_URL'=>$our_help_url,'HELP_TERM'=>$our_help_term));
+	return do_template('SCREEN_TITLE',array('_GUID'=>'847ffbe4823eca6d2d5eac42828ee552','AWARDS'=>$awards,'TITLE'=>$_title));
 }
 
 /**
@@ -231,24 +230,7 @@ function inform_screen($title,$text,$support_match_key_messages=false)
 function warn_screen($title,$text,$provide_back=true,$support_match_key_messages=false)
 {
 	require_code('failure');
-
-	$tmp=_look_for_match_key_message(is_object($text)?$text->evaluate():$text,!$support_match_key_messages);
-	if (!is_null($tmp)) $text=$tmp;
-
-	$text_eval=is_object($text)?$text->evaluate():$text;
-
-	if ($text_eval==do_lang('MISSING_RESOURCE'))
-	{
-		set_http_status_code('404');
-		if (ocp_srv('HTTP_REFERER')!='')
-		{
-			relay_error_notification($text_eval.' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_resource');
-		}
-	}
-
-	if (get_param_integer('keep_fatalistic',0)==1) fatal_exit($text);
-
-	return do_template('WARN_SCREEN',array('_GUID'=>'a762a7ac8cd08623a0ed6413d9250d97','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'TEXT'=>$text,'PROVIDE_BACK'=>$provide_back));
+	return _warn_screen($title,$text,$provide_back,$support_match_key_messages);
 }
 
 /**

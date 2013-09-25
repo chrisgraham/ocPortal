@@ -261,6 +261,7 @@ function build_preview($multi_return=false)
 	}
 
 	// Make attachments temporarily readable without any permission context
+	require_code('comcode_compiler');
 	global $COMCODE_ATTACHMENTS;
 	$posting_ref_id=post_param_integer('posting_ref_id',NULL);
 	if (!is_null($posting_ref_id))

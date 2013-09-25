@@ -1148,6 +1148,7 @@ class Hook_vb3
 	function import_custom_comcode($db,$table_prefix,$file_base)
 	{
 		require_code('custom_comcode');
+		require_code('comcode_compiler');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'bbcode');
 		foreach ($rows as $row)

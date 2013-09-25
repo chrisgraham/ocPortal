@@ -85,6 +85,7 @@ class Hook_ipb2 extends Hook_ipb_base
 	function import_custom_comcode($db,$table_prefix,$old_base_dir)
 	{
 		require_code('custom_comcode');
+		require_code('comcode_compiler');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'custom_bbcode');
 		foreach ($rows as $row)
