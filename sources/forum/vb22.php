@@ -258,6 +258,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
 			return $out;
 		}
 
+		require_code('users_active_actions');
 		ocp_eatcookie('sessionhash');
 
 		$out['id']=$row['userid'];

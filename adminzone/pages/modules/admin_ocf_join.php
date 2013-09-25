@@ -201,7 +201,7 @@ class Module_admin_ocf_join
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			content_review_set('member',strval($id));
 		}
 

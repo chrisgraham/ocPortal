@@ -369,47 +369,6 @@ function get_db_forums_password()
 }
 
 /**
- * Get the time difference in microseconds between two PHP microtimes.
- * Original source: php.net
- *
- * @param  string			First microtime
- * @param  string			Second microtime
- * @return float			The time difference
- */
-function microtime_diff($a,$b)
-{
-	$x=explode(' ',$a);
-	$a_micro=floatval($x[0]);
-	$a_int=(float)intval($x[1]);
-	$y=explode(' ',$b);
-	$b_micro=floatval($y[0]);
-	$b_int=(float)intval($y[1]);
-	if ($a_int>$b_int)
-	{
-		return ($a_int-$b_int)+($a_micro-$b_micro);
-	}
-	elseif ($a_int==$b_int)
-	{
-		if ($a_micro>$b_micro)
-		{
-			return ($a_int-$b_int)+($a_micro-$b_micro);
-		}
-		elseif ($a_micro<$b_micro)
-		{
-			return ($b_int-$a_int)+($b_micro-$a_micro);
-		}
-		else
-		{
-			return 0.0;
-		}
-	}
-	else
-	{ // $a_int<$b_int
-		return ($b_int-$a_int)+($b_micro-$a_micro);
-	}
-}
-
-/**
  * Database handling.
  * @package		core
  */

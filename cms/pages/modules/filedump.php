@@ -493,6 +493,7 @@ class Module_filedump
 
 			log_it('FILEDUMP_UPLOAD',$file,$place);
 
+			require_code('users2');
 			if (has_actual_page_access(get_modal_user(),get_page_name(),get_zone_name()))
 			{
 				require_code('activities');

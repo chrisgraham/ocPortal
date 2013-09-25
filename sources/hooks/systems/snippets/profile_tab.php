@@ -33,6 +33,8 @@ class Hook_profile_tab
 
 		$hook=filter_naughty_harsh(get_param('tab'));
 
+		require_code('urls2');
+
 		$keep_get=array();
 		foreach (array_keys($_GET) as $key)
 		{

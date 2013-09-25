@@ -208,7 +208,7 @@ class Module_cms_authors
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			$fields->attach(content_review_get_fields('author',$author));
 		}
 
@@ -294,7 +294,7 @@ class Module_cms_authors
 
 			if (addon_installed('content_reviews'))
 			{
-				require_code('content_reviews');
+				require_code('content_reviews2');
 				content_review_set('author',$author);
 			}
 		}

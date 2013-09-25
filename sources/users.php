@@ -119,9 +119,7 @@ function handle_logins()
 	}
 
 	// If it was a log out
-	$page=get_page_name();
-	$type=get_param('type','',true);
-	if (($page=='login') && ($type=='logout'))
+	if ((get_page_name()=='login') && (get_param('type','',true)=='logout'))
 	{
 		require_code('users_active_actions');
 		handle_active_logout();
@@ -340,6 +338,20 @@ function get_member($quick_only=false)
 }
 
 /**
+ * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
+ *
+ * @param  MEMBER			The current member
+ */
+function enforce_temporary_passwords($member)
+{
+	if ((get_forum_type()=='ocf') && (running_script('index')) && ($member!=db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary') && (get_page_name()!='lost_password') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
+	{
+		require_code('users_active_actions');
+		_enforce_temporary_passwords($member);
+	}
+}
+
+/**
  * Get the display name of a username.
  * If no display name generator is configured, this will be the same as the username.
  *
@@ -359,76 +371,6 @@ function get_displayname($username)
 	}
 
 	return $username;
-}
-
-/**
- * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
- *
- * @param  MEMBER			The current member
- */
-function enforce_temporary_passwords($member)
-{
-	if ((get_forum_type()=='ocf') && (running_script('index')) && ($member!=db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary') && (get_page_name()!='lost_password') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
-	{
-		$force_change_message=mixed();
-		$redirect_url=mixed();
-
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-
-		// Expired?
-		if (intval(get_option('password_expiry_days'))>0)
-		{
-			require_code('password_rules');
-			if (member_password_expired($member))
-			{
-				require_lang('password_rules');
-				$force_change_message=do_lang_tempcode('PASSWORD_EXPIRED',escape_html($username),escape_html(integer_format(intval(get_option('password_expiry_days')))));
-				require_code('urls');
-				$redirect_url=build_url(array('page'=>'lost_password','username'=>$username),'');
-			}
-		}
-
-		// Temporary?
-		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary')
-		{
-			require_lang('ocf');
-			$force_change_message=do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD',escape_html($username));
-			require_code('urls');
-			$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
-		}
-
-		// Too old?
-		elseif (intval(get_option('password_change_days'))>0)
-		{
-			require_code('password_rules');
-			if (member_password_too_old($member))
-			{
-				require_lang('password_rules');
-				$force_change_message=do_lang_tempcode('PASSWORD_TOO_OLD',escape_html($username),escape_html(integer_format(intval(get_option('password_change_days')))));
-				require_code('urls');
-				$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
-			}
-		}
-
-		if ($force_change_message!==NULL)
-		{
-			decache('side_users_online');
-
-			require_code('urls');
-			require_lang('ocf');
-
-			$screen=redirect_screen(
-				get_screen_title('LOGGED_IN'),
-				$redirect_url,
-				$force_change_message,
-				false,
-				'notice'
-			);
-			$out=globalise($screen,NULL,'',true);
-			$out->evaluate_echo();
-			exit();
-		}
-	}
 }
 
 /**
@@ -598,28 +540,6 @@ function ocp_admirecookie($name,$default=NULL)
 }
 
 /**
- * Deletes a cookie (if it exists), from within ocPortal's cookie environment.
- *
- * @param  string			The name of the cookie
- * @return boolean		The result of the PHP setcookie command
- */
-function ocp_eatcookie($name)
-{
-	$expire=time()-100000; // Note the negative number must be greater than 13*60*60 to account for maximum timezone difference
-
-	// Try and remove other potentials
-	@setcookie($name,'',$expire,'',preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
-	@setcookie($name,'',$expire,'/',preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
-	@setcookie($name,'',$expire,'','www.'.preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
-	@setcookie($name,'',$expire,'/','www.'.preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
-	@setcookie($name,'',$expire,'','');
-	@setcookie($name,'',$expire,'/','');
-
-	// Delete standard potential
-	return @setcookie($name,'',$expire,get_cookie_path(),get_cookie_domain());
-}
-
-/**
  * Get the value of a special 'ocp_' custom profile field. For OCF it can also do it for a pure field title, e.g. "Example Field".
  *
  * @param  ID_TEXT		The CPF name stem
@@ -641,138 +561,4 @@ function get_ocp_cpf($cpf,$member=NULL)
 	}
 
 	return '';
-}
-
-/**
- * Get database rows of all the online members.
- *
- * @param  boolean		Whether to use a longer online-time -- the session expiry-time
- * @param  ?MEMBER		We really only need to make sure we get the status for this user, although at this functions discretion more may be returned and the row won't be there if the user is not online (NULL: no filter). May not be the guest ID
- * @param  integer		The total online members, returned by reference
- * @return ?array			Database rows (NULL: too many)
- */
-function get_online_members($longer_time,$filter,&$count)
-{
-	if (get_value('no_member_tracking')==='1') return array();
-
-	$users_online_time_seconds=intval($longer_time?(60.0*60.0*floatval(get_option('session_expiry_time'))):(60.0*floatval(get_option('users_online_time'))));
-	$cutoff=time()-$users_online_time_seconds;
-
-	if (get_option('session_prudence')!='0')
-	{
-		// If we have multiple servers this many not be accurate as we probably turned replication off for the sessions table. The site design should be updated to not show this kind of info
-		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($cutoff)); // Written in by reference
-		if (!is_null($filter))
-			return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($cutoff).' AND member_id='.strval($filter),1);
-		return NULL;
-	}
-	$members=array();
-	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-	global $SESSION_CACHE;
-	$members_online=0;
-	foreach ($SESSION_CACHE as $row)
-	{
-		if (!isset($row['member_id'])) continue; // Workaround to HipHop PHP weird bug
-
-		if (($row['last_activity']>$cutoff) && ($row['session_invisible']==0))
-		{
-			if ($row['member_id']==$guest_id)
-			{
-				$count++;
-				$members[]=$row;
-				$members_online++;
-				if ($members_online==200) // This is silly, don't display any
-				{
-					if (!is_null($filter)) // Unless we are filtering
-						return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($cutoff).' AND member_id='.strval($filter),1);
-					return NULL;
-				}
-			} elseif (!member_blocked(get_member(),$row['member_id']))
-			{
-				$count++;
-				$members[-$row['member_id']]=$row; // - (minus) is just a hackerish thing to allow it to do a unique, without messing with the above
-			}
-		}
-	}
-	return $members;
-}
-
-/**
- * Find if a member is online.
- *
- * @param  MEMBER			The member to check
- * @return boolean		Whether they are online
- */
-function member_is_online($member_id)
-{
-	$count=0;
-	$online=get_online_members(false,$member_id,$count);
-	foreach ($online as $m)
-	{
-		if ($m['member_id']==$member_id) return true;
-	}
-	return false;
-}
-
-/**
- * Find if a member is blocked by a member.
- *
- * @param  MEMBER				The member being checked
- * @param  ?MEMBER			The member who may be blocking (NULL: current member)
- * @return boolean			Whether the member is blocked
- */
-function member_blocked($member_id,$member_blocker=NULL)
-{
-	if (!addon_installed('chat')) return false;
-	if (is_null($member_blocker)) $member_blocker=get_member();
-
-	if ($member_blocker==$member_id) return false;
-	if (is_guest($member_id)) return false;
-	if (is_guest($member_blocker)) return false;
-
-	if ($member_id==get_member())
-	{
-		global $MEMBERS_BLOCKING_US_CACHE;
-		if (is_null($MEMBERS_BLOCKING_US_CACHE))
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocker'),array('member_blocked'=>get_member()),'',NULL,NULL,true);
-			if (is_null($rows))
-			{
-				$MEMBERS_BLOCKING_US_CACHE=array();
-				return false;
-			}
-			$MEMBERS_BLOCKING_US_CACHE=collapse_1d_complexity('member_blocker',$rows);
-		}
-		return (in_array($member_blocker,$MEMBERS_BLOCKING_US_CACHE));
-	}
-
-	global $MEMBERS_BLOCKED_CACHE;
-	if (is_null($MEMBERS_BLOCKED_CACHE))
-	{
-		$rows=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>get_member()),'',NULL,NULL,true);
-		if (is_null($rows))
-		{
-			$MEMBERS_BLOCKED_CACHE=array();
-			return false;
-		}
-		$MEMBERS_BLOCKED_CACHE=collapse_1d_complexity('member_blocked',$rows);
-	}
-	return (in_array($member_id,$MEMBERS_BLOCKED_CACHE));
-}
-
-/**
- * Find a user to test access against, if we're planning on making presence of something public.
- *
- * @return MEMBER				The modal member
- */
-function get_modal_user()
-{
-	$modal_user=get_option('modal_user');
-	if ($modal_user!='')
-	{
-		if ($modal_user=='<self>') return get_member();
-		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($modal_user);
-		if (!is_null($member_id)) return $member_id;
-	}
-	return $GLOBALS['FORUM_DRIVER']->get_guest_id();
 }

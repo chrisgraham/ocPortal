@@ -1734,6 +1734,7 @@ class Module_calendar
 			$privacy_ok=has_privacy_access('event',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
 		}
 
+		require_code('users2');
 		if ((has_actual_page_access(get_modal_user(),'calendar')) && (has_category_access(get_modal_user(),'calendar',strval($event['e_type']))) && ($privacy_ok))
 		{
 			list(,$from)=find_event_start_timestamp($event);

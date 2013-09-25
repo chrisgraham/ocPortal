@@ -28,7 +28,7 @@ class catalogues_test_set extends ocp_test_case
 
 		$this->establish_admin_session();
 
-		require_code('content_reviews');
+		require_code('content_reviews2');
 		require_code('permissions2');
 		require_code('form_templates');
 

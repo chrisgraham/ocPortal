@@ -105,6 +105,7 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 		}
 		if ((!is_guest($row['p_poster'])) && (!is_null($primary_group)))
 		{
+			require_code('users2');
 			$poster=do_template('OCF_POSTER_MEMBER',array(
 				'_GUID'=>($guid!='')?$guid:'ab1724a9d97f93e097cf49b50eeafa66',
 				'ONLINE'=>member_is_online($row['p_poster']),

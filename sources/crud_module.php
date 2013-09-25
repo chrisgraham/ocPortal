@@ -154,6 +154,7 @@ class standard_crud_module
 		require_code('feedback');
 		require_code('autosave');
 		require_code('permissions2');
+		require_code('users2');
 
 		// Load lang file if it exists
 		$this->module_type=get_class($this);
@@ -199,7 +200,7 @@ class standard_crud_module
 
 		// Meta data etc
 		require_code('content2');
-		if (addon_installed('content_reviews')) require_code('content_reviews');
+		if (addon_installed('content_reviews')) require_code('content_reviews2');
 
 		if (method_exists($this,'run_start'))
 		{

@@ -787,6 +787,7 @@ class Hook_addon_registry_core
 			'sources/urls.php',
 			'sources/urls2.php',
 			'sources/users.php',
+			'sources/users2.php',
 			'sources/users_active_actions.php',
 			'sources/users_inactive_occasionals.php',
 			'sources/version.php',

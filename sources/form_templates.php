@@ -51,6 +51,57 @@ function init__form_templates()
 }
 
 /**
+ * Ensure Suhosin is not going to break a request due to number of request form fields. Call this each time a field is added to the output.
+ *
+ * @param  integer		How much to increment the counter by
+ * @param  integer		The name length being checked
+ */
+function check_suhosin_request_quantity($inc=1,$name_length=0)
+{
+	static $count=0;
+	static $name_length_count=0;
+	$count+=$inc;
+	$name_length_count+=$name_length;
+
+	static $failed_already=false;
+	if ($failed_already) return;
+
+	foreach (array('max_input_vars','suhosin.post.max_vars','suhosin.request.max_vars') as $setting)
+	{
+		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$count))
+		{
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
+			$failed_already=true;
+		}
+	}
+
+	foreach (array('suhosin.post.max_totalname_length','suhosin.request.max_totalname_length') as $setting)
+	{
+		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$name_length_count))
+		{
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
+			$failed_already=true;
+		}
+	}
+}
+
+/**
+ * Ensure Suhosin is not going to break a request due to request size.
+ *
+ * @param  integer		Most determinitve size within wider request size (we'll assume we actually need 500 more bytes than this)
+ */
+function check_suhosin_request_size($size)
+{
+	foreach (array('suhosin.request.max_value_length','suhosin.post.max_value_length') as $setting)
+	{
+		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))-500<$size))
+		{
+			attach_message(do_lang_tempcode('SUHOSIN_MAX_VALUE_TOO_SHORT',$setting),'warn');
+		}
+	}
+}
+
+/**
  * Enable reading in default parameters from the GET environment. This is typically called before 'add' forms.
  */
 function url_default_parameters__enable()

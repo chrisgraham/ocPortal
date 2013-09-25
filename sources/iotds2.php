@@ -177,6 +177,7 @@ function set_iotd($id)
 	$submitter=$rows[0]['submitter'];
 
 	log_it('CHOOSE_IOTD',strval($id),$title);
+	require_code('users2');
 	if (has_actual_page_access(get_modal_user(),'iotds'))
 	{
 		require_code('activities');

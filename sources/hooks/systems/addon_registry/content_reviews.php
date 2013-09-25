@@ -78,6 +78,7 @@ class Hook_addon_registry_content_reviews
 			'sources/hooks/systems/notifications/content_reviews.php',
 			'adminzone/pages/modules/admin_content_reviews.php',
 			'sources/content_reviews.php',
+			'sources/content_reviews2.php',
 			'lang/EN/content_reviews.ini',
 			'REVIEW_STATUS.tpl',
 		);

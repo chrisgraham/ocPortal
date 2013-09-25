@@ -230,6 +230,76 @@ function handle_active_logout()
 }
 
 /**
+ * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
+ *
+ * @param  MEMBER			The current member
+ */
+function _enforce_temporary_passwords($member)
+{
+	if ((get_forum_type()=='ocf') && (running_script('index')) && ($member!=db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary') && (get_page_name()!='lost_password') && ((get_page_name()!='members') || (get_param('type','misc')!='view')))
+	{
+		$force_change_message=mixed();
+		$redirect_url=mixed();
+
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+
+		// Expired?
+		if (intval(get_option('password_expiry_days'))>0)
+		{
+			require_code('password_rules');
+			if (member_password_expired($member))
+			{
+				require_lang('password_rules');
+				$force_change_message=do_lang_tempcode('PASSWORD_EXPIRED',escape_html($username),escape_html(integer_format(intval(get_option('password_expiry_days')))));
+				require_code('urls');
+				$redirect_url=build_url(array('page'=>'lost_password','username'=>$username),'');
+			}
+		}
+
+		// Temporary?
+		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='temporary')
+		{
+			require_lang('ocf');
+			$force_change_message=do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD',escape_html($username));
+			require_code('urls');
+			$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
+		}
+
+		// Too old?
+		elseif (intval(get_option('password_change_days'))>0)
+		{
+			require_code('password_rules');
+			if (member_password_too_old($member))
+			{
+				require_lang('password_rules');
+				$force_change_message=do_lang_tempcode('PASSWORD_TOO_OLD',escape_html($username),escape_html(integer_format(intval(get_option('password_change_days')))));
+				require_code('urls');
+				$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
+			}
+		}
+
+		if ($force_change_message!==NULL)
+		{
+			decache('side_users_online');
+
+			require_code('urls');
+			require_lang('ocf');
+
+			$screen=redirect_screen(
+				get_screen_title('LOGGED_IN'),
+				$redirect_url,
+				$force_change_message,
+				false,
+				'notice'
+			);
+			$out=globalise($screen,NULL,'',true);
+			$out->evaluate_echo();
+			exit();
+		}
+	}
+}
+
+/**
  * Delete a session.
  *
  * @param  integer		The new session
@@ -247,6 +317,28 @@ function delete_session($session)
 	{
 		persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}
+}
+
+/**
+ * Deletes a cookie (if it exists), from within ocPortal's cookie environment.
+ *
+ * @param  string			The name of the cookie
+ * @return boolean		The result of the PHP setcookie command
+ */
+function ocp_eatcookie($name)
+{
+	$expire=time()-100000; // Note the negative number must be greater than 13*60*60 to account for maximum timezone difference
+
+	// Try and remove other potentials
+	@setcookie($name,'',$expire,'',preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
+	@setcookie($name,'',$expire,'/',preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
+	@setcookie($name,'',$expire,'','www.'.preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
+	@setcookie($name,'',$expire,'/','www.'.preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
+	@setcookie($name,'',$expire,'','');
+	@setcookie($name,'',$expire,'/','');
+
+	// Delete standard potential
+	return @setcookie($name,'',$expire,get_cookie_path(),get_cookie_domain());
 }
 
 /**

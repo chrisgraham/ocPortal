@@ -86,6 +86,7 @@ function give_award($award_id,$content_id,$time=NULL)
 				$category_id=$content[$info['category_field']];
 			}
 		}
+		require_code('users2');
 		if ((has_actual_page_access(get_modal_user(),'awards')) && (has_actual_page_access(get_modal_user(),$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access(get_modal_user(),$permission_type_code,is_integer($category_id)?strval($category_id):$category_id))))
 		{
 			$privacy_ok=true;

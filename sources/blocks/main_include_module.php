@@ -74,6 +74,8 @@ class Block_main_include_module
 		if (($only_if_permissions==1) && (!has_actual_page_access(get_member(),$attributes['page'],$zone)))
 			return new ocp_tempcode();
 
+		require_code('urls2');
+
 		// Setup virtual environment
 		global $SKIP_TITLING;
 		if ($strip_title==1)

@@ -254,6 +254,7 @@ function set_poll($id)
 
 	log_it('CHOOSE_POLL',strval($id),get_translated_text($question));
 
+	require_code('users2');
 	if (has_actual_page_access(get_modal_user(),'polls'))
 	{
 		require_code('activities');

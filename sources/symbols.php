@@ -4415,33 +4415,8 @@ function ecv_REVIEW_STATUS($lang,$escaped,$param)
 	{
 		if (addon_installed('content_reviews'))
 		{
-			$content_reviews=$GLOBALS['SITE_DB']->query_select('content_reviews',array('display_review_status','last_reviewed_time','next_review_time'),array(
-				'content_type'=>$param[0],
-				'content_id'=>$param[1],
-			),'',1);
-			if (isset($content_reviews[0]))
-			{
-				if ((array_key_exists(2,$param)) && ($param[2]=='1'))
-				{
-					$value=strval($content_reviews[0]['last_reviewed_time']);
-				}
-				elseif ((array_key_exists(2,$param)) && ($param[2]=='2'))
-				{
-					$value=strval($content_reviews[0]['next_review_time']);
-				} else
-				{
-					require_lang('content_reviews');
-					$value=static_evaluate_tempcode(do_template('REVIEW_STATUS',array(
-						'LAST_REVIEWED_TIME'=>get_timezoned_date($content_reviews[0]['last_reviewed_time'],false,false,false,true),
-						'NEXT_REVIEW_TIME'=>get_timezoned_date($content_reviews[0]['next_review_time'],false,false,false,true),
-						'_LAST_REVIEWED_TIME'=>strval($content_reviews[0]['last_reviewed_time']),
-						'_NEXT_REVIEW_TIME'=>strval($content_reviews[0]['next_review_time']),
-						'CONTENT_TYPE'=>$param[0],
-						'CONTENT_ID'=>$param[1],
-						'DISPLAY'=>$content_reviews[0]['display_review_status']==1,
-					)));
-				}
-			}
+			require_code('content_reviews');
+			$value=show_content_reviews($param[0],$param[1],array_key_exists(2,$param)?intval($param[2]):0);
 		}
 	}
 

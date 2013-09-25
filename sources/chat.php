@@ -279,6 +279,7 @@ function member_befriended($member_id)
  */
 function filter_invites_for_blocking($people)
 {
+	require_code('users2');
 	$_people=explode(',',$people);
 	$people_new=array();
 	foreach ($_people as $person)
@@ -580,6 +581,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 				{
 					case 'BECOME_INACTIVE':
 					case 'BECOME_ACTIVE':
+						require_code('users2');
 						if ((!member_blocked(get_member(),$event['e_member_id'])) && (member_befriended($event['e_member_id'])))
 							$send_out=true;
 						break;
@@ -1028,6 +1030,7 @@ function get_chatters_in_room($room_id)
  */
 function get_chatters_in_room_tpl($users)
 {
+	require_code('users2');
 	$usernames=new ocp_tempcode();
 	$some_users=false;
 	foreach ($users as $member_id=>$username)

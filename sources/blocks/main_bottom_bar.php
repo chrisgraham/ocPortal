@@ -60,6 +60,7 @@ class Block_main_bottom_bar
 		// Users online
 		$users_online=new ocp_tempcode();
 		$count=0;
+		require_code('users2');
 		$members=get_online_members(false,NULL,$count);
 		$groups_seen=array();
 		$num_members=0;

@@ -19,6 +19,19 @@
  */
 
 /**
+ * Turn a boring timezone name into the pretty shortened list of ones Microsoft uses and others now use too.
+ *
+ * @param  string			Boring name
+ * @return string			Nice name
+ */
+function make_nice_timezone_name($in)
+{
+	$list=get_timezone_list();
+	if (array_key_exists($in,$list)) return $list[$in];
+	return $in;
+}
+
+/**
  * Get a list of timezones.
  *
  * @return array			Timezone (map between boring-style and human-readable name). Sorted in offset order then likelihood orde.

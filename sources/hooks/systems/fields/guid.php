@@ -132,6 +132,7 @@ class Hook_fields_guid
 	 */
 	function get_field_guid()
 	{
+		require_code('global4');
 		return generate_guid();
 	}
 

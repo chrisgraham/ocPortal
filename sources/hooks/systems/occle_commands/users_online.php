@@ -34,6 +34,7 @@ class Hook_occle_command_users_online
 		else
 		{
 			$count=0;
+			require_code('users2');
 			$members=get_online_members(true,NULL,$count);
 			if (is_null($members)) return array('','',do_lang('TOO_MANY_USERS_ONLINE'),'');
 			$out=new ocp_tempcode();

@@ -1204,6 +1204,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 		}
 
 		$pos=strpos(get_member_cookie(),'_data:userid');
+		require_code('users_active_actions');
 		ocp_eatcookie(substr(get_member_cookie(),0,$pos).'_sid');
 
 		$out['id']=$row['user_id'];

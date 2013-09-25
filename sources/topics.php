@@ -873,6 +873,7 @@ class OCP_Topic
 				}
 				if (!is_guest($post['poster']))
 				{
+					require_code('users2');
 					$poster=do_template('OCF_POSTER_MEMBER',array(
 						'_GUID'=>'da673c38b3cfbe9bf53d4334ca0eacfd',
 						'ONLINE'=>member_is_online($post['poster']),

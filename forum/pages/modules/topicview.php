@@ -193,6 +193,7 @@ class Module_topicview
 					$poster_online=mixed();
 					if ((get_option('is_on_show_online')=='1') && (!is_guest($_postdetails['poster'])))
 					{
+						require_code('users2');
 						$poster_online=member_is_online($_postdetails['poster']);
 					}
 
@@ -246,6 +247,7 @@ class Module_topicview
 
 					if (!is_guest($_postdetails['poster']))
 					{
+						require_code('users2');
 						$poster=do_template('OCF_POSTER_MEMBER',array(
 							'_GUID'=>'dbbed1850b6c01a6c9601d85c6aee43f',
 							'ONLINE'=>member_is_online($_postdetails['poster']),
@@ -731,6 +733,7 @@ class Module_topicview
 		{
 			member_tracking_update('forumview','',strval($topic_info['forum_id']));
 		}
+		require_code('users2');
 		list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('topicview','',strval($id),true);
 
 		if (!is_null($id))

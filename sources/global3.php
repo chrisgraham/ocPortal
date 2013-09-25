@@ -881,7 +881,7 @@ function sort_maps_by(&$rows,$sort_keys)
 {
 	global $M_SORT_KEY;
 	$M_SORT_KEY=$sort_keys;
-	mergesort($rows,'_multi_sort');
+	merge_sort($rows,'_multi_sort');
 }
 
 /**
@@ -890,7 +890,7 @@ function sort_maps_by(&$rows,$sort_keys)
  * @param  array			Sort array
  * @param  mixed			Comparison function
  */
-function mergesort(&$array,$cmp_function='strcmp')
+function merge_sort(&$array,$cmp_function='strcmp')
 {
 	// Arrays of size<2 require no action.
 	if (count($array)<2) return;
@@ -901,8 +901,8 @@ function mergesort(&$array,$cmp_function='strcmp')
 	$array2=array_slice($array,$halfway);
 
 	// Recurse to sort the two halves
-	mergesort($array1,$cmp_function);
-	mergesort($array2,$cmp_function);
+	merge_sort($array1,$cmp_function);
+	merge_sort($array2,$cmp_function);
 
 	// If all of $array1 is <= all of $array2, just append them.
 	if (call_user_func($cmp_function,end($array1),reset($array2))<1)
@@ -1491,7 +1491,7 @@ function get_os_string()
 	if (ocp_srv('HTTP_UA_OS')!='') return ocp_srv('HTTP_UA_OS');
 	elseif (ocp_srv('HTTP_USER_AGENT')!='')
 	{
-		// Mozilla/4.5 [en] (X11; U; Linux 2.2.9 i586)
+		// E.g. Mozilla/4.5 [en] (X11; U; Linux 2.2.9 i586)
 		// We need to get the stuff in the brackets
 		$matches=array();
 		if (preg_match('#\(([^\)]*)\)#',ocp_srv('HTTP_USER_AGENT'),$matches)!=0)
@@ -1681,48 +1681,6 @@ function member_tracking_update($page,$type,$id)
 }
 
 /**
- * Get a map of members viewing the specified ocPortal location.
- *
- * @param  ?ID_TEXT		The page they need to be viewing (NULL: environment current) (blank: blank't care)
- * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: environment current) (blank: don't care)
- * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: environment current) (blank: don't care)
- * @param  boolean		Whether this has to be done over the forum driver (multi site network)
- * @return ?array			A map of member-ids to rows about them (NULL: Too many / disabled)
- */
-function get_members_viewing($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
-{
-	if (get_value('no_member_tracking')==='1') return NULL;
-
-	global $ZONE;
-	if ($page===NULL) $page=get_param('page',$ZONE['zone_default_page']);
-	if ($type===NULL) $type=get_param('type','/');
-	if ($id===NULL) $id=get_param('id','/',true);
-	if ($type=='/') $type='';
-	if ($id=='/') $id='';
-
-	// Update the member tracking
-	member_tracking_update($page,$type,$id);
-
-	$map=array();
-	if (($page!==NULL) && ($page!='')) $map['mt_page']=$page;
-	if (($type!==NULL) && ($type!='')) $map['mt_type']=$type;
-	if (($id!==NULL) && ($id!='')) $map['mt_id']=$id;
-	$map['session_invisible']=0;
-	$db=($forum_layer?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
-	$results=$db->query_select('member_tracking t LEFT JOIN '.$db->get_table_prefix().'sessions s ON t.mt_member_id=s.member_id',array('*'),$map,'ORDER BY mt_member_id',200);
-	if (count($results)==200) return NULL;
-
-	$results=remove_duplicate_rows($results,'mt_member_id');
-
-	$out=array();
-	foreach ($results as $row)
-	{
-		if (!member_blocked(get_member(),$row['mt_member_id'])) $out[$row['mt_member_id']]=$row;
-	}
-	return $out;
-}
-
-/**
  * Find whether the current user is invisible.
  *
  * @return boolean		Whether the current user is invisible
@@ -1750,6 +1708,7 @@ function get_num_users_site()
 	{
 		$NUM_USERS_SITE_CACHE=get_value('users_online');
 		$count=0;
+		require_code('users2');
 		get_online_members(false,NULL,$count);
 		if (strval($count)!=$NUM_USERS_SITE_CACHE)
 		{
@@ -2015,45 +1974,14 @@ function is_mobile($user_agent=NULL,$truth=false)
 		'WebTV',
 
 		// Well known/important browsers/brands
-		'Minimo', // By Mozilla
-		'Fennec', // By Mozilla (being outmoded by minimo)
 		'Mobile Safari', // Usually Android
-		'lynx',
-		'Links',
 		'iPhone',
 		'iPod',
 		'Opera Mobi',
 		'Opera Mini',
 		'BlackBerry',
 		'Windows Phone',
-		'Windows CE',
-		'Symbian',
 		'nook browser', // Barnes and Noble
-		'Blazer', // Palm
-		'PalmOS',
-		'webOS', // Palm
-		'SonyEricsson',
-
-		// Games consoles
-		'Nintendo',
-		'PlayStation Portable',
-
-		// Less well known but common browsers
-		'UP.Browser', // OpenWave
-		'UP.Link', // OpenWave again?
-		'NetFront',
-		'Teleca',
-		'UCWEB',
-
-		// Specific lamely-identified devices/brands
-		'DDIPOCKET',
-		'SEMC-Browser',
-		'DoCoMo',
-		'Xda',
-		'ReqwirelessWeb', // Siemens/Samsung
-
-		// Specific services
-		'AvantGo',
 	);
 
 	$exceptions=array(
@@ -2432,6 +2360,8 @@ function get_zone_default_page($zone_name)
 function titleify($boring)
 {
 	$ret=ucwords(str_replace('_',' ',$boring));
+
+	// Fixup ocPortal addon naming
 	$ret=str_replace('Ocportal','ocPortal',$ret);
 	$ret=str_replace('Ocselect','ocSelect',$ret);
 	$ret=str_replace('Ocfilter','ocFilter',$ret);
@@ -2441,7 +2371,6 @@ function titleify($boring)
 	$ret=str_replace('Ecommerce','eCommerce',$ret);
 	$ret=str_replace('Iotds','IOTDs',$ret);
 	$ret=str_replace('Ldap','LDAP',$ret);
-	$ret=str_replace('Cedi','Wiki+',$ret);
 	$ret=str_replace('Sms','SMS',$ret);
 	$ret=str_replace('Ssl','SSL',$ret);
 	$ret=str_replace('Xml','XML',$ret);
@@ -2450,6 +2379,7 @@ function titleify($boring)
 	$ret=str_replace('Phpinfo','PHP-Info',$ret);
 	$ret=str_replace('Cpfs','CPFs',$ret);
 	if (substr($ret,0,3)=='Oc ') $ret='oc'.str_replace(' ','',substr($ret,3));
+
 	return $ret;
 }
 
@@ -2716,57 +2646,6 @@ function brand_name()
 }
 
 /**
- * Ensure Suhosin is not going to break a request due to request size.
- *
- * @param  integer		Most determinitve size within wider request size (we'll assume we actually need 500 more bytes than this)
- */
-function check_suhosin_request_size($size)
-{
-	foreach (array('suhosin.request.max_value_length','suhosin.post.max_value_length') as $setting)
-	{
-		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))-500<$size))
-		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VALUE_TOO_SHORT',$setting),'warn');
-		}
-	}
-}
-
-/**
- * Ensure Suhosin is not going to break a request due to number of request form fields. Call this each time a field is added to the output.
- *
- * @param  integer		How much to increment the counter by
- * @param  integer		The name length being checked
- */
-function check_suhosin_request_quantity($inc=1,$name_length=0)
-{
-	static $count=0;
-	static $name_length_count=0;
-	$count+=$inc;
-	$name_length_count+=$name_length;
-
-	static $failed_already=false;
-	if ($failed_already) return;
-
-	foreach (array('max_input_vars','suhosin.post.max_vars','suhosin.request.max_vars') as $setting)
-	{
-		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$count))
-		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
-			$failed_already=true;
-		}
-	}
-
-	foreach (array('suhosin.post.max_totalname_length','suhosin.request.max_totalname_length') as $setting)
-	{
-		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$name_length_count))
-		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
-			$failed_already=true;
-		}
-	}
-}
-
-/**
  * Convert HTML entities to plain characters for XML validity.
  *
  * @param  string			HTML to convert entities from
@@ -2807,38 +2686,6 @@ function is_ocf_satellite_site()
 {
 	if (get_forum_type()!='ocf') return false;
 	return (isset($GLOBALS['FORUM_DB'])) && ((get_db_site()!=get_db_forums()) || (get_db_site_host()!=get_db_forums_host()) || (get_db_site_user()!=get_db_forums_user()));
-}
-
-/**
- * Generate a GUID.
- *
- * @return ID_TEXT		A GUID
- */
-function generate_guid()
-{
-	// Calculate hash value
-	$hash=md5(uniqid('',true));
-
-	// Based on a comment in the PHP manual
-	return sprintf('%08s-%04s-%04x-%04x-%12s',
-		// 32 bits for "time_low"
-		substr($hash, 0, 8),
-
-		// 16 bits for "time_mid"
-		substr($hash, 8, 4),
-
-		// 16 bits for "time_hi_and_version",
-		// four most significant bits holds version number 5
-		(hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,
-
-		// 16 bits, 8 bits for "clk_seq_hi_res",
-		// 8 bits for "clk_seq_low",
-		// two most significant bits holds zero and one for variant DCE1.1
-		(hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
-
-		// 48 bits for "node"
-		substr($hash, 20, 12)
-	);
 }
 
 /**
@@ -2916,4 +2763,45 @@ function get_mass_import_mode()
 {
 	global $MASS_IMPORT_HAPPENING;
 	return $MASS_IMPORT_HAPPENING;
+}
+
+/**
+ * Get the time difference in microseconds between two PHP microtimes.
+ * Original source: php.net
+ *
+ * @param  string			First microtime
+ * @param  string			Second microtime
+ * @return float			The time difference
+ */
+function microtime_diff($a,$b)
+{
+	$x=explode(' ',$a);
+	$a_micro=floatval($x[0]);
+	$a_int=(float)intval($x[1]);
+	$y=explode(' ',$b);
+	$b_micro=floatval($y[0]);
+	$b_int=(float)intval($y[1]);
+	if ($a_int>$b_int)
+	{
+		return ($a_int-$b_int)+($a_micro-$b_micro);
+	}
+	elseif ($a_int==$b_int)
+	{
+		if ($a_micro>$b_micro)
+		{
+			return ($a_int-$b_int)+($a_micro-$b_micro);
+		}
+		elseif ($a_micro<$b_micro)
+		{
+			return ($b_int-$a_int)+($b_micro-$a_micro);
+		}
+		else
+		{
+			return 0.0;
+		}
+	}
+	else
+	{ // $a_int<$b_int
+		return ($b_int-$a_int)+($b_micro-$a_micro);
+	}
 }

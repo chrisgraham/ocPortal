@@ -619,7 +619,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			$fields->attach(content_review_get_fields('member',is_null($member_id)?NULL:strval($member_id)));
 		}
 	}

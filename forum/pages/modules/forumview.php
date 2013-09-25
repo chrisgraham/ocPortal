@@ -272,6 +272,7 @@ class Module_forumview
 		$title=get_screen_title($ltitle,false,NULL,NULL,$awards);
 
 		// Members viewing this forum
+		require_code('users2');
 		list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('forumview','',strval($id),true);
 
 		$tpl=do_template('OCF_FORUM_SCREEN',array(

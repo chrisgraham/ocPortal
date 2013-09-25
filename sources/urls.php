@@ -161,12 +161,8 @@ function ocp_url_encode($url_part,$consider_rewrite=NULL)
 	if ($consider_rewrite===NULL) $consider_rewrite=can_try_mod_rewrite();
 	if ($consider_rewrite) // These interfere with mod_rewrite processing because they get pre-decoded and make things ambiguous
 	{
-//		$url_part=str_replace(':','(colon)',$url_part); We'll ignore theoretical problem here- we won't expect there to be a need for encodings within redirect URL paths (params is fine, handles naturally)
-//		$url_part=str_replace(urlencode(':'),urlencode('(colon)'),$url_part); // horrible but mod_rewrite does it so we need to
-//		$url_part=str_replace(urlencode('/'),urlencode(':slash:'),$url_part); // horrible but mod_rewrite does it so we need to
-//		$url_part=str_replace(urlencode('&'),urlencode(':amp:'),$url_part); // horrible but mod_rewrite does it so we need to
-//		$url_part=str_replace(urlencode('#'),urlencode(':uhash:'),$url_part); // horrible but mod_rewrite does it so we need to
-		$url_part=str_replace(array('/','&','#'),array(':slash:',':amp:',':uhash:'),$url_part);
+		//$url_part=str_replace(':','(colon)',$url_part); We'll ignore theoretical problem here- we won't expect there to be a need for encodings within redirect URL paths (params is fine, handles naturally)
+		$url_part=str_replace(array('/','&','#'),array(':slash:',':amp:',':uhash:'),$url_part); // horrible but mod_rewrite does it so we need to
 	}
 	$url_part=urlencode($url_part);
 	return $url_part;
@@ -198,27 +194,10 @@ function ocp_url_decode_post_process($url_part)
 {
 	if ((strpos($url_part,':')!==false) && (can_try_mod_rewrite()))
 	{
-		$url_part=str_replace(':uhash:','#',$url_part);
-		$url_part=str_replace(':amp:','&',$url_part);
-		$url_part=str_replace(':slash:','/',$url_part);
-//		$url_part=str_replace('(colon)',':',$url_part);
+		$url_part=str_replace(array(':uhash:',':amp:',':slash:'),array('#','&','/'),$url_part);
+		//$url_part=str_replace('(colon)',':',$url_part);
 	}
 	return $url_part;
-}
-
-/**
- * Map spaces to %20 and put http:// in front of URLs starting www.
- *
- * @param  URLPATH		The URL to fix
- * @return URLPATH		The fixed result
- */
-function remove_url_mistakes($url)
-{
-	if (substr($url,0,4)=='www.') $url='http://'.$url;
-	$url=@html_entity_decode($url,ENT_NOQUOTES);
-	$url=str_replace(' ','%20',$url);
-	$url=preg_replace('#keep_session=\d*#','filtered=1',$url);
-	return $url;
 }
 
 /**
@@ -247,7 +226,8 @@ function skippable_keep($key,$val)
  */
 function tacit_https()
 {
-	return ((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off'));
+	$https=ocp_srv('HTTPS');
+	return (($https!='') && ($https!='off'));
 }
 
 /**
@@ -761,10 +741,30 @@ function url_is_local($url)
  */
 function looks_like_url($value,$lax=false)
 {
-	if (($lax) && (strpos($value,'/')!==false)) return true;
-	if (($lax) && (substr($value,0,1)=='%')) return true;
-	if (($lax) && (substr($value,0,1)=='{')) return true;
-	return (((strpos($value,'.php')!==false) || (strpos($value,'.htm')!==false) || (substr($value,0,1)=='#') || (substr($value,0,15)=='{$TUTORIAL_URL') || (substr($value,0,13)=='{$FIND_SCRIPT') || (substr($value,0,17)=='{$BRAND_BASE_URL') || (substr($value,0,10)=='{$BASE_URL') || (substr(strtolower($value),0,11)=='javascript:') || (substr($value,0,4)=='tel:') || (substr($value,0,7)=='mailto:') || (substr($value,0,7)=='http://') || (substr($value,0,8)=='https://') || (substr($value,0,3)=='../') || (substr($value,0,7)=='sftp://') || (substr($value,0,6)=='ftp://'))) && (strpos($value,'<')===false);
+	if ($lax)
+	{
+		if (strpos($value,'/')!==false) return true;
+		$at=substr($value,0,1);
+		if ($at=='%' || $at=='{') return true;
+	}
+	return
+		(
+			((strpos($value,'.php')!==false) || 
+			(strpos($value,'.htm')!==false) || 
+			(substr($value,0,1)=='#') || 
+			(substr($value,0,15)=='{$TUTORIAL_URL') || 
+			(substr($value,0,13)=='{$FIND_SCRIPT') || 
+			(substr($value,0,17)=='{$BRAND_BASE_URL') || 
+			(substr($value,0,10)=='{$BASE_URL') || 
+			(substr($value,0,3)=='../') || 
+			(substr(strtolower($value),0,11)=='javascript:') || 
+			(substr($value,0,4)=='tel:') || 
+			(substr($value,0,7)=='mailto:') || 
+			(substr($value,0,7)=='http://') || 
+			(substr($value,0,8)=='https://') || 
+			(substr($value,0,7)=='sftp://') || 
+			(substr($value,0,6)=='ftp://'))
+		) && (strpos($value,'<')===false);
 }
 
 /**
@@ -1132,45 +1132,5 @@ function find_id_moniker($url_parts,$zone)
 	}
 
 	return NULL;
-}
-
-/**
- * Change whatever global context that is required in order to run from a different context.
- *
- * @sets_input_state
- *
- * @param  array			The URL component map (must contain 'page').
- * @param  ID_TEXT		The zone.
- * @param  ID_TEXT		The running script.
- * @param  boolean		Whether to get rid of keep_ variables in current URL.
- * @return array			A list of parameters that would be required to be passed back to reset the state.
- */
-function set_execution_context($new_get,$new_zone='_SEARCH',$new_current_script='index',$erase_keep_also=false)
-{
-	$old_get=$_GET;
-	$old_zone=get_zone_name();
-	$old_current_script=current_script();
-
-	foreach ($_GET as $key=>$val)
-	{
-		if ((substr($key,0,5)!='keep_') || ($erase_keep_also)) unset($_GET[$key]);
-	}
-
-	foreach ($new_get as $key=>$val)
-	{
-		$_GET[$key]=is_integer($val)?strval($val):$val;
-	}
-
-	global $RELATIVE_PATH,$ZONE;
-	$RELATIVE_PATH=($new_zone=='_SEARCH')?get_page_zone(get_param('page')):$new_zone;
-	if ($new_zone!=$old_zone) $ZONE=NULL; // So zone details will have to reload
-
-	global $PAGE_NAME_CACHE;
-	$PAGE_NAME_CACHE=NULL;
-	global $RUNNING_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE;
-	$RUNNING_SCRIPT_CACHE=array();
-	$WHAT_IS_RUNNING_CACHE=$new_current_script;
-
-	return array($old_get,$old_zone,$old_current_script,true);
 }
 

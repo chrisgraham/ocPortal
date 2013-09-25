@@ -207,7 +207,6 @@ function init__global2()
 	require_code('caches');
 	require_code('database'); // There's nothing without the database
 	require_code('config'); // Config is needed for much active stuff
-	require_code('global4');
 	if ((!isset($SITE_INFO['known_suexec'])) || ($SITE_INFO['known_suexec']=='0'))
 		if (ip_banned(get_ip_address())) critical_error('BANNED');
 	if (!$MICRO_BOOTUP)
@@ -756,7 +755,7 @@ function catch_fatal_errors()
 /**
  * ocPortal error handler (hooked into PHP error system).
  *
- * @param  integer		The error code-number
+ * @param  integer		The error type-number
  * @param  PATH			The error message
  * @param  string			The file the error occurred in
  * @param  integer		The line the error occurred on
@@ -764,9 +763,7 @@ function catch_fatal_errors()
  */
 function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 {
-	if ((error_reporting()==0) && (!$GLOBALS['DYING_BADLY'])) return false; // This actually tells if @ was used oddly enough. You wouldn't figure from the PHP docs.
-
-	if ((error_reporting() & $errno) || ($GLOBALS['DYING_BADLY']))
+	if (((error_reporting() & $errno)!=0) || ($GLOBALS['DYING_BADLY']))
 	{
 		// Strip down path for security
 		if (substr(str_replace(DIRECTORY_SEPARATOR,'/',$errfile),0,strlen(get_file_base().'/'))==str_replace(DIRECTORY_SEPARATOR,'/',get_file_base().'/'))
@@ -1958,50 +1955,8 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 
 		if (!is_file($write_path))
 		{
-			// Create merged resource...
-
-			$data='';
-			$good_to_go=true;
-			$all_strict=true;
-			foreach ($resources as $resource)
-			{
-				if ($resource=='no_cache') continue;
-
-				if ($type=='.js')
-				{
-					$merge_from=javascript_enforce($resource);
-				} else // .css
-				{
-					$merge_from=css_enforce($resource);
-				}
-				if ($merge_from!='')
-				{
-					if (is_file($merge_from))
-					{
-						$extra_data=unixify_line_format(file_get_contents($merge_from)).chr(10).chr(10);
-						$data.=$extra_data;
-						if (strpos($extra_data,'"use strict";')===false) $all_strict=false;
-					} else // race condition
-					{
-						$good_to_go=false;
-						break;
-					}
-				}
-			}
-
-			if ($good_to_go)
-			{
-				if (!$all_strict)
-				{
-					$data=str_replace('"use strict";','',$data);
-				}
-
-				$myfile=@fopen($write_path,'wb') OR intelligent_write_error($write_path); // Intentionally 'wb' to stop line ending conversions on Windows
-				fwrite($myfile,$data);
-				fclose($myfile);
-				fix_permissions($write_path,0777);
-				sync_file($write_path);
-			}
+			require_code('global4');
+			$good_to_go=_save_web_resource_merging($resources,$type,$write_path);
 		} else
 		{
 			$good_to_go=true;

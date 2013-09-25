@@ -103,7 +103,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 
 				if (addon_installed('content_reviews'))
 				{
-					require_code('content_reviews');
+					require_code('content_reviews2');
 					schedule_content_review('comcode_page',$zone.':'.$codename,intval(get_option('comcode_page_default_review_freq')));
 				}
 			}
@@ -183,7 +183,7 @@ if (!function_exists('_load_comcode_page_cache_off'))
 
 			if (addon_installed('content_reviews'))
 			{
-				require_code('content_reviews');
+				require_code('content_reviews2');
 				schedule_content_review('comcode_page',$zone.':'.$codename,intval(get_option('comcode_page_default_review_freq')));
 			}
 		}

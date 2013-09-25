@@ -333,6 +333,7 @@ class Module_admin_lang
 		require_all_open_lang_files($lang);
 
 		// Make our translation page
+		require_code('form_templates');
 		require_code('lang2');
 		$lines='';
 		$google=$this->get_google_code($lang);

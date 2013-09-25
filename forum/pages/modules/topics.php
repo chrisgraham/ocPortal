@@ -1539,7 +1539,7 @@ class Module_topics
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			$specialisation2->attach(content_review_get_fields('topic',is_null($clone_id)?NULL:strval($clone_id)));
 		}
 
@@ -1859,7 +1859,7 @@ class Module_topics
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			$specialisation2->attach(content_review_get_fields('post'));
 		}
 
@@ -2156,7 +2156,7 @@ END;
 
 			if (addon_installed('content_reviews'))
 			{
-				require_code('content_reviews');
+				require_code('content_reviews2');
 				content_review_set('topic',strval($topic_id));
 			}
 		} else
@@ -2244,6 +2244,7 @@ END;
 
 		if ((!is_null($forum_id)) && ($anonymous==0) && ($intended_solely_for===NULL))
 		{
+			require_code('users2');
 			if ((has_actual_page_access(get_modal_user(),'forumview')) && (has_category_access(get_modal_user(),'forums',strval($forum_id))))
 			{
 				require_code('activities');
@@ -2259,7 +2260,7 @@ END;
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			content_review_set('post',strval($post_id));
 		}
 
@@ -2847,7 +2848,7 @@ END;
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			$specialisation2->attach(content_review_get_fields('post',strval($post_id)));
 		}
 
@@ -2966,7 +2967,7 @@ END;
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			content_review_set('post',strval($post_id));
 		}
 
@@ -3120,7 +3121,7 @@ END;
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			$fields->attach(content_review_get_fields('topic',strval($topic_id)));
 		}
 
@@ -3163,7 +3164,7 @@ END;
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			content_review_set('topic',strval($topic_id));
 		}
 

@@ -660,7 +660,7 @@ class Module_chat
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			content_review_set('chat',strval($new_room_id));
 		}
 

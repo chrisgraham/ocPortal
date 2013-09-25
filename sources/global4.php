@@ -19,56 +19,62 @@
  */
 
 /**
- * Get template-ready details of members viewing the specified ocPortal location.
+ * Save a file of merged web resources.
  *
- * @param  ?ID_TEXT		The page they need to be viewing (NULL: don't care)
- * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: don't care)
- * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: don't care)
- * @param  boolean		Whether this has to be done over the forum driver (multi site network)
- * @return ?array			A map of member-ids to rows about them (NULL: Too many)
+ * @param  array				Resources (map of keys to 1), passed by reference as we alter it
+ * @param  ID_TEXT			Resource type
+ * @set .css .js
+ * @param  PATH				Write path
+ * @return boolean			If the merge happened
  */
-function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
+function _save_web_resource_merging($resources,$type,$write_path)
 {
-	$members=is_null($id)?array():get_members_viewing($page,$type,$id,$forum_layer);
-	$num_guests=0;
-	$num_members=0;
-	if (is_null($members))
-	{
-		$members_viewing=new ocp_tempcode();
-	} else
-	{
-		$members_viewing=new ocp_tempcode();
-		if (!isset($members[get_member()]))
-		{
-			$members[get_member()]=array('mt_cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
-		}
-		foreach ($members as $member_id=>$at_details)
-		{
-			$username=$at_details['mt_cache_username'];
+	// Create merged resource...
 
-			if (is_guest($member_id))
+	$data='';
+	$good_to_go=true;
+	$all_strict=true;
+	foreach ($resources as $resource)
+	{
+		if ($resource=='no_cache') continue;
+
+		if ($type=='.js')
+		{
+			$merge_from=javascript_enforce($resource);
+		} else // .css
+		{
+			$merge_from=css_enforce($resource);
+		}
+		if ($merge_from!='')
+		{
+			if (is_file($merge_from))
 			{
-				$num_guests++;
-			} else
+				$extra_data=unixify_line_format(file_get_contents($merge_from)).chr(10).chr(10);
+				$data.=$extra_data;
+				if (strpos($extra_data,'"use strict";')===false) $all_strict=false;
+			} else // race condition
 			{
-				$num_members++;
-				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
-				$map=array('FIRST'=>$num_members==1,'PROFILE_URL'=>$profile_url,'USERNAME'=>$username,'MEMBER_ID'=>strval($member_id));
-				if (isset($at_details['the_title']))
-				{
-					if ((has_privilege(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id']==$id)))
-					{
-						$map['AT']=escape_html($at_details['the_title']);
-					}
-				}
-				$map['COLOUR']=get_group_colour(ocf_get_member_primary_group($member_id));
-				$members_viewing->attach(do_template('OCF_USER_MEMBER',$map));
+				$good_to_go=false;
+				break;
 			}
 		}
-		if ($members_viewing->is_empty()) $members_viewing=do_lang_tempcode('NONE_EM');
 	}
 
-	return array($num_guests,$num_members,$members_viewing);
+	if ($good_to_go)
+	{
+		if (!$all_strict)
+		{
+			$data=str_replace('"use strict";','',$data);
+		}
+
+		$myfile=@fopen($write_path,'wb') OR intelligent_write_error($write_path); // Intentionally 'wb' to stop line ending conversions on Windows
+		fwrite($myfile,$data);
+		fclose($myfile);
+		fix_permissions($write_path,0777);
+		sync_file($write_path);
+	}
+
+	return $good_to_go;
 }
 
 /**
@@ -354,51 +360,6 @@ function ocp_mb_chunk_split($str,$len=76,$glue="\r\n")
 }
 
 /**
- * Shuffle an array into an array of columns.
- *
- * @param  integer		The number of columns
- * @param  array			The source array
- * @return array			Array of columns
- */
-function shuffle_for($by,$in)
-{
-	// Split evenly into $by equal piles (if won't equally divide, bias so the last one is the smallest via 'ceil')
-	$out_piles=array();
-	for ($i=0;$i<$by;$i++)
-	{
-		$out_piles[$i]=array();
-	}
-	$cnt=count($in);
-	$split_point=intval(ceil(floatval($cnt)/floatval($by)));
-	$next_split_point=$split_point;
-	$for=0;
-	for ($i=0;$i<$cnt;$i++)
-	{
-		if ($i>=$next_split_point)
-		{
-			$for++;
-			$next_split_point+=intval(ceil(floatval($cnt-$i)/floatval($by-$for)));
-		}
-
-		$out_piles[$for][]=$in[$i];
-	}
-
-	// Take one from each pile in turn until none are left, putting into $out
-	$out=array();
-	while (true)
-	{
-		for ($j=0;$j<$by;$j++)
-		{
-			$next=array_shift($out_piles[$j]);
-			if (!is_null($next)) $out[]=$next; else break 2;
-		}
-	}
-
-	// $out now holds our result
-	return $out;
-}
-
-/**
  * Log an action
  *
  * @param  ID_TEXT		The type of activity just carried out (a lang string)
@@ -451,5 +412,37 @@ function _log_it($type,$a=NULL,$b=NULL)
 				dispatch_notification('actionlog',$type,$subject,$mail);
 		}
 	}
+}
+
+/**
+ * Generate a GUID.
+ *
+ * @return ID_TEXT		A GUID
+ */
+function generate_guid()
+{
+	// Calculate hash value
+	$hash=md5(uniqid('',true));
+
+	// Based on a comment in the PHP manual
+	return sprintf('%08s-%04s-%04x-%04x-%12s',
+		// 32 bits for "time_low"
+		substr($hash, 0, 8),
+
+		// 16 bits for "time_mid"
+		substr($hash, 8, 4),
+
+		// 16 bits for "time_hi_and_version",
+		// four most significant bits holds version number 5
+		(hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,
+
+		// 16 bits, 8 bits for "clk_seq_hi_res",
+		// 8 bits for "clk_seq_low",
+		// two most significant bits holds zero and one for variant DCE1.1
+		(hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
+
+		// 48 bits for "node"
+		substr($hash, 20, 12)
+	);
 }
 

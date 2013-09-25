@@ -889,6 +889,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 			return $out;
 		}
 
+		require_code('users_active_actions');
 		ocp_eatcookie('cookiehash');
 
 		$out['id']=$row['userid'];

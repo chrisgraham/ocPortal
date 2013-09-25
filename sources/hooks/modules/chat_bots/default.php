@@ -39,6 +39,7 @@ class Hook_chat_bot_default
 			case 'users_online':
 				// On the site
 				$count=0;
+				require_code('users2');
 				$members=get_online_members(true,NULL,$count);
 				if (is_null($members)) return do_lang('TOO_MANY_USERS_ONLINE');
 				$guests=0;

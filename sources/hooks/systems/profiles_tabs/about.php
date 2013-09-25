@@ -265,6 +265,7 @@ class Hook_Profiles_Tabs_about
 		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
 
 		$last_visit_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_last_visit_time');
+		require_code('users2');
 		if (member_is_online($member_id_of))
 		{
 			$online_now=do_lang_tempcode('YES');

@@ -227,6 +227,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 			$usergroups[]=$all_usergroups[$u];
 	}
 
+	require_code('users2');
 	return do_template('OCF_MEMBER_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'dfskfdsf9',
 		'GIVE_CONTEXT'=>$give_context,

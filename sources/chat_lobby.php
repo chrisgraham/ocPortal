@@ -57,6 +57,7 @@ function show_im_contacts($member_id=NULL,$simpler=false,$max=NULL)
 {
 	require_code('chat');
 	require_lang('chat');
+	require_code('users2');
 
 	if (is_null($max)) $max=intval(get_option('max_chat_lobby_friends'));
 
@@ -78,6 +79,7 @@ function show_im_contacts($member_id=NULL,$simpler=false,$max=NULL)
 			$online=true;
 		} else
 		{
+			require_code('users2');
 			$online=member_is_online($friend['member_liked']);
 			$online_text=$online?do_lang_tempcode('ONLINE'):do_lang_tempcode('OFFLINE');
 		}

@@ -19,6 +19,61 @@
  */
 
 /**
+ * Change whatever global context that is required in order to run from a different context.
+ *
+ * @sets_input_state
+ *
+ * @param  array			The URL component map (must contain 'page').
+ * @param  ID_TEXT		The zone.
+ * @param  ID_TEXT		The running script.
+ * @param  boolean		Whether to get rid of keep_ variables in current URL.
+ * @return array			A list of parameters that would be required to be passed back to reset the state.
+ */
+function set_execution_context($new_get,$new_zone='_SEARCH',$new_current_script='index',$erase_keep_also=false)
+{
+	$old_get=$_GET;
+	$old_zone=get_zone_name();
+	$old_current_script=current_script();
+
+	foreach ($_GET as $key=>$val)
+	{
+		if ((substr($key,0,5)!='keep_') || ($erase_keep_also)) unset($_GET[$key]);
+	}
+
+	foreach ($new_get as $key=>$val)
+	{
+		$_GET[$key]=is_integer($val)?strval($val):$val;
+	}
+
+	global $RELATIVE_PATH,$ZONE;
+	$RELATIVE_PATH=($new_zone=='_SEARCH')?get_page_zone(get_param('page')):$new_zone;
+	if ($new_zone!=$old_zone) $ZONE=NULL; // So zone details will have to reload
+
+	global $PAGE_NAME_CACHE;
+	$PAGE_NAME_CACHE=NULL;
+	global $RUNNING_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE;
+	$RUNNING_SCRIPT_CACHE=array();
+	$WHAT_IS_RUNNING_CACHE=$new_current_script;
+
+	return array($old_get,$old_zone,$old_current_script,true);
+}
+
+/**
+ * Map spaces to %20 and put http:// in front of URLs starting www.
+ *
+ * @param  URLPATH		The URL to fix
+ * @return URLPATH		The fixed result
+ */
+function remove_url_mistakes($url)
+{
+	if (substr($url,0,4)=='www.') $url='http://'.$url;
+	$url=@html_entity_decode($url,ENT_NOQUOTES);
+	$url=str_replace(' ','%20',$url);
+	$url=preg_replace('#keep_session=\d*#','filtered=1',$url);
+	return $url;
+}
+
+/**
  * Given a URL or page-link, return an absolute URL.
  *
  * @param  string			URL or page-link

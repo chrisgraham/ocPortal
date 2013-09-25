@@ -121,6 +121,7 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 
 	if (!$anonymous)
 	{
+		require_code('users2');
 		if (has_actual_page_access(get_modal_user(),'points'))
 		{
 			require_code('activities');

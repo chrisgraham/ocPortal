@@ -65,6 +65,7 @@ class Module_online_members
 		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 		$count=0;
+		require_code('users2');
 		$members=get_online_members(has_privilege(get_member(),'show_user_browsing'),NULL,$count);
 		if ((is_null($members)) && (has_privilege(get_member(),'show_user_browsing')))
 		{

@@ -251,6 +251,7 @@ function get_permissions_matrix($server_id,$access,$overridables,$privileges,$de
 	if (is_null($pinterface_view)) $pinterface_view=do_lang_tempcode('PINTERFACE_VIEW');
 
 	// Permission rows for matrix
+	require_code('form_templates');
 	$permission_rows=new ocp_tempcode();
 	$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 	foreach (array_keys($access) as $id)

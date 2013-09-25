@@ -432,6 +432,7 @@ function absoluteise_and_test_comcode_url($given_url,$source_member,$as_admin,$t
 {
 	$url=$given_url;
 
+	require_code('urls2');
 	$url=remove_url_mistakes($url);
 
 	$url=check_naughty_javascript_url($source_member,$url,$as_admin);

@@ -38,6 +38,7 @@ class Hook_members_chat
 			{
 				require_lang('chat');
 				require_code('chat');
+				require_code('users2');
 				if (!$GLOBALS['FORUM_DRIVER']->is_staff($member_id))
 				{
 					if (!member_blocked($member_id))

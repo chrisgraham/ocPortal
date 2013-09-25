@@ -1120,6 +1120,7 @@ class forum_driver_smf extends forum_driver_base
 			return $out;
 		}
 
+		require_code('users_active_actions');
 		ocp_eatcookie('PHPSESSID');
 
 		$out['id']=$row['ID_MEMBER'];

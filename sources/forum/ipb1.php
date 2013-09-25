@@ -583,6 +583,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		}
 
 		$pos=strpos(get_member_cookie(),'member_id');
+		require_code('users_active_actions');
 		ocp_eatcookie(substr(get_member_cookie(),0,$pos).'session_id');
 
 		$out['id']=$row['id'];

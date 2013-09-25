@@ -183,7 +183,7 @@ class Hook_Profiles_Tabs_Edit_settings
 
 			if (addon_installed('content_reviews'))
 			{
-				require_code('content_reviews');
+				require_code('content_reviews2');
 				content_review_set('member',strval($member_id_of));
 			}
 

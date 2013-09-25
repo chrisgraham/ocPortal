@@ -169,6 +169,7 @@ function generate_resourcefs_moniker($resource_type,$resource_id,$label=NULL,$ne
 	} else
 	{
 		$no_exists_check_for=mixed();
+		require_code('global4');
 		$guid=is_null($new_guid)?generate_guid():$new_guid;
 	}
 

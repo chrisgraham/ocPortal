@@ -784,6 +784,7 @@ class Module_admin_themes
 		$old_contents=@file_get_contents(get_file_base().'/themes/default/css/'.$file);
 		if ($old_contents===false) $old_contents='';
 
+		require_code('form_templates');
 		check_suhosin_request_size(strlen($css));
 
 		set_short_title($file);
