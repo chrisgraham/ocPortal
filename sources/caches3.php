@@ -28,6 +28,24 @@ function init__caches3()
 }
 
 /**
+ * Automatically empty caches.
+ */
+function auto_decache()
+{
+	delete_value('cdn');
+	erase_block_cache();
+	erase_cached_templates(!$changed_base_url);
+	erase_comcode_cache();
+	erase_cached_language();
+	erase_persistent_cache();
+	if ($changed_base_url)
+	{
+		erase_comcode_page_cache();
+		set_long_value('last_base_url',get_base_url(false));
+	}
+}
+
+/**
  * Rebuild the specified caches.
  *
  * @param  ?array			The caches to rebuild (NULL: all)

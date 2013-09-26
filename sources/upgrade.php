@@ -2263,9 +2263,9 @@ function upgrade_sharedinstall_sites($from=0)
 }
 
 /**
- * Automatically go through full upgrade for current site.
+ * Automatically go through a partial upgrade for current site.
  */
-function automate_upgrade()
+function automate_upgrade__safe()
 {
 	// Database
 	clear_caches_1();
@@ -2275,6 +2275,14 @@ function automate_upgrade()
 
 	// OCF
 	ocf_upgrade();
+}
+
+/**
+ * Automatically go through full upgrade for current site.
+ */
+function automate_upgrade()
+{
+	automate_upgrade__safe();
 
 	// Themes
 	require_code('themes2');

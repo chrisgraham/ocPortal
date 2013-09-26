@@ -64,6 +64,21 @@ function init__files2()
 }
 
 /**
+ * Make a missing required directory, or exit with an error if we cannot.
+ *
+ * @param PATH			Path to create
+ */
+function make_missing_directory($dir)
+{
+	if (@mkdir($dir,0777)===false)
+	{
+		warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
+	}
+	fix_permissions($dir,0777);
+	sync_file($dir);
+}
+
+/**
  * Discern the cause of a file-write error, and show an appropriate error message.
  *
  * @param PATH			File path that could not be written (full path, not relative)

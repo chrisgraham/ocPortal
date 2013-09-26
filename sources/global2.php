@@ -40,21 +40,12 @@ function init__global2()
 
 	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$KNOWN_AJAX,$KNOWN_UTF8;
 
-	if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('output_buffering')))=='1') @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
+	@ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
 	// Fixup some inconsistencies in parameterisation on different PHP platforms
-	if (array_key_exists('HTTP_X_REWRITE_URL',$_SERVER))
-	{
-		foreach ($_GET as $key=>$val)
-		{
-			if ($key[0]=='?')
-			{
-				unset($_GET[$key]);
-				$_GET[substr($key,1)]=$val;
-			}
-		}
-		$_SERVER['REQUEST_URI']=$_SERVER['HTTP_X_REWRITE_URL'];
-	} elseif ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS
+	if ((array_key_exists('SCRIPT_FILENAME',$_SERVER)) && (!array_key_exists('PHP_SELF',$_SERVER))) $_SERVER['PHP_SELF']=$_SERVER['SCRIPT_FILENAME'];
+	elseif ((array_key_exists('SCRIPT_NAME',$_SERVER)) && (defined('HIPHOP_PHP'))) $_SERVER['PHP_SELF']=$_SERVER['SCRIPT_NAME'];
+	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS
 	{
 		$_SERVER['REQUEST_URI']=$_SERVER['PHP_SELF'];
 		$first=true;
@@ -65,8 +56,6 @@ function init__global2()
 			$first=false;
 		}
 	}
-	if ((array_key_exists('SCRIPT_FILENAME',$_SERVER)) && (!array_key_exists('PHP_SELF',$_SERVER))) $_SERVER['PHP_SELF']=$_SERVER['SCRIPT_FILENAME'];
-	elseif ((array_key_exists('SCRIPT_NAME',$_SERVER)) && (defined('HIPHOP_PHP'))) $_SERVER['PHP_SELF']=$_SERVER['SCRIPT_NAME'];
 
 	// Don't want the browser caching PHP output, explicitly say this
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
@@ -129,7 +118,7 @@ function init__global2()
 
 	// Initialise timezones
 	$SERVER_TIMEZONE_CACHE=@date_default_timezone_get();
-	date_default_timezone_set('UTC');
+	if ($SERVER_TIMEZONE_CACHE!='UTC') date_default_timezone_set('UTC');
 
 	// Initialise some error handling
 	error_reporting(E_ALL);
@@ -156,7 +145,7 @@ function init__global2()
 		@ini_set('ocproducts.type_strictness','1');
 		@ini_set('ocproducts.xss_detect','1');
 	}
-	if ($DEV_MODE)
+	if ($DEV_MODE || $SEMI_DEV_MODE)
 	{
 		require_code('developer_tools');
 	}
@@ -280,7 +269,7 @@ function init__global2()
 
 	// Register Internationalisation settings
 	@header('Content-type: text/html; charset='.get_charset());
-	if ((function_exists('setlocale')) && (!$MICRO_AJAX_BOOTUP))
+	if (!$MICRO_AJAX_BOOTUP)
 	{
 		$locales=explode(',',do_lang('locale'));
 		setlocale(LC_ALL,$locales[0]);
@@ -334,18 +323,8 @@ function init__global2()
 		$changed_base_url=!array_key_exists('base_url',$SITE_INFO) && get_long_value('last_base_url')!==get_base_url(false);
 		if ((running_script('index')) && ((is_browser_decacheing()) || ($changed_base_url)))
 		{
-			delete_value('cdn');
 			require_code('caches3');
-			erase_block_cache();
-			erase_cached_templates(!$changed_base_url);
-			erase_comcode_cache();
-			erase_cached_language();
-			erase_persistent_cache();
-			if ($changed_base_url)
-			{
-				erase_comcode_page_cache();
-				set_long_value('last_base_url',get_base_url(false));
-			}
+			auto_decache();
 		}
 
 		// Load requirements for admins
@@ -367,57 +346,7 @@ function init__global2()
 
 	if (($SEMI_DEV_MODE) && (!$MICRO_AJAX_BOOTUP)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
 	{
-		if ($SEMI_DEV_MODE)
-		{
-			/*if ((mt_rand(0,2)==1) && ($DEV_MODE) && (running_script('index')))	We know this works now, so let's stop messing up our development speed
-			{
-				require_code('caches3');
-				erase_cached_templates(true); // Stop anything trying to read a template cache item (E.g. CSS, JS) that might not exist!
-			}*/
-
-			if ((strpos(ocp_srv('HTTP_REFERER'),ocp_srv('HTTP_HOST'))!==false) && (strpos(ocp_srv('HTTP_REFERER'),'keep_devtest')!==false) && (!running_script('attachment')) && (!running_script('upgrader')) && (strpos(ocp_srv('HTTP_REFERER'),'login')===false) && (is_null(get_param('keep_devtest',NULL))))
-			{
-				$_GET['keep_devtest']='1';
-				fatal_exit('URL not constructed properly: development mode in use but keep_devtest was not specified. This indicates that links have been made without build_url (in PHP) or keep_stub (in Javascript). Whilst not fatal this time, failure to use these functions can cause problems when your site goes live. See the ocPortal codebook for more details.');
-			} else $_GET['keep_devtest']='1';
-		}
-
-		if (isset($_CREATED_FILES)) // Comes from ocProducts custom PHP version
-		{
-			/**
-			 * Run after-tests for debug mode, to make sure coding standards are met.
-			 */
-			function dev_mode_aftertests()
-			{
-				global $_CREATED_FILES,$_MODIFIED_FILES;
-
-				// Use the info from ocProduct's custom PHP version to make sure that all files that were created/modified got synched as they should have been.
-				foreach ($_CREATED_FILES as $file)
-				{
-					if ((substr($file,0,strlen(get_file_base()))==get_file_base()) && (substr($file,-4)!='.tmp') && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
-						@exit(escape_html('File not permission-synched: '.$file));
-				}
-				foreach ($_MODIFIED_FILES as $file)
-				{
-					if ((strpos($file,'cache')===false) && (substr($file,0,strlen(get_file_base()))==get_file_base()) && (strpos($file,'/incoming/')===false) && (substr($file,-4)!='.tmp') && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
-						@exit(escape_html('File not change-synched: '.$file));
-				}
-
-				global $TITLE_CALLED,$SCREEN_TEMPLATE_CALLED,$EXITING;
-				if ((is_null($SCREEN_TEMPLATE_CALLED)) && ($EXITING==0) && (strpos(ocp_srv('PHP_SELF'),'index.php')!==false)) @exit(escape_html('No screen template called.'));
-				if ((!$TITLE_CALLED) && ((is_null($SCREEN_TEMPLATE_CALLED)) || ($SCREEN_TEMPLATE_CALLED!='')) && ($EXITING==0) && (strpos(ocp_srv('PHP_SELF'),'index.php')!==false)) @exit(escape_html('No title used on screen.'));
-			}
-
-			register_shutdown_function('dev_mode_aftertests');
-		}
-
-		if ((ocp_srv('SCRIPT_FILENAME')!='') && ($DEV_MODE) && (strpos(ocp_srv('SCRIPT_FILENAME'),'data_custom')===false))
-		{
-			if (@strlen(file_get_contents(ocp_srv('SCRIPT_FILENAME')))>4500)
-			{
-				fatal_exit('Entry scripts (front controllers) should not be shoved full of code.');
-			}
-		}
+		semi_dev_mode_startup();
 	}
 
 	// FirePHP console support, only for administrators
@@ -454,17 +383,18 @@ function init__global2()
 	}
 
 	// Detect and deal with spammers that triggered the spam blackhole
-	if (get_option('spam_blackhole_detection')=='1')
+	if ((count($_POST)>0) && (get_option('spam_blackhole_detection')=='1'))
 	{
-		if (post_param(md5(get_site_name().': antispam'),'')!='')
+		$blackhole=post_param(md5(get_site_name().': antispam'),'');
+		if ($blackhole!='')
 		{
-			log_hack_attack_and_exit('LAME_SPAM_HACK','<blackhole>'.post_param(md5(get_site_name().': antispam'),'').'</blackhole>');
+			log_hack_attack_and_exit('LAME_SPAM_HACK','<blackhole>'.$blackhole.'</blackhole>');
 		}
 	}
 
-	// Startup hooks
 	if (!running_script('upgrader'))
 	{
+		// Startup hooks
 		$startup_hooks=find_all_hooks('systems','startup');
 		foreach (array_keys($startup_hooks) as $hook)
 		{
@@ -473,13 +403,12 @@ function init__global2()
 			if ($ob===NULL) continue;
 			$ob->run($MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,0);
 		}
+
+		// Auto-upgrade
 		if (($CURRENT_SHARE_USER!==NULL) && (float_to_raw_string(ocp_version_number())!=get_value('version')))
 		{
 			require_code('upgrade');
-			clear_caches_2();
-			version_specific();
-			upgrade_modules();
-			ocf_upgrade();
+			automate_upgrade__safe();
 		}
 	}
 }
@@ -733,9 +662,7 @@ function catch_fatal_errors()
 		if (substr($error['message'],0,26)=='Maximum execution time of ')
 		{
 			if (function_exists('i_force_refresh'))
-			{
 				i_force_refresh();
-			}
 		}
 		//$tmp=$GLOBALS;unset($tmp['GLOBALS']);@var_dump($tmp);@exit();
 		//@var_dump(get_defined_functions()); exit(); // Useful for debugging memory problems, finding unneeded stuff that is loaded
@@ -1423,7 +1350,6 @@ function either_param_integer($name,$default=false)
 {
 	$ret=__param(array_merge($_POST,$_GET),$name,($default===false)?$default:(($default===NULL)?'':strval($default)),true,NULL); // $_REQUEST contains cookies too, so can't use
 	if (($default===NULL) && ($ret==='')) return NULL;
-	$ret=trim($ret);
 	if (!is_numeric($ret))
 	{
 		require_code('failure');
@@ -1451,12 +1377,8 @@ function post_param_integer($name,$default=false)
 	if (($default===NULL) && ($ret==='')) return NULL;
 	if (!is_numeric($ret))
 	{
-		$ret=trim($ret);
-		if (!is_numeric($ret))
-		{
-			require_code('failure');
-			$ret=_param_invalid($name,$ret,true);
-		}
+		require_code('failure');
+		$ret=_param_invalid($name,$ret,true);
 	}
 	if ($ret=='0') return 0;
 	if ($ret=='1') return 1;
@@ -1488,22 +1410,18 @@ function get_param_integer($name,$default=false,$not_string_ok=false)
 	if ((!isset($default)) && ($ret==='')) return NULL;
 	if (!is_numeric($ret))
 	{
-		$ret=trim($ret);
-		if (!is_numeric($ret))
+		if (substr($ret,-1)=='/') $ret=substr($ret,0,strlen($ret)-1);
+		if (!is_numeric($ret)) // Bizarre situation (bug in IIS?)
 		{
-			if (substr($ret,-1)=='/') $ret=substr($ret,0,strlen($ret)-1);
-			if (!is_numeric($ret)) // Bizarre situation (bug in IIS?)
+			$matches=array();
+			if (preg_match('#^(\d+)\#[\w]*$#',$ret,$matches)!=0)
 			{
-				$matches=array();
-				if (preg_match('#^(\d+)\#[\w]*$#',$ret,$matches)!=0)
-				{
-					$ret=$matches[1];
-				} else
-				{
-					if ($not_string_ok) return $default;
-					require_code('failure');
-					$ret=_param_invalid($name,$ret,false);
-				}
+				$ret=$matches[1];
+			} else
+			{
+				if ($not_string_ok) return $default;
+				require_code('failure');
+				$ret=_param_invalid($name,$ret,false);
 			}
 		}
 	}
@@ -1567,12 +1485,8 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 	{
 		if (!is_dir($dir))
 		{
-			if (@mkdir($dir,0777)===false)
-			{
-				warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
-			}
-			fix_permissions($dir,0777);
-			sync_file($dir);
+			require_code('files2');
+			make_missing_directory($dir);
 		}
 	}
 	$js_cache_path=$dir.'/'.filter_naughty_harsh($j);
@@ -1709,12 +1623,8 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 	{
 		if (!is_dir($dir))
 		{
-			if (@mkdir($dir,0777)===false)
-			{
-				warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
-			}
-			fix_permissions($dir,0777);
-			sync_file($dir);
+			require_code('files2');
+			make_missing_directory($dir);
 		}
 	}
 	$css_cache_path=$dir.'/'.filter_naughty_harsh($c);
@@ -2023,117 +1933,15 @@ function convert_data_encodings($known_utf8=false)
 	$VALID_ENCODING=true;
 
 	if ($CONVERTED_ENCODING) return; // Already done it
-	if ((array_key_exists('KNOWN_UTF8',$GLOBALS)) && ($GLOBALS['KNOWN_UTF8'])) $known_utf8=true;
 
-	$charset=get_charset();
-
-	$done_something=false;
-
-	// Conversion of parameters that might be in the wrong character encoding (e.g. Javascript uses UTF to make requests regardless of document encoding, so the stuff needs converting)
-	//  If we don't have any PHP extensions (mbstring etc) that can perform the detection/conversion, our code will take this into account and use utf8_decode at points where it knows that it's being communicated with by Javascript.
-	if (@strlen(ini_get('unicode.runtime_encoding'))>0)
+	if (preg_match('#^[\x00-\x7F]*$#',implode($_POST).implode($_GET))!=0) // Simple case, all is ASCII
 	{
-		@ini_set('default_charset',$charset);
-		@ini_set('unicode.runtime_encoding',$charset);
-		@ini_set('unicode.output_encoding',$charset);
-		@ini_set('unicode.semantics','1');
-
-		$done_something=true;
-	}
-	elseif (($known_utf8) && /*test method works...*/(will_be_unicode_neutered(serialize($_GET).serialize($_POST))) && (in_array(strtolower($charset),array('iso-8859-1','iso-8859-15','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp')))) // Preferred as it will sub entities where there's no equivalent character
-	{
-		require_code('character_sets');
-
-		do_environment_utf8_conversion($charset);
-
-		$done_something=true;
-	}
-	elseif ((function_exists('iconv_set_encoding')) && (get_value('disable_iconv')!=='1'))
-	{
-		$encoding=$known_utf8?'UTF-8':$charset;
-		if (@iconv_set_encoding('input_encoding',$encoding))
-		{
-			iconv_set_encoding('output_encoding',$charset);
-			iconv_set_encoding('internal_encoding',$charset);
-		} else
-		{
-			$VALID_ENCODING=false;
-		}
-
-		$done_something=true;
-	}
-	elseif ((function_exists('mb_convert_encoding')) && (get_value('disable_mbstring')!=='1'))
-	{
-		if (function_exists('mb_list_encodings'))
-		{
-			$VALID_ENCODING=in_array(strtolower($charset),array_map('strtolower',mb_list_encodings()));
-		} else $VALID_ENCODING=true;
-
-		if ($VALID_ENCODING)
-		{
-			$encoding=$known_utf8?'UTF-8':'';
-			if ((function_exists('mb_http_input')) && ($encoding==''))
-			{
-				if (count($_POST)!=0)
-				{
-					$encoding=mb_http_input('P');
-					if ((!is_string($encoding)) || ($encoding=='pass')) $encoding='';
-				}
-			}
-			if ((function_exists('mb_http_input')) && ($encoding==''))
-			{
-				$encoding=mb_http_input('G');
-				if ((!is_string($encoding)) || ($encoding=='pass')) $encoding='';
-				if ((function_exists('mb_detect_encoding')) && ($encoding=='') && (ocp_srv('REQUEST_URI')!=''))
-				{
-					$encoding=mb_detect_encoding(urldecode(ocp_srv('REQUEST_URI')),$charset.',UTF-8,ISO-8859-1');
-					if ((!is_string($encoding)) || ($encoding=='pass')) $encoding='';
-				}
-			}
-			if ($encoding!='')
-			{
-				foreach ($_GET as $key=>$val)
-				{
-					if (is_string($val))
-					{
-						$_GET[$key]=mb_convert_encoding($val,$charset,$encoding);
-					} elseif (is_array($val))
-					{
-						foreach ($val as $i=>$v)
-						{
-							$_GET[$key][$i]=mb_convert_encoding($v,$charset,$encoding);
-						}
-					}
-				}
-				foreach ($_POST as $key=>$val)
-				{
-					if (is_string($val))
-					{
-						$_POST[$key]=mb_convert_encoding($val,$charset,$encoding);
-					} elseif (is_array($val))
-					{
-						foreach ($val as $i=>$v)
-						{
-							$_POST[$key][$i]=mb_convert_encoding($v,$charset,$encoding);
-						}
-					}
-				}
-			}
-			if (function_exists('mb_http_output')) mb_http_output($charset);
-		}
-
-		$done_something=true;
-	}
-	elseif (($known_utf8) && (strtolower($charset)!='utf-8') && (strtolower($charset)!='utf8')) // This is super-easy, but it's imperfect as it assumes ISO-8859-1 -- hence our worst option
-	{
-		require_code('character_sets');
-
-		do_simple_environment_utf8_conversion();
-
-		$done_something=true;
+		$CONVERTED_ENCODING=true;
+		return;
 	}
 
-	if ($done_something) $CONVERTED_ENCODING=true;
+	require_code('character_sets');
+	_convert_data_encodings($known_utf8);
 }
 
 /**

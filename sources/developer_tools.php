@@ -30,6 +30,65 @@ function init__developer_tools()
 }
 
 /**
+ * Run some routines needed for semi-dev-mode, during startup.
+ */
+function semi_dev_mode_startup()
+{
+	global $SEMI_DEV_MODE,$DEV_MODE;
+	if ($SEMI_DEV_MODE)
+	{
+		/*if ((mt_rand(0,2)==1) && ($DEV_MODE) && (running_script('index')))	We know this works now, so let's stop messing up our development speed
+		{
+			require_code('caches3');
+			erase_cached_templates(true); // Stop anything trying to read a template cache item (E.g. CSS, JS) that might not exist!
+		}*/
+
+		if ((strpos(ocp_srv('HTTP_REFERER'),ocp_srv('HTTP_HOST'))!==false) && (strpos(ocp_srv('HTTP_REFERER'),'keep_devtest')!==false) && (!running_script('attachment')) && (!running_script('upgrader')) && (strpos(ocp_srv('HTTP_REFERER'),'login')===false) && (is_null(get_param('keep_devtest',NULL))))
+		{
+			$_GET['keep_devtest']='1';
+			fatal_exit('URL not constructed properly: development mode in use but keep_devtest was not specified. This indicates that links have been made without build_url (in PHP) or keep_stub (in Javascript). Whilst not fatal this time, failure to use these functions can cause problems when your site goes live. See the ocPortal codebook for more details.');
+		} else $_GET['keep_devtest']='1';
+	}
+
+	if (isset($_CREATED_FILES)) // Comes from ocProducts custom PHP version
+	{
+		/**
+		 * Run after-tests for debug mode, to make sure coding standards are met.
+		 */
+		function dev_mode_aftertests()
+		{
+			global $_CREATED_FILES,$_MODIFIED_FILES;
+
+			// Use the info from ocProduct's custom PHP version to make sure that all files that were created/modified got synched as they should have been.
+			foreach ($_CREATED_FILES as $file)
+			{
+				if ((substr($file,0,strlen(get_file_base()))==get_file_base()) && (substr($file,-4)!='.tmp') && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
+					@exit(escape_html('File not permission-synched: '.$file));
+			}
+			foreach ($_MODIFIED_FILES as $file)
+			{
+				if ((strpos($file,'cache')===false) && (substr($file,0,strlen(get_file_base()))==get_file_base()) && (strpos($file,'/incoming/')===false) && (substr($file,-4)!='.tmp') && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
+					@exit(escape_html('File not change-synched: '.$file));
+			}
+
+			global $TITLE_CALLED,$SCREEN_TEMPLATE_CALLED,$EXITING;
+			if ((is_null($SCREEN_TEMPLATE_CALLED)) && ($EXITING==0) && (strpos(ocp_srv('PHP_SELF'),'index.php')!==false)) @exit(escape_html('No screen template called.'));
+			if ((!$TITLE_CALLED) && ((is_null($SCREEN_TEMPLATE_CALLED)) || ($SCREEN_TEMPLATE_CALLED!='')) && ($EXITING==0) && (strpos(ocp_srv('PHP_SELF'),'index.php')!==false)) @exit(escape_html('No title used on screen.'));
+		}
+
+		register_shutdown_function('dev_mode_aftertests');
+	}
+
+	if ((ocp_srv('SCRIPT_FILENAME')!='') && ($DEV_MODE) && (strpos(ocp_srv('SCRIPT_FILENAME'),'data_custom')===false))
+	{
+		if (@strlen(file_get_contents(ocp_srv('SCRIPT_FILENAME')))>4500)
+		{
+			fatal_exit('Entry scripts (front controllers) should not be shoved full of code.');
+		}
+	}
+}
+
+/**
  * Remove ocPortal's strictness, to help integration of third-party code.
  *
  * @param  boolean		Whether to also set the content type to plain-HTML
