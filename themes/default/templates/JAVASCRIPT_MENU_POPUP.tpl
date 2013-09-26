@@ -137,10 +137,13 @@ function pop_up_menu(id,place,menu,event)
 		e.style.left=l+'px';
 	},0);
 	if ((find_pos_y(e.parentNode,true)+find_height(e)+10>full_height) && (t-find_height(e)>0)) t-=find_height(e)+find_height(e.parentNode,true,true,true);
+	e.style.top=(t)+'px';
 	if (t+find_height(e)>full_height)
-		e.style.top=(t-find_height(e,true,true,true)+find_height(e.parentNode)+1)+'px';
-	else
-		e.style.top=(t)+'px';
+	{
+		var upwards_top=(t-find_height(e,true,true,true)+find_height(e.parentNode)+1);
+		if (upwards_top>0)
+			e.style.top=upwards_top+'px';
+	}
 	e.style.zIndex=200;
 
 
