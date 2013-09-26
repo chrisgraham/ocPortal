@@ -373,7 +373,7 @@ class occle_fs
 				'FILENAME'=>$entry[0],
 				'FILESIZE'=>is_null($entry[2])?'':clean_file_size($entry[2]),
 				'_FILESIZE'=>is_null($entry[2])?'':strval($entry[2]),
-				'MTIME'=>is_null($entry[3])?'':get_timezoned_date($entry[3]),
+				'MTIME'=>is_null($entry[3])?'':date('Y-m-d H:i',$entry[3]),
 				'_MTIME'=>is_null($entry[3])?'':strval($entry[3]),
 			);
 		}

@@ -21,10 +21,10 @@
 			{FILENAME*}
 
 			{+START,IF_NON_EMPTY,{FILESIZE}}
-				<span class="occle_ls_associated_details">({!_FILE_SIZE}: {FILESIZE*})</span>
+				<span class="occle_ls_associated_details">({!_SIZE}: {FILESIZE*})</span>
 			{+END}
 			{+START,IF_NON_EMPTY,{MTIME}}
-				<span class="occle_ls_associated_details">({!MODIFIED}: {MTIME*})</span>
+				<span class="occle_ls_associated_details">({!_MODIFIED}: {MTIME*})</span>
 			{+END}
 		</li>
 		{$SET,listing,1}
