@@ -47,6 +47,7 @@ function sms_wrap($message,$to_sms)
 
 	$is_super_admin=$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member());
 
+	require_code('xml');
 	$api_id=xmlentities(get_option('sms_api_id'));
 	$username=xmlentities(get_option('sms_username'));
 	$password=xmlentities(get_option('sms_password'));

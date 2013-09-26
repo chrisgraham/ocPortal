@@ -153,6 +153,8 @@ class Hook_addon_registry_polls
 	 */
 	function tpl_preview__poll_rss_summary()
 	{
+		require_code('xml');
+
 		$_summary=do_lorem_template('POLL_RSS_SUMMARY', array(
 			'ANSWERS'=>placeholder_array()
 		));

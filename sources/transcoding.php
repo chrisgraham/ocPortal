@@ -60,6 +60,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 			require_code('images');
 			$extension=is_audio($url,true)?'mp3':'mp4';
 
+			require_code('xml');
 			$transcoded_filename=uniqid('transcoded',true).'--'.rawurldecode(preg_replace('#\.\w+$#','',basename($url))).'.'.$extension;
 			$xml='<'.'?xml version="1.0" encoding="UTF-8"?'.'>
 				<api-request>

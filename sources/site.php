@@ -899,7 +899,7 @@ function do_site()
 
 	// We calculated the time before outputting so that latency and bandwidth do not adversely affect the result
 	global $PAGE_START_TIME,$PAGE_STRING;
-	$page_generation_time=microtime_diff($PAGE_START_TIME,microtime(false));
+	$page_generation_time=(microtime(true)-$PAGE_START_TIME)*1000.0;
 
 	// Output
 	if (!$GLOBALS['QUICK_REDIRECT'])

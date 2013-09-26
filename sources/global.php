@@ -399,7 +399,7 @@ function filter_naughty_harsh($in,$preg=false)
 
 // Useful for basic profiling
 global $PAGE_START_TIME;
-$PAGE_START_TIME=microtime(false);
+$PAGE_START_TIME=microtime(true);
 
 // Unregister globals (sanitisation)
 if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('register_globals')))=='1')

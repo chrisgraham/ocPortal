@@ -43,6 +43,8 @@ function find_all_xml_tables()
  */
 function export_to_xml($tables=NULL)
 {
+	require_code('xml');
+
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
@@ -296,6 +298,7 @@ function make_map_nice($map)
  */
 function import_from_xml($xml_data,$delete_missing_rows=false)
 {
+	require_code('xml');
 	$parsed=new ocp_simple_xml_reader($xml_data);
 	if (!is_null($parsed->error)) warn_exit($parsed->error);
 
@@ -655,6 +658,7 @@ function get_translated_text_xml($id,$name,$db)
  */
 function insert_lang_xml($xml_data)
 {
+	require_code('xml');
 	$parsed=new ocp_simple_xml_reader($xml_data);
 	if (!is_null($parsed->error)) warn_exit($parsed->error);
 
@@ -693,158 +697,4 @@ function insert_lang_xml($xml_data)
 	}
 
 	return $id;
-}
-
-/**
- * Simple XML reader.
- * @package		core
- */
-class ocp_simple_xml_reader
-{
-	// Used during parsing
-	var $tag_stack,$attribute_stack,$children_stack,$text_stack;
-
-	var $gleamed,$error;
-
-	/**
-	 * Constructs the XML reader: parses the given data. Check $gleamed and $error after constructing.
-	 *
-	 * @param  string			The XML data
-	 */
-	function ocp_simple_xml_reader($xml_data)
-	{
-		$this->gleamed=array();
-		$this->error=NULL;
-
-		$this->tag_stack=array();
-		$this->attribute_stack=array();
-		$this->children_stack=array();
-		$this->text_stack=array();
-
-		if (!function_exists('xml_parser_create'))
-		{
-			$this->error=do_lang_tempcode('XML_NEEDED');
-			return;
-		}
-
-		// Our internal charset
-		$parser_charset=get_charset();
-		if (!in_array(strtoupper($parser_charset),array('ISO-8859-1','US-ASCII','UTF-8')))
-			$parser_charset='UTF-8';
-
-		// Create and setup our parser
-		$xml_parser=function_exists('xml_parser_create_ns')?@xml_parser_create_ns($parser_charset):@xml_parser_create($parser_charset);
-		if ($xml_parser===false)
-		{
-			$this->error=do_lang_tempcode('XML_PARSING_NOT_SUPPORTED');
-			return; // PHP5 default build on windows comes with this function disabled, so we need to be able to escape on error
-		}
-		xml_set_object($xml_parser,$this);
-		@xml_parser_set_option($xml_parser,XML_OPTION_TARGET_ENCODING,$parser_charset);
-		xml_set_element_handler($xml_parser,'startElement','endElement');
-		xml_set_character_data_handler($xml_parser,'startText');
-
-		if (strpos($xml_data,'<'.'?xml')===false)
-			$xml_data='<'.'?xml version="1.0" encoding="'.xmlentities($parser_charset).'"?'.'>'.$xml_data;
-		$xml_data=unixify_line_format($xml_data,$parser_charset); // Fixes Windows characters
-
-		if (xml_parse($xml_parser,$xml_data,true)==0)
-		{
-			warn_exit(xml_error_string(xml_get_error_code($xml_parser)));
-		}
-
-		@xml_parser_free($xml_parser);
-	}
-
-	/**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The name of the element found
-	 * @param  array			Array of attributes of the element
-	 */
-	function startElement($parser,$name,$attributes)
-	{
-		array_push($this->tag_stack,strtolower($name));
-		if ($attributes!=array())
-		{
-			$attributes_lowered=array();
-			foreach ($attributes as $key=>$val)
-			{
-				$attributes_lowered[strtolower($key)]=$val;
-			}
-			$attributes=$attributes_lowered;
-		}
-		array_push($this->attribute_stack,$attributes);
-		array_push($this->children_stack,array());
-		array_push($this->text_stack,'');
-	}
-
-	/**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 */
-	function endElement($parser)
-	{
-		$this_tag=array_pop($this->tag_stack);
-		$this_attributes=array_pop($this->attribute_stack);
-		$this_children=array_pop($this->children_stack);
-		$this_text=array_pop($this->text_stack);
-
-		if (count($this->tag_stack)==0)
-		{
-			$this->gleamed=array($this_tag,$this_attributes,$this_text,$this_children);
-		} else
-		{
-			$next_top_tags_children=array_pop($this->children_stack);
-			$next_top_tags_children[]=array($this_tag,$this_attributes,$this_text,$this_children);
-			array_push($this->children_stack,$next_top_tags_children);
-		}
-	}
-
-	/**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The text
-	 */
-	function startText($parser,$data)
-	{
-		$next_top_tags_text=array_pop($this->text_stack);
-		$next_top_tags_text.=$data;
-		array_push($this->text_stack,$next_top_tags_text);
-
-		$next_top_tags_children=array_pop($this->children_stack);
-		$next_top_tags_children[]=$data;
-		array_push($this->children_stack,$next_top_tags_children);
-	}
-
-	/**
-	 * Pull a portion of an XML tree structure back into textual XML.
-	 *
-	 * @param  array			Level of XML tree
-	 * @return string			The combined XML
-	 */
-	function pull_together($children)
-	{
-		$data='';
-		foreach ($children as $_)
-		{
-			if (is_array($_))
-			{
-				list($tag,$attributes,,$children)=$_;
-				$drawn='';
-				foreach ($attributes as $key=>$val)
-				{
-					$drawn.=$key.'='.xmlentities($val);
-				}
-				$data.='<'.$tag.$drawn.'>'.$this->pull_together($children).'</'.$tag.'>';
-			} else
-			{
-				$data.=xmlentities($_);
-			}
-		}
-		return $data;
-	}
 }

@@ -976,7 +976,7 @@ class database_driver
 
 		if ($QUERY_LOG)
 		{
-			$before=microtime(false);
+			$before=microtime(true);
 		}
 		$sub=substr($query,0,7);
 		if ($sub=='SELECT ' || $sub=='select ' || $sub=='(SELECT' || $sub=='(select')
@@ -1040,9 +1040,9 @@ class database_driver
 		$ret=$this->static_ob->db_query($query,$connection,$max,$start,$fail_ok,$get_insert_id,false,$save_as_volatile);
 		if ($QUERY_LOG)
 		{
-			$after=microtime(false);
+			$after=microtime(true);
 			$text=(!is_null($max))?($query.' ('.(is_null($start)?'0':strval($start)).'-'.strval((is_null($start)?0:$start)+$max).')'):$query;
-			$out=array('time'=>microtime_diff($after,$before),'text'=>$text);
+			$out=array('time'=>($after-$before),'text'=>$text);
 			$QUERY_LIST[]=$out;
 		}
 

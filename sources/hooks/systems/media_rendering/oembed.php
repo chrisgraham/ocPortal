@@ -146,7 +146,7 @@ class Hook_media_rendering_oembed
 		{
 			case 'text/xml':
 			case 'text/xml+oembed':
-				require_code('xml_storage');
+				require_code('xml');
 				$parsed=new ocp_simple_xml_reader($result);
 				list($root_tag,$root_attributes,,$this_children)=$parsed->gleamed;
 				if ($root_tag=='oembed')

@@ -1261,7 +1261,7 @@ class ocp_tempcode
 			return true;
 		}
 
-		//$tempcode_profile_log_start=microtime();
+		//$tempcode_profile_log_start=microtime(true);
 		//tempcode_profile_log($this->seq_parts);
 
 		ob_start();
@@ -1316,7 +1316,7 @@ class ocp_tempcode
 
 			if ((($first_of_long) || ($MEMORY_OVER_SPEED)) && (ob_get_length()>0)) // We only quick exit on the first iteration, as we know we likely didn't spend much time getting to it- anything more and we finish so that we can cache for later use by evaluate/evaluate_echo
 			{
-				//$tempcode_profile_log_end=microtime();
+				//$tempcode_profile_log_end=microtime(true);
 				//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
 
 				@ob_end_clean();
@@ -1331,7 +1331,7 @@ class ocp_tempcode
 			$first_of_long=false;
 		}
 
-		//$tempcode_profile_log_end=microtime();
+		//$tempcode_profile_log_end=microtime(true);
 		//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
 
 		if (($MEMORY_OVER_SPEED) || ($NO_EVAL_CACHE))
@@ -1592,7 +1592,7 @@ class ocp_tempcode
 
 		//ob_start();
 
-		//$tempcode_profile_log_start=microtime();
+		//$tempcode_profile_log_start=microtime(true);
 		//tempcode_profile_log($this->seq_parts);
 
 		global $KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
@@ -1632,7 +1632,7 @@ class ocp_tempcode
 
 		//ob_end_flush();
 
-		//$tempcode_profile_log_end=microtime();
+		//$tempcode_profile_log_end=microtime(true);
 		//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
 
 		return '';
@@ -1698,7 +1698,7 @@ class ocp_tempcode
 		}
 		$cl=$current_lang;
 
-		//$tempcode_profile_log_start=microtime();
+		//$tempcode_profile_log_start=microtime(true);
 		//tempcode_profile_log($this->seq_parts);
 
 		global $KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
@@ -1757,7 +1757,7 @@ class ocp_tempcode
 		if ($XSS_DETECT)
 			@ini_set('ocproducts.xss_detect',$before);
 
-		//$tempcode_profile_log_end=microtime();
+		//$tempcode_profile_log_end=microtime(true);
 		//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
 
 		if ($NO_EVAL_CACHE || $MEMORY_OVER_SPEED)
@@ -1831,7 +1831,7 @@ f unction tempcode_profile_log_diff($from,$to,$bit)
 		$sz=serialize($bit);
 		$signature=md5($sz);
 
-		fwrite($PROFILING_LOG_FILE,'Time taken for '.$signature.': '.float_format(microtime_diff($from,$to)).' seconds'."\n");
+		fwrite($PROFILING_LOG_FILE,'Time taken for '.$signature.': '.float_format($to-$from).' seconds'."\n");
 	}
 }
 

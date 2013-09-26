@@ -371,6 +371,7 @@ class Hook_addon_registry_core
 			'uploads/auto_thumbs/.htaccess',
 			'exports/file_backups/.htaccess',
 			'uploads/index.html',
+			'sources/xml.php',
 			'sources_custom/.htaccess',
 			'sources_custom/blocks/.htaccess',
 			'sources_custom/blocks/index.html',

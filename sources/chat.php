@@ -76,6 +76,8 @@ function messages_script()
 
 	get_screen_title('',false); // Force session time to be updated
 
+	require_code('xml');
+
 	// Closed site
 	$site_closed=get_option('site_closed');
 	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))

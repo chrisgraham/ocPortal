@@ -53,6 +53,7 @@ class rss
 	function rss($url,$is_filesystem_path=false)
 	{
 		require_lang('rss');
+		require_code('xml');
 
 		$url=str_replace('{$FIND_SCRIPT,backend}',find_script('backend'),$url);
 

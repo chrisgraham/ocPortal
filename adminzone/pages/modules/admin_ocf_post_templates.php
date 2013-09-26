@@ -172,6 +172,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	 */
 	function add_actualisation()
 	{
+		require_code('form_templates');
 		return strval(ocf_make_post_template(post_param('title'),post_param('text'),read_multi_code('forum_multi_code'),post_param_integer('use_default_forums',0)));
 	}
 
@@ -182,6 +183,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
+		require_code('form_templates');
 		ocf_edit_post_template(intval($id),post_param('title'),post_param('text'),read_multi_code('forum_multi_code'),post_param_integer('use_default_forums',0));
 	}
 

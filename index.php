@@ -25,46 +25,9 @@ if (getcwd()!=$FILE_BASE) @chdir($FILE_BASE);
 $profile=false;//array_key_exists('tick_profile',$_GET);
 if ($profile)
 {
-	/**
-	 * Get the time difference in microseconds between two PHP microtimes.
-	 * Original source: php.net
-	 *
-	 * @param  string			First microtime
-	 * @param  string			Second microtime
-	 * @return integer		The time difference
-	 */
-	function amicrotime_diff($a,$b)
-	{
-		list($a_micro,$a_int)=explode(' ',$a);
-		list($b_micro,$b_int)=explode(' ',$b);
-		if ($a_int>$b_int)
-		{
-			return ($a_int-$b_int)+($a_micro-$b_micro);
-		}
-		elseif ($a_int==$b_int)
-		{
-			if ($a_micro>$b_micro)
-			{
-				return ($a_int-$b_int)+($a_micro-$b_micro);
-			}
-			elseif ($a_micro<$b_micro)
-			{
-				return ($b_int-$a_int)+($b_micro-$a_micro);
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		else
-		{ // $a_int<$b_int
-			return ($b_int-$a_int)+($b_micro-$a_micro);
-		}
-	}
-
 	global $FUNC_WATCH,$MICROTIME;
 
-	$MICROTIME=microtime(false);
+	$MICROTIME=microtime(true);
 
 	/**
 	 * Profile tick function.
@@ -73,13 +36,13 @@ if ($profile)
 	{
 		global $FUNC_WATCH,$MICROTIME;
 		$LAST_MICROTIME=$MICROTIME;
-		$MICROTIME=microtime(false);
+		$MICROTIME=microtime(true);
 
 		$trace=debug_backtrace();
 		$func=$trace[1]['function'];
 		if (isset($trace[1]['class'])) $func=$trace[1]['class'].$trace[1]['type'].$func;
 		if (!isset($FUNC_WATCH[$func])) $FUNC_WATCH[$func]=0;
-		$FUNC_WATCH[$func]+=amicrotime_diff($LAST_MICROTIME,$MICROTIME);
+		$FUNC_WATCH[$func]+=$LAST_MICROTIME-$MICROTIME;
 	}
 /*	register_tick_function('tick_func');
 	declare(ticks=10);*/

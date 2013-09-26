@@ -78,6 +78,8 @@ function init__database__xml()
 	global $TABLE_BASES;
 	$TABLE_BASES=array();
 
+	require_code('xml');
+
 	// Support for chaining a DB- to make reads faster
 	global $SITE_INFO;
 	if ((array_key_exists('db_chain_type',$SITE_INFO)) && (!running_script('xml_db_import')) && (get_param_integer('keep_no_chain',0)!=1))

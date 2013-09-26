@@ -23,6 +23,8 @@
  */
 function build_news_sitemap()
 {
+	require_code('xml');
+
 	$path=get_file_base().'/ocp_news_sitemap.xml';
 	if (!file_exists($path))
 	{

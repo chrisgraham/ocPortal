@@ -804,6 +804,7 @@ class Module_cms_calendar extends standard_crud_module
 			if ((has_privilege(get_member(),'add_public_events')) && (array_key_exists('sign_up_reminder_groups',$_POST)))
 			{
 				$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
+				require_code('form_templates');
 				$multi_code=read_multi_code('sign_up_reminder_groups'); // Usergroups signed up
 				require_code('ocfiltering');
 				if ((substr($multi_code,0,1)=='-') || (substr($multi_code,0,1)=='*'))

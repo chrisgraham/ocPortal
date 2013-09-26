@@ -80,6 +80,7 @@ function rss_backend_script()
 	$type=get_param('type','RSS2');
 	$mode=get_param('mode','opml');
 	require_lang('rss');
+	require_code('xml');
 
 
 	if ($type=='xslt-rss')

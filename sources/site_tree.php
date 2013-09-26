@@ -29,6 +29,7 @@ function site_tree_script()
 
 	require_code('zones2');
 	require_code('zones3');
+	require_code('xml');
 
 	// Usergroups we have
 	$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();

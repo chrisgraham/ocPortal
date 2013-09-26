@@ -223,6 +223,8 @@ class virtual_bash
 	 */
 	function output_xml()
 	{
+		require_code('xml');
+
 		if (count($this->parsed_input)<1) return false;
 
 		header('Content-Type: text/xml');
@@ -235,6 +237,7 @@ class virtual_bash
 
 		// Make the HTML not use non-XML entities
 		$html_bak=$this->output[STREAM_STDHTML];
+		require_code('xml');
 		$this->output[STREAM_STDHTML]=convert_bad_entities($this->output[STREAM_STDHTML],get_charset());
 
 		@ob_end_clean(); // Cleanup any output that may have somehow leaked to this point

@@ -30,6 +30,8 @@ Implementation notes...
  */
 function init__sitemap()
 {
+	require_code('xml');
+
 	global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH;
 	$SITEMAPS_OUT_FILE=NULL;
 	$SITEMAPS_OUT_PATH=NULL;

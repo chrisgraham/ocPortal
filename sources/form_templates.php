@@ -51,6 +51,21 @@ function init__form_templates()
 }
 
 /**
+ * Read a multi code from a named parameter stub.
+ *
+ * @param  ID_TEXT	The parameter stub (stub of a series of POST parameters, made by ocf_get_forum_multi_code_field's field or similar).
+ * @return SHORT_TEXT The multi code.
+ */
+function read_multi_code($param)
+{
+	$type=post_param($param);
+	if ($type=='*') return $type;
+	if (!array_key_exists($param.'_list',$_POST)) return '';
+	$in=implode(',',$_POST[$param.'_list']);
+	return $type.$in;
+}
+
+/**
  * Ensure Suhosin is not going to break a request due to number of request form fields. Call this each time a field is added to the output.
  *
  * @param  integer		How much to increment the counter by

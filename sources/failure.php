@@ -842,6 +842,8 @@ function _fatal_exit($text,$return=false)
 
 	if (running_script('occle'))
 	{
+		require_code('xml');
+
 		header('Content-Type: text/xml');
 		header('HTTP/1.0 200 Ok');
 

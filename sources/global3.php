@@ -1571,44 +1571,6 @@ function compare_ip_address_ip6($wild,$full_parts)
 }
 
 /**
- * Get the XHTML for the community billboard message.
- *
- * @return tempcode		The community billboard message
- */
-function get_community_billboard_message()
-{
-	if (!addon_installed('community_billboard')) return new ocp_tempcode();
-
-	$system=(mt_rand(0,1)==0);
-	$_community_billboard=NULL;
-
-	if ((!$system) || (get_option('system_community_billboard')==''))
-	{
-		$_community_billboard=persistent_cache_get('COMMUNITY_BILLBOARD');
-		if ($_community_billboard===NULL)
-		{
-			$community_billboard=$GLOBALS['SITE_DB']->query_value_if_there('SELECT the_message FROM '.get_table_prefix().'community_billboard WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
-			if ($community_billboard===NULL)
-			{
-				persistent_cache_set('COMMUNITY_BILLBOARD',false);
-			} else
-			{
-				$_community_billboard=get_translated_tempcode($community_billboard);
-				persistent_cache_set('COMMUNITY_BILLBOARD',$_community_billboard);
-			}
-		}
-		if ($_community_billboard===false) $_community_billboard=NULL;
-	}
-	if ($_community_billboard===NULL)
-	{
-		return make_string_tempcode(get_option('system_community_billboard'));
-	} else
-	{
-		return do_lang_tempcode('_COMMUNITY_MESSAGE',$_community_billboard);
-	}
-}
-
-/**
  * Log an action
  *
  * @param  ID_TEXT		The type of activity just carried out (a lang string)
@@ -2091,21 +2053,6 @@ function get_bot_type()
 }
 
 /**
- * Read a multi code from a named parameter stub.
- *
- * @param  ID_TEXT	The parameter stub (stub of a series of POST parameters, made by ocf_get_forum_multi_code_field's field or similar).
- * @return SHORT_TEXT The multi code.
- */
-function read_multi_code($param)
-{
-	$type=post_param($param);
-	if ($type=='*') return $type;
-	if (!array_key_exists($param.'_list',$_POST)) return '';
-	$in=implode(',',$_POST[$param.'_list']);
-	return $type.$in;
-}
-
-/**
  * Turn an array into a humanely readable string.
  *
  * @param  array			Array to convert
@@ -2138,20 +2085,6 @@ function wordfilter_text($text)
 
 	require_code('word_filter');
 	return check_word_filter($text,NULL,true);
-}
-
-/**
- * XML escape the input string.
- *
- * @param  string			Input string
- * @param  integer		Quote style
- * @return string			Escaped version of input string
- */
-function xmlentities($string,$quote_style=ENT_COMPAT)
-{
-	$ret=str_replace('>','&gt;',str_replace('<','&lt;',str_replace('"','&quot;',str_replace('&','&amp;',$string))));
-	if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($ret);
-	return $ret;
 }
 
 /**
@@ -2646,38 +2579,6 @@ function brand_name()
 }
 
 /**
- * Convert HTML entities to plain characters for XML validity.
- *
- * @param  string			HTML to convert entities from
- * @param  string			The character set we are using for $data (both in and out)
- * @return string			Valid XHTML
- */
-function convert_bad_entities($data,$charset='ISO-8859-1')
-{
-	if (defined('ENT_HTML401')) // PHP5.4+, we must explicitly give the charset, but when we do it helps us
-	{
-		if ((strtoupper($charset)!='ISO-8859-1') && (strtoupper($charset)!='UTF-8')) $charset='ISO-8859-1';
-		$table=array_flip(get_html_translation_table(HTML_ENTITIES,ENT_COMPAT|ENT_HTML401,$charset));
-	} else
-	{
-		$table=array_flip(get_html_translation_table(HTML_ENTITIES));
-
-		if (strtoupper($charset)=='UTF-8')
-		{
-			foreach ($table as $x=>$y)
-				$table[$x]=utf8_encode($y);
-		}
-	}
-
-	unset($table['&amp;']);
-	unset($table['&gt;']);
-	unset($table['&lt;']);
-	unset($table['&quot;']);
-
-	return strtr($data,$table);
-}
-
-/**
  * Find if we're on an OCF satellite site.
  *
  * @return boolean		If we are
@@ -2763,45 +2664,4 @@ function get_mass_import_mode()
 {
 	global $MASS_IMPORT_HAPPENING;
 	return $MASS_IMPORT_HAPPENING;
-}
-
-/**
- * Get the time difference in microseconds between two PHP microtimes.
- * Original source: php.net
- *
- * @param  string			First microtime
- * @param  string			Second microtime
- * @return float			The time difference
- */
-function microtime_diff($a,$b)
-{
-	$x=explode(' ',$a);
-	$a_micro=floatval($x[0]);
-	$a_int=(float)intval($x[1]);
-	$y=explode(' ',$b);
-	$b_micro=floatval($y[0]);
-	$b_int=(float)intval($y[1]);
-	if ($a_int>$b_int)
-	{
-		return ($a_int-$b_int)+($a_micro-$b_micro);
-	}
-	elseif ($a_int==$b_int)
-	{
-		if ($a_micro>$b_micro)
-		{
-			return ($a_int-$b_int)+($a_micro-$b_micro);
-		}
-		elseif ($a_micro<$b_micro)
-		{
-			return ($b_int-$a_int)+($b_micro-$a_micro);
-		}
-		else
-		{
-			return 0.0;
-		}
-	}
-	else
-	{ // $a_int<$b_int
-		return ($b_int-$a_int)+($b_micro-$a_micro);
-	}
 }

@@ -300,6 +300,8 @@ function comcode_convert_script()
 	}
 	if (either_param_integer('keep_skip_rubbish',0)==0)
 	{
+		require_code('xml');
+
 		@ini_set('ocproducts.xss_detect','0');
 
 		$box_title=get_param('box_title','');
@@ -453,6 +455,7 @@ function ajax_tree_script()
 
 	prepare_for_known_ajax_response();
 
+	require_code('xml');
 	header('Content-Type: text/xml');
 	$hook=filter_naughty_harsh(get_param('hook'));
 	require_code('hooks/systems/ajax_tree/'.$hook);

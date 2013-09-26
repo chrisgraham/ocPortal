@@ -29,6 +29,8 @@
  */
 function xml_rpc($url,$method,$params,$accept_failure=false)
 {
+	require_code('xml');
+
 $rpc="
 <"."?xml version=\"1.0\"?".">
 <methodCall>

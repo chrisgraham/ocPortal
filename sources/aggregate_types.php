@@ -244,7 +244,7 @@ function parse_aggregate_xml($display_errors=false)
 	static $_aggregate_types=array();
 	if ($_aggregate_types!=array()) return $_aggregate_types;
 
-	require_code('xml_storage');
+	require_code('xml');
 
 	$xml=file_get_contents(get_custom_file_base().'/data_custom/aggregate_types.xml');
 	if (trim($xml)=='') return array();

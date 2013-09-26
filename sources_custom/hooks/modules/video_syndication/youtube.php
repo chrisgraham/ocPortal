@@ -28,6 +28,7 @@ class video_syndication_youtube
 
 	function __construct()
 	{
+		require_code('xml');
 	}
 
 	function get_service_title()

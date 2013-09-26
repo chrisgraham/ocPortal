@@ -85,6 +85,7 @@ class Hook_addon_registry_community_billboard
 			'sources/community_billboard.php',
 			'sources/hooks/blocks/main_staff_checklist/community_billboard.php',
 			'sources/hooks/modules/pointstore/community_billboard.php',
+			'sources/hooks/systems/symbols/COMMUNITY_BILLBOARD.php',
 		);
 	}
 

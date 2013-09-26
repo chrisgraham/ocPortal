@@ -270,6 +270,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 		$open_state=post_param_integer('open_state',0);
 		if ($open_state==-1) $open_state=NULL;
 
+		require_code('form_templates');
 		return strval(ocf_make_multi_moderation(post_param('name'),post_param('post_text'),post_param_integer('move_to',NULL),$pin_state,$sink_state,$open_state,read_multi_code('forum_multi_code'),post_param('title_suffix')));
 	}
 
@@ -292,6 +293,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 		$open_state=post_param_integer('open_state',0);
 		if ($open_state==-1) $open_state=NULL;
 
+		require_code('form_templates');
 		ocf_edit_multi_moderation(intval($id),post_param('name'),post_param('post_text'),post_param_integer('move_to',NULL),$pin_state,$sink_state,$open_state,read_multi_code('forum_multi_code'),post_param('title_suffix'));
 	}
 

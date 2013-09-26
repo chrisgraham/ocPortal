@@ -144,7 +144,6 @@ This product includes:
   - JAVASCRIPT_XSL_MOPUP.tpl (public domain)
   - dom-drag.js (www.youngpup.net, Creative Commons Attribution licence)
   - m-zip (Francesco M. Munafo', liberal custom license)
-  - microtime_diff implementation (from php.net comment by Peter Kehl, Creative Commons Attribution License)
   - utf8tohtml implementation (from php.net comment by silverbeat, Creative Commons Attribution License)
   - mergesort implementation (from php.net comment by sreid, Creative Commons Attribution License)
   - GUID implementation (from php.net comment by Andrew Moore, Creative Commons Attribution License)
