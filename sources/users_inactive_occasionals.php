@@ -218,7 +218,7 @@ function set_session_id($id,$guest_session=false)  // NB: Guests sessions can pe
  */
 function force_httpauth()
 {
-	if ((!isset($_SERVER['PHP_AUTH_USER'])) || ($_SERVER['PHP_AUTH_USER']==''))
+	if (empty($_SERVER['PHP_AUTH_USER']))
 	{
 		header('WWW-Authenticate: Basic realm="'.urlencode(get_site_name()).'"');
 		set_http_status_code('401');

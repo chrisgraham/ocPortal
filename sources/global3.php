@@ -1672,12 +1672,9 @@ function get_num_users_site()
 		$count=0;
 		require_code('users2');
 		get_online_members(false,NULL,$count);
-		if (strval($count)!=$NUM_USERS_SITE_CACHE)
-		{
-			$NUM_USERS_SITE_CACHE=strval($count);
-			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
-				set_value('users_online',$NUM_USERS_SITE_CACHE);
-		}
+		$NUM_USERS_SITE_CACHE=strval($count);
+		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+			set_value('users_online',$NUM_USERS_SITE_CACHE);
 	}
 	if ((intval($NUM_USERS_SITE_CACHE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_privilege(get_member(),'access_overrun_site')) && (!running_script('cron_bridge')))
 	{
@@ -1902,7 +1899,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 		{
 			require_code('files');
 			$details=better_parse_ini_file($ini_path);
-			if ((isset($details['mobile_pages'])) && ($details['mobile_pages']!='') && (preg_match('#(^|,)\s*'.preg_quote(get_page_name(),'#').'\s*(,|$)#',$details['mobile_pages'])==0) && (preg_match('#(^|,)\s*'.preg_quote(get_zone_name().':'.get_page_name(),'#').'\s*(,|$)#',$details['mobile_pages'])==0))
+			if ((!empty($details['mobile_pages'])) && (preg_match('#(^|,)\s*'.preg_quote(get_page_name(),'#').'\s*(,|$)#',$details['mobile_pages'])==0) && (preg_match('#(^|,)\s*'.preg_quote(get_zone_name().':'.get_page_name(),'#').'\s*(,|$)#',$details['mobile_pages'])==0))
 			{
 				$IS_MOBILE_CACHE=false;
 				return false;

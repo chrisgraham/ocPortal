@@ -187,7 +187,7 @@ function init__global2()
 		if ((running_script('index')) && (count($_POST)==0))
 		{
 			$bot_type=get_bot_type();
-			if (($bot_type!==NULL) && (isset($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='') && ($SITE_INFO['fast_spider_cache']!='0'))
+			if (($bot_type!==NULL) && (!empty($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='0'))
 			{
 				fast_spider_cache(true);
 			}
@@ -553,7 +553,7 @@ function get_charset()
 	if (isset($CHARSET_CACHE)) return $CHARSET_CACHE;
 
 	global $SITE_INFO;
-	if ((isset($SITE_INFO['charset'])) && ($SITE_INFO['charset']!='')) // An optimisation, if you want to put it in here
+	if (!empty($SITE_INFO['charset'])) // An optimisation, if you want to put it in here
 	{
 		$CHARSET_CACHE=$SITE_INFO['charset'];
 		if ($XSS_DETECT) ocp_mark_as_escaped($CHARSET_CACHE);
@@ -888,7 +888,7 @@ function get_domain()
 	$ret=array_key_exists('domain',$SITE_INFO)?$SITE_INFO['domain']:'';
 	if ($ret=='')
 	{
-		if ((!array_key_exists('base_url',$SITE_INFO)) || ($SITE_INFO['base_url']=='')) return array_key_exists('HTTP_HOST',$_SERVER)?preg_replace('#^www\.#','',$_SERVER['HTTP_HOST']):'localhost'; // Can't be ocp_srv due to bootstrap order
+		if (empty($SITE_INFO['base_url'])) return array_key_exists('HTTP_HOST',$_SERVER)?preg_replace('#^www\.#','',$_SERVER['HTTP_HOST']):'localhost'; // Can't be ocp_srv due to bootstrap order
 		$matches=array();
 		preg_match('#://([^/\#]+)#',$SITE_INFO['base_url'],$matches);
 		$ret=preg_replace('#^www\.#','',$matches[1]);
@@ -918,7 +918,7 @@ function get_forum_base_url($forum_base=false)
 {
 	global $SITE_INFO;
 
-	if ((!array_key_exists('board_prefix',$SITE_INFO)) || ($SITE_INFO['board_prefix']=='')) $SITE_INFO['board_prefix']=get_base_url();
+	if (empty($SITE_INFO['board_prefix'])) $SITE_INFO['board_prefix']=get_base_url();
 	$forum_type=get_forum_type();
 	if ($forum_type=='none') return '';
 	$needs_forum_strip=(substr($SITE_INFO['board_prefix'],-6)=='/forum') && (substr(get_base_url(),-6)!='/forum');
@@ -1081,7 +1081,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 	if (($BASE_URL_HTTPS_CACHE!==NULL) && ($https) && ((!$VIRTUALISED_ZONES_CACHE) || ($zone_for===NULL))) return $BASE_URL_HTTPS_CACHE.(($zone_for=='')?'':('/'.$zone_for));
 
 	global $SITE_INFO;
-	if ((!isset($SITE_INFO)) || (!array_key_exists('base_url',$SITE_INFO)) || ($SITE_INFO['base_url']=='')) // Try and autodetect the base URL if it's not configured
+	if ((!isset($SITE_INFO)) || (empty($SITE_INFO['base_url']))) // Try and autodetect the base URL if it's not configured
 	{
 		$domain=ocp_srv('HTTP_HOST');
 		$colon_pos=strpos($domain,':');

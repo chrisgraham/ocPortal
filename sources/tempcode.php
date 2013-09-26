@@ -523,7 +523,7 @@ function do_lang_tempcode($lang_string,$token1=NULL,$token2=NULL,$token3=NULL)
  */
 function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$fallback=NULL,$suffix='.tpl',$type='templates',$theme=NULL)
 {
-	if ((!isset($lang)) || ($lang==''))
+	if (empty($lang))
 	{
 		global $USER_LANG_CACHED;
 		$lang=isset($USER_LANG_CACHED)?$USER_LANG_CACHED:(function_exists('user_lang')?user_lang():'EN');

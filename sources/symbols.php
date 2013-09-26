@@ -1008,7 +1008,7 @@ function ecv_META_DATA($lang,$escaped,$param)
 					global $SEO_DESCRIPTION;
 					if (($SEO_DESCRIPTION===NULL) || ($SEO_DESCRIPTION==''))
 					{
-						if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description']!=''))
+						if (!empty($GLOBALS['META_DATA']['description']))
 						{
 							$value=strip_comcode($GLOBALS['META_DATA']['description']);
 						} else
@@ -3479,7 +3479,7 @@ function ecv_DATE($lang,$escaped,$param)
 	$use_contextual_dates=(isset($param[0]) && ($param[0]=='1'));
 	$verbose=(isset($param[1]) && ($param[1]=='1'));
 	$server_time=(isset($param[2]) && ($param[2]=='1'));
-	$time=((isset($param[3])) && ($param[3]!=''))?intval($param[3]):time();
+	$time=(!empty($param[3]))?intval($param[3]):time();
 	$member=isset($param[4])?intval($param[2]):NULL;
 	$value=get_timezoned_date($time,false,$verbose,$server_time,!$use_contextual_dates,$member);
 
@@ -3497,7 +3497,7 @@ function ecv_DATE($lang,$escaped,$param)
  */
 function ecv_TIME($lang,$escaped,$param)
 {
-	$time=((isset($param[0])) && ($param[0]!=''))?intval($param[0]):time();
+	$time=(!empty($param[0]))?intval($param[0]):time();
 	$use_contextual_dates=(isset($param[1]) && ($param[1]=='1'));
 	$server_time=(isset($param[2]) && ($param[2]=='1'));
 	$member=isset($param[3])?intval($param[3]):NULL;
@@ -3519,7 +3519,7 @@ function ecv_FROM_TIMESTAMP($lang,$escaped,$param)
 {
 	if (isset($param[0]))
 	{
-		$timestamp=((isset($param[1])) && ($param[1]!=''))?intval($param[1]):time();
+		$timestamp=(!empty($param[1]))?intval($param[1]):time();
 		if ((!array_key_exists(2,$param)) || ($param[2]=='1')) $timestamp=utctime_to_usertime($timestamp);
 		$value=locale_filter(my_strftime($param[0],$timestamp));
 		if ($value==$param[0]) // If no conversion happened then the syntax must have been for 'date' not 'strftime'
