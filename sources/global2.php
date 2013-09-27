@@ -89,7 +89,7 @@ function init__global2()
 	$VALID_ENCODING=false;
 	$CONVERTED_ENCODING=false;
 	$KNOWN_AJAX=false;
-	/** Whether we are loading up in micro-bootup mode (reduced amount of loading for quicker simple responses).
+	/** Whether we are loading up in micro-bootup mode (reduced amount of loading for quicker simple responses - mainly no member logins, and assumed non-page output and non-generative code).
 	 * @global boolean $MICRO_BOOTUP
 	 */
 	if (!isset($MICRO_BOOTUP)) $MICRO_BOOTUP=false;
@@ -269,13 +269,10 @@ function init__global2()
 
 	// Register Internationalisation settings
 	@header('Content-type: text/html; charset='.get_charset());
-	if (!$MICRO_AJAX_BOOTUP)
-	{
-		$locales=explode(',',do_lang('locale'));
-		setlocale(LC_ALL,$locales[0]);
-		@setlocale(LC_ALL,$locales);
-		unset($locales);
-	}
+	$locales=explode(',',do_lang('locale'));
+	setlocale(LC_ALL,$locales[0]);
+	@setlocale(LC_ALL,$locales);
+	unset($locales);
 
 	// Check RBL's
 	$spam_check_level=get_option('spam_check_level');
@@ -1651,6 +1648,8 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 
 	if (((!$is_cached) || (($support_smart_decaching) && (@(filemtime($css_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time())))))
 	{
+		if (filesize($fullpath)==0) return '';
+
 		require_code('css_and_js');
 		css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify);
 	}
@@ -1781,14 +1780,14 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 	if ($zone_name!='')
 	{
 		$welcome_value=get_value_newer_than($grouping_codename_welcome.$type,time()-60*60*24);
-		if (is_null($welcome_value)) return NULL; // Don't do this if we haven't got for welcome zone yet (we try and make all same as welcome zone if possible - so we need it to compare against)
+		if ($welcome_value===NULL) return NULL; // Don't do this if we haven't got for welcome zone yet (we try and make all same as welcome zone if possible - so we need it to compare against)
 	} else
 	{
 		$welcome_value=$value;
 	}
 
 	// If not set yet, work out what merge situation would be and save it
-	if ((is_null($value)) || (strpos($value,'::')===false))
+	if (($value===NULL) || (strpos($value,'::')===false))
 	{
 		$value=mixed();
 
@@ -1809,7 +1808,7 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 	if (($type=='.js') && ($value!==NULL)) $value=preg_replace('#(^|,)(?!javascript)#','${1}javascript_',$value); // Unshorten
 
 	// If set, ensure merged resources file exists, and apply it
-	if (!is_null($value))
+	if ($value!==NULL)
 	{
 		if ($welcome_value==$value) // Optimisation, if same as welcome zone, use that -- so user does not need to download multiple identical merged resources
 		{
@@ -1934,7 +1933,7 @@ function convert_data_encodings($known_utf8=false)
 
 	if ($CONVERTED_ENCODING) return; // Already done it
 
-	if (preg_match('#^[\x00-\x7F]*$#',implode($_POST).implode($_GET))!=0) // Simple case, all is ASCII
+	if (preg_match('#^[\x00-\x7F]*$#',serialize($_POST).serialize($_GET).serialize($_FILES))!=0) // Simple case, all is ASCII
 	{
 		$CONVERTED_ENCODING=true;
 		return;
@@ -1943,21 +1942,3 @@ function convert_data_encodings($known_utf8=false)
 	require_code('character_sets');
 	_convert_data_encodings($known_utf8);
 }
-
-/**
- * Guard for entity_utf8_decode. Checks that the data can be stripped so there is no unicode left. Either the htmlentities function must convert mechanically to entity-characters or all higher ascii character codes (which are actually unicode control codes in a unicode interpretation) that are used happen to be linked to named entities.
- *
- * @param  string					Data to check.
- * @return boolean				Whether we are good to execute entity_utf8_decode.
- */
-function will_be_unicode_neutered($data)
-{
-	$data=@htmlentities($data,ENT_COMPAT,'UTF-8');
-	if ($data=='') return false; // Some servers fail at the first step
-	for ($i=0;$i<strlen($data);$i++)
-	{
-		if (ord($data[$i])>0x7F) return false;
-	}
-	return true;
-}
-

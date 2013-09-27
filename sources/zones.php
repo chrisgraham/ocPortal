@@ -265,9 +265,10 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		}
 	}
 	$zones=find_all_zones();
+	$first_zones_flip=array_flip($first_zones);
 	foreach ($zones as $zone)
 	{
-		if (!in_array($zone,$first_zones))
+		if (!array_key_exists($zone,$first_zones_flip))
 		{
 			if ((is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype)))
 				|| (is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'_custom/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype))))
@@ -309,11 +310,11 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 function get_comcode_zone($page_name,$error=true)
 {
 	$test=get_module_zone($page_name,'comcode',user_lang(),'txt',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	$test=get_module_zone($page_name,'comcode',get_site_default_lang(),'txt',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	$test=get_module_zone($page_name,'comcode',fallback_lang(),'txt',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	if ($error) warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$page_name));
 	return NULL;
 }
@@ -328,17 +329,17 @@ function get_comcode_zone($page_name,$error=true)
 function get_page_zone($page_name,$error=true)
 {
 	$test=get_module_zone($page_name,'modules',NULL,'php',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	$test=get_module_zone($page_name,'comcode',get_site_default_lang(),'txt',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	$test=get_module_zone($page_name,'comcode',fallback_lang(),'txt',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	$test=get_module_zone($page_name,'html',get_site_default_lang(),'htm',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	$test=get_module_zone($page_name,'html',fallback_lang(),'htm',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	$test=get_module_zone($page_name,'minimodules',NULL,'php',false);
-	if (!is_null($test)) return $test;
+	if ($test!==NULL) return $test;
 	if ($error) warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$page_name));
 	return NULL;
 }

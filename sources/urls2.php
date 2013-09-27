@@ -494,7 +494,7 @@ function autogenerate_new_url_moniker($ob_info,$url_parts,$zone)
 	$select=array();
 	append_content_select_for_id($select,$ob_info);
 	if (substr($ob_info['title_field'],0,5)!='CALL:') $select[]=$ob_info['title_field'];
-	if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
+	if ($ob_info['parent_category_field']!==NULL) $select[]=$ob_info['parent_category_field'];
 	$db=((substr($ob_info['table'],0,2)!='f_') || (get_forum_type()=='none'))?$GLOBALS['SITE_DB']:$GLOBALS['FORUM_DB'];
 	$where=get_content_where_for_str_id($effective_id,$ob_info);
 	$_moniker_src=$db->query_select($ob_info['table'],$select,$where); // NB: For Comcode pages visited, this won't return anything -- it will become more performant when the page actually loads, so the moniker won't need redoing each time

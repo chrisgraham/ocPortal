@@ -5,6 +5,112 @@
 
 [contents][/contents]
 
+[title="2"]ocPortal core performance[/title]
+
+The ocPortal core is extremely optimised.
+
+Most of the ocPortal page generation time can be put down to detecting the context the user is operating in, retrieving all components from their storage locations, structuring, processing whatever aspects of the output are dynamic, and outputting. This typically all-together takes a few hundred milliseconds. With opcode caching and persistent caching, it can be under 100ms, and potentially further with a platform like HipHop-PHP (which compiles code, and keeps code even more permanently resident between requests than an opcode cache).
+
+The very core ocPortal responsibilities are as follows...
+
+Input:
+ - Set correct character sets, for unexpected inputs (fast default case: ASCII request)
+ - Input validation / gating to defaults
+ - Input state management
+ - File/HTTP I/O stubs
+Output:
+ - Find character set (fast default case: hard-coded character set optimisation)
+ - CSS and Javascript inclusion/merging
+ - Breadcrumbs (disableable)
+ - Comcode-page rendering (fast default case: Comcode cache)
+ - Date/time rendering
+ - Time period rendering
+ - Output framing
+ - Tempcode assembly
+ - Tempcode rendering
+ - Tempcode symbol processing
+ - Tempcode output escaping
+ - Theme images (fast default case: persistent cache)
+ - Output state management
+ - Primitive types rendering
+ - Locales
+ - Basic template bindings
+Internal dispatch:
+ - Finding linked scripts (internal caching)
+ - Error generation
+ - General link generation
+ - URL-moniker linking
+ - Page-link decoding
+ - Keep-parameter propagation
+ - Page-identification and dispatch
+ - Page searching (fast default case)
+ - Match-keys
+ - Hook searching
+ - Block and module calling
+ - Block processing
+ - Meta-data querying
+ - Addon state detection (fast default case: persistent cache)
+Configuration:
+ - Read base config and provide defaults
+ - Software versioning
+ - Config options API (fast default case: self-learning cache)
+ - Config values API
+Caches:
+ - Find if a decaching request is active
+ - Static caching for Guests and bots (the ultimate optimisation)
+ - Persistent cache
+ - Self-learning cache
+ - Block caching
+Context detection:
+ - Getting base URLs, based on SSL and zone context (internal caching)
+ - Detect safe mode (fast default case: hard-coded setting)
+ - Find current script context
+ - Mobile detection
+ - Rendering option detection [e.g. wide mode]
+ - Cookie detection (may be disabled)
+ - Javascript detection (may be disabled)
+ - Browser capability/flag detection
+ - IP banning (disableable)
+ - Detection of user language (fast default case if internationalisation disabled)
+ - Self-linking/context-identification
+ - Detect of timezone (fast default case if internationalisation disabled)
+ - Server/HTTP-environment querying
+ - Users-online limit (disableable)
+Users/Members:
+ - Find the current member
+ - Session restoration (fast default case: persistent cache)
+ - Session clean up (only runs randomly)
+ - Cookie logins
+ - Alternative login types
+ - Display names
+ - Custom profile fields
+ - Forum driver object initialisation and driver binding and driver
+ - Detecting and actioning logins
+Processing:
+ - Memory management
+ - Intelligent code inclusion, overrides (fast default case: persistent caching of current code profiles)
+ - Database API (delayed connection instantiation; structural management code not loaded by default)
+ - Database API low-level driver
+ - Error handlers (only called exceptionally)
+ - Comcode (fast default case: simple conversions)
+ - Language requiring (fast default case: self-learning cache)
+ - Lookup language strings, support parameters, pluralisation differences, vowel/consonant differences
+ - Lookup translations, including linking to Comcode parsing
+ - Translation database storage
+ - Stats logging (disableable)
+ - utf-8 support
+ - Sorting
+ - Primitive types data conversions
+ - IP address detection and processing
+
+We try and keep the core code size to an absolute minimum, due to memory requirements and PHP parsing time. Sometimes we have a little more code loaded up than needed, but only for things that are common even if not 100% routine. It is reasonable to assume a performance-conscience user will have an opcode cache, which removes the issue of code quantity.
+
+Anything not marked with a specific bypass optimisation (in brackets) will still have been heavily optimised: the ocPortal core is extremely optimal.
+
+Note that while we have a lot of user-specific and security features in the above list, but these can be bypassed when not needed via the static cache.
+
+Various hidden optimisation flags are described later in the Code Book, and also in the ocPortal optimisation tutorial.
+
 [title="2"]Why not more object-orientation?[/title]
 
 Most PHP CMSs have gone in the direction of having very sophisticated object systems, with dependency injection, design patterns and namespaces.
@@ -23,7 +129,7 @@ It's a matter of good engineering to consider all factors when coming up with a 
 
 '1' is so important. We feel that with OOP-heavy frameworks, where you have to worry about relatively complex initialisations of every part of the system you want to touch, and how you are going to plumb all the different components together, it really makes the code take a lot longer to write due to the extra verbosity. In fact, 66% of code can easily be taken up just by extra plumbing, and this really hurts when you're trying to get ROI on your time investment. Yes, extra plumbing is not that hard, but it is time consuming to do and maintain and to read through.
 
-Regarding '2', method calls are expensive in PHP, and variable storage uses a lot more memory than you think, as does the memory simply to load up PHP code. So, there really is a high cost in all the plumbing you might want to do -- 66% more code could certainly mean 40% more memory usage, and 30% slower CPU performance. Users increasingly expect sites to respond extremely fast, yet CPU speeds have not really increased in a decade, and PHP is not getting any faster either. On top of all this, frameworks also mean you need to load a lot more code than you need, due to having to load up structures that are more complete and complex than you strictly need to serve the simple requests you are normally serving. Most OOP-heavy framework users respond by slapping on a full-page cache, but this is very limiting because then you really block the social interactivity you really want from a system like ocPortal.
+Regarding '2', method calls are expensive in PHP, and variable storage uses a lot more memory than you think, as does the memory simply to load up PHP code. So, there really is a high cost in all the plumbing you might want to do -- 66% more code could certainly mean 40% more memory usage, and 30% slower CPU performance. Users increasingly expect sites to respond extremely fast, yet CPU speeds have not really increased in a decade, and PHP is not getting significantly faster either. On top of all this, frameworks also mean you need to load a lot more code than you need, due to having to load up structures that are more complete and complex than you strictly need to serve the simple requests you are normally serving. Most OOP-heavy framework users respond by slapping on a full-page cache, but this is very limiting because then you really block the social interactivity you really want from a system like ocPortal.
 
 Regarding '3', OOP-heavy architectures try to abstract away details to make things simpler, but in the process of defining custom interfaces for all modes of interaction, and plumbing to connect all the objects together, you end up with a huge amount of new interface complexity to both understand and maintain. We think this really is a zero-sum game. There's a really important design principle in the field of agile programming called 'You don't need it' (YDNI), and OOP-heavy architectures often go against this by trying to plan out for all access scenarios upfront and abstract them perfectly -- it's much better that we don't waste resources (both programmer time, and system resources) until we need to make a particular access pattern work, and then we can optimise it for how we need it. Apart from cost/schedule, YDNI is also important because you can't predict future requirements well -- trying to anticipate too much by putting in too much structure between components actually works against you rather than for you, giving you into patterns you actually would not have wanted. In other words, too much structure costs a lot to make and can tie you down as much as it can guide you.
 
@@ -228,7 +334,7 @@ We also have the following which are either unlikely to be useful, or potentiall
   - [tt]min_lastvisit_frequency[/tt] -- set this to the number of seconds waited between the last-visit time being updated (performance tweak, minimises database writes)
   - [tt]no_flood_control[/tt] -- set this to '1' if you will not have flood control
   - [tt]implicit_usergroup_sync[/tt] -- set this to '1' to enable synching of implicit usergroups (see the advanced members tutorial for more information)
-  - [tt]shortened_tempcode[/tt] -- don't store parameter reference origins in Tempcode, which makes Tempcode use less memory/storage/CPU
+  - [tt]shortened_tempcode[/tt] -- set this to '1' to not store parameter reference origins in Tempcode, which makes Tempcode use less memory/storage/CPU
  - Performance tuning (negative)
   - [tt]allow_admin_in_other_zones[/tt] -- set this to '1' if you want to allow admin and CMS modules to run in other zones (small performance cost)
  - Easter eggs

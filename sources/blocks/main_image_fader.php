@@ -88,16 +88,16 @@ class Block_main_image_fader
 			require_code('content_privacy');
 			$as_guest=array_key_exists('as_guest',$map)?($map['as_guest']=='1'):false;
 			$viewing_member_id=$as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():mixed();
-			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','e',$viewing_member_id);
-			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','e',$viewing_member_id);
+			list($privacy_join_video,$privacy_where_video)=get_privacy_where_clause('video','r',$viewing_member_id);
+			list($privacy_join_image,$privacy_where_image)=get_privacy_where_clause('image','r',$viewing_member_id);
 			$extra_join_image.=$privacy_join_image;
 			$extra_join_video.=$privacy_join_video;
 			$extra_where_image.=$privacy_where_image;
 			$extra_where_video.=$privacy_where_video;
 		}
 
-		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url,title,description FROM '.get_table_prefix().'images e '.$extra_join_image.' WHERE '.$cat_select.$extra_where_image.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
-		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos e '.$extra_join_video.' WHERE '.$cat_select.$extra_where_video.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true);
+		$image_rows=$GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,url,title,description FROM '.get_table_prefix().'images r '.$extra_join_image.' WHERE '.$cat_select.$extra_where_image.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true,array('title','description'));
+		$video_rows=$GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos r '.$extra_join_video.' WHERE '.$cat_select.$extra_where_video.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true,array('title','description'));
 		$all_rows=array();
 		if ($order!='')
 		{

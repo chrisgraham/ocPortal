@@ -283,7 +283,7 @@ function get_content_where_for_str_id($str_id,$cma_info,$table_alias=NULL)
 	foreach (is_array($id_field)?$id_field:array($id_field) as $i=>$id_field_part)
 	{
 		$val=array_key_exists($i,$id_parts)?$id_parts[$i]:'';
-		$where[(is_null($table_alias)?'':($table_alias.'.')).$id_field_part]=$cma_info['id_field_numeric']?intval($val):$val;
+		$where[(($table_alias===NULL)?'':($table_alias.'.')).$id_field_part]=$cma_info['id_field_numeric']?intval($val):$val;
 	}
 	return $where;
 }
@@ -299,6 +299,6 @@ function append_content_select_for_id(&$select,$cma_info,$table_alias=NULL)
 {
 	foreach (is_array($cma_info['id_field'])?$cma_info['id_field']:array($cma_info['id_field']) as $id_field_part)
 	{
-		$select[]=(is_null($table_alias)?'':($table_alias.'.')).$id_field_part;
+		$select[]=(($table_alias===NULL)?'':($table_alias.'.')).$id_field_part;
 	}
 }

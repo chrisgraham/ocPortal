@@ -20,8 +20,8 @@ Galleries are given a name, and a title. The name should be a code-name that can
 
 [media width="150" description="A gallery in multi-page mode" float="right"]data_custom/images/docs/gallery_not_flow_mode.png[/media]
 There are two display modes for galleries:
- - Flow mode -- this mode allows you to see all the entries in the gallery at the same time as viewing one of the entries. This makes navigation more efficient
- - Multi-page mode -- this mode provides page browsing features so as to be able to browse through a large numbers of entries
+ - Flow mode -- this mode allows you to see all the entries in the gallery at the same time as viewing one of the entries. This makes navigation more efficient. Note that there is a limit of 40 media files displayed in the carousel, so flow mode is only a good option for small galleries.
+ - Multi-page mode -- this mode provides page browsing features so as to be able to browse through a large numbers of entries.
 
 From the gallery, the user can choose any of the available entries (images or videos), and the chosen entry will be presented to the user on a full wide page.
 [/surround]

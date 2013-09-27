@@ -472,7 +472,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 
 			$GLOBALS['SITE_DB']->query_insert('digestives_tin',array(
 				'd_subject'=>$subject,
-				'd_message'=>$message,
+				'd_message'=>insert_lang($message,4),
 				'd_from_member_id'=>$from_member_id,
 				'd_to_member_id'=>$to_member_id,
 				'd_priority'=>$priority,

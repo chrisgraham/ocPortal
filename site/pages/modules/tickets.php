@@ -765,7 +765,7 @@ class Module_tickets
 		if (!$staff_only)
 		{
 			if ($email=='') $email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
-			send_ticket_email($id,$__title,$post,$home_url,$email,$ticket_type);
+			send_ticket_email($id,$__title,$post,$home_url,$email,$ticket_type,get_member());
 		}
 
 		// Close ticket, if requested

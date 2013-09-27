@@ -47,8 +47,6 @@ function _convert_data_encodings($known_utf8=false)
 	}
 	elseif (($known_utf8) && /*test method works...*/(will_be_unicode_neutered(serialize($_GET).serialize($_POST))) && (in_array(strtolower($charset),array('iso-8859-1','iso-8859-15','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp')))) // Preferred as it will sub entities where there's no equivalent character
 	{
-		require_code('character_sets');
-
 		do_environment_utf8_conversion($charset);
 
 		$done_something=true;
@@ -123,6 +121,10 @@ function _convert_data_encodings($known_utf8=false)
 						}
 					}
 				}
+				foreach ($_FILES as $key=>$val)
+				{
+					$_FILES[$key]['name']=mb_convert_encoding($val['name'],$charset,$encoding);
+				}
 			}
 			if (function_exists('mb_http_output')) mb_http_output($charset);
 		}
@@ -131,8 +133,6 @@ function _convert_data_encodings($known_utf8=false)
 	}
 	elseif (($known_utf8) && (strtolower($charset)!='utf-8') && (strtolower($charset)!='utf8')) // This is super-easy, but it's imperfect as it assumes ISO-8859-1 -- hence our worst option
 	{
-		require_code('character_sets');
-
 		do_simple_environment_utf8_conversion();
 
 		$done_something=true;
@@ -374,6 +374,10 @@ function do_simple_environment_utf8_conversion()
 			}
 		}
 	}
+	foreach ($_FILES as $key=>$val)
+	{
+		$_FILES[$key]['name']=utf8_decode($val['name']);
+	}
 }
 
 /**
@@ -413,6 +417,28 @@ function do_environment_utf8_conversion($from_charset)
 			}
 		}
 	}
+	foreach ($_FILES as $key=>$val)
+	{
+		$test=entity_utf8_decode($val['name'],$from_charset);
+		if ($test!==false) $_FILES[$key]['name']=$test;
+	}
+}
+
+/**
+ * Guard for entity_utf8_decode. Checks that the data can be stripped so there is no unicode left. Either the htmlentities function must convert mechanically to entity-characters or all higher ascii character codes (which are actually unicode control codes in a unicode interpretation) that are used happen to be linked to named entities.
+ *
+ * @param  string					Data to check.
+ * @return boolean				Whether we are good to execute entity_utf8_decode.
+ */
+function will_be_unicode_neutered($data)
+{
+	$data=@htmlentities($data,ENT_COMPAT,'UTF-8');
+	if ($data=='') return false; // Some servers fail at the first step
+	for ($i=0;$i<strlen($data);$i++)
+	{
+		if (ord($data[$i])>0x7F) return false;
+	}
+	return true;
 }
 
 /**

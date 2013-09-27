@@ -77,7 +77,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 		{
 			// Maybe a hook?
 			global $EXTRA_SYMBOLS;
-			if (is_null($EXTRA_SYMBOLS))
+			if ($EXTRA_SYMBOLS===NULL)
 			{
 				if (running_script('install'))
 				{
@@ -624,7 +624,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 	}
 	static $dle=false;
 	if (!$dle) $dle=function_exists('do_lang');
-	$value=$dle?do_lang($name,$a,$b,$c,$lang,false):escape_html($name.':'.(!is_null($a)?$a:'').','.(!is_null($b)?$b:''));
+	$value=$dle?do_lang($name,$a,$b,$c,$lang,false):escape_html($name.':'.(($a!==NULL)?$a:'').','.(($b!==NULL)?$b:''));
 	if ($value===NULL)
 	{
 		require_code('site');
@@ -664,11 +664,6 @@ function ecv_PAGE_LINK($lang,$escaped,$param)
 		$avoid_remap=isset($param[1]) && ($param[1]=='1');
 		$skip_keep=isset($param[2]) && ($param[2]=='1');
 		$keep_all=isset($param[3]) && ($param[3]=='1');
-
-		foreach ($map as $key=>$val)
-		{
-			if (is_object($val)) $map[$key]=$val->evaluate();
-		}
 
 		$value=_build_url($map,$zone,$skip,$keep_all,$avoid_remap,$skip_keep,$hash);
 	} else
@@ -2435,9 +2430,9 @@ function ecv_MEMBER_PROFILE_URL($lang,$escaped,$param)
  */
 function ecv_USERNAME($lang,$escaped,$param)
 {
-	$member_id=((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member();
+	$member_id=((($param!==NULL)) && (isset($param[0])))?intval($param[0]):get_member();
 	$value=$GLOBALS['FORUM_DRIVER']->get_username($member_id,(isset($param[1])) && ($param[1]=='1'));
-	if (is_null($value)) $value=do_lang('UNKNOWN');
+	if ($value===NULL) $value=do_lang('UNKNOWN');
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;

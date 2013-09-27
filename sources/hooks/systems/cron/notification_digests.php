@@ -61,7 +61,7 @@ class Hook_cron_notification_digests
 					foreach ($messages as $message)
 					{
 						if ($_message!='') $_message.=chr(10);
-						$_message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),$message['d_message'],array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));
+						$_message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),get_translated_text($message['d_message']),array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));
 					}
 					if ($_message!='')
 					{

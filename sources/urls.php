@@ -216,6 +216,10 @@ function skippable_keep($key,$val)
 		return true;
 	}
 
+	static $nkp=NULL;
+	if ($nkp===NULL) $nkp=(isset($GLOBALS['SITE_INFO']['no_keep_params'])) && ($GLOBALS['SITE_INFO']['no_keep_params']=='1');
+	if ($nkp) return true;
+
 	return ((($key=='keep_session') && (isset($_COOKIE['has_cookies']))) || (($key=='keep_has_js') && ($val=='1'))) && ((isset($_COOKIE['js_on'])) || (get_option('detect_javascript')=='0'));
 }
 
@@ -258,16 +262,13 @@ function is_page_https($zone,$page)
 	if ($HTTPS_PAGES_CACHE===NULL)
 	{
 		$results=$GLOBALS['SITE_DB']->query_select('https_pages',array('*'),NULL,'',NULL,NULL,true);
-		if (($results===false) || ($results===NULL)) // No HTTPS support (probably not upgraded yet)
-		{
-			$HTTPS_PAGES_CACHE=array();
-			return false;
-		}
-		$HTTPS_PAGES_CACHE=collapse_1d_complexity('https_page_name',$results);
+		$HTTPS_PAGES_CACHE=array();
+		foreach ($results as $r)
+			$HTTPS_PAGES_CACHE[$r['https_page_name']]=1;
 		if (function_exists('persistent_cache_set'))
 			persistent_cache_set('HTTPS_PAGES_CACHE',$HTTPS_PAGES_CACHE);
 	}
-	return in_array($zone.':'.$page,$HTTPS_PAGES_CACHE);
+	return isset($HTTPS_PAGES_CACHE[$zone.':'.$page]);
 }
 
 /**
@@ -368,7 +369,12 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 	$ret=symbol_tempcode('PAGE_LINK',$arr);
 
 	global $SITE_INFO;
-	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1') && (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) && (strpos($id,'/')!==false))
+	if (
+		(isset($SITE_INFO['no_keep_params'])) && 
+		($SITE_INFO['no_keep_params']=='1') && 
+		(!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) && 
+		((is_null($id)) || (strpos($id,'/')!==false))
+	)
 	{
 		$ret=make_string_tempcode($ret->evaluate());
 	}
@@ -1028,6 +1034,7 @@ function find_id_moniker($url_parts,$zone)
 {
 	if (!isset($url_parts['page'])) return NULL;
 	if (strpos($url_parts['page'],'[')!==false) return NULL; // A regexp in a comparison URL, in breadcrumbs code
+	if ($zone=='[\w\_\-]*') return NULL; // Part of a breadcrumbs regexp
 
 	// Does this URL arrangement support monikers?
 	global $CONTENT_OBS;
@@ -1122,6 +1129,8 @@ function find_id_moniker($url_parts,$zone)
 			$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$effective_id]=$test;
 		}
 		if (is_string($test)) return ($test=='')?NULL:$test;
+
+		if ($looking_for=='_WILD:_WILD') return NULL; // We don't generate these automatically
 
 		// Otherwise try to generate a new one
 		require_code('urls2');

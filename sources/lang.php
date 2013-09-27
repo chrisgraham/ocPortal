@@ -179,6 +179,12 @@ function user_lang()
 	if ($USER_LANG_CACHED!==NULL) return $USER_LANG_CACHED;
 	global $MEMBER_CACHED,$USER_LANG_LOOP,$IN_MINIKERNEL_VERSION;
 
+	if (get_option('allow_international')!='1')
+	{
+		$USER_LANG_CACHED=get_lang();
+		return $USER_LANG_CACHED;
+	}
+
 	if ($IN_MINIKERNEL_VERSION)
 	{
 		return get_site_default_lang();
@@ -238,7 +244,7 @@ function user_lang()
 			// In forum?
 			if (($USER_LANG_CACHED===NULL) && (get_option('detect_lang_forum')=='1'))
 			{
-				$USER_LANG_CACHED=get_lang_forum_user(get_member());
+				$USER_LANG_CACHED=get_lang_member(get_member());
 			}
 			if (($USER_LANG_CACHED===NULL) && (get_option('detect_lang_browser')=='1'))
 			{
@@ -335,7 +341,7 @@ function get_site_default_lang()
  * @param  MEMBER				The member ID
  * @return ?LANGUAGE_NAME	The language used by the member (NULL: the language will not map)
  */
-function get_lang_forum_user($member)
+function get_lang_member($member)
 {
 	// In forum?
 	$lang=$GLOBALS['FORUM_DRIVER']->forum_get_lang($member);
@@ -379,7 +385,7 @@ function get_lang($member=NULL)
 	{
 		if ($member==get_member()) return user_lang();
 
-		$lang=get_lang_forum_user($member);
+		$lang=get_lang_member($member);
 		if ($lang!==NULL) return $lang;
 	}
 

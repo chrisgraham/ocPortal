@@ -352,6 +352,9 @@ function restore_output_state($just_tempcode=false,$merge_current=false,$keep=NU
 
 	if ($keep===NULL) $keep=array();
 
+	$mergeable_arrays=array('META_DATA'=>1,'JAVASCRIPTS'=>1,'CSSS'=>1,'TEMPCODE_SETGET'=>1,'CYCLES'=>1);
+	$mergeable_tempcode=array('EXTRA_HEAD'=>1,'EXTRA_FOOT'=>1,'JAVASCRIPT'=>1);
+
 	$old_state=array_pop($OUTPUT_STATE_STACK);
 	if ($old_state===NULL)
 	{
@@ -362,8 +365,8 @@ function restore_output_state($just_tempcode=false,$merge_current=false,$keep=NU
 		{
 			if ((!$just_tempcode) || ($var=='CYCLES') || ($var=='TEMPCODE_SETGET'))
 			{
-				$merge_array=(($merge_current) && (is_array($val)) && (in_array($var,array('META_DATA','JAVASCRIPTS','CSSS','TEMPCODE_SETGET','CYCLES'))));
-				$merge_tempcode=(($merge_current) && (is_object($val)) && (in_array($var,array('EXTRA_HEAD','EXTRA_FOOT','JAVASCRIPT'))));
+				$merge_array=(($merge_current) && (is_array($val)) && (array_key_exists($var,$mergeable_arrays)));
+				$merge_tempcode=(($merge_current) && (is_object($val)) && (array_key_exists($var,$mergeable_tempcode)));
 				$mergeable=$merge_array || $merge_tempcode;
 				if ((!in_array($var,$keep)) || ($mergeable))
 				{
@@ -383,6 +386,79 @@ function restore_output_state($just_tempcode=false,$merge_current=false,$keep=NU
 			}
 		}
 	}
+}
+
+/**
+ * Turn the tempcode lump into a standalone page.
+ *
+ * @param  tempcode		The tempcode to put into a nice frame
+ * @param  ?mixed			'Additional' message (NULL: none)
+ * @param  string			The type of special message
+ * @set    inform warn ""
+ * @param  boolean		Whether to include the header/footer/panels
+ * @return tempcode		Standalone page
+ */
+function globalise($middle,$message=NULL,$type='',$include_header_and_footer=false)
+{
+	if (!$include_header_and_footer) // FUDGE
+	{
+		$old=mixed();
+		if (isset($_GET['wide_high'])) $old=$_GET['wide_high'];
+		$_GET['wide_high']='1';
+	}
+
+	require_code('site');
+	if ($message!==NULL) attach_message($message,$type);
+
+	restore_output_state(true); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
+
+	if (!running_script('index'))
+	{
+		global $ATTACHED_MESSAGES;
+		$global=do_template('STANDALONE_HTML_WRAP',array(
+			'_GUID'=>'fe818a6fb0870f0b211e8e52adb23f26',
+			'TITLE'=>($GLOBALS['DISPLAYED_TITLE']===NULL)?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],
+			'FRAME'=>running_script('iframe'),
+			'TARGET'=>'_self',
+			'CONTENT'=>$middle,
+		));
+		$global->handle_symbol_preprocessing();
+		return $global;
+	}
+
+	$global=new ocp_tempcode();
+	$global->attach(do_template('GLOBAL_HTML_WRAP',array(
+		'_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131',
+		'MIDDLE'=>$middle,
+	)));
+	$global->handle_symbol_preprocessing();
+
+	if (get_value('xhtml_strict')==='1')
+	{
+		require_code('global4');
+		$global=make_xhtml_strict($global);
+	}
+
+	if ((!$include_header_and_footer) && ($old!==NULL))
+	{
+		$_GET['wide_high']=$old;
+	}
+
+	return $global;
+}
+
+/**
+ * Attach some XHTML to the screen footer.
+ *
+ * @sets_output_state
+ *
+ * @param  mixed			XHTML to attach (Tempcode or string)
+ */
+function attach_to_screen_footer($data)
+{
+	global $EXTRA_FOOT;
+	if ($EXTRA_FOOT===NULL) $EXTRA_FOOT=new ocp_tempcode();
+	$EXTRA_FOOT->attach($data);
 }
 
 /**
@@ -548,6 +624,34 @@ function is_wide()
 	}
 
 	return $IS_WIDE_CACHE;
+}
+
+/**
+ * Fixes bad unicode (utf-8) in the input. Useful when input may be dirty, e.g. from a txt file, or from a potential hacker.
+ * The fix is imperfect, it will actually treat the input as ISO-8859-1 if not valid utf-8, then reconvert. Some limited scrambling is considered better than a stack trace.
+ * This function does nothing if we are not using utf-8.
+ *
+ * @param  string		Input string
+ * @return string		Guaranteed valid utf-8, if we're using it, otherwise the same as the input string
+ */
+function fix_bad_unicode($input)
+{
+	// Fix bad unicode
+	if (get_charset()=='utf-8')
+	{
+		$test_string=$input; // avoid being destructive 
+		$test_string=preg_replace('#[\x09\x0A\x0D\x20-\x7E]#','',$test_string); // ASCII 
+		$test_string=preg_replace('#[\xC2-\xDF][\x80-\xBF]#','',$test_string); // non-overlong 2-byte 
+		$test_string=preg_replace('#\xE0[\xA0-\xBF][\x80-\xBF]#','',$test_string); // excluding overlongs 
+		$test_string=preg_replace('#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','',$test_string); // straight 3-byte 
+		$test_string=preg_replace('#\xED[\x80-\x9F][\x80-\xBF]#','',$test_string); // excluding surrogates 
+		$test_string=preg_replace('#\xF0[\x90-\xBF][\x80-\xBF]{2}#','',$test_string); // planes 1-3 
+		$test_string=preg_replace('#[\xF1-\xF3][\x80-\xBF]{3}#','',$test_string); //  planes 4-15 
+		$test_string=preg_replace('#\xF4[\x80-\x8F][\x80-\xBF]{2}#','',$test_string); // plane 16 
+		if ($test_string!='') // All unicode characters stripped, so if anything is remaining it must be some kind of corruption
+			$input=utf8_encode($input);
+	}
+	return $input;
 }
 
 /**
@@ -1054,65 +1158,6 @@ function ocf_require_all_forum_stuff()
 }
 
 /**
- * Turn the tempcode lump into a standalone page.
- *
- * @param  tempcode		The tempcode to put into a nice frame
- * @param  ?mixed			'Additional' message (NULL: none)
- * @param  string			The type of special message
- * @set    inform warn ""
- * @param  boolean		Whether to include the header/footer/panels
- * @return tempcode		Standalone page
- */
-function globalise($middle,$message=NULL,$type='',$include_header_and_footer=false)
-{
-	if (!$include_header_and_footer) // FUDGE
-	{
-		$old=mixed();
-		if (isset($_GET['wide_high'])) $old=$_GET['wide_high'];
-		$_GET['wide_high']='1';
-	}
-
-	require_code('site');
-	if ($message!==NULL) attach_message($message,$type);
-
-	restore_output_state(true); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
-
-	if (!running_script('index'))
-	{
-		global $ATTACHED_MESSAGES;
-		$global=do_template('STANDALONE_HTML_WRAP',array(
-			'_GUID'=>'fe818a6fb0870f0b211e8e52adb23f26',
-			'TITLE'=>($GLOBALS['DISPLAYED_TITLE']===NULL)?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],
-			'FRAME'=>running_script('iframe'),
-			'TARGET'=>'_self',
-			'CONTENT'=>$middle,
-		));
-		$global->handle_symbol_preprocessing();
-		return $global;
-	}
-
-	$global=new ocp_tempcode();
-	$global->attach(do_template('GLOBAL_HTML_WRAP',array(
-		'_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131',
-		'MIDDLE'=>$middle,
-	)));
-	$global->handle_symbol_preprocessing();
-
-	if (get_value('xhtml_strict')==='1')
-	{
-		require_code('global4');
-		$global=make_xhtml_strict($global);
-	}
-
-	if ((!$include_header_and_footer) && ($old!==NULL))
-	{
-		$_GET['wide_high']=$old;
-	}
-
-	return $global;
-}
-
-/**
  * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
  *
  * @param  string		The prefix of the temporary file name.
@@ -1568,6 +1613,122 @@ function compare_ip_address_ip6($wild,$full_parts)
 		if (($wild_part!='*') && ($wild_part!=$full_parts[$i])) return false;
 	}
 	return true;
+}
+
+/**
+ * Check to see if an IP address is banned.
+ *
+ * @param  string			The IP address to check for banning (potentially encoded with *'s)
+ * @param  boolean		Force check via database
+ * @param  boolean		Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
+ * @return ?boolean		Whether the IP address is banned (NULL: unknown)
+ */
+function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is the very first query called, so we will be a bit smarter, checking for errors
+{
+	static $cache=array();
+	if ($handle_uncertainties)
+	{
+		if (array_key_exists($ip,$cache)) return $cache[$ip];
+	}
+
+	if (!addon_installed('securitylogging')) return false;
+
+	// Check exclusions first
+	$_exclusions=get_option('spam_check_exclusions');
+	$exclusions=explode(',',$_exclusions);
+	foreach ($exclusions as $exclusion)
+	{
+		if (trim($ip)==$exclusion) return false;
+	}
+
+	global $SITE_INFO;
+	if ((!$force_db) && (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (is_writable_wrap(get_file_base().'/.htaccess'))))
+	{
+		$bans=array();
+		$ban_count=preg_match_all('#\ndeny from (.*)#',file_get_contents(get_file_base().'/.htaccess'),$bans);
+		$ip_bans=array();
+		for ($i=0;$i<$ban_count;$i++)
+		{
+			$ip_bans[]=array('ip'=>$bans[1][$i]);
+		}
+	} else
+	{
+		$ip_bans=persistent_cache_get('IP_BANS');
+		if ($ip_bans===NULL)
+		{
+			$ip_bans=$GLOBALS['SITE_DB']->query_select('banned_ip',array('*'),NULL,'',NULL,NULL,true);
+			if ($ip_bans===NULL)
+				$ip_bans=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('*'),NULL,'',NULL,NULL,true);
+			if ($ip_bans!==NULL)
+			{
+				persistent_cache_set('IP_BANS',$ip_bans);
+			}
+		}
+		if ($ip_bans===NULL) critical_error('DATABASE_FAIL');
+	}
+
+	$ip4=(strpos($ip,'.')!==false);
+	if ($ip4)
+	{
+		$ip_parts=explode('.',$ip);
+	} else
+	{
+		$ip_parts=explode(':',$ip);
+	}
+
+	$self_ip=NULL;
+	foreach ($ip_bans as $ban)
+	{
+		if ((isset($ban['i_ban_until'])) && ($ban['i_ban_until']<time()))
+		{
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'banned_ip WHERE i_ban_until IS NOT NULL AND i_ban_until<'.strval(time()));
+			continue;
+		}
+
+		if ((($ip4) && (compare_ip_address_ip4($ban['ip'],$ip_parts))) || ((!$ip4) && (compare_ip_address_ip6($ban['ip'],$ip_parts))))
+		{
+			if ($self_ip===NULL)
+			{
+				$self_host=ocp_srv('HTTP_HOST');
+				if (($self_host=='') || (preg_match('#^localhost[\.\:$]#',$self_host)!=0))
+				{
+					$self_ip='';
+				} else
+				{
+					if (preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i',@ini_get('disable_functions'))==0)
+					{
+						$self_ip=gethostbyname($self_host);
+					} else $self_ip='';
+					if ($self_ip=='') $self_ip=ocp_srv('SERVER_ADDR');
+				}
+			}
+
+			if (($self_ip!='') && (!compare_ip_address($ban['ip'],$self_ip))) continue;
+			if (compare_ip_address($ban['ip'],'127.0.0.1')) continue;
+			if (compare_ip_address($ban['ip'],'fe00:0000:0000:0000:0000:0000:0000:0000')) continue;
+
+			if (array_key_exists('i_ban_positive',$ban))
+			{
+				$ret=($ban['i_ban_positive']==1);
+			} else
+			{
+				$ret=true;
+			}
+
+			if ($handle_uncertainties)
+			{
+				$cache[$ip]=$ret;
+			}
+			return $ret;
+		}
+	}
+
+	$ret=$handle_uncertainties?NULL:false;
+	if ($handle_uncertainties)
+	{
+		$cache[$ip]=$ret;
+	}
+	return $ret;
 }
 
 /**
@@ -2050,41 +2211,6 @@ function get_bot_type()
 }
 
 /**
- * Turn an array into a humanely readable string.
- *
- * @param  array			Array to convert
- * @param  boolean		Whether PHP magic-quotes have already been cleaned out for the array
- * @return string			A humanely readable version of the array.
- */
-function flatten_slashed_array($array,$already_stripped=false)
-{
-	$ret='';
-	foreach ($array as $key=>$val)
-	{
-		if (is_array($val)) $val=flatten_slashed_array($val);
-
-		if (!$already_stripped && get_magic_quotes_gpc()) $val=stripslashes($val);
-
-		$ret.='<param>'.(is_integer($key)?strval($key):$key).'='.$val.'</param>'."\n"; // $key may be integer, due to recursion line for list fields, above
-	}
-	return $ret;
-}
-
-/**
- * Get a word-filtered version of the specified text.
- *
- * @param  string			Text to filter
- * @return string			Filtered version of the input text
- */
-function wordfilter_text($text)
-{
-	if (!addon_installed('wordfilter')) return $text;
-
-	require_code('word_filter');
-	return check_word_filter($text,NULL,true);
-}
-
-/**
  * Determine whether the user's browser supports cookies or not.
  * Unfortunately this function will only return true once a user has been to the site more than once... ocPortal will set a cookie, and if it perseveres, that indicates cookies work.
  *
@@ -2125,6 +2251,41 @@ function has_js()
 	if (get_param_integer('keep_has_js',0)==1) return true;
 	if (get_param_integer('keep_has_js',NULL)===0) return false;
 	return ((array_key_exists('js_on',$_COOKIE)) && ($_COOKIE['js_on']=='1'));
+}
+
+/**
+ * Turn an array into a humanely readable string.
+ *
+ * @param  array			Array to convert
+ * @param  boolean		Whether PHP magic-quotes have already been cleaned out for the array
+ * @return string			A humanely readable version of the array.
+ */
+function flatten_slashed_array($array,$already_stripped=false)
+{
+	$ret='';
+	foreach ($array as $key=>$val)
+	{
+		if (is_array($val)) $val=flatten_slashed_array($val);
+
+		if (!$already_stripped && get_magic_quotes_gpc()) $val=stripslashes($val);
+
+		$ret.='<param>'.(is_integer($key)?strval($key):$key).'='.$val.'</param>'."\n"; // $key may be integer, due to recursion line for list fields, above
+	}
+	return $ret;
+}
+
+/**
+ * Get a word-filtered version of the specified text.
+ *
+ * @param  string			Text to filter
+ * @return string			Filtered version of the input text
+ */
+function wordfilter_text($text)
+{
+	if (!addon_installed('wordfilter')) return $text;
+
+	require_code('word_filter');
+	return check_word_filter($text,NULL,true);
 }
 
 /**
@@ -2398,136 +2559,6 @@ function strip_html($in)
 }
 
 /**
- * Attach some XHTML to the screen footer.
- *
- * @sets_output_state
- *
- * @param  mixed			XHTML to attach (Tempcode or string)
- */
-function attach_to_screen_footer($data)
-{
-	global $EXTRA_FOOT;
-	if ($EXTRA_FOOT===NULL) $EXTRA_FOOT=new ocp_tempcode();
-	$EXTRA_FOOT->attach($data);
-}
-
-/**
- * Check to see if an IP address is banned.
- *
- * @param  string			The IP address to check for banning (potentially encoded with *'s)
- * @param  boolean		Force check via database
- * @param  boolean		Handle uncertainities (used for the external bans - if true, we may return NULL, showing we need to do an external check). Only works with $force_db.
- * @return ?boolean		Whether the IP address is banned (NULL: unknown)
- */
-function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is the very first query called, so we will be a bit smarter, checking for errors
-{
-	static $cache=array();
-	if ($handle_uncertainties)
-	{
-		if (array_key_exists($ip,$cache)) return $cache[$ip];
-	}
-
-	if (!addon_installed('securitylogging')) return false;
-
-	// Check exclusions first
-	$_exclusions=get_option('spam_check_exclusions');
-	$exclusions=explode(',',$_exclusions);
-	foreach ($exclusions as $exclusion)
-	{
-		if (trim($ip)==$exclusion) return false;
-	}
-
-	global $SITE_INFO;
-	if ((!$force_db) && (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (is_writable_wrap(get_file_base().'/.htaccess'))))
-	{
-		$bans=array();
-		$ban_count=preg_match_all('#\ndeny from (.*)#',file_get_contents(get_file_base().'/.htaccess'),$bans);
-		$ip_bans=array();
-		for ($i=0;$i<$ban_count;$i++)
-		{
-			$ip_bans[]=array('ip'=>$bans[1][$i]);
-		}
-	} else
-	{
-		$ip_bans=persistent_cache_get('IP_BANS');
-		if ($ip_bans===NULL)
-		{
-			$ip_bans=$GLOBALS['SITE_DB']->query_select('banned_ip',array('*'),NULL,'',NULL,NULL,true);
-			if ($ip_bans===NULL)
-				$ip_bans=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('*'),NULL,'',NULL,NULL,true);
-			if ($ip_bans!==NULL)
-			{
-				persistent_cache_set('IP_BANS',$ip_bans);
-			}
-		}
-		if ($ip_bans===NULL) critical_error('DATABASE_FAIL');
-	}
-
-	$ip4=(strpos($ip,'.')!==false);
-	if ($ip4)
-	{
-		$ip_parts=explode('.',$ip);
-	} else
-	{
-		$ip_parts=explode(':',$ip);
-	}
-
-	$self_ip=NULL;
-	foreach ($ip_bans as $ban)
-	{
-		if ((isset($ban['i_ban_until'])) && ($ban['i_ban_until']<time()))
-		{
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'banned_ip WHERE i_ban_until IS NOT NULL AND i_ban_until<'.strval(time()));
-			continue;
-		}
-
-		if ((($ip4) && (compare_ip_address_ip4($ban['ip'],$ip_parts))) || ((!$ip4) && (compare_ip_address_ip6($ban['ip'],$ip_parts))))
-		{
-			if ($self_ip===NULL)
-			{
-				$self_host=ocp_srv('HTTP_HOST');
-				if (($self_host=='') || (preg_match('#^localhost[\.\:$]#',$self_host)!=0))
-				{
-					$self_ip='';
-				} else
-				{
-					if (preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i',@ini_get('disable_functions'))==0)
-					{
-						$self_ip=gethostbyname($self_host);
-					} else $self_ip='';
-					if ($self_ip=='') $self_ip=ocp_srv('SERVER_ADDR');
-				}
-			}
-
-			if (($self_ip!='') && (!compare_ip_address($ban['ip'],$self_ip))) continue;
-			if (compare_ip_address($ban['ip'],'127.0.0.1')) continue;
-			if (compare_ip_address($ban['ip'],'fe00:0000:0000:0000:0000:0000:0000:0000')) continue;
-
-			if (array_key_exists('i_ban_positive',$ban))
-			{
-				$ret=($ban['i_ban_positive']==1);
-			} else
-			{
-				$ret=true;
-			}
-
-			if ($handle_uncertainties)
-			{
-				$cache[$ip]=$ret;
-			}
-			return $ret;
-		}
-	}
-
-	$ret=$handle_uncertainties?NULL:false;
-	if ($handle_uncertainties)
-	{
-		$cache[$ip]=$ret;
-	}
-	return $ret;
-}
-
-/**
  * Find the base URL for documentation.
  *
  * @return URLPATH		The base URL for documentation
@@ -2584,34 +2615,6 @@ function is_ocf_satellite_site()
 {
 	if (get_forum_type()!='ocf') return false;
 	return (isset($GLOBALS['FORUM_DB'])) && ((get_db_site()!=get_db_forums()) || (get_db_site_host()!=get_db_forums_host()) || (get_db_site_user()!=get_db_forums_user()));
-}
-
-/**
- * Fixes bad unicode (utf-8) in the input. Useful when input may be dirty, e.g. from a txt file, or from a potential hacker.
- * The fix is imperfect, it will actually treat the input as ISO-8859-1 if not valid utf-8, then reconvert. Some limited scrambling is considered better than a stack trace.
- * This function does nothing if we are not using utf-8.
- *
- * @param  string		Input string
- * @return string		Guaranteed valid utf-8, if we're using it, otherwise the same as the input string
- */
-function fix_bad_unicode($input)
-{
-	// Fix bad unicode
-	if (get_charset()=='utf-8')
-	{
-		$test_string=$input; // avoid being destructive 
-		$test_string=preg_replace('#[\x09\x0A\x0D\x20-\x7E]#','',$test_string); // ASCII 
-		$test_string=preg_replace('#[\xC2-\xDF][\x80-\xBF]#','',$test_string); // non-overlong 2-byte 
-		$test_string=preg_replace('#\xE0[\xA0-\xBF][\x80-\xBF]#','',$test_string); // excluding overlongs 
-		$test_string=preg_replace('#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','',$test_string); // straight 3-byte 
-		$test_string=preg_replace('#\xED[\x80-\x9F][\x80-\xBF]#','',$test_string); // excluding surrogates 
-		$test_string=preg_replace('#\xF0[\x90-\xBF][\x80-\xBF]{2}#','',$test_string); // planes 1-3 
-		$test_string=preg_replace('#[\xF1-\xF3][\x80-\xBF]{3}#','',$test_string); //  planes 4-15 
-		$test_string=preg_replace('#\xF4[\x80-\x8F][\x80-\xBF]{2}#','',$test_string); // plane 16 
-		if ($test_string!='') // All unicode characters stripped, so if anything is remaining it must be some kind of corruption
-			$input=utf8_encode($input);
-	}
-	return $input;
 }
 
 /**

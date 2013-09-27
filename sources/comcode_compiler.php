@@ -174,7 +174,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 			$comcode_dangerous_html=true;
 		}
 	}
-	if (is_null($pass_id)) $pass_id=strval(mt_rand(0,32000)); // This is a unique ID that refers to this specific piece of comcode
+	if ($pass_id===NULL) $pass_id=strval(mt_rand(0,32000)); // This is a unique ID that refers to this specific piece of comcode
 	global $COMCODE_ATTACHMENTS;
 	if (!array_key_exists($pass_id,$COMCODE_ATTACHMENTS)) $COMCODE_ATTACHMENTS[$pass_id]=array();
 
@@ -259,7 +259,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 					$space_pos=strpos($ahead,' ');
 					$end_pos=strpos($ahead,']');
 					$lax_end_pos=strpos($ahead,'[');
-					$cl_pos=strpos($ahead,chr(10));
+					$cl_pos=strpos($ahead,$chr_10);
 					if ($equal_pos===false) $equal_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
 					if ($space_pos===false) $space_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
 					if ($end_pos===false) $end_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
@@ -456,7 +456,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 									$scan_next=$comcode[$scan_pos];
 									if ($scan_next!='-')
 									{
-										if ($scan_next==chr(10))
+										if ($scan_next==$chr_10)
 										{
 											++$NUM_COMCODE_LINES_PARSED;
 											break;
@@ -535,12 +535,12 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 						}
 					}
 
-					if (($next==chr(10)) && ($white_space_area) && ($print_mode) && ($list_indent==0)) // We might need to put some queued up stuff here: when we print, we can't float thumbnails
+					if (($next==$chr_10) && ($white_space_area) && ($print_mode) && ($list_indent==0)) // We might need to put some queued up stuff here: when we print, we can't float thumbnails
 					{
 						$tag_output->attach($queued_tempcode);
 						$queued_tempcode=new ocp_tempcode();
 					}
-					if (($next==chr(10)) && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode,$pos,3)==' - '))) // Hard-new-lines
+					if (($next==$chr_10) && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode,$pos,3)==' - '))) // Hard-new-lines
 					{
 						++$NUM_COMCODE_LINES_PARSED;
 						$line_starting=true;
@@ -582,7 +582,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 						{
 							if (($next==' ') || ($next=="\t") || ($just_ended)) $none_wrap_length=0; else
 							{
-								if ((!is_null($wrap_pos)) && ($none_wrap_length>=$wrap_pos) && ($textual_area) && (!$in_semihtml))
+								if (($wrap_pos!==NULL) && ($none_wrap_length>=$wrap_pos) && ($textual_area) && (!$in_semihtml))
 								{
 									if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 									$tag_output->attach($continuation);
@@ -857,10 +857,10 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 								{
 									if (($pos<$len) && ($comcode[$pos]=='|'))
 									{
-										$end_tbl=strpos($comcode,chr(10).'|}',$pos);
+										$end_tbl=strpos($comcode,$chr_10.'|}',$pos);
 										if ($end_tbl!==false)
 										{
-											$end_fst_line_pos=strpos($comcode,chr(10),$pos);
+											$end_fst_line_pos=strpos($comcode,$chr_10,$pos);
 											$caption=substr($comcode,$pos+2,max($end_fst_line_pos-$pos-2,0));
 											$pos+=strlen($caption)+1;
 
@@ -1089,7 +1089,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 								}
 
 								// Search highlighting lookahead
-								if ((!$differented) && (!is_null($highlight_bits)))
+								if ((!$differented) && ($highlight_bits!==NULL))
 								{
 									foreach ($highlight_bits as $highlight_bit)
 									{
@@ -1117,7 +1117,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 									{
 										// Find the full link portion in the upcoming Comcode
 										$link_end_pos=strlen($comcode);
-										foreach (array(' ',chr(10),'[',')','"','>','<','.'.chr(10),', ','. ',"'",) as $link_terminator_str)
+										foreach (array(' ',$chr_10,'[',')','"','>','<','.'.$chr_10,', ','. ',"'",) as $link_terminator_str)
 										{
 											$link_end_pos_x=strpos($comcode,$link_terminator_str,$pos-1);
 											if (($link_end_pos_x!==false) && ($link_end_pos_x<$link_end_pos)) $link_end_pos=$link_end_pos_x;
@@ -1336,7 +1336,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 						{
 							foreach ($_last[1] as $index=>$conv)
 							{
-								$_last[1][$index]=@html_entity_decode(str_replace('<br />',chr(10),$conv),ENT_QUOTES,get_charset());
+								$_last[1][$index]=@html_entity_decode(str_replace('<br />',$chr_10,$conv),ENT_QUOTES,get_charset());
 							}
 						}
 
@@ -1369,7 +1369,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 
 						if ($current_tag=='title')
 						{
-							if ((strlen($comcode)>$pos+1) && ($comcode[$pos]==chr(10)) && ($comcode[$pos+1]==chr(10))) // Linux newline
+							if ((strlen($comcode)>$pos+1) && ($comcode[$pos]==$chr_10) && ($comcode[$pos+1]==$chr_10)) // Linux newline
 							{
 								$NUM_COMCODE_LINES_PARSED+=2;
 								$pos+=2;

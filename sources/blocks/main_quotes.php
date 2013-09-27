@@ -97,7 +97,7 @@ class Block_main_quotes
 		{
 			$line[$i]=fgets($myfile,1024);
 
-			if (($line[$i]===false) || (is_null($line[$i]))) break;
+			if (($line[$i]===false) || ($line[$i]===NULL)) break;
 
 			if (trim($line[$i])!='') $i++;
 		}

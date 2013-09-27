@@ -1255,13 +1255,20 @@ class forum_driver_ocf extends forum_driver_base
 		if ($hide_hidden) $select.=',g.g_hidden';
 		$sup=' ORDER BY g_order,g.id';
 		if (running_script('upgrader')) $sup='';
-		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_groups g'.$where,false,true);
+		static $cnt_cache=array();
+		if (isset($cnt_cache[$where]))
+		{
+			$count=$cnt_cache[$where];
+		} else
+		{
+			$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_groups g'.$where,false,true);
+			$cnt_cache[$where]=$count;
+		}
 		if (($count>100) && ((!$force_show_all) || ($count>4000)))
 		{
-			if (is_null($force_find)) $force_find=NULL;
-			if (is_null($for_member)) $for_member=get_member();
+			if ($for_member===NULL) $for_member=get_member();
 			$where=' WHERE g_is_private_club=0';
-			if (is_null($force_find)) $force_find=array();
+			if ($force_find===NULL) $force_find=array();
 			$force_find=array_merge($force_find,$this->_get_members_groups($for_member));
 			foreach ($force_find as $gid)
 			{
@@ -1270,7 +1277,15 @@ class forum_driver_ocf extends forum_driver_base
 		}
 		if (!function_exists('require_lang')) require_code('lang');
 		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id'.$where.$sup;
-		$rows=$this->connection->query($query,NULL,NULL,false,true);
+		static $rows_cache=array();
+		if (isset($rows_cache[$where]))
+		{
+			$rows=$rows_cache[$where];
+		} else
+		{
+			$rows=$this->connection->query($query,NULL,NULL,false,true);
+			$rows_cache[$where]=$rows;
+		}
 		if ($hide_hidden)
 		{
 			require_lang('ocf');
@@ -1278,7 +1293,7 @@ class forum_driver_ocf extends forum_driver_base
 		$out=array();
 		foreach ($rows as $row)
 		{
-			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['text_original'])) $row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || ($row['text_original']===NULL)) $row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
 			if (($hide_hidden) && ($row['g_hidden']==1))
 			{

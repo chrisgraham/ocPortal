@@ -39,7 +39,7 @@ function init__database_security_filter()
  */
 function is_simple_query($query)
 {
-	$complex_keywords=array('ORDER','GROUP','AS','OR','NOT','LIKE','IN','BETWEEN','UNION','HAVING');
+	$complex_keywords=array('ORDER'=>1,'GROUP'=>1,'AS'=>1,'OR'=>1,'NOT'=>1,'LIKE'=>1,'IN'=>1,'BETWEEN'=>1,'UNION'=>1,'HAVING'=>1);
 	$complex_operators=array('<','>','!','+','-','/','*');
 	$query=_trim_quoted_substrings($query);
 	$query_parts=explode(' ',$query);
@@ -47,7 +47,7 @@ function is_simple_query($query)
 	{
 		foreach ($query_parts as $part)
 		{
-			if (in_array(strtoupper(trim($part)),$complex_keywords)) return false;
+			if (array_key_exists(strtoupper(trim($part)),$complex_keywords)) return false;
 		}
 		foreach ($complex_operators as $operator)
 		{

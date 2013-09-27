@@ -27,7 +27,7 @@
  */
 function _find_text_file_path($codename,$lang)
 {
-	if (is_null($lang))
+	if ($lang===NULL)
 	{
 		$langs=array('');
 	}

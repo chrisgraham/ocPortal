@@ -119,7 +119,7 @@ class Module_notifications
 		$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
 		$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 
-		$_message=comcode_to_tempcode($row['d_message']);
+		$_message=get_translated_tempcode($row['d_message']);
 
 		if ($row['d_read']==0)
 			$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('id'=>$id),'',1);

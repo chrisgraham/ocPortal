@@ -33,10 +33,10 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
 	if ($IN_MINIKERNEL_VERSION) return array();
 
 	$extra='';
-	if (is_null($member_id))
+	if ($member_id===NULL)
 	{
 		global $EMOTICON_LEVELS;
-		if (!is_null($this_ref->EMOTICON_CACHE)) return $this_ref->EMOTICON_CACHE;
+		if ($this_ref->EMOTICON_CACHE!==NULL) return $this_ref->EMOTICON_CACHE;
 	} else
 	{
 		$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';

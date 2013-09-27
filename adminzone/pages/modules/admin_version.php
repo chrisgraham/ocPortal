@@ -275,7 +275,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_table('digestives_tin',array( // Notifications queued up ready for the regular digest email
 				'id'=>'*AUTO',
 				'd_subject'=>'LONG_TEXT',
-				'd_message'=>'LONG_TEXT',
+				'd_message'=>'LONG_TRANS',
 				'd_from_member_id'=>'?MEMBER',
 				'd_to_member_id'=>'MEMBER',
 				'd_priority'=>'SHORT_INTEGER',
@@ -322,6 +322,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->alter_table_field('member_page_access','active_until','?TIME');
 			$GLOBALS['SITE_DB']->alter_table_field('member_category_access','active_until','?TIME');
 
+			$GLOBALS['SITE_DB']->promote_text_field_to_comcode('digestives_tin','d_message','id',4);
 			$GLOBALS['SITE_DB']->add_table_field('digestives_tin','d_read','BINARY');
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'notifications_enabled SET l_setting=l_setting+'.strval(A_WEB_NOTIFICATION).' WHERE l_setting<>0');
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_read',array('d_read'));

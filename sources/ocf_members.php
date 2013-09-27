@@ -127,19 +127,19 @@ function ocf_get_all_custom_fields_match($groups=NULL,$public_view=NULL,$owner_v
 		{
 			require_code('hooks/systems/ocf_cpf_filter/'.$hook);
 			$_hook=object_factory('Hook_ocf_cpf_filter_'.$hook,true);
-			if (is_null($_hook)) continue;
+			if ($_hook===NULL) continue;
 			$to_keep+=$_hook->to_enable();
 		}
 
 		$where='WHERE 1=1 ';
-		if (!is_null($public_view)) $where.=' AND cf_public_view='.strval($public_view);
-		if (!is_null($owner_view)) $where.=' AND cf_owner_view='.strval($owner_view);
-		if (!is_null($owner_set)) $where.=' AND cf_owner_set='.strval($owner_set);
+		if ($public_view!==NULL) $where.=' AND cf_public_view='.strval($public_view);
+		if ($owner_view!==NULL) $where.=' AND cf_owner_view='.strval($owner_view);
+		if ($owner_set!==NULL) $where.=' AND cf_owner_set='.strval($owner_set);
 		if ($required!==NULL) $where.=' AND cf_required='.strval($required);
-		if (!is_null($show_in_posts)) $where.=' AND cf_show_in_posts='.strval($show_in_posts);
-		if (!is_null($show_in_post_previews)) $where.=' AND cf_show_in_post_previews='.strval($show_in_post_previews);
+		if ($show_in_posts!==NULL) $where.=' AND cf_show_in_posts='.strval($show_in_posts);
+		if ($show_in_post_previews!==NULL) $where.=' AND cf_show_in_post_previews='.strval($show_in_post_previews);
 		if ($special_start==1) $where.=' AND tx.text_original LIKE \''.db_encode_like('ocp_%').'\'';
-		if (!is_null($show_on_join_form)) $where.=' AND cf_show_on_join_form='.strval($show_on_join_form);
+		if ($show_on_join_form!==NULL) $where.=' AND cf_show_on_join_form='.strval($show_on_join_form);
 
 		global $TABLE_LANG_FIELDS_CACHE;
 		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate tx ON (tx.id=f.cf_name AND '.db_string_equal_to('tx.language',get_site_default_lang()).') '.$where.' ORDER BY cf_order',NULL,NULL,false,true,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());
@@ -155,7 +155,7 @@ function ocf_get_all_custom_fields_match($groups=NULL,$public_view=NULL,$owner_v
 
 				require_lang('ocf');
 				$test=do_lang('SPECIAL_CPF__'.$row['trans_name'],NULL,NULL,NULL,NULL,false);
-				if (!is_null($test)) $row['trans_name']=$test;
+				if ($test!==NULL) $row['trans_name']=$test;
 			}
 			$result[]=$row;
 		}
@@ -166,7 +166,7 @@ function ocf_get_all_custom_fields_match($groups=NULL,$public_view=NULL,$owner_v
 	$result2=array();
 	foreach ($result as $row)
 	{
-		if (($row['cf_only_group']=='') || (is_null($groups)) || (count(array_intersect(explode(',',$row['cf_only_group']),$groups))!=0)) $result2[]=$row;
+		if (($row['cf_only_group']=='') || ($groups===NULL) || (count(array_intersect(explode(',',$row['cf_only_group']),$groups))!=0)) $result2[]=$row;
 	}
 
 	return $result2;
@@ -196,6 +196,9 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 	$all_cpf_permissions=((get_member()==$member_id)||$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))?/*no restricts if you are the member or a super-admin*/array():list_to_map('field_id',$GLOBALS['FORUM_DB']->query_select('f_member_cpf_perms',array('*'),array('member_id'=>$member_id)));
 
 	require_code('fields');
+
+	$editable_with_comcode=array('long_text'=>1,'long_trans'=>1,'short_trans'=>1);
+	$editable_without_comcode=array('list'=>1,'radiolist'=>1,'short_text'=>1,'codename'=>1,'url'=>1,'integer'=>1,'float'=>1,'email'=>1);
 
 	foreach ($fields_to_show as $i=>$field_to_show)
 	{
@@ -300,8 +303,8 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 			$rendered_value=$ob->render_field_value($field_to_show,$member_value,$i,NULL,'f_members',$member_id,'id','field_'.strval($field_to_show['id']),$member_id);
 
 			$editability=mixed(); // If stays as NULL, not editable
-			if (in_array($field_to_show['cf_type'],array('long_text','long_trans','short_trans'))) $editability=true; // Editable: Supports Comcode
-			elseif (in_array($field_to_show['cf_type'],array('list','radiolist','short_text','codename','url','integer','float','email'))) $editability=false; // Editable: Does not support Comcode
+			if (array_key_exists($field_to_show['cf_type'],$editable_with_comcode)) $editability=true; // Editable: Supports Comcode
+			elseif (array_key_exists($field_to_show['cf_type'],$editable_without_comcode)) $editability=false; // Editable: Does not support Comcode
 
 			$edit_type='line';
 			if (in_array($field_to_show['cf_type'],array('list','radiolist'))) $edit_type=$field_to_show['cf_default'];

@@ -646,7 +646,7 @@ function has_privilege($member,$permission,$page=NULL,$cats=NULL)
  */
 function check_submit_permission($range,$cats=NULL,$page=NULL)
 {
-	if (is_null($page)) $page=get_page_name();
+	if ($page===NULL) $page=get_page_name();
 
 	if (!has_submit_permission($range,get_member(),get_ip_address(),$page,$cats))
 		access_denied('PRIVILEGE','submit_'.$range.'range_content');
@@ -673,15 +673,15 @@ function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
 
 	if ((addon_installed('securitylogging')) && ((get_value('pinpoint_submitban_check')!=='1') || (get_zone_name()=='cms')))
 	{
-		if (is_null($USERSUBMITBAN_MEMBER_CACHE))
+		if ($USERSUBMITBAN_MEMBER_CACHE===NULL)
 		{
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$member));
-			$USERSUBMITBAN_MEMBER_CACHE=!is_null($test);
+			$USERSUBMITBAN_MEMBER_CACHE=($test!==NULL);
 		}
 		if ($USERSUBMITBAN_MEMBER_CACHE) $result=false;
 	}
 
-	if (is_null($result))
+	if ($result===NULL)
 	{
 		$result=has_privilege($member,'submit_'.$range.'range_content',$page,$cats);
 	}
@@ -701,7 +701,7 @@ function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
  */
 function check_some_edit_permission($range,$cats=NULL,$page=NULL)
 {
-	if (is_null($page)) $page=get_page_name();
+	if ($page===NULL) $page=get_page_name();
 
 	$ret=false;
 	$member=get_member();
@@ -723,7 +723,7 @@ function check_some_edit_permission($range,$cats=NULL,$page=NULL)
  */
 function check_edit_permission($range,$resource_owner,$cats=NULL,$page=NULL)
 {
-	if (is_null($page)) $page=get_page_name();
+	if ($page===NULL) $page=get_page_name();
 
 	if (!has_edit_permission($range,get_member(),$resource_owner,$page,$cats))
 		access_denied('PRIVILEGE','edit_'.(($resource_owner==get_member())?'own_':'').$range.'range_content');
@@ -759,7 +759,7 @@ function has_edit_permission($range,$member,$resource_owner,$page,$cats=NULL)
  */
 function check_delete_permission($range,$resource_owner,$cats=NULL,$page=NULL)
 {
-	if (is_null($page)) $page=get_page_name();
+	if ($page===NULL) $page=get_page_name();
 
 	if (!has_delete_permission($range,get_member(),$resource_owner,$page,$cats))
 		access_denied('PRIVILEGE','delete_'.(($resource_owner==get_member())?'own_':'').$range.'range_content');
@@ -793,7 +793,7 @@ function has_delete_permission($range,$member,$resource_owner,$page,$cats=NULL)
  */
 function has_add_comcode_page_permission($zone=NULL,$member=NULL)
 {
-	if (is_null($member)) $member=get_member();
+	if ($member===NULL) $member=get_member();
 
 	if (!is_null($zone))
 	{
@@ -816,7 +816,7 @@ function has_add_comcode_page_permission($zone=NULL,$member=NULL)
  */
 function has_bypass_validation_comcode_page_permission($zone=NULL,$member=NULL)
 {
-	if (is_null($member)) $member=get_member();
+	if ($member===NULL) $member=get_member();
 
 	if (!is_null($zone))
 	{
@@ -840,7 +840,7 @@ function has_bypass_validation_comcode_page_permission($zone=NULL,$member=NULL)
  */
 function has_some_edit_comcode_page_permission($scope,$zone=NULL,$member=NULL)
 {
-	if (is_null($member)) $member=get_member();
+	if ($member===NULL) $member=get_member();
 
 	if (!is_null($zone))
 	{
@@ -903,9 +903,9 @@ function get_comcode_page_editability_per_zone($member=NULL)
  */
 function has_edit_comcode_page_permission($zone,$page,$owner=NULL,$member=NULL)
 {
-	if (is_null($member)) $member=get_member();
+	if ($member===NULL) $member=get_member();
 
-	if (is_null($owner))
+	if ($owner===NULL)
 		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$page));
 
 	if (!has_actual_page_access($member,$page,$zone)) return false;
@@ -915,7 +915,7 @@ function has_edit_comcode_page_permission($zone,$page,$owner=NULL,$member=NULL)
 	$privilege=$is_owner?'edit_own_highrange_content':'edit_highrange_content';
 
 	$cats=mixed();
-	if (!is_null($zone)) $cats=array('zone_page',$zone);
+	if ($zone!==NULL) $cats=array('zone_page',$zone);
 
 	return has_privilege($member,$privilege,'cms_comcode_pages',$cats);
 }

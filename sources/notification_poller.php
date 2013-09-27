@@ -212,7 +212,7 @@ function get_web_notifications($max=NULL,$start=0)
 		$from_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
 		$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 
-		$_message=comcode_to_tempcode($row['d_message']);
+		$_message=get_translated_tempcode($row['d_message']);
 
 		$url=mixed();
 		switch ($row['d_notification_code'])
@@ -262,7 +262,7 @@ function web_notification_to_xml($row)
 	$from_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 
-	$_message=comcode_to_tempcode($row['d_message']);
+	$_message=get_translated_tempcode($row['d_message']);
 
 	$rendered=do_template('NOTIFICATION_WEB_DESKTOP',array(
 		'ID'=>strval($row['id']),
