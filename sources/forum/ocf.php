@@ -687,7 +687,7 @@ class forum_driver_ocf extends forum_driver_base
 		else $forum_id=$this->forum_id_from_name($forum);
 		$query='SELECT t.id,f_is_threaded FROM '.$this->connection->get_table_prefix().'f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id WHERE t_forum_id='.strval($forum_id).' AND ('.db_string_equal_to('t_description',$topic_identifier).' OR t_description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
-		$_result=$this->connection->query($query,1);
+		$_result=$this->connection->query($query,1,NULL,false,true);
 		if (array_key_exists(0,$_result))
 		{
 			$TOPIC_IDENTIFIERS_TO_IDS_CACHE[$key]=$_result[0]['id'];
@@ -1251,8 +1251,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		$where=$only_permissive?' WHERE g_is_private_club=0':'';
 
-		$select='g.id,text_original,g_name';
-		if ($hide_hidden) $select.=',g.g_hidden';
+		$select='g.id,text_original,g_name,g.g_hidden';
 		$sup=' ORDER BY g_order,g.id';
 		if (running_script('upgrader')) $sup='';
 		static $cnt_cache=array();

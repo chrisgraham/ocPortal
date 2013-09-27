@@ -208,7 +208,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 	$generator_num++;
 
 	$myfunc='do_runtime_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
-	$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"foreach (\\\$parameters as \\\$i=>\\\$p) { if (is_object(\\\$p)) \\\$parameters[\\\$i]=\\\$p->evaluate(); } echo ";
+	$funcdef="\$tpl_funcs['$myfunc']=\"foreach (\\\$parameters as \\\$i=>\\\$p) { if (is_object(\\\$p)) \\\$parameters[\\\$i]=\\\$p->evaluate(); } echo ";
 	if ($name=='?') $name='TERNARY';
 	if (($type==TC_SYMBOL) && (function_exists('ecv_'.$name)))
 	{
@@ -218,7 +218,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 		$funcdef.="ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
 	}
 
-	$ret=new ocp_tempcode(array($funcdef,array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,''))));
+	$ret=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,''))));
 	if ($type==TC_LANGUAGE_REFERENCE) $ret->pure_lang=true;
 	return $ret;
 }
@@ -398,7 +398,7 @@ function make_string_tempcode($string)
 	$generator_num++;
 
 	$myfunc='string_attach_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
-	$code_to_preexecute="\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($string)."\\\";\";\n";
+	$code_to_preexecute=array($myfunc=>"\$tpl_funcs['$myfunc']=\"echo \\\"".php_addslashes_twice($string)."\\\";\";\n");
 	$seq_parts=array(array($myfunc,array(),TC_KNOWN,'',''));
 	return new ocp_tempcode(array($code_to_preexecute,$seq_parts));
 }
@@ -457,8 +457,6 @@ function apply_tempcode_escaping_inline($escaped,$value)
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
 	foreach ($escaped as $escape)
 	{
-		//if ($escape==NL_ESCAPED) echo str_replace(chr(10),'',$value)."\n\n\n\n\n";
-
 		if ($escape==ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==SQ_ESCAPED) $value=str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
@@ -810,8 +808,6 @@ function handle_symbol_preprocessing($bit,&$children)
 				$param=block_params_str_to_arr($param[0],true);
 			}
 
-			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
-
 			if (in_array('defer=1',$param))
 			{
 				// Nothing has to be done here
@@ -1049,7 +1045,7 @@ class ocp_tempcode
 		{
 			$this->preprocessable_bits=array();
 			$this->seq_parts=array();
-			$this->code_to_preexecute='';
+			$this->code_to_preexecute=array();
 		} else
 		{
 			$this->code_to_preexecute=$details[0];
@@ -1138,9 +1134,7 @@ class ocp_tempcode
 		if (isset($this->preprocessed)) return;
 
 		foreach ($this->preprocessable_bits as $bit)
-		{
 			handle_symbol_preprocessing($bit,$this->children);
-		}
 
 		$this->preprocessed=true;
 	}
@@ -1191,10 +1185,7 @@ class ocp_tempcode
 		{
 			foreach ($attach->seq_parts as $b) $this->seq_parts[]=$b;
 
-			if (((strpos($this->code_to_preexecute,'/'.$attach->codename.'.')===false) && (strpos($this->code_to_preexecute,'$TPL_FUNCS[\'tcpfunc_'.$attach->codename.'\']')===false)) || ($GLOBALS['KEEP_MARKERS'])) // Optimisation for memory.
-			{
-				$this->code_to_preexecute.=$attach->code_to_preexecute;
-			}
+			$this->code_to_preexecute+=$attach->code_to_preexecute;
 
 			foreach ($attach->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
 
@@ -1209,13 +1200,12 @@ class ocp_tempcode
 			if (($end!==false) && ($end[2]==TC_KNOWN) && ($end[1]==array())) // Optimisation to save memory/storage-space/evaluation-time -- we can just append text
 			{
 				$myfunc=$end[0];
-				$code=$this->code_to_preexecute;
-				$pos=strpos($code,"\$TPL_FUNCS['$myfunc']=\"echo ");
-				if ($pos!==false)
+				if (isset($this->code_to_preexecute[$myfunc]))
 				{
-					$pos2=strpos($code,"\";\n",$pos);
-					$code=substr($code,0,$pos2)."echo \\\"".php_addslashes_twice($attach)."\\\";".substr($code,$pos2);
-					$this->code_to_preexecute=$code;
+					$code=$this->code_to_preexecute[$myfunc];
+					$pos2=strpos($code,"\";\n");
+					$code=substr($code,0,$pos2)." echo \\\"".php_addslashes_twice($attach)."\\\";".substr($code,$pos2);
+					$this->code_to_preexecute[$myfunc]=$code;
 					return;
 				}
 			}
@@ -1227,8 +1217,8 @@ class ocp_tempcode
 			$generator_num++;
 
 			$myfunc='string_attach_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
-			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
-			$this->code_to_preexecute.=$funcdef;
+			$funcdef="\$tpl_funcs['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
+			$this->code_to_preexecute[$myfunc]=$funcdef;
 			$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');
 		}
 
@@ -1255,18 +1245,15 @@ class ocp_tempcode
 		if ($this->cached_output!==NULL) return strlen($this->cached_output)==0;
 		if (isset($this->is_empty)) return $this->is_empty;
 
-		if (!isset($this->seq_parts[0]))
+		if (!isset($this->seq_parts[0])) // Optimisation: empty
 		{
 			$this->is_empty=true;
 			return true;
 		}
 
-		//$tempcode_profile_log_start=microtime(true);
-		//tempcode_profile_log($this->seq_parts);
-
 		ob_start();
 
-		global $NO_EVAL_CACHE,$XSS_DETECT,$USER_LANG_CACHED;
+		global $NO_EVAL_CACHE,$XSS_DETECT,$USER_LANG_CACHED,$KEEP_TPL_FUNCS,$MEMORY_OVER_SPEED,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
 
 		if ($XSS_DETECT)
 		{
@@ -1286,39 +1273,28 @@ class ocp_tempcode
 		}
 		$cl=$current_lang;
 
-		$first_of_long=isset($this->seq_parts[3]);
-		global $KEEP_TPL_FUNCS,$MEMORY_OVER_SPEED,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
-		$TPL_FUNCS=$KEEP_TPL_FUNCS;
+		$first_of_long=isset($this->seq_parts[3]); // We set this to know not to dig right through to determine emptiness, as this wastes cache memory (it's a tradeoff)
+		$tpl_funcs=$KEEP_TPL_FUNCS;
 
 		foreach ($this->seq_parts as $bit)
 		{
-			//$before=memory_get_usage();
-
 			$bit_0=$bit[0];
-			if (!isset($TPL_FUNCS[$bit_0]))
+			if (!isset($tpl_funcs[$bit_0]))
 			{
-				//$PROFILING_LOG_FILE=fopen(get_custom_file_base().'/../test.log','wt'); fwrite($PROFILING_LOG_FILE,$this->code_to_preexecute); fclose($PROFILING_LOG_FILE);
-
-				//eval_log($this->code_to_preexecute);
-				if (eval($this->code_to_preexecute)===false) fatal_exit(@strval($php_errormsg));
-				if (!isset($TPL_FUNCS[$bit_0])) $TPL_FUNCS[$bit_0]=' '; // Fudge to stop error. Actually caused by a race condition and output will be incomplete
+				foreach ($this->code_to_preexecute as $code)
+					if (eval($code)===false) fatal_exit(@strval($php_errormsg));
 			}
-			if (($TPL_FUNCS[$bit_0][0]!='e'/*for echo*/) && (function_exists($TPL_FUNCS[$bit_0])))
+			if (($tpl_funcs[$bit_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$bit_0])))
 			{
-				call_user_func($TPL_FUNCS[$bit_0],$bit[1],$current_lang,$bit[4]);
+				call_user_func($tpl_funcs[$bit_0],$bit[1],$current_lang,$bit[4]);
 			} else
 			{
 				$parameters=$bit[1];
-				if (eval($TPL_FUNCS[$bit_0])===false) fatal_exit(@strval($php_errormsg));
+				if (eval($tpl_funcs[$bit_0])===false) fatal_exit(@strval($php_errormsg));
 			}
-
-			//@ob_end_flush();@ob_end_flush();@ob_end_flush();print('<!-- tempcode-eval-is_empty: '.htmlentities($this->codename).' ('.clean_file_size(memory_get_usage()-$before).' used, now at '.number_format(memory_get_usage()).') -->'."\n");flush();
 
 			if ((($first_of_long) || ($MEMORY_OVER_SPEED)) && (ob_get_length()>0)) // We only quick exit on the first iteration, as we know we likely didn't spend much time getting to it- anything more and we finish so that we can cache for later use by evaluate/evaluate_echo
 			{
-				//$tempcode_profile_log_end=microtime(true);
-				//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
-
 				@ob_end_clean();
 				if (!$no_eval_cache_before)
 					$NO_EVAL_CACHE=$no_eval_cache_before;
@@ -1331,27 +1307,14 @@ class ocp_tempcode
 			$first_of_long=false;
 		}
 
-		//$tempcode_profile_log_end=microtime(true);
-		//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
-
-		if (($MEMORY_OVER_SPEED) || ($NO_EVAL_CACHE))
-		{
-			$tmp=ob_get_clean();
-			if ($XSS_DETECT)
-				@ini_set('ocproducts.xss_detect',$before);
-			if (!$no_eval_cache_before)
-				$NO_EVAL_CACHE=$no_eval_cache_before;
-			$ret=($tmp=='');
-			$this->is_empty=$ret;
-			return $ret;
-		}
-
-		$this->cached_output=ob_get_clean(); // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
+		$tmp=ob_get_clean();
+		if ((!$MEMORY_OVER_SPEED) && (!$NO_EVAL_CACHE))
+			$this->cached_output=$tmp; // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
 		if (!$no_eval_cache_before)
 			$NO_EVAL_CACHE=$no_eval_cache_before;
 		if ($XSS_DETECT)
 			@ini_set('ocproducts.xss_detect',$before);
-		$ret=($this->cached_output=='');
+		$ret=($tmp=='');
 		$this->is_empty=$ret;
 		return $ret;
 	}
@@ -1388,11 +1351,11 @@ class ocp_tempcode
 		list($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->pure_lang,$this->code_to_preexecute)=$result;
 
 		if ($forced_reload_details[6]===NULL) $forced_reload_details[6]='';
-		if ((isset($this->code_to_preexecute[800])) && ($GLOBALS['CACHE_TEMPLATES']))
+		if ((count($this->code_to_preexecute)>10) && ($GLOBALS['CACHE_TEMPLATES']))
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
 			$_file=(strpos($file,'\'')===false)?$file:php_addslashes($file);
-			$this->code_to_preexecute='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
+			$this->code_to_preexecute[]='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
 			else { eval($result[4]); unset($result); }';
 			// NB: $GLOBALS[\'CACHE_TEMPLATES\']=false; is in case the template cache has been detected as broken, it prevents this branch running as it would fail again
 		}
@@ -1446,7 +1409,6 @@ class ocp_tempcode
 		if ($result===false)
 		{
 			if ($allow_failure) return false;
-			//inspect_plain($raw_data);
 			fatal_exit(@strval($php_errormsg));
 		}
 
@@ -1582,7 +1544,7 @@ class ocp_tempcode
 			$this->cached_output=NULL; // Won't be needed again
 			return '';
 		}
-		if (!isset($this->seq_parts[0]))
+		if (!isset($this->seq_parts[0])) // Optimisation: empty
 		{
 			$this->cached_output='';
 			return '';
@@ -1590,50 +1552,26 @@ class ocp_tempcode
 
 		$cl=$current_lang;
 
-		//ob_start();
-
-		//$tempcode_profile_log_start=microtime(true);
-		//tempcode_profile_log($this->seq_parts);
-
 		global $KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
-		$TPL_FUNCS=$KEEP_TPL_FUNCS;
+		$tpl_funcs=$KEEP_TPL_FUNCS;
 		$seq_parts=&$this->seq_parts;
 		foreach ($seq_parts as $i=>$bit)
 		{
-			//$before=memory_get_usage();
-
 			$bit_0=$bit[0];
-			if (!isset($TPL_FUNCS[$bit_0]))
+			if (!isset($tpl_funcs[$bit_0]))
 			{
-				//eval_log($this->code_to_preexecute);
-				if (eval($this->code_to_preexecute)===false) fatal_exit(@strval($php_errormsg));
-				if (!isset($TPL_FUNCS[$bit_0])) $TPL_FUNCS[$bit_0]=' '; // Fudge to stop error. Actually caused by a race condition and output will be incomplete
+				foreach ($this->code_to_preexecute as $code)
+					if (eval($code)===false) fatal_exit(@strval($php_errormsg));
 			}
-			if (($TPL_FUNCS[$bit_0][0]!='e'/*for echo*/) && (function_exists($TPL_FUNCS[$bit_0])))
+			if (($tpl_funcs[$bit_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$bit_0])))
 			{
-				call_user_func($TPL_FUNCS[$bit_0],$bit[1],$current_lang,$bit[4]);
+				call_user_func($tpl_funcs[$bit_0],$bit[1],$current_lang,$bit[4]);
 			} else
 			{
 				$parameters=$bit[1];
-				//eval_log($TPL_FUNCS[$bit_0]);
-				if (eval($TPL_FUNCS[$bit_0])===false) fatal_exit(@strval($php_errormsg));
+				if (eval($tpl_funcs[$bit_0])===false) fatal_exit(@strval($php_errormsg));
 			}
-
-			//@ob_end_flush();@ob_end_flush();@ob_end_flush();print('<!-- tempcode-eval-evaluate_echo: '.htmlentities($this->codename).' ('.clean_file_size(memory_get_usage()-$before).' used, now at '.number_format(memory_get_usage()).') -->'."\n");flush();
-
-			//if (isset($GLOBALS['FINISHING_OUTPUT'])) $seq_parts[$i]=NULL;
 		}
-		/*if (isset($GLOBALS['FINISHING_OUTPUT']))		Optimisation to free memory up during wind down. Does not work well enough to risk the possible bugs doing this
-		{
-			$this->preprocessable_bits=NULL;
-			$this->seq_parts=NULL;
-			$this->code_to_preexecute=NULL;
-		}*/
-
-		//ob_end_flush();
-
-		//$tempcode_profile_log_end=microtime(true);
-		//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
 
 		return '';
 	}
@@ -1658,24 +1596,14 @@ class ocp_tempcode
 	 */
 	function evaluate($current_lang=NULL,$_escape=false,$up_to=NULL)
 	{
-		/*static $do_memory_tracking=NULL;	Breaks installer, and poor performance
-		if ($do_memory_tracking===NULL) $do_memory_tracking=(get_value('memory_tracking')==='1');
-		if ($do_memory_tracking)
-		{
-			if ((memory_get_usage()>50*1024*1024) && ((!isset($GLOBALS['FORUM_DRIVER'])) || (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))))
-			{
-				fatal_exit('Memory problem - over 50MB used');
-			}
-		}*/
-
 		if (isset($this->cached_output)) return $this->cached_output;
-		if (!isset($this->seq_parts[0]))
+		if (!isset($this->seq_parts[0])) // Optimisation: empty
 		{
 			$this->cached_output='';
 			return '';
 		}
 
-		global $NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$USER_LANG_CACHED,$XSS_DETECT;
+		global $NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$USER_LANG_CACHED,$XSS_DETECT,$KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
 
 		ob_start();
 
@@ -1698,11 +1626,7 @@ class ocp_tempcode
 		}
 		$cl=$current_lang;
 
-		//$tempcode_profile_log_start=microtime(true);
-		//tempcode_profile_log($this->seq_parts);
-
-		global $KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
-		$TPL_FUNCS=$KEEP_TPL_FUNCS; // NB: $TPL_FUNCS isn't really global, done like this for legacy reasons so our cache doesn't break. Eval'd code is in same variable scope
+		$tpl_funcs=$KEEP_TPL_FUNCS;
 		$doing_up_to=isset($up_to);
 		$seq_parts=&$this->seq_parts;
 		$no_eval_cache_before=$NO_EVAL_CACHE;
@@ -1717,62 +1641,35 @@ class ocp_tempcode
 				return $ret;
 			}
 
-			//$before=memory_get_usage();
-
 			$bit_0=$bit[0];
-			if (!isset($TPL_FUNCS[$bit_0]))
+			if (!isset($tpl_funcs[$bit_0]))
 			{
-				//eval_log($this->code_to_preexecute);
-				if (eval($this->code_to_preexecute)===false) fatal_exit(@strval($php_errormsg)); // Fix references to wrong templates_cached directory
-				if (!isset($TPL_FUNCS[$bit_0])) $TPL_FUNCS[$bit_0]=' '; // Fudge to stop error. Actually caused by a race condition and output will be incomplete
+				foreach ($this->code_to_preexecute as $code)
+					if (eval($code)===false) fatal_exit(@strval($php_errormsg));
 			}
-			if (($TPL_FUNCS[$bit_0][0]!='e'/*for echo*/) && (function_exists($TPL_FUNCS[$bit_0])))
+			if (($tpl_funcs[$bit_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$bit_0])))
 			{
-				call_user_func($TPL_FUNCS[$bit_0],$bit[1],$current_lang,$bit[4]);
+				call_user_func($tpl_funcs[$bit_0],$bit[1],$current_lang,$bit[4]);
 			} else
 			{
 				$parameters=$bit[1];
 
-				/*$code=$TPL_FUNCS[$bit_0];		Debug code to find good stack traces but unfortunately it never worked
-				$file=get_custom_file_base().'/uploads/website_specific/'.substr(md5($code),0,10).'.php';
-				$myfile=fopen($file,'wb');
-				fwrite($myfile,'<?php'.chr(10));
-				fwrite($myfile,$code);
-				fclose($myfile);
-				fix_permissions($file);
-				sync_file($file);
-				if (@include($file)===false)*/
-
-				//eval_log($TPL_FUNCS[$bit_0]);
-				if (eval($TPL_FUNCS[$bit_0])===false)
-				{
-					//@ob_end_clean();@var_dump($this);@exit($php_errormsg);
-					fatal_exit(@strval($php_errormsg));
-				}
+				if (eval($tpl_funcs[$bit_0])===false) fatal_exit(@strval($php_errormsg));
 			}
-
-			//@ob_end_flush();@ob_end_flush();@ob_end_flush();print('<!-- tempcode-eval-evaluate: '.htmlentities($this->codename).' ('.clean_file_size(memory_get_usage()-$before).' used, now at '.number_format(memory_get_usage()).') -->'."\n");flush();
 		}
 
 		if ($XSS_DETECT)
 			@ini_set('ocproducts.xss_detect',$before);
 
-		//$tempcode_profile_log_end=microtime(true);
-		//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
+		$ret=ob_get_clean();
 
-		if ($NO_EVAL_CACHE || $MEMORY_OVER_SPEED)
-		{
-			if (!$no_eval_cache_before)
-				$NO_EVAL_CACHE=$no_eval_cache_before;
-			$ret=ob_get_clean();
-			return $ret;
-		}
+		if (!$NO_EVAL_CACHE && !$MEMORY_OVER_SPEED)
+			$this->cached_output=$ret; // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
 
-		$this->cached_output=ob_get_clean(); // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
+		if (!$no_eval_cache_before) $NO_EVAL_CACHE=$no_eval_cache_before;
 
-		return $this->cached_output;
+		return $ret;
 	}
-
 }
 
 /**
@@ -1792,70 +1689,3 @@ function recall_named_function($id,$parameters,$code)
 	}
 	return $GLOBALS[$k];
 }
-
-/*f unction tempcode_profile_log($bit)
-{
-	global $PROFILING_LOG_FILE,$SUMMARY;
-	if (!isset($PROFILING_LOG_FILE))
-	{
-		$PROFILING_LOG_FILE=fopen(get_custom_file_base().'/../test.log','wt');
-		$SUMMARY=array();
-		fwrite($PROFILING_LOG_FILE,ocp_srv('SCRIPT_NAME').'?'.ocp_srv('QUERY_STRING')."...\n\n");
-
-		if (function_exists('set_time_limit')) @set_time_limit(2);
-
-		register_shutdown_function('finish_logging');
-	}
-
-	$backtrace=debug_backtrace();
-
-	$level=count($backtrace)-1;
-	$function=$backtrace[1]['function'];
-	$sz=serialize($bit);
-	$signature=md5($sz);
-	$complexity=strlen($sz);
-
-	if (!isset($SUMMARY[$signature])) $SUMMARY[$signature]=0;
-	$SUMMARY[$signature]++;
-
-	$bit=array(); // Comment out this line to show full data in the dump
-	fwrite($PROFILING_LOG_FILE,$function.': '.$signature.' [recursive level='.integer_format($level).', parts='.integer_format(count($bit)).', complexity='.integer_format($complexity).' bytes]      '.str_replace("\n",'\n',serialize($bit))."\n");
-}
-
-f unction tempcode_profile_log_diff($from,$to,$bit)
-{
-	global $PROFILING_LOG_FILE,$SUMMARY;
-
-	if (isset($PROFILING_LOG_FILE))
-	{
-		$sz=serialize($bit);
-		$signature=md5($sz);
-
-		fwrite($PROFILING_LOG_FILE,'Time taken for '.$signature.': '.float_format($to-$from).' seconds'."\n");
-	}
-}
-
-f unction finish_logging()
-{
-	global $PROFILING_LOG_FILE,$SUMMARY;
-
-	if (isset($PROFILING_LOG_FILE))
-	{
-		fwrite($PROFILING_LOG_FILE,"\n\nSUMMARY...\n\n");
-		foreach ($SUMMARY as $sig=>$count)
-		{
-			fwrite($PROFILING_LOG_FILE,$sig.' [x '.integer_format($count).']'."\n");
-		}
-
-		fclose($PROFILING_LOG_FILE);
-		$PROFILING_LOG_FILE=NULL;
-	}
-}
-
-f unction eval_log($in)
-{
-	global $SLOGFILE;
-	if (!isset($SLOGFILE)) $SLOGFILE=fopen(get_custom_file_base().'/data_custom/tempcode.log','wt');
-	fwrite($SLOGFILE,$in."\n\n\n\n");
-}
-*/

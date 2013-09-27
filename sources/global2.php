@@ -321,7 +321,7 @@ function init__global2()
 		if ((running_script('index')) && ((is_browser_decacheing()) || ($changed_base_url)))
 		{
 			require_code('caches3');
-			auto_decache();
+			auto_decache($changed_base_url);
 		}
 
 		// Load requirements for admins

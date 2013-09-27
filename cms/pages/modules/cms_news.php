@@ -877,8 +877,6 @@ class Module_cms_news_cat extends standard_crud_module
 		}
 
 		$fields->attach(meta_data_get_fields('news_category',is_null($id)?NULL:strval($id)),true);
-		require_code('seo2');
-		$fields->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('news_category',is_null($id)?NULL:strval($id)));

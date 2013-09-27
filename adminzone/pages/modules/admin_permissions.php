@@ -726,7 +726,7 @@ class Module_admin_permissions
 			}
 			$sections->attach(form_input_list_group(do_lang_tempcode('MOST_COMMON'),$sections_common));
 			$sections->attach(form_input_list_group(do_lang_tempcode('OTHER'),$sections_uncommon));
-			$fields->attach(form_input_list(do_lang_tempcode('SECTION'),'','id',$sections,NULL,true));
+			$fields->attach(form_input_huge_list(do_lang_tempcode('SECTION'),'','id',$sections,NULL,true));
 
 			$post_url=get_self_url(false,false,NULL,false,true);
 

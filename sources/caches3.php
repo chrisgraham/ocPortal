@@ -29,8 +29,10 @@ function init__caches3()
 
 /**
  * Automatically empty caches.
+ *
+ * @param  boolean		Whether the base URL has just been changed
  */
-function auto_decache()
+function auto_decache($changed_base_url)
 {
 	delete_value('cdn');
 	erase_block_cache();

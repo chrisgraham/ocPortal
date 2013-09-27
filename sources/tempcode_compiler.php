@@ -286,7 +286,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 										$myfunc='tcpfunc_'.fast_uniqid();
 										$funcdef=build_closure_function($myfunc,$param);
-										$symbol_params[]=new ocp_tempcode(array($funcdef,array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'','')))); // Parameters will be bound in later.
+										$symbol_params[]=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'','')))); // Parameters will be bound in later.
 									}
 
 									$pp_bit=array(array(),TC_SYMBOL,str_replace('"','',$first_param),$symbol_params);
@@ -726,7 +726,7 @@ function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$
 
 	$funcdef=build_closure_function($myfunc,$parts);
 
-	$ret=new ocp_tempcode(array($funcdef,array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'','')))); // Parameters will be bound in later.
+	$ret=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'','')))); // Parameters will be bound in later.
 	$ret->preprocessable_bits=array_merge($ret->preprocessable_bits,$preprocessable_bits);
 	$ret->codename=$codename;
 	return $ret;
@@ -762,10 +762,10 @@ function build_closure_function($myfunc,$parts)
 	{
 		if (strpos($code,'$bound')===false)
 		{
-			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"echo ".php_addslashes($code).";\");\n";
+			$funcdef="\$tpl_funcs['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"echo ".php_addslashes($code).";\");\n";
 		} else
 		{
-			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
+			$funcdef="\$tpl_funcs['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
 		}
 	} else
 	{
@@ -776,7 +776,7 @@ function build_closure_function($myfunc,$parts)
 			$reset_code="eval(\\\$RESET_VAR_CODE);";
 		else
 			$reset_code='';
-		$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"$reset_code echo ".php_addslashes($code).";\";\n";
+		$funcdef="\$tpl_funcs['$myfunc']=\"$reset_code echo ".php_addslashes($code).";\";\n";
 	}
 
 	return $funcdef;
