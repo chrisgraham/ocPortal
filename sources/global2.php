@@ -1584,13 +1584,18 @@ function javascript_tempcode($position=NULL)
  */
 function require_javascript($javascript)
 {
-	if ($javascript=='javascript_forums_embed') // Has to be first
+	global $JAVASCRIPTS;
+
+	// Has to do this inline, as you're not allowed to reference sheets outside head
+	if ((!isset($JAVASCRIPTS[$javascript])) && (headers_sent()))
 	{
-		$GLOBALS['JAVASCRIPTS']=array_merge(array('javascript_forums_embed'=>1),$GLOBALS['JAVASCRIPTS']);
-	} else
-	{
-		$GLOBALS['JAVASCRIPTS'][$javascript]=1;
+		$file=javascript_enforce($javascript);
+		//$_value=do_template('JAVASCRIPT_NEED_INLINE',array('CODE'=>str_replace(get_custom_file_base().'/',get_base_url().'/',file_get_contents($file))));
+		$_value=do_template('JAVASCRIPT_NEED',array('CODE'=>$javascript));
+		attach_to_screen_footer($_value);
 	}
+
+	$JAVASCRIPTS[$javascript]=1;
 }
 
 /**
@@ -1715,7 +1720,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 				}
 
 				if (trim($__css)!='')
-					$css_need_inline->attach(do_template('CSS_NEED_INLINE',array('_GUID'=>'f5b225e080c633ffa033ec5af5aec866','CSS'=>$__css),user_lang(),false,NULL,'.tpl','templates',$theme));
+					$css_need_inline->attach(do_template('CSS_NEED_INLINE',array('_GUID'=>'f5b225e080c633ffa033ec5af5aec866','CODE'=>$__css),user_lang(),false,NULL,'.tpl','templates',$theme));
 			}
 		} else
 		{
@@ -1746,7 +1751,18 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
  */
 function require_css($css)
 {
-	$GLOBALS['CSSS'][$css]=1;
+	global $CSSS;
+
+	// Has to do this inline, as you're not allowed to reference sheets outside head
+	if ((!isset($CSSS[$css])) && (headers_sent()))
+	{
+		$file=css_enforce($css);
+		//$_value=do_template('CSS_NEED_INLINE',array('CODE'=>str_replace(get_custom_file_base().'/',get_base_url().'/',file_get_contents($file))));
+		$_value=do_template('CSS_NEED',array('CODE'=>$css));
+		attach_to_screen_footer($_value);
+	}
+
+	$CSSS[$css]=1;
 }
 
 /**

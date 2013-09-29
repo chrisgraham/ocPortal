@@ -228,6 +228,7 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config/likes.php',
 			'sources/hooks/systems/config/tree_lists.php',
 			'sources/hooks/systems/config/lax_comcode.php',
+			'sources/hooks/systems/config/output_streaming.php',
 			'sources/hooks/systems/addon_registry/core_configuration.php',
 			'CONFIG_CATEGORY_SCREEN.tpl',
 			'CONFIG_GROUP.tpl',

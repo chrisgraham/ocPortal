@@ -1193,7 +1193,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED_INLINE', array(
-				'CSS'=>''
+				'CODE'=>''
 			)), NULL, '', true)
 		);
 	}

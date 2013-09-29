@@ -82,6 +82,9 @@ function init__tempcode()
 
 	global $IS_TEMPLATE_PREVIEW_OP_CACHE;
 	$IS_TEMPLATE_PREVIEW_OP_CACHE=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']=='1') && ((get_page_name()!='admin_themes') || (get_param('type','')=='view'));
+
+	global $OUTPUT_STREAMING;
+	$OUTPUT_STREAMING=(get_option('output_streaming')=='1'); // TODO: And not doing some view_mode op
 }
 
 /**
@@ -648,7 +651,8 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$out=new ocp_tempcode();
 		$out->codename=$codename;
 		$out->code_to_preexecute=$_data->code_to_preexecute;
-		$out->preprocessable_bits=$_data->preprocessable_bits;
+		if (!$GLOBALS['OUTPUT_STREAMING'])
+			$out->preprocessable_bits=$_data->preprocessable_bits;
 		$out->seq_parts=$_data->seq_parts;
 
 		foreach ($out->seq_parts as &$seq_parts_group)
@@ -1077,9 +1081,9 @@ class ocp_tempcode
 								break;
 						}
 					}
-					foreach ($seq_part[1] as $param)
+					if (!$GLOBALS['OUTPUT_STREAMING'])
 					{
-						if (isset($param->preprocessable_bits))
+						foreach ($seq_part[1] as $param)
 						{
 							foreach ($param->preprocessable_bits as $b) $pp_bits[]=$b;
 						}
@@ -1130,6 +1134,7 @@ class ocp_tempcode
 	 */
 	function handle_symbol_preprocessing()
 	{
+		if (!$GLOBALS['OUTPUT_STREAMING']) return;
 		if (isset($this->preprocessed)) return;
 
 		foreach ($this->preprocessable_bits as $seq_part)
@@ -1198,7 +1203,10 @@ class ocp_tempcode
 
 			$this->code_to_preexecute+=$attach->code_to_preexecute;
 
-			foreach ($attach->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
+			if (!$GLOBALS['OUTPUT_STREAMING'])
+			{
+				foreach ($attach->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
+			}
 
 			if ((!$avoid_child_merge) && ($GLOBALS['RECORD_TEMPLATES_TREE']))
 			{
@@ -1485,7 +1493,10 @@ class ocp_tempcode
 			}
 		}
 
-		foreach ($value->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
+		if (!$GLOBALS['OUTPUT_STREAMING'])
+		{
+			foreach ($value->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
+		}
 	}
 
 	/**
@@ -1509,14 +1520,17 @@ class ocp_tempcode
 		$out->codename=$codename;
 		$out->code_to_preexecute=$this->code_to_preexecute;
 		$out->preprocessable_bits=array();
-		foreach ($this->preprocessable_bits as $preprocessable_bit)
+		if (!$GLOBALS['OUTPUT_STREAMING'])
 		{
-			foreach ($preprocessable_bit[3] as $i=>$param)
+			foreach ($this->preprocessable_bits as $preprocessable_bit)
 			{
-				if ((($preprocessable_bit[2]!='SET') || (($i>=1))) && (is_object($param)))
-					$preprocessable_bit[3][$i]=$param->bind($parameters,'<'.$codename.'>');
+				foreach ($preprocessable_bit[3] as $i=>$param)
+				{
+					if ((($preprocessable_bit[2]!='SET') || (($i>=1))) && (is_object($param)))
+						$preprocessable_bit[3][$i]=$param->bind($parameters,'<'.$codename.'>');
+				}
+				$out->preprocessable_bits[]=$preprocessable_bit;
 			}
-			$out->preprocessable_bits[]=$preprocessable_bit;
 		}
 
 		if ($GLOBALS['RECORD_TEMPLATES_TREE'])
@@ -1545,9 +1559,12 @@ class ocp_tempcode
 			}
 			elseif ($p_type=='object')
 			{
-				if (isset($parameter->preprocessable_bits[0]))
+				if (isset($parameter->preprocessable_bits[0])) 
 				{
-					foreach ($parameter->preprocessable_bits as $b) $out->preprocessable_bits[]=$b;
+					if (!$GLOBALS['OUTPUT_STREAMING'])
+					{
+						foreach ($parameter->preprocessable_bits as $b) $out->preprocessable_bits[]=$b;
+					}
 				} elseif ($parameter->is_empty_shell()) $parameters[$key]=''; // Little optimisation to save memory
 			}
 			elseif ($p_type=='boolean')

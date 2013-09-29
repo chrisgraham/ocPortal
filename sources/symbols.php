@@ -224,6 +224,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'FRACTIONAL_EDITABLE':
+				require_javascript('javascript_ajax');
 				require_javascript('javascript_fractional_edit');
 
 				foreach (array_keys($param) as $key)
@@ -2004,14 +2005,6 @@ function ecv_REQUIRE_CSS($lang,$escaped,$param)
 	if (isset($param[0]))
 	{
 		require_css($param[0]);
-		/*// Has to do this inline, as you're not allowed to reference sheets outside head
-		if (!array_key_exists($param[0],$GLOBALS['CSSS']))
-		{
-			$GLOBALS['CSSS'][$param[0]]=1;
-			$file=css_enforce($param[0]);
-			$_value=do_template('CSS_NEED_INLINE',array('_GUID'=>'9de994d2f6d47a622d49347feb7ebe96','CSS'=>str_replace('../../../../',get_base_url().'/',file_get_contents($file))));
-			$value=$_value->evaluate();
-		}*/
 	}
 
 	$value='';
