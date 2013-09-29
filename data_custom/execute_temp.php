@@ -57,12 +57,12 @@ function execute_temp()
 //	@var_dump($test);
 //	exit();
 
-	$ob=new ocp_tempcode();
-//	$ob=do_template('ANCHOR',array('NAME'=>'x'));
-	$ob->attach(do_template('ANCHOR',array('NAME'=>'x')));
-	$ob->attach(do_template('ANCHOR',array('NAME'=>'x')));
-	$ob->attach('foo');
-	$ob->attach('bar');
+	$ob=comcode_to_tempcode('[block]main_news[/block]');
+	$ob->handle_symbol_preprocessing();
+//	$ob->attach(do_template('ANCHOR',array('NAME'=>'x','FOO'=>'bar')));
+	require_code('tempcode_optimiser');
+	optimise_tempcode($ob);
+$ob->evaluate_echo();
 	@var_dump($ob);
 	exit();
 }

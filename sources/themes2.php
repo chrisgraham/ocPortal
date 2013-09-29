@@ -143,6 +143,12 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 			set_long_value('THEME_IMG_DIMS',NULL);
 		}
 
+		if (addon_installed('!ssl'))
+		{
+			require_code('caches3');
+			erase_cached_templates(); // Paths may have been cached
+		}
+
 		log_it('EDIT_THEME_IMAGE',$id,$theme);
 	}
 }
@@ -239,6 +245,12 @@ function actual_add_theme_image($theme,$lang,$id,$path,$fail_ok=false)
 	log_it('ADD_THEME_IMAGE',$id,$theme);
 
 	persistent_cache_delete('THEME_IMAGES');
+
+	if (addon_installed('!ssl'))
+	{
+		require_code('caches3');
+		erase_cached_templates(); // Paths may have been cached
+	}
 }
 
 /**

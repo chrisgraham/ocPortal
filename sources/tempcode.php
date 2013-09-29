@@ -1220,9 +1220,12 @@ class ocp_tempcode
 						{
 							$code=$this->code_to_preexecute[$myfunc];
 							$pos2=strpos($code,"\";\n");
-							$code=substr($code,0,$pos2)." echo \\\"".php_addslashes_twice($attach)."\\\";".substr($code,$pos2);
-							$this->code_to_preexecute[$myfunc]=$code;
-							return;
+							if ($pos2!==false)
+							{
+								$code=substr($code,0,$pos2)." echo \\\"".php_addslashes_twice($attach)."\\\";".substr($code,$pos2);
+								$this->code_to_preexecute[$myfunc]=$code;
+								return;
+							}
 						}
 					}
 				}
@@ -1360,16 +1363,8 @@ class ocp_tempcode
 	 */
 	function to_assembly()
 	{
-		// Optimise
-		if (isset($this->seq_parts[0]))
-		{
-			$cnt=count($this->seq_parts);
-			for ($i=1;$i<$cnt;$i++)
-			{
-				$this->seq_parts[0]=array_merge($this->seq_parts[0],$this->seq_parts[$i]);
-			}
-			$this->seq_parts=array($this->seq_parts[0]);
-		}
+		require_code('tempcode_optimiser');
+		optimise_tempcode($this);
 
 		return 'return unserialize("'.php_addslashes(serialize(array($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->pure_lang,$this->code_to_preexecute))).'");'."\n";
 	}

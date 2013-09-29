@@ -36,6 +36,65 @@ function init__tempcode_compiler()
 	// These are templates often used multiple times on a single screen. They are loaded as functions, rather than eval'd each time
 	global $FUNC_STYLE_TPL;
 	$FUNC_STYLE_TPL=defined('HIPHOP_PHP')?array():array('CSS_NEED','JAVASCRIPT_NEED','OCF_AUTO_TIME_ZONE_ENTRY','FORM_SCREEN_INPUT_LIST_ENTRY','FORM_SCREEN_INPUT_LINE','FORM_SCREEN_INPUT_PERMISSION','FORM_SCREEN_INPUT_PERMISSION_OVERRIDE','FORM_SCREEN_INPUT_RADIO_LIST_ENTRY','FORM_SCREEN_INPUT_HIDDEN','FORM_SCREEN_INPUT_TICK','FORM_SCREEN_INPUT_TEXT','FORM_SCREEN_FIELD','MENU_BRANCH','MENU_NODE','HYPERLINK','BREADCRUMB_SEPARATOR','RESULTS_TABLE_ENTRY','OCF_TOPIC_POST','POSTER','OCF_FORUM_TOPIC_ROW');
+
+	// Work out what symbols may be compiled out
+	global $COMPILABLE_SYMBOLS;
+	$_compilable_symbols=array(
+		'LANG',
+		'THEME',
+		'VERSION_NUMBER',
+		'VERSION',
+		'SITE_NAME',
+		'CHARSET',
+		'ADDON_INSTALLED',
+		'CONFIG_OPTION',
+		'VALUE_OPTION',
+		'MOBILE',
+		'COPYRIGHT',
+		'BASE_URL',
+		'BASE_URL_NOHTTP',
+		'CUSTOM_BASE_URL',
+		'CUSTOM_BASE_URL_NOHTTP',
+		'BRAND_NAME',
+		'BRAND_BASE_URL',
+		'OCF',
+		'VALID_FILE_TYPES',
+		'COOKIE_PATH',
+		'COOKIE_DOMAIN',
+		'SESSION_COOKIE_NAME',
+		'INLINE_STATS',
+		'CURRENCY_SYMBOL',
+		'DOMAIN',
+		'STAFF_ADDRESS',
+		'STAFF_ADDRESS_PURE',
+		'SHOW_DOCS',
+		'SITE_SCOPE',
+		'IMG_WIDTH',
+		'IMG_HEIGHT',
+		'IMG_INLINE',
+		'SSW',
+		'MAILTO',
+	);
+	global $SITE_INFO;
+	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1'))
+	{
+		$_compilable_symbols[]='KEEP';
+		$_compilable_symbols[]='PAGE_LINK';
+		$_compilable_symbols[]='FIND_SCRIPT';
+	}
+	if (!addon_installed('ssl'))
+	{
+		$_compilable_symbols[]='IMG';
+	}
+	if (get_option('detect_javascript')=='0')
+	{
+		$_compilable_symbols[]='JS_ON';
+	}
+	$COMPILABLE_SYMBOLS=array();
+	foreach ($_compilable_symbols as $s)
+	{
+		$COMPILABLE_SYMBOLS['"'.$s.'"']=true;
+	}
 }
 
 /**
@@ -75,13 +134,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);
 
-	$compilable_symbols=array('"ADDON_INSTALLED"'=>0,'"BASE_URL"'=>0,'"COPYRIGHT"'=>0,'"SITE_NAME"'=>0,'"BRAND_BASE_URL"'=>0,'"BRAND_NAME"'=>0,'"IMG_WIDTH"'=>0,'"IMG_HEIGHT"'=>0,/*bad if theme image missing'"IMG"'=>0,*/'"LANG"'=>0,'"THEME"'=>0,'"VALUE_OPTION"'=>0,'"CONFIG_OPTION"'=>0);
-	global $SITE_INFO;
-	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1'))
-	{
-		$compilable_symbols['"PAGE_LINK"']=0;
-		$compilable_symbols['"FIND_SCRIPT"']=0;
-	}
+	global $COMPILABLE_SYMBOLS;
 
 	require_code('lang');
 	require_code('urls');
@@ -139,6 +192,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				}
 				$current_level_params=array();
 				break;
+
 			case '}':
 				if (($stack==array()) || ($current_level_mode==PARSE_DIRECTIVE_INNER))
 				{
@@ -234,12 +288,20 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					}
 				}
 				$_opener_params='';
-				foreach ($opener_params as $param)
+				foreach ($opener_params as $oi=>&$oparam)
 				{
-					if ($param==array()) $param=array('""');
+					if ($oparam==array())
+					{
+						$oparam=array('""');
+						if (!isset($opener_params[$oi+1]))
+						{
+							unset($opener_params[$oi]);
+							break;
+						}
+					}
 
 					if ($_opener_params!='') $_opener_params.=',';
-					$_opener_params.=implode('.',$param);
+					$_opener_params.=implode('.',$oparam);
 				}
 
 				$escaping_symbols_from=array('`','%','*','=',';','#','-','~','^','|','\'','&','.','/','@','+');
@@ -282,8 +344,6 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 									$symbol_params=array();
 									foreach ($opener_params as $param)
 									{
-										if ($param==array()) $param=array('""');
-
 										$myfunc='tcpfunc_'.fast_uniqid();
 										$funcdef=build_closure_function($myfunc,$param);
 										$symbol_params[]=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'',''))))); // Parameters will be bound in later.
@@ -301,15 +361,15 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 							$_opener_params.=',"0","'.php_addslashes($theme).'"';
 						}
 
-						if ($first_param=='"?"')
+						if ($first_param=='"?"') // Optimise out static ternary
 						{
-							if (implode('.',$opener_params[0])=='"1".""')
+							if (implode('.',$opener_params[0])=='"1"')
 							{
 								if (isset($opener_params[1]))
 									$current_level_data[]=implode('.',$opener_params[1]);
 								break;
 							}
-							if ((implode('.',$opener_params[0])=='"0".""') || (implode('.',$opener_params[0])=='""'))
+							if (implode('.',$opener_params[0])=='"0"')
 							{
 								if (isset($opener_params[2]))
 									$current_level_data[]=implode('.',$opener_params[2]);
@@ -317,24 +377,51 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 							}
 						}
 
-						if ($first_param!='""') // If not a comment
+						if ($first_param=='""') // Optimise out comments
 						{
-							$name=preg_replace('#(^")|("$)#','',$first_param);
-							if ($name=='?') $name='TERNARY';
-							if (function_exists('ecv_'.$name))
-							{
-								$new_line='ecv_'.$name.'($cl,array('.implode(',',$escaped).'),array('.$_opener_params.'))';
-							} else
-							{
-								$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
-							}
-							if ((isset($compilable_symbols[$first_param])) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
-							{
-								$new_line='"'.php_addslashes(eval('return '.$new_line.';')).'"';
-							}
-							$current_level_data[]=$new_line;
+							break;
 						}
+
+						// Optimise simple PHP-compatible operators
+						foreach (array('EQ'=>'==','NEQ'=>'!=') as $symbol_op=>$php_op)
+						{
+							if (($first_param=='"'.$symbol_op.'"') && (count($opener_params)==2))
+							{
+								$current_level_data[]='((('.implode('.',$opener_params[0]).')'.$php_op.'('.implode('.',$opener_params[1]).'))?"1":"0")';
+								break 2;
+							}
+						}
+						foreach (array('AND'=>'&&','OR'=>'||') as $symbol_op=>$php_op)
+						{
+							if (($first_param=='"'.$symbol_op.'"') && (count($opener_params)==2))
+							{
+								$current_level_data[]='((('.implode('.',$opener_params[0]).')=="1")'.$php_op.'('.implode('.',$opener_params[1]).'=="1")?"1":"0")';
+								break 2;
+							}
+						}
+						if (($first_param=='"?"') && (count($opener_params)==3))
+						{
+							$current_level_data[]='((('.implode('.',$opener_params[0]).')=="1")?('.implode('.',$opener_params[1]).'):('.implode('.',$opener_params[2]).'))';
+							break 2;
+						}
+
+						// Okay, a fully dynamic symbol
+						$name=preg_replace('#(^")|("$)#','',$first_param);
+						if ($name=='?') $name='TERNARY';
+						if (function_exists('ecv_'.$name))
+						{
+							$new_line='ecv_'.$name.'($cl,array('.implode(',',$escaped).'),array('.$_opener_params.'))';
+						} else
+						{
+							$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
+						}
+						if ((isset($COMPILABLE_SYMBOLS[$first_param])) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
+						{
+							$new_line='"'.php_addslashes(eval('return '.$new_line.';')).'"';
+						}
+						$current_level_data[]=$new_line;
 						break;
+
 					case PARSE_LANGUAGE_REFERENCE:
 						$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_LANGUAGE_REFERENCE).','.$first_param.',array('.$_opener_params.'))';
 						if (($_opener_params=='') && ($escaped==array())) // Optimise it out for simple case?
@@ -348,6 +435,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						}
 						$current_level_data[]=$new_line;
 						break;
+	
 					case PARSE_PARAMETER:
 						$parameter=str_replace('"','',str_replace("'",'',$first_param));
 						$parameter=preg_replace('#[^\w\_\d]#','',$parameter); // security to stop PHP injection
@@ -469,46 +557,93 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						{
 							case 'COMMENT':
 								break;
+
 							case 'NO_PREPROCESSING':
 								$current_level_data[]=implode('.',$past_level_data);
 								$preprocessable_bits=array_pop($preprocessable_bits_stack);
 								$num_preprocessable_bits=count($preprocessable_bits);
 								break;
+
 							case 'IF':
-								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\("1"\)\).""$#',$first_directive_param)!=0)
-									$first_directive_param='"0".""';
-								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\("0"\)\).""$#',$first_directive_param)!=0)
-									$first_directive_param='"1".""';
-								if ($first_directive_param=='"1".""')
+								// Optimise out static NOT expressions
+								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\("1"\)\)$#',$first_directive_param)!=0)
+									$first_directive_param='"0"';
+								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\("0"\)\)$#',$first_directive_param)!=0)
+									$first_directive_param='"1"';
+
+								// Optimise out static boolean expressions
+								if (($first_directive_param=='((("1")==("1"))?"1":"0")') || ($first_directive_param=='(("0"=="0")?"1":"0")'))
+									$first_directive_param='"1"';
+								elseif (($first_directive_param=='((("1")==("0"))?"1":"0")') || ($first_directive_param=='(("0"=="1")?"1":"0")'))
+									$first_directive_param='"0"';
+
+								// Optimise simple expressions to PHP
+								$matches=array();
+								if (preg_match('#^\((\(\([^()]+\)(==|!=)\([^()]+\))\)\?"1":"0"\)\)$#',$first_directive_param,$matches)!=0)
+								{
+									$current_level_data[]='('.$matches[1].'?('.implode('.',$past_level_data).'):\'\')';
+									break;
+								}
+
+								// Optimise out static IFs
+								if ($first_directive_param=='"0"')
+								{
+									break;
+								}
+								if ($first_directive_param=='"1"')
+								{
 									$current_level_data[]='('.implode('.',$past_level_data).')';
-								elseif ($first_directive_param!='"0".""')
-									$current_level_data[]='(('.$first_directive_param.'=="1")?('.implode('.',$past_level_data).'):\'\')';
+									break;
+								}
+
+								// Normal IF then (actually it's implemented as ternary un PHP)
+								$current_level_data[]='(('.$first_directive_param.'=="1")?('.implode('.',$past_level_data).'):\'\')';
 								break;
+
 							case 'IF_EMPTY':
 								$current_level_data[]='(('.$first_directive_param.'==\'\')?('.implode('.',$past_level_data).'):\'\')';
 								break;
-							case 'WHILE':
-								$current_level_data[]='closure_while_loop(array($parameters,$cl),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
-								break;
-							case 'PHP':
-								$current_level_data[]='closure_eval('.implode('.',$past_level_data).',$parameters)';
-								break;
-							case 'LOOP':
-								$current_level_data[]='closure_loop(array('.$directive_params.',\'vars\'=>$parameters),array($parameters,$cl),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
-								break;
+
 							case 'IF_NON_EMPTY':
 								$current_level_data[]='(('.$first_directive_param.'!=\'\')?('.implode('.',$past_level_data).'):\'\')';
 								break;
+
 							case 'IF_PASSED':
 								$eval=@eval('return '.$first_directive_param.';');
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='(isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')?('.implode('.',$past_level_data).'):\'\')';
 								break;
+
 							case 'IF_NON_PASSED':
 								$eval=@eval('return '.$first_directive_param.';');
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='(!isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')?('.implode('.',$past_level_data).'):\'\')';
 								break;
+
+							case 'IF_PASSED_AND_TRUE':
+								$eval=@eval('return '.$first_directive_param.';');
+								if (!is_string($eval)) $eval='';
+								$current_level_data[]='((isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).') && (otp($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')=="1"))?('.implode('.',$past_level_data).'):\'\')';
+								break;
+
+							case 'IF_NON_PASSED_OR_FALSE':
+								$eval=@eval('return '.$first_directive_param.';');
+								if (!is_string($eval)) $eval='';
+								$current_level_data[]='((!isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).') || (otp($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')=="0"))?('.implode('.',$past_level_data).'):\'\')';
+								break;
+
+							case 'WHILE':
+								$current_level_data[]='closure_while_loop(array($parameters,$cl),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								break;
+
+							case 'LOOP':
+								$current_level_data[]='closure_loop(array('.$directive_params.',\'vars\'=>$parameters),array($parameters,$cl),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								break;
+
+							case 'PHP':
+								$current_level_data[]='closure_eval('.implode('.',$past_level_data).',$parameters)';
+								break;
+
 							case 'INCLUDE':
 								global $FILE_ARRAY;
 								$eval=@eval('return '.$first_directive_param.';');
@@ -539,6 +674,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 										break;
 									}
 								}
+
 							default:
 								if ($directive_params!='') $directive_params.=',';
 								$directive_params.=implode('.',$past_level_data);
@@ -566,6 +702,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 					}
 				}
 				break;
+
 			case ',': // NB: Escaping via "\," was handled in our regexp split
 				switch($current_level_mode)
 				{
@@ -579,6 +716,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						break;
 				}
 				break;
+
 			default:
 				$literal=php_addslashes(str_replace(array('\,','\}','\{'),array(',','}','{'),$next_token));
 				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($literal);
@@ -595,6 +733,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),"\n"))));
 		}
 	}
+
+	if ($current_level_data==array('')) $current_level_data=array('""');
 
 	return array($current_level_data,$preprocessable_bits);
 }

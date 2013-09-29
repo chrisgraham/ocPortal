@@ -775,6 +775,7 @@ class Hook_addon_registry_core
 			'sources/tar.php',
 			'sources/tempcode.php',
 			'sources/tempcode_compiler.php',
+			'sources/tempcode_optimiser.php',
 			'sources/tempcode__runtime.php',
 			'sources/tempcode_compiler__runtime.php',
 			'sources/templates.php',
