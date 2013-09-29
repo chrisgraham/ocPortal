@@ -687,7 +687,7 @@ class Module_admin_orders
 			$address['country']=(array_key_exists('address_country',$order))?$order['address_country']:NULL;
 
 			if (!is_null($address['name']))
-				$full_address=implode(chr(10),$address);
+				$full_address=implode("\n",$address);
 			else
 				$full_address='';
 

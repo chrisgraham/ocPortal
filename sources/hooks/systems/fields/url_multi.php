@@ -81,7 +81,7 @@ class Hook_fields_url_multi
 		if ($ev=='http://') return '';
 
 		$ret=new ocp_tempcode();
-		$evs=explode(chr(10),$ev);
+		$evs=explode("\n",$ev);
 		foreach ($evs as $ev)
 		{
 			require_code('files2');
@@ -113,7 +113,7 @@ class Hook_fields_url_multi
 	{
 		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
 
-		return form_input_line_multi($_cf_name,$_cf_description,'field_'.strval($field['id']),($actual_value=='')?array():explode(chr(10),$actual_value),($field['cf_required']==1)?1:0,NULL,'url');
+		return form_input_line_multi($_cf_name,$_cf_description,'field_'.strval($field['id']),($actual_value=='')?array():explode("\n",$actual_value),($field['cf_required']==1)?1:0,NULL,'url');
 	}
 
 	/**
@@ -138,7 +138,7 @@ class Hook_fields_url_multi
 			if (($_value!==NULL) && ($_value!=''))
 			{
 				if ($_value!=STRING_MAGIC_NULL) $value=fixup_protocolless_urls($_value);
-				if ($value!='') $value.=chr(10);
+				if ($value!='') $value.="\n";
 				$value.=$_value;
 			}
 			$i++;

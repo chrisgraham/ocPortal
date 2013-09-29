@@ -55,15 +55,15 @@ function export_to_xml($tables=NULL)
 
 	// Build up data
 	$xml_data='';
-	$xml_data.='<!-- Exported on '.xmlentities(date('Y-m-d h:i:s')).' by '.xmlentities($GLOBALS['FORUM_DRIVER']->get_username(get_member())).' -->'.chr(10);
-	$xml_data.='<ocportal origin="'.xmlentities(get_base_url()).'" version="'.xmlentities(float_format(ocp_version_number())).'">'.chr(10);
+	$xml_data.='<!-- Exported on '.xmlentities(date('Y-m-d h:i:s')).' by '.xmlentities($GLOBALS['FORUM_DRIVER']->get_username(get_member())).' -->'."\n";
+	$xml_data.='<ocportal origin="'.xmlentities(get_base_url()).'" version="'.xmlentities(float_format(ocp_version_number())).'">'."\n";
 	foreach ($tables as $table)
 	{
 		$table_xml=_export_table_to_xml($table);
-		if ($table_xml!='') $xml_data.=_tab($table_xml).chr(10);
+		if ($table_xml!='') $xml_data.=_tab($table_xml)."\n";
 	}
-	$xml_data=rtrim($xml_data).chr(10);
-	$xml_data.='</ocportal>'.chr(10);
+	$xml_data=rtrim($xml_data)."\n";
+	$xml_data.='</ocportal>'."\n";
 	return $xml_data;
 }
 
@@ -154,10 +154,10 @@ function _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$per
 	foreach ($rows as $row) // Each row
 	{
 		$row[$parent_field]='PARENT_INSERT_ID';
-		$xml_data.=chr(10).chr(10);
+		$xml_data.="\n\n";
 		$xml_data.=_tab(_export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$parent_field));
 	}
-	$xml_data.='</'.$table.'>'.chr(10).chr(10);
+	$xml_data.='</'.$table.'>'."\n\n";
 	return $xml_data;
 }
 
@@ -231,15 +231,15 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 				$fields.=' '.$name.'="'.xmlentities($value).'"';
 			} else // Other data type
 			{
-				$inner.=_tab('<'.$name.'>'.xmlentities($value).'</'.$name.'>').chr(10);
+				$inner.=_tab('<'.$name.'>'.xmlentities($value).'</'.$name.'>')."\n";
 			}
 		}
 	}
 
 	// Assemble full row in XML format
-	$xml_data.=chr(10).chr(10);
-	if (!is_null($auto_key_id)) $xml_data.='<!-- If copying to another site you may wish to remove the '.$auto_key_id.' attribute/value-pair so that an appropriate new key is chosen (otherwise could update the wrong record) -->'.chr(10);
-	$xml_data.='<'.$table.$fields.'>'.chr(10);
+	$xml_data.="\n\n";
+	if (!is_null($auto_key_id)) $xml_data.='<!-- If copying to another site you may wish to remove the '.$auto_key_id.' attribute/value-pair so that an appropriate new key is chosen (otherwise could update the wrong record) -->'."\n";
+	$xml_data.='<'.$table.$fields.'>'."\n";
 	$xml_data.=$inner;
 
 	// SEO
@@ -283,7 +283,7 @@ function make_map_nice($map)
 			else $val=strval($val);
 		}
 
-		if ($out!='') $out.=chr(10);
+		if ($out!='') $out.="\n";
 		$out.=$key.' = '.$val;
 	}
 	return $out;
@@ -645,7 +645,7 @@ function get_translated_text_xml($id,$name,$db)
 	{
 		$value=xmlentities($t['text_original']);
 
-		$inner.=_tab('<'.$name.' language="'.xmlentities($t['language']).'" importance_level="'.xmlentities(strval($t['importance_level'])).'" source_user="'.xmlentities(strval($t['source_user'])).'">'.$value.'</'.$name.'>').chr(10);
+		$inner.=_tab('<'.$name.' language="'.xmlentities($t['language']).'" importance_level="'.xmlentities(strval($t['importance_level'])).'" source_user="'.xmlentities(strval($t['source_user'])).'">'.$value.'</'.$name.'>')."\n";
 	}
 	return $inner;
 }

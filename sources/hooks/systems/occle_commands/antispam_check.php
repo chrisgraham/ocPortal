@@ -86,7 +86,7 @@ class Hook_occle_command_antispam_check
 					$ret.=', ';
 					$ret.=do_lang('ANTISPAM_CONFIDENCE_NA');
 				}
-				$ret.=chr(10);
+				$ret.="\n";
 			}
 
 			return array('','',$ret,'');

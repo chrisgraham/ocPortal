@@ -164,7 +164,7 @@ function isVowel($chLetter) {
 
 function ocjester_string_changes_filter($in)
 {
-	$changes=explode(chr(10),get_option('ocjester_string_changes'));
+	$changes=explode("\n",get_option('ocjester_string_changes'));
 	$remap=array();
 	foreach ($changes as $change)
 	{

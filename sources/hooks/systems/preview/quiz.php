@@ -46,7 +46,7 @@ class Hook_Preview_quiz
 		$text=post_param('text');
 		$type=post_param('type');
 
-		$_qs=explode(chr(10).chr(10),$text);
+		$_qs=explode("\n\n",$text);
 		$qs=array();
 		foreach ($_qs as $q)
 		{
@@ -58,7 +58,7 @@ class Hook_Preview_quiz
 		$qs2=array();
 		foreach ($qs as $i=>$q)
 		{
-			$_as=explode(chr(10),$q);
+			$_as=explode("\n",$q);
 			$as=array();
 			foreach ($_as as $a)
 			{
@@ -71,13 +71,13 @@ class Hook_Preview_quiz
 
 			$implicit_question_number=$i;//$matches[1];
 
-			$qs2[$implicit_question_number]=$q.chr(10).implode(chr(10),$as);
+			$qs2[$implicit_question_number]=$q."\n".implode("\n",$as);
 		}
 		ksort($qs2);
 
 		foreach (array_values($qs2) as $i=>$q)
 		{
-			$_as=explode(chr(10),$q);
+			$_as=explode("\n",$q);
 			$as=array();
 			foreach ($_as as $a)
 			{

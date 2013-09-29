@@ -311,7 +311,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	{
 		if (((get_mass_import_mode()) || (count($_POST)==0) || (!$posted)) && (!$preparse_mode))
 		{
-			$line=substr_count(substr($comcode,0,$pos),chr(10))+1;
+			$line=substr_count(substr($comcode,0,$pos),"\n")+1;
 			$out=do_template('COMCODE_CRITICAL_PARSE_ERROR',array('_GUID'=>'29da9dc5c6b9a527cb055b7da35bb6b8','LINE'=>integer_format($line),'MESSAGE'=>$message,'SOURCE'=>$comcode)); // Won't parse, but we can't help it, so we will skip on
 			return $out;
 		}
@@ -331,7 +331,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 			$sofar.=$tmp_tpl->evaluate();
 			$line=$number;
 		}
-		if ($char==chr(10))
+		if ($char=="\n")
 		{
 			$lines->attach(do_template('COMCODE_MISTAKE_LINE',array('_GUID'=>'2022be3de10590d525f333b6ac0da37b','NUMBER'=>integer_format($number),'LINE'=>make_string_tempcode($sofar))));
 			$sofar='';
@@ -634,7 +634,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (!is_null($_embed))
 			{
 				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
-				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
+				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,"\n")<10))
 				{
 					$style='height: auto';
 				} else $style='';
@@ -653,7 +653,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				if ((!array_key_exists('scroll',$attributes)) && (strlen($_embed)>1000)) $attributes['scroll']=1;
 				$tpl=(array_key_exists('scroll',$attributes) && ($attributes['scroll']==1))?'COMCODE_CODE_SCROLL':'COMCODE_CODE';
-				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,chr(10))<10))
+				if (($tpl=='COMCODE_CODE_SCROLL') && (substr_count($_embed,"\n")<10))
 				{
 					$style='height: auto';
 				} else $style='';
@@ -1922,7 +1922,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			// New attachments: embedded attachments (base64)
 			if ((!is_numeric($id)) && (substr($id,0,4)!='new_'))
 			{
-				$file=base64_decode(str_replace(chr(10),'',$id));
+				$file=base64_decode(str_replace("\n",'',$id));
 				if ($file===false)
 				{
 					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'422658aee3c0eea77ad85d8621af742b','WARNING'=>do_lang_tempcode('comcode:CORRUPT_ATTACHMENT')));

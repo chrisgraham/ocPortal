@@ -346,7 +346,7 @@ class Database_Static_sqlite
 				fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
 			} else
 			{
-				echo htmlentities('Database query failed: '.$query.' [').($err).htmlentities(']'.'<br />'.chr(10));
+				echo htmlentities('Database query failed: '.$query.' [').($err).htmlentities(']'.'<br />'."\n");
 				return NULL;
 			}
 		}

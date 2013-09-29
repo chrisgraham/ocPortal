@@ -64,7 +64,7 @@ function check_posted_field($name,$val)
 	{
 		if (!in_array($name,array('login_username','password','remember','login_invisible')))
 		{
-			$allowed_partners=explode(chr(10),get_option('allowed_post_submitters'));
+			$allowed_partners=explode("\n",get_option('allowed_post_submitters'));
 			$allowed_partners[]='paypal.com';
 			$allowed_partners[]='www.paypal.com';
 			$found=false;
@@ -421,7 +421,7 @@ class field_restriction_loader
 	 */
 	function endElement($parser)
 	{
-		$text=str_replace('\n',chr(10),$this->text_so_far);
+		$text=str_replace('\n',"\n",$this->text_so_far);
 		$tag=array_pop($this->tag_stack);
 		$attributes=array_pop($this->attribute_stack);
 

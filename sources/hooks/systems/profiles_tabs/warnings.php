@@ -59,7 +59,7 @@ class Hook_Profiles_Tabs_warnings
 		{
 			$warning_by=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['w_by']);
 			$date=get_timezoned_date($row['w_time']);
-			if ($row['w_explanation']=='') $row['w_explanation']='?'; else $row['w_explanation']=str_replace(chr(10),' ',$row['w_explanation']);
+			if ($row['w_explanation']=='') $row['w_explanation']='?'; else $row['w_explanation']=str_replace("\n",' ',$row['w_explanation']);
 			$row['w_explanation_orig']=$row['w_explanation'];
 			if (strlen($row['w_explanation'])>30) $row['w_explanation']=substr($row['w_explanation'],0,27).'...';
 			$explanation=hyperlink(build_url(array('page'=>'warnings','type'=>'_ed','id'=>$row['id'],'redirect'=>get_self_url(true)),get_module_zone('warnings')),$row['w_explanation'],false,true,$row['w_explanation_orig']);

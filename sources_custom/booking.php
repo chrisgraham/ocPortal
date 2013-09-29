@@ -93,8 +93,8 @@ function read_booking_notes_from_form($prefix)
 	{
 		if (substr($post,0,strlen($prefix))==$prefix)
 		{
-			if ($notes!='') $notes.=chr(10).chr(10);
-			$notes.=post_param('descript_'.$post,$post).':'.chr(10).post_param($post,'');
+			if ($notes!='') $notes.="\n\n";
+			$notes.=post_param('descript_'.$post,$post).':'."\n".post_param($post,'');
 		}
 	}
 	return $notes;

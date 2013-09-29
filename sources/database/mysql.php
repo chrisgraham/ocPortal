@@ -63,7 +63,7 @@ class Database_Static_mysql extends Database_super_mysql
 			$error='The mySQL PHP extension not installed (anymore?). You need to contact the system administrator of this server, or use a different mySQL database driver (drivers can be chosen by editing _config.php).';
 			if ($fail_ok)
 			{
-				echo $error.chr(10);
+				echo $error."\n";
 				return NULL;
 			}
 			critical_error('PASSON',$error);
@@ -76,7 +76,7 @@ class Database_Static_mysql extends Database_super_mysql
 			$error='Could not connect to database-server ('.mysql_error().', '.(@strval($php_errormsg)).')';
 			if ($fail_ok)
 			{
-				echo $error.chr(10);
+				echo $error."\n";
 				return NULL;
 			}
 			critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
@@ -93,7 +93,7 @@ class Database_Static_mysql extends Database_super_mysql
 				$error='Could not connect to database ('.mysql_error().')';
 				if ($fail_ok)
 				{
-					echo $error.chr(10);
+					echo $error."\n";
 					return NULL;
 				}
 				critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_ERROR'));
@@ -245,7 +245,7 @@ class Database_Static_mysql extends Database_super_mysql
 				fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
 			} else
 			{
-				echo htmlentities('Database query failed: '.$query.' [').($err).htmlentities(']'.'<br />'.chr(10));
+				echo htmlentities('Database query failed: '.$query.' [').($err).htmlentities(']'.'<br />'."\n");
 				return NULL;
 			}
 		}

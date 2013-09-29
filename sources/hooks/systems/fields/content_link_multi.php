@@ -112,7 +112,7 @@ class Hook_fields_content_link_multi
 		if ($type=='forum_topic') $type='topic';
 
 		$ret=new ocp_tempcode();
-		$evs=explode(chr(10),$ev);
+		$evs=explode("\n",$ev);
 		foreach ($evs as $ev)
 		{
 			require_code('content');
@@ -148,7 +148,7 @@ class Hook_fields_content_link_multi
 		// Nice tree list selection
 		if ((is_file(get_file_base().'/sources/hooks/systems/ajax_tree/choose_'.$type.'.php')) || (is_file(get_file_base().'/sources_custom/hooks/systems/ajax_tree/choose_'.$type.'.php')))
 		{
-			return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_'.$type,$options,$field['cf_required']==1,str_replace(chr(10),',',$actual_value),false,NULL,true);
+			return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_'.$type,$options,$field['cf_required']==1,str_replace("\n",',',$actual_value),false,NULL,true);
 		}
 
 		// Simple list selection
@@ -179,7 +179,7 @@ class Hook_fields_content_link_multi
 		foreach ($_list as $id=>$text)
 		{
 			if (!is_string($id)) $id=strval($id);
-			$list->attach(form_input_list_entry($id,is_null($actual_value)?false:(strpos(chr(10).$actual_value.chr(10),$id)!==false),$text));
+			$list->attach(form_input_list_entry($id,is_null($actual_value)?false:(strpos("\n".$actual_value."\n",$id)!==false),$text));
 		}
 		return form_input_multi_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$list,NULL,5,$field['cf_required']==1);
 	}
@@ -204,7 +204,7 @@ class Hook_fields_content_link_multi
 		{
 			if ($_value!='')
 			{
-				if ($value!='') $value.=chr(10);
+				if ($value!='') $value.="\n";
 				$value.=$_value;
 			}
 		}

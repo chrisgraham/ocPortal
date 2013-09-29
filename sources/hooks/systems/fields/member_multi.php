@@ -88,7 +88,7 @@ class Hook_fields_member_multi
 		if ($ev=='') return new ocp_tempcode();
 
 		$out=new ocp_tempcode();
-		foreach (($ev=='')?array():explode(chr(10),$ev) as $ev)
+		foreach (($ev=='')?array():explode("\n",$ev) as $ev)
 		{
 			$out->attach(paragraph($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink(intval($ev))));
 		}
@@ -120,7 +120,7 @@ class Hook_fields_member_multi
 			}
 		}
 		$usernames=array();
-		foreach (explode(chr(10),$actual_value) as $actual_value)
+		foreach (explode("\n",$actual_value) as $actual_value)
 		{
 			$usernames[]=$GLOBALS['FORUM_DRIVER']->get_username(intval($actual_value));
 		}
@@ -149,7 +149,7 @@ class Hook_fields_member_multi
 			if (($_value!==NULL) && ($_value!=''))
 			{
 				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_value);
-				if ($value!='') $value.=chr(10);
+				if ($value!='') $value.="\n";
 				$value.=is_null($member_id)?'':strval($member_id);
 			}
 			$i++;

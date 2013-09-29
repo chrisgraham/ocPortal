@@ -135,8 +135,8 @@ function _cdata_protect($matches)
 	// We use a closing tag, as we can't just type these in the HTML normally (even in CDATA) - so they are safe unused strings
 	$new=str_replace(' ','</CDATA__space>',$new);
 	$new=str_replace("\t",'</CDATA__tab>',$new);
-	$new=str_replace(chr(10),'</CDATA__nl>',$new);
-	$new=str_replace(chr(13),'</CDATA__lf>',$new);
+	$new=str_replace("\n",'</CDATA__nl>',$new);
+	$new=str_replace("\r",'</CDATA__lf>',$new);
 	$new=str_replace('&','</CDATA__amp>',$new);
 	return $matches[1].$new.$matches[3];
 }
@@ -251,20 +251,20 @@ function debuttonise($matches)
 function convert_html_headers_to_titles($semihtml)
 {
 	$array_html_preg_replace=array();
-	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
-	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
-	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
-	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
-	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
-	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
-	$array_html_preg_replace[]=array('#^\s*<h1>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*><span class="inner">(.*)</span></h1>\s*$#siU',"\n\n".'[title="1"]${1}[/title]'."\n\n");
+	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*><span class="inner">(.*)</span></h1>\s*$#siU',"\n\n".'[title="1"]${1}[/title]'."\n\n");
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>\s*$#siU',"\n\n".'[title="1"]${1}[/title]'."\n\n");
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*>(.*)</h1>\s*$#siU',"\n\n".'[title="1"]${1}[/title]'."\n\n");
+	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*>(.*)</h1>\s*$#siU',"\n\n".'[title="1"]${1}[/title]'."\n\n");
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title"[^<>]*>(.*)</h1>\s*$#siU',"\n\n".'[title="1"]${1}[/title]'."\n\n");
+	$array_html_preg_replace[]=array('#^\s*<h1>(.*)</h1>\s*$#siU',"\n\n".'[title="1"]${1}[/title]'."\n\n");
 	$semihtml=array_html_preg_replace('h1',$array_html_preg_replace,$semihtml);
-	$semihtml=preg_replace('#^\s*<h1[^>]+>(.*)</h1>\s*#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10),$semihtml);
+	$semihtml=preg_replace('#^\s*<h1[^>]+>(.*)</h1>\s*#siU',"\n\n".'[title="1"]${1}[/title]'."\n\n",$semihtml);
 	for ($i=2;$i<=4;$i++)
 	{
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^\s*<h'.strval($i).'><span class="inner">(.*)</span></h'.strval($i).'>\s*$#siU',chr(10).chr(10).'[title="'.strval($i).'"]${1}[/title]'.chr(10).chr(10));
-		$array_html_preg_replace[]=array('#^\s*<h'.strval($i).'>(.*)</h'.strval($i).'>\s*$#siU',chr(10).chr(10).'[title="'.strval($i).'"]${1}[/title]'.chr(10).chr(10));
+		$array_html_preg_replace[]=array('#^\s*<h'.strval($i).'><span class="inner">(.*)</span></h'.strval($i).'>\s*$#siU',"\n\n".'[title="'.strval($i).'"]${1}[/title]'."\n\n");
+		$array_html_preg_replace[]=array('#^\s*<h'.strval($i).'>(.*)</h'.strval($i).'>\s*$#siU',"\n\n".'[title="'.strval($i).'"]${1}[/title]'."\n\n");
 		$semihtml=array_html_preg_replace('h'.strval($i).'',$array_html_preg_replace,$semihtml);
 	}
 	return $semihtml;
@@ -380,7 +380,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	$semihtml=preg_replace('#</?st1:[^>]*>#','',$semihtml); // Word smart tags
 	$semihtml=str_replace('<br class="Apple-interchange-newline" />','<br />',$semihtml);
 
-	$semihtml=str_replace(chr(10),' ',$semihtml);
+	$semihtml=str_replace("\n",' ',$semihtml);
 	// Clean some whitespace (they have a special Comcode meaning, but no special HTML meaning)
 	$inline_elements=array(
 		'font','s','u','strike','span','abbr','acronym','cite',
@@ -535,7 +535,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	$array_html_preg_replace=array();
 	if (strpos($semihtml,'[list')!==false) // Because not all HTML list tags will convert, e.g. if has CSS class on it
 	{
-		$array_html_preg_replace[]=array('#^<li>(.*)</li>$#siU','[*]${1}[/*]'.chr(10));
+		$array_html_preg_replace[]=array('#^<li>(.*)</li>$#siU','[*]${1}[/*]'."\n");
 		$semihtml=array_html_preg_replace('li',$array_html_preg_replace,$semihtml);
 	}
 	$semihtml=str_replace('<strong class="comcode_bold">','<strong>',$semihtml);
@@ -647,8 +647,8 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	// Remove our CDATA protections
 	$semihtml=str_replace('</CDATA__space>',' ',$semihtml);
 	$semihtml=str_replace('</CDATA__tab>',"\t",$semihtml);
-	$semihtml=str_replace('</CDATA__nl>',chr(10),$semihtml);
-	$semihtml=str_replace('</CDATA__lf>',chr(13),$semihtml);
+	$semihtml=str_replace('</CDATA__nl>',"\n",$semihtml);
+	$semihtml=str_replace('</CDATA__lf>',"\r",$semihtml);
 	$semihtml=str_replace('</CDATA__amp>','&',$semihtml);
 
 	// Tempcode escaping
@@ -667,8 +667,8 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$semihtml2=$semihtml;
 
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<table summary="([^"]*)"([^>]*)>(.*)</table>$#siU',chr(10)."{| \${2}\${3}'.chr(10).'|}".chr(10));
-		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',chr(10)."{|".chr(10)."\${2}".chr(10)."|}".chr(10));
+		$array_html_preg_replace[]=array('#^<table summary="([^"]*)"([^>]*)>(.*)</table>$#siU',"\n"."{| \${2}\${3}'."\n".'|}"."\n");
+		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',"\n"."{|"."\n"."\${2}"."\n"."|}"."\n");
 		$semihtml2=array_html_preg_replace('table',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<thead([^>]*)>(.*)</thead>$#siU','');
@@ -680,13 +680,13 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$array_html_preg_replace[]=array('#^<tfoot([^>]*)>(.*)</tfoot>$#siU','');
 		$semihtml2=array_html_preg_replace('tfoot',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<tr([^>]*)>(.*)</tr>$#siU',chr(10)."|-".chr(10)."\${2}");
+		$array_html_preg_replace[]=array('#^<tr([^>]*)>(.*)</tr>$#siU',"\n"."|-"."\n"."\${2}");
 		$semihtml2=array_html_preg_replace('tr',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<th([^>]*)>(.*)</th>$#siU',chr(10).chr(10)."! \${2}");
+		$array_html_preg_replace[]=array('#^<th([^>]*)>(.*)</th>$#siU',"\n\n"."! \${2}");
 		$semihtml2=array_html_preg_replace('th',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<td([^>]*)>(.*)</td>$#siU',chr(10)."| \${2}");
+		$array_html_preg_replace[]=array('#^<td([^>]*)>(.*)</td>$#siU',"\n"."| \${2}");
 		$semihtml2=array_html_preg_replace('td',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<span style="font-family: monospace;  font-size: 1.2em;">(.*)</span>$#siU',"[tt]\${1}[/tt]");
@@ -715,17 +715,17 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	}
 
 	// These can only be used outside semihtml - so we do them in a copy of our output, and only use that copy if we find we are able to do a 100% Comcode conversion
-	$semihtml2=str_replace('<ocpbr />',chr(10),$semihtml2);
-	$semihtml2=str_replace('<br />',chr(10),$semihtml2);
-	$semihtml2=str_replace('<br  />',chr(10),$semihtml2);
-	$semihtml2=str_replace('<br>',chr(10),$semihtml2);
+	$semihtml2=str_replace('<ocpbr />',"\n",$semihtml2);
+	$semihtml2=str_replace('<br />',"\n",$semihtml2);
+	$semihtml2=str_replace('<br  />',"\n",$semihtml2);
+	$semihtml2=str_replace('<br>',"\n",$semihtml2);
 	$semihtml2=str_replace('<hr width="100%" size="2" />','<hr />',$semihtml2);
 	$semihtml2=str_replace('<hr size="2" width="100%" />','<hr />',$semihtml2);
 	$semihtml2=str_replace('<hr width="100%" />','<hr />',$semihtml2);
-	$semihtml2=str_replace(chr(10).'<hr />',chr(10)."---------------".chr(10),$semihtml2);
-	$semihtml2=str_replace(chr(10).'<hr>',chr(10)."---------------".chr(10),$semihtml2);
-	$semihtml2=preg_replace('#<hr\s*/>#',chr(10)."---------------".chr(10),$semihtml2);
-	$semihtml2=str_replace('<hr>',chr(10)."---------------".chr(10),$semihtml2);
+	$semihtml2=str_replace("\n".'<hr />',"\n"."---------------"."\n",$semihtml2);
+	$semihtml2=str_replace("\n".'<hr>',"\n"."---------------"."\n",$semihtml2);
+	$semihtml2=preg_replace('#<hr\s*/>#',"\n"."---------------"."\n",$semihtml2);
+	$semihtml2=str_replace('<hr>',"\n"."---------------"."\n",$semihtml2);
 
 	// We transform any HTML in there to Comcode if we can
 	$smilies=$GLOBALS['FORUM_DRIVER']->find_emoticons();
@@ -758,13 +758,13 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	$semihtml=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*) />#siU','_img_tag_fixup',$semihtml);
 	$semihtml=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*)>#siU','_img_tag_fixup',$semihtml);
 
-	$semihtml=str_replace('<ocpbr />',chr(10),$semihtml);
+	$semihtml=str_replace('<ocpbr />',"\n",$semihtml);
 
 	// Make it look slightly reasonable first (to the reader of the Comcode)
 	$semihtml=str_replace('<br  />','<br />',$semihtml);
-	$semihtml=str_replace('<br />','<br />'.chr(10),$semihtml);
-	$semihtml=str_replace('</p>','</p>'.chr(10),$semihtml);
-	$semihtml=str_replace('[/align]','[/align]'.chr(10),$semihtml);
+	$semihtml=str_replace('<br />','<br />'."\n",$semihtml);
+	$semihtml=str_replace('</p>','</p>'."\n",$semihtml);
+	$semihtml=str_replace('[/align]','[/align]'."\n",$semihtml);
 
 	return '[semihtml]'./*apply_emoticons can cause problems inside Comcode tags*/($semihtml).'[/semihtml]';
 }

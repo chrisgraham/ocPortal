@@ -193,7 +193,7 @@ function _inspect($args,$force_plain=false)
 			header('Content-Disposition: inline'); // Override what might have been set
 		}
 
-		echo 'DEBUGGING. INSPECTING VARIABLES...'.chr(10);
+		echo 'DEBUGGING. INSPECTING VARIABLES...'."\n";
 	} else
 	{
 		header('Content-type: text/html; charset='.get_charset());
@@ -206,7 +206,7 @@ function _inspect($args,$force_plain=false)
 
 		if ($plain)
 		{
-			echo chr(10).chr(10).$arg_name.' is...'.chr(10);
+			echo "\n\n".$arg_name.' is...'."\n";
 			if ((is_object($arg_value) && (is_a($arg_value,'ocp_tempcode'))))
 			{
 				echo 'Tempcode: '.$arg_value->evaluate().' (';
@@ -220,17 +220,17 @@ function _inspect($args,$force_plain=false)
 		{
 			if ((is_object($arg_value) && (is_a($arg_value,'ocp_tempcode'))))
 			{
-				attach_message($arg_name.' is...'.chr(10).'Tempcode: '.$arg_value->evaluate());
+				attach_message($arg_name.' is...'."\n".'Tempcode: '.$arg_value->evaluate());
 			} else
 			{
-				attach_message($arg_name.' is...'.chr(10).var_export($arg_value,true));
+				attach_message($arg_name.' is...'."\n".var_export($arg_value,true));
 			}
 		}
 	}
 
 	if ($plain)
 	{
-		echo chr(10).chr(10).'--------------------'.chr(10).chr(10).'STACK TRACE FOLLOWS...'.chr(10).chr(10);
+		echo "\n\n".'--------------------'."\n\n".'STACK TRACE FOLLOWS...'."\n\n";
 
 		debug_print_backtrace();
 		exit();

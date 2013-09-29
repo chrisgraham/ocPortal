@@ -43,7 +43,7 @@ function download_gallery_script()
 	if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
 	check_privilege('may_download_gallery',array('galleries',$cat));
-	if ((strpos($cat,chr(10))!==false) || (strpos($cat,chr(13))!==false))
+	if ((strpos($cat,"\n")!==false) || (strpos($cat,"\r")!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
 	$gallery_rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$cat),'',1);

@@ -50,14 +50,14 @@ function insert_code_before__by_linenum(&$code,$function,$linenum,$newcode)
 	$pos=strpos($code,'function '.$function.'(');
 	if ($pos===false) return false;
 
-	$pos=strpos($code,chr(10),$pos)+1;
+	$pos=strpos($code,"\n",$pos)+1;
 	for ($i=0;$i<$linenum;$i++)
 	{
-		$next=strpos($code,chr(10),$pos);
+		$next=strpos($code,"\n",$pos);
 		if ($next===false) return false;
 		$pos=$next+1;
 	}
-	$code=substr($code,0,$pos)."\t".$newcode.chr(10).substr($code,$pos);
+	$code=substr($code,0,$pos)."\t".$newcode."\n".substr($code,$pos);
 
 	return true;
 }
@@ -97,8 +97,8 @@ function insert_code_before__by_command(&$code,$function,$command,$newcode,$inst
 		if ($next===false) return false;
 		$pos=$next+1;
 	}
-	$pos=strrpos(substr($code,0,$pos),chr(10));
-	$code=substr($code,0,$pos).chr(10)."\t".$newcode.substr($code,$pos);
+	$pos=strrpos(substr($code,0,$pos),"\n");
+	$code=substr($code,0,$pos)."\n"."\t".$newcode.substr($code,$pos);
 
 	return true;
 }
@@ -124,8 +124,8 @@ function insert_code_after__by_command(&$code,$function,$command,$newcode,$insta
 		if ($next===false) return false;
 		$pos=$next+1;
 	}
-	$pos=strpos($code,chr(10),$pos);
-	$code=substr($code,0,$pos).chr(10)."\t".$newcode.substr($code,$pos);
+	$pos=strpos($code,"\n",$pos);
+	$code=substr($code,0,$pos)."\n"."\t".$newcode.substr($code,$pos);
 
 	return true;
 }
@@ -151,8 +151,8 @@ function remove_code(&$code,$function,$command,$instance_of_command=1)
 		$pos=$next+1;
 	}
 	$old_pos=$pos;
-	$pos=strpos($code,chr(10),$pos);
-	$code=substr($code,0,$pos).chr(10).substr($code,$old_pos+1);
+	$pos=strpos($code,"\n",$pos);
+	$code=substr($code,0,$pos)."\n".substr($code,$old_pos+1);
 
 	return true;
 }

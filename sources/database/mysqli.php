@@ -92,7 +92,7 @@ class Database_Static_mysqli extends Database_super_mysql
 				$error='Could not connect to database ('.mysqli_error($db).')';
 				if ($fail_ok)
 				{
-					echo $error.chr(10);
+					echo $error."\n";
 					return NULL;
 				}
 				critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_ERROR'));
@@ -242,7 +242,7 @@ class Database_Static_mysqli extends Database_super_mysql
 				fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
 			} else
 			{
-				echo htmlentities('Database query failed: '.$query.' [').($err).htmlentities(']'.'<br />'.chr(10));
+				echo htmlentities('Database query failed: '.$query.' [').($err).htmlentities(']'.'<br />'."\n");
 				return NULL;
 			}
 		}

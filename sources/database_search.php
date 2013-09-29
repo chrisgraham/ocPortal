@@ -216,9 +216,9 @@ function opensearch_script()
 			@ini_set('ocproducts.xss_detect','0');
 
 			// JSON format
-			echo '['.chr(10);
+			echo '['."\n";
 				// Original request
-				echo '"'.php_addslashes($request).'",'.chr(10);
+				echo '"'.php_addslashes($request).'",'."\n";
 
 				// Suggestions
 				echo '[';
@@ -227,7 +227,7 @@ function opensearch_script()
 						if ($i!=0) echo ',';
 						echo '"'.php_addslashes($suggestion).'"';
 					}
-				echo '],'.chr(10);
+				echo '],'."\n";
 
 				// Descriptions of suggestions
 				echo '[';
@@ -236,7 +236,7 @@ function opensearch_script()
 						if ($i!=0) echo ',';
 						echo '"'.php_addslashes(do_lang('NUM_RESULTS',integer_format($suggestion))).'"';
 					}
-				echo '],'.chr(10);
+				echo '],'."\n";
 
 				// URLs to search suggestions
 				$filter=get_param('filter','');
@@ -262,8 +262,8 @@ function opensearch_script()
 						$search_url=$_search_url->evaluate();
 						echo '"'.php_addslashes($search_url).'"';
 					}
-				echo ']'.chr(10);
-			echo ']'.chr(10);
+				echo ']'."\n";
+			echo ']'."\n";
 			break;
 
 		// Provide details about the site search engine
@@ -384,7 +384,7 @@ function nl_delim_match_sql($row,$i,$type='short',$param=NULL)
 	$search_field='f'.strval($i).'.cv_value';
 	if (is_null($param)) $param=get_param('option_'.strval($row['id']),'');
 	$where_clause='';
-	if ($param!='') $where_clause='('.$search_field.' LIKE \''.db_encode_like($param).'\' OR '.$search_field.' LIKE \''.db_encode_like('%'.chr(10).$param).'\' OR '.$search_field.' LIKE \''.db_encode_like($param.chr(10).'%').'\' OR '.$search_field.' LIKE \''.db_encode_like('%'.chr(10).$param.chr(10).'%').'\')';
+	if ($param!='') $where_clause='('.$search_field.' LIKE \''.db_encode_like($param).'\' OR '.$search_field.' LIKE \''.db_encode_like('%'."\n".$param).'\' OR '.$search_field.' LIKE \''.db_encode_like($param."\n".'%').'\' OR '.$search_field.' LIKE \''.db_encode_like('%'."\n".$param."\n".'%').'\')';
 	return array(array(),array('f'.strval($i).'.cv_value'),$table,$search_field,$where_clause);
 }
 

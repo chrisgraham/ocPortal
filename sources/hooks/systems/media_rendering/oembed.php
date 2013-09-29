@@ -201,7 +201,7 @@ class Hook_media_rendering_oembed
 
 				// Check security
 				$url_details=parse_url($url);
-				$whitelist=explode(chr(10),get_option('oembed_html_whitelist'));
+				$whitelist=explode("\n",get_option('oembed_html_whitelist'));
 				if ((!in_array($url_details['host'],$whitelist)) && (!in_array(preg_replace('#^www\.#','',$url_details['host']),$whitelist)))
 				{
 					/*require_code('comcode_compiler');	We could do this but it's not perfect, it still has some level of trust
@@ -324,7 +324,7 @@ class Hook_media_rendering_oembed
 	{
 		// Hard-coded
 		$_oembed_manual_patterns=get_option('oembed_manual_patterns');
-		$oembed_manual_patterns=explode(chr(10),$_oembed_manual_patterns);
+		$oembed_manual_patterns=explode("\n",$_oembed_manual_patterns);
 		foreach ($oembed_manual_patterns as $oembed_manual_pattern)
 		{
 			if (strpos($oembed_manual_pattern,'=')!==false)

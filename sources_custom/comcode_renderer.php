@@ -69,7 +69,7 @@ function comcode_white_listed($tag,$marker,$comcode)
 	$comcode_portion=substr($comcode_portion_at_and_after,0,$end_pos);
 
 	require_code('textfiles');
-	$whitelists=explode(chr(10),read_text_file('comcode_whitelist'));
+	$whitelists=explode("\n",read_text_file('comcode_whitelist'));
 
 	if (in_array($comcode_portion,$whitelists)) return true;
 	foreach ($whitelists as $whitelist)

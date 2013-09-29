@@ -57,7 +57,7 @@ class Hook_worldpay
 	function get_logos()
 	{
 		$inst_id=ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn');
-		$address=str_replace(chr(10),'<br />',escape_html(get_option('pd_address')));
+		$address=str_replace("\n",'<br />',escape_html(get_option('pd_address')));
 		$email=get_option('pd_email');
 		$number=get_option('pd_number');
 		return do_template('ECOM_LOGOS_WORLDPAY',array('_GUID'=>'4b3254b330b3b1719d66d2b754c7a8c8','INST_ID'=>$inst_id,'PD_ADDRESS'=>$address,'PD_EMAIL'=>$email,'PD_NUMBER'=>$number));

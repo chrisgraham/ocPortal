@@ -165,7 +165,7 @@ function incoming_uploads_script()
 				$val=str_replace(chr(0),'',$val);
 
 				if ($done!=0) $outstr.=', ';
-				$outstr.='"'.str_replace(chr(10),'\n',addcslashes($key,"\\\'\"&\n\r<>")).'": "'.str_replace(chr(10),'\n',addcslashes($val,"\\\'\"&\n\r<>")).'"';
+				$outstr.='"'.str_replace("\n",'\n',addcslashes($key,"\\\'\"&\n\r<>")).'": "'.str_replace("\n",'\n',addcslashes($val,"\\\'\"&\n\r<>")).'"';
 				$done++;
 			}
 		}

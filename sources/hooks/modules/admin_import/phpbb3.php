@@ -608,7 +608,7 @@ class Hook_phpbb3
 			$rules=$this->fix_links($row['forum_rules'],$row['forum_rules_uid'],$db,$table_prefix);
 			if ($row['forum_rules_link']!='')
 			{
-				if ($rules!='') $rules.=chr(10).chr(10);
+				if ($rules!='') $rules.="\n\n";
 				$rules.='[url]'.$row['forum_rules_link'].'[/url]';
 			}
 
@@ -849,7 +849,7 @@ class Hook_phpbb3
 					{
 						if ((strpos($post,'[attachment')===false) && ($row['post_attachment']==1))
 						{
-							if (!is_null($_attach_id)) $post.=chr(10).chr(10).'[attachment]'.strval($_attach_id).'[/attachment]';
+							if (!is_null($_attach_id)) $post.="\n\n".'[attachment]'.strval($_attach_id).'[/attachment]';
 						}
 					}
 					$attach_id[$i]=$_attach_id;
@@ -1104,7 +1104,7 @@ class Hook_phpbb3
 					{
 						if ((strpos($post,'[attachment')===false) && ($row['message_attachment']==1))
 						{
-							if (!is_null($_attach_id)) $post.=chr(10).chr(10).'[attachment]'.strval($_attach_id).'[/attachment]';
+							if (!is_null($_attach_id)) $post.="\n\n".'[attachment]'.strval($_attach_id).'[/attachment]';
 						}
 					}
 					$attach_id[$i]=$_attach_id;

@@ -96,7 +96,7 @@ class Hook_fields_video_multi
 		}
 
 		$ret=new ocp_tempcode();
-		$evs=explode(chr(10),$ev);
+		$evs=explode("\n",$ev);
 		foreach ($evs as $ev)
 		{
 			if (addon_installed('galleries'))
@@ -181,7 +181,7 @@ class Hook_fields_video_multi
 	{
 		$say_required=($field['cf_required']==1) && (($actual_value=='') || (is_null($actual_value)));
 		require_code('galleries');
-		$ffield=form_input_upload_multi($_cf_name,$_cf_description,'field_'.strval($field['id']),$say_required,NULL,($field['cf_required']==1)?NULL/*so unlink option not shown*/:(($actual_value=='')?NULL:explode(chr(10),$actual_value)),true,get_allowed_video_file_types());
+		$ffield=form_input_upload_multi($_cf_name,$_cf_description,'field_'.strval($field['id']),$say_required,NULL,($field['cf_required']==1)?NULL/*so unlink option not shown*/:(($actual_value=='')?NULL:explode("\n",$actual_value)),true,get_allowed_video_file_types());
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
@@ -206,7 +206,7 @@ class Hook_fields_video_multi
 
 			$value='';
 
-			$_old_value=((is_null($old_value)) || ($old_value==''))?array():explode(chr(10),$old_value);
+			$_old_value=((is_null($old_value)) || ($old_value==''))?array():explode("\n",$old_value);
 
 			require_code('uploads');
 			is_swf_upload(true);
@@ -222,7 +222,7 @@ class Hook_fields_video_multi
 						sync_file(rawurldecode($_value));
 					} else
 					{
-						if ($value!='') $value.=chr(10);
+						if ($value!='') $value.="\n";
 						$value.=$_value;
 					}
 				}
@@ -236,7 +236,7 @@ class Hook_fields_video_multi
 				$_value=$temp[0];
 				if ($_value!='')
 				{
-					if ($value!='') $value.=chr(10);
+					if ($value!='') $value.="\n";
 					$value.=$_value;
 				}
 

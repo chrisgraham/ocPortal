@@ -91,7 +91,7 @@ class Hook_fields_multilist
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded=($ev=='')?array():explode(chr(10),$ev);
+		$exploded=($ev=='')?array():explode("\n",$ev);
 		foreach (explode('|',$field['cf_default']) as $option)
 		{
 			if (in_array($option,$exploded)) $all[]=array('OPTION'=>$option,'HAS'=>true);
@@ -119,7 +119,7 @@ class Hook_fields_multilist
 		$default=$field['cf_default'];
 		$list=($default=='')?array():explode('|',$default);
 		$_list=new ocp_tempcode();
-		$exploded=explode(chr(10),$actual_value);
+		$exploded=explode("\n",$actual_value);
 		if (($field['cf_required']==0) && (($actual_value=='') || (is_null($actual_value))))
 			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
 		foreach ($list as $l)
@@ -146,7 +146,7 @@ class Hook_fields_multilist
 		{
 			return ($editing && (is_null(post_param('require__field_'.strval($field['id']),NULL))))?STRING_MAGIC_NULL:'';
 		}
-		return implode(chr(10),$_POST[$tmp_name]);
+		return implode("\n",$_POST[$tmp_name]);
 	}
 
 }

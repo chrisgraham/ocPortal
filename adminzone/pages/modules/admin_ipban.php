@@ -136,10 +136,10 @@ class Module_admin_ipban
 		{
 			if (is_null($row['i_ban_until']))
 			{
-				$bans.=$row['ip'].' '.$row['i_descrip'].chr(10);
+				$bans.=$row['ip'].' '.$row['i_descrip']."\n";
 			} else
 			{
-				$locked_bans.=do_lang('SPAM_AUTO_BAN_TIMEOUT',$row['ip'],$row['i_descrip'],get_timezoned_date($row['i_ban_until'])).chr(10);
+				$locked_bans.=do_lang('SPAM_AUTO_BAN_TIMEOUT',$row['ip'],$row['i_descrip'],get_timezoned_date($row['i_ban_until']))."\n";
 			}
 		}
 
@@ -164,7 +164,7 @@ class Module_admin_ipban
 		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip FROM '.get_table_prefix().'banned_ip WHERE i_ban_until IS NULL'/*.' OR i_ban_until>'.strval(time())*/,NULL,NULL,false,true);
 		$old_bans=collapse_1d_complexity('ip',$rows);
 		$bans=post_param('bans');
-		$_bans=explode(chr(10),$bans);
+		$_bans=explode("\n",$bans);
 		foreach ($old_bans as $ban)
 		{
 			if (!in_array($ban,$_bans)) remove_ip_ban($ban);

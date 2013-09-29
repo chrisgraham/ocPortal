@@ -165,7 +165,7 @@ function js_compile($j,$js_cache_path,$minify=true)
 		$contents=$out;
 	} else
 	{
-		$contents='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
+		$contents='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'."\n".'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */'."\n\n".$out;
 	}
 	$js_file=@fopen($js_cache_path,'at');
 	if ($js_file===false) intelligent_write_error($js_cache_path);
@@ -308,7 +308,7 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify=true)
 	{
 		if (($out!='') && (!$minify))
 		{
-			$out='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE CSS FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A CSS_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
+			$out='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'."\n".'INSTEAD EDIT THE CSS FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A CSS_CUSTOM OVERRIDE. */'."\n\n".$out;
 		}
 	}
 	if ($num_msgs_after>$num_msgs_before) // Was an error (e.g. missing theme image), so don't cache so that the error will be visible on refresh and hence debugged

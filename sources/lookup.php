@@ -133,10 +133,10 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 		{
 			$get=$myrow['s_get'];
 			if (strpos($page_converted,':')!==false)
-				$get=str_replace('<param>page='.substr($page_converted,strpos($page_converted,':')+1).'</param>'.chr(10),'',$get);
+				$get=str_replace('<param>page='.substr($page_converted,strpos($page_converted,':')+1).'</param>'."\n",'',$get);
 			$data=escape_html($get).(($myrow['post']=='')?'':', ').escape_html($myrow['post']);
 			$data=str_replace('&lt;param&gt;','',str_replace('&lt;/param&gt;',', ',$data));
-			if (substr($data,-3)==', '.chr(10)) $data=substr($data,0,strlen($data)-3);
+			if (substr($data,-3)==', '."\n") $data=substr($data,0,strlen($data)-3);
 			$parameters=symbol_truncator(array($data,35,'1','1'),'left');
 		} else $parameters='?';
 

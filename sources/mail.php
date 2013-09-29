@@ -67,7 +67,7 @@ function _mail_css_rep_callback($matches)
  */
 function _indent_callback($matches)
 {
-	return '      '.str_replace(chr(10),chr(10).'      ',$matches[1]);
+	return '      '.str_replace("\n","\n".'      ',$matches[1]);
 }
 
 /**
@@ -80,7 +80,7 @@ function _title_callback($matches)
 {
 	$symbol='-';
 	if (strpos($matches[1],'1')!==false || strpos($matches[1],'2')!==false || $matches[1]=='') $symbol='=';
-	return $matches[2].chr(10).str_repeat($symbol,strlen($matches[2]));
+	return $matches[2]."\n".str_repeat($symbol,strlen($matches[2]));
 }
 
 /**
@@ -91,7 +91,7 @@ function _title_callback($matches)
  */
 function _box_callback($matches)
 {
-	return $matches[1].chr(10).str_repeat('-',strlen($matches[1])).chr(10).$matches[2];
+	return $matches[1]."\n".str_repeat('-',strlen($matches[1]))."\n".$matches[2];
 }
 
 /**
@@ -146,7 +146,7 @@ function comcode_to_clean_text($message_plain)
 
 	$message_plain=strip_html($message_plain);
 
-	$message_plain=str_replace(']http',']'.chr(10).'http',str_replace('[/url]',chr(10).'[/url]',$message_plain));
+	$message_plain=str_replace(']http',']'."\n".'http',str_replace('[/url]',"\n".'[/url]',$message_plain));
 	$message_plain=preg_replace('#\[random [^=]*="([^"]*)"[^\]]*\].*\[/random\]#Us','${1}',$message_plain);
 	$message_plain=preg_replace('#\[abbr="([^"]*)"[^\]]*\].*\[/abbr\]#Us','${1}',$message_plain);
 	$message_plain=preg_replace_callback('#\[indent[^\]]*\](.*)\[/indent\]#Us','_indent_callback',$message_plain);
@@ -165,14 +165,14 @@ function comcode_to_clean_text($message_plain)
 		$message_plain=preg_replace('#\['.$s.'[^\]]*\](.*)\[/'.$s.'\]#Us','${1}',$message_plain);
 	}
 	$message_plain=str_replace(
-		array('[/*]','[*]','[list]'.chr(10),chr(10).'[/list]','[list]','[/list]','[b]','[/b]','[i]','[/i]','[u]','[/u]','[highlight]','[/highlight]'),
+		array('[/*]','[*]','[list]'."\n","\n".'[/list]','[list]','[/list]','[b]','[/b]','[i]','[/i]','[u]','[/u]','[highlight]','[/highlight]'),
 		array('',' - ','','','','','**','**','*','*','__','__','***','***'),
 		$message_plain);
 	$message_plain=preg_replace('#\[list[^\[\]]*\]#','',$message_plain);
 
 	$message_plain=preg_replace('#\{\$,[^\{\}]*\}#','',$message_plain);
 
-	$message_plain=preg_replace('#\n\n+#',chr(10).chr(10),$message_plain);
+	$message_plain=preg_replace('#\n\n+#',"\n\n",$message_plain);
 
 	return trim($message_plain);
 }
@@ -482,7 +482,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		} else
 		{
 			$sending_message.='Content-Transfer-Encoding: 8bit'.$line_term.$line_term;
-			$sending_message.=wordwrap(str_replace(chr(10),$line_term,unixify_line_format($message_plain)).$line_term,988,$line_term,true);
+			$sending_message.=wordwrap(str_replace("\n",$line_term,unixify_line_format($message_plain)).$line_term,988,$line_term,true);
 		}
 	}
 
@@ -517,7 +517,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	} else
 	{
 		$sending_message.='Content-Transfer-Encoding: 8bit'.$line_term.$line_term; // Requires RFC 1652
-		$sending_message.=wordwrap(str_replace(chr(10),$line_term,unixify_line_format($html_evaluated)).$line_term,988,$line_term,true);
+		$sending_message.=wordwrap(str_replace("\n",$line_term,unixify_line_format($html_evaluated)).$line_term,988,$line_term,true);
 	}
 	foreach ($CID_IMG_ATTACHMENT as $id=>$img)
 	{
@@ -720,7 +720,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$worked=false;
 		foreach ($to_email as $i=>$to)
 		{
-			//exit($headers.chr(10).$sending_message);
+			//exit($headers."\n".$sending_message);
 			$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 
 			$additional='';
@@ -849,7 +849,7 @@ function filter_css($css,$context)
 					}
 					if ($applies)
 					{
-						$css_new.=trim(substr($css,$real_start,$pos2-$real_start+1)).chr(10).chr(10); // Append section
+						$css_new.=trim(substr($css,$real_start,$pos2-$real_start+1))."\n\n"; // Append section
 					}
 				}
 			} else

@@ -40,7 +40,7 @@ class Hook_main_custom_gfx_text_overlay
 		$url=$block->_do_image($cache_id,$map,$img_path);
 		if (is_object($url)) return $url;
 
-		$ret='<img class="gfx_text_overlay" alt="'.str_replace(chr(10),' ',escape_html($map['data'])).'" src="'.escape_html($url).'" />';
+		$ret='<img class="gfx_text_overlay" alt="'.str_replace("\n",' ',escape_html($map['data'])).'" src="'.escape_html($url).'" />';
 
 		if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($ret);
 		return make_string_tempcode($ret);

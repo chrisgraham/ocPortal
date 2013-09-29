@@ -803,7 +803,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 	{
 		list($filter_keys,$filter_op,$filter_val,$is_join)=$filter;
 
-		$filter_val=str_replace('\n',chr(10),$filter_val);
+		$filter_val=str_replace('\n',"\n",$filter_val);
 
 		// Allow specification of reading from the environment
 		$matches=array();

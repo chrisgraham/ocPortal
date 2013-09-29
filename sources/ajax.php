@@ -288,11 +288,11 @@ function comcode_convert_script()
 		if (preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$new))!=preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$out)))
 		{
 			/*$myfile=fopen(get_file_base().'/a','wb');		Useful for debugging
-			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',chr(10),$new)));
+			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',"\n",$new)));
 			fclose($myfile);
 
 			$myfile=fopen(get_file_base().'/b','wb');
-			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',chr(10),$out)));
+			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',"\n",$out)));
 			fclose($myfile);*/
 
 			$out=$new.do_lang('BROKEN_XHTML_FIXED');
@@ -535,7 +535,7 @@ function snippet_script()
 	$tempcode->handle_symbol_preprocessing();
 	$out=$tempcode->evaluate();
 
-	if ((strpos($out,chr(10))!==false) && (strpos($hook,'__text')!==false)) // Is HTML
+	if ((strpos($out,"\n")!==false) && (strpos($hook,'__text')!==false)) // Is HTML
 	{
 		if ((!function_exists('simplexml_load_string')) || ((function_exists('simplexml_load_string')) && (@simplexml_load_string('<wrap>'.preg_replace('#&\w+;#','',$out).'</wrap>')===false))) // Optimisation-- check first via optimised native PHP function if possible
 		{

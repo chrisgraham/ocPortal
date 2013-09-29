@@ -363,7 +363,7 @@ function send_rss_ping($show_errors=true)
 	require_code('files');
 	$out='';
 	$_ping_url=str_replace('{url}',urlencode(get_base_url()),str_replace('{rss}',urlencode($url),str_replace('{title}',urlencode(get_site_name()),get_option('ping_url'))));
-	$ping_urls=explode(chr(10),$_ping_url);
+	$ping_urls=explode("\n",$_ping_url);
 	foreach ($ping_urls as $ping_url)
 	{
 		$ping_url=trim($ping_url);

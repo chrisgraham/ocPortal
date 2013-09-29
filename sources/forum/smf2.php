@@ -460,7 +460,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function make_post_forum_topic($forum_name,$topic_identifier,$member,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url=NULL,$time=NULL,$ip=NULL,$validated=NULL,$topic_validated=1,$skip_post_checks=false,$poster_name_if_guest='',$parent_id=NULL,$staff_only=false)
 	{
-		$post=str_replace(chr(10),'<br />',$post);
+		$post=str_replace("\n",'<br />',$post);
 
 		if (is_null($time)) $time=time();
 		if (is_null($ip)) $ip=get_ip_address();
@@ -521,7 +521,7 @@ class forum_driver_smf2 extends forum_driver_base
 			global $LAX_COMCODE;
 			$temp2=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			$temp['message']=comcode_to_tempcode(str_replace('<br />',chr(10),$myrow['body']),$myrow['id_member']);
+			$temp['message']=comcode_to_tempcode(str_replace('<br />',"\n",$myrow['body']),$myrow['id_member']);
 			$LAX_COMCODE=$temp2;
 			$temp['member']=$myrow['id_member'];
 			$temp['date']=$myrow['poster_time'];
@@ -631,7 +631,7 @@ class forum_driver_smf2 extends forum_driver_base
 				global $LAX_COMCODE;
 				$temp=$LAX_COMCODE;
 				$LAX_COMCODE=true;
-				$out[$i]['firstpost']=comcode_to_tempcode(str_replace('<br />',chr(10),$fp_rows[0]['body']),$fp_rows[0]['id_member']);
+				$out[$i]['firstpost']=comcode_to_tempcode(str_replace('<br />',"\n",$fp_rows[0]['body']),$fp_rows[0]['id_member']);
 				$LAX_COMCODE=$temp;
 			}
 		}

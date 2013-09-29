@@ -19,7 +19,7 @@ $filename='ocportal-'.get_site_name().'.'.date('Y-m-d').'.sql';
 if (!isset($_GET['testing']))
 {
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+	header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 } else
 {
 	header('Content-type: text/plain');

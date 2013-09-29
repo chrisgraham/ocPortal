@@ -293,7 +293,7 @@ function pagelink_redirect_script()
 
 	$x=$tpl->evaluate();
 
-	if ((strpos($x,chr(10))!==false) || (strpos($x,chr(13))!==false))
+	if ((strpos($x,"\n")!==false) || (strpos($x,"\r")!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
 	header('Location: '.$x);
@@ -399,7 +399,7 @@ function thumb_script()
 	}
 	$url_thumb=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 
-	if ((strpos($url_thumb,chr(10))!==false) || (strpos($url_thumb,chr(13))!==false))
+	if ((strpos($url_thumb,"\n")!==false) || (strpos($url_thumb,"\r")!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Location: '.$url_thumb);
 }

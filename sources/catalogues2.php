@@ -84,7 +84,7 @@ function catalogue_file_script()
 		$original_filename=basename($file);
 	}
 	$ev_check=$GLOBALS['SITE_DB']->query_select_value($table,$url_field,array($id_field=>$entry_id)); // Has to return a result, will give a fatal error if not -- i.e. it implicitly checks the schema variables given
-	if (!in_array($ev,explode(chr(10),$ev_check))) access_denied('I_ERROR'); // ID mismatch for the file requested, to give a security error
+	if (!in_array($ev,explode("\n",$ev_check))) access_denied('I_ERROR'); // ID mismatch for the file requested, to give a security error
 	if ($table=='catalogue_efv_short') // Now check the match, if we support checking on it
 	{
 		$c_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$entry_id));
@@ -107,16 +107,16 @@ function catalogue_file_script()
 	{
 		$original_filename=filter_naughty($original_filename);
 
-		if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
+		if ((strpos($original_filename,"\n")!==false) || (strpos($original_filename,"\r")!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 		if (get_option('immediate_downloads',true)==='1')
 		{
 			require_code('mime_types');
 			header('Content-Type: '.get_mime_type(get_file_extension($original_filename),has_privilege($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','ce_submitter',array('id'=>$entry_id)),'comcode_dangerous')).'; authoritative=true;');
-			header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+			header('Content-Disposition: inline; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($original_filename))).'"');
 		} else
 		{
-			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
+			header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($original_filename))).'"');
 		}
 	} else
 	{

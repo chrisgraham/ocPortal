@@ -1345,7 +1345,7 @@ class Module_topics
 		{
 			list($title,$text,$default)=$template;
 			if ($default) $post=$text;
-			$post_templates->attach(form_input_list_entry(str_replace(chr(10),'\n',$text),$default==1,$title));
+			$post_templates->attach(form_input_list_entry(str_replace("\n",'\n',$text),$default==1,$title));
 		}
 		if ((!$post_templates->is_empty()) && (has_js()))
 		{
@@ -2196,9 +2196,9 @@ END;
 					$_intended_solely_for=is_null($intended_solely_for)?'NULL':strval($intended_solely_for);
 					$_postdetailser_name_if_guest=is_null($poster_name_if_guest)?'NULL':('\''.addslashes($poster_name_if_guest).'\'');
 					$_first_post=$first_post?'true':'false';
-					$__title=is_null($title)?'NULL':('\''.str_replace(chr(10),'\'.chr(10).\'',addslashes($title)).'\'');
-					$_postdetails=is_null($post)?'NULL':('\''.str_replace(chr(10),'\'.chr(10).\'',addslashes($post)).'\'');
-					$_new_title=is_null($new_title)?'NULL':('\''.str_replace(chr(10),'\'.chr(10).\'',addslashes($new_title)).'\'');
+					$__title=is_null($title)?'NULL':('\''.str_replace("\n",'\'."\n".\'',addslashes($title)).'\'');
+					$_postdetails=is_null($post)?'NULL':('\''.str_replace("\n",'\'."\n".\'',addslashes($post)).'\'');
+					$_new_title=is_null($new_title)?'NULL':('\''.str_replace("\n",'\'."\n".\'',addslashes($new_title)).'\'');
 
 $schedule_code=<<<END
 :require_code('ocf_topics_action2'); require_code('ocf_topics_action'); ocf_edit_topic($topic_id,NULL,NULL,$validated,$open,$pinned,$sunk,$cascading,'',$_new_title); if (($to!=$forum_id) && (!is_null($to))) ocf_move_topics($forum_id,$to,array($topic_id)); \$post_id=ocf_make_post($topic_id,$__title,$_postdetails,$skip_sig,$_first_post,$validated,$is_emphasised,$_postdetailser_name_if_guest,NULL,NULL,NULL,$_intended_solely_for,NULL,NULL,false,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1); if (addon_installed('awards')) { require_code('awards'); handle_award_setting('post',strval(\$post_id)); }
@@ -2914,7 +2914,7 @@ END;
 
 		$stub=unixify_line_format(either_param('stub',''));
 		if ($stub!='') $javascript.="
-					var df='".str_replace(chr(10),'\n',addslashes($stub))."';
+					var df='".str_replace("\n",'\n',addslashes($stub))."';
 
 					var pv=post.value;
 					if ((post) && (pv.substring(0,df.length)==df))

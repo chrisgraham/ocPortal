@@ -802,7 +802,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	$email=trim(post_param('email',''));
 	if ($email!='')
 	{
-		$body='> '.str_replace(chr(10),chr(10).'> ',$post);
+		$body='> '.str_replace("\n","\n".'> ',$post);
 		if (substr($body,-2)=='> ') $body=substr($body,0,strlen($body)-2);
 		if (get_page_name()!='tickets') $post.='{+START,IF,{$IS_ADMIN}}';
 		$post.="\n\n".'[email subject="Re: '.comcode_escape($post_title).' ['.get_site_name().']" body="'.comcode_escape($body).'"]'.$email.'[/email]'."\n\n";

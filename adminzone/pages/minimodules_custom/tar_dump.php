@@ -18,7 +18,7 @@ $filename='ocportal-'.get_site_name().'.'.date('Y-m-d').'.tar';
 @ob_end_clean();
 @ob_end_clean();
 
-header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 
 $tar=tar_open(NULL,'wb');
 

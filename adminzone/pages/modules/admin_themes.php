@@ -354,16 +354,16 @@ class Module_admin_themes
 		$myfile=@fopen((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini','at') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini');
 		flock($myfile,LOCK_EX);
 		ftruncate($myfile,0);
-		if (fwrite($myfile,'title='.post_param('title').chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		if (fwrite($myfile,'description='.post_param('description').chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (fwrite($myfile,'title='.post_param('title')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (fwrite($myfile,'description='.post_param('description')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		foreach ($before as $key=>$val)
 		{
 			if (($key!='title') && ($key!='description') && ($key!='author') && ($key!='mobile_pages') && ($key!='supports_wide'))
-				fwrite($myfile,$key.'='.$val.chr(10));
+				fwrite($myfile,$key.'='.$val."\n");
 		}
-		if (fwrite($myfile,'author='.post_param('author').chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		if (fwrite($myfile,'mobile_pages='.post_param('mobile_pages').chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		if (fwrite($myfile,'supports_wide='.strval(post_param_integer('supports_wide',0)).chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (fwrite($myfile,'author='.post_param('author')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (fwrite($myfile,'mobile_pages='.post_param('mobile_pages')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (fwrite($myfile,'supports_wide='.strval(post_param_integer('supports_wide',0))."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		flock($myfile,LOCK_UN);
 		fclose($myfile);
 		sync_file((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini');
@@ -390,7 +390,7 @@ class Module_admin_themes
 		ftruncate($myfile,0);
 		foreach ($new_map as $key=>$val)
 		{
-			if (fwrite($myfile,$key.'='.$val.chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			if (fwrite($myfile,$key.'='.$val."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		}
 		flock($myfile,LOCK_UN);
 		fclose($myfile);
@@ -810,8 +810,8 @@ class Module_admin_themes
 					if ($section_start===false || $section_start<5) break;
 				}
 				while (($css[$section_start-2]=='*') || ($css[$section_start-1]!=' '));
-				$section_line_start=strrpos(substr($css,0,$section_start),chr(10));
-				$line_start=strrpos(substr($css,0,$pos),chr(10));
+				$section_line_start=strrpos(substr($css,0,$section_start),"\n");
+				$line_start=strrpos(substr($css,0,$pos),"\n");
 				$context1=substr($css,$section_line_start,$section_start-$section_line_start);
 				$context2=substr($css,$line_start,$pos-$line_start);
 				$context=$context1.'=>'.trim($context2);

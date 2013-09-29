@@ -37,7 +37,7 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 
 	// Loop
 	$i=0;
-	$lines=explode(chr(10),$comcode);
+	$lines=explode("\n",$comcode);
 	$stack=array(); // Stores the previous level(s) if we are jumping down to a further one
 	$root_branch=array( // Our root branch is the first branch we load up
 		'type'=>'root',

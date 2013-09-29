@@ -61,7 +61,7 @@ function callback($match)
 	global $GUID_LANDSCAPE,$FILENAME,$IN;
 	$new_guid=md5(uniqid('',true));
 	if (!array_key_exists($match[1],$GUID_LANDSCAPE)) $GUID_LANDSCAPE[$match[1]]=array();
-	$line=substr_count(substr($IN,0,strpos($IN,$match[0])),chr(10))+1;
+	$line=substr_count(substr($IN,0,strpos($IN,$match[0])),"\n")+1;
 	if ($match[2]!='_GUID')
 	{
 		echo 'Insert needed for '.escape_html($match[1]).'<br />';

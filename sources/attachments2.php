@@ -108,7 +108,7 @@ function do_comcode_attachments($comcode,$type,$id,$previewing_only=false,$conne
 			{
 				if (preg_match('#\]\d+\[/attachment\]#',$comcode)==0) // Attachment could have already been put through (e.g. during a preview). If we have actual ID's referenced, it's almost certainly the case.
 				{
-					$comcode.=chr(10).chr(10).'[attachment]new_'.$matches[1].'[/attachment]';
+					$comcode.="\n\n".'[attachment]new_'.$matches[1].'[/attachment]';
 				}
 			}
 		}
@@ -406,7 +406,7 @@ function _handle_attachment_extraction(&$comcode,$key,$type,$id,$matches_extract
 				}
 
 				// Append Comcode for this new attachment
-				$added_comcode.=chr(10).chr(10).'[attachment'.$matches_extract[1].$matches_extract[2].' type="" description="'.comcode_escape($description).'"]'.strval($attachment_id).'[/attachment]';
+				$added_comcode.="\n\n".'[attachment'.$matches_extract[1].$matches_extract[2].' type="" description="'.comcode_escape($description).'"]'.strval($attachment_id).'[/attachment]';
 			}
 		}
 		if ($arcext=='tar')

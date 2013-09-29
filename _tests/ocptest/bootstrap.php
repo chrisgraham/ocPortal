@@ -62,10 +62,10 @@ function unit_testing_run()
 
 	$sets=find_testsets();
 	echo '<ul>';
-	echo '<li><em><a href="?id=!">All</a></em></li>'.chr(10);
+	echo '<li><em><a href="?id=!">All</a></em></li>'."\n";
 	foreach ($sets as $set)
 	{
-		echo '<li><a href="?id='.escape_html($set).'">'.escape_html($set).'</a></li>'.chr(10);
+		echo '<li><a href="?id='.escape_html($set).'">'.escape_html($set).'</a></li>'."\n";
 	}
 	echo '</ul>';
 

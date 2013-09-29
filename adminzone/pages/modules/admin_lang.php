@@ -497,9 +497,9 @@ msgstr ""
 						if (is_null($english)) continue;
 						if ($english=='') continue;
 						$val=convert_to_internal_encoding($val,$charset,'utf-8');
-						$val=str_replace(chr(10),'\n',$val);
+						$val=str_replace("\n",'\n',$val);
 						$english=convert_to_internal_encoding($english,$english_charset,'utf-8');
-						$english=str_replace(chr(10),'\n',$english);
+						$english=str_replace("\n",'\n',$english);
 
 						$seen_before=false;
 						if (isset($en_seen_before[$val]))
@@ -518,25 +518,25 @@ msgstr ""
 					foreach ($entries2 as $key=>$_val)
 					{
 						list($val,$seen_before,$english)=$_val;
-						$data.='#: [strings]'.$key.chr(10);
-						if ($seen_before) $data.='msgctxt "[strings]'.$key.'"'.chr(10);
-						$wrapped=preg_replace('#"\n"$#','',ocp_mb_chunk_split(str_replace('"','\"',$english),76,'"'.chr(10).'"'));
-						if (strpos($wrapped,chr(10))!==false)
+						$data.='#: [strings]'.$key."\n";
+						if ($seen_before) $data.='msgctxt "[strings]'.$key.'"'."\n";
+						$wrapped=preg_replace('#"\n"$#','',ocp_mb_chunk_split(str_replace('"','\"',$english),76,'"'."\n".'"'));
+						if (strpos($wrapped,"\n")!==false)
 						{
-							$data.='msgid ""'.chr(10).'"'.$wrapped.'"'.chr(10);
+							$data.='msgid ""'."\n".'"'.$wrapped.'"'."\n";
 						} else
 						{
-							$data.='msgid "'.$wrapped.'"'.chr(10);
+							$data.='msgid "'.$wrapped.'"'."\n";
 						}
-						$wrapped=preg_replace('#"\n"$#','',ocp_mb_chunk_split(str_replace('"','\"',$val),76,'"'.chr(10).'"'));
-						if (strpos($wrapped,chr(10))!==false)
+						$wrapped=preg_replace('#"\n"$#','',ocp_mb_chunk_split(str_replace('"','\"',$val),76,'"'."\n".'"'));
+						if (strpos($wrapped,"\n")!==false)
 						{
-							$data.='msgstr ""'.chr(10).'"'.$wrapped.'"'.chr(10);
+							$data.='msgstr ""'."\n".'"'.$wrapped.'"'."\n";
 						} else
 						{
-							$data.='msgstr "'.$wrapped.'"'.chr(10);
+							$data.='msgstr "'.$wrapped.'"'."\n";
 						}
-						$data.=chr(10);
+						$data.="\n";
 					}
 					tar_add_file($tar,basename($f,'.ini').'/'.basename($f,'.ini').'-'.strtolower($lang).'.po',$data,0666,$mtime);
 				}
@@ -608,7 +608,7 @@ msgstr ""
 			{
 				if (strpos(strtolower($value),strtolower($search))!==false)
 				{
-					$fields->attach(form_input_text($key,'','l_'.$key,str_replace('\n',chr(10),$value),false));
+					$fields->attach(form_input_text($key,'','l_'.$key,str_replace('\n',"\n",$value),false));
 				}
 			}
 			if ($fields->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
@@ -679,7 +679,7 @@ msgstr ""
 		$actions=new ocp_tempcode();
 		$next=0;
 		$trans_lot='';
-		$delimit=chr(10).'=-=-=-=-=-=-=-=-'.chr(10);
+		$delimit="\n".'=-=-=-=-=-=-=-=-'."\n";
 		foreach ($for_base_lang as $name=>$old)
 		{
 			if (array_key_exists($name,$for_lang))
@@ -691,7 +691,7 @@ msgstr ""
 			}
 			if (($current=='') && (strtolower($name)!=$name))
 			{
-				$trans_lot.=str_replace('\n',chr(10),str_replace(array('{','}'),array('(((',')))'),$old)).$delimit;
+				$trans_lot.=str_replace('\n',"\n",str_replace(array('{','}'),array('(((',')))'),$old)).$delimit;
 			}
 		}
 
@@ -710,9 +710,9 @@ msgstr ""
 				{
 					$result2=$matches[1];
 					$result2=@html_entity_decode($result2,ENT_QUOTES,get_charset());
-					$result2=preg_replace('#\s?<br>\s?#',chr(10),$result2);
+					$result2=preg_replace('#\s?<br>\s?#',"\n",$result2);
 					$result2=str_replace('> ','>',str_replace(' <',' <',str_replace('</ ','</',str_replace(array('(((',')))'),array('{','}'),$result2))));
-					$translated_stuff=explode(trim($delimit),$result2.chr(10));
+					$translated_stuff=explode(trim($delimit),$result2."\n");
 				}
 			}
 		}
@@ -733,17 +733,17 @@ msgstr ""
 				$next++;
 			} else
 			{
-				$_current=str_replace('\n',chr(10),$current);
+				$_current=str_replace('\n',"\n",$current);
 				$translate_auto=NULL;
 			}
-			if ($_current=='') $_current=str_replace('\n',chr(10),$old);
+			if ($_current=='') $_current=str_replace('\n',"\n",$old);
 
 			if (($google!='') && (get_option('google_translate_api_key')!=''))
 			{
 				$actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'9e9a68cb2c1a1e23a901b84c9af2280b','LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>$lang,'NAME'=>'trans_'.$name,'OLD'=>$_current));
 			}
 
-			$temp=do_template('TRANSLATE_LINE',array('_GUID'=>'9cb331f5852ee043e6ad30b45aedc43b','TRANSLATE_AUTO'=>$translate_auto,'DESCRIPTION'=>$description,'NAME'=>$name,'OLD'=>str_replace('\n',chr(10),$old),'CURRENT'=>$_current,'ACTIONS'=>$actions));
+			$temp=do_template('TRANSLATE_LINE',array('_GUID'=>'9cb331f5852ee043e6ad30b45aedc43b','TRANSLATE_AUTO'=>$translate_auto,'DESCRIPTION'=>$description,'NAME'=>$name,'OLD'=>str_replace('\n',"\n",$old),'CURRENT'=>$_current,'ACTIONS'=>$actions));
 			$lines.=$temp->evaluate();
 		}
 
@@ -806,9 +806,9 @@ msgstr ""
 		{
 			$val=post_param($key,NULL);
 			if (($val===NULL) && (!array_key_exists($key,$for_base_lang))) $val=$for_base_lang_2[$key]; // Not in lang, but is in lang_custom, AND not set now - must copy though
-			if (($val!==NULL) && ((!array_key_exists($key,$for_base_lang)) || (str_replace(chr(10),'\n',$val)!=$for_base_lang[$key])))
+			if (($val!==NULL) && ((!array_key_exists($key,$for_base_lang)) || (str_replace("\n",'\n',$val)!=$for_base_lang[$key])))
 			{
-				if (fwrite($myfile,$key.'='.str_replace(chr(10),'\n',$val)."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				if (fwrite($myfile,$key.'='.str_replace("\n",'\n',$val)."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			}
 		}
 		flock($myfile,LOCK_UN);
@@ -854,8 +854,8 @@ msgstr ""
 			foreach ($for_base_lang_2+$for_base_lang as $key=>$now_val)
 			{
 				$val=post_param('l_'.$key,array_key_exists($key,$for_base_lang_2)?$for_base_lang_2[$key]:$now_val);
-				if ((str_replace(chr(10),'\n',$val)!=$now_val) || (!array_key_exists($key,$for_base_lang)) || ($for_base_lang[$key]!=$val) || (!file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$lang_file.'.ini'))) // if it's changed from default ocPortal, or not in default ocPortal, or was already changed in language file, or whole file is not in default ocPortal
-					$out.=$key.'='.str_replace(chr(10),'\n',$val)."\n";
+				if ((str_replace("\n",'\n',$val)!=$now_val) || (!array_key_exists($key,$for_base_lang)) || ($for_base_lang[$key]!=$val) || (!file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$lang_file.'.ini'))) // if it's changed from default ocPortal, or not in default ocPortal, or was already changed in language file, or whole file is not in default ocPortal
+					$out.=$key.'='.str_replace("\n",'\n',$val)."\n";
 			}
 
 			if ($out!='')

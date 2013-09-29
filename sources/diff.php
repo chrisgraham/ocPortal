@@ -20,7 +20,7 @@ function diff_simple($old_file,$new_file,$unified=false)
 
 function diff_simple_2($old_contents,$new_contents,$unified=false)
 {
-	return _diff_simple(($old_contents=='')?array():explode(chr(10),$old_contents),($new_contents=='')?array():explode(chr(10),$new_contents),$unified);
+	return _diff_simple(($old_contents=='')?array():explode("\n",$old_contents),($new_contents=='')?array():explode("\n",$new_contents),$unified);
 }
 
 function _diff_simple($old,$new,$unified=false)
@@ -55,17 +55,17 @@ function diff_compute_new($file_1,$file_2,$file_3)
 	$new='';
 	foreach ($diff->_edits as $ob)
 	{
-		$orig=implode(chr(10),$ob->orig);
-		$final1=implode(chr(10),$ob->final1);
-		$final2=implode(chr(10),$ob->final2);
+		$orig=implode("\n",$ob->orig);
+		$final1=implode("\n",$ob->final1);
+		$final2=implode("\n",$ob->final2);
 		if (preg_replace('#\s#','',$orig)!=preg_replace('#\s#','',$final1))
 		{
 			$new.=$orig;
-			$new.=chr(10);
+			$new.="\n";
 		} else
 		{
 			$new.=$final2;
-			$new.=chr(10);
+			$new.="\n";
 		}
 	}
 

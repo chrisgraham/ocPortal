@@ -156,7 +156,7 @@ while (($line=fgets($myfile,10000000))!==false)
 			exit();
 		}
 
-		$sql_buildup.=$line.chr(10);
+		$sql_buildup.=$line."\n";
 
 		$i++;
 	}

@@ -27,7 +27,7 @@ class installsql_test_set extends ocp_test_case
 		$contents=file_get_contents(get_file_base().'/install.sql');
 
 		// Not with forced charsets or other contextual noise
-		$this->assertTrue(strpos($contents,chr(10).'SET')===false,'Contains unwanted context');
+		$this->assertTrue(strpos($contents,"\n".'SET')===false,'Contains unwanted context');
 		$this->assertTrue(preg_match('#\d+ SET #',$contents)==0,'Contains unwanted context');
 		$this->assertTrue(strpos($contents,' DEFAULT CHARSET=utf8')===false,'Contains unwanted charset stuff');
 
@@ -66,7 +66,7 @@ class installsql_test_set extends ocp_test_case
 			$this->assertTrue(filesize(get_file_base().'/install'.strval($i+1).'.sql')<300000,'SQL dump (install'.strval($i+1).'.sql) too big, maybe the split points need reconsideration or the table order in install.sql isn\'t alphabetical (try phpMyAdmin, that dumps alphabetically)');
 		}
 
-		$this->assertTrue(str_replace(chr(10),'',$contents1)==str_replace(chr(10),'',$contents2),'install*.sql not split from install.sql, but we\'ll try and fix that (try refreshing)');
+		$this->assertTrue(str_replace("\n",'',$contents1)==str_replace("\n",'',$contents2),'install*.sql not split from install.sql, but we\'ll try and fix that (try refreshing)');
 
 		$split_points=array(
 			'',

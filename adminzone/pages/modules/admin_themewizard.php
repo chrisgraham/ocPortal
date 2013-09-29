@@ -258,10 +258,10 @@ class Module_admin_themewizard
 		if ((!is_alphanumeric($themename)) || (strlen($themename)>40)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 		make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark==1,$inherit_css==1);
 		$myfile=@fopen(get_custom_file_base().'/themes/'.filter_naughty($themename).'/theme.ini','wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($themename).'/theme.ini');
-		fwrite($myfile,'title='.$themename.chr(10));
-		fwrite($myfile,'description='.do_lang('NA').chr(10));
-		fwrite($myfile,'seed='.$seed.chr(10));
-		if (fwrite($myfile,'author='.$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true).chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		fwrite($myfile,'title='.$themename."\n");
+		fwrite($myfile,'description='.do_lang('NA')."\n");
+		fwrite($myfile,'seed='.$seed."\n");
+		if (fwrite($myfile,'author='.$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true)."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		fclose($myfile);
 		sync_file('themes/'.filter_naughty($themename).'/theme.ini');
 

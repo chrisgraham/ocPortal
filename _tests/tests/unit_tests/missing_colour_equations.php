@@ -39,7 +39,7 @@ class missing_colour_equations_test_set extends ocp_test_case
 				{
 					if (strpos($matches[0][$i],'{$')===false)
 					{
-						$line=substr_count(substr($contents,0,strpos($contents,$matches[0][$i])),chr(10))+1;
+						$line=substr_count(substr($contents,0,strpos($contents,$matches[0][$i])),"\n")+1;
 						$this->assertTrue(false,'Missing colour equation in '.$f.':'.strval($line).' for '.$matches[1][$i]);
 					}
 				}

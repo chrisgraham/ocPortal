@@ -834,7 +834,7 @@ function populate_build_files_array($dir='',$pretend_dir='')
 		{
 			// Reset volatile files to how they should be by default (see also list in install.php)
 			if (($pretend_dir.$file)=='_config.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
-			elseif (($pretend_dir.$file)=='themes/map.ini') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='default=default'.chr(10);
+			elseif (($pretend_dir.$file)=='themes/map.ini') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='default=default'."\n";
 			elseif ($pretend_dir.$file=='data_custom/functions.dat') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/download_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/wiki_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';

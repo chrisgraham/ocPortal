@@ -47,7 +47,6 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=
 
 	$out=new ocp_tempcode();
 	$continuation='';
-	$chr_10=chr(10);
 	$symbol_len=strlen($text);
 	while (true)
 	{
@@ -558,7 +557,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	}
 
 	// Strip off trailing final lines from single lines templates. Editors often put these in, and it causes annoying "visible space" issues
-	if ((substr($html,-1,1)==chr(10)) && (substr_count($html,chr(10))==1))
+	if ((substr($html,-1,1)=="\n") && (substr_count($html,"\n")==1))
 	{
 		$html=substr($html,0,strlen($html)-1);
 	}

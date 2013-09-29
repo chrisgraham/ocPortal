@@ -242,7 +242,7 @@ END;
 
 $filename='mycustomprofile.tar';
 header('Content-Type: application/octet-stream'.'; authoritative=true;');
-header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 
 $tar=tar_open(NULL,'wb');
 

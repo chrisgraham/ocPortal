@@ -92,7 +92,7 @@ class Hook_fields_combo_multi
 		if (is_object($ev)) return $ev;
 		$all=array();
 		$exploded_inbuilt=array_flip(explode('|',$field['cf_default']));
-		$exploded_chosen=($ev=='')?array():array_flip(explode(chr(10),$ev));
+		$exploded_chosen=($ev=='')?array():array_flip(explode("\n",$ev));
 		foreach (array_keys($exploded_inbuilt) as $option)
 		{
 			$all[]=array('OPTION'=>$option,'HAS'=>isset($exploded_chosen[$option]));
@@ -127,7 +127,7 @@ class Hook_fields_combo_multi
 		$default=$field['cf_default'];
 		$exploded_inbuilt=explode('|',$default);
 		$_list=array();
-		$exploded_chosen=($actual_value==$default)?array():explode(chr(10),$actual_value);
+		$exploded_chosen=($actual_value==$default)?array():explode("\n",$actual_value);
 		$custom_value=mixed();
 		foreach ($exploded_inbuilt as $i=>$l)
 		{
@@ -168,7 +168,7 @@ class Hook_fields_combo_multi
 			$tmp_name='field_'.strval($id).'_'.strval($i);
 			if (post_param_integer($tmp_name,0)==1)
 			{
-				if ($value!='') $value.=chr(10);
+				if ($value!='') $value.="\n";
 				$value.=$l;
 			}
 		}
@@ -177,7 +177,7 @@ class Hook_fields_combo_multi
 		$custom=post_param($tmp_name.'_value','');
 		if ((post_param_integer($tmp_name,0)==1) && ($custom!=''))
 		{
-			if ($value!='') $value.=chr(10);
+			if ($value!='') $value.="\n";
 			$value.=$custom;
 		}
 

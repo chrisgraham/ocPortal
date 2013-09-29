@@ -19,8 +19,8 @@
  */
 
 $target=$_GET['url'];
-$target=str_replace(chr(13),'',$target);
-$target=str_replace(chr(10),'',$target);
+$target=str_replace("\r",'',$target);
+$target=str_replace("\n",'',$target);
 
 // Only allows redirections from our own server
 $OUR_SERVER='http://'.$_SERVER['HTTP_HOST'];

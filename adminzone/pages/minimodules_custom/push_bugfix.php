@@ -48,7 +48,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 		$fixed_files=array();
 		$git_command=$GIT_PATH.' show --pretty="format:" --name-only '.$git_commit_id;
 		$git_result=shell_exec($git_command.' 2>&1');
-		$_fixed_files=explode(chr(10),$git_result);
+		$_fixed_files=explode("\n",$git_result);
 		$fixed_files=array();
 		foreach ($_fixed_files as $file)
 		{
@@ -64,7 +64,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 		if (strpos($file,'_custom')!==false)
 		{
 			$is_addon=true;
-			$addon_files=explode(chr(10),file_get_contents(get_file_base().'/data_custom/addon_files.txt'));
+			$addon_files=explode("\n",file_get_contents(get_file_base().'/data_custom/addon_files.txt'));
 			$current_addon='';
 			foreach ($addon_files as $line)
 			{
@@ -166,7 +166,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	$recog_error_substring=post_param('recog_error_substring','');
 	if ($recog_error_substring!='')
 	{
-		$recog_post='Your error seems to match a known and fixed bug in ocPortal ('.$title.').'.chr(10).chr(10).'[title="2"]How did this happen?[/title]'.chr(10).chr(10).'The bug description is as follows...'.chr(10).chr(10).$notes.chr(10).chr(10).'[title="2"]How do I fix it?[/title]'.chr(10).chr(10).'A hotfix is available under issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url].';
+		$recog_post='Your error seems to match a known and fixed bug in ocPortal ('.$title.').'."\n\n".'[title="2"]How did this happen?[/title]'."\n\n".'The bug description is as follows...'."\n\n".$notes."\n\n".'[title="2"]How do I fix it?[/title]'."\n\n".'A hotfix is available under issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url].';
 		$recog_topic_id=create_forum_topic(SOLUTION_FORUM,$recog_error_substring,$recog_post);
 		$recog_topic_url=$REMOTE_BASE_URL.'/forum/topicview/misc/'.strval($recog_topic_id).'.htm';
 		$done['Posted recognition signature']=$recog_topic_url;
@@ -197,7 +197,7 @@ $on_disk_version=get_version_dotted();
 chdir(get_file_base());
 $git_command=$GIT_PATH.' status';
 $git_result=shell_exec($git_command.' 2>&1');
-$lines=explode(chr(10),$git_result);
+$lines=explode("\n",$git_result);
 $git_found=array();
 foreach ($lines as $line)
 {

@@ -728,7 +728,7 @@ class Module_tickets
 			$email=trim(post_param('email',''));
 			if ($email!='')
 			{
-				$body='> '.str_replace(chr(10),chr(10).'> ',$post);
+				$body='> '.str_replace("\n","\n".'> ',$post);
 				if (substr($body,-2)=='> ') $body=substr($body,0,strlen($body)-2);
 				$new_post->attach('[email subject="Re: '.comcode_escape(post_param('title')).' ['.get_site_name().']" body="'.comcode_escape($body).'"]'.$email.'[/email]'."\n\n");
 			}

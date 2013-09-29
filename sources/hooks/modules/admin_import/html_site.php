@@ -211,7 +211,7 @@ class Hook_html_site
 					$ratios=array();
 					while ($last_pos!==false)
 					{
-						//@print('!'.(strlen($reference_file)-$last_pos).' '.$lv.' '.$ratio.'<br />'.chr(10));flush();if (@$dd++==180) @exit('fini'); // Useful for debugging
+						//@print('!'.(strlen($reference_file)-$last_pos).' '.$lv.' '.$ratio.'<br />'."\n");flush();if (@$dd++==180) @exit('fini'); // Useful for debugging
 						if ($template_wanted=='HEADER')
 						{
 							$next_pos=strpos($reference_file,'<',$last_pos);

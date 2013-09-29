@@ -65,7 +65,7 @@ if (!array_key_exists('type',$_GET))
 	if (count($_GET)==0)
 		header('Content-type: text/html');
 
-	echo '<!DOCTYPE html>'.chr(10);
+	echo '<!DOCTYPE html>'."\n";
 	if (count($_GET)==0) // Special code to skip checks if need-be. The XHTML here is invalid but unfortunately it does need to be.
 	{
 		echo '<script>// <![CDATA[
@@ -673,7 +673,7 @@ function step_3()
 	if ($tdatabase->is_empty()) warn_exit(do_lang_tempcode('NO_PHP_DB'));
 
 	$js=do_template('JAVASCRIPT');
-	$js->attach(chr(10));
+	$js->attach("\n");
 	$js->attach(do_template('JAVASCRIPT_AJAX'));
 
 	$url='install.php?step=4';
@@ -955,7 +955,7 @@ function step_4()
 	$sections->attach(do_template('INSTALLER_STEP_4_SECTION_HIDE',array('_GUID'=>'42eb3d44bcf8ef99987b6daa9e6530aa','TITLE'=>$title,'CONTENT'=>$temp)));
 
 	$js=do_template('JAVASCRIPT');
-	$js->attach(chr(10));
+	$js->attach("\n");
 	$js->attach(do_template('JAVASCRIPT_AJAX'));
 
 	$message=paragraph(do_lang_tempcode('BASIC_CONFIG'));
@@ -2100,9 +2100,9 @@ function require_code($codename)
 		if (function_exists('memory_get_usage'))
 		{
 			$prior=memory_get_usage();
-			echo '<!-- Memory: '.number_format(memory_get_usage()).' -->'.chr(10);
+			echo '<!-- Memory: '.number_format(memory_get_usage()).' -->'."\n";
 		}
-		echo '<!-- Loading code file: '.$codename.' -->'.chr(10);
+		echo '<!-- Loading code file: '.$codename.' -->'."\n";
 		flush();
 	}
 
@@ -2124,7 +2124,7 @@ function require_code($codename)
 			$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources_custom/'.$codename.'.php'):'/'.str_replace('_custom','',$codename));
 		if (!file_exists($path))
 		{
-			exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal installer startup error</h1><p>A required installation file, sources/'.$codename.'.php, could not be located. This is almost always due to an incomplete upload of the ocPortal manual installation package, so please check all files are uploaded correctly.</p><p>Only once all ocPortal files are in place can the installer can function. Please note that we have a quick installer package which requires uploading only two files, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+			exit('<!DOCTYPE html>'."\n".'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal installer startup error</h1><p>A required installation file, sources/'.$codename.'.php, could not be located. This is almost always due to an incomplete upload of the ocPortal manual installation package, so please check all files are uploaded correctly.</p><p>Only once all ocPortal files are in place can the installer can function. Please note that we have a quick installer package which requires uploading only two files, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
 		}
 
 		require_once($path);
@@ -2135,7 +2135,7 @@ function require_code($codename)
 	{
 		if (function_exists('memory_get_usage'))
 		{
-			echo '<!-- Memory diff for '.$codename.' was: '.number_format(memory_get_usage()-$prior).' -->'.chr(10);
+			echo '<!-- Memory diff for '.$codename.' was: '.number_format(memory_get_usage()-$prior).' -->'."\n";
 		}
 	}
 }
@@ -2766,7 +2766,7 @@ END;
 		$out='';
 		foreach ($clauses as $i=>$clause)
 		{
-			if (!is_null($clause)) $out.=$clause.chr(10).chr(10);
+			if (!is_null($clause)) $out.=$clause."\n\n";
 		}
 		if (is_suexec_like())
 		{

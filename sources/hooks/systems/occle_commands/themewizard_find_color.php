@@ -93,7 +93,7 @@ class Hook_occle_command_themewizard_find_color
 					$results_printed.='-'.integer_format($result[1]);
 				}
 				$results_printed.=']';
-				$results_printed.=chr(10);
+				$results_printed.="\n";
 			}
 
 			return array('','',$results_printed,'');

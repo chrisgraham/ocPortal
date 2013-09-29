@@ -1345,7 +1345,7 @@ class Module_cms_catalogues extends standard_crud_module
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		header('Content-type: text/csv');
-		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+		header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 
 		@ini_set('ocproducts.xss_detect','0');
 
@@ -1365,7 +1365,7 @@ class Module_cms_catalogues extends standard_crud_module
 			echo ',';
 			echo '"'.str_replace('"','""',get_translated_text($k['cf_name'])).'"';
 		}
-		echo chr(10);
+		echo "\n";
 
 		$start=0;
 		do
@@ -1397,7 +1397,7 @@ class Module_cms_catalogues extends standard_crud_module
 					echo ',';
 					echo '"'.str_replace('"','""',$v).'"';
 				}
-				echo chr(10);
+				echo "\n";
 			}
 
 			$start+=4000;

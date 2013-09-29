@@ -31,7 +31,7 @@ function do_netlink($redir_url='')
 	// If we are redirecting
 	if ($redir_url!='')
 	{
-		if ((strpos($redir_url,chr(10))!==false) || (strpos($redir_url,chr(13))!==false))
+		if ((strpos($redir_url,"\n")!==false) || (strpos($redir_url,"\r")!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 		header('Location: '.$redir_url);
 		exit();
@@ -42,7 +42,7 @@ function do_netlink($redir_url='')
 
 	// For all the names in our network
 	require_code('textfiles');
-	$lines=explode(chr(10),read_text_file('netlink',NULL,true));
+	$lines=explode("\n",read_text_file('netlink',NULL,true));
 	if (count($lines)==0) return new ocp_tempcode();
 	$content=new ocp_tempcode();
 	foreach ($lines as $line)

@@ -86,7 +86,7 @@ class Hook_fields_upload_multi
 		if ($ev=='') return '';
 
 		$ret=new ocp_tempcode();
-		$evs=explode(chr(10),$ev);
+		$evs=explode("\n",$ev);
 		foreach ($evs as $ev)
 		{
 			$original_filename=basename($ev);
@@ -127,7 +127,7 @@ class Hook_fields_upload_multi
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		$default=($actual_value=='')?mixed():explode(chr(10),$actual_value);
+		$default=($actual_value=='')?mixed():explode("\n",$actual_value);
 		if (!is_null($default))
 		{
 			foreach ($default as $i=>$_actual_value)
@@ -166,7 +166,7 @@ class Hook_fields_upload_multi
 
 			$value='';
 
-			$_old_value=((is_null($old_value)) || ($old_value==''))?array():explode(chr(10),$old_value);
+			$_old_value=((is_null($old_value)) || ($old_value==''))?array():explode("\n",$old_value);
 
 			require_code('uploads');
 			is_swf_upload(true);
@@ -182,7 +182,7 @@ class Hook_fields_upload_multi
 						sync_file(rawurldecode($_value));
 					} else
 					{
-						if ($value!='') $value.=chr(10);
+						if ($value!='') $value.="\n";
 						$value.=$_value;
 					}
 				}
@@ -198,7 +198,7 @@ class Hook_fields_upload_multi
 				{
 					$_value.='::'.$temp[2];
 
-					if ($value!='') $value.=chr(10);
+					if ($value!='') $value.="\n";
 					$value.=$_value;
 				}
 

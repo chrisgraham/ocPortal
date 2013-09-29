@@ -358,7 +358,7 @@ function db_create_table($table_name,$fields)
 
 		$type=$type_remap[$type];
 
-		$_fields.='	  '.$name.' '.$type.' '.$perhaps_null.','.chr(10);
+		$_fields.='	  '.$name.' '.$type.' '.$perhaps_null.','."\n";
 	}
 
 	$query='CREATE TABLE '.get_table_prefix().$table_name.' (

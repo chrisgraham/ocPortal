@@ -714,7 +714,7 @@ class Module_cms_comcode_pages
 
 			if (($new) && (get_option('is_on_comcode_page_children')=='1') && (has_privilege(get_member(),'comcode_dangerous')))
 			{
-				$contents.=chr(10).chr(10).'[block]main_comcode_page_children[/block]';
+				$contents.="\n\n".'[block]main_comcode_page_children[/block]';
 			}
 
 			// Pre-process default pages with Tempcode, to make easier to understand

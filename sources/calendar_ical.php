@@ -26,7 +26,7 @@
  */
 function ical_escape($in)
 {
-	$ret=str_replace(chr(10),'\n',str_replace(',','\,',str_replace(';','\;',str_replace('\\','\\\\',$in))));
+	$ret=str_replace("\n",'\n',str_replace(',','\,',str_replace(';','\;',str_replace('\\','\\\\',$in))));
 	if (strpos($ret,':')!==false)
 		$ret='"'.str_replace('"','\"',$ret).'"';
 	return $ret;

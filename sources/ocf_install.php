@@ -201,7 +201,7 @@ function install_ocf($upgrade_from=NULL)
 				{
 					if (substr($key,0,6)=='field_')
 					{
-						$val=str_replace('|',chr(10),$val);
+						$val=str_replace('|',"\n",$val);
 						$row[$key]=$val;
 					}
 				}

@@ -49,7 +49,7 @@ function _save_web_resource_merging($resources,$type,$write_path)
 		{
 			if (is_file($merge_from))
 			{
-				$extra_data=unixify_line_format(file_get_contents($merge_from)).chr(10).chr(10);
+				$extra_data=unixify_line_format(file_get_contents($merge_from))."\n\n";
 				$data.=$extra_data;
 				if (strpos($extra_data,'"use strict";')===false) $all_strict=false;
 			} else // race condition

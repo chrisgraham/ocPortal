@@ -139,7 +139,7 @@ function messages_script()
 			// Resend invite (this is a self-invite)
 			$room[0]['room_name']=$GLOBALS['FORUM_DRIVER']->get_username(intval($people));
 			$num_posts=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room[0]['id']));
-			$extra_xml='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.strval(get_member()).'" participants="'.xmlentities($people.','.strval(get_member())).'" room_name="'.xmlentities($room[0]['room_name']).'" avatar_url="">'.strval($room[0]['id']).'</chat_invite>'.chr(10);
+			$extra_xml='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.strval(get_member()).'" participants="'.xmlentities($people.','.strval(get_member())).'" room_name="'.xmlentities($room[0]['room_name']).'" avatar_url="">'.strval($room[0]['id']).'</chat_invite>'."\n";
 		}
 
 		// Send response of new messages, so we get instant result
@@ -565,7 +565,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($room['room_owner']);
 
-					$invitations_output.='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.(is_null($room['room_owner'])?'':strval($room['room_owner'])).'" participants="'.xmlentities($participants).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="'.xmlentities($avatar_url).'">'.strval($room['id']).'</chat_invite>'.chr(10);
+					$invitations_output.='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.(is_null($room['room_owner'])?'':strval($room['room_owner'])).'" participants="'.xmlentities($participants).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="'.xmlentities($avatar_url).'">'.strval($room['id']).'</chat_invite>'."\n";
 				}
 			}
 		}
@@ -604,20 +604,20 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 					$username=$GLOBALS['FORUM_DRIVER']->get_username($event['e_member_id']);
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($event['e_member_id']);
 					if (!is_null($username))
-						$events_output.='<chat_event away="'.(chatter_active($event['e_member_id'])?'0':'1').'" event_type="'.$event['e_type_code'].'" member_id="'.strval($event['e_member_id']).'" username="'.xmlentities($username).'" avatar_url="'.xmlentities($avatar_url).'" room_id="'.(is_null($event['e_room_id'])?'':strval($event['e_room_id'])).'">'.strval($event['id']).'</chat_event>'.chr(10);
+						$events_output.='<chat_event away="'.(chatter_active($event['e_member_id'])?'0':'1').'" event_type="'.$event['e_type_code'].'" member_id="'.strval($event['e_member_id']).'" username="'.xmlentities($username).'" avatar_url="'.xmlentities($avatar_url).'" room_id="'.(is_null($event['e_room_id'])?'':strval($event['e_room_id'])).'">'.strval($event['id']).'</chat_event>'."\n";
 				}
 			}
 		} else
 		{
 			$max_id=$GLOBALS['SITE_DB']->query_select_value('chat_events','MAX(id)');
 			if (is_null($max_id)) $max_id=db_get_first_id()-1;
-			$events_output.='<chat_event type="NULL">'.strval($max_id).'</chat_event>'.chr(10);
+			$events_output.='<chat_event type="NULL">'.strval($max_id).'</chat_event>'."\n";
 		}
 	}
 
 	$last_msg=$GLOBALS['SITE_DB']->query_select_value('chat_messages','MAX(id)');
 	$last_event=$GLOBALS['SITE_DB']->query_select_value('chat_events','MAX(id)');
-	$tracking_output='<chat_tracking last_msg="'.strval($last_msg).'" last_event="'.strval($last_event).'">'.strval($room_id).'</chat_tracking>'.chr(10);
+	$tracking_output='<chat_tracking last_msg="'.strval($last_msg).'" last_event="'.strval($last_event).'">'.strval($room_id).'</chat_tracking>'."\n";
 
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
@@ -1339,7 +1339,7 @@ function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_
 					$response=$ob->handle_commands($room_id,$pm_message);
 					if (!is_null($response))
 					{
-						if ($response_text!='') $response_text.=chr(10).chr(10);
+						if ($response_text!='') $response_text.="\n\n";
 						$_response=comcode_to_tempcode($response,$from);
 						$response_text.=$_response->evaluate();
 					}

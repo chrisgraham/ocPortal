@@ -120,7 +120,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 		{
 			$comcode.=$cells;
 		}
-		$main.=chr(10).chr(10)."[block]main_comcode_page_children[/block]\n[/semihtml]";
+		$main.="\n\n"."[block]main_comcode_page_children[/block]\n[/semihtml]";
 		$comcode.=$main;
 		$page_structure[$zone]['start']=$comcode;
 

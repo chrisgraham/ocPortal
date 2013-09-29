@@ -58,7 +58,7 @@ function do_user_export($to_file=true)
 		if ($i!=0) fwrite($outfile,USER_EXPORT_DELIM);
 		fwrite($outfile,'"'.str_replace('"','""',$title).'"');
 	}
-	fwrite($outfile,chr(10));
+	fwrite($outfile,"\n");
 
 	require_code('ocf_members');
 
@@ -80,7 +80,7 @@ function do_user_export($to_file=true)
 				if (!is_string($val)) $val=strval($val);
 				fwrite($outfile,'"'.str_replace('"','""',$val).'"');
 			}
-			fwrite($outfile,chr(10));
+			fwrite($outfile,"\n");
 		}
 		$start+=$max;
 	}
@@ -144,13 +144,13 @@ function do_user_export__single_ipc($member_id,$delete=false)
 
 			if (USER_EXPORT_EMAIL!==NULL)
 			{
-				$message_raw='This is an automated e-mail. A member record has been updated.'.chr(10).chr(10);
+				$message_raw='This is an automated e-mail. A member record has been updated.'."\n\n";
 				foreach ($USER_EXPORT_WANTED as $local_key=>$url_key)
 				{
 					$val=is_array($row[$local_key])?$row[$local_key]['RAW']:$row[$local_key];
 					if (!is_string($val)) $val=strval($val);
 
-					$message_raw.=$url_key.' = '.$val.chr(10);
+					$message_raw.=$url_key.' = '.$val."\n";
 				}
 
 				require_code('mail');

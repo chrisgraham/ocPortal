@@ -595,7 +595,7 @@ function get_charset()
 	}
 	if (!is_file($path)) $path=get_file_base().'/lang/EN/global.ini';
 	$file=fopen($path,'rt');
-	$contents=str_replace(chr(13),chr(10),fread($file,3000));
+	$contents=str_replace("\r","\n",fread($file,3000));
 	fclose($file);
 	$matches=array();
 	if (preg_match('#\[strings\].*charset=([\w\-]+)\n#s',$contents,$matches)!=0)
@@ -1435,7 +1435,7 @@ function get_param_integer($name,$default=false,$not_string_ok=false)
 }
 
 /**
- * Make sure that lines are seperated by chr(10), with no chr(13)'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from chr(13).chr(10) to just chr(10). For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers chr(10)'s.
+ * Make sure that lines are seperated by "\n", with no "\r"'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from "\r"."\n" to just "\n". For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers "\n"'s.
  *
  * @param  string			The data to clean
  * @param  ?ID_TEXT		The character set it should be in. We don't do any real conversions using this, only make sure that common problems with fed ISO-8859-1 data are resolved (NULL: output character set)
@@ -1450,9 +1450,9 @@ function unixify_line_format($in,$desired_charset=NULL,$html=false,$from_disk=fa
 	if ($desired_charset===NULL) $desired_charset=get_charset();
 
 	static $from=NULL;
-	if ($from===NULL) $from=array(chr(13).chr(10),'&#8298;',chr(13)); // &#8298; is very odd- seems to come from open office copy & paste
+	if ($from===NULL) $from=array("\r"."\n",'&#8298;',"\r"); // &#8298; is very odd- seems to come from open office copy & paste
 	static $to=NULL;
-	if ($to===NULL) $to=array(chr(10),'',chr(10));
+	if ($to===NULL) $to=array("\n",'',"\n");
 	$in=str_replace($from,$to,$in);
 	return $in;
 }
@@ -1711,7 +1711,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 					$__css=filter_css($__css,$context);
 				} else
 				{
-					$__css=str_replace('} ','}'.chr(10),preg_replace('#\s+#',' ',$__css));
+					$__css=str_replace('} ','}'."\n",preg_replace('#\s+#',' ',$__css));
 				}
 
 				if (trim($__css)!='')

@@ -188,7 +188,7 @@ function xhtmlise_html($html,$definitely_want=false,$snippet=false)
 				if (is_null($token)) break;
 			}
 			if (strpos($temp,'<![CDATA[')===false)
-				$new.='// <![CDATA['.chr(10);
+				$new.='// <![CDATA['."\n";
 			$temp=str_replace('</','<\/',$temp);
 			if (strpos($temp,'<![CDATA[')===false)
 				$temp=str_replace(']]>',']]\'+\'>',$temp);
@@ -266,21 +266,21 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 {
 /* TESTS
 	$out='';
-	$out.=xhtml_substr('test',0,NULL).chr(10); //=test
-	$out.=xhtml_substr('test',0,4).chr(10); //=test
-	$out.=xhtml_substr('test',0,3).chr(10); //=tes
-	$out.=xhtml_substr('test',1,3).chr(10); //=est
-	$out.=xhtml_substr('test',1,2).chr(10); //=es
-	$out.=xhtml_substr('test',-3).chr(10); //=est
-	$out.=xhtml_substr('test',-2).chr(10); //=st
-	$out.=xhtml_substr('<i>test</i>',0,NULL).chr(10); //=<i>test</i>
-	$out.=xhtml_substr('<i>test</i>',0,4).chr(10); //=<i>test</i>
-	$out.=xhtml_substr('<i>test</i>',0,3).chr(10); //=<i>tes</i>
-	$out.=xhtml_substr('<i>test</i>',1,3).chr(10); //=<i>est</i>
-	$out.=xhtml_substr('<i>test</i>',1,2).chr(10); //=<i>es</i>
-	$out.=xhtml_substr('<i>test</i>',-3).chr(10); //=<i>est</i>
-	$out.=xhtml_substr('<i>test</i>',-2).chr(10); //=<i>st</i>
-	$out.=xhtml_substr('<a><br /><x><i foo="bar">test</i>',-2).chr(10); //=<a><x><i foo="bar">st</i></x></a>
+	$out.=xhtml_substr('test',0,NULL)."\n"; //=test
+	$out.=xhtml_substr('test',0,4)."\n"; //=test
+	$out.=xhtml_substr('test',0,3)."\n"; //=tes
+	$out.=xhtml_substr('test',1,3)."\n"; //=est
+	$out.=xhtml_substr('test',1,2)."\n"; //=es
+	$out.=xhtml_substr('test',-3)."\n"; //=est
+	$out.=xhtml_substr('test',-2)."\n"; //=st
+	$out.=xhtml_substr('<i>test</i>',0,NULL)."\n"; //=<i>test</i>
+	$out.=xhtml_substr('<i>test</i>',0,4)."\n"; //=<i>test</i>
+	$out.=xhtml_substr('<i>test</i>',0,3)."\n"; //=<i>tes</i>
+	$out.=xhtml_substr('<i>test</i>',1,3)."\n"; //=<i>est</i>
+	$out.=xhtml_substr('<i>test</i>',1,2)."\n"; //=<i>es</i>
+	$out.=xhtml_substr('<i>test</i>',-3)."\n"; //=<i>est</i>
+	$out.=xhtml_substr('<i>test</i>',-2)."\n"; //=<i>st</i>
+	$out.=xhtml_substr('<a><br /><x><i foo="bar">test</i>',-2)."\n"; //=<a><x><i foo="bar">st</i></x></a>
 */
 
 	$html=preg_replace('#<\!--.*($|-->)#Us','',$html); // Strip comments
@@ -633,7 +633,7 @@ Tests...
 	if ($para_end_pos-$nieve_end_pos<=intval(round($grammar_completeness_tolerance*$desired_length))) return true;
 
 	// See if we just finished our sentence (sentence end determined by next full stop followed by tab/nl/cr, or full stop followed by space followed by capital letter or another space, or question mark, or exclamation mark, or the end of $html)
-	$look_out=array('.  ','. A','. B','. C','. D','. E','. F','. G','. H','. I','. J','. K','. L','. M','. N','. O','. P','. Q','. R','. S','. T','. U','. V','. W','. X','. Y','. Z','.'.chr(10),'.'.chr(13),".\t",'?','!');
+	$look_out=array('.  ','. A','. B','. C','. D','. E','. F','. G','. H','. I','. J','. K','. L','. M','. N','. O','. P','. Q','. R','. S','. T','. U','. V','. W','. X','. Y','. Z','.'."\n",'.'."\r",".\t",'?','!');
 	foreach ($look_out as $l)
 	{
 		if (substr($html,$real_offset-strlen($l),strlen($l))==$l) return false;
@@ -654,7 +654,7 @@ Tests...
 	if (!$testing_ahead)
 	{
 		// Try at least to finish word (imperfect as e.g. "1.2" is a word but could be broken within)
-		if (!@in_array($html[$real_offset+1],array(false,NULL,'.',' ',"\t",chr(10),chr(13)))) return true;
+		if (!@in_array($html[$real_offset+1],array(false,NULL,'.',' ',"\t","\n","\r"))) return true;
 	}
 
 	return false;

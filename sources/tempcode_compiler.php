@@ -115,7 +115,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				if ($next_token===NULL)
 				{
 					if ($tolerate_errors) continue;
-					warn_exit(do_lang_tempcode('ABRUPTED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+					warn_exit(do_lang_tempcode('ABRUPTED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),"\n"))));
 				}
 				$current_level_data=array();
 				switch (isset($next_token[0])?$next_token[0]:'')
@@ -416,26 +416,26 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						if ($stack==array())
 						{
 							if ($tolerate_errors) continue;
-							warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+							warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),"\n"))));
 						}
 						list($current_level_mode,$current_level_data,$current_level_params,$directive_level_mode,$directive_level_data,$directive_level_params,$num_preprocessable_bits)=array_pop($stack);
 						if (!is_array($directive_level_params))
 						{
 							if ($tolerate_errors) continue;
-							warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+							warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),"\n"))));
 						}
 						$directive_opener_params=array_merge($directive_level_params,array($directive_level_data));
 						if (($directive_level_mode!=PARSE_DIRECTIVE) || ($directive_opener_params[0][0]!='"START"'))
 						{
 							if ($tolerate_errors) continue;
-							warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+							warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),"\n"))));
 						}
 
 						// Handle directive
 						if (count($directive_opener_params)==1)
 						{
 							if ($tolerate_errors) continue;
-							warn_exit(do_lang_tempcode('NO_DIRECTIVE_TYPE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+							warn_exit(do_lang_tempcode('NO_DIRECTIVE_TYPE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),"\n"))));
 						}
 						$directive_params='';
 						$first_directive_param='""';
@@ -488,13 +488,13 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								$current_level_data[]='(('.$first_directive_param.'==\'\')?('.implode('.',$past_level_data).'):\'\')';
 								break;
 							case 'WHILE':
-								$current_level_data[]='closure_while_loop(array($parameters,$cl),'.chr(10).'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'.chr(10).'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								$current_level_data[]='closure_while_loop(array($parameters,$cl),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
 								break;
 							case 'PHP':
 								$current_level_data[]='closure_eval('.implode('.',$past_level_data).',$parameters)';
 								break;
 							case 'LOOP':
-								$current_level_data[]='closure_loop(array('.$directive_params.',\'vars\'=>$parameters),array($parameters,$cl),'.chr(10).'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								$current_level_data[]='closure_loop(array('.$directive_params.',\'vars\'=>$parameters),array($parameters,$cl),'."\n".'recall_named_function(\''.uniqid('',true).'\',\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
 								break;
 							case 'IF_NON_EMPTY':
 								$current_level_data[]='(('.$first_directive_param.'!=\'\')?('.implode('.',$past_level_data).'):\'\')';
@@ -592,7 +592,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 		if ($stack!=array())
 		{
 			if (!$tolerate_errors)
-				warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+				warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),"\n"))));
 		}
 	}
 
@@ -646,7 +646,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	}
 
 	// Strip off trailing final lines from single lines templates. Editors often put these in, and it causes annoying "visible space" issues
-	if ((substr($html,-1,1)==chr(10)) && (substr_count($html,chr(10))==1))
+	if ((substr($html,-1,1)=="\n") && (substr_count($html,"\n")==1))
 	{
 		$html=substr($html,0,strlen($html)-1);
 	}
@@ -680,7 +680,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		{
 			flock($myfile,LOCK_EX);
 			ftruncate($myfile,0);
-			$data_to_write='<'.'?php'.chr(10).$result->to_assembly($lang).chr(10).'?'.'>';
+			$data_to_write='<'.'?php'."\n".$result->to_assembly($lang)."\n".'?'.'>';
 			if (fwrite($myfile,$data_to_write)>=strlen($data_to_write))
 			{
 				// Success
@@ -742,7 +742,7 @@ function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$
 function build_closure_function($myfunc,$parts)
 {
 	static $chr_10=NULL;
-	if ($chr_10===NULL) $chr_10=chr(10);
+	if ($chr_10===NULL) $chr_10="\n";
 
 	if ($parts==array()) $parts=array('""');
 	$code='';

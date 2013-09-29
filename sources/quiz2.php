@@ -31,17 +31,17 @@ function load_quiz_questions_to_string($id)
 	foreach ($question_rows as $q)
 	{
 		$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$q['id']),'ORDER BY q_order');
-		$text.=get_translated_text($q['q_question_text']).(($q['q_long_input_field']==1)?' [LONG]':'').(($q['q_required']==1)?' [REQUIRED]':'').((($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0))?' [*]':'').chr(10);
+		$text.=get_translated_text($q['q_question_text']).(($q['q_long_input_field']==1)?' [LONG]':'').(($q['q_required']==1)?' [REQUIRED]':'').((($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0))?' [*]':'')."\n";
 		foreach ($answer_rows as $a)
 		{
-			$text.=get_translated_text($a['q_answer_text']).(($a['q_is_correct']==1)?' [*]':'').chr(10);
+			$text.=get_translated_text($a['q_answer_text']).(($a['q_is_correct']==1)?' [*]':'')."\n";
 			$explanation=get_translated_text($a['q_explanation']);
 			if ($explanation!='')
 			{
-				$text.=':'.$explanation.chr(10);
+				$text.=':'.$explanation."\n";
 			}
 		}
-		$text.=chr(10);
+		$text.="\n";
 	}
 	return $text;
 }
@@ -58,7 +58,7 @@ function _save_available_quiz_answers($id,$text,$type)
 {
 	$_existing=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
 
-	$_qs=explode(chr(10).chr(10),$text);
+	$_qs=explode("\n\n",$text);
 	$qs=array();
 	foreach ($_qs as $q)
 	{
@@ -71,7 +71,7 @@ function _save_available_quiz_answers($id,$text,$type)
 	$existing=array();
 	foreach ($qs as $i=>$q)
 	{
-		$_as=explode(chr(10),$q);
+		$_as=explode("\n",$q);
 		$as=array();
 		foreach ($_as as $a)
 		{
@@ -84,7 +84,7 @@ function _save_available_quiz_answers($id,$text,$type)
 
 		$implicit_question_number=$i;//$matches[1];
 
-		$qs2[$implicit_question_number]=$q.chr(10).implode(chr(10),$as);
+		$qs2[$implicit_question_number]=$q."\n".implode("\n",$as);
 
 		$question=trim($matches[count($matches)-1]);
 		$question=str_replace(array(' [LONG]',' [*]',' [REQUIRED]'),array('','',''),$question);
@@ -111,7 +111,7 @@ function _save_available_quiz_answers($id,$text,$type)
 
 	foreach ($qs2 as $i=>$q)
 	{
-		$_as=explode(chr(10),$q);
+		$_as=explode("\n",$q);
 		$as=array();
 		foreach ($_as as $a)
 		{

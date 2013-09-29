@@ -1415,8 +1415,8 @@ class Database_Static_xml
 		if ($command_file!==false)
 		{
 			if ($new)
-				fwrite($command_file,'#!/bin/sh'.chr(10));
-			fwrite($command_file,$svn_command.chr(10));
+				fwrite($command_file,'#!/bin/sh'."\n");
+			fwrite($command_file,$svn_command."\n");
 			fclose($command_file);
 			require_code('files');
 			fix_permissions($db[0].'/deletions.sh',0777);

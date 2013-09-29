@@ -85,7 +85,7 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
 	if ($description==STRING_MAGIC_NULL) return;
 	if ($keywords==STRING_MAGIC_NULL) return;
 
-	$description=str_replace(chr(10),' ',$description);
+	$description=str_replace("\n",' ',$description);
 
 	$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('meta_keywords','meta_description'),array('meta_for_type'=>$type,'meta_for_id'=>$id),'',1);
 	if (array_key_exists(0,$rows))
@@ -113,12 +113,12 @@ function _seo_meta_find_data($keyword_sources,$description='')
 {
 	// These characters are considered to be word-characters
 	require_code('textfiles');
-	$word_chars=explode(chr(10),read_text_file('word_characters','')); // We use this, as we have no easy multi-language way of detecting if something is a word character in non-latin alphabets (as they don't usually have upper/lower case which would be our detection technique)
+	$word_chars=explode("\n",read_text_file('word_characters','')); // We use this, as we have no easy multi-language way of detecting if something is a word character in non-latin alphabets (as they don't usually have upper/lower case which would be our detection technique)
 	foreach ($word_chars as $i=>$word_char)
 	{
 		$word_chars[$i]=ocp_mb_trim($word_char);
 	}
-	$common_words=explode(chr(10),read_text_file('too_common_words',''));
+	$common_words=explode("\n",read_text_file('too_common_words',''));
 	foreach ($common_words as $i=>$common_word)
 	{
 		$common_words[$i]=ocp_mb_trim(ocp_mb_strtolower($common_word));

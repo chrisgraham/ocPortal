@@ -402,7 +402,7 @@ function do_page($given_password,$path)
 		$save_path=convert_to_save_path($path);
 
 		$contents=@file_get_contents($path);
-		$lines=substr_count($contents,chr(10))+1;
+		$lines=substr_count($contents,"\n")+1;
 		$line=(array_key_exists('line',$_POST)?intval($_POST['line']):(array_key_exists('line',$_POST)?intval($_POST['line']):0));
 		$_path=code_editor_escape_html($path);
 echo <<<END

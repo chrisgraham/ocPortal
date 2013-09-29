@@ -137,8 +137,8 @@ function apply_tempcode_escaping($escaped,&$value)
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==SQ_ESCAPED) $value=str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
 		elseif ($escape==DQ_ESCAPED) $value=str_replace('&quot;','\&quot;',str_replace('"','\\"',str_replace('\\','\\\\',$value)));
-		elseif ($escape==NL_ESCAPED) $value=str_replace(chr(13),'',str_replace(chr(10),'',$value));
-		elseif ($escape==NL2_ESCAPED) $value=str_replace(chr(13),'',str_replace(chr(10),'\n',$value));
+		elseif ($escape==NL_ESCAPED) $value=str_replace("\r",'',str_replace("\n",'',$value));
+		elseif ($escape==NL2_ESCAPED) $value=str_replace("\r",'',str_replace("\n",'\n',$value));
 		elseif ($escape==CC_ESCAPED) $value=str_replace('[','\\[',str_replace('\\','\\\\',$value));
 		elseif ($escape==UL_ESCAPED) $value=ocp_url_encode($value);
 		elseif ($escape==UL2_ESCAPED) $value=rawurlencode($value);
@@ -169,8 +169,8 @@ function apply_tempcode_escaping_inline($escaped,$value)
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==SQ_ESCAPED) $value=str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
 		elseif ($escape==DQ_ESCAPED) $value=str_replace('&quot;','\&quot;',str_replace('"','\\"',str_replace('\\','\\\\',$value)));
-		elseif ($escape==NL_ESCAPED) $value=str_replace(chr(13),'',str_replace(chr(10),'',$value));
-		elseif ($escape==NL2_ESCAPED) $value=str_replace(chr(13),'',str_replace(chr(10),'\n',$value));
+		elseif ($escape==NL_ESCAPED) $value=str_replace("\r",'',str_replace("\n",'',$value));
+		elseif ($escape==NL2_ESCAPED) $value=str_replace("\r",'',str_replace("\n",'\n',$value));
 		elseif ($escape==CC_ESCAPED) $value=str_replace('[','\\[',str_replace('\\','\\\\',$value));
 		elseif ($escape==UL_ESCAPED) $value=ocp_url_encode($value);
 		elseif ($escape==UL2_ESCAPED) $value=rawurlencode($value);
@@ -470,7 +470,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			{
 				if (is_object($param[0])) $param[0]=$param[0]->evaluate();
 
-				list(,$url_parts,)=page_link_decode(str_replace(chr(10),'',$param[0]));
+				list(,$url_parts,)=page_link_decode(str_replace("\n",'',$param[0]));
 
 				if (!array_key_exists('id',$url_parts)) return;
 				if (!array_key_exists('type',$url_parts)) $url_parts['type']='misc';

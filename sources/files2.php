@@ -243,7 +243,7 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 	if ($headers)
 	{
 		header('Content-type: text/csv');
-		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+		header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 	}
 
 	$out='';
@@ -256,7 +256,7 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 				if ($j!=0) $out.=',';
 				$out.='"'.str_replace('"','""',$val).'"';
 			}
-			$out.=chr(10);
+			$out.="\n";
 		}
 
 		// Main data
@@ -269,7 +269,7 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 			$out.='"'.str_replace('"','""',$val).'"';
 			$j++;
 		}
-		$out.=chr(10);
+		$out.="\n";
 	}
 
 	if ($output_and_exit)
@@ -1221,7 +1221,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		if (($proxy!='') && ($connect_to!='localhost') && ($connect_to!='127.0.0.1'))
 		{
 			$out='';
-			$out.=$http_verb.' '.str_replace("\r",'',str_replace(chr(10),'',$url))." HTTP/1.1\r\n";
+			$out.=$http_verb.' '.str_replace("\r",'',str_replace("\n",'',$url))." HTTP/1.1\r\n";
 			$proxy_user=get_option('proxy_user');
 			if ($proxy_user!='')
 			{
@@ -1230,7 +1230,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			}
 		} else
 		{
-			$out=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url2))." HTTP/1.1\r\n";
+			$out=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace("\n",'',$url2))." HTTP/1.1\r\n";
 		}
 		$out.='Host: '.$url_parts['host']."\r\n";
 		$out.=$headers;

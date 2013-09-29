@@ -281,7 +281,7 @@ function lex($text=NULL)
 						if ($char==' ') $indentation++;
 						elseif ($char=="\t") $indentation+=3;
 					}
-					if ($char==chr(10))
+					if ($char=="\n")
 					{
 						$indentation=0;
 						$new_line=true;
@@ -434,11 +434,11 @@ function lex($text=NULL)
 					} else
 					{
 						if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
-						if (($i_current>0) && (($TEXT[$i]!=' ') && ($TEXT[$i]!=chr(10)) && ($TEXT[$i]!=chr(13))) && (in_array($token_found,array('COMMA')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
-						if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!=chr(10)) && ($TEXT[$i]!=chr(13)))) && (in_array($token_found,array('IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
+						if (($i_current>0) && (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r")) && (in_array($token_found,array('COMMA')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
+						if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r"))) && (in_array($token_found,array('IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
 					}
-					if (($TEXT[$i]!=' ') && ($TEXT[$i]!=chr(10)) && ($TEXT[$i]!=chr(13)) && (in_array($token_found,array('IF','ELSEIF','FOREACH','FOR','WHILE','DO')))) log_warning('Missing following spacing (for '.$token_found.') against coding standards',$i,true);
-					if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!=chr(10)) && ($TEXT[$i]!=chr(13)))) && (in_array($token_found,array('BOOLEAN_AND','BOOLEAN_XOR','BOOLEAN_OR','BOOLEAN_OR_2')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);*/
+					if (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r") && (in_array($token_found,array('IF','ELSEIF','FOREACH','FOR','WHILE','DO')))) log_warning('Missing following spacing (for '.$token_found.') against coding standards',$i,true);
+					if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r"))) && (in_array($token_found,array('BOOLEAN_AND','BOOLEAN_XOR','BOOLEAN_OR','BOOLEAN_OR_2')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);*/
 
 					$tokens[]=array($token_found,$i);
 				} else
@@ -509,7 +509,7 @@ function lex($text=NULL)
 				list($reached_end,$i,$char)=plex__get_next_chars($i,strlen($heredoc_symbol)+2);
 
 				// Exit case
-				if ($char==chr(10).$heredoc_symbol.';')
+				if ($char=="\n".$heredoc_symbol.';')
 				{
 					$lex_state=PLEXER_FREE;
 					if ((isset($GLOBALS['CHECKS'])) && (preg_match('#\<[^\<\>]*\>#',$special_token_value)!=0))
@@ -665,7 +665,7 @@ function lex($text=NULL)
 				if ($reached_end) break 2;
 
 				// Exit case
-				if ($char==chr(10))
+				if ($char=="\n")
 				{
 					$lex_state=PLEXER_FREE;
 					$tokens[]=array('comment',$special_token_value,$i);

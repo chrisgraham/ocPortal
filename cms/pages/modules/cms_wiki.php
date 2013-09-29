@@ -531,8 +531,8 @@ class Module_cms_wiki
 		require_code('seo2');
 		for ($i=0;$i<$no_children;$i++)
 		{
-			$length=strpos($childlinks,chr(10),$start)-$start;
-			$newlink=str_replace(chr(10),'',str_replace(chr(13),'',substr($childlinks,$start,$length)));
+			$length=strpos($childlinks,"\n",$start)-$start;
+			$newlink=str_replace("\n",'',str_replace("\r",'',substr($childlinks,$start,$length)));
 			if ($newlink!='')
 			{
 				// Find ID and title

@@ -356,7 +356,7 @@ function js_lex($text)
 				if ($reached_end) break 2;
 
 				// Exit case
-				if ($char==chr(10))
+				if ($char=="\n")
 				{
 					$lex_state=LEXER_FREE;
 					$JS_LEX_TOKENS[]=array('comment',$special_token_value,$i);
@@ -546,12 +546,12 @@ function js_pos_to_line_details($i,$absolute=false)
 	if ((!$absolute) && (!isset($JS_LEX_TOKENS[$i]))) $i=-1;
 	if ($i==-1) return array(0,0,'',0);
 	$j=$absolute?$i:$JS_LEX_TOKENS[$i][count($JS_LEX_TOKENS[$i])-1];
-	$line=substr_count(substr($JS_TEXT,0,$j),chr(10))+1;
-	$pos=$j-strrpos(substr($JS_TEXT,0,$j),chr(10));
-	$l_s=strrpos(substr($JS_TEXT,0,$j+1),chr(10))+1;
+	$line=substr_count(substr($JS_TEXT,0,$j),"\n")+1;
+	$pos=$j-strrpos(substr($JS_TEXT,0,$j),"\n");
+	$l_s=strrpos(substr($JS_TEXT,0,$j+1),"\n")+1;
 	if ($l_s==1) $l_s=0;
 
-	$full_line=substr($JS_TEXT,$l_s,strpos($JS_TEXT,chr(10),$j)-1-$l_s);
+	$full_line=substr($JS_TEXT,$l_s,strpos($JS_TEXT,"\n",$j)-1-$l_s);
 
 	return array($pos,$line,$full_line,$j);
 }

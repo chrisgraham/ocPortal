@@ -692,15 +692,15 @@ function filter_naughty_harsh($in)
 }
 
 /**
- * Make sure that lines are seperated by chr(10), with no chr(13)'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from chr(13).chr(10) to just chr(10). For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers chr(10)'s.
+ * Make sure that lines are seperated by "\n", with no "\r"'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from "\r"."\n" to just "\n". For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers "\n"'s.
  *
  * @param  string			The data to clean
  * @return string			The cleaned data
  */
 function unixify_line_format($in)
 {
-	$in=str_replace(chr(13).chr(10),chr(10),$in);
-	return str_replace(chr(13),chr(10),$in);
+	$in=str_replace("\r"."\n","\n",$in);
+	return str_replace("\r","\n",$in);
 }
 
 /**

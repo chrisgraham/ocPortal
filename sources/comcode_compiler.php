@@ -133,7 +133,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 	$print_mode=get_param_integer('wide_print',0)==1;
 
 	static $chr_10=NULL;
-	if ($chr_10===NULL) $chr_10=chr(10);
+	if ($chr_10===NULL) $chr_10="\n";
 
 	$len=strlen($comcode);
 
@@ -1689,13 +1689,13 @@ function in_tag_stack($tag_stack,$tags)
 function detect_link(&$comcode,$pos)
 {
 	$link_end_pos=strpos($comcode,' ',$pos-1);
-	$link_end_pos_2=strpos($comcode,chr(10),$pos-1);
+	$link_end_pos_2=strpos($comcode,"\n",$pos-1);
 	$link_end_pos_3=strpos($comcode,'[',$pos-1);
 	$link_end_pos_4=strpos($comcode,')',$pos-1);
 	$link_end_pos_5=strpos($comcode,'"',$pos-1);
 	$link_end_pos_6=strpos($comcode,'>',$pos-1);
 	$link_end_pos_7=strpos($comcode,'<',$pos-1);
-	$link_end_pos_8=strpos($comcode,'.'.chr(10),$pos-1);
+	$link_end_pos_8=strpos($comcode,'.'."\n",$pos-1);
 	$link_end_pos_9=strpos($comcode,',',$pos-1);
 	if (($link_end_pos_2!==false) && (($link_end_pos===false) || ($link_end_pos_2<$link_end_pos))) $link_end_pos=$link_end_pos_2;
 	if (($link_end_pos_3!==false) && (($link_end_pos===false) || ($link_end_pos_3<$link_end_pos))) $link_end_pos=$link_end_pos_3;
@@ -1736,7 +1736,7 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 
 	$block_tag=isset($BLOCK_TAGS[$current_tag]);
 
-	if (($block_tag) && ($pos<$len) && ($comcode[$pos]==chr(10)))
+	if (($block_tag) && ($pos<$len) && ($comcode[$pos]=="\n"))
 	{
 		++$pos;
 		global $NUM_COMCODE_LINES_PARSED;

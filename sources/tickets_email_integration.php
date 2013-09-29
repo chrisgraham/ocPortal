@@ -47,7 +47,7 @@ function ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$subje
 	$headers.='From: '.do_lang('TICKET_SIMPLE_FROM',get_site_name(),$from_displayname).' <'.$website_email.'>'."\r\n";
 	$headers.='Reply-To: '.do_lang('TICKET_SIMPLE_FROM',get_site_name(),$from_displayname).' <'.$from_email.'>';
 
-	$tightened_subject=str_replace(array(chr(10),chr(13)),array('',''),$subject);
+	$tightened_subject=str_replace(array("\n","\r"),array('',''),$subject);
 	$extended_subject=do_lang('TICKET_SIMPLE_SUBJECT_'.($new?'new':'reply'),$subject,$ticket_id,array($ticket_type_text,$from_displayname,get_site_name()));
 
 	require_code('mail');

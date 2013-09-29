@@ -163,7 +163,7 @@ function assign_refresh($url,$multiplier=0.0)
 	if (!$must_show_message)
 	{
 		// Preferably server is gonna redirect before page is shown. This is for accessibility reasons
-		if ((strpos($url,chr(10))!==false) || (strpos($url,chr(13))!==false))
+		if ((strpos($url,"\n")!==false) || (strpos($url,"\r")!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
 		global $FORCE_META_REFRESH;

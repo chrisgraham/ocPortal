@@ -433,7 +433,7 @@ class Module_warnings extends standard_crud_module
 				$_postdetails_text=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_post',array('id'=>$post_id));
 				if (!is_null($_postdetails_text))
 				{
-					$message='[quote="'.$username.'"]'.chr(10).get_translated_text($_postdetails_text).chr(10).'[/quote]';
+					$message='[quote="'.$username.'"]'."\n".get_translated_text($_postdetails_text)."\n".'[/quote]';
 				}
 			}
 			$fields->attach(form_input_text_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_PP_MESSAGE'),'message',$message,false));

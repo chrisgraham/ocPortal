@@ -192,7 +192,7 @@ class Database_super_mysql
 
 			$type=$type_remap[$type];
 
-			$_fields.='	  '.$name.' '.$type.' '.$perhaps_null.','.chr(10);
+			$_fields.='	  '.$name.' '.$type.' '.$perhaps_null.','."\n";
 		}
 
 		$innodb=$this->using_innodb();
@@ -200,7 +200,7 @@ class Database_super_mysql
 		$type_key='engine';
 		if ($raw_table_name=='sessions') $table_type='HEAP';
 
-		$query='CREATE TABLE '.$table_name.' ('.chr(10).$_fields.'
+		$query='CREATE TABLE '.$table_name.' ('."\n".$_fields.'
 			PRIMARY KEY ('.$keys.')
 		)';
 

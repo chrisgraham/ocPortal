@@ -86,7 +86,7 @@ function chat_logs_script()
 	$room_name=get_chatroom_name($messages[0]['room_id']);
 	$filename='chatlog-'.str_replace(' ','',$room_name).'-'.str_replace(':','-',$start_date).'-'.str_replace(':','-',$finish_date).'.html';
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	if ((strpos($room_name,chr(10))!==false) || (strpos($room_name,chr(13))!==false))
+	if ((strpos($room_name,"\n")!==false) || (strpos($room_name,"\r")!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
 

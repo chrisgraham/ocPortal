@@ -228,7 +228,7 @@ function attachments_script()
 	// Is it non-local? If so, redirect
 	if (!url_is_local($full))
 	{
-		if ((strpos($full,chr(10))!==false) || (strpos($full,chr(13))!==false))
+		if ((strpos($full,"\n")!==false) || (strpos($full,"\r")!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 		header('Location: '.$full);
 		return;
@@ -247,7 +247,7 @@ function attachments_script()
 	$mime_type=get_mime_type($extension,has_privilege($myrow['a_member_id'],'comcode_dangerous'));
 
 	// Send header
-	if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
+	if ((strpos($original_filename,"\n")!==false) || (strpos($original_filename,"\r")!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Type: '.$mime_type.'; authoritative=true;');
 	header('Content-Disposition: inline; filename="'.$original_filename.'"');

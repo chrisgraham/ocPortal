@@ -116,7 +116,7 @@ function dload_script()
 	if ((!url_is_local($full)) || (!file_exists(get_file_base().'/'.rawurldecode(filter_naughty($full)))))
 	{
 		if (url_is_local($full)) $full=get_custom_base_url().'/'.$full;
-		if ((strpos($full,chr(10))!==false) || (strpos($full,chr(13))!==false))
+		if ((strpos($full,"\n")!==false) || (strpos($full,"\r")!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 		header('Location: '.$full);
 		log_download($id,0,!is_null($got_before)); // Bandwidth used is 0 for an external download
@@ -140,17 +140,17 @@ function dload_script()
 	log_download($id,$size,!is_null($got_before));
 
 	// Send header
-	if ((strpos($myrow['original_filename'],chr(10))!==false) || (strpos($myrow['original_filename'],chr(13))!==false))
+	if ((strpos($myrow['original_filename'],"\n")!==false) || (strpos($myrow['original_filename'],"\r")!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
 	if (get_option('immediate_downloads')=='1')
 	{
 		require_code('mime_types');
 		header('Content-Type: '.get_mime_type(get_file_extension($myrow['original_filename']),has_privilege($myrow['submitter'],'comcode_dangerous')).'; authoritative=true;');
-		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
+		header('Content-Disposition: filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($myrow['original_filename']))).'"');
 	} else
 	{
-		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
+		header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($myrow['original_filename']))).'"');
 	}
 	header('Accept-Ranges: bytes');
 
@@ -583,7 +583,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 				{
 					$end_pos_1=strpos($data,"\\",$i+1);
 					if ($end_pos_1===false) $end_pos_1=$len;
-					$end_pos_2=strpos($data,chr(10),$i+1);
+					$end_pos_2=strpos($data,"\n",$i+1);
 					if ($end_pos_2===false) $end_pos_2=$len;
 					$end_pos_3=strpos($data,' ',$i+1);
 					if ($end_pos_3===false) $end_pos_3=$len;
@@ -600,13 +600,13 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 					{
 						$skipping_section_depth=1;
 					}
-					if ($tag=='par') $mash.=chr(10);
+					if ($tag=='par') $mash.="\n";
 					$i=$end_pos-1;
 					$escape=false;
 				}
 				elseif ($skipping_section_depth==0)
 				{
-					if (($byte!=chr(13)) && ($byte!=chr(10))) $mash.=$byte;
+					if (($byte!="\r") && ($byte!="\n")) $mash.=$byte;
 					$escape=false;
 				} else $escape=false;
 			}

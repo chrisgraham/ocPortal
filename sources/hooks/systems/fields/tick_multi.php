@@ -91,7 +91,7 @@ class Hook_fields_tick_multi
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded=($ev=='')?array():array_flip(explode(chr(10),$ev));
+		$exploded=($ev=='')?array():array_flip(explode("\n",$ev));
 		foreach (explode('|',$field['cf_default']) as $option)
 		{
 			$all[]=array('OPTION'=>$option,'HAS'=>isset($exploded[$option]));
@@ -118,7 +118,7 @@ class Hook_fields_tick_multi
 		$default=$field['cf_default'];
 		$list=explode('|',$default);
 		$_list=array();
-		$exploded=explode(chr(10),$actual_value);
+		$exploded=explode("\n",$actual_value);
 		foreach ($list as $i=>$l)
 		{
 			$_list[]=array($l,'field_'.strval($field['id']).'_'.strval($i),in_array($l,$exploded),'');
@@ -149,7 +149,7 @@ class Hook_fields_tick_multi
 			$tmp_name='field_'.strval($id).'_'.strval($i);
 			if (post_param_integer($tmp_name,0)==1)
 			{
-				if ($value!='') $value.=chr(10);
+				if ($value!='') $value.="\n";
 				$value.=$l;
 			}
 		}

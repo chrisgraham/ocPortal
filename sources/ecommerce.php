@@ -373,7 +373,7 @@ function handle_transaction_script()
 	if ((file_exists(get_file_base().'/data_custom/ecommerce.log')) && (is_writable_wrap(get_file_base().'/data_custom/ecommerce.log')))
 	{
 		$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');
-		fwrite($myfile,serialize($_POST).chr(10));
+		fwrite($myfile,serialize($_POST)."\n");
 		fclose($myfile);
 	}
 

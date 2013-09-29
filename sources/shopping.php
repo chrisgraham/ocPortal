@@ -488,5 +488,5 @@ function get_ordered_product_list_string($order_id)
 		$product_det[]=$product['p_name']." x ".integer_format($product['p_quantity'])." @ ".do_lang('UNIT_PRICE')."=".float_format($product['p_price']);
 	}
 
-	return implode(chr(10),$product_det);
+	return implode("\n",$product_det);
 }

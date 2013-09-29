@@ -27,7 +27,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 
 @chdir($FILE_BASE);
 
-if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'."\n".'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
 
 require($FILE_BASE.'/sources/global.php');
 
@@ -92,7 +92,7 @@ function do_work()
 			'date_and_time'=>time()
 		),false,true);
 	}
-	echo 'done member/authors/points/notifications/friends stuff'.chr(10);
+	echo 'done member/authors/points/notifications/friends stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -102,7 +102,7 @@ function do_work()
 	{
 		add_banner(uniqid('',true),get_logo_url(),random_line(),random_text(),'',100,get_base_url(),3,'',db_get_first_id(),NULL,db_get_first_id()+1,1);
 	}
-	echo 'done banner stuff'.chr(10);
+	echo 'done banner stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -129,7 +129,7 @@ function do_work()
 			'p_show_as_edit'=>0
 		));
 	}
-	echo 'done comcode stuff'.chr(10);
+	echo 'done comcode stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -140,7 +140,7 @@ function do_work()
 	{
 		actual_add_zone(uniqid('',true),random_line(),'start',random_line(),'default',0,0,0);
 	}
-	echo 'done zone stuff'.chr(10);
+	echo 'done zone stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -150,7 +150,7 @@ function do_work()
 	{
 		add_calendar_event(db_get_first_id(),'',NULL,0,random_line(),random_text(),1,intval(date('Y')),intval(date('m')),intval(date('d')),'day_of_month',0,0);
 	}
-	echo 'done event stuff'.chr(10);
+	echo 'done event stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -168,7 +168,7 @@ function do_work()
 		$_message_parsed=insert_lang_comcode(random_text(),4);
 		$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>'','room_id'=>$room_id,'member_id'=>db_get_first_id(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')));
 	}
-	echo 'done chat stuff'.chr(10);
+	echo 'done chat stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -214,7 +214,7 @@ function do_work()
 			1
 		);
 	}
-	echo 'done download stuff'.chr(10);
+	echo 'done download stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -242,7 +242,7 @@ function do_work()
 	{
 		ocf_make_post($topic_id,random_line(),random_text(),0,true,0,0,NULL,NULL,NULL,mt_rand(db_get_first_id(),$num_wanted-1),NULL,NULL,NULL,false,false);
 	}
-	echo 'done forum stuff'.chr(10);
+	echo 'done forum stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -253,7 +253,7 @@ function do_work()
 	{
 		ocf_make_group(random_line(),0,0,0,random_line(),'',NULL,NULL,NULL,5,0,70,50,100,100,30000,700,25,1,0,0,0,$i,1,0,1);
 	}
-	echo 'done club stuff'.chr(10);
+	echo 'done club stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -277,7 +277,7 @@ function do_work()
 	{
 		add_video('','root',random_text(),get_logo_url(),get_logo_url(),0,1,1,1,'',0,0,0);
 	}
-	echo 'done galleries stuff'.chr(10);
+	echo 'done galleries stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -287,7 +287,7 @@ function do_work()
 	{
 		basic_newsletter_join(uniqid('',true).'@example.com');
 	}
-	echo 'done newsletter stuff'.chr(10);
+	echo 'done newsletter stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -311,7 +311,7 @@ function do_work()
 			'v_vote_for'=>$cast,
 		));
 	}
-	echo 'done polls stuff'.chr(10);
+	echo 'done polls stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -321,7 +321,7 @@ function do_work()
 	{
 		add_quiz(random_line(),0,random_text(),random_text(),random_text(),'',0,time(),NULL,3,300,'SURVEY',1,'1) Some question');
 	}
-	echo 'done quizzes stuff'.chr(10);
+	echo 'done quizzes stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -336,7 +336,7 @@ function do_work()
 		$page_id=wiki_add_page(random_line(),random_text(),'',1);
 		wiki_add_post($page_id,random_text(),1,NULL,false);
 	}
-	echo 'done Wiki+ stuff'.chr(10);
+	echo 'done Wiki+ stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -346,7 +346,7 @@ function do_work()
 	{
 		add_iotd(get_logo_url(),random_line(),random_text(),get_logo_url(),1,0,0,0,'');
 	}
-	echo 'done iotd stuff'.chr(10);
+	echo 'done iotd stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -373,7 +373,7 @@ function do_work()
 	{
 		log_stats('/testing'.uniqid('',true),mt_rand(100,2000));
 	}
-	echo 'done logs stuff'.chr(10);
+	echo 'done logs stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -383,7 +383,7 @@ function do_work()
 	{
 		add_news(random_line(),random_text(),'admin',1,1,1,1,'',random_text(),NULL,NULL,NULL,db_get_first_id()+$i);
 	}
-	echo 'done news stuff'.chr(10);
+	echo 'done news stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -394,7 +394,7 @@ function do_work()
 	{
 		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid('',true),db_get_first_id(),random_line(),random_text(),'');
 	}
-	echo 'done tickets stuff'.chr(10);
+	echo 'done tickets stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -414,7 +414,7 @@ function do_work()
 	{
 		actual_add_catalogue_category($catalogue_name,random_line(),random_text(),'',$subcat_id);
 	}
-	echo 'done catalogue stuff'.chr(10);
+	echo 'done catalogue stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -498,11 +498,11 @@ function do_work()
 			'included_tax'=>	'1.00',
 		));
 	}
-	echo 'done store stuff'.chr(10);
+	echo 'done store stuff'."\n";
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
-	echo '{{DONE}}'.chr(10);
+	echo '{{DONE}}'."\n";
 }
 
 

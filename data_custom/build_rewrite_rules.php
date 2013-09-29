@@ -285,5 +285,5 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 	fwrite($myfile,$updated);
 	fclose($myfile);
 
-	echo 'Done '.$file_path.chr(10);
+	echo 'Done '.$file_path."\n";
 }

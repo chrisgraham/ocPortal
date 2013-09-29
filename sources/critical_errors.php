@@ -89,19 +89,19 @@ if (!function_exists('critical_error'))
 				$error='The member you are masquerading as has been banned. We cannot finish initialising the virtualised environment for this reason.';
 				break;
 			case 'BANNED':
-				$error='The IP address you are accessing this website from ('.get_ip_address().') has been banished from this website. If you believe this is a mistake, contact the staff to have it resolved (typically, postmaster@'.get_domain().' will be able to reach them).</div>'.chr(10).'<div>If you are yourself staff, you should be able to unban yourself by editing the <kbd>banned_ip</kbd> table in a database administation tool, by removing rows that qualify against yourself. This error is raised to a critical error to reduce the chance of this IP address being able to further consume server resources.';
+				$error='The IP address you are accessing this website from ('.get_ip_address().') has been banished from this website. If you believe this is a mistake, contact the staff to have it resolved (typically, postmaster@'.get_domain().' will be able to reach them).</div>'."\n".'<div>If you are yourself staff, you should be able to unban yourself by editing the <kbd>banned_ip</kbd> table in a database administation tool, by removing rows that qualify against yourself. This error is raised to a critical error to reduce the chance of this IP address being able to further consume server resources.';
 				break;
 			case 'TEST':
 				$error='This is a test error.';
 				break;
 			case 'BUSY':
-				$error='This is a less-critical error that has been elevated for quick dismissal due to high server load.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
+				$error='This is a less-critical error that has been elevated for quick dismissal due to high server load.</div>'."\n".'<div style="padding-left: 50px">'.$relay;
 				break;
 			case 'EMERGENCY':
-				$error='This is an error that has been elevated to critical error status because it occurred during the primary error mechanism reporting system itself (possibly due to it occuring within the standard output framework). It may be masking a secondary error that occurred before this, but was never output - if so, it is likely strongly related to this one, thus fixing this will fix the other.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
+				$error='This is an error that has been elevated to critical error status because it occurred during the primary error mechanism reporting system itself (possibly due to it occuring within the standard output framework). It may be masking a secondary error that occurred before this, but was never output - if so, it is likely strongly related to this one, thus fixing this will fix the other.</div>'."\n".'<div style="padding-left: 50px">'.$relay;
 				break;
 			case 'RELAY':
-				$error='This is a relayed critical error, which means that this less-critical error has occurred during startup, and thus halted startup.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
+				$error='This is a relayed critical error, which means that this less-critical error has occurred during startup, and thus halted startup.</div>'."\n".'<div style="padding-left: 50px">'.$relay;
 				break;
 			case 'FILE_DOS':
 				$error='This website was prompted to download a file ('.htmlentities($relay).') which seemingly has a never-ending chain of redirections. Because this could be a denial of service attack, execution has been terminated.';
@@ -182,9 +182,9 @@ if (!function_exists('critical_error'))
 					if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password'])>4))
 						$_value=str_replace($SITE_INFO['db_forums_password'],'(password removed)',$_value);
 
-					$traces.=ucfirst($key).' -> '.htmlentities($_value).'<br />'.chr(10);
+					$traces.=ucfirst($key).' -> '.htmlentities($_value).'<br />'."\n";
 				}
-				$extra.='<p>'.$traces.'</p>'.chr(10);
+				$extra.='<p>'.$traces.'</p>'."\n";
 			}
 			$extra.='</div></div>';
 		}
@@ -217,7 +217,7 @@ echo <<<END
 <body><div class="global_middle">
 END;
 		}
-		echo '<h1 class="screen_title">Critical error &ndash; bailing out</h1>'.chr(10).'<div class="red_alert" role="error">'.$error.'</div>'.chr(10);
+		echo '<h1 class="screen_title">Critical error &ndash; bailing out</h1>'."\n".'<div class="red_alert" role="error">'.$error.'</div>'."\n";
 		flush();
 		if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')!==false) && (strpos($error,'Allowed memory')===false))
 		{
@@ -225,9 +225,9 @@ END;
 			echo '<div class="box guid_{_GUID}"><div class="box_inner"><h2>Integrity check</h2><p><strong>If you think this problem could be due to corruption caused by a failed upgrade (e.g. time-out during extraction), check the following integrity check&hellip;</strong></p>',run_integrity_check(true),'</div></div><br />';
 		}
 		flush();
-		echo $extra,chr(10);
-		echo '<p>Details here are intended only for the website/system-administrator, not for regular website users.<br />&raquo; <strong>If you are a regular website user, please let the website staff deal with this problem.</strong></p>'.chr(10).'<p class="associated_details">Depending on the error, and only if the website installation finished, you may need to <a href="#" onclick="if (!window.confirm(\'Are you staff on this site?\')) return false; this.href=\''.htmlentities($edit_url).'\';">edit the installation options</a> (the <kbd>_config.php</kbd> file).</p>'.chr(10).'<p class="associated_details">ocProducts maintains full documentation for all procedures and tools. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p>'.chr(10).'<hr />'.chr(10).'<p style="font-size: 0.8em"><a href="http://ocportal.com/">ocPortal</a> is a <abbr title="Content Management System">CMS</abbr> for building websites, developed by ocProducts.</p>'.chr(10);
-		echo '</div></body>'.chr(10).'</html>';
+		echo $extra,"\n";
+		echo '<p>Details here are intended only for the website/system-administrator, not for regular website users.<br />&raquo; <strong>If you are a regular website user, please let the website staff deal with this problem.</strong></p>'."\n".'<p class="associated_details">Depending on the error, and only if the website installation finished, you may need to <a href="#" onclick="if (!window.confirm(\'Are you staff on this site?\')) return false; this.href=\''.htmlentities($edit_url).'\';">edit the installation options</a> (the <kbd>_config.php</kbd> file).</p>'."\n".'<p class="associated_details">ocProducts maintains full documentation for all procedures and tools. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p>'."\n".'<hr />'."\n".'<p style="font-size: 0.8em"><a href="http://ocportal.com/">ocPortal</a> is a <abbr title="Content Management System">CMS</abbr> for building websites, developed by ocProducts.</p>'."\n";
+		echo '</div></body>'."\n".'</html>';
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
 		$contents=ob_get_contents();

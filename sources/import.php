@@ -167,7 +167,7 @@ function i_force_refresh()
 {
 	if (array_key_exists('I_REFRESH_URL',$GLOBALS))
 	{
-		if ((strpos($GLOBALS['I_REFRESH_URL'],chr(10))!==false) || (strpos($GLOBALS['I_REFRESH_URL'],chr(13))!==false))
+		if ((strpos($GLOBALS['I_REFRESH_URL'],"\n")!==false) || (strpos($GLOBALS['I_REFRESH_URL'],"\r")!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
 		if (!headers_sent())

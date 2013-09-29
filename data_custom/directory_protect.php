@@ -31,7 +31,7 @@ global $NON_PAGE_SCRIPT;
 $NON_PAGE_SCRIPT=1;
 global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST=false;
-if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>'); require($FILE_BASE.'/sources/global.php');
+if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'."\n".'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>'); require($FILE_BASE.'/sources/global.php');
 
 $file=get_param('file',false,true);
 $filename=basename($file);
@@ -80,7 +80,7 @@ if (!$okay) access_denied('PAGE_ACCESS');
 header('Content-Type: application/octet-stream'.'; authoritative=true;');
 require_code('mime_types');
 header('Content-Type: '.get_mime_type(get_file_extension($filename),false).'; authoritative=true;');
-header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+header('Content-Disposition: inline; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 header('Accept-Ranges: bytes');
 
 // Caching

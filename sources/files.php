@@ -131,7 +131,7 @@ function better_parse_ini_file($filename,$file=NULL)
 	}
 
 	$ini_array=array();
-	$lines=explode(chr(10),$file);
+	$lines=explode("\n",$file);
 	foreach ($lines as $line)
 	{
 		$line=rtrim($line);
@@ -466,7 +466,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		{
 			static $addon_list=NULL;
 			if ($addon_list===NULL) $addon_list=strtolower(file_get_contents(unixify_line_format(get_custom_file_base().'/data_custom/addon_files.txt')));
-			if (strpos($addon_list,' - '.strtolower($filepath).chr(10))!==false)
+			if (strpos($addon_list,' - '.strtolower($filepath)."\n")!==false)
 			{
 				return true;
 			}

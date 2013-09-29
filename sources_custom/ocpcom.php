@@ -156,7 +156,7 @@ function myocp_add_site($codename,$name,$email_address,$password,$description,$c
 	if (!is_null($test))
 	{
 		// Did it fail adding before? It's useful to not have to fiddle around manually cleaning up when debugging
-		$definitely_failed=false;//(strpos(file_get_contents(special_myocp_dir().'/rcpthosts'),chr(10).$codename.'.myocp.com'.chr(10))===false);
+		$definitely_failed=false;//(strpos(file_get_contents(special_myocp_dir().'/rcpthosts'),"\n".$codename.'.myocp.com'."\n")===false);
 		$probably_failed=!file_exists(special_myocp_dir().'/alias/.qmail-myocp_'.$codename.'_staff');
 		if (($definitely_failed) || ((($probably_failed) || (get_param_integer('keep_force',0)==1)) && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))))
 		{
@@ -392,19 +392,19 @@ function reset_aliases()
 	return; // Needs customising for each deployment; myOCP personal demos currently not supporting email hosting
 
 	// Rebuild virtualdomains
-	$vds=explode(chr(10),file_get_contents(special_myocp_dir().'/virtualdomains'));
+	$vds=explode("\n",file_get_contents(special_myocp_dir().'/virtualdomains'));
 	$text='';
 	foreach ($vds as $vd)
 	{
 		if ((strpos($vd,':alias-myocp_')===false) && (trim($vd)!=''))
-			$text.=$vd.chr(10);
+			$text.=$vd."\n";
 	}
 	$sites=$GLOBALS['SITE_DB']->query_select('sites',array('s_codename','s_domain_name'));
 	foreach ($sites as $site)
 	{
-		$text.=$site['s_codename'].'.myocp.com:'.'alias-myocp_'.$site['s_codename'].chr(10);
-		$text.=$site['s_codename'].'.3c.ms:'.'alias-myocp_'.$site['s_codename'].chr(10);
-		if ($site['s_domain_name']!='') $text.=$site['s_domain_name'].':'.'alias-myocp_'.$site['s_codename'].chr(10);
+		$text.=$site['s_codename'].'.myocp.com:'.'alias-myocp_'.$site['s_codename']."\n";
+		$text.=$site['s_codename'].'.3c.ms:'.'alias-myocp_'.$site['s_codename']."\n";
+		if ($site['s_domain_name']!='') $text.=$site['s_domain_name'].':'.'alias-myocp_'.$site['s_codename']."\n";
 	}
 	$myfile=fopen(special_myocp_dir().'/virtualdomains','at');
 	flock($myfile,LOCK_EX);
@@ -414,7 +414,7 @@ function reset_aliases()
 	fclose($myfile);
 
 	// Rebuild rcpthosts
-	$vds=explode(chr(10),file_get_contents(special_myocp_dir().'/rcpthosts'));
+	$vds=explode("\n",file_get_contents(special_myocp_dir().'/rcpthosts'));
 	$hosts=array();
 	foreach ($vds as $vd)
 	{
@@ -431,7 +431,7 @@ function reset_aliases()
 	$myfile=fopen(special_myocp_dir().'/rcpthosts','at');
 	flock($myfile,LOCK_EX);
 	ftruncate($myfile,0);
-	fwrite($myfile,implode(chr(10),array_keys($hosts)).chr(10));
+	fwrite($myfile,implode("\n",array_keys($hosts))."\n");
 	flock($myfile,LOCK_UN);
 	fclose($myfile);
 

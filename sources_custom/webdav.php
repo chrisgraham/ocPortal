@@ -48,7 +48,7 @@ function webdav_script()
 	{
 		$WEBDAV_LOG_FILE=fopen($log_path,'a');
 		$log_message='Request... '.ocp_srv('REQUEST_METHOD').': '.ocp_srv('REQUEST_URI');
-		//$log_message.=chr(10).file_get_contents('php://input'); // Only enable when debugging, as breaks PUT requests (see http://stackoverflow.com/questions/3107624/why-can-php-input-be-read-more-than-once-despite-the-documentation-saying-othe)
+		//$log_message.="\n".file_get_contents('php://input'); // Only enable when debugging, as breaks PUT requests (see http://stackoverflow.com/questions/3107624/why-can-php-input-be-read-more-than-once-despite-the-documentation-saying-othe)
 		webdav_log($log_message);
 	}
 
@@ -97,6 +97,6 @@ function webdav_log($str)
 	global $WEBDAV_LOG_FILE;
 	if (!is_null($WEBDAV_LOG_FILE))
 	{
-		fwrite($WEBDAV_LOG_FILE,$str.chr(10).chr(10));
+		fwrite($WEBDAV_LOG_FILE,$str."\n\n");
 	}
 }

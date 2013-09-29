@@ -1209,11 +1209,11 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 			$out[]=NULL;
 		} else
 		{
-			while ($file[$start-$spaces-1]!=chr(10))
+			while ($file[$start-$spaces-1]!="\n")
 				$spaces++;
 
-			$end1=strpos($file,chr(10).str_repeat(' ',$spaces).'}'.chr(10),$start);
-			$end2=strpos($file,chr(10).str_repeat("\t",$spaces).'}'.chr(10),$start);
+			$end1=strpos($file,"\n".str_repeat(' ',$spaces).'}'."\n",$start);
+			$end2=strpos($file,"\n".str_repeat("\t",$spaces).'}'."\n",$start);
 			if ($end1===false) $end1=$end2;
 			if ($end2===false) $end2=$end1;
 			$end=min($end1,$end2)+2+$spaces;

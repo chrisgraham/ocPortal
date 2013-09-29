@@ -43,11 +43,11 @@ class Hook_occle_command_cat
 				$parameters[$i]=$occle_fs->_pwd_to_array($parameters[$i]);
 				if (!$occle_fs->_is_file($parameters[$i])) return array('','','',do_lang('NOT_A_FILE',integer_format($i+1)));
 				$data=$occle_fs->read_file($parameters[$i]);
-				$lines=explode(chr(10),$data);
+				$lines=explode("\n",$data);
 				foreach ($lines as $j=>$line)
 				{
 					if ($line_numbers) $output.=str_pad(strval($j+1),strlen(strval(count($lines)))).'  ';
-					$output.=$line.chr(10);
+					$output.=$line."\n";
 				}
 			}
 

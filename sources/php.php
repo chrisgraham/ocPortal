@@ -90,8 +90,8 @@ function get_php_file_api($filename,$include_code=true)
 
 			$space_pos=strpos($ltrim,' ');
 			$space_pos_2=strpos($ltrim,' ',$space_pos+1);
-			if ($space_pos_2===false) $space_pos_2=strpos($ltrim,chr(13),$space_pos+1);
-			if ($space_pos_2===false) $space_pos_2=strpos($ltrim,chr(10),$space_pos+1);
+			if ($space_pos_2===false) $space_pos_2=strpos($ltrim,"\r",$space_pos+1);
+			if ($space_pos_2===false) $space_pos_2=strpos($ltrim,"\n",$space_pos+1);
 			$current_class=substr($ltrim,$space_pos+1,$space_pos_2-$space_pos-1);
 			$current_class_level=strlen($line)-strlen($ltrim);
 

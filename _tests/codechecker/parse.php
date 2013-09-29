@@ -1574,12 +1574,12 @@ function handle_comment($comment)
 	}
 	if (isset($GLOBALS['TODO']))
 	{
-		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
-		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
-		if (strpos($comment[1],'IDEA')!==false) log_warning('IDEA comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
-		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
-		if (strpos($comment[1],'FUDGE')!==false) log_warning('FUDGE comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
-		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found ('.str_replace("\n",' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found ('.str_replace("\n",' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'IDEA')!==false) log_warning('IDEA comment found ('.str_replace("\n",' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found ('.str_replace("\n",' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'FUDGE')!==false) log_warning('FUDGE comment found ('.str_replace("\n",' ',trim($comment[1])).')',$GLOBALS['I']);
+		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found ('.str_replace("\n",' ',trim($comment[1])).')',$GLOBALS['I']);
 		//if (strpos($comment[1],'XHTMLXHTML')!==false) log_warning('XHTMLXHTML comment found',$GLOBALS['I']);	Don't want to report these
 	}
 }

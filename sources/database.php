@@ -883,7 +883,7 @@ class database_driver
 
 		if ($QUERY_FILE_LOG!==NULL)
 		{
-			fwrite($QUERY_FILE_LOG,$query.';'.chr(10).chr(10));
+			fwrite($QUERY_FILE_LOG,$query.';'."\n\n");
 		}
 
 		if ($DEV_MODE)
@@ -898,7 +898,7 @@ class database_driver
 		{
 			$QUERY_COUNT++;
 			//@exit('!');
-			//if ($QUERY_COUNT>10) @ob_end_clean();@print('Query: '.$query.chr(10));
+			//if ($QUERY_COUNT>10) @ob_end_clean();@print('Query: '.$query."\n");
 		}
 		static $fb=NULL;
 		if ($fb===NULL) $fb=function_exists('fb');
@@ -914,7 +914,7 @@ class database_driver
 			if (is_writable_wrap($log_path))
 			{
 				$myfile=fopen($log_path,'at');
-				fwrite($myfile,get_self_url_easy().chr(10));
+				fwrite($myfile,get_self_url_easy()."\n");
 				fclose($myfile);
 			}
 			if ($DEV_MODE)

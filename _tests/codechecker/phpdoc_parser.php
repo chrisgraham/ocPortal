@@ -119,7 +119,7 @@ function do_lang_tempcode($x,$a=NULL,$b=NULL,$c=NULL,$d=NULL)
 	if (!isset($PARSED))
 	{
 		$temp=file_get_contents('lang/php.ini');
-		$temp_2=explode(chr(10),$temp);
+		$temp_2=explode("\n",$temp);
 		$PARSED=array();
 		foreach ($temp_2 as $p)
 		{

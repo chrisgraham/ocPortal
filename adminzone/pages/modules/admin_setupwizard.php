@@ -819,9 +819,9 @@ class Module_admin_setupwizard
 				imagedestroy($logo);
 			}
 			$myfile=fopen(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini','wt');
-			fwrite($myfile,'title='.$name.chr(10));
-			fwrite($myfile,'description='.do_lang('NA').chr(10));
-			if (fwrite($myfile,'author=ocPortal'.chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			fwrite($myfile,'title='.$name."\n");
+			fwrite($myfile,'description='.do_lang('NA')."\n");
+			if (fwrite($myfile,'author=ocPortal'."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			fclose($myfile);
 			sync_file(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini');
 			$THEME_IMAGES_CACHE['site']=$old_img_codes_site; // Just so it renders with the old theme
@@ -895,7 +895,7 @@ class Module_admin_setupwizard
 							if ($addon_row['addon_files']!='')
 							{
 								$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
-								create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+								create_addon($file,explode("\n",$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
 							}
 
 							uninstall_addon($addon_row['addon_name']);

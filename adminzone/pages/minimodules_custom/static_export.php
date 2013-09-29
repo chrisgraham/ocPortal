@@ -62,7 +62,7 @@ if ((get_param_integer('do__headers',1)==1) && (get_param_integer('dir',0)==0))
 	@ob_end_clean();
 	@ob_end_clean();
 
-	header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+	header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 }
 
 global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;
@@ -119,13 +119,13 @@ if (get_param_integer('save__uploads',1)==1)
 
 // .htaccess
 $data='';
-$data.='ErrorDocument 404 /sitemap.htm'.chr(10).chr(10);
-$data.='RewriteEngine on'.chr(10);
-$data.=chr(10);
-$data.=chr(10);
-$data.='RewriteRule ^$ start.htm [R,L]'.chr(10);
-$data.=chr(10);
-$data.=chr(10);
+$data.='ErrorDocument 404 /sitemap.htm'."\n\n";
+$data.='RewriteEngine on'."\n";
+$data.="\n";
+$data.="\n";
+$data.='RewriteRule ^$ start.htm [R,L]'."\n";
+$data.="\n";
+$data.="\n";
 $directory=$STATIC_EXPORT_TAR['directory'];
 $langs=find_all_langs();
 $done_non_spec=array();
@@ -137,7 +137,7 @@ foreach ($directory as $entry) // Rewrite non-specific pages to 'misc' files
 	$done_non_spec[$dir_name]=1;
 	if (($dir_name!='') && (basename($entry['path'])=='misc.htm'))
 	{
-		$data.='RewriteRule ^'.$dir_name.'\.htm(.*) '.$dir_name.'/misc.htm$1 [R,L]'.chr(10);
+		$data.='RewriteRule ^'.$dir_name.'\.htm(.*) '.$dir_name.'/misc.htm$1 [R,L]'."\n";
 
 		// If .htaccess not supported let it redirect via simple stub file instead
 		if (get_param_integer('save__redirects',1)==1)
@@ -152,8 +152,8 @@ foreach ($directory as $entry) // Rewrite non-specific pages to 'misc' files
 		}
 	}
 }
-$data.=chr(10);
-$data.=chr(10);
+$data.="\n";
+$data.="\n";
 if (count($langs)!=1) // Handling language detection
 {
 	// Recognise when language explicitly called
@@ -161,11 +161,11 @@ if (count($langs)!=1) // Handling language detection
 	{
 		if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang,'',true,false,true))<5)) continue; // Probably this is just the utf8 addon
 
-		$data.='RewriteRule '.$lang.' - [L]'.chr(10); // This stops it looping; [L] ends an iteration for a directory level but doesn't stop inter-level recursions
-		$data.='RewriteCond %{QUERY_STRING} keep_lang='.$lang.chr(10);
-		$data.='RewriteRule (^.*\.htm.*$) '.$lang.'/$1 [L]'.chr(10);
+		$data.='RewriteRule '.$lang.' - [L]'."\n"; // This stops it looping; [L] ends an iteration for a directory level but doesn't stop inter-level recursions
+		$data.='RewriteCond %{QUERY_STRING} keep_lang='.$lang."\n";
+		$data.='RewriteRule (^.*\.htm.*$) '.$lang.'/$1 [L]'."\n";
 
-		$data.=chr(10);
+		$data.="\n";
 	}
 
 	// Recognise when language supported by browser
@@ -175,18 +175,18 @@ if (count($langs)!=1) // Handling language detection
 		{
 			if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang,'',true,false,true))<5)) continue; // Probably this is just the utf8 addon
 
-			$data.='RewriteCond %{HTTP:Accept-Language} (^'.strtolower($lang).') [NC]'.chr(10);
-			$data.='RewriteRule (^.*\.htm.*$) '.$lang.'/$1 [L]'.chr(10);
+			$data.='RewriteCond %{HTTP:Accept-Language} (^'.strtolower($lang).') [NC]'."\n";
+			$data.='RewriteRule (^.*\.htm.*$) '.$lang.'/$1 [L]'."\n";
 
-			$data.=chr(10);
+			$data.="\n";
 		}
 	}
 
 	// And default to English
-	$data.=chr(10);
-	$data.='RewriteRule (^.*\.htm.*$) EN/$1 [L]'.chr(10);
+	$data.="\n";
+	$data.='RewriteRule (^.*\.htm.*$) EN/$1 [L]'."\n";
 
-	$data.=chr(10);
+	$data.="\n";
 }
 if (get_param_integer('save__htaccess',1)==1)
 {
@@ -282,17 +282,17 @@ if (get_param_integer('save__mailer',1)==1)
 	$relative_root=(count($langs)!=1)?'../':'';
 	tar_add_file($STATIC_EXPORT_TAR,((count($langs)!=1)?($lang.'/'):'').'mailer.php',static_remove_dynamic_references($data,$relative_root),0644,time(),false);
 
-	$robots_data.='Deny /'.((count($langs)!=1)?($lang.'/'):'').'mailer.php'.chr(10);
+	$robots_data.='Deny /'.((count($langs)!=1)?($lang.'/'):'').'mailer.php'."\n";
 }
 }
-tar_add_file($STATIC_EXPORT_TAR,'robots.txt','User-agent: *'.chr(10).$robots_data,0644,time(),false);
+tar_add_file($STATIC_EXPORT_TAR,'robots.txt','User-agent: *'."\n".$robots_data,0644,time(),false);
 
 // Add warnings file
 if (get_param_integer('save__warnings',1)==1)
 {
 	if ($STATIC_EXPORT_WARNINGS!=array())
 	{
-		tar_add_file($STATIC_EXPORT_TAR,'_warnings.txt',implode(chr(10),$STATIC_EXPORT_WARNINGS),0644,time(),false);
+		tar_add_file($STATIC_EXPORT_TAR,'_warnings.txt',implode("\n",$STATIC_EXPORT_WARNINGS),0644,time(),false);
 	}
 }
 

@@ -82,7 +82,7 @@ class Hook_fields_short_trans_multi
 	{
 		if (is_object($ev)) return $ev;
 		$ret=new ocp_tempcode();
-		foreach (($ev=='')?array():explode(chr(10),$ev) as $ev)
+		foreach (($ev=='')?array():explode("\n",$ev) as $ev)
 		{
 			$ret->attach(paragraph(comcode_to_tempcode($ev)));
 		}
@@ -106,7 +106,7 @@ class Hook_fields_short_trans_multi
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
-		return form_input_line_multi($_cf_name,$_cf_description,'field_'.strval($field['id']),explode(chr(10),$actual_value),($field['cf_required']==1)?1:0);
+		return form_input_line_multi($_cf_name,$_cf_description,'field_'.strval($field['id']),explode("\n",$actual_value),($field['cf_required']==1)?1:0);
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Hook_fields_short_trans_multi
 			if ((is_null($_value)) && ($i==0)) return $editing?STRING_MAGIC_NULL:'';
 			if (($_value!==NULL) && ($_value!=''))
 			{
-				if ($value!='') $value.=chr(10);
+				if ($value!='') $value.="\n";
 				$value.=$_value;
 			}
 			$i++;

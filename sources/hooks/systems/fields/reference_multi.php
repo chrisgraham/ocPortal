@@ -106,7 +106,7 @@ class Hook_fields_reference_multi
 		require_code('content');
 
 		$ret=new ocp_tempcode();
-		$evs=explode(chr(10),$ev);
+		$evs=explode("\n",$ev);
 		foreach ($evs as $ev)
 		{
 			list($title)=content_get_details('catalogue_entry',$ev);
@@ -144,7 +144,7 @@ class Hook_fields_reference_multi
 		{
 			$options['catalogue_name']=substr($field['cf_type'],3);
 		}
-		return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_catalogue_entry',$options,$field['cf_required']==1,str_replace(chr(10),',',$actual_value),false,NULL,true);
+		return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_catalogue_entry',$options,$field['cf_required']==1,str_replace("\n",',',$actual_value),false,NULL,true);
 	}
 
 	/**
@@ -167,7 +167,7 @@ class Hook_fields_reference_multi
 		{
 			if ($_value!='')
 			{
-				if ($value!='') $value.=chr(10);
+				if ($value!='') $value.="\n";
 				$value.=$_value;
 			}
 		}

@@ -30,7 +30,7 @@ function parse_file($to_use,$verbose=false,$very_verbose=false,$i=NULL,$count=NU
 		if (substr($FILENAME,0,1)==DIRECTORY_SEPARATOR) $FILENAME=substr($FILENAME,1);
 		if (substr($FILENAME,0,1)==DIRECTORY_SEPARATOR) $FILENAME=substr($FILENAME,1);
 	}
-	$TEXT=str_replace(chr(13),'',file_get_contents($to_use));
+	$TEXT=str_replace("\r",'',file_get_contents($to_use));
 
 	if ($verbose) echo '<hr /><p>DOING '.$to_use.'</p>';
 	if ($verbose) echo '<pre>';
@@ -72,8 +72,8 @@ function get_file_base()
 
 function unixify_line_format($in)
 {
-	$in=str_replace(chr(13).chr(10),chr(10),$in);
-	return str_replace(chr(13),chr(10),$in);
+	$in=str_replace("\r"."\n","\n",$in);
+	return str_replace("\r","\n",$in);
 }
 
 function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
@@ -177,11 +177,11 @@ function pos_to_line_details($i,$absolute=false)
 	if ((!$absolute) && (!isset($TOKENS[$i]))) $i=-1;
 	if ($i==-1) return array(0,0,'');
 	$j=$absolute?$i:$TOKENS[$i][count($TOKENS[$i])-1];
-	$line=substr_count(substr($TEXT,0,$j),chr(10))+1;
-	$pos=$j-strrpos(substr($TEXT,0,$j),chr(10));
-	$l_s=strrpos(substr($TEXT,0,$j+1),chr(10))+1;
+	$line=substr_count(substr($TEXT,0,$j),"\n")+1;
+	$pos=$j-strrpos(substr($TEXT,0,$j),"\n");
+	$l_s=strrpos(substr($TEXT,0,$j+1),"\n")+1;
 	if ($l_s==1) $l_s=0;
-	$full_line=@strval(htmlentities(substr($TEXT,$l_s,strpos($TEXT,chr(10),$j)-1-$l_s)));
+	$full_line=@strval(htmlentities(substr($TEXT,$l_s,strpos($TEXT,"\n",$j)-1-$l_s)));
 
 	return array($pos,$line,$full_line);
 }

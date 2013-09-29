@@ -86,7 +86,7 @@ if (!$WITHIN_PHP)
 {
 	$full_path=(strpos($to_use,':')===false)?($OCPORTAL_PATH.'/'.$to_use):$to_use;
 	$contents=file_get_contents($full_path);
-	$contents=str_replace(chr(13),'',$contents);
+	$contents=str_replace("\r",'',$contents);
 	if (substr($to_use,-4)=='.tpl')
 	{
 		$contents=str_replace('{!LINK_NEW_WINDOW}',do_lang('LINK_NEW_WINDOW'),$contents);
@@ -126,7 +126,7 @@ for ($i=0;$i<strlen($contents);$i++)
 {
 	$next=$contents[$i];
 	if (ord($next)>128) echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.do_lang('XHTML_UNSAFE_CHAR',$next,strval(ord($next)))."\n";
-	if ($next==chr(10))
+	if ($next=="\n")
 	{
 		$line++;
 		$pos=1;
@@ -164,7 +164,7 @@ elseif (substr($to_use,-4)=='.css')
 		{
 			echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.do_lang('MAIL_WEB_VERSION')."\n";
 		}
-		$nasty_keywords=explode(chr(10),"
+		$nasty_keywords=explode("\n","
 4U
 Accept credit cards
 Act now! Don't hesitate!
@@ -488,8 +488,8 @@ if ((!isset($URL_BASE)) && (isset($CRAWLED_URLS)))
 			if (!file_exists(dirname($to_use).'/'.$url))
 			{
 				$global_pos=strpos($contents,$url);
-				$line=substr_count(substr($contents,0,$global_pos),chr(10))+1;
-				$pos=$global_pos-strrpos(substr($contents,0,$global_pos),chr(10));
+				$line=substr_count(substr($contents,0,$global_pos),"\n")+1;
+				$pos=$global_pos-strrpos(substr($contents,0,$global_pos),"\n");
 				echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('XHTML_LOCAL_BROKEN_URL',$url))."\n";
 			} else
 			{

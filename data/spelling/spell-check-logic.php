@@ -431,7 +431,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 		{
 			//$i=0;
 
-			//$text=@html_entity_decode(strip_tags(str_replace('<br />',chr(10),$text)));
+			//$text=@html_entity_decode(strip_tags(str_replace('<br />',"\n",$text)));
 			//$len=strlen($text);
 
 			// HTML tags vs text
@@ -508,7 +508,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 
 		if (!is_integer($aspellcommand))
 		{
-			$dictionaries=str_replace(chr(10),",",wrap_exec($aspelldictionaries));
+			$dictionaries=str_replace("\n",",",wrap_exec($aspelldictionaries));
 			if (!$ret)
 			{
 				echo '<div id="HA-spellcheck-dictionaries">'.$dictionaries.'</div>';

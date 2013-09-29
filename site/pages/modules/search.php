@@ -625,7 +625,7 @@ class Module_search
 		$_content_bits=explode(' ',str_replace('"','',preg_replace('#(^|\s)\+#','',preg_replace('#(^|\s)\-#','',$content))));
 		$SEARCH__CONTENT_BITS=array();
 		require_code('textfiles');
-		$too_common_words=explode(chr(10),read_text_file('too_common_words','',true));
+		$too_common_words=explode("\n",read_text_file('too_common_words','',true));
 		foreach ($_content_bits as $content_bit)
 		{
 			$content_bit=trim($content_bit);

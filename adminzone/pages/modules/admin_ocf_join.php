@@ -599,7 +599,7 @@ class Module_admin_ocf_join
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		header('Content-type: text/csv');
-		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+		header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 
 		@ini_set('ocproducts.xss_detect','0');
 
@@ -634,7 +634,7 @@ class Module_admin_ocf_join
 			if ($i!=0) echo ',';
 			echo '"'.str_replace('"','""',$h).'"';
 		}
-		echo chr(10);
+		echo "\n";
 
 		$at=mixed();
 
@@ -673,7 +673,7 @@ class Module_admin_ocf_join
 					echo '"'.str_replace('"','""',$wider).'"';
 					$i++;
 				}
-				echo chr(10);
+				echo "\n";
 			}
 
 			$start+=200;
@@ -889,7 +889,7 @@ class Module_admin_ocf_join
 
 					if (array_key_exists($h,$line))
 					{
-						if ($extracted_value!='') $line[$h].=(($line[$h]!='')?chr(10):'').$extracted_value;
+						if ($extracted_value!='') $line[$h].=(($line[$h]!='')?"\n":'').$extracted_value;
 					} else
 					{
 						$line[$h]=$extracted_value;
@@ -1081,7 +1081,7 @@ class Module_admin_ocf_join
 						$custom_fields[$cpf['id']]=((strtoupper($custom_fields[$cpf['id']])=='YES' || strtoupper($custom_fields[$cpf['id']])=='Y' || strtoupper($custom_fields[$cpf['id']])=='ON' || $custom_fields[$cpf['id']]=='1')?1:0);
 					} elseif (($cpf['cf_type']=='short_text') || ($cpf['cf_type']=='short_trans'))
 					{
-						$custom_fields[$cpf['id']]=substr(str_replace(chr(10),', ',str_replace(','.chr(10),chr(10),$custom_fields[$cpf['id']])),0,255);
+						$custom_fields[$cpf['id']]=substr(str_replace("\n",', ',str_replace(','."\n","\n",$custom_fields[$cpf['id']])),0,255);
 					} elseif (($cpf['cf_type']=='long_text') || ($cpf['cf_type']=='long_trans'))
 					{
 						//$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];	Duh, no transform required
@@ -1089,7 +1089,7 @@ class Module_admin_ocf_join
 					{
 						if (preg_match('#^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\n(\d\d\d\d)$#',$custom_fields[$cpf['id']])!=0) // Convert to float based date
 						{
-							$parts=explode(chr(10),$custom_fields[$cpf['id']],2);
+							$parts=explode("\n",$custom_fields[$cpf['id']],2);
 							$month_lookup=array(
 								'Jan'=>0.1,
 								'Feb'=>0.2,

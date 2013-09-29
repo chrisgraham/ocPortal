@@ -150,7 +150,7 @@ function warn_exit_wordfilter($name,$message)
 	$hidden=build_keep_post_fields(array($name));
 	require_code('form_templates');
 	$value=post_param($name);
-	if (strpos($value,chr(10))===false)
+	if (strpos($value,"\n")===false)
 	{
 		$fields=form_input_line(do_lang_tempcode('CHANGE'),'',$name,$value,true);
 	} else

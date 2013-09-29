@@ -43,7 +43,7 @@ foreach ($files as $file)
 		$marked_old=file_exists($file_orig.'.orig-precompile');
 		if (($marked_old) && (file_exists($file_orig)))
 		{
-			echo 'Skipped due to inconsistency (like outdated orig-precompile file needs deleting): '.$file.chr(10);
+			echo 'Skipped due to inconsistency (like outdated orig-precompile file needs deleting): '.$file."\n";
 			continue;
 		}
 
@@ -74,7 +74,7 @@ foreach ($files as $file)
 
 				// Restore override
 				$myfile=fopen($file,'wb');
-				fwrite($myfile,'<'.'?php'.chr(10).chr(10).$file_data);
+				fwrite($myfile,'<'.'?php'."\n\n".$file_data);
 				fclose($myfile);
 			}
 		}
@@ -153,13 +153,13 @@ foreach ($files as $file)
 					$orig=str_replace($second_init_function,$init_func,$orig);
 				}
 
-				$new='<'.'?php'.chr(10).chr(10).'#PRIOR TO COMPILED>>>'.chr(10).preg_replace('#^#m','#',trim($file_data)).chr(10).'#<<<PRIOR TO COMPILED'.chr(10).chr(10).$orig;
+				$new='<'.'?php'."\n\n".'#PRIOR TO COMPILED>>>'."\n".preg_replace('#^#m','#',trim($file_data))."\n".'#<<<PRIOR TO COMPILED'."\n\n".$orig;
 				if (!$done_code_modifier_init)
 				{
-					$new.=chr(10).chr(10).$file_data;
+					$new.="\n\n".$file_data;
 				} else
 				{
-					$new.=chr(10).chr(10).preg_replace('#(/\*[^\*]*\*/\s*)?(^|\n)function '.preg_quote($init_func,'#').'\(\$\w+\)\n\{\n(?U).*\n\}\n?#s','',$file_data);
+					$new.="\n\n".preg_replace('#(/\*[^\*]*\*/\s*)?(^|\n)function '.preg_quote($init_func,'#').'\(\$\w+\)\n\{\n(?U).*\n\}\n?#s','',$file_data);
 				}
 
 				// Save
@@ -167,18 +167,18 @@ foreach ($files as $file)
 				{
 					if ($marked_old)
 					{
-						echo 'Skipped due to inconsistency (PRIOR TO COMPILED segment mismatching new override code): '.$file.chr(10);
+						echo 'Skipped due to inconsistency (PRIOR TO COMPILED segment mismatching new override code): '.$file."\n";
 					} else
 					{
 						$myfile=fopen($file,'wb');
 						fwrite($myfile,$new);
 						fclose($myfile);
 
-						echo 'Done: '.$file.chr(10);
+						echo 'Done: '.$file."\n";
 					}
 				} else
 				{
-					echo 'No changes for: '.$file.chr(10);
+					echo 'No changes for: '.$file."\n";
 				}
 
 				// Remove original file, to stop ocPortal trying to load it

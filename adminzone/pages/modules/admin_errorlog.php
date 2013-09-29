@@ -73,7 +73,7 @@ class Module_admin_errorlog
 			{
 				$myfile=fopen(get_custom_file_base().'/data_custom/errorlog.php','rt');
 				fseek($myfile,-1024*500,SEEK_END);
-				$lines=explode(chr(10),fread($myfile,1024*500));
+				$lines=explode("\n",fread($myfile,1024*500));
 				fclose($myfile);
 				unset($lines[0]);
 				$lines[]='...';
@@ -129,7 +129,7 @@ class Module_admin_errorlog
 				$data='';
 				while (!feof($myfile)) $data.=fread($myfile,8192);
 				fclose($myfile);
-				$lines=explode(chr(10),$data);
+				$lines=explode("\n",$data);
 				if (count($lines)!=0)
 				{
 					if (strpos($lines[0],'<'.'?php')!==false)
@@ -157,7 +157,7 @@ class Module_admin_errorlog
 		}
 
 		// Put permssions into table
-		$permission=implode(chr(10),$lines);
+		$permission=implode("\n",$lines);
 
 		$tpl=do_template('ERRORLOG_SCREEN',array('_GUID'=>'9186c7beb6b722a52f39e2cbe16aded6','TITLE'=>$title,'ERROR'=>$error,'PERMISSION'=>$permission));
 

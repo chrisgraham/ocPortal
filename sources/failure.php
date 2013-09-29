@@ -224,7 +224,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	}
 
 	// Generate error message
-	$outx='<strong>'.strtoupper($type).'</strong> ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline).'<br />'.chr(10);
+	$outx='<strong>'.strtoupper($type).'</strong> ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline).'<br />'."\n";
 	if (class_exists('ocp_tempcode'))
 	{
 		if ($GLOBALS['SUPPRESS_ERROR_DEATH'])
@@ -241,7 +241,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	if (get_param_integer('keep_fatalistic',0)==0)
 	{
 		$log='PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy();
-		/*$log.=chr(10);
+		/*$log.="\n";
 		ob_start();
 		debug_print_backtrace(); Does not work consistently, sometimes just kills PHP
 		$log.=ob_get_clean();*/
@@ -567,7 +567,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 			$ip_list_file=http_download_file($ip_list,NULL,false);
 			if (is_string($ip_list_file))
 			{
-				$ip_list_array=explode(chr(10),$ip_list_file);
+				$ip_list_array=explode("\n",$ip_list_file);
 				foreach ($ip_stack as $ip_s)
 				{
 					foreach ($ip_list_array as $_ip_list_array)
@@ -703,9 +703,9 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
-		if (strpos($original_contents,chr(10).'deny from '.$ip_cleaned)===false)
+		if (strpos($original_contents,"\n".'deny from '.$ip_cleaned)===false)
 		{
-			$contents=str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)'.chr(10).'deny from '.$ip_cleaned,$original_contents);
+			$contents=str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)'."\n".'deny from '.$ip_cleaned,$original_contents);
 			if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) // Safer
 			{
 				if (file_put_contents(get_file_base().'/.htaccess',$contents,LOCK_EX)<strlen($contents))
@@ -748,8 +748,8 @@ function remove_ip_ban($ip)
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
-		$contents=str_replace(chr(10).'deny from '.$ip_cleaned.chr(10),chr(10),$contents);
-		$contents=str_replace(chr(13).'deny from '.$ip_cleaned.chr(13),chr(13),$contents); // Just in case
+		$contents=str_replace("\n".'deny from '.$ip_cleaned."\n","\n",$contents);
+		$contents=str_replace("\r".'deny from '.$ip_cleaned."\r","\r",$contents); // Just in case
 		$myfile=fopen(get_file_base().'/.htaccess','wt');
 		if (fwrite($myfile,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		fclose($myfile);
@@ -1059,9 +1059,9 @@ function die_html_trace($message)
 			if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password'])>4))
 				$_value=str_replace($SITE_INFO['db_forums_password'],'(password removed)',$_value);
 
-			$traces.=ucfirst($key).' -> '.escape_html($_value).'<br />'.chr(10);
+			$traces.=ucfirst($key).' -> '.escape_html($_value).'<br />'."\n";
 		}
-		$trace.='<p>'.$traces.'</p>'.chr(10);
+		$trace.='<p>'.$traces.'</p>'."\n";
 	}
 	$trace.='</div></div>';
 
@@ -1220,7 +1220,7 @@ function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_tex
 			$message=get_translated_tempcode($match_key['k_message']);
 
 			// Maybe it is actually a redirect
-			if ((strpos($message_raw,chr(10))===false) && (strpos($message_raw,' ')===false))
+			if ((strpos($message_raw,"\n")===false) && (strpos($message_raw,' ')===false))
 			{
 				if (preg_match('#^https?://#',$message_raw)!=0) // Looks like a URL
 				{

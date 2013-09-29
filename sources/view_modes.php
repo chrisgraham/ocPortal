@@ -291,10 +291,10 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 				} else
 				{
 					require_javascript('javascript_translate');
-					$actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'031eb918cb3bcaf4339130b46f8b1b8a','LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>user_lang(),'NAME'=>'l_'.$key,'OLD'=>str_replace('\n',chr(10),$value_found)));
+					$actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'031eb918cb3bcaf4339130b46f8b1b8a','LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>user_lang(),'NAME'=>'l_'.$key,'OLD'=>str_replace('\n',"\n",$value_found)));
 				}
 				$description->attach($actions);
-				$fields->attach(form_input_text($key,$description,'l_'.$key,str_replace('\n',chr(10),$value_found),false));
+				$fields->attach(form_input_text($key,$description,'l_'.$key,str_replace('\n',"\n",$value_found),false));
 			}
 		}
 		$title=get_screen_title('__TRANSLATE_CODE',true,array($lang_name));
@@ -620,7 +620,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 				if ($level%$x==7) $colour='olive';
 				$previous=($i==0)?'':$out[$i-1];
 				$string=new ocp_tempcode();
-				if (($previous==' ') || ($previous==chr(10)) || ($previous==chr(13)))
+				if (($previous==' ') || ($previous=="\n") || ($previous=="\r"))
 					$string->attach(str_pad('',$level*3*6,'&nbsp;'));
 				$string->attach(do_template('VALIDATE_TAG_START',array('_GUID'=>'3a4c99283d32006143fc688ce8f2cadc','COLOUR'=>$colour)));
 				$string->evaluate_echo();
@@ -652,7 +652,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 
 		$char=$out[$i];
 
-		if (($char==chr(10)) || ($i==0))
+		if (($char=="\n") || ($i==0))
 		{
 			if ($number>1)
 			{
@@ -689,7 +689,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 				{
 					$_text=do_template('VALIDATE_MARKER_START');
 					$_text->evaluate_echo();
-					if ($char==chr(13) || ($char==chr(10)))
+					if ($char=="\r" || ($char=="\n"))
 					{
 						$__text='!'.do_lang('HERE').'!';
 						if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($__text);

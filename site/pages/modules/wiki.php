@@ -744,7 +744,7 @@ class Module_wiki
 			if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) access_denied('CATEGORY_ACCESS');
 			check_edit_permission('low',NULL,array('wiki_page',$myrow['page_id']),'cms_wiki');
 
-			if ($merged!='') $merged.=chr(10).chr(10);
+			if ($merged!='') $merged.="\n\n";
 			$merged.=get_translated_text($myrow['the_message']);
 		}
 
@@ -1166,7 +1166,7 @@ class Module_wiki
 		$map=array();
 		foreach ($page_rows as $i=>$page)
 		{
-			if ($i%100==0) echo escape_html(chr(10)); // Fixes weird CGI timeout (some servers only) if there's lots of data. Won't trigger quirks mode. 'escape_html' is just for the XSS detector.
+			if ($i%100==0) echo escape_html("\n"); // Fixes weird CGI timeout (some servers only) if there's lots of data. Won't trigger quirks mode. 'escape_html' is just for the XSS detector.
 
 			if ($page['id']!=db_get_first_id())
 			{

@@ -335,7 +335,7 @@ if ($has_jump)
 				}
 			/*//]]>*/</script>
 			";
-			echo str_replace(chr(10),'',str_replace(chr(13),'',$out));
+			echo str_replace("\n",'',str_replace("\r",'',$out));
 
 			// Next line of details
 			echo '<span class="version_details">('.$upgrade_type[$i].', released '.display_time_period(time()-$higher_versions[$i]['add_date']).' ago)</span>';
@@ -355,7 +355,7 @@ if ($has_jump)
 				</form>
 			</noscript>
 			";
-			echo str_replace(chr(10),'',str_replace(chr(13),'',$out));
+			echo str_replace("\n",'',str_replace("\r",'',$out));
 		}
 	}
 }

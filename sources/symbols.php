@@ -454,11 +454,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$tpl_params=$param['vars'];
-					$explode=explode(chr(10),$param[1]->evaluate());
+					$explode=explode("\n",$param[1]->evaluate());
 					foreach ($explode as $val)
 					{
 						$bits=explode('=',$val,2);
-						if (count($bits)==2) $tpl_params[ltrim($bits[0])]=str_replace('\n',chr(10),$bits[1]);
+						if (count($bits)==2) $tpl_params[ltrim($bits[0])]=str_replace('\n',"\n",$bits[1]);
 					}
 					$td=isset($param[3])?$param[2]->evaluate():'';
 					if ($td=='') $td='templates';
@@ -582,7 +582,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value='';
 					$compare=$param[0]->evaluate();
 					$substring=(isset($param[2]) && $param[1]->evaluate()=='1');
-					$explode=explode(chr(10),trim($param[$substring?2:1]->evaluate()));
+					$explode=explode("\n",trim($param[$substring?2:1]->evaluate()));
 					foreach ($explode as $i=>$case)
 					{
 						if (strpos($case,'=')===false) continue;
@@ -4198,7 +4198,7 @@ function ecv_INSERT_SPAMMER_BLACKHOLE($lang,$escaped,$param)
 		$field_name='x'.md5(get_site_name().': antispam');
 		$value='<div id="'.escape_html($field_name).'_wrap" style="display:none"><label for="'.escape_html($field_name).'">'.do_lang('DO_NOT_FILL_ME_SPAMMER_BLACKHOLE').'</label><input id="'.escape_html($field_name).'" name="'.escape_html($field_name).'" value="" type="text" /></div>';
 		if (!$GLOBALS['SEMI_DEV_MODE'])
-			$value.='<script>// <'.'![CDATA['.chr(10).'var wrap=document.getElementById(\''.escape_html($field_name).'_wrap\'); wrap.parentNode.removeChild(wrap);'.chr(10).'//]]></script>';
+			$value.='<script>// <'.'![CDATA['."\n".'var wrap=document.getElementById(\''.escape_html($field_name).'_wrap\'); wrap.parentNode.removeChild(wrap);'."\n".'//]]></script>';
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);

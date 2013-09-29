@@ -229,7 +229,7 @@ class breadcrumb_substitution_loader
 				$this->substitutions[$from]=$to;
 				break;
 			case 'link':
-				$text=trim(str_replace('\n',chr(10),$this->text_so_far));
+				$text=trim(str_replace('\n',"\n",$this->text_so_far));
 				$this->links[]=array($text,isset($tag_attributes['label'])?$tag_attributes['label']:NULL);
 				break;
 		}

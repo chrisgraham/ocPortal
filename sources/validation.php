@@ -632,8 +632,8 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 			if (array_key_exists($error[1],$misspellings)) continue;
 			$misspellings[$error[1]]=1;
 			$POS=strpos($OUT,$error[1]);
-			$LINESTART=strrpos(substr($OUT,0,$POS),chr(10));
-			$LINENO=substr_count(substr($OUT,0,$LINESTART),chr(10))+1;
+			$LINESTART=strrpos(substr($OUT,0,$POS),"\n");
+			$LINENO=substr_count(substr($OUT,0,$LINESTART),"\n")+1;
 			$errors[]=_xhtml_error($error[0],$error[1]);
 		}
 	}
@@ -657,7 +657,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 function _xhtml_error($error,$param_a='',$param_b='',$param_c='',$raw=false,$rel_pos=0)
 {
 	global $POS,$OUT,$LINENO,$LINESTART;
-	$lineno=($rel_pos==0)?0:substr_count(substr($OUT,$POS,$rel_pos),chr(10));
+	$lineno=($rel_pos==0)?0:substr_count(substr($OUT,$POS,$rel_pos),"\n");
 	$out=array();
 	$out['line']=$LINENO+1+$lineno;
 	if ($rel_pos==0)
@@ -665,7 +665,7 @@ function _xhtml_error($error,$param_a='',$param_b='',$param_c='',$raw=false,$rel
 		$out['pos']=$POS-$LINESTART;
 	} else
 	{
-		$out['pos']=$POS+$rel_pos-strrpos(substr($OUT,0,$POS+$rel_pos),chr(10));
+		$out['pos']=$POS+$rel_pos-strrpos(substr($OUT,0,$POS+$rel_pos),"\n");
 	}
 	$out['global_pos']=$POS+$rel_pos;
 	if (function_exists('do_lang'))
@@ -814,19 +814,15 @@ function _get_next_tag()
 
 	$errors=array();
 
-	static $chr_10=NULL;
-	if ($chr_10===NULL) $chr_10=chr(10);
-	static $chr_13=NULL;
-	if ($chr_13===NULL) $chr_13=chr(13);
 	$special_chars=NULL;
-	if ($special_chars===NULL) $special_chars=array('='=>1,'"'=>1,'&'=>1,'/'=>1,'<'=>1,'>'=>1,' '=>1,$chr_10=>1,$chr_13=>1);
+	if ($special_chars===NULL) $special_chars=array('='=>1,'"'=>1,'&'=>1,'/'=>1,'<'=>1,'>'=>1,' '=>1,"\n"=>1,"\r"=>1);
 
 	while ($POS<$LEN)
 	{
 		$next=$OUT[$POS];
 		$POS++;
 
-		if ($next==$chr_10)
+		if ($next=="\n")
 		{
 			$LINENO++;
 			$LINESTART=$POS;
@@ -854,7 +850,7 @@ function _get_next_tag()
 					$continue=($next!='<') && ($next!='&') && ($POS<$LEN-1);
 					if ($continue) $in_no_mans_land.=$next;
 					if ($next!='<') $INBETWEEN_TEXT.=$next;
-					if ($next==$chr_10)
+					if ($next=="\n")
 					{
 						$LINENO++;
 						$LINESTART=$POS;
@@ -916,14 +912,14 @@ function _get_next_tag()
 					$current_tag.=$next;
 					$next=$OUT[$POS];
 					$POS++;
-					if ($next==$chr_10)
+					if ($next=="\n")
 					{
 						$LINENO++;
 						$LINESTART=$POS;
 					}
 					$more_to_come=(!isset($special_chars[$next])) && ($POS<$LEN);
 				}
-				if (($next==' ') || ($next==$chr_10) || ($next==$chr_13))
+				if (($next==' ') || ($next=="\n") || ($next=="\r"))
 				{
 					$TAG_RANGES[]=array($T_POS+1,$POS-1,$current_tag);
 					$status=IN_TAG_BETWEEN_ATTRIBUTES;
@@ -986,7 +982,7 @@ function _get_next_tag()
 					$errors[]=array('XML_TAG_OPEN_ANOMALY','4');
 					return array(NULL,$errors);
 				}
-				elseif (($next!=' ') && ($next!="\t") && ($next!=$chr_10) && ($next!=$chr_13))
+				elseif (($next!=' ') && ($next!="\t") && ($next!="\n") && ($next!="\r"))
 				{
 					$status=IN_TAG_ATTRIBUTE_NAME;
 					$current_attribute_name.=$next;
@@ -999,7 +995,7 @@ function _get_next_tag()
 					$current_attribute_name.=$next;
 					$next=$OUT[$POS];
 					$POS++;
-					if ($next==$chr_10)
+					if ($next=="\n")
 					{
 						$LINENO++;
 						$LINESTART=$POS;
@@ -1045,7 +1041,7 @@ function _get_next_tag()
 					$VALUE_RANGES[]=array($POS-1,$POS-1);
 					return _check_tag($current_tag,$attribute_map,false,$close,$errors);
 				}
-				elseif (($next!=' ') && ($next!="\t") && ($next!=$chr_10) && ($next!=$chr_13)) $current_attribute_name.=$next;
+				elseif (($next!=' ') && ($next!="\t") && ($next!="\n") && ($next!="\r")) $current_attribute_name.=$next;
 				else
 				{
 					require_code('type_validation');
@@ -1059,7 +1055,7 @@ function _get_next_tag()
 				break;
 			case IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT:
 				if ($next=='=') $status=IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
-				elseif (($next!=' ') && ($next!="\t") && ($next!=$chr_10) && ($next!=$chr_13))
+				elseif (($next!=' ') && ($next!="\t") && ($next!="\n") && ($next!="\r"))
 				{
 					if ($GLOBALS['XML_CONSTRAIN']) $errors[]=array('XML_ATTRIBUTE_ERROR');
 					//return array(NULL,$errors);  Actually  <blah nowrap ... />	could cause this
@@ -1082,7 +1078,7 @@ function _get_next_tag()
 					$v_pos=$POS;
 					$status=IN_TAG_ATTRIBUTE_VALUE_LITTLE_QUOTES;
 				}
-				elseif (($next!=' ') && ($next!="\t") && ($next!=$chr_10) && ($next!=$chr_13))
+				elseif (($next!=' ') && ($next!="\t") && ($next!="\n") && ($next!="\r"))
 				{
 					if ($next=='<')
 					{
@@ -1109,7 +1105,7 @@ function _get_next_tag()
 					$VALUE_RANGES[]=array($v_pos,$POS-1);
 					return _check_tag($current_tag,$attribute_map,false,$close,$errors);
 				}
-				elseif (($next==' ') || ($next=="\t") || ($next==$chr_10) || ($next==$chr_13))
+				elseif (($next==' ') || ($next=="\t") || ($next=="\n") || ($next=="\r"))
 				{
 					$status=IN_TAG_BETWEEN_ATTRIBUTES;
 					if (isset($attribute_map[$current_attribute_name])) $errors[]=array('XML_TAG_DUPLICATED_ATTRIBUTES',$current_tag);
@@ -1135,7 +1131,7 @@ function _get_next_tag()
 					$current_attribute_value.=$next;
 					$next=$OUT[$POS];
 					$POS++;
-					if ($next==$chr_10)
+					if ($next=="\n")
 					{
 						$LINENO++;
 						$LINESTART=$POS;

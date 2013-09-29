@@ -211,7 +211,7 @@ class Hook_addon_registry_core_language_editing
 				'TRANSLATE_AUTO'=>$value,
 				'DESCRIPTION'=>lorem_sentence(),
 				'NAME'=>lorem_word().strval($i),
-				'OLD'=>str_replace('\n', chr(10), $value),
+				'OLD'=>str_replace('\n', "\n", $value),
 				'CURRENT'=>$value,
 				'ACTIONS'=>lorem_phrase()
 			));

@@ -26,9 +26,6 @@ function init__urls()
 	global $HTTPS_PAGES_CACHE;
 	$HTTPS_PAGES_CACHE=NULL;
 
-	global $CHR_0;
-	$CHR_0=chr(10);
-
 	global $USE_REWRITE_PARAMS_CACHE;
 	$USE_REWRITE_PARAMS_CACHE=NULL;
 
@@ -832,8 +829,6 @@ function qualify_url($url,$url_base)
  */
 function page_link_decode($param)
 {
-	global $CHR_0;
-
 	if (strpos($param,'#')===false)
 	{
 		$hash='';
@@ -843,12 +838,12 @@ function page_link_decode($param)
 		$hash=substr($param,$hash_pos);
 		$param=substr($param,0,$hash_pos);
 	}
-	if (strpos($param,$CHR_0)===false)
+	if (strpos($param,"\n")===false)
 	{
 		$bits=explode(':',$param);
 	} else // If there's a line break then we ignore any colons after that line-break. It's to allow complex stuff to be put on the end of the page-link
 	{
-		$term_pos=strpos($param,$CHR_0);
+		$term_pos=strpos($param,"\n");
 		$bits=explode(':',substr($param,0,$term_pos));
 		$bits[count($bits)-1].=substr($param,$term_pos);
 	}

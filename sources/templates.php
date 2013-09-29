@@ -242,7 +242,7 @@ function warn_screen($title,$text,$provide_back=true,$support_match_key_messages
  */
 function form_input_hidden($name,$value)
 {
-	return do_template('FORM_SCREEN_INPUT_HIDDEN'.((strpos($value,chr(10))!==false)?'_2':''),array('_GUID'=>'1b39e13d1a09573c67522e2f3b7ebf14','NAME'=>$name,'VALUE'=>$value));
+	return do_template('FORM_SCREEN_INPUT_HIDDEN'.((strpos($value,"\n")!==false)?'_2':''),array('_GUID'=>'1b39e13d1a09573c67522e2f3b7ebf14','NAME'=>$name,'VALUE'=>$value));
 }
 
 /**

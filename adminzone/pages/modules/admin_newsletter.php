@@ -579,7 +579,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$filename='subscribers_'.$id.'.csv';
 
 			header('Content-type: text/csv');
-			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+			header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 
 			@ini_set('ocproducts.xss_detect','0');
 		}
@@ -627,8 +627,8 @@ class Module_admin_newsletter extends standard_crud_module
 				{
 					if ($start2==0)
 					{
-						if (!is_null($level)) echo '"LEVEL '.do_lang('NEWSLETTER_'.strval($level)).'"'.chr(10);
-						echo '"'.str_replace('"','""',do_lang('EMAIL_ADDRESS')).'",'.'"'.str_replace('"','""',do_lang('FORENAME')).'",'.'"'.str_replace('"','""',do_lang('SURNAME')).'",'.'"'.str_replace('"','""',do_lang('NAME')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_SEND_ID')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_HASH')).'",'.'"'.str_replace('"','""',do_lang('PASSWORD_HASH')).'",'.'"'.str_replace('"','""',do_lang('SALT')).'",'.'"'.str_replace('"','""',do_lang('LANGUAGE')).'",'.'"'.str_replace('"','""',do_lang('CONFIRM_CODE')).'",'.'"'.str_replace('"','""',do_lang('JOIN_DATE')).'"'.chr(10);
+						if (!is_null($level)) echo '"LEVEL '.do_lang('NEWSLETTER_'.strval($level)).'"'."\n";
+						echo '"'.str_replace('"','""',do_lang('EMAIL_ADDRESS')).'",'.'"'.str_replace('"','""',do_lang('FORENAME')).'",'.'"'.str_replace('"','""',do_lang('SURNAME')).'",'.'"'.str_replace('"','""',do_lang('NAME')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_SEND_ID')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_HASH')).'",'.'"'.str_replace('"','""',do_lang('PASSWORD_HASH')).'",'.'"'.str_replace('"','""',do_lang('SALT')).'",'.'"'.str_replace('"','""',do_lang('LANGUAGE')).'",'.'"'.str_replace('"','""',do_lang('CONFIRM_CODE')).'",'.'"'.str_replace('"','""',do_lang('JOIN_DATE')).'"'."\n";
 					}
 				} else
 				{
@@ -653,7 +653,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 					if ($csv==1)
 					{
-						echo '"'.str_replace('"','""',$email).'",'.'"'.str_replace('"','""',$forename).'",'.'"'.str_replace('"','""',$surname).'",'.'"'.str_replace('"','""',$name).'",'.'"'.str_replace('"','""',$send_id).'",'.'"'.str_replace('"','""',$unsub).'",'.'"'.str_replace('"','""',$hash).'",'.'"'.str_replace('"','""',$salt).'",'.'"'.str_replace('"','""',$_lang).'",'.'"'.str_replace('"','""',strval($confirm_code)).'",'.'"'.str_replace('"','""',date('Y-m-d h:i:s',$join_time)).'"'.chr(10);
+						echo '"'.str_replace('"','""',$email).'",'.'"'.str_replace('"','""',$forename).'",'.'"'.str_replace('"','""',$surname).'",'.'"'.str_replace('"','""',$name).'",'.'"'.str_replace('"','""',$send_id).'",'.'"'.str_replace('"','""',$unsub).'",'.'"'.str_replace('"','""',$hash).'",'.'"'.str_replace('"','""',$salt).'",'.'"'.str_replace('"','""',$_lang).'",'.'"'.str_replace('"','""',strval($confirm_code)).'",'.'"'.str_replace('"','""',date('Y-m-d h:i:s',$join_time)).'"'."\n";
 					} else
 					{
 						$tpl=do_template('NEWSLETTER_SUBSCRIBER',array('_GUID'=>'ca45867a23cbaa7c6788d3cd2ba2793c','EMAIL'=>$email,'FORENAME'=>$forename,'SURNAME'=>$surname,'NAME'=>$name,'NEWSLETTER_SEND_ID'=>$send_id,'NEWSLETTER_HASH'=>$hash));
@@ -669,7 +669,7 @@ class Module_admin_newsletter extends standard_crud_module
 			{
 				if ($csv==1)
 				{
-					echo '"('.do_lang('NONE').')"'.chr(10);
+					echo '"('.do_lang('NONE').')"'."\n";
 				} else
 				{
 				}
@@ -1580,7 +1580,7 @@ class Module_admin_newsletter extends standard_crud_module
 				$send_details_string_exp='';
 				foreach ($send_details as $key=>$val)
 				{
-					$send_details_string_exp.='"'.str_replace(chr(10),'\n',addslashes($key)).'"=>"'.str_replace(chr(10),'\n',addslashes($val)).'",';
+					$send_details_string_exp.='"'.str_replace("\n",'\n',addslashes($key)).'"=>"'.str_replace("\n",'\n',addslashes($val)).'",';
 				}
 				$schedule_code=':require_code(\'newsletter\'); actual_send_newsletter("'.php_addslashes($message).'","'.php_addslashes($subject).'","'.php_addslashes($lang).'",array('.$send_details_string_exp.'),'.strval($html_only).',"'.php_addslashes($from_email).'","'.php_addslashes($from_name).'",'.strval($priority).',"'.php_addslashes($csv_data).'","'.php_addslashes($template).'");';
 				$start_year=intval(date('Y',$schedule));

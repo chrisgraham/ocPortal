@@ -151,7 +151,7 @@ function find_installed_addons($just_non_bundled=false)
 		$row['addon_files']='';
 		foreach ($files_rows as $file_row_name)
 		{
-			$row['addon_files'].=$file_row_name.chr(10);
+			$row['addon_files'].=$file_row_name."\n";
 		}
 		$addons_installed[$row['addon_name']]=$row;
 	}
@@ -211,7 +211,7 @@ function find_installed_addons($just_non_bundled=false)
 				'addon_version'=>($version==ocp_version_number())?ocp_version_pretty():float_format($version,1),
 				'addon_description'=>$description,
 				'addon_install_time'=>filemtime(get_file_base().'/sources/hooks/systems/addon_registry/'.$hook.'.php'),
-				'addon_files'=>implode(chr(10),make_global_file_list($file_list)),
+				'addon_files'=>implode("\n",make_global_file_list($file_list)),
 			);
 		}
 	}
@@ -290,7 +290,7 @@ function find_available_addons($installed_too=true)
 			$mtime=filemtime($full);
 			foreach ($files_rows as $file_row)
 			{
-				$info['files'].=$file_row['path'].chr(10);
+				$info['files'].=$file_row['path']."\n";
 			}
 			$info['mtime']=$mtime;
 			$info['tar_path']=$full;
@@ -512,7 +512,7 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 	$version=str_replace('"','\'',$version);
 	$incompatibilities=str_replace('"','\'',$incompatibilities);
 	$dependencies=str_replace('"','\'',$dependencies);
-	$description=str_replace(chr(13),'',str_replace(chr(10),'\n',str_replace('"','\'',$description)));
+	$description=str_replace("\r",'',str_replace("\n",'\n',str_replace('"','\'',$description)));
 	$addon_inf="name=".$name."
 author=".$author."
 organisation=".$organisation."
@@ -1050,7 +1050,7 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 		$loopable=$addon_row['addon_files'];
 	} else
 	{
-		$loopable=explode(chr(10),$addon_row['addon_files']);
+		$loopable=explode("\n",$addon_row['addon_files']);
 	}
 	foreach ($loopable as $i=>$filename)
 	{
