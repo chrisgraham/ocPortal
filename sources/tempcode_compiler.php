@@ -286,7 +286,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 										$myfunc='tcpfunc_'.fast_uniqid();
 										$funcdef=build_closure_function($myfunc,$param);
-										$symbol_params[]=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'','')))); // Parameters will be bound in later.
+										$symbol_params[]=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'',''))))); // Parameters will be bound in later.
 									}
 
 									$pp_bit=array(array(),TC_SYMBOL,str_replace('"','',$first_param),$symbol_params);
@@ -726,7 +726,7 @@ function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$
 
 	$funcdef=build_closure_function($myfunc,$parts);
 
-	$ret=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'','')))); // Parameters will be bound in later.
+	$ret=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'',''))))); // Parameters will be bound in later.
 	$ret->preprocessable_bits=array_merge($ret->preprocessable_bits,$preprocessable_bits);
 	$ret->codename=$codename;
 	return $ret;

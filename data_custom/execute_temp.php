@@ -53,10 +53,16 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+//	$test=require_once(get_file_base().'/themes/default/templates_cached/EN/ANCHOR.tpl.tcp');
+//	@var_dump($test);
+//	exit();
+
 	$ob=new ocp_tempcode();
+//	$ob=do_template('ANCHOR',array('NAME'=>'x'));
 	$ob->attach(do_template('ANCHOR',array('NAME'=>'x')));
 	$ob->attach(do_template('ANCHOR',array('NAME'=>'x')));
 	$ob->attach('foo');
 	$ob->attach('bar');
 	@var_dump($ob);
+	exit();
 }

@@ -541,9 +541,9 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 	$url=$branch['special'];
 	if (is_object($url)) // Try and convert it to a page-link, if we can
 	{
-		if ((isset($url->seq_parts)) && (isset($url->seq_parts[0])) && ($url->seq_parts[0][3]=='PAGE_LINK'))
+		if ((isset($url->seq_parts[0][0])) && ($url->seq_parts[0][0][3]=='PAGE_LINK'))
 		{
-			$url=$url->seq_parts[0][1][0];
+			$url=$url->seq_parts[0][0][1][0];
 			if (is_object($url)) $url=$url->evaluate();
 		} elseif ((isset($url->bits)) && (isset($url->bits[0])) && ($url->bits[0][2]=='PAGE_LINK'))
 		{

@@ -218,7 +218,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 		$funcdef.="ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
 	}
 
-	$ret=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,''))));
+	$ret=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,'')))));
 	if ($type==TC_LANGUAGE_REFERENCE) $ret->pure_lang=true;
 	return $ret;
 }
@@ -399,7 +399,7 @@ function make_string_tempcode($string)
 
 	$myfunc='string_attach_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
 	$code_to_preexecute=array($myfunc=>"\$tpl_funcs['$myfunc']=\"echo \\\"".php_addslashes_twice($string)."\\\";\";\n");
-	$seq_parts=array(array($myfunc,array(),TC_KNOWN,'',''));
+	$seq_parts=array(array(array($myfunc,array(),TC_KNOWN,'','')));
 	return new ocp_tempcode(array($code_to_preexecute,$seq_parts));
 }
 
@@ -661,10 +661,13 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$out->preprocessable_bits=$_data->preprocessable_bits;
 		$out->seq_parts=$_data->seq_parts;
 
-		foreach ($out->seq_parts as $i=>$bit)
+		foreach ($out->seq_parts as &$seq_parts_group)
 		{
-			if ($bit[1]!=array())
-				$out->seq_parts[$i][1]=array();
+			foreach ($seq_parts_group as &$seq_part)
+			{
+				if ($seq_part[1]!=array())
+					$seq_part[1]=array();
+			}
 		}
 
 		return $out;
@@ -722,12 +725,12 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
  * @param  array			Symbol details
  * @param  array			Where we store children stuff
  */
-function handle_symbol_preprocessing($bit,&$children)
+function handle_symbol_preprocessing($seq_part,&$children)
 {
-	switch ($bit[2])
+	switch ($seq_part[2])
 	{
 		case 'PAGE_LINK':
-			$param=$bit[3];
+			$param=$seq_part[3];
 
 			if (isset($param[0]))
 			{
@@ -760,18 +763,18 @@ function handle_symbol_preprocessing($bit,&$children)
 		case 'INCLUDE':
 			if ($GLOBALS['RECORD_TEMPLATES_USED'])
 			{
-				$param=$bit[3];
+				$param=$seq_part[3];
 				$GLOBALS['$RECORDED_TEMPLATES_USED'][]=(is_object($param[0])?$param[0]->evaluate():$param[0]);
 			}
 			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
 			{
-				$param=$bit[3];
+				$param=$seq_part[3];
 				$children[]=array((is_object($param[0])?$param[0]->evaluate():$param[0]),isset($param[1]->children)?$param[1]->children:array(),isset($param[1]->fresh)?$param[1]->fresh:false);
 			}
 			break;
 
 		case 'SET':
-			$param=$bit[3];
+			$param=$seq_part[3];
 
 			if (isset($param[1]))
 			{
@@ -790,7 +793,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			return;
 
 		case 'BLOCK':
-			$param=$bit[3];
+			$param=$seq_part[3];
 
 			global $REQUEST_BLOCK_NEST_LEVEL;
 			$REQUEST_BLOCK_NEST_LEVEL++;
@@ -862,7 +865,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			return;
 
 		case 'REQUIRE_JAVASCRIPT':
-			$param=$bit[3];
+			$param=$seq_part[3];
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
@@ -876,7 +879,7 @@ function handle_symbol_preprocessing($bit,&$children)
 		case 'CSS_INHERIT':
 
 		case 'REQUIRE_CSS':
-			$param=$bit[3];
+			$param=$seq_part[3];
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
@@ -885,7 +888,7 @@ function handle_symbol_preprocessing($bit,&$children)
 
 		case 'TRIM':
 		case 'PARAGRAPH':
-			$param=$bit[3];
+			$param=$seq_part[3];
 			if ((isset($param[0])) && (is_object($param[0])))
 			{
 				if ($GLOBALS['RECORD_TEMPLATES_TREE'])
@@ -897,7 +900,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			break;
 
 		case 'LOAD_PANEL':
-			$param=$bit[3];
+			$param=$seq_part[3];
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
@@ -950,7 +953,7 @@ function handle_symbol_preprocessing($bit,&$children)
 		case 'JS_TEMPCODE':
 			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
 			{
-				$param=$bit[3];
+				$param=$seq_part[3];
 				foreach ($param as $i=>$p)
 					if (is_object($p)) $param[$i]=$p->evaluate();
 
@@ -963,7 +966,7 @@ function handle_symbol_preprocessing($bit,&$children)
 		case 'CSS_TEMPCODE':
 			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
 			{
-				$param=$bit[3];
+				$param=$seq_part[3];
 
 				$temp=css_tempcode();
 
@@ -972,7 +975,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			return;
 
 		case 'LOAD_PAGE':
-			$param=$bit[3];
+			$param=$seq_part[3];
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
@@ -1024,7 +1027,7 @@ function handle_symbol_preprocessing($bit,&$children)
 class ocp_tempcode
 {
 	var $code_to_preexecute;
-	var $seq_parts; // List of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name
+	var $seq_parts; // List of list of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name			We use a 2D list to make attach ops very fast
 	var $preprocessable_bits; // List of tuples: escape (ignored), type (e.g. TC_SYMBOL), name, parameters
 	var $pure_lang;
 
@@ -1052,41 +1055,44 @@ class ocp_tempcode
 			$this->seq_parts=$details[1];
 			$pp_bits=array();
 
-			foreach ($this->seq_parts as $seq_part)
+			foreach ($this->seq_parts as $seq_parts_group)
 			{
-				if ($seq_part[2]==TC_SYMBOL)
+				foreach ($seq_parts_group as $seq_part)
 				{
-					switch ($seq_part[3])
+					if ($seq_part[2]==TC_SYMBOL)
 					{
-						case 'REQUIRE_CSS':
-						case 'REQUIRE_JAVASCRIPT':
-						case 'FACILITATE_AJAX_BLOCK_CALL':
-						case 'JS_TEMPCODE':
-						case 'CSS_TEMPCODE':
-						case 'SET':
-						case 'BLOCK':
-						case 'PAGE_LINK':
-						case 'LOAD_PAGE':
-						case 'LOAD_PANEL':
-							$pp_bits[]=array(array(),TC_SYMBOL,$seq_part[3],$seq_part[1]);
-							break;
+						switch ($seq_part[3])
+						{
+							case 'REQUIRE_CSS':
+							case 'REQUIRE_JAVASCRIPT':
+							case 'FACILITATE_AJAX_BLOCK_CALL':
+							case 'JS_TEMPCODE':
+							case 'CSS_TEMPCODE':
+							case 'SET':
+							case 'BLOCK':
+							case 'PAGE_LINK':
+							case 'LOAD_PAGE':
+							case 'LOAD_PANEL':
+								$pp_bits[]=array(array(),TC_SYMBOL,$seq_part[3],$seq_part[1]);
+								break;
+						}
 					}
-				}
-				elseif ($seq_part[2]==TC_DIRECTIVE)
-				{
-					switch ($seq_part[3])
+					elseif ($seq_part[2]==TC_DIRECTIVE)
 					{
-						case 'INCLUDE':
-						case 'FRACTIONAL_EDITABLE':
-							$pp_bits[]=array(array(),TC_DIRECTIVE,$seq_part[3],$seq_part[1]);
-							break;
+						switch ($seq_part[3])
+						{
+							case 'INCLUDE':
+							case 'FRACTIONAL_EDITABLE':
+								$pp_bits[]=array(array(),TC_DIRECTIVE,$seq_part[3],$seq_part[1]);
+								break;
+						}
 					}
-				}
-				foreach ($seq_part[1] as $param)
-				{
-					if (isset($param->preprocessable_bits))
+					foreach ($seq_part[1] as $param)
 					{
-						foreach ($param->preprocessable_bits as $b) $pp_bits[]=$b;
+						if (isset($param->preprocessable_bits))
+						{
+							foreach ($param->preprocessable_bits as $b) $pp_bits[]=$b;
+						}
 					}
 				}
 			}
@@ -1116,11 +1122,14 @@ class ocp_tempcode
 	 */
 	function decache()
 	{
-		foreach ($this->seq_parts as $seq_part)
+		foreach ($this->seq_parts as &$seq_parts_group)
 		{
-			foreach ($seq_part[1] as $val)
+			foreach ($seq_parts_group as &$seq_part)
 			{
-				if (is_object($val)) $val->decache();
+				foreach ($seq_part[1] as $val)
+				{
+					if (is_object($val)) $val->decache();
+				}
 			}
 		}
 		$this->cached_output=NULL;
@@ -1133,8 +1142,8 @@ class ocp_tempcode
 	{
 		if (isset($this->preprocessed)) return;
 
-		foreach ($this->preprocessable_bits as $bit)
-			handle_symbol_preprocessing($bit,$this->children);
+		foreach ($this->preprocessable_bits as $seq_part)
+			handle_symbol_preprocessing($seq_part,$this->children);
 
 		$this->preprocessed=true;
 	}
@@ -1147,7 +1156,16 @@ class ocp_tempcode
 	 */
 	function parameterless($at)
 	{
-		return ((!array_key_exists($at,$this->seq_parts)) || ($this->seq_parts[$at][1]==array()));
+		$i=0;
+		foreach ($this->seq_parts as $seq_parts_group)
+		{
+			foreach ($seq_parts_group as $seq_part)
+			{
+				if ($i==$at) return ($seq_part[1]==array());
+				$i++;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -1183,7 +1201,10 @@ class ocp_tempcode
 
 		if (is_object($attach)) // Consider it another piece of tempcode
 		{
-			foreach ($attach->seq_parts as $b) $this->seq_parts[]=$b;
+			foreach ($attach->seq_parts as $seq_part_group)
+			{
+				$this->seq_parts[]=$seq_part_group;
+			}
 
 			$this->code_to_preexecute+=$attach->code_to_preexecute;
 
@@ -1196,18 +1217,29 @@ class ocp_tempcode
 
 		} else // Consider it a string
 		{
-			$end=end($this->seq_parts);
-			if (($end!==false) && ($end[2]==TC_KNOWN) && ($end[1]==array())) // Optimisation to save memory/storage-space/evaluation-time -- we can just append text
+			if (end($this->seq_parts)!==false)
 			{
-				$myfunc=$end[0];
-				if (isset($this->code_to_preexecute[$myfunc]))
+				$end=&$this->seq_parts[key($this->seq_parts)];
+				if (end($end)!==false)
 				{
-					$code=$this->code_to_preexecute[$myfunc];
-					$pos2=strpos($code,"\";\n");
-					$code=substr($code,0,$pos2)." echo \\\"".php_addslashes_twice($attach)."\\\";".substr($code,$pos2);
-					$this->code_to_preexecute[$myfunc]=$code;
-					return;
+					$_end=&$end[key($end)];
+					if (($_end[2]==TC_KNOWN) && ($_end[1]==array())) // Optimisation to save memory/storage-space/evaluation-time -- we can just append text
+					{
+						$myfunc=$_end[0];
+						if (isset($this->code_to_preexecute[$myfunc]))
+						{
+							$code=$this->code_to_preexecute[$myfunc];
+							$pos2=strpos($code,"\";\n");
+							$code=substr($code,0,$pos2)." echo \\\"".php_addslashes_twice($attach)."\\\";".substr($code,$pos2);
+							$this->code_to_preexecute[$myfunc]=$code;
+							return;
+						}
+					}
 				}
+			} else
+			{
+				$this->seq_parts[]=array();
+				$end=&$this->seq_parts[0];
 			}
 
 			static $generator_base=NULL;
@@ -1219,7 +1251,7 @@ class ocp_tempcode
 			$myfunc='string_attach_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
 			$funcdef="\$tpl_funcs['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
 			$this->code_to_preexecute[$myfunc]=$funcdef;
-			$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');
+			$end[]=array($myfunc,array(),TC_KNOWN,'','');
 		}
 
 		$this->codename='(mixed)';
@@ -1232,7 +1264,11 @@ class ocp_tempcode
 	 */
 	function is_empty_shell()
 	{
-		return !isset($this->seq_parts[0]);
+		foreach ($this->seq_parts as $seq_parts_group)
+		{
+			if (isset($seq_parts_group[0])) return false;
+		}
+		return true;
 	}
 
 	/**
@@ -1245,7 +1281,7 @@ class ocp_tempcode
 		if ($this->cached_output!==NULL) return strlen($this->cached_output)==0;
 		if (isset($this->is_empty)) return $this->is_empty;
 
-		if (!isset($this->seq_parts[0])) // Optimisation: empty
+		if ($this->is_empty_shell()) // Optimisation: empty
 		{
 			$this->is_empty=true;
 			return true;
@@ -1273,38 +1309,46 @@ class ocp_tempcode
 		}
 		$cl=$current_lang;
 
-		$first_of_long=isset($this->seq_parts[3]); // We set this to know not to dig right through to determine emptiness, as this wastes cache memory (it's a tradeoff)
+		$first_of_long=isset($this->seq_parts[0][3]) || isset($this->seq_parts[3]); // We set this to know not to dig right through to determine emptiness, as this wastes cache memory (it's a tradeoff)
 		$tpl_funcs=$KEEP_TPL_FUNCS;
 
-		foreach ($this->seq_parts as $bit)
+		foreach ($this->seq_parts as $seq_parts_group)
 		{
-			$bit_0=$bit[0];
-			if (!isset($tpl_funcs[$bit_0]))
+			foreach ($seq_parts_group as $seq_part)
 			{
-				foreach ($this->code_to_preexecute as $code)
-					if (eval($code)===false) fatal_exit(@strval($php_errormsg));
-			}
-			if (($tpl_funcs[$bit_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$bit_0])))
-			{
-				call_user_func($tpl_funcs[$bit_0],$bit[1],$current_lang,$bit[4]);
-			} else
-			{
-				$parameters=$bit[1];
-				if (eval($tpl_funcs[$bit_0])===false) fatal_exit(@strval($php_errormsg));
-			}
+				$seq_part_0=$seq_part[0];
+				if (!isset($tpl_funcs[$seq_part_0]))
+				{
+					foreach ($this->code_to_preexecute as $code)
+					{
+						if (eval($code)===false) fatal_exit(@strval($php_errormsg));
+					}
+				}
+				if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+				{
+					call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+				} else
+				{
+					$parameters=$seq_part[1];
+					if (eval($tpl_funcs[$seq_part_0])===false)
+					{
+						fatal_exit(@strval($php_errormsg).' - '.$tpl_funcs[$seq_part_0]);
+					}
+				}
 
-			if ((($first_of_long) || ($MEMORY_OVER_SPEED)) && (ob_get_length()>0)) // We only quick exit on the first iteration, as we know we likely didn't spend much time getting to it- anything more and we finish so that we can cache for later use by evaluate/evaluate_echo
-			{
-				@ob_end_clean();
-				if (!$no_eval_cache_before)
-					$NO_EVAL_CACHE=$no_eval_cache_before;
-				if ($XSS_DETECT)
-					@ini_set('ocproducts.xss_detect',$before);
-				$this->is_empty=false;
-				return false;
-			}
+				if ((($first_of_long) || ($MEMORY_OVER_SPEED)) && (ob_get_length()>0)) // We only quick exit on the first iteration, as we know we likely didn't spend much time getting to it- anything more and we finish so that we can cache for later use by evaluate/evaluate_echo
+				{
+					@ob_end_clean();
+					if (!$no_eval_cache_before)
+						$NO_EVAL_CACHE=$no_eval_cache_before;
+					if ($XSS_DETECT)
+						@ini_set('ocproducts.xss_detect',$before);
+					$this->is_empty=false;
+					return false;
+				}
 
-			$first_of_long=false;
+				$first_of_long=false;
+			}
 		}
 
 		$tmp=ob_get_clean();
@@ -1326,6 +1370,17 @@ class ocp_tempcode
 	 */
 	function to_assembly()
 	{
+		// Optimise
+		if (isset($this->seq_parts[0]))
+		{
+			$cnt=count($this->seq_parts);
+			for ($i=1;$i<$cnt;$i++)
+			{
+				$this->seq_parts[0]=array_merge($this->seq_parts[0],$this->seq_parts[$i]);
+			}
+			$this->seq_parts=array($this->seq_parts[0]);
+		}
+
 		return 'return unserialize("'.php_addslashes(serialize(array($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->pure_lang,$this->code_to_preexecute))).'");'.chr(10);
 	}
 
@@ -1373,19 +1428,20 @@ class ocp_tempcode
 	 */
 	function _mark_all_as_escaped()
 	{
-		foreach ($this->seq_parts as $seq_part)
+		foreach ($this->seq_parts as &$seq_parts_group)
 		{
-			foreach ($seq_part[1] as $key=>$val)
+			foreach ($seq_parts_group as &$seq_part)
 			{
-				if (is_string($val))
+				foreach ($seq_part[1] as &$val)
 				{
-					ocp_mark_as_escaped($val);
-				} elseif (is_object($val))
-				{
-					$val->_mark_all_as_escaped();
+					if (is_string($val))
+					{
+						ocp_mark_as_escaped($val);
+					} elseif (is_object($val))
+					{
+						$val->_mark_all_as_escaped();
+					}
 				}
-
-				$seq_part[1][$key]=$val;
 			}
 		}
 	}
@@ -1435,11 +1491,13 @@ class ocp_tempcode
 
 		if ($this->seq_parts==array()) return;
 
-		foreach ($this->seq_parts as $i=>$bit)
+		foreach ($this->seq_parts as &$seq_parts_group)
 		{
-			if ((($bit[0][0]!='s') || (substr($bit[0],0,14)!='string_attach_')) && ($bit[2]!=TC_LANGUAGE_REFERENCE))
-				$bit[1][$parameter]=$value;
-			$this->seq_parts[$i]=$bit;
+			foreach ($seq_parts_group as &$seq_part)
+			{
+				if ((($seq_part[0][0]!='s') || (substr($seq_part[0],0,14)!='string_attach_')) && ($seq_part[2]!=TC_LANGUAGE_REFERENCE))
+					$seq_part[1][$parameter]=$value;
+			}
 		}
 
 		foreach ($value->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
@@ -1505,7 +1563,7 @@ class ocp_tempcode
 				if (isset($parameter->preprocessable_bits[0]))
 				{
 					foreach ($parameter->preprocessable_bits as $b) $out->preprocessable_bits[]=$b;
-				} elseif (!isset($parameter->seq_parts[0])) $parameters[$key]=''; // Little optimisation to save memory
+				} elseif ($parameter->is_empty_shell()) $parameters[$key]=''; // Little optimisation to save memory
 			}
 			elseif ($p_type=='boolean')
 			{
@@ -1517,11 +1575,15 @@ class ocp_tempcode
 			}
 		}
 
-		foreach ($this->seq_parts as $bit)
+		$out->seq_parts[0]=array();
+		foreach ($this->seq_parts as $seq_parts_group)
 		{
-			if ((($bit[0][0]!='s') || (substr($bit[0],0,14)!='string_attach_')) && ($bit[2]!=TC_LANGUAGE_REFERENCE))
-				$bit[1]=&$parameters; // & is to preserve memory
-			$out->seq_parts[]=$bit;
+			foreach ($seq_parts_group as $seq_part)
+			{
+				if ((($seq_part[0][0]!='s') || (substr($seq_part[0],0,14)!='string_attach_')) && ($seq_part[2]!=TC_LANGUAGE_REFERENCE))
+					$seq_part[1]=&$parameters; // & is to preserve memory
+				$out->seq_parts[0][]=$seq_part;
+			}
 		}
 
 		return $out;
@@ -1544,7 +1606,7 @@ class ocp_tempcode
 			$this->cached_output=NULL; // Won't be needed again
 			return '';
 		}
-		if (!isset($this->seq_parts[0])) // Optimisation: empty
+		if ($this->is_empty_shell()) // Optimisation: empty
 		{
 			$this->cached_output='';
 			return '';
@@ -1554,22 +1616,29 @@ class ocp_tempcode
 
 		global $KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
 		$tpl_funcs=$KEEP_TPL_FUNCS;
-		$seq_parts=&$this->seq_parts;
-		foreach ($seq_parts as $i=>$bit)
+		foreach ($this->seq_parts as $seq_parts_group)
 		{
-			$bit_0=$bit[0];
-			if (!isset($tpl_funcs[$bit_0]))
+			foreach ($seq_parts_group as $seq_part)
 			{
-				foreach ($this->code_to_preexecute as $code)
-					if (eval($code)===false) fatal_exit(@strval($php_errormsg));
-			}
-			if (($tpl_funcs[$bit_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$bit_0])))
-			{
-				call_user_func($tpl_funcs[$bit_0],$bit[1],$current_lang,$bit[4]);
-			} else
-			{
-				$parameters=$bit[1];
-				if (eval($tpl_funcs[$bit_0])===false) fatal_exit(@strval($php_errormsg));
+				$seq_part_0=$seq_part[0];
+				if (!isset($tpl_funcs[$seq_part_0]))
+				{
+					foreach ($this->code_to_preexecute as $code)
+					{
+						if (eval($code)===false) fatal_exit(@strval($php_errormsg));
+					}
+				}
+				if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+				{
+					call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+				} else
+				{
+					$parameters=$seq_part[1];
+					if (eval($tpl_funcs[$seq_part_0])===false)
+					{
+						fatal_exit(@strval($php_errormsg).' - '.$tpl_funcs[$seq_part_0]);
+					}
+				}
 			}
 		}
 
@@ -1597,7 +1666,7 @@ class ocp_tempcode
 	function evaluate($current_lang=NULL,$_escape=false,$up_to=NULL)
 	{
 		if (isset($this->cached_output)) return $this->cached_output;
-		if (!isset($this->seq_parts[0])) // Optimisation: empty
+		if ($this->is_empty_shell()) // Optimisation: empty
 		{
 			$this->cached_output='';
 			return '';
@@ -1628,33 +1697,40 @@ class ocp_tempcode
 
 		$tpl_funcs=$KEEP_TPL_FUNCS;
 		$doing_up_to=isset($up_to);
-		$seq_parts=&$this->seq_parts;
 		$no_eval_cache_before=$NO_EVAL_CACHE;
-		foreach ($seq_parts as $i=>$bit)
+		foreach ($this->seq_parts as $seq_parts_group)
 		{
-			if (($doing_up_to) && (ob_get_length()>$up_to))
+			foreach ($seq_parts_group as $seq_part)
 			{
-				$ret=ob_get_clean();
+				if (($doing_up_to) && (ob_get_length()>$up_to))
+				{
+					$ret=ob_get_clean();
 
-				if ($XSS_DETECT)
-					@ini_set('ocproducts.xss_detect',$before);
-				return $ret;
-			}
+					if ($XSS_DETECT)
+						@ini_set('ocproducts.xss_detect',$before);
+					return $ret;
+				}
 
-			$bit_0=$bit[0];
-			if (!isset($tpl_funcs[$bit_0]))
-			{
-				foreach ($this->code_to_preexecute as $code)
-					if (eval($code)===false) fatal_exit(@strval($php_errormsg));
-			}
-			if (($tpl_funcs[$bit_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$bit_0])))
-			{
-				call_user_func($tpl_funcs[$bit_0],$bit[1],$current_lang,$bit[4]);
-			} else
-			{
-				$parameters=$bit[1];
+				$seq_part_0=$seq_part[0];
+				if (!isset($tpl_funcs[$seq_part_0]))
+				{
+					foreach ($this->code_to_preexecute as $code)
+					{
+						if (eval($code)===false) fatal_exit(@strval($php_errormsg));
+					}
+				}
+				if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+				{
+					call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+				} else
+				{
+					$parameters=$seq_part[1];
 
-				if (eval($tpl_funcs[$bit_0])===false) fatal_exit(@strval($php_errormsg));
+					if (eval($tpl_funcs[$seq_part_0])===false)
+					{
+						fatal_exit(@strval($php_errormsg).' - '.$tpl_funcs[$seq_part_0]);
+					}
+				}
 			}
 		}
 

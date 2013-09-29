@@ -343,11 +343,17 @@ function _parse_command_actual($no_term_needed=false)
 			$expression=_parse_expression();
 			pparse__parser_expect('AS');
 			// Choice{"variable" "DOUBLE_ARROW" "variable" | "variable"}
+			$next=pparse__parser_peek();
+			$is_reference=($next=='REFERENCE');
+			if ($is_reference) pparse__parser_next();
 			$variable=_parse_variable($suppress_error);
 			$after_variable=pparse__parser_peek();
 			if ($after_variable=='DOUBLE_ARROW')
 			{
 				pparse__parser_next();
+				$next=pparse__parser_peek();
+				$is_reference=($next=='REFERENCE');
+				if ($is_reference) pparse__parser_next();
 				$_foreach=array($variable,_parse_variable($suppress_error));
 			} else
 			{
