@@ -53,11 +53,15 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$ob=do_block('main_news');
+	$ob->pure_lang=true;
+	@exit(empty($ob->pure_lang)?'empty':'not empty');
+
 //	$test=require_once(get_file_base().'/themes/default/templates_cached/EN/ANCHOR.tpl.tcp');
 //	@var_dump($test);
 //	exit();
 
-	$ob=comcode_to_tempcode('[block]main_news[/block]');
+$ob=do_block('main_news');
 	$ob->handle_symbol_preprocessing();
 //	$ob->attach(do_template('ANCHOR',array('NAME'=>'x','FOO'=>'bar')));
 	require_code('tempcode_optimiser');
