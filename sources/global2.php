@@ -233,10 +233,10 @@ function init__global2()
 		}
 	}
 	$CACHE_TEMPLATES=((get_option('is_on_template_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
+	require_code('lang'); // So that we can do language stuff (e.g. errors)
 	if (!$MICRO_AJAX_BOOTUP)
 	{
 		require_code('temporal'); // Date/time functions
-		require_code('lang'); // So that we can do language stuff (e.g. errors)
 		convert_data_encodings();
 		if (!$MICRO_BOOTUP)
 		{

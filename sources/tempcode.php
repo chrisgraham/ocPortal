@@ -1088,7 +1088,10 @@ class ocp_tempcode
 					{
 						foreach ($seq_part[1] as $param)
 						{
-							foreach ($param->preprocessable_bits as $b) $pp_bits[]=$b;
+							if (isset($param->preprocessable_bits)) // If is a Tempcode object
+							{
+								foreach ($param->preprocessable_bits as $b) $pp_bits[]=$b;
+							}
 						}
 					}
 				}

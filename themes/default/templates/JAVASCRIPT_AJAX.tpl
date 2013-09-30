@@ -469,12 +469,9 @@ function do_ajax_field_test(url,post)
 		{
 			if (xmlhttp.responseText.length>1000)
 			{
-				var error_window=window.open();
-				if (error_window)
-				{
-					error_window.document.write(xmlhttp.responseText);
-					error_window.document.close();
-				}
+				if (typeof window.console!='undefined') console.log(xmlhttp.responseText);
+
+				fauxmodal_alert(xmlhttp.responseText,null,'{!ERROR_OCCURRED;}',true);
 			} else
 			{
 				window.fauxmodal_alert(xmlhttp.responseText);
@@ -602,14 +599,9 @@ function handle_errors_in_result(result)
 
 		if ((result.responseText) && (result.responseText!='') && (result.responseText.indexOf('<html')!=-1))
 		{
-			if (typeof console.debug!='undefined') console.debug(result);
+			if (typeof window.console!='undefined') console.log(result);
 
-			var error_window=window.open();
-			if (error_window)
-			{
-				error_window.document.write(result.responseText);
-				error_window.document.close();
-			}
+			fauxmodal_alert(result.responseText,null,'{!ERROR_OCCURRED;}',true);
 		}
 		return false;
 	}
