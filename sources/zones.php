@@ -1066,6 +1066,7 @@ function block_installed($block)
  * @param  integer		Selection algorithm constant
  * @set 0 1 2
  * @param  ?ID_TEXT		Page type to show (NULL: all)
+ * @set    modules comcode html
  * @return array			A map of page name to type (modules_custom, etc)
  */
 function find_all_pages_wrap($zone,$keep_ext_on=false,$consider_redirects=false,$show_method=0,$page_type=NULL)
@@ -1078,8 +1079,8 @@ function find_all_pages_wrap($zone,$keep_ext_on=false,$consider_redirects=false,
  * Get an array of all the pages of the specified type (module, etc) and extension (for small sites everything will be returned, for larger ones it depends on the show method).
  *
  * @param  ID_TEXT		The zone name
- * @param  ID_TEXT		The type
- * @set    modules modules_custom comcode comcode_custom html html_custom
+ * @param  ID_TEXT		The page type
+ * @set    modules comcode html
  * @param  string			The file extension to limit us to (without a dot)
  * @param  boolean		Whether to leave file extensions on the page name
  * @param  ?TIME			Only show pages newer than (NULL: no restriction)

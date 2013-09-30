@@ -35,11 +35,35 @@ class Hook_occle_command_grep
 		{
 			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','grep'));
 			if (!array_key_exists(1,$parameters)) return array('','','',do_lang('MISSING_PARAM','2','grep'));
-			else $parameters[1]=$occle_fs->_pwd_to_array($parameters[1]);
+			$_parameters[1]=$occle_fs->_pwd_to_array($parameters[1]);
 
-			if (!$occle_fs->_is_file($parameters[1])) return array('','','',do_lang('NOT_A_FILE','2'));
+			if (!$occle_fs->_is_file($_parameters[1]))
+			{
+				if ($parameters[1]=='<comcode_pages>')
+				{
+					$output='';
 
-			$_lines=unixify_line_format($occle_fs->read_file($parameters[1]));
+					$zones=find_all_zones(false,false,true);
+					foreach ($zones as $zone)
+					{
+						$pages=find_all_pages_wrap($zone,true,false,FIND_ALL_PAGES__ALL,'comcode');
+						foreach ($pages as $page=>$type)
+						{
+							$contents=file_get_contents(get_custom_file_base().'/'.$zone.'/pages/'.$type.'/'.$page);
+							if (preg_match('#'.$parameters[0].'#',$contents)!=0)
+							{
+								$output.=$zone.':'.$page."\n";
+							}
+						}
+					}
+
+					return array('','',$output,'');
+				}
+
+				return array('','','',do_lang('NOT_A_FILE','2'));
+			}
+
+			$_lines=unixify_line_format($occle_fs->read_file($_parameters[1]));
 			$lines=explode("\n",$_lines);
 			if (($parameters[0]=='') || (($parameters[0][0]!='#') && ($parameters[0][0]!='/')))
 			{
