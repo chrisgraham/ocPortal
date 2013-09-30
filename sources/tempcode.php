@@ -84,7 +84,10 @@ function init__tempcode()
 	$IS_TEMPLATE_PREVIEW_OP_CACHE=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']=='1') && ((get_page_name()!='admin_themes') || (get_param('type','')=='view'));
 
 	global $OUTPUT_STREAMING;
-	$OUTPUT_STREAMING=(get_option('output_streaming')=='1'); // TODO: And not doing some view_mode op
+	$OUTPUT_STREAMING=(get_option('output_streaming')=='1');
+	if (get_param('special_page_type','view')!='') $OUTPUT_STREAMING=false;
+	if (get_param_integer('keep_markers',0)==1) $OUTPUT_STREAMING=false;
+	if (get_param_integer('show_edit_links',0)==1) $OUTPUT_STREAMING=false;
 }
 
 /**
