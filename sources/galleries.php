@@ -986,6 +986,7 @@ function show_gallery_video_media($url,$thumb_url,$width,$height,$length,$submit
 		'height'=>strval($height),
 		'length'=>strval($length),
 		'mime_type'=>get_mime_type(get_file_extension($url),$as_admin), // will not render as dangerous stuff (swf's etc), unless admin
+		'context'=>'gallery_video',
 	);
 
 	if (get_option('allow_audio_videos')=='1')

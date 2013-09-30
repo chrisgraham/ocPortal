@@ -98,7 +98,7 @@ function insert_code_before__by_command(&$code,$function,$command,$newcode,$inst
 		$pos=$next+1;
 	}
 	$pos=strrpos(substr($code,0,$pos),"\n");
-	$code=substr($code,0,$pos)."\n"."\t".$newcode.substr($code,$pos);
+	$code=substr($code,0,$pos)."\n\t".$newcode.substr($code,$pos);
 
 	return true;
 }
@@ -125,7 +125,7 @@ function insert_code_after__by_command(&$code,$function,$command,$newcode,$insta
 		$pos=$next+1;
 	}
 	$pos=strpos($code,"\n",$pos);
-	$code=substr($code,0,$pos)."\n"."\t".$newcode.substr($code,$pos);
+	$code=substr($code,0,$pos)."\n\t".$newcode.substr($code,$pos);
 
 	return true;
 }

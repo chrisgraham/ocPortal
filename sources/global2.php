@@ -1435,7 +1435,7 @@ function get_param_integer($name,$default=false,$not_string_ok=false)
 }
 
 /**
- * Make sure that lines are seperated by "\n", with no "\r"'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from "\r"."\n" to just "\n". For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers "\n"'s.
+ * Make sure that lines are seperated by "\n", with no "\r"'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from "\r\n" to just "\n". For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers "\n"'s.
  *
  * @param  string			The data to clean
  * @param  ?ID_TEXT		The character set it should be in. We don't do any real conversions using this, only make sure that common problems with fed ISO-8859-1 data are resolved (NULL: output character set)
@@ -1450,7 +1450,7 @@ function unixify_line_format($in,$desired_charset=NULL,$html=false,$from_disk=fa
 	if ($desired_charset===NULL) $desired_charset=get_charset();
 
 	static $from=NULL;
-	if ($from===NULL) $from=array("\r"."\n",'&#8298;',"\r"); // &#8298; is very odd- seems to come from open office copy & paste
+	if ($from===NULL) $from=array("\r\n",'&#8298;',"\r"); // &#8298; is very odd- seems to come from open office copy & paste
 	static $to=NULL;
 	if ($to===NULL) $to=array("\n",'',"\n");
 	$in=str_replace($from,$to,$in);

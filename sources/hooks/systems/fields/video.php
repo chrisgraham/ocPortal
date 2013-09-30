@@ -141,6 +141,7 @@ class Hook_fields_video
 			'height'=>strval($height),
 			'length'=>($length==0)?'':strval($length),
 			'mime_type'=>get_mime_type(get_file_extension($download_url),$as_admin), // will not render as dangerous stuff (swf's etc), unless admin
+			'context'=>'field_hook',
 		);
 
 		$media_type=MEDIA_TYPE_VIDEO | MEDIA_TYPE_OTHER | MEDIA_TYPE_AUDIO;

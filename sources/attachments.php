@@ -113,7 +113,7 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 	$ret=render_media_url(
 		$url,
 		$url_safe,
-		$attributes,
+		$attributes+array('context'=>'attachment'),
 		$as_admin,
 		$source_member,
 		MEDIA_TYPE_ALL,

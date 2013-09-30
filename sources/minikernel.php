@@ -692,14 +692,14 @@ function filter_naughty_harsh($in)
 }
 
 /**
- * Make sure that lines are seperated by "\n", with no "\r"'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from "\r"."\n" to just "\n". For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers "\n"'s.
+ * Make sure that lines are seperated by "\n", with no "\r"'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from "\r\n" to just "\n". For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers "\n"'s.
  *
  * @param  string			The data to clean
  * @return string			The cleaned data
  */
 function unixify_line_format($in)
 {
-	$in=str_replace("\r"."\n","\n",$in);
+	$in=str_replace("\r\n","\n",$in);
 	return str_replace("\r","\n",$in);
 }
 

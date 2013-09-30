@@ -667,8 +667,8 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$semihtml2=$semihtml;
 
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<table summary="([^"]*)"([^>]*)>(.*)</table>$#siU',"\n"."{| \${2}\${3}'."\n".'|}"."\n");
-		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',"\n"."{|"."\n"."\${2}"."\n"."|}"."\n");
+		$array_html_preg_replace[]=array('#^<table summary="([^"]*)"([^>]*)>(.*)</table>$#siU',"\n{| \${2}\${3}\n|}\n");
+		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',"\n{|\n\${2}\n|}\n");
 		$semihtml2=array_html_preg_replace('table',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<thead([^>]*)>(.*)</thead>$#siU','');
@@ -680,13 +680,13 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$array_html_preg_replace[]=array('#^<tfoot([^>]*)>(.*)</tfoot>$#siU','');
 		$semihtml2=array_html_preg_replace('tfoot',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<tr([^>]*)>(.*)</tr>$#siU',"\n"."|-"."\n"."\${2}");
+		$array_html_preg_replace[]=array('#^<tr([^>]*)>(.*)</tr>$#siU',"\n|-\n\${2}");
 		$semihtml2=array_html_preg_replace('tr',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<th([^>]*)>(.*)</th>$#siU',"\n\n"."! \${2}");
+		$array_html_preg_replace[]=array('#^<th([^>]*)>(.*)</th>$#siU',"\n\n! \${2}");
 		$semihtml2=array_html_preg_replace('th',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<td([^>]*)>(.*)</td>$#siU',"\n"."| \${2}");
+		$array_html_preg_replace[]=array('#^<td([^>]*)>(.*)</td>$#siU',"\n| \${2}");
 		$semihtml2=array_html_preg_replace('td',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<span style="font-family: monospace;  font-size: 1.2em;">(.*)</span>$#siU',"[tt]\${1}[/tt]");
@@ -722,10 +722,10 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	$semihtml2=str_replace('<hr width="100%" size="2" />','<hr />',$semihtml2);
 	$semihtml2=str_replace('<hr size="2" width="100%" />','<hr />',$semihtml2);
 	$semihtml2=str_replace('<hr width="100%" />','<hr />',$semihtml2);
-	$semihtml2=str_replace("\n".'<hr />',"\n"."---------------"."\n",$semihtml2);
-	$semihtml2=str_replace("\n".'<hr>',"\n"."---------------"."\n",$semihtml2);
-	$semihtml2=preg_replace('#<hr\s*/>#',"\n"."---------------"."\n",$semihtml2);
-	$semihtml2=str_replace('<hr>',"\n"."---------------"."\n",$semihtml2);
+	$semihtml2=str_replace("\n".'<hr />',"\n---------------\n",$semihtml2);
+	$semihtml2=str_replace("\n".'<hr>',"\n---------------\n",$semihtml2);
+	$semihtml2=preg_replace('#<hr\s*/>#',"\n---------------\n",$semihtml2);
+	$semihtml2=str_replace('<hr>',"\n---------------\n",$semihtml2);
 
 	// We transform any HTML in there to Comcode if we can
 	$smilies=$GLOBALS['FORUM_DRIVER']->find_emoticons();

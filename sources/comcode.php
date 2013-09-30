@@ -142,15 +142,16 @@ function comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap_
  * Strip out any Comcode from this "plain text". Useful for semantic text is wanted but where Comcode is used as "the next best thing" we have.
  *
  * @param  string			Plain-text/Comcode
+ * @param  boolean		Whether this is for generating an extract that does not need to be fully comprehended (i.e. favour brevity)
  * @return string			Purified plain-text
  */
-function strip_comcode($text)
+function strip_comcode($text,$for_extract=false)
 {
 	if (preg_match('#^[\w\d\-\_\(\) \.,:;/"\!\?]*$$#',$text)!=0) return $text; // Optimisation
 
 	require_code('mail');
 	if (function_exists('comcode_to_clean_text')) // For benefit of installer, which disables mail.php
-		$text=comcode_to_clean_text($text);
+		$text=comcode_to_clean_text($text,$for_extract);
 
 	global $VALID_COMCODE_TAGS;
 	foreach (array_keys($VALID_COMCODE_TAGS) as $tag)

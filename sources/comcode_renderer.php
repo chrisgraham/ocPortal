@@ -1820,7 +1820,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=render_media_url(
 				$url_full,
 				$url_full,
-				$attributes,
+				$attributes+array('context'=>'comcode_flash'),
 				$as_admin,
 				$source_member,
 				MEDIA_TYPE_OTHER | MEDIA_TYPE_VIDEO | MEDIA_TYPE_AUDIO,
@@ -1840,7 +1840,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=render_media_url(
 				$url_full,
 				$url_full,
-				$attributes,
+				$attributes+array('context'=>'comcode_media'),
 				$as_admin,
 				$source_member,
 				MEDIA_TYPE_ALL,

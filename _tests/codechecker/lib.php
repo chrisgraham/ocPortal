@@ -72,7 +72,7 @@ function get_file_base()
 
 function unixify_line_format($in)
 {
-	$in=str_replace("\r"."\n","\n",$in);
+	$in=str_replace("\r\n","\n",$in);
 	return str_replace("\r","\n",$in);
 }
 

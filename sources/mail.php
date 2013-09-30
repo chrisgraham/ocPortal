@@ -98,9 +98,10 @@ function _box_callback($matches)
  * Make some Comcode more readable.
  *
  * @param  string			Comcode text to change
+ * @param  boolean		Whether this is for generating an extract that does not need to be fully comprehended (i.e. favour brevity)
  * @return string			Clean text
  */
-function comcode_to_clean_text($message_plain)
+function comcode_to_clean_text($message_plain,$for_extract=false)
 {
 	//$message_plain=str_replace("\n",'',$message_plain);
 
@@ -137,8 +138,10 @@ function comcode_to_clean_text($message_plain)
 		$message_plain=preg_replace('#(\[semihtml[^\]]*\]|\[/semihtml\])#Us','',$message_plain);
 	}
 
+	$message_plain=preg_replace("#\(\[url=\"(https?://[^\"]*)\"([^\]]*)\]([^\[\]]*)\[/url\]\)#",'${1}',$message_plain);
+	$message_plain=preg_replace("#\[url=\"(https?://[^\"]*)\"([^\]]*)\]([^\[\]]*)\[/url\]#",$for_extract?'${3}':'${3} (${1})',$message_plain);
 	$message_plain=preg_replace("#\(\[url=\"([^\"]*)\"([^\]]*)\]([^\[\]]*)\[/url\]\)#",'${3}',$message_plain);
-	$message_plain=preg_replace("#\[url=\"([^\"]*)\"([^\]]*)\]([^\[\]]*)\[/url\]#",'${1} (${3})',$message_plain);
+	$message_plain=preg_replace("#\[url=\"([^\"]*)\"([^\]]*)\]([^\[\]]*)\[/url\]#",$for_extract?'${1}':'${1} (${3})',$message_plain);
 
 	$message_plain=preg_replace("#\[email[^\]]*\]([^\[\]]*)\[/email\]#",'${1}',$message_plain);
 
