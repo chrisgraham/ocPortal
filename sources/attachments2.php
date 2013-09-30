@@ -345,10 +345,10 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	$LAX_COMCODE=$temp;
 	$ATTACHMENTS_ALREADY_REFERENCED=$old_already;
 
-	if ((array_key_exists($id,$COMCODE_ATTACHMENTS)) && (array_key_exists(0,$COMCODE_ATTACHMENTS[$id]))) // This is necessary if multiple items of Comcode were parsed in sequence, global variables can be tricky so we must keep good track
+	/*if ((array_key_exists($id,$COMCODE_ATTACHMENTS)) && (array_key_exists(0,$COMCODE_ATTACHMENTS[$id]))) // This is necessary if multiple items of Comcode were parsed in sequence, global variables can be tricky so we must keep good track
 	{
 		$original_comcode=$COMCODE_ATTACHMENTS[$id][0]['comcode'];
-	}
+	}*/
 
 	$new_comcode=$original_comcode;
 
