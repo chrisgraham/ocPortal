@@ -591,11 +591,11 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 	$GLOBALS['SITE_DB']->query_delete('usersubmitban_ip',array('ip'=>$ip),'',1);
 	$GLOBALS['SITE_DB']->query_insert('usersubmitban_ip',array('ip'=>$ip,'i_descrip'=>$descrip,'i_ban_until'=>$ban_until,'i_ban_positive'=>$ban_positive?1:0),false,true); // To stop weird race-like conditions
 	persistent_cache_delete('IP_BANS');
-	if ((is_writable_wrap(get_file_base().'/.htaccess')) && (is_null($ban_until)))
+	if ((is_writable_wrap(get_file_base().DIRECTORY_SEPARATOR.'.htaccess')) && (is_null($ban_until)))
 	{
-		$myfile=fopen(get_file_base().'/.htaccess','rt');
+		$myfile=fopen(get_file_base().DIRECTORY_SEPARATOR.'.htaccess','rt');
 		flock($myfile,LOCK_SH);
-		$original_contents=file_get_contents(get_file_base().'/.htaccess');
+		$original_contents=file_get_contents(get_file_base().DIRECTORY_SEPARATOR.'.htaccess');
 		flock($myfile,LOCK_UN);
 		fclose($myfile);
 		$ip_cleaned=str_replace('*','',$ip);
@@ -604,14 +604,14 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 		$contents=str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)'.chr(10).'deny from '.$ip_cleaned,$original_contents);
 		if (function_exists('file_put_contents')) // Safer
 		{
-			if (file_put_contents(get_file_base().'/.htaccess',$contents,LOCK_EX)<strlen($contents)) // In case it ran out of disk space
+			if (file_put_contents(get_file_base().DIRECTORY_SEPARATOR.'.htaccess',$contents,LOCK_EX)<strlen($contents)) // In case it ran out of disk space
 			{
-				file_put_contents(get_file_base().'/.htaccess',$original_contents,LOCK_EX);
+				file_put_contents(get_file_base().DIRECTORY_SEPARATOR.'.htaccess',$original_contents,LOCK_EX);
 				warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			}
 		} else
 		{
-			$myfile=fopen(get_file_base().'/.htaccess','wt');
+			$myfile=fopen(get_file_base().DIRECTORY_SEPARATOR.'.htaccess','wt');
 			if (fwrite($myfile,$contents)<strlen($contents))
 			{
 				rewind($myfile);
@@ -620,7 +620,7 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 			}
 			fclose($myfile);
 		}
-		sync_file(get_file_base().'/.htaccess');
+		sync_file(get_file_base().DIRECTORY_SEPARATOR.'.htaccess');
 	}
 
 	return true;
@@ -637,15 +637,15 @@ function remove_ip_ban($ip)
 
 	$GLOBALS['SITE_DB']->query_delete('usersubmitban_ip',array('ip'=>$ip),'',1);
 	persistent_cache_delete('IP_BANS');
-	if (is_writable_wrap(get_file_base().'/.htaccess'))
+	if (is_writable_wrap(get_file_base().DIRECTORY_SEPARATOR.'.htaccess'))
 	{
-		$contents=file_get_contents(get_file_base().'/.htaccess');
+		$contents=file_get_contents(get_file_base().DIRECTORY_SEPARATOR.'.htaccess');
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$contents=str_replace(chr(10).'deny from '.$ip_cleaned.chr(10),chr(10),$contents);
 		$contents=str_replace(chr(13).'deny from '.$ip_cleaned.chr(13),chr(13),$contents); // Just in case
-		$myfile=fopen(get_file_base().'/.htaccess','wt');
+		$myfile=fopen(get_file_base().DIRECTORY_SEPARATOR.'.htaccess','wt');
 		if (fwrite($myfile,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		fclose($myfile);
 		sync_file('.htaccess');

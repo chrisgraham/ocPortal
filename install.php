@@ -2662,7 +2662,7 @@ ErrorDocument 404 {$base}/index.php?page=404
 </FilesMatch>
 END;
 
-	if ((is_writable_wrap(get_file_base().'/exports/addons')) && ((!file_exists(get_file_base().'/.htaccess')) || (trim(file_get_contents(get_file_base().'/.htaccess'))=='')))
+	if ((is_writable_wrap(get_file_base().'/exports/addons')) && ((!file_exists(get_file_base().DIRECTORY_SEPARATOR.'.htaccess')) || (trim(file_get_contents(get_file_base().DIRECTORY_SEPARATOR.'.htaccess'))=='')))
 	{
 		global $HTTP_MESSAGE;
 
@@ -2687,13 +2687,13 @@ END;
 			");
 			fclose($myfile);
 
-			$myfile=fopen(get_file_base().'/exports/addons/.htaccess','wt');
+			$myfile=fopen(get_file_base().'/exports/addons'.DIRECTORY_SEPARATOR.'.htaccess','wt');
 			fwrite($myfile,$clause);
 			fclose($myfile);
 			$HTTP_MESSAGE='';
 			http_download_file($base_url.'/exports/addons/index.php',NULL,false);
 			if ($HTTP_MESSAGE!='200') $clauses[$i]=NULL;
-			unlink(get_file_base().'/exports/addons/.htaccess');
+			unlink(get_file_base().'/exports/addons'.DIRECTORY_SEPARATOR.'.htaccess');
 		}
 
 		$out='';
@@ -2703,8 +2703,8 @@ END;
 		}
 		if (is_suexec_like())
 		{
-			@unlink(get_file_base().'/.htaccess');
-			$tmp=fopen(get_file_base().'/.htaccess','wb');
+			@unlink(get_file_base().DIRECTORY_SEPARATOR.'.htaccess');
+			$tmp=fopen(get_file_base().DIRECTORY_SEPARATOR.'.htaccess','wb');
 			fwrite($tmp,$out);
 			fclose($tmp);
 		} else

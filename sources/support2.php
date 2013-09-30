@@ -202,10 +202,10 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 	}
 
 	global $SITE_INFO;
-	if ((!$force_db) && (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (is_writable_wrap(get_file_base().'/.htaccess'))))
+	if ((!$force_db) && (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (is_writable_wrap(get_file_base().DIRECTORY_SEPARATOR.'.htaccess'))))
 	{
 		$bans=array();
-		$ban_count=preg_match_all('#\ndeny from (.*)#',file_get_contents(get_file_base().'/.htaccess'),$bans);
+		$ban_count=preg_match_all('#\ndeny from (.*)#',file_get_contents(get_file_base().DIRECTORY_SEPARATOR.'.htaccess'),$bans);
 		$ip_bans=array();
 		for ($i=0;$i<$ban_count;$i++)
 		{

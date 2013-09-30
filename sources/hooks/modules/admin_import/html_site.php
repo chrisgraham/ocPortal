@@ -160,7 +160,7 @@ class Hook_html_site
 			force_have_afm_details();
 
 			$change_htaccess=(get_option('htm_short_urls')=='1');
-			$htaccess_path=get_file_base().'/.htaccess';
+			$htaccess_path=get_file_base().DIRECTORY_SEPARATOR.'.htaccess';
 			if (($change_htaccess) && (file_exists($htaccess_path)) && (is_writable_wrap($htaccess_path)))
 			{
 				$htaccess=file_get_contents($htaccess_path);
