@@ -61,11 +61,8 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 	}
 
 	// Work out description
-	if (!array_key_exists('a_description',$attachment_row)) // All quite messy, because descriptions might source from attachments table (for existing attachments with no overridden Comcode description), from Comcode parameter (for attachments with description), or from POST environment (for new attachments)
-	{
-		if (!array_key_exists('description',$attributes)) $attributes['description']=$attachment_row['description'];
-		$attachment_row['a_description']=comcode_to_tempcode($attachment_row['description'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,NULL,$on_behalf_of_member);
-	}
+	if ((!array_key_exists('description',$attributes)) && (array_key_exists('a_description',$attachment_row)))
+		$attributes['description']=$attachment_row['a_description'];
 
 	// Work out URL, going through the attachment frontend script
 	$url=mixed();
