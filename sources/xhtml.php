@@ -312,6 +312,15 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 			if ($current_char==';')
 			{
 				$in_entity=false;
+			} else
+			{
+				if (preg_match('#\w#',$current_char)==0) // Broken entity
+				{
+					$in_entity=false;
+					$_html_buildup=preg_replace('#(.*)&#s','${1}&amp;',$_html_buildup);
+					$i--;
+					continue;
+				}
 			}
 
 			if (($literal_pos?$i:$c)<$from || (($real_from==0) && ($from!=0)))
