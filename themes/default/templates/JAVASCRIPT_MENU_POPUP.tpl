@@ -124,26 +124,31 @@ function pop_up_menu(id,place,menu,event)
 		var main_website_inner=document.getElementById('main_website_inner');
 		if (main_website_inner) full_width=find_width(main_website_inner);
 	{+END}
-	if (place=='below')
-	{
-		if (l+find_width(e)+10>full_width) l=full_width-find_width(e)-10;
-	} else
-	{ // NB: For non-below, we can't assume 'l' is absolute, as it is actually relative to parent node which is itself positioned
-		if (find_pos_x(p,true)+find_width(e)>full_width) l=-find_width(e);
-	}
-	e.style.left=l+'px';
-	window.setTimeout(function() { // Force it after a refresh too, when real width is known
-		if (l+find_width(e)+10>full_width) l=full_width-find_width(e)-10;
-		e.style.left=l+'px';
-	},0);
-	if ((find_pos_y(e.parentNode,true)+find_height(e)+10>full_height) && (t-find_height(e)>0)) t-=find_height(e)+find_height(e.parentNode,true,true,true);
-	e.style.top=(t)+'px';
-	if (t+find_height(e)>full_height)
-	{
-		var upwards_top=(t-find_height(e,true,true,true)+find_height(e.parentNode)+1);
-		if (upwards_top>0)
-			e.style.top=upwards_top+'px';
-	}
+	var e_parent_width=find_width(e.parentNode);
+	e.style.minWidth=e_parent_width+'px';
+	var e_parent_height=find_height(e.parentNode);
+	var e_width=find_width(e);
+	var position_l=function() {
+		var left=l;
+		if (place=='below') // Top-level of drop-down
+		{
+			if (left+e_width+10>full_width) left=full_width-e_width-10;
+		} else
+		{ // NB: For non-below, we can't assume 'left' is absolute, as it is actually relative to parent node which is itself positioned
+			if (find_pos_x(e.parentNode,true)+e_width+e_parent_width+10>full_width) left-=e_width+e_parent_width;
+		}
+		e.style.left=left+'px';
+	};
+	position_l();
+	window.setTimeout(position_l,0);
+	var position_t=function() {
+		var top=t;
+		if (top+find_height(e)+10>full_height)
+			top-=find_height(e,true,true,true)+e_parent_height-10;
+		e.style.top=top+'px';
+	};
+	position_t();
+	window.setTimeout(position_t,0);
 	e.style.zIndex=200;
 
 

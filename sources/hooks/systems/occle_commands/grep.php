@@ -52,7 +52,7 @@ class Hook_occle_command_grep
 							$contents=file_get_contents(get_custom_file_base().'/'.$zone.'/pages/'.$type.'/'.$page);
 							if (preg_match('#'.$parameters[0].'#',$contents)!=0)
 							{
-								$output.=$zone.':'.$page."\n";
+								$output.=$zone.':'.basename($page,'.txt')."\n";
 							}
 						}
 					}

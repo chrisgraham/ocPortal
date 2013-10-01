@@ -38,10 +38,24 @@ function init__site()
 	$NON_CANONICAL_PARAMS=array('wide_high','wide','wide_print','filtered','utheme','active_filter','redirected','redirect_url','redirect','redirect_passon');
 	if (function_exists('get_value'))
 	{
-		$canonical_keep_params=explode(',',is_null(get_value('canonical_keep_params'))?'':get_value('canonical_keep_params'));
+		$is_non_canonical=false;
+		$canonical_keep_params=explode(',',is_null(get_value('canonical_keep_params'))?'keep_devtest':get_value('canonical_keep_params'));
 		foreach (array_keys($_GET)+array('keep_session'/*may be inserted later*/) as $key)
 		{
-			if ((is_string($key)) && (substr($key,0,5)=='keep_') && (!in_array($key,$canonical_keep_params))) $NON_CANONICAL_PARAMS[]=$key;
+			if ((is_string($key)) && (substr($key,0,5)=='keep_') && (!in_array($key,$canonical_keep_params)))
+			{
+				$NON_CANONICAL_PARAMS[]=$key;
+				$is_non_canonical=true;
+			}
+		}
+		if (($is_non_canonical) && (get_bot_type()!==NULL)) // Force bots onto the canonical URL if there were non-standard keep parameters, as they may ignore even the canonical meta tag.
+		{
+			$non_canonical=array();
+			if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
+			set_http_status_code('301');
+			header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
+			header('Location: '.get_self_url(true,false,$non_canonical));
+			exit();
 		}
 	}
 
