@@ -72,7 +72,7 @@ class Block_main_personal_galleries_list
 		// Render galleries
 		foreach ($rows as $i=>$row)
 		{
-			$galleries->attach(render_gallery_box($row,'root',false,get_module_zone('galleries'),false,false,false,false));
+			$galleries->attach(render_gallery_box($row,'root',false,get_module_zone('galleries'),false,false,false,false,NULL,false,'main_personal_galleries_list'));
 			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id,$member_id_viewing);
 		}
 

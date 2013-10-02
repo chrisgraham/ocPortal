@@ -1,5 +1,6 @@
 {$SET,support_mass_select,cms_news}
 
+{$SET,has_mass_select,0}
 {+START,IF_NON_EMPTY,{RECENT_BLOG_POSTS}}
 	{RECENT_BLOG_POSTS}
 

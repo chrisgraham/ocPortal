@@ -4,6 +4,8 @@
 			TYPE=news
 			ID={ID}
 		{+END}
+
+		{$INC,has_mass_select}
 	{+END}
 
 	<h3>
