@@ -120,6 +120,7 @@ For these situations it is best to simply turn the WYSIWYG editor off. You can d
 [code]
 {$,page hint: no_wysiwyg}
 [/code]
+If you turn off the WYSIWYG editor when editing something, ocPortal may actually add this automatically. You may notice then that the enable/disable button disappears from alongside that field. This is to stop other content editors going in, and then accidentally corrupting carefully constructed Comcode via WYSIWYG.
 
 [concepts
  1_key="WYSIWYG"     1_value="What You See Is What You Get; the term for document editors where the editor's editing interface mirrors the appearance of the final document."

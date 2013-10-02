@@ -110,8 +110,8 @@ function copy_permission_presets(name,value,just_track)
 
 	var made_change=false;
 
-	var usual_suspects=['bypass_validation_xrange_content','edit_xrange_content','edit_own_xrange_content','delete_xrange_content','delete_own_xrange_content','submit_xrange_content'];
-	var access=[2,3,2,3,2,1]; // The minimum access level that turns on each of the above permissions
+	var usual_suspects=['bypass_validation_xrange_content','edit_xrange_content','edit_own_xrange_content','delete_xrange_content','delete_own_xrange_content','submit_xrange_content','edit_cat_xrange_content'];
+	var access=[2,3,2,3,2,1,3]; // The minimum access level that turns on each of the above permissions
 
 	var holder=document.getElementById(name+'_sp_container');
 	var elements=holder.getElementsByTagName('select');

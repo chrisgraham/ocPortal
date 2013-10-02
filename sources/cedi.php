@@ -390,7 +390,7 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 				$insbreadcrumbs->attach(hyperlink($url,escape_html($current_title),false,false,$this_link_virtual_root?do_lang_tempcode('VIRTUAL_ROOT'):do_lang_tempcode('GO_BACKWARDS_TO',$current_title),NULL,NULL,'up'));
 			} else
 			{
-				$insbreadcrumbs->attach($current_title);
+				$insbreadcrumbs->attach(protect_from_escaping('<span>'.escape_html($current_title).'</span>'));
 			}
 		}
 
