@@ -1135,10 +1135,9 @@ class ocp_tempcode
 	 * Parse the current tempcode object, then echo it to the browser.
 	 *
 	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current users language)
-	 * @param  mixed				Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
 	 * @return string				Blank string. Allows chaining within echo statements
 	 */
-	function evaluate_echo($lang=NULL,$_escape=false)
+	function evaluate_echo($lang=NULL)
 	{
 		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
 
@@ -1151,7 +1150,6 @@ class ocp_tempcode
 		foreach ($this->bits as $bit)
 		{
 			$bit_0=$bit[0];
-			if ($_escape!==false) array_unshift($bit_0,$_escape);
 
 			if ($bit[1]==TC_KNOWN) // Just pick up the string
 			{
@@ -1180,7 +1178,7 @@ class ocp_tempcode
 								if (!isset($decode_bit->fresh)) $decode_bit->fresh=false;
 								$this->children[]=array($decode_bit->codename,$decode_bit->children,$decode_bit->fresh);
 							}
-							$bit_3[$i]=$decode_bit->evaluate($lang,false);
+							$bit_3[$i]=$decode_bit->evaluate($lang);
 						}
 					}
 				}
@@ -1240,10 +1238,9 @@ class ocp_tempcode
 	 * Parses the current tempcode object, then return the parsed string
 	 *
 	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current user's language)
-	 * @param  mixed				Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
 	 * @return string				The evaluated thing. Voila, it's all over!
 	 */
-	function evaluate($lang=NULL,$_escape=false)
+	function evaluate($lang=NULL)
 	{
 		global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$RECORD_TEMPLATES_TREE,$SIMPLE_ESCAPED,$EVALUATE_LANG,$EVALUATE_ESCAPE;
 
@@ -1253,7 +1250,6 @@ class ocp_tempcode
 		foreach ($this->bits as $bit)
 		{
 			$bit_0=$bit[0];
-			if ($_escape!==false) array_unshift($bit_0,$_escape);
 
 			if ($bit[1]==TC_KNOWN) // Just pick up the string
 			{
@@ -1282,7 +1278,7 @@ class ocp_tempcode
 								if (!isset($decode_bit->fresh)) $decode_bit->fresh=false;
 								$this->children[]=array($decode_bit->codename,$decode_bit->children,$decode_bit->fresh);
 							}
-							$bit_3[$i]=$decode_bit->evaluate($lang,false);
+							$bit_3[$i]=$decode_bit->evaluate($lang);
 						}
 					}
 				}

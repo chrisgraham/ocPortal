@@ -2537,7 +2537,9 @@ function ecv_BLOCK($lang,$escaped,$param)
 		{
 			global $BLOCKS_CACHE;
 			if (isset($BLOCKS_CACHE[serialize($param_2)])) // Will always be set
+			{
 				$value=$BLOCKS_CACHE[serialize($param_2)]->evaluate();
+			}
 		}
 	}
 

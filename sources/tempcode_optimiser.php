@@ -46,7 +46,8 @@ function optimise_tempcode(&$ob)
 		$ob->seq_parts=array($ob->seq_parts[0]);
 	}
 
-	// Remove unused bindings
+	// Remove unused bindings (we don't do inclusion tests individual seq_parts, as the binding sets are often shared via references)
+	$found=array();
 	foreach ($ob->seq_parts as &$seq_part_group)
 	{
 		foreach ($seq_part_group as &$seq_part)
@@ -54,11 +55,29 @@ function optimise_tempcode(&$ob)
 			if ((($seq_part[2]==TC_KNOWN) || ($seq_part[2]==TC_PARAMETER)) && (isset($ob->code_to_preexecute[$seq_part[0]])))
 			{
 				$code=$ob->code_to_preexecute[$seq_part[0]];
-				foreach ($seq_part[1] as $key=>$val)
+				foreach ($seq_part[1] as $key=>$_)
 				{
 					if (is_integer($key)) $key=strval($key);
 
-					if (strpos($code,'(\$bound_'.$key.')')===false)
+					if (strpos($code,'\$bound_'.$key)!==false)
+					{
+						$found[$key]=true;
+					}
+				}
+			}
+		}
+	}
+	foreach ($ob->seq_parts as &$seq_part_group)
+	{
+		foreach ($seq_part_group as &$seq_part)
+		{
+			if ((($seq_part[2]==TC_KNOWN) || ($seq_part[2]==TC_PARAMETER)) && (isset($ob->code_to_preexecute[$seq_part[0]])))
+			{
+				foreach ($seq_part[1] as $key=>$_)
+				{
+					if (is_integer($key)) $key=strval($key);
+
+					if (!isset($found[$key]))
 					{
 						unset($seq_part[1][$key]);
 					}

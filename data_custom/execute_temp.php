@@ -53,4 +53,17 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	header('Content-Type: text/plain');
+	require_lang('authors');
+	$foo=do_template('AUTHOR_MANAGE_SCREEN',array(
+		'TITLE'=>'xxx',
+//		'DEFINE_FORM'=>'yyy',
+//		'MERGE_FORM'=>'zzz',
+	));
+	$foo->evaluate_echo(NULL,true);
+	$foo->evaluate_echo(NULL,true);
+	$foo->evaluate_echo(NULL,true);
+	$foo->evaluate_echo(NULL,true);
+	$foo->singular_bind('DEFINE_FORM','yyy');
+	$foo->evaluate_echo(NULL,true);
 }

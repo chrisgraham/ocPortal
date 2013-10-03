@@ -132,9 +132,6 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 	$wml=false; // removed feature from ocPortal now
 	$print_mode=get_param_integer('wide_print',0)==1;
 
-	static $chr_10=NULL;
-	if ($chr_10===NULL) $chr_10="\n";
-
 	$len=strlen($comcode);
 
 	if ((function_exists('set_time_limit')) && (ini_get('max_execution_time')!='0')) @set_time_limit(300);
@@ -238,7 +235,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 					$space_pos=strpos($ahead,' ');
 					$end_pos=strpos($ahead,']');
 					$lax_end_pos=strpos($ahead,'[');
-					$cl_pos=strpos($ahead,$chr_10);
+					$cl_pos=strpos($ahead,"\n");
 					if ($equal_pos===false) $equal_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
 					if ($space_pos===false) $space_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
 					if ($end_pos===false) $end_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
@@ -324,7 +321,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 
 				if ((($in_html) || ((($in_semihtml) && (!$in_code_tag)) && (($next=='<') || ($next=='>') || ($next=='"')))))
 				{
-					if ($next==$chr_10) ++$NUM_COMCODE_LINES_PARSED;
+					if ($next=="\n") ++$NUM_COMCODE_LINES_PARSED;
 
 					if ((!$comcode_dangerous_html) && ($next=='<')) // Special filtering required
 					{
@@ -435,7 +432,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 									$scan_next=$comcode[$scan_pos];
 									if ($scan_next!='-')
 									{
-										if ($scan_next==$chr_10)
+										if ($scan_next=="\n")
 										{
 											++$NUM_COMCODE_LINES_PARSED;
 											break;
@@ -514,12 +511,12 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 						}
 					}
 
-					if (($next==$chr_10) && ($white_space_area) && ($print_mode) && ($list_indent==0)) // We might need to put some queued up stuff here: when we print, we can't float thumbnails
+					if (($next=="\n") && ($white_space_area) && ($print_mode) && ($list_indent==0)) // We might need to put some queued up stuff here: when we print, we can't float thumbnails
 					{
 						$tag_output->attach($queued_tempcode);
 						$queued_tempcode=new ocp_tempcode();
 					}
-					if (($next==$chr_10) && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode,$pos,3)==' - '))) // Hard-new-lines
+					if (($next=="\n") && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode,$pos,3)==' - '))) // Hard-new-lines
 					{
 						++$NUM_COMCODE_LINES_PARSED;
 						$line_starting=true;
@@ -836,10 +833,10 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 								{
 									if (($pos<$len) && ($comcode[$pos]=='|'))
 									{
-										$end_tbl=strpos($comcode,$chr_10.'|}',$pos);
+										$end_tbl=strpos($comcode,"\n".'|}',$pos);
 										if ($end_tbl!==false)
 										{
-											$end_fst_line_pos=strpos($comcode,$chr_10,$pos);
+											$end_fst_line_pos=strpos($comcode,"\n",$pos);
 											$caption=substr($comcode,$pos+2,max($end_fst_line_pos-$pos-2,0));
 											$pos+=strlen($caption)+1;
 
@@ -1096,7 +1093,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 									{
 										// Find the full link portion in the upcoming Comcode
 										$link_end_pos=strlen($comcode);
-										foreach (array(' ',$chr_10,'[',')','"','>','<','.'.$chr_10,', ','. ',"'",) as $link_terminator_str)
+										foreach (array(' ',"\n",'[',')','"','>','<',".\n",', ','. ',"'",) as $link_terminator_str)
 										{
 											$link_end_pos_x=strpos($comcode,$link_terminator_str,$pos-1);
 											if (($link_end_pos_x!==false) && ($link_end_pos_x<$link_end_pos)) $link_end_pos=$link_end_pos_x;
@@ -1315,7 +1312,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 						{
 							foreach ($_last[1] as $index=>$conv)
 							{
-								$_last[1][$index]=@html_entity_decode(str_replace('<br />',$chr_10,$conv),ENT_QUOTES,get_charset());
+								$_last[1][$index]=@html_entity_decode(str_replace('<br />',"\n",$conv),ENT_QUOTES,get_charset());
 							}
 						}
 
@@ -1348,7 +1345,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 
 						if ($current_tag=='title')
 						{
-							if ((strlen($comcode)>$pos+1) && ($comcode[$pos]==$chr_10) && ($comcode[$pos+1]==$chr_10)) // Linux newline
+							if ((strlen($comcode)>$pos+1) && ($comcode[$pos]=="\n") && ($comcode[$pos+1]=="\n")) // Linux newline
 							{
 								$NUM_COMCODE_LINES_PARSED+=2;
 								$pos+=2;

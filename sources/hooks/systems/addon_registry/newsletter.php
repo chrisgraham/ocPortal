@@ -154,7 +154,7 @@ class Hook_addon_registry_newsletter
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>lorem_sentence()
 			));
-			$automatic[]=$tmp->evaluate(placeholder_number());
+			$automatic[]=$tmp->evaluate();
 		}
 
 		$content='';

@@ -85,9 +85,14 @@ function init__tempcode()
 
 	global $OUTPUT_STREAMING;
 	$OUTPUT_STREAMING=(get_option('output_streaming')=='1');
-	if (get_param('special_page_type','view')!='') $OUTPUT_STREAMING=false;
+	if (get_param('special_page_type','view')!='view') $OUTPUT_STREAMING=false;
 	if (get_param_integer('keep_markers',0)==1) $OUTPUT_STREAMING=false;
 	if (get_param_integer('show_edit_links',0)==1) $OUTPUT_STREAMING=false;
+
+	global $STOP_IF_STUCK,$STUCK_ABORT_SIGNAL,$TEMPCODE_OUTPUT_STARTED;
+	$STOP_IF_STUCK=false;
+	$STUCK_ABORT_SIGNAL=false;
+	$TEMPCODE_OUTPUT_STARTED=false;
 }
 
 /**
@@ -130,20 +135,6 @@ function fast_uniqid()
 }
 
 /**
- * Get a string (natural for Tempcode's stream-based processing-model) representation of a bound Tempcode variable (LEGACY)
- *
- * @param  mixed				Variable (or NULL if not set)
- * @param  ID_TEXT			Parameter name
- * @param  ID_TEXT			Template name
- * @return string				Value
- */
-function output_tempcode_parameter($var,$parameter,$template_name)
-{
-	$origin=$parameter.'/'.$template_name;
-	return otp($var,$origin);
-}
-
-/**
  * Get a string (natural for Tempcode's stream-based processing-model) representation of a bound Tempcode variable
  *
  * @param  mixed				Variable (or NULL if not set)
@@ -155,6 +146,11 @@ function otp($var,$origin='')
 	switch (gettype($var))
 	{
 		case 'NULL':
+			if ($GLOBALS['STOP_IF_STUCK'])
+			{
+				$GLOBALS['STUCK_ABORT_SIGNAL']=true;
+				return '';
+			}
 			return missing_template_parameter($origin);
 		case 'string':
 			return $var;
@@ -215,7 +211,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 
 	$myfunc='do_runtime_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
 	$funcdef="\$tpl_funcs['$myfunc']=\"foreach (\\\$parameters as \\\$i=>\\\$p) { if (is_object(\\\$p)) \\\$parameters[\\\$i]=\\\$p->evaluate(); } echo ";
-	if ($name=='?') $name='TERNARY';
+	if ($name=='?' && $type==TC_SYMBOL) $name='TERNARY';
 	if (($type==TC_SYMBOL) && (function_exists('ecv_'.$name)))
 	{
 		$funcdef.="ecv_".$name."(\\\$cl,".($_escaping).",\\\$parameters);\";\n";
@@ -289,7 +285,7 @@ function closure_eval($code,$parameters)
 		return do_lang('NO_PHP_IN_TEMPLATES');
 	}
 
-	$ret=eval($code);
+	$ret=$GLOBALS['DEV_MODE']?debug_eval($code):eval($code);
 	if (!is_string($ret)) $ret=@strval($ret);
 	return $ret;
 }
@@ -1027,6 +1023,8 @@ class ocp_tempcode
 	var $seq_parts; // List of list of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name			We use a 2D list to make attach ops very fast
 	var $preprocessable_bits; // List of tuples: escape (ignored), type (e.g. TC_SYMBOL), name, parameters
 	var $pure_lang;
+	var $evaluate_echo_offset_group=0;
+	var $evaluate_echo_offset_inner=0;
 
 	var $codename=':container'; // The name of the template it came from
 
@@ -1050,42 +1048,43 @@ class ocp_tempcode
 		{
 			$this->code_to_preexecute=$details[0];
 			$this->seq_parts=$details[1];
-			$pp_bits=array();
 
-			foreach ($this->seq_parts as $seq_parts_group)
+			if (!$GLOBALS['OUTPUT_STREAMING'])
 			{
-				foreach ($seq_parts_group as $seq_part)
+				$pp_bits=array();
+
+				foreach ($this->seq_parts as $seq_parts_group)
 				{
-					if ($seq_part[2]==TC_SYMBOL)
+					foreach ($seq_parts_group as $seq_part)
 					{
-						switch ($seq_part[3])
+						if ($seq_part[2]==TC_SYMBOL)
 						{
-							case 'REQUIRE_CSS':
-							case 'REQUIRE_JAVASCRIPT':
-							case 'FACILITATE_AJAX_BLOCK_CALL':
-							case 'JS_TEMPCODE':
-							case 'CSS_TEMPCODE':
-							case 'SET':
-							case 'BLOCK':
-							case 'PAGE_LINK':
-							case 'LOAD_PAGE':
-							case 'LOAD_PANEL':
-								$pp_bits[]=array(array(),TC_SYMBOL,$seq_part[3],$seq_part[1]);
-								break;
+							switch ($seq_part[3])
+							{
+								case 'REQUIRE_CSS':
+								case 'REQUIRE_JAVASCRIPT':
+								case 'FACILITATE_AJAX_BLOCK_CALL':
+								case 'JS_TEMPCODE':
+								case 'CSS_TEMPCODE':
+								case 'SET':
+								case 'BLOCK':
+								case 'PAGE_LINK':
+								case 'LOAD_PAGE':
+								case 'LOAD_PANEL':
+									$pp_bits[]=array(array(),TC_SYMBOL,$seq_part[3],$seq_part[1]);
+									break;
+							}
 						}
-					}
-					elseif ($seq_part[2]==TC_DIRECTIVE)
-					{
-						switch ($seq_part[3])
+						elseif ($seq_part[2]==TC_DIRECTIVE)
 						{
-							case 'INCLUDE':
-							case 'FRACTIONAL_EDITABLE':
-								$pp_bits[]=array(array(),TC_DIRECTIVE,$seq_part[3],$seq_part[1]);
-								break;
+							switch ($seq_part[3])
+							{
+								case 'INCLUDE':
+								case 'FRACTIONAL_EDITABLE':
+									$pp_bits[]=array(array(),TC_DIRECTIVE,$seq_part[3],$seq_part[1]);
+									break;
+							}
 						}
-					}
-					if (!$GLOBALS['OUTPUT_STREAMING'])
-					{
 						foreach ($seq_part[1] as $param)
 						{
 							if (isset($param->preprocessable_bits)) // If is a Tempcode object
@@ -1095,9 +1094,12 @@ class ocp_tempcode
 						}
 					}
 				}
-			}
 
-			$this->preprocessable_bits=$pp_bits;
+				$this->preprocessable_bits=$pp_bits;
+			} else
+			{
+				$this->preprocessable_bits=array();
+			}
 		}
 
 		if ($GLOBALS['RECORD_TEMPLATES_TREE'])
@@ -1118,7 +1120,7 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Decache the object.
+	 * Remove any internal evaluation cachings within the object.
 	 */
 	function decache()
 	{
@@ -1133,40 +1135,6 @@ class ocp_tempcode
 			}
 		}
 		$this->cached_output=NULL;
-	}
-
-	/**
-	 * Scan this Tempcode for anything that needs to be symbol-preprocessed
-	 */
-	function handle_symbol_preprocessing()
-	{
-		if (!$GLOBALS['OUTPUT_STREAMING']) return;
-		if (isset($this->preprocessed)) return;
-
-		foreach ($this->preprocessable_bits as $seq_part)
-			handle_symbol_preprocessing($seq_part,$this->children);
-
-		$this->preprocessed=true;
-	}
-
-	/**
-	 * Find whether a variable within this Tempcode is parameterless.
-	 *
-	 * @param  integer			Offset to the variable
-	 * @return boolean			Whether it is parameterless
-	 */
-	function parameterless($at)
-	{
-		$i=0;
-		foreach ($this->seq_parts as $seq_parts_group)
-		{
-			foreach ($seq_parts_group as $seq_part)
-			{
-				if ($i==$at) return ($seq_part[1]==array());
-				$i++;
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -1265,112 +1233,6 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty. This is also useful if you want to avoid early evaluation, which will mess up GET/SET flow.
-	 *
-	 * @return boolean		Whether it is entirely empty
-	 */
-	function is_empty_shell()
-	{
-		foreach ($this->seq_parts as $seq_parts_group)
-		{
-			if (isset($seq_parts_group[0])) return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Find whether the tempcode object is blank or not.
-	 *
-	 * @return boolean		Whether the tempcode object is empty
-	 */
-	function is_empty()
-	{
-		if ($this->cached_output!==NULL) return strlen($this->cached_output)==0;
-		if (isset($this->is_empty)) return $this->is_empty;
-
-		if ($this->is_empty_shell()) // Optimisation: empty
-		{
-			$this->is_empty=true;
-			return true;
-		}
-
-		ob_start();
-
-		global $NO_EVAL_CACHE,$XSS_DETECT,$USER_LANG_CACHED,$KEEP_TPL_FUNCS,$MEMORY_OVER_SPEED,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
-
-		if ($XSS_DETECT)
-		{
-			$before=@ini_get('ocproducts.xss_detect');
-			@ini_set('ocproducts.xss_detect','0');
-		}
-
-		$no_eval_cache_before=$NO_EVAL_CACHE;
-
-		if (isset($USER_LANG_CACHED))
-		{
-			$current_lang=$USER_LANG_CACHED;
-		} else
-		{
-			if (!function_exists('user_lang')) require_code('lang');
-			$current_lang=user_lang();
-		}
-		$cl=$current_lang;
-
-		$first_of_long=isset($this->seq_parts[0][3]) || isset($this->seq_parts[3]); // We set this to know not to dig right through to determine emptiness, as this wastes cache memory (it's a tradeoff)
-		$tpl_funcs=$KEEP_TPL_FUNCS;
-
-		foreach ($this->seq_parts as $seq_parts_group)
-		{
-			foreach ($seq_parts_group as $seq_part)
-			{
-				$seq_part_0=$seq_part[0];
-				if (!isset($tpl_funcs[$seq_part_0]))
-				{
-					foreach ($this->code_to_preexecute as $code)
-					{
-						if (eval($code)===false) fatal_exit(@strval($php_errormsg));
-					}
-				}
-				if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
-				{
-					call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
-				} else
-				{
-					$parameters=$seq_part[1];
-					if (eval($tpl_funcs[$seq_part_0])===false)
-					{
-						fatal_exit(@strval($php_errormsg).' - '.$tpl_funcs[$seq_part_0]);
-					}
-				}
-
-				if ((($first_of_long) || ($MEMORY_OVER_SPEED)) && (ob_get_length()>0)) // We only quick exit on the first iteration, as we know we likely didn't spend much time getting to it- anything more and we finish so that we can cache for later use by evaluate/evaluate_echo
-				{
-					@ob_end_clean();
-					if (!$no_eval_cache_before)
-						$NO_EVAL_CACHE=$no_eval_cache_before;
-					if ($XSS_DETECT)
-						@ini_set('ocproducts.xss_detect',$before);
-					$this->is_empty=false;
-					return false;
-				}
-
-				$first_of_long=false;
-			}
-		}
-
-		$tmp=ob_get_clean();
-		if ((!$MEMORY_OVER_SPEED) && (!$NO_EVAL_CACHE))
-			$this->cached_output=$tmp; // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
-		if (!$no_eval_cache_before)
-			$NO_EVAL_CACHE=$no_eval_cache_before;
-		if ($XSS_DETECT)
-			@ini_set('ocproducts.xss_detect',$before);
-		$ret=($tmp=='');
-		$this->is_empty=$ret;
-		return $ret;
-	}
-
-	/**
 	 * Assemble the current tempcode object into a single serialised (compiled) tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
 	 *
 	 * @return string			The assembly result
@@ -1403,14 +1265,15 @@ class ocp_tempcode
 
 		$this->cached_output=NULL;
 		list($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->pure_lang,$this->code_to_preexecute)=$result;
+		if ($GLOBALS['OUTPUT_STREAMING']) $this->preprocessable_bits=array();
 
 		if ($forced_reload_details[6]===NULL) $forced_reload_details[6]='';
 		if ((count($this->code_to_preexecute)>10) && ($GLOBALS['CACHE_TEMPLATES']))
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
 			$_file=(strpos($file,'\'')===false)?$file:php_addslashes($file);
-			$this->code_to_preexecute[]='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
-			else { eval($result[4]); unset($result); }';
+			$this->code_to_preexecute[]='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } debug_eval($tmp->code_to_preexecute); unset($tmp); }
+			else { debug_eval($result[4]); unset($result); }';
 			// NB: $GLOBALS[\'CACHE_TEMPLATES\']=false; is in case the template cache has been detected as broken, it prevents this branch running as it would fail again
 		}
 
@@ -1460,7 +1323,7 @@ class ocp_tempcode
 			$this->children=array();
 		}
 
-		$result=eval($raw_data);
+		$result=debug_eval($raw_data);
 		if ($result===false)
 		{
 			if ($allow_failure) return false;
@@ -1469,6 +1332,7 @@ class ocp_tempcode
 
 		$this->cached_output=NULL;
 		list($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->pure_lang,$this->code_to_preexecute)=$result;
+		if ($GLOBALS['OUTPUT_STREAMING']) $this->preprocessable_bits=array();
 
 		if ($GLOBALS['XSS_DETECT'])
 		{
@@ -1479,30 +1343,23 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Replace the named parameter with a specific value. Hardly used, but still important. Note that this will bind to all kinds of things that might not normally take named parameters, like symbols; this should not cause problems though.
+	 * Find whether a variable within this Tempcode is parameterless.
 	 *
-	 * @param  string			Named parameter
-	 * @param  tempcode		Specific value
+	 * @param  integer			Offset to the variable
+	 * @return boolean			Whether it is parameterless
 	 */
-	function singular_bind($parameter,$value)
+	function parameterless($at)
 	{
-		$this->cached_output=NULL;
-
-		if ($this->seq_parts==array()) return;
-
-		foreach ($this->seq_parts as &$seq_parts_group)
+		$i=0;
+		foreach ($this->seq_parts as $seq_parts_group)
 		{
-			foreach ($seq_parts_group as &$seq_part)
+			foreach ($seq_parts_group as $seq_part)
 			{
-				if ((($seq_part[0][0]!='s') || (substr($seq_part[0],0,14)!='string_attach_')) && ($seq_part[2]!=TC_LANGUAGE_REFERENCE))
-					$seq_part[1][$parameter]=$value;
+				if ($i==$at) return ($seq_part[1]==array());
+				$i++;
 			}
 		}
-
-		if (!$GLOBALS['OUTPUT_STREAMING'])
-		{
-			foreach ($value->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
-		}
+		return false;
 	}
 
 	/**
@@ -1598,59 +1455,164 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Parse the current tempcode object, then echo it to the browser.
+	 * Replace the named parameter with a specific value. Hardly used, but still important. Note that this will bind to all kinds of things that might not normally take named parameters, like symbols; this should not cause problems though.
 	 *
-	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current users language)
-	 * @param  mixed				Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
-	 * @return string				Blank string. Allows chaining within echo statements
+	 * @param  string			Named parameter
+	 * @param  tempcode		Specific value
 	 */
-	function evaluate_echo($current_lang=NULL,$_escape=false)
+	function singular_bind($parameter,$value)
 	{
-		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+		$this->cached_output=NULL;
 
-		if ($this->cached_output!==NULL)
+		if ($this->seq_parts==array()) return;
+
+		foreach ($this->seq_parts as &$seq_parts_group)
 		{
-			echo $this->cached_output;
-			$this->cached_output=NULL; // Won't be needed again
-			return '';
+			foreach ($seq_parts_group as &$seq_part)
+			{
+				if ((($seq_part[0][0]!='s') || (substr($seq_part[0],0,14)!='string_attach_')) && ($seq_part[2]!=TC_LANGUAGE_REFERENCE))
+					$seq_part[1][$parameter]=$value;
+			}
 		}
+
+		if (!$GLOBALS['OUTPUT_STREAMING'])
+		{
+			if (isset($value->preprocessable_bits)) // Is Tempcode
+			{
+				foreach ($value->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
+			}
+		}
+	}
+
+	/**
+	 * Scan this Tempcode for anything that needs to be symbol-preprocessed
+	 */
+	function handle_symbol_preprocessing()
+	{
+		if (!$GLOBALS['OUTPUT_STREAMING']) return;
+		if (isset($this->preprocessed)) return;
+
+		foreach ($this->preprocessable_bits as $seq_part)
+			handle_symbol_preprocessing($seq_part,$this->children);
+
+		$this->preprocessed=true;
+	}
+
+	/**
+	 * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty. This is also useful if you want to avoid early evaluation, which will mess up GET/SET flow.
+	 *
+	 * @return boolean		Whether it is entirely empty
+	 */
+	function is_empty_shell()
+	{
+		foreach ($this->seq_parts as $seq_parts_group)
+		{
+			if (isset($seq_parts_group[0])) return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Find whether the tempcode object is blank or not.
+	 *
+	 * @return boolean		Whether the tempcode object is empty
+	 */
+	function is_empty()
+	{
+		if ($this->cached_output!==NULL) return strlen($this->cached_output)==0;
+		if (isset($this->is_empty)) return $this->is_empty;
+
 		if ($this->is_empty_shell()) // Optimisation: empty
 		{
-			$this->cached_output='';
-			return '';
+			$this->is_empty=true;
+			return true;
 		}
 
+		ob_start();
+
+		global $NO_EVAL_CACHE,$XSS_DETECT,$USER_LANG_CACHED,$KEEP_TPL_FUNCS,$MEMORY_OVER_SPEED,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE,$DEV_MODE;
+
+		if ($XSS_DETECT)
+		{
+			$before=@ini_get('ocproducts.xss_detect');
+			@ini_set('ocproducts.xss_detect','0');
+		}
+
+		$no_eval_cache_before=$NO_EVAL_CACHE;
+
+		if (isset($USER_LANG_CACHED))
+		{
+			$current_lang=$USER_LANG_CACHED;
+		} else
+		{
+			if (!function_exists('user_lang')) require_code('lang');
+			$current_lang=user_lang();
+		}
 		$cl=$current_lang;
 
-		global $KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
+		$first_of_long=isset($this->seq_parts[0][3]) || isset($this->seq_parts[3]); // We set this to know not to dig right through to determine emptiness, as this wastes cache memory (it's a tradeoff)
 		$tpl_funcs=$KEEP_TPL_FUNCS;
+
 		foreach ($this->seq_parts as $seq_parts_group)
 		{
 			foreach ($seq_parts_group as $seq_part)
 			{
 				$seq_part_0=$seq_part[0];
-				if (!isset($tpl_funcs[$seq_part_0]))
+				if ($DEV_MODE)
 				{
-					foreach ($this->code_to_preexecute as $code)
+					if (!isset($tpl_funcs[$seq_part_0]))
 					{
-						if (eval($code)===false) fatal_exit(@strval($php_errormsg));
+						debug_eval($this->code_to_preexecute[$seq_part_0]);
 					}
-				}
-				if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
-				{
-					call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					{
+						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+					} else
+					{
+						$parameters=$seq_part[1];
+						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+					}
 				} else
 				{
-					$parameters=$seq_part[1];
-					if (eval($tpl_funcs[$seq_part_0])===false)
+					if (!isset($tpl_funcs[$seq_part_0]))
 					{
-						fatal_exit(@strval($php_errormsg).' - '.$tpl_funcs[$seq_part_0]);
+						eval($this->code_to_preexecute[$seq_part_0]);
+					}
+					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					{
+						call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+					} else
+					{
+						$parameters=$seq_part[1];
+						eval($tpl_funcs[$seq_part_0]);
 					}
 				}
+
+				if ((($first_of_long) || ($MEMORY_OVER_SPEED)) && (ob_get_length()>0)) // We only quick exit on the first iteration, as we know we likely didn't spend much time getting to it- anything more and we finish so that we can cache for later use by evaluate/evaluate_echo
+				{
+					@ob_end_clean();
+					if (!$no_eval_cache_before)
+						$NO_EVAL_CACHE=$no_eval_cache_before;
+					if ($XSS_DETECT)
+						@ini_set('ocproducts.xss_detect',$before);
+					$this->is_empty=false;
+					return false;
+				}
+
+				$first_of_long=false;
 			}
 		}
 
-		return '';
+		$tmp=ob_get_clean();
+		if ((!$MEMORY_OVER_SPEED) && (!$NO_EVAL_CACHE) && (!$GLOBALS['STUCK_ABORT_SIGNAL']))
+			$this->cached_output=$tmp; // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
+		if (!$no_eval_cache_before)
+			$NO_EVAL_CACHE=$no_eval_cache_before;
+		if ($XSS_DETECT)
+			@ini_set('ocproducts.xss_detect',$before);
+		$ret=($tmp=='');
+		$this->is_empty=$ret;
+		return $ret;
 	}
 
 	/**
@@ -1667,11 +1629,9 @@ class ocp_tempcode
 	 * Parses the current tempcode object, then return the parsed string
 	 *
 	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current user's language)
-	 * @param  mixed				Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
-	 * @param  ?integer			Evaluate at least this much (NULL: evaluate all)
 	 * @return string				The evaluated thing. Voila, it's all over!
 	 */
-	function evaluate($current_lang=NULL,$_escape=false,$up_to=NULL)
+	function evaluate($current_lang=NULL)
 	{
 		if (isset($this->cached_output)) return $this->cached_output;
 		if ($this->is_empty_shell()) // Optimisation: empty
@@ -1680,7 +1640,7 @@ class ocp_tempcode
 			return '';
 		}
 
-		global $NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$USER_LANG_CACHED,$XSS_DETECT,$KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
+		global $NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$USER_LANG_CACHED,$XSS_DETECT,$KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE,$DEV_MODE;
 
 		ob_start();
 
@@ -1704,39 +1664,39 @@ class ocp_tempcode
 		$cl=$current_lang;
 
 		$tpl_funcs=$KEEP_TPL_FUNCS;
-		$doing_up_to=isset($up_to);
 		$no_eval_cache_before=$NO_EVAL_CACHE;
 		foreach ($this->seq_parts as $seq_parts_group)
 		{
 			foreach ($seq_parts_group as $seq_part)
 			{
-				if (($doing_up_to) && (ob_get_length()>$up_to))
-				{
-					$ret=ob_get_clean();
-
-					if ($XSS_DETECT)
-						@ini_set('ocproducts.xss_detect',$before);
-					return $ret;
-				}
-
 				$seq_part_0=$seq_part[0];
-				if (!isset($tpl_funcs[$seq_part_0]))
+				if ($DEV_MODE)
 				{
-					foreach ($this->code_to_preexecute as $code)
+					if (!isset($tpl_funcs[$seq_part_0]))
 					{
-						if (eval($code)===false) fatal_exit(@strval($php_errormsg));
+						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
 					}
-				}
-				if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
-				{
-					call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					{
+						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+					} else
+					{
+						$parameters=$seq_part[1];
+						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+					}
 				} else
 				{
-					$parameters=$seq_part[1];
-
-					if (eval($tpl_funcs[$seq_part_0])===false)
+					if (!isset($tpl_funcs[$seq_part_0]))
 					{
-						fatal_exit(@strval($php_errormsg).' - '.$tpl_funcs[$seq_part_0]);
+						eval($this->code_to_preexecute[$seq_part_0]);
+					}
+					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					{
+						call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+					} else
+					{
+						$parameters=$seq_part[1];
+						eval($tpl_funcs[$seq_part_0]);
 					}
 				}
 			}
@@ -1747,12 +1707,124 @@ class ocp_tempcode
 
 		$ret=ob_get_clean();
 
-		if (!$NO_EVAL_CACHE && !$MEMORY_OVER_SPEED)
+		if ((!$MEMORY_OVER_SPEED) && (!$NO_EVAL_CACHE) && (!$GLOBALS['STUCK_ABORT_SIGNAL']))
 			$this->cached_output=$ret; // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
 
 		if (!$no_eval_cache_before) $NO_EVAL_CACHE=$no_eval_cache_before;
 
 		return $ret;
+	}
+
+	/**
+	 * Parse the current tempcode object, then echo it to the browser.
+	 *
+	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current users language)
+	 * @param  boolean			Whether to stop if we are stuck of a seq_part with parameters yet-unbound, and to continue from last resume point
+	 * @return string				Blank string. Allows chaining within echo statements
+	 */
+	function evaluate_echo($current_lang=NULL,$stop_if_stuck=false)
+	{
+		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+
+		if ($this->cached_output!==NULL)
+		{
+			echo $this->cached_output;
+			$this->cached_output=NULL; // Won't be needed again
+			return '';
+		}
+		if ($this->is_empty_shell()) // Optimisation: empty
+		{
+			$this->cached_output='';
+			return '';
+		}
+
+		$cl=$current_lang;
+
+		global $KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE,$STOP_IF_STUCK,$STUCK_ABORT_SIGNAL,$DEV_MODE,$TEMPCODE_OUTPUT_STARTED;
+		$TEMPCODE_OUTPUT_STARTED=true;
+		$tpl_funcs=$KEEP_TPL_FUNCS;
+		$seq_parts_group_cnt=count($this->seq_parts);
+		if ($stop_if_stuck)
+		{
+			$i=&$this->evaluate_echo_offset_group;
+			$stop_if_stuck_bak=$STOP_IF_STUCK;
+			$STOP_IF_STUCK=true;
+			ob_start();
+		} else
+		{
+			$i=0;
+		}
+		$first_i=true;
+		for (;$i<$seq_parts_group_cnt;$i++)
+		{
+			$seq_parts_group=$this->seq_parts[$i];
+
+			$seq_parts_cnt=count($seq_parts_group);
+			if ($stop_if_stuck && $first_i)
+			{
+				$j=&$this->evaluate_echo_offset_inner;
+				$first_i=false;
+			} else
+			{
+				$j=0;
+			}
+			for (;$j<$seq_parts_cnt;$j++)
+			{
+				$seq_part=$seq_parts_group[$j];
+
+				$seq_part_0=$seq_part[0];
+				if ($DEV_MODE)
+				{
+					if (!isset($tpl_funcs[$seq_part_0]))
+					{
+						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
+					}
+					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					{
+						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+					} else
+					{
+						$parameters=$seq_part[1];
+						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+					}
+				} else
+				{
+					if (!isset($tpl_funcs[$seq_part_0]))
+					{
+						eval($this->code_to_preexecute[$seq_part_0]);
+					}
+					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					{
+						call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+					} else
+					{
+						$parameters=$seq_part[1];
+						eval($tpl_funcs[$seq_part_0]);
+					}
+				}
+
+				if ($stop_if_stuck)
+				{
+					if ($STUCK_ABORT_SIGNAL)
+					{
+						$STUCK_ABORT_SIGNAL=false;
+						ob_clean();
+						break 2;
+					} else
+					{
+						ob_flush();
+					}
+				}
+			}
+		}
+
+		if ($stop_if_stuck)
+		{
+			$STOP_IF_STUCK=$stop_if_stuck_bak;
+			ob_end_flush();
+		}
+
+		return '';
 	}
 }
 
@@ -1772,4 +1844,46 @@ function recall_named_function($id,$parameters,$code)
 		$GLOBALS[$k]=create_function($parameters,$code);
 	}
 	return $GLOBALS[$k];
+}
+
+/**
+ * Evaluate some PHP, with ability to better debug.
+ *
+ * @param  string				Code to evaluate
+ * @param  ?array				Evaluation code context (NULL: N/A)
+ * @param  ?array				Evaluation parameters (NULL: N/A)
+ * @param  ?ID_TEXT			Language (NULL: N/A)
+ * @return string				Result
+ */
+function debug_eval($code,&$tpl_funcs=NULL,$parameters=NULL,$cl=NULL)
+{
+	global $NO_EVAL_CACHE,$XSS_DETECT,$KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
+
+	if ($code=='') return ''; // Blank eval returns false
+	$result=@eval($code);
+	if ($result===false)
+	{
+		if ($GLOBALS['DEV_MODE'])
+		{
+			$message=(isset($php_errormsg)?($php_errormsg.' - '):'').$code;
+			//@ob_end_clean();@exit('!'.$message.'!');
+			fatal_exit($message);
+		}
+		$result='';
+	}
+	return $result;
+}
+
+/**
+ * Call a PHP function, with ability to better debug.
+ *
+ * @param  string				Function to call
+ * @param  mixed				First parameter
+ * @param  mixed				Second parameter
+ * @param  mixed				Third parameter
+ * @return string				Result
+ */
+function debug_call_user_func($function,$a,$b=NULL,$c=NULL)
+{
+	return call_user_func($function,$a,$b,$c);
 }

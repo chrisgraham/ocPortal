@@ -25,9 +25,10 @@
  *
  * @param  PATH			The relative (to ocPortals base directory) path to the HTML page
  * @param  ?PATH			The file base to load from (NULL: standard)
+ * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
  * @return string			The page
  */
-function load_html_page($string,$file_base=NULL)
+function load_html_page($string,$file_base=NULL,&$out=NULL)
 {
 	if (is_null($file_base)) $file_base=get_file_base();
 
@@ -132,6 +133,9 @@ function load_html_page($string,$file_base=NULL)
 			$html=$matches[1];
 		} else $html='';
 	}
+
+	if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
+		$out->evaluate_echo(NULL,true);
 
 	return $html;
 }

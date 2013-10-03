@@ -33,10 +33,6 @@ function init__tempcode_compiler()
 	global $DIRECTIVES_NEEDING_VARS;
 	$DIRECTIVES_NEEDING_VARS=array('IF_PASSED_AND_TRUE'=>1,'IF_NON_PASSED_OR_FALSE'=>1,'PARAM_INFO'=>1,'IF_NOT_IN_ARRAY'=>1,'IF_IN_ARRAY'=>1,'IMPLODE'=>1,'COUNT'=>1,'IF_ARRAY_EMPTY'=>1,'IF_ARRAY_NON_EMPTY'=>1,'OF'=>1,'INCLUDE'=>1,'LOOP'=>1);
 
-	// These are templates often used multiple times on a single screen. They are loaded as functions, rather than eval'd each time
-	global $FUNC_STYLE_TPL;
-	$FUNC_STYLE_TPL=defined('HIPHOP_PHP')?array():array('CSS_NEED','JAVASCRIPT_NEED','OCF_AUTO_TIME_ZONE_ENTRY','FORM_SCREEN_INPUT_LIST_ENTRY','FORM_SCREEN_INPUT_LINE','FORM_SCREEN_INPUT_PERMISSION','FORM_SCREEN_INPUT_PERMISSION_OVERRIDE','FORM_SCREEN_INPUT_RADIO_LIST_ENTRY','FORM_SCREEN_INPUT_HIDDEN','FORM_SCREEN_INPUT_TICK','FORM_SCREEN_INPUT_TEXT','FORM_SCREEN_FIELD','MENU_BRANCH','MENU_NODE','HYPERLINK','BREADCRUMB_SEPARATOR','RESULTS_TABLE_ENTRY','OCF_TOPIC_POST','POSTER','OCF_FORUM_TOPIC_ROW');
-
 	// Work out what symbols may be compiled out
 	global $COMPILABLE_SYMBOLS;
 	$_compilable_symbols=array(
@@ -331,7 +327,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 									{
 										if (($level_test[3]==PARSE_DIRECTIVE) && (isset($level_test[5][1])) && (isset($level_test[5][1][0])) && ($level_test[5][1][0]=='"LOOP"')) // For a loop, we need to do full evaluation of symbol parameters as it may be bound to a loop variable
 										{
-											$eval=@eval('return array('.$_opener_params.');');
+											$eval=debug_eval('return array('.$_opener_params.');');
 											if (is_array($eval))
 											{
 												$pp_bit=array(array(),TC_SYMBOL,str_replace('"','',$first_param),$eval);
@@ -417,7 +413,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						}
 						if ((isset($COMPILABLE_SYMBOLS[$first_param])) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
 						{
-							$new_line='"'.php_addslashes(eval('return '.$new_line.';')).'"';
+							$new_line='"'.php_addslashes(debug_eval('return '.$new_line.';')).'"';
 						} else
 						{
 							// We want the benefit's of keep_ variables but not with having to do lots of individual URL moniker lookup queries - so use a static URL and KEEP_ symbol combination
@@ -428,7 +424,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								{
 									if (substr($key,0,5)=='keep_') unset($_GET[$key]);
 								}
-								$new_line='"'.php_addslashes(eval('return '.$new_line.';')).'"';
+								$new_line='"'.php_addslashes(debug_eval('return '.$new_line.';')).'"';
 								$_GET=$tmp;
 								$current_level_data[]=$new_line;
 								$current_level_data[]='ecv_KEEP($cl,array('.implode(',',$escaped).'),array("'.((strpos($new_line,'?')===false)?'1':'0').'"))';
@@ -442,7 +438,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_LANGUAGE_REFERENCE).','.$first_param.',array('.$_opener_params.'))';
 						if (($_opener_params=='') && ($escaped==array())) // Optimise it out for simple case?
 						{
-							$looked_up=do_lang(eval('return '.$first_param.';'),NULL,NULL,NULL,$lang,false);
+							$looked_up=do_lang(debug_eval('return '.$first_param.';'),NULL,NULL,NULL,$lang,false);
 							if ($looked_up!==NULL)
 							{
 								if (apply_tempcode_escaping($escaped,$looked_up)==$looked_up)
@@ -497,7 +493,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				// Handle directive nesting
 				if ($past_level_mode==PARSE_DIRECTIVE)
 				{
-					$eval=@eval('return '.$first_param.';');
+					$eval=debug_eval('return '.$first_param.';');
 					if (!is_string($eval)) $eval='';
 					if ($eval=='START') // START
 					{
@@ -554,14 +550,14 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 							if ($j==2) $first_directive_param=implode('.',$directive_opener_params[$j]);
 						}
-						$eval=@eval('return '.implode('.',$directive_opener_params[1]).';');
+						$eval=debug_eval('return '.implode('.',$directive_opener_params[1]).';');
 						if (!is_string($eval)) $eval='';
 						$directive_name=$eval;
 						switch ($directive_name)
 						{
 							case 'INCLUDE':
 							case 'FRACTIONAL_EDITABLE':
-								$eval=@eval('return array('.$directive_params.');');
+								$eval=debug_eval('return array('.$directive_params.');');
 								if (is_array($eval))
 								{
 									$pp_bit=array(array(),TC_DIRECTIVE,str_replace('"','',$directive_name),$eval);
@@ -625,25 +621,25 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								break;
 
 							case 'IF_PASSED':
-								$eval=@eval('return '.$first_directive_param.';');
+								$eval=debug_eval('return '.$first_directive_param.';');
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='(isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')?('.implode('.',$past_level_data).'):\'\')';
 								break;
 
 							case 'IF_NON_PASSED':
-								$eval=@eval('return '.$first_directive_param.';');
+								$eval=debug_eval('return '.$first_directive_param.';');
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='(!isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')?('.implode('.',$past_level_data).'):\'\')';
 								break;
 
 							case 'IF_PASSED_AND_TRUE':
-								$eval=@eval('return '.$first_directive_param.';');
+								$eval=debug_eval('return '.$first_directive_param.';');
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='((isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).') && (otp($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')=="1"))?('.implode('.',$past_level_data).'):\'\')';
 								break;
 
 							case 'IF_NON_PASSED_OR_FALSE':
-								$eval=@eval('return '.$first_directive_param.';');
+								$eval=debug_eval('return '.$first_directive_param.';');
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='((!isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).') || (otp($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')=="0"))?('.implode('.',$past_level_data).'):\'\')';
 								break;
@@ -662,7 +658,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 							case 'INCLUDE':
 								global $FILE_ARRAY;
-								$eval=@eval('return '.$first_directive_param.';');
+								$eval=debug_eval('return '.$first_directive_param.';');
 								if (!is_string($eval)) $eval='';
 								if (($template_name==$eval) || ((!$GLOBALS['SEMI_DEV_MODE']) && (get_param('special_page_type','')=='')) && ($count_directive_opener_params==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
 								{
@@ -705,7 +701,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						}
 					} else
 					{
-						$eval=@eval('return '.$first_param.';');
+						$eval=debug_eval('return '.$first_param.';');
 						if (!is_string($eval)) $eval='';
 						$directive_name=$eval;
 						if (isset($GLOBALS['DIRECTIVES_NEEDING_VARS'][$directive_name]))
@@ -878,11 +874,32 @@ function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$
 
 	if (count($parts)==0) return new ocp_tempcode();
 
-	$myfunc='tcpfunc_'.(($codename=='')?fast_uniqid():$codename);
+	$output_streaming=(get_option('output_streaming')=='1');
 
-	$funcdef=build_closure_function($myfunc,$parts);
+	$parts_groups=array();
+	$parts_group=array();
+	foreach ($parts as $part)
+	{
+		if (($output_streaming) && (strpos($part,'$bound_')!==false)) // Start a new seq_part, so output streaming can break at this parameter reference
+		{
+			if ($parts_group!==array()) $parts_groups[]=$parts_group;
+			$parts_group=array();
+		}
+		$parts_group[]=$part;
+	}
+	if ($parts_group!==array()) $parts_groups[]=$parts_group;
 
-	$ret=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'',''))))); // Parameters will be bound in later.
+	$funcdefs=array();
+	$seq_parts=array();
+	foreach ($parts_groups as $parts_group)
+	{
+		$myfunc='tcpfunc_'.(($codename=='')?fast_uniqid():$codename).'_'.strval(count($seq_parts)+1);
+		$funcdef=build_closure_function($myfunc,$parts_group);
+		$funcdefs[$myfunc]=$funcdef;
+		$seq_parts[]=array(array($myfunc,array(/* Is currently unbound */),TC_KNOWN,'',''));
+	}
+
+	$ret=new ocp_tempcode(array($funcdefs,$seq_parts)); // Parameters will be bound in later.
 	$ret->preprocessable_bits=array_merge($ret->preprocessable_bits,$preprocessable_bits);
 	$ret->codename=$codename;
 	return $ret;
@@ -897,33 +914,24 @@ function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$
  */
 function build_closure_function($myfunc,$parts)
 {
-	static $chr_10=NULL;
-	if ($chr_10===NULL) $chr_10="\n";
-
 	if ($parts==array()) $parts=array('""');
 	$code='';
-	foreach ($parts as $i=>$part)
+	foreach ($parts as $part)
 	{
-		if ($i!=0) $code.=','.$chr_10."\t";
+		if ($code!='') $code.=",\n\t";
 		$code.=$part;
 	}
 
-	global $FUNC_STYLE_TPL;
-	$func_style=false;
-	foreach ($FUNC_STYLE_TPL as $s)
+	if (strpos($code,'$bound')===false)
 	{
-		if (strpos($myfunc,$s)!==false) $func_style=true;
-	}
-	if ($func_style)
-	{
-		if (strpos($code,'$bound')===false)
-		{
-			$funcdef="\$tpl_funcs['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"echo ".php_addslashes($code).";\");\n";
-		} else
-		{
-			$funcdef="\$tpl_funcs['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
-		}
+		$funcdef="\$tpl_funcs['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"echo ".php_addslashes($code).";\");";
 	} else
+	{
+		$funcdef="\$tpl_funcs['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('".uniqid('',true)."','\$parameters,\$cl',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");";
+	}
+
+	//	Eval version also works. Easier to debug. Less performant due to re-parse requirement each time it is called
+	if ($GLOBALS['DEV_MODE'])
 	{
 		$unset_code='';
 		if (strpos($code,'isset($bound')!==false) // Horrible but efficient code needed to allow IF_PASSED/IF_NON_PASSED to keep working when templates are put adjacent to each other, where some have it, and don't. This is needed as eval does not set a scope block.
@@ -932,7 +940,7 @@ function build_closure_function($myfunc,$parts)
 			$reset_code="eval(\\\$RESET_VAR_CODE);";
 		else
 			$reset_code='';
-		$funcdef="\$tpl_funcs['$myfunc']=\"$reset_code echo ".php_addslashes($code).";\";\n";
+		$funcdef="\$tpl_funcs['$myfunc']=\"$reset_code echo ".php_addslashes($code).";\";";
 	}
 
 	return $funcdef;

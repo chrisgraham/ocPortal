@@ -47,6 +47,7 @@ class ecommerce_test_set extends ocp_test_case
 
 		require_code('adminzone/pages/modules/admin_orders.php');
 		$this->admin_orders=new Module_admin_orders();
+		if (method_exists($this->admin_orders,'pre_run')) $this->admin_orders->pre_run();
 		$this->admin_orders->run();
 
 		$GLOBALS['SITE_DB']->query_insert('shopping_order',array(
@@ -63,6 +64,7 @@ class ecommerce_test_set extends ocp_test_case
 
 		/*require_code('adminzone/pages/modules/admin_permissions_products.php');
 		$this->admin_permission_products=new Module_admin_permissions_products();
+		if (method_exists($this->admin_permission_products,'pre_run')) $this->admin_permission_products->pre_run();
 		$this->admin_permission_products->run();*/
 	}
 

@@ -391,7 +391,7 @@ function restore_output_state($just_tempcode=false,$merge_current=false,$keep=NU
 /**
  * Turn the tempcode lump into a standalone page.
  *
- * @param  tempcode		The tempcode to put into a nice frame
+ * @param  ?tempcode		The tempcode to put into a nice frame (NULL: support output streaming mode)
  * @param  ?mixed			'Additional' message (NULL: none)
  * @param  string			The type of special message
  * @set    inform warn ""

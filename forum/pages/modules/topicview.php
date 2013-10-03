@@ -23,8 +23,20 @@
  */
 class Module_topicview
 {
+	var $title;
+	var $breadcrumbs;
 	var $id;
 	var $forum_id;
+	var $type;
+	var $topic_info;
+	var $posts;
+	var $serialized_options;
+	var $hash;
+	var $may_reply;
+	var $start;
+	var $default_max;
+	var $max;
+	var $threaded_topic_ob;
 
 	/**
 	 * Standard modular info function.
@@ -54,29 +66,14 @@ class Module_topicview
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
-	 * @return tempcode	The result of execution.
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function run()
+	function pre_run()
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_topicview');
-		require_css('ocf');
-
-		inform_non_canonical_parameter('threaded');
-		inform_non_canonical_parameter('post_id');
-
-		$start=get_param_integer('topic_start',0);
-		$default_max=intval(get_option('forum_posts_per_page'));
-		$max=get_param_integer('topic_max',$default_max);
-		if ($max==0) $max=$default_max;
-		if ($max==0) $max=1;
-		if (($max>30) && (!has_privilege(get_member(),'remove_page_split'))) $max=$default_max;
-		$first_unread_id=-1;
-
-		foreach (array_keys($_GET) as $key)
-			if (substr($key,0,3)=='kfs') inform_non_canonical_parameter($key);
 
 		$type=get_param('type','misc');
 
@@ -90,45 +87,179 @@ class Module_topicview
 			require_code('site2');
 			assign_refresh($redirect,0.0);
 			return do_template('REDIRECT_SCREEN',array('_GUID'=>'76e6d34c20a4f5284119827e41c7752f','URL'=>$redirect,'TITLE'=>get_screen_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
-		} else
+		}
+		elseif ($type=='first_unread')
 		{
-			if ($type=='first_unread')
-			{
-				$redirect=find_first_unread_url($id);
-				require_code('site2');
-				assign_refresh($redirect,0.0);
-				return do_template('REDIRECT_SCREEN',array('_GUID'=>'12c5d16f60e8c4df03536d9a7a932528','URL'=>$redirect,'TITLE'=>get_screen_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
-			}
+			$redirect=find_first_unread_url($id);
+			require_code('site2');
+			assign_refresh($redirect,0.0);
+			return do_template('REDIRECT_SCREEN',array('_GUID'=>'12c5d16f60e8c4df03536d9a7a932528','URL'=>$redirect,'TITLE'=>get_screen_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
 		}
 
-		$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('d_notification_code'=>'ocf_topic','d_code_category'=>strval($id),'d_to_member_id'=>get_member()));
+		$start=get_param_integer('topic_start',0);
+		$default_max=intval(get_option('forum_posts_per_page'));
+		$max=get_param_integer('topic_max',$default_max);
+		if ($max==0) $max=$default_max;
+		if ($max==0) $max=1;
+		if (($max>30) && (!has_privilege(get_member(),'remove_page_split'))) $max=$default_max;
+
+		$view_poll_results=get_param_integer('view_poll_results',0);
+
+		$topic_info=ocf_read_in_topic($id,$start,$max,$view_poll_results==1);
+
+		$may_reply=(array_key_exists('may_reply',$topic_info)) && (($topic_info['is_open']) || (array_key_exists('may_post_closed',$topic_info)));
+
+		inform_non_canonical_parameter('threaded');
+		inform_non_canonical_parameter('post_id');
+		foreach (array_keys($_GET) as $key)
+			if (substr($key,0,3)=='kfs') inform_non_canonical_parameter($key);
+
+		set_extra_request_metadata($topic_info['meta_data']);
+
+		global $SEO_TITLE;
+		$SEO_TITLE=do_lang('_VIEW_TOPIC',$topic_info['title']);
 
 		if (!is_null($id))
 			set_feed_url('?mode=ocf_topicview&filter='.strval($id));
 
-		$view_poll_results=get_param_integer('view_poll_results',0);
+		if (is_null($id)) // Just inline personal posts
+		{
+			$title=get_screen_title('INLINE_PERSONAL_POSTS');
+		} else
+		{
+			if (is_null($topic_info['forum_id']))
+			{
+				$title=get_screen_title(do_lang_tempcode('NAMED_PRIVATE_TOPIC',escape_html($topic_info['title'])),false,NULL,do_lang_tempcode('READING_PRIVATE_TOPIC'));
+			} else
+			{
+				if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
+				{
+					require_code('awards');
+					$awards=find_awards_for('topic',strval($id));
+				} else $awards=array();
+
+				$title=get_screen_title(do_lang_tempcode('NAMED_TOPIC',make_fractionable_editable('topic',$id,$topic_info['title'])),false,NULL,NULL,$awards);
+			}
+		}
+
+		// Forum breadcrumbs
+		if (!is_null($topic_info['forum_id']))
+		{
+			$breadcrumbs=ocf_forum_breadcrumbs($topic_info['forum_id'],NULL,NULL,false);
+		} else
+		{
+			$breadcrumbs=new ocp_tempcode();
+			$breadcrumbs->attach(hyperlink(build_url(array('page'=>'members'),get_module_zone('members')),do_lang_tempcode('MEMBERS'),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
+			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+			if (has_privilege(get_member(),'view_other_pt'))
+			{
+				$of_member=($topic_info['pt_from']==get_member())?$topic_info['pt_from']:$topic_info['pt_to'];
+			} else $of_member=get_member();
+			$of_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member,true);
+			if (is_null($of_username)) $of_username=do_lang('UNKNOWN');
+			$private_topic_url=build_url(array('page'=>'members','type'=>'view','id'=>$of_member),get_module_zone('members'),NULL,true,false,false,'tab__pts');
+			$breadcrumbs->attach(hyperlink($private_topic_url,do_lang_tempcode('MEMBER_PROFILE',escape_html($of_username)),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
+		}
+
+		if (!is_null($id))
+			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang(is_null($topic_info['forum_id'])?'VIEW_PRIVATE_TOPIC':'VIEW_TOPIC').'</span>'));
+
+		if (is_null($id)) // Just inline personal posts
+		{
+			$root_forum_name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>db_get_first_id()));
+			$breadcrumbs=hyperlink(build_url(array('page'=>'forumview','id'=>db_get_first_id()),get_module_zone('forumview')),escape_html($root_forum_name),false,false,do_lang('GO_BACKWARDS_TO'));
+			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('INLINE_PERSONAL_POSTS').'</span>'));
+		}
+
+		$threaded=($topic_info['is_threaded']==1);
+		if (!$threaded)
+		{
+			$jump_post_id=get_param_integer('post_id',NULL);
+
+			$GLOBALS['META_DATA']['description']=$topic_info['description'];
+			foreach ($topic_info['posts'] as $array_id=>$_postdetails)
+			{
+				if (($GLOBALS['META_DATA']['description']=='') && (($_postdetails['id']===$jump_post_id) || (($array_id==0) && ($jump_post_id===NULL))))
+					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post'],'200','0','1','0.2'),'left')),ENT_QUOTES,get_charset());
+			}
+		} else
+		{
+			require_code('topics');
+			$threaded_topic_ob=new OCP_Topic();
+
+			// Load some settings into the renderer
+			$threaded_topic_ob->first_post_id=$topic_info['first_post_id'];
+			$threaded_topic_ob->topic_description=$topic_info['description'];
+			$threaded_topic_ob->topic_description_link=$topic_info['description_link'];
+			$threaded_topic_ob->topic_title=$topic_info['title'];
+			$threaded_topic_ob->topic_info=$topic_info;
+
+			// Other settings we need
+			$max_thread_depth=intval(get_option('max_thread_depth'));
+			$num_to_show_limit=get_param_integer('max_comments',intval(get_option('comments_to_show_in_thread')));
+
+			// Load posts
+			$threaded_topic_ob->load_from_topic($id,$num_to_show_limit,$start,false,NULL,true);
+			$threaded_topic_ob->is_threaded=true;
+
+			// Render posts
+			list($posts,$serialized_options,$hash)=$threaded_topic_ob->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$topic_info['first_poster'],array(),$topic_info['forum_id'],NULL,false);
+
+			$GLOBALS['META_DATA']['description']=$threaded_topic_ob->topic_description;
+
+			$this->posts=$posts;
+			$this->serialized_options=$serialized_options;
+			$this->hash=$hash;
+			$this->threaded_topic_ob=$threaded_topic_ob;
+		}
+
+		$this->title=$title;
+		$this->breadcrumbs=$breadcrumbs;
+		$this->type=$type;
+		$this->id=$id;
+		$this->topic_info=$topic_info;
+		$this->forum_id=$topic_info['forum_id'];
+		$this->may_reply=$may_reply;
+		$this->start=$start;
+		$this->default_max=$default_max;
+		$this->max=$max;
+
+		return NULL;
+	}
+
+	/**
+	 * Standard modular run function.
+	 *
+	 * @return tempcode		The result of execution.
+	 */
+	function run()
+	{
+		$title=$this->title;
+		$breadcrumbs=$this->breadcrumbs;
+		$type=$this->type;
+		$id=$this->id;
+		$topic_info=$this->topic_info;
+		$may_reply=$this->may_reply;
+		$start=$this->start;
+		$default_max=$this->default_max;
+		$max=$this->max;
+
+		require_css('ocf');
+
+		$first_unread_id=-1;
+
+		$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('d_notification_code'=>'ocf_topic','d_code_category'=>strval($id),'d_to_member_id'=>get_member()));
 
 		// Mark as read
 		if (!is_null($id))
 		{
-			$this->id=$id;
 			register_shutdown_function(array($this,'_update_read_status')); // done at end after output in case of locking (don't make the user wait)
 		}
 
-		// Load up topic info
-		$topic_info=ocf_read_in_topic($id,$start,$max,$view_poll_results==1);
-		$this->forum_id=$topic_info['forum_id'];
-		set_extra_request_metadata($topic_info['meta_data']);
-		global $SEO_TITLE;
-		$SEO_TITLE=do_lang('_VIEW_TOPIC',$topic_info['title']);
-
 		// Render posts according to whether threaded or not
 		$threaded=($topic_info['is_threaded']==1);
-		$may_reply=(array_key_exists('may_reply',$topic_info)) && (($topic_info['is_open']) || (array_key_exists('may_post_closed',$topic_info)));
 		if (!$threaded)
 		{
-			$GLOBALS['META_DATA']['description']=$topic_info['description'];
-
 			// Poster detail hooks
 			$hooks=find_all_hooks('modules','topicview');
 			$hook_objects=array();
@@ -299,9 +430,6 @@ class Module_topicview
 					$rating=new ocp_tempcode();
 				}
 
-				if (($GLOBALS['META_DATA']['description']=='') && (($_postdetails['id']===$jump_post_id) || (($array_id==0) && ($jump_post_id===NULL))))
-					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post'],'200','0','1','0.2'),'left')),ENT_QUOTES,get_charset());
-
 				$rendered_post=do_template('OCF_TOPIC_POST',array(
 					'_GUID'=>'sacd09wekfofpw2f',
 					'GIVE_CONTEXT'=>false,
@@ -340,28 +468,10 @@ class Module_topicview
 			$hash=mixed();
 		} else // Threaded
 		{
-			require_code('topics');
-			$threaded_topic_ob=new OCP_Topic();
-
-			// Load some settings into the renderer
-			$threaded_topic_ob->first_post_id=$topic_info['first_post_id'];
-			$threaded_topic_ob->topic_description=$topic_info['description'];
-			$threaded_topic_ob->topic_description_link=$topic_info['description_link'];
-			$threaded_topic_ob->topic_title=$topic_info['title'];
-			$threaded_topic_ob->topic_info=$topic_info;
-
-			// Other settings we need
-			$max_thread_depth=intval(get_option('max_thread_depth'));
-			$num_to_show_limit=get_param_integer('max_comments',intval(get_option('comments_to_show_in_thread')));
-
-			// Load posts
-			$threaded_topic_ob->load_from_topic($id,$num_to_show_limit,$start,false,NULL,true);
-			$threaded_topic_ob->is_threaded=true;
-
-			// Render posts
-			list($posts,$serialized_options,$hash)=$threaded_topic_ob->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$topic_info['first_poster'],array(),$topic_info['forum_id'],NULL,false);
-
-			$GLOBALS['META_DATA']['description']=$threaded_topic_ob->topic_description;
+			$posts=$this->posts;
+			$serialized_options=$this->serialized_options;
+			$hash=$this->hash;
+			$threaded_topic_ob=$this->threaded_topic_ob;
 
 			// Get other gathered details
 			$replied=$threaded_topic_ob->replied;
@@ -553,25 +663,6 @@ class Module_topicview
 			));
 		} else $poll=new ocp_tempcode();
 
-		// Forum breadcrumbs
-		if (!is_null($topic_info['forum_id']))
-		{
-			$breadcrumbs=ocf_forum_breadcrumbs($topic_info['forum_id'],NULL,NULL,false);
-		} else
-		{
-			$breadcrumbs=new ocp_tempcode();
-			$breadcrumbs->attach(hyperlink(build_url(array('page'=>'members'),get_module_zone('members')),do_lang_tempcode('MEMBERS'),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
-			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-			if (has_privilege(get_member(),'view_other_pt'))
-			{
-				$of_member=($topic_info['pt_from']==get_member())?$topic_info['pt_from']:$topic_info['pt_to'];
-			} else $of_member=get_member();
-			$of_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member,true);
-			if (is_null($of_username)) $of_username=do_lang('UNKNOWN');
-			$private_topic_url=build_url(array('page'=>'members','type'=>'view','id'=>$of_member),get_module_zone('members'),NULL,true,false,false,'tab__pts');
-			$breadcrumbs->attach(hyperlink($private_topic_url,do_lang_tempcode('MEMBER_PROFILE',escape_html($of_username)),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
-		}
-
 		// Quick reply
 		if ((array_key_exists('may_use_quick_reply',$topic_info)) && ($may_reply) && (!is_null($id)))
 		{
@@ -736,40 +827,10 @@ class Module_topicview
 		require_code('users2');
 		list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('topicview','',strval($id),true);
 
-		if (!is_null($id))
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang(is_null($topic_info['forum_id'])?'VIEW_PRIVATE_TOPIC':'VIEW_TOPIC').'</span>'));
-
-		if (is_null($id)) // Just inline personal posts
-		{
-			$root_forum_name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>db_get_first_id()));
-			$breadcrumbs=hyperlink(build_url(array('page'=>'forumview','id'=>db_get_first_id()),get_module_zone('forumview')),escape_html($root_forum_name),false,false,do_lang('GO_BACKWARDS_TO'));
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('INLINE_PERSONAL_POSTS').'</span>'));
-		}
-
 		if (($topic_info['validated']==0) && (addon_installed('unvalidated')))
 		{
 			$warning_details=do_template('WARNING_BOX',array('_GUID'=>'313de370c1aeab9545c4bee4e35e7f84','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'_UNVALIDATED_TEXT_NON_DIRECT':'_UNVALIDATED_TEXT',do_lang('FORUM_TOPIC'))));
 		} else $warning_details=new ocp_tempcode();
-
-		if (is_null($id)) // Just inline personal posts
-		{
-			$title=get_screen_title('INLINE_PERSONAL_POSTS');
-		} else
-		{
-			if (is_null($topic_info['forum_id']))
-			{
-				$title=get_screen_title(do_lang_tempcode('NAMED_PRIVATE_TOPIC',escape_html($topic_info['title'])),false,NULL,do_lang_tempcode('READING_PRIVATE_TOPIC'));
-			} else
-			{
-				if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-				{
-					require_code('awards');
-					$awards=find_awards_for('topic',strval($id));
-				} else $awards=array();
-
-				$title=get_screen_title(do_lang_tempcode('NAMED_TOPIC',make_fractionable_editable('topic',$id,$topic_info['title'])),false,NULL,NULL,$awards);
-			}
-		}
 
 		require_code('ocf_general');
 		ocf_set_context_forum($topic_info['forum_id']);
@@ -794,7 +855,7 @@ class Module_topicview
 			'MODERATOR_ACTIONS'=>$moderator_actions,
 			'MARKED_POST_ACTIONS'=>$marked_post_actions,
 			'QUICK_REPLY'=>$quick_reply,
-			'BREADCRUMBS'=>$breadcrumbs,
+			'BREADCRUMBS'=>$this->breadcrumbs,
 			'POLL'=>$poll,
 			'SCREEN_BUTTONS'=>$buttons,
 			'POSTS'=>$posts,

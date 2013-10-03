@@ -349,12 +349,16 @@ function get_page_zone($page_name,$error=true)
  * The module result is returned.
  *
  * @param  PATH			The relative path to the module file
+ * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
  * @return tempcode		The result of executing the module
  */
-function load_minimodule_page($string)
+function load_minimodule_page($string,&$out=NULL)
 {
 	global $PAGE_STRING;
 	if (is_null($PAGE_STRING)) $PAGE_STRING=$string;
+
+	if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
+		$out->evaluate_echo(NULL,true);
 
 	return _load_mini_code($string);
 }
@@ -403,9 +407,10 @@ function _load_mini_code($string,$map=NULL)
  *
  * @param  PATH			The relative path to the module file
  * @param  ID_TEXT		The page name to load
+ * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
  * @return tempcode		The result of executing the module
  */
-function load_module_page($string,$codename)
+function load_module_page($string,$codename,&$out=NULL)
 {
 	global $PAGE_STRING;
 	if (is_null($PAGE_STRING)) $PAGE_STRING=$string;
@@ -466,6 +471,14 @@ function load_module_page($string,$codename)
 		}
 	}
 
+	if (method_exists($object,'pre_run'))
+	{
+		$exceptional_output=$object->pre_run();
+		if ($exceptional_output!==NULL) return $exceptional_output;
+
+		if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
+			$out->evaluate_echo(NULL,true);
+	}
 	return $object->run();
 }
 
@@ -822,6 +835,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 		$backup_langs_requested=$LANGS_REQUESTED;
 		$LANGS_REQUESTED=array();
 		$cache=$object->run($map);
+
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 	} else
 	{

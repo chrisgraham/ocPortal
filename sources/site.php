@@ -829,8 +829,11 @@ function do_site()
 		}
 	}
 
+	// Output streaming?
+	$out=globalise(NULL,NULL,'',true);
+
 	// Load up our frames into strings. Note that the header and the footer are fixed already.
-	$middle=request_page(get_page_name(),true);
+	$middle=request_page(get_page_name(),true,NULL,NULL,false,false,$out);
 	if (($middle===NULL) || ($middle->is_empty_shell()))
 	{
 		set_http_status_code('404');
@@ -839,9 +842,7 @@ function do_site()
 		$text=do_lang_tempcode('NO_PAGE_OUTPUT');
 		$middle=warn_screen($title,$text,false);
 	}
-
-	// Put it all together
-	$out=globalise($middle,NULL,'',true);
+	$out->singular_bind('MIDDLE',$middle);
 
 	// Validation
 	$novalidate=get_param_integer('keep_novalidate',get_param_integer('novalidate',0));
@@ -849,7 +850,7 @@ function do_site()
 	if (((in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) && (($special_page_type=='code') || (($novalidate==0) && (get_option('validation')=='1'))) && ($GLOBALS['REFRESH_URL'][0]=='') && ($show_edit_links==0)) // Not a permission - a matter of performance
 	{
 		require_code('view_modes');
-		$out_evaluated=$out->evaluate(NULL,false);
+		$out_evaluated=$out->evaluate(NULL);
 		do_xhtml_validation($out_evaluated,($special_page_type=='code' && (get_param_integer('preview_mode',NULL)===NULL)),get_param_integer('preview_mode',0));
 	}
 
@@ -876,7 +877,7 @@ function do_site()
 				}
 			}
 
-			$out_evaluated=$out->evaluate(NULL,false);
+			$out_evaluated=$out->evaluate(NULL);
 
 			$myfile=@fopen($fast_cache_path,'ab') OR intelligent_write_error($fast_cache_path);
 			flock($myfile,LOCK_EX);
@@ -926,7 +927,7 @@ function do_site()
 			$GLOBALS['FINISHING_OUTPUT']=true;
 			/*if (get_option('gzip_output')=='1')	Does not work well
 				ob_start('_compress_html_output');*/
-			$out->evaluate_echo();
+			$out->evaluate_echo(NULL,true);
 		}
 	}
 
@@ -983,9 +984,10 @@ function do_site()
  * @param  ?ID_TEXT		The type of page - for if you know it (NULL: don't know it)
  * @param  boolean		Whether the page is being included from another
  * @param  boolean		Whether to not check for redirects (normally you would)
+ * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
  * @return ?tempcode		The page (NULL: no page)
  */
-function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_included=false,$no_redirect_check=false)
+function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_included=false,$no_redirect_check=false,&$out=NULL)
 {
 	global $SITE_INFO;
 
@@ -1046,19 +1048,19 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 	{
 		case 'MODULES_CUSTOM':
 			$path=isset($details[3])?$details[3]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/modules_custom/'.$details[2].'.php',true);
-			$ret=load_module_page($path,$details[2]);
+			$ret=load_module_page($path,$details[2],$out);
 			$REQUEST_PAGE_NEST_LEVEL--;
 			return $ret;
 		case 'MODULES':
 			$path=isset($details[3])?$details[3]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/modules/'.$details[2].'.php',true);
-			$ret=load_module_page($path,$details[2]);
+			$ret=load_module_page($path,$details[2],$out);
 			$REQUEST_PAGE_NEST_LEVEL--;
 			return $ret;
 		case 'COMCODE_CUSTOM':
 			$path=isset($details[4])?$details[4]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/comcode_custom/'.$details[3].'/'.$details[2].'.txt',true);
 			if (((isset($SITE_INFO['no_disk_sanity_checks'])) && ($SITE_INFO['no_disk_sanity_checks']=='1') && (get_custom_file_base()==get_file_base())) || (is_file(get_custom_file_base().'/'.$path)))
 			{
-				$ret=load_comcode_page($path,$details[1],$details[2],get_custom_file_base(),$being_included);
+				$ret=load_comcode_page($path,$details[1],$details[2],get_custom_file_base(),$being_included,$out);
 				$REQUEST_PAGE_NEST_LEVEL--;
 				return $ret;
 			}
@@ -1067,7 +1069,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 			$path=isset($details[4])?$details[4]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/comcode_custom/'.$details[3].'/'.$details[2].'.txt',true);
 			if (((isset($SITE_INFO['no_disk_sanity_checks'])) && ($SITE_INFO['no_disk_sanity_checks']=='1')) || (is_file(get_file_base().'/'.$path)))
 			{
-				$ret=load_comcode_page($path,$details[1],$details[2],get_file_base(),$being_included);
+				$ret=load_comcode_page($path,$details[1],$details[2],get_file_base(),$being_included,$out);
 				$REQUEST_PAGE_NEST_LEVEL--;
 				return $ret;
 			}
@@ -1076,7 +1078,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 			$path=isset($details[4])?$details[4]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/comcode/'.$details[3].'/'.$details[2].'.txt',true);
 			if (((isset($SITE_INFO['no_disk_sanity_checks'])) && ($SITE_INFO['no_disk_sanity_checks']=='1')) || (is_file(get_file_base().'/'.$path)))
 			{
-				$ret=load_comcode_page($path,$details[1],$details[2],NULL,$being_included);
+				$ret=load_comcode_page($path,$details[1],$details[2],NULL,$being_included,$out);
 				$REQUEST_PAGE_NEST_LEVEL--;
 				return $ret;
 			}
@@ -1084,23 +1086,23 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 		case 'HTML_CUSTOM':
 			require_code('site_html_pages');
 			$path=isset($details[4])?$details[4]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/html_custom/'.$details[3].'/'.$details[2].'.htm',true);
-			$ret=make_string_tempcode(load_html_page($path));
+			$ret=make_string_tempcode(load_html_page($path,NULL,$out));
 			$REQUEST_PAGE_NEST_LEVEL--;
 			return $ret;
 		case 'HTML':
 			require_code('site_html_pages');
 			$path=isset($details[4])?$details[4]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/html/'.$details[3].'/'.$details[2].'.htm',true);
-			$ret=make_string_tempcode(load_html_page($path));
+			$ret=make_string_tempcode(load_html_page($path,NULL,$out));
 			$REQUEST_PAGE_NEST_LEVEL--;
 			return $ret;
 		case 'MINIMODULES_CUSTOM':
 			$path=isset($details[3])?$details[3]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/minimodules_custom/'.$codename.'.php',true);
-			$ret=load_minimodule_page($path);
+			$ret=load_minimodule_page($path,$out);
 			$REQUEST_PAGE_NEST_LEVEL--;
 			return $ret;
 		case 'MINIMODULES':
 			$path=isset($details[3])?$details[3]:zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/minimodules/'.$codename.'.php',true);
-			$ret=load_minimodule_page($path);
+			$ret=load_minimodule_page($path,$out);
 			$REQUEST_PAGE_NEST_LEVEL--;
 			return $ret;
 		case 'REDIRECT':
@@ -1126,7 +1128,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 					if ($key!='page') $_GET[$key]=get_magic_quotes_gpc()?addslashes($val):$val;
 				if (($redirect['r_to_page']!=$codename) || ($redirect['r_to_zone']!=$zone))
 				{
-					$ret=request_page($redirect['r_to_page'],$required,$redirect['r_to_zone'],NULL,$being_included,$redirect['r_is_transparent']==1);
+					$ret=request_page($redirect['r_to_page'],$required,$redirect['r_to_zone'],NULL,$being_included,$redirect['r_is_transparent']==1,$out);
 					$REQUEST_PAGE_NEST_LEVEL--;
 					return $ret;
 				}
@@ -1399,9 +1401,10 @@ function _request_page__redirects($codename,$zone,$wildcard_mode=false)
  * @param  ID_TEXT		The codename of the page
  * @param  ?PATH			The file base to load from (NULL: standard)
  * @param  boolean		Whether the page is being included from another
+ * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
  * @return tempcode		The page
  */
-function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_included=false)
+function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_included=false,&$out=NULL)
 {
 	if ($file_base===NULL) $file_base=get_file_base();
 
@@ -1600,6 +1603,9 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 			//'category'=>???,
 		));
 	}
+
+	if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
+		$out->evaluate_echo(NULL,true);
 
 	if (($html->is_empty_shell()) && ($is_panel)) return $html;
 

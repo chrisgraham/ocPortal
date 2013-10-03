@@ -499,7 +499,7 @@ class ocp_tempcode_static
 					{
 						if (is_object($decode_bit))
 						{
-							$bit_3[$i]=$decode_bit->evaluate($lang,false);
+							$bit_3[$i]=$decode_bit->evaluate($lang);
 						}
 					}
 				}

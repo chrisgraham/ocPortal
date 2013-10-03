@@ -1587,7 +1587,7 @@ function require_javascript($javascript)
 	global $JAVASCRIPTS;
 
 	// Has to do this inline, as you're not allowed to reference sheets outside head
-	if ((!isset($JAVASCRIPTS[$javascript])) && (headers_sent()))
+	if ((!isset($JAVASCRIPTS[$javascript])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED']))
 	{
 		$file=javascript_enforce($javascript);
 		//$_value=do_template('JAVASCRIPT_NEED_INLINE',array('CODE'=>str_replace(get_custom_file_base().'/',get_base_url().'/',file_get_contents($file))));
@@ -1754,7 +1754,7 @@ function require_css($css)
 	global $CSSS;
 
 	// Has to do this inline, as you're not allowed to reference sheets outside head
-	if ((!isset($CSSS[$css])) && (headers_sent()))
+	if ((!isset($CSSS[$css])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED']))
 	{
 		$file=css_enforce($css);
 		//$_value=do_template('CSS_NEED_INLINE',array('CODE'=>str_replace(get_custom_file_base().'/',get_base_url().'/',file_get_contents($file))));
