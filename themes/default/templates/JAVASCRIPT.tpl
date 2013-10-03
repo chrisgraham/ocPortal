@@ -1540,6 +1540,8 @@ function get_window_scroll_y(win)
 }
 function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
+	if (typeof not_relative=='undefined') var not_relative=false;
+
 	if (!obj && typeof window.console!='undefined') { console.log(find_pos_x.caller); return 0; }
 	var call_obj=obj;
 
@@ -1562,6 +1564,8 @@ function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 }
 function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
+	if (typeof not_relative=='undefined') var not_relative=false;
+
 	if (!obj && typeof window.console!='undefined') { console.log(find_pos_y.caller); return 0; }
 	var call_obj=obj;
 
@@ -1584,6 +1588,10 @@ function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 }
 function find_width(obj,take_padding,take_margin,take_border)
 {
+	if (typeof take_padding=='undefined') var take_padding=false;
+	if (typeof take_margin=='undefined') var take_margin=false;
+	if (typeof take_border=='undefined') var take_border=false;
+
 	if (!obj) return 0;
 	var ret=obj.offsetWidth;
 	if (take_padding)
@@ -1605,6 +1613,10 @@ function find_width(obj,take_padding,take_margin,take_border)
 }
 function find_height(obj,take_padding,take_margin,take_border)
 {
+	if (typeof take_padding=='undefined') var take_padding=false;
+	if (typeof take_margin=='undefined') var take_margin=false;
+	if (typeof take_border=='undefined') var take_border=false;
+
 	if (!obj) return 0;
 	var ret=obj.offsetHeight;
 	if (take_padding)
@@ -1628,6 +1640,8 @@ function find_height(obj,take_padding,take_margin,take_border)
 /* See if a key event was an enter key being pressed */
 function enter_pressed(event,alt_char)
 {
+	if (typeof alt_char=='undefined') var alt_char=false;
+
 	if (typeof event=='undefined') var event=window.event;
 	if ((alt_char) && (((event.which) && (event.which==alt_char.charCodeAt(0))) || ((event.keyCode) && (event.keyCode==alt_char.charCodeAt(0))))) return true;
 	return (((event.which) && (event.which==13)) || ((event.keyCode) && (event.keyCode==13)));
