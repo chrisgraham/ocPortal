@@ -1272,7 +1272,7 @@ class ocp_tempcode
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
 			$_file=(strpos($file,'\'')===false)?$file:php_addslashes($file);
-			$this->code_to_preexecute[]='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } debug_eval($tmp->code_to_preexecute); unset($tmp); }
+			$this->code_to_preexecute[]='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } $GLOBALS[\'DEV_MODE\']?debug_eval($tmp->code_to_preexecute):eval($tmp->code_to_preexecute); unset($tmp); }
 			else { debug_eval($result[4]); unset($result); }';
 			// NB: $GLOBALS[\'CACHE_TEMPLATES\']=false; is in case the template cache has been detected as broken, it prevents this branch running as it would fail again
 		}
@@ -1323,7 +1323,7 @@ class ocp_tempcode
 			$this->children=array();
 		}
 
-		$result=debug_eval($raw_data);
+		$result=$GLOBALS['DEV_MODE']?debug_eval($raw_data):eval($raw_data);
 		if ($result===false)
 		{
 			if ($allow_failure) return false;
@@ -1562,7 +1562,7 @@ class ocp_tempcode
 				{
 					if (!isset($tpl_funcs[$seq_part_0]))
 					{
-						debug_eval($this->code_to_preexecute[$seq_part_0]);
+						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
 					}
 					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
 					{
