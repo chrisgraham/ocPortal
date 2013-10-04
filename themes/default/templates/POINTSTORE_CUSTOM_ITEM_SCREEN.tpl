@@ -4,6 +4,12 @@
 	{!CUSTOM_ITEM_A,{COST},{REMAINING}}
 </p>
 
+{+START,IF,{ONE_PER_MEMBER}}
+	<p class="associated_details">
+		({!POINTSTORE_ONE_PER_MEMBER})
+	</p>
+{+END}
+
 <ul role="navigation" class="actions_list">
 	<li class="actions_list_strong">
 		<form title="{!PRIMARY_PAGE_FORM}" class="inline" method="post" action="{NEXT_URL*}">

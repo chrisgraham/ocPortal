@@ -48,7 +48,7 @@ class Hook_config_topic_pin
 	 */
 	function get_default()
 	{
-		return (!addon_installed('ocf_forum'))?NULL:'180';
+		return (!addon_installed('ocf_forum'))?NULL:'50';
 	}
 
 }

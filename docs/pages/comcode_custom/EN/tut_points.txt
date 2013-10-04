@@ -128,6 +128,32 @@ The forwarding add address is:
 The POP3 quota change address is:
 [indent][tt]http://{DOMAIN}:2082/frontend/x/mail/pops.html[/tt][/indent]
 
+[title="3"]Permission products[/title]
+
+The different types of permission (product) are configured with settings as follows:
+
+[title="4"]Privilege[/title]
+
+If a privilege is set globally, you will only set &ldquo;The privilege&rdquo;.
+
+If you are scoping it to a particular module page (e.g. &ldquo;downloads&rdquo;), you will also set &ldquo;The page&rdquo;.
+
+If you are scoping it to a particular category, you will also set it to &ldquo;The module codename&rdquo; and &ldquo;The category&rdquo;.
+
+[title="4"]Zone-access[/title]
+
+You will only set &ldquo;The zone&rdquo;.
+
+[title="4"]Page-access[/title]
+
+You will set &ldquo;The zone&rdquo; and &ldquo;The page&rdquo;.
+
+[title="4"]Category-access[/title]
+
+You will set &ldquo;The module codename&rdquo; and &ldquo;The category&rdquo;.
+
+Normally &ldquo;The category&rdquo; will be a numeric ID.
+
 [title="2"]Other economy tie-ins[/title]
 
 [box="Important note" width="25em" float="right"]There is a distinction between the point count for points available for spending, and the point count for the total points ever earned (which contributes to rank and leader-board position). This will usually be made clear, but sometimes circumstance will dictate what is the appropriate meaning.[/box]

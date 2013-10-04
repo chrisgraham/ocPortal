@@ -77,10 +77,10 @@ class Hook_pointstore_custom
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'01362c21b40d7905b76ee6134198a128','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_custom_'.strval($i),false));
 			$hidden->attach(form_input_hidden('custom_'.strval($i),strval($row['id'])));
-			$out[]=array($fields,$hidden,do_lang_tempcode('EDIT_CUSTOM_PRODUCT'));
+			$out[]=array($fields,$hidden,do_lang_tempcode('_EDIT_CUSTOM_PRODUCT',escape_html(get_translated_text($row['c_title']))));
 		}
 
-		return array($out,do_lang_tempcode('ADD_NEW_CUSTOM_PRODUCT'),$this->get_fields());
+		return array($out,do_lang_tempcode('ADD_NEW_CUSTOM_PRODUCT'),$this->get_fields(),do_lang_tempcode('CUSTOM_PRODUCT_DESCRIPTION'));
 	}
 
 	/**
@@ -203,7 +203,7 @@ class Hook_pointstore_custom
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 		}
 
-		return do_template('POINTSTORE_CUSTOM_ITEM_SCREEN',array('_GUID'=>'bc57d8775b5471935b08f85082ba34ec','TITLE'=>$title,'COST'=>integer_format($cost),'REMAINING'=>integer_format($points_left-$cost),'NEXT_URL'=>$next_url));
+		return do_template('POINTSTORE_CUSTOM_ITEM_SCREEN',array('_GUID'=>'bc57d8775b5471935b08f85082ba34ec','TITLE'=>$title,'ONE_PER_MEMBER'=>($rows[0]['c_one_per_member']==1),'COST'=>integer_format($cost),'REMAINING'=>integer_format($points_left-$cost),'NEXT_URL'=>$next_url));
 	}
 
 	/**

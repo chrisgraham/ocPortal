@@ -332,10 +332,11 @@ class forum_driver_ocf extends forum_driver_base
 	 * Pin a topic.
 	 *
 	 * @param  AUTO_LINK		The topic ID
+	 * @param  boolean		True: pin it, False: unpin it
 	 */
-	function pin_topic($id)
+	function pin_topic($id,$pin=true)
 	{
-		$this->connection->query_update('f_topics',array('t_pinned'=>1),array('id'=>$id),'',1);
+		$this->connection->query_update('f_topics',array('t_pinned'=>$pin?1:0),array('id'=>$id),'',1);
 	}
 
 	/**

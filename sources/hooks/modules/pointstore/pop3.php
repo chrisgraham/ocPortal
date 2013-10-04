@@ -108,10 +108,10 @@ class Hook_pointstore_pop3
 			$fields->attach(form_input_integer(do_lang_tempcode('MAIL_COST'),do_lang_tempcode('DESCRIPTION_MAIL_COST',escape_html('pop3'),escape_html($domain)),'pop3_'.strval($i),$row['price'],true));
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9e37f41f134eecae630bfbf32da7b9ec','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_pop3_'.strval($i),false));
-			$out[]=array($fields,$hidden,do_lang_tempcode('EDIT_POP3_DOMAIN'));
+			$out[]=array($fields,$hidden,do_lang_tempcode('_EDIT_POP3_DOMAIN',escape_html(substr($row['name'],5))));
 		}
 
-		return array($out,do_lang_tempcode('ADD_NEW_POP3_DOMAIN'),$this->get_fields());
+		return array($out,do_lang_tempcode('ADD_NEW_POP3_DOMAIN'),$this->get_fields(),do_lang_tempcode('POP3_DESCRIPTION'));
 	}
 
 	/**
@@ -156,8 +156,8 @@ class Hook_pointstore_pop3
 
 		// What addresses are there?
 		$member_id=get_member();
-		$pointsleft=available_points($member_id); // the number of points this member has left
-		$list=get_mail_domains('pop3_',$pointsleft);
+		$points_left=available_points($member_id); // the number of points this member has left
+		$list=get_mail_domains('pop3_',$points_left);
 		if ($list->is_empty())
 		{
 			return warn_screen($title,do_lang_tempcode('NO_POP3S'));
@@ -213,7 +213,7 @@ class Hook_pointstore_pop3
 
 		// Getting User Information
 		$member_id=get_member();
-		$pointsleft=available_points($member_id);
+		$points_left=available_points($member_id);
 
 		// So we don't need to call these big ugly names, again...
 		$_suffix=post_param('esuffix');
@@ -225,7 +225,7 @@ class Hook_pointstore_pop3
 		$suffix='pop3_'.$_suffix;
 
 		$_suffix_price=get_price($suffix);
-		$points_after=$pointsleft-$_suffix_price;
+		$points_after=$points_left-$_suffix_price;
 
 		pointstore_handle_error_already_has('pop3');
 
@@ -280,7 +280,7 @@ class Hook_pointstore_pop3
 		$title=get_screen_title('TITLE_NEWPOP3');
 
 		$member_id=get_member();
-		$pointsleft=available_points($member_id); // the number of points this member has left
+		$points_left=available_points($member_id); // the number of points this member has left
 		$time=time();
 
 		// So we don't need to call these big ugly names, again...
@@ -294,7 +294,7 @@ class Hook_pointstore_pop3
 		pointstore_handle_error_already_has('pop3');
 
 		// If the price is more than we can afford...
-		if (($suffix_price>$pointsleft) && (!has_privilege(get_member(),'give_points_self')))
+		if (($suffix_price>$points_left) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('NOT_ENOUGH_POINTS',escape_html($_suffix)));
 		}
@@ -344,11 +344,11 @@ class Hook_pointstore_pop3
 		$title=get_screen_title('TITLE_QUOTA');
 
 		$member_id=get_member();
-		$pointsleft=available_points($member_id);
+		$points_left=available_points($member_id);
 		$price=intval(get_option('quota'));
 		$topamount=intval(get_option('max_quota'));
 
-		if ($price==0) $topamount=$pointsleft; else $topamount=intval(round($pointsleft/$price));
+		if ($price==0) $topamount=$points_left; else $topamount=intval(round($points_left/$price));
 		$details=$GLOBALS['SITE_DB']->query_select('sales',array('details','details2'),array('memberid'=>$member_id,'purchasetype'=>'pop3'),'',1);
 
 		// If we don't own a POP3 account, stop right here.
@@ -363,7 +363,7 @@ class Hook_pointstore_pop3
 		// Screen
 		$submit_name=do_lang_tempcode('TITLE_QUOTA');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_buyquota','id'=>'pop3'),'_SELF');
-		$text=do_template('POINTSTORE_QUOTA',array('_GUID'=>'1282fae968b4919bcd0ba1e3ca169fe8','POINTS_LEFT'=>integer_format($pointsleft),'PRICE'=>integer_format($price),'TOP_AMOUNT'=>integer_format($topamount),'EMAIL'=>$prefix.$suffix));
+		$text=do_template('POINTSTORE_QUOTA',array('_GUID'=>'1282fae968b4919bcd0ba1e3ca169fe8','POINTS_LEFT'=>integer_format($points_left),'PRICE'=>integer_format($price),'TOP_AMOUNT'=>integer_format($topamount),'EMAIL'=>$prefix.$suffix));
 		require_code('form_templates');
 		$fields=form_input_integer(do_lang_tempcode('QUOTA'),do_lang_tempcode('QUOTA_DESCRIPTION'),'quota',100,true);
 		return do_template('FORM_SCREEN',array('_GUID'=>'1c82c713beaa03d1e3045e50295c722c','HIDDEN'=>'','URL'=>$post_url,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
@@ -381,7 +381,7 @@ class Hook_pointstore_pop3
 		$title=get_screen_title('TITLE_QUOTA');
 
 		$member_id=get_member();
-		$pointsleft=available_points($member_id);
+		$points_left=available_points($member_id);
 		$price=intval(get_option('quota'));
 		$quota=post_param_integer('quota');
 
@@ -396,7 +396,7 @@ class Hook_pointstore_pop3
 		}
 
 		// Stop if we can't afford this much quota
-		if ((($quota*$price)>$pointsleft)  && (!has_privilege(get_member(),'give_points_self')))
+		if ((($quota*$price)>$points_left)  && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('CANT_AFFORD'));
 		}

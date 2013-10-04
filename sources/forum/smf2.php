@@ -209,10 +209,11 @@ class forum_driver_smf2 extends forum_driver_base
 	 * Pin a topic.
 	 *
 	 * @param  AUTO_LINK		The topic ID
+	 * @param  boolean		True: pin it, False: unpin it
 	 */
-	function pin_topic($id)
+	function pin_topic($id,$pin=true)
 	{
-		$this->connection->query_update('topics',array('is_sticky'=>1),array('id_topic'=>$id),'',1);
+		$this->connection->query_update('topics',array('is_sticky'=>$pin?1:0),array('id_topic'=>$id),'',1);
 	}
 
 	/**

@@ -214,7 +214,7 @@ class Module_admin_pointstore
 					{
 						$submit_name=do_lang_tempcode('ADD');
 						$post_url=build_url(array('page'=>'_SELF','type'=>'_p'),'_SELF');
-						$fg[2]=do_template('FORM',array('_GUID'=>'e98141bc0a2a54abcca59a5c947a6738','SECONDARY_FORM'=>true,'TABINDEX'=>strval(get_form_field_tabindex(NULL)),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fg[2],'SUBMIT_BUTTON_CLASS'=>'proceed_button_left','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+						$fg[2]=do_template('FORM',array('_GUID'=>'e98141bc0a2a54abcca59a5c947a6738','SECONDARY_FORM'=>true,'TABINDEX'=>strval(get_form_field_tabindex(NULL)),'HIDDEN'=>'','TEXT'=>$fg[3],'FIELDS'=>$fg[2],'SUBMIT_BUTTON_CLASS'=>'proceed_button_left','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 						$add_forms->attach(do_template('POINTSTORE_PRICES_FORM_WRAP',array('_GUID'=>'3956550ebff14bbb923b57c8341b0862','TITLE'=>$fg[1],'FORM'=>$fg[2])));
 					}
 				}

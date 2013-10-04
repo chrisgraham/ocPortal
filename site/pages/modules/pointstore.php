@@ -102,7 +102,7 @@ class Module_pointstore
 					'p_mail_body'=>'LONG_TRANS',
 					'p_enabled'=>'BINARY',
 					'p_cost'=>'INTEGER',
-					'p_hours'=>'INTEGER',
+					'p_hours'=>'?INTEGER',
 					'p_type'=>'ID_TEXT', // member_privileges,member_category_access,member_page_access,member_zone_access
 					'p_privilege'=>'ID_TEXT', // privilege only
 					'p_zone'=>'ID_TEXT', // zone and page only
@@ -125,6 +125,8 @@ class Module_pointstore
 		{
 			rename_config_option('text','community_billboard');
 			rename_config_option('is_on_flagrant_buy','is_on_community_billboard_buy');
+
+			$GLOBALS['SITE_DB']->alter_table_field('pstore_permissions','p_hours','?INTEGER');
 		}
 	}
 

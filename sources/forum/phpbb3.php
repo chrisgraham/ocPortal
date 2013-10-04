@@ -341,10 +341,11 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 * Pin a topic.
 	 *
 	 * @param  AUTO_LINK		The topic ID
+	 * @param  boolean		True: pin it, False: unpin it
 	 */
-	function pin_topic($id)
+	function pin_topic($id,$pin=true)
 	{
-		$this->connection->query_update('topics',array('topic_type'=>1),array('topic_id'=>$id),'',1);
+		$this->connection->query_update('topics',array('topic_type'=>$pin?1:0),array('topic_id'=>$id),'',1);
 	}
 
 	/**

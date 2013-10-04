@@ -108,10 +108,10 @@ class Hook_pointstore_forwarding
 			$fields->attach(form_input_integer(do_lang_tempcode('MAIL_COST'),do_lang_tempcode('DESCRIPTION_MAIL_COST',escape_html('forw'),escape_html($domain)),'forw_'.strval($i),$row['price'],true));
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'34f5212a96f58fa1b0575a99ca0509e7','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_forw_'.strval($i),false));
-			$out[]=array($fields,$hidden,do_lang_tempcode('EDIT_FORWARDING_DOMAIN'));
+			$out[]=array($fields,$hidden,do_lang_tempcode('_EDIT_FORWARDING_DOMAIN',escape_html(substr($row['name'],5))));
 		}
 
-		return array($out,do_lang_tempcode('ADD_NEW_FORWARDING_DOMAIN'),$this->get_fields());
+		return array($out,do_lang_tempcode('ADD_NEW_FORWARDING_DOMAIN'),$this->get_fields(),do_lang_tempcode('FORWARDING_DESCRIPTION'));
 	}
 
 	/**
@@ -130,8 +130,8 @@ class Hook_pointstore_forwarding
 		pointstore_handle_error_already_has('forwarding');
 
 		// What addresses are there?
-		$pointsleft=available_points($member_id); // the number of points this member has left
-		$list=get_mail_domains('forw_',$pointsleft);
+		$points_left=available_points($member_id); // the number of points this member has left
+		$list=get_mail_domains('forw_',$points_left);
 		if ($list->is_empty())
 		{
 			return warn_screen($title,do_lang_tempcode('NO_FORWARDINGS'));
@@ -171,20 +171,20 @@ class Hook_pointstore_forwarding
 
 		$title=get_screen_title('TITLE_NEWFORWARDING');
 
-		//Getting User Information
+		// Getting User Information
 		$member_id=get_member();
-		$pointsleft=available_points($member_id);
+		$points_left=available_points($member_id);
 
-		//So we don't need to call these big ugly names, again...
+		// So we don't need to call these big ugly names, again...
 		$_suffix=post_param('esuffix');
 		$prefix=post_param('email-prefix');
 		$email=post_param('email');
 
-		//Which suffix have we chosen?
+		// Which suffix have we chosen?
 		$suffix='forw_'.$_suffix;
 
 		$suffix_price=get_price($suffix);
-		$points_after=$pointsleft-$suffix_price;
+		$points_after=$points_left-$suffix_price;
 
 		pointstore_handle_error_already_has('forwarding');
 
@@ -239,7 +239,7 @@ class Hook_pointstore_forwarding
 		$title=get_screen_title('TITLE_NEWFORWARDING');
 
 		$member_id=get_member();
-		$pointsleft=available_points($member_id); // the number of points this member has left
+		$points_left=available_points($member_id); // the number of points this member has left
 		$time=time();
 
 		// So we don't need to call these big ugly names, again...
@@ -253,7 +253,7 @@ class Hook_pointstore_forwarding
 		pointstore_handle_error_already_has('forwarding');
 
 		// If the price is more than we can afford...
-		if (($suffix_price>$pointsleft) && (!has_privilege(get_member(),'give_points_self')))
+		if (($suffix_price>$points_left) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('NOT_ENOUGH_POINTS',escape_html($_suffix)));
 		}

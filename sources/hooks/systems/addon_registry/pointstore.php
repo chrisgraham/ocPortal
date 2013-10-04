@@ -106,6 +106,8 @@ class Hook_addon_registry_pointstore
 			'sources/hooks/systems/config/topic_pin.php',
 			'sources/hooks/systems/addon_registry/pointstore.php',
 			'sources/hooks/modules/admin_import_types/pointstore.php',
+			'sources/hooks/systems/cron/topic_pin.php',
+			'sources/hooks/systems/config/topic_pin_max_days.php',
 			'POINTSTORE_PRICES_FORM_WRAP.tpl',
 			'POINTSTORE_CUSTOM.tpl',
 			'POINTSTORE_CUSTOM_ITEM_SCREEN.tpl',
@@ -417,7 +419,8 @@ class Hook_addon_registry_pointstore
 					'TITLE'=>lorem_title(),
 					'COST'=>placeholder_number(),
 					'REMAINING'=>placeholder_number(),
-					'NEXT_URL'=>placeholder_url()
+					'NEXT_URL'=>placeholder_url(),
+					'ONE_PER_MEMBER'=>true,
 				)
 			),NULL,'',true),
 		);
@@ -533,7 +536,7 @@ class Hook_addon_registry_pointstore
 				do_lorem_template('POINTSTORE_CUSTOM',array(
 					'TITLE'=>lorem_phrase(),
 					'DESCRIPTION'=>lorem_sentence(),
-					'NEXT_URL'=>placeholder_url()
+					'NEXT_URL'=>placeholder_url(),
 				)
 			),NULL,'',true),
 		);

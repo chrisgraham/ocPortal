@@ -11,7 +11,9 @@
 		</p>
 	{+END}
 
-	<p>{MESSAGE}</p>
+	{+START,IF_PASSED,MESSAGE}
+		<p>{MESSAGE}</p>
+	{+END}
 </div></div>
 
 <p>
@@ -37,6 +39,6 @@
 			</form>
 		</div>
 
-		{!Q_SURE}
+		<span class="vertical_alignment_buttons">{!Q_SURE}</span>
 	</div>
 </div></div>

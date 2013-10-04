@@ -18,7 +18,7 @@
  * @package		pointstore
  */
 
-class Hook_config_community_billboard
+class Hook_config_topic_pin_max_days
 {
 
 	/**
@@ -29,11 +29,11 @@ class Hook_config_community_billboard
 	function get_details()
 	{
 		return array(
-			'human_name'=>'COST_community_billboard',
+			'human_name'=>'TOPIC_PIN_MAX_DAYS',
 			'type'=>'integer',
 			'category'=>'POINTSTORE',
-			'group'=>'COMMUNITY_BILLBOARD_MESSAGE',
-			'explanation'=>'CONFIG_OPTION_community_billboard',
+			'group'=>'TOPIC_PINNING',
+			'explanation'=>'CONFIG_OPTION_topic_pin_max_days',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 
@@ -48,7 +48,7 @@ class Hook_config_community_billboard
 	 */
 	function get_default()
 	{
-		if (!addon_installed('community_billboard')) return NULL; return '200';
+		return '365';
 	}
 
 }

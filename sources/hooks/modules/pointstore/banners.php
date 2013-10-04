@@ -300,7 +300,7 @@ class Hook_pointstore_banners
 		$title=get_screen_title('TITLE_BANNER_UPGRADE');
 
 		$member_id=get_member();
-		$pointsleft=available_points($member_id);
+		$points_left=available_points($member_id);
 
 		$myrow=$this->handle_has_no_banner();
 
@@ -336,7 +336,7 @@ class Hook_pointstore_banners
 		$impcost=$futimp*$impprice;
 		$hitcost=$futhit*$hitprice;
 		$total_price=$hitcost+$impcost;
-		$points_after=$pointsleft-$total_price;
+		$points_after=$points_left-$total_price;
 
 		// Check to see this isn't costing us more than we can afford
 		if (($points_after<0) && (!has_privilege(get_member(),'give_points_self')))

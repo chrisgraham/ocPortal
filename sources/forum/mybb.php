@@ -214,10 +214,11 @@ class forum_driver_mybb extends forum_driver_base
 	 * Pin a topic.
 	 *
 	 * @param  AUTO_LINK		The topic ID
+	 * @param  boolean		True: pin it, False: unpin it
 	 */
-	function pin_topic($id)
+	function pin_topic($id,$pin=true)
 	{
-		$this->connection->query_update('threads',array('sticky'=>1),array('tid'=>$id),'',1);
+		$this->connection->query_update('threads',array('sticky'=>$pin?1:0),array('tid'=>$id),'',1);
 	}
 
 	/**

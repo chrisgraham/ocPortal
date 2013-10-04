@@ -1007,6 +1007,12 @@ div.edited {
 	vertical-align: top;
 }
 
+/* Used to align next to a floated button(s) */
+.vertical_alignment_buttons {
+	line-height: 1.9em;
+}
+
+
 /* Makes an item of media (e.g. an image) get framed nicely. NB: We do not use this for galleries (which are more elaborate), although that has similar styling with .gallery_grid_cell */
 .media_box {
 	margin: {$?,{$MOBILE},1,1.5}em 0;

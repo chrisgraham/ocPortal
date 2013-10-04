@@ -56,7 +56,7 @@ class Hook_pointstore_community_billboard
 	{
 		if (get_option('is_on_community_billboard_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_NEWTEXT');
+		$title=get_screen_title('TITLE_NEWCOMMUNITY_BILLBOARD');
 
 		$queue=$GLOBALS['SITE_DB']->query_select_value('community_billboard','SUM(days) AS days',array('activation_time'=>NULL));
 		if (is_null($queue)) $queue=0;
@@ -75,11 +75,12 @@ class Hook_pointstore_community_billboard
 	{
 		if (get_option('is_on_community_billboard_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_NEWTEXT');
+		$title=get_screen_title('TITLE_NEWCOMMUNITY_BILLBOARD');
 
 		// Build up fields
 		require_code('form_templates');
-		$fields=form_input_line_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('MESSAGE_DESCRIPTION'),'message','',true);
+		$fields=new ocp_tempcode();
+		$fields->attach(form_input_line_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('MESSAGE_DESCRIPTION'),'message','',true));
 		$fields->attach(form_input_integer(do_lang_tempcode('NUMBER_DAYS'),do_lang_tempcode('NUMBER_DAYS_DESCRIPTION'),'days',1,true));
 
 		$price=intval(get_option('community_billboard'));
@@ -87,7 +88,7 @@ class Hook_pointstore_community_billboard
 
 		// Return template
 		$post_url=build_url(array('page'=>'_SELF','type'=>'__community_billboard','id'=>'community_billboard'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'3584ba6a16c9a51829dc3b25b58067f6','HIDDEN'=>'','TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWTEXT'),'TEXT'=>$text,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3584ba6a16c9a51829dc3b25b58067f6','HIDDEN'=>'','TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWCOMMUNITY_BILLBOARD'),'TEXT'=>$text,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
 	}
 
 	/**
@@ -99,31 +100,31 @@ class Hook_pointstore_community_billboard
 	{
 		if (get_option('is_on_community_billboard_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_NEWTEXT');
+		$title=get_screen_title('TITLE_NEWCOMMUNITY_BILLBOARD');
 
-		//So we don't need to call this big long ugly name...
+		// So we don't need to call this big long ugly name...
 		$days=post_param_integer('days');
 		$message=post_param('message');
 
 		$member_id=get_member();
-		$pointsleft=available_points($member_id);
+		$points_left=available_points($member_id);
 
-		//First we need to know the price of the number of days we ordered. After that, compare that price
-		//with our users current number of points.
-		$dayprice=intval(get_option('community_billboard'));
-		$total=$dayprice*$days;
+		// First we need to know the price of the number of days we ordered.
+		// After that will be compare that price with our users current number of points.
+		$day_price=intval(get_option('community_billboard'));
+		$total=$day_price*$days;
 
 		if (!($days>=1))
 		{
 			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_POSITIVE_DAYS'));
 		}
 
-		if (($pointsleft<$total) && (!has_privilege(get_member(),'give_points_self')))
+		if (($points_left<$total) && (!has_privilege(get_member(),'give_points_self')))
 		{
-			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_LACK_POINTS',integer_format($days),integer_format($total),array(integer_format($pointsleft))));
+			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_LACK_POINTS',integer_format($days),integer_format($total),array(integer_format($points_left))));
 		}
 
-		// the order screen...
+		// The order screen...
 		$action=do_lang_tempcode('CONFIRM_COMMUNITY_BILLBOARD',integer_format($days));
 		$keep=form_input_hidden('message',$message);
 		$keep->attach(form_input_hidden('days',strval($days)));
@@ -135,7 +136,7 @@ class Hook_pointstore_community_billboard
 			'KEEP'=>$keep,
 			'ACTION'=>$action,
 			'COST'=>integer_format($total),
-			'POINTS_AFTER'=>integer_format($pointsleft-$total),
+			'POINTS_AFTER'=>integer_format($points_left-$total),
 			'PROCEED_URL'=>$proceed_url,
 			'MESSAGE'=>comcode_to_tempcode($message),
 			'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),
@@ -151,7 +152,7 @@ class Hook_pointstore_community_billboard
 	{
 		if (get_option('is_on_community_billboard_buy')=='0') return new ocp_tempcode();
 
-		$title=get_screen_title('TITLE_NEWTEXT');
+		$title=get_screen_title('TITLE_NEWCOMMUNITY_BILLBOARD');
 
 		// Define variables
 		$member_id=get_member();
@@ -160,8 +161,8 @@ class Hook_pointstore_community_billboard
 		$points_left=available_points($member_id);
 
 		// First we need to know the price of the number of days we ordered. After that, compare that price with our users current number of points.
-		$dayprice=intval(get_option('community_billboard'));
-		$total=$dayprice*$days;
+		$day_price=intval(get_option('community_billboard'));
+		$total=$day_price*$days;
 
 		if (($points_left<$total) && (!has_privilege(get_member(),'give_points_self')))
 		{
@@ -175,9 +176,9 @@ class Hook_pointstore_community_billboard
 		require_code('notifications');
 		$_url=build_url(array('page'=>'admin_community_billboard'),'adminzone',NULL,false,false,true);
 		$manage_url=$_url->evaluate();
-		dispatch_notification('pointstore_request_community_billboard',NULL,do_lang('TITLE_NEWTEXT',NULL,NULL,NULL,get_site_default_lang()),do_lang('MAIL_COMMUNITY_BILLBOARD_TEXT',$message,comcode_escape($manage_url),NULL,get_site_default_lang()));
+		dispatch_notification('pointstore_request_community_billboard',NULL,do_lang('TITLE_NEWCOMMUNITY_BILLBOARD',NULL,NULL,NULL,get_site_default_lang()),do_lang('MAIL_COMMUNITY_BILLBOARD_TEXT',$message,comcode_escape($manage_url),NULL,get_site_default_lang()));
 
-		// Now, deduct the points from our user's account
+		// Now, deduct the points from our member's account
 		require_code('points2');
 		charge_member($member_id,$total,do_lang('PURCHASED_COMMUNITY_BILLBOARD'));
 

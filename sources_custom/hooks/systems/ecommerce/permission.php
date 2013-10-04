@@ -32,7 +32,7 @@ function handle_permission_purchase($purchase_id,$details,$product)
 	$row=$rows[0];
 
 	$map=get_sales_permission_map($row,$member);
-	$map['active_until']=time()+$row['p_hours']*60*60;
+	$map['active_until']=is_null($row['p_hours'])?NULL:(time()+$row['p_hours']*60*60);
 	$GLOBALS['SITE_DB']->query_insert(filter_naughty_harsh($row['p_type']),$map);
 
 	// Email member
