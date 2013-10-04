@@ -55,5 +55,44 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	echo function_exists('persistent_cache_get')?'yes':'no';
+	require_code('addons');
+	$addons_installed=find_installed_addons();
+	$uninstalling=array();
+	$_POST['addon_news']='0';
+	//$_POST['addon_syndication']='0';
+	$_POST['addon_syndication_blocks']='0';
+	foreach ($addons_installed as $addon_row)
+	{
+		if (post_param_integer('addon_'.$addon_row['addon_name'],NULL)===0)
+		{
+			$uninstalling[$addon_row['addon_name']]=$addon_row;
+		}
+	}
+	do
+	{
+		$cnt=count($uninstalling);
+		foreach ($addons_installed as $addon_row)
+		{
+			if (array_key_exists($addon_row['addon_name'],$uninstalling))
+			{
+				$addon_row+=read_addon_info($addon_row['addon_name']);
+				$addon_row['addon_author']=''; // Fudge, to stop it dying on warnings for official addons
+
+				// Check dependencies
+				$dependencies=$addon_row['addon_dependencies_on_this'];
+				foreach (array_keys($uninstalling) as $d)
+				{
+					if (in_array($d,$dependencies)) // Can mark this dependency as irrelevant, as we are uninstalling the addon for it anyway
+						unset($dependencies[array_search($d,$dependencies)]);
+				}
+
+				if (count($dependencies)!=0) // Can't uninstall, has dependencies
+				{
+					unset($uninstalling[$addon_row['addon_name']]);
+				}
+			}
+		}
+	}
+	while ($cnt!=count($uninstalling)); // Dependency chains can be complex, so loop until we're stopped finding anything changing
+	@var_dump(array_keys($uninstalling));
 }
