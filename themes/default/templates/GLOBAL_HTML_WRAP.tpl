@@ -192,7 +192,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 								{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},keep_su}
 
 								<div class="accessibility_hidden"><label for="su">{!SU}</label></div>
-								<input accesskey="w" size="10" onfocus="if (this.value=='{$USERNAME*;}') this.value='';" type="text" value="{$USERNAME*;}" id="su" name="keep_su" />
+								<input onkeypress="if (enter_pressed(event)) this.form.submit();" accesskey="w" size="10" onfocus="if (this.value=='{$USERNAME*;}') this.value='';" type="text" value="{$USERNAME*;}" id="su" name="keep_su" />
 								{+START,IF,{$NOT,{$JS_ON}}}
 									<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SU}" />
 								{+END}
