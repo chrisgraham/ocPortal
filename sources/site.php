@@ -344,7 +344,7 @@ function attach_message($message,$type='inform')
 		'MESSAGE'=>is_string($message)?escape_html($message):$message
 	));
 
-	if ($GLOBALS['OUTPUT_STARTED'])
+	if ($GLOBALS['TEMPCODE_OUTPUT_STARTED'])
 	{
 		$LATE_ATTACHED_MESSAGES_RAW[]=array($message,$type);
 		if ($LATE_ATTACHED_MESSAGES===NULL) $LATE_ATTACHED_MESSAGES=new ocp_tempcode();

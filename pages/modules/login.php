@@ -106,6 +106,8 @@ class Module_login
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_LOGIN'))));
 
+			$username=trim(post_param('login_username'));
+
 			$feedback=$GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,NULL,apply_forum_driver_md5_variant(trim(post_param('password')),$username),trim(post_param('password')));
 			if (!is_null($feedback['id']))
 			{
