@@ -52,6 +52,19 @@ class Hook_addon_registry_core_forum_drivers
 	}
 
 	/**
+	 * Get a list of tutorials that apply to this addon
+	 *
+	 * @return array			List of tutorials
+	 */
+	function get_applicable_tutorials()
+	{
+		return array(
+			'tut_nuances',
+			'codebook_1b',
+		);
+	}
+
+	/**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set

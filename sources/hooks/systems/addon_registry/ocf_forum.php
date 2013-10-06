@@ -51,6 +51,22 @@ class Hook_addon_registry_ocf_forum
 	}
 
 	/**
+	 * Get a list of tutorials that apply to this addon
+	 *
+	 * @return array			List of tutorials
+	 */
+	function get_applicable_tutorials()
+	{
+		return array(
+			'tut_forums',
+			'tut_forum_helpdesk',
+			'tut_forum_tracking',
+			'tut_mod',
+			'tut_information',
+		);
+	}
+
+	/**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set

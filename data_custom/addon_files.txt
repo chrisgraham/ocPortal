@@ -2186,6 +2186,8 @@ ocportal_tutorials
  - docs/ocportal-api-template/reports/markers.xsl
  - docs/ocportal-api-template/search.json.xsl
  - docs/ocportal-api-template/template.xml
+ - adminzone/pages/minimodules_custom/doc_index_build.php
+ - docs/pages/comcode_custom/EN/tut_addon_index.txt
 
 openid
 ------

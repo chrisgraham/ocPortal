@@ -51,6 +51,18 @@ class Hook_addon_registry_redirects_editor
 	}
 
 	/**
+	 * Get a list of tutorials that apply to this addon
+	 *
+	 * @return array			List of tutorials
+	 */
+	function get_applicable_tutorials()
+	{
+		return array(
+			'tut_subcom',
+		);
+	}
+
+	/**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set

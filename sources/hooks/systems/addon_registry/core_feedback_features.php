@@ -51,6 +51,19 @@ class Hook_addon_registry_core_feedback_features
 	}
 
 	/**
+	 * Get a list of tutorials that apply to this addon
+	 *
+	 * @return array			List of tutorials
+	 */
+	function get_applicable_tutorials()
+	{
+		return array(
+			'tut_feedback',
+			'tut_adv_news',
+		);
+	}
+
+	/**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set

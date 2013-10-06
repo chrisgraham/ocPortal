@@ -36,7 +36,7 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_2',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,expand}" /></a>Introduction and background information[/title]
 	<div class="hide_tag" id="doctray_2"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="webapp,drinking,browsers" view="full"]ocpcom_new_tutorials[/block]
+	[block="addon_index,webapp,drinking,browsers" view="full"]ocpcom_new_tutorials[/block]
 	</div>
 </div>
 

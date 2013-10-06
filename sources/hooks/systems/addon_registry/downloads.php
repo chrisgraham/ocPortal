@@ -51,6 +51,20 @@ class Hook_addon_registry_downloads
 	}
 
 	/**
+	 * Get a list of tutorials that apply to this addon
+	 *
+	 * @return array			List of tutorials
+	 */
+	function get_applicable_tutorials()
+	{
+		return array(
+			'tut_downloads',
+			'tut_adv_downloads',
+			'tut_information',
+		);
+	}
+
+	/**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set

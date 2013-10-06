@@ -51,6 +51,23 @@ class Hook_addon_registry_core_themeing
 	}
 
 	/**
+	 * Get a list of tutorials that apply to this addon
+	 *
+	 * @return array			List of tutorials
+	 */
+	function get_applicable_tutorials()
+	{
+		return array(
+			'tut_themes',
+			'tut_releasing_themes',
+			'tut_tempcode',
+			'tut_fixed_width',
+			'tut_design',
+			'tut_designer_themes',
+		);
+	}
+
+	/**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set

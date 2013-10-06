@@ -2455,6 +2455,7 @@ function titleify($boring)
 	$ret=str_replace('Ocselect','ocSelect',$ret);
 	$ret=str_replace('Ocfilter','ocFilter',$ret);
 	$ret=str_replace('Ocf','OCF',$ret);
+	$ret=str_replace('Html','HTML',$ret);
 	$ret=str_replace('Occle','OcCLE',$ret);
 	$ret=str_replace('Msn','M.S.N.',$ret);
 	$ret=str_replace('Ecommerce','eCommerce',$ret);

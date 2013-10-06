@@ -93,6 +93,16 @@ The following statistics screens exist to show [concept]OCF[/concept] data:
  - Demographics (summarise the ages of your members)
  - Posting rates (identify trends in daily posting rates)
 
+[title="2"]The statistics block[/title]
+
+The [tt]side_stats[/tt] block shows various figures that relate to your website's activity and archive size. The exact details shown are configurable (in the main ocPortal configuration) from quite a wide selection.
+
+[title="2"]Real-time analytics[/title]
+
+{!DOC_REALTIME_RAIN}
+
+It is a good way to visualise how people are using the site. This works best when the site has multiple online users performing options, but you can rewind the clock to a time when you know this was happening.
+
 [title="2"]Google Analytics[/title]
 
 [url="Google Analytics"]http://www.google.com/analytics/[/url] is an excellent free package for analysing website activity, allowing you to spot all kinds of trends in your data.

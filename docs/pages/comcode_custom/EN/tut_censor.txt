@@ -16,11 +16,15 @@ In addition to the word filter there is a more sophisticated filtering system, t
 
 [title="2"]Tools for moderation[/title]
 
-ocPortal, by default, will not allow most forms of non-trusted content to appear live on the website without validation by the staff. When a user that is not in a trusted usergroup posts content, then they will have no choice but to have it posted as non-validated, and an e-mail will be dispatched to the staff. The staff can then choose what to do with the content. There is also a page where staff can see all non-validated content, in case the notification e-mail was missed.
+ocPortal, by default, will not allow most forms of non-trusted content to appear live on the website without validation by the staff. When a user that is not in a trusted usergroup posts content, then they will have no choice but to have it posted as non-validated, and a notification will be dispatched to the staff. The staff can then choose what to do with the content. There is also a page where staff can see all non-validated content, in case the notification was missed or disabled.
 
 By default, the forum, the chat rooms, and Wiki+, are the main exceptions where validation is not required. This is because these are community orientated areas of the website, where instant posting is desirable.
 
 Naturally, privileged users may edit and delete any content on the system; by default, these privileged users are those in the staff usergroups. It is possible to configure ocPortal so that users may edit/delete their own content though, or even all content if you like.
+
+[title="2"]Content privacy[/title]
+
+Members may specify the privacy settings for content they post, if the [tt]content_privacy[/tt] addon is installed. For example, they may post an image and set it so only their friends may view it.
 
 [title="2"]Tools for punishment[/title]
 [surround]

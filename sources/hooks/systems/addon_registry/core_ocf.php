@@ -51,6 +51,22 @@ class Hook_addon_registry_core_ocf
 	}
 
 	/**
+	 * Get a list of tutorials that apply to this addon
+	 *
+	 * @return array			List of tutorials
+	 */
+	function get_applicable_tutorials()
+	{
+		return array(
+			'tut_members',
+			'tut_adv_members',
+			'tut_users',
+			'tut_httpauth',
+			'tut_emoticons',
+		);
+	}
+
+	/**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set

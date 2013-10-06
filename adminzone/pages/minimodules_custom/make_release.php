@@ -298,6 +298,7 @@ function phase_2()
 				<li>Update the secondary level navigation to link to the new addon locations</li>
 			</ul></li>
 			<li><strong>Documentation</strong>: Upload the latest new documentation&hellip;<ul>
+				<li>Build new addon tutorial index (<a target="_blank" href="'.get_base_url().'/adminzone/index.php?page=doc_index_build&amp;keep_devtest=1">doc_index_build minimodule</a>)</li>
 				<li>Create <a target="_blank" href="http://ocportal.com/adminzone/index.php?page=admin_zones&amp;type=add">docs'.strval(intval(ocp_version_number())).' zone</a> (Codename "docs'.strval(intval(ocp_version_number())).'", Title "Documentation (version '.strval(intval(ocp_version_number())).')", Theme "ocProducts", Default page "tutorials")</li>
 				<li>Do this in a Linux shell on the ocPortal.com server: <kbd>rm docs'.strval(intval(ocp_version_number())-1).' ; mv docs docs'.strval(intval(ocp_version_number())-1).' ; rm -f docs'.strval(intval(ocp_version_number())).'/pages/comcode_custom/EN/*.txt; ln -s docs'.strval(intval(ocp_version_number())).' docs; cd docs'.strval(intval(ocp_version_number()-1)).'; mv api *.doc *.pdf *.zip *.xls ../docs/ ; cd ..</kbd></li>
 				<li>Upload the latest <kbd>.txt</kbd> files from git for <kbd>docs/pages/comcode_custom/EN/</kbd> to the ocPortal.com server</li>

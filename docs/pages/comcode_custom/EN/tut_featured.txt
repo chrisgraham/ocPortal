@@ -119,6 +119,28 @@ You will find that by default a selection of deep quotes are provided.
 
 If block cacheing is on, quotes will be rotated on a daily basis.
 
+[title="2"]Pulling out forum content[/title]
+
+There are 4 blocks for pulling out forum content:
+1) [tt]side_forum_news[/tt] -- show forum topics, in news-style, as a side block
+2) [tt]main_forum_news[/tt] -- show forum topics, in news-style, as a main block
+3) [tt]bottom_forum_news[/tt] -- show forum topics, in news-style, as a ticker
+4) [tt]main_forum_topics[/tt] -- show forum topics, as either a side block or a main block
+
+Three of these show in a news-style, and are most useful for those who prefer to use their forum to post news, rather than the dedicated ocPortal news system. Most users will want to use the [tt]main_forum_topics[/tt] block.
+
+The blocks are configurable, but generally you will typically use them to show the most recent topics from a particular set of forums.
+
+[title="2"]Count-downs[/title]
+
+Count-downs are provided via the [tt]main_countdown[/tt] block. You can configure the date/time the count-down is running to, and ocPortal will automatically maintain the count-down for you. Once it passes the date/time, it displays negative time.
+You may place as many independent count-downs as you like.
+
+[title="2"]Hit counts[/title]
+
+Hit counters may be placed via the [tt]main_count[/tt] block. Hit counters are considered quite antiquated generally, but may be useful to you in some cases. Note that hits from bots, or repeat hits, are not filtered out.
+You may place as many independent hit counters as you like.
+
 [concepts
  1_key="IOTD"   1_value="[Image of the day]. An image and associated caption, generally shown on your front page, intended for regular changing"
  2_key="DOTW"   2_value="[Download of the week]"

@@ -57,6 +57,19 @@ ocPortal does not require cookie support, although it is recommended. To at leas
 A screen-resolution of at least 1024x768 is strongly suggested, as this is the minimum resolution that we design the default theme for.
 ocPortal users must be using 15 bit colour or higher. In other words, 256 colour is not supported: users are very unlikely to be using this any more.
 
+[title="2"]Printing[/title]
+
+It is not usually appropriate for a printed webpage to look like it does on the screen. For example, margins would want removing from each side of the site, social media links should not show, background images should be disabled, and so on.
+There are 3 approaches to solving this problem that work together:
+1) Browsers automatically disable background images, when printing
+2) CSS provides a mechanism for specifying different display rules for the printed version; ocPortal makes use of this
+3) ocPortal has a parameter, [tt]wide_print[/tt], that will influence some aspects of how pages are put together
+
+The ocPortal [tt]wide_print[/tt] parameter is activated from either:
+a) The link from the [tt]side_printer_friendly[/tt] block
+b) The link from the [tt]main_screen_actions[/tt] block
+c) [i]Or, a link you've put together yourself[/i]
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_accessibility"]Making an accessible website with ocPortal[/page]

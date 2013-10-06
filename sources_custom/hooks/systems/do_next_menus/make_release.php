@@ -28,6 +28,7 @@ class Hook_do_next_menus_ocportal_release_build
 			array('tools','admin_home',array('plug_guid',array(),'adminzone'),make_string_tempcode('Release tools: Plug in missing GUIDs')),
 			array('tools','admin_home',array('make_release',array(),'adminzone'),make_string_tempcode('Release tools: Make an ocPortal release')),
 			array('tools','admin_home',array('push_bugfix',array(),'adminzone'),make_string_tempcode('Release tools: Push an ocPortal bugfix')),
+			array('tools','admin_home',array('doc_index_build',array(),'adminzone'),make_string_tempcode('Doc tools: Make addon tutorial index')),
 		);
 	}
 

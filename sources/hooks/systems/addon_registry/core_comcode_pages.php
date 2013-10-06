@@ -51,6 +51,20 @@ class Hook_addon_registry_core_comcode_pages
 	}
 
 	/**
+	 * Get a list of tutorials that apply to this addon
+	 *
+	 * @return array			List of tutorials
+	 */
+	function get_applicable_tutorials()
+	{
+		return array(
+			'tut_comcode_pages',
+			'tut_adv_comcode_pages',
+			'tut_information',
+		);
+	}
+
+	/**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
