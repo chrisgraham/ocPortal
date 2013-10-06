@@ -195,9 +195,14 @@ class Hook_pointstore_topic_pin
 			return warn_screen($title,do_lang_tempcode('TOPIC_PIN_LACK_POINTS',integer_format($days),integer_format($total),integer_format($points_left)));
 		}
 
-		if ($GLOBALS['FORUM_DB']->query_select_value('f_topics','t_pinned',array('id'=>$topic_id))==1)
+		if (get_forum_type()=='ocf')
 		{
-			return warn_screen($title,do_lang_tempcode('TOPIC_PINNED_ALREADY'));
+			$currently_pinned=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_pinned',array('id'=>$topic_id));
+			if (is_null($currently_pinned)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			if ($currently_pinned==1)
+			{
+				return warn_screen($title,do_lang_tempcode('TOPIC_PINNED_ALREADY'));
+			}
 		}
 
 		// Actuate
