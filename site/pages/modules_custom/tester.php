@@ -106,6 +106,100 @@ class Module_tester
 		return array('add_test'=>'ADD_TEST','ad'=>'ADD_TEST_SECTION','ed'=>'EDIT_TEST_SECTION','go'=>'RUN_THROUGH_TESTS','stats'=>'TEST_STATISTICS');
 	}
 
+	var $title;
+	var $id;
+	var $test_row;
+	var $test;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','go');
+
+		if ($type=='stats')
+		{
+			$this->title=get_screen_title('TEST_STATISTICS');
+		}
+
+		if ($type=='go')
+		{
+			$this->title=get_screen_title('RUN_THROUGH_TESTS');
+		}
+
+		if ($type=='_go')
+		{
+			$this->title=get_screen_title('RUN_THROUGH_TESTS');
+		}
+
+		if ($type=='report')
+		{
+			$id=get_param_integer('id');
+			$test_row=$GLOBALS['SITE_DB']->query_select('tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id',array('*'),array('t.id'=>$id),'',1);
+			if (array_key_exists(0,$test_row))
+			{
+				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			}
+
+			$section=$test_row[0]['s_section'];
+			$test=$test_row[0]['t_test'];
+
+			$this->id=$id;
+			$this->test_row=$test_row;
+			$this->test=$test;
+
+			$this->self_title=$section.'/'.substr($test,0,20);
+
+			$this->title=get_screen_title('BUG_REPORT_FOR',true,array(escape_html($this->self_title)));
+		}
+
+		if ($type=='add_test')
+		{
+			$this->title=get_screen_title('ADD_TEST');
+		}
+
+		if ($type=='_add_test')
+		{
+			$this->title=get_screen_title('ADD_TEST');
+		}
+
+		if ($type=='ad')
+		{
+			$this->title=get_screen_title('ADD_TEST_SECTION');
+		}
+
+		if ($type=='_ad')
+		{
+			$this->title=get_screen_title('ADD_TEST_SECTION');
+		}
+
+		if ($type=='ed')
+		{
+			$this->title=get_screen_title('EDIT_TEST_SECTION');
+		}
+
+		if ($type=='_ed')
+		{
+			$this->title=get_screen_title('EDIT_TEST_SECTION');
+		}
+
+		if ($type=='__ed')
+		{
+			if (post_param_integer('delete',0)==1)
+			{
+				$this->title=get_screen_title('DELETE_TEST_SECTION');
+			} else
+			{
+				$this->title=get_screen_title('EDIT_TEST_SECTION');
+			}
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -142,8 +236,6 @@ class Module_tester
 	 */
 	function stats()
 	{
-		$title=get_screen_title('TEST_STATISTICS');
-
 		$num_tests_successful=$GLOBALS['SITE_DB']->query_select_value('tests','COUNT(*)',array('t_status'=>1,'t_enabled'=>1));
 		$num_tests_failed=$GLOBALS['SITE_DB']->query_select_value('tests','COUNT(*)',array('t_status'=>2,'t_enabled'=>1));
 		$num_tests_incomplete=$GLOBALS['SITE_DB']->query_select_value('tests','COUNT(*)',array('t_status'=>0,'t_enabled'=>1));
@@ -176,7 +268,7 @@ class Module_tester
 
 		return do_template('TESTER_STATISTICS_SCREEN',array(
 			'_GUID'=>'3f4bcbccbdc2e60ad7324cb28ed942b5',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TESTERS'=>$testers,
 			'NUM_TESTS'=>integer_format($num_tests),
 			'NUM_TESTS_SUCCESSFUL'=>integer_format($num_tests_successful),
@@ -193,8 +285,6 @@ class Module_tester
 	function go()
 	{
 		require_code('comcode_renderer');
-
-		$title=get_screen_title('RUN_THROUGH_TESTS');
 
 		$show_for_all=get_param_integer('show_for_all',0);
 		$show_successful=get_param_integer('show_successful',0);
@@ -274,7 +364,7 @@ class Module_tester
 			'ADD_TEST_SECTION_URL'=>$add_test_section_url,
 			'SHOW_SUCCESSFUL'=>strval($show_successful),
 			'SHOW_FOR_ALL'=>strval($show_for_all),
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SECTIONS'=>$sections,
 			'URL'=>$post_url,
 		));
@@ -287,30 +377,19 @@ class Module_tester
 	 */
 	function report()
 	{
-		$id=get_param_integer('id');
-		$test_row=$GLOBALS['SITE_DB']->query_select('tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id',array('*'),array('t.id'=>$id),'',1);
-		if (!array_key_exists(0,$test_row))
-		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		}
-
-		$section=$test_row[0]['s_section'];
-		$test=$test_row[0]['t_test'];
-
-		$self_title=$section.'/'.substr($test,0,20);
-
-		$title=get_screen_title('BUG_REPORT_FOR',true,array(escape_html($self_title)));
+		$id=$this->id;
+		$test_row=$this->test_row;
 
 		require_code('feedback');
 
 		$self_url=get_self_url();
 		$forum=get_option('tester_forum_name');
-		actualise_post_comment(true,'bug_report',strval($id),$self_url,$self_title,$forum);
+		actualise_post_comment(true,'bug_report',strval($id),$self_url,$this->self_title,$forum);
 
-		$comment_text=str_replace('{1}',$test,get_option('bug_report_text'));
+		$comment_text=str_replace('{1}',$this->test,get_option('bug_report_text'));
 		$comments=get_comments('bug_report',true,strval($id),false,$forum,$comment_text);
 
-		return do_template('TESTER_REPORT',array('_GUID'=>'0c223a0a29a2c5289d71fbb69b0fe40d','TITLE'=>$title,'TEST'=>$test,'COMMENTS'=>$comments));
+		return do_template('TESTER_REPORT',array('_GUID'=>'0c223a0a29a2c5289d71fbb69b0fe40d','TITLE'=>$this->title,'TEST'=>$test,'COMMENTS'=>$comments));
 	}
 
 	/**
@@ -320,8 +399,6 @@ class Module_tester
 	 */
 	function _go()
 	{
-		$title=get_screen_title('RUN_THROUGH_TESTS');
-
 		foreach ($_POST as $key=>$val)
 		{
 			if ((substr($key,0,5)=='test_') && (is_numeric(substr($key,5))) && (is_numeric($val)))
@@ -335,7 +412,7 @@ class Module_tester
 		$show_for_all=post_param_integer('show_for_all',0);
 		$show_successful=post_param_integer('show_successful',0);
 		$url=build_url(array('page'=>'_SELF','type'=>'go','show_for_all'=>$show_for_all,'show_successful'=>$show_successful),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -453,8 +530,6 @@ class Module_tester
 	 */
 	function add_test()
 	{
-		$title=get_screen_title('ADD_TEST');
-
 		check_privilege('add_tests');
 
 		$list=$this->get_section_list(get_param_integer('id',-1));
@@ -469,7 +544,7 @@ class Module_tester
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add_test'),'_SELF');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'133ed356bc7cf270d9763f8cdc7f1d41','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('ADD_TEST'),'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>'','HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'133ed356bc7cf270d9763f8cdc7f1d41','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang_tempcode('ADD_TEST'),'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>'','HIDDEN'=>''));
 	}
 
 	/**
@@ -479,8 +554,6 @@ class Module_tester
 	 */
 	function _add_test()
 	{
-		$title=get_screen_title('ADD_TEST');
-
 		check_privilege('add_tests');
 
 		$section_id=post_param_integer('id');
@@ -488,7 +561,7 @@ class Module_tester
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'add_test','id'=>$section_id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -498,8 +571,6 @@ class Module_tester
 	 */
 	function ad()
 	{
-		$title=get_screen_title('ADD_TEST_SECTION');
-
 		check_privilege('add_tests');
 
 		require_code('form_templates');
@@ -515,7 +586,7 @@ class Module_tester
 
 		$tests='';
 
-		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'49172fc2c5ace05a632f9a5fdd91abd0','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('ADD_TEST_SECTION'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
+		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'49172fc2c5ace05a632f9a5fdd91abd0','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang_tempcode('ADD_TEST_SECTION'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
 	}
 
 	/**
@@ -557,8 +628,6 @@ class Module_tester
 	 */
 	function _ad()
 	{
-		$title=get_screen_title('ADD_TEST_SECTION');
-
 		check_privilege('add_tests');
 
 		$assigned_to=post_param_integer('assigned_to');
@@ -575,7 +644,7 @@ class Module_tester
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'ad'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -585,8 +654,6 @@ class Module_tester
 	 */
 	function ed()
 	{
-		$title=get_screen_title('EDIT_TEST_SECTION');
-
 		check_privilege('edit_own_tests');
 		if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) access_denied('STAFF_ONLY');
 
@@ -602,7 +669,7 @@ class Module_tester
 		$fields=form_input_list(do_lang_tempcode('NAME'),'','id',$list,NULL,true);
 		$submit_name=do_lang_tempcode('PROCEED');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'37f70ba9d23204bceda6e84375b52270','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'37f70ba9d23204bceda6e84375b52270','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -612,8 +679,6 @@ class Module_tester
 	 */
 	function _ed()
 	{
-		$title=get_screen_title('EDIT_TEST_SECTION');
-
 		check_privilege('edit_own_tests');
 
 		$id=get_param_integer('id');
@@ -646,7 +711,7 @@ class Module_tester
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'__ed','id'=>$id),'_SELF');
 
-		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'ee10a568b6dacd8baf1efeac3e7bcb40','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
+		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'ee10a568b6dacd8baf1efeac3e7bcb40','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
 	}
 
 	/**
@@ -687,16 +752,12 @@ class Module_tester
 
 		if (post_param_integer('delete',0)==1)
 		{
-			$title=get_screen_title('DELETE_TEST_SECTION');
-
 			$GLOBALS['SITE_DB']->query_delete('test_sections',array('id'=>$id),'',1);
 			$GLOBALS['SITE_DB']->query_delete('tests',array('t_section'=>$id));
 
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		} else
 		{
-			$title=get_screen_title('EDIT_TEST_SECTION');
-
 			// New tests
 			$this->_add_new_tests($id);
 
@@ -741,7 +802,7 @@ class Module_tester
 
 			// Show it worked / Refresh
 			$url=build_url(array('page'=>'_SELF','type'=>'go'),'_SELF');
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
 	}
 }

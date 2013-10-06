@@ -137,6 +137,107 @@ class Module_admin_stats
 		return $ret;
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type!='misc' && $type!='_clear')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
+		}
+
+		if ($type=='_clear')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS')),array('_SELF:_SELF:clear',do_lang_tempcode('CLEAR_STATISTICS'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		if ($type=='overview')
+		{
+			inform_non_canonical_parameter('sort_views');
+		}
+
+		if ($type=='_page')
+		{
+			inform_non_canonical_parameter('sort_keywords');
+			inform_non_canonical_parameter('sort_regionalities');
+			inform_non_canonical_parameter('sort_views');
+		}
+
+		set_helper_panel_tutorial('tut_statistics');
+		if ($type=='clear' || $type=='_clear')
+		{
+			set_helper_panel_pic('pagepics/statistics_clear');
+		}
+		elseif ($type=='install_data')
+		{
+			set_helper_panel_pic('pagepics/installgeolocationdata');
+		} else
+		{
+			set_helper_panel_pic('pagepics/statistics');
+		}
+
+		if ($type=='users_online')
+		{
+			$this->title=get_screen_title('USERS_ONLINE_STATISTICS');
+		}
+
+		if ($type=='submission_rates')
+		{
+			$this->title=get_screen_title('SUBMISSION_STATISTICS');
+		}
+
+		if ($type=='load_times')
+		{
+			$this->title=get_screen_title('LOAD_TIMES');
+		}
+
+		if ($type=='referrers')
+		{
+			$this->title=get_screen_title('TOP_REFERRERS');
+		}
+
+		if ($type=='keywords')
+		{
+			$this->title=get_screen_title('TOP_SEARCH_KEYWORDS');
+		}
+
+		if ($type=='page_stats')
+		{
+			$this->title=get_screen_title('PAGES_STATISTICS');
+		}
+
+		if ($type=='overview')
+		{
+			$this->title=get_screen_title('OVERVIEW_STATISTICS');
+		}
+
+		if ($type=='show_page')
+		{
+			$page=get_param('iscreen');
+			$this->title=get_screen_title(do_lang_tempcode('PAGE_STATISTICS',escape_html($page)),false);
+		}
+
+		if ($type=='clear')
+		{
+			$this->title=get_screen_title('CLEAR_STATISTICS');
+		}
+
+		if ($type=='install_geolocation_data')
+		{
+			$this->title=get_screen_title('INSTALL_GEOLOCATION_DATA');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -187,9 +288,6 @@ class Module_admin_stats
 	 */
 	function misc()
 	{
-		set_helper_panel_pic('pagepics/statistics');
-		set_helper_panel_tutorial('tut_statistics');
-
 		require_code('templates_donext');
 		$test=$GLOBALS['SITE_DB']->query_select_value('ip_country','COUNT(*)');
 		$actions=array(
@@ -214,8 +312,8 @@ class Module_admin_stats
 		if ($test==0) $actions[]=array('geolocate',array('_SELF',array('type'=>'install_data'),'_SELF'),do_lang('INSTALL_GEOLOCATION_DATA'),('DOC_INSTALL_GEOLOCATION_DATA'));
 		$actions[]=array('clear_stats',array('_SELF',array('type'=>'clear'),'_SELF'),do_lang('CLEAR_STATISTICS'),do_lang_tempcode('DESCRIPTION_CLEAR_STATISTICS'));
 		return do_next_manager(get_screen_title('SITE_STATISTICS'),comcode_lang_string('DOC_STATISTICS'),
-					$actions,
-					do_lang('SITE_STATISTICS')
+			$actions,
+			do_lang('SITE_STATISTICS')
 		);
 	}
 
@@ -269,8 +367,6 @@ class Module_admin_stats
 			$message=do_lang_tempcode($stats_table?'SELECT_STATS_RANGE':'_SELECT_STATS_RANGE',escape_html(get_timezoned_date($first_stat,false)));
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
 		return do_template('FORM_SCREEN',array('_GUID'=>'3e76584f20ecfb947b00638211e63321','SKIP_VALIDATION'=>true,'GET'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$message,'HIDDEN'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
 	}
 
@@ -281,8 +377,7 @@ class Module_admin_stats
 	 */
 	function users_online()
 	{
-		//This needs to show a big scatter graph with the users online every day
-		$title=get_screen_title('USERS_ONLINE_STATISTICS');
+		// This needs to show a big scatter graph with the users online every day
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50); // Intentionally the browse is disabled, as the graph will show all - we fudge $max_rows to $i
@@ -298,10 +393,9 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('usersonline_track',array('date_and_time','peak'),NULL,'ORDER BY '.$sortable.' '.$sort_order);
-		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
+		if (count($rows)<1) return warn_screen($this->title,do_lang_tempcode('NO_DATA'));
 
 		$base=$rows[0]['date_and_time'];
 		foreach ($rows as $value)
@@ -342,9 +436,7 @@ class Module_admin_stats
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'9688722e526a814f3b90ca93a21333ad','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Users-online.xml','TITLE'=>do_lang_tempcode('USERS_ONLINE_STATISTICS'),'TEXT'=>do_lang_tempcode('DESCRIPTION_USERS_ONLINE_STATISTICS')));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
-		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'2e5a6a2f7317c80464c518996728d839','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'2e5a6a2f7317c80464c518996728d839','TITLE'=>$this->title,'GRAPH'=>$graph,'STATS'=>$list));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -357,9 +449,7 @@ class Module_admin_stats
 	 */
 	function submission_rates()
 	{
-		//Like the users online above, we need to use a nice scatter graph
-		$title=get_screen_title('SUBMISSION_STATISTICS');
-
+		// Like the users online above, we need to use a nice scatter graph
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50); // Intentionally the browse is disabled, as the graph will show all - we fudge $max_rows to $i
 		$csv=get_param_integer('csv',0)==1;
@@ -374,10 +464,9 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('date_and_time','COUNT(*) AS cnt'),NULL,'GROUP BY date_and_time ORDER BY '.$sortable.' '.$sort_order,3000/*reasonable limit*/);
-		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
+		if (count($rows)<1) return warn_screen($this->title,do_lang_tempcode('NO_DATA'));
 		//$max_rows=$GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(DISTINCT date_and_time)');	Cannot do this as the DB does not do all the processing
 
 		$data=array();
@@ -414,9 +503,7 @@ class Module_admin_stats
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'f6d5a58eae148a555e0f868eda245304','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Submissions.xml','TITLE'=>do_lang_tempcode('SUBMISSION_STATISTICS'),'TEXT'=>do_lang_tempcode('DESCRIPTION_SUBMISSION_STATISTICS')));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
-		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'66e8534ef342c1d0197f4ddb8f767025','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'66e8534ef342c1d0197f4ddb8f767025','TITLE'=>$this->title,'GRAPH'=>$graph,'STATS'=>$list));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -432,9 +519,7 @@ class Module_admin_stats
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('LOAD_TIMES');
-
-			return $this->get_between($title,true);
+			return $this->get_between($this->title,true);
 		}
 		$time_start=get_input_date('time_start',true);
 		$time_end=get_input_date('time_end',true);
@@ -456,11 +541,11 @@ class Module_admin_stats
 			$time_end=time();*/
 		}
 
-		$title=get_screen_title('LOAD_TIMES_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$this->title=get_screen_title('LOAD_TIMES_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		// We calculate MIN not AVG, because data can be made very dirty by slow clients or if the server is having trouble at one specfic point. It's a shame.
 		$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,MIN(milliseconds) AS avg FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end).' GROUP BY the_page');
-		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
+		if (count($rows)<1) return warn_screen($this->title,do_lang_tempcode('NO_DATA'));
 
 		$data=array();
 		foreach ($rows as $row)
@@ -480,7 +565,6 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		sort_maps_by($data,0);
 		if ($sort_order=='DESC')
@@ -519,9 +603,7 @@ class Module_admin_stats
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'3f1ef4ebbed1e064c0ec89481dc39afc','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Load-times.xml','TITLE'=>do_lang_tempcode('LOAD_TIMES'),'TEXT'=>do_lang_tempcode('DESCRIPTION_LOAD_TIMES')));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
-		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'8f7c585bdbc0180ed116693723108e2b','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'8f7c585bdbc0180ed116693723108e2b','TITLE'=>$this->title,'GRAPH'=>$graph,'STATS'=>$list));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -537,9 +619,7 @@ class Module_admin_stats
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('TOP_REFERRERS');
-
-			return $this->get_between($title,true);
+			return $this->get_between($this->title,true);
 		}
 		$time_start=get_input_date('time_start',true);
 		$time_end=get_input_date('time_end',true);
@@ -561,7 +641,7 @@ class Module_admin_stats
 			$time_end=time();*/
 		}
 
-		$title=get_screen_title('TOP_REFERRERS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$this->title=get_screen_title('TOP_REFERRERS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		$non_local_filter='referer NOT LIKE \''.db_encode_like(get_custom_base_url().'%').'\'';
 		if (get_param_integer('debug',0)==1) $non_local_filter='1=1';
@@ -569,7 +649,7 @@ class Module_admin_stats
 		$where=$non_local_filter.' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end);
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT COUNT(*) AS cnt,referer FROM '.get_table_prefix().'stats WHERE '.$where.' GROUP BY referer');
-		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
+		if (count($rows)<1) return warn_screen($this->title,do_lang_tempcode('NO_DATA'));
 
 		$referrers=array();
 		$total=0;
@@ -585,7 +665,6 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		if ($sort_order=='ASC') asort($referrers);
 		else arsort($referrers);
@@ -633,9 +712,7 @@ class Module_admin_stats
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'22c565665d8a98528659bbfc25526855','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Referrers.xml','TITLE'=>do_lang_tempcode('REFERRER_SHARE'),'TEXT'=>do_lang_tempcode('DESCRIPTION_REFERRER_SHARE')));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
-		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'777bc5f8573a5cef54aa0bc9bdc0ee29','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'777bc5f8573a5cef54aa0bc9bdc0ee29','TITLE'=>$this->title,'GRAPH'=>$graph,'STATS'=>$list));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -651,9 +728,7 @@ class Module_admin_stats
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('TOP_SEARCH_KEYWORDS');
-
-			return $this->get_between($title,true);
+			return $this->get_between($this->title,true);
 		}
 		$time_start=get_input_date('time_start',true);
 		$time_end=get_input_date('time_end',true);
@@ -675,7 +750,7 @@ class Module_admin_stats
 			$time_end=time();*/
 		}
 
-		$title=get_screen_title('TOP_SEARCH_KEYWORDS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$this->title=get_screen_title('TOP_SEARCH_KEYWORDS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		$sortables=array('referer'=>do_lang_tempcode('TOP_SEARCH_KEYWORDS'));
 		$test=explode(' ',get_param('sort','referer DESC'),2);
@@ -683,10 +758,9 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT referer FROM '.get_table_prefix().'stats WHERE referer LIKE \''.db_encode_like('http://www.google.%q=%').'\' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end).' ORDER BY '.$sortable.' '.$sort_order);
-		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
+		if (count($rows)<1) return warn_screen($this->title,do_lang_tempcode('NO_DATA'));
 
 		$keywords=array();
 		$total=0;
@@ -751,9 +825,7 @@ class Module_admin_stats
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'a199b095199a0e337d38c78564909e52','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Keywords.xml','TITLE'=>do_lang_tempcode('KEYWORDS_SHARE'),'TEXT'=>do_lang_tempcode('DESCRIPTION_KEYWORDS_SHARE')));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
-		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'ab791072361184a05c7e60a3127ee439','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'ab791072361184a05c7e60a3127ee439','TITLE'=>$this->title,'GRAPH'=>$graph,'STATS'=>$list));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -766,14 +838,12 @@ class Module_admin_stats
 	 */
 	function page_stats()
 	{
-		//This will show a plain bar chart with all the pages listed
+		// This will show a plain bar chart with all the pages listed
 
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_screen_title('PAGES_STATISTICS');
-
-			return $this->get_between($title,true);
+			return $this->get_between($this->title,true);
 		}
 		$time_start=get_input_date('time_start',true);
 		$time_end=get_input_date('time_end',true);
@@ -795,10 +865,10 @@ class Module_admin_stats
 			$time_end=time();*/
 		}
 
-		$title=get_screen_title('PAGES_STATISTICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$this->title=get_screen_title('PAGES_STATISTICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		$rows=$GLOBALS['SITE_DB']->query_select('stats',array('the_page'),NULL,'GROUP BY the_page ORDER BY COUNT(*) DESC',3000);
-		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
+		if (count($rows)<1) return warn_screen($this->title,do_lang_tempcode('NO_DATA'));
 
 		$views=array(do_lang('_ALL')=>0);
 		$total=0;
@@ -838,7 +908,6 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		sort_maps_by($views,0);
 		if ($sort_order=='DESC')
@@ -878,9 +947,7 @@ class Module_admin_stats
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'ea79fdc013046ef94992daeab961f2da','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Views.xml','TITLE'=>do_lang_tempcode('PAGES_STATISTICS'),'TEXT'=>do_lang_tempcode('DESCRIPTION_PAGES_STATISTICS')));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
-		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'cfe7d5aee8aa3c0d3a54bd3bf2d09e7f','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'cfe7d5aee8aa3c0d3a54bd3bf2d09e7f','TITLE'=>$this->title,'GRAPH'=>$graph,'STATS'=>$list));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -899,8 +966,6 @@ class Module_admin_stats
 		if (!file_exists(get_file_base().'/'.$page))
 			$page='pages/comcode/'.fallback_lang().'/start.txt';
 
-		$title=get_screen_title('OVERVIEW_STATISTICS');
-
 		list($graph_views_monthly,$list_views_monthly)=array_values($this->views_per_x($page,'views_hourly','VIEWS_PER_MONTH','DESCRIPTION_VIEWS_PER_MONTH',730,8766));
 
 		//************************************************************************************************
@@ -912,7 +977,6 @@ class Module_admin_stats
 		list($sortable,$sort_order)=explode(' ',get_param('sort_views','date_and_time DESC'));
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort_views');
 
 		// NB: not used in default templates
 		$where=db_string_equal_to('the_page',$page);
@@ -949,9 +1013,7 @@ class Module_admin_stats
 			$list_views=results_table(do_lang_tempcode('PAGES_STATISTICS',escape_html($page)),$start,'start_views',$max,'max_views',$i,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort_views');
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
-		$tpl=do_template('STATS_OVERVIEW_SCREEN',array('_GUID'=>'71be91ba0d83368e1e1ceaf39e506610','TITLE'=>$title,'STATS_VIEWS'=>$list_views,'GRAPH_VIEWS_MONTHLY'=>$graph_views_monthly,'STATS_VIEWS_MONTHLY'=>$list_views_monthly,));
+		$tpl=do_template('STATS_OVERVIEW_SCREEN',array('_GUID'=>'71be91ba0d83368e1e1ceaf39e506610','TITLE'=>$this->title,'STATS_VIEWS'=>$list_views,'GRAPH_VIEWS_MONTHLY'=>$graph_views_monthly,'STATS_VIEWS_MONTHLY'=>$list_views_monthly,));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -965,8 +1027,6 @@ class Module_admin_stats
 	function show_page()
 	{
 		$page=get_param('iscreen');
-
-		$title=get_screen_title(do_lang_tempcode('PAGE_STATISTICS',escape_html($page)),false);
 
 		//************************************************************************************************
 		// Views per hour/day/week/month
@@ -995,7 +1055,6 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort_keywords');
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1086,7 +1145,6 @@ class Module_admin_stats
 			list($sortable,$sort_order)=explode(' ',get_param('sort_regionalities','ip DESC'));
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
-			inform_non_canonical_parameter('sort_regionalities');
 
 			$where=db_string_equal_to('the_page',$page);
 			if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1163,7 +1221,6 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort_views');
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1200,11 +1257,9 @@ class Module_admin_stats
 			$list_views=results_table(do_lang_tempcode('PAGES_STATISTICS',escape_html($page)),$start,'start_views',$max,'max_views',$i,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort_views');
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
 		$tpl=do_template('STATS_SCREEN_ISCREEN',array(
 			'_GUID'=>'1ac86992de9fc7095883ae23b900d84c',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'GRAPH_REGIONALITY'=>$graph_regionality,
 			'STATS_REGIONALITY'=>$list_regionality,
 			'STATS_VIEWS'=>$list_views,
@@ -1239,9 +1294,8 @@ class Module_admin_stats
 	 */
 	function clear()
 	{
-		//Someone obviously wants to clear out all their statistics
-		//Let's give them the option of only clearing out stored graphs, or deleting everything
-		$title=get_screen_title('CLEAR_STATISTICS');
+		// Someone obviously wants to clear out all their statistics
+		// Let's give them the option of only clearing out stored graphs, or deleting everything
 
 		require_code('form_templates');
 		$controls=new ocp_tempcode();
@@ -1251,12 +1305,10 @@ class Module_admin_stats
 
 		$fields=form_input_radio(do_lang_tempcode('CLEAR_STATISTICS'),'','clear',$controls);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'82f3410d45e4d9ea53b2c033792a3207',
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SUBMIT_NAME'=>do_lang_tempcode('CLEAR_STATISTICS'),
 			'TEXT'=>paragraph(do_lang_tempcode('DESCRIPTION_CLEAR_STATISTICS')),
 			'URL'=>build_url(array('page'=>'_SELF','type'=>'_clear'),'_SELF'),
@@ -1272,8 +1324,6 @@ class Module_admin_stats
 	 */
 	function _clear()
 	{
-		set_helper_panel_pic('pagepics/statistics_clear');
-
 		// Let's clear out the saved graphs
 		$handle=opendir(get_custom_file_base().'/data_custom/modules/admin_stats/');
 		if ($handle!==false)
@@ -1301,9 +1351,6 @@ class Module_admin_stats
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS')),array('_SELF:_SELF:clear',do_lang_tempcode('CLEAR_STATISTICS'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		return inform_screen(get_screen_title('CLEAR_STATISTICS'),do_lang_tempcode('SUCCESS'));
 	}
 
@@ -1314,22 +1361,18 @@ class Module_admin_stats
 	 */
 	function install_geolocation_data()
 	{
-		$title=get_screen_title('INSTALL_GEOLOCATION_DATA');
-
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
 		$last=104295-1; // Index of the last line in the IP_Country.txt file
-
-		set_helper_panel_pic('pagepics/installgeolocationdata');
 
 		$test=$GLOBALS['SITE_DB']->query_select_value('ip_country','COUNT(*)');
 		if ($test>=$last)
 		{
 			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
 
-		//We need to read in IP_Country.txt, line-by-line, for x lines
+		// We need to read in IP_Country.txt, line-by-line, for x lines
 		$lines=get_param_integer('lines',2000);
 		$position=get_param_integer('position',0);
 		$i=0;
@@ -1372,16 +1415,14 @@ class Module_admin_stats
 		if ($i>=$last)
 		{
 			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
 		global $FORCE_META_REFRESH;
 		$FORCE_META_REFRESH=true;
 		require_code('site2');
 		assign_refresh(build_url(array('page'=>'_SELF','type'=>'install_data','lines'=>$lines,'position'=>$position+$lines),'adminzone'),($position==0)?1.0:0.0);
-		return inform_screen($title,do_lang_tempcode('INSTALLING_GEOLOCATION_DATA'));
+		return inform_screen($this->title,do_lang_tempcode('INSTALLING_GEOLOCATION_DATA'));
 	}
 
 	/**
@@ -1397,7 +1438,7 @@ class Module_admin_stats
 	 */
 	function views_per_x($page,$type,$graph_title,$graph_description,$hours=1,$total=24)
 	{
-		//Return a graph with the views per hour for a specified page
+		// Return a graph with the views per hour for a specified page
 		$start=get_param_integer('start_'.$type,0);
 		$max=get_param_integer('max_'.$type,50);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'));
@@ -1406,7 +1447,6 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1475,14 +1515,13 @@ class Module_admin_stats
 	 */
 	function page_x_share($page,$type,$graph_title,$graph_description,$list_title)
 	{
-		//Return a pie chart with the $type used to view this page
+		// Return a pie chart with the $type used to view this page
 		$start=get_param_integer('start_'.$type,0);
 		$max=get_param_integer('max_'.$type,20);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'));
 		list($sortable,$sort_order)=explode(' ',get_param('sort','date_and_time ASC'),2);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility

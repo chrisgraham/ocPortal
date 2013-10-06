@@ -366,6 +366,128 @@ class Module_calendar
 		}
 	}
 
+	var $title;
+	var $id
+	var $event
+	var $title_to_use
+	var $title_to_use_2
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_feed_url('?mode=calendar&filter='.implode(',',$this->get_and_filter()));
+
+		inform_non_canonical_parameter('#^int_.*$#');
+
+		if ($type=='view')
+		{
+			$id=get_param_integer('id');
+			if ($GLOBALS['SITE_DB']->query_select_value('calendar_events','e_seg_recurrences',array('id'=>$id))==0)
+			{
+				inform_non_canonical_parameter('day');
+				inform_non_canonical_parameter('date');
+			}
+			inform_non_canonical_parameter('back');
+
+			$filter=$this->get_filter();
+
+			// Read row
+			$rows=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON t.id=e.e_type',array('*'),array('e.id'=>$id),'',1);
+			if (!array_key_exists(0,$rows))
+			{
+				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			}
+			$event=$rows[0];
+
+			// Check permissions
+			check_privilege('view_calendar');
+			if ($event['e_member_calendar']!==get_member())
+			{
+				if (addon_installed('content_privacy'))
+				{
+					require_code('content_privacy');
+					check_privacy('event',strval($id));
+				}
+			}
+			if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
+
+			// Privacy
+			$_is_public=true;
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				if (!has_privacy_access('event',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id()))
+					$_is_public=false;
+			}
+
+			// Title and meta data
+			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
+			{
+				require_code('awards');
+				$awards=find_awards_for('event',strval($id));
+			} else $awards=array();
+			$_title=get_translated_text($event['e_title']);
+			$private=get_param_integer('private',NULL);
+			if ($private!==1)
+			{
+				$title_to_use=do_lang_tempcode('CALENDAR_EVENT_VCAL',make_fractionable_editable('event',$id,$_title));
+			} else
+			{
+				$username=$GLOBALS['FORUM_DRIVER']->get_username(/*is_null($event['e_member_calendar'])?$event['e_submitter']:$event['e_member_calendar']*/$event['e_submitter'],true);
+				$title_to_use=do_lang_tempcode('_CALENDAR_EVENT_VCAL',escape_html($username),make_fractionable_editable('event',$id,$_title));
+			}
+			$title_to_use_2=do_lang('CALENDAR_EVENT',$_title);
+			$this->title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
+			seo_meta_load_for('event',strval($id),$title_to_use_2);
+
+			$GLOBALS['META_DATA']+=array(
+				'created'=>date('Y-m-d',$event['e_add_date']),
+				'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter']),
+				'publisher'=>'', // blank means same as creator
+				'modified'=>is_null($event['e_edit_date'])?'':date('Y-m-d',$event['e_edit_date']),
+				'type'=>'Calendar event',
+				'title'=>get_translated_text($event['e_title']),
+				'identifier'=>'_SEARCH:calendar:view:'.strval($id),
+				'description'=>get_translated_text($event['e_content']),
+				'image'=>find_theme_image('bigicons/calendar'),
+				//'category'=>???,
+			);
+
+			set_feed_url(find_script('backend').'?mode=calendar&filter='.urlencode(implode(',',$this->get_and_filter())));
+
+			// Back URL / breadcrumbs
+			list(,$_first_date)=find_event_start_timestamp($event); // Will be first recurrence as we have not called adjust_event_dates_for_a_recurrence yet
+			$first_date=date('Y-m-d',$_first_date);
+			$date=get_param('date',$first_date); // It's year 10,000 compliant when it comes to year display ;).
+			$back_type=get_param('back','day');
+			$map=array_merge($filter,array('page'=>'_SELF','type'=>'misc','view'=>$back_type,'id'=>$date));
+			$back_url=build_url($map,'_SELF');
+			breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));
+
+			seo_meta_load_for('event',strval($id),$title_to_use_2);
+
+			$id=$this->id;
+			$event=$this->event;
+			$title_to_use=$this->title_to_use;
+			$title_to_use_2=$this->title_to_use_2;
+		}
+
+		if ($type!='misc' && $type!='view')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CALENDAR'))));
+		}
+
+		$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -409,8 +531,6 @@ class Module_calendar
 		{
 			$t=$type['id'];
 			$filter['int_'.strval($t)]=get_param_integer('int_'.strval($t),0);
-
-			inform_non_canonical_parameter('int_'.strval($t));
 
 			if (post_param_integer('id',NULL)===$type['id']) $filter['int_'.strval($t)]=1;
 			if ($filter['int_'.strval($t)]==1) $some_pos=true;
@@ -468,7 +588,6 @@ class Module_calendar
 
 		$view=get_param('view','day');
 		$filter=$this->get_filter();
-		set_feed_url('?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 		//if ($member_id!=get_member()) enforce_personal_access($member_id); has particular filtering
 		$back_url=NULL;
 
@@ -495,10 +614,10 @@ class Module_calendar
 				$title_date=locale_filter(date(do_lang('calendar_date_verbose'),$timestamp));
 				if ($private!==1)
 				{
-					$title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html($title_date)));
+					$this->title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html($title_date)));
 				} else
 				{
-					$title=get_screen_title('_CALENDAR_SPECIFIC',true,array(escape_html($username),escape_html($title_date)));
+					$this->title=get_screen_title('_CALENDAR_SPECIFIC',true,array(escape_html($username),escape_html($title_date)));
 				}
 
 				break;
@@ -520,10 +639,10 @@ class Module_calendar
 
 				if ($private!==1)
 				{
-					$title=get_screen_title('CALENDAR_SPECIFIC_WEEK',true,array(escape_html($explode[0]),escape_html($explode[1]),escape_html(locale_filter(date('M',$timestamp)))));
+					$this->title=get_screen_title('CALENDAR_SPECIFIC_WEEK',true,array(escape_html($explode[0]),escape_html($explode[1]),escape_html(locale_filter(date('M',$timestamp)))));
 				} else
 				{
-					$title=get_screen_title('_CALENDAR_SPECIFIC_WEEK',true,array(escape_html($username),escape_html($explode[0]),escape_html($explode[1]),escape_html(locale_filter(date('M',$timestamp)))));
+					$this->title=get_screen_title('_CALENDAR_SPECIFIC_WEEK',true,array(escape_html($username),escape_html($explode[0]),escape_html($explode[1]),escape_html(locale_filter(date('M',$timestamp)))));
 				}
 
 				break;
@@ -559,10 +678,10 @@ class Module_calendar
 				$title_date=locale_filter(my_strftime(do_lang('calendar_month_in_year_verbose'),$timestamp));
 				if ($private!==1)
 				{
-					$title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html($title_date)));
+					$this->title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html($title_date)));
 				} else
 				{
-					$title=get_screen_title('_CALENDAR_SPECIFIC',true,array(escape_html($username),escape_html($title_date)));
+					$this->title=get_screen_title('_CALENDAR_SPECIFIC',true,array(escape_html($username),escape_html($title_date)));
 				}
 
 				break;
@@ -582,10 +701,10 @@ class Module_calendar
 
 				if ($private!==1)
 				{
-					$title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html($id)));
+					$this->title=get_screen_title('CALENDAR_SPECIFIC',true,array(escape_html($id)));
 				} else
 				{
-					$title=get_screen_title('_CALENDAR_SPECIFIC',true,array(escape_html($username),escape_html($id)));
+					$this->title=get_screen_title('_CALENDAR_SPECIFIC',true,array(escape_html($username),escape_html($id)));
 				}
 
 				break;
@@ -682,7 +801,7 @@ class Module_calendar
 			'PREVIOUS_URL'=>$previous_url,
 			'NEXT_URL'=>$next_url,
 			'ADD_URL'=>$add_url,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'BACK_URL'=>$back_url,
 			'MAIN'=>$main,
 			'FILTER_URL'=>$filter_url,
@@ -766,12 +885,12 @@ class Module_calendar
 			}
 
 			// Fill in stream gaps as appropriate
-			$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
+			$_title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 			$down=strval($to_h-$from_h);
 			$description=(intval($down)<3)?new ocp_tempcode():(is_numeric($event['e_content'])?get_translated_tempcode($event['e_content']):$event['e_content']);
 			$priority_lang=do_lang_tempcode('PRIORITY_'.strval($event['e_priority']));
 			$priority_icon='calendar/priority_'.strval($event['e_priority']);
-			$streams[$found_stream][$from_h]=array('TPL'=>'CALENDAR_DAY_ENTRY','DESCRIPTION'=>$description,'DOWN'=>$down,'ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$title,'URL'=>$url,'PRIORITY_LANG'=>$priority_lang,'PRIORITY_ICON'=>$priority_icon,'RECURRING'=>$event['e_recurrence']!='none','VALIDATED'=>$event['validated']==1);
+			$streams[$found_stream][$from_h]=array('TPL'=>'CALENDAR_DAY_ENTRY','DESCRIPTION'=>$description,'DOWN'=>$down,'ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$_title,'URL'=>$url,'PRIORITY_LANG'=>$priority_lang,'PRIORITY_ICON'=>$priority_icon,'RECURRING'=>$event['e_recurrence']!='none','VALIDATED'=>$event['validated']==1);
 			for ($h=$from_h+1;$h<$to_h;$h++)
 			{
 				$streams[$found_stream][$h]=array('TPL'=>'-1');
@@ -915,7 +1034,7 @@ class Module_calendar
 								$continuation=max($continuation,intval(date('H',$to)));
 							}
 						}
-						$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
+						$_title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 						$entries->attach(do_template('CALENDAR_WEEK_ENTRY',array(
 							'_GUID'=>'a5577fb634ecc5480789d1cd21f686fb',
 							'ID'=>strval($event['e_id']),
@@ -923,7 +1042,7 @@ class Module_calendar
 							'PRIORITY'=>strval($event['e_priority']),
 							'ICON'=>$icon,
 							'TIME'=>$date,
-							'TITLE'=>$title,
+							'TITLE'=>$_title,
 							'URL'=>$url,
 							'RECURRING'=>$event['e_recurrence']!='none',
 							'VALIDATED'=>$event['validated']==1,
@@ -1158,7 +1277,7 @@ class Module_calendar
 					{
 						$date=date_range($real_from,$real_to,!is_null($event['e_start_hour']));
 					}
-					$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
+					$_title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 					$entries->attach(do_template('CALENDAR_MONTH_ENTRY',array(
 						'_GUID'=>'58353fc64595f981d41da303cfe40855',
 						'ID'=>strval($event['e_id']),
@@ -1166,7 +1285,7 @@ class Module_calendar
 						'PRIORITY'=>strval($event['e_priority']),
 						'ICON'=>$icon,
 						'TIME'=>$date,
-						'TITLE'=>$title,
+						'TITLE'=>$_title,
 						'URL'=>$url,
 						'RECURRING'=>$event['e_recurrence']!='none',
 						'VALIDATED'=>$event['validated']==1,
@@ -1268,7 +1387,7 @@ class Module_calendar
 						$url=$e_id;
 					}
 					$icon=$event['t_logo'];
-					$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
+					$_title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 					$date=locale_filter(date(do_lang('calendar_date'),$real_from));
 					$_from=$from;
 					do
@@ -1277,7 +1396,7 @@ class Module_calendar
 
 						if (!array_key_exists($_day,$entries))
 						{
-							$entries[$_day]=array('ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$title,'URL'=>$url);
+							$entries[$_day]=array('ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$_title,'URL'=>$url);
 							$priorities[$_day]=$event['e_priority'];
 						} else // If we have more than one, we don't store a map, we just count them
 						{
@@ -1407,28 +1526,10 @@ class Module_calendar
 	 */
 	function view_event()
 	{
-		$id=get_param_integer('id');
-		$filter=$this->get_filter();
-
-		// Read row
-		$rows=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON t.id=e.e_type',array('*'),array('e.id'=>$id),'',1);
-		if (!array_key_exists(0,$rows))
-		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$event=$rows[0];
-
-		// Check permissions
-		check_privilege('view_calendar');
-		if ($event['e_member_calendar']!==get_member())
-		{
-			if (addon_installed('content_privacy'))
-			{
-				require_code('content_privacy');
-				check_privacy('event',strval($id));
-			}
-		}
-		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
+		$this->id=$id;
+		$this->event=$event;
+		$this->title_to_use=$title_to_use;
+		$this->title_to_use_2=$title_to_use_2;
 
 		// Validation
 		$warning_details=new ocp_tempcode();
@@ -1440,52 +1541,12 @@ class Module_calendar
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
 		}
 
-		// Privacy
-		$_is_public=true;
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			if (!has_privacy_access('event',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id()))
-				$_is_public=false;
-		}
-		$is_public=$_is_public?do_lang_tempcode('YES'):do_lang_tempcode('NO');
-
-		// Title and meta data
-		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-		{
-			require_code('awards');
-			$awards=find_awards_for('event',strval($id));
-		} else $awards=array();
-		$_title=get_translated_text($event['e_title']);
-		$private=get_param_integer('private',NULL);
-		if ($private!==1)
-		{
-			$title_to_use=do_lang_tempcode('CALENDAR_EVENT_VCAL',make_fractionable_editable('event',$id,$_title));
-		} else
-		{
-			$username=$GLOBALS['FORUM_DRIVER']->get_username(/*is_null($event['e_member_calendar'])?$event['e_submitter']:$event['e_member_calendar']*/$event['e_submitter'],true);
-			$title_to_use=do_lang_tempcode('_CALENDAR_EVENT_VCAL',escape_html($username),make_fractionable_editable('event',$id,$_title));
-		}
-		$title_to_use_2=do_lang('CALENDAR_EVENT',$_title);
-		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
-		seo_meta_load_for('event',strval($id),$title_to_use_2);
+		// Misc data
 		$content=($event['e_type']==db_get_first_id())?make_string_tempcode(get_translated_text($event['e_content'])):get_translated_tempcode($event['e_content']);
 		$type=get_translated_text($event['t_title']);
 		$priority=$event['e_priority'];
 		$priority_lang=do_lang_tempcode('PRIORITY_'.strval($priority));
-		$GLOBALS['META_DATA']+=array(
-			'created'=>date('Y-m-d',$event['e_add_date']),
-			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter']),
-			'publisher'=>'', // blank means same as creator
-			'modified'=>is_null($event['e_edit_date'])?'':date('Y-m-d',$event['e_edit_date']),
-			'type'=>'Calendar event',
-			'title'=>get_translated_text($event['e_title']),
-			'identifier'=>'_SEARCH:calendar:view:'.strval($id),
-			'description'=>get_translated_text($event['e_content']),
-			'image'=>find_theme_image('bigicons/calendar'),
-			//'category'=>???,
-		);
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=calendar&filter='.urlencode(implode(',',$this->get_and_filter()));
+		$is_public=$_is_public?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 
 		// Personal subscriptions (reminders)
 		$subscribed=new ocp_tempcode();
@@ -1521,15 +1582,6 @@ class Module_calendar
 			$subscribe_url=build_url(array('page'=>'_SELF','type'=>'subscribe_event','id'=>$id),'_SELF');
 		}
 
-		// Back URL / breadcrumbs
-		list(,$_first_date)=find_event_start_timestamp($event); // Will be first recurrence as we have not called adjust_event_dates_for_a_recurrence yet
-		$first_date=date('Y-m-d',$_first_date);
-		$date=get_param('date',$first_date); // It's year 10,000 compliant when it comes to year display ;).
-		$back_type=get_param('back','day');
-		$map=array_merge($filter,array('page'=>'_SELF','type'=>'misc','view'=>$back_type,'id'=>$date));
-		$back_url=build_url($map,'_SELF');
-		breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));
-
 		// Feedback
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
 			'events',
@@ -1553,17 +1605,6 @@ class Module_calendar
 		{
 			$edit_url=new ocp_tempcode();
 		}
-
-		// Book keeping
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='back';
-		if ($event['e_seg_recurrences']==0)
-		{
-			inform_non_canonical_parameter('day');
-			inform_non_canonical_parameter('date');
-		}
-		inform_non_canonical_parameter('back');
-		seo_meta_load_for('event',strval($id),$title_to_use_2);
 
 		// Work out all our various dates
 		$day=get_param('day','');
@@ -1621,7 +1662,7 @@ class Module_calendar
 
 		// Output
 		$map=array(
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'_TITLE'=>get_translated_text($event['e_title']),
 			'ID'=>strval($id),
 			'TAGS'=>get_loaded_tags('calendar'),
@@ -1671,9 +1712,7 @@ class Module_calendar
 	 */
 	function subscribe_event()
 	{
-		$title=get_screen_title('SUBSCRIBE_EVENT');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CALENDAR'))));
+		$this->title=get_screen_title('SUBSCRIBE_EVENT');
 
 		// Check access
 		$id=get_param_integer('id');
@@ -1702,7 +1741,7 @@ class Module_calendar
 		$fields->attach(form_input_float(do_lang_tempcode('REMINDER_TIME'),do_lang_tempcode('DESCRIPTION_REMINDER_TIME'),'hours_before',1.0,true));
 		$submit_name=do_lang_tempcode('SUBSCRIBE_EVENT');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'8f6a962617031264ee1af552701804ca','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'8f6a962617031264ee1af552701804ca','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -1712,7 +1751,7 @@ class Module_calendar
 	 */
 	function _subscribe_event()
 	{
-		$title=get_screen_title('SUBSCRIBE_EVENT');
+		$this->title=get_screen_title('SUBSCRIBE_EVENT');
 
 		$seconds_before=intval(floatval(post_param('hours_before'))*3600.0);
 
@@ -1761,7 +1800,7 @@ class Module_calendar
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>get_param_integer('id')),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -1771,7 +1810,7 @@ class Module_calendar
 	 */
 	function unsubscribe_event()
 	{
-		$title=get_screen_title('UNSUBSCRIBE_EVENT');
+		$this->title=get_screen_title('UNSUBSCRIBE_EVENT');
 
 		$GLOBALS['SITE_DB']->query_delete('calendar_reminders',array('id'=>get_param_integer('reminder_id')),'',1); // reminder_id being the reminder ID
 
@@ -1781,7 +1820,7 @@ class Module_calendar
 		));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>get_param_integer('id')),'_SELF'); // id being the event ID
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -1804,8 +1843,8 @@ class Module_calendar
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc','view'=>get_param('view'),'id'=>get_param('id')),'_SELF'); // id being the event ID
-		$title=get_screen_title('DECLARE_EVENT_INTEREST');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		$this->title=get_screen_title('DECLARE_EVENT_INTEREST');
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -1815,12 +1854,12 @@ class Module_calendar
 	 */
 	function declare_interest()
 	{
-		$title=get_screen_title('DECLARE_EVENT_INTEREST');
+		$this->title=get_screen_title('DECLARE_EVENT_INTEREST');
 
 		$GLOBALS['SITE_DB']->query_insert('calendar_interests',array('i_member_id'=>get_member(),'t_type'=>get_param_integer('t_type')));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc','view'=>get_param('view'),'id'=>get_param('id')),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -1830,12 +1869,12 @@ class Module_calendar
 	 */
 	function undeclare_interest()
 	{
-		$title=get_screen_title('UNDECLARE_EVENT_INTEREST');
+		$this->title=get_screen_title('UNDECLARE_EVENT_INTEREST');
 
 		$GLOBALS['SITE_DB']->query_delete('calendar_interests',array('i_member_id'=>get_member(),'t_type'=>get_param('t_type')),'',1);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc','view'=>get_param('view'),'id'=>get_param('id')),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

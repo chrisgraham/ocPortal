@@ -36,6 +36,7 @@ function init__site()
 	global $NON_CANONICAL_PARAMS;
 	// We only bother listing ones the software itself may inject - otherwise admin responsible for their own curation of canonical settings
 	$NON_CANONICAL_PARAMS=array('wide_high','wide','wide_print','filtered','utheme','active_filter','redirected','redirect_url','redirect','redirect_passon');
+	inform_non_canonical_parameter('#^(.*_)?(max|start|sort)$#');
 	if (function_exists('get_value'))
 	{
 		$is_non_canonical=false;
@@ -267,7 +268,18 @@ function attach_to_screen_header($data)
 function inform_non_canonical_parameter($param)
 {
 	global $NON_CANONICAL_PARAMS;
-	$NON_CANONICAL_PARAMS[]=$param;
+
+	if (substr($param,0,1)=='#')
+	{
+		foreach (array_keys($_GET) as $key)
+		{
+			if (preg_match($param,$key)!=0)
+				inform_non_canonical_parameter($key);
+		}
+	} else
+	{
+		$NON_CANONICAL_PARAMS[]=$param;
+	}
 }
 
 /**
@@ -332,7 +344,7 @@ function attach_message($message,$type='inform')
 		'MESSAGE'=>is_string($message)?escape_html($message):$message
 	));
 
-	if (headers_sent())
+	if ($GLOBALS['OUTPUT_STARTED'])
 	{
 		$LATE_ATTACHED_MESSAGES_RAW[]=array($message,$type);
 		if ($LATE_ATTACHED_MESSAGES===NULL) $LATE_ATTACHED_MESSAGES=new ocp_tempcode();
@@ -1605,7 +1617,11 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 	}
 
 	if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
+	{
+		$TEMPCODE_CURRENT_PAGE_OUTPUTTING=$out;
+
 		$out->evaluate_echo(NULL,true);
+	}
 
 	if (($html->is_empty_shell()) && ($is_panel)) return $html;
 

@@ -24,40 +24,6 @@
 	margin: 1em 0;
 }
 
-body .horiz_help_panel { /* {$,Long definition to force precedence} */
-	width: 100% !important;
-	float: none !important;
-	overflow: hidden;
-}
-
-.horiz_help_panel #help {
-	width: {$?,{$MOBILE},315,380}px;
-	float: {!en_left};
-}
-
-.horiz_help_panel #help_tutorial {
-	width: {$?,{$MOBILE},315,380}px;
-	float: {!en_left};
-}
-
-.horiz_help_panel #global_helper_panel_pic {
-	display: none;
-}
-
-.horiz_help_panel .global_helper_panel_html {
-	display: none;
-}
-
-.horiz_help_panel .global_helper_panel {
-	padding: 0;
-	height: auto;
-	position: static;
-}
-
-.horiz_help_panel .global_helper_panel_text {
-	position: static;
-}
-
 .global_helper_panel_wrap {
 	border: 1px solid {$GET,pale_border};
 	background-color: {$GET,area_3_background};

@@ -242,6 +242,76 @@ class Module_search
 		}
 	}
 
+	var $title;
+	var $object;
+	var $info;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='my')
+		{
+			$this->title=get_screen_title('SAVED_SEARCHES');
+		}
+
+		if ($type=='_delete')
+		{
+			$this->title=get_screen_title('DELETE_SAVED_SEARCH');
+		}
+
+		if ($type=='misc' || $type=='results')
+		{
+			inform_non_canonical_parameter('search_under');
+			inform_non_canonical_parameter('all_defaults');
+			inform_non_canonical_parameter('days');
+			inform_non_canonical_parameter('only_titles');
+			inform_non_canonical_parameter('conjunctive_operator');
+			inform_non_canonical_parameter('boolean_search');
+			inform_non_canonical_parameter('only_search_meta');
+			inform_non_canonical_parameter('content');
+			inform_non_canonical_parameter('author');
+			inform_non_canonical_parameter('direction');
+			inform_non_canonical_parameter('#^search_.*$#');
+
+			$id=get_param('id','');
+			if ($id!='') // Specific screen, prepare
+			{
+				require_code('hooks/modules/search/'.filter_naughty_harsh($id),true);
+				$object=object_factory('Hook_search_'.filter_naughty_harsh($id));
+				$info=$object->info();
+
+				if (!is_null($info))
+					$this->title=get_screen_title('_SEARCH_TITLE',true,array($info['lang']));
+
+				breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('SEARCH_FOR'))));
+				breadcrumb_set_self($info['lang']);
+
+				$this->object=$object;
+				$this->info=$info;
+			}
+		}
+
+		if ($type=='form')
+		{
+			$this->title=get_screen_title('SEARCH_TITLE');
+		}
+
+		if ($type=='results')
+		{
+			$this->title=get_screen_title('SEARCH_RESULTS');
+
+			attach_to_screen_header('<meta name="robots" content="noindex,nofollow" />'); // XHTMLXHTML
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -275,15 +345,12 @@ class Module_search
 
 		require_code('templates_results_table');
 
-		$title=get_screen_title('SAVED_SEARCHES');
-
 		$start=get_param_integer('my_start',0);
 		$max=get_param_integer('my_max',50);
 		$sortables=array('s_time'=>do_lang_tempcode('DATE_TIME'),'s_title'=>do_lang_tempcode('TITLE'));
 		list($sortable,$sort_order)=explode(' ',get_param('sort','s_time DESC'),2);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('DELETE'),do_lang_tempcode('RUN_SEARCH')),$sortables,'sort',$sortable.' '.$sort_order);
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('searches_saved','COUNT(*)',array('s_member_id'=>get_member()));
 		$rows=$GLOBALS['SITE_DB']->query_select('searches_saved',array('*'),array('s_member_id'=>get_member()),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
@@ -312,7 +379,7 @@ class Module_search
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'my'),'_SELF');
 
-		$tpl=do_template('SEARCH_SAVED_SCREEN',array('_GUID'=>'f9a7116b8525eb223bde50dfb991f39f','TITLE'=>$title,'SEARCHES'=>$searches,'URL'=>$post_url));
+		$tpl=do_template('SEARCH_SAVED_SCREEN',array('_GUID'=>'f9a7116b8525eb223bde50dfb991f39f','TITLE'=>$this->title,'SEARCHES'=>$searches,'URL'=>$post_url));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -325,14 +392,12 @@ class Module_search
 	 */
 	function _delete()
 	{
-		$title=get_screen_title('DELETE_SAVED_SEARCH');
-
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
 		$GLOBALS['SITE_DB']->query_delete('searches_saved',array('id'=>post_param_integer('id'),'s_member_id'=>get_member()),'',1);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'my'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -346,21 +411,12 @@ class Module_search
 
 		$_GET['type']='results'; // To make it consistent for the purpose of URL generation (particularly how frames tie together)
 
-		$title=get_screen_title('SEARCH_TITLE');
-
 		require_code('templates_internalise_screen');
 
 		if ($id!='') // Specific screen, prepare
 		{
-			require_code('hooks/modules/search/'.filter_naughty_harsh($id),true);
-			$object=object_factory('Hook_search_'.filter_naughty_harsh($id));
-			$info=$object->info();
-
-			if (!is_null($info))
-				$title=get_screen_title('_SEARCH_TITLE',true,array($info['lang']));
-
-			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('SEARCH_FOR'))));
-			breadcrumb_set_self($info['lang']);
+			$object=$this->object;
+			$info=$this->info;
 
 			$under=get_param('search_under','!',true);
 			if ((!is_null($info)) && (method_exists($object,'get_tree'))) $object->get_tree($under);
@@ -402,7 +458,9 @@ class Module_search
 				require_javascript('javascript_more');
 				$ajax=true;
 				$under=get_param('search_under','',true);
-				list($ajax_hook,$ajax_options)=$object->ajax_tree();
+				$ajax_tree=$object->ajax_tree();
+				if (is_object($ajax_tree)) return $ajax_tree;
+				list($ajax_hook,$ajax_options)=$ajax_tree;
 
 				require_code('hooks/systems/ajax_tree/'.$ajax_hook);
 				$tree_hook_object=object_factory('Hook_'.$ajax_hook);
@@ -484,8 +542,6 @@ class Module_search
 				$info=$object->info();
 				if (is_null($info)) continue;
 
-				inform_non_canonical_parameter('search_'.$hook);
-
 				$is_default_or_advanced=(($info['default']) && ($id=='')) || ($hook==$id);
 
 				$checked=(get_param_integer('search_'.$hook,((is_null($content)) || (get_param_integer('all_defaults',0)==1))?($is_default_or_advanced?1:0):0)==1);
@@ -509,22 +565,10 @@ class Module_search
 		$sort=get_param('sort','relevance');
 		$direction=get_param('direction','DESC');
 		if (!in_array(strtoupper($direction),array('ASC','DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
-		inform_non_canonical_parameter('direction');
 		$only_titles=get_param_integer('only_titles',0)==1;
 		$search_under=get_param('search_under','!',true);
 		if ($search_under=='') $search_under='!';
 		$boolean_operator=get_param('conjunctive_operator','OR');
-
-		inform_non_canonical_parameter('search_under');
-		inform_non_canonical_parameter('all_defaults');
-		inform_non_canonical_parameter('days');
-		inform_non_canonical_parameter('only_titles');
-		inform_non_canonical_parameter('conjunctive_operator');
-		inform_non_canonical_parameter('boolean_search');
-		inform_non_canonical_parameter('only_search_meta');
-		inform_non_canonical_parameter('content');
-		inform_non_canonical_parameter('author');
 
 		$has_fulltext_search=db_has_full_text($GLOBALS['SITE_DB']->connection_read);
 
@@ -564,7 +608,7 @@ class Module_search
 			'RESULTS'=>$out,
 			'PAGINATION'=>$pagination,
 			'HAS_FULLTEXT_SEARCH'=>$has_fulltext_search,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'AUTHOR'=>$author,
 			'SPECIALISATION'=>$specialisation,
 			'URL'=>$url,
@@ -611,8 +655,6 @@ class Module_search
 	 */
 	function results($id,$author,$author_id,$days,$sort,$direction,$only_titles,$search_under)
 	{
-		$title=get_screen_title('SEARCH_RESULTS');
-
 		cache_module_installed_status();
 
 		$cutoff=($days==-1)?NULL:(time()-$days*24*60*60);
@@ -714,8 +756,6 @@ class Module_search
 		}
 
 		if (function_exists('set_time_limit')) @set_time_limit(15);
-
-		attach_to_screen_header('<meta name="robots" content="noindex,nofollow" />'); // XHTMLXHTML
 
 		// Now glue our templates together
 		$out=build_search_results_interface($results,$start,$max,$direction,$id=='');

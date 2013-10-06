@@ -51,6 +51,29 @@ class Module_forums
 		return array('!'=>'SECTION_FORUMS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$base_url=get_forum_base_url();
+
+		$forums=get_param('url',$base_url.'/');
+
+		if (substr($forums,0,strlen($base_url))!=$base_url)
+		{
+			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -68,8 +91,8 @@ class Module_forums
 			if ((strpos($base_url,'.php')!==false) || (strpos($base_url,'?')!==false)) $base_url=dirname($base_url);
 
 			//log_hack_attack_and_exit('REFERRER_IFRAME_HACK'); No longer a hack attack becase people webmasters changed their forum base URL at some point, creating problems with old bookmarks!
-			header('Location: '.get_self_url(true,false,array('url'=>get_forum_base_url())));
-			exit();
+			require_code('site2');
+			smart_redirect(get_self_url(true,false,array('url'=>get_forum_base_url())));
 		}
 
 		$old_method=false;

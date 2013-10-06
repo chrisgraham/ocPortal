@@ -62,6 +62,62 @@ class Module_cms_authors
 		return array('submit_midrange_content'=>array(0,'ADD_AUTHOR'),'edit_own_midrange_content'=>array(0,'EDIT_OWN_AUTHOR'),'edit_midrange_content'=>array(0,'EDIT_MERGE_AUTHORS'),'delete_own_midrange_content'=>array(0,'DELETE_OWN_AUTHOR'),'delete_midrange_content'=>array(0,'DELETE_AUTHOR'));
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='_ad')
+		{
+			inform_non_canonical_parameter('author');
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
+
+			$author=get_param('author',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			if (get_param('author',NULL)===NULL)
+			{
+				$this->title=get_screen_title('DEFINE_AUTHOR');
+			} else
+			{
+				$this->title=get_screen_title('_DEFINE_AUTHOR',true,array($author));
+			}
+		}
+
+		if ($type=='__ad')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+			$this->title=get_screen_title('DEFINE_AUTHOR');
+		}
+
+		if ($type=='_mg')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+			$this->title=get_screen_title('MERGE_AUTHORS');
+		}
+
+		if ($type=='ed')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
+
+			$this->title=get_screen_title('EDIT_MERGE_AUTHORS');
+		}
+
+		set_helper_panel_pic('pagepics/authors');
+		set_helper_panel_tutorial('tut_authors');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -69,9 +125,6 @@ class Module_cms_authors
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/authors');
-		set_helper_panel_tutorial('tut_authors');
-
 		require_code('authors');
 		require_lang('authors');
 
@@ -97,13 +150,13 @@ class Module_cms_authors
 		require_code('fields');
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('AUTHOR_MANAGE'),comcode_lang_string('DOC_AUTHORS'),
-					array_merge(array(
-						/*	 type							  page	 params													 zone	  */
-						has_privilege(get_member(),'set_own_author_profile')?array('set-own-profile',array('_SELF',array('type'=>'_ad'),'_SELF'),do_lang('EDIT_MY_AUTHOR_PROFILE')):NULL,
-						has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('add_one',array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'),do_lang('ADD_AUTHOR')):NULL,
-						has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MERGE_AUTHORS')):NULL,
-					),manage_custom_fields_donext_link('author')),
-					do_lang('AUTHOR_MANAGE')
+			array_merge(array(
+				/*	 type							  page	 params													 zone	  */
+				has_privilege(get_member(),'set_own_author_profile')?array('set-own-profile',array('_SELF',array('type'=>'_ad'),'_SELF'),do_lang('EDIT_MY_AUTHOR_PROFILE')):NULL,
+				has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('add_one',array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'),do_lang('ADD_AUTHOR')):NULL,
+				has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MERGE_AUTHORS')):NULL,
+			),manage_custom_fields_donext_link('author')),
+			do_lang('AUTHOR_MANAGE')
 		);
 	}
 
@@ -114,13 +167,11 @@ class Module_cms_authors
 	 */
 	function _ad()
 	{
-		inform_non_canonical_parameter('author');
-
 		require_code('form_templates');
 
 		url_default_parameters__enable();
 
-		$author=get_param('author',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		$author=$this->author;
 		if (!has_edit_author_permission(get_member(),$author))
 		{
 			if (get_author_id_from_name($author)==get_member()) access_denied('PRIVILEGE','set_own_author_profile');
@@ -160,14 +211,6 @@ class Module_cms_authors
 		{
 			$handle=$GLOBALS['FORUM_DRIVER']->get_member_from_username($author);
 			if (!is_null($handle)) $handle=strval($handle);
-		}
-
-		if (($author=='') || (is_null($handle)))
-		{
-			$title=get_screen_title('DEFINE_AUTHOR');
-		} else
-		{
-			$title=get_screen_title('_DEFINE_AUTHOR',true,array($author));
 		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'__ad','author'=>$author),'_SELF');
@@ -220,9 +263,7 @@ class Module_cms_authors
 
 		url_default_parameters__disable();
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'1d71c934e3e23fe394f5611191089630','PREVIEW'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'1d71c934e3e23fe394f5611191089630','PREVIEW'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -232,8 +273,6 @@ class Module_cms_authors
 	 */
 	function __ad()
 	{
-		$title=get_screen_title('DEFINE_AUTHOR');
-
 		$author=post_param('author',get_param('author'));
 		if (!has_edit_author_permission(get_member(),$author))
 		{
@@ -299,9 +338,7 @@ class Module_cms_authors
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
-
-		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),$author);
+		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$author);
 	}
 
 	/**
@@ -314,29 +351,27 @@ class Module_cms_authors
 	 */
 	function do_next_manager($title,$description,$author=NULL)
 	{
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		require_code('templates_donext');
 		return do_next_manager($title,$description,
-					NULL,
-					NULL,
-					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-					/*	 page	 params				  zone	  */
-					has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'):NULL,						 // Add one
-					is_null($author)?NULL:array('_SELF',array('type'=>'_ad','author'=>$author),'_SELF'),				  // Edit this
-					has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,				  // Edit one
-					is_null($author)?NULL:array('authors',array('type'=>'misc','id'=>$author),get_module_zone('authors')),					// View this
-					NULL,																						// View archive
-					NULL,																						// Add to category
-					NULL,																						// Add one category
-					NULL,																						// Edit one category
-					NULL,																						// Edit this category
-					NULL,																						// View this category
-					/*	  SPECIALLY TYPED 'LINKS'				  */
-					array(
-						/*	 type							  page	 params													 zone	  */
-						has_privilege(get_member(),'delete_midrange_content','cms_authors')?array('merge',array('_SELF',array('type'=>'ed'),'_SELF')):NULL
-					)
+			NULL,
+			NULL,
+			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+			/*	 page	 params				  zone	  */
+			has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'):NULL,						 // Add one
+			is_null($author)?NULL:array('_SELF',array('type'=>'_ad','author'=>$author),'_SELF'),				  // Edit this
+			has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,				  // Edit one
+			is_null($author)?NULL:array('authors',array('type'=>'misc','id'=>$author),get_module_zone('authors')),					// View this
+			NULL,																						// View archive
+			NULL,																						// Add to category
+			NULL,																						// Add one category
+			NULL,																						// Edit one category
+			NULL,																						// Edit this category
+			NULL,																						// View this category
+			/*	  SPECIALLY TYPED 'LINKS'				  */
+			array(
+				/*	 type							  page	 params													 zone	  */
+				has_privilege(get_member(),'delete_midrange_content','cms_authors')?array('merge',array('_SELF',array('type'=>'ed'),'_SELF')):NULL
+			)
 		);
 	}
 
@@ -347,8 +382,6 @@ class Module_cms_authors
 	 */
 	function ed()
 	{
-		$title=get_screen_title('EDIT_MERGE_AUTHORS');
-
 		$authors=$this->nice_get_authors();
 		if ($authors->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -367,9 +400,7 @@ class Module_cms_authors
 			$merge_form=do_template('FORM',array('_GUID'=>'d0dd075a54b72cfe47d3c2d9fe987c89','TABINDEX'=>strval(get_form_field_tabindex()),'SECONDARY_FORM'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 		} else $merge_form=new ocp_tempcode();
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
-
-		return do_template('AUTHOR_MANAGE_SCREEN',array('_GUID'=>'84f8de5d53090d138cb653bb861f2f70','TITLE'=>$title,'MERGE_FORM'=>$merge_form,'DEFINE_FORM'=>$define_form));
+		return do_template('AUTHOR_MANAGE_SCREEN',array('_GUID'=>'84f8de5d53090d138cb653bb861f2f70','TITLE'=>$this->title,'MERGE_FORM'=>$merge_form,'DEFINE_FORM'=>$define_form));
 	}
 
 	/**
@@ -381,16 +412,12 @@ class Module_cms_authors
 	{
 		check_privilege('delete_midrange_content');
 
-		$title=get_screen_title('MERGE_AUTHORS');
-
 		$from=post_param('mauthor');
 		$to=post_param('mauthor2');
 
 		merge_authors($from,$to);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
-
-		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'));
+		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**

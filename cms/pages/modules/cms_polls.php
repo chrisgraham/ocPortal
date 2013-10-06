@@ -38,6 +38,23 @@ class Module_cms_polls extends standard_crud_module
 	var $title_is_multi_lang=true;
 	var $award_type='poll';
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/polls');
+		set_helper_panel_tutorial('tut_feedback');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -46,9 +63,6 @@ class Module_cms_polls extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/polls');
-		set_helper_panel_tutorial('tut_feedback');
-
 		require_code('polls');
 		require_code('polls2');
 		require_lang('polls');
@@ -94,12 +108,12 @@ class Module_cms_polls extends standard_crud_module
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
-					array_merge(array(
-						/*	 type							  page	 params													 zone	  */
-						has_privilege(get_member(),'submit_midrange_content','cms_polls')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
-						has_privilege(get_member(),'edit_own_midrange_content','cms_polls')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):NULL,
-					),manage_custom_fields_donext_link('poll')),
-					do_lang('MANAGE_POLLS')
+			array_merge(array(
+				/*	 type							  page	 params													 zone	  */
+				has_privilege(get_member(),'submit_midrange_content','cms_polls')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
+				has_privilege(get_member(),'edit_own_midrange_content','cms_polls')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):NULL,
+			),manage_custom_fields_donext_link('poll')),
+			do_lang('MANAGE_POLLS')
 		);
 	}
 
@@ -137,7 +151,6 @@ class Module_cms_polls extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('QUESTION'),

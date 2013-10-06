@@ -113,6 +113,52 @@ class Module_admin_import
 		return array('misc'=>'IMPORT');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/importdata');
+		set_helper_panel_tutorial('tut_importer');
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_self(do_lang_tempcode('IMPORT'));
+		}
+
+		if ($type=='session')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT'))));
+			breadcrumb_set_self(do_lang_tempcode('IMPORT_SESSION'));
+		}
+
+		if ($type=='session2')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION'))));
+		}
+
+		if ($type=='hook')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session:importer='.$importer,do_lang_tempcode('IMPORT_SESSION'))));
+		}
+
+		if ($type=='import')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION')),array('_SELF:_SELF:hook:importer='.$importer.':session='.get_param('session'),do_lang_tempcode('IMPORT'))));
+			breadcrumb_set_self(do_lang_tempcode('START'));
+		}
+
+		$this->title=get_screen_title('IMPORT');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -120,9 +166,6 @@ class Module_admin_import
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/importdata');
-		set_helper_panel_tutorial('tut_importer');
-
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		disable_php_memory_limit();
@@ -140,8 +183,6 @@ class Module_admin_import
 		if ($type=='session2') return $this->choose_session2();
 		if ($type=='hook') return $this->choose_actions();
 		if ($type=='import') return $this->do_import();
-		/*if ($type=='advanced_hook') return $this->advanced_choose_actions();
-		if ($type=='advanced_import') return $this->advanced_do_import();*/
 
 		return new ocp_tempcode();
 	}
@@ -153,8 +194,6 @@ class Module_admin_import
 	 */
 	function choose_importer()
 	{
-		$title=get_screen_title('IMPORT');
-
 		$hooks=new ocp_tempcode();
 		$_hooks=find_all_hooks('modules','admin_import');
 		$__hooks=array();
@@ -180,9 +219,7 @@ class Module_admin_import
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'session'),'_SELF');
 
-		breadcrumb_set_self(do_lang_tempcode('IMPORT'));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'02416e5e9d6cb64248adeb9d2e6f2402','GET'=>true,'HIDDEN'=>'','SKIP_VALIDATION'=>true,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'02416e5e9d6cb64248adeb9d2e6f2402','GET'=>true,'HIDDEN'=>'','SKIP_VALIDATION'=>true,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 	}
 
 	/**
@@ -192,20 +229,17 @@ class Module_admin_import
 	 */
 	function choose_session()
 	{
-		$title=get_screen_title('IMPORT');
-
-		/* Codes to detect redirect hooks for import */
+		// Code to detect redirect hooks for import
 		$importer=filter_naughty(get_param('importer'));
 		require_code('hooks/modules/admin_import/'.filter_naughty_harsh($importer));
 		$object=object_factory('Hook_'.filter_naughty_harsh($importer));
 		$info=$object->info();
 
-		if(array_key_exists('hook_type',$info))
+		if (array_key_exists('hook_type',$info))
 		{
 			$redirect_url=build_url(array('page'=>$info['import_module'],'type'=>$info['import_method_name']),get_module_zone($info['import_module']));
-			return redirect_screen($title,$redirect_url,do_lang_tempcode('REDIRECTED_TO_CACHE_MODULES'));
+			return redirect_screen($this->title,$redirect_url,do_lang_tempcode('REDIRECTED_TO_CACHE_MODULES'));
 		}
-		/* END */
 
 		$sessions=new ocp_tempcode();
 		$_sessions=$GLOBALS['SITE_DB']->query_select('import_session',array('*'));
@@ -232,15 +266,12 @@ class Module_admin_import
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'session2','importer'=>get_param('importer')),'_SELF');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT'))));
-		breadcrumb_set_self(do_lang_tempcode('IMPORT_SESSION'));
-
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'f474980f7263f2def2ff75e7ee40be33',
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>form_input_hidden('importer',get_param('importer')),
 			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
 			'TEXT'=>'',
@@ -254,13 +285,11 @@ class Module_admin_import
 	 */
 	function choose_session2()
 	{
-		$title=get_screen_title('IMPORT');
-
-		/* Three cases:
-			  1) We are continuing (therefore do nothing)
-			  2) We are resuming a prior session, after our session changed (therefore remap old session-data to current session)
-			  3) We are starting afresh (therefore delete all previous import sessions)
-			  4) As per '3', except OCF imports are maintained as we're now importing a satellite site
+		/* These cases:
+		  1) We are continuing (therefore do nothing)
+		  2) We are resuming a prior session, after our session changed (therefore remap old session-data to current session)
+		  3) We are starting afresh (therefore delete all previous import sessions)
+		  4) As per '3', except OCF imports are maintained as we're now importing a satellite site
 		*/
 		$session=either_param_integer('session',get_session_id());
 		if (($session==-1) || ($session==-2))
@@ -336,9 +365,7 @@ class Module_admin_import
 		$url=build_url(array('page'=>'_SELF','type'=>'hook','session'=>$session,'importer'=>$importer),'_SELF');
 		$message=array_key_exists('message',$info)?$info['message']:'';
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'15f2c855acf0d365a2e6329bec692dc8','TEXT'=>$message,'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'15f2c855acf0d365a2e6329bec692dc8','TEXT'=>$message,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$url,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 	}
 
 	/**
@@ -349,8 +376,6 @@ class Module_admin_import
 	 */
 	function choose_actions($extra='')
 	{
-		$title=get_screen_title('IMPORT');
-
 		$session=either_param_integer('session',get_session_id());
 		$importer=filter_naughty(get_param('importer'));
 
@@ -484,80 +509,12 @@ class Module_admin_import
 
 		$url=build_url(array('page'=>'_SELF','type'=>'import','session'=>$session,'importer'=>$importer),'_SELF');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session:importer='.$importer,do_lang_tempcode('IMPORT_SESSION'))));
-
 		$hidden=new ocp_tempcode();
 		$hidden->attach(build_keep_post_fields($skip_hidden));
 		$hidden->attach(build_keep_form_fields('',true));
 
-		return do_template('IMPORT_ACTION_SCREEN',array('_GUID'=>'a3a69637e541923ad76e9e7e6ec7e1af','EXTRA'=>$extra,'MESSAGE'=>$message,'TITLE'=>$title,'FIELDS'=>'','HIDDEN'=>$hidden,'IMPORTER'=>$importer,'IMPORT_LIST'=>$import_list,'URL'=>$url));
+		return do_template('IMPORT_ACTION_SCREEN',array('_GUID'=>'a3a69637e541923ad76e9e7e6ec7e1af','EXTRA'=>$extra,'MESSAGE'=>$message,'TITLE'=>$this->title,'FIELDS'=>'','HIDDEN'=>$hidden,'IMPORTER'=>$importer,'IMPORT_LIST'=>$import_list,'URL'=>$url));
 	}
-
-	/* *
-	 * The UI to choose options for an advanced import.
-	 *
-	 * @return tempcode		The UI
-	 */
-	/*function advanced_choose_actions()
-	{
-		$title=get_screen_title('IMPORT');
-
-		$session=either_param_integer('session',get_session_id());
-		$importer=filter_naughty(get_param('importer'));
-		$content_type=filter_naughty(either_param('content_type'));
-
-		// Get the data from the content type and importer hooks
-		require_code('hooks/modules/admin_import_types/'.filter_naughty_harsh($content_type));
-		$content_type_object=object_factory('Hook_admin_import_types_'.filter_naughty_harsh($content_type));
-		$lang=$content_type_object->run();
-
-		require_code('hooks/modules/admin_import/'.filter_naughty_harsh($importer));
-		$importer_object=object_factory('Hook_'.filter_naughty_harsh($importer));
-		$info=$importer_object->info();
-
-		// Build up the advanced import form
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
-
-		// Selector for the content to import
-		$javascript='standard_alternate_fields([\'import_all\',\'import_items\'],true);';
-		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_ALL'),do_lang_tempcode('DESCRIPTION_IMPORT_ALL'),'import_all',true));
-		$fields->attach($importer_object->get_import_items_selector($content_type)); // Returns a form field called import_items
-
-		// Options for what to do with the imported content (if it's hierarchical)
-		if (in_array($content_type,$info['hierarchical']))
-		{
-			$radio_entries=new ocp_tempcode();
-			$radio_entries->attach(form_input_radio_entry('import_position','specific_position',true,do_lang_tempcode('IMPORT_TO_SPECIFIC_POSITION')));
-			$radio_entries->attach(form_input_radio_entry('import_position','match_or_specific_position',false,do_lang_tempcode('IMPORT_MATCH_OR_SPECIFIC_POSITION')));
-			$radio_entries->attach(form_input_radio_entry('import_position','match_or_skip',false,do_lang_tempcode('IMPORT_MATCH_OR_SKIP')));
-			$radio_entries->attach(form_input_radio_entry('import_position','match_or_warn',false,do_lang_tempcode('IMPORT_MATCH_OR_WARN')));
-			$fields->attach(form_input_radio(do_lang_tempcode('IMPORT_POSITION'),do_lang_tempcode('DESCRIPTION_IMPORT_POSITION'),'import_position',$radio_entries,true));
-		}
-
-		// Options for replacing/overwriting content
-		$radio_entries=new ocp_tempcode();
-		$radio_entries->attach(form_input_radio_entry('import_replace','replace',true,do_lang_tempcode('IMPORT_REPLACE_OVERWRITE')));
-		$radio_entries->attach(form_input_radio_entry('import_replace','skip',false,do_lang_tempcode('IMPORT_REPLACE_SKIP')));
-		$fields->attach(form_input_radio(do_lang_tempcode('IMPORT_REPLACE'),do_lang_tempcode('DESCRIPTION_IMPORT_REPLACE'),'import_replace',$radio_entries,true));
-
-		$url=build_url(array('page'=>'_SELF','type'=>'advanced_import','session'=>$session),'_SELF');
-		$message=array_key_exists('message',$info)?$info['message']:'';
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session:importer='.$importer,do_lang_tempcode('IMPORT_SESSION'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'07848c5a99cc6fe38650b4904091af79','TEXT'=>$message,'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'HIDDEN'=>build_keep_post_fields(),'SUBMIT_NAME'=>do_lang_tempcode('IMPORT')));
-	}*/
-
-	/* *
-	 * The actualiser to do an advanced import.
-	 *
-	 * @return tempcode		The UI
-	 */
-	/*function advanced_do_import()
-	{
-
-	}*/
 
 	/**
 	 * The actualiser to do an import.
@@ -577,8 +534,6 @@ class Module_admin_import
 		@ini_set('log_errors','0');
 		global $I_REFRESH_URL;
 		$I_REFRESH_URL=$refresh_url;
-
-		$title=get_screen_title('IMPORT');
 
 		$importer=get_param('importer');
 		require_code('hooks/modules/admin_import/'.filter_naughty_harsh($importer));
@@ -706,9 +661,6 @@ class Module_admin_import
 
 		log_it('IMPORT');
 		post_import_cleanup();
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION')),array('_SELF:_SELF:hook:importer='.$importer.':session='.get_param('session'),do_lang_tempcode('IMPORT'))));
-		breadcrumb_set_self(do_lang_tempcode('START'));
 
 		$back_url=build_url(array('page'=>'_SELF','type'=>'hook','importer'=>get_param('importer'),'just'=>$import_last),'_SELF');
 		$_GET['just']=$import_last;

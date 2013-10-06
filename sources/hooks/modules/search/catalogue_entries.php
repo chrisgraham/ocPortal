@@ -65,15 +65,13 @@ class Hook_search_catalogue_entries
 	/**
 	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
 	 *
-	 * @return array			A pair: the hook, and the options
+	 * @return mixed			Either Tempcode of a full screen to show, or a pair: the hook, and the options
 	 */
 	function ajax_tree()
 	{
 		$catalogue_name=get_param('catalogue_name','');
 		if ($catalogue_name=='')
 		{
-			@ob_end_clean();
-
 			$tree=nice_get_catalogues(NULL,true);
 			if ($tree->is_empty())
 			{
@@ -87,10 +85,7 @@ class Hook_search_catalogue_entries
 			$hidden=build_keep_post_fields();
 
 			$title=get_screen_title('SEARCH');
-			$tpl=do_template('FORM_SCREEN',array('_GUID'=>'a2812ac8056903811f444682d45ee448','TARGET'=>'_self','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
-			$echo=globalise($tpl,NULL,'',true);
-			$echo->evaluate_echo();
-			exit();
+			return do_template('FORM_SCREEN',array('_GUID'=>'a2812ac8056903811f444682d45ee448','TARGET'=>'_self','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 		}
 
 		return array('choose_catalogue_entry',array('catalogue_name'=>$catalogue_name));

@@ -146,7 +146,7 @@ function warn_exit_wordfilter($name,$message)
 	if (is_null($name)) warn_exit($message);
 
 	// Output our error / correction form
-	@ob_end_clean();
+	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 	$hidden=build_keep_post_fields(array($name));
 	require_code('form_templates');
 	$value=post_param($name);

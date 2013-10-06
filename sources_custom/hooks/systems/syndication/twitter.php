@@ -34,7 +34,8 @@ class Hook_Syndication_twitter
 		if (get_param_integer('oauth_in_progress',0)==0)
 		{
 			$response=$twitter->oAuthRequestToken($oauth_url->evaluate());
-			$twitter->oAuthAuthorize($response['oauth_token']);
+			require_code('site2');
+			smart_redirect(Twitter::SECURE_API_URL.'/oauth/authorize?oauth_token='.urlencode($response['oauth_token']));
 			exit();
 		}
 

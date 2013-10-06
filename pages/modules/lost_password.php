@@ -41,6 +41,40 @@ class Module_lost_password
 		return $info;
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
+
+			$this->title=get_screen_title('RESET_PASSWORD');
+		}
+
+		if ($type=='step2')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('RESET_PASSWORD'))));
+			breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
+
+			$this->title=get_screen_title('RESET_PASSWORD');
+		}
+
+		if ($type=='step3')
+		{
+			$this->title=get_screen_title('RESET_PASSWORD');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -76,8 +110,6 @@ class Module_lost_password
 	 */
 	function step1()
 	{
-		$title=get_screen_title('RESET_PASSWORD');
-
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
@@ -97,9 +129,7 @@ class Module_lost_password
 		$submit_name=do_lang_tempcode('PASSWORD_RESET_BUTTON');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF');
 
-		breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'080e516fef7c928dbb9fb85beb6e435a','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'080e516fef7c928dbb9fb85beb6e435a','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -109,11 +139,6 @@ class Module_lost_password
 	 */
 	function step2()
 	{
-		$title=get_screen_title('RESET_PASSWORD');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('RESET_PASSWORD'))));
-		breadcrumb_set_self(do_lang_tempcode('START'));
-
 		$username=trim(post_param('username',''));
 		$email_address=trim(post_param('email_address',''));
 		if (($username=='') && ($email_address==''))
@@ -188,7 +213,7 @@ class Module_lost_password
 			$fields->attach(form_input_line(do_lang_tempcode('CODE'),'','code',NULL,true));
 			$submit_name=do_lang_tempcode('PROCEED');
 			return do_template('FORM_SCREEN',array(
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'GET'=>true,
 				'SKIP_VALIDATION'=>true,
 				'HIDDEN'=>'',
@@ -199,9 +224,7 @@ class Module_lost_password
 			));
 		}
 
-		breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
-
-		return inform_screen($title,do_lang_tempcode('RESET_CODE_MAILED'));
+		return inform_screen($this->title,do_lang_tempcode('RESET_CODE_MAILED'));
 	}
 
 	/**
@@ -211,8 +234,6 @@ class Module_lost_password
 	 */
 	function step3()
 	{
-		$title=get_screen_title('RESET_PASSWORD');
-
 		$code=trim(get_param('code',''));
 		if ($code=='')
 		{
@@ -223,7 +244,7 @@ class Module_lost_password
 			$submit_name=do_lang_tempcode('PROCEED');
 			return do_template('FORM_SCREEN',array(
 				'_GUID'=>'6e4db5c6f3c75faa999251339533d22a',
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'GET'=>true,
 				'SKIP_VALIDATION'=>true,
 				'HIDDEN'=>'',
@@ -310,11 +331,11 @@ class Module_lost_password
 
 			$redirect_url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'),NULL,false,false,false,'tab__edit__settings');
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-			return redirect_screen($title,$redirect_url,do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD',escape_html($username)));
+			return redirect_screen($this->title,$redirect_url,do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD',escape_html($username)));
 		}
 
 		// Email new password
-		return inform_screen($title,do_lang_tempcode('NEW_PASSWORD_MAILED',escape_html($email)));
+		return inform_screen($this->title,do_lang_tempcode('NEW_PASSWORD_MAILED',escape_html($email)));
 	}
 
 }

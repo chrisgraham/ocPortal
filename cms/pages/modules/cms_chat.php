@@ -62,6 +62,129 @@ class Module_cms_chat
 		return array('edit_lowrange_content'=>array(1,'MODERATE_CHATROOMS'));
 	}
 
+	var $title;
+	var $myrow;
+	var $message_id;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/forums');
+		set_helper_panel_tutorial('tut_chat');
+
+		if ($type=='misc')
+		{
+			if (has_actual_page_access(get_member(),'admin_chat'))
+			{
+				$also_url=build_url(array('page'=>'admin_chat'),get_module_zone('admin_chat'));
+				attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
+			}
+
+			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+
+			$this->title=get_screen_title('CHAT_MOD_PANEL');
+		}
+
+		if ($type=='room')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
+
+			$this->title=get_screen_title('CHAT_MOD_PANEL');
+		}
+
+		if ($type=='ban')
+		{
+			$id=get_param_integer('id');
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+
+			$this->title=get_screen_title('CHAT_BAN');
+		}
+
+		if ($type=='unban')
+		{
+			$id=get_param_integer('id');
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+
+			$this->title=get_screen_title('CHAT_UNBAN');
+		}
+
+		if ($type=='ed')
+		{
+			$id=get_param_integer('id');
+
+			$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$rows))
+			{
+				return warn_screen($this->title,do_lang_tempcode('MISSING_RESOURCE'));
+			}
+			$myrow=$rows[0];
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($myrow['room_id']),do_lang_tempcode('CHAT_MOD_PANEL'))));
+
+			$this->title=get_screen_title('EDIT_MESSAGE');
+
+			$this->myrow=$myrow;
+		}
+
+		if ($type=='_ed')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+			$delete=post_param_integer('delete',0);
+			if ($delete==1)
+			{
+				$message_id=get_param_integer('id');
+
+				$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('the_message','room_id'),array('id'=>$message_id));
+				if (!array_key_exists(0,$rows))
+				{
+					return warn_screen($this->title,do_lang_tempcode('MISSING_RESOURCE'));
+				}
+				$myrow=$rows[0];
+
+				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($myrow['room_id']),do_lang_tempcode('CHAT_MOD_PANEL'))));
+
+				$this->title=get_screen_title('DELETE_MESSAGE');
+
+				$this->myrow=$myrow;
+				$this->message_id=$message_id;
+			} else
+			{
+				$this->title=get_screen_title('EDIT_MESSAGE');
+			}
+		}
+
+		if ($type=='delete')
+		{
+			$id=get_param_integer('id');
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+
+			$this->title=get_screen_title('DELETE_ALL_MESSAGES');
+		}
+
+		if ($type=='_delete')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+			$this->title=get_screen_title('DELETE_ALL_MESSAGES');
+		}
+
+		if ($type=='mass_delete')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+			$this->title=get_screen_title('DELETE_SOME_MESSAGES');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -69,9 +192,6 @@ class Module_cms_chat
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/forums');
-		set_helper_panel_tutorial('tut_chat');
-
 		require_lang('chat');
 		require_code('chat');
 		require_code('chat2');
@@ -79,15 +199,15 @@ class Module_cms_chat
 
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->chat_choose_room();
+		if ($type=='room') return $this->moderate_chat_room();
 		if ($type=='ban') return $this->chat_ban();
 		if ($type=='unban') return $this->chat_unban();
-		if ($type=='room') return $this->moderate_chat_room();
 		if ($type=='delete') return $this->chat_delete_all_messages();
 		if ($type=='_delete') return $this->_chat_delete_all_messages();
 		if ($type=='mass_delete') return $this->_chat_delete_many_messages();
 		if ($type=='ed') return $this->chat_edit_message();
 		if ($type=='_ed') return $this->_chat_edit_message();
-		if ($type=='misc') return $this->chat_choose_room();
 
 		return new ocp_tempcode();
 	}
@@ -99,17 +219,7 @@ class Module_cms_chat
 	 */
 	function chat_choose_room()
 	{
-		if (has_actual_page_access(get_member(),'admin_chat'))
-		{
-			require_lang('menus');
-			$also_url=build_url(array('page'=>'admin_chat'),get_module_zone('admin_chat'));
-			attach_message(do_lang_tempcode('ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
-		}
-
-		$title=get_screen_title('CHAT_MOD_PANEL');
 		$introtext=do_lang_tempcode('CHAT_PANEL_INTRO');
-
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -119,7 +229,6 @@ class Module_cms_chat
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('ROOM_NAME'),do_lang_tempcode('ROOM_OWNER'),do_lang_tempcode('ROOM_LANG'),do_lang_tempcode('MESSAGES')),$sortables,'sort',$sortable.' '.$sort_order);
 
@@ -151,7 +260,7 @@ class Module_cms_chat
 
 		$results_table=results_table(do_lang_tempcode('ROOMS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		$tpl=do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'c59cb6c8409d0e678b05628d92e423db','TITLE'=>$title,'INTRODUCTION'=>$introtext,'CONTENT'=>$results_table,'LINKS'=>array()));
+		$tpl=do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'c59cb6c8409d0e678b05628d92e423db','TITLE'=>$this->title,'INTRODUCTION'=>$introtext,'CONTENT'=>$results_table,'LINKS'=>array()));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -180,10 +289,6 @@ class Module_cms_chat
 	 */
 	function moderate_chat_room()
 	{
-		$title=get_screen_title('CHAT_MOD_PANEL');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
-
 		$room_id=get_param_integer('id');
 		check_chatroom_access($room_id);
 		$room_details=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id),'',1);
@@ -200,7 +305,6 @@ class Module_cms_chat
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room_id));
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('*'),array('room_id'=>$room_id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$fields=new ocp_tempcode();
@@ -248,7 +352,7 @@ class Module_cms_chat
 
 		$delete_url=build_url(array('page'=>'_SELF','type'=>'mass_delete','room_id'=>$room_id,'start'=>$start,'max'=>$max),'_SELF');
 
-		$tpl=do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'940de7e8c9a0ac3c575892887c7ef3c0','URL'=>$delete_url,'TITLE'=>$title,'INTRODUCTION'=>'','CONTENT'=>$content,'LINKS'=>$links));
+		$tpl=do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'940de7e8c9a0ac3c575892887c7ef3c0','URL'=>$delete_url,'TITLE'=>$this->title,'INTRODUCTION'=>'','CONTENT'=>$content,'LINKS'=>$links));
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
@@ -260,8 +364,6 @@ class Module_cms_chat
 	 */
 	function chat_ban()
 	{
-		$title=get_screen_title('CHAT_BAN');
-
 		$id=get_param_integer('id');
 
 		$room_details=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$id),'',1);
@@ -270,8 +372,6 @@ class Module_cms_chat
 		$has_mod_access=((has_privilege(get_member(),'edit_lowrange_content','cms_chat',array('chat',$id))) || ($row['room_owner']==get_member()) && (has_privilege(get_member(),'moderate_my_private_rooms')));
 		if (!$has_mod_access) access_denied('PRIVILEGE','edit_lowrange_content');
 		check_privilege('ban_chatters_from_rooms');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
 
 		$member_id=post_param_integer('member_id',NULL);
 		if (is_null($member_id))
@@ -292,12 +392,12 @@ class Module_cms_chat
 		if ($confirm_needed)
 		{
 			$hidden=form_input_hidden('member_id',strval($member_id));
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'7d04bebbac2c49be4458afdbf5619dc7','TITLE'=>$title,'TEXT'=>do_lang_tempcode('Q_SURE_BAN',escape_html($username)),'URL'=>get_self_url(),'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'7d04bebbac2c49be4458afdbf5619dc7','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE_BAN',escape_html($username)),'URL'=>get_self_url(),'HIDDEN'=>$hidden));
 		}
 
 		chatroom_ban_to($member_id,$id);
 
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -307,8 +407,6 @@ class Module_cms_chat
 	 */
 	function chat_unban()
 	{
-		$title=get_screen_title('CHAT_UNBAN');
-
 		$id=get_param_integer('id');
 
 		$room_details=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$id),'',1);
@@ -317,8 +415,6 @@ class Module_cms_chat
 		$has_mod_access=((has_privilege(get_member(),'edit_lowrange_content','cms_chat',array('chat',$id))) || ($row['room_owner']==get_member()) && (has_privilege(get_member(),'moderate_my_private_rooms')));
 		if (!$has_mod_access) access_denied('PRIVILEGE','edit_lowrange_content');
 		check_privilege('ban_chatters_from_rooms');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
 
 		$member_id=post_param_integer('member_id',NULL);
 		if (is_null($member_id))
@@ -333,12 +429,12 @@ class Module_cms_chat
 		if ($confirm_needed)
 		{
 			$hidden=form_input_hidden('member_id',strval($member_id));
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'6e90c87aa46814a8f4b8c5b2fee6c29d','TITLE'=>$title,'TEXT'=>do_lang_tempcode('Q_SURE_UNBAN',escape_html($username)),'URL'=>get_self_url(),'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'6e90c87aa46814a8f4b8c5b2fee6c29d','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE_UNBAN',escape_html($username)),'URL'=>get_self_url(),'HIDDEN'=>$hidden));
 		}
 
 		chatroom_unban_to($member_id,$id);
 
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -348,16 +444,7 @@ class Module_cms_chat
 	 */
 	function chat_edit_message()
 	{
-		$title=get_screen_title('EDIT_MESSAGE');
-
-		$id=get_param_integer('id');
-
-		$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$rows))
-		{
-			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$rows[0];
+		$myrow=$this->myrow;
 
 		$room_id=$myrow['room_id'];
 		check_chatroom_access($room_id);
@@ -383,9 +470,7 @@ class Module_cms_chat
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'43ca9d141f23445a018634bdc70f1c7c','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_MESSAGE'),'delete',false));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($room_id),do_lang_tempcode('CHAT_MOD_PANEL'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'bf92ecd4d5f923f78bbed4faca6c0cb6','HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'bf92ecd4d5f923f78bbed4faca6c0cb6','HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 	}
 
 	/**
@@ -395,14 +480,11 @@ class Module_cms_chat
 	 */
 	function _chat_edit_message()
 	{
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		$delete=post_param_integer('delete',0);
 		if ($delete==1)
 		{
 			return $this->_chat_delete_message();
-		}
-		else
+		} else
 		{
 			$message_id=get_param_integer('id');
 
@@ -416,7 +498,6 @@ class Module_cms_chat
 			$has_mod_access=((has_privilege(get_member(),'edit_lowrange_content','cms_chat',array('chat',$room_id))) || ($row['room_owner']==get_member()) && (has_privilege(get_member(),'moderate_my_private_rooms')));
 			if (!$has_mod_access) access_denied('PRIVILEGE','edit_lowrange_content');
 
-			$title=get_screen_title('EDIT_MESSAGE');
 			$_message_parsed=insert_lang_comcode(wordfilter_text(post_param('message')),4);
 			$GLOBALS['SITE_DB']->query_update('chat_messages',array('the_message'=>$_message_parsed,'text_colour'=>post_param('textcolour'),'font_name'=>post_param('fontname')),array('id'=>$message_id),'',1);
 
@@ -425,29 +506,29 @@ class Module_cms_chat
 			decache('side_shoutbox');
 
 			require_code('templates_donext');
-			return do_next_manager($title,do_lang_tempcode('SUCCESS'),
-						NULL,
-						NULL,
-						/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-						/*	 page	 params				  zone	  */
-						NULL,																						 // Add one
-						array('_SELF',array('type'=>'ed','id'=>$message_id,'room_id'=>$room_id),'_SELF'),	 // Edit this
-						array('_SELF',array('type'=>'room','id'=>$room_id),'_SELF'),											  // Edit one
-						NULL,	// View this
-						array('_SELF',array(),'_SELF'),											 // View archive
-						NULL,																						// Add to category
-						NULL,																						// Add one category
-						NULL,																						// Edit one category
-						NULL,																						// Edit this category
-						NULL,																							// View this category
-						/*	  SPECIALLY TYPED 'LINKS'				  */
-						array(),
-						array(),
-						array(
-							/*	 type							  page	 params													 zone	  */
-							has_actual_page_access(get_member(),'admin_chat')?array('chatrooms',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('ROOMS')):NULL,
-						),
-						do_lang('SETUP')
+			return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
+				NULL,
+				NULL,
+				/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+				/*	 page	 params				  zone	  */
+				NULL,																						 // Add one
+				array('_SELF',array('type'=>'ed','id'=>$message_id,'room_id'=>$room_id),'_SELF'),	 // Edit this
+				array('_SELF',array('type'=>'room','id'=>$room_id),'_SELF'),											  // Edit one
+				NULL,	// View this
+				array('_SELF',array(),'_SELF'),											 // View archive
+				NULL,																						// Add to category
+				NULL,																						// Add one category
+				NULL,																						// Edit one category
+				NULL,																						// Edit this category
+				NULL,																							// View this category
+				/*	  SPECIALLY TYPED 'LINKS'				  */
+				array(),
+				array(),
+				array(
+					/*	 type							  page	 params													 zone	  */
+					has_actual_page_access(get_member(),'admin_chat')?array('chatrooms',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('ROOMS')):NULL,
+				),
+				do_lang('SETUP')
 			);
 		}
 	}
@@ -459,16 +540,9 @@ class Module_cms_chat
 	 */
 	function _chat_delete_message()
 	{
-		$title=get_screen_title('DELETE_MESSAGE');
+		$myrow=$this->myrow;
+		$message_id=$this->message_id;
 
-		$message_id=get_param_integer('id');
-
-		$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('the_message','room_id'),array('id'=>$message_id));
-		if (!array_key_exists(0,$rows))
-		{
-			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$rows[0];
 		$message=$myrow['the_message'];
 
 		$room_id=$myrow['room_id'];
@@ -489,29 +563,27 @@ class Module_cms_chat
 
 		log_it('DELETE_MESSAGE',strval($message_id),$message2->evaluate());
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($room_id),do_lang_tempcode('CHAT_MOD_PANEL'))));
-
 		require_code('templates_donext');
-		return do_next_manager($title,do_lang_tempcode('SUCCESS'),
-					NULL,
-					NULL,
-					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-					/*	 page	 params				  zone	  */
-					NULL,																						 // Add one
-					NULL,	 // Edit this
-					array('_SELF',array('type'=>'room','id'=>$room_id),'_SELF'),											  // Edit one
-					NULL,	// View this
-					array('_SELF',array(),'_SELF'),											 // View archive
-					NULL,																						// Add to category
-					NULL,																						// Add one category
-					NULL,																						// Edit one category
-					NULL,																						// Edit this category
-					NULL,																							// View this category
-					/*	  SPECIALLY TYPED 'LINKS'				  */
-					array(
-						/*	 type							  page	 params													 zone	  */
-						has_actual_page_access(get_member(),'admin_chat')?array('chatrooms',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('SETUP')):NULL,
-					)
+		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
+			NULL,
+			NULL,
+			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+			/*	 page	 params				  zone	  */
+			NULL,																						 // Add one
+			NULL,	 // Edit this
+			array('_SELF',array('type'=>'room','id'=>$room_id),'_SELF'),											  // Edit one
+			NULL,	// View this
+			array('_SELF',array(),'_SELF'),											 // View archive
+			NULL,																						// Add to category
+			NULL,																						// Add one category
+			NULL,																						// Edit one category
+			NULL,																						// Edit this category
+			NULL,																							// View this category
+			/*	  SPECIALLY TYPED 'LINKS'				  */
+			array(
+				/*	 type							  page	 params													 zone	  */
+				has_actual_page_access(get_member(),'admin_chat')?array('chatrooms',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('SETUP')):NULL,
+			)
 		);
 	}
 
@@ -522,8 +594,6 @@ class Module_cms_chat
 	 */
 	function chat_delete_all_messages()
 	{
-		$title=get_screen_title('DELETE_ALL_MESSAGES');
-
 		$id=get_param_integer('id');
 		check_chatroom_access($id);
 
@@ -540,9 +610,7 @@ class Module_cms_chat
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_delete','id'=>$id),'_SELF');
 		$submit_name=do_lang_tempcode('DELETE');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'31b488e5d4ff52ffd5e097876c0b13c7','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'31b488e5d4ff52ffd5e097876c0b13c7','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
 	}
 
 	/**
@@ -552,19 +620,13 @@ class Module_cms_chat
 	 */
 	function _chat_delete_all_messages()
 	{
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		$delete=post_param_integer('continue_delete',0);
 		if ($delete!=1)
 		{
-			return $this->chat_choose_room();
-		}
-		else
+			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+			return redirect_screen($this->title,$url,do_lang_tempcode('CANCELLED'));
+		} else
 		{
-			$title=get_screen_title('DELETE_ALL_MESSAGES');
-			//Delete all the posts in the specified room
-			//delete_chatroom_messages(get_param_integer('room_id'));
-
 			$room_id=get_param_integer('id');
 			check_chatroom_access($room_id);
 
@@ -582,7 +644,7 @@ class Module_cms_chat
 
 			// Redirect
 			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
 	}
 
@@ -593,10 +655,6 @@ class Module_cms_chat
 	 */
 	function _chat_delete_many_messages()
 	{
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
-		$title=get_screen_title('DELETE_SOME_MESSAGES');
-
 		$room_id=get_param_integer('room_id');
 		check_chatroom_access($room_id);
 
@@ -631,7 +689,7 @@ class Module_cms_chat
 		}
 
 		// Redirect
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

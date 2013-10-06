@@ -89,6 +89,43 @@ class Module_cms_calendar extends standard_crud_module
 		);
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('date');
+		inform_non_canonical_parameter('e_type');
+		inform_non_canonical_parameter('validated');
+
+		set_helper_panel_pic('pagepics/calendar');
+		set_helper_panel_tutorial('tut_calendar');
+
+		if ($type=='_import_ical')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_CALENDARS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_ICAL'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		if ($type=='import' || $type=='_import_ical')
+		{
+			$this->title=get_screen_title('IMPORT_ICAL');
+		}
+
+		if ($type=='export')
+		{
+			$this->title=get_screen_title('EXPORT_ICAL');
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -168,9 +205,6 @@ class Module_cms_calendar extends standard_crud_module
 				};
 		";
 
-		set_helper_panel_pic('pagepics/calendar');
-		set_helper_panel_tutorial('tut_calendar');
-
 		$this->posting_form_title=do_lang_tempcode('EVENT_TEXT');
 
 		require_lang('calendar');
@@ -186,13 +220,10 @@ class Module_cms_calendar extends standard_crud_module
 
 		// Decide what to do
 		if ($type=='misc') return $this->misc();
-
-		// Decide what to do
-
 		if ($type=='import') return $this->import_ical();
 		if ($type=='_import_ical') return $this->_import_ical();
-		if ($type=='export') 	return 	$this->export_ical();
-		if ($type=='_export') 	return 	$this->_export_ical();
+		if ($type=='export') return $this->export_ical();
+		if ($type=='_export') return $this->_export_ical();
 
 		return new ocp_tempcode();
 	}
@@ -207,16 +238,16 @@ class Module_cms_calendar extends standard_crud_module
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_CALENDARS'),comcode_lang_string('DOC_CALENDAR'),
-					array_merge(array(
-						/*	 type							  page	 params													 zone	  */
-						has_privilege(get_member(),'submit_cat_highrange_content','cms_calendar')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_EVENT_TYPE')):NULL,
-						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_EVENT_TYPE')):NULL,
-						has_privilege(get_member(),'submit_lowrange_content','cms_calendar')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CALENDAR_EVENT')):NULL,
-						has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CALENDAR_EVENT')):NULL,
-						has_privilege(get_member(),'mass_import','cms_calendar')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_ICAL')):NULL,
-						array('export',array('_SELF',array('type'=>'export'),'_SELF'),do_lang('EXPORT_ICAL')),
-					),manage_custom_fields_donext_link('event')),
-					do_lang('MANAGE_CALENDARS')
+			array_merge(array(
+				/*	 type							  page	 params													 zone	  */
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_calendar')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_EVENT_TYPE')):NULL,
+				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_EVENT_TYPE')):NULL,
+				has_privilege(get_member(),'submit_lowrange_content','cms_calendar')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CALENDAR_EVENT')):NULL,
+				has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CALENDAR_EVENT')):NULL,
+				has_privilege(get_member(),'mass_import','cms_calendar')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_ICAL')):NULL,
+				array('export',array('_SELF',array('type'=>'export'),'_SELF'),do_lang('EXPORT_ICAL')),
+			),manage_custom_fields_donext_link('event')),
+			do_lang('MANAGE_CALENDARS')
 		);
 	}
 
@@ -247,7 +278,6 @@ class Module_cms_calendar extends standard_crud_module
 		{
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
-			inform_non_canonical_parameter('sort');
 		}
 
 		$header_row=results_field_title(array(
@@ -349,10 +379,6 @@ class Module_cms_calendar extends standard_crud_module
 
 		if (is_null($type)) // Adding one
 		{
-			inform_non_canonical_parameter('date');
-			inform_non_canonical_parameter('e_type');
-			inform_non_canonical_parameter('validated');
-
 			$date=get_param('date','');
 			$start_hour=NULL;
 			$start_minute=NULL;
@@ -1178,8 +1204,6 @@ class Module_cms_calendar extends standard_crud_module
 
 		require_code('calendar_ical');
 
-		$title=get_screen_title('IMPORT_ICAL');
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_import_ical','old_type'=>get_param('type','')),'_SELF');
 		$submit_name=do_lang_tempcode('IMPORT_ICAL');
 
@@ -1193,7 +1217,7 @@ class Module_cms_calendar extends standard_crud_module
 		$hidden->attach(form_input_hidden('lang',$lang));
 		handle_max_file_size($hidden);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'5a970cd3766a6d32b64015b4dfd4b25e','TITLE'=>$title,'TEXT'=>do_lang_tempcode('IMPORT_ICAL_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'5a970cd3766a6d32b64015b4dfd4b25e','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('IMPORT_ICAL_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -1204,8 +1228,6 @@ class Module_cms_calendar extends standard_crud_module
 	function _import_ical()
 	{
 		check_privilege('mass_import');
-
-		$title=get_screen_title('IMPORT_ICAL');
 
 		require_code('calendar_ical');
 
@@ -1220,10 +1242,7 @@ class Module_cms_calendar extends standard_crud_module
 
 		ical_import($ical_url);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_CALENDARS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_ICAL'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
-		return inform_screen($title,do_lang_tempcode('IMPORT_ICAL_DONE'));
+		return inform_screen($this->title,do_lang_tempcode('IMPORT_ICAL_DONE'));
 	}
 
 	/**
@@ -1233,8 +1252,6 @@ class Module_cms_calendar extends standard_crud_module
 	 */
 	function export_ical()
 	{
-		$title=get_screen_title('EXPORT_ICAL');
-
 		$fields=new ocp_tempcode();
 		$type_list=nice_get_event_types();
 
@@ -1245,7 +1262,7 @@ class Module_cms_calendar extends standard_crud_module
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');
 		$submit_name=do_lang_tempcode('EXPORT_ICAL');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'fa308cb6dd4f82f5ed2dd2fab45b0fef','TITLE'=>$title,'TEXT'=>do_lang_tempcode('EXPORT_ICAL_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'GET'=>true));
+		return do_template('FORM_SCREEN',array('_GUID'=>'fa308cb6dd4f82f5ed2dd2fab45b0fef','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('EXPORT_ICAL_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'GET'=>true));
 	}
 
 	/**
@@ -1253,7 +1270,6 @@ class Module_cms_calendar extends standard_crud_module
 	 */
 	function _export_ical()
 	{
-		$title=get_screen_title('EXPORT_ICAL');
 		require_code('calendar_ical');
 		output_ical();
 	}
@@ -1348,7 +1364,6 @@ class Module_cms_calendar_cat extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),
@@ -1475,8 +1490,6 @@ class Module_cms_calendar_cat extends standard_crud_module
 
 		require_code('templates_donext');
 
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		$extra=array();
 		$relay__private=post_param_integer('relay__private',NULL);
 		if ($relay__private!==NULL)
@@ -1492,52 +1505,52 @@ class Module_cms_calendar_cat extends standard_crud_module
 		if ((is_null($id)) && (is_null($type)))
 		{
 			return do_next_manager($title,$description,
-						NULL,
-						NULL,
-						/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-						/*	 page	 params				  zone	  */
-						array('_SELF',array('type'=>'ad'),'_SELF',do_lang_tempcode('ADD_CALENDAR_EVENT')),							// Add one
-						NULL,							 // Edit this
-						has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type'=>'ed')+$extra,'_SELF',do_lang_tempcode('EDIT_CALENDAR_EVENT')):NULL,											// Edit one
-						NULL,							// View this
-						array('calendar',$archive_map+$extra,get_module_zone('calendar'),do_lang('CALENDAR')),				// View archive
-						NULL,	  // Add to category
-						has_privilege(get_member(),'submit_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ac')+$extra,'_SELF',do_lang_tempcode('ADD_EVENT_TYPE')):NULL,					  // Add one category
-						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ec')+$extra,'_SELF',do_lang_tempcode('EDIT_EVENT_TYPE')):NULL,					  // Edit one category
-						NULL,			 // Edit this category
-						NULL,																						 // View this category
-						NULL,
-						NULL,
-						NULL,
-						NULL,
-						NULL,
-						NULL,
-						do_lang_tempcode('EVENT_TYPES')
+				NULL,
+				NULL,
+				/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+				/*	 page	 params				  zone	  */
+				array('_SELF',array('type'=>'ad'),'_SELF',do_lang_tempcode('ADD_CALENDAR_EVENT')),							// Add one
+				NULL,							 // Edit this
+				has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type'=>'ed')+$extra,'_SELF',do_lang_tempcode('EDIT_CALENDAR_EVENT')):NULL,											// Edit one
+				NULL,							// View this
+				array('calendar',$archive_map+$extra,get_module_zone('calendar'),do_lang('CALENDAR')),				// View archive
+				NULL,	  // Add to category
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ac')+$extra,'_SELF',do_lang_tempcode('ADD_EVENT_TYPE')):NULL,					  // Add one category
+				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ec')+$extra,'_SELF',do_lang_tempcode('EDIT_EVENT_TYPE')):NULL,					  // Edit one category
+				NULL,			 // Edit this category
+				NULL,																						 // View this category
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				do_lang_tempcode('EVENT_TYPES')
 			);
 		}
 
 		return do_next_manager($title,$description,
-					NULL,
-					NULL,
-					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-					/*	 page	 params				  zone	  */
-					array('_SELF',array('type'=>'ad','e_type'=>$type)+$extra,'_SELF',do_lang_tempcode('ADD_CALENDAR_EVENT')),											// Add one
-					(is_null($id) || (!has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar',array('calendar','type')+$extra)))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id)+$extra,'_SELF',do_lang_tempcode('EDIT_THIS_CALENDAR_EVENT')),							 // Edit this
-					has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type'=>'ed')+$extra,'_SELF',do_lang_tempcode('EDIT_CALENDAR_EVENT')):NULL,											// Edit one
-					is_null($id)?NULL:array('calendar',array('type'=>'view','id'=>$id)+$extra,get_module_zone('calendar')),						  // View this
-					array('calendar',$archive_map+$extra,get_module_zone('calendar'),do_lang('CALENDAR')),				// View archive
-					NULL,																						// Add to category
-					has_privilege(get_member(),'submit_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ac')+$extra,'_SELF',do_lang_tempcode('ADD_EVENT_TYPE')):NULL,				// Add one category
-					has_privilege(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ec')+$extra,'_SELF',do_lang_tempcode('EDIT_EVENT_TYPE')):NULL,				// Edit one category
-					has_privilege(get_member(),'edit_own_cat_highrange_content','cms_calendar',array('calendar','type')+$extra)?array('_SELF',array('type'=>'_ec','id'=>$type)+$extra,'_SELF',do_lang_tempcode('EDIT_THIS_EVENT_TYPE')):NULL,			  // Edit this category
-					NULL,																						// View this category
-					NULL,
-					NULL,
-					NULL,
-					NULL,
-					NULL,
-					NULL,
-					do_lang_tempcode('EVENT_TYPES')
+			NULL,
+			NULL,
+			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+			/*	 page	 params				  zone	  */
+			array('_SELF',array('type'=>'ad','e_type'=>$type)+$extra,'_SELF',do_lang_tempcode('ADD_CALENDAR_EVENT')),											// Add one
+			(is_null($id) || (!has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar',array('calendar','type')+$extra)))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id)+$extra,'_SELF',do_lang_tempcode('EDIT_THIS_CALENDAR_EVENT')),							 // Edit this
+			has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type'=>'ed')+$extra,'_SELF',do_lang_tempcode('EDIT_CALENDAR_EVENT')):NULL,											// Edit one
+			is_null($id)?NULL:array('calendar',array('type'=>'view','id'=>$id)+$extra,get_module_zone('calendar')),						  // View this
+			array('calendar',$archive_map+$extra,get_module_zone('calendar'),do_lang('CALENDAR')),				// View archive
+			NULL,																						// Add to category
+			has_privilege(get_member(),'submit_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ac')+$extra,'_SELF',do_lang_tempcode('ADD_EVENT_TYPE')):NULL,				// Add one category
+			has_privilege(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ec')+$extra,'_SELF',do_lang_tempcode('EDIT_EVENT_TYPE')):NULL,				// Edit one category
+			has_privilege(get_member(),'edit_own_cat_highrange_content','cms_calendar',array('calendar','type')+$extra)?array('_SELF',array('type'=>'_ec','id'=>$type)+$extra,'_SELF',do_lang_tempcode('EDIT_THIS_EVENT_TYPE')):NULL,			  // Edit this category
+			NULL,																						// View this category
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			do_lang_tempcode('EVENT_TYPES')
 		);
 	}
 

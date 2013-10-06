@@ -142,6 +142,23 @@ class standard_crud_module
 	}
 
 	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		if (is_null($this->default_type)) $this->default_type=method_exists($this,'misc')?'misc':'ad';
+		$type=get_param('type',$this->default_type);
+
+		if ($type=='_ad' || $type=='_av' || $type=='_ac' || $type=='_add_entry' || $type=='_add_category' || $type=='__ed' || $type=='__ev' || $type=='__ec' || $type=='__edit_entry' || $type=='__edit_category')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
+		}
+	}
+
+	/**
 	 * Standard modular run function.
 	 *
 	 * @return tempcode	The result of execution.
@@ -371,27 +388,27 @@ class standard_crud_module
 
 		require_code('templates_donext');
 		return do_next_manager($title,$description,
-					NULL,
-					NULL,
-					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-					/*	 page	 params				  zone	  */
-					$this->do_next_editing_categories?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_label)?$this->add_one_label:NULL),									 // Add one
-					$this->do_next_editing_categories?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_label)?$this->edit_this_label:NULL)),					  // Edit this
-					$this->do_next_editing_categories?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_label)?$this->edit_one_label:NULL)),									 // Edit one
-					$this->do_next_editing_categories?NULL:(is_null($id))?NULL:$view_url,																				 // View this
-					$archive_url,																			 // View archive
-					NULL,																						 // Add to category
-					(!$this->do_next_editing_categories)?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_cat_label)?$this->add_one_cat_label:NULL),									 // Add one category
-					(!$this->do_next_editing_categories)?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_cat_label)?$this->edit_one_cat_label:NULL)),									 // Edit one category
-					(!$this->do_next_editing_categories)?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_cat_label)?$this->edit_this_cat_label:NULL)),					  // Edit this category
-					(!$this->do_next_editing_categories)?NULL:$view_url,																				 // View this category
-					$this->extra_donext_entries,
-					$this->extra_donext_categories,
-					$this->extra_donext_whatever,
-					$this->extra_donext_whatever_title,
-					NULL,
-					$this->entries_title,
-					$this->categories_title
+			NULL,
+			NULL,
+			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+			/*	 page	 params				  zone	  */
+			$this->do_next_editing_categories?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_label)?$this->add_one_label:NULL),									 // Add one
+			$this->do_next_editing_categories?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_label)?$this->edit_this_label:NULL)),					  // Edit this
+			$this->do_next_editing_categories?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_label)?$this->edit_one_label:NULL)),									 // Edit one
+			$this->do_next_editing_categories?NULL:(is_null($id))?NULL:$view_url,																				 // View this
+			$archive_url,																			 // View archive
+			NULL,																						 // Add to category
+			(!$this->do_next_editing_categories)?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_cat_label)?$this->add_one_cat_label:NULL),									 // Add one category
+			(!$this->do_next_editing_categories)?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_cat_label)?$this->edit_one_cat_label:NULL)),									 // Edit one category
+			(!$this->do_next_editing_categories)?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_cat_label)?$this->edit_this_cat_label:NULL)),					  // Edit this category
+			(!$this->do_next_editing_categories)?NULL:$view_url,																				 // View this category
+			$this->extra_donext_entries,
+			$this->extra_donext_categories,
+			$this->extra_donext_whatever,
+			$this->extra_donext_whatever_title,
+			NULL,
+			$this->entries_title,
+			$this->categories_title
 		);
 	}
 
@@ -545,6 +562,7 @@ class standard_crud_module
 		url_default_parameters__enable();
 
 		$bits=$this->get_form_fields();
+		if (is_object($bits)) return $bits;
 
 		$fields2=new ocp_tempcode();
 		$posting_form_tabindex=NULL;
@@ -775,7 +793,7 @@ class standard_crud_module
 
 		clear_ocp_autosave();
 
-//		if ($this->redirect_type=='!')
+		//if ($this->redirect_type=='!')
 		{
 			$url=get_param('redirect',NULL);
 			if (!is_null($url))

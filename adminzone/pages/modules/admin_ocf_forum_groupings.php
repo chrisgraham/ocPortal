@@ -47,6 +47,25 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 		return parent::get_entry_points();
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/forums');
+		set_helper_panel_tutorial('tut_forums');
+
+		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_forums:misc',do_lang_tempcode('SECTION_FORUMS'))));
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -56,15 +75,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	{
 		$this->extra_donext_whatever_title=do_lang('SECTION_FORUMS');
 		$this->extra_donext_whatever=array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('admin_ocf_forums',array('type'=>'ad'),get_module_zone('admin_ocf_forums'))),
-						array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
-					);
-
-		set_helper_panel_pic('pagepics/forums');
-		set_helper_panel_tutorial('tut_forums');
-
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_forums:misc',do_lang_tempcode('SECTION_FORUMS'))));
+			/*	 type							  page	 	params					zone	  */
+			array('add_one',array('admin_ocf_forums',array('type'=>'ad'),get_module_zone('admin_ocf_forums'))),
+			array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
+		);
 
 		$this->add_one_cat_label=do_lang_tempcode('ADD_FORUM_GROUPING');
 		$this->edit_this_cat_label=do_lang_tempcode('EDIT_THIS_FORUM_GROUPING');
@@ -115,7 +129,6 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

@@ -440,7 +440,7 @@ class rss
 									$current_item['title']=xhtmlise_html($current_item['title']);
 								}
 								break;
-							case 'DESCRIPTION'://echo "here";exit();
+							case 'DESCRIPTION':
 								$current_item['news']=$data;
 								if ((preg_match('#[<>]#',$current_item['news'])==0) && (preg_match('#[<>]#',html_entity_decode($current_item['news'],ENT_QUOTES))!=0)) // Double escaped HTML
 									$current_item['news']=@html_entity_decode($current_item['news'],ENT_QUOTES);

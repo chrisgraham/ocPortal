@@ -90,6 +90,100 @@ class Module_admin_ipban
 		return array('misc'=>'IP_BANS');
 	}
 
+	var $title;
+	var $test;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/ipban');
+		set_helper_panel_tutorial('tut_censor');
+
+		if ($type=='misc')
+		{
+			$lookup_url=build_url(array('page'=>'admin_lookup'),get_module_zone('admin_lookup'));
+			set_helper_panel_text(comcode_to_tempcode(do_lang('IP_BANNING_WILDCARDS',$lookup_url->evaluate())));
+		}
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('IP_BANS');
+		}
+
+		if ($type=='actual')
+		{
+			$this->title=get_screen_title('IP_BANS');
+		}
+
+		if ($type=='syndicate_ip_ban')
+		{
+			$this->title=get_screen_title('SYNDICATE_TO_STOPFORUMSPAM');
+		}
+
+		if ($type=='multi_ban')
+		{
+			$this->title=get_screen_title('BAN_MEMBER');
+		}
+
+		if ($type=='toggle_ip_ban')
+		{
+			$ip=get_param('id');
+
+			$test=ip_banned($ip,true);
+
+			if (!$test)
+			{
+				$this->title=get_screen_title('IP_BANNED');
+			} else
+			{
+				$this->title=get_screen_title('IP_UNBANNED');
+			}
+
+			$this->test=$test;
+		}
+
+		if ($type=='toggle_member_ban')
+		{
+			$id=get_param_integer('id');
+
+			$test=$GLOBALS['FORUM_DRIVER']->is_banned($id);
+
+			if (!$test)
+			{
+				$this->title=get_screen_title('MEMBER_BANNED');
+			} else
+			{
+				$this->title=get_screen_title('MEMBER_UNBANNED');
+			}
+
+			$this->test=$test;
+		}
+
+		if ($type=='toggle_submitter_ban')
+		{
+			$id=get_param_integer('id');
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$id));
+
+			if (is_null($test))
+			{
+				$this->title=get_screen_title('SUBMITTER_BANNED');
+			} else
+			{
+				$this->title=get_screen_title('SUBMITTER_UNBANNED');
+			}
+
+			$this->test=$test;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -97,9 +191,6 @@ class Module_admin_ipban
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/ipban');
-		set_helper_panel_tutorial('tut_censor');
-
 		require_lang('submitban');
 		require_code('submit');
 
@@ -124,11 +215,6 @@ class Module_admin_ipban
 	 */
 	function gui()
 	{
-		$title=get_screen_title('IP_BANS');
-
-		$lookup_url=build_url(array('page'=>'admin_lookup'),get_module_zone('admin_lookup'));
-		set_helper_panel_text(comcode_to_tempcode(do_lang('IP_BANNING_WILDCARDS',$lookup_url->evaluate())));
-
 		$bans='';
 		$locked_bans='';
 		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip,i_ban_until FROM '.get_table_prefix().'banned_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL'.' OR i_ban_until>'.strval(time()).')');
@@ -149,7 +235,7 @@ class Module_admin_ipban
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		return do_template('IPBAN_SCREEN',array('_GUID'=>'963d24852ba87e9aa84e588862bcfecb','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'LOCKED_BANS'=>$locked_bans,'BANS'=>$bans,'URL'=>$post_url));
+		return do_template('IPBAN_SCREEN',array('_GUID'=>'963d24852ba87e9aa84e588862bcfecb','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$this->title,'LOCKED_BANS'=>$locked_bans,'BANS'=>$bans,'URL'=>$post_url));
 	}
 
 	/**
@@ -188,9 +274,8 @@ class Module_admin_ipban
 		}
 
 		// Show it worked / Refresh
-		$title=get_screen_title('IP_BANS');
 		$refresh_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$refresh_url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$refresh_url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -201,13 +286,10 @@ class Module_admin_ipban
 	function toggle_member_ban()
 	{
 		$id=get_param_integer('id');
-
-		$test=$GLOBALS['FORUM_DRIVER']->is_banned($id);
+		$test=$this->test;
 
 		if (!$test)
 		{
-			$title=get_screen_title('MEMBER_BANNED');
-
 			if ($id==get_member())
 				warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
 
@@ -215,7 +297,7 @@ class Module_admin_ipban
 			{
 				$preview=do_lang_tempcode('BAN_MEMBER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
 				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'4f8c5443497e60e9d636cd45283f2d59','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
+				return do_template('CONFIRM_SCREEN',array('_GUID'=>'4f8c5443497e60e9d636cd45283f2d59','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 			}
 
 			require_code('ocf_members_action');
@@ -223,13 +305,11 @@ class Module_admin_ipban
 			ocf_ban_member($id);
 		} else
 		{
-			$title=get_screen_title('MEMBER_UNBANNED');
-
 			if (post_param_integer('confirm',0)==0)
 			{
 				$preview=do_lang_tempcode('UNBAN_MEMBER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
 				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'6a21b101d5c0621572d0f80606258963','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
+				return do_template('CONFIRM_SCREEN',array('_GUID'=>'6a21b101d5c0621572d0f80606258963','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 			}
 
 			require_code('ocf_members_action');
@@ -244,9 +324,9 @@ class Module_admin_ipban
 		if (!is_null($_url))
 		{
 			$url=make_string_tempcode($_url);
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -257,12 +337,11 @@ class Module_admin_ipban
 	function toggle_submitter_ban()
 	{
 		$id=get_param_integer('id');
-
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$id));
+		$test=$this->test;
 
 		if (is_null($test))
 		{
-			$title=get_screen_title('SUBMITTER_BANNED');
+			$this->title=get_screen_title('SUBMITTER_BANNED');
 
 			if ($id==get_member())
 				warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
@@ -271,20 +350,20 @@ class Module_admin_ipban
 			{
 				$preview=do_lang_tempcode('BAN_SUBMITTER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
 				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'c1b82528e4f86be64484097adb60fdf2','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
+				return do_template('CONFIRM_SCREEN',array('_GUID'=>'c1b82528e4f86be64484097adb60fdf2','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 			}
 
 			$GLOBALS['SITE_DB']->query_insert('usersubmitban_member',array('the_member'=>$id));
 			log_it('SUBMITTER_BANNED',strval($id));
 		} else
 		{
-			$title=get_screen_title('SUBMITTER_UNBANNED');
+			$this->title=get_screen_title('SUBMITTER_UNBANNED');
 
 			if (post_param_integer('confirm',0)==0)
 			{
 				$preview=do_lang_tempcode('UNBAN_SUBMITTER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
 				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'3abb432a4d9ef0a812307f8681f3e3fe','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
+				return do_template('CONFIRM_SCREEN',array('_GUID'=>'3abb432a4d9ef0a812307f8681f3e3fe','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 			}
 
 			$GLOBALS['SITE_DB']->query_delete('usersubmitban_member',array('the_member'=>$id),'',1);
@@ -298,9 +377,9 @@ class Module_admin_ipban
 		if (!is_null($_url))
 		{
 			$url=make_string_tempcode($_url);
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -313,13 +392,11 @@ class Module_admin_ipban
 		$ip=either_param('ip');
 		$member_id=either_param_integer('member_id');
 
-		$title=get_screen_title('SYNDICATE_TO_STOPFORUMSPAM');
-
 		if (post_param_integer('confirm',0)==0)
 		{
 			$preview=do_lang_tempcode('DESCRIPTION_SYNDICATE_TO_STOPFORUMSPAM');
 			$url=get_self_url(false,false,NULL,true);
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'5dcc3d19a71be9e948d7d3668325ef90','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'5dcc3d19a71be9e948d7d3668325ef90','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 		}
 
 		require_code('failure');
@@ -331,9 +408,9 @@ class Module_admin_ipban
 		if (!is_null($_url))
 		{
 			$url=make_string_tempcode($_url);
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -344,11 +421,10 @@ class Module_admin_ipban
 	function toggle_ip_ban()
 	{
 		$ip=get_param('id');
+		$test=$this->test;
 
-		if (!ip_banned($ip,true))
+		if (!$test)
 		{
-			$title=get_screen_title('IP_BANNED');
-
 			if ($ip==get_ip_address())
 				warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
 
@@ -356,7 +432,7 @@ class Module_admin_ipban
 			{
 				$preview=do_lang_tempcode('BAN_IP_DESCRIPTION',escape_html($ip));
 				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'f6c2c7cacdb014fcca278865fbd663fe','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
+				return do_template('CONFIRM_SCREEN',array('_GUID'=>'f6c2c7cacdb014fcca278865fbd663fe','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 			}
 
 			require_code('failure');
@@ -364,13 +440,11 @@ class Module_admin_ipban
 			log_it('IP_BANNED',$ip);
 		} else
 		{
-			$title=get_screen_title('IP_UNBANNED');
-
 			if (post_param_integer('confirm',0)==0)
 			{
 				$preview=do_lang_tempcode('UNBAN_IP_DESCRIPTION',escape_html($ip));
 				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'19f4bee88709ba8e2534eec083abbafb','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
+				return do_template('CONFIRM_SCREEN',array('_GUID'=>'19f4bee88709ba8e2534eec083abbafb','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 			}
 
 			require_code('failure');
@@ -385,9 +459,9 @@ class Module_admin_ipban
 		if (!is_null($_url))
 		{
 			$url=make_string_tempcode($_url);
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -397,8 +471,6 @@ class Module_admin_ipban
 	 */
 	function multi_ban()
 	{
-		$title=get_screen_title('BAN_MEMBER');
-
 		$id=either_param('id',NULL);
 		$_ip=explode(':',strrev($id),2);
 		$ip=strrev($_ip[0]);
@@ -408,14 +480,14 @@ class Module_admin_ipban
 		{
 			$preview=do_lang_tempcode('BAN_MEMBER_DESCRIPTION',is_null($member)?do_lang_tempcode('NA_EM'):make_string_tempcode(strval($member)),make_string_tempcode(escape_html($ip)));
 			$url=get_self_url(false,false);
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'3840c52b23d9034cb6f9dd529b236c97','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'3840c52b23d9034cb6f9dd529b236c97','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 		}
 
 		if (!is_null($member)) ocf_ban_member(intval($member));
 		require_code('failure');
 		add_ip_ban($ip);
 
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 }

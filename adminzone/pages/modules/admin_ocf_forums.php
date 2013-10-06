@@ -49,6 +49,31 @@ class Module_admin_ocf_forums extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_FORUMS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('parent_forum');
+		inform_non_canonical_parameter('forum_grouping_id');
+
+		set_helper_panel_pic('pagepics/forums');
+		set_helper_panel_tutorial('tut_forums');
+
+		if ($type=='reorder' || $type=='ed')
+		{
+			$this->title=get_screen_title('EDIT_FORUM');
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -57,9 +82,6 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/forums');
-		set_helper_panel_tutorial('tut_forums');
-
 		$this->add_one_label=do_lang_tempcode('ADD_FORUM');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_FORUM');
 		$this->edit_one_label=do_lang_tempcode('EDIT_FORUM');
@@ -90,12 +112,12 @@ class Module_admin_ocf_forums extends standard_crud_module
 	function misc()
 	{
 		$menu_links=array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one_category',array('admin_ocf_forum_groupings',array('type'=>'ad'),get_module_zone('admin_ocf_forum_groupings')),do_lang('ADD_FORUM_GROUPING')),
-						array('edit_one_category',array('admin_ocf_forum_groupings',array('type'=>'ed'),get_module_zone('admin_ocf_forum_groupings')),do_lang('EDIT_FORUM_GROUPING')),
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_FORUM')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_FORUM')),
-					);
+			/*	 type							 	 page								 params					 zone	  */
+			array('add_one_category',array('admin_ocf_forum_groupings',array('type'=>'ad'),get_module_zone('admin_ocf_forum_groupings')),do_lang('ADD_FORUM_GROUPING')),
+			array('edit_one_category',array('admin_ocf_forum_groupings',array('type'=>'ed'),get_module_zone('admin_ocf_forum_groupings')),do_lang('EDIT_FORUM_GROUPING')),
+			array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_FORUM')),
+			array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_FORUM')),
+		);
 
 		if (addon_installed('ocf_post_templates'))
 			$menu_links[]=array('posttemplates',array('admin_ocf_post_templates',array('type'=>'misc'),get_module_zone('admin_ocf_post_templates')),do_lang_tempcode('POST_TEMPLATES'),('DOC_POST_TEMPLATES'));
@@ -105,8 +127,8 @@ class Module_admin_ocf_forums extends standard_crud_module
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_FORUMS'),comcode_to_tempcode(do_lang('DOC_FORUMS')."\n\n".do_lang('DOC_FORUM_CATEGORIES'),NULL,true),
-					array_merge($menu_links,manage_custom_fields_donext_link('post'),manage_custom_fields_donext_link('topic'),manage_custom_fields_donext_link('forum')),
-					do_lang('MANAGE_FORUMS')
+			array_merge($menu_links,manage_custom_fields_donext_link('post'),manage_custom_fields_donext_link('topic'),manage_custom_fields_donext_link('forum')),
+			do_lang('MANAGE_FORUMS')
 		);
 	}
 
@@ -133,14 +155,10 @@ class Module_admin_ocf_forums extends standard_crud_module
 		if (is_null($forum_grouping_id))
 		{
 			$forum_grouping_id=get_param_integer('forum_grouping_id',db_get_first_id());
-
-			inform_non_canonical_parameter('forum_grouping_id');
 		}
 
 		if (is_null($parent_forum))
 		{
-			inform_non_canonical_parameter('parent_forum');
-
 			$parent_forum=get_param_integer('parent_forum',NULL);
 		}
 
@@ -339,8 +357,6 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function ed()
 	{
-		$title=get_screen_title('EDIT_FORUM');
-
 		$huge=($GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>300);
 
 		$all_forums=array();
@@ -354,7 +370,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 			$reorder_url=build_url(array('page'=>'_SELF','type'=>'reorder'),'_SELF');
 		}
 
-		return do_template('OCF_EDIT_FORUM_SCREEN',array('_GUID'=>'762810dcff9acfa51995984d2c008fef','REORDER_URL'=>$reorder_url,'TITLE'=>$title,'ROOT_FORUM'=>$forums));
+		return do_template('OCF_EDIT_FORUM_SCREEN',array('_GUID'=>'762810dcff9acfa51995984d2c008fef','REORDER_URL'=>$reorder_url,'TITLE'=>$this->title,'ROOT_FORUM'=>$forums));
 	}
 
 	/**
@@ -364,8 +380,6 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function reorder()
 	{
-		$title=get_screen_title('EDIT_FORUM');
-
 		$all=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_parent_forum','f_forum_grouping_id'));
 		$ordering=array();
 		foreach ($all as $forum)
@@ -401,7 +415,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ed'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**

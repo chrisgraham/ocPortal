@@ -204,6 +204,73 @@ class Module_forumview
 		add_menu_item_simple('forum_features',NULL,'INVOLVED_TOPICS','_SEARCH:vforums:type=involved_topics');
 	}
 
+	var $title;
+	var $id;
+	var $forum_info;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('#^kfs_.*$#');
+
+		if ($type=='misc')
+		{
+			$id=get_param_integer('id',db_get_first_id());
+
+			$_forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('f.id'=>$id),'',1,NULL,false,array('f_description','f_intro_question'));
+			if (!array_key_exists(0,$_forum_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$forum_info=$_forum_info[0];
+
+			$description_text=get_translated_text($forum_info['f_description'],$GLOBALS['FORUM_DB']);
+
+			set_extra_request_metadata(array(
+				'created'=>'',
+				'creator'=>'',
+				'publisher'=>'', // blank means same as creator
+				'modified'=>'',
+				'type'=>'Forum',
+				'title'=>$forum_info['f_name'],
+				'identifier'=>'_SEARCH:forumview:misc:'.strval($id),
+				'description'=>$description_text,
+				'image'=>find_theme_image('bigicons/forums'),
+				//'category'=>???,
+			));
+
+			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
+			{
+				require_code('awards');
+				$awards=is_null($id)?array():find_awards_for('forum',strval($id));
+			} else $awards=array();
+
+			$name=get_translated_text($forum_info['f_name']);
+			$ltitle=do_lang_tempcode('NAMED_FORUM',make_fractionable_editable('forum',$id,$name));
+
+			$this->title=get_screen_title($ltitle,false,NULL,NULL,$awards);
+
+			if (($forum_info['f_redirection']!='') && (looks_like_url($forum_info['f_redirection'])))
+			{
+				require_code('site2');
+				smart_redirect($forum_info['f_redirection']);
+			}
+
+			$this->id=$id;
+			$this->forum_info=$forum_info;
+		}
+
+		if ($type=='pts')
+		{
+			$title=get_screen_title('PRIVATE_TOPICS');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -213,10 +280,6 @@ class Module_forumview
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_forumview');
-
-		foreach (array_keys($_GET) as $key)
-			if (substr($key,0,3)=='kfs') inform_non_canonical_parameter($key);
-		inform_non_canonical_parameter('order');
 
 		$type=get_param('type','misc');
 
@@ -231,11 +294,13 @@ class Module_forumview
 		if ($type=='pt') // Not used anymore by default, but code still here
 		{
 			$id=NULL;
+			$forum_info=array();
 			$start=get_param_integer('forum_start',get_param_integer('kfs',0));
 			$of_member_id=get_param_integer('id',get_member());
 		} else
 		{
-			$id=get_param_integer('id',db_get_first_id());
+			$id=$this->id;
+			$forum_info=$this->forum_info;
 			$start=get_param_integer('forum_start',get_param_integer('kfs'.strval($id),0));
 			$of_member_id=NULL;
 		}
@@ -247,10 +312,10 @@ class Module_forumview
 		require_code('ocf_general');
 		ocf_set_context_forum($id);
 
-		$test=ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_member_id);
+		$test=ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$root,$of_member_id);
 		if (is_array($test))
 		{
-			list($content,$ltitle,$breadcrumbs,$forum_name)=$test;
+			list($content,$breadcrumbs,$forum_name)=$test;
 		} else
 		{
 			return $test;
@@ -263,21 +328,13 @@ class Module_forumview
 			breadcrumb_add_segment($breadcrumbs);
 		}
 
-		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-		{
-			require_code('awards');
-			$awards=is_null($id)?array():find_awards_for('forum',strval($id));
-		} else $awards=array();
-
-		$title=get_screen_title($ltitle,false,NULL,NULL,$awards);
-
 		// Members viewing this forum
 		require_code('users2');
 		list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('forumview','',strval($id),true);
 
 		$tpl=do_template('OCF_FORUM_SCREEN',array(
 			'_GUID'=>'9e9fd9110effd8a92b7a839a4fea60c5',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'CONTENT'=>$content,
 			'ID'=>strval($id),
 			'NUM_GUESTS'=>integer_format($num_guests),

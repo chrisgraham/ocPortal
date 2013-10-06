@@ -86,14 +86,14 @@ class Module_topicview
 			$redirect=find_post_id_url($post_id);
 			require_code('site2');
 			assign_refresh($redirect,0.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'76e6d34c20a4f5284119827e41c7752f','URL'=>$redirect,'TITLE'=>get_screen_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
+			return redirect_screen(get_screen_title('VIEW_TOPIC'),$redirect);
 		}
 		elseif ($type=='first_unread')
 		{
 			$redirect=find_first_unread_url($id);
 			require_code('site2');
 			assign_refresh($redirect,0.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'12c5d16f60e8c4df03536d9a7a932528','URL'=>$redirect,'TITLE'=>get_screen_title('VIEW_TOPIC'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
+			return redirect_screen(get_screen_title('VIEW_TOPIC'),$redirect);
 		}
 
 		$start=get_param_integer('topic_start',0);
@@ -837,7 +837,7 @@ class Module_topicview
 
 		$topic_tpl=do_template('OCF_TOPIC_SCREEN',array(
 			'_GUID'=>'bb201d5d59559e5e2bd60e7cf2e6f7e9',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SERIALIZED_OPTIONS'=>$serialized_options,
 			'HASH'=>$hash,
 			'ID'=>strval($id),

@@ -42,6 +42,43 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		return array_merge(array('misc'=>'CUSTOM_PROFILE_FIELDS','stats'=>'CUSTOM_PROFILE_FIELD_STATS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/customprofilefields');
+		set_helper_panel_tutorial('tut_adv_members');
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+		}
+
+		if ($type=='stats')
+		{
+			breadcrumb_set_parents(array());
+		}
+
+		if ($type=='_stats')
+		{
+			breadcrumb_set_parents(array(array('_SEARCH:_SELF:stats',do_lang_tempcode('CUSTOM_PROFILE_FIELD_STATS'))));
+		}
+
+		if ($type=='stats' || $type=='_stats')
+		{
+			$this->title=get_screen_title('CUSTOM_PROFILE_FIELD_STATS');
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -51,9 +88,6 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	function run_start($type)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-
-		set_helper_panel_pic('pagepics/customprofilefields');
-		set_helper_panel_tutorial('tut_adv_members');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_members_action');
@@ -78,16 +112,14 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	 */
 	function misc()
 	{
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
-
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('CUSTOM_PROFILE_FIELDS'),comcode_lang_string('DOC_CUSTOM_PROFILE_FIELDS'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_PROFILE_FIELD')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CUSTOM_PROFILE_FIELD')),
-					),
-					do_lang('CUSTOM_PROFILE_FIELDS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_PROFILE_FIELD')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CUSTOM_PROFILE_FIELD')),
+			),
+			do_lang('CUSTOM_PROFILE_FIELDS')
 		);
 	}
 
@@ -202,7 +234,6 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fh=array(
 			do_lang_tempcode('NAME'),
@@ -402,10 +433,6 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	 */
 	function stats()
 	{
-		$title=get_screen_title('CUSTOM_PROFILE_FIELD_STATS');
-
-		breadcrumb_set_parents(array());
-
 		$fields=new ocp_tempcode();
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_name'));
 		require_code('form_templates');
@@ -416,7 +443,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		}
 		if ($list->is_empty())
 		{
-			return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
+			return inform_screen($this->title,do_lang_tempcode('NO_ENTRIES'));
 		}
 		require_lang('dates');
 		$fields->attach(form_input_list(do_lang_tempcode('NAME'),'','id',$list));
@@ -426,7 +453,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_stats'),'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('CUSTOM_PROFILE_FIELD_STATS');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'393bac2180c9e135ae9c31565ddf7761','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'393bac2180c9e135ae9c31565ddf7761','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -436,10 +463,6 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	 */
 	function _stats()
 	{
-		$title=get_screen_title('CUSTOM_PROFILE_FIELD_STATS');
-
-		breadcrumb_set_parents(array());
-
 		$f_name='field_'.strval(get_param_integer('id'));
 		$_a=get_input_date('start');
 		$a=is_null($_a)?'1=1':('m_join_time>'.strval($_a));
@@ -458,7 +481,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		}
 		if ($lines->is_empty()) warn_exit(do_lang_tempcode('NO_DATA'));
 
-		return do_template('OCF_CPF_STATS_SCREEN',array('_GUID'=>'bb7be7acf936cd008e16bd515f7f39ac','TITLE'=>$title,'STATS'=>$lines));
+		return do_template('OCF_CPF_STATS_SCREEN',array('_GUID'=>'bb7be7acf936cd008e16bd515f7f39ac','TITLE'=>$this->title,'STATS'=>$lines));
 	}
 }
 

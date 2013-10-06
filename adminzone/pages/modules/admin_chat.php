@@ -44,6 +44,34 @@ class Module_admin_chat extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_CHATROOMS','delete_all'=>'DELETE_ALL_ROOMS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/chatrooms');
+		set_helper_panel_tutorial('tut_chat');
+
+		if ($type=='misc')
+		{
+			$also_url=build_url(array('page'=>'cms_chat'),get_module_zone('cms_chat'));
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
+		}
+
+		if ($type=='delete_all' || $type=='_delete_all')
+		{
+			$this->title=get_screen_title('DELETE_ALL_ROOMS');
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -53,9 +81,6 @@ class Module_admin_chat extends standard_crud_module
 	function run_start($type)
 	{
 		$this->extra_donext_entries=array(array('delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')));
-
-		set_helper_panel_pic('pagepics/chatrooms');
-		set_helper_panel_tutorial('tut_chat');
 
 		require_lang('chat');
 		require_code('chat');
@@ -75,23 +100,19 @@ class Module_admin_chat extends standard_crud_module
 	 */
 	function misc()
 	{
-		require_lang('menus');
-		$also_url=build_url(array('page'=>'cms_chat'),get_module_zone('cms_chat'));
-		attach_message(do_lang_tempcode('ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
-
 		$this->add_one_label=do_lang_tempcode('ADD_CHATROOM');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_CHATROOM');
 		$this->edit_one_label=do_lang_tempcode('EDIT_CHATROOM');
 
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_CHATROOMS'),comcode_lang_string('DOC_CHAT'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CHATROOM')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CHATROOM')),
-						array('delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')),
-					),
-					do_lang('MANAGE_CHATROOMS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CHATROOM')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CHATROOM')),
+				array('delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')),
+			),
+			do_lang('MANAGE_CHATROOMS')
 		);
 	}
 
@@ -238,15 +259,13 @@ class Module_admin_chat extends standard_crud_module
 	 */
 	function delete_all()
 	{
-		$title=get_screen_title('DELETE_ALL_ROOMS');
-
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_tick(do_lang_tempcode('PROCEED'),do_lang_tempcode('Q_SURE'),'continue_delete',false));
 		$posting_name=do_lang_tempcode('PROCEED');
 		$posting_url=build_url(array('page'=>'_SELF','type'=>'_delete_all'),'_SELF');
 		$text=paragraph(do_lang_tempcode('CONFIRM_DELETE_ALL_ROOMS'));
-		return do_template('FORM_SCREEN',array('_GUID'=>'fdf02f5b3a3b9ce6d1abaccf0970ed73','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'fdf02f5b3a3b9ce6d1abaccf0970ed73','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
 	}
 
 	/**
@@ -259,15 +278,13 @@ class Module_admin_chat extends standard_crud_module
 		$delete=post_param_integer('continue_delete',0);
 		if ($delete!=1)
 		{
-			return $this->misc();
-		}
-		else
+			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+			return redirect_screen($this->title,$url,do_lang_tempcode('CANCELLED'));
+		} else
 		{
-			$title=get_screen_title('DELETE_ALL_ROOMS');
-
 			delete_all_chatrooms();
 
-			return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),NULL);
+			return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),NULL);
 		}
 	}
 }

@@ -45,6 +45,38 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 		return array_merge(array('misc'=>'EMOTICONS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/emoticons');
+		set_helper_panel_tutorial('tut_emoticons');
+
+		if ($type=='import')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('CHOOSE'))));
+		}
+
+		if ($type=='_import')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_EMOTICONS'))));
+		}
+
+		if ($type=='import' && $type=='_import')
+		{
+			$this->title=get_screen_title('IMPORT_EMOTICONS');
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -53,9 +85,6 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/emoticons');
-		set_helper_panel_tutorial('tut_emoticons');
-
 		$this->add_one_label=do_lang_tempcode('ADD_EMOTICON');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_EMOTICON');
 		$this->edit_one_label=do_lang_tempcode('EDIT_EMOTICON');
@@ -106,13 +135,13 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('EMOTICONS'),comcode_lang_string('DOC_EMOTICONS'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('emoticons',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_EMOTICONS')),
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_EMOTICON')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_EMOTICON')),
-					),
-					do_lang('EMOTICONS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('emoticons',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_EMOTICONS')),
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_EMOTICON')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_EMOTICON')),
+			),
+			do_lang('EMOTICONS')
 		);
 	}
 
@@ -127,8 +156,6 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 		{
 			attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
 		}
-
-		$title=get_screen_title('IMPORT_EMOTICONS');
 
 		require_code('form_templates');
 
@@ -148,13 +175,11 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 		}*/
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('CHOOSE'))));
-
 		$hidden=build_keep_post_fields();
 		$hidden->attach(form_input_hidden('test','1'));
 		handle_max_file_size($hidden);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'1910e01ec183392f6b254671dc7050a3','TITLE'=>$title,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('BATCH_IMPORT_ARCHIVE_CONTENTS'),'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'1910e01ec183392f6b254671dc7050a3','TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('BATCH_IMPORT_ARCHIVE_CONTENTS'),'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -169,8 +194,6 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 		require_code('uploads');
 		require_code('images');
 		is_swf_upload(true);
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_EMOTICONS'))));
 
 		foreach ($_FILES as $attach_name=>$__file)
 		{
@@ -274,11 +297,9 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 			}
 		}
 
-		$title=get_screen_title('IMPORT_EMOTICONS');
-
 		log_it('IMPORT_EMOTICONS');
 
-		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),NULL);
+		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),NULL);
 	}
 
 	/**

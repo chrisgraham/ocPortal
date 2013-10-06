@@ -54,6 +54,43 @@ class Module_cms_blogs extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_BLOGS','import_wordpress'=>'IMPORT_WORDPRESS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('validated');
+		inform_non_canonical_parameter('cat');
+
+		set_helper_panel_pic('pagepics/news');
+		set_helper_panel_tutorial('tut_news');
+
+		if ($type=='ad' || $type=='_ed')
+		{
+			require_lang('menus');
+			set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
+		}
+
+		if ($type=='import_wordpress' || $type=='_import_wordpress')
+		{
+			$this->title=get_screen_title('IMPORT_WORDPRESS');
+		}
+
+		if ($type=='_import_wordpress')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_BLOGS')),array('_SELF:_SELF:import_wordpress',do_lang_tempcode('IMPORT_WORDPRESS'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -62,9 +99,6 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/news');
-		set_helper_panel_tutorial('tut_news');
-
 		$this->posting_form_title=do_lang_tempcode('BLOG_NEWS_ARTICLE');
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
@@ -75,9 +109,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		// Decide what to do
 		if ($type=='misc') return $this->misc();
-
 		if ($type=='import_wordpress') return $this->import_wordpress();
-
 		if ($type=='_import_wordpress') return $this->_import_wordpress();
 
 		return new ocp_tempcode();
@@ -92,13 +124,13 @@ class Module_cms_blogs extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_BLOGS'),comcode_lang_string('DOC_BLOGS'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						has_privilege(get_member(),'submit_midrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS_BLOG')):NULL,
-						has_privilege(get_member(),'edit_own_midrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS_BLOG')):NULL,
-						has_privilege(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import_wordpress'),'_SELF'),do_lang('IMPORT_WORDPRESS')):NULL,
-					),
-					do_lang('MANAGE_BLOGS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				has_privilege(get_member(),'submit_midrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS_BLOG')):NULL,
+				has_privilege(get_member(),'edit_own_midrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS_BLOG')):NULL,
+				has_privilege(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import_wordpress'),'_SELF'),do_lang('IMPORT_WORDPRESS')):NULL,
+			),
+			do_lang('MANAGE_BLOGS')
 		);
 	}
 
@@ -124,7 +156,6 @@ class Module_cms_blogs extends standard_crud_module
 			$sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('TITLE');
@@ -196,12 +227,8 @@ class Module_cms_blogs extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		inform_non_canonical_parameter('validated');
-
 		if (is_null($main_news_category))
 		{
-			inform_non_canonical_parameter('cat');
-
 			$param_cat=get_param('cat','');
 			if ($param_cat=='')
 			{
@@ -306,10 +333,7 @@ class Module_cms_blogs extends standard_crud_module
 	{
 		$id=intval($_id);
 
-		require_lang('menus');
 		require_lang('zones');
-		set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
-		set_helper_panel_pic('');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>intval($id)),'',1);
 		if (!array_key_exists(0,$rows))
@@ -550,27 +574,25 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function do_next_manager($title,$description,$id=NULL)
 	{
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		$cat=$this->donext_type;
 
 		require_code('templates_donext');
 
-		return do_next_manager($title,$description,
-					NULL,
-					NULL,
-					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-					/*	 page	 params				  zone	  */
-					array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),							// Add one
-					(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
-					has_privilege(get_member(),'edit_own_midrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
-					is_null($id)?NULL:array('news',array('type'=>'view','id'=>$id,'blog'=>1),get_module_zone('news')),							// View this
-					array('news',array('type'=>'misc','blog'=>1),get_module_zone('news')),									 // View archive
-					NULL,	  // Add to category
-					has_privilege(get_member(),'submit_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-					has_privilege(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
-					is_null($cat)?NULL:has_privilege(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
-					NULL																						 // View this category
+		return do_next_manager($this->title,$description,
+			NULL,
+			NULL,
+			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+			/*	 page	 params				  zone	  */
+			array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),							// Add one
+			(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
+			has_privilege(get_member(),'edit_own_midrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+			is_null($id)?NULL:array('news',array('type'=>'view','id'=>$id,'blog'=>1),get_module_zone('news')),							// View this
+			array('news',array('type'=>'misc','blog'=>1),get_module_zone('news')),									 // View archive
+			NULL,	  // Add to category
+			has_privilege(get_member(),'submit_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
+			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+			is_null($cat)?NULL:has_privilege(get_member(),'edit_own_cat_midrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
+			NULL																						 // View this category
 		);
 	}
 
@@ -584,7 +606,7 @@ class Module_cms_blogs extends standard_crud_module
 		check_privilege('mass_import',NULL,NULL,'cms_news');
 
 		$lang=post_param('lang',user_lang());
-		$title=get_screen_title('IMPORT_WORDPRESS');
+
 		$submit_name=do_lang_tempcode('IMPORT_WORDPRESS');
 
 		require_code('form_templates');
@@ -646,8 +668,6 @@ class Module_cms_blogs extends standard_crud_module
 	{
 		check_privilege('mass_import',NULL,NULL,'cms_news');
 
-		$title=get_screen_title('IMPORT_WORDPRESS');
-
 		require_code('news2');
 
 		// Wordpress posts, XML file importing method
@@ -660,10 +680,7 @@ class Module_cms_blogs extends standard_crud_module
 			import_wordpress_db();
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_BLOGS')),array('_SELF:_SELF:import_wordpress',do_lang_tempcode('IMPORT_WORDPRESS'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
-		return inform_screen($title,do_lang_tempcode('IMPORT_WORDPRESS_DONE'));
+		return inform_screen($this->title,do_lang_tempcode('IMPORT_WORDPRESS_DONE'));
 	}
 
 }

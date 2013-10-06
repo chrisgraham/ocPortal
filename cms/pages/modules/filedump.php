@@ -104,6 +104,75 @@ class Module_filedump
 		return array('misc'=>'FILE_DUMP');
 	}
 
+	var $title;
+	var $place;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$place=filter_naughty(get_param('place','/'));
+			if (substr($place,-1,1)!='/') $place.='/';
+
+			set_feed_url('?mode=filedump&filter='.$place);
+
+			// Show breadcrumbs
+			$dirs=explode('/',substr($place,0,strlen($place)-1));
+			$i=0;
+			$pre='';
+			$breadcrumbs=new ocp_tempcode();
+			while (array_key_exists($i,$dirs))
+			{
+				if ($i>0) $d=$dirs[$i]; else $d=do_lang('FILE_DUMP');
+
+				if (array_key_exists($i+1,$dirs))
+				{
+					$breadcrumbs_url=build_url(array('page'=>'_SELF','place'=>$pre.$dirs[$i].'/'),'_SELF');
+					if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c6')));
+					$breadcrumbs->attach(hyperlink($breadcrumbs_url,$d));
+				}
+				$pre.=$dirs[$i].'/';
+				$i++;
+			}
+			if (!$breadcrumbs->is_empty())
+			{
+				breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.escape_html($d).'</span>'));
+			} else
+			{
+				breadcrumb_set_self(($i==1)?do_lang_tempcode('FILE_DUMP'):make_string_tempcode(escape_html($d)));
+			}
+
+			$this->place=$place;
+		}
+
+		if ($type=='ed')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILE_DUMP'))));
+			if (post_param_integer('confirmed',0)!=1)
+			{
+				breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
+			}
+		}
+
+		if ($type=='ec')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILE_DUMP'))));
+			if (post_param_integer('confirmed',0)!=1)
+			{
+				breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
+			}
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -133,38 +202,9 @@ class Module_filedump
 	 */
 	function module_do_gui()
 	{
-		$title=get_screen_title('FILE_DUMP');
+		$this->title=get_screen_title('FILE_DUMP');
 
-		$place=filter_naughty(get_param('place','/'));
-		if (substr($place,-1,1)!='/') $place.='/';
-
-		set_feed_url('?mode=filedump&filter='.$place);
-
-		// Show tree
-		$dirs=explode('/',substr($place,0,strlen($place)-1));
-		$i=0;
-		$pre='';
-		$breadcrumbs=new ocp_tempcode();
-		while (array_key_exists($i,$dirs))
-		{
-			if ($i>0) $d=$dirs[$i]; else $d=do_lang('FILE_DUMP');
-
-			if (array_key_exists($i+1,$dirs))
-			{
-				$breadcrumbs_url=build_url(array('page'=>'_SELF','place'=>$pre.$dirs[$i].'/'),'_SELF');
-				if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c6')));
-				$breadcrumbs->attach(hyperlink($breadcrumbs_url,$d));
-			}
-			$pre.=$dirs[$i].'/';
-			$i++;
-		}
-		if (!$breadcrumbs->is_empty())
-		{
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.escape_html($d).'</span>'));
-		} else
-		{
-			breadcrumb_set_self(($i==1)?do_lang_tempcode('FILE_DUMP'):make_string_tempcode(escape_html($d)));
-		}
+		$place=$this->place;
 
 		// Check directory exists
 		$fullpath=get_custom_file_base().'/uploads/filedump'.$place;
@@ -302,7 +342,7 @@ class Module_filedump
 			$create_folder_form=new ocp_tempcode();
 		}
 
-		return do_template('FILE_DUMP_SCREEN',array('_GUID'=>'3f49a8277a11f543eff6488622949c84','TITLE'=>$title,'PLACE'=>$place,'FILES'=>$files,'UPLOAD_FORM'=>$upload_form,'CREATE_FOLDER_FORM'=>$create_folder_form));
+		return do_template('FILE_DUMP_SCREEN',array('_GUID'=>'3f49a8277a11f543eff6488622949c84','TITLE'=>$this->title,'PLACE'=>$place,'FILES'=>$files,'UPLOAD_FORM'=>$upload_form,'CREATE_FOLDER_FORM'=>$create_folder_form));
 	}
 
 	/**
@@ -312,24 +352,20 @@ class Module_filedump
 	 */
 	function module_do_delete_file()
 	{
-		$title=get_screen_title('FILEDUMP_DELETE_FILE');
+		$this->title=get_screen_title('FILEDUMP_DELETE_FILE');
 
 		$file=filter_naughty(get_param('file'));
 		$place=filter_naughty(get_param('place'));
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILE_DUMP'))));
 
 		if (post_param_integer('confirmed',0)!=1)
 		{
 			$url=get_self_url();
 			$text=do_lang_tempcode('CONFIRM_DELETE',$file);
 
-			breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
-
 			$hidden=build_keep_post_fields();
 			$hidden->attach(form_input_hidden('confirmed','1'));
 
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'19503cf5dc795b9c85d26702b79e3202','TITLE'=>$title,'FIELDS'=>$hidden,'PREVIEW'=>$text,'URL'=>$url));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'19503cf5dc795b9c85d26702b79e3202','TITLE'=>$this->title,'FIELDS'=>$hidden,'PREVIEW'=>$text,'URL'=>$url));
 		}
 
 		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','the_member',array('name'=>$file,'path'=>$place));
@@ -348,7 +384,7 @@ class Module_filedump
 
 		log_it('FILEDUMP_DELETE_FILE',$file,$place);
 
-		return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$return_url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -358,24 +394,20 @@ class Module_filedump
 	 */
 	function module_do_delete_folder()
 	{
-		$title=get_screen_title('FILEDUMP_DELETE_FOLDER');
+		$this->title=get_screen_title('FILEDUMP_DELETE_FOLDER');
 
 		$file=filter_naughty(get_param('file'));
 		$place=filter_naughty(get_param('place'));
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILE_DUMP'))));
 
 		if (post_param_integer('confirmed',0)!=1)
 		{
 			$url=get_self_url();
 			$text=do_lang_tempcode('CONFIRM_DELETE',$file);
 
-			breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
-
 			$hidden=build_keep_post_fields();
 			$hidden->attach(form_input_hidden('confirmed','1'));
 
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'55cd4cafa3bf8285028da9862508d811','TITLE'=>$title,'FIELDS'=>$hidden,'PREVIEW'=>$text,'URL'=>$url));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'55cd4cafa3bf8285028da9862508d811','TITLE'=>$this->title,'FIELDS'=>$hidden,'PREVIEW'=>$text,'URL'=>$url));
 		}
 
 		$ret=@rmdir(get_custom_file_base().'/uploads/filedump'.$place.$file);
@@ -387,7 +419,7 @@ class Module_filedump
 
 			log_it('FILEDUMP_DELETE_FOLDER',$file,$place);
 
-			return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$return_url,do_lang_tempcode('SUCCESS'));
 
 		} else warn_exit(do_lang_tempcode('FOLDER_DELETE_ERROR'));
 
@@ -401,7 +433,7 @@ class Module_filedump
 	 */
 	function module_do_add_folder()
 	{
-		$title=get_screen_title('FILEDUMP_CREATE_FOLDER');
+		$this->title=get_screen_title('FILEDUMP_CREATE_FOLDER');
 
 		if (!has_privilege(get_member(),'upload_filedump')) access_denied('I_ERROR');
 
@@ -419,7 +451,7 @@ class Module_filedump
 
 			log_it('FILEDUMP_CREATE_FOLDER',$name,$place);
 
-			return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$return_url,do_lang_tempcode('SUCCESS'));
 		} else
 		{
 			warn_exit(do_lang_tempcode('FOLDER_OVERWRITE_ERROR'));
@@ -437,7 +469,7 @@ class Module_filedump
 	{
 		if (!has_privilege(get_member(),'upload_filedump')) access_denied('I_ERROR');
 
-		$title=get_screen_title('FILEDUMP_UPLOAD');
+		$this->title=get_screen_title('FILEDUMP_UPLOAD');
 
 		if (function_exists('set_time_limit')) @set_time_limit(0); // Slowly uploading a file can trigger time limit, on some servers
 
@@ -500,7 +532,7 @@ class Module_filedump
 				syndicate_described_activity('filedump:ACTIVITY_FILEDUMP_UPLOAD',$place.'/'.$file,'','','','','','filedump');
 			}
 
-			return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$return_url,do_lang_tempcode('SUCCESS'));
 		} else warn_exit(do_lang_tempcode('OVERWRITE_ERROR'));
 
 		return new ocp_tempcode();

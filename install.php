@@ -55,7 +55,7 @@ $CURRENT_SHARE_USER=NULL;
 $GLOBALS['DEV_MODE']=false;
 $GLOBALS['SEMI_DEV_MODE']=true;
 
-@ob_end_clean();
+@ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
 if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_ENV)) || (function_exists('quercus_version')) || (defined('PHALANGER')) || (defined('ROADSEND_PHPC')))
 	define('HIPHOP_PHP','1');

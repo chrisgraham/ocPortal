@@ -91,8 +91,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 			$completion_form_submitted=(trim(post_param('email_address',''))!='');
 			if ((!$completion_form_submitted) && (get_option('finish_profile')=='1')) // UI
 			{
-				@ob_end_clean();
-				if (!function_exists('do_header')) require_code('site');
+				@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 				$middle=ocf_member_external_linker_ask($username,'ldap',ocf_ldap_guess_email($username));
 				$tpl=globalise($middle,NULL,'',true);
 				$tpl->evaluate_echo();

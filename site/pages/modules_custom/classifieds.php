@@ -97,6 +97,23 @@ class Module_classifieds
 		return $ret;
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','adverts');
+
+		$member_id=get_param_integer('member_id',get_member());
+		$this->title=get_screen_title(($member_id==get_member())?'CLASSIFIED_ADVERTS':'_CLASSIFIED_ADVERTS',true,array($GLOBALS['FORUM_DRIVER']->get_username($member_id,true)));
+
+		return NULL;
+	}
+
 	/**
 	 * Standard module run function.
 	 *
@@ -123,8 +140,6 @@ class Module_classifieds
 		require_code('ecommerce');
 
 		$member_id=get_param_integer('member_id',get_member());
-
-		$title=get_screen_title(($member_id==get_member())?'CLASSIFIED_ADVERTS':'_CLASSIFIED_ADVERTS',true,array($GLOBALS['FORUM_DRIVER']->get_username($member_id,true)));
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
@@ -202,7 +217,7 @@ class Module_classifieds
 
 		$pagination=pagination(do_lang('_CLASSIFIED_ADVERTS'),$start,'classifieds_start',$max,'classifieds_max',$max_rows);
 
-		$tpl=do_template('CLASSIFIED_ADVERTS_SCREEN',array('_GUID'=>'b25659c245a738b4f161dc87869d9edc','TITLE'=>$title,'PAGINATION'=>$pagination,'ADS'=>$ads));
+		$tpl=do_template('CLASSIFIED_ADVERTS_SCREEN',array('_GUID'=>'b25659c245a738b4f161dc87869d9edc','TITLE'=>$this->title,'PAGINATION'=>$pagination,'ADS'=>$ads));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

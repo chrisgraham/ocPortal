@@ -225,6 +225,53 @@ class Module_tickets
 		return array(is_numeric($matches[3])?get_translated_text(intval($matches[3])):$matches[3],'tickets');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_feed_url('?mode=tickets&filter=');
+
+		if ($type=='misc')
+		{
+			if (!is_guest())
+			{
+				// Our tickets
+				$ticket_type=get_param_integer('ticket_type',NULL);
+				if (!is_null($ticket_type))
+					set_feed_url('?mode=tickets&filter='.strval($ticket_type));
+				$this->ticket_type=$ticket_type;
+			}
+
+			$this->title=get_screen_title('SUPPORT_TICKETS');
+		}
+
+		if ($type=='ticket')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SUPPORT_TICKETS'))));
+
+			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
+		}
+
+		if ($type=='do_update_ticket')
+		{
+			$this->title=get_screen_title('SUPPORT_TICKETS');
+		}
+
+		if ($type=='toggle_ticket_closed')
+		{
+			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -233,7 +280,6 @@ class Module_tickets
 	function run()
 	{
 		if (has_no_forum()) warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
-		set_feed_url('?mode=tickets&filter=');
 
 		require_lang('tickets');
 		require_javascript('javascript_validation');
@@ -243,9 +289,9 @@ class Module_tickets
 
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->do_choose_ticket();
 		if ($type=='ticket') return $this->do_ticket();
 		if ($type=='post') return $this->do_update_ticket();
-		if ($type=='misc') return $this->do_choose_ticket();
 		if ($type=='toggle_ticket_closed') return $this->toggle_ticket_closed();
 
 		return new ocp_tempcode();
@@ -279,17 +325,13 @@ class Module_tickets
 	{
 		require_code('feedback');
 
-		$title=get_screen_title('SUPPORT_TICKETS');
-
 		$message=new ocp_tempcode();
 		$links=new ocp_tempcode();
 
 		if (!is_guest())
 		{
 			// Our tickets
-			$ticket_type=get_param_integer('ticket_type',NULL);
-			if (!is_null($ticket_type))
-				set_feed_url('?mode=tickets&filter='.strval($ticket_type));
+			$ticket_type=$this->ticket_type;
 			$tickets=get_tickets(get_member(),$ticket_type);
 
 			// List (our?) tickets
@@ -318,7 +360,7 @@ class Module_tickets
 		if (get_param('default','')!='') $map['default']=get_param('default');
 		$add_ticket_url=build_url($map,'_SELF');
 
-		$tpl=do_template('SUPPORT_TICKETS_SCREEN',array('_GUID'=>'b208a9f1504d6b8a76400d89a8265d91','TITLE'=>$title,'MESSAGE'=>$message,'LINKS'=>$links,'ADD_TICKET_URL'=>$add_ticket_url,'TYPES'=>$this->build_types_list(get_param_integer('ticket_type',NULL))));
+		$tpl=do_template('SUPPORT_TICKETS_SCREEN',array('_GUID'=>'b208a9f1504d6b8a76400d89a8265d91','TITLE'=>$this->title,'MESSAGE'=>$message,'LINKS'=>$links,'ADD_TICKET_URL'=>$add_ticket_url,'TYPES'=>$this->build_types_list(get_param_integer('ticket_type',NULL))));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl,30,$tickets);
@@ -421,8 +463,6 @@ class Module_tickets
 			$ticket_id=uniqid('',false);
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SUPPORT_TICKETS'))));
-
 		$poster='';
 		$new=true;
 		$serialized_options=mixed();
@@ -440,7 +480,7 @@ class Module_tickets
 			if ($new)
 			{
 				$id=strval($member).'_'.$ticket_id;
-				$title=get_screen_title('ADD_TICKET');
+				$this->title=get_screen_title('ADD_TICKET');
 
 				$_comments=array();
 			} else
@@ -457,7 +497,7 @@ class Module_tickets
 				$ticket_title=$_comments[0]['title'];
 				if ($ticket_title=='') $ticket_title=do_lang('UNKNOWN');
 
-				$title=get_screen_title('_VIEW_SUPPORT_TICKET',true,array(escape_html($ticket_title),escape_html($ticket_type_text)));
+				$this->title=get_screen_title('_VIEW_SUPPORT_TICKET',true,array(escape_html($ticket_title),escape_html($ticket_type_text)));
 				breadcrumb_set_self($ticket_title);
 			}
 
@@ -638,7 +678,7 @@ class Module_tickets
 				'TYPES'=>$types,
 				'STAFF_ONLY'=>$staff_only,
 				'POSTER'=>$poster,
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'COMMENTS'=>$comments,
 				'COMMENT_FORM'=>$comment_form,
 				'STAFF_DETAILS'=>$staff_details,
@@ -680,11 +720,11 @@ class Module_tickets
 			}
 		}
 
-		$title=get_screen_title($action);
+		$this->title=get_screen_title($action);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id),'_SELF');
 		if (is_guest()) $url=build_url(array('page'=>'_SELF'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -694,8 +734,6 @@ class Module_tickets
 	 */
 	function do_update_ticket()
 	{
-		$title=get_screen_title('SUPPORT_TICKETS');
-
 		$id=get_param('id');
 		$_title=post_param('title');
 		$post=post_param('post');
@@ -720,7 +758,7 @@ class Module_tickets
 			// Check FAQ search results first
 			if (($ticket_type_details['search_faq']) && (post_param_integer('faq_searched',0)==0))
 			{
-				$results=$this->do_search($title,$id,$post);
+				$results=$this->do_search($this->title,$id,$post);
 				if (!is_null($results)) return $results;
 			}
 
@@ -778,7 +816,7 @@ class Module_tickets
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id),'_SELF');
 		if (is_guest()) $url=build_url(array('page'=>'_SELF'),'_SELF');
 		if (get_param('redirect','')!='') $url=make_string_tempcode(get_param('redirect'));
-		return redirect_screen($title,$url,do_lang_tempcode('TICKET_STARTED'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('TICKET_STARTED'));
 	}
 
 	/**

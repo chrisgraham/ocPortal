@@ -52,6 +52,31 @@ class Module_admin_ocf_ldap
 		return array('misc'=>'LDAP_SYNC');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/ldap');
+		set_helper_panel_tutorial('tut_ldap');
+
+		if ($type=='actual')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('LDAP_SYNC'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		$this->title=get_screen_title('LDAP_SYNC');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,9 +84,6 @@ class Module_admin_ocf_ldap
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/ldap');
-		set_helper_panel_tutorial('tut_ldap');
-
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');
 		require_code('ocf_groups_action2');
@@ -86,8 +108,6 @@ class Module_admin_ocf_ldap
 	 */
 	function gui()
 	{
-		$title=get_screen_title('LDAP_SYNC');
-
 		$groups_add=new ocp_tempcode();
 		$groups_delete=new ocp_tempcode();
 		$members_delete=new ocp_tempcode();
@@ -135,7 +155,7 @@ class Module_admin_ocf_ldap
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 
-		return do_template('OCF_LDAP_SYNC_SCREEN',array('_GUID'=>'38c608ce56cf3dbafb1dd1446c65d592','URL'=>$post_url,'TITLE'=>$title,'MEMBERS_DELETE'=>$members_delete,'GROUPS_DELETE'=>$groups_delete,'GROUPS_ADD'=>$groups_add));
+		return do_template('OCF_LDAP_SYNC_SCREEN',array('_GUID'=>'38c608ce56cf3dbafb1dd1446c65d592','URL'=>$post_url,'TITLE'=>$this->title,'MEMBERS_DELETE'=>$members_delete,'GROUPS_DELETE'=>$groups_delete,'GROUPS_ADD'=>$groups_add));
 	}
 
 	/**
@@ -145,8 +165,6 @@ class Module_admin_ocf_ldap
 	 */
 	function actual()
 	{
-		$title=get_screen_title('LDAP_SYNC');
-
 		$all_ldap_groups=ocf_get_all_ldap_groups();
 		foreach ($all_ldap_groups as $group)
 		{
@@ -177,11 +195,8 @@ class Module_admin_ocf_ldap
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('LDAP_SYNC'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

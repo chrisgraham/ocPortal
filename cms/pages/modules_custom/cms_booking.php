@@ -54,6 +54,20 @@ class Module_cms_booking extends standard_crud_module
 		return array('submit_cat_highrange_content'=>array(0,'ADD_BOOKABLE'),'edit_cat_highrange_content'=>array(0,'EDIT_BOOKABLE'),'delete_cat_highrange_content'=>array(0,'DELETE_BOOKABLE'));
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -110,7 +124,6 @@ class Module_cms_booking extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('TITLE');
@@ -359,7 +372,6 @@ class Module_cms_booking_supplements extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('TITLE');
@@ -551,7 +563,6 @@ class Module_cms_booking_blacks extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('FROM');
@@ -829,7 +840,6 @@ class Module_cms_booking_bookings extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('BOOKABLE');
@@ -876,7 +886,7 @@ class Module_cms_booking_bookings extends standard_crud_module
 	 *
 	 * @param  ?array		Details of the booking (NULL: new).
 	 * @param  ?MEMBER	Who the booking is for (NULL: current member).
-	 * @return array		Tuple: form fields, hidden fields.
+	 * @return mixed		Either Tempcode; or a tuple: form fields, hidden fields.
 	 */
 	function get_form_fields($details=NULL,$member_id=NULL)
 	{
@@ -889,9 +899,6 @@ class Module_cms_booking_bookings extends standard_crud_module
 			$bookable_id=get_param_integer('bookable_id',NULL);
 			if (is_null($bookable_id))
 			{
-				// Form to choose bookable
-				@ob_end_clean();
-
 				$bookables=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),NULL,'ORDER BY sort_order');
 				if (count($bookables)==0)
 				{
@@ -909,11 +916,18 @@ class Module_cms_booking_bookings extends standard_crud_module
 				$submit_name=do_lang_tempcode('PROCEED');
 				$hidden=build_keep_post_fields();
 
-				$title=get_screen_title('ADD_BOOKING');
-				$tpl=do_template('FORM_SCREEN',array('_GUID'=>'05c227f908ce664269b2bb6ba0fff75e','TARGET'=>'_self','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
-				$echo=globalise($tpl,NULL,'',true);
-				$echo->evaluate_echo();
-				exit();
+				return do_template('FORM_SCREEN',array(
+					'_GUID'=>'05c227f908ce664269b2bb6ba0fff75e',
+					'TARGET'=>'_self',
+					'GET'=>true,
+					'SKIP_VALIDATION'=>true,
+					'HIDDEN'=>$hidden,
+					'TITLE'=>$this->title,
+					'TEXT'=>'',
+					'URL'=>$post_url,
+					'FIELDS'=>$fields,
+					'SUBMIT_NAME'=>$submit_name,
+				));
 			}
 
 			$details=array(

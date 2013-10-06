@@ -581,6 +581,18 @@ class Module_admin_version
 		return array();
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *

@@ -167,6 +167,84 @@ class Module_cms_comcode_pages
 		}
 	}
 
+	var $title;
+	var $simple_add;
+	var $page_link;
+	var $zone;
+	var $file;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('parent_page');
+
+		set_helper_panel_pic('pagepics/comcode_page_edit');
+		set_helper_panel_tutorial('tut_comcode_pages');
+
+		if ($type=='ed')
+		{
+			breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGES'));
+
+			$this->title=get_screen_title('COMCODE_PAGE_EDIT');
+		}
+
+		if ($type=='_ed')
+		{
+			require_lang('menus');
+			set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
+
+			if (addon_installed('page_management'))
+			{
+				if (has_actual_page_access(get_member(),'admin_sitetree'))
+				{
+					require_lang('zones');
+					$page_wizard=build_url(array('page'=>'admin_sitetree','type'=>'pagewizard'),get_module_zone('admin_sitetree'));
+					$site_tree_editor=build_url(array('page'=>'admin_sitetree','type'=>'site_tree'),get_module_zone('admin_sitetree'));
+					attach_message(do_lang_tempcode('SUGGEST_PAGE_WIZARD',escape_html($page_wizard->evaluate()),escape_html($site_tree_editor->evaluate())),'inform');
+				}
+			}
+
+			$simple_add=(get_param_integer('simple_add',0)==1);
+
+			// Work out what we're editing, and where it's coming from (support for two pagelink specifying parameters for destination, with addition of restore_from to override source if different from destination)
+			$page_link=filter_naughty(get_param('page_link',''));
+			if ($page_link=='') $page_link=get_param('page_link_2');
+			if (strpos($page_link,':')===false) $page_link=':'.$page_link;
+			$page_link_parts=explode(':',$page_link);
+			if (count($page_link_parts)!=2) warn_exit(do_lang_tempcode('ZONE_COLON_FILE'));
+			$zone=$page_link_parts[0];
+			$file=$page_link_parts[1];
+
+			if (!$simple_add && ($page_link!='')) breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGE_EDIT'));
+			if (!$simple_add)
+				breadcrumb_set_parents(array(array('_SELF:_SELF:misc:lang='.get_param('lang',''),do_lang_tempcode('CHOOSE'))));
+
+			$this->title=get_screen_title(($simple_add || ($file==''))?'COMCODE_PAGE_ADD':'_COMCODE_PAGE_EDIT',true,array(escape_html($zone),escape_html($file)));
+
+			$this->simple_add=$simple_add;
+			$this->page_link=$page_link;
+			$this->zone=$zone;
+			$this->file=$file;
+		}
+
+		if ($type=='__ed')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+			$simple_add=get_param_integer('simple_add',0)==1;
+
+			$this->title=get_screen_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -181,8 +259,8 @@ class Module_cms_comcode_pages
 
 		$type=get_param('type','misc');
 
-		if ($type=='__ed') return $this->__ed();
 		if ($type=='_ed') return $this->_ed();
+		if ($type=='__ed') return $this->__ed();
 		if ($type=='misc') return $this->ed();
 
 		return new ocp_tempcode();
@@ -302,8 +380,7 @@ class Module_cms_comcode_pages
 	 */
 	function ed()
 	{
-		$title=get_screen_title('COMCODE_PAGE_EDIT');
-		$lang=choose_language($title,true);
+		$lang=choose_language($this->title,true);
 		if (is_object($lang)) return $lang;
 
 		require_code('form_templates');
@@ -327,8 +404,6 @@ class Module_cms_comcode_pages
 		$map=array('page'=>'_SELF','type'=>'_ed','lang'=>$lang);
 		$post_url=build_url($map,'_SELF',NULL,false,true);
 
-		breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGES'));
-
 		$search_url=build_url(array('page'=>'search','id'=>'comcode_pages'),get_module_zone('search'));
 		$sitemap_zone=get_page_zone('sitemap',false);
 		if ($sitemap_zone!==NULL)
@@ -339,15 +414,6 @@ class Module_cms_comcode_pages
 			$archive_url=build_url(array('page'=>''),'');
 		}
 		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($search_url->evaluate()),escape_html($archive_url->evaluate())));
-		if (addon_installed('page_management'))
-		{
-			if (has_actual_page_access(get_member(),'admin_sitetree'))
-			{
-				$page_wizard=build_url(array('page'=>'admin_sitetree','type'=>'pagewizard'),get_module_zone('admin_sitetree'));
-				$site_tree_editor=build_url(array('page'=>'admin_sitetree','type'=>'site_tree'),get_module_zone('admin_sitetree'));
-				attach_message(do_lang_tempcode('SUGGEST_PAGE_WIZARD',escape_html($page_wizard->evaluate()),escape_html($site_tree_editor->evaluate())),'inform');
-			}
-		}
 
 		require_code('templates_results_table');
 
@@ -362,7 +428,6 @@ class Module_cms_comcode_pages
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),
@@ -574,7 +639,7 @@ class Module_cms_comcode_pages
 
 		$table=results_table(do_lang('COMCODE_PAGES'),$start,'start',$max,'max',$max_rows,$header_row,$table_rows,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fdgfdfdfdggfd',true);
 
-		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name));
+		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a','TITLE'=>$this->title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -608,14 +673,17 @@ class Module_cms_comcode_pages
 	 */
 	function _ed()
 	{
-		set_helper_panel_pic('pagepics/comcode_page_edit');
-		require_lang('menus');
-		set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
-		set_helper_panel_tutorial('tut_comcode_pages');
-
 		require_code('form_templates');
 
-		$simple_add=(get_param_integer('simple_add',0)==1);
+		$simple_add=$this->simple_add;
+		$page_link=$this->page_link;
+		$zone=$this->zone;
+		$file=$this->file;
+
+		if (($zone!='') && (!file_exists(get_file_base().'/'.$zone.'/pages'))) warn_exit(do_lang_tempcode('NO_SUCH_ZONE'));
+
+		require_code('type_validation');
+		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$lang=choose_language(get_screen_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT'),true);
 		if (is_object($lang)) return $lang;
@@ -629,18 +697,6 @@ class Module_cms_comcode_pages
 				add_menu_item_simple(get_param('menu'),NULL,get_param('title'),get_param('page_link'),0,0,false);
 			}
 		}
-
-		// Work out what we're editing, and where it's coming from (support for two pagelink specifying parameters for destination, with addition of restore_from to override source if different from destination)
-		$page_link=filter_naughty(get_param('page_link',''));
-		if ($page_link=='') $page_link=get_param('page_link_2');
-		if (strpos($page_link,':')===false) $page_link=':'.$page_link;
-		$page_link_parts=explode(':',$page_link);
-		if (count($page_link_parts)!=2) warn_exit(do_lang_tempcode('ZONE_COLON_FILE'));
-		$zone=$page_link_parts[0];
-		if (($zone!='') && (!file_exists(get_file_base().'/'.$zone.'/pages'))) warn_exit(do_lang_tempcode('NO_SUCH_ZONE'));
-		$file=$page_link_parts[1];
-		require_code('type_validation');
-		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$resource_owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		if (is_null($resource_owner)) // Add
@@ -665,9 +721,6 @@ class Module_cms_comcode_pages
 				attach_message(do_lang_tempcode('BLOCKING_REDIRECT_IN_PLACE',escape_html($redirect_url->evaluate())),'notice');
 			}
 		}
-
-		$title=get_screen_title(($simple_add || ($file==''))?'COMCODE_PAGE_ADD':'_COMCODE_PAGE_EDIT',true,array(escape_html($zone),escape_html($file)));
-		if (!$simple_add && ($file!='')) breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGE_EDIT'));
 
 		if ($file=='') url_default_parameters__enable();
 
@@ -837,8 +890,6 @@ class Module_cms_comcode_pages
 			$owner=$rows[0]['p_submitter'];
 		} else
 		{
-			inform_non_canonical_parameter('parent_page');
-
 			$validated=true;
 			$parent_page=get_param('parent_page','');
 			$show_as_edit=false;
@@ -931,16 +982,13 @@ class Module_cms_comcode_pages
 
 		list($warning_details,$ping_url)=handle_conflict_resolution($page_link);
 
-		if (!$simple_add)
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc:lang='.$lang,do_lang_tempcode('CHOOSE'))));
-
 		return do_template('COMCODE_EDIT_SCREEN',array(
 			'_GUID'=>'ec1d773684757f5bf6f39cf931555bf2',
 			'NEW'=>$new,
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
 			'TEXT'=>$text,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'DELETE_URL'=>$delete_url,
 			'ZONE'=>$zone,
 			'FILE'=>$file,
@@ -957,10 +1005,6 @@ class Module_cms_comcode_pages
 	function __ed()
 	{
 		$simple_add=get_param_integer('simple_add',0)==1;
-
-		$title=get_screen_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT');
-
-		set_helper_panel_pic('pagepics/comcode_page_edit');
 
 		// Load up settings from the environments
 		$file=filter_naughty(post_param('file'));
@@ -1062,13 +1106,12 @@ class Module_cms_comcode_pages
 				send_validation_request('COMCODE_PAGE_EDIT','comcode_pages',true,$zone.':'.$new_file,$edit_url);
 		}
 		$completion_text=($validated==0)?do_lang_tempcode('SUBMIT_UNVALIDATED'):do_lang_tempcode('SUCCESS');
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
 		$url=post_param('redirect','');
 		if ($url!='')
 		{
-			return redirect_screen($title,$url,$completion_text);
+			return redirect_screen($this->title,$url,$completion_text);
 		}
-		return $this->do_next_manager($title,$file,$zone,$completion_text);
+		return $this->do_next_manager($this->title,$file,$zone,$completion_text);
 	}
 
 }

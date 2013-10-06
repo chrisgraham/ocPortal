@@ -51,6 +51,51 @@ class Module_contact_member
 		return array();
 	}
 
+	var $title;
+	var $member_id;
+	var $username;
+	var $to_name;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
+			$member_id=get_param_integer('id');
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+			if (is_null($username)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+
+			$this->title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($username)));
+
+			$this->member_id=$member_id;
+			$this->username=$username;
+		}
+
+		if ($type=='actual')
+		{
+			$member_id=get_param_integer('id');
+			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMAIL_MEMBER',escape_html($to_name)))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+			$this->title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id,true))));
+
+			$this->member_id=$member_id;
+			$this->to_name=$to_name;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -82,13 +127,8 @@ class Module_contact_member
 	 */
 	function gui()
 	{
-		$member_id=get_param_integer('id');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
-		if (is_null($username)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
-
-		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($username)));
-
-		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		$member_id=$this->member_id;
+		$username=$this->username;
 
 		$text=do_lang_tempcode('EMAIL_MEMBER_TEXT');
 
@@ -145,7 +185,7 @@ class Module_contact_member
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'e06557e6eceacf1f46ee930c99ac5bb5',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'HIDDEN'=>$hidden,
 			'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'',
 			'FIELDS'=>$fields,
@@ -169,12 +209,11 @@ class Module_contact_member
 			enforce_captcha();
 		}
 
-		$member_id=get_param_integer('id');
+		$member_id=$this->member_id;
+		$to_name=$this->to_name;
+
 		$email_address=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		if (is_null($email_address)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMAIL_MEMBER',escape_html($to_name)))));
 
 		if (is_null($to_name)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
@@ -212,8 +251,6 @@ class Module_contact_member
 			}
 		}
 
-		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id,true))));
-
 		require_code('mail');
 		$attachments=array();
 		$size_so_far=0;
@@ -240,13 +277,11 @@ class Module_contact_member
 
 		log_it('EMAIL',strval($member_id),$to_name);
 
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		require_code('autosave');
 		clear_ocp_autosave();
 
 		$url=get_param('redirect');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

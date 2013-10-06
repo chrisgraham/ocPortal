@@ -280,6 +280,80 @@ class Module_ocworld
 		return array('misc'=>'OCWORLD');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','room');
+
+		if ($type=='confirm')
+		{
+			$this->title=get_screen_title('W_CONFIRM_TITLE');
+		}
+
+		if ($type=='reallocate')
+		{
+			$this->title=get_screen_title('W_REALLOCATE');
+		}
+
+		if ($type=='additem')
+		{
+			$this->title=get_screen_title('W_ADD_ITEM_TITLE');
+		}
+
+		if ($type=='additemcopy')
+		{
+			$this->title=get_screen_title('W_ADD_ITEM_COPY_TITLE');
+		}
+
+		if ($type=='addroom')
+		{
+			$this->title=get_screen_title('W_ADD_ROOM_TITLE');
+		}
+
+		if ($type=='addrealm')
+		{
+			$this->title=get_screen_title('W_ADD_REALM_TITLE');
+		}
+
+		if ($type=='addportal')
+		{
+			$this->title=get_screen_title('W_ADD_PORTAL_TITLE');
+		}
+
+		if ($type=='edititem')
+		{
+			$this->title=get_screen_title('W_EDIT_ITEM_TITLE');
+		}
+
+		if ($type=='edititemcopy')
+		{
+			$this->title=get_screen_title('W_EDIT_ITEM_COPY_TITLE');
+		}
+
+		if ($type=='editroom')
+		{
+			$this->title=get_screen_title('W_EDIT_ROOM_TITLE');
+		}
+
+		if ($type=='editrealm')
+		{
+			$this->title=get_screen_title('W_EDIT_REALM_TITLE');
+		}
+
+		if ($type=='editportal')
+		{
+			$this->title=get_screen_title('W_EDIT_PORTAL_TITLE');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -291,7 +365,7 @@ class Module_ocworld
 		require_code('ocworld_screens');
 
 		// Decide what functions to execute for this command
-		$command=either_param('type','room');
+		$type=either_param('type','room');
 		$param=either_param('param','');
 		$dest_member_id=either_param_integer('member',-1);
 		$member_id=get_member();
@@ -397,13 +471,13 @@ class Module_ocworld
 			} else // Answer question screen
 			{
 				$troll_name=$GLOBALS['SITE_DB']->query_select_value('w_realms','troll_name',array('id'=>$realm));
-				$title=get_screen_title('W_TROLL_Q',true,array(escape_html($troll_name)));
+				$this->title=get_screen_title('W_TROLL_Q',true,array(escape_html($troll_name)));
 				$questions=new ocp_tempcode();
 				for ($i=1;$i<=$num_questions;$i++)
 				{
 					$questions->attach(do_template('W_TROLL_QUESTION',array('_GUID'=>'b09eb44e4264a9dca5bdf651ca9a48d4','Q'=>$q[$i],'I'=>strval($i))));
 				}
-				return do_template('W_TROLL',array('_GUID'=>'e108ccaebc5b1adfa9db6b5b23e93602','TITLE'=>$title,'TROLL'=>$troll_name,'QUESTIONS'=>$questions));
+				return do_template('W_TROLL',array('_GUID'=>'e108ccaebc5b1adfa9db6b5b23e93602','TITLE'=>$this->title,'TROLL'=>$troll_name,'QUESTIONS'=>$questions));
 			}
 		}
 
@@ -431,17 +505,18 @@ class Module_ocworld
 		require_code('uploads');
 
 		// What command are we being asked to do?
-		if ($command=='confirm')
+		if ($type=='confirm')
 		{
 			$url=build_url(array('page'=>'ocworld'),'_SELF');
-			$command2=either_param('btype','');
+			$type2=either_param('btype','');
 			$item=either_param('item','');
 			$member=either_param_integer('member',-1);
 			$param=either_param('param','');
 
-			return do_template('W_CONFIRM_SCREEN',array('_GUID'=>'365870cb4c6cb4282ff6c7a11f4f8a5b','TITLE'=>get_screen_title('W_CONFIRM_TITLE'),'URL'=>$url,'COMMAND'=>$command2,'ITEM'=>$item,'MEMBER'=>strval($member),'PARAM'=>$param));
+			return do_template('W_CONFIRM_SCREEN',array('_GUID'=>'365870cb4c6cb4282ff6c7a11f4f8a5b','TITLE'=>$this->title,'URL'=>$url,'COMMAND'=>$type2,'ITEM'=>$item,'MEMBER'=>strval($member),'PARAM'=>$param));
 		}
-		if ($command=='reallocate')
+
+		if ($type=='reallocate')
 		{
 			if (!has_privilege(get_member(),'administer_ocworld')) ocw_refresh_with_message(do_lang_tempcode('W_ONLY_STAFF_REALLOC'),'warn');
 
@@ -458,68 +533,84 @@ class Module_ocworld
 				}
 			}
 
-			return do_template('W_REALLOCATE',array('_GUID'=>'8fa4b9205310d6bc2fc28348a52898d5','TITLE'=>get_screen_title('W_REALLOCATE'),'OUT'=>$out));
+			return do_template('W_REALLOCATE',array('_GUID'=>'8fa4b9205310d6bc2fc28348a52898d5','TITLE'=>$this->title,'OUT'=>$out));
 		}	
-		if ($command=='portal') portal($member_id,intval($param));
-		if ($command=='realms')
+
+		if ($type=='portal') portal($member_id,intval($param));
+
+		if ($type=='realms')
 		{
 			realms();
 			return new ocp_tempcode();
 		}
-		if ($command=='up')
+
+		if ($type=='up')
 		{
 			$tpl=try_to_enter_room($member_id,0,-1,'');
 			if (!is_null($tpl)) return $tpl;
 			ocw_refresh_with_message(new ocp_tempcode());
 		}
-		if ($command=='down')
+		if ($type=='down')
 		{
 			$tpl=try_to_enter_room($member_id,0,1,'');
 			if (!is_null($tpl)) return $tpl;
 			ocw_refresh_with_message(new ocp_tempcode());
 		}
-		if ($command=='right')
+		if ($type=='right')
 		{
 			$tpl=try_to_enter_room($member_id,1,0,'');
 			if (!is_null($tpl)) return $tpl;
 			ocw_refresh_with_message(new ocp_tempcode());
 		}
-		if ($command=='left')
+		if ($type=='left')
 		{
 			$tpl=try_to_enter_room($member_id,-1,0,'');
 			if (!is_null($tpl)) return $tpl;
 			ocw_refresh_with_message(new ocp_tempcode());
 		}
-		if ($command=='answered')
+
+		if ($type=='answered')
 		{
 			$tpl=try_to_enter_room($member_id,post_param_integer('dx'),post_param_integer('dy'),$param);
 			if (!is_null($tpl)) return $tpl;
 		}
-		if ($command=='drop') drop_wrap($member_id,$item);
-		if ($command=='give') give($member_id,$dest_member_id,$item);
-		if ($command=='pickpocket') pickpocket($member_id,$dest_member_id);
-		if ($command=='use') useitem($member_id,$item);
-		if ($command=='take') take($member_id,$item,$dest_member_id);
-		if ($command=='buy') buy($member_id,$item,$dest_member_id);
-		if ($command=='inventory')
+
+		if ($type=='drop') drop_wrap($member_id,$item);
+
+		if ($type=='give') give($member_id,$dest_member_id,$item);
+
+		if ($type=='pickpocket') pickpocket($member_id,$dest_member_id);
+
+		if ($type=='use') useitem($member_id,$item);
+
+		if ($type=='take') take($member_id,$item,$dest_member_id);
+
+		if ($type=='buy') buy($member_id,$item,$dest_member_id);
+
+		if ($type=='inventory')
 		{
 			$tpl=output_inventory_screen($dest_member_id);
 			return $tpl;
 		}
-		if ($command=='findperson') findperson(($param=='')?strval($dest_member_id):$param);
-		if ($command=='message')
+
+		if ($type=='findperson') findperson(($param=='')?strval($dest_member_id):$param);
+
+		if ($type=='message')
 		{
 			message($member_id,post_param('post'),post_param_integer('tmember'));
 		}
-		if ($command=='emergency') basic_enter_room($member_id,0,0,0);
-		if ($command=='delete-message-by-person')
+
+		if ($type=='emergency') basic_enter_room($member_id,0,0,0);
+
+		if ($type=='delete-message-by-person')
 		{
 			if ((!has_privilege($member_id,'administer_ocworld')) && ($member_id!=$dest_member_id)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 			delete_message($member_id,$dest_member_id,addslashes($param));
 		}
 
-		// Management
-		if ($command=='additem')
+		// Management...
+
+		if ($type=='additem')
 		{
 			require_code('ocworld_action');
 
@@ -530,7 +621,7 @@ class Module_ocworld
 					'_GUID'=>'0246f7037a360996bdfb4f1dcf96bcfc',
 					'PRICE'=>integer_format(get_price('mud_item')),
 					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ITEM_TEXT')),
-					'TITLE'=>get_screen_title('W_ADD_ITEM_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'additem',
 					'ITEM'=>'',
 					'DESCRIPTION'=>'',
@@ -546,7 +637,8 @@ class Module_ocworld
 			$urls=get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
 			add_item_wrap($member_id,$name,post_param_integer('cost',0),post_param_integer('not_infinite',0),post_param_integer('bribable',0),post_param_integer('healthy',0),$urls[0],post_param_integer('max_per_player',-1),post_param_integer('replicateable',0),post_param('description'));
 		}
-		if ($command=='additemcopy')
+
+		if ($type=='additemcopy')
 		{
 			require_code('ocworld_action');
 
@@ -567,7 +659,7 @@ class Module_ocworld
 					'_GUID'=>'15799930bca51eafdee3c0a8e197866a',
 					'PRICE'=>integer_format(get_price('mud_item_copy')),
 					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ITEM_COPY_TEXT')),
-					'TITLE'=>get_screen_title('W_ADD_ITEM_COPY_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'additemcopy',
 					'NOT_INFINITE'=>'1',
 					'ITEMS'=>$items,
@@ -577,7 +669,8 @@ class Module_ocworld
 			}
 			add_item_wrap_copy($member_id,$name,post_param_integer('cost'),post_param_integer('not_infinite',0));
 		}
-		if ($command=='addroom')
+
+		if ($type=='addroom')
 		{
 			require_code('ocworld_action');
 
@@ -591,7 +684,7 @@ class Module_ocworld
 					'PRICE'=>integer_format(get_price('mud_room')),
 					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ROOM_TEXT')),
 					'ROOM_TEXT'=>'',
-					'TITLE'=>get_screen_title('W_ADD_ROOM_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'addroom',
 					'NAME'=>'',
 					'PASSWORD_QUESTION'=>'',
@@ -610,7 +703,8 @@ class Module_ocworld
 			$urls=get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
 			add_room_wrap($member_id,post_param_integer('position'),$name,post_param('text'),post_param('password_question'),post_param('password_answer'),post_param('password_fail_message'),post_param('required_item'),post_param_integer('locked_up',0),post_param_integer('locked_down',0),post_param_integer('locked_right',0),post_param_integer('locked_left',0),$urls[0],post_param_integer('allow_portal',0));
 		}
-		if ($command=='addrealm')
+
+		if ($type=='addrealm')
 		{
 			require_code('ocworld_action');
 
@@ -633,7 +727,7 @@ class Module_ocworld
 					'PRICE'=>integer_format(get_price('mud_realm')),
 					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_REALM_TEXT',
 					integer_format($left))),
-					'TITLE'=>get_screen_title('W_ADD_REALM_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'addrealm',
 					'QA'=>$_qa,
 					'NAME'=>'',
@@ -657,7 +751,8 @@ class Module_ocworld
 			$urls3=get_url('lobby_pic_url','lobby_pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
 			add_realm_wrap($member_id,$name,post_param('troll_name'),post_param('jail_name'),post_param('jail_text'),$urls1[0],post_param('jail_house_name'),post_param('jail_house_text'),$urls2[0],post_param('lobby_name'),post_param('lobby_text'),$urls3[0],$qa,post_param_integer('private',0));
 		}
-		if ($command=='addportal')
+
+		if ($type=='addportal')
 		{
 			require_code('ocworld_action');
 
@@ -669,7 +764,7 @@ class Module_ocworld
 					'_GUID'=>'69e74a964f69721d0381a920c4a25ce5',
 					'PRICE'=>integer_format(get_price('mud_portal')),
 					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_PORTAL_TEXT')),
-					'TITLE'=>get_screen_title('W_ADD_PORTAL_TITLE'),
+					'TITLE'=>$this->title,
 					'PORTAL_TEXT'=>'',
 					'PAGE_TYPE'=>'addportal',
 					'NAME'=>'',
@@ -682,36 +777,41 @@ class Module_ocworld
 
 			add_portal_wrap($member_id,$name,post_param('text'),post_param_integer('end_location_realm',-1),post_param_integer('end_location_x',-1),post_param_integer('end_location_y',-1));
 		}
-		if ($command=='deleteitem')
+
+		if ($type=='deleteitem')
 		{
 			require_code('ocworld_action');
 
 			delete_item_wrap($item);
 		}
-		if ($command=='deleteroom')
+
+		if ($type=='deleteroom')
 		{
 			require_code('ocworld_action');
 
 			delete_room_wrap($member_id);
 		}
-		if ($command=='deleterealm')
+
+		if ($type=='deleterealm')
 		{
 			require_code('ocworld_action');
 
 			delete_realm_wrap($member_id);
 		}
-		if ($command=='deleteportal')
+
+		if ($type=='deleteportal')
 		{
 			require_code('ocworld_action');
 
 			delete_portal_wrap($member_id,intval($param));
 		}
 
-		// Admin commands
+		// Admin commands...
+
 		if (has_privilege($member_id,'administer_ocworld'))
 		{
-			if ($command=='mergeitems') merge_items($item,either_param('item2'));
-			if ($command=='teleport-person')
+			if ($type=='mergeitems') merge_items($item,either_param('item2'));
+			if ($type=='teleport-person')
 			{
 				$ast=strpos($param,':');
 				$b=strpos($param,':',$ast+1);
@@ -720,14 +820,15 @@ class Module_ocworld
 				$y=intval(substr($param,$b+1));
 				basic_enter_room($dest_member_id,$realm,$x,$y);
 			}
-			if ($command=='imprison-person') imprison($dest_member_id);
-			if ($command=='hurt-person') hurt($dest_member_id);
-			if ($command=='dehurt-person') dehurt($dest_member_id);
-			if ($command=='ban-person') ban_member($dest_member_id);
-			if ($command=='unban-person') unban_member($dest_member_id);
-			if ($command=='take-from-person') steal($member_id,$dest_member_id);
+			if ($type=='imprison-person') imprison($dest_member_id);
+			if ($type=='hurt-person') hurt($dest_member_id);
+			if ($type=='dehurt-person') dehurt($dest_member_id);
+			if ($type=='ban-person') ban_member($dest_member_id);
+			if ($type=='unban-person') unban_member($dest_member_id);
+			if ($type=='take-from-person') steal($member_id,$dest_member_id);
 		}
-		if ($command=='edititem')
+
+		if ($type=='edititem')
 		{
 			require_code('ocworld_action');
 
@@ -741,7 +842,7 @@ class Module_ocworld
 
 				$tpl=do_template('W_ITEM_SCREEN',array(
 					'_GUID'=>'1f581864bd2f0cbe05742e03ab6c2a53',
-					'TITLE'=>get_screen_title('W_EDIT_ITEM_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'edititem',
 					'ITEM'=>either_param('item'),
 					'DESCRIPTION'=>$row['description'],
@@ -758,7 +859,8 @@ class Module_ocworld
 			$urls=get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
 			edit_item_wrap($member_id,$item,$name,post_param_integer('bribable',0),post_param_integer('healthy',0),$urls[0],grab_new_owner('new_owner'),post_param_integer('max_per_player',-1),post_param_integer('replicateable',0),post_param('description'));
 		}
-		if ($command=='edititemcopy')
+
+		if ($type=='edititemcopy')
 		{
 			require_code('ocworld_action');
 
@@ -774,7 +876,7 @@ class Module_ocworld
 
 				$tpl=do_template('W_ITEMCOPY_SCREEN',array(
 					'_GUID'=>'a8d28f6516408dba96a8b57ddcd7cee6',
-					'TITLE'=>get_screen_title('W_EDIT_ITEM_COPY_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'edititemcopy',
 					'NOT_INFINITE'=>strval($not_infinite),
 					'X'=>strval($x),
@@ -789,7 +891,8 @@ class Module_ocworld
 
 			edit_item_wrap_copy($member_id,$item,$cost,post_param_integer('not_infinite',0),post_param_integer('new_x'),post_param_integer('new_y'),post_param_integer('new_realm'),grab_new_owner('new_owner'));
 		}
-		if ($command=='editroom')
+
+		if ($type=='editroom')
 		{
 			require_code('ocworld_action');
 
@@ -805,7 +908,7 @@ class Module_ocworld
 
 				$tpl=do_template('W_ROOM_SCREEN',array(
 					'_GUID'=>'a4c5f8ae962cdbaa304135cf07c583a0',
-					'TITLE'=>get_screen_title('W_EDIT_ROOM_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'editroom',
 					'X'=>strval($x),
 					'Y'=>strval($y),
@@ -830,7 +933,8 @@ class Module_ocworld
 			$urls=get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
 			edit_room_wrap($member_id,$name,post_param('text'),post_param('password_question'),post_param('password_answer'),post_param('password_fail_message'),post_param('required_item'),post_param_integer('locked_up',0),post_param_integer('locked_down',0),post_param_integer('locked_right',0),post_param_integer('locked_left',0),$urls[0],post_param_integer('allow_portal',0),grab_new_owner('new_owner'),post_param_integer('new_x'),post_param_integer('new_y'),post_param_integer('new_realm'));
 		}
-		if ($command=='editrealm')
+
+		if ($type=='editrealm')
 		{
 			require_code('ocworld_action');
 
@@ -852,7 +956,7 @@ class Module_ocworld
 
 				$tpl=do_template('W_REALM_SCREEN',array(
 					'_GUID'=>'f2503e0be6e45a296baa8625cafb4d72',
-					'TITLE'=>get_screen_title('W_EDIT_REALM_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'editrealm',
 					'OWNER'=>is_null($row['owner'])?'':strval($row['owner']),
 					'QA'=>$qatc,
@@ -870,7 +974,8 @@ class Module_ocworld
 			}
 			edit_realm_wrap($member_id,$name,post_param('troll_name'),$qa,post_param_integer('private',0),grab_new_owner('new_owner'));
 		}
-		if ($command=='editportal')
+
+		if ($type=='editportal')
 		{
 			require_code('ocworld_action');
 
@@ -887,7 +992,7 @@ class Module_ocworld
 
 				$tpl=do_template('W_PORTAL_SCREEN',array(
 					'_GUID'=>'cad0e01c1c4c410e67b775c3ff6eeb3a',
-					'TITLE'=>get_screen_title('W_EDIT_PORTAL_TITLE'),
+					'TITLE'=>$this->title,
 					'PAGE_TYPE'=>'editportal',
 					'X'=>strval($x),
 					'Y'=>strval($y),
@@ -905,7 +1010,8 @@ class Module_ocworld
 
 			edit_portal_wrap($member_id,intval($param),$name,post_param('text'),post_param_integer('end_location_realm'),post_param_integer('end_location_x'),post_param_integer('end_location_y'),grab_new_owner('new_owner'),post_param_integer('new_x'),post_param_integer('new_y'),post_param_integer('new_realm'));
 		}
-		if ($command=='room')
+
+		if ($type=='room')
 		{
 			return output_room_screen($member_id);
 		}

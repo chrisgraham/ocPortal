@@ -49,6 +49,23 @@ class Module_admin_ocf_groups extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_USERGROUPS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/usergroups');
+		set_helper_panel_tutorial('tut_subcom');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -57,9 +74,6 @@ class Module_admin_ocf_groups extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/usergroups');
-		set_helper_panel_tutorial('tut_subcom');
-
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');
 		require_code('ocf_groups_action2');
@@ -108,12 +122,12 @@ class Module_admin_ocf_groups extends standard_crud_module
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_USERGROUPS'),comcode_lang_string('DOC_GROUPS'),
-					array_merge(array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GROUP')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_GROUP')),
-					),manage_custom_fields_donext_link('group')),
-					do_lang('MANAGE_USERGROUPS')
+			array_merge(array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GROUP')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_GROUP')),
+			),manage_custom_fields_donext_link('group')),
+			do_lang('MANAGE_USERGROUPS')
 		);
 	}
 
@@ -343,7 +357,6 @@ class Module_admin_ocf_groups extends standard_crud_module
 			list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
-			inform_non_canonical_parameter('sort');
 		}
 
 		$header_row=results_field_title(array(

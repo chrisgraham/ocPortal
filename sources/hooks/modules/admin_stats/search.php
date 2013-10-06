@@ -68,7 +68,6 @@ class Hook_admin_stats_search
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT s_primary,COUNT(*) AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'searches_logged WHERE s_time>'.strval($time_start).' AND s_time<'.strval($time_end).' GROUP BY s_primary ORDER BY '.$sortable.' '.$sort_order);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -115,8 +114,6 @@ class Hook_admin_stats_search
 		$ob->save_graph('Global-Search',$output);
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'980eb41a9c3f73edc67c842dd8573fcc','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Search.xml','TITLE'=>do_lang_tempcode('SEARCH_STATISTICS'),'TEXT'=>do_lang_tempcode('DESCRIPTION_SEARCH_STATISTICS')));
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
 		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'727a59e061727c4a1e24345cecb769aa','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
 

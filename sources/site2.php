@@ -144,6 +144,7 @@ function get_page_warning_details($zone,$codename,$edit_url)
 
 /**
  * Assign a page refresh to the specified URL.
+ * This is almost always used before calling the redirect_screen function. It assumes ocPortal will output a full screen.
  *
  * @sets_output_state
  *
@@ -152,35 +153,62 @@ function get_page_warning_details($zone,$codename,$edit_url)
  */
 function assign_refresh($url,$multiplier=0.0)
 {
+	// URL clean up
 	if (is_object($url)) $url=$url->evaluate();
-
 	if (strpos($url,'keep_session')!==false) $url=enforce_sessioned_url($url); // In case the session changed in transit (this refresh URL may well have been relayed from a much earlier point)
+	if ((strpos($url,"\n")!==false) || (strpos($url,"\r")!==false))
+		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
+	// No redirects for view-modes
 	$special_page_type=get_param('special_page_type','view');
+	if ($special_page_type!='view') return;
 
 	$must_show_message=($multiplier!=0.0);
 
-	if (!$must_show_message)
+	// Emergency meta tag
+	if (headers_sent())
 	{
-		// Preferably server is gonna redirect before page is shown. This is for accessibility reasons
-		if ((strpos($url,"\n")!==false) || (strpos($url,"\r")!==false))
-			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-
-		global $FORCE_META_REFRESH;
-		if (($special_page_type=='view') && (running_script('index')) && (!headers_sent()) && (!$FORCE_META_REFRESH))
-		{
-			header('Location: '.$url);
-			if (strpos($url,'#')===false)
-				$GLOBALS['QUICK_REDIRECT']=true;
-		}
+		ini_set('ocproducts.xss_detect','0');
+		echo '<meta http-equiv="Refresh" content="0; URL='.escape_html($url).'" />'; // XHTMLXHTML
+		return;
 	}
 
-	if ($special_page_type=='view')
+	// Redirect via meta tag in standard ocPortal output
+	if ($must_show_message)
 	{
 		global $REFRESH_URL;
 		$REFRESH_URL[0]=$url;
 		$REFRESH_URL[1]=2.5*$multiplier;
+		return;
 	}
+
+	// HTTP redirect
+	global $FORCE_META_REFRESH;
+	if ((running_script('index')) && (!$FORCE_META_REFRESH))
+	{
+		header('Location: '.$url);
+		if (strpos($url,'#')===false)
+			$GLOBALS['QUICK_REDIRECT']=true;
+	}
+	return;
+}
+
+/**
+ * Assign a redirect to the specified URL, with no visual component.
+ * If possible, use an HTTP header; but if output has already started, use a meta tag.
+ *
+ * @sets_output_state
+ *
+ * @param  mixed			Refresh to this URL (URLPATH or Tempcode URL)
+ */
+function smart_redirect($url)
+{
+	assign_refresh($url,0.0);
+
+	$middle=redirect_screen(get_screen_title('REDIRECTING'),$url);
+	$echo=globalise($middle,NULL,'',true);
+	$echo->evaluate_echo();
+	exit();
 }
 
 /**
@@ -190,8 +218,6 @@ function closed_site()
 {
 	if ((get_page_name()!='login') && (get_page_name()!='join') && (get_page_name()!='lost_password'))
 	{
-		@ob_end_clean();
-
 		if (!headers_sent())
 		{
 			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');

@@ -162,6 +162,14 @@ function script_load_stuff()
 	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff) && (typeof window.script_load_stuff_staff!='undefined')) script_load_stuff_staff();
 }
 
+function merge_global_messages()
+{
+	var m1=document.getElementById('global_messages');
+	var m2=document.getElementById('global_messages_2');
+	set_inner_html(m1,get_inner_html(m2),true);
+	m2.parentNode.removeChild(m2);
+}
+
 function set_font_size(size)
 {
 	var old_size=read_cookie('font_size');
@@ -174,7 +182,6 @@ function set_font_size(size)
 	var new_sizer=document.getElementById('font_size_'+size);
 	if (new_sizer) new_sizer.className+=' selected';
 }
-// TODO: Load from cookie
 
 function new_html__initialise(element)
 {

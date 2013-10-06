@@ -240,8 +240,6 @@ class virtual_bash
 		require_code('xml');
 		$this->output[STREAM_STDHTML]=convert_bad_entities($this->output[STREAM_STDHTML],get_charset());
 
-		@ob_end_clean(); // Cleanup any output that may have somehow leaked to this point
-
 		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <response>
 	<result>

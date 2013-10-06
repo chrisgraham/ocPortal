@@ -52,8 +52,6 @@ function nice_get_timezone_list($timezone=NULL)
  */
 function validate_ip_script()
 {
-	@ob_end_clean();
-
 	$keep=keep_symbol(array('1'));
 
 	$code=either_param('code','');
@@ -126,8 +124,8 @@ function ocf_member_external_linker_ask($username,$type,$email_address='',$dob_d
 {
 	// If somehow, we're not fully started up, or in a messy state
 	require_code('urls');
-	@ob_end_clean();
-	if (!function_exists('do_header')) require_code('site');
+
+	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
 	$title=get_screen_title('FINISH_PROFILE');
 

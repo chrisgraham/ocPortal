@@ -62,13 +62,13 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 			$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query2,false,true);
 		}
 	}
-	$order=get_param('order','last_time');
-	$order2='t_cache_last_time DESC';
-	if ($order=='first_post') $order2='t_cache_first_time DESC';
-	elseif ($order=='title') $order2='t_cache_first_title ASC';
+	$sort=get_param('sort','last_time');
+	$sort2='t_cache_last_time DESC';
+	if ($sort=='first_post') $sort2='t_cache_first_time DESC';
+	elseif ($sort=='title') $sort2='t_cache_first_title ASC';
 	if (get_option('enable_sunk')=='1')
-		$order2='t_sunk ASC,'.$order2;
-	$topic_rows=$GLOBALS['FORUM_DB']->query('SELECT * '.$query.$union.' ORDER BY t_pinned DESC,'.$order2,$max,$start,false,true);
+		$sort2='t_sunk ASC,'.$sort2;
+	$topic_rows=$GLOBALS['FORUM_DB']->query('SELECT * '.$query.$union.' ORDER BY t_pinned DESC,'.$sort2,$max,$start,false,true);
 	$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query);
 	$topics=array();
 	$hot_topic_definition=intval(get_option('hot_topic_definition'));

@@ -653,6 +653,20 @@ class Module_admin_customers
 		return array('misc'=>'CHARGE_CUSTOMER');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -678,7 +692,7 @@ class Module_admin_customers
 	 */
 	function charge()
 	{
-		$title=get_screen_title('CHARGE_CUSTOMER');
+		$this->title=get_screen_title('CHARGE_CUSTOMER');
 
 		require_code('form_templates');
 
@@ -706,7 +720,7 @@ class Module_admin_customers
 			$cpf_id=get_credits_profile_field_id();
 			if (is_null($cpf_id))
 			{
-				$msg_tpl=warn_screen($title,do_lang_tempcode('INVALID_FIELD_ID'));
+				$msg_tpl=warn_screen($this->title,do_lang_tempcode('INVALID_FIELD_ID'));
 				$msg_tpl->evaluate_echo();
 				return;
 			}
@@ -721,7 +735,7 @@ class Module_admin_customers
 			$text=do_lang_tempcode('CUSTOMER_CURRENTLY_HAS',escape_html(number_format($num_credits)));
 		} else $text=new ocp_tempcode();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'f91185ee725f47ffa652d5fef8d85c0b','TITLE'=>$title,'HIDDEN'=>'','TEXT'=>$text,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'f91185ee725f47ffa652d5fef8d85c0b','TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>$text,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -731,7 +745,7 @@ class Module_admin_customers
 	 */
 	function _charge()
 	{
-		$title=get_screen_title('CHARGE_CUSTOMER');
+		$this->title=get_screen_title('CHARGE_CUSTOMER');
 
 		$username=post_param('member_username');
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
@@ -740,7 +754,7 @@ class Module_admin_customers
 		$cpf_id=get_credits_profile_field_id();
 		if (is_null($cpf_id))
 		{
-			$msg_tpl=warn_screen($title,do_lang_tempcode('INVALID_FIELD_ID'));
+			$msg_tpl=warn_screen($this->title,do_lang_tempcode('INVALID_FIELD_ID'));
 			$msg_tpl->evaluate_echo();
 			return;
 		}
@@ -760,7 +774,7 @@ class Module_admin_customers
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc','username'=>$username),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 }
 

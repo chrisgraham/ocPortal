@@ -51,6 +51,33 @@ class Module_admin_trackbacks
 		return array('misc'=>'MANAGE_TRACKBACKS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/trackbacks');
+		set_helper_panel_text(comcode_lang_string('DOC_TRACKBACKS'));
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('MANAGE_TRACKBACKS');
+		}
+
+		if ($type=='delete')
+		{
+			$this->title=get_screen_title('DELETE_TRACKBACKS');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,9 +85,6 @@ class Module_admin_trackbacks
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/trackbacks');
-		set_helper_panel_text(comcode_lang_string('DOC_TRACKBACKS'));
-
 		require_lang('trackbacks');
 
 		$type=get_param('type','misc');
@@ -78,8 +102,6 @@ class Module_admin_trackbacks
 	 */
 	function choose()
 	{
-		$title=get_screen_title('MANAGE_TRACKBACKS');
-
 		$trackback_rows=$GLOBALS['SITE_DB']->query_select('trackbacks',array('*'),NULL,'ORDER BY id DESC',1000);
 
 		$trackbacks='';
@@ -97,7 +119,7 @@ class Module_admin_trackbacks
 			)));
 		}
 
-		return do_template('TRACKBACK_DELETE_SCREEN',array('_GUID'=>'51f7e4c1976bcaf120758d2c86771289','TITLE'=>$title,'TRACKBACKS'=>$trackbacks,'LOTS'=>count($trackback_rows)==1000));
+		return do_template('TRACKBACK_DELETE_SCREEN',array('_GUID'=>'51f7e4c1976bcaf120758d2c86771289','TITLE'=>$this->title,'TRACKBACKS'=>$trackbacks,'LOTS'=>count($trackback_rows)==1000));
 	}
 
 	/**
@@ -107,8 +129,6 @@ class Module_admin_trackbacks
 	 */
 	function delete_trackbacks()
 	{
-		$title=get_screen_title('DELETE_TRACKBACKS');
-
 		foreach ($_POST as $key=>$val)
 		{
 			if (!is_string($val)) continue;
@@ -144,7 +164,7 @@ class Module_admin_trackbacks
 			$_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,$text);
+		return redirect_screen($this->title,$url,$text);
 	}
 
 }

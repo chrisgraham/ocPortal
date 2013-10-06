@@ -51,6 +51,57 @@ class Module_awards
 		return ($GLOBALS['SITE_DB']->query_select_value('award_types','COUNT(*)')==0)?array():array('misc'=>'AWARDS','overview'=>'AWARD_OVERVIEW');
 	}
 
+	var $title;
+	var $id;
+	var $award_type_row;
+	var $object;
+	var $info;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+
+			$this->title=get_screen_title('AWARDS');
+		}
+
+		if ($type=='award')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
+
+			$id=get_param_integer('id');
+			$_award_type_row=$GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$_award_type_row)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$award_type_row=$_award_type_row[0];
+			require_code('content');
+			$object=get_content_object($award_type_row['a_content_type']);
+			$info=$object->info();
+			if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
+			$this->title=get_screen_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
+
+			$this->id=$id;
+			$this->award_type_row=$award_type_row;
+			$this->object=$object;
+			$this->info=$info;
+		}
+
+		if ($type=='overview')
+		{
+			$this->title=get_screen_title('AWARD_OVERVIEW');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,9 +115,9 @@ class Module_awards
 		// What are we doing?
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->choose_award();
 		if ($type=='award') return $this->award();
 		if ($type=='overview') return $this->award_overview();
-		if ($type=='misc') return $this->choose_award();
 
 		return new ocp_tempcode();
 	}
@@ -78,8 +129,6 @@ class Module_awards
 	 */
 	function choose_award()
 	{
-		$title=get_screen_title('AWARDS');
-
 		$rows=$GLOBALS['SITE_DB']->query_select('award_types',array('*'));
 		$out=new ocp_tempcode();
 		foreach ($rows as $myrow)
@@ -100,13 +149,11 @@ class Module_awards
 			}
 		}
 
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
-
 		$add_url=new ocp_tempcode();
 		if (has_actual_page_access(get_member(),'admin_awards'))
 			$add_url=build_url(array('page'=>'admin_awards','type'=>'ad'),get_module_zone('admin_awards'));
 
-		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'c8351f627333434d426db3b9ffe09d1c','ADD_URL'=>$add_url,'PRE'=>'','POST'=>'','TITLE'=>$title,'CONTENT'=>$out));
+		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'c8351f627333434d426db3b9ffe09d1c','ADD_URL'=>$add_url,'PRE'=>'','POST'=>'','TITLE'=>$this->title,'CONTENT'=>$out));
 	}
 
 	/**
@@ -116,8 +163,6 @@ class Module_awards
 	 */
 	function award_overview()
 	{
-		$title=get_screen_title('AWARD_OVERVIEW');
-
 		$award_types=$GLOBALS['SITE_DB']->query_select('award_types',array('*'));
 
 		$content=new ocp_tempcode();
@@ -171,7 +216,7 @@ class Module_awards
 			}
 		}
 
-		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'4d705418b837db3dc992de95c3b93f71','TITLE'=>$title,'PRE'=>do_lang_tempcode('DESCRIPTION_AWARD_OVERVIEW'),'CONTENT'=>$content,'POST'=>''));
+		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'4d705418b837db3dc992de95c3b93f71','TITLE'=>$this->title,'PRE'=>do_lang_tempcode('DESCRIPTION_AWARD_OVERVIEW'),'CONTENT'=>$content,'POST'=>''));
 	}
 
 	/**
@@ -181,22 +226,16 @@ class Module_awards
 	 */
 	function award()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
-
-		require_css('awards');
-
-		$id=get_param_integer('id');
-		$_award_type_row=$GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$_award_type_row)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$award_type_row=$_award_type_row[0];
-		require_code('content');
-		$object=get_content_object($award_type_row['a_content_type']);
-		$info=$object->info();
-		if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		$id=$this->id;
+		$award_type_row=$this->award_type_row;
+		$object=$this->object;
+		$info=$this->info;
 
 		$start=get_param_integer('award_start',0);
 		$max=get_param_integer('award_max',intval(get_option('awarded_items_per_page')));
-		$title=get_screen_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
+
+		require_css('awards');
+
 		$description=paragraph(get_translated_tempcode($award_type_row['a_description']),'grdgdfghdfgodfs');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>$id),'ORDER BY date_and_time DESC',$max,$start);
@@ -247,7 +286,7 @@ class Module_awards
 
 		$sub_title=do_lang_tempcode('AWARD_HISTORY');
 
-		$tpl=do_template('PAGINATION_SCREEN',array('_GUID'=>'b9cf3a37300aced490003f79d7bb4914','TITLE'=>$title,'SUB_TITLE'=>$sub_title,'DESCRIPTION'=>$description,'CONTENT'=>$content,'PAGINATION'=>$pagination));
+		$tpl=do_template('PAGINATION_SCREEN',array('_GUID'=>'b9cf3a37300aced490003f79d7bb4914','TITLE'=>$this->title,'SUB_TITLE'=>$sub_title,'DESCRIPTION'=>$description,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

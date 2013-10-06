@@ -389,7 +389,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	}
 
 	// Output our error / correction form
-	@ob_end_clean();
+	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 	$hidden=build_keep_post_fields(array($name));
 	require_code('form_templates');
 	$fields=form_input_text_comcode(do_lang_tempcode('NEW'),do_lang_tempcode('COMCODE_REPLACEMENT'),$name,$comcode,true,NULL,true);

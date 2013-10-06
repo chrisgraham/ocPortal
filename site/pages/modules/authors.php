@@ -99,6 +99,47 @@ class Module_authors
 		return is_guest()?array():array('misc'=>'VIEW_MY_AUTHOR_PROFILE');
 	}
 
+	var $title;
+	var $author;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$author=get_param('id',NULL);
+		if (is_null($author))
+		{
+			if (is_guest())
+			{
+				global $EXTRA_HEAD;
+				$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
+				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			}
+
+			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		}
+		if ((is_null($author)) || ($author=='')) warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Really don't want to have to search on this
+
+		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
+		{
+			require_code('awards');
+			$awards=find_awards_for('author',$author);
+		} else $awards=array();
+		$this->title=get_screen_title('_AUTHOR',true,array(escape_html($author)),NULL,$awards);
+
+		seo_meta_load_for('authors',$author);
+
+		$this->author=$author;
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -126,29 +167,7 @@ class Module_authors
 	 */
 	function show_author()
 	{
-		$author=get_param('id',NULL);
-		if (is_null($author))
-		{
-			if (is_guest())
-			{
-				global $EXTRA_HEAD;
-				$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
-
-				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-			}
-
-			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		}
-		if ((is_null($author)) || ($author=='')) warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Really don't want to have to search on this
-
-		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-		{
-			require_code('awards');
-			$awards=find_awards_for('author',$author);
-		} else $awards=array();
-		$title=get_screen_title('_AUTHOR',true,array(escape_html($author)),NULL,$awards);
-
-		seo_meta_load_for('authors',$author);
+		$author=$this->author;
 
 		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('url','description','skills'),array('author'=>$author),'',1);
 		if (!array_key_exists(0,$rows))
@@ -290,7 +309,7 @@ class Module_authors
 		return do_template('AUTHOR_SCREEN',array(
 			'_GUID'=>'ea789367b15bc90fc28d1c586e6e6536',
 			'TAGS'=>get_loaded_tags(),
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'EDIT_URL'=>$edit_url,
 			'AUTHOR'=>$author,
 			'NEWS_RELEASED'=>$news_released,

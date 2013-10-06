@@ -148,6 +148,69 @@ class Module_iotds
 		}
 	}
 
+	var $title;
+	var $id;
+	var $myrow;
+	var $url;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('IOTD_ARCHIVE');
+		}
+
+		if ($type=='view')
+		{
+			set_feed_url('?mode=iotds&filter=');
+
+			$id=get_param_integer('id');
+
+			require_lang('iotds');
+
+			// Breadcrumbs
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IOTD_ARCHIVE'))));
+
+			// Fetch details
+			$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$rows))
+			{
+				return warn_screen($this->title,do_lang_tempcode('MISSING_RESOURCE'));
+			}
+			$myrow=$rows[0];
+			$url=$myrow['url'];
+			if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+
+			// Meta data
+			set_extra_request_metadata(array(
+				'created'=>date('Y-m-d',$myrow['add_date']),
+				'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
+				'publisher'=>'', // blank means same as creator
+				'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
+				'type'=>'Poll',
+				'title'=>get_translated_text($myrow['i_title']),
+				'identifier'=>'_SEARCH:iotds:view:'.strval($id),
+				'description'=>'',
+				'image'=>$url,
+			));
+
+			$this->title=get_screen_title('IOTD');
+
+			$id=$this->id;
+			$myrow=$this->myrow;
+			$url=$this->url;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -155,9 +218,6 @@ class Module_iotds
 	 */
 	function run()
 	{
-		set_feed_url('?mode=iotds&filter=');
-
-		require_lang('iotds');
 		require_code('feedback');
 		require_code('iotds');
 		require_css('iotds');
@@ -165,8 +225,8 @@ class Module_iotds
 		// What action are we going to do?
 		$type=get_param('type','misc');
 
-		if ($type=='view') return $this->view();
 		if ($type=='misc') return $this->iotd_browse();
+		if ($type=='view') return $this->view();
 
 		return new ocp_tempcode();
 	}
@@ -178,11 +238,9 @@ class Module_iotds
 	 */
 	function iotd_browse()
 	{
-		$title=get_screen_title('IOTD_ARCHIVE');
-
 		$content=do_block('main_multi_content',array('param'=>'iotd','efficient'=>'0','zone'=>'_SELF','sort'=>'recent','max'=>'10','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','block_id'=>'module'));
 
-		return do_template('PAGINATION_SCREEN',array('_GUID'=>'d8a493c2b007d98074f104ea433c8091','TITLE'=>$title,'CONTENT'=>$content));
+		return do_template('PAGINATION_SCREEN',array('_GUID'=>'d8a493c2b007d98074f104ea433c8091','TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 	/**
@@ -192,28 +250,9 @@ class Module_iotds
 	 */
 	function view()
 	{
-		$title=get_screen_title('IOTD');
-
-		$id=get_param_integer('id');
-
-		// Breadcrumbs
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IOTD_ARCHIVE'))));
-
-		// Fetch details
-		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$rows))
-		{
-			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$rows[0];
-		$date_raw=strval($myrow['date_and_time']);
-		$add_date_raw=strval($myrow['add_date']);
-		$edit_date_raw=is_null($myrow['edit_date'])?'':strval($myrow['edit_date']);
-		$date=get_timezoned_date($myrow['date_and_time']);
-		$add_date=get_timezoned_date($myrow['add_date']);
-		$edit_date=get_timezoned_date($myrow['edit_date']);
-		$url=$myrow['url'];
-		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
+		$id=$this->id;
+		$myrow=$this->myrow;
+		$url=$this->url;
 
 		// Feedback
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
@@ -244,22 +283,9 @@ class Module_iotds
 			$edit_url=build_url(array('page'=>'cms_iotds','type'=>'_ed','id'=>$id),get_module_zone('cms_iotds'));
 		} else $edit_url=new ocp_tempcode();
 
-		// Meta data
-		set_extra_request_metadata(array(
-			'created'=>date('Y-m-d',$myrow['add_date']),
-			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
-			'publisher'=>'', // blank means same as creator
-			'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
-			'type'=>'Poll',
-			'title'=>get_translated_text($myrow['i_title']),
-			'identifier'=>'_SEARCH:iotds:view:'.strval($id),
-			'description'=>'',
-			'image'=>$url,
-		));
-
 		return do_template('IOTD_ENTRY_SCREEN',array(
 			'_GUID'=>'f508d483459b88fab44cd8b9f4db780b',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SUBMITTER'=>strval($myrow['submitter']),
 			'I_TITLE'=>get_translated_tempcode($myrow['i_title']),
 			'CAPTION'=>get_translated_tempcode($myrow['caption']),

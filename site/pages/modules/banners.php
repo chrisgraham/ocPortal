@@ -195,6 +195,59 @@ class Module_banners
 		return array(array(),$permission_page);
 	}
 
+	var $title;
+	var $source;
+	var $myrow;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('BANNERS');
+		}
+
+		if ($type=='view')
+		{
+			$source=get_param('source');
+
+			$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),array('name'=>$source));
+			if (!array_key_exists(0,$rows))
+			{
+				warn_exit(do_lang_tempcode('BANNER_MISSING_SOURCE'));
+			}
+			$myrow=$rows[0];
+
+			set_extra_request_metadata(array(
+				'created'=>date('Y-m-d',$myrow['add_date']),
+				'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
+				'publisher'=>'', // blank means same as creator
+				'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
+				'type'=>'Banner',
+				'title'=>get_translated_text($myrow['caption']),
+				'identifier'=>'_SEARCH:banners:view:'.$source,
+				'description'=>'',
+				'image'=>$myrow['img_url'],
+				//'category'=>$type,
+			));
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
+
+			$this->title=get_screen_title('BANNER_INFORMATION');
+
+			$this->source=$source;
+			$this->myrow=$myrow;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -210,8 +263,8 @@ class Module_banners
 		// Decide what we're doing
 		$type=get_param('type','misc');
 
-		if ($type=='view') return $this->view_banner();
 		if ($type=='misc') return $this->choose_banner();
+		if ($type=='view') return $this->view_banner();
 
 		return new ocp_tempcode();
 	}
@@ -223,8 +276,6 @@ class Module_banners
 	 */
 	function choose_banner()
 	{
-		$title=get_screen_title('BANNERS');
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','name ASC');
@@ -242,7 +293,6 @@ class Module_banners
 		if (addon_installed('unvalidated')) $sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$hr=array(
 			do_lang_tempcode('CODENAME'),
@@ -305,7 +355,7 @@ class Module_banners
 
 		$text=do_lang_tempcode('CHOOSE_VIEW_LIST');
 
-		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'be5248da379faeead5a18d9f2b62bd6b','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
+		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'be5248da379faeead5a18d9f2b62bd6b','TITLE'=>$this->title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -318,16 +368,9 @@ class Module_banners
 	 */
 	function view_banner()
 	{
-		$title=get_screen_title('BANNER_INFORMATION');
+		$source=$this->source;
 
-		$source=get_param('source');
-
-		$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),array('name'=>$source));
-		if (!array_key_exists(0,$rows))
-		{
-			warn_exit(do_lang_tempcode('BANNER_MISSING_SOURCE'));
-		}
-		$myrow=$rows[0];
+		$myrow=$this->myrow;
 
 		if ((is_guest($myrow['submitter'])) || ($myrow['submitter']!=get_member()))
 			check_privilege('view_anyones_banner_stats');
@@ -378,24 +421,9 @@ class Module_banners
 			$edit_url=build_url(array('page'=>'cms_banners','type'=>'_ed','id'=>$source),get_module_zone('cms_banners'));
 		}
 
-		set_extra_request_metadata(array(
-			'created'=>date('Y-m-d',$myrow['add_date']),
-			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
-			'publisher'=>'', // blank means same as creator
-			'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
-			'type'=>'Banner',
-			'title'=>get_translated_text($myrow['caption']),
-			'identifier'=>'_SEARCH:banners:view:'.$source,
-			'description'=>'',
-			'image'=>$myrow['img_url'],
-			//'category'=>$type,
-		));
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
-
 		return do_template('BANNER_VIEW_SCREEN',array(
 			'_GUID'=>'ed923ae0682c6ed679c0efda688c49ea',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'EDIT_URL'=>$edit_url,
 			'MAP_TABLE'=>$map_table,
 			'BANNER'=>$banner,

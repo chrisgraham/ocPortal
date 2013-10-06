@@ -25,8 +25,6 @@
  */
 function do_next_manager_admin_simplified()
 {
-	breadcrumb_set_self(do_lang_tempcode('CMS'));
-
 	$sections=new ocp_tempcode();
 	$sections->attach(do_next_manager_hooked('CMS',NULL,'cms'));
 	$sections->attach(do_next_manager_hooked('STRUCTURE',NULL,'structure'));
@@ -35,8 +33,14 @@ function do_next_manager_admin_simplified()
 	$sections->attach(do_next_manager_hooked('SETUP',NULL,'setup'));
 	$sections->attach(do_next_manager_hooked('TOOLS',NULL,'tools'));
 	$sections->attach(do_next_manager_hooked('SECURITY',NULL,'security'));
-	set_helper_panel_text(do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN'));
-	return do_template('DO_NEXT_SCREEN',array('_GUID'=>'3c5fa0d04c28c81cac64a481e1c96800','INTRO'=>'','QUESTION'=>do_lang_tempcode('WHAT_NEXT'),'TITLE'=>get_screen_title(has_zone_access(get_member(),'adminzone')?'ADMIN_ZONE':'CMS'),'SECTIONS'=>$sections));
+
+	return do_template('DO_NEXT_SCREEN',array(
+		'_GUID'=>'3c5fa0d04c28c81cac64a481e1c96800',
+		'INTRO'=>'',
+		'QUESTION'=>do_lang_tempcode('WHAT_NEXT'),
+		'TITLE'=>get_screen_title(has_zone_access(get_member(),'adminzone')?'ADMIN_ZONE':'CMS'),
+		'SECTIONS'=>$sections,
+	));
 }
 
 /**
@@ -53,8 +57,6 @@ function do_next_manager_hooked($title,$text,$type,$main_title=NULL)
 	$links=array();
 
 	if (is_null($main_title)) $main_title=$title;
-
-	breadcrumb_set_self(do_lang_tempcode($title));
 
 	$hooks=find_all_hooks('systems','do_next_menus');
 	foreach (array_keys($hooks) as $hook)
@@ -126,9 +128,6 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 
 	require_css('do_next');
 
-	global $BREADCRUMB_SET_SELF;
-	if (is_null($BREADCRUMB_SET_SELF)) breadcrumb_set_self(is_null($main_title)?do_lang_tempcode('MENU'):make_string_tempcode($main_title));
-
 	$sections=new ocp_tempcode();
 
 	// Main section stuff (the "Main" section is not always shown - it is shown when the do-next screen is being used as a traditional menu, not as a followup-action screen)
@@ -156,7 +155,6 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 					{
 						$x[1]['auto__add_one']='1';
 						$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
-						require_code('templates_redirect_screen');
 						return redirect_screen($title,$_url_redirect,$text);
 					}
 					$auto_add='auto__add_one';
@@ -176,7 +174,6 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 					if ((($keep_simplified_donext!==0) && (get_option('simplified_donext')=='1')) || ($keep_simplified_donext==1))
 					{
 						$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
-						require_code('templates_redirect_screen');
 						return redirect_screen($title,$_url_redirect,$text);
 					}
 				}
@@ -212,7 +209,6 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 					{
 						$x[1]['auto__add_one_category']='1';
 						$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
-						require_code('templates_redirect_screen');
 						return redirect_screen($title,$_url_redirect,$text);
 					}
 					$auto_add='auto__add_one_category';
@@ -232,7 +228,6 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 					if ((($keep_simplified_donext!==0) && (get_option('simplified_donext')=='1')) || ($keep_simplified_donext==1))
 					{
 						$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
-						require_code('templates_redirect_screen');
 						return redirect_screen($title,$_url_redirect,$text);
 					}
 				}

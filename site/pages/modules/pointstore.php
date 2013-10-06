@@ -140,6 +140,24 @@ class Module_pointstore
 		return is_guest()?array():array('!'=>'POINT_STORE');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINT_STORE'))));
+
+		$this->title=get_screen_title('POINT_STORE');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -152,8 +170,6 @@ class Module_pointstore
 		require_lang('points');
 		require_code('points');
 		require_css('points');
-
-		$title=get_screen_title('POINT_STORE');
 
 		$type=get_param('type','misc');
 		$hook=get_param('id','');
@@ -169,7 +185,6 @@ class Module_pointstore
 			require_code('hooks/modules/pointstore/'.filter_naughty_harsh($hook),true);
 			$object=object_factory('Hook_pointstore_'.filter_naughty_harsh($hook));
 			$object->init();
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINT_STORE'))));
 			if (method_exists($object,$type))
 			{
 				require_code('form_templates');
@@ -192,8 +207,6 @@ class Module_pointstore
 	 */
 	function do_module_gui()
 	{
-		$title=get_screen_title('POINT_STORE');
-
 		$points_left=available_points(get_member());
 
 		$items=new ocp_tempcode();
@@ -241,7 +254,7 @@ class Module_pointstore
 		}
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		return do_template('POINTSTORE_SCREEN',array('_GUID'=>'1b66923dd1a3da6afb934a07909b8aa7','TITLE'=>$title,'ITEMS'=>$items,'POINTS_LEFT'=>integer_format($points_left),'USERNAME'=>$username));
+		return do_template('POINTSTORE_SCREEN',array('_GUID'=>'1b66923dd1a3da6afb934a07909b8aa7','TITLE'=>$this->title,'ITEMS'=>$items,'POINTS_LEFT'=>integer_format($points_left),'USERNAME'=>$username));
 	}
 
 }

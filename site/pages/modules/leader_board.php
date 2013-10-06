@@ -51,6 +51,22 @@ class Module_leader_board
 		return ($GLOBALS['SITE_DB']->query_select_value('leader_board','COUNT(*)')==0)?array():array('!'=>'POINT_LEADERBOARD');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$this->title=get_screen_title('POINT_LEADERBOARD');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -61,8 +77,6 @@ class Module_leader_board
 		require_lang('leader_board');
 		require_code('points');
 		require_css('points');
-
-		$title=get_screen_title('POINT_LEADERBOARD');
 
 		$start_date=intval(get_option('leaderboard_start_date'));
 
@@ -103,7 +117,7 @@ class Module_leader_board
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('POINT_LEADERBOARD'),$start,'lb_start',$max,'lb_max',$num_weeks);
 
-		$tpl=do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$title,'WEEKS'=>$out,'PAGINATION'=>$pagination));
+		$tpl=do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$this->title,'WEEKS'=>$out,'PAGINATION'=>$pagination));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

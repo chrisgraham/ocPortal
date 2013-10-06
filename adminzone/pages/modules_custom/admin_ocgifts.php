@@ -132,8 +132,6 @@ class Module_admin_ocgifts extends standard_crud_module
 		//deldir_contents(get_custom_file_base().'/uploads/ocgifts_addon',true);
 	}
 
-
-
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -144,6 +142,28 @@ class Module_admin_ocgifts extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_GIFTS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_tutorial('tut_subcom');
+
+		if ($type=='view')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('OCGIFTS_TITLE'))));
+			breadcrumb_set_self(do_lang_tempcode('VIEW_GIFT'));
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -152,8 +172,6 @@ class Module_admin_ocgifts extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_tutorial('tut_subcom');
-
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');
 		require_code('ocf_forums_action');
@@ -176,12 +194,12 @@ class Module_admin_ocgifts extends standard_crud_module
 		require_lang('ocgifts');
 
 		return do_next_manager(get_screen_title('OCGIFTS_TITLE'),comcode_lang_string('DOC_OCGIFTS'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GIFT')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_GIFT')),
-					),
-					do_lang('OCGIFTS_TITLE')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GIFT')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_GIFT')),
+			),
+			do_lang('OCGIFTS_TITLE')
 		);
 	}
 
@@ -215,12 +233,8 @@ class Module_admin_ocgifts extends standard_crud_module
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('OCGIFTS_TITLE'))));
-		breadcrumb_set_self(do_lang_tempcode('VIEW_GIFT'));
-
 		require_code('templates_map_table');
 		return map_table(get_screen_title('VIEW_GIFT'),array('NAME'=>$name,'IMAGE'=>$image,'PRICE'=>integer_format($price),'CATEGORY'=>$category,'ENABLED'=>$enabled));
-
 	}
 
 	function get_form_fields($id=NULL,$name='',$category='',$image='',$price=10,$enabled=1)

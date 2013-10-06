@@ -51,6 +51,28 @@ class Module_admin_banners
 		return array('misc'=>'BANNER_STATISTICS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$also_url=build_url(array('page'=>'cms_banners'),get_module_zone('cms_banners'));
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
+
+			$this->title=get_screen_title('BANNER_STATISTICS');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -74,12 +96,7 @@ class Module_admin_banners
 	 */
 	function banner_statistics()
 	{
-		$title=get_screen_title('BANNER_STATISTICS');
-
 		check_privilege('view_anyones_banner_stats');
-
-		$also_url=build_url(array('page'=>'cms_banners'),get_module_zone('cms_banners'));
-		attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
 
 		$id=get_param_integer('id',-1);
 		$start=get_param_integer('start',0);
@@ -90,7 +107,6 @@ class Module_admin_banners
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$_sum=$GLOBALS['SITE_DB']->query_select_value('banners','SUM(views_from)');
 		$has_banner_network=$_sum!=0.0;
@@ -157,7 +173,7 @@ class Module_admin_banners
 
 		$table=results_table(do_lang_tempcode('BANNERS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'c9270fd515e76918a37edf3f573c6da2','RESULTS_TABLE'=>$table,'TITLE'=>$title));
+		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'c9270fd515e76918a37edf3f573c6da2','RESULTS_TABLE'=>$table,'TITLE'=>$this->title));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

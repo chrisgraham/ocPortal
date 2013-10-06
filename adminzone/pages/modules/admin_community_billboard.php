@@ -94,6 +94,23 @@ class Module_admin_community_billboard extends standard_crud_module
 		}
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('community_billboard');
+		set_helper_panel_tutorial('tut_points');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -102,9 +119,6 @@ class Module_admin_community_billboard extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('community_billboard');
-		set_helper_panel_tutorial('tut_points');
-
 		require_lang('community_billboard');
 		require_code('community_billboard');
 
@@ -126,12 +140,12 @@ class Module_admin_community_billboard extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('COMMUNITY_BILLBOARD'),comcode_lang_string('DOC_COMMUNITY_BILLBOARD'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_COMMUNITY_BILLBOARD')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_COMMUNITY_BILLBOARD')),
-					),
-					do_lang('COMMUNITY_BILLBOARD')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_COMMUNITY_BILLBOARD')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_COMMUNITY_BILLBOARD')),
+			),
+			do_lang('COMMUNITY_BILLBOARD')
 		);
 	}
 
@@ -166,7 +180,6 @@ class Module_admin_community_billboard extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('MESSAGE'),

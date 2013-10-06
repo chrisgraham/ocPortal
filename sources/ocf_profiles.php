@@ -21,12 +21,13 @@
 /**
  * Render a member profile.
  *
+ * @param  tempcode		Screen title
  * @param  MEMBER			The ID of the member who is being viewed
  * @param  ?MEMBER		The ID of the member who is doing the viewing (NULL: current member)
  * @param  ?ID_TEXT		The username of the member who is being viewed (NULL: work out from member_id_of)
  * @return tempcode		The rendered profile
  */
-function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=NULL)
+function render_profile_tabset($title,$member_id_of,$member_id_viewing=NULL,$username=NULL)
 {
 	if (is_null($member_id_viewing)) $member_id_viewing=get_member();
 
@@ -76,17 +77,6 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 	require_javascript('javascript_ajax');
 
 	load_up_all_self_page_permissions($member_id_viewing);
-
-	if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-	{
-		require_code('awards');
-		$awards=find_awards_for('member',strval($member_id_of));
-	} else $awards=array();
-
-	//$title=get_screen_title('MEMBER_PROFILE',true,array(make_fractionable_editable('member',$member_id_of,$username)),NULL,$awards);
-	$displayname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-	$title=get_screen_title('MEMBER_PROFILE',true,array(escape_html($displayname),escape_html($username)),NULL,$awards);
 
 	$_tabs=array();
 	$i=0;

@@ -85,6 +85,23 @@ class Module_admin_content_reviews
 		$GLOBALS['SITE_DB']->create_index('content_reviews','needs_review',array('next_review_time','content_type'));
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/unvalidated');
+		set_helper_panel_text(comcode_lang_string('DOC_CONTENT_REVIEWS'));
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -93,9 +110,6 @@ class Module_admin_content_reviews
 	function run()
 	{
 		require_lang('content_reviews');
-
-		set_helper_panel_pic('pagepics/unvalidated');
-		set_helper_panel_text(comcode_lang_string('DOC_CONTENT_REVIEWS'));
 
 		$_title=get_screen_title('_CONTENT_NEEDING_REVIEWING');
 

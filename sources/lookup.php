@@ -98,7 +98,6 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 	$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'the_page'=>do_lang_tempcode('PAGE'));
 	if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 		log_hack_attack_and_exit('ORDERBY_HACK');
-	inform_non_canonical_parameter('sort');
 
 	$query='';
 	if (!is_guest($member))
@@ -162,7 +161,6 @@ function find_security_alerts($where)
 	list($sortable,$sort_order)=$test;
 	if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 		log_hack_attack_and_exit('ORDERBY_HACK');
-	inform_non_canonical_parameter('alert_sort');
 	$_fields=array(do_lang_tempcode('FROM'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('IP_ADDRESS'),do_lang_tempcode('REASON'));
 	if (has_js()) $_fields[]=new ocp_tempcode();
 	$fields_title=results_field_title($_fields,$sortables,'alert_sort',$sortable.' '.$sort_order);

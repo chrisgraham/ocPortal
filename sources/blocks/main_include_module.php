@@ -157,7 +157,6 @@ class Block_main_include_module
 		{
 			$keep+=array(
 				'HELPER_PANEL_TEXT',
-				'HELPER_PANEL_HTML',
 				'HELPER_PANEL_PIC',
 				'HELPER_PANEL_TUTORIAL',
 			);

@@ -284,7 +284,7 @@ function count_catalogue_category_children($category_id)
  * @param  ?MEMBER			Viewing member ID (NULL: current user)
  * @return array				An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
-function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$filter,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_ocselect='',$_order_by=NULL,$ordering_param='order',$viewing_member_id=NULL)
+function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$filter,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_ocselect='',$_order_by=NULL,$ordering_param='sort',$viewing_member_id=NULL)
 {
 	if ($_ocselect!='')
 	{

@@ -22,14 +22,15 @@
  * Render the OCF forumview.
  *
  * @param  ?integer	Forum ID (NULL: private topics).
+ * @param  ?array		The forum row (NULL: private topics).
  * @param  string		The filter category (blank if no filter)
  * @param  integer	Maximum results to show
  * @param  integer	Offset for result showing
  * @param  AUTO_LINK	Virtual root
  * @param  ?MEMBER	The member to show private topics of (NULL: not showing private topics)
- * @return mixed		Either Tempcode (an interface that must be shown) or a Tuple: The main Tempcode, a title to use (also Tempcode), breadcrumbs (also Tempcode), the forum name (string). For a PT view, it is always a tuple, never raw Tempcode (as it can go inside a tabset).
+ * @return mixed		Either Tempcode (an interface that must be shown) or a Tuple: The main Tempcode, breadcrumbs (also Tempcode), the forum name (string). For a PT view, it is always a tuple, never raw Tempcode (as it can go inside a tabset).
  */
-function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_member_id)
+function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$root,$of_member_id)
 {
 	require_css('ocf');
 
@@ -53,7 +54,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	{
 		require_code('site');
 		set_feed_url('?mode=ocf_forumview&filter='.strval($id));
-		$details=ocf_get_forum_view($start,$max,$id);
+		$details=ocf_get_forum_view($id,$forum_info,$start,$max);
 		$breadcrumbs=ocf_forum_breadcrumbs($id,$details['name'],$details['parent_forum']);
 
 		if ((array_key_exists('question',$details)) && (is_null(get_bot_type())))
@@ -354,13 +355,13 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),$start,'forum_start',$max,'forum_max',$details['max_rows'],false,5,NULL,($type=='pt' && get_page_name()=='members')?'tab__pts':'');
 
-		$order=array_key_exists('order',$details)?$details['order']:'last_post';
+		$sort=array_key_exists('sort',$details)?$details['sort']:'last_post';
 		$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array(
 			'_GUID'=>'e452b81001e5c6b7adb4d82e627bf983',
 			'TYPE'=>$type,
 			'ID'=>is_null($id)?NULL:strval($id),
 			'MAX'=>strval($max),
-			'ORDER'=>$order,
+			'ORDER'=>$sort,
 			'MAY_CHANGE_MAX'=>array_key_exists('may_change_max',
 			$details),
 			'ACTION_URL'=>$action_url,
@@ -420,9 +421,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	);
 	$content=do_template('OCF_FORUM',$map);
 
-	$ltitle=do_lang_tempcode('NAMED_FORUM',is_null($id)?(is_object($details['name'])?$details['name']:make_string_tempcode(escape_html($details['name']))):make_fractionable_editable('forum',$id,$details['name']));
-
-	return array($content,$ltitle,$breadcrumbs,$forum_name);
+	return array($content,$breadcrumbs,$forum_name);
 }
 
 /**
@@ -676,12 +675,13 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 /**
  * Get a map of details relating to the view of a certain forum of a certain member.
  *
- * @param  integer	The start row for getting details of topics in the forum (i.e. 0 is newest, higher is starting further back in time).
- * @param  ?integer	The maximum number of topics to get detail of (NULL: default).
- * @param  ?MEMBER	The member viewing (NULL: current member).
- * @return array		The details.
+ * @param  AUTO_LINK		The forum ID.
+ * @param  array			The forum row.
+ * @param  integer		The start row for getting details of topics in the forum (i.e. 0 is newest, higher is starting further back in time).
+ * @param  ?integer		The maximum number of topics to get detail of (NULL: default).
+ * @return array			The details.
  */
-function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
+function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 {
 	if (is_null($max)) $max=intval(get_option('forum_topics_per_page'));
 
@@ -689,42 +689,24 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 
 	load_up_all_module_category_permissions($member_id,'forums');
 
-	if (is_null($forum_id))
-	{
-		/*$forum_info[0]['f_name']=do_lang('ROOT_FORUM'); This optimisation was more trouble that it was worth, and constraining
-		$forum_info[0]['f_description']='';
-		$forum_info[0]['f_parent_forum']=NULL;*/
-		$forum_id=db_get_first_id();
-	}/* else*/
-	{
-		$forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('f.id'=>$forum_id),'',1,NULL,false,array('f_description','f_intro_question'));
-		if (!array_key_exists(0,$forum_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-
-		if (($forum_info[0]['f_redirection']!='') && (looks_like_url($forum_info[0]['f_redirection'])))
-		{
-			header('Location: '.$forum_info[0]['f_redirection']);
-			exit();
-		}
-	}
-
 	if (!is_null($forum_id)) // Anyone may view the root (and see the topics in the root - but there will hardly be any)
 	{
 		if (!has_category_access($member_id,'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS_LEVEL'); // We're only allowed to view it existing from a parent forum, or nothing at all -- so access denied brother!
 	}
 
 	// Find our subforums first
-	$order=$forum_info[0]['f_order_sub_alpha']?'f_name':'f_position';
+	$sort=$forum_info['f_order_sub_alpha']?'f_name':'f_position';
 	$max_forum_detail=intval(get_option('max_forum_detail'));
 	$huge_forums=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>$max_forum_detail;
 	if ($huge_forums)
 	{
 		$max_forum_inspect=intval(get_option('max_forum_inspect'));
 
-		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$order,$max_forum_inspect,NULL,false,false,array('f_description','f_intro_question'));
+		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$sort,$max_forum_inspect,NULL,false,false,array('f_description','f_intro_question'));
 		if (count($subforum_rows)==$max_forum_inspect) $subforum_rows=array(); // Will cause performance breakage
 	} else
 	{
-		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$order,NULL,NULL,false,array('f_description','f_intro_question'));
+		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$sort,NULL,NULL,false,array('f_description','f_intro_question'));
 	}
 
 	$unread_forums=array();
@@ -845,31 +827,31 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	// Find topics
 	$extra='';
 	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')) && (!ocf_may_moderate_forum($forum_id,$member_id))) $extra='t_validated=1 AND ';
-	if ((is_null($forum_info[0]['f_parent_forum'])) || ($GLOBALS['FORUM_DB']->query_select_value('f_topics','COUNT(*)',array('t_cascading'=>1))==0))
+	if ((is_null($forum_info['f_parent_forum'])) || ($GLOBALS['FORUM_DB']->query_select_value('f_topics','COUNT(*)',array('t_cascading'=>1))==0))
 	{
 		$where=$extra.' (t_forum_id='.strval($forum_id).')';
 	} else
 	{
 		$extra2='';
-		$parent_or_list=ocf_get_forum_parent_or_list($forum_id,$forum_info[0]['f_parent_forum']);
+		$parent_or_list=ocf_get_forum_parent_or_list($forum_id,$forum_info['f_parent_forum']);
 		if ($parent_or_list!='')
 		{
 			$extra2='AND ('.$parent_or_list.')';
 		}
 		$where=$extra.' (t_forum_id='.strval($forum_id).' OR (t_cascading=1 '.$extra2.'))';
 	}
-	$order=get_param('order',$forum_info[0]['f_order']);
-	$order2='t_cache_last_time DESC';
-	if ($order=='first_post') $order2='t_cache_first_time DESC';
-	elseif ($order=='title') $order2='t_cache_first_title ASC';
+	$sort=get_param('sort',$forum_info['f_order']);
+	$sort2='t_cache_last_time DESC';
+	if ($sort=='first_post') $sort2='t_cache_first_time DESC';
+	elseif ($sort=='title') $sort2='t_cache_first_title ASC';
 	if (get_option('enable_sunk')=='1')
-		$order2='t_sunk ASC,'.$order2;
+		$sort2='t_sunk ASC,'.$sort2;
 	if (is_guest())
 	{
-		$query='SELECT ttop.*,t.text_parsed AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+		$query='SELECT ttop.*,t.text_parsed AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
 	} else
 	{
-		$query='SELECT ttop.*,t.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+		$query='SELECT ttop.*,t.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
 	}
 	$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,true);
 	if (($start==0) && (count($topic_rows)<$max)) $max_rows=$max; // We know that they're all on this screen
@@ -892,33 +874,19 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$topics[]=ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,in_array($topic_row['id'],$involved));
 	}
 
-	$description=get_translated_tempcode($forum_info[0]['f_description'],$GLOBALS['FORUM_DB']);
-	$description_text=get_translated_text($forum_info[0]['f_description'],$GLOBALS['FORUM_DB']);
+	$description=get_translated_tempcode($forum_info['f_description'],$GLOBALS['FORUM_DB']);
 	$out=array(
-		'name'=>$forum_info[0]['f_name'],
+		'name'=>$forum_info['f_name'],
 		'description'=>$description,
 		'forum_groupings'=>$forum_groupings,
 		'topics'=>$topics,
 		'max_rows'=>$max_rows,
-		'order'=>$order,
-		'parent_forum'=>$forum_info[0]['f_parent_forum']
+		'order'=>$sort,
+		'parent_forum'=>$forum_info['f_parent_forum']
 	);
 
-	set_extra_request_metadata(array(
-		'created'=>'',
-		'creator'=>'',
-		'publisher'=>'', // blank means same as creator
-		'modified'=>'',
-		'type'=>'Forum',
-		'title'=>$forum_info[0]['f_name'],
-		'identifier'=>'_SEARCH:forumview:misc:'.strval($forum_id),
-		'description'=>$description_text,
-		'image'=>find_theme_image('bigicons/forums'),
-		//'category'=>???,
-	));
-
 	// Is there a question/answer situation?
-	$question=get_translated_tempcode($forum_info[0]['f_intro_question'],$GLOBALS['FORUM_DB']);
+	$question=get_translated_tempcode($forum_info['f_intro_question'],$GLOBALS['FORUM_DB']);
 	if (!$question->is_empty())
 	{
 		$is_guest=($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id());
@@ -930,7 +898,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		if (is_null($test))
 		{
 			$out['question']=$question;
-			$out['answer']=$forum_info[0]['f_intro_answer'];
+			$out['answer']=$forum_info['f_intro_answer'];
 		}
 	}
 

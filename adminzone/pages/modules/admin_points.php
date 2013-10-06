@@ -51,6 +51,55 @@ class Module_admin_points
 		return array('misc'=>'GIFT_TRANSACTIONS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		require_lang('points');
+
+		if ($type=='export')
+		{
+			set_helper_panel_text(comcode_lang_string('DOC_EXPORT_POINTS'));
+			set_helper_panel_pic('pagepics/points');
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINTS'))));
+			breadcrumb_set_self(do_lang_tempcode('EXPORT'));
+		} else
+		{
+			set_helper_panel_tutorial('tut_points');
+			set_helper_panel_pic('points');
+		}
+
+		if ($type=='export')
+		{
+			$this->title=get_screen_title('EXPORT_POINTS');
+		}
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('GIFT_TRANSACTIONS');
+		}
+
+		if ($type=='reverse')
+		{
+			$this->title=get_screen_title('REVERSE_TITLE');
+		}
+
+		if ($type=='charge')
+		{
+			$this->title=get_screen_title('CHARGE_MEMBER');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,12 +107,8 @@ class Module_admin_points
 	 */
 	function run()
 	{
-		set_helper_panel_pic('points');
-		set_helper_panel_tutorial('tut_points');
-
 		require_code('points');
 		require_css('points');
-		require_lang('points');
 
 		$type=get_param('type','misc');
 
@@ -110,20 +155,11 @@ class Module_admin_points
 	 */
 	function points_export()
 	{
-		$title=get_screen_title('EXPORT_POINTS');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINTS'))));
-		breadcrumb_set_self(do_lang_tempcode('EXPORT'));
-
-		set_helper_panel_text(comcode_lang_string('DOC_EXPORT_POINTS'));
-
 		disable_php_memory_limit();
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
-		set_helper_panel_pic('pagepics/points');
-
 		$d=array(get_input_date('from',true),get_input_date('to',true));
-		if (is_null($d[0])) return $this->_get_between($title);
+		if (is_null($d[0])) return $this->_get_between($this->title);
 		list($from,$to)=$d;
 
 		require_code('points');
@@ -215,8 +251,6 @@ class Module_admin_points
 	 */
 	function points_log()
 	{
-		$title=get_screen_title('GIFT_TRANSACTIONS');
-
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
@@ -225,13 +259,12 @@ class Module_admin_points
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('gifts','COUNT(*)');
 		$rows=$GLOBALS['SITE_DB']->query_select('gifts',array('*'),NULL,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)
 		{
-			return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
+			return inform_screen($this->title,do_lang_tempcode('NO_ENTRIES'));
 		}
 		$fields=new ocp_tempcode();
 		require_code('templates_results_table');
@@ -266,7 +299,7 @@ class Module_admin_points
 
 		$results_table=results_table(do_lang_tempcode('GIFT_TRANSACTIONS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',paragraph(do_lang_tempcode('GIFT_POINTS_LOG')));
 
-		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'12ce8cf5c2f669948b14e68bd6c00fe9','TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'12ce8cf5c2f669948b14e68bd6c00fe9','TITLE'=>$this->title,'RESULTS_TABLE'=>$results_table));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -279,8 +312,6 @@ class Module_admin_points
 	 */
 	function reverse()
 	{
-		$title=get_screen_title('REVERSE_TITLE');
-
 		$id=post_param_integer('id');
 		$rows=$GLOBALS['SITE_DB']->query_select('gifts',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -297,7 +328,7 @@ class Module_admin_points
 			if (is_null($_sender_id)) $_sender_id=do_lang('UNKNOWN');
 			if (is_null($_recipient_id)) $_recipient_id=do_lang('UNKNOWN');
 			$preview=do_lang_tempcode('ARE_YOU_SURE_REVERSE',escape_html(integer_format($amount)),escape_html($_sender_id),escape_html($_recipient_id));
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'d3d654c7dcffb353638d08b53697488b','TITLE'=>$title,'PREVIEW'=>$preview,'URL'=>get_self_url(false,false,array('confirm'=>1)),'FIELDS'=>build_keep_post_fields()));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'d3d654c7dcffb353638d08b53697488b','TITLE'=>$this->title,'PREVIEW'=>$preview,'URL'=>get_self_url(false,false,array('confirm'=>1)),'FIELDS'=>build_keep_post_fields()));
 		}
 
 		$GLOBALS['SITE_DB']->query_delete('gifts',array('id'=>$id),'',1);
@@ -317,7 +348,7 @@ class Module_admin_points
 			$_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -327,8 +358,6 @@ class Module_admin_points
 	 */
 	function points_charge()
 	{
-		$title=get_screen_title('CHARGE_MEMBER');
-
 		$member=post_param_integer('member');
 		$amount=post_param_integer('amount');
 		$reason=post_param('reason');
@@ -348,7 +377,7 @@ class Module_admin_points
 			$_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,$text);
+		return redirect_screen($this->title,$url,$text);
 	}
 
 }

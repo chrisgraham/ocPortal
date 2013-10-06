@@ -23,7 +23,7 @@
  *
  * @param  tempcode		Title to display on redirect page
  * @param  mixed			Destination URL (may be Tempcode)
- * @param  mixed			Message to show (may be Tempcode)
+ * @param  ?mixed			Message to show (may be Tempcode) (NULL: standard redirection message)
  * @param  boolean		For intermediary hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediary)
  * @param  ID_TEXT		Code of message type to show
  * @set    warn inform fatal
@@ -33,24 +33,23 @@ function _redirect_screen($title,$url,$text,$intermediary_hop=false,$msg_type='i
 {
 	if (is_object($url)) $url=$url->evaluate();
 
+	if (is_null($text)) $text=do_lang_tempcode('_REDIRECTING');
+
 	global $FORCE_META_REFRESH,$ATTACHED_MESSAGES_RAW;
 	$special_page_type=get_param('special_page_type','view');
 	if (($special_page_type=='view') && (!headers_sent()) && (!$FORCE_META_REFRESH))
 	{
-		if ($ATTACHED_MESSAGES_RAW!==NULL)
+		foreach ($ATTACHED_MESSAGES_RAW as $message)
 		{
-			foreach ($ATTACHED_MESSAGES_RAW as $message)
-			{
-				$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
-					'r_session_id'=>get_session_id(),
-					'r_message'=>is_object($message[0])?$message[0]->evaluate():escape_html($message[0]),
-					'r_type'=>$message[1],
-					'r_time'=>time(),
-				));
-			}
+			$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
+				'r_session_id'=>get_session_id(),
+				'r_message'=>is_object($message[0])?$message[0]->evaluate():escape_html($message[0]),
+				'r_type'=>$message[1],
+				'r_time'=>time(),
+			));
 		}
 		$_message=is_object($text)?$text->evaluate():escape_html($text);
-		if (($_message!='') && ((($ATTACHED_MESSAGES_RAW===NULL) || (count($ATTACHED_MESSAGES_RAW)==0)) || (($_message!=do_lang('SUCCESS')) && ($_message!=do_lang('REDIRECTING')))))
+		if ($_message!='' && $_message!=do_lang('_REDIRECTING'))
 		{
 			$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
 				'r_session_id'=>get_session_id(),

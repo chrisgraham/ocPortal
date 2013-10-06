@@ -47,7 +47,6 @@ function do_user_export($to_file=true)
 	{
 		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) access_denied('ADMIN_ONLY');
 
-		@ob_end_clean();
 		header('Content-type: text/plain');
 		$outfile=@fopen('php://output','wb');
 	}

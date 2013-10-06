@@ -46,6 +46,20 @@ class Module_admin_referrals
 		return array('misc'=>'REFERRALS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -74,12 +88,12 @@ class Module_admin_referrals
 	{
 		require_lang('referrals');
 
-		$title=get_screen_title('REFERRALS');
+		$this->title=get_screen_title('REFERRALS');
 
 		$table=referrer_report_script(true);
 
 		$out=new ocp_tempcode();
-		$out->attach($title);
+		$out->attach($this->title);
 		$out->attach($table);
 		return $out;
 	}
@@ -95,7 +109,7 @@ class Module_admin_referrals
 		$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
 		$scheme_title=$ini_file[$scheme]['title'];
 
-		$title=get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS',true,array(escape_html($scheme_title)));
+		$this->title=get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS',true,array(escape_html($scheme_title)));
 
 		$member_id=get_param_integer('member_id');
 
@@ -117,7 +131,7 @@ class Module_admin_referrals
 		$is_qualified_list->attach(form_input_list_entry('0',$is_qualified===0,do_lang_tempcode('NO')));
 		$fields->attach(form_input_list(do_lang_tempcode('IS_QUALIFIED'),'','is_qualified',$is_qualified_list,NULL,false,false));
 
-		return do_template('FORM_SCREEN',array('TITLE'=>$title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -131,7 +145,7 @@ class Module_admin_referrals
 		$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
 		$scheme_title=$ini_file[$scheme]['title'];
 
-		$title=get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS',true,array(escape_html($scheme_title)));
+		$this->title=get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS',true,array(escape_html($scheme_title)));
 
 		$member_id=get_param_integer('member_id');
 
@@ -157,7 +171,7 @@ class Module_admin_referrals
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'));
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 }
 

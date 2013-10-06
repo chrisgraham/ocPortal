@@ -82,6 +82,37 @@ class Module_admin_messaging
 		return array('misc'=>'CONTACT_US_MESSAGING');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/messaging');
+		set_helper_panel_tutorial('tut_support_desk');
+
+		if ($type=='view')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING'))));
+			breadcrumb_set_self(do_lang_tempcode('MESSAGE'));
+		}
+
+		if ($type=='take')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING')),array('_SELF:_SELF:view:'.$id.':message_type='.$message_type,do_lang_tempcode('MESSAGE'))));
+			breadcrumb_set_self(do_lang_tempcode('_TAKE_RESPONSIBILITY'));
+		}
+
+		$this->title=get_screen_title('CONTACT_US_MESSAGING');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -90,9 +121,6 @@ class Module_admin_messaging
 	function run()
 	{
 		if (get_forum_type()=='none') warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
-
-		set_helper_panel_pic('pagepics/messaging');
-		set_helper_panel_tutorial('tut_support_desk');
 
 		require_lang('messaging');
 
@@ -112,8 +140,6 @@ class Module_admin_messaging
 	 */
 	function choose_message()
 	{
-		$title=get_screen_title('CONTACT_US_MESSAGING');
-
 		$fields=new ocp_tempcode();
 
 		$start=get_param_integer('start',0);
@@ -143,7 +169,7 @@ class Module_admin_messaging
 		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE'),do_lang_tempcode('TYPE')));
 		$results_table=results_table('messages',$start,'start',$max,'max',$max_rows,$fields_title,$fields,NULL,NULL,NULL,NULL,paragraph(do_lang_tempcode('SELECT_A_MESSAGE')));
 
-		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'6ced89e25a12a45deb6cf10bd42869ee','TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'6ced89e25a12a45deb6cf10bd42869ee','TITLE'=>$this->title,'RESULTS_TABLE'=>$results_table));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -156,8 +182,6 @@ class Module_admin_messaging
 	 */
 	function view_message()
 	{
-		$title=get_screen_title('CONTACT_US_MESSAGING');
-
 		$id=get_param('id');
 		$message_type=get_param('message_type');
 
@@ -217,12 +241,9 @@ class Module_admin_messaging
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING'))));
-		breadcrumb_set_self(do_lang_tempcode('MESSAGE'));
-
 		return do_template('MESSAGING_MESSAGE_SCREEN',array(
 			'_GUID'=>'61561f1a333b88370ceb66dbbcc0ea4c',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'MESSAGE_TITLE'=>$message_title,
 			'MESSAGE'=>$message,
 			'BY'=>$by,
@@ -240,8 +261,6 @@ class Module_admin_messaging
 	 */
 	function take_responsibility()
 	{
-		$title=get_screen_title('CONTACT_US_MESSAGING');
-
 		$id=get_param('id');
 		$message_type=get_param('message_type');
 
@@ -259,12 +278,9 @@ class Module_admin_messaging
 			do_lang('COMMENT')
 		);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING')),array('_SELF:_SELF:view:'.$id.':message_type='.$message_type,do_lang_tempcode('MESSAGE'))));
-		breadcrumb_set_self(do_lang_tempcode('_TAKE_RESPONSIBILITY'));
-
 		// Redirect them back to view screen
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id,'message_type'=>$message_type),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

@@ -31,8 +31,6 @@ function adminzone_special_cases($codename)
 	if (($codename=='start') && (get_page_name()=='start') && (get_option('show_docs')!=='0'))
 	{
 		require_lang('menus');
-		set_helper_panel_pic('pagepics/ocpmainpage');
-		$GLOBALS['HELPER_PANEL_HTML']=do_block('main_staff_tips');
 		set_helper_panel_text(comcode_lang_string('DOC_ADMIN_ZONE'));
 		set_helper_panel_tutorial('tut_adminzone');
 	}

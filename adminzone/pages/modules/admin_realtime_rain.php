@@ -51,6 +51,22 @@ class Module_admin_realtime_rain
 		return array('!'=>'REALTIME_RAIN');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$this->title=get_screen_title('REALTIME_RAIN');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,24 +80,13 @@ class Module_admin_realtime_rain
 		require_lang('realtime_rain');
 		require_css('realtime_rain');
 
-		$title=get_screen_title('REALTIME_RAIN');
-
 		if (!has_js())
 		{
 			// Send them to the page permissions screen
 			$url=build_url(array('page'=>'admin_stats','type'=>'misc'),'_SELF');
 			require_code('site2');
 			assign_refresh($url,5.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'d364f4b7afc82e32d1d7c59316908a50','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_REALTIME')));
-		}
-
-		if (!has_js())
-		{
-			// Send them to the stats screen
-			$url=build_url(array('page'=>'admin_stats','type'=>'misc'),'_SELF');
-			require_code('site2');
-			assign_refresh($url,5.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'7b7f4d3e565f010723aa5c414a64b467','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_ADVANCED_SCREEN_REALTIME_RAIN')));
+			return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_REALTIME'));
 		}
 
 		$min_time=$GLOBALS['SITE_DB']->query_select_value('stats','MIN(date_and_time)');

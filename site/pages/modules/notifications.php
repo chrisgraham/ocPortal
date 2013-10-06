@@ -53,6 +53,39 @@ class Module_notifications
 		return array('misc'=>'NOTIFICATION_MANAGEMENT','title'=>'NOTIFICATIONS');
 	}
 
+	var $title;
+	var $id;
+	var $row;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='view')
+		{
+			$id=get_param_integer('id');
+
+			$rows=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$row=$rows[0];
+
+			$this->title=get_screen_title('NOTIFICATION_VIEW',true,array(escape_html($row['d_subject'])));
+
+			$this->id=$id;
+			$this->row=$row;
+		} else
+		{
+			$this->title=get_screen_title('NOTIFICATIONS');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -81,8 +114,6 @@ class Module_notifications
 	 */
 	function browse()
 	{
-		$title=get_screen_title('NOTIFICATIONS');
-
 		$start=get_param_integer('n_start',0);
 		$max=get_param_integer('n_max',50);
 
@@ -93,7 +124,7 @@ class Module_notifications
 		$pagination=pagination(do_lang('NOTIFICATIONS'),$start,'n_start',$max,'n_max',$max_rows);
 
 		return do_template('NOTIFICATION_BROWSE_SCREEN',array(
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'NOTIFICATIONS'=>$notifications,
 			'PAGINATION'=>$pagination,
 		));
@@ -106,13 +137,8 @@ class Module_notifications
 	 */
 	function view()
 	{
-		$id=get_param_integer('id');
-
-		$rows=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$row=$rows[0];
-
-		$title=get_screen_title('NOTIFICATION_VIEW',true,array(escape_html($row['d_subject'])));
+		$id=$this->id;
+		$row=$this->row;
 
 		$member_id=$row['d_from_member_id'];
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
@@ -125,7 +151,7 @@ class Module_notifications
 			$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('id'=>$id),'',1);
 
 		return do_template('NOTIFICATION_VIEW_SCREEN',array(
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'ID'=>strval($row['id']),
 			'SUBJECT'=>$row['d_subject'],
 			'MESSAGE'=>$_message,
@@ -149,13 +175,11 @@ class Module_notifications
 	 */
 	function overall()
 	{
-		$title=get_screen_title('NOTIFICATIONS');
-
 		$interface=notifications_ui(get_member());
 
 		return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
 			'_GUID'=>'3c81043e6fd004baf9a36c68cb47ffe5',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'INTERFACE'=>$interface,
 			'ACTION_URL'=>get_self_url(),
 		));

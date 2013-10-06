@@ -252,8 +252,6 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	{
 		@ini_set('display_errors','0');
 		fatal_exit('PHP '.strtoupper($type).' ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline));
-		relay_error_notification($out);
-		exit();
 	} else
 	{
 		require_code('site');
@@ -300,7 +298,7 @@ function _warn_screen($title,$text,$provide_back=true,$support_match_key_message
  */
 function _generic_exit($text,$template,$support_match_key_messages=false)
 {
-	@ob_end_clean(); // Incase in minimodule
+	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
 	$text_eval=is_object($text)?$text->evaluate():$text;
 
@@ -822,7 +820,7 @@ function get_webservice_result($error_message)
  */
 function _fatal_exit($text,$return=false)
 {
-	@ob_end_clean(); // Incase in minimodule
+	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
 	if (!headers_sent())
 	{
@@ -872,8 +870,6 @@ function _fatal_exit($text,$return=false)
 		header('Content-type: text/html; charset='.get_charset());
 		header('Content-Disposition: inline');
 	}
-
-	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 
 	if ((array_key_exists('MSN_DB',$GLOBALS)) && (!is_null($GLOBALS['MSN_DB'])))
 	{
@@ -1041,7 +1037,6 @@ function may_see_stack_dumps()
  */
 function die_html_trace($message)
 {
-	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$_trace=debug_backtrace();
 	$trace='<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
 	foreach ($_trace as $i=>$stage)
@@ -1124,14 +1119,13 @@ function put_value_in_stack_trace($value)
  */
 function get_html_trace()
 {
-	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$GLOBALS['SUPPRESS_ERROR_DEATH']=true;
 	$_trace=debug_backtrace();
 	$trace=new ocp_tempcode();
 	foreach ($_trace as $i=>$stage)
 	{
 		$traces=new ocp_tempcode();
-		//if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;
+		//if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;	Hinders more than helps
 		$file='';
 		$line='';
 		$__value=mixed();
@@ -1227,7 +1221,7 @@ function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_tex
 					$url=$message_raw;
 					require_code('site2');
 					assign_refresh($url,0.0);
-					$message=do_lang_tempcode('REDIRECTING');
+					$message=do_lang_tempcode('_REDIRECTING');
 				}
 				elseif (preg_match('#^\w*:\w*#',$message_raw)!=0) // Looks like a page-link
 				{
@@ -1235,7 +1229,7 @@ function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_tex
 					$url=static_evaluate_tempcode(build_url($map,$zone,array(),false,false,false,$hash));
 					require_code('site2');
 					assign_refresh($url,0.0);
-					$message=do_lang_tempcode('REDIRECTING');
+					$message=do_lang_tempcode('_REDIRECTING');
 				}
 			}
 
@@ -1303,7 +1297,7 @@ function _access_denied($class,$param,$force_login)
 			exit();
 		}
 
-		@ob_end_clean();
+		@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
 		$redirect=get_self_url(true,true,array('page'=>get_param('page',''))); // We have to pass in 'page' because an access-denied situation tells get_page_name() (which get_self_url() relies on) that we are on page ''.
 		$_GET['redirect']=$redirect;

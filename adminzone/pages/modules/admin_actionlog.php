@@ -51,6 +51,46 @@ class Module_admin_actionlog
 		return array('misc'=>'VIEW_ACTION_LOGS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			set_helper_panel_pic('pagepics/actionlog');
+			set_helper_panel_tutorial('tut_trace');
+
+			breadcrumb_set_self(do_lang_tempcode('VIEW_ACTION_LOGS'));
+
+			$this->title=get_screen_title('VIEW_ACTION_LOGS');
+		}
+
+		if ($type=='list')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTION_LOGS'))));
+			breadcrumb_set_self(do_lang_tempcode('RESULTS'));
+
+			$this->title=get_screen_title('VIEW_ACTION_LOGS');
+		}
+
+		if ($type=='view')
+		{
+			breadcrumb_set_self(do_lang_tempcode('ENTRY'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTION_LOGS')),array('_SELF:_SELF:list',do_lang_tempcode('RESULTS'))));
+
+			$this->title=get_screen_title('VIEW_ACTION_LOGS');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -78,11 +118,6 @@ class Module_admin_actionlog
 	 */
 	function search()
 	{
-		$title=get_screen_title('VIEW_ACTION_LOGS');
-
-		set_helper_panel_pic('pagepics/actionlog');
-		set_helper_panel_tutorial('tut_trace');
-
 		require_code('form_templates');
 
 		$fields=new ocp_tempcode();
@@ -157,9 +192,7 @@ class Module_admin_actionlog
 		$post_url=build_url(array('page'=>'_SELF','type'=>'list'),'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('VIEW_ACTION_LOGS');
 
-		breadcrumb_set_self(do_lang_tempcode('VIEW_ACTION_LOGS'));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'f2c6eda24e0e973aa7e253054f6683a5','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'f2c6eda24e0e973aa7e253054f6683a5','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -169,11 +202,6 @@ class Module_admin_actionlog
 	 */
 	function choose_action()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTION_LOGS'))));
-		breadcrumb_set_self(do_lang_tempcode('RESULTS'));
-
-		$title=get_screen_title('VIEW_ACTION_LOGS');
-
 		$id=get_param_integer('id',-1);
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -183,7 +211,6 @@ class Module_admin_actionlog
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		require_code('templates_results_table');
 		$field_titles=array(do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTION'),do_lang_tempcode('PARAMETER_A'),do_lang_tempcode('PARAMETER_B'));
@@ -342,7 +369,7 @@ class Module_admin_actionlog
 		}
 		$table=results_table(do_lang_tempcode('ACTIONS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		$tpl=do_template('ACTION_LOGS_SCREEN',array('_GUID'=>'d75c813e372c3ca8d1204609e54c9d65','TABLE'=>$table,'TITLE'=>$title));
+		$tpl=do_template('ACTION_LOGS_SCREEN',array('_GUID'=>'d75c813e372c3ca8d1204609e54c9d65','TABLE'=>$table,'TITLE'=>$this->title));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -355,9 +382,6 @@ class Module_admin_actionlog
 	 */
 	function view_action()
 	{
-		breadcrumb_set_self(do_lang_tempcode('ENTRY'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTION_LOGS')),array('_SELF:_SELF:list',do_lang_tempcode('RESULTS'))));
-
 		$mode=get_param('mode','ocf');
 		$id=get_param_integer('id');
 
@@ -372,7 +396,6 @@ class Module_admin_actionlog
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$row=$rows[0];
 
-		$title=get_screen_title('VIEW_ACTION_LOGS');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 		$type_str=do_lang($row['the_type'],$row['param_a'],$row['param_b'],NULL,NULL,false);
@@ -421,7 +444,7 @@ class Module_admin_actionlog
 		$fields['INVESTIGATE_USER']=hyperlink(build_url(array('page'=>'admin_lookup','id'=>(array_key_exists('ip',$row))?$row['ip']:$row['member_id']),'_SELF'),do_lang_tempcode('PROCEED'));
 
 		require_code('templates_map_table');
-		return map_table($title,$fields);
+		return map_table($this->title,$fields);
 	}
 
 }

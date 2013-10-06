@@ -45,7 +45,8 @@ class Hook_login_provider_openid
 						'pref/language',
 						'media/image/default',
 					);
-					header('Location: '.$openid->authUrl());
+					require_code('site2');
+					smart_redirect($openid->authUrl());
 					exit();
 				}
 			} elseif($_GET['openid_mode']=='cancel')

@@ -90,6 +90,42 @@ class Module_cms_news extends standard_crud_module
 		);
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('cat');
+
+		set_helper_panel_pic('pagepics/news');
+		set_helper_panel_tutorial('tut_news');
+
+		if ($type=='ad' || $type=='_ed')
+		{
+			require_lang('menus');
+			set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
+		}
+
+		if ($type=='import' || $type=='_import_news')
+		{
+			$this->title=get_screen_title('IMPORT_NEWS');
+		}
+
+		if ($type=='_import_news')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_NEWS'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -98,9 +134,6 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/news');
-		set_helper_panel_tutorial('tut_news');
-
 		$this->cat_crud_module=class_exists('Mx_cms_news_cat')?new Mx_cms_news_cat():new Module_cms_news_cat();
 		$this->posting_form_title=do_lang_tempcode('NEWS_ARTICLE');
 
@@ -109,9 +142,7 @@ class Module_cms_news extends standard_crud_module
 
 		// Decide what to do
 		if ($type=='misc') return $this->misc();
-
 		if ($type=='import') return $this->import_news();
-
 		if ($type=='_import_news') return $this->_import_news();
 
 		return new ocp_tempcode();
@@ -127,15 +158,15 @@ class Module_cms_news extends standard_crud_module
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_NEWS'),comcode_lang_string('DOC_NEWS'),
-					array_merge(array(
-						/*	 type							  page	 params													 zone	  */
-						has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_NEWS_CATEGORY')):NULL,
-						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_NEWS_CATEGORY')):NULL,
-						has_privilege(get_member(),'submit_highrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS')):NULL,
-						has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS')):NULL,
-						has_privilege(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_NEWS')):NULL,
-					),manage_custom_fields_donext_link('news')),
-					do_lang('MANAGE_NEWS')
+			array_merge(array(
+				/*	 type							  page	 params													 zone	  */
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_NEWS_CATEGORY')):NULL,
+				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_NEWS_CATEGORY')):NULL,
+				has_privilege(get_member(),'submit_highrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS')):NULL,
+				has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS')):NULL,
+				has_privilege(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_NEWS')):NULL,
+			),manage_custom_fields_donext_link('news')),
+			do_lang('MANAGE_NEWS')
 		);
 	}
 
@@ -163,7 +194,6 @@ class Module_cms_news extends standard_crud_module
 			$sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('MAIN_CATEGORY'));
 		$fh[]=do_lang_tempcode('ADDED');
@@ -285,14 +315,8 @@ class Module_cms_news extends standard_crud_module
 
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		require_lang('menus');
-		set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
-		set_helper_panel_pic('');
-
 		if (is_null($main_news_category))
 		{
-			inform_non_canonical_parameter('cat');
-
 			$param_cat=get_param('cat','');
 			if ($param_cat=='')
 			{
@@ -716,8 +740,6 @@ class Module_cms_news extends standard_crud_module
 
 		$lang=post_param('lang',user_lang());
 
-		$title=get_screen_title('IMPORT_NEWS');
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_import_news','old_type'=>get_param('type','')),'_SELF');
 		$submit_name=do_lang_tempcode('IMPORT_NEWS');
 
@@ -730,7 +752,7 @@ class Module_cms_news extends standard_crud_module
 		$hidden->attach(form_input_hidden('lang',$lang));
 		handle_max_file_size($hidden);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'4ac8c667fa38c1e6338eedcb138e7fd4','TITLE'=>$title,'TEXT'=>do_lang_tempcode('IMPORT_NEWS_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'4ac8c667fa38c1e6338eedcb138e7fd4','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('IMPORT_NEWS_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -742,16 +764,11 @@ class Module_cms_news extends standard_crud_module
 	{
 		check_privilege('mass_import');
 
-		$title=get_screen_title('IMPORT_NEWS');
-
 		require_code('news2');
 
 		import_rss();
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_NEWS'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
-		return inform_screen($title,do_lang_tempcode('IMPORT_NEWS_DONE'));
+		return inform_screen($this->title,do_lang_tempcode('IMPORT_NEWS_DONE'));
 	}
 }
 
@@ -790,7 +807,6 @@ class Module_cms_news_cat extends standard_crud_module
 		}
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),
@@ -1005,45 +1021,43 @@ class Module_cms_news_cat extends standard_crud_module
 	 */
 	function _do_next_manager($title,$description,$id=NULL,$cat=NULL)
 	{
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		require_code('templates_donext');
 
 		if ((is_null($id)) && (is_null($cat)))
 		{
 			return do_next_manager($title,$description,
-						NULL,
-						NULL,
-						/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-						/*	 page	 params				  zone	  */
-						array('_SELF',array('type'=>'ad'),'_SELF'),							// Add one
-						NULL,							 // Edit this
-						has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
-						NULL,							// View this
-						array('news',array('type'=>'misc'),get_module_zone('news')),									 // View archive
-						NULL,	  // Add to category
-						has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
-						NULL,			 // Edit this category
-						NULL																						 // View this category
+				NULL,
+				NULL,
+				/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+				/*	 page	 params				  zone	  */
+				array('_SELF',array('type'=>'ad'),'_SELF'),							// Add one
+				NULL,							 // Edit this
+				has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+				NULL,							// View this
+				array('news',array('type'=>'misc'),get_module_zone('news')),									 // View archive
+				NULL,	  // Add to category
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
+				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+				NULL,			 // Edit this category
+				NULL																						 // View this category
 			);
 		}
 
 		return do_next_manager($title,$description,
-					NULL,
-					NULL,
-					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-					/*	 page	 params				  zone	  */
-					array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),							// Add one
-					(is_null($id) || (!has_privilege(get_member(),'edit_own_highrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
-					has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
-					is_null($id)?NULL:array('news',array('type'=>'view','id'=>$id),get_module_zone('news')),							// View this
-					array('news',array('type'=>'misc'),get_module_zone('news')),									 // View archive
-					(!is_null($id))?NULL:array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),	  // Add to category
-					has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-					has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
-					is_null($cat)?NULL:has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
-					NULL																						 // View this category
+			NULL,
+			NULL,
+			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+			/*	 page	 params				  zone	  */
+			array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),							// Add one
+			(is_null($id) || (!has_privilege(get_member(),'edit_own_highrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
+			has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+			is_null($id)?NULL:array('news',array('type'=>'view','id'=>$id),get_module_zone('news')),							// View this
+			array('news',array('type'=>'misc'),get_module_zone('news')),									 // View archive
+			(!is_null($id))?NULL:array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),	  // Add to category
+			has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
+			has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+			is_null($cat)?NULL:has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
+			NULL																						 // View this category
 		);
 	}
 

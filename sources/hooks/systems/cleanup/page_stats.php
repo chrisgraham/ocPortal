@@ -52,8 +52,6 @@ class Hook_page_stats
 		$delete_older_than=post_param_integer('delete_older_than',NULL);
 		if (is_null($delete_older_than))
 		{
-			@ob_end_clean();
-
 			$delete_older_than=intval(get_option('stats_store_time'));
 
 			require_code('form_templates');

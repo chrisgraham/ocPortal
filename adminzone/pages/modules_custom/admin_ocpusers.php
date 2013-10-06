@@ -80,6 +80,20 @@ class Module_admin_ocpusers
 		return array('users'=>'OC_SITES_INSTALLED');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -102,7 +116,7 @@ class Module_admin_ocpusers
 	 */
 	function users()
 	{
-		$title=get_screen_title('OC_SITES_INSTALLED');
+		$this->title=get_screen_title('OC_SITES_INSTALLED');
 
 		$sortby=get_param('sortby','');
 
@@ -185,7 +199,7 @@ class Module_admin_ocpusers
 			$_rows->attach(do_template('OC_SITE',$rt));
 		}
 
-		$out=do_template('OC_SITES',array('_GUID'=>'7f4b56c730f2b613994a3fe6f00ed525','TITLE'=>$title,'ROWS'=>$_rows,'NAMEORD'=>$nameord,'ACPORD'=>$acpord,'KEYORD'=>$keyord,'VERORD'=>$versord));
+		$out=do_template('OC_SITES',array('_GUID'=>'7f4b56c730f2b613994a3fe6f00ed525','TITLE'=>$this->title,'ROWS'=>$_rows,'NAMEORD'=>$nameord,'ACPORD'=>$acpord,'KEYORD'=>$keyord,'VERORD'=>$versord));
 
 		return $out;
 	}

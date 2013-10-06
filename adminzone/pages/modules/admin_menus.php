@@ -130,6 +130,41 @@ class Module_admin_menus
 		return array('misc'=>'MENU_MANAGEMENT');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			set_helper_panel_pic('pagepics/menus');
+			set_helper_panel_tutorial('tut_menus');
+
+			$this->title=get_screen_title('MENU_MANAGEMENT');
+		}
+
+		if ($type=='edit')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MENU_MANAGEMENT'))));
+
+			$id=get_param('id',get_param('id_new',''));
+			$this->title=get_screen_title('_EDIT_MENU',true,array(escape_html($id)));
+		}
+
+		if ($type=='_edit')
+		{
+			$this->title=get_screen_title('_EDIT_MENU',true,array(escape_html(get_param('id'))));
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -162,11 +197,6 @@ class Module_admin_menus
 	 */
 	function get_menu_name()
 	{
-		set_helper_panel_pic('pagepics/menus');
-		set_helper_panel_tutorial('tut_menus');
-
-		$title=get_screen_title('MENU_MANAGEMENT');
-
 		require_code('form_templates');
 		$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
 		$list=new ocp_tempcode();//form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
@@ -198,7 +228,7 @@ class Module_admin_menus
 			'_GUID'=>'f3c04ea3fb5e429210c5e33e5a2f2092',
 			'GET'=>true,
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'HIDDEN'=>'',
 			'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),
 			'FIELDS'=>$fields,
@@ -219,8 +249,6 @@ class Module_admin_menus
 		$id=get_param('id','');
 		if ($id=='') $id=get_param('id_new');
 		if (substr($id,0,1)=='_') warn_exit(do_lang_tempcode('MENU_UNDERSCORE_RESERVED'));
-
-		$title=get_screen_title('_EDIT_MENU',true,array(escape_html($id)));
 
 		$clickable_sections=(get_param_integer('clickable_sections',0)==1); // This is set to '1 if we have a menu type where pop out sections may be clicked on to be loaded. If we do then we make no UI distinction between page nodes and contracted/expanded, so people don't get compelled to choose a URL for everything, it simply becomes an option for them.
 
@@ -303,8 +331,6 @@ class Module_admin_menus
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MENU_MANAGEMENT'))));
-
 		$all_menus=array();
 		$menu_rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
 		foreach ($menu_rows as $menu_row)
@@ -325,7 +351,7 @@ class Module_admin_menus
 			'URL'=>$post_url,
 			'CHILD_BRANCH_TEMPLATE'=>$child_branch_template,
 			'ROOT_BRANCH'=>$root_branch,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 		));
 	}
 
@@ -399,8 +425,6 @@ class Module_admin_menus
 	 */
 	function _edit_menu()
 	{
-		$title=get_screen_title('_EDIT_MENU',true,array(escape_html(get_param('id'))));
-
 		post_param_integer('confirm'); // Just to make sure hackers don't try and get people to erase this form via a URL
 
 		$menu_id=get_param('id');
@@ -459,7 +483,7 @@ class Module_admin_menus
 			}
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**

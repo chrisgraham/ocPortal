@@ -1618,10 +1618,10 @@ function ecv_HELPER_PANEL_PIC($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_HELPER_PANEL_HTML($lang,$escaped,$param)
+function ecv_HELPER_PANEL_TEXT($lang,$escaped,$param)
 {
-	if ($GLOBALS['HELPER_PANEL_HTML']===NULL) $GLOBALS['HELPER_PANEL_HTML']='';
-	$value=$GLOBALS['HELPER_PANEL_HTML'];
+	if ($GLOBALS['HELPER_PANEL_TEXT']===NULL) $GLOBALS['HELPER_PANEL_TEXT']='';
+	$value=is_object($GLOBALS['HELPER_PANEL_TEXT'])?$GLOBALS['HELPER_PANEL_TEXT']->evaluate():$GLOBALS['HELPER_PANEL_TEXT'];
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
@@ -1635,12 +1635,10 @@ function ecv_HELPER_PANEL_HTML($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_HELPER_PANEL_TEXT($lang,$escaped,$param)
+function ecv_HELPER_PANEL_HTML($lang,$escaped,$param) // LEGACY
 {
-	if ($GLOBALS['HELPER_PANEL_TEXT']===NULL) $GLOBALS['HELPER_PANEL_TEXT']='';
-	$value=is_object($GLOBALS['HELPER_PANEL_TEXT'])?$GLOBALS['HELPER_PANEL_TEXT']->evaluate():$GLOBALS['HELPER_PANEL_TEXT'];
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
+	$value='';
+	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
 }
 

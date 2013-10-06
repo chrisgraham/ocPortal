@@ -370,7 +370,6 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL,$
 	if (is_null($country)) // We will do this by looping through each country, recursing back into this function to do just this country. This will take about 5 hours to run, so it's important to be able to do in a measured way.
 	{
 		$countries=$GLOBALS['SITE_DB']->query_select('locations',array('DISTINCT l_country'),NULL,'ORDER BY l_country');
-		@ob_end_clean();
 		foreach ($countries as $country)
 		{
 			create_catalogue_category_tree($catalogue_name,$country['l_country'],$fixup);

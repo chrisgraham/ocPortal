@@ -53,6 +53,31 @@ class Module_admin
 		return array('misc'=>'ADMIN_ZONE','structure'=>'STRUCTURE','usage'=>'USAGE','style'=>'STYLE','setup'=>'SETUP','tools'=>'TOOLS','security'=>'SECURITY_GROUP_SETUP');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$this->simplified=(((!has_privilege(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE));
+
+		if ($this->simplified)
+		{
+			breadcrumb_set_self(do_lang_tempcode('CMS'));
+			set_helper_panel_text(do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN'));
+		} else
+		{
+			breadcrumb_set_self(do_lang_tempcode(($type=='misc')?'ADMIN_ZONE':strtoupper($type)));
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -68,7 +93,7 @@ class Module_admin
 
 		$type=get_param('type','misc');
 
-		if (((!has_privilege(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE))
+		if ($this->simplified)
 		{
 			if ($type=='misc') return do_next_manager_admin_simplified();
 		}

@@ -97,22 +97,21 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 	$GLOBALS['HELPER_PANEL_PIC']=NULL;
 	$GLOBALS['HELPER_PANEL_TEXT']=NULL;
 	$GLOBALS['HELPER_PANEL_TUTORIAL']=NULL;
-	$GLOBALS['HELPER_PANEL_HTML']=NULL;
 
 	// CSS
 	if (substr($special_page_type,-4)=='.css')
 	{
 		$url=build_url(array('page'=>'admin_themes','type'=>'edit_css','theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'file'=>$special_page_type,'keep_wide_high'=>1),get_module_zone('admin_themes'));
-		header('Location: '.$url->evaluate());
-		exit();
+		require_code('site2');
+		smart_redirect($url->evaluate());
 	}
 
 	// Site Tree Editor
 	if ($special_page_type=='site_tree')
 	{
 		$url=build_url(array('page'=>'admin_sitetree','type'=>'site_tree','id'=>get_zone_name().':'.get_page_name()),get_module_zone('admin_sitetree'));
-		header('Location: '.$url->evaluate());
-		exit();
+		require_code('site2');
+		smart_redirect($url->evaluate());
 	}
 
 	// IDE linkage
@@ -709,7 +708,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 		if ($char=='\'') $char='&#039;';
 		if ((is_null($level_ranges)) && ($char==' ')) $char='&nbsp;';
 		if ((is_null($level_ranges)) && ($char=="\t")) $char='&nbsp;&nbsp;&nbsp;';
-//			if ($char==' ') $char='&nbsp;';
+		//if ($char==' ') $char='&nbsp;';
 		if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($char);
 		echo $char;
 
@@ -773,7 +772,6 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 	if (!$ret)
 	{
 		$echo=globalise(make_string_tempcode(ob_get_contents()),NULL,'',true);
-		@ob_end_clean();
 		$echo->evaluate_echo();
 		exit();
 	}

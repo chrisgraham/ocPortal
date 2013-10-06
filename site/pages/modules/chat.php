@@ -282,6 +282,111 @@ class Module_chat
 		return array($matches[3],'chat');
 	}
 
+	var $title;
+	var $room_id;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			set_feed_url('?mode=chat&filter=');
+
+			$this->title=get_screen_title($GLOBALS['IS_ACTUALLY_ADMIN']?'SU_CHATTING_AS':'CHAT_LOBBY',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
+		}
+
+		if ($type=='room')
+		{
+			$room_id=get_param_integer('id',db_get_first_id());
+			set_feed_url('?mode=chat&filter='.strval($room_id));
+			$this->room_id=$room_id;
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
+
+			$this->title=get_screen_title('ROOM');
+		}
+
+		if ($type=='download_logs')
+		{
+			inform_non_canonical_parameter('id');
+
+			$this->title=get_screen_title('CHAT_DOWNLOAD_LOGS');
+		}
+
+		if ($type=='misc' && $type=='room')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
+		}
+
+		if ($type=='chat_private')
+		{
+			$this->title=get_screen_title('CREATE_PRIVATE_ROOM');
+		}
+
+		if ($type=='_chat_private')
+		{
+			$this->title=get_screen_title('CREATE_PRIVATE_ROOM');
+		}
+
+		if ($type=='blocking_interface')
+		{
+			$this->title=get_screen_title('MEMBER_BLOCKING');
+		}
+
+		if ($type=='blocking_set')
+		{
+			$this->title=get_screen_title('MEMBER_BLOCKING');
+		}
+
+		if ($type=='blocking_add')
+		{
+			$this->title=get_screen_title('BLOCK_MEMBER');
+		}
+
+		if ($type=='blocking_remove')
+		{
+			$this->title=get_screen_title('UNBLOCK_MEMBER');
+		}
+
+		if ($type=='friend_add')
+		{
+			$this->title=get_screen_title('MAKE_FRIEND');
+		}
+
+		if ($type=='friend_remove')
+		{
+			$this->title=get_screen_title('DUMP_FRIEND');
+		}
+
+		if ($type=='chat_save_options')
+		{
+			$this->title=get_screen_title('ROOM');
+		}
+
+		if ($type=='_chat_download_logs')
+		{
+			$this->title=get_screen_title('CHAT_DOWNLOAD_LOGS');
+		}
+
+		if ($type=='set_effects')
+		{
+			$this->title=get_screen_title('CHAT_SET_EFFECTS');
+		}
+
+		if ($type=='_set_effects')
+		{
+			$this->title=get_screen_title('CHAT_SET_EFFECTS');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -290,9 +395,6 @@ class Module_chat
 	function run()
 	{
 		if (!has_js()) warn_exit(do_lang_tempcode('MSG_JS_NEEDED'));
-
-		// What action are we going to do?
-		$type=get_param('type','misc');
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_chat');
@@ -304,6 +406,9 @@ class Module_chat
 		require_lang('chat');
 		require_code('chat');
 		require_css('chat');
+
+		// What action are we going to do?
+		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->chat_lobby();
 		if ($type=='room') return $this->chat_room();
@@ -369,10 +474,6 @@ class Module_chat
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_events WHERE e_date_and_time<'.strval(time()-CHAT_EVENT_PRUNE));
 
 		enter_chat_lobby();
-
-		// Generic stuff: Title, feed URL
-		$title=get_screen_title($GLOBALS['IS_ACTUALLY_ADMIN']?'SU_CHATTING_AS':'CHAT_LOBBY',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
-		set_feed_url('?mode=chat&filter=');
 
 		// Rooms
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im'=>0),'ORDER BY room_name DESC',200);
@@ -456,7 +557,7 @@ class Module_chat
 
 		return do_template('CHAT_LOBBY_SCREEN',array(
 			'_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'ADD_ROOM_URL'=>$add_room_url,
 			'MESSAGE'=>$message,
 			'CHAT_SOUND'=>get_chat_sound_tpl(),
@@ -489,8 +590,7 @@ class Module_chat
 
 		$prefs=@$_COOKIE['ocp_chat_prefs'];
 		$prefs=@explode(';',$prefs);
-		$room_id=get_param_integer('id',1);
-		set_feed_url('?mode=chat&filter='.strval($room_id));
+		$room_id=$this->room_id;
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id'=>$room_id),'',1);
 		if (!array_key_exists(0,$room_check))
 		{
@@ -547,8 +647,6 @@ class Module_chat
 		$messages_php=find_script('messages');
 		$debug=(get_param_integer('debug',0)==1)?'block':'none';
 
-		$title=get_screen_title('ROOM');
-
 		$mod_link=new ocp_tempcode();
 		if (has_actual_page_access(get_member(),'cms_chat',NULL,array('chat',strval($room_id)),array('edit_lowrange_content',($room_check[0]['room_owner']==get_member())?'moderate_my_private_rooms':NULL)))
 		{
@@ -574,8 +672,6 @@ class Module_chat
 
 		$links=array($admin_link,$mod_link,$refresh_link,$download_link,$seteffects_link);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
-
 		return do_template('CHAT_ROOM_SCREEN',array(
 			'_GUID'=>'867a0b050c050c81d33482d131783eb0',
 			'CHATTERS'=>get_chatters_in_room_tpl(get_chatters_in_room($room_id)),
@@ -596,7 +692,7 @@ class Module_chat
 			'POSTING_URL'=>$posting_url,
 			'SUBMIT_VALUE'=>$posting_name,
 			'INTRODUCTION'=>'',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'LINKS'=>$links,
 		));
 	}
@@ -614,9 +710,6 @@ class Module_chat
 
 		check_privilege('create_private_room');
 
-		// This function instantiates a private room...WE MUST BE TIGHT ON SECURITY WITH THIS ONE!
-		$title=get_screen_title('CREATE_PRIVATE_ROOM');
-
 		require_code('form_templates');
 
 		url_default_parameters__enable();
@@ -628,9 +721,7 @@ class Module_chat
 		$text=paragraph(do_lang_tempcode('CHAT_PRIVATE_ROOM_DESCRIPTION',display_time_period(60*intval(get_option('chat_private_room_deletion_time')))));
 		if (intval(get_option('chat_private_room_deletion_time'))==0) $text=new ocp_tempcode();
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'5697add8e81f641559a212697d35a470','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'5697add8e81f641559a212697d35a470','HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
 	}
 
 	/**
@@ -640,8 +731,6 @@ class Module_chat
 	 */
 	function _chat_private()
 	{
-		$title=get_screen_title('CREATE_PRIVATE_ROOM');
-
 		require_code('chat2');
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
@@ -692,7 +781,7 @@ class Module_chat
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$new_room_id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -703,8 +792,6 @@ class Module_chat
 	function blocking_interface()
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
-
-		$title=get_screen_title('MEMBER_BLOCKING');
 
 		require_code('form_templates');
 
@@ -728,9 +815,7 @@ class Module_chat
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'blocking_set'),'_SELF');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'74e0700f4d2b52d71a0cbf8eb3045ecf','TITLE'=>$title,'HIDDEN'=>'','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('ABOUT_BLOCKING'),'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'FIELDS'=>$fields,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'74e0700f4d2b52d71a0cbf8eb3045ecf','TITLE'=>$this->title,'HIDDEN'=>'','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('ABOUT_BLOCKING'),'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'FIELDS'=>$fields,'URL'=>$post_url));
 	}
 
 	/**
@@ -741,8 +826,6 @@ class Module_chat
 	function blocking_set()
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
-
-		$title=get_screen_title('MEMBER_BLOCKING');
 
 		$blocked=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>get_member()));
 
@@ -764,11 +847,9 @@ class Module_chat
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
 		$_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		$url=$_url->evaluate();
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -783,16 +864,14 @@ class Module_chat
 		$member_id=get_param_integer('member_id',NULL);
 		if (!is_null($member_id))
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 			if (strpos(do_lang($action),'{1}')!==false)
 			{
 				$preview=do_lang_tempcode($action,escape_html($param));
-				$title=get_screen_title($preview,false);
+				$this->title=get_screen_title($preview,false);
 			} else
 			{
-				$title=get_screen_title($action);
+				$this->title=get_screen_title($action);
 				$preview=do_lang_tempcode('PERFORM_ACTION_ON_PREVIEW',do_lang_tempcode($action),escape_html($param));
 			}
 			$fields=form_input_hidden('member_id',strval($member_id));
@@ -800,7 +879,7 @@ class Module_chat
 			$redirect=get_param('redirect','');
 			if ($redirect!='') $map['redirect']=$redirect;
 			$url=build_url($map,'_SELF');
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'3b76b0e41541d5a38671134e92128d9f','TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'PREVIEW'=>$preview));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'3b76b0e41541d5a38671134e92128d9f','TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$url,'PREVIEW'=>$preview));
 		}
 		return NULL;
 	}
@@ -814,8 +893,6 @@ class Module_chat
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		$title=get_screen_title('BLOCK_MEMBER');
-
 		$member_id=either_param_integer('member_id');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 
@@ -827,14 +904,12 @@ class Module_chat
 		require_code('chat2');
 		blocking_add(get_member(),$member_id);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
 		$url=get_param('redirect','');
 		if ($url=='')
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -846,10 +921,6 @@ class Module_chat
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		$lang='UNBLOCK_MEMBER';
-
-		$title=get_screen_title($lang);
-
 		$member_id=either_param_integer('member_id');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 
@@ -859,14 +930,12 @@ class Module_chat
 		require_code('chat2');
 		blocking_remove(get_member(),$member_id);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
 		$url=get_param('redirect','');
 		if ($url=='')
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -877,8 +946,6 @@ class Module_chat
 	function friend_add()
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
-
-		$title=get_screen_title('MAKE_FRIEND');
 
 		$member_id=either_param_integer('member_id',NULL);
 		if (is_null($member_id))
@@ -903,14 +970,12 @@ class Module_chat
 		require_code('chat2');
 		friend_add(get_member(),$member_id);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
 		$url=get_param('redirect','');
 		if ($url=='')
 		{
-			return inform_screen($title,do_lang_tempcode('NOW_ADDED_AS_FRIEND',escape_html($username)));
+			return inform_screen($this->title,do_lang_tempcode('NOW_ADDED_AS_FRIEND',escape_html($username)));
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('NOW_ADDED_AS_FRIEND',escape_html($username)));
+		return redirect_screen($this->title,$url,do_lang_tempcode('NOW_ADDED_AS_FRIEND',escape_html($username)));
 	}
 
 	/**
@@ -921,8 +986,6 @@ class Module_chat
 	function friend_remove()
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
-
-		$title=get_screen_title('DUMP_FRIEND');
 
 		$member_id=either_param_integer('member_id',NULL);
 		if (is_null($member_id))
@@ -955,14 +1018,12 @@ class Module_chat
 			friend_remove(get_member(),$member_id);
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
 		$url=get_param('redirect','');
 		if ($url=='')
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -972,14 +1033,12 @@ class Module_chat
 	 */
 	function chat_save_options()
 	{
-		$title=get_screen_title('ROOM');
-
 		$value=post_param('text_colour',get_option('chat_default_post_colour')).';'.post_param('font_name',get_option('chat_default_post_font')).';';
 		require_code('users_active_actions');
 		ocp_setcookie('ocp_chat_prefs',$value);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>get_param_integer('id'),'no_reenter_message'=>1),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -989,10 +1048,6 @@ class Module_chat
 	 */
 	function chat_download_logs()
 	{
-		$title=get_screen_title('CHAT_DOWNLOAD_LOGS');
-
-		inform_non_canonical_parameter('id');
-
 		$chatrooms=chat_get_all_rooms();
 		$select=new ocp_tempcode();
 		$select_by_default=get_param_integer('id',NULL);
@@ -1012,9 +1067,7 @@ class Module_chat
 
 		if (count($chatrooms)==0) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'6741ef01d1c6dd8d2de9be3290666db7','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'6741ef01d1c6dd8d2de9be3290666db7','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>''));
 	}
 
 	/**
@@ -1024,8 +1077,6 @@ class Module_chat
 	 */
 	function _chat_download_logs()
 	{
-		$title=get_screen_title('CHAT_DOWNLOAD_LOGS');
-
 		$start_date_and_time=get_input_date('start',true);
 		$finish_date_and_time=get_input_date('finish',true);
 
@@ -1033,11 +1084,11 @@ class Module_chat
 
 		// We have the messages, now we have to create a nice little text file...
 		$keep=symbol_tempcode('KEEP');
-		$mod_link=find_script('dllogs').'?room='.strval($room).'&start='.strval($start_date_and_time).'&finish='.strval($finish_date_and_time).'&zone='.get_zone_name().$keep->evaluate();
+		$mod_url=find_script('dllogs').'?room='.strval($room).'&start='.strval($start_date_and_time).'&finish='.strval($finish_date_and_time).'&zone='.get_zone_name().$keep->evaluate();
 
 		require_code('site2');
-		assign_refresh($mod_link,0.0);
-		return do_template('REDIRECT_SCREEN',array('_GUID'=>'227be0596e721d4cbab81b707b6d6ba1','URL'=>$mod_link,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		assign_refresh($mod_url,0.0);
+		return redirect_screen($this->title,$mod_url);
 	}
 
 	/**
@@ -1047,11 +1098,7 @@ class Module_chat
 	 */
 	function set_effects()
 	{
-		$title=get_screen_title('CHAT_SET_EFFECTS');
-
 		require_code('chat_sounds');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
@@ -1127,7 +1174,7 @@ class Module_chat
 		require_code('form_templates');
 		handle_max_file_size($hidden);
 
-		return do_template('CHAT_SET_EFFECTS_SCREEN',array('_GUID'=>'f965b4376d603fc14dbcac7fb3c5580d','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'HIDDEN'=>$hidden,'POST_URL'=>$post_url,'SETTING_BLOCKS'=>$setting_blocks));
+		return do_template('CHAT_SET_EFFECTS_SCREEN',array('_GUID'=>'f965b4376d603fc14dbcac7fb3c5580d','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'HIDDEN'=>$hidden,'POST_URL'=>$post_url,'SETTING_BLOCKS'=>$setting_blocks));
 	}
 
 	/**
@@ -1137,11 +1184,7 @@ class Module_chat
 	 */
 	function _set_effects()
 	{
-		$title=get_screen_title('CHAT_SET_EFFECTS');
-
 		require_code('chat_sounds');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
 		require_code('uploads');
 
@@ -1206,12 +1249,12 @@ class Module_chat
 		$redirect=post_param('redirect',NULL);
 		if (is_null($redirect))
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		} else
 		{
 			require_code('site2');
 			assign_refresh($redirect,0.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'6bcc5c60f9b75e9dca719a5db8d24491','URL'=>$redirect,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('SUCCESS')));
+			return redirect_screen($this->title,$redirect,do_lang_tempcode('SUCCESS'));
 		}
 	}
 }

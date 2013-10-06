@@ -51,6 +51,59 @@ class Module_admin_ocf_history
 		return array('misc'=>'POST_HISTORY');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$member_id=get_param_integer('member_id',-1);
+			$post_id=get_param_integer('post_id',-1);
+			$topic_id=get_param_integer('topic_id',-1);
+
+			if ($member_id!=-1)
+			{
+				$this->title=get_screen_title('POST_HISTORY_MEMBER');
+			}
+			if ($post_id!=-1)
+			{
+				$this->title=get_screen_title('POST_HISTORY_POST');
+			}
+			if ($topic_id!=-1)
+			{
+				$this->title=get_screen_title('POST_HISTORY_TOPIC');
+			}
+			if (count($where)==0)
+			{
+				$this->title=get_screen_title('POST_HISTORY');
+			}
+		}
+
+		if ($type=='restore')
+		{
+			$this->title=get_screen_title('POST_HISTORY');
+		}
+
+		if ($type=='revert')
+		{
+			$this->title=get_screen_title('POST_HISTORY');
+		}
+
+		if ($type=='delete')
+		{
+			$this->title=get_screen_title('POST_HISTORY');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -88,22 +141,18 @@ class Module_admin_ocf_history
 		if ($member_id!=-1)
 		{
 			$where['h_owner_member_id']=$member_id;
-			$title=get_screen_title('POST_HISTORY_MEMBER');
 		}
 		if ($post_id!=-1)
 		{
 			$where['h_post_id']=$post_id;
-			$title=get_screen_title('POST_HISTORY_POST');
 		}
 		if ($topic_id!=-1)
 		{
 			$where['h_topic_id']=$topic_id;
-			$title=get_screen_title('POST_HISTORY_TOPIC');
 		}
 		if (count($where)==0)
 		{
 			$where=NULL;
-			$title=get_screen_title('POST_HISTORY');
 		}
 
 		$start=get_param_integer('start',0);
@@ -211,7 +260,7 @@ class Module_admin_ocf_history
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('POST_HISTORY'),$start,'start',$max,'max',$max_rows);
 
-		$tpl=do_template('OCF_HISTORY_SCREEN',array('_GUID'=>'7dd45ce985fc7222771368336c3f19e4','PAGINATION'=>$pagination,'TITLE'=>$title,'CONTENT'=>$content));
+		$tpl=do_template('OCF_HISTORY_SCREEN',array('_GUID'=>'7dd45ce985fc7222771368336c3f19e4','PAGINATION'=>$pagination,'TITLE'=>$this->title,'CONTENT'=>$content));
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
@@ -225,8 +274,6 @@ class Module_admin_ocf_history
 	{
 		check_privilege('restore_content_history');
 
-		$title=get_screen_title('POST_HISTORY');
-
 		$id=get_param_integer('h_id');
 		$post=$GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$post)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -238,7 +285,7 @@ class Module_admin_ocf_history
 		ocf_make_post($post['h_topic_id'],'',$post['h_before'],0,false,1,0,$owner_username,NULL,$post['h_create_date_and_time'],$post['h_owner_member_id'],NULL,time(),get_member(),false,true,NULL,true,'',0,NULL,false,false,false,false,NULL,false);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,true);
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -249,8 +296,6 @@ class Module_admin_ocf_history
 	function revert()
 	{
 		check_privilege('restore_content_history');
-
-		$title=get_screen_title('POST_HISTORY');
 
 		$id=get_param_integer('h_id');
 		$post=$GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),array('id'=>$id),'',1);
@@ -265,7 +310,7 @@ class Module_admin_ocf_history
 		ocf_edit_post($post['h_post_id'],$post2['p_validated'],$post2['p_title'],$post['h_before'],0,$post2['p_is_emphasised'],$post2['p_intended_solely_for'],false,false,do_lang('REVERT_HISTORY_POST'));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,true);
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -277,12 +322,10 @@ class Module_admin_ocf_history
 	{
 		check_privilege('delete_content_history');
 
-		$title=get_screen_title('POST_HISTORY');
-
 		$GLOBALS['FORUM_DB']->query_delete('f_post_history',array('id'=>get_param_integer('h_id')),'',1);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,true);
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

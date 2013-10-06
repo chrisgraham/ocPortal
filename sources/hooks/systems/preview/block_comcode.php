@@ -41,7 +41,7 @@ class Hook_Preview_block_comcode
 	 */
 	function run()
 	{
-		if (!has_privilege(get_member(),'comcode_dangerous')) exit();
+		if (!has_privilege(get_member(),'comcode_dangerous')) access_denied('I_ERROR');
 
 		require_code('zones2');
 		require_code('zones3');

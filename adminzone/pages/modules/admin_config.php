@@ -71,6 +71,95 @@ class Module_admin_config
 		return $ret;
 	}
 
+	var $title;
+	var $category;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			set_helper_panel_pic('pagepics/config');
+			set_helper_panel_tutorial('tut_adv_configuration');
+
+			$this->title=get_screen_title('CONFIGURATION');
+		}
+
+		if ($type=='category')
+		{
+			/*set_helper_panel_pic('pagepics/config');		Actually let's save the space
+			set_helper_panel_tutorial('tut_adv_configuration');*/
+
+			$category=get_param('id');
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONFIGURATION'))));
+			breadcrumb_set_self(do_lang_tempcode('CONFIG_CATEGORY_'.$category));
+
+			$this->title=get_screen_title(do_lang_tempcode('CONFIG_CATEGORY_'.$category),false);
+
+			$this->category=$category;
+		}
+
+		if ($type=='set')
+		{
+			$category=get_param('id','MAIN');
+			$this->title=get_screen_title(do_lang_tempcode('CONFIG_CATEGORY_'.$category),false);
+		}
+
+		if ($type=='base')
+		{
+			$this->title=get_screen_title('CONFIGURATION');
+		}
+
+		if ($type=='upgrader')
+		{
+			$this->title=get_screen_title('FU_UPGRADER_TITLE');
+		}
+
+		if ($type=='backend')
+		{
+			$this->title=get_screen_title('FEEDS');
+		}
+
+		if ($type=='code_editor')
+		{
+			$this->title=get_screen_title('CODE_EDITOR');
+		}
+
+		if ($type=='xml_fields')
+		{
+			set_helper_panel_tutorial('tut_fields_filter');
+			set_helper_panel_text(comcode_lang_string('DOC_FIELD_FILTERS'));
+
+			$this->title=get_screen_title('FIELD_FILTERS');
+		}
+
+		if ($type=='_xml_fields')
+		{
+			$this->title=get_screen_title('FIELD_FILTERS');
+		}
+
+		if ($type=='xml_breadcrumbs')
+		{
+			set_helper_panel_tutorial('tut_structure');
+			set_helper_panel_text(comcode_lang_string('DOC_BREADCRUMB_OVERRIDES'));
+
+			$this->title=get_screen_title('BREADCRUMB_OVERRIDES');
+		}
+
+		if ($type=='_xml_breadcrumbs')
+		{
+			$this->title=get_screen_title('BREADCRUMB_OVERRIDES');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -122,11 +211,6 @@ class Module_admin_config
 	 */
 	function config_choose()
 	{
-		set_helper_panel_pic('pagepics/config');
-		set_helper_panel_tutorial('tut_adv_configuration');
-
-		$title=get_screen_title('CONFIGURATION');
-
 		// Find all categories
 		$hooks=find_all_hooks('systems','config');
 		$categories=array();
@@ -201,7 +285,7 @@ class Module_admin_config
 		// Wrapper
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array(
 			'_GUID'=>'c8fdb2b481625d58b0b228c897fda72f',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'PRE'=>paragraph(do_lang_tempcode('CHOOSE_A_CONFIG_CATEGORY')),
 			'CONTENT'=>$categories_tpl,
 			'POST'=>'',
@@ -218,12 +302,9 @@ class Module_admin_config
 		require_javascript('javascript_validation');
 
 		// Load up some basic details
-		$category=get_param('id');
-		$title=get_screen_title(do_lang_tempcode('CONFIG_CATEGORY_'.$category),false);
+		$category=$this->category;
 		$post_url=build_url(array('page'=>'_SELF','type'=>'set','id'=>$category,'redirect'=>get_param('redirect',NULL)),'_SELF');
 		$category_description=do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$category);
-		/*set_helper_panel_pic('pagepics/config');		Actually let's save the space
-		set_helper_panel_tutorial('tut_adv_configuration');*/
 
 		// Find all options in category
 		$hooks=find_all_hooks('systems','config');
@@ -496,10 +577,6 @@ class Module_admin_config
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		// Breadcrumbs
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONFIGURATION'))));
-		breadcrumb_set_self(do_lang_tempcode('CONFIG_CATEGORY_'.$category));
-
 		// Render
 		return do_template('CONFIG_CATEGORY_SCREEN',array(
 			'_GUID'=>'d01b28b71c38bbb52b6aaf877c7f7b0e',
@@ -507,7 +584,7 @@ class Module_admin_config
 			'_GROUPS'=>$_groups,
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'URL'=>$post_url,
 			'GROUPS'=>$groups_tempcode,
 			'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),
@@ -524,7 +601,6 @@ class Module_admin_config
 		global $CONFIG_OPTIONS_CACHE;
 
 		$category=get_param('id','MAIN');
-		$title=get_screen_title(do_lang_tempcode('CONFIG_CATEGORY_'.$category),false);
 
 		// Make sure we haven't locked ourselves out due to clean URL support
 		if ((post_param('url_scheme','RAW')!='RAW') && (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') && ((!file_exists(get_file_base().'/.htaccess')) || (strpos(file_get_contents(get_file_base().'/.htaccess'),'RewriteEngine on')===false)))
@@ -665,7 +741,7 @@ class Module_admin_config
 		{
 			$url=make_string_tempcode($redirect);
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -675,10 +751,10 @@ class Module_admin_config
 	 */
 	function base()
 	{
-		$title=get_screen_title('CONFIGURATION');
 		require_code('site2');
-		assign_refresh(get_base_url().'/config_editor.php',0.0);
-		return do_template('REDIRECT_SCREEN',array('_GUID'=>'66b1e7b5d84a48677c12cb83b240d1c5','URL'=>get_base_url().'/config_editor.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		$url=get_base_url().'/config_editor.php';
+		assign_refresh($url,0.0);
+		return redirect_screen($this->title,$url);
 	}
 
 	/**
@@ -688,10 +764,10 @@ class Module_admin_config
 	 */
 	function upgrader()
 	{
-		$title=get_screen_title('FU_UPGRADER_TITLE');
 		require_code('site2');
-		assign_refresh(get_base_url().'/upgrader.php',0.0);
-		return do_template('REDIRECT_SCREEN',array('_GUID'=>'493b2a11c53ddb3af6eb5d73ec8a6244','URL'=>get_base_url().'/upgrader.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		$url=get_base_url().'/upgrader.php';
+		assign_refresh($url,0.0);
+		return redirect_screen($this->title,$url);
 	}
 
 	/**
@@ -701,10 +777,10 @@ class Module_admin_config
 	 */
 	function backend()
 	{
-		$title=get_screen_title('FEEDS');
 		require_code('site2');
-		assign_refresh(get_base_url().'/backend.php',0.0);
-		return do_template('REDIRECT_SCREEN',array('_GUID'=>'32b8840660b0ff990276ac4008da0f3a','URL'=>get_base_url().'/backend.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		$url=get_base_url().'/backend.php';
+		assign_refresh($url,0.0);
+		return redirect_screen($this->title,$url);
 	}
 
 	/**
@@ -714,10 +790,10 @@ class Module_admin_config
 	 */
 	function code_editor()
 	{
-		$title=get_screen_title('CODE_EDITOR');
 		require_code('site2');
-		assign_refresh(get_base_url().'/code_editor.php',0.0);
-		return do_template('REDIRECT_SCREEN',array('_GUID'=>'d9a0d9eefa1092e8b2604dce2378344f','URL'=>get_base_url().'/code_editor.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		$url=get_base_url().'/code_editor.php';
+		assign_refresh($url,0.0);
+		return redirect_screen($this->title,$url);
 	}
 
 	/**
@@ -727,16 +803,11 @@ class Module_admin_config
 	 */
 	function xml_fields()
 	{
-		set_helper_panel_tutorial('tut_fields_filter');
-		set_helper_panel_text(comcode_lang_string('DOC_FIELD_FILTERS'));
-
-		$title=get_screen_title('FIELD_FILTERS');
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_xml_fields'),'_SELF');
 
 		return do_template('XML_CONFIG_SCREEN',array(
 			'_GUID'=>'cc21f921ecbdbdf83e1e28d2b3f75a3a',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'POST_URL'=>$post_url,
 			'XML'=>file_exists(get_custom_file_base().'/data_custom/fields.xml')?file_get_contents(get_custom_file_base().'/data_custom/fields.xml'):'',
 		));
@@ -749,8 +820,6 @@ class Module_admin_config
 	 */
 	function _xml_fields()
 	{
-		$title=get_screen_title('FIELD_FILTERS');
-
 		$myfile=@fopen(get_custom_file_base().'/data_custom/fields.xml','at');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/fields.xml');
 		flock($myfile,LOCK_EX);
@@ -764,7 +833,7 @@ class Module_admin_config
 
 		log_it('FIELD_FILTERS');
 
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -774,16 +843,11 @@ class Module_admin_config
 	 */
 	function xml_breadcrumbs()
 	{
-		set_helper_panel_tutorial('tut_structure');
-		set_helper_panel_text(comcode_lang_string('DOC_BREADCRUMB_OVERRIDES'));
-
-		$title=get_screen_title('BREADCRUMB_OVERRIDES');
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_xml_breadcrumbs'),'_SELF');
 
 		return do_template('XML_CONFIG_SCREEN',array(
 			'_GUID'=>'456f56149832d459bce72ca63a1578b9',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'POST_URL'=>$post_url,
 			'XML'=>file_exists(get_custom_file_base().'/data_custom/breadcrumbs.xml')?file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml'):'',
 		));
@@ -796,8 +860,6 @@ class Module_admin_config
 	 */
 	function _xml_breadcrumbs()
 	{
-		$title=get_screen_title('BREADCRUMB_OVERRIDES');
-
 		$myfile=@fopen(get_custom_file_base().'/data_custom/breadcrumbs.xml','at');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/breadcrumbs.xml');
 		flock($myfile,LOCK_EX);
@@ -811,7 +873,7 @@ class Module_admin_config
 
 		log_it('BREADCRUMB_OVERRIDES');
 
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 }

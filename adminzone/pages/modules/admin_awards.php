@@ -113,6 +113,23 @@ class Module_admin_awards extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_AWARDS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/awards');
+		set_helper_panel_tutorial('tut_featured');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -121,9 +138,6 @@ class Module_admin_awards extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/awards');
-		set_helper_panel_tutorial('tut_featured');
-
 		require_code('awards');
 		require_code('awards2');
 
@@ -146,12 +160,12 @@ class Module_admin_awards extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_AWARDS'),comcode_lang_string('DOC_AWARDS'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_AWARD_TYPE')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_AWARD_TYPE')),
-					),
-					do_lang('MANAGE_AWARDS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_AWARD_TYPE')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_AWARD_TYPE')),
+			),
+			do_lang('MANAGE_AWARDS')
 		);
 	}
 
@@ -184,7 +198,6 @@ class Module_admin_awards extends standard_crud_module
 			$sortables['a_points']=do_lang_tempcode('POINTS');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title($hr,$sortables,'sort',$sortable.' '.$sort_order);
 

@@ -51,6 +51,25 @@ class Module_admin_debrand
 		return array('misc'=>'SUPER_DEBRAND');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/debrand');
+		set_helper_panel_text(comcode_lang_string('DOC_SUPERDEBRAND'));
+
+		$this->title=get_screen_title('SUPER_DEBRAND');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -62,9 +81,6 @@ class Module_admin_debrand
 
 		require_lang('debrand');
 		require_lang('config');
-
-		set_helper_panel_pic('pagepics/debrand');
-		set_helper_panel_text(comcode_lang_string('DOC_SUPERDEBRAND'));
 
 		$type=get_param('type','misc');
 		if ($type=='misc') return $this->misc();
@@ -80,8 +96,6 @@ class Module_admin_debrand
 	 */
 	function misc()
 	{
-		$title=get_screen_title('SUPER_DEBRAND');
-
 		require_code('form_templates');
 
 		$rebrand_name=get_value('rebrand_name');
@@ -120,7 +134,7 @@ class Module_admin_debrand
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$submit_name=do_lang_tempcode('SUPER_DEBRAND');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'fd47f191ac51f7754eb17e3233f53bcc','HIDDEN'=>'','TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('WARNING_SUPER_DEBRAND_MAJOR_CHANGES'),'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'fd47f191ac51f7754eb17e3233f53bcc','HIDDEN'=>'','TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('WARNING_SUPER_DEBRAND_MAJOR_CHANGES'),'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -268,11 +282,9 @@ class Module_admin_debrand
 				$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>$path[0]),array('id'=>'ocf_default_avatars/default_set/ocp_fanatic'));
 		}
 
-		$title=get_screen_title('SUPER_DEBRAND');
-
 		// Redirect them back to editing screen
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

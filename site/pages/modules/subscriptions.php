@@ -110,6 +110,32 @@ class Module_subscriptions
 		return ((is_guest()) || ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)')==0))?array():array('misc'=>'MY_SUBSCRIPTIONS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('MY_SUBSCRIPTIONS');
+		}
+
+		if ($type=='cancel')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MY_SUBSCRIPTIONS'))));
+
+			$this->title=get_screen_title('SUBSCRIPTION_CANCEL');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -140,8 +166,6 @@ class Module_subscriptions
 	 */
 	function my()
 	{
-		$title=get_screen_title('MY_SUBSCRIPTIONS');
-
 		$member_id=get_member();
 		if (has_privilege(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
 
@@ -165,7 +189,7 @@ class Module_subscriptions
 		}
 		if (count($subscriptions)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		return do_template('ECOM_SUBSCRIPTIONS_SCREEN',array('_GUID'=>'e39cd1883ba7b87599314c1f8b67902d','TITLE'=>$title,'SUBSCRIPTIONS'=>$subscriptions));
+		return do_template('ECOM_SUBSCRIPTIONS_SCREEN',array('_GUID'=>'e39cd1883ba7b87599314c1f8b67902d','TITLE'=>$this->title,'SUBSCRIPTIONS'=>$subscriptions));
 	}
 
 	/**
@@ -175,10 +199,6 @@ class Module_subscriptions
 	 */
 	function cancel()
 	{
-		$title=get_screen_title('SUBSCRIPTION_CANCEL');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MY_SUBSCRIPTIONS'))));
-
 		$id=get_param_integer('id');
 		$via=$GLOBALS['SITE_DB']->query_select_value('subscriptions','s_via',array('id'=>$id));
 
@@ -198,7 +218,7 @@ class Module_subscriptions
 		$GLOBALS['SITE_DB']->query_delete('subscriptions',array('id'=>$id,'s_member_id'=>get_member()),'',1);
 
 		$url=build_url(array('page'=>'_SELF'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

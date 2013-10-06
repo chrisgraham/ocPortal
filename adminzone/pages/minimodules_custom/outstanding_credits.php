@@ -111,7 +111,6 @@ if (!is_null($field_id))
 	$msg=do_lang_tempcode('TOTAL_UNSPENT_SUPPORT_CREDITS', strval($total));
 	$list=results_table(do_lang_tempcode('UNSPENT_SUPPORT_CREDITS'),$start,'start',$max,'max',$i,$fields_title,$fields_values,$sortables,$sortable,$sort_order,'sort',$msg);
 
-	breadcrumb_add_segment(do_lang_tempcode('UNSPENT_SUPPORT_CREDITS'));
 	$tpl=do_template('SUPPORT_CREDITS_OUTSTANDING_SCREEN',array('TITLE'=>$title,'DATA'=>$list));
 	$tpl->evaluate_echo();
 } else

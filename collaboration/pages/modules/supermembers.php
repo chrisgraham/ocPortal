@@ -79,6 +79,20 @@ class Module_supermembers
 	}
 
 	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$this->title=get_screen_title('SUPER_MEMBERS');
+
+		return NULL;
+	}
+
+	/**
 	 * Standard modular run function.
 	 *
 	 * @return tempcode	The result of execution.
@@ -88,8 +102,6 @@ class Module_supermembers
 		if (addon_installed('authors')) require_lang('authors');
 		if (addon_installed('points')) require_lang('points');
 		require_lang('supermembers');
-
-		$title=get_screen_title('SUPER_MEMBERS');
 
 		$message=get_option('supermembers_text');
 		if (has_actual_page_access(get_member(),'admin_config'))
@@ -154,7 +166,7 @@ class Module_supermembers
 			$groups->attach(do_template('SUPERMEMBERS_SCREEN_GROUP',array('_GUID'=>'d2cbe67dafa0dc9872f90fc8834d21ca','ENTRIES'=>$groups_current,'GROUP_NAME'=>$group_name)));
 		}
 
-		return do_template('SUPERMEMBERS_SCREEN',array('_GUID'=>'93b875bc00b094810ca9cc3e2f4968b8','TITLE'=>$title,'GROUPS'=>$groups,'TEXT'=>$text));
+		return do_template('SUPERMEMBERS_SCREEN',array('_GUID'=>'93b875bc00b094810ca9cc3e2f4968b8','TITLE'=>$this->title,'GROUPS'=>$groups,'TEXT'=>$text));
 	}
 
 }

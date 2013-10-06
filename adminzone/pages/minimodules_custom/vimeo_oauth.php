@@ -44,7 +44,7 @@ if ($oauth_token=='')
 	// Send off to authorize...
 	require_code('site2');
 	assign_refresh($auth_url,0.0);
-	$echo=do_template('REDIRECT_SCREEN',array('URL'=>$auth_url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+	$echo=redirect_screen($title,$auth_url);
 	$echo->evaluate_echo();
 	return;
 }

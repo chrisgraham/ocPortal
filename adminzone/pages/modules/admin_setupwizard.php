@@ -51,6 +51,35 @@ class Module_admin_setupwizard
 		return array('misc'=>'SETUP_WIZARD');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/configwizard');
+		set_helper_panel_tutorial('tut_configuration');
+
+		if ($type=='misc')
+		{
+			//breadcrumb_set_self(do_lang_tempcode('START'));
+		}
+
+		if ($type!='misc')
+		{
+			//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
+		}
+
+		$this->title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(max(10,intval(substr($type,4)))),integer_format(10)));
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,9 +88,6 @@ class Module_admin_setupwizard
 	function run()
 	{
 		$type=get_param('type','misc');
-
-		set_helper_panel_pic('pagepics/configwizard');
-		set_helper_panel_tutorial('tut_configuration');
 
 		require_lang('config');
 
@@ -87,8 +113,6 @@ class Module_admin_setupwizard
 	 */
 	function step1()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(1),integer_format(10)));
-
 		require_code('form_templates');
 
 		$dh=@opendir(get_custom_file_base().'/imports/addons/');
@@ -126,9 +150,7 @@ class Module_admin_setupwizard
 
 		$fields=new ocp_tempcode();
 
-		//breadcrumb_set_self(do_lang_tempcode('START'));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'71316d91703e3549301f57182405c997','SKIP_VALIDATION'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'71316d91703e3549301f57182405c997','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
 	}
 
 	/**
@@ -138,16 +160,12 @@ class Module_admin_setupwizard
 	 */
 	function step2()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(2),integer_format(10)));
-
 		require_code('form_templates');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step3'),'_SELF');
 		$submit_name=do_lang_tempcode('PROCEED');
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-
-		return do_template('SETUPWIZARD_2_SCREEN',array('_GUID'=>'2042f3786d10c7c5be5d38ea28942b47','SKIP_VALIDATION'=>true,'TITLE'=>$title,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('SETUPWIZARD_2_SCREEN',array('_GUID'=>'2042f3786d10c7c5be5d38ea28942b47','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -157,8 +175,6 @@ class Module_admin_setupwizard
 	 */
 	function step3()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(3),integer_format(10)));
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step4'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_3_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
@@ -214,9 +230,7 @@ class Module_admin_setupwizard
 		} else $include_ocp_advert=false;
 		$fields->attach(form_input_tick(do_lang_tempcode('INCLUDE_OCP_ADVERT'),do_lang_tempcode('DESCRIPTION_INCLUDE_OCP_ADVERT'),'include_ocp_advert',$include_ocp_advert));
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'3126441524b51cba6a1e0de336c8a9d5','SKIP_VALIDATION'=>true,'TITLE'=>$title,'SKIPPABLE'=>'skip_3','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3126441524b51cba6a1e0de336c8a9d5','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'SKIPPABLE'=>'skip_3','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
 	}
 
 	/**
@@ -226,8 +240,6 @@ class Module_admin_setupwizard
 	 */
 	function step4()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(4),integer_format(10)));
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step5'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_4_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
@@ -399,9 +411,7 @@ class Module_admin_setupwizard
 		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'00948cc876d0ecb8b511800eabd8cae2','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields.=$fields_advanced;
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'0f361a3ac0e020ba71f3a7a900eca0e4','SKIP_VALIDATION'=>true,'TITLE'=>$title,'SKIPPABLE'=>'skip_4','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0f361a3ac0e020ba71f3a7a900eca0e4','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'SKIPPABLE'=>'skip_4','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -411,8 +421,6 @@ class Module_admin_setupwizard
 	 */
 	function step5()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(5),integer_format(10)));
-
 		require_lang('menus');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step6'),'_SELF');
@@ -463,15 +471,13 @@ class Module_admin_setupwizard
 			$fields.=static_evaluate_tempcode($hook_fields);
 		}
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-
 		$js='var cuz=document.getElementById("collapse_user_zones"); var cuz_func=function() { var gza=document.getElementById("guest_zone_access"); gza.disabled=cuz.checked; if (cuz.checked) gza.checked=true; }; cuz.onchange=cuz_func; cuz_func();';
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'f1e9a4d271c7d68ff9da6dc0438f6e3f',
 			'SKIP_VALIDATION'=>true,
 			'JAVASCRIPT'=>$js,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SKIPPABLE'=>'skip_5',
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -488,8 +494,6 @@ class Module_admin_setupwizard
 	 */
 	function step6()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(6),integer_format(10)));
-
 		require_all_lang();
 
 		$installprofile=post_param('installprofile','');
@@ -594,12 +598,10 @@ class Module_admin_setupwizard
 			$fields.=$tmp->evaluate(); /*XHTMLXHTML*/
 		}
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'d463906b9e2cd8c37577d64783aa844c',
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SKIPPABLE'=>'skip_6',
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -629,8 +631,6 @@ class Module_admin_setupwizard
 	 */
 	function step7()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(7),integer_format(10)));
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>(addon_installed('themewizard') && (function_exists('imagecreatefromstring')))?'step8':'step9'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_7_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
@@ -650,15 +650,13 @@ class Module_admin_setupwizard
 		$list->attach(form_input_list_entry('corporate',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='corporate'):false,do_lang_tempcode('SETUP_WIZARD_RULES_corporate')));
 		$fields=form_input_list(do_lang_tempcode('RULES'),do_lang_tempcode('DESCRIPTION_RULES'),'rules',$list,NULL,true);
 		$javascript="document.getElementById('rules').onchange=function () { var items=['preview_box_balanced','preview_box_liberal','preview_box_corporate']; var i; for (i=0;i<items.length;i++) document.getElementById(items[i]).style.display=(this.selectedIndex!=i)?'none':'block'; }";
-		$form=do_template('FORM',array('_GUID'=>'bf01a2b90967e86213ae0672c36a4b4e','TITLE'=>$title,'SKIPPABLE'=>'skip_7','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),'JAVASCRIPT'=>$javascript));
+		$form=do_template('FORM',array('_GUID'=>'bf01a2b90967e86213ae0672c36a4b4e','SKIPPABLE'=>'skip_7','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),'JAVASCRIPT'=>$javascript));
 
 		$balanced=comcode_to_tempcode($this->get_rules_file('balanced'),NULL,true);
 		$liberal=comcode_to_tempcode($this->get_rules_file('liberal'),NULL,true);
 		$corporate=comcode_to_tempcode($this->get_rules_file('corporate'),NULL,true);
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-
-		return do_template('SETUPWIZARD_7_SCREEN',array('_GUID'=>'5e46c3a989e42fa6eec5a017e8c644c2','TITLE'=>$title,'FORM'=>$form,'BALANCED'=>$balanced,'LIBERAL'=>$liberal,'CORPORATE'=>$corporate));
+		return do_template('SETUPWIZARD_7_SCREEN',array('_GUID'=>'5e46c3a989e42fa6eec5a017e8c644c2','TITLE'=>$this->title,'FORM'=>$form,'BALANCED'=>$balanced,'LIBERAL'=>$liberal,'CORPORATE'=>$corporate));
 	}
 
 	/**
@@ -668,8 +666,6 @@ class Module_admin_setupwizard
 	 */
 	function step8()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(8),integer_format(10)));
-
 		require_lang('themes');
 		require_code('themewizard');
 
@@ -682,13 +678,11 @@ class Module_admin_setupwizard
 		$fields->attach(form_input_colour(do_lang_tempcode('SEED_COLOUR'),do_lang_tempcode('DESCRIPTION_SEED_COLOUR'),'seed_hex','#'.find_theme_seed('default'),true));
 		$fields->attach(form_input_tick(do_lang_tempcode('DARK_THEME'),do_lang_tempcode('DESCRIPTION_DARK_THEME'),'dark',get_param_integer('dark',0)==1));
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'7ef31eb9712cff98da57a92fc173f7af',
 			'PREVIEW'=>true,
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SKIPPABLE'=>'skip_8',
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -705,8 +699,6 @@ class Module_admin_setupwizard
 	 */
 	function step9()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(9),integer_format(10)));
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step10'),'_SELF');
 		$text=do_lang_tempcode('SETUP_WIZARD_9_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
@@ -718,12 +710,10 @@ class Module_admin_setupwizard
 
 		$javascript="document.getElementById('site_closed').onchange=function() { document.getElementById('closed').disabled=!this.checked; }";
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'c405a64a08328f78ac0e3f22a8365411',
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SKIPPABLE'=>'skip_9',
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -741,8 +731,6 @@ class Module_admin_setupwizard
 	 */
 	function step10()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
-
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
 		require_code('abstract_file_manager');
@@ -1025,11 +1013,8 @@ class Module_admin_setupwizard
 		erase_persistent_cache();
 		erase_cached_templates();
 
-		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
-		//breadcrumb_set_self(do_lang_tempcode('SETUP_WIZARD_STEP',integer_format(10),integer_format(10)));
-
 		$url=build_url(array('page'=>'_SELF','type'=>'step11'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -1039,24 +1024,22 @@ class Module_admin_setupwizard
 	 */
 	function step11()
 	{
-		$title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(10),integer_format(10)));
-
 		require_code('templates_donext');
 
 		require_lang('zones');
 
 		// Show nice interface to start adding pages
-		return do_next_manager($title,do_lang_tempcode('SUCCESS'),
-						array(
-							/*	 type							  page	 params													 zone	  */
-							addon_installed('page_management')?array('pagewizard',array('admin_sitetree',array('type'=>'pagewizard'),get_module_zone('admin_sitetree')),do_lang('PAGE_WIZARD')):NULL,
-							array('main_home',array(NULL,array(),'')),
-							array('cms_home',array(NULL,array(),'cms')),
-							array('admin_home',array(NULL,array(),'adminzone')),
-						),
-						do_lang('PAGES'),
-						NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
-						paragraph(do_lang_tempcode('SETUP_WIZARD_10_DESCRIBE'))
+		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
+			array(
+				/*	 type							  page	 params													 zone	  */
+				addon_installed('page_management')?array('pagewizard',array('admin_sitetree',array('type'=>'pagewizard'),get_module_zone('admin_sitetree')),do_lang('PAGE_WIZARD')):NULL,
+				array('main_home',array(NULL,array(),'')),
+				array('cms_home',array(NULL,array(),'cms')),
+				array('admin_home',array(NULL,array(),'adminzone')),
+			),
+			do_lang('PAGES'),
+			NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
+			paragraph(do_lang_tempcode('SETUP_WIZARD_10_DESCRIBE'))
 		);
 	}
 }

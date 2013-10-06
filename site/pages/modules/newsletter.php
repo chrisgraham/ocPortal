@@ -173,6 +173,52 @@ class Module_newsletter
 		return ($GLOBALS['SITE_DB']->query_select_value('newsletters','COUNT(*)')==0)?array():array('misc'=>'NEWSLETTER_JOIN');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
+		}
+
+		if ($type=='unsub')
+		{
+			$this->title=get_screen_title('NEWSLETTER_UNSUBSCRIBED');
+		}
+
+		if ($type=='reset')
+		{
+			breadcrumb_set_self(do_lang_tempcode('NEWSLETTER_PASSWORD_BEEN_RESET'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
+
+			$this->title=get_screen_title(get_option('newsletter_title'),false);
+		}
+
+		if ($type=='confirm')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
+
+			$this->title=get_screen_title(get_option('newsletter_title'),false);
+		}
+
+		if ($type=='do')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
+
+			$this->title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -184,11 +230,11 @@ class Module_newsletter
 
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->newsletter_form();
 		if ($type=='confirm') return $this->newsletter_confirm_joining();
 		if ($type=='do') return $this->newsletter_maintenance();
 		if ($type=='reset') return $this->newsletter_password_reset();
 		if ($type=='unsub') return $this->newsletter_unsubscribe();
-		if ($type=='misc') return $this->newsletter_form();
 
 		return new ocp_tempcode();
 	}
@@ -200,8 +246,6 @@ class Module_newsletter
 	 */
 	function newsletter_form()
 	{
-		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
-
 		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
 		if (count($newsletters)==0) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 
@@ -275,7 +319,7 @@ class Module_newsletter
 				};
 		";
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'24d7575465152f450c5a8e62650bf6c8','JAVASCRIPT'=>$javascript,'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'TITLE'=>$title,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'24d7575465152f450c5a8e62650bf6c8','JAVASCRIPT'=>$javascript,'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'TITLE'=>$this->title,'TEXT'=>$text));
 	}
 
 	/**
@@ -287,10 +331,6 @@ class Module_newsletter
 	{
 		require_code('type_validation');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
-
-		$title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
-
 		// Add
 		$email=trim(post_param('email'));
 		$password=trim(post_param('password',''));
@@ -301,7 +341,7 @@ class Module_newsletter
 		$lang=post_param('lang',user_lang());
 		if (!is_valid_email_address($email))
 		{
-			return warn_screen($title,do_lang_tempcode('IMPROPERLY_FILLED_IN'));
+			return warn_screen($this->title,do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 		}
 
 		$message=do_lang_tempcode('NEWSLETTER_UPDATE');
@@ -337,7 +377,7 @@ class Module_newsletter
 		elseif ($old_confirm!=0) // Reconfirm
 		{
 			$this->_send_confirmation($email,$old_confirm,NULL,$forename,$surname);
-			return inform_screen($title,do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email)));
+			return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email)));
 		}
 
 		// Okay, existing...
@@ -349,7 +389,7 @@ class Module_newsletter
 		{
 			$_reset_url=build_url(array('page'=>'_SELF','type'=>'reset','email'=>$email),'_SELF');
 			$reset_url=$_reset_url->evaluate();
-			return warn_screen($title,do_lang_tempcode('NEWSLETTER_PASSWORD_RESET',escape_html($reset_url)));
+			return warn_screen($this->title,do_lang_tempcode('NEWSLETTER_PASSWORD_RESET',escape_html($reset_url)));
 		} else
 		{
 			$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('id'));
@@ -375,7 +415,7 @@ class Module_newsletter
 			}
 		}
 
-		return inform_screen($title,$message);
+		return inform_screen($this->title,$message);
 	}
 
 	/**
@@ -385,8 +425,6 @@ class Module_newsletter
 	 */
 	function newsletter_password_reset()
 	{
-		$title=get_screen_title(get_option('newsletter_title'),false);
-
 		require_code('crypt');
 
 		$email=trim(get_param('email'));
@@ -400,10 +438,7 @@ class Module_newsletter
 		require_code('mail');
 		mail_wrap(get_option('newsletter_title'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
 
-		breadcrumb_set_self(do_lang_tempcode('NEWSLETTER_PASSWORD_BEEN_RESET'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
-
-		return inform_screen($title,protect_from_escaping(do_lang('NEWSLETTER_PASSWORD_BEEN_RESET',NULL,NULL,NULL,$lang)));
+		return inform_screen($this->title,protect_from_escaping(do_lang('NEWSLETTER_PASSWORD_BEEN_RESET',NULL,NULL,NULL,$lang)));
 	}
 
 	/**
@@ -428,11 +463,9 @@ class Module_newsletter
 			warn_exit(do_lang_tempcode('COULD_NOT_UNSUBSCRIBE'));
 		}
 
-		$title=get_screen_title('NEWSLETTER_UNSUBSCRIBED');
-
 		$GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array('email'=>$subscriber['email']));
 
-		return inform_screen($title,do_lang_tempcode('FULL_NEWSLETTER_UNSUBSCRIBED',escape_html(get_site_name())));
+		return inform_screen($this->title,do_lang_tempcode('FULL_NEWSLETTER_UNSUBSCRIBED',escape_html(get_site_name())));
 	}
 
 	/**
@@ -463,20 +496,16 @@ class Module_newsletter
 	 */
 	function newsletter_confirm_joining()
 	{
-		$title=get_screen_title(get_option('newsletter_title'),false);
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
-
 		$code_confirm=get_param_integer('confirm');
 		$email=trim(get_param('email'));
 		$correct_confirm=$GLOBALS['SITE_DB']->query_select_value('newsletter','code_confirm',array('email'=>$email));
 		if ($correct_confirm==$code_confirm)
 		{
 			$GLOBALS['SITE_DB']->query_update('newsletter',array('code_confirm'=>0),array('email'=>$email),'',1);
-			return inform_screen($title,do_lang_tempcode('NEWSLETTER_CONFIRMED'));
+			return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_CONFIRMED'));
 		}
 
-		return warn_screen($title,do_lang_tempcode(($correct_confirm==0)?'ALREADY_CONFIRMED':'INCORRECT_CONFIRMATION'));
+		return warn_screen($this->title,do_lang_tempcode(($correct_confirm==0)?'ALREADY_CONFIRMED':'INCORRECT_CONFIRMATION'));
 	}
 
 }

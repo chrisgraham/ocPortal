@@ -83,6 +83,94 @@ class Module_recommend
 		}
 	}
 
+	var $title;
+	var $type;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+		if (array_key_exists('upload',$_FILES) && isset($_FILES['upload']['tmp_name']) && strlen($_FILES['upload']['tmp_name'])>0)
+			$type='gui2';
+
+		if ($type=='misc')
+		{
+			attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
+			inform_non_canonical_parameter('page_title');
+			inform_non_canonical_parameter('subject');
+			inform_non_canonical_parameter('s_message');
+			inform_non_canonical_parameter('from');
+			inform_non_canonical_parameter('title');
+			inform_non_canonical_parameter('ocp');
+
+			$page_title=get_param('page_title',NULL,true);
+			if (!is_null(get_param('from',NULL,true)))
+			{
+				if (is_null($page_title))
+				{
+					$this->title=get_screen_title('RECOMMEND_LINK');
+				} else
+				{
+					$this->title=get_screen_title($page_title,false);
+				}
+			} else
+			{
+				if (is_null($page_title))
+				{
+					$this->title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
+				} else
+				{
+					$this->title=get_screen_title($page_title,false);
+				}
+			}
+		}
+
+		if ($type=='gui2')
+		{
+			$page_title=get_param('page_title',NULL,true);
+			if (!is_null(get_param('from',NULL,true)))
+			{
+				if (is_null($page_title))
+				{
+					$this->title=get_screen_title('RECOMMEND_LINK');
+				} else
+				{
+					$this->title=get_screen_title($page_title,false);
+				}
+			} else
+			{
+				if (is_null($page_title))
+				{
+					$this->title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
+				} else
+				{
+					$this->title=get_screen_title($page_title,false);
+				}
+			}
+		}
+
+		if ($type=='actual')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('RECOMMEND_SITE'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+
+			if (post_param_integer('wrap_message',0)==1)
+			{
+				$this->title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
+			} else
+			{
+				$this->title=get_screen_title('RECOMMEND_LINK');
+			}
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -93,15 +181,15 @@ class Module_recommend
 		require_lang('recommend');
 		require_code('recommend');
 
-		$type=get_param('type','misc');
+		$type=$this->type;
 
-		//is it send a CSV address file to parse and later usage
-		if (array_key_exists('upload',$_FILES) && isset($_FILES['upload']['tmp_name']) && strlen($_FILES['upload']['tmp_name'])>0)  return $this->gui2();
+		// Is it send a CSV address file to parse and later usage
+		if ($type=='gui2') return $this->gui2();
 
-		//is there a parameter passed from the second choose contacts to send page
+		// Is there a parameter passed from the second choose contacts to send page
 		if (array_key_exists('select_contacts_page',$_POST)) return $this->actual();
 
-		//if reached these, then there should be set manually at least on email address !!!
+		// If reached these, then there should be set manually at least on email address!
 		if (array_key_exists('email_address_0',$_POST) && strlen(trim($_POST['email_address_0']))==0)
 			warn_exit(do_lang_tempcode('ERROR_NO_CONTACTS_SELECTED'));
 
@@ -119,15 +207,6 @@ class Module_recommend
 	function gui()
 	{
 		require_code('form_templates');
-
-		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
-
-		inform_non_canonical_parameter('page_title');
-		inform_non_canonical_parameter('subject');
-		inform_non_canonical_parameter('s_message');
-		inform_non_canonical_parameter('from');
-		inform_non_canonical_parameter('title');
-		inform_non_canonical_parameter('ocp');
 
 		$page_title=get_param('page_title',NULL,true);
 
@@ -237,25 +316,11 @@ class Module_recommend
 
 		if (!is_null(get_param('from',NULL,true)))
 		{
-			if (is_null($page_title))
-			{
-				$title=get_screen_title('RECOMMEND_LINK');
-			} else
-			{
-				$title=get_screen_title($page_title,false);
-			}
 			$submit_name=do_lang_tempcode('SEND');
 			$text=do_lang_tempcode('RECOMMEND_AUTO_TEXT',get_site_name());
 			$need_message=true;
 		} else
 		{
-			if (is_null($page_title))
-			{
-				$title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
-			} else
-			{
-				$title=get_screen_title($page_title,false);
-			}
 			$hidden->attach(form_input_hidden('wrap_message','1'));
 			$need_message=false;
 		}
@@ -284,7 +349,7 @@ class Module_recommend
 			'_GUID'=>'08a538ca8d78597b0417f464758a59fd',
 			'JAVASCRIPT'=>$javascript,
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'HIDDEN'=>$hidden,
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -312,7 +377,6 @@ class Module_recommend
 		$email_counter=0;
 		foreach ($_POST as $key=>$input_value)
 		{
-			//stripslashes if necessary
 			if (get_magic_quotes_gpc()) $input_value=stripslashes($input_value);
 
 			if (substr($key,0,14)=='email_address_')
@@ -322,7 +386,7 @@ class Module_recommend
 				$hidden->attach(form_input_hidden($key,$input_value));
 			} else
 			{
-				//add hidden field to the form
+				// Add hidden field to the form
 				if ($key!='upload') $hidden->attach(form_input_hidden($key,$input_value));
 			}
 		}
@@ -332,30 +396,14 @@ class Module_recommend
 		$text=do_lang_tempcode('RECOMMEND_SITE_TEXT_CHOOSE_CONTACTS');
 
 		$page_title=get_param('page_title',NULL,true);
-		if (!is_null(get_param('from',NULL,true)))
+		if (is_null(get_param('from',NULL,true)))
 		{
-			if (is_null($page_title))
-			{
-				$title=get_screen_title('RECOMMEND_LINK');
-			} else
-			{
-				$title=get_screen_title($page_title,false);
-			}
-		} else
-		{
-			if (is_null($page_title))
-			{
-				$title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
-			} else
-			{
-				$title=get_screen_title($page_title,false);
-			}
 			$hidden->attach(form_input_hidden('wrap_message','1'));
 		}
 
 		$success_read=false;
 
-		//start processing CSV file
+		// Start processing CSV file
 		if ((get_option('enable_csv_recommend')=='1') && (!is_guest()))
 		{
 			if (array_key_exists('upload',$_FILES)) // NB: We disabled SWFupload for this form so don't need to consider it
@@ -389,12 +437,11 @@ class Module_recommend
 
 					if ((function_exists('mb_detect_encoding')) && (function_exists('mb_convert_encoding')) && (strlen(mb_detect_encoding($csv_header_line_fields[0],"ASCII,UTF-8,UTF-16,UTF16"))==0)) // Apple mail weirdness
 					{
-						//test string just for Apple mail detection
+						// Test string just for Apple mail detection
 						$test_unicode=utf8_decode(mb_convert_encoding($csv_header_line_fields[0],"UTF-8","UTF-16"));
 						if (preg_match('#\?\?ame#u',$test_unicode)!=0)
 						{
-							//THIS SHOULD BE APPLE MAIL
-							foreach($csv_header_line_fields as $key=>$value)
+							foreach ($csv_header_line_fields as $key=>$value)
 							{
 								$csv_header_line_fields[$key]=utf8_decode(mb_convert_encoding($csv_header_line_fields[$key],"UTF-8","UTF-16"));
 
@@ -403,13 +450,13 @@ class Module_recommend
 
 								$first_row_exploded=explode(';',$csv_header_line_fields[0]);
 
-								$email_index=1; //by default
-								$name_index=0; //by default
+								$email_index=1; // by default
+								$name_index=0; // by default
 
 								foreach ($csv_header_line_fields as $key2=>$value2)
 								{
-									if (preg_match('#\?\?ame#',$value2)!=0) $name_index=$key2; //Windows mail
-									if (preg_match('#E\-mail#',$value2)!=0) $email_index=$key2; //both
+									if (preg_match('#\?\?ame#',$value2)!=0) $name_index=$key2; // Windows mail
+									if (preg_match('#E\-mail#',$value2)!=0) $email_index=$key2; // both
 								}
 
 								while (($csv_line=fgetcsv($myfile,10240,$del))!==false) // Reading a CSV record
@@ -424,7 +471,7 @@ class Module_recommend
 									if (strlen($found_email_address)>0)
 									{
 										$skip_next_process=true;
-										//Add to the list what we've found
+										// Add to the list what we've found
 										$fields->attach(form_input_tick($found_name,$found_email_address,'use_details_'.strval($email_counter),true));
 										$hidden->attach(form_input_hidden('details_email_'.strval($email_counter),$found_email_address));
 										$hidden->attach(form_input_hidden('details_name_'.strval($email_counter),$found_name));
@@ -438,13 +485,13 @@ class Module_recommend
 
 					if (!$skip_next_process)
 					{
-						//there is a strange symbol that appears at start of the Windows Mail file, so we need to convert the first file line to catch these
+						// There is a strange symbol that appears at start of the Windows Mail file, so we need to convert the first file line to catch these
 						if ((function_exists('mb_check_encoding')) && (mb_check_encoding($csv_header_line_fields[0],'UTF-8')))
 						{
 							$csv_header_line_fields[0]=utf8_decode($csv_header_line_fields[0]);
 						}
 
-						//this means that we need to import from Windows mail (also for Outlook Express) export file, which is different from others csv export formats
+						// This means that we need to import from Windows mail (also for Outlook Express) export file, which is different from others csv export formats
 						if (array_key_exists(0,$csv_header_line_fields) && (preg_match('#\?Name#',$csv_header_line_fields[0])!=0 || preg_match('#Name\;E\-mail\sAddress#',$csv_header_line_fields[0])!=0))
 						{
 							$found_email_address='';
@@ -452,14 +499,14 @@ class Module_recommend
 
 							$first_row_exploded=explode(';',$csv_header_line_fields[0]);
 
-							$email_index=1; //by default
-							$name_index=0; //by default
+							$email_index=1; // by default
+							$name_index=0; // by default
 
 							foreach ($first_row_exploded as $key => $value)
 							{
-								if (preg_match('#\?Name#',$value)!=0) $name_index=$key; //Windows mail
-								if (preg_match('#^Name$#',$value)!=0) $name_index=$key; //Outlook Express
-								if (preg_match('#E\-mail\sAddress#',$value)!=0) $email_index=$key; //both
+								if (preg_match('#\?Name#',$value)!=0) $name_index=$key; // Windows mail
+								if (preg_match('#^Name$#',$value)!=0) $name_index=$key; // Outlook Express
+								if (preg_match('#E\-mail\sAddress#',$value)!=0) $email_index=$key; // both
 							}
 
 							while (($csv_line=fgetcsv($myfile,10240,$del))!==false) // Reading a CSV record
@@ -471,7 +518,7 @@ class Module_recommend
 
 								if (strlen($found_email_address)>0)
 								{
-									//Add to the list what we've found
+									// Add to the list what we've found
 									$fields->attach(form_input_tick($found_name,do_lang_tempcode('RECOMMENDING_TO_LINE',escape_html($found_name),escape_html($found_email_address)),'use_details_'.strval($email_counter),true));
 									$hidden->attach(form_input_hidden('details_email_'.strval($email_counter),$found_email_address));
 									$hidden->attach(form_input_hidden('details_name_'.strval($email_counter),$found_name));
@@ -511,7 +558,7 @@ class Module_recommend
 
 								if (strlen($found_email_address)>0)
 								{
-									//Add to the list what we've found
+									// Add to the list what we've found
 									$fields->attach(form_input_tick($found_name,do_lang_tempcode('RECOMMENDING_TO_LINE',escape_html($found_name),escape_html($found_email_address)),'use_details_'.strval($email_counter),true));
 									$hidden->attach(form_input_hidden('details_email_'.strval($email_counter),$found_email_address));
 									$hidden->attach(form_input_hidden('details_name_'.strval($email_counter),$found_name));
@@ -529,7 +576,7 @@ class Module_recommend
 		if (!$success_read)
 			warn_exit(do_lang_tempcode('ERROR_NO_CONTACTS_SELECTED'));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e3831cf87d76295c48cbce627bdd07e3','PREVIEW'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'e3831cf87d76295c48cbce627bdd07e3','PREVIEW'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
 	}
 
 	/**
@@ -539,8 +586,6 @@ class Module_recommend
 	 */
 	function actual()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('RECOMMEND_SITE'))));
-
 		$name=post_param('name');
 		$message=post_param('message');
 		$recommender_email_address=post_param('recommender_email_address');
@@ -608,7 +653,7 @@ class Module_recommend
 			}
 		}
 
-		//add emails from address book file
+		// Add emails from address book file
 		foreach ($adrbook_use_these as $key=>$value)
 		{
 			$cur_email=(array_key_exists($key,$adrbook_emails) && strlen($adrbook_emails[$key])>0)?$adrbook_emails[$key]:'';
@@ -629,16 +674,11 @@ class Module_recommend
 
 			if (post_param_integer('wrap_message',0)==1)
 			{
-				$title=get_screen_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
-
 				$referring_username=is_guest()?NULL:get_member();
 				$_url=(post_param_integer('invite',0)==1)?build_url(array('page'=>'join','email_address'=>$email_address,'keep_referrer'=>$referring_username),get_module_zone('join')):build_url(array('page'=>'','keep_referrer'=>$referring_username),'');
 				$url=$_url->evaluate();
 				$join_url=$GLOBALS['FORUM_DRIVER']->join_url();
 				$message=do_lang((post_param_integer('invite',0)==1)?'INVITE_MEMBER_MESSAGE':'RECOMMEND_MEMBER_MESSAGE',$name,$url,array(get_site_name(),$join_url)).$message;
-			} else
-			{
-				$title=get_screen_title('RECOMMEND_LINK');
 			}
 
 			if ((may_use_invites()) && (get_forum_type()=='ocf') && (!is_guest()) && (post_param_integer('invite',0)==1))
@@ -674,12 +714,10 @@ class Module_recommend
 			}
 		}
 
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		require_code('autosave');
 		clear_ocp_autosave();
 
-		return inform_screen($title,do_lang_tempcode('RECOMMENDATION_MADE'));
+		return inform_screen($this->title,do_lang_tempcode('RECOMMENDATION_MADE'));
 	}
 
 }

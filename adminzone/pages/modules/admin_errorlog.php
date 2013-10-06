@@ -51,6 +51,25 @@ class Module_admin_errorlog
 		return array('!'=>'ERROR_LOG');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/errorlog');
+		set_helper_panel_tutorial('tut_disaster');
+
+		$this->title=get_screen_title('ERROR_LOG');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,13 +77,8 @@ class Module_admin_errorlog
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/errorlog');
-		set_helper_panel_tutorial('tut_disaster');
-
 		require_lang('errorlog');
 		require_css('errorlog');
-
-		$title=get_screen_title('ERROR_LOG');
 
 		// Read in errors
 		if (is_readable(get_custom_file_base().'/data_custom/errorlog.php'))
@@ -104,7 +118,6 @@ class Module_admin_errorlog
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 		if ($sort_order=='DESC') $stuff=array_reverse($stuff);
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('DATE_TIME'),do_lang_tempcode('TYPE'),do_lang_tempcode('MESSAGE')),$sortables,'sort',$sortable.' '.$sort_order);
@@ -159,7 +172,7 @@ class Module_admin_errorlog
 		// Put permssions into table
 		$permission=implode("\n",$lines);
 
-		$tpl=do_template('ERRORLOG_SCREEN',array('_GUID'=>'9186c7beb6b722a52f39e2cbe16aded6','TITLE'=>$title,'ERROR'=>$error,'PERMISSION'=>$permission));
+		$tpl=do_template('ERRORLOG_SCREEN',array('_GUID'=>'9186c7beb6b722a52f39e2cbe16aded6','TITLE'=>$this->title,'ERROR'=>$error,'PERMISSION'=>$permission));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

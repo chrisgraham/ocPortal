@@ -13,9 +13,6 @@ $GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
 $filename='ocportal-'.get_site_name().'.'.date('Y-m-d').'.sql';
 
-@ob_end_clean();
-@ob_end_clean();
-
 if (!isset($_GET['testing']))
 {
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
@@ -40,7 +37,8 @@ if ((strpos(ini_get('disallowed_functions'),'shell_exec')===false) && (strpos(ge
 		if ($msg!='') echo ' - '.$msg; */
 	} else
 	{
-		header('Location: '.get_custom_base_url().'/'.$filename);
+		require_code('site2');
+		smart_redirect(get_custom_base_url().'/'.$filename);
 		exit();
 	}
 }/* else*/

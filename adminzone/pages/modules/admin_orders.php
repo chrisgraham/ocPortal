@@ -51,6 +51,107 @@ class Module_admin_orders
 		return array('misc'=>'ORDERS','show_orders'=>'OUTSTANDING_ORDERS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_self(do_lang_tempcode('ORDERS'));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+		}
+
+		if ($type=='show_orders')
+		{
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS'))));
+
+			$filter=get_param('filter',NULL);
+			if ($filter=='undispatched')
+			{
+				$this->title=get_screen_title('UNDISPATCHED_ORDER_LIST');
+			} else
+			{
+				$this->title=get_screen_title('ORDER_LIST');
+			}
+		}
+
+		if ($type=='order_det' || $action=='order_act' || $action=='_add_note' || $action=='order_export' || $action=='_order_export')
+		{
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
+		}
+
+		if ($action=='order_act')
+		{
+			$action=either_param('action');
+
+			if ($action!='add_note')
+			{
+				breadcrumb_set_self(do_lang_tempcode('DONE'));
+			}
+		}
+
+		if ($action=='_add_note' || $action=='_order_export')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		if ($type=='order_det')
+		{
+			$this->title=get_screen_title('MY_ORDER_DETAILS');
+		}
+
+		if ($type=='order_export')
+		{
+			$this->title=get_screen_title('EXPORT_ORDER_LIST');
+		}
+
+		if ($type=='order_act')
+		{
+			$action=either_param('action');
+
+			if ($action=='add_note')
+			{
+				$id=get_param_integer('id');
+				$this->title=get_screen_title('ADD_NOTE_TITLE',true,array(strval($id)));
+			}
+
+			if ($action=='dispatch')
+			{
+				$this->title=get_screen_title('ORDER_STATUS_dispatched');
+			}
+
+			if ($action=='del_order')
+			{
+				$this->title=get_screen_title('ORDER_STATUS_cancelled');
+			}
+
+			if ($action=='return')
+			{
+				$this->title=get_screen_title('ORDER_STATUS_returned');
+			}
+
+			if ($action=='hold')
+			{
+				$this->title=get_screen_title('ORDER_STATUS_onhold');
+			}
+		}
+
+		if ($type=='_add_note')
+		{
+			$id=post_param_integer('order_id');
+			$this->title=get_screen_title('ADD_NOTE_TITLE',true,array($id));
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -69,21 +170,20 @@ class Module_admin_orders
 
 		if ($type=='misc') return $this->misc();
 		if ($type=='show_orders') return $this->show_orders();
-		if ($type=='order_det') 	return $this->order_details();
+		if ($type=='order_det') return $this->order_details();
 		if ($type=='order_act')
 		{
 			$action=either_param('action');
 
-			if ($action=='add_note') 	return $this->add_note();			
-			if ($action=='dispatch') 	return $this->dispatch();
-			if ($action=='del_order') 	return $this->delete_order();
-			if ($action=='return') 		return $this->return_order();
-			if ($action=='hold') 		return $this->hold_order();
+			if ($action=='add_note') return $this->add_note();			
+			if ($action=='dispatch') return $this->dispatch();
+			if ($action=='del_order') return $this->delete_order();
+			if ($action=='return') return $this->return_order();
+			if ($action=='hold') return $this->hold_order();
 		}
-
-		if ($type=='_add_note') 		return $this->_add_note();
-		if ($type=='order_export') 	return $this->order_export();
-		if ($type=='_order_export') 	return $this->_order_export();
+		if ($type=='_add_note') return $this->_add_note();
+		if ($type=='order_export') return $this->order_export();
+		if ($type=='_order_export') $this->_order_export();
 
 		return new ocp_tempcode();
 	}
@@ -95,16 +195,13 @@ class Module_admin_orders
 	 */
 	function misc()
 	{
-		breadcrumb_set_self(do_lang_tempcode('ORDERS'));
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
-
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('ORDERS'),comcode_lang_string('DOC_ECOMMERCE'),
-					array(
-						array('show_orders',array('_SELF',array('type'=>'show_orders'),'_SELF'),do_lang('SHOW_ORDERS')),
-						array('undispatched',array('_SELF',array('type'=>'show_orders','filter'=>'undispatched'),'_SELF'),do_lang('UNDISPATCHED_ORDERS')),
-					),
-					do_lang('ORDERS')
+			array(
+				array('show_orders',array('_SELF',array('type'=>'show_orders'),'_SELF'),do_lang('SHOW_ORDERS')),
+				array('undispatched',array('_SELF',array('type'=>'show_orders','filter'=>'undispatched'),'_SELF'),do_lang('UNDISPATCHED_ORDERS')),
+			),
+			do_lang('ORDERS')
 		);
 	}
 
@@ -117,8 +214,6 @@ class Module_admin_orders
 	{
 		require_code('shopping');
 
-		$title=get_screen_title('ORDER_LIST');
-
 		$filter=get_param('filter',NULL);
 		$search=get_param('search','',true);
 
@@ -127,7 +222,6 @@ class Module_admin_orders
 		if ($filter=='undispatched')
 		{
 			$cond.=' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_payment_received');
-			$title=get_screen_title('UNDISPATCHED_ORDER_LIST');
 		}
 
 		$extra_join='';
@@ -139,14 +233,12 @@ class Module_admin_orders
 			$extra_join=' JOIN '.get_table_prefix().'f_members t2 ON t2.id=t1.c_member';
 		}
 
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS'))));
-
 		$orders=array();
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',10);
-		require_code('templates_pagination');
 
+		require_code('templates_pagination');
 		require_code('templates_results_table');
 
 		$sortables=array(
@@ -166,7 +258,6 @@ class Module_admin_orders
 
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fields_title=results_field_title(
 			array(
@@ -259,7 +350,7 @@ class Module_admin_orders
 
 		$tpl=do_template('ECOM_ADMIN_ORDERS_SCREEN',array(
 			'_GUID'=>'08afb0204c061644ec9c562b4eba24f4',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'CURRENCY'=>get_option('currency'),
 			'ORDERS'=>$orders,
 			'PAGINATION'=>$pagination,
@@ -281,8 +372,6 @@ class Module_admin_orders
 	function order_details()
 	{
 		$id=get_param_integer('id');
-
-		$title=get_screen_title('MY_ORDER_DETAILS');
 
 		$order_title=do_lang('CART_ORDER',$id);
 
@@ -317,8 +406,6 @@ class Module_admin_orders
 		$rows=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 
 		$product_entries=new ocp_tempcode();	
-
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
 
 		foreach ($rows as $row)
 		{
@@ -380,7 +467,7 @@ class Module_admin_orders
 
 		$tpl=do_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array(
 			'_GUID'=>'3ae59a343288eb6aa67e3627b5ea7eda',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>$text,
 			'CURRENCY'=>get_option('currency'),
 			'RESULTS_TABLE'=>$results_table,
@@ -408,8 +495,6 @@ class Module_admin_orders
 	 */
 	function dispatch()
 	{
-		$title=get_screen_title('ORDER_STATUS_dispatched');
-
 		$id=get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_dispatched'),array('id'=>$id),'',1);
@@ -420,7 +505,7 @@ class Module_admin_orders
 
 		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'dispatched','id'=>$id),get_module_zone('admin_orders'));
 
-		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$add_note_url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -430,15 +515,12 @@ class Module_admin_orders
 	 */
 	function add_note()
 	{
-		require_code('form_templates');
-
 		$id=get_param_integer('id');
 
+		require_code('form_templates');
+
 		$redirect_url=get_param('redirect',NULL);
-
 		$last_action=get_param('last_act',NULL);
-
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
 
 		$update_url=build_url(array('page'=>'_SELF','type'=>'_add_note','redirect'=>$redirect_url),'_SELF');
 
@@ -454,8 +536,6 @@ class Module_admin_orders
 		$fields->attach(form_input_text(do_lang_tempcode('NOTE'),do_lang_tempcode('NOTE_DESCRIPTION'),'note',$note,true));
 
 		$fields->attach(form_input_hidden('order_id',strval($id)));
-
-		$title=get_screen_title('ADD_NOTE_TITLE',true,array($id));
 
 		if ($last_action=='dispatched')
 		{	
@@ -473,7 +553,7 @@ class Module_admin_orders
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'a5bd2fd3e7f326fd7559e78015d70715',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>do_lang_tempcode('NOTE_DESCRIPTION'),
 			'HIDDEN'=>'',
 			'FIELDS'=>$fields,
@@ -491,10 +571,7 @@ class Module_admin_orders
 	{
 		$id=post_param_integer('order_id');
 
-		$title=get_screen_title('ADD_NOTE_TITLE',true,array($id));
-
 		$notes=post_param('note');
-
 		$redirect=get_param('redirect',NULL);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('notes'=>$notes),array('id'=>$id),'',1);
@@ -507,7 +584,7 @@ class Module_admin_orders
 			$redirect=$_redirect->evaluate();
 		}
 
-		return redirect_screen($title,$redirect,do_lang_tempcode('SUCCESS'));	
+		return redirect_screen($this->title,$redirect,do_lang_tempcode('SUCCESS'));	
 	}
 
 	/**
@@ -535,8 +612,6 @@ class Module_admin_orders
 	 */
 	function delete_order()
 	{
-		$title=get_screen_title('ORDER_STATUS_cancelled');
-
 		$id=get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_cancelled'),array('id'=>$id),'',1);
@@ -544,7 +619,7 @@ class Module_admin_orders
 
 		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'cancelled','id'=>$id),get_module_zone('admin_orders'));
 
-		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
+		return redirect_screen($this->title,$add_note_url,do_lang_tempcode('SUCCESS'));		
 	}
 
 	/**
@@ -554,8 +629,6 @@ class Module_admin_orders
 	 */
 	function return_order()
 	{
-		$title=get_screen_title('ORDER_STATUS_returned');
-
 		$id=get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_returned'),array('id'=>$id),'',1);
@@ -563,7 +636,7 @@ class Module_admin_orders
 
 		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'returned','id'=>$id),get_module_zone('admin_orders'));
 
-		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
+		return redirect_screen($this->title,$add_note_url,do_lang_tempcode('SUCCESS'));		
 	}
 
 	/**
@@ -573,8 +646,6 @@ class Module_admin_orders
 	 */
 	function hold_order()
 	{
-		$title=get_screen_title('ORDER_STATUS_onhold');
-
 		$id=get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_onhold'),array('id'=>$id),'',1);
@@ -582,7 +653,7 @@ class Module_admin_orders
 
 		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'onhold','id'=>$id),get_module_zone('admin_orders'));
 
-		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
+		return redirect_screen($this->title,$add_note_url,do_lang_tempcode('SUCCESS'));		
 	}
 
 	/**
@@ -595,10 +666,6 @@ class Module_admin_orders
 		require_code('shopping');
 
 		require_code('form_templates');
-
-		$title=get_screen_title('EXPORT_ORDER_LIST');
-
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
 
 		$fields=new ocp_tempcode();
 
@@ -626,7 +693,7 @@ class Module_admin_orders
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'e2e5097798c963f4977ba22b50ddf2f3',
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SUBMIT_NAME'=>do_lang_tempcode('EXPORT_ORDER_LIST'),
 			'TEXT'=>paragraph(do_lang_tempcode('EXPORT_ORDER_LIST_TEXT')),
 			'URL'=>build_url(array('page'=>'_SELF','type'=>'_order_export'),'_SELF'),

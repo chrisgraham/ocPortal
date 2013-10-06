@@ -148,6 +148,132 @@ class Module_admin_permissions
 		return $ret;
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='absorb' || $type=='_absorb')
+		{
+			set_helper_panel_pic('pagepics/privileges');
+			set_helper_panel_tutorial('tut_permissions');
+		}
+
+		if ($type=='keys' || $type=='_keys')
+		{
+			set_helper_panel_pic('pagepics/matchkeysecurity');
+			set_helper_panel_tutorial('tut_permissions');
+		}
+
+		if ($type=='page' || $type=='_page')
+		{
+			set_helper_panel_pic('pagepics/permissionstree');
+			set_helper_panel_tutorial('tut_permissions');
+		}
+
+		if ($type=='privileges')
+		{
+			set_helper_panel_pic('pagepics/privileges');
+			set_helper_panel_tutorial('tut_permissions');
+		}
+
+		if ($type=='_privileges')
+		{
+			$p_section=get_param('id',NULL);
+			if ((is_null($p_section)) || ($p_section==''))
+			{
+				set_helper_panel_pic('pagepics/privileges');
+				set_helper_panel_tutorial('tut_permissions');
+			}
+		}
+
+		if ($type=='_absorb')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:absorb',do_lang_tempcode('ABSORB_PERMISSIONS'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		if ($type=='_keys')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:keys',do_lang_tempcode('PAGE_MATCH_KEY_ACCESS'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		if ($type=='page')
+		{
+			$zone=get_param('zone',NULL);
+			if ($zone===NULL)
+			{
+				breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+			}
+			breadcrumb_set_parents(array(array('_SELF:_SELF:page',do_lang_tempcode('CHOOSE'))));
+		}
+
+		if ($type=='_page')
+		{
+			$zone=post_param('zone');
+			breadcrumb_set_parents(array(array('_SELF:_SELF:page',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:page:zone='.$zone,do_lang_tempcode('PAGE_ACCESS'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		if ($type=='privileges')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
+		}
+
+		if ($type=='_privileges')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
+		}
+
+		if ($type=='absorb' || $type=='_absorb')
+		{
+			$this->title=get_screen_title('ABSORB_PERMISSIONS');
+		}
+
+		if ($type=='tree_editor')
+		{
+			$this->title=get_screen_title('PERMISSIONS_TREE');
+		}
+
+		if ($type=='interface_keys_access' || $type=='set_keys_access')
+		{
+			$this->title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
+		}
+
+		if ($type=='interface_page_access' || $type=='set_page_access')
+		{
+			$this->title=get_screen_title('PAGE_ACCESS');
+		}
+
+		if ($type=='interface_privileges')
+		{
+			require_all_lang();
+
+			$p_section=get_param('id',NULL);
+			if ((is_null($p_section)) || ($p_section==''))
+			{
+				$this->title=get_screen_title('PRIVILEGES');
+			} else
+			{
+				$this->title=get_screen_title('_PRIVILEGES',true,array(do_lang_tempcode($p_section)));
+			}
+		}
+
+		if ($type=='set_privileges')
+		{
+			$this->title=get_screen_title('PRIVILEGES');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -173,8 +299,8 @@ class Module_admin_permissions
 		}
 		if ($type=='page') return $this->interface_page_access();
 		if ($type=='_page') return $this->set_page_access();
-		if ($type=='_privileges') return $this->set_privileges();
 		if ($type=='privileges') return $this->interface_privileges();
+		if ($type=='_privileges') return $this->set_privileges();
 
 		return new ocp_tempcode();
 	}
@@ -186,11 +312,6 @@ class Module_admin_permissions
 	 */
 	function absorb()
 	{
-		$title=get_screen_title('ABSORB_PERMISSIONS');
-
-		set_helper_panel_pic('pagepics/privileges');
-		set_helper_panel_tutorial('tut_permissions');
-
 		$groups_without=array();
 		$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 		$list1=new ocp_tempcode();
@@ -220,7 +341,7 @@ class Module_admin_permissions
 		$fields->attach(form_input_list(do_lang_tempcode('FROM'),do_lang_tempcode('PERMISSIONS_FROM'),'from',$list1));
 		$fields->attach(form_input_list(do_lang_tempcode('TO'),do_lang_tempcode('PERMISSIONS_TO'),'to',$list2));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'9e20011006a26b240fc898279338875c','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'9e20011006a26b240fc898279338875c','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -234,21 +355,13 @@ class Module_admin_permissions
 		$from=post_param_integer('from');
 		if ($to==$from) warn_exit(do_lang_tempcode('MERGE_SAME'));
 
-		$title=get_screen_title('ABSORB_PERMISSIONS');
-
-		set_helper_panel_pic('pagepics/privileges');
-		set_helper_panel_tutorial('tut_permissions');
-
 		// Although the code is from OCF, it is safe to use for other forum drivers
 		require_code('ocf_groups_action');
 		require_code('ocf_groups_action2');
 		ocf_group_absorb_privileges_of($to,$from);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:absord',do_lang_tempcode('ABSORB_PERMISSIONS'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		$url=build_url(array('page'=>'_SELF','type'=>'absorb'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -258,15 +371,13 @@ class Module_admin_permissions
 	 */
 	function tree_editor()
 	{
-		$title=get_screen_title('PERMISSIONS_TREE');
-
 		if (!has_js())
 		{
 			// Send them to the page permissions screen
 			$url=build_url(array('page'=>'_SELF','type'=>'page'),'_SELF');
 			require_code('site2');
 			assign_refresh($url,5.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'a376167acf6d0f5ac80ca743a2c728d9','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_ADVANCED_SCREEN_PERMISSIONS')));
+			return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_ADVANCED_SCREEN_PERMISSIONS'));
 		}
 
 		require_javascript('javascript_ajax');
@@ -306,7 +417,7 @@ class Module_admin_permissions
 		require_code('permissions2');
 		$editor=get_permissions_matrix('',array(),array(),array(),array(),true);
 
-		return do_template('PERMISSIONS_TREE_EDITOR_SCREEN',array('_GUID'=>'08bb679a7cfab45c0c29b5393666dd57','USERGROUPS'=>$all_groups,'TITLE'=>$title,'INITIAL_GROUP'=>$initial_group,'COLOR'=>$color,'GROUPS'=>$groups,'EDITOR'=>$editor));
+		return do_template('PERMISSIONS_TREE_EDITOR_SCREEN',array('_GUID'=>'08bb679a7cfab45c0c29b5393666dd57','USERGROUPS'=>$all_groups,'TITLE'=>$this->title,'INITIAL_GROUP'=>$initial_group,'COLOR'=>$color,'GROUPS'=>$groups,'EDITOR'=>$editor));
 	}
 
 	/**
@@ -354,7 +465,7 @@ class Module_admin_permissions
 	 * @param  tempcode		The title to use (output of get_screen_title)
 	 * @return tempcode		The UI
 	 */
-	function choose_zone($title)
+	function _choose_zone($title)
 	{
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
@@ -365,8 +476,6 @@ class Module_admin_permissions
 		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),'','zone',$zones,NULL,true));
 
 		$post_url=get_self_url(false,false,NULL,false,true);
-
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'457a5b8200991996b383bf75515382ab','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 	}
@@ -379,11 +488,6 @@ class Module_admin_permissions
 	function interface_keys_access()
 	{
 		require_css('permissions_editor');
-
-		set_helper_panel_pic('pagepics/matchkeysecurity');
-		set_helper_panel_tutorial('tut_permissions');
-
-		$title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_keys'),'_SELF');
 
@@ -441,7 +545,7 @@ class Module_admin_permissions
 			$rows2->attach(do_template('PERMISSION_KEYS_MESSAGE_ROW',array('_GUID'=>'bf52d4ac938ce5c495b89d06a4cb9e5e','KEY'=>$row['k_match_key'],'MSG'=>$msg,'UID'=>is_integer($row['id'])?strval($row['id']):$row['id'])));
 		}
 
-		return do_template('PERMISSION_KEYS_PERMISSIONS_SCREEN',array('_GUID'=>'61a702db2df67adb2702ae6c7081b4ab','TITLE'=>$title,'COLS'=>$cols,'URL'=>$url,'HEADER_CELLS'=>$header_cells,'ROWS'=>$rows,'ROWS2'=>$rows2));
+		return do_template('PERMISSION_KEYS_PERMISSIONS_SCREEN',array('_GUID'=>'61a702db2df67adb2702ae6c7081b4ab','TITLE'=>$this->title,'COLS'=>$cols,'URL'=>$url,'HEADER_CELLS'=>$header_cells,'ROWS'=>$rows,'ROWS2'=>$rows2));
 	}
 
 	/**
@@ -451,11 +555,6 @@ class Module_admin_permissions
 	 */
 	function set_keys_access()
 	{
-		set_helper_panel_pic('pagepics/matchkeysecurity');
-		set_helper_panel_tutorial('tut_permissions');
-
-		$title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
-
 		// Delete to cleanup
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE page_name LIKE \''.db_encode_like('%:%').'\'');
 		$mkeylang=collapse_2d_complexity('id','k_message',$GLOBALS['SITE_DB']->query_select('match_key_messages',array('id','k_message')));
@@ -509,12 +608,9 @@ class Module_admin_permissions
 
 		log_it('PAGE_MATCH_KEY_ACCESS');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:keys',do_lang_tempcode('PAGE_MATCH_KEY_ACCESS'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'keys'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -524,11 +620,6 @@ class Module_admin_permissions
 	 */
 	function interface_page_access()
 	{
-		set_helper_panel_pic('pagepics/permissionstree');
-		set_helper_panel_tutorial('tut_permissions');
-
-		$title=get_screen_title('PAGE_ACCESS');
-
 		$url=build_url(array('page'=>'_SELF','type'=>'_page'),'_SELF');
 
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
@@ -545,8 +636,8 @@ class Module_admin_permissions
 
 		// Rows (pages)
 		$rows=new ocp_tempcode();
-		$zone=get_param('zone','!');
-		if ($zone=='!') return $this->choose_zone($title);
+		$zone=get_param('zone',NULL);
+		if ($zone===NULL) return $this->_choose_zone($this->title);
 		$zones=array($zone);
 		$access_rows=$GLOBALS['SITE_DB']->query_select('group_page_access',array('page_name','zone_name','group_id'));
 		foreach ($zones as $zone)
@@ -582,9 +673,7 @@ class Module_admin_permissions
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:page',do_lang_tempcode('CHOOSE'))));
-
-		return do_template('PERMISSION_SCREEN_PERMISSIONS_SCREEN',array('_GUID'=>'1cfa15b2fd8c2828c897c6a5c974b201','COLS'=>$cols,'ZONE'=>$zone,'TITLE'=>$title,'URL'=>$url,'HEADER_CELLS'=>$header_cells,'ROWS'=>$rows));
+		return do_template('PERMISSION_SCREEN_PERMISSIONS_SCREEN',array('_GUID'=>'1cfa15b2fd8c2828c897c6a5c974b201','COLS'=>$cols,'ZONE'=>$zone,'TITLE'=>$this->title,'URL'=>$url,'HEADER_CELLS'=>$header_cells,'ROWS'=>$rows));
 	}
 
 	/**
@@ -594,11 +683,6 @@ class Module_admin_permissions
 	 */
 	function set_page_access()
 	{
-		set_helper_panel_pic('pagepics/permissionstree');
-		set_helper_panel_tutorial('tut_permissions');
-
-		$title=get_screen_title('PAGE_ACCESS');
-
 		// Delete to cleanup
 		$zone=post_param('zone');
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE page_name NOT LIKE \''.db_encode_like('%:%').'\' AND '.db_string_equal_to('zone_name',$zone));
@@ -626,9 +710,6 @@ class Module_admin_permissions
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:page',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:page:zone='.$zone,do_lang_tempcode('PAGE_ACCESS'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		decache('main_sitemap');
 		require_code('caches3');
 		erase_block_cache();
@@ -638,7 +719,7 @@ class Module_admin_permissions
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'page'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -687,16 +768,9 @@ class Module_admin_permissions
 		require_all_lang();
 		require_code('zones2');
 
-		$title=get_screen_title('PRIVILEGES');
-
 		$p_section=get_param('id',NULL);
 		if ((is_null($p_section)) || ($p_section==''))
 		{
-			set_helper_panel_pic('pagepics/privileges');
-			set_helper_panel_tutorial('tut_permissions');
-
-			set_helper_panel_pic('pagepics/privileges');
-
 			$fields=new ocp_tempcode();
 			require_code('form_templates');
 
@@ -730,10 +804,8 @@ class Module_admin_permissions
 
 			$post_url=get_self_url(false,false,NULL,false,true);
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'e5d457a49a76706afebc92da3d846e74','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+			return do_template('FORM_SCREEN',array('_GUID'=>'e5d457a49a76706afebc92da3d846e74','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 		}
-
-		$title=get_screen_title('_PRIVILEGES',true,array(do_lang_tempcode($p_section)));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_privileges','id'=>$p_section),'_SELF');
 
@@ -891,9 +963,7 @@ class Module_admin_permissions
 		}
 		$sections->attach(do_template('PERMISSION_S_CONFIG_SECTION',array('_GUID'=>'c75a07373f54c0fa31d18e360fcf26f6','COLS'=>$cols,'HEADER_CELLS'=>$header_cells,'SECTION'=>$rows,'CURRENT_SECTION'=>do_lang_tempcode($current_section))));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
-
-		return do_template('PERMISSION_S_PERMISSIONS_SCREEN',array('_GUID'=>'11974f0a137266a625991d3611b8e587','TITLE'=>$title,'URL'=>$url,'SECTIONS'=>$sections));
+		return do_template('PERMISSION_S_PERMISSIONS_SCREEN',array('_GUID'=>'11974f0a137266a625991d3611b8e587','TITLE'=>$this->title,'URL'=>$url,'SECTIONS'=>$sections));
 	}
 
 	/**
@@ -905,12 +975,7 @@ class Module_admin_permissions
 	{
 		require_all_lang();
 
-		set_helper_panel_pic('pagepics/privileges');
-		set_helper_panel_tutorial('tut_permissions');
-
 		if ((count($_POST)==0) && (strtolower(ocp_srv('REQUEST_METHOD'))!='post')) warn_exit(do_lang_tempcode('PERMISSION_TRAGEDY_PREVENTED'));
-
-		$title=get_screen_title('PRIVILEGES');
 
 		$p_section=get_param('id');
 		$_sections=$this->_get_ordered_sections();
@@ -950,8 +1015,6 @@ class Module_admin_permissions
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
-
 		decache('main_sitemap');
 		require_code('caches3');
 		erase_block_cache();
@@ -961,7 +1024,7 @@ class Module_admin_permissions
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'privileges','id'=>$next_section),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS_NOW_NEXT_SCREEN'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS_NOW_NEXT_SCREEN'));
 	}
 
 }

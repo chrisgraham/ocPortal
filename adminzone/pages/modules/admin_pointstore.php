@@ -51,6 +51,45 @@ class Module_admin_pointstore
 		return array('misc'=>'POINTSTORE_MANAGE_SALES','p'=>'POINTSTORE_MANAGE_INVENTORY');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/pointstore');
+		set_helper_panel_tutorial('tut_points');
+
+		if ($type=='misc')
+		{
+			$also_url=build_url(array('page'=>'_SELF','type'=>'p'),'_SELF');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
+		}
+
+		if ($type=='misc' || $type=='_logs')
+		{
+			$this->title=get_screen_title('POINTSTORE_MANAGE_SALES');
+		}
+
+		if ($type=='p')
+		{
+			$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
+		}
+
+		if ($type=='p' || $type=='_p')
+		{
+			$this->title=get_screen_title('POINTSTORE_MANAGE_INVENTORY');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,11 +97,7 @@ class Module_admin_pointstore
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/pointstore');
-		set_helper_panel_tutorial('tut_points');
-
 		require_lang('pointstore');
-		require_lang('menus');
 		require_code('form_templates');
 		require_css('points');
 
@@ -83,11 +118,6 @@ class Module_admin_pointstore
 	 */
 	function pointstore_log_interface()
 	{
-		$also_url=build_url(array('page'=>'_SELF','type'=>'p'),'_SELF');
-		attach_message(do_lang_tempcode('ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
-
-		$title=get_screen_title('POINTSTORE_MANAGE_SALES');
-
 		$rows=$GLOBALS['SITE_DB']->query_select('sales',array('*'),NULL,'ORDER BY date_and_time DESC');
 		$out=new ocp_tempcode();
 		require_code('templates_results_table');
@@ -135,7 +165,7 @@ class Module_admin_pointstore
 		}
 		if ($out->is_empty())
 		{
-			return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
+			return inform_screen($this->title,do_lang_tempcode('NO_ENTRIES'));
 		}
 
 		if ($do_other_details)
@@ -148,7 +178,7 @@ class Module_admin_pointstore
 
 		$content=do_template('COLUMNED_TABLE',array('_GUID'=>'d87800ff26e9e5b8f7593fae971faa73','HEADER_ROW'=>$header_row,'ROWS'=>$out));
 
-		return do_template('POINTSTORE_LOG_SCREEN',array('_GUID'=>'014cf9436ece951edb55f2f7b0efb597','TITLE'=>$title,'CONTENT'=>$content));
+		return do_template('POINTSTORE_LOG_SCREEN',array('_GUID'=>'014cf9436ece951edb55f2f7b0efb597','TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 	/**
@@ -158,13 +188,11 @@ class Module_admin_pointstore
 	 */
 	function delete_log_entry()
 	{
-		$title=get_screen_title('POINTSTORE_MANAGE_SALES');
-
 		$this->_delete_log_entry(get_param_integer('date_and_time'),get_param_integer('memberid'));
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -185,11 +213,6 @@ class Module_admin_pointstore
 	 */
 	function interface_set_prices()
 	{
-		$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		attach_message(do_lang_tempcode('ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
-
-		$title=get_screen_title('POINTSTORE_MANAGE_INVENTORY');
-
 		$field_groups=new ocp_tempcode();
 		$add_forms=new ocp_tempcode();
 
@@ -227,7 +250,7 @@ class Module_admin_pointstore
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		return do_template('POINTSTORE_PRICE_SCREEN',array('_GUID'=>'278c8244c7f1743370198dfc437b7bbf','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'EDIT_FORM'=>$edit_form,'ADD_FORMS'=>$add_forms));
+		return do_template('POINTSTORE_PRICE_SCREEN',array('_GUID'=>'278c8244c7f1743370198dfc437b7bbf','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$this->title,'EDIT_FORM'=>$edit_form,'ADD_FORMS'=>$add_forms));
 	}
 
 	/**
@@ -237,8 +260,6 @@ class Module_admin_pointstore
 	 */
 	function set_prices()
 	{
-		$title=get_screen_title('POINTSTORE_MANAGE_INVENTORY');
-
 		// Save configuration for hooks
 		$_hooks=find_all_hooks('modules','pointstore');
 		foreach (array_keys($_hooks) as $hook)
@@ -256,7 +277,7 @@ class Module_admin_pointstore
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'p'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

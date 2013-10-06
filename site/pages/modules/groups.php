@@ -117,6 +117,119 @@ class Module_groups
 		}
 	}
 
+	var $title;
+	var $id;
+	var $group;
+	var $group_name;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('USERGROUPS');
+		}
+
+		if ($type=='view')
+		{
+			$id=get_param_integer('id');
+
+			if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
+			$map=has_privilege(get_member(),'see_hidden_groups')?array('id'=>$id):array('id'=>$id,'g_hidden'=>0);
+			$groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),$map,'',1);
+			if (!array_key_exists(0,$groups)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$group=$groups[0];
+
+			$group_name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
+
+			breadcrumb_set_self(make_string_tempcode($group_name));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USERGROUPS'))));
+
+			set_extra_request_metadata(array(
+				'created'=>'',
+				'creator'=>is_null($group['g_group_leader'])?'':$GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']),
+				'publisher'=>'', // blank means same as creator
+				'modified'=>'',
+				'type'=>'Usergroup',
+				'title'=>$group_name,
+				'identifier'=>'_SEARCH:groups:view:'.strval($id),
+				'description'=>'',
+				'image'=>find_theme_image('bigicons/usergroups'),
+			));
+
+			$this->title=get_screen_title($club?'CLUB':'USERGROUP',true,array(make_fractionable_editable('group',$id,$group_name)));
+
+			$this->id=$id;
+			$this->group=$group;
+			$this->group_name=$group_name;
+		}
+
+		if ($type=='resign')
+		{
+			$this->title=get_screen_title('RESIGN_FROM_GROUP');
+		}
+
+		if ($type=='remove_from')
+		{
+			$this->title=get_screen_title('REMOVE_MEMBER_FROM_GROUP');
+		}
+
+		if ($type=='apply')
+		{
+			$id=post_param_integer('id',NULL);
+			if (is_null($id))
+			{
+				$_id=get_param('id');
+				if (is_numeric($_id))
+				{
+					$id=intval($_id);
+				} else // Collaboration zone has a text link like this
+				{
+					$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
+					if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+				}
+				if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
+				$group_name=ocf_get_group_name($id);
+
+				breadcrumb_set_self(do_lang_tempcode('DONE'));
+				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USERGROUPS')),array('_SELF:_SELF:view:id='.strval($id),do_lang_tempcode('USERGROUP',escape_html($group_name)))));
+			} else
+			{
+				$group_name=ocf_get_group_name($id);
+			}
+
+			$this->title=get_screen_title('_APPLY_TO_GROUP',true,array(escape_html($group_name)));
+
+			$this->id=$id;
+			$this->group_name=$group_name;
+		}
+
+		if ($type=='accept')
+		{
+			$this->title=get_screen_title('ACCEPT_INTO_GROUP');
+		}
+
+		if ($type=='add_to')
+		{
+			$this->title=get_screen_title('ADD_MEMBER_TO_GROUP');
+		}
+
+		if ($type=='decline')
+		{
+			$this->title=get_screen_title('DECLINE_FROM_GROUP');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -137,7 +250,6 @@ class Module_groups
 		if ($type=='remove_from') return $this->remove_from();
 		if ($type=='apply') return $this->apply();
 		if ($type=='accept') return $this->accept();
-		if ($type=='validate') return $this->validate();
 		if ($type=='add_to') return $this->add_to();
 		if ($type=='decline') return $this->decline();
 
@@ -151,8 +263,6 @@ class Module_groups
 	 */
 	function directory()
 	{
-		$title=get_screen_title('USERGROUPS');
-
 		$staff_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
 
 		$sql='SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g WHERE ';
@@ -244,10 +354,10 @@ class Module_groups
 				continue;
 			}
 			if ($i>$start+$max) break;
-			$name=$row['text_original'];
+			$group_name=$row['text_original'];
 			$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
-			$staff->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$name)),escape_html($num_members))));
+			$staff->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$group_name)),escape_html($num_members))));
 			$i++;
 		}
 		$staff=results_table(do_lang_tempcode('STAFF'),$start,'staff_start',$max,'staff_max',$max_rows,$fields_title,$staff,$sortables,$sortable,$sort_order,'staff_sort',NULL,array('200'));
@@ -270,7 +380,7 @@ class Module_groups
 					continue;
 				}
 				if ($i>$start+$max) break;
-				$name=$row['text_original'];
+				$group_name=$row['text_original'];
 				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 				$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
 				$_p_t=$row['g_promotion_threshold'];
@@ -279,7 +389,7 @@ class Module_groups
 				{
 					$p_t=do_lang_tempcode('PROMOTION_TO',escape_html(integer_format($_p_t)),escape_html($_rank[$row['g_promotion_target']]['text_original']));
 				}
-				$rank->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$name)),escape_html($num_members),$p_t)));
+				$rank->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$group_name)),escape_html($num_members),$p_t)));
 			}
 			$rank=results_table(do_lang_tempcode('RANK_SETS'),$start,'rank_start_'.strval($g_id),$max,'rank_max_'.strval($g_id),$max_rows,$fields_title,$rank,$sortables,$sortable,$sort_order,'rank_sort_'.strval($g_id),NULL,array('200'));
 			$ranks[]=$rank;
@@ -309,15 +419,15 @@ class Module_groups
 		{
 			$row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
-			$name=$row['text_original'];
+			$group_name=$row['text_original'];
 			$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
-			$others->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$name)),escape_html($num_members))));
+			$others->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$group_name)),escape_html($num_members))));
 		}
 		if (!$others->is_empty())
 			$others=results_table(do_lang_tempcode('OTHER_USERGROUPS'),$start,'others_start',$max,'others_max',$max_rows,$fields_title,$others,$sortables,$sortable,$sort_order,'others_sort',NULL,array('200'));
 
-		$tpl=do_template('OCF_GROUP_DIRECTORY_SCREEN',array('_GUID'=>'39aebd8fcb618c2ae45e867d0c96a4cf','TITLE'=>$title,'STAFF'=>$staff,'OTHERS'=>$others,'RANKS'=>$ranks));
+		$tpl=do_template('OCF_GROUP_DIRECTORY_SCREEN',array('_GUID'=>'39aebd8fcb618c2ae45e867d0c96a4cf','TITLE'=>$this->title,'STAFF'=>$staff,'OTHERS'=>$others,'RANKS'=>$ranks));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -330,19 +440,11 @@ class Module_groups
 	 */
 	function usergroup()
 	{
-		$id=get_param_integer('id');
-
-		if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-
-		$map=has_privilege(get_member(),'see_hidden_groups')?array('id'=>$id):array('id'=>$id,'g_hidden'=>0);
-		$groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),$map,'',1);
-		if (!array_key_exists(0,$groups)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$group=$groups[0];
+		$id=$this->id;
+		$group=$this->group;
+		$group_name=$this->group_name;
 
 		$club=($group['g_is_private_club']==1);
-		$name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
-
-		$title=get_screen_title($club?'CLUB':'USERGROUP',true,array(make_fractionable_editable('group',$id,$name)));
 
 		// Leadership
 		if ((!is_null($group['g_group_leader'])) && (!is_null($GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']))))
@@ -468,9 +570,6 @@ class Module_groups
 			}
 		}
 
-		breadcrumb_set_self(make_string_tempcode($name));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USERGROUPS'))));
-
 		if (has_actual_page_access(get_member(),'admin_ocf_groups',get_module_zone('admin_ocf_groups')))
 		{
 			$edit_url=build_url(array('page'=>'admin_ocf_groups','type'=>'_ed','id'=>$id),get_module_zone('admin_ocf_groups'));
@@ -479,22 +578,8 @@ class Module_groups
 		$club_forum=NULL;
 		if ($group['g_is_private_club']==1)
 		{
-			$club_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$name)));
+			$club_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$group_name)));
 		}
-
-		$group_name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
-
-		set_extra_request_metadata(array(
-			'created'=>'',
-			'creator'=>is_null($group['g_group_leader'])?'':$GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']),
-			'publisher'=>'', // blank means same as creator
-			'modified'=>'',
-			'type'=>'Usergroup',
-			'title'=>$group_name,
-			'identifier'=>'_SEARCH:groups:view:'.strval($id),
-			'description'=>'',
-			'image'=>find_theme_image('bigicons/usergroups'),
-		));
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_ajax_people_lists');
@@ -512,7 +597,7 @@ class Module_groups
 			'FORUM'=>is_null($forum_id)?'':strval($forum_id),
 			'CLUB'=>$club,
 			'EDIT_URL'=>$edit_url,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'LEADER'=>$leader,
 			'PROMOTION_INFO'=>$promotion_info,
 			'ADD_URL'=>$add_url,
@@ -536,8 +621,6 @@ class Module_groups
 	 */
 	function add_to($special_permission=false,$username=NULL)
 	{
-		$title=get_screen_title('ADD_MEMBER_TO_GROUP');
-
 		$_id=get_param('id');
 		if (is_numeric($_id))
 		{
@@ -569,7 +652,7 @@ class Module_groups
 		ocf_add_member_to_group($member_id,$id);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -579,8 +662,6 @@ class Module_groups
 	 */
 	function remove_from()
 	{
-		$title=get_screen_title('REMOVE_MEMBER_FROM_GROUP');
-
 		$member_id=get_param_integer('member_id');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
@@ -593,7 +674,7 @@ class Module_groups
 			$post_url=build_url(array('page'=>'_SELF','type'=>get_param('type')),'_SELF',NULL,true);
 			$hidden=form_input_hidden('id',strval($id));
 
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'f98ab98f130646f6fd33fbf85ae3f972','TITLE'=>$title,'TEXT'=>do_lang_tempcode('Q_SURE_REMOVE_FROM_GROUP',escape_html($username)),'URL'=>$post_url,'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'f98ab98f130646f6fd33fbf85ae3f972','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE_REMOVE_FROM_GROUP',escape_html($username)),'URL'=>$post_url,'HIDDEN'=>$hidden));
 		}
 
 		if (!ocf_may_control_group($id,get_member()))
@@ -602,7 +683,7 @@ class Module_groups
 		ocf_member_leave_group($id,$member_id);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -612,52 +693,40 @@ class Module_groups
 	 */
 	function apply()
 	{
+		$group_name=$this->group_name;
+
 		$id=post_param_integer('id',NULL);
 		if (is_null($id))
 		{
-			$_id=get_param('id');
-			if (is_numeric($_id))
-			{
-				$id=intval($_id);
-			} else // Collaboration zone has a text link like this
-			{
-				$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
-				if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-			}
-			if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			$id=$this->id;
 
 			$_leader=ocf_get_group_property($id,'group_leader');
 			$free_access=(ocf_get_group_property($id,'open_membership')==1);
-			$name=ocf_get_group_name($id);
-			$title=get_screen_title('_APPLY_TO_GROUP',true,array(escape_html($name)));
 
 			$post_url=build_url(array('page'=>'_SELF','type'=>get_param('type')),'_SELF',NULL,true);
 			$hidden=form_input_hidden('id',strval($id));
 
 			if ($free_access)
 			{
-				$text=do_lang_tempcode('ABOUT_TO_APPLY_FREE_ACCESS',escape_html($name));
+				$text=do_lang_tempcode('ABOUT_TO_APPLY_FREE_ACCESS',escape_html($group_name));
 			} else
 			{
 				if ((is_null($_leader)) || (is_null($GLOBALS['FORUM_DRIVER']->get_username($_leader))))
 				{
-					$text=do_lang_tempcode('ABOUT_TO_APPLY_STAFF',escape_html($name),escape_html(get_site_name()));
+					$text=do_lang_tempcode('ABOUT_TO_APPLY_STAFF',escape_html($group_name),escape_html(get_site_name()));
 				} else
 				{
 					$leader_username=$GLOBALS['FORUM_DRIVER']->get_username($_leader,true);
 					if (is_null($leader_username)) $leader_username=do_lang('UNKNOWN');
 					$leader_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($_leader,false,true);
-					$text=do_lang_tempcode('ABOUT_TO_APPLY_LEADER',escape_html($name),escape_html($leader_username),escape_html($leader_url));
+					$text=do_lang_tempcode('ABOUT_TO_APPLY_LEADER',escape_html($group_name),escape_html($leader_username),escape_html($leader_url));
 				}
 			}
 
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'ceafde00ade4492c65ed2e6e2309a0e7','TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'ceafde00ade4492c65ed2e6e2309a0e7','TITLE'=>$this->title,'TEXT'=>$text,'URL'=>$post_url,'HIDDEN'=>$hidden));
 		}
 		if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		$_name=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_name',array('id'=>$id));
-		$name=get_translated_text($_name,$GLOBALS['FORUM_DB']);
-		$title=get_screen_title('_APPLY_TO_GROUP',true,array(escape_html($name)));
 		$free_access=(ocf_get_group_property($id,'open_membership')==1);
 
 		if (is_guest()) access_denied('I_ERROR');
@@ -670,11 +739,8 @@ class Module_groups
 
 		ocf_member_ask_join_group($id,get_member());
 
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USERGROUPS')),array('_SELF:_SELF:view:id='.strval($id),do_lang_tempcode('USERGROUP',escape_html($name)))));
-
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('AWAITING_GROUP_LEADER'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('AWAITING_GROUP_LEADER'));
 	}
 
 	/**
@@ -684,7 +750,6 @@ class Module_groups
 	 */
 	function accept()
 	{
-		$title=get_screen_title('ACCEPT_INTO_GROUP');
 		$id=post_param_integer('id',NULL);
 		if (is_null($id))
 		{
@@ -693,7 +758,7 @@ class Module_groups
 			$post_url=build_url(array('page'=>'_SELF','type'=>get_param('type')),'_SELF',NULL,true);
 			$hidden=form_input_hidden('id',strval($id));
 
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'ebc562534bceb3161a21307633bc229e','TITLE'=>$title,'TEXT'=>do_lang_tempcode('Q_SURE'),'URL'=>$post_url,'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'ebc562534bceb3161a21307633bc229e','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE'),'URL'=>$post_url,'HIDDEN'=>$hidden));
 		}
 
 		if (!ocf_may_control_group($id,get_member()))
@@ -702,7 +767,7 @@ class Module_groups
 		ocf_member_validate_into_group($id,get_param_integer('member_id'));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -712,7 +777,6 @@ class Module_groups
 	 */
 	function decline()
 	{
-		$title=get_screen_title('DECLINE_FROM_GROUP');
 		$id=post_param_integer('id',NULL);
 		if (is_null($id))
 		{
@@ -727,7 +791,7 @@ class Module_groups
 			$hidden=form_input_hidden('id',strval($id));
 			$fields->attach(form_input_line(do_lang_tempcode('REASON'),'','reason','',false));
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'ebec84204dee305a8db1a57e5a95c774','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+			return do_template('FORM_SCREEN',array('_GUID'=>'ebec84204dee305a8db1a57e5a95c774','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 		}
 
 		if (!ocf_may_control_group($id,get_member()))
@@ -738,7 +802,7 @@ class Module_groups
 		ocf_member_validate_into_group($id,$member_id,true,post_param('reason'));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -748,7 +812,6 @@ class Module_groups
 	 */
 	function resign()
 	{
-		$title=get_screen_title('RESIGN_FROM_GROUP');
 		$id=post_param_integer('id',NULL);
 		if (is_null($id))
 		{
@@ -757,13 +820,13 @@ class Module_groups
 			$post_url=build_url(array('page'=>'_SELF','type'=>get_param('type')),'_SELF',NULL,true);
 			$hidden=form_input_hidden('id',strval($id));
 
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'d9524899fbc243247a9d253cf93c8aa2','TITLE'=>$title,'TEXT'=>do_lang_tempcode('Q_SURE'),'URL'=>$post_url,'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'d9524899fbc243247a9d253cf93c8aa2','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE'),'URL'=>$post_url,'HIDDEN'=>$hidden));
 		}
 
 		ocf_member_leave_group($id,get_member());
 
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

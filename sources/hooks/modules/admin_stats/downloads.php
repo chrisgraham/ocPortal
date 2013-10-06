@@ -48,8 +48,6 @@ class Hook_admin_stats_downloads
 	 */
 	function downloads($ob,$type)
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
 		require_lang('downloads');
 
 		//This will show a plain bar chart with all the downloads listed
@@ -106,7 +104,6 @@ class Hook_admin_stats_downloads
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		if ($sort_order=='ASC') asort($downloads);
 		else arsort($downloads);

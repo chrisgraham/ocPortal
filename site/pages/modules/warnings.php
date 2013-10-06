@@ -45,6 +45,55 @@ class Module_warnings extends standard_crud_module
 		return is_guest()?array():(parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='history')
+		{
+			$this->title=get_screen_title('PUNITIVE_HISTORY');
+		}
+
+		if ($type=='undo_charge')
+		{
+			$this->title=get_screen_title('UNDO_CHARGE');
+		}
+
+		if ($type=='undo_probation')
+		{
+			$this->title=get_screen_title('UNDO_PROBATION');
+		}
+
+		if ($type=='undo_banned_ip')
+		{
+			$this->title=get_screen_title('UNBAN_IP');
+		}
+
+		if ($type=='undo_banned_member')
+		{
+			$this->title=get_screen_title('UNBAN_MEMBER');
+		}
+
+		if ($type=='undo_silence_from_topic')
+		{
+			$this->title=get_screen_title('UNSILENCE_TOPIC');
+		}
+
+		if ($type=='undo_silence_from_forum')
+		{
+			$this->title=get_screen_title('UNSILENCE_FORUM');
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -80,8 +129,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function history()
 	{
-		$title=get_screen_title('PUNITIVE_HISTORY');
-
 		require_code('templates_results_table');
 
 		$member_id=get_param_integer('id');
@@ -136,7 +183,7 @@ class Module_warnings extends standard_crud_module
 
 		$tpl=do_template('OCF_WARNING_HISTORY_SCREEN',array(
 			'_GUID'=>'4444beed9305f0460a6c00e6c87d4208',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'MEMBER_ID'=>strval($member_id),
 			'EDIT_PROFILE_URL'=>$edit_profile_url,
 			'VIEW_PROFILE_URL'=>$view_profile_url,
@@ -155,8 +202,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function undo_charge()
 	{
-		$title=get_screen_title('UNDO_CHARGE');
-
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
 		$charged_points=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_charged_points',array('id'=>$id));
@@ -168,7 +213,7 @@ class Module_warnings extends standard_crud_module
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'history','id'=>$member_id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -178,8 +223,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function undo_probation()
 	{
-		$title=get_screen_title('UNDO_PROBATION');
-
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
 		$probation=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_probation',array('id'=>$id));
@@ -192,7 +235,7 @@ class Module_warnings extends standard_crud_module
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'history','id'=>$member_id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -202,8 +245,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function undo_banned_ip()
 	{
-		$title=get_screen_title('UNBAN_IP');
-
 		require_code('failure');
 
 		$id=post_param_integer('id');
@@ -216,7 +257,7 @@ class Module_warnings extends standard_crud_module
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'history','id'=>$member_id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -226,8 +267,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function undo_banned_member()
 	{
-		$title=get_screen_title('UNBAN_MEMBER');
-
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
 		$banned_member=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_banned_member',array('id'=>$id));
@@ -238,7 +277,7 @@ class Module_warnings extends standard_crud_module
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'history','id'=>$member_id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -248,8 +287,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function undo_silence_from_topic()
 	{
-		$title=get_screen_title('UNSILENCE_TOPIC');
-
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
 		$silence_from_topic=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_silence_from_topic',array('id'=>$id));
@@ -266,7 +303,7 @@ class Module_warnings extends standard_crud_module
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'history','id'=>$member_id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -276,8 +313,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function undo_silence_from_forum()
 	{
-		$title=get_screen_title('UNSILENCE_FORUM');
-
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
 		$silence_from_forum=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_silence_from_forum',array('id'=>$id));
@@ -294,7 +329,7 @@ class Module_warnings extends standard_crud_module
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'history','id'=>$member_id),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -477,7 +512,6 @@ class Module_warnings extends standard_crud_module
 			$sortables['p_charged_points']=do_lang_tempcode('POINTS');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fh=array(
 			do_lang_tempcode('USERNAME'),

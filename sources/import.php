@@ -170,15 +170,8 @@ function i_force_refresh()
 		if ((strpos($GLOBALS['I_REFRESH_URL'],"\n")!==false) || (strpos($GLOBALS['I_REFRESH_URL'],"\r")!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
-		if (!headers_sent())
-		{
-			header('Location: '.$GLOBALS['I_REFRESH_URL']);
-		} else
-		{
-			echo '<meta http-equiv="Refresh" content="0; URL='.escape_html($GLOBALS['I_REFRESH_URL']).'" />';
-			flush();
-		}
-		exit();
+		require_code('site2');
+		smart_redirect($GLOBALS['I_REFRESH_URL']);
 	}
 }
 

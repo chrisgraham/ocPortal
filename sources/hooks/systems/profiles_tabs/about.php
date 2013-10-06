@@ -339,18 +339,6 @@ class Hook_Profiles_Tabs_about
 		$_on_probation=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_on_probation_until');
 		if ((is_null($_on_probation)) || ($_on_probation<=time())) $on_probation=NULL; else $on_probation=strval($_on_probation);
 
-		set_extra_request_metadata(array(
-			'created'=>date('Y-m-d',$join_time),
-			'creator'=>$username,
-			'publisher'=>'', // blank means same as creator
-			'modified'=>'',
-			'type'=>'Profile',
-			'title'=>'',
-			'identifier'=>'_SEARCH:members:view:'.strval($member_id_of),
-			'description'=>'',
-			'image'=>(($avatar_url=='') && (has_privilege($member_id_viewing,'view_member_photos')))?$photo_url:$avatar_url,
-		));
-
 		// Look up member's clubs
 		$clubs=array();
 		if (addon_installed('ocf_clubs'))

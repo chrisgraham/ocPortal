@@ -45,6 +45,23 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 		return array_merge(array('misc'=>'POST_TEMPLATES'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/posttemplates');
+		set_helper_panel_tutorial('tut_forum_helpdesk');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -53,9 +70,6 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/posttemplates');
-		set_helper_panel_tutorial('tut_forum_helpdesk');
-
 		$this->add_one_label=do_lang_tempcode('ADD_POST_TEMPLATE');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_POST_TEMPLATE');
 		$this->edit_one_label=do_lang_tempcode('EDIT_POST_TEMPLATE');
@@ -77,12 +91,12 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('POST_TEMPLATES'),comcode_lang_string('DOC_POST_TEMPLATES'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POST_TEMPLATE')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_POST_TEMPLATE')),
-					),
-					do_lang('POST_TEMPLATES')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POST_TEMPLATE')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_POST_TEMPLATE')),
+			),
+			do_lang('POST_TEMPLATES')
 		);
 	}
 
@@ -104,7 +118,6 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

@@ -193,6 +193,62 @@ class Module_shopping
 		return is_guest()?array('misc'=>'SHOPPING'):array('my_orders'=>'MY_ORDERS','misc'=>'SHOPPING');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES'))));
+
+			$this->title=get_screen_title('SHOPPING');
+		}
+
+		if ($type=='add_item')
+		{
+			$this->title=get_screen_title('SHOPPING');	
+		}
+
+		if ($type=='update_cart')
+		{
+			$this->title=get_screen_title('SHOPPING');
+		}
+
+		if ($type=='empty_cart')
+		{
+			$this->title=get_screen_title('SHOPPING');
+		}
+
+		if ($type=='finish')
+		{
+			breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES')),array('_SELF:_SELF:misc',do_lang_tempcode('SHOPPING'))));
+
+			$this->title=get_screen_title('_PURCHASE_FINISHED');
+		}
+
+		if ($type=='my_orders')
+		{
+			$this->title=get_screen_title('MY_ORDERS');
+		}
+
+		if ($type=='order_det')
+		{
+			breadcrumb_set_parents(array(array('_SELF:orders:misc',do_lang_tempcode('MY_ORDERS'))));
+
+			$id=get_param_integer('id');
+			$this->title=get_screen_title('_MY_ORDER_DETAILS',true,array($id));
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -248,11 +304,7 @@ class Module_shopping
 		require_css('shopping');
 		require_javascript('javascript_shopping');
 
-		$title=get_screen_title('SHOPPING');
-
 		log_cart_actions('View cart');
-
-		breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES'))));
 
 		$where=array('ordered_by'=>get_member(),'is_deleted'=>0);
 		if (is_guest())
@@ -339,8 +391,7 @@ class Module_shopping
 				'CURRENCY'=>ecommerce_get_currency_symbol(),
 				'PAYMENT_FORM'=>$payment_form,
 			));
-		}
-		else
+		} else
 		{	
 			$update_cart=new ocp_tempcode();
 			$empty_cart=new ocp_tempcode();
@@ -363,7 +414,7 @@ class Module_shopping
 
 		$tpl=do_template('ECOM_SHOPPING_CART_SCREEN',array(
 			'_GUID'=>'badff09daf52ee1c84b472c44be1bfae',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'RESULTS_TABLE'=>$results_table,
 			'CONTENT'=>'',
 			'FORM_URL'=>$update_cart,
@@ -397,8 +448,6 @@ class Module_shopping
 			set_session_id(get_session_id(),true); // Persist guest sessions longer
 		}
 
-		$title=get_screen_title('SHOPPING');	
-
 		$product_details=get_product_details();
 
 		add_to_cart($product_details);
@@ -407,7 +456,7 @@ class Module_shopping
 
 		$cart_view=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 
-		return redirect_screen($title,$cart_view,do_lang_tempcode('SUCCESS'));		
+		return redirect_screen($this->title,$cart_view,do_lang_tempcode('SUCCESS'));		
 	}
 
 	/**
@@ -417,8 +466,6 @@ class Module_shopping
 	 */
 	function update_cart()
 	{
-		$title=get_screen_title('SHOPPING');
-
 		$p_ids=post_param('product_ids');
 
 		$pids=explode(",",$p_ids);
@@ -465,7 +512,7 @@ class Module_shopping
 
 		$cart_view=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 
-		return redirect_screen($title,$cart_view,do_lang_tempcode('CART_UPDATED'));
+		return redirect_screen($this->title,$cart_view,do_lang_tempcode('CART_UPDATED'));
 	}
 
 	/**
@@ -475,8 +522,6 @@ class Module_shopping
 	 */
 	function empty_cart()
 	{
-		$title=get_screen_title('SHOPPING');
-
 		log_cart_actions('Cart emptied');
 
 		$where=array();
@@ -493,7 +538,7 @@ class Module_shopping
 
 		$cart_view=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 
-		return redirect_screen($title,$cart_view,do_lang_tempcode('CART_EMPTIED'));
+		return redirect_screen($this->title,$cart_view,do_lang_tempcode('CART_EMPTIED'));
 	}
 
 	/**
@@ -520,10 +565,6 @@ class Module_shopping
 	 */
 	function finish()
 	{
-		$title=get_screen_title('_PURCHASE_FINISHED');
-
-		breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES')),array('_SELF:_SELF:misc',do_lang_tempcode('SHOPPING'))));
-
 		$message=get_param('message',NULL,true); // TODO: Assumption, needs to really go through the payment gateway API			#145 on tracker
 
 		if (get_param_integer('cancel',0)==0)
@@ -592,16 +633,16 @@ class Module_shopping
 
 				if (method_exists($object,'get_finish_url'))
 				{
-					return redirect_screen($title,$object->get_finish_url(),$message);
+					return redirect_screen($this->title,$object->get_finish_url(),$message);
 				}
 			}
 
-			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'3857e761ab75f314f4960805bc76b936','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
+			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'3857e761ab75f314f4960805bc76b936','TITLE'=>$this->title,'MESSAGE'=>$message)),$this->title,NULL);
 		}
 
 		if (!is_null($message))
 		{
-			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'6eafce1925e5069ceb438ec24754b47d','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
+			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'6eafce1925e5069ceb438ec24754b47d','TITLE'=>$this->title,'MESSAGE'=>$message)),$this->title,NULL);
 		}
 
 		return inform_screen(get_screen_title('PURCHASING'),do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'),true);
@@ -614,8 +655,6 @@ class Module_shopping
 	 */
 	function my_orders()
 	{
-		$title=get_screen_title('MY_ORDERS');
-
 		$member_id=get_member();
 
 		if (has_privilege(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
@@ -650,7 +689,7 @@ class Module_shopping
 
 		if (count($orders)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		return do_template('ECOM_ORDERS_SCREEN',array('_GUID'=>'79eb5f17cf4bc2dc4f0cccf438261c73','TITLE'=>$title,'CURRENCY'=>get_option('currency'),'ORDERS'=>$orders));
+		return do_template('ECOM_ORDERS_SCREEN',array('_GUID'=>'79eb5f17cf4bc2dc4f0cccf438261c73','TITLE'=>$this->title,'CURRENCY'=>get_option('currency'),'ORDERS'=>$orders));
 	}
 
 	/**
@@ -662,14 +701,9 @@ class Module_shopping
 	{
 		$id=get_param_integer('id');
 
-		$title=get_screen_title('_MY_ORDER_DETAILS',true,array($id));
-
 		$products=array();
 
 		$rows=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$id));
-
-		breadcrumb_set_parents(array(array('_SELF:orders:misc',do_lang_tempcode('MY_ORDERS'))));
-
 		foreach ($rows as $row)
 		{
 			$product_info_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['p_id']),get_module_zone('catalogues'));
@@ -679,7 +713,7 @@ class Module_shopping
 
 		if (count($products)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		return do_template('ECOM_ORDERS_DETAILS_SCREEN',array('_GUID'=>'8122a53dc0ccf27648af460759a2b6f6','TITLE'=>$title,'CURRENCY'=>get_option('currency'),'PRODUCTS'=>$products));
+		return do_template('ECOM_ORDERS_DETAILS_SCREEN',array('_GUID'=>'8122a53dc0ccf27648af460759a2b6f6','TITLE'=>$this->title,'CURRENCY'=>get_option('currency'),'PRODUCTS'=>$products));
 	}
 }
 

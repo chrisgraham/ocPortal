@@ -36,6 +36,38 @@ class Module_cms_iotds extends standard_crud_module
 	var $menu_label='IOTDS';
 	var $table='iotd';
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/iotds');
+		set_helper_panel_tutorial('tut_featured');
+
+		if ($type=='ed')
+		{
+			$this->title=get_screen_title('EDIT_OR_CHOOSE_IOTD');
+		}
+
+		if ($type=='_choose')
+		{
+			$this->title=get_screen_title('CHOOSE_IOTD');
+		}
+
+		if ($type=='_delete')
+		{
+			$this->title=get_screen_title('DELETE_IOTD');
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -49,9 +81,6 @@ class Module_cms_iotds extends standard_crud_module
 		require_code('iotds2');
 		require_css('iotds');
 
-		set_helper_panel_pic('pagepics/iotds');
-		set_helper_panel_tutorial('tut_featured');
-
 		$this->add_one_label=do_lang_tempcode('ADD_IOTD');
 		$this->edit_one_label=do_lang_tempcode('EDIT_OR_CHOOSE_IOTD');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_IOTD');
@@ -61,8 +90,7 @@ class Module_cms_iotds extends standard_crud_module
 		if ($type=='_delete')
 		{
 			$this->delete_actualisation(post_param_integer('id'));
-			$title=get_screen_title('DELETE_IOTD');
-			return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),NULL);
+			return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),NULL);
 		}
 
 		return new ocp_tempcode();
@@ -98,12 +126,12 @@ class Module_cms_iotds extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_IOTDS'),comcode_lang_string('DOC_IOTDS'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						has_privilege(get_member(),'submit_midrange_content','cms_iotds')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IOTD')):NULL,
-						has_privilege(get_member(),'edit_own_midrange_content','cms_iotds')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_IOTD')):NULL,
-					),
-					do_lang('MANAGE_IOTDS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				has_privilege(get_member(),'submit_midrange_content','cms_iotds')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IOTD')):NULL,
+				has_privilege(get_member(),'edit_own_midrange_content','cms_iotds')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_IOTD')):NULL,
+			),
+			do_lang('MANAGE_IOTDS')
 		);
 	}
 
@@ -193,8 +221,6 @@ class Module_cms_iotds extends standard_crud_module
 
 		$used=get_param_integer('used',0);
 
-		$title=get_screen_title('EDIT_OR_CHOOSE_IOTD');
-
 		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_iotds')?NULL:get_member();
 
 		$current_iotd=$this->_get_iotd_boxes(1,1);
@@ -207,7 +233,7 @@ class Module_cms_iotds extends standard_crud_module
 		$archive_url=build_url(array('page'=>'iotds'),get_module_zone('iotds'));
 		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($search_url->evaluate()),escape_html($archive_url->evaluate())));
 
-		return do_template('IOTD_ADMIN_CHOOSE_SCREEN',array('_GUID'=>'3ee2847c986bf349caa40d462f45eb9c','SHOWING_OLD'=>$used==1,'TITLE'=>$title,'TEXT'=>$text,'USED_URL'=>$used_url,'CURRENT_IOTD'=>$current_iotd,'UNUSED_IOTD'=>$unused_iotd,'USED_IOTD'=>$used_iotd));
+		return do_template('IOTD_ADMIN_CHOOSE_SCREEN',array('_GUID'=>'3ee2847c986bf349caa40d462f45eb9c','SHOWING_OLD'=>$used==1,'TITLE'=>$this->title,'TEXT'=>$text,'USED_URL'=>$used_url,'CURRENT_IOTD'=>$current_iotd,'UNUSED_IOTD'=>$unused_iotd,'USED_IOTD'=>$used_iotd));
 	}
 
 	/**
@@ -410,13 +436,11 @@ class Module_cms_iotds extends standard_crud_module
 	{
 		check_privilege('choose_iotd');
 
-		$title=get_screen_title('CHOOSE_IOTD');
-
 		$id=post_param_integer('id');
 
 		set_iotd($id);
 
-		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),$id);
+		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$id);
 	}
 
 	/**

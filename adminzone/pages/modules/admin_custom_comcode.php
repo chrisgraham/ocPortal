@@ -124,6 +124,23 @@ class Module_admin_custom_comcode extends standard_crud_module
 		));
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/customcomcode');
+		set_helper_panel_tutorial('tut_adv_comcode');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -133,9 +150,6 @@ class Module_admin_custom_comcode extends standard_crud_module
 	function run_start($type)
 	{
 		require_code('custom_comcode');
-
-		set_helper_panel_pic('pagepics/customcomcode');
-		set_helper_panel_tutorial('tut_adv_comcode');
 
 		$this->add_one_label=do_lang_tempcode('ADD_CUSTOM_COMCODE_TAG');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_CUSTOM_COMCODE_TAG');
@@ -177,12 +191,12 @@ class Module_admin_custom_comcode extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('CUSTOM_COMCODE'),comcode_lang_string('DOC_CUSTOM_COMCODE'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_COMCODE_TAG')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CUSTOM_COMCODE_TAG')),
-					),
-					do_lang('CUSTOM_COMCODE')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_COMCODE_TAG')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CUSTOM_COMCODE_TAG')),
+			),
+			do_lang('CUSTOM_COMCODE')
 		);
 	}
 
@@ -219,7 +233,6 @@ class Module_admin_custom_comcode extends standard_crud_module
 		),$sortables,'sort',$sortable.' '.$sort_order);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$fields=new ocp_tempcode();
 

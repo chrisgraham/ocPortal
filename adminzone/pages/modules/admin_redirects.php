@@ -106,6 +106,22 @@ class Module_admin_redirects
 		return array('misc'=>'REDIRECTS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$this->title=get_screen_title('REDIRECTS');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -132,7 +148,6 @@ class Module_admin_redirects
 	{
 		require_css('redirects_editor');
 
-		$title=get_screen_title('REDIRECTS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$fields=new ocp_tempcode();
 		$rows=$GLOBALS['SITE_DB']->query_select('redirects',array('*'));
@@ -200,7 +215,7 @@ class Module_admin_redirects
 			'NOTES'=>$notes,
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'NEW'=>$new,
 			'URL'=>$post_url,
@@ -214,8 +229,6 @@ class Module_admin_redirects
 	 */
 	function actual()
 	{
-		$title=get_screen_title('REDIRECTS');
-
 		$found=array();
 		foreach ($_POST as $key=>$val)
 		{
@@ -266,7 +279,7 @@ class Module_admin_redirects
 
 		// Redirect them back to editing screen
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

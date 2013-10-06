@@ -281,20 +281,20 @@ function site_tree_do_next_manager($title,$page,$zone,$completion_text)
 		));
 	}
 	return do_next_manager($title,$completion_text,
-					$special,
-					do_lang('PAGES'),
-					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-					/*	 page	 params				  zone	  */
-					NULL,								 // Add one
-					is_null($page)?NULL:array('_SELF',array('type'=>'_ed','page_link'=>$zone.':'.$page),'_SELF'), // Edit this
-					NULL,																						// Edit one
-					is_null($page)?NULL:array($page,array(),$zone),		 // View this
-					NULL,				// View archive
-					NULL,						// Add to category
-					NULL,							 // Add one category
-					NULL,							 // Edit one category
-					NULL,  // Edit this category
-					NULL						// View this category
+		$special,
+		do_lang('PAGES'),
+		/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+		/*	 page	 params				  zone	  */
+		NULL,								 // Add one
+		is_null($page)?NULL:array('_SELF',array('type'=>'_ed','page_link'=>$zone.':'.$page),'_SELF'), // Edit this
+		NULL,																						// Edit one
+		is_null($page)?NULL:array($page,array(),$zone),		 // View this
+		NULL,				// View archive
+		NULL,						// Add to category
+		NULL,							 // Add one category
+		NULL,							 // Edit one category
+		NULL,  // Edit this category
+		NULL						// View this category
 	);
 }
 

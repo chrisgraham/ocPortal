@@ -60,8 +60,11 @@ class Module_admin_phpinfo
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		require_lang('menus');
 		get_screen_title('PHP_INFO');
+
+		require_css('phpinfo');
+
+		require_lang('menus');
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 		$GLOBALS['TITLE_CALLED']=true;
 
@@ -95,8 +98,6 @@ class Module_admin_phpinfo
 		$out=preg_replace('#([^\s<>"\']{95})#','${1}<br />',$out);
 		$url_parts=parse_url(get_base_url());
 		$out=str_replace('<img border="0" src="/','<img border="0" style="padding-top: 20px" src="http://'.escape_html($url_parts['host']).'/',$out);
-
-		require_css('phpinfo');
 
 		require_code('xhtml');
 		$ret=make_string_tempcode(xhtmlise_html($out));

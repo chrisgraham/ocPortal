@@ -66,6 +66,73 @@ class Module_admin_lang
 		}
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		require_lang('lang');
+
+		set_helper_panel_pic('pagepics/language');
+		set_helper_panel_tutorial('tut_intl');
+
+		if ($type=='criticise')
+		{
+			set_helper_panel_pic('pagepics/criticise_language');
+
+			$this->title=get_screen_title('CRITICISE_LANGUAGE_PACK');
+		}
+
+		if ($type=='misc')
+		{
+			if (get_param('lang','')=='')
+				set_helper_panel_text(comcode_lang_string('DOC_FIND_LANG_STRING_TIP'));
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_self(do_lang_tempcode('TRANSLATE_CODE'));
+
+			$lang=filter_naughty_harsh(get_param('lang',''));
+			if ($lang=='')
+			{
+				$this->title=get_screen_title('TRANSLATE_CODE');
+			} else
+			{
+				$search=get_param('search','',true);
+				if ($search!='')
+				{
+					$this->title=get_screen_title('TRANSLATE_CODE');
+				} else
+				{
+					$lang_file=get_param('lang_file');
+					$this->title=get_screen_title('_TRANSLATE_CODE',true,array(escape_html($lang_file),escape_html(array_key_exists($lang,$map)?$map[$lang]:$lang)));
+				}
+			}
+		}
+
+		if ($type=='content' || $type=='_content')
+		{
+			$this->title=get_screen_title('TRANSLATE_CONTENT');
+		}
+
+		if ($type=='_code' || $type=='_code2')
+		{
+			$this->title=get_screen_title('TRANSLATE_CODE');
+		}
+
+		if ($type=='export_po')
+		{
+			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -77,7 +144,6 @@ class Module_admin_lang
 
 		require_code('lang2');
 		require_code('lang_compile');
-		require_lang('lang');
 
 		require_css('translations_editor');
 
@@ -107,9 +173,6 @@ class Module_admin_lang
 	 */
 	function choose_lang($title,$choose_lang_file=false,$add_lang=false,$text='',$provide_na=true,$param_name='lang')
 	{
-		set_helper_panel_pic('pagepics/language');
-		set_helper_panel_tutorial('tut_intl');
-
 		require_code('form_templates');
 		$langs=new ocp_tempcode();
 		$langs->attach(nice_get_langs(NULL,$add_lang));
@@ -205,13 +268,8 @@ class Module_admin_lang
 	 */
 	function criticise()
 	{
-		set_helper_panel_tutorial('tut_intl');
-		set_helper_panel_pic('pagepics/criticise_language');
-
-		$title=get_screen_title('CRITICISE_LANGUAGE_PACK');
-
 		$lang=get_param('crit_lang','');
-		if ($lang=='') return $this->choose_lang($title,false,false,do_lang_tempcode('CHOOSE_CRITICISE_LIST_LANG_FILE'),false,'crit_lang');
+		if ($lang=='') return $this->choose_lang($this->title,false,false,do_lang_tempcode('CHOOSE_CRITICISE_LIST_LANG_FILE'),false,'crit_lang');
 
 		$files='';
 
@@ -289,7 +347,7 @@ class Module_admin_lang
 			$files.=$file_result->evaluate();/*FUDGEFUDGE*/
 		}
 
-		return do_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN',array('_GUID'=>'62d6f40ca69609a8fd33704a8a38fb6f','TITLE'=>$title,'FILES'=>$files));
+		return do_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN',array('_GUID'=>'62d6f40ca69609a8fd33704a8a38fb6f','TITLE'=>$this->title,'FILES'=>$files));
 	}
 
 	/**
@@ -299,13 +357,11 @@ class Module_admin_lang
 	 */
 	function interface_content()
 	{
-		$title=get_screen_title('TRANSLATE_CONTENT');
-
 		if (!multi_lang()) warn_exit(do_lang_tempcode('MULTILANG_OFF'));
 
 		$max=get_param_integer('max',100);
 
-		$lang=choose_language($title);
+		$lang=choose_language($this->title);
 		if (is_object($lang)) return $lang;
 
 		// Fiddle around in order to find what we haven't translated. Subqueries and self joins don't work well enough across different db's
@@ -384,7 +440,7 @@ class Module_admin_lang
 			'GOOGLE'=>$google,
 			'LANG'=>$lang,
 			'LINES'=>$lines,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'URL'=>$url,
 		));
 	}
@@ -396,9 +452,7 @@ class Module_admin_lang
 	 */
 	function set_lang_content()
 	{
-		$title=get_screen_title('TRANSLATE_CONTENT');
-
-		$lang=choose_language($title);
+		$lang=choose_language($this->title);
 		if (is_object($lang)) return $lang;
 
 		foreach ($_POST as $key=>$val)
@@ -427,7 +481,7 @@ class Module_admin_lang
 
 		if (get_param_integer('contextual',0)==1)
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
 
 		// Show it worked / Refresh
@@ -437,7 +491,7 @@ class Module_admin_lang
 			$_url=build_url(array('page'=>'_SELF','type'=>'content'),'_SELF');
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -571,8 +625,6 @@ msgstr ""
 		}
 		if ($lang=='')
 		{
-			$title=get_screen_title('TRANSLATE_CODE');
-			set_helper_panel_text(comcode_lang_string('DOC_FIND_LANG_STRING_TIP'));
 			$choose_message=do_lang_tempcode(
 				'CHOOSE_EDIT_LIST_LANG_FILE',
 				escape_html(get_site_default_lang()),
@@ -583,11 +635,8 @@ msgstr ""
 					escape_html(lookup_language_full_name(user_lang()))
 				)
 			);
-			return $this->choose_lang($title,true,true,$choose_message);
+			return $this->choose_lang($this->title,true,true,$choose_message);
 		}
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
-		breadcrumb_set_self(do_lang_tempcode('TRANSLATE_CODE'));
 
 		$base_lang=fallback_lang();
 
@@ -597,8 +646,6 @@ msgstr ""
 		$search=get_param('search','',true);
 		if ($search!='')
 		{
-			$title=get_screen_title('TRANSLATE_CODE');
-
 			$search=trim($search,'" ');
 
 			require_code('form_templates');
@@ -616,13 +663,12 @@ msgstr ""
 			$hidden=new ocp_tempcode();
 			$hidden->attach(form_input_hidden('redirect',get_self_url(true)));
 			$hidden->attach(form_input_hidden('lang',$lang));
-			return do_template('FORM_SCREEN',array('_GUID'=>'2d7356fd2c4497ceb19450e65331c9c5','TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>'','SUBMIT_NAME'=>do_lang('TRANSLATE_CODE')));
+			return do_template('FORM_SCREEN',array('_GUID'=>'2d7356fd2c4497ceb19450e65331c9c5','TITLE'=>$this->title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>'','SUBMIT_NAME'=>do_lang('TRANSLATE_CODE')));
 		}
 		$lang_file=get_param('lang_file');
 		if (!file_exists($map_b)) $map_b=$map_a;
 		require_code('files');
 		$map=better_parse_ini_file($map_b);
-		$title=get_screen_title('_TRANSLATE_CODE',true,array(escape_html($lang_file),escape_html(array_key_exists($lang,$map)?$map[$lang]:$lang)));
 
 		// Upgrade to custom if not there yet (or maybe we are creating a new lang - same difference)
 		$custom_dir=get_custom_file_base().'/lang_custom/'.$lang;
@@ -749,7 +795,7 @@ msgstr ""
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_code','lang_file'=>$lang_file,'lang'=>$lang),'_SELF');
 
-		return do_template('TRANSLATE_SCREEN',array('_GUID'=>'b3429f8bd0b4eb79c33709ca43e3207c','PAGE'=>$lang_file,'GOOGLE'=>(get_option('google_translate_api_key')!='')?$google:'','LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
+		return do_template('TRANSLATE_SCREEN',array('_GUID'=>'b3429f8bd0b4eb79c33709ca43e3207c','PAGE'=>$lang_file,'GOOGLE'=>(get_option('google_translate_api_key')!='')?$google:'','LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$this->title,'URL'=>$url));
 	}
 
 	/**
@@ -819,8 +865,6 @@ msgstr ""
 		@copy($path,$path_backup2) OR intelligent_write_error($path_backup2);
 		sync_file($path_backup2);
 
-		$title=get_screen_title('TRANSLATE_CODE');
-
 		log_it('TRANSLATE_CODE');
 
 		require_code('caches3');
@@ -829,7 +873,7 @@ msgstr ""
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -888,9 +932,6 @@ msgstr ""
 			}
 		}
 
-
-		$title=get_screen_title('TRANSLATE_CODE');
-
 		log_it('TRANSLATE_CODE');
 
 		require_code('caches3');
@@ -901,9 +942,9 @@ msgstr ""
 		$url=post_param('redirect','');
 		if ($url=='')
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

@@ -612,10 +612,6 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 		<td>The helper panel's picture</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$HELPER_PANEL_HTML}</td>
-		<td>The helper panel's HTML</td>
-	</tr>
-	<tr style="background: #DDFFDD">
 		<td>{$HELPER_PANEL_TEXT}</td>
 		<td>The helper panel's text</td>
 	</tr>

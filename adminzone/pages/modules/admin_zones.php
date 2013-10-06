@@ -74,6 +74,98 @@ class Module_admin_zones
 		}*/
 	}
 
+	var $title;
+	var $id;
+	var $nice_zone_name;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='_editor')
+		{
+			attach_to_screen_header(make_string_tempcode('<base target="_blank" />'));
+		}
+
+		if ($type!='editor' && $type!='_editor' && $type!='__editor')
+		{
+			set_helper_panel_pic('pagepics/zones');
+			set_helper_panel_tutorial('tut_structure');
+		}
+
+		if ($type=='editor')
+		{
+			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+		}
+
+		if ($type=='_editor')
+		{
+			$id=get_param('id',''); // '' needed for short URLs
+			if ($id=='/') $id='';
+
+			$nice_zone_name=($id=='')?do_lang('_WELCOME'):$id;
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:editor',do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_self($nice_zone_name);
+
+			$this->title=get_screen_title('_ZONE_EDITOR',true,array(escape_html($nice_zone_name)));
+
+			$this->id=$id;
+			$this->nice_zone_name=$nice_zone_name;
+		}
+
+		if ($type=='__editor')
+		{
+			$this->title=get_screen_title('ZONE_EDITOR');
+		}
+
+		if ($type=='add')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES'))));
+
+			$this->title=get_screen_title('ADD_ZONE');
+		}
+
+		if ($type=='_add')
+		{
+			$this->title=get_screen_title('ADD_ZONE');
+		}
+
+		if ($type=='edit')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES'))));
+			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+
+			$this->title=get_screen_title('EDIT_ZONE');
+		}
+
+		if ($type=='_edit')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES')),array('_SELF:_SELF:edit_zone',do_lang_tempcode('CHOOSE'))));
+
+			$this->title=get_screen_title('EDIT_ZONE');
+		}
+
+		if ($type=='__edit')
+		{
+			$delete=post_param_integer('delete',0);
+			if ($delete==1)
+			{
+				$this->title=get_screen_title('DELETE_ZONE');
+			} else
+			{
+				$this->title=get_screen_title('EDIT_ZONE');
+			}
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -93,11 +185,11 @@ class Module_admin_zones
 		if ($type=='editor') return $this->editor();
 		if ($type=='_editor') return $this->_editor();
 		if ($type=='__editor') return $this->__editor();
+		if ($type=='add') return $this->add_zone();
+		if ($type=='_add') return $this->_add_zone();
 		if ($type=='edit') return $this->edit_zone();
 		if ($type=='_edit') return $this->_edit_zone();
 		if ($type=='__edit') return $this->__edit_zone();
-		if ($type=='_add') return $this->_add_zone();
-		if ($type=='add') return $this->add_zone();
 
 		return $this->misc();
 	}
@@ -109,17 +201,14 @@ class Module_admin_zones
 	 */
 	function misc()
 	{
-		set_helper_panel_pic('pagepics/zones');
-		set_helper_panel_tutorial('tut_structure');
-
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('ZONES'),comcode_lang_string('DOC_ZONES'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'add'),'_SELF'),do_lang('ADD_ZONE')),
-						array('edit_one',array('_SELF',array('type'=>'edit'),'_SELF'),do_lang('EDIT_ZONE')),
-					),
-					do_lang('ZONES')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'add'),'_SELF'),do_lang('ADD_ZONE')),
+				array('edit_one',array('_SELF',array('type'=>'edit'),'_SELF'),do_lang('EDIT_ZONE')),
+			),
+			do_lang('ZONES')
 		);
 	}
 
@@ -130,8 +219,6 @@ class Module_admin_zones
 	 */
 	function editor()
 	{
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
-
 		return $this->edit_zone('_editor',get_screen_title('ZONE_EDITOR'));
 	}
 
@@ -142,16 +229,10 @@ class Module_admin_zones
 	 */
 	function _editor()
 	{
-		$id=get_param('id',''); // '' needed for short URLs
-		if ($id=='/') $id='';
+		$id=$this->id;
+		$nice_zone_name=$this->nice_zone_name;
 
-		attach_to_screen_header(make_string_tempcode('<base target="_blank" />'));
-
-		$nice_zone_name=($id=='')?do_lang('_WELCOME'):$id;
-
-		$title=get_screen_title('_ZONE_EDITOR',true,array(escape_html($nice_zone_name)));
-
-		$lang=choose_language($title,true);
+		$lang=choose_language($this->title,true);
 		if (is_object($lang)) return $lang;
 
 		require_javascript('javascript_zone_editor');
@@ -169,7 +250,7 @@ class Module_admin_zones
 			$url=build_url(array('page'=>'_SELF','type'=>'edit'),'_SELF');
 			require_code('site2');
 			assign_refresh($url,5.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'20ed5fa100b87756a77c48988ef856ae','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_ADVANCED_SCREEN_ZONE_EDITOR')));
+			return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_ADVANCED_SCREEN_ZONE_EDITOR'));
 		}
 
 		// After completion prep/relay
@@ -333,14 +414,7 @@ class Module_admin_zones
 			)));
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:editor',do_lang_tempcode('CHOOSE'))));
-		breadcrumb_set_self($nice_zone_name);
-
 		list($warning_details,$ping_url)=handle_conflict_resolution($id);
-
-		set_helper_panel_pic('');
-		set_helper_panel_tutorial('');
-		set_helper_panel_text(new ocp_tempcode());
 
 		return do_template('ZONE_EDITOR_SCREEN',array(
 			'_GUID'=>'3cb1aab6b16444484e82d22f2c8f1e9a',
@@ -348,7 +422,7 @@ class Module_admin_zones
 			'LANG'=>$lang,
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'URL'=>$post_url,
 			'LEFT_EDITOR'=>$editor['panel_left'],
 			'RIGHT_EDITOR'=>$editor['panel_right'],
@@ -363,9 +437,7 @@ class Module_admin_zones
 	 */
 	function __editor()
 	{
-		$title=get_screen_title('ZONE_EDITOR');
-
-		$lang=choose_language($title,true);
+		$lang=choose_language($this->title,true);
 		if (is_object($lang)) return $lang;
 
 		$id=get_param('id','');
@@ -458,7 +530,7 @@ class Module_admin_zones
 
 		// Redirect
 		$url=get_param('redirect');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -581,9 +653,6 @@ class Module_admin_zones
 	 */
 	function add_zone()
 	{
-		set_helper_panel_pic('pagepics/zones');
-		set_helper_panel_tutorial('tut_structure');
-
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$url_scheme=get_option('url_scheme');
@@ -593,8 +662,6 @@ class Module_admin_zones
 		{
 			attach_message(do_lang_tempcode('HTM_SHORT_URLS_CARE'),'warn');
 		}
-
-		$title=get_screen_title('ADD_ZONE');
 
 		require_code('form_templates');
 
@@ -610,8 +677,6 @@ class Module_admin_zones
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add'),'_SELF');
 		$submit_name=do_lang_tempcode('ADD_ZONE');
 		$text=paragraph(do_lang_tempcode('ZONE_ADD_TEXT'));
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES'))));
 
 		require_javascript('javascript_ajax');
 		$script=find_script('snippet');
@@ -633,7 +698,7 @@ class Module_admin_zones
 				};
 		";
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'d8f08884cc370672c2e5604aefe78c6c','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name,'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'d8f08884cc370672c2e5604aefe78c6c','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text));
 	}
 
 	/**
@@ -644,8 +709,6 @@ class Module_admin_zones
 	function _add_zone()
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
-
-		$title=get_screen_title('ADD_ZONE');
 
 		$zone=post_param('zone');
 
@@ -672,7 +735,7 @@ class Module_admin_zones
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>$default_page),$zone);
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -684,10 +747,7 @@ class Module_admin_zones
 	 */
 	function edit_zone($type='_edit',$title=NULL)
 	{
-		set_helper_panel_pic('pagepics/zones');
-		set_helper_panel_tutorial('tut_structure');
-
-		if (is_null($title)) $title=get_screen_title('EDIT_ZONE');
+		if (is_null($title)) $title=$this->title;
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -739,9 +799,6 @@ class Module_admin_zones
 
 		$table=results_table(do_lang('ZONES'),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES'))));
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
-
 		$text=do_lang_tempcode('CHOOSE_EDIT_LIST');
 		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'a33d3ff1178e7898b42acd83b38b5dcb','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
 
@@ -756,12 +813,7 @@ class Module_admin_zones
 	 */
 	function _edit_zone()
 	{
-		$title=get_screen_title('EDIT_ZONE');
-
 		require_lang('themes');
-
-		set_helper_panel_pic('pagepics/zones');
-		set_helper_panel_tutorial('tut_structure');
 
 		$zone=get_param('id',''); // '' needed for short URLs
 		if ($zone=='/') $zone='';
@@ -799,9 +851,7 @@ class Module_admin_zones
 		$post_url=build_url($map,'_SELF');
 		$submit_name=do_lang_tempcode('SAVE');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES')),array('_SELF:_SELF:edit_zone',do_lang_tempcode('CHOOSE'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'54a578646aed86da06f30c459c9586c2','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name,'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'54a578646aed86da06f30c459c9586c2','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 	}
 
 	/**
@@ -817,15 +867,12 @@ class Module_admin_zones
 
 		if ($delete==1)
 		{
-			$title=get_screen_title('DELETE_ZONE');
-
 			actual_delete_zone($zone);
 
 			// Show it worked / Refresh
 			$_url=build_url(array('page'=>'_SELF','type'=>'edit'),'_SELF');
-			return redirect_screen($title,$_url,do_lang_tempcode('SUCCESS'));
-		}
-		else
+			return redirect_screen($this->title,$_url,do_lang_tempcode('SUCCESS'));
+		} else
 		{
 			$_title=post_param('title');
 			$default_page=post_param('default_page');
@@ -843,7 +890,7 @@ class Module_admin_zones
 
 			if ($new_zone!='') $this->set_permissions($new_zone);
 
-			$title=get_screen_title('EDIT_ZONE'); // Get title late, as we might be changing the theme this title is got from
+			$this->title=get_screen_title('EDIT_ZONE'); // Re-get title late, as we might be changing the theme this title is got from
 
 			// Handle logos
 			if (addon_installed('zone_logos'))
@@ -884,7 +931,7 @@ class Module_admin_zones
 				$_url=build_url(array('page'=>'_SELF','type'=>'edit'),'_SELF');
 				$url=$_url->evaluate();
 			}
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
 	}
 

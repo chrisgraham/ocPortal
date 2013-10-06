@@ -76,6 +76,35 @@ class Module_bookmarks
 		return is_guest()?array():array('misc'=>'MANAGE_BOOKMARKS','ad'=>'ADD_BOOKMARK');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc' || $type=='_manage')
+		{
+			$this->title=get_screen_title('MANAGE_BOOKMARKS');
+		}
+
+		if ($type=='ad' || $type=='_ad')
+		{
+			$this->title=get_screen_title('ADD_BOOKMARK');
+		}
+
+		if ($type=='_edit')
+		{
+			$this->title=get_screen_title('EDIT_BOOKMARK');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -94,9 +123,9 @@ class Module_bookmarks
 
 		if ($type=='misc') return $this->manage_bookmarks();
 		if ($type=='_manage') return $this->_manage_bookmarks();
-		if ($type=='_edit') return $this->_edit_bookmark();
 		if ($type=='ad') return $this->ad();
 		if ($type=='_ad') return $this->_ad();
+		if ($type=='_edit') return $this->_edit_bookmark();
 
 		return new ocp_tempcode();
 	}
@@ -108,8 +137,6 @@ class Module_bookmarks
 	 */
 	function manage_bookmarks()
 	{
-		$title=get_screen_title('MANAGE_BOOKMARKS');
-
 		require_code('form_templates');
 		require_lang('zones');
 
@@ -146,7 +173,7 @@ class Module_bookmarks
 			$bookmarks[]=array('ID'=>strval($bookmark['id']),'CAPTION'=>$bookmark['b_title'],'FOLDER'=>$bookmark['b_folder'],'PAGE_LINK'=>$bookmark['b_page_link']);
 		}
 
-		return do_template('BOOKMARKS_SCREEN',array('_GUID'=>'685f020d6407543271ce99b5775bb357','TITLE'=>$title,'FORM_URL'=>$post_url,'FORM'=>$form,'BOOKMARKS'=>$bookmarks));
+		return do_template('BOOKMARKS_SCREEN',array('_GUID'=>'685f020d6407543271ce99b5775bb357','TITLE'=>$this->title,'FORM_URL'=>$post_url,'FORM'=>$form,'BOOKMARKS'=>$bookmarks));
 	}
 
 	/**
@@ -156,8 +183,6 @@ class Module_bookmarks
 	 */
 	function _manage_bookmarks()
 	{
-		$title=get_screen_title('MANAGE_BOOKMARKS');
-
 		$bookmarks=$GLOBALS['SITE_DB']->query_select('bookmarks',array('id'),array('b_owner'=>get_member()));
 		if (post_param('delete','')!='') // A delete
 		{
@@ -184,7 +209,7 @@ class Module_bookmarks
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -209,8 +234,6 @@ class Module_bookmarks
 	 */
 	function _ad()
 	{
-		$title=get_screen_title('ADD_BOOKMARK');
-
 		$folder=post_param('folder_new','');
 		if ($folder=='') $folder=post_param('folder');
 		if ($folder=='!') $folder='';
@@ -220,10 +243,10 @@ class Module_bookmarks
 		if (get_param_integer('do_redirect')==1)
 		{
 			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		} else
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
 	}
 
@@ -234,8 +257,6 @@ class Module_bookmarks
 	 */
 	function _edit_bookmark()
 	{
-		$title=get_screen_title('EDIT_BOOKMARK');
-
 		$id=get_param_integer('id');
 
 		if (post_param('delete',NULL)!==NULL) // A delete
@@ -251,7 +272,7 @@ class Module_bookmarks
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

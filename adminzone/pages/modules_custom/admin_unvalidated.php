@@ -46,6 +46,23 @@ class Module_admin_unvalidated
 		return array('!'=>'UNVALIDATED_RESOURCES');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/unvalidated');
+		set_helper_panel_tutorial('tut_censor');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -55,10 +72,7 @@ class Module_admin_unvalidated
 	{
 		require_lang('unvalidated');
 
-		set_helper_panel_pic('pagepics/unvalidated');
-		set_helper_panel_tutorial('tut_censor');
-
-		$_title=get_screen_title('UNVALIDATED_RESOURCES');
+		$this->title=get_screen_title('UNVALIDATED_RESOURCES');
 
 		$out=new ocp_tempcode();
 		require_code('form_templates');
@@ -93,11 +107,11 @@ class Module_admin_unvalidated
 				}
 				if (array_key_exists('db_title',$info))
 				{
-					$title=$row[$info['db_title']];
-					if ($info['db_title_dereference']) $title=get_translated_text($title,$db); // May actually be comcode (can't be certain), but in which case it will be shown as source
-				} else $title='#'.(is_integer($id)?strval($id):$id);
-				if ($title=='') $title='#'.strval($id);
-				$content->attach(form_input_list_entry(is_integer($id)?strval($id):$id,false,strip_comcode($title)));
+					$_title=$row[$info['db_title']];
+					if ($info['db_title_dereference']) $_title=get_translated_text($_title,$db); // May actually be comcode (can't be certain), but in which case it will be shown as source
+				} else $_title='#'.(is_integer($id)?strval($id):$id);
+				if ($_title=='') $_title='#'.strval($id);
+				$content->attach(form_input_list_entry(is_integer($id)?strval($id):$id,false,strip_comcode($_title)));
 			}
 
 			if (!$content->is_empty())
@@ -120,7 +134,7 @@ class Module_admin_unvalidated
 			$out->attach(do_template('UNVALIDATED_SECTION',array('_GUID'=>'044f99ca3c101f90b35fc4b64977b1c7','TITLE'=>$info['title'],'CONTENT'=>$content)));
 		}
 
-		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'fd41829ff0848f23d1f428a840eeb72a','TITLE'=>$_title,'TEXT'=>do_lang_tempcode('UNVALIDATED_PAGE_TEXT'),'SECTIONS'=>$out));
+		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'fd41829ff0848f23d1f428a840eeb72a','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('UNVALIDATED_PAGE_TEXT'),'SECTIONS'=>$out));
 	}
 
 }

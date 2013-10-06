@@ -77,6 +77,30 @@ class Module_reportcontent
 		return array();
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('REPORT_CONTENT');
+		}
+
+		if ($type=='actual')
+		{
+			$this->title=get_screen_title('REPORT_CONTENT');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -98,8 +122,6 @@ class Module_reportcontent
 
 	function form()
 	{
-		$title=get_screen_title('REPORT_CONTENT');
-
 		require_code('form_templates');
 
 		$url=get_param('url',false,true);
@@ -166,13 +188,11 @@ class Module_reportcontent
 
 		url_default_parameters__disable();
 
-		return do_template('POSTING_SCREEN',array('_GUID'=>'92a0a35a7c07edd0d3f8a960710de608','TITLE'=>$title,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','TEXT'=>$text,'POSTING_FORM'=>$posting_form));
+		return do_template('POSTING_SCREEN',array('_GUID'=>'92a0a35a7c07edd0d3f8a960710de608','TITLE'=>$this->title,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}
 
 	function actualiser()
 	{
-		$title=get_screen_title('REPORT_CONTENT');
-
 		// Test CAPTCHA
 		if (addon_installed('captcha'))
 		{
@@ -247,8 +267,7 @@ class Module_reportcontent
 		$_url=post_param('url','',true);
 		if ($_url!='')
 			$content_url=make_string_tempcode($_url);
-		require_code('templates_redirect_screen');
-		return redirect_screen($title,$content_url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$content_url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

@@ -78,12 +78,114 @@ class Module_admin_ecommerce extends standard_crud_module
 		return array_merge(parent::get_entry_points(),array('misc'=>'CUSTOM_PRODUCT_USERGROUP','logs'=>'TRANSACTIONS','trigger'=>'MANUAL_TRANSACTION','profit_loss'=>'PROFIT_LOSS','cash_flow'=>'CASH_FLOW'));
 	}
 
+	var $title;
+
 	/**
-	 * Standard modular run function.
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
-	 * @return tempcode	The result of execution.
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function run_start()
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type!='logs')
+		{
+			set_helper_panel_pic('pagepics/ecommerce');
+			set_helper_panel_tutorial('tut_ecommerce');
+
+			$this->title=get_screen_title('TRANSACTIONS');
+		}
+
+		if ($type=='cash_flow')
+		{
+			set_helper_panel_pic('pagepics/cash_flow');
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_self(do_lang_tempcode('RESULT'));
+
+			$this->title=get_screen_title('CASH_FLOW');
+		}
+
+		if ($type=='profit_loss')
+		{
+			set_helper_panel_pic('pagepics/profit_loss');
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_self(do_lang_tempcode('RESULT'));
+
+			$this->title=get_screen_title('PROFIT_LOSS');
+		}
+
+		if ($type=='misc')
+		{
+			$also_url=build_url(array('page'=>'_SELF','type'=>'ecom_usage'),'_SELF');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
+		}
+
+		if ($type=='ecom_usage')
+		{
+			$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
+		}
+
+		if ($type=='logs')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_self(do_lang_tempcode('TRANSACTIONS'));
+		}
+
+		if ($type=='trigger')
+		{
+			breadcrumb_set_self(do_lang_tempcode('PRODUCT'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+
+			$this->title=get_screen_title('MANUAL_TRANSACTION');
+		}
+
+		if ($type=='trigger')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+			$item_name=get_param('item_name',NULL);
+			if (is_null($item_name))
+			{
+				breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT'))));
+			} else
+			{
+				breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT')),array('_SELF:_SELF:trigger:item_name='.$item_name,do_lang_tempcode('MANUAL_TRANSACTION'))));
+			}
+
+			$this->title=get_screen_title('MANUAL_TRANSACTION');
+		}
+
+		if ($type=='view_manual_subscriptions')
+		{
+			$this->title=get_screen_title('MANUAL_SUBSCRIPTIONS');
+		}
+
+		if ($type=='cancel_subscription')
+		{
+			$this->title=get_screen_title('CANCEL_MANUAL_SUBSCRIPTION');
+		}
+
+		if (($type=='ad') || ($type=='_ad') || ($type=='ed') || ($type=='_ed') || ($type=='__ed'))
+		{
+			if (get_forum_type()=='ocf')
+			{
+				breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+			}
+		}
+
+		return parent::pre_run();
+	}
+
+	/**
+	 * Standard crud_module run_start.
+	 *
+	 * @param  ID_TEXT		The type of module execution
+	 * @return tempcode		The output of the run
+	 */
+	function run_start($type)
 	{
 		require_lang('ecommerce');
 		require_code('ecommerce');
@@ -93,11 +195,6 @@ class Module_admin_ecommerce extends standard_crud_module
 		{
 			if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		}
-
-		set_helper_panel_pic('pagepics/ecommerce');
-		set_helper_panel_tutorial('tut_ecommerce');
-
-		$type=get_param('type','misc');
 
 		$this->add_one_label=do_lang_tempcode('ADD_USERGROUP_SUBSCRIPTION');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_USERGROUP_SUBSCRIPTION');
@@ -114,11 +211,6 @@ class Module_admin_ecommerce extends standard_crud_module
 		if ($type=='view_manual_subscriptions') return $this->view_manual_subscriptions();
 		if ($type=='cancel_subscription') return $this->cancel_subscription();
 
-		if (get_forum_type()=='ocf')
-		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
-		}
-
 		return new ocp_tempcode();
 	}
 
@@ -129,17 +221,14 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function misc()
 	{
-		$also_url=build_url(array('page'=>'_SELF','type'=>'ecom_usage'),'_SELF');
-		attach_message(do_lang_tempcode('menus:ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
-
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_USERGROUP_SUBSCRIPTION'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_USERGROUP_SUBSCRIPTION')),
-						((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_USERGROUP_SUBSCRIPTION')),
-					),
-					do_lang('CUSTOM_PRODUCT_USERGROUP')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_USERGROUP_SUBSCRIPTION')),
+				((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_USERGROUP_SUBSCRIPTION')),
+			),
+			do_lang('CUSTOM_PRODUCT_USERGROUP')
 		);
 	}
 
@@ -150,24 +239,19 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function usage()
 	{
-		breadcrumb_set_parents(array());
-
-		$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		attach_message(do_lang_tempcode('menus:ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
-
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('ECOMMERCE'),comcode_lang_string('DOC_ECOMMERCE'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('cash_flow',array('_SELF',array('type'=>'cash_flow'),'_SELF'),do_lang('CASH_FLOW')),
-						array('profit_loss',array('_SELF',array('type'=>'profit_loss'),'_SELF'),do_lang('PROFIT_LOSS')),
-						array('add_to_category',array('_SELF',array('type'=>'trigger'),'_SELF'),do_lang('MANUAL_TRANSACTION')),
-						array('transactions',array('_SELF',array('type'=>'logs'),'_SELF'),do_lang('LOGS')),
-						array('invoices',array('admin_invoices',array('type'=>'misc'),get_module_zone('admin_invoices')),do_lang('INVOICES')),
-						addon_installed('shopping')?array('orders',array('admin_orders',array('type'=>'misc'),get_module_zone('admin_orders')),do_lang('shopping:ORDERS')):NULL,
-						array('invoices',array('_SELF',array('type'=>'view_manual_subscriptions'),'_SELF'),do_lang('MANUAL_SUBSCRIPTIONS')),
-					),
-					do_lang('ECOMMERCE')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('cash_flow',array('_SELF',array('type'=>'cash_flow'),'_SELF'),do_lang('CASH_FLOW')),
+				array('profit_loss',array('_SELF',array('type'=>'profit_loss'),'_SELF'),do_lang('PROFIT_LOSS')),
+				array('add_to_category',array('_SELF',array('type'=>'trigger'),'_SELF'),do_lang('MANUAL_TRANSACTION')),
+				array('transactions',array('_SELF',array('type'=>'logs'),'_SELF'),do_lang('LOGS')),
+				array('invoices',array('admin_invoices',array('type'=>'misc'),get_module_zone('admin_invoices')),do_lang('INVOICES')),
+				addon_installed('shopping')?array('orders',array('admin_orders',array('type'=>'misc'),get_module_zone('admin_orders')),do_lang('shopping:ORDERS')):NULL,
+				array('invoices',array('_SELF',array('type'=>'view_manual_subscriptions'),'_SELF'),do_lang('MANUAL_SUBSCRIPTIONS')),
+			),
+			do_lang('ECOMMERCE')
 		);
 	}
 
@@ -178,13 +262,6 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function logs()
 	{
-		set_helper_panel_pic('');
-		set_helper_panel_tutorial('');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
-
-		$title=get_screen_title('TRANSACTIONS');
-
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
 		$sortables=array('t_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
@@ -193,7 +270,6 @@ class Module_admin_ecommerce extends standard_crud_module
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$where=NULL;
 		$product=get_param('product',NULL);
@@ -210,7 +286,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		$rows=$GLOBALS['SITE_DB']->query_select('transactions',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)
 		{
-			return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
+			return inform_screen($this->title,do_lang_tempcode('NO_ENTRIES'));
 		}
 		$fields=new ocp_tempcode();
 		require_code('templates_results_table');
@@ -251,10 +327,7 @@ class Module_admin_ecommerce extends standard_crud_module
 			$products->attach(form_input_list_entry($p['item']));
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
-		breadcrumb_set_self(do_lang_tempcode('TRANSACTIONS'));
-
-		$tpl=do_template('ECOM_TRANSACTION_LOGS_SCREEN',array('_GUID'=>'a6ba07e4be36ecc85157511e3807df75','TITLE'=>$title,'PRODUCTS'=>$products,'URL'=>$post_url,'RESULTS_TABLE'=>$results_table));
+		$tpl=do_template('ECOM_TRANSACTION_LOGS_SCREEN',array('_GUID'=>'a6ba07e4be36ecc85157511e3807df75','TITLE'=>$this->title,'PRODUCTS'=>$products,'URL'=>$post_url,'RESULTS_TABLE'=>$results_table));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -267,8 +340,6 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function trigger()
 	{
-		$title=get_screen_title('MANUAL_TRANSACTION');
-
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
 
@@ -278,9 +349,6 @@ class Module_admin_ecommerce extends standard_crud_module
 		$item_name=get_param('item_name',NULL);
 		if (is_null($item_name))
 		{
-			breadcrumb_set_self(do_lang_tempcode('PRODUCT'));
-			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
-
 			$products=find_all_products();
 			$list=new ocp_tempcode();
 			foreach ($products as $product=>$details)
@@ -300,10 +368,8 @@ class Module_admin_ecommerce extends standard_crud_module
 
 			url_default_parameters__disable();
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'a2fe914c23e378c493f6e1dad0dc11eb','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>get_self_url(),'GET'=>true,'HIDDEN'=>''));
+			return do_template('FORM_SCREEN',array('_GUID'=>'a2fe914c23e378c493f6e1dad0dc11eb','TITLE'=>$this->title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>get_self_url(),'GET'=>true,'HIDDEN'=>''));
 		}
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT'))));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_trigger','redirect'=>get_param('redirect',NULL)),'_SELF');
 		$text=do_lang('MANUAL_TRANSACTION_TEXT');
@@ -325,7 +391,7 @@ class Module_admin_ecommerce extends standard_crud_module
 
 				url_default_parameters__disable();
 
-				return do_template('FORM_SCREEN',array('_GUID'=>'90ee397ac24dcf0b3a0176da9e9c9741','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>is_array($needed_fields)?$needed_fields[1]:$needed_fields,'TEXT'=>'','URL'=>get_self_url(),'HIDDEN'=>$extra_hidden));
+				return do_template('FORM_SCREEN',array('_GUID'=>'90ee397ac24dcf0b3a0176da9e9c9741','TITLE'=>$this->title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>is_array($needed_fields)?$needed_fields[1]:$needed_fields,'TEXT'=>'','URL'=>get_self_url(),'HIDDEN'=>$extra_hidden));
 			}
 		}
 
@@ -361,7 +427,7 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		url_default_parameters__disable();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'990d955cb14b6681685ec9e1d1448d9d','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>$text,'URL'=>$post_url,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'990d955cb14b6681685ec9e1d1448d9d','TITLE'=>$this->title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>$text,'URL'=>$post_url,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -371,11 +437,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function _trigger()
 	{
-		$title=get_screen_title('MANUAL_TRANSACTION');
-
 		$item_name=post_param('item_name');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT')),array('_SELF:_SELF:trigger:item_name='.$item_name,do_lang_tempcode('MANUAL_TRANSACTION'))));
 
 		$purchase_id=post_param('purchase_id','');
 		$memo=post_param('memo');
@@ -437,9 +499,9 @@ class Module_admin_ecommerce extends standard_crud_module
 		handle_confirmed_transaction($purchase_id,$_item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id);
 
 		$url=get_param('redirect',NULL);
-		if (!is_null($url)) return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		if (!is_null($url)) return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 
-		return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -595,23 +657,14 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function cash_flow()
 	{
-		$title=get_screen_title('CASH_FLOW');
-
-		set_helper_panel_pic('pagepics/cash_flow');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
-
 		$d=array(get_input_date('from',true),get_input_date('to',true));
-		if (is_null($d[0])) return $this->_get_between($title);
+		if (is_null($d[0])) return $this->_get_between($this->title);
 		list($from,$to)=$d;
 
 		$types=$this->get_types($from,$to);
 		unset($types['PROFIT']);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:cash_flow',do_lang_tempcode('CASH_FLOW'))));
-		breadcrumb_set_self(do_lang_tempcode('RESULT'));
-
-		return do_template('ECOM_CASH_FLOW_SCREEN',array('_GUID'=>'a042e16418417f46c24818890679f38a','TITLE'=>$title,'TYPES'=>$types));
+		return do_template('ECOM_CASH_FLOW_SCREEN',array('_GUID'=>'a042e16418417f46c24818890679f38a','TITLE'=>$this->title,'TYPES'=>$types));
 	}
 
 	/**
@@ -621,24 +674,15 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function profit_loss()
 	{
-		$title=get_screen_title('PROFIT_LOSS');
-
-		set_helper_panel_pic('pagepics/profit_loss');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
-
 		$d=array(get_input_date('from',true),get_input_date('to',true));
-		if (is_null($d[0])) return $this->_get_between($title);
+		if (is_null($d[0])) return $this->_get_between($this->title);
 		list($from,$to)=$d;
 
 		$types=$this->get_types($from,$to,true);
 		unset($types['OPENING']);
 		unset($types['CLOSING']);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:profit_loss',do_lang_tempcode('PROFIT_LOSS'))));
-		breadcrumb_set_self(do_lang_tempcode('RESULT'));
-
-		return do_template('ECOM_CASH_FLOW_SCREEN',array('_GUID'=>'255681ec95e90e36e085d14cf984b725','TITLE'=>$title,'TYPES'=>$types));
+		return do_template('ECOM_CASH_FLOW_SCREEN',array('_GUID'=>'255681ec95e90e36e085d14cf984b725','TITLE'=>$this->title,'TYPES'=>$types));
 	}
 
 	/* *
@@ -755,7 +799,6 @@ class Module_admin_ecommerce extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),
@@ -878,8 +921,6 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function view_manual_subscriptions()
 	{
-		$title=get_screen_title('MANUAL_SUBSCRIPTIONS');
-
 		disable_php_memory_limit();
 
 		$where=array('s_via'=>'manual');
@@ -927,7 +968,7 @@ class Module_admin_ecommerce extends standard_crud_module
 			}
 		}
 
-		return do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN',array('TITLE'=>$title,'CONTENT'=>$result));
+		return do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN',array('TITLE'=>$this->title,'CONTENT'=>$result));
 	}
 
 	/**
@@ -946,14 +987,12 @@ class Module_admin_ecommerce extends standard_crud_module
 		$product_name=$products[$subscription[0]['s_type_code']][4];
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($subscription[0]['s_member_id']);
 
-		$title=get_screen_title('CANCEL_MANUAL_SUBSCRIPTION');
-
 		$repost_id=post_param_integer('id',NULL);
 		if (($repost_id!==NULL) && ($repost_id==$id))
 		{
 			require_code('ecommerce');
 			handle_confirmed_transaction(strval($id),'','SCancelled','','','','','','manual',''); // Runs a cancel
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
 
 		// We need to get confirmation via POST, for security/confirmation reasons
@@ -961,7 +1000,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		$fields=form_input_hidden('id',strval($id));
 		$map=array('page'=>'_SELF','type'=>get_param('type'),'subscription_id'=>$id);
 		$url=build_url($map,'_SELF');
-		return do_template('CONFIRM_SCREEN',array('_GUID'=>'3b76b0e41541d5a38671134e92128d9f','TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'PREVIEW'=>$preview));
+		return do_template('CONFIRM_SCREEN',array('_GUID'=>'3b76b0e41541d5a38671134e92128d9f','TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$url,'PREVIEW'=>$preview));
 	}
 
 }

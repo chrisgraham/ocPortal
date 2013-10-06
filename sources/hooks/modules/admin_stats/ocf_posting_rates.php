@@ -48,8 +48,6 @@ class Hook_admin_stats_ocf_posting_rates
 	 */
 	function posting_rates($ob,$type)
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
-
 		require_lang('ocf');
 
 		//This will show a plain bar chart with all the downloads listed

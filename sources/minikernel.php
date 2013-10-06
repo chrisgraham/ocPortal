@@ -269,7 +269,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 		case E_ERROR:
 		case E_WARNING:
 		case E_NOTICE:
-			@ob_end_clean(); // We can't be doing output buffering at this point
+			@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 			fatal_exit('PHP ['.strval($errno).'] '.$errstr);
 	}
 

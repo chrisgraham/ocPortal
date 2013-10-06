@@ -106,7 +106,6 @@ function get_afm_form()
 	}
 	$javascript="var ftp_ticker=function() { var uses_ftp=document.getElementById('uses_ftp'); if (!uses_ftp) return; var form=uses_ftp.form; form.elements['ftp_domain'].disabled=!uses_ftp.checked; form.elements['ftp_directory'].disabled=!uses_ftp.checked; form.elements['ftp_username'].disabled=!uses_ftp.checked; form.elements['ftp_password'].disabled=!uses_ftp.checked; form.elements['remember_password'].disabled=!uses_ftp.checked; }; ftp_ticker(); document.getElementById('uses_ftp').onclick=ftp_ticker;";
 
-	@ob_end_clean();
 	$middle=do_template('FORM_SCREEN',array('_GUID'=>'c47a31fca47a7b22eeef3a6269cc2407','JAVASCRIPT'=>$javascript,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name,'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>paragraph(do_lang_tempcode('TEXT_ABSTRACT_FILE_MANAGEMENT'))));
 	$echo=globalise($middle,NULL,'',true);
 	$echo->evaluate_echo();

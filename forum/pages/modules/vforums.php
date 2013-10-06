@@ -51,6 +51,45 @@ class Module_vforums
 		return is_guest()?array('misc'=>'POSTS_SINCE','unanswered_topics'=>'UNANSWERED_TOPICS'):array('misc'=>'POSTS_SINCE','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ','unanswered_topics'=>'UNANSWERED_TOPICS','involved_topics'=>'INVOLVED_TOPICS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='new_posts')
+		{
+			$this->title=get_screen_title('POSTS_SINCE')
+		}
+
+		if ($type=='unanswered_topics')
+		{
+			$this->title=get_screen_title('UNANSWERED_TOPICS')
+		}
+
+		if ($type=='involved_topics')
+		{
+			$this->title=get_screen_title('INVOLVED_TOPICS')
+		}
+
+		if ($type=='unread_topics')
+		{
+			$this->title=get_screen_title('TOPICS_UNREAD')
+		}
+
+		if ($type=='recently_read')
+		{
+			$this->title=get_screen_title('RECENTLY_READ')
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,24 +103,23 @@ class Module_vforums
 		require_css('ocf');
 
 		$type=get_param('type','misc');
-		if ($type=='misc') list($title,$content)=$this->new_posts();
-		elseif ($type=='unread') list($title,$content)=$this->unread_topics();
-		elseif ($type=='recently_read') list($title,$content)=$this->recently_read();
-		elseif ($type=='unanswered_topics') list($title,$content)=$this->unanswered_topics();
-		elseif ($type=='involved_topics') list($title,$content)=$this->involved_topics();
+		if ($type=='misc') $content=$this->new_posts();
+		elseif ($type=='unread') $content=$this->unread_topics();
+		elseif ($type=='recently_read') $content=$this->recently_read();
+		elseif ($type=='unanswered_topics') $content=$this->unanswered_topics();
+		elseif ($type=='involved_topics') $content=$this->involved_topics();
 		else
 		{
-			$title=new ocp_tempcode();
 			$content=new ocp_tempcode();
 		}
 
-		return do_template('OCF_VFORUM_SCREEN',array('_GUID'=>'8dca548982d65500ab1800ceec2ddc61','TITLE'=>$title,'CONTENT'=>$content));
+		return do_template('OCF_VFORUM_SCREEN',array('_GUID'=>'8dca548982d65500ab1800ceec2ddc61','TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 	/**
 	 * The UI to show topics with new posts since last visit time.
 	 *
-	 * @return array			A pair: The Title, The UI
+	 * @return tempcode			The UI
 	 */
 	function new_posts()
 	{
@@ -113,26 +151,26 @@ class Module_vforums
 
 		$extra_tpl_map=array('FILTERING'=>do_template('OCF_VFORUM_FILTERING',array()));
 
-		return array(get_screen_title('POSTS_SINCE'),$this->_vforum($title,$condition,'t_cascading DESC,t_pinned DESC,'.$order2,true,$extra_tpl_map));
+		return $this->_vforum($title,$condition,'t_cascading DESC,t_pinned DESC,'.$order2,true,$extra_tpl_map);
 	}
 
 	/**
 	 * The UI to show unanswered topics.
 	 *
-	 * @return array			A pair: The Title, The UI
+	 * @return tempcode			The UI
 	 */
 	function unanswered_topics()
 	{
 		$title=do_lang_tempcode('UNANSWERED_TOPICS');
 		$condition=array('(SELECT COUNT(DISTINCT p_poster) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p WHERE p.p_topic_id=top.id)=1');
 
-		return array(get_screen_title('UNANSWERED_TOPICS'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true));
+		return $this->_vforum($title,$condition,'t_cache_last_time DESC',true);
 	}
 
 	/**
 	 * The UI to show topics you're involved with.
 	 *
-	 * @return array			A pair: The Title, The UI
+	 * @return tempcode			The UI
 	 */
 	function involved_topics()
 	{
@@ -141,13 +179,13 @@ class Module_vforums
 		$title=do_lang_tempcode('INVOLVED_TOPICS');
 		$condition=array('p_poster='.strval(get_member()));
 
-		return array(get_screen_title('INVOLVED_TOPICS'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true,NULL,$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts pos LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top ON top.id=pos.p_topic_id'));
+		return $this->_vforum($title,$condition,'t_cache_last_time DESC',true,NULL,$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts pos LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top ON top.id=pos.p_topic_id');
 	}
 
 	/**
 	 * The UI to show topics with unread posts.
 	 *
-	 * @return array			A pair: The Title, The UI
+	 * @return tempcode			The UI
 	 */
 	function unread_topics()
 	{
@@ -156,13 +194,13 @@ class Module_vforums
 		$title=do_lang_tempcode('TOPICS_UNREAD');
 		$condition=array('l_time IS NOT NULL AND l_time<t_cache_last_time','l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))));
 
-		return array(get_screen_title('TOPICS_UNREAD'),$this->_vforum($title,$condition,'p_time DESC',true));
+		return $this->_vforum($title,$condition,'p_time DESC',true);
 	}
 
 	/**
 	 * The UI to show topics which have been recently read by the current member.
 	 *
-	 * @return array			A pair: The Title, The UI
+	 * @return tempcode			The UI
 	 */
 	function recently_read()
 	{
@@ -171,7 +209,7 @@ class Module_vforums
 		$title=do_lang_tempcode('RECENTLY_READ');
 		$condition='l_time>'.strval(time()-60*60*24*2);
 
-		return array(get_screen_title('RECENTLY_READ'),$this->_vforum($title,$condition,'l_time DESC',true));
+		return $this->_vforum($title,$condition,'l_time DESC',true);
 	}
 
 	/**

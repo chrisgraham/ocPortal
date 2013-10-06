@@ -42,7 +42,7 @@ $CURRENT_SHARE_USER=NULL;
 $GLOBALS['DEV_MODE']=false;
 $GLOBALS['SEMI_DEV_MODE']=true;
 
-@ob_end_clean();
+@ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
 $shl=@ini_get('suhosin.memory_limit');
 if (($shl===false) || ($shl=='') || ($shl=='0'))

@@ -74,6 +74,33 @@ class Module_admin_staff
 		return array('misc'=>'MANAGE_STAFF');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/staff');
+		set_helper_panel_tutorial('tut_staff');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('MANAGE_STAFF');
+		}
+
+		if ($type=='edit')
+		{
+			$this->title=get_screen_title('EDIT_STAFF');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -83,13 +110,10 @@ class Module_admin_staff
 	{
 		require_lang('staff');
 
-		set_helper_panel_pic('pagepics/staff');
-		set_helper_panel_tutorial('tut_staff');
-
 		$type=get_param('type','misc');
 
-		if ($type=='edit') return $this->staff_edit();
 		if ($type=='misc') return $this->staff_interface();
+		if ($type=='edit') return $this->staff_edit();
 
 		return new ocp_tempcode();
 	}
@@ -102,8 +126,6 @@ class Module_admin_staff
 	function staff_interface()
 	{
 		if (get_forum_type()=='none') warn_exit(do_lang_tempcode('NO_MEMBER_SYSTEM_INSTALLED'));
-
-		$title=get_screen_title('MANAGE_STAFF');
 
 		if (get_option('is_on_staff_filter')=='0') $text=do_lang_tempcode('STAFF_FILTER_OFF'); else $text=do_lang_tempcode('STAFF_FILTER_ON');
 
@@ -149,7 +171,7 @@ class Module_admin_staff
 			$available=do_template('FORM_GROUPED',array('_GUID'=>'5b74208b6c420edcdeb34bb49f1e9dcb','TEXT'=>'','URL'=>$post_url,'FIELD_GROUPS'=>$available,'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 		}
 
-		return do_template('STAFF_ADMIN_SCREEN',array('_GUID'=>'101087b0dbe5d679a55bb661ad7350fa','TITLE'=>$title,'TEXT'=>$text,'FORUM_STAFF'=>$available));
+		return do_template('STAFF_ADMIN_SCREEN',array('_GUID'=>'101087b0dbe5d679a55bb661ad7350fa','TITLE'=>$this->title,'TEXT'=>$text,'FORUM_STAFF'=>$available));
 	}
 
 	/**
@@ -159,7 +181,6 @@ class Module_admin_staff
 	 */
 	function staff_edit()
 	{
-		$title=get_screen_title('EDIT_STAFF');
 		foreach ($_POST as $key=>$val)
 		{
 			if (!is_string($val)) continue;
@@ -176,7 +197,7 @@ class Module_admin_staff
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**

@@ -52,6 +52,31 @@ class Module_admin_cleanup
 		return array('misc'=>'CLEANUP_TOOLS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/cleanup');
+		set_helper_panel_tutorial('tut_cleanup');
+
+		if ($type=='rebuild')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CLEANUP_TOOLS'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		$this->title=get_screen_title('CLEANUP_TOOLS');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,9 +84,6 @@ class Module_admin_cleanup
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/cleanup');
-		set_helper_panel_tutorial('tut_cleanup');
-
 		require_lang('cleanup');
 		require_code('caches3');
 
@@ -82,8 +104,6 @@ class Module_admin_cleanup
 	function choose_cache_type()
 	{
 		$hooks=find_all_hooks('systems','cleanup');
-
-		$title=get_screen_title('CLEANUP_TOOLS');
 
 		$url=build_url(array('page'=>'_SELF','type'=>'rebuild'),'_SELF');
 
@@ -116,7 +136,7 @@ class Module_admin_cleanup
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3ddb387dba8c42ac4ef7b85621052e11','TITLE'=>do_lang_tempcode('CACHES_PAGE_EXP_CACHES'),'HELP'=>do_lang_tempcode('CACHES_PAGE_CACHES'))));
 		$fields->attach($fields_cache);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'85bfdf171484604594a157aa8983f920','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('CACHES_PAGE'),'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'85bfdf171484604594a157aa8983f920','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('CACHES_PAGE'),'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$url));
 	}
 
 	/**
@@ -154,12 +174,7 @@ class Module_admin_cleanup
 		$messages=ocportal_cleanup($todo);
 		$messages->attach(paragraph(do_lang_tempcode('SUCCESS')));
 
-		$title=get_screen_title('CLEANUP_TOOLS');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CLEANUP_TOOLS'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
-		return do_template('CLEANUP_COMPLETED_SCREEN',array('_GUID'=>'598510a9ad9f01f3c0806319b32b5033','TITLE'=>$title,'MESSAGES'=>$messages));
+		return do_template('CLEANUP_COMPLETED_SCREEN',array('_GUID'=>'598510a9ad9f01f3c0806319b32b5033','TITLE'=>$this->title,'MESSAGES'=>$messages));
 	}
 
 }

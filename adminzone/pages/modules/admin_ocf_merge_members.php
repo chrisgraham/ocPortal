@@ -51,6 +51,39 @@ class Module_admin_ocf_merge_members
 		return array('misc'=>'MERGE_MEMBERS');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			inform_non_canonical_parameter('from');
+			inform_non_canonical_parameter('to');
+
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+		}
+
+		if ($type=='actual')
+		{
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('MERGE_MEMBERS'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		set_helper_panel_pic('pagepics/mergemembers');
+		set_helper_panel_tutorial('tut_adv_members');
+
+		$this->title=get_screen_title('MERGE_MEMBERS');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,9 +91,6 @@ class Module_admin_ocf_merge_members
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/mergemembers');
-		set_helper_panel_tutorial('tut_adv_members');
-
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 
 		$type=get_param('type','misc');
@@ -78,19 +108,12 @@ class Module_admin_ocf_merge_members
 	 */
 	function gui()
 	{
-		$title=get_screen_title('MERGE_MEMBERS');
-
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
-
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
 
 		$from=get_param('from','',true);
 		$to=get_param('to','',true);
-
-		inform_non_canonical_parameter('from');
-		inform_non_canonical_parameter('to');
 
 		$fields->attach(form_input_username(do_lang_tempcode('FROM'),do_lang_tempcode('DESCRIPTION_MEMBER_FROM'),'from',$from,true));
 		$fields->attach(form_input_username(do_lang_tempcode('TO'),do_lang_tempcode('DESCRIPTION_MEMBER_TO'),'to',$to,true));
@@ -103,7 +126,7 @@ class Module_admin_ocf_merge_members
 		$submit_name=do_lang_tempcode('MERGE_MEMBERS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$text=do_lang_tempcode('MERGE_MEMBERS_TEXT');
-		return do_template('FORM_SCREEN',array('_GUID'=>'6f6b18d90bbe9550303ab41be0a26dcb','SKIP_VALIDATION'=>true,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'HIDDEN'=>'','TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'6f6b18d90bbe9550303ab41be0a26dcb','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'HIDDEN'=>'','TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -113,8 +136,6 @@ class Module_admin_ocf_merge_members
 	 */
 	function actual()
 	{
-		$title=get_screen_title('MERGE_MEMBERS');
-
 		$to_username=post_param('to');
 		$to_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($to_username);
 		if ((is_null($to_id)) || (is_guest($to_id))) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$to_username));
@@ -183,11 +204,8 @@ class Module_admin_ocf_merge_members
 
 		log_it('MERGE_MEMBERS',$from_username,$to_username);
 
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('MERGE_MEMBERS'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($to_id,false,'',false);
-		return inform_screen($title,do_lang_tempcode('MERGED_MEMBERS',$username));
+		return inform_screen($this->title,do_lang_tempcode('MERGED_MEMBERS',$username));
 	}
 
 }

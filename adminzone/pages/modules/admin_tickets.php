@@ -51,6 +51,51 @@ class Module_admin_tickets
 		return array('misc'=>'MANAGE_TICKET_TYPES');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/tickets');
+		set_helper_panel_tutorial('tut_support_desk');
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_TICKET_TYPES'))));
+
+			$this->title=get_screen_title('MANAGE_TICKET_TYPES');
+		}
+
+		if ($type=='add')
+		{
+			$this->title=get_screen_title('ADD_TICKET_TYPE');
+		}
+
+		if ($type=='edit')
+		{
+			$this->title=get_screen_title('EDIT_TICKET_TYPE');
+		}
+
+		if ($type=='_edit')
+		{
+			if (post_param_integer('delete',0)==1)
+			{
+				$this->title=get_screen_title('DELETE_TICKET_TYPE');
+			} else
+			{
+				$this->title=get_screen_title('EDIT_TICKET_TYPE');
+			}
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,9 +103,6 @@ class Module_admin_tickets
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/tickets');
-		set_helper_panel_tutorial('tut_support_desk');
-
 		require_lang('tickets');
 		require_css('tickets');
 		require_code('tickets');
@@ -68,10 +110,10 @@ class Module_admin_tickets
 
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->ticket_type_interface();
 		if ($type=='add') return $this->add_ticket_type();
 		if ($type=='edit') return $this->edit_ticket_type();
 		if ($type=='_edit') return $this->_edit_ticket_type();
-		if ($type=='misc') return $this->ticket_type_interface();
 
 		return new ocp_tempcode();
 	}
@@ -83,8 +125,6 @@ class Module_admin_tickets
 	 */
 	function ticket_type_interface()
 	{
-		$title=get_screen_title('MANAGE_TICKET_TYPES');
-
 		require_lang('permissions');
 
 		$list=new ocp_tempcode();
@@ -120,9 +160,7 @@ class Module_admin_tickets
 		}
 		$add_form=do_template('FORM',array('_GUID'=>'382f6fab6c563d81303ecb26495e76ec','TABINDEX'=>strval(get_form_field_tabindex()),'SECONDARY_FORM'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_TICKET_TYPES'))));
-
-		return do_template('SUPPORT_TICKET_TYPE_SCREEN',array('_GUID'=>'28645dc4a86086fa865ec7e166b84bb6','TITLE'=>$title,'TPL'=>$tpl,'ADD_FORM'=>$add_form));
+		return do_template('SUPPORT_TICKET_TYPE_SCREEN',array('_GUID'=>'28645dc4a86086fa865ec7e166b84bb6','TITLE'=>$this->title,'TPL'=>$tpl,'ADD_FORM'=>$add_form));
 	}
 
 	/**
@@ -132,8 +170,6 @@ class Module_admin_tickets
 	 */
 	function add_ticket_type()
 	{
-		$title=get_screen_title('ADD_TICKET_TYPE');
-
 		$ticket_type=post_param('ticket_type',post_param('ticket_type_2'));
 		add_ticket_type($ticket_type,post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
 
@@ -143,7 +179,7 @@ class Module_admin_tickets
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -153,8 +189,6 @@ class Module_admin_tickets
 	 */
 	function edit_ticket_type()
 	{
-		$title=get_screen_title('EDIT_TICKET_TYPE');
-
 		require_code('form_templates');
 		require_code('permissions2');
 
@@ -172,7 +206,7 @@ class Module_admin_tickets
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'09e6f1d2276ee679f280b33a79bff089','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0a505a779c1639fd2d3ee10c24a7905a','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0a505a779c1639fd2d3ee10c24a7905a','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -182,16 +216,12 @@ class Module_admin_tickets
 	 */
 	function _edit_ticket_type()
 	{
-		$title=get_screen_title('EDIT_TICKET_TYPE');
-
 		$type=get_param_integer('ticket_type');
 
 		if (post_param_integer('delete',0)==1)
 		{
-			$title=get_screen_title('DELETE_TICKET_TYPE');
 			delete_ticket_type($type);
-		}
-		else
+		} else
 		{
 			$trans_old_ticket_type=get_translated_text($type);
 			edit_ticket_type($type,post_param('new_type'),post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
@@ -203,7 +233,7 @@ class Module_admin_tickets
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

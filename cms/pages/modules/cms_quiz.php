@@ -62,6 +62,34 @@ class Module_cms_quiz extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_QUIZZES'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('validated');
+
+		set_helper_panel_pic('pagepics/quiz');
+		set_helper_panel_tutorial('tut_quizzes');
+
+		if ($type=='misc')
+		{
+			if (has_actual_page_access(get_member(),'admin_quiz'))
+			{
+				$also_url=build_url(array('page'=>'admin_quiz'),get_module_zone('admin_quiz'));
+				attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
+			}
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -70,9 +98,6 @@ class Module_cms_quiz extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/quiz');
-		set_helper_panel_tutorial('tut_quizzes');
-
 		require_code('quiz');
 		require_code('quiz2');
 
@@ -94,21 +119,15 @@ class Module_cms_quiz extends standard_crud_module
 	 */
 	function misc()
 	{
-		if (has_actual_page_access(get_member(),'admin_quiz'))
-		{
-			$also_url=build_url(array('page'=>'admin_quiz'),get_module_zone('admin_quiz'));
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
-		}
-
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
-					array_merge(array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_QUIZ')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_QUIZ')),
-					),manage_custom_fields_donext_link('quiz')),
-					do_lang('MANAGE_QUIZZES')
+			array_merge(array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_QUIZ')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_QUIZ')),
+			),manage_custom_fields_donext_link('quiz')),
+			do_lang('MANAGE_QUIZZES')
 		);
 	}
 
@@ -131,7 +150,6 @@ class Module_cms_quiz extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),
@@ -217,8 +235,6 @@ class Module_cms_quiz extends standard_crud_module
 		$fields->attach(form_input_huge(do_lang_tempcode('QUESTIONS'),do_lang_tempcode('IMPORT_QUESTIONS_TEXT'),'text',$text,true));
 		if ($validated==0)
 		{
-			inform_non_canonical_parameter('validated');
-
 			$validated=get_param_integer('validated',0);
 			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}

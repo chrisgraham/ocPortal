@@ -51,22 +51,24 @@ class Module_admin_lookup
 		return array('!'=>'INVESTIGATE_USER');
 	}
 
+	var $title;
+	var $param;
+
 	/**
-	 * Standard modular run function.
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
-	 * @return tempcode	The result of execution.
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function run()
+	function pre_run()
 	{
+		$type=get_param('type','misc');
+
 		set_helper_panel_pic('pagepics/investigateuser');
 		set_helper_panel_tutorial('tut_trace');
 
-		require_lang('submitban');
-		require_lang('lookup');
-		require_code('lookup');
-
 		if (addon_installed('securitylogging'))
 		{
+			require_lang('actionlog');
 			$ip_ban_url=build_url(array('page'=>'admin_ipban'),get_module_zone('admin_ipban'));
 			set_helper_panel_text(comcode_to_tempcode(do_lang('DOC_ACTIONLOG_BAN_HELP',$ip_ban_url->evaluate())));
 		}
@@ -76,32 +78,59 @@ class Module_admin_lookup
 		if ($param=='')
 		{
 			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+			breadcrumb_set_self(do_lang_tempcode('SEARCH'));
+		} else
+		{
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('SEARCH'))));
+			breadcrumb_set_self(do_lang_tempcode('RESULT'));
+		}
 
-			$title=get_screen_title('INVESTIGATE_USER');
+		if ($param=='')
+		{
+			$this->title=get_screen_title('INVESTIGATE_USER');
+		} else
+		{
+			if (is_numeric($param))
+			{
+				$this->title=get_screen_title('INVESTIGATE_USER_BY_MEMBER_ID');
+			}
+			elseif (strpos($param,'.')!==false)
+			{
+				$this->title=get_screen_title('INVESTIGATE_USER_BY_IP');
+			} else
+			{
+				$this->title=get_screen_title('INVESTIGATE_USER_BY_USERNAME');
+			}
+		}
 
+		$this->param=$param;
+
+		return NULL;
+	}
+
+	/**
+	 * Standard modular run function.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function run()
+	{
+		require_lang('submitban');
+		require_lang('lookup');
+		require_code('lookup');
+
+		$param=$this->param;
+
+		if ($param=='')
+		{
 			require_code('form_templates');
 			$submit_name=do_lang_tempcode('INVESTIGATE_USER');
 			$post_url=build_url(array('page'=>'_SELF'),'_SELF',NULL,false,true);
 			$fields=form_input_line(do_lang_tempcode('DETAILS'),do_lang_tempcode('DESCRIPTION_INVESTIGATE'),'param','',false);
 
-			breadcrumb_set_self(do_lang_tempcode('SEARCH'));
-
-			return do_template('FORM_SCREEN',array('_GUID'=>'9cc407037ec01a8f3483746a22889471','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'URL'=>$post_url));
-
+			return do_template('FORM_SCREEN',array('_GUID'=>'9cc407037ec01a8f3483746a22889471','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'URL'=>$post_url));
 		} else
 		{
-			if (is_numeric($param))
-			{
-				$title=get_screen_title('INVESTIGATE_USER_BY_MEMBER_ID');
-			}
-			elseif (strpos($param,'.')!==false)
-			{
-				$title=get_screen_title('INVESTIGATE_USER_BY_IP');
-			} else
-			{
-				$title=get_screen_title('INVESTIGATE_USER_BY_USERNAME');
-			}
-
 			$test=explode(' ',get_param('sort','date_and_time DESC'),2);
 			if (count($test)==1) $test[1]='DESC';
 			list($sortable,$sort_order)=$test;
@@ -235,14 +264,11 @@ class Module_admin_lookup
 				}
 			}
 
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('SEARCH'))));
-			breadcrumb_set_self(do_lang_tempcode('RESULT'));
-
 			$tpl=do_template(
 				'LOOKUP_SCREEN',
 				array(
 					'_GUID'=>'dc6effaa043949940b809f6aa5a1f944',
-					'TITLE'=>$title,
+					'TITLE'=>$this->title,
 					'ALERTS'=>$alerts,
 					'STATS'=>$stats,
 					'IP_LIST'=>$ip_list,

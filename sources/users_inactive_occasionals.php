@@ -315,8 +315,7 @@ function try_httpauth_login()
 		require_code('ocf_members_action2');
 		if ((trim(post_param('email_address',''))=='') && (get_option('finish_profile')=='1'))
 		{
-			@ob_end_clean();
-			if (!function_exists('do_header')) require_code('site');
+			@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 			$middle=ocf_member_external_linker_ask($_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled')!='1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
 			$tpl=globalise($middle,NULL,'',true);
 			$tpl->evaluate_echo();

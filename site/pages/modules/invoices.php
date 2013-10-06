@@ -79,6 +79,30 @@ class Module_invoices
 		return ((is_guest()) || ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id'=>get_member()))==0))?array():array('misc'=>'MY_INVOICES');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('MY_INVOICES');
+		}
+
+		if ($type=='pay')
+		{
+			$this->title=get_screen_title('MAKE_PAYMENT');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -109,8 +133,6 @@ class Module_invoices
 	 */
 	function my()
 	{
-		$title=get_screen_title('MY_INVOICES');
-
 		$member_id=get_member();
 		if (has_privilege(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
 
@@ -139,7 +161,7 @@ class Module_invoices
 		}
 		if (count($invoices)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		return do_template('ECOM_INVOICES_SCREEN',array('_GUID'=>'144a893d93090c105eecc48fa58921a7','TITLE'=>$title,'CURRENCY'=>get_option('currency'),'INVOICES'=>$invoices));
+		return do_template('ECOM_INVOICES_SCREEN',array('_GUID'=>'144a893d93090c105eecc48fa58921a7','TITLE'=>$this->title,'CURRENCY'=>get_option('currency'),'INVOICES'=>$invoices));
 	}
 
 	/**
@@ -156,8 +178,6 @@ class Module_invoices
 			warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 		}
 
-		$title=get_screen_title('MAKE_PAYMENT');
-
 		$post_url=build_url(array('page'=>'purchase','type'=>'finish'),get_module_zone('purchase'));
 
 		$rows=$GLOBALS['SITE_DB']->query_select('invoices',array('*'),array('id'=>$id),'',1);
@@ -172,7 +192,7 @@ class Module_invoices
 
 		$text=do_lang_tempcode('TRANSACT_INFO');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e90a4019b37c8bf5bcb64086416bcfb3','TITLE'=>$title,'SKIP_VALIDATION'=>'1','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_PAYMENT')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'e90a4019b37c8bf5bcb64086416bcfb3','TITLE'=>$this->title,'SKIP_VALIDATION'=>'1','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_PAYMENT')));
 	}
 
 }

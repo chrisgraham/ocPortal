@@ -81,9 +81,6 @@ class Mx_chat extends Module_chat
 			attach_message('Instant messaging has been disabled on this site, but you can arrange with members to connect via XMPP software (create a Private Topic, asking them to use XMPP, and tell them your username is '.escape_html($you).' &ndash; we have auto-added '.escape_html($them).' as an contact in your XMPP software).','warn');
 		}
 
-		// Generic stuff: Title, feed URL
-		$title=get_screen_title('CHAT_LOBBY');
-
 		// Rooms
 		$room_url=build_url(array('page'=>'_SELF','type'=>'room','id'=>'room_id'),'_SELF');
 		$fields='
@@ -108,7 +105,7 @@ class Mx_chat extends Module_chat
 			'FRIENDS'=>$friends,
 			'PASSWORD_HASH'=>$password_hash,
 			'CHAT_SOUND'=>get_chat_sound_tpl(),
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'ROOMS'=>$fields,
 			'SETEFFECTS_LINK'=>$seteffectslink,
 		));
@@ -138,8 +135,6 @@ class Mx_chat extends Module_chat
 
 		$debug=(get_param_integer('debug',0)==1)?'block':'none';
 
-		$title=get_screen_title('ROOM');
-
 		$seteffectslink=hyperlink(build_url(array('page'=>'_SELF','type'=>'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
 		$logslink=hyperlink(get_base_url().'/data_custom/jabber-logs/'.strtolower($room_id).'@conference.'.get_domain(),'Chat logs',true);
 
@@ -147,8 +142,6 @@ class Mx_chat extends Module_chat
 			$seteffectslink,
 			$logslink,
 		);
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
 
 		$messages_php=find_script('messages');
 		$password_hash=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
@@ -164,7 +157,7 @@ class Mx_chat extends Module_chat
 			'YOUR_NAME'=>$yourname,
 			'SUBMIT_VALUE'=>$posting_name,
 			'INTRODUCTION'=>'',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'LINKS'=>$links,
 		));
 	}
@@ -176,14 +169,12 @@ class Mx_chat extends Module_chat
 	 */
 	function chat_options()
 	{
-		$title=get_screen_title('ROOM');
-
 		$value=post_param('text_colour',get_option('chat_default_post_colour')).';'.post_param('font_name',get_option('chat_default_post_font')).';';
 		require_code('users_active_actions');
 		ocp_setcookie('ocp_chat_prefs',$value);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>get_param('id'),'no_reenter_message'=>1),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

@@ -133,7 +133,6 @@ function xml_dump_script()
 
 
 	@header('Content-type: text/plain');
-	@ob_end_clean();
 
 	$sql=get_sql_dump(true,true,$from,is_null($skip)?array():explode(',',$skip),is_null($only)?NULL:explode(',',$only));
 

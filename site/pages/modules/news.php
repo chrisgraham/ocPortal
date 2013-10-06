@@ -284,6 +284,218 @@ class Module_news
 		return array($matches[3],'news');
 	}
 
+	var $title;
+	var $id;
+	var $blog;
+	var $filter;
+	var $filter_and;
+	var $myrow;
+	var $_title;
+	var $title_to_use;
+	var $img;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('filter');
+		inform_non_canonical_parameter('filter_and');
+		inform_non_canonical_parameter('blog');
+
+		if ($type=='cat_select')
+		{
+			$this->title=get_screen_title('JUST_NEWS_CATEGORIES');
+		}
+
+		if ($type=='select')
+		{
+			$this->title=get_screen_title('NEWS_CATEGORIES');
+		}
+
+		if ($type=='blog_select')
+		{
+			$this->title=get_screen_title('BLOGS');
+		}
+
+		if ($type=='misc')
+		{
+			$blog=get_param_integer('blog',NULL);
+
+			$filter=get_param('id',get_param('filter','*'));
+			$filter_and=get_param('filter_and','*');
+
+			// Title
+			if ($blog===1)
+			{
+				$this->title=get_screen_title('BLOG_NEWS_ARCHIVE');
+			} else
+			{
+				if (is_numeric($filter))
+				{
+					$news_cat_title=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title'),array('id'=>intval($filter)),'',1);
+					if (array_key_exists(0,$news_cat_title))
+					{
+						$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
+						$this->title=get_screen_title(make_fractionable_editable('news_category',$filter,$news_cat_title[0]['text_original']),false);
+					} else
+					{
+						$this->title=get_screen_title('NEWS_ARCHIVE');
+					}
+				} else
+				{
+					$this->title=get_screen_title('NEWS_ARCHIVE');
+				}
+			}
+
+			// Breadcrumbs
+			if ($blog===1)
+			{
+				$first_bc=array('_SELF:_SELF:blog_select',do_lang_tempcode('BLOGS'));
+			}
+			elseif ($blog===0)
+			{
+				$first_bc=array('_SELF:_SELF:cat_select',do_lang_tempcode('JUST_NEWS_CATEGORIES'));
+			} else
+			{
+				$first_bc=array('_SELF:_SELF:select',do_lang_tempcode('NEWS_CATEGORIES'));
+			}
+			breadcrumb_set_parents(array($first_bc));
+
+			$this->blog=$blog;
+			$this->filter=$filter;
+			$this->filter_and=$filter_and;
+		}
+
+		if ($type=='view')
+		{
+			$id=get_param_integer('id');
+
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				check_privacy('news',strval($id));
+			}
+
+			$blog=get_param_integer('blog',NULL);
+
+			$filter=get_param('filter','*');
+			$filter_and=get_param('filter_and','*');
+
+			// Load from database
+			$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$rows))
+			{
+				return warn_screen(get_screen_title('NEWS'),do_lang_tempcode('MISSING_RESOURCE'));
+			}
+			$myrow=$rows[0];
+
+			// Breadcrumbs
+			if ($blog===1)
+			{
+				$first_bc=array('_SELF:_SELF:blog_select',do_lang_tempcode('BLOGS'));
+			}
+			elseif ($blog===0)
+			{
+				$first_bc=array('_SELF:_SELF:cat_select',do_lang_tempcode('JUST_NEWS_CATEGORIES'));
+			} else
+			{
+				$first_bc=array('_SELF:_SELF:select',do_lang_tempcode('NEWS_CATEGORIES'));
+			}
+			if ($blog===1)
+			{
+				$parent_title=do_lang_tempcode('BLOG_NEWS_ARCHIVE');
+			} else
+			{
+				if (is_numeric($filter))
+				{
+					$news_cat_title=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title'),array('id'=>intval($filter)),'',1);
+					if (array_key_exists(0,$news_cat_title))
+					{
+						$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
+						$parent_title=make_string_tempcode(escape_html($news_cat_title[0]['text_original']));
+					} else
+					{
+						$parent_title=do_lang_tempcode('NEWS_ARCHIVE');
+					}
+				} else
+				{
+					$parent_title=do_lang_tempcode('NEWS_ARCHIVE');
+				}
+			}
+			breadcrumb_set_parents(array($first_bc,array('_SELF:_SELF:misc'.(($blog===1)?':blog=1':(($blog===0)?':blog=0':'')).(($filter=='*')?'':(is_numeric($filter)?(':id='.$filter):(':filter='.$filter))).(($filter_and=='*')?'':(':filter_and='.$filter_and)).propagate_ocselect_pagelink(),$parent_title)));
+			breadcrumb_set_self(get_translated_tempcode($myrow['title']));
+
+			// Permissions
+			if (!has_category_access(get_member(),'news',strval($myrow['news_category']))) access_denied('CATEGORY_ACCESS');
+
+			// Title
+			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
+			{
+				require_code('awards');
+				$awards=find_awards_for('news',strval($id));
+			} else $awards=array();
+			$_title=get_translated_tempcode($myrow['title']);
+			$title_to_use=do_lang_tempcode(($blog===1)?'BLOG__NEWS':'_NEWS',make_fractionable_editable('news',$id,$_title));
+			$this->title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
+
+			// SEO
+			seo_meta_load_for('news',strval($id),do_lang(($blog===1)?'BLOG__NEWS':'_NEWS',get_translated_text($myrow['title'])));
+
+			// Category membership
+			$news_cats=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NULL OR id='.strval($myrow['news_category']));
+			$news_cats=list_to_map('id',$news_cats);
+			$img=($news_cats[$myrow['news_category']]['nc_img']=='')?'':find_theme_image($news_cats[$myrow['news_category']]['nc_img']);
+			if (is_null($img)) $img='';
+			if ($myrow['news_image']!='')
+			{
+				$img=$myrow['news_image'];
+				if ((url_is_local($img)) && ($img!='')) $img=get_base_url().'/'.$img;
+			}
+			$category=get_translated_text($news_cats[$myrow['news_category']]['nc_title']);
+
+			$og_img=$img;
+			if ($og_img=='')
+			{
+				$news_full_eval=$news_full->evaluate();
+				$matches=array();
+				if (preg_match('#<img\s[^<>]*src="([^"]*)"#',$news_full_eval,$matches)!=0)
+				{
+					$og_img=$matches[1];
+				}
+			}
+
+			// Meta data
+			set_extra_request_metadata(array(
+				'created'=>date('Y-m-d',$myrow['date_and_time']),
+				'creator'=>$myrow['author'],
+				'publisher'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
+				'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
+				'type'=>'News article',
+				'title'=>get_translated_text($myrow['title']),
+				'identifier'=>'_SEARCH:news:view:'.strval($id),
+				'image'=>$og_img,
+				'description'=>strip_comcode(get_translated_text($myrow['news'])),
+				'category'=>$category,
+			));
+
+			$id=$this->id;
+			$blog=$this->blog;
+			$filter=$this->filter;
+			$filter_and=$this->filter_and;
+			$myrow=$this->myrow;
+			$_title=$this->_title;
+			$title_to_use=$this->title_to_use;
+			$this->img=$img;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -295,10 +507,6 @@ class Module_news
 		require_code('feedback');
 		require_code('news');
 		require_css('news');
-
-		inform_non_canonical_parameter('filter');
-		inform_non_canonical_parameter('filter_and');
-		inform_non_canonical_parameter('blog');
 
 		$type=get_param('type','misc');
 
@@ -319,8 +527,6 @@ class Module_news
 	 */
 	function news_cat_select($blogs)
 	{
-		$title=get_screen_title(($blogs===1)?'BLOGS':(($blogs===0)?'JUST_NEWS_CATEGORIES':'NEWS_CATEGORIES'));
-
 		$start=get_param_integer('news_categories_start',0);
 		$max=get_param_integer('news_categories_max',intval(get_option('news_categories_per_page')));
 
@@ -390,7 +596,7 @@ class Module_news
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('NEWS_CATEGORIES'),$start,'news_categories_start',$max,'news_categories_max',$max_rows);
 
-		$tpl=do_template('PAGINATION_SCREEN',array('_GUID'=>'c61c945e0453c2145a819ca60e8faf09','TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'CONTENT'=>$content,'PAGINATION'=>$pagination));
+		$tpl=do_template('PAGINATION_SCREEN',array('_GUID'=>'c61c945e0453c2145a819ca60e8faf09','TITLE'=>$this->title,'SUBMIT_URL'=>$submit_url,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -403,48 +609,11 @@ class Module_news
 	 */
 	function news_archive()
 	{
-		$blog=get_param_integer('blog',NULL);
-
-		$filter=get_param('id',get_param('filter','*'));
-		$filter_and=get_param('filter_and','*');
 		$ocselect=either_param('active_filter','');
 
-		// Title
-		if ($blog===1)
-		{
-			$title=get_screen_title('BLOG_NEWS_ARCHIVE');
-		} else
-		{
-			if (is_numeric($filter))
-			{
-				$news_cat_title=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title'),array('id'=>intval($filter)),'',1);
-				if (array_key_exists(0,$news_cat_title))
-				{
-					$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
-					$title=get_screen_title(make_fractionable_editable('news_category',$filter,$news_cat_title[0]['text_original']),false);
-				} else
-				{
-					$title=get_screen_title('NEWS_ARCHIVE');
-				}
-			} else
-			{
-				$title=get_screen_title('NEWS_ARCHIVE');
-			}
-		}
-
-		// Breadcrumbs
-		if ($blog===1)
-		{
-			$first_bc=array('_SELF:_SELF:blog_select',do_lang_tempcode('BLOGS'));
-		}
-		elseif ($blog===0)
-		{
-			$first_bc=array('_SELF:_SELF:cat_select',do_lang_tempcode('JUST_NEWS_CATEGORIES'));
-		} else
-		{
-			$first_bc=array('_SELF:_SELF:select',do_lang_tempcode('NEWS_CATEGORIES'));
-		}
-		breadcrumb_set_parents(array($first_bc));
+		$this->blog=$blog;
+		$this->filter=$filter;
+		$this->filter_and=$filter_and;
 
 		// Get category contents
 		$inline=get_param_integer('inline',0)==1;
@@ -459,7 +628,7 @@ class Module_news
 		} else $submit_url=new ocp_tempcode();
 
 		// Render
-		return do_template('NEWS_ARCHIVE_SCREEN',array('_GUID'=>'228918169ab1db445ee0c2d71f85983c','CAT'=>is_numeric($filter)?$filter:NULL,'SUBMIT_URL'=>$submit_url,'BLOG'=>$blog===1,'TITLE'=>$title,'CONTENT'=>$content));
+		return do_template('NEWS_ARCHIVE_SCREEN',array('_GUID'=>'228918169ab1db445ee0c2d71f85983c','CAT'=>is_numeric($filter)?$filter:NULL,'SUBMIT_URL'=>$submit_url,'BLOG'=>$blog===1,'TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 	/**
@@ -469,78 +638,14 @@ class Module_news
 	 */
 	function view_news()
 	{
-		$id=get_param_integer('id');
-
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			check_privacy('news',strval($id));
-		}
-
-		$blog=get_param_integer('blog',NULL);
-
-		$filter=get_param('filter','*');
-		$filter_and=get_param('filter_and','*');
-
-		// Load from database
-		$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$rows))
-		{
-			return warn_screen(get_screen_title('NEWS'),do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$rows[0];
-
-		// Breadcrumbs
-		if ($blog===1)
-		{
-			$first_bc=array('_SELF:_SELF:blog_select',do_lang_tempcode('BLOGS'));
-		}
-		elseif ($blog===0)
-		{
-			$first_bc=array('_SELF:_SELF:cat_select',do_lang_tempcode('JUST_NEWS_CATEGORIES'));
-		} else
-		{
-			$first_bc=array('_SELF:_SELF:select',do_lang_tempcode('NEWS_CATEGORIES'));
-		}
-		if ($blog===1)
-		{
-			$parent_title=do_lang_tempcode('BLOG_NEWS_ARCHIVE');
-		} else
-		{
-			if (is_numeric($filter))
-			{
-				$news_cat_title=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title'),array('id'=>intval($filter)),'',1);
-				if (array_key_exists(0,$news_cat_title))
-				{
-					$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
-					$parent_title=make_string_tempcode(escape_html($news_cat_title[0]['text_original']));
-				} else
-				{
-					$parent_title=do_lang_tempcode('NEWS_ARCHIVE');
-				}
-			} else
-			{
-				$parent_title=do_lang_tempcode('NEWS_ARCHIVE');
-			}
-		}
-		breadcrumb_set_parents(array($first_bc,array('_SELF:_SELF:misc'.(($blog===1)?':blog=1':(($blog===0)?':blog=0':'')).(($filter=='*')?'':(is_numeric($filter)?(':id='.$filter):(':filter='.$filter))).(($filter_and=='*')?'':(':filter_and='.$filter_and)).propagate_ocselect_pagelink(),$parent_title)));
-		breadcrumb_set_self(get_translated_tempcode($myrow['title']));
-
-		// Permissions
-		if (!has_category_access(get_member(),'news',strval($myrow['news_category']))) access_denied('CATEGORY_ACCESS');
-
-		// Title
-		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-		{
-			require_code('awards');
-			$awards=find_awards_for('news',strval($id));
-		} else $awards=array();
-		$_title=get_translated_tempcode($myrow['title']);
-		$title_to_use=do_lang_tempcode(($blog===1)?'BLOG__NEWS':'_NEWS',make_fractionable_editable('news',$id,$_title));
-		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
-
-		// SEO
-		seo_meta_load_for('news',strval($id),do_lang(($blog===1)?'BLOG__NEWS':'_NEWS',get_translated_text($myrow['title'])));
+		$id=$this->id;
+		$blog=$this->blog;
+		$filter=$this->filter;
+		$filter_and=$this->filter_and;
+		$myrow=$this->myrow;
+		$_title=$this->_title;
+		$title_to_use=$this->title_to_use;
+		$img=$this->img;
 
 		// Rating and comments
 		$self_url_map=array('page'=>'_SELF','type'=>'view','id'=>$id);
@@ -607,29 +712,6 @@ class Module_news
 			$submit_url=build_url($map,get_module_zone('cms_news'));
 		} else $submit_url=new ocp_tempcode();
 
-		// Category membership
-		$news_cats=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NULL OR id='.strval($myrow['news_category']));
-		$news_cats=list_to_map('id',$news_cats);
-		$img=($news_cats[$myrow['news_category']]['nc_img']=='')?'':find_theme_image($news_cats[$myrow['news_category']]['nc_img']);
-		if (is_null($img)) $img='';
-		if ($myrow['news_image']!='')
-		{
-			$img=$myrow['news_image'];
-			if ((url_is_local($img)) && ($img!='')) $img=get_base_url().'/'.$img;
-		}
-		$category=get_translated_text($news_cats[$myrow['news_category']]['nc_title']);
-
-		$og_img=$img;
-		if ($og_img=='')
-		{
-			$news_full_eval=$news_full->evaluate();
-			$matches=array();
-			if (preg_match('#<img\s[^<>]*src="([^"]*)"#',$news_full_eval,$matches)!=0)
-			{
-				$og_img=$matches[1];
-			}
-		}
-
 		$categories=array(strval($myrow['news_category'])=>$category);
 		$all_categories_for_this=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('*'),array('news_entry'=>$id));
 		$NEWS_CATS_CACHE=array();
@@ -657,24 +739,10 @@ class Module_news
 			}
 		}
 
-		// Meta data
-		set_extra_request_metadata(array(
-			'created'=>date('Y-m-d',$myrow['date_and_time']),
-			'creator'=>$myrow['author'],
-			'publisher'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
-			'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
-			'type'=>'News article',
-			'title'=>get_translated_text($myrow['title']),
-			'identifier'=>'_SEARCH:news:view:'.strval($id),
-			'image'=>$og_img,
-			'description'=>strip_comcode(get_translated_text($myrow['news'])),
-			'category'=>$category,
-		));
-
 		// Render
 		return do_template('NEWS_ENTRY_SCREEN',array(
 			'_GUID'=>'7686b23934e22c493d4ac10ba6c475c4',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'ID'=>strval($id),
 			'CATEGORY_ID'=>strval($myrow['news_category']),
 			'BLOG'=>$blog===1,

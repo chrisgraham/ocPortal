@@ -24,7 +24,7 @@
 				</div>
 			{+END}
 
-			{+START,IF_EMPTY,{$HELPER_PANEL_HTML}{$HELPER_PANEL_TEXT}{$GET,HELPER_PANEL_TUTORIAL}}
+			{+START,IF_EMPTY,{$HELPER_PANEL_TEXT}{$GET,HELPER_PANEL_TUTORIAL}}
 				<div id="help">
 					<div class="box box___global_helper_panel__none"><div class="box_inner">
 						<p>{!NO_HELP_HERE}</p>
@@ -32,14 +32,8 @@
 				</div>
 			{+END}
 
-			{+START,IF_NON_EMPTY,{$HELPER_PANEL_PIC}}{+START,IF_EMPTY,{$HELPER_PANEL_HTML}}
+			{+START,IF_NON_EMPTY,{$HELPER_PANEL_PIC}}
 				<div id="global_helper_panel_pic" class="global_helper_panel_pic"><img width="220" alt="" src="{$IMG*,{$HELPER_PANEL_PIC}}" /></div>
-			{+END}{+END}
-
-			{+START,IF_NON_EMPTY,{$HELPER_PANEL_HTML}}
-				<div class="global_helper_panel_html">
-					{$HELPER_PANEL_HTML}
-				</div>
 			{+END}
 		</div>
 	</div>

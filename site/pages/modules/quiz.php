@@ -224,6 +224,104 @@ class Module_quiz
 		}
 	}
 
+	var $title;
+	var $id;
+	var $quiz;
+	var $quiz_name;
+	var $title_to_use;
+	var $title_to_use_2;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('QUIZZES');
+		}
+
+		if ($type=='do')
+		{
+			$id=get_param_integer('id');
+
+			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$quiz=$quizzes[0];
+
+			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
+			{
+				require_code('awards');
+				$awards=find_awards_for('quiz',strval($id));
+			} else $awards=array();
+
+			$quiz_name=get_translated_text($quiz['q_name']);
+			$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$id,$quiz_name));
+			$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
+			seo_meta_load_for('quiz',strval($id),$title_to_use_2);
+
+			breadcrumb_set_self(make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))));
+
+			$type='Quiz';
+			switch ($quiz['q_type'])
+			{
+				case 'COMPETITION':
+					$type='Competition';
+					break;
+
+				case 'SURVEY':
+					$type='Survey';
+					break;
+
+				case 'TEST':
+					$type='Test';
+					break;
+			}
+
+			set_extra_request_metadata(array(
+				'created'=>date('Y-m-d',$quiz['q_add_date']),
+				'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($quiz['q_submitter']),
+				'publisher'=>'', // blank means same as creator
+				'modified'=>'',
+				'type'=>$type,
+				'title'=>get_translated_text($quiz['q_name']),
+				'identifier'=>'_SEARCH:quiz:do:'.strval($id),
+				'description'=>get_translated_text($quiz['q_start_text']),
+				'image'=>find_theme_image('bigicons/quiz'),
+			));
+
+			$this->id=$id;
+			$this->quiz=$quiz;
+			$this->quiz_name=$quiz_name;
+			$this->title_to_use=$title_to_use;
+			$this->title_to_use_2=$title_to_use_2;
+		}
+
+		if ($type=='_do')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
+
+			$id=get_param_integer('id');
+
+			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$quiz=$quizzes[0];
+			$this->enforcement_checks($quiz);
+
+			$this->title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
+
+			$this->id=$id;
+			$this->quiz=$quiz;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -249,8 +347,6 @@ class Module_quiz
 	 */
 	function archive()
 	{
-		$title=get_screen_title('QUIZZES');
-
 		require_code('quiz');
 
 		$start=get_param_integer('quizzes_start',0);
@@ -283,7 +379,7 @@ class Module_quiz
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('QUIZZES'),$start,'quizzes_start',$max,'quizzes_max',$max_rows);
 
-		$tpl=do_template('QUIZ_ARCHIVE_SCREEN',array('_GUID'=>'3073f74b500deba96b7a3031a2e9c8d8','TITLE'=>$title,'CONTENT_SURVEYS'=>$content_surveys,'CONTENT_COMPETITIONS'=>$content_competitions,'CONTENT_TESTS'=>$content_tests,'PAGINATION'=>$pagination));
+		$tpl=do_template('QUIZ_ARCHIVE_SCREEN',array('_GUID'=>'3073f74b500deba96b7a3031a2e9c8d8','TITLE'=>$this->title,'CONTENT_SURVEYS'=>$content_surveys,'CONTENT_COMPETITIONS'=>$content_competitions,'CONTENT_TESTS'=>$content_tests,'PAGINATION'=>$pagination));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -327,24 +423,13 @@ class Module_quiz
 	 */
 	function do_quiz()
 	{
-		$id=get_param_integer('id');
+		$id=$this->id;
+		$quiz=$this->quiz;
+		$quiz_name=$this->quiz_name;
+		$title_to_use=$this->title_to_use;
+		$title_to_use_2=$this->title_to_use_2;
 
-		$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$quiz=$quizzes[0];
 		$this->enforcement_checks($quiz);
-
-		if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-		{
-			require_code('awards');
-			$awards=find_awards_for('quiz',strval($id));
-		} else $awards=array();
-
-		$quiz_name=get_translated_text($quiz['q_name']);
-		$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$id,$quiz_name));
-		$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
-		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
-		seo_meta_load_for('quiz',strval($id),$title_to_use_2);
 
 		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
 		if (!is_null($last_visit_time)) // Refresh / new attempt
@@ -375,7 +460,7 @@ class Module_quiz
 
 		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
 		// If a test/quiz, randomly order questions
-//		if ($quiz['q_type']!='SURVEY') shuffle($questions);			No, could cause problems
+		//if ($quiz['q_type']!='SURVEY') shuffle($questions);			No, could cause problems
 		foreach ($questions as $i=>$question)
 		{
 			$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$question['id']),'ORDER BY q_order');
@@ -387,8 +472,6 @@ class Module_quiz
 		require_code('quiz');
 		$fields=render_quiz($questions);
 
-		breadcrumb_set_self(make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))));
-
 		// Validation
 		if (($quiz['q_validated']==0) && (addon_installed('unvalidated')))
 		{
@@ -397,34 +480,6 @@ class Module_quiz
 
 			$warning_details=do_template('WARNING_BOX',array('_GUID'=>'fc690dedf8601cc456e011931dfec595','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
 		} else $warning_details=new ocp_tempcode();
-
-		$type='Quiz';
-		switch ($quiz['q_type'])
-		{
-			case 'COMPETITION':
-				$type='Competition';
-				break;
-
-			case 'SURVEY':
-				$type='Survey';
-				break;
-
-			case 'TEST':
-				$type='Test';
-				break;
-		}
-
-		set_extra_request_metadata(array(
-			'created'=>date('Y-m-d',$quiz['q_add_date']),
-			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($quiz['q_submitter']),
-			'publisher'=>'', // blank means same as creator
-			'modified'=>'',
-			'type'=>$type,
-			'title'=>get_translated_text($quiz['q_name']),
-			'identifier'=>'_SEARCH:quiz:do:'.strval($id),
-			'description'=>get_translated_text($quiz['q_start_text']),
-			'image'=>find_theme_image('bigicons/quiz'),
-		));
 
 		$edit_url=new ocp_tempcode();
 		if ((has_actual_page_access(NULL,'cms_quiz',NULL,NULL)) && (has_edit_permission('mid',get_member(),$quiz['q_submitter'],'cms_quiz',array('quiz',$id))))
@@ -442,7 +497,7 @@ class Module_quiz
 			'ID'=>strval($id),
 			'WARNING_DETAILS'=>$warning_details,
 			'URL'=>$post_url,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'START_TEXT'=>$start_text,
 			'FIELDS'=>$fields,
 			'TIMEOUT'=>is_null($quiz['q_timeout'])?'':strval($quiz['q_timeout']*60-$timer_offset),
@@ -456,12 +511,8 @@ class Module_quiz
 	 */
 	function _do_quiz()
 	{
-		$id=get_param_integer('id');
-
-		$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$quiz=$quizzes[0];
-		$this->enforcement_checks($quiz);
+		$id=$this->id;
+		$quiz=$this->quiz;
 
 		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
 		if (is_null($last_visit_time)) warn_exit(do_lang_tempcode('QUIZ_TWICE'));
@@ -744,11 +795,7 @@ class Module_quiz
 		// Store results for entry
 		$GLOBALS['SITE_DB']->query_update('quiz_entries',array('q_results'=>intval(round($marks))),array('id'=>$entry_id),'',1);
 
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
-
 		// Show end text
-		$title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
 		$fail_text=get_translated_tempcode($quiz['q_end_text_fail']);
 		$message=(($quiz['q_type']!='TEST') || ($minimum_percentage>=$quiz['q_percentage']) || ($fail_text->is_empty()))?get_translated_tempcode($quiz['q_end_text']):get_translated_tempcode($quiz['q_end_text_fail']);
 		return do_template('QUIZ_DONE_SCREEN',array(
@@ -756,7 +803,7 @@ class Module_quiz
 			'CORRECTIONS_TO_SHOW'=>comcode_to_tempcode($_corrections_to_show->evaluate()),
 			'POINTS_DIFFERENCE'=>strval($points_difference),
 			'RESULT'=>$result,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TYPE'=>$quiz['q_type'],
 			'MESSAGE'=>$message,
 		));

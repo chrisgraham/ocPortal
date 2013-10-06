@@ -62,6 +62,46 @@ class Module_topics
 		return array('submit_lowrange_content'=>array(1,'MAKE_POST'),'bypass_validation_lowrange_content'=>array(1,'BYPASS_POST_VALIDATION'),'edit_own_lowrange_content'=>array(1,'EDIT_OWN_POST'),'edit_lowrange_content'=>array(1,'EDIT_POST'),'delete_own_lowrange_content'=>array(1,'DELETE_OWN_POST'),'delete_lowrange_content'=>array(1,'DELETE_POST'),'submit_midrange_content'=>array(1,'ADD_TOPIC'),'bypass_validation_midrange_content'=>array(1,'BYPASS_TOPIC_VALIDATION'),'edit_own_midrange_content'=>array(1,'EDIT_OWN_TOPIC'),'edit_midrange_content'=>array(1,'EDIT_TOPIC'),'delete_own_midrange_content'=>array(1,'DELETE_OWN_TOPIC'),'delete_midrange_content'=>array(1,'DELETE_TOPIC'));
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		inform_non_canonical_parameter('#^kfs.*$#');
+		inform_non_canonical_parameter('#^mark_.*$#');
+
+		if ($type=='whisper')
+		{
+			inform_non_canonical_parameter('quote');
+		}
+
+		if ($type=='new_topic')
+		{
+			inform_non_canonical_parameter('quote');
+		}
+
+		if ($type=='new_post')
+		{
+			inform_non_canonical_parameter('quote');
+			inform_non_canonical_parameter('intended_solely_for');
+		}
+
+		if ($type=='misc' || $type=='whisper')
+		{
+			attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		}
+
+		$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -75,9 +115,6 @@ class Module_topics
 		require_css('ocf');
 
 		require_code('form_templates');
-
-		foreach (array_keys($_GET) as $key)
-			if ((substr($key,0,3)=='kfs') || (substr($key,0,5)=='mark_')) inform_non_canonical_parameter($key);
 
 		$type=get_param('type','misc');
 
@@ -165,8 +202,6 @@ class Module_topics
 
 		if ($type=='misc')
 		{
-			attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
-
 			warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
 		}
 
@@ -197,7 +232,7 @@ class Module_topics
 			'SKIP_VALIDATION'=>true,
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
@@ -429,7 +464,7 @@ class Module_topics
 			'_GUID'=>'d62d2c81583398f26f900ee3df1894b1',
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
 			'SUBMIT_NAME'=>$submit_name,
@@ -474,7 +509,7 @@ class Module_topics
 			'_GUID'=>'a476da1fecfbd932db4853cdbd7cfedd',
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
 			'SUBMIT_NAME'=>$submit_name,
@@ -909,7 +944,7 @@ class Module_topics
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_forum_helpdesk'),
 			'PREVIEW'=>true,
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
@@ -976,7 +1011,7 @@ class Module_topics
 			'SKIP_VALIDATION'=>true,
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
 			'SUBMIT_NAME'=>$submit_name,
@@ -1142,7 +1177,7 @@ class Module_topics
 
 		$title=get_screen_title('CATEGORISE_PTS');
 		$submit_name=do_lang_tempcode('CATEGORISE_PTS');
-		return do_template('FORM_SCREEN',array('_GUID'=>'c6d0e273b5ce0e84d50a1c6294ece157','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'c6d0e273b5ce0e84d50a1c6294ece157','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -1212,11 +1247,7 @@ class Module_topics
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'],$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('WHISPER'));
 
-		inform_non_canonical_parameter('quote');
-
-		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
-
-		return do_template('OCF_WHISPER_CHOICE_SCREEN',array('_GUID'=>'1ecaa02e7e87a4d73798d3085cc27229','URL'=>$url,'TITLE'=>$title,'USERNAME'=>$username));
+		return do_template('OCF_WHISPER_CHOICE_SCREEN',array('_GUID'=>'1ecaa02e7e87a4d73798d3085cc27229','URL'=>$url,'TITLE'=>$this->title,'USERNAME'=>$username));
 	}
 
 	/**
@@ -1405,8 +1436,6 @@ class Module_topics
 
 		$hidden_fields=new ocp_tempcode();
 		$specialisation=new ocp_tempcode();
-
-		inform_non_canonical_parameter('quote');
 
 		// Where to post to
 		$map=array('page'=>'_SELF','type'=>'_add_reply');
@@ -1631,7 +1660,7 @@ class Module_topics
 			{
 				$url=get_self_url(false,false,array('agreed'=>'1'));
 				$title=get_screen_title('NEW_PRIVATE_TOPIC');
-				return do_template('OCF_MEMBER_PT_RULES_SCREEN',array('_GUID'=>'0c39906d4aeb728cc386cd9a79a338c7','TITLE'=>$title,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'MEMBER_ID'=>strval($member_id),'URL'=>$url,'RULES'=>$rules));
+				return do_template('OCF_MEMBER_PT_RULES_SCREEN',array('_GUID'=>'0c39906d4aeb728cc386cd9a79a338c7','TITLE'=>$this->title,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'MEMBER_ID'=>strval($member_id),'URL'=>$url,'RULES'=>$rules));
 			}
 		}
 
@@ -1668,9 +1697,6 @@ class Module_topics
 	function new_post()
 	{
 		require_code('ocf_posts2');
-
-		inform_non_canonical_parameter('quote');
-		inform_non_canonical_parameter('intended_solely_for');
 
 		url_default_parameters__enable();
 
@@ -1892,7 +1918,7 @@ class Module_topics
 
 		url_default_parameters__disable();
 
-		return do_template('POSTING_SCREEN',array('_GUID'=>'ca2eab9a9ffdab267a48eb7be48ccdc0','TEXT'=>$text,'TITLE'=>$title,'POSTING_FORM'=>$posting_form));
+		return do_template('POSTING_SCREEN',array('_GUID'=>'ca2eab9a9ffdab267a48eb7be48ccdc0','TEXT'=>$text,'TITLE'=>$this->title,'POSTING_FORM'=>$posting_form));
 	}
 
 	/**
@@ -1971,7 +1997,7 @@ class Module_topics
 		url_default_parameters__disable();
 
 		$title=get_screen_title('REPORT_POST');
-		return do_template('POSTING_SCREEN',array('_GUID'=>'eee64757e66fed702f74fecf8d595260','TITLE'=>$title,'TEXT'=>$text,'POSTING_FORM'=>$posting_form));
+		return do_template('POSTING_SCREEN',array('_GUID'=>'eee64757e66fed702f74fecf8d595260','TITLE'=>$this->title,'TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}
 
 	/**
@@ -2437,7 +2463,7 @@ END;
 				'SKIP_VALIDATION'=>true,
 				'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 				'HIDDEN'=>$hidden,
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'TEXT'=>$text,
 				'URL'=>$post_url,
 				'FIELDS'=>$fields,
@@ -2690,7 +2716,7 @@ END;
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'],$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('ADD_TOPIC_POLL'));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'ce1752a0c5508a061bffbf242a13e5bd','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'JAVASCRIPT'=>$javascript));
+		return do_template('FORM_SCREEN',array('_GUID'=>'ce1752a0c5508a061bffbf242a13e5bd','HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'JAVASCRIPT'=>$javascript));
 	}
 
 	/**
@@ -2882,7 +2908,7 @@ END;
 		return do_template('POSTING_SCREEN',array(
 			'_GUID'=>'347e469de58882bf77722bba6ed4aba4',
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
 			'POSTING_FORM'=>$posting_form,
@@ -3131,7 +3157,7 @@ END;
 			'_GUID'=>'071b6747a1df1cf8e72f8f542422aa5b',
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden_fields,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
 			'SUBMIT_NAME'=>$submit_name,
@@ -3227,7 +3253,7 @@ END;
 			'SKIP_VALIDATION'=>true,
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
 			'SUBMIT_NAME'=>$submit_name,
@@ -3285,7 +3311,7 @@ END;
 			'SKIP_VALIDATION'=>true,
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_correspondance'),
 			'HIDDEN'=>'',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
 			'SUBMIT_NAME'=>$submit_name,
@@ -3359,7 +3385,7 @@ END;
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
 			'HIDDEN'=>'',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
 			'SUBMIT_NAME'=>$submit_name,
@@ -3483,7 +3509,7 @@ END;
 			'SKIP_VALIDATION'=>true,
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_mod'),
 			'HIDDEN'=>'',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
 			'SUBMIT_NAME'=>$submit_name,
@@ -3688,7 +3714,7 @@ END;
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_forum_helpdesk'),
 			'PREVIEW'=>true,
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
@@ -3725,7 +3751,7 @@ END;
 		$url=build_url(array('page'=>'admin_ocf_history','type'=>'misc','topic_id'=>get_param_integer('id')),'adminzone');
 		require_code('site2');
 		assign_refresh($url->evaluate(),0.0);
-		return do_template('REDIRECT_SCREEN',array('_GUID'=>'e2e5a67f066a90afcc53f9730f8bc42b','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		return redirect_screen($this->title,$url);
 	}
 
 	/**
@@ -3774,7 +3800,7 @@ END;
 			'_GUID'=>'9416df197ee157510e9d6be7458d510f',
 			'STAFF_HELP_URL'=>get_tutorial_url('tut_correspondance'),
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
@@ -3822,11 +3848,11 @@ END;
 		$topic_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_first_time>'.strval(time()-60*60*24*3).' AND '.db_string_equal_to('t_cache_first_title',do_lang('HAPPY_BIRTHDAY_PERSON',$id)));
 		if (!is_null($topic_id))
 		{
-			$title=get_screen_title('REDIRECTING');
+			$title=get_screen_title('VIEW_TOPIC');
 			$url=$GLOBALS['FORUM_DRIVER']->topic_url($topic_id,'',true);
 			require_code('site2');
 			assign_refresh($url,0.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'f457a6d28fd6e494662e5b82e80e9fa2','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING_TO_BIRTHDAY_TOPIC')));
+			return redirect_screen($title,$url,do_lang_tempcode('REDIRECTING_TO_BIRTHDAY_TOPIC'));
 		}
 		$_POST['title']=do_lang('HAPPY_BIRTHDAY_PERSON',$id);
 		if (get_magic_quotes_gpc()) $_POST['title']=addslashes($_POST['title']);

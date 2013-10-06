@@ -118,6 +118,28 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_DISEASES'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_tutorial('tut_subcom');
+
+		if ($type=='view')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('OCDEADPEOPLE_TITLE'))));
+			breadcrumb_set_self(do_lang_tempcode('VIEW_DISEASE'));
+		}
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -126,8 +148,6 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_tutorial('tut_subcom');
-
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');
 		require_code('ocf_forums_action');
@@ -149,12 +169,12 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 		require_code('templates_donext');
 		require_lang('ocdeadpeople');
 		return do_next_manager(get_screen_title('OCDEADPEOPLE_TITLE'),comcode_lang_string('DOC_OCDEADPEOPLE'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DISEASE')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DISEASE')),
-					),
-					do_lang('OCDEADPEOPLE_TITLE')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DISEASE')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DISEASE')),
+			),
+			do_lang('OCDEADPEOPLE_TITLE')
 		);
 	}
 
@@ -191,12 +211,8 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('OCDEADPEOPLE_TITLE'))));
-		breadcrumb_set_self(do_lang_tempcode('VIEW_DISEASE'));
-
 		require_code('templates_map_table');
 		return map_table(get_screen_title('VIEW_DISEASE'),array('NAME'=>$name,'IMAGE'=>$image,'CURE'=>$cure,'CURE_PRICE'=>integer_format($cure_price),'IMMUNIZATION'=>$immunization,'IMMUNIZATION_PRICE'=>integer_format($immunization_price),'SPREAD_RATE'=>integer_format($spread_rate),'POINTS_PER_SPREAD'=>integer_format($points_per_spread),'ENABLED'=>$enabled));
-
 	}
 
 	function get_form_fields($id=NULL,$name='',$image='',$cure='',$cure_price=10,$immunization='',$immunization_price=5,$spread_rate=12,$points_per_spread=10,$enabled=0)

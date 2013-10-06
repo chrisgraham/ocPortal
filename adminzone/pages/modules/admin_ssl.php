@@ -51,6 +51,25 @@ class Module_admin_ssl
 		return array('misc'=>'SSL_CONFIGURATION');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/ssl');
+		set_helper_panel_tutorial('tut_security');
+
+		$this->title=get_screen_title('SSL_CONFIGURATION');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,9 +77,6 @@ class Module_admin_ssl
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/ssl');
-		set_helper_panel_tutorial('tut_security');
-
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		require_lang('ssl');
@@ -80,8 +96,6 @@ class Module_admin_ssl
 	 */
 	function ssl_interface()
 	{
-		$title=get_screen_title('SSL_CONFIGURATION');
-
 		$content=new ocp_tempcode();
 		$zones=find_all_zones();
 		foreach ($zones as $zone)
@@ -98,7 +112,7 @@ class Module_admin_ssl
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'set'),'_SELF');
-		return do_template('SSL_CONFIGURATION_SCREEN',array('_GUID'=>'823f395205f0c018861847e80c622710','URL'=>$url,'TITLE'=>$title,'CONTENT'=>$content));
+		return do_template('SSL_CONFIGURATION_SCREEN',array('_GUID'=>'823f395205f0c018861847e80c622710','URL'=>$url,'TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 	/**
@@ -122,13 +136,11 @@ class Module_admin_ssl
 			}
 		}
 
-		$title=get_screen_title('SSL_CONFIGURATION');
-
 		erase_persistent_cache();
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

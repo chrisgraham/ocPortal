@@ -51,6 +51,42 @@ class Module_admin_emaillog
 		return array('misc'=>'EMAIL_LOG');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			//set_helper_panel_pic('pagepics/email');	Actually, we need the space
+
+			$this->title=get_screen_title('EMAIL_LOG');
+		}
+
+		if ($type=='edit' || $type=='_edit')
+		{
+			$this->title=get_screen_title('HANDLE_QUEUED_MESSAGE');
+		}
+
+		if ($type=='mass_send')
+		{
+			$this->title=get_screen_title('SEND_ALL');
+		}
+
+		if ($type=='mass_delete')
+		{
+			$this->title=get_screen_title('DELETE_ALL');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -78,10 +114,6 @@ class Module_admin_emaillog
 	 */
 	function show()
 	{
-		//set_helper_panel_pic('pagepics/email');	Actually, we need the space
-
-		$title=get_screen_title('EMAIL_LOG');
-
 		// Put errors into table
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -91,7 +123,6 @@ class Module_admin_emaillog
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('DATE_TIME'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('SUBJECT')),$sortables,'sort',$sortable.' '.$sort_order);
 		$fields=new ocp_tempcode();
@@ -137,7 +168,7 @@ class Module_admin_emaillog
 		$mass_delete_url=build_url(array('page'=>'_SELF','type'=>'mass_delete'),'_SELF');
 		$mass_send_url=build_url(array('page'=>'_SELF','type'=>'mass_send'),'_SELF');
 
-		$tpl=do_template('EMAILLOG_SCREEN',array('_GUID'=>'8c249a372933e1215d8b9ff6d4bb0de3','TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'MASS_DELETE_URL'=>$mass_delete_url,'MASS_SEND_URL'=>$mass_send_url));
+		$tpl=do_template('EMAILLOG_SCREEN',array('_GUID'=>'8c249a372933e1215d8b9ff6d4bb0de3','TITLE'=>$this->title,'RESULTS_TABLE'=>$results_table,'MASS_DELETE_URL'=>$mass_delete_url,'MASS_SEND_URL'=>$mass_send_url));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -150,8 +181,6 @@ class Module_admin_emaillog
 	 */
 	function edit()
 	{
-		$title=get_screen_title('HANDLE_QUEUED_MESSAGE');
-
 		$id=get_param_integer('id');
 
 		$fields=new ocp_tempcode();
@@ -191,7 +220,7 @@ class Module_admin_emaillog
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit','id'=>$id),'_SELF');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'84c9b97944b6cf799ac1abb5044d426a','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'84c9b97944b6cf799ac1abb5044d426a','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -201,8 +230,6 @@ class Module_admin_emaillog
 	 */
 	function _edit()
 	{
-		$title=get_screen_title('HANDLE_QUEUED_MESSAGE');
-
 		$id=get_param_integer('id');
 
 		$action=post_param('action');
@@ -264,7 +291,7 @@ class Module_admin_emaillog
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -274,8 +301,6 @@ class Module_admin_emaillog
 	 */
 	function mass_send()
 	{
-		$title=get_screen_title('SEND_ALL');
-
 		require_code('mail');
 		$rows=$GLOBALS['SITE_DB']->query_select('logged_mail_messages',array('*'),array('m_queued'=>1));
 		foreach ($rows as $row)
@@ -293,7 +318,7 @@ class Module_admin_emaillog
 		$GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued'=>0),array('m_queued'=>1));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SENT_NUM',escape_html(integer_format(count($rows)))));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SENT_NUM',escape_html(integer_format(count($rows)))));
 	}
 
 	/**
@@ -303,14 +328,12 @@ class Module_admin_emaillog
 	 */
 	function mass_delete()
 	{
-		$title=get_screen_title('DELETE_ALL');
-
 		$count=$GLOBALS['SITE_DB']->query_select_value('logged_mail_messages','COUNT(*)',array('m_queued'=>1));
 
 		$GLOBALS['SITE_DB']->query_delete('logged_mail_messages',array('m_queued'=>1));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('DELETE_NUM',escape_html(integer_format($count))));
+		return redirect_screen($this->title,$url,do_lang_tempcode('DELETE_NUM',escape_html(integer_format($count))));
 	}
 
 

@@ -23,26 +23,26 @@
  */
 function clear_old_uploads()
 {
-	//get the unix timestamp corresonding to the two days ago condition
+	// Get the unix timestamp corresonding to the two days ago condition
 	$two_days_ago=strtotime('-2 days');
-	//get the incoming uploads that are older than two days
+	// Get the incoming uploads that are older than two days
 	$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'incoming_uploads WHERE i_date_and_time<'.strval($two_days_ago));
 
-	//if there are older uploads records found start processing them
-	if(count($rows)>0)
+	// If there are older uploads records found start processing them
+	if (count($rows)>0)
 	{
-		//browse through files
+		// Browse through files
 		foreach($rows as $upload)
 		{
-			if(!empty($upload['i_save_url']))
+			if (!empty($upload['i_save_url']))
 			{
-				if(file_exists($upload['i_save_url']))
+				if (file_exists($upload['i_save_url']))
 				{
-					//delete file if it exists
+					// Delete file if it exists
 					@unlink($upload['i_save_url']);
 				}
 
-				//Note: it is possible some db records to be left without corresponding files. So we need to clean them too.
+				// Note: it is possible some db records to be left without corresponding files. So we need to clean them too.
 				$GLOBALS['SITE_DB']->query_delete('incoming_uploads',array('id'=>$upload['id']),'',1);
 			}
 		}
@@ -65,7 +65,7 @@ function incoming_uploads_script()
 
 	$savename='uploads/incoming/'.uniqid('',true).'.dat';
 
-	if (array_key_exists('file',$_FILES)) // nice multi-part upload
+	if (array_key_exists('file',$_FILES)) // Nice mime upload
 	{
 		if (is_uploaded_file($_FILES['file']['tmp_name']))
 		{
@@ -85,7 +85,7 @@ function incoming_uploads_script()
 		{
 			@move_uploaded_file($_FILES['file']['tmp_name'],get_custom_file_base().'/'.$savename) OR intelligent_write_error(get_custom_file_base().'/'.$savename);
 		}
-	} elseif (post_param('name','')!='') // less nice raw post, which most HTML5 browsers have to do
+	} elseif (post_param('name','')!='') // Less nice raw post, which most HTML5 browsers have to do
 	{
 		prepare_for_known_ajax_response();
 
@@ -185,6 +185,4 @@ function incoming_uploads_script()
 		$out2=globalise(do_template('FORM_SCREEN',array('_GUID'=>'632edbf0ca9f6f644cd9ebbd817b90f3','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('incoming_uploads',true),'FIELDS'=>$fields)),NULL,'',true);
 		$out2->evaluate_echo();
 	}
-
-	exit();
 }

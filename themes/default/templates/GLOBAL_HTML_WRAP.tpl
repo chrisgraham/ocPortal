@@ -70,7 +70,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 			{$,ocPortal may show little messages for you as it runs relating to what you are doing or the state the site is in}
 			{+START,IF_NON_EMPTY,{$MESSAGES_TOP}}
-				<div class="global_messages">
+				<div class="global_messages" id="global_messages">
 					{$MESSAGES_TOP}
 				</div>
 			{+END}
@@ -85,7 +85,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 				{$,Deciding whether/how to show the right panel requires some complex logic}
 				{$SET,HELPER_PANEL_TUTORIAL,{$?,{$HAS_PRIVILEGE,see_software_docs},{$HELPER_PANEL_TUTORIAL}}}
-				{$SET,helper_panel,{$OR,{$IS_NON_EMPTY,{$GET,HELPER_PANEL_TUTORIAL}},{$IS_NON_EMPTY,{$HELPER_PANEL_PIC}},{$IS_NON_EMPTY,{$HELPER_PANEL_HTML}},{$IS_NON_EMPTY,{$HELPER_PANEL_TEXT}}}}
+				{$SET,helper_panel,{$OR,{$IS_NON_EMPTY,{$GET,HELPER_PANEL_TUTORIAL}},{$IS_NON_EMPTY,{$HELPER_PANEL_PIC}},{$IS_NON_EMPTY,{$HELPER_PANEL_TEXT}}}}
 				{+START,IF,{$OR,{$GET,helper_panel},{$IS_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}}}
 					<div id="panel_right" class="global_side_panel{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,right}}} helper_panel{+START,IF,{$HIDE_HELP_PANEL}} helper_panel_hidden{+END}{+END}" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
 						{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
@@ -123,9 +123,10 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			{+END}
 
 			{+START,IF_NON_EMPTY,{$MESSAGES_BOTTOM}}
-				<div class="global_messages">
+				<div class="global_messages" id="global_messages_2">
 					{$MESSAGES_BOTTOM}
 				</div>
+				<script>merge_global_messages();</script>
 			{+END}
 		{+END}
 
@@ -140,13 +141,6 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			<div class="global_messages">
 				{$LATE_MESSAGES}
 			</div>
-
-			{+START,IF,{$DEV_MODE}}
-				<script>// <![CDATA[
-					try { window.scrollTo(0,1000000); } catch (e) {};
-					window.fauxmodal_alert('{!PLEASE_REVIEW_ERRORS_AT_BOTTOM;}'); // Before Firefox dies with an XHTML error, let the developer see what is wrong
-				//]]></script>
-			{+END}
 		{+END}
 
 		{$,This is the main site footer; if you like your layout in one place you can move it to GLOBAL.tpl}

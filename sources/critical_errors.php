@@ -66,7 +66,7 @@ if (!function_exists('critical_error'))
 	{
 		error_reporting(0);
 
-		@ob_end_clean();
+		@ob_end_clean(); // Emergency output so kill off any active buffer
 		ob_start();
 
 		if (!headers_sent())

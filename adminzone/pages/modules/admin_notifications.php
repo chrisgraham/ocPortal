@@ -73,6 +73,22 @@ class Module_admin_notifications
 		));
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$this->title=get_screen_title('NOTIFICATIONS_LOCKDOWN');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -81,8 +97,6 @@ class Module_admin_notifications
 	function run()
 	{
 		require_lang('notifications');
-
-		$title=get_screen_title('NOTIFICATIONS_LOCKDOWN');
 
 		require_css('notifications');
 		require_javascript('javascript_notifications');
@@ -248,7 +262,7 @@ class Module_admin_notifications
 
 		return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
 			'_GUID'=>'4f6af291a40c519377879555e24c2c81',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'INTERFACE'=>$interface,
 			'ACTION_URL'=>get_self_url(),
 		));

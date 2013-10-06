@@ -51,6 +51,24 @@ class Module_online_members
 		return (get_option('session_prudence')==='1')?array():array('!'=>'USERS_ONLINE');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$this->title=get_screen_title('USERS_ONLINE');
+
+		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,10 +77,6 @@ class Module_online_members
 	function run()
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
-
-		$title=get_screen_title('USERS_ONLINE');
-
-		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 		$count=0;
 		require_code('users2');
@@ -130,7 +144,7 @@ class Module_online_members
 
 		if ($rows->is_empty()) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		return do_template('OCF_MEMBERS_ONLINE_SCREEN',array('_GUID'=>'2f63e2926c5a4690d905f97661afe6cc','TITLE'=>$title,'ROWS'=>$rows));
+		return do_template('OCF_MEMBERS_ONLINE_SCREEN',array('_GUID'=>'2f63e2926c5a4690d905f97661afe6cc','TITLE'=>$this->title,'ROWS'=>$rows));
 	}
 
 }

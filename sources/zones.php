@@ -357,8 +357,8 @@ function load_minimodule_page($string,&$out=NULL)
 	global $PAGE_STRING;
 	if (is_null($PAGE_STRING)) $PAGE_STRING=$string;
 
-	if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
-		$out->evaluate_echo(NULL,true);
+	/*if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))	Actually we cannot do this, as some minimodules don't return HTML and exit themselves (e.g. CSV downloads)
+		$out->evaluate_echo(NULL,true);*/
 
 	return _load_mini_code($string);
 }
@@ -471,15 +471,25 @@ function load_module_page($string,$codename,&$out=NULL)
 		}
 	}
 
+	if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
+	{
+		$TEMPCODE_CURRENT_PAGE_OUTPUTTING=$out;
+	}
+
 	if (method_exists($object,'pre_run'))
 	{
 		$exceptional_output=$object->pre_run();
 		if ($exceptional_output!==NULL) return $exceptional_output;
 
 		if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
+		{
 			$out->evaluate_echo(NULL,true);
+		}
 	}
-	return $object->run();
+	$ret=$object->run();
+	if ($GLOBALS['OUTPUT_STREAMING'])
+		$ret->evaluate_echo(NULL,true);
+	return $ret;
 }
 
 /**

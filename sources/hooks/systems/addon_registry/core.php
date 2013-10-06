@@ -556,7 +556,6 @@ class Hook_addon_registry_core
 			'themes/default/images/pagepics/investigateuser.png',
 			'themes/default/images/pagepics/ipban.png',
 			'themes/default/images/pagepics/ocp-logo.png',
-			'themes/default/images/pagepics/ocpmainpage.png',
 			'sources/hooks/systems/startup/index.html',
 			'data/confirm_session.php',
 			'data/cron_bridge.php',

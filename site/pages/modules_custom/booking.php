@@ -179,6 +179,40 @@ class Module_booking
 		return array('misc'=>'CREATE_BOOKING');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='choose_bookables_and_dates')
+		{
+			$this->title=get_screen_title('CREATE_BOOKING');
+		}
+
+		if ($type=='flesh_out')
+		{
+			$this->title=get_screen_title('CREATE_BOOKING');
+		}
+
+		if ($type=='join_or_login')
+		{
+			$this->title=get_screen_title('CREATE_BOOKING');
+		}
+
+		if ($type=='thanks')
+		{
+			$this->title=get_screen_title('CREATE_BOOKING');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -215,8 +249,6 @@ class Module_booking
 	 */
 	function choose_bookables_and_dates()
 	{
-		$title=get_screen_title('CREATE_BOOKING');
-
 		$query='SELECT * FROM '.get_table_prefix().'bookable WHERE enabled=1';
 		$filter=get_param('filter','*');
 		require_code('ocfiltering');
@@ -376,7 +408,7 @@ class Module_booking
 
 		return do_template('BOOKING_START_SCREEN',array(
 			'_GUID'=>'12787a01e3408b56f61f4b41cefa1325',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'CATEGORIES'=>$categories,
 			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'flesh_out','usergroup'=>get_param_integer('usergroup',NULL)),'_SELF'),
 			'SHARED_MESSAGES'=>$shared_messages,
@@ -426,8 +458,6 @@ class Module_booking
 	 */
 	function flesh_out()
 	{
-		$title=get_screen_title('CREATE_BOOKING');
-
 		// Check booking: redirect to last step as re-entrant if not valid
 		$request=get_booking_request_from_form();
 		$test=check_booking_dates_available($request,array());
@@ -481,7 +511,7 @@ class Module_booking
 
 		return do_template('BOOKING_FLESH_OUT_SCREEN',array(
 			'_GUID'=>'255280fa4f9bb37e3dae76f5bca46ace',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'BOOKABLES'=>$bookables,
 			'PRICE'=>float_format(find_booking_price($request)),
 			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'account','usergroup'=>get_param_integer('usergroup',NULL)),'_SELF'),
@@ -497,8 +527,6 @@ class Module_booking
 	 */
 	function join_or_login()
 	{
-		$title=get_screen_title('CREATE_BOOKING');
-
 		// Check login: skip to thanks if logged in
 		if (get_option('member_booking_only')=='1')
 		{
@@ -531,7 +559,7 @@ class Module_booking
 			list($javascript,$form)=ocf_join_form($url,true,false,false,false);
 		}
 
-		return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('_GUID'=>'b6e499588de8e2136122949478bac2e7','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'FORM'=>$form,'HIDDEN'=>$hidden));
+		return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('_GUID'=>'b6e499588de8e2136122949478bac2e7','TITLE'=>$this->title,'JAVASCRIPT'=>$javascript,'FORM'=>$form,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -541,14 +569,12 @@ class Module_booking
 	 */
 	function thanks()
 	{
-		$title=get_screen_title('CREATE_BOOKING');
-
 		// Finish join operation, if applicable
 		if ((is_guest()) && (get_option('member_booking_only')=='1'))
 		{
 			list($messages)=ocf_join_actual(true,false,false,true,false,false,false,true);
 			if (!$messages->is_empty())
-				return inform_screen($title,$messages);
+				return inform_screen($this->title,$messages);
 		}
 
 		// Read request
@@ -564,7 +590,7 @@ class Module_booking
 
 		// Show success
 		$customer_name=post_param('customer_name',is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
-		return inform_screen($title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($customer_name)));
+		return inform_screen($this->title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($customer_name)));
 	}
 
 }

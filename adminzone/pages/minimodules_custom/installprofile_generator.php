@@ -237,9 +237,6 @@ dependencies=
 description=Auto-generated installprofile for the Setup Wizard.
 END;
 
-@ob_end_clean();
-@ob_end_clean();
-
 $filename='mycustomprofile.tar';
 header('Content-Type: application/octet-stream'.'; authoritative=true;');
 header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');

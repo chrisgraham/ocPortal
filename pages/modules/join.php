@@ -51,6 +51,45 @@ class Module_join
 		return array('misc'=>'_JOIN');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		$this->title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_self(do_lang_tempcode('_JOIN'));
+		}
+
+		if ($type=='step2')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_JOIN'))));
+			breadcrumb_set_self(do_lang_tempcode('DETAILS'));
+		}
+
+		if ($type=='step3')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_JOIN'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		if ($type=='step4')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_JOIN'))));
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -85,8 +124,6 @@ class Module_join
 	{
 		if (!is_guest()) warn_exit(do_lang_tempcode('NO_JOIN_LOGGED_IN'));
 
-		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
-
 		// Show rules
 		$rules=request_page('_rules',true,get_comcode_zone('rules'),NULL,true);
 		$map=array('page'=>'_SELF','type'=>'step2');
@@ -113,9 +150,7 @@ class Module_join
 			}
 		}
 
-		breadcrumb_set_self(do_lang_tempcode('_JOIN'));
-
-		return do_template('OCF_JOIN_STEP1_SCREEN',array('_GUID'=>'3776e89f3b18e4bd9dd532defe6b1e9e','TITLE'=>$title,'RULES'=>$rules,'URL'=>$url,'GROUP_SELECT'=>$group_select));
+		return do_template('OCF_JOIN_STEP1_SCREEN',array('_GUID'=>'3776e89f3b18e4bd9dd532defe6b1e9e','TITLE'=>$this->title,'RULES'=>$rules,'URL'=>$url,'GROUP_SELECT'=>$group_select));
 	}
 
 	/**
@@ -127,13 +162,8 @@ class Module_join
 	{
 		if (!is_guest()) warn_exit(do_lang_tempcode('NO_JOIN_LOGGED_IN'));
 
-		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
-
 		if ((get_option('show_first_join_page')=='1') && (post_param_integer('confirm',0)!=1))
 			warn_exit(do_lang_tempcode('DESCRIPTION_I_AGREE_RULES'));
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_JOIN'))));
-		breadcrumb_set_self(do_lang_tempcode('DETAILS'));
 
 		$map=array('page'=>'_SELF','type'=>'step3');
 		$redirect=get_param('redirect','');
@@ -142,7 +172,7 @@ class Module_join
 
 		list($javascript,$form)=ocf_join_form($url);
 
-		return do_template('OCF_JOIN_STEP2_SCREEN',array('_GUID'=>'5879db5cf331526a999371f76868233d','JAVASCRIPT'=>$javascript,'TITLE'=>$title,'FORM'=>$form));
+		return do_template('OCF_JOIN_STEP2_SCREEN',array('_GUID'=>'5879db5cf331526a999371f76868233d','JAVASCRIPT'=>$javascript,'TITLE'=>$this->title,'FORM'=>$form));
 	}
 
 	/**
@@ -152,8 +182,6 @@ class Module_join
 	 */
 	function step3()
 	{
-		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
-
 		if ((get_option('show_first_join_page')=='1') && (post_param_integer('confirm',0)!=1))
 			warn_exit(do_lang_tempcode('DESCRIPTION_I_AGREE_RULES'));
 
@@ -180,11 +208,7 @@ class Module_join
 
 		list($message)=ocf_join_actual();
 
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_JOIN'))));
-
-		return inform_screen($title,$message);
+		return inform_screen($this->title,$message);
 	}
 
 	/**
@@ -194,11 +218,6 @@ class Module_join
 	 */
 	function step4()
 	{
-		$title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_JOIN'))));
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		// Check confirm code correct
 		$_code=get_param('code','-1'); // -1 allowed because people often seem to mess the e-mail link up
 		$code=intval($_code);
@@ -211,7 +230,7 @@ class Module_join
 			$submit_name=do_lang_tempcode('PROCEED');
 			return do_template('FORM_SCREEN',array(
 				'_GUID'=>'e2c8c3762a308ac7489ec3fb32cc0cf8',
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'GET'=>true,
 				'SKIP_VALIDATION'=>true,
 				'HIDDEN'=>'',
@@ -234,7 +253,7 @@ class Module_join
 				$map=array('page'=>'login','type'=>'misc');
 				if ($redirect!='') $map['redirect']=$redirect;
 				$url=build_url($map,get_module_zone('login'));
-				return redirect_screen($title,$url,do_lang_tempcode('ALREADY_CONFIRMED_THIS'));
+				return redirect_screen($this->title,$url,do_lang_tempcode('ALREADY_CONFIRMED_THIS'));
 			}
 		}
 		$id=$rows[0]['id'];
@@ -245,7 +264,7 @@ class Module_join
 
 		if ($validated==0)
 		{
-			return inform_screen($title,do_lang_tempcode('AWAITING_MEMBER_VALIDATION'));
+			return inform_screen($this->title,do_lang_tempcode('AWAITING_MEMBER_VALIDATION'));
 		}
 
 		// Alert user to situation
@@ -253,7 +272,7 @@ class Module_join
 		$map=array('page'=>'login','type'=>'misc');
 		if ($redirect!='') $map['redirect']=$redirect;
 		$url=build_url($map,get_module_zone('login'));
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESSFUL_CONFIRM'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESSFUL_CONFIRM'));
 	}
 
 }

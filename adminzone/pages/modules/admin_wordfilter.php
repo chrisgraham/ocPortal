@@ -66,10 +66,12 @@ class Module_admin_wordfilter
 				'w_substr'=>'*BINARY'
 			));
 
-			$naughties=array('arsehole','asshole','arse','cock','cocked','cocksucker','crap','cunt','cum','bastard',
-									'bitch','blowjob','bollocks','bondage','bugger','buggery','dickhead','fuck','fucked','fucking',
-									'fucker','gayboy','motherfucker','nigger','piss','pissed','puffter','pussy','shag','shagged',
-									'shat','shit','slut','twat','wank','wanker','whore');
+			$naughties=array(
+				'arsehole','asshole','arse','cock','cocked','cocksucker','crap','cunt','cum','bastard',
+				'bitch','blowjob','bollocks','bondage','bugger','buggery','dickhead','fuck','fucked','fucking',
+				'fucker','gayboy','motherfucker','nigger','piss','pissed','pussy','shag','shagged',
+				'shit','slut','twat','wank','wanker','whore',
+			);
 			foreach ($naughties as $word)
 			{
 				$GLOBALS['SITE_DB']->query_insert('wordfilter',array('word'=>$word,'w_replacement'=>'','w_substr'=>0));
@@ -87,6 +89,38 @@ class Module_admin_wordfilter
 		return array('misc'=>'MANAGE_WORDFILTER');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/wordfilter');
+		set_helper_panel_tutorial('tut_censor');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('MANAGE_WORDFILTER');
+		}
+
+		if ($type=='add')
+		{
+			$this->title=get_screen_title('ADD_WORDFILTER');
+		}
+
+		if ($type=='remove')
+		{
+			$this->title=get_screen_title('DELETE_WORDFILTER');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -94,16 +128,13 @@ class Module_admin_wordfilter
 	 */
 	function run()
 	{
-		set_helper_panel_pic('pagepics/wordfilter');
-		set_helper_panel_tutorial('tut_censor');
-
 		require_lang('wordfilter');
 
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->word_filter_interface();
 		if ($type=='add') return $this->add_word();
 		if ($type=='remove') return $this->remove_word();
-		if ($type=='misc') return $this->word_filter_interface();
 
 		return new ocp_tempcode();
 	}
@@ -115,8 +146,6 @@ class Module_admin_wordfilter
 	 */
 	function word_filter_interface()
 	{
-		$title=get_screen_title('MANAGE_WORDFILTER');
-
 		require_code('form_templates');
 		$list=new ocp_tempcode();
 		$words=$GLOBALS['SITE_DB']->query_select('wordfilter',array('*'),NULL,'ORDER BY word');
@@ -144,7 +173,7 @@ class Module_admin_wordfilter
 		$fields->attach(form_input_tick(do_lang_tempcode('WORD_SUBSTR'),do_lang_tempcode('DESCRIPTION_WORD_SUBSTR'),'substr',false));
 		$add_form=do_template('FORM',array('_GUID'=>'5b1d45b374e15392b9f5496de8db2e1c','TABINDEX'=>strval(get_form_field_tabindex()),'SECONDARY_FORM'=>true,'SKIP_REQUIRED'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 
-		return do_template('WORDFILTER_SCREEN',array('_GUID'=>'4b355f5d2cecc0bc26e76a69716cc841','TITLE'=>$title,'TPL'=>$tpl,'ADD_FORM'=>$add_form));
+		return do_template('WORDFILTER_SCREEN',array('_GUID'=>'4b355f5d2cecc0bc26e76a69716cc841','TITLE'=>$this->title,'TPL'=>$tpl,'ADD_FORM'=>$add_form));
 	}
 
 	/**
@@ -154,14 +183,12 @@ class Module_admin_wordfilter
 	 */
 	function add_word()
 	{
-		$title=get_screen_title('ADD_WORDFILTER');
-
 		$word=post_param('word_2');
 		$this->_add_word($word,post_param('replacement'),post_param_integer('substr',0));
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -188,13 +215,11 @@ class Module_admin_wordfilter
 	 */
 	function remove_word()
 	{
-		$title=get_screen_title('DELETE_WORDFILTER');
-
 		$this->_remove_word(post_param('word'));
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**

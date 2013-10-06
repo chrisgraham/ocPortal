@@ -89,10 +89,11 @@ function init__tempcode()
 	if (get_param_integer('keep_markers',0)==1) $OUTPUT_STREAMING=false;
 	if (get_param_integer('show_edit_links',0)==1) $OUTPUT_STREAMING=false;
 
-	global $STOP_IF_STUCK,$STUCK_ABORT_SIGNAL,$TEMPCODE_OUTPUT_STARTED;
+	global $STOP_IF_STUCK,$STUCK_ABORT_SIGNAL,$TEMPCODE_OUTPUT_STARTED,$TEMPCODE_CURRENT_PAGE_OUTPUTTING;
 	$STOP_IF_STUCK=false;
 	$STUCK_ABORT_SIGNAL=false;
 	$TEMPCODE_OUTPUT_STARTED=false;
+	$TEMPCODE_CURRENT_PAGE_OUTPUTTING=NULL;
 }
 
 /**

@@ -48,8 +48,6 @@ function ocw_refresh_with_message($message,$msg_type='inform')
 {
 	$url=build_url(array('page'=>'ocworld'),'_SELF');
 
-	@ob_end_clean();
-
 	$title=get_screen_title('MESSAGE');
 	$tpl=redirect_screen($title,$url,$message,false,$msg_type);
 
@@ -377,7 +375,8 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 
 			// Put trolled into the database
 			$GLOBALS['SITE_DB']->query_update('w_members',array('trolled'=>$trolled),array('id'=>$member_id),'',1);
-			header('Location: '.get_self_url(true));
+			require_code('site2');
+			smart_redirect(get_self_url(true));
 		}
 	}
 

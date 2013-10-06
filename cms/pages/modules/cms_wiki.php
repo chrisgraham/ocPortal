@@ -63,6 +63,85 @@ class Module_cms_wiki
 		return array('edit_cat_lowrange_content'=>array(1,'WIKI_EDIT_PAGE'),'delete_cat_lowrange_content'=>array(1,'WIKI_DELETE_PAGE'),'submit_lowrange_content'=>array(1,'WIKI_MAKE_POST'),'bypass_validation_lowrange_content'=>array(1,'BYPASS_WIKI_VALIDATION'),'edit_own_lowrange_content'=>array(1,'WIKI_EDIT_OWN_POST'),'edit_lowrange_content'=>array(1,'WIKI_EDIT_POST'),'delete_own_lowrange_content'=>array(1,'WIKI_DELETE_OWN_POST'),'delete_lowrange_content'=>array(1,'WIKI_DELETE_POST'),'wiki_manage_tree'=>1);
 	}
 
+	var $title;
+	var $id;
+	var $chain;
+	var $page;
+	var $page_title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/wiki');
+		set_helper_panel_tutorial('tut_wiki');
+
+		if ($type=='choose_page_to_edit')
+		{
+			set_helper_panel_text(comcode_lang_string('DOC_WIKI'));
+
+			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+
+			$this->title=get_screen_title('WIKI_EDIT_PAGE');
+		}
+
+		if ($type=='add_page')
+		{
+			$this->title=get_screen_title('WIKI_ADD_PAGE');
+		}
+
+		if ($type=='_add_page')
+		{
+			$this->title=get_screen_title('WIKI_ADD_PAGE');
+		}
+
+		if ($type=='edit_page')
+		{
+			$breadcrumbs=wiki_breadcrumbs(get_param('id',false,true),NULL,true,true);
+			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('WIKI_EDIT_PAGE').'</span>'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('CHOOSE'))));
+
+			$this->title=get_screen_title('WIKI_EDIT_PAGE');
+		}
+
+		if ($type=='_edit_page')
+		{
+			if (post_param_integer('delete',0)==1)
+			{
+				$this->title=get_screen_title('WIKI_DELETE_PAGE');
+			} else
+			{
+				$this->title=get_screen_title('WIKI_EDIT_PAGE');
+			}
+		}
+
+		if ($type=='edit_tree')
+		{
+			list($id,$chain)=get_param_wiki_chain('id');
+			$breadcrumbs=wiki_breadcrumbs($chain,NULL,true,true);
+			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('WIKI_EDIT_TREE').'</span>'));
+
+			$pages=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$pages)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$page=$pages[0];
+
+			$page_title=get_translated_text($page['title']);
+			$this->title=get_screen_title('_WIKI_EDIT_TREE',true,array(escape_html($page_title)));
+
+			$this->id=$id;
+			$this->chain=$chain;
+			$this->page=$page;
+			$this->page_title=$page_title;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -71,9 +150,6 @@ class Module_cms_wiki
 	function run()
 	{
 		$type=get_param('type','misc');
-
-		set_helper_panel_pic('pagepics/wiki');
-		set_helper_panel_tutorial('tut_wiki');
 
 		require_code('wiki');
 		require_lang('wiki');
@@ -102,12 +178,12 @@ class Module_cms_wiki
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_WIKI'),comcode_lang_string('DOC_WIKI'),
-					array_merge(array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'add_page'),'_SELF'),do_lang('WIKI_ADD_PAGE')),
-						array('edit_one',array('_SELF',array('type'=>'choose_page_to_edit'),'_SELF'),do_lang('WIKI_EDIT_PAGE')),
-					),manage_custom_fields_donext_link('wiki_post'),manage_custom_fields_donext_link('wiki_page')),
-					do_lang('MANAGE_WIKI')
+			array_merge(array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'add_page'),'_SELF'),do_lang('WIKI_ADD_PAGE')),
+				array('edit_one',array('_SELF',array('type'=>'choose_page_to_edit'),'_SELF'),do_lang('WIKI_EDIT_PAGE')),
+			),manage_custom_fields_donext_link('wiki_post'),manage_custom_fields_donext_link('wiki_page')),
+			do_lang('MANAGE_WIKI')
 		);
 	}
 
@@ -169,8 +245,6 @@ class Module_cms_wiki
 	 */
 	function add_page()
 	{
-		$title=get_screen_title('WIKI_ADD_PAGE');
-
 		check_submit_permission('cat_low');
 
 		$_title=get_param('id','',true);
@@ -194,7 +268,7 @@ class Module_cms_wiki
 
 		url_default_parameters__disable();
 
-		return do_template('POSTING_SCREEN',array('_GUID'=>'ea72f10d85ed06b618866f21da515180','POSTING_FORM'=>$posting_form,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('WIKI_EDIT_PAGE_TEXT'))));
+		return do_template('POSTING_SCREEN',array('_GUID'=>'ea72f10d85ed06b618866f21da515180','POSTING_FORM'=>$posting_form,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>paragraph(do_lang_tempcode('WIKI_EDIT_PAGE_TEXT'))));
 	}
 
 	/**
@@ -204,8 +278,6 @@ class Module_cms_wiki
 	 */
 	function _add_page()
 	{
-		$title=get_screen_title('WIKI_ADD_PAGE');
-
 		check_submit_permission('cat_low');
 
 		require_code('content2');
@@ -243,7 +315,7 @@ class Module_cms_wiki
 			$_url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($id==db_get_first_id())?NULL:$id),get_module_zone('wiki'));
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -253,8 +325,6 @@ class Module_cms_wiki
 	 */
 	function choose_page_to_edit()
 	{
-		$title=get_screen_title('WIKI_EDIT_PAGE');
-
 		$list=wiki_show_tree();
 		require_code('form_templates');
 		$fields=form_input_list(do_lang_tempcode('_WIKI_PAGE'),'','id',$list,NULL,true);
@@ -262,15 +332,11 @@ class Module_cms_wiki
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_page'),'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('CHOOSE');
 
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
-
-		set_helper_panel_text(comcode_lang_string('DOC_WIKI'));
-
 		$search_url=build_url(array('page'=>'search','id'=>'wiki_pages'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'wiki'),get_module_zone('wiki'));
 		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($search_url->evaluate()),escape_html($archive_url->evaluate())));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e64757db1c77d752d813638f8a80581d','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','SUBMIT_NAME'=>$submit_name,'TEXT'=>$text,'FIELDS'=>$fields,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'e64757db1c77d752d813638f8a80581d','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','SUBMIT_NAME'=>$submit_name,'TEXT'=>$text,'FIELDS'=>$fields,'URL'=>$post_url));
 	}
 
 	/**
@@ -280,8 +346,6 @@ class Module_cms_wiki
 	 */
 	function edit_page()
 	{
-		$title=get_screen_title('WIKI_EDIT_PAGE');
-
 		$__id=get_param('id','',true);
 		if (($__id=='') || (strpos($__id,'/')!==false))
 		{
@@ -361,10 +425,6 @@ class Module_cms_wiki
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		$breadcrumbs=wiki_breadcrumbs(get_param('id',false,true),NULL,true,true);
-		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('WIKI_EDIT_PAGE').'</span>'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('CHOOSE'))));
-
 		return do_template('POSTING_SCREEN',array(
 			'_GUID'=>'de53b8902ab1431e0d2d676f7d5471d3',
 			'PING_URL'=>$ping_url,
@@ -372,7 +432,7 @@ class Module_cms_wiki
 			'REVISION_HISTORY'=>$revision_history,
 			'POSTING_FORM'=>$posting_form,
 			'HIDDEN'=>$hidden,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>paragraph(do_lang_tempcode('WIKI_EDIT_PAGE_TEXT')),
 		));
 	}
@@ -391,8 +451,6 @@ class Module_cms_wiki
 
 		if (post_param_integer('delete',0)==1)
 		{
-			$title=get_screen_title('WIKI_DELETE_PAGE');
-
 			check_delete_permission('cat_low',NULL,array('wiki_page',$id));
 
 			wiki_delete_page($id);
@@ -410,8 +468,6 @@ class Module_cms_wiki
 			$url=$_url->evaluate();
 		} else
 		{
-			$title=get_screen_title('WIKI_EDIT_PAGE');
-
 			check_edit_permission('cat_low',NULL,array('wiki_page',$id));
 
 			require_code('content2');
@@ -446,7 +502,7 @@ class Module_cms_wiki
 		}
 
 		// Show it worked / Refresh
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -456,14 +512,10 @@ class Module_cms_wiki
 	 */
 	function edit_tree()
 	{
-		list($id,$chain)=get_param_wiki_chain('id');
-
-		$pages=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$pages)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$page=$pages[0];
-
-		$page_title=get_translated_text($page['title']);
-		$title=get_screen_title('_WIKI_EDIT_TREE',true,array(escape_html($page_title)));
+		$id=$this->id;
+		$chain=$this->chain;
+		$page=$this->page;
+		$page_title=$this->page_title;
 
 		check_privilege('wiki_manage_tree',array('wiki_page',$id));
 
@@ -491,15 +543,12 @@ class Module_cms_wiki
 		require_code('form_templates');
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		$breadcrumbs=wiki_breadcrumbs($chain,NULL,true,true);
-		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('WIKI_EDIT_TREE').'</span>'));
-
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_text(do_lang_tempcode('CHILD_PAGES'),new ocp_tempcode(),'children',$children,false,NULL,true));
 		$form=do_template('FORM',array('_GUID'=>'b908438ccfc9be6166cf7c5c81d5de8b','FIELDS'=>$fields,'URL'=>$post_url,'HIDDEN'=>'','TEXT'=>'','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 
-		return do_template('WIKI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PAGE_TITLE'=>$page_title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'FORM'=>$form,'WIKI_TREE'=>$wiki_tree));
+		return do_template('WIKI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PAGE_TITLE'=>$page_title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$this->title,'FORM'=>$form,'WIKI_TREE'=>$wiki_tree));
 	}
 
 	/**

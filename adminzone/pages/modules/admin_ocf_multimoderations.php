@@ -44,6 +44,23 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 		return array_merge(array('misc'=>'MULTI_MODERATIONS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/multimoderations');
+		set_helper_panel_tutorial('tut_forum_helpdesk');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -52,9 +69,6 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		set_helper_panel_pic('pagepics/multimoderations');
-		set_helper_panel_tutorial('tut_forum_helpdesk');
-
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_moderation_action');
 		require_code('ocf_moderation_action2');
@@ -77,12 +91,12 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MULTI_MODERATIONS'),comcode_lang_string('DOC_MULTI_MODERATIONS'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_MULTI_MODERATION')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MULTI_MODERATION')),
-					),
-					do_lang('MULTI_MODERATIONS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_MULTI_MODERATION')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MULTI_MODERATION')),
+			),
+			do_lang('MULTI_MODERATIONS')
 		);
 	}
 
@@ -149,7 +163,6 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('NAME'),

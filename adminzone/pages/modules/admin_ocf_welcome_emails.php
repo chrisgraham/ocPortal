@@ -104,6 +104,28 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		return array_merge(array('misc'=>'WELCOME_EMAILS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		require_lang('ocf_welcome_emails');
+
+		set_helper_panel_pic('pagepics/welcome_emails');
+		set_helper_panel_tutorial('tut_members');
+		set_helper_panel_text(comcode_lang_string('DOC_WELCOME_EMAIL_PREVIEW'));
+
+		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -113,14 +135,6 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	function run_start($type)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
-
-		require_lang('ocf_welcome_emails');
-
-		set_helper_panel_pic('pagepics/welcome_emails');
-		set_helper_panel_tutorial('tut_members');
-		set_helper_panel_text(comcode_lang_string('DOC_WELCOME_EMAIL_PREVIEW'));
 
 		require_code('ocf_general_action');
 		require_code('ocf_general_action2');
@@ -166,12 +180,12 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('WELCOME_EMAILS'),comcode_lang_string('DOC_WELCOME_EMAILS'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WELCOME_EMAIL')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_WELCOME_EMAIL')),
-					),
-					do_lang('WELCOME_EMAILS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WELCOME_EMAIL')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_WELCOME_EMAIL')),
+			),
+			do_lang('WELCOME_EMAILS')
 		);
 	}
 
@@ -253,7 +267,6 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('NAME'),

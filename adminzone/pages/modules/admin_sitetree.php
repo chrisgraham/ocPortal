@@ -52,6 +52,104 @@ class Module_admin_sitetree
 		return array('misc'=>'ZONES','pagewizard'=>'PAGE_WIZARD','site_tree'=>'SITE_TREE_EDITOR','move'=>'MOVE');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='move' || $type=='_move')
+		{
+			set_helper_panel_pic('pagepics/move');
+			set_helper_panel_tutorial('tut_structure');
+		}
+
+		if ($type=='misc')
+		{
+			set_helper_panel_pic('pagepics/sitetreeeditor');
+			set_helper_panel_tutorial('tut_structure');
+		}
+
+		if ($type=='page_wizard' || $type=='_page_wizard')
+		{
+			set_helper_panel_pic('pagepics/addpagewizard');
+			set_helper_panel_tutorial('tut_comcode_pages');
+		}
+
+		if ($type=='delete' || $type=='_delete' || $type=='__delete')
+		{
+			set_helper_panel_pic('pagepics/deletepage');
+		}
+
+		if ($type=='site_tree')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
+
+			$this->title=get_screen_title('SITE_TREE_EDITOR');
+		}
+
+		if ($type=='pagewizard')
+		{
+			//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
+			breadcrumb_set_self(do_lang_tempcode('PAGE_WIZARD'));
+
+			$this->title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(1),integer_format(3)));
+		}
+
+		if ($type=='_pagewizard')
+		{
+			breadcrumb_set_parents(array(/*array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),*/array('_SELF:_SELF:pagewizard',do_lang_tempcode('PAGE_WIZARD'))));
+			breadcrumb_set_self(do_lang_tempcode('DETAILS'));
+
+			$this->title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(2),integer_format(3)));
+		}
+
+		if ($type=='delete')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
+
+			$this->title=get_screen_title('DELETE_PAGES');
+		}
+
+		if ($type=='_delete')
+		{
+			breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:delete',do_lang_tempcode('DELETE_PAGES'))));
+
+			$this->title=get_screen_title('DELETE_PAGES');
+		}
+
+		if ($type=='__delete')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:delete',do_lang_tempcode('DELETE_PAGES'))));
+
+			$this->title=get_screen_title('DELETE_PAGES');
+		}
+
+		if ($type=='move')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
+
+			$this->title=get_screen_title('MOVE_PAGES');
+		}
+
+		if ($type=='_move')
+		{
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:move',do_lang_tempcode('MOVE_PAGES'))));
+
+			$this->title=get_screen_title('MOVE_PAGES');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -85,18 +183,15 @@ class Module_admin_sitetree
 	 */
 	function misc()
 	{
-		set_helper_panel_pic('pagepics/sitetreeeditor');
-		set_helper_panel_tutorial('tut_structure');
-
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('PAGES'),comcode_lang_string('DOC_PAGES'),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('comcode_page_edit',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('COMCODE_PAGE_EDIT')),
-						array('delete',array('_SELF',array('type'=>'delete'),'_SELF'),do_lang('DELETE_PAGES')),
-						array('move',array('_SELF',array('type'=>'move'),'_SELF'),do_lang('MOVE_PAGES')),
-					),
-					do_lang('PAGES')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('comcode_page_edit',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('COMCODE_PAGE_EDIT')),
+				array('delete',array('_SELF',array('type'=>'delete'),'_SELF'),do_lang('DELETE_PAGES')),
+				array('move',array('_SELF',array('type'=>'move'),'_SELF'),do_lang('MOVE_PAGES')),
+			),
+			do_lang('PAGES')
 		);
 	}
 
@@ -111,8 +206,6 @@ class Module_admin_sitetree
 	 */
 	function do_next_manager($title,$page,$zone,$completion_text)
 	{
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-
 		require_code('zones2');
 		require_code('zones3');
 		return site_tree_do_next_manager($title,$page,$zone,$completion_text);
@@ -125,8 +218,6 @@ class Module_admin_sitetree
 	 */
 	function site_tree()
 	{
-		$title=get_screen_title('SITE_TREE_EDITOR');
-
 		require_css('sitetree_editor');
 
 		if (!has_js())
@@ -135,7 +226,7 @@ class Module_admin_sitetree
 			$url=build_url(array('page'=>'_SELF','type'=>'page'),'_SELF');
 			require_code('site2');
 			assign_refresh($url,5.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'a801d4cb71aa0c680eff4469e29cf4c7','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_ADVANCED_SCREEN_SITE_TREE')));
+			return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_ADVANCED_SCREEN_SITE_TREE'));
 		}
 
 		if (count($GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)'))>=300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL',escape_html(integer_format(50))),'warn');
@@ -146,9 +237,7 @@ class Module_admin_sitetree
 		require_javascript('javascript_dragdrop');
 		require_javascript('javascript_site_tree_editor');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
-
-		return do_template('SITE_TREE_EDITOR_SCREEN',array('_GUID'=>'2d42cb71e03d31c855a6b6467d2082d2','TITLE'=>$title));
+		return do_template('SITE_TREE_EDITOR_SCREEN',array('_GUID'=>'2d42cb71e03d31c855a6b6467d2082d2','TITLE'=>$this->title));
 	}
 
 	/**
@@ -160,11 +249,6 @@ class Module_admin_sitetree
 	{
 		$zone=get_param('zone','site');
 
-		set_helper_panel_pic('pagepics/addpagewizard');
-		set_helper_panel_tutorial('tut_comcode_pages');
-
-		$title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(1),integer_format(3)));
-
 		require_code('form_templates');
 		require_code('zones2');
 		require_code('zones3');
@@ -174,10 +258,7 @@ class Module_admin_sitetree
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_pagewizard'),'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('PROCEED');
 
-//		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
-		breadcrumb_set_self(do_lang_tempcode('PAGE_WIZARD'));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'4c982255f035472282b5a3740d8df82d','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'4c982255f035472282b5a3740d8df82d','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -187,14 +268,6 @@ class Module_admin_sitetree
 	 */
 	function _page_wizard()
 	{
-		set_helper_panel_pic('pagepics/addpagewizard');
-		set_helper_panel_tutorial('tut_comcode_pages');
-
-		$title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(2),integer_format(3)));
-
-		breadcrumb_set_parents(array(/*array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),*/array('_SELF:_SELF:pagewizard',do_lang_tempcode('PAGE_WIZARD'))));
-		breadcrumb_set_self(do_lang_tempcode('DETAILS'));
-
 		require_code('type_validation');
 		if (!is_alphanumeric(str_replace(':','',post_param('name')))) warn_exit(do_lang('BAD_CODENAME'));
 
@@ -315,7 +388,7 @@ class Module_admin_sitetree
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('page_link',$zone.':'.post_param('name')));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'3281970772c410cf071c422792d1571d','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3281970772c410cf071c422792d1571d','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>$hidden,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -325,7 +398,7 @@ class Module_admin_sitetree
 	 * @param  ?string		Zone to not allow the selection of (NULL: none to filter out)
 	 * @return tempcode		The UI
 	 */
-	function choose_zone($title,$no_go=NULL)
+	function _choose_zone($title,$no_go=NULL)
 	{
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
@@ -336,8 +409,6 @@ class Module_admin_sitetree
 		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),'','zone',$zones,NULL,true));
 
 		$post_url=get_self_url(false,false,NULL,false,true);
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'df58e16290a783d24f9f81fc9227e6ff','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 	}
@@ -351,12 +422,8 @@ class Module_admin_sitetree
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		set_helper_panel_pic('pagepics/deletepage');
-
-		$title=get_screen_title('DELETE_PAGES');
-
 		$zone=get_param('zone',NULL);
-		if (is_null($zone)) return $this->choose_zone($title);
+		if (is_null($zone)) return $this->_choose_zone($this->title);
 
 		require_code('form_templates');
 		require_code('zones2');
@@ -378,13 +445,11 @@ class Module_admin_sitetree
 
 		$hidden=form_input_hidden('zone',$zone);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
-
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'a7310327788808856f1da4351f116b92',
 			'SKIP_VALIDATION'=>true,
 			'FIELDS'=>$fields,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SUBMIT_NAME'=>$submit_name,
 			'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_DELETE')),
 			'URL'=>$post_url,
@@ -399,8 +464,6 @@ class Module_admin_sitetree
 	 */
 	function _delete()
 	{
-		set_helper_panel_pic('pagepics/deletepage');
-
 		$hidden=new ocp_tempcode();
 
 		$file=new ocp_tempcode();
@@ -434,16 +497,12 @@ class Module_admin_sitetree
 			}
 		}
 
-		$title=get_screen_title('DELETE_PAGES');
 		$url=build_url(array('page'=>'_SELF','type'=>'__delete'),'_SELF');
 		$text=do_lang_tempcode('CONFIRM_DELETE',escape_html($file));
 
-		breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:delete',do_lang_tempcode('DELETE_PAGES'))));
-
 		$hidden->attach(form_input_hidden('zone',$zone));
 
-		return do_template('CONFIRM_SCREEN',array('_GUID'=>'f732bb10942759c6ca5771d2d446c333','TITLE'=>$title,'HIDDEN'=>$hidden,'TEXT'=>$text,'URL'=>$url));
+		return do_template('CONFIRM_SCREEN',array('_GUID'=>'f732bb10942759c6ca5771d2d446c333','TITLE'=>$this->title,'HIDDEN'=>$hidden,'TEXT'=>$text,'URL'=>$url));
 	}
 
 	/**
@@ -453,8 +512,6 @@ class Module_admin_sitetree
 	 */
 	function __delete()
 	{
-		set_helper_panel_pic('pagepics/deletepage');
-
 		$zone=post_param('zone',NULL);
 
 		$afm_needed=false;
@@ -495,12 +552,7 @@ class Module_admin_sitetree
 
 		decache('main_sitemap');
 
-		$title=get_screen_title('DELETE_PAGES');
-
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:delete',do_lang_tempcode('DELETE_PAGES'))));
-
-		return $this->do_next_manager($title,NULL,$zone,new ocp_tempcode());
+		return $this->do_next_manager($this->title,NULL,$zone,new ocp_tempcode());
 	}
 
 	/**
@@ -512,13 +564,8 @@ class Module_admin_sitetree
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		set_helper_panel_pic('pagepics/move');
-		set_helper_panel_tutorial('tut_structure');
-
-		$title=get_screen_title('MOVE_PAGES');
-
 		$zone=get_param('zone',NULL);
-		if (is_null($zone)) return $this->choose_zone($title);
+		if (is_null($zone)) return $this->_choose_zone($this->title);
 
 		require_code('form_templates');
 
@@ -545,9 +592,7 @@ class Module_admin_sitetree
 
 		$hidden=form_input_hidden('zone',$zone);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'79869440ede2482fe51839df04b9d880','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_MOVE')),'URL'=>$post_url,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'79869440ede2482fe51839df04b9d880','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'TITLE'=>$this->title,'SUBMIT_NAME'=>$submit_name,'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_MOVE')),'URL'=>$post_url,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -557,12 +602,7 @@ class Module_admin_sitetree
 	 */
 	function _move()
 	{
-		$title=get_screen_title('MOVE_PAGES');
-
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
-
-		set_helper_panel_pic('pagepics/move');
-		set_helper_panel_tutorial('tut_structure');
 
 		$zone=post_param('zone',NULL);
 
@@ -571,7 +611,7 @@ class Module_admin_sitetree
 			$post_url=build_url(array('page'=>'_SELF','type'=>get_param('type')),'_SELF',NULL,true);
 			$hidden=build_keep_form_fields('',true);
 
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'c6e872cc62bdc7cf1c5157fbfdb2dfd6','TITLE'=>$title,'TEXT'=>do_lang_tempcode('Q_SURE'),'URL'=>$post_url,'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'c6e872cc62bdc7cf1c5157fbfdb2dfd6','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE'),'URL'=>$post_url,'HIDDEN'=>$hidden));
 		}
 
 		$new_zone=post_param('destination_zone');
@@ -677,16 +717,13 @@ class Module_admin_sitetree
 		require_lang('addons');
 		if ($cannot_move->is_empty()) $message=do_lang_tempcode('SUCCESS'); else $message=do_lang_tempcode('WOULD_NOT_OVERWRITE_BUT_SUCCESS',$cannot_move);
 
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:move',do_lang_tempcode('MOVE_PAGES'))));
-
 		decache('main_sitemap');
 
 		if (has_js())
 		{
-			return inform_screen($title,$message); // Came from site-tree editor, so want to just close this window when done
+			return inform_screen($this->title,$message); // Came from site-tree editor, so want to just close this window when done
 		}
-		return $this->do_next_manager($title,$moved_something,$new_zone,new ocp_tempcode());
+		return $this->do_next_manager($this->title,$moved_something,$new_zone,new ocp_tempcode());
 	}
 
 }

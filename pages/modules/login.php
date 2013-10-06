@@ -79,6 +79,74 @@ class Module_login
 		return $ret;
 	}
 
+	var $title;
+	var $visible;
+	var $username;
+	var $feedback;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('_LOGIN');
+
+			attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
+			breadcrumb_set_parents(array());
+		}
+
+		if ($type=='login')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_LOGIN'))));
+
+			$feedback=$GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,NULL,apply_forum_driver_md5_variant(trim(post_param('password')),$username),trim(post_param('password')));
+			if (!is_null($feedback['id']))
+			{
+				$this->title=get_screen_title('LOGGED_IN');
+			} else
+			{
+				$this->title=get_screen_title('MEMBER_LOGIN_ERROR');
+			}
+
+			$this->username=$username;
+			$this->feedback=$feedback;
+		}
+
+		if ($type=='logout')
+		{
+			$this->title=get_screen_title('LOGGED_OUT');
+		}
+
+		if ($type=='concede')
+		{
+			$this->title=get_screen_title('CONCEDED_MODE');
+		}
+
+		if ($type=='invisible')
+		{
+			if (get_option('is_on_invisibility')=='1')
+			{
+				$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
+			} else
+			{
+				$visible=false; // Small fudge: always say thay are not visible now, so this will make them visible -- because they don't have permission to be invisible
+			}
+
+			$this->title=get_screen_title($visible?'INVISIBLE':'BE_VISIBLE');
+
+			$this->visible=$visible;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -88,11 +156,11 @@ class Module_login
 	{
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->login_before();
 		if ($type=='login') return $this->login_after();
 		if ($type=='logout') return $this->logout();
 		if ($type=='concede') return $this->concede();
 		if ($type=='invisible') return $this->invisible();
-		if ($type=='misc') return $this->login_before();
 
 		return new ocp_tempcode();
 	}
@@ -104,10 +172,6 @@ class Module_login
 	 */
 	function login_before()
 	{
-		$title=get_screen_title('_LOGIN');
-
-		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
-
 		$passion=new ocp_tempcode(); // Hidden fields
 
 		// Where we will be redirected to after login, for GET requests (POST requests are handled further in the code)
@@ -169,11 +233,10 @@ class Module_login
 
 		// Render
 		$login_url=build_url(array('page'=>'_SELF','type'=>'login'),'_SELF');
-		breadcrumb_set_parents(array());
 		require_css('login');
 		$username=trim(get_param('username',''));
 		if (!is_guest()) $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		return do_template('LOGIN_SCREEN',array('_GUID'=>'0940dbf2c42493c53b7e99eb50ca51f1','EXTRA'=>$extra,'USERNAME'=>$username,'JOIN_URL'=>$GLOBALS['FORUM_DRIVER']->join_url(),'TITLE'=>$title,'LOGIN_URL'=>$login_url,'PASSION'=>$passion));
+		return do_template('LOGIN_SCREEN',array('_GUID'=>'0940dbf2c42493c53b7e99eb50ca51f1','EXTRA'=>$extra,'USERNAME'=>$username,'JOIN_URL'=>$GLOBALS['FORUM_DRIVER']->join_url(),'TITLE'=>$this->title,'LOGIN_URL'=>$login_url,'PASSION'=>$passion));
 	}
 
 	/**
@@ -183,14 +246,12 @@ class Module_login
 	 */
 	function login_after()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('_LOGIN'))));
+		$username=$this->username;
+		$feedback=$this->feedback;
 
-		$username=trim(post_param('login_username'));
-		$feedback=$GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,NULL,apply_forum_driver_md5_variant(trim(post_param('password')),$username),trim(post_param('password')));
 		$id=$feedback['id'];
 		if (!is_null($id))
 		{
-			$title=get_screen_title('LOGGED_IN');
 			$url=enforce_sessioned_url(either_param('redirect')); // Now that we're logged in, we need to ensure the redirect URL contains our new session ID
 
 			if (count($_POST)<=4) // Only the login username, password, remember-me and redirect
@@ -209,11 +270,9 @@ class Module_login
 			}
 			decache('side_users_online');
 
-			return do_template('LOGIN_REDIRECT_SCREEN',array('_GUID'=>'82e056de9150bbed185120eac3571f40','REFRESH'=>$refresh,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('_LOGIN_TEXT'),'URL'=>$url,'POST'=>$post));
+			return do_template('LOGIN_REDIRECT_SCREEN',array('_GUID'=>'82e056de9150bbed185120eac3571f40','REFRESH'=>$refresh,'TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('_LOGIN_TEXT'),'URL'=>$url,'POST'=>$post));
 		} else
 		{
-			$title=get_screen_title('MEMBER_LOGIN_ERROR');
-
 			$text=$feedback['error'];
 
 			attach_message($text,'warn');
@@ -240,15 +299,13 @@ class Module_login
 	{
 		decache('side_users_online');
 
-		$title=get_screen_title('LOGGED_OUT');
-
 		$url=get_param('redirect',NULL);
 		if (is_null($url))
 		{
 			$_url=build_url(array('page'=>''),'',array('keep_session'=>1));
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('_LOGGED_OUT'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('_LOGGED_OUT'));
 	}
 
 	/**
@@ -258,8 +315,6 @@ class Module_login
 	 */
 	function concede()
 	{
-		$title=get_screen_title('CONCEDED_MODE');
-
 		$GLOBALS['SITE_DB']->query_update('sessions',array('session_confirmed'=>0),array('member_id'=>get_member(),'the_session'=>get_session_id()),'',1);
 		global $SESSION_CACHE;
 		if ($SESSION_CACHE[get_session_id()]['member_id']==get_member()) // A little security
@@ -277,7 +332,7 @@ class Module_login
 			$_url=build_url(array('page'=>''),'');
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('LOGIN_CONCEDED'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('LOGIN_CONCEDED'));
 	}
 
 	/**
@@ -287,15 +342,7 @@ class Module_login
 	 */
 	function invisible()
 	{
-		if (get_option('is_on_invisibility')=='1')
-		{
-			$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
-		} else
-		{
-			$visible=false; // Small fudge: always say thay are not visible now, so this will make them visible -- because they don't have permission to be invisible
-		}
-
-		$title=get_screen_title($visible?'INVISIBLE':'BE_VISIBLE');
+		$visible=$this->visible;
 
 		$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>$visible?1:0),array('member_id'=>get_member(),'the_session'=>get_session_id()),'',1);
 		global $SESSION_CACHE;
@@ -324,7 +371,7 @@ class Module_login
 			$_url=build_url(array('page'=>''),'');
 			$url=$_url->evaluate();
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

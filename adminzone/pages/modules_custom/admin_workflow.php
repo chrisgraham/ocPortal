@@ -126,6 +126,24 @@ class Module_admin_workflow extends standard_crud_module
 		return array_merge(array('misc'=>'MANAGE_WORKFLOWS'),parent::get_entry_points());
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		// TODO: Add pic & tutorial
+		//set_helper_panel_pic('pagepics/workflow');
+		//set_helper_panel_tutorial('tut_workflow');
+
+		return parent::pre_run();
+	}
+
 	/**
 	 * Standard crud_module run_start.
 	 *
@@ -134,10 +152,6 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		// TODO: Add pic & tutorial
-		//set_helper_panel_pic('pagepics/workflow');
-		//set_helper_panel_tutorial('tut_workflow');
-
 		require_lang('workflows');
 		require_code('workflows');
 
@@ -155,12 +169,12 @@ class Module_admin_workflow extends standard_crud_module
 		require_code('templates_donext');
 		require_lang('workflows');
 		return do_next_manager(get_screen_title('MANAGE_WORKFLOWS'),comcode_to_tempcode(do_lang('DOC_WORKFLOWS'),NULL,true),
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_WORKFLOW')),
-					),
-					do_lang('MANAGE_WORKFLOWS')
+			array(
+				/*	 type							  page	 params													 zone	  */
+				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
+				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_WORKFLOW')),
+			),
+			do_lang('MANAGE_WORKFLOWS')
 		);
 	}
 
@@ -509,14 +523,14 @@ class Module_admin_workflow extends standard_crud_module
 			}
 		}
 
-		$title=get_screen_title($doing);
+		$this->title=get_screen_title($doing);
 
 		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
 		{
-			return $this->preview_intercept($title);
+			return $this->preview_intercept($this->title);
 		}
 
-		$test=$this->handle_confirmations($title);
+		$test=$this->handle_confirmations($this->title);
 		if (!is_null($test)) return $test;
 
 		if (($this->user_facing) && (!is_null($this->permissions_require)))
@@ -580,12 +594,10 @@ class Module_admin_workflow extends standard_crud_module
 //		if ($this->redirect_type=='!')
 		{
 			$url=get_param('redirect',NULL);
-			if (!is_null($url)) return redirect_screen($title,$url,$description);
+			if (!is_null($url)) return redirect_screen($this->title,$url,$description);
 		}
 
-		breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:a'.$this->type_code,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
-
-		return $this->do_next_manager($title,$description,$id);
+		return $this->do_next_manager($this->title,$description,$id);
 	}
 
 	/**
@@ -617,11 +629,11 @@ class Module_admin_workflow extends standard_crud_module
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
 			}
 		}
-		$title=get_screen_title($doing);
+		$this->title=get_screen_title($doing);
 
 		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
 		{
-			return $this->preview_intercept($title);
+			return $this->preview_intercept($this->title);
 		}
 
 
@@ -654,8 +666,6 @@ class Module_admin_workflow extends standard_crud_module
 			}
 		} else $submitter=NULL;
 
-		breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:_e'.$this->type_code.':'.$id,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
-
 		$delete=post_param_integer('delete',0);
 		if (($delete==1) || ($delete==2)) //1=partial,2=full,...=unknown,thus handled as an edit
 		{
@@ -677,9 +687,9 @@ class Module_admin_workflow extends standard_crud_module
 					$doing=do_lang('CATALOGUE_GENERIC_DELETE_CATEGORY',escape_html($catalogue_title));
 				}
 			}
-			$title=get_screen_title($doing);
+			$this->title=get_screen_title($doing);
 
-			$test=$this->handle_confirmations($title);
+			$test=$this->handle_confirmations($this->title);
 			if (!is_null($test)) return $test;
 
 			$this->delete_actualisation($id);
@@ -687,14 +697,14 @@ class Module_admin_workflow extends standard_crud_module
 			/*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))		No - resource is gone now, and redirect would almost certainly try to take us back there
 			{
 				$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?get_param('redirect'):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-				return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+				return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 			}*/
 
 			clear_ocp_autosave();
 
 			$description=is_null($this->do_next_description)?do_lang_tempcode('SUCCESS'):$this->do_next_description;
 
-			return $this->do_next_manager($title,$description,NULL);
+			return $this->do_next_manager($this->title,$description,NULL);
 		}
 		else
 		{
@@ -703,7 +713,7 @@ class Module_admin_workflow extends standard_crud_module
 				check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)));
 			}
 
-			$test=$this->handle_confirmations($title);
+			$test=$this->handle_confirmations($this->title);
 			if (!is_null($test)) return $test;
 
 			if (($this->user_facing) && (!is_null($this->permissions_require)) && (array_key_exists('validated',$_POST)))
@@ -755,12 +765,12 @@ class Module_admin_workflow extends standard_crud_module
 		if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))
 		{
 			$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?make_string_tempcode(get_param('redirect')):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
 
 		clear_ocp_autosave();
 
-		return $this->do_next_manager($title,$description,$id);
+		return $this->do_next_manager($this->title,$description,$id);
 	}
 
 	/**

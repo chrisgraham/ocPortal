@@ -88,6 +88,106 @@ class Module_members
 		}
 	}
 
+	var $title;
+	var $username;
+	var $member_id_of;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			inform_non_canonical_parameter('md_sort');
+
+			$this->title=get_screen_title('MEMBERS');
+		}
+
+		if ($type=='view')
+		{
+			$username=get_param('id',strval(get_member()));
+			if ($username=='') $username=strval(get_member());
+			if (is_numeric($username))
+			{
+				$member_id_of=get_param_integer('id',get_member());
+				if (is_guest($member_id_of))
+					access_denied('NOT_AS_GUEST');
+				$username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_username');
+				if ((is_null($username)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+			} else
+			{
+				$member_id_of=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+				if (is_null($member_id_of)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
+			}
+
+			$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_join_time');
+
+			$privacy_ok=true;
+			if (addon_installed('content_privacy'))
+			{
+				require_code('content_privacy');
+				$privacy_ok=has_privacy_access('_photo',strval($member_id_of),get_member());
+			}
+
+			$photo_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_url');
+			if (($photo_url!='') && (addon_installed('ocf_member_photos')) && (has_privilege(get_member(),'view_member_photos')) && ($privacy_ok))
+			{
+				require_code('images');
+				$photo_thumb_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_thumb_url');
+				$photo_thumb_url=ensure_thumbnail($photo_url,$photo_thumb_url,(strpos($photo_url,'uploads/photos')!==false)?'photos':'ocf_photos','f_members',$member_id_of,'m_photo_thumb_url');
+				if (url_is_local($photo_url))
+				{
+					$photo_url=get_complex_base_url($photo_url).'/'.$photo_url;
+				}
+				if (url_is_local($photo_thumb_url))
+				{
+					$photo_thumb_url=get_complex_base_url($photo_thumb_url).'/'.$photo_thumb_url;
+				}
+			} else
+			{
+				$photo_url='';
+				$photo_thumb_url='';
+			}
+
+			$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id_of);
+
+			set_extra_request_metadata(array(
+				'created'=>date('Y-m-d',$join_time),
+				'creator'=>$username,
+				'publisher'=>'', // blank means same as creator
+				'modified'=>'',
+				'type'=>'Profile',
+				'title'=>'',
+				'identifier'=>'_SEARCH:members:view:'.strval($member_id_of),
+				'description'=>'',
+				'image'=>(($avatar_url=='') && (has_privilege(get_member(),'view_member_photos')))?$photo_url:$avatar_url,
+			));
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.propagate_ocselect_pagelink(),do_lang_tempcode('MEMBERS'))));
+
+			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
+			{
+				require_code('awards');
+				$awards=find_awards_for('member',strval($member_id_of));
+			} else $awards=array();
+
+			//$this->title=get_screen_title('MEMBER_PROFILE',true,array(make_fractionable_editable('member',$member_id_of,$username)),NULL,$awards);
+			$displayname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
+			$this->title=get_screen_title('MEMBER_PROFILE',true,array(escape_html($displayname),escape_html($username)),NULL,$awards);
+
+			$this->member_id_of=$member_id_of;
+			$this->username=$username;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -116,8 +216,6 @@ class Module_members
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_ajax_people_lists');
 
-		$title=get_screen_title('MEMBERS');
-
 		$get_url=get_self_url(true);
 		$hidden=build_keep_form_fields('_SELF',true,array('filter'));
 
@@ -135,7 +233,6 @@ class Module_members
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		inform_non_canonical_parameter('md_sort');
 
 		$group_filter=get_param('group_filter','');
 
@@ -170,7 +267,7 @@ class Module_members
 		if ($group_filter!='')
 		{
 			if (is_numeric($group_filter))
-				$title=get_screen_title('USERGROUP',true,array($usergroups[intval($group_filter)]['USERGROUP']));
+				$this->title=get_screen_title('USERGROUP',true,array($usergroups[intval($group_filter)]['USERGROUP']));
 
 			require_code('ocfiltering');
 			$filter=ocfilter_to_sqlfragment($group_filter,'m_primary_group','f_groups',NULL,'m_primary_group','id');
@@ -281,7 +378,7 @@ class Module_members
 			'SYMBOLS'=>$symbols,
 			'SEARCH'=>$search,
 			'GET_URL'=>$get_url,
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'RESULTS_TABLE'=>$results_table,
 		));
 
@@ -296,29 +393,11 @@ class Module_members
 	 */
 	function profile()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.propagate_ocselect_pagelink(),do_lang_tempcode('MEMBERS'))));
-
 		disable_php_memory_limit();
 
-		$username=get_param('id',strval(get_member()));
-		if ($username=='') $username=strval(get_member());
-		if (is_numeric($username))
-		{
-			$member_id=get_param_integer('id',get_member());
-			if (is_guest($member_id))
-				access_denied('NOT_AS_GUEST');
-			$username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_username');
-			if ((is_null($username)) || (is_guest($member_id))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
-		} else
-		{
-			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-			if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
-		}
-
 		require_code('ocf_profiles');
-		return render_profile_tabset($member_id,get_member(),$username);
+		return render_profile_tabset($this->title,$this->member_id_of,get_member(),$this->username);
 	}
 
 }
-
 

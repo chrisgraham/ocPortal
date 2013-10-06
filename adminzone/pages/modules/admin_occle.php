@@ -88,6 +88,26 @@ class Module_admin_occle
 		delete_value('last_occle_command');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/occle');
+		set_helper_panel_tutorial('tut_occle');
+		set_helper_panel_text(comcode_lang_string('DOC_OCCLE'));
+
+		$this->title=get_screen_title('OCCLE');
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -102,10 +122,6 @@ class Module_admin_occle
 		require_javascript('javascript_occle');
 		require_css('occle');
 
-		set_helper_panel_pic('pagepics/occle');
-		set_helper_panel_tutorial('tut_occle');
-		set_helper_panel_text(comcode_lang_string('DOC_OCCLE'));
-
 		return $this->main_gui();
 	}
 
@@ -117,8 +133,6 @@ class Module_admin_occle
 	function main_gui()
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
-
-		$title=get_screen_title('OCCLE');
 
 		$command=post_param('occle_command','');
 		if ($command!='')
@@ -137,7 +151,7 @@ class Module_admin_occle
 
 		return do_template('OCCLE_MAIN_SCREEN',array(
 			'_GUID'=>'d71ef9fa2cdaf419fee64cf3d7555225',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'CONTENT'=>$content,
 		));
 	}

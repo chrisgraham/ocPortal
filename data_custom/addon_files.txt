@@ -3880,7 +3880,6 @@ ocportalcom
  - adminzone/pages/minimodules_custom/make_ocportal_release.php
  - sources_custom/hooks/systems/do_next_menus/ocportalcom.php
  - data_custom/ocpcom_web_service.php
- - adminzone/pages/modules_custom/admin_sites.php
  - lang_custom/EN/sites.ini
  - lang_custom/EN/ocpcom.ini
  - pages/minimodules_custom/licence.php

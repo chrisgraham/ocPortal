@@ -77,6 +77,46 @@ class Module_admin_backup
 	{
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		set_helper_panel_pic('pagepics/backups');
+		set_helper_panel_tutorial('tut_backup');
+		set_helper_panel_text(comcode_lang_string('DOC_BACKUPS_2'));
+
+		if ($type=='make_backup')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('BACKUP'))));
+			breadcrumb_set_self(do_lang_tempcode('START'));
+		}
+
+		if ($type=='confirm_delete')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('BACKUP'))));
+			breadcrumb_set_self(do_lang_tempcode('DELETE'));
+		}
+
+		if ($type=='misc' || $type=='make_backup')
+		{
+			$this->title=get_screen_title('BACKUP');
+		}
+
+		if ($type=='confirm_delete' || $type=='delete')
+		{
+			$this->title=get_screen_title('DELETE');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -88,10 +128,6 @@ class Module_admin_backup
 
 		require_code('files');
 
-		set_helper_panel_pic('pagepics/backups');
-		set_helper_panel_tutorial('tut_backup');
-		set_helper_panel_text(comcode_lang_string('DOC_BACKUPS_2'));
-
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		decache('main_staff_checklist');
@@ -100,10 +136,10 @@ class Module_admin_backup
 
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->backup_interface();
 		if ($type=='make_backup') return $this->make_backup();
 		if ($type=='confirm_delete') return $this->confirm_delete();
 		if ($type=='delete') return $this->delete();
-		if ($type=='misc') return $this->backup_interface();
 
 		return new ocp_tempcode();
 	}
@@ -115,8 +151,6 @@ class Module_admin_backup
 	 */
 	function backup_interface()
 	{
-		$title=get_screen_title('BACKUP');
-
 		require_javascript('javascript_ajax');
 
 		$last_backup=intval(get_value('last_backup'));
@@ -172,7 +206,7 @@ class Module_admin_backup
 
 		$results=$this->get_results();
 
-		return do_template('BACKUP_LAUNCH_SCREEN',array('_GUID'=>'26a82a0627632db79b35055598de5d23','TITLE'=>$title,'TEXT'=>$text,'RESULTS'=>$results,'FORM'=>$form));
+		return do_template('BACKUP_LAUNCH_SCREEN',array('_GUID'=>'26a82a0627632db79b35055598de5d23','TITLE'=>$this->title,'TEXT'=>$text,'RESULTS'=>$results,'FORM'=>$form));
 	}
 
 	/**
@@ -243,62 +277,12 @@ class Module_admin_backup
 	}
 
 	/**
-	 * The UI to confirm deletion of a backup file.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function confirm_delete()
-	{
-		$title=get_screen_title('DELETE');
-
-		$file=get_param('file');
-
-		$preview=do_lang_tempcode('CONFIRM_DELETE',escape_html($file));
-		$url=build_url(array('page'=>'_SELF','type'=>'delete'),'_SELF');
-
-		$fields=form_input_hidden('file',$file);
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('BACKUP'))));
-		breadcrumb_set_self(do_lang_tempcode('DELETE'));
-
-		return do_template('CONFIRM_SCREEN',array('_GUID'=>'fa69bb63385525921c75954c03a3aa43','TITLE'=>$title,'PREVIEW'=>$preview,'URL'=>$url,'FIELDS'=>$fields));
-	}
-
-	/**
-	 * The actualiser to delete a backup file.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function delete()
-	{
-		$title=get_screen_title('DELETE');
-
-		$file=post_param('file');
-
-		$path=get_custom_file_base().'/exports/backups/'.filter_naughty($file);
-		if (!@unlink($path))
-		{
-			warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path)));
-		}
-		sync_file('exports/backups/'.$file);
-
-		// Show it worked / Refresh
-		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
-	}
-
-	/**
 	 * The actualiser to start a backup.
 	 *
 	 * @return tempcode		The UI
 	 */
 	function make_backup()
 	{
-		$title=get_screen_title('BACKUP');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('BACKUP'))));
-		breadcrumb_set_self(do_lang_tempcode('START'));
-
 		$b_type=post_param('b_type','full');
 		if ($b_type=='full')
 		{
@@ -312,7 +296,7 @@ class Module_admin_backup
 		{
 			$file='Backup_database'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid('',true); // The last bit is unfortunate, but we need to stop URL guessing
 		}
-		else exit();
+		else warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 		$max_size=post_param_integer('max_size',0);
 		if (($max_size==0) || (!is_numeric($max_size))) $max_size=1000000000;
@@ -326,7 +310,7 @@ class Module_admin_backup
 				set_value('backup_recurrance_days',strval(post_param_integer('recurrance_days',0)));
 				set_value('backup_max_size',strval($max_size));
 				set_value('backup_b_type',$b_type);
-				return inform_screen($title,do_lang_tempcode('SUCCESSFULLY_SCHEDULED_BACKUP'));
+				return inform_screen($this->title,do_lang_tempcode('SUCCESSFULLY_SCHEDULED_BACKUP'));
 			}
 		}
 
@@ -346,8 +330,46 @@ class Module_admin_backup
 		}
 
 		$url=build_url(array('page'=>'_SELF'),'_SELF');
-		redirect_screen($title,$url,do_lang_tempcode('BACKUP_INFO_1',$file));
+		redirect_screen($this->title,$url,do_lang_tempcode('BACKUP_INFO_1',$file));
 		return new ocp_tempcode();
+	}
+
+	/**
+	 * The UI to confirm deletion of a backup file.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function confirm_delete()
+	{
+		$file=get_param('file');
+
+		$preview=do_lang_tempcode('CONFIRM_DELETE',escape_html($file));
+		$url=build_url(array('page'=>'_SELF','type'=>'delete'),'_SELF');
+
+		$fields=form_input_hidden('file',$file);
+
+		return do_template('CONFIRM_SCREEN',array('_GUID'=>'fa69bb63385525921c75954c03a3aa43','TITLE'=>$this->title,'PREVIEW'=>$preview,'URL'=>$url,'FIELDS'=>$fields));
+	}
+
+	/**
+	 * The actualiser to delete a backup file.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function delete()
+	{
+		$file=post_param('file');
+
+		$path=get_custom_file_base().'/exports/backups/'.filter_naughty($file);
+		if (!@unlink($path))
+		{
+			warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path)));
+		}
+		sync_file('exports/backups/'.$file);
+
+		// Show it worked / Refresh
+		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

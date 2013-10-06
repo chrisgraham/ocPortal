@@ -51,6 +51,80 @@ class Module_admin_themewizard
 		return array('misc'=>'THEMEWIZARD','make_logo'=>'LOGOWIZARD');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		require_lang('themes');
+
+		set_helper_panel_tutorial('tut_themes');
+		set_helper_panel_text(comcode_lang_string('DOC_THEMEWIZARD'));
+		if ($type=='make_logo' || $type=='_make_logo' || $type=='__make_logo')
+		{
+			set_helper_panel_pic('pagepics/logowizard');
+		} else
+		{
+			set_helper_panel_pic('pagepics/themewizard');
+		}
+
+		if ($type=='misc')
+		{
+			breadcrumb_set_self(do_lang_tempcode('THEMEWIZARD'));
+
+			$this->title=get_screen_title('_THEMEWIZARD',true,array(integer_format(1),integer_format(4)));
+		}
+
+		if ($type=='step2')
+		{
+			$this->title=get_screen_title('_THEMEWIZARD',true,array(integer_format(2),integer_format(4)));
+		}
+
+		if ($type=='step3')
+		{
+			$this->title=get_screen_title('_THEMEWIZARD',true,array(integer_format(3),integer_format(4)));
+		}
+
+		if ($type=='step4')
+		{
+			$this->title=get_screen_title('_THEMEWIZARD',true,array(integer_format(4),integer_format(4)));
+		}
+
+		if ($type=='step2' || $type=='step3' || $type=='step4')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMEWIZARD'))));
+		}
+
+		if ($type=='make_logo')
+		{
+			breadcrumb_set_self(do_lang_tempcode('LOGOWIZARD'));
+
+			$this->title=get_screen_title('_LOGOWIZARD',true,array(integer_format(1),integer_format(3)));
+		}
+
+		if ($type=='_make_logo')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:make_logo',do_lang_tempcode('LOGOWIZARD'))));
+
+			$this->title=get_screen_title('_LOGOWIZARD',true,array(integer_format(2),integer_format(3)));
+		}
+
+		if ($type=='__make_logo')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:make_logo',do_lang_tempcode('START'))));
+
+			$this->title=get_screen_title('_LOGOWIZARD',true,array(integer_format(3),integer_format(3)));
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,14 +132,9 @@ class Module_admin_themewizard
 	 */
 	function run()
 	{
-		require_lang('themes');
 		require_code('themes2');
 		require_code('themewizard');
 		require_css('themes_editor');
-
-		set_helper_panel_pic('pagepics/themewizard');
-		set_helper_panel_tutorial('tut_themes');
-		set_helper_panel_text(comcode_lang_string('DOC_THEMEWIZARD'));
 
 		$type=get_param('type','misc');
 
@@ -87,8 +156,6 @@ class Module_admin_themewizard
 	 */
 	function step1()
 	{
-		$title=get_screen_title('_THEMEWIZARD',true,array(integer_format(1),integer_format(4)));
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF',array('keep_theme_seed','keep_theme_dark','keep_theme_source','keep_theme_algorithm'),false,true);
 		$text=do_lang_tempcode('THEMEWIZARD_1_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
@@ -129,8 +196,6 @@ class Module_admin_themewizard
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'e809c785aff72bbfeec3829a0b2f464d','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('INHERIT_CSS'),do_lang_tempcode('DESCRIPTION_INHERIT_CSS'),'inherit_css',get_param_integer('inherit_css',0)==1));
 
-		breadcrumb_set_self(do_lang_tempcode('THEMEWIZARD'));
-
 		require_javascript('javascript_ajax');
 		$script=find_script('snippet');
 		$javascript="
@@ -156,7 +221,7 @@ class Module_admin_themewizard
 				};
 		";
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'98963f4d7ff60744382f937e6cc5acbf','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'JAVASCRIPT'=>$javascript,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'98963f4d7ff60744382f937e6cc5acbf','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'JAVASCRIPT'=>$javascript,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -166,8 +231,6 @@ class Module_admin_themewizard
 	 */
 	function step2()
 	{
-		$title=get_screen_title('_THEMEWIZARD',true,array(integer_format(2),integer_format(4)));
-
 		$source_theme=get_param('source_theme');
 		$algorithm=get_param('algorithm');
 		$seed=preg_replace('/^\#/','',get_param('seed'));
@@ -193,11 +256,10 @@ class Module_admin_themewizard
 		$theme['LD']=$_theme['LD'];
 		$theme['DARK']=$_theme['dark'];
 		$theme['SEED']=$_theme['seed'];
-		$theme['TITLE']=$title;
+		$theme['TITLE']=$this->title;
 		$theme['CHANGE_URL']=build_url(array('page'=>'_SELF','type'=>'misc','source_theme'=>$source_theme,'algorithm'=>$algorithm,'seed'=>$seed,'dark'=>$dark,'inherit_css'=>$inherit_css,'themename'=>$themename),'_SELF');
 		$theme['STAGE3_URL']=build_url(array('page'=>'_SELF','type'=>'step3','source_theme'=>$source_theme,'algorithm'=>$algorithm,'seed'=>$seed,'dark'=>$dark,'inherit_css'=>$inherit_css,'themename'=>$themename),'_SELF');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMEWIZARD'))));
 		return do_template('THEMEWIZARD_2_SCREEN',$theme);
 	}
 
@@ -208,8 +270,6 @@ class Module_admin_themewizard
 	 */
 	function step3()
 	{
-		$title=get_screen_title('_THEMEWIZARD',true,array(integer_format(3),integer_format(4)));
-
 		$source_theme=get_param('source_theme');
 		$algorithm=get_param('algorithm');
 		$seed=get_param('seed');
@@ -230,8 +290,7 @@ class Module_admin_themewizard
 		$hidden->attach(form_input_hidden('dark',strval($dark)));
 		$hidden->attach(form_input_hidden('inherit_css',strval($inherit_css)));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMEWIZARD'))));
-		return do_template('FORM_SCREEN',array('_GUID'=>'349383d77ecfce8c65f3303cfec86ea0','SKIP_VALIDATION'=>true,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REFRESH_TO_FINISH'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'349383d77ecfce8c65f3303cfec86ea0','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('REFRESH_TO_FINISH'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -252,8 +311,6 @@ class Module_admin_themewizard
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMEWIZARD'))));
-
 		require_code('type_validation');
 		if ((!is_alphanumeric($themename)) || (strlen($themename)>40)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 		make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark==1,$inherit_css==1);
@@ -266,37 +323,36 @@ class Module_admin_themewizard
 		sync_file('themes/'.filter_naughty($themename).'/theme.ini');
 
 		// We're done
-		$title=get_screen_title('_THEMEWIZARD',true,array(integer_format(4),integer_format(4)));
 		$message=do_lang_tempcode('THEMEWIZARD_4_DESCRIBE',escape_html('#'.$seed),escape_html($themename));
 
 		require_code('templates_donext');
-		return do_next_manager($title,$message,
-						NULL,
-						NULL,
-						/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-						/*	 page	 params				  zone	  */
-						NULL,																						// Add one
-						NULL,																						// Edit this
-						NULL,																						// Edit one
-						NULL,																						// View this
-						NULL,																						// View archive
-						NULL,																						// Add to category
-						NULL,																						// Add one category
-						NULL,																						// Edit one category
-						NULL,																						// Edit this category
-						NULL,																						// View this category
-						/*	  SPECIALLY TYPED 'LINKS'				  */
-						array(),
-						array(),
-						array(
-							/*	 type							  page			 params													 zone	  */
-							array('edit_this',array('admin_themes',array('type'=>'edit_theme','theme'=>$themename),get_module_zone('admin_themes'))),								 // Edit this
-							array('edit_css',array('admin_themes',array('type'=>'choose_css','theme'=>$themename),get_module_zone('admin_themes'))),
-							array('edit_templates',array('admin_themes',array('type'=>'edit_templates','theme'=>$themename),get_module_zone('admin_themes'))),
-							array('manage_images',array('admin_themes',array('type'=>'manage_images','theme'=>$themename),get_module_zone('admin_themes'))),
-							array('manage_themes',array('admin_themes',array('type'=>'misc'),get_module_zone('admin_themes')))
-						),
-						do_lang('THEME')
+		return do_next_manager($this->title,$message,
+			NULL,
+			NULL,
+			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
+			/*	 page	 params				  zone	  */
+			NULL,																						// Add one
+			NULL,																						// Edit this
+			NULL,																						// Edit one
+			NULL,																						// View this
+			NULL,																						// View archive
+			NULL,																						// Add to category
+			NULL,																						// Add one category
+			NULL,																						// Edit one category
+			NULL,																						// Edit this category
+			NULL,																						// View this category
+			/*	  SPECIALLY TYPED 'LINKS'				  */
+			array(),
+			array(),
+			array(
+				/*	 type							  page			 params													 zone	  */
+				array('edit_this',array('admin_themes',array('type'=>'edit_theme','theme'=>$themename),get_module_zone('admin_themes'))),								 // Edit this
+				array('edit_css',array('admin_themes',array('type'=>'choose_css','theme'=>$themename),get_module_zone('admin_themes'))),
+				array('edit_templates',array('admin_themes',array('type'=>'edit_templates','theme'=>$themename),get_module_zone('admin_themes'))),
+				array('manage_images',array('admin_themes',array('type'=>'manage_images','theme'=>$themename),get_module_zone('admin_themes'))),
+				array('manage_themes',array('admin_themes',array('type'=>'misc'),get_module_zone('admin_themes')))
+			),
+			do_lang('THEME')
 		);
 	}
 
@@ -308,9 +364,6 @@ class Module_admin_themewizard
 	function make_logo()
 	{
 		if (!function_exists('imagepng')) warn_exit(do_lang_tempcode('GD_NEEDED'));
-
-		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(1),integer_format(3)));
-		set_helper_panel_pic('pagepics/logowizard');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_make_logo'),'_SELF');
 		$theme_image_url=build_url(array('page'=>'admin_themes','type'=>'edit_image','id'=>'logo/-logo','lang'=>user_lang(),'theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),get_module_zone('admin_themes'));
@@ -336,9 +389,7 @@ class Module_admin_themewizard
 
 		$fields->attach(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode('DESCRIPTION_LOGOWIZARD_THEME'),'theme',nice_get_themes($theme,true)));
 
-		breadcrumb_set_self(do_lang_tempcode('LOGOWIZARD'));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'08449c0ae8edf5c0b3510611c9ac9618','SKIP_VALIDATION'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'08449c0ae8edf5c0b3510611c9ac9618','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
 	}
 
 	/**
@@ -348,15 +399,10 @@ class Module_admin_themewizard
 	 */
 	function _make_logo()
 	{
-		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(2),integer_format(3)));
-		set_helper_panel_pic('pagepics/logowizard');
-
 		$preview=do_template('LOGOWIZARD_2',array('_GUID'=>'6e5a442860e5b7644b50c2345c3c8dee','NAME'=>post_param('name'),'TITLE'=>post_param('title'),'THEME'=>post_param('theme')));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:make_logo',do_lang_tempcode('LOGOWIZARD'))));
-
 		require_code('templates_confirm_screen');
-		return confirm_screen($title,$preview,'__make_logo','make_logo');
+		return confirm_screen($this->title,$preview,'__make_logo','make_logo');
 	}
 
 	/**
@@ -366,9 +412,6 @@ class Module_admin_themewizard
 	 */
 	function __make_logo()
 	{
-		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(3),integer_format(3)));
-		set_helper_panel_pic('pagepics/logowizard');
-
 		$theme=post_param('theme');
 
 		// Do it
@@ -392,10 +435,8 @@ class Module_admin_themewizard
 		}
 		persistent_cache_delete('THEME_IMAGES');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:make_logo',do_lang_tempcode('START'))));
-
 		$message=do_lang_tempcode('LOGOWIZARD_3_DESCRIBE',escape_html($theme));
-		return inform_screen($title,$message);
+		return inform_screen($this->title,$message);
 	}
 
 }

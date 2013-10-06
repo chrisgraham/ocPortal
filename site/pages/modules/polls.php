@@ -207,6 +207,63 @@ class Module_polls
 		}
 	}
 
+	var $title;
+	var $id;
+	var $myrow;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('POLL_ARCHIVE');
+		}
+
+		if ($type=='view')
+		{
+			set_feed_url('?mode=polls&filter=');
+
+			$id=get_param_integer('id');
+
+			// Breadcrumbs
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POLL_ARCHIVE'))));
+
+			// Load data
+			$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$rows))
+			{
+				return warn_screen($this->title,do_lang_tempcode('MISSING_RESOURCE'));
+			}
+			$myrow=$rows[0];
+
+			// Meta data
+			set_extra_request_metadata(array(
+				'created'=>date('Y-m-d',$myrow['add_time']),
+				'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
+				'publisher'=>'', // blank means same as creator
+				'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
+				'type'=>'Poll',
+				'title'=>$_title,
+				'identifier'=>'_SEARCH:polls:view:'.strval($id),
+				'description'=>'',
+				'image'=>find_theme_image('bigicons/polls'),
+			));
+
+			$this->title=get_screen_title('POLL');
+
+			$this->id=$id;
+			$this->myrow=$myrow;
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -214,8 +271,6 @@ class Module_polls
 	 */
 	function run()
 	{
-		set_feed_url('?mode=polls&filter=');
-
 		require_code('feedback');
 		require_code('polls');
 		require_lang('polls');
@@ -224,8 +279,8 @@ class Module_polls
 		// What are we doing?
 		$type=get_param('type','misc');
 
-		if ($type=='view') return $this->view();
 		if ($type=='misc') return $this->view_polls();
+		if ($type=='view') return $this->view();
 
 		return new ocp_tempcode();
 	}
@@ -237,11 +292,9 @@ class Module_polls
 	 */
 	function view_polls()
 	{
-		$title=get_screen_title('POLL_ARCHIVE');
-
 		$content=do_block('main_multi_content',array('param'=>'poll','efficient'=>'0','zone'=>'_SELF','sort'=>'recent','max'=>'20','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','block_id'=>'module'));
 
-		return do_template('PAGINATION_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content));
+		return do_template('PAGINATION_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 	/**
@@ -251,21 +304,10 @@ class Module_polls
 	 */
 	function view()
 	{
-		$title=get_screen_title('POLL');
-
-		$id=get_param_integer('id');
+		$id=$this->id;
 		$_GET['poll_id']=strval($id);
+		$myrow=$this->myrow;
 
-		// Breadcrumbs
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POLL_ARCHIVE'))));
-
-		// Load data
-		$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$rows))
-		{
-			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$rows[0];
 		$date_raw=is_null($myrow['date_and_time'])?'':strval($myrow['date_and_time']);
 		$add_date_raw=strval($myrow['add_time']);
 		$edit_date_raw=is_null($myrow['edit_date'])?'':strval($myrow['edit_date']);
@@ -306,23 +348,10 @@ class Module_polls
 		// Load poll
 		$poll_details=do_block('main_poll');
 
-		// Meta data
-		set_extra_request_metadata(array(
-			'created'=>date('Y-m-d',$myrow['add_time']),
-			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
-			'publisher'=>'', // blank means same as creator
-			'modified'=>is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
-			'type'=>'Poll',
-			'title'=>$_title,
-			'identifier'=>'_SEARCH:polls:view:'.strval($id),
-			'description'=>'',
-			'image'=>find_theme_image('bigicons/polls'),
-		));
-
 		// Render
 		return do_template('POLL_SCREEN',array(
 			'_GUID'=>'1463a42354c3ad154e2c6bb0c96be3b9',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'SUBMITTER'=>strval($myrow['submitter']),
 			'ID'=>strval($id),
 			'DATE_RAW'=>$date_raw,

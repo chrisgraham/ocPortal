@@ -116,6 +116,45 @@ class Module_sites
 		return array('add'=>'MO_ADD_SITE','misc'=>'OC_DOWNLOAD_NOW');
 	}
 
+	var $title;
+
+	/**
+	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 *
+	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
+	 */
+	function pre_run()
+	{
+		$type=get_param('type','misc');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('OC_DOWNLOAD_NOW');
+		}
+
+		if ($type=='hostingcopy_step2')
+		{
+			$this->title=get_screen_title('HOSTING_COPY');
+		}
+
+		if ($type=='hostingcopy_step3')
+		{
+			$this->title=get_screen_title('HOSTING_COPY');
+		}
+
+		if ($type=='myocp')
+		{
+			$this->title=get_screen_title('MO_ADD_SITE');
+		}
+
+		if ($type=='_myocp')
+		{
+			$this->title=get_screen_title('MO_ADD_SITE');
+		}
+
+		return NULL;
+	}
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -156,8 +195,6 @@ class Module_sites
 	 */
 	function download_screen()
 	{
-		$title=get_screen_title('OC_DOWNLOAD_NOW');
-
 		// Put together hosting-copy form
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('FTP_DOMAIN'),'','ftp_domain','',true));
@@ -191,7 +228,7 @@ class Module_sites
 			$releases=paragraph(do_lang_tempcode('OC_BETWEEN_VERSIONS'));
 		}
 
-		return do_template('OC_DOWNLOAD_SCREEN',array('_GUID'=>'4c4952e40ed96ab52461adce9989832d','TITLE'=>$title,'HOSTINGCOPY_FORM'=>$hostingcopy_form,'RELEASES'=>$releases,'VERSION'=>$latest));
+		return do_template('OC_DOWNLOAD_SCREEN',array('_GUID'=>'4c4952e40ed96ab52461adce9989832d','TITLE'=>$this->title,'HOSTINGCOPY_FORM'=>$hostingcopy_form,'RELEASES'=>$releases,'VERSION'=>$latest));
 	}
 
 	/**
@@ -309,8 +346,6 @@ class Module_sites
 	 */
 	function hostingcopy_step2()
 	{
-		$title=get_screen_title('HOSTING_COPY');
-
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		$hidden=build_keep_post_fields();
@@ -327,7 +362,7 @@ class Module_sites
 		$post_url=build_url(array('page'=>'_SELF','type'=>'hostingcopy_step3'),'_SELF');
 		$submit_name=do_lang('HOSTING_COPY');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0758605aeb4ee00f1eee562c14d16a5f','HIDDEN'=>$hidden,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0758605aeb4ee00f1eee562c14d16a5f','HIDDEN'=>$hidden,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -337,8 +372,6 @@ class Module_sites
 	 */
 	function hostingcopy_step3()
 	{
-		$title=get_screen_title('HOSTING_COPY');
-
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		$conn_id=$this->_hostingcopy_ftp_connect();
@@ -390,7 +423,7 @@ class Module_sites
 
 		return do_template('OC_HOSTING_COPY_SUCCESS_PAGE',array(
 			'_GUID'=>'5946fe2252fe1a67ba54e2c20a1d4d63',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'FTP_FOLDER'=>$path.(($extra_path=='')?'':($extra_path.'/')),
 			'HIDDEN'=>build_keep_post_fields(array('path','extra_path')),
 			'INSTALL_URL'=>$install_url,
@@ -406,8 +439,6 @@ class Module_sites
 	{
 		require_lang('myocp');
 
-		$title=get_screen_title('MO_ADD_SITE');
-
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('MO_CODENAME'),do_lang('MO_CODENAME_DESCRIPTION'),'codename','',true));
 		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('MO_YOUR_EMAIL_ADDRESS'),'email_address',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),true));
@@ -417,7 +448,7 @@ class Module_sites
 		$text=do_lang_tempcode('MO_ENTER_DETAILS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_myocp'),'_SELF');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0ed12af5b64c65a673b9837bd47a80b1','TITLE'=>$title,'SUBMIT_NAME'=>do_lang('PROCEED'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0ed12af5b64c65a673b9837bd47a80b1','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang('PROCEED'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>''));
 	}
 
 	/**
@@ -428,8 +459,6 @@ class Module_sites
 	function _myocp()
 	{
 		require_lang('myocp');
-
-		$title=get_screen_title('MO_ADD_SITE');
 
 		$codename=strtolower(post_param('codename'));
 		$name=post_param('name','');
@@ -444,7 +473,7 @@ class Module_sites
 
 		myocp_add_site($codename,$name,$email_address,$password,$description,$category,$show_in_directory);
 
-		return do_template('INFORM_SCREEN',array('_GUID'=>'bedc8955800508d6b91515e44e8a58ef','TITLE'=>$title,'TEXT'=>do_lang_tempcode('MO_NEW_SITE',escape_html($codename))));
+		return do_template('INFORM_SCREEN',array('_GUID'=>'bedc8955800508d6b91515e44e8a58ef','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('MO_NEW_SITE',escape_html($codename))));
 	}
 
 }
