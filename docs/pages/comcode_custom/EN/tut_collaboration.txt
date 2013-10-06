@@ -21,12 +21,19 @@ By default, some resources (Comcode pages, menu links, and catalogues), are crea
  - A link for the Super-Member to manage their author profile
 These may be used, deleted, or moved, according to your specific needs.
 
-[title="2"]File Dump[/title]
+[title="2"]File/Media library[/title]
 [surround]
-The file dump is a tool to allow sharing of files. It provides the ability to upload, download, and delete files, and organise files into folders.
+The File/Media library is a tool to allow sharing of files, located in the CMS zone. It provides the ability to upload, download, and delete files, and organise files into folders.
 [box="Important note" width="25em" float="right"]There is nothing stopping ordinary users from downloading from the file/media library if they have the URL to a file. This is sometimes useful, but you should be aware that if files are given guessable filenames, they will not be secure.[/box]
 [exp_thumb="The File Dump" float="left"]collaboration_filedump[/exp_thumb]
 [/surround]
+
+The File/Media library has two main purposes:
+1) Sharing media with the staff team, for use in content
+2) A general shared drive for collaborators
+
+You can get a browser to embed items from the File/Media library. Go to add a new Comcode tag (from the button in the WYSIWYG editor / above the text-area) and select the <kbd>media</kbd> tag.
+
 [title="2"]Other Super-members[/title]
 [surround]
 [exp_thumb="The Super-members fellows page" float="right"]collaboration_supermembers[/exp_thumb]

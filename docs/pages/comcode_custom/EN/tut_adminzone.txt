@@ -35,11 +35,34 @@ This is an area for you and your staff to make notes. You can write anything you
 
 You will be provided with a large number of handy tips. They are organised into 4 levels of increasing difficulty with a combined total of about 60 tips.
 
+[title="3"]Watch-list[/title]
+
+This section allows you to compare some statistics of your website, to others. The sites included can be changed via the edit button on the block.
+
+[title="3"]Links[/title]
+
+This section provides a selection of useful links. The links may be edited via the edit button on the block.
+
+[title="3"]Action log[/title]
+
+This section shows recent administrative/content actions on your website.
+
 [title="2"]Simplified Admin Zone[/title]
 
 If a user who does not have permission to use many aspects of the Admin Zone enters either the Admin or CMS zones, then they will be presented with a simplified interface, consisting just of one screen of icons, and an informative front page. This feature is particularly useful if you are using ocPortal to create a website for somebody else, and you do not want them to be off-put by the full complexity of the Admin Zone. By using this feature you'll be able to tailor your clients administration experience to the extent that they won't really consider the website to be an ocPortal website, but rather a website built from scratch just for them.
 
+[title="2"]Printing[/title]
 
+It is not usually appropriate for a printed webpage to look like it does on the screen. For example, margins would want removing from each side of the site, social media links should not show, background images should be disabled, and so on.
+There are 3 approaches to solving this problem that work together:
+1) Browsers automatically disable background images, when printing
+2) CSS provides a mechanism for specifying different display rules for the printed version; ocPortal makes use of this
+3) ocPortal has a parameter, [tt]wide_print[/tt], that will influence some aspects of how pages are put together
+
+The ocPortal [tt]wide_print[/tt] parameter is activated from either:
+a) The link from the [tt]side_printer_friendly[/tt] block
+b) The link from the [tt]main_screen_actions[/tt] block
+c) [i]Or, a link you've put together yourself[/i]
 
 [concepts
  1_key="Admin Zone"   1_value="The zone used to perform most site maintenance, accessible only by staff"

@@ -84,8 +84,9 @@ When somebody sends you a whisper, you would be notified on receipt just as you 
 
 As inline personal posts are just enhanced posts, they are moderated and administrated in the same way as posts. Please see the "Basic forum moderation" tutorial for information on forum moderation.
 
+[title="2"]Off-forum contact[/title]
 
-
+There is also a "contact member" addon. This allows you to e-mail a member, without the message being stored on the website. It is mainly useful to allow guests to contact a member without joining. Most websites will be likely to want to remove it, for reasons of simplicity.
 
 [concepts
  1_key="Private Topics"   1_value="Topics visible only to selected conversants, available only from each conversant's \"Private Topics\" virtual forum."

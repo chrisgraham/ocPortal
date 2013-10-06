@@ -101,6 +101,11 @@ These significant new feature categories are often requested, but are unlikely t
 [b]Will you implement per-user permissions?[/b]
 For reasons of simplicity we have opted to only provide per-usergroup permissions. ocPortal does have internal functionality for per-user permissions (used by the Point Store), but we feel that this would add unneeded complexity if it were placed in the administrative interface.
 
+[b]How are addons managed?[/b]
+There are the bundled addons which come built into ocPortal and can be uninstalled/installed as you like, and are upgraded as a part of the product.
+
+Then, there are non-bundled addons, some of which are being maintained by ocProducts, some of which are not. Some of them are maintained to a high quality and aren't bundled because they'd break our partisan policies (e.g. Facebook support, or Twitter support), or for licensing reasons (e.g. Plupload), or don't quite meet our core standard yet (e.g. Activities [relies on Javascript]).
+
 [b]Is ocPortal available in (some language)?[/b]
 ocProducts does not officially get involved in the translation of ocPortal. Please check the [url="internationalisation forum"]http://ocportal.com/forum/forumview/misc/internationalisation.htm[/url] for more information on specific languages and [url="check this topic if you would like to get involved with translation"]http://ocportal.com/forum/topicview/misc/internationalisation/if_youd_like_to_do_a.htm[/url] (please do!). We provide an [page="_SEARCH:tut_intl"]internationalisation tutorial[/page], and tools, to translate ocPortal, and ocPortal has excellent internationalisation support.
 
