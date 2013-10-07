@@ -19,6 +19,39 @@
  */
 
 /**
+ * AJAX script for rendering some Tempcode.
+ */
+function tempcode_tester_script()
+{
+	prepare_for_known_ajax_response();
+
+	header('Content-Type: text/plain');
+
+	$tempcode=post_param('tempcode');
+
+	$params=array();
+	foreach ($_POST as $key=>$val)
+	{
+		if ((substr($key,0,4)=='key_') && ($val!=''))
+		{
+			$params[post_param($key,'')]=post_param('val_'.substr($key,4),'');
+		}
+	}
+
+	require_code('tempcode_compiler');
+	$tpl=template_to_tempcode($tempcode);
+	$bound=$tpl->bind($params,'tempcode_tester');
+	$out=$bound->evaluate();
+	if (get_param_integer('comcode',0)==1)
+	{
+		echo static_evaluate_tempcode(comcode_to_tempcode($out));
+	} else
+	{
+		echo $out;
+	}
+}
+
+/**
  * Delete a theme image.
  *
  * @param  SHORT_TEXT		The theme image ID

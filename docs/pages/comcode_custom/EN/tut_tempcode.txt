@@ -1592,6 +1592,28 @@ Capital city:
 
 Based on the value of "Country", a different value would be shown. We have coded cases for the UK and Ireland, and anything else would default to "Unknown".
 
+Mode #1 is substring matching:
+[code]
+Healthiness:
+{+START,CASES,{FOOD_ITEM},1}
+	Cake=Unhealthy
+	Pie=Unhealthy
+	Salad=Healthy
+	=Unknown
+{+END}
+[/code]
+(Imagine [tt]FOOD_ITEM[/tt] contains something like [tt]Chocolate Cake[/tt] or [tt]Banoffee Pie[/tt].)
+
+Mode #2 is regular expression matching:
+[code]
+Head of state:
+{+START,CASES,{COUNTRY},2}
+	^(Canada|Australia|United Kingdom)$=King/Queen
+	^USA$=POTUS
+	=Unknown
+{+END}
+[/code]
+
 [title="2"]GUIDs[/title]
 
 There is a design issue that comes to us when we design template structure... do we re-use templates so that editing is easier, load is decreased, and consistency is raised; or do we allow maximum customisation of different aspects of the system by not re-using templates?

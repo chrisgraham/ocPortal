@@ -146,6 +146,8 @@ class Module_admin_version
 				'm_subject'=>'LONG_TEXT', // Whilst data for a subject would be tied to SHORT_TEXT, a language string could bump it up higher
 				'm_message'=>'LONG_TEXT',
 				'm_to_email'=>'LONG_TEXT',
+				'm_extra_cc_addresses'=>'LONG_TEXT',
+				'm_extra_bcc_addresses'=>'LONG_TEXT',
 				'm_to_name'=>'LONG_TEXT',
 				'm_from_email'=>'SHORT_TEXT',
 				'm_from_name'=>'SHORT_TEXT',
@@ -370,6 +372,9 @@ class Module_admin_version
 			rename_config_option('ocp_show_staff_page_actions','show_staff_page_actions');
 			rename_config_option('ocp_show_su','show_su');
 			rename_config_option('ocp_show_avatar','show_avatar');
+
+			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_extra_cc_addresses','LONG_TEXT',serialize(array()));
+			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_extra_bcc_addresses','LONG_TEXT',serialize(array()));
 
 			$GLOBALS['SITE_DB']->query_delete('url_title_cache');
 			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_meta_title','LONG_TEXT');

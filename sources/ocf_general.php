@@ -146,8 +146,10 @@ function ocf_read_in_member_profile($member_id,$lite=true)
 	}
 
 	// Primary usergroup
+	require_code('ocf_members');
 	$primary_group=ocf_get_member_primary_group($member_id);
 	$out['primary_group']=$primary_group;
+	require_code('ocf_groups');
 	$out['primary_group_name']=ocf_get_group_name($primary_group);
 
 	// Find how many points we need to advance

@@ -148,7 +148,11 @@ class Module_admin_emaillog
 			if ($from_name=='') $from_name=get_site_name();
 
 			$to_email=unserialize($row['m_to_email']);
+			$extra_cc_addresses=($row['m_extra_cc_addresses']=='')?array():@unserialize($row['m_extra_cc_addresses']);
+			$extra_bcc_addresses=($row['m_extra_bcc_addresses']=='')?array():@unserialize($row['m_extra_bcc_addresses']);
 			if (is_string($to_email)) $to_email=array($to_email);
+			$to_email=array_merge($to_email,$extra_cc_addresses);
+			$to_email=array_merge($to_email,$extra_bcc_addresses);
 			if ((is_null($to_email)) || (!array_key_exists(0,$to_email))) $to_email[0]=get_option('staff_address');
 			$to_name=unserialize($row['m_to_name']);
 			if (is_string($to_name)) $to_name=array($to_name);
@@ -197,6 +201,8 @@ class Module_admin_emaillog
 
 		$to_email=unserialize($row['m_to_email']);
 		if (is_string($to_email)) $to_email=array($to_email);
+		$extra_cc_addresses=($row['m_extra_cc_addresses']=='')?array():@unserialize($row['m_extra_cc_addresses']);
+		$extra_bcc_addresses=($row['m_extra_bcc_addresses']=='')?array():@unserialize($row['m_extra_bcc_addresses']);
 		if (!array_key_exists(0,$to_email)) $to_email[0]=get_option('staff_address');
 		$to_name=unserialize($row['m_to_name']);
 		if ((is_null($to_name)) || ($to_name==array(NULL)) || ($to_name==array(''))) $to_name=array(get_site_name());
@@ -208,6 +214,8 @@ class Module_admin_emaillog
 		$fields->attach(form_input_line(do_lang_tempcode('FROM_NAME'),'','from_name',$from_name,false));
 		$fields->attach(form_input_line_multi(do_lang_tempcode('TO_EMAIL'),'','to_email_',$to_email,1));
 		$fields->attach(form_input_line_multi(do_lang_tempcode('TO_NAME'),'','to_name',$to_name,1));
+		$fields->attach(form_input_line_multi(do_lang_tempcode('EXTRA_CC_ADDRESSES'),'','extra_cc_addresses_',$extra_cc_addresses,1));
+		$fields->attach(form_input_line_multi(do_lang_tempcode('EXTRA_BCC_ADDRESSES'),'','extra_bcc_addresses_',$extra_bcc_addresses,1));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MESSAGE'),'','message',$row['m_message'],true));
 
 		$radios=new ocp_tempcode();
@@ -245,6 +253,8 @@ class Module_admin_emaillog
 			default:
 				$to_name=array();
 				$to_email=array();
+				$extra_cc_addresses=array();
+				$extra_bcc_addresses=array();
 				foreach ($_POST as $key=>$input_value)
 				{
 					//stripslashes if necessary
@@ -258,6 +268,14 @@ class Module_admin_emaillog
 					{
 						$to_email[]=$input_value;
 					}
+					if (substr($key,0,19)=='extra_cc_addresses_')
+					{
+						$extra_cc_addresses[]=$input_value;
+					}
+					if (substr($key,0,20)=='extra_bcc_addresses_')
+					{
+						$extra_bcc_addresses[]=$input_value;
+					}
 				}
 
 				$subject=post_param('subject');
@@ -269,6 +287,8 @@ class Module_admin_emaillog
 					'm_subject'=>$subject,
 					'm_from_email'=>$from_email,
 					'm_to_email'=>serialize($to_email),
+					'm_extra_cc_addresses'=>serialize($extra_cc_addresses),
+					'm_extra_bcc_addresses'=>serialize($extra_bcc_addresses),
 					'm_from_name'=>$from_name,
 					'm_to_name'=>serialize($to_name),
 					'm_message'=>$message,
@@ -281,7 +301,7 @@ class Module_admin_emaillog
 					$row=$rows[0];
 
 					require_code('mail');
-					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true);
+					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses);
 
 					$remap['m_queued']=0;
 				}
@@ -308,11 +328,13 @@ class Module_admin_emaillog
 			$subject=$row['m_subject'];
 			$message=$row['m_message'];
 			$to_email=unserialize($row['m_to_email']);
+			$extra_cc_addresses=unserialize($row['m_extra_cc_addresses']);
+			$extra_bcc_addresses=unserialize($row['m_extra_bcc_addresses']);
 			$to_name=unserialize($row['m_to_name']);
 			$from_email=$row['m_from_email'];
 			$from_name=$row['m_from_name'];
 
-			mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true);
+			mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses);
 		}
 
 		$GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued'=>0),array('m_queued'=>1));

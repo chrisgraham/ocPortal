@@ -94,6 +94,7 @@ class Hook_addon_registry_core_themeing
 			'sources/hooks/systems/config/templates_number_revisions_show.php',
 			'sources/hooks/systems/config/templates_store_revisions.php',
 			'adminzone/load_template.php',
+			'adminzone/tempcode_tester.php',
 			'sources/hooks/systems/addon_registry/core_themeing.php',
 			'JAVASCRIPT_THEME_COLOURS.tpl',
 			'THEME_IMAGE_MANAGE_SCREEN.tpl',
@@ -117,6 +118,7 @@ class Hook_addon_registry_core_themeing
 			'TEMPLATE_LIST.tpl',
 			'TEMPLATE_LIST_WRAP.tpl',
 			'JAVASCRIPT_THEMEING.tpl',
+			'TEMPCODE_TESTER_SCREEN.tpl',
 			'sources/themes2.php',
 			'sources/themes3.php',
 			'themes/default/images/bigicons/edit_css.png',
@@ -157,7 +159,8 @@ class Hook_addon_registry_core_themeing
 			'TEMPLATE_TREE_NODE.tpl'=>'administrative__template_tree_screen',
 			'TEMPLATE_EDIT_LINK.tpl'=>'administrative__template_edit_link_screen',
 			'TEMPLATE_LIST.tpl'=>'administrative__template_preview_screen',
-			'TEMPLATE_LIST_WRAP.tpl'=>'administrative__template_preview_screen'
+			'TEMPLATE_LIST_WRAP.tpl'=>'administrative__template_preview_screen',
+			'TEMPCODE_TESTER_SCREEN.tpl'=>'administrative__tempcode_tester_screen',
 		);
 	}
 
@@ -516,5 +519,21 @@ class Hook_addon_registry_core_themeing
 			)), NULL, '', true)
 		);
 
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__administrative__tempcode_tester_screen()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('TEMPCODE_TESTER_SCREEN', array(
+				'TITLE'=>lorem_title(),
+			)), NULL, '', true)
+		);
 	}
 }

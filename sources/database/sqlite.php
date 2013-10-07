@@ -150,7 +150,7 @@ class Database_Static_sqlite
 				$perhaps_null='';
 			} else $perhaps_null='NOT NULL';
 
-			$type=$type_remap[$type];
+			$type=isset($type_remap[$type])?$type_remap[$type]:$type;
 
 			$_fields.="	  $name $type $perhaps_null,\n";
 		}

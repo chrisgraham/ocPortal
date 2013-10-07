@@ -604,7 +604,14 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 											$p_portion=substr($comcode,$pos+$p_len,$p_end-($pos+$p_len));
 											require_code('tempcode_compiler');
 											$ret=template_to_tempcode(substr($comcode,$pos-1,$p_len+1).'{DIRECTIVE_EMBEDMENT}'.substr($comcode,$p_end,6));
-											$ret->singular_bind('DIRECTIVE_EMBEDMENT',comcode_to_tempcode($p_portion,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
+											if (substr($comcode,$pos-1,strlen('{+START,CASES,'))=='{+START,CASES,')
+											{
+												$ret->singular_bind('DIRECTIVE_EMBEDMENT',make_string_tempcode($p_portion));
+											} else
+											{
+												$p_portion_comcode=comcode_to_tempcode($p_portion,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
+												$ret->singular_bind('DIRECTIVE_EMBEDMENT',$p_portion_comcode);
+											}
 											$pos=$p_end+6;
 										}
 										elseif ($comcode[$pos]=='!')

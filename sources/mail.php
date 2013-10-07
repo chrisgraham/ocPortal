@@ -240,17 +240,24 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 		$through_queue=
 			(!$bypass_queue) && 
-			($attachments===NULL) && 
-			(count($extra_cc_addresses)==0) && 
-			(count($extra_bcc_addresses)==0) && 
 			((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && 
 			(cron_installed())));
+		if (!is_null($attachments))
+		{
+			foreach (array_keys($attachments) as $path)
+			{
+				if ((substr($path,0,strlen(get_custom_file_base().'/'))!=get_custom_file_base().'/') && (substr($path,0,strlen(get_file_base().'/'))!=get_file_base().'/'))
+					$through_queue=false;
+			}
+		}
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
 			'm_subject'=>substr($subject_line,0,255),
 			'm_message'=>$message_raw,
 			'm_to_email'=>serialize($to_email),
 			'm_to_name'=>serialize($to_name),
+			'm_extra_cc_addresses'=>serialize($extra_cc_addresses),
+			'm_extra_bcc_addresses'=>serialize($extra_bcc_addresses),
 			'm_from_email'=>$from_email,
 			'm_from_name'=>$from_name,
 			'm_priority'=>$priority,

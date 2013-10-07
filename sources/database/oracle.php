@@ -178,7 +178,7 @@ class Database_Static_oracle
 				$trigger=true;
 			}
 
-			$type=$type_remap[$type];
+			$type=isset($type_remap[$type])?$type_remap[$type]:$type;
 
 			$_fields.="	  $name $type $perhaps_null,\n";
 		}

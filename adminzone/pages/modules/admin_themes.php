@@ -108,7 +108,7 @@ class Module_admin_themes
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'THEMES','add_theme'=>'ADD_THEME');
+		return array('misc'=>'THEMES','add_theme'=>'ADD_THEME','tempcode_tester'=>'TEMPCODE_TESTER');
 	}
 
 	var $title;
@@ -347,6 +347,13 @@ class Module_admin_themes
 			breadcrumb_set_parents(array(array('_SELF:_SELF:list',do_lang_tempcode('SCREEN_PREVIEWS'))));
 		}
 
+		if ($type=='tempcode_tester')
+		{
+			$this->title=get_screen_title('TEMPCODE_TESTER');
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMES'))));
+		}
+
 		return NULL;
 	}
 
@@ -387,6 +394,7 @@ class Module_admin_themes
 		if ($type=='_edit_theme') return $this->_edit_theme();
 		if ($type=='list') return $this->list_screen_previews();
 		if ($type=='view') return $this->view_screen_preview();
+		if ($type=='tempcode_tester') return $this->tempcode_tester();
 
 		return new ocp_tempcode();
 	}
@@ -2188,6 +2196,34 @@ class Module_admin_themes
 		$function=get_param('function');
 
 		return render_screen_preview($template,$hook,$function);
+	}
+
+	/**
+	 * The UI to run the Tempcode tester.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function tempcode_tester()
+	{
+		require_javascript('javascript_ajax');
+
+		if (get_option('editarea')=='1')
+		{
+			attach_to_screen_header(make_string_tempcode('
+				<script language="javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
+				<script>// <![CDATA[
+				editAreaLoader.init({
+					id : "tempcode"
+					,syntax: "tempcode"
+					,start_highlight: true
+					,language: "'.(file_exists(get_file_base().'/data/editarea/langs/'.strtolower(user_lang()))?strtolower(user_lang()):'en').'"
+					,allow_resize: true
+					,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
+				});
+				//]]></script>')); // XHTMLXHTML
+		}
+
+		return do_template('TEMPCODE_TESTER_SCREEN',array('TITLE'=>$this->title));
 	}
 }
 
