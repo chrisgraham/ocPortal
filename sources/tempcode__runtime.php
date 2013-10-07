@@ -710,6 +710,8 @@ class ocp_tempcode
 
 	var $pure_lang=false;
 
+	var $children=NULL,$fresh=NULL;
+
 	/**
 	 * Constructor of tempcode
 	 *

@@ -280,7 +280,6 @@ class Module_shopping
 		if ($type=='add_item') return $this->add_item_to_cart();
 		if ($type=='update_cart') return $this->update_cart();
 		if ($type=='empty_cart') return $this->empty_cart();
-		if ($type=='pay') return $this->pay();
 		if ($type=='finish') return $this->finish();
 		if ($type=='my_orders') return $this->my_orders();
 		if ($type=='order_det') return $this->order_det();
@@ -377,7 +376,6 @@ class Module_shopping
 
 			$update_cart=build_url(array('page'=>'_SELF','type'=>'update_cart'),'_SELF');
 			$empty_cart=build_url(array('page'=>'_SELF','type'=>'empty_cart'),'_SELF');
-			$checkout=build_url(array('page'=>'_SELF','type'=>'pay'),'_SELF');
 
 			$payment_form=payment_form();			
 
@@ -386,7 +384,6 @@ class Module_shopping
 				'SUB_TOTAL'=>float_format($sub_tot),
 				'SHIPPING_COST'=>float_format($shipping_cost),
 				'GRAND_TOTAL'=>float_format($sub_tot),
-				'CHECKOUT_URL'=>$checkout,
 				'PROCEED'=>do_lang_tempcode('PROCEED'),
 				'CURRENCY'=>ecommerce_get_currency_symbol(),
 				'PAYMENT_FORM'=>$payment_form,

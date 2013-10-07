@@ -33,6 +33,11 @@ function init__occle_fs()
  */
 class occle_fs
 {
+	var $occle_fs;
+	var $pwd;
+	var $current_meta=NULL;
+	var $current_meta_pwd=NULL;
+
 	/**
 	 * Constructor function. Setup a virtual filesystem, but do nothing with it.
 	 */

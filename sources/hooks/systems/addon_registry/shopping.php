@@ -476,7 +476,6 @@ class Hook_addon_registry_shopping
 			'SUB_TOTAL'=>float_format(floatval(placeholder_number())),
 			'SHIPPING_COST'=>float_format(floatval(placeholder_number())),
 			'GRAND_TOTAL'=>float_format(floatval(placeholder_number())),
-			'CHECKOUT_URL'=>placeholder_link(),
 			'PROCEED'=>lorem_phrase(),
 			'CURRENCY'=>lorem_word(),
 			'PAYMENT_FORM'=>placeholder_form()

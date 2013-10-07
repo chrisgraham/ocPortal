@@ -583,6 +583,11 @@ class Text_Diff3 extends Text_Diff {
  */
 class Text_Diff3_Op {
 
+	var $_merged;
+	var $final1;
+	var $final2;
+	var $orig;
+
 	function Text_Diff3_Op($orig=false, $final1=false, $final2=false)
 	{
 		$this->orig=$orig ? $orig : array();
@@ -949,6 +954,16 @@ class Text_Diff_Engine_string {
  * @access private
  */
 class Text_Diff_Engine_native {
+
+	var $seq;
+	var $in_seq;
+	var $lcs;
+	var $xchanged;
+	var $ychanged;
+	var $xind;
+	var $xv;
+	var $yind;
+	var $yv;
 
 	function diff($from_lines, $to_lines)
 	{

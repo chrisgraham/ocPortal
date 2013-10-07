@@ -21,6 +21,8 @@ class ecommerce_test_set extends ocp_test_case
 	var $admin_ecom;
 	var $item_id;
 	var $order_id;
+	var $access_mapping;
+	var $admin_orders;
 
 	function setUp()
 	{

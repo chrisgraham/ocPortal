@@ -226,6 +226,7 @@ class Module_tickets
 	}
 
 	var $title;
+	var $ticket_type;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.

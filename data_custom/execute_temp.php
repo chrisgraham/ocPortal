@@ -53,4 +53,23 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('files2');
+	$contents=get_directory_contents(get_file_base());
+	foreach ($contents as $path)
+	{
+		if (substr($path,-4)=='.php')
+		{
+			$c=file_get_contents(get_file_base().'/'.$path);
+			$num_matches=preg_match_all('#\$this->(\w+)#',$c,$matches);
+			for ($i=0;$i<$num_matches;$i++)
+			{
+				$var=$matches[1][$i];
+				if ((strpos($c,'var $'.$var)===false) && (strpos($c,'function '.$var)===false))
+				{
+					@print($path.':'.$var."\n");
+				}
+			}
+		}
+	}
+	@exit('done');
 }

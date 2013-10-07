@@ -32,6 +32,22 @@ if (class_exists('Compressor')) // 'if' is for the code quality checker
 class Compressor{
 
 
+	var $cache_file;
+	var $datas;
+	var $file_loaded_size;
+	var $full_cache_file;
+	var $gzip_cache_file;
+	var $gzip_datas;
+	var $gzip_enc_header;
+	var $infos;
+	var $load_all_plugins;
+	var $param;
+	var $path;
+	var $script_list;
+	var $start_time;
+	var $sub_script_list;
+	var $use_gzip;
+
 	function compressor($param)
 	{
 		$this->__construct($param);

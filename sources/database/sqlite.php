@@ -33,6 +33,8 @@ No need for presetting up, or usernames or passwords.
 class Database_Static_sqlite
 {
 
+	var $cache_db=array();
+
 	/**
 	 * Get the default user for making db connections (used by the installer as a default).
 	 *

@@ -78,6 +78,8 @@ class Module_supermembers
 		add_menu_item_simple('collab_website',NULL,'SUPER_MEMBERS','_SEARCH:supermembers');
 	}
 
+	var $title;
+
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *

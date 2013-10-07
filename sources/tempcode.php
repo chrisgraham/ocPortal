@@ -1029,7 +1029,10 @@ class ocp_tempcode
 
 	var $codename=':container'; // The name of the template it came from
 
+	var $preprocessed=false;
 	var $cached_output;
+
+	var $children=NULL,$fresh=NULL;
 
 	/**
 	 * Constructor of tempcode

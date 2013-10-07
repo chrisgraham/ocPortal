@@ -114,6 +114,7 @@ class Module_admin_themes
 	var $title;
 	var $id;
 	var $theme;
+	var $file;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
