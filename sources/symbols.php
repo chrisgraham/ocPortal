@@ -936,7 +936,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$param_2=array();
 					foreach ($param as $group)
 					{
-						if ((substr($group,0,1)=='!') && (is_numeric(substr($group,1))))
+						if ((substr($group,0,1)=='@') && (is_numeric(substr($group,1))))
 						{
 							$member_id=intval(substr($group,1));
 						} else
