@@ -74,6 +74,33 @@ A blank filter will match [i]nothing[/i]. If you want to match everything you mu
 
 ocFilter precedence is not based on order, it is based on the rule "pick out what is accepted then remove what is avoided". In other words, the filter first works out what IDs pass (e.g. "*" or "5" or "1-30" or "bar*") and then removes and IDs that have been explicitly marked as 'avoid' (e.g. "!3" or "foo~").
 
+[title="3"]Not[/title]
+
+It is important to understand that "!" does not really mean 'not', it means 'avoid' or 'except'. There is no way to use ocFilter to match on a negative, you can only limit what positive matches are accepted.
+
+Let's say we want to match anyone not in usergroup #14 using the Tempcode [tt]IS_IN_GROUP[/tt] symbol, which happens to work via ocFilter.
+
+[title="4"]Attempt 1[/title]
+
+[code]
+{+START,IF,{$IS_IN_GROUP,!14}}...{+END}
+[/code]
+This is incorrect, because we haven't defined any positive matches.
+
+[title="4"]Attempt 2[/title]
+
+[code]
+{+START,IF,{$IS_IN_GROUP,*,!14}}...{+END}
+[/code]
+This is also incorrect, because it would match if a member happened to be in another group additionally to usergroup #14.
+
+[title="4"]Attempt 3[/title]
+
+[code]
+{+START,IF,{$NOT,{$IS_IN_GROUP,14}}}...{+END}
+[/code]
+Finally, this is correct. It negates the ocFilter after it runs, via the Tempcode [tt]NOT[/tt] symbol.
+
 [title="2"]Finding IDs[/title]
 
 You may wonder how to find IDs for use in filtering. The best way is to look at the 'edit' URL for the entries. They will contain something like '&id=5', where 5 would be the ID of that particular entry.
