@@ -437,7 +437,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$compare=$param[0]->evaluate();
 					$substring=(isset($param[2]) && $param[1]->evaluate()=='1');
 					$regexp=(isset($param[2]) && $param[1]->evaluate()=='2');
-					$explode=explode("\n",trim($param[$substring?2:1]->evaluate()));
+					$explode=explode(chr(10),trim($param[isset($param[2])?2:1]->evaluate()));
 					foreach ($explode as $i=>$case)
 					{
 						if (strpos($case,'=')===false) continue;
@@ -445,7 +445,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$compare_case=trim($compare_case);
 						if (
 							((!$substring) && (!$regexp) && ($compare_case==$compare)) || // Exact match
-							(($substring) && (($compare=='') || (strpos($compare,$compare_case)!==false))) || // Substring
+							(($substring) && (($compare_case=='') || (strpos($compare,$compare_case)!==false))) || // Substring
 							(($regexp) && (preg_match('#'.str_replace('#','\#',$compare_case).'#',$compare)!=0)) || // Regexp
 							(($compare_case=='') && (!isset($explode[$i+1]))) // The final default case
 						)
