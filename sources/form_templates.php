@@ -95,7 +95,12 @@ function get_attachments($posting_field_name)
 
 	require_code('files2');
 	$max_attach_size=get_max_file_size(get_member(),$GLOBALS['SITE_DB']);
-	if (($max_attach_size==0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0))
+	if (get_forum_type()=='ocf')
+	{
+		require_code('ocf_groups');
+		require_lang('ocf');
+	}
+	if (($max_attach_size==0) && (get_forum_type()=='ocf') && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0))
 	{
 		return array(new ocp_tempcode(),new ocp_tempcode());
 	}
@@ -111,8 +116,6 @@ function get_attachments($posting_field_name)
 
 	if (get_forum_type()=='ocf')
 	{
-		require_code('ocf_groups');
-		require_lang('ocf');
 		$max_attachments=ocf_get_member_best_group_property(get_member(),'max_attachments_per_post');
 	} else $max_attachments=100;
 
