@@ -293,6 +293,9 @@ class Module_news
 	var $_title;
 	var $title_to_use;
 	var $img;
+	var $news_full;
+	var $news_cats;
+	var $category;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -458,6 +461,12 @@ class Module_news
 			}
 			$category=get_translated_text($news_cats[$myrow['news_category']]['nc_title']);
 
+			$news_full=get_translated_tempcode($myrow['news_article']);
+			if ($news_full->is_empty())
+			{
+				$news_full=get_translated_tempcode($myrow['news']);
+			}
+
 			$og_img=$img;
 			if ($og_img=='')
 			{
@@ -483,14 +492,17 @@ class Module_news
 				'category'=>$category,
 			));
 
-			$id=$this->id;
-			$blog=$this->blog;
-			$filter=$this->filter;
-			$filter_and=$this->filter_and;
-			$myrow=$this->myrow;
-			$_title=$this->_title;
-			$title_to_use=$this->title_to_use;
+			$this->id=$id;
+			$this->blog=$blog;
+			$this->filter=$filter;
+			$this->filter_and=$filter_and;
+			$this->myrow=$myrow;
+			$this->_title=$_title;
+			$this->title_to_use=$title_to_use;
 			$this->img=$img;
+			$this->news_full=$news_full;
+			$this->news_cats=$news_cats;
+			$this->category=$category;
 		}
 
 		return NULL;
@@ -611,9 +623,9 @@ class Module_news
 	{
 		$ocselect=either_param('active_filter','');
 
-		$this->blog=$blog;
-		$this->filter=$filter;
-		$this->filter_and=$filter_and;
+		$blog=$this->blog;
+		$filter=$this->filter;
+		$filter_and=$this->filter_and;
 
 		// Get category contents
 		$inline=get_param_integer('inline',0)==1;
@@ -646,6 +658,9 @@ class Module_news
 		$_title=$this->_title;
 		$title_to_use=$this->title_to_use;
 		$img=$this->img;
+		$news_full=$this->news_full;
+		$news_cats=$this->news_cats;
+		$category=$this->category;
 
 		// Rating and comments
 		$self_url_map=array('page'=>'_SELF','type'=>'view','id'=>$id);
@@ -670,11 +685,9 @@ class Module_news
 		$date=get_timezoned_date($myrow['date_and_time']);
 		$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$myrow['author']),get_module_zone('authors')):new ocp_tempcode();
 		$author=$myrow['author'];
-		$news_full=get_translated_tempcode($myrow['news_article']);
 		$news_full_plain=get_translated_text($myrow['news_article']);
 		if ($news_full->is_empty())
 		{
-			$news_full=get_translated_tempcode($myrow['news']);
 			$news_full_plain=get_translated_text($myrow['news']);
 		}
 

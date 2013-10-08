@@ -371,6 +371,11 @@ class Module_calendar
 	var $event;
 	var $title_to_use;
 	var $title_to_use_2;
+	var $_is_public;
+	var $date;
+	var $_title;
+	var $first_date;
+	var $back_url;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -472,10 +477,15 @@ class Module_calendar
 
 			seo_meta_load_for('event',strval($id),$title_to_use_2);
 
-			$id=$this->id;
-			$event=$this->event;
-			$title_to_use=$this->title_to_use;
-			$title_to_use_2=$this->title_to_use_2;
+			$this->id=$id;
+			$this->event=$event;
+			$this->title_to_use=$title_to_use;
+			$this->title_to_use_2=$title_to_use_2;
+			$this->_is_public=$_is_public;
+			$this->date=$date;
+			$this->_title=$_title;
+			$this->first_date=$first_date;
+			$this->back_url=$back_url;
 		}
 
 		if ($type!='misc' && $type!='view')
@@ -1530,6 +1540,11 @@ class Module_calendar
 		$event=$this->event;
 		$title_to_use=$this->title_to_use;
 		$title_to_use_2=$this->title_to_use_2;
+		$_is_public=$this->_is_public;
+		$date=$this->date;
+		$_title=$this->_title;
+		$first_date=$this->first_date;
+		$back_url=$this->back_url;
 
 		// Validation
 		$warning_details=new ocp_tempcode();

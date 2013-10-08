@@ -308,12 +308,13 @@ class Module_downloads
 
 	var $title;
 	var $category_id;
+	var $category;
 	var $id;
 	var $myrow;
-	var $category;
-	var $title_to_use;
 	var $name;
-	var $title_to_use_2;
+	var $root;
+	var $images_details;
+	var $num_images;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -334,6 +335,9 @@ class Module_downloads
 		if ($type=='misc')
 		{
 			$category_id=get_param_integer('id',db_get_first_id());
+
+			$root=get_param_integer('keep_download_root',db_get_first_id());
+
 			set_feed_url('?mode=downloads&filter='.strval($category_id));
 
 			// Get details
@@ -392,7 +396,7 @@ class Module_downloads
 
 			$this->category_id=$category_id;
 			$this->category=$category;
-			$this->title_to_use=$title_to_use;
+			$this->root=$root;
 		}
 
 		if ($type=='entry')
@@ -420,21 +424,68 @@ class Module_downloads
 			$name=get_translated_text($myrow['name']);
 
 			// Title
-			$title_to_use=do_lang_tempcode('DOWNLOAD_TITLE',make_fractionable_editable('download',$id,$name));
-			$title_to_use_2=do_lang('DOWNLOAD_TITLE',$name);
+			$title_to_use_tempcode=do_lang_tempcode('DOWNLOAD_TITLE',make_fractionable_editable('download',$id,$name));
+			$title_to_use=do_lang('DOWNLOAD_TITLE',$name);
 			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 			{
 				require_code('awards');
 				$awards=find_awards_for('download',strval($id));
 			} else $awards=array();
-			$this->title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
+			$this->title=get_screen_title($title_to_use_tempcode,false,NULL,NULL,$awards);
 
 			// SEO
-			seo_meta_load_for('downloads_download',strval($id),$title_to_use_2);
+			seo_meta_load_for('downloads_download',strval($id),$title_to_use);
 
 			// Breadcrumbs
 			$breadcrumbs=download_breadcrumbs($myrow['category_id'],$root,false,get_zone_name());
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$title_to_use->evaluate().'</span>'));
+			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$title_to_use_tempcode->evaluate().'</span>'));
+
+			// Images in associated gallery
+			$images_details=new ocp_tempcode();
+			$image_url='';
+			$counter=0;
+			if (addon_installed('galleries'))
+			{
+				// Images
+				require_lang('galleries');
+				$cat='download_'.strval($id);
+				$map=array('cat'=>$cat);
+				if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $map['validated']=1;
+				$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id',200/*Stop sillyness, could be a DOS attack*/);
+				$div=2;
+				$_out=new ocp_tempcode();
+				$_row=new ocp_tempcode();
+				require_code('images');
+				while (array_key_exists($counter,$rows))
+				{
+					$row=$rows[$counter];
+
+					$view_url=$row['url'];
+					if ($image_url=='') $image_url=$row['url'];
+					if (url_is_local($view_url)) $view_url=get_custom_base_url().'/'.$view_url;
+					$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
+					$image_description=get_translated_tempcode($row['description']);
+					$thumb=do_image_thumb($thumb_url,'');
+					if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('galleries','download_'.strval($id)))))
+					{
+						$iedit_url=build_url(array('page'=>'cms_galleries','type'=>'_ed','id'=>$row['id']),get_module_zone('cms_galleries'));
+					} else $iedit_url=new ocp_tempcode();
+					$_content=do_template('DOWNLOAD_SCREEN_IMAGE',array('_GUID'=>'fba0e309aa0ae04891e32c65a625b177','ID'=>strval($row['id']),'VIEW_URL'=>$view_url,'EDIT_URL'=>$iedit_url,'THUMB'=>$thumb,'DESCRIPTION'=>$image_description));
+
+					$_row->attach(do_template('DOWNLOAD_GALLERY_IMAGE_CELL',array('_GUID'=>'8400a832dbed64bb63f264eb3a038895','CONTENT'=>$_content)));
+
+					if (($counter%$div==1) && ($counter!=0))
+					{
+						$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'205c4f5387e98c534d5be1bdfcccdd7d','CELLS'=>$_row)));
+						$_row=new ocp_tempcode();
+					}
+
+					$counter++;
+				}
+				if (!$_row->is_empty())
+					$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'e9667ca2545ac72f85a873f236cbbd6f','CELLS'=>$_row)));
+				$images_details=$_out;
+			}
 
 			// Meta data
 			set_extra_request_metadata(array(
@@ -452,9 +503,9 @@ class Module_downloads
 
 			$this->id=$id;
 			$this->myrow=$myrow;
-			$this->title_to_use=$title_to_use;
 			$this->name=$name;
-			$this->title_to_use_2=$title_to_use_2;
+			$this->images_details=$images_details;
+			$this->num_images=$counter;
 		}
 
 		if ($type=='index')
@@ -504,7 +555,9 @@ class Module_downloads
 	function view_category_screen()
 	{
 		$category_id=$this->category_id;
-		$root=get_param_integer('keep_download_root',db_get_first_id());
+		$root=$this->root;
+		$category=$this->category;
+
 		$cat_sort=get_param('cat_sort','t1.text_original ASC');
 		$sort=get_param('sort',get_option('downloads_default_sort_order'));
 
@@ -687,8 +740,8 @@ class Module_downloads
 		$id=$this->id;
 		$myrow=$this->myrow;
 		$name=$this->name;
-		$title_to_use=$this->title_to_use;
-		$title_to_use_2=$this->title_to_use_2;
+		$images_details=$this->images_details;
+		$num_images=$this->num_images;
 
 		$root=get_param_integer('keep_download_root',db_get_first_id(),true);
 
@@ -767,53 +820,6 @@ class Module_downloads
 			$edit_date=make_string_tempcode(get_timezoned_date($myrow['edit_date'],false));
 		} else $edit_date=new ocp_tempcode();
 
-		// Images in associated gallery
-		$images_details=new ocp_tempcode();
-		$image_url='';
-		$counter=0;
-		if (addon_installed('galleries'))
-		{
-			// Images
-			require_lang('galleries');
-			$cat='download_'.strval($id);
-			$map=array('cat'=>$cat);
-			if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $map['validated']=1;
-			$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id',200/*Stop sillyness, could be a DOS attack*/);
-			$div=2;
-			$_out=new ocp_tempcode();
-			$_row=new ocp_tempcode();
-			require_code('images');
-			while (array_key_exists($counter,$rows))
-			{
-				$row=$rows[$counter];
-
-				$view_url=$row['url'];
-				if ($image_url=='') $image_url=$row['url'];
-				if (url_is_local($view_url)) $view_url=get_custom_base_url().'/'.$view_url;
-				$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-				$image_description=get_translated_tempcode($row['description']);
-				$thumb=do_image_thumb($thumb_url,'');
-				if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('galleries','download_'.strval($id)))))
-				{
-					$iedit_url=build_url(array('page'=>'cms_galleries','type'=>'_ed','id'=>$row['id']),get_module_zone('cms_galleries'));
-				} else $iedit_url=new ocp_tempcode();
-				$_content=do_template('DOWNLOAD_SCREEN_IMAGE',array('_GUID'=>'fba0e309aa0ae04891e32c65a625b177','ID'=>strval($row['id']),'VIEW_URL'=>$view_url,'EDIT_URL'=>$iedit_url,'THUMB'=>$thumb,'DESCRIPTION'=>$image_description));
-
-				$_row->attach(do_template('DOWNLOAD_GALLERY_IMAGE_CELL',array('_GUID'=>'8400a832dbed64bb63f264eb3a038895','CONTENT'=>$_content)));
-
-				if (($counter%$div==1) && ($counter!=0))
-				{
-					$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'205c4f5387e98c534d5be1bdfcccdd7d','CELLS'=>$_row)));
-					$_row=new ocp_tempcode();
-				}
-
-				$counter++;
-			}
-			if (!$_row->is_empty())
-				$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'e9667ca2545ac72f85a873f236cbbd6f','CELLS'=>$_row)));
-			$images_details=$_out;
-		}
-
 		// Download link
 		$author=$myrow['author'];
 		$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$author),get_module_zone('authors')):new ocp_tempcode();
@@ -844,7 +850,7 @@ class Module_downloads
 			'_GUID'=>'a9af438f84783d0d38c20b5f9a62dbdb',
 			'ORIGINAL_FILENAME'=>$myrow['original_filename'],
 			'URL'=>$myrow['url'],
-			'NUM_IMAGES'=>strval($counter),
+			'NUM_IMAGES'=>strval($num_images),
 			'TAGS'=>get_loaded_tags('downloads'),
 			'LICENCE'=>is_null($licence)?NULL:strval($licence),
 			'LICENCE_TITLE'=>$licence_title,

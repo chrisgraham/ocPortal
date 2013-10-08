@@ -670,6 +670,7 @@ class Module_catalogues
 	var $title_to_use_2;
 	var $category;
 	var $root;
+	var $ecommerce;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -685,98 +686,6 @@ class Module_catalogues
 			$this->title=get_screen_title('CATALOGUES');
 
 			set_feed_url('?mode=catalogues&filter=');
-
-			// Get category
-			$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$id),'',1);
-			if (!array_key_exists(0,$categories))
-			{
-				return warn_screen(get_screen_title('CATALOGUES'),do_lang_tempcode('MISSING_RESOURCE'));
-			}
-			$category=$categories[0];
-
-			// Permission for here?
-			if (!has_category_access(get_member(),'catalogues_catalogue',$category['c_name']))
-			{
-				access_denied('CATALOGUE_ACCESS');
-			}
-			if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($id))))
-			{
-				access_denied('CATEGORY_ACCESS');
-			}
-
-			// Pick up some data
-			$catalogue_name=$category['c_name'];
-			$root=get_param_integer('keep_catalogue_'.$catalogue_name.'_root',NULL);
-			$_title=get_translated_text($category['cc_title']);
-
-			// Screen title
-			$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_CATEGORY',make_fractionable_editable('catalogue_category',$id,$_title));
-			$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_CATEGORY',$_title,NULL,NULL,NULL,false);
-			if (is_null($title_to_use_2))
-			{
-				$title_to_use=do_lang_tempcode('DEFAULT__CATALOGUE_CATEGORY',escape_html($_title));
-				$title_to_use_2=do_lang('DEFAULT__CATALOGUE_CATEGORY',$_title);
-			}
-			$awards=array();
-			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-			{
-				require_code('awards');
-				$awards=array_merge($awards,find_awards_for('catalogue',$catalogue_name));
-				$awards=array_merge($awards,find_awards_for('catalogue_category',strval($id)));
-			}
-			$this->title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
-
-			// Meta data
-			if (is_object($title_to_use_2)) $title_to_use_2=$title_to_use_2->evaluate();
-			seo_meta_load_for('catalogue_category',strval($id),$title_to_use_2);
-
-			// Breadcrumbs
-			if ($catalogue['c_is_tree']==1)
-			{
-				$breadcrumbs=catalogue_category_breadcrumbs($id,$root,true,true);
-				if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-				if (has_privilege(get_member(),'open_virtual_roots'))
-				{
-					$url=get_self_url();
-					$breadcrumbs->attach(hyperlink($url,escape_html($_title),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
-				} else $breadcrumbs->attach('<span>'.escape_html($_title).'</span>');
-			} else
-			{
-				$breadcrumbs=new ocp_tempcode();
-				$url=build_url(array('page'=>'_SELF','type'=>'index','id'=>$catalogue_name),'_SELF');
-				$catalogue_title=get_translated_text($catalogue['c_title']);
-				$breadcrumbs->attach(hyperlink($url,escape_html($catalogue_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($catalogue_name))));
-				$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-				$breadcrumbs->attach('<span>'.escape_html($_title).'</span>');
-			}
-			breadcrumb_add_segment($breadcrumbs);
-			if (is_null($root)) breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.($is_ecommerce?':ecommerce=1':''),do_lang('CATALOGUES'))));
-
-			// Meta data
-			set_extra_request_metadata(array(
-				'created'=>date('Y-m-d',$category['cc_add_date']),
-				'creator'=>'',
-				'publisher'=>'', // blank means same as creator
-				'modified'=>'',
-				'type'=>get_translated_text($catalogue['c_title']).' category',
-				'title'=>$_title,
-				'identifier'=>'_SEARCH:catalogues:category:'.strval($id),
-				'description'=>get_translated_text($category['cc_description']),
-				//'category'=>???,
-			));
-			$rep_image_str=$category['rep_image'];
-			if ($rep_image_str!='')
-			{
-				set_extra_request_metadata(array(
-					'image'=>(url_is_local($rep_image_str)?(get_custom_base_url().'/'):'').$rep_image_str,
-				));
-			}
-
-			$this->category=$category;
-			$this->catalogue_name=$catalogue_name;
-			$this->root=$root;
-			$this->title_to_use=$title_to_use;
-			$this->title_to_use_2=$title_to_use_2;
 		}
 
 		if ($type=='index')
@@ -844,7 +753,104 @@ class Module_catalogues
 
 			set_feed_url('?mode=catalogues&filter='.strval($id));
 
+			// Get category
+			$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$categories))
+			{
+				return warn_screen(get_screen_title('CATALOGUES'),do_lang_tempcode('MISSING_RESOURCE'));
+			}
+			$category=$categories[0];
+
+			// Permission for here?
+			if (!has_category_access(get_member(),'catalogues_catalogue',$category['c_name']))
+			{
+				access_denied('CATALOGUE_ACCESS');
+			}
+			if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($id))))
+			{
+				access_denied('CATEGORY_ACCESS');
+			}
+
+			// Pick up some data
+			$catalogue_name=$category['c_name'];
+			$root=get_param_integer('keep_catalogue_'.$catalogue_name.'_root',NULL);
+			$_title=get_translated_text($category['cc_title']);
+
+			// Screen title
+			$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_CATEGORY',make_fractionable_editable('catalogue_category',$id,$_title));
+			$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_CATEGORY',$_title,NULL,NULL,NULL,false);
+			if (is_null($title_to_use_2))
+			{
+				$title_to_use=do_lang_tempcode('DEFAULT__CATALOGUE_CATEGORY',escape_html($_title));
+				$title_to_use_2=do_lang('DEFAULT__CATALOGUE_CATEGORY',$_title);
+			}
+			$awards=array();
+			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
+			{
+				require_code('awards');
+				$awards=array_merge($awards,find_awards_for('catalogue',$catalogue_name));
+				$awards=array_merge($awards,find_awards_for('catalogue_category',strval($id)));
+			}
+			$this->title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
+
+			// Meta data
+			if (is_object($title_to_use_2)) $title_to_use_2=$title_to_use_2->evaluate();
+			seo_meta_load_for('catalogue_category',strval($id),$title_to_use_2);
+
+			$catalogue=load_catalogue_row($catalogue_name);
+			$is_ecommerce=is_ecommerce_catalogue($catalogue_name,$catalogue);
+
+			// Breadcrumbs
+			if ($catalogue['c_is_tree']==1)
+			{
+				$breadcrumbs=catalogue_category_breadcrumbs($id,$root,true,true);
+				if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+				if (has_privilege(get_member(),'open_virtual_roots'))
+				{
+					$url=get_self_url();
+					$breadcrumbs->attach(hyperlink($url,escape_html($_title),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
+				} else $breadcrumbs->attach('<span>'.escape_html($_title).'</span>');
+			} else
+			{
+				$breadcrumbs=new ocp_tempcode();
+				$url=build_url(array('page'=>'_SELF','type'=>'index','id'=>$catalogue_name),'_SELF');
+				$catalogue_title=get_translated_text($catalogue['c_title']);
+				$breadcrumbs->attach(hyperlink($url,escape_html($catalogue_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($catalogue_name))));
+				$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+				$breadcrumbs->attach('<span>'.escape_html($_title).'</span>');
+			}
+			breadcrumb_add_segment($breadcrumbs);
+			if (is_null($root)) breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.($is_ecommerce?':ecommerce=1':''),do_lang('CATALOGUES'))));
+
+			// Meta data
+			set_extra_request_metadata(array(
+				'created'=>date('Y-m-d',$category['cc_add_date']),
+				'creator'=>'',
+				'publisher'=>'', // blank means same as creator
+				'modified'=>'',
+				'type'=>get_translated_text($catalogue['c_title']).' category',
+				'title'=>$_title,
+				'identifier'=>'_SEARCH:catalogues:category:'.strval($id),
+				'description'=>get_translated_text($category['cc_description']),
+				//'category'=>???,
+			));
+			$rep_image_str=$category['rep_image'];
+			if ($rep_image_str!='')
+			{
+				set_extra_request_metadata(array(
+					'image'=>(url_is_local($rep_image_str)?(get_custom_base_url().'/'):'').$rep_image_str,
+				));
+			}
+
+			$this->category=$category;
+			$this->catalogue_name=$catalogue_name;
+			$this->root=$root;
+			$this->title_to_use=$title_to_use;
+			$this->title_to_use_2=$title_to_use_2;
 			$this->id=$id;
+			$this->catalogue=$catalogue;
+			$this->is_ecommerce=$is_ecommerce;
+			$this->_title=$_title;
 		}
 
 		if ($type=='entry')
@@ -885,6 +891,7 @@ class Module_catalogues
 
 			$this->category=$category;
 			$this->id=$id;
+			$this->_title=$_title;
 		}
 
 		if ($type=='tree')
@@ -1034,6 +1041,7 @@ class Module_catalogues
 	{
 		$id=$this->id;
 		$category=$this->category;
+		$_title=$this->_title;
 
 		$catalogue_name=$category['c_name'];
 
@@ -1146,18 +1154,16 @@ class Module_catalogues
 		$root=$this->root;
 		$title_to_use=$this->title_to_use;
 		$title_to_use_2=$this->title_to_use_2;
+		$is_ecommerce=$this->is_ecommerce;
+		$catalogue=$this->catalogue;
+		$_title=$this->_title;
 
 		$tpl_set=$catalogue_name;
 
 		// Is eCommerce?
-		$catalogue=load_catalogue_row($catalogue_name);
-		if (is_ecommerce_catalogue($catalogue_name,$catalogue))
+		if ($is_ecommerce)
 		{
-			$is_ecommerce=true;
 			$tpl_set='products';
-		} else
-		{
-			$is_ecommerce=false;
 		}
 		$cart_link=new ocp_tempcode();
 		if ($is_ecommerce)
@@ -1242,7 +1248,6 @@ class Module_catalogues
 			'SUBCATEGORIES'=>$subcategories,
 			'DESCRIPTION'=>get_translated_tempcode($category['cc_description']),
 			'CART_LINK'=>$cart_link,
-			'BREADCRUMBS'=>$breadcrumbs
 		),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
 	}
 

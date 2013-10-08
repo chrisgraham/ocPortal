@@ -924,7 +924,7 @@ class Module_chat
 		$member_id=either_param_integer('member_id');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
 
-		$test=$this->handle_repost($lang,$username);
+		$test=$this->handle_repost('UNBLOCK_MEMBER',$username);
 		if (!is_null($test)) return $test;
 
 		require_code('chat2');

@@ -327,6 +327,8 @@ class Module_wiki
 	var $current_title;
 	var $title_to_use;
 	var $title_to_use_2;
+	var $dbposts;
+	var $num_posts;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -384,6 +386,11 @@ class Module_wiki
 			// Build up navigation tree
 			$breadcrumbs=wiki_breadcrumbs($chain,$current_title,has_privilege(get_member(),'open_virtual_roots'),true,true);
 
+			$where_map=array('page_id'=>$id);
+			if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where_map['validated']=1;
+			$dbposts=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),$where_map,'ORDER BY date_and_time',300);
+			$num_posts=count($dbposts);
+
 			set_extra_request_metadata(array(
 				'created'=>date('Y-m-d',$page['add_date']),
 				'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($page['submitter']),
@@ -412,6 +419,8 @@ class Module_wiki
 			$current_title=$this->current_title;
 			$title_to_use=$this->title_to_use;
 			$title_to_use_2=$this->title_to_use_2;
+			$dbposts=$this->dbposts;
+			$num_posts=$this->num_posts;
 		}
 
 		if ($type=='changes')
@@ -540,12 +549,14 @@ class Module_wiki
 	 */
 	function page()
 	{
-		$this->id=$id;
-		$this->chain=$chain;
-		$this->page=$page;
-		$this->current_title=$current_title;
-		$this->title_to_use=$title_to_use;
-		$this->title_to_use_2=$title_to_use_2;
+		$id=$this->id;
+		$chain=$this->chain;
+		$page=$this->page;
+		$current_title=$this->current_title;
+		$title_to_use=$this->title_to_use;
+		$title_to_use_2=$this->title_to_use_2;
+		$dbposts=$this->dbposts;
+		$num_posts=$this->num_posts;
 
 		require_code('feedback');
 
@@ -609,10 +620,6 @@ class Module_wiki
 		$staff_access=has_privilege(get_member(),'edit_lowrange_content','cms_wiki',array('wiki_page',$id));
 
 		// Main text (posts)
-		$where_map=array('page_id'=>$id);
-		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where_map['validated']=1;
-		$dbposts=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),$where_map,'ORDER BY date_and_time',300);
-		$num_posts=0;
 		$posts=new ocp_tempcode();
 		$include_expansion=(strpos($description_comcode,'[attachment')!==false);
 		foreach ($dbposts as $myrow)
@@ -665,16 +672,14 @@ class Module_wiki
 				'POST'=>$post,
 				'BUTTONS'=>$extra,
 			)));
-
-			$num_posts++;
 		}
 
-		if (count($dbposts)>=300)
+		if ($num_posts>=300)
 		{
 			attach_message(do_lang_tempcode('TOO_MANY_WIKI_POSTS'),'warn');
 		}
 
-		$menu=$this->do_menu($chain,$id,$include_expansion,count($dbposts)<300);
+		$menu=$this->do_menu($chain,$id,$include_expansion,$num_posts<300);
 
 		return do_template('WIKI_PAGE_SCREEN',array(
 			'_GUID'=>'1840d6934be3344c4f93a159fc737a45',

@@ -564,9 +564,7 @@ class Module_galleries
 
 			if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
-			$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$cat)));
-			if (is_null($category_name))
-				$category_name=$true_category_name;
+			$category_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$cat)));
 
 			if (get_param_integer('slideshow',0)==1)
 			{
@@ -625,7 +623,6 @@ class Module_galleries
 			$this->cat=$cat;
 			$this->url=$url;
 			$this->thumb_url=$thumb_url;
-			$this->true_category_name=$true_category_name;
 			$this->category_name=$category_name;
 			$this->root=$root;
 		}
@@ -1242,8 +1239,8 @@ class Module_galleries
 		$cat=$this->cat;
 		$url=$this->url;
 		$thumb_url=$this->thumb_url;
-		$true_category_name=$this->true_category_name;
-		$category_name=$this->category_name;
+		$true_category_name=$this->category_name;
+		if (is_null($category_name)) $category_name=$true_category_name;
 		$root=$this->root;
 
 		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml');
@@ -1355,8 +1352,8 @@ class Module_galleries
 		$cat=$this->cat;
 		$url=$this->url;
 		$thumb_url=$this->thumb_url;
-		$true_category_name=$this->true_category_name;
-		$category_name=$this->category_name;
+		$true_category_name=$this->category_name;
+		if (is_null($category_name)) $category_name=$true_category_name;
 		$root=$this->root;
 
 		if (get_param_integer('ajax',0)==1) header('Content-type: text/xml');

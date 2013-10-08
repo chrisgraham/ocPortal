@@ -266,7 +266,6 @@ class Hook_addon_registry_catalogues
 				'SUBCATEGORIES'=>$subcategories,
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
-				'TREE'=>lorem_phrase(),
 				'DISPLAY_TYPE'=>'0',
 			)), NULL, '', true)
 		);
@@ -335,7 +334,6 @@ class Hook_addon_registry_catalogues
 				'SUBCATEGORIES'=>$subcategories,
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
-				'TREE'=>lorem_phrase(),
 				'DISPLAY_TYPE'=>'0',
 			)), NULL, '', true)
 		);
@@ -388,7 +386,6 @@ class Hook_addon_registry_catalogues
 				'SUBCATEGORIES'=>'',
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
-				'TREE'=>lorem_phrase(),
 				'DISPLAY_TYPE'=>'0',
 			)), NULL, '', true)
 		);
@@ -461,7 +458,6 @@ class Hook_addon_registry_catalogues
 				'SUBCATEGORIES'=>$subcategories,
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
-				'TREE'=>lorem_phrase(),
 				'DISPLAY_TYPE'=>'0',
 			)), NULL, '', true)
 		);
@@ -529,7 +525,6 @@ class Hook_addon_registry_catalogues
 				'SUBCATEGORIES'=>$subcategories,
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
-				'TREE'=>lorem_phrase(),
 				'DISPLAY_TYPE'=>'0',
 			)), NULL, '', true)
 		);
