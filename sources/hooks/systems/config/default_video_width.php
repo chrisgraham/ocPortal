@@ -49,7 +49,7 @@ class Hook_config_default_video_width
 	 */
 	function get_default()
 	{
-		return '320';
+		return '480';
 	}
 
 }

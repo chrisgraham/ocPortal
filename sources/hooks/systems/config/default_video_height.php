@@ -49,7 +49,7 @@ class Hook_config_default_video_height
 	 */
 	function get_default()
 	{
-		return '240';
+		return '385';
 	}
 
 }
