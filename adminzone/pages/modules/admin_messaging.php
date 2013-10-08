@@ -93,6 +93,8 @@ class Module_admin_messaging
 	{
 		$type=get_param('type','misc');
 
+		require_lang('messaging');
+
 		set_helper_panel_pic('pagepics/messaging');
 		set_helper_panel_tutorial('tut_support_desk');
 
@@ -123,8 +125,6 @@ class Module_admin_messaging
 	function run()
 	{
 		if (get_forum_type()=='none') warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
-
-		require_lang('messaging');
 
 		$type=get_param('type','misc');
 

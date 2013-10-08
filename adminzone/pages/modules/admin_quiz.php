@@ -53,6 +53,8 @@ class Module_admin_quiz
 	{
 		$type=get_param('type','misc');
 
+		require_lang('quiz');
+
 		set_helper_panel_tutorial('tut_quizzes');
 
 		if ($type=='survey_results' || $type=='_survey_results' || $type=='__survey_results')
@@ -128,7 +130,6 @@ class Module_admin_quiz
 	 */
 	function run()
 	{
-		require_lang('quiz');
 		require_code('quiz');
 
 		$type=get_param('type','misc');

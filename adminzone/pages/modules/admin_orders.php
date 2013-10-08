@@ -62,6 +62,9 @@ class Module_admin_orders
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ecommerce');
+		require_lang('shopping');
+
 		if ($type=='misc')
 		{
 			breadcrumb_set_self(do_lang_tempcode('ORDERS'));
@@ -159,9 +162,7 @@ class Module_admin_orders
 	 */
 	function run()
 	{
-		require_lang('ecommerce');
 		require_code('ecommerce');
-		require_lang('shopping');
 		require_javascript('javascript_shopping');
 		require_css('shopping');
 		require_code('users_active_actions');

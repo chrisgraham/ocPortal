@@ -90,6 +90,8 @@ class Module_staff
 	{
 		$type=get_param('type','misc');
 
+		require_lang('staff');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('STAFF_TITLE',true,array(escape_html(get_site_name())));
@@ -113,8 +115,6 @@ class Module_staff
 	 */
 	function run()
 	{
-		require_lang('staff');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->do_all_staff();

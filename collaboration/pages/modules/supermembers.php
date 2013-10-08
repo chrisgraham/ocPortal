@@ -89,6 +89,8 @@ class Module_supermembers
 	{
 		$type=get_param('type','misc');
 
+		require_lang('supermembers');
+
 		$this->title=get_screen_title('SUPER_MEMBERS');
 
 		return NULL;
@@ -103,7 +105,6 @@ class Module_supermembers
 	{
 		if (addon_installed('authors')) require_lang('authors');
 		if (addon_installed('points')) require_lang('points');
-		require_lang('supermembers');
 
 		$message=get_option('supermembers_text');
 		if (has_actual_page_access(get_member(),'admin_config'))

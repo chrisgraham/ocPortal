@@ -102,6 +102,8 @@ class Module_admin_ipban
 	{
 		$type=get_param('type','misc');
 
+		require_lang('submitban');
+
 		set_helper_panel_pic('pagepics/ipban');
 		set_helper_panel_tutorial('tut_censor');
 
@@ -191,7 +193,6 @@ class Module_admin_ipban
 	 */
 	function run()
 	{
-		require_lang('submitban');
 		require_code('submit');
 
 		// What are we doing?

@@ -159,6 +159,8 @@ class Module_admin_permissions
 	{
 		$type=get_param('type','misc');
 
+		require_lang('permissions');
+
 		if ($type=='absorb' || $type=='_absorb')
 		{
 			set_helper_panel_pic('pagepics/privileges');
@@ -283,7 +285,6 @@ class Module_admin_permissions
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(60);
 
-		require_lang('permissions');
 		require_css('permissions_editor');
 		require_css('forms');
 

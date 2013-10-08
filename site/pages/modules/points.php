@@ -141,6 +141,8 @@ class Module_points
 	{
 		$type=get_param('type','misc');
 
+		require_lang('points');
+
 		if ($type=='misc' || $type=='_search')
 		{
 			set_feed_url('?mode=points&filter=');
@@ -194,7 +196,6 @@ class Module_points
 	{
 		require_code('points');
 		require_css('points');
-		require_lang('points');
 
 		// Work out what we're doing here
 		$type=get_param('type','misc');

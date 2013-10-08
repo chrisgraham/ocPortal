@@ -138,7 +138,6 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 
 		require_code('ocf_general_action');
 		require_code('ocf_general_action2');
-		require_lang('ocf_welcome_emails');
 
 		ocf_require_all_forum_stuff();
 

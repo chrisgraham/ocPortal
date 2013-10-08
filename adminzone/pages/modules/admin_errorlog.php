@@ -62,6 +62,8 @@ class Module_admin_errorlog
 	{
 		$type=get_param('type','misc');
 
+		require_lang('errorlog');
+
 		set_helper_panel_pic('pagepics/errorlog');
 		set_helper_panel_tutorial('tut_disaster');
 
@@ -77,7 +79,6 @@ class Module_admin_errorlog
 	 */
 	function run()
 	{
-		require_lang('errorlog');
 		require_css('errorlog');
 
 		// Read in errors

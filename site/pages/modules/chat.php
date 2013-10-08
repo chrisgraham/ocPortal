@@ -294,6 +294,8 @@ class Module_chat
 	{
 		$type=get_param('type','misc');
 
+		require_lang('chat');
+
 		if ($type=='misc')
 		{
 			set_feed_url('?mode=chat&filter=');
@@ -403,7 +405,6 @@ class Module_chat
 		require_javascript('javascript_validation');
 
 		require_lang('comcode');
-		require_lang('chat');
 		require_code('chat');
 		require_css('chat');
 

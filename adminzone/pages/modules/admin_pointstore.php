@@ -62,6 +62,8 @@ class Module_admin_pointstore
 	{
 		$type=get_param('type','misc');
 
+		require_lang('pointstore');
+
 		set_helper_panel_pic('pagepics/pointstore');
 		set_helper_panel_tutorial('tut_points');
 
@@ -97,7 +99,6 @@ class Module_admin_pointstore
 	 */
 	function run()
 	{
-		require_lang('pointstore');
 		require_code('form_templates');
 		require_css('points');
 

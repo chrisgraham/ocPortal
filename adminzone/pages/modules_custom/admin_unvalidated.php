@@ -57,6 +57,10 @@ class Module_admin_unvalidated
 	{
 		$type=get_param('type','misc');
 
+		require_lang('unvalidated');
+
+		$this->title=get_screen_title('UNVALIDATED_RESOURCES');
+
 		set_helper_panel_pic('pagepics/unvalidated');
 		set_helper_panel_tutorial('tut_censor');
 
@@ -70,10 +74,6 @@ class Module_admin_unvalidated
 	 */
 	function run()
 	{
-		require_lang('unvalidated');
-
-		$this->title=get_screen_title('UNVALIDATED_RESOURCES');
-
 		$out=new ocp_tempcode();
 		require_code('form_templates');
 

@@ -162,6 +162,8 @@ class Module_iotds
 	{
 		$type=get_param('type','misc');
 
+		require_lang('iotds');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('IOTD_ARCHIVE');
@@ -172,8 +174,6 @@ class Module_iotds
 			set_feed_url('?mode=iotds&filter=');
 
 			$id=get_param_integer('id');
-
-			require_lang('iotds');
 
 			// Breadcrumbs
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IOTD_ARCHIVE'))));

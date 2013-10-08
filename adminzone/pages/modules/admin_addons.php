@@ -107,6 +107,8 @@ class Module_admin_addons
 	{
 		$type=get_param('type','misc');
 
+		require_lang('addons');
+
 		if ($type=='misc')
 		{
 			set_helper_panel_pic('pagepics/addons');
@@ -254,7 +256,6 @@ class Module_admin_addons
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		require_lang('addons');
 		require_code('addons');
 		require_code('menus2');
 		require_css('addons_editor');

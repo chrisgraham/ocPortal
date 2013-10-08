@@ -65,6 +65,8 @@ class Module_cms_blogs extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('news');
+
 		inform_non_canonical_parameter('validated');
 		inform_non_canonical_parameter('cat');
 
@@ -105,7 +107,6 @@ class Module_cms_blogs extends standard_crud_module
 
 		require_code('news2');
 		require_css('news');
-		require_lang('news');
 
 		// Decide what to do
 		if ($type=='misc') return $this->misc();

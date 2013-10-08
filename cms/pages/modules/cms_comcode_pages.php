@@ -182,6 +182,8 @@ class Module_cms_comcode_pages
 	{
 		$type=get_param('type','misc');
 
+		require_lang('zones');
+
 		inform_non_canonical_parameter('parent_page');
 
 		set_helper_panel_pic('pagepics/comcode_page_edit');
@@ -254,7 +256,6 @@ class Module_cms_comcode_pages
 	{
 		require_code('zones2');
 		require_code('zones3');
-		require_lang('zones');
 		require_code('files');
 
 		$type=get_param('type','misc');

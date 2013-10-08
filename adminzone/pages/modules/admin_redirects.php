@@ -117,6 +117,8 @@ class Module_admin_redirects
 	{
 		$type=get_param('type','misc');
 
+		require_lang('redirects');
+
 		$this->title=get_screen_title('REDIRECTS');
 
 		return NULL;
@@ -129,8 +131,6 @@ class Module_admin_redirects
 	 */
 	function run()
 	{
-		require_lang('redirects');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->gui();

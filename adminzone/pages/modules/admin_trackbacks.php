@@ -62,6 +62,8 @@ class Module_admin_trackbacks
 	{
 		$type=get_param('type','misc');
 
+		require_lang('trackbacks');
+
 		set_helper_panel_pic('pagepics/trackbacks');
 		set_helper_panel_text(comcode_lang_string('DOC_TRACKBACKS'));
 
@@ -85,8 +87,6 @@ class Module_admin_trackbacks
 	 */
 	function run()
 	{
-		require_lang('trackbacks');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->choose();

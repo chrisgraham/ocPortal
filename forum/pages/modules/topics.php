@@ -73,6 +73,8 @@ class Module_topics
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		inform_non_canonical_parameter('#^kfs.*$#');
 		inform_non_canonical_parameter('#^mark_.*$#');
 

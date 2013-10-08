@@ -62,6 +62,8 @@ class Module_admin_ocf_history
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		if ($type=='misc')
 		{
 			$member_id=get_param_integer('member_id',-1);

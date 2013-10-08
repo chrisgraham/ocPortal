@@ -111,6 +111,8 @@ class Module_authors
 	{
 		$type=get_param('type','misc');
 
+		require_lang('authors');
+
 		$author=get_param('id',NULL);
 		if (is_null($author))
 		{
@@ -150,7 +152,6 @@ class Module_authors
 		set_feed_url('?mode=authors&filter=');
 
 		require_code('authors');
-		require_lang('authors');
 
 		// Decide what we're doing
 		$type=get_param('type','misc');

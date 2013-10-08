@@ -56,6 +56,8 @@ class Module_cms_ocf_groups extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		set_helper_panel_pic('pagepics/clubs');
 		set_helper_panel_tutorial('tut_subcom');
 

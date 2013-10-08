@@ -65,6 +65,8 @@ class Module_cms_booking extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('booking');
+
 		return parent::pre_run();
 	}
 

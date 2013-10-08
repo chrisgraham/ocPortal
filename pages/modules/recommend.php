@@ -97,6 +97,8 @@ class Module_recommend
 		if (array_key_exists('upload',$_FILES) && isset($_FILES['upload']['tmp_name']) && strlen($_FILES['upload']['tmp_name'])>0)
 			$type='gui2';
 
+		require_lang('recommend');
+
 		if ($type=='misc')
 		{
 			attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
@@ -178,7 +180,6 @@ class Module_recommend
 	 */
 	function run()
 	{
-		require_lang('recommend');
 		require_code('recommend');
 
 		$type=$this->type;

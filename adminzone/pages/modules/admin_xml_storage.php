@@ -62,6 +62,8 @@ class Module_admin_xml_storage
 	{
 		$type=get_param('type','misc');
 
+		require_lang('xml_storage');
+
 		set_helper_panel_pic('pagepics/xml');
 		set_helper_panel_text(comcode_lang_string('DOC_XML_DATA_MANAGEMENT'));
 
@@ -99,7 +101,6 @@ class Module_admin_xml_storage
 		$type=get_param('type','misc');
 
 		require_code('xml_storage');
-		require_lang('xml_storage');
 		require_lang('import');
 
 		switch ($type)

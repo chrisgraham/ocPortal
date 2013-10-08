@@ -63,6 +63,8 @@ class Module_admin_lookup
 	{
 		$type=get_param('type','misc');
 
+		require_lang('lookup');
+
 		set_helper_panel_pic('pagepics/investigateuser');
 		set_helper_panel_tutorial('tut_trace');
 
@@ -116,7 +118,6 @@ class Module_admin_lookup
 	function run()
 	{
 		require_lang('submitban');
-		require_lang('lookup');
 		require_code('lookup');
 
 		$param=$this->param;

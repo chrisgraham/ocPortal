@@ -100,8 +100,6 @@ class Module_newsletter
 			require_lang('newsletter');
 			//add_menu_item_simple('main_website',NULL,'NEWSLETTER','_SEARCH:newsletter:type=misc');
 
-			require_lang('newsletter');
-
 			$GLOBALS['SITE_DB']->create_table('newsletters',array( // Would have been better named 'newsletter_subscribers' (but isn't for legacy reasons)
 				'id'=>'*AUTO',
 				'title'=>'SHORT_TRANS',
@@ -184,6 +182,8 @@ class Module_newsletter
 	{
 		$type=get_param('type','misc');
 
+		require_lang('newsletter');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
@@ -226,8 +226,6 @@ class Module_newsletter
 	 */
 	function run()
 	{
-		require_lang('newsletter');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->newsletter_form();

@@ -89,6 +89,8 @@ class Module_admin_ecommerce extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ecommerce');
+
 		if ($type!='logs')
 		{
 			set_helper_panel_pic('pagepics/ecommerce');
@@ -187,7 +189,6 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		require_lang('ecommerce');
 		require_code('ecommerce');
 		require_code('ecommerce2');
 

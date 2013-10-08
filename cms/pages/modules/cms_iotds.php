@@ -47,6 +47,8 @@ class Module_cms_iotds extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('iotds');
+
 		set_helper_panel_pic('pagepics/iotds');
 		set_helper_panel_tutorial('tut_featured');
 
@@ -76,7 +78,6 @@ class Module_cms_iotds extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		require_lang('iotds');
 		require_code('iotds');
 		require_code('iotds2');
 		require_css('iotds');

@@ -129,6 +129,8 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocdeadpeople');
+
 		set_helper_panel_tutorial('tut_subcom');
 
 		if ($type=='view')
@@ -149,6 +151,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	function run_start($type)
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
+
 		require_code('ocf_groups_action');
 		require_code('ocf_forums_action');
 		require_code('ocf_groups_action2');
@@ -167,7 +170,6 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	function misc()
 	{
 		require_code('templates_donext');
-		require_lang('ocdeadpeople');
 		return do_next_manager(get_screen_title('OCDEADPEOPLE_TITLE'),comcode_lang_string('DOC_OCDEADPEOPLE'),
 			array(
 				/*	 type							  page	 params													 zone	  */
@@ -230,7 +232,6 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 		$field_set=alternate_fields_set__start($set_name);
 
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','image',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-
 		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$image,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$image));
@@ -238,17 +239,11 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 		handle_max_file_size($hidden,'image');
 
 		$fields->attach(form_input_line(do_lang_tempcode('CURE'),do_lang_tempcode('DESCRIPTION_CURE'),'cure',$cure,true));
-
 		$fields->attach(form_input_line(do_lang_tempcode('CURE_PRICE'),'','cure_price',strval($cure_price),true));
-
 		$fields->attach(form_input_line(do_lang_tempcode('IMMUNIZATION'),do_lang_tempcode('DESCRIPTION_IMMUNIZATION'),'immunization',$immunization,true));
-
 		$fields->attach(form_input_line(do_lang_tempcode('IMMUNIZATION_PRICE'),'','immunization_price',strval($immunization_price),true));
-
 		$fields->attach(form_input_line(do_lang_tempcode('SPREAD_RATE'),do_lang_tempcode('DESCRIPTION_SPREAD_RATE'),'spread_rate',strval($spread_rate),true));
-
 		$fields->attach(form_input_line(do_lang_tempcode('POINTS_PER_SPREAD'),do_lang_tempcode('DESCRIPTION_POINTS_PER_SPREAD'),'points_per_spread',strval($points_per_spread),true));
-
 		$fields->attach(form_input_tick(do_lang_tempcode('DISEASE_ENABLED'),do_lang_tempcode('DESCRIPTION_DISEASE_ENABLED'),'enabled',$enabled==1));
 
 		return array($fields,$hidden);

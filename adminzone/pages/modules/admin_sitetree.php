@@ -63,6 +63,8 @@ class Module_admin_sitetree
 	{
 		$type=get_param('type','misc');
 
+		require_lang('zones');
+
 		if ($type=='move' || $type=='_move')
 		{
 			set_helper_panel_pic('pagepics/move');
@@ -159,7 +161,6 @@ class Module_admin_sitetree
 	{
 		require_code('zones2');
 		require_code('zones3');
-		require_lang('zones');
 
 		$type=get_param('type','misc');
 

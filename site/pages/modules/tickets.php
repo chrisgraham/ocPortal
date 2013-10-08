@@ -237,6 +237,8 @@ class Module_tickets
 	{
 		$type=get_param('type','misc');
 
+		require_lang('tickets');
+
 		set_feed_url('?mode=tickets&filter=');
 
 		if ($type=='misc')
@@ -282,7 +284,6 @@ class Module_tickets
 	{
 		if (has_no_forum()) warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
 
-		require_lang('tickets');
 		require_javascript('javascript_validation');
 		require_css('tickets');
 		require_code('tickets');

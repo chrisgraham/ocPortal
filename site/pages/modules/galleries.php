@@ -423,6 +423,8 @@ class Module_galleries
 	{
 		$type=get_param('type','misc');
 
+		require_lang('galleries');
+
 		inform_non_canonical_parameter('days');
 		inform_non_canonical_parameter('select');
 		inform_non_canonical_parameter('video_select');

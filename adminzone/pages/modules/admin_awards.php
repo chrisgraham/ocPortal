@@ -124,6 +124,8 @@ class Module_admin_awards extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('awards');
+
 		set_helper_panel_pic('pagepics/awards');
 		set_helper_panel_tutorial('tut_featured');
 

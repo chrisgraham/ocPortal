@@ -217,6 +217,8 @@ class Module_forumview
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		inform_non_canonical_parameter('#^kfs_.*$#');
 
 		if ($type=='misc')

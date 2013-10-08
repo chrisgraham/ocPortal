@@ -62,6 +62,8 @@ class Module_admin_banners
 	{
 		$type=get_param('type','misc');
 
+		require_lang('banners');
+
 		if ($type=='misc')
 		{
 			$also_url=build_url(array('page'=>'cms_banners'),get_module_zone('cms_banners'));

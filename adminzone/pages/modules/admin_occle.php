@@ -99,6 +99,8 @@ class Module_admin_occle
 	{
 		$type=get_param('type','misc');
 
+		require_lang('occle');
+
 		set_helper_panel_pic('pagepics/occle');
 		set_helper_panel_tutorial('tut_occle');
 		set_helper_panel_text(comcode_lang_string('DOC_OCCLE'));
@@ -116,7 +118,6 @@ class Module_admin_occle
 	function run()
 	{
 		require_code('occle');
-		require_lang('occle');
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_more');
 		require_javascript('javascript_occle');

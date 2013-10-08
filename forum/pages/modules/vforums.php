@@ -62,6 +62,8 @@ class Module_vforums
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		if ($type=='new_posts')
 		{
 			$this->title=get_screen_title('POSTS_SINCE');

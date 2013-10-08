@@ -79,6 +79,8 @@ class Module_cms_catalogues extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('catalogues');
+
 		inform_non_canonical_parameter('parent_id');
 		inform_non_canonical_parameter('validated');
 		inform_non_canonical_parameter('category_id');
@@ -129,7 +131,6 @@ class Module_cms_catalogues extends standard_crud_module
 			$this->cat_crud_module->permissions_cat_name=NULL;
 		}
 
-		require_lang('catalogues');
 		require_lang('fields');
 		require_code('catalogues');
 

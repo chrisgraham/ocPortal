@@ -125,13 +125,13 @@ class Module_admin_themes
 	{
 		$type=get_param('type','misc');
 
+		require_lang('themes');
+
 		if ($type!='list' && $type!='view')
 		{
 			set_helper_panel_pic('pagepics/themes');
 			set_helper_panel_tutorial('tut_themes');
 		}
-
-		require_lang('themes');
 
 		if ($type=='misc')
 		{

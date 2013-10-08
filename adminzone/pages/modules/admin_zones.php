@@ -87,6 +87,8 @@ class Module_admin_zones
 	{
 		$type=get_param('type','misc');
 
+		require_lang('zones');
+
 		if ($type=='_editor')
 		{
 			attach_to_screen_header(make_string_tempcode('<base target="_blank" />'));
@@ -173,7 +175,6 @@ class Module_admin_zones
 	 */
 	function run()
 	{
-		require_lang('zones');
 		require_code('zones2');
 		require_code('zones3');
 

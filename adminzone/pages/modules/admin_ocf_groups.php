@@ -60,6 +60,8 @@ class Module_admin_ocf_groups extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		set_helper_panel_pic('pagepics/usergroups');
 		set_helper_panel_tutorial('tut_subcom');
 

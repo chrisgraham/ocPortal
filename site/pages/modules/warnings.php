@@ -56,6 +56,8 @@ class Module_warnings extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf_warnings');
+
 		if ($type=='history')
 		{
 			$this->title=get_screen_title('PUNITIVE_HISTORY');
@@ -102,8 +104,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		require_lang('ocf_warnings');
-
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_moderation_action');
 		require_code('ocf_moderation_action2');

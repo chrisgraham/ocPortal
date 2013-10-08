@@ -51,12 +51,12 @@ class Module_cms_banners extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('banners');
+
 		inform_non_canonical_parameter('b_type');
 
 		set_helper_panel_pic('pagepics/banners');
 		set_helper_panel_tutorial('tut_banners');
-
-		require_lang('banners');
 
 		if ((has_privilege(get_member(),'banner_free')) && (get_option('admin_banners')=='0'))
 		{

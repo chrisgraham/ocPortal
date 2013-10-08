@@ -62,6 +62,8 @@ class Module_admin_ssl
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ssl');
+
 		set_helper_panel_pic('pagepics/ssl');
 		set_helper_panel_tutorial('tut_security');
 
@@ -78,8 +80,6 @@ class Module_admin_ssl
 	function run()
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
-
-		require_lang('ssl');
 
 		$type=get_param('type','misc');
 

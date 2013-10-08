@@ -47,6 +47,9 @@ class Module_admin_referrals
 	}
 
 	var $title;
+	var $scheme;
+	var $ini_file;
+	var $scheme_title;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -56,6 +59,26 @@ class Module_admin_referrals
 	function pre_run()
 	{
 		$type=get_param('type','misc');
+
+		require_lang('referrals');
+
+		if ($type=='misc')
+		{
+			$this->title=get_screen_title('REFERRALS');
+		}
+
+		if ($type=='adjust' || $type=='_adjust')
+		{
+			$scheme=get_param('scheme');
+			$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
+			$scheme_title=$ini_file[$scheme]['title'];
+
+			$this->title=get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS',true,array(escape_html($scheme_title)));
+
+			$this->scheme=$scheme;
+			$this->ini_file=$ini_file;
+			$this->scheme_title=$scheme_title;
+		}
 
 		return NULL;
 	}
@@ -67,7 +90,6 @@ class Module_admin_referrals
 	 */
 	function run()
 	{
-		require_lang('referrals');
 		require_code('referrals');
 
 		$type=get_param('type','misc');
@@ -88,8 +110,6 @@ class Module_admin_referrals
 	{
 		require_lang('referrals');
 
-		$this->title=get_screen_title('REFERRALS');
-
 		$table=referrer_report_script(true);
 
 		$out=new ocp_tempcode();
@@ -105,11 +125,9 @@ class Module_admin_referrals
 	 */
 	function adjust()
 	{
-		$scheme=get_param('scheme');
-		$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
-		$scheme_title=$ini_file[$scheme]['title'];
-
-		$this->title=get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS',true,array(escape_html($scheme_title)));
+		$scheme=$this->scheme;
+		$ini_file=$this->ini_file;
+		$scheme_title=$this->scheme_title;
 
 		$member_id=get_param_integer('member_id');
 
@@ -141,11 +159,9 @@ class Module_admin_referrals
 	 */
 	function _adjust()
 	{
-		$scheme=get_param('scheme');
-		$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
-		$scheme_title=$ini_file[$scheme]['title'];
-
-		$this->title=get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS',true,array(escape_html($scheme_title)));
+		$scheme=$this->scheme;
+		$ini_file=$this->ini_file;
+		$scheme_title=$this->scheme_title;
 
 		$member_id=get_param_integer('member_id');
 

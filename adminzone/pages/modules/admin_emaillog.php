@@ -62,6 +62,8 @@ class Module_admin_emaillog
 	{
 		$type=get_param('type','misc');
 
+		require_lang('emaillog');
+
 		if ($type=='misc')
 		{
 			//set_helper_panel_pic('pagepics/email');	Actually, we need the space
@@ -95,8 +97,6 @@ class Module_admin_emaillog
 	function run()
 	{
 		$type=get_param('type','misc');
-
-		require_lang('emaillog');
 
 		if ($type=='misc') return $this->show();
 		if ($type=='edit') return $this->edit();

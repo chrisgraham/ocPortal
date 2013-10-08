@@ -100,6 +100,8 @@ class Module_cms_calendar extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('calendar');
+
 		inform_non_canonical_parameter('date');
 		inform_non_canonical_parameter('e_type');
 		inform_non_canonical_parameter('validated');
@@ -207,7 +209,6 @@ class Module_cms_calendar extends standard_crud_module
 
 		$this->posting_form_title=do_lang_tempcode('EVENT_TEXT');
 
-		require_lang('calendar');
 		require_lang('dates');
 		require_css('calendar');
 		require_code('calendar2');

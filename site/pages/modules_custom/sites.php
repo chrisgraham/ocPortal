@@ -127,6 +127,8 @@ class Module_sites
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocpcom');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('OC_DOWNLOAD_NOW');
@@ -163,7 +165,6 @@ class Module_sites
 	function run()
 	{
 		require_code('ocpcom');
-		require_lang('ocpcom');
 		require_lang('installer');
 		require_lang('search');
 		require_lang('downloads');

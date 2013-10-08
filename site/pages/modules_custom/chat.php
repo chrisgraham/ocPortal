@@ -37,7 +37,6 @@ class Mx_chat extends Module_chat
 		require_javascript('javascript_validation');
 
 		require_lang('comcode');
-		require_lang('chat');
 		require_code('chat');
 		require_css('chat');
 

@@ -62,6 +62,8 @@ class Module_admin_actionlog
 	{
 		$type=get_param('type','misc');
 
+		require_lang('actionlog');
+
 		if ($type=='misc')
 		{
 			set_helper_panel_pic('pagepics/actionlog');

@@ -73,6 +73,8 @@ class Module_cms_downloads extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('downloads');
+
 		inform_non_canonical_parameter('parent_id');
 		inform_non_canonical_parameter('validated');
 		inform_non_canonical_parameter('cat');
@@ -128,7 +130,6 @@ class Module_cms_downloads extends standard_crud_module
 
 		$GLOBALS['MODULE_CMS_DOWNLOADS']=$this;
 
-		require_lang('downloads');
 		require_code('downloads');
 		require_code('downloads2');
 		require_css('downloads');

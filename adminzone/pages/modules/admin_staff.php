@@ -85,6 +85,8 @@ class Module_admin_staff
 	{
 		$type=get_param('type','misc');
 
+		require_lang('staff');
+
 		set_helper_panel_pic('pagepics/staff');
 		set_helper_panel_tutorial('tut_staff');
 
@@ -108,8 +110,6 @@ class Module_admin_staff
 	 */
 	function run()
 	{
-		require_lang('staff');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->staff_interface();

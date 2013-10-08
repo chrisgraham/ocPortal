@@ -151,6 +151,8 @@ class Module_pointstore
 	{
 		$type=get_param('type','misc');
 
+		require_lang('pointstore');
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINT_STORE'))));
 
 		$this->title=get_screen_title('POINT_STORE');
@@ -166,7 +168,6 @@ class Module_pointstore
 	function run()
 	{
 		require_code('pointstore');
-		require_lang('pointstore');
 		require_lang('points');
 		require_code('points');
 		require_css('points');

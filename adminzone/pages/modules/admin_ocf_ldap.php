@@ -63,6 +63,8 @@ class Module_admin_ocf_ldap
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		set_helper_panel_pic('pagepics/ldap');
 		set_helper_panel_tutorial('tut_ldap');
 
@@ -87,8 +89,6 @@ class Module_admin_ocf_ldap
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');
 		require_code('ocf_groups_action2');
-
-		require_lang('ocf');
 
 		global $LDAP_CONNECTION;
 		if (is_null($LDAP_CONNECTION)) warn_exit(do_lang_tempcode('LDAP_DISABLED'));

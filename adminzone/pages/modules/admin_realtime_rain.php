@@ -62,6 +62,8 @@ class Module_admin_realtime_rain
 	{
 		$type=get_param('type','misc');
 
+		require_lang('realtime_rain');
+
 		$this->title=get_screen_title('REALTIME_RAIN');
 
 		return NULL;
@@ -77,7 +79,6 @@ class Module_admin_realtime_rain
 		require_javascript('javascript_realtime_rain');
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_more');
-		require_lang('realtime_rain');
 		require_css('realtime_rain');
 
 		if (!has_js())

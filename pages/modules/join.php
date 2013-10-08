@@ -62,6 +62,8 @@ class Module_join
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		$this->title=get_screen_title('__JOIN',true,array(escape_html(get_site_name())));
 
 		if ($type=='misc')

@@ -120,6 +120,8 @@ class Module_tester
 	{
 		$type=get_param('type','go');
 
+		require_lang('tester');
+
 		if ($type=='stats')
 		{
 			$this->title=get_screen_title('TEST_STATISTICS');
@@ -207,8 +209,8 @@ class Module_tester
 	 */
 	function run()
 	{
-		require_lang('tester');
 		require_css('tester');
+
 		check_privilege('perform_tests');
 
 		// Decide what we're doing

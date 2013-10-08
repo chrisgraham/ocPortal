@@ -65,6 +65,8 @@ class Module_contact_member
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		if ($type=='misc')
 		{
 			attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML

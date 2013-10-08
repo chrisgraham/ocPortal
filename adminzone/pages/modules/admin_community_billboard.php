@@ -105,6 +105,8 @@ class Module_admin_community_billboard extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('community_billboard');
+
 		set_helper_panel_pic('community_billboard');
 		set_helper_panel_tutorial('tut_points');
 
@@ -119,7 +121,6 @@ class Module_admin_community_billboard extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		require_lang('community_billboard');
 		require_code('community_billboard');
 
 		$this->add_one_label=do_lang_tempcode('ADD_COMMUNITY_BILLBOARD');

@@ -153,6 +153,8 @@ class Module_admin_ocgifts extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocgifts');
+
 		set_helper_panel_tutorial('tut_subcom');
 
 		if ($type=='view')
@@ -191,7 +193,6 @@ class Module_admin_ocgifts extends standard_crud_module
 	function misc()
 	{
 		require_code('templates_donext');
-		require_lang('ocgifts');
 
 		return do_next_manager(get_screen_title('OCGIFTS_TITLE'),comcode_lang_string('DOC_OCGIFTS'),
 			array(

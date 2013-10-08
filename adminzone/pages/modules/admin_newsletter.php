@@ -56,6 +56,8 @@ class Module_admin_newsletter extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('newsletter');
+
 		set_helper_panel_tutorial('tut_newsletter');
 		if ($type=='whatsnew')
 		{
@@ -137,7 +139,6 @@ class Module_admin_newsletter extends standard_crud_module
 	{
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
-		require_lang('newsletter');
 		require_code('newsletter');
 		require_css('newsletter');
 

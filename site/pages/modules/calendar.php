@@ -386,6 +386,8 @@ class Module_calendar
 	{
 		$type=get_param('type','misc');
 
+		require_lang('calendar');
+
 		set_feed_url('?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 
 		inform_non_canonical_parameter('#^int_.*$#');
@@ -505,7 +507,6 @@ class Module_calendar
 	 */
 	function run()
 	{
-		require_lang('calendar');
 		require_lang('dates');
 		require_code('calendar');
 		require_css('calendar');

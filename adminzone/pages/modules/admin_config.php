@@ -83,6 +83,8 @@ class Module_admin_config
 	{
 		$type=get_param('type','misc');
 
+		require_lang('config');
+
 		if ($type=='misc')
 		{
 			set_helper_panel_pic('pagepics/config');

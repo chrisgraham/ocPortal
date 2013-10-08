@@ -91,6 +91,10 @@ class Module_admin_ocpusers
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocpcom');
+
+		$this->title=get_screen_title('OC_SITES_INSTALLED');
+
 		return NULL;
 	}
 
@@ -101,7 +105,6 @@ class Module_admin_ocpusers
 	 */
 	function run()
 	{
-		require_lang('ocpcom');
 		require_code('ocpcom');
 		require_code('form_templates');
 
@@ -116,8 +119,6 @@ class Module_admin_ocpusers
 	 */
 	function users()
 	{
-		$this->title=get_screen_title('OC_SITES_INSTALLED');
-
 		$sortby=get_param('sortby','');
 
 		$nameord='';

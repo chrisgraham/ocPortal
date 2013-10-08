@@ -56,6 +56,8 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		set_helper_panel_pic('pagepics/emoticons');
 		set_helper_panel_tutorial('tut_emoticons');
 

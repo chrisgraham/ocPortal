@@ -53,6 +53,8 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		set_helper_panel_pic('pagepics/customprofilefields');
 		set_helper_panel_tutorial('tut_adv_members');
 
@@ -93,7 +95,6 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
 		require_lang('fields');
-		require_lang('ocf');
 
 		$this->add_one_label=do_lang_tempcode('ADD_CUSTOM_PROFILE_FIELD');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_CUSTOM_PROFILE_FIELD');

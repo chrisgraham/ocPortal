@@ -77,6 +77,8 @@ class Module_topicview
 
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		$id=get_param_integer('id',NULL);
 		if ((is_guest()) && (is_null($id))) access_denied('NOT_AS_GUEST');
 

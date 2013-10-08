@@ -101,6 +101,8 @@ class Module_admin_aggregate_types extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('aggregate_types');
+
 		set_helper_panel_tutorial('tut_aggregate_types');
 		set_helper_panel_text(comcode_lang_string('DOC_AGGREGATE_TYPES'));
 

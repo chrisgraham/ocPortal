@@ -62,6 +62,8 @@ class Module_leader_board
 	{
 		$type=get_param('type','misc');
 
+		require_lang('leader_board');
+
 		$this->title=get_screen_title('POINT_LEADERBOARD');
 
 		return NULL;
@@ -74,7 +76,6 @@ class Module_leader_board
 	 */
 	function run()
 	{
-		require_lang('leader_board');
 		require_code('points');
 		require_css('points');
 

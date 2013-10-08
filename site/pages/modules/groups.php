@@ -132,6 +132,8 @@ class Module_groups
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('USERGROUPS');

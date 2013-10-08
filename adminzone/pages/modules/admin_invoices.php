@@ -62,6 +62,8 @@ class Module_admin_invoices
 	{
 		$type=get_param('type','ad');
 
+		require_lang('ecommerce');
+
 		set_helper_panel_pic('pagepics/invoices');
 		set_helper_panel_tutorial('tut_ecommerce');
 
@@ -132,7 +134,6 @@ class Module_admin_invoices
 	 */
 	function run()
 	{
-		require_lang('ecommerce');
 		require_code('ecommerce');
 
 		$type=get_param('type','ad');

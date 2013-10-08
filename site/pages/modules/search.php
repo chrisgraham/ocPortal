@@ -255,6 +255,8 @@ class Module_search
 	{
 		$type=get_param('type','misc');
 
+		require_lang('search');
+
 		if ($type=='my')
 		{
 			$this->title=get_screen_title('SAVED_SEARCHES');
@@ -319,7 +321,6 @@ class Module_search
 	 */
 	function run()
 	{
-		require_lang('search');
 		require_css('search');
 		require_css('forms');
 		require_code('database_search');

@@ -84,6 +84,8 @@ class Module_admin_notifications
 	{
 		$type=get_param('type','misc');
 
+		require_lang('notifications');
+
 		$this->title=get_screen_title('NOTIFICATIONS_LOCKDOWN');
 
 		return NULL;
@@ -96,8 +98,6 @@ class Module_admin_notifications
 	 */
 	function run()
 	{
-		require_lang('notifications');
-
 		require_css('notifications');
 		require_javascript('javascript_notifications');
 		require_code('notifications');

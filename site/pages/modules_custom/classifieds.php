@@ -108,6 +108,8 @@ class Module_classifieds
 	{
 		$type=get_param('type','adverts');
 
+		require_lang('classifieds');
+
 		$member_id=get_param_integer('member_id',get_member());
 		$this->title=get_screen_title(($member_id==get_member())?'CLASSIFIED_ADVERTS':'_CLASSIFIED_ADVERTS',true,array($GLOBALS['FORUM_DRIVER']->get_username($member_id,true)));
 
@@ -135,7 +137,6 @@ class Module_classifieds
 	 */
 	function adverts()
 	{
-		require_lang('classifieds');
 		require_code('catalogues');
 		require_code('ecommerce');
 

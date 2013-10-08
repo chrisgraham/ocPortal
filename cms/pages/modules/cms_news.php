@@ -101,6 +101,8 @@ class Module_cms_news extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('news');
+
 		inform_non_canonical_parameter('cat');
 
 		set_helper_panel_pic('pagepics/news');

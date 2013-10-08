@@ -204,6 +204,8 @@ class Module_shopping
 	{
 		$type=get_param('type','misc');
 
+		require_lang('shopping');
+
 		if ($type=='misc')
 		{
 			breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES'))));
@@ -258,7 +260,6 @@ class Module_shopping
 	{	
 		@ignore_user_abort(true); // Must keep going till completion
 
-		require_lang('shopping');
 		require_lang('catalogues');
 		require_code('shopping');
 		require_code('feedback');

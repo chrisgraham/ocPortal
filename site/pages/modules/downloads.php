@@ -325,6 +325,8 @@ class Module_downloads
 	{
 		$type=get_param('type','misc');
 
+		require_lang('downloads');
+
 		set_feed_url('?mode=downloads&filter=');
 
 		if ($type=='index' || $type=='tree_view')

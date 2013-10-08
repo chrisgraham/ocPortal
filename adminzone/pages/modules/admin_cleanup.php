@@ -63,6 +63,8 @@ class Module_admin_cleanup
 	{
 		$type=get_param('type','misc');
 
+		require_lang('cleanup');
+
 		set_helper_panel_pic('pagepics/cleanup');
 		set_helper_panel_tutorial('tut_cleanup');
 
@@ -84,7 +86,6 @@ class Module_admin_cleanup
 	 */
 	function run()
 	{
-		require_lang('cleanup');
 		require_code('caches3');
 
 		// Decide what we're doing

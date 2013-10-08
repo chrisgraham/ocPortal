@@ -73,6 +73,8 @@ class Module_cms_quiz extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('quiz');
+
 		inform_non_canonical_parameter('validated');
 
 		set_helper_panel_pic('pagepics/quiz');

@@ -62,6 +62,8 @@ class Module_admin_tickets
 	{
 		$type=get_param('type','misc');
 
+		require_lang('tickets');
+
 		set_helper_panel_pic('pagepics/tickets');
 		set_helper_panel_tutorial('tut_support_desk');
 
@@ -103,7 +105,6 @@ class Module_admin_tickets
 	 */
 	function run()
 	{
-		require_lang('tickets');
 		require_css('tickets');
 		require_code('tickets');
 		require_code('tickets2');

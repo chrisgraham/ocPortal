@@ -87,6 +87,8 @@ class Module_bookmarks
 	{
 		$type=get_param('type','misc');
 
+		require_lang('bookmarks');
+
 		if ($type=='misc' || $type=='_manage')
 		{
 			$this->title=get_screen_title('MANAGE_BOOKMARKS');
@@ -112,7 +114,6 @@ class Module_bookmarks
 	 */
 	function run()
 	{
-		require_lang('bookmarks');
 		require_code('bookmarks');
 		require_css('bookmarks');
 

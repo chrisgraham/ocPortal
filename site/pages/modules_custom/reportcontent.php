@@ -88,6 +88,8 @@ class Module_reportcontent
 	{
 		$type=get_param('type','misc');
 
+		require_lang('reportcontent');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('REPORT_CONTENT');
@@ -108,7 +110,6 @@ class Module_reportcontent
 	 */
 	function run()
 	{
-		require_lang('reportcontent');
 		require_lang('ocf');
 
 		// Decide what we're doing

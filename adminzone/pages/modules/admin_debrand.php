@@ -62,6 +62,8 @@ class Module_admin_debrand
 	{
 		$type=get_param('type','misc');
 
+		require_lang('debrand');
+
 		set_helper_panel_pic('pagepics/debrand');
 		set_helper_panel_text(comcode_lang_string('DOC_SUPERDEBRAND'));
 
@@ -79,7 +81,6 @@ class Module_admin_debrand
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		require_lang('debrand');
 		require_lang('config');
 
 		$type=get_param('type','misc');

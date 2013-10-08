@@ -100,6 +100,8 @@ class Module_admin_wordfilter
 	{
 		$type=get_param('type','misc');
 
+		require_lang('wordfilter');
+
 		set_helper_panel_pic('pagepics/wordfilter');
 		set_helper_panel_tutorial('tut_censor');
 
@@ -128,8 +130,6 @@ class Module_admin_wordfilter
 	 */
 	function run()
 	{
-		require_lang('wordfilter');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->word_filter_interface();

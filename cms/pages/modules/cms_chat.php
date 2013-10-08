@@ -75,6 +75,8 @@ class Module_cms_chat
 	{
 		$type=get_param('type','misc');
 
+		require_lang('chat');
+
 		set_helper_panel_pic('pagepics/forums');
 		set_helper_panel_tutorial('tut_chat');
 
@@ -192,7 +194,6 @@ class Module_cms_chat
 	 */
 	function run()
 	{
-		require_lang('chat');
 		require_code('chat');
 		require_code('chat2');
 		require_css('chat');

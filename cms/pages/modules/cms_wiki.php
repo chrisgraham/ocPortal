@@ -78,6 +78,8 @@ class Module_cms_wiki
 	{
 		$type=get_param('type','misc');
 
+		require_lang('wiki');
+
 		set_helper_panel_pic('pagepics/wiki');
 		set_helper_panel_tutorial('tut_wiki');
 
@@ -152,7 +154,6 @@ class Module_cms_wiki
 		$type=get_param('type','misc');
 
 		require_code('wiki');
-		require_lang('wiki');
 		require_css('wiki');
 
 		// Decide what to do

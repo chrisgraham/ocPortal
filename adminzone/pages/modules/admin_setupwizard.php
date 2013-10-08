@@ -62,6 +62,8 @@ class Module_admin_setupwizard
 	{
 		$type=get_param('type','misc');
 
+		require_lang('config');
+
 		set_helper_panel_pic('pagepics/configwizard');
 		set_helper_panel_tutorial('tut_configuration');
 
@@ -88,8 +90,6 @@ class Module_admin_setupwizard
 	function run()
 	{
 		$type=get_param('type','misc');
-
-		require_lang('config');
 
 		if ($type=='misc') return $this->step1();
 		if ($type=='step2') return $this->step2();

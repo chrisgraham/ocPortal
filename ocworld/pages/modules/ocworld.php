@@ -291,6 +291,8 @@ class Module_ocworld
 	{
 		$type=get_param('type','room');
 
+		require_lang('ocworld');
+
 		if ($type=='confirm')
 		{
 			$this->title=get_screen_title('W_CONFIRM_TITLE');

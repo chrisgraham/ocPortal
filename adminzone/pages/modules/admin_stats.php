@@ -148,6 +148,8 @@ class Module_admin_stats
 	{
 		$type=get_param('type','misc');
 
+		require_lang('stats');
+
 		if ($type!='misc' && $type!='_clear')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
@@ -247,7 +249,6 @@ class Module_admin_stats
 	{
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*intval(get_option('stats_store_time'))));
 
-		require_lang('stats');
 		require_code('svg');
 		require_css('stats');
 

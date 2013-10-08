@@ -208,6 +208,8 @@ class Module_banners
 	{
 		$type=get_param('type','misc');
 
+		require_lang('banners');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('BANNERS');
@@ -258,7 +260,6 @@ class Module_banners
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		require_code('banners');
-		require_lang('banners');
 
 		// Decide what we're doing
 		$type=get_param('type','misc');

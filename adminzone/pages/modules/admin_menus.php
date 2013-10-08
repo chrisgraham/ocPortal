@@ -141,6 +141,8 @@ class Module_admin_menus
 	{
 		$type=get_param('type','misc');
 
+		require_lang('menus');
+
 		if ($type=='misc')
 		{
 			set_helper_panel_pic('pagepics/menus');
@@ -176,7 +178,6 @@ class Module_admin_menus
 		require_javascript('javascript_ajax');
 
 		require_code('menus');
-		require_lang('menus');
 		require_code('menus2');
 
 		require_css('menu_editor');

@@ -190,6 +190,8 @@ class Module_booking
 	{
 		$type=get_param('type','misc');
 
+		require_lang('booking');
+
 		if ($type=='choose_bookables_and_dates')
 		{
 			$this->title=get_screen_title('CREATE_BOOKING');
@@ -220,7 +222,6 @@ class Module_booking
 	 */
 	function run()
 	{
-		require_lang('booking');
 		require_code('booking');
 		require_code('ocf_join');
 		require_javascript('javascript_booking');

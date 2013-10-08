@@ -221,6 +221,8 @@ class Module_polls
 	{
 		$type=get_param('type','misc');
 
+		require_lang('polls');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('POLL_ARCHIVE');
@@ -276,7 +278,6 @@ class Module_polls
 	{
 		require_code('feedback');
 		require_code('polls');
-		require_lang('polls');
 		require_css('polls');
 
 		// What are we doing?

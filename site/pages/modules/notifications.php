@@ -66,6 +66,8 @@ class Module_notifications
 	{
 		$type=get_param('type','misc');
 
+		require_lang('notifications');
+
 		if ($type=='view')
 		{
 			$id=get_param_integer('id');
@@ -93,7 +95,6 @@ class Module_notifications
 	 */
 	function run()
 	{
-		require_lang('notifications');
 		require_code('notifications2');
 
 		$type=get_param('type','misc');

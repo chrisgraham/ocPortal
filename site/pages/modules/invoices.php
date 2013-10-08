@@ -90,6 +90,8 @@ class Module_invoices
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ecommerce');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('MY_INVOICES');
@@ -110,7 +112,6 @@ class Module_invoices
 	 */
 	function run()
 	{
-		require_lang('ecommerce');
 		require_code('ecommerce');
 		require_css('ecommerce');
 

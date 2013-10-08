@@ -52,6 +52,8 @@ class Module_lost_password
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		if ($type=='misc')
 		{
 			breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));

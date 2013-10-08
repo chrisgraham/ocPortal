@@ -124,6 +124,8 @@ class Module_admin_import
 	{
 		$type=get_param('type','misc');
 
+		require_lang('import');
+
 		set_helper_panel_pic('pagepics/importdata');
 		set_helper_panel_tutorial('tut_importer');
 

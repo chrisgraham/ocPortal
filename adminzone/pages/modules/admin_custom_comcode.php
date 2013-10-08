@@ -135,6 +135,8 @@ class Module_admin_custom_comcode extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('custom_comcode');
+
 		set_helper_panel_pic('pagepics/customcomcode');
 		set_helper_panel_tutorial('tut_adv_comcode');
 

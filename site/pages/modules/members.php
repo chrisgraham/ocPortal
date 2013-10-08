@@ -101,6 +101,8 @@ class Module_members
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		if ($type=='misc')
 		{
 			inform_non_canonical_parameter('md_sort');

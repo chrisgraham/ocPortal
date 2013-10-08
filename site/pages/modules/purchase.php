@@ -139,6 +139,8 @@ class Module_purchase
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ecommerce');
+
 		$this->title=get_screen_title('PURCHASING_TITLE',true,array(do_lang_tempcode('PURCHASE_STAGE_'.$type)));
 
 		if ($type=='misc')
@@ -161,7 +163,6 @@ class Module_purchase
 	{
 		@ignore_user_abort(true); // Must keep going till completion
 
-		require_lang('ecommerce');
 		require_code('ecommerce');
 		require_lang('config');
 		require_css('ecommerce');

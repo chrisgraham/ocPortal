@@ -88,6 +88,8 @@ class Module_admin_backup
 	{
 		$type=get_param('type','misc');
 
+		require_lang('backups');
+
 		set_helper_panel_pic('pagepics/backups');
 		set_helper_panel_tutorial('tut_backup');
 		set_helper_panel_text(comcode_lang_string('DOC_BACKUPS_2'));
@@ -124,8 +126,6 @@ class Module_admin_backup
 	 */
 	function run()
 	{
-		require_lang('backups');
-
 		require_code('files');
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));

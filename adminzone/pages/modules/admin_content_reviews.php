@@ -96,6 +96,8 @@ class Module_admin_content_reviews
 	{
 		$type=get_param('type','misc');
 
+		require_lang('content_reviews');
+
 		set_helper_panel_pic('pagepics/unvalidated');
 		set_helper_panel_text(comcode_lang_string('DOC_CONTENT_REVIEWS'));
 
@@ -109,8 +111,6 @@ class Module_admin_content_reviews
 	 */
 	function run()
 	{
-		require_lang('content_reviews');
-
 		$_title=get_screen_title('_CONTENT_NEEDING_REVIEWING');
 
 		require_code('content');

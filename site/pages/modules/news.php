@@ -306,6 +306,8 @@ class Module_news
 	{
 		$type=get_param('type','misc');
 
+		require_lang('news');
+
 		inform_non_canonical_parameter('filter');
 		inform_non_canonical_parameter('filter_and');
 		inform_non_canonical_parameter('blog');
@@ -515,7 +517,6 @@ class Module_news
 	 */
 	function run()
 	{
-		require_lang('news');
 		require_code('feedback');
 		require_code('news');
 		require_css('news');

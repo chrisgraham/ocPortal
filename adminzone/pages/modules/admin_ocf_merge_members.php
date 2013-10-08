@@ -62,6 +62,8 @@ class Module_admin_ocf_merge_members
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		if ($type=='misc')
 		{
 			inform_non_canonical_parameter('from');

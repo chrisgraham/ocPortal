@@ -681,6 +681,8 @@ class Module_catalogues
 	{
 		$type=get_param('type','misc');
 
+		require_lang('catalogues');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('CATALOGUES');
@@ -915,7 +917,6 @@ class Module_catalogues
 	 */
 	function run()
 	{
-		require_lang('catalogues');
 		require_code('catalogues');
 		require_css('catalogues');
 

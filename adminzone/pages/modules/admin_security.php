@@ -115,6 +115,8 @@ class Module_admin_security
 	{
 		$type=get_param('type','misc');
 
+		require_lang('security');
+
 		set_helper_panel_pic('pagepics/securitylog');
 		set_helper_panel_tutorial('tut_security');
 
@@ -158,7 +160,6 @@ class Module_admin_security
 	 */
 	function run()
 	{
-		require_lang('security');
 		require_code('lookup');
 		require_all_lang();
 

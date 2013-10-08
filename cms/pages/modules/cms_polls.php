@@ -49,6 +49,8 @@ class Module_cms_polls extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('polls');
+
 		set_helper_panel_pic('pagepics/polls');
 		set_helper_panel_tutorial('tut_feedback');
 
@@ -65,7 +67,6 @@ class Module_cms_polls extends standard_crud_module
 	{
 		require_code('polls');
 		require_code('polls2');
-		require_lang('polls');
 		require_css('polls');
 
 		$this->add_one_label=do_lang_tempcode('ADD_POLL');

@@ -137,6 +137,8 @@ class Module_admin_workflow extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		require_lang('workflows');
+
 		// TODO: Add pic & tutorial
 		//set_helper_panel_pic('pagepics/workflow');
 		//set_helper_panel_tutorial('tut_workflow');
@@ -152,7 +154,6 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		require_lang('workflows');
 		require_code('workflows');
 
 		if ($type=='misc') return $this->misc();

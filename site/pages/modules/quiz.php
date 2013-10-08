@@ -240,6 +240,8 @@ class Module_quiz
 	{
 		$type=get_param('type','misc');
 
+		require_lang('quiz');
+
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('QUIZZES');
@@ -329,8 +331,6 @@ class Module_quiz
 	 */
 	function run()
 	{
-		require_lang('quiz');
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->archive();

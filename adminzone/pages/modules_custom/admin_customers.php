@@ -664,6 +664,10 @@ class Module_admin_customers
 	{
 		$type=get_param('type','misc');
 
+		require_lang('customers');
+
+		$this->title=get_screen_title('CHARGE_CUSTOMER');
+
 		return NULL;
 	}
 
@@ -674,8 +678,6 @@ class Module_admin_customers
 	 */
 	function run()
 	{
-		require_lang('customers');
-
 		$type=get_param('type','misc');
 
 		if ($type=='charge') return $this->charge();
@@ -692,8 +694,6 @@ class Module_admin_customers
 	 */
 	function charge()
 	{
-		$this->title=get_screen_title('CHARGE_CUSTOMER');
-
 		require_code('form_templates');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_charge'),'_SELF');
@@ -745,8 +745,6 @@ class Module_admin_customers
 	 */
 	function _charge()
 	{
-		$this->title=get_screen_title('CHARGE_CUSTOMER');
-
 		$username=post_param('member_username');
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 		$amount=post_param_integer('amount');

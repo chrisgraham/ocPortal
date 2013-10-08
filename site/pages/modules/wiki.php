@@ -339,6 +339,8 @@ class Module_wiki
 	{
 		$type=get_param('type','misc');
 
+		require_lang('wiki');
+
 		set_feed_url('?mode=wiki&filter=');
 
 		if ($type=='misc')
@@ -494,7 +496,6 @@ class Module_wiki
 		$type=get_param('type','misc');
 
 		require_code('wiki');
-		require_lang('wiki');
 		require_css('wiki');
 
 		// Decide what to do

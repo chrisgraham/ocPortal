@@ -62,6 +62,8 @@ class Module_online_members
 	{
 		$type=get_param('type','misc');
 
+		require_lang('ocf');
+
 		$this->title=get_screen_title('USERS_ONLINE');
 
 		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML

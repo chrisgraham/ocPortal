@@ -73,6 +73,8 @@ class Module_cms_authors
 	{
 		$type=get_param('type','misc');
 
+		require_lang('authors');
+
 		if ($type=='_ad')
 		{
 			inform_non_canonical_parameter('author');
@@ -126,7 +128,6 @@ class Module_cms_authors
 	function run()
 	{
 		require_code('authors');
-		require_lang('authors');
 
 		// Decide what we're doing
 		$type=get_param('type','misc');

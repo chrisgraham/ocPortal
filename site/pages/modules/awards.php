@@ -66,6 +66,8 @@ class Module_awards
 	{
 		$type=get_param('type','misc');
 
+		require_lang('awards');
+
 		if ($type=='misc')
 		{
 			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
@@ -110,7 +112,6 @@ class Module_awards
 	function run()
 	{
 		require_code('awards');
-		require_lang('awards');
 
 		// What are we doing?
 		$type=get_param('type','misc');
