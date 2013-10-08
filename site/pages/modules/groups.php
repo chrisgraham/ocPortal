@@ -121,6 +121,7 @@ class Module_groups
 	var $id;
 	var $group;
 	var $group_name;
+	var $club;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -148,6 +149,7 @@ class Module_groups
 			$group=$groups[0];
 
 			$group_name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
+			$club=($group['g_is_private_club']==1);
 
 			breadcrumb_set_self(make_string_tempcode($group_name));
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USERGROUPS'))));
@@ -169,6 +171,7 @@ class Module_groups
 			$this->id=$id;
 			$this->group=$group;
 			$this->group_name=$group_name;
+			$this->club=$club;
 		}
 
 		if ($type=='resign')
@@ -443,8 +446,7 @@ class Module_groups
 		$id=$this->id;
 		$group=$this->group;
 		$group_name=$this->group_name;
-
-		$club=($group['g_is_private_club']==1);
+		$club=$this->club;
 
 		// Leadership
 		if ((!is_null($group['g_group_leader'])) && (!is_null($GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']))))

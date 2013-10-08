@@ -42,6 +42,7 @@ class Module_admin_quiz
 	}
 
 	var $title;
+	var $row;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -91,8 +92,15 @@ class Module_admin_quiz
 
 		if ($type=='__survey_results')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:_survey_results:id='.strval($quiz_id),do_lang_tempcode('SURVEY_RESULTS'))));
+			$id=get_param_integer('id'); // entry ID
+			$rows=$GLOBALS['SITE_DB']->query_select('quiz_entries',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$row=$rows[0];
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:_survey_results:id='.strval($row['q_quiz']),do_lang_tempcode('SURVEY_RESULTS'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
+
+			$this->row=$row;
 		}
 
 		if ($type=='export_quiz')
@@ -454,12 +462,12 @@ class Module_admin_quiz
 
 		$fields=new ocp_tempcode();
 
-		$rows=$GLOBALS['SITE_DB']->query_select('quiz_entries',array('q_time','q_member'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$member_id=$rows[0]['q_member'];
+		$row=$this->row;
+
+		$member_id=$row['q_member'];
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
-		$date=get_timezoned_date($rows[0]['q_time']);
+		$date=get_timezoned_date($row['q_time']);
 
 		$question_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions q LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'quiz_entry_answer a ON q.id=a.q_question',array('q.id','q_question_text','q_answer','q_quiz'),array('q_entry'=>$id),'ORDER BY q.id');
 		foreach ($question_rows as $q)

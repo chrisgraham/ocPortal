@@ -145,6 +145,7 @@ class Module_admin_import
 
 		if ($type=='hook')
 		{
+			$importer=filter_naughty(get_param('importer'));
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session:importer='.$importer,do_lang_tempcode('IMPORT_SESSION'))));
 		}
 

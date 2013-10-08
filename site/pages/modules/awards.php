@@ -54,7 +54,7 @@ class Module_awards
 	var $title;
 	var $id;
 	var $award_type_row;
-	var $object;
+	var $ob;
 	var $info;
 
 	/**
@@ -82,15 +82,15 @@ class Module_awards
 			if (!array_key_exists(0,$_award_type_row)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$award_type_row=$_award_type_row[0];
 			require_code('content');
-			$object=get_content_object($award_type_row['a_content_type']);
-			$info=$object->info();
+			$ob=get_content_object($award_type_row['a_content_type']);
+			$info=$ob->info();
 			if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 			$this->title=get_screen_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
 
 			$this->id=$id;
 			$this->award_type_row=$award_type_row;
-			$this->object=$object;
+			$this->ob=$ob;
 			$this->info=$info;
 		}
 
@@ -137,8 +137,8 @@ class Module_awards
 				continue;
 
 			require_code('content');
-			$object=get_content_object($myrow['a_content_type']);
-			$info=$object->info();
+			$ob=get_content_object($myrow['a_content_type']);
+			$info=$ob->info();
 			if (!is_null($info))
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'award','id'=>$myrow['id']),'_SELF');
@@ -172,8 +172,8 @@ class Module_awards
 		foreach ($award_types as $award_type_row)
 		{
 			require_code('content');
-			$object=get_content_object($award_type_row['a_content_type']);
-			$info=$object->info();
+			$ob=get_content_object($award_type_row['a_content_type']);
+			$info=$ob->info();
 			if (is_null($info)) continue;
 
 			$_title=get_translated_text($award_type_row['a_title']);
@@ -186,7 +186,7 @@ class Module_awards
 
 				if (!is_null($award_content_row))
 				{
-					$rendered_content=$object->run($award_content_row,'_SEARCH',false,true);
+					$rendered_content=$ob->run($award_content_row,'_SEARCH',false,true);
 
 					if (($award_type_row['a_hide_awardee']==1) || (is_guest($myrow['member_id'])))
 					{
@@ -228,7 +228,7 @@ class Module_awards
 	{
 		$id=$this->id;
 		$award_type_row=$this->award_type_row;
-		$object=$this->object;
+		$ob=$this->ob;
 		$info=$this->info;
 
 		$start=get_param_integer('award_start',0);
@@ -248,7 +248,7 @@ class Module_awards
 
 			if (!is_null($award_content_row))
 			{
-				$rendered_content=$object->run($award_content_row,'_SEARCH',false,true);
+				$rendered_content=$ob->run($award_content_row,'_SEARCH',false,true);
 
 				if (($award_type_row['a_hide_awardee']==1) || (is_guest($myrow['member_id'])))
 				{

@@ -149,12 +149,12 @@ class Module_search
 			foreach (array_keys($_hooks) as $hook)
 			{
 				require_code('hooks/modules/search/'.filter_naughty_harsh($hook));
-				$object=object_factory('Hook_search_'.filter_naughty_harsh($hook),true);
-				if (is_null($object)) continue;
-				$info=$object->info();
+				$ob=object_factory('Hook_search_'.filter_naughty_harsh($hook),true);
+				if (is_null($ob)) continue;
+				$info=$ob->info();
 				if (is_null($info)) continue;
 
-				if (($hook=='catalogue_entries') || (array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (method_exists($object,'get_tree')) || (method_exists($object,'ajax_tree')))
+				if (($hook=='catalogue_entries') || (array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (method_exists($ob,'get_tree')) || (method_exists($ob,'ajax_tree')))
 				{
 					$kids=array();
 					if (($hook=='catalogue_entries') && ($max_depth>1))
@@ -243,7 +243,7 @@ class Module_search
 	}
 
 	var $title;
-	var $object;
+	var $ob;
 	var $info;
 
 	/**
@@ -283,8 +283,8 @@ class Module_search
 			if ($id!='') // Specific screen, prepare
 			{
 				require_code('hooks/modules/search/'.filter_naughty_harsh($id),true);
-				$object=object_factory('Hook_search_'.filter_naughty_harsh($id));
-				$info=$object->info();
+				$ob=object_factory('Hook_search_'.filter_naughty_harsh($id));
+				$info=$ob->info();
 
 				if (!is_null($info))
 					$this->title=get_screen_title('_SEARCH_TITLE',true,array($info['lang']));
@@ -292,7 +292,7 @@ class Module_search
 				breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('SEARCH_FOR'))));
 				breadcrumb_set_self($info['lang']);
 
-				$this->object=$object;
+				$this->ob=$ob;
 				$this->info=$info;
 			}
 		}
@@ -415,11 +415,11 @@ class Module_search
 
 		if ($id!='') // Specific screen, prepare
 		{
-			$object=$this->object;
+			$ob=$this->ob;
 			$info=$this->info;
 
 			$under=get_param('search_under','!',true);
-			if ((!is_null($info)) && (method_exists($object,'get_tree'))) $object->get_tree($under);
+			if ((!is_null($info)) && (method_exists($ob,'get_tree'))) $ob->get_tree($under);
 		}
 
 		require_javascript('javascript_ajax');
@@ -442,8 +442,8 @@ class Module_search
 			$url=build_url($url_map,'_SELF',NULL,false,true);
 
 			require_code('hooks/modules/search/'.filter_naughty_harsh($id),true);
-			$object=object_factory('Hook_search_'.filter_naughty_harsh($id));
-			$info=$object->info();
+			$ob=object_factory('Hook_search_'.filter_naughty_harsh($id));
+			$info=$ob->info();
 			if (is_null($info)) warn_exit(do_lang_tempcode('SEARCH_HOOK_NOT_AVAILABLE'));
 
 			if (array_key_exists('user_label',$info)) $user_label=$info['user_label'];
@@ -452,19 +452,19 @@ class Module_search
 			$extra_sort_fields=array_key_exists('extra_sort_fields',$info)?$info['extra_sort_fields']:array();
 
 			$under=NULL;
-			if (method_exists($object,'ajax_tree'))
+			if (method_exists($ob,'ajax_tree'))
 			{
 				require_javascript('javascript_tree_list');
 				require_javascript('javascript_more');
 				$ajax=true;
 				$under=get_param('search_under','',true);
-				$ajax_tree=$object->ajax_tree();
+				$ajax_tree=$ob->ajax_tree();
 				if (is_object($ajax_tree)) return $ajax_tree;
 				list($ajax_hook,$ajax_options)=$ajax_tree;
 
 				require_code('hooks/systems/ajax_tree/'.$ajax_hook);
-				$tree_hook_object=object_factory('Hook_'.$ajax_hook);
-				$simple_content=$tree_hook_object->simple(NULL,$ajax_options,preg_replace('#,.*$#','',$under));
+				$tree_hook_ob=object_factory('Hook_'.$ajax_hook);
+				$simple_content=$tree_hook_ob->simple(NULL,$ajax_options,preg_replace('#,.*$#','',$under));
 
 				$nice_label=$under;
 				if (!is_null($under))
@@ -497,10 +497,10 @@ class Module_search
 			{
 				$ajax=false;
 				$tree=form_input_list_entry('!',false,do_lang_tempcode('NA_EM'));
-				if (method_exists($object,'get_tree'))
+				if (method_exists($ob,'get_tree'))
 				{
 					$under=get_param('search_under','!',true);
-					$tree->attach($object->get_tree($under));
+					$tree->attach($ob->get_tree($under));
 				}
 			}
 
@@ -511,9 +511,9 @@ class Module_search
 			if (array_key_exists('special_off',$info))
 				foreach ($info['special_off'] as $name=>$display)
 					$options->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array('_GUID'=>'2223ada7636c85e6879feb9a6f6885d2','CHECKED'=>(get_param_integer('option_'.$id.'_'.$name,0)==1),'NAME'=>'option_'.$id.'_'.$name,'DISPLAY'=>$display)));
-			if (method_exists($object,'get_fields'))
+			if (method_exists($ob,'get_fields'))
 			{
-				$fields=$object->get_fields();
+				$fields=$ob->get_fields();
 				foreach ($fields as $field)
 				{
 					$options->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION'.$field['TYPE'],array('_GUID'=>'a223ada7636c85e6879feb9a6f6885d2','NAME'=>'option_'.$field['NAME'],'DISPLAY'=>$field['DISPLAY'],'SPECIAL'=>$field['SPECIAL'],'CHECKED'=>array_key_exists('checked',$field)?$field['CHECKED']:false)));
@@ -537,16 +537,16 @@ class Module_search
 			foreach (array_keys($_hooks) as $hook)
 			{
 				require_code('hooks/modules/search/'.filter_naughty_harsh($hook));
-				$object=object_factory('Hook_search_'.filter_naughty_harsh($hook),true);
-				if (is_null($object)) continue;
-				$info=$object->info();
+				$ob=object_factory('Hook_search_'.filter_naughty_harsh($hook),true);
+				if (is_null($ob)) continue;
+				$info=$ob->info();
 				if (is_null($info)) continue;
 
 				$is_default_or_advanced=(($info['default']) && ($id=='')) || ($hook==$id);
 
 				$checked=(get_param_integer('search_'.$hook,((is_null($content)) || (get_param_integer('all_defaults',0)==1))?($is_default_or_advanced?1:0):0)==1);
 
-				$options_url=((array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (array_key_exists('extra_sort_fields',$info)) || (method_exists($object,'get_fields')) || (method_exists($object,'get_tree')) || (method_exists($object,'get_ajax_tree')))?build_url(array('page'=>'_SELF','id'=>$hook),'_SELF',NULL,false,true):new ocp_tempcode();
+				$options_url=((array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (array_key_exists('extra_sort_fields',$info)) || (method_exists($ob,'get_fields')) || (method_exists($ob,'get_tree')) || (method_exists($ob,'get_ajax_tree')))?build_url(array('page'=>'_SELF','id'=>$hook),'_SELF',NULL,false,true):new ocp_tempcode();
 
 				$_search_domains[]=array('_GUID'=>'3d3099872184923aec0f49388f52c750','ADVANCED_ONLY'=>(array_key_exists('advanced_only',$info)) && ($info['advanced_only']),'CHECKED'=>$checked,'OPTIONS_URL'=>$options_url,'LANG'=>$info['lang'],'NAME'=>$hook);
 			}
@@ -710,9 +710,9 @@ class Module_search
 		foreach (array_keys($_hooks) as $hook)
 		{
 			require_code('hooks/modules/search/'.filter_naughty_harsh($hook));
-			$object=object_factory('Hook_search_'.filter_naughty_harsh($hook),true);
-			if (is_null($object)) continue;
-			$info=$object->info();
+			$ob=object_factory('Hook_search_'.filter_naughty_harsh($hook),true);
+			if (is_null($ob)) continue;
+			$info=$ob->info();
 			if (is_null($info)) continue;
 
 			$test=get_param_integer('search_'.$hook,0);
@@ -742,11 +742,11 @@ class Module_search
 				$only_search_meta=get_param_integer('only_search_meta',0)==1;
 				$direction=get_param('direction','ASC');
 				if (function_exists('set_time_limit')) @set_time_limit(5); // Prevent errant search hooks (easily written!) taking down a server. Each call given 5 seconds (calling set_time_limit resets the timer).
-				$hook_results=$object->run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$max,$boolean_operator,$where_clause,$search_under,$boolean_search?1:0);
+				$hook_results=$ob->run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$max,$boolean_operator,$where_clause,$search_under,$boolean_search?1:0);
 				if (is_null($hook_results)) continue;
 				foreach ($hook_results as $i=>$result)
 				{
-					$result['object']=$object;
+					$result['object']=$ob;
 					$result['type']=$hook;
 					$hook_results[$i]=$result;
 				}

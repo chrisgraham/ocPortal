@@ -64,27 +64,27 @@ class Module_vforums
 
 		if ($type=='new_posts')
 		{
-			$this->title=get_screen_title('POSTS_SINCE')
+			$this->title=get_screen_title('POSTS_SINCE');
 		}
 
 		if ($type=='unanswered_topics')
 		{
-			$this->title=get_screen_title('UNANSWERED_TOPICS')
+			$this->title=get_screen_title('UNANSWERED_TOPICS');
 		}
 
 		if ($type=='involved_topics')
 		{
-			$this->title=get_screen_title('INVOLVED_TOPICS')
+			$this->title=get_screen_title('INVOLVED_TOPICS');
 		}
 
 		if ($type=='unread_topics')
 		{
-			$this->title=get_screen_title('TOPICS_UNREAD')
+			$this->title=get_screen_title('TOPICS_UNREAD');
 		}
 
 		if ($type=='recently_read')
 		{
-			$this->title=get_screen_title('RECENTLY_READ')
+			$this->title=get_screen_title('RECENTLY_READ');
 		}
 
 		return NULL;

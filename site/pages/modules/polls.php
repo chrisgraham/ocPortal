@@ -210,6 +210,7 @@ class Module_polls
 	var $title;
 	var $id;
 	var $myrow;
+	var $_title;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -241,6 +242,7 @@ class Module_polls
 				return warn_screen($this->title,do_lang_tempcode('MISSING_RESOURCE'));
 			}
 			$myrow=$rows[0];
+			$_title=get_translated_text($myrow['question']);
 
 			// Meta data
 			set_extra_request_metadata(array(
@@ -259,6 +261,7 @@ class Module_polls
 
 			$this->id=$id;
 			$this->myrow=$myrow;
+			$this->_title=$_title;
 		}
 
 		return NULL;
@@ -307,6 +310,7 @@ class Module_polls
 		$id=$this->id;
 		$_GET['poll_id']=strval($id);
 		$myrow=$this->myrow;
+		$_title=$this->_title;
 
 		$date_raw=is_null($myrow['date_and_time'])?'':strval($myrow['date_and_time']);
 		$add_date_raw=strval($myrow['add_time']);
@@ -314,7 +318,6 @@ class Module_polls
 		$date=get_timezoned_date($myrow['date_and_time']);
 		$add_date=get_timezoned_date($myrow['add_time']);
 		$edit_date=get_timezoned_date($myrow['edit_date']);
-		$_title=get_translated_text($myrow['question']);
 
 		// Views
 		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))

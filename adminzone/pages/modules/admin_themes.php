@@ -222,6 +222,8 @@ class Module_admin_themes
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_templates:theme='.$theme,do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_edit_templates:theme='.$theme.':file='.$file,do_lang_tempcode('EDIT_TEMPLATES'))));
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 
+			$this->theme=$theme;
+
 			$this->title=get_screen_title('EDIT_TEMPLATES');
 		}
 
@@ -1734,6 +1736,8 @@ class Module_admin_themes
 	 */
 	function __edit_templates()
 	{
+		$theme=$this->theme;
+
 		foreach (array_keys($_REQUEST) as $_i)
 		{
 			$matches=array();

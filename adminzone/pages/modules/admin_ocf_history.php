@@ -72,15 +72,14 @@ class Module_admin_ocf_history
 			{
 				$this->title=get_screen_title('POST_HISTORY_MEMBER');
 			}
-			if ($post_id!=-1)
+			elseif ($post_id!=-1)
 			{
 				$this->title=get_screen_title('POST_HISTORY_POST');
 			}
-			if ($topic_id!=-1)
+			elseif ($topic_id!=-1)
 			{
 				$this->title=get_screen_title('POST_HISTORY_TOPIC');
-			}
-			if (count($where)==0)
+			} else
 			{
 				$this->title=get_screen_title('POST_HISTORY');
 			}

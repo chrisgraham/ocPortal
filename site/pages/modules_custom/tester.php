@@ -378,6 +378,7 @@ class Module_tester
 	function report()
 	{
 		$id=$this->id;
+		$test=$this->test;
 		$test_row=$this->test_row;
 
 		require_code('feedback');

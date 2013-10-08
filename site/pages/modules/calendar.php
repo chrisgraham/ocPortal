@@ -367,10 +367,10 @@ class Module_calendar
 	}
 
 	var $title;
-	var $id
-	var $event
-	var $title_to_use
-	var $title_to_use_2
+	var $id;
+	var $event;
+	var $title_to_use;
+	var $title_to_use_2;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -1526,10 +1526,10 @@ class Module_calendar
 	 */
 	function view_event()
 	{
-		$this->id=$id;
-		$this->event=$event;
-		$this->title_to_use=$title_to_use;
-		$this->title_to_use_2=$title_to_use_2;
+		$id=$this->id;
+		$event=$this->event;
+		$title_to_use=$this->title_to_use;
+		$title_to_use_2=$this->title_to_use_2;
 
 		// Validation
 		$warning_details=new ocp_tempcode();

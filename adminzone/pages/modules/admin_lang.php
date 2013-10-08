@@ -110,7 +110,8 @@ class Module_admin_lang
 				} else
 				{
 					$lang_file=get_param('lang_file');
-					$this->title=get_screen_title('_TRANSLATE_CODE',true,array(escape_html($lang_file),escape_html(array_key_exists($lang,$map)?$map[$lang]:$lang)));
+					require_code('lang3');
+					$this->title=get_screen_title('_TRANSLATE_CODE',true,array(escape_html($lang_file),escape_html(get_language_title($lang))));
 				}
 			}
 		}

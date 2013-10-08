@@ -82,6 +82,8 @@ class Module_admin_orders
 			}
 		}
 
+		$action=either_param('action','');
+
 		if ($type=='order_det' || $action=='order_act' || $action=='_add_note' || $action=='order_export' || $action=='_order_export')
 		{
 			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
@@ -89,8 +91,6 @@ class Module_admin_orders
 
 		if ($action=='order_act')
 		{
-			$action=either_param('action');
-
 			if ($action!='add_note')
 			{
 				breadcrumb_set_self(do_lang_tempcode('DONE'));

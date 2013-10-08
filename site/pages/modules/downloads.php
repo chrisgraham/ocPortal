@@ -310,7 +310,7 @@ class Module_downloads
 	var $category_id;
 	var $id;
 	var $myrow;
-	var $category
+	var $category;
 	var $title_to_use;
 	var $name;
 	var $title_to_use_2;

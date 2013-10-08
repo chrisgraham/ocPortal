@@ -548,7 +548,7 @@ class Module_cms_wiki
 		$fields->attach(form_input_text(do_lang_tempcode('CHILD_PAGES'),new ocp_tempcode(),'children',$children,false,NULL,true));
 		$form=do_template('FORM',array('_GUID'=>'b908438ccfc9be6166cf7c5c81d5de8b','FIELDS'=>$fields,'URL'=>$post_url,'HIDDEN'=>'','TEXT'=>'','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 
-		return do_template('WIKI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PAGE_TITLE'=>$page_title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$this->title,'FORM'=>$form,'WIKI_TREE'=>$wiki_tree));
+		return do_template('WIKI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PAGE_TITLE'=>$page_title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$this->title,'FORM'=>$form,'WIKI_TREE'=>$wiki_tree));
 	}
 
 	/**

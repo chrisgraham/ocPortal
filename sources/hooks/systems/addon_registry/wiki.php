@@ -173,7 +173,6 @@ class Hook_addon_registry_wiki
 				'PAGE_TITLE'=>lorem_phrase(),
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
-				'TREE'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
 				'FORM'=>placeholder_form(),
 				'WIKI_TREE'=>placeholder_options(),

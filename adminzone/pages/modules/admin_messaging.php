@@ -104,6 +104,8 @@ class Module_admin_messaging
 
 		if ($type=='take')
 		{
+			$id=get_param('id');
+			$message_type=get_param('message_type');
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING')),array('_SELF:_SELF:view:'.$id.':message_type='.$message_type,do_lang_tempcode('MESSAGE'))));
 			breadcrumb_set_self(do_lang_tempcode('_TAKE_RESPONSIBILITY'));
 		}
