@@ -539,6 +539,7 @@ header h1 {
 	margin-bottom: 3em;
 	position: relative;
 	left: -0.8em;
+	margin-top: 3px;
 }
 .hero_section h1 {
 	font-size: 2.6em;
@@ -1507,6 +1508,10 @@ h3+.meta_details, .newscat_img+.meta_details {
 
 .box.overlay {
 	{$BETA_CSS_PROPERTY,box-shadow: 0px 0px 20px {$GET,dark_shadow};}
+}
+
+.box.overlay .associated_links_block_group {
+	margin: 1em;
 }
 
 /*
