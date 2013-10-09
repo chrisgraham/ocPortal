@@ -163,7 +163,7 @@ function user_sync__inbound($since=NULL)
 			{
 				$user_data[$key]=user_sync_handle_field_remap($key,$remap_scheme,$user,$dbh,$member_id);
 			}
-			$email_address=$user_data['email_address'];
+			$email_address=trim($user_data['email_address']);
 			$groups=$user_data['groups'];
 			$dob_day=$user_data['dob_day'];
 			$dob_month=$user_data['dob_month'];

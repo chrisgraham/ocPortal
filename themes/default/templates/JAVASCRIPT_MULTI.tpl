@@ -4,42 +4,42 @@
 // Multi-field
 // ===========
 
-function copy_dates(theStub)
+function copy_dates(the_stub)
 {
-	if (theStub!='end') return;
+	if (the_stub!='end') return;
 
-	var i,j,theForm,theElement,v;
+	var i,j,the_form,the_element,v;
 	for (i=0;i<document.forms.length;i++)
 	{
-		theForm=document.forms[i];
-		for (j=0;j<theForm.elements.length;j++)
+		the_form=document.forms[i];
+		for (j=0;j<the_form.elements.length;j++)
 		{
-			theElement=theForm.elements[j];
-			if (theElement.name.substring(0,6)=='start_')
+			the_element=the_form.elements[j];
+			if (the_element.name.substring(0,6)=='start_')
 			{
-				v=theElement.value;
-				if (theElement.name=='start_hour')
+				v=the_element.value;
+				if (the_element.name=='start_hour')
 				{
 					if (v!=24) v++;
 				}
-				theForm.elements[theElement.name.replace(/start\_/gi,'end_')].value=v;
+				the_form.elements[the_element.name.replace(/start\_/gi,'end_')].value=v;
 			}
 		}
 	}
 }
 
-function change_stubbed(theStub,value)
+function change_stubbed(the_stub,value)
 {
-	var i,j,theForm,theElement;
+	var i,j,the_form,the_element;
 	for (i=0;i<document.forms.length;i++)
 	{
-		theForm=document.forms[i];
-		for (j=0;j<theForm.elements.length;j++)
+		the_form=document.forms[i];
+		for (j=0;j<the_form.elements.length;j++)
 		{
-			theElement=theForm.elements[j];
-			if (theElement.name.substring(0,theStub.length+1)==theStub+'_')
+			the_element=the_form.elements[j];
+			if (the_element.name.substring(0,the_stub.length+1)==the_stub+'_')
 			{
-				theElement.disabled=!value;
+				the_element.disabled=!value;
 			}
 		}
 	}
@@ -53,65 +53,85 @@ function deselect_alt_url(form)
 	}
 }
 
-function _ensure_next_field(event)
+function _ensure_next_field(event,ob)
 {
 	if (typeof event=='undefined') var event=window.event;
-	if (!key_pressed(event,9)) ensure_next_field(this);
+	if (enter_pressed(event)) goto_next_field(ob);
+	else if (!key_pressed(event,9)) ensure_next_field(ob);
 }
 
-function ensure_next_field(thisField)
+function goto_next_field(this_field)
 {
-	var mid=thisField.id.lastIndexOf('_');
-	var nameStub=thisField.id.substring(0,mid+1);
+	var mid=this_field.id.lastIndexOf('_');
+	var name_stub=this_field.id.substring(0,mid+1);
 
-	var thisNum=thisField.id.substring(mid+1,thisField.id.length)-0;
+	var this_num=this_field.id.substring(mid+1,this_field.id.length)-0;
 
-	var nextNum=thisNum+1;
-	var nextField=document.getElementById(nameStub+nextNum);
-	var name=nameStub+nextNum;
-	var thisId=thisField.id;
-	if (!nextField)
+	var next_num=this_num+1;
+	var next_field=document.getElementById(name_stub+next_num);
+	if (next_field)
 	{
-		nextNum=thisNum+1;
-		thisField=document.getElementById(thisId);
-		var nextFieldWrap=document.createElement('div');
-		nextFieldWrap.className='constrain_field';
-		var nextField;
-		if (thisField.nodeName.toLowerCase()=='textarea')
+		try
 		{
-			nextField=document.createElement('textarea');
+			next_field.focus();
+		}
+		catch (e) {};
+	}
+}
+
+function ensure_next_field(this_field)
+{
+	var mid=this_field.id.lastIndexOf('_');
+	var name_stub=this_field.id.substring(0,mid+1);
+
+	var this_num=this_field.id.substring(mid+1,this_field.id.length)-0;
+
+	var next_num=this_num+1;
+	var next_field=document.getElementById(name_stub+next_num);
+	var name=name_stub+next_num;
+	var this_id=this_field.id;
+	if (!next_field)
+	{
+		next_num=this_num+1;
+		this_field=document.getElementById(this_id);
+		var next_field_wrap=document.createElement('div');
+		next_field_wrap.className='constrain_field';
+		var next_field;
+		if (this_field.nodeName.toLowerCase()=='textarea')
+		{
+			next_field=document.createElement('textarea');
 		} else
 		{
-			nextField=document.createElement('input');
-			nextField.setAttribute('size',thisField.getAttribute('size'));
+			next_field=document.createElement('input');
+			next_field.setAttribute('size',this_field.getAttribute('size'));
 		}
-		nextField.className=thisField.className.replace(/\_required/g,'');
-		if (thisField.form.elements['label_for__'+nameStub+'0'])
+		next_field.className=this_field.className.replace(/\_required/g,'');
+		if (this_field.form.elements['label_for__'+name_stub+'0'])
 		{
 			var nextLabel=document.createElement('input');
 			nextLabel.setAttribute('type','hidden');
-			nextLabel.value=thisField.form.elements['label_for__'+nameStub+'0'].value+' ('+(nextNum+1)+')';
-			nextLabel.name='label_for__'+nameStub+nextNum;
-			nextFieldWrap.appendChild(nextLabel);
+			nextLabel.value=this_field.form.elements['label_for__'+name_stub+'0'].value+' ('+(next_num+1)+')';
+			nextLabel.name='label_for__'+name_stub+next_num;
+			next_field_wrap.appendChild(nextLabel);
 		}
-		nextField.setAttribute('tabindex',thisField.getAttribute('tabindex'));
-		nextField.setAttribute('id',nameStub+nextNum);
-		if (thisField.onfocus) nextField.onfocus=thisField.onfocus;
-		if (thisField.onblur) nextField.onblur=thisField.onblur;
-		if (thisField.onkeyup) nextField.onkeyup=thisField.onkeyup;
-		nextField.onkeypress=_ensure_next_field;
-		if (thisField.onchange) nextField.onchange=thisField.onchange;
-		if (typeof thisField.onrealchange!='undefined') nextField.onchange=thisField.onrealchange;
-		if (thisField.nodeName.toLowerCase()!='textarea')
+		next_field.setAttribute('tabindex',this_field.getAttribute('tabindex'));
+		next_field.setAttribute('id',name_stub+next_num);
+		if (this_field.onfocus) next_field.onfocus=this_field.onfocus;
+		if (this_field.onblur) next_field.onblur=this_field.onblur;
+		if (this_field.onkeyup) next_field.onkeyup=this_field.onkeyup;
+		next_field.onkeypress=function(event) { _ensure_next_field(event,next_field); };
+		if (this_field.onchange) next_field.onchange=this_field.onchange;
+		if (typeof this_field.onrealchange!='undefined') next_field.onchange=this_field.onrealchange;
+		if (this_field.nodeName.toLowerCase()!='textarea')
 		{
-			nextField.setAttribute('type','text');
+			next_field.setAttribute('type','text');
 		}
-		nextField.value='';
-		nextField.name=((thisField.name.indexOf('[]')==-1)?(nameStub+nextNum):thisField.name);
-		nextFieldWrap.appendChild(nextField);
+		next_field.value='';
+		next_field.name=((this_field.name.indexOf('[]')==-1)?(name_stub+next_num):this_field.name);
+		next_field_wrap.appendChild(next_field);
 		var br=document.createElement('br');
-		nextFieldWrap.appendChild(br);
-		thisField.parentNode.parentNode.insertBefore(nextFieldWrap,thisField.parentNode.nextSibling);
+		next_field_wrap.appendChild(br);
+		this_field.parentNode.parentNode.insertBefore(next_field_wrap,this_field.parentNode.nextSibling);
 	}
 }
 
@@ -121,30 +141,30 @@ function _ensure_next_field_upload(event)
 	if (!key_pressed(event,9)) ensure_next_field_upload(this);
 }
 
-function ensure_next_field_upload(thisField)
+function ensure_next_field_upload(this_field)
 {
-	var mid=thisField.name.lastIndexOf('_');
-	var nameStub=thisField.name.substring(0,mid+1);
-	var thisNum=thisField.name.substring(mid+1,thisField.name.length)-0;
+	var mid=this_field.name.lastIndexOf('_');
+	var name_stub=this_field.name.substring(0,mid+1);
+	var this_num=this_field.name.substring(mid+1,this_field.name.length)-0;
 
-	var nextNum=thisNum+1;
-	var nextField=document.getElementById('multi_'+nextNum);
-	var name=nameStub+nextNum;
-	var thisId=thisField.id;
+	var next_num=this_num+1;
+	var next_field=document.getElementById('multi_'+next_num);
+	var name=name_stub+next_num;
+	var this_id=this_field.id;
 
-	if (!nextField)
+	if (!next_field)
 	{
-		nextNum=thisNum+1;
-		thisField=document.getElementById(thisId);
-		var nextField=document.createElement('input');
-		nextField.className='input_upload';
-		nextField.setAttribute('id','multi_'+nextNum);
-		nextField.onchange=_ensure_next_field_upload;
-		nextField.setAttribute('type','file');
-		nextField.name=nameStub+nextNum;
+		next_num=this_num+1;
+		this_field=document.getElementById(this_id);
+		var next_field=document.createElement('input');
+		next_field.className='input_upload';
+		next_field.setAttribute('id','multi_'+next_num);
+		next_field.onchange=_ensure_next_field_upload;
+		next_field.setAttribute('type','file');
+		next_field.name=name_stub+next_num;
 		var br=document.createElement('br');
-		thisField.parentNode.appendChild(br);
-		thisField.parentNode.appendChild(nextField);
+		this_field.parentNode.appendChild(br);
+		this_field.parentNode.appendChild(next_field);
 	}
 }
 

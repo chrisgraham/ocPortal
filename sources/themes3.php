@@ -34,7 +34,9 @@ function tempcode_tester_script()
 	{
 		if ((substr($key,0,4)=='key_') && ($val!=''))
 		{
-			$params[post_param($key,'')]=post_param('val_'.substr($key,4),'');
+			$_key=str_replace('}','',str_replace('{','',post_param($key,'')));
+			$_val=post_param('val_'.substr($key,4),'');
+			$params[$_key]=$_val;
 		}
 	}
 
