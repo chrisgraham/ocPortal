@@ -700,6 +700,10 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			{
 				$worked=mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
 			}
+			if ((!$worked) && (isset($php_errormsg)))
+			{
+				$error=$php_errormsg;
+			}
 			$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 		}
 	}
