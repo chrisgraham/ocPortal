@@ -530,7 +530,7 @@ class database_driver
 
 		if (count($all_values)==1) // usually $all_values only has length of 1
 		{
-			if ((in_array($table,array('stats','banner_clicks','member_tracking','usersonline_track','download_logging'))) && (substr(get_db_type(),0,5)=='mysql'))
+			if ((in_array($table,array('stats','banner_clicks','member_tracking','usersonline_track','download_logging'))) && (substr(get_db_type(),0,5)=='mysql') && (get_value('enable_delayed_inserts')==='1'))
 			{
 				$query='INSERT DELAYED INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
 			} else
