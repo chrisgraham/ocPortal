@@ -62,6 +62,8 @@ class Module_cms
 	{
 		$type=get_param('type','misc');
 
+		require_code('menus');
+
 		$this->simplified=(((!has_privilege(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE));
 
 		if ($this->simplified)
@@ -84,7 +86,6 @@ class Module_cms
 	function run()
 	{
 		require_code('templates_donext');
-		require_code('menus');
 
 		require_all_lang();
 
