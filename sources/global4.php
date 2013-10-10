@@ -238,12 +238,20 @@ function member_personal_links_and_details($member_id)
 			foreach ($subscriptions as $sub)
 			{
 				$product_obj=find_product($sub['s_type_code']);
+				if (is_null($product_obj)) continue;
 				$products=$product_obj->get_products(true);
 				$product_name=$products[$sub['s_type_code']][4];
 				$s_length=$products[$sub['s_type_code']][3]['length'];
 				$s_length_units=$products[$sub['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
 				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
 				$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$sub['s_time']);
+				/*if ($sub['s_via']!='manual')	Useful if recoding this to show even for auto-recuring subscriptions
+				{
+					while ($expiry_time<time()) // Must have auto-renewed
+					{
+						$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$expiry_time);
+					}
+				}*/
 				if ((($expiry_time-time())<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60)) && ($expiry_time>=time()))
 				{
 					$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
