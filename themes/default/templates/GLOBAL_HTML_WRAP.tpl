@@ -110,7 +110,12 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					<a id="maincontent"></a>
 
 					{$,The main site, whatever 'page' is being loaded}
+		{+END}
+		{$,Intentional breakup of directive so that output streaming has a top-level stopping point before MIDDLE}
+		{+START,IF,{$NOT,{$MOBILE}}}
 					{MIDDLE}
+		{+END}
+		{+START,IF,{$NOT,{$MOBILE}}}
 				</article>
 			</div>
 

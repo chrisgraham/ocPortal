@@ -141,20 +141,217 @@ class standard_crud_module
 		return $entry_points;
 	}
 
+	var $doing;
+
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
+	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
+	function pre_run($top_level=true)
 	{
 		if (is_null($this->default_type)) $this->default_type=method_exists($this,'misc')?'misc':'ad';
 		$type=get_param('type',$this->default_type);
 
-		if ($type=='_ad' || $type=='_av' || $type=='_ac' || $type=='_add_entry' || $type=='_add_category' || $type=='__ed' || $type=='__ev' || $type=='__ec' || $type=='__edit_entry' || $type=='__edit_category')
+		if ($top_level)
 		{
-			breadcrumb_set_self(do_lang_tempcode('DONE'));
-			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
+			if (!is_null($this->cat_crud_module)) $this->cat_crud_module->type_code='c';
+			if (!is_null($this->alt_crud_module)) $this->alt_crud_module->type_code='v';
+
+			if (($type=='ac') || ($type=='_ac') || ($type=='ec') || ($type=='_ec') || ($type=='__ec') || ($type=='add_category') || ($type=='_add_category') || ($type=='edit_category') || ($type=='_edit_category') || ($type=='__edit_category'))
+			{
+				if ($this->cat_crud_module!==NULL)
+					$this->cat_crud_module->pre_run(false);
+			}
+			elseif (($type=='av') || ($type=='_av') || ($type=='ev') || ($type=='_ev') || ($type=='__ev') || ($type=='add_catalogue') || ($type=='_add_catalogue') || ($type=='edit_catalogue') || ($type=='_edit_catalogue') || ($type=='__edit_catalogue'))
+			{
+				if ($this->alt_crud_module!==NULL)
+					$this->alt_crud_module->pre_run(false);
+			} else
+			{
+				$this->pre_run(false);
+			}
+		} else
+		{
+			if ($type=='_ad' || $type=='_av' || $type=='_ac' || $type=='_add_entry' || $type=='_add_category' || $type=='__ed' || $type=='__ev' || $type=='__ec' || $type=='__edit_entry' || $type=='__edit_category')
+			{
+				breadcrumb_set_self(do_lang_tempcode('DONE'));
+			}
+
+			if ($type=='ad' || $type=='av' || $type=='ac' || $type=='add_entry' || $type=='add_category')
+			{
+				$doing='ADD_'.$this->lang_type;
+
+				if (($this->catalogue) && (get_param('catalogue_name','')!=''))
+				{
+					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+					if ($this->type_code=='d')
+					{
+						$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
+					}
+					elseif ($this->type_code=='c')
+					{
+						$doing=do_lang('CATALOGUE_GENERIC_ADD_CATEGORY',escape_html($catalogue_title));
+					}
+				}
+
+				$this->title=get_screen_title($doing);
+
+				$this->doing=$doing;
+			}
+
+			if ($type=='_ad' || $type=='_av' || $type=='_ac' || $type=='_add_entry' || $type=='_add_category')
+			{
+				$doing='ADD_'.$this->lang_type;
+
+				$success_message_str='SUCCESS_MESSAGE__'.$doing;
+				if (get_param('catalogue_name','')!='') $success_message_str.='_'.get_param('catalogue_name','');
+				if (is_null(do_lang($success_message_str,NULL,NULL,NULL,NULL,false)))
+					$success_message_str='SUCCESS';
+
+				if (($this->catalogue) && (get_param('catalogue_name','')!=''))
+				{
+					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+					if ($this->type_code=='d')
+					{
+						$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
+					}
+					elseif ($this->type_code=='c')
+					{
+						$doing=do_lang('CATALOGUE_GENERIC_ADD_CATEGORY',escape_html($catalogue_title));
+					}
+				}
+
+				$this->title=get_screen_title($doing);
+
+				breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:a'.$this->type_code,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
+
+				$this->doing=$doing;
+			}
+
+			if ($type=='ed' || $type=='ev' || $type=='ec' || $type=='edit_entry' || $type=='edit_category')
+			{
+				$doing='EDIT_'.$this->lang_type;
+
+				if (($this->catalogue) && (get_param('catalogue_name','')!=''))
+				{
+					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+					if ($this->type_code=='d')
+					{
+						$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
+					}
+					elseif ($this->type_code=='c')
+					{
+						$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
+					}
+				}
+
+				$this->title=get_screen_title($doing);
+
+				$this->doing=$doing;
+			}
+
+			if ($type=='_ed' || $type=='_ev' || $type=='_ec' || $type=='_edit_entry' || $type=='_edit_category')
+			{
+				$doing='EDIT_'.$this->lang_type;
+
+				if (($this->catalogue) && (get_param('catalogue_name','')!=''))
+				{
+					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+					if ($this->type_code=='d')
+					{
+						$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
+					}
+					elseif ($this->type_code=='c')
+					{
+						$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
+					}
+				}
+
+				$this->title=get_screen_title($doing);
+
+				$this->doing=$doing;
+			}
+
+			if ($type=='__ed' || $type=='__ev' || $type=='__ec' || $type=='__edit_entry' || $type=='__edit_category')
+			{
+				$delete=post_param_integer('delete',0);
+				if (($delete==1) || ($delete==2)) //1=partial,2=full,...=unknown,thus handled as an edit
+				{
+					$doing='DELETE_'.$this->lang_type;
+					if (($this->catalogue) && (get_param('catalogue_name','')!=''))
+					{
+						$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+						if ($this->type_code=='d')
+						{
+							$doing=do_lang('CATALOGUE_GENERIC_DELETE',escape_html($catalogue_title));
+						}
+						elseif ($this->type_code=='c')
+						{
+							$doing=do_lang('CATALOGUE_GENERIC_DELETE_CATEGORY',escape_html($catalogue_title));
+						}
+					}
+
+					$this->title=get_screen_title($doing);
+				} else
+				{
+					$doing='EDIT_'.$this->lang_type;
+
+					$success_message_str='SUCCESS_MESSAGE__'.$doing;
+					if (get_param('catalogue_name','')!='') $success_message_str.='_'.get_param('catalogue_name','');
+					if (is_null(do_lang($success_message_str,NULL,NULL,NULL,NULL,false)))
+						$success_message_str='SUCCESS';
+
+					if (($this->catalogue) && (get_param('catalogue_name','')!=''))
+					{
+						$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+						if ($this->type_code=='d')
+						{
+							$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
+						}
+						elseif ($this->type_code=='c')
+						{
+							$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
+						}
+					}
+
+					$this->title=get_screen_title($doing);
+				}
+
+				breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:_e'.$this->type_code.':'.$id,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
+
+				$this->doing=$doing;
+			}
+
+			if ($type=='mass_delete')
+			{
+				$this->title=get_screen_title('MASS_DELETE');
+			}
+
+			if ((method_exists($this,'misc')) && ($type!='misc'))
+			{
+				if (($this->special_edit_frontend) && (($type=='_ed') || ($type=='_ec')))
+				{
+					breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label)),array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))));
+				} else
+				{
+					if (($this->catalogue) && (either_param('catalogue_name','')!=''))
+					{
+						$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>either_param('catalogue_name'))));
+						breadcrumb_set_parents(array(array('_SELF:_SELF:misc:catalogue_name='.either_param('catalogue_name',''),$catalogue_title)));
+					} else
+					{
+						breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label))));
+					}
+				}
+			} else
+			{
+				if (($this->special_edit_frontend) && (($type=='_ed') || ($type=='_ec')))
+				{
+					breadcrumb_set_parents(array(array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))));
+				}
+			}
 		}
 	}
 
@@ -191,30 +388,6 @@ class standard_crud_module
 		if (is_null($this->default_type)) $this->default_type=method_exists($this,'misc')?'misc':'ad';
 		$type=get_param('type',$this->default_type);
 
-		if ((method_exists($this,'misc')) && ($type!='misc'))
-		{
-			if (($this->special_edit_frontend) && (($type=='_ed') || ($type=='_ec')))
-			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label)),array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))));
-			} else
-			{
-				if (($this->catalogue) && (either_param('catalogue_name','')!=''))
-				{
-					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>either_param('catalogue_name'))));
-					breadcrumb_set_parents(array(array('_SELF:_SELF:misc:catalogue_name='.either_param('catalogue_name',''),$catalogue_title)));
-				} else
-				{
-					breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode(is_null($this->menu_label)?'MENU':$this->menu_label))));
-				}
-			}
-		} else
-		{
-			if (($this->special_edit_frontend) && (($type=='_ed') || ($type=='_ec')))
-			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:'.substr($type,1),do_lang_tempcode('CHOOSE'))));
-			}
-		}
-
 		// Meta data etc
 		require_code('content2');
 		if (addon_installed('content_reviews')) require_code('content_reviews2');
@@ -243,7 +416,6 @@ class standard_crud_module
 				$this->special_edit_frontend=true;
 		}
 
-		if (!is_null($this->cat_crud_module)) $this->cat_crud_module->type_code='d';
 		if ($type=='ad') return $this->ad();
 		if ($type=='_ad') return $this->_ad();
 		if ($type=='ed') return $this->ed();
@@ -251,7 +423,6 @@ class standard_crud_module
 		if ($type=='__ed') return $this->__ed();
 		if (!is_null($this->cat_crud_module))
 		{
-			$this->cat_crud_module->type_code='c';
 			if ($type=='ac') return $this->cat_crud_module->ad();
 			if ($type=='_ac') return $this->cat_crud_module->_ad();
 			if ($type=='ec') return $this->cat_crud_module->ed();
@@ -260,7 +431,6 @@ class standard_crud_module
 		}
 		if (!is_null($this->alt_crud_module))
 		{
-			$this->alt_crud_module->type_code='v';
 			if ($type=='av') return $this->alt_crud_module->ad();
 			if ($type=='_av') return $this->alt_crud_module->_ad();
 			if ($type=='ev') return $this->alt_crud_module->ed();
@@ -276,7 +446,6 @@ class standard_crud_module
 		if ($type=='__edit_entry') return $this->__ed();
 		if (!is_null($this->cat_crud_module))
 		{
-			$this->cat_crud_module->type_code='c';
 			if ($type=='add_category') return $this->cat_crud_module->ad();
 			if ($type=='_add_category') return $this->cat_crud_module->_ad();
 			if ($type=='edit_category') return $this->cat_crud_module->ed();
@@ -285,7 +454,6 @@ class standard_crud_module
 		}
 		if (!is_null($this->alt_crud_module))
 		{
-			$this->alt_crud_module->type_code='v';
 			if ($type=='add_catalogue') return $this->alt_crud_module->ad();
 			if ($type=='_add_catalogue') return $this->alt_crud_module->_ad();
 			if ($type=='edit_catalogue') return $this->alt_crud_module->ed();
@@ -383,8 +551,6 @@ class standard_crud_module
 			unset($attributes['page']);
 			$view_url=array($page,$attributes,$zone,(!isset($this->view_label))?NULL:$this->view_label);
 		}
-
-		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		require_code('templates_donext');
 		return do_next_manager($title,$description,
@@ -512,24 +678,7 @@ class standard_crud_module
 		if ((!is_null($this->permissions_require)) && (is_null($this->permissions_cat_require)))
 			check_submit_permission($this->permissions_require,$this->permission_page_name);
 
-		$doing='ADD_'.$this->lang_type;
-
-		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-			if ($this->type_code=='d')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
-			}
-			elseif ($this->type_code=='c')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_ADD_CATEGORY',escape_html($catalogue_title));
-			}
-		}
-
-		$title=get_screen_title($doing);
-
-		$test=$this->choose_catalogue($title);
+		$test=$this->choose_catalogue($this->title);
 		if (!is_null($test)) return $test;
 
 		if (multi_lang())
@@ -545,7 +694,7 @@ class standard_crud_module
 			}
 		}
 
-		$submit_name=(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang($doing);
+		$submit_name=(strpos($this->doing,' ')!==false)?protect_from_escaping($this->doing):do_lang($this->doing);
 		if (!is_null($this->add_submit_name)) $submit_name=$this->add_submit_name;
 
 		$map=array('page'=>'_SELF','type'=>'_a'.$this->type_code);
@@ -654,7 +803,7 @@ class standard_crud_module
 			return do_template('CATALOGUE_ADDING_SCREEN',array(
 				'_GUID'=>'adf73fdfccb387640340f15d5d6dae54'.get_class($this),
 				'HIDDEN'=>$hidden,
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'TEXT'=>$this->add_text,
 				'URL'=>$post_url,
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
@@ -668,7 +817,7 @@ class standard_crud_module
 			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$posting_form_tabindex,$this->posting_field_required);
 			return do_template('POSTING_SCREEN',array(
 				'_GUID'=>'15930ba8cc02634ed3a225c9714c3eac'.get_class($this),
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'PREVIEW'=>$this->do_preview,
 				'SEPARATE_PREVIEW'=>$this->second_stage_preview,
 				'TEXT'=>$this->add_text,
@@ -683,7 +832,7 @@ class standard_crud_module
 				'PREVIEW'=>$this->do_preview,
 				'SEPARATE_PREVIEW'=>$this->second_stage_preview,
 				'HIDDEN'=>$hidden,
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'SKIP_VALIDATION'=>$this->skip_validation,
 				'TEXT'=>$this->add_text,
 				'URL'=>$post_url,
@@ -704,34 +853,12 @@ class standard_crud_module
 	{
 		if (!is_null($this->permissions_require)) check_submit_permission($this->permissions_require,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b)),$this->permission_page_name);
 
-		$doing='ADD_'.$this->lang_type;
-
-		$success_message_str='SUCCESS_MESSAGE__'.$doing;
-		if (get_param('catalogue_name','')!='') $success_message_str.='_'.get_param('catalogue_name','');
-		if (is_null(do_lang($success_message_str,NULL,NULL,NULL,NULL,false)))
-			$success_message_str='SUCCESS';
-
-		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-			if ($this->type_code=='d')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
-			}
-			elseif ($this->type_code=='c')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_ADD_CATEGORY',escape_html($catalogue_title));
-			}
-		}
-
-		$title=get_screen_title($doing);
-
 		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
 		{
-			return $this->preview_intercept($title);
+			return $this->preview_intercept($this->title);
 		}
 
-		$test=$this->handle_confirmations($title);
+		$test=$this->handle_confirmations($this->title);
 		if (!is_null($test)) return $test;
 
 		if (($this->user_facing) && (!is_null($this->permissions_require)))
@@ -774,12 +901,12 @@ class standard_crud_module
 				if ($this->send_validation_request)
 				{
 					$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id,'validated'=>1),'_SELF',NULL,false,false,true);
-					send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
+					send_validation_request($this->doing,$this->table,$this->non_integer_id,$id,$edit_url);
 				}
 
 				$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
 			}
-			give_submit_points($doing);
+			give_submit_points($this->doing);
 		}
 
 		if (addon_installed('awards'))
@@ -799,13 +926,11 @@ class standard_crud_module
 			if (!is_null($url))
 			{
 				$url=str_replace('__ID__',$id,$url);
-				return redirect_screen($title,$url,$description);
+				return redirect_screen($this->title,$url,$description);
 			}
 		}
 
-		breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:a'.$this->type_code,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
-
-		return $this->do_next_manager($title,$description,$id);
+		return $this->do_next_manager($this->title,$description,$id);
 	}
 
 	/**
@@ -906,24 +1031,7 @@ class standard_crud_module
 		if ((!is_null($this->permissions_require)) && (is_null($this->permissions_cat_require)))
 			check_some_edit_permission($this->permissions_require,NULL,$this->permission_page_name);
 
-		$doing='EDIT_'.$this->lang_type;
-
-		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-			if ($this->type_code=='d')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
-			}
-			elseif ($this->type_code=='c')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
-			}
-		}
-
-		$title=get_screen_title($doing);
-
-		$test=$this->choose_catalogue($title);
+		$test=$this->choose_catalogue($this->title);
 		if (!is_null($test)) return $test;
 
 		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST'));
@@ -973,7 +1081,7 @@ class standard_crud_module
 				$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_TABLE'));
 			}
 
-			$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'3a3e7cf1bef6ca31f8c992c69a80449e','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,'POST_URL'=>get_self_url()));
+			$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'3a3e7cf1bef6ca31f8c992c69a80449e','TITLE'=>$this->title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,'POST_URL'=>get_self_url()));
 
 			require_code('templates_internalise_screen');
 			return internalise_own_screen($tpl);
@@ -1027,7 +1135,7 @@ class standard_crud_module
 			'GET'=>true,
 			'IFRAME_URL'=>$iframe_url,
 			'HIDDEN'=>'',
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
@@ -1044,22 +1152,6 @@ class standard_crud_module
 	 */
 	function _ed()
 	{
-		$doing='EDIT_'.$this->lang_type;
-
-		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-			if ($this->type_code=='d')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
-			}
-			elseif ($this->type_code=='c')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
-			}
-		}
-
-		$title=get_screen_title($doing);
 		$submit_name=do_lang_tempcode('SAVE');
 
 		$id=mixed(); // Define type as mixed
@@ -1243,7 +1335,7 @@ class standard_crud_module
 			return do_template('CATALOGUE_EDITING_SCREEN',array(
 				'_GUID'=>'584d7dc7c2c13939626102374f13f508'.get_class($this),
 				'HIDDEN'=>$hidden,
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'TEXT'=>$this->add_text,
 				'URL'=>$post_url,
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
@@ -1260,7 +1352,7 @@ class standard_crud_module
 			return do_template('POSTING_SCREEN',array(
 				'_GUID'=>'841b9af3aa80bcab86b907e4b942786a'.get_class($this),
 				'PREVIEW'=>$this->do_preview,
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'SEPARATE_PREVIEW'=>$this->second_stage_preview,
 				'PING_URL'=>$ping_url,
 				'WARNING_DETAILS'=>$warning_details,
@@ -1275,7 +1367,7 @@ class standard_crud_module
 				'_GUID'=>'2d70be34595a16c6f170d966b894bfe2'.get_class($this),
 				'PREVIEW'=>$this->do_preview,
 				'SEPARATE_PREVIEW'=>$this->second_stage_preview,
-				'TITLE'=>$title,
+				'TITLE'=>$this->title,
 				'SKIP_VALIDATION'=>$this->skip_validation,
 				'PING_URL'=>$ping_url,
 				'WARNING_DETAILS'=>$warning_details,
@@ -1300,32 +1392,10 @@ class standard_crud_module
 		$id=mixed(); // Define type as mixed
 		$id=$this->non_integer_id?get_param('id',false,true):strval(get_param_integer('id'));
 
-		$doing='EDIT_'.$this->lang_type;
-
-		$success_message_str='SUCCESS_MESSAGE__'.$doing;
-		if (get_param('catalogue_name','')!='') $success_message_str.='_'.get_param('catalogue_name','');
-		if (is_null(do_lang($success_message_str,NULL,NULL,NULL,NULL,false)))
-			$success_message_str='SUCCESS';
-
-		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-			if ($this->type_code=='d')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
-			}
-			elseif ($this->type_code=='c')
-			{
-				$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
-			}
-		}
-		$title=get_screen_title($doing);
-
 		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
 		{
-			return $this->preview_intercept($title);
+			return $this->preview_intercept($this->title);
 		}
-
 
 		if (method_exists($this,'get_submitter'))
 		{
@@ -1356,8 +1426,6 @@ class standard_crud_module
 			}
 		} else $submitter=NULL;
 
-		breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:_e'.$this->type_code.':'.$id,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
-
 		$delete=post_param_integer('delete',0);
 		if (($delete==1) || ($delete==2)) //1=partial,2=full,...=unknown,thus handled as an edit
 		{
@@ -1366,22 +1434,7 @@ class standard_crud_module
 				check_delete_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->permission_page_name);
 			}
 
-			$doing='DELETE_'.$this->lang_type;
-			if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-			{
-				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-				if ($this->type_code=='d')
-				{
-					$doing=do_lang('CATALOGUE_GENERIC_DELETE',escape_html($catalogue_title));
-				}
-				elseif ($this->type_code=='c')
-				{
-					$doing=do_lang('CATALOGUE_GENERIC_DELETE_CATEGORY',escape_html($catalogue_title));
-				}
-			}
-			$title=get_screen_title($doing);
-
-			$test=$this->handle_confirmations($title);
+			$test=$this->handle_confirmations($this->title);
 			if (!is_null($test)) return $test;
 
 			$this->delete_actualisation($id);
@@ -1396,7 +1449,7 @@ class standard_crud_module
 			/*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))		No - resource is gone now, and redirect would almost certainly try to take us back there
 			{
 				$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?get_param('redirect'):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-				return redirect_screen($title,$url,do_lang_tempcode($success_message_str));
+				return redirect_screen($this->title,$url,do_lang_tempcode($success_message_str));
 			}*/
 
 			clear_ocp_autosave();
@@ -1405,12 +1458,12 @@ class standard_crud_module
 			{
 				$url=make_string_tempcode(str_replace('__ID__',$id,get_param('redirect')));
 
-				return redirect_screen($title,$url,do_lang_tempcode($success_message_str));
+				return redirect_screen($this->title,$url,do_lang_tempcode($success_message_str));
 			}
 
 			$description=is_null($this->do_next_description)?do_lang_tempcode($success_message_str):$this->do_next_description;
 
-			return $this->do_next_manager($title,$description,NULL);
+			return $this->do_next_manager($this->title,$description,NULL);
 		}
 		else
 		{
@@ -1419,7 +1472,7 @@ class standard_crud_module
 				check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->permission_page_name);
 			}
 
-			$test=$this->handle_confirmations($title);
+			$test=$this->handle_confirmations($this->title);
 			if (!is_null($test)) return $test;
 
 			if (($this->user_facing) && (!is_null($this->permissions_require)) && (addon_installed('unvalidated')))
@@ -1468,7 +1521,7 @@ class standard_crud_module
 					if (($this->send_validation_request) && (addon_installed('unvalidated')))
 					{
 						$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id,'validated'=>1),'_SELF',NULL,false,false,true);
-						send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
+						send_validation_request($this->doing,$this->table,$this->non_integer_id,$id,$edit_url);
 					}
 
 					$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
@@ -1480,12 +1533,12 @@ class standard_crud_module
 		{
 			$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?make_string_tempcode(get_param('redirect')):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
 
-			return redirect_screen($title,$url,do_lang_tempcode($success_message_str));
+			return redirect_screen($this->title,$url,do_lang_tempcode($success_message_str));
 		}
 
 		clear_ocp_autosave();
 
-		return $this->do_next_manager($title,$description,$id);
+		return $this->do_next_manager($this->title,$description,$id);
 	}
 
 	/**
@@ -1546,18 +1599,16 @@ class standard_crud_module
 		// UI
 		if ($top_level)
 		{
-			$title=get_screen_title('MASS_DELETE');
-
 			if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))
 			{
 				$url=make_string_tempcode(get_param('redirect'));
 
-				return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+				return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 			}
 
 			$description=do_lang_tempcode('SUCCESS');
 
-			return $this->do_next_manager($title,$description,NULL);
+			return $this->do_next_manager($this->title,$description,NULL);
 		}
 
 		// Not top level

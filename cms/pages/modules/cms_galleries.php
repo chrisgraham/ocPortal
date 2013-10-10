@@ -67,10 +67,15 @@ class Module_cms_galleries extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
+	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
+	function pre_run($top_level=true)
 	{
+		$this->cat_crud_module=class_exists('Mx_cms_galleries_cat')?new Mx_cms_galleries_cat():new Module_cms_galleries_cat();
+		$this->alt_crud_module=class_exists('Mx_cms_galleries_alt')?new Mx_cms_galleries_alt():new Module_cms_galleries_alt();
+		$GLOBALS['MODULE_CMS_GALLERIES']=$this;
+
 		$type=get_param('type','misc');
 
 		require_lang('galleries');
@@ -134,7 +139,7 @@ class Module_cms_galleries extends standard_crud_module
 		set_helper_panel_tutorial('tut_galleries');
 		set_helper_panel_pic('pagepics/images');
 
-		return parent::pre_run();
+		return parent::pre_run($top_level);
 	}
 
 	/**
@@ -149,10 +154,6 @@ class Module_cms_galleries extends standard_crud_module
 		require_code('galleries2');
 		require_css('galleries');
 		require_lang('dearchive');
-
-		$this->cat_crud_module=class_exists('Mx_cms_galleries_cat')?new Mx_cms_galleries_cat():new Module_cms_galleries_cat();
-		$this->alt_crud_module=class_exists('Mx_cms_galleries_alt')?new Mx_cms_galleries_alt():new Module_cms_galleries_alt();
-		$GLOBALS['MODULE_CMS_GALLERIES']=$this;
 
 		$this->alt_crud_module->add_text=new ocp_tempcode();
 

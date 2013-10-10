@@ -720,7 +720,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				{
 					case PARSE_NO_MANS_LAND:
 					case PARSE_DIRECTIVE_INNER:
-						$current_level_data[]='\',\'';
+						$current_level_data[]='","';
 						break;
 					default:
 						$current_level_params[]=$current_level_data;
@@ -747,6 +747,30 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 	}
 
 	if ($current_level_data==array('')) $current_level_data=array('""');
+
+	// Try and merge some strings that don't need to be in separate seq_parts
+	$merged=array();
+	$just_done_string=false;
+	foreach ($current_level_data as $c)
+	{
+		if (preg_match('#^"((?<!\\\\)\\\\"|[^"])*"$#',$c)!=0)
+		{
+			if ($just_done_string)
+			{
+				$pi=count($merged)-1;
+				$merged[$pi]=substr($merged[$pi],0,strlen($merged[$pi])-1).substr($c,1,strlen($c)-1);
+			} else
+			{
+				$merged[]=$c;
+			}
+			$just_done_string=true;
+		} else
+		{
+			$just_done_string=false;
+			$merged[]=$c;
+		}
+	}
+	$current_level_data=$merged;
 
 	return array($current_level_data,$preprocessable_bits);
 }

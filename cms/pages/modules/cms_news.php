@@ -95,10 +95,13 @@ class Module_cms_news extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
+	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
+	function pre_run($top_level=true)
 	{
+		$this->cat_crud_module=class_exists('Mx_cms_news_cat')?new Mx_cms_news_cat():new Module_cms_news_cat();
+
 		$type=get_param('type','misc');
 
 		require_lang('news');
@@ -125,7 +128,7 @@ class Module_cms_news extends standard_crud_module
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 		}
 
-		return parent::pre_run();
+		return parent::pre_run($top_level);
 	}
 
 	/**
@@ -136,7 +139,6 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$this->cat_crud_module=class_exists('Mx_cms_news_cat')?new Mx_cms_news_cat():new Module_cms_news_cat();
 		$this->posting_form_title=do_lang_tempcode('NEWS_ARTICLE');
 
 		require_code('news2');

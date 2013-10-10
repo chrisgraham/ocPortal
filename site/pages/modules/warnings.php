@@ -50,9 +50,10 @@ class Module_warnings extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
+	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
+	function pre_run($top_level=true)
 	{
 		$type=get_param('type','misc');
 
@@ -93,7 +94,7 @@ class Module_warnings extends standard_crud_module
 			$this->title=get_screen_title('UNSILENCE_FORUM');
 		}
 
-		return parent::pre_run();
+		return parent::pre_run($top_level);
 	}
 
 	/**

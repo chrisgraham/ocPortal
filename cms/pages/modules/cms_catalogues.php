@@ -73,10 +73,15 @@ class Module_cms_catalogues extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
+	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
+	function pre_run($top_level=true)
 	{
+		$this->cat_crud_module=class_exists('Mx_cms_catalogues_cat')?new Mx_cms_catalogues_cat():new Module_cms_catalogues_cat();
+		$this->alt_crud_module=class_exists('Mx_cms_catalogues_alt')?new Mx_cms_catalogues_alt():new Module_cms_catalogues_alt();
+		$GLOBALS['MODULE_CMS_CATALOGUES']=$this;
+
 		$type=get_param('type','misc');
 
 		require_lang('catalogues');
@@ -108,7 +113,7 @@ class Module_cms_catalogues extends standard_crud_module
 			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
 		}
 
-		return parent::pre_run();
+		return parent::pre_run($top_level);
 	}
 
 	/**
@@ -119,10 +124,6 @@ class Module_cms_catalogues extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$this->cat_crud_module=class_exists('Mx_cms_catalogues_cat')?new Mx_cms_catalogues_cat():new Module_cms_catalogues_cat();
-		$this->alt_crud_module=class_exists('Mx_cms_catalogues_alt')?new Mx_cms_catalogues_alt():new Module_cms_catalogues_alt();
-		$GLOBALS['MODULE_CMS_CATALOGUES']=$this;
-
 		if (get_value('disable_cat_cat_perms')==='1')
 		{
 			$this->permissions_cat_require_b=NULL;

@@ -59,15 +59,20 @@ class Module_cms_booking extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
+	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
+	function pre_run($top_level=true)
 	{
+		$this->cat_crud_module=class_exists('Mx_cms_booking_blacks')?new Mx_cms_booking_blacks():new Module_cms_booking_blacks(); // Blacks
+		$this->alt_crud_module=class_exists('Mx_cms_booking_supplements')?new Mx_cms_booking_supplements():new Module_cms_booking_supplements(); // Supplements
+		$this->bookings_crud_module=class_exists('Mx_cms_booking_bookings')?new Mx_cms_booking_bookings():new Module_cms_booking_bookings(); // Bookings
+
 		$type=get_param('type','misc');
 
 		require_lang('booking');
 
-		return parent::pre_run();
+		return parent::pre_run($top_level);
 	}
 
 	/**
@@ -78,10 +83,6 @@ class Module_cms_booking extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$this->cat_crud_module=class_exists('Mx_cms_booking_blacks')?new Mx_cms_booking_blacks():new Module_cms_booking_blacks(); // Blacks
-		$this->alt_crud_module=class_exists('Mx_cms_booking_supplements')?new Mx_cms_booking_supplements():new Module_cms_booking_supplements(); // Supplements
-		$this->bookings_crud_module=class_exists('Mx_cms_booking_bookings')?new Mx_cms_booking_bookings():new Module_cms_booking_bookings(); // Bookings
-
 		require_code('booking2');
 
 		if ($type=='misc') return $this->misc();

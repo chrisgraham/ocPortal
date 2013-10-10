@@ -129,9 +129,10 @@ class Module_admin_custom_comcode extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
+	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
+	function pre_run($top_level=true)
 	{
 		$type=get_param('type','misc');
 
@@ -140,7 +141,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 		set_helper_panel_pic('pagepics/customcomcode');
 		set_helper_panel_tutorial('tut_adv_comcode');
 
-		return parent::pre_run();
+		return parent::pre_run($top_level);
 	}
 
 	/**
