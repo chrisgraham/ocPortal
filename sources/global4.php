@@ -19,6 +19,39 @@
  */
 
 /**
+ * Attach a message mentioning how the site is closed.
+ *
+ * @param  tempcode			Where to place the message.
+ */
+function attach_message_site_closed(&$messages_bottom)
+{
+	if ((!in_array(get_page_name(),array('login','join'))) && (get_param_integer('wide_high',0)==0) && (($GLOBALS['IS_ACTUALLY_ADMIN']) || (has_privilege(get_member(),'access_closed_site'))))
+	{
+		$messages_bottom->attach(do_template('MESSAGE',array(
+			'_GUID'=>'03a41a91606b3ad05330e7d6f3e741c1',
+			'TYPE'=>'notice',
+			'MESSAGE'=>do_lang_tempcode(has_privilege(get_member(),'access_closed_site')?'SITE_SPECIAL_ACCESS':'SITE_SPECIAL_ACCESS_SU'),
+		)));
+	}
+}
+
+/**
+ * Attach a message mentioning SU is active.
+ *
+ * @param  tempcode			Where to place the message.
+ */
+function attach_message_su(&$messages_bottom)
+{
+	$unsu_link=get_self_url(true,true,array('keep_su'=>NULL));
+	$su_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+	$messages_bottom->attach(do_template('MESSAGE',array(
+		'_GUID'=>'13a41a91606b3ad05330e7d6f3e741c1',
+		'TYPE'=>'notice',
+		'MESSAGE'=>do_lang_tempcode('USING_SU',escape_html($unsu_link),escape_html($su_username)),
+	)));
+}
+
+/**
  * Save a file of merged web resources.
  *
  * @param  array				Resources (map of keys to 1), passed by reference as we alter it

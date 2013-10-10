@@ -398,7 +398,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	$output=do_template('COMCODE_MISTAKE_SCREEN',array('_GUID'=>'0010230e6612b0775566d07ddf54305a','EDITABLE'=>!running_script('preview'),'FORM'=>$form,'TITLE'=>get_screen_title('ERROR_OCCURRED'),'LINE'=>integer_format($line),'MESSAGE'=>$message,'LINES'=>$lines));
 	$echo=globalise($output,NULL,'',true);
 	$echo->handle_symbol_preprocessing();
-	$echo->evaluate_echo();
+	$echo->evaluate_echo(NULL,true);
 	exit();
 	return new ocp_tempcode(); // to trick code checker
 }

@@ -424,12 +424,22 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 		return $global;
 	}
 
-	$global=new ocp_tempcode();
-	$global->attach(do_template('GLOBAL_HTML_WRAP',array(
-		'_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131',
-		'MIDDLE'=>$middle,
-	)));
-	$global->handle_symbol_preprocessing();
+	global $TEMPCODE_CURRENT_PAGE_OUTPUTTING;
+
+	if (($middle!==NULL) && (isset($TEMPCODE_CURRENT_PAGE_OUTPUTTING))) // Error happened after output and during MIDDLE processing, so bind MIDDLE as an error
+	{
+		$middle->handle_symbol_preprocessing();
+		$global=$TEMPCODE_CURRENT_PAGE_OUTPUTTING;
+		$global->singular_bind('MIDDLE',$middle);
+		// NB: We also considered the idea of using document.write() as a way to reset the output stream, but Javascript execution will not happen before the parser (even if you force a flush and delay)
+	} else
+	{
+		$global=do_template('GLOBAL_HTML_WRAP',array(
+			'_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131',
+			'MIDDLE'=>$middle,
+		));
+		$global->handle_symbol_preprocessing();
+	}
 
 	if (get_value('xhtml_strict')==='1')
 	{

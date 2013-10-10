@@ -250,7 +250,7 @@ class Module_forumview
 				$awards=is_null($id)?array():find_awards_for('forum',strval($id));
 			} else $awards=array();
 
-			$name=get_translated_text($forum_info['f_name']);
+			$name=$forum_info['f_name'];
 			$ltitle=do_lang_tempcode('NAMED_FORUM',make_fractionable_editable('forum',$id,$name));
 
 			$this->title=get_screen_title($ltitle,false,NULL,NULL,$awards);

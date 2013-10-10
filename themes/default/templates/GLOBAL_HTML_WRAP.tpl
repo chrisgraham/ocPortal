@@ -69,11 +69,9 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			{+END}
 
 			{$,ocPortal may show little messages for you as it runs relating to what you are doing or the state the site is in}
-			{+START,IF_NON_EMPTY,{$MESSAGES_TOP}}
-				<div class="global_messages" id="global_messages">
-					{$MESSAGES_TOP}
-				</div>
-			{+END}
+			<div class="global_messages" id="global_messages">
+				{$MESSAGES_TOP}
+			</div>
 
 			{$,The main panels and content; float_surrounder contains the layout into a rendering box so that the footer etc can sit underneath}
 			<div class="global_middle_outer float_surrounder">
@@ -123,10 +121,9 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			{+END}
 
 			{+START,IF_NON_EMPTY,{$MESSAGES_BOTTOM}}
-				<div class="global_messages" id="global_messages_2">
+				<div class="global_messages">
 					{$MESSAGES_BOTTOM}
 				</div>
-				<script>merge_global_messages();</script>
 			{+END}
 		{+END}
 
@@ -138,9 +135,10 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 		{$,Late messages happen if something went wrong during outputting everything (i.e. too late in the process to show the error in the normal place)}
 		{+START,IF_NON_EMPTY,{$LATE_MESSAGES}}
-			<div class="global_messages">
+			<div class="global_messages" id="global_messages_2">
 				{$LATE_MESSAGES}
 			</div>
+			<script>merge_global_messages();</script>
 		{+END}
 
 		{$,This is the main site footer; if you like your layout in one place you can move it to GLOBAL.tpl}

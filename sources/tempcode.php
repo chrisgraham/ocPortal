@@ -1828,6 +1828,8 @@ class ocp_tempcode
 			ob_end_flush();
 		}
 
+		flush();
+
 		return '';
 	}
 }

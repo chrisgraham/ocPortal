@@ -779,4 +779,27 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 	return $out;
 }
 
+/**
+ * Attach a message showing memory usage.
+ *
+ * @param  tempcode			Where to place the message.
+ */
+function attach_message_memory_usage(&$messages_bottom)
+{
+	if (function_exists('memory_get_usage'))
+	{
+		if (function_exists('memory_get_peak_usage'))
+		{
+			$memory_usage=memory_get_peak_usage();
+		} else
+		{
+			$memory_usage=memory_get_usage();
+		}
+		$messages_bottom->attach(do_template('MESSAGE',array(
+			'_GUID'=>'d605c0d111742a8cd2d4ef270a1e5fe1',
+			'TYPE'=>'inform',
+			'MESSAGE'=>do_lang_tempcode('MEMORY_USAGE',float_format(round(floatval($memory_usage)/1024.0/1024.0,2))),
+		)));
+	}
+}
 

@@ -1618,7 +1618,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
 	{
-		$TEMPCODE_CURRENT_PAGE_OUTPUTTING=$out;
+		$GLOBALS['TEMPCODE_CURRENT_PAGE_OUTPUTTING']=$out;
 
 		$out->evaluate_echo(NULL,true);
 	}

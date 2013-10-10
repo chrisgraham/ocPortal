@@ -165,6 +165,7 @@ function script_load_stuff()
 function merge_global_messages()
 {
 	var m1=document.getElementById('global_messages');
+	if (!m1) return;
 	var m2=document.getElementById('global_messages_2');
 	set_inner_html(m1,get_inner_html(m2),true);
 	m2.parentNode.removeChild(m2);
@@ -270,6 +271,8 @@ function initialise_error_mechanism()
 	window.onerror=function(msg,file,code)
 		{
 			if (typeof msg.indexOf=='undefined') return null;
+
+			if (document.readyState!='complete') return null; // Probably not loaded yet
 
 			if (
 				(msg.indexOf('AJAX_REQUESTS is not defined')!=-1) || // Intermittent during page out-clicks

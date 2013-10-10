@@ -170,6 +170,8 @@ class Module_recommend
 			}
 		}
 
+		$this->type=$type;
+
 		return NULL;
 	}
 

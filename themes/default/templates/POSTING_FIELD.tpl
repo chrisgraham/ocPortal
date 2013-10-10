@@ -138,7 +138,9 @@
 			<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
 
 			<script>// <![CDATA[
-				initialise_dragdrop_upload('container_for_{NAME;*}','{NAME;*}');
+				add_event_listener_abstract(window,'load',function () {
+					initialise_dragdrop_upload('container_for_{NAME;*}','{NAME;*}');
+				} );
 			//]]></script>
 		</td>
 	</tr>

@@ -386,7 +386,7 @@ function _generic_exit($text,$template,$support_match_key_messages=false)
 
 	$middle=do_template($template,array('TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>true));
 	$echo=globalise($middle,NULL,'',true);
-	$echo->evaluate_echo();
+	$echo->evaluate_echo(NULL,true);
 	exit();
 }
 
@@ -923,7 +923,7 @@ function _fatal_exit($text,$return=false)
 
 	$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'9fdc6d093bdb685a0eda6bb56988a8c5','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));
 	$echo=globalise($error_tpl,NULL,'',true);
-	$echo->evaluate_echo();
+	$echo->evaluate_echo(NULL,true);
 
 	if (get_param_integer('keep_fatalistic',0)==0)
 	{
@@ -1293,7 +1293,7 @@ function _access_denied($class,$param,$force_login)
 				//]]></script>
 			'));
 			$echo=globalise($middle,NULL,'',true);
-			$echo->evaluate_echo();
+			$echo->evaluate_echo(NULL,true);
 			exit();
 		}
 
@@ -1311,7 +1311,7 @@ function _access_denied($class,$param,$force_login)
 		if (get_value('no_tech_login_messages')!=='1')
 			attach_message($message,'warn');
 		$echo=globalise($middle,NULL,'',true);
-		$echo->evaluate_echo();
+		$echo->evaluate_echo(NULL,true);
 		exit();
 	}
 

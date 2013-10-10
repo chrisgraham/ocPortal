@@ -1682,28 +1682,19 @@ function ecv_MESSAGES_BOTTOM($lang,$escaped,$param)
 {
 	// Extra stuff we can tag on (like messages)
 	$messages_bottom=new ocp_tempcode();
-	$site_closed=get_option('site_closed'); // May have been JUST changed in page load - think Setup Wizard
-	$page=get_page_name();
-	if (($site_closed=='1') && ($page!='login') && ($page!='join') && (get_param_integer('wide_high',0)==0) && (($GLOBALS['IS_ACTUALLY_ADMIN']) || (has_privilege(get_member(),'access_closed_site'))))
+	if (get_option('site_closed')=='1')
 	{
-		$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'03a41a91606b3ad05330e7d6f3e741c1','TYPE'=>'notice','MESSAGE'=>do_lang_tempcode(has_privilege(get_member(),'access_closed_site')?'SITE_SPECIAL_ACCESS':'SITE_SPECIAL_ACCESS_SU'))));
+		attach_message_site_closed($messages_bottom);
 	}
 	if ($GLOBALS['IS_ACTUALLY_ADMIN'])
 	{
-		$unsu_link=get_self_url(true,true,array('keep_su'=>NULL));
-		$su_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'13a41a91606b3ad05330e7d6f3e741c1','TYPE'=>'notice','MESSAGE'=>do_lang_tempcode('USING_SU',escape_html($unsu_link),escape_html($su_username)))));
+		require_code('global4');
+		attach_message_su($messages_bottom);
 	}
-	if ((function_exists('memory_get_usage')) && (get_param('special_page_type','')=='memory'))
+	if (get_param('special_page_type','')=='memory')
 	{
-		if (function_exists('memory_get_peak_usage'))
-		{
-			$memory_usage=memory_get_peak_usage();
-		} else
-		{
-			$memory_usage=memory_get_usage();
-		}
-		$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'d605c0d111742a8cd2d4ef270a1e5fe1','TYPE'=>'inform','MESSAGE'=>do_lang_tempcode('MEMORY_USAGE',float_format(round(floatval($memory_usage)/1024.0/1024.0,2))))));
+		require_code('global4');
+		attach_message_memory_usage($messages_bottom);
 	}
 	$value=$messages_bottom->evaluate();
 

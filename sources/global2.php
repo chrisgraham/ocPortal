@@ -1557,22 +1557,45 @@ function javascript_tempcode($position=NULL)
 			if (($position=='footer') && (!$bottom)) continue;
 		}
 
-		$temp=($do_enforce==1)?javascript_enforce($j):'';
-		if (($temp!='') || ($do_enforce==0))
-		{
-			if (!$minify) $j.='_non_minified';
-			if ($https) $j.='_ssl';
-			if ($mobile) $j.='_mobile';
-
-			global $SITE_INFO;
-			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
-			$sup=($support_smart_decaching && $temp!='' && !$GLOBALS['RECORD_TEMPLATES_USED'])?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
-
-			$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j,'SUP'=>$sup)));
-		}
+		_javascript_tempcode($j,$js,$minify,$https,$mobile,$do_enforce==1);
 	}
 	if (!is_null($JAVASCRIPT)) $js->attach($JAVASCRIPT);
 	return $js;
+}
+
+/**
+ * Get tempcode to tie in (to the HTML, in <head>) for an individual CSS file.
+ *
+ * @param  ID_TEXT		The javascript file required
+ * @param  tempcode		Tempcode object (will be written into if appropriate)
+ * @param  boolean		Whether minifying
+ * @param  boolean		Whether doing HTTPS
+ * @param  boolean		Whether operating in mobile mode
+ * @param  boolean		Whether to generate the cached file if not already cached
+ * @return tempcode		The tempcode to tie in the CSS files
+ */
+function _javascript_tempcode($j,&$js,$_minify=NULL,$_https=NULL,$_mobile=NULL,$do_enforce=true)
+{
+	static $minify=NULL;
+	if ($_minify!==NULL) $minify=$_minify;
+	static $https=NULL;
+	if ($_https!==NULL) $https=$_https;
+	static $mobile=NULL;
+	if ($_mobile!==NULL) $mobile=$_mobile;
+
+	$temp=$do_enforce?javascript_enforce($j):'';
+	if (($temp!='') || ($do_enforce==0))
+	{
+		if (!$minify) $j.='_non_minified';
+		if ($https) $j.='_ssl';
+		if ($mobile) $j.='_mobile';
+
+		global $SITE_INFO;
+		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
+		$sup=($support_smart_decaching && $temp!='' && !$GLOBALS['RECORD_TEMPLATES_USED'])?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
+
+		$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j,'SUP'=>$sup)));
+	}
 }
 
 /**
@@ -1589,10 +1612,9 @@ function require_javascript($javascript)
 	// Has to do this inline, as you're not allowed to reference sheets outside head
 	if ((!isset($JAVASCRIPTS[$javascript])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED']))
 	{
-		$file=javascript_enforce($javascript);
-		//$_value=do_template('JAVASCRIPT_NEED_INLINE',array('CODE'=>str_replace(get_custom_file_base().'/',get_base_url().'/',file_get_contents($file))));
-		$_value=do_template('JAVASCRIPT_NEED',array('CODE'=>$javascript));
-		attach_to_screen_footer($_value);
+		$value=new ocp_tempcode();
+		_javascript_tempcode($javascript,$value);
+		attach_to_screen_footer($value);
 	}
 
 	$JAVASCRIPTS[$javascript]=1;
@@ -1700,46 +1722,79 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 	{
 		if (is_integer($c)) $c=strval($c);
 
-		if ($seed!='')
-		{
-			$keep=symbol_tempcode('KEEP');
-			$css->attach(do_template('CSS_NEED_FULL',array('_GUID'=>'f2d7f0303a08b9aa9e92f8b0208ee9a7','URL'=>find_script('themewizard').'?type=css&show='.urlencode($c).'.css'.$keep->evaluate()),user_lang(),false,NULL,'.tpl','templates',$theme));
-		}
-		elseif (($c=='no_cache') || ($inline))
-		{
-			if (!$text_only)
-			{
-				$_css=do_template($c,NULL,user_lang(),false,NULL,'.css','css',$theme);
-				$__css=$_css->evaluate();
-				if ($context!==NULL)
-				{
-					$__css=filter_css($__css,$context);
-				} else
-				{
-					$__css=str_replace('} ','}'."\n",preg_replace('#\s+#',' ',$__css));
-				}
-
-				if (trim($__css)!='')
-					$css_need_inline->attach(do_template('CSS_NEED_INLINE',array('_GUID'=>'f5b225e080c633ffa033ec5af5aec866','CODE'=>$__css),user_lang(),false,NULL,'.tpl','templates',$theme));
-			}
-		} else
-		{
-			$temp=($do_enforce==1)?css_enforce($c,$theme):'';
-			if (!$minify) $c.='_non_minified';
-			if ($https) $c.='_ssl';
-			if ($mobile) $c.='_mobile';
-			if (($temp!='') || ($do_enforce==0))
-			{
-				global $SITE_INFO;
-				$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
-				$sup=($support_smart_decaching && $temp!='')?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
-
-				$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c,'SUP'=>$sup),user_lang(),false,NULL,'.tpl','templates',$theme));
-			}
-		}
+		_css_tempcode($c,$css,$css_need_inline,$inline,$context,$theme,$seed,$text_only,$minify,$https,$mobile,$do_enforce==1);
 	}
 	$css_need_inline->attach($css);
 	return $css_need_inline;
+}
+
+/**
+ * Get tempcode to tie in (to the HTML, in <head>) for an individual CSS file.
+ *
+ * @param  ID_TEXT		The CSS file required
+ * @param  tempcode		Main tempcode object (will be written into if appropriate)
+ * @param  tempcode		Inline tempcode object (will be written into if appropriate)
+ * @param  boolean		Only do global CSS
+ * @param  ?string		HTML context for which we filter (minimise) any CSS we spit out as inline (NULL: none)
+ * @param  ?ID_TEXT		The name of the theme (NULL: current theme)
+ * @param  ?ID_TEXT		The seed colour (NULL: previous cached) (blank: none)
+ * @param  boolean		Whether operating in text-only mode
+ * @param  boolean		Whether minifying
+ * @param  boolean		Whether doing HTTPS
+ * @param  boolean		Whether operating in mobile mode
+ * @param  boolean		Whether to generate the cached file if not already cached
+ * @return tempcode		The tempcode to tie in the CSS files
+ */
+function _css_tempcode($c,&$css,&$css_need_inline,$inline=false,$context=NULL,$theme=NULL,$_seed=NULL,$_text_only=NULL,$_minify=NULL,$_https=NULL,$_mobile=NULL,$do_enforce=true)
+{
+	static $seed=NULL;
+	if ($_seed!==NULL) $seed=$_seed;
+	static $text_only=NULL;
+	if ($_text_only!==NULL) $text_only=$_text_only;
+	static $minify=NULL;
+	if ($_minify!==NULL) $minify=$_minify;
+	static $https=NULL;
+	if ($_https!==NULL) $https=$_https;
+	static $mobile=NULL;
+	if ($_mobile!==NULL) $mobile=$_mobile;
+
+	if ($seed!='')
+	{
+		$keep=symbol_tempcode('KEEP');
+		$css->attach(do_template('CSS_NEED_FULL',array('_GUID'=>'f2d7f0303a08b9aa9e92f8b0208ee9a7','URL'=>find_script('themewizard').'?type=css&show='.urlencode($c).'.css'.$keep->evaluate()),user_lang(),false,NULL,'.tpl','templates',$theme));
+	}
+	elseif (($c=='no_cache') || ($inline))
+	{
+		if (!$text_only)
+		{
+			$_css=do_template($c,NULL,user_lang(),false,NULL,'.css','css',$theme);
+			$__css=$_css->evaluate();
+			if ($context!==NULL)
+			{
+				$__css=filter_css($__css,$context);
+			} else
+			{
+				$__css=str_replace('} ','}'."\n",preg_replace('#\s+#',' ',$__css));
+			}
+
+			if (trim($__css)!='')
+				$css_need_inline->attach(do_template('CSS_NEED_INLINE',array('_GUID'=>'f5b225e080c633ffa033ec5af5aec866','CODE'=>$__css),user_lang(),false,NULL,'.tpl','templates',$theme));
+		}
+	} else
+	{
+		$temp=$do_enforce?css_enforce($c,$theme):'';
+		if (!$minify) $c.='_non_minified';
+		if ($https) $c.='_ssl';
+		if ($mobile) $c.='_mobile';
+		if (($temp!='') || ($do_enforce==0))
+		{
+			global $SITE_INFO;
+			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
+			$sup=($support_smart_decaching && $temp!='')?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
+
+			$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c,'SUP'=>$sup),user_lang(),false,NULL,'.tpl','templates',$theme));
+		}
+	}
 }
 
 /**
@@ -1756,10 +1811,9 @@ function require_css($css)
 	// Has to do this inline, as you're not allowed to reference sheets outside head
 	if ((!isset($CSSS[$css])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED']))
 	{
-		$file=css_enforce($css);
-		//$_value=do_template('CSS_NEED_INLINE',array('CODE'=>str_replace(get_custom_file_base().'/',get_base_url().'/',file_get_contents($file))));
-		$_value=do_template('CSS_NEED',array('CODE'=>$css));
-		attach_to_screen_footer($_value);
+		$value=new ocp_tempcode();
+		_css_tempcode($css,$value,$value);
+		attach_to_screen_footer($value);
 	}
 
 	$CSSS[$css]=1;

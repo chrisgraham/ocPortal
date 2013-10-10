@@ -473,7 +473,7 @@ function load_module_page($string,$codename,&$out=NULL)
 
 	if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
 	{
-		$TEMPCODE_CURRENT_PAGE_OUTPUTTING=$out;
+		$GLOBALS['TEMPCODE_CURRENT_PAGE_OUTPUTTING']=$out;
 	}
 
 	if (method_exists($object,'pre_run'))
@@ -486,9 +486,8 @@ function load_module_page($string,$codename,&$out=NULL)
 			$out->evaluate_echo(NULL,true);
 		}
 	}
+
 	$ret=$object->run();
-	if ($GLOBALS['OUTPUT_STREAMING'])
-		$ret->evaluate_echo(NULL,true);
 	return $ret;
 }
 
@@ -744,7 +743,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 	if (!isset($map['cache']))
 		$map['cache']=block_cache_default($codename);
 
-	push_output_state(false,true);
+	if (!$GLOBALS['OUTPUT_STREAMING'])
+		push_output_state(false,true);
 
 	$object=NULL;
 	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1) || (get_param_integer('cache_blocks',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache_blocks',NULL)!==0) && (get_param_integer('cache',NULL)!==0)) && (strpos(get_param('special_page_type',''),'t')===false))
@@ -799,7 +799,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 						$out=new ocp_tempcode();
 						$out->attach($object);
-						restore_output_state(false,true);
+						if (!$GLOBALS['OUTPUT_STREAMING'])
+							restore_output_state(false,true);
 						return $out;
 					}
 					$backup_langs_requested=$LANGS_REQUESTED;
@@ -821,14 +822,16 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 					} elseif (($ttl!=-1) && ($cache->is_empty())) // Try again with no TTL, if we currently failed but did impose a TTL
 					{
 						$LANGS_REQUESTED+=$backup_langs_requested;
-						restore_output_state(false,true);
+						if (!$GLOBALS['OUTPUT_STREAMING'])
+							restore_output_state(false,true);
 						return do_block($codename,$map,-1);
 					}
 					$LANGS_REQUESTED+=$backup_langs_requested;
 
 					$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 				}
-				restore_output_state(false,true);
+				if (!$GLOBALS['OUTPUT_STREAMING'])
+					restore_output_state(false,true);
 				return $cache;
 			}
 		}
@@ -851,7 +854,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 	{
 		$out=new ocp_tempcode();
 		$out->attach($object);
-		restore_output_state(false,true);
+		if (!$GLOBALS['OUTPUT_STREAMING'])
+			restore_output_state(false,true);
 		return $out;
 	}
 
@@ -865,7 +869,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			if ($cache_identifier!==NULL)
 			{
 				require_code('caches2');
-				put_into_cache($codename,$info['ttl'],$cache_identifier,$cache,array_keys($LANGS_REQUESTED),array_keys($JAVASCRIPTS),array_keys($CSSS),true);
+				put_into_cache($codename,$info['ttl'],$cache_identifier,$cache,array_keys($LANGS_REQUESTED),$GLOBALS['OUTPUT_STREAMING']?array():array_keys($JAVASCRIPTS),$GLOBALS['OUTPUT_STREAMING']?array():array_keys($CSSS),true);
 				if ((!defined('HIPHOP_PHP')) && (!is_array($info['cache_on'])))
 				{
 					$GLOBALS['SITE_DB']->query_insert('cache_on',array('cached_for'=>$codename,'cache_on'=>$info['cache_on'],'cache_ttl'=>$info['ttl']),false,true); // Allow errors in case of race conditions
@@ -875,7 +879,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 	}
 	$LANGS_REQUESTED+=$backup_langs_requested;
 
-	restore_output_state(false,true);
+	if (!$GLOBALS['OUTPUT_STREAMING'])
+		restore_output_state(false,true);
 	return $cache;
 }
 
