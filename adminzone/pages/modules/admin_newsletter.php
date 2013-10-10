@@ -389,7 +389,8 @@ class Module_admin_newsletter extends standard_aed_module
 		$folders=new ocp_tempcode();
 		foreach ($_folders as $folder)
 		{
-			$folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce')!==false));
+			$label=preg_replace('#@.*$#','',preg_replace('#\{[^{}]+\}#','',$folder));
+			$folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce')!==false),$label);
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'),new ocp_tempcode(),'box',$folders));
 
@@ -427,11 +428,7 @@ class Module_admin_newsletter extends standard_aed_module
 		$all_subscribers=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
 
 		$headers=imap_search($mbox,'UNDELETED');
-		//$headers=imap_headers($mbox);
-		if ($headers===false)
-		{
-		   warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
-		}
+		if ($headers===false) $headers=array();
 		$num=0;
 		foreach ($headers as $val)
 		{
