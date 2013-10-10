@@ -169,6 +169,7 @@ function require_code($codename,$light_exit=false)
 					include($path_b);
 				} else
 				{
+					//static $log_file=NULL;if ($log_file===NULL) $log_file=fopen(get_file_base().'/log.'.strval(time()).'.txt','wb');fwrite($log_file,$path_b."\n");		Good for debugging errors in eval'd code
 					eval($orig); // Load up modified original
 				}
 

@@ -210,15 +210,47 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 		$generator_base=uniqid('',true);
 	$generator_num++;
 
-	$myfunc='do_runtime_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
-	$funcdef="\$tpl_funcs['$myfunc']=\"foreach (\\\$parameters as \\\$i=>\\\$p) { if (is_object(\\\$p)) \\\$parameters[\\\$i]=\\\$p->evaluate(); } echo ";
-	if ($name=='?' && $type==TC_SYMBOL) $name='TERNARY';
-	if (($type==TC_SYMBOL) && (function_exists('ecv_'.$name)))
+	$has_tempcode=false;
+	foreach ($parameters as $parameter)
 	{
-		$funcdef.="ecv_".$name."(\\\$cl,".($_escaping).",\\\$parameters);\";\n";
+		if (is_object($parameter)) $has_tempcode=true;
+	}
+
+	$myfunc='do_runtime_'.$generator_base.'_'.strval($generator_num)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
+	if ($name=='?' && $type==TC_SYMBOL) $name='TERNARY';
+
+	if ($has_tempcode)
+	{
+		$funcdef="\$tpl_funcs['$myfunc']=\"foreach (\\\$parameters as \\\$i=>\\\$p) { if (is_object(\\\$p)) \\\$parameters[\\\$i]=\\\$p->evaluate(); } echo ";
+		if (($type==TC_SYMBOL) && (function_exists('ecv_'.$name)))
+		{
+			$funcdef.="ecv_".$name."(\\\$cl,".($_escaping).",\\\$parameters);\";\n";
+		} else
+		{
+			$funcdef.="ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
+		}
 	} else
 	{
-		$funcdef.="ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
+		$_parameters='';
+		if ($parameters!==NULL)
+		{
+			foreach ($parameters as $parameter)
+			{
+				if ($_parameters!='') $_parameters.=',';
+				$_parameters.="\\\"".php_addslashes_twice($parameter)."\\\"";
+			}
+		}
+
+		$funcdef="\$tpl_funcs['$myfunc']=\"echo ";
+		if (($type==TC_SYMBOL) && (function_exists('ecv_'.$name)))
+		{
+			$funcdef.="ecv_".$name."(\\\$cl,".($_escaping).",array(".$_parameters."));\";\n";
+		} else
+		{
+			$funcdef.="ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",array(".$_parameters."));\";\n";
+		}
+
+		$parameters=array();
 	}
 
 	$ret=new ocp_tempcode(array(array($myfunc=>$funcdef),array(array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,'')))));
@@ -556,7 +588,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$loaded_this_once=true;
 	}
 	$_data=false;
-	if (($CACHE_TEMPLATES) && (/*the following relates to ensuring a full recompile for INCLUDEs except for CSS and JS*/($parameters===NULL) || ((!$RECORD_TEMPLATES_USED) && (!$RECORD_TEMPLATES_TREE))) && (!$IS_TEMPLATE_PREVIEW_OP_CACHE) && ((!$POSSIBLY_IN_SAFE_MODE_CACHE) || (!in_safe_mode())))
+	if (($CACHE_TEMPLATES) && (/*the following relates to ensuring a full recompile for INCLUDEs except for CSS and JS*/($parameters===NULL) || ((!$RECORD_TEMPLATES_USED) && (!$RECORD_TEMPLATES_TREE))) && (!$IS_TEMPLATE_PREVIEW_OP_CACHE) && ((!$POSSIBLY_IN_SAFE_MODE_CACHE) || (isset($GLOBALS['SITE_INFO']['safe_mode'])) || (!in_safe_mode())))
 	{
 		$tcp_path=$prefix.$theme.'/templates_cached/'.$lang.'/'.$codename.$suffix.'.tcp';
 		if ($loaded_this_once)

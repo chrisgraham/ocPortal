@@ -1495,7 +1495,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
-	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($js_cache_path)!=0)) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($js_cache_path)!=0)) && (!is_browser_decacheing()) && ((!in_safe_mode()) || (isset($GLOBALS['SITE_INFO']['safe_mode'])));
 
 	if (($support_smart_decaching) || (!$is_cached))
 	{
@@ -1584,7 +1584,7 @@ function _javascript_tempcode($j,&$js,$_minify=NULL,$_https=NULL,$_mobile=NULL,$
 	if ($_mobile!==NULL) $mobile=$_mobile;
 
 	$temp=$do_enforce?javascript_enforce($j):'';
-	if (($temp!='') || ($do_enforce==0))
+	if (($temp!='') || (!$do_enforce))
 	{
 		if (!$minify) $j.='_non_minified';
 		if ($https) $j.='_ssl';
@@ -1660,7 +1660,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
-	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($css_cache_path)!=0)) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($css_cache_path)!=0)) && (!is_browser_decacheing()) && ((!in_safe_mode()) || (isset($GLOBALS['SITE_INFO']['safe_mode'])));
 
 	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
 	{
@@ -1786,7 +1786,7 @@ function _css_tempcode($c,&$css,&$css_need_inline,$inline=false,$context=NULL,$t
 		if (!$minify) $c.='_non_minified';
 		if ($https) $c.='_ssl';
 		if ($mobile) $c.='_mobile';
-		if (($temp!='') || ($do_enforce==0))
+		if (($temp!='') || (!$do_enforce))
 		{
 			global $SITE_INFO;
 			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');

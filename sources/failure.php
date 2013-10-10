@@ -1082,6 +1082,7 @@ function put_value_in_stack_trace($value)
 		elseif (is_object($value) && (is_a($value,'ocp_tempcode')))
 		{
 			$_value=$value->evaluate();
+			if (!is_string($_value)) @exit(gettype($_value));
 			if (strlen($_value)>1000) $_value=substr($_value,0,1000).'...';
 		}
 		elseif ((is_array($value)) || (is_object($value)))
