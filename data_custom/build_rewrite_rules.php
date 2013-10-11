@@ -162,7 +162,7 @@ write_to('web.config','IIS','<rules>','</rules>',4,$rewrite_rules);
 write_to('docs/pages/comcode_custom/EN/tut_adv_configuration.txt','IIRF','[staff_note]begin_rewrite_rules[/staff_note][codebox]','[/codebox][staff_note]end_rewrite_rules[/staff_note]',0,$rewrite_rules);
 
 // Write rules to ocp.hdf (Hip Hop PHP)
-write_to('ocp.hdf','HPHP','RewriteRules {','} # end rules',3,$rewrite_rules);
+write_to('ocp.hdf','HPHP','RewriteRules {',"\t\t}",3,$rewrite_rules);
 
 function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrite_rules)
 {
@@ -257,7 +257,7 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 			{
 				if ($x!=0) $rules_txt.="\n";
 				list($comment,$rewrite_rule_set)=$rewrite_rule_block;
-				$rules_txt.='# '.$comment."\n";
+				$rules_txt.="\n".'# '.$comment."\n";
 				foreach ($rewrite_rule_set as $y=>$rewrite_rule)
 				{
 					list($rule,$to,$flags,$enabled)=$rewrite_rule;

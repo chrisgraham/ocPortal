@@ -320,37 +320,38 @@ DNS may be used to route the CDN servers based on geographic location.
 
 There are many commercial CDN services available that can be configured in via this option.
 
-[title="2"]Facebook's HipHop PHP (hphp)[/title]
+[title="2"]Facebook's HipHop PHP (HHVM / hphp)[/title]
 
-[i]HPHP is not currently supported, as it is fast evolving and often has bugs. Support can be refreshed upon commercial demand. The below was written before the HHVM mode of operation was released.[/i]
+[i]Note that we now support HHVM, which has replaced the original HipHop PHP compiler. The names are used interchangeably, but we are referring to HHVM.
 
-Facebook released an alternative implementation of PHP that works as a compiler (compiles to an executable, via C++) instead of an interpreter. It more than doubles performance, and is set to improve further as it is developed.
+[i]HHVM is not officially supported, as it is fast evolving and sometimes has bugs. Support can be provided individually upon commercial demand.[/i]
+
+Facebook released an alternative implementation of PHP that works as a JIT virtual machine instead of an interpreter. It more than doubles performance, and is set to improve further as it is developed.
 This is not suitable for most people for the following reasons:
  - It requires server admin access
- - The compiled app takes over the whole server
- - It only runs on 64 bit systems running Linux (Fedora, CentOS, Ubuntu and Kubuntu are all the ones known to work at the time of writing)
- - You can't make changes to your PHP code without doing a full recompile and redeployment (e.g. you can't just install and use new addons)
- - It requires some advanced skills
+ - The HHVM server is hard to run in parallel to normal web servers
+ - It only runs on 64 bit systems running common varieties of Linux (Fedora/CentOS and Debian/Ubuntu are all the ones known to work at the time of writing)
+ - You need to be comfortable compiling HHVM yourself
+ - It generally requires some advanced skills
 However, it is very suitable for those who need to serve a high capacity and have the skills and staffing to manage all the above.
 
-ocPortal fully supported hphp since version 5.
+ocPortal fully supported HHVM since version 10.
 
-The 'hphp_buildkit' addon (bundled by default) provides a build script for hphp.
-To invoke a compile (we are assuming that hphp has been properly installed):
+The 'hphp_buildkit' addon (bundled by default) provides a config and initialisation scripts for HHVM.
+To invoke (we are assuming that HHVM has been properly installed and is in the path):
  - Open a shell to the ocPortal directory
- - Type [tt]./hphp.sh[/tt] (this is in the 'hphp_buildkit' addon)
- - Make sure [tt]data_custom/fields.xml[/tt] is deleted (at the time of writing there is a critical bug in hphp's XML support that any XML parsing will lead to request failure)
+ - Type [tt]sh hphp.sh[/tt] (this is in the 'hphp_buildkit' addon)
 
-In order to support hphp (which imposes some language restrictions) we made some changes to ocPortal, and updated our coding standards. There's no guarantee that any individual non-bundled addon will meet the coding standards however.
+In order to support hphp (which imposes some language restrictions) we made some changes to ocPortal, and updated our coding standards. There's no guarantee that any individual non-bundled addon will meet the coding standards, however.
 
-We expect Facebook will improve hphp performance will increase over time, as the current 50% performance improvement seems low compared to what could be possible, especially if they can implement better 'type hinting' support (or some other type detection support, such as type database building via gathering at run-time); currently type detection (needed for the significant performance boosts) is very limited. hphp is an Open Source project, so anybody can contribute.
+We expect Facebook will improve HHVM performance will increase over time. They are working on improvements to the PHP language, which ocPortal could benefit from with further development. Type hinting is particularly interesting, as it has great performance potential and mirrors our code quality efforts that have already made ocPortal type-strict.
 
 We have tried in the past to support:
  - Roadsend
  - Phalanger
  - Quercus
  - Project Zero
-But after quite a lot of work we have concluded these projects are too buggy to be realistic, and not well maintained.
+But after quite a lot of work we have concluded these projects are too buggy to be realistic, not well maintained, or don't actually offer any performance improvement. Never-the-less, making ocPortal work on these platforms in the past has led to improvements in the ocPortal code quality, as these PHP replacements have a tendency to float different kinds of subtle coding errors to the surface.
 
 [title="2"]mod_pagespeed[/title]
 

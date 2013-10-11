@@ -372,7 +372,7 @@ function _read_php_function_line($_line)
 				{
 					if ($arg_default==='true') $default='boolean-true'; // hack, to stop booleans coming out of arrays as integers
 					elseif ($arg_default==='false') $default='boolean-false';
-					else $default=defined('HIPHOP_PHP')?'':@eval('return '.$arg_default.';'); // Could be unprocessable by php.php in standalone mode
+					else $default=@eval('return '.$arg_default.';'); // Could be unprocessable by php.php in standalone mode
 					$parameters[]=array('name'=>$arg_name,'default'=>$default,'ref'=>$ref);
 					$arg_name='';
 					$arg_default='';
@@ -383,7 +383,7 @@ function _read_php_function_line($_line)
 				{
 					if ($arg_default==='true') $default='boolean-true'; // hack, to stop booleans coming out of arrays as integers
 					elseif ($arg_default==='false') $default='boolean-false';
-					else $default=defined('HIPHOP_PHP')?'':@eval('return '.$arg_default.';'); // Could be unprocessable by php.php in standalone mode
+					else $default=@eval('return '.$arg_default.';'); // Could be unprocessable by php.php in standalone mode
 					$parameters[]=array('name'=>$arg_name,'default'=>$default,'ref'=>$ref);
 					$parse='done';
 				} else
@@ -543,19 +543,19 @@ function check_function_type($type,$function_name,$name,$value,$range,$set,$echo
 
 		if (in_array($_type,$allowed))
 		{
-			if (($value!='') || (!defined('HIPHOP_PHP')))
+			if ($value!='')
 				if ((($min!='min') && ($value<intval($min))) || (($max!='max') && ($value>intval($max))))
 					fatal_exit(do_lang_tempcode('OUT_OF_RANGE_VALUE',escape_html($name),escape_html($function_name),array(escape_html($value))));
 		}
 		elseif (in_array($_type,$allowed_string))
 		{
-			if (($value!='') || (!defined('HIPHOP_PHP')))
+			if ($value!='')
 				if ((($min!='min') && (strlen($value)<intval($min))) || (($max!='max') && (strlen($value)>intval($max))))
 					fatal_exit(do_lang_tempcode('OUT_OF_RANGE_VALUE',escape_html($name),escape_html($function_name),array(escape_html($value))));
 		}
 		else
 		{
-			if (($value!='') || (!defined('HIPHOP_PHP')))
+			if ($value!='')
 				if ((($min!='min') && (count($value)<intval($min))) || (($max!='max') && (count($value)>intval($max))))
 					fatal_exit(do_lang_tempcode('OUT_OF_RANGE_VALUE',escape_html($name),escape_html($function_name),array(escape_html($value))));
 		}
@@ -571,7 +571,7 @@ function check_function_type($type,$function_name,$name,$value,$range,$set,$echo
 		}
 		if (!in_array(is_string($value)?$value:strval($value),$_set))
 		{
-			if (($value!='') || (!defined('HIPHOP_PHP')))
+			if ($value!='')
 				fatal_exit(do_lang_tempcode('OUT_OF_RANGE_VALUE',escape_html($name),escape_html($function_name),array(escape_html($value))));
 		}
 	}
@@ -697,8 +697,6 @@ function test_fail_php_type_check($type,$function_name,$name,$value,$echo=false)
  */
 function _fail_php_type_check($type,$function_name,$name,$value,$echo=false)
 {
-	if (($value=='') && (defined('HIPHOP_PHP'))) return;
-
 	if ($echo) echo 'TYPE_MISMATCH in \''.$function_name.'\' ('.$name.' is '.(is_string($value)?$value:strval($value)).' which is not a '.$type.')<br />';
 	else fatal_exit(do_lang_tempcode('TYPE_MISMATCH',escape_html($function_name),escape_html($name),is_string($value)?$value:strval($value)/*,$type*/));
 }
@@ -742,15 +740,9 @@ function render_php_function($function,$class,$show_filename=false)
 	{
 		$_code="<"."?php\n".$function['code']."\n?".">";
 
-		if (defined('HIPHOP_PHP'))
-		{
-			$code=nl2br(escape_html($_code));
-		} else
-		{
-			ob_start();
-			highlight_string($_code);
-			$code=ob_get_clean();
-		}
+		ob_start();
+		highlight_string($_code);
+		$code=ob_get_clean();
 		$code=str_replace('&lt;?php<br />','',$code);
 		$code=str_replace('?&gt;','',$code);
 		require_code('xhtml');

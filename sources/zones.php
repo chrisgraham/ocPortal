@@ -790,12 +790,9 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 					{
 						// This probably happened as we uninstalled a block, and now we're getting a "missing block" message back.
 
-						if (!defined('HIPHOP_PHP'))
-						{
-							// Removed outdated cache-on information
-							$GLOBALS['SITE_DB']->query_delete('cache_on',array('cached_for'=>$codename),'',1);
-							persistent_cache_delete('BLOCK_CACHE_ON_CACHE');
-						}
+						// Removed outdated cache-on information
+						$GLOBALS['SITE_DB']->query_delete('cache_on',array('cached_for'=>$codename),'',1);
+						persistent_cache_delete('BLOCK_CACHE_ON_CACHE');
 
 						$out=new ocp_tempcode();
 						$out->attach($object);
@@ -870,7 +867,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			{
 				require_code('caches2');
 				put_into_cache($codename,$info['ttl'],$cache_identifier,$cache,array_keys($LANGS_REQUESTED),$GLOBALS['OUTPUT_STREAMING']?array():array_keys($JAVASCRIPTS),$GLOBALS['OUTPUT_STREAMING']?array():array_keys($CSSS),true);
-				if ((!defined('HIPHOP_PHP')) && (!is_array($info['cache_on'])))
+				if (!is_array($info['cache_on']))
 				{
 					$GLOBALS['SITE_DB']->query_insert('cache_on',array('cached_for'=>$codename,'cache_on'=>$info['cache_on'],'cache_ttl'=>$info['ttl']),false,true); // Allow errors in case of race conditions
 				}
@@ -1153,7 +1150,7 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 	global $SITE_INFO;
 	$prefer_direct_code_call=$prefer_direct_code_call || ((isset($SITE_INFO['prefer_direct_code_call'])) && ($SITE_INFO['prefer_direct_code_call']=='1'));
 	$hphp=defined('HIPHOP_PHP');
-	if ((($hphp) && (!function_exists('quercus_version'))) || ($prefer_direct_code_call))
+	if (($hphp) || ($prefer_direct_code_call))
 	{
 		global $CLASS_CACHE;
 		if (isset($CLASS_CACHE[$path]))
@@ -1162,7 +1159,8 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 		} else
 		{
 			if (!$hphp && $class_name===NULL) $classes_before=get_declared_classes();
-			require_code(preg_replace('#^'.preg_quote(get_file_base()).'/#','',preg_replace('#^'.preg_quote(get_file_base()).'/((sources)|(sources\_custom))/(.*)\.php#','${4}',$path)));
+			$require_path=preg_replace('#^'.preg_quote(get_file_base()).'/#','',preg_replace('#^'.preg_quote(get_file_base()).'/((sources)|(sources\_custom))/(.*)\.php#','${4}',$path));
+			require_code($require_path);
 			if (!$hphp && $class_name===NULL) $classes_after=get_declared_classes();
 			if ($class_name===NULL)
 			{
@@ -1170,6 +1168,8 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 				if (count($new_classes)==0) // Ah, HipHop PHP's AllVolatile is probably not enabled
 				{
 					$matches=array();
+					if ((running_script('install')) && (file_exists(preg_replace('#(sources|modules|minimodules)_custom#','${1}',$path))))
+						$path=preg_replace('#(sources|modules|minimodules)_custom#','${1}',$path);
 					if (preg_match('#^\s*class (\w+)#m',file_get_contents($path),$matches)!=0)
 						$new_classes=array($matches[1]);
 				}

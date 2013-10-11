@@ -784,6 +784,9 @@ function ecv_FEEDS($lang,$escaped,$param)
 			$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'fa8c7aaa3601c24d1986fa2598416558','FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
 		}
 		$value=$feeds->evaluate();
+	} else
+	{
+		$value='';
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
@@ -1684,6 +1687,7 @@ function ecv_MESSAGES_BOTTOM($lang,$escaped,$param)
 	$messages_bottom=new ocp_tempcode();
 	if (get_option('site_closed')=='1')
 	{
+		require_code('global4');
 		attach_message_site_closed($messages_bottom);
 	}
 	if ($GLOBALS['IS_ACTUALLY_ADMIN'])
@@ -1693,7 +1697,6 @@ function ecv_MESSAGES_BOTTOM($lang,$escaped,$param)
 	}
 	if (get_param('special_page_type','')=='memory')
 	{
-		require_code('global4');
 		attach_message_memory_usage($messages_bottom);
 	}
 	$value=$messages_bottom->evaluate();

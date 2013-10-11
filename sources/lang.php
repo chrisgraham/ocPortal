@@ -179,15 +179,14 @@ function user_lang()
 	if ($USER_LANG_CACHED!==NULL) return $USER_LANG_CACHED;
 	global $MEMBER_CACHED,$USER_LANG_LOOP,$IN_MINIKERNEL_VERSION;
 
-	if (get_option('allow_international')!='1')
-	{
-		$USER_LANG_CACHED=get_lang();
-		return $USER_LANG_CACHED;
-	}
-
 	if ($IN_MINIKERNEL_VERSION)
 	{
 		return get_site_default_lang();
+	}
+	elseif (get_option('allow_international')!='1')
+	{
+		$USER_LANG_CACHED=get_lang();
+		return $USER_LANG_CACHED;
 	}
 
 	// In URL?

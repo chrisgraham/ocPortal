@@ -55,7 +55,7 @@ class Hook_content_meta_aware_catalogue_category
 			'view_pagelink_pattern'=>'_SEARCH:catalogues:category:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_catalogues:_ec:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:catalogues:category:_WILD',
-			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?(get_module_zone('cms_catalogues').':cms_catalogues:add_category:catalogue_name=!'):NULL,
+			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?(get_module_zone('cms_catalogues').':cms_catalogues:add_category:catalogue_name=!'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('catalogues')).':catalogues',
 
 			'support_url_monikers'=>true,

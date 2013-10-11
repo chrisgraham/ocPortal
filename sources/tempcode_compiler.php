@@ -82,7 +82,7 @@ function init__tempcode_compiler()
 	{
 		$_compilable_symbols[]='IMG';
 	}
-	if (get_option('detect_javascript')=='0')
+	if ((function_exists('get_option')) && (get_option('detect_javascript')=='0'))
 	{
 		$_compilable_symbols[]='JS_ON';
 	}
@@ -457,7 +457,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						} else
 						{
 							$temp='otp(isset($bound_'.php_addslashes($parameter).')?$bound_'.php_addslashes($parameter).':NULL';
-							if (get_value('shortened_tempcode')!=='1')
+							if ((!function_exists('get_value')) || (get_value('shortened_tempcode')!=='1'))
 								$temp.=',"'.php_addslashes($parameter.'/'.$template_name).'"';
 							$temp.=')';
 
@@ -898,7 +898,7 @@ function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$
 
 	if (count($parts)==0) return new ocp_tempcode();
 
-	$output_streaming=(get_option('output_streaming')=='1');
+	$output_streaming=(function_exists('get_option')) && (get_option('output_streaming')=='1');
 
 	$parts_groups=array();
 	$parts_group=array();

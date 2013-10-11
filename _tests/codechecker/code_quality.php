@@ -564,7 +564,6 @@ $VAR_ERROR_FUNCS=array(
 );
 global $ERROR_FUNCS;
 $ERROR_FUNCS=array(
-	'posix_getuid'=>1, // Roadsend produces warning on Windows
 	'ftp_fput'=>1,
 	'ftp_nlist'=>1,
 	'ftp_size'=>1,

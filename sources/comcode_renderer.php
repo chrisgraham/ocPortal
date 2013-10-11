@@ -2223,15 +2223,9 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 					$evaluated="<"."?php\n".$evaluated."\n?".">";
 				} else $strip=false;
 				require_code('xhtml');
-				if (defined('HIPHOP_PHP'))
-				{
-					$h_result=nl2br(escape_html($evaluated));
-				} else
-				{
-					ob_start();
-					highlight_string($evaluated);
-					$h_result=ob_get_clean();
-				}
+				ob_start();
+				highlight_string($evaluated);
+				$h_result=ob_get_clean();
 				$_embed=xhtmlise_html($h_result);
 				if ($strip)
 				{

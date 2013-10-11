@@ -363,7 +363,10 @@ class Module_admin_version
 				'member_id'=>'*MEMBER',
 			));
 			add_privilege('SUBMISSION','view_private_content',false,true);
+		}
 
+		if ((!is_null($upgrade_from)) && ($upgrade_from<17))
+		{
 			rename_config_option('ocp_show_conceded_mode_link','show_conceded_mode_link');
 			rename_config_option('ocp_show_personal_adminzone_link','show_personal_adminzone_link');
 			rename_config_option('ocp_show_personal_last_visit','show_personal_last_visit');
