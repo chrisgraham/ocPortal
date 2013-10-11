@@ -46,6 +46,9 @@ $GLOBALS['SEMI_DEV_MODE']=true;
 
 @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
+if (strpos(PHP_VERSION,'hiphop')!==false)
+	define('HIPHOP_PHP','1');
+
 $shl=@ini_get('suhosin.memory_limit');
 if (($shl===false) || ($shl=='') || ($shl=='0'))
 {
@@ -54,9 +57,6 @@ if (($shl===false) || ($shl=='') || ($shl=='0'))
 {
 	@ini_set('memory_limit',$shl);
 }
-
-if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_ENV)) || (function_exists('quercus_version')) || (defined('PHALANGER')) || (defined('ROADSEND_PHPC')))
-	define('HIPHOP_PHP','1');
 
 // Requirements check
 if (substr(phpversion(),0,2)=='3.') die(do_lang('PHP_OLD'));

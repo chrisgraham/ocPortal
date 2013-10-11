@@ -51,7 +51,7 @@ function do_comcode_attachments($comcode,$type,$id,$previewing_only=false,$conne
 		$member=$for_member;
 	} else
 	{
-		$member=get_member();
+		$member=function_exists('get_member')?get_member():db_get_first_id();
 	}
 	if (is_null($insert_as_admin)) $insert_as_admin=false;
 

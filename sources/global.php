@@ -36,15 +36,6 @@ if ((strpos($_SERVER['PHP_SELF'],'/sources/')!==false) || (strpos($_SERVER['PHP_
  */
 function require_code($codename,$light_exit=false)
 {
-	static $hphp=NULL;
-	if ($hphp===NULL) $hphp=defined('HIPHOP_PHP');
-
-	if ($hphp)
-	{
-		if ($codename=='tempcode' || $codename=='tempcode_compiler')
-			$codename.='__runtime';
-	}
-
 	global $REQUIRED_CODE,$FILE_BASE,$SITE_INFO;
 	if (isset($REQUIRED_CODE[$codename])) return;
 	$REQUIRED_CODE[$codename]=1;
@@ -113,7 +104,7 @@ function require_code($codename,$light_exit=false)
 			$orig=str_replace(array('?'.'>','<'.'?php'),array('',''),file_get_contents($path_b));
 			$a=file_get_contents($path_a);
 
-			if (((strpos($codename,'.php')===false) || (strpos($a,'class Mx_')===false)) && (strpos($a,' extends forum_driver_')===false) && ((function_exists('quercus_version')) || (!$hphp)))
+			if (((strpos($codename,'.php')===false) || (strpos($a,'class Mx_')===false)) && (strpos($a,' extends forum_driver_')===false))
 			{
 				$functions_before=get_defined_functions();
 				$classes_before=get_declared_classes();
@@ -181,7 +172,7 @@ function require_code($codename,$light_exit=false)
 			{
 				// Note we load the original and then the override. This is so function_exists can be used in the overrides (as we can't support the re-definition) OR in the case of Mx_ class derivation, so that the base class is loaded first.
 
-				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
+				if (isset($_GET['keep_show_parse_errors']))
 				{
 					@ini_set('display_errors','0');
 					$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_b)));
@@ -194,7 +185,7 @@ function require_code($codename,$light_exit=false)
 				{
 					include($path_b);
 				}
-				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
+				if (isset($_GET['keep_show_parse_errors']))
 				{
 					@ini_set('display_errors','0');
 					$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_a)));
@@ -210,7 +201,7 @@ function require_code($codename,$light_exit=false)
 			}
 		} else
 		{
-			if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
+			if (isset($_GET['keep_show_parse_errors']))
 			{
 				@ini_set('display_errors','0');
 				$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_a)));
@@ -240,7 +231,7 @@ function require_code($codename,$light_exit=false)
 		$worked=true;
 	} else
 	{
-		if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
+		if (isset($_GET['keep_show_parse_errors']))
 		{
 			$contents=@file_get_contents($path_b);
 			if ($contents!==false)
@@ -479,7 +470,7 @@ if (count($SITE_INFO)==0)
 }
 
 // Are we in a compiled version of PHP?
-if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_ENV)) || (function_exists('quercus_version')) || (defined('PHALANGER')) || (defined('ROADSEND_PHPC')) || ((array_key_exists('force_no_eval',$SITE_INFO)) && ($SITE_INFO['force_no_eval']=='1')))
+if (strpos(PHP_VERSION,'hiphop')!==false)
 	define('HIPHOP_PHP','1');
 
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.

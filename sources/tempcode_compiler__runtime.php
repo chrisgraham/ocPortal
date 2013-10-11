@@ -43,7 +43,10 @@ function init__tempcode_compiler__runtime()
  */
 function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL,$lang=NULL)
 {
-	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
+	if (is_null($theme))
+	{
+		$theme=is_null($GLOBALS['FORUM_DRIVER'])?'default':$GLOBALS['FORUM_DRIVER']->get_theme();
+	}
 
 	$out=new ocp_tempcode();
 	$continuation='';

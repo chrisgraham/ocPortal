@@ -69,7 +69,6 @@ class Database_Static_mysql extends Database_super_mysql
 			critical_error('PASSON',$error);
 		}
 
-		if ((defined('HIPHOP_PHP')) && ($db_host=='localhost')) $db_host='127.0.0.1';
 		$db=$persistent?@mysql_pconnect($db_host,$db_user,$db_password):@mysql_connect($db_host,$db_user,$db_password);
 		if ($db===false)
 		{

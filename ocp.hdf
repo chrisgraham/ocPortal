@@ -10,8 +10,6 @@ Server {
 	RequestTimeoutSeconds = -1
 	RequestMemoryMaxBytes = -1
 
-	EnableMemoryManager = false
-
 	GzipCompressionLevel = 0
 	EnableMagicQuotesGpc = false
 	EnableKeepAlive = true
@@ -23,8 +21,6 @@ Server {
 
 	APC {
 		EnableApc = true
-		UseSharedMemory = false
-		SharedMemorySize = 300	# in MB
 	}
 }
 
@@ -40,12 +36,14 @@ VirtualHost {
 			   to = $1index.php\?page=$3
 			   qsa = true
 			}
+
 			# PG STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
 			rule2 {
 			   pattern = ^([^=]*)pg/s/([^\&\?]*)/index\.php$
 			   to = $1index.php\?page=wiki&id=$2
 			   qsa = true
 			}
+
 			# PG STYLE: These have a specially reduce form (wide is implied)
 			rule3 {
 			   pattern = ^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$
@@ -64,6 +62,7 @@ VirtualHost {
 			   to = $1index.php\?page=iotds&type=view&id=$2$3
 			   qsa = true
 			}
+
 			# PG STYLE: These are standard patterns
 			rule4 {
 			   pattern = ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$
@@ -88,6 +87,7 @@ VirtualHost {
 			   to = $1index.php\?page=$3
 			   qsa = true
 			}
+
 			# PG STYLE: Now the same as the above sets, but without any additional parameters (and thus no index.php)
 			rule5 {
 			   pattern = ^([^=]*)pg/s/([^\&\?]*)$
@@ -136,6 +136,7 @@ VirtualHost {
 			   to = $1index.php\?page=$2
 			   qsa = true
 			}
+
 			# PG STYLE: And these for those nasty situations where index.php was missing and we couldn't do anything about it (usually due to keep_session creeping into a semi-cached URL)
 			rule6 {
 			   pattern = ^([^=]*)pg/s/([^\&\?\.]*)&(.*)$
@@ -178,6 +179,7 @@ VirtualHost {
 			   to = $1index.php\?$3&page=$2
 			   qsa = true
 			}
+
 			# HTM STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
 			rule7 {
 			   pattern = ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm$
@@ -190,6 +192,7 @@ VirtualHost {
 			   to = index\.php\?page=wiki&id=$1
 			   qsa = true
 			}
+
 			# HTM STYLE: These have a specially reduce form (wide is implied)
 			rule8 {
 			   pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$
@@ -208,6 +211,7 @@ VirtualHost {
 			   to = $1/index.php\?page=iotds&type=view&id=$2
 			   qsa = true
 			}
+
 			# HTM STYLE: These are standard patterns
 			rule9 {
 			   pattern = ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$
@@ -244,6 +248,7 @@ VirtualHost {
 			   to = index.php\?page=$1
 			   qsa = true
 			}
+
 			# SIMPLE STYLE: These have a specially reduced form (no need to make it too explicit that these are Wiki+). We shouldn't shorten them too much, or the actual zone or base url might conflict
 			#rule10 {
 			   #pattern = ^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)$
@@ -256,6 +261,7 @@ VirtualHost {
 			   #to = index\.php\?page=wiki&id=$1
 			   #qsa = true
 			#}
+
 			# SIMPLE STYLE: These have a specially reduce form (wide is implied)
 			#rule11 {
 			   #pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)$
@@ -274,6 +280,7 @@ VirtualHost {
 			   #to = $1/index.php\?page=iotds&type=view&id=$2
 			   #qsa = true
 			#}
+
 			# SIMPLE STYLE: These are standard patterns
 			#rule12 {
 			   #pattern = ^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$
@@ -310,7 +317,7 @@ VirtualHost {
 			   #to = index.php\?page=$1
 			   #qsa = true
 			#}
-		} # end rules
+		}
 	}
 }
 

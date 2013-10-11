@@ -1254,13 +1254,7 @@ class virtual_bash
 
 			@ini_set('ocproducts.xss_detect','0');
 			ob_start();
-			if ((!defined('HIPHOP_PHP')) || (@eval('return 1;')===1))
-			{
-				$occle_eval_output=eval($this->parsed_input[SECTION_COMMAND]);
-			} else
-			{
-				$occle_eval_output='';
-			}
+			$occle_eval_output=eval($this->parsed_input[SECTION_COMMAND]);
 			$occle_output=ob_get_contents();
 			if (($occle_output=='') && ($occle_eval_output!==false)) $occle_output=@strval($occle_eval_output);
 			ob_end_clean();

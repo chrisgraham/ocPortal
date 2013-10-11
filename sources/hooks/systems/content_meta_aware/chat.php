@@ -55,7 +55,7 @@ class Hook_content_meta_aware_chat
 			'view_pagelink_pattern'=>'_SEARCH:chat:room:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_chat:room:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:chat:room:_WILD',
-			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_chat'))?(get_module_zone('cms_chat').':cms_chat:ac'):NULL,
+			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_chat'))?(get_module_zone('cms_chat').':cms_chat:ac'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('chat')).':chat',
 
 			'support_url_monikers'=>true,

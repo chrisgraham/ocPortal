@@ -57,7 +57,7 @@ $GLOBALS['SEMI_DEV_MODE']=true;
 
 @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
-if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_ENV)) || (function_exists('quercus_version')) || (defined('PHALANGER')) || (defined('ROADSEND_PHPC')))
+if (strpos(PHP_VERSION,'hiphop')!==false)
 	define('HIPHOP_PHP','1');
 
 if (!array_key_exists('type',$_GET))
@@ -276,7 +276,7 @@ if (@is_resource($DATADOTOCP_FILE))
 function step_1()
 {
 	// To stop previous installs interfering
-	require_code('view_modes');
+	require_code('caches3');
 	erase_cached_templates();
 	erase_cached_language();
 
@@ -2084,14 +2084,6 @@ function require_code($codename)
 {
 	if ($codename=='mail') return;
 
-	if ((defined('HIPHOP_PHP')) || ((array_key_exists('keep_old_parser',$_GET)) && ($_GET['keep_old_parser']=='1')))
-	{
-		if ($codename=='tempcode')
-			$codename='tempcode__runtime';
-		if ($codename=='tempcode_compiler')
-			$codename='tempcode_compiler__runtime';
-	}
-
 	global $FILE_ARRAY,$REQUIRED_BEFORE;
 	if (array_key_exists($codename,$REQUIRED_BEFORE)) return;
 
@@ -2119,9 +2111,9 @@ function require_code($codename)
 	{
 		global $FILE_BASE;
 
-		$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources/'.$codename.'.php'):'/'.str_replace('_custom','',$codename));
+		$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources/'.$codename.'.php'):('/'.preg_replace('#(sources|modules|minimodules)_custom#','${1}',$codename)));
 		if (!file_exists($path))
-			$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources_custom/'.$codename.'.php'):'/'.str_replace('_custom','',$codename));
+			$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources_custom/'.$codename.'.php'):('/'.$codename));
 		if (!file_exists($path))
 		{
 			exit('<!DOCTYPE html>'."\n".'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal installer startup error</h1><p>A required installation file, sources/'.$codename.'.php, could not be located. This is almost always due to an incomplete upload of the ocPortal manual installation package, so please check all files are uploaded correctly.</p><p>Only once all ocPortal files are in place can the installer can function. Please note that we have a quick installer package which requires uploading only two files, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');

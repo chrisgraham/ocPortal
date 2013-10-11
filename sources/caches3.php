@@ -272,13 +272,16 @@ function erase_cached_templates($preserve_some=false)
 		}
 	}
 
-	$zones=find_all_zones();
-	foreach ($zones as $zone)
+	if (!$GLOBALS['IN_MINIKERNEL_VERSION'])
 	{
-		delete_value('merged__'.$zone.'.css');
-		delete_value('merged__'.$zone.'.js');
-		delete_value('merged__'.$zone.'__admin.css');
-		delete_value('merged__'.$zone.'__admin.js');
+		$zones=find_all_zones();
+		foreach ($zones as $zone)
+		{
+			delete_value('merged__'.$zone.'.css');
+			delete_value('merged__'.$zone.'.js');
+			delete_value('merged__'.$zone.'__admin.css');
+			delete_value('merged__'.$zone.'__admin.js');
+		}
 	}
 
 	// Often the back button will be used to return to a form, so we need to ensure we have not broken the Javascript

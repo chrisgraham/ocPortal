@@ -129,7 +129,6 @@ function phase_1_pre()
 	</ul>
 	<p>Ideally do these at least on some major versions:</p>
 	<ul>
-		<li>Run a HipHop PHP compile and looking at <kbd>hphp/CodeError.js</kbd> and make sure distributed code has no expected warnings</li>
 		<li>Run a PHPStorm Code Inspection and see if any warning stands out as a bug</li>
 	</ul>
 	';

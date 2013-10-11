@@ -690,20 +690,9 @@ function install_addon($file,$files=NULL)
 	{
 		$modphp_file=trim($_modphp_file['data']);
 
-		if (!defined('HIPHOP_PHP'))
-		{
-			if (substr($modphp_file,0,5)=='<'.'?php') $modphp_file=substr($modphp_file,5);
-			if (substr($modphp_file,-2)=='?'.'>') $modphp_file=substr($modphp_file,0,strlen($modphp_file)-2);
-			if (eval($modphp_file)===false) fatal_exit(@strval($php_errormsg));
-		} else
-		{
-			$matches=array();
-			$num_matches=preg_match_all('#\$GLOBALS[\'SITE_DB\']->query_insert(\'theme_images\',array(\'id\'=>\'([^\']*)\',\'theme\'=>\'([^\']*)\',\'path\'=>\'([^\']*)\',\'lang\'=>\'([^\']*)\'),false,true);#',$modphp_file,$matches);
-			for ($i=0;$i<$num_matches;$i++)
-			{
-				$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$matches[1][$i],'theme'=>$matches[2][$i],'path'=>$matches[3][$i],'lang'=>$matches[4][$i]),false,true);
-			}
-		}
+		if (substr($modphp_file,0,5)=='<'.'?php') $modphp_file=substr($modphp_file,5);
+		if (substr($modphp_file,-2)=='?'.'>') $modphp_file=substr($modphp_file,0,strlen($modphp_file)-2);
+		if (eval($modphp_file)===false) fatal_exit(@strval($php_errormsg));
 	}
 
 	tar_close($tar);

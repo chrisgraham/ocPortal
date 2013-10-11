@@ -55,7 +55,7 @@ class Hook_content_meta_aware_poll
 			'view_pagelink_pattern'=>'_SEARCH:polls:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_polls:_ed:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_polls'))?(get_module_zone('cms_polls').':cms_polls:ad'):NULL,
+			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_polls'))?(get_module_zone('cms_polls').':cms_polls:ad'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('polls')).':polls',
 
 			'support_url_monikers'=>true,

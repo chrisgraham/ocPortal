@@ -1783,6 +1783,7 @@ function _css_tempcode($c,&$css,&$css_need_inline,$inline=false,$context=NULL,$t
 	} else
 	{
 		$temp=$do_enforce?css_enforce($c,$theme):'';
+
 		if (!$minify) $c.='_non_minified';
 		if ($https) $c.='_ssl';
 		if ($mobile) $c.='_mobile';
@@ -1791,7 +1792,6 @@ function _css_tempcode($c,&$css,&$css_need_inline,$inline=false,$context=NULL,$t
 			global $SITE_INFO;
 			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 			$sup=($support_smart_decaching && $temp!='')?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
-
 			$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c,'SUP'=>$sup),user_lang(),false,NULL,'.tpl','templates',$theme));
 		}
 	}

@@ -1,5 +1,4 @@
 #!/bin/sh
-export HPHP_HOME=~/dev/hiphop-php
-export HPHP_LIB=~/dev/hiphop-php/bin
-sudo hphp/program -m server  -v "Server.SourceRoot=`pwd`" -v Server.DefaultDocument=index.php --config ./ocp.hdf
-# -v Log.Level=Verbose -v Log.Header=on
+
+echo "ocP: Running..."
+sudo hhvm -m server  -v "Server.SourceRoot=`pwd`" -v Server.DefaultDocument=index.php -v Log.Level=Info -v Log.InjectedStackTrace=true -v Log.Header=on --config ./ocp.hdf
