@@ -53,6 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('mail2');
-	manualproc_mail('chris@ocportal.com','Test','Test','');
+	var_dump(build_url(array('page'=>'about'),'collaboration'));
 }

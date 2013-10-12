@@ -304,30 +304,30 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 
 	$id=isset($vars['id'])?$vars['id']:NULL;
 
-	$page_link=make_string_tempcode($zone_name.':'./*urlencode not needed in reality, performance*/($vars['page']));
+	$page_link=$zone_name.':'./*urlencode not needed in reality, performance*/($vars['page']);
 	if ((isset($vars['type'])) || (array_key_exists('type',$vars)))
 	{
 		if (is_object($vars['type']))
 		{
-			$page_link->attach(':');
-			$page_link->attach($vars['type']);
+			$page_link.=':';
+			$page_link.=$vars['type'];
 		} else
 		{
-			$page_link->attach(':'.(($vars['type']===NULL)?'<null>':urlencode($vars['type'])));
+			$page_link.=':'.(($vars['type']===NULL)?'<null>':urlencode($vars['type']));
 		}
 		unset($vars['type']);
 		if ((isset($id)) || (array_key_exists('id',$vars)))
 		{
 			if (is_integer($id))
 			{
-				$page_link->attach(':'.strval($id));
+				$page_link.=':'.strval($id);
 			} elseif (is_object($id))
 			{
-				$page_link->attach(':');
-				$page_link->attach($id);
+				$page_link.=':';
+				$page_link.=$id;
 			} else
 			{
-				$page_link->attach(':'.(($id===NULL)?'<null>':urlencode($id)));
+				$page_link.=':'.(($id===NULL)?'<null>':urlencode($id));
 			}
 			unset($vars['id']);
 		}
@@ -342,18 +342,18 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 		{
 			if (is_object($val))
 			{
-				$page_link->attach(':'.$key.'=');
-				$page_link->attach($val);
+				$page_link.=':'.$key.'=';
+				$page_link.=$val;
 			} else
 			{
-				$page_link->attach(':'.$key.'='.(($val===NULL)?'<null>':urlencode($val)));
+				$page_link.=':'.$key.'='.(($val===NULL)?'<null>':urlencode($val));
 			}
 		}
 	}
 
 	if (($hash!='') && (substr($hash,0,1)!='#')) $hash='#'.$hash;
 
-	$page_link->attach($hash);
+	$page_link.=$hash;
 
 	$arr=array(
 		$page_link,
