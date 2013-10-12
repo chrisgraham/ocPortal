@@ -53,7 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$tempcode=symbol_tempcode('PAGE_LINK',array(':start','1','1'));
-	@var_dump($tempcode->evaluate());
-	exit();
+	require_code('mail2');
+	manualproc_mail('chris@ocportal.com','Test','Test','');
 }

@@ -761,6 +761,7 @@ class Hook_addon_registry_core
 			'sources/lang2.php',
 			'sources/lang3.php',
 			'sources/mail.php',
+			'sources/mail2.php',
 			'sources/miniblocks/.htaccess',
 			'sources/miniblocks/index.html',
 			'sources/minikernel.php',
