@@ -47,6 +47,9 @@ function ocf_field_editable($field_name,$special_type)
 		case 'password':
 			switch ($special_type)
 			{
+				case 'facebook':
+					return false;
+
 				case 'ldap':
 				case 'httpauth':
 					return false;

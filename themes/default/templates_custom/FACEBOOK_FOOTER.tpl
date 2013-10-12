@@ -24,12 +24,12 @@
 					{+END}
 
 					{$,Facebook has automatically rebuilt its expired fbsr cookie, auth.login not triggered as already technically logged in}
-					{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}}
+					{+START,IF,{$NOR,{$FB_CONNECT_FINISHING_PROFILE},{$FB_CONNECT_LOGGED_OUT}}} {$,Check it is not that logout}
 						{+START,IF_EMPTY,{$FB_CONNECT_UID}}{$,Definitive mismatch between server-side and client-side}
 							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
 								if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
 								{
-									window.location='{$PAGE_LINK;,:refreshed_once=1}';
+									window.location='{$PAGE_LINK;,::refreshed_once=1}';
 								} else
 								{
 									var current_url=window.top.location.href;
@@ -72,14 +72,14 @@
 			/*Facebook: Current user is "{$FB_CONNECT_UID*}"*/
 			{+START,IF_EMPTY,{$FB_CONNECT_UID}} {$,If not already in an ocPortal Facebook login session}
 				FB.Event.subscribe('auth.login',function(response) { {$,New login status arrived - so an ocPortal Facebook login session should be established, or ignore as we are calling a logout within this request (above)}
-					{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}} {$,Check it is not that logout}
+					{+START,IF,{$NOR,{$FB_CONNECT_FINISHING_PROFILE},{$FB_CONNECT_LOGGED_OUT}}} {$,Check it is not that logout}
 						{$,... and therefore only refresh to let ocPortal adapt, if this was a new login initiated just now on the client side}
 						if (response.status=='connected' && response.authResponse) {$,Check we really are logged in, in case this event calls without us being}
 						{
 							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
 								if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
 								{
-									window.location='{$PAGE_LINK;,:refreshed_once=1}';
+									window.location='{$PAGE_LINK;,::refreshed_once=1}';
 								} else
 								{
 									var current_url=window.top.location.href;

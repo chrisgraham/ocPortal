@@ -268,6 +268,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 		$_custom_fields=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true),NULL,NULL,NULL,1);
 		if ((!$completion_form_submitted) && (count($_custom_fields)!=0) && (get_value('no_finish_profile')!=='1')) // UI
 		{
+			$GLOBALS['FACEBOOK_FINISHING_PROFILE']=true;
 			$middle=ocf_member_external_linker_ask($username,'facebook',$email_address,$dob_day,$dob_month,$dob_year);
 			$tpl=globalise($middle,NULL,'',true);
 			$tpl->evaluate_echo();
