@@ -83,6 +83,9 @@ function init__tempcode()
 	global $IS_TEMPLATE_PREVIEW_OP_CACHE;
 	$IS_TEMPLATE_PREVIEW_OP_CACHE=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']=='1') && ((get_page_name()!='admin_themes') || (get_param('type','')=='view'));
 
+	/** Whether output streaming mode is active.
+	 * @global boolean $OUTPUT_STREAMING
+	 */
 	global $OUTPUT_STREAMING;
 	$OUTPUT_STREAMING=(function_exists('get_option')) && (get_option('output_streaming')=='1');
 	if (get_param('special_page_type','view')!='view') $OUTPUT_STREAMING=false;
@@ -1917,8 +1920,8 @@ function debug_eval($code,&$tpl_funcs=NULL,$parameters=NULL,$cl=NULL)
  *
  * @param  string				Function to call
  * @param  mixed				First parameter
- * @param  mixed				Second parameter
- * @param  mixed				Third parameter
+ * @param  ?mixed				Second parameter (NULL: null/none)
+ * @param  ?mixed				Third parameter (NULL: null/none)
  * @return string				Result
  */
 function debug_call_user_func($function,$a,$b=NULL,$c=NULL)

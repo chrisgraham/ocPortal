@@ -708,7 +708,6 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 	{
 		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$sort,NULL,NULL,false,array('f_description','f_intro_question'));
 	}
-
 	$unread_forums=array();
 	if ((!is_null($forum_id)) && (get_member()!=$GLOBALS['OCF_DRIVER']->get_guest_id()))
 	{

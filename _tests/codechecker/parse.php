@@ -21,7 +21,7 @@ function parse($_tokens=NULL)
 	$OK_EXTRA_FUNCTIONS=NULL;
 	if (!is_null($_tokens)) $TOKENS=$_tokens;
 	$I=0;
-	$structure=_parse_php($TOKENS,$I);
+	$structure=_parse_php($TOKENS);
 	$structure['ok_extra_functions']=$OK_EXTRA_FUNCTIONS;
 	global $FILENAME;
 	if ((count($structure['main'])>0) && (substr($FILENAME,0,7)=='sources') && ($FILENAME!='sources'.DIRECTORY_SEPARATOR.'global.php') && ($FILENAME!='sources'.DIRECTORY_SEPARATOR.'critical_errors.php') && ((count($structure['main'])>1) || (($structure['main'][0][0]!='RETURN') && (($structure['main'][0][0]!='CALL_DIRECT') || ($structure['main'][0][1]!='require_code')))))
@@ -1095,7 +1095,7 @@ function _parse_variable($suppress_error,$can_be_dangling_method_call_instead=fa
 		}
 	}
 
-	$variable_chain=_parse_variable_dereferencing_chain_segment($suppress_error,$can_be_dangling_method_call_instead);
+	$variable_chain=_parse_variable_dereferencing_chain_segment($suppress_error/*,$can_be_dangling_method_call_instead*/);
 	if ($variable_chain!==array())
 	{
 		// Restructure the chain around any particular calls made
@@ -1484,7 +1484,7 @@ function _parse_parameter()
 function pparse__parser_expect($token)
 {
 	global $TOKENS,$I;
-	if (!isset($TOKENS[$I])) parser_error('Ran out of input when expecting '.$token,$TOKENS,$I);
+	if (!isset($TOKENS[$I])) parser_error('Ran out of input when expecting '.$token,$TOKENS);
 	$next=$TOKENS[$I];
 	if ($next[0]=='comment')
 	{
@@ -1493,7 +1493,7 @@ function pparse__parser_expect($token)
 		return pparse__parser_expect($token);
 	}
 	$I++;
-	if ($next[0]!=$token) parser_error('Expected '.$token.' but got '.$next[0].' ('.$next[1].')',$TOKENS,$I);
+	if ($next[0]!=$token) parser_error('Expected '.$token.' but got '.$next[0].' ('.$next[1].')',$TOKENS);
 	return $next[1];
 }
 

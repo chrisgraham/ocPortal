@@ -53,7 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$tempcode=symbol_tempcode('PAGE_LINK',array(':start','1','1'));
-	@var_dump($tempcode->evaluate());
-	exit();
+	parse_str("a=1&b=2&c=3");
+	echo $a;
 }

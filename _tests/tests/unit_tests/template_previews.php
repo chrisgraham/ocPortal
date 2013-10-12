@@ -43,7 +43,7 @@ class template_previews_test_set extends ocp_test_case
 		$dh=opendir(get_file_base().'/themes/default/templates');
 		while (($f=readdir($dh))!==false)
 		{
-			if (strtolower(substr($f,-4))=='.tpl') $templates[]=$f;
+			if ((strtolower(substr($f,-4))=='.tpl') && ($f[0]!='.')) $templates[]=$f;
 		}
 
 		$all_previews=find_all_previews__by_template();

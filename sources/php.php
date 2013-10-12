@@ -373,6 +373,7 @@ function _read_php_function_line($_line)
 					if ($arg_default==='true') $default='boolean-true'; // hack, to stop booleans coming out of arrays as integers
 					elseif ($arg_default==='false') $default='boolean-false';
 					else $default=@eval('return '.$arg_default.';'); // Could be unprocessable by php.php in standalone mode
+					if (!isset($default)) $default=NULL; // Fix for HHVM, #1161
 					$parameters[]=array('name'=>$arg_name,'default'=>$default,'ref'=>$ref);
 					$arg_name='';
 					$arg_default='';
@@ -384,6 +385,7 @@ function _read_php_function_line($_line)
 					if ($arg_default==='true') $default='boolean-true'; // hack, to stop booleans coming out of arrays as integers
 					elseif ($arg_default==='false') $default='boolean-false';
 					else $default=@eval('return '.$arg_default.';'); // Could be unprocessable by php.php in standalone mode
+					if (!isset($default)) $default=NULL; // Fix for HHVM, #1161
 					$parameters[]=array('name'=>$arg_name,'default'=>$default,'ref'=>$ref);
 					$parse='done';
 				} else

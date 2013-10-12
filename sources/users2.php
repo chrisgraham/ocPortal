@@ -13,6 +13,12 @@
 */
 
 /**
+ * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright	ocProducts Ltd
+ * @package		core
+ */
+
+/**
  * Find if a member is online.
  *
  * @param  MEMBER			The member to check

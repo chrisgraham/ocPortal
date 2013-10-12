@@ -106,7 +106,7 @@ class Hook_content_meta_aware_gallery
 	{
 		require_code('galleries');
 
-		return render_gallery_box($row,'root',false,$zone,false,false,$give_context,$include_breadcrumbs,is_null($root)?NULL:$root,$attach_to_url_filter,$guid);
+		return render_gallery_box($row,is_null($root)?$root:'root',false,$zone,false,false,$give_context,$include_breadcrumbs,$attach_to_url_filter,$guid);
 	}
 
 }

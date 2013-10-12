@@ -84,7 +84,7 @@ function get_bug_category_id($version_pretty)
 
 	if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'bugs'))))
 	{
-		actual_add_catalogue('bugs','Bugs','',C_DT_MAPS,0,'',0);
+		actual_add_catalogue('bugs','Bugs','',C_DT_FIELDMAPS,0,'',0);
 		$fields=array(
 			array('Title','short_trans',1,1,1),
 			array('Description','long_trans',0,1,0),

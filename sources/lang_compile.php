@@ -249,6 +249,7 @@ function _get_lang_file_map($b,&$entries,$descriptions=NULL,$given_whole_file=fa
 		$lines=file($b);
 		flock($tmp,LOCK_UN);
 		fclose($tmp);
+		if ($lines===NULL) $lines=array(); // Workaround HHVM bug #1162
 	} else $lines=explode("\n",unixify_line_format($b));
 
 	if ((!$given_whole_file) && ($b[strlen($b)-1]=='o')) // po file.

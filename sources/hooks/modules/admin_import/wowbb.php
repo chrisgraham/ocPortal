@@ -633,7 +633,7 @@ class Hook_wowbb
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) $member_id=$post_row[0]['p_poster'];
 
-				$url=$this->data_to_disk($row['file_contents'],$row['file_name'],'attachments',false);
+				$url=$this->data_to_disk($row['file_contents'],$row['file_name'],'attachments');
 				$thumb_url='';
 
 				$a_id=$GLOBALS['SITE_DB']->query_insert('attachments',array('a_member_id'=>$member_id,'a_file_size'=>strlen($row['file_contents']),'a_url'=>$url,'a_thumb_url'=>$thumb_url,'a_original_filename'=>$row['file_name'],'a_num_downloads'=>$row['downloads'],'a_last_downloaded_time'=>NULL,'a_add_time'=>strtotime($row['upload_date']),'a_description'=>''),true);

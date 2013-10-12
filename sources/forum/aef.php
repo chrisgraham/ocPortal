@@ -518,7 +518,6 @@ class forum_driver_aef extends forum_driver_base
 		$post_id=$this->connection->query_insert('posts',$map,true);
 
 		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET first_post_id='.strval($post_id).', last_post_id='.strval($post_id).' WHERE tid='.strval($topic_id),1);
-		$this->connection->query_update('TODO',array('TODO'=>TODO),array('TODO'=>TODO),'',1);
 		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET ntopic=(ntopic+1),nposts=(nposts+1), f_last_pid='.strval($post_id).' WHERE fid='.strval($forum_id),1);
 
 		return array($topic_id,false);

@@ -62,7 +62,7 @@ This notification hook was created using the classifieds notification hook as a 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		// Set the templates names to use. Use CUSTOM template if it exists, else use the default template.
-		$theme=isset($CACHED_THEME)?$CACHED_THEME:(((isset($FORUM_DRIVER)) && (is_object($FORUM_DRIVER)) && (method_exists($FORUM_DRIVER,'get_theme')))?filter_naughty($FORUM_DRIVER->get_theme()):'default');
+		$theme='default';
 		if (find_template_place('DOWNLOADS_FOLLOWUP_EMAIL_CUSTOM',NULL,$theme,'.tpl','templates') == NULL)
 			$mail_template='DOWNLOADS_FOLLOWUP_EMAIL';
 		else

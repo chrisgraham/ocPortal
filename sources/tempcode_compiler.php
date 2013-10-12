@@ -130,7 +130,9 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);
 
-	global $COMPILABLE_SYMBOLS;
+	global $COMPILABLE_SYMBOLS,$STUCK_ABORT_SIGNAL;
+
+	$sas_bak=$STUCK_ABORT_SIGNAL;
 
 	require_code('lang');
 	require_code('urls');
@@ -771,6 +773,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 		}
 	}
 	$current_level_data=$merged;
+
+	$STUCK_ABORT_SIGNAL=$sas_bak;
 
 	return array($current_level_data,$preprocessable_bits);
 }

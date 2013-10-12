@@ -178,7 +178,6 @@ class Block_main_activities
 		return do_template('BLOCK_MAIN_ACTIVITIES',array(
 			'_GUID'=>'b4de219116e1b8107553ee588717e2c9',
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
-			'TITLE'=>$title,
 			'MODE'=>$mode,
 			'MEMBER_IDS'=>implode(',',$member_ids),
 			'CONTENT'=>$content,

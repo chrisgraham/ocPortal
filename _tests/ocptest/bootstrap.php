@@ -86,6 +86,7 @@ function find_testsets($dir='')
 			if (substr($file,-4)=='.php') $tests[]=substr($dir.'/'.basename($file,'.php'),1);
 		}
 	}
+	sort($tests);
 	return $tests;
 }
 

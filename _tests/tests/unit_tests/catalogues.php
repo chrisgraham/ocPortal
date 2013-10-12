@@ -37,12 +37,15 @@ class catalogues_test_set extends ocp_test_case
 		$this->cms_catalogues=new Module_cms_catalogues();
 		$this->cms_catalogues_cat=new Module_cms_catalogues_cat();
 		$this->cms_catalogues_alt=new Module_cms_catalogues_alt();
+		$this->cms_catalogues->pre_run();
 		$this->cms_catalogues->run_start('misc');
 	}
 
 	function testAddCatalogueUI()
 	{
 		require_code('content2');
+		$_GET['type']='ad';
+		$this->cms_catalogues_alt->pre_run();
 		$this->cms_catalogues_alt->ad();
 	}
 
@@ -352,6 +355,8 @@ class catalogues_test_set extends ocp_test_case
 		);
 
 		require_code('autosave');
+		$_GET['type']='_ad';
+		$this->cms_catalogues_alt->pre_run();
 		$this->cms_catalogues_alt->_ad();
 	}
 

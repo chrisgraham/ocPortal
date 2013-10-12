@@ -1303,7 +1303,7 @@ function ecv_COMMA_LIST_GET($lang,$escaped,$param)
  */
 function ecv_IS_EMPTY($lang,$escaped,$param)
 {
-	$value='';
+	$value='1';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
@@ -1325,7 +1325,7 @@ function ecv_IS_EMPTY($lang,$escaped,$param)
  */
 function ecv_IS_NON_EMPTY($lang,$escaped,$param)
 {
-	$value='';
+	$value='0';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
@@ -1399,9 +1399,9 @@ function ecv_JS_ON($lang,$escaped,$param)
 	$value='';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if (isset($param[1]))
+	if (isset($param[0]))
 	{
-		$value=has_js()?$param[0]:$param[1];
+		$value=has_js()?$param[0]:(isset($param[1])?$param[1]:'');
 	} else $value=has_js()?'1':'0';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
@@ -3361,8 +3361,9 @@ function ecv_EQ($lang,$escaped,$param)
 	$value='';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if (isset($param[1]))
+	if (isset($param[0]))
 	{
+		if (!isset($param[1])) $param[1]='';
 		$first=array_shift($param);
 		$count=0;
 		foreach ($param as $test)

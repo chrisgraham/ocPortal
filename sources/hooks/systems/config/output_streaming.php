@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_cleanup_tools
+ * @package		core_configuration
  */
 
 class Hook_config_output_streaming

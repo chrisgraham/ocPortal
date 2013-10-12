@@ -130,6 +130,7 @@ function phase_1_pre()
 	<p>Ideally do these at least on some major versions:</p>
 	<ul>
 		<li>Run a PHPStorm Code Inspection and see if any warning stands out as a bug</li>
+		<li>Run a HHVM analyze: <kbd>hhvm --hphp -t analyze `find . -name "*.php" -not -path "./_tests/*" -not -path "./tracker/*" -not -path "./uploads/*" -not -path "./sources_custom/photobucket/*" -not -path "./sources_custom/geshi/*" -not -path "./sources_custom/getid3/*" -not -path "./sources_custom/sabredav/*" -not -path "./sources_custom/Swift-4.1.1/*" -not -path "./sources_custom/programe/*"`</kbd></li>
 	</ul>
 	';
 

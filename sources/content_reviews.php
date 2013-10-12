@@ -18,7 +18,7 @@
  *
  * @param  ID_TEXT		The content type
  * @param  ID_TEXT		The content ID
- * @param  INTEGER		The display mode (0=show full box of review information, 1=show last reviewed time, 2=show next reviewed time)
+ * @param  integer		The display mode (0=show full box of review information, 1=show last reviewed time, 2=show next reviewed time)
  * @set 0 1 2
  * @return string			Content review details to show
  */

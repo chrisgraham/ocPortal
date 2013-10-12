@@ -43,7 +43,7 @@ function get_referrer_field($visible)
 		$field=form_input_username(do_lang_tempcode('TYPE_REFERRER'),do_lang_tempcode('DESCRIPTION_TYPE_REFERRER'),'referrer',$known_referrer,false,true);
 	} else
 	{
-		$field=form_input_hidden('referrer',$known_referrer,false,true);
+		$field=form_input_hidden('referrer',$known_referrer);
 	}
 
 	return $field;

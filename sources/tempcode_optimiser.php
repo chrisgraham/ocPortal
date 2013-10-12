@@ -32,6 +32,8 @@
 
 /**
  * Optimise for memory and execution time. This is typically used before something is cached.
+ *
+ * @param  object		Optimise a Tempcode object.
  */
 function optimise_tempcode(&$ob)
 {
