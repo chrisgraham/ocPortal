@@ -53,6 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	parse_str("a=1&b=2&c=3");
-	echo $a;
+	require_code('php');
+	echo convert_from_php_to_hhvm_hack('sources/global2.php');
 }

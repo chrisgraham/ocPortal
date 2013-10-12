@@ -42,6 +42,7 @@ function init__php()
  *		description
  *		type
  *		default
+ * 	default_raw
  *		set
  *		range
  *
@@ -370,11 +371,12 @@ function _read_php_function_line($_line)
 				}
 				elseif (($char==',') && (($_line[$k-1]!='\'') || ($_line[$k-2]!='=')))
 				{
+					$default_raw=$arg_default;
 					if ($arg_default==='true') $default='boolean-true'; // hack, to stop booleans coming out of arrays as integers
 					elseif ($arg_default==='false') $default='boolean-false';
 					else $default=@eval('return '.$arg_default.';'); // Could be unprocessable by php.php in standalone mode
 					if (!isset($default)) $default=NULL; // Fix for HHVM, #1161
-					$parameters[]=array('name'=>$arg_name,'default'=>$default,'ref'=>$ref);
+					$parameters[]=array('name'=>$arg_name,'default'=>$default,'default_raw'=>$default_raw,'ref'=>$ref);
 					$arg_name='';
 					$arg_default='';
 					$parse='in_args';
@@ -382,11 +384,12 @@ function _read_php_function_line($_line)
 				}
 				elseif ($char==')')
 				{
+					$default_raw=$arg_default;
 					if ($arg_default==='true') $default='boolean-true'; // hack, to stop booleans coming out of arrays as integers
 					elseif ($arg_default==='false') $default='boolean-false';
 					else $default=@eval('return '.$arg_default.';'); // Could be unprocessable by php.php in standalone mode
 					if (!isset($default)) $default=NULL; // Fix for HHVM, #1161
-					$parameters[]=array('name'=>$arg_name,'default'=>$default,'ref'=>$ref);
+					$parameters[]=array('name'=>$arg_name,'default'=>$default,'default_raw'=>$default_raw,'ref'=>$ref);
 					$parse='done';
 				} else
 				{
@@ -815,4 +818,89 @@ function render_php_function_do_bits($parameter)
 	return $bits;
 }
 
+/**
+ * Convert a code file to HHVM's hack language (i.e. strict typing).
+ *
+ * @param  PATH			The file path
+ * @return string			The new code
+ */
+function convert_from_php_to_hhvm_hack($filename)
+{
+	$code=file_get_contents(get_file_base().'/'.$filename);
+	if (substr($code,0,5)=='<'.'?php')
+	{
+		$code='<'.'?hh'.substr($code,5);
 
+		require_code('php');
+		$classes=get_php_file_api($filename,false);
+		foreach ($classes['__global']['functions'] as $function)
+		{
+			$func_start='function '.$function['name'].'(';
+			$pos=strpos($code,"\n".$func_start);
+			$pos2=strpos($code,"\n",$pos+1);
+			if ($pos2===false) $pos2=strlen($code);
+			if ($pos!==false)
+			{
+				$new_header=$func_start;
+				foreach ($function['parameters'] as $i=>$parameter)
+				{
+					if ($i!=0) $new_header.=',';
+
+					$new_header.=ocp_type_to_hhvm_type($parameter['type']).' ';
+
+					$new_header.='$'.$parameter['name'];
+					if (array_key_exists('default',$parameter))
+					{
+						$new_header.='=';
+						$new_header.=$parameter['default_raw'];
+					}
+				}
+				$new_header.=')';
+
+				if (isset($function['return']))
+				{
+					$new_header.=' : '.ocp_type_to_hhvm_type($function['return']['type']);
+				}
+
+				$code=substr($code,0,$pos)."\n".$new_header.substr($code,$pos2);
+			} else
+			{
+				// Should not get here
+			}
+		}
+	}
+	return $code;
+}
+
+/**
+ * Convert an ocPortal type to an HHVM hack type.
+ *
+ * @param  ID_TEXT		ocPortal type
+ * @return ID_TEXT		HHVM type
+ */
+function ocp_type_to_hhvm_type($t)
+{
+	if ($t[0]=='~')
+	{
+		return 'mixed';
+	}
+	if (substr($t,0,6)=='object') $t='object';
+	if ($t=='REAL') $t='float';
+	if (in_array($t,array('MEMBER','SHORT_INTEGER','UINTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
+	{
+		$t='integer';
+	}
+	if (in_array($t,array('LONG_TEXT','SHORT_TEXT','MINIID_TEXT','ID_TEXT','LANGUAGE_NAME','URLPATH','PATH','IP','MD5','EMAIL')))
+	{
+		$t='string';
+	}
+	if (in_array($t,array('tempcode')))
+	{
+		$t='object';
+	}
+	if (in_array($t,array('list','map')))
+	{
+		$t='array';
+	}
+	return $t;
+}
