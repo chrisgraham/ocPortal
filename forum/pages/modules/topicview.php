@@ -182,7 +182,10 @@ class Module_topicview
 			foreach ($topic_info['posts'] as $array_id=>$_postdetails)
 			{
 				if (($GLOBALS['META_DATA']['description']=='') && (($_postdetails['id']===$jump_post_id) || (($array_id==0) && ($jump_post_id===NULL))))
-					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post'],'200','0','1','0.2'),'left')),ENT_QUOTES,get_charset());
+				{
+					$truncated=symbol_truncator(array($_postdetails['post'],'200','0','1','0.2'),'left');
+					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags($truncated),ENT_QUOTES,get_charset());
+				}
 			}
 		} else
 		{

@@ -3,10 +3,6 @@
 	<div id="{$GET*,wrapper_id}">
 		<div class="float_surrounder">
 			<div id="activities_feed">
-				{+START,IF_NON_EMPTY,{TITLE}}
-					<h2 class="activities_icon">{TITLE*}</h2>
-				{+END}
-
 				<div id="activities_general_notify"></div>
 				<ul class="float_surrounder activities_holder raw_ajax_grow_spot" id="activities_holder">
 					{+START,IF_EMPTY,{CONTENT}}

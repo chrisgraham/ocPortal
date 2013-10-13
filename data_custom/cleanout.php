@@ -465,7 +465,7 @@ function cleanup()
 						continue;
 					}
 
-					if (($function=='ocf_delete_member') && ($GLOBALS['IS_SUPER_ADMIN']->get_member()))
+					if (($function=='ocf_delete_member') && ($GLOBALS['FORUM_DRIVER']->is_super_admin($row['id'])))
 					{
 						$GLOBALS['SITE_DB']->query_update('comcode_pages',array('p_submitter'=>2),array('p_submitter'=>$row['id']));
 					}

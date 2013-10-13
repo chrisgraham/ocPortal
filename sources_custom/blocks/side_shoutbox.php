@@ -73,7 +73,7 @@ class Block_side_shoutbox
 			return new ocp_tempcode();
 		}
 
-		if (is_null($last_message_id)) $last_message_id=-1;
+		$last_message_id=-1;
 
 		$zone=get_module_zone('chat');
 

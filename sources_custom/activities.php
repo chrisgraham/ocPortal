@@ -116,7 +116,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 				if (strlen($blocking)>0) // Also setting who gets discarded from outgoing like selection
 				{
 					if ($lm_ids!='') $lm_ids.=',';
-					$lm_ids.=strval($l_m['liked']);
+					$lm_ids.=$blocking;
 				}
 
 				// Also look at friends we like but they don't like back - and include public statuses from them

@@ -130,7 +130,9 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);
 
-	global $COMPILABLE_SYMBOLS;
+	global $COMPILABLE_SYMBOLS,$STUCK_ABORT_SIGNAL;
+
+	$sas_bak=$STUCK_ABORT_SIGNAL;
 
 	require_code('lang');
 	require_code('urls');
@@ -171,15 +173,15 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				{
 					case '$':
 						$current_level_mode=PARSE_SYMBOL;
-						$current_level_data[]='"'.php_addslashes(substr($next_token,1)).'"';
+						$current_level_data[]='"'.php_addslashes(($next_token=='$')?'':substr($next_token,1)).'"';
 						break;
 					case '+':
 						$current_level_mode=PARSE_DIRECTIVE;
-						$current_level_data[]='"'.php_addslashes(substr($next_token,1)).'"';
+						$current_level_data[]='"'.php_addslashes(($next_token=='+')?'':substr($next_token,1)).'"';
 						break;
 					case '!':
 						$current_level_mode=PARSE_LANGUAGE_REFERENCE;
-						$current_level_data[]='"'.php_addslashes(substr($next_token,1)).'"';
+						$current_level_data[]='"'.php_addslashes(($next_token=='!')?'':substr($next_token,1)).'"';
 						break;
 					default:
 						$current_level_mode=PARSE_PARAMETER;
@@ -327,7 +329,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 									{
 										if (($level_test[3]==PARSE_DIRECTIVE) && (isset($level_test[5][1])) && (isset($level_test[5][1][0])) && ($level_test[5][1][0]=='"LOOP"')) // For a loop, we need to do full evaluation of symbol parameters as it may be bound to a loop variable
 										{
-											$eval=debug_eval('return array('.$_opener_params.');');
+											$tpl_funcs=array();
+											$eval=debug_eval('return array('.$_opener_params.');',$tpl_funcs,array(),$cl);
 											if (is_array($eval))
 											{
 												$pp_bit=array(array(),TC_SYMBOL,str_replace('"','',$first_param),$eval);
@@ -413,7 +416,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						}
 						if ((isset($COMPILABLE_SYMBOLS[$first_param])) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
 						{
-							$new_line='"'.php_addslashes(debug_eval('return '.$new_line.';')).'"';
+							$tpl_funcs=array();
+							$new_line='"'.php_addslashes(debug_eval('return '.$new_line.';',$tpl_funcs,array(),$cl)).'"';
 						} else
 						{
 							// We want the benefit's of keep_ variables but not with having to do lots of individual URL moniker lookup queries - so use a static URL and KEEP_ symbol combination
@@ -424,7 +428,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								{
 									if (substr($key,0,5)=='keep_') unset($_GET[$key]);
 								}
-								$new_line='"'.php_addslashes(debug_eval('return '.$new_line.';')).'"';
+								$tpl_funcs=array();
+								$new_line='"'.php_addslashes(debug_eval('return '.$new_line.';',$tpl_funcs,array(),$cl)).'"';
 								$_GET=$tmp;
 								$current_level_data[]=$new_line;
 								$current_level_data[]='ecv_KEEP($cl,array('.implode(',',$escaped).'),array("'.((strpos($new_line,'?')===false)?'1':'0').'"))';
@@ -438,7 +443,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_LANGUAGE_REFERENCE).','.$first_param.',array('.$_opener_params.'))';
 						if (($_opener_params=='') && ($escaped==array())) // Optimise it out for simple case?
 						{
-							$looked_up=do_lang(debug_eval('return '.$first_param.';'),NULL,NULL,NULL,$lang,false);
+							$tpl_funcs=array();
+							$looked_up=do_lang(debug_eval('return '.$first_param.';',$tpl_funcs,array(),$cl),NULL,NULL,NULL,$lang,false);
 							if ($looked_up!==NULL)
 							{
 								if (apply_tempcode_escaping($escaped,$looked_up)==$looked_up)
@@ -493,7 +499,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 				// Handle directive nesting
 				if ($past_level_mode==PARSE_DIRECTIVE)
 				{
-					$eval=debug_eval('return '.$first_param.';');
+					$tpl_funcs=array();
+					$eval=debug_eval('return '.$first_param.';',$tpl_funcs,array(),$cl);
 					if (!is_string($eval)) $eval='';
 					if ($eval=='START') // START
 					{
@@ -550,14 +557,16 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 							if ($j==2) $first_directive_param=implode('.',$directive_opener_params[$j]);
 						}
-						$eval=debug_eval('return '.implode('.',$directive_opener_params[1]).';');
+						$tpl_funcs=array();
+						$eval=debug_eval('return '.implode('.',$directive_opener_params[1]).';',$tpl_funcs,array(),$cl);
 						if (!is_string($eval)) $eval='';
 						$directive_name=$eval;
 						switch ($directive_name)
 						{
 							case 'INCLUDE':
 							case 'FRACTIONAL_EDITABLE':
-								$eval=debug_eval('return array('.$directive_params.');');
+								$tpl_funcs=array();
+								$eval=debug_eval('return array('.$directive_params.');',$tpl_funcs,array(),$cl);
 								if (is_array($eval))
 								{
 									$pp_bit=array(array(),TC_DIRECTIVE,str_replace('"','',$directive_name),$eval);
@@ -621,25 +630,29 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								break;
 
 							case 'IF_PASSED':
-								$eval=debug_eval('return '.$first_directive_param.';');
+								$tpl_funcs=array();
+								$eval=debug_eval('return '.$first_directive_param.';',$tpl_funcs,array(),$cl);
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='(isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')?('.implode('.',$past_level_data).'):\'\')';
 								break;
 
 							case 'IF_NON_PASSED':
-								$eval=debug_eval('return '.$first_directive_param.';');
+								$tpl_funcs=array();
+								$eval=debug_eval('return '.$first_directive_param.';',$tpl_funcs,array(),$cl);
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='(!isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')?('.implode('.',$past_level_data).'):\'\')';
 								break;
 
 							case 'IF_PASSED_AND_TRUE':
-								$eval=debug_eval('return '.$first_directive_param.';');
+								$tpl_funcs=array();
+								$eval=debug_eval('return '.$first_directive_param.';',$tpl_funcs,array(),$cl);
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='((isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).') && (otp($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')=="1"))?('.implode('.',$past_level_data).'):\'\')';
 								break;
 
 							case 'IF_NON_PASSED_OR_FALSE':
-								$eval=debug_eval('return '.$first_directive_param.';');
+								$tpl_funcs=array();
+								$eval=debug_eval('return '.$first_directive_param.';',$tpl_funcs,array(),$cl);
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='((!isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).') || (otp($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')=="0"))?('.implode('.',$past_level_data).'):\'\')';
 								break;
@@ -658,7 +671,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 							case 'INCLUDE':
 								global $FILE_ARRAY;
-								$eval=debug_eval('return '.$first_directive_param.';');
+								$tpl_funcs=array();
+								$eval=debug_eval('return '.$first_directive_param.';',$tpl_funcs,array(),$cl);
 								if (!is_string($eval)) $eval='';
 								if (($template_name==$eval) || ((!$GLOBALS['SEMI_DEV_MODE']) && (get_param('special_page_type','')=='')) && ($count_directive_opener_params==3) && ($past_level_data==array('""')) && (!isset($FILE_ARRAY))) // Simple case
 								{
@@ -701,7 +715,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						}
 					} else
 					{
-						$eval=debug_eval('return '.$first_param.';');
+						$tpl_funcs=array();
+						$eval=debug_eval('return '.$first_param.';',$tpl_funcs,array(),$cl);
 						if (!is_string($eval)) $eval='';
 						$directive_name=$eval;
 						if (isset($GLOBALS['DIRECTIVES_NEEDING_VARS'][$directive_name]))
@@ -771,6 +786,8 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 		}
 	}
 	$current_level_data=$merged;
+
+	$STUCK_ABORT_SIGNAL=$sas_bak;
 
 	return array($current_level_data,$preprocessable_bits);
 }

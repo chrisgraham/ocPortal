@@ -243,7 +243,7 @@ function init__validation()
 	global $REQUIRE_ANCESTER;
 	$REQUIRE_ANCESTER=array(
 		'textarea'=>'form',
-		'input'=>'form',
+		//'input'=>'form',
 		//'button'=>'form',
 		'option'=>'form',
 		'optgroup'=>'form',

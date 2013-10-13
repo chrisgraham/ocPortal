@@ -1,5 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 	
+				<url>
+					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_4</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-10-13T01:17:00+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_3</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-10-12T01:37:00+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-10-12T01:37:00+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_2</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:access>Registration</news:access>
+					
+						<news:genres></news:genres>
+						<news:publication_date>2013-10-12T01:37:00+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
 		</urlset>
 	

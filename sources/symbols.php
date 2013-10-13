@@ -51,7 +51,7 @@ function init__symbols()
 /**
  * Evaluate a conventional tempcode variable, handling escaping
  *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  string				The language to evaluate this symbol in (some symbols refer to language elements).
  * @param  array				Array of escaping operations.
  * @param  integer			The type of symbol this is (TC_SYMBOL, TC_LANGUAGE_REFERENCE)
  * @set    0 2
@@ -62,7 +62,6 @@ function init__symbols()
 function ecv($lang,$escaped,$type,$name,$param)
 {
 	// SYMBOLS...
-
 	if ($type==TC_SYMBOL)
 	{
 		// Built-in
@@ -1303,7 +1302,7 @@ function ecv_COMMA_LIST_GET($lang,$escaped,$param)
  */
 function ecv_IS_EMPTY($lang,$escaped,$param)
 {
-	$value='';
+	$value='1';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
@@ -1325,7 +1324,7 @@ function ecv_IS_EMPTY($lang,$escaped,$param)
  */
 function ecv_IS_NON_EMPTY($lang,$escaped,$param)
 {
-	$value='';
+	$value='0';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
@@ -1399,9 +1398,9 @@ function ecv_JS_ON($lang,$escaped,$param)
 	$value='';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if (isset($param[1]))
+	if (isset($param[0]))
 	{
-		$value=has_js()?$param[0]:$param[1];
+		$value=has_js()?$param[0]:(isset($param[1])?$param[1]:'');
 	} else $value=has_js()?'1':'0';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
@@ -3361,20 +3360,19 @@ function ecv_EQ($lang,$escaped,$param)
 	$value='';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if (isset($param[1]))
+	if (!isset($param[0])) $param[0]='';
+	if (!isset($param[1])) $param[1]='';
+	$first=array_shift($param);
+	$count=0;
+	foreach ($param as $test)
 	{
-		$first=array_shift($param);
-		$count=0;
-		foreach ($param as $test)
+		if ($first==$test)
 		{
-			if ($first==$test)
-			{
-				$count++;
-				break;
-			}
+			$count++;
+			break;
 		}
-		$value=($count!=0)?'1':'0';
 	}
+	$value=($count!=0)?'1':'0';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
@@ -3393,16 +3391,15 @@ function ecv_NEQ($lang,$escaped,$param)
 	$value='';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if (isset($param[1]))
+	if (!isset($param[0])) $param[0]='';
+	if (!isset($param[1])) $param[1]='';
+	$first=array_shift($param);
+	$count=0;
+	foreach ($param as $test)
 	{
-		$first=array_shift($param);
-		$count=0;
-		foreach ($param as $test)
-		{
-			if ($first==$test) $count++;
-		}
-		$value=($count==0)?'1':'0';
+		if ($first==$test) $count++;
 	}
+	$value=($count==0)?'1':'0';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
@@ -3418,7 +3415,7 @@ function ecv_NEQ($lang,$escaped,$param)
  */
 function ecv_NOT($lang,$escaped,$param)
 {
-	$value='';
+	$value='1';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))

@@ -750,7 +750,7 @@ class Module_galleries
 
 			if ((get_option('show_empty_galleries')=='1') || (gallery_has_content($child['name'])))
 			{
-				$children->attach(render_gallery_box($child,$root,true,get_zone_name(),get_option('show_empty_galleries')!='1',false,false,false,NULL,true));
+				$children->attach(render_gallery_box($child,$root,true,get_zone_name(),get_option('show_empty_galleries')!='1',false,false,false,true));
 			}
 		}
 

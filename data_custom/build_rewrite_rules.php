@@ -265,9 +265,9 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 					if ($y!=0) $rules_txt.="\n\n";
 
 					$rules_txt.=($enabled?'':'#').'rule'.strval($i+1).' {
-					   '.($enabled?'':'#').'pattern = '.$rule.'
-					   '.($enabled?'':'#').'to = '.$to.'
-					   '.($enabled?'':'#').'qsa = '.(in_array('QSA',$flags)?'true':'false').'
+						'.($enabled?'':'#').'pattern = '.$rule.'
+						'.($enabled?'':'#').'to = '.$to.'
+						'.($enabled?'':'#').'qsa = '.(in_array('QSA',$flags)?'true':'false').'
 					'.($enabled?'':'#').'}';
 				}
 				$i++;

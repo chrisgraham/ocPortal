@@ -67,7 +67,7 @@ class Module_cms_downloads extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
-	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
+	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
 	function pre_run($top_level=true)
@@ -252,7 +252,7 @@ class Module_cms_downloads extends standard_crud_module
 		ftp_close($conn_id);
 
 		// Show it worked / Refresh
-		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL,$destination);
+		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL);
 	}
 
 	/**

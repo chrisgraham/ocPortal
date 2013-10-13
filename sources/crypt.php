@@ -127,7 +127,7 @@ function get_secure_random_number()
 	// 2147483647 is from MySQL limit http://dev.mysql.com/doc/refman/5.0/en/integer-types.html ; PHP_INT_MAX is higher on 64bit machines
 	if ((function_exists('openssl_random_pseudo_bytes')) && (get_value('disable_openssl')!=='1'))
 	{
-		$code=2147483647*(hexdec(bin2hex(openssl_random_pseudo_bytes(4)))/0xffffffff);
+		$code=intval(2147483647*(hexdec(bin2hex(openssl_random_pseudo_bytes(4)))/0xffffffff));
 		if ($code<0) $code=-$code;
 	} else
 	{

@@ -30,6 +30,9 @@ if (!function_exists('init__forum__ocf'))
 
 function ocjester_name_filter($in)
 {
+	$option=get_option('ocjester_name_changes');
+	if ($option=='') return $in;
+
 	require_code('ocfiltering');
 
 	$passes=(count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_name_changes_shown_for'),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);

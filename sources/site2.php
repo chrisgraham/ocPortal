@@ -168,8 +168,11 @@ function assign_refresh($url,$multiplier=0.0)
 	// Emergency meta tag
 	if (headers_sent())
 	{
-		ini_set('ocproducts.xss_detect','0');
-		echo '<meta http-equiv="Refresh" content="0; URL='.escape_html($url).'" />'; // XHTMLXHTML
+		if ($GLOBALS['RELATIVE_PATH']!='_tests')
+		{
+			ini_set('ocproducts.xss_detect','0');
+			echo '<meta http-equiv="Refresh" content="0; URL='.escape_html($url).'" />'; // XHTMLXHTML
+		}
 		return;
 	}
 

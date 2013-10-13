@@ -907,11 +907,11 @@ function check_variable_list($LOCAL_VARIABLES,$offset=-1)
 		{
 			if (is_array($t)) $t=$t[0];
 
-			if ($t{0}=='?')
+			if ($t[0]=='?')
 			{
 				$t=substr($t,1);
 			}
-			if ($t{0}=='~')
+			if ($t[0]=='~')
 			{
 				$t=substr($t,1);
 			}

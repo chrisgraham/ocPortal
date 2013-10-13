@@ -48,6 +48,7 @@ class galleries_test_set extends ocp_test_case
 		}
 
 		$this->cms_gal=new Module_cms_galleries();
+		$this->cms_gal->pre_run();
 		$this->cms_gal->run_start('misc');
 		$this->cms_gal_alt=new Module_cms_galleries_alt();
 		$this->cms_gal_category=new Module_cms_galleries_cat();
@@ -56,6 +57,8 @@ class galleries_test_set extends ocp_test_case
 	function testAddgalleryUI()
 	{
 		require_code('content2');
+		$_GET['type']='ad';
+		$this->cms_gal_category->pre_run();
 		return $this->cms_gal_category->ad();
 	}
 
@@ -77,8 +80,8 @@ class galleries_test_set extends ocp_test_case
 			'parent_id'=>'root',
 			'require__parent_id'=>1,
 			'secondary_parents'=>array(
-						'0'=>'a_test_image',
-				),
+				'0'=>'a_test_image',
+			),
 
 			'require__secondary_parents'=>0,
 			'accept_images'=>1,
@@ -137,6 +140,8 @@ class galleries_test_set extends ocp_test_case
 			'description__is_wysiwyg'=>1,
 		);
 
+		$_GET['type']='_ad';
+		$this->cms_gal_category->pre_run();
 		return $this->cms_gal_category->_ad();
 	}
 
@@ -157,8 +162,8 @@ class galleries_test_set extends ocp_test_case
 			'parent_id'=>'root',
 			'require__parent_id'=>1,
 			'secondary_parents'=>array(
-						'0'=>'a_test_image',
-				),	
+				'0'=>'a_test_image',
+			),	
 			'require__secondary_parents'=>0,
 			'accept_images'=>1,
 			'tick_on_form__accept_images'=>0,
@@ -222,6 +227,8 @@ class galleries_test_set extends ocp_test_case
 	function testAddimageUI()
 	{
 		//Checking gallery image adding UI
+		$_GET['type']='ad';
+		$this->cms_gal->pre_run();
 		return $this->cms_gal->ad();
 	}
 
@@ -266,11 +273,15 @@ class galleries_test_set extends ocp_test_case
 			'description__is_wysiwyg'=>1,
 		);
 
+		$_GET['type']='_ad';
+		$this->cms_gal->pre_run();
 		return $this->cms_gal->_ad();
 	}
 
 	function testAddVideoUI()
 	{
+		$_GET['type']='ad';
+		$this->cms_gal_alt->pre_run();
 		return $this->cms_gal_alt->ad();
 	}
 

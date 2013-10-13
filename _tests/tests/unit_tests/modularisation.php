@@ -40,6 +40,7 @@ class modularisation_test_set extends ocp_test_case
 		while (($file=readdir($dh))!==false)
 		{
 			if (substr($file,-4)!='.php') continue;
+			if ($file[0]=='.') continue;
 			require_code('hooks/systems/addon_registry/'.basename($file,'.php'));
 			$ob=eval('return new Hook_addon_registry_'.basename($file,'.php').'();');
 			$addon_data[basename($file,'.php')]=$ob->get_file_list();
@@ -57,6 +58,8 @@ class modularisation_test_set extends ocp_test_case
 				$seen[$file]=1;
 			}
 		}
+
+		ini_set('memory_limit','500M');
 
 		$GFILE_ARRAY=array();
 		$this->do_dir();
@@ -110,6 +113,7 @@ class modularisation_test_set extends ocp_test_case
 				}
 			}
 		}
+
 		ksort($unput_files);
 		foreach ($unput_files as $addon=>$paths)
 		{

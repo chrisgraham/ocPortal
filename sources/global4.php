@@ -411,7 +411,7 @@ function _log_it($type,$a=NULL,$b=NULL)
 {
 	if (!function_exists('get_member')) return; // If this is during installation
 
-	if ((get_option('site_closed')=='1') && (get_option('no_stats_when_closed')=='1')) return;
+	if ((get_option('site_closed')=='1') && (get_option('stats_when_closed')=='0')) return;
 
 	// Run hooks, if any exist
 	$hooks=find_all_hooks('systems','upon_action_logging');

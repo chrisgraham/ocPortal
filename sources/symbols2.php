@@ -148,7 +148,7 @@ function ecv2_CONFIG_OPTION($lang,$escaped,$param)
 			$value='0';
 		} else
 		{
-			$value=get_option($param[0],true);
+			$value=get_option($param[0],array_key_exists(1,$param) && $param[1]=='1');
 			if ($value===NULL) $value='';
 		}
 	}
@@ -1393,7 +1393,7 @@ function ecv2_FIND_URL_MONIKER_VIA_ID($lang,$escaped,$param)
  */
 function ecv2_FLAGRANT($lang,$escaped,$param) // LEGACY
 {
-	return ecv_COMMUNITY_BILLBOARD($lang,$escaped,$param);
+	return ecv($lang,$escaped,TC_SYMBOL,'COMMUNITY_MESSAGE',$param);
 }
 
 /**
@@ -1757,7 +1757,7 @@ function ecv2_LAST_VISIT_TIME($lang,$escaped,$param)
  */
 function ecv2_LENGTH($lang,$escaped,$param)
 {
-	$value='';
+	$value='0';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
@@ -3082,7 +3082,9 @@ function ecv2_WHILE(&$value,$lang,$escaped,$param)
 		{
 			$value='';
 			$value.=$param[1]->evaluate();
-			$value.=ecv($lang,$escaped,$type,$name,$param);
+			$put='';
+			ecv2_WHILE($put,$lang,$escaped,$param);
+			$value.=$put;
 		}
 	}
 }

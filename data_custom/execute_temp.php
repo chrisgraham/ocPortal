@@ -53,5 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	var_dump(build_url(array('page'=>'about'),'collaboration'));
 }

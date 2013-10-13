@@ -94,7 +94,7 @@ class Module_cms_calendar extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
-	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
+	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
 	function pre_run($top_level=true)
@@ -806,7 +806,7 @@ class Module_cms_calendar extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('event',NULL);
 
-		$conflicts=detect_conflicts(get_member(),NULL,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$start_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$type,$member_calendar,DETECT_CONFLICT_SCOPE_CALENDAR_WIDE);
+		$conflicts=detect_conflicts(get_member(),NULL,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$start_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$type,$member_calendar,DETECT_CONFLICT_SCOPE_ALL);
 		$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUBMIT_THANKYOU')):$conflicts;
 
 		/*

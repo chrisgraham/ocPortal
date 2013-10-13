@@ -67,7 +67,7 @@ class Module_cms_galleries extends standard_crud_module
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
-	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
+	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
 	function pre_run($top_level=true)
@@ -116,6 +116,7 @@ class Module_cms_galleries extends standard_crud_module
 		{
 			if (has_privilege(get_member(),'mass_import','cms_galleries'))
 			{
+				$cat=get_param('cat',NULL);
 				$mass_url=build_url(array('page'=>'_SELF','type'=>'gimp','cat'=>$cat),'_SELF');
 				attach_message(do_lang_tempcode('CAN_MASS_UPLOAD',escape_html($mass_url->evaluate())),'inform');
 			}
@@ -608,6 +609,7 @@ class Module_cms_galleries extends standard_crud_module
 						$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'',$length,$width,$height);
 						store_exif('video',strval($id),$exif);
 
+						require_code('users2');
 						if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 						{
 							$privacy_ok=true;
@@ -643,6 +645,7 @@ class Module_cms_galleries extends standard_crud_module
 						$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'');
 						store_exif('image',strval($id),$exif);
 
+						require_code('users2');
 						if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 						{
 							$privacy_ok=true;
@@ -809,6 +812,7 @@ class Module_cms_galleries extends standard_crud_module
 					save_privacy_form_fields('video',strval($id),$privacy_level,$additional_access);
 				}
 
+				require_code('users2');
 				if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 				{
 					$privacy_ok=true;
@@ -858,6 +862,7 @@ class Module_cms_galleries extends standard_crud_module
 					save_privacy_form_fields('image',strval($id),$privacy_level,$additional_access);
 				}
 
+				require_code('users2');
 				if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 				{
 					$privacy_ok=true;
@@ -1245,6 +1250,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
+			require_code('users2');
 			if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 			{
 				$privacy_ok=true;
@@ -1338,6 +1344,7 @@ class Module_cms_galleries extends standard_crud_module
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('images','submitter',array('id'=>$id));
 
+			require_code('users2');
 			if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 			{
 				$privacy_ok=true;
@@ -1822,6 +1829,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
+			require_code('users2');
 			if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 			{
 				$privacy_ok=true;
@@ -1927,6 +1935,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		{
 			$submitter=$GLOBALS['SITE_DB']->query_select_value('videos','submitter',array('id'=>$id));
 
+			require_code('users2');
 			if ((has_actual_page_access(get_modal_user(),'galleries')) && (has_category_access(get_modal_user(),'galleries',$cat)))
 			{
 				$privacy_ok=true;

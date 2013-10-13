@@ -38,12 +38,13 @@ class lang_test_set extends ocp_test_case
 
 		while (($file=readdir($dh))!==false)
 		{
+			if (substr($file,-4)!='.ini') continue;
 			if ($file[0]=='.') continue;
 
 			$input=array();
 			_get_lang_file_map(get_file_base().'/lang/EN/'.$file,$input,NULL,false);
 
-			foreach($input as $key=>$string)
+			foreach ($input as $key=>$string)
 			{
 				$output2='';
 
@@ -67,7 +68,7 @@ class lang_test_set extends ocp_test_case
 				if ($file!='upgrade.ini' && $key!='NO_PHP_IN_TEMPLATES' && $key!='WHAT_TO_EXPECT' && $key!='DESCRIPTION_INCLUDE_OCP_ADVERT' && $key!='INCLUDE_OCP_ADVERT' && $key!='UNINSTALL_WARNING' && $key!='OCP_CHAT_EXTRA' && (strpos($key,'SETUP_WIZARD')===false) && $key!='CANNOT_CONNECT_HOME' && $file!='lang.ini' && $file!='version.ini' && $file!='debrand.ini' && $file!='import.ini' && $file!='installer.ini' && $file!='occle.ini' && $file!='addons.ini' && strpos($string,'ocPortal')!==false)
 					$this->assertTrue(false,'The word \'ocPortal\' was used in '.$file.'. This should probably be changed to \'the software\'.');
 
-				if (preg_match('#([^A-Za-z"\_]+)comcode([^A-Za-z"]+)#',$string)!=0) $this->assertTrue(false,'The term \'comcode\' was used in '.$file.'. This should be changed to \'Comcode\'.');
+				if (preg_match('#([^A-Za-z"\_<]+)comcode([^A-Za-z"]+)#',$string)!=0) $this->assertTrue(false,'The term \'comcode\' was used in '.$file.'. This should be changed to \'Comcode\'.');
 
 				if (($verbose) && ($this->str_ipos($string,'user')!==false)) $this->assertTrue(false,'The term \'user\' was used in '.$file.'. This might need to be changed to \'member\', depending on the circumstances.');
 				if ($this->str_ipos($string,'set-up')!==false) $this->assertTrue(false,'The phrase \'set-up\' was used in '.$file.'. This might need to be changed to \'setup\', depending on the usage.');

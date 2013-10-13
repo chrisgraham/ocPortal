@@ -142,11 +142,12 @@ class standard_crud_module
 	}
 
 	var $doing;
+	var $success_message_str;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
-	 * @return boolean		Whether this is running at the top level, prior to having sub-objects called.
+	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
 	function pre_run($top_level=true)
@@ -228,6 +229,7 @@ class standard_crud_module
 				breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:a'.$this->type_code,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
 
 				$this->doing=$doing;
+				$this->success_message_str=$success_message_str;
 			}
 
 			if ($type=='ed' || $type=='ev' || $type=='ec' || $type=='edit_entry' || $type=='edit_category')
@@ -276,6 +278,8 @@ class standard_crud_module
 
 			if ($type=='__ed' || $type=='__ev' || $type=='__ec' || $type=='__edit_entry' || $type=='__edit_category')
 			{
+				$id=get_param('id','');
+
 				$delete=post_param_integer('delete',0);
 				if (($delete==1) || ($delete==2)) //1=partial,2=full,...=unknown,thus handled as an edit
 				{
@@ -322,6 +326,7 @@ class standard_crud_module
 				breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:_e'.$this->type_code.':'.$id,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
 
 				$this->doing=$doing;
+				$this->success_message_str=$success_message_str;
 			}
 
 			if ($type=='mass_delete')
@@ -875,7 +880,7 @@ class standard_crud_module
 		if (!is_null($this->upload)) require_code('uploads');
 		$temp=$this->add_actualisation();
 
-		$description=is_null($this->do_next_description)?do_lang_tempcode($success_message_str):$this->do_next_description;
+		$description=is_null($this->do_next_description)?do_lang_tempcode($this->success_message_str):$this->do_next_description;
 
 		if (is_array($temp))
 		{
@@ -1449,7 +1454,7 @@ class standard_crud_module
 			/*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))		No - resource is gone now, and redirect would almost certainly try to take us back there
 			{
 				$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?get_param('redirect'):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-				return redirect_screen($this->title,$url,do_lang_tempcode($success_message_str));
+				return redirect_screen($this->title,$url,do_lang_tempcode($this->success_message_str));
 			}*/
 
 			clear_ocp_autosave();
@@ -1458,10 +1463,10 @@ class standard_crud_module
 			{
 				$url=make_string_tempcode(str_replace('__ID__',$id,get_param('redirect')));
 
-				return redirect_screen($this->title,$url,do_lang_tempcode($success_message_str));
+				return redirect_screen($this->title,$url,do_lang_tempcode($this->success_message_str));
 			}
 
-			$description=is_null($this->do_next_description)?do_lang_tempcode($success_message_str):$this->do_next_description;
+			$description=is_null($this->do_next_description)?do_lang_tempcode($this->success_message_str):$this->do_next_description;
 
 			return $this->do_next_manager($this->title,$description,NULL);
 		}
@@ -1502,7 +1507,7 @@ class standard_crud_module
 
 			if (($this->output_of_action_is_confirmation) && (!is_null($description))) return $description;
 
-			if (is_null($description)) $description=do_lang_tempcode($success_message_str);
+			if (is_null($description)) $description=do_lang_tempcode($this->success_message_str);
 
 			if (addon_installed('awards'))
 			{
@@ -1533,7 +1538,7 @@ class standard_crud_module
 		{
 			$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?make_string_tempcode(get_param('redirect')):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
 
-			return redirect_screen($this->title,$url,do_lang_tempcode($success_message_str));
+			return redirect_screen($this->title,$url,do_lang_tempcode($this->success_message_str));
 		}
 
 		clear_ocp_autosave();

@@ -39,7 +39,7 @@ class eacceleratorcache
 		} elseif (function_exists('mmcache_get'))
 		{
 			$data=mmcache_get($key);
-		}
+		} else $data=NULL;
 		if (is_null($data)) return NULL;
 		if ((!is_null($min_cache_date)) && ($data[0]<$min_cache_date)) return NULL;
 		return unserialize($data[1]);

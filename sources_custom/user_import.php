@@ -38,7 +38,7 @@ function do_user_import()
 	{
 		require_code('files');
 		$infile=fopen(get_custom_file_base().'/'.USER_IMPORT_TEMP_PATH,'r+b');
-		$test=http_download_file(USER_IMPORT_URL,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$write_to_file);
+		$test=http_download_file(USER_IMPORT_URL,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$infile);
 		if (is_null($test)) return;
 	} else
 	{

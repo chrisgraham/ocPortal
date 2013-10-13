@@ -1568,10 +1568,10 @@ function javascript_tempcode($position=NULL)
  *
  * @param  ID_TEXT		The javascript file required
  * @param  tempcode		Tempcode object (will be written into if appropriate)
- * @param  boolean		Whether minifying
- * @param  boolean		Whether doing HTTPS
- * @param  boolean		Whether operating in mobile mode
- * @param  boolean		Whether to generate the cached file if not already cached
+ * @param  ?boolean		Whether minifying (NULL: from what is cached)
+ * @param  ?boolean		Whether doing HTTPS (NULL: from what is cached)
+ * @param  ?boolean		Whether operating in mobile mode (NULL: from what is cached)
+ * @param  ?boolean		Whether to generate the cached file if not already cached (NULL: from what is cached)
  * @return tempcode		The tempcode to tie in the CSS files
  */
 function _javascript_tempcode($j,&$js,$_minify=NULL,$_https=NULL,$_mobile=NULL,$do_enforce=true)
@@ -1736,12 +1736,12 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
  * @param  tempcode		Inline tempcode object (will be written into if appropriate)
  * @param  boolean		Only do global CSS
  * @param  ?string		HTML context for which we filter (minimise) any CSS we spit out as inline (NULL: none)
- * @param  ?ID_TEXT		The name of the theme (NULL: current theme)
- * @param  ?ID_TEXT		The seed colour (NULL: previous cached) (blank: none)
- * @param  boolean		Whether operating in text-only mode
- * @param  boolean		Whether minifying
- * @param  boolean		Whether doing HTTPS
- * @param  boolean		Whether operating in mobile mode
+ * @param  ?ID_TEXT		The name of the theme (NULL: current theme) (NULL: from what is cached)
+ * @param  ?ID_TEXT		The seed colour (NULL: previous cached) (blank: none) (NULL: from what is cached)
+ * @param  ?boolean		Whether operating in text-only mode (NULL: from what is cached)
+ * @param  ?boolean		Whether minifying (NULL: from what is cached)
+ * @param  ?boolean		Whether doing HTTPS (NULL: from what is cached)
+ * @param  ?boolean		Whether operating in mobile mode (NULL: from what is cached)
  * @param  boolean		Whether to generate the cached file if not already cached
  * @return tempcode		The tempcode to tie in the CSS files
  */

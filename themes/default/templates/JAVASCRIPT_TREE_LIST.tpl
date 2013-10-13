@@ -345,7 +345,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			master_html=document.getElementById('tree_list__root_'+this.name);
 			fix_up_node_position(node_self);
 			node_self.ocp_draggable=node.getAttribute('draggable');
-			Drag.init(node_self,null,find_pos_x(master_html,true),find_pos_x(master_html,true)+find_width(master_html)-find_width(node_self)-5,find_pos_y(master_html,true));
+			window.Drag.init(node_self,null,find_pos_x(master_html,true),find_pos_x(master_html,true)+find_width(master_html)-find_width(node_self)-5,find_pos_y(master_html,true));
 			node_self.onDragEnd=function(x,y)
 				{
 					this.className=this.className.replace(' being_dragged','');

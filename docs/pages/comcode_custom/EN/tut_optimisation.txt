@@ -344,7 +344,7 @@ To invoke (we are assuming that HHVM has been properly installed and is in the p
 
 In order to support hphp (which imposes some language restrictions) we made some changes to ocPortal, and updated our coding standards. There's no guarantee that any individual non-bundled addon will meet the coding standards, however.
 
-We expect Facebook will improve HHVM performance will increase over time. They are working on improvements to the PHP language, which ocPortal could benefit from with further development. Type hinting is particularly interesting, as it has great performance potential and mirrors our code quality efforts that have already made ocPortal type-strict.
+We expect Facebook will improve HHVM performance will increase over time. They are working on improvements to the PHP language, which ocPortal could benefit from with further development. Type hinting is particularly interesting, as it has great performance potential and mirrors our code quality efforts that have already made ocPortal type-strict. We have preliminary support for this already, but it is not consistently maintained production-ready.
 
 We have tried in the past to support:
  - Roadsend
