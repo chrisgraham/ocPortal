@@ -45,7 +45,7 @@ function init__php()
  *		set
  *		range
  *
- * @param  ID_TEXT		The PHP code module to get API information for
+ * @param  PATH			The PHP code module to get API information for
  * @param  boolean		Whether to include function source code
  * @return array			The complex structure of API information
  */
