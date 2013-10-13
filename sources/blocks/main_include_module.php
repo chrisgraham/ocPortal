@@ -80,7 +80,7 @@ class Block_main_include_module
 		}
 		foreach ($temp_get as $key=>$val)
 		{
-			if (substr($key,0,5)=='keep_')
+			if ((substr($key,0,5)=='keep_') || ($merge_parameters))
 				$_GET[$key]=get_magic_quotes_gpc()?addslashes($val):$val;
 		}
 		$_GET['in_main_include_module']='1';
