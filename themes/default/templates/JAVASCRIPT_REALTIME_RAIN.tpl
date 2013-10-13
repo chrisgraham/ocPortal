@@ -280,8 +280,8 @@ function set_time_line_position(time)
 	var realtimedate=document.getElementById('real_time_date');
 	var realtimetime=document.getElementById('real_time_time');
 	if (!realtimedate) return;
-	set_inner_html(realtimedate,date_object.getFullYear()+'/'+(''+date_object.getMonth()).strPad(2,'0',STR_PAD_LEFT)+'/'+(''+date_object.getDate()).strPad(2,'0',STR_PAD_LEFT));
-	set_inner_html(realtimetime,(''+date_object.getHours()).strPad(2,'0',STR_PAD_LEFT)+':'+(''+date_object.getMinutes()).strPad(2,'0',STR_PAD_LEFT)+':'+(''+date_object.getSeconds()).strPad(2,'0',STR_PAD_LEFT));
+	set_inner_html(realtimedate,date_object.getFullYear()+'/'+(''+date_object.getMonth())+'/'+(''+date_object.getDate()));
+	set_inner_html(realtimetime,(''+date_object.getHours())+':'+(''+date_object.getMinutes())+':'+(''+date_object.getSeconds()));
 }
 
 function toggle_window_pausing(button)

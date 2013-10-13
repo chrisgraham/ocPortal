@@ -3360,21 +3360,19 @@ function ecv_EQ($lang,$escaped,$param)
 	$value='';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if (isset($param[0]))
+	if (!isset($param[0])) $param[0]='';
+	if (!isset($param[1])) $param[1]='';
+	$first=array_shift($param);
+	$count=0;
+	foreach ($param as $test)
 	{
-		if (!isset($param[1])) $param[1]='';
-		$first=array_shift($param);
-		$count=0;
-		foreach ($param as $test)
+		if ($first==$test)
 		{
-			if ($first==$test)
-			{
-				$count++;
-				break;
-			}
+			$count++;
+			break;
 		}
-		$value=($count!=0)?'1':'0';
 	}
+	$value=($count!=0)?'1':'0';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
@@ -3393,16 +3391,15 @@ function ecv_NEQ($lang,$escaped,$param)
 	$value='';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if (isset($param[1]))
+	if (!isset($param[0])) $param[0]='';
+	if (!isset($param[1])) $param[1]='';
+	$first=array_shift($param);
+	$count=0;
+	foreach ($param as $test)
 	{
-		$first=array_shift($param);
-		$count=0;
-		foreach ($param as $test)
-		{
-			if ($first==$test) $count++;
-		}
-		$value=($count==0)?'1':'0';
+		if ($first==$test) $count++;
 	}
+	$value=($count==0)?'1':'0';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
@@ -3418,7 +3415,7 @@ function ecv_NEQ($lang,$escaped,$param)
  */
 function ecv_NOT($lang,$escaped,$param)
 {
-	$value='';
+	$value='1';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))

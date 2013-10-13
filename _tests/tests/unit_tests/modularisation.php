@@ -59,6 +59,8 @@ class modularisation_test_set extends ocp_test_case
 			}
 		}
 
+		ini_set('memory_limit','500M');
+
 		$GFILE_ARRAY=array();
 		$this->do_dir();
 		$unput_files=array();
@@ -111,6 +113,7 @@ class modularisation_test_set extends ocp_test_case
 				}
 			}
 		}
+
 		ksort($unput_files);
 		foreach ($unput_files as $addon=>$paths)
 		{

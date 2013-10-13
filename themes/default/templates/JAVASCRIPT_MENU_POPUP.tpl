@@ -129,23 +129,23 @@ function pop_up_menu(id,place,menu,event)
 	var e_parent_height=find_height(e.parentNode);
 	var e_width=find_width(e);
 	var position_l=function() {
-		var left=l;
+		var pos_left=l;
 		if (place=='below') // Top-level of drop-down
 		{
-			if (left+e_width+10>full_width) left=full_width-e_width-10;
+			if (pos_left+e_width+10>full_width) pos_left=full_width-e_width-10;
 		} else
 		{ // NB: For non-below, we can't assume 'left' is absolute, as it is actually relative to parent node which is itself positioned
-			if (find_pos_x(e.parentNode,true)+e_width+e_parent_width+10>full_width) left-=e_width+e_parent_width;
+			if (find_pos_x(e.parentNode,true)+e_width+e_parent_width+10>full_width) pos_left-=e_width+e_parent_width;
 		}
-		e.style.left=left+'px';
+		e.style.left=pos_left+'px';
 	};
 	position_l();
 	window.setTimeout(position_l,0);
 	var position_t=function() {
-		var top=t;
-		if (top+find_height(e)+10>full_height)
-			top-=find_height(e,true,true,true)+e_parent_height-10;
-		e.style.top=top+'px';
+		var pos_top=t;
+		if (pos_top+find_height(e)+10>full_height)
+			pos_top-=find_height(e,true,true,true)+e_parent_height-10;
+		e.style.top=pos_top+'px';
 	};
 	position_t();
 	window.setTimeout(position_t,0);

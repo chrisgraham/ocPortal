@@ -272,7 +272,7 @@ function js_lex($text)
 				$i=$i_current;
 				if (count($applicable_tokens)!=0)
 				{
-					usort($applicable_tokens,'_strlen_sort');
+					usort($applicable_tokens,'jlex__strlen_sort');
 					$token_found=$applicable_tokens[count($applicable_tokens)-1];
 
 					$i+=strlen($TOKENS[$token_found]);
@@ -604,7 +604,7 @@ function js_log_warning($system,$warning,$i=-1,$absolute=false)
  * @param  string			The second string to compare
  * @return integer		The comparison result
  */
-function _strlen_sort($a,$b)
+function jlex__strlen_sort($a,$b)
 {
 	global $TOKENS;
 	$a=$TOKENS[$a];

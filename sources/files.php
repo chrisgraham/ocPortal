@@ -287,6 +287,9 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		// Temporary files
 		'tmp'=>'.*',
 
+		// HHVM Hack converted files (built on-the-fly)
+		'hh'=>'.*',
+
 		// IDE projects
 		'clpprj'=>'',
 		'tmproj'=>'',

@@ -1757,7 +1757,7 @@ function ecv2_LAST_VISIT_TIME($lang,$escaped,$param)
  */
 function ecv2_LENGTH($lang,$escaped,$param)
 {
-	$value='';
+	$value='0';
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
