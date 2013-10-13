@@ -307,7 +307,7 @@ class OCP_Topic
 	/**
 	 * Load from a given topic ID.
 	 *
-	 * @param  AUTO_LINK		Topic ID
+	 * @param  ?AUTO_LINK	Topic ID (NULL: none yet, set up empty structure)
 	 * @param  integer		Maximum to load
 	 * @param  integer		Pagination start if non-threaded
 	 * @param  ?boolean		Whether to show in reverse date order (affects default search order only) (NULL: read config)

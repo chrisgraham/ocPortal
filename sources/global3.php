@@ -970,7 +970,7 @@ function sort_maps_by__strlen($rows,$sort_key)
  * @param  string			The second string to compare
  * @return integer		The comparison result (0 for equal, -1 for less, 1 for more)
  */
-function strlen_sort($a,$b)
+function _strlen_sort($a,$b)
 {
 	if (!isset($a)) $a='';
 	if (!isset($b)) $b='';

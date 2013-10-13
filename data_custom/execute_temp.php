@@ -53,6 +53,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('php');
-	echo convert_from_php_to_hhvm_hack('sources/global2.php');
+$arr=array();
+debug_eval('$tpl_funcs[3]=true;',$arr);
+var_dump($arr);@exit(); // TODO
 }

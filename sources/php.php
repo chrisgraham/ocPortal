@@ -42,9 +42,10 @@ function init__php()
  *		description
  *		type
  *		default
- * 	default_raw
+ *		default_raw
  *		set
  *		range
+ *		ref
  *
  * @param  ID_TEXT		The PHP code module to get API information for
  * @param  boolean		Whether to include function source code
@@ -198,7 +199,7 @@ function get_php_file_api($filename,$include_code=true)
 					}
 				} else // Part of the description
 				{
-					$description.=unixify_line_format($ltrim);
+					$description.=function_exists('unixify_line_format')?unixify_line_format($ltrim):$ltrim;
 				}
 			}
 			$f_a=strpos($description,'{{');
@@ -316,6 +317,7 @@ function get_php_file_api($filename,$include_code=true)
 				$functions[$function_name]=$function;
 			}
 
+			if (!function_exists('do_lang_tempcode')) exit('Missing function comment for: '.$line);
 			fatal_exit(do_lang_tempcode('MISSING_FUNCTION_COMMENT',rtrim($line)));
 		}
 	}
@@ -833,6 +835,7 @@ function convert_from_php_to_hhvm_hack($filename)
 
 		require_code('php');
 		$classes=get_php_file_api($filename,false);
+		if (!isset($classes['__global']['functions'])) return $code;
 		foreach ($classes['__global']['functions'] as $function)
 		{
 			$func_start='function '.$function['name'].'(';
@@ -847,6 +850,8 @@ function convert_from_php_to_hhvm_hack($filename)
 					if ($i!=0) $new_header.=',';
 
 					$new_header.=ocp_type_to_hhvm_type($parameter['type']).' ';
+
+					if ($parameter['ref']) $new_header.='&';
 
 					$new_header.='$'.$parameter['name'];
 					if (array_key_exists('default',$parameter))
@@ -884,7 +889,13 @@ function ocp_type_to_hhvm_type($t)
 	{
 		return 'mixed';
 	}
-	if (substr($t,0,6)=='object') $t='object';
+	$nullable=false;
+	if ($t[0]=='@')
+	{
+		$nullable=true;
+		$t=substr($t,1);
+	}
+	if (substr($t,0,6)=='object') $t='mixed';
 	if ($t=='REAL') $t='float';
 	if (in_array($t,array('MEMBER','SHORT_INTEGER','UINTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
 	{
@@ -896,11 +907,11 @@ function ocp_type_to_hhvm_type($t)
 	}
 	if (in_array($t,array('tempcode')))
 	{
-		$t='object';
+		$t='ocp_tempcode';
 	}
 	if (in_array($t,array('list','map')))
 	{
 		$t='array';
 	}
-	return $t;
+	return ($nullable?'?':'').$t;
 }

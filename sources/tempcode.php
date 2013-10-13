@@ -48,13 +48,14 @@ function init__tempcode()
 	define('TC_PARAMETER',3); // A late parameter for a compiled template
 	define('TC_DIRECTIVE',4);
 
-	global $XHTML_SPIT_OUT,$NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$TEMPLATE_DISK_ORIGIN_CACHE,$REQUEST_BLOCK_NEST_LEVEL,$LOADED_TPL_CACHE;
+	global $XHTML_SPIT_OUT,$NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$TEMPLATE_DISK_ORIGIN_CACHE,$REQUEST_BLOCK_NEST_LEVEL,$LOADED_TPL_CACHE,$KEEP_TPL_FUNCS;
 	$XHTML_SPIT_OUT=NULL;
 	$NO_EVAL_CACHE=false;
 	$MEMORY_OVER_SPEED=false;
 	$TEMPLATE_DISK_ORIGIN_CACHE=array();
 	$REQUEST_BLOCK_NEST_LEVEL=0;
 	$LOADED_TPL_CACHE=array();
+	$KEEP_TPL_FUNCS=array();
 
 	global $RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$POSSIBLY_IN_SAFE_MODE_CACHE,$SCREEN_TEMPLATE_CALLED,$TITLE_CALLED;
 	$RECORD_TEMPLATES_USED=false;
@@ -240,7 +241,13 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 			foreach ($parameters as $parameter)
 			{
 				if ($_parameters!='') $_parameters.=',';
-				$_parameters.="\\\"".php_addslashes_twice($parameter)."\\\"";
+				if (is_bool($parameter))
+				{
+					$_parameters.="\\\"".($parameter?'true':'false')."\\\"";
+				} else
+				{
+					$_parameters.="\\\"".php_addslashes_twice($parameter)."\\\"";
+				}
 			}
 		}
 
@@ -280,7 +287,7 @@ function symbol_tempcode($symbol,$parameters=NULL,$escape=NULL)
  * This will create a new tempcode object that is containing a single specifed directive
  *
  * @param  ID_TEXT		The ID of the directive to use
- * @param  tempcode		The contents
+ * @param  mixed			The contents (Tempcode or string)
  * @param  ?array			Directive parameters (NULL: none)
  * @return tempcode		A directive tempcode object
  */
@@ -331,7 +338,7 @@ function closure_eval($code,$parameters)
  *
  * @param  array			The template bound parameters
  * @param  array			The loop directive parameters
- * @param  array			The loop execution function
+ * @param  string			The loop execution function
  * @return string			Result
  */
 function closure_loop($param,$args,$main_function)
@@ -1778,6 +1785,7 @@ class ocp_tempcode
 		}
 
 		$cl=$current_lang;
+		if ($cl===NULL) $cl=user_lang();
 
 		global $KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE,$STOP_IF_STUCK,$STUCK_ABORT_SIGNAL,$DEV_MODE,$TEMPCODE_OUTPUT_STARTED;
 		$TEMPCODE_OUTPUT_STARTED=true;
@@ -1890,7 +1898,7 @@ function recall_named_function($id,$parameters,$code)
 /**
  * Evaluate some PHP, with ability to better debug.
  *
- * @param  string				Code to evaluate
+ * @param  ?string			Code to evaluate (NULL: code not found)
  * @param  ?array				Evaluation code context (NULL: N/A)
  * @param  ?array				Evaluation parameters (NULL: N/A)
  * @param  ?ID_TEXT			Language (NULL: N/A)
@@ -1900,6 +1908,7 @@ function debug_eval($code,&$tpl_funcs=NULL,$parameters=NULL,$cl=NULL)
 {
 	global $NO_EVAL_CACHE,$XSS_DETECT,$KEEP_TPL_FUNCS,$FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
 
+	if ($code===NULL) return ''; // HHVM issue
 	if ($code=='') return ''; // Blank eval returns false
 	$result=@eval($code);
 	if ($result===false)

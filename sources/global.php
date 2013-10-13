@@ -108,7 +108,13 @@ function require_code($codename,$light_exit=false)
 			{
 				$functions_before=get_defined_functions();
 				$classes_before=get_declared_classes();
-				include($path_a); // Include our override
+				if (defined('HIPHOP_PHP'))
+				{
+					hhvm_include($path_a); // Include our override
+				} else
+				{
+					include($path_a); // Include our override
+				}
 				$functions_after=get_defined_functions();
 				$classes_after=get_declared_classes();
 				$functions_diff=array_diff($functions_after['user'],$functions_before['user']); // Our override defined these functions
@@ -157,7 +163,13 @@ function require_code($codename,$light_exit=false)
 
 				if (!$doing_code_modifier_init && !$overlaps) // To make stack traces more helpful and help with opcode caching
 				{
-					include($path_b);
+					if (defined('HIPHOP_PHP'))
+					{
+						hhvm_include($path_b);
+					} else
+					{
+						include($path_b);
+					}
 				} else
 				{
 					//static $log_file=NULL;if ($log_file===NULL) $log_file=fopen(get_file_base().'/log.'.strval(time()).'.txt','wb');fwrite($log_file,$path_b."\n");		Good for debugging errors in eval'd code
@@ -183,7 +195,13 @@ function require_code($codename,$light_exit=false)
 					}
 				} else
 				{
-					include($path_b);
+					if (defined('HIPHOP_PHP'))
+					{
+						hhvm_include($path_b);
+					} else
+					{
+						include($path_b);
+					}
 				}
 				if (isset($_GET['keep_show_parse_errors']))
 				{
@@ -196,7 +214,13 @@ function require_code($codename,$light_exit=false)
 					}
 				} else
 				{
-					include($path_a);
+					if (defined('HIPHOP_PHP'))
+					{
+						hhvm_include($path_a);
+					} else
+					{
+						include($path_a);
+					}
 				}
 			}
 		} else
@@ -212,7 +236,13 @@ function require_code($codename,$light_exit=false)
 				}
 			} else
 			{
-				include($path_a);
+				if (defined('HIPHOP_PHP'))
+				{
+					hhvm_include($path_a);
+				} else
+				{
+					include($path_a);
+				}
 			}
 		}
 
@@ -250,7 +280,13 @@ function require_code($codename,$light_exit=false)
 		} else
 		{
 			$php_errormsg='';
-			@include($path_b);
+			if (defined('HIPHOP_PHP'))
+			{
+				@hhvm_include($path_b);
+			} else
+			{
+				@include($path_b);
+			}
 			if ($php_errormsg=='') $worked=true;
 		}
 
@@ -387,6 +423,30 @@ function filter_naughty_harsh($in,$preg=false)
 	}
 	log_hack_attack_and_exit('EVAL_HACK',$in);
 	return ''; // trick to make Zend happy
+}
+
+/**
+ * Include some PHP code, compiling to HHVM's hack, for type strictness (uses ocPortal phpdoc comments).
+ *
+ * @param  PATH			Include path
+ * @return ?mixed			Code return code
+ */
+function hhvm_include($path)
+{
+	return include($path); // Disable this line to enable the fancy Hack support. We don't maintain this 100%, but it is a great performance option.
+
+	//if (!is_file($path.'.hh'))	// Leave this commented when debugging
+	{
+		if ($path==get_file_base().'/sources/php.php') return include($path);
+		if ($path==get_file_base().'/sources/type_validation.php') return include($path);
+		if (strpos($path,'_custom')!==false) return include($path);
+
+		require_code('php');
+		$path=substr($path,strlen(get_file_base())+1);
+		$new_code=convert_from_php_to_hhvm_hack($path);
+		file_put_contents($path.'.hh',$new_code);
+	}
+	return include($path.'.hh');
 }
 
 // Useful for basic profiling

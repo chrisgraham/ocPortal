@@ -51,7 +51,7 @@ function init__symbols()
 /**
  * Evaluate a conventional tempcode variable, handling escaping
  *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  string				The language to evaluate this symbol in (some symbols refer to language elements).
  * @param  array				Array of escaping operations.
  * @param  integer			The type of symbol this is (TC_SYMBOL, TC_LANGUAGE_REFERENCE)
  * @set    0 2
@@ -62,7 +62,6 @@ function init__symbols()
 function ecv($lang,$escaped,$type,$name,$param)
 {
 	// SYMBOLS...
-
 	if ($type==TC_SYMBOL)
 	{
 		// Built-in

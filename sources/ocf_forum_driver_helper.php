@@ -351,8 +351,8 @@ function not_like_spacer_posts($field)
  * Get an array of maps for the topic in the given forum.
  *
  * @param  object			Link to the real forum driver
- * @param  integer		The topic ID
- * @param  integer		The comment count will be returned here by reference
+ * @param  ?integer		The topic ID (NULL: does not exist)
+ * @param  ?integer		The comment count will be returned here by reference (NULL: no return)
  * @param  ?integer		Maximum comments to returned (NULL: no limit)
  * @param  integer		Comment to start at
  * @param  boolean		Whether to mark the topic read
