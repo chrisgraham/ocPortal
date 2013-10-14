@@ -1043,6 +1043,7 @@ function do_block_get_cache_identifier($cache_on,$map)
 	}
 
 	// NB: Don't extend this without thinking, see hard-coded in decache() function too
+	require_code('temporal');
 	$_cache_identifier[]=get_users_timezone(get_member());
 	$_cache_identifier[]=(get_bot_type()===NULL);
 
