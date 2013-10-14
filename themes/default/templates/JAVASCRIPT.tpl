@@ -974,6 +974,7 @@ function _confirm_session(callback,username,url)
 function load_snippet(code,post,callback)
 {
 	var title=get_inner_html(document.getElementsByTagName('title')[0]);
+	title=title.replace(/ \u2013 .*/,'');
 	var metas=document.getElementsByTagName('link');
 	var i;
 	if (!window.location) return null; // In middle of page navigation away
