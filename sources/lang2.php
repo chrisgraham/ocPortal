@@ -19,6 +19,56 @@
  */
 
 /**
+ * Edit a language string direct from something saved into the code.
+ *
+ * @param  ID_TEXT			The language ID
+ * @param  ?LANGUAGE_NAME 	The language to use (NULL: users language)
+ */
+function inline_language_editing($codename,$lang)
+{
+	global $LANGS_REQUESTED,$LANGUAGE_STRINGS_CACHE;
+
+	// Find loaded file with smallest levenstein distance to current page
+	$best=mixed();
+	$best_for=NULL;
+	foreach (array_keys($LANGS_REQUESTED) as $possible)
+	{
+		$dist=levenshtein(get_page_name(),$possible);
+		if ((is_null($best)) || ($best>$dist))
+		{
+			$best=$dist;
+			$best_for=$possible;
+		}
+	}
+	$save_path=get_file_base().'/lang/'.fallback_lang().'/'.$best_for.'.ini';
+	if (!is_file($save_path))
+		$save_path=get_file_base().'/lang_custom/'.fallback_lang().'/'.$best_for.'.ini';
+	// Tack language strings onto this file
+	list($codename,$value)=explode('=',$codename,2);
+	$myfile=fopen($save_path,'at');
+	fwrite($myfile,"\n".$codename.'='.$value);
+	fclose($myfile);
+	// Fake-load the string
+	$LANGUAGE_STRINGS_CACHE[$lang][$codename]=$value;
+	// Go through all required files, doing a string replace if needed
+	$included_files=get_included_files();
+	foreach ($included_files as $inc)
+	{
+		$orig_contents=file_get_contents($inc);
+		$contents=str_replace("'".$codename.'='.$value."'","'".$codename."'",$orig_contents);
+		if ($orig_contents!=$contents)
+		{
+			$myfile=fopen($inc,'at');
+			flock($myfile,LOCK_EX);
+			ftruncate($myfile,0);
+			fwrite($myfile,$contents);
+			flock($myfile,LOCK_UN);
+			fclose($myfile);
+		}
+	}
+}
+
+/**
  * Get a list of languages files for the given language. ONLY those that are overridden.
  *
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)

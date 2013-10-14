@@ -685,13 +685,13 @@ function protect_from_escaping($in)
 /**
  * Get the human-readable form of a language ID, or a language entry from a language INI file.
  *
- * @param  ID_TEXT		The language ID
- * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
- * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
- * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
- * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
- * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
- * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
+ * @param  ID_TEXT			The language ID
+ * @param  ?mixed				The first token [string or tempcode] (replaces {1}) (NULL: none)
+ * @param  ?mixed				The second token [string or tempcode] (replaces {2}) (NULL: none)
+ * @param  ?mixed				The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+ * @param  ?LANGUAGE_NAME 	The language to use (NULL: users language)
+ * @param  boolean			Whether to cause ocPortal to exit if the lookup does not succeed
+ * @return ?mixed				The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
  */
 function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$require_result=true)
 {
@@ -702,50 +702,13 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 		$lang=($USER_LANG_CACHED===NULL)?user_lang():$USER_LANG_CACHED;
 	}// else // This else assumes we initially load all language files in the users language. Reasonable. EDIT: Actually, no it is not - the user_lang() initially is not accurate until ocPortal gets past a certain startup position
 	{
-		if ($GLOBALS['SEMI_DEV_MODE']) // Special syntax for easily inlining language strings
+		if ($GLOBALS['SEMI_DEV_MODE']) // Special syntax for easily inlining language strings while coding
 		{
 			$pos=strpos($codename,'=');
 			if ($pos!==false)
 			{
-				// Find loaded file with smallest levenstein distance to current page
-				$best=mixed();
-				$best_for=NULL;
-				global $LANGS_REQUESTED;
-				foreach (array_keys($LANGS_REQUESTED) as $possible)
-				{
-					$dist=levenshtein(get_page_name(),$possible);
-					if ((is_null($best)) || ($best>$dist))
-					{
-						$best=$dist;
-						$best_for=$possible;
-					}
-				}
-				$save_path=get_file_base().'/lang/'.fallback_lang().'/'.$best_for.'.ini';
-				if (!is_file($save_path))
-					$save_path=get_file_base().'/lang_custom/'.fallback_lang().'/'.$best_for.'.ini';
-				// Tack language strings onto this file
-				list($codename,$value)=explode('=',$codename,2);
-				$myfile=fopen($save_path,'at');
-				fwrite($myfile,"\n".$codename.'='.$value);
-				fclose($myfile);
-				// Fake-load the string
-				$LANGUAGE_STRINGS_CACHE[$lang][$codename]=$value;
-				// Go through all required files, doing a string replace if needed
-				$included_files=get_included_files();
-				foreach ($included_files as $inc)
-				{
-					$orig_contents=file_get_contents($inc);
-					$contents=str_replace("'".$codename.'='.$value."'","'".$codename."'",$orig_contents);
-					if ($orig_contents!=$contents)
-					{
-						$myfile=fopen($inc,'at');
-						flock($myfile,LOCK_EX);
-						ftruncate($myfile,0);
-						fwrite($myfile,$contents);
-						flock($myfile,LOCK_UN);
-						fclose($myfile);
-					}
-				}
+				require_code('lang2');
+				inline_language_editing($codename,$lang);
 			}
 		}
 
