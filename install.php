@@ -428,7 +428,7 @@ function step_1()
 		is_scalar is_subclass_of metaphone natcasesort natsort nl2br ob_get_length ob_gzhandler
 		ob_iconv_handler ob_implicit_flush php_sapi_name
 		php_uname printf convert_cyr_string cosh count_chars
-		disk_total_space gethostbynamel getimagesize getlastmod getmypid getmyuid
+		disk_total_space gethostbynamel getimagesize getlastmod
 		gettimeofday get_cfg_var get_magic_quotes_runtime get_meta_tags get_parent_class
 		get_included_files get_resource_type gzcompress gzdeflate gzencode gzfile gzinflate
 		gzuncompress hypot ignore_user_abort

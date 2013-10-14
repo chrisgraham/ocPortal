@@ -4036,16 +4036,6 @@ function flush()
 }
 
 /**
- * Gets the name of the owner of the current PHP script.
- *
- * @return string	Name.
- */
-function get_current_user()
-{
-	return '';
-}
-
-/**
  * Get the Internet host name corresponding to a given IP address.
  *
  * @param  string	IP address.
@@ -5564,26 +5554,6 @@ function getlastmod()
 }
 
 /**
- * Gets PHP's process ID.
- *
- * @return ~integer  Process ID (false: error).
- */
-function getmypid()
-{
-	return 0;
-}
-
-/**
- * Gets PHP's user ID.
- *
- * @return ~integer  User ID (false: error).
- */
-function getmyuid()
-{
-	return 0;
-}
-
-/**
  * Get current time.
  *
  * @return array	Map of time details.
@@ -6529,3 +6499,23 @@ function stream_context_create($options=NULL,$params=NULL)
 {
 	return array();
 }
+
+/*
+Disabled due to Google App Engine:
+
+gc_collect_cycles()
+gc_enable()
+gc_disable()
+getmypid()
+getmyuid()
+getrusage()
+getmyinode()
+getmygid()
+get_current_user()
+libxml_disable_entity_loader()
+
+Disabled due to multi-os compatibility:
+
+symlink()
+link()
+*/
