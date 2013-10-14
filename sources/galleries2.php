@@ -722,7 +722,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 			$at=display_seconds_period(post_param_integer('thumbnail_auto_position',1));
 			if (strlen($at)==5) $at='00:'.$at;
 
-			$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.@escapeshellarg($src_file).' -an -ss '.$at.' -r 1 -vframes 1 -y '.@escapeshellarg($dest_file);
+			$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.escapeshellarg_wrap($src_file).' -an -ss '.$at.' -r 1 -vframes 1 -y '.escapeshellarg_wrap($dest_file);
 
 			$shell_commands=array($shell_command,$shell_command.' -map 0.0:0.0',$shell_command.' -map 0.1:0.0');
 			foreach ($shell_commands as $shell_command)

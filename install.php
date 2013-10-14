@@ -127,9 +127,8 @@ require_lang('version');
 handle_self_referencing_embedment();
 
 // Requirements check
-$phpv=phpversion();
+$phpv=PHP_VERSION;
 if ((substr($phpv,0,2)=='3.') || (substr($phpv,0,2)=='4.') || (substr($phpv,0,4)=='5.0.')) exit(do_lang('PHP_OLD'));
-if (ini_get('file_uploads')=='0') exit(do_lang('NO_UPLOAD'));
 
 // Set up some globals
 $minor=ocp_version_minor();
@@ -280,6 +279,7 @@ function step_1()
 	erase_cached_templates();
 	erase_cached_language();
 
+	// Integrity check
 	$warnings=new ocp_tempcode();
 	global $DATADOTOCP_FILE;
 	if (!@is_resource($DATADOTOCP_FILE)) // Do an integrity check - missing corrupt files
@@ -351,24 +351,36 @@ function step_1()
 			}
 		}
 	}
+
+	// Various checks
+	if (ini_get('suhosin.executor.disable_eval')=='1')
+	{
+		header('Content-type: text/plain');
+		exit(do_lang('DISABLED_FUNCTION','eval'));
+	}
 	$test=ini_get('mbstring.func_overload');
 	if (($test!==false) && ($test!=='') && ($test!=='0'))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_MBSTRING_FUNC_OVERLOAD'))));
-	$disk_space=@disk_free_space(get_file_base());
-	if ((is_integer($disk_space)) && ($disk_space<25*1024*1024))
-		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_DISK_SPACE'))));
+	if (function_exists('disk_free_space'))
+	{
+		$disk_space=@disk_free_space(get_file_base());
+		if ((is_integer($disk_space)) && ($disk_space<25*1024*1024))
+			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_DISK_SPACE'))));
+	}
 	if ((!function_exists('zip_open')) && (!@file_exists('/usr/bin/unzip')))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_ZIP_ON_SERVER'))));
 	if (!function_exists('imagecreatefromstring'))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_GD_ON_SERVER'))));
 	if (!function_exists('xml_parser_create'))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_XML_ON_SERVER'))));
-	if ((function_exists('memory_get_usage')) && (@ini_get('memory_limit')!='') && (@ini_get('memory_limit')!='-1') && (@ini_get('memory_limit')!='0') && (intval(trim(str_replace('M','',@ini_get('memory_limit'))))<16))
+	if ((function_exists('memory_get_usage')) && (@ini_get('memory_limit')!='') && (@ini_get('memory_limit')!='-1') && (@ini_get('memory_limit')!='0') && (intval(trim(str_replace('M','',@ini_get('memory_limit'))))<32))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('LOW_MEMORY_LIMIT'))));
 	if ((is_numeric(@ini_get('max_execution_time'))) && (intval(@ini_get('max_execution_time'))>0) && (intval(@ini_get('max_execution_time'))<10) && (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1'))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_MAX_EXECUTION_TIME'))));
 	if ((is_numeric(@ini_get('max_input_time'))) && (intval(@ini_get('max_input_time'))>0) && (intval(@ini_get('max_input_time'))<60) && (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1'))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_MAX_INPUT_TIME'))));
+	if (ini_get('file_uploads')=='0')
+		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('NO_UPLOAD'))));
 	$needed_functions=<<<END
 		abs addslashes array_count_values array_diff array_flip array_key_exists array_keys
 		array_intersect array_merge array_pop array_push array_reverse array_search array_shift
@@ -396,14 +408,14 @@ function step_1()
 		is_integer is_null is_numeric is_object is_readable is_resource is_string is_uploaded_file is_writable
 		isset krsort ksort localeconv ltrim mail max md5 method_exists microtime min
 		mkdir mktime move_uploaded_file mt_getrandmax mt_rand mt_srand number_format ob_end_clean
-		ob_end_flush ob_get_contents ob_start octdec opendir ord pack parse_url pathinfo phpinfo phpversion
+		ob_end_flush ob_get_contents ob_start octdec opendir ord pack parse_url pathinfo
 		preg_match preg_grep preg_match_all
 		preg_replace preg_replace_callback preg_split print_r putenv rawurldecode
 		rawurlencode readdir realpath register_shutdown_function rename require require_once reset rmdir
 		round rsort rtrim serialize set_error_handler set_magic_quotes_runtime
 		setcookie setlocale sha1 sin sort sprintf srand str_pad str_repeat str_replace
 		strcmp strftime strip_tags stripslashes strlen strpos strrpos strstr strtok strtolower
-		strtotime strtoupper strtr strval substr substr_count tempnam time trim trigger_error
+		strtotime strtoupper strtr strval substr substr_count time trim trigger_error
 		uasort ucfirst ucwords uksort uniqid unlink unserialize unset urldecode urlencode usort
 		utf8_decode utf8_encode wordwrap xml_error_string xml_get_current_byte_index xml_get_current_line_number
 		xml_get_error_code xml_parse xml_parser_create_ns xml_parser_free xml_parser_set_option
@@ -428,11 +440,12 @@ function step_1()
 		is_scalar is_subclass_of metaphone natcasesort natsort nl2br ob_get_length ob_gzhandler
 		ob_iconv_handler ob_implicit_flush php_sapi_name
 		php_uname printf convert_cyr_string cosh count_chars
-		disk_total_space gethostbynamel getimagesize getlastmod
+		gethostbynamel getimagesize getlastmod fpassthru
 		gettimeofday get_cfg_var get_magic_quotes_runtime get_meta_tags get_parent_class
 		get_included_files get_resource_type gzcompress gzdeflate gzencode gzfile gzinflate
-		gzuncompress hypot ignore_user_abort
-		gzclose gzopen gzwrite ftp_chdir ftp_close ftp_connect ftp_delete ftp_fput
+		gzuncompress hypot ignore_user_abort hebrev hebrevc array_intersect_assoc
+		is_link is_callable debug_print_backtrace stream_context_create next usleep array_sum create_function
+		gzclose gzopen gzwrite ftp_chdir ftp_close ftp_connect ftp_delete ftp_fput ftp_chmod
 		ftp_login ftp_mkdir ftp_nlist ftp_put ftp_rename ftp_rmdir ftp_site ftp_size
 		file_get_contents str_word_count html_entity_decode array_combine array_diff_uassoc array_udiff
 		array_udiff_assoc array_udiff_uassoc array_walk_recursive array_uintersect_assoc array_uintersect_uassoc
@@ -581,18 +594,8 @@ function step_3()
 	if ($email==do_lang('EMAIL_ADDRESS')) $email=''; // In case was left as the label
 	if (($email!='') || ($advertise_on==1))
 	{
-		$call='/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$INSTALL_LANG;
-		$errno=0;
-		$errstr='';
-		$mysock=@fsockopen('ocportal.com',80,$errno,$errstr,6.0);
-		if ($mysock!==false)
-		{
-			$out="GET ".$call." HTTP/1.1\r\n";
-			$out.="Host: ocportal.com\r\n";
-			$out.="Connection: Close\r\n\r\n";
-			@fwrite($mysock,$out);
-			@fclose($mysock);
-		}
+		require_code('files');
+		http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$INSTALL_LANG);
 	}
 
 	// Forum chooser

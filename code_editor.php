@@ -316,7 +316,7 @@ END;
  * @param  PATH			The full pathname to the file/directory
  * @param  integer		The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
  */
-function code_editor_fix_permissions($path,$perms=0666) // We call this function assuming we are giving world permissions
+function ce_fix_permissions($path,$perms=0666) // We call this function assuming we are giving world permissions
 {
 	// If the file user is different to the FTP user, we need to make it world writeable
 	if ((!function_exists('posix_getuid')) || (strpos(@ini_get('disable_functions'),'posix_getuid')!==false) || (@posix_getuid()!=@fileowner($GLOBALS['FILE_BASE'].'/index.php')))
@@ -569,7 +569,7 @@ END;
 			unlink($save_path);
 		}
 
-		code_editor_fix_permissions($save_path);
+		ce_fix_permissions($save_path);
 		ce_sync_file($save_path);
 
 		// Make base-hash-thingy
@@ -588,9 +588,7 @@ END;
 					}
 				} else // Via FTP
 				{
-					$path2=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'ocpce');
-					if ($path2===false)
-						$path2=tempnam(get_custom_file_base().'/safe_mode_temp/','ocpce');
+					$path2=ce_ocp_tempnam('ocpce');
 
 					$h=fopen($path2,'wt');
 					fwrite($h,$hash);
@@ -607,7 +605,7 @@ END;
 		{
 			@unlink($save_path.'.editfrom');
 		}
-		code_editor_fix_permissions($save_path.'.editfrom');
+		ce_fix_permissions($save_path.'.editfrom');
 		ce_sync_file($save_path.'.editfrom');
 
 		if (!isset($_POST['delete']))
@@ -712,3 +710,31 @@ function ce_check_master_password($password_given)
 	return (((strlen($password_given)!=32) && ($actual_password_hashed==$password_given)) || ($actual_password_hashed==md5($password_given.$salt)));
 }
 
+/**
+ * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
+ *
+ * @param  string		The prefix of the temporary file name.
+ * @return ~string	The name of the temporary file (false: error).
+ */
+function ce_ocp_tempnam($prefix)
+{
+	global $FILE_BASE;
+	$problem_saving=((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((function_exists('get_option')) && (get_option('force_local_temp_dir')=='1')) || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
+	$local_path=$FILE_BASE.'/safe_mode_temp/';
+	$server_path='/tmp/';
+	$tmp_path=$problem_saving?$local_path:$server_path;
+	if ((function_exists('tempnam')) && (strpos(@ini_get('disable_functions'),'tempnam')===false))
+	{
+		$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
+		if (($tempnam===false) && (!$problem_saving))
+		{
+			$tempnam=tempnam($local_path,$prefix);
+		}
+	} else
+	{
+		$tempnam=$prefix.strval(mt_rand(0,min(2147483647,mt_getrandmax())));
+		$myfile=fopen($local_path.'/'.$tempnam,'wb');
+		fclose($myfile);
+	}
+	return $tempnam;
+}

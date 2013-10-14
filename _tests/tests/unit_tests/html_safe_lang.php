@@ -27,14 +27,13 @@ class html_safe_lang_test_set extends ocp_test_case
 	function testHtmlSafeLang()
 	{
 		require_code('files');
-		require_code('files');
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		global $LANGUAGE_STRINGS,$LANGUAGE_HTML,$LANGUAGE_LITERAL,$LANGUAGE_CURRENT,$FILE,$FIND_NO_GO_HTML_SPOTS;
 		$FIND_NO_GO_HTML_SPOTS=(@$_GET['find_html_no_go']=='1');
 
-		//echo '<h2>Pre-Processing&hellip;</h2>';
+		// Pre-Processing...
 		$LANGUAGE_STRINGS=array();
 		if (($dh=opendir(get_file_base().'/lang/EN'))!==false)
 		{
@@ -60,7 +59,7 @@ class html_safe_lang_test_set extends ocp_test_case
 			closedir($dh);
 		}
 
-		//echo '<h2>Processing for plain-usages&hellip;</h2>';
+		// Processing for plain-usages...
 		$LANGUAGE_CURRENT=array();
 		$forms=array(
 			'#do_lang\(\'(.+?)\'(,|\))#ims',
@@ -73,7 +72,7 @@ class html_safe_lang_test_set extends ocp_test_case
 		}
 		$LANGUAGE_LITERAL=$LANGUAGE_CURRENT;
 
-		//echo '<h2>Processing for HTML-usages&hellip;</h2>';
+		// Processing for HTML-usages...
 		$LANGUAGE_CURRENT=array();
 		$forms=array(
 			'#do_lang_tempcode\(\'(.+?)\'(,|\))#ims',
@@ -88,7 +87,7 @@ class html_safe_lang_test_set extends ocp_test_case
 		$this->do_dir(get_file_base().'/themes/default/templates','',$tpl,'tpl');
 		$LANGUAGE_HTML=$LANGUAGE_CURRENT;
 
-		//echo '<h2>Apparent conflicts between usage as HTML and plain text&hellip;</h2>';
+		// Apparent conflicts between usage as HTML and plain text...
 
 		$whitelist=array( // Checked are ok manually already
 			'PERMISSION_CELL',

@@ -59,7 +59,7 @@ function upgrade_script()
 				{
 					upgrade_sharedinstall_sites();
 					global $SITE_INFO;
-					$cmd='mysqldump -u'.escapeshellarg($SITE_INFO['db_site_user'].'_shareddemo').' -p'.escapeshellarg($SITE_INFO['db_site_password']).' '.escapeshellarg($SITE_INFO['db_site']).'_shareddemo';
+					$cmd='mysqldump -u'.escapeshellarg_wrap($SITE_INFO['db_site_user'].'_shareddemo').' -p'.escapeshellarg_wrap($SITE_INFO['db_site_password']).' '.escapeshellarg_wrap($SITE_INFO['db_site']).'_shareddemo';
 					echo '<p>Now regenerate <kbd>template.sql</kbd>, using something like <kbd>'.escape_html($cmd).' > ~/public_html/uploads/website_specific/ocportal.com/myocp/template.sql</kbd></p>';
 					up_do_footer();
 					return;

@@ -468,7 +468,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 		case 'odp':
 		case 'docx':
 			require_code('m_zip');
-			$tmp_file=ocp_tempnam('dcdm_');
+			$tmp_file=ocp_tempnam('dcdm');
 			$myfile2=fopen($tmp_file,'wb');
 			fwrite($myfile2,$data);
 			fclose($myfile2);
@@ -504,7 +504,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 			break;
 		case 'tar':
 			require_code('tar');
-			$tmp_file=ocp_tempnam('dcdm_');
+			$tmp_file=ocp_tempnam('dcdm');
 			$myfile=fopen($tmp_file,'wb');
 			fwrite($myfile,$data);
 			fclose($myfile);
@@ -535,7 +535,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 				{
 					if (function_exists('gzread'))
 					{
-						$tmp_file=ocp_tempnam('dcdm_');
+						$tmp_file=ocp_tempnam('dcdm');
 						$myfile=fopen($tmp_file,'wb');
 						fwrite($myfile,$data);
 						fclose($myfile);
@@ -615,10 +615,10 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 			if ((ini_get('safe_mode')!='1') && (strpos(@ini_get('disable_functions'),'shell_exec')===false) && (!is_null($tmp_file)))
 			{
 				$enc=(get_charset()=='utf-8')?' -enc UTF-8':'';
-				$path='pdftohtml -i -noframes -stdout -hidden'.$enc.' -q -xml '.@escapeshellarg($tmp_file);
+				$path='pdftohtml -i -noframes -stdout -hidden'.$enc.' -q -xml '.escapeshellarg_wrap($tmp_file);
 				if (strpos(strtolower(PHP_OS),'win')!==false)
 					if (file_exists(get_file_base().'/data_custom/pdftohtml.exe')) $path='"'.get_file_base().DIRECTORY_SEPARATOR.'data_custom'.DIRECTORY_SEPARATOR.'"'.$path;
-				$tmp_file_2=ocp_tempnam('pdfxml_');
+				$tmp_file_2=ocp_tempnam('pdfxml');
 				@shell_exec($path.' > '.$tmp_file_2);
 				$mash=create_data_mash($tmp_file_2,NULL,'xml',true);
 				@unlink($tmp_file_2);

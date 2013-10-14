@@ -53,4 +53,12 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$installer=file_get_contents(get_file_base().'/install.php');
+	$phpstub=file_get_contents(get_file_base().'/sources/phpstub.php');
+	$matches=array();
+	$num_matches=preg_match_all('#function (\w+)#',$phpstub,$matches);
+	for ($i=0;$i<$num_matches;$i++)
+	{
+		if (strpos($installer,$matches[1][$i])===false) @print($matches[1][$i].'<br />');
+	}
 }

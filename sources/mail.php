@@ -622,7 +622,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 	// Support for SMTP sockets rather than PHP mail()
 	$error=NULL;
-	if (get_option('smtp_sockets_use')=='1')
+	if ((get_option('smtp_sockets_use')=='1') && (function_exists('fsockopen')) && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
 	{
 		$worked=false;
 

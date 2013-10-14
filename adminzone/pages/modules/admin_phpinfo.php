@@ -72,7 +72,28 @@ class Module_admin_phpinfo
 		set_helper_panel_text(comcode_lang_string('DOC_PHP_INFO'));
 
 		ob_start();
-		phpinfo();
+		if ((function_exists('phpinfo')) && (strpos(@ini_get('disable_functions'),'phpinfo')===false))
+		{
+			phpinfo();
+		} else
+		{
+			var_dump(PHP_VERSION);
+			var_dump($_SERVER);
+			var_dump($_ENV);
+			var_dump($_COOKIE);
+			if (function_exists('ini_get_all'))
+			{
+				var_dump(ini_get_all());
+			}
+			if (function_exists('get_loaded_extensions'))
+			{
+				var_dump(get_loaded_extensions());
+			}
+			if (function_exists('phpcredits'))
+			{
+				var_dump(phpcredits());
+			}
+		}
 		require_code('xhtml');
 		$out=xhtmlise_html(ob_get_contents());
 		ob_end_clean();

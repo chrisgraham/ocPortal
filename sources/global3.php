@@ -2674,3 +2674,18 @@ function get_mass_import_mode()
 	global $MASS_IMPORT_HAPPENING;
 	return $MASS_IMPORT_HAPPENING;
 }
+
+/**
+ * Prepare an argument for use literally in a command. Works around common PHP restrictions.
+ *
+ * @param  string		The argument.
+ * @return string		Escaped.
+ */
+function escapeshellarg_wrap($arg)
+{
+	if ((function_exists('escapeshellarg')) && (strpos(@ini_get('disable_functions'),'escapeshellarg')===false))
+	{
+		return escapeshellarg($arg);
+	}
+	return "'".addslashes(str_replace(array(chr(0),"'"),array('',"'\"'\"'"),$arg))."'";
+}

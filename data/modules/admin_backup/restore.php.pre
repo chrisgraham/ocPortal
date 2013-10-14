@@ -59,9 +59,8 @@ if (($shl===false) || ($shl=='') || ($shl=='0'))
 }
 
 // Requirements check
-if (substr(phpversion(),0,2)=='3.') die(do_lang('PHP_OLD'));
-if (substr(phpversion(),0,3)=='4.0') die(do_lang('PHP_OLD'));
-if (ini_get('file_uploads')==0) die(do_lang('NO_UPLOAD'));
+$phpv=PHP_VERSION;
+if ((substr($phpv,0,2)=='3.') || (substr($phpv,0,2)=='4.') || (substr($phpv,0,4)=='5.0.')) exit(do_lang('PHP_OLD'));
 
 // Tunnel into some ocPortal code we can use
 include('_config.php');

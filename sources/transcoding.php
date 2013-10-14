@@ -162,7 +162,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 		{
 			// It is video
 			$output_path=preg_replace('#\.'.preg_quote($file_ext,'#').'$#','',$file_path).'.mp4';
-			$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.@escapeshellarg($file_path).' -y -f mp4 -vcodec libx264 -b '.@escapeshellarg($video_bitrate).'Kb -ab '.@escapeshellarg($audio_bitrate).'Kb -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -ar 22050 -ac 2 -aspect 16:9 -s '.@escapeshellarg($video_width_setting.':'.$video_height_setting).' '.@escapeshellarg($output_path);
+			$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.escapeshellarg_wrap($file_path).' -y -f mp4 -vcodec libx264 -b '.escapeshellarg_wrap($video_bitrate).'Kb -ab '.escapeshellarg_wrap($audio_bitrate).'Kb -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -ar 22050 -ac 2 -aspect 16:9 -s '.escapeshellarg_wrap($video_width_setting.':'.$video_height_setting).' '.escapeshellarg_wrap($output_path);
 			$shell_commands=array($shell_command.' -map 0.1:0.0 -map 0.0:0.1',$shell_command.' -map 0.0:0.0 -map 0.1:0.1');
 			foreach ($shell_commands as $shell_command)
 			{
@@ -171,7 +171,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 			}
 			if (@filesize($output_path))
 			{
-				shell_exec('"'.$ffmpeg_path.'MP4Box" -inter 500 '.' '.@escapeshellarg($output_path));
+				shell_exec('"'.$ffmpeg_path.'MP4Box" -inter 500 '.' '.escapeshellarg_wrap($output_path));
 				$url=preg_replace('#\.'.preg_quote($file_ext,'#').'$#','',$url).'.mp4';
 			}
 		}
@@ -179,7 +179,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 		{
 			// It is audio
 			$output_path=preg_replace('#\.'.preg_quote($file_ext,'#').'$#','',$file_path).'.mp3';
-			$shell_command='"'.$ffmpeg_path.'ffmpeg" -y -i '.@escapeshellarg($file_path).' -ab '.@escapeshellarg($audio_bitrate).'Kb '.@escapeshellarg($output_path);
+			$shell_command='"'.$ffmpeg_path.'ffmpeg" -y -i '.escapeshellarg_wrap($file_path).' -ab '.escapeshellarg_wrap($audio_bitrate).'Kb '.escapeshellarg_wrap($output_path);
 			shell_exec($shell_command);
 			if (@filesize($output_path))
 			{

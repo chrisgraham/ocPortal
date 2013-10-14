@@ -33,7 +33,7 @@ function init__m_zip()
 	if (!function_exists('zip_open'))
 {
 
-if (substr(phpversion(),0,2)!='4.') eval("class ZIPARCHIVE
+@eval("class ZIPARCHIVE
 {
 	const ER_OK=0;  /* N No error */
 	const ER_MULTIDISK=1;  /* N Multi-disk zip archives not supported */

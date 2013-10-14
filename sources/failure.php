@@ -880,7 +880,7 @@ function _fatal_exit($text,$return=false)
 	// Supplement error message with some useful info
 	if ((function_exists('ocp_version_pretty')) && (function_exists('ocp_srv')))
 	{
-		$sup=' (version: '.ocp_version_pretty().', PHP version: '.phpversion().', URL: '.ocp_srv('REQUEST_URI').')';
+		$sup=' (version: '.ocp_version_pretty().', PHP version: '.PHP_VERSION.', URL: '.ocp_srv('REQUEST_URI').')';
 	} else
 	{
 		$sup='';
@@ -995,7 +995,6 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(preg_match('#Out of memory \(allocated (1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)\d{6}\)#',$text)==0) && 
 		(strpos($text,'is marked as crashed and last')===false) && 
 		(strpos($text,'failed to open stream: Permission denied')===false) && 
-		(strpos($text,'phpinfo() has been disabled')===false) && 
 		((strpos($text,'Maximum execution time')===false) || ((strpos($text,'/js_')===false) && (strpos($text,'/caches_filesystem.php')===false) && (strpos($text,'/files2.php')===false))) && 
 		((strpos($text,'doesn\'t exist')===false) || ((strpos($text,'import')===false))) && 
 		((strpos($text,'No such file or directory')===false) || ((strpos($text,'admin_setupwizard')===false))) && 

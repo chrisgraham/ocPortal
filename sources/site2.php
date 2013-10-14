@@ -82,10 +82,6 @@ function get_staff_actions_list()
 			'query'=>do_lang_tempcode('VIEW_PAGE_QUERIES'),
 			'ide_linkage'=>do_lang_tempcode('IDE_LINKAGE'),
 	);
-	if (function_exists('xdebug_enable'))
-	{
-		$list['profile']=do_lang_tempcode('PROFILING');
-	}
 	if (function_exists('memory_get_usage'))
 	{
 		$list['memory']=do_lang_tempcode('_MEMORY_USAGE');

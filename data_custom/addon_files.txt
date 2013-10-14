@@ -4209,6 +4209,7 @@ testing_platform
  - _tests/tests/unit_tests/override_issues.php
  - _tests/tests/unit_tests/js_ssl_issues.php
  - _tests/tests/unit_tests/resource_fs.php
+ - _tests/tests/unit_tests/google_appengine.php
 
 weather
 -------

@@ -157,9 +157,7 @@ function aspell_init()
 		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) exit('Spell Checker does not work on systems with shell_exec disabled that do not have direct pspell support into PHP');
 
 		// Our temporary spell check file
-		$temptext=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?sl_get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
-		if ($temptext===false)
-			$temptext=tempnam(sl_get_custom_file_base().'/safe_mode_temp/','spell_');
+		$temptext=sl_ocp_tempnam('spell');
 
 		// Find aspell
 		$aspell='aspell';
@@ -306,6 +304,17 @@ function utf8_ord($chr)
 }
 
 /**
+ * preg_replace_callback callback to fix up unicode
+ *
+ * @param  array			Array of matches
+ * @return string			Substituted text
+ */
+function _utf8_ord($matches)
+{
+	return '&#'.utf8_ord($matches[1]).';';
+}
+
+/**
  * Do aSpell spelling check
  *
  * @param  string			aSpell command to get dictionaries
@@ -322,9 +331,9 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 	if (is_null($words_skip)) $words_skip=array();
 
 	// Convert UTF-8 multi-bytes into decimal character entities.  This is because aspell isn't fully utf8-aware
-	$text=preg_replace('/([\xC0-\xDF][\x80-\xBF])/e',"'&#'.utf8_ord('\$1').';'",$text);
-	$text=preg_replace('/([\xE0-\xEF][\x80-\xBF][\x80-\xBF])/e',"'&#'.utf8_ord('\$1').';'",$text);
-	$text=preg_replace('/([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])/e',"'&#'.utf8_ord('\$1').';'",$text);
+	$text=preg_replace_callback('#([\xC0-\xDF][\x80-\xBF])#','_utf8_ord',$text);
+	$text=preg_replace_callback('#([\xE0-\xEF][\x80-\xBF][\x80-\xBF])#','_utf8_ord',$text);
+	$text=preg_replace_callback('#([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])#','_utf8_ord',$text);
 
 	if (!$ret)
 	{
@@ -585,4 +594,31 @@ function aspell_save($aspellcommand,$temptext)
 	}
 }
 
+/**
+ * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
+ *
+ * @param  string		The prefix of the temporary file name.
+ * @return ~string	The name of the temporary file (false: error).
+ */
+function sl_ocp_tempnam($prefix)
+{
+	$problem_saving=((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((function_exists('get_option')) && (get_option('force_local_temp_dir')=='1')) || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
+	$local_path=sl_get_custom_file_base().'/safe_mode_temp/';
+	$server_path='/tmp/';
+	$tmp_path=$problem_saving?$local_path:$server_path;
+	if ((function_exists('tempnam')) && (strpos(@ini_get('disable_functions'),'tempnam')===false))
+	{
+		$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
+		if (($tempnam===false) && (!$problem_saving))
+		{
+			$tempnam=tempnam($local_path,$prefix);
+		}
+	} else
+	{
+		$tempnam=$prefix.strval(mt_rand(0,min(2147483647,mt_getrandmax())));
+		$myfile=fopen($local_path.'/'.$tempnam,'wb');
+		fclose($myfile);
+	}
+	return $tempnam;
+}
 

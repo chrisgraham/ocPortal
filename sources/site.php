@@ -800,18 +800,6 @@ function do_site()
 	}
 	$doing_special_page_type=($special_page_type!='view') && ($special_page_type!='show_markers') && ($special_page_type!='show_edit_links') && ($special_page_type!='memory') && ((has_privilege(get_member(),'view_profiling_modes')) || ($GLOBALS['IS_ACTUALLY_ADMIN']));
 
-	// Set up Xdebug profiling
-	if ($special_page_type=='profile')
-	{
-		if (function_exists('xdebug_start_profiling')) xdebug_start_profiling(); // xdebug 1 style
-		if (ini_get('xdebug.profiler_enable')!='1') attach_message(escape_html('Profiling must be enabled in php.ini'),'warn'); // xdebug 2 style
-
-		if (!is_writable_wrap(ini_get('xdebug.profiler_output_dir')))
-		{
-			attach_message(escape_html('xdebug.profiler_output_dir needs setting to a writable directory'),'warn');
-		}
-	}
-
 	// Allow the site to be closed
 	$site_closed=get_option('site_closed');
 	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
@@ -975,14 +963,17 @@ function do_site()
 		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
 			set_value('last_space_check',strval(time()));
 
-		$low_space_check=intval(get_option('low_space_check'))*1024*1024;
-		$disk_space=@disk_free_space(get_file_base());
-		if ((is_integer($disk_space)) && ($disk_space<$low_space_check))
+		if (function_exists('disk_free_space'))
 		{
-			require_code('notifications');
-			$subject=do_lang('LOW_DISK_SPACE_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
-			$message=do_lang('LOW_DISK_SPACE_MAIL',strval(intval(round($disk_space/1024/1024))),NULL,NULL,get_site_default_lang());
-			dispatch_notification('low_disk_space',NULL,$subject,$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
+			$low_space_check=intval(get_option('low_space_check'))*1024*1024;
+			$disk_space=@disk_free_space(get_file_base());
+			if ((is_integer($disk_space)) && ($disk_space<$low_space_check))
+			{
+				require_code('notifications');
+				$subject=do_lang('LOW_DISK_SPACE_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
+				$message=do_lang('LOW_DISK_SPACE_MAIL',strval(intval(round($disk_space/1024/1024))),NULL,NULL,get_site_default_lang());
+				dispatch_notification('low_disk_space',NULL,$subject,$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
+			}
 		}
 	}
 }

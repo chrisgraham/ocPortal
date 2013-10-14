@@ -494,47 +494,6 @@ function date($format,$timestamp=NULL)
 }
 
 /**
- * Open a connection to a database Server.
- *
- * @param  string			Database type.
- * @param  string			The server hostname/IP.
- * @param  string			Database name.
- * @param  string			The username to connect with.
- * @param  string			The password to connect with.
- * @param  BINARY			Whether to use a persitent connection.
- * @return ~object	 	The connection (false: error).
- */
-function dbx_connect($module,$server,$database,$username,$password,$persistent=0)
-{
-	return false;
-}
-
-/**
- * Escapes a string for use in a dbx_query.
- *
- * @param  object	The connection we're escaping for.
- * @param  string	Unescaped string.
- * @return string	Escaped string.
- */
-function dbx_escape_string($connection,$unescaped_string)
-{
-	return '';
-}
-
-/**
- * Send a database query.
- *
- * @param  object		The connection we're querying over.
- * @param  string		The query.
- * @param  integer	OR'd Flags (DBX_RESULT_INDEX, DBX_RESULT_INFO, DBX_RESULT_ASSOC).
- * @return ~resource The result identifier (false: error).
- */
-function dbx_query($connection,$query,$flags=0)
-{
-	return array();
-}
-
-/**
  * Integer to string representation of hexadecimal.
  *
  * @param  integer	The integer ('decimal' form, although truly stored in binary).
@@ -588,17 +547,6 @@ function defined($name)
 function dirname($name)
 {
 	return '';
-}
-
-/**
- * Returns the amount of free space under a directory in a unix-style mount/quota-supporting filesystem.
- *
- * @param  PATH		The path.
- * @return ~integer  The amount of space (technically a float, but integer is more conveniant) (false: error).
- */
-function disk_free_space($directory)
-{
-	return 0;
 }
 
 /**
@@ -882,21 +830,6 @@ function fread($handle,$length)
 function fseek($handle,$offset,$whence=SEEK_SET)
 {
 	return 0;
-}
-
-/**
- * Open Internet or Unix domain socket connection.
- *
- * @param  string		The target domain/IP to open.
- * @param  integer	The target port to open.
- * @param  integer	Where any error number will be put.
- * @param  string		Whether any error string will be put.
- * @param  ?float		How long to wait until timeout (NULL: no timeout).
- * @return ~resource The handle (false: error).
- */
-function fsockopen($target,$port,&$errno,&$errstr,$timeout=NULL)
-{
-	return array();
 }
 
 /**
@@ -2722,23 +2655,6 @@ function pathinfo($path)
 }
 
 /**
- * Outputs lots of PHP information.
- */
-function phpinfo()
-{
-}
-
-/**
- * Gets the current PHP version.
- *
- * @return string	The PHP version.
- */
-function phpversion()
-{
-	return '';
-}
-
-/**
  * Return info about a user by user id. Does not exist on Windows.
  *
  * @param  integer	The user ID.
@@ -3045,15 +2961,6 @@ function set_error_handler($error_handler)
 	return '';
 }
 
-/*!ROADSEND*
- * Limits the maximum execution time.
- *
- * @param  integer	The number of a seconds the application is allowed to run.
- */
-/*function set_time_limit($seconds)
-{
-}*/
-
 /**
  * Send a cookie.
  *
@@ -3091,28 +2998,6 @@ function setlocale($category,$locale)
  * @return string	The hash of the string.
  */
 function sha1($str)
-{
-	return '';
-}
-
-/**
- * Prepare a command path for a shell call to it.
- *
- * @param  string		The command.
- * @return string		Escaped.
- */
-function escapeshellcmd($arg)
-{
-	return '';
-}
-
-/**
- * Prepare an argument for use literally in a command.
- *
- * @param  string		The argument.
- * @return string		Escaped.
- */
-function escapeshellarg($arg)
 {
 	return '';
 }
@@ -3408,18 +3293,6 @@ function substr_count($haystack,$needle)
 }
 
 /**
- * Create file with unique file name. {{creates-file}}
- *
- * @param  PATH		The directory to create in (empty for temp directory).
- * @param  string		The prefix of the temporary file name.
- * @return ~string	The name of the temporary file (false: error).
- */
-function tempnam($dir,$prefix)
-{
-	return '';
-}
-
-/**
  * Return current UNIX timestamp.
  *
  * @return TIME		The timestamp.
@@ -3603,22 +3476,6 @@ function utf8_encode($data)
 function wordwrap($string,$width=75,$break="\n",$cut=false)
 {
 	return '';
-}
-
-/**
- * Xdebug: dump profiling information.
- *
- * @param  integer	The dump mode.
- */
-function xdebug_dump_function_profile($type)
-{
-}
-
-/**
- * Xdebug: start profiling.
- */
-function xdebug_start_profiling()
-{
 }
 
 /**
@@ -4755,18 +4612,6 @@ function stripcslashes($in)
 }
 
 /**
- * Execute an external program and display the output.
- *
- * @param  string		Command to execute.
- * @param  ?integer  Place to put return value (NULL: not collected). Note that this is actually passed by reference, but is also optional.
- * @return ~string	Output (false: error).
- */
-function system($commend,$ret_var=NULL)
-{
-	return '';
-}
-
-/**
  * Output a gz-file.
  *
  * @param  PATH		Path to read from.
@@ -5229,43 +5074,6 @@ function parse_str($str,&$arr)
 }
 
 /**
- * Execute an external program and display raw output.
- *
- * @param  PATH		The command that will be executed.
- * @param  ?integer  Command success status (NULL: don't collect). Note that this is actually passed by reference, but is also optional.
- */
-function passthru($command,$return_var=NULL)
-{
-}
-
-/**
- * Closes process file pointer.
- *
- * @param  resource  Process handle.
- * @return integer	Termination status.
- */
-function pclose($handle)
-{
-	return 0;
-}
-
-/**
- * Open persistent Internet or Unix domain socket connection.
- *
- *
- * @param  string		The target domain/IP to open.
- * @param  integer	The target port to open.
- * @param  integer	Where any error number will be put.
- * @param  string		Whether any error string will be put.
- * @param  ?float		How long to wait until timeout (NULL: no timeout).
- * @return ~resource The handle (false: error) (false: error).
- */
-function pfsockopen($target,$port,&$errno,&$errstr,$timeout=NULL)
-{
-	return array();
-}
-
-/**
  * Tells whether the filename is executable.
  *
  * @param  PATH		Filename.
@@ -5476,17 +5284,6 @@ function count_chars($string,$mode=0)
 }
 
 /**
- * Returns the total size of a directory.
- *
- * @param  PATH		Where to look.
- * @return ~integer  The size (false: error) (actually, a float).
- */
-function disk_total_space($directory)
-{
-	return 0;
-}
-
-/**
  * Create a function dynamically. Do not use unless absolutely needed.
  *
  * @param  string		Arguments.
@@ -5507,17 +5304,6 @@ function create_function($args,$code)
 function eval($code)
 {
 	return 0;
-}
-
-/**
- * Get float value of a variable.
- *
- * @param  mixed	Probably a string value.
- * @return float	Float value.
- */
-function doubleval($var)
-{
-	return 0.0;
 }
 
 /**
@@ -5724,15 +5510,6 @@ function hebrevc($hebrew_text,$max_chars_per_line=NULL)
 }
 
 /**
- * Syntax highlighting of a file.
- *
- * @param  PATH		File to highlight.
- */
-function highlight_file($file)
-{
-}
-
-/**
  * Calculate the length of the hypotenuse of a right-angle triangle.
  *
  * @param  float	X.
@@ -5753,154 +5530,6 @@ function hypot($x,$y)
 function ignore_user_abort($setting)
 {
 	return true;
-}
-
-/**
- * Get and/or set the current cache limiter.
- *
- * @param  ?string	New Setting (NULL: don't change).
- * @return string		Current setting.
- */
-function session_cache_limiter($cache_limiter=NULL)
-{
-	return '';
-}
-
-/**
- * Decodes session data from a string.
- *
- * @param  string		Data to decode.
- * @return boolean	Success status.
- */
-function session_decode($data)
-{
-	return true;
-}
-
-/**
- * Destroys all data registered to a session.
- */
-function session_destroy()
-{
-}
-
-/**
- * Encodes the current session data as a string.
- *
- * @return string	Session data.
- */
-function session_encode()
-{
-	return '';
-}
-
-/**
- * Get the session cookie parameters.
- *
- * @return array	Data.
- */
-function session_get_cookie_params()
-{
-	return array();
-}
-
-/**
- * Get and/or set the current session id.
- *
- * @param  ?string	New setting (NULL: don't change).
- * @return string		Current setting.
- */
-function session_id($id=NULL)
-{
-	return '';
-}
-
-/**
- * Get and/or set the current session module.
- *
- * @param  ?string	New session module name (NULL: don't change).
- * @return string		Current session module name.
- */
-function session_module_name($name=NULL)
-{
-	return '';
-}
-
-/**
- * Get and/or set the current session name.
- *
- * @param  ?string	New session name (NULL: don't change).
- * @return string		Current session name.
- */
-function session_name($name=NULL)
-{
-	return '';
-}
-
-/**
- * Get and/or set the current session save path.
- *
- * @param  ?PATH	New session save path (NULL: don't change).
- * @return string	Current session save path.
- */
-function session_save_path($path=NULL)
-{
-	return '';
-}
-
-/**
- * Set the session cookie parameters.
- *
- * @param  integer	Lifetime.
- * @param  ?string	Cookie path (NULL: no path limitation).
- * @param  ?string	Cookie domain (NULL: autodetect).
- */
-function session_set_cookie_params($lifetime,$path=NULL,$domain=NULL)
-{
-}
-
-/**
- * Sets user-level session storage functions.
- *
- * @param  mixed		Callback (open).
- * @param  mixed		Callback (close).
- * @param  mixed		Callback (read).
- * @param  mixed		Callback (write).
- * @param  mixed		Callback (destroy).
- * @param  mixed		Callback (garbage collection).
- * @return boolean	Success status.
- */
-function session_set_save_handler($open,$close,$read,$write,$destroy,$gc)
-{
-	return true;
-}
-
-/**
- * Initialize session data.
- *
- * @return boolean	Success status.
- */
-function session_start()
-{
-	return true;
-}
-
-/**
- * Set whether a client disconnect should abort script execution.
- *
- * @param  boolean	Setting.
- * @return boolean	Previous setting.
- */
-function session_unset($foo)
-{
-	return true;
-}
-
-/**
- * Write session data and end session.
- */
-function session_write_close()
-{
 }
 
 /**
@@ -6501,21 +6130,96 @@ function stream_context_create($options=NULL,$params=NULL)
 }
 
 /*
-Disabled due to Google App Engine:
 
-gc_collect_cycles()
-gc_enable()
-gc_disable()
-getmypid()
-getmyuid()
-getrusage()
-getmyinode()
-getmygid()
-get_current_user()
-libxml_disable_entity_loader()
+Various things are disabled for various reasons. You may use them, if you use a function_exists guard and a check against the disabled_functions option.
 
-Disabled due to multi-os compatibility:
+Disabled due to Google App Engine...
 
-symlink()
-link()
+gc_collect_cycles
+gc_enable
+gc_disable
+getmypid
+getmyuid
+getrusage
+getmyinode
+getmygid
+get_current_user
+libxml_disable_entity_loader
+disk_free_space
+disk_total_space
+highlight_file
+phpversion
+
+Disabled due to multi-os compatibility...
+
+symlink
+link
+
+Disabled various very specific ones, such as...
+
+apache_*
+posix_uname
+syslog
+openlog
+
+Disabled various legacy synonyms, such as...
+
+show_source
+doubleval
+ini_alter
+
+Disabled due to very commonly being disabled on hosts...
+
+popen
+pclose
+proc_close
+prog_get_status
+proc_nice
+proc_open
+proc_terminate
+passthru
+pfsockopen
+escapeshellcmd
+escapeshellarg
+define_syslog_variables
+exec
+system
+shell_exec
+ftp_exec
+posix_kill
+posix_mkfifo
+posix_setpgid
+posix_setsid
+posix_setuid
+posix_setuid
+set_time_limit
+fsockopen
+phpinfo
+
+Disabled due to often being ill-configured or disabled on hosts...
+
+tmpfile
+tempnam
+
+Sessions is not always compiled into PHP or correctly configured...
+
+session_cache_limiter
+session_decode
+session_destroy
+session_encode
+session_get_cookie_params
+session_id
+session_module_name
+session_name
+session_save_path
+session_set_cookie_params
+session_set_save_handler
+session_start
+session_unset
+session_write_close
+
+Not yet in our compatibility list (<=PHP5), but would be disabled if they were...
+
+gethostname (Google AppEngine disallows)
+
 */

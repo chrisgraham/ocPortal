@@ -12,8 +12,6 @@
 
 */
 
-/*EXTRA FUNCTIONS: shell_exec*/
-
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -1003,7 +1001,7 @@ function has_feature($dependency)
 	if ($dependency=='adobeflash') return true;
 	if (substr($dependency,0,3)=='php')
 	{
-		$phpv=phpversion();
+		$phpv=PHP_VERSION;
 		if (version_compare(substr($phpv,0,strlen(substr($dependency,3))),substr($dependency,3),'>=')) return true;
 	}
 

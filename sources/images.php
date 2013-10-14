@@ -450,9 +450,9 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
 					if (!@file_exists($imagemagick)) $imagemagick='/opt/local/bin/convert';
 					if (@file_exists($imagemagick))
 					{
-						$shrink_command=$imagemagick.' '.@escapeshellarg($file_path);
+						$shrink_command=$imagemagick.' '.escapeshellarg_wrap($file_path);
 						$shrink_command.=' -resize '.strval(intval(floatval($max_dim)/1.5)).'x'.strval(intval(floatval($max_dim)/1.5));
-						$shrink_command.=' '.@escapeshellarg($file_path);
+						$shrink_command.=' '.escapeshellarg_wrap($file_path);
 						$err_cond=-1;
 						$output_arr=array();
 						if (strpos(@ini_get('disable_functions'),'shell_exec')===false)
@@ -1004,30 +1004,13 @@ function adjust_pic_orientation($img,$exif)
  */
 function get_gd_version()
 {
-	if (function_exists('gd_info'))
+	$info=gd_info();
+	$matches=array();
+	if (preg_match('#(\d(\.|))+#',$info['GD Version'],$matches)!=0)
 	{
-		$info=gd_info();
-		$matches=array();
-		if (preg_match('#(\d(\.|))+#',$info['GD Version'],$matches)!=0)
-		{
-			$version=$matches[0];
-		} else $version=$info['version'];
-		return floatval($version);
-	}
-
-	ob_start();
-	phpinfo();
-	$_info=ob_get_clean();
-	$a=explode("\n",$_info);
-	foreach ($a as $line)
-	{
-		if (strpos($line,"GD Version")!==false)
-		{
-			return floatval(trim(str_replace('GD Version','',strip_tags($line))));
-		}
-	}
-	fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	return (-1.0); // trick for Zend
+		$version=$matches[0];
+	} else $version=$info['version'];
+	return floatval($version);
 }
 
 /**

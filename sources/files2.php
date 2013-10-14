@@ -128,11 +128,20 @@ function _ocp_tempnam($prefix)
 	$local_path=get_custom_file_base().'/safe_mode_temp/';
 	$server_path='/tmp/';
 	$tmp_path=$problem_saving?$local_path:$server_path;
-	$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
-	if (($tempnam===false) && (!$problem_saving))
+	if ((function_exists('tempnam')) && (strpos(@ini_get('disable_functions'),'tempnam')===false))
 	{
-		$problem_saving=true;
-		$tempnam=tempnam($local_path,$prefix);
+		$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
+		if (($tempnam===false) && (!$problem_saving))
+		{
+			$tempnam=tempnam($local_path,$prefix);
+		}
+	} else
+	{
+		require_code('crypt');
+		$tempnam=$prefix.produce_salt();
+		$myfile=fopen($local_path.'/'.$tempnam,'wb');
+		fclose($myfile);
+		fix_permissions($local_path.'/'.$tempnam);
 	}
 	return $tempnam;
 }
@@ -718,7 +727,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 
 			if ((substr($file_path,-4)=='.php') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
 			{
-				$cmd='DOCUMENT_ROOT='.escapeshellarg(dirname(get_file_base())).' PATH_TRANSLATED='.escapeshellarg($file_path).' SCRIPT_NAME='.escapeshellarg($file_path).' HTTP_USER_AGENT='.escapeshellarg($ua).' QUERY_STRING='.escapeshellarg($parsed['query']).' HTTP_HOST='.escapeshellarg($parsed['host']).' '.escapeshellcmd(find_php_path(true)).' '.escapeshellarg($file_path);
+				$cmd='DOCUMENT_ROOT='.escapeshellarg_wrap(dirname(get_file_base())).' PATH_TRANSLATED='.escapeshellarg_wrap($file_path).' SCRIPT_NAME='.escapeshellarg_wrap($file_path).' HTTP_USER_AGENT='.escapeshellarg($ua).' QUERY_STRING='.escapeshellarg($parsed['query']).' HTTP_HOST='.escapeshellarg($parsed['host']).' '.escapeshellcmd(find_php_path(true)).' '.escapeshellarg($file_path);
 				$contents=shell_exec($cmd);
 				$split_pos=strpos($contents,"\r\n\r\n");
 				if ($split_pos!==false)
@@ -1181,7 +1190,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$headers.='Referer: '.rawurlencode($referer)."\r\n";
 	$errno=0;
 	$errstr='';
-	if ($url_parts['scheme']=='http')
+	if (($url_parts['scheme']=='http') && (function_exists('fsockopen')) && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
 	{
 		if (!array_key_exists('host',$url_parts)) $url_parts['host']='127.0.0.1';
 		$connect_to=$url_parts['host'];

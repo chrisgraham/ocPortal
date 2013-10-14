@@ -170,7 +170,7 @@ function init__global2()
 	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP))
 	{
 		// Marker that ocPortal running
-		@header('X-Powered-By: ocPortal '.ocp_version_pretty().' (PHP '.phpversion().')');
+		@header('X-Powered-By: ocPortal '.ocp_version_pretty().' (PHP '.PHP_VERSION.')');
 
 		// Get ready for query logging if requested
 		$QUERY_LOG=false;

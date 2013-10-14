@@ -49,6 +49,8 @@ class Hook_config_smtp_sockets_use
 	 */
 	function get_default()
 	{
+		if (!function_exists('fsockopen')) return NULL;
+		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) return NULL;
 		return '0';
 	}
 

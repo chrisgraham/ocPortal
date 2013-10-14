@@ -203,21 +203,8 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$middle_spt=do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'b16d40ad36f209b1a3559df6f1ebac55','TITLE'=>$title,'CONTENT'=>$theme_images,'PRE'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'POST'=>''));
 	}
 
-	// Profile mode?
-	if ($special_page_type=='profile')
-	{
-		if (function_exists('xdebug_dump_function_profile'))
-		{
-			$type=XDEBUG_PROFILER_FS_SUM;
-			xdebug_dump_function_profile($type);
-		} else
-		{
-			$middle_spt=make_string_tempcode('Check out the dump using KCacheGrind.');
-		}
-	}
-
 	// Content translation mode
-	elseif (substr($special_page_type,0,12)=='lang_content')
+	if (substr($special_page_type,0,12)=='lang_content')
 	{
 		$map_a=get_file_base().'/lang/langs.ini';
 		$map_b=get_custom_file_base().'/lang_custom/langs.ini';

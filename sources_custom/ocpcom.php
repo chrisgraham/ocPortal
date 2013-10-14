@@ -553,7 +553,7 @@ function do_backup_script()
 	// Create data
 	require_code('zip');
 	$file_array=zip_scan_folder(special_myocp_dir().'/servers/'.filter_naughty($server).'/sites/'.filter_naughty($id));
-	$tmp_path=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((ini_get('open_basedir')!='') && (strpos(ini_get('open_basedir'),'/tmp')===false)))?get_custom_file_base().'/uploads/attachments/':'/tmp/'),'');
+	$tmp_path=ocp_tempnam('myocp_backup');
 	$user=substr(md5('myocp_site_'.$id),0,16);
 	shell_exec('mysqldump -h'./*$server*/'localhost'.' -u'.$user.' -p'.$GLOBALS['SITE_INFO']['mysql_myocp_password'].' myocp_site_'.$id.' --skip-opt > '.$tmp_path);
 	$file_array[]=array('full_path'=>$tmp_path,'name'=>'database.sql','time'=>time());

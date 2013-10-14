@@ -269,7 +269,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		generate_resourcefs_moniker('news',strval($id),NULL,NULL,true);
 	}
 
-	if (function_exists('xmlrpc_encode'))
+	if ((function_exists('fsockopen')) && (strpos(@ini_get('disable_functions'),'shell_exec')===false) && (function_exists('xmlrpc_encode'))
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
