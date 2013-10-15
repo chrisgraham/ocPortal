@@ -1688,6 +1688,7 @@ ocportal_tutorials
  - docs/pages/comcode_custom/EN/tut_designer_themes.txt
  - docs/pages/comcode_custom/EN/tut_intl_users.txt
  - docs/pages/comcode_custom/EN/tut_ocselect.txt
+ - docs/pages/comcode_custom/EN/tut_google_appengine.txt
  - default.png
  - themes/default/images_custom/tutorial_icons/flashy.png
  - themes/default/images_custom/tutorial_icons/index.html
@@ -4210,6 +4211,7 @@ testing_platform
  - _tests/tests/unit_tests/js_ssl_issues.php
  - _tests/tests/unit_tests/resource_fs.php
  - _tests/tests/unit_tests/google_appengine.php
+ - _tests/tests/unit_tests/tutorials_all_linked.php
 
 weather
 -------

@@ -70,10 +70,10 @@ class Hook_addon_registry_community_billboard
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(
+			'requires'=>array(
 				'pointstore'
 			),
+			'recommends'=>array(),
 			'conflicts_with'=>array()
 		);
 	}
@@ -98,6 +98,11 @@ class Hook_addon_registry_community_billboard
 			'sources/hooks/blocks/main_staff_checklist/community_billboard.php',
 			'sources/hooks/modules/pointstore/community_billboard.php',
 			'sources/hooks/systems/symbols/COMMUNITY_BILLBOARD.php',
+			'POINTSTORE_COMMUNITY_BILLBOARD_SCREEN.tpl',
+			'POINTSTORE_COMMUNITY_BILLBOARD_2.tpl',
+			'sources/hooks/systems/config/community_billboard.php',
+			'sources/hooks/systems/config/is_on_community_billboard_buy.php',
+			'sources/hooks/systems/notifications/pointstore_request_community_billboard.php',
 		);
 	}
 
@@ -111,7 +116,48 @@ class Hook_addon_registry_community_billboard
 	{
 		return array(
 			'COMMUNITY_BILLBOARD_DETAILS.tpl'=>'administrative__community_billboard_manage_screen',
-			'COMMUNITY_BILLBOARD_STORE_LIST_LINE.tpl'=>'administrative__community_billboard_manage_screen'
+			'COMMUNITY_BILLBOARD_STORE_LIST_LINE.tpl'=>'administrative__community_billboard_manage_screen',
+			'POINTSTORE_COMMUNITY_BILLBOARD_2.tpl'=>'pointstore_community_billboard_2',
+			'POINTSTORE_COMMUNITY_BILLBOARD_SCREEN.tpl'=>'pointstore_community_billboard_screen',
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__pointstore_community_billboard_2()
+	{
+		return array(
+			lorem_globalise(
+				do_lorem_template('POINTSTORE_COMMUNITY_BILLBOARD_2',array(
+					'TEXT_URL'=>placeholder_url(),
+				)
+			),NULL,'',true),
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__pointstore_community_billboard_screen()
+	{
+		return array(
+			lorem_globalise(
+				do_lorem_template('POINTSTORE_COMMUNITY_BILLBOARD_SCREEN',array(
+					'TITLE'=>lorem_title(),
+					'TEXT_URL'=>placeholder_url(),
+					'QUEUE'=>placeholder_number(),
+					'COST'=>placeholder_number()
+				)
+			),NULL,'',true),
 		);
 	}
 

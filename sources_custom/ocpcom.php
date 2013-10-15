@@ -568,7 +568,6 @@ function do_backup_script()
 	// Send header
 	header('Content-Type: application/octet-stream');
 	header('Content-Disposition: attachment; filename="backup-'.date('Y-m-d').'.zip"');
-	header('Content-Transfer-Encoding: binary');
 	header('Accept-Ranges: bytes');
 
 	// Default to no resume

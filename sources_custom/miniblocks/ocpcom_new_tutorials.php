@@ -22,7 +22,7 @@ function get_tutorial_info($tut)
 		case 'notifications':
 			$result=array(
 				"Notifications",
-				"An explanation of the different ways notifications can work.",
+				"How different kinds of notifications may be set up in ocPortal.",
 				"Aug 2013",
 				"blue",
 				"Chris",
@@ -424,6 +424,54 @@ function get_tutorial_info($tut)
 				"ocPortal is very heavily optimised for high performance out-of-the-box, but here are some advanced performance tips.",
 				"Aug 2008",
 				"red",
+			); break;
+
+		case 'google_appengine':
+			$result=array(
+				"Installing on Google AppEngine",
+				"How to install ocPortal on Google AppEngine, for automatic cloud scaling.",
+				"Oct 2013",
+				"red",
+			); break;
+
+		case 'addon_index':
+			$result=array(
+				"Addon index",
+				"An index showing what addons are available, and linking to relevant tutorials.",
+				"Oct 2013",
+				"blue",
+			); break;
+
+		case 'aggregate_types':
+			$result=array(
+				"Aggregate Content Types",
+				"How to set up complex content types, by linking standard ocPortal types/structure together.",
+				"May 2013",
+				"red",
+			); break;
+
+		case 'ocselect':
+			$result=array(
+				"Filtering using ocSelect syntax",
+				"How to filter content based upon field filtering queries.",
+				"Aug 2010",
+				"red",
+			); break;
+
+		case 'quizzes':
+			$result=array(
+				"Quizzes",
+				"How to add competitions, surveys, and tests.",
+				"Aug 2008",
+				"blue",
+			); break;
+
+		case 'repository':
+			$result=array(
+				"The ocPortal repository",
+				"How the ocPortal content repository works and may be accessed and used.",
+				"May 2013",
+				"orange",
 			); break;
 
 		case 'intl':

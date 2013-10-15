@@ -20,7 +20,7 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_1',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,expand}" /></a>Installation and configuration[/title]
 	<div class="hide_tag" id="doctray_1"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="web_hosting,install,adv_installation,windows,configuration,importer,nuances" view="full"]ocpcom_new_tutorials[/block]
+	[block="web_hosting,install,adv_installation,windows,google_appengine,configuration,importer,nuances" view="full"]ocpcom_new_tutorials[/block]
 	</div>
 </div>
 
@@ -71,7 +71,7 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_7',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,expand}" /></a>Advanced configuration[/title]
 	<div class="hide_tag" id="doctray_7"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="adv_configuration,filter,intl_users,intl,optimisation,msn,security,fields_filter,cookies" view="full"]ocpcom_new_tutorials[/block]
+	[block="adv_configuration,filter,ocselect,intl_users,intl,optimisation,msn,security,fields_filter,cookies" view="full"]ocpcom_new_tutorials[/block]
 	</div>
 </div>
 
@@ -92,14 +92,14 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_10',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,expand}" /></a>Content features and usage[/title]
 	<div class="hide_tag" id="doctray_10"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="information,news,adv_news,newsletter,downloads,adv_downloads,galleries,adv_galleries,catalogues,wiki,calendar" view="full"]ocpcom_new_tutorials[/block]
+	[block="information,news,adv_news,newsletter,downloads,adv_downloads,galleries,adv_galleries,catalogues,wiki,calendar,quizzes,aggregate_types" view="full"]ocpcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_11',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,expand}" /></a>Miscellaneous features and usage[/title]
 	<div class="hide_tag" id="doctray_11"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="keymap,search,banners,feedback,ecommerce,occle" view="full"]ocpcom_new_tutorials[/block]
+	[block="keymap,search,banners,feedback,ecommerce,occle,repository" view="full"]ocpcom_new_tutorials[/block]
 	</div>
 </div>
 
@@ -113,7 +113,7 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_13',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,expand}" /></a>OCF features and (Forum/Members) usage[/title]
 	<div class="hide_tag" id="doctray_13"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="members,correspondance,adv_members,forums,mod,forum_helpdesk,forum_tracking,emoticons" view="full"]ocpcom_new_tutorials[/block]
+	[block="members,correspondance,adv_members,forums,mod,forum_helpdesk,forum_tracking,emoticons,notifications" view="full"]ocpcom_new_tutorials[/block]
 	</div>
 </div>
 

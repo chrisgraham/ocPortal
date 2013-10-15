@@ -42,4 +42,98 @@ class google_appengine_test_set extends ocp_test_case
 			}
 		}
 	}
+
+	// We must be under 1000 templates, due to a GAE limit
+	function testAdviceConstraint()
+	{
+		$tpl_counts=array();
+		$file_counts=array();
+		$directory_counts=array();
+		$hooks=find_all_hooks('systems','addon_registry');
+		foreach (array_keys($hooks) as $hook)
+		{
+			if (in_array($hook,array(
+				'installer',
+				'devguide',
+				'backup',
+				'uninstaller',
+				'ldap',
+				'themewizard',
+				'setupwizard',
+				'stats',
+				'import',
+				'iotds', // TODO: This is here because it will be removed to custom
+				'community_billboard', // TODO: This is here because it will be removed to custom
+			))) continue;
+
+			require_code('hooks/systems/addon_registry/'.$hook);
+			$hook_ob=object_factory('Hook_addon_registry_'.$hook);
+
+			$files=$hook_ob->get_file_list();
+			$file_counts[$hook]=count($files);
+
+			$tpl_count=0;
+			foreach ($files as $file)
+			{
+				if (substr($file,-4)=='.tpl') $tpl_count++;
+
+				if (!isset($directory_counts[dirname($file)])) $directory_counts[dirname($file)]=0;
+				$directory_counts[dirname($file)]++;
+
+				$path=get_file_base().'/'.$file;
+				if (is_file($path))
+				{
+					$this->assertTrue(filesize($path)<=32*1024*1024,'32MB is the maximum file size: '.$file.' is '.integer_format(filesize($path)));
+				}
+			}
+			$tpl_counts[$hook]=$tpl_count;
+		}
+
+		$tpl_total=1;
+		$file_total=100; // Just an arbitrary amount that we will assume are not in any particular addon
+		foreach ($tpl_counts as $hook=>$tpl_count)
+		{
+			$tpl_total+=$tpl_count;
+			$file_total+=$file_counts[$hook];
+		}
+
+		// Any large directories?
+		foreach ($directory_counts as $dir=>$count)
+		{
+			if ($dir=='.') continue; // Templates/CSS usually, and we account for templates separately ; certainly not a lot of CSS or root files, in general (it'd get noticed ;-) )
+			$this->assertTrue($count<=1000,'Must be less than 1000 files in any directory (except templates, which is checked separately): '.$dir);
+		}
+
+		// The user is advised they must take one big away and one small (or another big)
+		$set_big=array(
+			'calendar',
+			'chat',
+			'ecommerce',
+			'shopping',
+			'galleries',
+			'pointstore',
+		);
+		$set_small=array(
+			'authors',
+			'banners',
+			'downloads',
+			'polls',
+			'quizzes',
+			'tickets',
+			'newsletter',
+			'wiki',
+		);
+		foreach ($set_big as $big)
+		{
+			foreach ($set_small as $small)
+			{
+				$custom_tpl_total=$tpl_total-$tpl_counts[$big]-$tpl_counts[$small];
+				$custom_file_total=$file_total-$file_counts[$big]-$file_counts[$small];
+
+				$this->assertTrue($custom_tpl_total<=1000,'Must be less than 1000 templates for given addon advice (removing unsupported and also '.$big.'&'.$small.')');
+
+				$this->assertTrue($custom_file_total<=10000,'Must be less than 10000 files for given addon advice (removing unsupported and also '.$big.'&'.$small.')');
+			}
+		}
+	}
 }

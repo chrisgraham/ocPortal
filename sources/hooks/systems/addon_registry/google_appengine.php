@@ -59,7 +59,7 @@ class Hook_addon_registry_google_appengine
 	function get_applicable_tutorials()
 	{
 		return array(
-			'tut_optimisation',
+			'tut_google_appengine',
 		);
 	}
 

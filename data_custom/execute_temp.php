@@ -53,12 +53,23 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$installer=file_get_contents(get_file_base().'/install.php');
-	$phpstub=file_get_contents(get_file_base().'/sources/phpstub.php');
-	$matches=array();
-	$num_matches=preg_match_all('#function (\w+)#',$phpstub,$matches);
-	for ($i=0;$i<$num_matches;$i++)
+	$counts=array();
+	$hooks=find_all_hooks('systems','addon_registry');
+	foreach (array_keys($hooks) as $hook)
 	{
-		if (strpos($installer,$matches[1][$i])===false) @print($matches[1][$i].'<br />');
+		require_code('hooks/systems/addon_registry/'.$hook);
+		$hook_ob=object_factory('Hook_addon_registry_'.$hook);
+
+		$files=$hook_ob->get_file_list();
+
+		$count=0;
+		foreach ($files as $file)
+		{
+			if (substr($file,-4)=='.tpl') $count++;
+		}
+		$counts[$hook]=$count;
 	}
+
+	arsort($counts);
+	var_dump($counts);
 }
