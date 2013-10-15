@@ -41,7 +41,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 
 		if ((get_option('transcoding_zencoder_api_key')!='') && (get_option('transcoding_zencoder_ftp_path')!=''))
 		{
-			if ((ocp_srv('HTTP_HOST')=='localhost') || (ocp_srv('HTTP_HOST')=='127.0.0.1'))
+			if (running_locally())
 			{
 				attach_message(do_lang_tempcode('TRANSCODING_LOCALHOST'),'inform');
 				$notifications='';

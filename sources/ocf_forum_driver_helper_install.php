@@ -102,15 +102,7 @@ function _helper_install_test_load_from($path)
 	$PROBED_FORUM_CONFIG['sql_user']=$GLOBALS['DB_STATIC_OBJECT']->db_default_user();
 	$PROBED_FORUM_CONFIG['sql_pass']=$GLOBALS['DB_STATIC_OBJECT']->db_default_password();
 
-	$domain=ocp_srv('HTTP_HOST');
-	if (substr($domain,0,4)=='www.') $domain=substr($domain,4);
-	$colon_pos=strpos($domain,':');
-	if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-	$pos=strpos(ocp_srv('PHP_SELF'),'install.php');
-	if ($pos===false) $pos=strlen(ocp_srv('PHP_SELF')); else $pos--;
-	$port=ocp_srv('SERVER_PORT');
-	if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
-	$base_url=post_param('base_url','http://'.$domain.$port.substr(ocp_srv('PHP_SELF'),0,$pos));
+	$base_url=post_param('base_url','http://'.ocp_srv('HTTP_HOST').dirname(ocp_srv('SCRIPT_NAME')));
 
 	$PROBED_FORUM_CONFIG['board_url']=$base_url.'/forum';
 	return true;

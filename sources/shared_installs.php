@@ -34,7 +34,7 @@ function current_share_user()
 	$domain=preg_replace('#:\d+#','',$domain);
 	if ($domain==$custom_share_domain) // Get from the access path
 	{
-		$path=isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:(isset($_ENV['REQUEST_URI'])?$_ENV['REQUEST_URI']:'');
+		$path=isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
 		if (substr($path,0,strlen($SITE_INFO['custom_share_path'])+1)=='/'.$SITE_INFO['custom_share_path']) $path=substr($path,strlen($SITE_INFO['custom_share_path'])+1);
 		$slash=strpos($path,'/');
 		if ($slash!==false)

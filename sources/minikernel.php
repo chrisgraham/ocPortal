@@ -31,9 +31,10 @@
  */
 function init__minikernel()
 {
-	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV)))
+	// Fixup some inconsistencies in parameterisation on different PHP platforms. See phpstub.php for info on what environmental data we can rely on.
+	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS
 	{
-		$_SERVER['REQUEST_URI']=$_SERVER['PHP_SELF'];
+		$_SERVER['REQUEST_URI']=$_SERVER['SCRIPT_NAME']; // This doesn't include path info after .php like PHP_SELF would, but we don't use that in ocPortal. PHP_SELF is not reliable generally.
 		$first=true;
 		foreach ($_GET as $key=>$val)
 		{
@@ -306,8 +307,8 @@ function in_safe_mode()
 function running_script($is_this_running)
 {
 	if (substr($is_this_running,-4)!='.php') $is_this_running.='.php';
-	$stripped_current_url=preg_replace('#^.*/#','',function_exists('ocp_srv')?ocp_srv('PHP_SELF'):$_SERVER['PHP_SELF']);
-	return (substr($stripped_current_url,0,strlen($is_this_running))==$is_this_running);
+	$script_name=isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
+	return (basename($script_name)==$is_this_running);
 }
 
 /**
@@ -437,7 +438,7 @@ function get_domain()
 	global $SITE_INFO;
 	if (!array_key_exists('domain',$SITE_INFO))
 	{
-		$SITE_INFO['domain']=ocp_srv('HTTP_HOST');
+		$SITE_INFO['domain']=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
 	}
 	return $SITE_INFO['domain'];
 }
@@ -489,15 +490,7 @@ function get_base_url($https=NULL,$zone_for='')
 	global $SITE_INFO;
 	if (!array_key_exists('base_url',$SITE_INFO))
 	{
-		$domain=ocp_srv('HTTP_HOST');
-		if (substr($domain,0,4)=='www.') $domain=substr($domain,4);
-		$colon_pos=strpos($domain,':');
-		if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-		$pos=strpos(ocp_srv('PHP_SELF'),'install.php');
-		if ($pos===false) $pos=strlen(ocp_srv('PHP_SELF')); else $pos--;
-		$port=ocp_srv('SERVER_PORT');
-		if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
-		$base_url=post_param('base_url','http://'.$domain.$port.substr(ocp_srv('PHP_SELF'),0,$pos));
+		$base_url=post_param('base_url','http://'.ocp_srv('HTTP_HOST').dirname(ocp_srv('SCRIPT_NAME')));
 
 		return $base_url.(($zone_for=='')?'':('/'.$zone_for));
 	}

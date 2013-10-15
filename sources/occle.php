@@ -33,7 +33,7 @@ function init__occle()
  */
 function occle_script()
 {
-	$cli=(php_sapi_name()=='cli' && empty($_SERVER['REMOTE_ADDR']));
+	$cli=((php_sapi_name()=='cli') && (ocp_srv('REMOTE_ADDR')==''));
 
 	if ($cli)
 	{

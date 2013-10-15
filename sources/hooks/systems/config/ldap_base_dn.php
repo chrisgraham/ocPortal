@@ -49,7 +49,7 @@ class Hook_config_ldap_base_dn
 	 */
 	function get_default()
 	{
-		return 'dc='.str_replace('.',',dc=',ocp_srv('HTTP_HOST'));
+		return 'dc='.str_replace('.',',dc=',get_domain());
 	}
 
 }

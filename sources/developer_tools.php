@@ -50,6 +50,7 @@ function semi_dev_mode_startup()
 		} else $_GET['keep_devtest']='1';
 	}
 
+	global $_CREATED_FILES;
 	if (isset($_CREATED_FILES)) // Comes from ocProducts custom PHP version
 	{
 		/**
@@ -72,16 +73,16 @@ function semi_dev_mode_startup()
 			}
 
 			global $TITLE_CALLED,$SCREEN_TEMPLATE_CALLED,$EXITING;
-			if ((is_null($SCREEN_TEMPLATE_CALLED)) && ($EXITING==0) && (strpos(ocp_srv('PHP_SELF'),'index.php')!==false)) @exit(escape_html('No screen template called.'));
-			if ((!$TITLE_CALLED) && ((is_null($SCREEN_TEMPLATE_CALLED)) || ($SCREEN_TEMPLATE_CALLED!='')) && ($EXITING==0) && (strpos(ocp_srv('PHP_SELF'),'index.php')!==false)) @exit(escape_html('No title used on screen.'));
+			if ((is_null($SCREEN_TEMPLATE_CALLED)) && ($EXITING==0) && (running_script('index'))) @exit(escape_html('No screen template called.'));
+			if ((!$TITLE_CALLED) && ((is_null($SCREEN_TEMPLATE_CALLED)) || ($SCREEN_TEMPLATE_CALLED!='')) && ($EXITING==0) && (strpos(ocp_srv('SCRIPT_NAME'),'index.php')!==false)) @exit(escape_html('No title used on screen.'));
 		}
 
 		register_shutdown_function('dev_mode_aftertests');
 	}
 
-	if ((ocp_srv('SCRIPT_FILENAME')!='') && ($DEV_MODE) && (strpos(ocp_srv('SCRIPT_FILENAME'),'data_custom')===false))
+	if ((ocp_srv('SCRIPT_NAME')!='') && ($DEV_MODE) && (strpos(ocp_srv('SCRIPT_NAME'),'data_custom')===false))
 	{
-		if (@strlen(file_get_contents(ocp_srv('SCRIPT_FILENAME')))>4500)
+		if (@strlen(file_get_contents(ocp_srv('SCRIPT_NAME')))>4500)
 		{
 			fatal_exit('Entry scripts (front controllers) should not be shoved full of code.');
 		}
@@ -138,7 +139,7 @@ function restrictify()
 	error_reporting(E_ALL);
 	if (function_exists('set_time_limit')) @set_time_limit(25);
 	if (get_forum_type()=='ocf') $GLOBALS['SITE_DB']->query('SET sql_mode=STRICT_ALL_TABLES',NULL,NULL,true);
-	if (($GLOBALS['DEV_MODE']) && (strpos(ocp_srv('PHP_SELF'),'_tests')===false))
+	if (($GLOBALS['DEV_MODE']) && (strpos(ocp_srv('SCRIPT_NAME'),'_tests')===false))
 	{
 		@ini_set('ocproducts.type_strictness','1');
 		@ini_set('ocproducts.xss_detect','1');

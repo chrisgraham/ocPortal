@@ -191,11 +191,12 @@ class Module_lost_password
 			mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 		} else
 		{
-			$old_php_self=$_SERVER['PHP_SELF'];
-			$old_server_name=$_SERVER['SERVER_NAME'];
+			$old_php_self=ocp_srv('PHP_SELF');
+			$old_server_name=ocp_srv('SERVER_NAME');
 
+			// Fiddle to try and anonymise details of the e-mail
 			$_SERVER['PHP_SELF']="/";
-			$_SERVER['SERVER_NAME']=$_SERVER['SERVER_ADDR'];
+			$_SERVER['SERVER_NAME']=ocp_srv('SERVER_ADDR');
 
 			$from_email=get_option('website_email');
 			//$from_email='noreply@'.$_SERVER['SERVER_ADDR'];	Won't work on most hosting
@@ -204,6 +205,7 @@ class Module_lost_password
 			$body=do_lang('PASSWORD_RESET_ULTRA_BODY',$code);
 			mail($email,$subject,$body,'From: '.$from_name.' <'.$from_email.'>'."\r\n".'Reply-To: '.$from_name.' <'.$from_email.'>');
 
+			// Put env details back to how they should be
 			$_SERVER['PHP_SELF']=$old_php_self;
 			$_SERVER['SERVER_NAME']=$old_server_name;
 

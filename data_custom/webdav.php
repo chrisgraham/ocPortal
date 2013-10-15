@@ -28,10 +28,10 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 @chdir($FILE_BASE);
 
 // Workaround for MacOS slow-downs
-$method=$_SERVER['REQUEST_METHOD'];
+$method=ocp_srv('REQUEST_METHOD');
 if ($method=='PROPFIND')
 {
-	$filename=basename($_SERVER['REQUEST_URI']);
+	$filename=basename(ocp_srv('SCRIPT_NAME'));
 	$bad_files=array(
 		'.DS_Store',
 		'.hidden',
@@ -52,7 +52,7 @@ if ($method=='PROPFIND')
 }
 if ($method=='GET' || $method=='PROPFIND')
 {
-	$filename=basename($_SERVER['REQUEST_URI']);
+	$filename=basename(ocp_srv('SCRIPT_NAME'));
 	$bad_files=array(
 		'.DS_Store',
 	);

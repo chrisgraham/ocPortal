@@ -183,7 +183,7 @@ function erase_cached_language()
 						$key='page__'.get_zone_name().'__'.get_page_name();
 					} else
 					{
-						$key='script__'.md5(serialize(ocp_srv('PHP_SELF')).serialize($_GET));
+						$key='script__'.md5(serialize(ocp_srv('SCRIPT_NAME')).serialize($_GET));
 					}
 					if ($key.'.lcd'==$file) continue; // Will be open/locked
 

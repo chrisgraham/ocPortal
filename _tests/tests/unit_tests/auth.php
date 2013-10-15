@@ -72,7 +72,7 @@ class auth_test_set extends ocp_test_case
 		$fake_session_id=1234543;
 
 		$ips=array();
-		$ips[preg_replace('#\.\d+$#','.*',$_SERVER['SERVER_ADDR'])]=true;
+		$ips[preg_replace('#\.\d+$#','.*',ocp_srv('SERVER_ADDR'))]=true;
 		$ips['1.2.3.4']=false;
 
 		foreach ($ips as $ip=>$pass_expected) // We actually test both pass and fail, to help ensure our test is actually not somehow getting a failure from something else

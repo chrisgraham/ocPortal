@@ -457,14 +457,8 @@ class Hook_mybb
 			if ($option['name']=='homeurl') $homeurl=$option['value'];
 		}
 
-		$host=preg_replace('#\.#','\.',$_SERVER['HTTP_HOST']);
-		$doc_root=$_SERVER['DOCUMENT_ROOT'];
-
-		$forum_dir=preg_replace('#http\:\/\/www\.#','',$homeurl);
-		$forum_dir=preg_replace('#http\:\/\/#','',$forum_dir);
-		$forum_dir=preg_replace('#'.$host.'#','',$forum_dir);
-
-		$forum_dir=$doc_root.$forum_dir;
+		$home_dir_parts=parse_url($homeurl);
+		$forum_dir=ocp_srv('DOCUMENT_ROOT').urldecode($home_dir_parts['path']);
 
 		$avatar_gallery_path=$forum_dir.'/'.$avatar_gallery_path;
 		$avatar_path=preg_replace('#\.\/#','/',$avatar_path);
@@ -859,20 +853,14 @@ class Hook_mybb
 	 * @param  string			The filename to output to
 	 * @return URLPATH		The URL
 	 */
-	function data_to_disk($data,$filename,$sections, $db,$table_prefix='', $output_filename='')
+	function data_to_disk($data,$filename,$sections,$db,$table_prefix='',$output_filename='')
 	{
 		$options=$db->query('SELECT * FROM '.$table_prefix.'settings WHERE '.db_string_equal_to('name','bburl'));
 
 		$homeurl=(isset($options[0]['value'])&&($options[0]['value']!=''))?$options[0]['value']:'';
 
-		$host=preg_replace('#\.#','\.',$_SERVER['HTTP_HOST']);
-		$doc_root=$_SERVER['DOCUMENT_ROOT'];
-
-		$forum_dir=preg_replace('#http\:\/\/www\.#','',$homeurl);
-		$forum_dir=preg_replace('#http\:\/\/#','',$forum_dir);
-		$forum_dir=preg_replace('#'.$host.'#','',$forum_dir);
-
-		$forum_dir=$doc_root.$forum_dir; //full path to the forum folder
+		$home_dir_parts=parse_url($homeurl);
+		$forum_dir=ocp_srv('DOCUMENT_ROOT').urldecode($home_dir_parts['path']);
 
 		$attachments_dir=$forum_dir.'/uploads/'; //forum attachments directory
 		$file_path=$attachments_dir.$filename;

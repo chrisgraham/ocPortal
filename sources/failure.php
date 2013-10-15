@@ -495,7 +495,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		$username=function_exists('do_lang')?do_lang('UNKNOWN'):'Unknown';
 	}
 
-	$url=ocp_srv('PHP_SELF').'?'.ocp_srv('QUERY_STRING');
+	$url=ocp_srv('SCRIPT_NAME').'?'.ocp_srv('QUERY_STRING');
 	$post='';
 	foreach ($_POST as $key=>$val)
 	{
@@ -668,7 +668,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	}
 
 	if ($silent) return;
-	if ((preg_match('#^localhost[\.\:$]#',ocp_srv('HTTP_HOST'))!=0) && (substr(get_base_url(),0,17)=='http://localhost/')) fatal_exit(do_lang('HACK_ATTACK'));
+	if ($GLOBALS['DEV_MODE']) fatal_exit(do_lang('HACK_ATTACK'));
 	warn_exit(do_lang_tempcode('HACK_ATTACK_USER'));
 }
 

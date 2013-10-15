@@ -24,7 +24,12 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 	require_once(get_file_base().'/data/quick_js_loader.php');
 }
 
-if ((strpos($_SERVER['PHP_SELF'],'/sources/')!==false) || (strpos($_SERVER['PHP_SELF'],'/sources_custom/')!==false)) exit('May not be included directly');
+$script_name=isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
+if ((strpos($script_name,'/sources/')!==false) || (strpos($script_name,'/sources_custom/')!==false))
+{
+	header('Content-type: text/plain');
+	exit('May not be included directly');
+}
 
 /**
  * This function is a very important one when coding. It allows you to include a source code file (from root/sources/ or root/sources_custom/) through the proper channels.
@@ -435,7 +440,7 @@ function hhvm_include($path)
 {
 	return include($path); // Disable this line to enable the fancy Hack support. We don't maintain this 100%, but it is a great performance option.
 
-	//if (!is_file($path.'.hh'))	// Leave this commented when debugging
+	/*//if (!is_file($path.'.hh'))	// Leave this commented when debugging
 	{
 		if ($path==get_file_base().'/sources/php.php') return include($path);
 		if ($path==get_file_base().'/sources/type_validation.php') return include($path);
@@ -446,7 +451,7 @@ function hhvm_include($path)
 		$new_code=convert_from_php_to_hhvm_hack($path);
 		file_put_contents($path.'.hh',$new_code);
 	}
-	return include($path.'.hh');
+	return include($path.'.hh');*/
 }
 
 // Useful for basic profiling

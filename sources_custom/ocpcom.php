@@ -332,6 +332,11 @@ function reset_info_php($server)
 	flock($myfile,LOCK_EX);
 	ftruncate($myfile,0);
 	$contents="<"."?php
+if (!isset(\$_SERVER['HTTP_HOST']))
+{
+	exit('Must be run from a web-request, for us to be able to identify the correct site.');
+}
+
 global \$SITE_INFO;
 \$SITE_INFO['default_lang']='EN';
 \$SITE_INFO['db_type']='mysql';

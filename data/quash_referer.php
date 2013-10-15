@@ -18,12 +18,30 @@
  * @package		core
  */
 
+/**
+ * Find the active domain name.
+ *
+ * @return ID_TEXT		Active domain name
+ */
+function qr_get_domain()
+{
+	if (!empty($_SERVER['HTTP_HOST'])) return $_SERVER['HTTP_HOST'];
+	if (!empty($_ENV['HTTP_HOST'])) return $_ENV['HTTP_HOST'];
+	if (function_exists('get_hostname')) return get_hostname();
+	if (!empty($_SERVER['SERVER_ADDR'])) return $_SERVER['SERVER_ADDR'];
+	if (!empty($_ENV['SERVER_ADDR'])) return $_ENV['SERVER_ADDR'];
+	if (!empty($_SERVER['LOCAL_ADDR'])) return $_SERVER['LOCAL_ADDR'];
+	if (!empty($_ENV['LOCAL_ADDR'])) return $_ENV['LOCAL_ADDR'];
+	return 'localhost';
+}
+
 $target=$_GET['url'];
-$target=str_replace("\r",'',$target);
-$target=str_replace("\n",'',$target);
+if (get_magic_quotes_gpc()) $target=stripslashes($target);
+$target=str_replace(array("\r","\n"),array('',''),$target);
 
 // Only allows redirections from our own server
-$OUR_SERVER='http://'.$_SERVER['HTTP_HOST'];
+$domain=qr_get_domain();
+$OUR_SERVER='http://'.$domain;
 if (substr($_SERVER['HTTP_REFERER'],0,strlen($OUR_SERVER))==$OUR_SERVER) header('Location: '.$target);
 
 

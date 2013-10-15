@@ -300,7 +300,7 @@ $(window).load(function () {
 				<img src="../../<?php echo $large_image_location;?>" style="position: relative;" alt="Thumbnail Preview" />
 			</div>
 			<br style="clear:both;"/>
-			<form style="float: left; width: 400px" onsubmit="document.getElementById('message').innerHTML='Changing size';" action="<?php echo htmlentities($_SERVER["PHP_SELF"].'?'.$_SERVER['QUERY_STRING']);?>" method="post">
+			<form style="float: left; width: 400px" onsubmit="document.getElementById('message').innerHTML='Changing size';" action="<?php echo htmlentities($_SERVER["SCRIPT_NAME"].'?'.$_SERVER['QUERY_STRING']);?>" method="post">
 				<p>
 					<input size="5" type="text" name="thumb_width" value="<?php echo $thumb_width; ?>" id="thumb_width" />
 					&times;
@@ -308,7 +308,7 @@ $(window).load(function () {
 					<input type="submit" name="change_size" value="Change thumbnail size" id="change_size" />
 				</p>
 			</form>
-			<form style="margin-right: 400px" onsubmit="document.getElementById('message').innerHTML='...';" action="<?php echo htmlentities($_SERVER["PHP_SELF"].'?'.$_SERVER['QUERY_STRING']);?>" method="post">
+			<form style="margin-right: 400px" onsubmit="document.getElementById('message').innerHTML='...';" action="<?php echo htmlentities($_SERVER["SCRIPT_NAME"].'?'.$_SERVER['QUERY_STRING']);?>" method="post">
 				<input type="hidden" name="thumb_width" value="<?php echo $thumb_width; ?>" id="thumb_width" />
 				<input type="hidden" name="thumb_height" value="<?php echo $thumb_height; ?>" id="thumb_height" />
 				<input type="hidden" name="x1" value="" id="x1" />

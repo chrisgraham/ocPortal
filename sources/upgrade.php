@@ -522,12 +522,12 @@ function up_do_login($message=NULL)
 	{
 		if (!array_key_exists('ftp_folder',$SITE_INFO))
 		{
-			$dr=array_key_exists('DOCUMENT_ROOT',$_SERVER)?$_SERVER['DOCUMENT_ROOT']:(array_key_exists('DOCUMENT_ROOT',$_ENV)?$_ENV['DOCUMENT_ROOT']:'');
+			$dr=ocp_srv('DOCUMENT_ROOT');
 			if (strpos($dr,'/')!==false) $dr_parts=explode('/',$dr); else $dr_parts=explode('\\',$dr);
 			$webdir_stub=$dr_parts[count($dr_parts)-1];
-			$pos=strpos($_SERVER['PHP_SELF'],'upgrader.php');
-			if ($pos===false) $pos=strlen($_SERVER['PHP_SELF']); else $pos--;
-			$ftp_folder='/'.$webdir_stub.substr($_SERVER['PHP_SELF'],0,$pos);
+			$pos=strpos(ocp_srv('SCRIPT_NAME'),'upgrader.php');
+			if ($pos===false) $pos=strlen(ocp_srv('SCRIPT_NAME')); else $pos--;
+			$ftp_folder='/'.$webdir_stub.substr(ocp_srv('SCRIPT_NAME'),0,$pos);
 		} else $ftp_folder=$SITE_INFO['ftp_folder'];
 	}
 	require_lang('installer');

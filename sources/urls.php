@@ -53,22 +53,7 @@ function init__urls()
 function get_self_url_easy()
 {
 	$protocol=((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off'))?'https':'http';
-	if (!isset($_SERVER['HTTP_HOST']))
-	{
-		$domain=get_domain();
-	} else
-	{
-		$domain=$_SERVER['HTTP_HOST'];
-	}
-	$colon_pos=strpos($domain,':');
-	if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-	$self_url=$protocol.'://'.$domain;
-	$port=ocp_srv('SERVER_PORT');
-	if (($port!='') && ($port!='80')) $self_url.=':'.$port;
-	$s=ocp_srv('PHP_SELF');
-	if (substr($s,0,1)!='/') $self_url.='/';
-	$self_url.=$s;
-	if ((array_key_exists('QUERY_STRING',$_SERVER)) && ($_SERVER['QUERY_STRING']!='')) $self_url.='?'.$_SERVER['QUERY_STRING'];
+	$self_url=$protocol.'://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI');
 	return $self_url;
 }
 
@@ -91,12 +76,9 @@ function get_self_url($evaluate=false,$root_if_posted=false,$extra_params=NULL,$
 		return $SELF_URL_CACHED;
 	}
 
-	if ((isset($_SERVER['PHP_SELF'])) || (isset($_ENV['PHP_SELF'])))
+	if (running_script('execute_temp'))
 	{
-		if (running_script('execute_temp'))
-		{
-			return get_self_url_easy();
-		}
+		return get_self_url_easy();
 	}
 
 	if ($extra_params===NULL) $extra_params=array();

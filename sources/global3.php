@@ -1408,10 +1408,17 @@ function ocp_srv($key)
 
 	if ($key=='HTTP_HOST')
 	{
+		if (!empty($_SERVER['HTTP_HOST'])) return $_SERVER['HTTP_HOST'];
+		if (!empty($_ENV['HTTP_HOST'])) return $_ENV['HTTP_HOST'];
+		if (function_exists('get_hostname')) return get_hostname();
+		if (!empty($_SERVER['SERVER_ADDR'])) return $_SERVER['SERVER_ADDR'];
+		if (!empty($_ENV['SERVER_ADDR'])) return $_ENV['SERVER_ADDR'];
+		if (!empty($_SERVER['LOCAL_ADDR'])) return $_SERVER['LOCAL_ADDR'];
+		if (!empty($_ENV['LOCAL_ADDR'])) return $_ENV['LOCAL_ADDR'];
 		return 'localhost';
 	}
 
-	if ($key=='SERVER_ADDR')
+	if ($key=='SERVER_ADDR') // IIS issue
 	{
 		return ocp_srv('LOCAL_ADDR');
 	}
@@ -2688,4 +2695,17 @@ function escapeshellarg_wrap($arg)
 		return escapeshellarg($arg);
 	}
 	return "'".addslashes(str_replace(array(chr(0),"'"),array('',"'\"'\"'"),$arg))."'";
+}
+
+/**
+ * Find whether ocPortal is running on a local network, rather than a live-site.
+ *
+ * @return boolean		If it is running locally
+ */
+function running_locally()
+{
+	return
+		(substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || 
+		(substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || 
+		(in_array(ocp_srv('HTTP_HOST'),array('localhost')));
 }

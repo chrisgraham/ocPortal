@@ -7,26 +7,24 @@ ini_set('allow_url_fopen','1');
 ini_set('display_errors','1');
 error_reporting(E_ALL);
 
-$transcoder_server='http://'.$_SERVER['HTTP_HOST'].str_replace('queue.php','',$_SERVER['SCRIPT_NAME']);
+// This may want hard-coding if it does not detect correctly
+$transcoder_server='http://'.(isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:(function_exists('gethostname')?get_hostname():'localhost')).dirname($_SERVER['SCRIPT_NAME']);
 $liveserver=str_replace('/transcoder','',$transcoder_server);
 
 //mencoder path
 define('MENCODER_PATH','/usr/local/bin/');
 
 //video width to be set
-//define('VIDEO_WIDTH_SETTING',1280); // "720v HDD"
-define('VIDEO_WIDTH_SETTING',600);
+define('VIDEO_WIDTH_SETTING',720);
 
 //video height to be set
-//define('VIDEO_HEIGHT_SETTING',720);
-define('VIDEO_HEIGHT_SETTING',400);
+define('VIDEO_HEIGHT_SETTING',480);
 
 //audio bitrate to be set
 define('AUDIO_BITRATE',192);
 
 //video bitrate to be set
-//define('VIDEO_BITRATE',2000); // Good for 720v
-define('VIDEO_BITRATE',1000);
+define('VIDEO_BITRATE',1500);
 
 /**
  * Find the mime type for the given file extension. It does not take into account whether the file type has been white-listed or not, and returns a binary download mime type for any unknown extensions.

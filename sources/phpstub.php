@@ -6222,4 +6222,17 @@ Not yet in our compatibility list (<=PHP5), but would be disabled if they were..
 
 gethostname (Google AppEngine disallows)
 
+
+NB:
+ Almost always avoid PHP_SELF and SCRIPT_FILENAME and PATH_TRANSLATED. They do not work consistently across platforms and with rewrite rules and are mostly redundant.
+ Instead, use __FILE__ (filesystem path), SCRIPT_NAME (URL path) or REQUEST_URI (URL path and parameters)
+ REQUEST_URI may be wrong, but ocPortal will correct it if it is.
+ Obviously do not rely on REQUEST_URI if you're not sure it is a web-request; use get_base_url()
+
+NB:
+ We should always check both $_SERVER and $_ENV for stuff (usually via ocp_srv) apart from for...
+  argv
+  PHP_AUTH_USER
+  HTTP_CACHE_CONTROL
+  When we know the architecture involved implicitly (e.g. MyOCP, Rackspace Cloud, CloudFlare with Apache)
 */

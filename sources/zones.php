@@ -176,7 +176,7 @@ function get_zone_name()
 	if ($VIRTUALISED_ZONES_CACHE!==false)
 	{
 		$VIRTUALISED_ZONES_CACHE=false;
-		$url_path=dirname(ocp_srv('REQUEST_URI'));
+		$url_path=dirname(ocp_srv('SCRIPT_NAME'));
 		foreach ($SITE_INFO as $key=>$val)
 		{
 			if (($key[0]=='Z') && (substr($key,0,13))=='ZONE_MAPPING_')

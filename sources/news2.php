@@ -269,7 +269,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		generate_resourcefs_moniker('news',strval($id),NULL,NULL,true);
 	}
 
-	if ((function_exists('fsockopen')) && (strpos(@ini_get('disable_functions'),'shell_exec')===false) && (function_exists('xmlrpc_encode'))
+	if ((function_exists('fsockopen')) && (strpos(@ini_get('disable_functions'),'shell_exec')===false) && (function_exists('xmlrpc_encode')))
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -340,7 +340,7 @@ END;
 		dispatch_news_notification($id,$title,$main_news_category_id);
 	}
 
-	if ((!get_mass_import_mode()) && ($validated==1) && (get_option('site_closed')=='0') && (ocp_srv('HTTP_HOST')!='127.0.0.1') && (ocp_srv('HTTP_HOST')!='localhost') && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category_id))))
+	if ((!get_mass_import_mode()) && ($validated==1) && (get_option('site_closed')=='0') && (!$GLOBALS['DEV_MODE']) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category_id))))
 	{
 		register_shutdown_function('send_rss_ping');
 		require_code('news_sitemap');

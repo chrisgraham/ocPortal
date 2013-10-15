@@ -31,7 +31,7 @@ if (strpos($git_result,'git: command not found')!==false)
 // Actualisation
 // =============
 
-if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
+if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST')
 {
 	$git_commit_id=post_param('git_commit_id','');
 

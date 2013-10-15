@@ -142,10 +142,7 @@ function get_afm_form_fields()
 			$ftp_domain=$GLOBALS['SITE_INFO']['ftp_domain'];
 		} else
 		{
-			$domain=ocp_srv('HTTP_HOST');
-			if (substr($domain,0,4)=='www.') $domain=substr($domain,4);
-			$colon_pos=strpos($domain,':');
-			if ($colon_pos!==false) $ftp_domain=substr($domain,0,$colon_pos); else $ftp_domain=$domain;
+			$ftp_domain=get_domain();
 		}
 	}
 
@@ -174,16 +171,16 @@ function get_afm_form_fields()
 			$ftp_directory=$GLOBALS['SITE_INFO']['ftp_directory'];
 		} else
 		{
-			$pos=strpos($_SERVER['PHP_SELF'],'adminzone/index.php');
-			if (($pos===false) && (get_zone_name()!='')) $pos=strpos($_SERVER['PHP_SELF'],get_zone_name().'/index.php');
-			if ($pos===false) $pos=strpos($_SERVER['PHP_SELF'],'data/');
-			if ($pos===false) $pos=strpos($_SERVER['PHP_SELF'],'data_custom/');
-			if ($pos===false) $pos=strpos($_SERVER['PHP_SELF'],'cms/index.php');
-			if ($pos===false) $pos=strpos($_SERVER['PHP_SELF'],'site/index.php');
-			$dr=array_key_exists('DOCUMENT_ROOT',$_SERVER)?$_SERVER['DOCUMENT_ROOT']:(array_key_exists('DOCUMENT_ROOT',$_ENV)?$_ENV['DOCUMENT_ROOT']:'');
+			$pos=strpos(ocp_srv('SCRIPT_NAME'),'adminzone/index.php');
+			if (($pos===false) && (get_zone_name()!='')) $pos=strpos(ocp_srv('SCRIPT_NAME'),get_zone_name().'/index.php');
+			if ($pos===false) $pos=strpos(ocp_srv('SCRIPT_NAME'),'data/');
+			if ($pos===false) $pos=strpos(ocp_srv('SCRIPT_NAME'),'data_custom/');
+			if ($pos===false) $pos=strpos(ocp_srv('SCRIPT_NAME'),'cms/index.php');
+			if ($pos===false) $pos=strpos(ocp_srv('SCRIPT_NAME'),'site/index.php');
+			$dr=ocp_srv('DOCUMENT_ROOT');
 			if (strpos($dr,'/')!==false) $dr_parts=explode('/',$dr); else $dr_parts=explode('\\',$dr);
 			$webdir_stub=$dr_parts[count($dr_parts)-1];
-			$ftp_directory='/'.$webdir_stub.substr($_SERVER['PHP_SELF'],0,$pos);
+			$ftp_directory='/'.$webdir_stub.substr(ocp_srv('SCRIPT_NAME'),0,$pos);
 		}
 	}
 

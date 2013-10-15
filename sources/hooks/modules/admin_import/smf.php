@@ -444,9 +444,6 @@ class Hook_smf
 
 		$avatar_gallery_path=str_replace($boardurl, '', $avatar_gallery_path);
 
-		$host=preg_replace('#\.#','\.',$_SERVER['HTTP_HOST']);
-		$doc_root=$_SERVER['DOCUMENT_ROOT'];
-
 		$forum_dir=preg_replace('#\\\\#','/',$boarddir);
 
 		$avatar_gallery_path=$forum_dir.$avatar_gallery_path;

@@ -68,7 +68,7 @@ function init__lang()
 			$key='page__'.get_zone_name().'__'.get_page_name();
 		} else
 		{
-			$key='script__'.md5(serialize(ocp_srv('PHP_SELF')));
+			$key='script__'.md5(serialize(ocp_srv('SCRIPT_NAME')));
 		}
 		$cache_path=get_custom_file_base().'/caches/lang/'.user_lang().'/'.filter_naughty($key,true).'.lcd';
 		if (!is_null($GLOBALS['MEM_CACHE']))
@@ -268,9 +268,7 @@ function user_lang()
 function get_lang_browser()
 {
 	// In browser?
-	if (array_key_exists('HTTP_ACCEPT_LANGUAGE',$_SERVER)) $http_lang=$_SERVER['HTTP_ACCEPT_LANGUAGE'];
-	elseif (array_key_exists('HTTP_ACCEPT_LANGUAGE',$_ENV)) $http_lang=$_ENV['HTTP_ACCEPT_LANGUAGE'];
-	else $http_lang='';
+	$http_lang=ocp_srv('HTTP_ACCEPT_LANGUAGE');
 	if (strlen($http_lang)>0)
 	{
 		$http_langs=explode(',',$http_lang);
@@ -1192,7 +1190,7 @@ function get_translated_text($entry,$connection=NULL,$lang=NULL,$force=false)
 		$member_id=function_exists('get_member')?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
 		$connection->query_insert('translate',array('id'=>$entry,'source_user'=>$member_id,'broken'=>0,'importance_level'=>3,'text_original'=>'','text_parsed'=>'','language'=>$lang));
 		$msg=do_lang('LANGUAGE_CORRUPTION',strval($entry));
-		if (preg_match('#^localhost[\.\:$]#',ocp_srv('HTTP_HOST'))!=0) fatal_exit($msg);
+		if ($GLOBALS['DEV_MODE']) fatal_exit($msg);
 		require_code('site');
 		attach_message(make_string_tempcode($msg),'warn');
 		return '';

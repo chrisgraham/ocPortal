@@ -135,7 +135,7 @@ class foo
 END;
 
 	$tests[7]=<<<END
-if (\$pos===false) \$pos=strlen(\$_SERVER['PHP_SELF']); else \$pos--;
+if (\$pos===false) \$pos=strlen(\$_SERVER['SCRIPT_NAME']); else \$pos--;
 END;
 
 	$tests[8]=<<<END

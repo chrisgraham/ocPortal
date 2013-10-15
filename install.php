@@ -595,7 +595,7 @@ function step_3()
 	if (($email!='') || ($advertise_on==1))
 	{
 		require_code('files');
-		http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$INSTALL_LANG);
+		http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('SCRIPT_NAME')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$INSTALL_LANG);
 	}
 
 	// Forum chooser
@@ -710,16 +710,7 @@ function step_4()
 	require_code('database/'.post_param('db_type'));
 	$GLOBALS['DB_STATIC_OBJECT']=object_factory('Database_Static_'.post_param('db_type'));
 
-	$domain=ocp_srv('HTTP_HOST');
-	if (substr($domain,0,4)=='www.') $domain=substr($domain,4);
-	$colon_pos=strpos($domain,':');
-	if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-	$pos=strpos(ocp_srv('PHP_SELF'),'install.php');
-	if ($pos===false) $pos=strlen(ocp_srv('PHP_SELF')); else $pos--;
-	$port=ocp_srv('SERVER_PORT');
-	if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
-	$base_url=post_param('base_url','http://'.$domain.$port.substr(ocp_srv('PHP_SELF'),0,$pos));
-	if (substr($base_url,-1)=='/') $base_url=substr($base_url,0,strlen($base_url)-1);
+	$base_url=post_param('base_url','http://'.ocp_srv('HTTP_HOST').dirname(ocp_srv('SCRIPT_NAME')));
 
 	// Our forum is
 	$forum_type=post_param('forum_type');
@@ -760,7 +751,7 @@ function step_4()
 	$cookie_days='120';
 	$use_persistent=false;
 	require_code('version');
-	$table_prefix=($domain=='test.example.com')?($forum_type.'_ocp_'):('ocp_');
+	$table_prefix='ocp_';
 	if (strpos(strtoupper(PHP_OS),'WIN')!==false)
 	{
 		$db_site_host='127.0.0.1';
@@ -800,7 +791,7 @@ function step_4()
 		}
 	}
 
-	$ftp_folder='/'.$webdir_stub.substr(ocp_srv('PHP_SELF'),0,$pos);
+	$ftp_folder='/'.$webdir_stub.basename(ocp_srv('SCRIPT_NAME'));
 	$ftp_domain=$domain;
 
 	$specifics=$GLOBALS['FORUM_DRIVER']->install_specifics();
@@ -2717,7 +2708,7 @@ order allow,deny
 allow from all
 END;
 
-$base=dirname(ocp_srv('PHP_SELF'));
+$base=dirname(ocp_srv('SCRIPT_NAME'));
 $clauses[]=<<<END
 <FilesMatch !"\.(jpg|jpeg|gif|png|ico)$">
 ErrorDocument 404 {$base}/index.php?page=404
@@ -2728,16 +2719,7 @@ END;
 	{
 		global $HTTP_MESSAGE;
 
-		$domain=ocp_srv('HTTP_HOST');
-		if (substr($domain,0,4)=='www.') $domain=substr($domain,4);
-		$colon_pos=strpos($domain,':');
-		if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-		$pos=strpos(ocp_srv('PHP_SELF'),'install.php');
-		if ($pos===false) $pos=strlen(ocp_srv('PHP_SELF')); else $pos--;
-		$port=ocp_srv('SERVER_PORT');
-		if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
-		$base_url=post_param('base_url','http://'.$domain.$port.substr(ocp_srv('PHP_SELF'),0,$pos));
-		if (substr($base_url,-1)=='/') $base_url=substr($base_url,0,strlen($base_url)-1);
+		$base_url=post_param('base_url','http://'.ocp_srv('HTTP_HOST').dirname(ocp_srv('SCRIPT_NAME')));
 
 		foreach ($clauses as $i=>$clause)
 		{

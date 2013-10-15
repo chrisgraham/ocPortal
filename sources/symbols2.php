@@ -179,7 +179,7 @@ function ecv2_VALUE_OPTION($lang,$escaped,$param)
 			if (is_null($value))
 			{
 				$value=isset($param[1])?$param[1]:'';
-				if (($param[0]=='textmate') && ((ocp_srv('HTTP_HOST')=='localhost') && (strpos(ocp_srv('HTTP_USER_AGENT'),'Macintosh')!==false))) $value='1';
+				if (($param[0]=='textmate') && ((running_locally()) && (strpos(ocp_srv('HTTP_USER_AGENT'),'Macintosh')!==false))) $value='1';
 			}
 		}
 	}
@@ -3105,7 +3105,7 @@ function ecv2_LOOP(&$value,$lang,$escaped,$param)
 		{
 			require_code('site');
 			attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$param[0]->evaluate(),'???'),'warn');
-			return '';
+			return;
 		}
 
 		$array_key=$param[0]->evaluate();

@@ -16,7 +16,7 @@ NB: This script must be located in the data_custom directory, otherwise there wi
 NB: There is a requirement that overrides that do code re-writing, must not call ocPortal API funcs, such as require_code. They must use pure PHP to do their string replaces.
 */
 
-$cli=(empty($_SERVER['REMOTE_ADDR']));
+$cli=((php_sapi_name()=='cli') && (empty($_SERVER['REMOTE_ADDR'])) && (empty($_ENV['REMOTE_ADDR'])));
 if (!$cli)
 {
 	header('Content-type: text/plain');

@@ -190,9 +190,10 @@ function code_editor_do_login()
 		$dr=array_key_exists('DOCUMENT_ROOT',$_SERVER)?$_SERVER['DOCUMENT_ROOT']:(array_key_exists('DOCUMENT_ROOT',$_ENV)?$_ENV['DOCUMENT_ROOT']:'');
 		if (strpos($dr,'/')!==false) $dr_parts=explode('/',$dr); else $dr_parts=explode('\\',$dr);
 		$webdir_stub=$dr_parts[count($dr_parts)-1];
-		$pos=strpos($_SERVER['PHP_SELF'],'code_editor.php');
-		if ($pos===false) $pos=strlen($_SERVER['PHP_SELF']); else $pos--;
-		$ftp_folder='/'.$webdir_stub.substr($_SERVER['PHP_SELF'],0,$pos);
+		$script_name=isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
+		$pos=strpos($script_name,'code_editor.php');
+		if ($pos===false) $pos=strlen($script_name); else $pos--;
+		$ftp_folder='/'.$webdir_stub.substr($script_name,0,$pos);
 	} else $ftp_folder=$SITE_INFO['ftp_folder'];
 	echo <<<END
 	<h1 class="screen_title">ocPortal Code Editor</h1>

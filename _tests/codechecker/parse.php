@@ -1453,7 +1453,28 @@ function _parse_parameter()
 		case 'REFERENCE':
 			$variable=pparse__parser_expect('variable');
 			// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-			$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I']);
+			if (pparse__parser_peek()=='EQUAL')
+			{
+				// Variable with type hint and default value. This can only be
+				// NULL
+				pparse__parser_next();		// Consume the EQUAL
+				if (pparse__parser_peek()=='NULL')
+				{
+					// If the default value is NULL, the hint is extended to allow
+					// NULL
+					pparse__parser_next();		// Consume the NULL
+					// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
+					$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I'],'HINT'=>'?'.$hint);
+				}
+				else
+				{
+					parser_error('Default arguments for referenced parameters can only be NULL');
+				}
+			}
+			else
+			{
+				$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I']);
+			}
 			/*$next_2=pparse__parser_peek();		Not valid in all PHP versions
 			if ($next_2=='EQUAL')
 			{

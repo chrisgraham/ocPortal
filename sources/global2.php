@@ -42,12 +42,10 @@ function init__global2()
 
 	@ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
-	// Fixup some inconsistencies in parameterisation on different PHP platforms
-	if ((array_key_exists('SCRIPT_FILENAME',$_SERVER)) && (!array_key_exists('PHP_SELF',$_SERVER))) $_SERVER['PHP_SELF']=$_SERVER['SCRIPT_FILENAME'];
-	elseif ((array_key_exists('SCRIPT_NAME',$_SERVER)) && (defined('HIPHOP_PHP'))) $_SERVER['PHP_SELF']=$_SERVER['SCRIPT_NAME'];
+	// Fixup some inconsistencies in parameterisation on different PHP platforms. See phpstub.php for info on what environmental data we can rely on.
 	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS
 	{
-		$_SERVER['REQUEST_URI']=$_SERVER['PHP_SELF'];
+		$_SERVER['REQUEST_URI']=$_SERVER['SCRIPT_NAME']; // This doesn't include path info after .php like PHP_SELF would, but we don't use that in ocPortal. PHP_SELF is not reliable generally.
 		$first=true;
 		foreach ($_GET as $key=>$val)
 		{
@@ -64,11 +62,12 @@ function init__global2()
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
 	// Closed site message
-	if (((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']!='1')) && (strpos($_SERVER['PHP_SELF'],'upgrader.php')===false))
+	if (((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']!='1')) && (strpos(isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:$_ENV['SCRIPT_NAME'],'upgrader.php')===false))
 	{
 		if ((is_file('closed.html')) || (@is_file('../closed.html')))
 		{
-			if ((@strpos($_SERVER['SERVER_SOFTWARE'],'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
+			$server_software=isset($_SERVER['SERVER_SOFTWARE'])?$_SERVER['SERVER_SOFTWARE']:(isset($_ENV['SERVER_SOFTWARE'])?$_ENV['SERVER_SOFTWARE']:'');
+			if ((strpos($server_software,'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
 			header('Location: '.get_base_url().'closed.html');
 			exit();
 		}
@@ -473,7 +472,7 @@ function fast_spider_cache($bot=true)
 				header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');
 				header('Last-Modified: '.gmdate('D, d M Y H:i:s',$mtime).' GMT');
 
-				$since=ocp_srv('HTTP_IF_MODIFIED_SINCE');
+				$since=isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])?$_SERVER['HTTP_IF_MODIFIED_SINCE']:(isset($_ENV['HTTP_IF_MODIFIED_SINCE'])?$_ENV['HTTP_IF_MODIFIED_SINCE']:'');
 				if ($since!='')
 				{
 					if (strtotime($since)<$mtime)
@@ -771,7 +770,8 @@ function current_script()
 	global $WHAT_IS_RUNNING_CACHE;
 	if ($WHAT_IS_RUNNING_CACHE===NULL)
 	{
-		$stripped_current_url=basename(function_exists('ocp_srv')?ocp_srv('PHP_SELF'):$_SERVER['PHP_SELF']);
+		$script_name=isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
+		$stripped_current_url=basename($script_name);
 		$WHAT_IS_RUNNING_CACHE=substr($stripped_current_url,0,strpos($stripped_current_url,'.'));
 	}
 	return $WHAT_IS_RUNNING_CACHE;
@@ -883,12 +883,27 @@ function get_domain()
 {
 	global $SITE_INFO;
 	$ret=array_key_exists('domain',$SITE_INFO)?$SITE_INFO['domain']:'';
+
+	// Ah, no explicit setting, so derive...
 	if ($ret=='')
 	{
-		if (empty($SITE_INFO['base_url'])) return array_key_exists('HTTP_HOST',$_SERVER)?preg_replace('#^www\.#','',$_SERVER['HTTP_HOST']):'localhost'; // Can't be ocp_srv due to bootstrap order
-		$matches=array();
-		preg_match('#://([^/\#]+)#',$SITE_INFO['base_url'],$matches);
-		$ret=preg_replace('#^www\.#','',$matches[1]);
+		// Derive from base URL
+		if (!empty($SITE_INFO['base_url']))
+		{
+			$matches=array();
+			preg_match('#://([^/\#]+)#',$SITE_INFO['base_url'],$matches);
+			$ret=preg_replace('#^www\.#','',$matches[1]);
+		}
+
+		// Derive from other possibilities. Note that we can't use ocp_srv due to bootstrap order (it's in global3.php)
+		if (!empty($_SERVER['HTTP_HOST'])) return preg_replace('#^www\.#','',$_SERVER['HTTP_HOST']);
+		if (!empty($_ENV['HTTP_HOST'])) return preg_replace('#^www\.#','',$_ENV['HTTP_HOST']);
+		if (function_exists('get_hostname')) return preg_replace('#^www\.#','',get_hostname());
+		if (!empty($_SERVER['SERVER_ADDR'])) return preg_replace('#^www\.#','',$_SERVER['SERVER_ADDR']);
+		if (!empty($_ENV['SERVER_ADDR'])) return preg_replace('#^www\.#','',$_ENV['SERVER_ADDR']);
+		if (!empty($_SERVER['LOCAL_ADDR'])) return preg_replace('#^www\.#','',$_SERVER['LOCAL_ADDR']);
+		if (!empty($_ENV['LOCAL_ADDR'])) return preg_replace('#^www\.#','',$_ENV['LOCAL_ADDR']);
+		return 'localhost';
 	}
 	return $ret;
 }
@@ -1080,12 +1095,9 @@ function get_base_url($https=NULL,$zone_for=NULL)
 	global $SITE_INFO;
 	if ((!isset($SITE_INFO)) || (empty($SITE_INFO['base_url']))) // Try and autodetect the base URL if it's not configured
 	{
-		$domain=ocp_srv('HTTP_HOST');
-		$colon_pos=strpos($domain,':');
-		if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-		$port=ocp_srv('SERVER_PORT');
-		if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
-			$SITE_INFO['base_url']='http://'.$domain.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',str_replace('\\','/',dirname(ocp_srv('PHP_SELF'))))));
+		$domain=isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:(isset($_ENV['HTTP_HOST'])?$_ENV['HTTP_HOST']:'');
+		$script_name=isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
+		$SITE_INFO['base_url']='http://'.$domain.preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($script_name));
 	}
 
 	// Lookup
@@ -1093,7 +1105,9 @@ function get_base_url($https=NULL,$zone_for=NULL)
 	global $CURRENT_SHARE_USER;
 	if ($CURRENT_SHARE_USER!==NULL)
 	{
-		$base_url=preg_replace('#^http://([\w]+\.)?'.preg_quote($SITE_INFO['custom_share_domain'],'#').'#','http://'.ocp_srv('HTTP_HOST'),$base_url);
+		// Put in access domain, in case there is a custom domain attached to the site
+		$domain=isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:(isset($_ENV['HTTP_HOST'])?$_ENV['HTTP_HOST']:'');
+		$base_url=preg_replace('#^http://([\w]+\.)?'.preg_quote($SITE_INFO['custom_share_domain'],'#').'#','http://'.$domain,$base_url);
 	}
 	$found_mapping=false;
 	if ($VIRTUALISED_ZONES_CACHE) // Special searching if we are doing a complex zone scheme
@@ -1572,7 +1586,6 @@ function javascript_tempcode($position=NULL)
  * @param  ?boolean		Whether doing HTTPS (NULL: from what is cached)
  * @param  ?boolean		Whether operating in mobile mode (NULL: from what is cached)
  * @param  ?boolean		Whether to generate the cached file if not already cached (NULL: from what is cached)
- * @return tempcode		The tempcode to tie in the CSS files
  */
 function _javascript_tempcode($j,&$js,$_minify=NULL,$_https=NULL,$_mobile=NULL,$do_enforce=true)
 {
@@ -1743,7 +1756,6 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
  * @param  ?boolean		Whether doing HTTPS (NULL: from what is cached)
  * @param  ?boolean		Whether operating in mobile mode (NULL: from what is cached)
  * @param  boolean		Whether to generate the cached file if not already cached
- * @return tempcode		The tempcode to tie in the CSS files
  */
 function _css_tempcode($c,&$css,&$css_need_inline,$inline=false,$context=NULL,$theme=NULL,$_seed=NULL,$_text_only=NULL,$_minify=NULL,$_https=NULL,$_mobile=NULL,$do_enforce=true)
 {

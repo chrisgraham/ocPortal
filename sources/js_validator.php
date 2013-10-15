@@ -184,17 +184,6 @@ function reset_js_global_variables()
  */
 function check_js($data,$raw_errors=false)
 {
-	if ((strlen($data)>15000) && (preg_match('#^localhost[\.\:$]#',ocp_srv('HTTP_HOST'))!=0) && (function_exists('get_param_integer')) && (get_param_integer('keep_huge',0)==0))
-	{
-		$out=array();
-		$out['line']=0;
-		$out['pos']=0;
-		$out['global_pos']=0;
-		$out['error']='JS: There is a 15KB JS validation limit for this validator';
-		if ($raw_errors) return array(array(0=>$out['error'],'raw'=>true));
-		return array('level_ranges'=>NULL,'tag_ranges'=>NULL,'value_ranges'=>NULL,'errors'=>array($out));
-	}
-
 	global $JS_ERRORS,$JS_TAG_RANGES,$JS_VALUE_RANGES;
 	$JS_ERRORS=array();
 	$JS_TAG_RANGES=array();

@@ -18,6 +18,23 @@
  * @package		core
  */
 
+/**
+ * Find the active domain name.
+ *
+ * @return ID_TEXT		Active domain name
+ */
+function qjs_get_domain()
+{
+	if (!empty($_SERVER['HTTP_HOST'])) return $_SERVER['HTTP_HOST'];
+	if (!empty($_ENV['HTTP_HOST'])) return $_ENV['HTTP_HOST'];
+	if (function_exists('get_hostname')) return get_hostname();
+	if (!empty($_SERVER['SERVER_ADDR'])) return $_SERVER['SERVER_ADDR'];
+	if (!empty($_ENV['SERVER_ADDR'])) return $_ENV['SERVER_ADDR'];
+	if (!empty($_SERVER['LOCAL_ADDR'])) return $_SERVER['LOCAL_ADDR'];
+	if (!empty($_ENV['LOCAL_ADDR'])) return $_ENV['LOCAL_ADDR'];
+	return 'localhost';
+}
+
 @ini_set('zlib.output_compression','On');
 
 header('Pragma: public');
@@ -26,7 +43,7 @@ header('Cache-Control: max-age='.strval(time()+$time));
 header('Expires: '.gmdate('D, d M Y H:i:s',time()+$time).' GMT');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()-$time).' GMT');
 
-$since=isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])?$_SERVER['HTTP_IF_MODIFIED_SINCE']:'';
+$since=isset($_SERVER['SCRIPT_NAME'])?$_SERVER['HTTP_IF_MODIFIED_SINCE']:(isset($_ENV['HTTP_IF_MODIFIED_SINCE'])?$_ENV['HTTP_IF_MODIFIED_SINCE']:'');
 if ($since!='')
 {
 	header('HTTP/1.0 304 Not Modified');
@@ -35,24 +52,8 @@ if ($since!='')
 
 global $FILE_BASE,$SITE_INFO;
 
-$domain=$_SERVER['HTTP_HOST'];
-$colon_pos=strpos($domain,':');
-if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-$port=$_SERVER['SERVER_PORT'];
-if (($port=='') || ($port=='80') || ($port=='443'))
-{
-	$base_url='http://'.$domain.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($_SERVER['PHP_SELF']))));
-} else
-{
-	@include($FILE_BASE.'/_config.php');
-	if (array_key_exists('base_url',$SITE_INFO))
-	{
-		$base_url=$SITE_INFO['base_url'];
-	} else
-	{
-		$base_url='http://'.$domain.':'.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($_SERVER['PHP_SELF']))));
-	}
-}
+$domain=qjs_get_domain();
+$base_url='http://'.$domain.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($_SERVER['SCRIPT_NAME']))));
 
 header('Content-type: text/html');
 @ini_set('ocproducts.xss_detect','0');

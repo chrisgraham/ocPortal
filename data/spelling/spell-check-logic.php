@@ -20,7 +20,7 @@
 	fclose($x);*/
 
 
-if (strpos($_SERVER['PHP_SELF'],'spell-check-logic.php')!==false)
+if (strpos($_SERVER['SCRIPT_NAME'],'spell-check-logic.php')!==false)
 	spellchecklogic();
 
 /**
@@ -311,7 +311,7 @@ function utf8_ord($chr)
  */
 function _utf8_ord($matches)
 {
-	return '&#'.utf8_ord($matches[1]).';';
+	return '&#'.strval(utf8_ord($matches[1])).';';
 }
 
 /**

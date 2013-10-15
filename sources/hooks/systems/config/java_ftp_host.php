@@ -49,7 +49,7 @@ class Hook_config_java_ftp_host
 	 */
 	function get_default()
 	{
-		return ocp_srv('HTTP_HOST');
+		return get_domain();
 	}
 
 }

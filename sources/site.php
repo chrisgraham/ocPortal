@@ -76,12 +76,12 @@ function init__site()
 	require_code('urls');
 	if (can_try_mod_rewrite())
 	{
-		$ruri=ocp_srv('REQUEST_URI');
+		$ruri=ocp_srv('SCRIPT_NAME');
 
 		$url_scheme=get_option('url_scheme');
 		if (($url_scheme=='PG') || ($url_scheme=='HTM'))
 		{
-			if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || ($url_scheme!='PG')) && ((strpos($ruri,'.htm')===false) || ($url_scheme!='HTM')))
+			if ((!headers_sent()) && (running_script('index')) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || ($url_scheme!='PG')) && ((strpos($ruri,'.htm')===false) || ($url_scheme!='HTM')))
 			{
 				set_http_status_code('301');
 				header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
@@ -92,7 +92,7 @@ function init__site()
 	}
 
 	// Search engine having session in URL, we don't like this
-	if ((get_bot_type()!==NULL) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
+	if ((get_bot_type()!==NULL) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
 	{
 		set_http_status_code('301');
 		header('Location: '.get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)));
@@ -104,7 +104,7 @@ function init__site()
 	{
 		global $SITE_INFO;
 		$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
-		if (($access_host!='') && (isset($_SERVER['HTTP_HOST'])))
+		if (($access_host!='') && ((isset($_SERVER['HTTP_HOST'])) || (isset($_ENV['HTTP_HOST']))))
 		{
 			$parsed_base_url=parse_url(get_base_url());
 
@@ -847,7 +847,7 @@ function do_site()
 	// Validation
 	$novalidate=get_param_integer('keep_novalidate',get_param_integer('novalidate',0));
 	$show_edit_links=get_param_integer('show_edit_links',0);
-	if (((in_array(ocp_srv('HTTP_HOST'),array('localhost','test.example.com'))) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) && (($special_page_type=='code') || (($novalidate==0) && (get_option('validation')=='1'))) && ($GLOBALS['REFRESH_URL'][0]=='') && ($show_edit_links==0)) // Not a permission - a matter of performance
+	if ((($GLOBALS['IS_ACTUALLY_ADMIN']) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) && (($special_page_type=='code') || (($novalidate==0) && (get_option('validation')=='1'))) && ($GLOBALS['REFRESH_URL'][0]=='') && ($show_edit_links==0)) // Not a permission - a matter of performance
 	{
 		require_code('view_modes');
 		$out_evaluated=$out->evaluate(NULL);
@@ -946,7 +946,7 @@ function do_site()
 		dispatch_notification('adminzone_frontpage_accessed',NULL,$subject,$mail);
 
 		// Track very basic details of what sites use ocPortal. You can remove if you like.
-		if ((preg_match('#^localhost[\.\:$]?#',ocp_srv('HTTP_HOST'))==0) && (get_option('call_home')=='1'))
+		if ((!running_locally()) && (get_option('call_home')=='1'))
 		{
 			$timeout_before=@ini_get('default_socket_timeout');
 			@ini_set('default_socket_timeout','3');

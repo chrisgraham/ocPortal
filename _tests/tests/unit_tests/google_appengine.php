@@ -28,10 +28,17 @@ class google_appengine_test_set extends ocp_test_case
 			if ((substr($file,-4)=='.php') && (!should_ignore_file($file,IGNORE_BUNDLED_VOLATILE | IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS)))
 			{
 				$contents=file_get_contents(get_file_base().'/'.$file);
+
 				if (preg_match('#preg_(replace|replace_callback|match|match_all|grep|split)\(\'(.)[^\']*(?<!\\\\)\\2[^\']*e#',$contents)!=0)
 				{
 					$this->assertTrue(false,'regexp /e not allowed (in '.$file.')');
 				}
+
+				if ((strpos($contents,'\'PHP_SELF\'')!==false) && (basename($file)!='phpstub.php') && (basename($file)!='lost_password.php'))
+					$this->assertTrue(false,'PHP_SELF does not work stably across platforms (in '.$file.')');
+
+				if ((strpos($contents,'\'SCRIPT_FILENAME\'')!==false) && (basename($file)!='phpstub.php'))
+					$this->assertTrue(false,'SCRIPT_FILENAME does not work stably across platforms (in '.$file.')');
 			}
 		}
 	}

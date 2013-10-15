@@ -49,7 +49,7 @@ class Hook_config_site_closed
 	 */
 	function get_default()
 	{
-		if ((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost')))) return '0'; return '1';
+		return $GLOBALS['DEV_MODE']?'0':'1';
 	}
 
 	/**

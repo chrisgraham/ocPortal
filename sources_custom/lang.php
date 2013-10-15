@@ -381,7 +381,7 @@ if (!function_exists('get_translated_text'))
 			$member_id=function_exists('get_member')?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$connection->query_insert('translate',array('id'=>$entry,'source_user'=>$member_id,'broken'=>0,'importance_level'=>3,'text_original'=>'','text_parsed'=>'','language'=>$lang));
 			$msg=do_lang('LANGUAGE_CORRUPTION',strval($entry));
-			if (preg_match('#^localhost[\.\:$]#',ocp_srv('HTTP_HOST'))!=0) fatal_exit($msg);
+			if ($GLOBALS['DEV_MODE']) fatal_exit($msg);
 			require_code('site');
 			attach_message(make_string_tempcode($msg),'warn');
 			return '';

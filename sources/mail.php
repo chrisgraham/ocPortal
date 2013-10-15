@@ -747,7 +747,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			if (get_value('manualproc_mail')==='1')
 			{
 				require_code('mail2');
-				manualproc_mail($to,$subject,$message,$additional_headers);
+				manualproc_mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
 			} else
 			{
 				if ((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ($additional==''))
