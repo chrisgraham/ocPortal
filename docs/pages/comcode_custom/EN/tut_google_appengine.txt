@@ -1,41 +1,184 @@
-[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Installing on Google AppEngine[/title]
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Installing on Google App Engine[/title]
 
-ocPortal is very heavily optimised so that pages load as quickly as possible. This tutorial will provide information on techniques and issues for increasing throughput, so that your site may support more visitors.
+ocPortal can run on Google App Engine (GAE). Google App Engine is a cloud hosting service designed for high scalability. Unlike almost all other cloud services, it does not require significant preparation and ongoing maintenance in order to scale (you do not need to set up Virtual Machine images, or manually start/stop server instances).
+Most people don't realise how much work the normal "cloud" services are to properly utilise, as the marketing can be really very misleading, and successful customers are development teams rather than webmasters.
+The easy ocPortal scalability with App Engine is possible because it is a locked-down environment. Essentially the ocPortal developers have done up-front work to ensure ocPortal meets certain restraints that allow Google to automatically copy things across different servers without it being noticeable.
 
-If you have need to be able to take particularly high load, considering getting [page="site:support"]the support of the experts[/page].
+All the above said, hosting a large scale cloud deployment is still not simple. Some restraints will affect you, and you will need to be comfortable working on the command line, and staging your changes on a local development machine. We'll save you having to have a programming/IT team, or the need to fork ocPortal, but it still requires some level of expertise.
+However, if your at the level of needing this kind of scaling rather than typical hosting or a dedicated server (or virtual machine, such as on Amazon Cloud via Bitnami) then you should be successful enough to invest in some expert set up.
+
+This tutorial explains how the ocPortal GAE support works.
 
 [contents]decimal,lower-alpha[/contents]
 
-The following addons are not supported/useful on Google App Engine and must be uninstalled:
- - installer (serves no purpose on any ocPortal site, once install has finished)
- - devguide (generally not useful)
- - backup (not supported/relevant, use the GAE database backup tools)
- - uninstaller (not supported)
- - ldap (not supported)
- - themewizard (themeing on a live site is ill-advised, especially on the scale of the theme-wizard)
- - setupwizard (not supported)
- - stats (not supported due to the resource-usage-pattern, use Google Analytics)
- - import (not supported)
+[title="2"]Limitations[/title]
 
-Note that the purpose of recommending uninstallation is actually primarily because AppEngine has some limits. We push up against these limits and hence need to get rid of redundant code to stay under them.
+The following are known limitations with Google App Engine:
+ - Individual non-bundled ocPortal addons, or third party frameworks, may or may not work. The ocPortal development tools can scan for issues but generally most programmers will not be developing with App Engine's constraints in mind. ocProducts can bring non-bundled addons up to scratch in most cases, under our development services. If possible/ideally we might try and contribute improvements back into "upstream" to the actual project, but sometimes we may feel it better to just fork our own version of the project.
+ - LDAP will not work (LDAP would typically be used on a local corporate network anyway).
+ - There is a 32MB upload limit, which means uploading large files is not realistic. This could be worked around, [url="with investment"]http://ocportal.com/tracker/view.php?id=1426[/url].
+ - FFMPEG will not run. You would need to use a third-party transcoding service, or syndicate to YouTube (note: that addon is not currently tested on GAE). Most users, however, will be fine with ocPortal's support for integrating videos that were separately uploaded to Youtube.
+ - Outgoing web requests cannot exceed 10MB, which limits some external transcoding and syndication options.
+ - There is a 32MB response size limit. This should not generally be a problem for most users, but worth noting.
+ - You will need to maintain a local development site, and won't be able to do things such as themeing or addon management directly on the live site.
+ - You won't be able to have the [i]full[/i] set of ocPortal addons installed, due to size constraints. This should generally not be a problem, and we provide advice on it in this tutorial.
+ - While we are making sure ocPortal runs well on Google App Engine (i.e. stably, without special patches), initial set up, and some maintenance tasks, are inherently very complex. If you are not a programmer, you will need one to perform some things for you.
+
+[title="2"]Costs[/title]
+
+Google App Engine is charged based on usage. Google will provide documents that explain what is chargeable, and by how much.
+
+It is hard to compare GAE costs to those of shared hosting. Typically a shared host will assume you won't max out your resource allocation fully (and if you tried, they'd ban you, often regardless of their stated offering). Therefore you would need to compare averaged typical resource usage on shared hosting, to the costs on GAE.
+Anecdotally, we have heard the costs are similar, but we have not tested this. It will of course vary greatly on a case-by-case basis.
+
+In a sense it is a mute comparison, because shared hosting cannot scale and hence you have no real choice other than to use a different cloud solution (where pricing is also complex) or your own/rented hardware.
+
+From a cost-origin point of view, shared hosting pricing benefits from its relative simplicity (no high R&D costs, relatively unskilled support personnel) and the relatively low usage the average customer has (hence subsidisation is happening), while cloud hosting benefits from its low-service nature. Both the shared hosting and cloud hosting markets are extremely competitive.
+
+You should obviously keep track of your costs. And, obviously the ocPortal developers cannot put any guarantee on how much things might cost. Be advised: even if there is a bug that uses run-away resources, we cannot be held liable for those costs. Google probably have options to put a ceiling on resource usage, blocking requests that go above this -- but we have not researched this specifically, so you should check the options Google provides.
+
+[title="2"]Basic process[/title]
+
+You will need to have a local development machine, in addition to your live application. Your initial site setup will be done locally, and then you will deploy it live.
+
+You will need to install the [url="Google App Engine PHP SDK"]https://developers.google.com/appengine/docs/php/gettingstarted/installing[/url] on your local development machine. Do this before ocPortal installation.
+
+[title="2"]ocPortal installation[/title]
+
+Extract the ocPortal manual installation package to a directory on your development machine.
+
+Start up the Google App Engine launcher.
+
+(the exact tool/process may depend on what platform you are using -- i.e. Windows/Linux/Mac. These instructions have been tested on a Mac).
+
+[media width="150" description="The application launcher, after the application has been created" float="right"]data_custom/images/docs/appengine_launcher.png[/media]
+Create a new application in the launcher:
+ - Set the "Application ID" to the name of the directory you extracted ocPortal into.
+ - Set the "Application Directory" to be the parent of that directory.
+ - Set the "Runtime" to PHP.
+ - Leave the port settings alone.
+
+Select your application row in the list of applications, and click "Run".
+
+In your web browser, go to [tt]http://localhost:8080/install.php[/tt]
+
+Install ocPortal.
+TODO: What settings?
+
+[title="2"]Structural configuration[/title]
+
+Continue through to the ocPortal Setup Wizard. Go through it as normal, but you will need to make some particular choices.
+
+[title="3"]Setup Wizard: Step 4[/title]
+
+The following addons are not supported/useful on Google App Engine and should be uninstalled:
+ - Installer (serves no purpose on any ocPortal site, once install has finished)
+ - Code Editor (not supported)
+ - Config Editor (not supported)
+ - Devguide (generally not useful)
+ - Backup (not supported/relevant, use the GAE database backup tools)
+ - Uninstaller (not supported)
+ - LDAP (not supported)
+ - Themewizard (themeing on a live site is ill-advised, especially on the scale of the theme-wizard)
+ - Setupwizard (not supported)
+ - Stats (not supported due to the resource-usage-pattern, use Google Analytics)
+ - Import (not supported)
+
+Note that the purpose of recommending uninstallation is actually primarily because App Engine has some limits. We push up against these limits and hence need to get rid of redundant code to stay under them.
 
 Even after removing these addons, you will still need to clear a bit more out to make sure you have fewer than 1000 files in the [tt]themes/default/templates[/tt] directory.
 Remove one or two of the following addons (your choice which):
- - calendar
- - chat
- - ecommerce
- - shopping
- - galleries
- - pointstore
+ - Calendar
+ - Chat
+ - eCommerce
+ - Shopping
+ - Galleries
+ - Pointstore
 If you only removed one of the above, also remove one of the following:
- - authors
- - banners
- - downloads
- - newsletter
- - polls
- - quizzes
- - tickets
+ - Authors
+ - Banners
+ - Downloads
+ - Newsletter
+ - Polls
+ - Quizzes
+ - Tickets
  - wiki
 (Of course, you may remove more if you wish, or other addons)
 
 If you find it annoying that you cannot have every ocPortal addon when using Google App Engine, you should consider that good sites are streamlined; very few (if any) websites should contain every ocPortal feature.
+
+[title="2"]Staging configuration[/title]
+
+You should do certain tasks on your local development machine:
+ - Themeing
+ - Addon management (installing/uninstalling)
+ - Debranding
+ - Adding/renaming/deleting zones
+These tasks need doing locally because you cannot manipulate the filesystem on the live application. Once it is live, the main-structure/code of the website is expected to not change outside a deployment. It's a good habit to maintain generally for a large-scale site, as it enforces discipline.
+
+You may also wish to consider doing the following locally, for reasons of performance:
+ - Edit Comcode pages
+ - Language editing
+(remote ocPortal custom files will go through Cloud Storage, which may have increased latency than if stored directly in the deployed application)
+
+Things like menu editing, or adding content, would primarily be done on the live site directly. With investment we would/will continue to improve ocPortal's staging tools (see the [page="_SEARCH:tut_repository"]Repository tutorial[/page]), but at this time we cannot necessarily confirm they will work with GAE or fit into a smooth staging to live publishing process. Our primary aim has been getting the challenge of basic support working so that we can then work on smoothing over daily usage as we find useful.
+You could consider regularly copying the live Cloud Database back to your staging site and testing new content locally, before recreating your actions manually onto the live site. This isn't as bad as it sounds for most kinds of content, as the actual clicks are minimal compared to the time actually producing content.
+
+[title="2"]Deployment[/title]
+
+See the Google documentation on [url="how to set up your live application and how to deploy"]https://developers.google.com/appengine/docs/php/gettingstarted/uploading[/url].
+
+TODO: How do we upload initial database?
+
+[title="2"]Late structural changes[/title]
+
+If you forget to do something before you deploy, or if new development has happened, you can always re-deploy later.
+
+If you are going to uninstall/install an addon, you should generally go through this process:
+ - Close the live site temporarily
+ - Download the live Cloud Database and load it into your development machine
+ - Perform the action on your development machine
+ - Do a code deploy
+ - Copy the Cloud database back to live
+ - Re-open the live site
+This process is admittedly cumbersome and time-consuming, but not wholly unreasonable: if you are working at a multi-server scale this kind of thing should be a part of your development process anyway.
+
+That said, down-time is bad. It may not strictly be always necessary. You can uninstall modules and blocks on the live site, then deploy the code after doing a full uninstall locally. Generally this will work, but it requires a programmers insight in terms of knowing exactly what uninstall code is being triggered. You'd still have to close the live site for a time, to stop the modules/blocks automatically reinstalling.
+
+The process of automatic module/block installation/upgrading is actually key to the deployment process. You should not generally have to think about manually making Cloud Database changes because you can put migration code into blocks/modules. This is essentially the same thing as the ocPortal developers do between ocPortal versions (at no point [generally] does anyone need to manually go into their database to change it).
+
+[title="3"]ocPortal major upgrades[/title]
+
+Doing a full ocPortal upgrade is a little bit more thorny than being a developer and deploying some code enhancements.
+
+Note that we would generally not expect non-programmers to be doing this kind of thing. Therefore please consult outside help if you are not one.
+
+You could do an upgrade two ways...
+
+[title="4"]Fully local upgrade (simplest, longest)[/title]
+
+Go through this process:
+ - Close the live site temporarily
+ - Download the live Cloud Database and load it into your development machine
+ - Perform the upgrade on your development machine
+ - Do a code deploy
+ - Copy the Cloud database back to live
+ - Re-open the live site
+
+[title="4"]Split upgrade[/title]
+
+Go through this process:
+ - Perform the upgrade on your development machine
+ - Close the live site temporarily
+ - Do a code deploy
+ - Go into the upgrader on live, and perform all the steps except the file transfer one (as you have just done that when you re-deployed)
+ - Re-open the live site
+
+[title="2"]Notes to programmers[/title]
+
+The GAE API installs a version of PHP, but it does not have the limitations of the live version of PHP. Therefore be careful that you apply to all the coding standards. In particular, ensure any custom files are written to using ocPortal's [tt]get_custom_file_base[/tt] function (which will be mapped to Google Cloud Storage).
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_optimisation"]Optimising[/page]
+ - [page="_SEARCH:tut_repository"]The Repository[/page]

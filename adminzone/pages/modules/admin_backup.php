@@ -126,6 +126,8 @@ class Module_admin_backup
 	 */
 	function run()
 	{
+		appengine_general_guard();
+
 		require_code('files');
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));

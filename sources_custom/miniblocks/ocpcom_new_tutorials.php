@@ -428,8 +428,8 @@ function get_tutorial_info($tut)
 
 		case 'google_appengine':
 			$result=array(
-				"Installing on Google AppEngine",
-				"How to install ocPortal on Google AppEngine, for automatic cloud scaling.",
+				"Installing on Google App Engine",
+				"How to install ocPortal on Google App Engine, for automatic cloud scaling.",
 				"Oct 2013",
 				"red",
 			); break;

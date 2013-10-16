@@ -1150,8 +1150,7 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 
 	global $SITE_INFO;
 	$prefer_direct_code_call=$prefer_direct_code_call || ((isset($SITE_INFO['prefer_direct_code_call'])) && ($SITE_INFO['prefer_direct_code_call']=='1'));
-	$hphp=defined('HIPHOP_PHP');
-	if (($hphp) || ($prefer_direct_code_call))
+	if ((HIPHOP_PHP) || ($prefer_direct_code_call))
 	{
 		global $CLASS_CACHE;
 		if (isset($CLASS_CACHE[$path]))
@@ -1159,13 +1158,13 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 			$new_classes=$CLASS_CACHE[$path];
 		} else
 		{
-			if (!$hphp && $class_name===NULL) $classes_before=get_declared_classes();
+			if (!HIPHOP_PHP && $class_name===NULL) $classes_before=get_declared_classes();
 			$require_path=preg_replace('#^'.preg_quote(get_file_base()).'/#','',preg_replace('#^'.preg_quote(get_file_base()).'/((sources)|(sources\_custom))/(.*)\.php#','${4}',$path));
 			require_code($require_path);
-			if (!$hphp && $class_name===NULL) $classes_after=get_declared_classes();
+			if (!HIPHOP_PHP && $class_name===NULL) $classes_after=get_declared_classes();
 			if ($class_name===NULL)
 			{
-				$new_classes=$hphp?array():array_values(array_diff($classes_after,$classes_before));
+				$new_classes=HIPHOP_PHP?array():array_values(array_diff($classes_after,$classes_before));
 				if (count($new_classes)==0) // Ah, HipHop PHP's AllVolatile is probably not enabled
 				{
 					$matches=array();

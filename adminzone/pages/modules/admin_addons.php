@@ -387,6 +387,8 @@ class Module_admin_addons
 	 */
 	function addon_import()
 	{
+		appengine_live_guard();
+
 		require_code('form_templates');
 
 		$fields=new ocp_tempcode();
@@ -429,6 +431,8 @@ class Module_admin_addons
 	 */
 	function _addon_import()
 	{
+		appengine_live_guard();
+
 		require_code('uploads');
 
 		$url_map=array('page'=>'_SELF','type'=>'multi_action');
@@ -464,6 +468,8 @@ class Module_admin_addons
 	 */
 	function multi_action()
 	{
+		appengine_live_guard();
+
 		$warnings=new ocp_tempcode();
 		$install_files=new ocp_tempcode();
 		$uninstall_files=new ocp_tempcode();
@@ -517,6 +523,8 @@ class Module_admin_addons
 	 */
 	function _multi_action()
 	{
+		appengine_live_guard();
+
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		require_code('abstract_file_manager');
@@ -575,6 +583,8 @@ class Module_admin_addons
 	 */
 	function addon_install()
 	{
+		appengine_live_guard();
+
 		$file=get_param('file');
 		list($warnings,$files,$info)=inform_about_addon_install($file);
 
@@ -604,6 +614,8 @@ class Module_admin_addons
 	 */
 	function _addon_install()
 	{
+		appengine_live_guard();
+
 		require_code('abstract_file_manager');
 		force_have_afm_details();
 
@@ -646,6 +658,8 @@ class Module_admin_addons
 	 */
 	function addon_uninstall()
 	{
+		appengine_live_guard();
+
 		$name=get_param('name');
 
 		list($warnings,$files)=inform_about_addon_uninstall($name);
@@ -662,6 +676,8 @@ class Module_admin_addons
 	 */
 	function _addon_uninstall()
 	{
+		appengine_live_guard();
+
 		require_code('abstract_file_manager');
 		force_have_afm_details();
 
@@ -709,6 +725,8 @@ class Module_admin_addons
 	 */
 	function addon_export()
 	{
+		appengine_live_guard();
+
 		require_code('files');
 
 		// Lang packs
@@ -827,6 +845,8 @@ class Module_admin_addons
 	 */
 	function _addon_export()
 	{
+		appengine_live_guard();
+
 		$hidden=build_keep_post_fields();
 
 		$theme=get_param('theme',NULL,true);
@@ -958,6 +978,8 @@ class Module_admin_addons
 	 */
 	function __addon_export()
 	{
+		appengine_live_guard();
+
 		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',post_param('name'))).date('-dmY-Hm',time()).'.tar';
 
 		$files=array();

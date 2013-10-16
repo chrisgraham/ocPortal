@@ -177,7 +177,7 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
 						if (is_null($entrypoints))
 						{
 							$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/'.$page_type.'/'.$page.'.php',true);
-							if ((!defined('HIPHOP_PHP')) && ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') || (get_option('has_low_memory_limit')==='1')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_crud_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
+							if ((!HIPHOP_PHP) && ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') || (get_option('has_low_memory_limit')==='1')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_crud_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
 							{
 								$new_code=str_replace(',parent::get_entry_points()','',str_replace('parent::get_entry_points(),','',$__entrypoints[0]));
 								if (strpos($new_code,'parent::')!==false) continue;

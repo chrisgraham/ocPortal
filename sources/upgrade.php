@@ -12,7 +12,6 @@
 
 */
 
-
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -133,8 +132,15 @@ function upgrade_script()
 	<h2>{$l_maintenance}&hellip;</h2><ul>
 		<li>{$l_clear_caches}</li>";
 					if (!is_suexec_like()) echo "
+					";
+					if (GOOGLE_APPENGINE)
+					{
+						echo "
 		<li>{$l_check_permissions}</li>
 		<li>{$l_fix_permissions}</li>
+						";
+					}
+					echo "
 	</ul>";
 
 					echo "
@@ -207,6 +213,8 @@ function upgrade_script()
 					break;
 
 				case 'file_upgrade':
+					appengine_live_guard();
+
 					if (get_param('tar_url','')=='') echo do_lang('FU_FILE_UPGRADE_INFO');
 					echo do_lang('FU_FILE_UPGRADE_INFO_MANUAL');
 					echo '<form title="'.do_lang('PROCEED').'" enctype="multipart/form-data" action="upgrader.php?type=_file_upgrade" method="post">'.post_fields_relay();
@@ -221,6 +229,8 @@ function upgrade_script()
 					break;
 
 				case '_file_upgrade':
+					appengine_live_guard();
+
 					require_code('tar');
 					if (function_exists('set_time_limit')) @set_time_limit(0);
 					if ((post_param('url','')=='') && ((ocp_srv('HTTP_HOST')=='ocportal.com') || ($GLOBALS['DEV_MODE'])))
@@ -435,6 +445,8 @@ function upgrade_script()
 					break;
 
 				case 'theme_upgrade':
+					appengine_live_guard();
+
 					echo upgrade_themes();
 					break;
 
@@ -996,7 +1008,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		$matches=array();
 		if (preg_match('#function get_file_list\(\)\s*\{([^\}]*)\}#',$hook_file,$matches)!=0)
 		{
-			if (!defined('HIPHOP_PHP'))
+			if (!HIPHOP_PHP)
 			{
 				$files_to_check=array_merge($files_to_check,eval($matches[1]));
 			} else

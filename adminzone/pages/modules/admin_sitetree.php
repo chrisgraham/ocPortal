@@ -534,6 +534,8 @@ class Module_admin_sitetree
 
 		if ($afm_needed)
 		{
+			appengine_live_guard();
+
 			require_code('abstract_file_manager');
 			force_have_afm_details();
 		}
@@ -642,6 +644,8 @@ class Module_admin_sitetree
 
 		if ($afm_needed)
 		{
+			appengine_live_guard();
+
 			require_code('abstract_file_manager');
 			force_have_afm_details();
 		}

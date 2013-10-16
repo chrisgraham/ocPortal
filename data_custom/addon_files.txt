@@ -4212,6 +4212,7 @@ testing_platform
  - _tests/tests/unit_tests/resource_fs.php
  - _tests/tests/unit_tests/google_appengine.php
  - _tests/tests/unit_tests/tutorials_all_linked.php
+ - _tests/tests/unit_tests/addon_setupwizard.php
 
 weather
 -------

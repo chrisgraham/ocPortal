@@ -113,7 +113,7 @@ function require_code($codename,$light_exit=false)
 			{
 				$functions_before=get_defined_functions();
 				$classes_before=get_declared_classes();
-				if (defined('HIPHOP_PHP'))
+				if (HIPHOP_PHP)
 				{
 					hhvm_include($path_a); // Include our override
 				} else
@@ -168,7 +168,7 @@ function require_code($codename,$light_exit=false)
 
 				if (!$doing_code_modifier_init && !$overlaps) // To make stack traces more helpful and help with opcode caching
 				{
-					if (defined('HIPHOP_PHP'))
+					if (HIPHOP_PHP)
 					{
 						hhvm_include($path_b);
 					} else
@@ -200,7 +200,7 @@ function require_code($codename,$light_exit=false)
 					}
 				} else
 				{
-					if (defined('HIPHOP_PHP'))
+					if (HIPHOP_PHP)
 					{
 						hhvm_include($path_b);
 					} else
@@ -219,7 +219,7 @@ function require_code($codename,$light_exit=false)
 					}
 				} else
 				{
-					if (defined('HIPHOP_PHP'))
+					if (HIPHOP_PHP)
 					{
 						hhvm_include($path_a);
 					} else
@@ -241,7 +241,7 @@ function require_code($codename,$light_exit=false)
 				}
 			} else
 			{
-				if (defined('HIPHOP_PHP'))
+				if (HIPHOP_PHP)
 				{
 					hhvm_include($path_a);
 				} else
@@ -285,7 +285,7 @@ function require_code($codename,$light_exit=false)
 		} else
 		{
 			$php_errormsg='';
-			if (defined('HIPHOP_PHP'))
+			if (HIPHOP_PHP)
 			{
 				@hhvm_include($path_b);
 			} else
@@ -534,9 +534,9 @@ if (count($SITE_INFO)==0)
 	critical_error('INFO.PHP_CORRUPTED');
 }
 
-// Are we in a compiled version of PHP?
-if (strpos(PHP_VERSION,'hiphop')!==false)
-	define('HIPHOP_PHP','1');
+// Are we in a special version of PHP?
+define('HIPHOP_PHP',strpos(PHP_VERSION,'hiphop')!==false);
+define('GOOGLE_APPENGINE',isset($_SERVER['APPLICATION_ID']));
 
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.
 

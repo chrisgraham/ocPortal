@@ -89,6 +89,8 @@ class Module_admin_setupwizard
 	 */
 	function run()
 	{
+		appengine_live_guard();
+
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->step1();
@@ -271,6 +273,48 @@ class Module_admin_setupwizard
 			$addon_list_advanced_on_by_default=array();
 		}
 
+		/*$addon_list_on_by_default=array(	These will be put on in individual Setup Wizard profiles; we list them here just so our addon_setupwizard unit test can ensure we haven't forgotten to consider their status
+			'aggregate_types',
+			'authors',
+			'calendar',
+			'chat',
+			'community_billboard',
+			'content_privacy',
+			'content_reviews',
+			'debrand',
+			'downloads',
+			'forum_blocks',
+			'galleries',
+			'guestbook',
+			'iotds',
+			'match_key_permissions',
+			'news',
+			'newsletter',
+			'ocf_clubs',
+			'ocf_contact_member',
+			'ocf_forum',
+			'ocf_member_photos',
+			'ocf_member_titles',
+			'ocf_multi_moderations',
+			'ocf_post_templates',
+			'ocf_reported_posts',
+			'ocf_signatures',
+			'ocf_warnings',
+			'points',
+			'pointstore',
+			'polls',
+			'quizzes',
+			'random_quotes',
+			'realtime_rain',
+			'recommend',
+			'shopping',
+			'ssl',
+			'tickets',
+			'welcome_emails',
+			'wiki',
+			'zone_logos',
+		);*/
+
 		// These are on by default regardless of install profile. It's useful, because we don't want install profiles to have to be too prescriptive, and we want old ones to keep working well even if new addons have been introduced.
 		if (!is_null($addon_list_on_by_default))
 		{
@@ -319,7 +363,10 @@ class Module_admin_setupwizard
 			'linux_helper_scripts',
 			'windows_helper_scripts',
 			'weather',
+			'xml_fields',
 			'users_online_block',
+			'news_shared',
+			'filedump',
 			'plupload', // this will be downloaded as it is not bundled, for licencing reasons
 			'getid3', // this will be downloaded as it is not bundled, for licencing reasons
 		));
@@ -342,6 +389,7 @@ class Module_admin_setupwizard
 			'bookmarks',
 			'devguide',
 			'supermember_directory',
+			'ldap',
 			'sms',
 			'printer_friendly_block',
 			'oc_data_map', // this will be downloaded as it is not bundled
@@ -349,6 +397,8 @@ class Module_admin_setupwizard
 			'facebook_support', // this will be downloaded as it is not bundled
 			'twitter_support', // this will be downloaded as it is not bundled
 		);
+		if (GOOGLE_APPENGINE)
+			$addon_list_advanced_off_by_default[]='google_appengine';
 
 		// Do we need to download any from ocPortal.com?
 		$GLOBALS['DEV_MODE']=false;

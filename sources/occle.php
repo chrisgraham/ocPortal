@@ -1222,7 +1222,7 @@ class virtual_bash
 			}
 			else $occle_state_code_diff=array();
 
-			if (!defined('HIPHOP_PHP'))
+			if (!HIPHOP_PHP)
 			{
 				foreach ($occle_state_diff as $occle_key=>$occle_val)
 				{

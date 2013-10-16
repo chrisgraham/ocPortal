@@ -48,7 +48,7 @@ class Hook_addon_registry_google_appengine
 	 */
 	function get_description()
 	{
-		return 'Support for deploying to Google AppEngine (for developers).';
+		return 'Support for deploying to Google App Engine (for developers).';
 	}
 
 	/**
@@ -87,6 +87,8 @@ class Hook_addon_registry_google_appengine
 		return array(
 			'sources/hooks/systems/addon_registry/google_appengine.php',
 			'app.yaml',
+			'data/modules/google_appengine/index.html',
+			'data/modules/google_appengine/php.ini',
 		);
 	}
 

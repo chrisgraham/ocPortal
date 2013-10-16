@@ -116,6 +116,8 @@ class Hook_html_site
 	 */
 	function import_pages($db,$table_prefix,$file_base)
 	{
+		appengine_live_guard();
+
 		require_code('files2');
 		$files=@get_directory_contents($file_base);
 

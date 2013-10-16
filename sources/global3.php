@@ -159,6 +159,8 @@ function is_suexec_like()
 {
 	if (running_script('webdav')) return true; // Has to assume so, as cannot intercede
 
+	if (GOOGLE_APPENGINE) return false;
+
 	return (((function_exists('posix_getuid')) && (strpos(@ini_get('disable_functions'),'posix_getuid')===false) && (!isset($_SERVER['HTTP_X_MOSSO_DT'])) && (is_integer(@posix_getuid())) && (@posix_getuid()==@fileowner(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))))
 	|| (is_writable_wrap(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))));
 }
@@ -2708,4 +2710,32 @@ function running_locally()
 		(substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || 
 		(substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || 
 		(in_array(ocp_srv('HTTP_HOST'),array('localhost')));
+}
+
+/**
+ * Exit if we are running on a Google App Engine application (live or development).
+ */
+function appengine_general_guard()
+{
+	if (GOOGLE_APPENGINE)
+		warn_exit(do_lang_tempcode('NOT_ON_GOOGLE_APPENGINE'));
+}
+
+/**
+ * Find if we are running on a live Google App Engine application.
+ *
+ * @return boolean		If it is running as a live Google App Engine application
+ */
+function appengine_is_live()
+{
+	return ((GOOGLE_APPENGINE) && (!is_writeable(get_file_base().'/index.php')));
+}
+
+/**
+ * Exit if we are running on a live Google App Engine application.
+ */
+function appengine_live_guard()
+{
+	if (appengine_is_live())
+		warn_exit(do_lang_tempcode('NOT_ON_LIVE_GOOGLE_APPENGINE'));
 }

@@ -60,6 +60,8 @@ class Module_admin_debrand
 	 */
 	function pre_run()
 	{
+		appengine_live_guard();
+
 		$type=get_param('type','misc');
 
 		require_lang('debrand');

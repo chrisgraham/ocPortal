@@ -41,7 +41,7 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 		$matches=array();
 		if (preg_match('#function get_file_list\(\)\s*\{([^\}]*)\}#',$hook_file,$matches)!=0)
 		{
-			if (!defined('HIPHOP_PHP'))
+			if (!HIPHOP_PHP)
 			{
 				$addon_files=eval($matches[1]);
 			} else

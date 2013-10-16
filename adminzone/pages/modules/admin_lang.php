@@ -675,6 +675,8 @@ msgstr ""
 		$custom_dir=get_custom_file_base().'/lang_custom/'.$lang;
 		if (!file_exists($custom_dir))
 		{
+			appengine_live_guard();
+
 			require_code('abstract_file_manager');
 			force_have_afm_details();
 

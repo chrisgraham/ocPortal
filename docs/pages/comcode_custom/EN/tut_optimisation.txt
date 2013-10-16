@@ -47,12 +47,12 @@ ocPortal is not designed to "cache everything as it will be displayed" because t
 
 [title="2"]General tips[/title]
 
- - If you are using a particularly visually complex block (e.g. deep pop-out menus) then use the 'quick_cache' block option on it if possible.
+ - If you are using a particularly visually complex block (e.g. deep pop-out menus) then use the 'quick_cache' block option on it if possible. The defer-loading option is also useful, although it puts a requirement on Javascript.
  - Avoid making very long Comcode pages if they are just going to be static for all users. Ideally for usability pages should not be very long, but there are cases where you may choose for them to be (e.g. large glossaries). You can put [tt]{$,page hint: no_smart_conversion}[/tt] into a Comcode page to prevent the WYSIWYG editor converting it to Comcode and otherwise use the Comcode 'html' tag to include pure HTML content.
  - If you get a lot of 404 errors, it is best to make a static 404 page instead of using ocPortal's which can be relatively intensive. You activate a custom 404 page by putting a reference to it in the [tt].htaccess[/tt] file (our [tt]recommended.htaccess[/tt] file does this for ocPortal's).
  - If you are optimising your server infrastructure to be able to handle large numbers of users don't forget to change the value of the "Maximum users" config option to something much higher!
- - Even though ocPortal supports various database vendors it is optimised for MySQL
- - Even though ocPortal supports various third party forums it is optimised for OCF
+ - Even though ocPortal supports various database vendors it is optimised for MySQL.
+ - Even though ocPortal supports various third party forums it is optimised for OCF.
 
 [title="2"]Persistent cache[/title]
 
@@ -166,9 +166,15 @@ Once you get it right, fulltext searches on large databases should complete in a
 
 It also never hurts to optimise (via [tt]OPTIMIZE TABLE[/tt] or [tt]myisamchk -r *.MYI[/tt]) your MySQL tables. This helps MySQL know how to better conduct queries in general, and re-structures data in a more efficient way.
 
+If getting ocPortal search to work well does not seem feasible, there is a simple non-bundled addon for using Google to do your site searches. Of course this would not have any sense of permissions and be limited to Guest content, but that's fine for most use cases.
+
 [title="2"]The Cloud[/title]
 
-ocPortal runs perfectly on Rackspace Cloud Sites hosting (formerly named Mosso Cloud), which will spread requests across machines automatically, and handle data synching faultlessly (we have been told that behind-the-scenes there is database replication, but it is unnoticeable). You could also run on your own Amazon Cloud Server Instances, but there is probably no reason to -- it's a lot more work and ocPortal is designed to run on commodity machines that require no custom configuration.
+If you have outgrown normal shared hosting / a single VPS or server, you can do a cloud deployment of ocPortal, and there are a few options:
+1) ocPortal runs perfectly on Rackspace Cloud Sites hosting, where you can set up quite large instances (we have been told that behind-the-scenes there is database replication, to share database load).
+2) You can run on Amazon Cloud Server Instances (or pretty much any cloud service that supports custom images, or PHP). There is an ocPortal Bitnami image for easy installation on Amazon's infrastructure. Bitnami also provide their own Amazon-based hosting service. If you want to use multiple instances you will need to set up your own MySQL replication and file-synching, but ocPortal does have support for it (see "Server farms"). There are some solutions to auto-scale out cloud instances, although many companies handle it manually.
+3) You can set up your own cloud system on your own servers, or cheap dedicated servers. You could look at using something like OpenStack to achieve this, and you could use HHVM for great performance. This is similar to Facebook's infrastructure and a very challening option, but perhaps the best from a huge-scale cost perspective.
+4) You can use Google App Engine, to get automated scaling, with a tradeoff that it is a bit harder to initially set up. This is the most elegant and maintainable option and we generally prefer it over '1' and '2' if you are seriously investing in a maintainable infrastructure. We discuss this in the separate [page="_SEARCH:tut_google_appengine"]Google App Engine tutorial[/page].
 
 [title="2"]Other optimisations[/title]
 
@@ -370,6 +376,11 @@ Google's work with SPDY is also interesting, and SDCH is [i]extremely interestin
 
 The CloudFlare service provides some of the same optimisations that mod_pagespeed does, as well as a CDN. However personally I'd opt to use mod_pagespeed and a custom CDN, as it is a more straight-forward configuration that doesn't require proxying your traffic (which itself will impact performance). That said, CloudFlare does provide nice anti-spam and traffic filtering, so if you have a big spam/DOS problem, it can be a very useful tool. CloudFlare's preloading feature also looks interesting, but it is not likely to result in noticeable speedup for most sites.
 
+[title="2"]Preloaded links[/title]
+
+Web browsers are starting to support link preloading. If you have a situation where you can predict what links people will click, you can use a standard HTML approach to define preloading for those links.
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]
+ - [page="_SEARCH:tut_google_appengine"]Installing on Google App Engine[/page]

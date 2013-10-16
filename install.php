@@ -13,15 +13,24 @@
  * @package		installer
  */
 
-if (!function_exists('preg_match')) exit('The PHP preg support may not be disabled');
+if (!function_exists('preg_match'))
+{
+	header('Content-type: text/plain');
+	exit('The PHP preg support may not be disabled');
+}
 $functions=array('fopen');
 foreach ($functions as $function)
 {
-	if (preg_match('#[^,\s]'.$function.'[$,\s]#',@ini_get('disable_functions'))!=0) exit('The '.$function.' function appears to have been manually disabled in your PHP installation. This is a basic and necessary function, required for ocPortal.');
+	if (preg_match('#[^,\s]'.$function.'[$,\s]#',@ini_get('disable_functions'))!=0)
+	{
+		header('Content-type: text/plain');
+		exit('The '.$function.' function appears to have been manually disabled in your PHP installation. This is a basic and necessary function, required for ocPortal.');
+	}
 }
 
 if ((!array_key_exists('type',$_GET)) && (file_exists('install_locked')))
 {
+	header('Content-type: text/plain');
 	exit('Installer is locked for security reasons (delete the \'install_locked\' file to return to the installer)');
 }
 
@@ -57,8 +66,9 @@ $GLOBALS['SEMI_DEV_MODE']=true;
 
 @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
-if (strpos(PHP_VERSION,'hiphop')!==false)
-	define('HIPHOP_PHP','1');
+// Are we in a special version of PHP?
+define('HIPHOP_PHP',strpos(PHP_VERSION,'hiphop')!==false);
+define('GOOGLE_APPENGINE',isset($_SERVER['APPLICATION_ID']));
 
 if (!array_key_exists('type',$_GET))
 {
@@ -846,8 +856,15 @@ function step_4()
 	$text=new ocp_tempcode();
 	$options=new ocp_tempcode();
 	$hidden=new ocp_tempcode();
-	$options->attach(make_option(do_lang_tempcode('DOMAIN'),example('DOMAIN_EXAMPLE','DOMAIN_TEXT'),'domain',$domain,false,true));
-	$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_EXAMPLE','BASE_URL_TEXT'),'base_url',$base_url,false,true));
+	if (!GOOGLE_APPENGINE)
+	{
+		$options->attach(make_option(do_lang_tempcode('DOMAIN'),example('DOMAIN_EXAMPLE','DOMAIN_TEXT'),'domain',$domain,false,true));
+		$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_EXAMPLE','BASE_URL_TEXT'),'base_url',$base_url,false,true));
+	} else
+	{
+		$hidden->attach(form_input_hidden('domain',$domain));
+		$hidden->attach(form_input_hidden('base_url',$base_url));
+	}
 	if (post_param('db_type')!='xml')
 		$options->attach(make_option(do_lang_tempcode('TABLE_PREFIX'),example('TABLE_PREFIX_EXAMPLE','TABLE_PREFIX_TEXT'),'table_prefix',$table_prefix));
 	else
@@ -1521,6 +1538,9 @@ function step_5_write_config()
 			($key=='use_multi_db')
 		) continue;
 
+		if ((!GOOGLE_APPENGINE) && (($key=='domain') || ($key=='base_url')))
+			continue;
+
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
 		if ($key=='master_password') $val='!'.md5($val.'ocp');
 		if ($key=='base_url') $val=$base_url;
@@ -1566,6 +1586,12 @@ function step_5_write_config()
 		{
 			ftp_close($conn);
 		}
+	}
+
+	if (GOOGLE_APPENGINE)
+	{
+		@unlink(get_file_base().'/php.ini');
+		copy(get_file_base().'/data/modules/google_appengine/php.ini',get_file_base().'/php.ini');
 	}
 
 	$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'261a1eb80baed15cbbce1a684d4a354d','SOMETHING'=>do_lang_tempcode('WROTE_CONFIGURATION'))));
