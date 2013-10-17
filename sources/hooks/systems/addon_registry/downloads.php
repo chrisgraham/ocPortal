@@ -155,6 +155,9 @@ class Hook_addon_registry_downloads
 			'sources/hooks/systems/config/download_subcats_per_page.php',
 			'sources/hooks/systems/config/downloads_default_sort_order.php',
 			'sources/hooks/systems/config/downloads_subcat_narrowin.php',
+			'sources/hooks/systems/tasks/import_filesystem_downloads.php',
+			'sources/hooks/systems/tasks/import_ftp_downloads.php',
+			'sources/hooks/systems/tasks/index_download.php',
 		);
 	}
 

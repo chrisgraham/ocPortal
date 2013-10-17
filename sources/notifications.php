@@ -121,12 +121,13 @@ function dispatch_notification($notification_code,$code_category,$subject,$messa
 
 	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix);
 
-	if (get_param_integer('keep_debug_notifications',0)==1)
+	if ((get_param_integer('keep_debug_notifications',0)==1) || ($notification_code=='task_completed'))
 	{
 		$dispatcher->dispatch();
 	} else
 	{
-		register_shutdown_function(array($dispatcher,'dispatch'));
+		require_code('tasks');
+		call_user_func_array__long_task(do_lang('_SEND_NOTIFICATION'),get_screen_title('_SEND_NOTIFICATION'),'dispatch_notification',array($dispatcher),true,false,false);
 	}
 }
 
@@ -219,8 +220,6 @@ class Notification_dispatcher
 
 		require_lang('notifications');
 		require_code('mail');
-
-		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		if (($this->store_in_staff_messaging_system) && (addon_installed('staff_messaging')))
 		{

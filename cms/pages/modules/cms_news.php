@@ -768,11 +768,34 @@ class Module_cms_news extends standard_crud_module
 	{
 		check_privilege('mass_import');
 
-		require_code('news2');
+		$is_validated=post_param_integer('auto_validate',0);
+		if (!addon_installed('unvalidated')) $is_validated=1;
+		$download_images=post_param_integer('download_images',0);
+		if (!has_privilege(get_member(),'draw_to_server')) $download_images=0;
+		$to_own_account=post_param_integer('add_to_own',0);
+		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $to_own_account=1;
+		$import_blog_comments=post_param_integer('import_blog_comments',0);
+		$import_to_blog=post_param_integer('import_to_blog',0);
 
-		import_rss();
+		$rss_url=post_param('rss_feed_url',NULL);
+		require_code('uploads');
+		if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
+		{
+			$rss_url=$_FILES['file_novalidate']['tmp_name'];
+		}
+		if (is_null($rss_url))
+			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
-		return inform_screen($this->title,do_lang_tempcode('IMPORT_NEWS_DONE'));
+		$rss=new rss($rss_url,true);
+
+		require_code('tasks');
+		$ret=call_user_func_array__long_task(do_lang('IMPORT_NEWS'),$this->title,'import_rss',array($is_validated,$download_images,$to_own_account,$import_blog_comments,$import_to_blog,$rss));
+
+		// Cleanup
+		if (url_is_local($rss_url)) // Means it is a temp file
+			@unlink($rss_url);
+
+		return $ret;
 	}
 }
 

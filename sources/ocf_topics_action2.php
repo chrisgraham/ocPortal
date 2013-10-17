@@ -427,29 +427,8 @@ function ocf_move_topics($from,$to,$topics=NULL,$check_perms=true) // NB: From i
 	}
 	ocf_decache_ocp_blocks($to,$forum_name);
 
-	if (function_exists('set_time_limit')) @set_time_limit(0);
-
-	$start=0;
-	do
-	{
-		$topics2=$GLOBALS['FORUM_DB']->query('SELECT id,t_cache_first_title,t_cache_last_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list,100,$start,false,true);
-		require_code('urls2');
-		foreach ($topics2 as $_topic)
-		{
-			if ($_topic['t_cache_last_time']<time()-60*60*24*14) continue;
-
-			$topic_id=$_topic['id'];
-			$topic_title=$_topic['t_cache_first_title'];
-
-			suggest_new_idmoniker_for('topicview','misc',strval($topic_id),'',$topic_title);
-
-			// Now lets inform people tracking the topic that it has moved
-			$subject=do_lang('TOPIC_MOVE_MAIL_SUBJECT',get_site_name(),$topic_title);
-			$mail=do_lang('TOPIC_MOVE_MAIL',comcode_escape(get_site_name()),comcode_escape($topic_title),array(comcode_escape($forum_name)));
-			dispatch_notification('ocf_topic',strval($topic_id),$subject,$mail);
-		}
-	}
-	while (count($topics2)==100);
+	require_code('tasks');
+	call_user_func_array__long_task(do_lang('MOVE_TOPICS'),get_screen_title('MOVE_TOPICS'),'notify_topics_moved',array($or_list,$forum_name),false,false,false);
 }
 
 /**

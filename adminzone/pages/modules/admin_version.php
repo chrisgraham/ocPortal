@@ -83,6 +83,7 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('alternative_ids');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_privacy');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_primary__members');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('task_queue');
 
 		delete_privilege('use_sms');
 		delete_privilege('sms_higher_limit');
@@ -363,6 +364,16 @@ class Module_admin_version
 				'member_id'=>'*MEMBER',
 			));
 			add_privilege('SUBMISSION','view_private_content',false,true);
+
+			$GLOBALS['SITE_DB']->create_table('task_queue',array(
+				'id'=>'*AUTO',
+				't_title'=>'SHORT_TEXT',
+				't_hook'=>'ID_TEXT',
+				't_args'=>'LONG_TEXT',
+				't_member_id'=>'MEMBER',
+				't_secure_ref'=>'ID_TEXT', // Used like a temporary password to initiate the task
+				't_send_notification'=>'BINARY',
+			));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<17))

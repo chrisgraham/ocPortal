@@ -92,6 +92,7 @@ function basic_newsletter_join($email,$interest_level=4,$lang=NULL,$get_confirm_
  * @range  1 5
  * @param  string				CSV data of extra subscribers (blank: none). This is in the same ocPortal newsletter CSV format that we export elsewhere.
  * @param  ID_TEXT			The template used to show the email
+ * @return tempcode			UI
  */
 function actual_send_newsletter($message,$subject,$lang,$send_details,$html_only=0,$from_email='',$from_name='',$priority=3,$csv_data='',$mail_template='MAIL')
 {
@@ -104,23 +105,9 @@ function actual_send_newsletter($message,$subject,$lang,$send_details,$html_only
 	log_it('NEWSLETTER_SEND',$subject);
 	set_value('newsletter_send_time',strval(time()));
 
-	// Schedule the background send
-	require_code('mail');
-	if (function_exists('set_time_limit')) @set_time_limit(0);
-
-	global $NEWSLETTER_SUBJECT,$NEWSLETTER_MESSAGE,$NEWSLETTER_HTML_ONLY,$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,$NEWSLETTER_SEND_DETAILS,$NEWSLETTER_LANGUAGE,$NEWSLETTER_MAIL_TEMPLATE,$CSV_DATA;
-	$NEWSLETTER_SUBJECT=$subject;
-	$NEWSLETTER_MESSAGE=$message;
-	$NEWSLETTER_HTML_ONLY=$html_only;
-	$NEWSLETTER_FROM_EMAIL=$from_email;
-	$NEWSLETTER_FROM_NAME=$from_name;
-	$NEWSLETTER_PRIORITY=$priority;
-	$NEWSLETTER_SEND_DETAILS=$send_details;
-	$NEWSLETTER_LANGUAGE=$lang;
-	$NEWSLETTER_MAIL_TEMPLATE=$mail_template;
-	$CSV_DATA=$csv_data;
-
-	if (get_param_integer('keep_send_immediately',0)==1) newsletter_shutdown_function(); else register_shutdown_function('newsletter_shutdown_function');
+	// Schedule the task
+	require_code('tasks');
+	return call_user_func_array__long_task(do_lang('NEWSLETTER_SEND'),get_screen_title('NEWSLETTER_SEND'),'send_newsletter',array($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$mail_template),false,get_param_integer('keep_send_immediately',0)==1,false);
 }
 
 /**
@@ -368,70 +355,6 @@ function newsletter_variable_substitution($message,$subject,$forename,$surname,$
 	}
 
 	return $message;
-}
-
-/**
- * Actually send out the newsletter in the background.
- */
-function newsletter_shutdown_function()
-{
-	global $NEWSLETTER_SUBJECT,$NEWSLETTER_MESSAGE,$NEWSLETTER_HTML_ONLY,$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,$NEWSLETTER_SEND_DETAILS,$NEWSLETTER_LANGUAGE,$CSV_DATA,$NEWSLETTER_MAIL_TEMPLATE;
-
-	//mail_wrap($NEWSLETTER_SUBJECT,$NEWSLETTER_MESSAGE,$NEWSLETTER_ADDRESSES,$NEWSLETTER_USERNAMES,$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,3,NULL,true,NULL,true,$NEWSLETTER_HTML_ONLY==1);  Not so easy any more as message needs tailoring per subscriber
-
-	$last_cron=get_value('last_cron');
-
-	$start=0;
-	do
-	{
-		list($addresses,$hashes,$usernames,$forenames,$surnames,$ids,)=newsletter_who_send_to($NEWSLETTER_SEND_DETAILS,$NEWSLETTER_LANGUAGE,$start,100,false,$CSV_DATA);
-
-		// Send to all
-		foreach ($addresses as $i=>$email_address)
-		{
-			// Variable substitution in body
-			$newsletter_message_substituted=(strpos($NEWSLETTER_MESSAGE,'{')===false)?$NEWSLETTER_MESSAGE:newsletter_variable_substitution($NEWSLETTER_MESSAGE,$NEWSLETTER_SUBJECT,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
-			$in_html=false;
-			if (strpos($newsletter_message_substituted,'<html')===false)
-			{
-				if ($NEWSLETTER_HTML_ONLY==1)
-				{
-					$_m=comcode_to_tempcode($newsletter_message_substituted,get_member(),true);
-					$newsletter_message_substituted=$_m->evaluate($NEWSLETTER_LANGUAGE);
-					$in_html=true;
-				}
-			} else
-			{
-				require_code('tempcode_compiler');
-				$_m=template_to_tempcode($newsletter_message_substituted);
-				$newsletter_message_substituted=$_m->evaluate($NEWSLETTER_LANGUAGE);
-				$in_html=true;
-			}
-
-			if (!is_null($last_cron))
-			{
-				$GLOBALS['SITE_DB']->query_insert('newsletter_drip_send',array(
-					'd_inject_time'=>time(),
-					'd_subject'=>$NEWSLETTER_SUBJECT,
-					'd_message'=>$newsletter_message_substituted,
-					'd_html_only'=>$NEWSLETTER_HTML_ONLY,
-					'd_to_email'=>$email_address,
-					'd_to_name'=>$usernames[$i],
-					'd_from_email'=>$NEWSLETTER_FROM_EMAIL,
-					'd_from_name'=>$NEWSLETTER_FROM_NAME,
-					'd_priority'=>$NEWSLETTER_PRIORITY,
-					'd_template'=>$NEWSLETTER_MAIL_TEMPLATE,
-				));
-			} else
-			{
-				mail_wrap($NEWSLETTER_SUBJECT,$newsletter_message_substituted,array($email_address),array($usernames[$i]),$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,NULL,true,NULL,true,$in_html,false,$NEWSLETTER_MAIL_TEMPLATE);
-			}
-
-			if (function_exists('gc_collect_cycles')) gc_collect_cycles(); // Stop problem with PHP leaking memory
-		}
-		$start+=100;
-	}
-	while (array_key_exists(0,$addresses));
 }
 
 /**

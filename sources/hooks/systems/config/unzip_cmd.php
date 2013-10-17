@@ -48,6 +48,7 @@ class Hook_config_unzip_cmd
 	 */
 	function get_default()
 	{
+		if (function_exists('zip_open')) return NULL;
 		return '/usr/bin/unzip -o @_SRC_@ -x -d @_DST_@';
 	}
 

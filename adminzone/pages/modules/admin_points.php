@@ -149,99 +149,18 @@ class Module_admin_points
 	}
 
 	/**
-	 * Show a cash flow diagram.
+	 * Export a CSV of point transactions.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
 	function points_export()
 	{
-		disable_php_memory_limit();
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-
 		$d=array(get_input_date('from',true),get_input_date('to',true));
 		if (is_null($d[0])) return $this->_get_between($this->title);
 		list($from,$to)=$d;
 
-		require_code('points');
-
-		$label=do_lang('POINTS_GAINED_BETWEEN',get_timezoned_date($from,false,false,false,true),get_timezoned_date($to,false,false,false,true));
-
-		$data=array();
-
-		$total_gained_points=0;
-
-		$quizzes=array();
-		if (addon_installed('quizzes'))
-		{
-			require_lang('quiz');
-			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('id','q_name'),NULL,'ORDER BY q_add_date DESC',100);
-		}
-
-		$members=$GLOBALS['FORUM_DRIVER']->get_matching_members('',10000/*reasonable limit -- works via returning 'most active' first*/);
-		$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-		foreach ($members as $member)
-		{
-			$member_id=$GLOBALS['FORUM_DRIVER']->mrow_id($member);
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-			$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
-
-			$usergroups='';
-			$_usergroups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
-			foreach ($_usergroups as $_usergroup)
-			{
-				if ($usergroups!='') $usergroups.=', ';
-				$usergroups.=$all_usergroups[$_usergroup];
-			}
-
-			$points_gained=total_points($member_id,$to)-total_points($member_id,$from);
-			$points_now=total_points($member_id);
-
-			$data_point=array();
-
-			$data_point[do_lang('IDENTIFIER')]=$member_id;
-			$data_point[do_lang('USERNAME')]=$username;
-			$data_point[$label]=$points_gained;
-			$data_point[do_lang('POINTS_NOW')]=$points_now;
-			$data_point[do_lang('GROUPS')]=$usergroups;
-			$data_point[do_lang('EMAIL')]=$email;
-
-			if (addon_installed('quizzes'))
-			{
-				foreach ($quizzes as $quiz)
-				{
-					$entered=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('quiz_entries','id',array('q_member'=>$member_id,'q_quiz'=>$quiz['id'])));
-					$data_point[do_lang('ENTERED_THIS_QUIZ',get_translated_text($quiz['q_name']))]=do_lang($entered?'YES':'NO');
-				}
-			}
-
-			$data[]=$data_point;
-
-			$total_gained_points+=$points_gained;
-		}
-
-		// Ordering for automatic 'lottery'
-		$winner_data=array();
-		while (count($data)!=0)
-		{
-			$rand=mt_rand(0,$total_gained_points);
-			$so_far=0;
-			foreach ($data as $i=>$data_point)
-			{
-				$so_far+=$data_point[$label];
-
-				if (($rand<$so_far) || (($rand==$so_far) && ($so_far==$total_gained_points)))
-				{
-					$winner_data[]=$data_point;
-					unset($data[$i]);
-					$total_gained_points-=$data_point[$label];
-
-					break;
-				}
-			}
-		}
-
-		require_code('files2');
-		make_csv($winner_data,'points_log.csv');
+		require_code('tasks');
+		return call_user_func_array__long_task(do_lang('EXPORT_POINTS'),$this->title,'points_log_export',array($from,$to));
 	}
 
 	/**

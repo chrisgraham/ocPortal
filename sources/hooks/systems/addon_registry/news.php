@@ -155,6 +155,8 @@ class Hook_addon_registry_news
 			'sources/blocks/main_image_fader_news.php',
 			'sources/news_sitemap.php',
 			'ocp_news_sitemap.xml',
+			'sources/hooks/systems/tasks/import_rss.php',
+			'sources/hooks/systems/tasks/import_wordpress.php',
 		);
 	}
 

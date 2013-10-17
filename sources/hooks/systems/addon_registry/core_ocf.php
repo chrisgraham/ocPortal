@@ -358,6 +358,9 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/config/valid_email_domains.php',
 			'sources/hooks/systems/config/enable_birthdays.php',
 			'sources/ocf_field_editability.php',
+			'sources/hooks/systems/tasks/download_member_csv.php',
+			'sources/hooks/systems/tasks/ocf_members_recache.php',
+			'sources/hooks/systems/tasks/import_member_csv.php',
 		);
 	}
 

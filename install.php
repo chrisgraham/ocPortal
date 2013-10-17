@@ -643,6 +643,12 @@ function step_3()
 		$rec=in_array($DEFAULT_FORUM,$forums);
 		foreach ($forums as $forum)
 		{
+			if (!GOOGLE_APPENGINE)
+			{
+				if ($forum!='ocf')
+					continue;
+			}
+
 			if ($class=='general')
 			{
 				$version=$forum;
@@ -668,6 +674,12 @@ function step_3()
 	$tdatabase=new ocp_tempcode();
 	foreach (array_keys($databases) as $database)
 	{
+		if (!GOOGLE_APPENGINE)
+		{
+			if ($forum!='mysql')
+				continue;
+		}
+
 		if ((count($databases)==1) && ($database=='xml')) continue; // If they only have experimental XML option, they'll choose it - we don't want that - we want them to get the error
 
 		if (($database=='mysqli') && (!function_exists('mysqli_connect'))) continue;
@@ -717,8 +729,14 @@ function step_4()
 
 	if (count($_POST)==0) exit(do_lang('INST_POST_ERROR'));
 
+	$js=do_template('JAVASCRIPT');
+	$js->attach("\n");
+	$js->attach(do_template('JAVASCRIPT_AJAX'));
+
 	require_code('database/'.post_param('db_type'));
 	$GLOBALS['DB_STATIC_OBJECT']=object_factory('Database_Static_'.post_param('db_type'));
+
+	// Probing
 
 	$base_url=post_param('base_url','http://'.ocp_srv('HTTP_HOST').dirname(ocp_srv('SCRIPT_NAME')));
 
@@ -780,30 +798,6 @@ function step_4()
 	$member_cookie=$PROBED_FORUM_CONFIG['cookie_member_id'];
 	$pass_cookie=$PROBED_FORUM_CONFIG['cookie_member_hash'];
 
-	if ((function_exists('posix_getpwuid')) && (strpos(@ini_get('disable_functions'),'posix_getpwuid')===false))
-	{
-		$u_info=posix_getpwuid(fileowner(get_file_base().'/install.php'));
-		if ($u_info!==false) $ftp_username=$u_info['name']; else $ftp_username='';
-	} else $ftp_username='';
-	if (is_null($ftp_username)) $ftp_username='';
-	$dr=array_key_exists('DOCUMENT_ROOT',$_SERVER)?$_SERVER['DOCUMENT_ROOT']:(array_key_exists('DOCUMENT_ROOT',$_ENV)?$_ENV['DOCUMENT_ROOT']:'');
-	if (strpos($dr,'/')!==false) $dr_parts=explode('/',$dr); else $dr_parts=explode('\\',$dr);
-	$webdir_stub=$dr_parts[count($dr_parts)-1];
-
-	// If we have a host where the FTP is two+ levels down (often when we have one FTP covering multiple virtual hosts), then this "last component" rule would be insufficient; do a search through for critical strings to try and make a better guess
-	$special_root_dirs=array('public_html','www','webroot','httpdocs','wwwroot');
-	$webdir_stub=$dr_parts[count($dr_parts)-1];
-	foreach ($dr_parts as $i=>$part)
-	{
-		if (in_array($part,$special_root_dirs))
-		{
-			$webdir_stub=implode('/',array_slice($dr_parts,$i));
-		}
-	}
-
-	$ftp_folder='/'.$webdir_stub.basename(ocp_srv('SCRIPT_NAME'));
-	$ftp_domain=$domain;
-
 	$specifics=$GLOBALS['FORUM_DRIVER']->install_specifics();
 
 	// Now we've gone through all the work of detecting it, lets grab from _config.php to see what we had last time we installed
@@ -836,7 +830,35 @@ function step_4()
 
 	$sections=new ocp_tempcode();
 
-	// Is this autoinstaller?
+	// Detect FTP settings
+
+	if ((function_exists('posix_getpwuid')) && (strpos(@ini_get('disable_functions'),'posix_getpwuid')===false))
+	{
+		$u_info=posix_getpwuid(fileowner(get_file_base().'/install.php'));
+		if ($u_info!==false) $ftp_username=$u_info['name']; else $ftp_username='';
+	} else $ftp_username='';
+	if (is_null($ftp_username)) $ftp_username='';
+	$dr=array_key_exists('DOCUMENT_ROOT',$_SERVER)?$_SERVER['DOCUMENT_ROOT']:(array_key_exists('DOCUMENT_ROOT',$_ENV)?$_ENV['DOCUMENT_ROOT']:'');
+	if (strpos($dr,'/')!==false) $dr_parts=explode('/',$dr); else $dr_parts=explode('\\',$dr);
+	$webdir_stub=$dr_parts[count($dr_parts)-1];
+
+	// If we have a host where the FTP is two+ levels down (often when we have one FTP covering multiple virtual hosts), then this "last component" rule would be insufficient; do a search through for critical strings to try and make a better guess
+	$special_root_dirs=array('public_html','www','webroot','httpdocs','wwwroot');
+	$webdir_stub=$dr_parts[count($dr_parts)-1];
+	foreach ($dr_parts as $i=>$part)
+	{
+		if (in_array($part,$special_root_dirs))
+		{
+			$webdir_stub=implode('/',array_slice($dr_parts,$i));
+		}
+	}
+
+	$domain=ocp_srv('HTTP_HOST');
+	$ftp_folder='/'.$webdir_stub.basename(ocp_srv('SCRIPT_NAME'));
+	$ftp_domain=$domain;
+
+	// Is this autoinstaller? FTP settings
+
 	global $FILE_ARRAY;
 	if ((@is_array($FILE_ARRAY)) && (!is_suexec_like()))
 	{
@@ -852,6 +874,8 @@ function step_4()
 		$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'50fcb00f4d1da1813e94d86529ea0862','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
 	}
 
+	// General settings
+
 	$title=do_lang_tempcode('GENERAL_SETTINGS');
 	$text=new ocp_tempcode();
 	$options=new ocp_tempcode();
@@ -862,6 +886,7 @@ function step_4()
 		$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_EXAMPLE','BASE_URL_TEXT'),'base_url',$base_url,false,true));
 	} else
 	{
+		$options->attach(make_option(do_lang_tempcode('GAE_APPLICATION'),do_lang_tempcode('DESCRIPTION_GAE_APPLICATION'),'gae_application','ocportal',false,true));
 		$hidden->attach(form_input_hidden('domain',$domain));
 		$hidden->attach(form_input_hidden('base_url',$base_url));
 	}
@@ -869,12 +894,17 @@ function step_4()
 		$options->attach(make_option(do_lang_tempcode('TABLE_PREFIX'),example('TABLE_PREFIX_EXAMPLE','TABLE_PREFIX_TEXT'),'table_prefix',$table_prefix));
 	else
 		$hidden->attach(form_input_hidden('table_prefix',$table_prefix));
+	if (!GOOGLE_APPENGINE)
+	{
+		$options->attach(make_tick(do_lang_tempcode('USE_PERSISTENT'),example('','USE_PERSISTENT_TEXT'),'use_persistent',$use_persistent?1:0));
+	}
 	$master_password='';
 	$options->attach(make_option(do_lang_tempcode('MASTER_PASSWORD'),example('','CHOOSE_MASTER_PASSWORD'),'master_password',$master_password,true));
-	$options->attach(make_tick(do_lang_tempcode('USE_PERSISTENT'),example('','USE_PERSISTENT_TEXT'),'use_persistent',$use_persistent?1:0));
 	require_lang('config');
 	$options->attach(make_tick(do_lang_tempcode('SEND_ERROR_EMAILS_OCPRODUCTS'),example('','CONFIG_OPTION_send_error_emails_ocproducts'),'allow_reports_default',1));
 	$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'f051465e86a7a53ec078e0d9de773993','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
+
+	// Database settings for forum (if applicable)
 
 	$hidden=new ocp_tempcode();
 	$forum_text=new ocp_tempcode();
@@ -919,14 +949,13 @@ function step_4()
 		{
 			$hidden->attach(form_input_hidden('clear_existing_forums_on_install','yes'));
 		}
-		elseif (($specific['name']=='ocf_table_prefix') && ($use_msn==0))
-		{
-			// Nothing
-		} else
+		elseif (($specific['name']!='ocf_table_prefix') || ($use_msn==1))
 		{
 			$forum_options->attach(make_option(is_object($specific['title'])?$specific['title']:make_string_tempcode($specific['title']),is_object($specific['description'])?$specific['description']:make_string_tempcode($specific['description']),$specific['name'],array_key_exists($specific['name'],$SITE_INFO)?$SITE_INFO[$specific['name']]:$specific['default'],strpos($specific['name'],'password')!==false));
 		}
 	}
+
+	// Database settings for site
 
 	$text=($use_msn==1)?do_lang_tempcode(($forum_type=='ocf')?'DUPLICATE_OCF':'DUPLICATE'):new ocp_tempcode();
 	$options=make_option(do_lang_tempcode('DATABASE_NAME'),new ocp_tempcode(),'db_site',$db_site,false,true);
@@ -948,26 +977,55 @@ function step_4()
 		$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'48a122b54d68d9893533ece7237ea5e0','HIDDEN'=>$hidden,'TITLE'=>$forum_title,'TEXT'=>$forum_text,'OPTIONS'=>$forum_options)));
 	} else
 	{
-		$title=do_lang_tempcode('OCPORTAL_SETTINGS');
-		if (!$forum_options->is_empty()) $sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'232b69a995f384275c1cd9269a42c3b8','HIDDEN'=>'','TITLE'=>$forum_title,'TEXT'=>$forum_text,'OPTIONS'=>$forum_options)));
-		$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'15e0f275f78414b6c4fe7775a1cacb23','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
+		if (GOOGLE_APPENGINE)
+		{
+			$title=do_lang_tempcode('DEV_DATABASE_SETTINGS');
+			$text=do_lang_tempcode('DEV_DATABASE_SETTINGS_HELP');
+			$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
+
+			$title=do_lang_tempcode('LIVE_DATABASE_SETTINGS');
+			$text=do_lang_tempcode('LIVE_DATABASE_SETTINGS_HELP');
+			$options=make_option(do_lang_tempcode('DATABASE_NAME'),new ocp_tempcode(),'gae_live_db_site','<application>',false,true);
+			$options->attach(make_option(do_lang_tempcode('DATABASE_HOST'),example('','DATABASE_HOST_TEXT'),'gae_live_db_site_host',':/cloudsql/<application>',false,true));
+			$options->attach(make_option(do_lang_tempcode('DATABASE_USERNAME'),new ocp_tempcode(),'gae_live_db_site_user','root',false,true));
+			$options->attach(make_option(do_lang_tempcode('DATABASE_PASSWORD'),new ocp_tempcode(),'gae_live_db_site_password','',true));
+			$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('HIDDEN'=>'','TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
+
+			$js->attach('
+				var gae_application=document.getElementById(\'gae_application\');
+				gae_application.onchange=function() {
+					var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
+					gae_live_db_site.value=gae_live_db_site.value.replace(/<application>/g,gae_application.value);
+					var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
+					gae_live_db_site_host.value=gae_live_db_site_host.value.replace(/<application>/g,gae_application.value);
+				};
+			');
+		} else
+		{
+			$title=do_lang_tempcode('OCPORTAL_SETTINGS');
+			if (!$forum_options->is_empty()) $sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'232b69a995f384275c1cd9269a42c3b8','HIDDEN'=>'','TITLE'=>$forum_title,'TEXT'=>$forum_text,'OPTIONS'=>$forum_options)));
+			$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'15e0f275f78414b6c4fe7775a1cacb23','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
+		}
 	}
 
-	$title=do_lang_tempcode('COOKIE_SETTINGS');
-	$text=new ocp_tempcode();
-	$options=new ocp_tempcode();
-	$hidden=new ocp_tempcode();
-	$options->attach(make_option(do_lang_tempcode('COOKIE'),example('COOKIE_EXAMPLE','COOKIE_TEXT'),'user_cookie',$member_cookie,false,true));
-	$options->attach(make_option(do_lang_tempcode('COOKIE_PASSWORD'),example('COOKIE_PASSWORD_EXAMPLE','COOKIE_PASSWORD_TEXT'),'pass_cookie',$pass_cookie,false,true));
-	$options->attach(make_option(do_lang_tempcode('COOKIE_DOMAIN'),example('COOKIE_DOMAIN_EXAMPLE','COOKIE_DOMAIN_TEXT'),'cookie_domain',$cookie_domain));
-	$options->attach(make_option(do_lang_tempcode('COOKIE_PATH'),example('COOKIE_PATH_EXAMPLE','COOKIE_PATH_TEXT'),'cookie_path',$cookie_path));
-	$options->attach(make_option(do_lang_tempcode('COOKIE_DAYS'),example('COOKIE_DAYS_EXAMPLE','COOKIE_DAYS_TEXT'),'cookie_days',$cookie_days,false,true));
-	$temp=do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'3b9ea022164801f4b60780a4a966006f','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options));
-	$sections->attach(do_template('INSTALLER_STEP_4_SECTION_HIDE',array('_GUID'=>'42eb3d44bcf8ef99987b6daa9e6530aa','TITLE'=>$title,'CONTENT'=>$temp)));
+	// Cookie settings
 
-	$js=do_template('JAVASCRIPT');
-	$js->attach("\n");
-	$js->attach(do_template('JAVASCRIPT_AJAX'));
+	if (!GOOGLE_APPENGINE)
+	{
+		$title=do_lang_tempcode('COOKIE_SETTINGS');
+		$text=new ocp_tempcode();
+		$options=new ocp_tempcode();
+		$hidden=new ocp_tempcode();
+		$options->attach(make_option(do_lang_tempcode('COOKIE'),example('COOKIE_EXAMPLE','COOKIE_TEXT'),'user_cookie',$member_cookie,false,true));
+		$options->attach(make_option(do_lang_tempcode('COOKIE_PASSWORD'),example('COOKIE_PASSWORD_EXAMPLE','COOKIE_PASSWORD_TEXT'),'pass_cookie',$pass_cookie,false,true));
+		$options->attach(make_option(do_lang_tempcode('COOKIE_DOMAIN'),example('COOKIE_DOMAIN_EXAMPLE','COOKIE_DOMAIN_TEXT'),'cookie_domain',$cookie_domain));
+		$options->attach(make_option(do_lang_tempcode('COOKIE_PATH'),example('COOKIE_PATH_EXAMPLE','COOKIE_PATH_TEXT'),'cookie_path',$cookie_path));
+		$options->attach(make_option(do_lang_tempcode('COOKIE_DAYS'),example('COOKIE_DAYS_EXAMPLE','COOKIE_DAYS_TEXT'),'cookie_days',$cookie_days,false,true));
+		$temp=do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'3b9ea022164801f4b60780a4a966006f','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options));
+		$sections->attach(do_template('INSTALLER_STEP_4_SECTION_HIDE',array('_GUID'=>'42eb3d44bcf8ef99987b6daa9e6530aa','TITLE'=>$title,'CONTENT'=>$temp)));
+	}
+
+	// ----
 
 	$message=paragraph(do_lang_tempcode('BASIC_CONFIG'));
 	if (($forum_type!='none') && ($forum_type!='ocf'))
@@ -1054,7 +1112,13 @@ function step_5()
 	global $SITE_INFO;
 	foreach ($_POST as $key=>$val)
 	{
-		if (($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='master_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm')) continue;
+		if (in_array($key,array(
+			'ftp_password',
+			'ftp_password_confirm',
+			'master_password_confirm',
+			'ocf_admin_password',
+			'ocf_admin_password_confirm',
+		))) continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
 		if ($key=='master_password') $val='!'.md5($val.'ocp');
@@ -1509,34 +1573,43 @@ function step_5_write_config()
 	$base_url=post_param('base_url');
 	if (substr($base_url,-1)=='/') $base_url=substr($base_url,0,strlen($base_url)-1);
 
-	// _config.php
+	// Open up _config.php
 	$config_file='_config.php';
 	$config_file_handle=fopen(get_file_base().'/'.$config_file,'wt');
 	fwrite($config_file_handle,"<"."?php\nglobal \$SITE_INFO;\n");
 	if ($config_file_handle===false)
 		warn_exit(do_lang_tempcode('INSTALL_WRITE_ERROR',escape_html($config_file)));
 
+	// Write in inputted settings
 	foreach ($_POST as $key=>$val)
 	{
-		if (
-			(($key=='admin_username') && (post_param('forum_type')!='none')) || 
-			($key=='clear_existing_forums_on_install') || 
-			($key=='allow_reports_default') || 
-			($key=='board_path') || 
-			($key=='confirm') || 
-			($key=='ftp_password') || 
-			($key=='ftp_password_confirm') || 
-			($key=='master_password_confirm') || 
-			($key=='ocf_admin_password') || 
-			($key=='ocf_admin_password_confirm') || 
-			($key=='email') || 
-			($key=='interest_level') || 
-			($key=='advertise_on') || 
-			($key=='forum') || 
-			($key=='max') || 
-			($key=='use_msn') || 
-			($key=='use_multi_db')
-		) continue;
+		if (in_array($key,array(
+			'ftp_password',
+			'ftp_password_confirm',
+			'master_password_confirm',
+			'ocf_admin_password',
+			'ocf_admin_password_confirm',
+
+			'clear_existing_forums_on_install',
+			'allow_reports_default',
+			'board_path',
+			'confirm',
+			'email',
+			'interest_level',
+			'advertise_on',
+			'forum',
+			'max',
+			'use_msn',
+			'use_multi_db',
+
+			'gae_live_db_site',
+			'gae_live_db_site_host',
+			'gae_live_db_site_user',
+			'gae_live_db_site_password',
+		))) continue;
+
+		if (($key=='admin_username') && (post_param('forum_type')!='none'))
+			continue;
 
 		if ((!GOOGLE_APPENGINE) && (($key=='domain') || ($key=='base_url')))
 			continue;
@@ -1547,7 +1620,40 @@ function step_5_write_config()
 		$_val=addslashes(trim($val));
 		fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
 	}
+
+	// Derive a random session cookie name, to stop conflicts between sites
 	fwrite($config_file_handle,'$SITE_INFO[\'session_cookie\']=\'ocp_session__'.preg_replace('#[^\w\d]#','',uniqid('',true))."';\n");
+
+	// On the live GAE, we need to switch in different settings to the local dev server
+	if (GOOGLE_APPENGINE)
+	{
+		$gae_live_code="
+			if (appengine_is_live())
+			{
+				\$SITE_INFO['db_site']='".addslashes(post_param('gae_live_db_site'))."';
+				\$SITE_INFO['db_site_host']='".addslashes(post_param('gae_live_db_site_host'))."';
+				\$SITE_INFO['db_site_user']='".addslashes(post_param('gae_live_db_site_user'))."';
+				\$SITE_INFO['db_site_password']='".addslashes(post_param('gae_live_db_site_password'))."';
+				\$SITE_INFO['custom_file_base']='".addslashes('gs://'.post_param('gae_application'))."';
+				if ((strpos(\$_SERVER['HTTP_HOST'],'.appspot.com')!==false) || (!tacit_https()))
+				{
+					\$SITE_INFO['custom_base_url']='".addslashes((tacit_https()?'https://':'http://').post_param('gae_application').'.storage.googleapis.com')."';
+				} else // Assumes a storage.<domain> CNAME has been created
+				{
+					\$SITE_INFO['custom_base_url']='".addslashes((tacit_https()?'https://':'http://').'storage.')."'.\$_SERVER['HTTP_HOST'];
+				}
+			} else
+			{
+				\$SITE_INFO['custom_file_base']='".addslashes(get_file_base().'/data_custom/modules/google_appengine')."';
+				\$SITE_INFO['custom_base_url']='".addslashes(get_base_url().'/data_custom/modules/google_appengine')."';
+			}
+			\$SITE_INFO['use_mem_cache']='1';
+		";
+		fwrite($config_file_handle,preg_replace('#^\t\t\t#m','',$gae_live_code));
+	}
+
+	// ---
+
 	fclose($config_file_handle);
 	require_once(get_file_base().'/'.$config_file);
 
@@ -1590,8 +1696,25 @@ function step_5_write_config()
 
 	if (GOOGLE_APPENGINE)
 	{
+		// Copy in default php.ini file
 		@unlink(get_file_base().'/php.ini');
 		copy(get_file_base().'/data/modules/google_appengine/php.ini',get_file_base().'/php.ini');
+
+		// Copy in default YAML files
+		$dh=opendir(get_file_base().'/data/modules/google_appengine');
+		while (($f=readdir($dh))!==false)
+		{
+			if (substr($f,-5)=='.yaml')
+			{
+				@unlink(get_file_base().'/'.$f);
+				copy(get_file_base().'/data/modules/google_appengine/'.$f,get_file_base().'/'.$f);
+			}
+		}
+
+		// Customise app.yaml file
+		$app_yaml=file_get_contents(get_file_base().'/app.yaml');
+		$app_yaml=preg_replace('#^application: .*$#m','application: '.post_param('gae_application'),$app_yaml);
+		file_put_contents(get_file_base().'/app.yaml',$app_yaml);
 	}
 
 	$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'261a1eb80baed15cbbce1a684d4a354d','SOMETHING'=>do_lang_tempcode('WROTE_CONFIGURATION'))));

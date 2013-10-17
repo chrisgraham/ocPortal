@@ -48,6 +48,7 @@ class Hook_config_unzip_dir
 	 */
 	function get_default()
 	{
+		if (function_exists('zip_open')) return NULL;
 		return (DIRECTORY_SEPARATOR=='/')?'/tmp/':ocp_srv('TMP');
 	}
 

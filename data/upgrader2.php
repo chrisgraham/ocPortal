@@ -48,27 +48,6 @@ if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('
 	}
 }
 
-if (!function_exists('file_get_contents'))
-{
-	/**
-	 * Get the contents of a file.
-	 *
-	 * @param  SHORT_TEXT	The file name.
-	 * @return ~LONG_TEXT	The file contents (false: error).
-	 */
-	function file_get_contents($filename)
-	{
-		$data='';
-		$file=@fopen($filename,'rb');
-		if ($file)
-		{
-			while (!feof($file)) $data.=fread($file,1024);
-			fclose($file);
-		}
-		return $data;
-	}
-}
-
 $hashed_password=$_GET['hashed_password'];
 global $SITE_INFO;
 require_once($FILE_BASE.'/_config.php');

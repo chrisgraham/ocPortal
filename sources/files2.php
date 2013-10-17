@@ -245,14 +245,21 @@ function _deldir_contents($dir,$default_preserve=false,$just_files=false)
  * @param  ID_TEXT		Filename to output
  * @param  boolean		Whether to output CSV headers
  * @param  boolean		Whether to output/exit when we're done instead of return
- * @return string			CSV data (we might not return though, depending on $exit)
+ * @param  ?PATH			File to spool into (NULL: none)
+ * @return string			CSV data (we might not return though, depending on $exit; if $outfile_path is not NULL, this will be blank)
  */
-function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true)
+function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true,$outfile_path=NULL)
 {
 	if ($headers)
 	{
 		header('Content-type: text/csv');
 		header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
+	}
+
+	$outfile=mixed();
+	if (!is_null($outfile_path))
+	{
+		$outfile=fopen($outfile_path,'w+b');
 	}
 
 	$out='';
@@ -279,6 +286,12 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 			$j++;
 		}
 		$out.="\n";
+
+		if (!is_null($outfile))
+		{
+			fwrite($outfile,$out);
+			$out='';
+		}
 	}
 
 	if ($output_and_exit)
@@ -286,6 +299,14 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
 		@ini_set('ocproducts.xss_detect','0');
+
+		if (!is_null($outfile))
+		{
+			rewind($outfile);
+			fpassthru($outfile);
+			fclose($outfile);
+			@unlink($outfile_path);
+		}
 		exit($out);
 	}
 	return $out;
@@ -725,9 +746,9 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			$file_base=preg_replace('#'.preg_quote(urldecode($parsed_base_url['path'])).'$#','',$file_base);
 			$file_path=$file_base.urldecode($parsed['path']);
 
-			if ((substr($file_path,-4)=='.php') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
+			if ((function_exists('shell_exec')) && (function_exists('escapeshellcmd')) && (substr($file_path,-4)=='.php') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
 			{
-				$cmd='DOCUMENT_ROOT='.escapeshellarg_wrap(dirname(get_file_base())).' PATH_TRANSLATED='.escapeshellarg_wrap($file_path).' SCRIPT_NAME='.escapeshellarg_wrap($file_path).' HTTP_USER_AGENT='.escapeshellarg($ua).' QUERY_STRING='.escapeshellarg($parsed['query']).' HTTP_HOST='.escapeshellarg($parsed['host']).' '.escapeshellcmd(find_php_path(true)).' '.escapeshellarg($file_path);
+				$cmd='DOCUMENT_ROOT='.escapeshellarg_wrap(dirname(get_file_base())).' PATH_TRANSLATED='.escapeshellarg_wrap($file_path).' SCRIPT_NAME='.escapeshellarg_wrap($file_path).' HTTP_USER_AGENT='.escapeshellarg_wrap($ua).' QUERY_STRING='.escapeshellarg_wrap($parsed['query']).' HTTP_HOST='.escapeshellarg_wrap($parsed['host']).' '.escapeshellcmd(find_php_path(true)).' '.escapeshellarg_wrap($file_path);
 				$contents=shell_exec($cmd);
 				$split_pos=strpos($contents,"\r\n\r\n");
 				if ($split_pos!==false)
@@ -1549,7 +1570,12 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					$opts['proxy']='tcp://'.$proxy.':'.$port;
 				}
 			}
-			$context=stream_context_create(array('http'=>$opts));
+			$context=stream_context_create(array(
+				'http'=>$opts,
+				'method'=>$http_verb,
+				'header'=>$headers,
+				'content'=>$raw_payload,
+			));
 			if ((is_null($byte_limit)) && (is_null($write_to_file)))
 			{
 				$read_file=@file_get_contents($url,false,$context);

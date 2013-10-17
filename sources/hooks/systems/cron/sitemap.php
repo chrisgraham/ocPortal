@@ -35,14 +35,12 @@ class Hook_cron_sitemap
 
 		if (($last_time>time()-60*60*24) && (@filesize(get_custom_file_base().'/ocp_sitemap.xml')>10)) return; // Every day
 
-		set_value('sitemap_building_in_progress','1');
-
 		set_value('last_sitemap_time_calc',strval($time));
 
-		require_code('sitemap');
-		sitemaps_build();
+		require_lang('menus');
 
-		set_value('sitemap_building_in_progress','0');
+		require_code('tasks');
+		call_user_func_array__long_task(do_lang('GENERATE_SITEMAP'),get_screen_title('GENERATE_SITEMAP'),'sitemap',array(),false,false,false);
 	}
 
 }

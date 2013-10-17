@@ -49,6 +49,7 @@ class Hook_config_ffmpeg_path
 	 */
 	function get_default()
 	{
+		if (GOOGLE_APPENGINE) return NULL;
 		return '';
 	}
 

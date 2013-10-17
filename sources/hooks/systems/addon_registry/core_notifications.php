@@ -132,6 +132,7 @@ class Hook_addon_registry_core_notifications
 			'themes/default/images/notifications/index.html',
 			'data_custom/modules/web_notifications/.htaccess',
 			'data_custom/modules/web_notifications/index.html',
+			'sources/hooks/systems/tasks/dispatch_notification.php',
 		);
 	}
 

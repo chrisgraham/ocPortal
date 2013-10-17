@@ -384,8 +384,6 @@ function delete_download_category($category_id)
  */
 function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 {
-	if (function_exists('set_time_limit')) @set_time_limit(300);
-
 	if (get_option('dload_search_index')=='0') return '';
 
 	if (running_script('stress_test_loader')) return '';
@@ -711,12 +709,9 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 			$file_size=@filesize($url) OR $file_size=NULL;
 		}
 	}
-	$met=@ini_get('max_execution_time');
-	$data_mash=($url=='')?'':create_data_mash($url,NULL,get_file_extension($original_filename));
-	if (function_exists('set_time_limit')) @set_time_limit($met);
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array(
-		'download_data_mash'=>$data_mash,
+		'download_data_mash'=>'',
 		'download_licence'=>$licence,
 		'rep_image'=>'',
 		'edit_date'=>$edit_date,
@@ -744,6 +739,9 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 	);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('download_downloads',$map,true);
+
+	require_code('tasks');
+	call_user_func_array__long_task(do_lang('INDEX_DOWNLOAD'),get_screen_title('INDEX_DOWNLOAD'),'index_download',array($id,$url,$original_filename));
 
 	require_code('seo2');
 	if (($meta_keywords=='') && ($meta_description==''))
@@ -896,9 +894,8 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 	require_code('files2');
 	delete_upload('uploads/downloads','download_downloads','url','id',$id,$url);
 
-	$met=@ini_get('max_execution_time');
-	$data_mash=create_data_mash($url,NULL,get_file_extension($original_filename));
-	if (function_exists('set_time_limit')) @set_time_limit($met);
+	require_code('tasks');
+	call_user_func_array__long_task(do_lang('INDEX_DOWNLOAD'),get_screen_title('INDEX_DOWNLOAD'),'index_download',array($id,$url,$original_filename));
 
 	if (!addon_installed('unvalidated')) $validated=1;
 
@@ -910,7 +907,6 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 	}
 
 	$update_map=array(
-		'download_data_mash'=>$data_mash,
 		'download_licence'=>$licence,
 		'original_filename'=>$original_filename,
 		'download_submitter_gets_points'=>$submitter_gets_points,

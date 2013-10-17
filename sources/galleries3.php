@@ -23,10 +23,6 @@
  */
 function download_gallery_script()
 {
-	if (function_exists('set_time_limit')) @set_time_limit(0);
-
-	require_code('galleries');
-
 	// Closed site
 	$site_closed=get_option('site_closed');
 	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
@@ -34,9 +30,6 @@ function download_gallery_script()
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
 	}
-
-	require_lang('galleries');
-	require_code('zip');
 
 	$cat=get_param('cat');
 
@@ -46,82 +39,12 @@ function download_gallery_script()
 	if ((strpos($cat,"\n")!==false) || (strpos($cat,"\r")!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
-	$gallery_rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$cat),'',1);
-	if (!array_key_exists(0,$gallery_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$gallery_row=$gallery_rows[0];
+	$num_videos=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)',array('cat'=>$cat,'validated'=>1));
 
-	// Send header
-	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	header('Content-Disposition: attachment; filename="gallery-'.$cat.'.zip"');
+	require_code('tasks');
+	$ret=call_user_func_array__long_task(do_lang('DOWNLOAD_GALLERY_CONTENTS'),get_screen_title('DOWNLOAD_GALLERY_CONTENTS'),'download_gallery',array($cat),false,$num_videos==0);
 
-	disable_php_memory_limit();
-
-	$rows_images=$GLOBALS['SITE_DB']->query_select('images',array('id','url','add_date'),array('cat'=>$cat,'validated'=>1));
-	$rows_videos=$GLOBALS['SITE_DB']->query_select('videos',array('id','url','add_date'),array('cat'=>$cat,'validated'=>1));
-	$rows_combined=array();
-	foreach ($rows_images as $row)
-	{
-		$rows_combined[]=$row+array('content_type'=>'image');
-	}
-	foreach ($rows_videos as $row)
-	{
-		$rows_combined[]=$row+array('content_type'=>'video');
-	}
-	$array=array();
-	foreach ($rows_combined as $row)
-	{
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			if (!has_privacy_access($row['content_type'],strval($row['id']))) continue;
-		}
-
-		$full_path=NULL;
-		$data=NULL;
-		if ((url_is_local($row['url'])) && (file_exists(get_file_base().'/'.urldecode($row['url']))))
-		{
-			$path=urldecode($row['url']);
-			$full_path=get_file_base().'/'.$path;
-			if (file_exists($full_path))
-			{
-				$time=filemtime($full_path);
-				$name=$path;
-			} else continue;
-		} else
-		{
-			continue; // Actually we won't include them, if they are not local it implies it is not reasonable for them to lead to server load, and they may not even be native files
-
-			$time=$row['add_date'];
-			$name=basename(urldecode($row['url']));
-			$data=http_download_file($row['url']);
-		}
-
-		$array[]=array('name'=>preg_replace('#^uploads/galleries/#','',$name),'time'=>$time,'data'=>$data,'full_path'=>$full_path);
-	}
-
-	if ($gallery_row['rep_image']!='')
-	{
-		if ((url_is_local($gallery_row['rep_image'])) && (file_exists(get_file_base().'/'.urldecode($gallery_row['rep_image']))))
-		{
-			$path=urldecode($gallery_row['rep_image']);
-			$full_path=get_file_base().'/'.$path;
-			if (file_exists($full_path))
-			{
-				$time=filemtime($full_path);
-				$name=$path;
-				$data=file_get_contents($full_path);
-			}
-		} else
-		{
-			$time=$gallery_row['add_date'];
-			$name=basename(urldecode($gallery_row['rep_image']));
-			$data=http_download_file($gallery_row['rep_image']);
-		}
-		$array[]=array('name'=>preg_replace('#^uploads/(galleries|grepimages)/#','',$name),'time'=>$time,'data'=>$data);
-	}
-
-	@ini_set('zlib.output_compression','Off');
-
-	create_zip_file($array,true);
+	$echo=globalise($ret,NULL,'',true);
+	$echo->evaluate_echo(NULL);
 }
 

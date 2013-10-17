@@ -94,10 +94,18 @@ function crc32_file($filename)
  * @param  array			A list of maps (time,data/full_path,name) covering everything to zip up
  * @param  boolean		Whether to stream the output direct to the browser
  * @param  boolean		Whether to return the tuple
- * @return mixed			The data for the zip file OR a tuple: data, offsets, sizes
+ * @param  ?PATH			File to spool into (NULL: none). $stream will be forced to false
+ * @return mixed			The data for the zip file OR a tuple: data, offsets, sizes; will be blank if $stream is true or $outfile_path is not NULL
  */
-function create_zip_file($file_array,$stream=false,$get_offsets=false)
+function create_zip_file($file_array,$stream=false,$get_offsets=false,$outfile_path=NULL)
 {
+	$outfile=mixed();
+	if (!is_null($outfile_path))
+	{
+		$stream=false;
+		$outfile=fopen($outfile_path,'w+b');
+	}
+
 	if ($stream)
 	{
 		ini_set('ocproducts.xss_detect','0');
@@ -151,14 +159,37 @@ function create_zip_file($file_array,$stream=false,$get_offsets=false)
 			$out='';
 		} else
 		{
-			if ((!array_key_exists('data',$file)) || (is_null($file['data'])))
+			if (!is_null($outfile))
 			{
-				$out.=file_get_contents($file['full_path']);
+				if ((!array_key_exists('data',$file)) || (is_null($file['data'])))
+				{
+					$tmp=fopen($file['full_path'],'rb');
+					while (!feof($tmp))
+					{
+						$data=fread($tmp,1024*1024);
+						if ($data!==false)
+						{
+							fwrite($outfile,$data);
+						}
+					}
+					fclose($tmp);
+					$offset+=filesize($file['full_path']);
+				} else
+				{
+					fwrite($outfile,$file['data']);
+					$offset+=strlen($file['data']);
+				}
 			} else
 			{
-				$out.=$file['data'];
+				if ((!array_key_exists('data',$file)) || (is_null($file['data'])))
+				{
+					$out.=file_get_contents($file['full_path']);
+				} else
+				{
+					$out.=$file['data'];
+				}
+				$offset=strlen($out);
 			}
-			$offset=strlen($out);
 		}
 
 		if ((!array_key_exists('data',$file)) || (is_null($file['data'])))
@@ -193,6 +224,13 @@ function create_zip_file($file_array,$stream=false,$get_offsets=false)
 		{
 			echo $out;
 			$out='';
+		} else
+		{
+			if (!is_null($outfile))
+			{
+				fwrite($outfile,$out);
+				$out='';
+			}
 		}
 	}
 
@@ -202,6 +240,13 @@ function create_zip_file($file_array,$stream=false,$get_offsets=false)
 	{
 		echo $out;
 		$out='';
+	} else
+	{
+		if (!is_null($outfile))
+		{
+			fwrite($outfile,$out);
+			$out='';
+		}
 	}
 
 	if ($get_offsets) return array($out,$offsets,$sizes);

@@ -50,29 +50,10 @@ class Hook_ocf_members
 	 */
 	function run()
 	{
-		if (get_forum_type()!='ocf') return new ocp_tempcode(); else ocf_require_all_forum_stuff();
+		if (get_forum_type()!='ocf') return new ocp_tempcode();
 
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-
-		require_code('ocf_posts_action');
-		require_code('ocf_posts_action2');
-
-		// Members
-		$start=0;
-		do
-		{
-			$members=$GLOBALS['FORUM_DB']->query_select('f_members',array('id'),NULL,'',500,$start);
-			foreach ($members as $member)
-			{
-				ocf_force_update_member_post_count($member['id']);
-				$num_warnings=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id'=>$member['id']));
-				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member['id']),'',1);
-			}
-			$start+=500;
-		}
-		while (array_key_exists(0,$members));
-
-		return new ocp_tempcode();
+		require_code('tasks');
+		return call_user_func_array__long_task(do_lang('CACHE_MEMBERS'),get_screen_title('CACHE_MEMBERS'),'ocf_members_recache');
 	}
 
 }

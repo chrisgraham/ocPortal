@@ -300,6 +300,9 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/systems/config/forum_topics_per_page.php',
 			'sources/hooks/systems/config/default_preview_guests.php',
 			'sources/hooks/systems/config/delete_trashed_pts.php',
+			'sources/hooks/systems/tasks/ocf_recache.php',
+			'sources/hooks/systems/tasks/ocf_topics_recache.php',
+			'sources/hooks/systems/tasks/notify_topics_moved.php',
 		);
 	}
 

@@ -1650,9 +1650,7 @@ class Module_admin_newsletter extends standard_crud_module
 				return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_DEFERRED',get_timezoned_date($schedule)));
 			}
 		}
-		actual_send_newsletter($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$template);
-
-		return inform_screen($this->title,do_lang_tempcode('SENDING_NEWSLETTER'));
+		return actual_send_newsletter($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$template);
 	}
 
 	/**

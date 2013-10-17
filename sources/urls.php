@@ -203,17 +203,6 @@ function skippable_keep($key,$val)
 }
 
 /**
- * Are we currently running HTTPS.
- *
- * @return boolean		If we are
- */
-function tacit_https()
-{
-	$https=ocp_srv('HTTPS');
-	return (($https!='') && ($https!='off'));
-}
-
-/**
  * Find whether the specified page is to use HTTPS (if not -- it will use HTTP).
  * All images (etc) on a HTTPS page should use HTTPS to avoid mixed-content browser notices.
  *

@@ -1410,7 +1410,10 @@ function check_call($c,$c_pos,$class=NULL,$function_guard='')
 			{
 				if ((is_null($class)) || ($class=='__global'))
 				{
-					log_warning('Could not find function \''.$function.'\'',$c_pos);
+					if ($function!='')
+					{
+						log_warning('Could not find function \''.$function.'\'',$c_pos);
+					}
 				} else
 				{
 					if ($class!='mixed')

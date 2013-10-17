@@ -200,123 +200,13 @@ class Module_cms_downloads extends standard_crud_module
 	{
 		$destination=post_param_integer('destination');
 
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-
 		check_privilege('mass_import'/*Not currently scoped to categories,array('downloads',$destination)*/);
 
 		$server_url=post_param('server_url');
 		$subfolders=post_param_integer('subfolders',0);
 
-		// Firstly, parse the server URL, to make sure it is fine
-		$parsed_url=@parse_url($server_url) OR warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_BAD_URL',escape_html($server_url)));
-		if (!array_key_exists('scheme',$parsed_url)) warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_BAD_URL',escape_html($server_url)));
-		if ($parsed_url['scheme']!='ftp')
-		{
-			//Error
-			warn_exit(do_lang_tempcode('URL_BEGIN_FTP'));
-		}
-		if (substr($server_url,strlen($server_url)-1,1)!='/')
-		{
-			$server_url.='/';
-		}
-
-		$parsed_url=parse_url($server_url);
-		$directory=array_key_exists('path',$parsed_url)?$parsed_url['path']:'';
-
-		require_lang('installer');
-		$conn_id=@ftp_connect(array_key_exists('host',$parsed_url)?$parsed_url['host']:'localhost',array_key_exists('port',$parsed_url)?$parsed_url['port']:21);
-		if ($conn_id===false) warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',escape_html($server_url))); // Yes it's FTP not HTTP, but lang string is ok
-		if ((array_key_exists('user',$parsed_url)) && (array_key_exists('pass',$parsed_url)))
-		{
-			$login_result=@ftp_login($conn_id,$parsed_url['user'],$parsed_url['pass']) OR warn_exit(do_lang_tempcode('NO_FTP_LOGIN',@strval($php_errormsg)));
-		} else
-		{
-			$login_result=@ftp_login($conn_id,'anonymous',get_option('staff_address')) OR warn_exit(do_lang_tempcode('NO_FTP_LOGIN',@strval($php_errormsg)));
-		}
-
-		// Check connection
-		if (!$login_result)
-		{
-			warn_exit(do_lang_tempcode('FTP_ERROR'));
-		}
-
-		// Failsafe check
-		if ((@ftp_nlist($conn_id,$directory.'/dev')!==false) && (@ftp_nlist($conn_id,$directory.'/etc')!==false) && (@ftp_nlist($conn_id,$directory.'/sbin')!==false))
-			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',$directory));
-		if ((@ftp_nlist($conn_id,$directory.'/Program files')!==false) && ((@ftp_nlist($conn_id,$directory.'/Users')!==false) || (@ftp_nlist($conn_id,$directory.'/Documents and settings')!==false)) && (@ftp_nlist($conn_id,$directory.'/Windows')!==false))
-			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',$directory));
-
-		// Actually start the scanning
-		$num_added=$this->ftp_recursive_downloads_scan($conn_id,$server_url,$directory,$destination,$subfolders);
-
-		ftp_close($conn_id);
-
-		// Show it worked / Refresh
-		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL);
-	}
-
-	/**
-	 * Worker function to do an FTP import.
-	 *
-	 * @param  resource			The FTP connection
-	 * @param  URLPATH			The URL that is equivalent to the base path on our FTP
-	 * @param  PATH				The directory we are scanning
-	 * @param  AUTO_LINK			The destination downloading category
-	 * @param  boolean			Whether we add hierarchically (as opposed to a flat category fill)
-	 * @return integer			Number of downloads added
-	 */
-	function ftp_recursive_downloads_scan($conn_id,$url,$directory,$dest_cat,$make_subfolders)
-	{
-		$num_added=0;
-
-		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-
-		$contents=@ftp_nlist($conn_id,$directory);
-		if ($contents===false) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		foreach ($contents as $entry)
-		{
-			$full_entry=$entry;
-			$parts=explode('/',$entry);
-			$entry=$parts[count($parts)-1];
-
-			// Is the entry a directory?
-			if (@ftp_chdir($conn_id,$full_entry.'/'))
-			{
-				$full_path=$directory.$entry.'/';
-				$full_url=$url.$entry.'/';
-				if ($make_subfolders)
-				{
-					// Do we need to make new category, or is it already existant?
-					$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,'text_original'=>$entry));
-					if (is_null($category_id))
-					{
-						// Add the directory
-						$category_id=add_download_category(titleify($entry),$dest_cat,'','','');
-						foreach (array_keys($groups) as $group_id)
-							$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id),'group_id'=>$group_id));
-					}
-					// Call this function again to recurse it
-					$num_added+=$this->ftp_recursive_downloads_scan($conn_id,$full_url,$full_path,$category_id,true);
-				} else
-				{
-					$num_added+=$this->ftp_recursive_downloads_scan($conn_id,$full_url,$full_path,$dest_cat,false);
-				}
-			} else
-			{
-				$full_url=$url.$entry;
-
-				// Test to see if the file is already in our database
-				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url'=>$full_url));
-				if (is_null($test))
-				{
-					// It is a file, so add it
-					add_download($dest_cat,titleify($entry),$full_url,'',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'',NULL,1,1,1,1,'',$entry,ftp_size($conn_id,$entry),0,0);
-					$num_added++;
-				}
-			}
-		}
-
-		return $num_added;
+		require_code('tasks');
+		return call_user_func_array__long_task(do_lang('FTP_DOWNLOADS'),$this->title,'import_ftp_downloads',array($destination,$server_url,$subfolders));
 	}
 
 	/**
@@ -350,107 +240,12 @@ class Module_cms_downloads extends standard_crud_module
 
 		check_privilege('mass_import'/*Not currently scoped to categories,array('downloads',$destination)*/);
 
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-
 		$server_path=post_param('server_path');
-		if (substr($server_path,-1)=='/') $server_path=substr($server_path,0,strlen($server_path)-1);
-		$base_path=get_custom_file_base().'/'.$server_path;
-		$base_url=get_custom_base_url().'/'.$server_path;
+
 		$subfolders=post_param_integer('subfolders',0);
 
-		if (!file_exists($base_path)) warn_exit(do_lang_tempcode('DIRECTORY_NOT_FOUND',$server_path));
-
-		/*	Needless because it's relative to ocPortal directory anyway
-		// Failsafe check
-		if ((file_exists($base_path.'/dev')) && (file_exists($base_path.'/etc')) && (file_exists($base_path.'/sbin')))
-			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',$server_path));
-		if ((file_exists($base_path.'/Program files')) && ((file_exists($base_path.'/Users')) || (file_exists($base_path.'/Documents and settings'))) && (file_exists($base_path.'/Windows')))
-			warn_exit(do_lang_tempcode('POINTS_TO_ROOT_SCARY',$server_path));
-		*/
-
-		// Actually start the scanning
-		$num_added=$this->filesystem_recursive_downloads_scan($base_path,$base_url,$destination,$subfolders);
-
-		// Show it worked / Refresh
-		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL);
-	}
-
-	/**
-	 * Worker function to do a filesystem import.
-	 *
-	 * @param  PATH				Filesystem-based path from where we are reading files
-	 * @param  URLPATH			URL-based path from where we are reading files
-	 * @param  AUTO_LINK			The destination downloading category
-	 * @param  boolean			Whether we add hierarchically (as opposed to a flat category fill)
-	 * @return integer			Number of downloads added
-	 */
-	function filesystem_recursive_downloads_scan($server_path,$server_url,$dest_cat,$make_subfolders)
-	{
-		$num_added=0;
-
-		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-
-		require_code('files');
-
-		$dh=@opendir($server_path);
-		if ($dh!==false)
-		{
-			while (($entry=readdir($dh))!==false)
-			{
-				if (!should_ignore_file($entry,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES))
-				{
-					$full_path=$server_path.'/'.$entry;
-					$full_url=$server_url.'/'.rawurlencode($entry);
-
-					// Is the entry a directory?
-					if (is_dir($full_path))
-					{
-						if ($make_subfolders)
-						{
-							// Do we need to make new category, or is it already existant?
-							$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,'text_original'=>$entry));
-							if (is_null($category_id))
-							{
-								// Add the directory
-								$category_id=add_download_category(titleify($entry),$dest_cat,'','','');
-								foreach (array_keys($groups) as $group_id)
-									$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id),'group_id'=>$group_id));
-							}
-							// Call this function again to recurse it
-							$num_added+=$this->filesystem_recursive_downloads_scan($full_path,$full_url,$category_id,true);
-						} else
-						{
-							$num_added+=$this->filesystem_recursive_downloads_scan($full_path,$full_url,$dest_cat,false);
-						}
-					} elseif (!is_link($full_path))
-					{
-						// Test to see if the file is already in our database
-						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url'=>$full_url));
-						if (is_null($test))
-						{
-							// First let's see if we are allowed to add this (accessible by URL already)
-							$myfile=@fopen($full_path,'rb');
-							if ($myfile!==false)
-							{
-								$shouldbe=fread($myfile,8000);
-								fclose($myfile);
-							} else $shouldbe=NULL;
-							global $HTTP_MESSAGE;
-							$actuallyis=http_download_file($full_url,8000,false);
-							if (($HTTP_MESSAGE=='200') && (!is_null($shouldbe)) && (strcmp($shouldbe,$actuallyis)==0))
-							{
-								// Ok, add it
-								$filesize=filesize($full_path);
-								add_download($dest_cat,titleify($entry),$full_url,'',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'',NULL,1,1,1,1,'',$entry,$filesize,0,0);
-								$num_added++;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return $num_added;
+		require_code('tasks');
+		return call_user_func_array__long_task(do_lang('FILESYSTEM_DOWNLOADS'),$this->title,'import_filesystem_downloads',array($destination,$server_path,$subfolders));
 	}
 
 	/**

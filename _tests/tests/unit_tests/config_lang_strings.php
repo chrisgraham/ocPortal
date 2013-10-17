@@ -31,9 +31,17 @@ class config_lang_strings_test_set extends ocp_test_case
 		$options=array();
 		foreach (array_keys($hooks) as $hook)
 		{
+			$path=get_custom_file_base().'/hooks/systems/config/'.filter_naughty($hook).'.php';
+			if (!file_exists($path))
+				$path=get_file_base().'/hooks/systems/config/'.filter_naughty($hook).'.php';
+			$code=file_get_contents($path);
+
 			require_code('hooks/systems/config/'.filter_naughty($hook));
 			$ob=object_factory('Hook_config_'.$hook);
-			$options[]=$ob->get_details();
+			$details=$ob->get_details();
+			$options[]=$details;
+
+			$this->assertTrue(strpos($code,"@package\t\t".$details['addon'])!==false,'Addon definition mismatch in '.$hook);
 		}
 		require_all_lang();
 		foreach ($options as $option)

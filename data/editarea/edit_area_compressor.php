@@ -197,7 +197,7 @@ class Compressor{
 			{
 				if( $file !== "." && $file !== ".." && ( $pos = strpos( $file, '.js' ) ) !== false )
 				{
-					$js_content	= $this->file_get_contents( $reg_path.$file );
+					$js_content	= file_get_contents( $reg_path.$file );
 					$match=array();
 					if( preg_match( '@(\'|")DISPLAY_NAME\1\s*:\s*(\'|")(.*)\2@', $js_content, $match ) )
 					{
@@ -370,7 +370,7 @@ class Compressor{
 			$content = fread($fd, filesize($file));
 			fclose($fd);
 			return $content;*/
-			return $this->file_get_contents($file);
+			return file_get_contents($file);
 		} else
 		{
 			$this->infos[]=sprintf("'%s' not loaded", $end_uri);
@@ -449,16 +449,6 @@ class Compressor{
 			$this->sub_script_list=stripslashes($param2);
 		}
 		return $param1."[];";
-	}
-
-	/* for php version that have not thoses functions */
-	function file_get_contents($file)
-	{
-		$fd = fopen($file, 'rb');
-		$content = fread($fd, filesize($file));
-		fclose($fd);
-		$this->file_loaded_size+= strlen($content);
-		return $content;				
 	}
 
 	function file_put_contents($file, &$content, $mtime=-1)

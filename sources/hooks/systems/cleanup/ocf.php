@@ -47,25 +47,10 @@ class Hook_ocf
 	 */
 	function run()
 	{
-		if (get_forum_type()!='ocf') return new ocp_tempcode(); else ocf_require_all_forum_stuff();
+		if (get_forum_type()!='ocf') return new ocp_tempcode();
 
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-
-		// Forums
-		require_code('ocf_posts_action2');
-		$start=0;
-		do
-		{
-			$forums=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id'),NULL,'',100,$start);
-			foreach ($forums as $forum)
-			{
-				ocf_force_update_forum_cacheing($forum['id']);
-			}
-			$start+=100;
-		}
-		while ($forums!=array());
-
-		return new ocp_tempcode();
+		require_code('tasks');
+		return call_user_func_array__long_task(do_lang('CACHE_FORUMS'),get_screen_title('CACHE_FORUMS'),'ocf_recache');
 	}
 
 }

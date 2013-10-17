@@ -137,6 +137,7 @@ class Hook_addon_registry_points
 			'sources/hooks/systems/config/points_if_liked.php',
 			'sources/hooks/systems/config/gift_reward_amount.php',
 			'sources/hooks/systems/config/gift_reward_chance.php',
+			'sources/hooks/systems/tasks/export_points_log.php',
 		);
 	}
 

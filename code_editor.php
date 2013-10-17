@@ -13,6 +13,8 @@
  * @package		code_editor
  */
 
+/*EXTRA FUNCTIONS: tempnam*/
+
 // Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
@@ -54,28 +56,6 @@ function code_editor_escape_html($string)
 	if ($string==='') return ''; // Optimisation
 
 	return str_replace($GLOBALS['HTML_ESCAPE_1_STRREP'],$GLOBALS['HTML_ESCAPE_2'],$string);
-}
-
-// Cover up a hole in old PHP versions functionality
-if (!function_exists('file_get_contents'))
-{
-	/**
-	 * Get the contents of a file.
-	 *
-	 * @param  SHORT_TEXT	The file name.
-	 * @return ~LONG_TEXT	The file contents (false: error).
-	 */
-	function file_get_contents($filename)
-	{
-		$data='';
-		$file=@fopen($filename,'rb');
-		if ($file)
-		{
-			while (!feof($file)) $data.=fread($file, 1024);
-			fclose($file);
-		}
-		return $data;
-	}
 }
 
 require_once($FILE_BASE.'/_config.php');

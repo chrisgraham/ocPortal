@@ -355,6 +355,7 @@ class Hook_addon_registry_core
 			'themes/default/images/admin_search.png',
 			'ocp_sitemap.xml',
 			'sources/sitemap.php',
+			'sources/hooks/systems/tasks/sitemap.php',
 			'data/force_sitemap_generation.php',
 			'sources/hooks/systems/cron/sitemap.php',
 			'IPBAN_SCREEN.tpl',
@@ -900,6 +901,12 @@ class Hook_addon_registry_core
 			'MASS_SELECT_DELETE_FORM.tpl',
 			'MASS_SELECT_FORM_BUTTONS.tpl',
 			'DELETE_MARKER.tpl',
+			'data/tasks.php',
+			'lang/EN/tasks.ini',
+			'sources/hooks/systems/config/tasks_background.php',
+			'sources/tasks.php',
+			'sources/hooks/systems/tasks/index.html',
+			'sources/hooks/systems/notifications/task_completed.php',
 		);
 	}
 

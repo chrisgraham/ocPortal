@@ -343,6 +343,27 @@ function require_code_no_override($codename)
 }
 
 /**
+ * Find if we are running on a live Google App Engine application.
+ *
+ * @return boolean		If it is running as a live Google App Engine application
+ */
+function appengine_is_live()
+{
+	return ((GOOGLE_APPENGINE) && (!is_writable(get_file_base().'/index.php')));
+}
+
+/**
+ * Are we currently running HTTPS.
+ *
+ * @return boolean		If we are
+ */
+function tacit_https()
+{
+	$https=isset($_SERVER['HTTPS'])?$_SERVER['HTTPS']:'';
+	return (($https!='') && ($https!='off'));
+}
+
+/**
  * Make an object of the given class
  *
  * @param  string			The class name
@@ -378,6 +399,10 @@ function get_file_base()
 function get_custom_file_base()
 {
 	global $FILE_BASE,$SITE_INFO;
+	if (!empty($SITE_INFO['custom_file_base']))
+	{
+		return $SITE_INFO['custom_file_base'];
+	}
 	if (!empty($SITE_INFO['custom_file_base_stub']))
 	{
 		require_code('shared_installs');
@@ -434,7 +459,7 @@ function filter_naughty_harsh($in,$preg=false)
  * Include some PHP code, compiling to HHVM's hack, for type strictness (uses ocPortal phpdoc comments).
  *
  * @param  PATH			Include path
- * @return ?mixed			Code return code
+ * @return ?mixed			Code return code (NULL: actual NULL)
  */
 function hhvm_include($path)
 {
@@ -471,16 +496,23 @@ if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('
 	}
 }
 
+// Are we in a special version of PHP?
+define('HIPHOP_PHP',strpos(PHP_VERSION,'hiphop')!==false);
+define('GOOGLE_APPENGINE',isset($_SERVER['APPLICATION_ID']));
+
 // Sanitise the PHP environment some more
 @ini_set('track_errors','1'); // so $php_errormsg is available
-@ini_set('allow_url_fopen','0');
+if (!GOOGLE_APPENGINE)
+{
+	@ini_set('include_path','');
+	@ini_set('allow_url_fopen','0');
+}
 @ini_set('suhosin.executor.disable_emodifier','1'); // Extra security if suhosin is available
 @ini_set('suhosin.executor.multiheader','1'); // Extra security if suhosin is available
 @ini_set('suhosin.executor.disable_eval','0');
 @ini_set('suhosin.executor.eval.whitelist','');
 @ini_set('suhosin.executor.func.whitelist','');
 @ini_set('auto_detect_line_endings','0');
-@ini_set('include_path','');
 @ini_set('default_socket_timeout','60');
 if (function_exists('set_magic_quotes_runtime')) @set_magic_quotes_runtime(0); // @'d because it's deprecated and PHP 5.3 may give an error
 @ini_set('html_errors','1');
@@ -533,10 +565,6 @@ if (count($SITE_INFO)==0)
 		critical_error('INFO.PHP');
 	critical_error('INFO.PHP_CORRUPTED');
 }
-
-// Are we in a special version of PHP?
-define('HIPHOP_PHP',strpos(PHP_VERSION,'hiphop')!==false);
-define('GOOGLE_APPENGINE',isset($_SERVER['APPLICATION_ID']));
 
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.
 

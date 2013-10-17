@@ -15,6 +15,7 @@ This tutorial explains how the ocPortal GAE support works.
 
 The following are known limitations with Google App Engine:
  - Individual non-bundled ocPortal addons, or third party frameworks, may or may not work. The ocPortal development tools can scan for issues but generally most programmers will not be developing with App Engine's constraints in mind. ocProducts can bring non-bundled addons up to scratch in most cases, under our development services. If possible/ideally we might try and contribute improvements back into "upstream" to the actual project, but sometimes we may feel it better to just fork our own version of the project.
+ - The comments above extend to other applications you may wish to integrate. You need to be comfortable of their compatibility, that you will get them updated, or that you will run them on another server.
  - LDAP will not work (LDAP would typically be used on a local corporate network anyway).
  - There is a 32MB upload limit, which means uploading large files is not realistic. This could be worked around, [url="with investment"]http://ocportal.com/tracker/view.php?id=1426[/url].
  - FFMPEG will not run. You would need to use a third-party transcoding service, or syndicate to YouTube (note: that addon is not currently tested on GAE). Most users, however, will be fine with ocPortal's support for integrating videos that were separately uploaded to Youtube.
@@ -23,6 +24,12 @@ The following are known limitations with Google App Engine:
  - You will need to maintain a local development site, and won't be able to do things such as themeing or addon management directly on the live site.
  - You won't be able to have the [i]full[/i] set of ocPortal addons installed, due to size constraints. This should generally not be a problem, and we provide advice on it in this tutorial.
  - While we are making sure ocPortal runs well on Google App Engine (i.e. stably, without special patches), initial set up, and some maintenance tasks, are inherently very complex. If you are not a programmer, you will need one to perform some things for you.
+ - You may not use a third-party forum with ocPortal: you must use OCF. You must also not be using a shared forum database.
+ - If you have unusually large amounts of data (as a rough example, over 50,000 catalogue entries), it is possible some actions could time-out, such as deleting a catalogue with those entries in. Such high-volume use-cases may need custom solutions for individual sites (requiring custom programming), such as shifting certain actions into background maintenance tasks. This kind of problem would affect any hosting, but particularly Google App Engine has hard-limits on how much a web request can do (which is a good thing).
+
+The following ocPortal bundled addons will not work:
+ - (All the addons mentioned for uninstallation in the Setup Wizard, further down in this tutorial)
+ - Rootkit detector (you can run it on your local development site, but on the live application it will likely timeout)
 
 [title="2"]Costs[/title]
 
@@ -177,6 +184,8 @@ Go through this process:
 [title="2"]Notes to programmers[/title]
 
 The GAE API installs a version of PHP, but it does not have the limitations of the live version of PHP. Therefore be careful that you apply to all the coding standards. In particular, ensure any custom files are written to using ocPortal's [tt]get_custom_file_base[/tt] function (which will be mapped to Google Cloud Storage).
+
+If you are developing and don't have OcCLE working yet, the [url="PHP-minishell"]http://php-minishell.appspot.com/[/url] is quite useful.
 
 [title="2"]See also[/title]
 

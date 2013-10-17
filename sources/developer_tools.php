@@ -144,8 +144,11 @@ function restrictify()
 		@ini_set('ocproducts.type_strictness','1');
 		@ini_set('ocproducts.xss_detect','1');
 	}
-	@ini_set('include_path','');
-	@ini_set('allow_url_fopen','0');
+	if (!GOOGLE_APPENGINE)
+	{
+		@ini_set('include_path','');
+		@ini_set('allow_url_fopen','0');
+	}
 	@ini_set('suhosin.executor.disable_emodifier','1');
 	@ini_set('suhosin.executor.multiheader','1');
 	$GLOBALS['NO_DB_SCOPE_CHECK']=false;

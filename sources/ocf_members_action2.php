@@ -28,6 +28,42 @@ function init__ocf_members_action2()
 }
 
 /**
+ * Get field mapping data for CSV import/export.
+ *
+ * @return array		A map of heading information (human name to field name/encoding details)
+ */
+function member_get_csv_headings()
+{
+	$headings=array(
+		'ID'=>'id',
+		'Username'=>'m_username',
+		'E-mail address'=>'m_email_address',
+		'Password'=>'m_pass_hash_salted/m_pass_salt/m_password_compat_scheme'
+	);
+	if (addon_installed('ocf_member_avatars')) $headings+=array(
+		'Avatar'=>'#m_avatar_url',
+	);
+	if (addon_installed('ocf_member_photos')) $headings+=array(
+		'Photo'=>'#m_photo_url',
+	);
+	$headings+=array(
+		'Signature'=>'*m_signature',
+		'Validated'=>'!m_validated',
+		'Join time'=>'&m_join_time',
+		'Last visit'=>'&m_last_visit_time',
+		'Number of posts'=>'m_cache_num_posts',
+		'Usergroup'=>'@m_primary_group',
+		'Banned'=>'!m_is_perm_banned',
+		'Date of birth'=>'m_dob_year/m_dob_month/m_dob_day',
+		'Reveal age'=>'!m_reveal_age',
+		'Language'=>'m_language',
+		'Accept member e-mails'=>'!m_allow_emails',
+		'Opt-in'=>'!m_allow_emails_from_staff',
+	);
+	return $headings;
+}
+
+/**
  * Get a list of timezones.
  *
  * @param  ?string		Current timezone to select (NULL: server default)

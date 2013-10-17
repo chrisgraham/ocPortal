@@ -2722,16 +2722,6 @@ function appengine_general_guard()
 }
 
 /**
- * Find if we are running on a live Google App Engine application.
- *
- * @return boolean		If it is running as a live Google App Engine application
- */
-function appengine_is_live()
-{
-	return ((GOOGLE_APPENGINE) && (!is_writeable(get_file_base().'/index.php')));
-}
-
-/**
  * Exit if we are running on a live Google App Engine application.
  */
 function appengine_live_guard()

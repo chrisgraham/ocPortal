@@ -385,6 +385,7 @@ The 'keep' parameters available are:
  - [tt]keep_on_same_msn[/tt] -- set this to '0' if you are doing an ocPortal site merge import and want to force OCF content to import even if the importer thinks that you are on the same MSN as the other site
  - [tt]keep_theme_test[/tt] -- set this to '1' if you are testing lots of themes. It will cause installed theme addons to have their Comcode pages extracted with a special prefix, it will remove that prefix on addon packaging, and page detection will give preference to the prefix for the particular theme you are currently using (so use in conjunction with keep_theme).
  - [tt]keep_debug_notifications[/tt] -- set this to '1' if you are debugging the notifications system and therefore need them to be sent before the page output finishes
+ - [tt]keep_debug_tasks[/tt] -- set this to '1' if you are debugging the tasks system and therefore need them to be run immediately (i.e. without going into the task queue)
  - [tt]keep_devtest[/tt] -- used during development mode to test URL building is working correctly, of no use manually
  - [tt]keep_debug_has_cookies[/tt] -- useful for developers to tell ocPortal cookies are supported when Javascript may be off
  - [tt]keep_memory_limit_test[/tt] -- set to a number of megabytes under 32 to reduce the memory limit to this value; useful for performance debugging

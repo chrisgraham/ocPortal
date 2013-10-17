@@ -13,6 +13,8 @@
  * @package		rootkit_detector
  */
 
+/*EXTRA FUNCTIONS: mysql\_.+*/
+
 // Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
@@ -27,16 +29,16 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 }
 @chdir($FILE_BASE);
 
-if (!function_exists('mysql_connect')) echo 'MySQL extension needed';
-// To make Code Quality Checker pass
-if (!function_exists('mysql_connect')) return;
-if (!function_exists('mysql_select_db')) return;
-if (!function_exists('mysql_query')) return;
-if (!function_exists('mysql_fetch_assoc')) return;
-
 $type=isset($_GET['type'])?$_GET['type']:'';
 
 rd_do_header();
+
+if (!function_exists('mysql_connect'))
+{
+	echo '<p>MySQL extension needed</p>';
+	rd_do_footer();
+	exit();
+}
 
 if ($type=='')
 {
@@ -55,50 +57,76 @@ if ($type=='')
 			<p>Database table prefix: <input type="text" name="db_prefix" value="ocp_" /></p>
 			<p>Database username: <input type="text" name="db_user" value="root" /></p>
 			<p>Database password: <input type="password" name="db_pass" /></p>
+END;
 
+	if (isset($_SERVER['APPLICATION_ID'])) // Google App Engine
+	echo <<<END
+			<p>E-mail results to (required): <input type="text" name="email" /></p>
+END;
+
+	echo <<<END
 			<input type="submit" value="Begin" />
 		</div>
 END;
 } else
 {
-	if (get_magic_quotes_gpc())
+	$settings=array();
+	foreach ($_POST as $key=>$val)
 	{
-		foreach ($_POST as $key=>$val)
-		{
-			$_POST[$key]=stripslashes($val);
-		}
+		if (get_magic_quotes_gpc())
+			$val=stripslashes($val);
+		$settings[$key]=$val;
 	}
 
-	$info_file=file_get_contents('_config.php');
+	$info_file=file_get_contents($FILE_BASE.'/_config.php');
 	$matches=array();
 	if (preg_match('#\$SITE_INFO\[\'master_password\'\]=\'([^\']*)\';#',$info_file,$matches)==0) exit(':(');
 	global $SITE_INFO;
 	$SITE_INFO=array('master_password'=>$matches[1]);
-	if (!rk_check_master_password($_POST['password']))
+	if (!rk_check_master_password($settings['password']))
 	{
 		echo '<p>Incorrect master password</p>';
 		rd_do_footer();
 		exit();
 	}
 
-	$db=mysql_connect($_POST['db_host'],$_POST['db_user'],$_POST['db_pass']);
+	$db=mysql_connect($settings['db_host'],$settings['db_user'],$settings['db_pass']);
 	if ($db===false)
 	{
 		echo '<p>Could not connect (1)</p>';
 		rd_do_footer();
 		exit();
 	}
-	if (!mysql_select_db($_POST['db_name'],$db))
+	if (!mysql_select_db($settings['db_name'],$db))
 	{
 		echo '<p>Could not connect (2)</p>';
 		rd_do_footer();
 		exit();
 	}
 
+	if (isset($_SERVER['APPLICATION_ID'])) // Google App Engine
+	{
+		if (isset($_GET['settings'])) // Running out of the task queue
+		{
+			$settings=unserialize(get_magic_quotes_gpc()?stripslashes($_GET['settings']):$_GET['settings']);
+		} else // Put into the task queue
+		{
+			require_once('google/appengine/api/taskqueue/PushTask.php');
+
+			$pushtask='\google\appengine\api\taskqueue\PushTask'; // So does not give a parser error on older versions of PHP
+			$task=new $pushtask('/worker.php',array('action'=>'rootkit_detection.php?type=go&settings='.urlencode(serialize($settings))));
+			$task_name=$task->add();
+
+			echo '<p>The task has been added to the GAE task queue.</p>';
+			rd_do_footer();
+			exit();
+		}
+	}
+	
 	$results='';
 
 	// Check database
-	$prefix=$_POST['db_prefix'];
+	$prefix=$settings['db_prefix'];
 	if (file_exists($FILE_BASE.'/sources/hooks/systems/addon_registry/calendar_events.php'))
 	{
 		$r=mysql_query('SELECT * FROM '.$prefix.'calendar_events e LEFT JOIN '.$prefix.'translate t on e.e_content=t.id WHERE e_type=1 ORDER BY e.id',$db);
@@ -156,27 +184,35 @@ END;
 	$files=rd_do_dir('');
 	foreach ($files as $file)
 	{
-		if (filesize($GLOBALS['FILE_BASE'].'/'.$file)!=0)
+		if (filesize($FILE_BASE.'/'.$file)!=0)
 		{
 			$results.='File: '.$file.'=';
 			if (function_exists('md5_file'))
 			{
-				$results.=md5_file($GLOBALS['FILE_BASE'].'/'.$file);
+				$results.=md5_file($FILE_BASE.'/'.$file);
 			} else
 			{
-				$data='';
-				$myfile=@fopen($GLOBALS['FILE_BASE'].'/'.$file,'rb');
-				if ($file!==false)
-				{
-					while (!feof($myfile)) $data.=fread($myfile,1024);
-					fclose($myfile);
-				}
+				$data=file_get_contents($FILE_BASE.'/'.$file);
 				$results.=md5($data);
 			}
 			$results.="\n";
 		}
 	}
 
+	if (!empty($settings['email'])) // Will only be the case on Google App Engine
+	{
+		require_once('google/appengine/api/mail/Message.php');
+
+		$message='\google\appengine\api\mail\Message'; // So does not give a parser error on older versions of PHP
+		$task=new $message(array(
+			'to'=>$settings['email'],
+			'subject'=>'Rootkit detection results',
+			'textBody'=>$results,
+		));
+		$task_name=$task->add();
+	}
+
+	$results=htmlentities($results);
 	echo <<<END
 		<p>This is the result of the scan. Please save this to your own computer somewhere secure, and if you have run this tool previously, run a diff between those results and these. It is up to you to interpret the results - basically the diff will tell you what has been added and changed, and if you see anything you cannot fully explain, you may wish to investigate. This tool has been designed to empower, and to some extent promote secure practice, but it is only really useful in expert hands (there's no point ocProducts making it easier, as the security principles and analysis involved require expert knowledge in themself).</p>
 		<textarea style="width: 100%" rows="30" cols="100" name="results">{$results}</textarea>

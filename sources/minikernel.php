@@ -70,6 +70,27 @@ function init__minikernel()
 }
 
 /**
+ * Find if we are running on a live Google App Engine application.
+ *
+ * @return boolean		If it is running as a live Google App Engine application
+ */
+function appengine_is_live()
+{
+	return false;
+}
+
+/**
+ * Are we currently running HTTPS.
+ *
+ * @return boolean		If we are
+ */
+function tacit_https()
+{
+	$https=isset($_SERVER['HTTPS'])?$_SERVER['HTTPS']:'';
+	return (($https!='') && ($https!='off'));
+}
+
+/**
  * Provides a hook for file synchronisation between mirrored servers. Called after any file creation, deletion or edit.
  *
  * @param  PATH				File/directory name to sync on (full path)

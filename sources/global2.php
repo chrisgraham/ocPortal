@@ -1149,7 +1149,8 @@ function get_base_url($https=NULL,$zone_for=NULL)
 function get_custom_base_url($https=NULL)
 {
 	global $SITE_INFO;
-	if (!isset($SITE_INFO['custom_base_url_stub'])) return get_base_url($https);
+	if (!empty($SITE_INFO['custom_base_url'])) return $SITE_INFO['custom_base_url'];
+	if (empty($SITE_INFO['custom_base_url_stub'])) return get_base_url($https);
 
 	// Note that HTTPS is not supported for shared installs
 	$u=current_share_user();
