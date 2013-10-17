@@ -40,6 +40,7 @@ function clear_old_uploads()
 				{
 					// Delete file if it exists
 					@unlink($upload['i_save_url']);
+					sync_file($upload['i_save_url']);
 				}
 
 				// Note: it is possible some db records to be left without corresponding files. So we need to clean them too.

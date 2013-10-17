@@ -1594,7 +1594,10 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 
 	// Cleanup old avatar
 	if ((url_is_local($old)) && ((substr($old,0,20)=='uploads/ocf_avatars/') || (substr($old,0,16)=='uploads/avatars/')) && ($old!=$avatar_url))
+	{
+		sync_file(rawurldecode($old));
 		@unlink(get_custom_file_base().'/'.rawurldecode($old));
+	}
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url'=>$avatar_url),array('id'=>$member_id),'',1);
 
@@ -1673,7 +1676,10 @@ function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id=NULL)
 	$old=$GLOBALS['FORUM_DB']->query_select_value('f_members','m_photo_url',array('id'=>$member_id));
 	if ($old==$url) return;
 	if ((url_is_local($old)) && ((substr($old,0,19)=='uploads/ocf_photos/') || (substr($old,0,15)=='uploads/photos/')))
+	{
+		sync_file(rawurldecode($old));
 		@unlink(get_custom_file_base().'/'.rawurldecode($old));
+	}
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_photo_url'=>$url,'m_photo_thumb_url'=>$thumb_url),array('id'=>$member_id),'',1);
 

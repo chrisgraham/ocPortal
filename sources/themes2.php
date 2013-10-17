@@ -716,6 +716,7 @@ function tidy_theme_img_code($new,$old,$table,$field,$db=NULL)
 		if ($count==0)
 		{
 			@unlink(get_custom_file_base().'/'.$path);
+			sync_file($path);
 			$GLOBALS['SITE_DB']->query_delete('theme_images',array('id'=>$old));
 		}
 	}

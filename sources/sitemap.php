@@ -364,6 +364,7 @@ function sitemaps_xml_finished()
 	@unlink($SITEMAPS_OUT_PATH);
 	copy($SITEMAPS_OUT_TEMPPATH,$SITEMAPS_OUT_PATH);
 	@unlink($SITEMAPS_OUT_TEMPPATH);
+	sync_file($SITEMAPS_OUT_PATH);
 }
 
 /**

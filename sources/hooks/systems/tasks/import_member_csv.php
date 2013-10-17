@@ -62,6 +62,7 @@ class Hook_task_import_member_csv
 		if ($csv_header===false)
 		{
 			@unlink($path);
+			sync_file($path);
 			return array(NULL,do_lang_tempcode('NO_DATA_IMPORTED'));
 		}
 		if ((count($csv_header)==1) && (strpos($csv_header[0],';')!==false))
@@ -358,12 +359,14 @@ class Hook_task_import_member_csv
 		if ($done==0)
 		{
 			@unlink($path);
+			sync_file($path);
 			return array(NULL,do_lang_tempcode('NO_DATA_IMPORTED'));
 		}
 
 		$outputted_messages->attach(do_lang_tempcode('NUM_MEMBERS_IMPORTED',escape_html(integer_format($num_added)),escape_html(integer_format($num_edited))));
 
 		@unlink($path);
+		sync_file($path);
 		return array('text/html',$outputted_messages);
 	}
 }

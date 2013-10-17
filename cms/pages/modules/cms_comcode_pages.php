@@ -1081,6 +1081,7 @@ class Module_cms_comcode_pages
 		{
 			check_delete_permission('high',$resource_owner);
 			unlink(get_custom_file_base().'/'.$path);
+			sync_file($path);
 		}
 
 		// Look for bad title semantics

@@ -557,6 +557,7 @@ function delete_ocp_page($zone,$page,$type=NULL,$use_afm=false)
 				} else
 				{
 					unlink(get_custom_file_base().'/'.$_path);
+					sync_file($_path);
 				}
 			}
 		}
@@ -586,6 +587,7 @@ function delete_ocp_page($zone,$page,$type=NULL,$use_afm=false)
 			} else
 			{
 				unlink(get_custom_file_base().'/'.$_path);
+				sync_file($_path);
 			}
 		}
 	}

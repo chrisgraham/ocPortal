@@ -128,6 +128,7 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 				$path=$content_result[1];
 				$content_result=file_get_contents($path);
 				@unlink($path);
+				sync_file($path);
 			}
 
 			return do_template('FULL_MESSAGE_SCREEN',array(
@@ -141,6 +142,7 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 		{
 			readfile($content_result[1]);
 			@unlink($content_result[1]);
+			sync_file($content_result[1]);
 		} elseif (is_object($content_result))
 		{
 			$content_result->evaluate_echo(NULL);

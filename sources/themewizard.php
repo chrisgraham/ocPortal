@@ -487,10 +487,12 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 						// Wipe out ones that might have been copied from source theme
 						if (($source_theme!='default') && (strpos($orig_path,'images_custom')!==false))
 						{
-							@unlink(str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.png');
-							@unlink(str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.jpg');
-							@unlink(str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.gif');
-							@unlink(str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.jpeg');
+							foreach (array('png','jpg','gif','jpeg') as $ext)
+							{
+								$old_delete_path=str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.'.$ext;
+								@unlink($old_delete_path);
+								sync_file($old_delete_path);
+							}
 						}
 
 						if ((!file_exists($saveat)) || ($source_theme!='default') || ($algorithm=='hsv'))
@@ -561,6 +563,7 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 						} else
 						{
 							@unlink($saveat.'.editfrom');
+							sync_file($saveat.'.editfrom');
 						}
 					}
 				}

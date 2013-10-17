@@ -788,12 +788,12 @@ class Module_cms_news extends standard_crud_module
 
 		$rss=new rss($rss_url,true);
 
-		require_code('tasks');
-		$ret=call_user_func_array__long_task(do_lang('IMPORT_NEWS'),$this->title,'import_rss',array($is_validated,$download_images,$to_own_account,$import_blog_comments,$import_to_blog,$rss));
-
 		// Cleanup
 		if (url_is_local($rss_url)) // Means it is a temp file
 			@unlink($rss_url);
+
+		require_code('tasks');
+		$ret=call_user_func_array__long_task(do_lang('IMPORT_NEWS'),$this->title,'import_rss',array($is_validated,$download_images,$to_own_account,$import_blog_comments,$import_to_blog,$rss));
 
 		return $ret;
 	}

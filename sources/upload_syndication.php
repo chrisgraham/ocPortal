@@ -217,6 +217,7 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
 			if (url_is_local($new_url))
 			{
 				@unlink(get_custom_file_base().'/'.rawurldecode($new_url));
+				sync_file(rawurldecode($new_url));
 			}
 
 			if (count($remote_urls)==0)

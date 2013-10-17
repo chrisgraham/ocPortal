@@ -372,6 +372,7 @@ function upgrade_script()
 										tar_close($old_mod_file);
 										unlink(get_file_base().'/imports/addons/'.$found.'.tar');
 										rename(get_file_base().'/imports/addons/'.$found.'.new.tar',get_file_base().'/imports/addons/'.$found.'.tar');
+										sync_file('imports/addons/'.$found.'.tar');
 
 										echo do_lang('U_PACKING_MESSAGE',escape_html($upgrade_file['path'])).'<br />';
 									}

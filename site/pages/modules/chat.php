@@ -1227,6 +1227,7 @@ class Module_chat
 				if ((array_key_exists($effect.$suffix,$current_settings)) && (substr($current_settings[$effect.$suffix],0,31)=='uploads/personal_sound_effects/') && ($current_settings[$effect.$suffix]!=$url))
 				{
 					@unlink(get_custom_file_base().'/'.filter_naughty($current_settings[$effect.$suffix]));
+					sync_file(filter_naughty($current_settings[$effect.$suffix]));
 				}
 
 				// Delete existing setting
