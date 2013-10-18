@@ -48,6 +48,8 @@ class Hook_config_ticket_email_from
 	 */
 	function get_default()
 	{
+		if (GOOGLE_APPENGINE) return 'tickets@appid.appspotmail.com';
+
 		return 'support@'.get_domain();
 	}
 

@@ -5,9 +5,44 @@ api_version: 1
 threadsafe: yes
 
 handlers:
-- url: /favicon\.ico
-  static_files: favicon.ico
-  upload: favicon\.ico
+- url: ^.*\.php
+  script: \1
+- url: ^.*\.(css|csv|cur|dat|gif|gz|htm|html|ico|ini|jar|jpg|js|json|mp3|pdf|png|pre|svg|swf|tar|tpl|ttf|txt|wav|xml|xsl|zip)
+  static_files: \1
+  upload: ^.*\.(css|csv|cur|dat|gif|gz|htm|html|ico|ini|jar|jpg|js|json|mp3|pdf|png|pre|svg|swf|tar|tpl|ttf|txt|wav|xml|xsl|zip)
+  application_readable: true
+- url: /_ah/mail/tickets@appid.appspotmail.com
+  script: data/incoming_ticket_email.php
+  login: admin
+- url: /_ah/bounce
+  script: data/incoming_bounced_email.php
+  login: admin
 
-- url: .*
-  script: gae_test.php
+skip_files:
+- ^uploads/(?<!website_specific/).*
+- ^caches/.*
+- ^data_custom/errorlog.php$
+- ^safe_mode_temp/.*
+
+inbound_services:
+- mail
+- mail_bounce
+
+admin_console:
+  pages:
+  - name: Admin Zone
+    url: /adminzone
+
+pagespeed:
+  enabled_rewriters:
+  - CollapseWhitespace
+  - ElideAttributes
+  - RemoveComments
+  - RemoveQuotes
+  - LeftTrimUrls
+  disabled_rewriters:
+  - ConvertMetaTags
+  - InlineCss
+  - InlinePreviewImages
+  - CombineCss
+  - CombineJs

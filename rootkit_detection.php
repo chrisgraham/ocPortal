@@ -114,7 +114,7 @@ END;
 			require_once('google/appengine/api/taskqueue/PushTask.php');
 
 			$pushtask='\google\appengine\api\taskqueue\PushTask'; // So does not give a parser error on older versions of PHP
-			$task=new $pushtask('/worker.php',array('action'=>'rootkit_detection.php?type=go&settings='.urlencode(serialize($settings))));
+			$task=new $pushtask('/rootkit_detection.php',array('type'=>'go','settings'=>serialize($settings)));
 			$task_name=$task->add();
 
 			echo '<p>The task has been added to the GAE task queue.</p>';

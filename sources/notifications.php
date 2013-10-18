@@ -109,8 +109,9 @@ function _get_notification_ob_for_code($notification_code)
  * @param  string			Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
  * @param  string			Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
  * @param  string			Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
+ * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
  */
-function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='')
+function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='',$attachments=NULL)
 {
 	global $NOTIFICATIONS_ON;
 	if (!$NOTIFICATIONS_ON) return;
@@ -119,7 +120,7 @@ function dispatch_notification($notification_code,$code_category,$subject,$messa
 
 	if (running_script('install')) return;
 
-	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix);
+	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix,$attachments);
 
 	if ((get_param_integer('keep_debug_notifications',0)==1) || ($notification_code=='task_completed'))
 	{
@@ -153,6 +154,7 @@ class Notification_dispatcher
 	var $subject_suffix='';
 	var $body_prefix='';
 	var $body_suffix='';
+	var $attachments=NULL;
 
 	/**
 	 * Construct notification dispatcher.
@@ -173,8 +175,9 @@ class Notification_dispatcher
 	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
 	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
 	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
+	 * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
 	 */
-	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='')
+	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='',$attachments=NULL)
 	{
 		$this->notification_code=$notification_code;
 		$this->code_category=$code_category;
@@ -191,6 +194,7 @@ class Notification_dispatcher
 		$this->subject_suffix=$subject_suffix;
 		$this->body_prefix=$body_prefix;
 		$this->body_suffix=$body_suffix;
+		$this->attachments=$attachments;
 	}
 
 	/**
@@ -259,7 +263,7 @@ class Notification_dispatcher
 				}
 
 				if (($to_member_id!==$this->from_member_id) || ($testing))
-					$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc);
+					$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc,$this->attachments);
 			}
 
 			$start+=$max;
@@ -388,9 +392,10 @@ function _find_member_statistical_notification_type($to_member_id)
  * @param  integer		The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
  * @param  boolean		Whether to NOT CC to the CC address
+ * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
  * @return boolean		New $no_cc setting
  */
-function _dispatch_notification_to_member($to_member_id,$setting,$notification_code,$code_category,$subject,$message,$from_member_id,$priority,$no_cc)
+function _dispatch_notification_to_member($to_member_id,$setting,$notification_code,$code_category,$subject,$message,$from_member_id,$priority,$no_cc,$attachments)
 {
 	// Fish out some general details of the sender
 	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id,true);
@@ -443,7 +448,24 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 				$wrapped_subject=do_lang('NOTIFICATION_EMAIL_SUBJECT_WRAP',$subject,comcode_escape(get_site_name()));
 				$wrapped_message=do_lang('NOTIFICATION_EMAIL_MESSAGE_WRAP',$message_to_send,comcode_escape(get_site_name()));
 
-				mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,$from_email,$from_name,$priority,NULL,$no_cc,($from_member_id<0)?$GLOBALS['FORUM_DRIVER']->get_guest_id():$from_member_id,($from_member_id==A_FROM_SYSTEM_PRIVILEGED),false,false,'MAIL',$priority<3);
+				mail_wrap(
+					$wrapped_subject,
+					$wrapped_message,
+					array($to_email),
+					$to_name,
+					$from_email,
+					$from_name,
+					$priority,
+					NULL,
+					$no_cc,
+					($from_member_id<0)?$GLOBALS['FORUM_DRIVER']->get_guest_id():$from_member_id,
+					($from_member_id==A_FROM_SYSTEM_PRIVILEGED),
+					false,
+					false,
+					'MAIL',
+					$priority<3,
+					$attachments
+				);
 
 				$needs_manual_cc=false;
 				$no_cc=true; // Don't CC again

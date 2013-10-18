@@ -316,20 +316,8 @@ class Module_admin_backup
 			}
 		}
 
-		$instant=get_param_integer('keep_backup_instant',0); // Toggle this to true when debugging
-		if (function_exists('set_time_limit')) @set_time_limit(0) OR warn_exit(do_lang_tempcode('SAFE_MODE'));
-		if ($instant==1)
-		{
-			make_backup_2($file,$b_type,$max_size);
-		} else
-		{
-			global $MB2_FILE,$MB2_B_TYPE,$MB2_MAX_SIZE;
-			$MB2_FILE=$file;
-			$MB2_B_TYPE=$b_type;
-			$MB2_MAX_SIZE=$max_size;
-			@ignore_user_abort(true);
-			register_shutdown_function('make_backup_2');
-		}
+		require_code('tasks');
+		$ret=call_user_func_array__long_task(do_lang('BACKUP'),$this->title,'make_backup',array($file,$b_type,$max_size));
 
 		$url=build_url(array('page'=>'_SELF'),'_SELF');
 		redirect_screen($this->title,$url,do_lang_tempcode('BACKUP_INFO_1',$file));

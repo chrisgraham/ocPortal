@@ -296,7 +296,8 @@ function init__global2()
 	if (get_option('log_php_errors')=='1')
 	{
 		@ini_set('log_errors','1');
-		@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
+		if (!GOOGLE_APPENGINE)
+			@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
 	}
 	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_privilege(get_member(),'see_php_errors'))))
 	{
@@ -703,6 +704,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 			case E_COMPILE_ERROR:
 			case E_ERROR:
 				$type='error';
+				$syslog_type=LOG_ERR;
 				break;
 			case -123: // Hacked in for the memtrack extension, which was buggy
 			case E_CORE_WARNING:
@@ -710,6 +712,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 			case E_USER_WARNING:
 			case E_WARNING:
 				$type='warning';
+				$syslog_type=LOG_WARNING;
 				break;
 			//case E_STRICT: (constant not defined in all php versions)
 			//case E_DEPRECATED: (constant not defined in all php versions)
@@ -717,6 +720,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 			case E_USER_NOTICE:
 			case E_NOTICE:
 				$type='notice';
+				$syslog_type=LOG_NOTICE;
 				break;
 			default: // We don't know the error type so it's probably best to continue (could be a problem with something getting deprecated)
 				return false;
@@ -728,12 +732,19 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 			global $REQUIRED_CODE;
 			if (!array_key_exists('failure',$REQUIRED_CODE))
 			{
-				@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy(),0); // We really want to know the URL where this is happening (normal PHP error logging does not include it)!
+				$php_error_label=$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy(); // We really want to know the URL where this is happening (normal PHP error logging does not include it)!
+				if ((GOOGLE_APPENGINE) && (function_exists('syslog')))
+				{
+					syslog($syslog_type,$php_error_label);
+				} else
+				{
+					@error_log('PHP '.ucwords($type).': '.$php_error_label,0);
+				}
 				critical_error('EMERGENCY',$errstr.escape_html(' ['.$errfile.' at '.strval($errline).']'));
 			}
 		}
 		require_code('failure');
-		_ocportal_error_handler($type,$errno,$errstr,$errfile,$errline);
+		_ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_type);
 	}
 
 	return false;

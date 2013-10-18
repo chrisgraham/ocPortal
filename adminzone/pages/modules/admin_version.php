@@ -373,6 +373,7 @@ class Module_admin_version
 				't_member_id'=>'MEMBER',
 				't_secure_ref'=>'ID_TEXT', // Used like a temporary password to initiate the task
 				't_send_notification'=>'BINARY',
+				't_locked'=>'BINARY',
 			));
 		}
 

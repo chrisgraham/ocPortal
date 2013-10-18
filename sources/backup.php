@@ -19,15 +19,6 @@
  */
 
 /**
- * Standard code module initialisation function.
- */
-function init__backup()
-{
-	global $STARTED_BACKUP;
-	$STARTED_BACKUP=false;
-}
-
-/**
  * Write PHP code for the restoration of database data into file.
  *
  * @param  resource			The logfile to write to
@@ -121,25 +112,14 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 /**
  * Backend function to do a backup (meant to be run as a shutdown function - essentially a background task).
  *
- * @param  ?string		The filename to backup to (NULL: get global)
- * @param  ?string		The type of backup to do (NULL: get global)
+ * @param  string			The filename to backup to
+ * @param  string			The type of backup to do
  * @set    full incremental
- * @param  ?integer		The maximum size of a file to include in the backup (NULL: get global)
+ * @param  integer		The maximum size of a file to include in the backup
+ * @return tempcode		Success message
  */
-function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called as a shutdown function and thus cannot script-timeout
+function make_backup_2($file,$b_type,$max_size) // This is called as a shutdown function and thus cannot script-timeout
 {
-	global $STARTED_BACKUP;
-	if ($STARTED_BACKUP) return;
-	$STARTED_BACKUP=true;
-
-	if (is_null($file))
-	{
-		global $MB2_FILE,$MB2_B_TYPE,$MB2_MAX_SIZE;
-		$file=$MB2_FILE;
-		$b_type=$MB2_B_TYPE;
-		$max_size=$MB2_MAX_SIZE;
-	}
-
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	$logfile_path=get_custom_file_base().'/exports/backups/'.$file.'.txt';
 	$logfile=@fopen($logfile_path,'wt') OR intelligent_write_error($logfile_path); // .txt file because IIS doesn't allow .log download
@@ -208,13 +188,13 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 
 			'site', // In case of collapsed zones blocking in
 		));
-		tar_add_folder($myfile,$logfile,get_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'));
+		tar_add_folder($myfile,$logfile,get_custom_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'));
 	} elseif ($b_type=='incremental')
 	{
 		$threshold=intval(get_value('last_backup'));
 
 		set_value('last_backup',strval(time()));
-		$directory=tar_add_folder_incremental($myfile,$logfile,get_file_base(),$threshold,$max_size);
+		$directory=tar_add_folder_incremental($myfile,$logfile,get_custom_file_base(),$threshold,$max_size);
 		$_directory='';
 		foreach ($directory as $d)
 		{
@@ -311,8 +291,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 		}
 	}
 
-	require_code('notifications');
-	dispatch_notification('backup_finished',NULL,do_lang('BACKUP',NULL,NULL,NULL,get_site_default_lang()),do_lang('BACKUP_FINISHED',comcode_escape($url),get_site_default_lang()),NULL,A_FROM_SYSTEM_PRIVILEGED);
+	return do_lang_tempcode('BACKUP_FINISHED',escape_html($url));
 }
 
 

@@ -38,6 +38,9 @@ function init__failure()
 	 */
 	global $WANT_TEXT_ERRORS;
 	$WANT_TEXT_ERRORS=false;
+
+	global $RUNNING_TASK;
+	$RUNNING_TASK=false;
 }
 
 /**
@@ -210,8 +213,9 @@ function improperly_filled_in_post($name)
  * @param  PATH			The error message
  * @param  string			The file the error occurred in
  * @param  integer		The line the error occurred on
+ * @param  integer		The syslog type (used by GAE logging)
  */
-function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
+function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_type)
 {
 	if (!$GLOBALS['SUPPRESS_ERROR_DEATH'])
 	{
@@ -240,12 +244,18 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	// Put into error log
 	if (get_param_integer('keep_fatalistic',0)==0)
 	{
-		$log='PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy();
+		$php_error_label=$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy();
 		/*$log.="\n";
 		ob_start();
 		debug_print_backtrace(); Does not work consistently, sometimes just kills PHP
 		$log.=ob_get_clean();*/
-		@error_log($log,0);
+		if ((GOOGLE_APPENGINE) && (function_exists('syslog')))
+		{
+			syslog($syslog_type,$php_error_label);
+		} else
+		{
+			@error_log('PHP '.ucwords($type).': '.$php_error_label,0);
+		}
 	}
 
 	if (!$GLOBALS['SUPPRESS_ERROR_DEATH']) // Don't display - die as normal
@@ -301,6 +311,16 @@ function _generic_exit($text,$template,$support_match_key_messages=false)
 	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
 	$text_eval=is_object($text)?$text->evaluate():$text;
+
+	global $RUNNING_TASK;
+	if ($RUNNING_TASK)
+	{
+		require_code('notifications');
+		require_lang('tasks');
+		$n_subject=do_lang('_TASK_FAILED_SUBJECT');
+		$n_message=do_lang('TASK_FAILED_BODY','[semihtml]'.$text_eval.'[/semihtml]');
+		dispatch_notification('task_completed',NULL,$n_subject,$n_message,array(get_member()),A_FROM_SYSTEM_PRIVILEGED,2);
+	}
 
 	if (is_null($support_match_key_messages))
 	{
@@ -919,7 +939,16 @@ function _fatal_exit($text,$return=false)
 	$title=get_screen_title('ERROR_OCCURRED');
 
 	if (get_param_integer('keep_fatalistic',0)==0)
-		@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text).' @ '.get_self_url_easy(),0);
+	{
+		$php_error_label=(is_object($text)?$text->evaluate():$text).' @ '.get_self_url_easy();
+		if ((GOOGLE_APPENGINE) && (function_exists('syslog')))
+		{
+			syslog(LOG_ERR,$php_error_label);
+		} else
+		{
+			@error_log('ocPortal: '.$php_error_label,0);
+		}
+	}
 
 	$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'9fdc6d093bdb685a0eda6bb56988a8c5','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));
 	$echo=globalise($error_tpl,NULL,'',true);

@@ -87,11 +87,13 @@ class Hook_addon_registry_google_appengine
 		return array(
 			'sources/hooks/systems/addon_registry/google_appengine.php',
 			'data/modules/google_appengine/app.yaml',
-			'data/modules/google_appengine/queue.yaml',
+			'data/modules/google_appengine/cron.yaml',
 			'data/modules/google_appengine/dos.yaml',
+			'data/modules/google_appengine/queue.yaml',
 			'data/modules/google_appengine/index.html',
 			'data/modules/google_appengine/php.ini',
 			'data_custom/modules/google_appengine/index.html',
+			'sources/google_appengine.php',
 		);
 	}
 

@@ -84,7 +84,6 @@ class Hook_addon_registry_backup
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/notifications/backup_finished.php',
 			'sources/hooks/systems/config/backup_overwrite.php',
 			'sources/hooks/systems/config/backup_server_hostname.php',
 			'sources/hooks/systems/config/backup_server_password.php',
@@ -111,6 +110,7 @@ class Hook_addon_registry_backup
 			'sources/hooks/systems/do_next_menus/backup.php',
 			'sources/hooks/systems/snippets/backup_size.php',
 			'exports/backups/.htaccess',
+			'sources/hooks/systems/tasks/make_backup.php',
 		);
 	}
 

@@ -164,6 +164,9 @@ write_to('docs/pages/comcode_custom/EN/tut_adv_configuration.txt','IIRF','[staff
 // Write rules to ocp.hdf (Hip Hop PHP)
 write_to('ocp.hdf','HPHP','RewriteRules {',"\t\t}",3,$rewrite_rules);
 
+// Write rules to app.yaml (Google App Engine)
+write_to('data/modules/google_appengine/app.yaml','GAE','handlers:',"- url: ^.*\.(css",0,$rewrite_rules);
+
 function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrite_rules)
 {
 	if (!file_exists($file_path)) $file_path='../'.$file_path;
@@ -247,6 +250,26 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 			$rules_txt=preg_replace('#^\t*#m',str_repeat("\t",$indent_level),$rules_txt);
 			$new.=$rules_txt;
 			$new.="\n\t\t\t".$match_end;
+			break;
+
+		case 'GAE':
+			$new=$match_start;
+			$rules_txt='';
+			foreach ($rewrite_rules as $x=>$rewrite_rule_block)
+			{
+				list($comment,$rewrite_rule_set)=$rewrite_rule_block;
+				foreach ($rewrite_rule_set as $y=>$rewrite_rule)
+				{
+					list($rule,$to,$flags,$enabled)=$rewrite_rule;
+
+					$rules_txt.=
+						($enabled?'':'#').'- url: ^/'.str_replace(array('^','$'),array('',''),$rule)."\n";
+						($enabled?'':'#').'  script: /'.str_replace('$','\\',$to)."\n";
+				}
+			}
+			$rules_txt=preg_replace('#^\t*#m',str_repeat("\t",$indent_level),$rules_txt);
+			$new.="\n".$rules_txt;
+			$new.="\n\t\t".$match_end;
 			break;
 
 		case 'HPHP':

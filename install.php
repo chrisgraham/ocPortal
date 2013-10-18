@@ -889,6 +889,7 @@ function step_4()
 		$options->attach(make_option(do_lang_tempcode('GAE_APPLICATION'),do_lang_tempcode('DESCRIPTION_GAE_APPLICATION'),'gae_application','ocportal',false,true));
 		$hidden->attach(form_input_hidden('domain',$domain));
 		$hidden->attach(form_input_hidden('base_url',$base_url));
+		$options->attach(make_option(do_lang_tempcode('GAE_BUCKET_NAME'),do_lang_tempcode('DESCRIPTION_GAE_BUCKET_NAME'),'gae_bucket_name','<application>',false,true));
 	}
 	if (post_param('db_type')!='xml')
 		$options->attach(make_option(do_lang_tempcode('TABLE_PREFIX'),example('TABLE_PREFIX_EXAMPLE','TABLE_PREFIX_TEXT'),'table_prefix',$table_prefix));
@@ -996,8 +997,10 @@ function step_4()
 				gae_application.onchange=function() {
 					var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
 					gae_live_db_site.value=gae_live_db_site.value.replace(/<application>/g,gae_application.value);
-					var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
+					var gae_live_db_site_host=document.getElementById(\'gae_live_db_site_host\');
 					gae_live_db_site_host.value=gae_live_db_site_host.value.replace(/<application>/g,gae_application.value);
+					var gae_bucket_name=document.getElementById(\'gae_bucket_name\');
+					gae_bucket_name.value=gae_bucket_name.value.replace(/<application>/g,gae_application.value);
 				};
 			');
 		} else
@@ -1634,10 +1637,10 @@ function step_5_write_config()
 				\$SITE_INFO['db_site_host']='".addslashes(post_param('gae_live_db_site_host'))."';
 				\$SITE_INFO['db_site_user']='".addslashes(post_param('gae_live_db_site_user'))."';
 				\$SITE_INFO['db_site_password']='".addslashes(post_param('gae_live_db_site_password'))."';
-				\$SITE_INFO['custom_file_base']='".addslashes('gs://'.post_param('gae_application'))."';
+				\$SITE_INFO['custom_file_base']='".addslashes('gs://'.post_param('gae_bucket_name'))."';
 				if ((strpos(\$_SERVER['HTTP_HOST'],'.appspot.com')!==false) || (!tacit_https()))
 				{
-					\$SITE_INFO['custom_base_url']='".addslashes((tacit_https()?'https://':'http://').post_param('gae_application').'.storage.googleapis.com')."';
+					\$SITE_INFO['custom_base_url']='".addslashes((tacit_https()?'https://':'http://').post_param('gae_bucket_name').'.storage.googleapis.com')."';
 				} else // Assumes a storage.<domain> CNAME has been created
 				{
 					\$SITE_INFO['custom_base_url']='".addslashes((tacit_https()?'https://':'http://').'storage.')."'.\$_SERVER['HTTP_HOST'];

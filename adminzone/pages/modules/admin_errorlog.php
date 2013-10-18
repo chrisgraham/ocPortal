@@ -82,31 +82,70 @@ class Module_admin_errorlog
 		require_css('errorlog');
 
 		// Read in errors
-		if (is_readable(get_custom_file_base().'/data_custom/errorlog.php'))
+		if (!GOOGLE_APPENGINE)
 		{
-			if (filesize(get_custom_file_base().'/data_custom/errorlog.php')>1024*1024)
+			if (is_readable(get_custom_file_base().'/data_custom/errorlog.php'))
 			{
-				$myfile=fopen(get_custom_file_base().'/data_custom/errorlog.php','rt');
-				fseek($myfile,-1024*500,SEEK_END);
-				$lines=explode("\n",fread($myfile,1024*500));
-				fclose($myfile);
-				unset($lines[0]);
-				$lines[]='...';
+				if (filesize(get_custom_file_base().'/data_custom/errorlog.php')>1024*1024)
+				{
+					$myfile=fopen(get_custom_file_base().'/data_custom/errorlog.php','rt');
+					fseek($myfile,-1024*500,SEEK_END);
+					$lines=explode("\n",fread($myfile,1024*500));
+					fclose($myfile);
+					unset($lines[0]);
+					$lines[]='...';
+				} else
+				{
+					$lines=file(get_custom_file_base().'/data_custom/errorlog.php');
+				}
 			} else
 			{
-				$lines=file(get_custom_file_base().'/data_custom/errorlog.php');
+				$lines=array();
 			}
-		}
-		else $lines=array();
-		$stuff=array();
-		foreach ($lines as $line)
-		{
-			$_line=trim($line);
-
-			if (($_line!='') && (strpos($_line,'<?php')===false))
+			$stuff=array();
+			foreach ($lines as $line)
 			{
-				$matches=array();
-				if (preg_match('#\[(.+?) (.+?)\] (.+?):  ?(.*)#',$_line,$matches)!=0) $stuff[]=$matches;
+				$_line=trim($line);
+
+				if (($_line!='') && (strpos($_line,'<?php')===false))
+				{
+					$matches=array();
+					if (preg_match('#\[(.+?) (.+?)\] (.+?):  ?(.*)#',$_line,$matches)!=0) $stuff[]=$matches;
+				}
+			}
+		} else
+		{
+			$stuff=array();
+
+			require_once('google/appengine/api/log/LogService.php');
+
+			$_log_service='google\appengine\api\log\LogService';
+			$log_service=new $_log_service;
+
+			$options=array();
+			$options['include_app_logs']=true;
+			$options['minimum_log_level']=$log_service->LEVEL_WARNING;
+			$options['batch_size']=300;
+
+			$logs=$log_service->fetch($options);
+			foreach ($logs as $log)
+			{
+				$app_logs=$log->getAppLogs();
+				foreach ($app_logs as $app_log)
+				{
+					$message=$app_log->getMessage();
+
+					$level=$app_log->getLevel();
+					$_level='';
+					if ($level==$log_service->LEVEL_WARNING) $_level='notice';
+					elseif ($level==$log_service->LEVEL_ERROR) $_level='warning';
+					elseif ($level==$log_service->LEVEL_CRITICAL) $_level='error';
+					else continue;
+
+					$time=intval($app_log->getTimeUsec()/1000000.0);
+
+					$stuff[]='['.date('D-M-Y H:i:s',$time).'] '.$_level.': '.$message;
+				}
 			}
 		}
 

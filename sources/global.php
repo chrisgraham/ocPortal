@@ -569,4 +569,8 @@ if (count($SITE_INFO)==0)
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.
 
 // Pass on to next bootstrap level
+if (GOOGLE_APPENGINE)
+{
+	require_code('google_appengine');
+}
 require_code('global2');

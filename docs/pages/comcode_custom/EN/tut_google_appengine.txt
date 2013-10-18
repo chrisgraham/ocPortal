@@ -137,6 +137,8 @@ See the Google documentation on [url="how to set up your live application and ho
 
 TODO: How do we upload initial database?
 
+Note that the ocPortal scheduler will have been automatically set up, along with a particular PHP configuration (no [tt].htaccess[/tt] file setup needed).
+
 [title="2"]Late structural changes[/title]
 
 If you forget to do something before you deploy, or if new development has happened, you can always re-deploy later.

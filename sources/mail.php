@@ -460,12 +460,29 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	{
 		$_html_content=$html_content->evaluate($lang);
 		$_html_content=preg_replace('#(keep|for)_session=[\d\w]*#','filtered=1',$_html_content);
-		$message_html=(strpos($_html_content,'<html')!==false)?make_string_tempcode($_html_content):do_template($mail_template,array('_GUID'=>'b23069c20202aa59b7450ebf8d49cde1','CSS'=>'{CSS}','LOGOURL'=>get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/'LANG'=>$lang,'TITLE'=>$subject,'CONTENT'=>$_html_content),$lang,false,NULL,'.tpl','templates',$theme);
+		if (strpos($_html_content,'<html')!==false)
+		{
+			$message_html=make_string_tempcode($_html_content);
+		} else
+		{
+			$message_html=do_template($mail_template,array(
+				'_GUID'=>'b23069c20202aa59b7450ebf8d49cde1',
+				'CSS'=>'{CSS}',
+				'LOGOURL'=>get_logo_url(''),
+				/*'LOGOMAP'=>get_option('logo_map'),*/
+				'LANG'=>$lang,
+				'TITLE'=>$subject,
+				'CONTENT'=>$_html_content,
+			),$lang,false,NULL,'.tpl','templates',$theme);
+		}
 		$css=css_tempcode(true,true,$message_html->evaluate($lang),$theme);
 		$_css=$css->evaluate($lang);
-		if (get_option('allow_ext_images')!='1')
+		if (!GOOGLE_APPENGINE)
 		{
-			$_css=preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$_css);
+			if (get_option('allow_ext_images')!='1')
+			{
+				$_css=preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$_css);
+			}
 		}
 		$html_evaluated=$message_html->evaluate($lang);
 		$html_evaluated=str_replace('{CSS}',$_css,$html_evaluated);
@@ -477,6 +494,61 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$html_evaluated=$message_raw;
 	}
 
+	if (GOOGLE_APPENGINE)
+	{
+		require_once('google/appengine/api/mail/Message.php');
+		$message_class='google\appengine\api\mail\Message';
+
+		$reply_to=$from_name.' <'.$from_email.'>';
+
+		$mail_options=array(
+			'sender'=>$website_email,
+			'replyTo'=>$reply_to,
+			'subject'=>$subject->evaluate($lang),
+			'textBody'=>$message_plain,
+			'htmlBody'=>$html_evaluated,
+		);
+
+		try
+		{
+			$message=new $message_class($mail_options);
+			$message->addCc($extra_cc_addresses);
+			$message->addBcc($extra_bcc_addresses);
+			foreach ($to_email as $_to_email)
+			{
+				$message->addTo($to_name.' <'.$_to_email.'>');
+			}
+			foreach ($attachments as $path=>$filename)
+			{
+				if (strpos($path,'://')===false)
+				{
+					if (!is_file($path)) continue;
+					$contents=file_get_contents($path);
+				} else
+				{
+					$contents=http_download_file($path,NULL,false);
+					if (is_null($contents)) continue;
+				}
+				$message->addAttachment($filename,$contents);
+			}
+			$message->send();
+		}
+		catch (InvalidArgumentException $e)
+		{
+			$error=$e->getMessage();
+			if (get_param_integer('keep_hide_mail_failure',0)==0)
+			{
+				require_code('site');
+				attach_message(!is_null($error)?make_string_tempcode($error):do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))),'warn');
+			} else
+			{
+				return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
+			}
+		}
+
+		$SENDING_MAIL=false;
+		return NULL;
+	}
 
 	$base64_encode=(get_value('base64_emails')==='1'); // More robust, but more likely to be spam-blocked, and some servers can scramble it.
 

@@ -26,14 +26,35 @@ function tasks_script()
 	$id=get_param_integer('id');
 	$secure_ref=get_param('secure_ref');
 
-	require_lang('tasks');
-
 	$task_rows=$GLOBALS['SITE_DB']->query_select('task_queue',array('*'),array(
 		'id'=>$id,
 		't_secure_ref'=>$secure_ref,
+		't_locked'=>0,
 	),'',1);
-	if (!array_key_exists(0,$task_rows)) return; // Missing
+	if (!array_key_exists(0,$task_rows)) return; // Missing / locked / secure_ref error
+	$GLOBALS['SITE_DB']->query_update('task_queue',array(
+		't_locked'=>1,
+	),array(
+		'id'=>$id,
+	),'',1);
 	$task_row=$task_rows[0];
+
+	execute_task_background($task_row);
+}
+
+/**
+ * Execute a background task.
+ *
+ * @param  array				The task row
+ */
+function execute_task_background($task_row)
+{
+	require_code('failure');
+
+	global $RUNNING_TASK;
+	$RUNNING_TASK=true;
+
+	require_lang('tasks');
 
 	require_code('users_inactive_occasionals');
 	$requester=$task_row['t_member_id'];
@@ -50,20 +71,71 @@ function tasks_script()
 
 	if ($task_row['t_send_notification']==1)
 	{
-		if (!is_null($result))
-		{
-			$subject=TODO;	use t_title
-			$message=TODO;
+		$attachments=array();
 
-			require_code('notifications');
-			dispatch_notification('task_completed',NULL,$subject,$message,array($requester),A_FROM_SYSTEM_PRIVILEGED,2);
+		if (is_null($result))
+		{
+			$subject=do_lang('TASK_COMPLETED_SUBJECT',$task_row['t_title']);
+			$message=do_lang('TASK_COMPLETED_BODY_SIMPLE');
+		} else
+		{
+			list($mime_type,$content_result)=$result;
+
+			// Handle error results
+			if (is_null($mime_type))
+			{
+				$subject=do_lang('TASK_FAILED_SUBJECT',$task_row['t_title']);
+				$_content_result=is_object($content_result)?('[semihtml]'.$content_result->evaluate().'[/semihtml]'):$content_result;
+				$message=do_lang('TASK_FAILED_SIMPLE',$_content_result);
+			} else
+			{
+				$subject=do_lang('TASK_COMPLETED_SUBJECT',$task_row['t_title']);
+
+				// HTML result
+				if ($mime_type=='text/html')
+				{
+					if (is_array($content_result))
+					{
+						$path=$content_result[1];
+						$content_result=file_get_contents($path);
+						@unlink($path);
+						sync_file($path);
+					}
+
+					$_content_result=is_object($content_result)?('[semihtml]'.$content_result->evaluate().'[/semihtml]'):$content_result;
+					$message=do_lang('TASK_COMPLETED_SIMPLE',$_content_result);
+				} else
+				{
+					// Some downloaded result
+					if (is_array($content_result))
+					{
+						$attachments[$content_result[1]]=$content_result[0];
+					} else
+					{
+						fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+					}
+
+					$message=do_lang('TASK_COMPLETED_BODY_ATTACHMENT');
+				}
+			}
+		}
+
+		require_code('notifications');
+		dispatch_notification('task_completed',NULL,$subject,$message,array($requester),A_FROM_SYSTEM_PRIVILEGED,2,false,false,NULL,NULL,'','','','',$attachments);
+
+		if (is_null(!$result))
+		{
+			list($mime_type,$content_result)=$result;
+			@unlink($content_result[1]);
+			sync_file($content_result[1]);
 		}
 	}
 
-	$task_row=$GLOBALS['SITE_DB']->query_delete('task_queue',array(
-		'id'=>$id,
-		't_secure_ref'=>$secure_ref,
+	$GLOBALS['SITE_DB']->query_delete('task_queue',array(
+		'id'=>$task_row['id'],
 	),'',1);
+
+	$RUNNING_TASK=false;
 }
 
 /**
@@ -82,9 +154,12 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 {
 	if (is_null($args)) $args=array();
 
-	if (get_param_integer('keep_debug_tasks',0)==1) $force_immediate=true;
-	if (get_option('tasks_background')=='0') $force_immediate=true;
-	if ((is_guest()) && ($send_notification)) $force_immediate=true;
+	if (
+		(get_param_integer('keep_debug_tasks',0)==1) || 
+		(get_option('tasks_background')=='0') || 
+		((is_guest()) && ($send_notification))
+	)
+		$force_immediate=true;
 
 	require_lang('tasks');
 
@@ -98,6 +173,7 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 		require_code('systems/hooks/tasks/'.filter_naughty($hook));
 		$ob=object_factory('Hook_task_'.$hook);
 		$result=call_user_func_array(array($ob,'run'),$args);
+		if (is_null($result)) return inform_screen($title,do_lang_tempcode('SUCCESS'));
 		if (!isset($result[2])) $result[2]=array();
 		if (!isset($result[3])) $result[3]=array();
 		list($mime_type,$content_result,$headers,$ini_set)=$result;
@@ -143,29 +219,46 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 			readfile($content_result[1]);
 			@unlink($content_result[1]);
 			sync_file($content_result[1]);
-		} elseif (is_object($content_result))
+		}/* elseif (is_object($content_result))
 		{
 			$content_result->evaluate_echo(NULL);
 		} else
 		{
 			echo $content_result;
+		}*/
+		else
+		{
+			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		}
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 		exit();
 
-		return; // Will never get here
+		return new ocp_tempcode(); // Will never get here
 	}
 
 	// Enqueue...
 
+	require_code('crypt');
+	$secure_ref=produce_salt();
+
 	$id=$GLOBALS['SITE_DB']->query_insert('task_queue',array(
 		't_title'=>$plain_title,
-		't_hook'=>'ID_TEXT',
-		't_args'=>'LONG_TEXT',
-		't_member_id'=>'MEMBER',
-		't_secure_ref'=>'ID_TEXT', // Used like a temporary password to initiate the task
+		't_hook'=>$hook,
+		't_args'=>serialize($args),
+		't_member_id'=>get_member(),
+		't_secure_ref'=>$secure_ref, // Used like a temporary password to initiate the task
 		't_send_notification'=>$send_notification?1:0,
+		't_locked'=>1,
 	),true);
+
+	if (GOOGLE_APPENGINE)
+	{
+		require_once('google/appengine/api/taskqueue/PushTask.php');
+
+		$pushtask='\google\appengine\api\taskqueue\PushTask'; // So does not give a parser error on older versions of PHP
+		$task=new $pushtask('/data/tasks.php.php',array('id'=>strval($id),'secure_ref'=>$secure_ref));
+		$task_name=$task->add();
+	}
 
 	return inform_screen($title,do_lang_tempcode('NEW_TASK_RUNNING'));
 }
