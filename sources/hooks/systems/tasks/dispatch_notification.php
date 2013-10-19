@@ -29,6 +29,7 @@ class Hook_task_dispatch_notification
 	function run($dispatcher)
 	{
 		require_code('notifications');
+		require_lang('notifications');
 
 		$dispatcher->dispatch();
 

@@ -423,6 +423,7 @@ class Module_galleries
 	{
 		$type=get_param('type','misc');
 
+		require_code('galleries');
 		require_lang('galleries');
 
 		inform_non_canonical_parameter('days');
@@ -639,8 +640,6 @@ class Module_galleries
 	 */
 	function run()
 	{
-		require_code('galleries');
-		require_lang('galleries');
 		require_code('feedback');
 		require_css('galleries');
 		require_javascript('javascript_galleries');

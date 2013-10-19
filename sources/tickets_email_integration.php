@@ -102,7 +102,7 @@ function ticket_email_cannot_bind($subject,$body,$email,$email_bounce_to)
  */
 function ticket_incoming_scan()
 {
-	if (get_option('ticket_mail_on')=='0') return;
+	if (get_option('ticket_mail_on')!=='1') return;
 
 	if (!function_exists('imap_open')) warn_exit(do_lang_tempcode('IMAP_NEEDED'));
 

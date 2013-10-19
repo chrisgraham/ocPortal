@@ -181,7 +181,7 @@ class Module_admin_ocf_join
 		if ($type=='delurk') return $this->delurk();
 		if ($type=='_delurk') return $this->_delurk();
 		if ($type=='__delurk') return $this->__delurk();
-		if ($type=='download_csv') $this->download_csv();
+		if ($type=='download_csv') return $this->download_csv();
 		if ($type=='import_csv') return $this->import_csv();
 		if ($type=='_import_csv') return $this->_import_csv();
 		if ($type=='group_member_timeouts') return $this->group_member_timeouts();

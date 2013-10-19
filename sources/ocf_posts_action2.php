@@ -312,7 +312,7 @@ function ocf_force_update_forum_cacheing($forum_id,$num_topics_increment=NULL,$n
 		f_cache_last_username=\''.db_escape_string($last_username).'\',
 		f_cache_last_member_id='.(!is_null($last_member_id)?strval($last_member_id):'NULL').',
 		f_cache_last_forum_id='.(!is_null($last_forum_id)?strval($last_forum_id):'NULL').'
-			WHERE id='.strval($forum_id),1);
+			WHERE id='.strval($forum_id),1,NULL,false,true);
 
 	// Now, are there any parents who need updating?
 	if (!is_null($forum_id))

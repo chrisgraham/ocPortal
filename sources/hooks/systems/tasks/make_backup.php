@@ -31,7 +31,7 @@ class Hook_task_make_backup
 	 */
 	function run($file,$b_type,$max_size)
 	{
-		require_code('backups');
+		require_code('backup');
 
 		return array('text/html',make_backup_2($file,$b_type,$max_size));
 	}

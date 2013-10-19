@@ -243,7 +243,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 				if ($_parameters!='') $_parameters.=',';
 				if (is_bool($parameter))
 				{
-					$_parameters.="\\\"".($parameter?'true':'false')."\\\"";
+					$_parameters.="\\\"".($parameter?'1':'0')."\\\"";
 				} else
 				{
 					$_parameters.="\\\"".php_addslashes_twice($parameter)."\\\"";
@@ -328,7 +328,7 @@ function closure_eval($code,$parameters)
 		return do_lang('NO_PHP_IN_TEMPLATES');
 	}
 
-	$ret=$GLOBALS['DEV_MODE']?debug_eval($code):eval($code);
+	$ret=/*$GLOBALS['DEV_MODE']?debug_eval($code):*/eval($code);
 	if (!is_string($ret)) $ret=@strval($ret);
 	return $ret;
 }
@@ -1318,7 +1318,7 @@ class ocp_tempcode
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
 			$_file=(strpos($file,'\'')===false)?$file:php_addslashes($file);
-			$this->code_to_preexecute[]='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } $GLOBALS[\'DEV_MODE\']?debug_eval($tmp->code_to_preexecute):eval($tmp->code_to_preexecute); unset($tmp); }
+			$this->code_to_preexecute[]='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } /*$GLOBALS[\'DEV_MODE\']?debug_eval($tmp->code_to_preexecute):*/eval($tmp->code_to_preexecute); unset($tmp); }
 			else { debug_eval($result[4]); unset($result); }';
 			// NB: $GLOBALS[\'CACHE_TEMPLATES\']=false; is in case the template cache has been detected as broken, it prevents this branch running as it would fail again
 		}
@@ -1369,7 +1369,7 @@ class ocp_tempcode
 			$this->children=array();
 		}
 
-		$result=$GLOBALS['DEV_MODE']?debug_eval($raw_data):eval($raw_data);
+		$result=/*$GLOBALS['DEV_MODE']?debug_eval($raw_data):*/eval($raw_data);
 		if ($result===false)
 		{
 			if ($allow_failure) return false;
@@ -1604,13 +1604,13 @@ class ocp_tempcode
 			foreach ($seq_parts_group as $seq_part)
 			{
 				$seq_part_0=$seq_part[0];
-				if ($DEV_MODE)
+				/*if ($DEV_MODE)
 				{
 					if (!isset($tpl_funcs[$seq_part_0]))
 					{
 						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
 					}
-					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
 					{
 						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
 					} else
@@ -1618,7 +1618,7 @@ class ocp_tempcode
 						$parameters=$seq_part[1];
 						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
 					}
-				} else
+				} else*/
 				{
 					if (!isset($tpl_funcs[$seq_part_0]))
 					{
@@ -1716,13 +1716,13 @@ class ocp_tempcode
 			foreach ($seq_parts_group as $seq_part)
 			{
 				$seq_part_0=$seq_part[0];
-				if ($DEV_MODE)
+				/*if ($DEV_MODE)
 				{
 					if (!isset($tpl_funcs[$seq_part_0]))
 					{
 						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
 					}
-					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
 					{
 						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
 					} else
@@ -1730,7 +1730,7 @@ class ocp_tempcode
 						$parameters=$seq_part[1];
 						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
 					}
-				} else
+				} else*/
 				{
 					if (!isset($tpl_funcs[$seq_part_0]))
 					{
@@ -1791,15 +1791,12 @@ class ocp_tempcode
 		$TEMPCODE_OUTPUT_STARTED=true;
 		$tpl_funcs=$KEEP_TPL_FUNCS;
 		$seq_parts_group_cnt=count($this->seq_parts);
+		$i=&$this->evaluate_echo_offset_group;
 		if ($stop_if_stuck)
 		{
-			$i=&$this->evaluate_echo_offset_group;
 			$stop_if_stuck_bak=$STOP_IF_STUCK;
 			$STOP_IF_STUCK=true;
 			ob_start();
-		} else
-		{
-			$i=0;
 		}
 		$first_i=true;
 		for (;$i<$seq_parts_group_cnt;$i++)
@@ -1807,7 +1804,7 @@ class ocp_tempcode
 			$seq_parts_group=$this->seq_parts[$i];
 
 			$seq_parts_cnt=count($seq_parts_group);
-			if ($stop_if_stuck && $first_i)
+			if ($first_i)
 			{
 				$j=&$this->evaluate_echo_offset_inner;
 				$first_i=false;
@@ -1820,13 +1817,13 @@ class ocp_tempcode
 				$seq_part=$seq_parts_group[$j];
 
 				$seq_part_0=$seq_part[0];
-				if ($DEV_MODE)
+				/*if ($DEV_MODE)
 				{
 					if (!isset($tpl_funcs[$seq_part_0]))
 					{
 						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
 					}
-					if (($tpl_funcs[$seq_part_0][0]!='e'/*for echo*/) && (function_exists($tpl_funcs[$seq_part_0])))
+					if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
 					{
 						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
 					} else
@@ -1834,7 +1831,7 @@ class ocp_tempcode
 						$parameters=$seq_part[1];
 						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
 					}
-				} else
+				} else*/
 				{
 					if (!isset($tpl_funcs[$seq_part_0]))
 					{
@@ -1897,6 +1894,7 @@ function recall_named_function($id,$parameters,$code)
 
 /**
  * Evaluate some PHP, with ability to better debug.
+ * In a way this can also quash problems, so only use when debugging. The "@" before eval turns off attach_message.
  *
  * @param  ?string			Code to evaluate (NULL: code not found)
  * @param  ?array				Evaluation code context (NULL: N/A)

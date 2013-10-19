@@ -41,6 +41,8 @@ function download_gallery_script()
 
 	$num_videos=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)',array('cat'=>$cat,'validated'=>1));
 
+	require_lang('galleries');
+
 	require_code('tasks');
 	$ret=call_user_func_array__long_task(do_lang('DOWNLOAD_GALLERY_CONTENTS'),get_screen_title('DOWNLOAD_GALLERY_CONTENTS'),'download_gallery',array($cat),false,$num_videos==0);
 

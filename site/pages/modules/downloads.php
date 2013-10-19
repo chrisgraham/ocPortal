@@ -325,6 +325,7 @@ class Module_downloads
 	{
 		$type=get_param('type','misc');
 
+		require_code('downloads');
 		require_lang('downloads');
 
 		set_feed_url('?mode=downloads&filter=');
@@ -404,6 +405,8 @@ class Module_downloads
 		if ($type=='entry')
 		{
 			$id=get_param_integer('id');
+
+			$root=get_param_integer('keep_download_root',db_get_first_id(),true);
 
 			if (addon_installed('content_privacy'))
 			{
@@ -508,6 +511,7 @@ class Module_downloads
 			$this->name=$name;
 			$this->images_details=$images_details;
 			$this->num_images=$counter;
+			$this->root=$root;
 		}
 
 		if ($type=='index')
@@ -532,9 +536,7 @@ class Module_downloads
 	 */
 	function run()
 	{
-		require_code('downloads');
 		require_code('feedback');
-		require_lang('downloads');
 		require_css('downloads');
 		require_code('files');
 
@@ -744,8 +746,7 @@ class Module_downloads
 		$name=$this->name;
 		$images_details=$this->images_details;
 		$num_images=$this->num_images;
-
-		$root=get_param_integer('keep_download_root',db_get_first_id(),true);
+		$root=$this->root;
 
 		// Feedback
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(

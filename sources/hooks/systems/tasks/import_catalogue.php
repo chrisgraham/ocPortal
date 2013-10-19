@@ -45,14 +45,14 @@ class Hook_task_import_catalogue
 
 		// Find out what categories we have in the catalogue
 		$categories=array();
-		$catsrow=$GLOBALS['SITE_DB']->query("SELECT t1.id,t2.text_original,t1.cc_parent_id FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."catalogue_categories t1,".$GLOBALS['SITE_DB']->get_table_prefix()."translate t2 WHERE t1.cc_title=t2.id AND t1.c_name='".db_escape_string($catalogue_name)."'");
-		foreach ($catsrow as $values)
+		$cat_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories t1 JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t2 ON t1.cc_title=t2.id',array('t1.id','t2.text_original','t1.cc_parent_id'),array('t1.c_name'=>$catalogue_name));
+		foreach ($cat_rows as $cat_row)
 		{
-			$categories[$values['text_original']]=$values['id'];
+			$categories[$cat_row['text_original']]=$cat_row['id'];
 
 			// Root category is 'default' category for catalogue importing (category with same name as catalogue)
-			if ((!array_key_exists($catalogue_name,$categories)) && (is_null($values['cc_parent_id'])))
-				$categories[$catalogue_name]=$values['id'];
+			if ((!array_key_exists($catalogue_name,$categories)) && (is_null($cat_row['cc_parent_id'])))
+				$categories[$catalogue_name]=$cat_row['id'];
 		}
 		$root_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('cc_parent_id'=>NULL));
 

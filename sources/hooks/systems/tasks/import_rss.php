@@ -32,7 +32,7 @@ class Hook_task_import_rss
 	 * @param  object			The parsed RSS feed
 	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
 	 */
-	function run($is_validated,$download_images,$to_own_account,$import_blog_comments,$import_to_blog,$rss_url,$rss)
+	function run($is_validated,$download_images,$to_own_account,$import_blog_comments,$import_to_blog,$rss)
 	{
 		require_code('rss');
 		require_code('files');

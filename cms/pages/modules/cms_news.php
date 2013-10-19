@@ -786,6 +786,7 @@ class Module_cms_news extends standard_crud_module
 		if (is_null($rss_url))
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
+		require_code('rss');
 		$rss=new rss($rss_url,true);
 
 		// Cleanup

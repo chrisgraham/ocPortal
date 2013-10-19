@@ -927,7 +927,7 @@ function do_site()
 			$GLOBALS['FINISHING_OUTPUT']=true;
 			/*if (get_option('gzip_output')=='1')	Does not work well
 				ob_start('_compress_html_output');*/
-			$out->evaluate_echo(NULL,true);
+			$out->evaluate_echo(NULL);
 		}
 	}
 

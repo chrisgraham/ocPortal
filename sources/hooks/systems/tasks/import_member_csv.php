@@ -40,7 +40,7 @@ class Hook_task_import_member_csv
 
 		$outputted_messages=new ocp_tempcode();
 
-		require_code('ocf_members_actions2');
+		require_code('ocf_members_action2');
 		$headings=member_get_csv_headings();
 		$all_cpfs=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_default','cf_type','cf_name'),NULL,'ORDER BY cf_order');
 		foreach ($all_cpfs as $i=>$c) // CPFs take precedence over normal fields of the same name

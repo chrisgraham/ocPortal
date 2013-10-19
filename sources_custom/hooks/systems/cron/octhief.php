@@ -97,8 +97,8 @@ class Hook_cron_octhief
 					$subject=do_lang('THIEF_PT_TOPIC',strval($octhief_points),$thief_displayname,array($target_displayname,$thief_username,$target_username));
 					$body=do_lang('THIEF_PT_TOPIC_POST',strval($octhief_points),$thief_displayname,array($target_displayname,$thief_username,$target_username));
 
-					require_code('ocf_topic_action');
-					require_code('ocf_posts_action');
+					require_code('ocf_topic_actions');
+					require_code('ocf_posts_actions');
 
 					$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$member['id'],$give_to_member,false,0,NULL,'');
 

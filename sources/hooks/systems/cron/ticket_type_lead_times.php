@@ -35,6 +35,7 @@ class Hook_cron_ticket_type_lead_times
 
 		require_code('tickets');
 		require_code('tickets2');
+		require_lang('tickets');
 		update_ticket_type_lead_times();
 	}
 

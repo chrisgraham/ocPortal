@@ -207,6 +207,7 @@ class Module_forumview
 	var $title;
 	var $id;
 	var $forum_info;
+	var $breadcrumbs;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -250,8 +251,8 @@ class Module_forumview
 				$awards=is_null($id)?array():find_awards_for('forum',strval($id));
 			} else $awards=array();
 
-			$name=$forum_info['f_name'];
-			$ltitle=do_lang_tempcode('NAMED_FORUM',make_fractionable_editable('forum',$id,$name));
+			$forum_name=$forum_info['f_name'];
+			$ltitle=do_lang_tempcode('NAMED_FORUM',make_fractionable_editable('forum',$id,$forum_name));
 
 			$this->title=get_screen_title($ltitle,false,NULL,NULL,$awards);
 
@@ -261,13 +262,32 @@ class Module_forumview
 				smart_redirect($forum_info['f_redirection']);
 			}
 
+			set_short_title($forum_name);
+
+			set_feed_url('?mode=ocf_forumview&filter='.strval($id));
+
+			require_code('ocf_forums');
+			$breadcrumbs=ocf_forum_breadcrumbs($id,$forum_name,$forum_info['f_parent_forum']);
+			breadcrumb_add_segment($breadcrumbs);
+			$this->breadcrumbs=$breadcrumbs;
+
 			$this->id=$id;
 			$this->forum_info=$forum_info;
 		}
 
 		if ($type=='pts')
 		{
-			$title=get_screen_title('PRIVATE_TOPICS');
+			$this->title=get_screen_title('PRIVATE_TOPICS');
+
+			$root=get_param_integer('keep_forum_root',db_get_first_id());
+			$root_forum_name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$root));
+			$breadcrumbs=hyperlink(build_url(array('page'=>'_SELF','id'=>($root==db_get_first_id())?NULL:$root),'_SELF'),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$root_forum_name),NULL,NULL,'up');
+			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+			$pt_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id);
+			$pt_displayname=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id,true);
+			if (is_null($pt_username)) $pt_username=do_lang('UNKNOWN');
+			$breadcrumbs->attach(do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_displayname),escape_html($pt_username)));
+			$this->breadcrumbs=$breadcrumbs;
 		}
 
 		return NULL;
@@ -314,20 +334,13 @@ class Module_forumview
 		require_code('ocf_general');
 		ocf_set_context_forum($id);
 
-		$test=ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$root,$of_member_id);
+		$test=ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$root,$of_member_id,$this->breadcrumbs);
 		if (is_array($test))
 		{
-			list($content,$breadcrumbs,$forum_name)=$test;
+			list($content,$forum_name)=$test;
 		} else
 		{
 			return $test;
-		}
-
-		if ($type!='pt')
-		{
-			set_short_title($forum_name);
-
-			breadcrumb_add_segment($breadcrumbs);
 		}
 
 		// Members viewing this forum

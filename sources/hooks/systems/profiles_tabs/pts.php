@@ -64,7 +64,7 @@ class Hook_Profiles_Tabs_pts
 
 		$root=db_get_first_id();
 
-		list($content,,)=ocf_render_forumview($id,NULL,$current_filter_cat,$max,$start,$root,$member_id_of);
+		list($content)=ocf_render_forumview($id,NULL,$current_filter_cat,$max,$start,$root,$member_id_of,new ocp_tempcode());
 
 		$content=do_template('OCF_MEMBER_PROFILE_PTS',array('CONTENT'=>$content));
 

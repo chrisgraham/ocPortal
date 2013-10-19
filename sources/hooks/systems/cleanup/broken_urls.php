@@ -60,7 +60,7 @@ class Hook_broken_urls
 	function run()
 	{
 		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('BROKEN_URLS'),get_screen_title('BROKEN_URLS'),'find_broken_urls');
+		return call_user_func_array__long_task(do_lang('BROKEN_URLS'),NULL,'find_broken_urls');
 	}
 }
 

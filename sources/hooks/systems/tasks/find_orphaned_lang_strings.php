@@ -49,8 +49,7 @@ class Hook_task_find_orphaned_lang_strings
 
 		$fix=true;
 
-		$query='SELECT m_name,m_table,m_type FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta';
-		$all_fields=$GLOBALS['SITE_DB']->query($query);
+		$all_fields=$GLOBALS['SITE_DB']->query_select('db_meta',array('*'));
 
 		$langidfields=array();
 		foreach ($all_fields as $f)
@@ -62,7 +61,7 @@ class Hook_task_find_orphaned_lang_strings
 		{
 			if ($langidfield['m_table']=='config')
 			{
-				$select=array($langidfield['m_name'],'the_type');
+				$select=array($langidfield['m_name'],'c_needs_dereference');
 			} else
 			{
 				$select=array($langidfield['m_name']);
@@ -86,7 +85,7 @@ class Hook_task_find_orphaned_lang_strings
 
 				if (!array_key_exists($id,$all_ids))
 				{
-					if (($fix) && (!array_key_exists($id,$missing_lang_strings)))
+					if (($fix) && (($id==0) || (!array_key_exists($id,$missing_lang_strings))))
 					{
 						$new_id=insert_lang('',2,NULL,false,$id);
 						if ($id!=$new_id)

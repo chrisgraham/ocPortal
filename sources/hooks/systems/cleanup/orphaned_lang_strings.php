@@ -46,7 +46,7 @@ class Hook_orphaned_lang_strings
 	function run()
 	{
 		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('ORPHANED_LANG_STRINGS'),get_screen_title('ORPHANED_LANG_STRINGS'),'find_orphaned_lang_strings');
+		return call_user_func_array__long_task(do_lang('ORPHANED_LANG_STRINGS'),NULL,'find_orphaned_lang_strings');
 	}
 
 }

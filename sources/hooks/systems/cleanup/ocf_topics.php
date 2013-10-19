@@ -50,7 +50,7 @@ class Hook_ocf_topics
 		if (get_forum_type()!='ocf') return new ocp_tempcode();
 
 		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('CACHE_TOPICS'),get_screen_title('CACHE_TOPICS'),'ocf_topics_recache');
+		return call_user_func_array__long_task(do_lang('CACHE_TOPICS'),NULL,'ocf_topics_recache');
 	}
 
 }

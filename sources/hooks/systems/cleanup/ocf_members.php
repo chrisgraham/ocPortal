@@ -53,7 +53,7 @@ class Hook_ocf_members
 		if (get_forum_type()!='ocf') return new ocp_tempcode();
 
 		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('CACHE_MEMBERS'),get_screen_title('CACHE_MEMBERS'),'ocf_members_recache');
+		return call_user_func_array__long_task(do_lang('CACHE_MEMBERS'),NULL,'ocf_members_recache');
 	}
 
 }

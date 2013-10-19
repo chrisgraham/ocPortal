@@ -53,23 +53,14 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$counts=array();
-	$hooks=find_all_hooks('systems','addon_registry');
-	foreach (array_keys($hooks) as $hook)
-	{
-		require_code('hooks/systems/addon_registry/'.$hook);
-		$hook_ob=object_factory('Hook_addon_registry_'.$hook);
-
-		$files=$hook_ob->get_file_list();
-
-		$count=0;
-		foreach ($files as $file)
-		{
-			if (substr($file,-4)=='.tpl') $count++;
-		}
-		$counts[$hook]=$count;
-	}
-
-	arsort($counts);
-	var_dump($counts);
+	$GLOBALS['SITE_DB']->create_table('task_queue',array(
+		'id'=>'*AUTO',
+		't_title'=>'SHORT_TEXT',
+		't_hook'=>'ID_TEXT',
+		't_args'=>'LONG_TEXT',
+		't_member_id'=>'MEMBER',
+		't_secure_ref'=>'ID_TEXT', // Used like a temporary password to initiate the task
+		't_send_notification'=>'BINARY',
+		't_locked'=>'BINARY',
+	));
 }

@@ -28,9 +28,10 @@
  * @param  integer	Offset for result showing
  * @param  AUTO_LINK	Virtual root
  * @param  ?MEMBER	The member to show private topics of (NULL: not showing private topics)
- * @return mixed		Either Tempcode (an interface that must be shown) or a Tuple: The main Tempcode, breadcrumbs (also Tempcode), the forum name (string). For a PT view, it is always a tuple, never raw Tempcode (as it can go inside a tabset).
+ * @param  tempcode	The breadcrumbs
+ * @return mixed		Either Tempcode (an interface that must be shown) or a pair: The main Tempcode, the forum name (string). For a PT view, it is always a tuple, never raw Tempcode (as it can go inside a tabset).
  */
-function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$root,$of_member_id)
+function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$root,$of_member_id,$breadcrumbs)
 {
 	require_css('ocf');
 
@@ -43,19 +44,13 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 		require_code('ocf_forumview_pt');
 		$details=ocf_get_private_topics($start,$max,$of_member_id);
 		$root_forum_name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$root));
-		$breadcrumbs=hyperlink(build_url(array('page'=>'_SELF','id'=>($root==db_get_first_id())?NULL:$root),'_SELF'),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$root_forum_name),NULL,NULL,'up');
-		$breadcrumbs->attach(' &gt; ');
 		$pt_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id);
 		$pt_displayname=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id,true);
 		if (is_null($pt_username)) $pt_username=do_lang('UNKNOWN');
-		$breadcrumbs->attach(do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_displayname),escape_html($pt_username)));
 		$details['name']=do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_displayname),escape_html($pt_username));
 	} else
 	{
-		require_code('site');
-		set_feed_url('?mode=ocf_forumview&filter='.strval($id));
 		$details=ocf_get_forum_view($id,$forum_info,$start,$max);
-		$breadcrumbs=ocf_forum_breadcrumbs($id,$details['name'],$details['parent_forum']);
 
 		if ((array_key_exists('question',$details)) && (is_null(get_bot_type())))
 		{
@@ -421,7 +416,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 	);
 	$content=do_template('OCF_FORUM',$map);
 
-	return array($content,$breadcrumbs,$forum_name);
+	return array($content,$forum_name);
 }
 
 /**

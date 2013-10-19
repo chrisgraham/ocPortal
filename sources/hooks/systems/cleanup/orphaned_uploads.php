@@ -55,7 +55,7 @@ class Hook_orphaned_uploads
 	function run()
 	{
 		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('ORPHANED_UPLOADS'),get_screen_title('ORPHANED_UPLOADS'),'find_orphaned_uploads');
+		return call_user_func_array__long_task(do_lang('ORPHANED_UPLOADS'),NULL,'find_orphaned_uploads');
 	}
 
 }

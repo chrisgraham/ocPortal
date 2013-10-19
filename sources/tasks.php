@@ -142,7 +142,7 @@ function execute_task_background($task_row)
  * Send out the newsletter.
  *
  * @param  string				Title to use for completion notification subject lines
- * @param  tempcode			Title to use if there is no queueing or a queue message
+ * @param  ?tempcode			Title to use if there is no queueing or a queue message (NULL: don't return a full screen)
  * @param  ID_TEXT			The task hook
  * @param  ?array				Arguments for the task (NULL: no arguments)
  * @param  boolean			Whether to run the task at the end of the script (if it's not going to be put into the task queue)
@@ -165,15 +165,25 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 
 	if ($force_immediate)
 	{
+		if ($run_at_end_of_script)
+		{
+			register_shutdown_function('call_user_func_array__long_task',$plain_title,$title,$hook,$args,false,$force_immediate,$send_notification);
+			return new ocp_tempcode();
+		}
+
 		// Disable limits, as tasks can be resource-intensive
 		disable_php_memory_limit();
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		// Run task
-		require_code('systems/hooks/tasks/'.filter_naughty($hook));
+		require_code('hooks/systems/tasks/'.filter_naughty($hook));
 		$ob=object_factory('Hook_task_'.$hook);
 		$result=call_user_func_array(array($ob,'run'),$args);
-		if (is_null($result)) return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		if (is_null($result))
+		{
+			if (is_null($title)) return new ocp_tempcode();
+			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+		}
 		if (!isset($result[2])) $result[2]=array();
 		if (!isset($result[3])) $result[3]=array();
 		list($mime_type,$content_result,$headers,$ini_set)=$result;
@@ -193,6 +203,7 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 		// Handle error results
 		if (is_null($mime_type))
 		{
+			if (is_null($title)) return $content_result;
 			return warn_screen($title,$content_result);
 		}
 
@@ -207,9 +218,10 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 				sync_file($path);
 			}
 
+			if (is_null($title)) return is_object($content_result)?protect_from_escaping($content_result):make_string_tempcode($content_result);
 			return do_template('FULL_MESSAGE_SCREEN',array(
 				'TITLE'=>$title,
-				'TEXT'=>is_object($content_result)?protect_from_escaping($content_result):$content_result,
+				'TEXT'=>is_object($content_result)?protect_from_escaping($content_result):make_string_tempcode($content_result),
 			));
 		}
 
@@ -260,5 +272,6 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 		$task_name=$task->add();
 	}
 
+	if (is_null($title)) return do_lang_tempcode('NEW_TASK_RUNNING');
 	return inform_screen($title,do_lang_tempcode('NEW_TASK_RUNNING'));
 }

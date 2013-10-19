@@ -1756,6 +1756,10 @@ ocportal_tutorials
  - data_custom/images/docs/adv_news_rss_xml.png
  - data_custom/images/docs/adv_news_show_trackbacks.png
  - data_custom/images/docs/adv_news_trackbacks_method.png
+ - data_custom/images/docs/appengine_create.png
+ - data_custom/images/docs/cloud_sql_database.png
+ - data_custom/images/docs/appengine_launcher.png
+ - data_custom/images/docs/cloud_sql.png
  - data_custom/images/docs/authors_define.png
  - data_custom/images/docs/authors_manage.png
  - data_custom/images/docs/authors_view.png

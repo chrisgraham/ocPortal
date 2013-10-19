@@ -50,7 +50,7 @@ class Hook_ocf
 		if (get_forum_type()!='ocf') return new ocp_tempcode();
 
 		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('CACHE_FORUMS'),get_screen_title('CACHE_FORUMS'),'ocf_recache');
+		return call_user_func_array__long_task(do_lang('CACHE_FORUMS'),NULL,'ocf_recache');
 	}
 
 }

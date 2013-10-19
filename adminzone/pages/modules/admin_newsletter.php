@@ -159,7 +159,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 		if (!GOOGLE_APPENGINE)
 		{
-			$this->extra_donext_entries[]=array('newsletter_email_bounce',array('_SELF',array('type'=>'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER')),
+			$this->extra_donext_entries[]=array('newsletter_email_bounce',array('_SELF',array('type'=>'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER'));
 		}
 
 		$this->add_one_label=do_lang_tempcode('ADD_NEWSLETTER');

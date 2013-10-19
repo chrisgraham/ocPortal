@@ -55,8 +55,8 @@ This notification hook was created using the classifieds notification hook as a 
 		working for more than 2 days we will not generate emails for downloads prior to the previous 
 		48 hours to prevent sending stale notifications for download actions that are not recent.
 		*/
-		if ((is_null($last)) || (intval($last)<$time-60*60*48))  $last=$time-60*60*48;
-		
+		if ((is_null($last)) || (intval($last)<$time-60*60*48))  $last=strval($time-60*60*48);
+
 		if (intval($last)>$time-60*60*$cron_interval) return; // Don't do more than once per $cron_interval (default is 24 hours)
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
@@ -73,7 +73,7 @@ This notification hook was created using the classifieds notification hook as a 
 			$download_list_template='DOWNLOADS_FOLLOWUP_EMAIL_DOWNLOAD_LIST_CUSTOM';
 
 		// Get all distinct member id's (except for guest) from download_logging table where the date_and_time is newer than the last runtime of this hook (or last 48 hours if hook hasn't been run recently)
-		$query="SELECT DISTINCT the_user FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."download_logging WHERE the_user>1 AND date_and_time>".$last;
+		$query="SELECT DISTINCT member_id FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."download_logging WHERE member_id>1 AND date_and_time>".$last;
 		if ($debug) echo "downloads_followup_email: distinct user query = $query \n";
 		$member_ids=$GLOBALS['SITE_DB']->query($query);
 
@@ -84,7 +84,7 @@ This notification hook was created using the classifieds notification hook as a 
 			$download_list=new ocp_tempcode();
 			$member_id='1';
 			$member_name='Guest';
-			$member_id=strval($id['the_user']);
+			$member_id=strval($id['member_id']);
 			$member_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 			$lang=get_lang($member_id);
 			$zone=get_module_zone('downloads');
@@ -93,7 +93,7 @@ This notification hook was created using the classifieds notification hook as a 
 			if ($debug) echo "downloads_followup_email: preparing notification to id #$member_id ($member_name) language=$lang \n";
 			
 			// Do a query to get list of download ids the current member id has downloaded since last run and place them in a content variable
-			$query="SELECT * FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."download_logging WHERE the_user=".$member_id." AND date_and_time>".$last;
+			$query="SELECT * FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."download_logging WHERE member_id=".$member_id." AND date_and_time>".$last;
 			if ($debug) echo "downloads_followup_email: download ids query = $query \n";
 			$downloads=$GLOBALS['SITE_DB']->query($query);
 			foreach ($downloads as $download)

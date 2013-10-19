@@ -58,7 +58,7 @@ class Hook_task_download_member_csv
 			$member_cpfs=array();
 		}
 
-		require_code('ocf_members_actions2');
+		require_code('ocf_members_action2');
 		$headings=member_get_csv_headings();
 		foreach ($cpfs as $i=>$c) // CPFs take precedence over normal fields of the same name
 		{

@@ -18,7 +18,7 @@
  * @package		core_cleanup_tools
  */
 
-class Hook_task_find_orphaned_lang_strings
+class Hook_task_find_orphaned_uploads
 {
 	/**
 	 * Run the task hook.

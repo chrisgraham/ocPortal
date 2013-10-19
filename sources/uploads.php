@@ -52,6 +52,8 @@ function is_swf_upload($fake_prepopulation=false)
 	{
 		if (!is_string($value)) continue;	
 
+		if (is_integer($key)) $key=strval($key);
+
 		if ((preg_match('#^hidFileID\_#i',$key)!=0) && ($value!='-1'))
 		{
 			// Get the incoming uploads appropiate database table row

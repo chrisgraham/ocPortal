@@ -1129,6 +1129,10 @@ function put_value_in_stack_trace($value)
 		{
 			$_value=integer_format($value);
 		}
+		elseif (is_bool($value))
+		{
+			$_value=$value?'true':'false';
+		}
 		else
 		{
 			$_value=strval($value);

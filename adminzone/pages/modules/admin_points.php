@@ -80,6 +80,7 @@ class Module_admin_points
 		if ($type=='export')
 		{
 			$this->title=get_screen_title('EXPORT_POINTS');
+			$GLOBALS['OUTPUT_STREAMING']=false;
 		}
 
 		if ($type=='misc')
@@ -160,7 +161,7 @@ class Module_admin_points
 		list($from,$to)=$d;
 
 		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('EXPORT_POINTS'),$this->title,'points_log_export',array($from,$to));
+		return call_user_func_array__long_task(do_lang('EXPORT_POINTS'),$this->title,'export_points_log',array($from,$to));
 	}
 
 	/**
