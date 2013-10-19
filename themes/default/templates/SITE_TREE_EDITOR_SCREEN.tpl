@@ -23,7 +23,9 @@
 				</div>
 			</form>
 			<script>// <![CDATA[
-				var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
+				add_event_listener_abstract(window,'load',function () {
+					window.site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
+				} );
 
 				var actions_tpl='{!ACTIONS;}:<ul role="navigation" class="actions_list">[1]<\/ul>';
 				var actions_tpl_item='<li><a href="[2]">[1]<\/a><\/li>';

@@ -223,10 +223,10 @@ class Module_admin_ipban
 		{
 			if (is_null($row['i_ban_until']))
 			{
-				$bans.=$row['ip'].' '.$row['i_descrip']."\n";
+				$bans.=$row['ip'].' '.str_replace("\n",' ',$row['i_descrip'])."\n";
 			} else
 			{
-				$locked_bans.=do_lang('SPAM_AUTO_BAN_TIMEOUT',$row['ip'],$row['i_descrip'],get_timezoned_date($row['i_ban_until']))."\n";
+				$locked_bans.=do_lang('SPAM_AUTO_BAN_TIMEOUT',$row['ip'],str_replace("\n",' ',$row['i_descrip']),get_timezoned_date($row['i_ban_until']))."\n";
 			}
 		}
 

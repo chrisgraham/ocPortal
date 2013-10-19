@@ -1720,7 +1720,7 @@ class Module_admin_newsletter extends standard_crud_module
 	 *
 	 * @param  SHORT_TEXT	The title
 	 * @param  LONG_TEXT		The description
-	 * @return tempcode		The input fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($title='',$description='')
 	{
@@ -1728,7 +1728,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 		$fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -1796,7 +1796,7 @@ class Module_admin_newsletter extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -1804,9 +1804,7 @@ class Module_admin_newsletter extends standard_crud_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields(get_translated_text($r['title']),get_translated_text($r['description']));
-
-		return $fields;
+		return $this->get_form_fields(get_translated_text($r['title']),get_translated_text($r['description']));
 	}
 
 	/**

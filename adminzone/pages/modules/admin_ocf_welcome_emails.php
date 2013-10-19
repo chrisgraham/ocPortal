@@ -200,7 +200,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	 * @param  ?AUTO_LINK	The usergroup to tie to (NULL: none)
 	 * @param  ID_TEXT		How to send regarding usergroups (blank: indiscriminately)
 	 * @set primary secondary ""
-	 * @return tempcode		The input fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($name='',$subject='',$text='',$send_time=0,$newsletter=NULL,$usergroup=NULL,$usergroup_type='')
 	{
@@ -244,7 +244,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 			$fields->attach(form_input_radio(do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP_TYPE'),'usergroup_type',$radios,false));
 		}
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -310,7 +310,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -318,9 +318,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields($r['w_name'],get_translated_text($r['w_subject']),get_translated_text($r['w_text']),$r['w_send_time'],$r['w_newsletter'],$r['w_usergroup'],$r['w_usergroup_type']);
-
-		return $fields;
+		return $this->get_form_fields($r['w_name'],get_translated_text($r['w_subject']),get_translated_text($r['w_text']),$r['w_send_time'],$r['w_newsletter'],$r['w_usergroup'],$r['w_usergroup_type']);
 	}
 
 	/**

@@ -217,7 +217,7 @@ class Module_cms_quiz extends standard_crud_module
 	 * @param  ?string		Text for questions (NULL: default)
 	 * @param  integer		The number of points awarded for completing/passing the quiz/test
 	 * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
-	 * @return tempcode		The form fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($id=NULL,$name='',$timeout=NULL,$start_text='',$end_text='',$end_text_fail='',$notes='',$percentage=70,$open_time=NULL,$close_time=NULL,$num_winners=2,$redo_time=NULL,$type='COMPETITION',$validated=1,$text=NULL,$points_for_passing=0,$tied_newsletter=NULL)
 	{
@@ -290,7 +290,7 @@ class Module_cms_quiz extends standard_crud_module
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('quiz',is_null($id)?NULL:strval($id)));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -310,7 +310,7 @@ class Module_cms_quiz extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($_id)
 	{

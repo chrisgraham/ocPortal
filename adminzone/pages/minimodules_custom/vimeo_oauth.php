@@ -19,6 +19,7 @@
  */
 
 require_code('vimeo');
+require_code('oauth');
 
 $service_name='vimeo';
 

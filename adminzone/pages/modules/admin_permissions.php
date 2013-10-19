@@ -183,6 +183,19 @@ class Module_admin_permissions
 		{
 			set_helper_panel_pic('pagepics/privileges');
 			set_helper_panel_tutorial('tut_permissions');
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
+
+			require_all_lang();
+
+			$p_section=get_param('id',NULL);
+			if ((is_null($p_section)) || ($p_section==''))
+			{
+				$this->title=get_screen_title('PRIVILEGES');
+			} else
+			{
+				$this->title=get_screen_title('_PRIVILEGES',true,array(do_lang_tempcode($p_section)));
+			}
 		}
 
 		if ($type=='_privileges')
@@ -193,6 +206,10 @@ class Module_admin_permissions
 				set_helper_panel_pic('pagepics/privileges');
 				set_helper_panel_tutorial('tut_permissions');
 			}
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
+
+			$this->title=get_screen_title('PRIVILEGES');
 		}
 
 		if ($type=='_absorb')
@@ -224,53 +241,24 @@ class Module_admin_permissions
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 		}
 
-		if ($type=='privileges')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
-		}
-
-		if ($type=='_privileges')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
-		}
-
 		if ($type=='absorb' || $type=='_absorb')
 		{
 			$this->title=get_screen_title('ABSORB_PERMISSIONS');
 		}
 
-		if ($type=='tree_editor')
+		if ($type=='misc')
 		{
 			$this->title=get_screen_title('PERMISSIONS_TREE');
 		}
 
-		if ($type=='interface_keys_access' || $type=='set_keys_access')
+		if ($type=='keys' || $type=='_keys')
 		{
 			$this->title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
 		}
 
-		if ($type=='interface_page_access' || $type=='set_page_access')
+		if ($type=='page' || $type=='_page')
 		{
 			$this->title=get_screen_title('PAGE_ACCESS');
-		}
-
-		if ($type=='interface_privileges')
-		{
-			require_all_lang();
-
-			$p_section=get_param('id',NULL);
-			if ((is_null($p_section)) || ($p_section==''))
-			{
-				$this->title=get_screen_title('PRIVILEGES');
-			} else
-			{
-				$this->title=get_screen_title('_PRIVILEGES',true,array(do_lang_tempcode($p_section)));
-			}
-		}
-
-		if ($type=='set_privileges')
-		{
-			$this->title=get_screen_title('PRIVILEGES');
 		}
 
 		return NULL;

@@ -157,6 +157,18 @@ class standard_crud_module
 
 		if ($top_level)
 		{
+			// Load lang file if it exists
+			$this->module_type=get_class($this);
+			if (strtolower(substr($this->module_type,0,11))=='module_cms_') $this->module_type=substr($this->module_type,11);
+			if (strtolower(substr($this->module_type,0,13))=='module_admin_') $this->module_type=substr($this->module_type,13);
+			if (strtolower(substr($this->module_type,0,7))=='module_') $this->module_type=substr($this->module_type,7);
+			if (substr($this->module_type,0,4)=='ocf_') $this->module_type=substr($this->module_type,2);
+			if ((file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$this->module_type.'.ini'))
+				|| (file_exists(get_custom_file_base().'/lang_custom/'.fallback_lang().'/'.$this->module_type.'.ini')))
+			{
+				require_lang($this->module_type);
+			}
+
 			if (!is_null($this->cat_crud_module)) $this->cat_crud_module->type_code='c';
 			if (!is_null($this->alt_crud_module)) $this->alt_crud_module->type_code='v';
 
@@ -374,18 +386,6 @@ class standard_crud_module
 		require_code('autosave');
 		require_code('permissions2');
 		require_code('users2');
-
-		// Load lang file if it exists
-		$this->module_type=get_class($this);
-		if (strtolower(substr($this->module_type,0,11))=='module_cms_') $this->module_type=substr($this->module_type,11);
-		if (strtolower(substr($this->module_type,0,13))=='module_admin_') $this->module_type=substr($this->module_type,13);
-		if (strtolower(substr($this->module_type,0,7))=='module_') $this->module_type=substr($this->module_type,7);
-		if (substr($this->module_type,0,4)=='ocf_') $this->module_type=substr($this->module_type,2);
-		if ((file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$this->module_type.'.ini'))
-			|| (file_exists(get_custom_file_base().'/lang_custom/'.fallback_lang().'/'.$this->module_type.'.ini')))
-		{
-			require_lang($this->module_type);
-		}
 
 		if (!is_null($this->code_require)) require_code($this->code_require);
 		if (!is_null($this->javascript_require)) require_javascript($this->javascript_require);
@@ -724,7 +724,7 @@ class standard_crud_module
 		if (is_array($bits))
 		{
 			$fields=$bits[0];
-			$hidden=$bits[1];
+			$hidden=array_key_exists(1,$bits)?$bits[1]:new ocp_tempcode();
 			if ((array_key_exists(6,$bits)) && (!is_null($bits[6]))) $fields2=$bits[6];
 			if ((array_key_exists(7,$bits)) && (!is_null($bits[7]))) $posting_form_tabindex=$bits[7];
 			if ((array_key_exists(8,$bits)) && (!is_null($bits[8]))) $extra_tpl_params+=$bits[8];

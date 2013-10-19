@@ -354,7 +354,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -388,9 +388,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		}
 		$show_on_join_form=$myrow['cf_show_on_join_form'];
 
-		$fields=$this->get_form_fields($name,$description,$default,$public_view,$owner_view,$owner_set,$encrypted,$type,$required,$show_on_join_form,$show_in_posts,$show_in_post_previews,$order,$only_group,$myrow['cf_locked']);
-
-		return $fields;
+		return $this->get_form_fields($name,$description,$default,$public_view,$owner_view,$owner_set,$encrypted,$type,$required,$show_on_join_form,$show_in_posts,$show_in_post_previews,$order,$only_group,$myrow['cf_locked']);
 	}
 
 	/**

@@ -1640,7 +1640,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
 	function fill_in_edit_form($catalogue_name)
 	{

@@ -862,6 +862,7 @@ a.ocf_gcol_15, a.ocf_gcol_15:visited, a.ocf_gcol_15:hover {
 .ocf_post_history_header {
 	margin-top: 1em;
 	text-align: {!en_left};
+	color: {$GET,box_title_text};
 }
 
 .ocf_history_post_meta {

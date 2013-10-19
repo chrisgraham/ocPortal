@@ -96,8 +96,6 @@ class Module_admin_ecommerce extends standard_crud_module
 		{
 			set_helper_panel_pic('pagepics/ecommerce');
 			set_helper_panel_tutorial('tut_ecommerce');
-
-			$this->title=get_screen_title('TRANSACTIONS');
 		}
 
 		if ($type=='cash_flow')
@@ -124,18 +122,24 @@ class Module_admin_ecommerce extends standard_crud_module
 		{
 			$also_url=build_url(array('page'=>'_SELF','type'=>'ecom_usage'),'_SELF');
 			attach_message(do_lang_tempcode('menus:ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
+
+			$this->title=get_screen_title('CUSTOM_PRODUCT_USERGROUP');
 		}
 
 		if ($type=='ecom_usage')
 		{
 			$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 			attach_message(do_lang_tempcode('menus:ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
+
+			$this->title=get_screen_title('ECOMMERCE');
 		}
 
 		if ($type=='logs')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 			breadcrumb_set_self(do_lang_tempcode('TRANSACTIONS'));
+
+			$this->title=get_screen_title('TRANSACTIONS');
 		}
 
 		if ($type=='trigger')
@@ -224,7 +228,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_USERGROUP_SUBSCRIPTION'),
+		return do_next_manager($this->title,comcode_lang_string('DOC_USERGROUP_SUBSCRIPTION'),
 			array(
 				/*	 type							  page	 params													 zone	  */
 				((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_USERGROUP_SUBSCRIPTION')),
@@ -242,7 +246,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	function usage()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('ECOMMERCE'),comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager($this->title,comcode_lang_string('DOC_ECOMMERCE'),
 			array(
 				/*	 type							  page	 params													 zone	  */
 				array('cash_flow',array('_SELF',array('type'=>'cash_flow'),'_SELF'),do_lang('CASH_FLOW')),

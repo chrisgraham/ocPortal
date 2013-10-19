@@ -71,6 +71,9 @@ class Module_admin_ocf_join
 		{
 			set_helper_panel_pic('pagepics/editmember');
 			set_helper_panel_tutorial('tut_members');
+
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+			breadcrumb_set_self(do_lang_tempcode('ADD_MEMBER'));
 		}
 
 		if ($type=='group_member_timeouts' || $type=='_group_member_timeouts')
@@ -86,12 +89,6 @@ class Module_admin_ocf_join
 		if ($type=='import_csv' || $type=='_import_csv')
 		{
 			set_helper_panel_pic('pagepics/import_csv');
-		}
-
-		if ($type=='step1')
-		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
-			breadcrumb_set_self(do_lang_tempcode('ADD_MEMBER'));
 		}
 
 		if ($type=='step2')
@@ -132,7 +129,7 @@ class Module_admin_ocf_join
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 		}
 
-		if ($type=='step1' || $type=='step2')
+		if ($type=='misc' || $type=='step2')
 		{
 			$this->title=get_screen_title('ADD_MEMBER');
 		}

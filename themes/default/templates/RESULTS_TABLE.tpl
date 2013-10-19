@@ -7,7 +7,8 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{FIELDS}}
-	{MESSAGE}
+	{$PARAGRAPH,{MESSAGE}}
+
 	<div class="wide_table_wrap"><table class="columned_table results_table wide_table{+START,IF_EMPTY,{WIDTHS}} autosized_table{+END}" itemprop="significantLinks">
 		{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{WIDTHS}}
 			<colgroup>

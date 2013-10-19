@@ -259,6 +259,7 @@ function web_notification_to_xml($row)
 {
 	$member_id=$row['d_from_member_id'];
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+	if (is_null($username)) $username=do_lang('UNKNOWN');
 	$from_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 

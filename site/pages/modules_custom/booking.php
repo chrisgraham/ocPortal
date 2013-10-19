@@ -192,7 +192,7 @@ class Module_booking
 
 		require_lang('booking');
 
-		if ($type=='choose_bookables_and_dates')
+		if ($type=='misc')
 		{
 			$this->title=get_screen_title('CREATE_BOOKING');
 		}

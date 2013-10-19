@@ -264,7 +264,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 	 * @param  BINARY			Whether it is a dangerous tag
 	 * @param  BINARY			Whether it is a block tag
 	 * @param  BINARY			Whether it is a textual tag
-	 * @return tempcode		The input fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($title='',$description='',$enabled=1,$tag='this',$replace='<span class="example" style="color: {color}">{content}</span>',$example='[this color="red"]blah[/this]',$parameters='color=black',$dangerous_tag=0,$block_tag=0,$textual_tag=1)
 	{
@@ -281,14 +281,14 @@ class Module_admin_custom_comcode extends standard_crud_module
 		$fields->attach(form_input_tick(do_lang_tempcode('TEXTUAL_TAG'),do_lang_tempcode('DESCRIPTION_TEXTUAL_TAG'),'textual_tag',$textual_tag==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),'','enabled',$enabled==1));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -296,9 +296,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields(get_translated_text($r['tag_title']),get_translated_text($r['tag_description']),$r['tag_enabled'],$r['tag_tag'],$r['tag_replace'],$r['tag_example'],$r['tag_parameters'],$r['tag_dangerous_tag'],$r['tag_block_tag'],$r['tag_textual_tag']);
-
-		return $fields;
+		return $this->get_form_fields(get_translated_text($r['tag_title']),get_translated_text($r['tag_description']),$r['tag_enabled'],$r['tag_tag'],$r['tag_replace'],$r['tag_example'],$r['tag_parameters'],$r['tag_dangerous_tag'],$r['tag_block_tag'],$r['tag_textual_tag']);
 	}
 
 	/**

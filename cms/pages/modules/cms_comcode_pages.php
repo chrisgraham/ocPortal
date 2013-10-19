@@ -189,7 +189,7 @@ class Module_cms_comcode_pages
 		set_helper_panel_pic('pagepics/comcode_page_edit');
 		set_helper_panel_tutorial('tut_comcode_pages');
 
-		if ($type=='ed')
+		if ($type=='misc')
 		{
 			breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGES'));
 
@@ -260,9 +260,9 @@ class Module_cms_comcode_pages
 
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->ed();
 		if ($type=='_ed') return $this->_ed();
 		if ($type=='__ed') return $this->__ed();
-		if ($type=='misc') return $this->ed();
 
 		return new ocp_tempcode();
 	}

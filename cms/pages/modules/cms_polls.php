@@ -221,7 +221,7 @@ class Module_cms_polls extends standard_crud_module
 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  LONG_TEXT			Notes for the poll
-	 * @return tempcode			The tempcode for the visible fields
+	 * @return array				A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($id=NULL,$question='',$a1='',$a2='',$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a9='',$a10='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
 	{
@@ -259,7 +259,7 @@ class Module_cms_polls extends standard_crud_module
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('poll',is_null($id)?NULL:strval($id)));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -290,9 +290,7 @@ class Module_cms_polls extends standard_crud_module
 		}
 		$myrow=$rows[0];
 
-		$fields=$this->get_form_fields(get_translated_text($myrow['question']),get_translated_text($myrow['option1']),get_translated_text($myrow['option2']),get_translated_text($myrow['option3']),get_translated_text($myrow['option4']),get_translated_text($myrow['option5']),get_translated_text($myrow['option6']),get_translated_text($myrow['option7']),get_translated_text($myrow['option8']),get_translated_text($myrow['option9']),get_translated_text($myrow['option10']),$myrow['is_current'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
-
-		return $fields;
+		return $this->get_form_fields(get_translated_text($myrow['question']),get_translated_text($myrow['option1']),get_translated_text($myrow['option2']),get_translated_text($myrow['option3']),get_translated_text($myrow['option4']),get_translated_text($myrow['option5']),get_translated_text($myrow['option6']),get_translated_text($myrow['option7']),get_translated_text($myrow['option8']),get_translated_text($myrow['option9']),get_translated_text($myrow['option10']),$myrow['is_current'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
 	}
 
 	/**

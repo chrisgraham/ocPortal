@@ -102,7 +102,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	 * @param  SHORT_TEXT	The title (name) of the forum grouping
 	 * @param  LONG_TEXT		The description for the forum grouping
 	 * @param  BINARY			Whether the forum grouping is expanded by default when shown in the forum view
-	 * @return tempcode		The input fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($title='',$description='',$expanded_by_default=1)
 	{
@@ -111,7 +111,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 		$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('EXPANDED_BY_DEFAULT'),do_lang_tempcode('DESCRIPTION_EXPANDED_BY_DEFAULT'),'expanded_by_default',$expanded_by_default==1));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -183,12 +183,12 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 
 		$delete_fields=new ocp_tempcode();
 
-		$fields=$this->get_form_fields($r['c_title'],$r['c_description'],$r['c_expanded_by_default']);
+		list($fields,$hidden)=$this->get_form_fields($r['c_title'],$r['c_description'],$r['c_expanded_by_default']);
 		$list=ocf_nice_get_forum_groupings($id);
 		if (!$list->is_empty())
 			$delete_fields->attach(form_input_list(do_lang_tempcode('TARGET'),do_lang_tempcode('DESCRIPTION_FORUM_MOVE_TARGET'),'target_forum_grouping',$list));
 
-		return array($fields,new ocp_tempcode(),$delete_fields);
+		return array($fields,$hidden,$delete_fields);
 	}
 
 	/**

@@ -326,12 +326,12 @@ class Module_chat
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 		}
 
-		if ($type=='chat_private')
+		if ($type=='private')
 		{
 			$this->title=get_screen_title('CREATE_PRIVATE_ROOM');
 		}
 
-		if ($type=='_chat_private')
+		if ($type=='_private')
 		{
 			$this->title=get_screen_title('CREATE_PRIVATE_ROOM');
 		}

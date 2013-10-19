@@ -577,15 +577,14 @@ class Module_warnings extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
 		$warning=$GLOBALS['FORUM_DB']->query_select('f_warnings',array('w_explanation','w_by','w_member_id','w_is_warning'),array('id'=>intval($id)),'',1);
 		if (!array_key_exists(0,$warning)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$fields=$this->get_form_fields(false,$warning[0]['w_explanation'],$warning[0]['w_is_warning'],$warning[0]['w_member_id']);
 
-		return $fields;
+		return $this->get_form_fields(false,$warning[0]['w_explanation'],$warning[0]['w_is_warning'],$warning[0]['w_member_id']);
 	}
 
 	/**

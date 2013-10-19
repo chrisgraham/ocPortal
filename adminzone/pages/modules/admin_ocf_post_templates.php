@@ -151,7 +151,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	 * @param  LONG_TEXT		The actual post template text
 	 * @param  SHORT_TEXT	Multi-code identifying forums it is applicable to
 	 * @param  BINARY			Whether to use as the default post for applicable forums
-	 * @return tempcode		The input fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($title='',$text='',$forum_multi_code='',$use_default_forums=0)
 	{
@@ -161,14 +161,14 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 		$fields->attach(ocf_get_forum_multi_code_field($forum_multi_code));
 		$fields->attach(form_input_tick(do_lang_tempcode('DEFAULT'),do_lang_tempcode('USE_AS_DEFAULT_ON_APPLICABLE_FORUMS'),'use_default_forums',$use_default_forums==1));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -176,9 +176,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields($r['t_title'],$r['t_text'],$r['t_forum_multi_code'],$r['t_use_default_forums']);
-
-		return $fields;
+		return $this->get_form_fields($r['t_title'],$r['t_text'],$r['t_forum_multi_code'],$r['t_use_default_forums']);
 	}
 
 	/**

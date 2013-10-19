@@ -105,7 +105,7 @@ class Module_admin_quiz
 			$this->row=$row;
 		}
 
-		if ($type=='export_quiz')
+		if ($type=='export')
 		{
 			$this->title=get_screen_title('EXPORT_QUIZ');
 		}

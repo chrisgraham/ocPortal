@@ -112,7 +112,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 	 * @param  SHORT_TEXT	The usergroup name
 	 * @param  ?ID_TEXT		The username of the usergroup leader (NULL: none picked yet)
 	 * @param  BINARY			Whether members may join this usergroup without requiring any special permission
-	 * @return tempcode		The input fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($id=NULL,$name='',$group_leader=NULL,$open_membership=1)
 	{
@@ -124,7 +124,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 		$fields->attach(form_input_username(do_lang_tempcode('GROUP_LEADER'),do_lang_tempcode('DESCRIPTION_GROUP_LEADER'),'group_leader',$group_leader,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('OPEN_MEMBERSHIP'),do_lang_tempcode('OPEN_MEMBERSHIP_DESCRIPTION'),'open_membership',$open_membership==1));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -213,7 +213,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		Fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -226,9 +226,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_group_leader']);
 		if (is_null($username)) $username='';//do_lang('UNKNOWN');
-		$fields=$this->get_form_fields($id,get_translated_text($myrow['g_name'],$GLOBALS['FORUM_DB']),$username,$myrow['g_open_membership']);
-
-		return $fields;
+		return $this->get_form_fields($id,get_translated_text($myrow['g_name'],$GLOBALS['FORUM_DB']),$username,$myrow['g_open_membership']);
 	}
 
 	/**

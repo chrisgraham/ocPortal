@@ -218,7 +218,7 @@ class Module_admin_community_billboard extends standard_crud_module
 	 * @param  integer		The number of days to display for
 	 * @param  LONG_TEXT		Notes
 	 * @param  BINARY			Whether the message is for immediate use
-	 * @return tempcode		The tempcode for the fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($message='',$days=1,$notes='',$validated=0)
 	{
@@ -229,7 +229,8 @@ class Module_admin_community_billboard extends standard_crud_module
 		if (get_option('enable_staff_notes')=='1')
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$validated==1));
-		return $fields;
+
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -248,13 +249,13 @@ class Module_admin_community_billboard extends standard_crud_module
 		$myrow=$rows[0];
 		$date=get_timezoned_date($myrow['order_time']);
 		$date_raw=$myrow['order_time'];
-		$fields=$this->get_form_fields(get_translated_text($myrow['the_message']),$myrow['days'],$myrow['notes'],$myrow['active_now']);
+		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['the_message']),$myrow['days'],$myrow['notes'],$myrow['active_now']);
 
 		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
 
 		$text=do_template('COMMUNITY_BILLBOARD_DETAILS',array('_GUID'=>'dcc7a8b027d450a3c17c79b23b39cd87','USERNAME'=>$username,'DAYS_ORDERED'=>integer_format($myrow['days']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date));
 
-		return array($fields,new ocp_tempcode(),new ocp_tempcode(),$text);
+		return array($fields,$hidden,new ocp_tempcode(),$text);
 	}
 
 	/**

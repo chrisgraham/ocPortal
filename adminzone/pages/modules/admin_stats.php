@@ -63,7 +63,6 @@ class Module_admin_stats
 	{
 		if (is_null($upgrade_from))
 		{
-			// Note: We have chosen not to create many indices because we want insertion to be very fast
 			$GLOBALS['SITE_DB']->create_table('stats',array(
 				'id'=>'*AUTO',
 				'the_page'=>'SHORT_TEXT',
@@ -79,6 +78,7 @@ class Module_admin_stats
 				'access_denied_counter'=>'INTEGER'
 			));
 
+			// Note: We have chosen not to create many indices because we want insertion to be very fast
 			$GLOBALS['SITE_DB']->create_index('stats','member_track_1',array('member_id'));
 			$GLOBALS['SITE_DB']->create_index('stats','member_track_2',array('ip'));
 			$GLOBALS['SITE_DB']->create_index('stats','member_track_3',array('member_id','date_and_time'));
@@ -211,17 +211,17 @@ class Module_admin_stats
 			$this->title=get_screen_title('TOP_SEARCH_KEYWORDS');
 		}
 
-		if ($type=='page_stats')
-		{
-			$this->title=get_screen_title('PAGES_STATISTICS');
-		}
-
 		if ($type=='overview')
 		{
 			$this->title=get_screen_title('OVERVIEW_STATISTICS');
 		}
 
-		if ($type=='show_page')
+		if ($type=='page')
+		{
+			$this->title=get_screen_title('PAGES_STATISTICS');
+		}
+
+		if ($type=='_page')
 		{
 			$page=get_param('iscreen');
 			$this->title=get_screen_title(do_lang_tempcode('PAGE_STATISTICS',escape_html($page)),false);

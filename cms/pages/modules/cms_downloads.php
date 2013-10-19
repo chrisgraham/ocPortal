@@ -719,7 +719,7 @@ class Module_cms_downloads_alt extends standard_crud_module
 	 *
 	 * @param  ID_TEXT		The title of the licence
 	 * @param  LONG_TEXT		The text of the licence
-	 * @return tempcode		The fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($title='',$text='')
 	{
@@ -728,14 +728,14 @@ class Module_cms_downloads_alt extends standard_crud_module
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('TEXT'),do_lang_tempcode('DESCRIPTION_LICENCE_TEXT'),'text',$text,true));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($_id)
 	{
@@ -748,9 +748,7 @@ class Module_cms_downloads_alt extends standard_crud_module
 		}
 		$myrow=$myrows[0];
 
-		$fields=$this->get_form_fields($myrow['l_title'],$myrow['l_text']);
-
-		return $fields;
+		return $this->get_form_fields($myrow['l_title'],$myrow['l_text']);
 	}
 
 	/**
@@ -884,7 +882,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{

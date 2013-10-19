@@ -114,7 +114,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 	 * @param  ?BINARY		What to change the sink state to (NULL: don't change)
 	 * @param  SHORT_TEXT	The forum multicode identifying where the multimoderation is applicable
 	 * @param  SHORT_TEXT	The title suffix
-	 * @return tempcode		The input fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($name='',$post_text='',$move_to=NULL,$pin_state=NULL,$open_state=NULL,$sink_state=NULL,$forum_multi_code='*',$title_suffix='')
 	{
@@ -142,7 +142,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 		$fields->attach(ocf_get_forum_multi_code_field($forum_multi_code));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE_SUFFIX'),do_lang_tempcode('DESCRIPTION_TITLE_SUFFIX'),'title_suffix',$title_suffix,false));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -254,7 +254,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		The edit form
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -262,9 +262,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields(get_translated_text($r['mm_name'],$GLOBALS['FORUM_DB']),$r['mm_post_text'],$r['mm_move_to'],$r['mm_pin_state'],$r['mm_open_state'],$r['mm_sink_state'],$r['mm_forum_multi_code'],$r['mm_title_suffix']);
-
-		return $fields;
+		return $this->get_form_fields(get_translated_text($r['mm_name'],$GLOBALS['FORUM_DB']),$r['mm_post_text'],$r['mm_move_to'],$r['mm_pin_state'],$r['mm_open_state'],$r['mm_sink_state'],$r['mm_forum_multi_code'],$r['mm_title_suffix']);
 	}
 
 	/**

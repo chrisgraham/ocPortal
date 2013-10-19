@@ -76,7 +76,7 @@ function init__site()
 	require_code('urls');
 	if (can_try_mod_rewrite())
 	{
-		$ruri=ocp_srv('SCRIPT_NAME');
+		$ruri=ocp_srv('REQUEST_URI');
 
 		$url_scheme=get_option('url_scheme');
 		if (($url_scheme=='PG') || ($url_scheme=='HTM'))

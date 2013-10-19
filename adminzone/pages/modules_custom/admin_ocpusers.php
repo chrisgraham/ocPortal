@@ -77,7 +77,7 @@ class Module_admin_ocpusers
 	 */
 	function get_entry_points()
 	{
-		return array('users'=>'OC_SITES_INSTALLED');
+		return array('misc'=>'OC_SITES_INSTALLED');
 	}
 
 	var $title;
@@ -200,9 +200,7 @@ class Module_admin_ocpusers
 			$_rows->attach(do_template('OC_SITE',$rt));
 		}
 
-		$out=do_template('OC_SITES',array('_GUID'=>'7f4b56c730f2b613994a3fe6f00ed525','TITLE'=>$this->title,'ROWS'=>$_rows,'NAMEORD'=>$nameord,'ACPORD'=>$acpord,'KEYORD'=>$keyord,'VERORD'=>$versord));
-
-		return $out;
+		return do_template('OC_SITES_SCREEN',array('_GUID'=>'7f4b56c730f2b613994a3fe6f00ed525','TITLE'=>$this->title,'ROWS'=>$_rows,'NAMEORD'=>$nameord,'ACPORD'=>$acpord,'KEYORD'=>$keyord,'VERORD'=>$versord));
 	}
 
 }

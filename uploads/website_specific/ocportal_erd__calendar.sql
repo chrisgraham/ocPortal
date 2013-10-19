@@ -1,29 +1,31 @@
-		CREATE TABLE ocp_calendar_events
+		CREATE TABLE ocp10_calendar_events
 		(
 			id integer auto_increment NULL,
 			e_submitter integer NOT NULL,
+			e_member_calendar integer NOT NULL,
 			e_views integer NOT NULL,
 			e_title integer NOT NULL,
 			e_content integer NOT NULL,
 			e_add_date integer unsigned NOT NULL,
 			e_edit_date integer unsigned NOT NULL,
 			e_recurrence varchar(80) NOT NULL,
-			e_recurrences integer NOT NULL,
+			e_recurrences tinyint NOT NULL,
 			e_seg_recurrences tinyint(1) NOT NULL,
 			e_start_year integer NOT NULL,
-			e_start_month integer NOT NULL,
-			e_start_day integer NOT NULL,
-			e_start_hour integer NOT NULL,
-			e_start_minute integer NOT NULL,
+			e_start_month tinyint NOT NULL,
+			e_start_day tinyint NOT NULL,
+			e_start_monthly_spec_type varchar(80) NOT NULL,
+			e_start_hour tinyint NOT NULL,
+			e_start_minute tinyint NOT NULL,
 			e_end_year integer NOT NULL,
-			e_end_month integer NOT NULL,
-			e_end_day integer NOT NULL,
-			e_end_hour integer NOT NULL,
-			e_end_minute integer NOT NULL,
+			e_end_month tinyint NOT NULL,
+			e_end_day tinyint NOT NULL,
+			e_end_monthly_spec_type varchar(80) NOT NULL,
+			e_end_hour tinyint NOT NULL,
+			e_end_minute tinyint NOT NULL,
 			e_timezone varchar(80) NOT NULL,
 			e_do_timezone_conv tinyint(1) NOT NULL,
-			e_is_public tinyint(1) NOT NULL,
-			e_priority integer NOT NULL,
+			e_priority tinyint NOT NULL,
 			allow_rating tinyint(1) NOT NULL,
 			allow_comments tinyint NOT NULL,
 			allow_trackbacks tinyint(1) NOT NULL,
@@ -33,7 +35,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_calendar_types
+		CREATE TABLE ocp10_calendar_types
 		(
 			id integer auto_increment NULL,
 			t_title integer NOT NULL,
@@ -42,7 +44,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_calendar_reminders
+		CREATE TABLE ocp10_calendar_reminders
 		(
 			id integer auto_increment NULL,
 			e_id integer NOT NULL,
@@ -51,14 +53,14 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_calendar_interests
+		CREATE TABLE ocp10_calendar_interests
 		(
 			i_member_id integer NULL,
 			t_type integer NULL,
 			PRIMARY KEY (i_member_id,t_type)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_calendar_jobs
+		CREATE TABLE ocp10_calendar_jobs
 		(
 			id integer auto_increment NULL,
 			j_time integer unsigned NOT NULL,
@@ -68,7 +70,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_members
+		CREATE TABLE ocp10_f_members
 		(
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
@@ -88,8 +90,8 @@
 			m_signature integer NOT NULL,
 			m_is_perm_banned tinyint(1) NOT NULL,
 			m_preview_posts tinyint(1) NOT NULL,
-			m_dob_day integer NOT NULL,
-			m_dob_month integer NOT NULL,
+			m_dob_day tinyint NOT NULL,
+			m_dob_month tinyint NOT NULL,
 			m_dob_year integer NOT NULL,
 			m_reveal_age tinyint(1) NOT NULL,
 			m_email_address varchar(255) NOT NULL,
@@ -102,7 +104,6 @@
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
 			m_allow_emails_from_staff tinyint(1) NOT NULL,
-			m_notes longtext NOT NULL,
 			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
 			m_pt_allow varchar(255) NOT NULL,
@@ -114,7 +115,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_translate
+		CREATE TABLE ocp10_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -126,7 +127,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_groups
+		CREATE TABLE ocp10_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -159,62 +160,65 @@
 		) TYPE=InnoDB;
 
 
-		CREATE INDEX `calendar_events.e_submitter` ON ocp_calendar_events(e_submitter);
-		ALTER TABLE ocp_calendar_events ADD FOREIGN KEY `calendar_events.e_submitter` (e_submitter) REFERENCES ocp_f_members (id);
+		CREATE INDEX `calendar_events.e_submitter` ON ocp10_calendar_events(e_submitter);
+		ALTER TABLE ocp10_calendar_events ADD FOREIGN KEY `calendar_events.e_submitter` (e_submitter) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `calendar_events.e_title` ON ocp_calendar_events(e_title);
-		ALTER TABLE ocp_calendar_events ADD FOREIGN KEY `calendar_events.e_title` (e_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `calendar_events.e_member_calendar` ON ocp10_calendar_events(e_member_calendar);
+		ALTER TABLE ocp10_calendar_events ADD FOREIGN KEY `calendar_events.e_member_calendar` (e_member_calendar) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `calendar_events.e_content` ON ocp_calendar_events(e_content);
-		ALTER TABLE ocp_calendar_events ADD FOREIGN KEY `calendar_events.e_content` (e_content) REFERENCES ocp_translate (id);
+		CREATE INDEX `calendar_events.e_title` ON ocp10_calendar_events(e_title);
+		ALTER TABLE ocp10_calendar_events ADD FOREIGN KEY `calendar_events.e_title` (e_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `calendar_events.e_type` ON ocp_calendar_events(e_type);
-		ALTER TABLE ocp_calendar_events ADD FOREIGN KEY `calendar_events.e_type` (e_type) REFERENCES ocp_calendar_types (id);
+		CREATE INDEX `calendar_events.e_content` ON ocp10_calendar_events(e_content);
+		ALTER TABLE ocp10_calendar_events ADD FOREIGN KEY `calendar_events.e_content` (e_content) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `calendar_types.t_title` ON ocp_calendar_types(t_title);
-		ALTER TABLE ocp_calendar_types ADD FOREIGN KEY `calendar_types.t_title` (t_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `calendar_events.e_type` ON ocp10_calendar_events(e_type);
+		ALTER TABLE ocp10_calendar_events ADD FOREIGN KEY `calendar_events.e_type` (e_type) REFERENCES ocp10_calendar_types (id);
 
-		CREATE INDEX `calendar_reminders.e_id` ON ocp_calendar_reminders(e_id);
-		ALTER TABLE ocp_calendar_reminders ADD FOREIGN KEY `calendar_reminders.e_id` (e_id) REFERENCES ocp_calendar_events (id);
+		CREATE INDEX `calendar_types.t_title` ON ocp10_calendar_types(t_title);
+		ALTER TABLE ocp10_calendar_types ADD FOREIGN KEY `calendar_types.t_title` (t_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `calendar_reminders.n_member_id` ON ocp_calendar_reminders(n_member_id);
-		ALTER TABLE ocp_calendar_reminders ADD FOREIGN KEY `calendar_reminders.n_member_id` (n_member_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `calendar_reminders.e_id` ON ocp10_calendar_reminders(e_id);
+		ALTER TABLE ocp10_calendar_reminders ADD FOREIGN KEY `calendar_reminders.e_id` (e_id) REFERENCES ocp10_calendar_events (id);
 
-		CREATE INDEX `calendar_interests.i_member_id` ON ocp_calendar_interests(i_member_id);
-		ALTER TABLE ocp_calendar_interests ADD FOREIGN KEY `calendar_interests.i_member_id` (i_member_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `calendar_reminders.n_member_id` ON ocp10_calendar_reminders(n_member_id);
+		ALTER TABLE ocp10_calendar_reminders ADD FOREIGN KEY `calendar_reminders.n_member_id` (n_member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `calendar_interests.t_type` ON ocp_calendar_interests(t_type);
-		ALTER TABLE ocp_calendar_interests ADD FOREIGN KEY `calendar_interests.t_type` (t_type) REFERENCES ocp_calendar_types (id);
+		CREATE INDEX `calendar_interests.i_member_id` ON ocp10_calendar_interests(i_member_id);
+		ALTER TABLE ocp10_calendar_interests ADD FOREIGN KEY `calendar_interests.i_member_id` (i_member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `calendar_jobs.j_reminder_id` ON ocp_calendar_jobs(j_reminder_id);
-		ALTER TABLE ocp_calendar_jobs ADD FOREIGN KEY `calendar_jobs.j_reminder_id` (j_reminder_id) REFERENCES ocp_calendar_reminders (id);
+		CREATE INDEX `calendar_interests.t_type` ON ocp10_calendar_interests(t_type);
+		ALTER TABLE ocp10_calendar_interests ADD FOREIGN KEY `calendar_interests.t_type` (t_type) REFERENCES ocp10_calendar_types (id);
 
-		CREATE INDEX `calendar_jobs.j_member_id` ON ocp_calendar_jobs(j_member_id);
-		ALTER TABLE ocp_calendar_jobs ADD FOREIGN KEY `calendar_jobs.j_member_id` (j_member_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `calendar_jobs.j_reminder_id` ON ocp10_calendar_jobs(j_reminder_id);
+		ALTER TABLE ocp10_calendar_jobs ADD FOREIGN KEY `calendar_jobs.j_reminder_id` (j_reminder_id) REFERENCES ocp10_calendar_reminders (id);
 
-		CREATE INDEX `calendar_jobs.j_event_id` ON ocp_calendar_jobs(j_event_id);
-		ALTER TABLE ocp_calendar_jobs ADD FOREIGN KEY `calendar_jobs.j_event_id` (j_event_id) REFERENCES ocp_calendar_events (id);
+		CREATE INDEX `calendar_jobs.j_member_id` ON ocp10_calendar_jobs(j_member_id);
+		ALTER TABLE ocp10_calendar_jobs ADD FOREIGN KEY `calendar_jobs.j_member_id` (j_member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `calendar_jobs.j_event_id` ON ocp10_calendar_jobs(j_event_id);
+		ALTER TABLE ocp10_calendar_jobs ADD FOREIGN KEY `calendar_jobs.j_event_id` (j_event_id) REFERENCES ocp10_calendar_events (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_signature` ON ocp10_f_members(m_signature);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
-		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp10_f_members(m_pt_rules_text);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
+		CREATE INDEX `translate.source_user` ON ocp10_translate(source_user);
+		ALTER TABLE ocp10_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_groups.g_name` ON ocp10_f_groups(g_name);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_group_leader` ON ocp10_f_groups(g_group_leader);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_groups.g_title` ON ocp10_f_groups(g_title);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp10_translate (id);
+
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);

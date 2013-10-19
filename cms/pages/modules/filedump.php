@@ -114,6 +114,8 @@ class Module_filedump
 	 */
 	function pre_run()
 	{
+		require_lang('filedump');
+
 		$type=get_param('type','misc');
 
 		if ($type=='misc')
@@ -180,7 +182,6 @@ class Module_filedump
 	 */
 	function run()
 	{
-		require_lang('filedump');
 		require_code('files');
 		require_code('files2');
 

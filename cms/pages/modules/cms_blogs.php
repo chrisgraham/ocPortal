@@ -658,7 +658,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		/* Render */
 
-		return do_template('NEWS_WORDPRESS_IMPORT_SCREEN',array('_GUID'=>'b9dcdd8211c65f3d2acd16e759d451a5','TITLE'=>get_screen_title('DB_IMPORT_FORM'),'XML_UPLOAD_FORM'=>$xml_upload_form,'DB_IMPORT_FORM'=>$db_import_form));
+		return do_template('NEWS_WORDPRESS_IMPORT_SCREEN',array('_GUID'=>'b9dcdd8211c65f3d2acd16e759d451a5','TITLE'=>$this->title,'XML_UPLOAD_FORM'=>$xml_upload_form,'DB_IMPORT_FORM'=>$db_import_form));
 	}
 
 	/**

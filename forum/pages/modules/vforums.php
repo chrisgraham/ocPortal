@@ -48,7 +48,7 @@ class Module_vforums
 	 */
 	function get_entry_points()
 	{
-		return is_guest()?array('misc'=>'POSTS_SINCE','unanswered_topics'=>'UNANSWERED_TOPICS'):array('misc'=>'POSTS_SINCE','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ','unanswered_topics'=>'UNANSWERED_TOPICS','involved_topics'=>'INVOLVED_TOPICS');
+		return is_guest()?array('misc'=>'POSTS_SINCE','unanswered'=>'UNANSWERED_TOPICS'):array('misc'=>'POSTS_SINCE','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ','unanswered'=>'UNANSWERED_TOPICS','involved'=>'INVOLVED_TOPICS');
 	}
 
 	var $title;
@@ -64,22 +64,22 @@ class Module_vforums
 
 		require_lang('ocf');
 
-		if ($type=='new_posts')
+		if ($type=='misc')
 		{
 			$this->title=get_screen_title('POSTS_SINCE');
 		}
 
-		if ($type=='unanswered_topics')
+		if ($type=='unanswered')
 		{
 			$this->title=get_screen_title('UNANSWERED_TOPICS');
 		}
 
-		if ($type=='involved_topics')
+		if ($type=='involved')
 		{
 			$this->title=get_screen_title('INVOLVED_TOPICS');
 		}
 
-		if ($type=='unread_topics')
+		if ($type=='unread')
 		{
 			$this->title=get_screen_title('TOPICS_UNREAD');
 		}
@@ -108,8 +108,8 @@ class Module_vforums
 		if ($type=='misc') $content=$this->new_posts();
 		elseif ($type=='unread') $content=$this->unread_topics();
 		elseif ($type=='recently_read') $content=$this->recently_read();
-		elseif ($type=='unanswered_topics') $content=$this->unanswered_topics();
-		elseif ($type=='involved_topics') $content=$this->involved_topics();
+		elseif ($type=='unanswered') $content=$this->unanswered_topics();
+		elseif ($type=='involved') $content=$this->involved_topics();
 		else
 		{
 			$content=new ocp_tempcode();
@@ -196,7 +196,7 @@ class Module_vforums
 		$title=do_lang_tempcode('TOPICS_UNREAD');
 		$condition=array('l_time IS NOT NULL AND l_time<t_cache_last_time','l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))));
 
-		return $this->_vforum($title,$condition,'p_time DESC',true);
+		return $this->_vforum($title,$condition,'t_cache_last_time DESC',true);
 	}
 
 	/**
@@ -363,7 +363,7 @@ class Module_vforums
 		$_buttons=new ocp_tempcode();
 		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(),true);
 		$_buttons->attach(do_template('SCREEN_BUTTON',array('_GUID'=>'8c928f1f703e9ba232a7033adee19a31','TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'all','IMMEDIATE'=>false,'URL'=>$archive_url)));
-		if ($title==do_lang('TOPICS_UNREAD'))
+		if ($title->evaluate()==do_lang('TOPICS_UNREAD'))
 		{
 			$mark_read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>db_get_first_id()),get_module_zone('topics'));
 			$_buttons->attach(do_template('SCREEN_BUTTON',array('TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'mark_read','IMMEDIATE'=>false,'URL'=>$mark_read_url)));

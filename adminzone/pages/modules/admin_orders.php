@@ -284,7 +284,7 @@ class Module_admin_orders
 		$order_entries=new ocp_tempcode();
 
 		foreach ($rows as $row)
-		{	
+		{
 			if ($row['purchase_through']=='cart')
 			{
 				$order_det_url=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');

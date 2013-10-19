@@ -53,14 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->create_table('task_queue',array(
-		'id'=>'*AUTO',
-		't_title'=>'SHORT_TEXT',
-		't_hook'=>'ID_TEXT',
-		't_args'=>'LONG_TEXT',
-		't_member_id'=>'MEMBER',
-		't_secure_ref'=>'ID_TEXT', // Used like a temporary password to initiate the task
-		't_send_notification'=>'BINARY',
-		't_locked'=>'BINARY',
-	));
+	$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_extra_cc_addresses','LONG_TEXT',serialize(array()));
+	$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_extra_bcc_addresses','LONG_TEXT',serialize(array()));
 }

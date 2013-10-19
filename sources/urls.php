@@ -309,8 +309,10 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 		if (is_integer($val)) $val=strval($val);
 		if ($val===NULL) $val='<null>';
 
-		if ($key!='page')
+		if ($key!=='page')
 		{
+			if (is_integer($key)) $key=strval($key);
+
 			if (is_object($val))
 			{
 				$page_link.=':'.$key.'=';

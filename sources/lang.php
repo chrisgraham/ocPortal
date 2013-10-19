@@ -183,7 +183,7 @@ function user_lang()
 	{
 		return get_site_default_lang();
 	}
-	elseif (get_option('allow_international')!='1')
+	elseif ((function_exists('get_option')) && (get_option('allow_international')!='1'))
 	{
 		$USER_LANG_CACHED=get_lang();
 		return $USER_LANG_CACHED;

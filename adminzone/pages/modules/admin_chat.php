@@ -121,7 +121,7 @@ class Module_admin_chat extends standard_crud_module
 	/**
 	 * Get tempcode for a adding/editing form.
 	 *
-	 * @return tempcode		The input fields
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields()
 	{
@@ -130,7 +130,7 @@ class Module_admin_chat extends standard_crud_module
 		// Permissions
 		$fields->attach($this->get_permission_fields(NULL,NULL,true));
 
-		return $fields;
+		return array($fields,new ocp_tempcode());
 	}
 
 	/**
@@ -163,7 +163,7 @@ class Module_admin_chat extends standard_crud_module
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A tuple of information
+	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -181,7 +181,7 @@ class Module_admin_chat extends standard_crud_module
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['room_owner']);
 		if (is_null($username)) $username='';//do_lang('UNKNOWN');
 
-		$fields=get_chatroom_fields(intval($id),false,$row['room_name'],get_translated_text($row['c_welcome']),$username,$allow2,$allow2_groups,$disallow2,$disallow2_groups);
+		list($fields,$hidden)=get_chatroom_fields(intval($id),false,$row['room_name'],get_translated_text($row['c_welcome']),$username,$allow2,$allow2_groups,$disallow2,$disallow2_groups);
 
 		// Permissions
 		$fields->attach($this->get_permission_fields($id));
@@ -190,7 +190,7 @@ class Module_admin_chat extends standard_crud_module
 		$logs_url=build_url(array('page'=>'chat','type'=>'download_logs','id'=>$id),get_module_zone('chat'));
 		$delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_CHAT_ROOM',escape_html($logs_url->evaluate())),'delete',false));
 
-		return array($fields,new ocp_tempcode(),$delete_fields,NULL,true);
+		return array($fields,$hidden,$delete_fields,NULL,true);
 	}
 
 	/**

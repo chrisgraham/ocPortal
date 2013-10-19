@@ -2,7 +2,9 @@
 
 <div class="splurgh" id="{$GET,splurgh_id}"></div>
 <script>// <![CDATA[
-	splurgh('{$GET,splurgh_id}','{KEY_NAME;/}','{URL_STUB;/}',0,-1,0,'{SPLURGH;/}','');
+	add_event_listener_abstract(window,'load',function () {
+		splurgh('{$GET,splurgh_id}','{KEY_NAME;/}','{URL_STUB;/}',0,-1,0,'{SPLURGH;/}','');
+	} );
 //]]></script>
 <noscript>
 	{!JAVASCRIPT_REQUIRED}

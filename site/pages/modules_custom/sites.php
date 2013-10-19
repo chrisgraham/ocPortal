@@ -422,7 +422,7 @@ class Module_sites
 
 		$install_url=$base_url.'install.php';
 
-		return do_template('OC_HOSTING_COPY_SUCCESS_PAGE',array(
+		return do_template('OC_HOSTING_COPY_SUCCESS_SCREEN',array(
 			'_GUID'=>'5946fe2252fe1a67ba54e2c20a1d4d63',
 			'TITLE'=>$this->title,
 			'FTP_FOLDER'=>$path.(($extra_path=='')?'':($extra_path.'/')),

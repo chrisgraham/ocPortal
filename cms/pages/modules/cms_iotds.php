@@ -250,10 +250,10 @@ class Module_cms_iotds extends standard_crud_module
 	{
 		$where=array('used'=>$used,'is_current'=>$current);
 		if (!is_null($submitter)) $where['submitter']=$submitter;
-		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('i_title','submitter','is_current','used','id','thumb_url','url'),$where,'ORDER BY id DESC',100);
+		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),$where,'ORDER BY id DESC',100);
 		if (count($rows)==100) // Ah, too much, then we should pick a better set
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('i_title','submitter','is_current','used','id','thumb_url','url'),$where,'ORDER BY add_date DESC',100);
+			$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),$where,'ORDER BY add_date DESC',100);
 		}
 		$previews=new ocp_tempcode();
 		foreach ($rows as $myrow)

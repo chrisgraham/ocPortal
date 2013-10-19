@@ -63,6 +63,7 @@ class Module_cms_authors
 	}
 
 	var $title;
+	var $author;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -89,6 +90,8 @@ class Module_cms_authors
 			{
 				$this->title=get_screen_title('_DEFINE_AUTHOR',true,array($author));
 			}
+
+			$this->author=$author;
 		}
 
 		if ($type=='__ad')
