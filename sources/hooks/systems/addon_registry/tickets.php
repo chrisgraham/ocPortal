@@ -126,6 +126,7 @@ class Hook_addon_registry_tickets
 			'sources/hooks/systems/config/ticket_mail_server_type.php',
 			'sources/hooks/systems/config/ticket_mail_username.php',
 			'sources/hooks/systems/config/ticket_mail_password.php',
+			'data/incoming_ticket_email.php',
 		);
 	}
 

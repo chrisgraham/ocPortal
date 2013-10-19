@@ -48,6 +48,8 @@ class Hook_config_ticket_mail_server
 	 */
 	function get_default()
 	{
+		if (GOOGLE_APPENGINE) return NULL;
+
 		return 'localhost';
 	}
 

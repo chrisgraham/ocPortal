@@ -49,6 +49,8 @@ class Hook_config_ticket_mail_on
 	 */
 	function get_default()
 	{
+		if (GOOGLE_APPENGINE) return NULL;
+
 		return '0';
 	}
 

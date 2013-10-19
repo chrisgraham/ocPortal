@@ -1,6 +1,6 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Installing on Google App Engine[/title]
 
-ocPortal can run on Google App Engine (GAE). Google App Engine is a cloud hosting service designed for high scalability. Unlike almost all other cloud services, it does not require significant preparation and ongoing maintenance in order to scale (you do not need to set up Virtual Machine images, or manually start/stop server instances).
+ocPortal can run on Google App Engine (GAE). GAE is a cloud hosting service designed for high scalability. Unlike almost all other cloud services, it does not require significant preparation and ongoing maintenance in order to scale (you do not need to set up Virtual Machine images, or manually start/stop server instances).
 Most people don't realise how much work the normal "cloud" services are to properly utilise, as the marketing can be really very misleading, and successful customers are development teams rather than webmasters.
 The easy ocPortal scalability with App Engine is possible because it is a locked-down environment. Essentially the ocPortal developers have done up-front work to ensure ocPortal meets certain restraints that allow Google to automatically copy things across different servers without it being noticeable.
 
@@ -13,7 +13,7 @@ This tutorial explains how the ocPortal GAE support works.
 
 [title="2"]Limitations[/title]
 
-The following are known limitations with Google App Engine:
+The following are known limitations with GAE:
  - Individual non-bundled ocPortal addons, or third party frameworks, may or may not work. The ocPortal development tools can scan for issues but generally most programmers will not be developing with App Engine's constraints in mind. ocProducts can bring non-bundled addons up to scratch in most cases, under our development services. If possible/ideally we might try and contribute improvements back into "upstream" to the actual project, but sometimes we may feel it better to just fork our own version of the project.
  - The comments above extend to other applications you may wish to integrate. You need to be comfortable of their compatibility, that you will get them updated, or that you will run them on another server.
  - LDAP will not work (LDAP would typically be used on a local corporate network anyway).
@@ -23,9 +23,10 @@ The following are known limitations with Google App Engine:
  - There is a 32MB response size limit. This should not generally be a problem for most users, but worth noting.
  - You will need to maintain a local development site, and won't be able to do things such as themeing or addon management directly on the live site.
  - You won't be able to have the [i]full[/i] set of ocPortal addons installed, due to size constraints. This should generally not be a problem, and we provide advice on it in this tutorial.
- - While we are making sure ocPortal runs well on Google App Engine (i.e. stably, without special patches), initial set up, and some maintenance tasks, are inherently very complex. If you are not a programmer, you will need one to perform some things for you.
+ - While we are making sure ocPortal runs well on GAE (i.e. stably, without special patches), initial set up, and some maintenance tasks, are inherently very complex. If you are not a programmer, you will need one to perform some things for you.
  - You may not use a third-party forum with ocPortal: you must use OCF. You must also not be using a shared forum database.
- - If you have unusually large amounts of data (as a rough example, over 50,000 catalogue entries), it is possible some actions could time-out, such as deleting a catalogue with those entries in. Such high-volume use-cases may need custom solutions for individual sites (requiring custom programming), such as shifting certain actions into background maintenance tasks. This kind of problem would affect any hosting, but particularly Google App Engine has hard-limits on how much a web request can do (which is a good thing).
+ - If you have unusually large amounts of data (as a rough example, over 50,000 catalogue entries), it is possible some actions could time-out, such as deleting a catalogue with those entries in. Such high-volume use-cases may need custom solutions for individual sites (requiring custom programming), such as shifting certain actions into background maintenance tasks. This kind of problem would affect any hosting, but particularly GAE has hard-limits on how much a web request can do (which is a good thing).
+ - The feature to e-mail in support tickets is not supported, although [url="it could be added via an alternative mechanism"]http://ocportal.com/tracker/view.php?id=1429[/url].
 
 The following ocPortal bundled addons will not work:
  - (All the addons mentioned for uninstallation in the Setup Wizard, further down in this tutorial)
@@ -33,7 +34,7 @@ The following ocPortal bundled addons will not work:
 
 [title="2"]Costs[/title]
 
-Google App Engine is charged based on usage. Google will provide documents that explain what is chargeable, and by how much.
+GAE is charged based on usage. Google will provide documents that explain what is chargeable, and by how much.
 
 It is hard to compare GAE costs to those of shared hosting. Typically a shared host will assume you won't max out your resource allocation fully (and if you tried, they'd ban you, often regardless of their stated offering). Therefore you would need to compare averaged typical resource usage on shared hosting, to the costs on GAE.
 Anecdotally, we have heard the costs are similar, but we have not tested this. It will of course vary greatly on a case-by-case basis.
@@ -42,19 +43,21 @@ In a sense it is a mute comparison, because shared hosting cannot scale and henc
 
 From a cost-origin point of view, shared hosting pricing benefits from its relative simplicity (no high R&D costs, relatively unskilled support personnel) and the relatively low usage the average customer has (hence subsidisation is happening), while cloud hosting benefits from its low-service nature. Both the shared hosting and cloud hosting markets are extremely competitive.
 
-You should obviously keep track of your costs. And, obviously the ocPortal developers cannot put any guarantee on how much things might cost. Be advised: even if there is a bug that uses run-away resources, we cannot be held liable for those costs. Google probably have options to put a ceiling on resource usage, blocking requests that go above this -- but we have not researched this specifically, so you should check the options Google provides.
+You should obviously keep track of your costs. And, obviously the ocPortal developers cannot put any guarantee on how much things might cost. Be advised: even if there is a bug that uses run-away resources, we cannot be held liable for those costs. Google have [url="options to put a ceiling on resource usage"]https://developers.google.com/appengine/docs/quotas[/url], blocking requests that go above this.
 
-[title="2"]Basic process[/title]
+[title="2"]Basic set up[/title]
 
 You will need to have a local development machine, in addition to your live application. Your initial site setup will be done locally, and then you will deploy it live.
 
-You will need to install the [url="Google App Engine PHP SDK"]https://developers.google.com/appengine/docs/php/gettingstarted/installing[/url] on your local development machine. Do this before ocPortal installation.
+You will need to install the [url="GAE PHP SDK"]https://developers.google.com/appengine/docs/php/gettingstarted/installing[/url] on your local development machine. Do this before ocPortal installation.
+
+You will also need to install MySQL, as this doesn't come with the SDK. MySQL is equivalent to Google Cloud SQL, which is used by the live application.
 
 [title="2"]ocPortal installation[/title]
 
 Extract the ocPortal manual installation package to a directory on your development machine.
 
-Start up the Google App Engine launcher.
+Start up the GAE launcher.
 
 (the exact tool/process may depend on what platform you are using -- i.e. Windows/Linux/Mac. These instructions have been tested on a Mac).
 
@@ -69,8 +72,22 @@ Select your application row in the list of applications, and click "Run".
 
 In your web browser, go to [tt]http://localhost:8080/install.php[/tt]
 
-Install ocPortal.
-TODO: What settings?
+[media width="150" description="Creating a Google App Engine application" float="right"]data_custom/images/docs/appengine_create.png[/media]
+[media width="150" description="Creating a Google Cloud SQL database" float="right"]data_custom/images/docs/cloud_sql.png[/media]
+The installer will ask for various GAE-specific details. It will provide links that take you directly to where you can set these up, or to the official Google instruction pages.
+To summarise, the following live application details are needed:
+ - App Engine application ID -- The identifier for the live GAE application
+ - Google Cloud Storage bucket name -- The identifier for the live Google Cloud Storage (this is basically the live filesystem, which is stored separately to the application itself)
+ - Database hostname -- This includes the identifier for the Google Cloud SQL database's Google Cloud Platform project and the identifier for the Google Cloud SQL instance
+ - Database name -- The name of the Google Cloud SQL database, which you must create manually
+The default settings assume all the different identifier's are the same, but they don't have to be. These are separate services that are linked together for your live application to run.
+
+[media width="150" description="Creating a Google Cloud SQL database" float="right"]data_custom/images/docs/cloud_sql_database.png[/media]
+The actual Google Cloud SQL database needs creating manually with an SQL command:
+[code]
+CREATE DATABASE <application>;
+[/code]
+Do this in the SQL prompt under the Google Cloud SQL section of the Google APIs site.
 
 [title="2"]Structural configuration[/title]
 
@@ -78,7 +95,7 @@ Continue through to the ocPortal Setup Wizard. Go through it as normal, but you 
 
 [title="3"]Setup Wizard: Step 4[/title]
 
-The following addons are not supported/useful on Google App Engine and should be uninstalled:
+The following addons are not supported/useful on GAE and should be uninstalled:
  - Installer (serves no purpose on any ocPortal site, once install has finished)
  - Code Editor (not supported)
  - Config Editor (not supported)
@@ -112,7 +129,7 @@ If you only removed one of the above, also remove one of the following:
  - wiki
 (Of course, you may remove more if you wish, or other addons)
 
-If you find it annoying that you cannot have every ocPortal addon when using Google App Engine, you should consider that good sites are streamlined; very few (if any) websites should contain every ocPortal feature.
+If you find it annoying that you cannot have every ocPortal addon when using GAE, you should consider that good sites are streamlined; very few (if any) websites should contain every ocPortal feature.
 
 [title="2"]Staging configuration[/title]
 
@@ -133,9 +150,17 @@ You could consider regularly copying the live Cloud Database back to your stagin
 
 [title="2"]Deployment[/title]
 
-See the Google documentation on [url="how to set up your live application and how to deploy"]https://developers.google.com/appengine/docs/php/gettingstarted/uploading[/url].
+We will assume that you have already set up your live application/storage/database, as those details were put into the installer. This section covers how to copy your application and data, from local to live, in the following order:
+ - Copying your initial database
+ - Copying your storage
+ - Copying your application
 
-TODO: How do we upload initial database?
+To copy your initial database to live, you need to follow a rather complex procedure of exporting, copying to live storage, then importing from live storage. See [url="Google's documentation on Importing data"]https://developers.google.com/cloud-sql/docs/import_export[/url].
+
+You may want to copy your initial custom files to live. To do this you will need to [url="use gsutil"]https://developers.google.com/storage/docs/gsutil[/url] with the files in [tt]data_custom/modules/google_appengine[/tt] (that is your custom filesystem, which ocPortal has kept separated from your application files).
+Alternatively, you can include your custom files as a part of the application. You do this by merging the [tt]data_custom/modules/google_appengine[/tt] folder back down into your main ocPortal folder. Note that this does not work for the [tt]uploads[/tt] directory though, as uploads are always considered custom and ocPortal will not search the application directory when locating them.
+
+See the Google documentation on [url="how to upload your live application"]https://developers.google.com/appengine/docs/php/gettingstarted/uploading[/url].
 
 Note that the ocPortal scheduler will have been automatically set up, along with a particular PHP configuration (no [tt].htaccess[/tt] file setup needed).
 
@@ -183,11 +208,34 @@ Go through this process:
  - Go into the upgrader on live, and perform all the steps except the file transfer one (as you have just done that when you re-deployed)
  - Re-open the live site
 
-[title="2"]Notes to programmers[/title]
+[title="2"]Configuration considerations[/title]
 
-The GAE API installs a version of PHP, but it does not have the limitations of the live version of PHP. Therefore be careful that you apply to all the coding standards. In particular, ensure any custom files are written to using ocPortal's [tt]get_custom_file_base[/tt] function (which will be mapped to Google Cloud Storage).
+[title="3"]Domain name[/title]
+
+Initially you will be set up on an [tt]appspot.com[/tt] subdomain. You [url="may use your own domain"]https://developers.google.com/appengine/docs/domain[/url]. ocPortal is set up to automatically detect your base URL from the access URL, so you do not need to worry about any configuration within ocPortal. Make sure though that you stop using the [tt]appspot.com[/tt] URL fully after switching to your custom domain name.
+
+If using SSL with your own custom domain, ocPortal's default configuration in [tt]_config.php[/tt] will assume that you want to serve uploaded data via that domain. To do that you need to setup [tt]storage.<domainname>[/tt] as per [url="Google's documentation on setting a CNAME record"]https://developers.google.com/storage/docs/reference-uris[/url].
+
+[title="2"]Notes to programmers / architects[/title]
+
+The GAE API installs a version of PHP, but it does not have the limitations of the live version of PHP. Therefore be careful that you apply all the coding standards. In particular, ensure any custom files are written to using ocPortal's [tt]get_custom_file_base[/tt] function (which will be mapped to Google Cloud Storage).
 
 If you are developing and don't have OcCLE working yet, the [url="PHP-minishell"]http://php-minishell.appspot.com/[/url] is quite useful.
+
+Be aware that filesystem latency may be considerably higher on GAE, as Cloud Storage may not be in the same machine as the actual running application. One hopes that the machine will be at least in the same data centre, with a fast non-congested link, but be mindful that there are reports of ~10ms latency. The same issue applies to Google Cloud SQL. Try and keep the number of filesystem and database queries you do down.
+It is also advisable to minimise the number of filesystem and database writes you make, as these have to replicate across each copy of your filesystem/database.
+
+Be advised that Google cannot provide automated "sharding" of data. This means that if you have a huge volume of data (many 100s of GB), you may come across limits. For smaller quantities of data, you may still find that scaling isn't as fast as one would like, while the data is cloned out. The moral of this isn't that there is a problem hosting regular sites on GAE, but that if you are successful in creating a huge new web property, don't expect data to automatically scale without having a proper development team to re-architect your data model into shards. At a huge scale you will probably also want to move away from Google Cloud SQL.
+
+[concepts
+ 1_key="Google App Engine"         1_value="Google's auto-scaling application-hosting service"
+ 2_key="Application Instance"      2_value="Your ocPortal-based application running on GAE"
+ 3_key="Google Cloud Storage"      3_value="Google's cloud filesystem service (actually, it is for non-structured data, but can simulate a filesystem)"
+ 4_key="Bucket"                    4_value="A configured cloud filesystem on Google Cloud Storage"
+ 5_key="Google Cloud SQL"          5_value="Google's cloud version of MySQL, automatically set up to replicate across multiple machines, for redundancy/performance"
+ 5_key="Google Cloud SQL instance" 5_value="A particular instance on Google Cloud SQL; within this instance you have one or more databases"
+ 6_key="GAE"                       6_value="Abbreviation of Google App Engine"
+]Concepts[/concepts]
 
 [title="2"]See also[/title]
 

@@ -42,7 +42,11 @@ class Module_admin_newsletter extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_NEWSLETTER','new'=>'NEWSLETTER_SEND','subscribers'=>'VIEW_NEWSLETTER_SUBSCRIBERS','archive'=>'NEWSLETTER_ARCHIVE','whatsnew'=>'NEW','bounce_filter_a'=>'BOUNCE_FILTER'),parent::get_entry_points());
+		$ret=array('misc'=>'MANAGE_NEWSLETTER','new'=>'NEWSLETTER_SEND','subscribers'=>'VIEW_NEWSLETTER_SUBSCRIBERS','archive'=>'NEWSLETTER_ARCHIVE','whatsnew'=>'NEW');
+		if (!GOOGLE_APPENGINE)
+			$ret['bounce_filter_a']='BOUNCE_FILTER';
+		$ret+=parent::get_entry_points();
+		return $ret;
 	}
 
 	var $title;
@@ -151,8 +155,12 @@ class Module_admin_newsletter extends standard_crud_module
 			array('view_archive',array('_SELF',array('type'=>'archive'),'_SELF'),do_lang('NEWSLETTER_ARCHIVE')),
 			array('subscribers',array('_SELF',array('type'=>'subscribers'),'_SELF'),do_lang('VIEW_SUBSCRIBERS')),
 			array('import_subscribers',array('_SELF',array('type'=>'import_subscribers'),'_SELF'),do_lang('IMPORT_NEWSLETTER_SUBSCRIBERS')),
-			array('newsletter_email_bounce',array('_SELF',array('type'=>'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER')),
 		);
+
+		if (!GOOGLE_APPENGINE)
+		{
+			$this->extra_donext_entries[]=array('newsletter_email_bounce',array('_SELF',array('type'=>'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER')),
+		}
 
 		$this->add_one_label=do_lang_tempcode('ADD_NEWSLETTER');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_NEWSLETTER');
@@ -167,10 +175,13 @@ class Module_admin_newsletter extends standard_crud_module
 		if ($type=='archive') return $this->archive();
 		if ($type=='view') return $this->view();
 		if ($type=='new') return $this->send_gui();
-		if ($type=='bounce_filter_a') return $this->bounce_filter_a();
-		if ($type=='bounce_filter_b') return $this->bounce_filter_b();
-		if ($type=='bounce_filter_c') return $this->bounce_filter_c();
-		if ($type=='bounce_filter_d') return $this->bounce_filter_d();
+		if (!GOOGLE_APPENGINE)
+		{
+			if ($type=='bounce_filter_a') return $this->bounce_filter_a();
+			if ($type=='bounce_filter_b') return $this->bounce_filter_b();
+			if ($type=='bounce_filter_c') return $this->bounce_filter_c();
+			if ($type=='bounce_filter_d') return $this->bounce_filter_d();
+		}
 
 		return new ocp_tempcode();
 	}

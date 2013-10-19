@@ -125,6 +125,7 @@ class Hook_addon_registry_newsletter
 			'sources/hooks/systems/config/minutes_between_sends.php',
 			'PERIODIC_NEWSLETTER_REMOVE.tpl',
 			'sources/hooks/systems/tasks/send_newsletter.php',
+			'data/incoming_bounced_email.php',
 		);
 	}
 

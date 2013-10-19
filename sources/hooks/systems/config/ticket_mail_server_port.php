@@ -48,6 +48,8 @@ class Hook_config_ticket_mail_server_port
 	 */
 	function get_default()
 	{
+		if (GOOGLE_APPENGINE) return NULL;
+
 		return '143';
 	}
 

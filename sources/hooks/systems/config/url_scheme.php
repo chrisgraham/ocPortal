@@ -49,6 +49,7 @@ class Hook_config_url_scheme
 	 */
 	function get_default()
 	{
+		if (GOOGLE_APPENGINE) return 'HTM';
 		return 'RAW';
 	}
 

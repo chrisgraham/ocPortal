@@ -146,6 +146,9 @@ $rewrite_rules=array(
 	),
 );
 
+// Write rules to app.yaml (Google App Engine)
+write_to('data/modules/google_appengine/app.yaml','GAE','handlers:'."\n","- url: ^.*\.(css",0,$rewrite_rules);
+
 // Write rules to plain.htaccess (Apache, CGI PHP)
 write_to('plain.htaccess','Apache','<IfModule mod_rewrite.c>','</IfModule>',0,$rewrite_rules);
 
@@ -163,9 +166,6 @@ write_to('docs/pages/comcode_custom/EN/tut_adv_configuration.txt','IIRF','[staff
 
 // Write rules to ocp.hdf (Hip Hop PHP)
 write_to('ocp.hdf','HPHP','RewriteRules {',"\t\t}",3,$rewrite_rules);
-
-// Write rules to app.yaml (Google App Engine)
-write_to('data/modules/google_appengine/app.yaml','GAE','handlers:',"- url: ^.*\.(css",0,$rewrite_rules);
 
 function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrite_rules)
 {
@@ -263,13 +263,13 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 					list($rule,$to,$flags,$enabled)=$rewrite_rule;
 
 					$rules_txt.=
-						($enabled?'':'#').'- url: ^/'.str_replace(array('^','$'),array('',''),$rule)."\n";
+						($enabled?'':'#').'- url: ^/'.str_replace(array('^','$'),array('',''),$rule)."\n".
 						($enabled?'':'#').'  script: /'.str_replace('$','\\',$to)."\n";
 				}
 			}
 			$rules_txt=preg_replace('#^\t*#m',str_repeat("\t",$indent_level),$rules_txt);
-			$new.="\n".$rules_txt;
-			$new.="\n\t\t".$match_end;
+			$new.=$rules_txt;
+			$new.=$match_end;
 			break;
 
 		case 'HPHP':

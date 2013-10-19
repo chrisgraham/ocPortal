@@ -19,6 +19,26 @@
  */
 
 /**
+ * Script to read in an e-mailed ticket/reply.
+ */
+function incoming_bounced_email_script()
+{
+	if (!GOOGLE_APPENGINE) return;
+
+	if (!gae_is_admin()) return;
+
+	$bounce_email=file_get_contents('php://input');
+
+	$matches=array();
+	if (preg_match('#^From: .*([^ ]+@[^ ]+)#m',$bounce_email,$matches)!=0)
+	{
+		$email=$matches[1];
+
+		$GLOBALS['SITE_DB']->query_delete('newsletter',array('email'=>$email),'',1);
+	}
+}
+
+/**
  * Add to the newsletter, in the simplest way.
  *
  * @param  EMAIL				The email address of the subscriber

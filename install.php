@@ -886,7 +886,7 @@ function step_4()
 		$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_EXAMPLE','BASE_URL_TEXT'),'base_url',$base_url,false,true));
 	} else
 	{
-		$options->attach(make_option(do_lang_tempcode('GAE_APPLICATION'),do_lang_tempcode('DESCRIPTION_GAE_APPLICATION'),'gae_application','ocportal',false,true));
+		$options->attach(make_option(do_lang_tempcode('GAE_APPLICATION'),do_lang_tempcode('DESCRIPTION_GAE_APPLICATION'),'gae_application',basename(dirname(__FILE__)),false,true));
 		$hidden->attach(form_input_hidden('domain',$domain));
 		$hidden->attach(form_input_hidden('base_url',$base_url));
 		$options->attach(make_option(do_lang_tempcode('GAE_BUCKET_NAME'),do_lang_tempcode('DESCRIPTION_GAE_BUCKET_NAME'),'gae_bucket_name','<application>',false,true));
@@ -986,8 +986,9 @@ function step_4()
 
 			$title=do_lang_tempcode('LIVE_DATABASE_SETTINGS');
 			$text=do_lang_tempcode('LIVE_DATABASE_SETTINGS_HELP');
-			$options=make_option(do_lang_tempcode('DATABASE_NAME'),new ocp_tempcode(),'gae_live_db_site','<application>',false,true);
-			$options->attach(make_option(do_lang_tempcode('DATABASE_HOST'),example('','DATABASE_HOST_TEXT'),'gae_live_db_site_host',':/cloudsql/<application>',false,true));
+			$options=new ocp_tempcode();
+			$options->attach(make_option(do_lang_tempcode('DATABASE_HOST'),new ocp_tempcode(),'gae_live_db_site_host',':/cloudsql/<application>:<application>',false,true));
+			$options->attach(make_option(do_lang_tempcode('DATABASE_NAME'),new ocp_tempcode(),'gae_live_db_site','<application>',false,true));
 			$options->attach(make_option(do_lang_tempcode('DATABASE_USERNAME'),new ocp_tempcode(),'gae_live_db_site_user','root',false,true));
 			$options->attach(make_option(do_lang_tempcode('DATABASE_PASSWORD'),new ocp_tempcode(),'gae_live_db_site_password','',true));
 			$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('HIDDEN'=>'','TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
@@ -1002,6 +1003,7 @@ function step_4()
 					var gae_bucket_name=document.getElementById(\'gae_bucket_name\');
 					gae_bucket_name.value=gae_bucket_name.value.replace(/<application>/g,gae_application.value);
 				};
+				gae_application.onchange();
 			');
 		} else
 		{

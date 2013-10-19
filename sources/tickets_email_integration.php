@@ -21,6 +21,20 @@
  */
 
 /**
+ * Script to read in an e-mailed ticket/reply.
+ */
+function incoming_ticket_email_script()
+{
+	if (!GOOGLE_APPENGINE) return;
+
+	if (!gae_is_admin()) return;
+
+	$_body=file_get_contents('php://input');
+
+	return; // Not currently supported
+}
+
+/**
  * Send out an e-mail message for a ticket / ticket reply.
  *
  * @param  ID_TEXT	Ticket ID

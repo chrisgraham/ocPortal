@@ -48,6 +48,8 @@ class Hook_config_ticket_mail_password
 	 */
 	function get_default()
 	{
+		if (GOOGLE_APPENGINE) return NULL;
+
 		return '';
 	}
 
