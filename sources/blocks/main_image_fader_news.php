@@ -167,8 +167,7 @@ class Block_main_image_fader_news
 		if ($blogs!=-1) $tmp['blog']=$blogs;
 		$archive_url=build_url($tmp,$zone);
 
-		return do_template('BLOCK_MAIN_IMAGE_FADER_NEWS',array(
-			'TITLE'=>$main_title,
+		return do_template('BLOCK_MAIN_IMAGE_FADER_NEWS',array('_GUID'=>'dbe34e6f670edfd74b15d3c4afbe615e','TITLE'=>$main_title,
 			'ARCHIVE_URL'=>$archive_url,
 			'NEWS'=>$news,
 			'MILL'=>strval($mill),

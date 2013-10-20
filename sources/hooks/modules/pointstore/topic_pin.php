@@ -96,8 +96,7 @@ class Hook_pointstore_topic_pin
 				}
 			;
 		";
-		return do_template('FORM_SCREEN',array(
-			'HIDDEN'=>'',
+		return do_template('FORM_SCREEN',array('_GUID'=>'318a1f335fd0d2d9380024eb5438d2d8','HIDDEN'=>'',
 			'TITLE'=>$title,
 			'ACTION'=>do_lang_tempcode('TOPIC_PINNING'),
 			'TEXT'=>$text,
@@ -153,8 +152,7 @@ class Hook_pointstore_topic_pin
 		$keep->attach(form_input_hidden('days',strval($days)));
 		$proceed_url=build_url(array('page'=>'_SELF','type'=>'___topic_pin','id'=>'topic_pin'),'_SELF');
 
-		return do_template('POINTSTORE_CONFIRM_SCREEN',array(
-			'TITLE'=>$title,
+		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'94abff69da7ba3cca3d125ac4d519d72','TITLE'=>$title,
 			'KEEP'=>$keep,
 			'ACTION'=>$action,
 			'COST'=>integer_format($total),

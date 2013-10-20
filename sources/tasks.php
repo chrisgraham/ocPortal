@@ -219,8 +219,7 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 			}
 
 			if (is_null($title)) return is_object($content_result)?protect_from_escaping($content_result):make_string_tempcode($content_result);
-			return do_template('FULL_MESSAGE_SCREEN',array(
-				'TITLE'=>$title,
+			return do_template('FULL_MESSAGE_SCREEN',array('_GUID'=>'20e67ceb86e3bbd1e889c6ca116d7a77','TITLE'=>$title,
 				'TEXT'=>is_object($content_result)?protect_from_escaping($content_result):make_string_tempcode($content_result),
 			));
 		}

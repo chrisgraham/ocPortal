@@ -210,8 +210,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		$fields->attach(form_input_huge_comcode(do_lang_tempcode('TEXT'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_TEXT'),'text',$text,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('SEND_TIME'),do_lang_tempcode('DESCRIPTION_SEND_TIME'),'send_time',$send_time,true));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-			'SECTION_HIDDEN'=>false,
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3c9bf61e762eb8715a7fdde214b7eac2','SECTION_HIDDEN'=>false,
 			'TITLE'=>do_lang_tempcode('SCOPE'),
 		)));
 

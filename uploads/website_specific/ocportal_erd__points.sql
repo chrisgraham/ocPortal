@@ -1,14 +1,14 @@
-		CREATE TABLE ocp_chargelog
+		CREATE TABLE ocp10_chargelog
 		(
 			id integer auto_increment NULL,
-			user_id integer NOT NULL,
+			member_id integer NOT NULL,
 			amount integer NOT NULL,
 			reason integer NOT NULL,
 			date_and_time integer unsigned NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_gifts
+		CREATE TABLE ocp10_gifts
 		(
 			id integer auto_increment NULL,
 			date_and_time integer unsigned NOT NULL,
@@ -20,7 +20,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_leader_board
+		CREATE TABLE ocp10_leader_board
 		(
 			lb_member integer NULL,
 			lb_points integer NOT NULL,
@@ -28,7 +28,7 @@
 			PRIMARY KEY (lb_member,date_and_time)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_members
+		CREATE TABLE ocp10_f_members
 		(
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
@@ -48,8 +48,8 @@
 			m_signature integer NOT NULL,
 			m_is_perm_banned tinyint(1) NOT NULL,
 			m_preview_posts tinyint(1) NOT NULL,
-			m_dob_day integer NOT NULL,
-			m_dob_month integer NOT NULL,
+			m_dob_day tinyint NOT NULL,
+			m_dob_month tinyint NOT NULL,
 			m_dob_year integer NOT NULL,
 			m_reveal_age tinyint(1) NOT NULL,
 			m_email_address varchar(255) NOT NULL,
@@ -62,7 +62,6 @@
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
 			m_allow_emails_from_staff tinyint(1) NOT NULL,
-			m_notes longtext NOT NULL,
 			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
 			m_pt_allow varchar(255) NOT NULL,
@@ -74,7 +73,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_translate
+		CREATE TABLE ocp10_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -86,7 +85,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_groups
+		CREATE TABLE ocp10_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -119,44 +118,44 @@
 		) TYPE=InnoDB;
 
 
-		CREATE INDEX `chargelog.user_id` ON ocp_chargelog(user_id);
-		ALTER TABLE ocp_chargelog ADD FOREIGN KEY `chargelog.user_id` (user_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `chargelog.member_id` ON ocp10_chargelog(member_id);
+		ALTER TABLE ocp10_chargelog ADD FOREIGN KEY `chargelog.member_id` (member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `chargelog.reason` ON ocp_chargelog(reason);
-		ALTER TABLE ocp_chargelog ADD FOREIGN KEY `chargelog.reason` (reason) REFERENCES ocp_translate (id);
+		CREATE INDEX `chargelog.reason` ON ocp10_chargelog(reason);
+		ALTER TABLE ocp10_chargelog ADD FOREIGN KEY `chargelog.reason` (reason) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `gifts.gift_from` ON ocp_gifts(gift_from);
-		ALTER TABLE ocp_gifts ADD FOREIGN KEY `gifts.gift_from` (gift_from) REFERENCES ocp_f_members (id);
+		CREATE INDEX `gifts.gift_from` ON ocp10_gifts(gift_from);
+		ALTER TABLE ocp10_gifts ADD FOREIGN KEY `gifts.gift_from` (gift_from) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `gifts.gift_to` ON ocp_gifts(gift_to);
-		ALTER TABLE ocp_gifts ADD FOREIGN KEY `gifts.gift_to` (gift_to) REFERENCES ocp_f_members (id);
+		CREATE INDEX `gifts.gift_to` ON ocp10_gifts(gift_to);
+		ALTER TABLE ocp10_gifts ADD FOREIGN KEY `gifts.gift_to` (gift_to) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `gifts.reason` ON ocp_gifts(reason);
-		ALTER TABLE ocp_gifts ADD FOREIGN KEY `gifts.reason` (reason) REFERENCES ocp_translate (id);
+		CREATE INDEX `gifts.reason` ON ocp10_gifts(reason);
+		ALTER TABLE ocp10_gifts ADD FOREIGN KEY `gifts.reason` (reason) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `leader_board.lb_member` ON ocp_leader_board(lb_member);
-		ALTER TABLE ocp_leader_board ADD FOREIGN KEY `leader_board.lb_member` (lb_member) REFERENCES ocp_f_members (id);
+		CREATE INDEX `leader_board.lb_member` ON ocp10_leader_board(lb_member);
+		ALTER TABLE ocp10_leader_board ADD FOREIGN KEY `leader_board.lb_member` (lb_member) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_signature` ON ocp10_f_members(m_signature);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp10_f_members(m_pt_rules_text);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
-		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
+		CREATE INDEX `translate.source_user` ON ocp10_translate(source_user);
+		ALTER TABLE ocp10_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_name` ON ocp10_f_groups(g_name);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_groups.g_group_leader` ON ocp10_f_groups(g_group_leader);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_title` ON ocp10_f_groups(g_title);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);

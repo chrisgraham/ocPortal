@@ -1,4 +1,11 @@
-		CREATE TABLE ocp_tickets
+		CREATE TABLE ocp10_ticket_known_emailers
+		(
+			email_address varchar(255) NULL,
+			member_id integer NOT NULL,
+			PRIMARY KEY (email_address)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp10_tickets
 		(
 			ticket_id varchar(255) NULL,
 			topic_id integer NOT NULL,
@@ -7,7 +14,7 @@
 			PRIMARY KEY (ticket_id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_ticket_types
+		CREATE TABLE ocp10_ticket_types
 		(
 			ticket_type integer NULL,
 			guest_emails_mandatory tinyint(1) NOT NULL,
@@ -16,7 +23,52 @@
 			PRIMARY KEY (ticket_type)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_topics
+		CREATE TABLE ocp10_f_members
+		(
+			id integer auto_increment NULL,
+			m_username varchar(80) NOT NULL,
+			m_pass_hash_salted varchar(255) NOT NULL,
+			m_pass_salt varchar(255) NOT NULL,
+			m_theme varchar(80) NOT NULL,
+			m_avatar_url varchar(255) NOT NULL,
+			m_validated tinyint(1) NOT NULL,
+			m_validated_email_confirm_code varchar(255) NOT NULL,
+			m_cache_num_posts integer NOT NULL,
+			m_cache_warnings integer NOT NULL,
+			m_join_time integer unsigned NOT NULL,
+			m_timezone_offset varchar(255) NOT NULL,
+			m_primary_group integer NOT NULL,
+			m_last_visit_time integer unsigned NOT NULL,
+			m_last_submit_time integer unsigned NOT NULL,
+			m_signature integer NOT NULL,
+			m_is_perm_banned tinyint(1) NOT NULL,
+			m_preview_posts tinyint(1) NOT NULL,
+			m_dob_day tinyint NOT NULL,
+			m_dob_month tinyint NOT NULL,
+			m_dob_year integer NOT NULL,
+			m_reveal_age tinyint(1) NOT NULL,
+			m_email_address varchar(255) NOT NULL,
+			m_title varchar(255) NOT NULL,
+			m_photo_url varchar(255) NOT NULL,
+			m_photo_thumb_url varchar(255) NOT NULL,
+			m_views_signatures tinyint(1) NOT NULL,
+			m_auto_monitor_contrib_content tinyint(1) NOT NULL,
+			m_language varchar(80) NOT NULL,
+			m_ip_address varchar(40) NOT NULL,
+			m_allow_emails tinyint(1) NOT NULL,
+			m_allow_emails_from_staff tinyint(1) NOT NULL,
+			m_zone_wide tinyint(1) NOT NULL,
+			m_highlighted_name tinyint(1) NOT NULL,
+			m_pt_allow varchar(255) NOT NULL,
+			m_pt_rules_text integer NOT NULL,
+			m_max_email_attach_size_mb integer NOT NULL,
+			m_password_change_code varchar(255) NOT NULL,
+			m_password_compat_scheme varchar(80) NOT NULL,
+			m_on_probation_until integer unsigned NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp10_f_topics
 		(
 			id integer auto_increment NULL,
 			t_pinned tinyint(1) NOT NULL,
@@ -49,12 +101,12 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_forums
+		CREATE TABLE ocp10_f_forums
 		(
 			id integer auto_increment NULL,
 			f_name varchar(255) NOT NULL,
 			f_description integer NOT NULL,
-			f_category_id integer NOT NULL,
+			f_forum_grouping_id integer NOT NULL,
 			f_parent_forum integer NOT NULL,
 			f_position integer NOT NULL,
 			f_order_sub_alpha tinyint(1) NOT NULL,
@@ -71,10 +123,11 @@
 			f_cache_last_forum_id integer NOT NULL,
 			f_redirection varchar(255) NOT NULL,
 			f_order varchar(80) NOT NULL,
+			f_is_threaded tinyint(1) NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_translate
+		CREATE TABLE ocp10_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -86,95 +139,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_members
-		(
-			id integer auto_increment NULL,
-			m_username varchar(80) NOT NULL,
-			m_pass_hash_salted varchar(255) NOT NULL,
-			m_pass_salt varchar(255) NOT NULL,
-			m_theme varchar(80) NOT NULL,
-			m_avatar_url varchar(255) NOT NULL,
-			m_validated tinyint(1) NOT NULL,
-			m_validated_email_confirm_code varchar(255) NOT NULL,
-			m_cache_num_posts integer NOT NULL,
-			m_cache_warnings integer NOT NULL,
-			m_join_time integer unsigned NOT NULL,
-			m_timezone_offset varchar(255) NOT NULL,
-			m_primary_group integer NOT NULL,
-			m_last_visit_time integer unsigned NOT NULL,
-			m_last_submit_time integer unsigned NOT NULL,
-			m_signature integer NOT NULL,
-			m_is_perm_banned tinyint(1) NOT NULL,
-			m_preview_posts tinyint(1) NOT NULL,
-			m_dob_day integer NOT NULL,
-			m_dob_month integer NOT NULL,
-			m_dob_year integer NOT NULL,
-			m_reveal_age tinyint(1) NOT NULL,
-			m_email_address varchar(255) NOT NULL,
-			m_title varchar(255) NOT NULL,
-			m_photo_url varchar(255) NOT NULL,
-			m_photo_thumb_url varchar(255) NOT NULL,
-			m_views_signatures tinyint(1) NOT NULL,
-			m_auto_monitor_contrib_content tinyint(1) NOT NULL,
-			m_language varchar(80) NOT NULL,
-			m_ip_address varchar(40) NOT NULL,
-			m_allow_emails tinyint(1) NOT NULL,
-			m_allow_emails_from_staff tinyint(1) NOT NULL,
-			m_notes longtext NOT NULL,
-			m_zone_wide tinyint(1) NOT NULL,
-			m_highlighted_name tinyint(1) NOT NULL,
-			m_pt_allow varchar(255) NOT NULL,
-			m_pt_rules_text integer NOT NULL,
-			m_max_email_attach_size_mb integer NOT NULL,
-			m_password_change_code varchar(255) NOT NULL,
-			m_password_compat_scheme varchar(80) NOT NULL,
-			m_on_probation_until integer unsigned NOT NULL,
-			PRIMARY KEY (id)
-		) TYPE=InnoDB;
-
-		CREATE TABLE ocp_f_polls
-		(
-			id integer auto_increment NULL,
-			po_question varchar(255) NOT NULL,
-			po_cache_total_votes integer NOT NULL,
-			po_is_private tinyint(1) NOT NULL,
-			po_is_open tinyint(1) NOT NULL,
-			po_minimum_selections integer NOT NULL,
-			po_maximum_selections integer NOT NULL,
-			po_requires_reply tinyint(1) NOT NULL,
-			PRIMARY KEY (id)
-		) TYPE=InnoDB;
-
-		CREATE TABLE ocp_f_posts
-		(
-			id integer auto_increment NULL,
-			p_title varchar(255) NOT NULL,
-			p_post integer NOT NULL,
-			p_ip_address varchar(40) NOT NULL,
-			p_time integer unsigned NOT NULL,
-			p_poster integer NOT NULL,
-			p_intended_solely_for integer NOT NULL,
-			p_poster_name_if_guest varchar(80) NOT NULL,
-			p_validated tinyint(1) NOT NULL,
-			p_topic_id integer NOT NULL,
-			p_cache_forum_id integer NOT NULL,
-			p_last_edit_time integer unsigned NOT NULL,
-			p_last_edit_by integer NOT NULL,
-			p_is_emphasised tinyint(1) NOT NULL,
-			p_skip_sig tinyint(1) NOT NULL,
-			PRIMARY KEY (id)
-		) TYPE=InnoDB;
-
-		CREATE TABLE ocp_f_categories
-		(
-			id integer auto_increment NULL,
-			c_title varchar(255) NOT NULL,
-			c_description longtext NOT NULL,
-			c_expanded_by_default tinyint(1) NOT NULL,
-			PRIMARY KEY (id)
-		) TYPE=InnoDB;
-
-		CREATE TABLE ocp_f_groups
+		CREATE TABLE ocp10_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -206,105 +171,154 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
+		CREATE TABLE ocp10_f_polls
+		(
+			id integer auto_increment NULL,
+			po_question varchar(255) NOT NULL,
+			po_cache_total_votes integer NOT NULL,
+			po_is_private tinyint(1) NOT NULL,
+			po_is_open tinyint(1) NOT NULL,
+			po_minimum_selections integer NOT NULL,
+			po_maximum_selections integer NOT NULL,
+			po_requires_reply tinyint(1) NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
 
-		CREATE INDEX `tickets.topic_id` ON ocp_tickets(topic_id);
-		ALTER TABLE ocp_tickets ADD FOREIGN KEY `tickets.topic_id` (topic_id) REFERENCES ocp_f_topics (id);
+		CREATE TABLE ocp10_f_posts
+		(
+			id integer auto_increment NULL,
+			p_title varchar(255) NOT NULL,
+			p_post integer NOT NULL,
+			p_ip_address varchar(40) NOT NULL,
+			p_time integer unsigned NOT NULL,
+			p_poster integer NOT NULL,
+			p_intended_solely_for integer NOT NULL,
+			p_poster_name_if_guest varchar(80) NOT NULL,
+			p_validated tinyint(1) NOT NULL,
+			p_topic_id integer NOT NULL,
+			p_cache_forum_id integer NOT NULL,
+			p_last_edit_time integer unsigned NOT NULL,
+			p_last_edit_by integer NOT NULL,
+			p_is_emphasised tinyint(1) NOT NULL,
+			p_skip_sig tinyint(1) NOT NULL,
+			p_parent_id integer NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
 
-		CREATE INDEX `tickets.forum_id` ON ocp_tickets(forum_id);
-		ALTER TABLE ocp_tickets ADD FOREIGN KEY `tickets.forum_id` (forum_id) REFERENCES ocp_f_forums (id);
+		CREATE TABLE ocp10_f_forum_groupings
+		(
+			id integer auto_increment NULL,
+			c_title varchar(255) NOT NULL,
+			c_description longtext NOT NULL,
+			c_expanded_by_default tinyint(1) NOT NULL,
+			PRIMARY KEY (id)
+		) TYPE=InnoDB;
 
-		CREATE INDEX `tickets.ticket_type` ON ocp_tickets(ticket_type);
-		ALTER TABLE ocp_tickets ADD FOREIGN KEY `tickets.ticket_type` (ticket_type) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `ticket_types.ticket_type` ON ocp_ticket_types(ticket_type);
-		ALTER TABLE ocp_ticket_types ADD FOREIGN KEY `ticket_types.ticket_type` (ticket_type) REFERENCES ocp_translate (id);
+		CREATE INDEX `ticket_known_emailers.member_id` ON ocp10_ticket_known_emailers(member_id);
+		ALTER TABLE ocp10_ticket_known_emailers ADD FOREIGN KEY `ticket_known_emailers.member_id` (member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_topics.t_forum_id` ON ocp_f_topics(t_forum_id);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_forum_id` (t_forum_id) REFERENCES ocp_f_forums (id);
+		CREATE INDEX `tickets.topic_id` ON ocp10_tickets(topic_id);
+		ALTER TABLE ocp10_tickets ADD FOREIGN KEY `tickets.topic_id` (topic_id) REFERENCES ocp10_f_topics (id);
 
-		CREATE INDEX `f_topics.t_pt_from` ON ocp_f_topics(t_pt_from);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_pt_from` (t_pt_from) REFERENCES ocp_f_members (id);
+		CREATE INDEX `tickets.forum_id` ON ocp10_tickets(forum_id);
+		ALTER TABLE ocp10_tickets ADD FOREIGN KEY `tickets.forum_id` (forum_id) REFERENCES ocp10_f_forums (id);
 
-		CREATE INDEX `f_topics.t_pt_to` ON ocp_f_topics(t_pt_to);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_pt_to` (t_pt_to) REFERENCES ocp_f_members (id);
+		CREATE INDEX `tickets.ticket_type` ON ocp10_tickets(ticket_type);
+		ALTER TABLE ocp10_tickets ADD FOREIGN KEY `tickets.ticket_type` (ticket_type) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_topics.t_poll_id` ON ocp_f_topics(t_poll_id);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_poll_id` (t_poll_id) REFERENCES ocp_f_polls (id);
+		CREATE INDEX `ticket_types.ticket_type` ON ocp10_ticket_types(ticket_type);
+		ALTER TABLE ocp10_ticket_types ADD FOREIGN KEY `ticket_types.ticket_type` (ticket_type) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_topics.t_cache_first_post_id` ON ocp_f_topics(t_cache_first_post_id);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_post_id` (t_cache_first_post_id) REFERENCES ocp_f_posts (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
 
-		CREATE INDEX `f_topics.t_cache_first_post` ON ocp_f_topics(t_cache_first_post);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_post` (t_cache_first_post) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_signature` ON ocp10_f_members(m_signature);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_topics.t_cache_first_member_id` ON ocp_f_topics(t_cache_first_member_id);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_member_id` (t_cache_first_member_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp10_f_members(m_pt_rules_text);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_topics.t_cache_last_post_id` ON ocp_f_topics(t_cache_last_post_id);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_cache_last_post_id` (t_cache_last_post_id) REFERENCES ocp_f_posts (id);
+		CREATE INDEX `f_topics.t_forum_id` ON ocp10_f_topics(t_forum_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_forum_id` (t_forum_id) REFERENCES ocp10_f_forums (id);
 
-		CREATE INDEX `f_topics.t_cache_last_member_id` ON ocp_f_topics(t_cache_last_member_id);
-		ALTER TABLE ocp_f_topics ADD FOREIGN KEY `f_topics.t_cache_last_member_id` (t_cache_last_member_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_topics.t_pt_from` ON ocp10_f_topics(t_pt_from);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_pt_from` (t_pt_from) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_forums.f_description` ON ocp_f_forums(f_description);
-		ALTER TABLE ocp_f_forums ADD FOREIGN KEY `f_forums.f_description` (f_description) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_topics.t_pt_to` ON ocp10_f_topics(t_pt_to);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_pt_to` (t_pt_to) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_forums.f_category_id` ON ocp_f_forums(f_category_id);
-		ALTER TABLE ocp_f_forums ADD FOREIGN KEY `f_forums.f_category_id` (f_category_id) REFERENCES ocp_f_categories (id);
+		CREATE INDEX `f_topics.t_poll_id` ON ocp10_f_topics(t_poll_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_poll_id` (t_poll_id) REFERENCES ocp10_f_polls (id);
 
-		CREATE INDEX `f_forums.f_parent_forum` ON ocp_f_forums(f_parent_forum);
-		ALTER TABLE ocp_f_forums ADD FOREIGN KEY `f_forums.f_parent_forum` (f_parent_forum) REFERENCES ocp_f_forums (id);
+		CREATE INDEX `f_topics.t_cache_first_post_id` ON ocp10_f_topics(t_cache_first_post_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_post_id` (t_cache_first_post_id) REFERENCES ocp10_f_posts (id);
 
-		CREATE INDEX `f_forums.f_intro_question` ON ocp_f_forums(f_intro_question);
-		ALTER TABLE ocp_f_forums ADD FOREIGN KEY `f_forums.f_intro_question` (f_intro_question) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_topics.t_cache_first_post` ON ocp10_f_topics(t_cache_first_post);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_post` (t_cache_first_post) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_forums.f_cache_last_topic_id` ON ocp_f_forums(f_cache_last_topic_id);
-		ALTER TABLE ocp_f_forums ADD FOREIGN KEY `f_forums.f_cache_last_topic_id` (f_cache_last_topic_id) REFERENCES ocp_f_topics (id);
+		CREATE INDEX `f_topics.t_cache_first_member_id` ON ocp10_f_topics(t_cache_first_member_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_member_id` (t_cache_first_member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_forums.f_cache_last_member_id` ON ocp_f_forums(f_cache_last_member_id);
-		ALTER TABLE ocp_f_forums ADD FOREIGN KEY `f_forums.f_cache_last_member_id` (f_cache_last_member_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_topics.t_cache_last_post_id` ON ocp10_f_topics(t_cache_last_post_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_last_post_id` (t_cache_last_post_id) REFERENCES ocp10_f_posts (id);
 
-		CREATE INDEX `f_forums.f_cache_last_forum_id` ON ocp_f_forums(f_cache_last_forum_id);
-		ALTER TABLE ocp_f_forums ADD FOREIGN KEY `f_forums.f_cache_last_forum_id` (f_cache_last_forum_id) REFERENCES ocp_f_forums (id);
+		CREATE INDEX `f_topics.t_cache_last_member_id` ON ocp10_f_topics(t_cache_last_member_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_last_member_id` (t_cache_last_member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
-		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_forums.f_description` ON ocp10_f_forums(f_description);
+		ALTER TABLE ocp10_f_forums ADD FOREIGN KEY `f_forums.f_description` (f_description) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_forums.f_forum_grouping_id` ON ocp10_f_forums(f_forum_grouping_id);
+		ALTER TABLE ocp10_f_forums ADD FOREIGN KEY `f_forums.f_forum_grouping_id` (f_forum_grouping_id) REFERENCES ocp10_f_forum_groupings (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_forums.f_parent_forum` ON ocp10_f_forums(f_parent_forum);
+		ALTER TABLE ocp10_f_forums ADD FOREIGN KEY `f_forums.f_parent_forum` (f_parent_forum) REFERENCES ocp10_f_forums (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_forums.f_intro_question` ON ocp10_f_forums(f_intro_question);
+		ALTER TABLE ocp10_f_forums ADD FOREIGN KEY `f_forums.f_intro_question` (f_intro_question) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_posts.p_post` ON ocp_f_posts(p_post);
-		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_post` (p_post) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_forums.f_cache_last_topic_id` ON ocp10_f_forums(f_cache_last_topic_id);
+		ALTER TABLE ocp10_f_forums ADD FOREIGN KEY `f_forums.f_cache_last_topic_id` (f_cache_last_topic_id) REFERENCES ocp10_f_topics (id);
 
-		CREATE INDEX `f_posts.p_poster` ON ocp_f_posts(p_poster);
-		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_poster` (p_poster) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_forums.f_cache_last_member_id` ON ocp10_f_forums(f_cache_last_member_id);
+		ALTER TABLE ocp10_f_forums ADD FOREIGN KEY `f_forums.f_cache_last_member_id` (f_cache_last_member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_posts.p_intended_solely_for` ON ocp_f_posts(p_intended_solely_for);
-		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_intended_solely_for` (p_intended_solely_for) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_forums.f_cache_last_forum_id` ON ocp10_f_forums(f_cache_last_forum_id);
+		ALTER TABLE ocp10_f_forums ADD FOREIGN KEY `f_forums.f_cache_last_forum_id` (f_cache_last_forum_id) REFERENCES ocp10_f_forums (id);
 
-		CREATE INDEX `f_posts.p_topic_id` ON ocp_f_posts(p_topic_id);
-		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_topic_id` (p_topic_id) REFERENCES ocp_f_topics (id);
+		CREATE INDEX `translate.source_user` ON ocp10_translate(source_user);
+		ALTER TABLE ocp10_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_posts.p_cache_forum_id` ON ocp_f_posts(p_cache_forum_id);
-		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_cache_forum_id` (p_cache_forum_id) REFERENCES ocp_f_forums (id);
+		CREATE INDEX `f_groups.g_name` ON ocp10_f_groups(g_name);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_posts.p_last_edit_by` ON ocp_f_posts(p_last_edit_by);
-		ALTER TABLE ocp_f_posts ADD FOREIGN KEY `f_posts.p_last_edit_by` (p_last_edit_by) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_groups.g_group_leader` ON ocp10_f_groups(g_group_leader);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_title` ON ocp10_f_groups(g_title);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_posts.p_post` ON ocp10_f_posts(p_post);
+		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_post` (p_post) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_posts.p_poster` ON ocp10_f_posts(p_poster);
+		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_poster` (p_poster) REFERENCES ocp10_f_members (id);
+
+		CREATE INDEX `f_posts.p_intended_solely_for` ON ocp10_f_posts(p_intended_solely_for);
+		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_intended_solely_for` (p_intended_solely_for) REFERENCES ocp10_f_members (id);
+
+		CREATE INDEX `f_posts.p_topic_id` ON ocp10_f_posts(p_topic_id);
+		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_topic_id` (p_topic_id) REFERENCES ocp10_f_topics (id);
+
+		CREATE INDEX `f_posts.p_cache_forum_id` ON ocp10_f_posts(p_cache_forum_id);
+		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_cache_forum_id` (p_cache_forum_id) REFERENCES ocp10_f_forums (id);
+
+		CREATE INDEX `f_posts.p_last_edit_by` ON ocp10_f_posts(p_last_edit_by);
+		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_last_edit_by` (p_last_edit_by) REFERENCES ocp10_f_members (id);
+
+		CREATE INDEX `f_posts.p_parent_id` ON ocp10_f_posts(p_parent_id);
+		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_parent_id` (p_parent_id) REFERENCES ocp10_f_posts (id);

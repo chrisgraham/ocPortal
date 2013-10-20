@@ -88,7 +88,7 @@ function get_privacy_form_fields($content_type,$content_id=NULL,$show_header=tru
 	$fields=new ocp_tempcode();
 
 	if ($show_header)
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$view_by_guests,'TITLE'=>do_lang_tempcode('PRIVACY_SETTINGS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3f3bf4190c8f4973382f264e2a892044','SECTION_HIDDEN'=>$view_by_guests,'TITLE'=>do_lang_tempcode('PRIVACY_SETTINGS'))));
 
 	$privacy_options=new ocp_tempcode();
 	$privacy_options->attach(form_input_list_entry('guests',$view_by_guests,do_lang_tempcode('VISIBLE_TO_GUESTS')));

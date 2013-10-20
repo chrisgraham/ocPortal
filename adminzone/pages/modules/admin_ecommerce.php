@@ -964,17 +964,17 @@ class Module_admin_ecommerce extends standard_crud_module
 			{
 				if ($continues_for_same_product)
 				{
-					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('ID'=>strval($val[3]),'SUBSCRIPTION'=>$key,'MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>strval(count($data[$key])),'CANCEL_URL'=>$val[2])));
+					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('_GUID'=>'979a0e7ca87437bc7ee1035afd16e07c','ID'=>strval($val[3]),'SUBSCRIPTION'=>$key,'MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>strval(count($data[$key])),'CANCEL_URL'=>$val[2])));
 					$continues_for_same_product=false;
 				}
 				else
 				{
-					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('ID'=>'','SUBSCRIPTION'=>'','MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>'','CANCEL_URL'=>$val[2])));
+					$result->attach(do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_LINE',array('_GUID'=>'4abea40b654471f0fec0961a1e8716e4','ID'=>'','SUBSCRIPTION'=>'','MEMBER'=>$val[0],'EXPIRY'=>$val[1],'ROWSPAN'=>'','CANCEL_URL'=>$val[2])));
 				}
 			}
 		}
 
-		return do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN',array('TITLE'=>$this->title,'CONTENT'=>$result));
+		return do_template('ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN',array('_GUID'=>'35a782b45d391f7766303b05c9422305','TITLE'=>$this->title,'CONTENT'=>$result));
 	}
 
 	/**

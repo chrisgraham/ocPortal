@@ -355,7 +355,7 @@ class Module_admin
 		$_keywords=$this->_strip_junk_words($_keywords);
 		if (count($_keywords)==0)
 		{
-			return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>true,'ARRAY'=>true,'CONTENT'=>'','PRE'=>'','POST'=>''));
+			return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'8635190f315a0c1cf1d5bad4009a7955','TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>true,'ARRAY'=>true,'CONTENT'=>'','PRE'=>'','POST'=>''));
 		}
 		$keywords=array();
 		$synonym_rows=$this->_synonyms(); // Only in English by default. To do for another language, override this file using inheritance

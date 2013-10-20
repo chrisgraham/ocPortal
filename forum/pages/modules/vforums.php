@@ -366,7 +366,7 @@ class Module_vforums
 		if ($title->evaluate()==do_lang('TOPICS_UNREAD'))
 		{
 			$mark_read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>db_get_first_id()),get_module_zone('topics'));
-			$_buttons->attach(do_template('SCREEN_BUTTON',array('TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'mark_read','IMMEDIATE'=>false,'URL'=>$mark_read_url)));
+			$_buttons->attach(do_template('SCREEN_BUTTON',array('_GUID'=>'b96e17e77be6de6faf9eb340d7ba955a','TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'mark_read','IMMEDIATE'=>false,'URL'=>$mark_read_url)));
 		}
 
 		$tpl_map=array(

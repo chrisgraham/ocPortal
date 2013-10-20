@@ -77,7 +77,7 @@ class Hook_media_rendering_quicktime
 	 */
 	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
-		return do_template('MEDIA_QUICKTIME',array('HOOK'=>'quicktime')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		return do_template('MEDIA_QUICKTIME',array('_GUID'=>'e75c4ef05717f779408a10b2ef12d37c','HOOK'=>'quicktime')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
 }

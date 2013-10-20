@@ -82,7 +82,7 @@ class Hook_media_rendering_video_websafe
 	 */
 	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
-		return do_template('MEDIA_VIDEO_WEBSAFE',array('HOOK'=>'video_websafe')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		return do_template('MEDIA_VIDEO_WEBSAFE',array('_GUID'=>'26387b2cee516e1ab54acb552aee2dcb','HOOK'=>'video_websafe')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
 }

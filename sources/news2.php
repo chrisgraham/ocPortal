@@ -624,7 +624,7 @@ function import_rss_fields($import_to_blog)
 
 	$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_WP_XML'),$field_set,$required));
 
-	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'56ae4f6ded172f27ca37e86f4f6df8ef','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 
 	$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_BLOG_COMMENTS'),do_lang_tempcode('DESCRIPTION_IMPORT_BLOG_COMMENTS'),'import_blog_comments',true));
 	if (addon_installed('unvalidated'))

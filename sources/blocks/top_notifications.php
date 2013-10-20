@@ -59,8 +59,7 @@ class Block_top_notifications
 
 		list($pts,$num_unread_pts)=get_pts($max);
 
-		return do_template('BLOCK_TOP_NOTIFICATIONS',array(
-			'NUM_UNREAD_WEB_NOTIFICATIONS'=>strval($num_unread_web_notifications),
+		return do_template('BLOCK_TOP_NOTIFICATIONS',array('_GUID'=>'3fa04eb827741561440dbf1a65988b33','NUM_UNREAD_WEB_NOTIFICATIONS'=>strval($num_unread_web_notifications),
 			'NOTIFICATIONS'=>$notifications,
 
 			'NUM_UNREAD_PTS'=>strval($num_unread_pts),

@@ -86,8 +86,7 @@ class Block_main_unslider
 			}
 		}
 		
-		return do_template('BLOCK_MAIN_UNSLIDER',array(
-			'PAGES'=>$pages,
+		return do_template('BLOCK_MAIN_UNSLIDER',array('_GUID'=>'ae60f714ef84227c0cb958b65f7a253c','PAGES'=>$pages,
 			'WIDTH'=>$width,
 			'HEIGHT'=>$height,
 			'FLUID'=>(substr($width,-1)=='%'),

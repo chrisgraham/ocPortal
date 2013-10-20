@@ -94,7 +94,7 @@ class Hook_media_rendering_video_cnn
 	{
 		if (is_object($url)) $url=$url->evaluate();
 		$attributes['remote_id']==preg_replace('#^https?://(edition\.)?cnn\.com/.*/video/(.*)\.html#','${2}',$url);
-		return do_template('MEDIA_VIDEO_CNN',array('HOOK'=>'video_cnn')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		return do_template('MEDIA_VIDEO_CNN',array('_GUID'=>'9b6a695ff7556a955a17a07fc4b77bf6','HOOK'=>'video_cnn')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
 }

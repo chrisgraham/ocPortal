@@ -71,7 +71,7 @@ class Hook_Profiles_Tabs_comments
 			)+$main_map);
 		}
 
-		$content=do_template('OCF_MEMBER_PROFILE_COMMENTS',array('MEMBER_ID'=>strval($member_id_of),'FORUM_NAME'=>$forum_name));
+		$content=do_template('OCF_MEMBER_PROFILE_COMMENTS',array('_GUID'=>'5ce1949e4fa0d247631f52f48698df4e','MEMBER_ID'=>strval($member_id_of),'FORUM_NAME'=>$forum_name));
 		$content->handle_symbol_preprocessing();
 
 		return array($title,$content,$order);

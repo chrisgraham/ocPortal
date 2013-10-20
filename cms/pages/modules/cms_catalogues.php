@@ -525,7 +525,7 @@ class Module_cms_catalogues extends standard_crud_module
 			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,is_null($this->permission_page_name)?get_page_name():$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat(strval($id)),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b(strval($id))));
 			if ($delete_permission)
 			{
-				$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'),'SECTION_HIDDEN'=>true)));
+				$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'f38200840366846dd7d9ed769f673657','TITLE'=>do_lang_tempcode('ACTIONS'),'SECTION_HIDDEN'=>true)));
 				$fields2->attach(form_input_tick(do_lang_tempcode('shopping:SHOPPING_FORCE_DELETE'),do_lang_tempcode('shopping:DESCRIPTION_SHOPPING_FORCE_DELETE'),'force_delete',false));
 			}
 		}

@@ -440,7 +440,7 @@ class Module_admin_setupwizard
 				$_addon_description=protect_from_escaping(symbol_truncator(array(static_evaluate_tempcode(comcode_to_tempcode($addon_description)),'250','1','1'),'left'));
 
 				$addon_icon=find_addon_icon($addon_name,false,array_key_exists('tar_path',$row)?$row['tar_path']:NULL);
-				$addon_name_pretty=protect_from_escaping(do_template('ADDON_NAME',array('IMAGE_URL'=>$addon_icon,'NAME'=>$row['name'])));
+				$addon_name_pretty=protect_from_escaping(do_template('ADDON_NAME',array('_GUID'=>'c036db4d27417f79e1f395d1edb44020','IMAGE_URL'=>$addon_icon,'NAME'=>$row['name'])));
 
 				$field=form_input_tick($addon_name_pretty,$_addon_description,'addon_'.$addon_name,$install_by_default);
 

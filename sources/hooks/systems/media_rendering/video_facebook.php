@@ -98,7 +98,7 @@ class Hook_media_rendering_video_facebook
 	{
 		if (is_object($url)) $url=$url->evaluate();
 		$attributes['remote_id']=preg_replace('#^https?://www\.facebook\.com/video/video\.php\?v=(\w+)#','${1}',$url);
-		return do_template('MEDIA_VIDEO_FACEBOOK',array('HOOK'=>'video_facebook')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		return do_template('MEDIA_VIDEO_FACEBOOK',array('_GUID'=>'f9ba7e3b94d421791233cf3a34508ed7','HOOK'=>'video_facebook')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
 }

@@ -1438,7 +1438,7 @@ class Hook_addon_registry_ocf_forum
 	{
 		require_css('ocf');
 
-		$tab_content=do_template('OCF_MEMBER_PROFILE_PTS',array('CONTENT'=>lorem_paragraph_html()));
+		$tab_content=do_template('OCF_MEMBER_PROFILE_PTS',array('_GUID'=>'1bcb43f6ded79efdc08cde4ee80be15d','CONTENT'=>lorem_paragraph_html()));
 
 		return array(
 			lorem_globalise($tab_content, NULL, '', true)

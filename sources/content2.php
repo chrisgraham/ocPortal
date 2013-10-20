@@ -128,8 +128,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 	if ((!$fields->is_empty()) && ($show_header!=META_DATA_HEADER_NO))
 	{
 		$_fields=new ocp_tempcode();
-		$_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-			'SECTION_HIDDEN'=>true,
+		$_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'adf2a2cda231619243763ddbd0cc9d4e','SECTION_HIDDEN'=>true,
 			'TITLE'=>do_lang_tempcode('META_DATA'),
 			'HELP'=>do_lang_tempcode('DESCRIPTION_META_DATA',is_null($content_id)?do_lang_tempcode('RESOURCE_NEW'):$content_id),
 		)));

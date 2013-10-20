@@ -119,7 +119,7 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 	);
 	if (is_null($ret))
 	{
-		$ret=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
+		$ret=do_template('WARNING_BOX',array('_GUID'=>'1e8a6c605fb61b9b5067a9d627506654','WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
 	}
 	return $ret;
 }

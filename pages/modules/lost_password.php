@@ -216,8 +216,7 @@ class Module_lost_password
 			$fields=new ocp_tempcode();
 			$fields->attach(form_input_line(do_lang_tempcode('CODE'),'','code',NULL,true));
 			$submit_name=do_lang_tempcode('PROCEED');
-			return do_template('FORM_SCREEN',array(
-				'TITLE'=>$this->title,
+			return do_template('FORM_SCREEN',array('_GUID'=>'9f03d4abe0140559ec6eba2fa34fe3d6','TITLE'=>$this->title,
 				'GET'=>true,
 				'SKIP_VALIDATION'=>true,
 				'HIDDEN'=>'',

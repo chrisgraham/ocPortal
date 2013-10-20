@@ -272,8 +272,7 @@ class Hook_media_rendering_oembed
 					return $this->_fallback_render($url,$attributes,$source_member,array_key_exists('title',$data)?$data['title']:'');
 
 				// embed.ly and Wordpress may show thumbnail details within a "link" type
-				return do_template('MEDIA_WEBPAGE_SEMANTIC',array(
-					'TITLE'=>array_key_exists('title',$attributes)?$attributes['title']:'', // not official, but embed.ly has it
+				return do_template('MEDIA_WEBPAGE_SEMANTIC',array('_GUID'=>'58ab7a83f5671bcfd9587ca8d589441c','TITLE'=>array_key_exists('title',$attributes)?$attributes['title']:'', // not official, but embed.ly has it
 					'META_TITLE'=>array_key_exists('title',$data)?$data['title']:'', // not official, but embed.ly has it
 					'DESCRIPTION'=>array_key_exists('description',$data)?$data['description']:'',
 					'IMAGE_URL'=>$data['thumbnail_url'],

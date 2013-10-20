@@ -2228,7 +2228,7 @@ class Module_admin_themes
 				//]]></script>')); // XHTMLXHTML
 		}
 
-		return do_template('TEMPCODE_TESTER_SCREEN',array('TITLE'=>$this->title));
+		return do_template('TEMPCODE_TESTER_SCREEN',array('_GUID'=>'b7ea146fffc0dfdcefcb8e8e0c0168a4','TITLE'=>$this->title));
 	}
 }
 

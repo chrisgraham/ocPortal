@@ -167,7 +167,7 @@ class Module_contact_member
 		{
 			if (ini_get('suhosin.mail.protect')!='2')
 			{
-				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADVANCED'),'SECTION_HIDDEN'=>true)));
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'7f7e5aa2fa469ebbca9ca61e9f869882','TITLE'=>do_lang_tempcode('ADVANCED'),'SECTION_HIDDEN'=>true)));
 				if ($default_name!='')
 					$fields->attach($name_field);
 				if ($default_email!='')

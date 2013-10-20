@@ -1,4 +1,4 @@
-		CREATE TABLE ocp_poll
+		CREATE TABLE ocp10_poll
 		(
 			id integer auto_increment NULL,
 			question integer NOT NULL,
@@ -36,7 +36,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_poll_votes
+		CREATE TABLE ocp10_poll_votes
 		(
 			id integer auto_increment NULL,
 			v_poll_id integer NOT NULL,
@@ -46,7 +46,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_translate
+		CREATE TABLE ocp10_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -58,7 +58,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_members
+		CREATE TABLE ocp10_f_members
 		(
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
@@ -78,8 +78,8 @@
 			m_signature integer NOT NULL,
 			m_is_perm_banned tinyint(1) NOT NULL,
 			m_preview_posts tinyint(1) NOT NULL,
-			m_dob_day integer NOT NULL,
-			m_dob_month integer NOT NULL,
+			m_dob_day tinyint NOT NULL,
+			m_dob_month tinyint NOT NULL,
 			m_dob_year integer NOT NULL,
 			m_reveal_age tinyint(1) NOT NULL,
 			m_email_address varchar(255) NOT NULL,
@@ -92,7 +92,6 @@
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
 			m_allow_emails_from_staff tinyint(1) NOT NULL,
-			m_notes longtext NOT NULL,
 			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
 			m_pt_allow varchar(255) NOT NULL,
@@ -104,7 +103,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_groups
+		CREATE TABLE ocp10_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -137,68 +136,68 @@
 		) TYPE=InnoDB;
 
 
-		CREATE INDEX `poll.question` ON ocp_poll(question);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.question` (question) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.question` ON ocp10_poll(question);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.question` (question) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option1` ON ocp_poll(option1);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option1` (option1) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option1` ON ocp10_poll(option1);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option1` (option1) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option2` ON ocp_poll(option2);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option2` (option2) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option2` ON ocp10_poll(option2);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option2` (option2) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option3` ON ocp_poll(option3);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option3` (option3) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option3` ON ocp10_poll(option3);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option3` (option3) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option4` ON ocp_poll(option4);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option4` (option4) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option4` ON ocp10_poll(option4);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option4` (option4) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option5` ON ocp_poll(option5);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option5` (option5) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option5` ON ocp10_poll(option5);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option5` (option5) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option6` ON ocp_poll(option6);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option6` (option6) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option6` ON ocp10_poll(option6);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option6` (option6) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option7` ON ocp_poll(option7);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option7` (option7) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option7` ON ocp10_poll(option7);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option7` (option7) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option8` ON ocp_poll(option8);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option8` (option8) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option8` ON ocp10_poll(option8);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option8` (option8) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option9` ON ocp_poll(option9);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option9` (option9) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option9` ON ocp10_poll(option9);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option9` (option9) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.option10` ON ocp_poll(option10);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option10` (option10) REFERENCES ocp_translate (id);
+		CREATE INDEX `poll.option10` ON ocp10_poll(option10);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.option10` (option10) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `poll.submitter` ON ocp_poll(submitter);
-		ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.submitter` (submitter) REFERENCES ocp_f_members (id);
+		CREATE INDEX `poll.submitter` ON ocp10_poll(submitter);
+		ALTER TABLE ocp10_poll ADD FOREIGN KEY `poll.submitter` (submitter) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `poll_votes.v_poll_id` ON ocp_poll_votes(v_poll_id);
-		ALTER TABLE ocp_poll_votes ADD FOREIGN KEY `poll_votes.v_poll_id` (v_poll_id) REFERENCES ocp_poll (poll_id);
+		CREATE INDEX `poll_votes.v_poll_id` ON ocp10_poll_votes(v_poll_id);
+		ALTER TABLE ocp10_poll_votes ADD FOREIGN KEY `poll_votes.v_poll_id` (v_poll_id) REFERENCES ocp10_poll (poll_id);
 
-		CREATE INDEX `poll_votes.v_voter_id` ON ocp_poll_votes(v_voter_id);
-		ALTER TABLE ocp_poll_votes ADD FOREIGN KEY `poll_votes.v_voter_id` (v_voter_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `poll_votes.v_voter_id` ON ocp10_poll_votes(v_voter_id);
+		ALTER TABLE ocp10_poll_votes ADD FOREIGN KEY `poll_votes.v_voter_id` (v_voter_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
-		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
+		CREATE INDEX `translate.source_user` ON ocp10_translate(source_user);
+		ALTER TABLE ocp10_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_signature` ON ocp10_f_members(m_signature);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp10_f_members(m_pt_rules_text);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_name` ON ocp10_f_groups(g_name);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_groups.g_group_leader` ON ocp10_f_groups(g_group_leader);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_title` ON ocp10_f_groups(g_title);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);

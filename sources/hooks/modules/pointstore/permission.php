@@ -71,7 +71,7 @@ class Hook_pointstore_permission
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_type'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_type'),'permission_type'.$name_suffix,$types));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('SETTINGS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'c1ee1d8ff171d8de6cd5ed14b5a59afb','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('SETTINGS'))));
 
 		require_all_lang();
 		$privileges=new ocp_tempcode();

@@ -95,7 +95,7 @@ class Hook_media_rendering_youtube
 	{
 		if (is_object($url)) $url=$url->evaluate();
 		$attributes['remote_id']=preg_replace('#^(https?://www\.youtube\.com/watch\?v=|http://youtu\.be/)([\w\-]+)#','${2}',$url);
-		return do_template('MEDIA_YOUTUBE',array('HOOK'=>'youtube')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		return do_template('MEDIA_YOUTUBE',array('_GUID'=>'f7c4c015b208e13bf0cd9326d9133175','HOOK'=>'youtube')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
 }

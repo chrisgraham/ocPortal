@@ -1,4 +1,4 @@
-		CREATE TABLE ocp_shopping_order
+		CREATE TABLE ocp10_shopping_order
 		(
 			id integer auto_increment NULL,
 			c_member integer NOT NULL,
@@ -13,7 +13,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_shopping_cart
+		CREATE TABLE ocp10_shopping_cart
 		(
 			id integer auto_increment NULL,
 			session_id integer NOT NULL,
@@ -31,7 +31,7 @@
 			PRIMARY KEY (id,ordered_by,product_id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_shopping_order_details
+		CREATE TABLE ocp10_shopping_order_details
 		(
 			id integer auto_increment NULL,
 			order_id integer NOT NULL,
@@ -46,7 +46,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_shopping_logging
+		CREATE TABLE ocp10_shopping_logging
 		(
 			id integer auto_increment NULL,
 			e_member_id integer NULL,
@@ -57,7 +57,7 @@
 			PRIMARY KEY (id,e_member_id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_shopping_order_addresses
+		CREATE TABLE ocp10_shopping_order_addresses
 		(
 			id integer auto_increment NULL,
 			order_id integer NOT NULL,
@@ -70,7 +70,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_members
+		CREATE TABLE ocp10_f_members
 		(
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
@@ -90,8 +90,8 @@
 			m_signature integer NOT NULL,
 			m_is_perm_banned tinyint(1) NOT NULL,
 			m_preview_posts tinyint(1) NOT NULL,
-			m_dob_day integer NOT NULL,
-			m_dob_month integer NOT NULL,
+			m_dob_day tinyint NOT NULL,
+			m_dob_month tinyint NOT NULL,
 			m_dob_year integer NOT NULL,
 			m_reveal_age tinyint(1) NOT NULL,
 			m_email_address varchar(255) NOT NULL,
@@ -104,7 +104,6 @@
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
 			m_allow_emails_from_staff tinyint(1) NOT NULL,
-			m_notes longtext NOT NULL,
 			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
 			m_pt_allow varchar(255) NOT NULL,
@@ -116,7 +115,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_catalogue_entries
+		CREATE TABLE ocp10_catalogue_entries
 		(
 			id integer auto_increment NULL,
 			c_name varchar(80) NOT NULL,
@@ -135,7 +134,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_groups
+		CREATE TABLE ocp10_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -167,7 +166,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_translate
+		CREATE TABLE ocp10_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -179,7 +178,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_catalogues
+		CREATE TABLE ocp10_catalogues
 		(
 			c_name varchar(80) NULL,
 			c_title integer NOT NULL,
@@ -190,11 +189,12 @@
 			c_add_date integer unsigned NOT NULL,
 			c_submit_points integer NOT NULL,
 			c_ecommerce tinyint(1) NOT NULL,
+			c_default_review_freq integer NOT NULL,
 			c_send_view_reports varchar(80) NOT NULL,
 			PRIMARY KEY (c_name)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_catalogue_categories
+		CREATE TABLE ocp10_catalogue_categories
 		(
 			id integer auto_increment NULL,
 			c_name varchar(80) NOT NULL,
@@ -211,74 +211,74 @@
 		) TYPE=InnoDB;
 
 
-		CREATE INDEX `shopping_cart.ordered_by` ON ocp_shopping_cart(ordered_by);
-		ALTER TABLE ocp_shopping_cart ADD FOREIGN KEY `shopping_cart.ordered_by` (ordered_by) REFERENCES ocp_f_members (id);
+		CREATE INDEX `shopping_cart.ordered_by` ON ocp10_shopping_cart(ordered_by);
+		ALTER TABLE ocp10_shopping_cart ADD FOREIGN KEY `shopping_cart.ordered_by` (ordered_by) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `shopping_cart.product_id` ON ocp_shopping_cart(product_id);
-		ALTER TABLE ocp_shopping_cart ADD FOREIGN KEY `shopping_cart.product_id` (product_id) REFERENCES ocp_catalogue_entries (id);
+		CREATE INDEX `shopping_cart.product_id` ON ocp10_shopping_cart(product_id);
+		ALTER TABLE ocp10_shopping_cart ADD FOREIGN KEY `shopping_cart.product_id` (product_id) REFERENCES ocp10_catalogue_entries (id);
 
-		CREATE INDEX `shopping_order_details.order_id` ON ocp_shopping_order_details(order_id);
-		ALTER TABLE ocp_shopping_order_details ADD FOREIGN KEY `shopping_order_details.order_id` (order_id) REFERENCES ocp_shopping_order (id);
+		CREATE INDEX `shopping_order_details.order_id` ON ocp10_shopping_order_details(order_id);
+		ALTER TABLE ocp10_shopping_order_details ADD FOREIGN KEY `shopping_order_details.order_id` (order_id) REFERENCES ocp10_shopping_order (id);
 
-		CREATE INDEX `shopping_order_details.p_id` ON ocp_shopping_order_details(p_id);
-		ALTER TABLE ocp_shopping_order_details ADD FOREIGN KEY `shopping_order_details.p_id` (p_id) REFERENCES ocp_catalogue_entries (id);
+		CREATE INDEX `shopping_order_details.p_id` ON ocp10_shopping_order_details(p_id);
+		ALTER TABLE ocp10_shopping_order_details ADD FOREIGN KEY `shopping_order_details.p_id` (p_id) REFERENCES ocp10_catalogue_entries (id);
 
-		CREATE INDEX `shopping_logging.e_member_id` ON ocp_shopping_logging(e_member_id);
-		ALTER TABLE ocp_shopping_logging ADD FOREIGN KEY `shopping_logging.e_member_id` (e_member_id) REFERENCES ocp_f_members (id);
+		CREATE INDEX `shopping_logging.e_member_id` ON ocp10_shopping_logging(e_member_id);
+		ALTER TABLE ocp10_shopping_logging ADD FOREIGN KEY `shopping_logging.e_member_id` (e_member_id) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `shopping_order_addresses.order_id` ON ocp_shopping_order_addresses(order_id);
-		ALTER TABLE ocp_shopping_order_addresses ADD FOREIGN KEY `shopping_order_addresses.order_id` (order_id) REFERENCES ocp_shopping_order (id);
+		CREATE INDEX `shopping_order_addresses.order_id` ON ocp10_shopping_order_addresses(order_id);
+		ALTER TABLE ocp10_shopping_order_addresses ADD FOREIGN KEY `shopping_order_addresses.order_id` (order_id) REFERENCES ocp10_shopping_order (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_signature` ON ocp10_f_members(m_signature);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp10_f_members(m_pt_rules_text);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `catalogue_entries.c_name` ON ocp_catalogue_entries(c_name);
-		ALTER TABLE ocp_catalogue_entries ADD FOREIGN KEY `catalogue_entries.c_name` (c_name) REFERENCES ocp_catalogues (c_name);
+		CREATE INDEX `catalogue_entries.c_name` ON ocp10_catalogue_entries(c_name);
+		ALTER TABLE ocp10_catalogue_entries ADD FOREIGN KEY `catalogue_entries.c_name` (c_name) REFERENCES ocp10_catalogues (c_name);
 
-		CREATE INDEX `catalogue_entries.cc_id` ON ocp_catalogue_entries(cc_id);
-		ALTER TABLE ocp_catalogue_entries ADD FOREIGN KEY `catalogue_entries.cc_id` (cc_id) REFERENCES ocp_catalogue_categories (id);
+		CREATE INDEX `catalogue_entries.cc_id` ON ocp10_catalogue_entries(cc_id);
+		ALTER TABLE ocp10_catalogue_entries ADD FOREIGN KEY `catalogue_entries.cc_id` (cc_id) REFERENCES ocp10_catalogue_categories (id);
 
-		CREATE INDEX `catalogue_entries.ce_submitter` ON ocp_catalogue_entries(ce_submitter);
-		ALTER TABLE ocp_catalogue_entries ADD FOREIGN KEY `catalogue_entries.ce_submitter` (ce_submitter) REFERENCES ocp_f_members (id);
+		CREATE INDEX `catalogue_entries.ce_submitter` ON ocp10_catalogue_entries(ce_submitter);
+		ALTER TABLE ocp10_catalogue_entries ADD FOREIGN KEY `catalogue_entries.ce_submitter` (ce_submitter) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_name` ON ocp10_f_groups(g_name);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_groups.g_group_leader` ON ocp10_f_groups(g_group_leader);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_title` ON ocp10_f_groups(g_title);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);
 
-		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
-		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
+		CREATE INDEX `translate.source_user` ON ocp10_translate(source_user);
+		ALTER TABLE ocp10_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `catalogues.c_title` ON ocp_catalogues(c_title);
-		ALTER TABLE ocp_catalogues ADD FOREIGN KEY `catalogues.c_title` (c_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `catalogues.c_title` ON ocp10_catalogues(c_title);
+		ALTER TABLE ocp10_catalogues ADD FOREIGN KEY `catalogues.c_title` (c_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `catalogues.c_description` ON ocp_catalogues(c_description);
-		ALTER TABLE ocp_catalogues ADD FOREIGN KEY `catalogues.c_description` (c_description) REFERENCES ocp_translate (id);
+		CREATE INDEX `catalogues.c_description` ON ocp10_catalogues(c_description);
+		ALTER TABLE ocp10_catalogues ADD FOREIGN KEY `catalogues.c_description` (c_description) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `catalogue_categories.c_name` ON ocp_catalogue_categories(c_name);
-		ALTER TABLE ocp_catalogue_categories ADD FOREIGN KEY `catalogue_categories.c_name` (c_name) REFERENCES ocp_catalogues (c_name);
+		CREATE INDEX `catalogue_categories.c_name` ON ocp10_catalogue_categories(c_name);
+		ALTER TABLE ocp10_catalogue_categories ADD FOREIGN KEY `catalogue_categories.c_name` (c_name) REFERENCES ocp10_catalogues (c_name);
 
-		CREATE INDEX `catalogue_categories.cc_title` ON ocp_catalogue_categories(cc_title);
-		ALTER TABLE ocp_catalogue_categories ADD FOREIGN KEY `catalogue_categories.cc_title` (cc_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `catalogue_categories.cc_title` ON ocp10_catalogue_categories(cc_title);
+		ALTER TABLE ocp10_catalogue_categories ADD FOREIGN KEY `catalogue_categories.cc_title` (cc_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `catalogue_categories.cc_description` ON ocp_catalogue_categories(cc_description);
-		ALTER TABLE ocp_catalogue_categories ADD FOREIGN KEY `catalogue_categories.cc_description` (cc_description) REFERENCES ocp_translate (id);
+		CREATE INDEX `catalogue_categories.cc_description` ON ocp10_catalogue_categories(cc_description);
+		ALTER TABLE ocp10_catalogue_categories ADD FOREIGN KEY `catalogue_categories.cc_description` (cc_description) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `catalogue_categories.cc_parent_id` ON ocp_catalogue_categories(cc_parent_id);
-		ALTER TABLE ocp_catalogue_categories ADD FOREIGN KEY `catalogue_categories.cc_parent_id` (cc_parent_id) REFERENCES ocp_catalogue_categories (id);
+		CREATE INDEX `catalogue_categories.cc_parent_id` ON ocp10_catalogue_categories(cc_parent_id);
+		ALTER TABLE ocp10_catalogue_categories ADD FOREIGN KEY `catalogue_categories.cc_parent_id` (cc_parent_id) REFERENCES ocp10_catalogue_categories (id);
 
-		CREATE INDEX `catalogue_categories.cc_move_target` ON ocp_catalogue_categories(cc_move_target);
-		ALTER TABLE ocp_catalogue_categories ADD FOREIGN KEY `catalogue_categories.cc_move_target` (cc_move_target) REFERENCES ocp_catalogue_categories (id);
+		CREATE INDEX `catalogue_categories.cc_move_target` ON ocp10_catalogue_categories(cc_move_target);
+		ALTER TABLE ocp10_catalogue_categories ADD FOREIGN KEY `catalogue_categories.cc_move_target` (cc_move_target) REFERENCES ocp10_catalogue_categories (id);

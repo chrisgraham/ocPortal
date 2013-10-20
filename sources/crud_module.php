@@ -1134,7 +1134,7 @@ class standard_crud_module
 		$extra_buttons=mixed();
 		if ($this->supports_mass_delete)
 		{
-			$extra_buttons=do_template('MASS_SELECT_FORM_BUTTONS',array('TYPE'=>$this->award_type));
+			$extra_buttons=do_template('MASS_SELECT_FORM_BUTTONS',array('_GUID'=>'21121b5a5f8beafefbd09d3e23265986','TYPE'=>$this->award_type));
 		}
 
 		return do_template('FORM_SCREEN',array(

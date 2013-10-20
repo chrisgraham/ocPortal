@@ -2529,7 +2529,7 @@ function ecv_BLOCK($lang,$escaped,$param)
 
 		if (in_array('defer=1',$param_2))
 		{
-			$value=static_evaluate_tempcode(do_template('JS_BLOCK',array('BLOCK_PARAMS'=>block_params_arr_to_str($param_2))));
+			$value=static_evaluate_tempcode(do_template('JS_BLOCK',array('_GUID'=>'2334719e23b2773ad04fe0fcbdce684d','BLOCK_PARAMS'=>block_params_arr_to_str($param_2))));
 		} else
 		{
 			global $BLOCKS_CACHE;

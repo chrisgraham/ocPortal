@@ -92,7 +92,7 @@ class Hook_media_rendering_audio_websafe
 			$attributes['height']='30';
 		}
 
-		return do_template('MEDIA_AUDIO_WEBSAFE',array('HOOK'=>'audio_websafe')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		return do_template('MEDIA_AUDIO_WEBSAFE',array('_GUID'=>'474dfa6766d809141bb6ef800bf22636','HOOK'=>'audio_websafe')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
 }

@@ -124,8 +124,7 @@ class Module_notifications
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang('NOTIFICATIONS'),$start,'n_start',$max,'n_max',$max_rows);
 
-		return do_template('NOTIFICATION_BROWSE_SCREEN',array(
-			'TITLE'=>$this->title,
+		return do_template('NOTIFICATION_BROWSE_SCREEN',array('_GUID'=>'2b503097bcf97b3296c826e87131cf8e','TITLE'=>$this->title,
 			'NOTIFICATIONS'=>$notifications,
 			'PAGINATION'=>$pagination,
 		));
@@ -151,8 +150,7 @@ class Module_notifications
 		if ($row['d_read']==0)
 			$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('id'=>$id),'',1);
 
-		return do_template('NOTIFICATION_VIEW_SCREEN',array(
-			'TITLE'=>$this->title,
+		return do_template('NOTIFICATION_VIEW_SCREEN',array('_GUID'=>'0099edc0157ccd4544877e0e0e552dce','TITLE'=>$this->title,
 			'ID'=>strval($row['id']),
 			'SUBJECT'=>$row['d_subject'],
 			'MESSAGE'=>$_message,

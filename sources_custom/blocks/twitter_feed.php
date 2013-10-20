@@ -128,7 +128,7 @@ class Block_twitter_feed
 
 		if (count($twitter_statuses)==0)
 		{
-			return do_template('BLOCK_NO_ENTRIES',array('TITLE'=>'Twitter Profile Details','MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>'','SUBMIT_URL'=>''));
+			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'24982bb4c3bfdc2ada1b4ccad92b5039','TITLE'=>'Twitter Profile Details','MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>'','SUBMIT_URL'=>''));
 		}
 
 		// Generate variables and pass them to Style template for each status (status=tweet)

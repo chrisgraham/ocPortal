@@ -110,8 +110,7 @@ class Hook_media_rendering_hyperlink
 				$meta_title=$meta_details['t_meta_title'];
 				if ($meta_title=='') $meta_title=escape_html($title);
 
-				return do_template('MEDIA_WEBPAGE_SEMANTIC',array(
-					'TITLE'=>$meta_details['t_title'],
+				return do_template('MEDIA_WEBPAGE_SEMANTIC',array('_GUID'=>'59ae26467bbde639a176a213d85370ea','TITLE'=>$meta_details['t_title'],
 					'META_TITLE'=>$meta_title,
 					'DESCRIPTION'=>((array_key_exists('description',$attributes)) && ($attributes['description']!=''))?$attributes['description']:$meta_details['t_description'],
 					'IMAGE_URL'=>((array_key_exists('thumb_url',$attributes)) && ($attributes['thumb_url']!=''))?$attributes['thumb_url']:$meta_details['t_image_url'],

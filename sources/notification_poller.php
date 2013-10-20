@@ -225,8 +225,7 @@ function get_web_notifications($max=NULL,$start=0)
 				break;
 		}
 
-		$rendered=do_template('NOTIFICATION_WEB',array(
-			'ID'=>strval($row['id']),
+		$rendered=do_template('NOTIFICATION_WEB',array('_GUID'=>'314db5380aecd610c7ad2a013743f614','ID'=>strval($row['id']),
 			'SUBJECT'=>$row['d_subject'],
 			'MESSAGE'=>$_message,
 			'FROM_USERNAME'=>$username,
@@ -265,8 +264,7 @@ function web_notification_to_xml($row)
 
 	$_message=get_translated_tempcode($row['d_message']);
 
-	$rendered=do_template('NOTIFICATION_WEB_DESKTOP',array(
-		'ID'=>strval($row['id']),
+	$rendered=do_template('NOTIFICATION_WEB_DESKTOP',array('_GUID'=>'1641fa5c5b62421ae535680859e89636','ID'=>strval($row['id']),
 		'SUBJECT'=>$row['d_subject'],
 		'MESSAGE'=>$_message,
 		'FROM_USERNAME'=>$username,
@@ -333,8 +331,7 @@ function get_pts($max=NULL,$start=0)
 
 		$is_unread=($topic['t_cache_last_time']>time()-60*60*24*intval(get_option('post_history_days'))) && ((is_null($topic['l_time'])) || ($topic['l_time']<$topic['p_time']));
 
-		$out->attach(do_template('TOPIC_LIST',array(
-			'POSTER_URL'=>$member_link,
+		$out->attach(do_template('TOPIC_LIST',array('_GUID'=>'6a36e785b05d10f53e7ee76acdfb9f80','POSTER_URL'=>$member_link,
 			'TOPIC_URL'=>$topic_url,
 			'TITLE'=>$title,
 			'DATE'=>$date,
@@ -366,8 +363,7 @@ function pt_to_xml($row)
 
 	$_message=get_translated_tempcode($row['p_post']);
 
-	$rendered=do_template('NOTIFICATION_PT_DESKTOP',array(
-		'ID'=>strval($row['p_id']),
+	$rendered=do_template('NOTIFICATION_PT_DESKTOP',array('_GUID'=>'624df70cf0cbb796c5d5ce1d18ae39f7','ID'=>strval($row['p_id']),
 		'SUBJECT'=>$row['t_cache_first_title'],
 		'MESSAGE'=>$_message,
 		'FROM_USERNAME'=>$username,

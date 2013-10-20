@@ -62,7 +62,7 @@ class Block_side_friends
 
 		$friends=show_im_contacts(NULL,true,$max);
 
-		return do_template('BLOCK_SIDE_FRIENDS',array('FRIENDS'=>$friends));
+		return do_template('BLOCK_SIDE_FRIENDS',array('_GUID'=>'ce94db14f9a212f38d0fce1658866e2c','FRIENDS'=>$friends));
 	}
 
 }

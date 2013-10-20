@@ -40,8 +40,7 @@ function show_content_reviews($content_type,$content_id,$display_mode=0)
 		} else // display mode 0
 		{
 			require_lang('content_reviews');
-			$value=static_evaluate_tempcode(do_template('REVIEW_STATUS',array(
-				'LAST_REVIEWED_TIME'=>get_timezoned_date($content_reviews[0]['last_reviewed_time'],false,false,false,true),
+			$value=static_evaluate_tempcode(do_template('REVIEW_STATUS',array('_GUID'=>'89fa418ac54d63c3d53c32b9314b8889','LAST_REVIEWED_TIME'=>get_timezoned_date($content_reviews[0]['last_reviewed_time'],false,false,false,true),
 				'NEXT_REVIEW_TIME'=>get_timezoned_date($content_reviews[0]['next_review_time'],false,false,false,true),
 				'_LAST_REVIEWED_TIME'=>strval($content_reviews[0]['last_reviewed_time']),
 				'_NEXT_REVIEW_TIME'=>strval($content_reviews[0]['next_review_time']),

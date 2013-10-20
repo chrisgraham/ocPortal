@@ -194,7 +194,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 		if (addon_installed('content_privacy') && addon_installed('ocf_member_photos'))
 		{
 			require_code('content_privacy2');
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PHOTO'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'23f6382125592da7a449311b6dd9137b','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PHOTO'))));
 			$fields->attach(get_privacy_form_fields('_photo',strval($member_id_of),false,'photo_'));
 		}
 

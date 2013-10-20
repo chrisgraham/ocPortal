@@ -239,8 +239,7 @@ function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_pos
 
 	if (get_value('pagination_when_not_needed')==='1')
 	{
-		return do_template('PAGINATION_WRAP',array(
-			'TEXT_ID'=>$title,
+		return do_template('PAGINATION_WRAP',array('_GUID'=>'451167645e67c7beabcafe11c78680db','TEXT_ID'=>$title,
 			'PER_PAGE'=>$per_page,
 			'FIRST'=>'',
 			'PREVIOUS'=>'',

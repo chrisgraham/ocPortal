@@ -86,8 +86,7 @@ class Block_side_ocf_private_topics
 
 			$is_unread=($topic['t_cache_last_time']>time()-60*60*24*intval(get_option('post_history_days'))) && ((is_null($topic['l_time'])) || ($topic['l_time']<$topic['p_time']));
 
-			$out->attach(do_template('TOPIC_LIST',array(
-				'POSTER_URL'=>$member_link,
+			$out->attach(do_template('TOPIC_LIST',array('_GUID'=>'05beab5a3fab191df988bf101f44a47a','POSTER_URL'=>$member_link,
 				'TOPIC_URL'=>$topic_url,
 				'TITLE'=>$title,
 				'DATE'=>$date,

@@ -198,7 +198,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 				$fields->attach(form_input_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type',$list,NULL,true,true));
 				$submit_name=do_lang_tempcode('PROCEED');
 				$url=get_self_url();
-				return do_template('FORM_SCREEN',array('TITLE'=>$this->title,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'URL'=>$url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
+				return do_template('FORM_SCREEN',array('_GUID'=>'8bd97d858f2ab1dc885a7453b3dd781c','TITLE'=>$this->title,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'URL'=>$url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
 			}
 		}
 
@@ -364,8 +364,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_xml'),'_SELF');
 
-		return do_template('XML_CONFIG_SCREEN',array(
-			'TITLE'=>$this->title,
+		return do_template('XML_CONFIG_SCREEN',array('_GUID'=>'2303459e94b959d2edf8444188bbeea9','TITLE'=>$this->title,
 			'POST_URL'=>$post_url,
 			'XML'=>file_exists(get_custom_file_base().'/data_custom/aggregate_types.xml')?file_get_contents(get_custom_file_base().'/data_custom/aggregate_types.xml'):'',
 		));
@@ -418,8 +417,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_sync'),'_SELF');
 
-		return do_template('FORM_SCREEN',array(
-			'TITLE'=>$this->title,
+		return do_template('FORM_SCREEN',array('_GUID'=>'823999c74834fc34a51a6a63cdafeab5','TITLE'=>$this->title,
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>'',
 			'URL'=>$url,

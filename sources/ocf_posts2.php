@@ -89,7 +89,7 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 			$rank_image_pri_only=ocf_get_group_property($group,'rank_image_pri_only');
 			if (($rank_image!='') && (($rank_image_pri_only==0) || ($group==$primary_group)))
 			{
-				$rank_images->attach(do_template('OCF_RANK_IMAGE',array('GROUP_NAME'=>$group_name,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),'IMG'=>$rank_image,'IS_LEADER'=>$group_leader==$row['p_poster'])));
+				$rank_images->attach(do_template('OCF_RANK_IMAGE',array('_GUID'=>'ad383e495f77445ddb4d9107a9ebf269','GROUP_NAME'=>$group_name,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),'IMG'=>$rank_image,'IS_LEADER'=>$group_leader==$row['p_poster'])));
 			}
 		}
 

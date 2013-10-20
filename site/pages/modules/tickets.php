@@ -402,8 +402,7 @@ class Module_tickets
 			$last_poster=$topic['lastusername'];
 		}
 
-		return do_template('SUPPORT_TICKET_LINK',array(
-			'NUM_POSTS'=>integer_format($topic['num']-1),
+		return do_template('SUPPORT_TICKET_LINK',array('_GUID'=>'4a39a6b5a7d56ead2d9c20b8a7a71398','NUM_POSTS'=>integer_format($topic['num']-1),
 			'CLOSED'=>strval($topic['closed']),
 			'URL'=>$url,
 			'TITLE'=>$_title,

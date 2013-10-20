@@ -169,7 +169,7 @@ function render_media_url($url,$url_safe,$attributes,$as_admin=false,$source_mem
 
 	if (array_key_exists('float',$attributes))
 	{
-		$ret=do_template('FLOATER',array('FLOAT'=>$attributes['float'],'CONTENT'=>$ret));
+		$ret=do_template('FLOATER',array('_GUID'=>'26410f89305c16ae9cb17dd02a4a7999','FLOAT'=>$attributes['float'],'CONTENT'=>$ret));
 	}
 
 	return $ret;

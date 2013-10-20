@@ -1,8 +1,7 @@
-		CREATE TABLE ocp_galleries
+		CREATE TABLE ocp10_galleries
 		(
 			name varchar(80) NULL,
 			description integer NOT NULL,
-			teaser integer NOT NULL,
 			fullname integer NOT NULL,
 			add_date integer unsigned NOT NULL,
 			rep_image varchar(255) NOT NULL,
@@ -23,13 +22,13 @@
 			PRIMARY KEY (name)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_images
+		CREATE TABLE ocp10_images
 		(
 			id integer auto_increment NULL,
 			cat varchar(80) NOT NULL,
 			url varchar(255) NOT NULL,
 			thumb_url varchar(255) NOT NULL,
-			comments integer NOT NULL,
+			description integer NOT NULL,
 			allow_rating tinyint(1) NOT NULL,
 			allow_comments tinyint NOT NULL,
 			allow_trackbacks tinyint(1) NOT NULL,
@@ -43,13 +42,13 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_videos
+		CREATE TABLE ocp10_videos
 		(
 			id integer auto_increment NULL,
 			cat varchar(80) NOT NULL,
 			url varchar(255) NOT NULL,
 			thumb_url varchar(255) NOT NULL,
-			comments integer NOT NULL,
+			description integer NOT NULL,
 			allow_rating tinyint(1) NOT NULL,
 			allow_comments tinyint NOT NULL,
 			allow_trackbacks tinyint(1) NOT NULL,
@@ -66,9 +65,11 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_video_transcoding
+		CREATE TABLE ocp10_video_transcoding
 		(
 			t_id varchar(80) NULL,
+			t_local_id integer NOT NULL,
+			t_local_id_field varchar(80) NOT NULL,
 			t_error longtext NOT NULL,
 			t_url varchar(255) NOT NULL,
 			t_table varchar(80) NOT NULL,
@@ -80,7 +81,7 @@
 			PRIMARY KEY (t_id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_translate
+		CREATE TABLE ocp10_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -92,7 +93,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_members
+		CREATE TABLE ocp10_f_members
 		(
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
@@ -112,8 +113,8 @@
 			m_signature integer NOT NULL,
 			m_is_perm_banned tinyint(1) NOT NULL,
 			m_preview_posts tinyint(1) NOT NULL,
-			m_dob_day integer NOT NULL,
-			m_dob_month integer NOT NULL,
+			m_dob_day tinyint NOT NULL,
+			m_dob_month tinyint NOT NULL,
 			m_dob_year integer NOT NULL,
 			m_reveal_age tinyint(1) NOT NULL,
 			m_email_address varchar(255) NOT NULL,
@@ -126,7 +127,6 @@
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
 			m_allow_emails_from_staff tinyint(1) NOT NULL,
-			m_notes longtext NOT NULL,
 			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
 			m_pt_allow varchar(255) NOT NULL,
@@ -138,7 +138,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp_f_groups
+		CREATE TABLE ocp10_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -171,65 +171,65 @@
 		) TYPE=InnoDB;
 
 
-		CREATE INDEX `galleries.description` ON ocp_galleries(description);
-		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.description` (description) REFERENCES ocp_translate (id);
+		CREATE INDEX `galleries.description` ON ocp10_galleries(description);
+		ALTER TABLE ocp10_galleries ADD FOREIGN KEY `galleries.description` (description) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `galleries.teaser` ON ocp_galleries(teaser);
-		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.teaser` (teaser) REFERENCES ocp_translate (id);
+		CREATE INDEX `galleries.fullname` ON ocp10_galleries(fullname);
+		ALTER TABLE ocp10_galleries ADD FOREIGN KEY `galleries.fullname` (fullname) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `galleries.fullname` ON ocp_galleries(fullname);
-		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.fullname` (fullname) REFERENCES ocp_translate (id);
+		CREATE INDEX `galleries.parent_id` ON ocp10_galleries(parent_id);
+		ALTER TABLE ocp10_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp10_galleries (name);
 
-		CREATE INDEX `galleries.parent_id` ON ocp_galleries(parent_id);
-		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp_galleries (name);
+		CREATE INDEX `galleries.g_owner` ON ocp10_galleries(g_owner);
+		ALTER TABLE ocp10_galleries ADD FOREIGN KEY `galleries.g_owner` (g_owner) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `galleries.g_owner` ON ocp_galleries(g_owner);
-		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.g_owner` (g_owner) REFERENCES ocp_f_members (id);
+		CREATE INDEX `images.cat` ON ocp10_images(cat);
+		ALTER TABLE ocp10_images ADD FOREIGN KEY `images.cat` (cat) REFERENCES ocp10_galleries (name);
 
-		CREATE INDEX `images.cat` ON ocp_images(cat);
-		ALTER TABLE ocp_images ADD FOREIGN KEY `images.cat` (cat) REFERENCES ocp_galleries (name);
+		CREATE INDEX `images.description` ON ocp10_images(description);
+		ALTER TABLE ocp10_images ADD FOREIGN KEY `images.description` (description) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `images.comments` ON ocp_images(comments);
-		ALTER TABLE ocp_images ADD FOREIGN KEY `images.comments` (comments) REFERENCES ocp_translate (id);
+		CREATE INDEX `images.submitter` ON ocp10_images(submitter);
+		ALTER TABLE ocp10_images ADD FOREIGN KEY `images.submitter` (submitter) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `images.submitter` ON ocp_images(submitter);
-		ALTER TABLE ocp_images ADD FOREIGN KEY `images.submitter` (submitter) REFERENCES ocp_f_members (id);
+		CREATE INDEX `images.title` ON ocp10_images(title);
+		ALTER TABLE ocp10_images ADD FOREIGN KEY `images.title` (title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `images.title` ON ocp_images(title);
-		ALTER TABLE ocp_images ADD FOREIGN KEY `images.title` (title) REFERENCES ocp_translate (id);
+		CREATE INDEX `videos.cat` ON ocp10_videos(cat);
+		ALTER TABLE ocp10_videos ADD FOREIGN KEY `videos.cat` (cat) REFERENCES ocp10_galleries (name);
 
-		CREATE INDEX `videos.cat` ON ocp_videos(cat);
-		ALTER TABLE ocp_videos ADD FOREIGN KEY `videos.cat` (cat) REFERENCES ocp_galleries (name);
+		CREATE INDEX `videos.description` ON ocp10_videos(description);
+		ALTER TABLE ocp10_videos ADD FOREIGN KEY `videos.description` (description) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `videos.comments` ON ocp_videos(comments);
-		ALTER TABLE ocp_videos ADD FOREIGN KEY `videos.comments` (comments) REFERENCES ocp_translate (id);
+		CREATE INDEX `videos.submitter` ON ocp10_videos(submitter);
+		ALTER TABLE ocp10_videos ADD FOREIGN KEY `videos.submitter` (submitter) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `videos.submitter` ON ocp_videos(submitter);
-		ALTER TABLE ocp_videos ADD FOREIGN KEY `videos.submitter` (submitter) REFERENCES ocp_f_members (id);
+		CREATE INDEX `videos.title` ON ocp10_videos(title);
+		ALTER TABLE ocp10_videos ADD FOREIGN KEY `videos.title` (title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `videos.title` ON ocp_videos(title);
-		ALTER TABLE ocp_videos ADD FOREIGN KEY `videos.title` (title) REFERENCES ocp_translate (id);
+		CREATE INDEX `video_transcoding.t_local_id` ON ocp10_video_transcoding(t_local_id);
+		ALTER TABLE ocp10_video_transcoding ADD FOREIGN KEY `video_transcoding.t_local_id` (t_local_id) REFERENCES ocp10_videos (id);
 
-		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
-		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
+		CREATE INDEX `translate.source_user` ON ocp10_translate(source_user);
+		ALTER TABLE ocp10_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_signature` ON ocp10_f_members(m_signature);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
-		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp10_f_members(m_pt_rules_text);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_name` ON ocp10_f_groups(g_name);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+		CREATE INDEX `f_groups.g_group_leader` ON ocp10_f_groups(g_group_leader);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
+		CREATE INDEX `f_groups.g_title` ON ocp10_f_groups(g_title);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp10_translate (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
-		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);

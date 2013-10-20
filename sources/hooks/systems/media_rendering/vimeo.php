@@ -124,7 +124,7 @@ class Hook_media_rendering_vimeo
 	{
 		if (is_object($url)) $url=$url->evaluate();
 		$attributes['remote_id']=preg_replace('#^https?://vimeo\.com/(\d+)#','${1}',$url);
-		return do_template('MEDIA_VIMEO',array('HOOK'=>'vimeo')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+		return do_template('MEDIA_VIMEO',array('_GUID'=>'490903ba659a899d70d3a2f5afa7d6cb','HOOK'=>'vimeo')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 
 }

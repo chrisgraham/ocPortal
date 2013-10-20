@@ -76,5 +76,5 @@ else
 $tickets_url=build_url(array('page'=>'tickets','type'=>'misc'),get_module_zone('tickets'));
 if (is_object($tickets_url)) $tickets_url=$tickets_url->evaluate();
 $tickets_open_msg=do_lang_tempcode('SHOW_CREDITS_Tickets_open',number_format($tickets_open),$tickets_url);
-$tpl=do_template('SHOW_CREDITS_BAR',array('GUEST_MSG'=>$guest_msg,'WHATS_THIS'=>$whats_this,'WHATS_THIS_LINK'=>$no_credits_link,'WELCOME_MSG'=>$welcome_msg,'CREDITS_AVAILABLE'=>$credits_message));
+$tpl=do_template('SHOW_CREDITS_BAR',array('_GUID'=>'43e6e18c180cda2e6f4627d2a2bb8677','GUEST_MSG'=>$guest_msg,'WHATS_THIS'=>$whats_this,'WHATS_THIS_LINK'=>$no_credits_link,'WELCOME_MSG'=>$welcome_msg,'CREDITS_AVAILABLE'=>$credits_message));
 $tpl->evaluate_echo();

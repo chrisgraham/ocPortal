@@ -137,8 +137,7 @@ class Module_admin_points
 		$fields->attach(form_input_date(do_lang_tempcode('FROM'),'','from',false,false,false,$time_start,10,intval(date('Y'))-9));
 		$fields->attach(form_input_date(do_lang_tempcode('TO'),'','to',false,false,false,time(),10,intval(date('Y'))-9));
 
-		return do_template('FORM_SCREEN',array(
-			'GET'=>true,
+		return do_template('FORM_SCREEN',array('_GUID'=>'e7529ab3f49792924ecdad78e1f3593c','GET'=>true,
 			'SKIP_VALIDATION'=>true,
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,

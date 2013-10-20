@@ -33,8 +33,7 @@ function content_review_get_fields($content_type,$content_id=NULL,$catalogue_nam
 	{
 		require_lang('content_reviews');
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-			'SECTION_HIDDEN'=>true,
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'ca379bacb82c15c768d3c45f5ed9f207','SECTION_HIDDEN'=>true,
 			'TITLE'=>do_lang_tempcode('CONTENT_REVIEWS'),
 		)));
 
