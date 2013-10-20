@@ -107,7 +107,8 @@ function destrictify($change_content_type=true,$mysql_too=false)
 	if ((get_forum_type()=='ocf') && ($mysql_too)) $GLOBALS['SITE_DB']->query('SET sql_mode=\'\'',NULL,NULL,true);
 	@ini_set('ocproducts.type_strictness','0');
 	@ini_set('ocproducts.xss_detect','0');
-	$include_path='./';
+	$include_path=ini_get('include_path');
+	$include_path.=PATH_SEPARATOR.'./';
 	$include_path.=PATH_SEPARATOR.get_file_base().'/';
 	$include_path.=PATH_SEPARATOR.get_file_base().'/sources_custom/';
 	$include_path.=PATH_SEPARATOR.get_file_base().'/uploads/website_specific/';

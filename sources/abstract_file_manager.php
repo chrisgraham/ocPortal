@@ -462,18 +462,9 @@ function afm_make_directory($basic_path,$world_access,$recursive=false)
 		sync_file(get_custom_file_base().'/'.$basic_path);
 	} else
 	{
-		if ($recursive)
-		{
-			$build_up=get_custom_file_base();
-			foreach ($parts as $part)
-			{
-				$build_up.='/'.$part;
-				@mkdir($build_up,$access); //0755
-			}
-		}
 		if (!file_exists(get_custom_file_base().'/'.$basic_path))
 		{
-			@mkdir($path,$access) OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',escape_html($path),escape_html(dirname($path))));
+			@mkdir($path,$access,$recursive) OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',escape_html($path),escape_html(dirname($path))));
 		} else
 		{
 			@chmod($path,$access);

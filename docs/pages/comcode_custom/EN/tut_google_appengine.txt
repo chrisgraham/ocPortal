@@ -58,7 +58,7 @@ Extract the ocPortal manual installation package to a directory on your developm
 
 Start up the GAE launcher.
 
-(the exact tool/process may depend on what platform you are using -- i.e. Windows/Linux/Mac. These instructions have been tested on a Mac).
+(the exact tool/process may depend on what platform you are using -- i.e. Windows/Linux/Mac. These instructions have been written on a Mac).
 
 [media width="150" description="The application launcher, after the application has been created" float="right"]data_custom/images/docs/appengine_launcher.png[/media]
 Add the in the launcher. Simple add the directory you extracted ocPortal to, and it should automatically configure it from that.
@@ -67,22 +67,47 @@ Select your application row in the list of applications, and click "Run".
 
 In your web browser, go to [tt]http://localhost:8080/install.php[/tt] (it's running on port 8080 by default, which means you can also have Apache installed on the machine if you so wish).
 
+Ignore any "There is no PHP GD extension on the server" error. The PHP SDK (at the time of writing does not have GD), but the live environment does.
+
 [media width="150" description="Creating a Google App Engine application" float="right"]data_custom/images/docs/appengine_create.png[/media]
-[media width="150" description="Creating a Google Cloud SQL database" float="right"]data_custom/images/docs/cloud_sql.png[/media]
-The installer will ask for various GAE-specific details. It will provide links that take you directly to where you can set these up, or to the official Google instruction pages.
-To summarise, the following live application details are needed:
+The installer will ask for various GAE-specific details. It will provide links that take you to where you can set these up. That said, things aren't always straight-forward, so you must read the "Live setup instructions / notes" below to tell you what you actually need to configure.
+
+A top-level view of what you'll be setting up:
  - App Engine application ID -- The identifier for the live GAE application
  - Google Cloud Storage bucket name -- The identifier for the live Google Cloud Storage (this is basically the live filesystem, which is stored separately to the application itself)
  - Database hostname -- This includes the identifier for the Google Cloud SQL database's Google Cloud Platform project and the identifier for the Google Cloud SQL instance
  - Database name -- The name of the Google Cloud SQL database, which you must create manually
 The default settings assume all the different identifier's are the same, but they don't have to be. These are separate services that are linked together for your live application to run.
 
+[title="3"]Live setup instructions / notes[/title]
+
+When adding your GAE application, ignore any settings relating to authentication for users. ocPortal uses its own authentication, not Google authentication settings. That said, an administrator of the GAE app will automatically be logged in as the first admin on the ocPortal site (unless you choose to explicitly log in to a different user from the login screen).
+
+You want your datastore to be set for "High Replication". This is the default.
+
+You cannot create Google Cloud Storage buckets, or a Google Cloud SQL instance, without signing up for billing first. They are not available on the free tier. You sign up for billing under the Google Cloud Console. Note that billing must also be separately set up for Google App Engine, which is not managed from the Google Cloud Console (to be honest, Google's tools here are a bit of a jumble).
+
+[media width="150" description="Enabling necessary services" float="right"]data_custom/images/docs/google_cloud_services.png[/media]
+Before you may set up Google Cloud Storage or Google Cloud SQL, you must specifically enable the services for them.
+At the time of writing, the beta version of the Google Cloud Console (the "new" one) does not work properly. You cannot create a Google Cloud Storage bucket in it because there are no service management settings in the user interface. If you try to create the bucket you'll get an odd error about the project being disabled. Therefore make sure you do not enable the beta version.
+
+To enable Google Cloud Storage and Google Cloud SQL, go to 'Services' in the left-hand menu in the Google Cloud Console (under your project) and select 'On' for the Google Cloud Storage and Google Cloud SQL services.
+
+Once enabled, options to configure the services will be shown on the left-hand menu.
+
+[media width="150" description="Enabling Google Cloud Storage (1)" float="right"]data_custom/images/docs/google_cloud_storage_link.png[/media]
+[media width="150" description="Enabling Google Cloud Storage (2)" float="right"]data_custom/images/docs/google_cloud_storage.png[/media]
+[media width="150" description="Setting Google Cloud Storage permissions (1)" float="right"]data_custom/images/docs/cloud_storage_permissions_1.png[/media]
+[media width="150" description="Setting Google Cloud Storage permissions (2)" float="right"]data_custom/images/docs/cloud_storage_permissions_2.png[/media]
+When you go to Google Cloud Storage, you will see a link to go to "online browser". From there you can set up a bucket. Annoyingly it takes you to the beta version of Google Cloud Console, which you'll need to exit out of when you're done (did I mention it is a jumble...). You need to set permissions to public access, as URLs will be served out of the storage. Do this by ticking (checking) the bucket and clicking the "Bucket permissions" button that will appear.
+
+[media width="150" description="Creating a Google Cloud SQL instance" float="right"]data_custom/images/docs/cloud_sql.png[/media]
+Next set up your Google Cloud SQL instance. You should probably leave the "Replication mode" as "Synchronous", for stability reasons. You have to authorise your GAE application when you add the Google Cloud SQL instance. The instance does not itself contain a database, so when added click the 'SQL Prompt' tab and enter an SQL command:
 [media width="150" description="Creating a Google Cloud SQL database" float="right"]data_custom/images/docs/cloud_sql_database.png[/media]
-The actual Google Cloud SQL database needs creating manually with an SQL command:
 [code]
 CREATE DATABASE <application>;
 [/code]
-Do this in the SQL prompt under the Google Cloud SQL section of the Google APIs site.
+(where [tt]<application>[/tt] is the name of your application, or a different database name if you prefer)
 
 [title="2"]Structural configuration[/title]
 
@@ -124,11 +149,11 @@ If you only removed one of the above, also remove one of the following:
  - wiki
 (Of course, you may remove more if you wish, or other addons)
 
-If you find it annoying that you cannot have every ocPortal addon when using GAE, you should consider that good sites are streamlined; very few (if any) websites should contain every ocPortal feature.
+If you find it annoying that you cannot have every ocPortal addon in simultaneous use when using GAE, you might consider that good sites are streamlined; very few (if any) websites should contain every ocPortal feature ;).
 
 [title="2"]Staging configuration[/title]
 
-You should do certain tasks on your local development machine:
+You should only do certain tasks on your local development machine:
  - Themeing
  - Addon management (installing/uninstalling)
  - Debranding
@@ -141,7 +166,7 @@ You may also wish to consider doing the following locally, for reasons of perfor
 (remote ocPortal custom files will go through Cloud Storage, which may have increased latency than if stored directly in the deployed application)
 
 Things like menu editing, or adding content, would primarily be done on the live site directly. With investment we would/will continue to improve ocPortal's staging tools (see the [page="_SEARCH:tut_repository"]Repository tutorial[/page]), but at this time we cannot necessarily confirm they will work with GAE or fit into a smooth staging to live publishing process. Our primary aim has been getting the challenge of basic support working so that we can then work on smoothing over daily usage as we find useful.
-You could consider regularly copying the live Cloud Database back to your staging site and testing new content locally, before recreating your actions manually onto the live site. This isn't as bad as it sounds for most kinds of content, as the actual clicks are minimal compared to the time actually producing content.
+You could consider regularly copying the live Cloud Database back to your staging site and testing new content locally, before repeating your actions manually onto the live site. This isn't as bad as it sounds for most kinds of content, as the actual clicks are minimal compared to the time actually producing quality content.
 
 [title="2"]Deployment[/title]
 
@@ -152,8 +177,8 @@ We will assume that you have already set up your live application/storage/databa
 
 To copy your initial database to live, you need to follow a rather complex procedure of exporting, copying to live storage, then importing from live storage. See [url="Google's documentation on Importing data"]https://developers.google.com/cloud-sql/docs/import_export[/url].
 
-You may want to copy your initial custom files to live. To do this you will need to [url="use gsutil"]https://developers.google.com/storage/docs/gsutil[/url] with the files in [tt]data_custom/modules/google_appengine[/tt] (that is your custom filesystem, which ocPortal has kept separated from your application files).
-Alternatively, you can include your custom files as a part of the application. You do this by merging the [tt]data_custom/modules/google_appengine[/tt] folder back down into your main ocPortal folder. Note that this does not work for the [tt]uploads[/tt] directory though, as uploads are always considered custom and ocPortal will not search the application directory when locating them.
+You may want to copy your initial custom files to live. To do this you will need to [url="use gsutil"]https://developers.google.com/storage/docs/gsutil[/url] with the files in [tt]data_custom/modules/google_appengine[/tt] (that is your custom filesystem for Cloud Storage, which ocPortal has kept separated from your application files).
+Alternatively, you can include your custom files as a part of the application. You do this by merging the [tt]data_custom/modules/google_appengine[/tt] folder back down into your main ocPortal folder. Note though that this does not work for the [tt]uploads[/tt] directory, as uploads are always considered custom and ocPortal will not search the application directory when locating them.
 
 See the Google documentation on [url="how to upload your live application"]https://developers.google.com/appengine/docs/php/gettingstarted/uploading[/url].
 
@@ -210,6 +235,7 @@ Go through this process:
 Initially you will be set up on an [tt]appspot.com[/tt] subdomain. You [url="may use your own domain"]https://developers.google.com/appengine/docs/domain[/url]. ocPortal is set up to automatically detect your base URL from the access URL, so you do not need to worry about any configuration within ocPortal. Make sure though that you stop using the [tt]appspot.com[/tt] URL fully after switching to your custom domain name.
 
 If using SSL with your own custom domain, ocPortal's default configuration in [tt]_config.php[/tt] will assume that you want to serve uploaded data via that domain. To do that you need to setup [tt]storage.<domainname>[/tt] as per [url="Google's documentation on setting a CNAME record"]https://developers.google.com/storage/docs/reference-uris[/url].
+Of course you would also need to set up [url="your own SSL certificate"]https://developers.google.com/appengine/docs/ssl[/url].
 
 [title="3"]Error pages[/title]
 
@@ -222,27 +248,27 @@ And then create [tt]404.htm[/tt] by saving out the result of [tt]/index.php?page
 
 This rule works because it's the last rule, run after no dynamic page has been found.
 
-You could create a [tt]404.php[/tt] if you need it to be dynamic, but it's probably not a good idea. It is possible you could get a lot of 404 hits from old broken URLs, or bots, so you should make it a fast static page.
+You could create a [tt]404.php[/tt] if you need it to be dynamic, but it's probably not a good idea. It is possible you could get a lot of 404 hits from old broken URLs, or bots -- a static page is much faster to execute (i.e. less costly to you).
 
 [title="2"]Notes to programmers / architects[/title]
 
-The GAE API installs a version of PHP, but it does not have the limitations of the live version of PHP. Therefore be careful that you apply all the coding standards. In particular, ensure any custom files are written to using ocPortal's [tt]get_custom_file_base[/tt] function (which will be mapped to Google Cloud Storage).
+The GAE API installs a version of PHP, but it does not have most of the limitations of the live version of PHP. Therefore be careful that you apply all the coding standards. In particular, ensure any custom files are written to using ocPortal's [tt]get_custom_file_base[/tt] function (which will be mapped to Google Cloud Storage live and [tt]data_custom/modules/google_appengine[/tt] in development).
 
-If you are developing and don't have OcCLE working yet, the [url="PHP-minishell"]http://php-minishell.appspot.com/[/url] is quite useful.
+If you are developing and don't have OcCLE working yet, the [url="PHP-minishell"]http://php-minishell.appspot.com/[/url] is quite useful for testing the environment.
 
 Be aware that filesystem latency may be considerably higher on GAE, as Cloud Storage may not be in the same machine as the actual running application. One hopes that the machine will be at least in the same data centre, with a fast non-congested link, but be mindful that there are reports of ~10ms latency. The same issue applies to Google Cloud SQL. Try and keep the number of filesystem and database queries you do down.
 It is also advisable to minimise the number of filesystem and database writes you make, as these have to replicate across each copy of your filesystem/database.
 
-Be advised that Google cannot provide automated "sharding" of data. This means that if you have a huge volume of data (many 100s of GB), you may come across limits. For smaller quantities of data, you may still find that scaling isn't as fast as one would like, while the data is cloned out. The moral of this isn't that there is a problem hosting regular sites on GAE, but that if you are successful in creating a huge new web property, don't expect data to automatically scale without having a proper development team to re-architect your data model into shards. At a huge scale you will probably also want to move away from Google Cloud SQL.
+Be advised that Google cannot provide automated "sharding" of data. This means that if you have a huge volume of data (many 100s of GB), you may come across limits. For smaller quantities of data, you may still find that scaling isn't as fast as one would like, while the data is cloned out. The moral of this isn't that there is a problem hosting regular sites on GAE, but that if you are successful in creating a huge new web property, don't expect data to automatically scale without having a proper development team to re-architect your data model into shards. At a huge scale you will probably also want to move away from Google Cloud SQL. All this is beyond the scope of ocPortal as a product.
 
 [concepts
  1_key="Google App Engine"         1_value="Google's auto-scaling application-hosting service"
  2_key="Application Instance"      2_value="Your ocPortal-based application running on GAE"
- 3_key="Google Cloud Storage"      3_value="Google's cloud filesystem service (actually, it is for non-structured data, but can simulate a filesystem)"
+ 3_key="Google Cloud Storage"      3_value="Google's cloud filesystem service (built on top of their no-SQL infrastructure)"
  4_key="Bucket"                    4_value="A configured cloud filesystem on Google Cloud Storage"
  5_key="Google Cloud SQL"          5_value="Google's cloud version of MySQL, automatically set up to replicate across multiple machines, for redundancy/performance"
  5_key="Google Cloud SQL instance" 5_value="A particular instance on Google Cloud SQL; within this instance you have one or more databases"
- 6_key="GAE"                       6_value="Abbreviation of Google App Engine"
+ 6_key="GAE"                       6_value="An abbreviation of Google App Engine"
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]

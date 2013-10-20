@@ -676,7 +676,7 @@ function step_3()
 	{
 		if (!GOOGLE_APPENGINE)
 		{
-			if ($forum!='mysql')
+			if ($database!='mysql')
 				continue;
 		}
 
@@ -755,7 +755,7 @@ function step_4()
 	$PROBED_FORUM_CONFIG['sql_database']='';
 	$PROBED_FORUM_CONFIG['sql_user']='';
 	$PROBED_FORUM_CONFIG['sql_pass']='';
-	$board_path=post_param('board_path');
+	$board_path=post_param('board_path','');
 	find_forum_path($board_path);
 
 	if ((!array_key_exists('board_url',$PROBED_FORUM_CONFIG)) || (!(strlen($PROBED_FORUM_CONFIG['board_url'])>0)))
@@ -853,7 +853,7 @@ function step_4()
 		}
 	}
 
-	$domain=ocp_srv('HTTP_HOST');
+	$domain=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
 	$ftp_folder='/'.$webdir_stub.basename(ocp_srv('SCRIPT_NAME'));
 	$ftp_domain=$domain;
 
@@ -997,11 +997,11 @@ function step_4()
 				var gae_application=document.getElementById(\'gae_application\');
 				gae_application.onchange=function() {
 					var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
-					gae_live_db_site.value=gae_live_db_site.value.replace(/<application>/g,gae_application.value);
+					gae_live_db_site.value=gae_live_db_site.value.replace(/(<application>|ocportal)/g,gae_application.value);
 					var gae_live_db_site_host=document.getElementById(\'gae_live_db_site_host\');
-					gae_live_db_site_host.value=gae_live_db_site_host.value.replace(/<application>/g,gae_application.value);
+					gae_live_db_site_host.value=gae_live_db_site_host.value.replace(/(<application>|ocportal)/g,gae_application.value);
 					var gae_bucket_name=document.getElementById(\'gae_bucket_name\');
-					gae_bucket_name.value=gae_bucket_name.value.replace(/<application>/g,gae_application.value);
+					gae_bucket_name.value=gae_bucket_name.value.replace(/(<application>|ocportal)/g,gae_application.value);
 				};
 				gae_application.onchange();
 			');
@@ -1539,7 +1539,7 @@ function step_5_checks()
 	if (count($_POST)==0) exit(do_lang('INST_POST_ERROR'));
 
 	// Check domain
-	$domain=trim(post_param('domain'));
+	$domain=trim(post_param('domain',''));
 	if ((strstr($domain,'/')!==false) || (strstr($domain,':')!==false))
 		warn_exit(do_lang_tempcode('INVALID_DOMAIN'));
 
@@ -2509,7 +2509,7 @@ function make_option($nice_name,$description,$name,$value,$hidden=false,$require
 	{
 		$input1=do_template('INSTALLER_INPUT_PASSWORD',array('_GUID'=>'373b85cea71837a30d146df387dc2a42','REQUIRED'=>$_required,'NAME'=>$name,'VALUE'=>$value));
 		$a=do_template('INSTALLER_STEP_4_SECTION_OPTION',array('_GUID'=>'455b0f61e6ce2eaf2acce2844fdd5e7a','NAME'=>$name,'INPUT'=>$input1,'NICE_NAME'=>$nice_name,'DESCRIPTION'=>$description));
-		if ((substr($name,0,3)!='db_') && ($name!='ftp_password'))
+		if ((substr($name,0,3)!='db_') && (substr($name,0,12)!='gae_live_db_') && ($name!='ftp_password'))
 		{
 			$input2=do_template('INSTALLER_INPUT_PASSWORD',array('_GUID'=>'0f15bfe5b58f3ca7830a48791f1a6a6d','REQUIRED'=>$_required,'NAME'=>$name.'_confirm','VALUE'=>$value));
 			$nice_name_2=do_lang_tempcode('RELATED_FIELD',$nice_name);

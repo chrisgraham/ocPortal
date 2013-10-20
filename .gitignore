@@ -46,6 +46,9 @@ php.ini
 /.project
 
 ; These should be banned for the main ocPortal dev repository but not for ocP projects
+/cron.yaml
+/dos.yaml
+/queue.yaml
 /iirf.ini
 docs/api
 *test.png

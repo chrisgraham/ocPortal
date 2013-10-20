@@ -630,13 +630,7 @@ class Module_cms_galleries extends standard_crud_module
 					$ok=true;
 					if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
 					{
-						$subdirs=explode('/',rawurldecode($thumb_url));
-						$subdir_buildup='';
-						foreach ($subdirs as $subdir)
-						{
-							$subdir_buildup.=$subdir.'/';
-							@mkdir(dirname(get_custom_file_base().'/'.$subdir_buildup),0777);
-						}
+						@mkdir(dirname(get_custom_file_base().'/'.rawurldecode($thumb_url)),0777,true);
 						$ok=convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/'.rawurldecode($thumb_url),-1,-1,intval(get_option('thumb_width')),false);
 					}
 					if ($ok)

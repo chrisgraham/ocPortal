@@ -18,14 +18,23 @@
  * @package		core
  */
 
-/*EXTRA FUNCTIONS: wincache\_.+*/
+/*EXTRA FUNCTIONS: Memcached*/
 
 /**
  * Cache Driver.
  * @package		core
  */
-class ocp_wincache
+class ocp_memcached extends Memcached
 {
+	/**
+	 * Constructor.
+	 */
+	function __construct()
+	{
+		$this->addServer('localhost',11211);
+		parent::__construct();
+	}
+
 	/**
 	 * Get data from the persistent cache.
 	 *
@@ -35,9 +44,8 @@ class ocp_wincache
 	 */
 	function get($key,$min_cache_date=NULL)
 	{
-		$success=false;
-		$data=wincache_ucache_get($key,$success);
-		if (!$success) return NULL;
+		$data=parent::get($key);
+		if ($data===false) return NULL;
 		if ((!is_null($min_cache_date)) && ($data[0]<$min_cache_date)) return NULL;
 		return $data[1];
 	}
@@ -52,8 +60,7 @@ class ocp_wincache
 	 */
 	function set($key,$data,$flags,$expire_secs)
 	{
-		if ($expire_secs==-1) $expire_secs=0;
-		wincache_ucache_set($key,array(time(),$data),$expire_secs);
+		parent::set($key,array(time(),$data),$expire_secs);
 	}
 
 	/**
@@ -63,14 +70,6 @@ class ocp_wincache
 	 */
 	function delete($key)
 	{
-		wincache_ucache_delete($key);
-	}
-
-	/**
-	 * Remove all data from the persistent cache.
-	 */
-	function flush()
-	{
-		wincache_ucache_clear();
+		parent::delete($key);
 	}
 }

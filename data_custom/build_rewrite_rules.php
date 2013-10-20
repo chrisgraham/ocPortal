@@ -263,7 +263,7 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 				{
 					list($rule,$to,$flags,$enabled)=$rewrite_rule;
 
-					$rules_txt.="\n".($enabled?'':'//')."if (preg_match('#{$rule}#',\$matches)!=0)\n".($enabled?'':'//')."\treturn _roll_gae_redirect(\$matches,'{$to}');";
+					$rules_txt.="\n".($enabled?'':'//')."if (preg_match('#{$rule}#',\$uri,\$matches)!=0)\n".($enabled?'':'//')."\treturn _roll_gae_redirect(\$matches,'{$to}');";
 				}
 			}
 			$rules_txt=preg_replace('#^#m',str_repeat("\t",$indent_level),$rules_txt)."\n";
@@ -281,8 +281,11 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 				{
 					list($rule,$to,$flags,$enabled)=$rewrite_rule;
 
+					if (substr($rule,0,1)=='^') $rule=substr($rule,1);
+					if (substr($rule,-1)=='$') $rule=substr($rule,0,strlen($rule)-1);
+
 					$rules_txt.=
-						($enabled?'':'#').'- url: /'.str_replace(array('^','$'),array('',''),$rule)."\n".
+						($enabled?'':'#').'- url: /'.$rule."\n".
 						($enabled?'':'#').'  script: '.preg_replace('#\?.*$#','',str_replace(array('\\','$'),array('','\\'),$to))."\n";
 				}
 			}

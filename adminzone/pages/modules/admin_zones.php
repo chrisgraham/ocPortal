@@ -490,7 +490,7 @@ class Module_admin_zones
 				// Make dir if needed
 				if (!file_exists(dirname($fullpath)))
 				{
-					if (@mkdir(dirname($fullpath),0777)===false)
+					if (@mkdir(dirname($fullpath),0777,true)===false)
 					{
 						warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html(basename(dirname($fullpath))),escape_html(dirname(dirname($fullpath)))));
 					}

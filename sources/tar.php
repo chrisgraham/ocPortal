@@ -306,7 +306,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 			{
 				if (!$use_afm)
 				{
-					@mkdir(get_custom_file_base().'/'.$path.$file['path'],0777);
+					@mkdir(get_custom_file_base().'/'.$path.$file['path'],0777,true);
 					fix_permissions(get_custom_file_base().'/'.$path.$file['path'],0777);
 					sync_file(get_custom_file_base().'/'.$path.$file['path']);
 				} else
@@ -331,7 +331,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 						{
 							if (!file_exists(get_custom_file_base().'/'.$path.$buildup))
 							{
-								@mkdir(get_custom_file_base().'/'.$path.$buildup,0777);
+								@mkdir(get_custom_file_base().'/'.$path.$buildup,0777,true);
 								fix_permissions(get_custom_file_base().'/'.$path.$buildup,0777);
 								sync_file(get_custom_file_base().'/'.$path.$buildup);
 							}

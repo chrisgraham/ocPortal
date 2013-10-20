@@ -2110,6 +2110,11 @@ ocportal_tutorials
  - data_custom/images/docs/windows_perm1.png
  - data_custom/images/docs/windows_perm2.png
  - data_custom/images/docs/windows_perm_reset.png
+ - data_custom/images/docs/google_cloud_services.png
+ - data_custom/images/docs/cloud_storage_permissions_1.png
+ - data_custom/images/docs/cloud_storage_permissions_2.png
+ - data_custom/images/docs/google_cloud_storage.png
+ - data_custom/images/docs/google_cloud_storage_link.png
  - docs/ocportal-api-template/README.md
  - docs/ocportal-api-template/class.xsl
  - docs/ocportal-api-template/composer.json

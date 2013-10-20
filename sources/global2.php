@@ -43,9 +43,13 @@ function init__global2()
 	@ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
 	// Fixup some inconsistencies in parameterisation on different PHP platforms. See phpstub.php for info on what environmental data we can rely on.
-	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS
+	if ((!isset($_SERVER['SCRIPT_NAME'])) && (!isset($_ENV['SCRIPT_NAME']))) // May be missing on GAE
 	{
-		$_SERVER['REQUEST_URI']=$_SERVER['SCRIPT_NAME']; // This doesn't include path info after .php like PHP_SELF would, but we don't use that in ocPortal. PHP_SELF is not reliable generally.
+		$_SERVER['SCRIPT_NAME']=preg_replace('#\.php/.*#','.php',$_SERVER['PHP_SELF']); // Same as PHP_SELF except without path info on the end
+	}
+	if ((!isset($_SERVER['REQUEST_URI'])) && (!isset($_ENV['REQUEST_URI']))) // May be missing on IIS
+	{
+		$_SERVER['REQUEST_URI']=$_SERVER['SCRIPT_NAME'];
 		$first=true;
 		foreach ($_GET as $key=>$val)
 		{

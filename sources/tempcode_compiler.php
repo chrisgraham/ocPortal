@@ -808,15 +808,9 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 {
 	if (is_null($theme_orig)) $theme_orig=$theme;
 
-	if (is_null($GLOBALS['CURRENT_SHARE_USER']))
-	{
-		$base_dir=((($theme=='default') && (($suffix!='.css') || (strpos($path,'/css_custom')===false)))?get_file_base():get_custom_file_base()).'/themes/';
-	} else
-	{
-		$base_dir=get_custom_file_base().'/themes/';
-		if (!is_file($base_dir.$theme.$path.$codename.$suffix))
-			$base_dir=get_file_base().'/themes/';
-	}
+	$base_dir=get_custom_file_base().'/themes/';
+	if (!is_file($base_dir.$theme.$path.$codename.$suffix))
+		$base_dir=get_file_base().'/themes/';
 
 	global $CACHE_TEMPLATES,$FILE_ARRAY,$IS_TEMPLATE_PREVIEW_OP_CACHE,$MEM_CACHE;
 
@@ -857,18 +851,13 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcp','ab');
 		if ($myfile===false)
 		{
-			@mkdir(dirname($path2),0777);
-			fix_permissions(dirname($path2),0777);
-			sync_file(dirname($path2));
-			if (@mkdir($path2,0777))
-			{
-				fix_permissions($path2,0777);
-				sync_file($path2);
-			} else
+			if (@mkdir($path2,0777,true)===false)
 			{
 				if ($codename=='SCREEN_TITLE') critical_error('PASSON',do_lang('WRITE_ERROR',escape_html($path2.filter_naughty($_codename).$suffix.'.tcp'))); // Bail out hard if would cause a loop
 				intelligent_write_error($path2.filter_naughty($_codename).$suffix.'.tcp');
 			}
+			fix_permissions(dirname($path2),0777);
+			sync_file(dirname($path2));
 		} else
 		{
 			flock($myfile,LOCK_EX);

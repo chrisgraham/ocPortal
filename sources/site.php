@@ -867,7 +867,7 @@ function do_site()
 
 			if (!is_dir(get_custom_file_base().'/caches/guest_pages/'))
 			{
-				if (@mkdir(get_custom_file_base().'/caches/guest_pages/',0777))
+				if (@mkdir(get_custom_file_base().'/caches/guest_pages/',0777,true))
 				{
 					fix_permissions(get_custom_file_base().'/caches/guest_pages/',0777);
 					sync_file(get_custom_file_base().'/caches/guest_pages/');

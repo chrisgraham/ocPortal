@@ -22,10 +22,24 @@
  * Cache Driver.
  * @package		core
  */
-class eacceleratorcache
+class ocp_eacceleratorcache
 {
+	var $objects_list;
+
 	/**
-	 * (Plug-in replacement for memcache API) Get data from the persistent cache.
+	 * Constructor.
+	 */
+	function __construct()
+	{
+		if (function_exists('eaccelerator_get'))
+			$this->objects_list=eaccelerator_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
+		if (function_exists('mmcache_get'))
+			$this->objects_list=mmcache_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
+		if ($this->objects_list===NULL) $this->objects_list=array();
+	}
+
+	/**
+	 * Get data from the persistent cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
@@ -46,7 +60,7 @@ class eacceleratorcache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Put data into the persistent cache.
+	 * Put data into the persistent cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  mixed			The data
@@ -56,16 +70,16 @@ class eacceleratorcache
 	function set($key,$data,$flags,$expire_secs)
 	{
 		// Update list of e-objects
-		global $PERSISTENT_CACHE_OBJECTS_CACHE;
-		if (!array_key_exists($key,$PERSISTENT_CACHE_OBJECTS_CACHE))
+		global $this->objects_list;
+		if (!array_key_exists($key,$this->objects_list))
 		{
-			$PERSISTENT_CACHE_OBJECTS_CACHE[$key]=1;
+			$this->objects_list[$key]=1;
 			if (function_exists('eaccelerator_put'))
 			{
-				eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
+				eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
 			} elseif (function_exists('mmcache_put'))
 			{
-				mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
+				mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
 			}
 		}
 
@@ -79,22 +93,22 @@ class eacceleratorcache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Delete data from the persistent cache.
+	 * Delete data from the persistent cache.
 	 *
 	 * @param  mixed			Key name
 	 */
 	function delete($key)
 	{
 		// Update list of e-objects
-		global $PERSISTENT_CACHE_OBJECTS_CACHE;
-		unset($PERSISTENT_CACHE_OBJECTS_CACHE[$key]);
+		global $this->objects_list;
+		unset($this->objects_list[$key]);
 
 		if (function_exists('eaccelerator_put'))
 		{
-			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
+			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
 		} elseif (function_exists('mmcache_put'))
 		{
-			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
+			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
 		}
 
 		if (function_exists('eaccelerator_rm'))
@@ -107,31 +121,31 @@ class eacceleratorcache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Remove all data from the persistent cache.
+	 * Remove all data from the persistent cache.
 	 */
 	function flush()
 	{
-		global $PERSISTENT_CACHE_OBJECTS_CACHE;
-		$PERSISTENT_CACHE_OBJECTS_CACHE=array();
+		global $this->objects_list;
+		$this->objects_list=array();
 		if (function_exists('eaccelerator_rm'))
 		{
-			foreach (array_keys($PERSISTENT_CACHE_OBJECTS_CACHE) as $obkey)
+			foreach (array_keys($this->objects_list) as $obkey)
 			{
 				eaccelerator_rm($obkey);
 			}
 		} elseif (function_exists('mmcache_rm'))
 		{
-			foreach (array_keys($PERSISTENT_CACHE_OBJECTS_CACHE) as $obkey)
+			foreach (array_keys($this->objects_list) as $obkey)
 			{
 				mmcache_rm($obkey);
 			}
 		}
 		if (function_exists('eaccelerator_put'))
 		{
-			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
+			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
 		} elseif (function_exists('mmcache_put'))
 		{
-			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
+			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
 		}
 	}
 }

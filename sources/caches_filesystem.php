@@ -22,10 +22,18 @@
  * Cache Driver.
  * @package		core
  */
-class filecache
+class ocp_filecache
 {
 	/**
-	 * (Plug-in replacement for memcache API) Get data from the persistent cache.
+	 * Constructor.
+	 */
+	function __construct()
+	{
+		require_code('files');
+	}
+
+	/**
+	 * Get data from the persistent cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
@@ -56,7 +64,7 @@ class filecache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Put data into the persistent cache.
+	 * Put data into the persistent cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  mixed			The data
@@ -89,7 +97,7 @@ class filecache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Delete data from the persistent cache.
+	 * Delete data from the persistent cache.
 	 *
 	 * @param  mixed			Key name
 	 */
@@ -100,7 +108,7 @@ class filecache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Remove all data from the persistent cache.
+	 * Remove all data from the persistent cache.
 	 */
 	function flush()
 	{

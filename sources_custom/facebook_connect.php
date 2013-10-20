@@ -11,6 +11,8 @@ function init__facebook_connect()
 {
 	if (!class_exists('ocp_tempcode')) return;
 
+	if (!function_exists('curl_version')) return;
+
 	// Initialise Facebook Connect
 	require_code('facebook/facebook');
 	class ocpFacebook extends BaseFacebook // We don't want any persistence - we store in normal ocPortal sessions/member rows

@@ -92,13 +92,7 @@ foreach ($todo as $i=>$_target_file)
 	}
 
 	// Make any needed directories
-	$build_up=$FILE_BASE;
-	$parts=explode('/',dirname($target_file));
-	foreach ($parts as $part)
-	{
-		$build_up.='/'.$part;
-		@mkdir($build_up,0755);
-	}
+	@mkdir($FILE_BASE.'/'.dirname($target_file),0755,true);
 
 	// Copy in the data
 	fseek($myfile,$offset);

@@ -32,9 +32,13 @@
 function init__minikernel()
 {
 	// Fixup some inconsistencies in parameterisation on different PHP platforms. See phpstub.php for info on what environmental data we can rely on.
+	if ((!isset($_SERVER['SCRIPT_NAME'])) && (!isset($_ENV['SCRIPT_NAME']))) // May be missing on GAE
+	{
+		$_SERVER['SCRIPT_NAME']=preg_replace('#\.php/.*#','.php',$_SERVER['PHP_SELF']); // Same as PHP_SELF except without path info on the end
+	}
 	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS
 	{
-		$_SERVER['REQUEST_URI']=$_SERVER['SCRIPT_NAME']; // This doesn't include path info after .php like PHP_SELF would, but we don't use that in ocPortal. PHP_SELF is not reliable generally.
+		$_SERVER['REQUEST_URI']=$_SERVER['SCRIPT_NAME'];
 		$first=true;
 		foreach ($_GET as $key=>$val)
 		{
@@ -512,6 +516,7 @@ function get_base_url($https=NULL,$zone_for='')
 	if (!array_key_exists('base_url',$SITE_INFO))
 	{
 		$base_url=post_param('base_url','http://'.ocp_srv('HTTP_HOST').dirname(ocp_srv('SCRIPT_NAME')));
+		if (substr($base_url,-1)=='/') $base_url=substr($base_url,0,strlen($base_url)-1);
 
 		return $base_url.(($zone_for=='')?'':('/'.$zone_for));
 	}

@@ -1,9 +1,3 @@
-{+START,IF_NON_EMPTY,{TEXT}}
-	<p class="associated_details">
-		{TEXT}
-	</p>
-{+END}
-
 {HIDDEN}
 
 <div class="installer_section">
@@ -12,6 +6,12 @@
 			<legend class="accessibility_hidden">{TITLE}</legend>
 
 			<h2>{TITLE}</h2>
+
+			{+START,IF_NON_EMPTY,{TEXT}}
+				<p class="associated_details">
+					{TEXT}
+				</p>
+			{+END}
 
 			<div class="wide_table_wrap"><table class="map_table form_table wide_table">
 				<colgroup>

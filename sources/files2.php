@@ -70,7 +70,7 @@ function init__files2()
  */
 function make_missing_directory($dir)
 {
-	if (@mkdir($dir,0777)===false)
+	if (@mkdir($dir,0777,true)===false)
 	{
 		warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
 	}

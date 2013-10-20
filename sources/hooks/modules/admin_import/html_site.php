@@ -521,13 +521,7 @@ class Hook_html_site
 			if (!file_exists($file_base.'/'.$file)) continue;
 
 			$path=get_custom_file_base().'/uploads/website_specific/'.$file;
-			$create_path=$path;
-			do
-			{
-				@mkdir(dirname($create_path),0777);
-				$create_path=dirname($create_path);
-			}
-			while (strlen($create_path)>1);
+			@mkdir(dirname($path),0777,true);
 			copy($file_base.'/'.$file,$path);
 			fix_permissions($path);
 			sync_file($path);
@@ -611,12 +605,7 @@ class Hook_html_site
 					{
 						$target=get_custom_file_base().'/uploads/website_specific/'.$decoded_url;
 						$create_path=$target;
-						do
-						{
-							@mkdir(dirname($create_path),0777);
-							$create_path=dirname($create_path);
-						}
-						while (strlen($create_path)>1);
+						@mkdir(dirname($target),0777,true);
 						@unlink($target);
 						@copy($file_base.'/'.$decoded_url,$target);
 

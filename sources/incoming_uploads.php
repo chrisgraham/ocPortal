@@ -59,7 +59,7 @@ function incoming_uploads_script()
 
 	if (!file_exists(get_custom_file_base().'/uploads/incoming'))
 	{
-		@mkdir(get_custom_file_base().'/uploads/incoming',0777);
+		@mkdir(get_custom_file_base().'/uploads/incoming',0777,true);
 		fix_permissions(get_custom_file_base().'/uploads/incoming',0777);
 		sync_file(get_custom_file_base().'/uploads/incoming');
 	}

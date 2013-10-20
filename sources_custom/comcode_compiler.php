@@ -15,7 +15,7 @@ if (!function_exists('init__comcode_compiler'))
 
 		$new_code='
 			require_code(\'textfiles\');
-			$whitelists=explode("\n",read_text_file(\'comcode_whitelist\'));
+			$whitelists=explode("\n",read_text_file(\'comcode_whitelist\',NULL,true));
 			foreach ($whitelists as $w)
 			{
 				if (trim($w)!=\'\')
@@ -31,7 +31,7 @@ if (!function_exists('init__comcode_compiler'))
 			global $OBSCURE_REPLACEMENTS;
 			$OBSCURE_REPLACEMENTS=array();
 			require_code(\'textfiles\');
-			$whitelists=explode("\n",read_text_file(\'comcode_whitelist\'));
+			$whitelists=explode("\n",read_text_file(\'comcode_whitelist\',NULL,true));
 			foreach ($whitelists as $i=>$w)
 			{
 				if (trim($w)!=\'\')
