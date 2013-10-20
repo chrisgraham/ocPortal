@@ -146,8 +146,9 @@ $rewrite_rules=array(
 	),
 );
 
-// Write rules to app.yaml (Google App Engine)
-write_to('data/modules/google_appengine/app.yaml','GAE','handlers:'."\n","- url: ^.*\.(css",0,$rewrite_rules);
+// Write rules to google_appengine.php and app.yaml (Google App Engine)
+write_to('sources/google_appengine.php','GAE1',"\t".'// RULES START',"\t// RULES END",1,$rewrite_rules);
+write_to('data/modules/google_appengine/app.yaml','GAE2','handlers:'."\n","- url: ^.*\.(css",0,$rewrite_rules);
 
 // Write rules to plain.htaccess (Apache, CGI PHP)
 write_to('plain.htaccess','Apache','<IfModule mod_rewrite.c>','</IfModule>',0,$rewrite_rules);
@@ -252,7 +253,25 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 			$new.="\n\t\t\t".$match_end;
 			break;
 
-		case 'GAE':
+		case 'GAE1':
+			$new=$match_start;
+			$rules_txt='';
+			foreach ($rewrite_rules as $x=>$rewrite_rule_block)
+			{
+				list($comment,$rewrite_rule_set)=$rewrite_rule_block;
+				foreach ($rewrite_rule_set as $y=>$rewrite_rule)
+				{
+					list($rule,$to,$flags,$enabled)=$rewrite_rule;
+
+					$rules_txt.="\n".($enabled?'':'//')."if (preg_match('#{$rule}#',\$matches)!=0)\n".($enabled?'':'//')."\treturn _roll_gae_redirect(\$matches,'{$to}');";
+				}
+			}
+			$rules_txt=preg_replace('#^#m',str_repeat("\t",$indent_level),$rules_txt)."\n";
+			$new.=$rules_txt;
+			$new.=$match_end;
+			break;
+
+		case 'GAE2':
 			$new=$match_start;
 			$rules_txt='';
 			foreach ($rewrite_rules as $x=>$rewrite_rule_block)
@@ -264,7 +283,7 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 
 					$rules_txt.=
 						($enabled?'':'#').'- url: /'.str_replace(array('^','$'),array('',''),$rule)."\n".
-						($enabled?'':'#').'  script: '.str_replace(array('\\','$'),array('','\\'),$to)."\n";
+						($enabled?'':'#').'  script: '.preg_replace('#\?.*$#','',str_replace(array('\\','$'),array('','\\'),$to))."\n";
 				}
 			}
 			$rules_txt=preg_replace('#^\t*#m',str_repeat("\t",$indent_level),$rules_txt);

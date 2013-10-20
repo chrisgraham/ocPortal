@@ -423,7 +423,7 @@ function step_1()
 		preg_replace preg_replace_callback preg_split print_r putenv rawurldecode
 		rawurlencode readdir realpath register_shutdown_function rename require require_once reset rmdir
 		round rsort rtrim serialize set_error_handler set_magic_quotes_runtime
-		setcookie setlocale sha1 sin sort sprintf srand str_pad str_repeat str_replace
+		setcookie setlocale sha1 sin sort fprintf sprintf srand str_pad str_repeat str_replace
 		strcmp strftime strip_tags stripslashes strlen strpos strrpos strstr strtok strtolower
 		strtotime strtoupper strtr strval substr substr_count time trim trigger_error
 		uasort ucfirst ucwords uksort uniqid unlink unserialize unset urldecode urlencode usort
@@ -448,7 +448,7 @@ function step_1()
 		ftp_pwd ftp_rawlist ftp_systype ftruncate func_get_arg func_get_args func_num_args
 		parse_ini_file parse_str is_executable
 		is_scalar is_subclass_of metaphone natcasesort natsort nl2br ob_get_length ob_gzhandler
-		ob_iconv_handler ob_implicit_flush php_sapi_name
+		ob_iconv_handler ob_implicit_flush php_sapi_name ob_clean
 		php_uname printf convert_cyr_string cosh count_chars
 		gethostbynamel getimagesize getlastmod fpassthru
 		gettimeofday get_cfg_var get_magic_quotes_runtime get_meta_tags get_parent_class

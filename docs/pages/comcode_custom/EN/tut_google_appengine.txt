@@ -211,6 +211,19 @@ Initially you will be set up on an [tt]appspot.com[/tt] subdomain. You [url="may
 
 If using SSL with your own custom domain, ocPortal's default configuration in [tt]_config.php[/tt] will assume that you want to serve uploaded data via that domain. To do that you need to setup [tt]storage.<domainname>[/tt] as per [url="Google's documentation on setting a CNAME record"]https://developers.google.com/storage/docs/reference-uris[/url].
 
+[title="3"]Error pages[/title]
+
+To enable a custom page for 404 errors, in [tt]app.yaml[/tt] uncomment (i.e. remove the [tt]#[/tt]s):
+[code]
+#- url: .*
+#  script: 404.htm
+[/code]
+And then create [tt]404.htm[/tt] by saving out the result of [tt]/index.php?page=404[/tt]
+
+This rule works because it's the last rule, run after no dynamic page has been found.
+
+You could create a [tt]404.php[/tt] if you need it to be dynamic, but it's probably not a good idea. It is possible you could get a lot of 404 hits from old broken URLs, or bots, so you should make it a fast static page.
+
 [title="2"]Notes to programmers / architects[/title]
 
 The GAE API installs a version of PHP, but it does not have the limitations of the live version of PHP. Therefore be careful that you apply all the coding standards. In particular, ensure any custom files are written to using ocPortal's [tt]get_custom_file_base[/tt] function (which will be mapped to Google Cloud Storage).
