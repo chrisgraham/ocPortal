@@ -57,6 +57,7 @@ class Module_warnings extends standard_crud_module
 	{
 		$type=get_param('type','misc');
 
+		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_lang('ocf_warnings');
 
 		if ($type=='history')
@@ -105,7 +106,6 @@ class Module_warnings extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_moderation_action');
 		require_code('ocf_moderation_action2');
 
@@ -458,7 +458,7 @@ class Module_warnings extends standard_crud_module
 
 		// Explanatory text
 		$keep=symbol_tempcode('KEEP');
-		$load_url=find_script('warnings').'?type=load'.$keep->evaluate();
+		$load_url=find_script('warnings_browse').'?type=load'.$keep->evaluate();
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'c7eb70b13be74d8f3bd1f1c5e739d9aa','TITLE'=>do_lang_tempcode('EXPLANATORY_TEXT'),'HELP'=>do_lang_tempcode('LOAD_SAVED_WARNING',escape_html($load_url)))));
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('EXPLANATION'),do_lang_tempcode('DESCRIPTION_EXPLANATION'),'explanation',$explanation,true));
 		if ($new)

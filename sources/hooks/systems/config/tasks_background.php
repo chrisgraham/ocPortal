@@ -31,8 +31,8 @@ class Hook_config_tasks_background
 		return array(
 			'human_name'=>'TASKS_BACKGROUND',
 			'type'=>'tick',
-			'category'=>'GENERAL',
-			'group'=>'PERFORMANCE',
+			'category'=>'PERFORMANCE',
+			'group'=>'GENERAL',
 			'explanation'=>'CONFIG_OPTION_tasks_background',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',

@@ -90,7 +90,7 @@ class Hook_addon_registry_ocf_warnings
 			'OCF_SAVED_WARNING.tpl',
 			'OCF_WARNING_HISTORY_SCREEN.tpl',
 			'lang/EN/ocf_warnings.ini',
-			'site/warnings.php',
+			'site/warnings_browse.php',
 			'sources/hooks/systems/profiles_tabs/warnings.php',
 			'OCF_MEMBER_PROFILE_WARNINGS.tpl',
 		);

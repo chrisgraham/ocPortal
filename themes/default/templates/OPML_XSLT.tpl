@@ -31,14 +31,16 @@
 		</html>
 	</xsl:template>
 	<xsl:template match="body">
-		<h2>Atom</h2>
-		<ul>
-			<xsl:apply-templates select="outline[@text='Atom']/outline" />
-		</ul>
-		<h2>RSS</h2>
-		<ul>
-			<xsl:apply-templates select="outline[@text='RSS']/outline" />
-		</ul>
+		<div>
+			<h2>Atom</h2>
+			<ul>
+				<xsl:apply-templates select="outline[@text='Atom']/outline" />
+			</ul>
+			<h2>RSS</h2>
+			<ul>
+				<xsl:apply-templates select="outline[@text='RSS']/outline" />
+			</ul>
+		</div>
 	</xsl:template>
 	<xsl:template match="outline">
 		<li>

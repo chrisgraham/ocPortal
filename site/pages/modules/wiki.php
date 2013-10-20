@@ -340,6 +340,7 @@ class Module_wiki
 		$type=get_param('type','misc');
 
 		require_lang('wiki');
+		require_code('wiki');
 
 		set_feed_url('?mode=wiki&filter=');
 
@@ -415,14 +416,14 @@ class Module_wiki
 			if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
 			$CANONICAL_URL=get_self_url(true,false,$non_canonical+array('id'=>$id,'type'=>'misc','find'=>NULL));
 
-			$id=$this->id;
-			$chain=$this->chain;
-			$page=$this->page;
-			$current_title=$this->current_title;
-			$title_to_use=$this->title_to_use;
-			$title_to_use_2=$this->title_to_use_2;
-			$dbposts=$this->dbposts;
-			$num_posts=$this->num_posts;
+			$this->id=$id;
+			$this->chain=$chain;
+			$this->page=$page;
+			$this->current_title=$current_title;
+			$this->title_to_use=$title_to_use;
+			$this->title_to_use_2=$title_to_use_2;
+			$this->dbposts=$dbposts;
+			$this->num_posts=$num_posts;
 		}
 
 		if ($type=='changes')
@@ -495,7 +496,6 @@ class Module_wiki
 	{
 		$type=get_param('type','misc');
 
-		require_code('wiki');
 		require_css('wiki');
 
 		// Decide what to do

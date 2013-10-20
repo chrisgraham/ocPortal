@@ -148,12 +148,14 @@ class standard_crud_module
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
+	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run($top_level=true)
+	function pre_run($top_level=true,$type=NULL)
 	{
 		if (is_null($this->default_type)) $this->default_type=method_exists($this,'misc')?'misc':'ad';
-		$type=get_param('type',$this->default_type);
+		if (is_null($type))
+			$type=get_param('type',$this->default_type);
 
 		if ($top_level)
 		{
@@ -175,15 +177,15 @@ class standard_crud_module
 			if (($type=='ac') || ($type=='_ac') || ($type=='ec') || ($type=='_ec') || ($type=='__ec') || ($type=='add_category') || ($type=='_add_category') || ($type=='edit_category') || ($type=='_edit_category') || ($type=='__edit_category'))
 			{
 				if ($this->cat_crud_module!==NULL)
-					$this->cat_crud_module->pre_run(false);
+					$this->cat_crud_module->pre_run(false,$type);
 			}
 			elseif (($type=='av') || ($type=='_av') || ($type=='ev') || ($type=='_ev') || ($type=='__ev') || ($type=='add_catalogue') || ($type=='_add_catalogue') || ($type=='edit_catalogue') || ($type=='_edit_catalogue') || ($type=='__edit_catalogue'))
 			{
 				if ($this->alt_crud_module!==NULL)
-					$this->alt_crud_module->pre_run(false);
+					$this->alt_crud_module->pre_run(false,$type);
 			} else
 			{
-				$this->pre_run(false);
+				$this->pre_run(false,$type);
 			}
 		} else
 		{

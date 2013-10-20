@@ -658,9 +658,12 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 			if (!is_null($expected_output_path))
 			{
 				require_code('files');
-				$_expected_output_path=fopen($expected_output_path,'wb');
-				http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
-				fclose($_expected_output_path);
+				$_expected_output_path=@fopen($expected_output_path,'wb');
+				if ($_expected_output_path!==false)
+				{
+					http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
+					fclose($_expected_output_path);
+				}
 			}
 		}
 		return $ret;

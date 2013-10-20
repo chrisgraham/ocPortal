@@ -404,6 +404,8 @@ class Hook_catalogue_items
 
 		require_code('images');
 
+		require_lang('catalogues');
+
 		$edit_qnty=do_template('ECOM_SHOPPING_ITEM_QUANTITY_FIELD',
 			array(
 				'PRODUCT_ID'=>strval($entry['product_id']),
@@ -421,7 +423,8 @@ class Hook_catalogue_items
 			)
 		);
 
-		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$entry['product_id']));
+		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','c_name',array('id'=>$entry['product_id']));
+		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$image=$this->get_product_image($catalogue_name,$entry['product_id']);
 

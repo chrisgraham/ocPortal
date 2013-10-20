@@ -19,7 +19,7 @@ $all_tables=get_all_tables();
 
 $tables_by=get_tables_by_addon();
 
-foreach($tables_by as $t=>$ts)
+foreach ($tables_by as $t=>$ts)
 {
 	$path=get_custom_file_base().'/uploads/website_specific/ocportal_erd__'.$t.'.sql';
 	$myfile=fopen($path,'wt');

@@ -1109,9 +1109,14 @@ function put_value_in_stack_trace($value)
 		}
 		elseif (is_object($value) && (is_a($value,'ocp_tempcode')))
 		{
-			$_value=$value->evaluate();
-			if (!is_string($_value)) @exit(gettype($_value));
-			if (strlen($_value)>1000) $_value=substr($_value,0,1000).'...';
+			if (($value->codename=='GLOBAL_HTML_WRAP') || (strlen(serialize($value))>1000)) // NB: We can't do an eval on GLOBAL_HTML_WRAP because it may be output streaming, incomplete
+			{
+				$_value='Tempcode -> ...';
+			} else
+			{
+				$_value=$value->evaluate();
+				if (!is_string($_value)) $_value='Tempcode -> '.gettype($_value);
+			}
 		}
 		elseif ((is_array($value)) || (is_object($value)))
 		{
@@ -1119,11 +1124,11 @@ function put_value_in_stack_trace($value)
 		}
 		elseif (is_string($value))
 		{
-			$_value=$value;
+			$_value='\''.php_addslashes($value).'\'';
 		}
 		elseif (is_float($value))
 		{
-			$_value=float_format($value);
+			$_value=float_to_raw_string($value);
 		}
 		elseif (is_integer($value))
 		{

@@ -98,6 +98,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
 		$description=$this->_default_property_str($properties,'description');
 		$points=$this->_default_property_int($properties,'points');
 		$resource_type=$this->_default_property_str($properties,'resource_type');
+		if ($resource_type=='') $resource_type='download';
 		$hide_awardee=$this->_default_property_int($properties,'hide_awardee');
 		$update_time_hours=$this->_default_property_int($properties,'update_time_hours');
 
@@ -149,6 +150,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
 		$description=$this->_default_property_str($properties,'description');
 		$points=$this->_default_property_int($properties,'points');
 		$resource_type=$this->_default_property_str($properties,'resource_type');
+		if ($resource_type=='') $resource_type='download';
 		$hide_awardee=$this->_default_property_int($properties,'hide_awardee');
 		$update_time_hours=$this->_default_property_int($properties,'update_time_hours');
 

@@ -299,7 +299,7 @@ class Module_search
 			}
 		}
 
-		if ($type=='form')
+		if ($type=='misc')
 		{
 			$this->title=get_screen_title('SEARCH_TITLE');
 		}

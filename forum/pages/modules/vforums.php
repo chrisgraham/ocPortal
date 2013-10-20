@@ -369,7 +369,6 @@ class Module_vforums
 			$_buttons->attach(do_template('SCREEN_BUTTON',array('TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'mark_read','IMMEDIATE'=>false,'URL'=>$mark_read_url)));
 		}
 
-		breadcrumb_add_segment($breadcrumbs);
 		$tpl_map=array(
 			'_GUID'=>'d3fa84575727af935eadb2ce2b7c7b3e',
 			'FILTERS'=>'',

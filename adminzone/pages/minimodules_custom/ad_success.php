@@ -26,7 +26,7 @@ $success=array();
 $joining=array();
 $failure=array();
 $users_done=array();
-$advertiser_sessions=$GLOBALS['SITE_DB']->query('SELECT member_id,s_get,ip,date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time>'.(string)(time()-60*60*24*get_param_integer('days',1)).' AND get LIKE \''.db_encode_like('%<param>from=%').'\'');
+$advertiser_sessions=$GLOBALS['SITE_DB']->query('SELECT member_id,s_get,ip,date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time>'.(string)(time()-60*60*24*get_param_integer('days',1)).' AND s_get LIKE \''.db_encode_like('%<param>from=%').'\'');
 foreach ($advertiser_sessions as $session)
 {
 	if (array_key_exists($session['member_id'],$users_done)) continue;
@@ -46,7 +46,7 @@ foreach ($advertiser_sessions as $session)
 
 	if (get_param_integer('track',0)==1)
 	{
-		echo '<b>Tracking information for <u>'.$from.'</u> visitor</b> ('.$session['ip'].')....<br />';
+		echo '<b>Tracking information for <u>'.$from.'</u> visitor</b> ('.$session['ip'].')&hellip;<br />';
 		$places=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,referer FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE member_id='.(string)intval($user).' AND date_and_time>='.(string)intval($session['date_and_time']).' ORDER BY date_and_time');
 		foreach ($places as $place)
 		{
@@ -61,13 +61,13 @@ foreach ($advertiser_sessions as $session)
 	if (!is_null($test)) $success[$from]++; else $failure[$from]++;
 }
 
-echo '<p><b>Summary</b>...</p>';
-echo 'Successes...';
-print_r($success);
+echo '<p><b>Summary</b>&hellip;</p>';
+echo 'Successes&hellip;';
+var_dump($success);
 echo '<br />';
-echo 'Joinings...';
-print_r($joining);
+echo 'Joinings&hellip;';
+var_dump($joining);
 echo '<br />';
-echo 'Failures...';
-print_r($failure);
+echo 'Failures&hellip;';
+var_dump($failure);
 

@@ -113,7 +113,7 @@ class Module_sites
 	 */
 	function get_entry_points()
 	{
-		return array('add'=>'MO_ADD_SITE','misc'=>'OC_DOWNLOAD_NOW');
+		return array('myocp'=>'MO_ADD_SITE','misc'=>'OC_DOWNLOAD_NOW');
 	}
 
 	var $title;
@@ -134,23 +134,15 @@ class Module_sites
 			$this->title=get_screen_title('OC_DOWNLOAD_NOW');
 		}
 
-		if ($type=='hostingcopy_step2')
+		if ($type=='hostingcopy_step2' || $type=='hostingcopy_step3')
 		{
 			$this->title=get_screen_title('HOSTING_COPY');
 		}
 
-		if ($type=='hostingcopy_step3')
+		if ($type=='myocp' || $type=='_myocp')
 		{
-			$this->title=get_screen_title('HOSTING_COPY');
-		}
+			require_lang('sites');
 
-		if ($type=='myocp')
-		{
-			$this->title=get_screen_title('MO_ADD_SITE');
-		}
-
-		if ($type=='_myocp')
-		{
 			$this->title=get_screen_title('MO_ADD_SITE');
 		}
 
@@ -207,7 +199,7 @@ class Module_sites
 		$hostingcopy_form=do_template('FORM',array('_GUID'=>'e9f51de85f7cf800aa3097366a03ca5e','HIDDEN'=>'','URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('OC_COPYWAIT'),'SUBMIT_NAME'=>$submit_name));
 
 		// Put together details about releases
-		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','name',array('text_original'=>'This is the latest version.'));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.description','name',array('text_original'=>'This is the latest version.'));
 		if (!is_null($t))
 		{
 			$releases=new ocp_tempcode();
@@ -386,7 +378,7 @@ class Module_sites
 		}
 
 		// Find latest version
-		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','url',array('text_original'=>'This is the latest version.'));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.description','url',array('text_original'=>'This is the latest version.'));
 		if (is_null($t)) warn_exit(do_lang_tempcode('ARCHIVE_NOT_AVAILABLE'));
 		if (url_is_local($t)) $t=get_custom_file_base().'/'.rawurldecode($t);
 
@@ -438,8 +430,6 @@ class Module_sites
 	 */
 	function myocp()
 	{
-		require_lang('myocp');
-
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('MO_CODENAME'),do_lang('MO_CODENAME_DESCRIPTION'),'codename','',true));
 		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('MO_YOUR_EMAIL_ADDRESS'),'email_address',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),true));
@@ -459,8 +449,6 @@ class Module_sites
 	 */
 	function _myocp()
 	{
-		require_lang('myocp');
-
 		$codename=strtolower(post_param('codename'));
 		$name=post_param('name','');
 		$email_address=post_param('email_address');

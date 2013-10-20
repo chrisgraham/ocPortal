@@ -89,6 +89,14 @@ class Module_leader_board
 		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'leader_board WHERE date_and_time>'.strval($cutoff));
 		if ($test==0) do_block('main_leader_board',array());
 
+		// Are there any rank images going to display?
+		$or_list='1=1';
+		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
+		$moderator_groups=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();
+		foreach (array_merge($admin_groups,$moderator_groups) as $group_id)
+			$or_list.=' AND id<>'.strval($group_id);
+		$has_rank_images=(get_forum_type()=='ocf') && ($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE '.$or_list.' AND '.db_string_not_equal_to('g_rank_image',''))!=0);
+
 		// Continue on to displaying the leaderboard...
 
 		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC',$max,$start);
@@ -109,7 +117,15 @@ class Module_leader_board
 				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 				if (is_null($username)) $username=do_lang('UNKNOWN');
-				$week_tpl->attach(do_template('POINTS_LEADERBOARD_ROW',array('_GUID'=>'6d323b4b5abea0e82a14cb4745c4af4f','POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'POINTS'=>integer_format($points),'USERNAME'=>$username,'ID'=>strval($member))));
+				$week_tpl->attach(do_template('POINTS_LEADERBOARD_ROW',array(
+					'_GUID'=>'6d323b4b5abea0e82a14cb4745c4af4f',
+					'POINTS_URL'=>$points_url,
+					'PROFILE_URL'=>$profile_url,
+					'POINTS'=>integer_format($points),
+					'USERNAME'=>$username,
+					'ID'=>strval($member),
+					'HAS_RANK_IMAGES'=>$has_rank_images,
+				)));
 			}
 			$nice_week=intval(($week-$first_week)/(7*24*60*60)+1);
 			$out->attach(do_template('POINTS_LEADERBOARD_WEEK',array('_GUID'=>'3a0f71bf20f9098e5711e85cf25f6549','WEEK'=>integer_format($nice_week),'ROWS'=>$week_tpl)));
