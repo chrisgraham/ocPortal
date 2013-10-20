@@ -3794,7 +3794,6 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 		padding: 0.5em;
 	{+END}
 	font-size: 0.9em;
-	white-space: nowrap;
 	display: inline-block;
 }
 /* Wordpress compatibility */

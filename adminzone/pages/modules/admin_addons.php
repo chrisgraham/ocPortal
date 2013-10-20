@@ -254,7 +254,7 @@ class Module_admin_addons
 	 */
 	function run()
 	{
-		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		require_code('addons');
 		require_code('menus2');

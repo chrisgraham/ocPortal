@@ -23,7 +23,7 @@
  */
 function init__google_appengine()
 {
-	$uri=$_SERVER['REQUEST_URI'];
+	$uri=preg_replace('#\?.*#','',$_SERVER['REQUEST_URI']);
 	if (substr($uri,0,1)=='/') $uri=substr($uri,1);
 	$matches=array();
 
@@ -76,21 +76,21 @@ function init__google_appengine()
 		return _roll_gae_redirect($matches,'$1index.php\?$4&page=$2&type=$3');
 	if (preg_match('#^([^=]*)pg/([^/\&\?\.]*)&(.*)$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'$1index.php\?$3&page=$2');
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
+	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'$1/index.php\?page=wiki&id=$2');
 	if (preg_match('#^s/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'index\.php\?page=wiki&id=$1');
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
+	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/galleries/image/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'$1/index.php\?page=galleries&type=image&id=$2');
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
+	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/galleries/video/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'$1/index.php\?page=galleries&type=video&id=$2');
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
+	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/iotds/view/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'$1/index.php\?page=iotds&type=view&id=$2');
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
+	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3&id=$4');
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm$#',$uri,$matches)!=0)
+	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3');
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)\.htm$#',$uri,$matches)!=0)
+	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'$1/index.php\?page=$2');
 	if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'index.php\?page=$1&type=$2&id=$3');
@@ -98,21 +98,21 @@ function init__google_appengine()
 		return _roll_gae_redirect($matches,'index.php\?page=$1&type=$2');
 	if (preg_match('#^([^/\&\?]+)\.htm$#',$uri,$matches)!=0)
 		return _roll_gae_redirect($matches,'index.php\?page=$1');
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)$#',$uri,$matches)!=0)
+	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'$1/index.php\?page=wiki&id=$2');
 	//if (preg_match('#^s/([^\&\?]*)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'index\.php\?page=wiki&id=$1');
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)$#',$uri,$matches)!=0)
+	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/galleries/image/([^\&\?]*)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'$1/index.php\?page=galleries&type=image&id=$2');
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)$#',$uri,$matches)!=0)
+	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/galleries/video/([^\&\?]*)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'$1/index.php\?page=galleries&type=video&id=$2');
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)$#',$uri,$matches)!=0)
+	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/iotds/view/([^\&\?]*)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'$1/index.php\?page=iotds&type=view&id=$2');
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
+	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3&id=$4');
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)$#',$uri,$matches)!=0)
+	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3');
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)$#',$uri,$matches)!=0)
+	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'$1/index.php\?page=$2');
 	//if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'index.php\?page=$1&type=$2&id=$3');

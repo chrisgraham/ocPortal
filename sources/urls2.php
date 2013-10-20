@@ -265,13 +265,17 @@ function _convert_url_to_path($url)
 			$file_path_stub=urldecode($url);
 		if (((substr($file_path_stub,0,7)=='themes/') && (substr($file_path_stub,0,15)!='themes/default/')) || (substr($file_path_stub,0,8)=='uploads/') || (strpos($file_path_stub,'_custom/')!==false))
 		{
-			$file_path_stub=get_custom_file_base().'/'.$file_path_stub;
+			$_file_path_stub=get_custom_file_base().'/'.$file_path_stub;
+			if (!is_file($_file_path_stub))
+			{
+				$_file_path_stub=get_file_base().'/'.$file_path_stub;
+			}
 		} else
 		{
-			$file_path_stub=get_file_base().'/'.$file_path_stub;
+			$_file_path_stub=get_file_base().'/'.$file_path_stub;
 		}
 
-		return $file_path_stub;
+		return $_file_path_stub;
 	}
 
 	return NULL;

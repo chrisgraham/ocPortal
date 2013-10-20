@@ -34,7 +34,13 @@ function init__minikernel()
 	// Fixup some inconsistencies in parameterisation on different PHP platforms. See phpstub.php for info on what environmental data we can rely on.
 	if ((!isset($_SERVER['SCRIPT_NAME'])) && (!isset($_ENV['SCRIPT_NAME']))) // May be missing on GAE
 	{
-		$_SERVER['SCRIPT_NAME']=preg_replace('#\.php/.*#','.php',$_SERVER['PHP_SELF']); // Same as PHP_SELF except without path info on the end
+		if (strpos($_SERVER['PHP_SELF'],'.php')!==false)
+		{
+			$_SERVER['SCRIPT_NAME']=preg_replace('#\.php/.*#','.php',$_SERVER['PHP_SELF']); // Same as PHP_SELF except without path info on the end
+		} else
+		{
+			$_SERVER['SCRIPT_NAME']='/'.$GLOBALS['RELATIVE_PATH'].$_SERVER['SCRIPT_FILENAME'];
+		}
 	}
 	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS
 	{

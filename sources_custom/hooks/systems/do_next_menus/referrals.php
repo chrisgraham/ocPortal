@@ -28,18 +28,22 @@ class Hook_do_next_menus_referrals
 
 		$ret=array();
 
-		$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
-
-		foreach ($ini_file as $ini_file_section_name=>$ini_file_section)
+		$path=get_custom_file_base().'/text_custom/referrals.txt';
+		if (is_file($path))
 		{
-			if ($ini_file_section_name!='global')
+			$ini_file=parse_ini_file($path,true);
+
+			foreach ($ini_file as $ini_file_section_name=>$ini_file_section)
 			{
-				$scheme_name=$ini_file_section_name;
-				$scheme=$ini_file_section;
+				if ($ini_file_section_name!='global')
+				{
+					$scheme_name=$ini_file_section_name;
+					$scheme=$ini_file_section;
 
-				$scheme_title=isset($scheme['title'])?$scheme['title']:$ini_file_section_name;
+					$scheme_title=isset($scheme['title'])?$scheme['title']:$ini_file_section_name;
 
-				$ret[]=array('usage','referrals',array('admin_referrals',array('type'=>'misc','scheme'=>$scheme_name),'adminzone'),$scheme_title,('DOC_REFERRALS'));
+					$ret[]=array('usage','referrals',array('admin_referrals',array('type'=>'misc','scheme'=>$scheme_name),'adminzone'),$scheme_title,('DOC_REFERRALS'));
+				}
 			}
 		}
 

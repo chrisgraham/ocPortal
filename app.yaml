@@ -53,21 +53,21 @@ handlers:
   script: \1index.php
 - url: /([=]*)pg/([/\&\?\.]*)&(.*)
   script: \1index.php
-- url: /(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)\.htm
+- url: /(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)\.htm
   script: \1/index.php
 - url: /s/([^\&\?]*)\.htm
   script: index\.php
-- url: /(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm
+- url: /(site|forum|adminzone|cms|collaboration|docs)/galleries/image/([^\&\?]*)\.htm
   script: \1/index.php
-- url: /(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm
+- url: /(site|forum|adminzone|cms|collaboration|docs)/galleries/video/([^\&\?]*)\.htm
   script: \1/index.php
-- url: /(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm
+- url: /(site|forum|adminzone|cms|collaboration|docs)/iotds/view/([^\&\?]*)\.htm
   script: \1/index.php
-- url: /(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm
+- url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm
   script: \1/index.php
-- url: /(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)\.htm
+- url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)\.htm
   script: \1/index.php
-- url: /(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)\.htm
+- url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)\.htm
   script: \1/index.php
 - url: /([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm
   script: index.php
@@ -75,21 +75,21 @@ handlers:
   script: index.php
 - url: /([^/\&\?]+)\.htm
   script: index.php
-#- url: /(site|forum|adminzone|cms|collaboration)/s/([^\&\?]*)
+#- url: /(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)
 #  script: \1/index.php
 #- url: /s/([^\&\?]*)
 #  script: index\.php
-#- url: /(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)
+#- url: /(site|forum|adminzone|cms|collaboration|docs)/galleries/image/([^\&\?]*)
 #  script: \1/index.php
-#- url: /(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)
+#- url: /(site|forum|adminzone|cms|collaboration|docs)/galleries/video/([^\&\?]*)
 #  script: \1/index.php
-#- url: /(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)
+#- url: /(site|forum|adminzone|cms|collaboration|docs)/iotds/view/([^\&\?]*)
 #  script: \1/index.php
-#- url: /(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)
+#- url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)
 #  script: \1/index.php
-#- url: /(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)/([^/\&\?]*)
+#- url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)
 #  script: \1/index.php
-#- url: /(site|forum|adminzone|cms|collaboration)/([^/\&\?]+)
+#- url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)
 #  script: \1/index.php
 #- url: /([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)
 #  script: index.php
@@ -103,14 +103,16 @@ handlers:
   application_readable: true
 - url: /
   script: index.php
-- url: /adminzone
+- url: /adminzone/
   script: adminzone/index.php
-- url: /cms
+- url: /cms/
   script: cms/index.php
-- url: /forum
+- url: /forum/
   script: forum/index.php
-- url: /collaboration
+- url: /collaboration/
   script: collaboration/index.php
+- url: /docs/
+  script: docs/index.php
 - url: /_ah/mail/tickets@appid.appspotmail.com
   script: data/incoming_ticket_email.php
   login: admin

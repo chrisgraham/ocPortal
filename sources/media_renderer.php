@@ -241,12 +241,24 @@ function _create_media_template_parameters($url,$attributes,$as_admin=false,$sou
 
 	if (($_url!='') && (url_is_local($_url)))
 	{
-		$_url=get_custom_base_url().'/'.$_url;
+		if (is_file(get_custom_file_base().'/'.urldecode($_url)))
+		{
+			$_url=get_custom_base_url().'/'.$_url;
+		} else
+		{
+			$_url=get_base_url().'/'.$_url;
+		}
 		$url=$_url;
 	}
 	if ((is_string($attributes['thumb_url'])) && ($attributes['thumb_url']!='') && (url_is_local($attributes['thumb_url'])))
 	{
-		$attributes['thumb_url']=get_custom_base_url().'/'.$attributes['thumb_url'];
+		if (is_file(get_custom_file_base().'/'.urldecode($_url)))
+		{
+			$attributes['thumb_url']=get_custom_base_url().'/'.$attributes['thumb_url'];
+		} else
+		{
+			$attributes['thumb_url']=get_base_url().'/'.$attributes['thumb_url'];
+		}
 	}
 
 	// Put together template parameters

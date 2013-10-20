@@ -279,27 +279,6 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify=true)
 	$CSS_COMPILE_ACTIVE_THEME=$active_theme;
 	$out=preg_replace_callback('#\@ocp\_include\(\'?(\w+)/(\w+)/(\w+)\'?\);#','_css_ocp_include',$out);
 	$out=preg_replace('#/\*\s*\*/#','',$out); // strip empty comments (would have encapsulated Tempcode comments)
-	if (get_custom_file_base()!=get_file_base())
-	{
-		$out=preg_replace('#'.preg_quote(get_base_url(true).'/themes/','#').'#','../../../../../../themes/',$out); // make URLs relative. For SSL and myocp
-		$out=preg_replace('#'.preg_quote(get_base_url(false).'/themes/','#').'#','../../../../../../themes/',$out); // make URLs relative. For SSL and myocp
-		$out=preg_replace('#'.preg_quote(get_custom_base_url(true).'/themes/','#').'#','../../../../themes/',$out); // make URLs relative. For SSL and myocp
-		$out=preg_replace('#'.preg_quote(get_custom_base_url(false).'/themes/','#').'#','../../../../themes/',$out); // make URLs relative. For SSL and myocp
-	} else
-	{
-		$out=preg_replace('#'.preg_quote(get_base_url(true),'#').'#','../../../..',$out); // make URLs relative. For SSL and myocp
-		$out=preg_replace('#'.preg_quote(get_base_url(false),'#').'#','../../../..',$out); // make URLs relative. For SSL and myocp
-	}
-	$cdn=get_value('cdn');
-	if (!is_null($cdn))
-	{
-		$cdn_parts=explode(',',$cdn);
-		foreach ($cdn_parts as $cdn_part)
-		{
-			$out=preg_replace('#'.preg_quote(preg_replace('#://'.preg_quote(get_domain(),'#').'([/:])#','://'.$cdn_part.'${1}',get_base_url(true)),'#').'#','../../../..',$out); // make URLs relative. For SSL and myocp
-			$out=preg_replace('#'.preg_quote(preg_replace('#://'.preg_quote(get_domain(),'#').'([/:])#','://'.$cdn_part.'${1}',get_base_url(false)),'#').'#','../../../..',$out); // make URLs relative. For SSL and myocp
-		}
-	}
 	if ($minify)
 		$out=css_minify($out);
 	$KEEP_MARKERS=$keep_markers;

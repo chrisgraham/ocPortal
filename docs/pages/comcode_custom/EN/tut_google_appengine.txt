@@ -56,20 +56,21 @@ You will also need to install MySQL, as this doesn't come with the SDK. MySQL is
 
 Extract the ocPortal manual installation package to a directory on your development machine.
 
-Start up the GAE launcher.
+[media width="150" description="The application launcher, after the application has been created.
+
+I have created mine under my local Apache server root (where I already have a git checkout), but that is only for convenience." float="right"]data_custom/images/docs/appengine_launcher.png[/media]Start up the GAE launcher.
 
 (the exact tool/process may depend on what platform you are using -- i.e. Windows/Linux/Mac. These instructions have been written on a Mac).
 
-[media width="150" description="The application launcher, after the application has been created" float="right"]data_custom/images/docs/appengine_launcher.png[/media]
 Add the in the launcher. Simple add the directory you extracted ocPortal to, and it should automatically configure it from that.
 
 Select your application row in the list of applications, and click "Run".
 
-In your web browser, go to [tt]http://localhost:8080/install.php[/tt] (it's running on port 8080 by default, which means you can also have Apache installed on the machine if you so wish).
+In your web browser, go to [tt]http://localhost:8080/install.php[/tt]
+(it's running on port 8080 by default, which means you can also have Apache installed on the machine if you so wish.)
 
 Ignore any "There is no PHP GD extension on the server" error. The PHP SDK (at the time of writing does not have GD), but the live environment does.
 
-[media width="150" description="Creating a Google App Engine application" float="right"]data_custom/images/docs/appengine_create.png[/media]
 The installer will ask for various GAE-specific details. It will provide links that take you to where you can set these up. That said, things aren't always straight-forward, so you must read the "Live setup instructions / notes" below to tell you what you actually need to configure.
 
 A top-level view of what you'll be setting up:
@@ -81,13 +82,13 @@ The default settings assume all the different identifier's are the same, but the
 
 [title="3"]Live setup instructions / notes[/title]
 
+[media width="150" description="Creating a Google App Engine application." float="left"]data_custom/images/docs/appengine_create.png[/media][media width="150" description="Enabling necessary services." float="right"]data_custom/images/docs/google_cloud_services.png[/media]
 When adding your GAE application, ignore any settings relating to authentication for users. ocPortal uses its own authentication, not Google authentication settings. That said, an administrator of the GAE app will automatically be logged in as the first admin on the ocPortal site (unless you choose to explicitly log in to a different user from the login screen).
 
 You want your datastore to be set for "High Replication". This is the default.
 
 You cannot create Google Cloud Storage buckets, or a Google Cloud SQL instance, without signing up for billing first. They are not available on the free tier. You sign up for billing under the Google Cloud Console. Note that billing must also be separately set up for Google App Engine, which is not managed from the Google Cloud Console (to be honest, Google's tools here are a bit of a jumble).
 
-[media width="150" description="Enabling necessary services" float="right"]data_custom/images/docs/google_cloud_services.png[/media]
 Before you may set up Google Cloud Storage or Google Cloud SQL, you must specifically enable the services for them.
 At the time of writing, the beta version of the Google Cloud Console (the "new" one) does not work properly. You cannot create a Google Cloud Storage bucket in it because there are no service management settings in the user interface. If you try to create the bucket you'll get an odd error about the project being disabled. Therefore make sure you do not enable the beta version.
 
@@ -95,19 +96,23 @@ To enable Google Cloud Storage and Google Cloud SQL, go to 'Services' in the lef
 
 Once enabled, options to configure the services will be shown on the left-hand menu.
 
-[media width="150" description="Enabling Google Cloud Storage (1)" float="right"]data_custom/images/docs/google_cloud_storage_link.png[/media]
-[media width="150" description="Enabling Google Cloud Storage (2)" float="right"]data_custom/images/docs/google_cloud_storage.png[/media]
-[media width="150" description="Setting Google Cloud Storage permissions (1)" float="right"]data_custom/images/docs/cloud_storage_permissions_1.png[/media]
-[media width="150" description="Setting Google Cloud Storage permissions (2)" float="right"]data_custom/images/docs/cloud_storage_permissions_2.png[/media]
-When you go to Google Cloud Storage, you will see a link to go to "online browser". From there you can set up a bucket. Annoyingly it takes you to the beta version of Google Cloud Console, which you'll need to exit out of when you're done (did I mention it is a jumble...). You need to set permissions to public access, as URLs will be served out of the storage. Do this by ticking (checking) the bucket and clicking the "Bucket permissions" button that will appear.
+[surround]
+[media width="150" description="Setting Google Cloud Storage permissions (2)." float="right"]data_custom/images/docs/cloud_storage_permissions_2.png[/media][media width="150" description="Setting Google Cloud Storage permissions (1)." float="right"]data_custom/images/docs/cloud_storage_permissions_1.png[/media][media width="150" description="Enabling Google Cloud Storage (2)." float="right"]data_custom/images/docs/google_cloud_storage.png[/media][media width="150" description="Enabling Google Cloud Storage (1)." float="right"]data_custom/images/docs/google_cloud_storage_link.png[/media]
+When you go to Google Cloud Storage, you will see a link to go to "online browser". From there you can set up a bucket.
 
-[media width="150" description="Creating a Google Cloud SQL instance" float="right"]data_custom/images/docs/cloud_sql.png[/media]
-Next set up your Google Cloud SQL instance. You should probably leave the "Replication mode" as "Synchronous", for stability reasons. You have to authorise your GAE application when you add the Google Cloud SQL instance. The instance does not itself contain a database, so when added click the 'SQL Prompt' tab and enter an SQL command:
-[media width="150" description="Creating a Google Cloud SQL database" float="right"]data_custom/images/docs/cloud_sql_database.png[/media]
+Annoyingly it takes you to the beta version of Google Cloud Console, which you'll need to exit out of when you're done (did I mention it is a jumble?).
+
+You need to set permissions to public access, as URLs will be served out of the storage. Do this by ticking (checking) the bucket and clicking the "Bucket permissions" button that will appear.
+[/surround]
+
+[surround]
+[media width="150" description="Creating a Google Cloud SQL database, within the instance." float="right"]data_custom/images/docs/cloud_sql_database.png[/media][media width="150" description="Creating a Google Cloud SQL instance." float="right"]data_custom/images/docs/cloud_sql.png[/media]
+Next set up your Google Cloud SQL instance. You should leave the "Replication mode" as "Synchronous", for stability reasons. You have to authorise your GAE application when you add the Google Cloud SQL instance. The instance does not itself contain a database, so when added click the 'SQL Prompt' tab and enter an SQL command:
 [code]
 CREATE DATABASE <application>;
 [/code]
 (where [tt]<application>[/tt] is the name of your application, or a different database name if you prefer)
+[/surround]
 
 [title="2"]Structural configuration[/title]
 

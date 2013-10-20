@@ -656,7 +656,7 @@ class Module_admin_zones
 	{
 		appengine_live_guard();
 
-		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$url_scheme=get_option('url_scheme');
 		$change_htaccess=(($url_scheme=='HTM') || ($url_scheme=='SIMPLE'));
@@ -713,7 +713,7 @@ class Module_admin_zones
 	{
 		appengine_live_guard();
 
-		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$zone=post_param('zone');
 

@@ -104,7 +104,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 	require_code('type_validation');
 	if (!is_alphanumeric($zone)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
-	if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+	if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 	// Check doesn't already exist
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>$zone));

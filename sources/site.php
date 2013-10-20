@@ -1215,7 +1215,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 					$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
 					if (is_file(get_custom_file_base().'/'.$path))
 						return array('COMCODE_CUSTOM',$zone,$codename,$lang,$path);
-					if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's Custom Comcode pages
+					if (get_custom_file_base()!=get_file_base()) // For multisite installs we also will search the root site's Custom Comcode pages
 					{
 						$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
 						if (is_file(get_file_base().'/'.$path))
@@ -1289,7 +1289,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 		$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
 		if (is_file(get_custom_file_base().'/'.$path))
 			return array('COMCODE_CUSTOM',$zone,$codename,$lang,$path);
-		if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's Custom Comcode pages
+		if (get_custom_file_base()!=get_file_base()) // For multisite installs we also will search the root site's Custom Comcode pages
 		{
 			$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
 			if (is_file(get_file_base().'/'.$path))
@@ -1325,7 +1325,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 			$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$fallback_lang.'/'.$codename.'.txt',true);
 			if (is_file(get_custom_file_base().'/'.$path))
 				return array('COMCODE_CUSTOM',$zone,$codename,$fallback_lang,$path);
-			if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's Custom Comcode pages
+			if (get_custom_file_base()!=get_file_base()) // For multisite installs we also will search the root site's Custom Comcode pages
 			{
 				$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/comcode_custom/'.$fallback_lang.'/'.$codename.'.txt',true);
 				if (is_file(get_file_base().'/'.$path))

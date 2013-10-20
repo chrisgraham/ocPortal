@@ -1417,7 +1417,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				require_code('comcode_compiler');
 
-				comcode_to_tempcode($comcode,$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
+				__comcode_to_tempcode($comcode,$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
 
 				$base=array_key_exists('base',$attributes)?intval($attributes['base']):2;
 			}

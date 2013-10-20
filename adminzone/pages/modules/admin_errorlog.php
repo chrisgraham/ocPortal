@@ -121,10 +121,9 @@ class Module_admin_errorlog
 
 			$_log_service='google\appengine\api\log\LogService';
 			$log_service=new $_log_service;
-
 			$options=array();
 			$options['include_app_logs']=true;
-			$options['minimum_log_level']=$log_service->LEVEL_WARNING;
+			$options['minimum_log_level']=$log_service::LEVEL_WARNING; // = PHP notice
 			$options['batch_size']=300;
 
 			$logs=$log_service->fetch($options);
@@ -137,14 +136,14 @@ class Module_admin_errorlog
 
 					$level=$app_log->getLevel();
 					$_level='';
-					if ($level==$log_service->LEVEL_WARNING) $_level='notice';
-					elseif ($level==$log_service->LEVEL_ERROR) $_level='warning';
-					elseif ($level==$log_service->LEVEL_CRITICAL) $_level='error';
+					if ($level==$log_service::LEVEL_WARNING) $_level='notice';
+					elseif ($level==$log_service::LEVEL_ERROR) $_level='warning';
+					elseif ($level==$log_service::LEVEL_CRITICAL) $_level='error';
 					else continue;
 
 					$time=intval($app_log->getTimeUsec()/1000000.0);
 
-					$stuff[]='['.date('D-M-Y H:i:s',$time).'] '.$_level.': '.$message;
+					$stuff[]=array('',date('D-M-Y',$time),date('H:i:s',$time),$_level,$message);
 				}
 			}
 		}
@@ -207,10 +206,13 @@ class Module_admin_errorlog
 					}
 				}
 			}
-		}
 
-		// Put permssions into table
-		$permission=implode("\n",$lines);
+			// Put permssions into table
+			$permission=implode("\n",$lines);
+		} else
+		{
+			$permission='';
+		}
 
 		$tpl=do_template('ERRORLOG_SCREEN',array('_GUID'=>'9186c7beb6b722a52f39e2cbe16aded6','TITLE'=>$this->title,'ERROR'=>$error,'PERMISSION'=>$permission));
 

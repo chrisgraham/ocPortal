@@ -65,7 +65,7 @@ function execute_task_background($task_row)
 
 	$hook=$task_row['t_hook'];
 	$args=unserialize($task_row['t_args']);
-	require_code('systems/hooks/tasks/'.filter_naughty($hook));
+	require_code('hooks/systems/tasks/'.filter_naughty($hook));
 	$ob=object_factory('Hook_task_'.$hook);
 	$result=call_user_func_array(array($ob,'run'),$args);
 
@@ -259,7 +259,7 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 		't_member_id'=>get_member(),
 		't_secure_ref'=>$secure_ref, // Used like a temporary password to initiate the task
 		't_send_notification'=>$send_notification?1:0,
-		't_locked'=>1,
+		't_locked'=>0,
 	),true);
 
 	if (GOOGLE_APPENGINE)
@@ -267,7 +267,7 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 		require_once('google/appengine/api/taskqueue/PushTask.php');
 
 		$pushtask='\google\appengine\api\taskqueue\PushTask'; // So does not give a parser error on older versions of PHP
-		$task=new $pushtask('/data/tasks.php.php',array('id'=>strval($id),'secure_ref'=>$secure_ref));
+		$task=new $pushtask('/data/tasks.php',array('id'=>strval($id),'secure_ref'=>$secure_ref),array('name'=>$hook.'_'.$secure_ref));
 		$task_name=$task->add();
 	}
 

@@ -222,7 +222,7 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
 			if (strpos($direct_code,'<?')!==false)
 			{
 				check_privilege('use_php_banner');
-				if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+				if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 			}
 		}
 	} else

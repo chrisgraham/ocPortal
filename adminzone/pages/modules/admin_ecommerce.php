@@ -84,9 +84,10 @@ class Module_admin_ecommerce extends standard_crud_module
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
+	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run($top_level=true)
+	function pre_run($top_level=true,$type=NULL)
 	{
 		$type=get_param('type','misc');
 

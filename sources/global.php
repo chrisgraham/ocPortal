@@ -392,7 +392,7 @@ function get_file_base()
 }
 
 /**
- * Get the file base for your installation of ocPortal.  For a shared install only, this is different to the base-url.
+ * Get the file base for your installation of ocPortal.  For a shared install, or a GAE-install, this is different to the file-base.
  *
  * @return PATH			The file base, without a trailing slash
  */

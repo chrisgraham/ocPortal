@@ -421,7 +421,7 @@ class Module_admin_sitetree
 	 */
 	function delete()
 	{
-		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$zone=get_param('zone',NULL);
 		if (is_null($zone)) return $this->_choose_zone($this->title);
@@ -565,7 +565,7 @@ class Module_admin_sitetree
 	 */
 	function move()
 	{
-		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$zone=get_param('zone',NULL);
 		if (is_null($zone)) return $this->_choose_zone($this->title);
@@ -605,7 +605,7 @@ class Module_admin_sitetree
 	 */
 	function _move()
 	{
-		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$zone=post_param('zone',NULL);
 

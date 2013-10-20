@@ -42,7 +42,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		require_code('type_validation');
 		if (!is_alphanumeric($new_zone)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
-		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		// Check doesn't already exist
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>$new_zone));
@@ -172,7 +172,7 @@ function actual_rename_zone_lite($zone,$new_zone,$dont_bother_with_main_row=fals
  */
 function actual_delete_zone($zone,$force=false,$skip_afm=false)
 {
-	if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+	if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 	require_code('abstract_file_manager');
 	if (!$skip_afm)

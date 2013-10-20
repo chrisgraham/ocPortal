@@ -53,6 +53,11 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_extra_cc_addresses','LONG_TEXT',serialize(array()));
-	$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_extra_bcc_addresses','LONG_TEXT',serialize(array()));
+	require_code('mail');
+	mail_wrap('sub','test',array('chris@ocportal.com'));
+}
+
+abstract class foo
+{
+	abstract static function test();
 }

@@ -499,11 +499,10 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		require_once('google/appengine/api/mail/Message.php');
 		$message_class='google\appengine\api\mail\Message';
 
-		$reply_to=$from_name.' <'.$from_email.'>';
+		$reply_to=$from_email;//$from_name.' <'.$from_email.'>'; GAE doesn't support nice format yet
 
 		$mail_options=array(
 			'sender'=>$website_email,
-			'replyTo'=>$reply_to,
 			'subject'=>$subject->evaluate($lang),
 			'textBody'=>$message_plain,
 			'htmlBody'=>$html_evaluated,
@@ -514,9 +513,10 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			$message=new $message_class($mail_options);
 			$message->addCc($extra_cc_addresses);
 			$message->addBcc($extra_bcc_addresses);
+			$message->setReplyTo($reply_to);
 			foreach ($to_email as $_to_email)
 			{
-				$message->addTo($to_name.' <'.$_to_email.'>');
+				$message->addTo($_to_email); // $to_name.' <'.$_to_email.'>' GAE doesn't support nice format yet
 			}
 			foreach ($attachments as $path=>$filename)
 			{
@@ -536,6 +536,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		catch (InvalidArgumentException $e)
 		{
 			$error=$e->getMessage();
+
 			if (get_param_integer('keep_hide_mail_failure',0)==0)
 			{
 				require_code('site');

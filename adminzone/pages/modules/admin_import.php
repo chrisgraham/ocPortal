@@ -169,7 +169,7 @@ class Module_admin_import
 	 */
 	function run()
 	{
-		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		disable_php_memory_limit();
 

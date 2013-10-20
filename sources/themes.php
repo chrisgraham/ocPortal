@@ -110,7 +110,19 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		{
 			if ((url_is_local($path)) && (!$leave_local))
 			{
-				$path=(($db->connection_write!=$GLOBALS['SITE_DB']->connection_write)?get_forum_base_url():((substr($path,0,22)=='themes/default/images/')?get_base_url():get_custom_base_url())).'/'.$path;
+				if ($db->connection_write!=$GLOBALS['SITE_DB']->connection_write)
+				{
+					$path=get_forum_base_url().'/'.$path;
+				} else
+				{
+					if ((substr($path,0,22)=='themes/default/images/') || (!is_file(get_custom_file_base().'/'.rawurldecode($path))))
+					{
+						$path=get_base_url().'/'.$path;
+					} else
+					{
+						$path=get_custom_base_url().'/'.$path;
+					}
+				}
 			}
 
 			return cdn_filter($path);
@@ -217,7 +229,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 		global $SITE_INFO;
 
-		if (($path!='') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1')) && (url_is_local($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Missing image, so erase to re-search for it
+		if (($path!='') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1')) && (url_is_local($path)) && (!is_file(get_file_base().'/'.rawurldecode($path))) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Missing image, so erase to re-search for it
 		{
 			unset($THEME_IMAGES_CACHE[$site][$id]);
 			return find_theme_image($id,$silent_fail,$leave_local,$theme,$lang,$db,$pure_only);
@@ -231,10 +243,10 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		} else
 		{
 			global $SITE_INFO;
-			$missing=(!$pure_only) && (((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1')) && (!is_file(get_file_base().'/'.rawurldecode($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))));
+			$missing=(!$pure_only) && (((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1')) && (!is_file(get_custom_file_base().'/'.rawurldecode($path))));
 			if ((substr($path,0,22)=='themes/default/images/') || ($missing)) // Not found, so throw away custom theme image and look in default theme images to restore default
 			{
-				if ($missing)
+				if (($missing) && (!is_file(get_file_base().'/'.rawurldecode($path))))
 				{
 					return find_theme_image($id,$silent_fail,$leave_local,$theme,$lang,$db,true);
 				}
@@ -313,9 +325,8 @@ function cdn_filter($path)
 function _search_img_file($theme,$lang,$id,$dir='images')
 {
 	$extensions=array('png','jpg','jpeg','gif','ico');
-	$base=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/';
 	$url_base='themes/';
-	foreach (array(get_file_base(),get_custom_file_base()) as $_base)
+	foreach (array(get_custom_file_base(),get_file_base()) as $_base)
 	{
 		$base=$_base.'/themes/';
 

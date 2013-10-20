@@ -23,29 +23,16 @@
  */
 function init__global2()
 {
-	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally hackerish chat message precheck (for extra efficiency)
-	{
-		require_code('chat_poller');
-		chat_poller();
-	}
-	if ((running_script('notifications')) && (filemtime(get_custom_file_base().'/data_custom/modules/web_notifications/latest.dat')>=get_param_integer('time_barrier')))
-	{
-		prepare_for_known_ajax_response();
-
-		header('Content-Type: application/xml');
-
-		//  encoding="'.get_charset().'" not needed due to no data in it
-		$output='<?xml version="1.0" ?'.'><response><result></result></response>';
-	}
-
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$KNOWN_AJAX,$KNOWN_UTF8;
-
-	@ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
-
 	// Fixup some inconsistencies in parameterisation on different PHP platforms. See phpstub.php for info on what environmental data we can rely on.
 	if ((!isset($_SERVER['SCRIPT_NAME'])) && (!isset($_ENV['SCRIPT_NAME']))) // May be missing on GAE
 	{
-		$_SERVER['SCRIPT_NAME']=preg_replace('#\.php/.*#','.php',$_SERVER['PHP_SELF']); // Same as PHP_SELF except without path info on the end
+		if (strpos($_SERVER['PHP_SELF'],'.php')!==false)
+		{
+			$_SERVER['SCRIPT_NAME']=preg_replace('#\.php/.*#','.php',$_SERVER['PHP_SELF']); // Same as PHP_SELF except without path info on the end
+		} else
+		{
+			$_SERVER['SCRIPT_NAME']='/'.$GLOBALS['RELATIVE_PATH'].$_SERVER['SCRIPT_FILENAME'];
+		}
 	}
 	if ((!isset($_SERVER['REQUEST_URI'])) && (!isset($_ENV['REQUEST_URI']))) // May be missing on IIS
 	{
@@ -58,6 +45,32 @@ function init__global2()
 			$first=false;
 		}
 	}
+
+	@ini_set('log_errors','1');
+	if ((GOOGLE_APPENGINE) && (!appengine_is_live()))
+	{
+		@mkdir(get_custom_file_base().'/data_custom',0755);
+	}
+	@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
+
+	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally hackerish chat message precheck (for extra efficiency)
+	{
+		require_code('chat_poller');
+		chat_poller();
+	}
+	if ((running_script('notifications')) && (@filemtime(get_custom_file_base().'/data_custom/modules/web_notifications/latest.dat')>=get_param_integer('time_barrier')))
+	{
+		prepare_for_known_ajax_response();
+
+		header('Content-Type: application/xml');
+
+		//  encoding="'.get_charset().'" not needed due to no data in it
+		$output='<?xml version="1.0" ?'.'><response><result></result></response>';
+	}
+
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$KNOWN_AJAX,$KNOWN_UTF8;
+
+	@ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
 	// Don't want the browser caching PHP output, explicitly say this
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
@@ -79,7 +92,6 @@ function init__global2()
 
 	// Initialise some globals
 	$JAVASCRIPTS_DEFAULT=array('javascript'=>1,'javascript_transitions'=>1,'javascript_modalwindow'=>1,'javascript_custom_globals'=>1);
-	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) $JAVASCRIPTS_DEFAULT['javascript_ajax']=1; // AJAX needed by shared installs
 	$RUNNING_SCRIPT_CACHE=array();
 	$BROWSER_DECACHEING_CACHE=NULL;
 	$CHARSET_CACHE=NULL;
@@ -297,11 +309,9 @@ function init__global2()
 	}
 
 	// Our logging
-	if (get_option('log_php_errors')=='1')
+	if (get_option('log_php_errors')=='0')
 	{
-		@ini_set('log_errors','1');
-		if (!GOOGLE_APPENGINE)
-			@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
+		@ini_set('log_errors','0');
 	}
 	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_privilege(get_member(),'see_php_errors'))))
 	{
@@ -740,10 +750,8 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 				if ((function_exists('syslog')) && (GOOGLE_APPENGINE))
 				{
 					syslog($syslog_type,$php_error_label);
-				} else
-				{
-					@error_log('PHP '.ucwords($type).': '.$php_error_label,0);
 				}
+				@error_log('PHP '.ucwords($type).': '.$php_error_label,0);
 				critical_error('EMERGENCY',$errstr.escape_html(' ['.$errfile.' at '.strval($errline).']'));
 			}
 		}
@@ -1156,7 +1164,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 }
 
 /**
- * Get the base url (the minimum fully qualified URL to our personal data installation). For a shared install only, this is different to the base-url.
+ * Get the base url (the minimum fully qualified URL to our personal data installation). For a shared install, or a GAE-install, this is different to the base-url.
  *
  * @param  ?boolean		Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
  * @return URLPATH		The base-url

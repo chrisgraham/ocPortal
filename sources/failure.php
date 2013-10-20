@@ -252,10 +252,8 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_
 		if ((function_exists('syslog')) && (GOOGLE_APPENGINE))
 		{
 			syslog($syslog_type,$php_error_label);
-		} else
-		{
-			@error_log('PHP '.ucwords($type).': '.$php_error_label,0);
 		}
+		@error_log('PHP '.ucwords($type).': '.$php_error_label,0);
 	}
 
 	if (!$GLOBALS['SUPPRESS_ERROR_DEATH']) // Don't display - die as normal
@@ -944,10 +942,8 @@ function _fatal_exit($text,$return=false)
 		if ((function_exists('syslog')) && (GOOGLE_APPENGINE))
 		{
 			syslog(LOG_ERR,$php_error_label);
-		} else
-		{
-			@error_log('ocPortal: '.$php_error_label,0);
 		}
+		@error_log('ocPortal: '.$php_error_label,0);
 	}
 
 	$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'9fdc6d093bdb685a0eda6bb56988a8c5','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));

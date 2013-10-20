@@ -111,19 +111,25 @@ class Hook_media_rendering_image_websafe
 				require_code('images');
 				if (!is_saveable_image($new_name)) $new_name.='.png';
 				$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
-				if (!file_exists($file_thumb))
+				if (function_exists('imagecreatefromstring'))
 				{
-					convert_image($_url,$file_thumb,-1,-1,intval($attributes['width']),false);
-				}
-				$attributes['thumb_url']=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
-				if ((function_exists('getimagesize')) && (($auto_width) || ($auto_height)))
-				{
-					$size=@getimagesize($file_thumb);
-					if ($size!==false)
+					if (!file_exists($file_thumb))
 					{
-						list($width,$height)=$size;
-						if ($auto_width) $attributes['width']=strval($width);
-						if ($auto_height) $attributes['height']=strval($height);
+						convert_image($_url,$file_thumb,-1,-1,intval($attributes['width']),false);
+					}
+					$attributes['thumb_url']=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
+					if (($auto_width) || ($auto_height))
+					{
+						if (function_exists('getimagesize'))
+						{
+							$size=@getimagesize($file_thumb);
+							if ($size!==false)
+							{
+								list($width,$height)=$size;
+								if ($auto_width) $attributes['width']=strval($width);
+								if ($auto_height) $attributes['height']=strval($height);
+							}
+						}
 					}
 				}
 			} else

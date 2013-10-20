@@ -1652,8 +1652,7 @@ function step_5_write_config()
 				\$SITE_INFO['custom_file_base']='".addslashes(get_file_base().'/data_custom/modules/google_appengine')."';
 				\$SITE_INFO['custom_base_url']='".addslashes(get_base_url().'/data_custom/modules/google_appengine')."';
 			}
-			\$SITE_INFO['use_mem_cache']='1';
-		";
+			\$SITE_INFO['use_mem_cache']='1';";
 		fwrite($config_file_handle,preg_replace('#^\t\t\t#m','',$gae_live_code));
 	}
 

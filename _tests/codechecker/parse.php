@@ -283,7 +283,7 @@ function _parse_command_actual($no_term_needed=false)
 				pparse__parser_expect('BRACKET_CLOSE');
 				$command=array('CALL_DIRECT',$identifier,$parameters,$suppress_error,$GLOBALS['I']);
 			}
-			while (pparse__parser_peek()=='OBJECT_OPERATOR')
+			while (pparse__parser_peek()=='OBJECT_OPERATOR' || pparse__parser_peek()=='SCOPE')
 			{
 				pparse__parser_next();
 				$command=_parse_call_chain($command,$suppress_error);
@@ -725,6 +725,10 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 					if ($_['name']==$_function['name']) log_warning('Duplicated method \''.$_function['name'].'\'');
 				}
 				$class['functions'][]=$_function;
+
+				if ((in_array('static',$modifiers)) && (in_array('abstract',$modifiers)))
+					log_warning('Cannot mix static and abstract');
+
 				$modifiers=array();
 				break;
 
@@ -769,7 +773,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 						// Valid
 						break;
 					case 'VAR':
-						log_warning('Abstract keyword applied to memmber variable');
+						log_warning('Abstract keyword applied to member variable');
 						break;
 					case 'STATIC':
 						break;
@@ -1054,7 +1058,7 @@ function _parse_expression_inner()
 	}
 	if (in_array($expression[0],array('CALL_DIRECT','CALL_INDIRECT','CALL_METHOD'),true))
 	{
-		while (pparse__parser_peek()=='OBJECT_OPERATOR')
+		while (pparse__parser_peek()=='OBJECT_OPERATOR' || pparse__parser_peek()=='SCOPE')
 		{
 			pparse__parser_next();
 			$expression=_parse_call_chain($expression,$suppress_error);
@@ -1137,6 +1141,7 @@ function _parse_variable_dereferencing_chain_segment($suppress_error)
 	switch ($next)
 	{
 		case 'OBJECT_OPERATOR':
+		case 'SCOPE':
 			pparse__parser_next();
 			$next_2=pparse__parser_peek(true);
 			if (($next_2[0]!='IDENTIFIER') && ($next_2[0]!='variable')) parser_error('Expected variable/identifier to be dereferenced from object variable but got '.$next_2[0]);
@@ -1145,7 +1150,7 @@ function _parse_variable_dereferencing_chain_segment($suppress_error)
 			$tunnel=array();
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
-			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
+			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='SCOPE') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
 			$variable=array('DEREFERENCE',$calling,$tunnel,$GLOBALS['I']);
 			break;
 
@@ -1163,7 +1168,7 @@ function _parse_variable_dereferencing_chain_segment($suppress_error)
 			$tunnel=array();
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
-			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
+			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='SCOPE') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
 			$variable=array('ARRAY_AT',$expression,$tunnel,$GLOBALS['I']);
 			break;
 
@@ -1174,7 +1179,7 @@ function _parse_variable_dereferencing_chain_segment($suppress_error)
 			$tunnel=array();
 			$next_3=pparse__parser_peek();
 			$next_4=pparse__parser_peek_dist(1);
-			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
+			if ((($next_3=='EXTRACT_OPEN') && ($next_4!='EXTRACT_CLOSE')) || ($next_3=='OBJECT_OPERATOR') || ($next_3=='SCOPE') || ($next_3=='BRACKET_OPEN')) $tunnel=_parse_variable_dereferencing_chain_segment($suppress_error);
 			$variable=array('CALL_METHOD',NULL/*will be subbed later for preceding part of chain*/,$args,$suppress_error,$GLOBALS['I'],$tunnel);
 			break;
 

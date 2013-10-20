@@ -1211,7 +1211,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$headers.='Referer: '.rawurlencode($referer)."\r\n";
 	$errno=0;
 	$errstr='';
-	if (($url_parts['scheme']=='http') && (function_exists('fsockopen')) && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
+	if (($url_parts['scheme']=='http') && (!GOOGLE_APPENGINE) && (function_exists('fsockopen')) && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
 	{
 		if (!array_key_exists('host',$url_parts)) $url_parts['host']='127.0.0.1';
 		$connect_to=$url_parts['host'];
@@ -1539,6 +1539,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		return $input;
 	} else
 	{
+		// PHP streams method
 		if (($errno!=110) && (($errno!=10060) || (@ini_get('default_socket_timeout')=='1')) && (is_null($post_params)))
 		{
 			// Perhaps fsockopen is restricted... try fread/file_get_contents
@@ -1570,12 +1571,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					$opts['proxy']='tcp://'.$proxy.':'.$port;
 				}
 			}
-			$context=stream_context_create(array(
-				'http'=>$opts,
-				'method'=>$http_verb,
-				'header'=>$headers,
-				'content'=>$raw_payload,
-			));
+			$context=stream_context_create(array('http'=>$opts));
 			if ((is_null($byte_limit)) && (is_null($write_to_file)))
 			{
 				$read_file=@file_get_contents($url,false,$context);

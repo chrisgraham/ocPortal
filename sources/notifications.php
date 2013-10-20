@@ -490,7 +490,9 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 			if ($frequency==A_WEB_NOTIFICATION)
 			{
 				if (($notification_code=='ocf_new_pt') && (get_option('pt_notifications_as_web')=='0')) continue;
-				@file_put_contents(get_custom_file_base().'/data_custom/modules/web_notifications/latest.dat',strval(time()));
+				$path=get_custom_file_base().'/data_custom/modules/web_notifications';
+				@mkdir($path,0755,true);
+				@file_put_contents($path.'/latest.dat',strval(time()));
 			}
 
 			$GLOBALS['SITE_DB']->query_insert('digestives_tin',array(
