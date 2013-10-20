@@ -886,7 +886,7 @@ function step_4()
 		$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_EXAMPLE','BASE_URL_TEXT'),'base_url',$base_url,false,true));
 	} else
 	{
-		$options->attach(make_option(do_lang_tempcode('GAE_APPLICATION'),do_lang_tempcode('DESCRIPTION_GAE_APPLICATION'),'gae_application',basename(dirname(__FILE__)),false,true));
+		$options->attach(make_option(do_lang_tempcode('GAE_APPLICATION'),do_lang_tempcode('DESCRIPTION_GAE_APPLICATION'),'gae_application',preg_replace('#^.*~#','',$_SERVER['APPLICATION_ID']),false,true));
 		$hidden->attach(form_input_hidden('domain',$domain));
 		$hidden->attach(form_input_hidden('base_url',$base_url));
 		$options->attach(make_option(do_lang_tempcode('GAE_BUCKET_NAME'),do_lang_tempcode('DESCRIPTION_GAE_BUCKET_NAME'),'gae_bucket_name','<application>',false,true));

@@ -4,8 +4,8 @@ ocPortal can run on Google App Engine (GAE). GAE is a cloud hosting service desi
 Most people don't realise how much work the normal "cloud" services are to properly utilise, as the marketing can be really very misleading, and successful customers are development teams rather than webmasters.
 The easy ocPortal scalability with App Engine is possible because it is a locked-down environment. Essentially the ocPortal developers have done up-front work to ensure ocPortal meets certain restraints that allow Google to automatically copy things across different servers without it being noticeable.
 
-All the above said, hosting a large scale cloud deployment is still not simple. Some restraints will affect you, and you will need to be comfortable working on the command line, and staging your changes on a local development machine. We'll save you having to have a programming/IT team, or the need to fork ocPortal, but it still requires some level of expertise.
-However, if your at the level of needing this kind of scaling rather than typical hosting or a dedicated server (or virtual machine, such as on Amazon Cloud via Bitnami) then you should be successful enough to invest in some expert set up.
+All the above said, hosting a large scale cloud deployment is still not simple. Some restraints will affect you, and you will need to be comfortable working on the command line, and staging your changes on a local development machine. We'll save you having to have a programming/IT team to get ocPortal running, or the need to fork ocPortal, but it still requires some level of expertise.
+However, if you're at the level of needing this kind of scaling rather than typical hosting or a dedicated server (or virtual machine, such as on Amazon Cloud via Bitnami) then you should be successful enough to invest in some expert set up.
 
 This tutorial explains how the ocPortal GAE support works.
 
@@ -14,8 +14,8 @@ This tutorial explains how the ocPortal GAE support works.
 [title="2"]Limitations[/title]
 
 The following are known limitations with GAE:
- - Individual non-bundled ocPortal addons, or third party frameworks, may or may not work. The ocPortal development tools can scan for issues but generally most programmers will not be developing with App Engine's constraints in mind. ocProducts can bring non-bundled addons up to scratch in most cases, under our development services. If possible/ideally we might try and contribute improvements back into "upstream" to the actual project, but sometimes we may feel it better to just fork our own version of the project.
- - The comments above extend to other applications you may wish to integrate. You need to be comfortable of their compatibility, that you will get them updated, or that you will run them on another server.
+ - Individual non-bundled ocPortal addons, or third party frameworks, may or may not work. The ocPortal development tools can scan for most issues but generally most programmers will not be developing with App Engine's constraints in mind. ocProducts can bring non-bundled addons up to scratch in most cases, under our development services. If possible/ideally we might try and contribute improvements back into "upstream" to the actual project, but sometimes we may feel it better to just fork our own version of the project.
+ - The comments above extend to other applications you may wish to integrate. You need to be comfortable of their compatibility, or that you will get them updated, or that you will run them on another server.
  - LDAP will not work (LDAP would typically be used on a local corporate network anyway).
  - There is a 32MB upload limit, which means uploading large files is not realistic. This could be worked around, [url="with investment"]http://ocportal.com/tracker/view.php?id=1426[/url].
  - FFMPEG will not run. You would need to use a third-party transcoding service, or syndicate to YouTube (note: that addon is not currently tested on GAE). Most users, however, will be fine with ocPortal's support for integrating videos that were separately uploaded to Youtube.
@@ -30,28 +30,27 @@ The following are known limitations with GAE:
 
 The following ocPortal bundled addons will not work:
  - (All the addons mentioned for uninstallation in the Setup Wizard, further down in this tutorial)
- - Rootkit detector (you can run it on your local development site, but on the live application it will likely timeout)
 
 [title="2"]Costs[/title]
 
-GAE is charged based on usage. Google will provide documents that explain what is chargeable, and by how much.
+GAE is charged based on usage. Google provide documents that explain what is chargeable, and by how much.
 
-It is hard to compare GAE costs to those of shared hosting. Typically a shared host will assume you won't max out your resource allocation fully (and if you tried, they'd ban you, often regardless of their stated offering). Therefore you would need to compare averaged typical resource usage on shared hosting, to the costs on GAE.
+It is hard to compare GAE costs to those of shared hosting. Typically a shared host will assume you won't max out your resource allocation fully (and if you tried, they'd ban you, often regardless of their advertised terms). Therefore you would need to compare averaged typical resource usage on shared hosting, to the costs on GAE.
 Anecdotally, we have heard the costs are similar, but we have not tested this. It will of course vary greatly on a case-by-case basis.
 
-In a sense it is a mute comparison, because shared hosting cannot scale and hence you have no real choice other than to use a different cloud solution (where pricing is also complex) or your own/rented hardware.
+In a sense it is a mute comparison, because shared hosting cannot scale and hence you have no real choice other than to use a cloud solution (where pricing is also complex) or your own/rented hardware.
 
-From a cost-origin point of view, shared hosting pricing benefits from its relative simplicity (no high R&D costs, relatively unskilled support personnel) and the relatively low usage the average customer has (hence subsidisation is happening), while cloud hosting benefits from its low-service nature. Both the shared hosting and cloud hosting markets are extremely competitive.
+From a cost-origin point of view, shared hosting pricing benefits from its relative simplicity (no high R&D costs, relatively unskilled support personnel) and the relatively low usage the average customer has (hence subsidisation is happening) -- while cloud hosting benefits from its low-service nature and economies of scale. Both the shared hosting and cloud hosting markets are extremely competitive.
 
-You should obviously keep track of your costs. And, obviously the ocPortal developers cannot put any guarantee on how much things might cost. Be advised: even if there is a bug that uses run-away resources, we cannot be held liable for those costs. Google have [url="options to put a ceiling on resource usage"]https://developers.google.com/appengine/docs/quotas[/url], blocking requests that go above this.
+You should obviously keep track of your costs. And, obviously the ocPortal developers cannot put any guarantee on how much things might cost. Be advised: even if there is a bug that uses run-away resources, the ocPortal developers cannot be held liable for those costs. Google have [url="options to put a ceiling on resource usage"]https://developers.google.com/appengine/docs/quotas[/url], blocking requests that go above this.
 
 [title="2"]Basic set up[/title]
 
-You will need to have a local development machine, in addition to your live application. Your initial site setup will be done locally, and then you will deploy it live.
+You will need to have a local development machine, in addition to your live application. Your initial site setup will be done locally, and then you will deploy it live. This "development to live" process will be your core workflow.
 
-You will need to install the [url="GAE PHP SDK"]https://developers.google.com/appengine/docs/php/gettingstarted/installing[/url] on your local development machine. Do this before ocPortal installation.
+You will need to install the [url="GAE PHP SDK"]https://developers.google.com/appengine/docs/php/gettingstarted/installing[/url] on your local development machine. You must do this before ocPortal installation.
 
-You will also need to install MySQL, as this doesn't come with the SDK. MySQL is equivalent to Google Cloud SQL, which is used by the live application.
+You will also need to install MySQL, as this doesn't come with the SDK. MySQL is equivalent to Google Cloud SQL (used by the live application).
 
 [title="2"]ocPortal installation[/title]
 
@@ -62,15 +61,11 @@ Start up the GAE launcher.
 (the exact tool/process may depend on what platform you are using -- i.e. Windows/Linux/Mac. These instructions have been tested on a Mac).
 
 [media width="150" description="The application launcher, after the application has been created" float="right"]data_custom/images/docs/appengine_launcher.png[/media]
-Create a new application in the launcher:
- - Set the "Application ID" to the name of the directory you extracted ocPortal into.
- - Set the "Application Directory" to be the parent of that directory.
- - Set the "Runtime" to PHP.
- - Leave the port settings alone.
+Add the in the launcher. Simple add the directory you extracted ocPortal to, and it should automatically configure it from that.
 
 Select your application row in the list of applications, and click "Run".
 
-In your web browser, go to [tt]http://localhost:8080/install.php[/tt]
+In your web browser, go to [tt]http://localhost:8080/install.php[/tt] (it's running on port 8080 by default, which means you can also have Apache installed on the machine if you so wish).
 
 [media width="150" description="Creating a Google App Engine application" float="right"]data_custom/images/docs/appengine_create.png[/media]
 [media width="150" description="Creating a Google Cloud SQL database" float="right"]data_custom/images/docs/cloud_sql.png[/media]

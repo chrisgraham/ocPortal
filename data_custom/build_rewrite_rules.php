@@ -263,8 +263,8 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
 					list($rule,$to,$flags,$enabled)=$rewrite_rule;
 
 					$rules_txt.=
-						($enabled?'':'#').'- url: ^/'.str_replace(array('^','$'),array('',''),$rule)."\n".
-						($enabled?'':'#').'  script: /'.str_replace('$','\\',$to)."\n";
+						($enabled?'':'#').'- url: /'.str_replace(array('^','$'),array('',''),$rule)."\n".
+						($enabled?'':'#').'  script: '.str_replace(array('\\','$'),array('','\\'),$to)."\n";
 				}
 			}
 			$rules_txt=preg_replace('#^\t*#m',str_repeat("\t",$indent_level),$rules_txt);
