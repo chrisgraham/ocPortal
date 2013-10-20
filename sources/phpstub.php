@@ -2508,6 +2508,16 @@ function number_format($number,$decimals=0,$dec_point='.',$thousands_sep=',')
 }
 
 /**
+ * Turn on output buffering.
+ *
+ * @return boolean	Success status.
+ */
+function ob_start()
+{
+	return false;
+}
+
+/**
  * Clean (erase) the output buffer and turn off output buffering.
  *
  * @return boolean	Success status (could fail if there is no buffer).
@@ -2538,13 +2548,71 @@ function ob_get_contents()
 }
 
 /**
- * Turn on output buffering.
- *
- * @return boolean	Success status.
+ * Flush (send) the output buffer.
  */
-function ob_start()
+function ob_flush()
 {
-	return false;
+}
+
+/**
+ * Get current buffer contents and delete current output buffer.
+ *
+ * @return ~string		Contents of the buffer (false: no buffer was open).
+ */
+function ob_get_clean()
+{
+	return '';
+}
+
+/**
+ * Empty the output buffer.
+ */
+function ob_clean()
+{
+	return '';
+}
+
+/**
+ * ob_start callback function to gzip output buffer.
+ *
+ * @param  string		Input string.
+ * @param  integer	Irrelevant (we don't use this function directly anyway).
+ * @return string		Filtered version.
+ */
+function ob_gzhandler($buffer,$mode)
+{
+	return '';
+}
+
+/**
+ * Return the length of the output buffer.
+ *
+ * @return ~integer  Output buffer length (false: error).
+ */
+function ob_get_length()
+{
+	return 0;
+}
+
+/**
+ * Convert character encoding as output buffer handler.
+ *
+ * @param  string		Input string.
+ * @param  integer	Irrelevant (we don't use this function directly anyway).
+ * @return string		Filtered version.
+ */
+function ob_iconv_handler($buffer,$mode)
+{
+	return '';
+}
+
+/**
+ * Turn implicit flush on/off .
+ *
+ * @param  integer	Flag (1 for on, 0 for off).
+ */
+function ob_implicit_flush($flag)
+{
 }
 
 /**
@@ -3025,18 +3093,38 @@ function sort(&$array)
 /**
  * Return a formatted string.
  *
- * @param  string	Formatting string.
- * @param  ?mixed	Argument for the formatting string (NULL: none required).
- * @param  ?mixed	Argument for the formatting string (NULL: none required).
- * @param  ?mixed	Argument for the formatting string (NULL: none required).
- * @param  ?mixed	Argument for the formatting string (NULL: none required).
- * @param  ?mixed	Argument for the formatting string (NULL: none required).
- * @param  ?mixed	Argument for the formatting string (NULL: none required).
- * @param  ?mixed	Argument for the formatting string (NULL: none required).
- * @param  ?mixed	Argument for the formatting string (NULL: none required).
- * @return string	Formatted string.
+ * @param  string		Formatting string.
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @return string		Formatted string.
  */
 function sprintf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=NULL,$arg8=NULL)
+{
+	return '';
+}
+
+/**
+ * Print a formatted string into a file.
+ *
+ * @param  resource	File to write to.
+ * @param  string		Formatting string.
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @param  ?mixed		Argument for the formatting string (NULL: none required).
+ * @return string		Formatted string.
+ */
+function fprintf($handle,$format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=NULL,$arg8=NULL)
 {
 	return '';
 }
@@ -5153,49 +5241,6 @@ function nl2br($in)
 }
 
 /**
- * Return the length of the output buffer.
- *
- * @return ~integer  Output buffer length (false: error).
- */
-function ob_get_length()
-{
-	return 0;
-}
-
-/**
- * ob_start callback function to gzip output buffer.
- *
- * @param  string		Input string.
- * @param  integer	Irrelevant (we don't use this function directly anyway).
- * @return string		Filtered version.
- */
-function ob_gzhandler($buffer,$mode)
-{
-	return '';
-}
-
-/**
- * Convert character encoding as output buffer handler.
- *
- * @param  string		Input string.
- * @param  integer	Irrelevant (we don't use this function directly anyway).
- * @return string		Filtered version.
- */
-function ob_iconv_handler($buffer,$mode)
-{
-	return '';
-}
-
-/**
- * Turn implicit flush on/off .
- *
- * @param  integer	Flag (1 for on, 0 for off).
- */
-function ob_implicit_flush($flag)
-{
-}
-
-/**
  * Returns the type of interface between web server and PHP.
  *
  * @return string	SAPI name.
@@ -5859,16 +5904,6 @@ function exif_imagetype($filename)
 }
 
 /**
- * Get current buffer contents and delete current output buffer.
- *
- * @return ~string		Contents of the buffer (false: no buffer was open).
- */
-function ob_get_clean()
-{
-	return '';
-}
-
-/**
  * Find pathnames matching a pattern.
  *
  * @param  string 	 	Pattern according to the rules used by the libc glob.
@@ -6044,13 +6079,6 @@ function is_finite($val)
 function is_infinite($val)
 {
 	return true;
-}
-
-/**
- * Flush (send) the output buffer.
- */
-function ob_flush()
-{
 }
 
 /**

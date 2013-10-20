@@ -37,7 +37,7 @@ class Hook_config_output_streaming
 			'shared_hosting_restricted'=>'1',
 			'list_options'=>'',
 
-			'addon'=>'core_cleanup_tools',
+			'addon'=>'core_configuration',
 		);
 	}
 

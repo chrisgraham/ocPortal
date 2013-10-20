@@ -208,6 +208,7 @@ class Module_forumview
 	var $id;
 	var $forum_info;
 	var $breadcrumbs;
+	var $of_member_id;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -283,11 +284,13 @@ class Module_forumview
 			$root_forum_name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$root));
 			$breadcrumbs=hyperlink(build_url(array('page'=>'_SELF','id'=>($root==db_get_first_id())?NULL:$root),'_SELF'),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$root_forum_name),NULL,NULL,'up');
 			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
+			$of_member_id=get_param_integer('id',get_member());
 			$pt_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id);
 			$pt_displayname=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id,true);
 			if (is_null($pt_username)) $pt_username=do_lang('UNKNOWN');
 			$breadcrumbs->attach(do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_displayname),escape_html($pt_username)));
 			$this->breadcrumbs=$breadcrumbs;
+			$this->of_member_id=$of_member_id;
 		}
 
 		return NULL;
@@ -318,7 +321,7 @@ class Module_forumview
 			$id=NULL;
 			$forum_info=array();
 			$start=get_param_integer('forum_start',get_param_integer('kfs',0));
-			$of_member_id=get_param_integer('id',get_member());
+			$of_member_id=$this->of_member_id;
 		} else
 		{
 			$id=$this->id;

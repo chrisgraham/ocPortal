@@ -28,7 +28,6 @@ class Hook_task_import_rss
 	 * @param  BINARY			Whether to import everything to the task initiator's account
 	 * @param  BINARY			Whether to import comments
 	 * @param  BINARY			Whether to import everything to blog news categories
-	 * @param  boolean		Whether to import Wordpress users
 	 * @param  object			The parsed RSS feed
 	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
 	 */

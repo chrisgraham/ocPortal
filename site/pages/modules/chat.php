@@ -714,7 +714,7 @@ class Module_chat
 		require_code('form_templates');
 
 		url_default_parameters__enable();
-		$fields=get_chatroom_fields(NULL,true,do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'','',strval(get_member()));
+		list($fields,$hidden)=get_chatroom_fields(NULL,true,do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'','',strval(get_member()));
 		url_default_parameters__disable();
 
 		$posting_name=do_lang_tempcode('CREATE_PRIVATE_ROOM');
@@ -722,7 +722,7 @@ class Module_chat
 		$text=paragraph(do_lang_tempcode('CHAT_PRIVATE_ROOM_DESCRIPTION',display_time_period(60*intval(get_option('chat_private_room_deletion_time')))));
 		if (intval(get_option('chat_private_room_deletion_time'))==0) $text=new ocp_tempcode();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'5697add8e81f641559a212697d35a470','HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'5697add8e81f641559a212697d35a470','HIDDEN'=>$hidden,'TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
 	}
 
 	/**

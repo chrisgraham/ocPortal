@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @package		community_billboard
  */
 
 class Hook_config_community_billboard
@@ -37,7 +37,7 @@ class Hook_config_community_billboard
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 
-			'addon'=>'pointstore',
+			'addon'=>'community_billboard',
 		);
 	}
 

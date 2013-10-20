@@ -249,7 +249,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_
 		ob_start();
 		debug_print_backtrace(); Does not work consistently, sometimes just kills PHP
 		$log.=ob_get_clean();*/
-		if ((GOOGLE_APPENGINE) && (function_exists('syslog')))
+		if ((function_exists('syslog')) && (GOOGLE_APPENGINE))
 		{
 			syslog($syslog_type,$php_error_label);
 		} else
@@ -941,7 +941,7 @@ function _fatal_exit($text,$return=false)
 	if (get_param_integer('keep_fatalistic',0)==0)
 	{
 		$php_error_label=(is_object($text)?$text->evaluate():$text).' @ '.get_self_url_easy();
-		if ((GOOGLE_APPENGINE) && (function_exists('syslog')))
+		if ((function_exists('syslog')) && (GOOGLE_APPENGINE))
 		{
 			syslog(LOG_ERR,$php_error_label);
 		} else

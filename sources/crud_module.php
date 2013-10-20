@@ -372,6 +372,8 @@ class standard_crud_module
 				}
 			}
 		}
+
+		return NULL;
 	}
 
 	/**

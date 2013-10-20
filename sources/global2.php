@@ -733,7 +733,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 			if (!array_key_exists('failure',$REQUIRED_CODE))
 			{
 				$php_error_label=$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy(); // We really want to know the URL where this is happening (normal PHP error logging does not include it)!
-				if ((GOOGLE_APPENGINE) && (function_exists('syslog')))
+				if ((function_exists('syslog')) && (GOOGLE_APPENGINE))
 				{
 					syslog($syslog_type,$php_error_label);
 				} else

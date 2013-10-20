@@ -211,7 +211,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 		// Files you are sometimes expected to leave around, but outside ocPortal's direct remit
 		'bingsiteauth.xml'=>'',
-		'php.ini'=>'.*',
+		'php.ini'=>'(?!data/modules/google_appengine).*',
 		'.htpasswd'=>'.*',
 		'iirf.ini'=>'',
 		'robots.txt'=>'',

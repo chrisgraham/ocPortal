@@ -51,7 +51,7 @@ class Hook_pointstore_topic_pin
 	function _topic_pin()
 	{
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
-		if (get_option('is_on_'.$class.'_buy')=='0') return array();
+		if (get_option('is_on_'.$class.'_buy')=='0') return new ocp_tempcode();
 
 		$title=get_screen_title('TOPIC_PINNING');
 
@@ -115,7 +115,7 @@ class Hook_pointstore_topic_pin
 	function __topic_pin()
 	{
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
-		if (get_option('is_on_'.$class.'_buy')=='0') return array();
+		if (get_option('is_on_'.$class.'_buy')=='0') return new ocp_tempcode();
 
 		$title=get_screen_title('TOPIC_PINNING');
 
@@ -170,7 +170,7 @@ class Hook_pointstore_topic_pin
 	function ___topic_pin()
 	{
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
-		if (get_option('is_on_'.$class.'_buy')=='0') return array();
+		if (get_option('is_on_'.$class.'_buy')=='0') return new ocp_tempcode();
 
 		$title=get_screen_title('TOPIC_PINNING');
 

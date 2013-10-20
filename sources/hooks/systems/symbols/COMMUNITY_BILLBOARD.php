@@ -29,7 +29,7 @@ class Hook_symbol_COMMUNITY_BILLBOARD
 	 */
 	function run($param)
 	{
-		if (!addon_installed('community_billboard')) return new ocp_tempcode();
+		if (!addon_installed('community_billboard')) return '';
 
 		$system=(mt_rand(0,1)==0);
 		$_community_billboard=NULL;

@@ -10,7 +10,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @package		community_billboard
  */
 
 class Hook_Notification_pointstore_request_community_billboard extends Hook_Notification__Staff

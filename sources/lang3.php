@@ -266,8 +266,13 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 
 	if ((is_null($id)) && (multi_lang())) // Needed as MySQL auto-increment works separately for each combo of other key values (i.e. language in this case). We can't let a language string ID get assigned to something entirely different in another language. This MySQL behaviour is not well documented, it may work differently on different versions.
 	{
+		$connection->query('LOCK TABLES '.get_table_prefix().'translate',NULL,NULL,true);
+		$lock=true;
 		$id=$connection->query_select_value('translate','MAX(id)');
 		$id=is_null($id)?NULL:($id+1);
+	} else
+	{
+		$lock=false;
 	}
 
 	if ($lang=='Gibb') // Debug code to help us spot language layer bugs. We expect &keep_lang=EN to show EnglishEnglish content, but otherwise no EnglishEnglish content.
@@ -286,6 +291,11 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 	} else
 	{
 		$connection->query_insert('translate',array('id'=>$id,'source_user'=>$source_member,'broken'=>0,'importance_level'=>$level,'text_original'=>$text,'text_parsed'=>$text2,'language'=>$lang),false,false,$save_as_volatile);
+	}
+
+	if ($lock)
+	{
+		$connection->query('UNLOCK TABLES',NULL,NULL,true);
 	}
 
 	if (count($connection->text_lookup_cache)<5000)

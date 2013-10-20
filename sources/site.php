@@ -81,7 +81,7 @@ function init__site()
 		$url_scheme=get_option('url_scheme');
 		if (($url_scheme=='PG') || ($url_scheme=='HTM'))
 		{
-			if ((!headers_sent()) && (running_script('index')) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || ($url_scheme!='PG')) && ((strpos($ruri,'.htm')===false) || ($url_scheme!='HTM')))
+			if ((!headers_sent()) && (running_script('index')) && ($GLOBALS['RELATIVE_PATH']==get_zone_name()/*i.e. a proper zone*/) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || ($url_scheme!='PG')) && ((strpos($ruri,'.htm')===false) || ($url_scheme!='HTM')))
 			{
 				set_http_status_code('301');
 				header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing

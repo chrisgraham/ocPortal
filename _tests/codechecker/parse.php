@@ -1005,10 +1005,8 @@ function _parse_expression_inner()
 
 		case 'CLONE':
 			pparse__parser_next();
-			$identifier=pparse__parser_next(true);
-			if (($identifier[0]!='IDENTIFIER') && ($identifier[0]!='variable')) parser_error('Expected IDENTIFIER or variable but got '.$identifier[0]);
-			$next_2=pparse__parser_peek();
-			$expression=array('CLONE_OBJECT',($identifier[0]=='IDENTIFIER')?$identifier[1]:NULL,array(),$GLOBALS['I']);
+			$variable=_parse_variable($suppress_error);
+			$expression=array('CLONE_OBJECT',$variable,$GLOBALS['I']);
 			break;
 
 		case 'ARRAY':

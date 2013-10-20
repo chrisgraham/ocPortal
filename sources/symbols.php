@@ -495,8 +495,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 	}
 	if ($escaped!=array() && $escaped!=array(ENTITY_ESCAPED))
 		apply_tempcode_escaping(array_diff($escaped,array(ENTITY_ESCAPED)),$value); // Escape but without ENTITY_ESCAPED because we don't do that on lang strings
-	else
-		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+	elseif ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
 }
 
@@ -2538,6 +2537,10 @@ function ecv_BLOCK($lang,$escaped,$param)
 				$value=$BLOCKS_CACHE[serialize($param_2)]->evaluate();
 			}
 		}
+	} else
+	{
+		$value='';
+		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);

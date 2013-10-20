@@ -31,9 +31,9 @@ class config_lang_strings_test_set extends ocp_test_case
 		$options=array();
 		foreach (array_keys($hooks) as $hook)
 		{
-			$path=get_custom_file_base().'/hooks/systems/config/'.filter_naughty($hook).'.php';
+			$path=get_file_base().'/sources/hooks/systems/config/'.filter_naughty($hook).'.php';
 			if (!file_exists($path))
-				$path=get_file_base().'/hooks/systems/config/'.filter_naughty($hook).'.php';
+				$path=get_file_base().'/sources_custom/hooks/systems/config/'.filter_naughty($hook).'.php';
 			$code=file_get_contents($path);
 
 			require_code('hooks/systems/config/'.filter_naughty($hook));

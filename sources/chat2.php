@@ -134,7 +134,7 @@ function friend_remove($likes,$liked)
  * @param  LONG_TEXT		The comma-separated list of usergroups that may access it (blank: no restriction)
  * @param  LONG_TEXT		The comma-separated list of users that may NOT access it (blank: no restriction)
  * @param  LONG_TEXT		The comma-separated list of usergroups that may NOT access it (blank: no restriction)
- * @return tempcode		The fields
+ * @return array			A pair: The input fields, Hidden fields
  */
 function get_chatroom_fields($id=NULL,$is_made_by_me=false,$room_name='',$welcome='',$username='',$allow2='',$allow2_groups='',$disallow2='',$disallow2_groups='')
 {
@@ -229,7 +229,7 @@ function get_chatroom_fields($id=NULL,$is_made_by_me=false,$room_name='',$welcom
 		$fields->attach(content_review_get_fields('chat',is_null($id)?NULL:strval($id)));
 	}
 
-	return $fields;
+	return array($fields,new ocp_tempcode());
 }
 
 /**

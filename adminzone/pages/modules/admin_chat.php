@@ -125,12 +125,12 @@ class Module_admin_chat extends standard_crud_module
 	 */
 	function get_form_fields()
 	{
-		$fields=get_chatroom_fields();
+		list($fields,$hidden)=get_chatroom_fields();
 
 		// Permissions
 		$fields->attach($this->get_permission_fields(NULL,NULL,true));
 
-		return array($fields,new ocp_tempcode());
+		return array($fields,$hidden);
 	}
 
 	/**

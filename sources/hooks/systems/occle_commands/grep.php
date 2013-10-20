@@ -35,9 +35,9 @@ class Hook_occle_command_grep
 		{
 			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','grep'));
 			if (!array_key_exists(1,$parameters)) return array('','','',do_lang('MISSING_PARAM','2','grep'));
-			$_parameters[1]=$occle_fs->_pwd_to_array($parameters[1]);
+			$_parameters=$occle_fs->_pwd_to_array($parameters[1]);
 
-			if (!$occle_fs->_is_file($_parameters[1]))
+			if (!$occle_fs->_is_file($_parameters))
 			{
 				if ($parameters[1]=='<comcode_pages>')
 				{
@@ -63,7 +63,7 @@ class Hook_occle_command_grep
 				return array('','','',do_lang('NOT_A_FILE','2'));
 			}
 
-			$_lines=unixify_line_format($occle_fs->read_file($_parameters[1]));
+			$_lines=unixify_line_format($occle_fs->read_file($_parameters));
 			$lines=explode("\n",$_lines);
 			if (($parameters[0]=='') || (($parameters[0][0]!='#') && ($parameters[0][0]!='/')))
 			{

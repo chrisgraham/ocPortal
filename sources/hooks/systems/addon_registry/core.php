@@ -906,9 +906,9 @@ class Hook_addon_registry_core
 			'lang/EN/tasks.ini',
 			'sources/hooks/systems/config/tasks_background.php',
 			'sources/hooks/systems/cron/tasks.php',
-			'sources/tasks.php',
 			'sources/hooks/systems/tasks/index.html',
 			'sources/hooks/systems/notifications/task_completed.php',
+			'sources/hooks/systems/tasks/.htaccess',
 		);
 	}
 
