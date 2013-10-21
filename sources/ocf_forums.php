@@ -226,8 +226,8 @@ function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NU
 	} else $out=new ocp_tempcode();
 	$out->attach($_this_name);
 
-	if ($start)
-		$cache[$end_point_forum]=$out;
+	/*if ($start)
+		$cache[$end_point_forum]=$out; Does not work right due to objects being reference parameters - v10 will fix via 'clone' but v9 supports PHP4 still*/
 
 	return $out;
 }

@@ -133,7 +133,7 @@ class Module_invoices
 				$transaction_button=hyperlink(build_url(array('page'=>'_SELF','type'=>'pay','id'=>$row['id']),'_SELF'),do_lang_tempcode('MAKE_PAYMENT'));
 			} else
 			{
-				$transaction_button=make_transaction_button(substr(get_class($object),5),$invoice_title,strval($row['id']),$row['i_amount'],get_option('currency'));
+				$transaction_button=make_transaction_button(substr(get_class($object),5),$invoice_title,strval($row['id']),floatval($row['i_amount']),get_option('currency'));
 			}
 			$invoices[]=array('TRANSACTION_BUTTON'=>$transaction_button,'INVOICE_TITLE'=>$invoice_title,'ID'=>strval($row['id']),'AMOUNT'=>$row['i_amount'],'TIME'=>$time,'STATE'=>$state,'DELIVERABLE'=>$deliverable,'PAYABLE'=>$payable,'NOTE'=>$row['i_note'],'TYPE_CODE'=>$row['i_type_code']);
 		}
