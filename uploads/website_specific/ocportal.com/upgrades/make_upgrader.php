@@ -171,7 +171,7 @@ function recursive_unzip($zip_path,$unzip_path)
 			$_entry=zip_entry_open($zip_handle,$entry);
 			if ($_entry!==false)
 			{
-				@mkdir(dirname($unzip_path.'/'.$entry_name),0755,true);
+				@mkdir(dirname($unzip_path.'/'.$entry_name),0777,true);
 				$out_file=fopen($unzip_path.'/'.$entry_name,'wb');
 				while (true)
 				{

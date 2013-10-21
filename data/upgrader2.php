@@ -92,7 +92,7 @@ foreach ($todo as $i=>$_target_file)
 	}
 
 	// Make any needed directories
-	@mkdir($FILE_BASE.'/'.dirname($target_file),0755,true);
+	@mkdir($FILE_BASE.'/'.dirname($target_file),0777,true);
 
 	// Copy in the data
 	fseek($myfile,$offset);

@@ -68,10 +68,9 @@ class Module_cms_galleries extends standard_crud_module
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run($top_level=true,$type=NULL)
+	function pre_run($top_level=true)
 	{
 		$this->cat_crud_module=class_exists('Mx_cms_galleries_cat')?new Mx_cms_galleries_cat():new Module_cms_galleries_cat();
 		$this->alt_crud_module=class_exists('Mx_cms_galleries_alt')?new Mx_cms_galleries_alt():new Module_cms_galleries_alt();
@@ -631,7 +630,12 @@ class Module_cms_galleries extends standard_crud_module
 					$ok=true;
 					if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
 					{
-						@mkdir(dirname(get_custom_file_base().'/'.rawurldecode($thumb_url)),0777,true);
+						$path=dirname(get_custom_file_base().'/'.rawurldecode($thumb_url));
+						if (!file_exists($path))
+						{
+							require_code('files2');
+							make_missing_directory($path);
+						}
 						$ok=convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/'.rawurldecode($thumb_url),-1,-1,intval(get_option('thumb_width')),false);
 					}
 					if ($ok)

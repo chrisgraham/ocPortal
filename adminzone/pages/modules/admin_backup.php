@@ -222,9 +222,8 @@ class Module_admin_backup
 		$path=get_custom_file_base().'/exports/backups/';
 		if (!file_exists($path))
 		{
-			mkdir($path,0777,true);
-			fix_permissions($path,0777);
-			sync_file($path);
+			require_code('files2');
+			make_missing_directory($path);
 		}
 		$handle=opendir($path);
 		$entries=array();

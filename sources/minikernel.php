@@ -39,7 +39,7 @@ function init__minikernel()
 			$_SERVER['SCRIPT_NAME']=preg_replace('#\.php/.*#','.php',$_SERVER['PHP_SELF']); // Same as PHP_SELF except without path info on the end
 		} else
 		{
-			$_SERVER['SCRIPT_NAME']='/'.$GLOBALS['RELATIVE_PATH'].$_SERVER['SCRIPT_FILENAME'];
+			$_SERVER['SCRIPT_NAME']='/'.$_SERVER['SCRIPT_FILENAME']; // In GAE SCRIPT_FILENAME is actually relative to the app root
 		}
 	}
 	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV))) // May be missing on IIS

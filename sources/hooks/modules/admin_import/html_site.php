@@ -521,10 +521,11 @@ class Hook_html_site
 			if (!file_exists($file_base.'/'.$file)) continue;
 
 			$path=get_custom_file_base().'/uploads/website_specific/'.$file;
-			@mkdir(dirname($path),0777,true);
-			copy($file_base.'/'.$file,$path);
-			fix_permissions($path);
-			sync_file($path);
+			if (!file_exists($path))
+			{
+				require_code('files2');
+				make_missing_directory($path);
+			}
 		}
 
 		// Set the panels to be blank

@@ -328,8 +328,12 @@ function chat_room_prune($room_id)
 						'e_date_and_time'=>time()
 					),true);
 
-					if (!file_exists(get_custom_file_base().'/data_custom/modules/chat'))
-						@mkdir(get_custom_file_base().'/data_custom/modules/chat',0777,true);
+					$path=get_custom_file_base().'/data_custom/modules/chat';
+					if (!file_exists($path))
+					{
+						require_code('files2');
+						make_missing_directory($path);
+					}
 					$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
 					fwrite($myfile,strval($event_id));
 					fclose($myfile);

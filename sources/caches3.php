@@ -231,9 +231,8 @@ function erase_cached_templates($preserve_some=false)
 			$_dir=@opendir($path);
 			if ($_dir===false)
 			{
-				@mkdir($path,0777,true);// OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($path)));
-				fix_permissions($path,0777);
-				sync_file($path);
+				require_code('files2');
+				make_missing_directory($path);
 			} else
 			{
 				while (false!==($file=readdir($_dir)))

@@ -1616,7 +1616,7 @@ function step_5_write_config()
 		if (($key=='admin_username') && (post_param('forum_type')!='none'))
 			continue;
 
-		if ((!GOOGLE_APPENGINE) && (($key=='domain') || ($key=='base_url')))
+		if ((GOOGLE_APPENGINE) && (($key=='domain') || ($key=='base_url')))
 			continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);

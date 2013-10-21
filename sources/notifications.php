@@ -491,7 +491,11 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 			{
 				if (($notification_code=='ocf_new_pt') && (get_option('pt_notifications_as_web')=='0')) continue;
 				$path=get_custom_file_base().'/data_custom/modules/web_notifications';
-				@mkdir($path,0755,true);
+				if (!file_exists($path))
+				{
+					require_code('files2');
+					make_missing_directory($path);
+				}
 				@file_put_contents($path.'/latest.dat',strval(time()));
 			}
 

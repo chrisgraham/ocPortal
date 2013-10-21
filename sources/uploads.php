@@ -220,19 +220,17 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 
 	$thumb_folder=(strpos($upload_folder,'uploads/galleries')!==false)?str_replace('uploads/galleries','uploads/galleries_thumbs',$upload_folder):($upload_folder.'_thumbs');
 
-	if (!file_exists(get_custom_file_base().'/'.$upload_folder))
+	$path=get_custom_file_base().'/'.$upload_folder;
+	if (!file_exists($path))
 	{
-		$success=@mkdir(get_custom_file_base().'/'.$upload_folder,0777,true);
-		if ($success===false) warn_exit(@strval($php_errormsg));
-		fix_permissions(get_custom_file_base().'/'.$upload_folder,0777);
-		sync_file($upload_folder);
+		require_code('files2');
+		make_missing_directory($path);
 	}
-	if ((!file_exists(get_custom_file_base().'/'.$thumb_folder)) && ($make_thumbnail))
+	$path=get_custom_file_base().'/'.$thumb_folder;
+	if ((!file_exists($path)) && ($make_thumbnail))
 	{
-		$success=@mkdir(get_custom_file_base().'/'.$thumb_folder,0777,true);
-		if ($success===false) warn_exit(@strval($php_errormsg));
-		fix_permissions(get_custom_file_base().'/'.$thumb_folder,0777);
-		sync_file($thumb_folder);
+		require_code('files2');
+		make_missing_directory($path);
 	}
 
 	// Find URL

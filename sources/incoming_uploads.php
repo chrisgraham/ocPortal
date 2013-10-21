@@ -57,11 +57,11 @@ function incoming_uploads_script()
 {
 	$is_uploaded=false;
 
-	if (!file_exists(get_custom_file_base().'/uploads/incoming'))
+	$path=get_custom_file_base().'/uploads/incoming');
+	if (!file_exists($path))
 	{
-		@mkdir(get_custom_file_base().'/uploads/incoming',0777,true);
-		fix_permissions(get_custom_file_base().'/uploads/incoming',0777);
-		sync_file(get_custom_file_base().'/uploads/incoming');
+		require_code('files2');
+		make_missing_directory($path);
 	}
 
 	$savename='uploads/incoming/'.uniqid('',true).'.dat';

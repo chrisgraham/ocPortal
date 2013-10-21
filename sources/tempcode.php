@@ -587,7 +587,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 	if (!isset($theme))
 		$theme=isset($USER_THEME_CACHE)?$USER_THEME_CACHE:(((isset($FORUM_DRIVER)) && (is_object($FORUM_DRIVER)) && (method_exists($FORUM_DRIVER,'get_theme')))?filter_naughty($FORUM_DRIVER->get_theme()):'default');
 	$prefix_default=get_file_base().'/themes/';
-	$prefix=($theme=='default')?$prefix_default:(get_custom_file_base().'/themes/');
+	$prefix=(get_custom_file_base().'/themes/');
 
 	// Is it structurally cached on disk yet?
 	if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]))
@@ -629,7 +629,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 
 				if ($found!==NULL)
 				{
-					if (isset($GLOBALS['CURRENT_SHARE_USER']))
+					if (get_custom_file_base()!=get_file_base())
 					{
 						$file_path=get_custom_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
 						if (!is_file($file_path))

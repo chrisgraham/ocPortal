@@ -31,7 +31,7 @@ function init__global2()
 			$_SERVER['SCRIPT_NAME']=preg_replace('#\.php/.*#','.php',$_SERVER['PHP_SELF']); // Same as PHP_SELF except without path info on the end
 		} else
 		{
-			$_SERVER['SCRIPT_NAME']='/'.$GLOBALS['RELATIVE_PATH'].$_SERVER['SCRIPT_FILENAME'];
+			$_SERVER['SCRIPT_NAME']='/'.$_SERVER['SCRIPT_FILENAME']; // In GAE SCRIPT_FILENAME is actually relative to the app root
 		}
 	}
 	if ((!isset($_SERVER['REQUEST_URI'])) && (!isset($_ENV['REQUEST_URI']))) // May be missing on IIS
