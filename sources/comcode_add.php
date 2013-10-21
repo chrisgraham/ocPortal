@@ -492,7 +492,7 @@ function comcode_helper_script_step2()
 		foreach ($params as $param)
 		{
 			$description=new ocp_tempcode();
-			$fields->attach(form_input_line(preg_replace('#=.*$#','',ucwords(str_replace('_',' ',$param))),protect_from_escaping($description),preg_replace('#=.*$#','',$param),preg_replace('#^.*=#U','',$param),false));
+			$fields->attach(form_input_line(preg_replace('#=.*$#','',titleify($param)),protect_from_escaping($description),preg_replace('#=.*$#','',$param),preg_replace('#^.*=#U','',$param),false));
 		}
 		$tag_description=new ocp_tempcode();
 		$tag_description->attach(is_integer($_params['tag_description'])?get_translated_text($_params['tag_description']):$_params['tag_description']);

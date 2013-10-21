@@ -61,17 +61,54 @@ function set_attachment(field_name,number,filename,multi)
 		{
 			filepath=document.getElementById('file'+number).value;
 		}
+		if (filepath=='')
+			return; // Upload error
 
-		var is_image=true,is_archive=false;
-		if (filepath!='')
+		var ext=filepath.replace(/^.*\./,'').toLowerCase();
+
+		var is_image=(',{$CONFIG_OPTION;,valid_images},'.indexOf(','+ext+',')!=-1);
+		var is_video=(',{$CONFIG_OPTION;,valid_videos},'.indexOf(','+ext+',')!=-1);
+		var is_audio=(',{$CONFIG_OPTION;,valid_audios},'.indexOf(','+ext+',')!=-1);
+		var is_archive=(ext=='tar') || (ext=='zip');
+
+		var show_overlay,defaults={};
+		defaults.description=filepath; // Default caption to local file path
+		{+START,INCLUDE,ATTACHMENT_UI_DEFAULTS}{+END}
+
+		if (!show_overlay)
 		{
-			var ext=filepath.substr(filepath.length-4,4).toLowerCase();
+			var comcode='[attachment';
+			for (var key in defaults)
+			{
+				comcode+=' '+key+'="'+(defaults[key].replace(/"/g,'\\"'))+'"';
+			}
+			comcode+=']new_'+number+'[/attachment]';
+			if (multi)
+			{
+				var split_filename=document.getElementById('txtFileName_file'+window.num_attachments).value.split(/:/);
+				for (var i=1;i<split_filename.length;i++)
+				{
+					window.num_attachments++;
+					insert_textbox(post,"\n\n",null,true,"<br /><br />"); // Not sure why but one break gets stripped
+					insert_textbox(
+						post,
+						comcode.replace(']new_'+number+'[',']new_'+window.num_attachments+'['),
+						document.selection?document.selection:null
+					);
+				}
+				number=''+(window.parseInt(number)+split_filename.length-1);
+			} else
+			{
+				insert_textbox(
+					post,
+					comcode,
+					document.selection?document.selection:null
+				);
+			}
+			return;
+		}
 
-			is_image=(ext=='.png') || (ext=='.jpg') || (ext=='jpeg') || (ext=='.gif');
-			is_archive=(ext=='.tar') || (ext=='.zip');
-		} else return; // Upload error
-
-		var wysiwyg=is_wysiwyg_field(document.getElementById(field_name));
+		var wysiwyg=is_wysiwyg_field(post);
 
 		if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 		var url='{$FIND_SCRIPT;,comcode_helper}';
@@ -79,14 +116,16 @@ function set_attachment(field_name,number,filename,multi)
 		url+='&type=step2';
 		url+='&tag='+'attachment';//(is_image?'attachment_safe':'attachment');
 		url+='&default=new_'+number;
-		url+='&default_thumb=1';
-		url+='&default_type=';
 		url+='&is_image='+(is_image?'1':'0');
 		url+='&is_archive='+(is_archive?'1':'0');
-		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path
 		url+='&multi='+(multi?'1':'0');
 		if (wysiwyg) url+='&in_wysiwyg=1';
+		for (var key in defaults)
+		{
+			url+='&default_'+key+'='+window.encodeURIComponent(defaults[key]);
+		}
 		url+=keep_stub();
+
 		window.setTimeout(function() {
 			window.faux_showModalDialog(
 				maintain_theme_in_link(url),

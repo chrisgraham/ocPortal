@@ -91,6 +91,7 @@ class Hook_addon_registry_core_form_interfaces
 			'JAVASCRIPT_POSTING.tpl',
 			'JAVASCRIPT_EDITING.tpl',
 			'WYSIWYG_SETTINGS.tpl',
+			'ATTACHMENT_UI_DEFAULTS.tpl',
 			'JAVASCRIPT_MULTI.tpl',
 			'JAVASCRIPT_VALIDATION.tpl',
 			'FORM_FIELD_SET_GROUPER.tpl',
@@ -471,6 +472,7 @@ class Hook_addon_registry_core_form_interfaces
 			'BLOCK_HELPER_START.tpl'=>'administrative__block_helper_start',
 			'BLOCK_HELPER_DONE.tpl'=>'administrative__block_helper_done',
 			'WYSIWYG_SETTINGS.tpl'=>'wysiwyg_settings',
+			'ATTACHMENT_UI_DEFAULTS.tpl'=>'attachment_ui_defaults',
 		);
 	}
 
@@ -485,6 +487,20 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('WYSIWYG_SETTINGS', array()), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__attachment_ui_defaults()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS', array()), NULL, '', true)
 		);
 	}
 

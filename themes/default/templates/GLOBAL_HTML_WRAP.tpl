@@ -263,14 +263,14 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			</footer>
 		{+END}
 
+		{$EXTRA_FOOT}
+
 		{$JS_TEMPCODE,footer}
 		<script>// <![CDATA[
 			script_load_stuff();
 
 			{+START,IF,{$EQ,{$_GET,wide_print},1}}try { window.print(); } catch (e) {};{+END}
 		//]]></script>
-
-		{$EXTRA_FOOT}
 	</div>
 </body>
 </html>

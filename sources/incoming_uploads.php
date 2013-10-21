@@ -19,45 +19,13 @@
  */
 
 /**
- * Function to clear old uploads, that are older then 2 days
- */
-function clear_old_uploads()
-{
-	// Get the unix timestamp corresonding to the two days ago condition
-	$two_days_ago=strtotime('-2 days');
-	// Get the incoming uploads that are older than two days
-	$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'incoming_uploads WHERE i_date_and_time<'.strval($two_days_ago));
-
-	// If there are older uploads records found start processing them
-	if (count($rows)>0)
-	{
-		// Browse through files
-		foreach($rows as $upload)
-		{
-			if (!empty($upload['i_save_url']))
-			{
-				if (file_exists($upload['i_save_url']))
-				{
-					// Delete file if it exists
-					@unlink($upload['i_save_url']);
-					sync_file($upload['i_save_url']);
-				}
-
-				// Note: it is possible some db records to be left without corresponding files. So we need to clean them too.
-				$GLOBALS['SITE_DB']->query_delete('incoming_uploads',array('id'=>$upload['id']),'',1);
-			}
-		}
-	}
-}
-
-/**
  * Function to process the file upload process
  */
 function incoming_uploads_script()
 {
 	$is_uploaded=false;
 
-	$path=get_custom_file_base().'/uploads/incoming');
+	$path=get_custom_file_base().'/uploads/incoming';
 	if (!file_exists($path))
 	{
 		require_code('files2');
@@ -97,7 +65,7 @@ function incoming_uploads_script()
 		if ($in!==false)
 		{
 			// Open temp file
-			$out=fopen($savename,'wb');
+			$out=fopen(get_custom_file_base().'/'.$savename,'wb');
 			if ($out!==false)
 			{
 				$is_uploaded=true;
@@ -185,5 +153,37 @@ function incoming_uploads_script()
 		$hidden=new ocp_tempcode();
 		$out2=globalise(do_template('FORM_SCREEN',array('_GUID'=>'632edbf0ca9f6f644cd9ebbd817b90f3','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('incoming_uploads',true),'FIELDS'=>$fields)),NULL,'',true);
 		$out2->evaluate_echo();
+	}
+}
+
+/**
+ * Function to clear old uploads, that are older then 2 days
+ */
+function clear_old_uploads()
+{
+	// Get the unix timestamp corresonding to the two days ago condition
+	$two_days_ago=strtotime('-2 days');
+	// Get the incoming uploads that are older than two days
+	$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'incoming_uploads WHERE i_date_and_time<'.strval($two_days_ago));
+
+	// If there are older uploads records found start processing them
+	if (count($rows)>0)
+	{
+		// Browse through files
+		foreach($rows as $upload)
+		{
+			if (!empty($upload['i_save_url']))
+			{
+				if (file_exists($upload['i_save_url']))
+				{
+					// Delete file if it exists
+					@unlink($upload['i_save_url']);
+					sync_file($upload['i_save_url']);
+				}
+
+				// Note: it is possible some db records to be left without corresponding files. So we need to clean them too.
+				$GLOBALS['SITE_DB']->query_delete('incoming_uploads',array('id'=>$upload['id']),'',1);
+			}
+		}
 	}
 }

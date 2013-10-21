@@ -483,6 +483,9 @@ hr.ocf_sig_barrier {
 .ocf_forum_subforums {
 	font-size: 0.85em;
 }
+.ocf_forum_subforums a {
+	white-space: nowrap;
+}
 
 .ocf_forum_grouping td {
 	padding: 0.5em;

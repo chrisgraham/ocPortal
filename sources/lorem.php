@@ -905,6 +905,7 @@ function get_text_templates()
 		'TRACKBACK_XML',
 		'POLL_RSS_SUMMARY',
 		'WYSIWYG_SETTINGS',
+		'ATTACHMENT_UI_DEFAULTS',
 		'FONT_SIZER',
 		'GALLERY_POPULAR',
 	);
@@ -930,6 +931,7 @@ function is_plain_text_template($temp_name)
 		substr($temp_name,0,14)=='TRACKBACK_XML_' ||
 		$temp_name=='OPENSEARCH' ||
 		$temp_name=='WYSIWYG_SETTINGS' ||
+		$temp_name=='ATTACHMENT_UI_DEFAULTS' ||
 		substr($temp_name,0,5)=='OPML_' ||
 		substr($temp_name,0,5)=='ATOM_' || substr($temp_name,0,4)=='RSS_' ||
 		in_array($temp_name,get_text_templates())

@@ -248,7 +248,7 @@ function init__global2()
 		}
 	}
 	$CACHE_TEMPLATES=((get_option('is_on_template_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
-	require_code('lang'); // So that we can do language stuff (e.g. errors)
+	require_code('lang'); // So that we can do language stuff (e.g. errors). Note that even though we have included a lot so far, we can't really use any of it until lang is loaded. Lang isn't loaded earlier as it itself has a dependency on Tempcode.
 	if (!$MICRO_AJAX_BOOTUP)
 	{
 		require_code('temporal'); // Date/time functions
@@ -1015,9 +1015,10 @@ function get_site_name()
 function in_safe_mode()
 {
 	global $SITE_INFO;
-	if (isset($SITE_INFO['safe_mode'])) return ($SITE_INFO['safe_mode']=='1'); // Useful for testing HPHP support
+	if (isset($SITE_INFO['safe_mode'])) return ($SITE_INFO['safe_mode']=='1'); // Useful for testing HPHP support, and generally more robust and fast
 
 	global $CHECKING_SAFEMODE;
+	if (!isset($REQUIRED_CODE['lang']) || $REQUIRED_CODE['lang']==0) return false; // Too early. We can get in horrible problems when doing get_member() below if lang hasn't loaded yet
 	if ($CHECKING_SAFEMODE) return false; // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
 	$CHECKING_SAFEMODE=true;
 	$ret=((get_param_integer('keep_safe_mode',0)==1) && ((isset($GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['IS_ACTUALLY_ADMIN'])) || (!array_key_exists('FORUM_DRIVER',$GLOBALS)) || ($GLOBALS['FORUM_DRIVER']===NULL) || (!function_exists('get_member')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))));

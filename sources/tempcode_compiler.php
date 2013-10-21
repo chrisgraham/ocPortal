@@ -133,7 +133,6 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 	global $COMPILABLE_SYMBOLS,$STUCK_ABORT_SIGNAL;
 
 	$sas_bak=$STUCK_ABORT_SIGNAL;
-
 	require_code('lang');
 	require_code('urls');
 	$cl=fallback_lang();

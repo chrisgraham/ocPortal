@@ -37,8 +37,8 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'."\n".'<ht
 
 require_code('incoming_uploads');
 
-//clear uploads records/files older then 2 days
-clear_old_uploads();
-
-//do upload, output result and exit the entry point script
+// Do upload, output result and exit the entry point script
 incoming_uploads_script();
+
+// Clear uploads records/files older then 2 days
+clear_old_uploads();

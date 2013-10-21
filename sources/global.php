@@ -43,7 +43,7 @@ function require_code($codename,$light_exit=false)
 {
 	global $REQUIRED_CODE,$FILE_BASE,$SITE_INFO;
 	if (isset($REQUIRED_CODE[$codename])) return;
-	$REQUIRED_CODE[$codename]=1;
+	$REQUIRED_CODE[$codename]=0; // unset means no, 0 means in-progress, 1 means done
 
 	$shorthand=(strpos($codename,'.php')===false);
 	if (!$shorthand)
@@ -311,6 +311,7 @@ function require_code($codename,$light_exit=false)
 		}
 	}
 
+	$REQUIRED_CODE[$codename]=1;
 	if ($worked) return;
 
 	if ($light_exit)
