@@ -851,13 +851,14 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcp','ab');
 		if ($myfile===false)
 		{
-			if (@mkdir($path2,0777,true)===false)
+			static $looping=false;
+			if ($looping)
 			{
-				if ($codename=='SCREEN_TITLE') critical_error('PASSON',do_lang('WRITE_ERROR',escape_html($path2.filter_naughty($_codename).$suffix.'.tcp'))); // Bail out hard if would cause a loop
-				intelligent_write_error($path2.filter_naughty($_codename).$suffix.'.tcp');
+				critical_error('PASSON',do_lang('WRITE_ERROR',escape_html($path2.filter_naughty($_codename).$suffix.'.tcp'))); // Bail out hard if would cause a loop
 			}
-			fix_permissions(dirname($path2),0777);
-			sync_file(dirname($path2));
+			$looping=true;
+			require_code('files2');
+			make_missing_directory($path2);
 		} else
 		{
 			flock($myfile,LOCK_EX);

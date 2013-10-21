@@ -167,13 +167,8 @@ class Module_admin_debrand
 		{
 			if (!file_exists($dir))
 			{
-				require_code('files');
-				if (@mkdir($dir,0777,true)===false)
-				{
-					warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
-				}
-				fix_permissions($dir,0777);
-				sync_file($dir);
+				require_code('files2');
+				make_missing_directory($dir);
 			}
 		}
 

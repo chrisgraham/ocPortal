@@ -490,12 +490,8 @@ class Module_admin_zones
 				// Make dir if needed
 				if (!file_exists(dirname($fullpath)))
 				{
-					if (@mkdir(dirname($fullpath),0777,true)===false)
-					{
-						warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html(basename(dirname($fullpath))),escape_html(dirname(dirname($fullpath)))));
-					}
-					fix_permissions(dirname($fullpath),0777);
-					sync_file(dirname($fullpath));
+					require_code('files2');
+					make_missing_directory(dirname($fullpath));
 				}
 
 				// Store revision

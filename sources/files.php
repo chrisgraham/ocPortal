@@ -219,6 +219,9 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'500.shtml'=>'',
 		'404.shtml'=>'',
 		'403.shtml'=>'',
+		'cron.yaml'=>'',
+		'dos.yaml'=>'',
+		'queue.yaml'=>'',
 		'.htaccess'=>'',
 
 		// Installer files
@@ -397,7 +400,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 			));
 			$ignore_filename_and_dir_name_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
 				//'.*\_custom'=>'.*', Let it find them, but work on the contents
-				array('(?!index\.html$)(?!\.htaccess$).*','sources_custom/hooks/[^/]*'), // We don't want deep sources_custom hook directories either
+				array('(?!index\.html$)(?!\.htaccess$).*','sources_custom/[^/]*'), // We don't want deep sources_custom directories either
 				array('(?!index\.html$)(?!\.htaccess$).*','themes/default/images_custom'), // We don't want deep images_custom directories either
 				array('(?!index\.html$)(?!\.htaccess$).*','data/spelling/aspell'), // We don't supply aspell outside git, too much space taken
 				array('(?!index\.html$)(?!\.htaccess$).*','data_custom/modules/admin_stats'), // Various temporary XML files get created under here, for SVG graphs
