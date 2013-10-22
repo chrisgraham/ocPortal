@@ -135,7 +135,7 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 
 	if (!$quick)
 	{
-		if ((function_exists('persistent_cache_delete')) && (!is_null($GLOBALS['MEM_CACHE'])))
+		if ((function_exists('persistent_cache_delete')) && (!is_null($GLOBALS['PERSISTENT_CACHE'])))
 		{
 			persistent_cache_delete('THEME_IMG_DIMS');
 		} else

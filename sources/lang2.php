@@ -280,6 +280,10 @@ function lookup_language_full_name($code)
 {
 	global $LANGS_MAP_CACHE;
 
+	if ($code=='EN') return 'English'; // Optimisation
+
+	if ($LANGS_MAP_CACHE===NULL)
+		$LANGS_MAP_CACHE=persistent_cache_get('LANGS_MAP_CACHE');
 	if ($LANGS_MAP_CACHE===NULL)
 	{
 		require_code('files');
@@ -287,6 +291,8 @@ function lookup_language_full_name($code)
 		$map_file_b=get_custom_file_base().'/lang_custom/langs.ini';
 		if (!is_file($map_file_b)) $map_file_b=$map_file_a;
 		$LANGS_MAP_CACHE=better_parse_ini_file($map_file_b);
+
+		persistent_cache_set('LANGS_MAP_CACHE',$LANGS_MAP_CACHE);
 	}
 	return isset($LANGS_MAP_CACHE[$code])?$LANGS_MAP_CACHE[$code]:$code;
 }

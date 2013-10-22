@@ -200,7 +200,7 @@ if (!function_exists('require_lang_compile'))
 			}
 		}
 
-		if (is_null($GLOBALS['MEM_CACHE']))
+		if (is_null($GLOBALS['PERSISTENT_CACHE']))
 		{
 			// Cache
 			if ($desire_cache)

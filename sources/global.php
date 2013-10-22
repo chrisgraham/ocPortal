@@ -71,7 +71,7 @@ function require_code($codename,$light_exit=false)
 	$path_b=$FILE_BASE.'/'.($shorthand?('sources/'.$codename.'.php'):$non_custom_codename);
 
 	$has_original=NULL;
-	if (isset($GLOBALS['MEM_CACHE']))
+	if (isset($GLOBALS['PERSISTENT_CACHE']))
 	{
 		global $CODE_OVERRIDES;
 		if (!isset($CODE_OVERRIDES))

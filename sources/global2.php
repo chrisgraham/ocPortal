@@ -1534,7 +1534,9 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
+	if (GOOGLE_APPENGINE) gae_optimistic_cache(true);
 	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($js_cache_path)!=0)) && (!is_browser_decacheing()) && ((!in_safe_mode()) || (isset($GLOBALS['SITE_INFO']['safe_mode'])));
+	if (GOOGLE_APPENGINE) gae_optimistic_cache(false);
 
 	if (($support_smart_decaching) || (!$is_cached))
 	{
@@ -1698,7 +1700,9 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
+	if (GOOGLE_APPENGINE) gae_optimistic_cache(true);
 	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($css_cache_path)!=0)) && (!is_browser_decacheing()) && ((!in_safe_mode()) || (isset($GLOBALS['SITE_INFO']['safe_mode'])));
+	if (GOOGLE_APPENGINE) gae_optimistic_cache(false);
 
 	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
 	{
@@ -1969,7 +1973,10 @@ function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 		$write_path=$dir.'/'.filter_naughty_harsh($file);
 		$write_path.=$type;
 
-		if (!is_file($write_path))
+		if (GOOGLE_APPENGINE) gae_optimistic_cache(true);
+		$already_exists=is_file($write_path);
+		if (GOOGLE_APPENGINE) gae_optimistic_cache(false);
+		if (!$already_exists)
 		{
 			require_code('global4');
 			$good_to_go=_save_web_resource_merging($resources,$type,$write_path);

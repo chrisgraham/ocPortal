@@ -24,24 +24,28 @@
  */
 class ocp_eacceleratorcache
 {
-	var $objects_list;
+	var $objects_list=NULL;
 
 	/**
-	 * Constructor.
+	 * Instruction to load up the objects list.
 	 */
-	function __construct()
+	function load_objects_list()
 	{
-		if (function_exists('eaccelerator_get'))
-			$this->objects_list=eaccelerator_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
-		if (function_exists('mmcache_get'))
-			$this->objects_list=mmcache_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
-		if ($this->objects_list===NULL) $this->objects_list=array();
+		if (is_null($this->objects_list))
+		{
+			if (function_exists('eaccelerator_get'))
+				$this->objects_list=eaccelerator_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
+			if (function_exists('mmcache_get'))
+				$this->objects_list=mmcache_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
+			if ($this->objects_list===NULL) $this->objects_list=array();
+		}
+		return $this->objects_list;
 	}
 
 	/**
 	 * Get data from the persistent cache.
 	 *
-	 * @param  mixed			Key
+	 * @param  string			Key
 	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
 	 * @return ?mixed			The data (NULL: not found / NULL entry)
 	 */
@@ -62,24 +66,24 @@ class ocp_eacceleratorcache
 	/**
 	 * Put data into the persistent cache.
 	 *
-	 * @param  mixed			Key
+	 * @param  string			Key
 	 * @param  mixed			The data
 	 * @param  integer		Various flags (parameter not used)
-	 * @param  integer		The expiration time in seconds.
+	 * @param  ?integer		The expiration time in seconds (NULL: no expiry)
 	 */
-	function set($key,$data,$flags,$expire_secs)
+	function set($key,$data,$flags=0,$expire_secs=NULL)
 	{
-		// Update list of e-objects
-		global $this->objects_list;
-		if (!array_key_exists($key,$this->objects_list))
+		// Update list of persistent-objects
+		$objects_list=$this->load_objects_list();
+		if (!array_key_exists($key,$objects_list))
 		{
-			$this->objects_list[$key]=1;
+			$objects_list[$key]=true;
 			if (function_exists('eaccelerator_put'))
 			{
-				eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
+				eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list,0);
 			} elseif (function_exists('mmcache_put'))
 			{
-				mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
+				mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list,0);
 			}
 		}
 
@@ -95,20 +99,19 @@ class ocp_eacceleratorcache
 	/**
 	 * Delete data from the persistent cache.
 	 *
-	 * @param  mixed			Key name
+	 * @param  string			Key
 	 */
 	function delete($key)
 	{
-		// Update list of e-objects
-		global $this->objects_list;
-		unset($this->objects_list[$key]);
-
+		// Update list of persistent-objects
+		$objects_list=$this->load_objects_list();
+		unset($objects_list[$key]);
 		if (function_exists('eaccelerator_put'))
 		{
-			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
+			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list,0);
 		} elseif (function_exists('mmcache_put'))
 		{
-			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
+			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list,0);
 		}
 
 		if (function_exists('eaccelerator_rm'))
@@ -125,27 +128,28 @@ class ocp_eacceleratorcache
 	 */
 	function flush()
 	{
-		global $this->objects_list;
-		$this->objects_list=array();
+		$objects_list=$this->load_objects_list();
 		if (function_exists('eaccelerator_rm'))
 		{
-			foreach (array_keys($this->objects_list) as $obkey)
+			foreach (array_keys($objects_list) as $obkey)
 			{
 				eaccelerator_rm($obkey);
 			}
 		} elseif (function_exists('mmcache_rm'))
 		{
-			foreach (array_keys($this->objects_list) as $obkey)
+			foreach (array_keys($objects_list) as $obkey)
 			{
 				mmcache_rm($obkey);
 			}
 		}
+
+		$objects_list=array();
 		if (function_exists('eaccelerator_put'))
 		{
-			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
+			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list,0);
 		} elseif (function_exists('mmcache_put'))
 		{
-			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$this->objects_list,0);
+			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list,0);
 		}
 	}
 }

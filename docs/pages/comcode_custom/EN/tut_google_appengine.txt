@@ -253,6 +253,13 @@ An appropriate PHP configuration has also been provided for you (no [tt].htacces
 
 If you forget to do something before you deploy, or if new development has happened, you can always re-deploy later.
 
+[title="3"]Any redeployment[/title]
+
+Fortunately the [tt]appcfg.py[/tt] command is quite efficient, so redeployment does not take long.
+Note that ocPortal caches in Google Cloud Storage may be out-dated. When you redeploy you should go to [tt]http://liveurl/upgrader.php[/tt] and empty the caches.
+
+[title="3"]Changes to the addon set[/title]
+
 If you are going to uninstall/install an addon, you should generally go through this process:
  - Close the live site temporarily
  - Export the live Cloud Database and import it into your development machine

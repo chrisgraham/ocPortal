@@ -33,10 +33,6 @@ function init__zones()
 	global $DO_NOT_CACHE_THIS;
 	$DO_NOT_CACHE_THIS=false;
 
-	global $ZBMF_CACHE;
-	$ZBMF_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('ZBMF_CACHE'):NULL;
-	if ($ZBMF_CACHE===NULL) $ZBMF_CACHE=array();
-
 	global $MODULES_ZONES_CACHE,$MODULES_ZONES_CACHE_DEFAULT;
 	$MODULES_ZONES_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('MODULES_ZONES'):NULL;
 	global $SITE_INFO;
@@ -118,8 +114,15 @@ function zone_black_magic_filterer($path,$relative=false)
 	if ($no_collapse_zones===NULL) $no_collapse_zones=(get_option('collapse_user_zones')!='1');
 	if ($no_collapse_zones) return $path;
 
-	global $ZBMF_CACHE;
-	if (isset($ZBMF_CACHE[$path])) return $ZBMF_CACHE[$path];
+	static $zbmf_cache=NULL;
+	if ($zbmf_cache===NULL)
+	{
+		$zbmf_cache=function_exists('persistent_cache_get')?persistent_cache_get('ZBMF_CACHE'):array();
+		if ($zbmf_cache===NULL) $zbmf_cache=array();
+	}
+
+	global $zbmf_cache;
+	if (isset($zbmf_cache[$path])) return $zbmf_cache[$path];
 
 	if ($relative)
 	{
@@ -151,16 +154,16 @@ function zone_black_magic_filterer($path,$relative=false)
 				if (is_file($site_equiv))
 				{
 					$ret=$relative?('site/'.$stripped):$site_equiv;
-					$ZBMF_CACHE[$path]=$ret;
-					if (function_exists('persistent_cache_set')) persistent_cache_set('ZBMF_CACHE',$ZBMF_CACHE);
+					$zbmf_cache[$path]=$ret;
+					if (function_exists('persistent_cache_set')) persistent_cache_set('ZBMF_CACHE',$zbmf_cache);
 					return $ret;
 				}
 			}
 		}
 	}
 
-	$ZBMF_CACHE[$path]=$path;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('ZBMF_CACHE',$ZBMF_CACHE);
+	$zbmf_cache[$path]=$path;
+	if (function_exists('persistent_cache_set')) persistent_cache_set('ZBMF_CACHE',$zbmf_cache);
 	return $path;
 }
 

@@ -296,7 +296,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 
 	if (is_null($parameters)) $parameters=array();
 
-	global $RECORD_TEMPLATES_USED,$FILE_ARRAY,$MEM_CACHE,$CACHE_TEMPLATES,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$TEMPLATE_CACHE,$IS_MOBILE_CACHE,$FORUM_DRIVER;
+	global $RECORD_TEMPLATES_USED,$FILE_ARRAY,$PERSISTENT_CACHE,$CACHE_TEMPLATES,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$TEMPLATE_CACHE,$IS_MOBILE_CACHE,$FORUM_DRIVER;
 	$special_treatment=((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && (is_null($XHTML_SPIT_OUT)));
 
 	// Is it already loaded?
@@ -339,7 +339,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 	$data=mixed();
 	if ($CACHE_TEMPLATES)
 	{
-		if (!is_null($MEM_CACHE))
+		if (!is_null($PERSISTENT_CACHE))
 		{
 			$data=persistent_cache_get(array('TEMPLATE',$theme,$lang,$_codename));
 			if (!is_null($data))

@@ -1199,7 +1199,7 @@ class virtual_bash
 	function _handle_php_command()
 	{
 		// NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
-		if (get_file_base()==get_custom_file_base())
+		if (is_null($GLOBALS['CURRENT_SHARE_USER']))
 		{
 			if (array_key_exists('occle_state',$_COOKIE))
 			{
@@ -1278,6 +1278,7 @@ class virtual_bash
 			// Fake the PHP evaluation, because it's prohibited by a shared install
 			$this->output[STREAM_STDERR]=do_lang('SHARED_INSTALL_PROHIBIT');
 			$occle_eval_output=true;
+			$occle_output='';
 		}
 
 		$this->output[STREAM_STDCOMMAND]='';

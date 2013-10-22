@@ -103,7 +103,7 @@ require_code('inst_special');
 require_code('forum_stub');
 require_code('global3');
 require_code('temporal');
-$GLOBALS['MEM_CACHE']=NULL;
+$GLOBALS['PERSISTENT_CACHE']=NULL;
 require_code('files');
 require_code('lang');
 require_code('tempcode');
@@ -1647,12 +1647,18 @@ function step_5_write_config()
 				{
 					\$SITE_INFO['custom_base_url']='".addslashes((tacit_https()?'https://':'http://').'storage.')."'.\$_SERVER['HTTP_HOST'];
 				}
+				\$SITE_INFO['no_extra_logs']='1';
+				\$SITE_INFO['no_disk_sanity_checks']='1';
+				\$SITE_INFO['no_installer_checks']='1';
+				\$SITE_INFO['disable_smart_decaching']='1';
 			} else
 			{
 				\$SITE_INFO['custom_file_base']='".addslashes(get_file_base().'/data_custom/modules/google_appengine')."';
 				\$SITE_INFO['custom_base_url']='".addslashes(get_base_url().'/data_custom/modules/google_appengine')."';
 			}
-			\$SITE_INFO['use_mem_cache']='1';";
+			\$SITE_INFO['use_mem_cache']='1';
+			\$SITE_INFO['charset']='utf-8';
+";
 		fwrite($config_file_handle,preg_replace('#^\t\t\t#m','',$gae_live_code));
 	}
 
@@ -1703,6 +1709,11 @@ function step_5_write_config()
 		// Copy in default php.ini file
 		@unlink(get_file_base().'/php.ini');
 		copy(get_file_base().'/data/modules/google_appengine/php.ini',get_file_base().'/php.ini');
+
+		// Customise php.ini file
+		$php_ini=file_get_contents(get_file_base().'/php.ini');
+		$php_ini=str_replace('<application>',post_param('gae_application'),$php_ini);
+		file_put_contents(get_file_base().'/php.ini',$php_ini);
 
 		// Copy in default YAML files
 		$dh=opendir(get_file_base().'/data/modules/google_appengine');

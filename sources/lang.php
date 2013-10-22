@@ -71,7 +71,7 @@ function init__lang()
 			$key='script__'.md5(serialize(ocp_srv('SCRIPT_NAME')));
 		}
 		$cache_path=get_custom_file_base().'/caches/lang/'.user_lang().'/'.filter_naughty($key,true).'.lcd';
-		if (!is_null($GLOBALS['MEM_CACHE']))
+		if (!is_null($GLOBALS['PERSISTENT_CACHE']))
 		{
 			$PAGE_CACHE_LANG_LOADED=persistent_cache_get($cache_path);
 			if (is_array($PAGE_CACHE_LANG_LOADED))
@@ -136,7 +136,7 @@ function do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$re
  */
 function open_page_cache_file()
 {
-	if ($GLOBALS['MEM_CACHE']===NULL)
+	if ($GLOBALS['PERSISTENT_CACHE']===NULL)
 	{
 		global $PAGE_CACHE_FILE,$PAGE_CACHE_LAZY_LOAD;
 		if ($PAGE_CACHE_FILE===NULL) return;
@@ -302,6 +302,7 @@ function does_lang_exist($lang)
 	if ($lang=='') return false;
 	if ($lang=='Gibb') return true; // Test language
 	if ($lang=='xxx') return true; // Test language
+	if ($lang==fallback_lang()) return true;
 
 	$file_a=get_file_base().'/lang/'.$lang;
 	$file_b=get_custom_file_base().'/lang_custom/'.$lang;
@@ -342,10 +343,10 @@ function get_lang_member($member)
 {
 	// In forum?
 	$lang=$GLOBALS['FORUM_DRIVER']->forum_get_lang($member);
-	if ((!is_null($lang)) && (strlen($lang)>0))
+	if ((!is_null($lang)) && ($lang!=''))
 	{
 		$_lang=strtoupper($lang);
-		if ((!is_dir(get_file_base().'/lang/'.$_lang)) && (!is_dir(get_custom_file_base().'/lang_custom/'.$_lang)) && (!is_dir(get_file_base().'/lang_custom/'.$_lang)))
+		if (!does_lang_lang($_lang))
 		{
 			require_code('files');
 			$map_file_a=get_file_base().'/lang/map.ini';
@@ -495,7 +496,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 	$cache_path=$cfb.'/caches/lang/'.$lang.'/'.$codename.'.lcd';
 
 	// Try language cache
-	if ($GLOBALS['MEM_CACHE']!==NULL)
+	if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 	{
 		$desire_cache=true;
 		global $SITE_INFO;
@@ -717,8 +718,11 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			$pos=strpos($codename,':');
 			if ($pos!==false)
 			{
-				require_lang(substr($codename,0,$pos),NULL,NULL,!$require_result);
 				$codename=substr($codename,$pos+1);
+
+				$there=isset($LANGUAGE_STRINGS_CACHE[$lang][$codename]);
+				if (!$there)
+					require_lang(substr($codename,0,$pos),NULL,NULL,!$require_result);
 			}
 
 			$there=isset($LANGUAGE_STRINGS_CACHE[$lang][$codename]);
@@ -747,7 +751,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				if ($ret===NULL)
 				{
 					$PAGE_CACHE_LANG_LOADED[$lang][$codename]=NULL;
-					if ($GLOBALS['MEM_CACHE']!==NULL)
+					if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 					{
 						persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 					} else
@@ -778,7 +782,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && (isset($PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename])))
 				{
 					$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
-					if ($GLOBALS['MEM_CACHE']!==NULL)
+					if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 					{
 						persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 					} else
@@ -816,7 +820,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 		if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename,$PAGE_CACHE_LANG_LOADED[$lang]))))
 		{
 			$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE_STRINGS_CACHE[$lang][$codename];
-			if ($GLOBALS['MEM_CACHE']!==NULL)
+			if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 			{
 				persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 			} else

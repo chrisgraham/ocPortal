@@ -145,7 +145,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 		}
 	}
 
-	if (is_null($GLOBALS['MEM_CACHE']))
+	if (is_null($GLOBALS['PERSISTENT_CACHE']))
 	{
 		// Cache
 		if ($desire_cache)

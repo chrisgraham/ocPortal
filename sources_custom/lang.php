@@ -76,7 +76,7 @@ if (!function_exists('_do_lang'))
 					if ($ret===NULL)
 					{
 						$PAGE_CACHE_LANG_LOADED[$lang][$codename]=NULL;
-						if ($GLOBALS['MEM_CACHE']!==NULL)
+						if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 						{
 							persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 						} else
@@ -150,7 +150,7 @@ if (!function_exists('_do_lang'))
 					if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && (isset($PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename])))
 					{
 						$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
-						if ($GLOBALS['MEM_CACHE']!==NULL)
+						if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 						{
 							persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 						} else
@@ -187,7 +187,7 @@ if (!function_exists('_do_lang'))
 			if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename,$PAGE_CACHE_LANG_LOADED[$lang]))))
 			{
 				$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE_STRINGS_CACHE[$lang][$codename];
-				if ($GLOBALS['MEM_CACHE']!==NULL)
+				if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 				{
 					persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 				} else

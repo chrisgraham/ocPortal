@@ -34,9 +34,11 @@ function _decache($cached_for,$identifier=NULL)
 		if (array_key_exists($cached_for,$done_already)) return;
 	}
 
-	if ($GLOBALS['MEM_CACHE']!==NULL)
+	if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 	{
-		persistent_cache_delete(array('CACHE',$cached_for));
+		$cached_profiles=array('CACHE',$cached_for);
+		if ($identifier!==NULL) $cached_profiles[]=$identifier;
+		persistent_cache_delete($cached_profiles,true);
 	}
 
 	$where=db_string_equal_to('cached_for',$cached_for);
@@ -128,12 +130,10 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 	$dependencies.='!';
 	$dependencies.=(is_null($_csss_required))?'':implode(':',$_csss_required);
 
-	if (!is_null($GLOBALS['MEM_CACHE']))
+	if (!is_null($GLOBALS['PERSISTENT_CACHE']))
 	{
-		$pcache=persistent_cache_get(array('CACHE',$codename));
-		if (is_null($pcache)) $pcache=array();
-		$pcache[$cache_identifier][$lang][$theme]=array('dependencies'=>$dependencies,'date_and_time'=>time(),'the_value'=>$cache);
-		persistent_cache_set(array('CACHE',$codename),$pcache,false,$ttl*60);
+		$pcache=array('dependencies'=>$dependencies,'date_and_time'=>time(),'the_value'=>$cache);
+		persistent_cache_set(array('CACHE',$codename,md5($cache_identifier),$lang,$theme),$pcache,false,$ttl*60);
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_delete('cache',array('lang'=>$lang,'the_theme'=>$theme,'cached_for'=>$codename,'identifier'=>md5($cache_identifier)),'',1);

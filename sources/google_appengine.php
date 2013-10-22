@@ -174,3 +174,18 @@ function gae_is_admin()
 	}
 	return false;
 }
+
+/**
+ * Enable/Disable GAE optimistic cache, meaning it avoids need to check the Cloud Storage if a file is updated.
+ * We only set this to enabled if we are sure the persistent cache would receive a flush if the referenced file changed state.
+ *
+ * @param  boolean		Whether the cache is enabled
+ */
+function gae_optimistic_cache($enabled)
+{
+	$gs_options=array('gs'=>array(
+		'enable_optimistic_cache'=>$enabled,
+		'read_cache_expiry_seconds'=>$enabled?180:3600,
+	));
+	stream_context_set_default($gs_options);
+}

@@ -26,11 +26,11 @@ function init__caches()
 	global $BLOCK_CACHE_ON_CACHE;
 	$BLOCK_CACHE_ON_CACHE=NULL;
 
-	global $MEM_CACHE,$SITE_INFO;
+	global $PERSISTENT_CACHE,$SITE_INFO;
 	/** The persistent cache access object (NULL if there is no persistent cache).
-	 * @global ?object $MEM_CACHE
+	 * @global ?object $PERSISTENT_CACHE
 	 */
-	$MEM_CACHE=NULL;
+	$PERSISTENT_CACHE=NULL;
 
 	$use_memcache=((array_key_exists('use_mem_cache',$SITE_INFO)) && ($SITE_INFO['use_mem_cache']!='') && ($SITE_INFO['use_mem_cache']!='0'));// Default to off because badly configured caches can result in lots of very slow misses and lots of lost sessions || ((!array_key_exists('use_mem_cache',$SITE_INFO)) && ((function_exists('xcache_get')) || (function_exists('wincache_ucache_get')) || (function_exists('apc_fetch')) || (function_exists('eaccelerator_get')) || (function_exists('mmcache_get'))));
 	if (($use_memcache) && (!$GLOBALS['IN_MINIKERNEL_VERSION']))
@@ -38,43 +38,43 @@ function init__caches()
 		if ((class_exists('Memcached')) && (($SITE_INFO['use_mem_cache']=='memcached') || ($SITE_INFO['use_mem_cache']=='1')))
 		{
 			require_code('caches_memcached');
-			$MEM_CACHE=new ocp_memcached();
+			$PERSISTENT_CACHE=new ocp_memcached();
 		}
 
 		elseif ((class_exists('Memcache')) && (($SITE_INFO['use_mem_cache']=='memcache') || ($SITE_INFO['use_mem_cache']=='1')))
 		{
 			require_code('caches_memcache');
-			$MEM_CACHE=new ocp_memcache();
+			$PERSISTENT_CACHE=new ocp_memcache();
 		}
 
 		elseif ((function_exists('apc_fetch')) && (($SITE_INFO['use_mem_cache']=='apc') || ($SITE_INFO['use_mem_cache']=='1')))
 		{
 			require_code('caches_apc');
-			$MEM_CACHE=new ocp_apccache();
+			$PERSISTENT_CACHE=new ocp_apccache();
 		}
 
 		elseif (((function_exists('eaccelerator_put')) || (function_exists('mmcache_put'))) && (($SITE_INFO['use_mem_cache']=='eaccelerator') || ($SITE_INFO['use_mem_cache']=='1')))
 		{
 			require_code('caches_eaccelerator');
-			$MEM_CACHE=new ocp_eacceleratorcache();
+			$PERSISTENT_CACHE=new ocp_eacceleratorcache();
 		}
 
 		elseif ((function_exists('xcache_get')) && (($SITE_INFO['use_mem_cache']=='xcache') || ($SITE_INFO['use_mem_cache']=='1')))
 		{
 			require_code('caches_xcache');
-			$MEM_CACHE=new ocp_xcache();
+			$PERSISTENT_CACHE=new ocp_xcache();
 		}
 
 		elseif ((function_exists('wincache_ucache_get')) && (($SITE_INFO['use_mem_cache']=='wincache') || ($SITE_INFO['use_mem_cache']=='1')))
 		{
 			require_code('caches_wincache');
-			$MEM_CACHE=new ocp_wincache();
+			$PERSISTENT_CACHE=new ocp_wincache();
 		}
 
 		elseif ((file_exists(get_custom_file_base().'/caches/persistent/')) && (($SITE_INFO['use_mem_cache']=='filesystem') || ($SITE_INFO['use_mem_cache']=='1')))
 		{
 			require_code('caches_filesystem');
-			$MEM_CACHE=new ocp_filecache();
+			$PERSISTENT_CACHE=new ocp_filecache();
 		}
 	}
 }
@@ -88,12 +88,13 @@ function init__caches()
  */
 function persistent_cache_get($key,$min_cache_date=NULL)
 {
-	global $MEM_CACHE;
-	if (($GLOBALS['DEV_MODE']) && (mt_rand(0,3)==1)) return NULL;
-	if ($MEM_CACHE===NULL) return NULL;
-	$test=$MEM_CACHE->get(get_file_base().serialize($key),$min_cache_date); // First we'll try specifically for site
+	global $PERSISTENT_CACHE;
+	//if (($GLOBALS['DEV_MODE']) && (mt_rand(0,3)==1)) return NULL;	Annoying when doing performance tests, but you can enable to test persistent cache more
+	if ($PERSISTENT_CACHE===NULL) return NULL;
+	$test=$PERSISTENT_CACHE->get(get_file_base().serialize($key),$min_cache_date); // First we'll try specifically for site
 	if ($test!==NULL) return $test;
-	return $MEM_CACHE->get(('ocp'.float_to_raw_string(ocp_version_number())).serialize($key),$min_cache_date); // And last we'll try server-wide
+	$test=$PERSISTENT_CACHE->get(('ocp'.float_to_raw_string(ocp_version_number())).serialize($key),$min_cache_date); // And last we'll try server-wide
+	return $test;
 }
 
 /**
@@ -106,23 +107,46 @@ function persistent_cache_get($key,$min_cache_date=NULL)
  */
 function persistent_cache_set($key,$data,$server_wide=false,$expire_secs=NULL)
 {
-	global $MEM_CACHE;
-	if ($MEM_CACHE===NULL) return NULL;
+	global $PERSISTENT_CACHE;
+	if ($PERSISTENT_CACHE===NULL) return NULL;
 	if ($expire_secs===NULL) $expire_secs=$server_wide?0:(60*60);
-	$MEM_CACHE->set(($server_wide?('ocp'.float_to_raw_string(ocp_version_number())):get_file_base()).serialize($key),$data,0,$expire_secs);
+	$PERSISTENT_CACHE->set(($server_wide?('ocp'.float_to_raw_string(ocp_version_number())):get_file_base()).serialize($key),$data,0,$expire_secs);
 }
 
 /**
  * Delete data from the persistent cache.
  *
  * @param  mixed			Key name
+ * @param  boolean		Whether we are deleting via substring
  */
-function persistent_cache_delete($key)
+function persistent_cache_delete($key,$substring=false)
 {
-	global $MEM_CACHE;
-	if ($MEM_CACHE===NULL) return NULL;
-	$MEM_CACHE->delete(get_file_base().serialize($key));
-	$MEM_CACHE->delete('ocp'.float_to_raw_string(ocp_version_number()).serialize($key));
+	global $PERSISTENT_CACHE;
+	if ($PERSISTENT_CACHE===NULL) return NULL;
+	if ($substring)
+	{
+		$list=$PERSISTENT_CACHE->load_objects_list();
+		foreach (array_keys($list) as $l)
+		{
+			$delete=true;
+			foreach (is_array($key)?$key:array($key) as $key_part)
+			{
+				if (strpos($l,$key_part)===false) // Should work even though key was serialized, in reasonable cases
+				{
+					$delete=false;
+					break;
+				}
+			}
+			if ($delete)
+			{
+				$PERSISTENT_CACHE->delete($l);
+			}
+		}
+	} else
+	{
+		$PERSISTENT_CACHE->delete(get_file_base().serialize($key));
+		$PERSISTENT_CACHE->delete('ocp'.float_to_raw_string(ocp_version_number()).serialize($key));
+	}
 }
 
 /**
@@ -130,9 +154,9 @@ function persistent_cache_delete($key)
  */
 function erase_persistent_cache()
 {
-	global $MEM_CACHE;
-	if ($MEM_CACHE===NULL) return NULL;
-	$MEM_CACHE->flush();
+	global $PERSISTENT_CACHE;
+	if ($PERSISTENT_CACHE===NULL) return NULL;
+	$PERSISTENT_CACHE->flush();
 }
 
 /**
@@ -185,13 +209,11 @@ function find_cache_on($codename)
  */
 function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false,$caching_via_cron=false,$map=NULL) // Default to a very big ttl
 {
-	if ($GLOBALS['MEM_CACHE']!==NULL)
+	if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 	{
-		$pcache=persistent_cache_get(array('CACHE',$codename));
-		if ($pcache===NULL) return NULL;
 		$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 		$lang=user_lang();
-		$pcache=isset($pcache[$cache_identifier][$lang][$theme])?$pcache[$cache_identifier][$lang][$theme]:NULL;
+		$pcache=persistent_cache_get(array('CACHE',$codename,md5($cache_identifier),$lang,$theme));
 		if ($pcache===NULL)
 		{
 			if ($caching_via_cron)

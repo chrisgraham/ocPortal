@@ -533,7 +533,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 
 	$base_dir=((($theme=='default') && (($suffix!='.css') || (strpos($path,'/css_custom')===false)))?get_file_base():get_custom_file_base()).'/themes/';
 
-	global $CACHE_TEMPLATES,$FILE_ARRAY,$IS_TEMPLATE_PREVIEW_OP_CACHE,$MEM_CACHE;
+	global $CACHE_TEMPLATES,$FILE_ARRAY,$IS_TEMPLATE_PREVIEW_OP_CACHE,$PERSISTENT_CACHE;
 
 	if (isset($FILE_ARRAY))
 	{
@@ -574,7 +574,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	$result=template_to_tempcode($html,0,false,$codename,$theme,$lang);
 	if (($CACHE_TEMPLATES) && (($suffix=='.tpl') || ($codename=='no_cache')))
 	{
-		if (!is_null($MEM_CACHE))
+		if (!is_null($PERSISTENT_CACHE))
 		{
 			persistent_cache_set(array('TEMPLATE',$theme,$lang,$_codename),$result->to_assembly(),strpos($path,'default/templates/')!==false);
 		} else

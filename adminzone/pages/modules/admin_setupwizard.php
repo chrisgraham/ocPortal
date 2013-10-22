@@ -894,7 +894,7 @@ class Module_admin_setupwizard
 		}
 
 		// Set addons
-		if ((post_param_integer('skip_4',0)==0) && (get_file_base()==get_custom_file_base()))
+		if ((post_param_integer('skip_4',0)==0) && (is_null($GLOBALS['CURRENT_SHARE_USER'])))
 		{
 			require_lang('addons');
 			require_code('addons');

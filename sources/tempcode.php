@@ -575,7 +575,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		}
 	}
 
-	global $IS_TEMPLATE_PREVIEW_OP_CACHE,$RECORD_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$RECORDED_TEMPLATES_USED,$FILE_ARRAY,$MEM_CACHE,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$CACHE_TEMPLATES,$FORUM_DRIVER,$POSSIBLY_IN_SAFE_MODE_CACHE,$USER_THEME_CACHE,$TEMPLATE_DISK_ORIGIN_CACHE,$LOADED_TPL_CACHE;
+	global $IS_TEMPLATE_PREVIEW_OP_CACHE,$RECORD_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$RECORDED_TEMPLATES_USED,$FILE_ARRAY,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$CACHE_TEMPLATES,$FORUM_DRIVER,$POSSIBLY_IN_SAFE_MODE_CACHE,$USER_THEME_CACHE,$TEMPLATE_DISK_ORIGIN_CACHE,$LOADED_TPL_CACHE;
 	$special_treatment=((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && (is_null($XHTML_SPIT_OUT)));
 
 	if ($RECORD_TEMPLATES_USED)
@@ -638,7 +638,9 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 					{
 						$file_path=((($theme=='default') && ($suffix!='.css'))?get_file_base():get_custom_file_base()).'/themes/'.$found[0].$found[1].$codename.$suffix;
 					}
+					if (GOOGLE_APPENGINE) gae_optimistic_cache(true);
 					$tcp_time=@filemtime($tcp_path);
+					if (GOOGLE_APPENGINE) gae_optimistic_cache(false);
 				} else
 				{
 					$tcp_time=false;
@@ -1306,7 +1308,7 @@ class ocp_tempcode
 			$this->children=array();
 		}
 
-		$result=@include($file); // We don't eval on this because we want it to potentially be op-code cached by e.g. Zend Accelerator
+		$result=tempcode_include($file); // We don't eval on this because we want it to potentially be op-code cached by e.g. Zend Accelerator
 		if (!is_array($result)) return false; // May never get here, as PHP fatal errors can't be suppressed or skipped over
 
 		$this->cached_output=NULL;
@@ -1318,7 +1320,7 @@ class ocp_tempcode
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
 			$_file=(strpos($file,'\'')===false)?$file:php_addslashes($file);
-			$this->code_to_preexecute[]='if (($result=@include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } /*$GLOBALS[\'DEV_MODE\']?debug_eval($tmp->code_to_preexecute):*/eval($tmp->code_to_preexecute); unset($tmp); }
+			$this->code_to_preexecute[]='if (($result=tempcode_include(\''.$_file.'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.((strpos($forced_reload_details[2],'\'')===false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])).'\',false,\''.(($forced_reload_details[6]=='')?'':((strpos($forced_reload_details[6],'\'')===false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (!@is_file(\''.$_file.'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } /*$GLOBALS[\'DEV_MODE\']?debug_eval($tmp->code_to_preexecute):*/eval($tmp->code_to_preexecute); unset($tmp); }
 			else { debug_eval($result[4]); unset($result); }';
 			// NB: $GLOBALS[\'CACHE_TEMPLATES\']=false; is in case the template cache has been detected as broken, it prevents this branch running as it would fail again
 		}
@@ -1890,6 +1892,21 @@ function recall_named_function($id,$parameters,$code)
 		$GLOBALS[$k]=create_function($parameters,$code);
 	}
 	return $GLOBALS[$k];
+}
+
+/**
+ * Include and evaluate the specified Tempcode file.
+ *
+ * @param  PATH		The filename of the file to include.
+ * @return mixed		Success status or returned value.
+ */
+function tempcode_include($filename)
+{
+	if (GOOGLE_APPENGINE) gae_optimistic_cache(true);
+	$ret=@include($filename);
+	if (GOOGLE_APPENGINE) gae_optimistic_cache(false);
+
+	return $ret;
 }
 
 /**

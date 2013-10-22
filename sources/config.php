@@ -66,12 +66,19 @@ function init__config()
 function multi_lang()
 {
 	global $MULTI_LANG_CACHE;
+
 	if ($MULTI_LANG_CACHE!==NULL) return $MULTI_LANG_CACHE;
+
+	$MULTI_LANG_CACHE=persistent_cache_get('MULTI_LANG');
+	if ($MULTI_LANG_CACHE!==NULL) return $MULTI_LANG_CACHE;
+
 	$MULTI_LANG_CACHE=false;
 	if (get_option('allow_international')!='1') return false;
 
 	require_code('config2');
-	return _multi_lang();
+	$ret=_multi_lang();
+	persistent_cache_set('MULTI_LANG',$ret);
+	return $ret;
 }
 
 /**

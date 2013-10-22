@@ -32,10 +32,25 @@ class ocp_filecache
 		require_code('files');
 	}
 
+	var $objects_list=NULL;
+
+	/**
+	 * Instruction to load up the objects list.
+	 */
+	function load_objects_list()
+	{
+		if (is_null($this->objects_list))
+		{
+			$this->objects_list=$this->get('PERSISTENT_CACHE_OBJECTS');
+			if ($this->objects_list===NULL) $this->objects_list=array();
+		}
+		return $this->objects_list;
+	}
+
 	/**
 	 * Get data from the persistent cache.
 	 *
-	 * @param  mixed			Key
+	 * @param  string			Key
 	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
 	 * @return ?mixed			The data (NULL: not found / NULL entry)
 	 */
@@ -66,13 +81,24 @@ class ocp_filecache
 	/**
 	 * Put data into the persistent cache.
 	 *
-	 * @param  mixed			Key
+	 * @param  string			Key
 	 * @param  mixed			The data
 	 * @param  integer		Various flags (parameter not used)
-	 * @param  integer		The expiration time in seconds.
+	 * @param  ?integer		The expiration time in seconds (NULL: no expiry)
 	 */
-	function set($key,$data,$flags,$expire_secs)
+	function set($key,$data,$flags=0,$expire_secs=NULL)
 	{
+		if ($key!=='PERSISTENT_CACHE_OBJECTS')
+		{
+			// Update list of persistent-objects
+			$objects_list=$this->load_objects_list();
+			if (!array_key_exists($key,$objects_list))
+			{
+				$objects_list[$key]=true;
+				$this->set('PERSISTENT_CACHE_OBJECTS',$objects_list);
+			}
+		}
+
 		$to_write=serialize($data);
 
 		$path=get_custom_file_base().'/caches/persistent/'.md5($key).'.gcd';
@@ -99,10 +125,18 @@ class ocp_filecache
 	/**
 	 * Delete data from the persistent cache.
 	 *
-	 * @param  mixed			Key name
+	 * @param  string			Key
 	 */
 	function delete($key)
 	{
+		if ($key!=='PERSISTENT_CACHE_OBJECTS')
+		{
+			// Update list of persistent-objects
+			$objects_list=$this->load_objects_list();
+			unset($objects_list[$key]);
+			$this->set('PERSISTENT_CACHE_OBJECTS',$objects_list);
+		}
+
 		// Ideally we'd lock whilst we delete, but it's not stable (and the workaround would be too slow for our efficiency context). So some people reading may get errors whilst we're clearing the cache. Fortunately this is a rare op to perform.
 		@unlink(get_custom_file_base().'/caches/persistent/'.md5($key).'.gcd');
 	}
@@ -112,6 +146,10 @@ class ocp_filecache
 	 */
 	function flush()
 	{
+		// Update list of persistent-objects
+		$objects_list=array();
+		$this->set('PERSISTENT_CACHE_OBJECTS',$objects_list);
+
 		$d=opendir(get_custom_file_base().'/caches/persistent');
 		while (($e=readdir($d))!==false)
 		{

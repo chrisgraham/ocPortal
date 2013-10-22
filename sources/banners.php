@@ -438,7 +438,7 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 			require_code('permissions');
 			if (has_privilege($submitter,'use_html_banner'))
 			{
-				if (get_file_base()==get_custom_file_base()) // Only allow PHP code if not a shared install
+				if (is_null($GLOBALS['CURRENT_SHARE_USER'])) // Only allow PHP code if not a shared install
 				{
 					$matches=array();
 					$num_matches=preg_match_all('#\<\?(.*)\?\>#U',$direct_code,$matches);

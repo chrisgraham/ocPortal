@@ -840,7 +840,7 @@ class Module_admin_zones
 				$rename_label='DESCRIPTION_ZONE_RENAME_DEFAULT_ZONE';
 			$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode($rename_label),'new_zone',$zone,true));
 		}
-		if ((!in_array($zone,$no_delete_zones)) && (!appengine_is_live()) && (get_file_base()==get_custom_file_base()))
+		if ((!in_array($zone,$no_delete_zones)) && (!appengine_is_live()) && (is_null($GLOBALS['CURRENT_SHARE_USER'])))
 		{
 			if ($no_rename) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'2fec0bddfe975b573da9bbd68ec16689','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));

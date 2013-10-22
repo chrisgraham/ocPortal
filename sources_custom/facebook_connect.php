@@ -43,8 +43,11 @@ function init__facebook_connect()
 	$appsecret=get_option('facebook_secret_code');
 	$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 
-	require_javascript('javascript_facebook');
-	attach_to_screen_footer(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
+	if (running_script('index'))
+	{
+		require_javascript('javascript_facebook');
+		attach_to_screen_footer(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
+	}
 }
 
 // This is only called if we know we have a user logged into Facebook, who has authorised to our app
@@ -105,10 +108,10 @@ function handle_facebook_connection_login($current_logged_in_member)
 		$language=strtoupper($details['locale']);
 	if ($language!==NULL)
 	{
-		if (!file_exists(get_custom_file_base().'/lang_custom/'.$language))
+		if (!does_lang_exist($language))
 		{
 			$language=preg_replace('#\_.*$#','',$language);
-			if (!file_exists(get_custom_file_base().'/lang_custom/'.$language))
+			if (!does_lang_exist($language))
 				$language='';
 		}
 	}

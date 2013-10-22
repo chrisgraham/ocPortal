@@ -409,9 +409,16 @@ function breadcrumbs($show_self=true)
 	$segment_substitutions=array();
 	if ((addon_installed('breadcrumbs')) && (function_exists('xml_parser_create')))
 	{
-		$data=@file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml');
-		if (($data===false) && (get_custom_file_base()!=get_file_base()))
-			$data=@file_get_contents(get_file_base().'/data_custom/breadcrumbs.xml');
+		$data=persistent_cache_get('BREADCRUMBS');
+		if ($data===NULL)
+		{
+			$data=@file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml');
+			if (($data===false) && (get_custom_file_base()!=get_file_base()))
+				$data=@file_get_contents(get_file_base().'/data_custom/breadcrumbs.xml');
+			if ($data===false) $data='';
+
+			persistent_cache_set('BREADCRUMBS',$data);
+		}
 		if (trim($data)!='')
 		{
 			require_code('breadcrumbs');
@@ -992,12 +999,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 
 	if (($zone=='site') && (get_option('collapse_user_zones')=='1')) $zone=''; // Might have been explicitly said in Tempcode, for example
 
-	$details=persistent_cache_get(array('PAGE_INFO',$codename,$required,$zone));
-	if (($details===NULL) || ($details===false))
-	{
-		$details=_request_page($codename,$zone,$page_type,NULL,$no_redirect_check);
-		persistent_cache_set(array('PAGE_INFO',$codename,$required,$zone),$details);
-	}
+	$details=_request_page($codename,$zone,$page_type,NULL,$no_redirect_check);
 
 	global $REQUEST_PAGE_NEST_LEVEL;
 	$REQUEST_PAGE_NEST_LEVEL++;
@@ -1145,7 +1147,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 }
 
 /**
- * Take the specified parameters, and try to find the corresponding page
+ * Take the specified parameters, and try to find the corresponding page (caching front end).
  *
  * @param  ID_TEXT			The codename of the page to load
  * @param  ID_TEXT			The zone the page is being loaded in
@@ -1155,6 +1157,27 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
  * @return ~array				A list of details (false: page not found)
  */
 function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_check=false)
+{
+	$details=persistent_cache_get(array('PAGE_INFO',$codename,$zone,$page_type,$lang,$no_redirect_check));
+	if ($details===NULL)
+	{
+		$details=__request_page($codename,$zone,$page_type,NULL,$no_redirect_check);
+		persistent_cache_set(array('PAGE_INFO',$codename,$zone,$page_type,$lang,$no_redirect_check),$details);
+	}
+	return $details;
+}
+
+/**
+ * Take the specified parameters, and try to find the corresponding page.
+ *
+ * @param  ID_TEXT			The codename of the page to load
+ * @param  ID_TEXT			The zone the page is being loaded in
+ * @param  ?ID_TEXT			The type of page - for if you know it (NULL: don't know it)
+ * @param  ?LANGUAGE_NAME	Language name (NULL: users language)
+ * @param  boolean			Whether to not check for redirects (normally you would)
+ * @return ~array				A list of details (false: page not found)
+ */
+function __request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_check=false)
 {
 	if ($lang===NULL) $lang=user_lang();
 
@@ -1462,7 +1485,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 			}
 		}
 		$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
-		if ($GLOBALS['MEM_CACHE']!==NULL)
+		if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
 		{
 			if ($support_smart_decaching)
 			{

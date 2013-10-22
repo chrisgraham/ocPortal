@@ -149,7 +149,7 @@ class Module_admin_debrand
 	{
 		require_code('config2');
 
-		if (get_file_base()==get_custom_file_base()) // Only if not a shared install
+		if (is_null($GLOBALS['CURRENT_SHARE_USER'])) // Only if not a shared install
 		{
 			require_code('abstract_file_manager');
 			force_have_afm_details();
@@ -213,7 +213,7 @@ class Module_admin_debrand
 			sync_file($start_path);
 		}
 
-		if (get_file_base()==get_custom_file_base()) // Only if not a shared install
+		if (is_null($GLOBALS['CURRENT_SHARE_USER'])) // Only if not a shared install
 		{
 			$critical_errors=file_get_contents(get_file_base().'/sources/critical_errors.php');
 			$critical_errors=str_replace('ocPortal',addslashes(post_param('rebrand_name')),$critical_errors);

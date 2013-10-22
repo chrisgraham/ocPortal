@@ -811,7 +811,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	if (!is_file($base_dir.$theme.$path.$codename.$suffix))
 		$base_dir=get_file_base().'/themes/';
 
-	global $CACHE_TEMPLATES,$FILE_ARRAY,$IS_TEMPLATE_PREVIEW_OP_CACHE,$MEM_CACHE;
+	global $CACHE_TEMPLATES,$FILE_ARRAY,$IS_TEMPLATE_PREVIEW_OP_CACHE;
 
 	if (isset($FILE_ARRAY))
 	{
