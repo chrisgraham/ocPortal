@@ -712,9 +712,9 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 	if ((is_writable_wrap(get_file_base().'/.htaccess')) && (is_null($ban_until)))
 	{
 		$myfile=fopen(get_file_base().'/.htaccess','rt');
-		flock($myfile,LOCK_SH);
+		@flock($myfile,LOCK_SH);
 		$original_contents=file_get_contents(get_file_base().'/.htaccess');
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);

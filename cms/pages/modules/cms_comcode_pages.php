@@ -742,9 +742,9 @@ class Module_cms_comcode_pages
 			if (file_exists($file_base.'/'.$restore_from))
 			{
 				$tmp=fopen($file_base.'/'.$restore_from,'rb');
-				flock($tmp,LOCK_SH);
+				@flock($tmp,LOCK_SH);
 				$contents=file_get_contents($file_base.'/'.$restore_from);
-				flock($tmp,LOCK_UN);
+				@flock($tmp,LOCK_UN);
 				fclose($tmp);
 				if (is_null(get_param('restore_from',NULL)))
 				{

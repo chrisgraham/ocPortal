@@ -594,9 +594,9 @@ class Module_admin_themes
 		erase_persistent_cache();
 
 		$before=better_parse_ini_file((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini');
-		$myfile=@fopen((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini','at') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini');
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		$myfile=@fopen((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini',GOOGLE_APPENGINE?'wt':'at') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini');
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		if (fwrite($myfile,'title='.post_param('title')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		if (fwrite($myfile,'description='.post_param('description')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		foreach ($before as $key=>$val)
@@ -607,7 +607,7 @@ class Module_admin_themes
 		if (fwrite($myfile,'author='.post_param('author')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		if (fwrite($myfile,'mobile_pages='.post_param('mobile_pages')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		if (fwrite($myfile,'supports_wide='.strval(post_param_integer('supports_wide',0))."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 		sync_file((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini');
 
@@ -628,14 +628,14 @@ class Module_admin_themes
 				$new_map[$val]=$theme;
 			}
 		}
-		$myfile=@fopen(get_file_base().'/themes/map.ini','at') OR intelligent_write_error(get_file_base().'/themes/map.ini');
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		$myfile=@fopen(get_file_base().'/themes/map.ini',GOOGLE_APPENGINE?'wt':'at') OR intelligent_write_error(get_file_base().'/themes/map.ini');
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		foreach ($new_map as $key=>$val)
 		{
 			if (fwrite($myfile,$key.'='.$val."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		}
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 		sync_file('themes/map.ini');
 	}
@@ -981,9 +981,9 @@ class Module_admin_themes
 		if (!file_exists($path)) $path=get_custom_file_base().'/themes/default/css_custom/'.$file;
 		if (!file_exists($path)) $path=get_file_base().'/themes/default/css/'.$file;
 		$tmp=fopen($path,'rb');
-		flock($tmp,LOCK_SH);
+		@flock($tmp,LOCK_SH);
 		$css=unixify_line_format(file_get_contents($path));
-		flock($tmp,LOCK_UN);
+		@flock($tmp,LOCK_UN);
 		fclose($tmp);
 		$file=preg_replace('#\.\d+#','',$file);
 
@@ -1127,17 +1127,17 @@ class Module_admin_themes
 			sync_file($path_backup);
 		}
 		fix_permissions($path_backup);
-		$myfile=@fopen($custom_path,'at');
+		$myfile=@fopen($custom_path,GOOGLE_APPENGINE?'wt':'at');
 		if ($myfile===false) intelligent_write_error($custom_path);
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		if (fwrite($myfile,$css)<strlen($css))
 		{
 			fclose($myfile);
 			unlink($custom_path);
 			warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		}
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 		sync_file($custom_path);
 
@@ -1145,13 +1145,13 @@ class Module_admin_themes
 		$base_path=get_file_base().'/themes/default/css/'.$file;
 		if (is_file($base_path))
 		{
-			$myfile=@fopen($custom_path.'.editfrom','at');
+			$myfile=@fopen($custom_path.'.editfrom',GOOGLE_APPENGINE?'wt':'at');
 			if ($myfile===false) intelligent_write_error($custom_path);
-			flock($myfile,LOCK_EX);
-			ftruncate($myfile,0);
+			@flock($myfile,LOCK_EX);
+			if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 			$hash=file_get_contents($base_path);
 			if (fwrite($myfile,$hash)<strlen($hash)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-			flock($myfile,LOCK_UN);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 			fix_permissions($custom_path.'.editfrom');
 			sync_file($custom_path.'.editfrom');
@@ -1553,9 +1553,9 @@ class Module_admin_themes
 			if (file_exists($_path))
 			{
 				$tmp=fopen($_path,'rb');
-				flock($tmp,LOCK_SH);
+				@flock($tmp,LOCK_SH);
 				$old_contents=file_get_contents($_path);
-				flock($tmp,LOCK_UN);
+				@flock($tmp,LOCK_UN);
 				fclose($tmp);
 			} else $old_contents='';
 
@@ -1791,17 +1791,17 @@ class Module_admin_themes
 				$file=$_file;
 			} else
 			{
-				$myfile=@fopen($fullpath,'at');
+				$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wt':'at');
 				if ($myfile===false) intelligent_write_error($fullpath);
-				flock($myfile,LOCK_EX);
-				ftruncate($myfile,0);
+				@flock($myfile,LOCK_EX);
+				if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 				if (fwrite($myfile,$new)<strlen($new))
 				{
 					fclose($myfile);
 					unlink($fullpath);
 					warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 				}
-				flock($myfile,LOCK_UN);
+				@flock($myfile,LOCK_UN);
 				fclose($myfile);
 				fix_permissions($fullpath);
 				sync_file($fullpath);
@@ -1809,13 +1809,13 @@ class Module_admin_themes
 				if (file_exists(get_file_base().'/themes/'.post_param('f'.$i.'file')))
 				{
 					// Make base-hash-thingy
-					$myfile=@fopen($fullpath.'.editfrom','at');
+					$myfile=@fopen($fullpath.'.editfrom',GOOGLE_APPENGINE?'wt':'at');
 					if ($myfile===false) intelligent_write_error($fullpath);
-					flock($myfile,LOCK_EX);
-					ftruncate($myfile,0);
+					@flock($myfile,LOCK_EX);
+					if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 					$hash=file_get_contents(get_file_base().'/themes/'.post_param('f'.$i.'file'));
 					if (fwrite($myfile,$hash)<strlen($hash)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-					flock($myfile,LOCK_UN);
+					@flock($myfile,LOCK_UN);
 					fclose($myfile);
 					fix_permissions($fullpath.'.editfrom');
 					sync_file($fullpath.'.editfrom');

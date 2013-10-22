@@ -34,9 +34,9 @@ function build_news_sitemap()
 		if (!is_writable_wrap($path)) return;
 	}
 
-	$sitemap_file=fopen($path,'at');
-	flock($sitemap_file,LOCK_EX);
-	ftruncate($sitemap_file,0);
+	$sitemap_file=fopen($path,GOOGLE_APPENGINE?'wt':'at');
+	@flock($sitemap_file,LOCK_EX);
+	if (!GOOGLE_APPENGINE) ftruncate($sitemap_file,0);
 
 	fwrite($sitemap_file,'<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
@@ -139,7 +139,7 @@ function build_news_sitemap()
 		</urlset>
 	');
 
-	flock($sitemap_file,LOCK_UN);
+	@flock($sitemap_file,LOCK_UN);
 	fclose($sitemap_file);
 	require_code('files');
 	fix_permissions($path,0666);

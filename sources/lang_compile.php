@@ -156,22 +156,22 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 				make_missing_directory(dirname($cache_path));
 			}
 
-			$file=@fopen($cache_path,'at'); // Will fail if cache dir missing .. e.g. in quick installer
+			$file=@fopen($cache_path,GOOGLE_APPENGINE?'wb':'ab'); // Will fail if cache dir missing .. e.g. in quick installer
 			if ($file)
 			{
-				flock($file,LOCK_EX);
-				ftruncate($file,0);
+				@flock($file,LOCK_EX);
+				if (!GOOGLE_APPENGINE) ftruncate($file,0);
 				if (fwrite($file,serialize($load_target))>0)
 				{
 					// Success
-					flock($file,LOCK_UN);
+					@flock($file,LOCK_UN);
 					fclose($file);
 					require_code('files');
 					fix_permissions($cache_path);
 				} else
 				{
 					// Failure
-					flock($file,LOCK_UN);
+					@flock($file,LOCK_UN);
 					fclose($file);
 					@unlink($cache_path);
 				}
@@ -251,9 +251,9 @@ function _get_lang_file_map($b,&$entries,$descriptions=NULL,$given_whole_file=fa
 		if (!file_exists($b)) return;
 
 		$tmp=fopen($b,'rb');
-		flock($tmp,LOCK_SH);
+		@flock($tmp,LOCK_SH);
 		$lines=file($b);
-		flock($tmp,LOCK_UN);
+		@flock($tmp,LOCK_UN);
 		fclose($tmp);
 		if ($lines===NULL) $lines=array(); // Workaround HHVM bug #1162
 	} else $lines=explode("\n",unixify_line_format($b));

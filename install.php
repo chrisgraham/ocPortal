@@ -1300,7 +1300,7 @@ function step_5_ftp()
 		sleep(1);
 		$file_size_after=@filesize(get_file_base().'/ocp_inst_tmp/tmp');
 		if ($file_size_before!==$file_size_after) warn_exit(do_lang_tempcode('DATA_FILE_CONFLICT'));
-		flock($lock_myfile,LOCK_UN);
+		@flock($lock_myfile,LOCK_UN);
 		fclose($lock_myfile);
 	} else
 	{

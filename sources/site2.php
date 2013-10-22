@@ -327,11 +327,11 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 
 	// Not cached :(
 	$tmp=fopen($file_base.'/'.$string,'rb');
-	flock($tmp,LOCK_SH);
+	@flock($tmp,LOCK_SH);
 	$result=file_get_contents($file_base.'/'.$string);
 	apply_comcode_page_substitutions($result);
 	$result=fix_bad_unicode($result);
-	flock($tmp,LOCK_UN);
+	@flock($tmp,LOCK_UN);
 	fclose($tmp);
 
 	if (is_null($new_comcode_page_row['p_submitter']))

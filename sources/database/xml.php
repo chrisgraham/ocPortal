@@ -1353,9 +1353,9 @@ class Database_Static_xml
 			attach_message('File path too long on Windows ('.$path.')','warn');
 			return;
 		}
-		$myfile=fopen($path,'ab');
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'ab');
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		fwrite($myfile,"<ocportal>\n");
 		$val=mixed();
 		foreach ($record as $key=>$val)
@@ -1366,7 +1366,7 @@ class Database_Static_xml
 			fwrite($myfile,"\t<".$key.">".xmlentities($val)."</".$key.">\n");
 		}
 		fwrite($myfile,"</ocportal>\n");
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 		require_code('files');
 		fix_permissions($path,0666);
@@ -1425,9 +1425,9 @@ class Database_Static_xml
 
 		if (file_exists($path))
 		{
-			$myfile=fopen($path,'ab');
-			flock($myfile,LOCK_EX);
-			flock($myfile,LOCK_UN);
+			$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'ab');
+			@flock($myfile,LOCK_EX);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 			@unlink($path);
 			sync_file($path);
@@ -1435,9 +1435,9 @@ class Database_Static_xml
 
 		if (file_exists($path.'.mine'))
 		{
-			$myfile=fopen($path.'.mine','ab');
-			flock($myfile,LOCK_EX);
-			flock($myfile,LOCK_UN);
+			$myfile=fopen($path.'.mine',GOOGLE_APPENGINE?'wb':'ab');
+			@flock($myfile,LOCK_EX);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 			unlink($path.'.mine');
 			sync_file($path.'.mine');

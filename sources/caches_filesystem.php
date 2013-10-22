@@ -51,13 +51,13 @@ class ocp_filecache
 				return NULL;
 			}
 		}
-		flock($myfile,LOCK_SH);
+		@flock($myfile,LOCK_SH);
 		$contents='';
 		while (!feof($myfile)) $contents.=fread($myfile,1024);
 
 		$ret=@unserialize($contents);
 
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 
 		return $ret;
@@ -76,21 +76,21 @@ class ocp_filecache
 		$to_write=serialize($data);
 
 		$path=get_custom_file_base().'/caches/persistent/'.md5($key).'.gcd';
-		$myfile=@fopen($path,'ab');
+		$myfile=@fopen($path,GOOGLE_APPENGINE?'wb':'ab');
 		if ($myfile===false) return; // Failure
 
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		if (fwrite($myfile,$to_write)!==false)
 		{
 			// Success
-			flock($myfile,LOCK_UN);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 			fix_permissions($path);
 		} else
 		{
 			// Failure
-			flock($myfile,LOCK_UN);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 			unlink($path);
 		}

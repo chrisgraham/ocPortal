@@ -58,11 +58,11 @@ function inline_language_editing($codename,$lang)
 		$contents=str_replace("'".$codename.'='.$value."'","'".$codename."'",$orig_contents);
 		if ($orig_contents!=$contents)
 		{
-			$myfile=fopen($inc,'at');
-			flock($myfile,LOCK_EX);
-			ftruncate($myfile,0);
+			$myfile=fopen($inc,GOOGLE_APPENGINE?'wt':'at');
+			@flock($myfile,LOCK_EX);
+			if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 			fwrite($myfile,$contents);
-			flock($myfile,LOCK_UN);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 		}
 	}

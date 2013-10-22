@@ -76,9 +76,9 @@ function read_text_file($codename,$lang=NULL,$missing_blank=false)
 		if ($missing_blank) return '';
 		warn_exit(do_lang_tempcode('MISSING_TEXT_FILE',escape_html($codename)));
 	}
-	flock($tmp,LOCK_SH);
+	@flock($tmp,LOCK_SH);
 	$in=@file_get_contents($path);
-	flock($tmp,LOCK_UN);
+	@flock($tmp,LOCK_UN);
 	fclose($tmp);
 	$in=unixify_line_format($in);
 	return $in;
@@ -106,13 +106,13 @@ function write_text_file($codename,$lang,$out)
 		make_missing_directory(dirname($path));
 	}
 
-	$myfile=@fopen($path,'at');
-	flock($myfile,LOCK_EX);
-	ftruncate($myfile,0);
+	$myfile=@fopen($path,GOOGLE_APPENGINE?'wt':'at');
+	@flock($myfile,LOCK_EX);
+	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 	if ($myfile===false) intelligent_write_error($path);
 	$out=unixify_line_format($out);
 	if (fwrite($myfile,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-	flock($myfile,LOCK_UN);
+	@flock($myfile,LOCK_UN);
 	fclose($myfile);
 	fix_permissions($path);
 	sync_file($path);

@@ -873,9 +873,9 @@ function do_site()
 
 			$out_evaluated=$out->evaluate(NULL);
 
-			$myfile=@fopen($fast_cache_path,'ab') OR intelligent_write_error($fast_cache_path);
-			flock($myfile,LOCK_EX);
-			ftruncate($myfile,0);
+			$myfile=@fopen($fast_cache_path,GOOGLE_APPENGINE?'wb':'ab') OR intelligent_write_error($fast_cache_path);
+			@flock($myfile,LOCK_EX);
+			if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 			if (function_exists('gzencode'))
 			{
 				fwrite($myfile,gzencode($out_evaluated,9));
@@ -883,7 +883,7 @@ function do_site()
 			{
 				fwrite($myfile,$out_evaluated);
 			}
-			flock($myfile,LOCK_UN);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 			fix_permissions($fast_cache_path);
 			sync_file($fast_cache_path);

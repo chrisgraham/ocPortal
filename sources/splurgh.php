@@ -60,16 +60,16 @@ function splurgh_master_build($key_name,$map,$url_stub,$_cache_file,$last_change
 			make_missing_directory(dirname($cache_file));
 		}
 
-		$myfile=@fopen($cache_file,'at');
+		$myfile=@fopen($cache_file,GOOGLE_APPENGINE?'wt':'at');
 		if ($myfile===false) intelligent_write_error($cache_file);
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		$fulltable=array();
 		$splurgh=_splurgh_do_node($map,$first_id,'',$fulltable,0);
 		$page=do_template('SPLURGH',array('_GUID'=>'8775edfc5a386fdf2cec69b0fc889952','KEY_NAME'=>$key_name,'URL_STUB'=>$url_stub,'SPLURGH'=>str_replace('"','\'',$splurgh)));
 		$ev=$page->evaluate();
 		if (fwrite($myfile,$ev)<strlen($ev)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 		fix_permissions($cache_file);
 		sync_file($cache_file);

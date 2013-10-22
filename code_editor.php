@@ -476,7 +476,7 @@ if (window.alert!==null)
 END;
 					return;
 				}
-				flock($myfile,LOCK_EX);
+				@flock($myfile,LOCK_EX);
 				ftruncate($myfile,0);
 				if (fwrite($myfile,$file)===false)
 				{
@@ -495,7 +495,7 @@ if (window.alert!==null)
 END;
 					return;
 				}
-				flock($myfile,LOCK_UN);
+				@flock($myfile,LOCK_UN);
 				fclose($myfile);
 			} else // Via FTP
 			{

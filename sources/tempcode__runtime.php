@@ -359,9 +359,9 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 			if (is_file($tcp_path))
 			{
 				$tmp=fopen($tcp_path,'rb');
-				flock($tmp,LOCK_SH);
+				@flock($tmp,LOCK_SH);
 				$data=file_get_contents($tcp_path);
-				flock($tmp,LOCK_UN);
+				@flock($tmp,LOCK_UN);
 				fclose($tmp);
 			} else $data=false;
 			if ($data!==false)

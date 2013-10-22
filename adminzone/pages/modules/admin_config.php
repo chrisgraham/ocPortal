@@ -828,13 +828,13 @@ class Module_admin_config
 			make_missing_directory(get_custom_file_base().'/data_custom');
 		}
 
-		$myfile=@fopen(get_custom_file_base().'/data_custom/fields.xml','at');
+		$myfile=@fopen(get_custom_file_base().'/data_custom/fields.xml',GOOGLE_APPENGINE?'wt':'at');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/fields.xml');
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		$xml=post_param('xml');
 		if (fwrite($myfile,$xml)<strlen($xml)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 		fix_permissions(get_custom_file_base().'/data_custom/fields.xml');
 		sync_file(get_custom_file_base().'/data_custom/fields.xml');
@@ -874,13 +874,13 @@ class Module_admin_config
 			make_missing_directory(get_custom_file_base().'/data_custom');
 		}
 
-		$myfile=@fopen(get_custom_file_base().'/data_custom/breadcrumbs.xml','at');
+		$myfile=@fopen(get_custom_file_base().'/data_custom/breadcrumbs.xml',GOOGLE_APPENGINE?'wt':'at');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/breadcrumbs.xml');
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		$xml=post_param('xml');
 		if (fwrite($myfile,$xml)<strlen($xml)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		flock($myfile,LOCK_UN);
+		@flock($myfile,LOCK_UN);
 		fclose($myfile);
 		fix_permissions(get_custom_file_base().'/data_custom/breadcrumbs.xml');
 		sync_file(get_custom_file_base().'/data_custom/breadcrumbs.xml');

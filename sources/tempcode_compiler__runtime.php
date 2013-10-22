@@ -542,9 +542,9 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	{
 		$_path=$base_dir.filter_naughty($theme.$path.$codename).$suffix;
 		$tmp=fopen($_path,'rb');
-		flock($tmp,LOCK_SH);
+		@flock($tmp,LOCK_SH);
 		$html=unixify_line_format(file_get_contents($_path));
-		flock($tmp,LOCK_UN);
+		@flock($tmp,LOCK_UN);
 		fclose($tmp);
 	}
 
@@ -579,8 +579,9 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 			persistent_cache_set(array('TEMPLATE',$theme,$lang,$_codename),$result->to_assembly(),strpos($path,'default/templates/')!==false);
 		} else
 		{
-			$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang).'/';
-			$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcd','ab');
+			$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang);
+			$_path2=$path2.'/'.filter_naughty($_codename).$suffix.'.tcd';
+			$myfile=@fopen($_path2,GOOGLE_APPENGINE?'wb':'ab');
 			if ($myfile===false)
 			{
 				if (@mkdir($path2,0777,true))
@@ -589,20 +590,21 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 					fix_permissions($path2,0777);
 				} else
 				{
-					if (file_exists($path2.filter_naughty($_codename).$suffix.'.tcd'))
-						warn_exit(do_lang_tempcode('WRITE_ERROR',$path2.filter_naughty($_codename).$suffix.'.tcd'));
+					if (file_exists($path2.'/'.filter_naughty($_codename).$suffix.'.tcd'))
+						warn_exit(do_lang_tempcode('WRITE_ERROR',$path2.'/'.filter_naughty($_codename).$suffix.'.tcd'));
 					else
-						warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE',$path2.filter_naughty($_codename).$suffix.'.tcd'));
+						warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE',$path2.'/'.filter_naughty($_codename).$suffix.'.tcd'));
 				}
-			} else
-			{
-				flock($myfile,LOCK_EX);
-				ftruncate($myfile,0);
-				fwrite($myfile,$result->to_assembly($lang));
-				flock($myfile,LOCK_UN);
-				fclose($myfile);
-				fix_permissions($path2.filter_naughty($_codename).$suffix.'.tcd');
+
+				$myfile=@fopen($_path2,GOOGLE_APPENGINE?'wb':'ab');
 			}
+
+			@flock($myfile,LOCK_EX);
+			if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
+			fwrite($myfile,$result->to_assembly($lang));
+			@flock($myfile,LOCK_UN);
+			fclose($myfile);
+			fix_permissions($path2.'/'.filter_naughty($_codename).$suffix.'.tcd');
 		}
 	}
 

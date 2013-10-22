@@ -335,9 +335,9 @@ class Module_admin_zones
 				if (file_exists($fullpath))
 				{
 					$tmp=fopen($fullpath,'rb');
-					flock($tmp,LOCK_SH);
+					@flock($tmp,LOCK_SH);
 					$comcode=file_get_contents($fullpath);
-					flock($tmp,LOCK_UN);
+					@flock($tmp,LOCK_UN);
 					fclose($tmp);
 					$default_parsed=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true);
 				} else
@@ -504,11 +504,11 @@ class Module_admin_zones
 				}
 
 				// Save
-				$myfile=@fopen($fullpath,'at') OR intelligent_write_error($fullpath);
-				flock($myfile,LOCK_EX);
-				ftruncate($myfile,0);
+				$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wt':'at') OR intelligent_write_error($fullpath);
+				@flock($myfile,LOCK_EX);
+				if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 				if (fwrite($myfile,$comcode)<strlen($comcode)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-				flock($myfile,LOCK_UN);
+				@flock($myfile,LOCK_UN);
 				fclose($myfile);
 				fix_permissions($fullpath);
 				sync_file($fullpath);

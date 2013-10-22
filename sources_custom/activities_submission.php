@@ -346,7 +346,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 	// Grab a pointer for appending to this file
 	// NOTE: ALWAYS open as append! Opening as write will wipe the file during
 	// the fopen call, which is before we have a lock.
-	$fp=@fopen($file_path,'a+');
+	$fp=@fopen($file_path,GOOGLE_APPENGINE?'w+':'a+');
 
 	// Only bother running if this file can be opened
 	if ($fp!==false)
@@ -356,7 +356,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 
 		$sleep_multiplier=floatval($timeout)/10.0;
 
-		flock($fp,LOCK_EX);
+		@flock($fp,LOCK_EX);
 
 		// Read the current value
 		rewind($fp);
@@ -366,13 +366,13 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 		{
 			// If so then wipe the file (since we're in append mode,
 			// but we want to overwrite)
-			ftruncate($fp,0);
+			if (!GOOGLE_APPENGINE) ftruncate($fp,0);
 
 			// Save our new ID
 			fwrite($fp,strval($id));
 		}
 
-		flock($fp,LOCK_UN);
+		@flock($fp,LOCK_UN);
 		fclose($fp);
 	} else
 	{

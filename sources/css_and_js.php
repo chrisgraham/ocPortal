@@ -86,11 +86,11 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 
 	// Copy to tmp file
 	$temp_file=get_custom_file_base().'/themes/'.$destination_theme.'/css_custom/'.basename($fullpath,'.css').'__tmp_copy.css';
-	$myfile=@fopen($temp_file,'at') OR intelligent_write_error($temp_file);
-	flock($myfile,LOCK_EX);
-	ftruncate($myfile,0);
+	$myfile=@fopen($temp_file,GOOGLE_APPENGINE?'wt':'at') OR intelligent_write_error($temp_file);
+	@flock($myfile,LOCK_EX);
+	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 	fwrite($myfile,$sheet);
-	flock($myfile,LOCK_UN);
+	@flock($myfile,LOCK_UN);
 	fclose($myfile);
 	fix_permissions($temp_file);
 
@@ -167,12 +167,12 @@ function js_compile($j,$js_cache_path,$minify=true)
 	{
 		$contents='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'."\n".'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */'."\n\n".$out;
 	}
-	$js_file=@fopen($js_cache_path,'at');
+	$js_file=@fopen($js_cache_path,GOOGLE_APPENGINE?'wt':'at');
 	if ($js_file===false) intelligent_write_error($js_cache_path);
-	flock($js_file,LOCK_EX);
-	ftruncate($js_file,0);
+	@flock($js_file,LOCK_EX);
+	if (!GOOGLE_APPENGINE) ftruncate($js_file,0);
 	if (fwrite($js_file,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-	flock($js_file,LOCK_UN);
+	@flock($js_file,LOCK_UN);
 	fclose($js_file);
 	fix_permissions($js_cache_path);
 	sync_file($js_cache_path);
@@ -206,12 +206,12 @@ function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=t
 	}
 
 	list($success_status,$out)=_css_compile($active_theme,$theme,$c,$fullpath,$minify);
-	$css_file=@fopen($css_cache_path,'at');
+	$css_file=@fopen($css_cache_path,GOOGLE_APPENGINE?'wt':'at');
 	if ($css_file===false) intelligent_write_error($css_cache_path);
-	flock($css_file,LOCK_EX);
-	ftruncate($css_file,0);
+	@flock($css_file,LOCK_EX);
+	if (!GOOGLE_APPENGINE) ftruncate($css_file,0);
 	if (fwrite($css_file,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-	flock($css_file,LOCK_UN);
+	@flock($css_file,LOCK_UN);
 	fclose($css_file);
 	fix_permissions($css_cache_path);
 	sync_file($css_cache_path);

@@ -685,9 +685,9 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 										if (is_file($fullpath))
 										{
 											$tmp=fopen($fullpath,'rb');
-											flock($tmp,LOCK_SH);
+											@flock($tmp,LOCK_SH);
 											$filecontents=file_get_contents($fullpath);
-											flock($tmp,LOCK_UN);
+											@flock($tmp,LOCK_UN);
 											fclose($tmp);
 										} else
 										{
@@ -820,9 +820,9 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	{
 		$_path=$base_dir.filter_naughty($theme.$path.$codename).$suffix;
 		$tmp=fopen($_path,'rb');
-		flock($tmp,LOCK_SH);
+		@flock($tmp,LOCK_SH);
 		$html=unixify_line_format(file_get_contents($_path));
-		flock($tmp,LOCK_UN);
+		@flock($tmp,LOCK_UN);
 		fclose($tmp);
 	}
 
@@ -848,7 +848,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	{
 		$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang);
 		$_path2=$path2.'/'.filter_naughty($_codename).$suffix.'.tcp';
-		$myfile=@fopen($_path2,'ab');
+		$myfile=@fopen($_path2,GOOGLE_APPENGINE?'wb':'ab');
 		if ($myfile===false)
 		{
 			static $looping=false;
@@ -866,23 +866,23 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 
 			$looping=false;
 
-			$myfile=@fopen($_path2,'ab');
+			$myfile=@fopen($_path2,GOOGLE_APPENGINE?'wb':'ab');
 		}
 
-		flock($myfile,LOCK_EX);
-		ftruncate($myfile,0);
+		@flock($myfile,LOCK_EX);
+		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		$data_to_write='<'.'?php'."\n".$result->to_assembly($lang)."\n".'?'.'>';
 		if (fwrite($myfile,$data_to_write)>=strlen($data_to_write))
 		{
 			// Success
-			flock($myfile,LOCK_UN);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 			require_code('files');
 			fix_permissions($path2.'/'.filter_naughty($_codename).$suffix.'.tcp');
 		} else
 		{
 			// Failure
-			flock($myfile,LOCK_UN);
+			@flock($myfile,LOCK_UN);
 			fclose($myfile);
 			@unlink($path2.'/'.filter_naughty($_codename).$suffix.'.tcp'); // Can't leave this around, would cause problems
 		}
