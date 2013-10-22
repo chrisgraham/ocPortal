@@ -74,7 +74,7 @@ Ignore any "There is no PHP GD extension on the server" error. The PHP SDK (at t
 The installer will ask for various GAE-specific details. It will provide links that take you to where you can set these up. That said, things aren't always straight-forward, so you must read the "Live setup instructions / notes" below to tell you what you actually need to configure.
 
 A top-level view of what you'll be setting up:
- - App Engine application ID -- The identifier for the live GAE application
+ - App Engine application ID -- The identifier for the live GAE application; Google will automatically also use this as the Google Cloud project name
  - Google Cloud Storage bucket name -- The identifier for the live Google Cloud Storage (this is basically the live filesystem, which is stored separately to the application itself)
  - Database hostname -- This includes the identifier for the Google Cloud SQL database's Google Cloud Platform project and the identifier for the Google Cloud SQL instance
  - Database name -- The name of the Google Cloud SQL database, which you must create manually
@@ -103,6 +103,12 @@ When you go to Google Cloud Storage, you will see a link to go to "online browse
 Annoyingly it takes you to the beta version of Google Cloud Console, which you'll need to exit out of when you're done (did I mention it is a jumble?).
 
 You need to set permissions to public access, as URLs will be served out of the storage. Do this by ticking (checking) the bucket and clicking the "Bucket permissions" button that will appear.
+
+Next, we need to grant GAE permissions on the bucket:
+ - Click on Permissions on the left hand menu
+ - Click "Add member"
+ - Use the Email [tt]<application>@appspot.gserviceaccount.com[/tt] (obviously substitute [tt]<application>[/tt] for the real name of the application)
+ - Click Add
 [/surround]
 
 [surround]

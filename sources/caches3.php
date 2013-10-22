@@ -168,9 +168,8 @@ function erase_cached_language()
 		$_dir=@opendir($path);
 		if ($_dir===false)
 		{
-			@mkdir($path,0777,true) OR intelligent_write_error($path);
-			fix_permissions($path,0777);
-			sync_file($path);
+			require_code('files2');
+			make_missing_directory($path);
 		} else
 		{
 			while (false!==($file=readdir($_dir)))

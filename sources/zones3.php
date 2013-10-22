@@ -462,6 +462,12 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.filter_naughty($zone).'/pages/comcode_custom/'.filter_naughty($lang).'/'.filter_naughty($new_file).'.txt');
 	if ((!file_exists($fullpath)) || ($text!=file_get_contents($fullpath)))
 	{
+		if (!file_exists(dirname($fullpath)))
+		{
+			require_code('files2');
+			make_missing_directory(dirname($fullpath));
+		}
+
 		$myfile=@fopen($fullpath,'at');
 		if ($myfile===false) intelligent_write_error($fullpath);
 		flock($myfile,LOCK_EX);

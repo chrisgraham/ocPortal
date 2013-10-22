@@ -845,6 +845,11 @@ class Module_admin_setupwizard
 			{
 				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'logo_template');
 				$path='themes/'.$logo_save_theme.'/images_custom/-logo.png';
+				if (!file_exists(dirname($path)))
+				{
+					require_code('files2');
+					make_missing_directory(dirname($path));
+				}
 				@imagepng($logo,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 				actual_edit_theme_image('logo/-logo',$logo_save_theme,get_site_default_lang(),'logo/-logo',$path,true);
 				if (addon_installed('collaboration_zone'))
@@ -983,6 +988,11 @@ class Module_admin_setupwizard
 		if (post_param_integer('skip_7',0)==0)
 		{
 			$fullpath=get_custom_file_base().'/pages/comcode_custom/'.get_site_default_lang().'/rules.txt';
+			if (!file_exists(dirname($fullpath)))
+			{
+				require_code('files2');
+				make_missing_directory(dirname($fullpath));
+			}
 			if (file_exists($fullpath))
 			{
 				@copy($fullpath,$fullpath.'.'.strval(time()));
@@ -1013,6 +1023,11 @@ class Module_admin_setupwizard
 			{
 				// Start
 				$fullpath=get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.get_site_default_lang().'/start.txt';
+				if (!file_exists(dirname($fullpath)))
+				{
+					require_code('files2');
+					make_missing_directory(dirname($fullpath));
+				}
 				if (file_exists($fullpath)) @copy($fullpath,$fullpath.'.'.strval(time()));
 				$myfile=@fopen($fullpath,'wt')  OR intelligent_write_error($fullpath);
 				if ($myfile!==false)

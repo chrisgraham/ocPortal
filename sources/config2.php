@@ -53,15 +53,18 @@ function _multi_lang()
 		}
 		if (get_custom_file_base()!=get_file_base())
 		{
-			$_dir=opendir(get_file_base().'/lang_custom/');
-			while (false!==($file=readdir($_dir)))
+			$_dir=@opendir(get_file_base().'/lang_custom/');
+			if ($_dir!==false)
 			{
-				if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && ($file!='index.html') && ($file!='langs.ini') && ($file!='map.ini') && (!isset($_langs[$file])))
+				while (false!==($file=readdir($_dir)))
 				{
-					if (is_dir(get_file_base().'/lang_custom/'.$file)) $_langs[$file]='lang_custom';
+					if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && ($file!='index.html') && ($file!='langs.ini') && ($file!='map.ini') && (!isset($_langs[$file])))
+					{
+						if (is_dir(get_file_base().'/lang_custom/'.$file)) $_langs[$file]='lang_custom';
+					}
 				}
+				closedir($_dir);
 			}
-			closedir($_dir);
 		}
 	}	
 

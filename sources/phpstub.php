@@ -5242,16 +5242,6 @@ function nl2br($in)
 }
 
 /**
- * Returns the type of interface between web server and PHP.
- *
- * @return string	SAPI name.
- */
-function php_sapi_name()
-{
-	return '';
-}
-
-/**
  * Returns information about the operating system PHP is running on.
  *
  * @param  string	Type of info to get.
@@ -6178,6 +6168,7 @@ disk_free_space
 disk_total_space
 highlight_file
 phpversion
+php_sapi_name
 
 Disabled due to multi-os compatibility...
 

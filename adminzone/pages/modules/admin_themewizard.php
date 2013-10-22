@@ -420,6 +420,13 @@ class Module_admin_themewizard
 		foreach (array($theme,'default') as $logo_save_theme)
 		{
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
+
+			if (!file_exists(dirname($path)))
+			{
+				require_code('files2');
+				make_missing_directory(dirname($path));
+			}
+
 			$img=generate_logo(post_param('name'),post_param('title'),false,$logo_save_theme,'logo_template');
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);

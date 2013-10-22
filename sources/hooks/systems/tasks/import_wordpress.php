@@ -260,6 +260,11 @@ class Hook_task_import_wordpress
 						));
 
 						// Save to disk
+						if (!file_exists(dirname($fullpath)))
+						{
+							require_code('files2');
+							make_missing_directory(dirname($fullpath));
+						}
 						$myfile=@fopen($fullpath,'wt');
 						if ($myfile===false) intelligent_write_error($fullpath);
 						if (fwrite($myfile,$_content)<strlen($_content))

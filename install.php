@@ -448,7 +448,7 @@ function step_1()
 		ftp_pwd ftp_rawlist ftp_systype ftruncate func_get_arg func_get_args func_num_args
 		parse_ini_file parse_str is_executable
 		is_scalar is_subclass_of metaphone natcasesort natsort nl2br ob_get_length ob_gzhandler
-		ob_iconv_handler ob_implicit_flush php_sapi_name ob_clean
+		ob_iconv_handler ob_implicit_flush ob_clean
 		php_uname printf convert_cyr_string cosh count_chars
 		gethostbynamel getimagesize getlastmod fpassthru
 		gettimeofday get_cfg_var get_magic_quotes_runtime get_meta_tags get_parent_class
@@ -1616,7 +1616,7 @@ function step_5_write_config()
 		if (($key=='admin_username') && (post_param('forum_type')!='none'))
 			continue;
 
-		if ((GOOGLE_APPENGINE) && (($key=='domain') || ($key=='base_url')))
+		if ((GOOGLE_APPENGINE) && (($key=='domain') || ($key=='base_url') || (substr($key,0,9)=='db_forums')))
 			continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);

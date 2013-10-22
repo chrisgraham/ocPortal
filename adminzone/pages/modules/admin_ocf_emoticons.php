@@ -231,6 +231,11 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 								{
 									$path=get_custom_file_base().'/themes/default/images_custom/ocf_emoticons__'.basename($_file);
 								}
+								if (!file_exists(dirname($path)))
+								{
+									require_code('files2');
+									make_missing_directory(dirname($path));
+								}
 								$outfile=@fopen($path,'wb') OR intelligent_write_error($path);
 
 								$more=mixed();

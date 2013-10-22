@@ -23,6 +23,12 @@
  */
 function make_functions_dat()
 {
+	if (!file_exists(get_custom_file_base().'/data_custom'))
+	{
+		require_code('files2');
+		make_missing_directory(get_custom_file_base().'/data_custom');
+	}
+
 	$files=make_functions_dat_do_dir(get_custom_file_base());
 	$classes=array();
 	$global=array();

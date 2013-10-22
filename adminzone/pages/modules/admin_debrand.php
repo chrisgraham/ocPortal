@@ -173,6 +173,11 @@ class Module_admin_debrand
 		}
 
 		$keyboard_map_path=get_file_base().'/pages/comcode_custom/'.get_site_default_lang().'/keymap.txt';
+		if (!file_exists(dirname($keyboard_map_path)))
+		{
+			require_code('files2');
+			make_missing_directory(dirname($keyboard_map_path));
+		}
 		$myfile=@fopen($keyboard_map_path,'wb');
 		if ($myfile===false) intelligent_write_error($keyboard_map_path);
 		$km=post_param('keyboard_map');
@@ -182,6 +187,11 @@ class Module_admin_debrand
 		sync_file($keyboard_map_path);
 
 		$adminguide_path=get_file_base().'/adminzone/pages/comcode_custom/'.get_site_default_lang().'/website.txt';
+		if (!file_exists(dirname($adminguide_path)))
+		{
+			require_code('files2');
+			make_missing_directory(dirname($adminguide_path));
+		}
 		$adminguide=post_param('adminguide');
 		$adminguide=str_replace('__company__',post_param('company_name'),$adminguide);
 		$myfile=@fopen($adminguide_path,'wb');
@@ -215,6 +225,11 @@ class Module_admin_debrand
 		}
 
 		$save_header_path=get_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_custom/GLOBAL_HTML_WRAP.tpl';
+		if (!file_exists(dirname($save_header_path)))
+		{
+			require_code('files2');
+			make_missing_directory(dirname($save_header_path));
+		}
 		$header_path=$save_header_path;
 		if (!file_exists($header_path)) $header_path=get_file_base().'/themes/default/templates/GLOBAL_HTML_WRAP.tpl';
 		$header_tpl=file_get_contents($header_path);

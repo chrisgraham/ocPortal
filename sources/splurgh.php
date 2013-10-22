@@ -54,6 +54,12 @@ function splurgh_master_build($key_name,$map,$url_stub,$_cache_file,$last_change
 
 	if ((!file_exists($cache_file)) || (is_browser_decacheing()) || (filesize($cache_file)==0) || ($last_change_time>filemtime($cache_file)))
 	{
+		if (!file_exists(dirname($cache_file)))
+		{
+			require_code('files2');
+			make_missing_directory(dirname($cache_file));
+		}
+
 		$myfile=@fopen($cache_file,'at');
 		if ($myfile===false) intelligent_write_error($cache_file);
 		flock($myfile,LOCK_EX);

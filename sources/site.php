@@ -867,14 +867,8 @@ function do_site()
 
 			if (!is_dir(get_custom_file_base().'/caches/guest_pages/'))
 			{
-				if (@mkdir(get_custom_file_base().'/caches/guest_pages/',0777,true))
-				{
-					fix_permissions(get_custom_file_base().'/caches/guest_pages/',0777);
-					sync_file(get_custom_file_base().'/caches/guest_pages/');
-				} else
-				{
-					intelligent_write_error($fast_cache_path);
-				}
+				require_code('files2');
+				make_missing_directory(get_custom_file_base().'/caches/guest_pages');
 			}
 
 			$out_evaluated=$out->evaluate(NULL);

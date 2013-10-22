@@ -812,6 +812,12 @@ function _news_import_grab_image(&$data,$url)
 		$target_url=get_custom_base_url().'/uploads/attachments/'.$uniqid.'_'.basename($url);
 	}
 
+	if (!file_exists(dirname($target_path)))
+	{
+		require_code('files2');
+		make_missing_directory(dirname($target_path));
+	}
+
 	$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
 	$result=http_download_file($url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
 	fclose($target_handle);

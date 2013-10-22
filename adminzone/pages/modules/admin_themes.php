@@ -1115,6 +1115,11 @@ class Module_admin_themes
 		}
 
 		$custom_path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/'.$file;
+		if (!file_exists(dirname($custom_path)))
+		{
+			require_code('files2');
+			make_missing_directory(dirname($custom_path));
+		}
 		$path_backup=$custom_path.'.'.strval(time());
 		if (file_exists($custom_path))
 		{
@@ -1752,6 +1757,11 @@ class Module_admin_themes
 			$file=str_replace('templates/','templates_custom/',$_file);
 			$file=str_replace('css/','css_custom/',$file);
 			$fullpath=get_custom_file_base().'/themes/'.$file;
+			if (!file_exists(dirname($fullpath)))
+			{
+				require_code('files2');
+				make_missing_directory(dirname($fullpath));
+			}
 
 			// Make backup
 			if ((file_exists($fullpath)) && (get_option('templates_store_revisions')=='1'))

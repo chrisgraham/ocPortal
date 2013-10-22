@@ -379,6 +379,12 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function _xml()
 	{
+		if (!file_exists(get_custom_file_base().'/data_custom'))
+		{
+			require_code('files2');
+			make_missing_directory(get_custom_file_base().'/data_custom');
+		}
+
 		$myfile=@fopen(get_custom_file_base().'/data_custom/aggregate_types.xml','wt');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/aggregate_types.xml');
 		$xml=post_param('xml');

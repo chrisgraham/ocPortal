@@ -833,6 +833,12 @@ msgstr ""
 
 		if ((count($_POST)==0) && (strtolower(ocp_srv('REQUEST_METHOD'))!='post')) warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
+		if (!file_exists(get_custom_file_base().'/lang_custom/'.filter_naughty($lang)))
+		{
+			require_code('files2');
+			make_missing_directory(get_custom_file_base().'/lang_custom/'.filter_naughty($lang));
+		}
+
 		$path=get_custom_file_base().'/lang_custom/'.filter_naughty($lang).'/'.filter_naughty($lang_file).'.ini';
 		$path_backup=$path.'.'.strval(time());
 		if (file_exists($path))
@@ -887,6 +893,12 @@ msgstr ""
 	function set_lang_code_2()
 	{
 		$lang=post_param('lang');
+
+		if (!file_exists(get_custom_file_base().'/lang_custom/'.filter_naughty($lang)))
+		{
+			require_code('files2');
+			make_missing_directory(get_custom_file_base().'/lang_custom/'.filter_naughty($lang));
+		}
 
 		$lang_files=get_lang_files(fallback_lang());
 

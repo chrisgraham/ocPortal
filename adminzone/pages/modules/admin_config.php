@@ -822,6 +822,12 @@ class Module_admin_config
 	 */
 	function _xml_fields()
 	{
+		if (!file_exists(get_custom_file_base().'/data_custom'))
+		{
+			require_code('files2');
+			make_missing_directory(get_custom_file_base().'/data_custom');
+		}
+
 		$myfile=@fopen(get_custom_file_base().'/data_custom/fields.xml','at');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/fields.xml');
 		flock($myfile,LOCK_EX);
@@ -862,6 +868,12 @@ class Module_admin_config
 	 */
 	function _xml_breadcrumbs()
 	{
+		if (!file_exists(get_custom_file_base().'/data_custom'))
+		{
+			require_code('files2');
+			make_missing_directory(get_custom_file_base().'/data_custom');
+		}
+
 		$myfile=@fopen(get_custom_file_base().'/data_custom/breadcrumbs.xml','at');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/breadcrumbs.xml');
 		flock($myfile,LOCK_EX);

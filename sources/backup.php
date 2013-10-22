@@ -120,6 +120,12 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
  */
 function make_backup_2($file,$b_type,$max_size) // This is called as a shutdown function and thus cannot script-timeout
 {
+	if (!file_exists(get_custom_file_base().'/exports/backups'))
+	{
+		require_code('files2');
+		make_missing_directory(get_custom_file_base().'/exports/backups');
+	}
+
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	$logfile_path=get_custom_file_base().'/exports/backups/'.$file.'.txt';
 	$logfile=@fopen($logfile_path,'wt') OR intelligent_write_error($logfile_path); // .txt file because IIS doesn't allow .log download

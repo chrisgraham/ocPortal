@@ -100,6 +100,12 @@ function write_text_file($codename,$lang,$out)
 	}
 	$path=str_replace(get_file_base().'/text/',get_custom_file_base().'/text_custom/',$xpath);
 
+	if (!file_exists(dirname($path)))
+	{
+		require_code('files2');
+		make_missing_directory(dirname($path));
+	}
+
 	$myfile=@fopen($path,'at');
 	flock($myfile,LOCK_EX);
 	ftruncate($myfile,0);

@@ -97,9 +97,9 @@ handlers:
 #  script: index.php
 #- url: /([^/\&\?]+)
 #  script: index.php
-- url: /(.*\.(css|csv|cur|dat|gif|gz|htm|html|ico|ini|jar|jpg|js|json|mp3|pdf|png|pre|svg|swf|tar|tpl|ttf|txt|wav|xml|xsl|zip))
+- url: /(.*\.(css|csv|cur|gif|gz|htm|html|ico|jar|jpg|js|json|mp3|pdf|png|pre|svg|swf|tar|ttf|txt|wav|xml|xsl|zip))
   static_files: \1
-  upload: .*\.(css|csv|cur|dat|gif|gz|htm|html|ico|ini|jar|jpg|js|json|mp3|pdf|png|pre|svg|swf|tar|tpl|ttf|txt|wav|xml|xsl|zip)
+  upload: .*\.(css|csv|cur|gif|gz|htm|html|ico|jar|jpg|js|json|mp3|pdf|png|pre|svg|swf|tar|ttf|txt|wav|xml|xsl|zip)
   application_readable: true
 - url: /
   script: index.php
@@ -111,6 +111,8 @@ handlers:
   script: forum/index.php
 - url: /collaboration/
   script: collaboration/index.php
+- url: /test.php
+  script: test.php
 - url: /docs/
   script: docs/index.php
 - url: /_ah/mail/tickets@appid.appspotmail.com
@@ -129,6 +131,11 @@ skip_files:
 - ^caches/.*
 - ^data_custom/errorlog.php$
 - ^safe_mode_temp/.*
+- ^\.git/.*
+- ^data_custom/modules/google_appengine/.*
+- ^dump.sql
+- ^themes/default/templates_cached/.*
+- ^_old/.*
 
 inbound_services:
 - mail

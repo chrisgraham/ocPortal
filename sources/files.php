@@ -468,10 +468,10 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		if (strtolower($filepath)=='exports/static') return true; // Empty directory, so has to be a special exception
 		if (strtolower($filepath)=='exports/builds') return true; // Needed to stop build recursion
 		if (strtolower($filepath)=='_tests') return true; // Test set may have various temporary files buried within
-		if (file_exists(get_custom_file_base().'/data_custom/addon_files.txt'))
+		if (file_exists(get_file_base().'/data_custom/addon_files.txt'))
 		{
 			static $addon_list=NULL;
-			if ($addon_list===NULL) $addon_list=strtolower(file_get_contents(unixify_line_format(get_custom_file_base().'/data_custom/addon_files.txt')));
+			if ($addon_list===NULL) $addon_list=strtolower(file_get_contents(unixify_line_format(get_file_base().'/data_custom/addon_files.txt')));
 			if (strpos($addon_list,' - '.strtolower($filepath)."\n")!==false)
 			{
 				return true;

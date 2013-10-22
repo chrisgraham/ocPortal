@@ -150,16 +150,10 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 		// Cache
 		if ($desire_cache)
 		{
-			if (!is_dir(dirname($cache_path)))
+			if (!file_exists(dirname($cache_path)))
 			{
-				if (@mkdir(dirname($cache_path),0777,true))
-				{
-					fix_permissions(dirname($cache_path),0777);
-					sync_file(dirname($cache_path));
-				} else
-				{
-					intelligent_write_error($cache_path);
-				}
+				require_code('files2');
+				make_missing_directory(dirname($cache_path));
 			}
 
 			$file=@fopen($cache_path,'at'); // Will fail if cache dir missing .. e.g. in quick installer

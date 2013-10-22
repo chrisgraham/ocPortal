@@ -846,37 +846,45 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	$result=template_to_tempcode($html,0,false,($suffix!='.tpl')?'':$codename,$theme_orig,$lang);
 	if (($CACHE_TEMPLATES) && (!$IS_TEMPLATE_PREVIEW_OP_CACHE) && (($suffix=='.tpl') || ($codename=='no_cache')))
 	{
-		$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang).'/';
-		$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcp','ab');
+		$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang);
+		$_path2=$path2.'/'.filter_naughty($_codename).$suffix.'.tcp';
+		$myfile=@fopen($_path2,'ab');
 		if ($myfile===false)
 		{
 			static $looping=false;
 			if ($looping)
 			{
-				critical_error('PASSON',do_lang('WRITE_ERROR',escape_html($path2.filter_naughty($_codename).$suffix.'.tcp'))); // Bail out hard if would cause a loop
+				critical_error('PASSON',do_lang('WRITE_ERROR',escape_html($path2.'/'.filter_naughty($_codename).$suffix.'.tcp'))); // Bail out hard if would cause a loop
 			}
 			$looping=true;
-			require_code('files2');
-			make_missing_directory($path2);
+
+			if (!file_exists($path2))
+			{
+				require_code('files2');
+				make_missing_directory($path2);
+			}
+
+			$looping=false;
+
+			$myfile=@fopen($_path2,'ab');
+		}
+
+		flock($myfile,LOCK_EX);
+		ftruncate($myfile,0);
+		$data_to_write='<'.'?php'."\n".$result->to_assembly($lang)."\n".'?'.'>';
+		if (fwrite($myfile,$data_to_write)>=strlen($data_to_write))
+		{
+			// Success
+			flock($myfile,LOCK_UN);
+			fclose($myfile);
+			require_code('files');
+			fix_permissions($path2.'/'.filter_naughty($_codename).$suffix.'.tcp');
 		} else
 		{
-			flock($myfile,LOCK_EX);
-			ftruncate($myfile,0);
-			$data_to_write='<'.'?php'."\n".$result->to_assembly($lang)."\n".'?'.'>';
-			if (fwrite($myfile,$data_to_write)>=strlen($data_to_write))
-			{
-				// Success
-				flock($myfile,LOCK_UN);
-				fclose($myfile);
-				require_code('files');
-				fix_permissions($path2.filter_naughty($_codename).$suffix.'.tcp');
-			} else
-			{
-				// Failure
-				flock($myfile,LOCK_UN);
-				fclose($myfile);
-				@unlink($path2.filter_naughty($_codename).$suffix.'.tcp'); // Can't leave this around, would cause problems
-			}
+			// Failure
+			flock($myfile,LOCK_UN);
+			fclose($myfile);
+			@unlink($path2.'/'.filter_naughty($_codename).$suffix.'.tcp'); // Can't leave this around, would cause problems
 		}
 	}
 

@@ -98,7 +98,39 @@ function _find_all_langs($even_empty_langs=false)
 							$_langs[$file]='lang_custom';
 						} else
 						{
-							$_dir2=opendir(get_custom_file_base().'/lang_custom/'.$file);
+							$_dir2=@opendir(get_custom_file_base().'/lang_custom/'.$file);
+							if ($_dir2!==false)
+							{
+								while (false!==($file2=readdir($_dir2)))
+								{
+									if ((substr($file2,-4)=='.ini') || (substr($file2,-3)=='.po'))
+									{
+										$_langs[$file]='lang_custom';
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			closedir($_dir);
+		}
+		if (get_custom_file_base()!=get_file_base())
+		{
+			$_dir=@opendir(get_file_base().'/lang_custom/');
+			if ($_dir!==false)
+			{
+				while (false!==($file=readdir($_dir)))
+				{
+					if ((!isset($file[5])) && ($file[0]!='.') && (($file=='EN') || (!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS))))
+					{
+						if ($even_empty_langs)
+						{
+							$_langs[$file]='lang_custom';
+						} else
+						{
+							$_dir2=opendir(get_file_base().'/lang_custom/'.$file);
 							while (false!==($file2=readdir($_dir2)))
 							{
 								if ((substr($file2,-4)=='.ini') || (substr($file2,-3)=='.po'))
@@ -110,34 +142,8 @@ function _find_all_langs($even_empty_langs=false)
 						}
 					}
 				}
+				closedir($_dir);
 			}
-			closedir($_dir);
-		}
-		if (get_custom_file_base()!=get_file_base())
-		{
-			$_dir=opendir(get_file_base().'/lang_custom/');
-			while (false!==($file=readdir($_dir)))
-			{
-				if ((!isset($file[5])) && ($file[0]!='.') && (($file=='EN') || (!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS))))
-				{
-					if ($even_empty_langs)
-					{
-						$_langs[$file]='lang_custom';
-					} else
-					{
-						$_dir2=opendir(get_file_base().'/lang_custom/'.$file);
-						while (false!==($file2=readdir($_dir2)))
-						{
-							if ((substr($file2,-4)=='.ini') || (substr($file2,-3)=='.po'))
-							{
-								$_langs[$file]='lang_custom';
-								break;
-							}
-						}
-					}
-				}
-			}
-			closedir($_dir);
 		}
 	}	
 	$_dir=opendir(get_file_base().'/lang/');

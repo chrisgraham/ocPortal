@@ -176,6 +176,11 @@ class Hook_task_import_rss
 				}
 
 				// Work out rep-image
+				if (!file_exists(get_custom_file_base().'/uploads/grepimages'))
+				{
+					require_code('files2');
+					make_missing_directory(get_custom_file_base().'/uploads/grepimages');
+				}
 				$rep_image='';
 				if (array_key_exists('rep_image',$item))
 				{
@@ -284,6 +289,11 @@ class Hook_task_import_rss
 				));
 
 				// Save to disk
+				if (!file_exists(dirname($fullpath)))
+				{
+					require_code('files2');
+					make_missing_directory(dirname($fullpath));
+				}
 				$myfile=@fopen($fullpath,'wt');
 				if ($myfile===false) intelligent_write_error($fullpath);
 				if (fwrite($myfile,$_content)<strlen($_content))

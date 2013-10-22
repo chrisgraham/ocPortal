@@ -499,6 +499,12 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 {
 	disable_php_memory_limit();
 
+	if (!file_exists(dirname($to)))
+	{
+		require_code('files2');
+		make_missing_directory(dirname($to));
+	}
+
 	// Load
 	$ext=get_file_extension($from);
 	if ($using_path)

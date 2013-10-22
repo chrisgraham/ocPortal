@@ -257,6 +257,12 @@ class Module_admin_stats
 
 		$type=get_param('type','misc');
 
+		if (!file_exists(get_custom_file_base().'/data_custom/modules/admin_stats'))
+		{
+			require_code('files2');
+			make_missing_directory(get_custom_file_base().'/data_custom/modules/admin_stats');
+		}
+
 		if ($type=='misc') return $this->misc();
 		elseif ($type=='overview') return $this->overview();
 		elseif ($type=='users_online') return $this->users_online();

@@ -337,6 +337,12 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 {
 	$file_path=get_custom_file_base().'/data_custom/latest_activity.txt';
 
+	if (!file_exists(dirname($file_path)))
+	{
+		require_code('files2');
+		make_missing_directory(dirname($file_path));
+	}
+
 	// Grab a pointer for appending to this file
 	// NOTE: ALWAYS open as append! Opening as write will wipe the file during
 	// the fopen call, which is before we have a lock.
