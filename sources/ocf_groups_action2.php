@@ -126,6 +126,9 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 		require_code('resource_fs');
 		generate_resourcefs_moniker('group',strval($group_id));
 	}
+
+	persistent_cache_delete('GROUPS');
+	persistent_cache_delete('GROUPS_PO');
 }
 
 /**
@@ -175,6 +178,11 @@ function ocf_delete_group($group_id,$target_group=NULL)
 		require_code('resource_fs');
 		expunge_resourcefs_moniker('group',strval($group_id));
 	}
+
+	persistent_cache_delete('GROUPS_COUNT');
+	persistent_cache_delete('GROUPS_COUNT_PO');
+	persistent_cache_delete('GROUPS');
+	persistent_cache_delete('GROUPS_PO');
 }
 
 /**
@@ -203,11 +211,8 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 
 	$validated=0;
 	$in=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
-//	if (count($in)==1)
-	{
-		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$group_id));
-		if ($test==1) $validated=1;
-	}
+	$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$group_id));
+	if ($test==1) $validated=1;
 
 	$GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
 		'gm_group_id'=>$group_id,

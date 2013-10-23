@@ -1875,6 +1875,8 @@ function get_num_users_site()
 		{
 			// New record
 			$GLOBALS['SITE_DB']->query_insert('usersonline_track',array('date_and_time'=>time(),'peak'=>intval($NUM_USERS_SITE_CACHE)),false,true);
+			if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
+				set_value('user_peak',$NUM_USERS_SITE_CACHE);
 		}
 
 		// Store a 7-day-cycle peak record if we've made one

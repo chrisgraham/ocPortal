@@ -164,6 +164,11 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 		dispatch_notification('ocf_club',NULL,$subject,$mail);
 	}
 
+	persistent_cache_delete('GROUPS_COUNT');
+	persistent_cache_delete('GROUPS_COUNT_PO');
+	persistent_cache_delete('GROUPS');
+	persistent_cache_delete('GROUPS_PO');
+
 	return $group_id;
 }
 

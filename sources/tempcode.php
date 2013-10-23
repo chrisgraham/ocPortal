@@ -784,16 +784,16 @@ function handle_symbol_preprocessing($seq_part,&$children)
 
 				// Does this URL arrangement support monikers?
 				global $LOADED_MONIKERS_CACHE;
-				if (!isset($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]))
+				if (!isset($LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']]))
 				{
-					global $CONTENT_OBS,$LOADED_MONIKERS_CACHE;
+					global $CONTENT_OBS;
 					load_moniker_hooks();
 					$found=false;
 					$looking_for='_SEARCH:'.$url_parts['page'].':'.$url_parts['type'].':_WILD';
 
 					$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
 					if ($ob_info!==NULL)
-						$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]=true; // Indicator to preload this
+						$LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']]=true; // Indicator to preload this
 				}
 			}
 			return;

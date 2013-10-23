@@ -208,9 +208,17 @@ function get_web_notifications($max=NULL,$start=0)
 	foreach ($rows as $row)
 	{
 		$member_id=$row['d_from_member_id'];
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
-		$from_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
-		$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+		if ($member_id<0)
+		{
+			$username=do_lang('SYSTEM');
+			$from_url='';
+			$avatar_url=find_theme_image('ocf_default_avatars/default');
+		} else
+		{
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+			$from_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
+			$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+		}
 
 		$_message=get_translated_tempcode($row['d_message']);
 

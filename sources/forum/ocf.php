@@ -924,6 +924,8 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
+		if ($member==db_get_first_id()) return '';
+
 		$privacy_ok=true;
 		if (addon_installed('content_privacy'))
 		{
@@ -964,6 +966,8 @@ class forum_driver_ocf extends forum_driver_base
 	function get_member_avatar_url($member)
 	{
 		if ((!addon_installed('ocf_member_avatars')) && (!addon_installed('ocf_member_photos'))) return '';
+
+		if ($member==db_get_first_id()) return '';
 
 		/*if (!addon_installed('ocf_member_avatars'))	Actually when photo is chosen, avatar is set - and will have been resized right
 		{
@@ -1264,10 +1268,20 @@ class forum_driver_ocf extends forum_driver_base
 			$count=$cnt_cache[$where];
 		} else
 		{
-			$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_groups g'.$where,false,true);
-			$cnt_cache[$where]=$count;
+			$count=persistent_cache_get('GROUPS_COUNT'.($only_permissive?'_PO':''));
+			if ($count===NULL)
+			{
+				$groups_count_sql='SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_groups g'.$where;
+				$count=$this->connection->query_value_if_there($groups_count_sql,false,true);
+				$cnt_cache[$where]=$count;
+				persistent_cache_set('GROUPS_COUNT'.($only_permissive?'_PO':''),$cnt_cache[$where]);
+			} else
+			{
+				$cnt_cache[$where]=$count;
+			}
 		}
-		if (($count>100) && ((!$force_show_all) || ($count>4000)))
+		$too_many=($count>100) && ((!$force_show_all) || ($count>4000));
+		if ($too_many)
 		{
 			if ($for_member===NULL) $for_member=get_member();
 			$where=' WHERE g_is_private_club=0';
@@ -1281,13 +1295,22 @@ class forum_driver_ocf extends forum_driver_base
 		if (!function_exists('require_lang')) require_code('lang');
 		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id'.$where.$sup;
 		static $rows_cache=array();
-		if (isset($rows_cache[$where]))
+		if (!$too_many)
+			$rows=persistent_cache_get('GROUPS'.($only_permissive?'_PO':''));
+		if ($rows===NULL)
+			$rows=array();
+		if ($rows===NULL)
 		{
-			$rows=$rows_cache[$where];
-		} else
-		{
-			$rows=$this->connection->query($query,NULL,NULL,false,true);
-			$rows_cache[$where]=$rows;
+			if (isset($rows_cache[$where]))
+			{
+				$rows=$rows_cache[$where];
+			} else
+			{
+				$rows=$this->connection->query($query,NULL,NULL,false,true);
+				$rows_cache[$where]=$rows;
+				if (!$too_many)
+					persistent_cache_set('GROUPS'.($only_permissive?'_PO':''),$rows);
+			}
 		}
 		if ($hide_hidden)
 		{

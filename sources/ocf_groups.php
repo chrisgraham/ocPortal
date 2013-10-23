@@ -147,12 +147,21 @@ function ocf_ensure_groups_cached($groups)
 		return;
 	}
 
+	$count=persistent_cache_get('GROUPS_COUNT');
+
 	$groups_to_load='';
 	$counter=0;
 	foreach ($groups as $group)
 	{
 		if (!array_key_exists($group,$USER_GROUPS_CACHED))
 		{
+			if (($count!==NULL) && ($count<100))
+			{
+				$USER_GROUPS_CACHED[$group]=persistent_cache_get('GROUP_'.strval($group));
+				if ($USER_GROUPS_CACHED[$group]!==NULL)
+					continue;
+			}
+
 			if ($groups_to_load!='') $groups_to_load.=' OR ';
 			$groups_to_load.='g.id='.strval($group);
 			$counter++;
@@ -163,7 +172,6 @@ function ocf_ensure_groups_cached($groups)
 
 	if (count($extra_groups)!=$counter) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	//require_code('lang');
 	foreach ($extra_groups as $extra_group)
 	{
 		if (function_exists('get_translated_text'))
@@ -173,6 +181,11 @@ function ocf_ensure_groups_cached($groups)
 		}
 
 		$USER_GROUPS_CACHED[$extra_group['id']]=$extra_group;
+
+		if (($count!==NULL) && ($count<100))
+		{
+			persistent_cache_set('GROUP_'.strval($extra_group['id']),$extra_group);
+		}
 	}
 }
 
