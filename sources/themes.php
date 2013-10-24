@@ -244,7 +244,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		{
 			global $SITE_INFO;
 			$missing=(!$pure_only) && (((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1')) && (!is_file(get_custom_file_base().'/'.rawurldecode($path))));
-			if ((substr($path,0,22)=='themes/default/images/') || ($missing)) // Not found, so throw away custom theme image and look in default theme images to restore default
+			if ((substr($path,0,22)=='themes/default/images/') || ($missing) || (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Not found, so throw away custom theme image and look in default theme images to restore default
 			{
 				if (($missing) && (!is_file(get_file_base().'/'.rawurldecode($path))))
 				{
@@ -259,6 +259,19 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		}
 
 		$path=$base_url.'/'.$path;
+
+		// Save as absolute, back into the persistent cache, for simple cases only
+		if (($truism) && (!addon_installed('ssl')) && ($site=='site'))
+		{
+			$THEME_IMAGES_CACHE[$site][$id]=$path;
+
+			$cache=persistent_cache_get('THEME_IMAGES');
+			if ($cache!==NULL)
+			{
+				$cache[$theme][$lang][$id]=$path;
+				persistent_cache_set('THEME_IMAGES',$cache);
+			}
+		}
 	}
 
 	return cdn_filter($path);
