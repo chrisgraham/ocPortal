@@ -40,38 +40,33 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	static $poster_details_cache=array();
 	if (isset($poster_details_cache[$row['p_poster']]))
 	{
+		list($poster_title,$avatar,$post_avatar,$rank_images,$poster_details,$poster)=$poster_details_cache[$row['p_poster']];
+	} else
+	{
 		// Poster title
 		$primary_group=$GLOBALS['FORUM_DRIVER']->get_member_row_field($row['p_poster'],'m_primary_group');
 		if (!is_null($primary_group))
 		{
-			list($poster_title,$avatar,$post_avatar,$rank_images,$poster_details,$poster)=$poster_details_cache[$row['p_poster']];
+			if (addon_installed('ocf_member_titles'))
+			{
+				$poster_title=$GLOBALS['OCF_DRIVER']->get_member_row_field($row['p_poster'],'m_title');
+				if ($poster_title=='') $poster_title=get_translated_text(ocf_get_group_property($primary_group,'title'),$GLOBALS['FORUM_DB']);
+			} else $poster_title='';
+			$avatar=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($row['p_poster']);
+			$posters_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($row['p_poster'],true);
 		} else
 		{
-			// Poster title
-			$primary_group=$GLOBALS['FORUM_DRIVER']->get_member_row_field($row['p_poster'],'m_primary_group');
-			if (!is_null($primary_group))
-			{
-				if (addon_installed('ocf_member_titles'))
-				{
-					$poster_title=$GLOBALS['OCF_DRIVER']->get_member_row_field($row['p_poster'],'m_title');
-					if ($poster_title=='') $poster_title=get_translated_text(ocf_get_group_property($primary_group,'title'),$GLOBALS['FORUM_DB']);
-				} else $poster_title='';
-				$avatar=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($row['p_poster']);
-				$posters_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($row['p_poster'],true);
-			} else
-			{
-				$poster_title='';
-				$avatar='';
-				$posters_groups=array();
-			}
+			$poster_title='';
+			$avatar='';
+			$posters_groups=array();
+		}
 
-			// Avatar
-			if (is_guest($row['p_poster']))
+		// Avatar
+		if (is_guest($row['p_poster']))
+		{
+			if ($row['p_poster_name_if_guest']==do_lang('SYSTEM'))
 			{
-				if ($row['p_poster_name_if_guest']==do_lang('SYSTEM'))
-				{
-					$avatar=find_theme_image('ocf_default_avatars/default_set/ocp_fanatic',true);
-				}
+				$avatar=find_theme_image('ocf_default_avatars/default_set/ocp_fanatic',true);
 			}
 		}
 		if ($avatar!='')

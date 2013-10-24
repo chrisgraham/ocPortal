@@ -1452,7 +1452,7 @@ class Module_admin_newsletter extends standard_crud_module
 			if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 			{
 				$__csv_data=array();
-				$myfile=fopen($_FILES['file']['tmp_name'],'rt');
+				$myfile=fopen($_FILES['file']['tmp_name'],GOOGLE_APPENGINE?'rb':'rt');
 				$del=',';
 				$csv_test_line=fgetcsv($myfile,4096,$del);
 				if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))

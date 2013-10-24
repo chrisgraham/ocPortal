@@ -58,7 +58,7 @@ function inline_language_editing($codename,$lang)
 		$contents=str_replace("'".$codename.'='.$value."'","'".$codename."'",$orig_contents);
 		if ($orig_contents!=$contents)
 		{
-			$myfile=fopen($inc,GOOGLE_APPENGINE?'wt':'at');
+			$myfile=fopen($inc,GOOGLE_APPENGINE?'wb':'at');
 			@flock($myfile,LOCK_EX);
 			if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 			fwrite($myfile,$contents);

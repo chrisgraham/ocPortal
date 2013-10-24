@@ -846,7 +846,7 @@ msgstr ""
 			@copy($path,$path_backup) OR intelligent_write_error($path_backup);
 			sync_file($path_backup);
 		}
-		$myfile=@fopen($path,GOOGLE_APPENGINE?'wt':'at');
+		$myfile=@fopen($path,GOOGLE_APPENGINE?'wb':'at');
 		if ($myfile===false) intelligent_write_error($path);
 		@flock($myfile,LOCK_EX);
 		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
@@ -855,7 +855,7 @@ msgstr ""
 		{
 			fwrite($myfile,$key.'='.$description."\n");
 		}
-		fwrite($myfile,"\n"); // Weird bug with IIS 'wt' writing needs this to be on a separate line
+		fwrite($myfile,"\n"); // Weird bug with IIS GOOGLE_APPENGINE?'wb':'wt' writing needs this to be on a separate line
 		fwrite($myfile,"[strings]\n");
 		foreach (array_unique(array_merge(array_keys($for_base_lang),array_keys($for_base_lang_2))) as $key)
 		{
@@ -926,7 +926,7 @@ msgstr ""
 					@copy($path,$path_backup) OR intelligent_write_error($path_backup);
 					sync_file($path_backup);
 				}
-				$myfile=@fopen($path,GOOGLE_APPENGINE?'wt':'at');
+				$myfile=@fopen($path,GOOGLE_APPENGINE?'wb':'at');
 				if ($myfile===false) intelligent_write_error($path);
 				@flock($myfile,LOCK_EX);
 				if (!GOOGLE_APPENGINE) ftruncate($myfile,0);

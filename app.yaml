@@ -5,6 +5,8 @@ api_version: 1
 threadsafe: yes
 
 handlers:
+- url: /data/modules/google_appengine/cloud_storage_proxy\.php.*
+  script: data/modules/google_appengine/cloud_storage_proxy.php
 - url: /([=]*)pages/(modules|modules\_custom)/([/]*)\.php
   script: \1index.php
 - url: /([=]*)pg/s/([^\&\?]*)/index\.php
@@ -121,7 +123,7 @@ handlers:
 - url: /_ah/bounce
   script: data/incoming_bounced_email.php
   login: admin
-- url: /(.*\.php)(\?.*)?
+- url: /(.*\.php)(/.*)?(\?.*)?
   script: \1
 #- url: .*
 #  script: 404.htm

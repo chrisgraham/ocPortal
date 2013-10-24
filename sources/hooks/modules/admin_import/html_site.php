@@ -368,7 +368,7 @@ class Hook_html_site
 			$global_to_write=$header_to_write.'{MIDDLE}'.$footer_to_write;
 		}
 		$path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/templates_custom/GLOBAL_HTML_WRAP.tpl';
-		$myfile=fopen($path,'wt');
+		$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'wt');
 		fwrite($myfile,$global_to_write);
 		fclose($myfile);
 		fix_permissions($path);
@@ -442,7 +442,7 @@ class Hook_html_site
 			if (substr($content_file,-4)=='.php')
 			{
 				$file_path=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/minimodules_custom/'.$page.'.php');
-				$myfile=fopen($file_path,'wt');
+				$myfile=fopen($file_path,GOOGLE_APPENGINE?'wb':'wt');
 				fwrite($myfile,$file_contents);
 				fclose($myfile);
 				fix_permissions($file_path);
@@ -492,7 +492,7 @@ class Hook_html_site
 
 					$file_path=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.get_site_default_lang().'/'.$page.'.txt');
 
-					$myfile=fopen($file_path,'wt');
+					$myfile=fopen($file_path,GOOGLE_APPENGINE?'wb':'wt');
 					fwrite($myfile,'[semihtml]'.$filtered.'[/semihtml]');
 					fclose($myfile);
 					fix_permissions($file_path);
@@ -506,7 +506,7 @@ class Hook_html_site
 					require_code('comcode_from_html');
 					$comcode=semihtml_to_comcode($filtered);
 					$file_path=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.get_site_default_lang().'/'.$page.'.txt');
-					$myfile=fopen($file_path,'wt');
+					$myfile=fopen($file_path,GOOGLE_APPENGINE?'wb':'wt');
 					fwrite($myfile,$comcode);
 					fclose($myfile);
 					fix_permissions($file_path);
@@ -535,7 +535,7 @@ class Hook_html_site
 			foreach ($panels as $panel)
 			{
 				$path=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'pages/comcode_custom/'.filter_naughty(fallback_lang()).'/'.filter_naughty($panel).'.txt');
-				$myfile=fopen($path,'wt');
+				$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'wt');
 				fclose($myfile);
 				fix_permissions($path);
 				sync_file($path);
@@ -614,7 +614,7 @@ class Hook_html_site
 						{
 							$css_file=file_get_contents($target);
 							$css_file=preg_replace('#(url\([\'"]?)(\.*'.'/)?#','${1}{$BASE_URL;}/uploads/website_specific/',$css_file);
-							$my_css_file=fopen($target,'wt');
+							$my_css_file=fopen($target,GOOGLE_APPENGINE?'wb':'wt');
 							fwrite($my_css_file,$css_file);
 							fclose($my_css_file);
 						}*/

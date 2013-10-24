@@ -328,7 +328,7 @@ function find_all_servers()
 function reset_info_php($server)
 {
 	$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/_config.php';
-	$myfile=fopen($path,GOOGLE_APPENGINE?'wt':'at');
+	$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'at');
 	@flock($myfile,LOCK_EX);
 	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 	$contents="<"."?php
@@ -411,7 +411,7 @@ function reset_aliases()
 		$text.=$site['s_codename'].'.3c.ms:'.'alias-myocp_'.$site['s_codename']."\n";
 		if ($site['s_domain_name']!='') $text.=$site['s_domain_name'].':'.'alias-myocp_'.$site['s_codename']."\n";
 	}
-	$myfile=fopen(special_myocp_dir().'/virtualdomains',GOOGLE_APPENGINE?'wt':'at');
+	$myfile=fopen(special_myocp_dir().'/virtualdomains',GOOGLE_APPENGINE?'wb':'at');
 	@flock($myfile,LOCK_EX);
 	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 	fwrite($myfile,$text);
@@ -433,7 +433,7 @@ function reset_aliases()
 		if ($site['s_domain_name']!='')
 			$hosts[$site['s_domain_name']]=1;
 	}
-	$myfile=fopen(special_myocp_dir().'/rcpthosts',GOOGLE_APPENGINE?'wt':'at');
+	$myfile=fopen(special_myocp_dir().'/rcpthosts',GOOGLE_APPENGINE?'wb':'at');
 	@flock($myfile,LOCK_EX);
 	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 	fwrite($myfile,implode("\n",array_keys($hosts))."\n");
@@ -456,7 +456,7 @@ function reset_aliases()
 	$emails=$GLOBALS['SITE_DB']->query_select('sites_email',array('*'));
 	foreach ($emails as $email)
 	{
-		$myfile=fopen($a_path.'/.qmail-myocp_'.filter_naughty($email['s_codename']).'_'.filter_naughty(str_replace('.',':',$email['s_email_from'])),GOOGLE_APPENGINE?'wt':'at');
+		$myfile=fopen($a_path.'/.qmail-myocp_'.filter_naughty($email['s_codename']).'_'.filter_naughty(str_replace('.',':',$email['s_email_from'])),GOOGLE_APPENGINE?'wb':'at');
 		@flock($myfile,LOCK_EX);
 		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		fwrite($myfile,'&'.$email['s_email_to']);

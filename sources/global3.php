@@ -797,7 +797,7 @@ function is_writable_wrap($path)
 	{
 		/*if (false) // ideal, but too dangerous as sometimes you can write files but not delete again
 		{
-			$test=@fopen($path.'/ocp.delete.me','wt');
+			$test=@fopen($path.'/ocp.delete.me',GOOGLE_APPENGINE?'wb':'wt');
 			if ($test!==false)
 			{
 				fclose($test);

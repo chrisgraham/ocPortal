@@ -45,7 +45,7 @@ class ocp_memcached extends Memcached
 		if (is_null($this->objects_list))
 		{
 			$this->objects_list=parent::get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
-			if ($this->objects_list===NULL) $this->objects_list=array();
+			if ($this->objects_list===false) $this->objects_list=array();
 		}
 		return $this->objects_list;
 	}

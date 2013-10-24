@@ -1900,11 +1900,17 @@ function recall_named_function($id,$parameters,$code)
  * @param  PATH		The filename of the file to include.
  * @return mixed		Success status or returned value.
  */
-function tempcode_include($filename)
+function tempcode_include($filepath)
 {
-	if (GOOGLE_APPENGINE) gae_optimistic_cache(true);
-	$ret=@include($filename);
-	if (GOOGLE_APPENGINE) gae_optimistic_cache(false);
+	if (GOOGLE_APPENGINE)
+	{
+		gae_optimistic_cache(true);
+		$ret=@include($filepath);
+		gae_optimistic_cache(false);
+	} else
+	{
+		$ret=@include($filepath);
+	}
 
 	return $ret;
 }

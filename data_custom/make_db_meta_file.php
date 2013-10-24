@@ -38,7 +38,7 @@ foreach ($rows as $row)
 	if (!isset($db_meta[$row['m_table']])) $db_meta[$row['m_table']]=array();
 	$db_meta[$row['m_table']][$row['m_name']]=$row['m_type'];
 }
-$myfile=fopen(get_file_base().'/data/db_meta.dat','wt');
+$myfile=fopen(get_file_base().'/data/db_meta.dat',GOOGLE_APPENGINE?'wb':'wt');
 fwrite($myfile,serialize($db_meta));
 fclose($myfile);
 

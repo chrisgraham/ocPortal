@@ -294,7 +294,7 @@ class Hook_task_import_rss
 					require_code('files2');
 					make_missing_directory(dirname($fullpath));
 				}
-				$myfile=@fopen($fullpath,'wt');
+				$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wb':'wt');
 				if ($myfile===false) intelligent_write_error($fullpath);
 				if (fwrite($myfile,$_content)<strlen($_content))
 				{

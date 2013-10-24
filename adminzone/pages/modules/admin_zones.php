@@ -504,7 +504,7 @@ class Module_admin_zones
 				}
 
 				// Save
-				$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wt':'at') OR intelligent_write_error($fullpath);
+				$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wb':'at') OR intelligent_write_error($fullpath);
 				@flock($myfile,LOCK_EX);
 				if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 				if (fwrite($myfile,$comcode)<strlen($comcode)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));

@@ -468,7 +468,7 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 			make_missing_directory(dirname($fullpath));
 		}
 
-		$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wt':'at');
+		$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wb':'at');
 		if ($myfile===false) intelligent_write_error($fullpath);
 		@flock($myfile,LOCK_EX);
 		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);

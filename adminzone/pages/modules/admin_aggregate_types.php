@@ -385,7 +385,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 			make_missing_directory(get_custom_file_base().'/data_custom');
 		}
 
-		$myfile=@fopen(get_custom_file_base().'/data_custom/aggregate_types.xml','wt');
+		$myfile=@fopen(get_custom_file_base().'/data_custom/aggregate_types.xml',GOOGLE_APPENGINE?'wb':'wt');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/aggregate_types.xml');
 		$xml=post_param('xml');
 		if (fwrite($myfile,$xml)<strlen($xml)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));

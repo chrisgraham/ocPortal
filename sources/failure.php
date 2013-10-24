@@ -711,7 +711,7 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 	persistent_cache_delete('IP_BANS');
 	if ((is_writable_wrap(get_file_base().'/.htaccess')) && (is_null($ban_until)))
 	{
-		$myfile=fopen(get_file_base().'/.htaccess','rt');
+		$myfile=fopen(get_file_base().'/.htaccess',GOOGLE_APPENGINE?'rb':'rt');
 		@flock($myfile,LOCK_SH);
 		$original_contents=file_get_contents(get_file_base().'/.htaccess');
 		@flock($myfile,LOCK_UN);
@@ -731,7 +731,7 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 				}
 			} else
 			{
-				$myfile=fopen(get_file_base().'/.htaccess','wt');
+				$myfile=fopen(get_file_base().'/.htaccess',GOOGLE_APPENGINE?'wb':'wt');
 				if (fwrite($myfile,$contents)<strlen($contents))
 				{
 					rewind($myfile);
@@ -766,7 +766,7 @@ function remove_ip_ban($ip)
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$contents=str_replace("\n".'deny from '.$ip_cleaned."\n","\n",$contents);
 		$contents=str_replace("\r".'deny from '.$ip_cleaned."\r","\r",$contents); // Just in case
-		$myfile=fopen(get_file_base().'/.htaccess','wt');
+		$myfile=fopen(get_file_base().'/.htaccess',GOOGLE_APPENGINE?'wb':'wt');
 		if (fwrite($myfile,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		fclose($myfile);
 		sync_file('.htaccess');

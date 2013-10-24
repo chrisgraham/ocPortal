@@ -170,7 +170,7 @@ class Hook_occle_fs_raw
 
 		if ((is_dir($path)) && (((file_exists($path.'/'.$file_name)) && (is_writable_wrap($path.'/'.$file_name))) || ((!file_exists($path.'/'.$file_name)) && (is_writable_wrap($path)))))
 		{
-			$fh=@fopen($path.'/'.$file_name,'wt') OR intelligent_write_error($path.'/'.$file_name);
+			$fh=@fopen($path.'/'.$file_name,GOOGLE_APPENGINE?'wb':'wt') OR intelligent_write_error($path.'/'.$file_name);
 			$output=fwrite($fh,$contents);
 			fclose($fh);
 			if ($output<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));

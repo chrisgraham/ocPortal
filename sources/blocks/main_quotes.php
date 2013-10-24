@@ -88,7 +88,7 @@ class Block_main_quotes
 	 */
 	function get_random_line($filename)
 	{
-		$myfile=@fopen(filter_naughty($filename,true),'rt');
+		$myfile=@fopen(filter_naughty($filename,true),GOOGLE_APPENGINE?'rb':'rt');
 		if ($myfile===false) return '';
 		@flock($myfile,LOCK_SH);
 		$i=0;

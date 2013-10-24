@@ -51,7 +51,7 @@ function make_functions_dat()
 	}
 
 	$classes['__global']=array('functions'=>$global);
-	$myfile=@fopen(get_custom_file_base().'/data_custom/functions.dat','wt') OR intelligent_write_error(get_custom_file_base().'/data_custom/functions.dat');
+	$myfile=@fopen(get_custom_file_base().'/data_custom/functions.dat',GOOGLE_APPENGINE?'wb':'wt') OR intelligent_write_error(get_custom_file_base().'/data_custom/functions.dat');
 	if (fwrite($myfile,serialize($classes))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($myfile);
 }

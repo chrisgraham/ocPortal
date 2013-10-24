@@ -354,7 +354,7 @@ function get_charset()
 	$lang=array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN';
 	$path=get_file_base().'/lang_custom/'.$lang.'/global.ini';
 	if (!file_exists($path)) $path=get_file_base().'/lang/'.$lang.'/global.ini';
-	$file=fopen($path,'rt');
+	$file=fopen($path,GOOGLE_APPENGINE?'rb':'rt');
 	$contents=unixify_line_format(fread($file,100));
 	fclose($file);
 	$matches=array();

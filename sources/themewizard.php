@@ -547,7 +547,7 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 					}
 					if ($changed_from_default_theme)
 					{
-						$fp=@fopen($saveat,'wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($themename).'/css_custom/'.$sheet);
+						$fp=@fopen($saveat,GOOGLE_APPENGINE?'wb':'wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($themename).'/css_custom/'.$sheet);
 						if (fwrite($fp,$output)<strlen($output)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 						fclose($fp);
 						fix_permissions($saveat);

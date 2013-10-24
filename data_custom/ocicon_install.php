@@ -32,7 +32,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'."\n".'<ht
 
 
 // Remap menus to use these images
-$icons=fopen(get_file_base().'/data_custom/icon_map.csv','rt');
+$icons=fopen(get_file_base().'/data_custom/icon_map.csv',GOOGLE_APPENGINE?'rb':'rt');
 while (($line=fgetcsv($icons,1024))!==false)
 {
 	if (count($line)==2)

@@ -1553,7 +1553,7 @@ function step_5_checks()
 	global $CHMOD_ARRAY;
 	if (!file_exists(get_file_base().'/_config.php'))
 	{
-		$myfile=@fopen(get_file_base().'/_config.php','wt');
+		$myfile=@fopen(get_file_base().'/_config.php',GOOGLE_APPENGINE?'wb':'wt');
 		@fclose($myfile);
 	}
 	foreach ($CHMOD_ARRAY as $chmod)
@@ -1580,7 +1580,7 @@ function step_5_write_config()
 
 	// Open up _config.php
 	$config_file='_config.php';
-	$config_file_handle=fopen(get_file_base().'/'.$config_file,'wt');
+	$config_file_handle=fopen(get_file_base().'/'.$config_file,GOOGLE_APPENGINE?'wb':'wt');
 	fwrite($config_file_handle,"<"."?php\nglobal \$SITE_INFO;\n");
 	if ($config_file_handle===false)
 		warn_exit(do_lang_tempcode('INSTALL_WRITE_ERROR',escape_html($config_file)));
@@ -1655,6 +1655,10 @@ function step_5_write_config()
 			{
 				\$SITE_INFO['custom_file_base']='".addslashes(get_file_base().'/data_custom/modules/google_appengine')."';
 				\$SITE_INFO['custom_base_url']='".addslashes(get_base_url().'/data_custom/modules/google_appengine')."';
+
+				// Or this for more accurate (but slower) testing (assumes app name matches bucket name)...
+				//\$SITE_INFO['custom_file_base']='gs://".addslashes(post_param('gae_application'))."';
+				//\$SITE_INFO['custom_base_url']='http://localhost:8080/data/modules/google_appengine/cloud_storage_proxy.php?';
 			}
 			\$SITE_INFO['use_mem_cache']='1';
 			\$SITE_INFO['charset']='utf-8';
@@ -2887,7 +2891,7 @@ END;
 
 		foreach ($clauses as $i=>$clause)
 		{
-			$myfile=fopen(get_file_base().'/exports/addons/index.php','wt');
+			$myfile=fopen(get_file_base().'/exports/addons/index.php',GOOGLE_APPENGINE?'wb':'wt');
 			fwrite($myfile,"<"."?php
 			@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 			@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
@@ -2895,7 +2899,7 @@ END;
 			");
 			fclose($myfile);
 
-			$myfile=fopen(get_file_base().'/exports/addons/.htaccess','wt');
+			$myfile=fopen(get_file_base().'/exports/addons/.htaccess',GOOGLE_APPENGINE?'wb':'wt');
 			fwrite($myfile,$clause);
 			fclose($myfile);
 			$HTTP_MESSAGE='';

@@ -113,7 +113,7 @@ function do_work()
 	{
 		$file=uniqid('',true);
 		/*$path=get_custom_file_base().'/site/pages/comcode_custom/'.fallback_lang().'/'.$file.'.txt';
-		$myfile=fopen($path,'wt');
+		$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'wt');
 		fwrite($myfile,random_text());
 		fclose($myfile);
 		sync_file($path);

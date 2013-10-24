@@ -870,7 +870,7 @@ function sync_htaccess_with_zones()
 
 		$htaccess=file_get_contents($htaccess_path);
 		$htaccess=preg_replace('#\(site[^\)]*#','('.implode('|',$zones),$htaccess);
-		$myfile=fopen($htaccess_path,'wt');
+		$myfile=fopen($htaccess_path,GOOGLE_APPENGINE?'wb':'wt');
 		fwrite($myfile,$htaccess);
 		fclose($myfile);
 		fix_permissions($htaccess_path);

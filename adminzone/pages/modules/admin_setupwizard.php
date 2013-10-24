@@ -861,7 +861,7 @@ class Module_admin_setupwizard
 				actual_edit_theme_image('logo/trimmed_logo',$logo_save_theme,get_site_default_lang(),'logo/trimmed_logo',$path,true);
 				imagedestroy($logo);
 			}
-			$myfile=fopen(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini','wt');
+			$myfile=fopen(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini',GOOGLE_APPENGINE?'wb':'wt');
 			fwrite($myfile,'title='.$name."\n");
 			fwrite($myfile,'description='.do_lang('NA')."\n");
 			if (fwrite($myfile,'author=ocPortal'."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
@@ -999,7 +999,7 @@ class Module_admin_setupwizard
 				fix_permissions($fullpath.'.'.strval(time()));
 				sync_file($fullpath.'.'.strval(time()));
 			}
-			$myfile=@fopen($fullpath,'wt') OR intelligent_write_error(get_custom_file_base().'/pages/comcode_custom/'.get_site_default_lang().'/rules.txt');
+			$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wb':'wt') OR intelligent_write_error(get_custom_file_base().'/pages/comcode_custom/'.get_site_default_lang().'/rules.txt');
 			$rf=$this->get_rules_file(post_param('rules'));
 			if (fwrite($myfile,$rf)<strlen($rf)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			fclose($myfile);
@@ -1029,7 +1029,7 @@ class Module_admin_setupwizard
 					make_missing_directory(dirname($fullpath));
 				}
 				if (file_exists($fullpath)) @copy($fullpath,$fullpath.'.'.strval(time()));
-				$myfile=@fopen($fullpath,'wt')  OR intelligent_write_error($fullpath);
+				$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wb':'wt')  OR intelligent_write_error($fullpath);
 				if ($myfile!==false)
 				{
 					if ($zone_pages['start']!='')
@@ -1042,7 +1042,7 @@ class Module_admin_setupwizard
 				// Left
 				$fullpath=get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.get_site_default_lang().'/panel_left.txt';
 				if (file_exists($fullpath)) @copy($fullpath,$fullpath.'.'.strval(time()));
-				$myfile=@fopen($fullpath,'wt');
+				$myfile=@fopen($fullpath,GOOGLE_APPENGINE?'wb':'wt');
 				if ($myfile!==false)
 				{
 					if ($zone_pages['left']!='')
@@ -1055,7 +1055,7 @@ class Module_admin_setupwizard
 				// Right
 				$fullpath=get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.get_site_default_lang().'/panel_right.txt';
 				if (file_exists($fullpath)) @copy($fullpath,$fullpath.'.'.strval(time()));
-				$myfile=fopen($fullpath,'wt');
+				$myfile=fopen($fullpath,GOOGLE_APPENGINE?'wb':'wt');
 				if ($myfile!==false)
 				{
 					if ($zone_pages['right']!='')

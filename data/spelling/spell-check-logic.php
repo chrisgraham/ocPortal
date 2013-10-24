@@ -15,7 +15,7 @@
 
 /*EXTRA FUNCTIONS: (pspell\_.+|shell_exec)*/
 
-/*	$x=fopen(get_custom_file_base().'/data_custom/spelling/write.log','wt');
+/*	$x=fopen(get_custom_file_base().'/data_custom/spelling/write.log',GOOGLE_APPENGINE?'wb':'wt');
 	fwrite($x,serialize($_GET+$_POST));
 	fclose($x);*/
 

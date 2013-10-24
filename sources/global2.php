@@ -608,7 +608,7 @@ function get_charset()
 		}
 	}
 	if (!is_file($path)) $path=get_file_base().'/lang/EN/global.ini';
-	$file=fopen($path,'rt');
+	$file=fopen($path,GOOGLE_APPENGINE?'rb':'rt');
 	$contents=str_replace("\r","\n",fread($file,3000));
 	fclose($file);
 	$matches=array();
@@ -771,6 +771,8 @@ function is_browser_decacheing()
 {
 	global $BROWSER_DECACHEING_CACHE;
 	if ($BROWSER_DECACHEING_CACHE!==NULL) return $BROWSER_DECACHEING_CACHE;
+
+	if (GOOGLE_APPENGINE) return false; // Decaching by mistake is real-bad when Google Cloud Storage is involved
 
 	if (is_null(get_value('ran_once')))
 	{

@@ -142,7 +142,7 @@ function open_page_cache_file()
 		if ($PAGE_CACHE_FILE===NULL) return;
 		if (!is_string($PAGE_CACHE_FILE)) return;
 		$cache_path=$PAGE_CACHE_FILE;
-		$PAGE_CACHE_FILE=@fopen($cache_path,GOOGLE_APPENGINE?'wt':'at');
+		$PAGE_CACHE_FILE=@fopen($cache_path,GOOGLE_APPENGINE?'wb':'at');
 		if ($PAGE_CACHE_FILE!==false)
 		{
 			if (ftell($PAGE_CACHE_FILE)==0)

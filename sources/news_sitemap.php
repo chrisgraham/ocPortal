@@ -34,7 +34,7 @@ function build_news_sitemap()
 		if (!is_writable_wrap($path)) return;
 	}
 
-	$sitemap_file=fopen($path,GOOGLE_APPENGINE?'wt':'at');
+	$sitemap_file=fopen($path,GOOGLE_APPENGINE?'wb':'at');
 	@flock($sitemap_file,LOCK_EX);
 	if (!GOOGLE_APPENGINE) ftruncate($sitemap_file,0);
 

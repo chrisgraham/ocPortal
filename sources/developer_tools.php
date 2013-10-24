@@ -118,7 +118,6 @@ function destrictify($change_content_type=true,$mysql_too=false)
 		@ini_set('include_path',$include_path);
 	}
 	//disable_php_memory_limit();	Don't do this, recipe for disaster
-	@ini_set('allow_url_fopen','1');
 	@ini_set('suhosin.executor.disable_emodifier','0');
 	@ini_set('suhosin.executor.multiheader','0');
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -148,7 +147,6 @@ function restrictify()
 	if (!GOOGLE_APPENGINE)
 	{
 		@ini_set('include_path','');
-		@ini_set('allow_url_fopen','0');
 	}
 	@ini_set('suhosin.executor.disable_emodifier','1');
 	@ini_set('suhosin.executor.multiheader','1');

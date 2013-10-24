@@ -88,7 +88,7 @@ class Module_admin_errorlog
 			{
 				if (filesize(get_custom_file_base().'/data_custom/errorlog.php')>1024*1024)
 				{
-					$myfile=fopen(get_custom_file_base().'/data_custom/errorlog.php','rt');
+					$myfile=fopen(get_custom_file_base().'/data_custom/errorlog.php',GOOGLE_APPENGINE?'rb':'rt');
 					fseek($myfile,-1024*500,SEEK_END);
 					$lines=explode("\n",fread($myfile,1024*500));
 					fclose($myfile);
@@ -174,7 +174,7 @@ class Module_admin_errorlog
 		require_all_lang();
 		if (is_readable(get_custom_file_base().'/data_custom/permissioncheckslog.php'))
 		{
-			$myfile=@fopen(get_custom_file_base().'/data_custom/permissioncheckslog.php','rt');
+			$myfile=@fopen(get_custom_file_base().'/data_custom/permissioncheckslog.php',GOOGLE_APPENGINE?'rb':'rt');
 			if ($myfile!==false)
 			{
 				fseek($myfile,-40000,SEEK_END);

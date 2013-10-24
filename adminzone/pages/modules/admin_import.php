@@ -725,7 +725,7 @@ class Module_admin_import
 		// _config.php
 		global $FILE_BASE;
 		$config_file='_config.php';
-		$config_file_handle=@fopen($FILE_BASE.'/'.$config_file,'wt') OR intelligent_write_error($FILE_BASE.'/'.$config_file);
+		$config_file_handle=@fopen($FILE_BASE.'/'.$config_file,GOOGLE_APPENGINE?'wb':'wt') OR intelligent_write_error($FILE_BASE.'/'.$config_file);
 		fwrite($config_file_handle,"<"."?php\n");
 		global $SITE_INFO;
 		$SITE_INFO['forum_type']='ocf';

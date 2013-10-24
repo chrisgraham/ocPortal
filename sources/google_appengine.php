@@ -183,9 +183,13 @@ function gae_is_admin()
  */
 function gae_optimistic_cache($enabled)
 {
-	$gs_options=array('gs'=>array(
-		'enable_optimistic_cache'=>$enabled,
-		'read_cache_expiry_seconds'=>$enabled?180:3600,
+	static $gs_options_enabled=array('gs'=>array(
+		'enable_optimistic_cache'=>true,
+		'read_cache_expiry_seconds'=>180,
 	));
-	stream_context_set_default($gs_options);
+	static $gs_options_disabled=array('gs'=>array(
+		'enable_optimistic_cache'=>false,
+		'read_cache_expiry_seconds'=>3600,
+	));
+	stream_context_set_default($enabled?$gs_options_enabled:$gs_options_disabled);
 }

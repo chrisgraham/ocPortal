@@ -1387,7 +1387,7 @@ class Module_admin_stats
 		if ($position==0) $GLOBALS['SITE_DB']->query_delete('ip_country');
 
 		$path=get_file_base().'/data/modules/admin_stats/IP_Country.txt';
-		$file=@fopen($path,'rt');
+		$file=@fopen($path,GOOGLE_APPENGINE?'rb':'rt');
 		if ($file===false) warn_exit(do_lang_tempcode('READ_ERROR',escape_html($path)));
 		$to_insert=array('begin_num'=>array(),'end_num'=>array(),'country'=>array());
 		while ((!feof($file)) && ($i<($position+$lines)))
@@ -1594,7 +1594,7 @@ class Module_admin_stats
 	function save_graph($path,$graph)
 	{
 		$path=get_custom_file_base().'/data_custom/modules/admin_stats/'.filter_naughty_harsh($path).'.xml';
-		$file=@fopen($path,'wt');
+		$file=@fopen($path,GOOGLE_APPENGINE?'wb':'wt');
 		if ($file===false) intelligent_write_error($path);
 		if (fwrite($file,$graph)<strlen($graph)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		@fclose($file);

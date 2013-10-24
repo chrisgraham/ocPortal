@@ -95,7 +95,7 @@ function make_upgrade_get_path($from_version,$to_version)
 	@mkdir($wip_path,0777);
 	make_upgrader_do_dir($wip_path,$new_base_path,$old_base_path);
 	@copy($old_base_path.'/data/files.dat',$wip_path.'/data/files_previous.dat');
-	$log_file=fopen(dirname(__FILE__).'/tarring.log','wt');
+	$log_file=fopen(dirname(__FILE__).'/tarring.log',GOOGLE_APPENGINE?'wb':'wt');
 	$tar_handle=tar_open($tar_path.'.new','wb');
 	tar_add_folder($tar_handle,$log_file,$wip_path,NULL,'',NULL,NULL,false,true);
 	tar_close($tar_handle);

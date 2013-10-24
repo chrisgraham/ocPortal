@@ -106,7 +106,7 @@ function write_text_file($codename,$lang,$out)
 		make_missing_directory(dirname($path));
 	}
 
-	$myfile=@fopen($path,GOOGLE_APPENGINE?'wt':'at');
+	$myfile=@fopen($path,GOOGLE_APPENGINE?'wb':'at');
 	@flock($myfile,LOCK_EX);
 	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 	if ($myfile===false) intelligent_write_error($path);

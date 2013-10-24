@@ -60,7 +60,7 @@ function splurgh_master_build($key_name,$map,$url_stub,$_cache_file,$last_change
 			make_missing_directory(dirname($cache_file));
 		}
 
-		$myfile=@fopen($cache_file,GOOGLE_APPENGINE?'wt':'at');
+		$myfile=@fopen($cache_file,GOOGLE_APPENGINE?'wb':'at');
 		if ($myfile===false) intelligent_write_error($cache_file);
 		@flock($myfile,LOCK_EX);
 		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);

@@ -291,7 +291,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		{
 			$mime_type=get_mime_type(get_file_extension($filename),has_privilege($as,'comcode_dangerous'));
 
-			if (strpos($path,'://')===false)
+			if ((strpos($path,'://')===false) && (substr($path,0,5)!='gs://'))
 			{
 				$real_attachment=array(
 					'mime'=>$mime_type,

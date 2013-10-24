@@ -520,7 +520,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			}
 			foreach ($attachments as $path=>$filename)
 			{
-				if (strpos($path,'://')===false)
+				if ((strpos($path,'://')===false) && (substr($path,0,5)!='gs://'))
 				{
 					if (!is_file($path)) continue;
 					$contents=file_get_contents($path);
@@ -678,7 +678,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			$sending_message.='Content-Transfer-Encoding: base64'.$line_term;
 			$sending_message.='Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',$filename)).'"'.$line_term.$line_term;
 
-			if (strpos($path,'://')===false)
+			if ((strpos($path,'://')===false) && (substr($path,0,5)!='gs://'))
 			{
 				if (!is_file($path)) continue;
 				$contents=file_get_contents($path);
