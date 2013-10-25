@@ -330,7 +330,7 @@ function block_helper_script()
 					}
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif (($parameter=='zone') || (($parameter=='param') && ($block=='main_as_zone_access'))) // Zone list
+				elseif ($parameter=='zone') // Zone list
 				{
 					$list=new ocp_tempcode();
 					$list->attach(form_input_list_entry('_SEARCH',($default=='')));

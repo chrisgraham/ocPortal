@@ -714,7 +714,6 @@ class Hook_addon_registry_core
 			'sources/ajax.php',
 			'sources/blocks/.htaccess',
 			'sources/blocks/index.html',
-			'sources/blocks/main_as_zone_access.php',
 			'sources/blocks/main_db_notes.php',
 			'sources/blocks/main_notes.php',
 			'sources/blocks/main_only_if_match.php',
