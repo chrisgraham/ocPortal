@@ -121,6 +121,12 @@ function init__google_appengine()
 	//if (preg_match('#^([^/\&\?]+)$#',$uri,$matches)!=0)
 	//	return _roll_gae_redirect($matches,'index.php\?page=$1');
 	// RULES END
+
+	if (isset($_GET['gae_stop']))
+	{
+		declare(ticks=1);
+		register_tick_function('gae_debugger');
+	}
 }
 
 /**
@@ -173,6 +179,31 @@ function gae_is_admin()
 		return $userservice->isCurrentUserAdmin();
 	}
 	return false;
+}
+
+/**
+ * Tick function for stepping through GAE code, using ?gae_stop=<code-pos>.
+ */
+function gae_debugger()
+{
+	static $i=0;
+	$i++;
+	static $stop=false;
+	if ($stop===false)
+	{
+		if ((!isset($_GET['gae_stop'])) || (!gae_is_admin()))
+		{
+			$_GET['gae_stop']=NULL;
+			return;
+		}
+		$stop=intval($_GET['gae_stop']);
+	}
+
+	if ($i==$stop)
+	{
+		debug_print_backtrace();
+		exit();
+	}
 }
 
 /**

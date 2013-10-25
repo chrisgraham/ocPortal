@@ -1,5 +1,7 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Installing on Google App Engine[/title]
 
+[b]This functionality is currently not working. It works on the development server, but a GAE crash has prevented us making it work live. Google are investigating the issue.[/b]
+
 ocPortal can run on Google App Engine (GAE). GAE is a cloud hosting service designed for high scalability. Unlike almost all other cloud services, it does not require significant preparation and ongoing maintenance in order to scale (you do not need to set up Virtual Machine images, or manually start/stop server instances).
 Most people don't realise how much work the normal "cloud" services are to properly utilise, as the marketing can be really very misleading, and successful customers are development teams rather than webmasters.
 The easy ocPortal scalability with App Engine is possible because it is a locked-down environment. Essentially the ocPortal developers have done up-front work to ensure ocPortal meets certain restraints that allow Google to automatically copy things across different servers without it being noticeable.
