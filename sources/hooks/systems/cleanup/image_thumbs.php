@@ -28,7 +28,7 @@ class Hook_image_thumbs
 	 */
 	function info()
 	{
-		if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes'))) return NULL;
+		if (!function_exists('imagetypes')) return NULL;
 
 		$info=array();
 		$info['title']=do_lang_tempcode('IMAGE_THUMBNAILS');

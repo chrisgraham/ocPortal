@@ -303,7 +303,7 @@ class Module_cms_galleries extends standard_crud_module
 		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images').','.get_allowed_video_file_types()))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
-		if (get_option('is_on_gd')=='1')
+		if (function_exists('imagecreatefromstring'))
 		{
 			if ($this->has_at_least_one_watermark($cat))
 				$fields->attach(form_input_tick(do_lang_tempcode('WATERMARK'),do_lang_tempcode('DESCRIPTION_WATERMARK'),'watermark',true));
@@ -628,7 +628,7 @@ class Module_cms_galleries extends standard_crud_module
 				} else
 				{
 					$ok=true;
-					if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+					if (function_exists('imagecreatefromstring'))
 					{
 						$path=dirname(get_custom_file_base().'/'.rawurldecode($thumb_url));
 						if (!file_exists($path))
@@ -830,7 +830,7 @@ class Module_cms_galleries extends standard_crud_module
 		} else
 		{
 			$ok=true;
-			if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+			if (function_exists('imagecreatefromstring'))
 			{
 				require_code('images');
 				$ok=convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/'.rawurldecode($thumb_url),-1,-1,intval(get_option('thumb_width')),true);
@@ -839,7 +839,7 @@ class Module_cms_galleries extends standard_crud_module
 			{
 				$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
 
-				if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+				if (function_exists('imagecreatefromstring'))
 				{
 					// See if we need to resize the image
 					constrain_gallery_image_to_max_size(get_custom_file_base().'/'.rawurldecode($url),$file,intval(get_option('maximum_image_size')));
@@ -913,7 +913,7 @@ class Module_cms_galleries extends standard_crud_module
 	 */
 	function handle_resizing_and_watermarking()
 	{
-		if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (array_key_exists('tmp_name',$_FILES['file'])) && (get_option('is_on_gd')=='1')))
+		if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (array_key_exists('tmp_name',$_FILES['file'])) && (function_exists('imagetypes'))))
 		{
 			// See if we need to resize the image
 			constrain_gallery_image_to_max_size($_FILES['file']['tmp_name'],$_FILES['file']['name'],intval(get_option('maximum_image_size')));
@@ -1052,7 +1052,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$url));
 
-		if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
+		if (!function_exists('imagetypes'))
 		{
 			$thumb_width=get_option('thumb_width');
 
@@ -1076,7 +1076,7 @@ class Module_cms_galleries extends standard_crud_module
 		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
-		$do_watermark=($this->has_at_least_one_watermark($cat)) && (get_option('is_on_gd')=='1');
+		$do_watermark=($this->has_at_least_one_watermark($cat)) && (function_exists('imagetypes'));
 		$do_rep_image=((get_option('gallery_rep_image')=='1') && (($cat=='') || (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat)))));
 		if (($do_watermark) || ($do_rep_image))
 		{

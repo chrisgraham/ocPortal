@@ -369,8 +369,7 @@ function _handle_attachment_extraction(&$comcode,$key,$type,$id,$matches_extract
 				require_code('images');
 				if (is_image($_file))
 				{
-					$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
-					if ($gd)
+					if (function_exists('imagetypes'))
 					{
 						require_code('images');
 						if (!is_saveable_image($_file)) $ext='.png'; else $ext='.'.get_file_extension($_file);

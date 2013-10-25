@@ -177,7 +177,7 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
 				}
 				warn_exit(do_lang_tempcode('BANNER_TOO_LARGE',integer_format(intval(ceil(strlen($data)/1024))),integer_format($banner_type_row['t_max_file_size'])));
 			}
-			if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')) && (substr($test_url,-4)!='.swf'))
+			if ((function_exists('imagetypes')) && (substr($test_url,-4)!='.swf'))
 			{
 				require_code('images');
 				if (is_image($test_url))

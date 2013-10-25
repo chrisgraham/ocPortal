@@ -1535,7 +1535,7 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 			warn_exit(do_lang_tempcode('UNKNOWN_FORMAT',escape_html($ext)));
 		}
 		$stub=url_is_local($avatar_url)?(get_complex_base_url($avatar_url).'/'):'';
-		if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))
+		if (function_exists('imagetypes'))
 		{
 			$file_path_stub=convert_url_to_path($stub.$avatar_url);
 			if (!is_null($file_path_stub))
@@ -1636,7 +1636,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	}
 	// At this point in the code, we know a photo was uploaded.
 	//  If we don't have GD, we need them to have uploaded a thumbnail too.
-	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
+	if (!function_exists('imagetypes'))
 	{
 		if ((!is_swf_upload()) && ((!array_key_exists($upload_name.'2',$_FILES)) || (!is_uploaded_file($_FILES[$upload_name.'2']['tmp_name']))))
 		{
@@ -1692,7 +1692,7 @@ function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id=NULL)
 	if (!addon_installed('ocf_avatars'))
 	{
 		$avatar_url=$url;
-		if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))
+		if (function_exists('imagetypes'))
 		{
 			$stub=url_is_local($avatar_url)?(get_complex_base_url($avatar_url).'/'):'';
 			$file_path=convert_url_to_path($stub.$avatar_url);

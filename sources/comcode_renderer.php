@@ -1722,7 +1722,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 			$align=array_key_exists('align',$attributes)?$attributes['align']:'bottom';
 
-			if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')) || ((!has_privilege($source_member,'draw_to_server')) && (!$as_admin)))
+			if ((!function_exists('imagetypes')) || ((!has_privilege($source_member,'draw_to_server')) && (!$as_admin)))
 			{
 				$url_thumb=$url_full;
 			} else
@@ -2052,8 +2052,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					require_code('images');
 					if (is_image($original_filename))
 					{
-						$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
-						if ($gd)
+						if (function_exists('imagetypes'))
 						{
 							require_code('images');
 							if (!is_saveable_image($url)) $ext='.png'; else $ext='.'.get_file_extension($original_filename);

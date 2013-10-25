@@ -225,7 +225,7 @@ function form_input_captcha()
  */
 function use_captcha()
 {
-	$answer=((is_guest()) && (intval(get_option('is_on_gd'))==1) && (intval(get_option('use_captchas'))==1) && (function_exists('imagetypes')));
+	$answer=((is_guest()) && (intval(get_option('use_captchas'))==1) && (function_exists('imagetypes')));
 	return $answer;
 }
 

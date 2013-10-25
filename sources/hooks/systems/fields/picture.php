@@ -87,7 +87,7 @@ class Hook_fields_picture
 
 		$img_url=$ev;
 		if (url_is_local($img_url)) $img_url=get_custom_base_url().'/'.$img_url;
-		if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
+		if (!function_exists('imagetypes'))
 		{
 			$img_thumb_url=$img_url;
 		} else

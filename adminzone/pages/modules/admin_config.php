@@ -641,7 +641,7 @@ class Module_admin_config
 		}
 
 		// Empty thumbnail cache if needed
-		if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))
+		if (function_exists('imagetypes'))
 		{
 			if ((!is_null(post_param('thumb_width',NULL))) && (post_param('thumb_width')!=get_option('thumb_width')))
 			{

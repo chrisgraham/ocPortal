@@ -445,9 +445,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			$thumb=$_thumb[0];
 		} else
 		{
-			$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
-
-			if ($gd)
+			if (function_exists('imagetypes'))
 			{
 				if ((!is_saveable_image($url[0])) && (get_file_extension($url[0])!='svg')) $ext='.png'; else $ext='';
 				$file=basename($url[0]);

@@ -699,7 +699,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 				if (file_exists($expected_output_path))
 				{
 					require_code('images');
-					if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+					if (function_exists('imagecreatefromstring'))
 						convert_image($expected_output_path,$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
 
 					return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
@@ -737,7 +737,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 			if (file_exists(str_replace('%d','1',$dest_file)))
 			{
 				require_code('images');
-				if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+				if (function_exists('imagecreatefromstring'))
 				{
 					convert_image(str_replace('%d','1',$dest_file),$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
 				} else
@@ -1138,7 +1138,7 @@ function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
 	require_code('images');
 	if (!is_saveable_image($filename)) return;
 
-	if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+	if (function_exists('imagecreatefromstring'))
 		convert_image($file_path,$file_path,-1,-1,$box_width,false,get_file_extension($filename),true,true);
 }
 

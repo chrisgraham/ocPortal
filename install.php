@@ -1135,7 +1135,7 @@ function step_5()
 	if (post_param_integer('confirm',0)==0)
 	{
 		$tmp=new database_driver(trim(post_param('db_site')),trim(post_param('db_site_host')),trim(post_param('db_site_user')),trim(post_param('db_site_password')),$table_prefix);
-		$test=$tmp->query_select_value_if_there('config','c_value',array('c_name'=>'is_on_gd'),'',true);
+		$test=$tmp->query_select_value_if_there('config','c_value',array('c_name'=>'is_on_block_cache'),'',true);
 		unset($tmp);
 		if (!is_null($test))
 		{

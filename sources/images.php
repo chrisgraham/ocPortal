@@ -28,7 +28,7 @@
  */
 function _symbol_image_dims($param)
 {
-	if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return array('','');
+	if (!function_exists('imagecreatefromstring')) return array('','');
 
 	$value=array('','');
 	if (isset($param[0]))
@@ -125,7 +125,7 @@ function _symbol_thumbnail($param)
 		// made one with these options
 		if ((!is_file($save_path)) && (!is_file($save_path.'.png')))
 		{
-			if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return $param[0];
+			if (!function_exists('imagecreatefromstring')) return $param[0];
 
 			// Branch based on the type of thumbnail we're making
 			if ($algorithm=='box')
@@ -332,7 +332,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 {
 	if ($thumb_width===NULL) $thumb_width=intval(get_option('thumb_width'));
 
-	if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')) || ($full_url==''))
+	if ((!function_exists('imagetypes')) || ($full_url==''))
 	{
 		if ((url_is_local($thumb_url)) && ($thumb_url!='')) return get_custom_base_url().'/'.$thumb_url;
 		return $thumb_url;
@@ -1048,7 +1048,7 @@ function is_image($name)
 function is_saveable_image($name)
 {
 	$ext=get_file_extension($name);
-	if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))
+	if (function_exists('imagetypes'))
 	{
 		$gd=imagetypes();
 		if (($ext=='gif') && (($gd&IMG_GIF)!=0) && (function_exists('image_gif'))) return true;

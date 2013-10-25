@@ -98,8 +98,7 @@ class Hook_media_rendering_image_websafe
 			$auto_height=true;
 		} else $auto_height=false;
 		$use_thumb=(!array_key_exists('thumb',$attributes)) || ($attributes['thumb']=='1');
-		$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
-		if ((!$use_thumb) || (!$gd))
+		if ((!$use_thumb) || (!function_exists('imagetypes')))
 		{
 			$attributes['thumb_url']=$url;
 		}

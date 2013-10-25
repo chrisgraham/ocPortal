@@ -177,7 +177,6 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config/ip_forwarding.php',
 			'sources/hooks/systems/config/ip_strict_for_sessions.php',
 			'sources/hooks/systems/config/is_on_emoticon_choosers.php',
-			'sources/hooks/systems/config/is_on_gd.php',
 			'sources/hooks/systems/config/is_on_preview_validation.php',
 			'sources/hooks/systems/config/is_on_strong_forum_tie.php',
 			'sources/hooks/systems/config/java_ftp_host.php',

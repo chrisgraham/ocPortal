@@ -381,7 +381,7 @@ function get_comcode_editor($field_name='post',$cut_down=false)
 	$_buttons=array();
 
 	// Non-wrappers
-	if (!$cut_down) $_buttons[]=(get_option('is_on_gd')=='0')?'img':'thumb';
+	if (!$cut_down) $_buttons[]=(function_exists('imagecreatefromstring')?'thumb':'img');
 	if (has_privilege(get_member(),'comcode_dangerous'))
 	{
 		$_buttons[]='block';
