@@ -534,16 +534,6 @@
   </parameter> 
 
   <parameter
-    name="SetAclParameter48" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/iotds" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/iotds" />
-  </parameter> 
-
-  <parameter
-    name="SetAclParameter49" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/iotds_thumbs" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/iotds_thumbs" />
-  </parameter> 
-
-  <parameter
     name="SetAclParameter50" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/attachments" tags="Hidden">
     <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/attachments" />
   </parameter> 

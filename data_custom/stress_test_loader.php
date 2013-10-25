@@ -340,16 +340,6 @@ function do_work()
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
-	// iotds
-	require_code('iotds2');
-	for ($i=$GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)');$i<$num_wanted;$i++)
-	{
-		add_iotd(get_logo_url(),random_line(),random_text(),get_logo_url(),1,0,0,0,'');
-	}
-	echo 'done iotd stuff'."\n";
-
-	if (function_exists('gc_collect_cycles')) gc_enable();
-
 	// logged hack attempts
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('hackattack','COUNT(*)');$i<$num_wanted;$i++)
 	{

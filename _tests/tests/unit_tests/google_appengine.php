@@ -62,8 +62,6 @@ class google_appengine_test_set extends ocp_test_case
 				'setupwizard',
 				'stats',
 				'import',
-				'iotds', // TODO: This is here because it will be removed to custom
-				'community_billboard', // TODO: This is here because it will be removed to custom
 			))) continue;
 
 			require_code('hooks/systems/addon_registry/'.$hook);

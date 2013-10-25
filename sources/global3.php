@@ -2480,7 +2480,6 @@ function titleify($boring)
 	$ret=str_replace('Occle','OcCLE',$ret);
 	$ret=str_replace('Msn','M.S.N.',$ret);
 	$ret=str_replace('Ecommerce','eCommerce',$ret);
-	$ret=str_replace('Iotds','IOTDs',$ret);
 	$ret=str_replace('Ldap','LDAP',$ret);
 	$ret=str_replace('Sms','SMS',$ret);
 	$ret=str_replace('Ssl','SSL',$ret);

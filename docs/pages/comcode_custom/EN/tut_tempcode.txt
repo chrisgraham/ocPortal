@@ -934,10 +934,6 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 		<td>{$AVAILABLE_POINTS,3}</td>
 		<td>Get the total points in the specified member's account; some of these will probably have been spent already</td>
 	</tr>
-	<tr style="background: #DDFFDD">
-		<td>{$COMMUNITY_BILLBOARD}</td>
-		<td>Place the active community billboard message</td>
-	</tr>
 	<tr style="background: #FFDDDD">
 		<td>{$OCF}</td>
 		<td>Whether OCF is being used (returns Tempcode boolean)</td>

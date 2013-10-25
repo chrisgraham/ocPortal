@@ -103,6 +103,7 @@ class Hook_addon_registry_community_billboard
 			'sources/hooks/systems/config/community_billboard.php',
 			'sources/hooks/systems/config/is_on_community_billboard_buy.php',
 			'sources/hooks/systems/notifications/pointstore_request_community_billboard.php',
+			'community_billboard.css',
 		);
 	}
 

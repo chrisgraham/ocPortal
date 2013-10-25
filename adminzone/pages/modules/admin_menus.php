@@ -66,7 +66,7 @@ class Module_admin_menus
 			 NO panel_top (if there is that's fine, it's just a supplementary source of navigation)
 			 footer menu
 			 donate/hosting/advertise linked to by banners
-			 side_personal_stats/side_search/main_newsletter_signup/main_leaderboard/main_poll/main_iotd/main_news/side_news_categories/side_calendar blocks
+			 side_personal_stats/side_search/main_newsletter_signup/main_leaderboard/main_poll/main_news/side_news_categories/side_calendar blocks
 			 implicit links to authors/awards/member-actions/online_members
 
 			(not all links defined here, various modules also install them)

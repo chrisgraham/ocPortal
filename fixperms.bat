@@ -44,8 +44,6 @@ cacls uploads\downloads\* /e /g %user%:F
 cacls uploads\filedump\* /e /g %user%:F
 cacls uploads\galleries\* /e /g %user%:F
 cacls uploads\galleries_thumbs\* /e /g %user%:F
-cacls uploads\iotds\* /e /g %user%:F
-cacls uploads\iotds_thumbs\* /e /g %user%:F
 cacls uploads\attachments\* /e /g %user%:F
 cacls uploads\attachments_thumbs\* /e /g %user%:F
 cacls uploads\auto_thumbs\* /e /g %user%:F
@@ -184,8 +182,6 @@ icacls uploads\downloads\* /grant %user%:(M)
 icacls uploads\filedump\* /grant %user%:(M)
 icacls uploads\galleries\* /grant %user%:(M)
 icacls uploads\galleries_thumbs\* /grant %user%:(M)
-icacls uploads\iotds\* /grant %user%:(M)
-icacls uploads\iotds_thumbs\* /grant %user%:(M)
 icacls uploads\attachments\* /grant %user%:(M)
 icacls uploads\attachments_thumbs\* /grant %user%:(M)
 icacls uploads\auto_thumbs\* /grant %user%:(M)

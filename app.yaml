@@ -11,12 +11,6 @@ handlers:
   script: \1index.php
 - url: /([=]*)pg/s/([^\&\?]*)/index\.php
   script: \1index.php
-- url: /([=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)
-  script: \1index.php
-- url: /([=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)
-  script: \1index.php
-- url: /([=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)
-  script: \1index.php
 - url: /([=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)
   script: \1index.php
 - url: /([=]*)pg/([^/\&\?]*)/([^/\&\?]*)/index\.php(.*)
@@ -26,12 +20,6 @@ handlers:
 - url: /([=]*)pg/index\.php(.*)
   script: \1index.php
 - url: /([=]*)pg/s/([^\&\?]*)
-  script: \1index.php
-- url: /([=]*)pg/galleries/image/([^\&\?]*)
-  script: \1index.php
-- url: /([=]*)pg/galleries/video/([^\&\?]*)
-  script: \1index.php
-- url: /([=]*)pg/iotds/view/([^\&\?]*)
   script: \1index.php
 - url: /([=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/
   script: \1index.php
@@ -43,12 +31,6 @@ handlers:
   script: \1index.php
 - url: /([=]*)pg/s/([^\&\?\.]*)&(.*)
   script: \1index.php
-- url: /([=]*)pg/galleries/image/([/\&\?\.]*)&(.*)
-  script: \1index.php
-- url: /([=]*)pg/galleries/video/([/\&\?\.]*)&(.*)
-  script: \1index.php
-- url: /([=]*)pg/iotds/view/([/\&\?\.]*)&(.*)
-  script: \1index.php
 - url: /([=]*)pg/([/\&\?\.]*)/([/\&\?\.]*)/([/\&\?\.]*)&(.*)
   script: \1index.php
 - url: /([=]*)pg/([/\&\?\.]*)/([/\&\?\.]*)&(.*)
@@ -59,12 +41,6 @@ handlers:
   script: \1/index.php
 - url: /s/([^\&\?]*)\.htm
   script: index\.php
-- url: /(site|forum|adminzone|cms|collaboration|docs)/galleries/image/([^\&\?]*)\.htm
-  script: \1/index.php
-- url: /(site|forum|adminzone|cms|collaboration|docs)/galleries/video/([^\&\?]*)\.htm
-  script: \1/index.php
-- url: /(site|forum|adminzone|cms|collaboration|docs)/iotds/view/([^\&\?]*)\.htm
-  script: \1/index.php
 - url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm
   script: \1/index.php
 - url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)\.htm
@@ -81,12 +57,6 @@ handlers:
 #  script: \1/index.php
 #- url: /s/([^\&\?]*)
 #  script: index\.php
-#- url: /(site|forum|adminzone|cms|collaboration|docs)/galleries/image/([^\&\?]*)
-#  script: \1/index.php
-#- url: /(site|forum|adminzone|cms|collaboration|docs)/galleries/video/([^\&\?]*)
-#  script: \1/index.php
-#- url: /(site|forum|adminzone|cms|collaboration|docs)/iotds/view/([^\&\?]*)
-#  script: \1/index.php
 #- url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)
 #  script: \1/index.php
 #- url: /(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)

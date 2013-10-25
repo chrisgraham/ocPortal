@@ -14,7 +14,6 @@ Methods of earning points include:
  - Joining
  - Voting in a poll
  - Rating content
- - IOTD chosen
  - Poll chosen
  - Submitting various forms of content
  - Length of membership
@@ -80,6 +79,9 @@ There is a module in the Admin Zone for sales inventory management. It should be
 [/surround]
 
 [title="3"]Community billboard[/title]
+
+[i]As of ocPortal 10, the community billboard is a non-bundled addon.[/i]
+
 [surround]
 {!community_billboard:DOC_COMMUNITY_BILLBOARD}
 

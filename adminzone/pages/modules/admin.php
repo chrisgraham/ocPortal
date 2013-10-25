@@ -147,7 +147,6 @@ class Module_admin
 			array('ban','suspend','suspension','probation','warn','punish','punitive'),
 			array('staff','moderator','admin', 'administrator','operator','webmaster'),
 			array('open','closed','live','activate','activation',/*'enable',*/'turn'),
-			array('iotd','potd','image of the day'),
 			array('import','convert','migrate','upload'),
 			array('occle','console','command prompt','command line','cle'),
 			array('export','download'),

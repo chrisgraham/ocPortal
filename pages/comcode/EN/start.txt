@@ -23,7 +23,7 @@
 
 [surround="fp_col_blocks_wrap pale_box"]
 	[surround="fp_col_block left"]
-		[block failsafe="1"]main_iotd[/block]
+		[block failsafe="1"]main_content[/block]
 	[/surround]
 
 	[surround="fp_col_block right"]

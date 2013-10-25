@@ -131,8 +131,6 @@ Set the following to [b]777[/b]: (full directory permissions)
  - uploads/galleries_thumbs
  - uploads/grepimages
  - uploads/incoming
- - uploads/iotds
- - uploads/iotds_thumbs
  - uploads/ocf_avatars
  - uploads/ocf_cpf_upload
  - uploads/ocf_photos

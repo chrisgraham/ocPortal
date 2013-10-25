@@ -58,7 +58,6 @@ class Hook_ocp_merge
 			'ocf_warnings',
 			'filedump',
 			'images_and_galleries', // including rating, trackbacks, seo
-			'iotds', // including rating, trackbacks, seo
 			'news_and_categories', // including rating, trackbacks, seo
 			'newsletter_subscriptions',
 			'polls', // including rating, trackbacks, seo
@@ -66,7 +65,6 @@ class Hook_ocp_merge
 			'redirects',
 			'wiki', // including rating, trackbacks, seo
 			'stats',
-			'community_billboard',
 			'themes',
 			'support_tickets',
 			'useronline_tracking',
@@ -92,12 +90,10 @@ class Hook_ocp_merge
 			'downloads_and_categories'=>array('ocf_members'),
 			'filedump'=>array('ocf_members'),
 			'images_and_galleries'=>array('ocf_members'),
-			'iotds'=>array('ocf_members'),
 			'news_and_categories'=>array('ocf_members','attachments'),
 			'polls'=>array('ocf_members'),
 			'pointstore'=>array('ocf_members'),
 			'wiki'=>array('ocf_members','attachments'),
-			'community_billboard'=>array('ocf_members'),
 			'useronline_tracking'=>array('ocf_members'),
 			'ip_bans'=>array('ocf_members'),
 			'points_gifts_and_charges'=>array('ocf_members'),
@@ -743,32 +739,6 @@ class Hook_ocp_merge
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_iotds($db,$table_prefix,$file_base)
-	{
-		require_code('iotds2');
-
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'iotd',NULL,NULL,true);
-		if (is_null($rows)) return;
-		$on_same_msn=($this->on_same_msn($file_base));
-		foreach ($rows as $row)
-		{
-			if (import_check_if_imported('iotd',strval($row['id']))) continue;
-
-			$submitter=$on_same_msn?$row['submitter']:import_id_remap_get('member',$row['submitter'],true);
-			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$id_new=add_iotd($row['url'],array_key_exists('i_title',$row)?$this->get_lang_string($db,$row['i_title']):'',$this->get_lang_string($db,$row['caption']),$row['thumb_url'],$row['is_current'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['add_date'],$submitter,$row['used'],$row['date_and_time'],$row['iotd_views'],$row['edit_date']);
-
-			import_id_remap_put('iotd',strval($row['id']),$id_new);
-		}
-	}
-
-	/**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
 	function import_polls($db,$table_prefix,$file_base)
 	{
 		require_code('polls2');
@@ -973,27 +943,6 @@ class Hook_ocp_merge
 			if (is_null($member_id)) continue;
 			unset($row['id']);
 			$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>$row['date_and_time'],'memberid'=>$member_id,'purchasetype'=>$row['purchasetype'],'details'=>$row['details'],'details2'=>$row['details2']));
-		}
-	}
-
-	/**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
-	function import_community_billboard($db,$table_prefix,$file_base)
-	{
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'text',NULL,NULL,true);
-		if (is_null($rows)) return;
-		$on_same_msn=($this->on_same_msn($file_base));
-		foreach ($rows as $row)
-		{
-			$member=$on_same_msn?$row['user_id']:import_id_remap_get('member',$row['user_id'],true);
-			if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			unset($row['id']);
-			$GLOBALS['SITE_DB']->query_insert('text',array('user_id'=>$member,'the_message'=>insert_lang($this->get_lang_string($db,$row['the_message']),2),'days'=>$row['days'],'order_time'=>$row['order_time'],'activation_time'=>$row['activation_time'],'active_now'=>$row['active_now'],'notes'=>$row['notes']));
 		}
 	}
 

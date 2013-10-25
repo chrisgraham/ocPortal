@@ -549,7 +549,6 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/images/pagepics/menus.png');
 		unlink($prefix.'/themes/default/images/pagepics/customprofilefields.png');
 		unlink($prefix.'/themes/default/images/pagepics/quiz.png');
-		unlink($prefix.'/themes/default/images/pagepics/community_billboard.png');
 		unlink($prefix.'/themes/default/images/pagepics/clubs.png');
 		unlink($prefix.'/themes/default/images/pagepics/images.png');
 		unlink($prefix.'/themes/default/images/pagepics/editmember.png');

@@ -96,6 +96,8 @@ would show OCF topic #1 in a block, without running permission checks, and with 
 
 [title="2"]Image of the day[/title]
 
+[i]As of ocPortal version 10, the IOTDs addon is not bundled[/i]
+
 [media width="150" description="Adding an IOTD" float="left"]data_custom/images/docs/featured_iotd_add.png[/media]
 [media width="150" description="Choosing an IOTD" float="right"]data_custom/images/docs/featured_iotd_choose.png[/media]
 {!iotds:DOC_IOTDS} You can turn them off by removing the block from your front page if you wish (unless you already deselected using the Setup Wizard).

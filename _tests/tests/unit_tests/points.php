@@ -102,17 +102,6 @@ class points_test_set extends ocp_test_case
  		$this->assertTrue( preg_match("/Unfortunately you do not have enough points to be able to afford this./",$page));
 	}
 
-	//	Test #130
-	function testAddFlagmsg()
-	{
-		$browser=new SimpleBrowser();
-		$browser->get(get_base_url().'/site/index.php?page=pointstore&type=text&id=community_billboard');
-
-		$browser->setField('login_username', 'admin');
-		$browser->setField('password', 'welcome');
-		$browser->clickSubmit('Login');
-	}
-
 	//	Test #1149
 	function testAddEventError()
 	{

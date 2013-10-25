@@ -22,6 +22,8 @@ class iotd_test_set extends ocp_test_case
 
 	function setUp()
 	{
+		if (!addon_installed('iotds')) return;
+
 		parent::setUp();
 
 		require_code('iotds2');
@@ -33,6 +35,8 @@ class iotd_test_set extends ocp_test_case
 
 	function testEditIotd()
 	{
+		if (!addon_installed('iotds')) return;
+
 		edit_iotd($this->iotd_id,'Thank you','Caption ?','images/yahoo.jpg','yahoo.com',0,0,0,'Notes');
 
 		$this->assertTrue('yahoo.com'==$GLOBALS['SITE_DB']->query_select_value('iotd','url',array('id'=>$this->iotd_id)));
@@ -40,6 +44,8 @@ class iotd_test_set extends ocp_test_case
 
 	function tearDown()
 	{
+		if (!addon_installed('iotds')) return;
+
 		delete_iotd($this->iotd_id);
 		parent::tearDown();
 	}

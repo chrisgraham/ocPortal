@@ -208,12 +208,6 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 				</div>
 
 				<div class="global_footer_right">
-					{+START,IF,{$ADDON_INSTALLED,community_billboard}}
-						<div class="global_community_message">
-							{$COMMUNITY_BILLBOARD`}
-						</div>
-					{+END}
-
 					<div class="global_copyright">
 						{$,Uncomment to show user"s time {$DATE} {$TIME}}
 						{$COPYRIGHT`}

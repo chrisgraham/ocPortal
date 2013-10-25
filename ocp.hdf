@@ -45,25 +45,6 @@ VirtualHost {
 				qsa = true
 			}
 
-			# PG STYLE: These have a specially reduce form (wide is implied)
-			rule3 {
-				pattern = ^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$
-				to = $1index.php\?page=galleries&type=image&id=$2$3
-				qsa = true
-			}
-			
-			rule3 {
-				pattern = ^([^=]*)pg/galleries/video/([^\&\?]*)/index\.php(.*)$
-				to = $1index.php\?page=galleries&type=video&id=$2$3
-				qsa = true
-			}
-			
-			rule3 {
-				pattern = ^([^=]*)pg/iotds/view/([^\&\?]*)/index\.php(.*)$
-				to = $1index.php\?page=iotds&type=view&id=$2$3
-				qsa = true
-			}
-
 			# PG STYLE: These are standard patterns
 			rule4 {
 				pattern = ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$
@@ -93,24 +74,6 @@ VirtualHost {
 			rule5 {
 				pattern = ^([^=]*)pg/s/([^\&\?]*)$
 				to = $1index.php\?page=wiki&id=$2
-				qsa = true
-			}
-			
-			rule5 {
-				pattern = ^([^=]*)pg/galleries/image/([^\&\?]*)$
-				to = $1index.php\?page=galleries&type=image&id=$2$3
-				qsa = true
-			}
-			
-			rule5 {
-				pattern = ^([^=]*)pg/galleries/video/([^\&\?]*)$
-				to = $1index.php\?page=galleries&type=video&id=$2$3
-				qsa = true
-			}
-			
-			rule5 {
-				pattern = ^([^=]*)pg/iotds/view/([^\&\?]*)$
-				to = $1index.php\?page=iotds&type=view&id=$2
 				qsa = true
 			}
 			
@@ -146,24 +109,6 @@ VirtualHost {
 			}
 			
 			rule6 {
-				pattern = ^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$
-				to = $1index.php\?$5&page=galleries&type=image&id=$2&$3
-				qsa = true
-			}
-			
-			rule6 {
-				pattern = ^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$
-				to = $1index.php\?$5&page=galleries&type=video&id=$2&$3
-				qsa = true
-			}
-			
-			rule6 {
-				pattern = ^([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$
-				to = $1index.php\?$3&page=iotds&type=view&id=$2
-				qsa = true
-			}
-			
-			rule6 {
 				pattern = ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$
 				to = $1index.php\?$5&page=$2&type=$3&id=$4
 				qsa = true
@@ -191,25 +136,6 @@ VirtualHost {
 			rule7 {
 				pattern = ^s/([^\&\?]*)\.htm$
 				to = index\.php\?page=wiki&id=$1
-				qsa = true
-			}
-
-			# HTM STYLE: These have a specially reduce form (wide is implied)
-			rule8 {
-				pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)\.htm$
-				to = $1/index.php\?page=galleries&type=image&id=$2
-				qsa = true
-			}
-			
-			rule8 {
-				pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)\.htm$
-				to = $1/index.php\?page=galleries&type=video&id=$2
-				qsa = true
-			}
-			
-			rule8 {
-				pattern = ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)\.htm$
-				to = $1/index.php\?page=iotds&type=view&id=$2
 				qsa = true
 			}
 
@@ -260,25 +186,6 @@ VirtualHost {
 			#rule10 {
 				#pattern = ^s/([^\&\?]*)$
 				#to = index\.php\?page=wiki&id=$1
-				#qsa = true
-			#}
-
-			# SIMPLE STYLE: These have a specially reduce form (wide is implied)
-			#rule11 {
-				#pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/image/([^\&\?]*)$
-				#to = $1/index.php\?page=galleries&type=image&id=$2
-				#qsa = true
-			#}
-			
-			#rule11 {
-				#pattern = ^(site|forum|adminzone|cms|collaboration)/galleries/video/([^\&\?]*)$
-				#to = $1/index.php\?page=galleries&type=video&id=$2
-				#qsa = true
-			#}
-			
-			#rule11 {
-				#pattern = ^(site|forum|adminzone|cms|collaboration)/iotds/view/([^\&\?]*)$
-				#to = $1/index.php\?page=iotds&type=view&id=$2
 				#qsa = true
 			#}
 

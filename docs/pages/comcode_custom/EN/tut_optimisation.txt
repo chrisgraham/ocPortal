@@ -229,7 +229,6 @@ ocPortal has been tested up to a million of the following:
  - Images under a single gallery
  - Videos under a single gallery (unvalidated, to test validation queue)
  - Quizzes
- - IOTDs
  - Hack attempts
  - Logged hits
  - News

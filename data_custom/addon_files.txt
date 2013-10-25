@@ -1287,57 +1287,6 @@ oc_smiles
  - themes/default/images_custom/ocf_emoticons/wub.png
  - data_custom/ocsmiles_install.php
 
-oc_icon
--------
- - themes/default/images_custom/menu_items/add_group.png
- - themes/default/images_custom/menu_items/add_user.png
- - themes/default/images_custom/menu_items/agt_business.png
- - themes/default/images_custom/menu_items/agt_family.png
- - themes/default/images_custom/menu_items/amor.png
- - themes/default/images_custom/menu_items/calendar.png
- - themes/default/images_custom/menu_items/camera_unmount.png
- - themes/default/images_custom/menu_items/chat.png
- - themes/default/images_custom/menu_items/database.png
- - themes/default/images_custom/menu_items/delete_user.png
- - themes/default/images_custom/menu_items/edit_user.png
- - themes/default/images_custom/menu_items/email-1.png
- - themes/default/images_custom/menu_items/email.png
- - themes/default/images_custom/menu_items/filesave.png
- - themes/default/images_custom/menu_items/folder1_red.png
- - themes/default/images_custom/menu_items/help_index.png
- - themes/default/images_custom/menu_items/history.png
- - themes/default/images_custom/menu_items/history_clear.png
- - themes/default/images_custom/menu_items/inline_image.png
- - themes/default/images_custom/menu_items/knewstuff.png
- - themes/default/images_custom/menu_items/list.png
- - themes/default/images_custom/menu_items/money.png
- - themes/default/images_custom/menu_items/news.png
- - themes/default/images_custom/menu_items/news_subscribe.png
- - themes/default/images_custom/menu_items/newtodo.png
- - themes/default/images_custom/menu_items/ooo_printeradmin.png
- - themes/default/images_custom/menu_items/password.png
- - themes/default/images_custom/menu_items/personal.png
- - themes/default/images_custom/menu_items/personal_edit.png
- - themes/default/images_custom/menu_items/privacy.png
- - themes/default/images_custom/menu_items/project_edit.png
- - themes/default/images_custom/menu_items/project_open.png
- - themes/default/images_custom/menu_items/random.png
- - themes/default/images_custom/menu_items/search.png
- - themes/default/images_custom/menu_items/signature.png
- - themes/default/images_custom/menu_items/tree_explorer.gif
- - themes/default/images_custom/menu_items/webarchiver.png
- - themes/default/images_custom/menu_items/wiki.png
- - themes/default/images_custom/menu_items/question.png
- - themes/default/images_custom/menu_items/evolution-contacts.png
- - themes/default/images_custom/menu_items/bookmarks_list_add.png
- - themes/default/images_custom/menu_items/configure_toolbars.png
- - themes/default/images_custom/menu_items/bookcase.png
- - themes/default/images_custom/menu_items/knotes.png
- - themes/default/images_custom/menu_items/tool_clipboard.png
- - themes/default/images_custom/menu_items/insert_link.png
- - data_custom/icon_map.csv
- - data_custom/ocicon_install.php
-
 oc_worrdss
 ----------
  - sources_custom/php-crossword/index.html
@@ -4641,3 +4590,8 @@ image_syndication
  - sources_custom/hooks/systems/config/photobucket_client_id.php
  - sources_custom/hooks/systems/config/photobucket_client_secret.php 
  - lang_custom/EN/video_syndication_photobucket.ini
+
+change_addon_bundling
+---------------------
+data_custom/change_addon_bundling.php
+

@@ -31,6 +31,8 @@ class Hook_symbol_COMMUNITY_BILLBOARD
 	{
 		if (!addon_installed('community_billboard')) return '';
 
+		require_css('community_billboard');
+
 		$system=(mt_rand(0,1)==0);
 		$_community_billboard=NULL;
 

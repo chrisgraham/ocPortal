@@ -45,15 +45,6 @@ function get_remappings($url_scheme)
 			{
 				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'pg/s/ID',false);
 			}
-			if (addon_installed('galleries'))
-			{
-				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL),'pg/galleries/image/ID',false);
-				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL),'pg/galleries/video/ID',false);
-			}
-			if (addon_installed('iotds'))
-			{
-				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL),'pg/iotds/view/ID',false);
-			}
 			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'pg/PAGE/TYPE/ID',false);
 			$rules[]=array(array('page'=>NULL,'type'=>NULL),'pg/PAGE/TYPE',false);
 			$rules[]=array(array('page'=>NULL),'pg/PAGE',false);
@@ -66,15 +57,6 @@ function get_remappings($url_scheme)
 			{
 				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID.htm',false);
 			}
-			if (addon_installed('galleries'))
-			{
-				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL),'galleries/image/ID.htm',false);
-				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL),'galleries/video/ID.htm',false);
-			}
-			if (addon_installed('iotds'))
-			{
-				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL),'iotds/view/ID.htm',false);
-			}
 			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID.htm',false);
 			$rules[]=array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE.htm',false);
 			$rules[]=array(array('page'=>NULL),'PAGE.htm',false);
@@ -86,15 +68,6 @@ function get_remappings($url_scheme)
 			if (addon_installed('wiki'))
 			{
 				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID',false);
-			}
-			if (addon_installed('galleries'))
-			{
-				$rules[]=array(array('page'=>'galleries','type'=>'image','id'=>NULL),'galleries/image/ID',false);
-				$rules[]=array(array('page'=>'galleries','type'=>'video','id'=>NULL),'galleries/video/ID',false);
-			}
-			if (addon_installed('iotds'))
-			{
-				$rules[]=array(array('page'=>'iotds','type'=>'view','id'=>NULL),'iotds/view/ID',false);
 			}
 			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID',false);
 			$rules[]=array(array('page'=>NULL,'type'=>'misc'),'PAGE',false);

@@ -4,7 +4,7 @@ ocPortal is designed to be able to support large community sites, and a common f
  - [b]Zones[/b] (different zones may be created for each sub-community, located under a URL beneath the main site, with their own set of pages)
  - [b]Redirection pages[/b] (using redirection pages, common modules, such as the download module, may be made to appear as if they are running from individual zones)
  - [b]Categories, and virtual roots[/b] (using a combination of separate categories [and sub-branches there-of] for different sub-communities, and the 'virtual root' system, it can be made to appear that each sub-community has their own catalogue/download/gallery
- - [b]Comcode pages, Chat rooms, Polls, IOTDs[/b] (all these support individual creating and referencing, such that different instances can be presented to different sub-communities)
+ - [b]Comcode pages, Chat rooms, Polls[/b] (all these support individual creating and referencing, such that different instances can be presented to different sub-communities)
  - [b]Banners, Calendar[/b] (all these support category based referencing such that a division between sub-community interests can be created)
  - [b]Sub-forums[/b] (different communities can be given their own branch of the discussion forums, with the [concept]OCF[/concept] 'Clubs' feature providing special support for this)
  - [b]Themes[/b] (different themes may be applied to different zones, giving sub-communities individual looks)

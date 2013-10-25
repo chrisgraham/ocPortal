@@ -73,7 +73,7 @@ class Hook_content_meta_aware_poll
 
 			'permissions_type_code'=>NULL, // NULL if has no permissions
 
-			'search_hook'=>'iotd',
+			'search_hook'=>'polls',
 
 			'addon_name'=>'polls',
 

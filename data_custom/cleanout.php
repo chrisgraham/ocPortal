@@ -195,14 +195,6 @@ function cleanup()
 			array('root'),
 		),
 
-		array(
-			'delete_iotd',
-			'iotds2',
-			'iotd',
-			'id',
-			array(),
-		),
-
 		/*array( Probably unwanted
 			'delete_menu_item',
 			'menus2',

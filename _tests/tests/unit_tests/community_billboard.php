@@ -22,6 +22,8 @@ class community_billboard_test_set extends ocp_test_case
 
 	function setUp()
 	{
+		if (!addon_installed('community_billboard')) return;
+
 		parent::setUp();
 
 		require_code('community_billboard');
@@ -33,6 +35,8 @@ class community_billboard_test_set extends ocp_test_case
 
 	function testEditCommunityBillboard()
 	{
+		if (!addon_installed('community_billboard')) return;
+
 		edit_community_billboard_message($this->flag_id,'Tested','Thank you',0);
 
 		$this->assertTrue('Thank you'==$GLOBALS['SITE_DB']->query_select_value('community_billboard','notes',array('id'=>$this->flag_id)));
@@ -40,6 +44,8 @@ class community_billboard_test_set extends ocp_test_case
 
 	function tearDown()
 	{
+		if (!addon_installed('community_billboard')) return;
+
 		delete_community_billboard_message($this->flag_id);
 		parent::tearDown();
 	}
