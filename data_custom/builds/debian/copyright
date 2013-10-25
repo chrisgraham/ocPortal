@@ -3,10 +3,10 @@ Upstream-Name: ocportal
 Source: http://ocportal.com/site/dload.php?id=444 Non-free modules are removed, CKEditor is removed and non-free artwork is replaced with http://ocportal.com/site/dload.php?id=360
 
 Files: *
-Copyright: 2004-2011 ocProducts Ltd
+Copyright: 2004-2014 ocProducts Ltd
 License: CPAL-1.0
  ocPortal
- Copyright (c) ocProducts, 2004-2011
+ Copyright (c) ocProducts, 2004-2014
  See text/EN/licence.txt for full licencing information.
  @license             http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  @copyright   ocProducts Ltd
