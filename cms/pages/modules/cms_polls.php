@@ -36,7 +36,7 @@ class Module_cms_polls extends standard_crud_module
 	var $menu_label='POLLS';
 	var $table='poll';
 	var $title_is_multi_lang=true;
-	var $award_type='poll';
+	var $content_type='poll';
 
 	var $title;
 

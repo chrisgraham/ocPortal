@@ -33,7 +33,7 @@ class Module_cms_news extends standard_crud_module
 	var $permissions_cat_name='main_news_category';
 	var $user_facing=true;
 	var $seo_type='news';
-	var $award_type='news';
+	var $content_type='news';
 	var $possibly_some_kind_of_upload=true;
 	var $upload='image';
 	var $menu_label='NEWS';

@@ -30,7 +30,7 @@ class Module_cms_quiz extends standard_crud_module
 	var $permissions_require='high';
 	var $user_facing=true;
 	var $seo_type='quiz';
-	var $award_type='quiz';
+	var $content_type='quiz';
 	var $view_entry_point='_SEARCH:quiz:type=do:id=_ID';
 	var $archive_entry_point='_SEARCH:quiz:type=misc';
 	var $javascript='var hide_func=function () { var ob=document.getElementById(\'type\'); if (ob.value==\'TEST\') { document.getElementById(\'percentage\').disabled=false; document.getElementById(\'num_winners\').disabled=true; }  if (ob.value==\'COMPETITION\') { document.getElementById(\'num_winners\').disabled=false; document.getElementById(\'percentage\').disabled=true; }  if (ob.value==\'SURVEY\') { document.getElementById(\'text\').value=document.getElementById(\'text\').value.replace(/ \[\*\]/g,\'\'); document.getElementById(\'num_winners\').disabled=true; document.getElementById(\'percentage\').disabled=true; } }; document.getElementById(\'type\').onchange=hide_func; hide_func();';

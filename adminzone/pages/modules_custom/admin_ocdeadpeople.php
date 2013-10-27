@@ -22,7 +22,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 {
 	var $lang_type='DISEASE';
 	var $select_name='NAME';
-	var $award_type='group';
+	var $content_type='group';
 	var $possibly_some_kind_of_upload=true;
 	var $output_of_action_is_confirmation=true;
 	var $menu_label='OCDEADPEOPLE_TITLE';

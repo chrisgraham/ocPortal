@@ -20,7 +20,7 @@ class Module_admin_workflow extends standard_crud_module
 	var $lang_type='WORKFLOW';
 	var $select_name='NAME';
 	var $javascript='';
-	var $award_type=NULL;
+	var $content_type=NULL;
 	var $possibly_some_kind_of_upload=false;
 	var $output_of_action_is_confirmation=true;
 	var $do_preview=NULL;
@@ -633,10 +633,10 @@ class Module_admin_workflow extends standard_crud_module
 
 		if (addon_installed('awards'))
 		{
-			if (!is_null($this->award_type))
+			if (!is_null($this->content_type))
 			{
 				require_code('awards');
-				handle_award_setting($this->award_type,$id);
+				handle_award_setting($this->content_type,$id);
 			}
 		}
 
@@ -759,10 +759,10 @@ class Module_admin_workflow extends standard_crud_module
 
 			if (addon_installed('awards'))
 			{
-				if (!is_null($this->award_type))
+				if (!is_null($this->content_type))
 				{
 					require_code('awards');
-					handle_award_setting($this->award_type,$id);
+					handle_award_setting($this->content_type,$id);
 				}
 			}
 

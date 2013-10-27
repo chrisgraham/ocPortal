@@ -34,7 +34,7 @@ class Module_cms_downloads extends standard_crud_module
 	var $seo_type='downloads_download';
 	var $upload='file';
 	var $javascript='var url=document.getElementById(\'url\'); var form=url.form; var crf=function() { var s=url.value!=\'\'; if (form.elements[\'copy_to_server\']) form.elements[\'copy_to_server\'].disabled=!s; if (form.elements[\'file_size\']) form.elements[\'file_size\'].disabled=!s; }; crf(); url.onchange=crf; url.onkeyup=crf; var cost=document.getElementById(\'cost\'); if (cost) { var form=cost.form; var crf2=function() { var s=(cost.value!=\'\') && (cost.value!=\'0\'); if (form.elements[\'submitter_gets_points\']) form.elements[\'submitter_gets_points\'].disabled=!s; }; crf2(); cost.onchange=crf2; cost.onkeyup=crf2; }';
-	var $award_type='download';
+	var $content_type='download';
 	var $menu_label='SECTION_DOWNLOADS';
 	var $table='download_downloads';
 	var $supports_mass_delete=true;
@@ -814,7 +814,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 	var $permission_module='downloads';
 	var $seo_type='downloads_category';
 	var $upload='image';
-	var $award_type='download_category';
+	var $content_type='download_category';
 	var $protect_first=1;
 	var $menu_label='SECTION_DOWNLOADS';
 

@@ -34,7 +34,7 @@ class Module_cms_galleries extends standard_crud_module
 	var $user_facing=true;
 	var $seo_type='image';
 	var $upload='image';
-	var $award_type='image';
+	var $content_type='image';
 	var $menu_label='GALLERIES';
 	var $table='images';
 	var $supports_mass_delete=true;
@@ -1426,7 +1426,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 	var $seo_type='video';
 	var $upload='file';
 	var $javascript='';
-	var $award_type='video';
+	var $content_type='video';
 	var $menu_label='GALLERIES';
 	var $table='videos';
 	var $supports_mass_delete=true;
@@ -2010,7 +2010,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 	var $seo_type='gallery';
 	var $upload='image';
 	var $non_integer_id=true;
-	var $award_type='gallery';
+	var $content_type='gallery';
 	var $menu_label='GALLERIES';
 	var $table='galleries';
 	var $javascript="var fn=document.getElementById('fullname'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,''); }; }";

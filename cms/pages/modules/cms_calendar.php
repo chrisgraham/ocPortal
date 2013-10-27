@@ -36,7 +36,7 @@ class Module_cms_calendar extends standard_crud_module
 	var $permissions_require='low';
 	var $user_facing=true;
 	var $seo_type='event';
-	var $award_type='event';
+	var $content_type='event';
 	var $possibly_some_kind_of_upload=true;
 	var $menu_label='CALENDAR';
 	var $permissions_cat_require='calendar';

@@ -35,7 +35,7 @@ class Module_cms_catalogues extends standard_crud_module
 	var $user_facing=true;
 	var $seo_type='catalogue_entry';
 	var $catalogue=true;
-	var $award_type='catalogue_entry';
+	var $content_type='catalogue_entry';
 	var $possibly_some_kind_of_upload=true;
 	var $do_preview=NULL;
 	var $menu_label='CATALOGUES';
@@ -1065,7 +1065,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 	var $permissions_cat_name='catalogue_name';
 	var $seo_type='catalogue_category';
 	var $catalogue=true;
-	var $award_type='catalogue_category';
+	var $content_type='catalogue_category';
 	var $upload='image';
 	var $javascript='if (document.getElementById(\'move_days_lower\')) { var mt=document.getElementById(\'move_target\'); var form=mt.form; var crf=function() { var s=mt.selectedIndex==0; form.elements[\'move_days_lower\'].disabled=s; form.elements[\'move_days_higher\'].disabled=s; }; crf(); mt.onclick=crf; }';
 	var $menu_label='CATALOGUES';
@@ -1427,7 +1427,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 	var $permissions_require='cat_high';
 	var $permission_module='catalogues_catalogue';
 	var $non_integer_id=true;
-	var $award_type='catalogue';
+	var $content_type='catalogue';
 	var $is_tree_catalogue=false; // Set for usage by do-next-manager
 	var $menu_label='CATALOGUES';
 	var $table='catalogues';

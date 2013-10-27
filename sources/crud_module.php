@@ -59,7 +59,7 @@ class standard_crud_module
 	var $possibly_some_kind_of_upload=false;
 	var $cat_crud_module=NULL; // Allows chaining of a secondary CRUD module on, to listen for cat CRUD (c)
 	var $alt_crud_module=NULL; // Allows chaining of a secondary CRUD module on, to listen for some other CRUD (v)
-	var $award_type=NULL;
+	var $content_type=NULL;
 	var $posting_form_title=NULL;
 	var $posting_form_text='';
 	var $posting_form_text_parsed=NULL;
@@ -669,10 +669,10 @@ class standard_crud_module
 	 */
 	function has_tied_catalogue()
 	{
-		if (!is_null($this->award_type))
+		if (!is_null($this->content_type))
 		{
 			require_code('fields');
-			return has_tied_catalogue($this->award_type);
+			return has_tied_catalogue($this->content_type);
 		}
 		return false;
 	}
@@ -744,16 +744,16 @@ class standard_crud_module
 		{
 			require_code('fields');
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d55b3a9fc65c8586498489f55ca2f1b8','TITLE'=>do_lang_tempcode('MORE'))));
-			append_form_custom_fields($this->award_type,NULL,$fields,$hidden);
+			append_form_custom_fields($this->content_type,NULL,$fields,$hidden);
 		}
 
 		// Awards?
 		if (addon_installed('awards'))
 		{
-			if (!is_null($this->award_type))
+			if (!is_null($this->content_type))
 			{
 				require_code('awards');
-				$fields2->attach(get_award_fields($this->award_type));
+				$fields2->attach(get_award_fields($this->content_type));
 			}
 		}
 
@@ -899,7 +899,7 @@ class standard_crud_module
 		if ($this->has_tied_catalogue())
 		{
 			require_code('fields');
-			save_form_custom_fields($this->award_type,$id);
+			save_form_custom_fields($this->content_type,$id);
 		}
 
 		if ($this->user_facing)
@@ -920,10 +920,10 @@ class standard_crud_module
 
 		if (addon_installed('awards'))
 		{
-			if (!is_null($this->award_type))
+			if (!is_null($this->content_type))
 			{
 				require_code('awards');
-				handle_award_setting($this->award_type,$id);
+				handle_award_setting($this->content_type,$id);
 			}
 		}
 
@@ -1136,7 +1136,7 @@ class standard_crud_module
 		$extra_buttons=mixed();
 		if ($this->supports_mass_delete)
 		{
-			$extra_buttons=do_template('MASS_SELECT_FORM_BUTTONS',array('_GUID'=>'21121b5a5f8beafefbd09d3e23265986','TYPE'=>$this->award_type));
+			$extra_buttons=do_template('MASS_SELECT_FORM_BUTTONS',array('_GUID'=>'21121b5a5f8beafefbd09d3e23265986','TYPE'=>$this->content_type));
 		}
 
 		return do_template('FORM_SCREEN',array(
@@ -1230,16 +1230,16 @@ class standard_crud_module
 		{
 			require_code('fields');
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3431365db07e3ecd6f9f4d8cf51ff396','TITLE'=>do_lang_tempcode('MORE'))));
-			append_form_custom_fields($this->award_type,$id,$fields,$hidden);
+			append_form_custom_fields($this->content_type,$id,$fields,$hidden);
 		}
 
 		// Awards?
 		if (addon_installed('awards'))
 		{
-			if (!is_null($this->award_type))
+			if (!is_null($this->content_type))
 			{
 				require_code('awards');
-				$fields2->attach(get_award_fields($this->award_type,$id));
+				$fields2->attach(get_award_fields($this->content_type,$id));
 			}
 		}
 
@@ -1452,7 +1452,7 @@ class standard_crud_module
 			if ($this->has_tied_catalogue())
 			{
 				require_code('fields');
-				delete_form_custom_fields($this->award_type,$id);
+				delete_form_custom_fields($this->content_type,$id);
 			}
 
 			/*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))		No - resource is gone now, and redirect would almost certainly try to take us back there
@@ -1506,7 +1506,7 @@ class standard_crud_module
 			if ($this->has_tied_catalogue())
 			{
 				require_code('fields');
-				save_form_custom_fields($this->award_type,$id);
+				save_form_custom_fields($this->content_type,$id);
 			}
 
 			if (($this->output_of_action_is_confirmation) && (!is_null($description))) return $description;
@@ -1515,10 +1515,10 @@ class standard_crud_module
 
 			if (addon_installed('awards'))
 			{
-				if (!is_null($this->award_type))
+				if (!is_null($this->content_type))
 				{
 					require_code('awards');
-					handle_award_setting($this->award_type,$id);
+					handle_award_setting($this->content_type,$id);
 				}
 			}
 
@@ -1565,7 +1565,7 @@ class standard_crud_module
 			{
 				list($type,$id)=explode('_',$key,2);
 
-				if ($type==$this->award_type)
+				if ($type==$this->content_type)
 				{
 					if (!is_null($this->permissions_require))
 					{
@@ -1584,7 +1584,7 @@ class standard_crud_module
 		{
 			$this->delete_actualisation($id);
 		}
-		if ((!is_null($this->cat_crud_module)) && (!is_null($this->cat_crud_module->award_type)))
+		if ((!is_null($this->cat_crud_module)) && (!is_null($this->cat_crud_module->content_type)))
 		{
 			foreach ($_POST as $key=>$val)
 			{
@@ -1594,7 +1594,7 @@ class standard_crud_module
 				}
 			}
 		}
-		if ((!is_null($this->alt_crud_module)) && (!is_null($this->alt_crud_module->award_type)))
+		if ((!is_null($this->alt_crud_module)) && (!is_null($this->alt_crud_module->content_type)))
 		{
 			foreach ($_POST as $key=>$val)
 			{
