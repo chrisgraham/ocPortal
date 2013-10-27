@@ -1555,7 +1555,7 @@ function fu_rename_zone($zone,$new_zone,$dont_bother_with_main_row=false)
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	require_code('zones2');
-	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3');
+	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3'); // LEGACY
 	actual_rename_zone_lite($zone,$new_zone,$dont_bother_with_main_row);
 	$pages=find_all_pages_wrap($zone,true,false,FIND_ALL_PAGES__ALL);
 	foreach ($pages as $page=>$type)
@@ -1580,7 +1580,7 @@ function upgrade_modules()
 	$out='';
 
 	require_code('zones2');
-	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3');
+	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3'); // LEGACY
 
 	$ret=upgrade_module('adminzone','admin_version');
 	if ($ret==1) $out.='<li>'.do_lang('FU_UPGRADED_MODULE','<kbd>admin_version</kbd>').'</li>';
@@ -1609,7 +1609,7 @@ function upgrade_modules()
 	}
 
 	require_code('zones2');
-	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3');
+	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3'); // LEGACY
 	$blocks=find_all_blocks();
 	foreach ($blocks as $block=>$type)
 	{
@@ -1622,6 +1622,23 @@ function upgrade_modules()
 			if (reinstall_block($block))
 			{
 				$out.='<li>'.do_lang('FU_INSTALLED_BLOCK','<kbd>'.escape_html($block).'</kbd>').'</li>';
+			}
+		}
+	}
+
+	require_code('addons2');
+	$addons=find_all_hooks('systems','addon_registry');
+	foreach ($addons as $addon=>$type)
+	{
+		$ret=upgrade_addon_soft($addon);
+		if ($ret==1) $out.='<li>'.do_lang('FU_UPGRADED_ADDON','<kbd>'.escape_html($addon).'</kbd>').'</li>';
+		elseif ($ret==-2)
+		{
+			if ($type=='sources_custom') continue;
+
+			if (reinstall_addon_soft($addon))
+			{
+				$out.='<li>'.do_lang('FU_INSTALLED_ADDON','<kbd>'.escape_html($addon).'</kbd>').'</li>';
 			}
 		}
 	}

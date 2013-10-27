@@ -31,8 +31,9 @@ function init__addons()
  * Upgrade the specified addon.
  *
  * @param  ID_TEXT		The addon name
+ * @return integer		0=No upgrade. -2=Not installed, 1=Upgrade
  */
-function upgrade_addon($addon)
+function upgrade_addon_soft($addon)
 {
 	require_code('database_action');
 	require_code('config2');
@@ -49,15 +50,19 @@ function upgrade_addon($addon)
 
 	$disk_version=float_to_raw_string($ob->get_version(),2,true);
 
+	$ret=0;
 	if (floatval($upgrade_from)<floatval($disk_version))
 	{
 		if (method_exists($ob,'install'))
 		{
 			$ob->install($upgrade_from);
+			$ret=1;
 		}
 	}
 
 	$GLOBALS['SITE_DB']->query_update('addons',array('addon_version'=>$disk_version),array('addon_name'=>$addon),'',1);
+
+	return $ret;
 }
 
 /**
@@ -663,7 +668,7 @@ function install_addon($file,$files=NULL)
 		reinstall_addon_soft($addon,$info+array('files'=>$_files));
 	} else
 	{
-		upgrade_addon($addon);
+		upgrade_addon_soft($addon);
 	}
 
 	// Clear some cacheing
