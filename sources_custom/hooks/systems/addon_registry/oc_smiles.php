@@ -153,7 +153,28 @@ class Hook_addon_registry_oc_smiles
 			'themes/default/images_custom/ocf_emoticons/whistle.png',
 			'themes/default/images_custom/ocf_emoticons/wink.png',
 			'themes/default/images_custom/ocf_emoticons/wub.png',
-			'data_custom/ocsmiles_install.php',
 		);
+	}
+
+	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+	}
+
+	/**
+	 * Standard modular install function.
+	 *
+	 * @param  ?integer	What version we're upgrading from (NULL: new install)
+	 */
+	function install($upgrade_from=NULL)
+	{
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'theme_images WHERE path LIKE \'themes/%/images/ocf_emoticons/%\'');
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'theme_images WHERE path LIKE \'themes/%/images//ocf_emoticons/%\'');
+			persistent_cache_delete('THEME_IMAGES');
+		}
 	}
 }

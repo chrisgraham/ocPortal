@@ -135,12 +135,35 @@ New users should then be assigned a mentor/buddy who will receive an equal amoun
 	{
 		return array(
 			'sources_custom/hooks/systems/addon_registry/oc_best_buddy.php',
-			'data_custom/ocbestbuddy_install.php',
-			'data_custom/ocbestbuddy_uninstall.php',
 			'sources_custom/points2.php',
 			'sources_custom/hooks/systems/upon_query/add_mentor.php',
 			'lang_custom/EN/ocbestbuddy.ini',
 			'sources_custom/hooks/systems/config/mentor_usergroup.php',
 		);
+	}
+
+	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+		$GLOBALS['SITE_DB']->drop_table_if_exists('members_mentors');
+	}
+
+	/**
+	 * Standard modular install function.
+	 *
+	 * @param  ?integer	What version we're upgrading from (NULL: new install)
+	 */
+	function install($upgrade_from=NULL)
+	{
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('members_mentors',array(
+				'id'=>'*AUTO',
+				'member_id'=>'*INTEGER',
+				'mentor_id'=>'*INTEGER'
+			));
+		}
 	}
 }

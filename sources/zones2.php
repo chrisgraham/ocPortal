@@ -273,10 +273,6 @@ function get_module_overridables($zone,$page,$for_permissions=false)
  */
 function upgrade_module($zone,$module)
 {
-	require_code('database_action');
-	require_code('config2');
-	require_code('menus2');
-
 	$rows=$GLOBALS['SITE_DB']->query_select('modules',array('*'),array('module_the_name'=>$module),'',1);
 	if (!array_key_exists(0,$rows)) return (-2); // Not installed, so can't upgrade
 
@@ -314,6 +310,11 @@ function upgrade_module($zone,$module)
 		if ((($upgrade_from<$info['version']) && (array_key_exists('update_require_upgrade',$info)))
 			|| (($upgrade_from_hack<$info['hack_version']) && (array_key_exists('hack_require_upgrade',$info))))
 		{
+			require_code('database_action');
+			require_code('config2');
+			require_code('menus2');
+			require_code('files2');
+
 			if (is_array($functions[1]))
 			{
 				call_user_func_array($functions[1][0],$functions[1][1]);
@@ -342,6 +343,7 @@ function reinstall_module($zone,$module)
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
 	$module_path=get_file_base().'/'._get_module_path($zone,$module);
+
 	require_code('database_action');
 	require_code('config2');
 	require_code('menus2');
@@ -410,7 +412,9 @@ function uninstall_module($zone,$module)
 
 	require_code('database_action');
 	require_code('config2');
+	require_code('menus2');
 	require_code('files2');
+
 	$GLOBALS['SITE_DB']->query_delete('modules',array('module_the_name'=>$module),'',1);
 	$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>$module)); // As some modules will try and install this themselves. Entry point permissions they won't.
 	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('the_page'=>$module)); // Ditto
@@ -515,7 +519,6 @@ function get_block_parameters($block)
  */
 function upgrade_block($block)
 {
-	require_code('database_action');
 	$rows=$GLOBALS['SITE_DB']->query_select('blocks',array('*'),array('block_name'=>$block),'',1);
 	if (!array_key_exists(0,$rows)) return (-2); // Not installed, so can't upgrade
 
@@ -533,6 +536,11 @@ function upgrade_block($block)
 		if ((($upgrade_from<$info['version']) && (array_key_exists('update_require_upgrade',$info)))
 			|| (($upgrade_from_hack<$info['hack_version']) && (array_key_exists('hack_require_upgrade',$info))))
 		{
+			require_code('database_action');
+			require_code('config2');
+			require_code('menus2');
+			require_code('files2');
+
 			if (is_array($functions[1]))
 			{
 				call_user_func_array($functions[1][0],$functions[1][1]);
@@ -557,7 +565,6 @@ function upgrade_block($block)
  */
 function reinstall_block($block)
 {
-	//echo $block.'<br />';
 	$block_path=_get_block_path($block);
 
 	$GLOBALS['SITE_DB']->query_delete('blocks',array('block_name'=>$block),'',1);
@@ -609,8 +616,10 @@ function uninstall_block($block)
 	$block_path=_get_block_path($block);
 
 	require_code('database_action');
+	require_code('config2');
 	require_code('menus2');
 	require_code('files2');
+
 	$GLOBALS['SITE_DB']->query_delete('blocks',array('block_name'=>$block),'',1);
 	$GLOBALS['SITE_DB']->query_delete('cache_on',array('cached_for'=>$block),'',1);
 	$GLOBALS['SITE_DB']->query_delete('cache',array('cached_for'=>$block));

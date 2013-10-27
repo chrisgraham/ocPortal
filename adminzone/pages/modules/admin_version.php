@@ -65,8 +65,6 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('member_page_access');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('member_category_access');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('tracking');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('sms_log');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('confirmed_mobiles');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('autosave');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('messages_to_render');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('url_title_cache');
@@ -85,9 +83,6 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_primary__members');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('task_queue');
 
-		delete_privilege('use_sms');
-		delete_privilege('sms_higher_limit');
-		delete_privilege('sms_higher_trigger_limit');
 		delete_privilege('edit_meta_fields');
 		delete_privilege('view_private_content');
 	}
@@ -128,19 +123,6 @@ class Module_admin_version
 				'r_rating_for_type'=>'ID_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('review_supplement','rating_for_id',array('r_rating_for_id'));
-
-			// TODO: Move these into sms addon_registry hook, once these hooks support installation (#354 on tracker)
-			$GLOBALS['SITE_DB']->create_table('sms_log',array(
-				'id'=>'*AUTO',
-				's_member_id'=>'MEMBER',
-				's_time'=>'TIME',
-				's_trigger_ip'=>'IP'
-			));
-			$GLOBALS['SITE_DB']->create_index('sms_log','sms_log_for',array('s_member_id','s_time'));
-			$GLOBALS['SITE_DB']->create_index('sms_log','sms_trigger_ip',array('s_trigger_ip'));
-			add_privilege('GENERAL_SETTINGS','use_sms',false);
-			add_privilege('GENERAL_SETTINGS','sms_higher_limit',false);
-			add_privilege('GENERAL_SETTINGS','sms_higher_trigger_limit',false);
 
 			$GLOBALS['SITE_DB']->create_table('logged_mail_messages',array(
 				'id'=>'*AUTO',
@@ -535,14 +517,6 @@ class Module_admin_version
 			));
 			$GLOBALS['SITE_DB']->create_index('member_category_access','mcaname',array('module_the_name','category_name'));
 			$GLOBALS['SITE_DB']->create_index('member_category_access','mcamember_id',array('member_id'));
-
-			/*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(		Not currently implemented
-				'm_phone_number'=>'*SHORT_TEXT',
-				'm_member_id'=>'MEMBER',
-				'm_time'=>'TIME',
-				'm_confirm_code'=>'IP'
-			));*/
-			/*$GLOBALS['SITE_DB']->create_index('confirmed_mobiles','confirmed_numbers',array('m_confirm_code'));*/
 
 			$GLOBALS['SITE_DB']->create_table('autosave',array(
 				'id'=>'*AUTO',

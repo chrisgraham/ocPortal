@@ -152,10 +152,68 @@ Allows people to specify who referred them when they join your site or other con
 			'sources_custom/hooks/modules/members/referrals.php',
 			'themes/default/images_custom/bigicons/referrals.png',
 			'adminzone/pages/comcode_custom/EN/referrals.txt',
-			'data_custom/referrals_install.php',
-			'data_custom/referrals_uninstall.php',
 			'adminzone/pages/modules_custom/admin_referrals.php',
 			'sources_custom/hooks/systems/startup/referrals.php',
 		);
+	}
+
+	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+		$GLOBALS['SITE_DB']->drop_table_if_exists('referrer_override');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('referrals_qualified_for');
+	}
+
+	/**
+	 * Standard modular install function.
+	 *
+	 * @param  ?integer	What version we're upgrading from (NULL: new install)
+	 */
+	function install($upgrade_from=NULL)
+	{
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('referrer_override',array(
+				'o_referrer'=>'*MEMBER',
+				'o_scheme_name'=>'*ID_TEXT',
+				'o_referrals_dif'=>'INTEGER',
+				'o_is_qualified'=>'?BINARY',
+			));
+
+			$GLOBALS['SITE_DB']->create_table('referees_qualified_for',array(
+				'id'=>'*AUTO',
+				'q_referee'=>'MEMBER',
+				'q_referrer'=>'MEMBER',
+				'q_scheme_name'=>'ID_TEXT',
+				'q_email_address'=>'SHORT_TEXT',
+				'q_time'=>'TIME',
+				'q_action'=>'ID_TEXT',
+			));
+
+			// Populate from current invites
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_invites',array('i_email_address','i_time','i_inviter'),array('i_taken'=>1));
+			foreach ($rows as $row)
+			{
+				$member_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_email_address'=>$row['i_email_address']));
+				if (!is_null($member_id))
+				{
+					$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt',true);
+
+					foreach (array_keys($ini_file) as $scheme_name)
+					{
+						$GLOBALS['SITE_DB']->query_insert('referees_qualified_for',array(
+							'q_referee'=>$member_id,
+							'q_referrer'=>$row['i_inviter'],
+							'q_scheme_name'=>$scheme_name,
+							'q_email_address'=>$row['i_email_address'],
+							'q_time'=>$row['i_time'],
+							'q_action'=>'',
+						));
+					}
+				}
+			}
+		}
 	}
 }

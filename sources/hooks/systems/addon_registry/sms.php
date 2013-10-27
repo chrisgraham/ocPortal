@@ -100,4 +100,48 @@ class Hook_addon_registry_sms
 		);
 	}
 
+	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+		$GLOBALS['SITE_DB']->drop_table_if_exists('sms_log');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('confirmed_mobiles');
+
+		delete_privilege('use_sms');
+		delete_privilege('sms_higher_limit');
+		delete_privilege('sms_higher_trigger_limit');
+	}
+
+	/**
+	 * Standard modular install function.
+	 *
+	 * @param  ?integer	What version we're upgrading from (NULL: new install)
+	 */
+	function install($upgrade_from=NULL)
+	{
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('sms_log',array(
+				'id'=>'*AUTO',
+				's_member_id'=>'MEMBER',
+				's_time'=>'TIME',
+				's_trigger_ip'=>'IP'
+			));
+			$GLOBALS['SITE_DB']->create_index('sms_log','sms_log_for',array('s_member_id','s_time'));
+			$GLOBALS['SITE_DB']->create_index('sms_log','sms_trigger_ip',array('s_trigger_ip'));
+			add_privilege('GENERAL_SETTINGS','use_sms',false);
+			add_privilege('GENERAL_SETTINGS','sms_higher_limit',false);
+			add_privilege('GENERAL_SETTINGS','sms_higher_trigger_limit',false);
+
+			/*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(		Not currently implemented
+				'm_phone_number'=>'*SHORT_TEXT',
+				'm_member_id'=>'MEMBER',
+				'm_time'=>'TIME',
+				'm_confirm_code'=>'IP'
+			));*/
+			/*$GLOBALS['SITE_DB']->create_index('confirmed_mobiles','confirmed_numbers',array('m_confirm_code'));*/
+		}
+	}
+
 }

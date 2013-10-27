@@ -134,8 +134,33 @@ class Hook_addon_registry_oc_bank
 			'sources_custom/hooks/systems/cron/bank.php',
 			'themes/default/templates_custom/POINTSTORE_BANK.tpl',
 			'sources_custom/hooks/systems/config/bank_dividend.php',
-			'data_custom/ocbank_uninstall.php ',
-			'data_custom/ocbank_install.php ',
 		);
+	}
+
+	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+		$GLOBALS['SITE_DB']->drop_table_if_exists('bank');
+	}
+
+	/**
+	 * Standard modular install function.
+	 *
+	 * @param  ?integer	What version we're upgrading from (NULL: new install)
+	 */
+	function install($upgrade_from=NULL)
+	{
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('bank',array(
+				'id'=>'*AUTO',
+				'member_id'=>'MEMBER',
+				'amount'=>'INTEGER',
+				'dividend'=>'INTEGER',
+				'add_time'=>'?TIME',
+			));
+		}
 	}
 }

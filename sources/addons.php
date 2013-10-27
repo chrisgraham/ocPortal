@@ -46,17 +46,24 @@ function get_default_addon_details()
  * @param  string		The name of the addon
  * @param  boolean	Whether to search for dependencies on this
  * @param  ?array		Database row (NULL: lookup via a new query)
+ * @param  ?array		.ini-format info (needs processing) (NULL: unknown / N/A)
  * @return array		The map of details
  */
-function read_addon_info($name,$get_dependencies_on_this=false,$row=NULL)
+function read_addon_info($addon,$get_dependencies_on_this=false,$row=NULL,$ini_info=NULL)
 {
-	$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($name).'.php';
+	// Hook file has highest priority...
+
+	$is_orig=false;
+	$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($addon).'.php';
 	if (!file_exists($path))
-		$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name).'.php';
+	{
+		$is_orig=true;
+		$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($addon).'.php';
+	}
 
 	if (file_exists($path))
 	{
-		$_hook_bits=extract_module_functions($path,array('get_dependencies','get_version','get_category','copyright_attribution','get_licence','get_description','get_file_list'));
+		$_hook_bits=extract_module_functions($path,array('get_dependencies','get_version','get_category','copyright_attribution','get_licence','get_description','get_author','get_organisation','get_file_list'));
 		if (is_null($_hook_bits[0]))
 		{
 			$dep=array();
@@ -94,18 +101,32 @@ function read_addon_info($name,$get_dependencies_on_this=false,$row=NULL)
 			$licence=$defaults['licence'];
 		}
 		$description=is_array($_hook_bits[5])?call_user_func_array($_hook_bits[5][0],$_hook_bits[5][1]):@eval($_hook_bits[5]);
-		if (is_null($_hook_bits[6]))
+		if (!is_null($_hook_bits[6]))
+		{
+			$author=is_array($_hook_bits[6])?call_user_func_array($_hook_bits[6][0],$_hook_bits[6][1]):@eval($_hook_bits[6]);
+		} else
+		{
+			$author=$is_orig?'Core Team':$defaults['author'];
+		}
+		if (!is_null($_hook_bits[7]))
+		{
+			$organisation=is_array($_hook_bits[7])?call_user_func_array($_hook_bits[7][0],$_hook_bits[7][1]):@eval($_hook_bits[7]);
+		} else
+		{
+			$organisation=$is_orig?'ocProducts':$defaults['organisation'];
+		}
+		if (is_null($_hook_bits[8]))
 		{
 			$file_list=array();
 		} else
 		{
-			$file_list=is_array($_hook_bits[6])?call_user_func_array($_hook_bits[6][0],$_hook_bits[6][1]):@eval($_hook_bits[6]);
+			$file_list=is_array($_hook_bits[8])?call_user_func_array($_hook_bits[8][0],$_hook_bits[8][1]):@eval($_hook_bits[8]);
 		}
 
 		$addon_info=array(
-			'name'=>$name,
-			'author'=>'Core Team',
-			'organisation'=>'ocProducts',
+			'name'=>$addon,
+			'author'=>$author,
+			'organisation'=>$organisation,
 			'version'=>float_to_raw_string($version,2,true),
 			'category'=>$category,
 			'copyright_attribution'=>$copyright_attribution,
@@ -118,15 +139,49 @@ function read_addon_info($name,$get_dependencies_on_this=false,$row=NULL)
 		);
 		if ($get_dependencies_on_this)
 		{
-			$addon_info['dependencies_on_this']=find_addon_dependencies_on($name);
+			$addon_info['dependencies_on_this']=find_addon_dependencies_on($addon);
 		}
 
 		return $addon_info;
 	}
 
+	// Next try .ini file
+
+	if (!is_null($ini_info))
+	{
+		$version=$ini_info['version'];
+		if ($version=='(version-synched)') $version=float_to_raw_string(ocp_version_number(),2,true);
+
+		$dependencies=array_key_exists('dependencies',$ini_info)?explode(',',$ini_info['dependencies']):array();
+		$incompatibilities=array_key_exists('incompatibilities',$ini_info)?explode(',',$ini_info['incompatibilities']):array();
+
+		$addon_info=array(
+			'name'=>$ini_info['name'],
+			'author'=>$ini_info['author'],
+			'organisation'=>$ini_info['organisation'],
+			'version'=>$version,
+			'category'=>$ini_info['category'],
+			'copyright_attribution'=>explode("\n",$ini_info['addon_copyright_attribution']),
+			'licence'=>$ini_info['licence'],
+			'description'=>$ini_info['description'],
+			'install_time'=>time(),
+			'files'=>$ini_info['files'],
+			'dependencies'=>$dependencies,
+			'incompatibilities'=>$incompatibilities,
+		);
+		if ($get_dependencies_on_this)
+		{
+			$addon_info['dependencies_on_this']=find_addon_dependencies_on($addon);
+		}
+
+		return $addon_info;
+	}
+
+	// Next try what is in the database...
+
 	if (is_null($row))
 	{
-		$addon_rows=$GLOBALS['SITE_DB']->query_select('addons',array('*'),array('addon_name'=>$name));
+		$addon_rows=$GLOBALS['SITE_DB']->query_select('addons',array('*'),array('addon_name'=>$addon));
 		if (array_key_exists(0,$addon_rows))
 		{
 			$row=$addon_rows[0];
@@ -147,12 +202,12 @@ function read_addon_info($name,$get_dependencies_on_this=false,$row=NULL)
 			'install_time'=>$row['addon_install_time'],
 		);
 
-		$addon_info['files']=array_unique(collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'),array('addon_name'=>$name))));
-		$addon_info['dependencies']=collapse_1d_complexity('addon_name_dependant_upon',$GLOBALS['SITE_DB']->query_select('addons_dependencies',array('addon_name_dependant_upon'),array('addon_name'=>$name,'addon_name_incompatibility'=>0)));
-		$addon_info['incompatibilities']=collapse_1d_complexity('addon_name_dependant_upon',$GLOBALS['SITE_DB']->query_select('addons_dependencies',array('addon_name_dependant_upon'),array('addon_name'=>$name,'addon_name_incompatibility'=>1)));
+		$addon_info['files']=array_unique(collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'),array('addon_name'=>$addon))));
+		$addon_info['dependencies']=collapse_1d_complexity('addon_name_dependant_upon',$GLOBALS['SITE_DB']->query_select('addons_dependencies',array('addon_name_dependant_upon'),array('addon_name'=>$addon,'addon_name_incompatibility'=>0)));
+		$addon_info['incompatibilities']=collapse_1d_complexity('addon_name_dependant_upon',$GLOBALS['SITE_DB']->query_select('addons_dependencies',array('addon_name_dependant_upon'),array('addon_name'=>$addon,'addon_name_incompatibility'=>1)));
 		if ($get_dependencies_on_this)
 		{
-			$addon_info['dependencies_on_this']=find_addon_dependencies_on($name);
+			$addon_info['dependencies_on_this']=find_addon_dependencies_on($addon);
 		}
 		return $addon_info;
 	}

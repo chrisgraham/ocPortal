@@ -137,9 +137,46 @@ class Hook_addon_registry_locations
 			'sources_custom/locations_geopositioning.php',
 			'sources_custom/locations/uk.php',
 			'sources_custom/locations/us.php',
-			'data_custom/locations_install.php',
-			'data_custom/locations_uninstall.php',
 			'data_custom/geoposition.php',
 		);
+	}
+
+	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+		$GLOBALS['SITE_DB']->drop_table_if_exists('locations');
+	}
+
+	/**
+	 * Standard modular install function.
+	 *
+	 * @param  ?integer	What version we're upgrading from (NULL: new install)
+	 */
+	function install($upgrade_from=NULL)
+	{
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('locations',array(
+				'id'=>'*AUTO',
+				'l_place'=>'SHORT_TEXT',
+				'l_type'=>'ID_TEXT',
+				'l_continent'=>'ID_TEXT',
+				'l_country'=>'ID_TEXT',
+				'l_parent_1'=>'ID_TEXT',
+				'l_parent_2'=>'ID_TEXT',
+				'l_parent_3'=>'ID_TEXT',
+				'l_population'=>'?INTEGER',
+				'l_latitude'=>'?REAL',
+				'l_longitude'=>'?REAL',
+				//'l_postcode'=>'ID_TEXT',	Actually often many postcodes per location and/or poor alignment
+			));
+			$GLOBALS['SITE_DB']->create_index('locations','l_place',array('l_place'));
+			$GLOBALS['SITE_DB']->create_index('locations','l_country',array('l_country'));
+			$GLOBALS['SITE_DB']->create_index('locations','l_latitude',array('l_latitude'));
+			$GLOBALS['SITE_DB']->create_index('locations','l_longitude',array('l_longitude'));
+			//$GLOBALS['SITE_DB']->create_index('locations','l_postcode',array('l_postcode'));
+		}
 	}
 }
