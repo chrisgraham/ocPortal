@@ -48,7 +48,7 @@ class Hook_content_meta_aware_poll
 			'edit_pagelink_pattern'=>'_SEARCH:cms_polls:_ed:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
 			'support_url_monikers'=>true,
-			'search_hook'=>'iotd',
+			'search_hook'=>'polls',
 			'views_field'=>'poll_views',
 			'submitter_field'=>'submitter',
 			'add_time_field'=>'add_time',
