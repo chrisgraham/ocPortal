@@ -41,6 +41,46 @@ class Hook_addon_registry_community_billboard
 	}
 
 	/**
+	 * Get the addon category
+	 *
+	 * @return string			The category
+	 */
+	function get_category()
+	{
+		return 'Fun and Games';
+	}
+
+	/**
+	 * Get the addon author
+	 *
+	 * @return string			The author
+	 */
+	function get_author()
+	{
+		return 'Chris Graham';
+	}
+
+	/**
+	 * Find other authors
+	 *
+	 * @return array			A list of co-authors that should be attributed
+	 */
+	function get_copyright_attribution()
+	{
+		return array();
+	}
+
+	/**
+	 * Get the addon licence (one-line summary only)
+	 *
+	 * @return string			The licence
+	 */
+	function get_licence()
+	{
+		return 'Licensed on the same terms as ocPortal';
+	}
+
+	/**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
@@ -71,10 +111,12 @@ class Hook_addon_registry_community_billboard
 	{
 		return array(
 			'requires'=>array(
-				'pointstore'
+				'pointstore',
 			),
-			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'recommends'=>array(
+			),
+			'conflicts_with'=>array(
+			)
 		);
 	}
 
@@ -90,20 +132,20 @@ class Hook_addon_registry_community_billboard
 			'themes/default/images/pagepics/community_billboard.png',
 			'sources/hooks/systems/addon_registry/community_billboard.php',
 			'sources/hooks/modules/admin_import_types/community_billboard.php',
-			'COMMUNITY_BILLBOARD_DETAILS.tpl',
-			'COMMUNITY_BILLBOARD_STORE_LIST_LINE.tpl',
+			'themes/default/templates_custom/COMMUNITY_BILLBOARD_DETAILS.tpl',
+			'themes/default/templates_custom/COMMUNITY_BILLBOARD_STORE_LIST_LINE.tpl',
 			'adminzone/pages/modules/admin_community_billboard.php',
 			'lang/EN/community_billboard.ini',
 			'sources/community_billboard.php',
 			'sources/hooks/blocks/main_staff_checklist/community_billboard.php',
 			'sources/hooks/modules/pointstore/community_billboard.php',
 			'sources/hooks/systems/symbols/COMMUNITY_BILLBOARD.php',
-			'POINTSTORE_COMMUNITY_BILLBOARD_SCREEN.tpl',
-			'POINTSTORE_COMMUNITY_BILLBOARD_2.tpl',
+			'themes/default/templates_custom/POINTSTORE_COMMUNITY_BILLBOARD_SCREEN.tpl',
+			'themes/default/templates_custom/POINTSTORE_COMMUNITY_BILLBOARD_2.tpl',
 			'sources/hooks/systems/config/community_billboard.php',
 			'sources/hooks/systems/config/is_on_community_billboard_buy.php',
 			'sources/hooks/systems/notifications/pointstore_request_community_billboard.php',
-			'community_billboard.css',
+			'themes/default/css_custom/community_billboard.css',
 		);
 	}
 
@@ -173,7 +215,7 @@ class Hook_addon_registry_community_billboard
 	{
 		require_css('forms');
 
-		$about_current=do_lorem_template('COMMUNITY_BILLBOARD_DETAILS', array(
+		$about_current=do_lorem_template('COMMUNITY_BILLBOARD_DETAILS',array(
 			'USERNAME'=>lorem_word_html(),
 			'DAYS_ORDERED'=>lorem_phrase(),
 			'DATE_RAW'=>placeholder_time(),
@@ -183,11 +225,11 @@ class Hook_addon_registry_community_billboard
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$text=do_lorem_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE', array(
+			$text=do_lorem_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE',array(
 				'MESSAGE'=>$value,
 				'STATUS'=>do_lang('NEW')
 			));
-			$out->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
+			$out->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
 				'SELECTED'=>false,
 				'DISABLED'=>false,
 				'CLASS'=>'',
@@ -196,14 +238,14 @@ class Hook_addon_registry_community_billboard
 			)));
 		}
 
-		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST',array(
 			'TABINDEX'=>'5',
 			'REQUIRED'=>'_required',
 			'NAME'=>lorem_word(),
 			'CONTENT'=>$out,
 			'INLINE_LIST'=>true
 		));
-		$fields=do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields=do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'PRETTY_NAME'=>lorem_word(),
@@ -216,7 +258,7 @@ class Hook_addon_registry_community_billboard
 
 		//Create 'COMMUNITY_BILLBOARD_MANAGE_SCREEN' using the sub-templates 'COMMUNITY_BILLBOARD_DETAILS' and 'COMMUNITY_BILLBOARD_STORE_LIST_LINE'
 		return array(
-			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
+			lorem_globalise(do_lorem_template('FORM_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TEXT'=>$about_current,
 				'HIDDEN'=>'',

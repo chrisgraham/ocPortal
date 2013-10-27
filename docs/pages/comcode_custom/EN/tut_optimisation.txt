@@ -180,6 +180,8 @@ If you have outgrown normal shared hosting / a single VPS or server, you can do 
 
 There are many possible config options, or [tt]set_value[/tt] commands to tune performance described in the [page="_SEARCH:codebook_3"]Code Book[/page].
 
+Also see the non-bundled [tt]performance_compile[/tt] addon.
+
 [title="2"]Ensure configuration is set[/title]
 
 If a configuration page has never been saved, default config values from that page will be calculated on the fly, which is a little slower.

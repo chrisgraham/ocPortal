@@ -101,8 +101,8 @@ class Hook_addon_registry_ldap
 			'sources/hooks/systems/config/ldap_version.php',
 			'sources/hooks/systems/config/windows_auth_is_enabled.php',
 			'sources/hooks/systems/addon_registry/ldap.php',
-			'OCF_LDAP_LIST_ENTRY.tpl',
-			'OCF_LDAP_SYNC_SCREEN.tpl',
+			'themes/default/templates/OCF_LDAP_LIST_ENTRY.tpl',
+			'themes/default/templates/OCF_LDAP_SYNC_SCREEN.tpl',
 			'adminzone/pages/modules/admin_ocf_ldap.php',
 			'sources/ocf_ldap.php',
 			'themes/default/images/bigicons/ldap.png',
@@ -138,7 +138,7 @@ class Hook_addon_registry_ldap
 		$members_delete=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
+			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
 				'NAME'=>lorem_word() . placeholder_random(),
 				'NICE_NAME'=>lorem_word()
 			));
@@ -148,7 +148,7 @@ class Hook_addon_registry_ldap
 		$groups_delete=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
+			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
 				'NAME'=>lorem_word() . placeholder_random(),
 				'NICE_NAME'=>lorem_word()
 			));
@@ -158,7 +158,7 @@ class Hook_addon_registry_ldap
 		$groups_add=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
+			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
 				'NAME'=>lorem_word() . placeholder_random(),
 				'NICE_NAME'=>lorem_word()
 			));
@@ -166,7 +166,7 @@ class Hook_addon_registry_ldap
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_LDAP_SYNC_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_LDAP_SYNC_SCREEN',array(
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
 				'MEMBERS_DELETE'=>$members_delete,

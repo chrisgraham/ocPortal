@@ -85,18 +85,18 @@ class Hook_addon_registry_core_language_editing
 	function get_file_list()
 	{
 		return array(
-			'translations_editor.css',
+			'themes/default/css/translations_editor.css',
 			'sources/hooks/systems/addon_registry/core_language_editing.php',
 			'sources/hooks/blocks/main_staff_checklist/translations.php',
-			'JAVASCRIPT_TRANSLATE.tpl',
-			'TRANSLATE_ACTION.tpl',
-			'TRANSLATE_LINE.tpl',
-			'TRANSLATE_LINE_CONTENT.tpl',
-			'TRANSLATE_SCREEN.tpl',
-			'TRANSLATE_SCREEN_CONTENT_SCREEN.tpl',
-			'TRANSLATE_LANGUAGE_CRITICISE_SCREEN.tpl',
-			'TRANSLATE_LANGUAGE_CRITICISE_FILE.tpl',
-			'TRANSLATE_LANGUAGE_CRITICISM.tpl',
+			'themes/default/templates/JAVASCRIPT_TRANSLATE.tpl',
+			'themes/default/templates/TRANSLATE_ACTION.tpl',
+			'themes/default/templates/TRANSLATE_LINE.tpl',
+			'themes/default/templates/TRANSLATE_LINE_CONTENT.tpl',
+			'themes/default/templates/TRANSLATE_SCREEN.tpl',
+			'themes/default/templates/TRANSLATE_SCREEN_CONTENT_SCREEN.tpl',
+			'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISE_SCREEN.tpl',
+			'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISE_FILE.tpl',
+			'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISM.tpl',
 			'adminzone/pages/modules/admin_lang.php',
 			'themes/default/images/bigicons/criticise_language.png',
 			'themes/default/images/bigicons/language.png',
@@ -141,12 +141,12 @@ class Hook_addon_registry_core_language_editing
 		$files='';
 		foreach (placeholder_array() as $value)
 		{
-			$crit=do_lorem_template('TRANSLATE_LANGUAGE_CRITICISM', array(
+			$crit=do_lorem_template('TRANSLATE_LANGUAGE_CRITICISM',array(
 				'CRITICISM'=>lorem_sentence()
 			));
 			$file->attach($crit);
 		}
-		$file_result=do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_FILE', array(
+		$file_result=do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_FILE',array(
 			'COMPLAINTS'=>$file,
 			'FILENAME'=>do_lang_tempcode('NA_EM')
 		));
@@ -154,7 +154,7 @@ class Hook_addon_registry_core_language_editing
 		$files.=$file_result->evaluate();
 
 		return array(
-			lorem_globalise(do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN', array(
+			lorem_globalise(do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FILES'=>$files
 			)), NULL, '', true)
@@ -174,13 +174,13 @@ class Hook_addon_registry_core_language_editing
 		$lines=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$actions=do_lorem_template('TRANSLATE_ACTION', array(
+			$actions=do_lorem_template('TRANSLATE_ACTION',array(
 				'LANG_FROM'=>fallback_lang(),
 				'LANG_TO'=>fallback_lang(),
 				'NAME'=>'trans_' . strval($key),
 				'OLD'=>$value
 			));
-			$lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT', array(
+			$lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT',array(
 				'ID'=>strval($key),
 				'NAME'=>'trans_' . strval($key),
 				'OLD'=>$value,
@@ -191,7 +191,7 @@ class Hook_addon_registry_core_language_editing
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('TRANSLATE_SCREEN_CONTENT_SCREEN', array(
+			lorem_globalise(do_lorem_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array(
 				'LANG_NICE_NAME'=>lorem_word(),
 				'LANG_NICE_ORIGINAL_NAME'=>lorem_word(),
 				'TOO_MANY'=>lorem_phrase(),
@@ -220,7 +220,7 @@ class Hook_addon_registry_core_language_editing
 		$lines='';
 		foreach (placeholder_array() as $i=>$value)
 		{
-			$temp=do_lorem_template('TRANSLATE_LINE', array(
+			$temp=do_lorem_template('TRANSLATE_LINE',array(
 				'TRANSLATE_AUTO'=>$value,
 				'DESCRIPTION'=>lorem_sentence(),
 				'NAME'=>lorem_word().strval($i),
@@ -232,7 +232,7 @@ class Hook_addon_registry_core_language_editing
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('TRANSLATE_SCREEN', array(
+			lorem_globalise(do_lorem_template('TRANSLATE_SCREEN',array(
 				'PAGE'=>lorem_phrase(),
 				'GOOGLE'=>lorem_phrase(),
 				'LANG'=>fallback_lang(),

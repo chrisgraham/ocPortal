@@ -113,19 +113,19 @@ class Hook_addon_registry_downloads
 			'sources/hooks/systems/disposable_values/num_archive_downloads.php',
 			'sources/hooks/systems/disposable_values/num_downloads_downloaded.php',
 			'site/pages/html_custom/EN/download_tree_made.htm',
-			'DOWNLOAD_GALLERY_IMAGE_CELL.tpl',
-			'DOWNLOAD_GALLERY_ROW.tpl',
-			'DOWNLOAD_CATEGORY_SCREEN.tpl',
-			'DOWNLOAD_SCREEN_IMAGE.tpl',
-			'DOWNLOAD_BOX.tpl',
-			'DOWNLOAD_LIST_LINE.tpl',
-			'DOWNLOAD_LIST_LINE_2.tpl',
-			'DOWNLOAD_SCREEN.tpl',
-			'DOWNLOAD_ALL_SCREEN.tpl',
-			'DOWNLOAD_AND_IMAGES_SIMPLE_BOX.tpl',
+			'themes/default/templates/DOWNLOAD_GALLERY_IMAGE_CELL.tpl',
+			'themes/default/templates/DOWNLOAD_GALLERY_ROW.tpl',
+			'themes/default/templates/DOWNLOAD_CATEGORY_SCREEN.tpl',
+			'themes/default/templates/DOWNLOAD_SCREEN_IMAGE.tpl',
+			'themes/default/templates/DOWNLOAD_BOX.tpl',
+			'themes/default/templates/DOWNLOAD_LIST_LINE.tpl',
+			'themes/default/templates/DOWNLOAD_LIST_LINE_2.tpl',
+			'themes/default/templates/DOWNLOAD_SCREEN.tpl',
+			'themes/default/templates/DOWNLOAD_ALL_SCREEN.tpl',
+			'themes/default/templates/DOWNLOAD_AND_IMAGES_SIMPLE_BOX.tpl',
 			'uploads/downloads/.htaccess',
 			'uploads/downloads/index.html',
-			'downloads.css',
+			'themes/default/css/downloads.css',
 			'themes/default/images/bigicons/downloads.png',
 			'themes/default/images/pagepics/downloads.png',
 			'cms/pages/modules/cms_downloads.php',
@@ -193,7 +193,7 @@ class Hook_addon_registry_downloads
 	function tpl_preview__download_and_images_simple_box()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('DOWNLOAD_AND_IMAGES_SIMPLE_BOX', array(
+			lorem_globalise(do_lorem_template('DOWNLOAD_AND_IMAGES_SIMPLE_BOX',array(
 				'DESCRIPTION'=>lorem_paragraph_html(),
 				'IMAGES'=>lorem_phrase(),
 			)), NULL, '', true)
@@ -210,7 +210,7 @@ class Hook_addon_registry_downloads
 	function tpl_preview__download_list_line()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE', array(
+			lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE',array(
 				'BREADCRUMBS'=>lorem_word(),
 				'DOWNLOAD'=>lorem_phrase()
 			)), NULL, '', true)
@@ -227,7 +227,7 @@ class Hook_addon_registry_downloads
 	function tpl_preview__download_list_line_2()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE_2', array(
+			lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE_2',array(
 				'BREADCRUMBS'=>lorem_phrase(),
 				'FILECOUNT'=>placeholder_number()
 			)), NULL, '', true)
@@ -270,7 +270,7 @@ class Hook_addon_registry_downloads
 		$downloads->attach($tpl);
 
 		return array(
-			lorem_globalise(do_lorem_template('DOWNLOAD_CATEGORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('DOWNLOAD_CATEGORY_SCREEN',array(
 				'TAGS'=>lorem_word_html(),
 				'TITLE'=>lorem_title(),
 				'SUBMIT_URL'=>placeholder_url(),
@@ -326,7 +326,7 @@ class Hook_addon_registry_downloads
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('DOWNLOAD_ALL_SCREEN', array(
+			lorem_globalise(do_lorem_template('DOWNLOAD_ALL_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
@@ -349,7 +349,7 @@ class Hook_addon_registry_downloads
 		$images_details=new ocp_tempcode();
 		foreach (placeholder_array() as $row)
 		{
-			$image=do_lorem_template('DOWNLOAD_SCREEN_IMAGE', array(
+			$image=do_lorem_template('DOWNLOAD_SCREEN_IMAGE',array(
 				'ID'=>placeholder_id(),
 				'VIEW_URL'=>placeholder_url(),
 				'EDIT_URL'=>placeholder_url(),
@@ -357,17 +357,17 @@ class Hook_addon_registry_downloads
 				'DESCRIPTION'=>lorem_phrase()
 			));
 
-			$cell=do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL', array(
+			$cell=do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL',array(
 				'CONTENT'=>$image
 			));
 
-			$images_details->attach(do_lorem_template('DOWNLOAD_GALLERY_ROW', array(
+			$images_details->attach(do_lorem_template('DOWNLOAD_GALLERY_ROW',array(
 				'CELLS'=>$cell
 			)));
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('DOWNLOAD_SCREEN', array(
+			lorem_globalise(do_lorem_template('DOWNLOAD_SCREEN',array(
 				'ORIGINAL_FILENAME'=>lorem_phrase(),
 				'TAGS'=>lorem_word_html(),
 				'LICENCE'=>lorem_phrase(),

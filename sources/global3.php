@@ -89,7 +89,6 @@ function init__global3()
 		'ATTACHED_MESSAGES',
 		'ATTACHED_MESSAGES_RAW',
 		'LATE_ATTACHED_MESSAGES',
-		'LATE_ATTACHED_MESSAGES_RAW',
 		'SEO_KEYWORDS',
 		'SEO_DESCRIPTION',
 		'SHORT_TITLE',
@@ -243,7 +242,7 @@ function _load_blank_output_state($just_tempcode=false,$true_blank=false)
 		global $META_DATA;
 		$META_DATA=array();
 
-		global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
+		global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES;
 		$ATTACHED_MESSAGES=NULL;
 		/** Raw data of attached messages.
 		 * @sets_output_state
@@ -252,7 +251,6 @@ function _load_blank_output_state($just_tempcode=false,$true_blank=false)
 		 */
 		$ATTACHED_MESSAGES_RAW=array();
 		$LATE_ATTACHED_MESSAGES=NULL;
-		$LATE_ATTACHED_MESSAGES_RAW=array();
 
 		global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SHORT_TITLE;
 		$SEO_KEYWORDS=NULL;

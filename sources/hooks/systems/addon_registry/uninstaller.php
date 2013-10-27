@@ -86,7 +86,7 @@ class Hook_addon_registry_uninstaller
 		return array(
 			'sources/hooks/systems/addon_registry/uninstaller.php',
 			'uninstall.php',
-			'UNINSTALL_SCREEN.tpl',
+			'themes/default/templates/UNINSTALL_SCREEN.tpl',
 		);
 	}
 
@@ -112,7 +112,7 @@ class Hook_addon_registry_uninstaller
 	function tpl_preview__administrative__uninstall_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('UNINSTALL_SCREEN', array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('UNINSTALL_SCREEN',array()), NULL, '', true)
 		);
 	}
 

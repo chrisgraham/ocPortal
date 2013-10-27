@@ -102,9 +102,9 @@ class Hook_addon_registry_stats_block
 			'sources/hooks/systems/config/forum_show_stats_count_topics.php',
 			'sources/hooks/systems/addon_registry/stats_block.php',
 			'sources/hooks/modules/admin_setupwizard/stats_block.php',
-			'BLOCK_SIDE_STATS_SECTION.tpl',
-			'BLOCK_SIDE_STATS_SUBLINE.tpl',
-			'BLOCK_SIDE_STATS.tpl',
+			'themes/default/templates/BLOCK_SIDE_STATS_SECTION.tpl',
+			'themes/default/templates/BLOCK_SIDE_STATS_SUBLINE.tpl',
+			'themes/default/templates/BLOCK_SIDE_STATS.tpl',
 			'sources/blocks/side_stats.php',
 			'sources/hooks/blocks/side_stats/stats_forum.php',
 			'sources/hooks/blocks/side_stats/.htaccess',
@@ -140,18 +140,18 @@ class Hook_addon_registry_stats_block
 		$bits=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
-			$bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE', array(
+			$bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE',array(
 				'KEY'=>lorem_phrase(),
 				'VALUE'=>placeholder_number()
 			)));
 		}
-		$full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION', array(
+		$full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION',array(
 			'SECTION'=>lorem_phrase(),
 			'CONTENT'=>$bits
 		)));
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_STATS', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_STATS',array(
 				'CONTENT'=>$full_tpl
 			)), NULL, '', true)
 		);

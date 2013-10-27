@@ -302,7 +302,7 @@ class Module_cms_wiki
 
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			content_review_set('wiki_page',strval($id));
 		}
 

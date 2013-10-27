@@ -196,7 +196,7 @@ function activities_ajax_update_list_handler()
 
 	require_lang('activities');
 	require_code('activities');
-	require_code('addons_overview');
+	require_code('addons');
 
 	$proceed_selection=true; //There are some cases in which even glancing at the database is a waste of precious time.
 

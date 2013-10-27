@@ -726,7 +726,7 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 
 	// $filter_key is exactly as said in most cases
 
-	return array($filter_key,$field_type,$filter_val);
+	return array($table_join_code.'.'.$filter_key,$field_type,$filter_val);
 }
 
 /**

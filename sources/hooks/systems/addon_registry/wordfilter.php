@@ -92,7 +92,7 @@ class Hook_addon_registry_wordfilter
 			'lang/EN/wordfilter.ini',
 			'themes/default/images/pagepics/wordfilter.png',
 			'themes/default/images/bigicons/wordfilter.png',
-			'WORDFILTER_SCREEN.tpl',
+			'themes/default/templates/WORDFILTER_SCREEN.tpl',
 			'adminzone/pages/modules/admin_wordfilter.php',
 			'sources/hooks/modules/admin_setupwizard/wordfilter.php',
 			'sources/hooks/modules/admin_import_types/wordfilter.php',
@@ -122,7 +122,7 @@ class Hook_addon_registry_wordfilter
 	function tpl_preview__administrative__wordfilter_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('WORDFILTER_SCREEN', array(
+			lorem_globalise(do_lorem_template('WORDFILTER_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TPL'=>lorem_phrase(),
 				'ADD_FORM'=>placeholder_form()

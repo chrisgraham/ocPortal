@@ -87,8 +87,8 @@ class Hook_addon_registry_users_online_block
 			'sources/hooks/systems/config/usersonline_show_birthdays.php',
 			'sources/hooks/systems/config/usersonline_show_newest_member.php',
 			'sources/hooks/systems/addon_registry/users_online_block.php',
-			'BLOCK_SIDE_USERS_ONLINE.tpl',
-			'BLOCK_SIDE_USERS_ONLINE_USER.tpl',
+			'themes/default/templates/BLOCK_SIDE_USERS_ONLINE.tpl',
+			'themes/default/templates/BLOCK_SIDE_USERS_ONLINE_USER.tpl',
 			'sources/blocks/side_users_online.php',
 		);
 	}
@@ -119,7 +119,7 @@ class Hook_addon_registry_users_online_block
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$out->attach(do_lorem_template('BLOCK_SIDE_USERS_ONLINE_USER', array(
+			$out->attach(do_lorem_template('BLOCK_SIDE_USERS_ONLINE_USER',array(
 				'URL'=>placeholder_url(),
 				'USERNAME'=>lorem_phrase(),
 				'COLOUR'=>lorem_word(),
@@ -134,7 +134,7 @@ class Hook_addon_registry_users_online_block
 		{
 			$newest->attach(lorem_phrase());
 
-			$birthday=do_lorem_template('OCF_USER_MEMBER', array(
+			$birthday=do_lorem_template('OCF_USER_MEMBER',array(
 				'FIRST'=>$birthdays->is_empty(),
 				'COLOUR'=>lorem_word(),
 				'AGE'=>placeholder_number(),
@@ -147,7 +147,7 @@ class Hook_addon_registry_users_online_block
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_USERS_ONLINE', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_USERS_ONLINE',array(
 				'CONTENT'=>$out,
 				'GUESTS'=>placeholder_number(),
 				'MEMBERS'=>placeholder_number(),

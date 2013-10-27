@@ -598,7 +598,7 @@ class Module_admin_themes
 		@flock($myfile,LOCK_EX);
 		if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 		if (fwrite($myfile,'title='.post_param('title')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		if (fwrite($myfile,'description='.post_param('description')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (fwrite($myfile,'description='.str_replace("\n",'\n',post_param('description'))."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		foreach ($before as $key=>$val)
 		{
 			if (($key!='title') && ($key!='description') && ($key!='author') && ($key!='mobile_pages') && ($key!='supports_wide'))

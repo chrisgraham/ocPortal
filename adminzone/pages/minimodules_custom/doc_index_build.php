@@ -8,7 +8,7 @@ $admin=object_factory('Module_admin');
 $synonyms=$admin->_synonyms();
 
 // Find details about addons
-require_code('addons_overview');
+require_code('addons');
 $addons=array();
 $all_tutorials_referenced=array();
 $_addons=find_all_hooks('systems','addon_registry');

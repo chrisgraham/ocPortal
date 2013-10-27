@@ -1166,17 +1166,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		$master_data=array();
 		foreach ($files_to_check as $file)
 		{
-			if ((substr($file,-4)=='.tpl') && (strpos($file,'/')===false))
-			{
-				$master_data['themes/default/templates/'.$file]=1;
-			}
-			elseif ((substr($file,-4)=='.css') && (strpos($file,'/')===false))
-			{
-				$master_data['themes/default/css/'.$file]=1;
-			} else
-			{
-				$master_data[$file]=1;
-			}
+			$master_data[$file]=1;
 		}
 
 		$addon_files=collapse_2d_complexity('filename','addon_name',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename','addon_name')));

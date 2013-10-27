@@ -22,100 +22,55 @@ echo '<hr />';
 require_code('addons');
 require_code('version');
 require_code('version2');
-require_code('dump_addons');
-
-if (!file_exists(get_file_base().'/data_custom/addon_files.txt'))
-{
-	exit("File missing : <br />".get_file_base().'/data_custom/addon_files.txt');
-}
-if (!file_exists(get_file_base().'/data_custom/addon_details.csv'))
-{
-	exit("File missing : <br />".get_file_base().'/data_custom/addon_details.csv');
-}
 
 if (function_exists('set_time_limit')) @set_time_limit(0);
 
 $only=get_param('only',NULL);
 
-if (get_param_integer('export_bundled_addons',0)==1) // We are not normally concerned about these, but maybe it is useful sometimes
+$done_addon=false;
+
+$addons=find_all_hooks('systems','addon_registry');
+foreach ($addons as $name=>$place)
 {
-	$addons=find_all_hooks('systems','addon_registry');
-	foreach (array_keys($addons) as $name)
+	if (($only!==NULL) && ($only!==$name)) continue;
+
+	if ((get_param_integer('export_bundled_addons',0)==0) && ($place=='sources')) // We are not normally concerned about these, but maybe it is useful sometimes
+		continue;
+	if ((get_param_integer('export_addons',1)==0) && ($place=='sources_custom'))
+		continue;
+
+	$addon_info=read_addon_info($name);
+
+	// Archive it off to exports/addons
+	$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'-'.$addon_info['version'].'.tar';
+
+	$new_addon_files=array();
+	foreach ($addon_info['files'] as $_file)
 	{
-		if (($only!==NULL) && ($only!==$name)) continue;
-
-		$addon_row=read_addon_info($name);
-
-		// Archive it off to exports/addons
-		if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
-		{
-			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
-		} else // Traditional ocPortal style
-		{
-			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).date('-dmY-Hm',time()).'.tar';
-		}
-
-		$new_addon_files=array();
-		foreach ($addon_row['addon_files'] as $_file)
-		{
-			if (substr($_file,-9)!='.editfrom') // This would have been added back in automatically
-				$new_addon_files[]=$_file;
-		}
-
-		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'exports/addons');
+		if (substr($_file,-9)!='.editfrom') // This would have been added back in automatically
+			$new_addon_files[]=$_file;
 	}
-	if ($only!==NULL) echo "<p>All bundled addons have been exported to 'export/addons/'</p>\n";
+
+	create_addon(
+		$file,
+		$new_addon_files,
+		$addon_info['name'],
+		implode(',',$addon_info['incompatibilities']),
+		implode(',',$addon_info['dependencies']),
+		$addon_info['author'],
+		$addon_info['organisation'],
+		$addon_info['version'],
+		$addon_info['category'],
+		implode("\n",$addon_info['copyright_attribution']),
+		$addon_info['licence'],
+		$addon_info['description'],
+		'exports/addons'
+	);
+
+	$done_addon=true;
 }
-
-if (get_param_integer('export_addons',1)==1)
-{
-	$file_list=get_file_list_of_addons();
-	$addon_list=get_details_of_addons();
-
-	$_addon_limit=get_param('addon_limit','');
-	$addon_limit=mixed();
-	if ($_addon_limit!='')
-	{
-		$addon_limit=explode(',',$_addon_limit);
-	}
-
-	$version=ocp_version_number();
-
-	foreach ($file_list as $addon_codename=>$files)
-	{
-		if ((!is_null($addon_limit)) && (!in_array($addon_codename,$addon_limit))) continue;
-
-		if (($only!==NULL) && ($only!==$addon_codename)) continue;
-
-		$file=$addon_codename.'-'.get_version_branch().'.tar';
-
-		$name=titleify($addon_list[$addon_codename]['Addon name']);
-		$author=$addon_list[$addon_codename]['Author'];
-		$description=$addon_list[$addon_codename]['Help'];
-		$dependencies=$addon_list[$addon_codename]['Requirements / Dependencies'];
-		$incompatibilities=$addon_list[$addon_codename]['Incompatible with'];
-		$category=$addon_list[$addon_codename]['Category'];
-		$license=$addon_list[$addon_codename]['License'];
-		$attribute=$addon_list[$addon_codename]['Attribute'];
-
-		// Formalise dependencies
-		$vs=explode(',',$dependencies);
-		$dependencies='';
-		foreach ($vs as $_v)
-		{
-			if ((!addon_installed($_v)) || (array_key_exists($_v,$addon_list)) || (!file_exists(get_file_base().'/exports/addons/'.$_v.'.tar')) || (!file_exists(get_file_base().'/imports/addons/'.$_v.'.tar')))
-			{
-				if ($dependencies!='') $dependencies.=',';
-				$dependencies.=$_v;
-			}
-		}
-
-		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd',float_to_raw_string($version,2,true),$description,'exports/addons');
-
-		echo nl2br(escape_html(show_updated_comments_code($file,$name)));
-	}
-	if ($only!==NULL) echo "<p>All non-bundled addons have been exported to 'export/addons/'</p>\n";
-}
+if ($done_addon)
+	echo "<p>Addons have been exported to <kbd>export/addons/</kbd></p>\n";
 
 if (get_param_integer('export_themes',0)==1)
 {
@@ -132,15 +87,35 @@ if (get_param_integer('export_themes',0)==1)
 		if ($theme=='default') continue;
 
 		$name='';
-		$description='';
+		$incompatibilities='';
+		$dependencies='';
 		$author='ocProducts';
+		$organisation='ocProducts Ltd';
+		$version='1.0';
+		$copyright_attribution='';
+		$licence='(Unstated)';
+		$description='';
 		$ini_file=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini';
 		if (file_exists($ini_file))
 		{
 			$details=better_parse_ini_file($ini_file);
-			if (array_key_exists('title',$details)) $name=$details['title'];
-			if (array_key_exists('description',$details)) $description=$details['description'];
-			if ((array_key_exists('author',$details)) && ($details['author']!='admin')) $author=$details['author'];
+
+			if (array_key_exists('title',$details))
+				$name=$details['title'];
+			if (array_key_exists('description',$details))
+				$description=$details['description'];
+			if ((array_key_exists('author',$details)) && ($details['author']!='admin'))
+				$author=$details['author'];
+			if (array_key_exists('dependencies',$details))
+				$dependencies=$details['dependencies'];
+			if (array_key_exists('organisation',$details))
+				$organisation=$details['organisation'];
+			if (array_key_exists('version',$details))
+				$version=$details['version'];
+			if (array_key_exists('copyright_attribution',$details))
+				$copyright_attribution=implode("\n",$details['copyright_attribution']);
+			if (array_key_exists('licence',$details))
+				$licence=$details['licence'];
 		}
 
 		$file='theme-'.preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$theme)).'-'.get_version_branch().'.tar';
@@ -161,30 +136,28 @@ if (get_param_integer('export_themes',0)==1)
 				$files2[]=dirname($file2).'/'.substr(basename($file2),strlen($theme)+2);
 			}
 		}
+
 		$_GET['keep_theme_test']='1';
 		$_GET['theme']=$theme;
-		create_addon($file,$files2,$name,'','',$author,'ocProducts Ltd','1.0',$description,'exports/addons');
 
-		echo escape_html(nl2br(show_updated_comments_code($file,$name)));
+		create_addon(
+			$file,
+			$files2,
+			$name,
+			$incompatibilities,
+			$dependencies,
+			$author,
+			$organisation,
+			$version,
+			'Themes',
+			$copyright_attribution,
+			$licence,
+			$description,
+			'exports/addons'
+		);
 	}
 
-	if ($only!==NULL) echo "<p>All themes have been exported to 'export/addons/'</p>\n";
+	if ($only!==NULL) echo "<p>All themes have been exported to <kbd>export/addons/</kbd></p>\n";
 }
 
 echo "<hr /><p><strong>Done</strong></p>\n";
-
-function show_updated_comments_code($file,$name)
-{
-return <<<END
-	Paste into ocPortal.com's OcCLE if this addon is updated: {$file}...
-
-	:require_code('feedback');
-	\$id=\$GLOBALS['SITE_DB']->query_select_value('download_downloads','id',array('url'=>'uploads/downloads/'.rawurlencode('{$file}')));
-	\$content_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>\$id),get_module_zone('downloads'));
-	\$_POST['title']='';
-	\$_POST['post']='[i]Automated message[/i]: This addon has been updated with fixes.';
-	actualise_post_comment(true,'downloads',strval(\$id),\$content_url,'{$name}');
-
-
-END;
-}

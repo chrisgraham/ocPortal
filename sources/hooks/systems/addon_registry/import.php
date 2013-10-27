@@ -84,7 +84,7 @@ class Hook_addon_registry_import
 	function get_file_list()
 	{
 		return array(
-			'importing.css',
+			'themes/default/css/importing.css',
 			'sources/hooks/modules/admin_import/html_site.php',
 			'sources/hooks/modules/admin_import/index.html',
 			'sources/hooks/modules/admin_import/shared/.htaccess',
@@ -93,11 +93,11 @@ class Hook_addon_registry_import
 			'sources/hooks/modules/admin_import_types/.htaccess',
 			'sources/hooks/modules/admin_import_types/core.php',
 			'sources/hooks/modules/admin_import_types/index.html',
-			'IMPORT_ACTION_LINE.tpl',
-			'IMPORT_ACTION_SCREEN.tpl',
-			'IMPORT_MESSAGE.tpl',
-			'IMPORT_PHPNUKE_FCOMCODEPAGE.tpl',
-			'IMPORT_MKPORTAL_FCOMCODEPAGE.tpl',
+			'themes/default/templates/IMPORT_ACTION_LINE.tpl',
+			'themes/default/templates/IMPORT_ACTION_SCREEN.tpl',
+			'themes/default/templates/IMPORT_MESSAGE.tpl',
+			'themes/default/templates/IMPORT_PHPNUKE_FCOMCODEPAGE.tpl',
+			'themes/default/templates/IMPORT_MKPORTAL_FCOMCODEPAGE.tpl',
 			'adminzone/pages/modules/admin_import.php',
 			'themes/default/images/pagepics/xml.png',
 			'lang/EN/import.ini',
@@ -120,9 +120,9 @@ class Hook_addon_registry_import
 			'sources/import.php',
 			'themes/default/images/pagepics/importdata.png',
 			'lang/EN/xml_storage.ini',
-			'XML_STORAGE_SCREEN.tpl',
-			'XML_STORAGE_EXPORT_RESULTS_SCREEN.tpl',
-			'XML_STORAGE_IMPORT_RESULTS_SCREEN.tpl',
+			'themes/default/templates/XML_STORAGE_SCREEN.tpl',
+			'themes/default/templates/XML_STORAGE_EXPORT_RESULTS_SCREEN.tpl',
+			'themes/default/templates/XML_STORAGE_IMPORT_RESULTS_SCREEN.tpl',
 			'adminzone/pages/modules/admin_xml_storage.php',
 			'sources/hooks/systems/occle_commands/continue_import.php',
 		);
@@ -157,10 +157,10 @@ class Hook_addon_registry_import
 	 */
 	function tpl_preview__administrative__import_action_screen()
 	{
-		$extra=do_lorem_template('IMPORT_MESSAGE', array(
+		$extra=do_lorem_template('IMPORT_MESSAGE',array(
 			'MESSAGE'=>lorem_phrase()
 		));
-		$import_list=do_lorem_template('IMPORT_ACTION_LINE', array(
+		$import_list=do_lorem_template('IMPORT_ACTION_LINE',array(
 			'CHECKED'=>false,
 			'DISABLED'=>true,
 			'NAME'=>lorem_word(),
@@ -169,7 +169,7 @@ class Hook_addon_registry_import
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('IMPORT_ACTION_SCREEN', array(
+			lorem_globalise(do_lorem_template('IMPORT_ACTION_SCREEN',array(
 				'EXTRA'=>$extra,
 				'MESSAGE'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
@@ -192,7 +192,7 @@ class Hook_addon_registry_import
 	function tpl_preview__administrative__xml_storage_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('XML_STORAGE_SCREEN', array(
+			lorem_globalise(do_lorem_template('XML_STORAGE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'IMPORT_FORM'=>placeholder_form(),
 				'EXPORT_FORM'=>placeholder_form()
@@ -219,7 +219,7 @@ class Hook_addon_registry_import
 			);
 		}
 		return array(
-			lorem_globalise(do_lorem_template('XML_STORAGE_IMPORT_RESULTS_SCREEN', array(
+			lorem_globalise(do_lorem_template('XML_STORAGE_IMPORT_RESULTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'OPS'=>$ops_nice
 			)), NULL, '', true)
@@ -236,7 +236,7 @@ class Hook_addon_registry_import
 	function tpl_preview__administrative__xml_storage_export_results_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('XML_STORAGE_EXPORT_RESULTS_SCREEN', array(
+			lorem_globalise(do_lorem_template('XML_STORAGE_EXPORT_RESULTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'XML'=>lorem_phrase()
 			)), NULL, '', true)
@@ -253,7 +253,7 @@ class Hook_addon_registry_import
 	function tpl_preview__administrative__import_mkportal_fcomcodepage()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('IMPORT_MKPORTAL_FCOMCODEPAGE', array(
+			lorem_globalise(do_lorem_template('IMPORT_MKPORTAL_FCOMCODEPAGE',array(
 				'TITLE'=>lorem_phrase(),
 				'SUBTITLE'=>lorem_phrase(),
 				'PAGE_HEADER'=>lorem_phrase(),
@@ -274,7 +274,7 @@ class Hook_addon_registry_import
 	function tpl_preview__administrative__import_phpnuke_fcomcodepage()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('IMPORT_PHPNUKE_FCOMCODEPAGE', array(
+			lorem_globalise(do_lorem_template('IMPORT_PHPNUKE_FCOMCODEPAGE',array(
 				'TITLE'=>lorem_phrase(),
 				'SUBTITLE'=>lorem_phrase(),
 				'PAGE_HEADER'=>lorem_phrase(),

@@ -91,11 +91,11 @@ class Hook_addon_registry_staff_messaging
 			'sources/hooks/systems/do_next_menus/messaging.php',
 			'themes/default/images/bigicons/messaging.png',
 			'themes/default/images/pagepics/messaging.png',
-			'BLOCK_MAIN_CONTACT_SIMPLE.tpl',
-			'BLOCK_MAIN_CONTACT_US.tpl',
+			'themes/default/templates/BLOCK_MAIN_CONTACT_SIMPLE.tpl',
+			'themes/default/templates/BLOCK_MAIN_CONTACT_US.tpl',
 			'adminzone/pages/modules/admin_messaging.php',
-			'MESSAGING_MESSAGE_SCREEN.tpl',
-			'messaging.css',
+			'themes/default/templates/MESSAGING_MESSAGE_SCREEN.tpl',
+			'themes/default/css/messaging.css',
 			'sources/hooks/systems/notifications/messaging.php',
 			'lang/EN/messaging.ini',
 			'data/form_to_email.php',
@@ -128,7 +128,7 @@ class Hook_addon_registry_staff_messaging
 	 */
 	function tpl_preview__administrative__messaging_message_screen()
 	{
-		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM', array(
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array(
 			'JOIN_BITS'=>lorem_phrase_html(),
 			'USE_CAPTCHA'=>false,
 			'EMAIL_OPTIONAL'=>lorem_word(),
@@ -147,7 +147,7 @@ class Hook_addon_registry_staff_messaging
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('MESSAGING_MESSAGE_SCREEN', array(
+			lorem_globalise(do_lorem_template('MESSAGING_MESSAGE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MESSAGE_TITLE'=>lorem_phrase(),
 				'MESSAGE'=>lorem_phrase(),
@@ -172,7 +172,7 @@ class Hook_addon_registry_staff_messaging
 	 */
 	function tpl_preview__block_main_contact_us()
 	{
-		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM', array(
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array(
 			'JOIN_BITS'=>lorem_phrase_html(),
 			'USE_CAPTCHA'=>false,
 			'EMAIL_OPTIONAL'=>lorem_word(),
@@ -191,7 +191,7 @@ class Hook_addon_registry_staff_messaging
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_US', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_US',array(
 				'COMMENT_DETAILS'=>$comment_details,
 				'MESSAGE'=>lorem_phrase(),
 				'NOTIFICATIONS_ENABLED'=>lorem_phrase(),
@@ -211,7 +211,7 @@ class Hook_addon_registry_staff_messaging
 	function tpl_preview__block_main_contact_simple()
 	{
 		require_lang('ocf');
-		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM', array(
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array(
 			'JOIN_BITS'=>lorem_phrase_html(),
 			'FIRST_POST_URL'=>placeholder_url(),
 			'FIRST_POST'=>lorem_paragraph_html(),
@@ -230,7 +230,7 @@ class Hook_addon_registry_staff_messaging
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_SIMPLE', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_SIMPLE',array(
 				'EMAIL_OPTIONAL'=>lorem_word_html(),
 				'COMMENT_DETAILS'=>$comment_details,
 				'MESSAGE'=>lorem_phrase()

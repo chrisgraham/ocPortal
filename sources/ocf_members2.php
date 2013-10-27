@@ -38,7 +38,7 @@ function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filte
 	if (($filter_key=='id') || (preg_match('#^m\_[\w\_]+$#',$filter_key)!=0))
 	{
 		if (!array_key_exists($filter_key,$db_fields)) return NULL;
-		return array($filter_key,'',$field_val);
+		return array($table_join_code.'.'.$filter_key,'',$field_val);
 	}
 
 	// CPFS...
@@ -72,6 +72,7 @@ function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filte
 	} else
 	{
 		if (!array_key_exists($filter_key,$db_fields)) return NULL;
+		$new_filter_key=$table_join_code.'.'.$new_filter_key;
 	}
 
 	return array($new_filter_key,'',$field_val);

@@ -247,11 +247,11 @@ class Module_admin_setupwizard
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		require_code('form_templates');
-		require_code('addons');
+		require_code('addons2');
 		require_lang('addons');
 
-		$addons_installed=list_to_map('addon_name',find_installed_addons());
-		$addons_not_installed=list_to_map('addon_name',find_available_addons(false));
+		$addons_installed=list_to_map('name',find_installed_addons());
+		$addons_not_installed=list_to_map('name',find_available_addons(false));
 
 		$fields='';
 		$fields_advanced='';
@@ -415,7 +415,7 @@ class Module_admin_setupwizard
 				}
 			}
 		}
-		$addons_not_installed=list_to_map('addon_name',find_available_addons(false)); // Re-search for these, as more may have been downloaded above
+		$addons_not_installed=list_to_map('name',find_available_addons(false)); // Re-search for these, as more may have been downloaded above
 
 		$all_addons=$addons_installed+$addons_not_installed;
 		foreach ($all_addons as $addon_name=>$row)
@@ -424,7 +424,7 @@ class Module_admin_setupwizard
 				$all_addons[$addon_name]['name']=titleify($addon_name);
 		}
 		sort_maps_by($all_addons,'name');
-		require_code('addons_overview');
+		require_code('addons');
 		foreach ($all_addons as $addon_name=>$row)
 		{
 			if ((substr($addon_name,0,5)!='core_') && (substr($addon_name,-7)!='_shared') && ($addon_name!='setupwizard'))
@@ -433,7 +433,7 @@ class Module_admin_setupwizard
 				$is_advanced_off_by_default=in_array($addon_name,$addon_list_advanced_off_by_default);
 				$install_by_default=((in_array($addon_name,$addon_list_on_by_default)) || ($is_advanced_on_by_default) || ((is_null($addon_list_on_by_default)) && (!$is_advanced_off_by_default)));
 
-				$addon_description=$row['addon_description'];
+				$addon_description=$row['description'];
 				if ((substr($addon_description,-1)!='.') && ($addon_description!='')) $addon_description.='.';
 				$_addon_description=protect_from_escaping(symbol_truncator(array(static_evaluate_tempcode(comcode_to_tempcode($addon_description)),'250','1','1'),'left'));
 
@@ -895,36 +895,36 @@ class Module_admin_setupwizard
 		if ((post_param_integer('skip_4',0)==0) && (is_null($GLOBALS['CURRENT_SHARE_USER'])))
 		{
 			require_lang('addons');
-			require_code('addons');
+			require_code('addons2');
 			$addons_installed=find_installed_addons();
 			$uninstalling=array();
-			foreach ($addons_installed as $addon_row)
+			foreach ($addons_installed as $addon_info)
 			{
-				if (post_param_integer('addon_'.$addon_row['addon_name'],0)==0)
+				if (post_param_integer('addon_'.$addon_info['addon_name'],0)==0)
 				{
-					$uninstalling[]=$addon_row['addon_name'];
+					$uninstalling[]=$addon_info['name'];
 				}
 			}
 			$addons_not_installed=find_available_addons(false);
 			$installing=array();
-			foreach ($addons_not_installed as $addon_row)
+			foreach ($addons_not_installed as $addon_info)
 			{
-				if (post_param_integer('addon_'.$addon_row['name'],0)==1)
+				if (post_param_integer('addon_'.$addon_info['name'],0)==1)
 				{
-					$installing[]=$addon_row['name'];
+					$installing[]=$addon_info['name'];
 				}
 			}
 			if (!file_exists(get_file_base().'/.git')) // Only uninstall if we're not working from a git repository
 			{
-				foreach ($addons_installed as $addon_row)
+				foreach ($addons_installed as $addon_info)
 				{
-					if (post_param_integer('addon_'.$addon_row['addon_name'],0)==0)
+					if (post_param_integer('addon_'.$addon_info['name'],0)==0)
 					{
-						$addon_row+=read_addon_info($addon_row['addon_name']);
-						$addon_row['addon_author']=''; // Fudge, to stop it dying on warnings for official addons
+						$addon_info+=read_addon_info($addon_info['name'],true);
+						$addon_info['author']=''; // Fudge, to stop it dying on warnings for official addons
 
 						// Check dependencies
-						$dependencies=$addon_row['addon_dependencies_on_this'];
+						$dependencies=$addon_info['dependencies_on_this'];
 						foreach ($uninstalling as $d)
 						{
 							if (in_array($d,$dependencies)) unset($dependencies[array_search($d,$dependencies)]);
@@ -933,23 +933,37 @@ class Module_admin_setupwizard
 						if (count($dependencies)==0) // If nothing left installed depending on this
 						{
 							// Archive it off to exports/addons
-							if ($addon_row['addon_files']!='')
+							if ($addon_info['files']!=array())
 							{
-								$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
-								create_addon($file,explode("\n",$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+								$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_info['name'])).'.tar';
+								create_addon(
+									$file,
+									$addon_info['files'],
+									$addon_info['name'],
+									implode(',',$addon_info['incompatibilities']),
+									implode(',',$addon_info['dependencies']),
+									$addon_info['author'],
+									$addon_info['organisation'],
+									$addon_info['version'],
+									$addon_info['category'],
+									implode("\n",$addon_info['copyright_attribution']),
+									$addon_info['licence'],
+									$addon_info['description'],
+									'imports/addons'
+								);
 							}
 
-							uninstall_addon($addon_row['addon_name']);
+							uninstall_addon($addon_info['name']);
 						}
 					}
 				}
 			}
-			foreach ($addons_not_installed as $addon_file=>$addon_row)
+			foreach ($addons_not_installed as $addon_file=>$addon_info)
 			{
-				if (post_param_integer('addon_'.$addon_row['name'],0)==1)
+				if (post_param_integer('addon_'.$addon_info['name'],0)==1)
 				{
 					// Check dependencies
-					$dependencies=explode(',',$addon_row['dependencies']);
+					$dependencies=explode(',',$addon_info['dependencies']);
 					foreach ($uninstalling as $d)
 					{
 						if ((addon_installed($d,true)) || (in_array($d,$installing))) unset($dependencies[array_search($d,$dependencies)]);

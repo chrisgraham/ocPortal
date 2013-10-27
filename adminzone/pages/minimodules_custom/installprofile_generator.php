@@ -1,6 +1,6 @@
 <?php
 
-require_code('addons');
+require_code('addons2');
 
 function find_blocks_in_page($page)
 {
@@ -74,7 +74,7 @@ $addons=find_installed_addons();
 sort($addons);
 foreach ($addons as $addon)
 {
-	$profile.="\t\t\t\t\"".php_addslashes($addon['addon_name'])."\",\n";
+	$profile.="\t\t\t\t\"".php_addslashes($addon['name'])."\",\n";
 }
 $profile.=<<<END
 			),
@@ -87,7 +87,7 @@ $non_installed_addons=find_available_addons(false);
 sort($non_installed_addons);
 foreach ($non_installed_addons as $addon)
 {
-	$profile.="\t\t\t\t\"".php_addslashes($addon['addon_name'])."\",\n";
+	$profile.="\t\t\t\t\"".php_addslashes($addon['name'])."\",\n";
 }
 $profile.=<<<END
 			),
@@ -228,13 +228,16 @@ END;
 
 $site_name=get_option('site_name');
 $addoninf=<<<END
-name=My Custom installprofile
-author=Me
-organisation={$site_name}
-version=1
-incompatibilities=
-dependencies=
-description=Auto-generated installprofile for the Setup Wizard.
+name="My Custom installprofile"
+author="Me"
+organisation="{$site_name}"
+version="1"
+incompatibilities=""
+dependencies=""
+description="Auto-generated installprofile for the Setup Wizard."
+category="Installation profiles"
+copyright_attribution=""
+licence="(Unstated)"
 END;
 
 $filename='mycustomprofile.tar';

@@ -300,7 +300,7 @@ function attach_message($message,$type='inform')
 	if ($am_looping) return ''; // Was a lang lookup error and got in an infinite loop of attaching errors about missing lang errors (because each iteration causes a reevaluation of past messages)
 	$am_looping=true;
 
-	global $ATTACH_MESSAGE_CALLED,$ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
+	global $ATTACH_MESSAGE_CALLED,$ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES;
 
 	foreach ($ATTACHED_MESSAGES_RAW as $last)
 	{
@@ -344,14 +344,13 @@ function attach_message($message,$type='inform')
 		'MESSAGE'=>is_string($message)?escape_html($message):$message
 	));
 
+	$ATTACHED_MESSAGES_RAW[]=array($message,$type);
 	if ($GLOBALS['TEMPCODE_OUTPUT_STARTED'])
 	{
-		$LATE_ATTACHED_MESSAGES_RAW[]=array($message,$type);
 		if ($LATE_ATTACHED_MESSAGES===NULL) $LATE_ATTACHED_MESSAGES=new ocp_tempcode();
 		$LATE_ATTACHED_MESSAGES->attach($message_tpl);
 	} else
 	{
-		$ATTACHED_MESSAGES_RAW[]=array($message,$type);
 		if ($ATTACHED_MESSAGES===NULL) $ATTACHED_MESSAGES=new ocp_tempcode();
 		$ATTACHED_MESSAGES->attach($message_tpl);
 	}

@@ -372,12 +372,21 @@ function ocf_make_boiler_custom_field($type)
 	$public_view=1;
 	$owner_view=1;
 	$owner_set=1;
+	$required=0;
+	$show_in_posts=0;
+	$show_in_post_previews=0;
 
 	if ($type=='staff_notes')
 	{
 		$public_view=0;
 		$owner_view=0;
 		$owner_set=0;
+	}
+
+	if ($type=='interests' || $type=='location')
+	{
+		$show_in_posts=1;
+		$show_in_post_previews=1;
 	}
 
 	global $CUSTOM_FIELD_CACHE;
@@ -393,7 +402,7 @@ function ocf_make_boiler_custom_field($type)
 		$description=do_lang('DEFAULT_CPF_'.$type.'_DESCRIPTION');
 	}
 
-	return ocf_make_custom_field($title,0,$description,'',$public_view,$owner_view,$owner_set,0,$_type,0,0,0,NULL,'',true);
+	return ocf_make_custom_field($title,0,$description,'',$public_view,$owner_view,$owner_set,0,$_type,$required,$show_in_posts,$show_in_post_previews,NULL,'',true);
 }
 
 /**

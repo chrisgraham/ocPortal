@@ -66,7 +66,7 @@ class Block_main_staff_new_version
 
 		$table=get_future_version_information();
 
-		require_code('addons');
+		require_code('addons2');
 		$updated_addons=find_updated_addons();
 		$has_updated_addons=(count($updated_addons)!=0);
 

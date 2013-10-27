@@ -84,14 +84,14 @@ class Hook_addon_registry_errorlog
 	function get_file_list()
 	{
 		return array(
-			'errorlog.css',
+			'themes/default/css/errorlog.css',
 			'sources/hooks/systems/addon_registry/errorlog.php',
 			'lang/EN/errorlog.ini',
 			'data_custom/errorlog.php',
 			'themes/default/images/pagepics/errorlog.png',
 			'themes/default/images/bigicons/errorlog.png',
 			'adminzone/pages/modules/admin_errorlog.php',
-			'ERRORLOG_SCREEN.tpl',
+			'themes/default/templates/ERRORLOG_SCREEN.tpl',
 		);
 	}
 
@@ -117,7 +117,7 @@ class Hook_addon_registry_errorlog
 	function tpl_preview__administrative__errorlog_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ERRORLOG_SCREEN', array(
+			lorem_globalise(do_lorem_template('ERRORLOG_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'ERROR'=>lorem_phrase(),
 				'PERMISSION'=>lorem_phrase()

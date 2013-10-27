@@ -88,27 +88,27 @@ class Hook_addon_registry_search
 	{
 		return array(
 			'sources/hooks/systems/realtime_rain/search.php',
-			'TAGS.tpl',
+			'themes/default/templates/TAGS.tpl',
 			'sources/blocks/side_tag_cloud.php',
-			'BLOCK_SIDE_TAG_CLOUD.tpl',
-			'SEARCH_RESULT.tpl',
-			'SEARCH_RESULT_TABLE.tpl',
+			'themes/default/templates/BLOCK_SIDE_TAG_CLOUD.tpl',
+			'themes/default/templates/SEARCH_RESULT.tpl',
+			'themes/default/templates/SEARCH_RESULT_TABLE.tpl',
 			'sources/hooks/systems/addon_registry/search.php',
 			'sources/hooks/modules/admin_stats/search.php',
 			'sources/hooks/modules/admin_setupwizard/search.php',
-			'SEARCH_ADVANCED.tpl',
-			'BLOCK_MAIN_SEARCH.tpl',
-			'SEARCH_DOMAINS.tpl',
-			'SEARCH_FORM_SCREEN.tpl',
-			'SEARCH_FOR_SEARCH_DOMAIN.tpl',
-			'SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl',
-			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl',
-			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl',
-			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl',
-			'SEARCH_SAVED_DELETION_BUTTON.tpl',
-			'SEARCH_SAVED_SCREEN.tpl',
-			'SEARCH_SAVED_RUN_BUTTON.tpl',
-			'search.css',
+			'themes/default/templates/SEARCH_ADVANCED.tpl',
+			'themes/default/templates/BLOCK_MAIN_SEARCH.tpl',
+			'themes/default/templates/SEARCH_DOMAINS.tpl',
+			'themes/default/templates/SEARCH_FORM_SCREEN.tpl',
+			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN.tpl',
+			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl',
+			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl',
+			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl',
+			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl',
+			'themes/default/templates/SEARCH_SAVED_DELETION_BUTTON.tpl',
+			'themes/default/templates/SEARCH_SAVED_SCREEN.tpl',
+			'themes/default/templates/SEARCH_SAVED_RUN_BUTTON.tpl',
+			'themes/default/css/search.css',
 			'themes/default/images/bigicons/searchstats.png',
 			'themes/default/images/EN/page/search.png',
 			'lang/EN/search.ini',
@@ -117,7 +117,7 @@ class Hook_addon_registry_search
 			'sources/hooks/modules/search/.htaccess',
 			'sources/hooks/modules/search/index.html',
 			'themes/default/images/google.png',
-			'OPENSEARCH.tpl',
+			'themes/default/templates/OPENSEARCH.tpl',
 			'data/opensearch.php',
 			'sources/hooks/systems/config/search_results_per_page.php',
 			'sources/hooks/systems/config/enable_boolean_search.php',
@@ -163,7 +163,7 @@ class Hook_addon_registry_search
 	function tpl_preview__block_main_search()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH',array(
 				'TITLE'=>lorem_phrase(),
 				'INPUT_FIELDS'=>placeholder_array(),
 				'EXTRA'=>placeholder_array(),
@@ -208,7 +208,7 @@ class Hook_addon_registry_search
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD',array(
 				'TITLE'=>lorem_phrase(),
 				'TAGS'=>$tpl_tags
 			)), NULL, '', true)
@@ -225,7 +225,7 @@ class Hook_addon_registry_search
 	function tpl_preview__tags()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('TAGS', array(
+			lorem_globalise(do_lorem_template('TAGS',array(
 				'TAGS'=>array(
 					array(
 						'LINK_FULLSCOPE'=>placeholder_url(),
@@ -251,7 +251,7 @@ class Hook_addon_registry_search
 	function tpl_preview__opensearch()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OPENSEARCH', array(
+			lorem_globalise(do_lorem_template('OPENSEARCH',array(
 				'DESCRIPTION'=>lorem_paragraph()
 			)), NULL, '', true)
 		);
@@ -270,12 +270,12 @@ class Hook_addon_registry_search
 
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$deletion_button=do_lorem_template('SEARCH_SAVED_DELETION_BUTTON', array(
+			$deletion_button=do_lorem_template('SEARCH_SAVED_DELETION_BUTTON',array(
 				'NAME'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'ID'=>placeholder_random()
 			));
-			$run_button=do_lorem_template('SEARCH_SAVED_RUN_BUTTON', array(
+			$run_button=do_lorem_template('SEARCH_SAVED_RUN_BUTTON',array(
 				'NAME'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'HIDDEN'=>''
@@ -292,11 +292,11 @@ class Hook_addon_registry_search
 
 			foreach ($entry_data as $_k=>$_v)
 			{
-				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD', array(
+				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
 					'VALUE'=>$_v
 				)));
 			}
-			$entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY', array(
+			$entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array(
 				'VALUES'=>$cells
 			)));
 		}
@@ -309,12 +309,12 @@ class Hook_addon_registry_search
 			'Run search'
 		) as $k=>$v)
 		{
-			$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+			$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
 				'VALUE'=>$v
 			)));
 		}
 
-		$results_table=do_lorem_template('RESULTS_TABLE', array(
+		$results_table=do_lorem_template('RESULTS_TABLE',array(
 			'WIDTHS'=>array(),
 			'TEXT_ID'=>lorem_phrase(),
 			'FIELDS_TITLE'=>$fields_title,
@@ -324,7 +324,7 @@ class Hook_addon_registry_search
 			'PAGINATION'=>new ocp_tempcode()
 		));
 
-		$saved_search_screen=do_lorem_template('SEARCH_SAVED_SCREEN', array(
+		$saved_search_screen=do_lorem_template('SEARCH_SAVED_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'SEARCHES'=>placeholder_table(),
 			'URL'=>placeholder_url()
@@ -349,7 +349,7 @@ class Hook_addon_registry_search
 		$options=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION', array(
+			$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array(
 				'NAME'=>placeholder_random(),
 				'DISPLAY'=>lorem_phrase(),
 				'SPECIAL'=>lorem_phrase(),
@@ -357,28 +357,28 @@ class Hook_addon_registry_search
 			)));
 		}
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST', array(
+		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST',array(
 			'NAME'=>placeholder_random(),
 			'DISPLAY'=>lorem_word(),
 			'SPECIAL'=>placeholder_options(),
 			'CHECKED'=>false
 		)));
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT', array(
+		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT',array(
 			'NAME'=>placeholder_random(),
 			'DISPLAY'=>lorem_word(),
 			'SPECIAL'=>lorem_word(),
 			'CHECKED'=>false
 		)));
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK', array(
+		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK',array(
 			'NAME'=>placeholder_random(),
 			'DISPLAY'=>lorem_word(),
 			'SPECIAL'=>lorem_word(),
 			'CHECKED'=>false
 		)));
 
-		$specialisation=do_lorem_template('SEARCH_ADVANCED', array(
+		$specialisation=do_lorem_template('SEARCH_ADVANCED',array(
 			'AJAX'=>lorem_phrase(),
 			'OPTIONS'=>$options,
 			'TREE'=>'',
@@ -388,7 +388,7 @@ class Hook_addon_registry_search
 		$search_domains=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN', array(
+			$search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN',array(
 				'ADVANCED_ONLY'=>lorem_phrase(),
 				'CHECKED'=>lorem_phrase(),
 				'OPTIONS_URL'=>placeholder_url(),
@@ -397,12 +397,12 @@ class Hook_addon_registry_search
 			)));
 		}
 
-		$specialisation->attach(do_lorem_template('SEARCH_DOMAINS', array(
+		$specialisation->attach(do_lorem_template('SEARCH_DOMAINS',array(
 			'SEARCH_DOMAINS'=>$search_domains
 		)));
 
 		$result=new ocp_tempcode();
-		$result->attach(do_lorem_template('SEARCH_RESULT', array(
+		$result->attach(do_lorem_template('SEARCH_RESULT',array(
 			'CONTENT'=>lorem_paragraph_html(),
 			'TYPE'=>placeholder_id(),
 			'ID'=>placeholder_id()
@@ -414,13 +414,13 @@ class Hook_addon_registry_search
 				'R'=>placeholder_array()
 			);
 
-		$result->attach(do_lorem_template('SEARCH_RESULT_TABLE', array(
+		$result->attach(do_lorem_template('SEARCH_RESULT_TABLE',array(
 			'HEADERS'=>placeholder_array(),
 			'ROWS'=>$types_results
 		)));
 
 		require_lang('catalogues');
-		$result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES', array(
+		$result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES',array(
 			'BUILDUP'=>lorem_phrase(),
 			'NAME'=>lorem_word(),
 			'TITLE'=>lorem_word_2()
@@ -428,7 +428,7 @@ class Hook_addon_registry_search
 
 
 		return array(
-			lorem_globalise(do_lorem_template('SEARCH_FORM_SCREEN', array(
+			lorem_globalise(do_lorem_template('SEARCH_FORM_SCREEN',array(
 				'SEARCH_TERM'=>lorem_word_2(),
 				'NUM_RESULTS'=>placeholder_number(),
 				'CAN_ORDER_BY_RATING'=>false,

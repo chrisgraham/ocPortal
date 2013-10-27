@@ -87,12 +87,12 @@ class Hook_addon_registry_ocf_warnings
 		return array(
 			'sources/hooks/systems/addon_registry/ocf_warnings.php',
 			'site/pages/modules/warnings.php',
-			'OCF_SAVED_WARNING.tpl',
-			'OCF_WARNING_HISTORY_SCREEN.tpl',
+			'themes/default/templates/OCF_SAVED_WARNING.tpl',
+			'themes/default/templates/OCF_WARNING_HISTORY_SCREEN.tpl',
 			'lang/EN/ocf_warnings.ini',
 			'site/warnings_browse.php',
 			'sources/hooks/systems/profiles_tabs/warnings.php',
-			'OCF_MEMBER_PROFILE_WARNINGS.tpl',
+			'themes/default/templates/OCF_MEMBER_PROFILE_WARNINGS.tpl',
 		);
 	}
 
@@ -119,7 +119,7 @@ class Hook_addon_registry_ocf_warnings
 	 */
 	function tpl_preview__ocf_member_profile_warnings()
 	{
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_WARNINGS', array(
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_WARNINGS',array(
 			'MEMBER_ID'=>placeholder_id(),
 			'WARNINGS'=>lorem_phrase()
 		));
@@ -139,7 +139,7 @@ class Hook_addon_registry_ocf_warnings
 	{
 		require_css('ocf');
 		return array(
-			lorem_globalise(do_lorem_template('OCF_SAVED_WARNING', array(
+			lorem_globalise(do_lorem_template('OCF_SAVED_WARNING',array(
 				'MESSAGE'=>lorem_phrase(),
 				'EXPLANATION'=>lorem_phrase(),
 				'TITLE'=>lorem_word(),
@@ -160,7 +160,7 @@ class Hook_addon_registry_ocf_warnings
 		require_lang('ocf');
 		require_css('ocf');
 		return array(
-			lorem_globalise(do_lorem_template('OCF_WARNING_HISTORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_WARNING_HISTORY_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MEMBER_ID'=>placeholder_id(),
 				'EDIT_PROFILE_URL'=>placeholder_url(),

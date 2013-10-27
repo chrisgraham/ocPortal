@@ -404,7 +404,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 						$attributes[strtolower($bit)]=$bits_real[$i];
 				}
 
-				break;
+				break 2;
 			}
 		}
 	}

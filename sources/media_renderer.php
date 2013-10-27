@@ -165,7 +165,7 @@ function render_media_url($url,$url_safe,$attributes,$as_admin=false,$source_mem
 	$hook=reset($hooks);
 
 	$ob=object_factory('Hook_media_rendering_'.$hook);
-	$ret=$ob->render($url,$url,$attributes,$as_admin,$source_member);
+	$ret=$ob->render($url,$url,$attributes,$as_admin,$source_member,$url_to_scan_against);
 
 	if (array_key_exists('float',$attributes))
 	{

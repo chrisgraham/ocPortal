@@ -324,22 +324,14 @@ function get_addon_structure()
 {
 	$struct=array('bundled'=>array(),'non_bundled'=>array());
 
-	if (file_exists(get_file_base().'/sources_custom/dump_addons.php'))
-	{
-		require_code('dump_addons');
-		$struct['non_bundled']=get_file_list_of_addons();
-		ksort($struct['non_bundled']);
-	} else
-	{
-		$struct['non_bundled']=array();
-	}
-
 	$hooks=find_all_hooks('systems','addon_registry');
-	foreach (array_keys($hooks) as $hook)
+	foreach ($hooks as $hook=>$place)
 	{
 		require_code('hooks/systems/addon_registry/'.filter_naughty_harsh($hook));
 		$hook_ob=object_factory('Hook_addon_registry_'.$hook,true);
+
 		$file_list=$hook_ob->get_file_list();
+
 		$_file_list=array();
 		foreach ($file_list as $file)
 		{
@@ -355,9 +347,17 @@ function get_addon_structure()
 				$_file_list[]=$file;
 			}
 		}
-		$struct['bundled'][$hook]=$_file_list;
+
+		if ($place=='sources')
+		{
+			$struct['bundled'][$hook]=$_file_list;
+		} else
+		{
+			$struct['non_bundled'][$hook]=$_file_list;
+		}
 	}
 	ksort($struct['bundled']);
+	ksort($struct['non_bundled']);
 
 	return $struct;
 }

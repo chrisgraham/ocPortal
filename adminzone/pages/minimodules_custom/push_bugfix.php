@@ -57,25 +57,19 @@ if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST')
 	}
 
 	// Find what addons are involved with this
-	$is_addon=false;
+	require_code('addons2');
 	$addons_involved=array();
+	$hooks=find_all_hooks('systems','addon_registry');
 	foreach ($fixed_files as $file)
 	{
-		if (strpos($file,'_custom')!==false)
+		foreach ($hooks as $addon=>$place)
 		{
-			$is_addon=true;
-			$addon_files=explode("\n",file_get_contents(get_file_base().'/data_custom/addon_files.txt'));
-			$current_addon='';
-			foreach ($addon_files as $line)
+			if ($place=='sources_custom')
 			{
-				if ($line=='') continue;
-				if (($line[0]=='#') || ($line[0]=='-')) continue;
-				if (substr($line,0,3)!=' - ')
+				$addon_info=read_addon_info($addon);
+				if (in_array($file,$addon_info['files']))
 				{
-					$current_addon=$line;
-				} else
-				{
-					if ($line==' - '.$file) $addons_involved[]=$current_addon;
+					$addons_involved[]=$addon;
 				}
 			}
 		}
@@ -180,9 +174,10 @@ if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST')
 	}
 	echo '</ol>';
 
-	if (($is_addon) && (count($addons_involved)!=0))
+	if (count($addons_involved)!=0)
 	{
-		echo '<p><strong>This was for an addon.</strong> Remember to run <a href="'.escape_html(get_base_url()).'/adminzone/index.php?page=build_addons&amp;addon_limit='.escape_html(urlencode(implode(',',$addons_involved))).'">the addon update script</a>, and then upload the appropriate addon TARs and post the has-updated comments.</p>';
+		$addons_involved=array_unique($addons_involved);
+		echo '<p><strong>This was for a non-bundled addon.</strong> Remember to run <a href="'.escape_html(get_base_url()).'/adminzone/index.php?page=build_addons&amp;addon_limit='.escape_html(urlencode(implode(',',$addons_involved))).'">the addon update script</a>, and then upload the appropriate addon TARs and post the has-updated comments.</p>';
 	}
 
 	return;

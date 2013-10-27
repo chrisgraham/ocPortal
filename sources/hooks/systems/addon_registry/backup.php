@@ -94,9 +94,9 @@ class Hook_addon_registry_backup
 			'data/modules/admin_backup/.htaccess',
 			'data_custom/modules/admin_backup/.htaccess',
 			'sources/hooks/systems/addon_registry/backup.php',
-			'RESTORE_HTML_WRAP.tpl',
+			'themes/default/templates/RESTORE_HTML_WRAP.tpl',
 			'exports/backups/index.html',
-			'BACKUP_LAUNCH_SCREEN.tpl',
+			'themes/default/templates/BACKUP_LAUNCH_SCREEN.tpl',
 			'adminzone/pages/modules/admin_backup.php',
 			'themes/default/images/bigicons/backups.png',
 			'themes/default/images/pagepics/backups.png',
@@ -138,7 +138,7 @@ class Hook_addon_registry_backup
 	function tpl_preview__administrative__backup_launch_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BACKUP_LAUNCH_SCREEN', array(
+			lorem_globalise(do_lorem_template('BACKUP_LAUNCH_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence(),
 				'RESULTS'=>lorem_phrase(),
@@ -159,7 +159,7 @@ class Hook_addon_registry_backup
 		// This preview inevitably looks ugly because the install CSS can't be shown (its loaded via self-reference to a non-existent file)
 
 		return array(
-			lorem_globalise(do_lorem_template('RESTORE_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('RESTORE_HTML_WRAP',array(
 				'MESSAGE'=>lorem_sentence_html(),
 				'CSS_NOCACHE'=>'',
 				'SUCCESS'=>'1'

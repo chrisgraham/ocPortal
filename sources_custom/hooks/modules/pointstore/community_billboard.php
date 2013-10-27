@@ -36,8 +36,6 @@ class Hook_pointstore_community_billboard
 	 */
 	function info()
 	{
-		if (!addon_installed('community_billboard')) return array();
-
 		if (get_option('is_on_community_billboard_buy')=='1')
 		{
 			$community_billboard_url=build_url(array('page'=>'_SELF','type'=>'community_billboard','id'=>'community_billboard'),'_SELF');

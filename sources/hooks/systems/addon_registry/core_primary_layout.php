@@ -86,20 +86,20 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/core_primary_layout.php',
-			'MESSAGE.tpl',
-			'helper_panel.css',
-			'messages.css',
-			'GLOBAL_HTML_WRAP.tpl',
-			'GLOBAL_HTML_WRAP_mobile.tpl',
-			'GLOBAL_HELPER_PANEL.tpl',
-			'CLOSED_SITE.tpl',
-			'SCREEN_TITLE.tpl',
-			'SECTION_TITLE.tpl',
-			'MINOR_TITLE.tpl',
-			'MAIL.tpl',
-			'MAIL_SUBJECT.tpl',
-			'BREADCRUMB_SEPARATOR.tpl',
-			'CSS_NEED_FULL.tpl',
+			'themes/default/templates/MESSAGE.tpl',
+			'themes/default/css/helper_panel.css',
+			'themes/default/css/messages.css',
+			'themes/default/templates/GLOBAL_HTML_WRAP.tpl',
+			'themes/default/templates/GLOBAL_HTML_WRAP_mobile.tpl',
+			'themes/default/templates/GLOBAL_HELPER_PANEL.tpl',
+			'themes/default/templates/CLOSED_SITE.tpl',
+			'themes/default/templates/SCREEN_TITLE.tpl',
+			'themes/default/templates/SECTION_TITLE.tpl',
+			'themes/default/templates/MINOR_TITLE.tpl',
+			'themes/default/templates/MAIL.tpl',
+			'themes/default/templates/MAIL_SUBJECT.tpl',
+			'themes/default/templates/BREADCRUMB_SEPARATOR.tpl',
+			'themes/default/templates/CSS_NEED_FULL.tpl',
 		);
 	}
 
@@ -138,7 +138,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		$out=new ocp_tempcode();
 		$out->attach(lorem_phrase());
-		$out->attach(do_lorem_template('BREADCRUMB_SEPARATOR', array()));
+		$out->attach(do_lorem_template('BREADCRUMB_SEPARATOR',array()));
 		$out->attach(lorem_phrase());
 		return array(
 			lorem_globalise($out, NULL, '', true)
@@ -155,7 +155,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__closed_site()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CLOSED_SITE', array(
+			lorem_globalise(do_lorem_template('CLOSED_SITE',array(
 				'CLOSED'=>lorem_phrase(),
 				'LOGIN_URL'=>placeholder_url(),
 				'JOIN_URL'=>placeholder_url()
@@ -173,7 +173,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__css_need_full()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CSS_NEED_FULL', array(
+			lorem_globalise(do_lorem_template('CSS_NEED_FULL',array(
 				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
@@ -189,7 +189,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__message()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('MESSAGE', array(
+			lorem_globalise(do_lorem_template('MESSAGE',array(
 				'TYPE'=>placeholder_img_code('messageicons'),
 				'MESSAGE'=>lorem_phrase()
 			)), NULL, '', true)
@@ -206,7 +206,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__mail_subject()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('MAIL_SUBJECT', array(
+			lorem_globalise(do_lorem_template('MAIL_SUBJECT',array(
 				'SUBJECT_LINE'=>lorem_word()
 			)), NULL, '', true)
 		);
@@ -222,7 +222,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__mail()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('MAIL', array(
+			lorem_globalise(do_lorem_template('MAIL',array(
 				'CSS'=>'',
 				'LOGOURL'=>placeholder_image_url(),
 				'LOGOMAP'=>'',
@@ -242,7 +242,7 @@ class Hook_addon_registry_core_primary_layout
 	 */
 	function tpl_preview__global_html_wrap()
 	{
-		$out=do_lorem_template('GLOBAL_HTML_WRAP', array(
+		$out=do_lorem_template('GLOBAL_HTML_WRAP',array(
 			'MIDDLE'=>lorem_paragraph_html(),
 		));
 
@@ -272,7 +272,7 @@ class Hook_addon_registry_core_primary_layout
 			);
 		}
 		return array(
-			lorem_globalise(do_lorem_template('SCREEN_TITLE', array(
+			lorem_globalise(do_lorem_template('SCREEN_TITLE',array(
 				'TITLE'=>lorem_phrase(),
 				'AWARDS'=>$awards
 			)), NULL, '', true)
@@ -289,7 +289,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__minor_title()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('MINOR_TITLE', array(
+			lorem_globalise(do_lorem_template('MINOR_TITLE',array(
 				'TITLE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -305,7 +305,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__section_title()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SECTION_TITLE', array(
+			lorem_globalise(do_lorem_template('SECTION_TITLE',array(
 				'TITLE'=>lorem_phrase()
 			)), NULL, '', true)
 		);

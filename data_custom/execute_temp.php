@@ -53,11 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('mail');
-	mail_wrap('sub','test',array('chris@ocportal.com'));
-}
-
-abstract class foo
-{
-	abstract static function test();
+	@print(url_to_pagelink('http://localhost/git/adminzone/admin_messaging.htm'));
 }

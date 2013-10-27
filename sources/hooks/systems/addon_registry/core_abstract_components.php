@@ -85,25 +85,25 @@ class Hook_addon_registry_core_abstract_components
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/core_abstract_components.php',
-			'CROP_TEXT_MOUSE_OVER.tpl',
-			'CROP_TEXT_MOUSE_OVER_INLINE.tpl',
-			'IMG_THUMB.tpl',
-			'POST.tpl',
-			'POST_CHILD_LOAD_LINK.tpl',
-			'SCREEN_BUTTON.tpl',
-			'SCREEN_ITEM_BUTTON.tpl',
-			'STANDARDBOX_default.tpl',
-			'STANDARDBOX_accordion.tpl',
-			'REVISION_HISTORY_LINE.tpl',
-			'REVISION_HISTORY_WRAP.tpl',
-			'REVISION_RESTORE.tpl',
-			'HANDLE_CONFLICT_RESOLUTION.tpl',
-			'FRACTIONAL_EDIT.tpl',
-			'JAVASCRIPT_FRACTIONAL_EDIT.tpl',
+			'themes/default/templates/CROP_TEXT_MOUSE_OVER.tpl',
+			'themes/default/templates/CROP_TEXT_MOUSE_OVER_INLINE.tpl',
+			'themes/default/templates/IMG_THUMB.tpl',
+			'themes/default/templates/POST.tpl',
+			'themes/default/templates/POST_CHILD_LOAD_LINK.tpl',
+			'themes/default/templates/SCREEN_BUTTON.tpl',
+			'themes/default/templates/SCREEN_ITEM_BUTTON.tpl',
+			'themes/default/templates/STANDARDBOX_default.tpl',
+			'themes/default/templates/STANDARDBOX_accordion.tpl',
+			'themes/default/templates/REVISION_HISTORY_LINE.tpl',
+			'themes/default/templates/REVISION_HISTORY_WRAP.tpl',
+			'themes/default/templates/REVISION_RESTORE.tpl',
+			'themes/default/templates/HANDLE_CONFLICT_RESOLUTION.tpl',
+			'themes/default/templates/FRACTIONAL_EDIT.tpl',
+			'themes/default/templates/JAVASCRIPT_FRACTIONAL_EDIT.tpl',
 			'data/fractional_edit.php',
 			'data/edit_ping.php',
 			'data/change_detection.php',
-			'STAFF_ACTIONS.tpl',
+			'themes/default/templates/STAFF_ACTIONS.tpl',
 			'sources/hooks/systems/change_detection/.htaccess',
 			'sources/hooks/systems/change_detection/index.html',
 		);
@@ -143,7 +143,7 @@ class Hook_addon_registry_core_abstract_components
 	 */
 	function tpl_preview__administrative__show_revision_history()
 	{
-		$revision_history=do_lorem_template('REVISION_HISTORY_LINE', array(
+		$revision_history=do_lorem_template('REVISION_HISTORY_LINE',array(
 			'RENDERED_DIFF'=>lorem_phrase(),
 			'EDITOR'=>lorem_phrase(),
 			'DATE'=>placeholder_time(),
@@ -154,7 +154,7 @@ class Hook_addon_registry_core_abstract_components
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('REVISION_HISTORY_WRAP', array(
+			lorem_globalise(do_lorem_template('REVISION_HISTORY_WRAP',array(
 				'CONTENT'=>$revision_history
 			)), NULL, '', true)
 		);
@@ -170,7 +170,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__staff_actions()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('STAFF_ACTIONS', array(
+			lorem_globalise(do_lorem_template('STAFF_ACTIONS',array(
 				'1_TITLE'=>lorem_phrase(),
 				'1_URL'=>placeholder_url(),
 				'2_TITLE'=>lorem_phrase(),
@@ -193,7 +193,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__administrative__revision_restore()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('REVISION_RESTORE', array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('REVISION_RESTORE',array()), NULL, '', true)
 		);
 	}
 
@@ -207,7 +207,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__screen_item_button()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SCREEN_ITEM_BUTTON', array(
+			lorem_globalise(do_lorem_template('SCREEN_ITEM_BUTTON',array(
 				'REL'=>lorem_phrase(),
 				'IMMEDIATE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
@@ -227,7 +227,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__administrative__fractional_edit()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('FRACTIONAL_EDIT', array(
+			lorem_globalise(do_lorem_template('FRACTIONAL_EDIT',array(
 				'VALUE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'EDIT_TEXT'=>lorem_sentence_html(),
@@ -246,7 +246,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__crop_text_mouse_over_inline()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE', array(
+			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE',array(
 				'TEXT_SMALL'=>lorem_sentence_html(),
 				'TEXT_LARGE'=>lorem_sentence_html()
 			)), NULL, '', true)
@@ -263,7 +263,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__img_thumb()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('IMG_THUMB', array(
+			lorem_globalise(do_lorem_template('IMG_THUMB',array(
 				'JS_TOOLTIP'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
 				'URL'=>placeholder_image_url()
@@ -281,7 +281,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__crop_text_mouse_over()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER', array(
+			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER',array(
 				'TEXT_LARGE'=>lorem_phrase(),
 				'TEXT_SMALL'=>lorem_phrase()
 			)), NULL, '', true)
@@ -299,7 +299,7 @@ class Hook_addon_registry_core_abstract_components
 	{
 		$img="login";
 		return array(
-			lorem_globalise(do_lorem_template('SCREEN_BUTTON', array(
+			lorem_globalise(do_lorem_template('SCREEN_BUTTON',array(
 				'IMMEDIATE'=>true,
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
@@ -394,7 +394,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__administrative__handle_conflict_resolution()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HANDLE_CONFLICT_RESOLUTION', array()))
+			lorem_globalise(do_lorem_template('HANDLE_CONFLICT_RESOLUTION',array()))
 		);
 	}
 }

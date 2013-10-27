@@ -99,36 +99,36 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/systems/cron/catalogue_view_reports.php',
 			'sources/hooks/systems/meta/catalogue_category.php',
 			'sources/hooks/systems/meta/catalogue_entry.php',
-			'JAVASCRIPT_CATALOGUES.tpl',
+			'themes/default/templates/JAVASCRIPT_CATALOGUES.tpl',
 			'sources/hooks/modules/admin_import_types/catalogues.php',
 			'sources/hooks/systems/content_meta_aware/catalogue.php',
 			'sources/hooks/systems/content_meta_aware/catalogue_category.php',
 			'sources/hooks/systems/content_meta_aware/catalogue_entry.php',
 			'sources/hooks/systems/occle_fs/catalogues.php',
 			'sources/hooks/systems/addon_registry/catalogues.php',
-			'CATALOGUE_ADDING_SCREEN.tpl',
-			'CATALOGUE_EDITING_SCREEN.tpl',
-			'CATALOGUE_CATEGORIES_LIST_LINE.tpl',
-			'CATALOGUE_DEFAULT_CATEGORY_EMBED.tpl',
-			'CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl',
-			'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl',
-			'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD.tpl',
-			'CATALOGUE_DEFAULT_GRID_ENTRY_WRAP.tpl',
-			'CATALOGUE_DEFAULT_GRID_ENTRY_FIELD.tpl',
-			'CATALOGUE_DEFAULT_ENTRY_SCREEN.tpl',
-			'CATALOGUE_DEFAULT_TITLELIST_ENTRY.tpl',
-			'CATALOGUE_DEFAULT_TITLELIST_WRAP.tpl',
-			'CATALOGUE_ENTRIES_LIST_LINE.tpl',
-			'SEARCH_RESULT_CATALOGUE_ENTRIES.tpl',
-			'CATALOGUE_DEFAULT_TABULAR_ENTRY_WRAP.tpl',
-			'CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD.tpl',
-			'CATALOGUE_DEFAULT_TABULAR_HEADCELL.tpl',
-			'CATALOGUE_DEFAULT_TABULAR_WRAP.tpl',
-			'CATALOGUE_links_TABULAR_ENTRY_WRAP.tpl',
-			'CATALOGUE_links_TABULAR_ENTRY_FIELD.tpl',
-			'CATALOGUE_links_TABULAR_HEADCELL.tpl',
-			'CATALOGUE_links_TABULAR_WRAP.tpl',
-			'CATALOGUE_CATEGORY_HEADING.tpl',
+			'themes/default/templates/CATALOGUE_ADDING_SCREEN.tpl',
+			'themes/default/templates/CATALOGUE_EDITING_SCREEN.tpl',
+			'themes/default/templates/CATALOGUE_CATEGORIES_LIST_LINE.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_CATEGORY_EMBED.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_GRID_ENTRY_WRAP.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_GRID_ENTRY_FIELD.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_ENTRY_SCREEN.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_TITLELIST_ENTRY.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_TITLELIST_WRAP.tpl',
+			'themes/default/templates/CATALOGUE_ENTRIES_LIST_LINE.tpl',
+			'themes/default/templates/SEARCH_RESULT_CATALOGUE_ENTRIES.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_TABULAR_ENTRY_WRAP.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_TABULAR_HEADCELL.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_TABULAR_WRAP.tpl',
+			'themes/default/templates/CATALOGUE_links_TABULAR_ENTRY_WRAP.tpl',
+			'themes/default/templates/CATALOGUE_links_TABULAR_ENTRY_FIELD.tpl',
+			'themes/default/templates/CATALOGUE_links_TABULAR_HEADCELL.tpl',
+			'themes/default/templates/CATALOGUE_links_TABULAR_WRAP.tpl',
+			'themes/default/templates/CATALOGUE_CATEGORY_HEADING.tpl',
 			'uploads/catalogues/index.html',
 			'uploads/catalogues/.htaccess',
 			'themes/default/images/bigicons/catalogues.png',
@@ -151,7 +151,7 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/modules/admin_unvalidated/catalogue_entry.php',
 			'sources/hooks/systems/attachments/catalogue_entry.php',
 			'sources/blocks/main_cc_embed.php',
-			'catalogues.css',
+			'themes/default/css/catalogues.css',
 			'site/catalogue_file.php',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_BACKREFS.php',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_FIELD_VALUE.php',
@@ -219,12 +219,12 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__grid_category_screen()
 	{
 		$subcategories=new ocp_tempcode();
-		$subcategories->attach(do_lorem_template('SIMPLE_PREVIEW_BOX', array(
+		$subcategories->attach(do_lorem_template('SIMPLE_PREVIEW_BOX',array(
 			'TITLE'=>lorem_phrase(),
 			'SUMMARY'=>lorem_paragraph_html(),
 			'URL'=>placeholder_url(),
 		)));
-		$tags=do_lorem_template('TAGS', array(
+		$tags=do_lorem_template('TAGS',array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
@@ -235,7 +235,7 @@ class Hook_addon_registry_catalogues
 		$fields=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
-			$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_GRID_ENTRY_FIELD', array(
+			$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_GRID_ENTRY_FIELD',array(
 				'ENTRYID'=>placeholder_random_id(),
 				'CATALOGUE'=>lorem_phrase(),
 				'TYPE'=>lorem_word(),
@@ -247,13 +247,13 @@ class Hook_addon_registry_catalogues
 				'VALUE'=>lorem_phrase()
 			)));
 		}
-		$content=do_lorem_template('CATALOGUE_DEFAULT_GRID_ENTRY_WRAP', array(
+		$content=do_lorem_template('CATALOGUE_DEFAULT_GRID_ENTRY_WRAP',array(
 			'FIELDS'=>$fields,
 			'VIEW_URL'=>placeholder_url(),
 			'FIELD_0'=>lorem_word()
 		));
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
 				'ADD_DATE_RAW'=>placeholder_time(),
 				'TITLE'=>lorem_title(),
@@ -283,7 +283,7 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__fieldmap_category_screen()
 	{
 		$subcategories=new ocp_tempcode();
-		$tags=do_lorem_template('TAGS', array(
+		$tags=do_lorem_template('TAGS',array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
@@ -294,7 +294,7 @@ class Hook_addon_registry_catalogues
 		$fields=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
-			$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD', array(
+			$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD',array(
 				'ENTRYID'=>placeholder_random_id(),
 				'CATALOGUE'=>lorem_phrase(),
 				'TYPE'=>lorem_word(),
@@ -306,7 +306,7 @@ class Hook_addon_registry_catalogues
 				'VALUE'=>lorem_phrase()
 			)));
 		}
-		$content=do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP', array(
+		$content=do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP',array(
 			'ID'=>placeholder_id(),
 			'FIELDS'=>$fields,
 			'VIEW_URL'=>placeholder_url(),
@@ -315,13 +315,13 @@ class Hook_addon_registry_catalogues
 		));
 		foreach (placeholder_array(2) as $v)
 		{
-			$entries->attach(do_lorem_template('CATALOGUE_CATEGORY_HEADING', array(
+			$entries->attach(do_lorem_template('CATALOGUE_CATEGORY_HEADING',array(
 				'LETTER'=>lorem_phrase(),
 				'ENTRIES'=>$content
 			)));
 		}
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
 				'ADD_DATE_RAW'=>placeholder_time(),
 				'TITLE'=>lorem_title(),
@@ -354,26 +354,26 @@ class Hook_addon_registry_catalogues
 		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
-			$content->attach(do_lorem_template('CATALOGUE_DEFAULT_TITLELIST_ENTRY', array(
+			$content->attach(do_lorem_template('CATALOGUE_DEFAULT_TITLELIST_ENTRY',array(
 				'VIEW_URL'=>placeholder_url(),
 				'ID'=>placeholder_url(),
 				'FIELD_0'=>lorem_word_2(),
 				'FIELD_0_PLAIN'=>lorem_word()
 			)));
 		}
-		$entries=do_lorem_template('CATALOGUE_DEFAULT_TITLELIST_WRAP', array(
+		$entries=do_lorem_template('CATALOGUE_DEFAULT_TITLELIST_WRAP',array(
 			'CATALOGUE'=>lorem_word(),
 			'CONTENT'=>$content
 		));
 
-		$tags=do_lorem_template('TAGS', array(
+		$tags=do_lorem_template('TAGS',array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
 			'TAG'=>lorem_word()
 		));
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
 				'ADD_DATE_RAW'=>placeholder_time(),
 				'TITLE'=>lorem_title(),
@@ -403,7 +403,7 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__tabular_category_screen__links()
 	{
 		$subcategories=new ocp_tempcode();
-		$tags=do_lorem_template('TAGS', array(
+		$tags=do_lorem_template('TAGS',array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
@@ -415,7 +415,7 @@ class Hook_addon_registry_catalogues
 		$head=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
-			$head->attach(do_lorem_template('CATALOGUE_links_TABULAR_HEADCELL', array(
+			$head->attach(do_lorem_template('CATALOGUE_links_TABULAR_HEADCELL',array(
 				'SORT_ASC_SELECTED'=>TRUE,
 				'SORT_DESC_SELECTED'=>FALSE,
 				'SORT_URL_ASC'=>placeholder_url(),
@@ -426,26 +426,26 @@ class Hook_addon_registry_catalogues
 				'FIELD'=>$v,
 				'FIELDTYPE'=>'text'
 			)));
-			$entry_fields->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_FIELD', array(
+			$entry_fields->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_FIELD',array(
 				'FIELDID'=>placeholder_random_id(),
 				'ENTRYID'=>placeholder_random_id(),
 				'VALUE'=>lorem_phrase()
 			)));
 		}
-		$row->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_WRAP', array(
+		$row->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_WRAP',array(
 			'FIELDS_TABULAR'=>$entry_fields,
 			'VIEW_URL'=>placeholder_url(),
 			'EDIT_URL'=>placeholder_url(),
 			'FIELD_1_PLAIN'=>lorem_phrase()
 		)));
-		$content=do_lorem_template('CATALOGUE_links_TABULAR_WRAP', array(
+		$content=do_lorem_template('CATALOGUE_links_TABULAR_WRAP',array(
 			'CATALOGUE'=>lorem_word(),
 			'HEAD'=>$head,
 			'CONTENT'=>$row,
 			'FIELD_COUNT'=>"3"
 		));
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
 				'ADD_DATE_RAW'=>placeholder_time(),
 				'TITLE'=>lorem_title(),
@@ -475,7 +475,7 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__tabular_category_screen()
 	{
 		$subcategories=new ocp_tempcode();
-		$tags=do_lorem_template('TAGS', array(
+		$tags=do_lorem_template('TAGS',array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
@@ -483,7 +483,7 @@ class Hook_addon_registry_catalogues
 		));
 
 		$entries=new ocp_tempcode();
-		$head=do_lorem_template('CATALOGUE_DEFAULT_TABULAR_HEADCELL', array(
+		$head=do_lorem_template('CATALOGUE_DEFAULT_TABULAR_HEADCELL',array(
 			'SORT_ASC_SELECTED'=>TRUE,
 			'SORT_DESC_SELECTED'=>FALSE,
 			'SORT_URL_ASC'=>placeholder_url(),
@@ -495,24 +495,24 @@ class Hook_addon_registry_catalogues
 			'FIELDTYPE'=>'text'
 		));
 		$fields=new ocp_tempcode();
-		$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD', array(
+		$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD',array(
 			'FIELDID'=>placeholder_id(),
 			'ENTRYID'=>placeholder_id(),
 			'VALUE'=>lorem_phrase()
 		)));
-		$entries->attach(do_lorem_template('CATALOGUE_DEFAULT_TABULAR_ENTRY_WRAP', array(
+		$entries->attach(do_lorem_template('CATALOGUE_DEFAULT_TABULAR_ENTRY_WRAP',array(
 			'FIELDS_TABULAR'=>$fields,
 			'EDIT_URL'=>placeholder_url(),
 			'VIEW_URL'=>placeholder_url()
 		)));
-		$content=do_lorem_template('CATALOGUE_DEFAULT_TABULAR_WRAP', array(
+		$content=do_lorem_template('CATALOGUE_DEFAULT_TABULAR_WRAP',array(
 			'CATALOGUE'=>lorem_word(),
 			'HEAD'=>$head,
 			'CONTENT'=>$entries,
 			'FIELD_COUNT'=>"1"
 		));
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
 				'ADD_DATE_RAW'=>placeholder_time(),
 				'TITLE'=>lorem_title(),
@@ -541,7 +541,7 @@ class Hook_addon_registry_catalogues
 	 */
 	function tpl_preview__entry_screen()
 	{
-		$tags=do_lorem_template('TAGS', array(
+		$tags=do_lorem_template('TAGS',array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
@@ -550,7 +550,7 @@ class Hook_addon_registry_catalogues
 
 		$fields=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
-			$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD', array(
+			$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD',array(
 				'ENTRYID'=>placeholder_id(),
 				'CATALOGUE'=>lorem_phrase(),
 				'TYPE'=>lorem_word(),
@@ -562,7 +562,7 @@ class Hook_addon_registry_catalogues
 				'VALUE'=>lorem_phrase()
 			)));
 
-		$entry=do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP', array(
+		$entry=do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP',array(
 			'ID'=>placeholder_id(),
 			'FIELDS'=>$fields,
 			'VIEW_URL'=>placeholder_url(),
@@ -572,7 +572,7 @@ class Hook_addon_registry_catalogues
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_ENTRY_SCREEN', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_ENTRY_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'WARNINGS'=>'',
 				'ENTRY'=>$entry,
@@ -604,7 +604,7 @@ class Hook_addon_registry_catalogues
 		require_javascript('javascript_validation');
 
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_ADDING_SCREEN', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_ADDING_SCREEN',array(
 				'HIDDEN'=>'',
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence_html(),
@@ -628,7 +628,7 @@ class Hook_addon_registry_catalogues
 		require_javascript('javascript_validation');
 
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_EDITING_SCREEN', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_EDITING_SCREEN',array(
 				'HIDDEN'=>'',
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence_html(),
@@ -651,7 +651,7 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__catalogue_entries_list_line()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_ENTRIES_LIST_LINE', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_ENTRIES_LIST_LINE',array(
 				'BREADCRUMBS'=>lorem_phrase(),
 				'NAME'=>lorem_word()
 			)), NULL, '', true)
@@ -668,7 +668,7 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__catalogue_categories_list_line()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_CATEGORIES_LIST_LINE', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_CATEGORIES_LIST_LINE',array(
 				'BREADCRUMBS'=>lorem_phrase(),
 				'COUNT'=>placeholder_number()
 			)), NULL, '', true)
@@ -685,7 +685,7 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__search_result_catalogue_entries()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES', array(
+			lorem_globalise(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES',array(
 				'BUILDUP'=>lorem_phrase(),
 				'NAME'=>lorem_word_html(),
 				'TITLE'=>lorem_word()
@@ -704,7 +704,7 @@ class Hook_addon_registry_catalogues
 	{
 		$entries=new ocp_tempcode();
 
-		$entries->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP', array(
+		$entries->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP',array(
 			'ID'=>placeholder_id(),
 			'FIELDS'=>placeholder_fields(),
 			'VIEW_URL'=>placeholder_url(),
@@ -713,7 +713,7 @@ class Hook_addon_registry_catalogues
 		)));
 
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
 				'DISPLAY_TYPE'=>'FIELDMAPS',
 				'ENTRIES'=>$entries,
 				'ROOT'=>placeholder_id(),

@@ -89,11 +89,11 @@ class Hook_addon_registry_realtime_rain
 			'data/realtime_rain.php',
 			'sources/hooks/systems/snippets/realtime_rain_load.php',
 			'sources/hooks/systems/do_next_menus/realtime_rain.php',
-			'realtime_rain.css',
-			'REALTIME_RAIN_OVERLAY.tpl',
-			'REALTIME_RAIN_BUBBLE.tpl',
-			'JAVASCRIPT_REALTIME_RAIN.tpl',
-			'JAVASCRIPT_BUTTON_REALTIME_RAIN.tpl',
+			'themes/default/css/realtime_rain.css',
+			'themes/default/templates/REALTIME_RAIN_OVERLAY.tpl',
+			'themes/default/templates/REALTIME_RAIN_BUBBLE.tpl',
+			'themes/default/templates/JAVASCRIPT_REALTIME_RAIN.tpl',
+			'themes/default/templates/JAVASCRIPT_BUTTON_REALTIME_RAIN.tpl',
 			'lang/EN/realtime_rain.ini',
 			'themes/default/images/realtime_rain/index.html',
 			'themes/default/images/bigicons/realtime_rain.png',
@@ -389,7 +389,7 @@ class Hook_addon_registry_realtime_rain
 	{
 		require_lang('realtime_rain');
 		return array(
-			lorem_globalise(do_lorem_template('REALTIME_RAIN_OVERLAY', array(
+			lorem_globalise(do_lorem_template('REALTIME_RAIN_OVERLAY',array(
 				'MIN_TIME'=>placeholder_id()
 			)), NULL, '', true)
 		);
@@ -406,7 +406,7 @@ class Hook_addon_registry_realtime_rain
 	{
 		require_lang('realtime_rain');
 		return array(
-			lorem_globalise(do_lorem_template('REALTIME_RAIN_BUBBLE', array(
+			lorem_globalise(do_lorem_template('REALTIME_RAIN_BUBBLE',array(
 				'TITLE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'IMAGE'=>placeholder_image_url(),

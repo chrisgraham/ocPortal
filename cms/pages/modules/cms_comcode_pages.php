@@ -1068,7 +1068,7 @@ class Module_cms_comcode_pages
 		}
 		if (addon_installed('content_reviews'))
 		{
-			require_code('content_reviews');
+			require_code('content_reviews2');
 			content_review_set('comcode_page',$zone.':'.$new_file,$zone.':'.$file);
 		}
 

@@ -390,7 +390,8 @@ function _load_mini_code($string,$map=NULL)
 		} else
 		{
 			$out=new ocp_tempcode();
-			$out->attach(is_string($test1)?$test1:strval($test1));
+			if ((!is_bool($test1)) && (!is_integer($test1))) // Not an automatic return code
+				$out->attach(is_string($test1)?$test1:strval($test1));
 		}
 	} else
 	{

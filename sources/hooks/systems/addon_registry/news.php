@@ -101,17 +101,17 @@ class Hook_addon_registry_news
 			'sources/hooks/systems/config/ping_url.php',
 			'sources/hooks/systems/config/points_ADD_NEWS.php',
 			'sources/hooks/systems/profiles_tabs/blog.php',
-			'NEWS_ARCHIVE_SCREEN.tpl',
-			'NEWS_ENTRY_SCREEN.tpl',
-			'BLOCK_BOTTOM_NEWS.tpl',
-			'BLOCK_MAIN_NEWS.tpl',
-			'BLOCK_SIDE_NEWS_ARCHIVE.tpl',
-			'BLOCK_SIDE_NEWS.tpl',
-			'BLOCK_SIDE_NEWS_SUMMARY.tpl',
-			'BLOCK_SIDE_NEWS_CATEGORIES.tpl',
-			'BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY.tpl',
-			'NEWS_CHICKLETS.tpl',
-			'NEWS_WORDPRESS_IMPORT_SCREEN.tpl',
+			'themes/default/templates/NEWS_ARCHIVE_SCREEN.tpl',
+			'themes/default/templates/NEWS_ENTRY_SCREEN.tpl',
+			'themes/default/templates/BLOCK_BOTTOM_NEWS.tpl',
+			'themes/default/templates/BLOCK_MAIN_NEWS.tpl',
+			'themes/default/templates/BLOCK_SIDE_NEWS_ARCHIVE.tpl',
+			'themes/default/templates/BLOCK_SIDE_NEWS.tpl',
+			'themes/default/templates/BLOCK_SIDE_NEWS_SUMMARY.tpl',
+			'themes/default/templates/BLOCK_SIDE_NEWS_CATEGORIES.tpl',
+			'themes/default/templates/BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY.tpl',
+			'themes/default/templates/NEWS_CHICKLETS.tpl',
+			'themes/default/templates/NEWS_WORDPRESS_IMPORT_SCREEN.tpl',
 			'themes/default/images/newscats/index.html',
 			'themes/default/images/bigicons/news.png',
 			'themes/default/images/newscats/art.jpg',
@@ -146,12 +146,12 @@ class Hook_addon_registry_news
 			'sources/hooks/modules/admin_import/rss.php',
 			'sources/hooks/modules/admin_newsletter/news.php',
 			'sources/hooks/blocks/main_staff_checklist/blog.php',
-			'OCF_MEMBER_PROFILE_BLOG.tpl',
+			'themes/default/templates/OCF_MEMBER_PROFILE_BLOG.tpl',
 			'sources/hooks/systems/block_ui_renderers/news.php',
 			'sources/hooks/systems/config/news_categories_per_page.php',
 			'sources/hooks/systems/config/news_entries_per_page.php',
 			'sources/hooks/systems/config/enable_secondary_news.php',
-			'BLOCK_MAIN_IMAGE_FADER_NEWS.tpl',
+			'themes/default/templates/BLOCK_MAIN_IMAGE_FADER_NEWS.tpl',
 			'sources/blocks/main_image_fader_news.php',
 			'sources/news_sitemap.php',
 			'ocp_news_sitemap.xml',
@@ -211,7 +211,7 @@ class Hook_addon_registry_news
 			'AUTHOR_URL'=>placeholder_url(),
 		);
 
-		$block=do_lorem_template('BLOCK_MAIN_IMAGE_FADER_NEWS', array(
+		$block=do_lorem_template('BLOCK_MAIN_IMAGE_FADER_NEWS',array(
 			'TITLE'=>lorem_phrase(),
 			'ARCHIVE_URL'=>placeholder_url(),
 			'NEWS'=>$news,
@@ -233,7 +233,7 @@ class Hook_addon_registry_news
 	{
 		require_lang('news');
 
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_BLOG', array(
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_BLOG',array(
 			'MEMBER_ID'=>placeholder_id(),
 			'RECENT_BLOG_POSTS'=>lorem_paragraph_html(),
 			'RSS_URL'=>placeholder_url(),
@@ -257,7 +257,7 @@ class Hook_addon_registry_news
 		require_lang('dates');
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_NEWS_ARCHIVE', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_NEWS_ARCHIVE',array(
 				'TITLE'=>lorem_phrase(),
 				'YEARS'=>array(
 					array(
@@ -310,7 +310,7 @@ class Hook_addon_registry_news
 		$contents=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$contents->attach(do_lorem_template('NEWS_BOX', array(
+			$contents->attach(do_lorem_template('NEWS_BOX',array(
 				'BLOG'=>lorem_phrase(),
 				'AUTHOR_URL'=>placeholder_url(),
 				'CATEGORY'=>lorem_phrase(),
@@ -344,7 +344,7 @@ class Hook_addon_registry_news
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWS', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWS',array(
 				'BLOG'=>TRUE,
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>$contents,
@@ -374,7 +374,7 @@ class Hook_addon_registry_news
 	{
 		require_lang('news');
 		return array(
-			lorem_globalise(do_lorem_template('NEWS_WORDPRESS_IMPORT_SCREEN', array(
+			lorem_globalise(do_lorem_template('NEWS_WORDPRESS_IMPORT_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'XML_UPLOAD_FORM'=>placeholder_form(),
 				'DB_IMPORT_FORM'=>placeholder_form()
@@ -392,7 +392,7 @@ class Hook_addon_registry_news
 	 */
 	function tpl_preview__news_archive_screen()
 	{
-		$content=do_lorem_template('NEWS_BRIEF', array(
+		$content=do_lorem_template('NEWS_BRIEF',array(
 			'DATE'=>placeholder_time(),
 			'URL'=>placeholder_url(),
 			'NEWS_TITLE_PLAIN'=>lorem_word(),
@@ -401,7 +401,7 @@ class Hook_addon_registry_news
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('NEWS_ARCHIVE_SCREEN', array(
+			lorem_globalise(do_lorem_template('NEWS_ARCHIVE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>$content,
 				'SUBMIT_URL'=>placeholder_url(),
@@ -422,7 +422,7 @@ class Hook_addon_registry_news
 		require_css('news');
 
 		return array(
-			lorem_globalise(do_lorem_template('NEWS_CHICKLETS', array(
+			lorem_globalise(do_lorem_template('NEWS_CHICKLETS',array(
 				'RSS_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
@@ -440,7 +440,7 @@ class Hook_addon_registry_news
 		$contents=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$contents->attach(do_lorem_template('BLOCK_SIDE_NEWS_SUMMARY', array(
+			$contents->attach(do_lorem_template('BLOCK_SIDE_NEWS_SUMMARY',array(
 				'ID'=>placeholder_id(),
 				'SUBMITTER'=>placeholder_id(),
 				'AUTHOR'=>lorem_phrase(),
@@ -456,7 +456,7 @@ class Hook_addon_registry_news
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_NEWS', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_NEWS',array(
 				'BLOG'=>TRUE,
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>$contents,
@@ -479,14 +479,14 @@ class Hook_addon_registry_news
 		$contents=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$contents->attach(do_lorem_template('BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY', array(
+			$contents->attach(do_lorem_template('BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY',array(
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_phrase(),
 				'COUNT'=>placeholder_random()
 			)));
 		}
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_NEWS_CATEGORIES', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_NEWS_CATEGORIES',array(
 				'CONTENT'=>$contents,
 				'PRE'=>'',
 				'POST'=>''
@@ -505,7 +505,7 @@ class Hook_addon_registry_news
 			);
 		}
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_BOTTOM_NEWS', array(
+			lorem_globalise(do_lorem_template('BLOCK_BOTTOM_NEWS',array(
 				'BLOG'=>TRUE,
 				'POSTS'=>$contents_arr
 			)), NULL, '', true)
@@ -533,7 +533,7 @@ class Hook_addon_registry_news
 			);
 		}
 
-		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM', array(
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array(
 			'JOIN_BITS'=>lorem_phrase_html(),
 			'USE_CAPTCHA'=>false,
 			'EMAIL_OPTIONAL'=>lorem_word(),
@@ -552,12 +552,12 @@ class Hook_addon_registry_news
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('NEWS_ENTRY_SCREEN', array(
+			lorem_globalise(do_lorem_template('NEWS_ENTRY_SCREEN',array(
 				'ID'=>placeholder_id(),
 				'CATEGORY_ID'=>placeholder_id(),
 				'BLOG'=>TRUE,
 				'_TITLE'=>lorem_phrase(),
-				'TAGS'=>do_lorem_template('TAGS', array(
+				'TAGS'=>do_lorem_template('TAGS',array(
 					'TAGS'=>$tags,
 					'TYPE'=>''
 				)),

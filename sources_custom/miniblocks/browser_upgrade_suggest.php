@@ -6,6 +6,8 @@ $safari_needed=array_key_exists('safari_needed',$map)?floatval($map['safari_need
 $chrome_needed=array_key_exists('chrome_needed',$map)?floatval($map['chrome_needed']):15.0;
 $opera_needed=array_key_exists('firefox_needed',$map)?floatval($map['firefox_needed']):11.0;
 
+$attach=(array_key_exists('attach',$map)) && ($map['attach']=='1');
+
 require_code('browser_detect');
 require_lang('browser_upgrade_suggest');
 
@@ -68,6 +70,12 @@ if (($browser->getBrowser()==Browser::BROWSER_OPERA) && (floatval($browser->getV
 
 if ($message!='')
 {
-	$out=put_in_standard_box(make_string_tempcode($message));
-	$out->evaluate_echo();
+	if ($attach)
+	{
+		attach_message(make_string_tempcode($message),'warn');
+	} else
+	{
+		$out=put_in_standard_box(make_string_tempcode($message));
+		$out->evaluate_echo();
+	}
 }

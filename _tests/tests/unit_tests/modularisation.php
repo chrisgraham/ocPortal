@@ -66,11 +66,6 @@ class modularisation_test_set extends ocp_test_case
 		$unput_files=array();
 		foreach ($GFILE_ARRAY as $path)
 		{
-			if ((substr($path,-4)=='.tpl') || ((substr($path,-4)=='.css') && (substr($path,0,6)=='themes')))
-			{
-				$path=basename($path);
-			}
-
 			$found=false;
 			foreach ($addon_data as $section_name=>$section)
 			{

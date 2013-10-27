@@ -30,26 +30,28 @@
 		{+END}
 
 		{+START,SET,CONTENTS}
-			{$SET,AVATAR_URL,{$?,{$GET,fancy_screen},{$THUMBNAIL,{$?,{$IS_EMPTY,{$PHOTO,{MEMBER_ID}}},{$IMG,no_image},{$PHOTO,{MEMBER_ID}}},80x80,uploads/website_specific,,,pad,both,#faf5ef},{AVATAR_URL}}}
+			{$SET,AVATAR_URL,{$?,{$GET,fancy_screen},{$THUMBNAIL,{$?,{$IS_EMPTY,{$PHOTO,{MEMBER_ID}}},{$?,{$IS_EMPTY,{AVATAR_URL}},{$IMG,no_image},{AVATAR_URL}},{$PHOTO,{MEMBER_ID}}},80x80,uploads/website_specific,,,pad,both,#faf5ef},{AVATAR_URL}}}
 
 			{$SET,main,0}
-			<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'&lt;table class=&quot;tooltip_fields autosized_table&quot; summary=&quot;{!MAP_TABLE}&quot;&gt;&lt;tbody&gt;{CUSTOM_FIELDS_FULL;^*}{$GET;^*,ADDITIONAL_DETAILS}&lt;/tbody&gt;&lt;/table&gt;','auto');" href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img class="ocf_member_box_avatar" src="{$GET*,AVATAR_URL}" alt="" /></a>
+			<div class="inline_lined_up">
+				<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'&lt;table class=&quot;tooltip_fields autosized_table&quot; summary=&quot;{!MAP_TABLE}&quot;&gt;&lt;tbody&gt;{CUSTOM_FIELDS_FULL;^*}{$GET;^*,ADDITIONAL_DETAILS}&lt;/tbody&gt;&lt;/table&gt;','auto');" href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img class="ocf_member_box_avatar" src="{$GET*,AVATAR_URL}" alt="" /></a>
 
-			<div{+START,IF_NON_EMPTY,{$GET,AVATAR_URL}} class="ocf_member_box_avatar"{+END} style="float: left; width: 95px; word-wrap: break-word; margin-right: 0">
-				<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$TRUNCATE_LEFT,{$USERNAME,{MEMBER_ID},1},18,1}</a>
-				{$SET,main,1}
-				{CUSTOM_FIELDS}
+				<div style="word-wrap: break-word; display: inline-block">
+					<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$TRUNCATE_LEFT,{$USERNAME,{MEMBER_ID},1},18,1}</a>
+					{$SET,main,1}
+					{CUSTOM_FIELDS}
 
-				{+START,IF,{$ADDON_INSTALLED,ocGiftGiver,1}}
-					<p class="associated_link">
-						{+START,IF,{$NEQ,{$MEMBER},{MEMBER_ID}}}
-							<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{MEMBER_ID}}}">{!ocgifts:GIVE_A_GIFT}</a>
-						{+END}
-						{+START,IF,{$EQ,{$MEMBER},{MEMBER_ID}}}
-							<em>{!ocgifts:THIS_IS_YOU}</em>
-						{+END}
-					</p>
-				{+END}
+					{+START,IF,{$ADDON_INSTALLED,oc_gift_giver}}
+						<p class="associated_link">
+							{+START,IF,{$NEQ,{$MEMBER},{MEMBER_ID}}}
+								<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{MEMBER_ID}}}">{!ocgifts:GIVE_A_GIFT}</a>
+							{+END}
+							{+START,IF,{$EQ,{$MEMBER},{MEMBER_ID}}}
+								<em>{!ocgifts:THIS_IS_YOU}</em>
+							{+END}
+						</p>
+					{+END}
+				</div>
 			</div>
 		{+END}
 

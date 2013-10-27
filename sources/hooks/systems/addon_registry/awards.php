@@ -89,8 +89,8 @@ class Hook_addon_registry_awards
 		return array(
 			'sources/hooks/systems/addon_registry/awards.php',
 			'sources/hooks/systems/resource_meta_aware/award_type.php',
-			'AWARDED_CONTENT.tpl',
-			'BLOCK_MAIN_AWARDS.tpl',
+			'themes/default/templates/AWARDED_CONTENT.tpl',
+			'themes/default/templates/BLOCK_MAIN_AWARDS.tpl',
 			'adminzone/pages/modules/admin_awards.php',
 			'sources/blocks/main_awards.php',
 			'sources/awards.php',
@@ -100,7 +100,7 @@ class Hook_addon_registry_awards
 			'themes/default/images/pagepics/awards.png',
 			'themes/default/images/bigicons/awards.png',
 			'sources/hooks/blocks/main_staff_checklist/awards.php',
-			'awards.css',
+			'themes/default/css/awards.css',
 			'themes/default/images/awarded.png',
 			'sources/hooks/modules/admin_import_types/awards.php',
 			'sources/hooks/systems/block_ui_renderers/awards.php',
@@ -133,7 +133,7 @@ class Hook_addon_registry_awards
 	function tpl_preview__block_main_awards()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_AWARDS', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_AWARDS',array(
 				'TITLE'=>lorem_word(),
 				'TYPE'=>lorem_word(),
 				'DESCRIPTION'=>lorem_paragraph_html(),
@@ -159,7 +159,7 @@ class Hook_addon_registry_awards
 	function tpl_preview__awarded_content()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('AWARDED_CONTENT', array(
+			lorem_globalise(do_lorem_template('AWARDED_CONTENT',array(
 				'AWARDEE_PROFILE_URL'=>placeholder_url(),
 				'AWARDEE'=>lorem_phrase(),
 				'AWARDEE_USERNAME'=>lorem_word(),

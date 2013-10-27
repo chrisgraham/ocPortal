@@ -89,24 +89,24 @@ class Hook_addon_registry_core_validation
 	function get_file_list()
 	{
 		return array(
-			'validation.css',
+			'themes/default/css/validation.css',
 			'sources/hooks/systems/addon_registry/core_validation.php',
-			'VALIDATE_ATTRIBUTE_END.tpl',
-			'VALIDATE_ATTRIBUTE_START.tpl',
-			'VALIDATE_ERROR.tpl',
-			'VALIDATE_ERROR_SCREEN.tpl',
-			'VALIDATE_LINE.tpl',
-			'VALIDATE_LINE_END.tpl',
-			'VALIDATE_LINE_ERROR.tpl',
-			'VALIDATE_MARKER_END.tpl',
-			'VALIDATE_MARKER_START.tpl',
-			'VALIDATE_SCREEN.tpl',
-			'VALIDATE_SCREEN_END.tpl',
-			'VALIDATE_TAG_END.tpl',
-			'VALIDATE_TAG_NAME_END.tpl',
-			'VALIDATE_TAG_NAME_START.tpl',
-			'VALIDATE_TAG_START.tpl',
-			'VALIDATE_MARKER.tpl',
+			'themes/default/templates/VALIDATE_ATTRIBUTE_END.tpl',
+			'themes/default/templates/VALIDATE_ATTRIBUTE_START.tpl',
+			'themes/default/templates/VALIDATE_ERROR.tpl',
+			'themes/default/templates/VALIDATE_ERROR_SCREEN.tpl',
+			'themes/default/templates/VALIDATE_LINE.tpl',
+			'themes/default/templates/VALIDATE_LINE_END.tpl',
+			'themes/default/templates/VALIDATE_LINE_ERROR.tpl',
+			'themes/default/templates/VALIDATE_MARKER_END.tpl',
+			'themes/default/templates/VALIDATE_MARKER_START.tpl',
+			'themes/default/templates/VALIDATE_SCREEN.tpl',
+			'themes/default/templates/VALIDATE_SCREEN_END.tpl',
+			'themes/default/templates/VALIDATE_TAG_END.tpl',
+			'themes/default/templates/VALIDATE_TAG_NAME_END.tpl',
+			'themes/default/templates/VALIDATE_TAG_NAME_START.tpl',
+			'themes/default/templates/VALIDATE_TAG_START.tpl',
+			'themes/default/templates/VALIDATE_MARKER.tpl',
 			'sources/js_lex.php',
 			'sources/js_parse.php',
 			'sources/js_validator.php',
@@ -161,7 +161,7 @@ class Hook_addon_registry_core_validation
 	function tpl_preview__administrative__validate()
 	{
 		$display=new ocp_tempcode();
-		$display->attach(do_lorem_template('VALIDATE_SCREEN', array(
+		$display->attach(do_lorem_template('VALIDATE_SCREEN',array(
 			'MSG'=>lorem_phrase(),
 			'RETURN_URL'=>placeholder_url(),
 			'TITLE'=>lorem_title(),
@@ -169,27 +169,27 @@ class Hook_addon_registry_core_validation
 			'RET'=>lorem_phrase()
 		)));
 
-		$display->attach(do_lorem_template('VALIDATE_LINE', array(
+		$display->attach(do_lorem_template('VALIDATE_LINE',array(
 			'NUMBER'=>placeholder_number()
 		)));
 
-		$display->attach(do_lorem_template('VALIDATE_TAG_START', array(
+		$display->attach(do_lorem_template('VALIDATE_TAG_START',array(
 			'COLOUR'=>'#b7b7b7'
 		)));
 		$display->attach(lorem_word());
-		$display->attach(do_lorem_template('VALIDATE_TAG_END', array()));
+		$display->attach(do_lorem_template('VALIDATE_TAG_END',array()));
 
-		$display->attach(do_lorem_template('VALIDATE_TAG_NAME_START', array()));
+		$display->attach(do_lorem_template('VALIDATE_TAG_NAME_START',array()));
 		$display->attach(lorem_word());
-		$display->attach(do_lorem_template('VALIDATE_TAG_NAME_END', array()));
+		$display->attach(do_lorem_template('VALIDATE_TAG_NAME_END',array()));
 
-		$display->attach(do_lorem_template('VALIDATE_MARKER_START', array()));
+		$display->attach(do_lorem_template('VALIDATE_MARKER_START',array()));
 		$display->attach(lorem_word());
-		$display->attach(do_lorem_template('VALIDATE_MARKER_END', array()));
+		$display->attach(do_lorem_template('VALIDATE_MARKER_END',array()));
 
-		$display->attach(do_lorem_template('VALIDATE_LINE_END', array()));
+		$display->attach(do_lorem_template('VALIDATE_LINE_END',array()));
 
-		$display->attach(do_lorem_template('VALIDATE_SCREEN_END', array()));
+		$display->attach(do_lorem_template('VALIDATE_SCREEN_END',array()));
 
 		return array(
 			lorem_globalise($display, NULL, '', true)
@@ -209,7 +209,7 @@ class Hook_addon_registry_core_validation
 		$display=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$_error)
 		{
-			$errors->attach(do_lorem_template('VALIDATE_ERROR', array(
+			$errors->attach(do_lorem_template('VALIDATE_ERROR',array(
 				'I'=>lorem_word() . strval($key),
 				'LINE'=>placeholder_number(),
 				'POS'=>placeholder_number(),
@@ -217,7 +217,7 @@ class Hook_addon_registry_core_validation
 			)));
 		}
 
-		$display->attach(do_lorem_template('VALIDATE_ERROR_SCREEN', array(
+		$display->attach(do_lorem_template('VALIDATE_ERROR_SCREEN',array(
 			'MSG'=>lorem_phrase(),
 			'RETURN_URL'=>placeholder_url(),
 			'TITLE'=>lorem_title(),
@@ -231,27 +231,27 @@ class Hook_addon_registry_core_validation
 		$markers=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$_error)
 		{
-			$markers->attach(do_lorem_template('VALIDATE_MARKER', array(
+			$markers->attach(do_lorem_template('VALIDATE_MARKER',array(
 				'I'=>lorem_word() . strval($key),
 				'ERROR'=>$_error
 			)));
 		}
-		$display->attach(do_lorem_template('VALIDATE_LINE_ERROR', array(
+		$display->attach(do_lorem_template('VALIDATE_LINE_ERROR',array(
 			'MARKERS'=>$markers,
 			'NUMBER'=>placeholder_number()
 		)));
-		$display->attach(do_lorem_template('VALIDATE_ATTRIBUTE_START', array()));
+		$display->attach(do_lorem_template('VALIDATE_ATTRIBUTE_START',array()));
 		$display->attach(lorem_word());
-		$display->attach(do_lorem_template('VALIDATE_ATTRIBUTE_END', array()));
-		$display->attach(do_lorem_template('VALIDATE_LINE_END', array()));
+		$display->attach(do_lorem_template('VALIDATE_ATTRIBUTE_END',array()));
+		$display->attach(do_lorem_template('VALIDATE_LINE_END',array()));
 		$display->attach(lorem_phrase());
 
-		$display->attach(do_lorem_template('VALIDATE_LINE', array(
+		$display->attach(do_lorem_template('VALIDATE_LINE',array(
 			'NUMBER'=>placeholder_number()
 		)));
-		$display->attach(do_lorem_template('VALIDATE_LINE_END', array()));
+		$display->attach(do_lorem_template('VALIDATE_LINE_END',array()));
 
-		$display->attach(do_lorem_template('VALIDATE_SCREEN_END', array()));
+		$display->attach(do_lorem_template('VALIDATE_SCREEN_END',array()));
 
 		return array(
 			lorem_globalise($display, NULL, '', true)

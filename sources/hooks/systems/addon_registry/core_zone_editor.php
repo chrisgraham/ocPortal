@@ -85,12 +85,12 @@ class Hook_addon_registry_core_zone_editor
 	{
 		return array(
 			'sources/hooks/systems/resource_meta_aware/zone.php',
-			'zone_editor.css',
+			'themes/default/css/zone_editor.css',
 			'sources/hooks/systems/snippets/exists_zone.php',
 			'sources/hooks/systems/addon_registry/core_zone_editor.php',
-			'ZONE_EDITOR_SCREEN.tpl',
-			'ZONE_EDITOR_PANEL.tpl',
-			'JAVASCRIPT_ZONE_EDITOR.tpl',
+			'themes/default/templates/ZONE_EDITOR_SCREEN.tpl',
+			'themes/default/templates/ZONE_EDITOR_PANEL.tpl',
+			'themes/default/templates/JAVASCRIPT_ZONE_EDITOR.tpl',
 			'themes/default/images/bigicons/zone_editor.png',
 			'themes/default/images/bigicons/zones.png',
 			'adminzone/pages/modules/admin_zones.php',
@@ -122,7 +122,7 @@ class Hook_addon_registry_core_zone_editor
 	function tpl_preview__administrative__zone_editor_screen()
 	{
 		require_lang('zones');
-		$comcode_editor=do_lorem_template('COMCODE_EDITOR_BUTTON', array(
+		$comcode_editor=do_lorem_template('COMCODE_EDITOR_BUTTON',array(
 			'DIVIDER'=>true,
 			'FIELD_NAME'=>lorem_word(),
 			'TITLE'=>lorem_word(),
@@ -136,7 +136,7 @@ class Hook_addon_registry_core_zone_editor
 			'panel_right'
 		) as $i=>$for)
 		{
-			$editor[$for]=do_lorem_template('ZONE_EDITOR_PANEL', array(
+			$editor[$for]=do_lorem_template('ZONE_EDITOR_PANEL',array(
 				'CLASS'=>'',
 				'ZONES'=>'',
 				'CURRENT_ZONE'=>'',
@@ -153,7 +153,7 @@ class Hook_addon_registry_core_zone_editor
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('ZONE_EDITOR_SCREEN', array(
+			lorem_globalise(do_lorem_template('ZONE_EDITOR_SCREEN',array(
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
 				'TITLE'=>lorem_title(),

@@ -85,7 +85,7 @@ class Block_main_unslider
 				$bgcolors[$pages[$i]]=isset($_bgcolors[$i])?$_bgcolors[$i]:'';
 			}
 		}
-		
+
 		return do_template('BLOCK_MAIN_UNSLIDER',array('_GUID'=>'ae60f714ef84227c0cb958b65f7a253c','PAGES'=>$pages,
 			'WIDTH'=>$width,
 			'HEIGHT'=>$height,

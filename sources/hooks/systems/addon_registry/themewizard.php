@@ -93,13 +93,13 @@ class Hook_addon_registry_themewizard
 			'sources/hooks/systems/addon_registry/themewizard.php',
 			'sources/themewizard.php',
 			'adminzone/pages/modules/admin_themewizard.php',
-			'THEMEWIZARD_2_SCREEN.tpl',
-			'THEMEWIZARD_2_PREVIEW.tpl',
+			'themes/default/templates/THEMEWIZARD_2_SCREEN.tpl',
+			'themes/default/templates/THEMEWIZARD_2_PREVIEW.tpl',
 			'adminzone/themewizard.php',
 			'sources/hooks/systems/do_next_menus/themewizard.php',
 			'themes/default/images/pagepics/themewizard.png',
 			'themes/default/images/bigicons/themewizard.png',
-			'LOGOWIZARD_2.tpl',
+			'themes/default/templates/LOGOWIZARD_2.tpl',
 			'adminzone/logowizard.php',
 			'themes/default/images/bigicons/make_logo.png',
 			'themes/default/images/logo_template.png',
@@ -153,7 +153,7 @@ class Hook_addon_registry_themewizard
 		require_lang('themes');
 
 		return array(
-			lorem_globalise(do_lorem_template('THEMEWIZARD_2_SCREEN', array(
+			lorem_globalise(do_lorem_template('THEMEWIZARD_2_SCREEN',array(
 				'SOURCE_THEME'=>'default',
 				'ALGORITHM'=>'equations',
 				'RED'=>placeholder_id(),
@@ -181,14 +181,14 @@ class Hook_addon_registry_themewizard
 	{
 		require_lang('themes');
 
-		$preview=do_lorem_template('LOGOWIZARD_2', array(
+		$preview=do_lorem_template('LOGOWIZARD_2',array(
 			'NAME'=>lorem_phrase(),
 			'TITLE'=>lorem_phrase(),
 			'THEME'=>lorem_phrase()
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('CONFIRM_SCREEN', array(
+			lorem_globalise(do_lorem_template('CONFIRM_SCREEN',array(
 				'URL'=>placeholder_url(),
 				'BACK_URL'=>placeholder_url(),
 				'PREVIEW'=>$preview,

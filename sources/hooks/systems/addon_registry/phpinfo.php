@@ -85,7 +85,7 @@ class Hook_addon_registry_phpinfo
 	function get_file_list()
 	{
 		return array(
-			'phpinfo.css',
+			'themes/default/css/phpinfo.css',
 			'sources/hooks/systems/do_next_menus/phpinfo.php',
 			'sources/hooks/systems/addon_registry/phpinfo.php',
 			'adminzone/pages/modules/admin_phpinfo.php',

@@ -89,36 +89,36 @@ class Hook_addon_registry_core_themeing
 	function get_file_list()
 	{
 		return array(
-			'themes_editor.css',
+			'themes/default/css/themes_editor.css',
 			'sources/hooks/systems/snippets/exists_theme.php',
 			'sources/hooks/systems/config/templates_number_revisions_show.php',
 			'sources/hooks/systems/config/templates_store_revisions.php',
 			'adminzone/load_template.php',
 			'adminzone/tempcode_tester.php',
 			'sources/hooks/systems/addon_registry/core_themeing.php',
-			'JAVASCRIPT_THEME_COLOURS.tpl',
-			'THEME_IMAGE_MANAGE_SCREEN.tpl',
-			'THEME_IMAGE_PREVIEW.tpl',
-			'THEME_MANAGE_SCREEN.tpl',
-			'THEME_MANAGE.tpl',
-			'THEME_COLOUR_CHOOSER.tpl',
-			'THEME_EDIT_CSS_SCREEN.tpl',
+			'themes/default/templates/JAVASCRIPT_THEME_COLOURS.tpl',
+			'themes/default/templates/THEME_IMAGE_MANAGE_SCREEN.tpl',
+			'themes/default/templates/THEME_IMAGE_PREVIEW.tpl',
+			'themes/default/templates/THEME_MANAGE_SCREEN.tpl',
+			'themes/default/templates/THEME_MANAGE.tpl',
+			'themes/default/templates/THEME_COLOUR_CHOOSER.tpl',
+			'themes/default/templates/THEME_EDIT_CSS_SCREEN.tpl',
 			'adminzone/pages/modules/admin_themes.php',
-			'TEMPLATE_EDIT_SCREEN.tpl',
-			'TEMPLATE_EDIT_SCREEN_DROPDOWN.tpl',
-			'TEMPLATE_LIST_ENTRY.tpl',
-			'TEMPLATE_LIST_SCREEN.tpl',
-			'TEMPLATE_MANAGE_SCREEN.tpl',
-			'TEMPLATE_EDIT_LINK.tpl',
-			'TEMPLATE_EDIT_SCREEN_EDITOR.tpl',
-			'TEMPLATE_TREE.tpl',
-			'TEMPLATE_TREE_ITEM.tpl',
-			'TEMPLATE_TREE_ITEM_WRAP.tpl',
-			'TEMPLATE_TREE_NODE.tpl',
-			'TEMPLATE_LIST.tpl',
-			'TEMPLATE_LIST_WRAP.tpl',
-			'JAVASCRIPT_THEMEING.tpl',
-			'TEMPCODE_TESTER_SCREEN.tpl',
+			'themes/default/templates/TEMPLATE_EDIT_SCREEN.tpl',
+			'themes/default/templates/TEMPLATE_EDIT_SCREEN_DROPDOWN.tpl',
+			'themes/default/templates/TEMPLATE_LIST_ENTRY.tpl',
+			'themes/default/templates/TEMPLATE_LIST_SCREEN.tpl',
+			'themes/default/templates/TEMPLATE_MANAGE_SCREEN.tpl',
+			'themes/default/templates/TEMPLATE_EDIT_LINK.tpl',
+			'themes/default/templates/TEMPLATE_EDIT_SCREEN_EDITOR.tpl',
+			'themes/default/templates/TEMPLATE_TREE.tpl',
+			'themes/default/templates/TEMPLATE_TREE_ITEM.tpl',
+			'themes/default/templates/TEMPLATE_TREE_ITEM_WRAP.tpl',
+			'themes/default/templates/TEMPLATE_TREE_NODE.tpl',
+			'themes/default/templates/TEMPLATE_LIST.tpl',
+			'themes/default/templates/TEMPLATE_LIST_WRAP.tpl',
+			'themes/default/templates/JAVASCRIPT_THEMEING.tpl',
+			'themes/default/templates/TEMPCODE_TESTER_SCREEN.tpl',
 			'sources/themes2.php',
 			'sources/themes3.php',
 			'themes/default/images/bigicons/edit_css.png',
@@ -177,7 +177,7 @@ class Hook_addon_registry_core_themeing
 		$themes=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$themes->attach(do_lorem_template('THEME_MANAGE', array(
+			$themes->attach(do_lorem_template('THEME_MANAGE',array(
 				'THEME_USAGE'=>lorem_phrase(),
 				'SEED'=>'123456',
 				'DATE'=>placeholder_time(),
@@ -206,7 +206,7 @@ class Hook_addon_registry_core_themeing
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('THEME_MANAGE_SCREEN', array(
+			lorem_globalise(do_lorem_template('THEME_MANAGE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'THEMES'=>$themes,
 				'THEME_DEFAULT_REASON'=>lorem_phrase(),
@@ -229,14 +229,14 @@ class Hook_addon_registry_core_themeing
 		require_javascript('javascript_ajax');
 		require_css('forms');
 
-		$colour_chooser=do_lorem_template('THEME_COLOUR_CHOOSER', array(
+		$colour_chooser=do_lorem_template('THEME_COLOUR_CHOOSER',array(
 			'COLOR'=>'#ffffff',
 			'NAME'=>lorem_word(),
 			'CONTEXT'=>lorem_sentence()
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('THEME_EDIT_CSS_SCREEN', array(
+			lorem_globalise(do_lorem_template('THEME_EDIT_CSS_SCREEN',array(
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
 				'REVISION_HISTORY'=>placeholder_table(),
@@ -264,7 +264,7 @@ class Hook_addon_registry_core_themeing
 	function tpl_preview__administrative__template_manage_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('TEMPLATE_MANAGE_SCREEN', array(
+			lorem_globalise(do_lorem_template('TEMPLATE_MANAGE_SCREEN',array(
 				'THEME'=>lorem_phrase(),
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
@@ -302,7 +302,7 @@ class Hook_addon_registry_core_themeing
 		$parameters=array();
 		for ($i=0;$i<8;$i++)
 		{
-			$parameters[$i]=do_lorem_template('TEMPLATE_EDIT_SCREEN_DROPDOWN', array(
+			$parameters[$i]=do_lorem_template('TEMPLATE_EDIT_SCREEN_DROPDOWN',array(
 				'ID'=>placeholder_id().strval($i),
 				'PARAMETERS'=>$_parameters,
 				'NAME'=>lorem_word().strval($i),
@@ -312,7 +312,7 @@ class Hook_addon_registry_core_themeing
 
 		$template_editors=new ocp_tempcode();
 
-		$template_editors->attach(do_lorem_template('TEMPLATE_EDIT_SCREEN_EDITOR', array(
+		$template_editors->attach(do_lorem_template('TEMPLATE_EDIT_SCREEN_EDITOR',array(
 			'CODENAME'=>lorem_word(),
 			'I'=>lorem_word(),
 			'NAME'=>lorem_word(),
@@ -336,7 +336,7 @@ class Hook_addon_registry_core_themeing
 		)));
 
 		return array(
-			lorem_globalise(do_lorem_template('TEMPLATE_EDIT_SCREEN', array(
+			lorem_globalise(do_lorem_template('TEMPLATE_EDIT_SCREEN',array(
 				'MULTIPLE'=>lorem_phrase(),
 				'FIRST_ID'=>placeholder_id(),
 				'THEME'=>lorem_phrase(),
@@ -359,7 +359,7 @@ class Hook_addon_registry_core_themeing
 	function tpl_preview__administrative__theme_image_manage_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('THEME_IMAGE_MANAGE_SCREEN', array(
+			lorem_globalise(do_lorem_template('THEME_IMAGE_MANAGE_SCREEN',array(
 				'ADD_URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
 				'FORM'=>placeholder_form()
@@ -377,7 +377,7 @@ class Hook_addon_registry_core_themeing
 	function tpl_preview__administrative__theme_image_preview()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('THEME_IMAGE_PREVIEW', array(
+			lorem_globalise(do_lorem_template('THEME_IMAGE_PREVIEW',array(
 				'WIDTH'=>placeholder_number(),
 				'HEIGHT'=>placeholder_number(),
 				'URL'=>placeholder_image_url(),
@@ -405,7 +405,7 @@ class Hook_addon_registry_core_themeing
 		}
 		foreach (placeholder_array() as $v)
 		{
-			$lis->attach(do_lorem_template('TEMPLATE_LIST', array(
+			$lis->attach(do_lorem_template('TEMPLATE_LIST',array(
 				'URL'=>placeholder_url(),
 				'COLOR'=>'green',
 				'TEMPLATE'=>lorem_word(),
@@ -413,7 +413,7 @@ class Hook_addon_registry_core_themeing
 			)));
 		}
 
-		$post=do_lorem_template('TEMPLATE_LIST_WRAP', array(
+		$post=do_lorem_template('TEMPLATE_LIST_WRAP',array(
 			'LI'=>$lis,
 			'TITLE'=>lorem_phrase()
 		));
@@ -444,17 +444,17 @@ class Hook_addon_registry_core_themeing
 		$middle=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$middle->attach(do_lorem_template('TEMPLATE_TREE_ITEM_WRAP', array(
+			$middle->attach(do_lorem_template('TEMPLATE_TREE_ITEM_WRAP',array(
 				'CONTENT'=>lorem_phrase()
 			)));
 		}
 
-		$tree->attach(do_lorem_template('TEMPLATE_TREE_NODE', array(
+		$tree->attach(do_lorem_template('TEMPLATE_TREE_NODE',array(
 			'ITEMS'=>$middle
 		)));
 
 		return array(
-			lorem_globalise(do_lorem_template('TEMPLATE_TREE', array(
+			lorem_globalise(do_lorem_template('TEMPLATE_TREE',array(
 				'HIDDEN'=>'',
 				'EDIT_URL'=>placeholder_url(),
 				'TREE'=>$tree
@@ -474,7 +474,7 @@ class Hook_addon_registry_core_themeing
 		$ftemp=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
-			$ftemp->attach(do_lorem_template('TEMPLATE_LIST_ENTRY', array(
+			$ftemp->attach(do_lorem_template('TEMPLATE_LIST_ENTRY',array(
 				'COUNT'=>placeholder_number(),
 				'NAME'=>lorem_word(),
 				'EDIT_URL'=>placeholder_url()
@@ -482,7 +482,7 @@ class Hook_addon_registry_core_themeing
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('TEMPLATE_LIST_SCREEN', array(
+			lorem_globalise(do_lorem_template('TEMPLATE_LIST_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TEMPLATES'=>$ftemp
 			)), NULL, '', true)
@@ -506,12 +506,12 @@ class Hook_addon_registry_core_themeing
 			'ID'=>placeholder_random_id()
 		);
 
-		$param_info=do_lorem_template('PARAM_INFO', array(
+		$param_info=do_lorem_template('PARAM_INFO',array(
 			'MAP'=>$parameters
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('TEMPLATE_EDIT_LINK', array(
+			lorem_globalise(do_lorem_template('TEMPLATE_EDIT_LINK',array(
 				'PARAM_INFO'=>$param_info,
 				'CONTENTS'=>lorem_paragraph_html(),
 				'CODENAME'=>lorem_word(),
@@ -531,7 +531,7 @@ class Hook_addon_registry_core_themeing
 	function tpl_preview__administrative__tempcode_tester_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('TEMPCODE_TESTER_SCREEN', array(
+			lorem_globalise(do_lorem_template('TEMPCODE_TESTER_SCREEN',array(
 				'TITLE'=>lorem_title(),
 			)), NULL, '', true)
 		);

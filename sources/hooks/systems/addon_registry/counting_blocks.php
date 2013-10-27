@@ -88,9 +88,9 @@ class Hook_addon_registry_counting_blocks
 			'sources/blocks/main_count.php',
 			'sources/blocks/main_countdown.php',
 			'sources/hooks/systems/snippets/count.php',
-			'counting_blocks.css',
-			'BLOCK_MAIN_COUNTDOWN.tpl',
-			'BLOCK_MAIN_COUNT.tpl',
+			'themes/default/css/counting_blocks.css',
+			'themes/default/templates/BLOCK_MAIN_COUNTDOWN.tpl',
+			'themes/default/templates/BLOCK_MAIN_COUNT.tpl',
 		);
 	}
 
@@ -118,7 +118,7 @@ class Hook_addon_registry_counting_blocks
 	function tpl_preview__main_countdown()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNTDOWN', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNTDOWN',array(
 				'LANG'=>placeholder_number(),
 				'POSITIVE'=>true,
 				'PRECISION'=>placeholder_number(),
@@ -139,7 +139,7 @@ class Hook_addon_registry_counting_blocks
 	function tpl_preview__main_count()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNT', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNT',array(
 				'NAME'=>lorem_word(),
 				'VALUE'=>placeholder_random()
 			)), NULL, '', true)

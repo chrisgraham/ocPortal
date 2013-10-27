@@ -86,9 +86,9 @@ class Hook_addon_registry_news_shared
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/news_shared.php',
-			'NEWS_BOX.tpl',
-			'NEWS_BRIEF.tpl',
-			'news.css',
+			'themes/default/templates/NEWS_BOX.tpl',
+			'themes/default/templates/NEWS_BRIEF.tpl',
+			'themes/default/css/news.css',
 			'lang/EN/news.ini',
 		);
 	}
@@ -116,7 +116,7 @@ class Hook_addon_registry_news_shared
 	function tpl_preview__news_piece_summary()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('NEWS_BOX', array(
+			lorem_globalise(do_lorem_template('NEWS_BOX',array(
 				'BLOG'=>lorem_phrase(),
 				'AUTHOR_URL'=>placeholder_url(),
 				'TAGS'=>'',

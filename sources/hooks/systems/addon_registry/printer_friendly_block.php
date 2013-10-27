@@ -84,7 +84,7 @@ class Hook_addon_registry_printer_friendly_block
 	function get_file_list()
 	{
 		return array(
-			'BLOCK_SIDE_PRINTER_FRIENDLY.tpl',
+			'themes/default/templates/BLOCK_SIDE_PRINTER_FRIENDLY.tpl',
 			'sources/blocks/side_printer_friendly.php',
 			'sources/hooks/systems/addon_registry/printer_friendly_block.php',
 			'sources/hooks/modules/admin_setupwizard/printer_friendly_block.php',
@@ -114,7 +114,7 @@ class Hook_addon_registry_printer_friendly_block
 	function tpl_preview__block_side_printer_friendly()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_PRINTER_FRIENDLY', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_PRINTER_FRIENDLY',array(
 				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);

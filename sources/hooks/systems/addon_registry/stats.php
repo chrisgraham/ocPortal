@@ -97,13 +97,13 @@ class Hook_addon_registry_stats
 			'sources/hooks/modules/admin_import_types/stats.php',
 			'sources/hooks/modules/admin_stats/.htaccess',
 			'sources/hooks/modules/admin_stats/index.html',
-			'STATS_GRAPH.tpl',
-			'STATS_SCREEN.tpl',
-			'STATS_SCREEN_ISCREEN.tpl',
-			'STATS_OVERVIEW_SCREEN.tpl',
+			'themes/default/templates/STATS_GRAPH.tpl',
+			'themes/default/templates/STATS_SCREEN.tpl',
+			'themes/default/templates/STATS_SCREEN_ISCREEN.tpl',
+			'themes/default/templates/STATS_OVERVIEW_SCREEN.tpl',
 			'adminzone/pages/modules/admin_stats.php',
-			'stats.css',
-			'svg.css',
+			'themes/default/css/stats.css',
+			'themes/default/css/svg.css',
 			'themes/default/images/bigicons/statistics.png',
 			'themes/default/images/bigicons/clear_stats.png',
 			'data/modules/admin_stats/.htaccess',
@@ -161,7 +161,7 @@ class Hook_addon_registry_stats
 	 */
 	function tpl_preview__administrative__stats_screen()
 	{
-		$graph=do_lorem_template('STATS_GRAPH', array(
+		$graph=do_lorem_template('STATS_GRAPH',array(
 			'GRAPH'=>placeholder_url(),
 			'TITLE'=>lorem_phrase(),
 			'TEXT'=>lorem_sentence(),
@@ -170,7 +170,7 @@ class Hook_addon_registry_stats
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('STATS_SCREEN', array(
+			lorem_globalise(do_lorem_template('STATS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'GRAPH'=>$graph,
 				'STATS'=>placeholder_table()
@@ -188,7 +188,7 @@ class Hook_addon_registry_stats
 	function tpl_preview__administrative__stats_screen_overview()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('STATS_OVERVIEW_SCREEN', array(
+			lorem_globalise(do_lorem_template('STATS_OVERVIEW_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'STATS_VIEWS'=>placeholder_table(),
 				'GRAPH_VIEWS_MONTHLY'=>lorem_phrase(),
@@ -206,7 +206,7 @@ class Hook_addon_registry_stats
 	 */
 	function tpl_preview__administrative__stats_screen_iscreen()
 	{
-		$graph_regionality=do_lorem_template('STATS_GRAPH', array(
+		$graph_regionality=do_lorem_template('STATS_GRAPH',array(
 			'GRAPH'=>placeholder_url(),
 			'TITLE'=>lorem_phrase(),
 			'TEXT'=>lorem_sentence(),
@@ -215,7 +215,7 @@ class Hook_addon_registry_stats
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('STATS_SCREEN_ISCREEN', array(
+			lorem_globalise(do_lorem_template('STATS_SCREEN_ISCREEN',array(
 				'TITLE'=>lorem_title(),
 				'GRAPH_REGIONALITY'=>$graph_regionality,
 				'STATS_REGIONALITY'=>placeholder_table(),

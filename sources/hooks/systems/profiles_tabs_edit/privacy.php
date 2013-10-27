@@ -123,25 +123,26 @@ class Hook_Profiles_Tabs_Edit_privacy
 		$cpf_ids=array();
 		foreach ($member_cpfs as $cpf_id=>$cpf)
 		{
-			if ((preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$cpf)==='') && (count($member_cpfs)>15)) continue; // If there are lots of CPFs, and this one seems to have a blank name, skip it (likely corrupt data)
-
-			$cpf_ids[]=$cpf_id;
-
 			// Look up the details for this field
 			$cpf_data=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('*'),array('id'=>$cpf_id));
 			if (!array_key_exists(0,$cpf_data)) continue;
 			if ($cpf_data[0]['cf_public_view']==0) continue;
+
+			$cpf_title=get_translated_text($cpf_data[0]['cf_name']);
+			if ((preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$cpf_title)==='') && (count($member_cpfs)>15))
+				continue; // If there are lots of CPFs, and this one seems to have a blank name, skip it (likely corrupt data)
+			if ((preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$cpf)==='') && (count($member_cpfs)>15))
+				continue; // If there are lots of CPFs, and this one seems to have a blank value, skip it
+
+			$cpf_ids[]=$cpf_id;
 
 			// Work out current settings for this field
 			$cpf_permissions=$GLOBALS['FORUM_DB']->query_select('f_member_cpf_perms',array('*'),array('member_id'=>$member_id_of,'field_id'=>$cpf_id));
 			if (!array_key_exists(0,$cpf_permissions))
 			{
 				$view_by_guests=true;
-
 				$view_by_members=true;
-
 				$view_by_friends=true;
-
 				$view_by_groups=array('all');
 			} else
 			{
@@ -152,8 +153,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				if (count($view_by_groups)==count($tmp_groups) || $view_by_members) $view_by_groups=array('all');
 			}
 
-			// Work out the CPF name
-			$cpf_title=get_translated_text($cpf_data[0]['cf_name']);
+			// Work out the displayed CPF title
 			if (substr($cpf_title,0,4)=='ocp_')
 			{
 				$_cpf_title=do_lang('SPECIAL_CPF__'.$cpf_title,NULL,NULL,NULL,NULL,false);

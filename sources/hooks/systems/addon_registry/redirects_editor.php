@@ -89,14 +89,14 @@ class Hook_addon_registry_redirects_editor
 		return array(
 			'sources/hooks/systems/addon_registry/redirects_editor.php',
 			'sources/hooks/systems/occle_fs_extended_config/redirect.php',
-			'REDIRECTE_TABLE_SCREEN.tpl',
-			'REDIRECTE_TABLE_REDIRECT.tpl',
+			'themes/default/templates/REDIRECTE_TABLE_SCREEN.tpl',
+			'themes/default/templates/REDIRECTE_TABLE_REDIRECT.tpl',
 			'adminzone/pages/modules/admin_redirects.php',
 			'themes/default/images/bigicons/redirect.png',
 			'themes/default/images/pagepics/redirect.png',
 			'lang/EN/redirects.ini',
 			'themes/default/images/EN/page/redirect.png',
-			'redirects_editor.css',
+			'themes/default/css/redirects_editor.css',
 		);
 	}
 
@@ -128,7 +128,7 @@ class Hook_addon_registry_redirects_editor
 		$fields=new ocp_tempcode();
 		foreach (placeholder_array() as $i=>$row)
 		{
-			$fields->attach(do_lorem_template('REDIRECTE_TABLE_REDIRECT', array(
+			$fields->attach(do_lorem_template('REDIRECTE_TABLE_REDIRECT',array(
 				'I'=>strval($i),
 				'TO_ZONES'=>placeholder_options(),
 				'FROM_ZONES'=>placeholder_options(),
@@ -139,7 +139,7 @@ class Hook_addon_registry_redirects_editor
 			)));
 		}
 
-		$new=do_lorem_template('REDIRECTE_TABLE_REDIRECT', array(
+		$new=do_lorem_template('REDIRECTE_TABLE_REDIRECT',array(
 			'I'=>'new',
 			'TO_ZONES'=>placeholder_options(),
 			'FROM_ZONES'=>placeholder_options(),
@@ -149,7 +149,7 @@ class Hook_addon_registry_redirects_editor
 			'NAME'=>'is_transparent_new'
 		));
 
-		$out=do_lorem_template('REDIRECTE_TABLE_SCREEN', array(
+		$out=do_lorem_template('REDIRECTE_TABLE_SCREEN',array(
 			'NOTES'=>'',
 			'PING_URL'=>placeholder_url(),
 			'WARNING_DETAILS'=>'',

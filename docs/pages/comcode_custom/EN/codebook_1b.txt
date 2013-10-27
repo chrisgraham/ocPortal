@@ -792,14 +792,13 @@ The following steps are required for correct use of ocPortal's language/Comcode/
 
 If you are working with the ocPortal git repository, you can commit addons into git without them having to be a part of ocPortal.
 
-Only do this if the addon would generally be useful to a decent number of people -- things specific to one website, or one specific kind of website, should not be in git.
+Only do this if the addon would generally be useful to a decent number of people -- things specific to one website, or one specific kind of website, should not be in git (unless it is a part of the ocPortal build/publish/website infrastructure).
 
 To add the addon as non-bundled:
  - Decide on the informal and formal names for your addon (e.g. "Fun time" and "fun_time")
  - Save files into [tt]*_custom[/tt] directories wherever possible.
- - Create a section in [tt]data_custom/addon_files.txt[/tt] and list [i]all[/i] the files relating to your addon.
- - Add a row to [tt]data_custom/addon_details.csv[/tt]
- - Ideally put a screenshot in [tt]data_custom/addon_screenshots[/tt]
+ - Create a [tt]sources_custom/hooks/systems/addon_registry/<addon_name>.php[/tt] file that lists [i]all[/i] the files relating to your addon (including the addon_registry hook itself). Of course, all other settings in the addon_registry hook should be filled out.
+ - Put a screenshot in [tt]data_custom/addon_screenshots[/tt]
  - 'Add' the files to git, commit and push
 
 Your addon can then be managed through the bugfix push system, and will be pushed when the addons are bulk-uploaded (done as a part of the new version release process).

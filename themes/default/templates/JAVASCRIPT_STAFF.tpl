@@ -62,7 +62,7 @@ function script_load_stuff_staff()
 		has_local_storage=(typeof window.localStorage!='undefined');
 	}
 	catch (e) { };
-	if ((has_local_storage) && ('{$CONFIG_OPTION;,advanced_admin_cache}'=='1') && (!window.unloaded) && (!browser_matches('gecko')/*Far too slow*/) && (!browser_matches('ie')/*Big problems loading script with sanity in document.write*/))
+	if ((has_local_storage) && ('{$VALUE_OPTION;,advanced_admin_cache}'=='1') && (!window.unloaded) && (!browser_matches('gecko')/*Far too slow*/) && (!browser_matches('ie')/*Big problems loading script with sanity in document.write*/))
 	{
 		var html=get_inner_html(document.documentElement,true);
 		if ((html.length<1024*256) && (!document.getElementById('login_username')) && (document.title!='Preloading')) // Do not save more than 256kb
@@ -647,8 +647,11 @@ function set_task_hiding(hide_done)
 			if (src && src.indexOf('checklist1')!=-1)
 			{
 				checklist_rows[i].style.display='none';
+				checklist_rows[i].className+=' task_hidden';
+			} else
+			{
+				checklist_rows[i].className=checklist_rows[i].className.replace(/ task_hidden/g,'');
 			}
-			checklist_rows[i].className+=' task_hidden';
 		} else
 		{
 			if ((typeof window.fade_transition!='undefined') && (checklist_rows[i].style.display=='none'))

@@ -94,8 +94,8 @@ class Hook_addon_registry_custom_comcode
 			'sources/hooks/systems/meta/comcode_page.php',
 			'sources/hooks/systems/addon_registry/custom_comcode.php',
 			'adminzone/pages/modules/admin_custom_comcode.php',
-			'BLOCK_MAIN_CUSTOM_COMCODE_TAGS.tpl',
-			'CUSTOM_COMCODE_TAG_ROW.tpl',
+			'themes/default/templates/BLOCK_MAIN_CUSTOM_COMCODE_TAGS.tpl',
+			'themes/default/templates/CUSTOM_COMCODE_TAG_ROW.tpl',
 			'themes/default/images/pagepics/customcomcode.png',
 			'lang/EN/custom_comcode.ini',
 			'sources/blocks/main_custom_comcode_tags.php',
@@ -140,7 +140,7 @@ class Hook_addon_registry_custom_comcode
 		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $tag)
 		{
-			$content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW', array(
+			$content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW',array(
 				'TITLE'=>lorem_word(),
 				'DESCRIPTION'=>lorem_paragraph(),
 				'EXAMPLE'=>lorem_word()
@@ -148,7 +148,7 @@ class Hook_addon_registry_custom_comcode
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS',array(
 				'TAGS'=>$content
 			)), NULL, '', true)
 		);

@@ -89,7 +89,7 @@ class Hook_addon_registry_captcha
 		return array(
 			'sources/hooks/systems/snippets/captcha_wrong.php',
 			'sources/hooks/systems/addon_registry/captcha.php',
-			'FORM_SCREEN_INPUT_CAPTCHA.tpl',
+			'themes/default/templates/FORM_SCREEN_INPUT_CAPTCHA.tpl',
 			'data/captcha.php',
 			'sources/captcha.php',
 			'lang/EN/captcha.ini',
@@ -164,10 +164,10 @@ class Hook_addon_registry_captcha
 
 		require_css('forms');
 
-		$input=do_lorem_template('FORM_SCREEN_INPUT_CAPTCHA', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_CAPTCHA',array(
 			'TABINDEX'=>placeholder_number()
 		));
-		$captcha=do_lorem_template('FORM_SCREEN_FIELD', array(
+		$captcha=do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>'captcha',
@@ -179,7 +179,7 @@ class Hook_addon_registry_captcha
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
+			lorem_globalise(do_lorem_template('FORM_SCREEN',array(
 				'SKIP_VALIDATION'=>true,
 				'HIDDEN'=>'',
 				'TITLE'=>lorem_title(),

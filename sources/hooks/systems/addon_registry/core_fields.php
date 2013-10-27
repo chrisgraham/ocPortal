@@ -133,8 +133,8 @@ class Hook_addon_registry_core_fields
 			'sources/hooks/systems/fields/tick_multi.php',
 			'sources/hooks/systems/fields/combo.php',
 			'sources/hooks/systems/fields/combo_multi.php',
-			'CATALOGUE_DEFAULT_FIELD_MULTILIST.tpl',
-			'CATALOGUE_DEFAULT_FIELD_PICTURE.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_FIELD_MULTILIST.tpl',
+			'themes/default/templates/CATALOGUE_DEFAULT_FIELD_PICTURE.tpl',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_FOR.php',
 		);
 	}
@@ -162,7 +162,7 @@ class Hook_addon_registry_core_fields
 	function tpl_preview__catalogue_multilist()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_MULTILIST', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_MULTILIST',array(
 				'ALL'=>array(
 					array(
 						'HAS'=>true,
@@ -188,7 +188,7 @@ class Hook_addon_registry_core_fields
 	function tpl_preview__catalogue_picture()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_PICTURE', array(
+			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_PICTURE',array(
 				'URL'=>placeholder_url(),
 				'THUMB_URL'=>placeholder_image_url(),
 				'I'=>'0'

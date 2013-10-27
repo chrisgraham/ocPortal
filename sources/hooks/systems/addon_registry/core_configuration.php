@@ -243,15 +243,15 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config/lax_comcode.php',
 			'sources/hooks/systems/config/output_streaming.php',
 			'sources/hooks/systems/addon_registry/core_configuration.php',
-			'CONFIG_CATEGORY_SCREEN.tpl',
-			'CONFIG_GROUP.tpl',
+			'themes/default/templates/CONFIG_CATEGORY_SCREEN.tpl',
+			'themes/default/templates/CONFIG_GROUP.tpl',
 			'adminzone/pages/modules/admin_config.php',
 			'themes/default/images/bigicons/config.png',
 			'themes/default/images/pagepics/config.png',
 			'lang/EN/config.ini',
 			'sources/hooks/systems/config/.htaccess',
 			'sources/hooks/systems/config/index.html',
-			'XML_CONFIG_SCREEN.tpl',
+			'themes/default/templates/XML_CONFIG_SCREEN.tpl',
 		);
 	}
 
@@ -283,7 +283,7 @@ class Hook_addon_registry_core_configuration
 
 		foreach (placeholder_array() as $k=>$group)
 		{
-			$group=do_lorem_template('CONFIG_GROUP', array(
+			$group=do_lorem_template('CONFIG_GROUP',array(
 				'GROUP_DESCRIPTION'=>lorem_word(),
 				'GROUP_NAME'=>$group,
 				'GROUP'=>placeholder_fields(),
@@ -293,7 +293,7 @@ class Hook_addon_registry_core_configuration
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('CONFIG_CATEGORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('CONFIG_CATEGORY_SCREEN',array(
 				'CATEGORY_DESCRIPTION'=>lorem_word_2(),
 				'_GROUPS'=>placeholder_array(),
 				'PING_URL'=>placeholder_url(),
@@ -316,7 +316,7 @@ class Hook_addon_registry_core_configuration
 	function tpl_preview__administrative__xml_config_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('XML_CONFIG_SCREEN', array(
+			lorem_globalise(do_lorem_template('XML_CONFIG_SCREEN',array(
 				'XML'=>'<test />',
 				'POST_URL'=>placeholder_url(),
 				'TITLE'=>lorem_title()

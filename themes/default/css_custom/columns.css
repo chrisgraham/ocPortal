@@ -1,6 +1,7 @@
 .website_body .column_wrapper, .website_body .column_wrapper_2 {
 	visibility: hidden;
 	width: 950px;
+	overflow: hidden;
 	/*overflow-x: scroll; If you want this the visibility: hidden must be removed*/
 }
 

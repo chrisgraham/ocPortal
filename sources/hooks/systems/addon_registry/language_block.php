@@ -86,7 +86,7 @@ class Hook_addon_registry_language_block
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/language_block.php',
-			'BLOCK_SIDE_LANGUAGE.tpl',
+			'themes/default/templates/BLOCK_SIDE_LANGUAGE.tpl',
 			'sources/blocks/side_language.php',
 		);
 	}
@@ -114,7 +114,7 @@ class Hook_addon_registry_language_block
 	function tpl_preview__block_side_language()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_LANGUAGE', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_LANGUAGE',array(
 				'LANGS'=>placeholder_options(),
 			)), NULL, '', true)
 		);

@@ -689,6 +689,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
+		if (is_null($forum_id)) return NULL;
 		$query='SELECT t.id,f_is_threaded FROM '.$this->connection->get_table_prefix().'f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id WHERE t_forum_id='.strval($forum_id).' AND ('.db_string_equal_to('t_description',$topic_identifier).' OR t_description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
 		$_result=$this->connection->query($query,1,NULL,false,true);

@@ -85,22 +85,22 @@ class Hook_addon_registry_core_html_abstractions
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/core_html_abstractions.php',
-			'JS_REFRESH.tpl',
-			'META_REFRESH_LINE.tpl',
-			'ANCHOR.tpl',
-			'HYPERLINK.tpl',
-			'HYPERLINK_POPUP_WINDOW.tpl',
-			'HYPERLINK_TOOLTIP.tpl',
-			'HYPERLINK_BUTTON.tpl',
-			'HYPERLINK_EMAIL.tpl',
-			'DIV.tpl',
-			'PARAGRAPH.tpl',
-			'FLOATER.tpl',
-			'BASIC_HTML_WRAP.tpl',
-			'STANDALONE_HTML_WRAP.tpl',
-			'HTML_HEAD.tpl',
-			'POOR_XHTML_WRAPPER.tpl',
-			'WITH_WHITESPACE.tpl',
+			'themes/default/templates/JS_REFRESH.tpl',
+			'themes/default/templates/META_REFRESH_LINE.tpl',
+			'themes/default/templates/ANCHOR.tpl',
+			'themes/default/templates/HYPERLINK.tpl',
+			'themes/default/templates/HYPERLINK_POPUP_WINDOW.tpl',
+			'themes/default/templates/HYPERLINK_TOOLTIP.tpl',
+			'themes/default/templates/HYPERLINK_BUTTON.tpl',
+			'themes/default/templates/HYPERLINK_EMAIL.tpl',
+			'themes/default/templates/DIV.tpl',
+			'themes/default/templates/PARAGRAPH.tpl',
+			'themes/default/templates/FLOATER.tpl',
+			'themes/default/templates/BASIC_HTML_WRAP.tpl',
+			'themes/default/templates/STANDALONE_HTML_WRAP.tpl',
+			'themes/default/templates/HTML_HEAD.tpl',
+			'themes/default/templates/POOR_XHTML_WRAPPER.tpl',
+			'themes/default/templates/WITH_WHITESPACE.tpl',
 		);
 	}
 
@@ -142,7 +142,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__poor_xhtml_wrapper()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('POOR_XHTML_WRAPPER', array(
+			lorem_globalise(do_lorem_template('POOR_XHTML_WRAPPER',array(
 				'CONTENT'=>lorem_phrase_html()
 			)), NULL, '', true)
 		);
@@ -158,7 +158,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__js_refresh()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('JS_REFRESH', array(
+			lorem_globalise(do_lorem_template('JS_REFRESH',array(
 				'FORM_NAME'=>lorem_word_html()
 			)), NULL, '', true)
 		);
@@ -174,7 +174,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__anchor()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ANCHOR', array(
+			lorem_globalise(do_lorem_template('ANCHOR',array(
 				'NAME'=>lorem_word()
 			)), NULL, '', true)
 		);
@@ -190,7 +190,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__standalone_html_wrap()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('STANDALONE_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('STANDALONE_HTML_WRAP',array(
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>lorem_chunk_html(),
 			)), NULL, '', true)
@@ -207,7 +207,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__meta_refresh_line()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('META_REFRESH_LINE', array(
+			lorem_globalise(do_lorem_template('META_REFRESH_LINE',array(
 				'URL'=>placeholder_url(),
 				'TIME'=>placeholder_date_raw()
 			)), NULL, '', true)
@@ -224,7 +224,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink_popup_window()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HYPERLINK_POPUP_WINDOW', array(
+			lorem_globalise(do_lorem_template('HYPERLINK_POPUP_WINDOW',array(
 				'TITLE'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
@@ -245,7 +245,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__basic_html_wrap()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BASIC_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('BASIC_HTML_WRAP',array(
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>lorem_chunk_html()
 			)), NULL, '', true)
@@ -262,7 +262,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__floater()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('FLOATER', array(
+			lorem_globalise(do_lorem_template('FLOATER',array(
 				'FLOAT'=>'left',
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
@@ -279,7 +279,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink_email()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HYPERLINK_EMAIL', array(
+			lorem_globalise(do_lorem_template('HYPERLINK_EMAIL',array(
 				'VALUE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -295,7 +295,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink_tooltip()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HYPERLINK_TOOLTIP', array(
+			lorem_globalise(do_lorem_template('HYPERLINK_TOOLTIP',array(
 				'TOOLTIP'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
@@ -314,7 +314,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__paragraph()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('PARAGRAPH', array(
+			lorem_globalise(do_lorem_template('PARAGRAPH',array(
 				'TEXT'=>lorem_sentence_html(),
 				'CLASS'=>lorem_phrase()
 			)), NULL, '', true)
@@ -331,7 +331,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__div()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('DIV', array(
+			lorem_globalise(do_lorem_template('DIV',array(
 				'TEMPCODE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -347,7 +347,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__with_whitespace()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('WITH_WHITESPACE', array(
+			lorem_globalise(do_lorem_template('WITH_WHITESPACE',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -363,7 +363,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HYPERLINK', array(
+			lorem_globalise(do_lorem_template('HYPERLINK',array(
 				'REL'=>NULL,
 				'POST_DATA'=>NULL,
 				'ACCESSKEY'=>NULL,
@@ -385,7 +385,7 @@ class Hook_addon_registry_core_html_abstractions
 	function tpl_preview__hyperlink_button()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HYPERLINK_BUTTON', array(
+			lorem_globalise(do_lorem_template('HYPERLINK_BUTTON',array(
 				'REL'=>NULL,
 				'POST_DATA'=>'',
 				'ACCESSKEY'=>NULL,

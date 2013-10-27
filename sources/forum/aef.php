@@ -1240,7 +1240,7 @@ class forum_driver_aef extends forum_driver_base
 		} else
 		{
 			$session_id=strtolower($this->generateRandStr(32));
-			$this->connection->query_insert('sessions', array('sid'=>$session_id,'uid'=>$id,'time'=>time(),'data'=>'','ip'=>$row['r_ip']));
+			$this->connection->query_insert('sessions',array('sid'=>$session_id,'uid'=>$id,'time'=>time(),'data'=>'','ip'=>$row['r_ip']));
 		}
 
 		// Now lets try and set a COOKIE of AEF Session ID

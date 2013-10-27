@@ -621,13 +621,13 @@ function placeholder_pagination()
 	$selectors=new ocp_tempcode();
 	foreach (placeholder_array() as $k => $v)
 	{
-		$selectors->attach(do_lorem_template('PAGINATION_PER_SCREEN_OPTION', array(
+		$selectors->attach(do_lorem_template('PAGINATION_PER_SCREEN_OPTION',array(
 			'SELECTED' => true,
 			'VALUE' => strval($k),
 			'NAME' => $v
 		)));
 	}
-	$per_page=do_lorem_template('PAGINATION_PER_SCREEN', array(
+	$per_page=do_lorem_template('PAGINATION_PER_SCREEN',array(
 		'HIDDEN' => '',
 		'URL' => placeholder_url(),
 		'MAX_NAME' => 'max',
@@ -640,57 +640,57 @@ function placeholder_pagination()
 		$j=$k + 1;
 		if ($k==0)
 		{
-			$parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER', array(
+			$parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER',array(
 				'P' => strval($j)
 			)));
 		} else
 		{
-			$parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER_LINK', array(
+			$parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER_LINK',array(
 				'P' => strval($j),
 				'URL' => placeholder_url(),
 				'TITLE' => lorem_phrase()
 			)));
 		}
 	}
-	$first=do_lorem_template('PAGINATION_CONTINUE_FIRST', array(
+	$first=do_lorem_template('PAGINATION_CONTINUE_FIRST',array(
 		'TITLE' => lorem_phrase(),
 		'P' => placeholder_number(),
 		'FIRST_URL' => placeholder_url()
 	));
-	$previous=do_lorem_template('PAGINATION_PREVIOUS_LINK', array(
+	$previous=do_lorem_template('PAGINATION_PREVIOUS_LINK',array(
 		'TITLE' => lorem_phrase(),
 		'P' => placeholder_date_raw(),
 		'URL' => placeholder_url()
 	));
-	$previous->attach(do_lorem_template('PAGINATION_PREVIOUS', array(
+	$previous->attach(do_lorem_template('PAGINATION_PREVIOUS',array(
 		'TITLE' => lorem_phrase(),
 		'P' => placeholder_date_raw(),
 	)));
-	$next=do_lorem_template('PAGINATION_NEXT_LINK', array(
+	$next=do_lorem_template('PAGINATION_NEXT_LINK',array(
 		'REL' => NULL,
 		'TITLE' => lorem_phrase(),
 		'NUM_PAGES' => placeholder_number(),
 		'P' => placeholder_number(),
 		'URL' => placeholder_url()
 	));
-	$next->attach(do_lorem_template('PAGINATION_NEXT', array(
+	$next->attach(do_lorem_template('PAGINATION_NEXT',array(
 		'TITLE' => lorem_phrase(),
 		'P' => placeholder_date_raw(),
 	)));
-	$continues=do_lorem_template('PAGINATION_CONTINUE', array());
-	$last=do_lorem_template('PAGINATION_CONTINUE_LAST', array(
+	$continues=do_lorem_template('PAGINATION_CONTINUE',array());
+	$last=do_lorem_template('PAGINATION_CONTINUE_LAST',array(
 		'TITLE' => lorem_phrase(),
 		'P' => placeholder_number(),
 		'LAST_URL' => placeholder_url()
 	));
-	$pages_list=do_lorem_template('PAGINATION_LIST_PAGES', array(
+	$pages_list=do_lorem_template('PAGINATION_LIST_PAGES',array(
 		'URL' => placeholder_url(),
 		'HIDDEN' => '',
 		'START_NAME' => 'start',
 		'LIST' => placeholder_options()
 	));
 
-	return do_lorem_template('PAGINATION_WRAP', array(
+	return do_lorem_template('PAGINATION_WRAP',array(
 		'TEXT_ID' => lorem_phrase(),
 		'PER_PAGE' => $per_page,
 		'PREVIOUS' => $previous,
@@ -840,10 +840,10 @@ function render_screen_preview($template,$hook,$function)
 		if ((substr($file,-4)=='.ini') && (substr($file,0,8)=='lang/EN/'))
 			require_lang(basename($file,'.ini'));
 
-		if ((substr($file,-4)=='.css') && (strpos($file,'/')===false))
+		if ((substr($file,-4)=='.css') && (substr($file,0,7)=='themes/'))
 			require_css(basename($file,'.css'));
 
-		if ((substr($file,-4)=='.tpl') && (strpos($file,'/')===false) && (substr($file,0,11)=='JAVASCRIPT_') && ($file!='JAVASCRIPT_NEED.tpl') && ($file!='JAVASCRIPT_NEED_INLINE.tpl'))
+		if ((substr($file,-4)=='.tpl') && (substr($file,0,7)=='themes/') && (substr($file,0,11)=='JAVASCRIPT_') && ($file!='JAVASCRIPT_NEED.tpl') && ($file!='JAVASCRIPT_NEED_INLINE.tpl'))
 			require_javascript(strtolower(basename($file,'.tpl')));
 	}
 	$temp_name=substr($template,0,-4);

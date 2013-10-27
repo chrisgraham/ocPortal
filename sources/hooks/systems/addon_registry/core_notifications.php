@@ -97,14 +97,14 @@ class Hook_addon_registry_core_notifications
 			'themes/default/images/EN/pageitem/disable_notifications.png',
 			'themes/default/images/EN/pageitem/enable_notifications.png',
 			'sources/hooks/systems/profiles_tabs_edit/notifications.php',
-			'notifications.css',
-			'JAVASCRIPT_NOTIFICATIONS.tpl',
-			'NOTIFICATIONS_MANAGE.tpl',
-			'NOTIFICATIONS_MANAGE_SCREEN.tpl',
-			'NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl',
-			'NOTIFICATIONS_TREE.tpl',
-			'NOTIFICATION_TYPES.tpl',
-			'NOTIFICATION_BUTTONS.tpl',
+			'themes/default/css/notifications.css',
+			'themes/default/templates/JAVASCRIPT_NOTIFICATIONS.tpl',
+			'themes/default/templates/NOTIFICATIONS_MANAGE.tpl',
+			'themes/default/templates/NOTIFICATIONS_MANAGE_SCREEN.tpl',
+			'themes/default/templates/NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl',
+			'themes/default/templates/NOTIFICATIONS_TREE.tpl',
+			'themes/default/templates/NOTIFICATION_TYPES.tpl',
+			'themes/default/templates/NOTIFICATION_BUTTONS.tpl',
 			'site/pages/modules/notifications.php',
 			'adminzone/pages/modules/admin_notifications.php',
 			'sources/hooks/systems/do_next_menus/notifications.php',
@@ -118,14 +118,14 @@ class Hook_addon_registry_core_notifications
 			'sources/blocks/top_notifications.php',
 			'sources/hooks/systems/startup/notification_poller_init.php',
 			'sources/notification_poller.php',
-			'JAVASCRIPT_NOTIFICATION_POLLER.tpl',
-			'NOTIFICATION_POLLER.tpl',
-			'NOTIFICATION_WEB.tpl',
-			'NOTIFICATION_WEB_DESKTOP.tpl',
-			'NOTIFICATION_PT_DESKTOP.tpl',
-			'BLOCK_TOP_NOTIFICATIONS.tpl',
-			'NOTIFICATION_BROWSE_SCREEN.tpl',
-			'NOTIFICATION_VIEW_SCREEN.tpl',
+			'themes/default/templates/JAVASCRIPT_NOTIFICATION_POLLER.tpl',
+			'themes/default/templates/NOTIFICATION_POLLER.tpl',
+			'themes/default/templates/NOTIFICATION_WEB.tpl',
+			'themes/default/templates/NOTIFICATION_WEB_DESKTOP.tpl',
+			'themes/default/templates/NOTIFICATION_PT_DESKTOP.tpl',
+			'themes/default/templates/BLOCK_TOP_NOTIFICATIONS.tpl',
+			'themes/default/templates/NOTIFICATION_BROWSE_SCREEN.tpl',
+			'themes/default/templates/NOTIFICATION_VIEW_SCREEN.tpl',
 			'themes/default/images/notifications/notifications.ico',
 			'themes/default/images/notifications/pts.png',
 			'themes/default/images/notifications/web_notifications.png',
@@ -391,12 +391,12 @@ class Hook_addon_registry_core_notifications
 				$notification_code_map
 			)
 		);
-		$interface=do_lorem_template('NOTIFICATIONS_MANAGE', array(
+		$interface=do_lorem_template('NOTIFICATIONS_MANAGE',array(
 			'COLOR'=>'FFFFFF',
 			'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,
 			'NOTIFICATION_SECTIONS'=>$notification_sections
 		));
-		$out=do_lorem_template('NOTIFICATIONS_MANAGE_SCREEN', array(
+		$out=do_lorem_template('NOTIFICATIONS_MANAGE_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'INTERFACE'=>$interface,
 			'ACTION_URL'=>get_self_url()
@@ -438,7 +438,7 @@ class Hook_addon_registry_core_notifications
 			'CHECKED'=>true,
 			'CHILDREN'=>''
 		);
-		$tree=do_lorem_template('NOTIFICATIONS_TREE', array(
+		$tree=do_lorem_template('NOTIFICATIONS_TREE',array(
 			'NOTIFICATION_CODE'=>placeholder_id(),
 			'NOTIFICATION_CATEGORIES'=>$notification_categories
 		));
@@ -448,7 +448,7 @@ class Hook_addon_registry_core_notifications
 			'LABEL'=>lorem_phrase(),
 			'RAW'=>placeholder_number()
 		);
-		$out=do_lorem_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN', array(
+		$out=do_lorem_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'_TITLE'=>lorem_phrase(),
 			'COLOR'=>'FFFFFF',

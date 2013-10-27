@@ -90,13 +90,13 @@ class Hook_addon_registry_core_comcode_pages
 			'sources/hooks/systems/config/points_COMCODE_PAGE_ADD.php',
 			'sources/hooks/systems/config/store_revisions.php',
 			'sources/hooks/systems/addon_registry/core_comcode_pages.php',
-			'COMCODE_PAGE_EDIT_ACTIONS.tpl',
-			'COMCODE_PAGE_BOX.tpl',
+			'themes/default/templates/COMCODE_PAGE_EDIT_ACTIONS.tpl',
+			'themes/default/templates/COMCODE_PAGE_BOX.tpl',
 			'sources/hooks/modules/search/comcode_pages.php',
 			'sources/hooks/systems/content_meta_aware/comcode_page.php',
 			'sources/hooks/systems/occle_fs/comcode_pages.php',
 			'themes/default/images/bigicons/comcode_page_edit.png',
-			'COMCODE_PAGE_SCREEN.tpl',
+			'themes/default/templates/COMCODE_PAGE_SCREEN.tpl',
 			'themes/default/images/pagepics/comcode_page_edit.png',
 			'sources/hooks/systems/rss/comcode_pages.php',
 			'sources/hooks/systems/cleanup/comcode_pages.php',
@@ -136,7 +136,7 @@ class Hook_addon_registry_core_comcode_pages
 	{
 		require_lang('zones');
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS', array(
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS',array(
 				'EDIT_URL'=>placeholder_url(),
 				'CLONE_URL'=>placeholder_url()
 			)), NULL, '', true)
@@ -153,7 +153,7 @@ class Hook_addon_registry_core_comcode_pages
 	function tpl_preview__comcode_page_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_SCREEN', array(
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_SCREEN',array(
 				'BEING_INCLUDED'=>false,
 				'IS_PANEL'=>false,
 				'SUBMITTER'=>placeholder_id(),
@@ -180,7 +180,7 @@ class Hook_addon_registry_core_comcode_pages
 	function tpl_preview__comcode_page_preview()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX', array(
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX',array(
 				'GIVE_CONTEXT'=>true,
 				'PAGE'=>lorem_phrase(),
 				'ZONE'=>lorem_phrase(),

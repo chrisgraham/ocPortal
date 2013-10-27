@@ -92,7 +92,7 @@ class Hook_addon_registry_content_reviews
 			'sources/content_reviews.php',
 			'sources/content_reviews2.php',
 			'lang/EN/content_reviews.ini',
-			'REVIEW_STATUS.tpl',
+			'themes/default/templates/REVIEW_STATUS.tpl',
 		);
 	}
 
@@ -118,7 +118,7 @@ class Hook_addon_registry_content_reviews
 	function tpl_preview__review_status()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('REVIEW_STATUS', array(
+			lorem_globalise(do_lorem_template('REVIEW_STATUS',array(
 				'LAST_REVIEWED_TIME'=>placeholder_time(),
 				'NEXT_REVIEW_TIME'=>placeholder_time(),
 				'_LAST_REVIEWED_TIME'=>placeholder_date_raw(),

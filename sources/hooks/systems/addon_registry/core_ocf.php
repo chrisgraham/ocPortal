@@ -154,24 +154,24 @@ class Hook_addon_registry_core_ocf
 			'adminzone/pages/modules/admin_ocf_merge_members.php',
 			'adminzone/pages/modules/admin_ocf_join.php',
 			'sources/hooks/modules/admin_import/csv_members.php',
-			'OCF_BIRTHDAYS.tpl',
-			'OCF_EMOTICON_CELL.tpl',
-			'OCF_EMOTICON_ROW.tpl',
-			'OCF_EMOTICON_TABLE.tpl',
-			'OCF_JOIN_STEP1_SCREEN.tpl',
-			'OCF_MEMBERS_ONLINE_SCREEN.tpl',
-			'OCF_MEMBER_ACTION.tpl',
-			'OCF_MEMBER_DIRECTORY_SCREEN.tpl',
-			'OCF_MEMBER_ONLINE_ROW.tpl',
-			'OCF_MEMBER_PROFILE_SCREEN.tpl',
-			'OCF_MEMBER_PROFILE_ABOUT.tpl',
-			'OCF_MEMBER_PROFILE_EDIT.tpl',
-			'JAVASCRIPT_PROFILE.tpl',
-			'OCF_USER_MEMBER.tpl',
-			'OCF_VIEW_GROUP_SCREEN.tpl',
-			'OCF_VIEW_GROUP_MEMBER.tpl',
-			'OCF_VIEW_GROUP_MEMBER_PROSPECTIVE.tpl',
-			'OCF_VIEW_GROUP_MEMBER_SECONDARY.tpl',
+			'themes/default/templates/OCF_BIRTHDAYS.tpl',
+			'themes/default/templates/OCF_EMOTICON_CELL.tpl',
+			'themes/default/templates/OCF_EMOTICON_ROW.tpl',
+			'themes/default/templates/OCF_EMOTICON_TABLE.tpl',
+			'themes/default/templates/OCF_JOIN_STEP1_SCREEN.tpl',
+			'themes/default/templates/OCF_MEMBERS_ONLINE_SCREEN.tpl',
+			'themes/default/templates/OCF_MEMBER_ACTION.tpl',
+			'themes/default/templates/OCF_MEMBER_DIRECTORY_SCREEN.tpl',
+			'themes/default/templates/OCF_MEMBER_ONLINE_ROW.tpl',
+			'themes/default/templates/OCF_MEMBER_PROFILE_SCREEN.tpl',
+			'themes/default/templates/OCF_MEMBER_PROFILE_ABOUT.tpl',
+			'themes/default/templates/OCF_MEMBER_PROFILE_EDIT.tpl',
+			'themes/default/templates/JAVASCRIPT_PROFILE.tpl',
+			'themes/default/templates/OCF_USER_MEMBER.tpl',
+			'themes/default/templates/OCF_VIEW_GROUP_SCREEN.tpl',
+			'themes/default/templates/OCF_VIEW_GROUP_MEMBER.tpl',
+			'themes/default/templates/OCF_VIEW_GROUP_MEMBER_PROSPECTIVE.tpl',
+			'themes/default/templates/OCF_VIEW_GROUP_MEMBER_SECONDARY.tpl',
 			'validateip.php',
 			'themes/default/images/pagepics/usergroups.png',
 			'themes/default/images/ocf_emoticons/birthday.png',
@@ -290,9 +290,9 @@ class Hook_addon_registry_core_ocf
 			'pages/modules/join.php',
 			'sources/ocf_join.php',
 			'pages/modules/lost_password.php',
-			'OCF_AUTO_TIME_ZONE_ENTRY.tpl',
-			'OCF_DELURK_CONFIRM.tpl',
-			'OCF_JOIN_STEP2_SCREEN.tpl',
+			'themes/default/templates/OCF_AUTO_TIME_ZONE_ENTRY.tpl',
+			'themes/default/templates/OCF_DELURK_CONFIRM.tpl',
+			'themes/default/templates/OCF_JOIN_STEP2_SCREEN.tpl',
 			'lang/EN/ocf_lurkers.ini',
 			'sources/ocf_profiles.php',
 			'sources/hooks/systems/profiles_tabs/index.html',
@@ -311,10 +311,10 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/preview/ocf_emoticon.php',
 			'sources/hooks/systems/cron/ocf_confirm_reminder.php',
 			'themes/default/images/EN/page/invite_member.png',
-			'OCF_TOPIC_POST_AVATAR.tpl',
-			'OCF_GROUP_DIRECTORY_SCREEN.tpl',
-			'ocf.css',
-			'ocf_editor.css',
+			'themes/default/templates/OCF_TOPIC_POST_AVATAR.tpl',
+			'themes/default/templates/OCF_GROUP_DIRECTORY_SCREEN.tpl',
+			'themes/default/css/ocf.css',
+			'themes/default/css/ocf_editor.css',
 			'data/username_check.php',
 			'sources/hooks/systems/ocf_auth/aef.php',
 			'sources/hooks/systems/ocf_auth/converge.php',
@@ -322,9 +322,9 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/ocf_auth/smf.php',
 			'sources/hooks/systems/ocf_auth/vb3.php',
 			'sources/hooks/systems/ocf_auth/index.html',
-			'POSTING_FIELD.tpl',
-			'OCF_MEMBER_BOX.tpl',
-			'OCF_RANK_IMAGE.tpl',
+			'themes/default/templates/POSTING_FIELD.tpl',
+			'themes/default/templates/OCF_MEMBER_BOX.tpl',
+			'themes/default/templates/OCF_RANK_IMAGE.tpl',
 			'themes/default/images/menu_items/community_navigation/forums.png',
 			'themes/default/images/menu_items/community_navigation/groups.png',
 			'themes/default/images/menu_items/community_navigation/index.html',
@@ -406,7 +406,7 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__administrative__ocf_delurk_confirm()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_DELURK_CONFIRM', array(
+			lorem_globalise(do_lorem_template('OCF_DELURK_CONFIRM',array(
 				'TITLE'=>lorem_title(),
 				'LURKERS'=>array(
 					array(
@@ -440,7 +440,7 @@ class Hook_addon_registry_core_ocf
 			$group_select->attach(form_input_list_entry(strval($key), false, $value));
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_JOIN_STEP1_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_JOIN_STEP1_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'RULES'=>lorem_chunk_html(),
 				'URL'=>placeholder_url(),
@@ -464,14 +464,14 @@ class Hook_addon_registry_core_ocf
 		$fields=new ocp_tempcode();
 
 		$name=lorem_word() . placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_LINE',array(
 			'MAXLENGTH'=>'3',
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
 			'NAME'=>$name,
 			'DEFAULT'=>''
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
@@ -483,13 +483,13 @@ class Hook_addon_registry_core_ocf
 		)));
 
 		$name=lorem_word() . placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
 			'NAME'=>$name,
 			'VALUE'=>''
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
@@ -501,13 +501,13 @@ class Hook_addon_registry_core_ocf
 		)));
 
 		$name=lorem_word() . placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
 			'NAME'=>$name,
 			'VALUE'=>''
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
@@ -519,13 +519,13 @@ class Hook_addon_registry_core_ocf
 		)));
 
 		$name=lorem_word() . placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_EMAIL', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_EMAIL',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
 			'NAME'=>$name,
 			'DEFAULT'=>''
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
@@ -537,7 +537,7 @@ class Hook_addon_registry_core_ocf
 		)));
 
 		$name=lorem_word() . placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
 			'UNLIMITED'=>false,
 			'NULL_OK'=>'',
 			'DISABLED'=>'',
@@ -549,7 +549,7 @@ class Hook_addon_registry_core_ocf
 			'NULL'=>'',
 			'TIME'=>''
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>true,
 			'NAME'=>$name,
@@ -561,12 +561,12 @@ class Hook_addon_registry_core_ocf
 		)));
 
 		$name=lorem_word() . placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
 			'CHECKED'=>'true',
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
@@ -577,7 +577,7 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>''
 		)));
 
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER',array(
 			'TITLE'=>lorem_phrase(),
 			'THEME_ALSO_INCLUDE_PAGES'=>false
 		)));
@@ -586,7 +586,7 @@ class Hook_addon_registry_core_ocf
 		$timezone_list=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$timezone_list->attach(do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY', array(
+			$timezone_list->attach(do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY',array(
 				'HOUR'=>$value,
 				'DW'=>placeholder_date_raw(),
 				'NAME'=>$name,
@@ -595,14 +595,14 @@ class Hook_addon_registry_core_ocf
 				'TEXT'=>lorem_phrase()
 			)));
 		}
-		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
 			'NAME'=>$name,
 			'CONTENT'=>$timezone_list,
 			'INLINE_LIST'=>false
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
@@ -614,12 +614,12 @@ class Hook_addon_registry_core_ocf
 		)));
 
 		$name=lorem_word() . placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
 			'CHECKED'=>'true',
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
@@ -630,7 +630,7 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>''
 		)));
 
-		$form=do_lorem_template('FORM', array(
+		$form=do_lorem_template('FORM',array(
 			'TEXT'=>'',
 			'HIDDEN'=>'',
 			'FIELDS'=>$fields,
@@ -640,7 +640,7 @@ class Hook_addon_registry_core_ocf
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_JOIN_STEP2_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_JOIN_STEP2_SCREEN',array(
 				'JAVASCRIPT'=>'',
 				'TITLE'=>lorem_title(),
 				'FORM'=>$form
@@ -658,7 +658,7 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_auto_time_zone_entry()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY', array(
+			lorem_globalise(do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY',array(
 				'HOUR'=>placeholder_number(),
 				'DW'=>date('w', time()),
 				'NAME'=>lorem_word(),
@@ -679,7 +679,7 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_user_member()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_USER_MEMBER', array(
+			lorem_globalise(do_lorem_template('OCF_USER_MEMBER',array(
 				'FIRST'=>true,
 				'COLOUR'=>'',
 				'PROFILE_URL'=>placeholder_url(),
@@ -707,12 +707,12 @@ class Hook_addon_registry_core_ocf
 		{
 			if (($i % $cols==0) && ($i != 0))
 			{
-				$content->attach(do_lorem_template('OCF_EMOTICON_ROW', array(
+				$content->attach(do_lorem_template('OCF_EMOTICON_ROW',array(
 					'CELLS'=>$current_row
 				)));
 				$current_row=new ocp_tempcode();
 			}
-			$current_row->attach(do_lorem_template('OCF_EMOTICON_CELL', array(
+			$current_row->attach(do_lorem_template('OCF_EMOTICON_CELL',array(
 				'FIELD_NAME'=>lorem_word(),
 				'COLS'=>strval($cols),
 				'CODE_ESC'=>'',
@@ -721,11 +721,11 @@ class Hook_addon_registry_core_ocf
 			)));
 		}
 		if (!$current_row->is_empty())
-			$content->attach(do_lorem_template('OCF_EMOTICON_ROW', array(
+			$content->attach(do_lorem_template('OCF_EMOTICON_ROW',array(
 				'CELLS'=>$current_row
 			)));
 
-		$content=do_lorem_template('OCF_EMOTICON_TABLE', array(
+		$content=do_lorem_template('OCF_EMOTICON_TABLE',array(
 			'ROWS'=>$content
 		));
 
@@ -744,7 +744,7 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_member_directory_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN',array(
 				'USERGROUPS'=>lorem_phrase(),
 				'HIDDEN'=>'',
 				'MAX'=>'30',
@@ -795,13 +795,13 @@ class Hook_addon_registry_core_ocf
 		$links=new ocp_tempcode();
 		foreach ($sections as $section_code=>$section_title)
 		{
-			$links->attach(do_lorem_template('OCF_MEMBER_ACTION', array(
+			$links->attach(do_lorem_template('OCF_MEMBER_ACTION',array(
 				'ID'=>strval($i),
 				'URL'=>placeholder_url(),
 				'LANG'=>lorem_word(),
 				'REL'=>''
 			)));
-			$actions[$section_code]=do_lorem_template('OCF_MEMBER_ACTION', array(
+			$actions[$section_code]=do_lorem_template('OCF_MEMBER_ACTION',array(
 				'ID'=>strval($i),
 				'URL'=>placeholder_url(),
 				'LANG'=>lorem_word(),
@@ -815,7 +815,7 @@ class Hook_addon_registry_core_ocf
 		require_lang('menus');
 
 		$tabs=array();
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_ABOUT', array(
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_ABOUT',array(
 			'RIGHT_MARGIN'=>lorem_phrase(),
 			'AVATAR_WIDTH'=>placeholder_id(),
 			'PHOTO_WIDTH'=>placeholder_id(),
@@ -873,13 +873,13 @@ class Hook_addon_registry_core_ocf
 		$tabs2=array();
 		$fields=new ocp_tempcode();
 		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_INTEGER', array(
+		$input=do_lorem_template('FORM_SCREEN_INPUT_INTEGER',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
 			'NAME'=>$name,
 			'DEFAULT'=>''
 		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
@@ -896,7 +896,7 @@ class Hook_addon_registry_core_ocf
 			'TAB_FIRST'=>true,
 			'TAB_LAST'=>true
 		);
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_EDIT', array(
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_EDIT',array(
 			'URL'=>placeholder_url(),
 			'SUBMIT_NAME'=>lorem_phrase(),
 			'AUTOCOMPLETE'=>false,
@@ -913,7 +913,7 @@ class Hook_addon_registry_core_ocf
 		);
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_MEMBER_PROFILE_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_MEMBER_PROFILE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MEMBER_ID'=>placeholder_id(),
 				'TABS'=>$tabs
@@ -933,7 +933,7 @@ class Hook_addon_registry_core_ocf
 		$rows=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$rows->attach(do_lorem_template('OCF_MEMBER_ONLINE_ROW', array(
+			$rows->attach(do_lorem_template('OCF_MEMBER_ONLINE_ROW',array(
 				'IP'=>placeholder_ip(),
 				'AT_URL'=>placeholder_url(),
 				'LOCATION'=>lorem_word(),
@@ -943,7 +943,7 @@ class Hook_addon_registry_core_ocf
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_MEMBERS_ONLINE_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_MEMBERS_ONLINE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'ROWS'=>$rows
 			)), NULL, '', true)
@@ -960,7 +960,7 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_group_directory_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_GROUP_DIRECTORY_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_GROUP_DIRECTORY_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'STAFF'=>lorem_phrase(),
 				'OTHERS'=>lorem_phrase(),
@@ -986,16 +986,16 @@ class Hook_addon_registry_core_ocf
 		$_prospective_members=new ocp_tempcode();
 		foreach ($_primary_members as $i=>$primary_member)
 		{
-			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER', array(
+			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER',array(
 				'NAME'=>$primary_member,
 				'URL'=>placeholder_url()
 			));
 
 			//results_entry starts
-			$cells=do_lorem_template('RESULTS_TABLE_FIELD', array(
+			$cells=do_lorem_template('RESULTS_TABLE_FIELD',array(
 				'VALUE'=>$temp
 			), NULL, false);
-			$entries=do_lorem_template('RESULTS_TABLE_ENTRY', array(
+			$entries=do_lorem_template('RESULTS_TABLE_ENTRY',array(
 				'VALUES'=>$cells
 			), NULL, false);
 			//results_entry ends
@@ -1003,12 +1003,12 @@ class Hook_addon_registry_core_ocf
 			$primary_members->attach($entries);
 		}
 
-		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
 			'VALUE'=>lorem_word()
 		));
 
 		//results_table
-		$primary_members=do_lorem_template('RESULTS_TABLE', array(
+		$primary_members=do_lorem_template('RESULTS_TABLE',array(
 			'WIDTHS'=>array(),
 			'TEXT_ID'=>lorem_phrase(),
 			'FIELDS_TITLE'=>$fields_title,
@@ -1021,26 +1021,26 @@ class Hook_addon_registry_core_ocf
 		$temp=new ocp_tempcode();
 		foreach (placeholder_array() as $i=>$v)
 		{
-			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_SECONDARY', array(
+			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_SECONDARY',array(
 				'URL'=>placeholder_url(),
 				'REMOVE_URL'=>placeholder_url(),
 				'NAME'=>$v
 			));
-			$cells=do_lorem_template('RESULTS_TABLE_FIELD', array(
+			$cells=do_lorem_template('RESULTS_TABLE_FIELD',array(
 				'VALUE'=>$temp
 			), NULL, false);
-			$entries=do_lorem_template('RESULTS_TABLE_ENTRY', array(
+			$entries=do_lorem_template('RESULTS_TABLE_ENTRY',array(
 				'VALUES'=>$cells
 			), NULL, false);
 
 			$_secondary_members->attach($entries);
 		}
-		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
 			'VALUE'=>lorem_word()
 		));
 
 		//results_table
-		$secondary_members=do_lorem_template('RESULTS_TABLE', array(
+		$secondary_members=do_lorem_template('RESULTS_TABLE',array(
 			'WIDTHS'=>array(),
 			'TEXT_ID'=>lorem_phrase(),
 			'FIELDS_TITLE'=>$fields_title,
@@ -1052,27 +1052,27 @@ class Hook_addon_registry_core_ocf
 
 		foreach (placeholder_array() as $i=>$v)
 		{
-			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE', array(
+			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE',array(
 				'ACCEPT_URL'=>placeholder_url(),
 				'DECLINE_URL'=>placeholder_url(),
 				'NAME'=>lorem_word(),
 				'URL'=>placeholder_url()
 			));
-			$cells=do_lorem_template('RESULTS_TABLE_FIELD', array(
+			$cells=do_lorem_template('RESULTS_TABLE_FIELD',array(
 				'VALUE'=>$temp
 			), NULL, false);
-			$entries=do_lorem_template('RESULTS_TABLE_ENTRY', array(
+			$entries=do_lorem_template('RESULTS_TABLE_ENTRY',array(
 				'VALUES'=>$cells
 			), NULL, false);
 
 			$_prospective_members->attach($entries);
 		}
-		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
 			'VALUE'=>lorem_word()
 		));
 
 		//results_table
-		$prospective_members=do_lorem_template('RESULTS_TABLE', array(
+		$prospective_members=do_lorem_template('RESULTS_TABLE',array(
 			'WIDTHS'=>array(),
 			'TEXT_ID'=>lorem_phrase(),
 			'FIELDS_TITLE'=>$fields_title,
@@ -1084,7 +1084,7 @@ class Hook_addon_registry_core_ocf
 
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_VIEW_GROUP_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_VIEW_GROUP_SCREEN',array(
 				'GROUP_NAME'=>lorem_phrase(),
 				'ID'=>placeholder_id(),
 				'FORUM'=>'',

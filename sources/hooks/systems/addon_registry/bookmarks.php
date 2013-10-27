@@ -88,14 +88,14 @@ class Hook_addon_registry_bookmarks
 			'data/bookmarks.php',
 			'sources/hooks/systems/addon_registry/bookmarks.php',
 			'sources/hooks/modules/admin_import_types/bookmarks.php',
-			'BOOKMARKS_SCREEN.tpl',
-			'JAVASCRIPT_BOOKMARKS.tpl',
+			'themes/default/templates/BOOKMARKS_SCREEN.tpl',
+			'themes/default/templates/JAVASCRIPT_BOOKMARKS.tpl',
 			'themes/default/images/footer/bookmarksmenu.png',
 			'themes/default/images/footer/bookmarksmenu_off.png',
 			'lang/EN/bookmarks.ini',
 			'site/pages/modules/bookmarks.php',
 			'sources/hooks/systems/snippets/bookmarks_menu.php',
-			'bookmarks.css',
+			'themes/default/css/bookmarks.css',
 		);
 	}
 
@@ -133,7 +133,7 @@ class Hook_addon_registry_bookmarks
 		);
 
 		return array(
-			lorem_globalise(do_lorem_template('BOOKMARKS_SCREEN', array(
+			lorem_globalise(do_lorem_template('BOOKMARKS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FORM_URL'=>placeholder_url(),
 				'FORM'=>placeholder_form(),

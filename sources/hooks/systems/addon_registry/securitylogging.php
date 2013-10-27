@@ -90,13 +90,13 @@ class Hook_addon_registry_securitylogging
 		return array(
 			'sources/hooks/systems/realtime_rain/security.php',
 			'sources/hooks/systems/addon_registry/securitylogging.php',
-			'SECURITY_SCREEN.tpl',
-			'SECURITY_ALERT_SCREEN.tpl',
+			'themes/default/templates/SECURITY_SCREEN.tpl',
+			'themes/default/templates/SECURITY_ALERT_SCREEN.tpl',
 			'adminzone/pages/modules/admin_security.php',
 			'themes/default/images/bigicons/securitylog.png',
 			'themes/default/images/pagepics/securitylog.png',
 			'themes/default/images/bigicons/security.png',
-			'HACK_ATTEMPT_MAIL.tpl',
+			'themes/default/templates/HACK_ATTEMPT_MAIL.tpl',
 			'adminzone/pages/modules/admin_ipban.php',
 			'lang/EN/lookup.ini',
 			'lang/EN/security.ini',
@@ -137,7 +137,7 @@ class Hook_addon_registry_securitylogging
 		require_lang('submitban');
 
 		return array(
-			lorem_globalise(do_lorem_template('IPBAN_SCREEN', array(
+			lorem_globalise(do_lorem_template('IPBAN_SCREEN',array(
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
 				'TITLE'=>lorem_title(),
@@ -158,7 +158,7 @@ class Hook_addon_registry_securitylogging
 	function tpl_preview__administrative__hack_attempt_mail()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HACK_ATTEMPT_MAIL', array(
+			lorem_globalise(do_lorem_template('HACK_ATTEMPT_MAIL',array(
 				'STACK_TRACE'=>lorem_phrase(),
 				'USER_AGENT'=>lorem_phrase(),
 				'REFERER'=>lorem_phrase(),
@@ -186,7 +186,7 @@ class Hook_addon_registry_securitylogging
 	{
 		require_lang('security');
 		return array(
-			lorem_globalise(do_lorem_template('SECURITY_SCREEN', array(
+			lorem_globalise(do_lorem_template('SECURITY_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FAILED_LOGINS'=>placeholder_table(),
 				'ALERTS'=>lorem_phrase(),
@@ -206,7 +206,7 @@ class Hook_addon_registry_securitylogging
 	{
 		require_lang('security');
 		return array(
-			lorem_globalise(do_lorem_template('SECURITY_ALERT_SCREEN', array(
+			lorem_globalise(do_lorem_template('SECURITY_ALERT_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'USER_AGENT'=>lorem_phrase(),
 				'REFERER'=>lorem_phrase(),
@@ -231,7 +231,7 @@ class Hook_addon_registry_securitylogging
 	{
 		$inner_ip_list=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
-			$inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY', array(
+			$inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY',array(
 				'LOOKUP_URL'=>placeholder_url(),
 				'DATE'=>placeholder_time(),
 				'_DATE'=>placeholder_time(),
@@ -240,7 +240,7 @@ class Hook_addon_registry_securitylogging
 				'UNIQID'=>placeholder_random()
 			)));
 
-		$group=do_lorem_template('LOOKUP_IP_LIST_GROUP', array(
+		$group=do_lorem_template('LOOKUP_IP_LIST_GROUP',array(
 			'BANNED'=>do_lang_tempcode('YES'),
 			'MASK'=>placeholder_ip(),
 			'GROUP'=>$inner_ip_list,
@@ -248,7 +248,7 @@ class Hook_addon_registry_securitylogging
 			'UNIQID'=>placeholder_random()
 		));
 		return array(
-			lorem_globalise(do_lorem_template('LOOKUP_SCREEN', array(
+			lorem_globalise(do_lorem_template('LOOKUP_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'ALERTS'=>lorem_phrase(),
 				'STATS'=>lorem_phrase(),

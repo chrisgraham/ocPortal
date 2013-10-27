@@ -91,8 +91,8 @@ class Hook_addon_registry_chat
 			'sources/hooks/systems/snippets/im_friends_rejig.php',
 			'site/pages/comcode/EN/popup_blockers.txt',
 			'sources/blocks/side_friends.php',
-			'BLOCK_SIDE_FRIENDS.tpl',
-			'CHAT_FRIENDS.tpl',
+			'themes/default/templates/BLOCK_SIDE_FRIENDS.tpl',
+			'themes/default/templates/CHAT_FRIENDS.tpl',
 			'themes/default/images/menu_items/community_navigation/chat.png',
 			'sources/hooks/systems/startup/im.php',
 			'sources/hooks/systems/notifications/im_invited.php',
@@ -124,12 +124,12 @@ class Hook_addon_registry_chat
 			'data/sounds/you_connect.mp3',
 			'sources/hooks/modules/chat_bots/default.php',
 			'sources/hooks/modules/chat_bots/index.html',
-			'CHAT_SET_EFFECTS_SCREEN.tpl',
-			'CHAT_SET_EFFECTS_SETTING_BLOCK.tpl',
-			'CHAT_SITEWIDE_IM.tpl',
-			'CHAT_SITEWIDE_IM_POPUP.tpl',
-			'CHAT_SOUND.tpl',
-			'CHAT_MODERATE_SCREEN.tpl',
+			'themes/default/templates/CHAT_SET_EFFECTS_SCREEN.tpl',
+			'themes/default/templates/CHAT_SET_EFFECTS_SETTING_BLOCK.tpl',
+			'themes/default/templates/CHAT_SITEWIDE_IM.tpl',
+			'themes/default/templates/CHAT_SITEWIDE_IM_POPUP.tpl',
+			'themes/default/templates/CHAT_SOUND.tpl',
+			'themes/default/templates/CHAT_MODERATE_SCREEN.tpl',
 			'sources/hooks/modules/admin_import_types/chat.php',
 			'sources/hooks/modules/admin_setupwizard/chat.php',
 			'sources/hooks/modules/admin_themewizard/chat.php',
@@ -137,25 +137,25 @@ class Hook_addon_registry_chat
 			'sources/hooks/systems/occle_fs/chat.php',
 			'sources/hooks/systems/addon_registry/chat.php',
 			'sources/hooks/systems/ocf_cpf_filter/points_chat.php',
-			'BLOCK_SIDE_SHOUTBOX_MESSAGE.tpl',
-			'BLOCK_SIDE_SHOUTBOX.tpl',
-			'CHAT_ROOM_SCREEN.tpl',
-			'CHATCODE_EDITOR_BUTTON.tpl',
-			'CHATCODE_EDITOR_MICRO_BUTTON.tpl',
-			'CHAT_INVITE.tpl',
-			'CHAT_MESSAGE.tpl',
-			'CHAT_PRIVATE.tpl',
-			'CHAT_STAFF_ACTIONS.tpl',
-			'JAVASCRIPT_CHAT.tpl',
-			'BLOCK_MAIN_FRIENDS_LIST.tpl',
+			'themes/default/templates/BLOCK_SIDE_SHOUTBOX_MESSAGE.tpl',
+			'themes/default/templates/BLOCK_SIDE_SHOUTBOX.tpl',
+			'themes/default/templates/CHAT_ROOM_SCREEN.tpl',
+			'themes/default/templates/CHATCODE_EDITOR_BUTTON.tpl',
+			'themes/default/templates/CHATCODE_EDITOR_MICRO_BUTTON.tpl',
+			'themes/default/templates/CHAT_INVITE.tpl',
+			'themes/default/templates/CHAT_MESSAGE.tpl',
+			'themes/default/templates/CHAT_PRIVATE.tpl',
+			'themes/default/templates/CHAT_STAFF_ACTIONS.tpl',
+			'themes/default/templates/JAVASCRIPT_CHAT.tpl',
+			'themes/default/templates/BLOCK_MAIN_FRIENDS_LIST.tpl',
 			'sources/blocks/main_friends_list.php',
-			'CHAT_LOBBY_SCREEN.tpl',
-			'CHAT_LOBBY_IM_AREA.tpl',
-			'CHAT_LOBBY_IM_PARTICIPANT.tpl',
-			'CHAT_ROOM_LINK.tpl',
+			'themes/default/templates/CHAT_LOBBY_SCREEN.tpl',
+			'themes/default/templates/CHAT_LOBBY_IM_AREA.tpl',
+			'themes/default/templates/CHAT_LOBBY_IM_PARTICIPANT.tpl',
+			'themes/default/templates/CHAT_ROOM_LINK.tpl',
 			'sources/hooks/modules/chat_bots/.htaccess',
 			'adminzone/pages/modules/admin_chat.php',
-			'chat.css',
+			'themes/default/css/chat.css',
 			'themes/default/images/bigicons/chatrooms.png',
 			'themes/default/images/EN/chatcodeeditor/index.html',
 			'themes/default/images/EN/chatcodeeditor/invite.png',
@@ -182,7 +182,7 @@ class Hook_addon_registry_chat
 			'site/dllogs.php',
 			'site/messages.php',
 			'sources/blocks/side_shoutbox.php',
-			'OCF_MEMBER_PROFILE_FRIENDS.tpl',
+			'themes/default/templates/OCF_MEMBER_PROFILE_FRIENDS.tpl',
 			'sources/hooks/systems/block_ui_renderers/chat.php',
 			'sources/hooks/systems/config/chat_message_check_interval.php',
 			'sources/hooks/systems/config/chat_transitory_alert_time.php',
@@ -249,7 +249,7 @@ class Hook_addon_registry_chat
 		$friends_arr=array();
 		$friends_arr[]=$friend_map;
 
-		$friends=do_lorem_template('BLOCK_MAIN_FRIENDS_LIST', array(
+		$friends=do_lorem_template('BLOCK_MAIN_FRIENDS_LIST',array(
 			'FRIENDS'=>$friends_arr,
 			'PAGINATION'=>placeholder_pagination(),
 			'BLOCK_PARAMS'=>'',
@@ -260,7 +260,7 @@ class Hook_addon_registry_chat
 			'MAX_PARAM'=>'x_max',
 		));
 
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS', array(
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS',array(
 			'MEMBER_ID'=>placeholder_id(),
 			'FRIENDS_MUTUAL'=>array(),
 			'FRIENDS_NONMUTUAL'=>array(),
@@ -291,7 +291,7 @@ class Hook_addon_registry_chat
 	function tpl_preview__administrative__chat_moderate_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_MODERATE_SCREEN', array(
+			lorem_globalise(do_lorem_template('CHAT_MODERATE_SCREEN',array(
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
 				'INTRODUCTION'=>lorem_phrase(),
@@ -311,7 +311,7 @@ class Hook_addon_registry_chat
 	function tpl_preview__chat_message()
 	{
 		require_lang('submitban');
-		$chat_actions=do_lorem_template('CHAT_STAFF_ACTIONS', array(
+		$chat_actions=do_lorem_template('CHAT_STAFF_ACTIONS',array(
 			'CHAT_BAN_URL'=>placeholder_url(),
 			'CHAT_UNBAN_URL'=>placeholder_url(),
 			'EDIT_URL'=>placeholder_url(),
@@ -319,7 +319,7 @@ class Hook_addon_registry_chat
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_MESSAGE', array(
+			lorem_globalise(do_lorem_template('CHAT_MESSAGE',array(
 				'SYSTEM_MESSAGE'=>lorem_phrase(),
 				'STAFF'=>"1",
 				'OLD_MESSAGES'=>lorem_phrase(),
@@ -345,7 +345,7 @@ class Hook_addon_registry_chat
 	function tpl_preview__chat_private()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_PRIVATE', array(
+			lorem_globalise(do_lorem_template('CHAT_PRIVATE',array(
 				'SYSTEM_MESSAGE'=>lorem_phrase(),
 				'MESSAGE'=>lorem_phrase_html(),
 				'MEMBER'=>lorem_word()
@@ -363,7 +363,7 @@ class Hook_addon_registry_chat
 	function tpl_preview__chat_invite()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_INVITE', array(
+			lorem_globalise(do_lorem_template('CHAT_INVITE',array(
 				'USERNAME'=>lorem_word(),
 				'ROOM'=>lorem_phrase(),
 				'LINK'=>placeholder_link(),
@@ -383,7 +383,7 @@ class Hook_addon_registry_chat
 	 */
 	function tpl_preview__block_side_shoutbox()
 	{
-		$tpl=do_lorem_template('BLOCK_SIDE_SHOUTBOX_MESSAGE', array(
+		$tpl=do_lorem_template('BLOCK_SIDE_SHOUTBOX_MESSAGE',array(
 			'MEMBER'=>lorem_word(),
 			'MESSAGE'=>lorem_phrase(),
 			'TIME_RAW'=>placeholder_time(),
@@ -391,7 +391,7 @@ class Hook_addon_registry_chat
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_SHOUTBOX', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_SHOUTBOX',array(
 				'ROOM_ID'=>placeholder_id(),
 				'NUM_MESSAGES'=>placeholder_number(),
 				'LAST_MESSAGE_ID'=>placeholder_id(),
@@ -412,7 +412,7 @@ class Hook_addon_registry_chat
 	function tpl_preview__chat_sitewide_im()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_SITEWIDE_IM', array(
+			lorem_globalise(do_lorem_template('CHAT_SITEWIDE_IM',array(
 				'IM_AREA_TEMPLATE'=>lorem_phrase(),
 				'IM_PARTICIPANT_TEMPLATE'=>lorem_phrase(),
 				'CHAT_SOUND'=>lorem_phrase()
@@ -443,7 +443,7 @@ class Hook_addon_registry_chat
 			);
 		}
 
-		$friends_tpl=do_lorem_template('CHAT_FRIENDS', array(
+		$friends_tpl=do_lorem_template('CHAT_FRIENDS',array(
 			'FRIENDS_ONLINE'=>$friends,
 			'FRIENDS_OFFLINE'=>$friends,
 			'FRIENDS'=>$friends,
@@ -453,7 +453,7 @@ class Hook_addon_registry_chat
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_FRIENDS', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_FRIENDS',array(
 				'FRIENDS'=>$friends_tpl,
 			)), NULL, '', true)
 		);
@@ -468,18 +468,18 @@ class Hook_addon_registry_chat
 	 */
 	function tpl_preview__chat_lobby_screen()
 	{
-		$chat_sound=do_lorem_template('CHAT_SOUND', array(
+		$chat_sound=do_lorem_template('CHAT_SOUND',array(
 			'SOUND_EFFECTS'=>placeholder_array(),
 			'KEY'=>lorem_word(),
 			'VALUE'=>lorem_word_2()
 		));
 
-		$im_area_template=do_lorem_template('CHAT_LOBBY_IM_AREA', array(
+		$im_area_template=do_lorem_template('CHAT_LOBBY_IM_AREA',array(
 			'MESSAGES_PHP'=>find_script('messages'),
 			'ROOM_ID'=>'__room_id__'
 		));
 
-		$im_participant_template=do_lorem_template('CHAT_LOBBY_IM_PARTICIPANT', array(
+		$im_participant_template=do_lorem_template('CHAT_LOBBY_IM_PARTICIPANT',array(
 			'PROFILE_URL'=>placeholder_url(),
 			'ID'=>'__id__',
 			'ROOM_ID'=>'__room_id__',
@@ -502,7 +502,7 @@ class Hook_addon_registry_chat
 			$usernames=new ocp_tempcode();
 
 			foreach ($users as $user)
-				$usernames->attach(do_lorem_template('OCF_USER_MEMBER', array(
+				$usernames->attach(do_lorem_template('OCF_USER_MEMBER',array(
 					'FIRST'=>$usernames->is_empty(),
 					'PROFILE_URL'=>placeholder_url(),
 					'USERNAME'=>$user,
@@ -511,7 +511,7 @@ class Hook_addon_registry_chat
 					'AT'=>lorem_phrase()
 				)));
 
-			$room_link=do_lorem_template('CHAT_ROOM_LINK', array(
+			$room_link=do_lorem_template('CHAT_ROOM_LINK',array(
 				'PRIVATE'=>true,
 				'ID'=>strval($key),
 				'NAME'=>$room,
@@ -534,7 +534,7 @@ class Hook_addon_registry_chat
 			);
 		}
 
-		$friends_tpl=do_lorem_template('CHAT_FRIENDS', array(
+		$friends_tpl=do_lorem_template('CHAT_FRIENDS',array(
 			'FRIENDS_ONLINE'=>$friends,
 			'FRIENDS_OFFLINE'=>$friends,
 			'FRIENDS'=>$friends,
@@ -545,7 +545,7 @@ class Hook_addon_registry_chat
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_LOBBY_SCREEN', array(
+			lorem_globalise(do_lorem_template('CHAT_LOBBY_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MESSAGE'=>lorem_phrase(),
 				'CHAT_SOUND'=>$chat_sound,
@@ -581,7 +581,7 @@ class Hook_addon_registry_chat
 		require_javascript('javascript_chat');
 		require_javascript('javascript_yahoo_2');
 
-		$chat_sound=do_lorem_template('CHAT_SOUND', array(
+		$chat_sound=do_lorem_template('CHAT_SOUND',array(
 			'SOUND_EFFECTS'=>placeholder_array(),
 			'KEY'=>lorem_word(),
 			'VALUE'=>lorem_word_2()
@@ -595,7 +595,7 @@ class Hook_addon_registry_chat
 
 		$buttons=new ocp_tempcode();
 		foreach ($_buttons as $button)
-			$buttons->attach(do_lorem_template('CHATCODE_EDITOR_BUTTON', array(
+			$buttons->attach(do_lorem_template('CHATCODE_EDITOR_BUTTON',array(
 				'TITLE'=>do_lang_tempcode('INPUT_CHATCODE_' . $button),
 				'B'=>$button
 			)));
@@ -606,13 +606,13 @@ class Hook_addon_registry_chat
 			'i'
 		);
 
-		$micro_buttons->attach(do_lorem_template('CHATCODE_EDITOR_MICRO_BUTTON', array(
+		$micro_buttons->attach(do_lorem_template('CHATCODE_EDITOR_MICRO_BUTTON',array(
 			'TITLE'=>lorem_phrase(),
 			'B'=>'new_room'
 		)));
 
 		foreach ($_micro_buttons as $button)
-			$micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON', array(
+			$micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON',array(
 				'FIELD_NAME'=>'post',
 				'TITLE'=>do_lang_tempcode('INPUT_COMCODE_' . $button),
 				'B'=>$button
@@ -625,7 +625,7 @@ class Hook_addon_registry_chat
 
 		$usernames=new ocp_tempcode();
 		foreach ($users as $user)
-			$usernames->attach(do_lorem_template('OCF_USER_MEMBER', array(
+			$usernames->attach(do_lorem_template('OCF_USER_MEMBER',array(
 				'FIRST'=>$usernames->is_empty(),
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>$user,
@@ -635,7 +635,7 @@ class Hook_addon_registry_chat
 			)));
 
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_ROOM_SCREEN', array(
+			lorem_globalise(do_lorem_template('CHAT_ROOM_SCREEN',array(
 				'CHATTERS'=>$usernames,
 				'CHAT_SOUND'=>$chat_sound,
 				'ROOM_ID'=>placeholder_number(),
@@ -692,7 +692,7 @@ class Hook_addon_registry_chat
 					'EFFECT'=>lorem_word()
 				);
 			}
-			$block=do_lorem_template('CHAT_SET_EFFECTS_SETTING_BLOCK', array(
+			$block=do_lorem_template('CHAT_SET_EFFECTS_SETTING_BLOCK',array(
 				'HAS_SOME'=>false,
 				'EFFECTS'=>$effects,
 				'LIBRARY'=>placeholder_array()
@@ -701,7 +701,7 @@ class Hook_addon_registry_chat
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_SET_EFFECTS_SCREEN', array(
+			lorem_globalise(do_lorem_template('CHAT_SET_EFFECTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'SUBMIT_NAME'=>lorem_word(),
 				'HIDDEN'=>'',
@@ -720,12 +720,12 @@ class Hook_addon_registry_chat
 	 */
 	function tpl_preview__chat_sitewide_im_popup()
 	{
-		$im_area_template=do_lorem_template('CHAT_LOBBY_IM_AREA', array(
+		$im_area_template=do_lorem_template('CHAT_LOBBY_IM_AREA',array(
 			'MESSAGES_PHP'=>find_script('messages'),
 			'ROOM_ID'=>placeholder_id()
 		));
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_SITEWIDE_IM_POPUP', array(
+			lorem_globalise(do_lorem_template('CHAT_SITEWIDE_IM_POPUP',array(
 				'CONTENT'=>$im_area_template,
 				'CHAT_SOUND'=>'',
 			)), NULL, '', true)

@@ -87,121 +87,121 @@ class Hook_addon_registry_core_rich_media
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/core_rich_media.php',
-			'JAVASCRIPT_DYN_COMCODE.tpl',
-			'EMOTICON_CLICK_CODE.tpl',
-			'EMOTICON_IMG_CODE_DIR.tpl',
-			'EMOTICON_IMG_CODE_THEMED.tpl',
-			'ATTACHMENT.tpl',
-			'ATTACHMENTS.tpl',
-			'ATTACHMENTS_BROWSER.tpl',
-			'ATTACHMENTS_BROWSER_ATTACHMENT.tpl',
-			'COMCODE_ABBR.tpl',
-			'COMCODE_ADDRESS.tpl',
-			'COMCODE_ALIGN.tpl',
-			'COMCODE_BOLD.tpl',
-			'COMCODE_CITE.tpl',
-			'COMCODE_CODE.tpl',
-			'COMCODE_CODE_SCROLL.tpl',
-			'COMCODE_CONCEPT.tpl',
-			'COMCODE_CONCEPTS.tpl',
-			'COMCODE_CONCEPTS_CONCEPT.tpl',
-			'COMCODE_CONTENTS.tpl',
-			'COMCODE_CONTENTS_LEVEL.tpl',
-			'COMCODE_CONTENTS_LINE.tpl',
-			'COMCODE_CONTENTS_LINE_FINAL.tpl',
-			'COMCODE_CRITICAL_PARSE_ERROR.tpl',
-			'COMCODE_DEL.tpl',
-			'COMCODE_DFN.tpl',
-			'COMCODE_EDITOR_BUTTON.tpl',
-			'COMCODE_EDITOR_MICRO_BUTTON.tpl',
-			'COMCODE_EDIT_SCREEN.tpl',
-			'COMCODE_EMAIL.tpl',
-			'COMCODE_FONT.tpl',
-			'COMCODE_TELETYPE.tpl',
-			'COMCODE_SAMP.tpl',
-			'COMCODE_Q.tpl',
-			'COMCODE_VAR.tpl',
-			'COMCODE_SHOCKER.tpl',
-			'COMCODE_SHOCKER_PART.tpl',
-			'COMCODE_HIDE.tpl',
-			'COMCODE_HIGHLIGHT.tpl',
-			'COMCODE_IMG.tpl',
-			'COMCODE_INDENT.tpl',
-			'COMCODE_INS.tpl',
-			'COMCODE_ITALICS.tpl',
-			'COMCODE_JUMPING.tpl',
-			'COMCODE_JUMPING_PART.tpl',
-			'COMCODE_MESSAGE.tpl',
-			'COMCODE_MINOR_TITLE.tpl',
-			'COMCODE_MISTAKE_ERROR.tpl',
-			'COMCODE_MISTAKE_LINE.tpl',
-			'COMCODE_MISTAKE_SCREEN.tpl',
-			'COMCODE_QUOTE.tpl',
-			'COMCODE_QUOTE_BY.tpl',
-			'COMCODE_RANDOM.tpl',
-			'COMCODE_RANDOM_PART.tpl',
-			'COMCODE_REFERENCE.tpl',
-			'COMCODE_SECTION_TITLE.tpl',
-			'COMCODE_STRIKE.tpl',
-			'COMCODE_SUB.tpl',
-			'COMCODE_SUP.tpl',
-			'COMCODE_THUMB.tpl',
-			'COMCODE_TICKER.tpl',
-			'COMCODE_UNDERLINE.tpl',
-			'COMCODE_URL.tpl',
-			'COMCODE_SURROUND.tpl',
-			'COMCODE_VERY_MINOR_TITLE.tpl',
-			'COMCODE_TEXTCODE_LINE.tpl',
-			'COMCODE_TEXTCODE_TAB.tpl',
-			'COMCODE_WIKI_LINK.tpl',
-			'COMCODE_CONCEPT_INLINE.tpl',
-			'COMCODE_CURRENCY.tpl',
-			'COMCODE_FAKE_TABLE_WRAP_START.tpl',
-			'COMCODE_FAKE_TABLE_WRAP_END.tpl',
-			'COMCODE_FAKE_TABLE_2_START.tpl',
-			'COMCODE_FAKE_TABLE_END.tpl',
-			'COMCODE_FAKE_TABLE_START.tpl',
-			'COMCODE_FAKE_TABLE_WIDE2_START.tpl',
-			'COMCODE_FAKE_TABLE_WIDE_START.tpl',
-			'COMCODE_IF_IN_GROUP.tpl',
-			'COMCODE_OVERLAY.tpl',
-			'COMCODE_CAROUSEL.tpl',
-			'COMCODE_SECTION.tpl',
-			'COMCODE_SECTION_CONTROLLER.tpl',
-			'COMCODE_TAB_CONTROLLER.tpl',
-			'COMCODE_TAB_HEAD.tpl',
-			'COMCODE_TAB_BODY.tpl',
-			'COMCODE_SNAPBACK.tpl',
-			'COMCODE_TOOLTIP.tpl',
-			'COMCODE_REAL_TABLE_CELL.tpl',
-			'COMCODE_REAL_TABLE_END.tpl',
-			'COMCODE_REAL_TABLE_ROW_END.tpl',
-			'COMCODE_REAL_TABLE_ROW_START.tpl',
-			'COMCODE_REAL_TABLE_START.tpl',
-			'COMCODE_REAL_TABLE_START_SUMMARY.tpl',
-			'COMCODE_PULSE.tpl',
-			'JAVASCRIPT_PULSE.tpl',
-			'COMCODE_BIG_TABS_CONTROLLER.tpl',
-			'COMCODE_BIG_TABS_TAB.tpl',
-			'MEDIA_AUDIO_WEBSAFE.tpl',
-			'MEDIA_FLASH.tpl',
-			'MEDIA_IMAGE_WEBSAFE.tpl',
-			'MEDIA_PDF.tpl',
-			'MEDIA_QUICKTIME.tpl',
-			'MEDIA_REALMEDIA.tpl',
-			'MEDIA_SVG.tpl',
-			'MEDIA_VIDEO_FACEBOOK.tpl',
-			'MEDIA_VIDEO_GENERAL.tpl',
-			'MEDIA_VIDEO_WEBSAFE.tpl',
-			'MEDIA_VIMEO.tpl',
-			'MEDIA_WEBPAGE_OEMBED_RICH.tpl',
-			'MEDIA_WEBPAGE_OEMBED_VIDEO.tpl',
-			'MEDIA_WEBPAGE_SEMANTIC.tpl',
-			'MEDIA_YOUTUBE.tpl',
-			'MEDIA_DOWNLOAD.tpl',
-			'MEDIA__DOWNLOAD_LINK.tpl',
-			'big_tabs.css',
-			'comcode_mistakes.css',
+			'themes/default/templates/JAVASCRIPT_DYN_COMCODE.tpl',
+			'themes/default/templates/EMOTICON_CLICK_CODE.tpl',
+			'themes/default/templates/EMOTICON_IMG_CODE_DIR.tpl',
+			'themes/default/templates/EMOTICON_IMG_CODE_THEMED.tpl',
+			'themes/default/templates/ATTACHMENT.tpl',
+			'themes/default/templates/ATTACHMENTS.tpl',
+			'themes/default/templates/ATTACHMENTS_BROWSER.tpl',
+			'themes/default/templates/ATTACHMENTS_BROWSER_ATTACHMENT.tpl',
+			'themes/default/templates/COMCODE_ABBR.tpl',
+			'themes/default/templates/COMCODE_ADDRESS.tpl',
+			'themes/default/templates/COMCODE_ALIGN.tpl',
+			'themes/default/templates/COMCODE_BOLD.tpl',
+			'themes/default/templates/COMCODE_CITE.tpl',
+			'themes/default/templates/COMCODE_CODE.tpl',
+			'themes/default/templates/COMCODE_CODE_SCROLL.tpl',
+			'themes/default/templates/COMCODE_CONCEPT.tpl',
+			'themes/default/templates/COMCODE_CONCEPTS.tpl',
+			'themes/default/templates/COMCODE_CONCEPTS_CONCEPT.tpl',
+			'themes/default/templates/COMCODE_CONTENTS.tpl',
+			'themes/default/templates/COMCODE_CONTENTS_LEVEL.tpl',
+			'themes/default/templates/COMCODE_CONTENTS_LINE.tpl',
+			'themes/default/templates/COMCODE_CONTENTS_LINE_FINAL.tpl',
+			'themes/default/templates/COMCODE_CRITICAL_PARSE_ERROR.tpl',
+			'themes/default/templates/COMCODE_DEL.tpl',
+			'themes/default/templates/COMCODE_DFN.tpl',
+			'themes/default/templates/COMCODE_EDITOR_BUTTON.tpl',
+			'themes/default/templates/COMCODE_EDITOR_MICRO_BUTTON.tpl',
+			'themes/default/templates/COMCODE_EDIT_SCREEN.tpl',
+			'themes/default/templates/COMCODE_EMAIL.tpl',
+			'themes/default/templates/COMCODE_FONT.tpl',
+			'themes/default/templates/COMCODE_TELETYPE.tpl',
+			'themes/default/templates/COMCODE_SAMP.tpl',
+			'themes/default/templates/COMCODE_Q.tpl',
+			'themes/default/templates/COMCODE_VAR.tpl',
+			'themes/default/templates/COMCODE_SHOCKER.tpl',
+			'themes/default/templates/COMCODE_SHOCKER_PART.tpl',
+			'themes/default/templates/COMCODE_HIDE.tpl',
+			'themes/default/templates/COMCODE_HIGHLIGHT.tpl',
+			'themes/default/templates/COMCODE_IMG.tpl',
+			'themes/default/templates/COMCODE_INDENT.tpl',
+			'themes/default/templates/COMCODE_INS.tpl',
+			'themes/default/templates/COMCODE_ITALICS.tpl',
+			'themes/default/templates/COMCODE_JUMPING.tpl',
+			'themes/default/templates/COMCODE_JUMPING_PART.tpl',
+			'themes/default/templates/COMCODE_MESSAGE.tpl',
+			'themes/default/templates/COMCODE_MINOR_TITLE.tpl',
+			'themes/default/templates/COMCODE_MISTAKE_ERROR.tpl',
+			'themes/default/templates/COMCODE_MISTAKE_LINE.tpl',
+			'themes/default/templates/COMCODE_MISTAKE_SCREEN.tpl',
+			'themes/default/templates/COMCODE_QUOTE.tpl',
+			'themes/default/templates/COMCODE_QUOTE_BY.tpl',
+			'themes/default/templates/COMCODE_RANDOM.tpl',
+			'themes/default/templates/COMCODE_RANDOM_PART.tpl',
+			'themes/default/templates/COMCODE_REFERENCE.tpl',
+			'themes/default/templates/COMCODE_SECTION_TITLE.tpl',
+			'themes/default/templates/COMCODE_STRIKE.tpl',
+			'themes/default/templates/COMCODE_SUB.tpl',
+			'themes/default/templates/COMCODE_SUP.tpl',
+			'themes/default/templates/COMCODE_THUMB.tpl',
+			'themes/default/templates/COMCODE_TICKER.tpl',
+			'themes/default/templates/COMCODE_UNDERLINE.tpl',
+			'themes/default/templates/COMCODE_URL.tpl',
+			'themes/default/templates/COMCODE_SURROUND.tpl',
+			'themes/default/templates/COMCODE_VERY_MINOR_TITLE.tpl',
+			'themes/default/templates/COMCODE_TEXTCODE_LINE.tpl',
+			'themes/default/templates/COMCODE_TEXTCODE_TAB.tpl',
+			'themes/default/templates/COMCODE_WIKI_LINK.tpl',
+			'themes/default/templates/COMCODE_CONCEPT_INLINE.tpl',
+			'themes/default/templates/COMCODE_CURRENCY.tpl',
+			'themes/default/templates/COMCODE_FAKE_TABLE_WRAP_START.tpl',
+			'themes/default/templates/COMCODE_FAKE_TABLE_WRAP_END.tpl',
+			'themes/default/templates/COMCODE_FAKE_TABLE_2_START.tpl',
+			'themes/default/templates/COMCODE_FAKE_TABLE_END.tpl',
+			'themes/default/templates/COMCODE_FAKE_TABLE_START.tpl',
+			'themes/default/templates/COMCODE_FAKE_TABLE_WIDE2_START.tpl',
+			'themes/default/templates/COMCODE_FAKE_TABLE_WIDE_START.tpl',
+			'themes/default/templates/COMCODE_IF_IN_GROUP.tpl',
+			'themes/default/templates/COMCODE_OVERLAY.tpl',
+			'themes/default/templates/COMCODE_CAROUSEL.tpl',
+			'themes/default/templates/COMCODE_SECTION.tpl',
+			'themes/default/templates/COMCODE_SECTION_CONTROLLER.tpl',
+			'themes/default/templates/COMCODE_TAB_CONTROLLER.tpl',
+			'themes/default/templates/COMCODE_TAB_HEAD.tpl',
+			'themes/default/templates/COMCODE_TAB_BODY.tpl',
+			'themes/default/templates/COMCODE_SNAPBACK.tpl',
+			'themes/default/templates/COMCODE_TOOLTIP.tpl',
+			'themes/default/templates/COMCODE_REAL_TABLE_CELL.tpl',
+			'themes/default/templates/COMCODE_REAL_TABLE_END.tpl',
+			'themes/default/templates/COMCODE_REAL_TABLE_ROW_END.tpl',
+			'themes/default/templates/COMCODE_REAL_TABLE_ROW_START.tpl',
+			'themes/default/templates/COMCODE_REAL_TABLE_START.tpl',
+			'themes/default/templates/COMCODE_REAL_TABLE_START_SUMMARY.tpl',
+			'themes/default/templates/COMCODE_PULSE.tpl',
+			'themes/default/templates/JAVASCRIPT_PULSE.tpl',
+			'themes/default/templates/COMCODE_BIG_TABS_CONTROLLER.tpl',
+			'themes/default/templates/COMCODE_BIG_TABS_TAB.tpl',
+			'themes/default/templates/MEDIA_AUDIO_WEBSAFE.tpl',
+			'themes/default/templates/MEDIA_FLASH.tpl',
+			'themes/default/templates/MEDIA_IMAGE_WEBSAFE.tpl',
+			'themes/default/templates/MEDIA_PDF.tpl',
+			'themes/default/templates/MEDIA_QUICKTIME.tpl',
+			'themes/default/templates/MEDIA_REALMEDIA.tpl',
+			'themes/default/templates/MEDIA_SVG.tpl',
+			'themes/default/templates/MEDIA_VIDEO_FACEBOOK.tpl',
+			'themes/default/templates/MEDIA_VIDEO_GENERAL.tpl',
+			'themes/default/templates/MEDIA_VIDEO_WEBSAFE.tpl',
+			'themes/default/templates/MEDIA_VIMEO.tpl',
+			'themes/default/templates/MEDIA_WEBPAGE_OEMBED_RICH.tpl',
+			'themes/default/templates/MEDIA_WEBPAGE_OEMBED_VIDEO.tpl',
+			'themes/default/templates/MEDIA_WEBPAGE_SEMANTIC.tpl',
+			'themes/default/templates/MEDIA_YOUTUBE.tpl',
+			'themes/default/templates/MEDIA_DOWNLOAD.tpl',
+			'themes/default/templates/MEDIA__DOWNLOAD_LINK.tpl',
+			'themes/default/css/big_tabs.css',
+			'themes/default/css/comcode_mistakes.css',
 			'themes/default/images/wiki_link.png',
 			'themes/default/images/wiki_link_hover.png',
 			'themes/default/images/comcode_emoticon.png',
@@ -219,7 +219,7 @@ class Hook_addon_registry_core_rich_media
 			'themes/default/images/EN/page/fullsize.png',
 			'themes/default/images/EN/page/thumbnail.png',
 			'data/jwplayer.flash.swf',
-			'JAVASCRIPT_JWPLAYER.tpl',
+			'themes/default/templates/JAVASCRIPT_JWPLAYER.tpl',
 			'data/attachment.php',
 			'data/attachment_popup.php',
 			'data/emoticons.php',
@@ -415,7 +415,7 @@ class Hook_addon_registry_core_rich_media
 		{
 			$page[]=$v;
 		}
-		$content->attach(do_lorem_template('COMCODE_BIG_TABS_CONTROLLER', array(
+		$content->attach(do_lorem_template('COMCODE_BIG_TABS_CONTROLLER',array(
 			'PASS_ID'=>lorem_word(),
 			'SWITCH_TIME'=>'6000',
 			'TABS'=>$page
@@ -423,7 +423,7 @@ class Hook_addon_registry_core_rich_media
 
 		foreach ($page as $i=>$v)
 		{
-			$content->attach(do_lorem_template('COMCODE_BIG_TABS_TAB', array(
+			$content->attach(do_lorem_template('COMCODE_BIG_TABS_TAB',array(
 				'PASS_ID'=>lorem_word().strval($i),
 				'CONTENT'=>lorem_paragraph() . placeholder_random(),
 				'NAME'=>$v,
@@ -431,7 +431,7 @@ class Hook_addon_registry_core_rich_media
 			)));
 		}
 
-		$content=do_lorem_template('COMCODE_SURROUND', array(
+		$content=do_lorem_template('COMCODE_SURROUND',array(
 			'CLASS'=>'float_surrounder',
 			'CONTENT'=>$content
 		));
@@ -452,7 +452,7 @@ class Hook_addon_registry_core_rich_media
 	{
 		require_lang('zones');
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_EDIT_SCREEN', array(
+			lorem_globalise(do_lorem_template('COMCODE_EDIT_SCREEN',array(
 				'NEW'=>lorem_phrase(),
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
@@ -478,7 +478,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_tooltip()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_TOOLTIP', array(
+			lorem_globalise(do_lorem_template('COMCODE_TOOLTIP',array(
 				'URL'=>placeholder_url(),
 				'TOOLTIP'=>lorem_phrase(),
 				'CONTENT'=>lorem_phrase()
@@ -499,21 +499,21 @@ class Hook_addon_registry_core_rich_media
 		$emt=new ocp_tempcode();
 		foreach ($emoticon as $k=>$v)
 		{
-			$_emt=do_lorem_template('EMOTICON_IMG_CODE_THEMED', array(
+			$_emt=do_lorem_template('EMOTICON_IMG_CODE_THEMED',array(
 				'EMOTICON'=>$k,
 				'SRC'=>$v[1]
 			));
-			$emt->attach(do_lorem_template('EMOTICON_CLICK_CODE', array(
+			$emt->attach(do_lorem_template('EMOTICON_CLICK_CODE',array(
 					'FIELD_NAME'=>lorem_word(),
 					'CODE'=>lorem_word(),
 					'IMAGE'=>$_emt
 			)));
 		}
-		$_emt=do_lorem_template('EMOTICON_IMG_CODE_DIR', array(
+		$_emt=do_lorem_template('EMOTICON_IMG_CODE_DIR',array(
 			'EMOTICON'=>lorem_word(),
 			'SRC'=>get_base_url() . '/themes/default/images//ocf_emoticons/constipated.png'
 		));
-		$emt->attach(do_lorem_template('EMOTICON_CLICK_CODE', array(
+		$emt->attach(do_lorem_template('EMOTICON_CLICK_CODE',array(
 				'FIELD_NAME'=>lorem_word(),
 				'CODE'=>lorem_word(),
 				'IMAGE'=>$_emt
@@ -540,12 +540,12 @@ class Hook_addon_registry_core_rich_media
 
 		require_css('forms');
 
-		$content=do_lorem_template('ATTACHMENT', array(
+		$content=do_lorem_template('ATTACHMENT',array(
 			'I'=>placeholder_number(),
 			'POSTING_FIELD_NAME'=>''
 		));
 
-		$attachments=do_lorem_template('ATTACHMENTS', array(
+		$attachments=do_lorem_template('ATTACHMENTS',array(
 			'ATTACHMENT_TEMPLATE'=>$content,
 			'IMAGE_TYPES'=>placeholder_types(),
 			'ATTACHMENTS'=>$content,
@@ -555,7 +555,7 @@ class Hook_addon_registry_core_rich_media
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('POSTING_FORM', array(
+			lorem_globalise(do_lorem_template('POSTING_FORM',array(
 				'TABINDEX_PF'=>placeholder_number(),
 				'JAVASCRIPT'=>'',
 				'PREVIEW'=>lorem_phrase(),
@@ -590,7 +590,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_critical_parse_error()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_CRITICAL_PARSE_ERROR', array(
+			lorem_globalise(do_lorem_template('COMCODE_CRITICAL_PARSE_ERROR',array(
 				'LINE'=>lorem_phrase(),
 				'MESSAGE'=>lorem_phrase(),
 				'SOURCE'=>lorem_phrase()
@@ -614,17 +614,17 @@ class Hook_addon_registry_core_rich_media
 			$line_content->attach(lorem_phrase());
 			if ($key==0)
 			{
-				$line_content->attach(do_lorem_template('COMCODE_MISTAKE_ERROR', array()));
+				$line_content->attach(do_lorem_template('COMCODE_MISTAKE_ERROR',array()));
 			}
 
-			$line->attach(do_lorem_template('COMCODE_MISTAKE_LINE', array(
+			$line->attach(do_lorem_template('COMCODE_MISTAKE_LINE',array(
 				'NUMBER'=>placeholder_number(),
 				'LINE'=>$line_content
 			)));
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_MISTAKE_SCREEN', array(
+			lorem_globalise(do_lorem_template('COMCODE_MISTAKE_SCREEN',array(
 				'EDITABLE'=>placeholder_table(),
 				'FORM'=>placeholder_form(),
 				'TITLE'=>lorem_title(),
@@ -645,7 +645,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_currency()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_CURRENCY', array(
+			lorem_globalise(do_lorem_template('COMCODE_CURRENCY',array(
 				'AMOUNT'=>placeholder_number(),
 				'FROM_CURRENCY'=>'USD',
 				'BRACKET'=>true
@@ -663,7 +663,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_overlay()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_OVERLAY', array(
+			lorem_globalise(do_lorem_template('COMCODE_OVERLAY',array(
 				'UNIQ_ID'=>placeholder_id(),
 				'EMBED'=>lorem_phrase(),
 				'ID'=>placeholder_id(),
@@ -687,7 +687,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_snapback()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_SNAPBACK', array(
+			lorem_globalise(do_lorem_template('COMCODE_SNAPBACK',array(
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
 				'POST_ID'=>placeholder_id(),
@@ -707,7 +707,7 @@ class Hook_addon_registry_core_rich_media
 		$section=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$section->attach(do_lorem_template('COMCODE_SECTION', array(
+			$section->attach(do_lorem_template('COMCODE_SECTION',array(
 				'PASS_ID'=>lorem_word(),
 				'DEFAULT'=>false,
 				'NAME'=>strval($k+1),
@@ -715,7 +715,7 @@ class Hook_addon_registry_core_rich_media
 			)));
 		}
 		$k++;
-		$section->attach(do_lorem_template('COMCODE_SECTION', array(
+		$section->attach(do_lorem_template('COMCODE_SECTION',array(
 			'PASS_ID'=>lorem_word(),
 			'DEFAULT'=>true,
 			'NAME'=>strval($k+1),
@@ -726,7 +726,7 @@ class Hook_addon_registry_core_rich_media
 		{
 			$page[]=strval($k+1);
 		}
-		$section->attach(do_lorem_template('COMCODE_SECTION_CONTROLLER', array(
+		$section->attach(do_lorem_template('COMCODE_SECTION_CONTROLLER',array(
 			'SECTIONS'=>$page,
 			'PASS_ID'=>lorem_word()
 		)));
@@ -749,7 +749,7 @@ class Hook_addon_registry_core_rich_media
 		foreach (placeholder_array(10) as $v)
 			$content->attach(placeholder_image());
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_CAROUSEL', array(
+			lorem_globalise(do_lorem_template('COMCODE_CAROUSEL',array(
 				'CONTENT'=>$content,
 				'SCROLL_AMOUNT'=>placeholder_number()
 			)), NULL, '', true)
@@ -766,7 +766,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_if_in_group()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_IF_IN_GROUP', array(
+			lorem_globalise(do_lorem_template('COMCODE_IF_IN_GROUP',array(
 				'TYPE'=>'',
 				'CONTENT'=>lorem_phrase(),
 				'GROUPS'=>lorem_phrase()
@@ -784,7 +784,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_abbr()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_ABBR', array(
+			lorem_globalise(do_lorem_template('COMCODE_ABBR',array(
 				'CONTENT'=>lorem_phrase(),
 				'TITLE'=>lorem_phrase()
 			)), NULL, '', true)
@@ -801,7 +801,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_address()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_ADDRESS', array(
+			lorem_globalise(do_lorem_template('COMCODE_ADDRESS',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -817,7 +817,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_dfn()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_DFN', array(
+			lorem_globalise(do_lorem_template('COMCODE_DFN',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -833,7 +833,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_q()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_Q', array(
+			lorem_globalise(do_lorem_template('COMCODE_Q',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -849,7 +849,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_pulse()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PULSE', array(
+			lorem_globalise(do_lorem_template('COMCODE_PULSE',array(
 				'CONTENT'=>lorem_phrase(),
 				'MIN_COLOR'=>'#000000',
 				'MAX_COLOR'=>'#FFFFFF',
@@ -868,7 +868,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_del()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_DEL', array(
+			lorem_globalise(do_lorem_template('COMCODE_DEL',array(
 				'CONTENT'=>lorem_phrase(),
 				'CITE'=>lorem_word(),
 				'DATETIME'=>placeholder_time()
@@ -886,7 +886,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_ins()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_INS', array(
+			lorem_globalise(do_lorem_template('COMCODE_INS',array(
 				'CONTENT'=>lorem_phrase(),
 				'CITE'=>lorem_word(),
 				'DATETIME'=>placeholder_time()
@@ -904,7 +904,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_cite()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_CITE', array(
+			lorem_globalise(do_lorem_template('COMCODE_CITE',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -920,7 +920,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_bold()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_BOLD', array(
+			lorem_globalise(do_lorem_template('COMCODE_BOLD',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -936,7 +936,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_align()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_ALIGN', array(
+			lorem_globalise(do_lorem_template('COMCODE_ALIGN',array(
 				'ALIGN'=>'left',
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
@@ -953,7 +953,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_indent()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_INDENT', array(
+			lorem_globalise(do_lorem_template('COMCODE_INDENT',array(
 				'INDENT'=>placeholder_id(),
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
@@ -970,7 +970,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_surround()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_SURROUND', array(
+			lorem_globalise(do_lorem_template('COMCODE_SURROUND',array(
 				'CLASS'=>lorem_phrase(),
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
@@ -987,7 +987,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_italics()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_ITALICS', array(
+			lorem_globalise(do_lorem_template('COMCODE_ITALICS',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -1003,7 +1003,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_underline()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_UNDERLINE', array(
+			lorem_globalise(do_lorem_template('COMCODE_UNDERLINE',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -1019,7 +1019,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_strike()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_STRIKE', array(
+			lorem_globalise(do_lorem_template('COMCODE_STRIKE',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -1035,7 +1035,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_sup()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_SUP', array(
+			lorem_globalise(do_lorem_template('COMCODE_SUP',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -1051,7 +1051,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_sub()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_SUB', array(
+			lorem_globalise(do_lorem_template('COMCODE_SUB',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -1069,13 +1069,13 @@ class Hook_addon_registry_core_rich_media
 		$part=new ocp_tempcode();
 		foreach (placeholder_array(5) as $k=>$v)
 		{
-			$part->attach(do_lorem_template('COMCODE_RANDOM_PART', array(
+			$part->attach(do_lorem_template('COMCODE_RANDOM_PART',array(
 				'NUM'=>strval($k),
 				'VAL'=>placeholder_number()
 			)));
 		}
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_RANDOM', array(
+			lorem_globalise(do_lorem_template('COMCODE_RANDOM',array(
 				'UNIQID'=>placeholder_id(),
 				'FULL'=>placeholder_number(),
 				'MAX'=>'3',
@@ -1093,12 +1093,12 @@ class Hook_addon_registry_core_rich_media
 	 */
 	function tpl_preview__comcode_jumping()
 	{
-		$part=do_lorem_template('COMCODE_JUMPING_PART', array(
+		$part=do_lorem_template('COMCODE_JUMPING_PART',array(
 			'PART'=>lorem_phrase()
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_JUMPING', array(
+			lorem_globalise(do_lorem_template('COMCODE_JUMPING',array(
 				'UNIQID'=>placeholder_id(),
 				'FULL'=>lorem_phrase(),
 				'TIME'=>'1000',
@@ -1117,7 +1117,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_ticker()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_TICKER', array(
+			lorem_globalise(do_lorem_template('COMCODE_TICKER',array(
 				'UNIQID'=>placeholder_id(),
 				'SPEED'=>'10',
 				'WIDTH'=>'400',
@@ -1136,7 +1136,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_highlight()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_HIGHLIGHT', array(
+			lorem_globalise(do_lorem_template('COMCODE_HIGHLIGHT',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -1152,7 +1152,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_font()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_FONT', array(
+			lorem_globalise(do_lorem_template('COMCODE_FONT',array(
 				'CONTENT'=>lorem_phrase(),
 				'SIZE'=>"font-size:2em;",
 				'COLOR'=>'color:red;',
@@ -1171,7 +1171,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_concept()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_CONCEPT', array(
+			lorem_globalise(do_lorem_template('COMCODE_CONCEPT',array(
 				'TEXT'=>lorem_sentence(),
 				'URL'=>placeholder_url()
 			)), NULL, '', true)
@@ -1188,7 +1188,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_concept_inline()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_CONCEPT_INLINE', array(
+			lorem_globalise(do_lorem_template('COMCODE_CONCEPT_INLINE',array(
 				'TEXT'=>lorem_sentence(),
 				'FULL'=>lorem_phrase()
 			)), NULL, '', true)
@@ -1207,7 +1207,7 @@ class Hook_addon_registry_core_rich_media
 		$concept=new ocp_tempcode();
 		foreach (placeholder_array() as $i=>$v)
 		{
-			$concept->attach(do_lorem_template('COMCODE_CONCEPTS_CONCEPT', array(
+			$concept->attach(do_lorem_template('COMCODE_CONCEPTS_CONCEPT',array(
 				'A'=>lorem_word() . strval($i),
 				'KEY'=>lorem_phrase(),
 				'VALUE'=>lorem_phrase()
@@ -1215,7 +1215,7 @@ class Hook_addon_registry_core_rich_media
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_CONCEPTS', array(
+			lorem_globalise(do_lorem_template('COMCODE_CONCEPTS',array(
 				'TITLE'=>lorem_phrase(),
 				'CONCEPTS'=>$concept
 			)), NULL, '', true)
@@ -1232,7 +1232,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_thumb()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_THUMB', array(
+			lorem_globalise(do_lorem_template('COMCODE_THUMB',array(
 				'CAPTION'=>lorem_phrase(),
 				'ALIGN'=>'top',
 				'PASS_ID'=>placeholder_id(),
@@ -1252,7 +1252,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_img()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_IMG', array(
+			lorem_globalise(do_lorem_template('COMCODE_IMG',array(
 				'REFRESH_TIME'=>'20000',
 				'ROLLOVER'=>lorem_phrase(),
 				'ALIGN'=>'top',
@@ -1273,7 +1273,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_url()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_URL', array(
+			lorem_globalise(do_lorem_template('COMCODE_URL',array(
 				'TITLE'=>lorem_phrase(),
 				'REL'=>lorem_phrase(),
 				'TARGET'=>lorem_phrase(),
@@ -1293,7 +1293,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_email()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_EMAIL', array(
+			lorem_globalise(do_lorem_template('COMCODE_EMAIL',array(
 				'TITLE'=>lorem_phrase(),
 				'ADDRESS'=>lorem_phrase(),
 				'SUBJECT'=>lorem_phrase(),
@@ -1313,7 +1313,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_reference()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_REFERENCE', array(
+			lorem_globalise(do_lorem_template('COMCODE_REFERENCE',array(
 				'SOURCE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -1349,7 +1349,7 @@ class Hook_addon_registry_core_rich_media
 
 				$left=make_string_tempcode($left);
 				$right=make_string_tempcode($right);
-				$_parts->attach(do_lorem_template('COMCODE_SHOCKER_PART', array(
+				$_parts->attach(do_lorem_template('COMCODE_SHOCKER_PART',array(
 					'LEFT'=>$left,
 					'RIGHT'=>$right
 				)));
@@ -1359,7 +1359,7 @@ class Hook_addon_registry_core_rich_media
 		$min_color='0000FF';
 		$max_color='FF0044';
 
-		$temp_tpl=do_lorem_template('COMCODE_SHOCKER', array(
+		$temp_tpl=do_lorem_template('COMCODE_SHOCKER',array(
 			'UNIQID'=>placeholder_random(),
 			'MIN_COLOR'=>$min_color,
 			'MAX_COLOR'=>$max_color,
@@ -1383,7 +1383,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_hide()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_HIDE', array(
+			lorem_globalise(do_lorem_template('COMCODE_HIDE',array(
 				'TEXT'=>lorem_sentence_html(),
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
@@ -1400,7 +1400,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_quote_by()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_QUOTE_BY', array(
+			lorem_globalise(do_lorem_template('COMCODE_QUOTE_BY',array(
 				'CONTENT'=>lorem_phrase(),
 				'BY'=>lorem_phrase(),
 				'CITE'=>lorem_word(),
@@ -1419,7 +1419,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_quote()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_QUOTE', array(
+			lorem_globalise(do_lorem_template('COMCODE_QUOTE',array(
 				'CONTENT'=>lorem_phrase(),
 				'CITE'=>lorem_word()
 			)), NULL, '', true)
@@ -1438,20 +1438,20 @@ class Hook_addon_registry_core_rich_media
 		$line=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
-			$line->attach(do_lorem_template('COMCODE_CONTENTS_LINE', array(
+			$line->attach(do_lorem_template('COMCODE_CONTENTS_LINE',array(
 				'LINE'=>lorem_phrase()
 			)));
 		}
-		$level=do_lorem_template('COMCODE_CONTENTS_LEVEL', array(
+		$level=do_lorem_template('COMCODE_CONTENTS_LEVEL',array(
 			'TYPE'=>'disc',
 			'LINES'=>$line
 		));
-		$level->attach(do_lorem_template('COMCODE_CONTENTS_LINE_FINAL', array(
+		$level->attach(do_lorem_template('COMCODE_CONTENTS_LINE_FINAL',array(
 			'URL'=>placeholder_url(),
 			'LINE'=>lorem_phrase(),
 			'ID'=>placeholder_id()
 		)));
-		$line=do_lorem_template('COMCODE_CONTENTS', array(
+		$line=do_lorem_template('COMCODE_CONTENTS',array(
 			'LEVELS'=>$level
 		));
 		return array(
@@ -1469,7 +1469,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_textcode_line()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_TEXTCODE_LINE', array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('COMCODE_TEXTCODE_LINE',array()), NULL, '', true)
 		);
 	}
 
@@ -1483,7 +1483,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_textcode_tab()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_TEXTCODE_TAB', array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('COMCODE_TEXTCODE_TAB',array()), NULL, '', true)
 		);
 	}
 
@@ -1497,7 +1497,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_wiki_link()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_WIKI_LINK', array(
+			lorem_globalise(do_lorem_template('COMCODE_WIKI_LINK',array(
 				'URL'=>placeholder_url(),
 				'TEXT'=>lorem_sentence()
 			)), NULL, '', true)
@@ -1515,18 +1515,18 @@ class Hook_addon_registry_core_rich_media
 	{
 		$tag_output=new ocp_tempcode();
 
-		$tag_output->attach(do_lorem_template('COMCODE_CODE_SCROLL', array(
+		$tag_output->attach(do_lorem_template('COMCODE_CODE_SCROLL',array(
 			'TITLE'=>lorem_phrase(),
 			'CONTENT'=>lorem_phrase(),
 			'TYPE'=>''
 		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'100%',
 			'FLOAT'=>'left',
 			'PADDING'=>'',
 			'PADDING_AMOUNT'=>'5'
 		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1534,7 +1534,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1542,7 +1542,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1550,7 +1550,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word_2());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1560,13 +1560,13 @@ class Hook_addon_registry_core_rich_media
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE_START',array(
 			'WIDTH'=>'100%',
 			'FLOAT'=>'left',
 			'PADDING'=>'',
 			'PADDING_AMOUNT'=>'5'
 		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1574,7 +1574,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1582,7 +1582,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1590,7 +1590,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word_2());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1600,13 +1600,13 @@ class Hook_addon_registry_core_rich_media
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
 
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_2_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_2_START',array(
 			'WIDTH'=>'100%',
 			'FLOAT'=>'left',
 			'PADDING'=>'',
 			'PADDING_AMOUNT'=>'5'
 		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1614,7 +1614,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1622,7 +1622,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1630,42 +1630,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word_2());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START', array()));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1675,13 +1640,48 @@ class Hook_addon_registry_core_rich_media
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START',array()));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
+			'WIDTH'=>'40%',
+			'FLOAT'=>'left',
+			'PADDING'=>'-left',
+			'PADDING_AMOUNT'=>'10'
+		)));
+		$tag_output->attach(lorem_word());
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
+			'WIDTH'=>'40%',
+			'FLOAT'=>'left',
+			'PADDING'=>'-left',
+			'PADDING_AMOUNT'=>'10'
+		)));
+		$tag_output->attach(lorem_word());
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
+			'WIDTH'=>'40%',
+			'FLOAT'=>'left',
+			'PADDING'=>'-left',
+			'PADDING_AMOUNT'=>'10'
+		)));
+		$tag_output->attach(lorem_word_2());
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
+			'WIDTH'=>'40%',
+			'FLOAT'=>'left',
+			'PADDING'=>'-left',
+			'PADDING_AMOUNT'=>'10'
+		)));
+		$tag_output->attach(lorem_word_2());
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
+
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
 			'WIDTH'=>'100%',
 			'PADDING_AMOUNT'=>'0',
 			'FLOAT'=>'left',
 			'PADDING'=>''
 		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1689,7 +1689,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1697,7 +1697,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1705,7 +1705,7 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word_2());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
 			'PADDING'=>'-left',
@@ -1716,7 +1716,7 @@ class Hook_addon_registry_core_rich_media
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 
 
-		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START', array(
+		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START',array(
 			'SUMMARY'=>lorem_phrase(),
 			'CAPTION'=>lorem_word()
 		)));
@@ -1730,7 +1730,7 @@ class Hook_addon_registry_core_rich_media
 
 			foreach (placeholder_array(2) as $cell)
 			{
-				$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL', array(
+				$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL',array(
 					'WIDTH'=>'',
 					'C_TYPE'=>'td',
 					'MID'=>$cell
@@ -1742,7 +1742,7 @@ class Hook_addon_registry_core_rich_media
 		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_END',array('END_BODY'=>true)));
 
 
-		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START_SUMMARY', array(
+		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START_SUMMARY',array(
 			'CAPTION'=>lorem_word(),
 			'START_BODY'=>true
 		)));
@@ -1756,7 +1756,7 @@ class Hook_addon_registry_core_rich_media
 
 			foreach (placeholder_array(2) as $cell)
 			{
-				$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL', array(
+				$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL',array(
 					'WIDTH'=>'',
 					'C_TYPE'=>'td',
 					'MID'=>$cell
@@ -1782,7 +1782,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_minor_title()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_MINOR_TITLE', array(
+			lorem_globalise(do_lorem_template('COMCODE_MINOR_TITLE',array(
 				'ID'=>placeholder_id(),
 				'TITLE'=>lorem_phrase(),
 				'SUB'=>lorem_sentence()
@@ -1802,7 +1802,7 @@ class Hook_addon_registry_core_rich_media
 		$list_cont=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$list_cont->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
+			$list_cont->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
 				'SELECTED'=>'',
 				'DISABLED'=>'',
 				'CLASS'=>'',
@@ -1811,7 +1811,7 @@ class Hook_addon_registry_core_rich_media
 			)));
 		}
 
-		$content=do_lorem_template('ATTACHMENTS_BROWSER_ATTACHMENT', array(
+		$content=do_lorem_template('ATTACHMENTS_BROWSER_ATTACHMENT',array(
 			'FIELD_NAME'=>lorem_phrase(),
 			'TPL'=>lorem_phrase(),
 			'DESCRIPTION'=>lorem_sentence(),
@@ -1821,7 +1821,7 @@ class Hook_addon_registry_core_rich_media
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENTS_BROWSER', array(
+			lorem_globalise(do_lorem_template('ATTACHMENTS_BROWSER',array(
 				'LIST'=>$list_cont,
 				'CONTENT'=>$content,
 				'URL'=>placeholder_url()
@@ -1839,7 +1839,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_code()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_CODE', array(
+			lorem_globalise(do_lorem_template('COMCODE_CODE',array(
 				'STYLE'=>lorem_phrase(),
 				'TYPE'=>lorem_phrase(),
 				'CONTENT'=>lorem_phrase(),
@@ -1878,19 +1878,19 @@ class Hook_addon_registry_core_rich_media
 				$first=false;
 				$last=false;
 			}
-			$head->attach(do_lorem_template('COMCODE_TAB_HEAD', array(
+			$head->attach(do_lorem_template('COMCODE_TAB_HEAD',array(
 				'TITLE'=>lorem_word() . $v,
 				'FIRST'=>$first,
 				'LAST'=>$last
 			)));
-			$content->attach(do_lorem_template('COMCODE_TAB_BODY', array(
+			$content->attach(do_lorem_template('COMCODE_TAB_BODY',array(
 				'DEFAULT'=>($k==0),
 				'TITLE'=>lorem_word() . $v,
 				'CONTENT'=>lorem_paragraph_html()
 			)));
 		}
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_TAB_CONTROLLER', array(
+			lorem_globalise(do_lorem_template('COMCODE_TAB_CONTROLLER',array(
 				'HEADS'=>$head,
 				'CONTENT'=>$content
 			)), NULL, '', true)
@@ -1907,7 +1907,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_samp()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_SAMP', array(
+			lorem_globalise(do_lorem_template('COMCODE_SAMP',array(
 				'CONTENT'=>lorem_sentence()
 			)), NULL, '', true)
 		);
@@ -1923,7 +1923,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_section_title()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_SECTION_TITLE', array(
+			lorem_globalise(do_lorem_template('COMCODE_SECTION_TITLE',array(
 				'ID'=>placeholder_id(),
 				'TITLE'=>lorem_phrase(),
 				'SUB'=>lorem_sentence()
@@ -1941,7 +1941,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_var()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_VAR', array(
+			lorem_globalise(do_lorem_template('COMCODE_VAR',array(
 				'CONTENT'=>lorem_sentence()
 			)), NULL, '', true)
 		);
@@ -1957,7 +1957,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_very_minor_title()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_VERY_MINOR_TITLE', array(
+			lorem_globalise(do_lorem_template('COMCODE_VERY_MINOR_TITLE',array(
 				'ID'=>placeholder_id(),
 				'TITLE'=>lorem_phrase(),
 				'SUB'=>lorem_sentence()
@@ -1975,7 +1975,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_teletype()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_TELETYPE', array(
+			lorem_globalise(do_lorem_template('COMCODE_TELETYPE',array(
 				'CONTENT'=>lorem_sentence()
 			)), NULL, '', true)
 		);
@@ -2197,7 +2197,7 @@ class Hook_addon_registry_core_rich_media
 		require_code('files');
 
 		return array(
-			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_OEMBED_RICH', array(
+			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_OEMBED_RICH',array(
 				'TITLE'=>lorem_title(),
 				'HTML'=>lorem_paragraph_html(),
 				'WIDTH'=>placeholder_number(),
@@ -2219,7 +2219,7 @@ class Hook_addon_registry_core_rich_media
 		require_code('files');
 
 		return array(
-			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_OEMBED_VIDEO', array(
+			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_OEMBED_VIDEO',array(
 				'TITLE'=>lorem_title(),
 				'HTML'=>lorem_paragraph_html(),
 				'WIDTH'=>placeholder_number(),
@@ -2241,7 +2241,7 @@ class Hook_addon_registry_core_rich_media
 		require_code('files');
 
 		return array(
-			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_SEMANTIC', array(
+			lorem_globalise(do_lorem_template('MEDIA_WEBPAGE_SEMANTIC',array(
 				'TITLE'=>lorem_title(),
 				'META_TITLE'=>lorem_title(),
 				'DESCRIPTION'=>lorem_paragraph_html(),

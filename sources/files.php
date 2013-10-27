@@ -144,7 +144,7 @@ function better_parse_ini_file($filename,$file=NULL)
 		{
 			list($property,$value)=$bits;
 			$value=trim($value,'"');
-			$ini_array[$property]=$value;
+			$ini_array[$property]=str_replace('\n',"\n",$value);
 		}
 	}
 
@@ -468,20 +468,23 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		if (strtolower($filepath)=='exports/static') return true; // Empty directory, so has to be a special exception
 		if (strtolower($filepath)=='exports/builds') return true; // Needed to stop build recursion
 		if (strtolower($filepath)=='_tests') return true; // Test set may have various temporary files buried within
-		if (file_exists(get_file_base().'/data_custom/addon_files.txt'))
+
+		static $addon_files=NULL;
+		if ($addon_files===NULL)
 		{
-			static $addon_list=NULL;
-			if ($addon_list===NULL) $addon_list=strtolower(file_get_contents(unixify_line_format(get_file_base().'/data_custom/addon_files.txt')));
-			if (strpos($addon_list,' - '.strtolower($filepath)."\n")!==false)
+			$addon_files=array_map('strtolower',collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'))));
+			$hooks=find_all_hooks('systems','addon_registry');
+			foreach ($hooks as $hook=>$place)
 			{
-				return true;
+				if ($place=='sources_custom')
+				{
+					require_code('addons2');
+					$addon_info=read_addon_info($hook);
+					$addon_files=array_merge($addon_files,$addon_info['files']);
+				}
 			}
-		} else
-		{
-			static $addon_files=NULL;
-			if ($addon_files===NULL) $addon_files=array_map('strtolower',collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'))));
-			if (in_array(strtolower($filepath),$addon_files)) return true;
 		}
+		if (in_array(strtolower($filepath),$addon_files)) return true;
 		// Note that we have no support for identifying directories related to addons, only files inside. Code using this function should detect directories with no usable files in as relating to addons.
 	}
 

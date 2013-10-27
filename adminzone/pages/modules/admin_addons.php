@@ -36,7 +36,7 @@ class Module_admin_addons
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=3;
+		$info['version']=4;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -73,27 +73,40 @@ class Module_admin_addons
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		$GLOBALS['SITE_DB']->create_table('addons',array(
-			'addon_name'=>'*SHORT_TEXT',
-			'addon_author'=>'SHORT_TEXT',
-			'addon_organisation'=>'SHORT_TEXT',
-			'addon_version'=>'SHORT_TEXT',
-			'addon_description'=>'LONG_TEXT',
-			'addon_install_time'=>'TIME'
-		));
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('addons',array(
+				'addon_name'=>'*SHORT_TEXT',
+				'addon_author'=>'SHORT_TEXT',
+				'addon_organisation'=>'SHORT_TEXT',
+				'addon_version'=>'SHORT_TEXT',
+				'addon_category'=>'SHORT_TEXT',
+				'addon_copyright_attribution'=>'SHORT_TEXT',
+				'addon_licence'=>'SHORT_TEXT',
+				'addon_description'=>'LONG_TEXT',
+				'addon_install_time'=>'TIME'
+			));
 
-		$GLOBALS['SITE_DB']->create_table('addons_files',array(
-			'id'=>'*AUTO', // Because two SHORT_TEXT's as keys exceeds the 500 mysql key limit
-			'addon_name'=>'SHORT_TEXT',
-			'filename'=>'SHORT_TEXT'
-		));
+			$GLOBALS['SITE_DB']->create_table('addons_files',array(
+				'id'=>'*AUTO', // Because two SHORT_TEXT's as keys exceeds the 500 mysql key limit
+				'addon_name'=>'SHORT_TEXT',
+				'filename'=>'SHORT_TEXT'
+			));
 
-		$GLOBALS['SITE_DB']->create_table('addons_dependencies',array(
-			'id'=>'*AUTO', // Because two SHORT_TEXT's as keys exceeds the 500 mysql key limit
-			'addon_name'=>'SHORT_TEXT',
-			'addon_name_dependant_upon'=>'SHORT_TEXT',
-			'addon_name_incompatibility'=>'BINARY' // 0=dependency,1=incompatibility
-		));
+			$GLOBALS['SITE_DB']->create_table('addons_dependencies',array(
+				'id'=>'*AUTO', // Because two SHORT_TEXT's as keys exceeds the 500 mysql key limit
+				'addon_name'=>'SHORT_TEXT',
+				'addon_name_dependant_upon'=>'SHORT_TEXT',
+				'addon_name_incompatibility'=>'BINARY' // 0=dependency,1=incompatibility
+			));
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('addons','addon_category','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('addons','addon_copyright_attribution','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('addons','addon_licence','SHORT_TEXT');
+		}
 	}
 
 	var $title;
@@ -256,7 +269,7 @@ class Module_admin_addons
 	{
 		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		require_code('addons');
+		require_code('addons2');
 		require_code('menus2');
 		require_css('addons_editor');
 
@@ -307,32 +320,35 @@ class Module_admin_addons
 		}
 
 		// Show installed addons
-		require_code('addons_overview');
 		foreach ($addons_installed as $row)
 		{
-			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'5a65c9aa87291ecfe46f75e9b2949246','GET'=>true,'NAME'=>$row['addon_name'],'URL'=>build_url(array('page'=>'_SELF','type'=>'addon_uninstall','name'=>$row['addon_name']),'_SELF')));
-			$updated=array_key_exists($row['addon_name'],$updated_addons_arr);
+			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'5a65c9aa87291ecfe46f75e9b2949246','GET'=>true,'NAME'=>$row['name'],'URL'=>build_url(array('page'=>'_SELF','type'=>'addon_uninstall','name'=>$row['name']),'_SELF')));
+			$updated=array_key_exists($row['name'],$updated_addons_arr);
 			$status=do_lang_tempcode($updated?'STATUS_OUTOFDATE':'STATUS_INSTALLED');
 			$colour=$updated?'red':'green';
-			$description=$row['addon_description'];
-			$file_list=$row['addon_files'];
-			$pretty_name=do_template('ADDON_NAME',array('_GUID'=>'86b940f63744eb0690059efd69c1d58c','IMAGE_URL'=>find_addon_icon($row['addon_name'],false,NULL),'NAME'=>$row['addon_name']));
-			$_tpl_addons[$row['addon_name']]=array(
+			$description=$row['description'];
+			$file_list=$row['files'];
+			$pretty_name=do_template('ADDON_NAME',array('_GUID'=>'86b940f63744eb0690059efd69c1d58c','IMAGE_URL'=>find_addon_icon($row['name'],false,NULL),'NAME'=>$row['name']));
+
+			$_tpl_addons[$row['name']]=array(
 				'_GUID'=>'9a06f5a9c9e3085c10ab7fb17c3efcd1',
 				'UPDATED_ADDONS'=>$updated,
 				'DESCRIPTION'=>$description,
-				'FILE_LIST'=>$file_list,
+				'FILE_LIST'=>implode("\n",$file_list),
 				'COLOUR'=>$colour,
 				'STATUS'=>$status,
 				'PRETTY_NAME'=>$pretty_name,
-				'NAME'=>$row['addon_name'],
+				'NAME'=>$row['name'],
 				'FILENAME'=>do_lang_tempcode('NA_EM'),
-				'AUTHOR'=>$row['addon_author'],
-				'ORGANISATION'=>$row['addon_organisation'],
-				'VERSION'=>$row['addon_version'],
+				'AUTHOR'=>$row['author'],
+				'ORGANISATION'=>$row['organisation'],
+				'CATEGORY'=>$row['category'],
+				'COPYRIGHT_ATTRIBUTION'=>implode("\n",$row['copyright_attribution']),
+				'LICENCE'=>$row['licence'],
+				'VERSION'=>$row['version'],
 				'ACTIONS'=>$actions,
 				'TYPE'=>'uninstall',
-				'PASSTHROUGH'=>$row['addon_name'],
+				'PASSTHROUGH'=>$row['name'],
 			);
 		}
 
@@ -347,11 +363,12 @@ class Module_admin_addons
 				$file_list=$addon['files'];
 				if ($addon['version']=='(version-synched)') $addon['version']=float_to_raw_string(ocp_version_number());
 				$pretty_name=do_template('ADDON_NAME',array('_GUID'=>'4802523382da01432bf04120ad01c677','IMAGE_URL'=>find_addon_icon($addon['name'],false,$addon['tar_path']),'NAME'=>$addon['name']));
+
 				$_tpl_addons[$addon['name']]=array(
 					'_GUID'=>'cb61bdb9ce0cef5cd520440c5f62008f',
 					'UPDATED_ADDONS'=>false,
 					'DESCRIPTION'=>$description,
-					'FILE_LIST'=>$file_list,
+					'FILE_LIST'=>implode("\n",$file_list),
 					'COLOUR'=>'orange',
 					'STATUS'=>$status,
 					'PRETTY_NAME'=>$pretty_name,
@@ -359,6 +376,9 @@ class Module_admin_addons
 					'FILENAME'=>$filename,
 					'AUTHOR'=>$addon['author'],
 					'ORGANISATION'=>$addon['organisation'],
+					'CATEGORY'=>$addon['category'],
+					'COPYRIGHT_ATTRIBUTION'=>implode("\n",$addon['copyright_attribution']),
+					'LICENCE'=>$addon['licence'],
 					'VERSION'=>$addon['version'],
 					'ACTIONS'=>$actions,
 					'TYPE'=>'install',
@@ -547,17 +567,25 @@ class Module_admin_addons
 				)
 					continue;
 
-				$addon_row=read_addon_info($name);
+				$addon_info=read_addon_info($name);
 
 				// Archive it off to exports/addons
-				if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
-				{
-					$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
-				} else // Traditional ocPortal style
-				{
-					$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).date('-dmY-Hm',time()).'.tar';
-				}
-				create_addon($file,$addon_row['addon_files'],$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+				$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
+				create_addon(
+					$file,
+					$addon_info['files'],
+					$addon_info['name'],
+					implode(',',$addon_info['incompatibilities']),
+					implode(',',$addon_info['dependencies']),
+					$addon_info['author'],
+					$addon_info['organisation'],
+					$addon_info['version'],
+					$addon_info['category'],
+					implode("\n",$addon_info['copyright_attribution']),
+					$addon_info['licence'],
+					$addon_info['description'],
+					'imports/addons'
+				);
 
 				uninstall_addon($name);
 			}
@@ -590,8 +618,9 @@ class Module_admin_addons
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_addon_install'),'_SELF');
 
-		$_description=comcode_to_tempcode(str_replace('\n',"\n",$info['description']),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+		$_description=comcode_to_tempcode($info['description'],$GLOBALS['FORUM_DRIVER']->get_guest_id());
 		if ($info['version']=='(version-synched)') $info['version']=float_to_raw_string(ocp_version_number());
+
 		return do_template('ADDON_INSTALL_CONFIRM_SCREEN',array(
 			'_GUID'=>'79b8c0e900a498cfb166392163295a07',
 			'TITLE'=>$this->title,
@@ -603,6 +632,9 @@ class Module_admin_addons
 			'AUTHOR'=>$info['author'],
 			'ORGANISATION'=>$info['organisation'],
 			'VERSION'=>$info['version'],
+			'CATEGORY'=>$info['category'],
+			'COPYRIGHT_ATTRIBUTION'=>implode("\n",$info['copyright_attribution']),
+			'LICENCE'=>$info['licence'],
 			'DESCRIPTION'=>$_description,
 		));
 	}
@@ -683,25 +715,33 @@ class Module_admin_addons
 
 		$name=post_param('name');
 
-		$addon_row=read_addon_info($name);
+		$addon_info=read_addon_info($name);
 
 		// Archive it off to exports/addons
-		if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
-		{
-			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
-		} else // Traditional ocPortal style
-		{
-			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).date('-dmY-Hm',time()).'.tar';
-		}
+		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
 
 		$new_addon_files=array();
-		foreach ($addon_row['addon_files'] as $_file)
+		foreach ($addon_info['files'] as $_file)
 		{
 			if (substr($_file,-9)!='.editfrom') // This would have been added back in automatically
 				$new_addon_files[]=$_file;
 		}
 
-		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+		create_addon(
+			$file,
+			$new_addon_files,
+			$addon_info['name'],
+			implode(',',$addon_info['incompatibilities']),
+			implode(',',$addon_info['dependencies']),
+			$addon_info['author'],
+			$addon_info['organisation'],
+			$addon_info['version'],
+			$addon_info['category'],
+			implode(',',$addon_info['copyright_attribution']),
+			$addon_info['licence'],
+			$addon_info['description'],
+			'imports/addons'
+		);
 
 		uninstall_addon($name);
 
@@ -851,6 +891,8 @@ class Module_admin_addons
 
 		$theme=get_param('theme',NULL,true);
 
+		$is_language=(get_param('exp','custom')=='lang');
+
 		require_code('files');
 
 		// Default meta data
@@ -858,6 +900,12 @@ class Module_admin_addons
 		$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 		$organisation=get_site_name();
 		$description='';
+		$category=is_null($theme)?($is_language?'Translation':'Uncategorised/Unstable'):'Themes';
+		$version='1.0';
+		$copyright_attribution='';
+		$licence='Creative Commons Attribution-ShareAlike';
+		$dependencies='';
+		$incompatibilities='';
 
 		// ... but the theme might already define some of this
 		if (!is_null($theme))
@@ -871,7 +919,7 @@ class Module_admin_addons
 				if (array_key_exists('author',$details)) $author=$details['author'];
 			}
 		}
-		if (get_param('exp','custom')=='lang')
+		if ($is_language)
 		{
 			$lang=post_param('lang');
 			$ini_file=get_custom_file_base().'/lang_custom/langs.ini';
@@ -896,13 +944,19 @@ class Module_admin_addons
 		$fields.=$field->evaluate();
 		$field=form_input_line(do_lang_tempcode('ORGANISATION'),do_lang_tempcode('DESCRIPTION_ORGANISATION'),'organisation',$organisation,false);
 		$fields.=$field->evaluate();
-		$field=form_input_line(do_lang_tempcode('VERSION'),do_lang_tempcode('DESCRIPTION_VERSION'),'version','1.0',true);
+		$field=form_input_line(do_lang_tempcode('VERSION'),do_lang_tempcode('DESCRIPTION_VERSION'),'version',$version,true);
+		$fields.=$field->evaluate();
+		$field=form_input_line(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_ADDON_CATEGORY'),'category',$category,true);
+		$fields.=$field->evaluate();
+		$field=form_input_line(do_lang_tempcode('COPYRIGHT_ATTRIBUTION'),do_lang_tempcode('DESCRIPTION_COPYRIGHT_ATTRIBUTION'),'copyright_attribution',$copyright_attribution,true);
+		$fields.=$field->evaluate();
+		$field=form_input_line(do_lang_tempcode('LICENCE'),do_lang_tempcode('DESCRIPTION_ADDON_LICENCE'),'licence',$licence,true);
 		$fields.=$field->evaluate();
 		$field=form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true);
 		$fields.=$field->evaluate();
-		$field=form_input_line(do_lang_tempcode('DEPENDENCIES'),do_lang_tempcode('DESCRIPTION_DEPENDENCIES'),'dependencies','',false);
+		$field=form_input_line(do_lang_tempcode('DEPENDENCIES'),do_lang_tempcode('DESCRIPTION_DEPENDENCIES'),'dependencies',$dependencies,false);
 		$fields.=$field->evaluate();
-		$field=form_input_line(do_lang_tempcode('INCOMPATIBILITIES'),do_lang_tempcode('DESCRIPTION_INCOMPATIBILITIES'),'incompatibilities','',false);
+		$field=form_input_line(do_lang_tempcode('INCOMPATIBILITIES'),do_lang_tempcode('DESCRIPTION_INCOMPATIBILITIES'),'incompatibilities',$incompatibilities,false);
 		$fields.=$field->evaluate();
 
 		if (get_param('exp','custom')=='theme')
@@ -995,7 +1049,20 @@ class Module_admin_addons
 			}
 		}
 
-		create_addon($file,$files,post_param('name'),post_param('incompatibilities'),post_param('dependencies'),post_param('author'),post_param('organisation'),post_param('version'),post_param('description'));
+		create_addon(
+			$file,
+			$files,
+			post_param('name'),
+			post_param('incompatibilities'),
+			post_param('dependencies'),
+			post_param('author'),
+			post_param('organisation'),
+			post_param('version'),
+			post_param('category'),
+			post_param('copyright_attribution'),
+			post_param('licence'),
+			post_param('description')
+		);
 
 		$download_url=get_custom_base_url().'/exports/addons/'.$file;
 

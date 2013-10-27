@@ -33,6 +33,16 @@
 				<th>{!ORGANISATION}</th>
 				<td>{ORGANISATION*}</td>
 			</tr>
+			{+START,IF_NON_EMPTY,{COPYRIGHT_ATTRIBUTION}}
+				<tr>
+					<th>{!COPYRIGHT_ATTRIBUTION}</th>
+					<td><div class="whitespace_visible">{COPYRIGHT_ATTRIBUTION*}</div></td>
+				</tr>
+			{+END}
+			<tr>
+				<th>{!LICENCE}</th>
+				<td>{LICENCE*}</td>
+			</tr>
 			<tr>
 				<th>{!VERSION}</th>
 				<td>{VERSION*}</td>
@@ -40,6 +50,10 @@
 			<tr>
 				<th>{!DESCRIPTION}</th>
 				<td>{DESCRIPTION}</td>
+			</tr>
+			<tr>
+				<th>{!CATEGORY}</th>
+				<td>{CATEGORY*}</td>
 			</tr>
 		</tbody>
 	</table></div>

@@ -44,15 +44,6 @@ if ($mode=='unbundle')
 	$files=$ob->get_file_list();
 	foreach ($files as $file)
 	{
-		if ((substr($file,-4)=='.css') && (strpos($file,'/')===false))
-		{
-			$file='themes/default/css/'.$file;
-		}
-		if ((substr($file,-4)=='.tpl') && (strpos($file,'/')===false))
-		{
-			$file='themes/default/templates/'.$file;
-		}
-
 		$new_file=NULL;
 		$matches=array();
 
@@ -87,7 +78,7 @@ if ($mode=='unbundle')
 
 		if (!is_null($new_file))
 		{
-//var_dump($new_file);continue;
+			//var_dump($new_file);continue;
 			if (!file_exists(get_file_base().'/'.$new_file))
 			{
 				@mkdir(dirname($new_file),0777,true);
@@ -95,7 +86,7 @@ if ($mode=='unbundle')
 			} // else already moved
 		} else
 		{
-	//		var_dump($file);
+			//var_dump($file);
 		}
 	}
 }
@@ -105,4 +96,4 @@ if ($mode=='bundle')
 	// Not currently implemented
 }
 
-echo 'Done';
+echo 'Done.';

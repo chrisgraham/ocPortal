@@ -89,9 +89,9 @@ class Hook_addon_registry_supermember_directory
 			'sources/hooks/systems/config/supermembers_text.php',
 			'sources/hooks/systems/addon_registry/supermember_directory.php',
 			'lang/EN/supermembers.ini',
-			'SUPERMEMBERS_SCREEN.tpl',
-			'SUPERMEMBERS_SCREEN_ENTRY.tpl',
-			'SUPERMEMBERS_SCREEN_GROUP.tpl',
+			'themes/default/templates/SUPERMEMBERS_SCREEN.tpl',
+			'themes/default/templates/SUPERMEMBERS_SCREEN_ENTRY.tpl',
+			'themes/default/templates/SUPERMEMBERS_SCREEN_GROUP.tpl',
 			'collaboration/pages/modules/supermembers.php',
 		);
 	}
@@ -122,7 +122,7 @@ class Hook_addon_registry_supermember_directory
 	{
 		require_lang('authors');
 		require_lang('points');
-		$groups_current=do_lorem_template('SUPERMEMBERS_SCREEN_ENTRY', array(
+		$groups_current=do_lorem_template('SUPERMEMBERS_SCREEN_ENTRY',array(
 			'USERNAME'=>lorem_phrase(),
 			'DAYS'=>placeholder_number(),
 			'PROFILE_URL'=>placeholder_url(),
@@ -132,13 +132,13 @@ class Hook_addon_registry_supermember_directory
 			'SKILLS'=>lorem_phrase()
 		));
 
-		$groups=do_lorem_template('SUPERMEMBERS_SCREEN_GROUP', array(
+		$groups=do_lorem_template('SUPERMEMBERS_SCREEN_GROUP',array(
 			'ENTRIES'=>$groups_current,
 			'GROUP_NAME'=>lorem_phrase()
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('SUPERMEMBERS_SCREEN', array(
+			lorem_globalise(do_lorem_template('SUPERMEMBERS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'GROUPS'=>$groups,
 				'TEXT'=>lorem_sentence_html()

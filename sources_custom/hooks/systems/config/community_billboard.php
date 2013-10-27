@@ -48,7 +48,7 @@ class Hook_config_community_billboard
 	 */
 	function get_default()
 	{
-		if (!addon_installed('community_billboard')) return NULL; return '200';
+		return '200';
 	}
 
 }

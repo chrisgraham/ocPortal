@@ -1206,7 +1206,7 @@ class forum_driver_mybb extends forum_driver_base
 		} else
 		{
 			$session_id=md5(strval(time()));
-			$this->connection->query_insert('sessions', array('sid'=>$session_id,'uid'=>$id,'time'=>time(),'ip'=>$current_ip));
+			$this->connection->query_insert('sessions',array('sid'=>$session_id,'uid'=>$id,'time'=>time(),'ip'=>$current_ip));
 		}
 
 		//Now lets try and set a COOKIE of MyBB Session ID

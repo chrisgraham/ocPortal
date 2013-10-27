@@ -91,19 +91,19 @@ class Hook_addon_registry_syndication_blocks
 			'sources/hooks/systems/config/is_on_rss.php',
 			'sources/hooks/systems/config/is_rss_advertised.php',
 			'sources/hooks/systems/config/rss_update_time.php',
-			'BLOCK_MAIN_RSS.tpl',
-			'BLOCK_MAIN_RSS_CATEGORY.tpl',
-			'BLOCK_MAIN_RSS_CATEGORY_NO_IMG.tpl',
-			'BLOCK_MAIN_RSS_FROM_TITLE.tpl',
-			'BLOCK_MAIN_RSS_FULL.tpl',
-			'BLOCK_MAIN_RSS_LIST_FIRST.tpl',
-			'BLOCK_MAIN_RSS_LIST_LAST.tpl',
-			'BLOCK_MAIN_RSS_LIST_MIDDLE.tpl',
-			'BLOCK_MAIN_RSS_SUMMARY.tpl',
-			'BLOCK_MAIN_RSS_TITLE.tpl',
-			'BLOCK_SIDE_RSS.tpl',
-			'BLOCK_SIDE_RSS_SUMMARY.tpl',
-			'rss.css',
+			'themes/default/templates/BLOCK_MAIN_RSS.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_CATEGORY.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_CATEGORY_NO_IMG.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_FROM_TITLE.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_FULL.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_LIST_FIRST.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_LIST_LAST.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_LIST_MIDDLE.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_SUMMARY.tpl',
+			'themes/default/templates/BLOCK_MAIN_RSS_TITLE.tpl',
+			'themes/default/templates/BLOCK_SIDE_RSS.tpl',
+			'themes/default/templates/BLOCK_SIDE_RSS_SUMMARY.tpl',
+			'themes/default/css/rss.css',
 			'sources/blocks/bottom_rss.php',
 			'sources/blocks/main_rss.php',
 			'sources/blocks/side_rss.php',
@@ -149,7 +149,7 @@ class Hook_addon_registry_syndication_blocks
 		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$content->attach(do_lorem_template('BLOCK_SIDE_RSS_SUMMARY', array(
+			$content->attach(do_lorem_template('BLOCK_SIDE_RSS_SUMMARY',array(
 				'FEED_URL'=>placeholder_url(),
 				'FULL_URL'=>placeholder_url(),
 				'NEWS_TITLE'=>lorem_phrase(),
@@ -160,7 +160,7 @@ class Hook_addon_registry_syndication_blocks
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_RSS', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_RSS',array(
 				'FEED_URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>$content,
@@ -183,39 +183,39 @@ class Hook_addon_registry_syndication_blocks
 		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$news_full=do_lorem_template('BLOCK_MAIN_RSS_FULL', array(
+			$news_full=do_lorem_template('BLOCK_MAIN_RSS_FULL',array(
 				'NEWS_FULL'=>lorem_paragraph()
 			));
 
-			$tails=do_lorem_template('BLOCK_MAIN_RSS_LIST_FIRST', array(
+			$tails=do_lorem_template('BLOCK_MAIN_RSS_LIST_FIRST',array(
 				'X'=>lorem_phrase()
 			));
-			$tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_MIDDLE', array(
+			$tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_MIDDLE',array(
 				'X'=>placeholder_url()
 			)));
-			$tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_LAST', array(
+			$tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_LAST',array(
 				'X'=>placeholder_url()
 			)));
 
-			$category=do_lorem_template('BLOCK_MAIN_RSS_CATEGORY', array(
+			$category=do_lorem_template('BLOCK_MAIN_RSS_CATEGORY',array(
 				'IMG'=>placeholder_image_url(),
 				'CATEGORY'=>lorem_phrase()
 			));
-			$category->attach(do_lorem_template('BLOCK_MAIN_RSS_CATEGORY_NO_IMG', array(
+			$category->attach(do_lorem_template('BLOCK_MAIN_RSS_CATEGORY_NO_IMG',array(
 				'CATEGORY'=>lorem_phrase()
 			)));
 
-			$_title=do_lorem_template('BLOCK_MAIN_RSS_TITLE', array(
+			$_title=do_lorem_template('BLOCK_MAIN_RSS_TITLE',array(
 				'CATEGORY'=>lorem_phrase(),
 				'TITLE'=>lorem_phrase()
 			));
-			$__title=do_lorem_template('BLOCK_MAIN_RSS_FROM_TITLE', array(
+			$__title=do_lorem_template('BLOCK_MAIN_RSS_FROM_TITLE',array(
 				'FEED_URL'=>placeholder_url(),
 				'NEWS_TITLE'=>lorem_phrase(),
 				'DATE'=>placeholder_time()
 			));
 
-			$content->attach(do_lorem_template('BLOCK_MAIN_RSS_SUMMARY', array(
+			$content->attach(do_lorem_template('BLOCK_MAIN_RSS_SUMMARY',array(
 				'FEED_URL'=>placeholder_url(),
 				'NEWS_FULL'=>$news_full,
 				'DATE'=>placeholder_time(),
@@ -230,7 +230,7 @@ class Hook_addon_registry_syndication_blocks
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_RSS', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_RSS',array(
 				'FEED_URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
 				'COPYRIGHT'=>lorem_phrase(),

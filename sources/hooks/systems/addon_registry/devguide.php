@@ -84,18 +84,18 @@ class Hook_addon_registry_devguide
 	function get_file_list()
 	{
 		return array(
-			'devguide.css',
+			'themes/default/css/devguide.css',
 			'sources/hooks/systems/addon_registry/devguide.php',
-			'BLOCK_MAIN_BLOCK_HELP.tpl',
-			'BLOCK_MAIN_BLOCK_HELP_PARAMETER.tpl',
+			'themes/default/templates/BLOCK_MAIN_BLOCK_HELP.tpl',
+			'themes/default/templates/BLOCK_MAIN_BLOCK_HELP_PARAMETER.tpl',
 			'sources/blocks/main_block_help.php',
-			'PHP_CLASS.tpl',
-			'PHP_FILE.tpl',
-			'PHP_FUNCTION.tpl',
-			'PHP_FUNCTION_SUMMARY.tpl',
-			'PHP_PARAMETER.tpl',
-			'PHP_PARAMETER_BIT.tpl',
-			'PHP_PARAMETER_LIST.tpl',
+			'themes/default/templates/PHP_CLASS.tpl',
+			'themes/default/templates/PHP_FILE.tpl',
+			'themes/default/templates/PHP_FUNCTION.tpl',
+			'themes/default/templates/PHP_FUNCTION_SUMMARY.tpl',
+			'themes/default/templates/PHP_PARAMETER.tpl',
+			'themes/default/templates/PHP_PARAMETER_BIT.tpl',
+			'themes/default/templates/PHP_PARAMETER_LIST.tpl',
 			'lang/EN/phpdoc.ini',
 			'sources/blocks/main_code_documentor.php',
 			'sources/php.php',
@@ -138,17 +138,17 @@ class Hook_addon_registry_devguide
 
 		foreach (placeholder_array() as $value)
 		{
-			$parameters->attach(do_lorem_template('PHP_PARAMETER_LIST', array(
+			$parameters->attach(do_lorem_template('PHP_PARAMETER_LIST',array(
 				'TYPE'=>lorem_word(),
 				'NAME'=>lorem_word_2()
 			)));
 
-			$bits=do_lorem_template('PHP_PARAMETER_BIT', array(
+			$bits=do_lorem_template('PHP_PARAMETER_BIT',array(
 				'NAME'=>lorem_word(),
 				'VALUE'=>$value
 			));
 
-			$full_parameters->attach(do_lorem_template('PHP_PARAMETER', array(
+			$full_parameters->attach(do_lorem_template('PHP_PARAMETER',array(
 				'BITS'=>$bits
 			)));
 		}
@@ -156,12 +156,12 @@ class Hook_addon_registry_devguide
 		$classes=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$value)
 		{
-			$return=do_lorem_template('PHP_PARAMETER_BIT', array(
+			$return=do_lorem_template('PHP_PARAMETER_BIT',array(
 				'NAME'=>lorem_word(),
 				'VALUE'=>lorem_word(),
 			));
 
-			$function=do_lorem_template('PHP_FUNCTION', array(
+			$function=do_lorem_template('PHP_FUNCTION',array(
 				'FILENAME'=>lorem_word(),
 				'CODE'=>lorem_paragraph_html(),
 				'RETURN_TYPE'=>lorem_word(),
@@ -174,7 +174,7 @@ class Hook_addon_registry_devguide
 			));
 
 
-			$summary=do_lorem_template('PHP_FUNCTION_SUMMARY', array(
+			$summary=do_lorem_template('PHP_FUNCTION_SUMMARY',array(
 				'FILENAME'=>lorem_word(),
 				'RETURN_TYPE'=>lorem_word(),
 				'CLASS'=>lorem_word_2(),
@@ -182,7 +182,7 @@ class Hook_addon_registry_devguide
 				'PARAMETERS'=>$parameters
 			));
 
-			$classes->attach(do_lorem_template('PHP_CLASS', array(
+			$classes->attach(do_lorem_template('PHP_CLASS',array(
 				'CLASS_NAME'=>lorem_word() . strval($k),
 				'FUNCTION_SUMMARIES'=>$summary,
 				'FUNCTIONS'=>$function
@@ -190,7 +190,7 @@ class Hook_addon_registry_devguide
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('PHP_FILE', array(
+			lorem_globalise(do_lorem_template('PHP_FILE',array(
 				'FILENAME'=>lorem_word(),
 				'CLASSES'=>$classes
 			)), NULL, '', true)
@@ -210,14 +210,14 @@ class Hook_addon_registry_devguide
 
 		foreach (placeholder_array() as $value)
 		{
-			$parameters->attach(do_lorem_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER', array(
+			$parameters->attach(do_lorem_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER',array(
 				'NAME'=>lorem_word(),
 				'DESCRIPTION'=>lorem_paragraph()
 			)));
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_BLOCK_HELP', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_BLOCK_HELP',array(
 				'NAME'=>lorem_word(),
 				'DESCRIPTION'=>lorem_paragraph(),
 				'USE'=>lorem_phrase(),

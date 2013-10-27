@@ -54,9 +54,14 @@ function optimise_tempcode(&$ob)
 	{
 		foreach ($seq_part_group as &$seq_part)
 		{
+			$code=$ob->code_to_preexecute[$seq_part[0]];
+
+			// Indication of dynamic variable use, cannot optimise
+			if (isset($seq_part[1]['vars'])) return;
+			if (strpos($code,"'vars'=>")!==false) return;
+
 			if ((($seq_part[2]==TC_KNOWN) || ($seq_part[2]==TC_PARAMETER)) && (isset($ob->code_to_preexecute[$seq_part[0]])))
 			{
-				$code=$ob->code_to_preexecute[$seq_part[0]];
 				foreach ($seq_part[1] as $key=>$_)
 				{
 					if (is_integer($key)) $key=strval($key);

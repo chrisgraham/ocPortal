@@ -87,25 +87,25 @@ class Hook_addon_registry_installer
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/installer.php',
-			'INSTALLER_FORUM_CHOICE.tpl',
-			'INSTALLER_FORUM_CHOICE_VERSION.tpl',
-			'INSTALLER_STEP_4_SECTION.tpl',
-			'INSTALLER_STEP_4_SECTION_HIDE.tpl',
-			'INSTALLER_STEP_4_SECTION_OPTION.tpl',
-			'INSTALLER_HTML_WRAP.tpl',
-			'INSTALLER_WARNING_LONG.tpl',
-			'INSTALLER_DONE_SOMETHING.tpl',
-			'INSTALLER_INPUT_LINE.tpl',
-			'INSTALLER_INPUT_PASSWORD.tpl',
-			'INSTALLER_INPUT_TICK.tpl',
-			'INSTALLER_STEP_1.tpl',
-			'INSTALLER_STEP_2.tpl',
-			'INSTALLER_STEP_3.tpl',
-			'INSTALLER_STEP_4.tpl',
-			'INSTALLER_STEP_LOG.tpl',
-			'INSTALLER_STEP_10.tpl',
-			'INSTALLER_WARNING.tpl',
-			'INSTALLER_NOTICE.tpl',
+			'themes/default/templates/INSTALLER_FORUM_CHOICE.tpl',
+			'themes/default/templates/INSTALLER_FORUM_CHOICE_VERSION.tpl',
+			'themes/default/templates/INSTALLER_STEP_4_SECTION.tpl',
+			'themes/default/templates/INSTALLER_STEP_4_SECTION_HIDE.tpl',
+			'themes/default/templates/INSTALLER_STEP_4_SECTION_OPTION.tpl',
+			'themes/default/templates/INSTALLER_HTML_WRAP.tpl',
+			'themes/default/templates/INSTALLER_WARNING_LONG.tpl',
+			'themes/default/templates/INSTALLER_DONE_SOMETHING.tpl',
+			'themes/default/templates/INSTALLER_INPUT_LINE.tpl',
+			'themes/default/templates/INSTALLER_INPUT_PASSWORD.tpl',
+			'themes/default/templates/INSTALLER_INPUT_TICK.tpl',
+			'themes/default/templates/INSTALLER_STEP_1.tpl',
+			'themes/default/templates/INSTALLER_STEP_2.tpl',
+			'themes/default/templates/INSTALLER_STEP_3.tpl',
+			'themes/default/templates/INSTALLER_STEP_4.tpl',
+			'themes/default/templates/INSTALLER_STEP_LOG.tpl',
+			'themes/default/templates/INSTALLER_STEP_10.tpl',
+			'themes/default/templates/INSTALLER_WARNING.tpl',
+			'themes/default/templates/INSTALLER_NOTICE.tpl',
 		);
 	}
 
@@ -153,7 +153,7 @@ class Hook_addon_registry_installer
 		require_lang('version');
 
 		return array(
-			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
@@ -181,20 +181,20 @@ class Hook_addon_registry_installer
 		require_lang('installer');
 		require_lang('version');
 
-		$warning=do_lorem_template('INSTALLER_WARNING_LONG', array(
+		$warning=do_lorem_template('INSTALLER_WARNING_LONG',array(
 			'FILES'=>placeholder_array(),
 			'MESSAGE'=>lorem_sentence_html()
 		));
-		$warning->attach(do_lorem_template('INSTALLER_WARNING', array(
+		$warning->attach(do_lorem_template('INSTALLER_WARNING',array(
 			'MESSAGE'=>lorem_sentence_html()
 		)));
-		$warning->attach(do_lorem_template('INSTALLER_NOTICE', array(
+		$warning->attach(do_lorem_template('INSTALLER_NOTICE',array(
 			'MESSAGE'=>lorem_sentence_html()
 		)));
 		$languages=new ocp_tempcode();
 		foreach (placeholder_array() as $lang)
 		{
-			$entry=do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
+			$entry=do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
 				'SELECTED'=>false,
 				'DISABLED'=>false,
 				'NAME'=>$lang,
@@ -203,14 +203,14 @@ class Hook_addon_registry_installer
 			));
 			$languages->attach($entry);
 		}
-		$content=do_lorem_template('INSTALLER_STEP_1', array(
+		$content=do_lorem_template('INSTALLER_STEP_1',array(
 			'URL'=>placeholder_url(),
 			'WARNINGS'=>$warning,
 			'HIDDEN'=>'',
 			'LANGUAGES'=>$languages
 		));
 		return array(
-			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
@@ -238,13 +238,13 @@ class Hook_addon_registry_installer
 		require_lang('installer');
 		require_lang('version');
 
-		$content=do_lorem_template('INSTALLER_STEP_2', array(
+		$content=do_lorem_template('INSTALLER_STEP_2',array(
 			'URL'=>placeholder_url(),
 			'HIDDEN'=>'',
 			'LICENCE'=>lorem_chunk()
 		));
 		return array(
-			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
@@ -287,14 +287,14 @@ class Hook_addon_registry_installer
 			foreach ($forums as $_key=>$forum)
 			{
 				$version=do_lang('VERSION_NUM', $_key);
-				$versions->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION', array(
+				$versions->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION',array(
 					'IS_DEFAULT'=>false,
 					'CLASS'=>$forum,
 					'NAME'=>$forum,
 					'VERSION'=>$version,
 					'EXTRA'=>''
 				)));
-				$simple_forums->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION', array(
+				$simple_forums->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION',array(
 					'IS_DEFAULT'=>false,
 					'CLASS'=>$forum,
 					'NAME'=>$forum,
@@ -302,7 +302,7 @@ class Hook_addon_registry_installer
 					'EXTRA'=>''
 				)));
 			}
-			$tforums->attach(do_lorem_template('INSTALLER_FORUM_CHOICE', array(
+			$tforums->attach(do_lorem_template('INSTALLER_FORUM_CHOICE',array(
 				'CLASS'=>'f'.strval($key),
 				'REC'=>'',
 				'TEXT'=>lorem_phrase(),
@@ -315,7 +315,7 @@ class Hook_addon_registry_installer
 		$tdatabase=new ocp_tempcode();
 		foreach (placeholder_array() as $dbname)
 		{
-			$entry=do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
+			$entry=do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
 				'SELECTED'=>false,
 				'DISABLED'=>false,
 				'NAME'=>$dbname,
@@ -325,7 +325,7 @@ class Hook_addon_registry_installer
 			$tdatabase->attach($entry);
 		}
 
-		$step3=do_lorem_template('INSTALLER_STEP_3', array(
+		$step3=do_lorem_template('INSTALLER_STEP_3',array(
 			'URL'=>placeholder_url(),
 			'JS'=>'',
 			'HIDDEN'=>'',
@@ -337,7 +337,7 @@ class Hook_addon_registry_installer
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
@@ -362,11 +362,11 @@ class Hook_addon_registry_installer
 	 */
 	function make_tick($nice_name, $description, $name, $value)
 	{
-		$input=do_lorem_template('INSTALLER_INPUT_TICK', array(
+		$input=do_lorem_template('INSTALLER_INPUT_TICK',array(
 			'CHECKED'=>$value==1,
 			'NAME'=>$name
 		));
-		return do_lorem_template('INSTALLER_STEP_4_SECTION_OPTION', array(
+		return do_lorem_template('INSTALLER_STEP_4_SECTION_OPTION',array(
 			'_GUID'=>'0723f86908f66da7f67ebc4cd07bff2e',
 			'NAME'=>$name,
 			'INPUT'=>$input,
@@ -390,7 +390,7 @@ class Hook_addon_registry_installer
 	{
 		if ($hidden)
 		{
-			$input=do_lorem_template('INSTALLER_INPUT_PASSWORD', array(
+			$input=do_lorem_template('INSTALLER_INPUT_PASSWORD',array(
 				'REQUIRED'=>$required,
 				'NAME'=>$name,
 				'VALUE'=>$value
@@ -398,14 +398,14 @@ class Hook_addon_registry_installer
 		}
 		else
 		{
-			$input=do_lorem_template('INSTALLER_INPUT_LINE', array(
+			$input=do_lorem_template('INSTALLER_INPUT_LINE',array(
 				'REQUIRED'=>$required,
 				'NAME'=>$name,
 				'VALUE'=>$value
 			));
 		}
 
-		return do_lorem_template('INSTALLER_STEP_4_SECTION_OPTION', array(
+		return do_lorem_template('INSTALLER_STEP_4_SECTION_OPTION',array(
 			'NAME'=>$name,
 			'INPUT'=>$input,
 			'NICE_NAME'=>$nice_name,
@@ -433,19 +433,19 @@ class Hook_addon_registry_installer
 
 		$options->attach($this->make_tick(lorem_word(), lorem_phrase(), 'tick', 1));
 
-		$section=do_lorem_template('INSTALLER_STEP_4_SECTION', array(
+		$section=do_lorem_template('INSTALLER_STEP_4_SECTION',array(
 			'HIDDEN'=>'',
 			'TITLE'=>lorem_word(),
 			'TEXT'=>lorem_sentence_html(),
 			'OPTIONS'=>$options
 		));
 
-		$section->attach(do_lorem_template('INSTALLER_STEP_4_SECTION_HIDE', array(
+		$section->attach(do_lorem_template('INSTALLER_STEP_4_SECTION_HIDE',array(
 			'TITLE'=>lorem_phrase(),
 			'CONTENT'=>lorem_phrase()
 		)));
 
-		$content=do_lorem_template('INSTALLER_STEP_4', array(
+		$content=do_lorem_template('INSTALLER_STEP_4',array(
 			'URL'=>placeholder_url(),
 			'JS'=>'',
 			'MESSAGE'=>lorem_phrase(),
@@ -457,7 +457,7 @@ class Hook_addon_registry_installer
 			'MAX'=>'1000'
 		));
 		return array(
-			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
@@ -480,13 +480,13 @@ class Hook_addon_registry_installer
 	 */
 	function tpl_preview__administrative__installer_step_log()
 	{
-		$message=do_lorem_template('INSTALLER_DONE_SOMETHING', array(
+		$message=do_lorem_template('INSTALLER_DONE_SOMETHING',array(
 			'SOMETHING'=>lorem_sentence()
 		));
 
 		require_css('install');
 		return array(
-			lorem_globalise(do_lorem_template('INSTALLER_STEP_LOG', array(
+			lorem_globalise(do_lorem_template('INSTALLER_STEP_LOG',array(
 				'PREVIOUS_STEP'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'LOG'=>$message,
@@ -508,12 +508,12 @@ class Hook_addon_registry_installer
 		require_lang('installer');
 		require_lang('version');
 
-		$message=do_lorem_template('INSTALLER_DONE_SOMETHING', array(
+		$message=do_lorem_template('INSTALLER_DONE_SOMETHING',array(
 			'SOMETHING'=>lorem_sentence()
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('INSTALLER_STEP_10', array(
+			lorem_globalise(do_lorem_template('INSTALLER_STEP_10',array(
 				'PREVIOUS_STEP'=>lorem_phrase(),
 				'FINAL'=>lorem_phrase(),
 				'LOG'=>$message

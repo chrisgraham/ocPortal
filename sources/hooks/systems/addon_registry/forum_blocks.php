@@ -86,11 +86,11 @@ class Hook_addon_registry_forum_blocks
 	function get_file_list()
 	{
 		return array(
-			'BLOCK_MAIN_FORUM_NEWS.tpl',
-			'BLOCK_MAIN_FORUM_TOPICS.tpl',
-			'BLOCK_MAIN_FORUM_TOPICS_TOPIC.tpl',
-			'BLOCK_SIDE_FORUM_NEWS.tpl',
-			'BLOCK_SIDE_FORUM_NEWS_SUMMARY.tpl',
+			'themes/default/templates/BLOCK_MAIN_FORUM_NEWS.tpl',
+			'themes/default/templates/BLOCK_MAIN_FORUM_TOPICS.tpl',
+			'themes/default/templates/BLOCK_MAIN_FORUM_TOPICS_TOPIC.tpl',
+			'themes/default/templates/BLOCK_SIDE_FORUM_NEWS.tpl',
+			'themes/default/templates/BLOCK_SIDE_FORUM_NEWS_SUMMARY.tpl',
 			'sources/blocks/bottom_forum_news.php',
 			'sources/blocks/main_forum_news.php',
 			'sources/blocks/main_forum_topics.php',
@@ -131,7 +131,7 @@ class Hook_addon_registry_forum_blocks
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$out->attach(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC', array(
+			$out->attach(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array(
 				'POST'=>lorem_paragraph(),
 				'FORUM_ID'=>NULL,
 				'FORUM_NAME'=>lorem_word(),
@@ -147,7 +147,7 @@ class Hook_addon_registry_forum_blocks
 
 		//Create the 'BLOCK_MAIN_FORUM_TOPICS' with 'BLOCK_MAIN_FORUM_TOPICS_TOPIC' as sub-template.
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS',array(
 				'TITLE'=>lorem_word(),
 				'CONTENT'=>$out,
 				'FORUM_NAME'=>lorem_word_html(),
@@ -171,7 +171,7 @@ class Hook_addon_registry_forum_blocks
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$out->attach(do_lorem_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY', array(
+			$out->attach(do_lorem_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY',array(
 				'REPLIES'=>lorem_word(),
 				'FIRSTTIME'=>lorem_word(),
 				'LASTTIME'=>lorem_word(),
@@ -189,7 +189,7 @@ class Hook_addon_registry_forum_blocks
 
 		//Create the 'BLOCK_SIDE_FORUM_NEWS' with 'BLOCK_SIDE_FORUM_NEWS_SUMMARY' as sub-template.
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_FORUM_NEWS', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_FORUM_NEWS',array(
 				'FORUM_NAME'=>lorem_word_html(),
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>$out,
@@ -213,7 +213,7 @@ class Hook_addon_registry_forum_blocks
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$out->attach(do_lorem_template('NEWS_BOX', array(
+			$out->attach(do_lorem_template('NEWS_BOX',array(
 				'TRUNCATE'=>false,
 				'BLOG'=>false,
 				'FIRSTTIME'=>lorem_word(),
@@ -240,7 +240,7 @@ class Hook_addon_registry_forum_blocks
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_FORUM_NEWS', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_FORUM_NEWS',array(
 				'TITLE'=>lorem_word(),
 				'FORUM_NAME'=>lorem_word_html(),
 				'CONTENT'=>$out,

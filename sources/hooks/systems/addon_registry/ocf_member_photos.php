@@ -91,7 +91,7 @@ class Hook_addon_registry_ocf_member_photos
 			'uploads/ocf_photos_thumbs/.htaccess',
 			'sources/hooks/systems/profiles_tabs_edit/photo.php',
 			'sources/hooks/systems/notifications/ocf_choose_photo.php',
-			'OCF_EDIT_PHOTO_TAB.tpl',
+			'themes/default/templates/OCF_EDIT_PHOTO_TAB.tpl',
 		);
 	}
 
@@ -120,7 +120,7 @@ class Hook_addon_registry_ocf_member_photos
 		require_css('ocf');
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_EDIT_PHOTO_TAB', array(
+			lorem_globalise(do_lorem_template('OCF_EDIT_PHOTO_TAB',array(
 				'USERNAME'=>lorem_word(),
 				'PHOTO'=>placeholder_image_url(),
 				'TEXT'=>''

@@ -74,12 +74,14 @@ class Hook_media_rendering_image_websafe
 	 * @param  array		Attributes (e.g. width, height, length)
 	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
+	 * @param  ?URLPATH	Direct URL (not via a script) (NULL: just use the normal URL)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
+	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL,$url_direct_filesystem=NULL)
 	{
 		$_url=is_object($url)?$url->evaluate():$url;
 		$_url_safe=is_object($url_safe)?$url_safe->evaluate():$url_safe;
+		if ($url_direct_filesystem===NULL) $url_direct_filesystem=$_url;
 
 		// Put in defaults
 		$blank_thumbnail=(!array_key_exists('thumb_url',$attributes)) || ((is_object($attributes['thumb_url'])) && ($attributes['thumb_url']->is_empty()) || (is_string($attributes['thumb_url'])) && ($attributes['thumb_url']==''));
@@ -114,7 +116,7 @@ class Hook_media_rendering_image_websafe
 				{
 					if (!file_exists($file_thumb))
 					{
-						convert_image($_url,$file_thumb,-1,-1,intval($attributes['width']),false);
+						convert_image($url_direct_filesystem,$file_thumb,-1,-1,intval($attributes['width']),false);
 					}
 					$attributes['thumb_url']=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 					if (($auto_width) || ($auto_height))

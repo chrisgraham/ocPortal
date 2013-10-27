@@ -49,7 +49,7 @@ class css_and_js_test_set extends ocp_test_case
 		$dh=opendir(get_file_base().'/themes/default/templates');
 		while (($f=readdir($dh))!==false)
 		{
-			if ((substr($f,-4)=='.tpl') && (substr($f,0,11)=='JAVASCRIPT_') && (strpos($f,'JWPLAYER')===false) && (strpos($f,'SOUND')===false) && (strpos($f,'COLOUR_PICKER')===false) && (strpos($f,'YAHOO')===false) && ($f!='JAVASCRIPT_NEED.tpl') && ($f!='JAVASCRIPT_NEED_INLINE.tpl'))
+			if ((substr($f,-4)=='.tpl') && (substr($f,0,7)=='themes/') && (substr($f,0,11)=='JAVASCRIPT_') && (strpos($f,'JWPLAYER')===false) && (strpos($f,'SOUND')===false) && (strpos($f,'COLOUR_PICKER')===false) && (strpos($f,'YAHOO')===false) && ($f!='JAVASCRIPT_NEED.tpl') && ($f!='JAVASCRIPT_NEED_INLINE.tpl'))
 			{
 				$path=javascript_enforce(basename($f,'.tpl'),'default',false);
 				$contents=file_get_contents($path);
@@ -87,7 +87,7 @@ class css_and_js_test_set extends ocp_test_case
 		$dh=opendir(get_file_base().'/themes/default/css');
 		while (($f=readdir($dh))!==false)
 		{
-			if ((substr($f,-4)=='.css') && ($f!='svg.css') && ($f!='no_cache.css') && ($f!='quizzes.css'/*we know this doesn't pass but it is extra glitz only*/))
+			if ((substr($f,-4)=='.css') && (substr($f,0,7)=='themes/') && ($f!='svg.css') && ($f!='no_cache.css') && ($f!='quizzes.css'/*we know this doesn't pass but it is extra glitz only*/))
 			{
 				$path=css_enforce(basename($f,'.css'),'default',false);
 

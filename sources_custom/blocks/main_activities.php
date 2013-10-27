@@ -122,7 +122,7 @@ class Block_main_activities
 
 		require_lang('activities');
 		require_code('activities');
-		require_code('addons_overview');
+		require_code('addons');
 
 		$mode=array_key_exists('mode',$map)?$map['mode']:'all';
 
@@ -159,7 +159,7 @@ class Block_main_activities
 					'IS_PUBLIC'=>$is_public,
 					'LANG_STRING'=>$lang_string,
 					'ADDON'=>$row['a_addon'],
-					'ADDON_ICON'=>find_addon_icon($row['a_addon']),
+					'ADDON_ICON'=>($row['a_addon']=='')?'':find_addon_icon($row['a_addon']),
 					'MESSAGE'=>$message,
 					'AVATAR'=>$member_avatar,
 					'MEMBER_ID'=>strval($row['a_member_id']),

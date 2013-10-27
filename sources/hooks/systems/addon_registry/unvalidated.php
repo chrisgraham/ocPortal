@@ -90,9 +90,9 @@ class Hook_addon_registry_unvalidated
 			'sources/hooks/systems/notifications/content_validated.php',
 			'sources/hooks/systems/notifications/needs_validation.php',
 			'sources/hooks/systems/addon_registry/unvalidated.php',
-			'UNVALIDATED_SCREEN.tpl',
-			'UNVALIDATED_SECTION.tpl',
-			'VALIDATION_REQUEST_MAIL.tpl',
+			'themes/default/templates/UNVALIDATED_SCREEN.tpl',
+			'themes/default/templates/UNVALIDATED_SECTION.tpl',
+			'themes/default/templates/VALIDATION_REQUEST_MAIL.tpl',
 			'adminzone/pages/modules/admin_unvalidated.php',
 			'themes/default/images/pagepics/unvalidated.png',
 			'lang/EN/unvalidated.ini',
@@ -128,7 +128,7 @@ class Hook_addon_registry_unvalidated
 	{
 		require_lang('unvalidated');
 		return array(
-			lorem_globalise(do_lorem_template('VALIDATION_REQUEST_MAIL', array(
+			lorem_globalise(do_lorem_template('VALIDATION_REQUEST_MAIL',array(
 				'USERNAME'=>lorem_word(),
 				'TYPE'=>lorem_phrase(),
 				'ID'=>placeholder_id(),
@@ -146,12 +146,12 @@ class Hook_addon_registry_unvalidated
 	 */
 	function tpl_preview__administrative__unvalidated_screen()
 	{
-		$section=do_lorem_template('UNVALIDATED_SECTION', array(
+		$section=do_lorem_template('UNVALIDATED_SECTION',array(
 			'TITLE'=>lorem_phrase(),
 			'CONTENT'=>lorem_phrase()
 		));
 		return array(
-			lorem_globalise(do_lorem_template('UNVALIDATED_SCREEN', array(
+			lorem_globalise(do_lorem_template('UNVALIDATED_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'SECTIONS'=>$section
 			)), NULL, '', true)

@@ -91,17 +91,17 @@ class Hook_addon_registry_quizzes
 			'themes/default/images/bigicons/findwinners.png',
 			'themes/default/images/pagepics/findwinners.png',
 			'sources/hooks/blocks/side_stats/stats_quiz.php',
-			'QUIZ_ANSWERS_MAIL.tpl',
-			'QUIZ_ARCHIVE_SCREEN.tpl',
-			'QUIZ_TEST_ANSWERS_MAIL.tpl',
+			'themes/default/templates/QUIZ_ANSWERS_MAIL.tpl',
+			'themes/default/templates/QUIZ_ARCHIVE_SCREEN.tpl',
+			'themes/default/templates/QUIZ_TEST_ANSWERS_MAIL.tpl',
 			'sources/hooks/systems/content_meta_aware/quiz.php',
 			'sources/hooks/systems/occle_fs/quizzes.php',
 			'sources/hooks/systems/addon_registry/quizzes.php',
 			'sources/hooks/modules/admin_import_types/quizzes.php',
-			'QUIZ_BOX.tpl',
-			'QUIZ_SCREEN.tpl',
-			'QUIZ_DONE_SCREEN.tpl',
-			'SURVEY_RESULTS_SCREEN.tpl',
+			'themes/default/templates/QUIZ_BOX.tpl',
+			'themes/default/templates/QUIZ_SCREEN.tpl',
+			'themes/default/templates/QUIZ_DONE_SCREEN.tpl',
+			'themes/default/templates/SURVEY_RESULTS_SCREEN.tpl',
 			'adminzone/pages/modules/admin_quiz.php',
 			'themes/default/images/bigicons/quiz.png',
 			'themes/default/images/pagepics/quiz.png',
@@ -117,7 +117,7 @@ class Hook_addon_registry_quizzes
 			'themes/default/images/bigicons/survey_results.png',
 			'themes/default/images/pagepics/survey_results.png',
 			'sources/hooks/systems/preview/quiz.php',
-			'quizzes.css',
+			'themes/default/css/quizzes.css',
 		);
 	}
 
@@ -152,19 +152,19 @@ class Hook_addon_registry_quizzes
 		$fields=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$fields->attach(do_lorem_template('MAP_TABLE_FIELD_RAW', array(
+			$fields->attach(do_lorem_template('MAP_TABLE_FIELD_RAW',array(
 				'ABBR'=>'',
 				'NAME'=>lorem_phrase(),
 				'VALUE'=>lorem_phrase()
 			)));
 		}
-		$summary=do_lorem_template('MAP_TABLE', array(
+		$summary=do_lorem_template('MAP_TABLE',array(
 			'WIDTH'=>placeholder_number(),
 			'FIELDS'=>$fields
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('SURVEY_RESULTS_SCREEN', array(
+			lorem_globalise(do_lorem_template('SURVEY_RESULTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'SUMMARY'=>$summary,
 				'RESULTS'=>placeholder_table(),
@@ -186,7 +186,7 @@ class Hook_addon_registry_quizzes
 		$content_surveys=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$link=do_lorem_template('QUIZ_BOX', array(
+			$link=do_lorem_template('QUIZ_BOX',array(
 				'TYPE'=>lorem_word(),
 				'DATE'=>placeholder_time(),
 				'URL'=>placeholder_url(),
@@ -204,7 +204,7 @@ class Hook_addon_registry_quizzes
 		$content_competitions->attach($link);
 
 		return array(
-			lorem_globalise(do_lorem_template('QUIZ_ARCHIVE_SCREEN', array(
+			lorem_globalise(do_lorem_template('QUIZ_ARCHIVE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CONTENT_SURVEYS'=>$content_surveys,
 				'CONTENT_COMPETITIONS'=>$content_competitions,
@@ -226,12 +226,12 @@ class Hook_addon_registry_quizzes
 		//This is for getting the do_ajax_request() javascript function.
 		require_javascript('javascript_ajax');
 
-		$warning_details=do_lorem_template('WARNING_BOX', array(
+		$warning_details=do_lorem_template('WARNING_BOX',array(
 			'WARNING'=>lorem_phrase()
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('QUIZ_SCREEN', array(
+			lorem_globalise(do_lorem_template('QUIZ_SCREEN',array(
 				'TAGS'=>lorem_word_html(),
 				'ID'=>placeholder_id(),
 				'WARNING_DETAILS'=>$warning_details,
@@ -267,7 +267,7 @@ class Hook_addon_registry_quizzes
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('QUIZ_TEST_ANSWERS_MAIL', array(
+			lorem_globalise(do_lorem_template('QUIZ_TEST_ANSWERS_MAIL',array(
 				'UNKNOWNS'=>$_unknowns,
 				'CORRECTIONS'=>$_corrections,
 				'RESULT'=>lorem_phrase(),
@@ -292,7 +292,7 @@ class Hook_addon_registry_quizzes
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('QUIZ_ANSWERS_MAIL', array(
+			lorem_globalise(do_lorem_template('QUIZ_ANSWERS_MAIL',array(
 				'ANSWERS'=>$_answers,
 				'MEMBER_PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_phrase(),
@@ -311,7 +311,7 @@ class Hook_addon_registry_quizzes
 	function tpl_preview__quiz_done_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('QUIZ_DONE_SCREEN', array(
+			lorem_globalise(do_lorem_template('QUIZ_DONE_SCREEN',array(
 				'RESULT'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
 				'TYPE'=>lorem_phrase(),

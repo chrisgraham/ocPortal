@@ -101,8 +101,8 @@ class Hook_addon_registry_recommend
 			'themes/default/images/recommend/print.gif',
 			'themes/default/images/recommend/recommend.gif',
 			'sources/blocks/main_screen_actions.php',
-			'screen_actions.css',
-			'BLOCK_MAIN_SCREEN_ACTIONS.tpl',
+			'themes/default/css/screen_actions.css',
+			'themes/default/templates/BLOCK_MAIN_SCREEN_ACTIONS.tpl',
 			'sources/hooks/systems/config/enable_csv_recommend.php',
 		);
 	}
@@ -130,7 +130,7 @@ class Hook_addon_registry_recommend
 	function tpl_preview__block_main_screen_actions()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_SCREEN_ACTIONS', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_SCREEN_ACTIONS',array(
 				'PRINT_URL'=>placeholder_url(),
 				'RECOMMEND_URL'=>placeholder_url(),
 				'EASY_SELF_URL'=>placeholder_url(),

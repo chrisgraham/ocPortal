@@ -84,27 +84,27 @@ class Hook_addon_registry_core_addon_management
 	function get_file_list()
 	{
 		return array(
-			'addons_editor.css',
+			'themes/default/css/addons_editor.css',
 			'sources/hooks/systems/addon_registry/core_addon_management.php',
-			'sources/addons_overview.php',
-			'ADDON_SCREEN_ADDON.tpl',
-			'ADDON_MULTI_CONFIRM_SCREEN.tpl',
-			'ADDON_SCREEN.tpl',
-			'ADDON_EXPORT_FILE_CHOICE.tpl',
-			'ADDON_EXPORT_LINE.tpl',
-			'ADDON_EXPORT_LINE_CHOICE.tpl',
-			'ADDON_EXPORT_SCREEN.tpl',
-			'ADDON_INSTALL_CONFIRM_SCREEN.tpl',
-			'ADDON_INSTALL_FILES.tpl',
-			'ADDON_INSTALL_FILES_WARNING.tpl',
-			'ADDON_INSTALL_WARNING.tpl',
-			'ADDON_UNINSTALL_CONFIRM_SCREEN.tpl',
-			'MODULE_SCREEN.tpl',
-			'MODULE_SCREEN_MODULE.tpl',
-			'ADDON_NAME.tpl',
+			'sources/addons.php',
+			'sources/addons2.php',
+			'themes/default/templates/ADDON_SCREEN_ADDON.tpl',
+			'themes/default/templates/ADDON_MULTI_CONFIRM_SCREEN.tpl',
+			'themes/default/templates/ADDON_SCREEN.tpl',
+			'themes/default/templates/ADDON_EXPORT_FILE_CHOICE.tpl',
+			'themes/default/templates/ADDON_EXPORT_LINE.tpl',
+			'themes/default/templates/ADDON_EXPORT_LINE_CHOICE.tpl',
+			'themes/default/templates/ADDON_EXPORT_SCREEN.tpl',
+			'themes/default/templates/ADDON_INSTALL_CONFIRM_SCREEN.tpl',
+			'themes/default/templates/ADDON_INSTALL_FILES.tpl',
+			'themes/default/templates/ADDON_INSTALL_FILES_WARNING.tpl',
+			'themes/default/templates/ADDON_INSTALL_WARNING.tpl',
+			'themes/default/templates/ADDON_UNINSTALL_CONFIRM_SCREEN.tpl',
+			'themes/default/templates/MODULE_SCREEN.tpl',
+			'themes/default/templates/MODULE_SCREEN_MODULE.tpl',
+			'themes/default/templates/ADDON_NAME.tpl',
 			'adminzone/pages/modules/admin_addons.php',
 			'exports/index.html',
-			'sources/addons.php',
 			'exports/addons/index.html',
 			'imports/index.html',
 			'imports/.htaccess',
@@ -160,7 +160,7 @@ class Hook_addon_registry_core_addon_management
 
 		foreach (placeholder_array() as $value)
 		{
-			$actions=do_lorem_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY', array(
+			$actions=do_lorem_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY',array(
 				'GET'=>true,
 				'NAME'=>lorem_phrase(),
 				'HIDDEN'=>'',
@@ -170,7 +170,7 @@ class Hook_addon_registry_core_addon_management
 
 			$pretty_name=do_lorem_template('ADDON_NAME',array('IMAGE_URL'=>placeholder_image_url(),'NAME'=>lorem_word()));
 
-			$add_ons->attach(do_lorem_template('ADDON_SCREEN_ADDON', array(
+			$add_ons->attach(do_lorem_template('ADDON_SCREEN_ADDON',array(
 				'DESCRIPTION'=>lorem_paragraph_html(),
 				'FILE_LIST'=>lorem_paragraph_html(),
 				'COLOUR'=>'orange',
@@ -178,9 +178,12 @@ class Hook_addon_registry_core_addon_management
 				'NAME'=>$value,
 				'PRETTY_NAME'=>$pretty_name,
 				'FILENAME'=>lorem_word(),
-				'AUTHOR'=>lorem_word(),
+				'AUTHOR'=>lorem_phrase(),
 				'ORGANISATION'=>lorem_word(),
 				'VERSION'=>placeholder_number(),
+				'CATEGORY'=>lorem_phrase(),
+				'COPYRIGHT_ATTRIBUTION'=>lorem_phrase(),
+				'LICENCE'=>lorem_phrase(),
 				'ACTIONS'=>$actions,
 				'TYPE'=>lorem_phrase(),
 				'PASSTHROUGH'=>lorem_phrase(),
@@ -189,7 +192,7 @@ class Hook_addon_registry_core_addon_management
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('ADDON_SCREEN', array(
+			lorem_globalise(do_lorem_template('ADDON_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'ADDONS'=>$add_ons,
 				'MULTI_ACTION'=>placeholder_url(),
@@ -225,7 +228,7 @@ class Hook_addon_registry_core_addon_management
 			$install_files->attach("<li>" . $file . "</li>");
 
 		return array(
-			lorem_globalise(do_lorem_template('ADDON_MULTI_CONFIRM_SCREEN', array(
+			lorem_globalise(do_lorem_template('ADDON_MULTI_CONFIRM_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'HIDDEN'=>'',
 				'URL'=>placeholder_url(),
@@ -253,14 +256,14 @@ class Hook_addon_registry_core_addon_management
 			$_dependencies->attach(escape_html($in));
 		}
 
-		$warning=do_lorem_template('ADDON_INSTALL_WARNING', array(
+		$warning=do_lorem_template('ADDON_INSTALL_WARNING',array(
 			'WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES', $_dependencies, lorem_phrase()),
 			'ADDON_WARNING_OVERWRITE'=>lorem_phrase()
 		));
 		$files=new ocp_tempcode();
 		foreach (placeholder_array() as $val)
 		{
-			$files->attach(do_lorem_template('ADDON_INSTALL_FILES_WARNING', array(
+			$files->attach(do_lorem_template('ADDON_INSTALL_FILES_WARNING',array(
 				'PATH'=>lorem_phrase(),
 				'ABOUT'=>do_lang_tempcode('ADDON_FILE_WILL_OVERWRITE'),
 				'I'=>placeholder_random()
@@ -268,14 +271,14 @@ class Hook_addon_registry_core_addon_management
 		}
 		foreach (placeholder_array() as $val)
 		{
-			$files->attach(do_lorem_template('ADDON_INSTALL_FILES', array(
+			$files->attach(do_lorem_template('ADDON_INSTALL_FILES',array(
 				'PATH'=>lorem_phrase(),
 				'ABOUT'=>do_lang_tempcode('ADDON_FILE_NORMAL'),
 				'I'=>placeholder_random()
 			)));
 		}
 		return array(
-			lorem_globalise(do_lorem_template('ADDON_INSTALL_CONFIRM_SCREEN', array(
+			lorem_globalise(do_lorem_template('ADDON_INSTALL_CONFIRM_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FILE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
@@ -285,6 +288,9 @@ class Hook_addon_registry_core_addon_management
 				'AUTHOR'=>lorem_word_2(),
 				'ORGANISATION'=>lorem_phrase(),
 				'VERSION'=>placeholder_number(),
+				'CATEGORY'=>lorem_phrase(),
+				'COPYRIGHT_ATTRIBUTION'=>lorem_phrase(),
+				'LICENCE'=>lorem_phrase(),
 				'DESCRIPTION'=>lorem_paragraph_html()
 			)), NULL, '', true)
 		);
@@ -300,7 +306,7 @@ class Hook_addon_registry_core_addon_management
 	function tpl_preview__administrative__addon_uninstall_confirm_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ADDON_UNINSTALL_CONFIRM_SCREEN', array(
+			lorem_globalise(do_lorem_template('ADDON_UNINSTALL_CONFIRM_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_word(),
@@ -334,7 +340,7 @@ class Hook_addon_registry_core_addon_management
 				$frm_langs->attach(form_input_hidden("file_$i", $file));
 				$i++;
 			}
-			$tpl_languages->attach(do_lorem_template('ADDON_EXPORT_LINE', array(
+			$tpl_languages->attach(do_lorem_template('ADDON_EXPORT_LINE',array(
 				'NAME'=>$value,
 				'URL'=>placeholder_url(),
 				'FILES'=>$frm_langs
@@ -352,7 +358,7 @@ class Hook_addon_registry_core_addon_management
 				$frm_themes->attach(form_input_hidden("file_$i", $file));
 				$i++;
 			}
-			$tpl_themes->attach(do_lorem_template('ADDON_EXPORT_LINE', array(
+			$tpl_themes->attach(do_lorem_template('ADDON_EXPORT_LINE',array(
 				'NAME'=>$value,
 				'URL'=>placeholder_url(),
 				'FILES'=>$frm_themes
@@ -364,20 +370,20 @@ class Hook_addon_registry_core_addon_management
 		$i=0;
 		foreach (placeholder_array() as $file)
 		{
-			$frm_files->attach(do_lorem_template('ADDON_EXPORT_FILE_CHOICE', array(
+			$frm_files->attach(do_lorem_template('ADDON_EXPORT_FILE_CHOICE',array(
 				'ID'=>strval($i),
 				'PATH'=>$file
 			)));
 			$i++;
 		}
 
-		$tpl_files=do_lorem_template('ADDON_EXPORT_LINE_CHOICE', array(
+		$tpl_files=do_lorem_template('ADDON_EXPORT_LINE_CHOICE',array(
 			'URL'=>placeholder_url(),
 			'FILES'=>$frm_files
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('ADDON_EXPORT_SCREEN', array(
+			lorem_globalise(do_lorem_template('ADDON_EXPORT_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'LANGUAGES'=>$tpl_languages,
 				'FILES'=>$tpl_files,
@@ -408,7 +414,7 @@ class Hook_addon_registry_core_addon_management
 
 			if ($module=='downloads')
 			{
-				$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_REINSTALL_ENTRY', array(
+				$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_REINSTALL_ENTRY',array(
 					'HIDDEN'=>'',
 					'NAME'=>lorem_phrase(),
 					'URL'=>placeholder_url()
@@ -416,13 +422,13 @@ class Hook_addon_registry_core_addon_management
 				$status=do_lang_tempcode('STATUS_CURRENT');
 			}
 			else
-				$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY', array(
+				$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY',array(
 					'HIDDEN'=>'',
 					'NAME'=>lorem_phrase(),
 					'URL'=>placeholder_url()
 				)));
 
-			$tpl_modules->attach(do_lorem_template('MODULE_SCREEN_MODULE', array(
+			$tpl_modules->attach(do_lorem_template('MODULE_SCREEN_MODULE',array(
 				'STATUS'=>$status,
 				'NAME'=>$module,
 				'AUTHOR'=>lorem_word(),
@@ -435,7 +441,7 @@ class Hook_addon_registry_core_addon_management
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('MODULE_SCREEN', array(
+			lorem_globalise(do_lorem_template('MODULE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MODULES'=>$tpl_modules
 			)), NULL, '', true)

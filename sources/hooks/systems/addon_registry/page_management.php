@@ -88,13 +88,13 @@ class Hook_addon_registry_page_management
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/page_management.php',
-			'VALIDATE_CHECK_SCREEN.tpl',
-			'VALIDATE_CHECK_ERROR.tpl',
+			'themes/default/templates/VALIDATE_CHECK_SCREEN.tpl',
+			'themes/default/templates/VALIDATE_CHECK_ERROR.tpl',
 			'adminzone/pages/modules/admin_sitetree.php',
 			'themes/default/images/bigicons/sitetree.png',
 			'themes/default/images/pagepics/sitetreeeditor.png',
-			'JAVASCRIPT_SITE_TREE_EDITOR.tpl',
-			'SITE_TREE_EDITOR_SCREEN.tpl',
+			'themes/default/templates/JAVASCRIPT_SITE_TREE_EDITOR.tpl',
+			'themes/default/templates/SITE_TREE_EDITOR_SCREEN.tpl',
 			'themes/default/images/pagepics/move.png',
 			'themes/default/images/pagepics/deletepage.png',
 			'themes/default/images/pagepics/addpagewizard.png',
@@ -133,7 +133,7 @@ class Hook_addon_registry_page_management
 		require_javascript('javascript_site_tree_editor');
 		require_lang('zones');
 		return array(
-			lorem_globalise(do_lorem_template('SITE_TREE_EDITOR_SCREEN', array(
+			lorem_globalise(do_lorem_template('SITE_TREE_EDITOR_SCREEN',array(
 				'TITLE'=>lorem_title()
 			)), NULL, '', true)
 		);
@@ -152,13 +152,13 @@ class Hook_addon_registry_page_management
 		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $val)
 		{
-			$content->attach(do_lorem_template('VALIDATE_CHECK_ERROR', array(
+			$content->attach(do_lorem_template('VALIDATE_CHECK_ERROR',array(
 				'URL'=>placeholder_url(),
 				'POINT'=>lorem_phrase()
 			)));
 		}
 		return array(
-			lorem_globalise(do_lorem_template('VALIDATE_CHECK_SCREEN', array(
+			lorem_globalise(do_lorem_template('VALIDATE_CHECK_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CONTENTS'=>$content
 			)), NULL, '', true)

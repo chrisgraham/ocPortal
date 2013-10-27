@@ -105,24 +105,24 @@ class Hook_addon_registry_shopping
 			'sources/hooks/blocks/main_staff_checklist/ecommerce_orders.php',
 			'sources/shopping.php',
 			'site/pages/modules/shopping.php',
-			'CATALOGUE_products_CATEGORY_SCREEN.tpl',
-			'CATALOGUE_products_ENTRY_SCREEN.tpl',
-			'CATALOGUE_products_GRID_ENTRY_FIELD.tpl',
-			'CATALOGUE_products_FIELDMAP_ENTRY_FIELD.tpl',
-			'CATALOGUE_products_GRID_ENTRY_WRAP.tpl',
-			'RESULTS_products_TABLE.tpl',
-			'JAVASCRIPT_SHOPPING.tpl',
-			'ECOM_SHOPPING_CART_PROCEED.tpl',
-			'ECOM_SHOPPING_CART_STAGE_PAY.tpl',
-			'ECOM_SHOPPING_CART_SCREEN.tpl',
-			'ECOM_SHOPPING_ITEM_QUANTITY_FIELD.tpl',
-			'ECOM_SHOPPING_ITEM_REMOVE_FIELD.tpl',
-			'CATALOGUE_ENTRY_ADD_TO_CART.tpl',
+			'themes/default/templates/CATALOGUE_products_CATEGORY_SCREEN.tpl',
+			'themes/default/templates/CATALOGUE_products_ENTRY_SCREEN.tpl',
+			'themes/default/templates/CATALOGUE_products_GRID_ENTRY_FIELD.tpl',
+			'themes/default/templates/CATALOGUE_products_FIELDMAP_ENTRY_FIELD.tpl',
+			'themes/default/templates/CATALOGUE_products_GRID_ENTRY_WRAP.tpl',
+			'themes/default/templates/RESULTS_products_TABLE.tpl',
+			'themes/default/templates/JAVASCRIPT_SHOPPING.tpl',
+			'themes/default/templates/ECOM_SHOPPING_CART_PROCEED.tpl',
+			'themes/default/templates/ECOM_SHOPPING_CART_STAGE_PAY.tpl',
+			'themes/default/templates/ECOM_SHOPPING_CART_SCREEN.tpl',
+			'themes/default/templates/ECOM_SHOPPING_ITEM_QUANTITY_FIELD.tpl',
+			'themes/default/templates/ECOM_SHOPPING_ITEM_REMOVE_FIELD.tpl',
+			'themes/default/templates/CATALOGUE_ENTRY_ADD_TO_CART.tpl',
 			'adminzone/pages/modules/admin_orders.php',
 			'lang/EN/shopping.ini',
 			'sources/hooks/systems/addon_registry/shopping.php',
 			'sources/hooks/systems/ocf_cpf_filter/shopping_cart.php',
-			'shopping.css',
+			'themes/default/css/shopping.css',
 			'themes/default/images/bigicons/orders.png',
 			'themes/default/images/bigicons/show_orders.png',
 			'themes/default/images/bigicons/undispatched.png',
@@ -132,18 +132,18 @@ class Hook_addon_registry_shopping
 			'themes/default/images/results/hold.png',
 			'themes/default/images/results/return.gif',
 			'themes/default/images/results/view.gif',
-			'ECOM_ADMIN_ORDER_ACTIONS.tpl',
-			'ECOM_CART_LOGO.tpl',
-			'ECOM_ADMIN_ORDERS_DETAILS_SCREEN.tpl',
-			'ECOM_ADMIN_ORDERS_SCREEN.tpl',
-			'ECOM_ORDERS_DETAILS_SCREEN.tpl',
-			'ECOM_ORDERS_SCREEN.tpl',
-			'RESULTS_cart_TABLE.tpl',
-			'RESULTS_TABLE_cart_ENTRY.tpl',
-			'RESULTS_TABLE_cart_FIELD.tpl',
-			'ECOM_SHIPPING_ADDRESS.tpl',
-			'ECOM_CART_BUTTON_VIA_PAYPAL.tpl',
-			'ECOM_ITEM_DETAILS.tpl',
+			'themes/default/templates/ECOM_ADMIN_ORDER_ACTIONS.tpl',
+			'themes/default/templates/ECOM_CART_LOGO.tpl',
+			'themes/default/templates/ECOM_ADMIN_ORDERS_DETAILS_SCREEN.tpl',
+			'themes/default/templates/ECOM_ADMIN_ORDERS_SCREEN.tpl',
+			'themes/default/templates/ECOM_ORDERS_DETAILS_SCREEN.tpl',
+			'themes/default/templates/ECOM_ORDERS_SCREEN.tpl',
+			'themes/default/templates/RESULTS_cart_TABLE.tpl',
+			'themes/default/templates/RESULTS_TABLE_cart_ENTRY.tpl',
+			'themes/default/templates/RESULTS_TABLE_cart_FIELD.tpl',
+			'themes/default/templates/ECOM_SHIPPING_ADDRESS.tpl',
+			'themes/default/templates/ECOM_CART_BUTTON_VIA_PAYPAL.tpl',
+			'themes/default/templates/ECOM_ITEM_DETAILS.tpl',
 		);
 	}
 
@@ -193,7 +193,7 @@ class Hook_addon_registry_shopping
 	function tpl_preview__shopping_cart_stage_pay()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ECOM_SHOPPING_CART_STAGE_PAY', array(
+			lorem_globalise(do_lorem_template('ECOM_SHOPPING_CART_STAGE_PAY',array(
 				'TRANSACTION_BUTTON'=>placeholder_button()
 			)), NULL, '', true)
 		);
@@ -209,7 +209,7 @@ class Hook_addon_registry_shopping
 	function tpl_preview__administrative__ecom_admin_orders_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ECOM_ADMIN_ORDERS_SCREEN', array(
+			lorem_globalise(do_lorem_template('ECOM_ADMIN_ORDERS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CURRENCY'=>lorem_phrase(),
 				'ORDERS'=>placeholder_array(),
@@ -238,7 +238,7 @@ class Hook_addon_registry_shopping
 			lorem_word_2()
 		) as $k=>$v)
 		{
-			$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+			$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
 				'VALUE'=>$v
 			)));
 		}
@@ -256,11 +256,11 @@ class Hook_addon_registry_shopping
 
 			foreach ($entry_data as $_k=>$_v)
 			{
-				$cells->attach(do_lorem_template('RESULTS_TABLE_' . $tplset . 'FIELD', array(
+				$cells->attach(do_lorem_template('RESULTS_TABLE_' . $tplset . 'FIELD',array(
 					'VALUE'=>$_v
 				)));
 			}
-			$entries->attach(do_lorem_template('RESULTS_TABLE_' . $tplset . 'ENTRY', array(
+			$entries->attach(do_lorem_template('RESULTS_TABLE_' . $tplset . 'ENTRY',array(
 				'VALUES'=>$cells
 			)));
 		}
@@ -268,21 +268,21 @@ class Hook_addon_registry_shopping
 		$selectors=new ocp_tempcode();
 		foreach (placeholder_array(11) as $k=>$v)
 		{
-			$selectors->attach(do_lorem_template('PAGINATION_SORTER', array(
+			$selectors->attach(do_lorem_template('PAGINATION_SORTER',array(
 				'SELECTED'=>'',
 				'NAME'=>$v,
 				'VALUE'=>$v
 			)));
 		}
 
-		$sort=do_lorem_template('PAGINATION_SORT', array(
+		$sort=do_lorem_template('PAGINATION_SORT',array(
 			'HIDDEN'=>'',
 			'SORT'=>lorem_word(),
 			'URL'=>placeholder_url(),
 			'SELECTORS'=>$selectors
 		));
 
-		return do_lorem_template('RESULTS_' . $tplset . 'TABLE', array(
+		return do_lorem_template('RESULTS_' . $tplset . 'TABLE',array(
 			'FIELDS_TITLE'=>$fields_title,
 			'FIELDS'=>$entries,
 			'MESSAGE'=>new ocp_tempcode(),
@@ -303,13 +303,13 @@ class Hook_addon_registry_shopping
 	 */
 	function tpl_preview__administrative__ecom_admin_orders_details_screen()
 	{
-		$order_actions=do_lorem_template('ECOM_ADMIN_ORDER_ACTIONS', array(
+		$order_actions=do_lorem_template('ECOM_ADMIN_ORDER_ACTIONS',array(
 			'ORDER_TITLE'=>lorem_phrase(),
 			'ORDER_ACTUALISE_URL'=>placeholder_url(),
 			'ORDER_STATUS'=>lorem_word()
 		));
 
-		$shipping_address=do_lorem_template('ECOM_SHIPPING_ADDRESS', array(
+		$shipping_address=do_lorem_template('ECOM_SHIPPING_ADDRESS',array(
 			'ADDRESS_NAME'=>lorem_phrase(),
 			'ADDRESS_STREET'=>lorem_phrase(),
 			'ADDRESS_CITY'=>lorem_phrase(),
@@ -319,7 +319,7 @@ class Hook_addon_registry_shopping
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN', array(
+			lorem_globalise(do_lorem_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence(),
 				'CURRENCY'=>lorem_phrase(),
@@ -349,7 +349,7 @@ class Hook_addon_registry_shopping
 	function tpl_preview__ecommerce_item_details()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ECOM_ITEM_DETAILS', array(
+			lorem_globalise(do_lorem_template('ECOM_ITEM_DETAILS',array(
 				'FIELDS'=>placeholder_fields()
 			)), NULL, '', true)
 		);
@@ -374,7 +374,7 @@ class Hook_addon_registry_shopping
 			);
 		}
 		return array(
-			lorem_globalise(do_lorem_template('ECOM_CART_BUTTON_VIA_PAYPAL', array(
+			lorem_globalise(do_lorem_template('ECOM_CART_BUTTON_VIA_PAYPAL',array(
 				'ITEMS'=>$items,
 				'CURRENCY'=>lorem_phrase(),
 				'PAYMENT_ADDRESS'=>lorem_word(),
@@ -405,7 +405,7 @@ class Hook_addon_registry_shopping
 			$cells=new ocp_tempcode();
 			foreach (placeholder_array(8) as $_v)
 			{
-				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
 					'VALUE'=>$_v
 				)));
 			}
@@ -414,11 +414,11 @@ class Hook_addon_registry_shopping
 			$product_image=placeholder_image();
 			$product_link=placeholder_link();
 			$currency=lorem_word();
-			$edit_qnty=do_lorem_template('ECOM_SHOPPING_ITEM_QUANTITY_FIELD', array(
+			$edit_qnty=do_lorem_template('ECOM_SHOPPING_ITEM_QUANTITY_FIELD',array(
 				'PRODUCT_ID'=>strval($k),
 				'QUANTITY'=>lorem_phrase()
 			));
-			$del_item=do_lorem_template('ECOM_SHOPPING_ITEM_REMOVE_FIELD', array(
+			$del_item=do_lorem_template('ECOM_SHOPPING_ITEM_REMOVE_FIELD',array(
 				'PRODUCT_ID'=>strval($k)
 			));
 
@@ -435,12 +435,12 @@ class Hook_addon_registry_shopping
 			$cells=new ocp_tempcode();
 			foreach ($values as $value)
 			{
-				$cells->attach(do_lorem_template('RESULTS_TABLE_cart_FIELD', array(
+				$cells->attach(do_lorem_template('RESULTS_TABLE_cart_FIELD',array(
 					'VALUE'=>$value,
 					'CLASS'=>''
 				)));
 			}
-			$shopping_cart->attach(do_lorem_template('RESULTS_TABLE_cart_ENTRY', array(
+			$shopping_cart->attach(do_lorem_template('RESULTS_TABLE_cart_ENTRY',array(
 				'VALUES'=>$cells
 			)));
 		}
@@ -449,20 +449,20 @@ class Hook_addon_registry_shopping
 		$selectors=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$selectors->attach(do_lorem_template('PAGINATION_SORTER', array(
+			$selectors->attach(do_lorem_template('PAGINATION_SORTER',array(
 				'SELECTED'=>'',
 				'NAME'=>lorem_word(),
 				'VALUE'=>lorem_word()
 			)));
 		}
-		$sort=do_lorem_template('PAGINATION_SORT', array(
+		$sort=do_lorem_template('PAGINATION_SORT',array(
 			'HIDDEN'=>'',
 			'SORT'=>lorem_word(),
 			'URL'=>placeholder_url(),
 			'SELECTORS'=>$selectors
 		));
 
-		$results_table=do_lorem_template('RESULTS_cart_TABLE', array(
+		$results_table=do_lorem_template('RESULTS_cart_TABLE',array(
 			'WIDTHS'=>array(),
 			'FIELDS_TITLE'=>$fields_title,
 			'FIELDS'=>$shopping_cart,
@@ -472,7 +472,7 @@ class Hook_addon_registry_shopping
 		));
 		//results_table ends
 
-		$proceed_box=do_lorem_template('ECOM_SHOPPING_CART_PROCEED', array(
+		$proceed_box=do_lorem_template('ECOM_SHOPPING_CART_PROCEED',array(
 			'SUB_TOTAL'=>float_format(floatval(placeholder_number())),
 			'SHIPPING_COST'=>float_format(floatval(placeholder_number())),
 			'GRAND_TOTAL'=>float_format(floatval(placeholder_number())),
@@ -482,7 +482,7 @@ class Hook_addon_registry_shopping
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('ECOM_SHOPPING_CART_SCREEN', array(
+			lorem_globalise(do_lorem_template('ECOM_SHOPPING_CART_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'RESULTS_TABLE'=>$results_table,
 				'FORM_URL'=>placeholder_url(),
@@ -523,7 +523,7 @@ class Hook_addon_registry_shopping
 			);
 		}
 		return array(
-			lorem_globalise(do_lorem_template('ECOM_ORDERS_SCREEN', array(
+			lorem_globalise(do_lorem_template('ECOM_ORDERS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CURRENCY'=>lorem_phrase(),
 				'ORDERS'=>$orders
@@ -552,7 +552,7 @@ class Hook_addon_registry_shopping
 			);
 		}
 		return array(
-			lorem_globalise(do_lorem_template('ECOM_ORDERS_DETAILS_SCREEN', array(
+			lorem_globalise(do_lorem_template('ECOM_ORDERS_DETAILS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CURRENCY'=>lorem_phrase(),
 				'PRODUCTS'=>$orders
@@ -580,7 +580,7 @@ class Hook_addon_registry_shopping
 
 		foreach (placeholder_array() as $v)
 		{
-			$_field=do_lorem_template('CATALOGUE_products_FIELDMAP_ENTRY_FIELD', array(
+			$_field=do_lorem_template('CATALOGUE_products_FIELDMAP_ENTRY_FIELD',array(
 				'ENTRYID'=>placeholder_random_id(),
 				'CATALOGUE'=>lorem_phrase(),
 				'TYPE'=>lorem_word(),
@@ -594,7 +594,7 @@ class Hook_addon_registry_shopping
 			$fields->attach($_field);
 		}
 
-		$cart_buttons=do_lorem_template('CATALOGUE_ENTRY_ADD_TO_CART', array(
+		$cart_buttons=do_lorem_template('CATALOGUE_ENTRY_ADD_TO_CART',array(
 			'OUT_OF_STOCK'=>lorem_phrase(),
 			'ACTION_URL'=>placeholder_url(),
 			'PRODUCT_ID'=>placeholder_id(),
@@ -602,7 +602,7 @@ class Hook_addon_registry_shopping
 			'PURCHASE_ACTION_URL'=>placeholder_url(),
 			'CART_URL'=>placeholder_url()
 		));
-		$cart_link=do_lorem_template('ECOM_CART_LOGO', array(
+		$cart_link=do_lorem_template('ECOM_CART_LOGO',array(
 			'URL'=>placeholder_url(),
 			'TITLE'=>lorem_phrase()
 		), NULL, false);
@@ -663,7 +663,7 @@ class Hook_addon_registry_shopping
 
 		foreach (placeholder_array() as $v)
 		{
-			$_field=do_lorem_template('CATALOGUE_products_GRID_ENTRY_FIELD', array(
+			$_field=do_lorem_template('CATALOGUE_products_GRID_ENTRY_FIELD',array(
 				'ENTRYID'=>placeholder_random_id(),
 				'CATALOGUE'=>lorem_phrase(),
 				'TYPE'=>lorem_word(),
@@ -677,7 +677,7 @@ class Hook_addon_registry_shopping
 			$fields->attach($_field);
 		}
 
-		$cart_buttons=do_lorem_template('CATALOGUE_ENTRY_ADD_TO_CART', array(
+		$cart_buttons=do_lorem_template('CATALOGUE_ENTRY_ADD_TO_CART',array(
 			'OUT_OF_STOCK'=>lorem_phrase(),
 			'ACTION_URL'=>placeholder_url(),
 			'PRODUCT_ID'=>placeholder_id(),
@@ -685,7 +685,7 @@ class Hook_addon_registry_shopping
 			'PURCHASE_ACTION_URL'=>placeholder_url(),
 			'CART_URL'=>placeholder_url()
 		));
-		$cart_link=do_lorem_template('ECOM_CART_LOGO', array(
+		$cart_link=do_lorem_template('ECOM_CART_LOGO',array(
 			'URL'=>placeholder_url(),
 			'TITLE'=>lorem_phrase()
 		), NULL, false);
@@ -751,11 +751,11 @@ class Hook_addon_registry_shopping
 		foreach ($array as $k=>$v)
 		{
 			if ($k==1)
-				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
 					'VALUE'=>$v
 				)));
 			else
-				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE_SORTABLE', array(
+				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE_SORTABLE',array(
 					'VALUE'=>$v,
 					'SORT_URL_DESC'=>placeholder_url(),
 					'SORT_DESC_SELECTED'=>lorem_word(),
@@ -771,14 +771,14 @@ class Hook_addon_registry_shopping
 			$cells=new ocp_tempcode();
 			foreach ($array as $k2=>$v)
 			{
-				$tick=do_lorem_template('RESULTS_TABLE_TICK', array(
+				$tick=do_lorem_template('RESULTS_TABLE_TICK',array(
 					'ID'=>placeholder_id() . '_' . strval($k1) . '_' . strval($k2)
 				));
-				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD', array(
+				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
 					'VALUE'=>$tick
 				)));
 			}
-			$order_entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY', array(
+			$order_entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array(
 				'VALUES'=>$cells
 			)));
 		}
@@ -788,13 +788,13 @@ class Hook_addon_registry_shopping
 		$sortable=NULL;
 		foreach ($array as $k=>$v)
 		{
-			$selectors->attach(do_lorem_template('PAGINATION_SORTER', array(
+			$selectors->attach(do_lorem_template('PAGINATION_SORTER',array(
 				'SELECTED'=>'',
 				'NAME'=>$v,
 				'VALUE'=>$v
 			)));
 		}
-		$sort=do_lorem_template('PAGINATION_SORT', array(
+		$sort=do_lorem_template('PAGINATION_SORT',array(
 			'HIDDEN'=>'',
 			'SORT'=>lorem_word(),
 			'URL'=>placeholder_url(),
@@ -802,7 +802,7 @@ class Hook_addon_registry_shopping
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('RESULTS_products_TABLE', array(
+			lorem_globalise(do_lorem_template('RESULTS_products_TABLE',array(
 				'TEXT_ID'=>lorem_phrase(),
 				'FIELDS_TITLE'=>$fields_title,
 				'FIELDS'=>$order_entries,

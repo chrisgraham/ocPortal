@@ -85,8 +85,8 @@ class Hook_addon_registry_ssl
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/ssl.php',
-			'SSL_CONFIGURATION_SCREEN.tpl',
-			'SSL_CONFIGURATION_ENTRY.tpl',
+			'themes/default/templates/SSL_CONFIGURATION_SCREEN.tpl',
+			'themes/default/templates/SSL_CONFIGURATION_ENTRY.tpl',
 			'adminzone/pages/modules/admin_ssl.php',
 			'sources/hooks/systems/do_next_menus/ssl.php',
 			'themes/default/images/pagepics/ssl.png',
@@ -126,7 +126,7 @@ class Hook_addon_registry_ssl
 			foreach (placeholder_array() as $k=>$v2)
 			{
 				$k++;
-				$content->attach(do_lorem_template('SSL_CONFIGURATION_ENTRY', array(
+				$content->attach(do_lorem_template('SSL_CONFIGURATION_ENTRY',array(
 					'TICKED'=>lorem_word(),
 					'PAGE'=>$v,
 					'ZONE'=>$v2
@@ -135,7 +135,7 @@ class Hook_addon_registry_ssl
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('SSL_CONFIGURATION_SCREEN', array(
+			lorem_globalise(do_lorem_template('SSL_CONFIGURATION_SCREEN',array(
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>$content

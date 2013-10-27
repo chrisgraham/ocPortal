@@ -92,7 +92,7 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/ajax_tree/choose_filedump_file.php',
 			'sources/hooks/systems/do_next_menus/filedump.php',
 			'sources/hooks/modules/admin_import_types/filedump.php',
-			'FILE_DUMP_SCREEN.tpl',
+			'themes/default/templates/FILE_DUMP_SCREEN.tpl',
 			'uploads/filedump/index.html',
 			'cms/pages/modules/filedump.php',
 			'lang/EN/filedump.ini',
@@ -130,7 +130,7 @@ class Hook_addon_registry_filedump
 		require_css('forms');
 
 		return array(
-			lorem_globalise(do_lorem_template('FILE_DUMP_SCREEN', array(
+			lorem_globalise(do_lorem_template('FILE_DUMP_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FILES'=>placeholder_table(),
 				'UPLOAD_FORM'=>placeholder_form(),

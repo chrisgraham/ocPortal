@@ -1,6 +1,26 @@
 <tr class="{$CYCLE,results_table_zebra,zebra_0,zebra_1}">
 	<td class="addon_name">
-		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{DESCRIPTION;^*}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
+		{+START,SET,description}
+			{DESCRIPTION}
+
+			<p>
+				<span class="field_name">{!ORGANISATION}:</span>
+				{ORGANISATION*}
+			</p>
+			{+START,IF_NON_EMPTY,{COPYRIGHT_ATTRIBUTION}}
+				<span class="field_name">{!COPYRIGHT_ATTRIBUTION}:</span>
+				<div class="whitespace_visible">{COPYRIGHT_ATTRIBUTION*}</div>
+			{+END}
+			<p>
+				<span class="field_name">{!LICENCE}:</span>
+				{LICENCE*}
+			</p>
+			<p>
+				<span class="field_name">{!CATEGORY}:</span>
+				{CATEGORY*}
+			</p>
+		{+END}
+		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET;^*,description}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
 			{PRETTY_NAME}
 		</p>
 		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{FILE_LIST;^*}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
@@ -8,12 +28,7 @@
 		</p>
 	</td>
 	<td>
-		<p>
-			{AUTHOR*}
-		</p>
-		<p>
-			{ORGANISATION*}
-		</p>
+		{AUTHOR*}
 	</td>
 	<td>
 		{VERSION*}

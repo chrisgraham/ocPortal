@@ -91,9 +91,9 @@ class Hook_addon_registry_staff
 			'sources/hooks/systems/config/staff_text.php',
 			'sources/hooks/systems/addon_registry/staff.php',
 			'sources/hooks/systems/do_next_menus/staff.php',
-			'STAFF_SCREEN.tpl',
-			'STAFF_EDIT_WRAPPER.tpl',
-			'STAFF_ADMIN_SCREEN.tpl',
+			'themes/default/templates/STAFF_SCREEN.tpl',
+			'themes/default/templates/STAFF_EDIT_WRAPPER.tpl',
+			'themes/default/templates/STAFF_ADMIN_SCREEN.tpl',
 			'adminzone/pages/modules/admin_staff.php',
 			'site/pages/modules/staff.php',
 			'lang/EN/staff.ini',
@@ -130,14 +130,14 @@ class Hook_addon_registry_staff
 		$available=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$available->attach(do_lorem_template('STAFF_EDIT_WRAPPER', array(
+			$available->attach(do_lorem_template('STAFF_EDIT_WRAPPER',array(
 				'FORM'=>placeholder_form(),
 				'USERNAME'=>lorem_word()
 			)));
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('STAFF_ADMIN_SCREEN', array(
+			lorem_globalise(do_lorem_template('STAFF_ADMIN_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence_html(),
 				'FORUM_STAFF'=>$available
@@ -155,7 +155,7 @@ class Hook_addon_registry_staff
 	function tpl_preview__staff_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('STAFF_SCREEN', array(
+			lorem_globalise(do_lorem_template('STAFF_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'REAL_NAME'=>lorem_phrase(),
 				'ROLE'=>lorem_phrase(),

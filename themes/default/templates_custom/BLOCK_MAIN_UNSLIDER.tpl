@@ -17,11 +17,13 @@
 {+START,IF_PASSED,WIDTH}</div>{+END}
 
 <script>// <![CDATA[
-	$('#{SLIDER_ID;*}').unslider({
-		fluid: {$?,{FLUID},true,false},
-		dots: {$?,{BUTTONS},true,false},
-		delay: {$?,{$IS_EMPTY,{DELAY}},false,{DELAY%}},
-		{+START,IF_NON_EMPTY,{HEIGHT}}balanceheight: false,{+END}
-		speed: {SPEED%}
-	});
+	add_event_listener_abstract(window,'load',function () {
+		$('#{SLIDER_ID;*}').unslider({
+			fluid: {$?,{FLUID},true,false},
+			dots: {$?,{BUTTONS},true,false},
+			delay: {$?,{$IS_EMPTY,{DELAY}},false,{DELAY%}},
+			{+START,IF_NON_EMPTY,{HEIGHT}}balanceheight: false,{+END}
+			speed: {SPEED%}
+		});
+	} );
 //]]></script>

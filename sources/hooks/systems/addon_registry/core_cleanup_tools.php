@@ -91,9 +91,9 @@ class Hook_addon_registry_core_cleanup_tools
 			'data/modules/admin_cleanup/.htaccess',
 			'data/modules/admin_cleanup/index.html',
 			'sources/hooks/systems/addon_registry/core_cleanup_tools.php',
-			'CLEANUP_ORPHANED_UPLOADS.tpl',
-			'CLEANUP_COMPLETED_SCREEN.tpl',
-			'CLEANUP_PAGE_STATS.tpl',
+			'themes/default/templates/CLEANUP_ORPHANED_UPLOADS.tpl',
+			'themes/default/templates/CLEANUP_COMPLETED_SCREEN.tpl',
+			'themes/default/templates/CLEANUP_PAGE_STATS.tpl',
 			'adminzone/pages/modules/admin_cleanup.php',
 			'themes/default/images/bigicons/cleanup.png',
 			'sources/hooks/systems/cleanup/comcode.php',
@@ -151,14 +151,14 @@ class Hook_addon_registry_core_cleanup_tools
 			);
 		}
 
-		$message=do_lorem_template('CLEANUP_ORPHANED_UPLOADS', array(
+		$message=do_lorem_template('CLEANUP_ORPHANED_UPLOADS',array(
 			'FOUND'=>$url
 		));
-		$message->attach(do_lorem_template('CLEANUP_PAGE_STATS', array(
+		$message->attach(do_lorem_template('CLEANUP_PAGE_STATS',array(
 			'STATS_BACKUP_URL'=>placeholder_url()
 		)));
 		return array(
-			lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN', array(
+			lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MESSAGES'=>$message
 			)), NULL, '', true)

@@ -86,11 +86,11 @@ class Hook_addon_registry_ocf_cpfs
 		return array(
 			'sources/hooks/systems/resource_meta_aware/cpf.php',
 			'adminzone/pages/modules/admin_ocf_customprofilefields.php',
-			'OCF_CPF_STATS_LINE.tpl',
-			'OCF_CPF_STATS_SCREEN.tpl',
+			'themes/default/templates/OCF_CPF_STATS_LINE.tpl',
+			'themes/default/templates/OCF_CPF_STATS_SCREEN.tpl',
 			'uploads/ocf_cpf_upload/index.html',
 			'uploads/ocf_cpf_upload/.htaccess',
-			'OCF_CPF_PERMISSIONS_TAB.tpl',
+			'themes/default/templates/OCF_CPF_PERMISSIONS_TAB.tpl',
 			'lang/EN/ocf_privacy.ini',
 			'sources/hooks/systems/profiles_tabs_edit/privacy.php',
 			'sources/hooks/systems/addon_registry/ocf_cpfs.php',
@@ -122,7 +122,7 @@ class Hook_addon_registry_ocf_cpfs
 	function tpl_preview__ocf_cpf_permissions_tab()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_CPF_PERMISSIONS_TAB', array(
+			lorem_globalise(do_lorem_template('OCF_CPF_PERMISSIONS_TAB',array(
 				'FIELDS'=>placeholder_fields()
 			)), NULL, '', true)
 		);
@@ -140,14 +140,14 @@ class Hook_addon_registry_ocf_cpfs
 		$lines=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$lines->attach(do_lorem_template('OCF_CPF_STATS_LINE', array(
+			$lines->attach(do_lorem_template('OCF_CPF_STATS_LINE',array(
 				'CNT'=>placeholder_number(),
 				'VAL'=>lorem_phrase()
 			)));
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_CPF_STATS_SCREEN', array(
+			lorem_globalise(do_lorem_template('OCF_CPF_STATS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'STATS'=>$lines
 			)), NULL, '', true)

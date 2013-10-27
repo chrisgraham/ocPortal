@@ -32,7 +32,7 @@ class Hook_checklist_version
 		$version=get_future_version_information();
 		$version_outdated=(strpos($version->evaluate(),'You are running the latest version')===false) && (strpos($version->evaluate(),'This version does not exist in our database')===false);
 
-		require_code('addons');
+		require_code('addons2');
 		$num_addons_outdated=count(find_updated_addons());
 
 		if (($version_outdated) || ($num_addons_outdated>0))

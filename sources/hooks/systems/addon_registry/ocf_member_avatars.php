@@ -86,7 +86,7 @@ class Hook_addon_registry_ocf_member_avatars
 		return array(
 			'sources/hooks/systems/notifications/ocf_choose_avatar.php',
 			'sources/hooks/systems/addon_registry/ocf_member_avatars.php',
-			'OCF_EDIT_AVATAR_TAB.tpl',
+			'themes/default/templates/OCF_EDIT_AVATAR_TAB.tpl',
 			'uploads/ocf_avatars/index.html',
 			'uploads/ocf_avatars/.htaccess',
 			'sources/hooks/systems/profiles_tabs_edit/avatar.php',
@@ -119,12 +119,12 @@ class Hook_addon_registry_ocf_member_avatars
 	{
 		require_lang('ocf');
 		require_css('ocf');
-		$avatar=do_lorem_template('OCF_TOPIC_POST_AVATAR', array(
+		$avatar=do_lorem_template('OCF_TOPIC_POST_AVATAR',array(
 			'AVATAR'=>placeholder_image_url()
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_EDIT_AVATAR_TAB', array(
+			lorem_globalise(do_lorem_template('OCF_EDIT_AVATAR_TAB',array(
 				'USERNAME'=>lorem_word(),
 				'AVATAR'=>$avatar,
 				'WIDTH'=>placeholder_number(),

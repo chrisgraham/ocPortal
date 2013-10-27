@@ -87,8 +87,8 @@ class Hook_addon_registry_msn
 			'sources/hooks/systems/config/network_links.php',
 			'sources/hooks/systems/addon_registry/msn.php',
 			'sources/hooks/blocks/main_notes/msn.php',
-			'BLOCK_SIDE_NETWORK.tpl',
-			'NETLINK.tpl',
+			'themes/default/templates/BLOCK_SIDE_NETWORK.tpl',
+			'themes/default/templates/NETLINK.tpl',
 			'adminzone/pages/comcode/EN/netlink.txt',
 			'text/netlink.txt',
 			'netlink.php',
@@ -124,7 +124,7 @@ class Hook_addon_registry_msn
 	function tpl_preview__block_side_network()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_NETWORK', array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_NETWORK',array(
 				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
@@ -147,7 +147,7 @@ class Hook_addon_registry_msn
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('NETLINK', array(
+			lorem_globalise(do_lorem_template('NETLINK',array(
 				'CONTENT'=>$content
 			)), NULL, '', true)
 		);

@@ -88,7 +88,7 @@ class Hook_addon_registry_random_quotes
 			'sources/hooks/modules/admin_import_types/quotes.php',
 			'sources/hooks/modules/admin_setupwizard/random_quotes.php',
 			'sources/hooks/systems/addon_registry/random_quotes.php',
-			'BLOCK_MAIN_QUOTES.tpl',
+			'themes/default/templates/BLOCK_MAIN_QUOTES.tpl',
 			'adminzone/pages/comcode/EN/quotes.txt',
 			'text/EN/quotes.txt',
 			'themes/default/images/bigicons/quotes.png',
@@ -96,7 +96,7 @@ class Hook_addon_registry_random_quotes
 			'lang/EN/quotes.ini',
 			'sources/blocks/main_quotes.php',
 			'sources/hooks/systems/do_next_menus/quotes.php',
-			'random_quotes.css',
+			'themes/default/css/random_quotes.css',
 		);
 	}
 
@@ -123,7 +123,7 @@ class Hook_addon_registry_random_quotes
 	function tpl_preview__block_main_quotes()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_QUOTES', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_QUOTES',array(
 				'EDIT_URL'=>placeholder_url(),
 				'FILE'=>lorem_phrase(),
 				'CONTENT'=>lorem_phrase(),

@@ -92,13 +92,13 @@ class Hook_addon_registry_tickets
 			'sources/hooks/systems/config/ticket_type_forums.php',
 			'sources/hooks/systems/addon_registry/tickets.php',
 			'sources/hooks/modules/admin_import_types/tickets.php',
-			'SUPPORT_TICKET_TYPE_SCREEN.tpl',
-			'SUPPORT_TICKET_SCREEN.tpl',
-			'SUPPORT_TICKETS_SCREEN.tpl',
-			'SUPPORT_TICKET_LINK.tpl',
-			'SUPPORT_TICKETS_SEARCH_SCREEN.tpl',
+			'themes/default/templates/SUPPORT_TICKET_TYPE_SCREEN.tpl',
+			'themes/default/templates/SUPPORT_TICKET_SCREEN.tpl',
+			'themes/default/templates/SUPPORT_TICKETS_SCREEN.tpl',
+			'themes/default/templates/SUPPORT_TICKET_LINK.tpl',
+			'themes/default/templates/SUPPORT_TICKETS_SEARCH_SCREEN.tpl',
 			'adminzone/pages/modules/admin_tickets.php',
-			'tickets.css',
+			'themes/default/css/tickets.css',
 			'themes/default/images/bigicons/tickets.png',
 			'themes/default/images/pagepics/tickets.png',
 			'lang/EN/tickets.ini',
@@ -159,7 +159,7 @@ class Hook_addon_registry_tickets
 		$links=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$links->attach(do_lorem_template('SUPPORT_TICKET_LINK', array(
+			$links->attach(do_lorem_template('SUPPORT_TICKET_LINK',array(
 				'NUM_POSTS'=>placeholder_number(),
 				'CLOSED'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
@@ -176,7 +176,7 @@ class Hook_addon_registry_tickets
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('SUPPORT_TICKETS_SCREEN', array(
+			lorem_globalise(do_lorem_template('SUPPORT_TICKETS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MESSAGE'=>lorem_phrase(),
 				'LINKS'=>$links,
@@ -205,7 +205,7 @@ class Hook_addon_registry_tickets
 		$other_tickets=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$other_tickets->attach(do_lorem_template('SUPPORT_TICKET_LINK', array(
+			$other_tickets->attach(do_lorem_template('SUPPORT_TICKET_LINK',array(
 				'NUM_POSTS'=>placeholder_number(),
 				'CLOSED'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
@@ -220,7 +220,7 @@ class Hook_addon_registry_tickets
 
 		$comments=new ocp_tempcode();
 
-		$comment_form=do_lorem_template('COMMENTS_POSTING_FORM', array(
+		$comment_form=do_lorem_template('COMMENTS_POSTING_FORM',array(
 			'JOIN_BITS'=>lorem_phrase_html(),
 			'FIRST_POST_URL'=>placeholder_url(),
 			'FIRST_POST'=>lorem_paragraph_html(),
@@ -242,7 +242,7 @@ class Hook_addon_registry_tickets
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('SUPPORT_TICKET_SCREEN', array(
+			lorem_globalise(do_lorem_template('SUPPORT_TICKET_SCREEN',array(
 				'TOGGLE_TICKET_CLOSED_URL'=>placeholder_url(),
 				'CLOSED'=>lorem_phrase(),
 				'OTHER_TICKETS'=>$other_tickets,
@@ -276,7 +276,7 @@ class Hook_addon_registry_tickets
 	function tpl_preview__support_tickets_search_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SUPPORT_TICKETS_SEARCH_SCREEN', array(
+			lorem_globalise(do_lorem_template('SUPPORT_TICKETS_SEARCH_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'POST_FIELDS'=>'',
@@ -295,7 +295,7 @@ class Hook_addon_registry_tickets
 	function tpl_preview__support_ticket_type_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SUPPORT_TICKET_TYPE_SCREEN', array(
+			lorem_globalise(do_lorem_template('SUPPORT_TICKET_TYPE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TPL'=>placeholder_form(),
 				'ADD_FORM'=>placeholder_form()

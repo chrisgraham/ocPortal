@@ -49,7 +49,7 @@ class Hook_config_is_on_community_billboard_buy
 	 */
 	function get_default()
 	{
-		return (!addon_installed('community_billboard'))?NULL:'1';
+		return '1';
 	}
 
 }

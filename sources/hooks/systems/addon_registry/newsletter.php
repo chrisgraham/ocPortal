@@ -93,12 +93,12 @@ class Hook_addon_registry_newsletter
 			'sources/hooks/systems/cron/newsletter_drip_send.php',
 			'sources/hooks/systems/cron/newsletter_periodic.php',
 			'sources/hooks/modules/admin_import_types/newsletter.php',
-			'NEWSLETTER_AUTOMATED_FCOMCODE.tpl',
-			'NEWSLETTER_AUTOMATE_SECTION_FCOMCODE.tpl',
-			'NEWSLETTER_CONFIRM_WRAP.tpl',
-			'NEWSLETTER_SUBSCRIBER.tpl',
-			'NEWSLETTER_SUBSCRIBERS_SCREEN.tpl',
-			'NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl',
+			'themes/default/templates/NEWSLETTER_AUTOMATED_FCOMCODE.tpl',
+			'themes/default/templates/NEWSLETTER_AUTOMATE_SECTION_FCOMCODE.tpl',
+			'themes/default/templates/NEWSLETTER_CONFIRM_WRAP.tpl',
+			'themes/default/templates/NEWSLETTER_SUBSCRIBER.tpl',
+			'themes/default/templates/NEWSLETTER_SUBSCRIBERS_SCREEN.tpl',
+			'themes/default/templates/NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl',
 			'adminzone/pages/modules/admin_newsletter.php',
 			'themes/default/images/bigicons/newsletters.png',
 			'themes/default/images/bigicons/newsletter_email_bounce.png',
@@ -117,13 +117,13 @@ class Hook_addon_registry_newsletter
 			'sources/hooks/systems/config/max_newsletter_whatsnew.php',
 			'themes/default/images/bigicons/subscribers.png',
 			'sources/hooks/modules/admin_newsletter/index.html',
-			'newsletter.css',
-			'BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl',
-			'BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl',
+			'themes/default/css/newsletter.css',
+			'themes/default/templates/BLOCK_MAIN_NEWSLETTER_SIGNUP.tpl',
+			'themes/default/templates/BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE.tpl',
 			'sources/hooks/systems/config/dual_format_newsletters.php',
 			'sources/hooks/systems/config/mails_per_send.php',
 			'sources/hooks/systems/config/minutes_between_sends.php',
-			'PERIODIC_NEWSLETTER_REMOVE.tpl',
+			'themes/default/templates/PERIODIC_NEWSLETTER_REMOVE.tpl',
 			'sources/hooks/systems/tasks/send_newsletter.php',
 			'data/incoming_bounced_email.php',
 		);
@@ -163,7 +163,7 @@ class Hook_addon_registry_newsletter
 		$automatic=array();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$tmp=do_lorem_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE', array(
+			$tmp=do_lorem_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array(
 				'I'=>lorem_word(),
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>lorem_sentence()
@@ -178,7 +178,7 @@ class Hook_addon_registry_newsletter
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('NEWSLETTER_AUTOMATED_FCOMCODE', array(
+			lorem_globalise(do_lorem_template('NEWSLETTER_AUTOMATED_FCOMCODE',array(
 				'CONTENT'=>$content
 			)), NULL, '', true)
 		);
@@ -196,7 +196,7 @@ class Hook_addon_registry_newsletter
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$out->attach(do_lorem_template('NEWSLETTER_SUBSCRIBER', array(
+			$out->attach(do_lorem_template('NEWSLETTER_SUBSCRIBER',array(
 				'EMAIL'=>lorem_word(),
 				'FORENAME'=>lorem_word(),
 				'SURNAME'=>lorem_word(),
@@ -213,7 +213,7 @@ class Hook_addon_registry_newsletter
 		);
 
 		return array(
-			lorem_globalise(do_lorem_template('NEWSLETTER_SUBSCRIBERS_SCREEN', array(
+			lorem_globalise(do_lorem_template('NEWSLETTER_SUBSCRIBERS_SCREEN',array(
 				'SUBSCRIBERS'=>$outs,
 				'PAGINATION'=>'',
 				'TITLE'=>lorem_title(),
@@ -232,7 +232,7 @@ class Hook_addon_registry_newsletter
 	function tpl_preview__newsletter_default()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('NEWSLETTER_DEFAULT_FCOMCODE', array(
+			lorem_globalise(do_lorem_template('NEWSLETTER_DEFAULT_FCOMCODE',array(
 				'CONTENT'=>lorem_phrase(),
 				'LANG'=>fallback_lang()
 			)), NULL, '', true)
@@ -248,14 +248,14 @@ class Hook_addon_registry_newsletter
 	 */
 	function tpl_preview__administrative__newsletter_confirm_wrap()
 	{
-		$preview=do_lorem_template('NEWSLETTER_CONFIRM_WRAP', array(
+		$preview=do_lorem_template('NEWSLETTER_CONFIRM_WRAP',array(
 			'TEXT_PREVIEW'=>lorem_sentence(),
 			'PREVIEW'=>lorem_phrase(),
 			'SUBJECT'=>lorem_phrase()
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('CONFIRM_SCREEN', array(
+			lorem_globalise(do_lorem_template('CONFIRM_SCREEN',array(
 				'URL'=>placeholder_url(),
 				'BACK_URL'=>placeholder_url(),
 				'PREVIEW'=>$preview,
@@ -275,7 +275,7 @@ class Hook_addon_registry_newsletter
 	function tpl_preview__block_main_newsletter_signup_done()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE',array(
 				'PASSWORD'=>lorem_phrase(),
 				'NEWSLETTER_TITLE'=>lorem_word()
 			)), NULL, '', true)
@@ -293,7 +293,7 @@ class Hook_addon_registry_newsletter
 	{
 		require_lang('javascript');
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP', array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array(
 				'URL'=>placeholder_url(),
 				'NEWSLETTER_TITLE'=>lorem_word(),
 				'NID'=>placeholder_id()
@@ -311,7 +311,7 @@ class Hook_addon_registry_newsletter
 	function tpl_preview__newsletter_new_resource_fcomcode()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array(
+			lorem_globalise(do_lorem_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array(
 				'MEMBER_ID'=>placeholder_id(),
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_word(),
@@ -333,7 +333,7 @@ class Hook_addon_registry_newsletter
 	function tpl_preview__periodic_newsletter_remove()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('PERIODIC_NEWSLETTER_REMOVE', array(
+			lorem_globalise(do_lorem_template('PERIODIC_NEWSLETTER_REMOVE',array(
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 			)), NULL, '', true)

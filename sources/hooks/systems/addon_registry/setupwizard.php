@@ -92,13 +92,13 @@ class Hook_addon_registry_setupwizard
 			'sources/hooks/modules/admin_setupwizard_installprofiles/index.html',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/community.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/infosite.php',
-			'SETUPWIZARD_2_SCREEN.tpl',
-			'SETUPWIZARD_BLOCK_PREVIEW.tpl',
+			'themes/default/templates/SETUPWIZARD_2_SCREEN.tpl',
+			'themes/default/templates/SETUPWIZARD_BLOCK_PREVIEW.tpl',
 			'sources/hooks/systems/addon_registry/setupwizard.php',
 			'sources/setupwizard.php',
 			'sources/hooks/systems/preview/setupwizard.php',
 			'sources/hooks/systems/preview/setupwizard_blocks.php',
-			'SETUPWIZARD_7_SCREEN.tpl',
+			'themes/default/templates/SETUPWIZARD_7_SCREEN.tpl',
 			'adminzone/pages/modules/admin_setupwizard.php',
 			'text/EN/rules_balanced.txt',
 			'text/EN/rules_corporate.txt',
@@ -138,7 +138,7 @@ class Hook_addon_registry_setupwizard
 	function tpl_preview__administrative__setupwizard_block_preview()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SETUPWIZARD_BLOCK_PREVIEW', array(
+			lorem_globalise(do_lorem_template('SETUPWIZARD_BLOCK_PREVIEW',array(
 				'LEFT'=>lorem_paragraph(),
 				'RIGHT'=>lorem_paragraph(),
 				'START'=>lorem_paragraph()
@@ -157,7 +157,7 @@ class Hook_addon_registry_setupwizard
 	{
 		require_lang('config');
 		return array(
-			lorem_globalise(do_lorem_template('SETUPWIZARD_2_SCREEN', array(
+			lorem_globalise(do_lorem_template('SETUPWIZARD_2_SCREEN',array(
 				'SKIP_VALIDATION'=>true,
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
@@ -176,7 +176,7 @@ class Hook_addon_registry_setupwizard
 	function tpl_preview__administrative__setupwizard_7_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SETUPWIZARD_7_SCREEN', array(
+			lorem_globalise(do_lorem_template('SETUPWIZARD_7_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FORM'=>placeholder_form(),
 				'BALANCED'=>lorem_phrase(),
