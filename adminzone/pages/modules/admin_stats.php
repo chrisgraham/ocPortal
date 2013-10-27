@@ -364,8 +364,8 @@ class Module_admin_stats
 			if (!array_key_exists($i,$data)) continue;
 
 			$real_data[]=array(
-				'Date/Time'=>get_timezoned_date($data[$i]['t']+$base),
-				'Tally'=>$data[$i]['value'],
+				do_lang('DATE_TIME')=>get_timezoned_date($data[$i]['t']+$base),
+				do_lang('COUNT_TOTAL')=>$data[$i]['value'],
 			);
 
 			$fields->attach(results_entry(array(get_timezoned_date($data[$i]['t']+$base,false),integer_format($data[$i]['value'])),true));
@@ -434,8 +434,8 @@ class Module_admin_stats
 			if (!array_key_exists($i,$data)) continue;
 
 			$real_data[]=array(
-				'Date/Time'=>$data[$i]['key'],
-				'Tally'=>$data[$i]['value'],
+				do_lang('DATE_TIME')=>$data[$i]['key'],
+				do_lang('COUNT_TOTAL')=>$data[$i]['value'],
 			);
 
 			$fields->attach(results_entry(array($data[$i]['key'],integer_format($data[$i]['value'])),true));
@@ -643,8 +643,8 @@ class Module_admin_stats
 			$fields->attach(results_entry(array($link,integer_format($views)),true));
 
 			$real_data[]=array(
-				'Date/Time'=>$referrer,
-				'Tally'=>$views,
+				do_lang('DATE_TIME')=>$referrer,
+				do_lang('COUNT_TOTAL')=>$views,
 			);
 
 			//if ($done<20)
@@ -766,8 +766,8 @@ class Module_admin_stats
 			$fields->attach(results_entry(array($link,escape_html(integer_format($views)))));
 
 			$real_data[]=array(
-				'Keyword'=>$keyword,
-				'Tally'=>$views,
+				do_lang('KEYWORD')=>$keyword,
+				do_lang('COUNT_TOTAL')=>$views,
 			);
 
 			//if ($done<20)
@@ -900,8 +900,8 @@ class Module_admin_stats
 			list($value,$page)=$_value;
 
 			$real_data[]=array(
-				'Page/URL'=>is_null($page)?$url:$page,
-				'Tally'=>$value,
+				do_lang('PAGE_OR_URL')=>is_null($page)?$url:$page,
+				do_lang('COUNT_TOTAL')=>$value,
 			);
 
 			$fields->attach(results_entry(array(is_null($page)?make_string_tempcode(escape_html($url)):hyperlink(build_url(array('page'=>'_SELF','type'=>'_page','iscreen'=>$page),'_SELF'),escape_html($url)),escape_html(integer_format($value)))));
@@ -954,7 +954,8 @@ class Module_admin_stats
 		// NB: not used in default templates
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-		$rows=$GLOBALS['SITE_DB']->query('SELECT date_and_time FROM '.get_table_prefix().'stats WHERE ('.$where.') ORDER BY '.$sortable.' '.$sort_order);
+		$reasonable_max=10000;
+		$rows=$GLOBALS['SITE_DB']->query('SELECT date_and_time FROM '.get_table_prefix().'stats WHERE ('.$where.') ORDER BY '.$sortable.' '.$sort_order,$reasonable_max);
 		if (count($rows)<1)
 		{
 			$list_views=new ocp_tempcode();
@@ -968,8 +969,8 @@ class Module_admin_stats
 			while (array_key_exists($i,$rows))
 			{
 				$row=$rows[$i];
-				$date=get_timezoned_date($row['date_and_time'],false);
 				$week=round($row['date_and_time']/(60*60*24*7));
+				$date=get_timezoned_date(($week-1)*(60*60*24*7),false,false,false,true).' - '.get_timezoned_date(($week)*(60*60*24*7),false,false,false,true);
 				$views=0;
 				while (array_key_exists($i+$views,$rows))
 				{
@@ -980,8 +981,9 @@ class Module_admin_stats
 					$views++;
 				}
 				$i+=$views;
-				if ($i<$start) continue; elseif ($i>=$start+$max) break;
-				$fields->attach(results_entry(array($date,integer_format($views)),true));
+				if ($i<$start) continue;
+				$fields->attach(results_entry(array($date,($i<$reasonable_max)?integer_format($views):('>'.integer_format($views))),true));
+				if ($i>=$start+$max) break;
 			}
 			$list_views=results_table(do_lang_tempcode('PAGES_STATISTICS',escape_html($page)),$start,'start_views',$max,'max_views',$i,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort_views');
 		}
@@ -1228,8 +1230,8 @@ class Module_admin_stats
 			while (array_key_exists($i,$rows))
 			{
 				$row=$rows[$i];
-				$date=get_timezoned_date($row['date_and_time'],false);
 				$week=round($row['date_and_time']/(60*60*24*7));
+				$date=get_timezoned_date(($week-1)*(60*60*24*7),false,false,false,true).' - '.get_timezoned_date(($week)*(60*60*24*7),false,false,false,true);
 				$views=0;
 				while (array_key_exists($i+$views,$rows))
 				{
@@ -1240,8 +1242,9 @@ class Module_admin_stats
 					$views++;
 				}
 				$i+=$views;
-				if ($i<$start) continue; elseif ($i>=$start+$max) break;
-				$fields->attach(results_entry(array($date,integer_format($views)),true));
+				if ($i<$start) continue;
+				$fields->attach(results_entry(array($date,($i<$reasonable_max)?integer_format($views):('>'.integer_format($views))),true));
+				if ($i>=$start+$max) break;
 			}
 			$list_views=results_table(do_lang_tempcode('PAGES_STATISTICS',escape_html($page)),$start,'start_views',$max,'max_views',$i,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort_views');
 		}
@@ -1421,10 +1424,10 @@ class Module_admin_stats
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
 		$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
 		$query='SELECT id,date_and_time FROM '.get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' AND date_and_time>'.strval(time()-($total*60*60)).' AND date_and_time<='.strval(time()).' ORDER BY '.$sortable.' '.$sort_order;
-		$rows=$GLOBALS['SITE_DB']->query($query,5000/*reasonable limit*/);
-		if ((count($rows)<1) || (count($rows)==5000))
+		$rows=$GLOBALS['SITE_DB']->query($query,10000/*reasonable limit*/);
+		if ((count($rows)<1) || (count($rows)==10000))
 		{
-			$list=new ocp_tempcode();
+			$list=paragraph(do_lang_tempcode('TOO_MUCH_DATA'),'','red_alert');
 			$graph=new ocp_tempcode();
 			return array($graph,$list);
 		}
@@ -1492,7 +1495,7 @@ class Module_admin_stats
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
 		$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
-		$rows=$GLOBALS['SITE_DB']->query('SELECT id,'.$type.' FROM '.get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' ORDER BY '.$sortable.' '.$sort_order,5000/*reasonable limit*/);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT id,'.$type.' FROM '.get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' ORDER BY '.$sortable.' '.$sort_order,10000/*reasonable limit*/);
 		if (count($rows)<1)
 		{
 			$list=new ocp_tempcode();
