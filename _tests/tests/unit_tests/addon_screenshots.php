@@ -46,7 +46,6 @@ class addon_screenshots_test_set extends ocp_test_case
 				// These are defined as exceptions where we won't enforce our screenshot rule
 				if (in_array($hook,array(
 					'ad_success',
-					'admin_search_stemmer',
 					'better_mail',
 					'calendar_from_6am',
 					'content_read_tracking',
