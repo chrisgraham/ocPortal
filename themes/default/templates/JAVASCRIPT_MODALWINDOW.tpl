@@ -41,7 +41,7 @@ function open_link_as_overlay(ob,width,height,target)
 	function open_image_into_lightbox(a)
 	{
 		// Set up overlay for Lightbox
-		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" /></p>';
+		var lightbox_code='<p class="ajax_loading"><img id="lightbox_image" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" /></p>';
 		var has_full_button=(typeof a.childNodes[0]=='undefined') || (a.href!==a.childNodes[0].src);
 		if (has_full_button)
 			lightbox_code+='<p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';

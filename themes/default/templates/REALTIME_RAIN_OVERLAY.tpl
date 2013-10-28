@@ -16,7 +16,7 @@
 			<div id="bubbles_go_here">
 			</div>
 
-			<div id="loading_icon" class="ajax_tree_list_loading"><img aria-busy="true" src="{$IMG*,loading}" alt="{!LOADING}" title="{!LOADING}" /></div>
+			<div id="loading_icon" class="ajax_loading"><img aria-busy="true" src="{$IMG*,loading}" alt="{!LOADING}" title="{!LOADING}" /></div>
 		</div>
 
 		<div id="timer_outer"><div id="timer_inner">

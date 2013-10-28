@@ -1,5 +1,5 @@
 <div aria-busy="true" class="spaced">
-	<div class="ajax_tree_list_loading vertical_alignment">
+	<div class="ajax_loading vertical_alignment">
 		<img id="loading_image" src="{$IMG*,loading}" title="{!LOADING}" alt="{!LOADING}" />
 		<span>{!LOADING}</span>
 	</div>

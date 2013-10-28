@@ -314,7 +314,7 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 
 	// Show loading animation
 	var loading_wrapper=target_div;
-	if (loading_wrapper.id.indexOf('carousel_')==-1)
+	if ((loading_wrapper.id.indexOf('carousel_')==-1) && (get_inner_html(loading_wrapper).indexOf('ajax_loading')==-1))
 	{
 		var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
 		if (typeof raw_ajax_grow_spot[0]!='undefined' && append) loading_wrapper=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
@@ -332,7 +332,7 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 			}
 		}
 		var loading_image=document.createElement('img');
-		loading_image.className='ajax_loading ajax_loading_block';
+		loading_image.className='ajax_loading_block';
 		loading_image.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
 		loading_image.style.position='absolute';
 		loading_image.style.zIndex='1000';

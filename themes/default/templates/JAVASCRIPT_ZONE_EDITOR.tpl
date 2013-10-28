@@ -175,7 +175,7 @@ function reload_preview(id)
 	var edit_element=document.getElementById('edit_'+id+'_textarea');
 	if (!edit_element) return; // Nothing interatively edited
 
-	set_inner_html(element,'<div aria-busy="true" class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG;,loading}'.replace(/^http:/,window.location.protocol)+'" /> <span>{!LOADING;^}</span></div>');
+	set_inner_html(element,'<div aria-busy="true" class="ajax_loading vertical_alignment"><img src="'+'{$IMG;,loading}'.replace(/^http:/,window.location.protocol)+'" /> <span>{!LOADING;^}</span></div>');
 
 	window.loading_preview_of=id;
 

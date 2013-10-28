@@ -16,7 +16,7 @@ window.tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all
 	this.use_server_id=use_server_id;
 
 	var element=document.getElementById('tree_list__root_'+name);
-	set_inner_html(element,'<div class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> <span>{!LOADING;^}</span></div>');
+	set_inner_html(element,'<div class="ajax_loading vertical_alignment"><img src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> <span>{!LOADING;^}</span></div>');
 
 	// Initial rendering
 	do_ajax_request('{$BASE_URL_NOHTTP;}/'+hook+'&id='+window.encodeURIComponent(root_id)+'&options='+options+'&default='+window.encodeURIComponent(document.getElementById(name).value),this,false);

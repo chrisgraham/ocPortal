@@ -2149,7 +2149,7 @@ div.wysiwyg_toolbar_color_finder {
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
-.ajax_tree_list_loading {
+.ajax_loading {
 	padding: 2em;
 	text-align: center;
 }
