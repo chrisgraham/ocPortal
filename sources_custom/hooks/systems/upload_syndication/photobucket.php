@@ -104,6 +104,14 @@ class Hook_upload_syndication_photobucket
 		{
 			require_lang('video_syndication_photobucket');
 			attach_message(do_lang_tempcode('PHOTOBUCKET_ERROR',escape_html($e->getCode()),escape_html($e->getMessage()),escape_html(get_site_name())),'warn');
+
+			// Tidy out old incomplete request tokens
+			if (is_null(get_long_value_newer_than('photobucket_oauth_key__'.strval(get_member()),time()-60*60)))
+			{
+				set_long_value('photobucket_oauth_key__'.strval(get_member()),NULL);
+				set_long_value('photobucket_oauth_secret__'.strval(get_member()),NULL);
+			}
+
 			return false; // Maybe our 'request' token had a stale authorisation, or was never authorised -- so we fail and receive_authorisation() would need calling
 		}
 		$token=$api->getOAuthToken();
