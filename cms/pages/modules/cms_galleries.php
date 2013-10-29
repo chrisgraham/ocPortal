@@ -971,7 +971,7 @@ class Module_cms_galleries extends standard_crud_module
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
-	function nice_get_ajax_tree()
+	function create_selection_list_ajax_tree()
 	{
 		if ($GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)')==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -1542,7 +1542,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
-	function nice_get_ajax_tree()
+	function create_selection_list_ajax_tree()
 	{
 		if ($GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)')==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -2020,7 +2020,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
-	function nice_get_ajax_tree()
+	function create_selection_list_ajax_tree()
 	{
 		$purity=true;
 		$_member_id=NULL;

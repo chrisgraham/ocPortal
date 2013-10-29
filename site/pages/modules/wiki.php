@@ -68,7 +68,6 @@ class Module_wiki
 		delete_menu_item_simple('_SEARCH:wiki:type=misc');
 		delete_menu_item_simple('_SEARCH:wiki:type=random');
 		delete_menu_item_simple('_SEARCH:wiki:type=changes');
-		delete_menu_item_simple('_SEARCH:wiki:type=tree');
 
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_wiki');
 	}
@@ -151,7 +150,6 @@ class Module_wiki
 			add_menu_item_simple('wiki_features',NULL,'HOME','_SEARCH:wiki:type=misc');
 			add_menu_item_simple('wiki_features',NULL,'RANDOM_PAGE','_SEARCH:wiki:type=random');
 			add_menu_item_simple('wiki_features',NULL,'WIKI_CHANGELOG','_SEARCH:wiki:type=changes');
-			add_menu_item_simple('wiki_features',NULL,'TREE','_SEARCH:wiki:type=tree');
 
 			$GLOBALS['SITE_DB']->create_index('wiki_posts','ftjoin_spm',array('the_message'));
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spt',array('title'));
@@ -220,104 +218,7 @@ class Module_wiki
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'WIKI_HOME','random'=>'RANDOM_PAGE','changes'=>'WIKI_CHANGELOG','tree'=>'TREE');
-	}
-
-	/**
-	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
-	 *
-	 * @param  ?integer  The number of tree levels to computer (NULL: no limit)
-	 * @param  boolean	Whether to not return stuff that does not support permissions (unless it is underneath something that does).
-	 * @param  ?string	Position to start at in the tree. Does not need to be respected. (NULL: from root)
-	 * @param  boolean	Whether to avoid returning categories.
-	 * @return ?array	 	A tuple: 1) full tree structure [made up of (pagelink, permission-module, permissions-id, title, children, ?entry point for the children, ?children permission module, ?whether there are children) OR a list of maps from a get_* function] 2) permissions-page 3) optional base entry-point for the tree 4) optional permission-module 5) optional permissions-id (NULL: disabled).
-	 */
-	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
-	{
-		$permission_page='cms_wiki';
-
-		//if ($require_permission_support) return array(array(),$permission_page,'_SELF:_SELF:type=misc:id=!');
-
-		require_code('wiki');
-		$category_id=NULL;
-		if (!is_null($start_at))
-		{
-			$matches=array();
-			if (preg_match('#[^:]*:wiki:type=misc:id=(.*)#',$start_at,$matches)!=0) $category_id=intval($matches[1]);
-		}
-
-		$wiki_seen=array();
-		$adjusted_max_depth=is_null($max_depth)?NULL:(is_null($category_id)?($max_depth-1):$max_depth);
-		return array($dont_care_about_categories?array():get_wiki_page_tree($wiki_seen,$category_id,NULL,NULL,false,false,$adjusted_max_depth),$permission_page,'_SELF:_SELF:type=misc:id=!','wiki_page');
-	}
-
-	/**
-	 * Standard modular new-style deep page-link finder function (does not return the main entry-points).
-	 *
-	 * @param  string  	Callback function to send discovered page-links to.
-	 * @param  MEMBER		The member we are finding stuff for (we only find what the member can view).
-	 * @param  integer	Code for how deep we are tunnelling down, in terms of whether we are getting entries as well as categories.
-	 * @param  string		Stub used to create page-links. This is passed in because we don't want to assume a zone or page name within this function.
-	 * @param  ?string	Where we're looking under (NULL: root of tree). We typically will NOT show a root node as there's often already an entry-point representing it.
-	 * @param  integer	Our recursion depth (used to calculate importance of page-link, used for instance by Google sitemap). Deeper is typically less important.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 */
-	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$parent_pagelink=NULL,$recurse_level=0,$category_data=NULL)
-	{
-		// This is where we start
-		if (is_null($parent_pagelink))
-		{
-			$parent_pagelink=$pagelink_stub.':misc'; // This is the entry-point we're under
-			$parent_attributes=array('id'=>strval(db_get_first_id()));
-		} else
-		{
-			list(,$parent_attributes,)=page_link_decode($parent_pagelink);
-		}
-
-		// We read in all data for efficiency
-		if (is_null($category_data))
-		{
-			$category_data=$GLOBALS['SITE_DB']->query_select('wiki_pages c LEFT JOIN '.get_table_prefix().'wiki_children x ON x.child_id=c.id LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.title',array('c.title AS _title','c.id','t.text_original AS title','parent_id','add_date'));
-			$category_data=remove_duplicate_rows($category_data,'id');
-		}
-
-		// Subcategories
-		foreach ($category_data as $row)
-		{
-			if (is_null($row['title'])) $row['title']=get_translated_text($row['_title']);
-
-			if ((!is_null($row['parent_id'])) && (strval($row['parent_id'])==$parent_attributes['id']))
-			{
-				$pagelink=$pagelink_stub.'misc:'.strval($row['id']);
-				if (__CLASS__!='')
-				{
-					$this->get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data); // Recurse
-				} else
-				{
-					call_user_func_array(__FUNCTION__,array($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data)); // Recurse
-				}
-				if (has_category_access($member_id,'wiki_page',strval($row['id'])))
-				{
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],NULL,max(0.7-$recurse_level*0.1,0.3),$row['title'])); // Callback
-				} else // Not accessible: we need to copy the node through, but we will flag it 'Unknown' and say it's not accessible.
-				{
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],NULL,max(0.7-$recurse_level*0.1,0.3),do_lang('UNKNOWN'),false)); // Callback
-				}
-			}
-		}
-	}
-
-	/**
-	 * Convert a page link to a category ID and category permission module type.
-	 *
-	 * @param  string	The page link
-	 * @return array	The pair
-	 */
-	function extract_page_link_permissions($page_link)
-	{
-		$matches=array();
-		preg_match('#^([^:]*):([^:]*):type=misc:id=(.*)$#',$page_link,$matches);
-		return array($matches[3],'wiki_page');
+		return array('misc'=>'WIKI_HOME','random'=>'RANDOM_PAGE','changes'=>'WIKI_CHANGELOG');
 	}
 
 	var $title;
@@ -433,13 +334,6 @@ class Module_wiki
 			$this->title=get_screen_title('WIKI_CHANGELOG');
 		}
 
-		if ($type=='tree')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('WIKI'))));
-
-			$this->title=get_screen_title('WIKI_TREE');
-		}
-
 		if ($type=='post')
 		{
 			$_chain=get_param_wiki_chain('id',strval(db_get_first_id()));
@@ -511,7 +405,6 @@ class Module_wiki
 		if ($type=='misc') return $this->page();
 		if ($type=='random') return $this->random();
 		if ($type=='changes') return $this->changes();
-		if ($type=='tree') return $this->tree();
 		if ($type=='mg') return $this->do_wiki_merge_interface();
 		if ($type=='do') return $this->do_wiki_merge();
 		if ($type=='move') return $this->move();
@@ -1219,52 +1112,6 @@ class Module_wiki
 		// Show it worked / Refresh
 		$url=get_param('redirect');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-	}
-
-	/**
-	 * The UI to show the Wiki+ tree.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function tree()
-	{
-		require_code('splurgh');
-
-		if ($GLOBALS['SITE_DB']->query_select_value('wiki_pages','COUNT(*)')>3000)
-			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
-
-		$url_stub=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,false,false,true);
-		$last_change_time=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_changes','date_and_time',NULL,'ORDER BY date_and_time DESC');
-
-		$children_rows=$GLOBALS['SITE_DB']->query_select('wiki_children',array('child_id','parent_id'),NULL,'ORDER BY the_order');
-		$page_rows=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('id','title'));
-		$map=array();
-		foreach ($page_rows as $i=>$page)
-		{
-			if ($i%100==0) echo escape_html("\n"); // Fixes weird CGI timeout (some servers only) if there's lots of data. Won't trigger quirks mode. 'escape_html' is just for the XSS detector.
-
-			if ($page['id']!=db_get_first_id())
-			{
-				if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'wiki_page',strval($page['id']))) continue;
-			}
-
-			$id=$page['id'];
-
-			$map[$id]['title']=get_translated_text($page['title']);
-			$children=array();
-			foreach ($children_rows as $child)
-			{
-				if ($child['parent_id']==$id) $children[]=$child['child_id'];
-			}
-			$map[$id]['children']=$children;
-		}
-
-		$root=get_param_integer('keep_wiki_root',NULL);
-		$cache_name='wiki_tree_made';
-		if (!is_null($root)) $cache_name.=strval($root);
-		$content=splurgh_master_build('id',$map,$url_stub->evaluate(),$cache_name,$last_change_time,$root);
-
-		return do_template('SPLURGH_SCREEN',array('_GUID'=>'be1e902d5f4429795f0f4c4e4384071b','TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 }

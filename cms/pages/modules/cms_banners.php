@@ -207,7 +207,7 @@ class Module_cms_banners extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -287,10 +287,10 @@ class Module_cms_banners extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_banners')?NULL:get_member();
-		return nice_get_banners(NULL,$only_owned);
+		return create_selection_list_banners(NULL,$only_owned);
 	}
 
 	/**
@@ -502,7 +502,7 @@ class Module_cms_banners_cat extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 

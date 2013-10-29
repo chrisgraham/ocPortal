@@ -78,7 +78,7 @@ function render_group_box($row,$zone='_SEARCH',$give_context=true,$guid='')
  * @param  ?AUTO_LINK	Usergroup selected by default (NULL: no specific default).
  * @return tempcode		The list.
  */
-function ocf_nice_get_usergroups($it=NULL)
+function ocf_create_selection_list_usergroups($it=NULL)
 {
 	$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 	$_m=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?array('g_is_private_club'=>0):NULL,'ORDER BY g_order');

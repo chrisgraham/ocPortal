@@ -153,7 +153,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 			afm_make_file($zone.'/'.$i.'/index.html','',false);
 		}
 		$default_menu=<<<END
-[block="zone_{$zone}_menu" title="Menu"]side_stored_menu[/block]
+[block="zone_{$zone}_menu" title="Menu"]menu[/block]
 [block failsafe="1"]side_users_online[/block]
 [block failsafe="1"]side_stats[/block]
 [block]side_personal_stats[/block]
@@ -172,7 +172,7 @@ END;
 	persistent_cache_delete('ALL_ZONES');
 
 	decache('main_sitemap');
-	decache('side_stored_menu');
+	decache('menu');
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{

@@ -21,7 +21,7 @@
 /**
  * Module page class.
  */
-class Module_admin_sitetree
+class Module_admin_sitemap
 {
 
 	/**
@@ -49,7 +49,7 @@ class Module_admin_sitetree
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'ZONES','pagewizard'=>'PAGE_WIZARD','site_tree'=>'SITE_TREE_EDITOR','move'=>'MOVE');
+		return array('misc'=>'ZONES','pagewizard'=>'PAGE_WIZARD','sitemap'=>'SITEMAP_EDITOR','move'=>'MOVE');
 	}
 
 	var $title;
@@ -73,7 +73,7 @@ class Module_admin_sitetree
 
 		if ($type=='misc')
 		{
-			set_helper_panel_pic('pagepics/sitetreeeditor');
+			set_helper_panel_pic('pagepics/sitemapeditor');
 			set_helper_panel_tutorial('tut_structure');
 		}
 
@@ -88,11 +88,11 @@ class Module_admin_sitetree
 			set_helper_panel_pic('pagepics/deletepage');
 		}
 
-		if ($type=='site_tree')
+		if ($type=='sitemap')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
 
-			$this->title=get_screen_title('SITE_TREE_EDITOR');
+			$this->title=get_screen_title('SITEMAP_EDITOR');
 		}
 
 		if ($type=='pagewizard')
@@ -167,7 +167,7 @@ class Module_admin_sitetree
 		if ($type=='misc') return $this->misc();
 		if ($type=='pagewizard') return $this->page_wizard();
 		if ($type=='_pagewizard') return $this->_page_wizard();
-		if ($type=='site_tree') return $this->site_tree();
+		if ($type=='sitemap') return $this->sitemap();
 		if ($type=='delete') return $this->delete();
 		if ($type=='_delete') return $this->_delete();
 		if ($type=='__delete') return $this->__delete();
@@ -178,7 +178,7 @@ class Module_admin_sitetree
 	}
 
 	/**
-	 * The do-next manager for before content management. This is intended for exceptional users who cannot use the site-tree editor
+	 * The do-next manager for before content management. This is intended for exceptional users who cannot use the sitemap editor
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -209,17 +209,17 @@ class Module_admin_sitetree
 	{
 		require_code('zones2');
 		require_code('zones3');
-		return site_tree_do_next_manager($title,$page,$zone,$completion_text);
+		return sitemap_do_next_manager($title,$page,$zone,$completion_text);
 	}
 
 	/**
-	 * The UI for the site-tree editor.
+	 * The UI for the sitemap editor.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function site_tree()
+	function sitemap()
 	{
-		require_css('sitetree_editor');
+		require_css('sitemap_editor');
 
 		if (!has_js())
 		{
@@ -227,7 +227,7 @@ class Module_admin_sitetree
 			$url=build_url(array('page'=>'_SELF','type'=>'page'),'_SELF');
 			require_code('site2');
 			assign_refresh($url,5.0);
-			return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_ADVANCED_SCREEN_SITE_TREE'));
+			return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_ADVANCED_SCREEN_SITEMAP'));
 		}
 
 		if (count($GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)'))>=300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL',escape_html(integer_format(50))),'warn');
@@ -236,9 +236,9 @@ class Module_admin_sitetree
 		require_javascript('javascript_more');
 		require_javascript('javascript_tree_list');
 		require_javascript('javascript_dragdrop');
-		require_javascript('javascript_site_tree_editor');
+		require_javascript('javascript_sitemap_editor');
 
-		return do_template('SITE_TREE_EDITOR_SCREEN',array('_GUID'=>'2d42cb71e03d31c855a6b6467d2082d2','TITLE'=>$this->title));
+		return do_template('SITEMAP_EDITOR_SCREEN',array('_GUID'=>'2d42cb71e03d31c855a6b6467d2082d2','TITLE'=>$this->title));
 	}
 
 	/**
@@ -254,7 +254,7 @@ class Module_admin_sitetree
 		require_code('zones2');
 		require_code('zones3');
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),do_lang_tempcode('MENU_ZONE'),'zone',nice_get_zones($zone),NULL,true));
+		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),do_lang_tempcode('MENU_ZONE'),'zone',create_selection_list_zones($zone),NULL,true));
 		$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_PAGE_NAME'),'name','',true));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_pagewizard'),'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('PROCEED');
@@ -314,7 +314,7 @@ class Module_admin_sitetree
 							$fallback=zone_black_magic_filterer(get_file_base().'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/comcode/'.fallback_lang().'/'.$filename);
 							if (file_exists($fallback)) $contents.=file_get_contents($fallback);
 						}
-						if (preg_match('#\[block="'.preg_quote($row['i_menu'],'#').'"[^\]]* title="([^"]*)"[^\]]*\]side_stored_menu\[/block\]#',$contents,$matches)!=0)
+						if (preg_match('#\[block="'.preg_quote($row['i_menu'],'#').'"[^\]]* title="([^"]*)"[^\]]*\]menu\[/block\]#',$contents,$matches)!=0)
 						{
 							$zone_title=preg_replace('# '.preg_quote(do_lang('ZONE'),'#').'$#','',$zones[$zone_under][1]);
 							$menu_name=do_lang_tempcode('MENU_FULL_DETAILS',$menu_name,comcode_to_tempcode($matches[1]),make_string_tempcode(escape_html($zone_title)));
@@ -356,7 +356,7 @@ class Module_admin_sitetree
 						$fallback=zone_black_magic_filterer(get_file_base().'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/comcode/'.fallback_lang().'/'.$filename);
 						if (file_exists($fallback)) $contents.=file_get_contents($fallback);
 					}
-					$num_matches=preg_match_all('#\[block="([^"]*)"[^\]]* title="([^"]*)"[^\]]*\]side_stored_menu\[/block\]#',$contents,$matches);
+					$num_matches=preg_match_all('#\[block="([^"]*)"[^\]]* title="([^"]*)"[^\]]*\]menu\[/block\]#',$contents,$matches);
 					for ($i=0;$i<$num_matches;$i++)
 					{
 						$menu_name=$matches[1][$i];
@@ -406,7 +406,7 @@ class Module_admin_sitetree
 
 		require_code('zones2');
 		require_code('zones3');
-		$zones=nice_get_zones(NULL,is_null($no_go)?NULL:array($no_go));
+		$zones=create_selection_list_zones(NULL,is_null($no_go)?NULL:array($no_go));
 		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),'','zone',$zones,NULL,true));
 
 		$post_url=get_self_url(false,false,NULL,false,true);
@@ -590,7 +590,7 @@ class Module_admin_sitetree
 		}
 		require_code('zones2');
 		require_code('zones3');
-		$zones=nice_get_zones();
+		$zones=create_selection_list_zones();
 		$fields->attach(form_input_list(do_lang_tempcode('DESTINATION'),do_lang_tempcode('DESCRIPTION_DESTINATION_ZONE'),'destination_zone',$zones,NULL,true));
 
 		$hidden=form_input_hidden('zone',$zone);
@@ -726,7 +726,7 @@ class Module_admin_sitetree
 
 		if (has_js())
 		{
-			return inform_screen($this->title,$message); // Came from site-tree editor, so want to just close this window when done
+			return inform_screen($this->title,$message); // Came from sitemap editor, so want to just close this window when done
 		}
 		return $this->do_next_manager($this->title,$moved_something,$new_zone,new ocp_tempcode());
 	}

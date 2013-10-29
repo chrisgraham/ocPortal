@@ -18,397 +18,290 @@
  * @package		core
  */
 
-/*
-Implementation notes...
- - We do not put edit/posting forms in our sitemap; that is, forms that begin an action on a specific resource
- - Nodes may not be (in fact, usually are not) written in a streamed tree order
- - Node children may be written if they do not have access permission (albeit flagged as such) but ONLY if there is a possibility they may have accessible children
-*/
-
 /**
  * Standard code module initialisation function.
  */
 function init__sitemap()
 {
-	require_code('xml');
+	// Defining what should be gathered with the sitemap
+	define('SITEMAP_GATHER_DESCRIPTION',1);
+	define('SITEMAP_GATHER_IMAGE',2);
+	define('SITEMAP_GATHER_DATES',4);
+	define('SITEMAP_GATHER_SUBMITTER',8);
+	define('SITEMAP_GATHER_VIEWS',16);
+	define('SITEMAP_GATHER_RATING',32);
+	define('SITEMAP_GATHER_META',64);
+	define('SITEMAP_GATHER_CATEGORIES',128);
+	define('SITEMAP_GATHER_DB_ROW',256);
 
-	global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH;
-	$SITEMAPS_OUT_FILE=NULL;
-	$SITEMAPS_OUT_PATH=NULL;
-	$SITEMAPS_OUT_TEMPPATH=NULL;
-
-	define('DEPTH__PAGES',1);
-	define('DEPTH__ENTRY_POINTS',2);
-	define('DEPTH__CATEGORIES',3);
-	define('DEPTH__ENTRIES',3);
+	// Defining how the content-selection list should be put together
+	define('NGC_PERMISSION_VIEW',1);
+	define('NGC_PERMISSION_ADD',2);
+	define('NGC_PERMISSION_EDIT',4);
+	define('NGC_PERMISSION_DELETE',8);
 }
 
 /**
- * Top level function to (re)generate a Sitemap (xml file, Google-style).
+ * Find details of a position in the sitemap (shortcut into the object structure).
+ *
+ * @param  ?ID_TEXT 		The page-link we are finding (NULL: root).
+ * @param  ?mixed  		Callback function to send discovered page-links to (NULL: return).
+ * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+ * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
+ * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
+ * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+ * @param  boolean		Whether to filter out non-validated content.
+ * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
+ * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+ * @return ?array			Result structure (NULL: working via callback).
  */
-function sitemaps_build()
+function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_validation=false,$consider_secondary_categories=false,$meta_gather=0)
 {
-	$GLOBALS['NO_QUERY_LIMIT']=true;
-
-	if (!is_guest())
+	if (is_null($pagelink))
 	{
-		warn_exit('Will not generate sitemap as non-Guest');
-	}
-
-	$path=get_custom_file_base().'/ocp_sitemap.xml';
-	if (!file_exists($path))
-	{
-		if (!is_writable_wrap(dirname($path))) warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE',escape_html('/')));
+		$hook='root';
+		require_code('hooks/systems/sitemap/root');
+		$ob=object_factory('Hook_sitemap_root');
 	} else
 	{
-		if (!is_writable_wrap($path)) warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html('ocp_sitemap.xml')));
+		$hook=mixed();
+		$hooks=find_all_hooks('systems','sitemap');
+		foreach (array_keys($hooks) as $_hook)
+		{
+			require_code('hooks/systems/sitemap/'.$_hook);
+			$ob=object_factory('Hook_sitemap_'.$_hook);
+			if ($ob->handles_pagelink($pagelink))
+			{
+				$hook=$_hook;
+				break;
+			}
+		}
+		if (is_null($hook))
+			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	}
 
-	// Runs via a callback mechanism, so we don't need to load an arbitrary complex structure into memory.
-	sitemaps_xml_initialise($path);
-	spawn_page_crawl('pagelink_to_sitemapsxml',$GLOBALS['FORUM_DRIVER']->get_guest_id(),NULL,DEPTH__ENTRIES);
-	sitemaps_xml_finished();
-
-	ping_sitemap(get_custom_base_url().'/ocp_sitemap.xml');
+	return $ob->get_node($pagelink,$callback,$valid_node_content_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
 }
 
 /**
- * Ping search engines with an updated sitemap.
+ * Get an HTML selection list for some part of the sitemap.
  *
- * @param  URLPATH 	Sitemap URL.
- * @return string		HTTP result output
+ * @param  ID_TEXT  		The page-link we are starting from.
+ * @param  ?ID_TEXT		Default selection (NULL: none).
+ * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+ * @param  ?array			List of node content types we will allow to be selectable (NULL: no limit)
+ * @param  integer		Check permissions according to this bitmask of possibilities (requiring all in the bitmask to be matched)
+ * @param  ?MEMBER		The member we are checking permissions for (NULL: current member)
+ * @param  boolean		Whether to filter out non-validated entries if the $check_permissions_for user doesn't have the privilege to see them AND doesn't own them
+ * @param  ?MEMBER		The member we are only finding owned content of (NULL: no such limit); nodes leading up to owned content will be shown, but not as selectable
+ * @param  boolean		Whether to produce selection IDs as a comma-separated list of all selectable sub-nodes.
+ * @param  ?mixed  		Filter function for limiting what rows will be included (NULL: none).
+ * @return tempcode		List.
  */
-function ping_sitemap($url)
+function create_selection_list($root_pagelink,$default=NULL,$valid_node_content_types=NULL,$valid_selectable_content_types=NULL,$check_permissions_against=0,$check_permissions_for=NULL,$consider_validation=false,$only_owned=NULL,$use_compound_list=false,$filter_func=NULL)
 {
-	// Ping search engines
-	$out='';
-	if (get_option('auto_submit_sitemap')=='1')
+	if (is_null($check_permissions_for)) $check_permissions_for=get_member();
+
+	$out=new ocp_tempcode();
+	$root_node=retrieve_sitemap_node($root_pagelink,NULL,NULL,false,'_SEARCH',$consider_validation,false,is_null($filter_func)?0:SITEMAP_GATHER_DB_ROW);
+	foreach ($root_node['children'] as $child_node)
 	{
-		$ping=true;
-		$base_url=get_base_url();
-		$not_local=(substr($base_url,0,16)!='http://localhost') && (substr($base_url,0,16)!='http://127.0.0.1') && (substr($base_url,0,15)!='http://192.168.') && (substr($base_url,0,10)!='http://10.');
-		if (($ping) && (get_option('site_closed')=='0') && ($not_local))
-		{
-			// Submit to search engines
-			$services=array(
-				'http://www.google.com/webmasters/tools/ping?sitemap=',
-				'http://submissions.ask.com/ping?sitemap=',
-				'http://www.bing.com/webmaster/ping.aspx?siteMap=',
-				'http://search.yahooapis.com/SiteExplorerService/V1/updateNotification?appid=SitemapWriter&url=',
-			);
-			foreach ($services as $service)
-			{
-				$out.=http_download_file($service.urlencode($url),NULL,false);
-			}
-		}
+		_create_selection_list($out,$child_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func);
 	}
 	return $out;
 }
 
 /**
- * Start up a search for page-links, writing results into the callback. Usually we pass a callback that builds a Sitemap XML file, but we don't need to- it can be anything.
+ * Recurse function for create_selection_list.
  *
- * @param  string  	Callback function to send discovered page-links to.
- * @param  MEMBER		The member we are finding stuff for (we only find what the member can view).
- * @param  ?array		Page-links to skip (NULL: none). Currently this only works on pages, but may be expanded in the future.
- * @param  integer	Code for how deep we are tunnelling down, in terms of what kinds of things we'll go so far as to collect. Use DEPTH__* constants for the values.
+ * @param  tempcode  	Output Tempcode.
+ * @param  array  		Node being recursed.
+ * @param  ?ID_TEXT		Default selection (NULL: none).
+ * @param  ?array			List of node content types we will allow to be selectable (NULL: no limit)
+ * @param  integer		Check permissions according to this bitmask of possibilities (requiring all in the bitmask to be matched)
+ * @param  ?MEMBER		The member we are checking permissions for (NULL: current member)
+ * @param  ?MEMBER		The member we are only finding owned content of (NULL: no such limit); nodes leading up to owned content will be shown, but not as selectable
+ * @param  boolean		Whether to produce selection IDs as a comma-separated list of all selectable sub-nodes.
+ * @param  ?mixed  		Filter function for limiting what rows will be included (NULL: none).
+ * @param  integer		Recursion depth.
+ * @return string			Compound list.
  */
-function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
+function _create_selection_list(&$out,$node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func,$depth=0)
 {
-	require_all_lang();
-	require_code('zones2');
-
-	if (is_null($extra_filters)) $extra_filters=array();
-
-	$comcode_page_rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'));
-
-	$_zones=array();
-	$zones=find_all_zones(false,true,true);
-
-	// Reorder a bit
-	$zones2=array();
-	foreach (array('','site') as $zone_match)
+	// Skip?
+	if (!is_null($check_permissions_for))
 	{
-		foreach ($zones as $i=>$zone)
+		foreach ($node['permissions'] as $permission)
 		{
-			if ($zone[0]==$zone_match)
+			if (($check_permissions_against & NGC_PERMISSION_VIEW) != 0)
 			{
-				$zones2[]=$zone;
-				unset($zones[$i]);
-			}
-		}
-	}
-	$zones2=array_merge($zones2,$zones);
-
-	if (function_exists('set_time_limit')) @set_time_limit(0);
-	disable_php_memory_limit();
-
-	$GLOBALS['MEMORY_OVER_SPEED']=true;
-
-	foreach ($zones2 as $z)
-	{
-		list($zone,$zone_title,,$zone_default_page)=$z;
-		if (has_zone_access($member_id,$zone))
-		{
-			$done_zone_level=false;
-
-			$_pages=array();
-			$pages=find_all_pages_wrap($zone,false,false,FIND_ALL_PAGES__ALL);
-			foreach ($pages as $page=>$page_type)
-			{
-				if (is_integer($page)) $page=strval($page);
-				if (substr($page,0,6)=='panel_') continue;
-				if (substr($page,0,1)=='_') continue;
-				if (in_array($zone.':'.$page,$extra_filters)) continue;
-				if ($page=='404') continue;
-				if (($page=='forums') && (substr($page_type,0,7)=='modules') && ((get_forum_type()=='ocf') || (get_forum_type()=='none'))) continue;
-				if (($page=='join') && (substr($page_type,0,7)=='modules') && (!is_guest($member_id))) continue;
-
-				if (get_value('disable_sitemap_for__'.$page)==='1') continue;
-
-				if (has_page_access($member_id,$page,$zone))
+				switch ($permission['type'])
 				{
-					// Page level
-					$_entrypoints=array();
-					$__entrypoints=extract_module_functions_page($zone,$page,array('get_entry_points'));
-					if (!is_null($__entrypoints[0]))
+					case 'zone':
+						if (!has_zone_access($check_permissions_for,$permission['zone_name']))
+							return '';
+						break;
+
+					case 'page':
+						if (!has_zone_access($check_permissions_for,$permission['zone_name'],$permission['page_name']))
+							return '';
+						break;
+
+					case 'category':
+						if (!has_category_access($check_permissions_for,$permission['permission_module'],$permission['category_name']))
+							return '';
+						break;
+				}
+			}
+			if ($permission['type']=='privilege')
+			{
+				if (($check_permissions_against & NGC_PERMISSION_ADD) != 0)
+				{
+					if (preg_match('#^submit_#',$permission['privilege'])!=0)
 					{
-						$entrypoints=is_array($__entrypoints[0])?call_user_func_array($__entrypoints[0][0],$__entrypoints[0][1]):((strpos($__entrypoints[0],'::')!==false)?NULL:eval($__entrypoints[0])); // The strpos thing is a little hack that allows it to work for base-class derived modules
-						if (is_null($entrypoints))
-						{
-							$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/'.$page_type.'/'.$page.'.php',true);
-							if ((!HIPHOP_PHP) && ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') || (get_option('has_low_memory_limit')==='1')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_crud_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
-							{
-								$new_code=str_replace(',parent::get_entry_points()','',str_replace('parent::get_entry_points(),','',$__entrypoints[0]));
-								if (strpos($new_code,'parent::')!==false) continue;
-								$entrypoints=eval($new_code);
-							} else
-							{
-								require_code($path);
-								if (class_exists('Mx_'.filter_naughty_harsh($page)))
-								{
-									$object=object_factory('Mx_'.filter_naughty_harsh($page));
-								} else
-								{
-									$object=object_factory('Module_'.filter_naughty_harsh($page));
-								}
-								$entrypoints=$object->get_entry_points();
-							}
-						}
-					} else $entrypoints=array('!');
-					if (!is_array($entrypoints)) $entrypoints=array('!');
-					if ($entrypoints==array('!'))
-					{
-						if ($zone_default_page==$page) $done_zone_level=true;
-
-						$add_date=NULL;
-						$edit_date=NULL;
-						$pagelink=($zone_default_page==$page)?$zone:($zone.':'.$page);
-						$title=titleify($page);
-						if (substr($page_type,0,7)=='comcode')
-						{
-							foreach ($comcode_page_rows as $page_row)
-							{
-								if (($page_row['p_validated']==0) && ($page_row['the_page']==$page) && ($page_row['the_zone']==$zone))
-								{
-									continue 2;
-								}
-							}
-
-							$path=zone_black_magic_filterer(((strpos($page_type,'_custom')!==false)?get_custom_file_base():get_file_base()).'/'.filter_naughty($zone).'/pages/'.filter_naughty($page_type).'/'.$page.'.txt');
-							$add_date=filectime($path);
-							$edit_date=filemtime($path);
-							$page_contents=file_get_contents($path);
-							$matches=array();
-							if (preg_match('#\[title[^\]]*\]#',$page_contents,$matches)!=0)
-							{
-								$start=strpos($page_contents,$matches[0])+strlen($matches[0]);
-								$end=strpos($page_contents,'[/title]',$start);
-								$matches=array();
-								if (preg_match('#^[^\[\{\&]*$#',substr($page_contents,$start,$end-$start),$matches)!=0)
-								{
-									$title=$matches[0];
-								} else
-								{
-									$_title=comcode_to_tempcode(substr($page_contents,$start,$end-$start),NULL,true);
-									$title=strip_tags(@html_entity_decode($_title->evaluate(),ENT_QUOTES,get_charset()));
-								}
-							}
-						}
-						elseif (substr($page_type,0,4)=='html')
-						{
-							$path=zone_black_magic_filterer(((strpos($page_type,'_custom')!==false)?get_custom_file_base():get_file_base()).'/'.filter_naughty($zone).'/pages/'.filter_naughty($page_type).'/'.$page.'.htm');
-							$add_date=filectime($path);
-							$edit_date=filemtime($path);
-							$page_contents=file_get_contents($path);
-							$matches=array();
-							if (preg_match('#\<title[^\>]*\>#',$page_contents,$matches)!=0)
-							{
-								$start=strpos($page_contents,$matches[0])+strlen($matches[0]);
-								$end=strpos($page_contents,'</title>',$start);
-								$title=strip_tags(@html_entity_decode(substr($page_contents,$start,$end-$start),ENT_QUOTES,get_charset()));
-							}
-						}
-
-						// Callback
-						call_user_func_array($callback,array($pagelink,$zone,$add_date,$edit_date,($zone_default_page==$page)?1.0:0.8,$title));
-					} elseif (count($entrypoints)!=0)
-					{
-						// Entry point level
-						$done_top=false;
-						if ($depth>=DEPTH__ENTRY_POINTS)
-						{
-							foreach ($entrypoints as $entrypoint=>$title)
-							{
-								if ($entrypoint=='!')
-								{
-									$pagelink=$zone.':'.$page;
-									$done_top=true;
-									if ($zone_default_page==$page) $done_zone_level=true;
-								} else
-								{
-									$pagelink=$zone.':'.$page.':'.$entrypoint;
-									if (($zone_default_page==$page) && ($entrypoint=='misc')) $done_zone_level=true;
-								}
-
-								// Callback
-								call_user_func_array($callback,array($pagelink,((count($_entrypoints)>1)&&($entrypoint!='!'))?($zone.':'.$page):$zone,NULL,NULL,(($entrypoint=='!') || ($entrypoint=='misc'))?0.8:0.7,$title));
-							}
-						}
-						$title=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
-						if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.preg_quote($zone,'#').'_#','',preg_replace('#^'.preg_quote(str_replace('zone','',$zone),'#').'_#','',$page))));
-						if ((count($_entrypoints)>1) && (!$done_top))
-						{
-							// Callback
-							call_user_func_array($callback,array($zone.':'.$page,$zone,NULL,NULL,0.8,$title,false));
-						}
+						if (!has_privilege($check_permissions_for,$permission['privilege'],$privilege['page_name'],array($privilege['permission_module'],$privilege['category_name'])))
+							return '';
 					}
-
-					// Categories
-					if ($depth>=DEPTH__CATEGORIES)
+				}
+				if (($check_permissions_against & NGC_PERMISSION_EDIT) != 0)
+				{
+					if (preg_match('#^edit_#',$permission['privilege'])!=0)
 					{
-						$__sitemap_pagelinks=extract_module_functions_page($zone,$page,array('get_sitemap_pagelinks'),array($callback,$member_id,$depth,$zone.':'.$page.':'));
-						if (!is_null($__sitemap_pagelinks[0]))
-						{
-							if (is_array($__sitemap_pagelinks[0]))
-							{
-								call_user_func_array($__sitemap_pagelinks[0][0],$__sitemap_pagelinks[0][1]);
-							} else
-							{
-								eval($__sitemap_pagelinks[0]);
-							}
-						}
+						if (!has_privilege($check_permissions_for,$permission['privilege'],$privilege['page_name'],array($privilege['permission_module'],$privilege['category_name'])))
+							return '';
+					}
+				}
+				if (($check_permissions_against & NGC_PERMISSION_DELETE) != 0)
+				{
+					if (preg_match('#^delete_#',$permission['privilege'])!=0)
+					{
+						if (!has_privilege($check_permissions_for,$permission['privilege'],$privilege['page_name'],array($privilege['permission_module'],$privilege['category_name'])))
+							return '';
 					}
 				}
 			}
-
-			// Zone level
-			if (!$done_zone_level) // Probably will never run actually (unless we didn't show pages), as start page will override
-			{
-				// Callback
-				call_user_func_array($callback,array($zone,'',filectime(get_file_base().'/'.$zone),NULL,1.0,$zone_title));
-			}
 		}
 	}
-}
-
-/**
- * Initialise the writing to a Sitemaps XML file. You can only call one of these functions per time as it uses global variables for tracking.
- *
- * @param  PATH  		Where we will save to.
- */
-function sitemaps_xml_initialise($file_path)
-{
-	global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH,$LOADED_MONIKERS_CACHE;
-	$SITEMAPS_OUT_TEMPPATH=ocp_tempnam('ocpsmap'); // We write to temporary path first to minimise the time our target file is invalid (during generation)
-	$SITEMAPS_OUT_FILE=fopen($SITEMAPS_OUT_TEMPPATH,'wb');
-	$SITEMAPS_OUT_PATH=$file_path;
-
-	// Load ALL URL ID monikers (for efficiency)
-	if ($GLOBALS['SITE_DB']->query_select_value('url_id_monikers','COUNT(*)',array('m_deprecated'=>0))<10000)
+	if (!is_null($only_owned))
 	{
-		$results=$GLOBALS['SITE_DB']->query_select('url_id_monikers',array('m_moniker','m_resource_page','m_resource_type','m_resource_id'),array('m_deprecated'=>0));
-		foreach ($results as $result)
-		{
-			$LOADED_MONIKERS_CACHE[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
-		}
+		if ($node['submitter']!=$only_owned) return '';
+	}
+	if (!is_null($filter_func))
+	{
+		if (!call_user_func($filter_func,$node)) return '';
 	}
 
-	// Load ALL guest permissions (for efficiency)
-	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-	load_up_all_self_page_permissions($guest_id);
-	load_up_all_module_category_permissions($guest_id);
-
-	// Start of file
-	$blob='<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	';
-	fwrite($SITEMAPS_OUT_FILE,$blob);
-}
-
-/**
- * Finalise the writing to a Sitemaps XML file.
- */
-function sitemaps_xml_finished()
-{
-	global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH;
-
-	// End of file
-	$blob='
-</urlset>
-	';
-	fwrite($SITEMAPS_OUT_FILE,$blob);
-
-	// Copy to final path / tidy up
-	fclose($SITEMAPS_OUT_FILE);
-	@unlink($SITEMAPS_OUT_PATH);
-	copy($SITEMAPS_OUT_TEMPPATH,$SITEMAPS_OUT_PATH);
-	@unlink($SITEMAPS_OUT_TEMPPATH);
-	sync_file($SITEMAPS_OUT_PATH);
-}
-
-/**
- * Callback for writing a page-link into the Sitemaps XML file.
- *
- * @param  string		The page-link.
- * @param  string		The parent page-link in the ocPortal site tree.
- * @param  ?TIME		When the node was added (NULL: unknown).
- * @param  ?TIME 		When the node was last edited (NULL: unknown/never).
- * @param  float		The priority of this for spidering, 0.0-1.0.
- * @param  string		The title of the node.
- * @param  boolean	Whether the category is accessible by the user the sitemap is being generated for (Guest for a Sitemaps XML file).
- */
-function pagelink_to_sitemapsxml($pagelink,$parent_pagelink,$add_date,$edit_date,$priority,$title,$accessible=true)
-{
-	global $SITEMAPS_OUT_FILE;
-
-	if (!$accessible) return; // $accessible is false and we're not building up a structure, so just leave
-
-	unset($parent_pagelink); // Structure not used for Sitemaps
-	unset($title); // Title not used for Sitemaps
-
-	list($zone,$attributes,$hash)=page_link_decode($pagelink);
-	$langs=find_all_langs();
-	foreach (array_keys($langs) as $lang)
+	// Recurse, working out $children and $compound_list
+	$children=new ocp_tempcode();
+	$child_compound_list='';
+	foreach ($node['children'] as $node)
 	{
-		$url=_build_url($attributes+(($lang==get_site_default_lang())?array():array('keep_lang'=>$lang)),$zone,NULL,false,false,true,$hash);
+		$_child_compound_list=_create_selection_list($children,$child_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func,$depth+1);
+		if ($_child_compound_list!='')
+			$child_compound_list.=($child_compound_list!='')?(','.$_child_compound_list):$_child_compound_list;
+	}
+	$compound_list=$content_id.(($child_compound_list!='')?(','.$child_compound_list):'');
 
-		$_lastmod_date=is_null($edit_date)?$add_date:$edit_date;
-		if (!is_null($_lastmod_date))
-		{
-			$lastmod_date='<lastmod>'.xmlentities(date('Y-m-d\TH:i:s',$_lastmod_date).substr_replace(date('O',$_lastmod_date),':',3,0)).'</lastmod>';
-		} else
-		{
-			$lastmod_date='<changefreq>yearly</changefreq>';
-		}
+	// Handle node
+	$title=str_repeat(' ',$depth).$node['title'];
+	$content_id=$node['content_id'];
+	$selected=($content_id===is_integer($default)?strval($default):$default);
+	$disabled=(!is_null($valid_selectable_content_types) && !in_array($node['content_type'],$valid_selectable_content_types));
+	$_content_id=$use_compound_list?$compound_list:$content_id;
+	$out->attach(form_input_list_entry($_content_id,$selected,$title,false,$disabled));
 
-		$url_blob='
-   <url>
-      <loc>'.xmlentities($url).'</loc>
-      '.$lastmod_date.'
-      <priority>'.float_to_raw_string($priority).'</priority>
-   </url>
-		';
-		fwrite($SITEMAPS_OUT_FILE,$url_blob);
+	// Attach recursion result
+	$out->attach($children);
+
+	return $compound_list;
+}
+
+abstract class Hook_sitemap_base
+{
+	/**
+	 * Convert a page link to a category ID and category permission module type.
+	 *
+	 * @param  ID_TEXT		The page-link.
+	 * @return boolean		Whether the page-link is handled by this hook.
+	 */
+	abstract function handles_pagelink($pagelink);
+
+	/**
+	 * Get a particular sitemap object. Used for easily tying in a different kind of child node.
+	 *
+	 * @param  ID_TEXT		The hook, i.e. the sitemap object type. Usually the same as a content type.
+	 * @return object			The sitemap object.
+	 */
+	private function _get_sitemap_object($hook)
+	{
+		require_code('hooks/systems/sitemap/'.filter_naughty($hook));
+		return object_factory('Hook_sitemap_'.$hook);
+	}
+
+	/**
+	 * Find details of a position in the sitemap.
+	 *
+	 * @param  ID_TEXT  		The page-link we are finding.
+	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
+	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
+	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
+	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
+	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to filter out non-validated content.
+	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
+	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+	 * @return ?array			Result structure (NULL: working via callback).
+	 */
+	abstract function get_node($pagelink,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0);
+
+	/**
+	 * Convert a page link to a category ID and category permission module type.
+	 *
+	 * @param  string	The page link
+	 * @return ?array	The pair (NULL: permission modules not handled)
+	 */
+	abstract function extract_child_pagelink_permission_pair($pagelink);
+}
+
+abstract class Hook_sitemap_content extends Hook_sitemap_base
+{
+	abstract private $content_type;
+
+	/**
+	 * Convert a page link to a category ID and category permission module type.
+	 *
+	 * @param  ID_TEXT		The page-link.
+	 * @return boolean		Whether the page-link is handled by this hook.
+	 */
+	function handles_pagelink($pagelink)
+	{
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
+		$page=$matches[2];
+
+		require_code('content');
+		$ob=get_content_object($content_type);
+		$info=$ob->info();
+		return $info['module']==$page;
+	}
+
+	/**
+	 * Convert a page link to a category ID and category permission module type.
+	 *
+	 * @param  string	The page link
+	 * @return ?array	The pair (NULL: permission modules not handled)
+	 */
+	function extract_child_pagelink_permission_pair($pagelink)
+	{
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*):type=misc:id=(.*)$#',$pagelink,$matches);
+		$id=$matches[3];
+
+		require_code('content');
+		$ob=get_content_object($content_type);
+		$info=$ob->info();
+
+		return array($id,$info['permissions_type_code']);
 	}
 }

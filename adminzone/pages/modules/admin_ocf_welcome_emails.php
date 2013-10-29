@@ -234,7 +234,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 			require_code('ocf_groups');
 			$usergroups=new ocp_tempcode();
 			$usergroups->attach(form_input_list_entry('',$usergroup===NULL,do_lang_tempcode('NA_EM')));
-			$usergroups->attach(ocf_nice_get_usergroups($usergroup));
+			$usergroups->attach(ocf_create_selection_list_usergroups($usergroup));
 			$fields->attach(form_input_list(do_lang_tempcode('GROUP'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP',escape_html(get_site_name())),'usergroup',$usergroups,NULL,false,false));
 
 			$radios=new ocp_tempcode();
@@ -253,7 +253,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -294,7 +294,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		$_m=$GLOBALS['SITE_DB']->query_select('f_welcome_emails',array('*'));
 		$entries=new ocp_tempcode();

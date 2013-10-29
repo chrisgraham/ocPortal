@@ -1,8 +1,8 @@
 {TITLE}
 
 <div class="float_surrounder">
-	<div class="site_tree_right">
-		<div class="box box___site_tree_editor_screen"><div class="box_inner">
+	<div class="sitemap_right">
+		<div class="box box___sitemap_editor_screen"><div class="box_inner">
 			<h2>{!SELECTION_DETAILS}</h2>
 
 			<div id="details_target">
@@ -11,9 +11,9 @@
 		</div></div>
 	</div>
 
-	<div class="site_tree_left">
-		<div class="box box___site_tree_editor_screen"><div class="box_inner">
-			<h2>{!SITE_TREE}</h2>
+	<div class="sitemap_left">
+		<div class="box box___sitemap_editor_screen"><div class="box_inner">
+			<h2>{!SITEMAP}</h2>
 
 			<div class="accessibility_hidden"><label for="tree_list">{!ENTRY}</label></div>
 			<form title="{!PRIMARY_PAGE_FORM}" action="index.php" method="post">
@@ -24,7 +24,7 @@
 			</form>
 			<script>// <![CDATA[
 				add_event_listener_abstract(window,'load',function () {
-					window.site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
+					window.sitemap=new tree_list('tree_list','data/sitemap.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
 				} );
 
 				var actions_tpl='{!ACTIONS;}:<ul role="navigation" class="actions_list">[1]<\/ul>';

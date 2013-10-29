@@ -17,7 +17,7 @@
  * Callback for saving a page-link into static output.
  *
  * @param  string		The page-link.
- * @param  string		The parent page-link in the ocPortal site tree.
+ * @param  string		The parent page-link in the ocPortal sitemap.
  * @param  ?TIME		When the node was added (NULL: unknown).
  * @param  ?TIME 		When the node was last edited (NULL: unknown/never).
  * @param  float		The priority of this for spidering, 0.0-1.0.

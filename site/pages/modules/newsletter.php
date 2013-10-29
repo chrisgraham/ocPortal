@@ -273,7 +273,7 @@ class Module_newsletter
 		$fields->attach(form_input_password(do_lang_tempcode('YOUR_PASSWORD'),do_lang_tempcode('DESCRIPTION_MAINTENANCE_PASSWORD'),'password',false));
 		$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',false));
 		if (count(find_all_langs())!=1)
-			$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),'','lang',nice_get_langs(user_lang())));
+			$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),'','lang',create_selection_list_langs(user_lang())));
 		$level=get_param_integer('level',NULL);
 		if (is_null($level))
 		{

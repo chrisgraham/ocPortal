@@ -125,7 +125,7 @@ class Hook_choose_gallery
 
 		require_code('galleries');
 
-		return nice_get_gallery_tree($it,$filter,$must_accept_images,$must_accept_videos,$purity,$compound_list,$member_id,$addable_filter,$editable_filter);
+		return create_selection_list_gallery_tree($it,$filter,$must_accept_images,$must_accept_videos,$purity,$compound_list,$member_id,$addable_filter,$editable_filter);
 	}
 
 }

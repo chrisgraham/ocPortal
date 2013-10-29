@@ -29,7 +29,7 @@ class Hook_whats_news_comcode_pages
 	function choose_categories()
 	{
 		require_code('zones3');
-		return array(nice_get_zones(),do_lang('PAGES'));
+		return array(create_selection_list_zones(),do_lang('PAGES'));
 	}
 
 	/**

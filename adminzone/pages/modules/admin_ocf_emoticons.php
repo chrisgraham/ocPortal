@@ -410,7 +410,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_radio_entries()
+	function create_selection_list_radio_entries()
 	{
 		$_m=$GLOBALS['FORUM_DB']->query_select('f_emoticons',array('e_code','e_theme_img_code'));
 		$entries=new ocp_tempcode();

@@ -233,170 +233,7 @@ class Module_galleries
 	 */
 	function get_entry_points()
 	{
-		return array('list'=>'LIST_OF_GALLERIES','misc'=>'GALLERIES_HOME');
-	}
-
-	/**
-	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
-	 *
-	 * @param  ?integer  The number of tree levels to computer (NULL: no limit)
-	 * @param  boolean	Whether to not return stuff that does not support permissions (unless it is underneath something that does).
-	 * @param  ?string	Position to start at in the tree. Does not need to be respected. (NULL: from root)
-	 * @param  boolean	Whether to avoid returning categories.
-	 * @return ?array	 	A tuple: 1) full tree structure [made up of (pagelink, permission-module, permissions-id, title, children, ?entry point for the children, ?children permission module, ?whether there are children) OR a list of maps from a get_* function] 2) permissions-page 3) optional base entry-point for the tree 4) optional permission-module 5) optional permissions-id (NULL: disabled).
-	 */
-	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
-	{
-		$permission_page='cms_galleries';
-
-		$category_data_count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
-		if ($category_data_count>2000) $dont_care_about_categories=true;
-
-		require_code('galleries');
-		$category_id=NULL;
-		if (!is_null($start_at))
-		{
-			$matches=array();
-			if (preg_match('#[^:]*:galleries:type=misc:id=(.*)#',$start_at,$matches)!=0) $category_id=$matches[1];
-		}
-		$adjusted_max_depth=is_null($max_depth)?NULL:(is_null($category_id)?($max_depth-1):$max_depth);
-		return array($dont_care_about_categories?array():get_gallery_tree($category_id,'',NULL,true,NULL,false,false,true,false,$adjusted_max_depth,NULL,false),$permission_page,'_SELF:_SELF:type=misc:id=!','galleries');
-	}
-
-	/**
-	 * Standard modular new-style deep page-link finder function (does not return the main entry-points).
-	 *
-	 * @param  string  	Callback function to send discovered page-links to.
-	 * @param  MEMBER		The member we are finding stuff for (we only find what the member can view).
-	 * @param  integer	Code for how deep we are tunnelling down, in terms of whether we are getting entries as well as categories.
-	 * @param  string		Stub used to create page-links. This is passed in because we don't want to assume a zone or page name within this function.
-	 * @param  ?string	Where we're looking under (NULL: root of tree). We typically will NOT show a root node as there's often already an entry-point representing it.
-	 * @param  integer	Our recursion depth (used to calculate importance of page-link, used for instance by Google sitemap). Deeper is typically less important.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 */
-	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$parent_pagelink=NULL,$recurse_level=0,$category_data=NULL,$image_data=NULL,$video_data=NULL)
-	{
-		// This is where we start
-		if (is_null($parent_pagelink))
-		{
-			$parent_pagelink=$pagelink_stub.':misc'; // This is the entry-point we're under
-			$parent_attributes=array('id'=>'root');
-		} else
-		{
-			list(,$parent_attributes,)=page_link_decode($parent_pagelink);
-		}
-
-		// We read in all data for efficiency
-		if (is_null($category_data))
-		{
-			$category_data_count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
-			if ($category_data_count>2000)
-			{
-				$category_data=$GLOBALS['SITE_DB']->query('SELECT name AS id,name AS title,parent_id,add_date FROM '.get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('member\_%').'\'');
-			} else
-			{
-				$category_data=$GLOBALS['SITE_DB']->query_select('galleries',array('name AS id','name AS title','parent_id','add_date'));
-			}
-		}
-		if (is_null($image_data))
-		{
-			$image_data_count=$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)');
-			if ($image_data_count>2000)
-			{
-				$image_data=array();
-			} else
-			{
-				$privacy_join='';
-				$privacy_where='';
-				if (addon_installed('content_privacy'))
-				{
-					require_code('content_privacy');
-					list($privacy_join,$privacy_where)=get_privacy_where_clause('image','d');
-				}
-				$where=$privacy_where;
-				$image_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'images d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
-			}
-		}
-		if (is_null($video_data))
-		{
-			$video_data_count=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)');
-			if ($video_data_count>2000)
-			{
-				$video_data=array();
-			} else
-			{
-				$privacy_join='';
-				$privacy_where='';
-				if (addon_installed('content_privacy'))
-				{
-					require_code('content_privacy');
-					list($privacy_join,$privacy_where)=get_privacy_where_clause('video','d');
-				}
-				$where=$privacy_where;
-				$video_data=$GLOBALS['SITE_DB']->query('SELECT d.title,d.id,t.text_original AS ntitle,cat AS category_id,add_date,edit_date FROM '.get_table_prefix().'videos d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title'.$where);
-			}
-		}
-
-		// Subcategories
-		foreach ($category_data as $row)
-		{
-			if (($row['parent_id']!='') && ($row['parent_id']==$parent_attributes['id']))
-			{
-				$pagelink=$pagelink_stub.'misc:'.$row['id'];
-				if (__CLASS__!='')
-				{
-					$this->get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data,$image_data,$video_data); // Recurse
-				} else
-				{
-					call_user_func_array(__FUNCTION__,array($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data,$image_data,$video_data)); // Recurse
-				}
-				if (has_category_access($member_id,'galleries',$row['id']))
-				{
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],NULL,max(0.7-$recurse_level*0.1,0.3),$row['title'])); // Callback
-				} else // Not accessible: we need to copy the node through, but we will flag it 'Unknown' and say it's not accessible.
-				{
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],NULL,max(0.7-$recurse_level*0.1,0.3),do_lang('UNKNOWN'),false)); // Callback
-				}
-			}
-		}
-
-		// Entries
-		if (($depth>=DEPTH__ENTRIES) && (has_category_access($member_id,'galleries',$parent_attributes['id'])))
-		{
-			foreach ($image_data as $row)
-			{
-				if ($row['category_id']==$parent_attributes['id'])
-				{
-					$pagelink=$pagelink_stub.'image:'.strval($row['id']).'';
-					if (is_null($row['title'])) $row['ntitle']=get_translated_text($row['title']);
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['ntitle'])); // Callback
-				}
-			}
-			foreach ($video_data as $row)
-			{
-				if ($row['category_id']==$parent_attributes['id'])
-				{
-					$pagelink=$pagelink_stub.'video:'.strval($row['id']).'';
-					if (is_null($row['title'])) $row['ntitle']=get_translated_text($row['title']);
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['ntitle'])); // Callback
-				}
-			}
-		}
-	}
-
-	/**
-	 * Convert a page link to a category ID and category permission module type.
-	 *
-	 * @param  string	The page link
-	 * @return array	The pair
-	 */
-	function extract_page_link_permissions($page_link)
-	{
-		$matches=array();
-		preg_match('#^([^:]*):([^:]*):type=misc:id=(.*)$#',$page_link,$matches);
-		return array($matches[3],'galleries');
+		return array('misc'=>'GALLERIES_HOME');
 	}
 
 	var $title;
@@ -436,13 +273,6 @@ class Module_galleries
 			{
 				attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 			}
-		}
-
-		if ($type=='list')
-		{
-			set_feed_url('?mode=galleries&filter=');
-
-			$this->title=get_screen_title('LIST_OF_GALLERIES');
 		}
 
 		if ($type=='misc')
@@ -646,36 +476,11 @@ class Module_galleries
 
 		// What are we doing?
 		$type=get_param('type','misc');
-		if ($type=='list') return $this->list_galleries();
 		if ($type=='misc') return $this->do_gallery();
 		if ($type=='image') return $this->show_image();
 		if ($type=='video') return $this->show_video();
 
 		return new ocp_tempcode();
-	}
-
-	/**
-	 * The UI to list all galleries for browsing.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function list_galleries()
-	{
-		// Not done via main_multi_content block due to need to filter out special galleries
-		$count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
-		if ($count>500) warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
-		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'));
-		$out=new ocp_tempcode();
-		foreach ($rows as $myrow)
-		{
-			if (substr($myrow['name'],0,9)=='download_') continue;
-
-			if (!has_category_access(get_member(),'galleries',$myrow['name'])) continue;
-
-			$out->attach(render_gallery_box($myrow,'root',false,'_SELF',get_option('show_empty_galleries')=='0',true,false,true));
-		}
-
-		return do_template('PAGINATION_SCREEN',array('_GUID'=>'76b23ef79ede9908a8664cf82bea7568','TITLE'=>$this->title,'CONTENT'=>$out));
 	}
 
 	/**

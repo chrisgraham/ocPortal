@@ -134,7 +134,7 @@ class Hook_fields_reference_multi
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		/*$_list=new ocp_tempcode();
-		$list=nice_get_catalogue_entries_tree($field['c_name'],intval($actual_value),NULL,false);
+		$list=create_selection_list_catalogue_entries_tree($field['c_name'],intval($actual_value),NULL,false);
 		if (($field['cf_required']==0) || ($actual_value==='') || (is_null($actual_value)) || ($list->is_empty()))
 			$_list->attach(form_input_list_entry('',(($actual_value==='') || (is_null($actual_value))),do_lang_tempcode('NA_EM')));
 		$_list->attach($list);

@@ -236,7 +236,7 @@ function find_lang_content_names($ids)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @return tempcode			The language file selector
  */
-function nice_get_lang_files($lang=NULL)
+function create_selection_list_lang_files($lang=NULL)
 {
 	$_lang_files=get_lang_files(is_null($lang)?get_site_default_lang():$lang);
 

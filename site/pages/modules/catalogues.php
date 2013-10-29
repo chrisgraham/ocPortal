@@ -461,205 +461,6 @@ class Module_catalogues
 		if (is_guest()) return array(); // Guest (sitemap) won't want a catalogue list - too low level
 	}
 
-	/**
-	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
-	 *
-	 * @param  ?integer  The number of tree levels to computer (NULL: no limit)
-	 * @param  boolean	Whether to not return stuff that does not support permissions (unless it is underneath something that does).
-	 * @param  ?string	Position to start at in the tree. Does not need to be respected. (NULL: from root)
-	 * @param  boolean	Whether to avoid returning categories.
-	 * @return ?array	 	A tuple: 1) full tree structure [made up of (pagelink, permission-module, permissions-id, title, children, ?entry point for the children, ?children permission module, ?whether there are children) OR a list of maps from a get_* function] 2) permissions-page 3) optional base entry-point for the tree 4) optional permission-module 5) optional permissions-id (NULL: disabled).
-	 */
-	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
-	{
-		$permission_page='cms_catalogues';
-
-		require_code('catalogues');
-		require_lang('catalogues');
-
-		$category_id=NULL;
-		if (!is_null($start_at))
-		{
-			$matches=array();
-			if (preg_match('#[^:]*:catalogues:type=index:id=(.*)#',$start_at,$matches)!=0)
-			{
-				$category_id=NULL;
-				$adjusted_max_depth=is_null($max_depth)?NULL:(is_null($category_id)?$max_depth:$max_depth);
-				$children=$dont_care_about_categories?array():get_catalogue_category_tree($matches[1],$category_id,NULL,NULL,$adjusted_max_depth,false);
-				return array($children,$permission_page,'_SELF:_SELF:type=category:id=!','catalogues_category');
-			}
-			elseif (preg_match('#[^:]*:catalogues:type=category:id=(.*)#',$start_at,$matches)!=0)
-			{
-				$category_id=($matches[1]=='')?NULL:intval($matches[1]);
-				$adjusted_max_depth=is_null($max_depth)?NULL:(is_null($category_id)?$max_depth:$max_depth);
-				$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
-				$children=$dont_care_about_categories?array():get_catalogue_category_tree($catalogue_name,$category_id,NULL,NULL,$adjusted_max_depth,false);
-				return array($children,$permission_page,'_SELF:_SELF:type=category:id=!','catalogues_category');
-			}
-		}
-
-		$children=array();
-		if ($dont_care_about_categories)
-		{
-			$rows=array();
-		} else
-		{
-			$query='SELECT c.c_title,c.c_name,t.text_original FROM '.get_table_prefix().'catalogues c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.c_title=t.id';
-			//if (db_has_subqueries($GLOBALS['SITE_DB']->connection_read))		Actually we want empty ones in site trees
-			//	$query.=' WHERE EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.c_name=c.c_name)';
-			$rows=$GLOBALS['SITE_DB']->query($query);
-		}
-		foreach ($rows as $row)
-		{
-			if (substr($row['c_name'],0,1)=='_') continue;
-
-			if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
-			$kids=array();
-			if ((!is_null($max_depth)) || ($max_depth>1))
-			{
-				$adjusted_max_depth=is_null($max_depth)?NULL:(is_null($category_id)?($max_depth-2):($max_depth-1));
-				$kids=get_catalogue_category_tree($row['c_name'],$category_id,NULL,NULL,$adjusted_max_depth,false);
-			}
-			$children[]=array('_SELF:_SELF:type=index:id='.$row['c_name'],'catalogues_catalogue',$row['c_name'],$row['text_original'],$kids,'_SELF:_SELF:type=category:id=!','catalogues_category',true);
-			if (!$require_permission_support)
-			{
-				$children[]=array('_SELF:_SELF:type=atoz:catalogue_name='.$row['c_name'],'catalogues_catalogue',$row['c_name'],do_lang('DEFAULT__CATALOGUE_CATEGORY_ATOZ',$row['text_original']));
-			}
-		}
-
-		return array($children,$permission_page,'_SELF:_SELF:type=misc:id=!');
-	}
-
-	/**
-	 * Convert a page link to a category ID and category permission module type.
-	 *
-	 * @param  string	The page link
-	 * @return array	The pair
-	 */
-	function extract_page_link_permissions($page_link)
-	{
-		$matches=array();
-		if (preg_match('#^([^:]*):([^:]*):type=index:id=(.*)$#',$page_link,$matches)!=0)
-			return array($matches[3],'catalogues_catalogue');
-		preg_match('#^([^:]*):([^:]*):type=category:id=(.*)$#',$page_link,$matches);
-		return array($matches[3],'catalogues_category');
-	}
-
-	/**
-	 * Standard modular new-style deep page-link finder function (does not return the main entry-points).
-	 *
-	 * @param  string  	Callback function to send discovered page-links to.
-	 * @param  MEMBER		The member we are finding stuff for (we only find what the member can view).
-	 * @param  integer	Code for how deep we are tunnelling down, in terms of whether we are getting entries as well as categories.
-	 * @param  string		Stub used to create page-links. This is passed in because we don't want to assume a zone or page name within this function.
-	 * @param  ?string	Where we're looking under (NULL: root of tree). We typically will NOT show a root node as there's often already an entry-point representing it.
-	 * @param  integer	Our recursion depth (used to calculate importance of page-link, used for instance by Google sitemap). Deeper is typically less important.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 */
-	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$parent_pagelink=NULL,$recurse_level=0,$category_data=NULL,$entry_data=NULL)
-	{
-		$parent_pagelink_orig=$parent_pagelink;
-
-		// This is where we start
-		if (is_null($parent_pagelink))
-		{
-			$parent_pagelink=$pagelink_stub.':misc'; // This is the entry-point we're under
-			$parent_attributes=array('id'=>NULL,'c_name'=>'');
-		} else
-		{
-			list(,$parent_attributes,)=page_link_decode($parent_pagelink);
-		}
-
-		// We read in all data for efficiency
-		if (is_null($category_data))
-		{
-			$query='SELECT c_name,d.id,t.text_original AS title,cc_add_date AS edit_date';
-			$lots=($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)')>1000) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read));
-			if ($lots)
-			{
-				$query.=',NULL AS parent_id';
-			} else
-			{
-				$query.=',cc_parent_id AS parent_id';
-			}
-			$query.=' FROM '.get_table_prefix().'catalogue_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.cc_title';
-			$query.=' WHERE d.c_name NOT LIKE \''.db_encode_like('\_%').'\'';
-			if ($lots)
-			{
-				$query.=' AND EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.cc_id=d.id)';
-			}
-			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query($query));
-		}
-		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
-		if (can_arbitrary_groupby())
-			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON c.c_name=e.c_name';
-		$query.=' WHERE c.c_name NOT LIKE \''.db_encode_like('\_%').'\'';
-		if (can_arbitrary_groupby())
-			$query.=' GROUP BY e.cc_id';
-		$catalogues=list_to_map('c_name',$GLOBALS['SITE_DB']->query($query));
-
-		if (!is_null($parent_pagelink_orig))
-		{
-			$parent_attributes['c_name']=$category_data[intval($parent_attributes['id'])]['c_name'];
-		}
-
-		// Subcategories
-		foreach ($category_data as $row)
-		{
-			if (((!is_null($row['parent_id'])) && (strval($row['parent_id'])==$parent_attributes['id'])) || ((is_null($parent_pagelink_orig)) && (is_null($row['parent_id']))))
-			{
-				$pagelink=$pagelink_stub.'category:'.strval($row['id']);
-				if (__CLASS__!='')
-				{
-					$this->get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data,$entry_data); // Recurse
-				} else
-				{
-					call_user_func_array(__FUNCTION__,array($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data,$entry_data)); // Recurse
-				}
-				if ((has_category_access($member_id,'catalogues_catalogue',$row['c_name'])) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access($member_id,'catalogues_category',strval($row['id'])))))
-				{
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,NULL,$row['edit_date'],max(0.7-$recurse_level*0.1,0.3),$row['title'])); // Callback
-				} else // Not accessible: we need to copy the node through, but we will flag it 'Unknown' and say it's not accessible.
-				{
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,NULL,$row['edit_date'],max(0.7-$recurse_level*0.1,0.3),do_lang('UNKNOWN'),false)); // Callback
-				}
-			}
-		}
-
-		// Entries
-		if (($depth>=DEPTH__ENTRIES) && (has_category_access($member_id,'catalogues_catalogue',$parent_attributes['c_name'])) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access($member_id,'catalogues_category',$parent_attributes['id']))))
-		{
-			require_code('catalogues');
-
-			$start=0;
-			do
-			{
-				$privacy_join='';
-				$privacy_where='';
-				if (addon_installed('content_privacy'))
-				{
-					require_code('content_privacy');
-					list($privacy_join,$privacy_where)=get_privacy_where_clause('catalogue_entry','d');
-				}
-				$entry_data=$GLOBALS['SITE_DB']->query('SELECT c_name,id,cc_id AS category_id,ce_add_date AS add_date,ce_edit_date AS edit_date,d.* FROM '.get_table_prefix().'catalogue_entries d'.$privacy_join.' WHERE cc_id='.strval(intval($parent_attributes['id'])).$privacy_where,500,$start);
-
-				foreach ($entry_data as $row)
-				{
-					$map=get_catalogue_entry_map($row,$catalogues[$row['c_name']],'CATEGORY','DEFAULT',NULL,NULL,array(0));
-
-					$row['title']=is_object($map['FIELD_0_PLAIN'])?$map['FIELD_0_PLAIN']->evaluate():$map['FIELD_0_PLAIN'];
-
-					$pagelink=$pagelink_stub.'entry:'.strval($row['id']);
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
-				}
-
-				$start+=500;
-			}
-			while (array_key_exists(0,$entry_data));
-		}
-	}
-
 	var $title;
 	var $catalogue_name;
 	var $id;
@@ -926,9 +727,8 @@ class Module_catalogues
 
 		if ($type=='misc') return $this->list_catalogues();
 		if ($type=='index') return $this->view_catalogue_index();
-		if ($type=='tree') return $this->tree_view_screen();
 		if ($type=='category') return $this->view_catalogue_category();
-		if ($type=='atoz') return $this->show_catalogue_all_entries();
+		if ($type=='atoz') return $this->show_all_catalogue_entries();
 		if ($type=='entry') return $this->view_catalogue_entry();
 
 		return new ocp_tempcode();
@@ -1038,7 +838,7 @@ class Module_catalogues
 	 *
 	 * @return tempcode		The UI
 	 */
-	function show_catalogue_all_entries()
+	function show_all_catalogue_entries()
 	{
 		$id=$this->id;
 		$category=$this->category;
@@ -1260,54 +1060,6 @@ class Module_catalogues
 	function view_catalogue_entry()
 	{
 		return $this->screen;
-	}
-
-	/**
-	 * The UI to view a catalogue category tree.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function tree_view_screen()
-	{
-		require_code('splurgh');
-
-		$catalogue_name=get_param('id');
-
-		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)
-			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
-
-		$url_stub=build_url(array('page'=>'_SELF','type'=>'category'),'_SELF',NULL,false,false,true);
-		$last_change_time=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MAX(cc_add_date)');
-
-		if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name))
-		{
-			access_denied('CATALOGUE_ACCESS');
-		}
-
-		$category_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title','cc_parent_id'),array('c_name'=>$catalogue_name));
-		$map=array();
-		foreach ($category_rows as $i=>$category)
-		{
-			if ($i!=0)
-			{
-				if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category['id'])))) continue;
-			}
-
-			$id=$category['id'];
-
-			$map[$id]['title']=get_translated_text($category['cc_title']);
-			$children=array();
-			foreach ($category_rows as $child)
-			{
-				if ($child['cc_parent_id']==$id) $children[]=$child['id'];
-			}
-			$map[$id]['children']=$children;
-		}
-		if (count($map)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
-
-		$content=splurgh_master_build('id',$map,$url_stub->evaluate(),'catalogue_'.$catalogue_name.'_tree_made',$last_change_time,$category_rows[0]['id']);
-
-		return do_template('SPLURGH_SCREEN',array('_GUID'=>'7cbb5d410887e3834a01265e133a9b33','TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 }

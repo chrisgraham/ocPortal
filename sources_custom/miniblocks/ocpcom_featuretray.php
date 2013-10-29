@@ -372,7 +372,7 @@ $featuretree=array(
 		'nav'=>array(
 			'Structure and navigation',
 			array(
-				array('Visually browse your site structure','Intuitive site-tree editor <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Site Tree Editor" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_sitetree&amp;type=site_tree"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
+				array('Visually browse your site structure','Intuitive sitemap editor <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Sitemap Editor" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_sitemap&amp;type=sitemap"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				array('Menu editor','Our user friendly editor can work with 7 different kinds of menu design (drop-downs, tree menus, pop-ups, etc) <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Menus" href="http://shareddemo.myocp.com/index.php?page=menus"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				array('Zones (sub-sites)','Organise your pages into separate zones. Zones can have different menus, themes, permissions, and content <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Zones" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_zones&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				NULL, // divider

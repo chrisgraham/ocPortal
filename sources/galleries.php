@@ -517,7 +517,7 @@ function only_member_galleries_of_id($cat,$member_id,$child_count)
  * @param  boolean		Whether to only show for what may be edited by the current member
  * @return tempcode		The tree list
  */
-function nice_get_gallery_tree($it=NULL,$filter=NULL,$must_accept_images=false,$must_accept_videos=false,$purity=false,$use_compound_list=false,$member_id=NULL,$addable_filter=false,$editable_filter=false)
+function create_selection_list_gallery_tree($it=NULL,$filter=NULL,$must_accept_images=false,$must_accept_videos=false,$purity=false,$use_compound_list=false,$member_id=NULL,$addable_filter=false,$editable_filter=false)
 {
 	$tree=get_gallery_tree('root','',NULL,false,$filter,$must_accept_images,$must_accept_videos,$purity,$use_compound_list,NULL,$member_id,$addable_filter,$editable_filter);
 	if ($use_compound_list) $tree=$tree[0];
@@ -859,7 +859,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
  * @param  boolean		Whether to only show for what may be edited by the current member
  * @return tempcode		The list of entries
  */
-function nice_get_gallery_content_tree($table,$it=NULL,$submitter=NULL,$use_compound_list=false,$editable_filter=false)
+function create_selection_list_gallery_content_tree($table,$it=NULL,$submitter=NULL,$use_compound_list=false,$editable_filter=false)
 {
 	$tree=get_gallery_content_tree($table,$submitter,NULL,NULL,NULL,NULL,$use_compound_list,$editable_filter);
 	if ($use_compound_list) $tree=$tree[0];

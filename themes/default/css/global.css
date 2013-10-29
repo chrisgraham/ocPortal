@@ -2092,36 +2092,6 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	margin-{!en_left}: 18px; /* Due to action_link image */
 }
 
-.splurgh {
-	font-weight: bold;
-}
-.splurgh ul {
-	list-style: none;
-	margin-{!en_left}: 0;
-	padding-{!en_left}: 0;
-	font-size: 1.5em;
-}
-.splurgh li {
-	margin-{!en_left}: 0;
-	padding-{!en_left}: 0;
-}
-
-.splurgh ul ul {
-	list-style: circle;
-	font-size: 0.9em;
-	padding-top: 6px;
-}
-.splurgh li li {
-	margin-{!en_left}: 40px;
-	padding-{!en_left}: 0;
-}
-.splurgh ul ul ul {
-	font-size: 0.8em;
-}
-.splurgh ul ul ul ul {
-	font-size: 1em;
-}
-
 div.wysiwyg_toolbar_color_finder {
 	color: {$GET,area_background};
 }

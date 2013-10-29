@@ -110,7 +110,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 

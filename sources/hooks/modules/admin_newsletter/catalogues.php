@@ -33,7 +33,7 @@ class Hook_whats_news_catalogues
 		require_lang('catalogues');
 
 		require_code('catalogues');
-		return array(nice_get_catalogues(NULL,true),do_lang('CATALOGUE_ENTRIES'));
+		return array(create_selection_list_catalogues(NULL,true),do_lang('CATALOGUE_ENTRIES'));
 	}
 
 	/**

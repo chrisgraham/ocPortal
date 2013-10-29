@@ -1,6 +1,6 @@
 {$,We'll only show a menu here if we have not collapsed zones - otherwise we'll consider this a splash page with no left panel}
 {+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
-[block="main_website" title="{$SITE_NAME}"]side_stored_menu[/block]
-[block="main_content" title="{!CONTENT}"]side_stored_menu[/block]
-[block="wiki_features" silent_failure="1" title="{!wiki:WIKI}"]side_stored_menu[/block]
+[block="main_website" title="{$SITE_NAME}"]menu[/block]
+[block="main_content" title="{!CONTENT}"]menu[/block]
+[block="wiki_features" silent_failure="1" title="{!wiki:WIKI}"]menu[/block]
 {+END}

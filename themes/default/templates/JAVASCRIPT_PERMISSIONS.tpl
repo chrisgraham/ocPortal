@@ -61,13 +61,13 @@ function show_permission_setting(ob,event)
 	{
 		var serverid;
 
-		if (typeof window.site_tree!='undefined')
+		if (typeof window.sitemap!='undefined')
 		{
 			var value=document.getElementById('tree_list').value;
 
 			if (value.indexOf(',')!=-1) return; // Can't find any single value, as multiple resources are selected
 
-			var node=window.site_tree.getElementByIdHack(value);
+			var node=window.sitemap.getElementByIdHack(value);
 			serverid=node.getAttribute('serverid');
 		} else
 		{
@@ -118,7 +118,7 @@ function copy_permission_presets(name,value,just_track)
 	var i,j,test,stub=name+'_privilege_',name2,x;
 
 	var node=null;
-	if (typeof window.site_tree!='undefined') node=window.site_tree.getElementByIdHack(document.getElementById('tree_list').value.split(',')[0]);
+	if (typeof window.sitemap!='undefined') node=window.sitemap.getElementByIdHack(document.getElementById('tree_list').value.split(',')[0]);
 
 	if (value!='-1')
 	{
@@ -126,7 +126,7 @@ function copy_permission_presets(name,value,just_track)
 		{
 			if (elements[i].name.indexOf('presets')!=-1) continue;
 
-			if (typeof window.site_tree=='undefined') elements[i].disabled=false;
+			if (typeof window.sitemap=='undefined') elements[i].disabled=false;
 			test=-1;
 			name2=elements[i].name.substr(stub.length);
 			x=name2.replace(/(high|mid|low)/,'x');
@@ -158,7 +158,7 @@ function copy_permission_presets(name,value,just_track)
 		{
 			if (elements[i].name.indexOf('presets')!=-1) continue;
 
-			if (typeof window.site_tree=='undefined') elements[i].disabled=true;
+			if (typeof window.sitemap=='undefined') elements[i].disabled=true;
 			// Any disabled ones will be set to show the default permission rather than the "use-default" one, WHILST all-global is on
 			elements[i].selectedIndex=eval(elements[i].name+';')+1; // -1 is at index 0
 		}
@@ -180,7 +180,7 @@ function setup_privilege_override_selector(name,default_access,privilege,title,a
 	{
 		// Any disabled ones will be set to show the default permission rather than the "use-default" one, WHILST all-global is on
 		select_element.selectedIndex=eval(name+'_privilege_'+privilege)+1; // -1 is at index 0
-		if (typeof window.site_tree=='undefined') select_element.disabled=true;
+		if (typeof window.sitemap=='undefined') select_element.disabled=true;
 	}
 }
 
@@ -247,7 +247,7 @@ function copy_permissions_function(to_row,from_row,name)
 
 function update_permission_box(setting)
 {
-	if (typeof window.site_tree=='undefined') return;
+	if (typeof window.sitemap=='undefined') return;
 
 	if (setting.value=='')
 	{
@@ -266,7 +266,7 @@ function update_permission_box(setting)
 		var done_header=false;
 		for (i=0;i<values.length;i++) // For all items that we are loading permissions for (we usually just do it for one, but sometimes we load whole sets if we are batch setting permissions)
 		{
-			node=window.site_tree.getElementByIdHack(values[i]);
+			node=window.sitemap.getElementByIdHack(values[i]);
 
 			if (i==0) // On first iteration we do a cleanup
 			{
@@ -431,7 +431,7 @@ function update_permission_box(setting)
 					for (j=0;j<known_privileges.length;j++)
 					{
 						element=document.getElementById('access_'+group+'_privilege_'+known_privileges[j]);
-						if (typeof window.site_tree=='undefined') element.disabled=true;
+						if (typeof window.sitemap=='undefined') element.disabled=true;
 					}
 				}
 			}
@@ -477,7 +477,7 @@ function update_permission_box(setting)
 
 function set_permissions(setting)
 {
-	if (typeof window.site_tree=='undefined') return;
+	if (typeof window.sitemap=='undefined') return;
 	if (typeof window.do_ajax_request=='undefined') return;
 
 	if (setting.value=='')
@@ -490,7 +490,7 @@ function set_permissions(setting)
 		var id,i,node,j,group,element,privilege,known_groups=[],k,serverid,set_request='',set_request_b,new_value;
 		for (i=0;i<values.length;i++)
 		{
-			node=window.site_tree.getElementByIdHack(values[i]);
+			node=window.sitemap.getElementByIdHack(values[i]);
 			serverid=node.getAttribute('serverid');
 
 			// Find usergroups
@@ -555,7 +555,7 @@ function set_permissions(setting)
 		}
 
 		// Send AJAX request
-		if (set_request!='') do_ajax_request('{$BASE_URL_NOHTTP;}/data/site_tree.php?set_perms=1'+keep_stub(),null,set_request);
+		if (set_request!='') do_ajax_request('{$BASE_URL_NOHTTP;}/data/sitemap.php?set_perms=1'+keep_stub(),null,set_request);
 	}
 	window.fauxmodal_alert('{!permissions:PERMISSIONS_TREE_EDITOR_SAVED;^}');
 }
@@ -621,11 +621,11 @@ function permissions_img_func_2_b(node,id)
 
 function update_group_displayer(setting)
 {
-	if (typeof window.site_tree=='undefined') return;
+	if (typeof window.sitemap=='undefined') return;
 
 	set_inner_html(document.getElementById('group_name'),escape_html(window.usergroup_titles[setting.options[setting.selectedIndex].value]));
 	var html=document.getElementById('tree_list__root_tree_list');
 	set_inner_html(html,'');
-	window.site_tree.render_tree(window.site_tree.tree_list_data,html);
+	window.sitemap.render_tree(window.sitemap.tree_list_data,html);
 }
 

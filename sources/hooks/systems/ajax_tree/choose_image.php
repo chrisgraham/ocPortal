@@ -97,7 +97,7 @@ class Hook_choose_image
 
 		$only_owned=array_key_exists('only_owned',$options)?(is_null($options['only_owned'])?NULL:intval($options['only_owned'])):NULL;
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
-		return nice_get_gallery_content_tree('images',$it,$only_owned,false,$editable_filter);
+		return create_selection_list_gallery_content_tree('images',$it,$only_owned,false,$editable_filter);
 	}
 
 }

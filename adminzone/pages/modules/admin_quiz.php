@@ -182,7 +182,7 @@ class Module_admin_quiz
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		require_code('form_templates');
 
@@ -204,7 +204,7 @@ class Module_admin_quiz
 	function export_quiz()
 	{
 		$fields=new ocp_tempcode();
-		$quiz_list=$this->nice_get_entries();
+		$quiz_list=$this->create_selection_list_entries();
 
 		$fields->attach(form_input_list(do_lang_tempcode('QUIZZES_EXPORT'),do_lang_tempcode('DESCRIPTION_QUIZZES_EXPORT'),'quiz_id',$quiz_list));
 

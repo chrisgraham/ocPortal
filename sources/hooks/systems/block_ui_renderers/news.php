@@ -36,7 +36,7 @@ class Hook_block_ui_renderers_news
 		if ((($default=='') || (is_numeric(str_replace(',','',$default)))) && ($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) // news category list
 		{
 			require_code('news');
-			$list=nice_get_news_categories(($default=='')?-1:intval($default));
+			$list=create_selection_list_news_categories(($default=='')?-1:intval($default));
 			return form_input_multi_list(titleify($parameter),escape_html($description),$parameter,$list);
 		}
 		return NULL;

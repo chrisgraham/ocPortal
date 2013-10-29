@@ -417,7 +417,7 @@ function get_days_between($initial_start_month,$initial_start_day,$initial_start
  * @param  ?AUTO_LINK		The event type to select by default (NULL: none)
  * @return tempcode			The list
  */
-function nice_get_event_types($it=NULL)
+function create_selection_list_event_types($it=NULL)
 {
 	$type_list=new ocp_tempcode();
 	$types=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
@@ -763,7 +763,7 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
  * @param  boolean			Whether owned public events should be shown
  * @return tempcode			The list
  */
-function nice_get_events($only_owned,$it,$edit_viewable_events=true)
+function create_selection_list_events($only_owned,$it,$edit_viewable_events=true)
 {
 	$where=array();
 	if (!is_null($only_owned)) $where['e_submitter']=$only_owned;

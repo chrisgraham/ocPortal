@@ -942,10 +942,10 @@ function find_all_langs($even_empty_langs=false)
  * @param  boolean			Whether to show languages that have no language details currently defined for them
  * @return tempcode			The language selector
  */
-function nice_get_langs($select_lang=NULL,$show_unset=false)
+function create_selection_list_langs($select_lang=NULL,$show_unset=false)
 {
 	require_code('lang3');
-	return _nice_get_langs($select_lang,$show_unset);
+	return _create_selection_list_langs($select_lang,$show_unset);
 }
 
 // =======

@@ -1109,7 +1109,7 @@ class Module_admin_setupwizard
 		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
 			array(
 				/*	 type							  page	 params													 zone	  */
-				addon_installed('page_management')?array('pagewizard',array('admin_sitetree',array('type'=>'pagewizard'),get_module_zone('admin_sitetree')),do_lang('PAGE_WIZARD')):NULL,
+				addon_installed('page_management')?array('pagewizard',array('admin_sitemap',array('type'=>'pagewizard'),get_module_zone('admin_sitemap')),do_lang('PAGE_WIZARD')):NULL,
 				array('main_home',array(NULL,array(),'')),
 				array('cms_home',array(NULL,array(),'cms')),
 				array('admin_home',array(NULL,array(),'adminzone')),

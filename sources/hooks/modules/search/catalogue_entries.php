@@ -72,7 +72,7 @@ class Hook_search_catalogue_entries
 		$catalogue_name=get_param('catalogue_name','');
 		if ($catalogue_name=='')
 		{
-			$tree=nice_get_catalogues(NULL,true);
+			$tree=create_selection_list_catalogues(NULL,true);
 			if ($tree->is_empty())
 			{
 				inform_exit(do_lang_tempcode('NO_ENTRIES'));

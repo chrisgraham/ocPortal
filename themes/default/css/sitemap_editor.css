@@ -8,13 +8,13 @@
 	overflow: auto;
 }
 
-.site_tree_left {
+.sitemap_left {
 	width: 50%;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	padding-right: 1em;
 }
 
-.site_tree_right {
+.sitemap_right {
 	float: {!en_right};
 	width: 50%;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}

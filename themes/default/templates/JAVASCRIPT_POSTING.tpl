@@ -251,7 +251,7 @@ function do_input_menu(field_name)
 						var add;
 						var element=document.getElementById(field_name);
 						element=ensure_true_id(element,field_name);
-						add='[block=\""+escape_comcode(va)+"\" caption=\""+escape_comcode(vb)+"\" type=\"tree\"]side_stored_menu[/block]';
+						add='[block=\""+escape_comcode(va)+"\" caption=\""+escape_comcode(vb)+"\" type=\"tree\"]menu[/block]';
 						insert_textbox(element,add);
 					},
 					'{!comcode:INPUT_COMCODE_menu;^}'

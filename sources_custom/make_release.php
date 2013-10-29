@@ -380,7 +380,7 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/images/bigicons/backups.png');
 		unlink($prefix.'/themes/default/images/bigicons/statistics.png');
 		unlink($prefix.'/themes/default/images/bigicons/clear_stats.png');
-		unlink($prefix.'/themes/default/images/bigicons/sitetree.png');
+		unlink($prefix.'/themes/default/images/bigicons/sitemap.png');
 		unlink($prefix.'/themes/default/images/bigicons/invoices.png');
 		unlink($prefix.'/themes/default/images/bigicons/news.png');
 		unlink($prefix.'/themes/default/images/bigicons/admin_home.png');
@@ -499,7 +499,7 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/images/pagepics/authors.png');
 		unlink($prefix.'/themes/default/images/pagepics/wordfilter.png');
 		unlink($prefix.'/themes/default/images/pagepics/cleanup.png');
-		unlink($prefix.'/themes/default/images/pagepics/sitetreeeditor.png');
+		unlink($prefix.'/themes/default/images/pagepics/sitemapeditor.png');
 		unlink($prefix.'/themes/default/images/pagepics/errorlog.png');
 		unlink($prefix.'/themes/default/images/pagepics/newsletter_from_changes.png');
 		unlink($prefix.'/themes/default/images/pagepics/addpagewizard.png');

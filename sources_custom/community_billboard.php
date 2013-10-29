@@ -89,7 +89,7 @@ function choose_community_billboard_message($id)
  *
  * @return tempcode		The list of community billboard messages
  */
-function nice_get_community_billboard_messages()
+function create_selection_list_community_billboard_messages()
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('community_billboard',array('*'),NULL,'ORDER BY order_time ASC');
 	$time=$GLOBALS['SITE_DB']->query_select_value_if_there('community_billboard','activation_time',array('active_now'=>1));

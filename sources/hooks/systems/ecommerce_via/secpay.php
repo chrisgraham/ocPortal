@@ -229,7 +229,7 @@ class Hook_secpay
 	 * @param  ?string	The card type to select by default (NULL: don't care)
 	 * @return tempcode	The list
 	 */
-	function nice_get_card_types($it=NULL)
+	function create_selection_list_card_types($it=NULL)
 	{
 		$list=new ocp_tempcode();
 		$array=array('Visa','Master Card','Switch','UK Maestro','Maestro','Solo','Delta','American Express','Diners Card','JCB');

@@ -98,7 +98,7 @@ class Hook_choose_download_category
 		$compound_list=array_key_exists('compound_list',$options)?$options['compound_list']:false;
 		$addable_filter=array_key_exists('addable_filter',$options)?($options['addable_filter']):false;
 
-		return nice_get_download_category_tree(is_null($it)?NULL:intval($it),$compound_list,$addable_filter);
+		return create_selection_list_download_category_tree(is_null($it)?NULL:intval($it),$compound_list,$addable_filter);
 	}
 
 }

@@ -25,7 +25,7 @@
  * @param  ?AUTO_LINK	Category selected by default (NULL: no specific default).
  * @return tempcode		The list.
  */
-function ocf_nice_get_forum_groupings($avoid=NULL,$it=NULL)
+function ocf_create_selection_list_forum_groupings($avoid=NULL,$it=NULL)
 {
 	$_m=$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('*'));
 	$entries=new ocp_tempcode();
@@ -43,7 +43,7 @@ function ocf_nice_get_forum_groupings($avoid=NULL,$it=NULL)
  * @param  ?AUTO_LINK	The currently selected topic (NULL: none selected)
  * @return tempcode		The list of topics
  */
-function ocf_nice_get_topic_tree($it=NULL)
+function ocf_create_selection_list_topic_tree($it=NULL)
 {
 	$tree=ocf_get_topic_tree();
 
@@ -121,7 +121,7 @@ function ocf_get_topic_tree($forum_id=NULL,$breadcrumbs=NULL,$title=NULL,$levels
 }
 
 /**
- * Generate a tempcode tree based selection list (ala nice_get_*) for choosing a forum OR a map of details. Also capable of getting comma-separated ancester forum lists. Also capable of displaying topic lists in the tree. In other words... this function is incredibly powerful, and complex.
+ * Generate a tempcode tree based selection list (ala create_selection_list_*) for choosing a forum OR a map of details. Also capable of getting comma-separated ancester forum lists. Also capable of displaying topic lists in the tree. In other words... this function is incredibly powerful, and complex.
  *
  * @param  ?MEMBER		The member that the view privileges are done for (NULL: current member).
  * @param  ?AUTO_LINK	The forum we are starting from (NULL: capture the whole tree).

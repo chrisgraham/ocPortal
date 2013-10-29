@@ -36,7 +36,7 @@ class Hook_block_ui_renderers_banners
 		if (($parameter=='param') && (in_array($block,array('main_banner_wave','main_topsites')))) // banner type list
 		{
 			require_code('banners');
-			$list=nice_get_banner_types($default);
+			$list=create_selection_list_banner_types($default);
 			return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false);
 		}
 		return NULL;

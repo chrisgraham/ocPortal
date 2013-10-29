@@ -578,7 +578,7 @@ function get_all_image_codes($base_path,$search_under,$recurse=true)
  * @return tempcode		Tempcode for a list selection of theme images
  * @param  string			Only include images under this path. Including a trailing slash unless you specifically want to filter allowing filename stubs as well as paths (blank: no limitation)
  */
-function nice_get_theme_images($it=NULL,$filter=NULL,$do_id=false,$include_all=false,$under='')
+function create_selection_list_theme_images($it=NULL,$filter=NULL,$do_id=false,$include_all=false,$under='')
 {
 	$out=new ocp_tempcode();
 	if (!$include_all)
@@ -619,7 +619,7 @@ function nice_get_theme_images($it=NULL,$filter=NULL,$do_id=false,$include_all=f
  * @param  ID_TEXT		The language string to use for the default answer
  * @return tempcode		The list
  */
-function nice_get_themes($theme=NULL,$no_rely=false,$show_everything=false,$default_message_string='RELY_FORUMS')
+function create_selection_list_themes($theme=NULL,$no_rely=false,$show_everything=false,$default_message_string='RELY_FORUMS')
 {
 	if (!$no_rely) $entries=form_input_list_entry('-1',false,do_lang_tempcode($default_message_string)); else $entries=new ocp_tempcode();
 	$themes=find_all_themes();

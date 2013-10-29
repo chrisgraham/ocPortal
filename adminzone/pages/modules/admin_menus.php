@@ -322,7 +322,7 @@ class Module_admin_menus
 		$list=new ocp_tempcode();
 		$list->attach(form_input_list_entry('',false,do_lang_tempcode('NONE_EM')));
 		require_code('themes2');
-		$list->attach(nice_get_theme_images(NULL,NULL,false,true,'menu_items/'));
+		$list->attach(create_selection_list_theme_images(NULL,NULL,false,true,'menu_items/'));
 		$fields_template->attach(form_input_list(do_lang_tempcode('THEME_IMAGE'),do_lang_tempcode('DESCRIPTION_THEME_IMAGE_FOR_MENU_ITEM'),'theme_img_code',$list,NULL,false,false));
 		$fields_template->attach(form_input_line(do_lang_tempcode('RESTRICT_PAGE_VISIBILITY'),do_lang_tempcode('MENU_ENTRY_MATCH_KEYS'),'match_tags','',false));
 
@@ -466,7 +466,7 @@ class Module_admin_menus
 			delete_lang($lang_code['i_caption_long']);
 		}
 
-		decache('side_stored_menu');
+		decache('menu');
 		persistent_cache_delete(array('MENU',$menu_id));
 
 		log_it((count($_POST)==1)?'DELETE_MENU':'EDIT_MENU',$menu_id);

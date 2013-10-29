@@ -1738,7 +1738,7 @@ class Module_admin_newsletter extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -1781,7 +1781,7 @@ class Module_admin_newsletter extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		$_m=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
 		$entries=new ocp_tempcode();

@@ -90,9 +90,6 @@ class Hook_addon_registry_core_abstract_interfaces
 			'themes/default/templates/AJAX_PAGINATION.tpl',
 			'themes/default/templates/CONFIRM_SCREEN.tpl',
 			'themes/default/templates/WARN_SCREEN.tpl',
-			'themes/default/templates/JAVASCRIPT_SPLURGH.tpl',
-			'themes/default/templates/SPLURGH.tpl',
-			'themes/default/templates/SPLURGH_SCREEN.tpl',
 			'themes/default/templates/FULL_MESSAGE_SCREEN.tpl',
 			'themes/default/templates/INFORM_SCREEN.tpl',
 			'themes/default/templates/REDIRECT_SCREEN.tpl',
@@ -194,7 +191,6 @@ class Hook_addon_registry_core_abstract_interfaces
 			'MAP_TABLE.tpl'=>'map_table',
 			'MAP_TABLE_SCREEN.tpl'=>'map_table_screen',
 			'COLUMNED_TABLE_ACTION_DELETE_CATEGORY.tpl'=>'columned_table_action_delete_category',
-			'SPLURGH.tpl'=>'splurgh_screen',
 			'WARNING_BOX.tpl'=>'warning_box',
 			'PAGINATION_SORTER.tpl'=>'result_table_screen',
 			'PAGINATION_SORT.tpl'=>'result_table_screen',
@@ -235,7 +231,6 @@ class Hook_addon_registry_core_abstract_interfaces
 			'DO_NEXT_SECTION.tpl'=>'administrative__do_next_screen',
 			'QUESTION_UI_BUTTONS.tpl'=>'question_ui_buttons',
 			'PAGINATION_SCREEN.tpl'=>'pagination_screen',
-			'SPLURGH_SCREEN.tpl'=>'splurgh_screen',
 			'FULL_MESSAGE_SCREEN.tpl'=>'full_message_screen',
 			'RESULTS_TABLE.tpl'=>'result_table_screen',
 			'MEMBER_TOOLTIP.tpl'=>'member_tooltip',
@@ -668,29 +663,6 @@ class Hook_addon_registry_core_abstract_interfaces
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>lorem_phrase(),
 				'BROWSE'=>placeholder_pagination()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__splurgh_screen()
-	{
-		$content=do_lorem_template('SPLURGH',array(
-			'KEY_NAME'=>lorem_word(),
-			'URL_STUB'=>placeholder_url(),
-			'SPLURGH'=>'a,b,[c,d,],'
-		));
-
-		return array(
-			lorem_globalise(do_lorem_template('SPLURGH_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'CONTENT'=>$content
 			)), NULL, '', true)
 		);
 	}

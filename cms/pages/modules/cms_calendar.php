@@ -261,7 +261,7 @@ class Module_cms_calendar extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -328,10 +328,10 @@ class Module_cms_calendar extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		$only_owned=has_privilege(get_member(),'edit_lowrange_content','cms_calendar')?NULL:get_member();
-		return nice_get_events($only_owned,NULL,has_privilege(get_member(),'edit_midrange_content','cms_calendar'));
+		return create_selection_list_events($only_owned,NULL,has_privilege(get_member(),'edit_midrange_content','cms_calendar'));
 	}
 
 	/**
@@ -455,7 +455,7 @@ class Module_cms_calendar extends standard_crud_module
 		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,$end_month,$end_day_of_month,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
 
 		// Type
-		$type_list=nice_get_event_types($type);
+		$type_list=create_selection_list_event_types($type);
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_EVENT_TYPE'),'type',$type_list));
 
 		// Member calendar
@@ -1256,7 +1256,7 @@ class Module_cms_calendar extends standard_crud_module
 	function export_ical()
 	{
 		$fields=new ocp_tempcode();
-		$type_list=nice_get_event_types();
+		$type_list=create_selection_list_event_types();
 
 		//Add all cal option
 		$type_list->attach(form_input_list_entry('0',true,'All types'));
@@ -1355,7 +1355,7 @@ class Module_cms_calendar_cat extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 

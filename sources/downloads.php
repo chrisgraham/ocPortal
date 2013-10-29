@@ -222,7 +222,7 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
  * @param  boolean		Whether to only show for what may be edited by the current member
  * @return tempcode		The list of entries
  */
-function nice_get_downloads_tree($it=NULL,$submitter=NULL,$shun=NULL,$use_compound_list=false,$editable_filter=false)
+function create_selection_list_downloads_tree($it=NULL,$submitter=NULL,$shun=NULL,$use_compound_list=false,$editable_filter=false)
 {
 	$tree=get_downloads_tree($submitter,NULL,NULL,NULL,$shun,NULL,$use_compound_list,$editable_filter);
 	if ($use_compound_list) $tree=$tree[0];
@@ -332,7 +332,7 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$breadcrumbs=NULL,
  * @param  boolean		Whether to only show for what may be added to by the current member
  * @return tempcode		The list of categories
  */
-function nice_get_download_category_tree($it=NULL,$use_compound_list=false,$addable_filter=false)
+function create_selection_list_download_category_tree($it=NULL,$use_compound_list=false,$addable_filter=false)
 {
 	$tree=get_download_category_tree(NULL,NULL,NULL,false,$use_compound_list,NULL,$addable_filter);
 	if ($use_compound_list) $tree=$tree[0];
@@ -359,7 +359,7 @@ function nice_get_download_category_tree($it=NULL,$use_compound_list=false,$adda
  * @param  boolean		Whether to allow an N/A selection
  * @return tempcode		The list of categories
  */
-function nice_get_download_licences($it=NULL,$allow_na=false)
+function create_selection_list_download_licences($it=NULL,$allow_na=false)
 {
 	$list=new ocp_tempcode();
 	if ($allow_na) $list->attach(form_input_list_entry('-1',false,do_lang_tempcode('NA_EM')));

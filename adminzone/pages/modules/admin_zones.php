@@ -395,7 +395,7 @@ class Module_admin_zones
 			$is_panel=(substr($for,0,6)=='panel_');
 
 			require_code('zones3');
-			$zone_list=($for==$current_for)?nice_get_zones($redirecting_to,array($id)):new ocp_tempcode() /*not simple so leave field out*/;
+			$zone_list=($for==$current_for)?create_selection_list_zones($redirecting_to,array($id)):new ocp_tempcode() /*not simple so leave field out*/;
 
 			$editor[$for]=static_evaluate_tempcode(do_template('ZONE_EDITOR_PANEL',array(
 				'_GUID'=>'f32ac84fe18b90497acd4afa27698bf0',
@@ -572,7 +572,7 @@ class Module_admin_zones
 
 		// Theme
 		require_code('themes2');
-		$entries=nice_get_themes($theme,false,true);
+		$entries=create_selection_list_themes($theme,false,true);
 		$fields.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode((get_forum_type()=='ocf')?'_DESCRIPTION_THEME_OCF':'_DESCRIPTION_THEME',substr(preg_replace('#[^A-Za-z\d]#','_',get_site_name()),0,80)),'theme',$entries));
 
 		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b997e901934b59fa72c944e0ce6fc1b0','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));

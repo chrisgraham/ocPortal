@@ -25,7 +25,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 				{$,Main menu}
 				<div class="global_navigation">
-					{$BLOCK,block=side_stored_menu,param=zone_menu,type=zone}
+					{$BLOCK,block=menu,param=zone_menu,type=zone}
 				</div>
 
 				{$,Outside the Admin Zone we have a spot for the banner}

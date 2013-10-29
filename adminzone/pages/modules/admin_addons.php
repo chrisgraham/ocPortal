@@ -1085,7 +1085,7 @@ class Module_admin_addons
 		require_code('form_templates');
 		require_code('zones2');
 		require_code('zones3');
-		$list=nice_get_zones();
+		$list=create_selection_list_zones();
 		$list->attach(form_input_list_entry('_block',false,do_lang_tempcode('BLOCKS')));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'view'),'_SELF',NULL,false,true);

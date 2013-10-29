@@ -63,51 +63,6 @@ class Module_cms_comcode_pages
 	}
 
 	/**
-	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
-	 *
-	 * @param  ?integer  The number of tree levels to computer (NULL: no limit)
-	 * @param  boolean	Whether to not return stuff that does not support permissions (unless it is underneath something that does).
-	 * @param  ?string	Position to start at in the tree. Does not need to be respected. (NULL: from root)
-	 * @param  boolean	Whether to avoid returning categories.
-	 * @return ?array	 	A tuple: 1) full tree structure [made up of (pagelink, permission-module, permissions-id, title, children, ?entry point for the children, ?children permission module, ?whether there are children) OR a list of maps from a get_* function] 2) permissions-page 3) optional base entry-point for the tree 4) optional permission-module 5) optional permissions-id (NULL: disabled).
-	 */
-	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
-	{
-		if (!$require_permission_support) return NULL;
-
-		$permission_page='cms_comcode_pages';
-
-		$category_data_count=$GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');
-		if ($category_data_count>2000) $dont_care_about_categories=true;
-
-		$tree=array();
-
-		$zones=find_all_zones(false,true);
-		foreach ($zones as $_zone)
-		{
-			list($zone,$zone_title)=$_zone;
-
-			$pagelink='cms:cms_comcode_pages:'.$zone; // A cheat
-			$tree[]=array($pagelink,'zone_page',$zone,$zone_title,array());
-		}
-
-		return array($tree,$permission_page);
-	}
-
-	/**
-	 * Convert a page link to a category ID and category permission module type.
-	 *
-	 * @param  string	The page link
-	 * @return array	The pair
-	 */
-	function extract_page_link_permissions($page_link)
-	{
-		$matches=array();
-		preg_match('#^([^:]*):([^:]*):(.*)$#',$page_link,$matches);
-		return array($matches[3],'zone_page');
-	}
-
-	/**
 	 * Standard modular uninstall function.
 	 */
 	function uninstall()
@@ -203,12 +158,12 @@ class Module_cms_comcode_pages
 
 			if (addon_installed('page_management'))
 			{
-				if (has_actual_page_access(get_member(),'admin_sitetree'))
+				if (has_actual_page_access(get_member(),'admin_sitemap'))
 				{
 					require_lang('zones');
-					$page_wizard=build_url(array('page'=>'admin_sitetree','type'=>'pagewizard'),get_module_zone('admin_sitetree'));
-					$site_tree_editor=build_url(array('page'=>'admin_sitetree','type'=>'site_tree'),get_module_zone('admin_sitetree'));
-					attach_message(do_lang_tempcode('SUGGEST_PAGE_WIZARD',escape_html($page_wizard->evaluate()),escape_html($site_tree_editor->evaluate())),'inform');
+					$page_wizard=build_url(array('page'=>'admin_sitemap','type'=>'pagewizard'),get_module_zone('admin_sitemap'));
+					$sitemap_editor=build_url(array('page'=>'admin_sitemap','type'=>'sitemap'),get_module_zone('admin_sitemap'));
+					attach_message(do_lang_tempcode('SUGGEST_PAGE_WIZARD',escape_html($page_wizard->evaluate()),escape_html($sitemap_editor->evaluate())),'inform');
 				}
 			}
 
@@ -285,7 +240,7 @@ class Module_cms_comcode_pages
 
 		require_code('zones2');
 		require_code('zones3');
-		return site_tree_do_next_manager($title,$page,$zone,$completion_text);
+		return sitemap_do_next_manager($title,$page,$zone,$completion_text);
 	}
 
 	/**
@@ -692,7 +647,7 @@ class Module_cms_comcode_pages
 		if (addon_installed('page_management'))
 		{
 			// Add to menu
-			if ((get_param('menu',STRING_MAGIC_NULL)!=STRING_MAGIC_NULL) && (has_actual_page_access(get_member(),'admin_sitetree')))
+			if ((get_param('menu',STRING_MAGIC_NULL)!=STRING_MAGIC_NULL) && (has_actual_page_access(get_member(),'admin_sitemap')))
 			{
 				require_code('menus2');
 				add_menu_item_simple(get_param('menu'),NULL,get_param('title'),get_param('page_link'),0,0,false);
@@ -861,7 +816,7 @@ class Module_cms_comcode_pages
 
 		if ((addon_installed('page_management')) && (has_actual_page_access(get_member(),'adminzone')))
 		{
-			$delete_url=build_url(array('page'=>'admin_sitetree','type'=>'_delete','page__'.$file=>1,'zone'=>$zone),get_module_zone('admin_sitetree'));
+			$delete_url=build_url(array('page'=>'admin_sitemap','type'=>'_delete','page__'.$file=>1,'zone'=>$zone),get_module_zone('admin_sitemap'));
 		} else
 		{
 			$delete_url=new ocp_tempcode();
@@ -871,7 +826,7 @@ class Module_cms_comcode_pages
 		$fields2=new ocp_tempcode();
 		if (addon_installed('page_management'))
 		{
-			if (has_actual_page_access(get_member(),'admin_sitetree'))
+			if (has_actual_page_access(get_member(),'admin_sitemap'))
 			{
 				if ($simple_add)
 				{
@@ -1013,7 +968,7 @@ class Module_cms_comcode_pages
 		$zone=filter_naughty(post_param('zone'));
 		if (addon_installed('page_management'))
 		{
-			$new_file=filter_naughty(has_actual_page_access(get_member(),'admin_sitetree')?post_param('title',$file):$file);
+			$new_file=filter_naughty(has_actual_page_access(get_member(),'admin_sitemap')?post_param('title',$file):$file);
 		} else $new_file=filter_naughty($file);
 		if ($file=='') $file=$new_file;
 		$validated=post_param_integer('validated',0);

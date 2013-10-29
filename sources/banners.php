@@ -323,7 +323,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
  * @param  ?ID_TEXT		The currently selected licence (NULL: none selected)
  * @return tempcode		The list of categories
  */
-function nice_get_banner_types($it=NULL)
+function create_selection_list_banner_types($it=NULL)
 {
 	$list=new ocp_tempcode();
 	$rows=$GLOBALS['SITE_DB']->query_select('banner_types',array('id','t_image_width','t_image_height','t_is_textual'),NULL,'ORDER BY id');
@@ -477,7 +477,7 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
  * @param  ?MEMBER		Only show banners owned by the member (NULL: no such restriction)
  * @return tempcode		The list
  */
-function nice_get_banners($it=NULL,$only_owned=NULL)
+function create_selection_list_banners($it=NULL,$only_owned=NULL)
 {
 	$where=is_null($only_owned)?NULL:array('submitter'=>$only_owned);
 	$rows=$GLOBALS['SITE_DB']->query_select('banners',array('name'),$where,'ORDER BY name',150);

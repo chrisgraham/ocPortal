@@ -300,7 +300,7 @@ function block_helper_script()
 						continue 2;
 					}
 				}
-				if ($block.':'.$parameter=='side_stored_menu:type') // special case for menus
+				if ($block.':'.$parameter=='menu:type') // special case for menus
 				{
 					$matches=array();
 					$dh=opendir(get_file_base().'/themes/default/templates/');
@@ -320,7 +320,7 @@ function block_helper_script()
 						$list->attach(form_input_list_entry($option,$has_default && $option==$default));
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif ($block.':'.$parameter=='side_stored_menu:param') // special case for menus
+				elseif ($block.':'.$parameter=='menu:param') // special case for menus
 				{
 					$list=new ocp_tempcode();
 					$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
@@ -334,7 +334,7 @@ function block_helper_script()
 				{
 					$list=new ocp_tempcode();
 					$list->attach(form_input_list_entry('_SEARCH',($default=='')));
-					$list->attach(nice_get_zones(($default=='')?NULL:$default));
+					$list->attach(create_selection_list_zones(($default=='')?NULL:$default));
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif ((($default=='') || (is_numeric(str_replace(',','',$default)))) && ((($parameter=='forum') || (($parameter=='param') && (in_array($block,array('main_forum_topics'))))) && (get_forum_type()=='ocf'))) // OCF forum list

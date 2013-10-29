@@ -176,7 +176,7 @@ class Module_admin_lang
 	{
 		require_code('form_templates');
 		$langs=new ocp_tempcode();
-		$langs->attach(nice_get_langs(NULL,$add_lang));
+		$langs->attach(create_selection_list_langs(NULL,$add_lang));
 
 		$javascript='';
 
@@ -208,7 +208,7 @@ class Module_admin_lang
 
 			$lang_files=new ocp_tempcode();
 			$lang_files->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
-			$lang_files->attach(nice_get_lang_files());
+			$lang_files->attach(create_selection_list_lang_files());
 			$field_set->attach(form_input_list(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_LANGUAGE_FILE'),'lang_file',$lang_files,NULL,true));
 
 			$field_set->attach(form_input_line(do_lang('SEARCH'),'','search','',false));

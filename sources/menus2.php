@@ -254,7 +254,7 @@ function delete_menu($menu_id)
 		delete_lang($lang_code['i_caption_long']);
 	}
 
-	decache('side_stored_menu');
+	decache('menu');
 	persistent_cache_delete(array('MENU',$menu_id));
 
 	if ((addon_installed('occle')) && (!running_script('install')))

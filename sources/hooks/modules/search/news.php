@@ -56,7 +56,7 @@ class Hook_search_news
 
 		require_code('news');
 
-		$tree=nice_get_news_categories($selected);
+		$tree=create_selection_list_news_categories($selected);
 		return $tree;
 	}
 

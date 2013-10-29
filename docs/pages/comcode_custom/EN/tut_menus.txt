@@ -31,7 +31,7 @@ Clearly which to use is a personal/needs-based choice, and there is nothing stop
 [title="2"]Template sets / menu types[/title]
 
 The Comcode/managed menu system supports 'template sets' to allow different kinds of menu on a website.
-The template set to use is specified as one of the parameters to the '[tt]side_stored_menu[/tt]' block.
+The template set to use is specified as one of the parameters to the '[tt]menu[/tt]' block.
 
 The following template sets exist:
  - [b]embossed[/b] (the default type, a very simple single-layered type for side-placed menus; does not support multiple-levels)
@@ -48,7 +48,7 @@ The menus themselves aren't saved against how the data is to be used, but for us
 [media width="150" description="Links to edit a panel page and to edit managed menus" float="right"]data_custom/images/docs/menus_edit_links.png[/media]
 Please see the 'site structure' tutorial for more information on panel pages. This section is only intended to provide a brief orientation to help further clarify the menu relationship. Basically panel pages are pages beginning with the name 'panel_' in the zone of the page being viewed.
 
-Your panel pages by default are just Comcode pages that use the block tag for arrangement of blocks such as the 'login/personal-stats block' (side_personal_stats), and the managed menu block, 'side_stored_menu'. Blocks are described in the 'Advanced custom pages of information (via Comcode)' tutorial, but basically, you can use any of the blocks that begin with the name 'side_' on your panel pages to add dynamic elements, as well as any Comcode (Comcode menus are actually created using the Comcode 'menu' tag). To edit a panel page, make sure you are logged in as a staff member and click the 'edit page' link underneath the pages as they are seen.
+Your panel pages by default are just Comcode pages that use the block tag for arrangement of blocks such as the 'login/personal-stats block' (side_personal_stats), and the managed menu block, 'menu'. Blocks are described in the 'Advanced custom pages of information (via Comcode)' tutorial, but basically, you can use any of the blocks that begin with the name 'side_' on your panel pages to add dynamic elements, as well as any Comcode (Comcode menus are actually created using the Comcode 'menu' tag). To edit a panel page, make sure you are logged in as a staff member and click the 'edit page' link underneath the pages as they are seen.
 
 Some information:
  - Panel pages need to be Comcode pages if you want to use the ocPortal Comcode/managed menu features, but otherwise there is nothing stopping you constructing panel pages as HTML or modules if you wish to
@@ -59,7 +59,7 @@ These two statements may confuse you, but I thought it was important at this poi
 [title="2"]Adding and editing managed menus[/title]
 
 [media width="150" description="Adding a new menu" float="right"]data_custom/images/docs/menus_add_link.png[/media]
-The easiest way to add a new managed menu is to edit a panel page so as to include a 'side_stored_menu' block that uses a menu with a code-name of what you want to create. You can use the 'Add block' button to help you do this. When you view the saved panel ocPortal will detect the menu is missing, and place a link to create the menu there instead of the menu itself (in much the same way it detects a missing page and allows the creation of a new Comcode page). It is important to [b]not[/b] click to add a new menu from the Comcode page preview, unless you open the add link in a new window/tab: this is because the Comcode page editing will not have been confirmed, hence making you repeat the page editing process.
+The easiest way to add a new managed menu is to edit a panel page so as to include a 'menu' block that uses a menu with a code-name of what you want to create. You can use the 'Add block' button to help you do this. When you view the saved panel ocPortal will detect the menu is missing, and place a link to create the menu there instead of the menu itself (in much the same way it detects a missing page and allows the creation of a new Comcode page). It is important to [b]not[/b] click to add a new menu from the Comcode page preview, unless you open the add link in a new window/tab: this is because the Comcode page editing will not have been confirmed, hence making you repeat the page editing process.
 
 The easiest way to edit a managed menu is to click the 'edit menu' link shown underneath, much like when clicking the 'edit page' link to edit the panel page.
 
@@ -71,7 +71,7 @@ There are three reasons you might not realise this:
 2) 'panel_top' menus are not given edit buttons, due to space constraints
 3) By default there's a system of redirects in place that might confuse you. You might have seen a top panel in the forum zone but seen no [tt]forum:panel_top[/tt] page, and hence assumed it was rendered by some other mechanism. The truth is that the forum shows the [tt]:panel_top[/tt] page, due to some default transparent redirects. These redirects exist because this default panel (the one that hides most of the time) cuts across zones, linking community pages together
 
-You can edit the [tt]:panel_top[/tt] menu from the Content Management zone, as if it were any other Comcode page. If you like you can rip out the Tempcode 'IF' directive that's there, leaving only the block code ([tt][block="community_menu" type="top"]side_stored_menu[/block][/tt]). That change will make the menu start showing everywhere where the panel shows (that's a lot of places, due to the transparent redirects).
+You can edit the [tt]:panel_top[/tt] menu from the Content Management zone, as if it were any other Comcode page. If you like you can rip out the Tempcode 'IF' directive that's there, leaving only the block code ([tt][block="community_menu" type="top"]menu[/block][/tt]). That change will make the menu start showing everywhere where the panel shows (that's a lot of places, due to the transparent redirects).
 
 [title="3"]Caching[/title]
 
@@ -84,7 +84,7 @@ To resolve this you will need to turn off the caching for the block by adding a 
 The menu editing interface is split into three main sections:
  - the actual menu tree structure
  - a form for editing a branch in the tree structure (invisible, until one of the branches is selected)
- - a site-tree tool to find 'entry points' for insertion into the selected branch's URL field
+ - a sitemap tool to find 'entry points' for insertion into the selected branch's URL field
 
 Menus are a tree structure made up of branches, where each branch may be a simple link and/or be a container for more child branches. For a branch with children that branch can be set to be initially expanded or contracted.
 
@@ -98,7 +98,7 @@ In the form part of the interface there are the following fields:
  - a check-box to determine if the link opens in a new window
  - a check-box to determine whether the link will be shown only if there is permission to actually view the page (slight efficiency hit)
 
-[title="2"]The site-tree tool[/title]
+[title="2"]The sitemap tool[/title]
 
 Entry points are described in full in the 'Site structure' tutorial, but basically they are ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:type=ad[/tt]' is the entry point to a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
 
@@ -106,7 +106,7 @@ Don't worry too much about entry point syntax as ocPortal will automatically con
 
 To copy an entry point to a branch you need to:
  - select the caption field of an item in the menu (this will cause an editing form to become available for that menu item)
- - click the entry point in the site-tree tool
+ - click the entry point in the sitemap tool
 You will then see the URL has been changed to the entry point you want. Do not be alarmed that this was placed in the 'URL' field, as the field also supports page links (of which entry points are a type of).
 
 [title="2"]Images[/title]
@@ -150,7 +150,7 @@ If you have menu items that only vary based on some other parameter you will nee
 
 There are some advanced features for those wanting to have auto-generated deep menus.
  - If a menu branch's tooltip is set to [tt]!!!<pagelink>[/tt] (e.g. [tt]!!!site:downloads[/tt]) then the category tree from the module will be inserted underneath that branch. This works with virtually any module that supports categories, including [tt]forum:forumview[/tt]
- - ... also, if you ask the [tt]side_stored_menu[/tt] block to load a menu named [tt]!!!<pagelink>[/tt], this will insert the category tree as if it were a standalone menu
+ - ... also, if you ask the [tt]menu[/tt] block to load a menu named [tt]!!!<pagelink>[/tt], this will insert the category tree as if it were a standalone menu
  - If a menu branch's tooltip is set to [tt]@@<menuname>[/tt] then the menu will be inserted underneath that branch. This is very useful for generating drop-down menus that automatically absorb the left-hand-side menus from multiple zones -- removing the need to maintain two sets of menus
 
 [concepts

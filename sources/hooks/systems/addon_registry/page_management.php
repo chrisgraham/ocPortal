@@ -90,11 +90,11 @@ class Hook_addon_registry_page_management
 			'sources/hooks/systems/addon_registry/page_management.php',
 			'themes/default/templates/VALIDATE_CHECK_SCREEN.tpl',
 			'themes/default/templates/VALIDATE_CHECK_ERROR.tpl',
-			'adminzone/pages/modules/admin_sitetree.php',
-			'themes/default/images/bigicons/sitetree.png',
-			'themes/default/images/pagepics/sitetreeeditor.png',
-			'themes/default/templates/JAVASCRIPT_SITE_TREE_EDITOR.tpl',
-			'themes/default/templates/SITE_TREE_EDITOR_SCREEN.tpl',
+			'adminzone/pages/modules/admin_sitemap.php',
+			'themes/default/images/bigicons/sitemap.png',
+			'themes/default/images/pagepics/sitemapeditor.png',
+			'themes/default/templates/JAVASCRIPT_SITEMAP_EDITOR.tpl',
+			'themes/default/templates/SITEMAP_EDITOR_SCREEN.tpl',
 			'themes/default/images/pagepics/move.png',
 			'themes/default/images/pagepics/deletepage.png',
 			'themes/default/images/pagepics/addpagewizard.png',
@@ -111,7 +111,7 @@ class Hook_addon_registry_page_management
 	function tpl_previews()
 	{
 		return array(
-			'SITE_TREE_EDITOR_SCREEN.tpl'=>'administrative__site_tree_editor_screen',
+			'SITEMAP_EDITOR_SCREEN.tpl'=>'administrative__sitemap_editor_screen',
 			'VALIDATE_CHECK_SCREEN.tpl'=>'administrative__validate_check_screen',
 			'VALIDATE_CHECK_ERROR.tpl'=>'administrative__validate_check_screen'
 		);
@@ -124,16 +124,16 @@ class Hook_addon_registry_page_management
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__site_tree_editor_screen()
+	function tpl_preview__administrative__sitemap_editor_screen()
 	{
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_more');
 		require_javascript('javascript_tree_list');
 		require_javascript('javascript_dragdrop');
-		require_javascript('javascript_site_tree_editor');
+		require_javascript('javascript_sitemap_editor');
 		require_lang('zones');
 		return array(
-			lorem_globalise(do_lorem_template('SITE_TREE_EDITOR_SCREEN',array(
+			lorem_globalise(do_lorem_template('SITEMAP_EDITOR_SCREEN',array(
 				'TITLE'=>lorem_title()
 			)), NULL, '', true)
 		);

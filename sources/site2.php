@@ -37,7 +37,7 @@ function get_staff_actions_list()
 			'templates'=>do_lang_tempcode('TEMPLATES'),
 			'theme_images'=>do_lang_tempcode('THEME_IMAGE_EDITING'),
 			'code'=>do_lang_tempcode('VALIDATION'),
-			'site_tree'=>do_lang_tempcode('FIND_IN_SITE_TREE'),
+			'sitemap'=>do_lang_tempcode('FIND_IN_SITEMAP'),
 	);
 	if (get_param_integer('keep_no_minify',0)==0) // When minification on we need to hard-code CSS list as cannot be auto-detected
 	{

@@ -181,7 +181,7 @@ class Module_cms_news extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -258,10 +258,10 @@ class Module_cms_news extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		$only_owned=has_privilege(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
-		return nice_get_news(NULL,$only_owned,false);
+		return create_selection_list_news(NULL,$only_owned,false);
 	}
 
 	/**
@@ -341,8 +341,8 @@ class Module_cms_news extends standard_crud_module
 			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		}
 
-		$cats1=nice_get_news_categories($main_news_category,false,true,is_integer($main_news_category),NULL,true);
-		$cats2=nice_get_news_categories(is_null($news_category)?array():$news_category,false,true,is_integer($main_news_category),NULL,true);
+		$cats1=create_selection_list_news_categories($main_news_category,false,true,is_integer($main_news_category),NULL,true);
+		$cats2=create_selection_list_news_categories(is_null($news_category)?array():$news_category,false,true,is_integer($main_news_category),NULL,true);
 
 		$fields=new ocp_tempcode();
 		$fields2=new ocp_tempcode();
@@ -821,7 +821,7 @@ class Module_cms_news_cat extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -865,9 +865,9 @@ class Module_cms_news_cat extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
-		return nice_get_news_categories(NULL,false,false,true);
+		return create_selection_list_news_categories(NULL,false,false,true);
 	}
 
 	/**

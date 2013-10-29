@@ -2,7 +2,7 @@
 
 If you're not sure how the admin menu above is categorised, hold the mouse to see a tooltip explaining what is under that drop-down menu.
 
-For help, see the [url="{$BRAND_BASE_URL}/docs"]docs[/url]. Add content/categories from the [page="cms:"]content management zone[/page]. Manage site structure from the [page="adminzone:admin_sitetree:site_tree"]site tree editor[/page].
+For help, see the [url="{$BRAND_BASE_URL}/docs"]docs[/url]. Add content/categories from the [page="cms:"]content management zone[/page]. Manage site structure from the [page="adminzone:admin_sitemap:sitemap"]sitemap editor[/page].
 
 
 [title="2"]To Do[/title]

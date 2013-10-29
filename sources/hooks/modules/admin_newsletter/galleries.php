@@ -33,7 +33,7 @@ class Hook_whats_news_galleries
 		require_lang('galleries');
 
 		require_code('galleries');
-		return array(nice_get_gallery_tree(NULL,NULL,false,false,true),do_lang('GALLERIES'));
+		return array(create_selection_list_gallery_tree(NULL,NULL,false,false,true),do_lang('GALLERIES'));
 	}
 
 	/**

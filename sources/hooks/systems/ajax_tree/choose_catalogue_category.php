@@ -111,12 +111,12 @@ class Hook_choose_catalogue_category
 			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name'));
 			foreach ($catalogues as $catalogue)
 			{
-				$out.=static_evaluate_tempcode(nice_get_catalogue_category_tree($catalogue['c_name'],is_null($it)?NULL:intval($it),$addable_filter,$compound_list));
+				$out.=static_evaluate_tempcode(create_selection_list_catalogue_category_tree($catalogue['c_name'],is_null($it)?NULL:intval($it),$addable_filter,$compound_list));
 			}
 			return make_string_tempcode($out);
 		} else
 		{
-			return nice_get_catalogue_category_tree($catalogue_name,is_null($it)?NULL:intval($it),$addable_filter,$compound_list);
+			return create_selection_list_catalogue_category_tree($catalogue_name,is_null($it)?NULL:intval($it),$addable_filter,$compound_list);
 		}
 	}
 

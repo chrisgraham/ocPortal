@@ -56,7 +56,7 @@ function get_content_object($content_type)
 }
 
 /**
- * Find a different content type code from the one had. In future we intend to change everything to be content_type internally.
+ * Find a different content type code from the one had.
  *
  * @param  ID_TEXT		Content type type we know
  * @set addon content_type meta_hook search_hook seo_type_code feedback_type_code permissions_type_code module table
@@ -68,8 +68,6 @@ function get_content_object($content_type)
 function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 {
 	$real_type_wanted=$type_wanted;
-
-	$type_id=preg_replace('#^catalogues__\w+_#','catalogues_',$type_id);
 
 	$type_id=preg_replace('#^catalogues__\w+_#','catalogues_',$type_id);
 
@@ -94,6 +92,39 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 
 	if ($found_type_id===NULL) $found_type_id='';
 	return $found_type_id;
+}
+
+/**
+ * Find content type info, for a particular content type type we know.
+ *
+ * @param  ID_TEXT		Content type type we know
+ * @set addon content_type meta_hook search_hook seo_type_code feedback_type_code permissions_type_code module table
+ * @param  ID_TEXT		Content type ID we know
+ * @return array			Content type info list (blank: could not find)
+ */
+function convert_ocportal_type_codes_multiple($type_has,$type_id)
+{
+	$type_id=preg_replace('#^catalogues__\w+_#','catalogues_',$type_id);
+
+	// Search content-meta-aware hooks
+	$found_type_ids=array();
+	$cma_hooks=find_all_hooks('systems','content_meta_aware');
+	foreach (array_keys($cma_hooks) as $content_type)
+	{
+		if ((($type_has=='content_type') && ($content_type==$type_id)) || ($type_has!='content_type'))
+		{
+			require_code('content');
+			$cma_ob=get_content_object($content_type);
+			$cma_info=$cma_ob->info();
+			$cma_info['content_type']=$content_type;
+			if ((isset($cma_info[$type_has])) && (($cma_info[$type_has]==$type_id) || ($cma_info[$type_has]==preg_replace('#__.*$#','',$type_id))))
+			{
+				$found_type_ids[]=$cma_info;
+			}
+		}
+	}
+
+	return $found_type_ids;
 }
 
 /**

@@ -36,7 +36,7 @@ class Hook_block_ui_renderers_galleries
 		if ((($default=='') || (preg_match('#^\w+$#',$default)!=0)) && ($parameter=='param') && (in_array($block,array('side_galleries','main_gallery_embed','main_image_fader')))) // gallery list
 		{
 			require_code('galleries');
-			$list=nice_get_gallery_tree($default);
+			$list=create_selection_list_gallery_tree($default);
 			return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false);
 		}
 		return NULL;

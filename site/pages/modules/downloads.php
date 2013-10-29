@@ -186,124 +186,7 @@ class Module_downloads
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'DOWNLOADS_HOME','tree_view'=>'TREE');
-	}
-
-	/**
-	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
-	 *
-	 * @param  ?integer  The number of tree levels to computer (NULL: no limit)
-	 * @param  boolean	Whether to not return stuff that does not support permissions (unless it is underneath something that does).
-	 * @param  ?string	Position to start at in the tree. Does not need to be respected. (NULL: from root)
-	 * @param  boolean	Whether to avoid returning categories.
-	 * @return ?array	 	A tuple: 1) full tree structure [made up of (pagelink, permission-module, permissions-id, title, children, ?entry point for the children, ?children permission module, ?whether there are children) OR a list of maps from a get_* function] 2) permissions-page 3) optional base entry-point for the tree 4) optional permission-module 5) optional permissions-id (NULL: disabled).
-	 */
-	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
-	{
-		$permission_page='cms_downloads';
-
-		require_code('downloads');
-
-		$category_id=NULL;
-		if (!is_null($start_at))
-		{
-			$matches=array();
-			if (preg_match('#[^:]*:downloads:type=misc:id=(.*)#',$start_at,$matches)!=0) $category_id=intval($matches[1]);
-		}
-
-		$adjusted_max_depth=is_null($max_depth)?NULL:(is_null($category_id)?($max_depth-1):$max_depth);
-		return array($dont_care_about_categories?array():get_download_category_tree($category_id,NULL,NULL,false,false,$adjusted_max_depth,false),$permission_page,'_SELF:_SELF:type=misc:id=!','downloads');
-	}
-
-	/**
-	 * Standard modular new-style deep page-link finder function (does not return the main entry-points).
-	 *
-	 * @param  string  	Callback function to send discovered page-links to.
-	 * @param  MEMBER		The member we are finding stuff for (we only find what the member can view).
-	 * @param  integer	Code for how deep we are tunnelling down, in terms of whether we are getting entries as well as categories.
-	 * @param  string		Stub used to create page-links. This is passed in because we don't want to assume a zone or page name within this function.
-	 * @param  ?string	Where we're looking under (NULL: root of tree). We typically will NOT show a root node as there's often already an entry-point representing it.
-	 * @param  integer	Our recursion depth (used to calculate importance of page-link, used for instance by Google sitemap). Deeper is typically less important.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 */
-	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$parent_pagelink=NULL,$recurse_level=0,$category_data=NULL,$entry_data=NULL)
-	{
-		// This is where we start
-		if (is_null($parent_pagelink))
-		{
-			$parent_pagelink=$pagelink_stub.':misc'; // This is the entry-point we're under
-			$parent_attributes=array('id'=>strval(db_get_first_id()));
-		} else
-		{
-			list(,$parent_attributes,)=page_link_decode($parent_pagelink);
-		}
-
-		// We read in all data for efficiency
-		if (is_null($category_data))
-			$category_data=$GLOBALS['SITE_DB']->query_select('download_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.category',array('d.id','t.text_original AS title','parent_id','add_date AS edit_date'));
-
-		// Subcategories
-		foreach ($category_data as $row)
-		{
-			if ((!is_null($row['parent_id'])) && (strval($row['parent_id'])==$parent_attributes['id']))
-			{
-				$pagelink=$pagelink_stub.'misc:'.strval($row['id']);
-				if (__CLASS__!='')
-				{
-					$this->get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data,$entry_data); // Recurse
-				} else
-				{
-					call_user_func_array(__FUNCTION__,array($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data,$entry_data)); // Recurse
-				}
-				if (has_category_access($member_id,'downloads',strval($row['id'])))
-				{
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,NULL,$row['edit_date'],max(0.7-$recurse_level*0.1,0.3),$row['title'])); // Callback
-				} else // Not accessible: we need to copy the node through, but we will flag it 'Unknown' and say it's not accessible.
-				{
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,NULL,$row['edit_date'],max(0.7-$recurse_level*0.1,0.3),do_lang('UNKNOWN'),false)); // Callback
-				}
-			}
-		}
-
-		// Entries
-		if (($depth>=DEPTH__ENTRIES) && (has_category_access($member_id,'downloads',$parent_attributes['id'])))
-		{
-			$start=0;
-			do
-			{
-				$privacy_join='';
-				$privacy_where='';
-				if (addon_installed('content_privacy'))
-				{
-					require_code('content_privacy');
-					list($privacy_join,$privacy_where)=get_privacy_where_clause('download','d');
-				}
-				$entry_data=$GLOBALS['SITE_DB']->query('SELECT d.id,t.text_original AS title,category_id,add_date,edit_date FROM '.get_table_prefix().'download_downloads d'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.name WHERE category_id='.strval(intval($parent_attributes['id'])).$privacy_where,500,$start);
-
-				foreach ($entry_data as $row)
-				{
-					$pagelink=$pagelink_stub.'entry:'.strval($row['id']);
-					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
-				}
-
-				$start+=500;
-			}
-			while (array_key_exists(0,$entry_data));
-		}
-	}
-
-	/**
-	 * Convert a page link to a category ID and category permission module type.
-	 *
-	 * @param  string	The page link
-	 * @return array	The pair
-	 */
-	function extract_page_link_permissions($page_link)
-	{
-		$matches=array();
-		preg_match('#^([^:]*):([^:]*):type=misc:id=(.*)$#',$page_link,$matches);
-		return array($matches[3],'downloads');
+		return array('misc'=>'DOWNLOADS_HOME');
 	}
 
 	var $title;
@@ -330,7 +213,7 @@ class Module_downloads
 
 		set_feed_url('?mode=downloads&filter=');
 
-		if ($type=='index' || $type=='tree_view')
+		if ($type=='index')
 		{
 			set_feed_url('?mode=downloads&filter=');
 		}
@@ -519,13 +402,6 @@ class Module_downloads
 			$this->title=get_screen_title('SECTION_DOWNLOADS');
 		}
 
-		if ($type=='tree_view')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECTION_DOWNLOADS'))));
-
-			$this->title=get_screen_title('DOWNLOADS_TREE');
-		}
-
 		return NULL;
 	}
 
@@ -546,7 +422,6 @@ class Module_downloads
 		if ($type=='misc') return $this->view_category_screen();
 		if ($type=='index') return $this->show_all_downloads();
 		if ($type=='entry') return $this->view_download_screen();
-		if ($type=='tree_view') return $this->tree_view_screen();
 
 		return new ocp_tempcode();
 	}
@@ -883,46 +758,6 @@ class Module_downloads
 			'COMMENT_DETAILS'=>$comment_details,
 			'MAY_DOWNLOAD'=>$may_download,
 		));
-	}
-
-	/**
-	 * The UI to view a download category tree.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function tree_view_screen()
-	{
-		require_code('splurgh');
-
-		if ($GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)')>1000)
-			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
-
-		$url_stub=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,false,false,true);
-		$last_change_time=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','MAX(add_date)');
-
-		$category_rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category','parent_id'));
-		$map=array();
-		foreach ($category_rows as $category)
-		{
-			if ($category['category']!=db_get_first_id())
-			{
-				if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category['id']))) continue;
-			}
-
-			$id=$category['id'];
-
-			$map[$id]['title']=get_translated_text($category['category']);
-			$children=array();
-			foreach ($category_rows as $child)
-			{
-				if ($child['parent_id']==$id) $children[]=$child['id'];
-			}
-			$map[$id]['children']=$children;
-		}
-
-		$content=splurgh_master_build('id',$map,$url_stub->evaluate(),'download_tree_made',$last_change_time);
-
-		return do_template('SPLURGH_SCREEN',array('_GUID'=>'4efab542cfa3d48a3b23d60b04798a37','TITLE'=>$this->title,'CONTENT'=>$content));
 	}
 
 }

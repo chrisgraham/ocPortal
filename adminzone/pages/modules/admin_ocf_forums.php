@@ -176,7 +176,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name',$name,true));
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		$list=ocf_nice_get_forum_groupings(NULL,$forum_grouping_id);
+		$list=ocf_create_selection_list_forum_groupings(NULL,$forum_grouping_id);
 		$fields->attach(form_input_list(do_lang_tempcode('FORUM_GROUPING'),do_lang_tempcode('DESCRIPTION_FORUM_GROUPING'),'forum_grouping_id',$list));
 		if ((is_null($id)) || ((!is_null($id)) && ($id!=db_get_first_id())))
 		{

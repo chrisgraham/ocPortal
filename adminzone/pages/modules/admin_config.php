@@ -533,7 +533,7 @@ class Module_admin_config
 							require_code('ocf_forums2');
 							$_list=new ocp_tempcode();
 							if (!$required) $list->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
-							$_list->attach(ocf_nice_get_forum_groupings(NULL,$tmp_value));
+							$_list->attach(ocf_create_selection_list_forum_groupings(NULL,$tmp_value));
 							$out.=static_evaluate_tempcode(form_input_list($human_name,$explanation,$name,$_list));
 						} else
 						{
@@ -549,7 +549,7 @@ class Module_admin_config
 							require_code('ocf_groups');
 							$_list=new ocp_tempcode();
 							if (!$required) $list->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
-							$_list->attach(ocf_nice_get_usergroups($tmp_value));
+							$_list->attach(ocf_create_selection_list_usergroups($tmp_value));
 							$out.=static_evaluate_tempcode(form_input_list($human_name,$explanation,$name,$_list));
 						} else
 						{

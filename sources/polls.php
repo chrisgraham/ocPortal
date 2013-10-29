@@ -214,7 +214,7 @@ function may_vote_in_poll($poll_id,$member_id,$ip)
  * @param  ?MEMBER		Only show polls owned by this member (NULL: no such restriction)
  * @return tempcode		The list
  */
-function nice_get_polls($it=NULL,$only_owned=NULL)
+function create_selection_list_polls($it=NULL,$only_owned=NULL)
 {
 	$where=is_null($only_owned)?NULL:array('submitter'=>$only_owned);
 	$rows=$GLOBALS['SITE_DB']->query_select('poll',array('question','is_current','votes1','votes2','votes3','votes4','votes5','votes6','votes7','votes8','votes9','votes10','id'),$where,'ORDER BY is_current DESC,date_and_time,question',400);

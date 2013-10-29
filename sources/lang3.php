@@ -59,7 +59,7 @@ function _choose_language($title,$tip=false,$allow_all_selection=false)
 	{
 		$langs->attach(form_input_list_entry('',false,do_lang_tempcode('_ALL')));
 	}
-	$langs->attach(nice_get_langs());
+	$langs->attach(create_selection_list_langs());
 	require_code('form_templates');
 	$fields=form_input_list(do_lang_tempcode('LANGUAGE'),do_lang_tempcode('DESCRIPTION_LANGUAGE'),'lang',$langs,NULL,true);
 
@@ -188,7 +188,7 @@ function get_language_title($lang)
  * @param  boolean			Whether to show languages that have no language details currently defined for them
  * @return tempcode			The language selector
  */
-function _nice_get_langs($select_lang=NULL,$show_unset=false)
+function _create_selection_list_langs($select_lang=NULL,$show_unset=false)
 {
 	$langs=new ocp_tempcode();
 	$_langs=find_all_langs();

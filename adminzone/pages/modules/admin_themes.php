@@ -885,7 +885,7 @@ class Module_admin_themes
 
 		if ($lang_too) // We also need the language
 		{
-			$langs=nice_get_langs();
+			$langs=create_selection_list_langs();
 			$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),do_lang_tempcode('DESCRIPTION_LANGUAGE'),'lang',$langs,NULL,true));
 		}
 

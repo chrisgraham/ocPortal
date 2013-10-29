@@ -145,7 +145,7 @@ class Hook_addon_registry_core_permission_management
 	 */
 	function tpl_preview__administrative__permissions_tree_editor_screen()
 	{
-		require_css('sitetree_editor');
+		require_css('sitemap_editor');
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_tree_list');

@@ -126,7 +126,7 @@ class Module_cms_polls extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -195,10 +195,10 @@ class Module_cms_polls extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_polls')?NULL:get_member();
-		$poll_list=nice_get_polls(NULL,$only_owned);
+		$poll_list=create_selection_list_polls(NULL,$only_owned);
 		return $poll_list;
 	}
 

@@ -138,7 +138,7 @@ This is advanced functionality, so it's best to skip over this function until yo
 
 [title="5"]The '[tt]extract_page_link_permissions[/tt]' function[/title]
 
-This function converts a page links scoped toward our module into permission-module/permission-ID pairs. It is used by the permission tree editor for getting/setting permissions corresponding to site-tree nodes.
+This function converts a page links scoped toward our module into permission-module/permission-ID pairs. It is used by the permission tree editor for getting/setting permissions corresponding to sitemap nodes.
 
 This is advanced functionality, so it's best to skip over this function until you are more advanced.
 

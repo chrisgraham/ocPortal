@@ -33,7 +33,7 @@ class Hook_whats_news_downloads
 		require_lang('downloads');
 
 		require_code('downloads');
-		return array(nice_get_download_category_tree(),do_lang('SECTION_DOWNLOADS'));
+		return array(create_selection_list_download_category_tree(),do_lang('SECTION_DOWNLOADS'));
 	}
 
 	/**

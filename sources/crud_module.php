@@ -99,7 +99,7 @@ class standard_crud_module
 	var $edit_keep_validation=false;
 	var $supports_mass_delete=false;
 
-	// These only needed if we are generate nice_get_entries automatically
+	// These only needed if we are generate create_selection_list_entries automatically
 	var $table_prefix='';
 	var $array_key='id';
 	var $title_is_multi_lang=true;
@@ -619,7 +619,7 @@ class standard_crud_module
 		$catalogue_name=get_param('catalogue_name','');
 		if ($catalogue_name!='') return NULL;
 
-		$tree=nice_get_catalogues(NULL,false,true);
+		$tree=create_selection_list_catalogues(NULL,false,true);
 		if ($tree->is_empty())
 		{
 			return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
@@ -1017,7 +1017,7 @@ class standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		list($_entries,)=$this->get_entry_rows();
 
@@ -1053,13 +1053,13 @@ class standard_crud_module
 		if (!is_null(get_param('continue',NULL))) $map['continue']=get_param('continue');
 
 		$description=($this->select_name_description!='')?do_lang_tempcode($this->select_name_description):new ocp_tempcode();
-		if (method_exists($this,'nice_get_radio_entries')) // For picture selection lists only
+		if (method_exists($this,'create_selection_list_radio_entries')) // For picture selection lists only
 		{
-			$entries=$this->nice_get_radio_entries();
+			$entries=$this->create_selection_list_radio_entries();
 			if ($entries->is_empty()) inform_exit(do_lang_tempcode(($this->type_code=='d')?'NO_ENTRIES':'NO_CATEGORIES'));
 			$fields=form_input_radio(do_lang_tempcode($this->select_name),$description,'id',$entries,$this->no_blank_ids,true,'');
 		}
-		elseif ((method_exists($this,'nice_get_ajax_tree')) && (($_fields=$this->nice_get_ajax_tree())!==NULL))
+		elseif ((method_exists($this,'create_selection_list_ajax_tree')) && (($_fields=$this->create_selection_list_ajax_tree())!==NULL))
 		{
 			if (is_array($_fields))
 			{
@@ -1070,11 +1070,11 @@ class standard_crud_module
 				$fields=$_fields;
 			}
 		}
-		elseif (method_exists($this,'nice_get_choose_table'))
+		elseif (method_exists($this,'create_selection_list_choose_table'))
 		{
 			list($test,)=$this->get_entry_rows();
 			if (count($test)==0) inform_exit(do_lang_tempcode(($this->type_code=='d')?'NO_ENTRIES':'NO_CATEGORIES'));
-			$table_result=$this->nice_get_choose_table($map);
+			$table_result=$this->create_selection_list_choose_table($map);
 			if (is_null($table_result)) inform_exit(do_lang_tempcode(($this->type_code=='d')?'NO_ENTRIES':'NO_CATEGORIES'));
 			$table=$table_result[0];
 			$has_ordering=$table_result[1];
@@ -1096,7 +1096,7 @@ class standard_crud_module
 			return internalise_own_screen($tpl);
 		} else
 		{
-			$_entries=$this->nice_get_entries();
+			$_entries=$this->create_selection_list_entries();
 
 			if (is_array($_entries))
 			{

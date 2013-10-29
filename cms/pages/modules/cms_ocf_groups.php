@@ -134,7 +134,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -184,7 +184,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		$fields=new ocp_tempcode();
 		$count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)',array('g_is_private_club'=>1));

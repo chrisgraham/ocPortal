@@ -97,7 +97,7 @@ class Hook_pointstore_permission
 		//$zones->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));		Will always scope to a zone. Welcome zone would be '' anyway, so we're simplifying the code by having a zone setting which won't hurt anyway
 		require_code('zones2');
 		require_code('zones3');
-		$zones->attach(nice_get_zones($zone));
+		$zones->attach(create_selection_list_zones($zone));
 		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_zone'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_zone'),'permission_zone'.$name_suffix,$zones,NULL,false,false));
 		$pages=new ocp_tempcode();
 		$temp=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));

@@ -861,7 +861,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 		</tr>
 	
 		<tr>
-			<td><img class="right" src="http://ocportal.com/themes/default/images/bigicons/sitetree.png" />Page Management<br />(<kbd>page_management</kbd>)</td>
+			<td><img class="right" src="http://ocportal.com/themes/default/images/bigicons/sitemap.png" />Page Management<br />(<kbd>page_management</kbd>)</td>
 			<td>Manage pages on the website.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>

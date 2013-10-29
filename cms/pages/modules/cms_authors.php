@@ -386,7 +386,7 @@ class Module_cms_authors
 	 */
 	function ed()
 	{
-		$authors=$this->nice_get_authors();
+		$authors=$this->create_selection_list_authors();
 		if ($authors->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		require_code('form_templates');
@@ -430,7 +430,7 @@ class Module_cms_authors
 	 * @param  ?ID_TEXT		The author to select by default (NULL: no specific default)
 	 * @return tempcode		The list
 	 */
-	function nice_get_authors($it=NULL)
+	function create_selection_list_authors($it=NULL)
 	{
 		$author_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta WHERE m_name LIKE \''.db_encode_like('%author').'\'');
 		$authors=array();

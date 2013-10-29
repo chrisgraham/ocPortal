@@ -75,7 +75,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 			if (get_translated_text($i_caption)==get_translated_text($_title))
 			{
 				lang_remap($i_caption,$title);
-				decache('side_stored_menu');
+				decache('menu');
 			}
 		}
 	}
@@ -96,7 +96,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		$ZONE['theme']=$theme;
 	}
 
-	decache('side_stored_menu');
+	decache('menu');
 	decache('main_sitemap');
 	persistent_cache_delete(array('ZONE',$zone));
 	persistent_cache_delete('ALL_ZONES');
@@ -226,7 +226,7 @@ function actual_delete_zone_lite($zone)
 	}
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'));
 
-	decache('side_stored_menu');
+	decache('menu');
 	decache('main_sitemap');
 	persistent_cache_delete(array('ZONE',$zone));
 	persistent_cache_delete('ALL_ZONES');
@@ -253,14 +253,14 @@ function actual_delete_zone_lite($zone)
  * @param  tempcode		The text to show (blank: default)
  * @return tempcode		The UI
  */
-function site_tree_do_next_manager($title,$page,$zone,$completion_text)
+function sitemap_do_next_manager($title,$page,$zone,$completion_text)
 {
 	if ($completion_text->is_empty()) $completion_text=do_lang_tempcode('SUCCESS');
 
 	require_code('templates_donext');
 	$special=array(
 		/*	 type							  page	 params													 zone	  */
-		array('pagewizard',array('admin_sitetree',array('type'=>'pagewizard','zone'=>$zone),get_module_zone('admin_sitetree')),do_lang_tempcode('PAGE_WIZARD')),
+		array('pagewizard',array('admin_sitemap',array('type'=>'pagewizard','zone'=>$zone),get_module_zone('admin_sitemap')),do_lang_tempcode('PAGE_WIZARD')),
 		array('comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('COMCODE_PAGE_EDIT')),
 	);
 	if (addon_installed('redirects_editor'))
@@ -271,13 +271,13 @@ function site_tree_do_next_manager($title,$page,$zone,$completion_text)
 	if (!has_js())
 	{
 		$special=array_merge($special,array(
-			array('delete',array('admin_sitetree',array('type'=>'delete'),get_module_zone('admin_sitetree')),do_lang_tempcode('DELETE_PAGES')),
-			array('move',array('admin_sitetree',array('type'=>'move'),get_module_zone('admin_sitetree')),do_lang_tempcode('MOVE_PAGES')),
+			array('delete',array('admin_sitemap',array('type'=>'delete'),get_module_zone('admin_sitemap')),do_lang_tempcode('DELETE_PAGES')),
+			array('move',array('admin_sitemap',array('type'=>'move'),get_module_zone('admin_sitemap')),do_lang_tempcode('MOVE_PAGES')),
 		));
 	} else
 	{
 		$special=array_merge($special,array(
-			array('sitetree',array('admin_sitetree',array('type'=>'site_tree'),get_module_zone('admin_sitetree')),do_lang_tempcode('SITE_TREE_EDITOR')),
+			array('sitemap',array('admin_sitemap',array('type'=>'sitemap'),get_module_zone('admin_sitemap')),do_lang_tempcode('SITEMAP_EDITOR')),
 		));
 	}
 	return do_next_manager($title,$completion_text,
@@ -306,7 +306,7 @@ function site_tree_do_next_manager($title,$page,$zone,$completion_text)
  * @param  ?array			A reordering (NULL: no reordering)
  * @return tempcode		The list
  */
-function nice_get_zones($sel=NULL,$no_go=NULL,$reorder=NULL)
+function create_selection_list_zones($sel=NULL,$no_go=NULL,$reorder=NULL)
 {
 	if (is_null($no_go)) $no_go=array();
 
@@ -346,7 +346,7 @@ function nice_get_zones($sel=NULL,$no_go=NULL,$reorder=NULL)
  */
 function get_zone_chooser($inline=false,$no_go=NULL,$reorder=NULL)
 {
-	$content=nice_get_zones(get_zone_name(),$no_go,$reorder);
+	$content=create_selection_list_zones(get_zone_name(),$no_go,$reorder);
 
 	$content=do_template('ZONE_CHOOSE'.($inline?'_INLINE':''),array('CONTENT'=>$content));
 	return $content;

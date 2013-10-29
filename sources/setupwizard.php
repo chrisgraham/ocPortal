@@ -136,7 +136,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 		} elseif ($left!='')
 		{
 			if ($GLOBALS['SITE_DB']->query_select_value('menu_items','COUNT(*)',array('i_menu'=>'site'))>1)
-				$comcode.="[block=\"site\" title=\"".do_lang('PAGES')."\"]side_stored_menu[/block]\n";
+				$comcode.="[block=\"site\" title=\"".do_lang('PAGES')."\"]menu[/block]\n";
 		}
 		$comcode.=$left;
 		if ($installprofile=='')
@@ -154,7 +154,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 		if (($left=='') && ($installprofile!=''))
 		{
 			if ($GLOBALS['SITE_DB']->query_select_value('menu_items','COUNT(*)',array('i_menu'=>'site'))>1)
-				$comcode.="[block=\"site\" title=\"".do_lang('PAGES')."\"]side_stored_menu[/block]\n";
+				$comcode.="[block=\"site\" title=\"".do_lang('PAGES')."\"]menu[/block]\n";
 		}
 		$comcode.=$right;
 		$page_structure[$zone]['right']=$comcode;

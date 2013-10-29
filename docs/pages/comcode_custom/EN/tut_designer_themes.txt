@@ -112,7 +112,7 @@ This section will step through how to build your design, in a number of steps an
 	[*]Comcode page: Right panel (if you have one on the design), [tt]:panel_right[/tt]
 	[*]Comcode page: Top panel (if you have one on the design), [tt]:panel_top[/tt]
 	[*]Comcode page: Bottom panel (if you have one on the design), [tt]:panel_bottom[/tt]
-	[*][tt]GLOBAL_HTML_WRAP[/tt]: Often there will be blocks in the header, like 'search' or 'login'. You can place these using code like [tt]{$BLOCK,block=<blockname>}[/tt]. Similarly sometimes the is a menu in the footer, which can be placed like [code]{$BLOCK,block=side_stored_menu,type=<menu-type>,param=<menu-name>}[/code]
+	[*][tt]GLOBAL_HTML_WRAP[/tt]: Often there will be blocks in the header, like 'search' or 'login'. You can place these using code like [tt]{$BLOCK,block=<blockname>}[/tt]. Similarly sometimes the is a menu in the footer, which can be placed like [code]{$BLOCK,block=menu,type=<menu-type>,param=<menu-name>}[/code]
 [/list]
 [/list]
 
@@ -172,7 +172,7 @@ is a "Comcode tag". The following Comcode is also equivalent:
 [/code]
 because the parameter named 'param' can be written in short-hand. 'param' is only special in two ways:
  - We have this Comcode short-hand notation for it.
- - Most blocks use it to pass in the main parameter the block needs, usually some kind of ID code. For example, for the [tt]side_stored_menu[/tt] block it is the name of the menu to be loaded.
+ - Most blocks use it to pass in the main parameter the block needs, usually some kind of ID code. For example, for the [tt]menu[/tt] block it is the name of the menu to be loaded.
 
 The "Tempcode symbol" is written like:
 [code]
@@ -208,7 +208,7 @@ You can place a block in a template like:
 [code]{$BLOCK,block=<blockname>,...}[/code]
 Where "..." is further parameters.
 
-For an example you can see how it is done for the [tt]side_stored_menu[/tt] block, in the 'Menus' section further down.
+For an example you can see how it is done for the [tt]menu[/tt] block, in the 'Menus' section further down.
 
 [title="3"]Creating page-links[/title]
 
@@ -288,13 +288,13 @@ You don't want to hard-code sets of page links into templates for themes as it's
  - [b]select[/b]: a simple XHTML [tt]<select>[/tt] based navigation menu.
 The menu layout types are distinguished by their templates. Each menu type has it's own set of templates that includes the name of the menu layout type. The template naming pattern would be [tt]MENU_<layouttype>.tpl[/tt], [tt]MENU_BRANCH_<layouttype>.tpl[/tt] and [tt]MENU_SPACER_<layouttype>.tpl[/tt]. You can create a new menu layout type just by making a new set of templates (using an existing set as a base), but this is virtually never necessary: it is often easiest just to customise one of the default sets.
 
-You can have as many menus of each layout type as you like. They are placed using the [tt]side_stored_menu[/tt] block.
+You can have as many menus of each layout type as you like. They are placed using the [tt]menu[/tt] block.
 [code]
-{$BLOCK,block=side_stored_menu,type=<layouttype>,param=<name>}
+{$BLOCK,block=menu,type=<layouttype>,param=<name>}
 [/code]
 and in Comcode like:
 [code]
-[block="<name>" type="<layouttype>"]side_stored_menu[/block]
+[block="<name>" type="<layouttype>"]menu[/block]
 [/code]
 Where [tt]<name>[/tt] is something that identifies the particular menu instance, holding together the links in that particular menu instance. You can just make the [tt]<name>[/tt]s up, and you'll get a new empty menu each time you do. If you're making a theme it's best to try and use default pre-existing menu names (ones that are there on any new ocPortal installation) so that the default links are immediately available in your theme (menu links are considered content, so not exported with your theme).
 The following default menus exist in ocPortal:

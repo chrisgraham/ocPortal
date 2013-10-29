@@ -48,7 +48,7 @@ class Hook_search_comcode_pages
 	function get_tree($selected)
 	{
 		require_code('zones3');
-		$tree=nice_get_zones($selected);
+		$tree=create_selection_list_zones($selected);
 		return $tree;
 	}
 

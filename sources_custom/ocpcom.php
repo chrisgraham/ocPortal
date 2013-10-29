@@ -269,7 +269,7 @@ function get_site_categories()
  * @param  string			The default selected item
  * @return tempcode		 List
  */
-function nice_get_site_categories($cat)
+function create_selection_list_site_categories($cat)
 {
 	$cat_list=new ocp_tempcode();
 	$categories=get_site_categories();
@@ -286,7 +286,7 @@ function nice_get_site_categories($cat)
  * @param  string			The default selected item
  * @return tempcode		 List
  */
-function nice_get_servers($server)
+function create_selection_list_servers($server)
 {
 	$server_list=new ocp_tempcode();
 	$servers=find_all_servers();

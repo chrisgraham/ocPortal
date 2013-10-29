@@ -33,7 +33,7 @@ class Hook_whats_news_news
 		require_lang('news');
 
 		require_code('news');
-		return array(nice_get_news_categories(NULL,false,false,true),do_lang('NEWS'));
+		return array(create_selection_list_news_categories(NULL,false,false,true),do_lang('NEWS'));
 	}
 
 	/**

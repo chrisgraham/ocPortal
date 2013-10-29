@@ -374,7 +374,7 @@ class Module_admin_permissions
 		require_javascript('javascript_more');
 		require_code('form_templates');
 
-		require_css('sitetree_editor');
+		require_css('sitemap_editor');
 
 		$groups=new ocp_tempcode();
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
@@ -461,7 +461,7 @@ class Module_admin_permissions
 		require_lang('zones');
 
 		require_code('zones3');
-		$zones=nice_get_zones();
+		$zones=create_selection_list_zones();
 		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),'','zone',$zones,NULL,true));
 
 		$post_url=get_self_url(false,false,NULL,false,true);

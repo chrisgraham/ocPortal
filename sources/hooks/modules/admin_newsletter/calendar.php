@@ -33,7 +33,7 @@ class Hook_whats_news_calendar
 		require_lang('calendar');
 
 		require_code('calendar');
-		return array(nice_get_event_types(),do_lang('CALENDAR'));
+		return array(create_selection_list_event_types(),do_lang('CALENDAR'));
 	}
 
 	/**

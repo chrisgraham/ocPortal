@@ -222,7 +222,7 @@ class Module_cms_catalogues extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -316,7 +316,7 @@ class Module_cms_catalogues extends standard_crud_module
 	 *
 	 * @return ?array				A triple: The tree field (tempcode), Search URL, Archive URL (NULL: nothing here)
 	 */
-	function nice_get_ajax_tree()
+	function create_selection_list_ajax_tree()
 	{
 		$catalogue_name=get_param('catalogue_name');
 
@@ -1081,7 +1081,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -1129,7 +1129,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 	 *
 	 * @return ?array				A triple: The tree field (tempcode), Search URL, Archive URL (NULL: nothing here)
 	 */
-	function nice_get_ajax_tree()
+	function create_selection_list_ajax_tree()
 	{
 		$catalogue_name=get_param('catalogue_name');
 
@@ -1438,9 +1438,9 @@ class Module_cms_catalogues_alt extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
-		return nice_get_catalogues();
+		return create_selection_list_catalogues();
 	}
 
 	/**
@@ -1605,7 +1605,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		require_code('fields');
 		require_lang('fields');
 
-		$type_list=nice_get_field_type($type,$name!='');
+		$type_list=create_selection_list_field_type($type,$name!='');
 
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode(($name=='')?'DESCRIPTION_FIELD_TYPE_FIRST_TIME':'DESCRIPTION_FIELD_TYPE'),$prefix.'type',$type_list));
 		$order_list=new ocp_tempcode();

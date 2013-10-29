@@ -127,7 +127,7 @@ class Hook_addon_registry_core_menus
 			'themes/default/templates/MENU_EDITOR_SCREEN.tpl',
 			'themes/default/templates/MENU_EDITOR_BRANCH_WRAP.tpl',
 			'themes/default/templates/JAVASCRIPT_MENU_EDITOR.tpl',
-			'themes/default/templates/BLOCK_SIDE_STORED_MENU.tpl',
+			'themes/default/templates/BLOCK_MENU.tpl',
 			'themes/default/templates/MENU_LINK_PROPERTIES.tpl',
 			'adminzone/pages/modules/admin_menus.php',
 			'adminzone/menu_management.php',
@@ -143,7 +143,7 @@ class Hook_addon_registry_core_menus
 			'themes/default/images/menus/menu_bullet_current.png',
 			'themes/default/images/pagepics/menus.png',
 			'lang/EN/menus.ini',
-			'sources/blocks/side_stored_menu.php',
+			'sources/blocks/menu.php',
 			'sources/hooks/systems/snippets/management_menu.php',
 			'sources/menus.php',
 			'sources/menus_sitemap.php',
@@ -169,38 +169,38 @@ class Hook_addon_registry_core_menus
 				'MENU_EDITOR_BRANCH_WRAP.tpl'=>'administrative__menu_editor_screen',
 				'MENU_EDITOR_SCREEN.tpl'=>'administrative__menu_editor_screen',
 				'PAGE_LINK_CHOOSER.tpl'=>'page_link_chooser',
-				'BLOCK_SIDE_STORED_MENU.tpl'=>'block_side_stored_menu__tree',
-				'MENU_STAFF_LINK.tpl'=>'block_side_stored_menu__tree',
+				'BLOCK_MENU.tpl'=>'block_menu__tree',
+				'MENU_STAFF_LINK.tpl'=>'block_menu__tree',
 
-				'MENU_SPACER_tree.tpl'=>'block_side_stored_menu__tree',
-				'MENU_BRANCH_tree.tpl'=>'block_side_stored_menu__tree',
-				'MENU_tree.tpl'=>'block_side_stored_menu__tree',
+				'MENU_SPACER_tree.tpl'=>'block_menu__tree',
+				'MENU_BRANCH_tree.tpl'=>'block_menu__tree',
+				'MENU_tree.tpl'=>'block_menu__tree',
 
-				'MENU_SPACER_dropdown.tpl'=>'block_side_stored_menu__dropdown',
-				'MENU_BRANCH_dropdown.tpl'=>'block_side_stored_menu__dropdown',
-				'MENU_dropdown.tpl'=>'block_side_stored_menu__dropdown',
+				'MENU_SPACER_dropdown.tpl'=>'block_menu__dropdown',
+				'MENU_BRANCH_dropdown.tpl'=>'block_menu__dropdown',
+				'MENU_dropdown.tpl'=>'block_menu__dropdown',
 
-				'MENU_SPACER_embossed.tpl'=>'block_side_stored_menu__embossed',
-				'MENU_BRANCH_embossed.tpl'=>'block_side_stored_menu__embossed',
-				'MENU_embossed.tpl'=>'block_side_stored_menu__embossed',
+				'MENU_SPACER_embossed.tpl'=>'block_menu__embossed',
+				'MENU_BRANCH_embossed.tpl'=>'block_menu__embossed',
+				'MENU_embossed.tpl'=>'block_menu__embossed',
 
-				'MENU_SPACER_popup.tpl'=>'block_side_stored_menu__popup',
-				'MENU_BRANCH_popup.tpl'=>'block_side_stored_menu__popup',
-				'MENU_popup.tpl'=>'block_side_stored_menu__popup',
+				'MENU_SPACER_popup.tpl'=>'block_menu__popup',
+				'MENU_BRANCH_popup.tpl'=>'block_menu__popup',
+				'MENU_popup.tpl'=>'block_menu__popup',
 
-				'MENU_SPACER_select.tpl'=>'block_side_stored_menu__select',
-				'MENU_BRANCH_select.tpl'=>'block_side_stored_menu__select',
-				'MENU_select.tpl'=>'block_side_stored_menu__select',
+				'MENU_SPACER_select.tpl'=>'block_menu__select',
+				'MENU_BRANCH_select.tpl'=>'block_menu__select',
+				'MENU_select.tpl'=>'block_menu__select',
 
-				'MENU_SPACER_top.tpl'=>'block_side_stored_menu__top',
-				'MENU_BRANCH_top.tpl'=>'block_side_stored_menu__top',
-				'MENU_top.tpl'=>'block_side_stored_menu__top',
+				'MENU_SPACER_top.tpl'=>'block_menu__top',
+				'MENU_BRANCH_top.tpl'=>'block_menu__top',
+				'MENU_top.tpl'=>'block_menu__top',
 
-				'MENU_SPACER_zone.tpl'=>'block_side_stored_menu__zone',
-				'MENU_BRANCH_zone.tpl'=>'block_side_stored_menu__zone',
-				'MENU_zone.tpl'=>'block_side_stored_menu__zone',
+				'MENU_SPACER_zone.tpl'=>'block_menu__zone',
+				'MENU_BRANCH_zone.tpl'=>'block_menu__zone',
+				'MENU_zone.tpl'=>'block_menu__zone',
 
-				'MENU_LINK_PROPERTIES.tpl'=>'block_side_stored_menu__top',
+				'MENU_LINK_PROPERTIES.tpl'=>'block_menu__top',
 			);
 	}
 
@@ -265,7 +265,7 @@ class Hook_addon_registry_core_menus
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_stored_menu__tree()
+	function tpl_preview__block_menu__tree()
 	{
 		$child=new ocp_tempcode();
 		$content=new ocp_tempcode();
@@ -332,7 +332,7 @@ class Hook_addon_registry_core_menus
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_STORED_MENU',array(
+				do_lorem_template('BLOCK_MENU',array(
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
@@ -350,7 +350,7 @@ class Hook_addon_registry_core_menus
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_stored_menu__dropdown()
+	function tpl_preview__block_menu__dropdown()
 	{
 		$child=new ocp_tempcode();
 		$content=new ocp_tempcode();
@@ -427,7 +427,7 @@ class Hook_addon_registry_core_menus
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_stored_menu__embossed()
+	function tpl_preview__block_menu__embossed()
 	{
 		$child=new ocp_tempcode();
 		$content=new ocp_tempcode();
@@ -494,7 +494,7 @@ class Hook_addon_registry_core_menus
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_STORED_MENU',array(
+				do_lorem_template('BLOCK_MENU',array(
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
@@ -512,7 +512,7 @@ class Hook_addon_registry_core_menus
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_stored_menu__popup()
+	function tpl_preview__block_menu__popup()
 	{
 		$child=new ocp_tempcode();
 		$content=new ocp_tempcode();
@@ -579,7 +579,7 @@ class Hook_addon_registry_core_menus
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_STORED_MENU',array(
+				do_lorem_template('BLOCK_MENU',array(
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
@@ -597,7 +597,7 @@ class Hook_addon_registry_core_menus
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_stored_menu__select()
+	function tpl_preview__block_menu__select()
 	{
 		$child=new ocp_tempcode();
 		$content=new ocp_tempcode();
@@ -664,7 +664,7 @@ class Hook_addon_registry_core_menus
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_STORED_MENU',array(
+				do_lorem_template('BLOCK_MENU',array(
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),
@@ -682,7 +682,7 @@ class Hook_addon_registry_core_menus
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_stored_menu__top()
+	function tpl_preview__block_menu__top()
 	{
 		$child=new ocp_tempcode();
 		$content=new ocp_tempcode();
@@ -760,7 +760,7 @@ class Hook_addon_registry_core_menus
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_stored_menu__zone()
+	function tpl_preview__block_menu__zone()
 	{
 		$child=new ocp_tempcode();
 		$content=new ocp_tempcode();
@@ -827,7 +827,7 @@ class Hook_addon_registry_core_menus
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_STORED_MENU',array(
+				do_lorem_template('BLOCK_MENU',array(
 					'CONTENT'=>$menu,
 					'PARAM'=>lorem_phrase(),
 					'TRAY_STATUS'=>lorem_phrase(),

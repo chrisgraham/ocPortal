@@ -173,7 +173,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		}
 
 		require_code('fields');
-		$type_list=nice_get_field_type($type,$name!='');
+		$type_list=create_selection_list_field_type($type,$name!='');
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_FIELD_TYPE'),'type',$type_list));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('REQUIRED'),do_lang_tempcode('DESCRIPTION_REQUIRED'),'required',$required==1));
@@ -220,7 +220,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 

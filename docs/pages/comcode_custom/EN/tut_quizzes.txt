@@ -39,7 +39,7 @@ Note that if you change the time limit whilst someone is using the quiz then the
 
 [title="2"]Adding to menus[/title]
 
-To add your quiz to a menu, use the Site Tree tool within the menu editor. You will find your quiz is available as a link underneath the Site\Quiz module.
+To add your quiz to a menu, use the Sitemap tool within the menu editor. You will find your quiz is available as a link underneath the Site\Quiz module.
 
 [title="2"]See also[/title]
 

@@ -2,7 +2,7 @@
 
 ocPortal has a number of interacting systems, that together form the structure and navigation paradigm of your website. This tutorial will detail these systems, and show how they fit together.
 
-To view the structural contents of your website, head over to the 'Structure' section of the Admin Zone, and choose the 'Site Tree Editor' icon. The Site Tree Editor is a very powerful tool for viewing the zones, pages, and categories within your website, and will help you build up a mental picture of how everything relates.
+To view the structural contents of your website, head over to the 'Structure' section of the Admin Zone, and choose the 'Sitemap Editor' icon. The Sitemap Editor is a very powerful tool for viewing the zones, pages, and categories within your website, and will help you build up a mental picture of how everything relates.
 
 [contents]decimal,lower-alpha[/contents]
 
@@ -125,9 +125,9 @@ When something appears beneath, on the same level, it has been attached. When on
 
 A third view of the structure of an ocPortal-driven website, is that of the HTML itself. HTML forms its own tree structure, which is actually similar to how the final ocPortal template tree looks before it is output. HTML is of a lower level however, and if ocPortal didn't have the template system as an intermediary, layout control for non-programmers would be severely limited.
 
-[title="2]The Site-Tree editor[/title]
+[title="2]The Sitemap editor[/title]
 
-{!zones:DOC_SITE_TREE_EDITOR}
+{!zones:DOC_SITEMAP_EDITOR}
 
 [title="2"]Navigation mechanisms[/title]
 
@@ -153,15 +153,15 @@ The admin and community menus may also be converted into normal editable menus q
 There is a breadcrumb override facility in the Admin Zone that allows you to change how breadcrumbs work. It allows you to substitute in new chains, with powerful wildcard matching (PHP regular expressions). It is very useful if, for example, you want to show a gallery as existing underneath a download category. It is, however, advanced functionality and requires a rudimentary understanding of XML and a strong understanding of ocPortal page-links.
 
 [concepts
- 1_key="Page link"   1_value="A special syntax that is like 'an ocPortal URL' that is written in a simplified form, local, and not tied to PHP/ocPortal URL reality (so if ocPortal URLs start to look different, Page links still work)"
- 2_key="Short URL"   2_value="A URL that points to content in a simpler, shorter, form. Also called a Quick URL' or an 'SEO URL'"
- 3_key="Zone"        3_value="A sub-directory of ocPortal that stores pages and has separate configuration (including permissions)"
- 4_key="Page"        4_value="An ocPortal site consists of pages, and some pages (mainly modules) consist of multiple screens"
- 5_key="screen"      5_value="An actual screen that could be roughly categorised distinctly from all other screens (e.g. the backup system has a screen to start a backup, and a screen to view the results)"
- 6_key="Module"      6_value="An ocPortal page that is written in PHP to a very strict structure"
- 7_key="Mini-module" 7_value="A module that is easier to write, but less powerful (it has no installation support, for example)"
- 8_key="Zone editor" 8_value="A unified zone and panel editor"
- 9_key="Site-Tree editor" 9_value="A frontend for viewing and manipulating all content on the website"
+ 1_key="Page link"      1_value="A special syntax that is like 'an ocPortal URL' that is written in a simplified form, local, and not tied to PHP/ocPortal URL reality (so if ocPortal URLs start to look different, Page links still work)"
+ 2_key="Short URL"      2_value="A URL that points to content in a simpler, shorter, form. Also called a Quick URL' or an 'SEO URL'"
+ 3_key="Zone"           3_value="A sub-directory of ocPortal that stores pages and has separate configuration (including permissions)"
+ 4_key="Page"           4_value="An ocPortal site consists of pages, and some pages (mainly modules) consist of multiple screens"
+ 5_key="screen"         5_value="An actual screen that could be roughly categorised distinctly from all other screens (e.g. the backup system has a screen to start a backup, and a screen to view the results)"
+ 6_key="Module"         6_value="An ocPortal page that is written in PHP to a very strict structure"
+ 7_key="Mini-module"    7_value="A module that is easier to write, but less powerful (it has no installation support, for example)"
+ 8_key="Zone editor"    8_value="A unified zone and panel editor"
+ 9_key="Sitemap editor" 9_value="A frontend for viewing and manipulating all content on the website"
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]

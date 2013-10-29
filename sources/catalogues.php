@@ -1059,7 +1059,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
  * @param  boolean		Whether to only show catalogues that can be submitted to
  * @return tempcode		Catalogue selection list
  */
-function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_submittable=false)
+function create_selection_list_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_submittable=false)
 {
 	$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 	if ($prefer_ones_with_entries)
@@ -1285,7 +1285,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
  * @param  boolean		Whether to only show for what may be edited by the current member
  * @return tempcode		The list of entries
  */
-function nice_get_catalogue_entries_tree($catalogue_name,$it=NULL,$submitter=NULL,$editable_filter=false)
+function create_selection_list_catalogue_entries_tree($catalogue_name,$it=NULL,$submitter=NULL,$editable_filter=false)
 {
 	$tree=get_catalogue_entries_tree($catalogue_name,$submitter,NULL,NULL,NULL,NULL,$editable_filter);
 
@@ -1425,7 +1425,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
  * @param  boolean		Whether to make the list elements store comma-separated child lists instead of IDs
  * @return tempcode		The list of categories
  */
-function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filter=false,$use_compound_list=false)
+function create_selection_list_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filter=false,$use_compound_list=false)
 {
 	if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
 

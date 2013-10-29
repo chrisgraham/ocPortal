@@ -21,7 +21,7 @@
 
 	<div>
 		<div class="box box___permissions_tree_editor_screen"><div class="box_inner">
-			<h2>{!SITE_TREE}</h2>
+			<h2>{!SITEMAP}</h2>
 
 			<div class="pte_tree">
 				<!-- onmouseover="fade_icons_out();" onmouseout="fade_icons_in();" firefox too buggy -->
@@ -46,7 +46,7 @@
 				</div>
 				<script>// <![CDATA[
 					add_event_listener_abstract(window,'load',function () {
-						window.site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=1{$KEEP;}','','',true);
+						window.sitemap=new tree_list('tree_list','data/sitemap.php?start_links=1&get_perms=1{$KEEP;}','','',true);
 					} );
 					var column_color='{COLOR;*}';
 

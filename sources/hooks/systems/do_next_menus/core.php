@@ -43,9 +43,9 @@ class Hook_do_next_menus_core
 			array('structure','zones',array('admin_zones',array('type'=>'misc'),get_module_zone('admin_zones')),do_lang_tempcode('ZONES'),('DOC_ZONES')),
 			array('structure','zone_editor',array('admin_zones',array('type'=>'editor'),get_module_zone('admin_zones')),do_lang_tempcode('ZONE_EDITOR'),('DOC_ZONE_EDITOR')),
 			array('structure','menus',array('admin_menus',array('type'=>'misc'),get_module_zone('admin_menus')),do_lang_tempcode('MENU_MANAGEMENT'),('DOC_MENUS')),
-			addon_installed('page_management')?array('structure','sitetree',array('admin_sitetree',array('type'=>'site_tree'),get_module_zone('admin_sitetree')),do_lang_tempcode('SITE_TREE_EDITOR'),('DOC_SITE_TREE_EDITOR')):NULL,
+			addon_installed('page_management')?array('structure','sitemap',array('admin_sitemap',array('type'=>'sitemap'),get_module_zone('admin_sitemap')),do_lang_tempcode('SITEMAP_EDITOR'),('DOC_SITEMAP_EDITOR')):NULL,
 			addon_installed('redirects_editor')?array('structure','redirect',array('admin_redirects',array('type'=>'misc'),get_module_zone('admin_redirects')),do_lang_tempcode('REDIRECTS'),('DOC_REDIRECTS')):NULL,
-			addon_installed('page_management')?array('structure','pagewizard',array('admin_sitetree',array('type'=>'pagewizard'),get_module_zone('admin_sitetree')),do_lang_tempcode('PAGE_WIZARD'),('DOC_PAGE_WIZARD')):NULL,
+			addon_installed('page_management')?array('structure','pagewizard',array('admin_sitemap',array('type'=>'pagewizard'),get_module_zone('admin_sitemap')),do_lang_tempcode('PAGE_WIZARD'),('DOC_PAGE_WIZARD')):NULL,
 			addon_installed('breadcrumbs')?array('structure','xml',array('admin_config',array('type'=>'xml_breadcrumbs'),get_module_zone('admin_config')),do_lang_tempcode('BREADCRUMB_OVERRIDES'),('DOC_BREADCRUMB_OVERRIDES')):NULL,
 			array('structure','addons',array('admin_addons',array('type'=>'misc'),get_module_zone('admin_addons')),do_lang_tempcode('ADDONS'),('DOC_ADDONS')),
 
@@ -71,7 +71,7 @@ class Hook_do_next_menus_core
 
 			array('security','permissionstree',array('admin_permissions',array('type'=>'misc'),get_module_zone('admin_permissions')),do_lang_tempcode('PERMISSIONS_TREE'),('DOC_PERMISSIONS_TREE')),
 			addon_installed('match_key_permissions')?array('security','matchkeysecurity',array('admin_permissions',array('type'=>'keys'),get_module_zone('admin_permissions')),do_lang_tempcode('PAGE_MATCH_KEY_ACCESS'),('DOC_PAGE_MATCH_KEY_ACCESS')):NULL,
-			//array('security','sitetree',array('admin_permissions',array('type'=>'page'),get_module_zone('admin_permissions')),do_lang_tempcode('PAGE_ACCESS'), ('DOC_PAGE_PERMISSIONS')),  // Disabled as not needed - but tree permission editor will redirect to it if no javascript available
+			//array('security','sitemap',array('admin_permissions',array('type'=>'page'),get_module_zone('admin_permissions')),do_lang_tempcode('PAGE_ACCESS'), ('DOC_PAGE_PERMISSIONS')),  // Disabled as not needed - but tree permission editor will redirect to it if no javascript available
 			addon_installed('securitylogging')?array('security','ipban',array('admin_ipban',array('type'=>'misc'),get_module_zone('admin_ipban')),do_lang_tempcode('BANNED_ADDRESSES'),('DOC_IPBAN')):NULL,
 			array('security','privileges',array('admin_permissions',array('type'=>'privileges'),get_module_zone('admin_permissions')),do_lang_tempcode('GLOBAL_PRIVILEGES'),('DOC_PRIVILEGES')),
 			(get_forum_type()!='ocf')?NULL:array('security','usergroups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups')),do_lang_tempcode('USERGROUPS'),('DOC_GROUPS')),

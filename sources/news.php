@@ -180,7 +180,7 @@ function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attac
  * @param  boolean		Whether to prefer to choose a non-blog category as the default
  * @return tempcode		The tempcode for the news category select list
  */
-function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$addable_filter=false,$only_existing=false,$only_blogs=NULL,$prefer_not_blog_selected=false)
+function create_selection_list_news_categories($it=NULL,$show_all_personal_categories=false,$addable_filter=false,$only_existing=false,$only_blogs=NULL,$prefer_not_blog_selected=false)
 {
 	if (!is_array($it)) $it=array($it);
 
@@ -254,7 +254,7 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
  * @param  boolean		Whether to only show blog posts
  * @return tempcode		The list
  */
-function nice_get_news($it,$only_owned=NULL,$editable_filter=false,$only_in_blog=false)
+function create_selection_list_news($it,$only_owned=NULL,$editable_filter=false,$only_in_blog=false)
 {
 	$where=is_null($only_owned)?'1':'submitter='.strval($only_owned);
 	if ($only_in_blog)

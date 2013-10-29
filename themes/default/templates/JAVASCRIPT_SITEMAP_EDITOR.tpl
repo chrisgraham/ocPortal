@@ -2,7 +2,7 @@
 
 function update_details_box(element)
 {
-	if (typeof window.site_tree=='undefined') return;
+	if (typeof window.sitemap=='undefined') return;
 	if (typeof window.actions_tpl_item=='undefined') return;
 	if (typeof window.info_tpl_item=='undefined') return;
 	if (typeof window.actions_tpl=='undefined') return;
@@ -15,7 +15,7 @@ function update_details_box(element)
 		return;
 	}
 
-	var node=window.site_tree.getElementByIdHack(element.value);
+	var node=window.sitemap.getElementByIdHack(element.value);
 	var type=node.getAttribute('type');
 	var page_link=node.getAttribute('serverid');
 	var page_link_bits=page_link.split(/:/);

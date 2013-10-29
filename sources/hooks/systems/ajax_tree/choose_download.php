@@ -164,7 +164,7 @@ class Hook_choose_download
 		$only_owned=array_key_exists('only_owned',$options)?(is_null($options['only_owned'])?NULL:intval($options['only_owned'])):NULL;
 		$shun=array_key_exists('shun',$options)?$options['shun']:NULL;
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
-		return nice_get_downloads_tree(is_null($it)?NULL:intval($it),$only_owned,$shun,false,$editable_filter);
+		return create_selection_list_downloads_tree(is_null($it)?NULL:intval($it),$only_owned,$shun,false,$editable_filter);
 	}
 
 }

@@ -166,64 +166,6 @@ class Module_quiz
 		return array('misc'=>'QUIZZES');
 	}
 
-	/**
-	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
-	 *
-	 * @param  ?integer  The number of tree levels to computer (NULL: no limit)
-	 * @param  boolean	Whether to not return stuff that does not support permissions (unless it is underneath something that does).
-	 * @param  ?string	Position to start at in the tree. Does not need to be respected. (NULL: from root)
-	 * @param  boolean	Whether to avoid returning categories.
-	 * @return ?array	 	A tuple: 1) full tree structure [made up of (pagelink, permission-module, permissions-id, title, children, ?entry point for the children, ?children permission module, ?whether there are children) OR a list of maps from a get_* function] 2) permissions-page 3) optional base entry-point for the tree 4) optional permission-module 5) optional permissions-id (NULL: disabled).
-	 */
-	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
-	{
-		$permission_page='cms_quiz';
-
-		$quizzes=array();
-		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('quizzes',array('id','q_name','q_timeout'),array('q_validated'=>1),'ORDER BY q_add_date DESC',500);
-		foreach ($rows as $row)
-		{
-			if (is_null($row['q_timeout']))
-				$quizzes[]=array('_SELF:_SELF:type=do:id='.strval($row['id']),NULL,NULL,get_translated_text($row['q_name']),array());
-		}
-		return array($quizzes,$permission_page);
-	}
-
-	/**
-	 * Standard modular new-style deep page-link finder function (does not return the main entry-points).
-	 *
-	 * @param  string  	Callback function to send discovered page-links to.
-	 * @param  MEMBER		The member we are finding stuff for (we only find what the member can view).
-	 * @param  integer	Code for how deep we are tunnelling down, in terms of whether we are getting entries as well as categories.
-	 * @param  string		Stub used to create page-links. This is passed in because we don't want to assume a zone or page name within this function.
-	 */
-	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub)
-	{
-		// Entries
-		if ($depth>=DEPTH__ENTRIES)
-		{
-			$start=0;
-			do
-			{
-				$rows=$GLOBALS['SITE_DB']->query_select('quizzes c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.q_name',array('c.q_name','c.id','t.text_original AS title','q_add_date AS add_time','q_timeout'),array('q_validated'=>1),'',500,$start);
-
-				foreach ($rows as $row)
-				{
-					if (is_null($row['q_timeout']))
-					{
-						if (is_null($row['title'])) $row['title']=get_translated_text($row['q_name']);
-
-						$pagelink=$pagelink_stub.'do:'.strval($row['id']);
-						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',$row['add_time'],NULL,0.2,$row['title'])); // Callback
-					}
-				}
-
-				$start+=500;
-			}
-			while (array_key_exists(0,$rows));
-		}
-	}
-
 	var $title;
 	var $id;
 	var $quiz;

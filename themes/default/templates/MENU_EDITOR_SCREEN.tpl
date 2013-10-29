@@ -16,7 +16,7 @@
 			<div class="menu_editor_rh_side">
 				<h2>{!HELP}</h2>
 
-				<p>{!BRANCHES_DESCRIPTION,{$PAGE_LINK*,_SEARCH:admin_sitetree:site_tree}}</p>
+				<p>{!BRANCHES_DESCRIPTION,{$PAGE_LINK*,_SEARCH:admin_sitemap:sitemap}}</p>
 
 				<p>{!ENTRY_POINTS_DESCRIPTION}</p>
 			</div>
@@ -49,7 +49,7 @@
 				</div>
 				<script>// <![CDATA[
 					var current_selection='';
-					var site_tree=new tree_list('tree_list','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1','','',false,null,false,true);
+					var sitemap=new tree_list('tree_list','data/sitemap.php?get_perms=0{$KEEP;}&start_links=1','','',false,null,false,true);
 				//]]></script>
 
 				<p class="associated_details">

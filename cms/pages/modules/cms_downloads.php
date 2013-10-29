@@ -254,7 +254,7 @@ class Module_cms_downloads extends standard_crud_module
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
-	function nice_get_ajax_tree()
+	function create_selection_list_ajax_tree()
 	{
 		if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)')==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -374,10 +374,10 @@ class Module_cms_downloads extends standard_crud_module
 		{
 			$hidden->attach(form_input_hidden('cost',''));
 		}
-		$licences=nice_get_download_licences($licence);
+		$licences=create_selection_list_download_licences($licence);
 		if (!$licences->is_empty())
 		{
-			$licences=nice_get_download_licences($licence,true);
+			$licences=create_selection_list_download_licences($licence,true);
 			$fields->attach(form_input_list(do_lang_tempcode('LICENCE'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_LICENCE'),'licence',$licences));
 		}
 
@@ -710,9 +710,9 @@ class Module_cms_downloads_alt extends standard_crud_module
 	 *
 	 * @return tempcode	The list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
-		return nice_get_download_licences();
+		return create_selection_list_download_licences();
 	}
 
 	/**
@@ -823,7 +823,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
-	function nice_get_ajax_tree()
+	function create_selection_list_ajax_tree()
 	{
 		$search_url=build_url(array('page'=>'search','id'=>'download_categories'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'downloads'),get_module_zone('downloads'));

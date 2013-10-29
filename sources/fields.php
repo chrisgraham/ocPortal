@@ -323,7 +323,7 @@ function delete_form_custom_fields($content_type,$id)
  * @param  boolean		Whether to only show options in the same storage set as $type
  * @return tempcode		List of field types
  */
-function nice_get_field_type($type='',$limit_to_storage_set=false)
+function create_selection_list_field_type($type='',$limit_to_storage_set=false)
 {
 	require_lang('fields');
 

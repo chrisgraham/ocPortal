@@ -256,7 +256,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries()
+	function create_selection_list_entries()
 	{
 		$fields=new ocp_tempcode();
 

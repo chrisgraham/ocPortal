@@ -51,7 +51,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	$fields->attach(form_input_line(do_lang_tempcode('DESTINATION_URL'),do_lang_tempcode('DESCRIPTION_BANNER_URL'),'site_url',$site_url,false)); // Blank implies iframe or direct code
 	if (!$simplified)
 	{
-		$types=nice_get_banner_types($b_type);
+		$types=create_selection_list_banner_types($b_type);
 		if ($types->is_empty()) warn_exit(do_lang_tempcode('NO_CATEGORIES'));
 		$fields->attach(form_input_list(do_lang_tempcode('_BANNER_TYPE'),do_lang_tempcode('_DESCRIPTION_BANNER_TYPE'),'b_type',$types,NULL,false,false));
 	} else

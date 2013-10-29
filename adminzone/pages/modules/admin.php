@@ -549,14 +549,14 @@ class Module_admin
 								}
 								$_url=build_url(array('page'=>$page,'type'=>$type),$zone);
 								$sup=$breadcrumbs->is_empty()?NULL:do_lang_tempcode('LOCATED_IN',$breadcrumbs);
-								$site_tree_editor_url=build_url(array('page'=>'admin_sitetree','type'=>'site_tree','id'=>$zone.':'.$page),'adminzone');
+								$sitemap_editor_url=build_url(array('page'=>'admin_sitemap','type'=>'sitemap','id'=>$zone.':'.$page),'adminzone');
 								$permission_tree_editor_url=build_url(array('page'=>'admin_permissions','id'=>$zone.':'.$page),'adminzone');
 								$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array(
 									'_GUID'=>'f656efd513099deac516d3273f9adfc4',
 									'NAME'=>$n,
 									'URL'=>$_url,
 									'TITLE'=>'',
-									'DESCRIPTION'=>do_lang_tempcode('FIND_IN_SITE_TREE_EDITOR',escape_html($site_tree_editor_url->evaluate()),escape_html($permission_tree_editor_url->evaluate())),
+									'DESCRIPTION'=>do_lang_tempcode('FIND_IN_SITEMAP_EDITOR',escape_html($sitemap_editor_url->evaluate()),escape_html($permission_tree_editor_url->evaluate())),
 									'SUP'=>$sup,
 								)));
 							}

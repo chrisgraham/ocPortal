@@ -69,7 +69,7 @@ function member_get_csv_headings()
  * @param  ?string		Current timezone to select (NULL: server default)
  * @return tempcode		List of timezones
  */
-function nice_get_timezone_list($timezone=NULL)
+function create_selection_list_timezone_list($timezone=NULL)
 {
 	if (is_null($timezone)) $timezone=get_site_timezone();
 
@@ -502,7 +502,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	// Timezones, if enabled
 	if ($doing_international)
 	{
-		$timezone_list=nice_get_timezone_list($timezone);
+		$timezone_list=create_selection_list_timezone_list($timezone);
 		$fields->attach(form_input_list(do_lang_tempcode('TIME_ZONE'),do_lang_tempcode('DESCRIPTION_TIMEZONE_MEMBER'),'timezone',$timezone_list));
 	}
 
@@ -519,7 +519,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		{
 			if ($no_lang_set) $language=user_lang();
 		}
-		$lang_list->attach(nice_get_langs($language));
+		$lang_list->attach(create_selection_list_langs($language));
 		$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),'','language',$lang_list,NULL,false,!$allow_no_lang_set));
 	}
 
@@ -540,7 +540,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 		// Theme, if we have any zones giving a choice
 		require_code('themes2');
-		$entries=nice_get_themes($theme,false,false,'RELY_SITE_DEFAULT');
+		$entries=create_selection_list_themes($theme,false,false,'RELY_SITE_DEFAULT');
 		require_lang('themes');
 		if ($doing_theme_option)
 		{

@@ -44,7 +44,7 @@ Here is an example of the definition of two aggregate content types: Course, and
         </resource>
         <resource type="comcode_page" subpath="{$FIX_ID*,{LABEL}}" label="panel_left">
             <property key="text">
-                [block="{$FIX_ID*,{LABEL}}"]side_stored_menu[/block]
+                [block="{$FIX_ID*,{LABEL}}"]menu[/block]
             </property>
             <access usergroup="*" value="1" />
         </resource>

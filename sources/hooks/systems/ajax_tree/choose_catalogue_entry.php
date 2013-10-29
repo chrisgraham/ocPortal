@@ -87,7 +87,7 @@ class Hook_choose_catalogue_entry
 		$only_owned=array_key_exists('only_owned',$options)?(is_null($options['only_owned'])?NULL:intval($options['only_owned'])):NULL;
 		$catalogue_name=array_key_exists('catalogue_name',$options)?$options['catalogue_name']:NULL;
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
-		return nice_get_catalogue_entries_tree($catalogue_name,is_null($it)?NULL:intval($it),$only_owned,$editable_filter);
+		return create_selection_list_catalogue_entries_tree($catalogue_name,is_null($it)?NULL:intval($it),$only_owned,$editable_filter);
 	}
 
 }

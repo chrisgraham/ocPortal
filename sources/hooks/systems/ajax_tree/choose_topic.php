@@ -81,7 +81,7 @@ class Hook_choose_topic
 	{
 		require_code('ocf_forums2');
 
-		return ocf_nice_get_topic_tree(is_null($it)?NULL:intval($it));
+		return ocf_create_selection_list_topic_tree(is_null($it)?NULL:intval($it));
 	}
 
 }

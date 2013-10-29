@@ -532,7 +532,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				$param=preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
 			}
 
-			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
+			//if (strpos(serialize($param),'menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
 
 			global $BLOCKS_CACHE;
 			if (array_key_exists(serialize($param),$BLOCKS_CACHE))

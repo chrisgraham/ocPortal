@@ -160,10 +160,10 @@ class Module_admin_redirects
 				$from_zones=new ocp_tempcode();
 			} else
 			{
-				$from_zones=nice_get_zones($row['r_from_zone']);
+				$from_zones=create_selection_list_zones($row['r_from_zone']);
 				$from_zones->attach(form_input_list_entry('*',$row['r_from_zone']=='*',do_lang_tempcode('_ALL')));
 			}
-			$to_zones=($num_zones>50)?new ocp_tempcode():nice_get_zones($row['r_to_zone']);
+			$to_zones=($num_zones>50)?new ocp_tempcode():create_selection_list_zones($row['r_to_zone']);
 			$fields->attach(do_template('REDIRECTE_TABLE_REDIRECT',array(
 				'_GUID'=>'fd1ea392a98e588bb1f553464d315ef0',
 				'I'=>strval($i),
@@ -184,7 +184,7 @@ class Module_admin_redirects
 			$from_zones=new ocp_tempcode();
 		} else
 		{
-			$zones=nice_get_zones($default[0]);
+			$zones=create_selection_list_zones($default[0]);
 			$to_zones=new ocp_tempcode();
 			$to_zones->attach($zones);
 			$from_zones=new ocp_tempcode();

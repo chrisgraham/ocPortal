@@ -121,7 +121,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function nice_get_choose_table($url_map)
+	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
 
@@ -163,9 +163,9 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	 * @param  ?ID_TEXT		The entry to not show (NULL: none to not show)
 	 * @return tempcode		The selection list
 	 */
-	function nice_get_entries($avoid=NULL)
+	function create_selection_list_entries($avoid=NULL)
 	{
-		return ocf_nice_get_forum_groupings(intval($avoid));
+		return ocf_create_selection_list_forum_groupings(intval($avoid));
 	}
 
 	/**
@@ -185,7 +185,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 		$delete_fields=new ocp_tempcode();
 
 		list($fields,$hidden)=$this->get_form_fields($r['c_title'],$r['c_description'],$r['c_expanded_by_default']);
-		$list=ocf_nice_get_forum_groupings($id);
+		$list=ocf_create_selection_list_forum_groupings($id);
 		if (!$list->is_empty())
 			$delete_fields->attach(form_input_list(do_lang_tempcode('TARGET'),do_lang_tempcode('DESCRIPTION_FORUM_MOVE_TARGET'),'target_forum_grouping',$list));
 
