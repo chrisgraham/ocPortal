@@ -1712,7 +1712,9 @@ function convert_tooltip(element)
 	var title=element.title;
 	if ((title!='') && (element.className.indexOf('leave_native_tooltip')==-1))
 	{
-		element.title=''; // Remove old tooltip
+		// Remove old tooltip
+		if (element.nodeName=='img' && element.alt=='') element.alt=element.title;
+		element.title='';
 
 		if ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && ((!element.childNodes[0].title) || (element.childNodes[0].title=='')))) // Only put on new tooltip if there's nothing with a tooltip inside the element
 		{
