@@ -51,6 +51,8 @@ class Hook_content_meta_aware_banner_type
 
 			'title_field'=>'id',
 			'title_field_dereference'=>false,
+			'description_field'=>NULL,
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>NULL,
 			'edit_pagelink_pattern'=>NULL,

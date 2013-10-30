@@ -51,6 +51,8 @@ class Hook_content_meta_aware_wiki_post
 
 			'title_field'=>'the_message',
 			'title_field_dereference'=>true,
+			'description_field'=>'the_message',
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:wiki:find_post:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:wiki:post:post_id=_WILD',

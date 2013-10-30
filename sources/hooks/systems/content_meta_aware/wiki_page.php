@@ -51,6 +51,8 @@ class Hook_content_meta_aware_wiki_page
 
 			'title_field'=>'title',
 			'title_field_dereference'=>true,
+			'description_field'=>'description',
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:wiki:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_wiki:edit_page:_WILD',

@@ -51,6 +51,8 @@ class Hook_content_meta_aware_chat
 
 			'title_field'=>'room_name',
 			'title_field_dereference'=>false,
+			'description_field'=>NULL,
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:chat:room:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_chat:room:_WILD',

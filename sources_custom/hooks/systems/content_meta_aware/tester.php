@@ -48,6 +48,8 @@ class Hook_content_meta_aware_tester
 
 			'title_field'=>NULL,
 			'title_field_dereference'=>false,
+			'description_field'=>NULL,
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:tester:report:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:tester:_ed:_WILD',

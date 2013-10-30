@@ -51,6 +51,8 @@ class Hook_content_meta_aware_banner
 
 			'title_field'=>'name',
 			'title_field_dereference'=>false,
+			'description_field'=>'caption',
+			'thumb_field'=>'img_url',
 
 			'view_pagelink_pattern'=>'_SEARCH:banners:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_banners:_ed:_WILD',

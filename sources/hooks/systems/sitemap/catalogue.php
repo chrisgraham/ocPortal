@@ -255,7 +255,7 @@ class Hook_sitemap_?
 			'content_id'=>?,
 			'pagelink'=>?,
 			'sitemap_priority'=>?, // 0.0 to 1.0
-			'sitemap_changefreq'=>?, // always|hourly|daily|weekly|monthly|yearly|never
+			'sitemap_refreshfreq'=>?, // always|hourly|daily|weekly|monthly|yearly|never
 			'extra_meta'=>array(
 				'description'=>?,
 				'image'=>?,

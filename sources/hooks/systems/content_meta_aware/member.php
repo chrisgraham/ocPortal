@@ -54,6 +54,8 @@ class Hook_content_meta_aware_member
 
 			'title_field'=>'m_username',
 			'title_field_dereference'=>false,
+			'description_field'=>'m_title',
+			'thumb_field'=>'m_avatar_url',
 
 			'view_pagelink_pattern'=>'_SEARCH:members:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:members:view:_WILD',

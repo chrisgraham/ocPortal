@@ -52,6 +52,8 @@ class Hook_content_meta_aware_video
 
 			'title_field'=>'title',
 			'title_field_dereference'=>true,
+			'description_field'=>'description',
+			'thumb_field'=>'thumb_url',
 
 			'view_pagelink_pattern'=>'_SEARCH:galleries:video:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_galleries:_ev:_WILD',

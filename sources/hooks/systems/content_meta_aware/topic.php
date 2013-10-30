@@ -57,6 +57,9 @@ class Hook_content_meta_aware_topic
 			'title_field_dereference__resource_fs'=>false,*/
 			'title_field__resource_fs'=>'t_description',
 			'title_field_dereference__resource_fs'=>false,
+			'description_field'=>'t_description',
+			'thumb_field'=>'t_emoticon',
+			'thumb_field_is_theme_image'=>true,
 
 			'view_pagelink_pattern'=>'_SEARCH:topicview:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:topics:edit_topic:_WILD',

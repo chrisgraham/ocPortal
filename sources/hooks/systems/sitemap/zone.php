@@ -1,3 +1,9 @@
+array(
+	'type'=>'zone',
+	'zone_name'=>TODO,
+),
+
+
 <?php /*
 
  ocPortal

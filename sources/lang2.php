@@ -211,7 +211,13 @@ function find_lang_content_names($ids)
 								$ret[$id]=$field['m_table'].' \ '.get_translated_text($test[$id][$info['title_field']]).' \ '.$field['m_name'];
 							} else
 							{
-								$ret[$id]=$field['m_table'].' \ '.(is_integer($test[$id][$info['title_field']])?strval($test[$id][$info['title_field']]):$test[$id][$info['title_field']]).' \ '.$field['m_name'];
+								if (strpos($info['title_field'],'CALL:')!==false)
+								{
+									$ret[$id]=call_user_func(trim(substr($info['title_field'],5)),array('id'=>$test[$id][$info['id_field']]),false);
+								} else
+								{
+									$ret[$id]=$field['m_table'].' \ '.(is_integer($test[$id][$info['title_field']])?strval($test[$id][$info['title_field']]):$test[$id][$info['title_field']]).' \ '.$field['m_name'];
+								}
 							}
 
 							continue 2;

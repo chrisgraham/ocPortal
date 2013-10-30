@@ -51,6 +51,8 @@ class Hook_content_meta_aware_comcode_page
 
 			'title_field'=>'the_page',
 			'title_field_dereference'=>false,
+			'description_field'=>TODO,
+			'thumb_field'=>TODO,
 
 			'view_pagelink_pattern'=>'_WILD:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_comcode_pages:_ed:_WILD',

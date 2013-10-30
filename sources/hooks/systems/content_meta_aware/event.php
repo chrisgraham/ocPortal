@@ -51,6 +51,8 @@ class Hook_content_meta_aware_event
 
 			'title_field'=>'e_title',
 			'title_field_dereference'=>true,
+			'description_field'=>'e_content',
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:calendar:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_calendar:_ed:_WILD',

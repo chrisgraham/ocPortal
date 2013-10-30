@@ -51,6 +51,8 @@ class Hook_content_meta_aware_poll
 
 			'title_field'=>'question',
 			'title_field_dereference'=>true,
+			'description_field'=>NULL,
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:polls:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_polls:_ed:_WILD',

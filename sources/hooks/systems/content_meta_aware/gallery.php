@@ -52,6 +52,8 @@ class Hook_content_meta_aware_gallery
 
 			'title_field'=>'fullname',
 			'title_field_dereference'=>true,
+			'description_field'=>'description',
+			'thumb_field'=>'rep_image',
 
 			'view_pagelink_pattern'=>'_SEARCH:galleries:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_galleries:_ec:_WILD',

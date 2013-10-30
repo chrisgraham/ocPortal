@@ -51,6 +51,8 @@ class Hook_content_meta_aware_quiz
 
 			'title_field'=>'q_name',
 			'title_field_dereference'=>true,
+			'description_field'=>'q_start_text',
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:quiz:do:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_quiz:_ed:_WILD',

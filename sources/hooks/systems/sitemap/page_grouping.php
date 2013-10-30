@@ -1,5 +1,9 @@
 TODO (uses do_next_menus for grouping guidance)
 
+	//if ((($meta_gather & SITEMAP_GATHER_IMAGE)!=0) && (isset($cma_info['thumb_field'])))	We don't have 2x images for content
+	//	$struct['extra_meta']['image_2x']=$row[$cma_info['thumb_field']];
+
+
 	<?php /*
 
 	 ocPortal

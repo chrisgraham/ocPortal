@@ -51,6 +51,8 @@ class Hook_content_meta_aware_author
 
 			'title_field'=>'author',
 			'title_field_dereference'=>false,
+			'description_field'=>'description',
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:authors:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_authors:_ad:_WILD',

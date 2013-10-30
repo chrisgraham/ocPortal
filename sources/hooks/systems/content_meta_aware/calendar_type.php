@@ -51,6 +51,9 @@ class Hook_content_meta_aware_calendar_type
 
 			'title_field'=>'t_title',
 			'title_field_dereference'=>true,
+			'description_field'=>NULL,
+			'thumb_field'=>'t_logo',
+			'thumb_field_is_theme_image'=>true,
 
 			'view_pagelink_pattern'=>'_SEARCH:calendar:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_calendar:_ec:_WILD',

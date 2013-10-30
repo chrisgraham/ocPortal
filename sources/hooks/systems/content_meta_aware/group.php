@@ -53,6 +53,9 @@ class Hook_content_meta_aware_group
 
 			'title_field'=>'g_name',
 			'title_field_dereference'=>true,
+			'description_field'=>NULL,
+			'thumb_field'=>'g_rank_image',
+			'thumb_field_is_theme_image'=>true,
 
 			'view_pagelink_pattern'=>'_SEARCH:groups:view:_WILD',
 			'edit_pagelink_pattern'=>'adminzone:admin_ocf_groups:_ed:_WILD',

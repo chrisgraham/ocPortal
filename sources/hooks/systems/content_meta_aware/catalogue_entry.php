@@ -50,8 +50,10 @@ class Hook_content_meta_aware_catalogue_entry
 			'parent_spec__field_name'=>'id',
 			'category_is_string'=>array(true,false),
 
-			'title_field'=>'CALL: generate_catalogue_entry_moniker',
+			'title_field'=>'CALL: generate_catalogue_entry_title',
 			'title_field_dereference'=>false,
+			'description_field'=>NULL,
+			'thumb_field'=>'CALL: generate_catalogue_thumb_field',
 
 			'view_pagelink_pattern'=>'_SEARCH:catalogues:entry:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_catalogues:_ed:_WILD',
@@ -117,13 +119,13 @@ class Hook_content_meta_aware_catalogue_entry
 }
 
 /**
- * Generate a catalogue entry URL moniker.
+ * Find a catalogue entry title.
  *
- * @param  array		The URL parts to generate the moniker from.
+ * @param  array		The URL parts to search from.
  * @param  boolean	Whether to get the field title using resource-fs style.
- * @return string 	The generated moniker.
+ * @return string 	The field title.
  */
-function generate_catalogue_entry_moniker($url_parts,$resourcefs_style=false)
+function generate_catalogue_entry_title($url_parts,$resourcefs_style=false)
 {
 	$catalogue_name=mixed();
 	$fields=mixed();
@@ -144,9 +146,40 @@ function generate_catalogue_entry_moniker($url_parts,$resourcefs_style=false)
 	}
 
 	require_code('catalogues');
-	$fields=get_catalogue_entry_field_values($catalogue_name,intval($url_parts['id']),array($unique_key_num),$fields);
-	$field=$fields[$unique_key_num];
+	$field_values=get_catalogue_entry_field_values($catalogue_name,intval($url_parts['id']),array($unique_key_num),$fields);
+	$field=$field_values[$unique_key_num];
 	if (is_null($field)) return uniqid('',true);
 	$value=array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['effective_value'];
 	return strip_comcode($value);
+}
+
+/**
+ * Find a catalogue entry thumbnail.
+ *
+ * @param  array		The URL parts to search from.
+ * @return string 	The field title.
+ */
+function generate_catalogue_thumb_field($url_parts)
+{
+	$unique_key_num=mixed();
+
+	$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>intval($url_parts['id'])));
+	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+	foreach ($fields as $i=>$f)
+	{
+		if ($f['cf_type']=='picture')
+		{
+			$unique_key_num=$i;
+			break;
+		}
+	}
+
+	if ($unique_key_num===NULL) return '';
+
+	require_code('catalogues');
+	$field_values=get_catalogue_entry_field_values($catalogue_name,intval($url_parts['id']),array($unique_key_num),$fields);
+	$field=$field_values[$unique_key_num];
+	if (is_null($field)) return '';
+	$value=array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['effective_value'];
+	return $value;
 }

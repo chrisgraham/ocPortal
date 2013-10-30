@@ -51,6 +51,8 @@ class Hook_content_meta_aware_news_category
 
 			'title_field'=>'nc_title',
 			'title_field_dereference'=>true,
+			'description_field'=>NULL,
+			'thumb_field'=>'nc_img',
 
 			'view_pagelink_pattern'=>'_SEARCH:news:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_news:_ec:_WILD',

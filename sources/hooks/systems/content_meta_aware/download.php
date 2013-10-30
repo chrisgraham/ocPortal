@@ -51,6 +51,8 @@ class Hook_content_meta_aware_download
 
 			'title_field'=>'name',
 			'title_field_dereference'=>true,
+			'description_field'=>'description',
+			'thumb_field'=>'rep_image',
 
 			'view_pagelink_pattern'=>'_SEARCH:downloads:entry:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_downloads:_ed:_WILD',
@@ -62,6 +64,7 @@ class Hook_content_meta_aware_download
 
 			'views_field'=>'download_views',
 			'submitter_field'=>'submitter',
+			'author_field'=>'author',
 			'add_time_field'=>'add_date',
 			'edit_time_field'=>'edit_date',
 			'date_field'=>'add_date',

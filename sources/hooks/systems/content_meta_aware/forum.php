@@ -53,6 +53,8 @@ class Hook_content_meta_aware_forum
 
 			'title_field'=>'f_name',
 			'title_field_dereference'=>false,
+			'description_field'=>'f_description',
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:forumview:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:admin_ocf_forums:_ec:_WILD',

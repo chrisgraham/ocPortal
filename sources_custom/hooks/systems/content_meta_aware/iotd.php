@@ -52,6 +52,8 @@ class Hook_content_meta_aware_iotd
 			'title_field'=>'i_title',
 			'title_field_dereference'=>true,
 			'title_field_supports_comcode'=>true,
+			'description_field'=>'caption',
+			'thumb_field'=>'thumb_url',
 
 			'view_pagelink_pattern'=>'_SEARCH:iotds:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_iotds:_ed:_WILD',

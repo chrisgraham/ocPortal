@@ -53,6 +53,8 @@ class Hook_content_meta_aware_post
 
 			'title_field'=>'p_title',
 			'title_field_dereference'=>false,
+			'description_field'=>'p_post',
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_SEARCH:topicview:findpost:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:topics:edit_post:_WILD',

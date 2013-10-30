@@ -51,6 +51,8 @@ class Hook_content_meta_aware_catalogue_category
 
 			'title_field'=>'cc_title',
 			'title_field_dereference'=>true,
+			'description_field'=>'cc_description',
+			'thumb_field'=>'rep_image',
 
 			'view_pagelink_pattern'=>'_SEARCH:catalogues:category:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_catalogues:_ec:_WILD',

@@ -51,6 +51,8 @@ class Hook_content_meta_aware_download_category
 
 			'title_field'=>'category',
 			'title_field_dereference'=>true,
+			'description_field'=>'description',
+			'thumb_field'=>'rep_image',
 
 			'view_pagelink_pattern'=>'_SEARCH:downloads:misc:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_downloads:_ec:_WILD',

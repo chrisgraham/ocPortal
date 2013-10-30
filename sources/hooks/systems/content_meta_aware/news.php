@@ -51,6 +51,8 @@ class Hook_content_meta_aware_news
 			'title_field'=>'title',
 			'title_field_dereference'=>true,
 			'title_field_supports_comcode'=>true,
+			'description_field'=>'news',
+			'thumb_field'=>'news_image',
 
 			'view_pagelink_pattern'=>'_SEARCH:news:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_news:_ed:_WILD',
@@ -62,6 +64,7 @@ class Hook_content_meta_aware_news
 
 			'views_field'=>'news_views',
 			'submitter_field'=>'submitter',
+			'author_field'=>'author',
 			'add_time_field'=>'date_and_time',
 			'edit_time_field'=>'edit_date',
 			'date_field'=>'date_and_time',
