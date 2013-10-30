@@ -51,11 +51,11 @@ class Hook_content_meta_aware_comcode_page
 
 			'title_field'=>'the_page',
 			'title_field_dereference'=>false,
-			'description_field'=>TODO,
-			'thumb_field'=>TODO,
+			'description_field'=>NULL,
+			'thumb_field'=>NULL,
 
 			'view_pagelink_pattern'=>'_WILD:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:cms_comcode_pages:_ed:_WILD',
+			'edit_pagelink_pattern'=>'_SEARCH:cms_comcode_pages:_ed:page_link=_WILD',
 			'view_category_pagelink_pattern'=>'_WILD:',
 			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('high',get_member(),get_ip_address(),'cms_comcode_pages'))?(get_module_zone('cms_comcode_pages').':cms_comcode_pages:ed'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_page_zone('sitemap')).':sitemap',

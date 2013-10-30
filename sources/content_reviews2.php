@@ -114,6 +114,8 @@ function content_review_get_fields($content_type,$content_id=NULL,$catalogue_nam
 
 		// Specification of a specific date
 
+		if ((!is_null($next_review_time)) && ($next_review_time<time())) $next_review_time=NULL; // Stop edits resetting the reviewed status and leaving the old date there
+
 		$fields->attach(form_input_date(do_lang_tempcode('NEXT_REVIEW_DATE'),do_lang_tempcode('DESCRIPTION_NEXT_REVIEW_DATE'),'next_review_time',true,is_null($next_review_time),false,$next_review_time));
 
 		// Specification of auto-action to perform
