@@ -97,12 +97,15 @@ function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_content
 		{
 			require_code('hooks/systems/sitemap/'.$_hook);
 			$ob=object_factory('Hook_sitemap_'.$_hook);
-			$is_handled=$ob->handles_pagelink($pagelink);
-			if ($is_handled!=SITEMAP_NODE_NOT_HANDLED)
+			if ($ob->is_active())
 			{
-				$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
-				$hook=$_hook;
-				break;
+				$is_handled=$ob->handles_pagelink($pagelink);
+				if ($is_handled!=SITEMAP_NODE_NOT_HANDLED)
+				{
+					$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
+					$hook=$_hook;
+					break;
+				}
 			}
 		}
 		if (is_null($hook))
@@ -116,6 +119,16 @@ function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_content
 
 abstract class Hook_sitemap_base
 {
+	/**
+	 * Find whether the hook is active.
+	 *
+	 * @return boolean		Whether the hook is active.
+	 */
+	function is_active()
+	{
+		return true;
+	}
+
 	/**
 	 * Find if a page-link will be covered by this node.
 	 *
@@ -184,9 +197,9 @@ abstract class Hook_sitemap_base
 
 abstract class Hook_sitemap_content extends Hook_sitemap_base
 {
-	abstract protected $content_type=NULL;
-	abstract protected $entry_content_type=NULL;
-	abstract protected $entry_sitetree_hook=NULL;
+	protected $content_type=NULL;
+	protected $entry_content_type=NULL;
+	protected $entry_sitetree_hook=NULL;
 	protected $cma_info=NULL;
 
 	/**
@@ -202,7 +215,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 		$page=$matches[2];
 
 		require_code('content');
-		$cma_ob=get_content_object($content_type);
+		$cma_ob=get_content_object($this->content_type);
 		$cma_info=$cma_ob->info();
 		if ($cma_info['module']==$page)
 		{
@@ -287,10 +300,10 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			$title_value=$row[$cma_info['title_field']];
 			if ((isset($cma_info['title_field_supports_comcode'])) && ($cma_info['title_field_supports_comcode']))
 			{
-				$title=get_translated_tempcode($title_value);
+				$title=get_translated_tempcode($title_value,$cma_info['connection']);
 			} else
 			{
-				$title=make_string_tempcode(escape_html($cma_info['title_field_dereference']?get_translated_text($title_value):$title_value));
+				$title=make_string_tempcode(escape_html($cma_info['title_field_dereference']?get_translated_text($title_value,$cma_info['connection']):$title_value));
 			}
 		}
 
@@ -342,7 +355,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			$description=$row[$cma_info['description_field']];
 			if (is_integer($description))
 			{
-				$struct['extra_meta']['description']=get_translated_tempcode($description);
+				$struct['extra_meta']['description']=get_translated_tempcode($description,$cma_info['connection']);
 			} else
 			{
 				$struct['extra_meta']['description']=make_string_tempcode(escape_html($description));
@@ -441,6 +454,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			return array();
 		}
 
+		$cma_info=$this->_get_cma_info();
+
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$pagelink,$matches);
 		$page=$matches[2];
@@ -450,38 +465,65 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 		// Entries...
 		if ($cma_info['is_category'])
 		{
-			require_code('content');
-			$cma_entry_ob=get_content_object($this->entry_content_type);
-			$cma_entry_info=$cma_entry_ob->info();
-
-			if ((!$require_permission_support) || (isset($cma_entry_info['permissions_type_code'])))
+			if ($this->entry_content_type!==NULL)
 			{
-				$child_hook_ob=$this->_get_sitemap_object($this->entry_sitetree_hook);
-
-				$start=0;
-				do
+				for ($i=0;$i<count($this->entry_content_type);$i++)
 				{
-					$where=array();
-					$where[$cma_entry_info['category_field']]=$cma_entry_info['id_field_numeric']?intval($content_id):$content_id;
-					if (($consider_validation) && (isset($cma_entry_info['validated_field'])))
-						$where[$cma_entry_info['validated_field']]=1;
-					$rows=$cma_entry_info['connection']->query_select($cma_entry_info['table'],array('*'),$where,$extra_where_entries,SITEMAP_MAX_ROWS_PER_LOOP,$start);
-					foreach ($rows as $child_row)
+					$entry_content_type=$this->entry_content_type[$i];
+					$entry_sitetree_hook=$this->entry_sitetree_hook[$i];
+
+					require_code('content');
+					$cma_entry_ob=get_content_object($entry_content_type);
+					$cma_entry_info=$cma_entry_ob->info();
+
+					if ((!$require_permission_support) || (isset($cma_entry_info['permissions_type_code'])))
 					{
-						$child_pagelink=$zone.':'.$page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']])):$child_row[$cma_entry_info['id_field']];
-						$node=$child_hook_ob->_create_partial_node_structure($child_pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
-						if ($node!==NULL)
-							$children[]=$node;
+						$child_hook_ob=$this->_get_sitemap_object($entry_sitetree_hook);
+
+						$children_entries=array();
+
+						$privacy_join='';
+						$privacy_where='';
+						if ((isset($cma_entry_info['supports_privacy'])) && ($cma_entry_info['supports_privacy']))
+						{
+							if (addon_installed('content_privacy'))
+							{
+								require_code('content_privacy');
+								list($privacy_join,$privacy_where)=get_privacy_where_clause($entry_content_type,'r');
+							}
+						}
+
+						$start=0;
+						do
+						{
+							$where=array();
+							$where[$cma_entry_info['category_field']]=$cma_entry_info['id_field_numeric']?intval($content_id):$content_id;
+							if (($consider_validation) && (isset($cma_entry_info['validated_field'])))
+								$where[$cma_entry_info['validated_field']]=1;
+							$rows=$cma_entry_info['connection']->query_select($cma_entry_info['table'].' r'.$privacy_join,array('*'),$where,$extra_where_entries.$privacy_where,SITEMAP_MAX_ROWS_PER_LOOP,$start);
+							foreach ($rows as $child_row)
+							{
+								$child_pagelink=$zone.':'.$page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
+								$node=$child_hook_ob->_create_partial_node_structure($child_pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+								if ($node!==NULL)
+									$children_entries[]=$node;
+							}
+							$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+						}
+						while (count($rows)>0);
+
+						multi_sort($children_entries,'title');
+						$children=array_merge($children,$children_entries);
 					}
-					$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 				}
-				while (count($rows)>0);
 			}
 		}
 
 		// Subcategories...
 		if ((isset($cma_info['parent_spec__parent_name'])) && ($cma_info['parent_category_meta_aware_type']==$this->content_type))
 		{
+			$children_categories=array();
+
 			$start=0;
 			do
 			{
@@ -495,11 +537,14 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 					$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.($cma_info['category_is_string']?$child_row[$cma_info['id_field']]:strval($child_row[$cma_info['id_field']]));
 					$node=$this->_create_partial_node_structure($child_pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 					if ($node!==NULL)
-						$children[]=$node;
+						$children_categories[]=$node;
 				}
 				$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 			}
 			while (count($rows)>0);
+
+			multi_sort($children_categories,'title');
+			$children=array_merge($children,$children_categories);
 		}
 
 		return $children;
@@ -518,7 +563,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 		$id=$matches[3];
 
 		require_code('content');
-		$cma_ob=get_content_object($content_type);
+		$cma_ob=get_content_object($this->content_type);
 		$cma_info=$cma_ob->info();
 
 		return array($id,$cma_info['permissions_type_code']);
@@ -585,7 +630,7 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 						break;
 
 					case 'page':
-						if (!has_zone_access($check_permissions_for,$permission['zone_name'],$permission['page_name']))
+						if (!has_page_access($check_permissions_for,$permission['zone_name'],$permission['page_name']))
 							return '';
 						break;
 
@@ -601,7 +646,7 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 				{
 					if (preg_match('#^submit_#',$permission['privilege'])!=0)
 					{
-						if (!has_privilege($check_permissions_for,$permission['privilege'],$privilege['page_name'],array($privilege['permission_module'],$privilege['category_name'])))
+						if (!has_privilege($check_permissions_for,$permission['privilege'],$permission['page_name'],array($permission['permission_module'],$permission['category_name'])))
 							return '';
 					}
 				}
@@ -609,7 +654,7 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 				{
 					if (preg_match('#^edit_#',$permission['privilege'])!=0)
 					{
-						if (!has_privilege($check_permissions_for,$permission['privilege'],$privilege['page_name'],array($privilege['permission_module'],$privilege['category_name'])))
+						if (!has_privilege($check_permissions_for,$permission['privilege'],$permission['page_name'],array($permission['permission_module'],$permission['category_name'])))
 							return '';
 					}
 				}
@@ -617,7 +662,7 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 				{
 					if (preg_match('#^delete_#',$permission['privilege'])!=0)
 					{
-						if (!has_privilege($check_permissions_for,$permission['privilege'],$privilege['page_name'],array($privilege['permission_module'],$privilege['category_name'])))
+						if (!has_privilege($check_permissions_for,$permission['privilege'],$permission['page_name'],array($permission['permission_module'],$permission['category_name'])))
 							return '';
 					}
 				}
@@ -633,10 +678,12 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 		if (!call_user_func($filter_func,$node)) return '';
 	}
 
+	$content_id=$node['content_id'];
+
 	// Recurse, working out $children and $compound_list
 	$children=new ocp_tempcode();
 	$child_compound_list='';
-	foreach ($node['children'] as $node)
+	foreach ($node['children'] as $child_node)
 	{
 		$_child_compound_list=_create_selection_list($children,$child_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func,$depth+1);
 		if ($_child_compound_list!='')
@@ -646,8 +693,7 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 
 	// Handle node
 	$title=str_repeat(' ',$depth).$node['title'];
-	$content_id=$node['content_id'];
-	$selected=($content_id===is_integer($default)?strval($default):$default);
+	$selected=($content_id===(is_integer($default)?strval($default):$default));
 	$disabled=(!is_null($valid_selectable_content_types) && !in_array($node['content_type'],$valid_selectable_content_types));
 	$_content_id=$use_compound_list?$compound_list:$content_id;
 	$out->attach(form_input_list_entry($_content_id,$selected,$title,false,$disabled));

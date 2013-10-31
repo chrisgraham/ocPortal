@@ -90,6 +90,7 @@ class Hook_addon_registry_search
 			'sources/hooks/systems/realtime_rain/search.php',
 			'themes/default/templates/TAGS.tpl',
 			'sources/blocks/side_tag_cloud.php',
+			'sources/hooks/systems/sitemap/search.php',
 			'themes/default/templates/BLOCK_SIDE_TAG_CLOUD.tpl',
 			'themes/default/templates/SEARCH_RESULT.tpl',
 			'themes/default/templates/SEARCH_RESULT_TABLE.tpl',

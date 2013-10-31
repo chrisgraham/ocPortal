@@ -64,7 +64,7 @@ class Hook_sitemap_iotd extends Hook_sitemap_content
 			foreach ($rows as $row)
 			{
 				$child_pagelink=$zone.':iotds:'.$this->screen_type.':'.strval($row['id']);
-				$node=get_node($child_pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+				$node=$this->get_node($child_pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 				if ($callback===NULL) $nodes[]=$node;
 			}
 
@@ -101,7 +101,7 @@ class Hook_sitemap_iotd extends Hook_sitemap_content
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_LOW,
 			'sitemap_refreshfreq'=>'never',
 
-			'permission_page'='cms_iotds'; // Where privileges are overridden on
+			'permission_page'=>'cms_iotds', // Where privileges are overridden on
 		)+$partial_struct;
 
 		if ($callback!==NULL)
@@ -109,7 +109,7 @@ class Hook_sitemap_iotd extends Hook_sitemap_content
 
 		// Categories done after node callback, to ensure sensible ordering
 		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-		$struct['children']=$children_struct;
+		$struct['children']=$children;
 
 		return ($callback===NULL)?$struct:NULL;
 	}

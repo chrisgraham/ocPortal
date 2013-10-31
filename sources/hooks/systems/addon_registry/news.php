@@ -101,6 +101,8 @@ class Hook_addon_registry_news
 			'sources/hooks/systems/config/ping_url.php',
 			'sources/hooks/systems/config/points_ADD_NEWS.php',
 			'sources/hooks/systems/profiles_tabs/blog.php',
+			'sources/hooks/systems/sitemap/news.php',
+			'sources/hooks/systems/sitemap/news_category.php',
 			'themes/default/templates/NEWS_ARCHIVE_SCREEN.tpl',
 			'themes/default/templates/NEWS_ENTRY_SCREEN.tpl',
 			'themes/default/templates/BLOCK_BOTTOM_NEWS.tpl',

@@ -159,6 +159,9 @@ class Hook_addon_registry_iotds
 			'themes/default/templates_custom/IOTD_ADMIN_CHOOSE_SCREEN.tpl',
 			'uploads/iotds/.htaccess',
 			'uploads/iotds_thumbs/.htaccess',
+			'sources_custom/hooks/systems/sitemap/.htaccess',
+			'sources_custom/hooks/systems/sitemap/index.html',
+			'sources_custom/hooks/systems/sitemap/iotd.php',
 		);
 	}
 

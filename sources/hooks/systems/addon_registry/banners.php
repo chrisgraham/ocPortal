@@ -109,6 +109,7 @@ class Hook_addon_registry_banners
 			'themes/default/templates/BLOCK_MAIN_TOPSITES.tpl',
 			'themes/default/templates/BLOCK_MAIN_BANNER_WAVE.tpl',
 			'themes/default/templates/BLOCK_MAIN_BANNER_WAVE_BWRAP.tpl',
+			'sources/hooks/systems/sitemap/banner.php',
 			'banner.php',
 			'uploads/banners/index.html',
 			'themes/default/images/bigicons/banners.png',

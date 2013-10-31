@@ -113,6 +113,7 @@ class Hook_addon_registry_chat
 			'sources/hooks/systems/realtime_rain/chat.php',
 			'sources/hooks/systems/symbols/CHAT_IM.php',
 			'sources/hooks/systems/profiles_tabs/friends.php',
+			'sources/hooks/systems/sitemap/chat.php',
 			'uploads/personal_sound_effects/index.html',
 			'uploads/personal_sound_effects/.htaccess',
 			'data/sounds/contact_off.mp3',

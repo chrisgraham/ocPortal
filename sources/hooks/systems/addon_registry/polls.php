@@ -98,6 +98,7 @@ class Hook_addon_registry_polls
 			'sources/hooks/systems/preview/poll.php',
 			'sources/hooks/modules/admin_setupwizard/polls.php',
 			'sources/hooks/modules/admin_import_types/polls.php',
+			'sources/hooks/systems/sitemap/poll.php',
 			'themes/default/templates/POLL_BOX.tpl',
 			'themes/default/templates/POLL_ANSWER.tpl',
 			'themes/default/templates/POLL_ANSWER_RESULT.tpl',

@@ -362,13 +362,13 @@ class Module_banners
 
 		switch ($myrow['the_type'])
 		{
-			case 0:
+			case BANNER_PERMANENT:
 				$type=do_lang_tempcode('BANNER_PERMANENT');
 				break;
-			case 1:
+			case BANNER_CAMPAIGN:
 				$type=do_lang_tempcode('_BANNER_HITS_LEFT',do_lang_tempcode('BANNER_CAMPAIGN'),make_string_tempcode(integer_format($myrow['campaign_remaining'])));
 				break;
-			case 2:
+			case BANNER_DEFAULT:
 				$type=do_lang_tempcode('BANNER_DEFAULT');
 				break;
 		}

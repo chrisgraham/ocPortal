@@ -73,7 +73,7 @@ class Hook_content_meta_aware_comcode_page
 
 			'feedback_type_code'=>NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+			'permissions_type_code'=>NULL,
 
 			'search_hook'=>'comcode_pages',
 

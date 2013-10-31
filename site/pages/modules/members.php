@@ -53,41 +53,6 @@ class Module_members
 		return $ret;
 	}
 
-	/**
-	 * Standard modular new-style deep page-link finder function (does not return the main entry-points).
-	 *
-	 * @param  string  	Callback function to send discovered page-links to.
-	 * @param  MEMBER		The member we are finding stuff for (we only find what the member can view).
-	 * @param  integer	Code for how deep we are tunnelling down, in terms of whether we are getting entries as well as categories.
-	 * @param  string		Stub used to create page-links. This is passed in because we don't want to assume a zone or page name within this function.
-	 */
-	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub)
-	{
-		if (get_forum_type()!='ocf') return;
-
-		// Entries
-		if ($depth>=DEPTH__ENTRIES)
-		{
-			$start=0;
-			do
-			{
-				$members=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username AS title','m_join_time'),NULL,'',500,$start);
-
-				foreach ($members as $row)
-				{
-					if ($row['id']!=db_get_first_id())
-					{
-						$pagelink=$pagelink_stub.'view:'.strval($row['id']);
-						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',$row['m_join_time'],NULL,0.1,$row['title'])); // Callback
-					}
-				}
-
-				$start+=500;
-			}
-			while (array_key_exists(0,$members));
-		}
-	}
-
 	var $title;
 	var $username;
 	var $member_id_of;

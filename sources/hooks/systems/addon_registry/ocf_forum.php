@@ -103,6 +103,8 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/systems/content_meta_aware/post.php',
 			'sources/hooks/systems/occle_fs/forums.php',
 			'sources/hooks/modules/admin_stats/ocf_posting_rates.php',
+			'sources/hooks/systems/sitemap/topic.php',
+			'sources/hooks/systems/sitemap/forum.php',
 			'themes/default/images/bigicons/statistics_posting_rates.png',
 			'themes/default/templates/OCF_BIRTHDAY_LINK.tpl',
 			'themes/default/templates/OCF_FORUM_INTRO_QUESTION_POPUP.tpl',

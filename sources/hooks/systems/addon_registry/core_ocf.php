@@ -98,6 +98,8 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/snippets/exists_emoticon.php',
 			'themes/default/images/pagepics/usergroups_temp.png',
 			'themes/default/images/bigicons/usergroups_temp.png',
+			'sources/hooks/systems/sitemap/group.php',
+			'sources/hooks/systems/sitemap/member.php',
 			'sources/hooks/systems/config/allow_alpha_search.php',
 			'sources/hooks/systems/config/allow_email_disable.php',
 			'sources/hooks/systems/config/allow_email_from_staff_disable.php',

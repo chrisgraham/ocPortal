@@ -85,6 +85,7 @@ class Hook_addon_registry_wiki
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/sitemap/wiki_page.php',
 			'sources/hooks/systems/content_meta_aware/wiki_page.php',
 			'sources/hooks/systems/content_meta_aware/wiki_post.php',
 			'sources/hooks/systems/occle_fs/wiki.php',

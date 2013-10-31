@@ -131,6 +131,8 @@ class Hook_addon_registry_downloads
 			'cms/pages/modules/cms_downloads.php',
 			'lang/EN/downloads.ini',
 			'site/pages/modules/downloads.php',
+			'sources/hooks/systems/sitemap/download.php',
+			'sources/hooks/systems/sitemap/download_category.php',
 			'sources/downloads.php',
 			'sources/downloads2.php',
 			'sources/downloads_stats.php',

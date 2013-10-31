@@ -107,6 +107,7 @@ class Hook_addon_registry_core_comcode_pages
 			'sources/hooks/modules/admin_newsletter/comcode_pages.php',
 			'sources/hooks/systems/config/comcode_page_default_review_freq.php',
 			'sources/hooks/systems/config/is_on_comcode_page_children.php',
+			'sources/hooks/systems/sitemap/comcode_page.php',
 		);
 	}
 

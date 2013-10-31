@@ -108,6 +108,7 @@ class Hook_addon_registry_quizzes
 			'cms/pages/modules/cms_quiz.php',
 			'lang/EN/quiz.ini',
 			'site/pages/modules/quiz.php',
+			'sources/hooks/systems/sitemap/quiz.php',
 			'sources/hooks/modules/admin_newsletter/quiz.php',
 			'sources/hooks/modules/admin_unvalidated/quiz.php',
 			'sources/hooks/modules/search/quiz.php',

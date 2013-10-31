@@ -759,9 +759,10 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 							case 'FUNCTION':
 								// Valid
 								break;
+							case 'variable':
 							case 'VAR':
 								// Invalid
-								log_warning('Member variables cannot be abstract.');
+								log_warning('Abstract keyword applied to member variable');
 								break;
 							default:
 								// Invalid
@@ -772,6 +773,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 					case 'FUNCTION':
 						// Valid
 						break;
+					case 'variable':
 					case 'VAR':
 						log_warning('Abstract keyword applied to member variable');
 						break;

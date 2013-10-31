@@ -139,6 +139,8 @@ class Hook_addon_registry_calendar
 			'lang/EN/calendar.ini',
 			'site/pages/modules/calendar.php',
 			'sources/blocks/side_calendar.php',
+			'sources/hooks/systems/sitemap/calendar_type.php',
+			'sources/hooks/systems/sitemap/event.php',
 			'sources/calendar.php',
 			'sources/calendar2.php',
 			'sources/calendar_ical.php',
