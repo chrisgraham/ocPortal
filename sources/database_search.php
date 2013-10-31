@@ -735,6 +735,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		$db->dedupe_mode=true;
 		$t_main_search_rows_count=$db->query_value_null_ok_full($_count_query_main_search);
 		$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
+		if ($t_main_search_rows===NULL) $t_main_search_rows=array(); // In case of a failed search query
 		$db->dedupe_mode=false;
 		$t_count+=$t_main_search_rows_count;
 	} else

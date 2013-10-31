@@ -126,7 +126,10 @@ function handle_facebook_connection_login($current_logged_in_member)
 	$email_address=array_key_exists('email',$details)?$details['email']:'';
 	$timezone=mixed();
 	if (isset($details['timezone']))
+	{
+		require_code('temporal');
 		$timezone=convert_timezone_offset_to_formal_timezone($details['timezone']);
+	}
 	$language=mixed();
 	if (isset($details['locale']))
 		$language=strtoupper($details['locale']);
