@@ -357,15 +357,7 @@ function _imap_get_part($stream,$msg_number,$mime_type,&$attachments,&$attachmen
 			if ($attachment_size_total+$structure->bytes<1024*1024*20/*20MB is quite enough, thankyou*/)
 			{
 				$filedata=imap_fetchbody($stream,$msg_number,$part_number);
-				if ($structure->encoding==0)
-				{
-					$filedata=imap_utf7_decode($filedata);
-				}
-				elseif ($structure->encoding==1)
-				{
-					$filedata=imap_utf8($filedata);
-				}
-				elseif ($structure->encoding==3)
+				if ($structure->encoding==3)
 				{
 					$filedata=imap_base64($filedata);
 				}
@@ -394,17 +386,7 @@ function _imap_get_part($stream,$msg_number,$mime_type,&$attachments,&$attachmen
 				$part_number='1';
 			}
 			$filedata=imap_fetchbody($stream,$msg_number,$part_number);
-			if ($structure->encoding==0)
-			{
-				$filedata=imap_utf7_decode($filedata);
-				$filedata=convert_to_internal_encoding($filedata,'iso-8859-1');
-			}
-			elseif ($structure->encoding==1)
-			{
-				$filedata=imap_utf8($filedata);
-				$filedata=convert_to_internal_encoding($filedata,'utf-8');
-			}
-			elseif ($structure->encoding==3)
+			if ($structure->encoding==3)
 			{
 				$filedata=imap_base64($filedata);
 				$filedata=convert_to_internal_encoding($filedata,'iso-8859-1');
