@@ -143,6 +143,7 @@ function assign_refresh($url,$multiplier)
 	// Fudge so that redirects can't count as flooding
 	if (get_forum_type()=='ocf')
 	{
+		require_code('ocf_groups');
 		$restrict_answer=ocf_get_best_group_property($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),'flood_control_access_secs');
 		if ($restrict_answer!=0)
 		{
