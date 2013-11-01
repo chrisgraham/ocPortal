@@ -135,6 +135,7 @@ function persistent_cache_delete($key)
  */
 function persistent_cache_empty()
 {
+	// TODO: Fix dir in v10
 	$d=opendir(get_custom_file_base().'/persistent_cache');
 	while (($e=readdir($d))!==false)
 	{
