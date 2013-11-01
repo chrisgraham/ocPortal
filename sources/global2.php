@@ -12,6 +12,8 @@
 
 */
 
+/*EXTRA FUNCTIONS: memory_get_peak_usage*/
+
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -206,6 +208,10 @@ function init__global2()
 			{
 				fast_spider_cache(true);
 			}
+			if ((isset($SITE_INFO['any_guest_cached_too'])) && ($SITE_INFO['any_guest_cached_too']=='1') && (count(array_diff_key($_COOKIE,array('__utma'=>0,'__utmc'=>0,'__utmz'=>0,'has_cookies'=>0,'last_visit'=>0)))==0) && ((!isset($SITE_INFO['backdoor_ip'])) || ($SITE_INFO['backdoor_ip']!=get_ip_address())) && (!isset($_GET['keep_session'])))
+			{
+				fast_spider_cache(false);
+			}
 		}
 	}
 	require_code('caches');
@@ -392,6 +398,11 @@ function init__global2()
 			}
 		}
 	}
+	$memory_tracking=get_value('memory_tracking');
+	if (!empty($memory_tracking))
+	{
+		register_shutdown_function('memory_tracking');
+	}
 
 	// Detect and deal with spammers that triggered the spam blackhole
 	if ((count($_POST)>0) && (get_option('spam_blackhole_detection')=='1'))
@@ -421,6 +432,18 @@ function init__global2()
 			require_code('upgrade');
 			automate_upgrade__safe();
 		}
+	}
+}
+
+/**
+ * Log excessive memory usage.
+ */
+function memory_tracking()
+{
+	$memory_tracking=intval(get_value('memory_tracking'));
+	if (memory_get_peak_usage()>1024*1024*$memory_tracking)
+	{
+		@error_log('Memory usage above memory_tracking ('.strval($memory_tracking).'MB) @ '.get_self_url_easy(),0);
 	}
 }
 

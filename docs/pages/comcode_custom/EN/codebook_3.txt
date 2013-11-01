@@ -283,7 +283,7 @@ We also have the following which are either unlikely to be useful, or potentiall
   - [tt]company_name[/tt] -- if ocPortal is being rebranded to be 'made' by another company, set the name here (this has no effect of copyright of course, but ocProducts allows this)
  - Developer testing
   - [tt]notification_safety_testing[/tt] -- set this to '1' to enable extra checks to ensure notifications or welcome emails don't get mistargeted/over-sent
-  - [tt]memory_tracking[/tt] -- set this to '1' if you want error mails to go out if a non-admin uses more than 50MB of memory. The check happens during Tempcode output phase
+  - [tt]memory_tracking[/tt] -- set this to the number of megabytes peak memory usage after which you want the execution URL to be silently logged to the error log (useful for debugging memory usage on a live site). The value must be an integer, with no trailing 'M'. This does not impose a memory limit, which is 64MB by default in ocPortal, but may be turned off within certain carefully-chosen execution contexts (usually admin tasks which are necessarily memory consuming). Requires PHP 5.2+.
  - For system-integrators
   - [tt]agency_email_address[/tt] -- set this to a secondary e-mail address where you would like all error e-mails to go (the primary one being the staff address). Only set this if you are an agency and want to receive error e-mails in addition/instead of your client
  - For back-end developers
