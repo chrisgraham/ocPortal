@@ -78,6 +78,16 @@ class Hook_addon_registry_core_language_editing
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/style/language/language.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,12 @@ class Hook_addon_registry_core_language_editing
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/style/language/criticise_language.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/language/language.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/language/criticise_language.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/language/language.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/language/index.html',
+			'themes/default/images/icons/48x48/menu/adminzone/style/language/index.html',
 			'themes/default/css/translations_editor.css',
 			'sources/hooks/systems/addon_registry/core_language_editing.php',
 			'sources/hooks/blocks/main_staff_checklist/translations.php',

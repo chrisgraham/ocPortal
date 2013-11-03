@@ -83,6 +83,16 @@ class Hook_addon_registry_ocf_forum
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/social/forum/forums.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -90,6 +100,50 @@ class Hook_addon_registry_ocf_forum
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/posting_rates.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/posting_rates.png',
+			'themes/default/images/icons/24x24/menu/social/forum/forums.png',
+			'themes/default/images/icons/48x48/menu/social/forum/forums.png',
+			'themes/default/images/icons/24x24/buttons/new_topic.png',
+			'themes/default/images/icons/48x48/buttons/new_topic.png',
+			'themes/default/images/icons/24x24/menu/social/forum/vforums/involved_topics.png',
+			'themes/default/images/icons/24x24/menu/social/forum/vforums/posts_since_last_visit.png',
+			'themes/default/images/icons/24x24/menu/social/forum/vforums/recently_read_topics.png',
+			'themes/default/images/icons/24x24/menu/social/forum/vforums/unanswered_topics.png',
+			'themes/default/images/icons/24x24/menu/social/forum/vforums/unread_topics.png',
+			'themes/default/images/icons/48x48/menu/social/forum/vforums/involved_topics.png',
+			'themes/default/images/icons/48x48/menu/social/forum/vforums/posts_since_last_visit.png',
+			'themes/default/images/icons/48x48/menu/social/forum/vforums/recently_read_topics.png',
+			'themes/default/images/icons/48x48/menu/social/forum/vforums/unanswered_topics.png',
+			'themes/default/images/icons/48x48/menu/social/forum/vforums/unread_topics.png',
+			'themes/default/images/icons/24x24/buttons/mark_read_forum.png',
+			'themes/default/images/icons/24x24/buttons/mark_read_topic.png',
+			'themes/default/images/icons/24x24/buttons/mark_unread_forum.png',
+			'themes/default/images/icons/24x24/buttons/mark_unread_topic.png',
+			'themes/default/images/icons/48x48/buttons/mark_read_forum.png',
+			'themes/default/images/icons/48x48/buttons/mark_read_topic.png',
+			'themes/default/images/icons/48x48/buttons/mark_unread_forum.png',
+			'themes/default/images/icons/48x48/buttons/mark_unread_topic.png',
+			'themes/default/images/icons/24x24/buttons/forum.png',
+			'themes/default/images/icons/48x48/buttons/forum.png',
+			'themes/default/images/icons/24x24/buttons/history.png',
+			'themes/default/images/icons/48x48/buttons/history.png',
+			'themes/default/images/icons/24x24/buttons/linear.png',
+			'themes/default/images/icons/48x48/buttons/linear.png',
+			'themes/default/images/icons/24x24/buttons/threaded.png',
+			'themes/default/images/icons/48x48/buttons/threaded.png',
+			'themes/default/images/icons/24x24/buttons/whisper.png',
+			'themes/default/images/icons/48x48/buttons/whisper.png',
+			'themes/default/images/icons/24x24/buttons/quote.png',
+			'themes/default/images/icons/48x48/buttons/quote.png',
+			'themes/default/images/icons/24x24/buttons/quick_reply.png',
+			'themes/default/images/icons/48x48/buttons/quick_reply.png',
+			'themes/default/images/icons/24x24/menu/adminzone/structure/forum/index.html',
+			'themes/default/images/icons/24x24/menu/social/forum/index.html',
+			'themes/default/images/icons/24x24/menu/social/forum/vforums/index.html',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/forum/index.html',
+			'themes/default/images/icons/48x48/menu/social/forum/index.html',
+			'themes/default/images/icons/48x48/menu/social/forum/vforums/index.html',
 			'sources/hooks/systems/ocf_cpf_filter/notifications.php',
 			'sources/hooks/systems/resource_meta_aware/forum_grouping.php',
 			'sources/hooks/systems/occle_fs/forum_groupings.php',

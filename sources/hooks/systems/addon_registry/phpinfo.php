@@ -78,6 +78,16 @@ class Hook_addon_registry_phpinfo
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/tools/phpinfo.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_phpinfo
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/tools/phpinfo.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/phpinfo.png',
 			'themes/default/css/phpinfo.css',
 			'sources/hooks/systems/do_next_menus/phpinfo.php',
 			'sources/hooks/systems/addon_registry/phpinfo.php',

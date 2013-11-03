@@ -77,6 +77,16 @@ class Hook_addon_registry_ssl
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/security/ssl.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_ssl
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/security/ssl.png',
+			'themes/default/images/icons/48x48/menu/adminzone/security/ssl.png',
 			'sources/hooks/systems/addon_registry/ssl.php',
 			'themes/default/templates/SSL_CONFIGURATION_SCREEN.tpl',
 			'themes/default/templates/SSL_CONFIGURATION_ENTRY.tpl',

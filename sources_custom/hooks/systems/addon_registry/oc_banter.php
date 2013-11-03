@@ -120,6 +120,16 @@ The insulted member has to try and make the right reply, if they succeed then th
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images_custom/icons/48x48/menu/insults.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files

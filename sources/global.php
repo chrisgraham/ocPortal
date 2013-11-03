@@ -371,11 +371,11 @@ function tacit_https()
  * @param  boolean		Whether to return NULL if there is no such class
  * @return ?object		The object (NULL: no such class)
  */
-function object_factory($class,$null_ok=false)
+function object_factory($class,$failure_ok=false)
 {
 	if (!class_exists($class))
 	{
-		if ($null_ok) return NULL;
+		if ($failure_ok) return NULL;
 		fatal_exit(escape_html('Missing class: '.$class));
 	}
 	return new $class;

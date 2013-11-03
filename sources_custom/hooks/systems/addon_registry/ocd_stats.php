@@ -119,6 +119,16 @@ The new stats include: Google PageRank, Alexa rank, Back links and Speed results
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files

@@ -77,6 +77,16 @@ class Hook_addon_registry_quizzes
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/rich_content/quiz.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,14 @@ class Hook_addon_registry_quizzes
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/cms/quiz/find_winners.png',
+			'themes/default/images/icons/24x24/menu/cms/quiz/survey_results.png',
+			'themes/default/images/icons/48x48/menu/cms/quiz/find_winners.png',
+			'themes/default/images/icons/48x48/menu/cms/quiz/survey_results.png',
+			'themes/default/images/icons/24x24/menu/rich_content/quiz.png',
+			'themes/default/images/icons/48x48/menu/rich_content/quiz.png',
+			'themes/default/images/icons/24x24/menu/cms/quiz/index.html',
+			'themes/default/images/icons/48x48/menu/cms/quiz/index.html',
 			'sources/hooks/systems/notifications/quiz_results.php',
 			'sources/hooks/systems/config/points_ADD_QUIZ.php',
 			'sources/hooks/systems/config/quiz_show_stats_count_total_open.php',

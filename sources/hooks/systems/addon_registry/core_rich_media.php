@@ -79,6 +79,16 @@ class Hook_addon_registry_core_rich_media
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,14 @@ class Hook_addon_registry_core_rich_media
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/1x/editor/insert_emoticons.png',
+			'themes/default/images/1x/editor/wysiwyg_off.png',
+			'themes/default/images/1x/editor/wysiwyg_on.png',
+			'themes/default/images/2x/editor/insert_emoticons.png',
+			'themes/default/images/2x/editor/wysiwyg_off.png',
+			'themes/default/images/2x/editor/wysiwyg_on.png',
+			'themes/default/images/1x/editor/index.html',
+			'themes/default/images/2x/editor/index.html',
 			'sources/hooks/systems/addon_registry/core_rich_media.php',
 			'themes/default/templates/JAVASCRIPT_DYN_COMCODE.tpl',
 			'themes/default/templates/EMOTICON_CLICK_CODE.tpl',

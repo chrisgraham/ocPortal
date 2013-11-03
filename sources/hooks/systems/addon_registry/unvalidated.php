@@ -80,6 +80,16 @@ class Hook_addon_registry_unvalidated
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/audit/unvalidated.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -87,6 +97,12 @@ class Hook_addon_registry_unvalidated
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/unvalidated.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/unvalidated.png',
+			'themes/default/images/icons/24x24/buttons/validate.png',
+			'themes/default/images/icons/48x48/buttons/validate.png',
+			'themes/default/images/icons/24x24/buttons/unvalidate.png',
+			'themes/default/images/icons/48x48/buttons/unvalidate.png',
 			'sources/hooks/systems/notifications/content_validated.php',
 			'sources/hooks/systems/notifications/needs_validation.php',
 			'sources/hooks/systems/addon_registry/unvalidated.php',

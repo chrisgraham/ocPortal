@@ -78,6 +78,16 @@ class Hook_addon_registry_occle
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/tools/occle.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,12 @@ class Hook_addon_registry_occle
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/tools/occle.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/occle.png',
+			'themes/default/images/icons/24x24/tool_buttons/occle_off.png',
+			'themes/default/images/icons/24x24/tool_buttons/occle_on.png',
+			'themes/default/images/icons/48x48/tool_buttons/occle_off.png',
+			'themes/default/images/icons/48x48/tool_buttons/occle_on.png',
 			'sources/hooks/systems/occle_commands/find_guid_via_id.php',
 			'sources/hooks/systems/occle_commands/find_id_via_guid.php',
 			'sources/hooks/systems/occle_commands/find_id_via_label.php',

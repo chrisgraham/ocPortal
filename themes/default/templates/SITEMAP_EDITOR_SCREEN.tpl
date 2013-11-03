@@ -39,7 +39,7 @@
 				var permission_tree_editor_url='{$PAGE_LINK*;,_SEARCH:admin_permissions:type=misc:id=!}';
 				var edit_page_url='{$PAGE_LINK*;,cms:cms_comcode_pages:type=_ed:page_link=!}';
 				var export_page_url='{$PAGE_LINK*;,_SELF:_SELF:type=export:page_link=!}';
-				var add_page_url='{$PAGE_LINK*;,_SELF:_SELF:type=pagewizard:zone=!}';
+				var add_page_url='{$PAGE_LINK*;,_SELF:_SELF:type=page_wizard:zone=!}';
 				var delete_url='{$PAGE_LINK*;,_SELF:_SELF:type=_delete:zone=[1]:page__[2]=1}';
 				var stats_url='{+START,IF,{$ADDON_INSTALLED,stats}}{$PAGE_LINK*;,_SEARCH:admin_stats:type=_page:iscreen=!}{+END}';
 				var move_url='{$PAGE_LINK;,_SELF:_SELF:type=_move:zone=[1]:destination_zone=[3]:page__[2]=1}'; // Intentionally not escaped

@@ -1107,7 +1107,7 @@ class Module_admin_setupwizard
 		// Show nice interface to start adding pages
 		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
 			array(
-				addon_installed('page_management')?array('menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'pagewizard'),get_module_zone('admin_sitemap')),do_lang('PAGE_WIZARD')):NULL,
+				addon_installed('page_management')?array('menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'page_wizard'),get_module_zone('admin_sitemap')),do_lang('PAGE_WIZARD')):NULL,
 				array('menu/pages/help',array(NULL,array(),'')),
 				array('menu/cms/cms',array(NULL,array(),'cms')),
 				array('menu/adminzone/adminzone',array(NULL,array(),'adminzone')),

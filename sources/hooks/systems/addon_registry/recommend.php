@@ -77,6 +77,16 @@ class Hook_addon_registry_recommend
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/site_meta/recommend.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,18 @@ class Hook_addon_registry_recommend
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/site_meta/recommend.png',
+			'themes/default/images/icons/48x48/menu/site_meta/recommend.png',
+			'themes/default/images/icons/24x24/action_links/digg.png',
+			'themes/default/images/icons/24x24/action_links/facebook.png',
+			'themes/default/images/icons/24x24/action_links/index.html',
+			'themes/default/images/icons/24x24/action_links/stumbleupon.png',
+			'themes/default/images/icons/24x24/action_links/twitter.png',
+			'themes/default/images/icons/48x48/action_links/digg.png',
+			'themes/default/images/icons/48x48/action_links/facebook.png',
+			'themes/default/images/icons/48x48/action_links/index.html',
+			'themes/default/images/icons/48x48/action_links/stumbleupon.png',
+			'themes/default/images/icons/48x48/action_links/twitter.png',
 			'sources/hooks/systems/config/points_RECOMMEND_SITE.php',
 			'sources/hooks/systems/realtime_rain/recommend.php',
 			'sources/hooks/systems/addon_registry/recommend.php',

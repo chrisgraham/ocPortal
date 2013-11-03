@@ -77,6 +77,16 @@ class Hook_addon_registry_tickets
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/site_meta/tickets.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,12 @@ class Hook_addon_registry_tickets
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/site_meta/tickets.png',
+			'themes/default/images/icons/48x48/menu/site_meta/tickets.png',
+			'themes/default/images/icons/24x24/buttons/add_ticket.png',
+			'themes/default/images/icons/48x48/buttons/add_ticket.png',
+			'themes/default/images/icons/24x24/buttons/staff_only_reply.png',
+			'themes/default/images/icons/48x48/buttons/staff_only_reply.png',
 			'sources/hooks/systems/resource_meta_aware/ticket_type.php',
 			'sources/hooks/systems/occle_fs/ticket_types.php',
 			'sources/hooks/systems/config/ticket_forum_name.php',

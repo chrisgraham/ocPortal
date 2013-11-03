@@ -80,6 +80,16 @@ class Hook_addon_registry_custom_comcode
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/setup/custom_comcode.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -87,6 +97,8 @@ class Hook_addon_registry_custom_comcode
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/setup/custom_comcode.png',
+			'themes/default/images/icons/48x48/menu/adminzone/setup/custom_comcode.png',
 			'sources/hooks/systems/resource_meta_aware/custom_comcode_tag.php',
 			'sources/custom_comcode.php',
 			'sources/hooks/systems/snippets/exists_tag.php',

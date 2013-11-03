@@ -78,6 +78,16 @@ class Hook_addon_registry_ocf_contact_member
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/links/contact_member.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_ocf_contact_member
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/links/contact_member.png',
+			'themes/default/images/icons/48x48/links/contact_member.png',
 			'site/pages/modules/contact_member.php',
 			'sources/hooks/systems/addon_registry/ocf_contact_member.php',
 		);

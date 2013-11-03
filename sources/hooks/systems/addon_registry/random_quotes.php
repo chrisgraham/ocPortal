@@ -77,6 +77,16 @@ class Hook_addon_registry_random_quotes
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/style/quotes.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_random_quotes
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/style/quotes.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/quotes.png',
 			'sources/hooks/blocks/main_notes/quotes.php',
 			'sources/hooks/modules/admin_import_types/quotes.php',
 			'sources/hooks/modules/admin_setupwizard/random_quotes.php',

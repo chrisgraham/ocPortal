@@ -891,10 +891,10 @@ class Module_cms_catalogues extends standard_crud_module
 			array(),
 			array(),
 			array(
-				has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
-				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$c_name),'_SELF')):NULL,
-				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
-				array('view_this',array('catalogues',array('type'=>'index','id'=>$c_name),get_module_zone('catalogues')),do_lang('VIEW_CATALOGUE'))
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
+				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$c_name),'_SELF')):NULL,
+				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
+				array('menu/_generic_admin/view_this',array('menu/cms/catalogues/catalogues',array('type'=>'index','id'=>$c_name),get_module_zone('catalogues')),do_lang('VIEW_CATALOGUE'))
 			),
 			do_lang('MANAGE_CATALOGUES')
 		);
@@ -1414,10 +1414,10 @@ class Module_cms_catalogues_cat extends standard_crud_module
 			/* SPECIALLY TYPED 'LINKS' */
 			array(),array(),
 			array(
-				has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
-				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$catalogue_name),'_SELF')):NULL,
-				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
-				array('view_this',array('catalogues',array('type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues')),do_lang('INDEX'))
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
+				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$catalogue_name),'_SELF')):NULL,
+				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
+				array('view_this',array('menu/cms/catalogues/catalogues',array('type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues')),do_lang('INDEX'))
 			),
 			do_lang('MANAGE_CATALOGUES')
 		);
@@ -2038,10 +2038,10 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			array(),
 			array(),
 			array(
-				array('add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')),
-				is_null($name)?NULL:array('edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$name),'_SELF')),
-				array('edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')),
-				is_null($name)?NULL:array('view_this',array('catalogues',$this->is_tree_catalogue?array('type'=>'category','catalogue_name'=>$name):array('type'=>'index','id'=>$name),get_module_zone('catalogues')))
+				array('menu/cms/catalogues/add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')),
+				is_null($name)?NULL:array('menu/cms/catalogues/edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$name),'_SELF')),
+				array('menu/cms/catalogues/edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')),
+				is_null($name)?NULL:array('view_this',array('menu/cms/catalogues/catalogues',$this->is_tree_catalogue?array('type'=>'category','catalogue_name'=>$name):array('type'=>'index','id'=>$name),get_module_zone('catalogues')))
 			),
 			do_lang('MANAGE_CATALOGUES')
 		);

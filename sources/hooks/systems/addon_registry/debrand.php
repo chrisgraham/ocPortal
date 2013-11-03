@@ -78,6 +78,16 @@ class Hook_addon_registry_debrand
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/style/debrand.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_debrand
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/style/debrand.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/debrand.png',
 			'sources/hooks/systems/addon_registry/debrand.php',
 			'adminzone/pages/modules/admin_debrand.php',
 			'sources/hooks/systems/do_next_menus/debrand.php',

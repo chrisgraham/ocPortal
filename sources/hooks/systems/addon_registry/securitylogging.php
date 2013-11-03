@@ -81,6 +81,16 @@ class Hook_addon_registry_securitylogging
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/audit/security_log.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -88,6 +98,12 @@ class Hook_addon_registry_securitylogging
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/security_log.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/security_log.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/users/investigate_user.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/users/investigate_user.png',
+			'themes/default/images/icons/24x24/menu/adminzone/security/ipban.png',
+			'themes/default/images/icons/48x48/menu/adminzone/security/ipban.png',
 			'sources/hooks/systems/realtime_rain/security.php',
 			'sources/hooks/systems/addon_registry/securitylogging.php',
 			'themes/default/templates/SECURITY_SCREEN.tpl',

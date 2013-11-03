@@ -81,6 +81,16 @@ class Hook_addon_registry_setupwizard
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/setup/setupwizard.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -88,6 +98,8 @@ class Hook_addon_registry_setupwizard
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/setup/setupwizard.png',
+			'themes/default/images/icons/48x48/menu/adminzone/setup/setupwizard.png',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/.htaccess',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/index.html',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/community.php',

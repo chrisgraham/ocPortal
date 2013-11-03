@@ -130,6 +130,16 @@ The blocks provided are [tt]main_activities[/tt] and the status entry box is cal
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images_custom/icons/48x48/tabs/member_account/activity.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -137,6 +147,8 @@ The blocks provided are [tt]main_activities[/tt] and the status entry box is cal
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images_custom/icons/24x24/tabs/member_account/activity.png',
+			'themes/default/images_custom/icons/48x48/tabs/member_account/activity.png',
 			'sources_custom/hooks/systems/addon_registry/activity_feed.php',
 			'sources_custom/hooks/systems/activities/.htaccess',
 			'sources_custom/hooks/systems/notifications/activity.php',

@@ -78,6 +78,16 @@ class Hook_addon_registry_core_menus
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/structure/menus.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_core_menus
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/structure/menus.png',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/menus.png',
 			'sources/hooks/systems/resource_meta_aware/menu.php',
 			'sources/hooks/systems/resource_meta_aware/menu_item.php',
 			'sources/hooks/systems/occle_fs/menus.php',

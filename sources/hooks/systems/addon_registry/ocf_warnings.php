@@ -78,6 +78,16 @@ class Hook_addon_registry_ocf_warnings
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/tabs/member_account/warnings.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_ocf_warnings
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/tabs/member_account/warnings.png',
+			'themes/default/images/icons/48x48/tabs/member_account/warnings.png',
 			'sources/hooks/systems/addon_registry/ocf_warnings.php',
 			'site/pages/modules/warnings.php',
 			'themes/default/templates/OCF_SAVED_WARNING.tpl',

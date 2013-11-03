@@ -79,6 +79,16 @@ class Hook_addon_registry_downloads
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/rich_content/downloads.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,14 @@ class Hook_addon_registry_downloads
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/rich_content/downloads.png',
+			'themes/default/images/icons/48x48/menu/rich_content/downloads.png',
+			'themes/default/images/icons/24x24/menu/cms/downloads/add_one_licence.png',
+			'themes/default/images/icons/24x24/menu/cms/downloads/edit_one_licence.png',
+			'themes/default/images/icons/48x48/menu/cms/downloads/add_one_licence.png',
+			'themes/default/images/icons/48x48/menu/cms/downloads/edit_one_licence.png',
+			'themes/default/images/icons/24x24/menu/cms/downloads/index.html',
+			'themes/default/images/icons/48x48/menu/cms/downloads/index.html',
 			'sources/hooks/systems/resource_meta_aware/download_licence.php',
 			'sources/hooks/systems/occle_fs/download_licences.php',
 			'sources/hooks/systems/preview/download.php',

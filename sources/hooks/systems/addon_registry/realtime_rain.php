@@ -77,6 +77,16 @@ class Hook_addon_registry_realtime_rain
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/audit/realtime_rain.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,13 @@ class Hook_addon_registry_realtime_rain
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/realtime_rain.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/realtime_rain.png',
+			'themes/default/images/icons/24x24/tool_buttons/realtime_rain_off.png',
+			'themes/default/images/icons/24x24/tool_buttons/realtime_rain_on.png',
+			'themes/default/images/icons/48x48/tool_buttons/realtime_rain_off.png',
+			'themes/default/images/icons/48x48/tool_buttons/realtime_rain_on.png',
+
 			'adminzone/pages/modules/admin_realtime_rain.php',
 			'sources/realtime_rain.php',
 			'data/realtime_rain.php',

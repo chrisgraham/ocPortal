@@ -78,6 +78,16 @@ class Hook_addon_registry_breadcrumbs
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/structure/breadcrumbs.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_breadcrumbs
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/structure/breadcrumbs.png',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/breadcrumbs.png',
 			'sources/hooks/systems/addon_registry/breadcrumbs.php',
 			'data_custom/breadcrumbs.xml',
 			'sources/breadcrumbs.php',

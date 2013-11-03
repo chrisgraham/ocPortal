@@ -80,6 +80,16 @@ class Hook_addon_registry_redirects_editor
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/structure/redirect.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -87,6 +97,8 @@ class Hook_addon_registry_redirects_editor
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/structure/redirect.png',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/redirect.png',
 			'sources/hooks/systems/addon_registry/redirects_editor.php',
 			'sources/hooks/systems/occle_fs_extended_config/redirect.php',
 			'themes/default/templates/REDIRECTE_TABLE_SCREEN.tpl',

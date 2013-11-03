@@ -77,6 +77,16 @@ class Hook_addon_registry_newsletter
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/site_meta/newsletters.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,18 @@ class Hook_addon_registry_newsletter
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/tools/newsletter/import_subscribers.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/newsletter/newsletter_email_bounce.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/newsletter/newsletter_from_changes.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/newsletter/subscribers.png',
+			'themes/default/images/icons/24x24/menu/site_meta/newsletters.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/newsletter/import_subscribers.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/newsletter/newsletter_email_bounce.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/newsletter/newsletter_from_changes.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/newsletter/subscribers.png',
+			'themes/default/images/icons/48x48/menu/site_meta/newsletters.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/newsletter/index.html',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/newsletter/index.html',
 			'sources/hooks/systems/block_ui_renderers/newsletters.php',
 			'sources/hooks/modules/admin_setupwizard/newsletter.php',
 			'sources/hooks/systems/config/interest_levels.php',

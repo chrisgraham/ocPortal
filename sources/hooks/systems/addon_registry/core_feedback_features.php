@@ -78,6 +78,16 @@ class Hook_addon_registry_core_feedback_features
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/feedback/comment.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,14 @@ class Hook_addon_registry_core_feedback_features
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/feedback/comment.png',
+			'themes/default/images/icons/48x48/feedback/comment.png',
+			'themes/default/images/icons/24x24/feedback/comments_topic.png',
+			'themes/default/images/icons/48x48/feedback/comments_topic.png',
+			'themes/default/images/icons/24x24/feedback/rate.png',
+			'themes/default/images/icons/48x48/feedback/rate.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/trackbacks.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/trackbacks.png',
 			'sources/topics.php',
 			'sources/hooks/systems/notifications/like.php',
 			'sources/hooks/systems/notifications/comment_posted.php',

@@ -78,6 +78,16 @@ class Hook_addon_registry_pointstore
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/social/pointstore.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,10 @@ class Hook_addon_registry_pointstore
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/social/pointstore.png',
+			'themes/default/images/icons/48x48/menu/social/pointstore.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/pointstore_log.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/pointstore_log.png',
 			'sources/hooks/systems/notifications/pointstore_request_custom.php',
 			'sources/hooks/systems/notifications/pointstore_request_forwarding.php',
 			'sources/hooks/systems/notifications/pointstore_request_pop3.php',

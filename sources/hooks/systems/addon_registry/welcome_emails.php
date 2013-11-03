@@ -78,6 +78,16 @@ class Hook_addon_registry_welcome_emails
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/setup/welcome_emails.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_welcome_emails
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/setup/welcome_emails.png',
+			'themes/default/images/icons/48x48/menu/adminzone/setup/welcome_emails.png',
 			'sources/hooks/systems/addon_registry/welcome_emails.php',
 			'adminzone/pages/modules/admin_ocf_welcome_emails.php',
 			'lang/EN/ocf_welcome_emails.ini',

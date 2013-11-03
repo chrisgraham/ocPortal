@@ -77,6 +77,16 @@ class Hook_addon_registry_chat
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/social/chat/chat.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,16 @@ class Hook_addon_registry_chat
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/social/chat/chat.png',
+			'themes/default/images/icons/48x48/menu/social/chat/chat.png',
+			'themes/default/images/icons/24x24/menu/social/chat/chatroom_add.png',
+			'themes/default/images/icons/48x48/menu/social/chat/chatroom_add.png',
+			'themes/default/images/icons/24x24/menu/social/chat/member_blocking.png',
+			'themes/default/images/icons/48x48/menu/social/chat/member_blocking.png',
+			'themes/default/images/icons/24x24/tabs/member_account/friends.png',
+			'themes/default/images/icons/48x48/tabs/member_account/friends.png',
+			'themes/default/images/icons/24x24/menu/social/chat/index.html',
+			'themes/default/images/icons/48x48/menu/social/chat/index.html',
 			'sources/chat_shoutbox.php',
 			'sources/chat_sounds.php',
 			'sources/chat_lobby.php',

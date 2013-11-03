@@ -123,19 +123,19 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 
 		if (strpos($pagelink,':atoz:')!==false)
 		{
-			$test=find_theme_image('24x24/menu/rich_content/atoz',true);
-			if ($test!==NULL)
+			$test=find_theme_image('icons/24x24/menu/rich_content/atoz',true);
+			if ($test!='')
 				$struct['image']=$test;
-			$test=find_theme_image('48x48/menu/rich_content/atoz',true);
-			if ($test!==NULL)
+			$test=find_theme_image('icons/48x48/menu/rich_content/atoz',true);
+			if ($test!='')
 				$struct['image_2x']=$test;
 		} else
 		{
-			$test=find_theme_image('24x24/menu/rich_content/catalogues/'.$content_id,true);
-			if ($test!==NULL)
+			$test=find_theme_image('icons/24x24/menu/rich_content/catalogues/'.$content_id,true);
+			if ($test!='')
 				$struct['image']=$test;
-			$test=find_theme_image('48x48/menu/rich_content/catalogues/'.$content_id,true);
-			if ($test!==NULL)
+			$test=find_theme_image('icons/48x48/menu/rich_content/catalogues/'.$content_id,true);
+			if ($test!='')
 				$struct['image_2x']=$test;
 		}
 

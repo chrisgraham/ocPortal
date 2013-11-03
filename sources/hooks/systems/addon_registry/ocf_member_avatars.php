@@ -77,6 +77,16 @@ class Hook_addon_registry_ocf_member_avatars
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/tabs/member_account/edit/avatar.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_ocf_member_avatars
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/tabs/member_account/edit/avatar.png',
+			'themes/default/images/icons/48x48/tabs/member_account/edit/avatar.png',
 			'sources/hooks/systems/notifications/ocf_choose_avatar.php',
 			'sources/hooks/systems/addon_registry/ocf_member_avatars.php',
 			'themes/default/templates/OCF_EDIT_AVATAR_TAB.tpl',

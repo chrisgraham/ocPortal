@@ -80,6 +80,16 @@ class Hook_addon_registry_awards
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/setup/awards.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -87,6 +97,8 @@ class Hook_addon_registry_awards
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/setup/awards.png',
+			'themes/default/images/icons/48x48/menu/adminzone/setup/awards.png',
 			'sources/hooks/systems/addon_registry/awards.php',
 			'sources/hooks/systems/resource_meta_aware/award_type.php',
 			'themes/default/templates/AWARDED_CONTENT.tpl',

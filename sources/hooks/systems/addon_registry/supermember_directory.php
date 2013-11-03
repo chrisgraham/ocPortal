@@ -79,6 +79,16 @@ class Hook_addon_registry_supermember_directory
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/collaboration/supermember_directory.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,8 @@ class Hook_addon_registry_supermember_directory
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/collaboration/supermember_directory.png',
+			'themes/default/images/icons/48x48/menu/collaboration/supermember_directory.png',
 			'sources/hooks/systems/config/supermembers_text.php',
 			'sources/hooks/systems/addon_registry/supermember_directory.php',
 			'lang/EN/supermembers.ini',

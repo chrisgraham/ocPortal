@@ -82,6 +82,16 @@ class Hook_addon_registry_core_themeing
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/style/themes/themes.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -89,6 +99,14 @@ class Hook_addon_registry_core_themeing
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/style/themes/themes.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/themes/themes.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/themes/css.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/themes/templates.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/themes/theme_images.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/themes/css.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/themes/templates.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/themes/theme_images.png',
 			'themes/default/css/themes_editor.css',
 			'sources/hooks/systems/snippets/exists_theme.php',
 			'sources/hooks/systems/config/templates_number_revisions_show.php',

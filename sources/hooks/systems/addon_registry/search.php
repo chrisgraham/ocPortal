@@ -80,6 +80,16 @@ class Hook_addon_registry_search
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/search.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -87,6 +97,10 @@ class Hook_addon_registry_search
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/search.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/search.png',
+			'themes/default/images/icons/24x24/menu/site_meta/search.png',
+			'themes/default/images/icons/48x48/menu/site_meta/search.png',
 			'sources/hooks/systems/realtime_rain/search.php',
 			'themes/default/templates/TAGS.tpl',
 			'sources/blocks/side_tag_cloud.php',

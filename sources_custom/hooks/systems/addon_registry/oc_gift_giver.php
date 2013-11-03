@@ -126,6 +126,16 @@ When creating new gifts please only use images which are free to use, we suggest
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images_custom/icons/48x48/menu/ocgifts.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files

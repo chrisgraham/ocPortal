@@ -63,7 +63,7 @@ function read_addon_info($addon,$get_dependencies_on_this=false,$row=NULL,$ini_i
 
 	if (file_exists($path))
 	{
-		$_hook_bits=extract_module_functions($path,array('get_dependencies','get_version','get_category','copyright_attribution','get_licence','get_description','get_author','get_organisation','get_file_list'));
+		$_hook_bits=extract_module_functions($path,array('get_dependencies','get_version','get_category','copyright_attribution','get_licence','get_description','get_author','get_organisation','get_file_list','get_default_icon'));
 		if (is_null($_hook_bits[0]))
 		{
 			$dep=array();
@@ -122,6 +122,13 @@ function read_addon_info($addon,$get_dependencies_on_this=false,$row=NULL,$ini_i
 		{
 			$file_list=is_array($_hook_bits[8])?call_user_func_array($_hook_bits[8][0],$_hook_bits[8][1]):@eval($_hook_bits[8]);
 		}
+		if (is_null($_hook_bits[9]))
+		{
+			$default_icon=mixed();
+		} else
+		{
+			$default_icon=is_array($_hook_bits[9])?call_user_func_array($_hook_bits[9][0],$_hook_bits[9][1]):@eval($_hook_bits[9]);
+		}
 
 		$addon_info=array(
 			'name'=>$addon,
@@ -136,6 +143,7 @@ function read_addon_info($addon,$get_dependencies_on_this=false,$row=NULL,$ini_i
 			'files'=>$file_list,
 			'dependencies'=>$dep['requires'],
 			'incompatibilities'=>$dep['conflicts_with'],
+			'default_icon'=>$default_icon,
 		);
 		if ($get_dependencies_on_this)
 		{
@@ -168,6 +176,7 @@ function read_addon_info($addon,$get_dependencies_on_this=false,$row=NULL,$ini_i
 			'files'=>$ini_info['files'],
 			'dependencies'=>$dependencies,
 			'incompatibilities'=>$incompatibilities,
+			'default_icon'=>NULL,
 		);
 		if ($get_dependencies_on_this)
 		{
@@ -200,6 +209,7 @@ function read_addon_info($addon,$get_dependencies_on_this=false,$row=NULL,$ini_i
 			'licence'=>$row['addon_licence'],
 			'description'=>$row['addon_description'],
 			'install_time'=>$row['addon_install_time'],
+			'default_icon'=>NULL,
 		);
 
 		$addon_info['files']=array_unique(collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'),array('addon_name'=>$addon))));
@@ -234,10 +244,26 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 		$directory=tar_get_directory($tar_file,true);
 		if (!is_null($directory))
 		{
+			// Is there an explicitly defined addon?
+			$data=tar_get_file($tar_file,'sources_custom/hooks/systems/addon_registry/'.$addon_name.'.php',true);
+			if ($data===NULL)
+				$data=tar_get_file($tar_file,'sources/hooks/systems/addon_registry/'.$addon_name.'.php',true);
+			if ($data!==NULL)
+			{
+				$data=str_replace('<'.'?php','',$data);
+				@eval($data);
+				$ob=object_factory('Hook_addon_registry_'.$addon_name,true);
+				if (($ob!==NULL) && (method_exists($ob,'get_default_icon')))
+				{
+					return get_base_url().'/'.urlencode($ob->get_default_icon());
+				}
+			}
+
+			// Search through for an icon
 			foreach ($directory as $d)
 			{
 				$file=$d['path'];
-				if ((preg_match('themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)',$file,$matches)!-0) && (!array_key_exists($addon_name,$addon_icons)))
+				if (preg_match('themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)',$file,$matches)!=0)
 				{
 					require_code('mime_types');
 					$data=tar_get_file($tar_file,$file);
@@ -248,12 +274,20 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 	} else
 	{
 		$addon_info=read_addon_info($addon_name);
+
+		// Is there an explicitly defined addon?
+		if ($addon_info['default_icon']!==NULL)
+		{
+			return get_base_url().'/'.urlencode($addon_info['default_icon']);
+		}
+
+		// Search through for an icon
 		$addon_files=$addon_info['files'];
 		foreach ($addon_files as $file)
 		{
-			if ((preg_match('themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)',$file,$matches)!-0) && (!array_key_exists($addon_name,$addon_icons)))
+			if (preg_match('themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)',$file,$matches)!=0)
 			{
-				return find_theme_image('icons/48x48/'.$matches[2]));
+				return get_base_url().'/'.urlencode($file);
 			}
 		}
 	}

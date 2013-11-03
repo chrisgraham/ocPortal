@@ -78,6 +78,16 @@ class Hook_addon_registry_collaboration_zone
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/collaboration.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,10 @@ class Hook_addon_registry_collaboration_zone
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/collaboration.png',
+			'themes/default/images/icons/48x48/menu/collaboration.png',
+			'themes/default/images/icons/24x24/menu/collaboration/index.html',
+			'themes/default/images/icons/48x48/menu/collaboration/index.html',
 			'sources/hooks/systems/addon_registry/collaboration_zone.php',
 			'sources/hooks/modules/admin_themewizard/collaboration_zone.php',
 			'themes/default/images/EN/logo/collaboration-logo.png',

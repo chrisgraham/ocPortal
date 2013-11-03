@@ -259,7 +259,7 @@ function sitemap_do_next_manager($title,$page,$zone,$completion_text)
 
 	require_code('templates_donext');
 	$special=array(
-		array('menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'pagewizard','zone'=>$zone),get_module_zone('admin_sitemap')),do_lang_tempcode('PAGE_WIZARD')),
+		array('menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'page_wizard','zone'=>$zone),get_module_zone('admin_sitemap')),do_lang_tempcode('PAGE_WIZARD')),
 		array('menu/cms/comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('COMCODE_PAGE_EDIT')),
 	);
 	if (addon_installed('redirects_editor'))

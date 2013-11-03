@@ -49,10 +49,10 @@ class Module_admin_invoices
 	function get_entry_points()
 	{
 		return array(
-			'misc'=>'INVOICES',
+			'misc'=>array('INVOICES','menu/adminzone/audit/ecommerce/create_invoice'),
 			'outstanding'=>array('OUTSTANDING_INVOICES','menu/adminzone/audit/ecommerce/outstanding_invoices'),
 			'undelivered'=>array('UNDELIVERED_INVOICES','menu/adminzone/audit/ecommerce/undelivered_invoices'),
-			'ad'=>array('CREATE_INVOICE','menu/adminzone/audit/ecommerce/create_invoice'),
+			'ad'=>array('CREATE_INVOICE','menu/_generic_admin/add_one'),
 		);
 	}
 
@@ -162,7 +162,7 @@ class Module_admin_invoices
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('INVOICES'),comcode_lang_string('DOC_ECOMMERCE'),
 			array(
-				array('menu/adminzone/audit/ecommerce/create_invoice',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('CREATE_INVOICE')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('CREATE_INVOICE')),
 				array('menu/adminzone/audit/ecommerce/outstanding_invoices',array('_SELF',array('type'=>'outstanding'),'_SELF'),do_lang('OUTSTANDING_INVOICES')),
 				array('menu/adminzone/audit/ecommerce/undelivered_invoices',array('_SELF',array('type'=>'undelivered'),'_SELF'),do_lang('UNDELIVERED_INVOICES')),
 			),

@@ -77,6 +77,16 @@ class Hook_addon_registry_backup
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/tools/bulk_content_actions/backups.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_backup
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/tools/bulk_content_actions/backups.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/bulk_content_actions/backups.png',
 			'sources/hooks/systems/config/backup_overwrite.php',
 			'sources/hooks/systems/config/backup_server_hostname.php',
 			'sources/hooks/systems/config/backup_server_password.php',

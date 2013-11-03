@@ -78,6 +78,16 @@ class Hook_addon_registry_catalogues
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/rich_content/catalogues/catalogues.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,28 @@ class Hook_addon_registry_catalogues
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/rich_content/catalogues/catalogues.png',
+			'themes/default/images/icons/48x48/menu/rich_content/catalogues/catalogues.png',
+			'themes/default/images/icons/24x24/menu/cms/catalogues/add_one_catalogue.png',
+			'themes/default/images/icons/24x24/menu/cms/catalogues/edit_one_catalogue.png',
+			'themes/default/images/icons/48x48/menu/cms/catalogues/add_one_catalogue.png',
+			'themes/default/images/icons/48x48/menu/cms/catalogues/edit_one_catalogue.png',
+			'themes/default/images/icons/48x48/menu/cms/catalogues/edit_this_catalogue.png',
+			'themes/default/images/icons/48x48/menu/cms/catalogues/index.html',
+			'themes/default/images/icons/24x24/menu/cms/catalogues/edit_this_catalogue.png',
+			'themes/default/images/icons/24x24/menu/cms/catalogues/index.html',
+			'themes/default/images/icons/24x24/menu/rich_content/catalogues/classifieds.png',
+			'themes/default/images/icons/24x24/menu/rich_content/catalogues/contacts.png',
+			'themes/default/images/icons/24x24/menu/rich_content/catalogues/faqs.png',
+			'themes/default/images/icons/24x24/menu/rich_content/catalogues/index.html',
+			'themes/default/images/icons/24x24/menu/rich_content/catalogues/links.png',
+			'themes/default/images/icons/24x24/menu/rich_content/catalogues/shopping.png',
+			'themes/default/images/icons/48x48/menu/rich_content/catalogues/classifieds.png',
+			'themes/default/images/icons/48x48/menu/rich_content/catalogues/contacts.png',
+			'themes/default/images/icons/48x48/menu/rich_content/catalogues/faqs.png',
+			'themes/default/images/icons/48x48/menu/rich_content/catalogues/index.html',
+			'themes/default/images/icons/48x48/menu/rich_content/catalogues/links.png',
+			'themes/default/images/icons/48x48/menu/rich_content/catalogues/shopping.png',
 			'sources/hooks/systems/snippets/exists_catalogue.php',
 			'sources/hooks/systems/module_permissions/catalogues_catalogue.php',
 			'sources/hooks/systems/module_permissions/catalogues_category.php',

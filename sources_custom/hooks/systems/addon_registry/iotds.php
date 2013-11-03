@@ -115,6 +115,16 @@ class Hook_addon_registry_iotds
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images_custom/icons/48x48/menu/rich_content/iotds.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -122,9 +132,7 @@ class Hook_addon_registry_iotds
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images_custom/icons/24x24/menu/rich_content/index.html',
 			'themes/default/images_custom/icons/24x24/menu/rich_content/iotds.png',
-			'themes/default/images_custom/icons/48x48/menu/rich_content/index.html',
 			'themes/default/images_custom/icons/48x48/menu/rich_content/iotds.png',
 			'sources/iotds2.php',
 			'sources/hooks/systems/notifications/iotd_chosen.php',

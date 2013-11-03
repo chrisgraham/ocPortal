@@ -51,7 +51,7 @@ class Module_admin_sitemap
 	{
 		return array(
 			'misc'=>'ZONES',
-			'pagewizard'=>'PAGE_WIZARD',
+			'page_wizard'=>'PAGE_WIZARD',
 			'sitemap'=>'SITEMAP_EDITOR',
 			'move'=>array('MOVE_PAGES','menu/adminzone/structure/site_tree/page_move'),
 			'delete'=>array('DELETE_PAGES','menu/adminzone/structure/site_tree/page_delete'),
@@ -97,7 +97,7 @@ class Module_admin_sitemap
 			$this->title=get_screen_title('SITEMAP_EDITOR');
 		}
 
-		if ($type=='pagewizard')
+		if ($type=='page_wizard')
 		{
 			//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
 			breadcrumb_set_self(do_lang_tempcode('PAGE_WIZARD'));
@@ -105,9 +105,9 @@ class Module_admin_sitemap
 			$this->title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(1),integer_format(3)));
 		}
 
-		if ($type=='_pagewizard')
+		if ($type=='_page_wizard')
 		{
-			breadcrumb_set_parents(array(/*array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),*/array('_SELF:_SELF:pagewizard',do_lang_tempcode('PAGE_WIZARD'))));
+			breadcrumb_set_parents(array(/*array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),*/array('_SELF:_SELF:page_wizard',do_lang_tempcode('PAGE_WIZARD'))));
 			breadcrumb_set_self(do_lang_tempcode('DETAILS'));
 
 			$this->title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(2),integer_format(3)));
@@ -167,8 +167,8 @@ class Module_admin_sitemap
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->misc();
-		if ($type=='pagewizard') return $this->page_wizard();
-		if ($type=='_pagewizard') return $this->_page_wizard();
+		if ($type=='page_wizard') return $this->page_wizard();
+		if ($type=='_page_wizard') return $this->_page_wizard();
 		if ($type=='sitemap') return $this->sitemap();
 		if ($type=='delete') return $this->delete();
 		if ($type=='_delete') return $this->_delete();
@@ -257,7 +257,7 @@ class Module_admin_sitemap
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),do_lang_tempcode('MENU_ZONE'),'zone',create_selection_list_zones($zone),NULL,true));
 		$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_PAGE_NAME'),'name','',true));
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_pagewizard'),'_SELF',NULL,false,true);
+		$post_url=build_url(array('page'=>'_SELF','type'=>'_page_wizard'),'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'4c982255f035472282b5a3740d8df82d','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));

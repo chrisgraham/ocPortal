@@ -116,6 +116,16 @@ class Hook_addon_registry_community_billboard
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images_custom/icons/48x48/menu/adminzone/setup/community_billboard.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -123,6 +133,8 @@ class Hook_addon_registry_community_billboard
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images_custom/icons/24x24/menu/adminzone/setup/community_billboard.png',
+			'themes/default/images_custom/icons/48x48/menu/adminzone/setup/community_billboard.png',
 			'sources/hooks/systems/config/system_community_billboard.php',
 			'sources/hooks/systems/addon_registry/community_billboard.php',
 			'sources/hooks/modules/admin_import_types/community_billboard.php',

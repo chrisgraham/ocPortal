@@ -81,6 +81,16 @@ class Hook_addon_registry_core_ocf
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/tabs/member_account/profile.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -88,6 +98,44 @@ class Hook_addon_registry_core_ocf
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/tools/users/member_add.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/users/member_add.png',
+			'themes/default/images/icons/24x24/menu/adminzone/security/usergroups_temp.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/users/delete_lurkers.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/users/member_edit.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/users/merge_members.png',
+			'themes/default/images/icons/48x48/menu/adminzone/security/usergroups_temp.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/users/delete_lurkers.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/users/member_edit.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/users/merge_members.png',
+			'themes/default/images/icons/24x24/tabs/member_account/profile.png',
+			'themes/default/images/icons/48x48/tabs/member_account/profile.png',
+			'themes/default/images/icons/24x24/tabs/member_account/edit/delete.png',
+			'themes/default/images/icons/48x48/tabs/member_account/edit/delete.png',
+			'themes/default/images/icons/24x24/tabs/member_account/edit/settings.png',
+			'themes/default/images/icons/48x48/tabs/member_account/edit/settings.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/demographics.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/demographics.png',
+			'themes/default/images/icons/24x24/tabs/member_account/edit/index.html',
+			'themes/default/images/icons/24x24/tabs/member_account/index.html',
+			'themes/default/images/icons/48x48/tabs/member_account/edit/index.html',
+			'themes/default/images/icons/48x48/tabs/member_account/index.html',
+			'themes/default/images/icons/24x24/links/birthday.png',
+			'themes/default/images/icons/48x48/links/birthday.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/emoticons.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/emoticons.png',
+			'themes/default/images/icons/24x24/menu/social/groups.png',
+			'themes/default/images/icons/48x48/menu/social/groups.png',
+			'themes/default/images/icons/24x24/buttons/ignore.png',
+			'themes/default/images/icons/48x48/buttons/ignore.png',
+			'themes/default/images/icons/24x24/menu/site_meta/user_actions/reset_password.png',
+			'themes/default/images/icons/48x48/menu/site_meta/user_actions/reset_password.png',
+			'themes/default/images/1x/ocf/index.html',
+			'themes/default/images/2x/ocf/index.html',
+			'themes/default/images/1x/ocf/isoff.png',
+			'themes/default/images/1x/ocf/ison.png',
+			'themes/default/images/2x/ocf/isoff.png',
+			'themes/default/images/2x/ocf/ison.png',
 			'sources/ocf_forum_driver_helper_auth.php',
 			'sources/hooks/modules/admin_import/emoticons.php',
 			'sources/hooks/systems/notifications/ocf_password_changed.php',

@@ -77,6 +77,16 @@ class Hook_addon_registry_errorlog
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/audit/errorlog.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_errorlog
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/errorlog.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/errorlog.png',
 			'themes/default/css/errorlog.css',
 			'sources/hooks/systems/addon_registry/errorlog.php',
 			'lang/EN/errorlog.ini',

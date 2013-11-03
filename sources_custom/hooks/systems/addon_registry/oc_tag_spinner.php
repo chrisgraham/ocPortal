@@ -107,12 +107,23 @@ class Hook_addon_registry_oc_tag_spinner
 	{
 		return array(
 			'requires'=>array(
+				'search',
 			),
 			'recommends'=>array(
 			),
 			'conflicts_with'=>array(
 			)
 		);
+	}
+
+	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/rich_content.png';
 	}
 
 	/**

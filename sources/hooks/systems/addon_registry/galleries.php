@@ -79,6 +79,16 @@ class Hook_addon_registry_galleries
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/rich_content/galleries.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,20 @@ class Hook_addon_registry_galleries
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/rich_content/galleries.png',
+			'themes/default/images/icons/48x48/menu/rich_content/galleries.png',
+			'themes/default/images/icons/24x24/menu/cms/galleries/add_one_image.png',
+			'themes/default/images/icons/24x24/menu/cms/galleries/add_one_video.png',
+			'themes/default/images/icons/24x24/menu/cms/galleries/edit_one_image.png',
+			'themes/default/images/icons/24x24/menu/cms/galleries/edit_one_video.png',
+			'themes/default/images/icons/48x48/menu/cms/galleries/add_one_image.png',
+			'themes/default/images/icons/48x48/menu/cms/galleries/add_one_video.png',
+			'themes/default/images/icons/48x48/menu/cms/galleries/edit_one_image.png',
+			'themes/default/images/icons/48x48/menu/cms/galleries/edit_one_video.png',
+			'themes/default/images/icons/24x24/menu/cms/galleries/index.html',
+			'themes/default/images/icons/48x48/menu/cms/galleries/index.html',
+			'themes/default/images/icons/24x24/buttons/slideshow.png',
+			'themes/default/images/icons/48x48/buttons/slideshow.png',
 			'data/zencoder_receive.php',
 			'sources/hooks/systems/notifications/gallery_entry.php',
 			'sources/hooks/systems/snippets/exists_gallery.php',

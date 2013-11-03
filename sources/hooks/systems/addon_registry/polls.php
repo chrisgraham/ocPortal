@@ -77,6 +77,16 @@ class Hook_addon_registry_polls
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/social/polls.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_polls
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/social/polls.png',
+			'themes/default/images/icons/48x48/menu/social/polls.png',
 			'sources/polls2.php',
 			'sources/hooks/systems/block_ui_renderers/polls.php',
 			'sources/hooks/systems/notifications/poll_chosen.php',

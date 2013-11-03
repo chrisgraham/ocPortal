@@ -77,6 +77,16 @@ class Hook_addon_registry_calendar
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/rich_content/calendar.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_calendar
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/rich_content/calendar.png',
+			'themes/default/images/icons/48x48/menu/rich_content/calendar.png',
 			'sources/hooks/systems/snippets/calendar_recurrence_suggest.php',
 			'sources/hooks/systems/notifications/calendar_reminder.php',
 			'sources/hooks/systems/notifications/calendar_event.php',

@@ -77,6 +77,16 @@ class Hook_addon_registry_ocf_cpfs
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/tools/users/custom_profile_fields.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_ocf_cpfs
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/tools/users/custom_profile_fields.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/users/custom_profile_fields.png',
 			'sources/hooks/systems/resource_meta_aware/cpf.php',
 			'adminzone/pages/modules/admin_ocf_customprofilefields.php',
 			'themes/default/templates/OCF_CPF_STATS_LINE.tpl',

@@ -77,6 +77,16 @@ class Hook_addon_registry_core_notifications
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/tool_buttons/notifications.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,16 @@ class Hook_addon_registry_core_notifications
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/tool_buttons/inbox.png',
+			'themes/default/images/icons/24x24/tool_buttons/notifications.png',
+			'themes/default/images/icons/48x48/tool_buttons/inbox.png',
+			'themes/default/images/icons/48x48/tool_buttons/notifications.png',
+			'themes/default/images/icons/24x24/menu/adminzone/setup/notifications.png',
+			'themes/default/images/icons/48x48/menu/adminzone/setup/notifications.png',
+			'themes/default/images/icons/24x24/buttons/disable_notifications.png',
+			'themes/default/images/icons/24x24/buttons/enable_notifications.png',
+			'themes/default/images/icons/48x48/buttons/disable_notifications.png',
+			'themes/default/images/icons/48x48/buttons/enable_notifications.png',
 			'sources/hooks/systems/addon_registry/core_notifications.php',
 			'sources/hooks/systems/occle_fs_extended_config/notification_lockdown.php',
 			'sources/notifications.php',

@@ -78,6 +78,16 @@ class Hook_addon_registry_themewizard
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/style/themes/themewizard.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,10 @@ class Hook_addon_registry_themewizard
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/style/themes/logowizard.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/themes/themewizard.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/themes/logowizard.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/themes/themewizard.png',
 			'sources/hooks/systems/occle_commands/themewizard_find_color.php',
 			'sources/hooks/systems/occle_commands/themewizard_compute_equation.php',
 			'sources/hooks/modules/admin_themewizard/.htaccess',

@@ -80,6 +80,16 @@ class Hook_addon_registry_wordfilter
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/security/wordfilter.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -87,6 +97,8 @@ class Hook_addon_registry_wordfilter
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/security/wordfilter.png',
+			'themes/default/images/icons/48x48/menu/adminzone/security/wordfilter.png',
 			'sources/hooks/systems/addon_registry/wordfilter.php',
 			'sources/hooks/systems/do_next_menus/wordfilter.php',
 			'lang/EN/wordfilter.ini',

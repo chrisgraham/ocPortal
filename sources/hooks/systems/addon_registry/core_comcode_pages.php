@@ -79,6 +79,16 @@ class Hook_addon_registry_core_comcode_pages
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/cms/comcode_page_edit.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,10 @@ class Hook_addon_registry_core_comcode_pages
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/cms/comcode_page_edit.png',
+			'themes/default/images/icons/48x48/menu/cms/comcode_page_edit.png',
+			'themes/default/images/icons/24x24/buttons/convert.png',
+			'themes/default/images/icons/48x48/buttons/convert.png',
 			'sources/hooks/systems/config/number_revisions_show.php',
 			'sources/hooks/systems/config/points_COMCODE_PAGE_ADD.php',
 			'sources/hooks/systems/config/store_revisions.php',

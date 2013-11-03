@@ -77,6 +77,16 @@ class Hook_addon_registry_msn
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/structure/multi_site_network.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_msn
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/structure/multi_site_network.png',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/multi_site_network.png',
 			'sources/hooks/systems/config/network_links.php',
 			'sources/hooks/systems/addon_registry/msn.php',
 			'sources/hooks/blocks/main_notes/msn.php',

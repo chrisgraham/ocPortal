@@ -77,6 +77,16 @@ class Hook_addon_registry_core_cleanup_tools
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/tools/cleanup.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_core_cleanup_tools
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/tools/cleanup.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/cleanup.png',
 			'sources/hooks/systems/config/is_on_block_cache.php',
 			'sources/hooks/systems/config/is_on_comcode_page_cache.php',
 			'sources/hooks/systems/config/is_on_lang_cache.php',

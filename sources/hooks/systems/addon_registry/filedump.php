@@ -77,6 +77,16 @@ class Hook_addon_registry_filedump
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/cms/filedump.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_filedump
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/cms/filedump.png',
+			'themes/default/images/icons/48x48/menu/cms/filedump.png',
 			'sources/hooks/systems/notifications/filedump.php',
 			'sources/hooks/systems/config/filedump_show_stats_count_total_files.php',
 			'sources/hooks/systems/config/filedump_show_stats_count_total_space.php',

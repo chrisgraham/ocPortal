@@ -78,6 +78,16 @@ class Hook_addon_registry_help_page
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/pages/help.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_help_page
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/pages/help.png',
+			'themes/default/images/icons/48x48/menu/pages/help.png',
 			'sources/hooks/systems/addon_registry/help_page.php',
 			'site/pages/comcode/EN/help.txt',
 			'sources/hooks/systems/do_next_menus/help_page.php',

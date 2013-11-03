@@ -77,6 +77,16 @@ class Hook_addon_registry_banners
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/cms/banners.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,12 @@ class Hook_addon_registry_banners
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/cms/banners.png',
+			'themes/default/images/icons/24x24/menu/pages/advertise.png',
+			'themes/default/images/icons/24x24/menu/pages/donate.png',
+			'themes/default/images/icons/48x48/menu/cms/banners.png',
+			'themes/default/images/icons/48x48/menu/pages/advertise.png',
+			'themes/default/images/icons/48x48/menu/pages/donate.png',
 			'themes/default/css/banners.css',
 			'sources/hooks/systems/snippets/exists_banner.php',
 			'sources/hooks/systems/snippets/exists_banner_type.php',

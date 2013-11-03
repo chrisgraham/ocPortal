@@ -79,6 +79,16 @@ class Hook_addon_registry_ocf_post_templates
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/structure/forum/post_templates.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,8 @@ class Hook_addon_registry_ocf_post_templates
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/structure/forum/post_templates.png',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/forum/post_templates.png',
 			'sources/hooks/systems/resource_meta_aware/post_template.php',
 			'sources/hooks/systems/occle_fs/post_templates.php',
 			'sources/hooks/systems/addon_registry/ocf_post_templates.php',

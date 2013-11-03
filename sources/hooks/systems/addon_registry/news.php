@@ -77,6 +77,16 @@ class Hook_addon_registry_news
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/rich_content/news.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,10 @@ class Hook_addon_registry_news
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/rich_content/news.png',
+			'themes/default/images/icons/24x24/tabs/member_account/blog.png',
+			'themes/default/images/icons/48x48/menu/rich_content/news.png',
+			'themes/default/images/icons/48x48/tabs/member_account/blog.png',
 			'sources/hooks/systems/notifications/news_entry.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/blog.php',
 			'sources/hooks/systems/realtime_rain/news.php',

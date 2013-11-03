@@ -77,6 +77,16 @@ class Hook_addon_registry_ldap
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/security/ldap.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_ldap
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/security/ldap.png',
+			'themes/default/images/icons/48x48/menu/adminzone/security/ldap.png',
 			'sources/hooks/systems/config/ldap_allow_joining.php',
 			'sources/hooks/systems/config/ldap_base_dn.php',
 			'sources/hooks/systems/config/ldap_bind_password.php',

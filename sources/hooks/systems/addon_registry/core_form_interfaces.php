@@ -77,6 +77,16 @@ class Hook_addon_registry_core_form_interfaces
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,16 @@ class Hook_addon_registry_core_form_interfaces
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/1x/editor/off.png',
+			'themes/default/images/1x/editor/on.png',
+			'themes/default/images/2x/editor/off.png',
+			'themes/default/images/2x/editor/on.png',
+			'themes/default/images/1x/tree/collapse.png',
+			'themes/default/images/1x/tree/expand.png',
+			'themes/default/images/1x/tree/index.html',
+			'themes/default/images/2x/tree/collapse.png',
+			'themes/default/images/2x/tree/expand.png',
+			'themes/default/images/2x/tree/index.html',
 			'sources/hooks/systems/addon_registry/core_form_interfaces.php',
 			'themes/default/templates/POSTING_FORM.tpl',
 			'themes/default/templates/POSTING_SCREEN.tpl',

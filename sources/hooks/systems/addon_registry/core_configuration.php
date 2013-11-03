@@ -79,6 +79,16 @@ class Hook_addon_registry_core_configuration
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/setup/config/config.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,8 @@ class Hook_addon_registry_core_configuration
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/setup/config/config.png',
+			'themes/default/images/icons/48x48/menu/adminzone/setup/config/config.png',
 			'sources/hooks/systems/config/max_moniker_length.php',
 			'sources/hooks/systems/config/enable_seo_fields.php',
 			'sources/hooks/systems/config/enable_staff_notes.php',

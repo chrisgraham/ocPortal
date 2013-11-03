@@ -77,6 +77,16 @@ class Hook_addon_registry_ecommerce
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/ecommerce.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,28 @@ class Hook_addon_registry_ecommerce
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/ecommerce.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/ecommerce.png',
+			'themes/default/images/icons/24x24/menu/rich_content/ecommerce/purchase.png',
+			'themes/default/images/icons/48x48/menu/rich_content/ecommerce/purchase.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/cash_flow.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/invoices.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/profit_loss.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/transactions.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/cash_flow.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/invoices.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/profit_loss.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/transactions.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/create_invoice.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/outstanding_invoices.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/undelivered_invoices.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/create_invoice.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/outstanding_invoices.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/undelivered_invoices.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/index.html',
+			'themes/default/images/icons/24x24/menu/rich_content/ecommerce/index.html',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/index.html',
+			'themes/default/images/icons/48x48/menu/rich_content/ecommerce/index.html',
 			'sources/hooks/systems/resource_meta_aware/usergroup_subscription.php',
 			'sources/hooks/systems/occle_fs/usergroup_subscriptions.php',
 			'sources/hooks/systems/config/callback_password.php',

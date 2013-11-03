@@ -53,5 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	@print(url_to_pagelink('http://localhost/git/adminzone/admin_messaging.htm'));
 }

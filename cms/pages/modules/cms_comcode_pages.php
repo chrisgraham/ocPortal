@@ -160,7 +160,7 @@ class Module_cms_comcode_pages
 				if (has_actual_page_access(get_member(),'admin_sitemap'))
 				{
 					require_lang('zones');
-					$page_wizard=build_url(array('page'=>'admin_sitemap','type'=>'pagewizard'),get_module_zone('admin_sitemap'));
+					$page_wizard=build_url(array('page'=>'admin_sitemap','type'=>'page_wizard'),get_module_zone('admin_sitemap'));
 					$sitemap_editor=build_url(array('page'=>'admin_sitemap','type'=>'sitemap'),get_module_zone('admin_sitemap'));
 					attach_message(do_lang_tempcode('SUGGEST_PAGE_WIZARD',escape_html($page_wizard->evaluate()),escape_html($sitemap_editor->evaluate())),'inform');
 				}

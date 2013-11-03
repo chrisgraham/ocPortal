@@ -79,6 +79,16 @@ class Hook_addon_registry_actionlog
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/audit/actionlog.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,8 @@ class Hook_addon_registry_actionlog
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/actionlog.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/actionlog.png',
 			'sources/hooks/systems/notifications/actionlog.php',
 			'sources/hooks/systems/realtime_rain/actionlog.php',
 			'sources/hooks/systems/addon_registry/actionlog.php',

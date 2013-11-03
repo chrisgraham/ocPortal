@@ -78,6 +78,16 @@ class Hook_addon_registry_ocf_clubs
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/cms/clubs.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_ocf_clubs
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/cms/clubs.png',
+			'themes/default/images/icons/48x48/menu/cms/clubs.png',
 			'sources/hooks/systems/notifications/ocf_club.php',
 			'sources/hooks/systems/addon_registry/ocf_clubs.php',
 			'sources/hooks/modules/search/ocf_clubs.php',

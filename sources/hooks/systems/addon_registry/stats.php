@@ -77,6 +77,16 @@ class Hook_addon_registry_stats
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/statistics.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,26 @@ class Hook_addon_registry_stats
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/statistics.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/statistics.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/clear_stats.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/geolocate.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/load_times.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/page_views.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/submits.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/top_keywords.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/top_referrers.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/users_online.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/clear_stats.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/geolocate.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/load_times.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/page_views.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/submits.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/top_keywords.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/top_referrers.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/users_online.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/index.html',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/index.html',
 			'sources/hooks/modules/admin_setupwizard/stats.php',
 			'sources/hooks/systems/config/stats_store_time.php',
 			'sources/hooks/systems/config/super_logging.php',

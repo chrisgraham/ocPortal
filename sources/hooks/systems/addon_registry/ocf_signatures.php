@@ -77,6 +77,16 @@ class Hook_addon_registry_ocf_signatures
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/tabs/member_account/edit/signature.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_ocf_signatures
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/tabs/member_account/edit/signature.png',
+			'themes/default/images/icons/48x48/tabs/member_account/edit/signature.png',
 			'sources/hooks/systems/addon_registry/ocf_signatures.php',
 			'themes/default/templates/OCF_EDIT_SIGNATURE_TAB.tpl',
 			'sources/hooks/systems/attachments/ocf_signature.php',

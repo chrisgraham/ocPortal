@@ -46,7 +46,7 @@ class Hook_do_next_menus_core
 			array('structure','menu/adminzone/structure/menus',array('admin_menus',array('type'=>'misc'),get_module_zone('admin_menus')),do_lang_tempcode('menus:MENU_MANAGEMENT'),'menus:DOC_MENUS'),
 			addon_installed('page_management')?array('structure','menu/adminzone/structure/sitemap/sitemap_editor',array('admin_sitemap',array('type'=>'sitemap'),get_module_zone('admin_sitemap')),do_lang_tempcode('zones:SITEMAP_EDITOR'),'zones:DOC_SITEMAP_EDITOR'):NULL,
 			addon_installed('redirects_editor')?array('structure','menu/adminzone/structure/redirect',array('admin_redirects',array('type'=>'misc'),get_module_zone('admin_redirects')),do_lang_tempcode('redirects:REDIRECTS'),'redirects:DOC_REDIRECTS'):NULL,
-			addon_installed('page_management')?array('structure','menu/adminzone/structure/pagewizard',array('admin_sitemap',array('type'=>'pagewizard'),get_module_zone('admin_sitemap')),do_lang_tempcode('config:PAGE_WIZARD'),'config:DOC_PAGE_WIZARD'):NULL,
+			addon_installed('page_management')?array('structure','menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'page_wizard'),get_module_zone('admin_sitemap')),do_lang_tempcode('config:PAGE_WIZARD'),'config:DOC_PAGE_WIZARD'):NULL,
 			addon_installed('breadcrumbs')?array('structure','menu/adminzone/structure/breadcrumbs',array('admin_config',array('type'=>'xml_breadcrumbs'),get_module_zone('admin_config')),do_lang_tempcode('config:BREADCRUMB_OVERRIDES'),'config:DOC_BREADCRUMB_OVERRIDES'):NULL,
 			array('structure','menu/adminzone/structure/addons',array('admin_addons',array('type'=>'misc'),get_module_zone('admin_addons')),do_lang_tempcode('addons:ADDONS'),'addons:DOC_ADDONS'),
 

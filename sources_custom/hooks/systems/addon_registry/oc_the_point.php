@@ -106,6 +106,7 @@ class Hook_addon_registry_oc_the_point
 		return array(
 			'requires'=>array(
 				'banners',
+				'points',
 			),
 			'recommends'=>array(
 			),

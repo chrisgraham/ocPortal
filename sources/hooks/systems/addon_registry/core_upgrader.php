@@ -79,6 +79,16 @@ class Hook_addon_registry_core_upgrader
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,8 @@ class Hook_addon_registry_core_upgrader
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/tools/upgrade.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png',
 			'sources/hooks/systems/addon_registry/core_upgrader.php',
 			'upgrader.php',
 			'sources/upgrade.php',

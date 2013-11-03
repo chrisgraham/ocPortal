@@ -88,7 +88,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	function get_entry_points()
 	{
 		return parent::get_entry_points()+array(
-			'xml'=>array('EDIT_AGGREGATE_TYPES','menu/adminzone/tools/bulk_content_actions/xml_syndication'),
+			'xml'=>array('EDIT_AGGREGATE_TYPES','menu/_generic_admin/xml'),
 			'sync'=>array('SYNCHRONISE_AGGREGATE_TYPES','menu/_generic_admin/sync'),
 		);
 	}
@@ -168,7 +168,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 			array(
 				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_AGGREGATE_TYPE_INSTANCE')),
 				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPE_INSTANCE')),
-				array('menu/adminzone/structure/aggregate_types',array('_SELF',array('type'=>'xml'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPES')),
+				array('menu/_generic_admin/xml',array('_SELF',array('type'=>'xml'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPES')),
 				array('menu/_generic_admin/sync',array('_SELF',array('type'=>'sync'),'_SELF'),do_lang('SYNCHRONISE_AGGREGATE_TYPES')),
 			),
 			do_lang('AGGREGATE_TYPES')

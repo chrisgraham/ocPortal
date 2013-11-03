@@ -79,6 +79,16 @@ class Hook_addon_registry_aggregate_types
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/structure/aggregate_types.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,8 @@ class Hook_addon_registry_aggregate_types
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/structure/aggregate_types.png',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/aggregate_types.png',
 			'sources/hooks/systems/addon_registry/aggregate_types.php',
 			'sources/hooks/systems/resource_meta_aware/aggregate_type_instance.php',
 			'lang/EN/aggregate_types.ini',

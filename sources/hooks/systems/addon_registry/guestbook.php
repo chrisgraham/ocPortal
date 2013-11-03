@@ -79,6 +79,16 @@ class Hook_addon_registry_guestbook
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/site_meta/guestbook.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,8 @@ class Hook_addon_registry_guestbook
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/site_meta/guestbook.png',
+			'themes/default/images/icons/48x48/menu/site_meta/guestbook.png',
 			'sources/hooks/systems/addon_registry/guestbook.php',
 			'site/pages/comcode/EN/guestbook.txt',
 			'sources/hooks/systems/do_next_menus/guestbook.php',

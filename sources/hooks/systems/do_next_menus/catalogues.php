@@ -48,7 +48,12 @@ class Hook_do_next_menus_catalogues
 					if (($row['c_ecommerce']==0) || (addon_installed('shopping')))
 					{
 						if (has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$row['c_name'])))
-							$ret2[]=array('cms','of_catalogues',array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',get_translated_text($row['c_title']),escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_text($row['c_description']));
+						{
+							$menu_icon='menu/cms/catalogues/'.$row['c_name'];
+							if (find_theme_image('icons/24x24/'.$menu_icon,true)=='')
+								$menu_icon='menu/cms/catalogues/catalogues';
+							$ret2[]=array('cms',$menu_icon,array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',get_translated_text($row['c_title']),escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_text($row['c_description']));
+						}
 					}
 				}
 				if (count($ret2)<10)

@@ -79,6 +79,16 @@ class Hook_addon_registry_staff
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/site_meta/staff_view.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -86,6 +96,8 @@ class Hook_addon_registry_staff
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/site_meta/staff_view.png',
+			'themes/default/images/icons/48x48/menu/site_meta/staff_view.png',
 			'sources/hooks/systems/config/is_on_staff_filter.php',
 			'sources/hooks/systems/config/is_on_sync_staff.php',
 			'sources/hooks/systems/config/staff_text.php',

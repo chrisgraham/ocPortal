@@ -78,6 +78,16 @@ class Hook_addon_registry_ocf_member_titles
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/tabs/member_account/edit/title.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,8 @@ class Hook_addon_registry_ocf_member_titles
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/tabs/member_account/edit/title.png',
+			'themes/default/images/icons/48x48/tabs/member_account/edit/title.png',
 			'sources/hooks/systems/addon_registry/ocf_member_titles.php',
 			'sources/hooks/systems/profiles_tabs_edit/title.php',
 			'sources/hooks/systems/config/max_member_title_length.php',

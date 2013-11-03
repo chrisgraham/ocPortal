@@ -77,6 +77,16 @@ class Hook_addon_registry_ocf_member_photos
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/tabs/member_account/edit/photo.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,8 @@ class Hook_addon_registry_ocf_member_photos
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/tabs/member_account/edit/photo.png',
+			'themes/default/images/icons/48x48/tabs/member_account/edit/photo.png',
 			'sources/hooks/systems/addon_registry/ocf_member_photos.php',
 			'uploads/ocf_photos/index.html',
 			'uploads/ocf_photos_thumbs/index.html',

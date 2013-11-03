@@ -77,6 +77,16 @@ class Hook_addon_registry_core_permission_management
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/security/permissions/privileges.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,12 @@ class Hook_addon_registry_core_permission_management
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/security/permissions/index.html',
+			'themes/default/images/icons/48x48/menu/adminzone/security/permissions/index.html',
+			'themes/default/images/icons/24x24/menu/adminzone/security/permissions/privileges.png',
+			'themes/default/images/icons/48x48/menu/adminzone/security/permissions/privileges.png',
+			'themes/default/images/icons/24x24/menu/adminzone/security/permissions/permission_tree_editor.png',
+			'themes/default/images/icons/48x48/menu/adminzone/security/permissions/permission_tree_editor.png',
 			'themes/default/css/permissions_editor.css',
 			'themes/default/templates/PERMISSION_COLUMN_SIZER.tpl',
 			'sources/hooks/systems/addon_registry/core_permission_management.php',

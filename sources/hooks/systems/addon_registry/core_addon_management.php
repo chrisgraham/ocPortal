@@ -77,6 +77,16 @@ class Hook_addon_registry_core_addon_management
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/adminzone/structure/addons.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -84,6 +94,10 @@ class Hook_addon_registry_core_addon_management
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/adminzone/structure/addons.png',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/addons.png',
+			'themes/default/images/icons/24x24/menu/_generic_admin/component.png',
+			'themes/default/images/icons/48x48/menu/_generic_admin/component.png',
 			'themes/default/css/addons_editor.css',
 			'sources/hooks/systems/addon_registry/core_addon_management.php',
 			'sources/addons.php',

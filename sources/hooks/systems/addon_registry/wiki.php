@@ -78,6 +78,16 @@ class Hook_addon_registry_wiki
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images/icons/48x48/menu/rich_content/wiki.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -85,6 +95,16 @@ class Hook_addon_registry_wiki
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/rich_content/wiki.png',
+			'themes/default/images/icons/24x24/menu/rich_content/wiki/change_log.png',
+			'themes/default/images/icons/24x24/menu/rich_content/wiki/random_page.png',
+			'themes/default/images/icons/48x48/menu/rich_content/wiki.png',
+			'themes/default/images/icons/48x48/menu/rich_content/wiki/change_log.png',
+			'themes/default/images/icons/48x48/menu/rich_content/wiki/random_page.png',
+			'themes/default/images/icons/24x24/buttons/edit_tree.png',
+			'themes/default/images/icons/48x48/buttons/edit_tree.png',
+			'themes/default/images/icons/24x24/menu/rich_content/wiki/index.html',
+			'themes/default/images/icons/48x48/menu/rich_content/wiki/index.html',
 			'sources/hooks/systems/sitemap/wiki_page.php',
 			'sources/hooks/systems/content_meta_aware/wiki_page.php',
 			'sources/hooks/systems/content_meta_aware/wiki_post.php',
