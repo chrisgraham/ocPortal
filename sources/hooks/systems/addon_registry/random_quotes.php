@@ -91,8 +91,6 @@ class Hook_addon_registry_random_quotes
 			'themes/default/templates/BLOCK_MAIN_QUOTES.tpl',
 			'adminzone/pages/comcode/EN/quotes.txt',
 			'text/EN/quotes.txt',
-			'themes/default/images/bigicons/quotes.png',
-			'themes/default/images/pagepics/quotes.png',
 			'lang/EN/quotes.ini',
 			'sources/blocks/main_quotes.php',
 			'sources/hooks/systems/do_next_menus/quotes.php',

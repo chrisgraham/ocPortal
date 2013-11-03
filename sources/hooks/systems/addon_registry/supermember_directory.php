@@ -93,6 +93,7 @@ class Hook_addon_registry_supermember_directory
 			'themes/default/templates/SUPERMEMBERS_SCREEN_ENTRY.tpl',
 			'themes/default/templates/SUPERMEMBERS_SCREEN_GROUP.tpl',
 			'collaboration/pages/modules/supermembers.php',
+			'sources/hooks/systems/do_next_menus/supermember_directory.php',
 		);
 	}
 

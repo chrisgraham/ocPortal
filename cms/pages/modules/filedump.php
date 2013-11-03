@@ -77,14 +77,14 @@ class Module_filedump
 				'the_member'=>'MEMBER'
 			));
 
-			add_privilege('FILE_DUMP','upload_anything_filedump',false);
-			add_privilege('FILE_DUMP','upload_filedump',true);
-			add_privilege('FILE_DUMP','delete_anything_filedump',false);
+			add_privilege('FILEDUMP','upload_anything_filedump',false);
+			add_privilege('FILEDUMP','upload_filedump',true);
+			add_privilege('FILEDUMP','delete_anything_filedump',false);
 
 			require_lang('filedump');
 			if (addon_installed('collaboration_zone'))
 			{
-				add_menu_item_simple('collab_features',NULL,'FILE_DUMP','_SEARCH:filedump:type=misc');
+				add_menu_item_simple('collab_features',NULL,'FILEDUMP','_SEARCH:filedump:type=misc');
 			}
 		}
 
@@ -97,11 +97,11 @@ class Module_filedump
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'FILE_DUMP');
+		return array('misc'=>'FILEDUMP');
 	}
 
 	var $title;
@@ -132,7 +132,7 @@ class Module_filedump
 			$breadcrumbs=new ocp_tempcode();
 			while (array_key_exists($i,$dirs))
 			{
-				if ($i>0) $d=$dirs[$i]; else $d=do_lang('FILE_DUMP');
+				if ($i>0) $d=$dirs[$i]; else $d=do_lang('FILEDUMP');
 
 				if (array_key_exists($i+1,$dirs))
 				{
@@ -148,7 +148,7 @@ class Module_filedump
 				breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.escape_html($d).'</span>'));
 			} else
 			{
-				breadcrumb_set_self(($i==1)?do_lang_tempcode('FILE_DUMP'):make_string_tempcode(escape_html($d)));
+				breadcrumb_set_self(($i==1)?do_lang_tempcode('FILEDUMP'):make_string_tempcode(escape_html($d)));
 			}
 
 			$this->place=$place;
@@ -156,7 +156,7 @@ class Module_filedump
 
 		if ($type=='ed')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILE_DUMP'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILEDUMP'))));
 			if (post_param_integer('confirmed',0)!=1)
 			{
 				breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
@@ -165,7 +165,7 @@ class Module_filedump
 
 		if ($type=='ec')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILE_DUMP'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILEDUMP'))));
 			if (post_param_integer('confirmed',0)!=1)
 			{
 				breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
@@ -203,7 +203,7 @@ class Module_filedump
 	 */
 	function module_do_gui()
 	{
-		$this->title=get_screen_title('FILE_DUMP');
+		$this->title=get_screen_title('FILEDUMP');
 
 		$place=$this->place;
 
@@ -343,7 +343,7 @@ class Module_filedump
 			$create_folder_form=new ocp_tempcode();
 		}
 
-		return do_template('FILE_DUMP_SCREEN',array('_GUID'=>'3f49a8277a11f543eff6488622949c84','TITLE'=>$this->title,'PLACE'=>$place,'FILES'=>$files,'UPLOAD_FORM'=>$upload_form,'CREATE_FOLDER_FORM'=>$create_folder_form));
+		return do_template('FILEDUMP_SCREEN',array('_GUID'=>'3f49a8277a11f543eff6488622949c84','TITLE'=>$this->title,'PLACE'=>$place,'FILES'=>$files,'UPLOAD_FORM'=>$upload_form,'CREATE_FOLDER_FORM'=>$create_folder_form));
 	}
 
 	/**

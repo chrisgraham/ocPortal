@@ -29,7 +29,7 @@ class Hook_admin_import_types_pointstore
 	function run()
 	{
 		return array(
-			'pointstore'=>'POINT_STORE',
+			'pointstore'=>'POINTSTORE',
 		);
 	}
 

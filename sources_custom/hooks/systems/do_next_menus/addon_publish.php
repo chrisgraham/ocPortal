@@ -25,9 +25,9 @@ class Hook_do_next_menus_addon_publish
 	function run()
 	{
 		return array(
-			array('tools','admin_home',array('admin_generate_adhoc_upgrade',array(),'adminzone'),make_string_tempcode('Release tools: Create adhoc-upgrade-TAR/guidance')),
-			array('tools','admin_home',array('build_addons',array(),'adminzone'),make_string_tempcode('Release tools: Build non-bundled addon TARs')),
-			array('tools','admin_home',array('publish_addons_as_downloads',array(),'adminzone'),make_string_tempcode('ocPortal.com: Publish non-bundled addons')),
+			array('tools','menu/_generic_admin/tool',array('admin_generate_adhoc_upgrade',array(),'adminzone'),make_string_tempcode('Release tools: Create adhoc-upgrade-TAR/guidance')),
+			array('tools','menu/_generic_admin/tool',array('build_addons',array(),'adminzone'),make_string_tempcode('Release tools: Build non-bundled addon TARs')),
+			array('tools','menu/_generic_admin/tool',array('publish_addons_as_downloads',array(),'adminzone'),make_string_tempcode('ocPortal.com: Publish non-bundled addons')),
 		);
 	}
 

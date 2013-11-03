@@ -38,7 +38,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -60,7 +60,6 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 
 		require_lang('ocf');
 
-		set_helper_panel_pic('pagepics/posttemplates');
 		set_helper_panel_tutorial('tut_forum_helpdesk');
 
 		return parent::pre_run($top_level);
@@ -96,9 +95,8 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('POST_TEMPLATES'),comcode_lang_string('DOC_POST_TEMPLATES'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POST_TEMPLATE')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_POST_TEMPLATE')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POST_TEMPLATE')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_POST_TEMPLATE')),
 			),
 			do_lang('POST_TEMPLATES')
 		);

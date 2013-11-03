@@ -63,7 +63,7 @@ class Hook_realtime_rain_polls
 					'FROM_MEMBER_ID'=>strval($member_id),
 					'TO_MEMBER_ID'=>NULL,
 					'TITLE'=>rain_truncate_for_title(get_translated_text($row['question'])),
-					'IMAGE'=>find_theme_image('bigicons/polls'),
+					'IMAGE'=>find_theme_image('icons/48x48/menu/social/polls'),
 					'TIMESTAMP'=>strval($timestamp),
 					'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),
 					'TICKER_TEXT'=>$ticker_text,

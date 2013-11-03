@@ -38,7 +38,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -60,7 +60,6 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 
 		require_lang('ocf');
 
-		set_helper_panel_pic('pagepics/emoticons');
 		set_helper_panel_tutorial('tut_emoticons');
 
 		if ($type=='import')
@@ -140,10 +139,9 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('EMOTICONS'),comcode_lang_string('DOC_EMOTICONS'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('emoticons',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_EMOTICONS')),
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_EMOTICON')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_EMOTICON')),
+				array('menu/_generic_admin/import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_EMOTICONS')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_EMOTICON')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_EMOTICON')),
 			),
 			do_lang('EMOTICONS')
 		);

@@ -44,7 +44,7 @@ class Module_groups
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -99,7 +99,7 @@ class Module_groups
 				'title'=>$group_name,
 				'identifier'=>'_SEARCH:groups:view:'.strval($id),
 				'description'=>'',
-				'image'=>find_theme_image('bigicons/usergroups'),
+				'image'=>find_theme_image('icons/48x48/menu/social/groups'),
 			));
 
 			$this->title=get_screen_title($club?'CLUB':'USERGROUP',true,array(make_fractionable_editable('group',$id,$group_name)));

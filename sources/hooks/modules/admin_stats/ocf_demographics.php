@@ -33,8 +33,8 @@ class Hook_admin_stats_ocf_demographics
 		require_lang('stats');
 
 		return array(
-			array('demographics'=>'DEMOGRAPHICS',),
-			array('statistics_demographics',array('_SELF',array('type'=>'demographics'),'_SELF'),do_lang('DEMOGRAPHICS'),('DESCRIPTION_DEMOGRAPHICS')),
+			array('demographics'=>array('DEMOGRAPHICS','menu/adminzone/audit/statistics/demographics'),),
+			array('menu/adminzone/audit/statistics/demographics',array('_SELF',array('type'=>'demographics'),'_SELF'),do_lang('DEMOGRAPHICS'),'DESCRIPTION_DEMOGRAPHICS'),
 		);
 	}
 

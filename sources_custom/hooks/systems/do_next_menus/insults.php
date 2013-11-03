@@ -10,8 +10,8 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
+ * @package		oc_banter
  */
-
 
 class Hook_do_next_menus_insults
 {
@@ -23,11 +23,8 @@ class Hook_do_next_menus_insults
 	 */
 	function run()
 	{
-		require_lang('insults');
-		//if (!addon_installed('insults')) return array();
-
 		return array(
-			array('setup','insults',array('insults',array(),get_page_zone('insults')),do_lang_tempcode('MANAGE_INSULTS'),('DOC_INSULTS'))
+			array('setup','menu/insults',array('insults',array(),get_page_zone('insults')),do_lang_tempcode('insults:MANAGE_INSULTS'),'insults:DOC_INSULTS')
 		);
 	}
 

@@ -25,8 +25,8 @@ class Hook_do_next_menus_ocportalcom_support_credits
 	function run()
 	{
 		return array(
-			array('usage','admin_home',array('outstanding_credits',array(),'adminzone'),do_lang_tempcode('UNSPENT_SUPPORT_CREDITS')),
-			array('tools','admin_home',array('admin_customers',array(),'adminzone'),do_lang_tempcode('CHARGE_CUSTOMER')),
+			array('audit','menu/_generic_admin/tool',array('outstanding_credits',array(),'adminzone'),do_lang_tempcode('customers:UNSPENT_SUPPORT_CREDITS')),
+			array('tools','menu/_generic_admin/tool',array('admin_customers',array(),'adminzone'),do_lang_tempcode('customers:CHARGE_CUSTOMER')),
 		);
 	}
 

@@ -82,27 +82,27 @@ class Hook_Profiles_Tabs_about
 		if ((has_privilege($member_id_viewing,'warn_members')) && (has_actual_page_access($member_id_viewing,'warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$redir_url=get_self_url(true);
-			$modules[]=array('usage',do_lang_tempcode('WARN_MEMBER'),build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$member_id_of,'redirect'=>$redir_url),get_module_zone('warnings')));
-			$modules[]=array('usage',do_lang_tempcode('PUNITIVE_HISTORY'),build_url(array('page'=>'warnings','type'=>'history','member_id'=>$member_id_of),get_module_zone('warnings')));
+			$modules[]=array('audit',do_lang_tempcode('WARN_MEMBER'),build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$member_id_of,'redirect'=>$redir_url),get_module_zone('warnings')));
+			$modules[]=array('audit',do_lang_tempcode('PUNITIVE_HISTORY'),build_url(array('page'=>'warnings','type'=>'history','member_id'=>$member_id_of),get_module_zone('warnings')));
 		}
 		if ((has_privilege($member_id_viewing,'view_content_history')) && (has_actual_page_access($member_id_viewing,'admin_ocf_history')))
-			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('usage',do_lang_tempcode('POST_HISTORY'),build_url(array('page'=>'admin_ocf_history','member_id'=>$member_id_of),'adminzone'));
+			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('audit',do_lang_tempcode('POST_HISTORY'),build_url(array('page'=>'admin_ocf_history','member_id'=>$member_id_of),'adminzone'));
 		if ((addon_installed('securitylogging')) && (has_actual_page_access($member_id_viewing,'admin_lookup')))
 		{
 			require_lang('lookup');
-			$modules[]=array('usage',do_lang_tempcode('INVESTIGATE_USER'),build_url(array('page'=>'admin_lookup','param'=>$member_id_of),'adminzone'));
+			$modules[]=array('audit',do_lang_tempcode('INVESTIGATE_USER'),build_url(array('page'=>'admin_lookup','param'=>$member_id_of),'adminzone'));
 		}
 		if (has_actual_page_access($member_id_viewing,'admin_security'))
 		{
 			require_lang('security');
-			$modules[]=array('usage',do_lang_tempcode('SECURITY_LOGGING'),build_url(array('page'=>'admin_security','member_id'=>$member_id_of),'adminzone'));
+			$modules[]=array('audit',do_lang_tempcode('SECURITY_LOGGING'),build_url(array('page'=>'admin_security','member_id'=>$member_id_of),'adminzone'));
 		}
 		if (addon_installed('actionlog'))
 		{
 			if (has_actual_page_access($member_id_viewing,'admin_actionlog'))
 			{
 				require_lang('actionlog');
-				$modules[]=array('usage',do_lang_tempcode('VIEW_ACTION_LOGS'),build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$member_id_of),'adminzone'));
+				$modules[]=array('audit',do_lang_tempcode('VIEW_ACTIONLOGS'),build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$member_id_of),'adminzone'));
 			}
 		}
 		if ((has_privilege($member_id_viewing,'assume_any_member')) && (get_member()!=$member_id_of))
@@ -157,7 +157,7 @@ class Hook_Profiles_Tabs_about
 			}
 		}
 		require_lang('menus');
-		$sections=array('contact'=>do_lang_tempcode('CONTACT'),'profile'=>do_lang_tempcode('EDIT_PROFILE'),'views'=>do_lang_tempcode('ACCOUNT'),'usage'=>do_lang_tempcode('USAGE'),'content'=>do_lang_tempcode('CONTENT'));
+		$sections=array('contact'=>do_lang_tempcode('CONTACT'),'profile'=>do_lang_tempcode('EDIT_PROFILE'),'views'=>do_lang_tempcode('ACCOUNT'),'audit'=>do_lang_tempcode('AUDIT'),'content'=>do_lang_tempcode('CONTENT'));
 		$actions=array();
 
 		sort_maps_by($modules,1);
@@ -405,7 +405,7 @@ class Hook_Profiles_Tabs_about
 			'ACTIONS_contact'=>$actions['contact'],
 			'ACTIONS_profile'=>$actions['profile'],
 			'ACTIONS_views'=>$actions['views'],
-			'ACTIONS_usage'=>$actions['usage'],
+			'ACTIONS_audit'=>$actions['audit'],
 			'ACTIONS_content'=>$actions['content'],
 			'USERNAME'=>$username,
 			'MEMBER_ID'=>strval($member_id_of),

@@ -29,16 +29,15 @@ function booking_do_next()
 	require_code('fields');
 	return do_next_manager(get_screen_title('BOOKINGS'),comcode_lang_string('DOC_BOOKING'),
 		array(
-			/*	 type							  page	 params													 zone	  */
-			has_privilege(get_member(),'submit_cat_highrange_content','cms_booking')?array('bookable',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_BOOKABLE')):NULL,
-			has_privilege(get_member(),'edit_cat_highrange_content','cms_booking')?array('bookable',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_BOOKABLE')):NULL,
-			has_privilege(get_member(),'submit_cat_highrange_content','cms_booking')?array('supplement',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_BOOKABLE_SUPPLEMENT')):NULL,
-			has_privilege(get_member(),'edit_cat_highrange_content','cms_booking')?array('supplement',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_BOOKABLE_SUPPLEMENT')):NULL,
-			has_privilege(get_member(),'submit_cat_highrange_content','cms_booking')?array('blacked',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_BOOKABLE_BLACKED')):NULL,
-			has_privilege(get_member(),'edit_cat_highrange_content','cms_booking')?array('blacked',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_BOOKABLE_BLACKED')):NULL,
-			has_privilege(get_member(),'submit_highrange_content','cms_booking')?array('booking',array('_SELF',array('type'=>'ab'),'_SELF'),do_lang('ADD_BOOKING')):NULL,
-			has_privilege(get_member(),'edit_highrange_content','cms_booking')?array('booking',array('_SELF',array('type'=>'eb'),'_SELF'),do_lang('EDIT_BOOKING')):NULL,
-			has_actual_page_access(get_member(),'calendar')?array('calendar',array('calendar',array('type'=>'misc','view'=>'month'),'_SEARCH'),do_lang('CALENDAR')):NULL,
+			has_privilege(get_member(),'submit_cat_highrange_content','cms_booking')?array('menu/bookable',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_BOOKABLE')):NULL,
+			has_privilege(get_member(),'edit_cat_highrange_content','cms_booking')?array('menu/bookable',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_BOOKABLE')):NULL,
+			has_privilege(get_member(),'submit_cat_highrange_content','cms_booking')?array('menu/supplement',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_BOOKABLE_SUPPLEMENT')):NULL,
+			has_privilege(get_member(),'edit_cat_highrange_content','cms_booking')?array('menu/supplement',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_BOOKABLE_SUPPLEMENT')):NULL,
+			has_privilege(get_member(),'submit_cat_highrange_content','cms_booking')?array('menu/blacked',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_BOOKABLE_BLACKED')):NULL,
+			has_privilege(get_member(),'edit_cat_highrange_content','cms_booking')?array('menu/blacked',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_BOOKABLE_BLACKED')):NULL,
+			has_privilege(get_member(),'submit_highrange_content','cms_booking')?array('menu/booking',array('_SELF',array('type'=>'ab'),'_SELF'),do_lang('ADD_BOOKING')):NULL,
+			has_privilege(get_member(),'edit_highrange_content','cms_booking')?array('menu/booking',array('_SELF',array('type'=>'eb'),'_SELF'),do_lang('EDIT_BOOKING')):NULL,
+			has_actual_page_access(get_member(),'calendar')?array('calendar',array('menu/calendar',array('type'=>'misc','view'=>'month'),'_SEARCH'),do_lang('CALENDAR')):NULL,
 		),
 		do_lang('BOOKINGS')
 	);

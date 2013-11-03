@@ -24,13 +24,18 @@ class Hook_search_calendar
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (!module_installed('calendar')) return NULL;
 
-		if (!has_actual_page_access(get_member(),'calendar')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'calendar')) return NULL;
+		}
+
 		if ($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)')==0) return NULL;
 
 		require_lang('calendar');
@@ -38,6 +43,18 @@ class Hook_search_calendar
 		$info=array();
 		$info['lang']=do_lang_tempcode('CALENDAR');
 		$info['default']=false;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('calendar'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('calendar'),
+				'page_name'=>'calendar',
+			),
+		);
 
 		return $info;
 	}

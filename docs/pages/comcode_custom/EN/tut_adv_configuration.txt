@@ -440,8 +440,8 @@ sites/www/uploads/galleries
 sites/www/uploads/galleries/index.html
 sites/www/uploads/galleries_thumbs
 sites/www/uploads/galleries_thumbs/index.html
-sites/www/uploads/grepimages
-sites/www/uploads/grepimages/index.html
+sites/www/uploads/repimages
+sites/www/uploads/repimages/index.html
 sites/www/uploads/index.html
 sites/www/uploads/ocf_avatars
 sites/www/uploads/ocf_avatars/index.html

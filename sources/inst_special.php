@@ -79,9 +79,8 @@ function get_chmod_array($lang)
 			'pages/comcode_custom','site/pages/comcode_custom','docs/pages/comcode_custom','adminzone/pages/comcode_custom','forum/pages/comcode_custom','cms/pages/comcode_custom',
 			'pages/comcode_custom/'.$lang,'site/pages/comcode_custom/'.$lang,'docs/pages/comcode_custom/'.$lang,'adminzone/pages/comcode_custom/'.$lang,'forum/pages/comcode_custom/'.$lang,'cms/pages/comcode_custom/'.$lang,
 			'themes/default/css_custom','themes/default/images_custom','themes/default/templates_custom','themes/default/templates_cached','themes/default/templates_cached/'.$lang,'themes/default/theme.ini',
-			'uploads/incoming','uploads/website_specific','uploads/personal_sound_effects','uploads/banners','uploads/downloads','uploads/galleries','uploads/watermarks','uploads/grepimages','uploads/galleries_thumbs','uploads/catalogues','uploads/attachments','uploads/attachments_thumbs','uploads/auto_thumbs','uploads/ocf_avatars','uploads/ocf_cpf_upload','uploads/ocf_photos','uploads/ocf_photos_thumbs','uploads/filedump',
-			'_config.php','exports/backups','exports/file_backups','exports/addons','imports/addons',
-			'site/pages/html_custom/'.$lang.'/download_tree_made.htm','site/pages/html_custom/'.$lang.'/wiki_tree_made.htm'
+			'uploads/incoming','uploads/website_specific','uploads/personal_sound_effects','uploads/banners','uploads/downloads','uploads/galleries','uploads/watermarks','uploads/repimages','uploads/galleries_thumbs','uploads/catalogues','uploads/attachments','uploads/attachments_thumbs','uploads/auto_thumbs','uploads/ocf_avatars','uploads/ocf_cpf_upload','uploads/ocf_photos','uploads/ocf_photos_thumbs','uploads/filedump',
+			'_config.php','exports/backups','exports/file_backups','exports/addons','imports/addons'
 		)
 	);
 }

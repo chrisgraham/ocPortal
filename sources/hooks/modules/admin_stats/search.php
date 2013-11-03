@@ -31,8 +31,8 @@ class Hook_admin_stats_search
 		require_lang('search');
 
 		return array(
-			array('search'=>'SEARCH_STATISTICS',),
-			array('searchstats',array('_SELF',array('type'=>'search'),'_SELF'),do_lang('SEARCH_STATISTICS'),('DESCRIPTION_SEARCH_STATISTICS')),
+			array('search'=>array('SEARCH_STATISTICS','menu/adminzone/audit/statistics/search'),),
+			array('menu/adminzone/audit/statistics/search',array('_SELF',array('type'=>'search'),'_SELF'),do_lang('SEARCH_STATISTICS'),'DESCRIPTION_SEARCH_STATISTICS'),
 		);
 	}
 

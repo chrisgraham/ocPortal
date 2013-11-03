@@ -8,10 +8,10 @@
 			<div>
 				<div>
 					{+START,IF_EMPTY,{WARNING}}
-						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{URL*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
+						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{URL*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,icons/48x48/menu/{PICTURE*}}" /></a>
 					{+END}
 					{+START,IF_NON_EMPTY,{WARNING}}
-						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event); var t=this; window.fauxmodal_confirm('{WARNING;*}',function(answer) { if (answer) click_link(t); }); return false;" href="{URL*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
+						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event); var t=this; window.fauxmodal_confirm('{WARNING;*}',function(answer) { if (answer) click_link(t); }); return false;" href="{URL*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,icons/48x48/menu/{PICTURE*}}" /></a>
 					{+END}
 				</div>
 

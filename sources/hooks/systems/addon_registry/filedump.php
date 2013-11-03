@@ -92,7 +92,7 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/ajax_tree/choose_filedump_file.php',
 			'sources/hooks/systems/do_next_menus/filedump.php',
 			'sources/hooks/modules/admin_import_types/filedump.php',
-			'themes/default/templates/FILE_DUMP_SCREEN.tpl',
+			'themes/default/templates/FILEDUMP_SCREEN.tpl',
 			'uploads/filedump/index.html',
 			'cms/pages/modules/filedump.php',
 			'lang/EN/filedump.ini',
@@ -101,7 +101,6 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/rss/filedump.php',
 			'sources/hooks/systems/occle_fs/home.php',
 			'uploads/filedump/.htaccess',
-			'themes/default/images/bigicons/filedump.png',
 		);
 	}
 
@@ -114,7 +113,7 @@ class Hook_addon_registry_filedump
 	function tpl_previews()
 	{
 		return array(
-			'FILE_DUMP_SCREEN.tpl'=>'file_dump_screen'
+			'FILEDUMP_SCREEN.tpl'=>'filedump_screen'
 		);
 	}
 
@@ -125,12 +124,12 @@ class Hook_addon_registry_filedump
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__file_dump_screen()
+	function tpl_preview__filedump_screen()
 	{
 		require_css('forms');
 
 		return array(
-			lorem_globalise(do_lorem_template('FILE_DUMP_SCREEN',array(
+			lorem_globalise(do_lorem_template('FILEDUMP_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FILES'=>placeholder_table(),
 				'UPLOAD_FORM'=>placeholder_form(),

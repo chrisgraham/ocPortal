@@ -44,11 +44,11 @@ class Module_admin_phpinfo
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('!'=>'PHP_INFO');
+		return array('!'=>'PHPINFO');
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Module_admin_phpinfo
 
 		require_lang('menus');
 
-		get_screen_title('PHP_INFO');
+		get_screen_title('PHPINFO');
 
 		require_css('phpinfo');
 
@@ -70,7 +70,7 @@ class Module_admin_phpinfo
 		$GLOBALS['TITLE_CALLED']=true;
 
 		require_lang('menus');
-		set_helper_panel_text(comcode_lang_string('DOC_PHP_INFO'));
+		set_helper_panel_text(comcode_lang_string('DOC_PHPINFO'));
 
 		ob_start();
 		if ((function_exists('phpinfo')) && (strpos(@ini_get('disable_functions'),'phpinfo')===false))

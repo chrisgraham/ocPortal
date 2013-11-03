@@ -569,8 +569,8 @@
   </parameter> 
 
   <parameter
-    name="SetAclParameter57" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/grepimages" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/grepimages" />
+    name="SetAclParameter57" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/repimages" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/repimages" />
   </parameter> 
 
   <parameter

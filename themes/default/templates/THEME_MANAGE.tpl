@@ -24,19 +24,19 @@
 		<p><a href="{SCREEN_PREVIEW_URL*}">{!_SCREEN_PREVIEWS}</a></p>
 	</td>
 	<td class="do_theme_item" onclick="click_link(this.getElementsByTagName('a')[0]);" onkeypress="if (enter_pressed(event)) return this.onclick.call(this,event);">
-		<div><a rel="edit" title="{!EDIT_THEME}: {NAME*}" href="{EDIT_URL*}"><img alt="" src="{$IMG*,bigicons/edit_this}" /></a></div>
+		<div><a rel="edit" title="{!EDIT_THEME}: {NAME*}" href="{EDIT_URL*}"><img alt="" src="{$IMG*,icons/48x48/menu/_generic_admin/edit_this}" /></a></div>
 		<div><a title="{!EDIT_THEME}: {NAME*}" href="{EDIT_URL*}">{$?,{$IS_EMPTY,{THEME_USAGE}},{!_EDIT_THEME},{!EDIT_THEME}}</a></div>
 	</td>
 	<td class="do_theme_item" onclick="click_link(this.getElementsByTagName('a')[0]);" onkeypress="if (enter_pressed(event)) return this.onclick.call(this,event);">
-		<div><a rel="edit" title="{!EDIT_CSS}: {NAME*}" href="{CSS_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; window.fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;"><img alt="" src="{$IMG*,bigicons/edit_css}" /></a></div>
+		<div><a rel="edit" title="{!EDIT_CSS}: {NAME*}" href="{CSS_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; window.fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;"><img alt="" src="{$IMG*,icons/48x48/menu/adminzone/style/themes/css}" /></a></div>
 		<div><a title="{!EDIT_CSS}: {NAME*}" href="{CSS_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; window.fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;">{!EDIT_CSS}</a></div>
 	</td>
 	<td class="do_theme_item" onclick="click_link(this.getElementsByTagName('a')[0]);" onkeypress="if (enter_pressed(event)) return this.onclick.call(this,event);">
-		<div><a rel="edit" title="{!EDIT_TEMPLATES}: {NAME*}" href="{TEMPLATES_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; window.fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;"><img alt="" src="{$IMG*,bigicons/edit_templates}" /></a></div>
+		<div><a rel="edit" title="{!EDIT_TEMPLATES}: {NAME*}" href="{TEMPLATES_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; window.fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;"><img alt="" src="{$IMG*,icons/48x48/menu/adminzone/style/themes/templates}" /></a></div>
 		<div><a title="{!EDIT_TEMPLATES}: {NAME*}" href="{TEMPLATES_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; window.fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;">{!EDIT_TEMPLATES}</a></div>
 	</td>
 	<td class="do_theme_item" onclick="click_link(this.getElementsByTagName('a')[0]);" onkeypress="if (enter_pressed(event)) return this.onclick.call(this,event);">
-		<div><a rel="edit" title="{!MANAGE_THEME_IMAGES}: {NAME*}" href="{IMAGES_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; window.fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;"><img alt="" src="{$IMG*,bigicons/manage_images}" /></a></div>
+		<div><a rel="edit" title="{!MANAGE_THEME_IMAGES}: {NAME*}" href="{IMAGES_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; window.fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;"><img alt="" src="{$IMG*,icons/48x48/menu/adminzone/style/themes/theme_images}" /></a></div>
 		<div><a title="{!MANAGE_THEME_IMAGES}: {NAME*}" href="{IMAGES_URL*}" onclick="cancel_bubbling(event); if ('{NAME;*}'=='default') { var t=this; fauxmodal_confirm('{!EDIT_DEFAULT_THEME_WARNING;}',function(result) { if (result) { click_link(t); } }); return false; } return true;">{!MANAGE_THEME_IMAGES}</a></div>
 	</td>
 </tr>

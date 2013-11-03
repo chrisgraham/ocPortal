@@ -1334,7 +1334,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 	if (!is_null($rep_image))
 	{
 		$update_map['rep_image']=$rep_image;
-		delete_upload('uploads/grepimages','galleries','rep_image','name',$old_name,$rep_image);
+		delete_upload('uploads/repimages','galleries','rep_image','name',$old_name,$rep_image);
 	}
 	if (!is_null($watermark_top_left))
 	{
@@ -1403,7 +1403,7 @@ function delete_gallery($name)
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	require_code('files2');
-	delete_upload('uploads/grepimages','galleries','rep_image','name',$name);
+	delete_upload('uploads/repimages','galleries','rep_image','name',$name);
 	delete_upload('uploads/watermarks','galleries','watermark_top_left','name',$name);
 	delete_upload('uploads/watermarks','galleries','watermark_top_right','name',$name);
 	delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$name);

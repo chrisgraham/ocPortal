@@ -30,8 +30,8 @@ class Hook_do_next_menus_themewizard
 	function run()
 	{
 		return array(
-//			array('style','themewizard',array('admin_themewizard',array('type'=>'misc'),get_module_zone('admin_themewizard')),do_lang_tempcode('THEMEWIZARD'),('DOC_THEMEWIZARD')),
-			array('style','make_logo',array('admin_themewizard',array('type'=>'make_logo'),get_module_zone('admin_themewizard')),do_lang_tempcode('LOGOWIZARD'),('DOC_LOGOWIZARD')),
+			//array('style','menu/adminzone/style/themes/themewizard',array('admin_themewizard',array('type'=>'misc'),get_module_zone('admin_themewizard')),do_lang_tempcode('themes:THEMEWIZARD'),'themes:DOC_THEMEWIZARD'),
+			array('style','menu/adminzone/style/themes/logowizard',array('admin_themewizard',array('type'=>'make_logo'),get_module_zone('admin_themewizard')),do_lang_tempcode('themes:LOGOWIZARD'),'themes:DOC_LOGOWIZARD'),
 		);
 	}
 

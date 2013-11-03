@@ -44,11 +44,11 @@ class Module_admin_actionlog
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'VIEW_ACTION_LOGS');
+		return array('misc'=>'VIEW_ACTIONLOGS');
 	}
 
 	var $title;
@@ -66,28 +66,27 @@ class Module_admin_actionlog
 
 		if ($type=='misc')
 		{
-			set_helper_panel_pic('pagepics/actionlog');
 			set_helper_panel_tutorial('tut_trace');
 
-			breadcrumb_set_self(do_lang_tempcode('VIEW_ACTION_LOGS'));
+			breadcrumb_set_self(do_lang_tempcode('VIEW_ACTIONLOGS'));
 
-			$this->title=get_screen_title('VIEW_ACTION_LOGS');
+			$this->title=get_screen_title('VIEW_ACTIONLOGS');
 		}
 
 		if ($type=='list')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTION_LOGS'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTIONLOGS'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULTS'));
 
-			$this->title=get_screen_title('VIEW_ACTION_LOGS');
+			$this->title=get_screen_title('VIEW_ACTIONLOGS');
 		}
 
 		if ($type=='view')
 		{
 			breadcrumb_set_self(do_lang_tempcode('ENTRY'));
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTION_LOGS')),array('_SELF:_SELF:list',do_lang_tempcode('RESULTS'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTIONLOGS')),array('_SELF:_SELF:list',do_lang_tempcode('RESULTS'))));
 
-			$this->title=get_screen_title('VIEW_ACTION_LOGS');
+			$this->title=get_screen_title('VIEW_ACTIONLOGS');
 		}
 
 		return NULL;
@@ -192,7 +191,7 @@ class Module_admin_actionlog
 		$fields->attach(form_input_line(do_lang_tempcode('PARAMETER_B'),'','param_b','',false));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'list'),'_SELF',NULL,false,true);
-		$submit_name=do_lang_tempcode('VIEW_ACTION_LOGS');
+		$submit_name=do_lang_tempcode('VIEW_ACTIONLOGS');
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'f2c6eda24e0e973aa7e253054f6683a5','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
@@ -371,7 +370,7 @@ class Module_admin_actionlog
 		}
 		$table=results_table(do_lang_tempcode('ACTIONS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		$tpl=do_template('ACTION_LOGS_SCREEN',array('_GUID'=>'d75c813e372c3ca8d1204609e54c9d65','TABLE'=>$table,'TITLE'=>$this->title));
+		$tpl=do_template('ACTIONLOGS_SCREEN',array('_GUID'=>'d75c813e372c3ca8d1204609e54c9d65','TABLE'=>$table,'TITLE'=>$this->title));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -419,10 +418,10 @@ class Module_admin_actionlog
 				$fields['IP_BANNED']=(!$banned_test_1)?do_lang_tempcode('NO'):do_lang_tempcode('YES');
 				if ($row['ip']!=get_ip_address())
 				{
-					$fields['IP_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'eff2890f2193ece32df8ec8ee48b252d','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_ip_ban','id'=>$row['ip'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
+					$fields['IP_BANNED']->attach(do_template('ACTIONLOGS_TOGGLE_LINK',array('_GUID'=>'eff2890f2193ece32df8ec8ee48b252d','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_ip_ban','id'=>$row['ip'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 					if (get_option('stopforumspam_api_key').get_option('tornevall_api_username')!='')
 					{
-						$fields['SYNDICATE_TO_STOPFORUMSPAM']=do_template('ACTION_LOGS_TOGGLE_LINK',array(
+						$fields['SYNDICATE_TO_STOPFORUMSPAM']=do_template('ACTIONLOGS_TOGGLE_LINK',array(
 							'_GUID'=>'7d10045c6b3b48f256e2f8eb5535809c',
 							'LABEL'=>do_lang_tempcode('PROCEED'),
 							'URL'=>build_url(array('page'=>'admin_ipban','type'=>'syndicate_ip_ban','ip'=>$row['ip'],'member_id'=>$row['member_id'],'reason'=>do_lang('BANNED_ADDRESSES'),'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')),
@@ -434,13 +433,13 @@ class Module_admin_actionlog
 			$fields['SUBMITTER_BANNED']=is_null($banned_test_2)?do_lang_tempcode('NO'):do_lang_tempcode('YES');
 			if ((!is_guest($row['member_id'])) && ($row['member_id']!=get_member()))
 			{
-				$fields['SUBMITTER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'f79fb00ef35d89381371a67bc9c4d69b','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_submitter_ban','id'=>$row['member_id'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
+				$fields['SUBMITTER_BANNED']->attach(do_template('ACTIONLOGS_TOGGLE_LINK',array('_GUID'=>'f79fb00ef35d89381371a67bc9c4d69b','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_submitter_ban','id'=>$row['member_id'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 			}
 			$banned_test_3=$GLOBALS['FORUM_DRIVER']->is_banned($row['member_id']);
 			$fields['MEMBER_BANNED']=$banned_test_3?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			if (((get_forum_type()=='ocf') && (!is_guest($row['member_id']))) && ($row['member_id']!=get_member()))
 			{
-				$fields['MEMBER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'6b192ecfad1afc67bb8c2f1e744cc3b1','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_member_ban','id'=>$row['member_id'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
+				$fields['MEMBER_BANNED']->attach(do_template('ACTIONLOGS_TOGGLE_LINK',array('_GUID'=>'6b192ecfad1afc67bb8c2f1e744cc3b1','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_member_ban','id'=>$row['member_id'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 			}
 		}
 		$fields['INVESTIGATE_USER']=hyperlink(build_url(array('page'=>'admin_lookup','id'=>(array_key_exists('ip',$row))?$row['ip']:$row['member_id']),'_SELF'),do_lang_tempcode('PROCEED'));

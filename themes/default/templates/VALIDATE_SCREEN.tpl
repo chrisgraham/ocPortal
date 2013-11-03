@@ -3,7 +3,7 @@
 
 	{+START,IF_NON_EMPTY,{RETURN_URL}}
 		<p class="back_button">
-			<a href="{RETURN_URL*}"><img title="{MSG}" alt="{MSG}" src="{$IMG*,bigicons/back}" /></a>
+			<a href="{RETURN_URL*}"><img title="{MSG}" alt="{MSG}" src="{$IMG*,icons/48x48/menu/_generic_admin/back}" /></a>
 		</p>
 	{+END}
 

@@ -32,7 +32,7 @@ class Hook_do_next_menus_phpinfo
 		if (!addon_installed('phpinfo')) return array();
 
 		return array(
-			array('tools','phpinfo',array('admin_phpinfo',array(),get_module_zone('admin_phpinfo')),do_lang_tempcode('PHP_INFO'),('DOC_PHP_INFO')),
+			array('tools','menu/adminzone/tools/phpinfo',array('admin_phpinfo',array(),get_module_zone('admin_phpinfo')),do_lang_tempcode('menus:PHPINFO'),'menus:DOC_PHPINFO'),
 		);
 	}
 

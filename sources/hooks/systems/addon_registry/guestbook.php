@@ -88,6 +88,7 @@ class Hook_addon_registry_guestbook
 		return array(
 			'sources/hooks/systems/addon_registry/guestbook.php',
 			'site/pages/comcode/EN/guestbook.txt',
+			'sources/hooks/systems/do_next_menus/guestbook.php',
 		);
 	}
 

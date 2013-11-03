@@ -1860,12 +1860,12 @@ class Hook_smf2
 
 				if ($row['illustration']!='')
 				{
-					$out_filename=find_derivative_filename('uploads/grepimages',basename($row['illustration']));
-					$out_path=get_custom_file_base().'/uploads/grepimages/'.$out_filename;
+					$out_filename=find_derivative_filename('uploads/repimages',basename($row['illustration']));
+					$out_path=get_custom_file_base().'/uploads/repimages/'.$out_filename;
 					$out_handle=fopen($out_path,'wb');
 					http_download_file($boardurl.'/tp-files/tp-articles/illustrations/'.$row['illustration'],NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$out_handle);
 					fclose($out_handle);
-					$image='uploads/grepimages/'.urlencode($out_filename);
+					$image='uploads/repimages/'.urlencode($out_filename);
 				} else
 				{
 					$image='';

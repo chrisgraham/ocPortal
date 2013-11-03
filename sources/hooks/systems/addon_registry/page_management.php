@@ -91,13 +91,8 @@ class Hook_addon_registry_page_management
 			'themes/default/templates/VALIDATE_CHECK_SCREEN.tpl',
 			'themes/default/templates/VALIDATE_CHECK_ERROR.tpl',
 			'adminzone/pages/modules/admin_sitemap.php',
-			'themes/default/images/bigicons/sitemap.png',
-			'themes/default/images/pagepics/sitemapeditor.png',
 			'themes/default/templates/JAVASCRIPT_SITEMAP_EDITOR.tpl',
 			'themes/default/templates/SITEMAP_EDITOR_SCREEN.tpl',
-			'themes/default/images/pagepics/move.png',
-			'themes/default/images/pagepics/deletepage.png',
-			'themes/default/images/pagepics/addpagewizard.png',
 			'themes/default/images/under_construction_animated.gif',
 		);
 	}

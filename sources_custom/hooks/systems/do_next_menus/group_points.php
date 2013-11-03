@@ -13,7 +13,6 @@
  * @package		group_points
  */
 
-
 class Hook_do_next_menus_group_points
 {
 
@@ -25,7 +24,7 @@ class Hook_do_next_menus_group_points
 	function run()
 	{
 		return array(
-			array('setup','pointstore',array('group_points',array('type'=>'misc'),'adminzone'),'Usergroup point assignments'),
+			array('setup','menu/social/pointstore',array('group_points',array('type'=>'misc'),'adminzone'),'Usergroup point assignments'),
 		);
 	}
 

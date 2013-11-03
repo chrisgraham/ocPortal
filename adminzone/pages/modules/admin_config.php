@@ -45,7 +45,7 @@ class Module_admin_config
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -87,7 +87,6 @@ class Module_admin_config
 
 		if ($type=='misc')
 		{
-			set_helper_panel_pic('pagepics/config');
 			set_helper_panel_tutorial('tut_adv_configuration');
 
 			$this->title=get_screen_title('CONFIGURATION');
@@ -95,8 +94,7 @@ class Module_admin_config
 
 		if ($type=='category')
 		{
-			/*set_helper_panel_pic('pagepics/config');		Actually let's save the space
-			set_helper_panel_tutorial('tut_adv_configuration');*/
+			/*Actually let's save the space	set_helper_panel_tutorial('tut_adv_configuration');*/
 
 			$category=get_param('id');
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONFIGURATION'))));

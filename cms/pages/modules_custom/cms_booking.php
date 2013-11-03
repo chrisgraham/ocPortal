@@ -36,11 +36,17 @@ class Module_cms_booking extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'BOOKINGS','ab'=>'ADD_BOOKING','eb'=>'EDIT_BOOKING'),parent::get_entry_points());
+		return array_merge(parent::get_entry_points(),array(
+			'misc'=>'BOOKINGS',
+			'ab'=>array('ADD_BOOKING','menu/_generic_admin/add_one'),
+			'eb'=>array('EDIT_BOOKING','menu/_generic_admin/edit_one'),
+			'av'=>array('ADD_BOOKABLE_BLACKED','menu/_generic_admin/add_one'),
+			'ev'=>array('EDIT_BOOKABLE_BLACKED','menu/_generic_admin/edit_one'),
+		));
 	}
 
 	/**

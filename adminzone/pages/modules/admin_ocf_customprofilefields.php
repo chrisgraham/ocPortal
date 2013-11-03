@@ -35,11 +35,14 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'CUSTOM_PROFILE_FIELDS','stats'=>'CUSTOM_PROFILE_FIELD_STATS'),parent::get_entry_points());
+		return array_merge(array(
+			'misc'=>'CUSTOM_PROFILE_FIELDS',
+			'stats'=>'CUSTOM_PROFILE_FIELD_STATS',
+		),parent::get_entry_points());
 	}
 
 	var $title;
@@ -57,7 +60,6 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 
 		require_lang('ocf');
 
-		set_helper_panel_pic('pagepics/customprofilefields');
 		set_helper_panel_tutorial('tut_adv_members');
 
 		if ($type=='misc')
@@ -118,9 +120,8 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('CUSTOM_PROFILE_FIELDS'),comcode_lang_string('DOC_CUSTOM_PROFILE_FIELDS'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_PROFILE_FIELD')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CUSTOM_PROFILE_FIELD')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_PROFILE_FIELD')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CUSTOM_PROFILE_FIELD')),
 			),
 			do_lang('CUSTOM_PROFILE_FIELDS')
 		);

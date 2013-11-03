@@ -32,7 +32,8 @@ class Hook_do_next_menus_tickets
 		if (!addon_installed('tickets')) return array();
 
 		return array(
-			array('setup','tickets',array('admin_tickets',array('type'=>'misc'),get_module_zone('admin_tickets')),do_lang_tempcode('SUPPORT_TICKETS'),('DOC_TICKETS')),
+			array('setup','menu/site_meta/tickets',array('admin_tickets',array('type'=>'misc'),get_module_zone('admin_tickets')),do_lang_tempcode('tickets:SUPPORT_TICKETS'),'tickets:DOC_TICKETS'),
+			array('site_meta','menu/site_meta/tickets',array('tickets',array(),get_module_zone('tickets')),do_lang_tempcode('tickets:SUPPORT_TICKETS')),
 		);
 	}
 

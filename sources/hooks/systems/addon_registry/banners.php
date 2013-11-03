@@ -112,8 +112,6 @@ class Hook_addon_registry_banners
 			'sources/hooks/systems/sitemap/banner.php',
 			'banner.php',
 			'uploads/banners/index.html',
-			'themes/default/images/bigicons/banners.png',
-			'themes/default/images/pagepics/banners.png',
 			'cms/pages/modules/cms_banners.php',
 			'lang/EN/banners.ini',
 			'site/pages/modules/banners.php',

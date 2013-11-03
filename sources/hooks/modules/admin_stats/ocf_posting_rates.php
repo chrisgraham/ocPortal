@@ -33,8 +33,8 @@ class Hook_admin_stats_ocf_posting_rates
 		require_lang('stats');
 
 		return array(
-			array('posting_rates'=>'POSTING_RATES',),
-			array('statistics_posting_rates',array('_SELF',array('type'=>'posting_rates'),'_SELF'),do_lang('POSTING_RATES'),('DESCRIPTION_POSTING_RATES')),
+			array('posting_rates'=>array('POSTING_RATES','menu/adminzone/audit/statistics/posting_rates'),),
+			array('menu/adminzone/audit/statistics/posting_rates',array('_SELF',array('type'=>'posting_rates'),'_SELF'),do_lang('POSTING_RATES'),'DESCRIPTION_POSTING_RATES'),
 		);
 	}
 

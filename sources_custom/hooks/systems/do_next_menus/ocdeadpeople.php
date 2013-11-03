@@ -23,11 +23,8 @@ class Hook_do_next_menus_ocdeadpeople
 	 */
 	function run()
 	{
-		require_lang('ocdeadpeople');
-		//if (!addon_installed('ocdeadpeople')) return array();
-
 		return array(
-			array('setup','ocdeadpeoplelog',array('admin_ocdeadpeople',array('type'=>'misc'),get_module_zone('admin_ocdeadpeople')),do_lang_tempcode('MANAGE_DISEASES'),('DOC_OCDEADPEOPLE'))
+			array('setup','menu/ocdeadpeoplelog',array('admin_ocdeadpeople',array('type'=>'misc'),get_module_zone('admin_ocdeadpeople')),do_lang_tempcode('ocdeadpeople:MANAGE_DISEASES'),'ocdeadpeople:DOC_OCDEADPEOPLE')
 		);
 	}
 

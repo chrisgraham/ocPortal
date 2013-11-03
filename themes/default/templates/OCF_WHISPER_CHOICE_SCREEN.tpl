@@ -1,7 +1,7 @@
 {TITLE}
 
 <div class="ocf_whisper_lead_in">
-	<img src="{$IMG*,bigicons/subscribers}" alt="" class="right" />
+	<img src="{$IMG*,icons/48x48/buttons/new_topic}" alt="" class="right" />
 
 	{+START,IF,{$HAS_PRIVILEGE,use_pt}}<p>{!WHISPER_TEXT}</p>{+END}
 </div>
@@ -53,7 +53,7 @@
 
 {+START,IF,{$JS_ON}}
 	<p class="back_button">
-		<a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></a>
+		<a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,icons/48x48/menu/_generic_admin/back}" /></a>
 	</p>
 {+END}
 

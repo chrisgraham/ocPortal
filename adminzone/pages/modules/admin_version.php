@@ -381,6 +381,30 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_mime_type','ID_TEXT');
 			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_json_discovery','URLPATH');
 			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_xml_discovery','URLPATH');
+
+			require_code('users_active_actions');
+			$admin_user=get_first_admin_user();
+			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+				'the_zone'=>'site',
+				'the_page'=>'userguide_comcode',
+				'p_parent_page'=>'help',
+				'p_validated'=>1,
+				'p_edit_date'=>NULL,
+				'p_add_date'=>time(),
+				'p_submitter'=>$admin_user,
+				'p_show_as_edit'=>0
+			));
+
+			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+				'the_zone'=>'site',
+				'the_page'=>'keymap',
+				'p_parent_page'=>'help',
+				'p_validated'=>1,
+				'p_edit_date'=>NULL,
+				'p_add_date'=>time(),
+				'p_submitter'=>$admin_user,
+				'p_show_as_edit'=>0
+			));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
@@ -568,7 +592,7 @@ class Module_admin_version
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{

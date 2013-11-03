@@ -259,42 +259,40 @@ function sitemap_do_next_manager($title,$page,$zone,$completion_text)
 
 	require_code('templates_donext');
 	$special=array(
-		/*	 type							  page	 params													 zone	  */
-		array('pagewizard',array('admin_sitemap',array('type'=>'pagewizard','zone'=>$zone),get_module_zone('admin_sitemap')),do_lang_tempcode('PAGE_WIZARD')),
-		array('comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('COMCODE_PAGE_EDIT')),
+		array('menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'pagewizard','zone'=>$zone),get_module_zone('admin_sitemap')),do_lang_tempcode('PAGE_WIZARD')),
+		array('menu/cms/comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('COMCODE_PAGE_EDIT')),
 	);
 	if (addon_installed('redirects_editor'))
 	{
 		require_lang('redirects');
-		$special[]=array('redirect',array('admin_redirects',array('type'=>'misc'),get_module_zone('admin_redirects')),do_lang_tempcode('REDIRECTS'));
+		$special[]=array('menu/adminzone/structure/redirect',array('admin_redirects',array('type'=>'misc'),get_module_zone('admin_redirects')),do_lang_tempcode('REDIRECTS'));
 	}
 	if (!has_js())
 	{
 		$special=array_merge($special,array(
-			array('delete',array('admin_sitemap',array('type'=>'delete'),get_module_zone('admin_sitemap')),do_lang_tempcode('DELETE_PAGES')),
-			array('move',array('admin_sitemap',array('type'=>'move'),get_module_zone('admin_sitemap')),do_lang_tempcode('MOVE_PAGES')),
+			array('menu/adminzone/structure/sitemap/page_delete',array('admin_sitemap',array('type'=>'delete'),get_module_zone('admin_sitemap')),do_lang_tempcode('DELETE_PAGES')),
+			array('menu/adminzone/structure/sitemap/page_move',array('admin_sitemap',array('type'=>'move'),get_module_zone('admin_sitemap')),do_lang_tempcode('MOVE_PAGES')),
 		));
 	} else
 	{
 		$special=array_merge($special,array(
-			array('sitemap',array('admin_sitemap',array('type'=>'sitemap'),get_module_zone('admin_sitemap')),do_lang_tempcode('SITEMAP_EDITOR')),
+			array('menu/adminzone/structure/sitemap/sitemap_editor',array('admin_sitemap',array('type'=>'sitemap'),get_module_zone('admin_sitemap')),do_lang_tempcode('SITEMAP_EDITOR')),
 		));
 	}
 	return do_next_manager($title,$completion_text,
 		$special,
 		do_lang('PAGES'),
-		/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-		/*	 page	 params				  zone	  */
-		NULL,								 // Add one
+		/* TYPED-ORDERED LIST OF 'LINKS'	 */
+		NULL, // Add one
 		is_null($page)?NULL:array('_SELF',array('type'=>'_ed','page_link'=>$zone.':'.$page),'_SELF'), // Edit this
-		NULL,																						// Edit one
-		is_null($page)?NULL:array($page,array(),$zone),		 // View this
-		NULL,				// View archive
-		NULL,						// Add to category
-		NULL,							 // Add one category
-		NULL,							 // Edit one category
-		NULL,  // Edit this category
-		NULL						// View this category
+		NULL, // Edit one
+		is_null($page)?NULL:array($page,array(),$zone), // View this
+		NULL, // View archive
+		NULL, // Add to category
+		NULL, // Add one category
+		NULL, // Edit one category
+		NULL, // Edit this category
+		NULL // View this category
 	);
 }
 

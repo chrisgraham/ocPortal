@@ -41,6 +41,21 @@ class Module_admin_quiz
 		return $info;
 	}
 
+	/**
+	 * Standard modular entry-point finder function.
+	 *
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 */
+	function get_entry_points()
+	{
+		return array(
+			'misc'=>'MANAGE_QUIZZES',
+			'find_winner'=>array('FIND_WINNER','menu/cms/quiz/find_winners'),
+			'survey_results'=>array('SURVEY_RESULTS','menu/cms/quiz/survey_results'),
+			'export'=>array('EXPORT_QUIZ','menu/_generic_admin/export'),
+		);
+	}
+
 	var $title;
 	var $row;
 
@@ -59,10 +74,8 @@ class Module_admin_quiz
 
 		if ($type=='survey_results' || $type=='_survey_results' || $type=='__survey_results')
 		{
-			set_helper_panel_pic('pagepics/survey_results');
 		} else
 		{
-			set_helper_panel_pic('pagepics/quiz');
 		}
 
 		if ($type=='misc')
@@ -147,16 +160,6 @@ class Module_admin_quiz
 	}
 
 	/**
-	 * Standard modular entry-point finder function.
-	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
-	 */
-	function get_entry_points()
-	{
-		return array('misc'=>'MANAGE_QUIZZES','find_winner'=>'FIND_WINNER','survey_results'=>'SURVEY_RESULTS','export'=>'EXPORT_QUIZ');
-	}
-
-	/**
 	 * The do-next manager for before setup management.
 	 *
 	 * @return tempcode		The UI
@@ -168,10 +171,9 @@ class Module_admin_quiz
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('findwinners',array('_SELF',array('type'=>'find_winner'),'_SELF'),do_lang('FIND_WINNERS')),
-				array('survey_results',array('_SELF',array('type'=>'survey_results'),'_SELF'),do_lang('SURVEY_RESULTS')),
-				array('export',array('_SELF',array('type'=>'export'),'_SELF'),do_lang('EXPORT_QUIZ')),
+				array('menu/cms/quiz/find_winners',array('_SELF',array('type'=>'find_winner'),'_SELF'),do_lang('FIND_WINNERS')),
+				array('menu/cms/quiz/survey_results',array('_SELF',array('type'=>'survey_results'),'_SELF'),do_lang('SURVEY_RESULTS')),
+				array('menu/_generic_admin/export',array('_SELF',array('type'=>'export'),'_SELF'),do_lang('EXPORT_QUIZ')),
 			),
 			do_lang('MANAGE_QUIZZES')
 		);

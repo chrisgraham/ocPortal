@@ -147,11 +147,22 @@ class Module_news
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'NEWS_ARCHIVE','cat_select'=>'NEWS_CATEGORIES','blog_select'=>'BLOGS','select'=>'JUST_NEWS_CATEGORIES');
+		$has_blogs=($GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)',NULL,'nc_owner IS NOT NULL')>0);
+
+		$ret=array(
+			'misc'=>'NEWS_ARCHIVE',
+			'cat_select'=>array('NEWS_CATEGORIES','menu/_generic_admin/view_archive'),
+		);
+		if ($has_blogs)
+		{
+			$ret['select']=array('JUST_NEWS_CATEGORIES','menu/rich_content/news');
+			$ret['blog_select']=array('BLOGS','tabs/member_account/blog');
+		}
+		return $ret;
 	}
 
 	var $title;

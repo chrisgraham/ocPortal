@@ -103,8 +103,6 @@ class Hook_addon_registry_setupwizard
 			'text/EN/rules_balanced.txt',
 			'text/EN/rules_corporate.txt',
 			'text/EN/rules_liberal.txt',
-			'themes/default/images/bigicons/setupwizard.png',
-			'themes/default/images/pagepics/configwizard.png',
 			'sources/hooks/modules/admin_setupwizard/.htaccess',
 			'sources/hooks/modules/admin_setupwizard/index.html',
 			'sources/hooks/systems/do_next_menus/setupwizard.php',

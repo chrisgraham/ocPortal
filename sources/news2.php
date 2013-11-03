@@ -453,7 +453,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	{
 		$update_map['news_image']=$image;
 		require_code('files2');
-		delete_upload('uploads/grepimages','news','news_image','id',$id,$image);
+		delete_upload('uploads/repimages','news','news_image','id',$id,$image);
 	}
 
 	if (!is_null($news_categories))
@@ -570,7 +570,7 @@ function delete_news($id)
 	$_title=get_translated_text($title);
 
 	require_code('files2');
-	delete_upload('uploads/grepimages','news','news_image','id',$id);
+	delete_upload('uploads/repimages','news','news_image','id',$id);
 
 	$GLOBALS['SITE_DB']->query_delete('news',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('news_category_entries',array('news_entry'=>$id));

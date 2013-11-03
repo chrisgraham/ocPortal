@@ -139,12 +139,16 @@ class Module_admin_permissions
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		$ret=array('page'=>'PAGE_ACCESS','privileges'=>'PRIVILEGES');
-		if (addon_installed('match_key_permissions')) $ret['keys']='MATCH_KEYS';
+		$ret=array(
+			'page'=>'PAGE_ACCESS',
+			'privileges'=>'PRIVILEGES',
+		);
+		if (addon_installed('match_key_permissions'))
+			$ret['keys']='MATCH_KEYS';
 		return $ret;
 	}
 
@@ -163,25 +167,21 @@ class Module_admin_permissions
 
 		if ($type=='absorb' || $type=='_absorb')
 		{
-			set_helper_panel_pic('pagepics/privileges');
 			set_helper_panel_tutorial('tut_permissions');
 		}
 
 		if ($type=='keys' || $type=='_keys')
 		{
-			set_helper_panel_pic('pagepics/matchkeysecurity');
 			set_helper_panel_tutorial('tut_permissions');
 		}
 
 		if ($type=='page' || $type=='_page')
 		{
-			set_helper_panel_pic('pagepics/permissionstree');
 			set_helper_panel_tutorial('tut_permissions');
 		}
 
 		if ($type=='privileges')
 		{
-			set_helper_panel_pic('pagepics/privileges');
 			set_helper_panel_tutorial('tut_permissions');
 
 			breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
@@ -203,7 +203,6 @@ class Module_admin_permissions
 			$p_section=get_param('id',NULL);
 			if ((is_null($p_section)) || ($p_section==''))
 			{
-				set_helper_panel_pic('pagepics/privileges');
 				set_helper_panel_tutorial('tut_permissions');
 			}
 

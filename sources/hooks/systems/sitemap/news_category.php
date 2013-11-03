@@ -28,11 +28,11 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 	protected $entry_sitetree_hook=array('news');
 
 	/**
-	 * Find details of a virtual position in the sitemap.
+	 * Find details of a virtual position in the sitemap. Virtual positions have no structure of their own, but can find child structures to be absorbed down the tree. We do this for modularity reasons.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
 	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
@@ -43,11 +43,11 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
 	{
 		$nodes=($callback===NULL)?array():mixed();
 
-		if (($valid_node_content_types!==NULL) && (!in_array($this->content_type,$valid_node_content_types)))
+		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
 		{
 			return $nodes;
 		}
@@ -66,7 +66,7 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 				$child_pagelink=$zone.':news:'.$this->screen_type.':'.strval($row['id']);
 				if (strpos($pagelink,':blog=0')!==false) $child_pagelink.=':blog=0';
 				if (strpos($pagelink,':blog=1')!==false) $child_pagelink.=':blog=1';
-				$node=$this->get_node($child_pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 				if ($callback===NULL) $nodes[]=$node;
 			}
 
@@ -82,7 +82,7 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
 	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
@@ -93,9 +93,9 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			Node structure (NULL: working via callback).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
 	{
-		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		if ($_===NULL) return array();
 		list($content_id,$row,$partial_struct)=$_;
 
@@ -110,7 +110,7 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
-		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		foreach ($children as &$child)
 		{
 			if (strpos($pagelink,':blog=0')!==false) $child['pagelink'].=':blog=0';

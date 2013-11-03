@@ -37,11 +37,14 @@ class Module_admin_chat extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_CHATROOMS','delete_all'=>'DELETE_ALL_ROOMS'),parent::get_entry_points());
+		return array_merge(array(
+			'misc'=>'MANAGE_CHATROOMS',
+			'delete_all'=>array('DELETE_ALL_ROOMS','menu/_generic_admin/delete'),
+		),parent::get_entry_points());
 	}
 
 	var $title;
@@ -59,7 +62,6 @@ class Module_admin_chat extends standard_crud_module
 
 		require_lang('chat');
 
-		set_helper_panel_pic('pagepics/chatrooms');
 		set_helper_panel_tutorial('tut_chat');
 
 		if ($type=='misc')
@@ -84,7 +86,9 @@ class Module_admin_chat extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$this->extra_donext_entries=array(array('delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')));
+		$this->extra_donext_entries=array(
+			array('menu/_generic_admin/delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')),
+		);
 
 		require_code('chat');
 		require_code('chat2');
@@ -110,10 +114,9 @@ class Module_admin_chat extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_CHATROOMS'),comcode_lang_string('DOC_CHAT'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CHATROOM')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CHATROOM')),
-				array('delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CHATROOM')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CHATROOM')),
+				array('menu/_generic_admin/delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')),
 			),
 			do_lang('MANAGE_CHATROOMS')
 		);

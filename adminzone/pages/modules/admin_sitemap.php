@@ -45,11 +45,17 @@ class Module_admin_sitemap
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'ZONES','pagewizard'=>'PAGE_WIZARD','sitemap'=>'SITEMAP_EDITOR','move'=>'MOVE');
+		return array(
+			'misc'=>'ZONES',
+			'pagewizard'=>'PAGE_WIZARD',
+			'sitemap'=>'SITEMAP_EDITOR',
+			'move'=>array('MOVE_PAGES','menu/adminzone/structure/site_tree/page_move'),
+			'delete'=>array('DELETE_PAGES','menu/adminzone/structure/site_tree/page_delete'),
+		);
 	}
 
 	var $title;
@@ -67,25 +73,21 @@ class Module_admin_sitemap
 
 		if ($type=='move' || $type=='_move')
 		{
-			set_helper_panel_pic('pagepics/move');
 			set_helper_panel_tutorial('tut_structure');
 		}
 
 		if ($type=='misc')
 		{
-			set_helper_panel_pic('pagepics/sitemapeditor');
 			set_helper_panel_tutorial('tut_structure');
 		}
 
 		if ($type=='page_wizard' || $type=='_page_wizard')
 		{
-			set_helper_panel_pic('pagepics/addpagewizard');
 			set_helper_panel_tutorial('tut_comcode_pages');
 		}
 
 		if ($type=='delete' || $type=='_delete' || $type=='__delete')
 		{
-			set_helper_panel_pic('pagepics/deletepage');
 		}
 
 		if ($type=='sitemap')
@@ -187,10 +189,9 @@ class Module_admin_sitemap
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('PAGES'),comcode_lang_string('DOC_PAGES'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('comcode_page_edit',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('COMCODE_PAGE_EDIT')),
-				array('delete',array('_SELF',array('type'=>'delete'),'_SELF'),do_lang('DELETE_PAGES')),
-				array('move',array('_SELF',array('type'=>'move'),'_SELF'),do_lang('MOVE_PAGES')),
+				array('menu/cms/comcode_page_edit',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('COMCODE_PAGE_EDIT')),
+				array('menu/adminzone/structure/sitemap/page_delete',array('_SELF',array('type'=>'delete'),'_SELF'),do_lang('DELETE_PAGES')),
+				array('menu/adminzone/structure/sitemap/page_move',array('_SELF',array('type'=>'move'),'_SELF'),do_lang('MOVE_PAGES')),
 			),
 			do_lang('PAGES')
 		);

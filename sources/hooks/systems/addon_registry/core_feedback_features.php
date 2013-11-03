@@ -88,8 +88,6 @@ class Hook_addon_registry_core_feedback_features
 			'sources/topics.php',
 			'sources/hooks/systems/notifications/like.php',
 			'sources/hooks/systems/notifications/comment_posted.php',
-			'themes/default/images/pagepics/trackbacks.png',
-			'themes/default/images/bigicons/trackbacks.png',
 			'themes/default/templates/TRACKBACK_DELETE_SCREEN.tpl',
 			'sources/hooks/systems/do_next_menus/trackbacks.php',
 			'lang/EN/trackbacks.ini',

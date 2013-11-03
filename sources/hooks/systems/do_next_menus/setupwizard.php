@@ -29,8 +29,10 @@ class Hook_do_next_menus_setupwizard
 	 */
 	function run()
 	{
+		if (!addon_installed('setupwizard')) return array();
+
 		return array(
-			array('setup','setupwizard',array('admin_setupwizard',array('type'=>'misc'),get_module_zone('admin_setupwizard')),do_lang_tempcode('SETUP_WIZARD'),('DOC_SETUPWIZARD')),
+			array('setup','menu/adminzone/setup/setup_wizard',array('admin_setupwizard',array('type'=>'misc'),get_module_zone('admin_setupwizard')),do_lang_tempcode('config:SETUP_WIZARD'),'config:DOC_SETUPWIZARD'),
 		);
 	}
 

@@ -44,7 +44,7 @@ class Module_admin_ocf_merge_members
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -78,7 +78,6 @@ class Module_admin_ocf_merge_members
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 		}
 
-		set_helper_panel_pic('pagepics/mergemembers');
 		set_helper_panel_tutorial('tut_adv_members');
 
 		$this->title=get_screen_title('MERGE_MEMBERS');

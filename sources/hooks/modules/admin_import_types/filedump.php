@@ -29,7 +29,7 @@ class Hook_admin_import_types_filedump
 	function run()
 	{
 		return array(
-			'filedump'=>'FILE_DUMP',
+			'filedump'=>'FILEDUMP',
 		);
 	}
 

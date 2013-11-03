@@ -60,7 +60,7 @@ There are many methods for banning an ocPortal user:
 
 [title="2"]The Action Log (audit trails)[/title]
 
-{!submitban:DOC_ACTION_LOG}
+{!submitban:DOC_ACTIONLOG}
 
 [media width="150" description="Recent actions performed" float="right"]data_custom/images/docs/adminzone_recent_actions.png[/media]
 This section shows the recent actions performed by you and your staff. Virtually every action that is done by your staff is logged here.

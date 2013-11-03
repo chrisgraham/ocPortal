@@ -44,11 +44,16 @@ class Module_admin_invoices
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'OUTSTANDING_INVOICES','undelivered'=>'UNDELIVERED_INVOICES','ad'=>'CREATE_INVOICE');
+		return array(
+			'misc'=>'INVOICES',
+			'outstanding'=>array('OUTSTANDING_INVOICES','menu/adminzone/audit/ecommerce/outstanding_invoices'),
+			'undelivered'=>array('UNDELIVERED_INVOICES','menu/adminzone/audit/ecommerce/undelivered_invoices'),
+			'ad'=>array('CREATE_INVOICE','menu/adminzone/audit/ecommerce/create_invoice'),
+		);
 	}
 
 	var $title;
@@ -64,18 +69,17 @@ class Module_admin_invoices
 
 		require_lang('ecommerce');
 
-		set_helper_panel_pic('pagepics/invoices');
 		set_helper_panel_tutorial('tut_ecommerce');
 
 		if ($type=='misc')
 		{
 			breadcrumb_set_self(do_lang_tempcode('INVOICES'));
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE'))));
 		}
 
 		if ($type=='ad')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
 			$this->title=get_screen_title('CREATE_INVOICE');
 		}
@@ -83,28 +87,28 @@ class Module_admin_invoices
 		if ($type=='_ad')
 		{
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:ad',do_lang_tempcode('CREATE_INVOICE'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:ad',do_lang_tempcode('CREATE_INVOICE'))));
 
 			$this->title=get_screen_title('CREATE_INVOICE');
 		}
 
 		if ($type=='outstanding')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
 			$this->title=get_screen_title('OUTSTANDING_INVOICES');
 		}
 
 		if ($type=='undelivered')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
 			$this->title=get_screen_title('UNDELIVERED_INVOICES');
 		}
 
 		if ($type=='delete')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
 			if (post_param_integer('confirmed',0)!=1)
 			{
 				breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
@@ -119,7 +123,7 @@ class Module_admin_invoices
 		if ($type=='deliver')
 		{
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
 
 			$this->title=get_screen_title('MARK_AS_DELIVERED');
 		}
@@ -158,10 +162,9 @@ class Module_admin_invoices
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('INVOICES'),comcode_lang_string('DOC_ECOMMERCE'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('CREATE_INVOICE')),
-				array('securitylog',array('_SELF',array('type'=>'outstanding'),'_SELF'),do_lang('OUTSTANDING_INVOICES')),
-				array('edit_one',array('_SELF',array('type'=>'undelivered'),'_SELF'),do_lang('UNDELIVERED_INVOICES')),
+				array('menu/adminzone/audit/ecommerce/create_invoice',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('CREATE_INVOICE')),
+				array('menu/adminzone/audit/ecommerce/outstanding_invoices',array('_SELF',array('type'=>'outstanding'),'_SELF'),do_lang('OUTSTANDING_INVOICES')),
+				array('menu/adminzone/audit/ecommerce/undelivered_invoices',array('_SELF',array('type'=>'undelivered'),'_SELF'),do_lang('UNDELIVERED_INVOICES')),
 			),
 			do_lang('INVOICES')
 		);

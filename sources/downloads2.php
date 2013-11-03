@@ -315,7 +315,7 @@ function edit_download_category($category_id,$category,$parent_id,$description,$
 	{
 		$update_map['rep_image']=$rep_image;
 		require_code('files2');
-		delete_upload('uploads/grepimages','download_categories','rep_image','id',$category_id,$rep_image);
+		delete_upload('uploads/repimages','download_categories','rep_image','id',$category_id,$rep_image);
 	}
 	if (!is_null($add_time))
 		$update_map['add_date']=$add_time;
@@ -349,7 +349,7 @@ function delete_download_category($category_id)
 	$description=$rows[0]['description'];
 
 	require_code('files2');
-	delete_upload('uploads/grepimages','download_categories','rep_image','id',$category_id);
+	delete_upload('uploads/repimages','download_categories','rep_image','id',$category_id);
 
 	$GLOBALS['SITE_DB']->query_delete('download_categories',array('id'=>$category_id),'',1);
 	$GLOBALS['SITE_DB']->query_update('download_downloads',array('category_id'=>$rows[0]['parent_id']),array('category_id'=>$category_id));

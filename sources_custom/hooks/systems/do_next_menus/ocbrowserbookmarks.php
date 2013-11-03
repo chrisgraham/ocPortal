@@ -25,7 +25,7 @@ class Hook_do_next_menus_ocbrowserbookmarks
 	function run()
 	{
 		return array(
-			array('tools','admin_home',array('admin_generate_bookmarks',array(),'adminzone'),make_string_tempcode('Generate bookmarks.html for browser'))
+			array('tools','menu/_generic_admin/tool',array('admin_generate_bookmarks',array(),'adminzone'),make_string_tempcode('Generate bookmarks.html for browser'))
 		);
 	}
 

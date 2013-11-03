@@ -59,7 +59,6 @@ class Module_cms_banners extends standard_crud_module
 
 		inform_non_canonical_parameter('b_type');
 
-		set_helper_panel_pic('pagepics/banners');
 		set_helper_panel_tutorial('tut_banners');
 
 		if ((has_privilege(get_member(),'banner_free')) && (get_option('admin_banners')=='0'))
@@ -163,7 +162,7 @@ class Module_cms_banners extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -191,11 +190,10 @@ class Module_cms_banners extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_BANNERS'),comcode_lang_string('DOC_BANNERS'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_BANNER_TYPE')):NULL,
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('menu/_generic_admin/add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_BANNER_TYPE')):NULL,
 				has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_BANNER_TYPE')):NULL,
-				has_privilege(get_member(),'submit_midrange_content','cms_banners')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_BANNER')):NULL,
-				has_privilege(get_member(),'edit_own_midrange_content','cms_banners')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_BANNER')):NULL,
+				has_privilege(get_member(),'submit_midrange_content','cms_banners')?array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_BANNER')):NULL,
+				has_privilege(get_member(),'edit_own_midrange_content','cms_banners')?array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_BANNER')):NULL,
 			),
 			do_lang('MANAGE_BANNERS')
 		);
@@ -696,18 +694,17 @@ class Module_cms_banners_cat extends standard_crud_module
 			return do_next_manager($title,$description,
 				NULL,
 				NULL,
-				/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-				/*	 page	 params				  zone	  */
-				array('_SELF',array('type'=>'ad'),'_SELF',do_lang_tempcode('ADD_BANNER')),							// Add one
-				NULL,							 // Edit this
-				has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):NULL,											// Edit one
-				NULL,							// View this
-				NULL,				// View archive
-				NULL,	  // Add to category
-				has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang_tempcode('ADD_BANNER_TYPE')):NULL,					  // Add one category
-				has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang_tempcode('EDIT_BANNER_TYPE')):NULL,					  // Edit one category
-				NULL,			 // Edit this category
-				NULL,																						 // View this category
+				/* TYPED-ORDERED LIST OF 'LINKS'	 */
+				array('_SELF',array('type'=>'ad'),'_SELF',do_lang_tempcode('ADD_BANNER')), // Add one
+				NULL, // Edit this
+				has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):NULL, // Edit one
+				NULL, // View this
+				NULL, // View archive
+				NULL, // Add to category
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang_tempcode('ADD_BANNER_TYPE')):NULL, // Add one category
+				has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang_tempcode('EDIT_BANNER_TYPE')):NULL, // Edit one category
+				NULL, // Edit this category
+				NULL, // View this category
 				NULL,
 				NULL,
 				NULL,
@@ -721,18 +718,17 @@ class Module_cms_banners_cat extends standard_crud_module
 		return do_next_manager($title,$description,
 			NULL,
 			NULL,
-			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-			/*	 page	 params				  zone	  */
-			array('_SELF',array('type'=>'ad','b_type'=>$type),'_SELF',do_lang_tempcode('ADD_BANNER')),											// Add one
-			(is_null($id) || (!has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER')),							 // Edit this
-			has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):NULL,											// Edit one
-			((is_null($id)) || (/*Don't go direct to view if simplified do-next on as too unnatural*/get_option('simplified_donext')=='1'))?NULL:array('banners',array('type'=>'view','source'=>$id),get_module_zone('banners')),						  // View this
-			array('admin_banners',array('type'=>'misc'),get_module_zone('admin_banners')),				// View archive
-			NULL,																						// Add to category
-			has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang_tempcode('ADD_BANNER_TYPE')):NULL,				// Add one category
-			has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang_tempcode('EDIT_BANNER_TYPE')):NULL,				// Edit one category
-			has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'_ec','id'=>$type),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER_TYPE')):NULL,			  // Edit this category
-			NULL,																						// View this category
+			/* TYPED-ORDERED LIST OF 'LINKS'	 */
+			array('_SELF',array('type'=>'ad','b_type'=>$type),'_SELF',do_lang_tempcode('ADD_BANNER')), // Add one
+			(is_null($id) || (!has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER')), // Edit this
+			has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):NULL, // Edit one
+			((is_null($id)) || (/*Don't go direct to view if simplified do-next on as too unnatural*/get_option('simplified_donext')=='1'))?NULL:array('banners',array('type'=>'view','source'=>$id),get_module_zone('banners')), // View this
+			array('admin_banners',array('type'=>'misc'),get_module_zone('admin_banners')), // View archive
+			NULL, // Add to category
+			has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang_tempcode('ADD_BANNER_TYPE')):NULL, // Add one category
+			has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang_tempcode('EDIT_BANNER_TYPE')):NULL, // Edit one category
+			has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'_ec','id'=>$type),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER_TYPE')):NULL, // Edit this category
+			NULL, // View this category
 			NULL,
 			NULL,
 			NULL,

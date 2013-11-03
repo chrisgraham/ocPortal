@@ -159,7 +159,7 @@ class Module_quiz
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -235,7 +235,7 @@ class Module_quiz
 				'title'=>get_translated_text($quiz['q_name']),
 				'identifier'=>'_SEARCH:quiz:do:'.strval($id),
 				'description'=>get_translated_text($quiz['q_start_text']),
-				'image'=>find_theme_image('bigicons/quiz'),
+				'image'=>find_theme_image('icons/48x48/menu/rich_content/quiz'),
 			));
 
 			$this->id=$id;

@@ -25,9 +25,9 @@ class Hook_do_next_menus_theme_debug
 	function run()
 	{
 		return array(
-			array('style','admin_home',array('theme_debug',array(),''),make_string_tempcode('Theme testing / fixup tools')),
-			array('style','admin_home',array('fix_partial_themewizard_css',array(),'adminzone'),make_string_tempcode('Fixup themewizard themes')),
-			array('style','admin_home',array('css_check',array(),'adminzone'),make_string_tempcode('Look for unused CSS')),
+			array('style','menu/_generic_admin/tool',array('theme_debug',array(),''),make_string_tempcode('Theme testing / fixup tools')),
+			array('style','menu/_generic_admin/tool',array('fix_partial_themewizard_css',array(),'adminzone'),make_string_tempcode('Fixup themewizard themes')),
+			array('style','menu/_generic_admin/tool',array('css_check',array(),'adminzone'),make_string_tempcode('Look for unused CSS')),
 		);
 	}
 

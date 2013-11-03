@@ -44,7 +44,7 @@ class Module_admin_ssl
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -64,7 +64,6 @@ class Module_admin_ssl
 
 		require_lang('ssl');
 
-		set_helper_panel_pic('pagepics/ssl');
 		set_helper_panel_tutorial('tut_security');
 
 		$this->title=get_screen_title('SSL_CONFIGURATION');

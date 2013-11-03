@@ -45,7 +45,7 @@ class Module_cms_comcode_pages
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -141,7 +141,6 @@ class Module_cms_comcode_pages
 
 		inform_non_canonical_parameter('parent_page');
 
-		set_helper_panel_pic('pagepics/comcode_page_edit');
 		set_helper_panel_tutorial('tut_comcode_pages');
 
 		if ($type=='misc')

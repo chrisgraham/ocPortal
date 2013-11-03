@@ -44,7 +44,7 @@ class Module_admin_points
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -67,14 +67,12 @@ class Module_admin_points
 		if ($type=='export')
 		{
 			set_helper_panel_text(comcode_lang_string('DOC_EXPORT_POINTS'));
-			set_helper_panel_pic('pagepics/points');
 
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINTS'))));
 			breadcrumb_set_self(do_lang_tempcode('EXPORT'));
 		} else
 		{
 			set_helper_panel_tutorial('tut_points');
-			set_helper_panel_pic('points');
 		}
 
 		if ($type=='export')

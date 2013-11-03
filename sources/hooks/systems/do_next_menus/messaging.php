@@ -32,7 +32,7 @@ class Hook_do_next_menus_messaging
 		if (!addon_installed('staff_messaging')) return array();
 
 		return array(
-			array('usage','messaging',array('admin_messaging',array('type'=>'misc'),get_module_zone('admin_messaging')),do_lang_tempcode('CONTACT_US_MESSAGING'),('DOC_MESSAGING')),
+			array('audit','menu/adminzone/audit/messaging',array('admin_messaging',array('type'=>'misc'),get_module_zone('admin_messaging')),do_lang_tempcode('messaging:CONTACT_US_MESSAGING'),'messaging:DOC_MESSAGING'),
 		);
 	}
 

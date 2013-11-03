@@ -30,7 +30,7 @@ class Hook_do_next_menus_wordfilter
 	function run()
 	{
 		return array(
-			array('security','wordfilter',array('admin_wordfilter',array('type'=>'misc'),get_module_zone('admin_wordfilter')),do_lang_tempcode('WORD_FILTER'),('DOC_WORDFILTER')),
+			array('security','menu/adminzone/security/wordfilter',array('admin_wordfilter',array('type'=>'misc'),get_module_zone('admin_wordfilter')),do_lang_tempcode('wordfilter:WORD_FILTER'),'wordfilter:DOC_WORDFILTER'),
 		);
 	}
 

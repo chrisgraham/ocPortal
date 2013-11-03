@@ -44,11 +44,15 @@ class Module_cms_authors
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'AUTHOR_MANAGE','_ad'=>'EDIT_MY_AUTHOR_PROFILE','ed'=>'EDIT_MERGE_AUTHORS');
+		return array(
+			'misc'=>'AUTHOR_MANAGE',
+			'_ad'=>array('EDIT_MY_AUTHOR_PROFILE','menu/cms/author_set_own_profile'),
+			'ed'=>array('EDIT_MERGE_AUTHORS','menu/_generic_admin/edit_one'),
+		);
 	}
 
 	/**
@@ -117,7 +121,6 @@ class Module_cms_authors
 			$this->title=get_screen_title('EDIT_MERGE_AUTHORS');
 		}
 
-		set_helper_panel_pic('pagepics/authors');
 		set_helper_panel_tutorial('tut_authors');
 
 		return NULL;
@@ -155,10 +158,9 @@ class Module_cms_authors
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('AUTHOR_MANAGE'),comcode_lang_string('DOC_AUTHORS'),
 			array_merge(array(
-				/*	 type							  page	 params													 zone	  */
-				has_privilege(get_member(),'set_own_author_profile')?array('set-own-profile',array('_SELF',array('type'=>'_ad'),'_SELF'),do_lang('EDIT_MY_AUTHOR_PROFILE')):NULL,
-				has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('add_one',array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'),do_lang('ADD_AUTHOR')):NULL,
-				has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MERGE_AUTHORS')):NULL,
+				has_privilege(get_member(),'set_own_author_profile')?array('menu/cms/author_set_own_profile',array('_SELF',array('type'=>'_ad'),'_SELF'),do_lang('EDIT_MY_AUTHOR_PROFILE')):NULL,
+				has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'),do_lang('ADD_AUTHOR')):NULL,
+				has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MERGE_AUTHORS')):NULL,
 			),manage_custom_fields_donext_link('author')),
 			do_lang('AUTHOR_MANAGE')
 		);
@@ -359,22 +361,20 @@ class Module_cms_authors
 		return do_next_manager($title,$description,
 			NULL,
 			NULL,
-			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-			/*	 page	 params				  zone	  */
-			has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'):NULL,						 // Add one
-			is_null($author)?NULL:array('_SELF',array('type'=>'_ad','author'=>$author),'_SELF'),				  // Edit this
-			has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,				  // Edit one
-			is_null($author)?NULL:array('authors',array('type'=>'misc','id'=>$author),get_module_zone('authors')),					// View this
-			NULL,																						// View archive
-			NULL,																						// Add to category
-			NULL,																						// Add one category
-			NULL,																						// Edit one category
-			NULL,																						// Edit this category
-			NULL,																						// View this category
-			/*	  SPECIALLY TYPED 'LINKS'				  */
+			/* TYPED-ORDERED LIST OF 'LINKS'	 */
+			has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'):NULL, // Add one
+			is_null($author)?NULL:array('_SELF',array('type'=>'_ad','author'=>$author),'_SELF'), // Edit this
+			has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL, // Edit one
+			is_null($author)?NULL:array('authors',array('type'=>'misc','id'=>$author),get_module_zone('authors')), // View this
+			NULL, // View archive
+			NULL, // Add to category
+			NULL, // Add one category
+			NULL, // Edit one category
+			NULL, // Edit this category
+			NULL, // View this category
+			/* SPECIALLY TYPED 'LINKS' */
 			array(
-				/*	 type							  page	 params													 zone	  */
-				has_privilege(get_member(),'delete_midrange_content','cms_authors')?array('merge',array('_SELF',array('type'=>'ed'),'_SELF')):NULL
+				has_privilege(get_member(),'delete_midrange_content','cms_authors')?array('menu/_generic_admin/merge',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('MERGE_AUTHORS')):NULL
 			)
 		);
 	}

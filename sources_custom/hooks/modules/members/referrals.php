@@ -58,7 +58,7 @@ class Hook_members_referrals
 				if (!referrer_is_qualified($scheme,$member_id)) continue;
 
 				$ret[]=array(
-					'usage',
+					'audit',
 					make_string_tempcode(escape_html($scheme_title)),
 					find_script('referrer_report').'?scheme='.urlencode($scheme_name).'&member_id='.strval($member_id).$keep->evaluate()
 				);

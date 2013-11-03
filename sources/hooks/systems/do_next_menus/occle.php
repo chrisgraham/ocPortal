@@ -32,7 +32,7 @@ class Hook_do_next_menus_occle
 		if (!addon_installed('occle')) return array();
 
 		return array(
-			array('tools','occle',array('admin_occle',array('type'=>'misc'),get_module_zone('admin_occle')),do_lang_tempcode('OCCLE')),
+			array('tools','menu/adminzone/tools/occle',array('admin_occle',array('type'=>'misc'),get_module_zone('admin_occle')),do_lang_tempcode('occle:OCCLE'),'DOC_OCCLE'),
 		);
 	}
 

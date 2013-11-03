@@ -24,7 +24,7 @@ class Hook_do_next_menus_comcode_whitelist
 	function run()
 	{
 		return array(
-			array('setup','custom-comcode',array('comcode_whitelist',array(),get_page_zone('comcode_whitelist')),'Edit Comcode whitelist')
+			array('setup','menu/adminzone/setup/custom_comcode',array('comcode_whitelist',array(),get_page_zone('comcode_whitelist')),'Edit Comcode whitelist')
 		);
 	}
 

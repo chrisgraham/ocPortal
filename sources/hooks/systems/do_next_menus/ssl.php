@@ -32,7 +32,7 @@ class Hook_do_next_menus_ssl
 		if (!addon_installed('ssl')) return array();
 
 		return array(
-			array('security','ssl',array('admin_ssl',array('type'=>'misc'),get_module_zone('admin_ssl')),do_lang_tempcode('SSL_CONFIGURATION'),('DOC_SSL')),
+			array('security','menu/adminzone/security/ssl',array('admin_ssl',array('type'=>'misc'),get_module_zone('admin_ssl')),do_lang_tempcode('ssl:SSL_CONFIGURATION'),'ssl:DOC_SSL'),
 		);
 	}
 

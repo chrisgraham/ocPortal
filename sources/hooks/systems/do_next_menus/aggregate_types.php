@@ -32,7 +32,7 @@ class Hook_do_next_menus_aggregate_types
 		if (!addon_installed('aggregate_types')) return array();
 
 		return array(
-			array('structure','aggregate_types',array('admin_aggregate_types',array('type'=>'misc'),get_module_zone('admin_aggregate_types')),do_lang_tempcode('AGGREGATE_TYPES'),('DOC_AGGREGATE_TYPES')),
+			array('structure','menu/adminzone/structure/aggregate_types',array('admin_aggregate_types',array('type'=>'misc'),get_module_zone('admin_aggregate_types')),do_lang_tempcode('aggregate_types:AGGREGATE_TYPES'),'aggregate_types:DOC_AGGREGATE_TYPES'),
 		);
 	}
 

@@ -114,7 +114,7 @@ function testset_do_header($title)
 END;
 @print(file_get_contents(css_enforce('global','default',false)));
 echo <<<END
-			.screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
+			.screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/icons/48x48/menu/_generic_admin/tool.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 		</style>
 	</head>

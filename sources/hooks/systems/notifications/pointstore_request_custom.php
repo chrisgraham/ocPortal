@@ -72,7 +72,7 @@ class Hook_Notification_pointstore_request_custom extends Hook_Notification__Sta
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['pointstore_request_custom']=array(do_lang('POINT_STORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_custom'));
+		$list['pointstore_request_custom']=array(do_lang('POINTSTORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_custom'));
 		return $list;
 	}
 }

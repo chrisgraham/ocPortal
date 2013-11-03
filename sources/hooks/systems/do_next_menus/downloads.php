@@ -32,7 +32,8 @@ class Hook_do_next_menus_downloads
 		if (!addon_installed('downloads')) return array();
 
 		return array(
-			array('cms','downloads',array('cms_downloads',array('type'=>'misc'),get_module_zone('cms_downloads')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('SECTION_DOWNLOADS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','COUNT(*)',NULL,'',true))))),('DOC_DOWNLOADS')),
+			array('cms','menu/rich_content/downloads',array('cms_downloads',array('type'=>'misc'),get_module_zone('cms_downloads')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('downloads:SECTION_DOWNLOADS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','COUNT(*)',NULL,'',true))))),'downloads:DOC_DOWNLOADS'),
+			array('rich_content','menu/rich_content/downloads',array('downloads',array(),get_module_zone('downloads')),do_lang_tempcode('downloads:SECTION_DOWNLOADS')),
 		);
 	}
 

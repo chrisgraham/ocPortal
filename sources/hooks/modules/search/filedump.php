@@ -24,22 +24,39 @@ class Hook_search_filedump
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (!module_installed('filedump')) return NULL;
 
-		if (!has_actual_page_access(get_member(),'filedump')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'filedump')) return NULL;
+		}
+
 		require_code('files2');
 		if (count(get_directory_contents(get_custom_file_base().'/uploads/filedump'))==0) return NULL;
 
 		require_lang('filedump');
 
 		$info=array();
-		$info['lang']=do_lang_tempcode('FILE_DUMP');
+		$info['lang']=do_lang_tempcode('FILEDUMP');
 		$info['default']=false;
 		$info['extra_sort_fields']=array('file_size'=>do_lang_tempcode('_FILE_SIZE'));
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('filedump'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('filedump'),
+				'page_name'=>'filedump',
+			),
+		);
 
 		return $info;
 	}

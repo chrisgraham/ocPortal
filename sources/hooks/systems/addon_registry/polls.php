@@ -106,8 +106,6 @@ class Hook_addon_registry_polls
 			'themes/default/templates/POLL_LIST_ENTRY.tpl',
 			'themes/default/templates/POLL_RSS_SUMMARY.tpl',
 			'themes/default/css/polls.css',
-			'themes/default/images/bigicons/polls.png',
-			'themes/default/images/pagepics/polls.png',
 			'cms/pages/modules/cms_polls.php',
 			'lang/EN/polls.ini',
 			'site/pages/modules/polls.php',

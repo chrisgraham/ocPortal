@@ -46,11 +46,19 @@ class Module_admin
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'ADMIN_ZONE','structure'=>'STRUCTURE','usage'=>'USAGE','style'=>'STYLE','setup'=>'SETUP','tools'=>'TOOLS','security'=>'SECURITY_GROUP_SETUP');
+		return array(
+			'misc'=>'ADMIN_ZONE',
+			'structure'=>'STRUCTURE',
+			'audit'=>'AUDIT',
+			'style'=>'STYLE',
+			'setup'=>'SETUP',
+			'tools'=>'TOOLS',
+			'security'=>'SECURITY_GROUP_SETUP',
+		);
 	}
 
 	var $title;
@@ -105,8 +113,8 @@ class Module_admin
 				return do_next_manager_hooked('ADMIN_ZONE','DOC_ADMIN_ZONE','');
 			case 'structure':
 				return do_next_manager_hooked('STRUCTURE','DOC_STRUCTURE','structure');
-			case 'usage':
-				return do_next_manager_hooked('USAGE','DOC_USAGE','usage');
+			case 'audit':
+				return do_next_manager_hooked('AUDIT','DOC_AUDIT','audit');
 			case 'style':
 				return do_next_manager_hooked('STYLE','DOC_STYLE','style');
 			case 'setup':
@@ -313,7 +321,6 @@ class Module_admin
 	 */
 	function search()
 	{
-		require_all_lang();
 		require_code('zones2');
 		disable_php_memory_limit();
 
@@ -497,6 +504,8 @@ class Module_admin
 						if (is_null($entry_points)) $entry_points=array();
 						foreach ($entry_points as $type=>$lang)
 						{
+							if (!is_string($lang)) $lang=$lang[0];
+
 							$type=str_replace('!','',$type); // The ! was a hackerish thing just to multiply-up possibilities for the single entry-point
 							$n=do_lang_tempcode($lang);
 							if (($this->_keyword_match($n->evaluate())) && (has_actual_page_access(get_member(),$page,$zone)))

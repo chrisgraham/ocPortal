@@ -24,11 +24,18 @@ class Hook_search_catalogue_entries
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (!module_installed('catalogues')) return NULL;
+
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'catalogues')) return NULL;
+		}
+
 		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)')==0) return NULL;
 
 		require_lang('catalogues');
@@ -58,6 +65,18 @@ class Hook_search_catalogue_entries
 			}
 		}
 		$info['extra_sort_fields']=$extra_sort_fields;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('catalogues'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('catalogues'),
+				'page_name'=>'catalogues',
+			),
+		);
 
 		return $info;
 	}

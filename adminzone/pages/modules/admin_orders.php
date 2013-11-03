@@ -44,11 +44,14 @@ class Module_admin_orders
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'ORDERS','show_orders'=>'OUTSTANDING_ORDERS');
+		return array(
+			'misc'=>'ORDERS',
+			'show_orders'=>array('OUTSTANDING_ORDERS','menu/adminzone/audit/ecommerce/orders'),
+		);
 	}
 
 	var $title;
@@ -68,12 +71,12 @@ class Module_admin_orders
 		if ($type=='misc')
 		{
 			breadcrumb_set_self(do_lang_tempcode('ORDERS'));
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE'))));
 		}
 
 		if ($type=='show_orders')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS'))));
 
 			$filter=get_param('filter',NULL);
 			if ($filter=='undispatched')
@@ -89,7 +92,7 @@ class Module_admin_orders
 
 		if ($type=='order_det' || $action=='order_act' || $action=='_add_note' || $action=='order_export' || $action=='_order_export')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
 		}
 
 		if ($action=='order_act')
@@ -199,8 +202,8 @@ class Module_admin_orders
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('ORDERS'),comcode_lang_string('DOC_ECOMMERCE'),
 			array(
-				array('show_orders',array('_SELF',array('type'=>'show_orders'),'_SELF'),do_lang('SHOW_ORDERS')),
-				array('undispatched',array('_SELF',array('type'=>'show_orders','filter'=>'undispatched'),'_SELF'),do_lang('UNDISPATCHED_ORDERS')),
+				array('menu/adminzone/audit/ecommerce/orders',array('_SELF',array('type'=>'show_orders'),'_SELF'),do_lang('SHOW_ORDERS')),
+				array('menu/adminzone/audit/ecommerce/undispatched',array('_SELF',array('type'=>'show_orders','filter'=>'undispatched'),'_SELF'),do_lang('UNDISPATCHED_ORDERS')),
 			),
 			do_lang('ORDERS')
 		);

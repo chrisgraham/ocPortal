@@ -111,10 +111,14 @@ You will then see the URL has been changed to the entry point you want. Do not b
 
 [title="2"]Images[/title]
 
-Any theme images available with a prefix of [tt]menu_items/[/tt] will be available for attachment to menu items, so long as those theme images are defined in the default theme.
+Any theme images available with a prefix of [tt]icons/[/tt] will be available for attachment to menu items, so long as those theme images are defined in the default theme.
 You can have different versions of the images for different themes, but they must be available on the default theme too.
 
-The simple way to add them if you don't want to use the theme image management to upload them individually is to upload the images to [tt]themes/default/images_custom/menu_items/[/tt].
+The simple way to add them if you don't want to use the theme image management to upload them individually is to upload the images to [tt]themes/default/images_custom/icons/[/tt].
+
+We supply a very large selection by default, including some generic and abstract icons for use on your own pages, if you don't want to create your own icons.
+
+You can also find many icons online using websites such as [url="http://iconlet.com/"]Iconlet[/url].
 
 [title="2"]Match-keys[/title]
 

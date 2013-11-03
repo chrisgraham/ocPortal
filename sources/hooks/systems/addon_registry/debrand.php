@@ -87,8 +87,6 @@ class Hook_addon_registry_debrand
 		return array(
 			'sources/hooks/systems/addon_registry/debrand.php',
 			'adminzone/pages/modules/admin_debrand.php',
-			'themes/default/images/pagepics/debrand.png',
-			'themes/default/images/bigicons/debrand.png',
 			'sources/hooks/systems/do_next_menus/debrand.php',
 		);
 	}

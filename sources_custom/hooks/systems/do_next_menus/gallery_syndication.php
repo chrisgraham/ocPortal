@@ -23,9 +23,6 @@ class Hook_do_next_menus_gallery_syndication
 	 */
 	function run()
 	{
-		require_lang('gallery_syndication');
-		require_lang('oauth');
-
 		$menu_items=array();
 
 		$hooks=find_all_hooks('modules','video_syndication');
@@ -39,10 +36,10 @@ class Hook_do_next_menus_gallery_syndication
 
 			$menu_items[]=array(
 				'setup',
-				'galleries',
+				'menu/rich_content/galleries',
 				array($hook.'_oauth',array(),'adminzone'),
-				do_lang_tempcode('OAUTH_TITLE',escape_html($service_title)),
-				comcode_to_tempcode(do_lang('DOC_OAUTH_SETUP',$service_title))
+				do_lang_tempcode('oauth:OAUTH_TITLE',escape_html($service_title)),
+				comcode_to_tempcode(do_lang('oauth:DOC_OAUTH_SETUP',$service_title))
 			);
 		}
 

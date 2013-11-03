@@ -90,8 +90,6 @@ class Hook_addon_registry_actionlog
 			'sources/hooks/systems/realtime_rain/actionlog.php',
 			'sources/hooks/systems/addon_registry/actionlog.php',
 			'adminzone/pages/modules/admin_actionlog.php',
-			'themes/default/images/bigicons/actionlog.png',
-			'themes/default/images/pagepics/actionlog.png',
 			'sources/hooks/systems/rss/admin_recent_actions.php',
 			'lang/EN/actionlog.ini',
 		);

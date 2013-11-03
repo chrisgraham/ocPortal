@@ -1,6 +1,6 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Advanced techniques for multi-site-networks[/title]
 
-{!global:DOC_NETLINK}
+{!menus:DOC_NETLINK}
 
 [contents]decimal,lower-alpha[/contents]
 

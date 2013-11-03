@@ -24,13 +24,18 @@ class Hook_search_catalogue_categories
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
-		if (!has_actual_page_access(get_member(),'catalogues')) return NULL;
-
 		if (!module_installed('catalogues')) return NULL;
+
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'catalogues')) return NULL;
+		}
+
 		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)')==0) return NULL;
 
 		require_lang('catalogues');
@@ -38,6 +43,18 @@ class Hook_search_catalogue_categories
 		$info=array();
 		$info['lang']=do_lang_tempcode('CATALOGUE_CATEGORIES');
 		$info['default']=false;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('calendar'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('calendar'),
+				'page_name'=>'calendar',
+			),
+		);
 
 		return $info;
 	}

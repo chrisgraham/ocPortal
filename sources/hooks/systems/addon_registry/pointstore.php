@@ -85,7 +85,6 @@ class Hook_addon_registry_pointstore
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images/menu_items/community_navigation/pointstore.png',
 			'sources/hooks/systems/notifications/pointstore_request_custom.php',
 			'sources/hooks/systems/notifications/pointstore_request_forwarding.php',
 			'sources/hooks/systems/notifications/pointstore_request_pop3.php',
@@ -141,9 +140,6 @@ class Hook_addon_registry_pointstore
 			'themes/default/templates/POINTSTORE_QUOTA.tpl',
 			'themes/default/templates/POINTSTORE_QUOTA_MAIL.tpl',
 			'adminzone/pages/modules/admin_pointstore.php',
-			'themes/default/images/bigicons/pointstore.png',
-			'themes/default/images/bigicons/pointstorelog.png',
-			'themes/default/images/pagepics/pointstore.png',
 			'lang/EN/pointstore.ini',
 			'site/pages/modules/pointstore.php',
 			'sources/hooks/blocks/main_staff_checklist/pointstore.php',

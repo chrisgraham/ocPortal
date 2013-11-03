@@ -114,18 +114,28 @@ class Module_points
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('chargelog','user_id','MEMBER','member_id');
 		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<8))
+		{
+			rename_config_option('leaderboard_start_date','leader_board_start_date');
+		}
 	}
 
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
 		if (get_forum_type()=='ocf') return array();
-		$ret=array('browser'=>'BROWSE_POINT_PROFILES','misc'=>'MEMBER_POINT_FIND');
-		if (!is_guest()) $ret['member']='POINTS';
+		$ret=array(
+			'misc'=>array('MEMBER_POINT_FIND','buttons/search'),
+		);
+		if (!$check_perms || !is_guest($member_id))
+			$ret['member']=array('POINTS','menu/social/points');
 		return $ret;
 	}
 
@@ -203,7 +213,6 @@ class Module_points
 		if ($type=='misc') return $this->points_search_form();
 		if ($type=='_search') return $this->points_search_results();
 		if ($type=='give') return $this->do_give();
-		if ($type=='browser') return $this->points_profile();
 		if ($type=='member') return $this->points_profile();
 
 		return new ocp_tempcode();

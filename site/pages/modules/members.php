@@ -44,12 +44,17 @@ class Module_members
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
-		$ret=array('misc'=>'MEMBERS');
-		if (!is_guest()) $ret['view']='MY_PROFILE';
+		$ret=array(
+			'misc'=>'MEMBERS',
+		);
+		if (!$check_perms || !is_guest($member_id))
+			$ret['view']=array('MY_PROFILE','tabs/member_account/profile');
 		return $ret;
 	}
 

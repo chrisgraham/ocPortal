@@ -44,11 +44,11 @@ class Module_leader_board
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return ($GLOBALS['SITE_DB']->query_select_value('leader_board','COUNT(*)')==0)?array():array('!'=>'POINT_LEADERBOARD');
+		return ($GLOBALS['SITE_DB']->query_select_value('leader_board','COUNT(*)')==0)?array():array('!'=>'POINT_LEADER_BOARD');
 	}
 
 	var $title;
@@ -64,7 +64,7 @@ class Module_leader_board
 
 		require_lang('leader_board');
 
-		$this->title=get_screen_title('POINT_LEADERBOARD');
+		$this->title=get_screen_title('POINT_LEADER_BOARD');
 
 		return NULL;
 	}
@@ -79,12 +79,12 @@ class Module_leader_board
 		require_code('points');
 		require_css('points');
 
-		$start_date=intval(get_option('leaderboard_start_date'));
+		$start_date=intval(get_option('leader_board_start_date'));
 
 		$start=get_param_integer('lb_start',0);
 		$max=get_param_integer('lb_max',52);
 
-		// Ensure the leaderboard is getting calculated...
+		// Ensure the leader-board is getting calculated...
 		$cutoff=time()-60*60*24*7;
 		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'leader_board WHERE date_and_time>'.strval($cutoff));
 		if ($test==0) do_block('main_leader_board',array());
@@ -97,7 +97,7 @@ class Module_leader_board
 			$or_list.=' AND id<>'.strval($group_id);
 		$has_rank_images=(get_forum_type()=='ocf') && ($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE '.$or_list.' AND '.db_string_not_equal_to('g_rank_image',''))!=0);
 
-		// Continue on to displaying the leaderboard...
+		// Continue on to displaying the leader-board...
 
 		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC',$max,$start);
 		if (count($weeks)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
@@ -117,7 +117,7 @@ class Module_leader_board
 				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 				if (is_null($username)) $username=do_lang('UNKNOWN');
-				$week_tpl->attach(do_template('POINTS_LEADERBOARD_ROW',array(
+				$week_tpl->attach(do_template('POINTS_LEADER_BOARD_ROW',array(
 					'_GUID'=>'6d323b4b5abea0e82a14cb4745c4af4f',
 					'POINTS_URL'=>$points_url,
 					'PROFILE_URL'=>$profile_url,
@@ -128,13 +128,13 @@ class Module_leader_board
 				)));
 			}
 			$nice_week=intval(($week-$first_week)/(7*24*60*60)+1);
-			$out->attach(do_template('POINTS_LEADERBOARD_WEEK',array('_GUID'=>'3a0f71bf20f9098e5711e85cf25f6549','WEEK'=>integer_format($nice_week),'ROWS'=>$week_tpl)));
+			$out->attach(do_template('POINTS_LEADER_BOARD_WEEK',array('_GUID'=>'3a0f71bf20f9098e5711e85cf25f6549','WEEK'=>integer_format($nice_week),'ROWS'=>$week_tpl)));
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('POINT_LEADERBOARD'),$start,'lb_start',$max,'lb_max',$num_weeks);
+		$pagination=pagination(do_lang_tempcode('POINT_LEADER_BOARD'),$start,'lb_start',$max,'lb_max',$num_weeks);
 
-		$tpl=do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$this->title,'WEEKS'=>$out,'PAGINATION'=>$pagination));
+		$tpl=do_template('POINTS_LEADER_BOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$this->title,'WEEKS'=>$out,'PAGINATION'=>$pagination));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

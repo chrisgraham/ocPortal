@@ -44,7 +44,7 @@ class Module_admin_errorlog
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -64,7 +64,6 @@ class Module_admin_errorlog
 
 		require_lang('errorlog');
 
-		set_helper_panel_pic('pagepics/errorlog');
 		set_helper_panel_tutorial('tut_disaster');
 
 		$this->title=get_screen_title('ERROR_LOG');

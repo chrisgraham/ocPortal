@@ -92,11 +92,15 @@ class Module_search
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
-		return is_guest()?array('misc'=>'SEARCH_TITLE'):array('misc'=>'SEARCH_TITLE','my'=>'SAVED_SEARCHES');
+		return array(
+			'misc'=>'SEARCH_TITLE',
+		);
 	}
 
 	var $title;
@@ -113,16 +117,6 @@ class Module_search
 		$type=get_param('type','misc');
 
 		require_lang('search');
-
-		if ($type=='my')
-		{
-			$this->title=get_screen_title('SAVED_SEARCHES');
-		}
-
-		if ($type=='_delete')
-		{
-			$this->title=get_screen_title('DELETE_SAVED_SEARCH');
-		}
 
 		if ($type=='misc' || $type=='results')
 		{
@@ -186,76 +180,8 @@ class Module_search
 
 		$type=get_param('type','misc');
 		if (($type=='misc') || ($type=='results')) return $this->form();
-		if ($type=='my') return $this->my();
-		if ($type=='_delete') return $this->_delete();
 
 		return new ocp_tempcode();
-	}
-
-	/**
-	 * The UI to choose a saved search.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function my()
-	{
-		if (is_guest()) access_denied('NOT_AS_GUEST');
-
-		require_code('templates_results_table');
-
-		$start=get_param_integer('my_start',0);
-		$max=get_param_integer('my_max',50);
-		$sortables=array('s_time'=>do_lang_tempcode('DATE_TIME'),'s_title'=>do_lang_tempcode('TITLE'));
-		list($sortable,$sort_order)=explode(' ',get_param('sort','s_time DESC'),2);
-		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
-			log_hack_attack_and_exit('ORDERBY_HACK');
-		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('DELETE'),do_lang_tempcode('RUN_SEARCH')),$sortables,'sort',$sortable.' '.$sort_order);
-		$max_rows=$GLOBALS['SITE_DB']->query_select_value('searches_saved','COUNT(*)',array('s_member_id'=>get_member()));
-		$rows=$GLOBALS['SITE_DB']->query_select('searches_saved',array('*'),array('s_member_id'=>get_member()),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
-		$fields=new ocp_tempcode();
-		foreach ($rows as $row)
-		{
-			$post_url=build_url(array('page'=>'_SELF','type'=>'_delete'),'_SELF');
-			$deletion_button=do_template('SEARCH_SAVED_DELETION_BUTTON',array('_GUID'=>'ac55dd5cd40e2ee09f5ac48110ee7215','NAME'=>$row['s_title'],'URL'=>$post_url,'ID'=>strval($row['id'])));
-
-			$post_url=build_url(array('page'=>'_SELF','type'=>'results'),'_SELF',NULL,false,true);
-			$hidden=new ocp_tempcode();
-			$post=unserialize($row['s_auxillary']);
-			foreach ($post as $key=>$val)
-			{
-				if ($key!='save_title')
-				{
-					if (get_magic_quotes_gpc()) $val=stripslashes($val);
-					$hidden->attach(form_input_hidden($key,$val));
-				}
-			}
-			$run_button=do_template('SEARCH_SAVED_RUN_BUTTON',array('_GUID'=>'8ce6e09b76cfd6a1db59f1ab46376feb','NAME'=>$row['s_title'],'URL'=>$post_url,'HIDDEN'=>$hidden));
-
-			$fields->attach(results_entry(array($row['s_title'],get_timezoned_date($row['s_time']),$deletion_button,$run_button),true));
-		}
-		$searches=results_table(do_lang_tempcode('SAVED_SEARCHES'),$start,'my_start',$max,'my_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',new ocp_tempcode());
-
-		$post_url=build_url(array('page'=>'_SELF','type'=>'my'),'_SELF');
-
-		$tpl=do_template('SEARCH_SAVED_SCREEN',array('_GUID'=>'f9a7116b8525eb223bde50dfb991f39f','TITLE'=>$this->title,'SEARCHES'=>$searches,'URL'=>$post_url));
-
-		require_code('templates_internalise_screen');
-		return internalise_own_screen($tpl);
-	}
-
-	/**
-	 * The actualiser to delete a saved search.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function _delete()
-	{
-		if (is_guest()) access_denied('NOT_AS_GUEST');
-
-		$GLOBALS['SITE_DB']->query_delete('searches_saved',array('id'=>post_param_integer('id'),'s_member_id'=>get_member()),'',1);
-
-		$url=build_url(array('page'=>'_SELF','type'=>'my'),'_SELF');
-		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**

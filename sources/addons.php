@@ -225,6 +225,8 @@ function read_addon_info($addon,$get_dependencies_on_this=false,$row=NULL,$ini_i
  */
 function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 {
+	$matches=array();
+
 	if (!is_null($tar_path))
 	{
 		require_code('tar');
@@ -235,7 +237,7 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 			foreach ($directory as $d)
 			{
 				$file=$d['path'];
-				if (preg_match('#^themes/default/(images|images_custom)/bigicons/.*\.(png|jpg|jpeg|gif)$#',$file)!=0)
+				if ((preg_match('themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)',$file,$matches)!-0) && (!array_key_exists($addon_name,$addon_icons)))
 				{
 					require_code('mime_types');
 					$data=tar_get_file($tar_file,$file);
@@ -249,13 +251,13 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 		$addon_files=$addon_info['files'];
 		foreach ($addon_files as $file)
 		{
-			if (preg_match('#^themes/default/(images|images_custom)/bigicons/.*\.(png|jpg|jpeg|gif)$#',$file)!=0)
+			if ((preg_match('themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)',$file,$matches)!-0) && (!array_key_exists($addon_name,$addon_icons)))
 			{
-				return find_theme_image('bigicons/'.basename($file,'.png'));
+				return find_theme_image('icons/48x48/'.$matches[2]));
 			}
 		}
 	}
 
 	// Default, as not found
-	return $pick_default?find_theme_image('bigicons/addons'):NULL;
+	return $pick_default?find_theme_image('icons/48x48/menu/_generic_admin/component'):NULL;
 }

@@ -16,7 +16,7 @@
 			{+END}
 
 			<div class="img_wrap">
-				<img src="{$IMG*,pagepics/ocp-logo}" alt="" />
+				<img src="{$IMG*,product_logo}" alt="" />
 			</div>
 		</div>
 	</div>

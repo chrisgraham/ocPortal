@@ -69,13 +69,25 @@ class Module_login
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
-		if (is_guest()) return array('misc'=>'_LOGIN');
-		$ret=array('misc'=>'_LOGIN','logout'=>'LOGOUT','concede'=>'CONCEDED_MODE');
-		if (get_option('is_on_invisibility')=='1') $ret['invisible']='INVISIBLE';
+		if ($check_perms && is_guest($member_id))
+		{
+			return array(
+				'misc'=>'_LOGIN',
+			);
+		}
+		$ret=array(
+			'misc'=>'_LOGIN',
+			'logout'=>'LOGOUT',
+			'concede'=>'CONCEDED_MODE',
+		);
+		if (get_option('is_on_invisibility')=='1')
+			$ret['invisible']='INVISIBLE';
 		return $ret;
 	}
 

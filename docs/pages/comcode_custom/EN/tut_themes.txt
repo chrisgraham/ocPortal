@@ -138,7 +138,7 @@ To add an image, go to the "Themes" section of your Admin Zone, then choose the 
 
 If you are adding a theme image that is only relevant to your new theme, you should not tick "Use for all themes". For example, an image that is only referenced by one of your customised templates.
 
-If you are adding a theme image that potentially could be used by any theme, you should tick "Use for all themes". For example, an image used on one of your menus (you can add such images by adding them with image codes that start [tt]menu_items/[/tt]).
+If you are adding a theme image that potentially could be used by any theme, you should tick "Use for all themes". For example, an image used on one of your menus (you can add such images by adding them with image codes that start [tt]icons/[/tt]).
 
 [title="2"]Mobile support[/title]
 

@@ -9,7 +9,7 @@
 		<img src="{$THUMBNAIL*,{ADDON_ICON},36x36,addon_icon_normalise,,,pad,both,#FFFFFF00}" />
 	{+END}
 	{+START,IF_EMPTY,{ADDON_ICON}}
-		<img src="{$THUMBNAIL*,{$IMG,bigicons/{$?,{IS_PUBLIC},edit_this,edit_one}},36x36,addon_icon_normalise,,,pad,both,#FFFFFF00}" />
+		<img src="{$THUMBNAIL*,{$IMG,icons/48x48/menu/_generic_admin/{$?,{IS_PUBLIC},edit_this,edit_one}},36x36,addon_icon_normalise,,,pad,both,#FFFFFF00}" />
 	{+END}
 
 	{+START,SET,commented_out}

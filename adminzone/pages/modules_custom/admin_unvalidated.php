@@ -39,7 +39,7 @@ class Module_admin_unvalidated
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -61,7 +61,6 @@ class Module_admin_unvalidated
 
 		$this->title=get_screen_title('UNVALIDATED_RESOURCES');
 
-		set_helper_panel_pic('pagepics/unvalidated');
 		set_helper_panel_tutorial('tut_censor');
 
 		return NULL;

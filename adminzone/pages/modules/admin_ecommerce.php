@@ -71,11 +71,17 @@ class Module_admin_ecommerce extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array_merge(parent::get_entry_points(),array('misc'=>'CUSTOM_PRODUCT_USERGROUP','logs'=>'TRANSACTIONS','trigger'=>'MANUAL_TRANSACTION','profit_loss'=>'PROFIT_LOSS','cash_flow'=>'CASH_FLOW'));
+		return array_merge(parent::get_entry_points(),array(
+			'misc'=>'CUSTOM_PRODUCT_USERGROUP',
+			'trigger'=>array('MANUAL_TRANSACTION','menu/adminzone/audit/ecommerce/add_to_category'),
+			'logs'=>array('TRANSACTIONS','menu/adminzone/audit/ecommerce/transactions'),
+			'profit_loss'=>array('PROFIT_LOSS','menu/adminzone/audit/ecommerce/profit_loss'),
+			'cash_flow'=>array('CASH_FLOW','menu/adminzone/audit/ecommerce/cash_flow'),
+		));
 	}
 
 	var $title;
@@ -95,15 +101,13 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		if ($type!='logs')
 		{
-			set_helper_panel_pic('pagepics/ecommerce');
 			set_helper_panel_tutorial('tut_ecommerce');
 		}
 
 		if ($type=='cash_flow')
 		{
-			set_helper_panel_pic('pagepics/cash_flow');
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_audit',do_lang_tempcode('ECOMMERCE'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
 			$this->title=get_screen_title('CASH_FLOW');
@@ -111,9 +115,8 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		if ($type=='profit_loss')
 		{
-			set_helper_panel_pic('pagepics/profit_loss');
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_audit',do_lang_tempcode('ECOMMERCE'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
 			$this->title=get_screen_title('PROFIT_LOSS');
@@ -121,13 +124,13 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		if ($type=='misc')
 		{
-			$also_url=build_url(array('page'=>'_SELF','type'=>'ecom_usage'),'_SELF');
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
+			$also_url=build_url(array('page'=>'_SELF','type'=>'ecom_audit'),'_SELF');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_AUDIT',escape_html($also_url->evaluate())),'inform');
 
 			$this->title=get_screen_title('CUSTOM_PRODUCT_USERGROUP');
 		}
 
-		if ($type=='ecom_usage')
+		if ($type=='ecom_audit')
 		{
 			$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 			attach_message(do_lang_tempcode('menus:ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
@@ -137,7 +140,7 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		if ($type=='logs')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_audit',do_lang_tempcode('ECOMMERCE'))));
 			breadcrumb_set_self(do_lang_tempcode('TRANSACTIONS'));
 
 			$this->title=get_screen_title('TRANSACTIONS');
@@ -146,7 +149,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		if ($type=='trigger')
 		{
 			breadcrumb_set_self(do_lang_tempcode('PRODUCT'));
-			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_audit',do_lang_tempcode('ECOMMERCE'))));
 
 			$this->title=get_screen_title('MANUAL_TRANSACTION');
 		}
@@ -157,10 +160,10 @@ class Module_admin_ecommerce extends standard_crud_module
 			$item_name=get_param('item_name',NULL);
 			if (is_null($item_name))
 			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT'))));
+				breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT'))));
 			} else
 			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT')),array('_SELF:_SELF:trigger:item_name='.$item_name,do_lang_tempcode('MANUAL_TRANSACTION'))));
+				breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT')),array('_SELF:_SELF:trigger:item_name='.$item_name,do_lang_tempcode('MANUAL_TRANSACTION'))));
 			}
 
 			$this->title=get_screen_title('MANUAL_TRANSACTION');
@@ -209,7 +212,7 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		if ($type=='misc') return $this->misc();
 		if ($type=='logs') return $this->logs();
-		if ($type=='ecom_usage') return $this->usage();
+		if ($type=='ecom_audit') return $this->audit();
 		if ($type=='cash_flow') return $this->cash_flow();
 		if ($type=='profit_loss') return $this->profit_loss();
 		//if ($type=='balance_sheet') return $this->balance_sheet();
@@ -231,32 +234,30 @@ class Module_admin_ecommerce extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager($this->title,comcode_lang_string('DOC_USERGROUP_SUBSCRIPTION'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_USERGROUP_SUBSCRIPTION')),
-				((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_USERGROUP_SUBSCRIPTION')),
+				((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_USERGROUP_SUBSCRIPTION')),
+				((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_USERGROUP_SUBSCRIPTION')),
 			),
 			do_lang('CUSTOM_PRODUCT_USERGROUP')
 		);
 	}
 
 	/**
-	 * The do-next manager for before usage management.
+	 * The do-next manager for before audit management.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function usage()
+	function audit()
 	{
 		require_code('templates_donext');
 		return do_next_manager($this->title,comcode_lang_string('DOC_ECOMMERCE'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('cash_flow',array('_SELF',array('type'=>'cash_flow'),'_SELF'),do_lang('CASH_FLOW')),
-				array('profit_loss',array('_SELF',array('type'=>'profit_loss'),'_SELF'),do_lang('PROFIT_LOSS')),
-				array('add_to_category',array('_SELF',array('type'=>'trigger'),'_SELF'),do_lang('MANUAL_TRANSACTION')),
-				array('transactions',array('_SELF',array('type'=>'logs'),'_SELF'),do_lang('LOGS')),
-				array('invoices',array('admin_invoices',array('type'=>'misc'),get_module_zone('admin_invoices')),do_lang('INVOICES')),
-				addon_installed('shopping')?array('orders',array('admin_orders',array('type'=>'misc'),get_module_zone('admin_orders')),do_lang('shopping:ORDERS')):NULL,
-				array('invoices',array('_SELF',array('type'=>'view_manual_subscriptions'),'_SELF'),do_lang('MANUAL_SUBSCRIPTIONS')),
+				array('menu/adminzone/audit/ecommerce/cash_flow',array('_SELF',array('type'=>'cash_flow'),'_SELF'),do_lang('CASH_FLOW')),
+				array('menu/adminzone/audit/ecommerce/profit_loss',array('_SELF',array('type'=>'profit_loss'),'_SELF'),do_lang('PROFIT_LOSS')),
+				array('menu/_generic_admin/add_to_category',array('_SELF',array('type'=>'trigger'),'_SELF'),do_lang('MANUAL_TRANSACTION')),
+				array('menu/adminzone/audit/ecommerce/transactions',array('_SELF',array('type'=>'logs'),'_SELF'),do_lang('LOGS')),
+				array('menu/adminzone/audit/ecommerce/invoices',array('admin_invoices',array('type'=>'misc'),get_module_zone('admin_invoices')),do_lang('INVOICES')),
+				addon_installed('shopping')?array('menu/adminzone/audit/ecommerce/orders',array('admin_orders',array('type'=>'misc'),get_module_zone('admin_orders')),do_lang('shopping:ORDERS')):NULL,
+				array('menu/adminzone/audit/ecommerce/subscriptions',array('_SELF',array('type'=>'view_manual_subscriptions'),'_SELF'),do_lang('MANUAL_SUBSCRIPTIONS')),
 			),
 			do_lang('ECOMMERCE')
 		);

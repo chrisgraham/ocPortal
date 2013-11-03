@@ -76,6 +76,9 @@ class Hook_sw_banners
 				delete_banner('donate');
 				foreach (array_keys($usergroups) as $id)
 					$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'donate','zone_name'=>'site','group_id'=>$id));
+
+				require_code('zones3');
+				delete_ocp_page('site','donate',NULL,true);
 			}
 		}
 		if (post_param_integer('have_default_banners_advertising',0)==0)
@@ -87,6 +90,9 @@ class Hook_sw_banners
 				delete_banner('advertise_here');
 				foreach (array_keys($usergroups) as $id)
 					$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'advertise','zone_name'=>'site','group_id'=>$id));
+
+				require_code('zones3');
+				delete_ocp_page('site','advertise',NULL,true);
 			}
 		}
 	}

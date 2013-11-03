@@ -80,7 +80,7 @@ class Module_pointstore
 			));
 
 			require_lang('pointstore');
-			add_menu_item_simple('main_community',NULL,'POINT_STORE','_SEARCH:pointstore:type=misc',0,0,true,'',0,'menu_items/community_navigation/pointstore');
+			add_menu_item_simple('main_community',NULL,'POINTSTORE','_SEARCH:pointstore:type=misc',0,0,true,'',0,'icons/24x24/menu/social/pointstore');
 
 			// Custom
 				$GLOBALS['SITE_DB']->create_table('pstore_customs',array(
@@ -133,11 +133,13 @@ class Module_pointstore
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
-		return is_guest()?array():array('!'=>'POINT_STORE');
+		return (!$check_perms || !is_guest($member_id))?array('!'=>'POINTSTORE'):array();
 	}
 
 	var $title;
@@ -153,9 +155,9 @@ class Module_pointstore
 
 		require_lang('pointstore');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINT_STORE'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINTSTORE'))));
 
-		$this->title=get_screen_title('POINT_STORE');
+		$this->title=get_screen_title('POINTSTORE');
 
 		return NULL;
 	}

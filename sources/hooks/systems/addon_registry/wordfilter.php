@@ -90,8 +90,6 @@ class Hook_addon_registry_wordfilter
 			'sources/hooks/systems/addon_registry/wordfilter.php',
 			'sources/hooks/systems/do_next_menus/wordfilter.php',
 			'lang/EN/wordfilter.ini',
-			'themes/default/images/pagepics/wordfilter.png',
-			'themes/default/images/bigicons/wordfilter.png',
 			'themes/default/templates/WORDFILTER_SCREEN.tpl',
 			'adminzone/pages/modules/admin_wordfilter.php',
 			'sources/hooks/modules/admin_setupwizard/wordfilter.php',

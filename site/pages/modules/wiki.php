@@ -214,11 +214,15 @@ class Module_wiki
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'WIKI_HOME','random'=>'RANDOM_PAGE','changes'=>'WIKI_CHANGELOG');
+		return array(
+			'misc'=>'WIKI_HOME',
+			'random'=>array('RANDOM_PAGE','menu/rich_content/wiki/random_page'),
+			'changes'=>array('WIKI_CHANGELOG','menu/rich_content/wiki/change_log'),
+		);
 	}
 
 	var $title;
@@ -305,7 +309,7 @@ class Module_wiki
 				'identifier'=>'_SEARCH:wiki:misc:'.strval($page['id']),
 				'description'=>get_translated_text($page['description']),
 				'numposts'=>strval($num_posts),
-				'image'=>find_theme_image('bigicons/wiki'),
+				'image'=>find_theme_image('icons/48x48/menu/rich_content/wiki'),
 				//'category'=>???,
 			));
 

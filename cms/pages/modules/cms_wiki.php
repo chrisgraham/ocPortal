@@ -45,7 +45,7 @@ class Module_cms_wiki
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -80,7 +80,6 @@ class Module_cms_wiki
 
 		require_lang('wiki');
 
-		set_helper_panel_pic('pagepics/wiki');
 		set_helper_panel_tutorial('tut_wiki');
 
 		if ($type=='choose_page_to_edit')
@@ -180,9 +179,8 @@ class Module_cms_wiki
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_WIKI'),comcode_lang_string('DOC_WIKI'),
 			array_merge(array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'add_page'),'_SELF'),do_lang('WIKI_ADD_PAGE')),
-				array('edit_one',array('_SELF',array('type'=>'choose_page_to_edit'),'_SELF'),do_lang('WIKI_EDIT_PAGE')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'add_page'),'_SELF'),do_lang('WIKI_ADD_PAGE')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'choose_page_to_edit'),'_SELF'),do_lang('WIKI_EDIT_PAGE')),
 			),manage_custom_fields_donext_link('wiki_post'),manage_custom_fields_donext_link('wiki_page')),
 			do_lang('MANAGE_WIKI')
 		);

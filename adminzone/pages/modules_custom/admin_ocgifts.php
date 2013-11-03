@@ -135,7 +135,7 @@ class Module_admin_ocgifts extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -198,9 +198,8 @@ class Module_admin_ocgifts extends standard_crud_module
 
 		return do_next_manager(get_screen_title('OCGIFTS_TITLE'),comcode_lang_string('DOC_OCGIFTS'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GIFT')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_GIFT')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GIFT')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_GIFT')),
 			),
 			do_lang('OCGIFTS_TITLE')
 		);

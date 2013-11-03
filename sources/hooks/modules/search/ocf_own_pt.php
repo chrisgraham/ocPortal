@@ -24,13 +24,20 @@ class Hook_search_ocf_own_pt
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (get_forum_type()!='ocf') return NULL;
-		if (!has_actual_page_access(get_member(),'topicview')) return NULL;
-		if (get_member()==$GLOBALS['OCF_DRIVER']->get_guest_id()) return NULL;
+
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'topicview')) return NULL;
+
+			if (get_member()==$GLOBALS['OCF_DRIVER']->get_guest_id()) return NULL;
+		}
+
 		if ($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_from='.strval(get_member()).' OR '.'t_pt_to='.strval(get_member()))==0) return NULL;
 
 		require_lang('ocf');
@@ -40,6 +47,21 @@ class Hook_search_ocf_own_pt
 		$info['default']=false;
 		$info['special_on']=array();
 		$info['special_off']=array('starter'=>do_lang_tempcode('POST_SEARCH_STARTER'));
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('topicview'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('topicview'),
+				'page_name'=>'topicview',
+			),
+			array(
+				'type'=>'non_guests',
+			),
+		);
 
 		return $info;
 	}

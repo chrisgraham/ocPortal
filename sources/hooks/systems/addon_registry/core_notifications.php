@@ -108,7 +108,6 @@ class Hook_addon_registry_core_notifications
 			'site/pages/modules/notifications.php',
 			'adminzone/pages/modules/admin_notifications.php',
 			'sources/hooks/systems/do_next_menus/notifications.php',
-			'themes/default/images/bigicons/notifications.png',
 			'sources/hooks/systems/config/allow_auto_notifications.php',
 			'sources/hooks/systems/config/pt_notifications_as_web.php',
 			'sources/hooks/systems/config/notification_keep_days.php',

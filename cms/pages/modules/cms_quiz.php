@@ -55,7 +55,7 @@ class Module_cms_quiz extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -79,7 +79,6 @@ class Module_cms_quiz extends standard_crud_module
 
 		inform_non_canonical_parameter('validated');
 
-		set_helper_panel_pic('pagepics/quiz');
 		set_helper_panel_tutorial('tut_quizzes');
 
 		if ($type=='misc')
@@ -127,9 +126,8 @@ class Module_cms_quiz extends standard_crud_module
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
 			array_merge(array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_QUIZ')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_QUIZ')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_QUIZ')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_QUIZ')),
 			),manage_custom_fields_donext_link('quiz')),
 			do_lang('MANAGE_QUIZZES')
 		);

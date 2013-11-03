@@ -24,13 +24,18 @@ class Hook_search_news
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (!module_installed('news')) return NULL;
 
-		if (!has_actual_page_access(get_member(),'news')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'news')) return NULL;
+		}
+
 		if ($GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)')==0) return NULL;
 
 		require_lang('news');
@@ -40,6 +45,18 @@ class Hook_search_news
 		$info['default']=true;
 		$info['category']='news_category';
 		$info['integer_category']=true;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('news'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('news'),
+				'page_name'=>'news',
+			),
+		);
 
 		return $info;
 	}

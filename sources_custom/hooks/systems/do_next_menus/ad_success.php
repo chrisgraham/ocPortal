@@ -25,7 +25,7 @@ class Hook_do_next_menus_ad_success
 	function run()
 	{
 		return array(
-			array('usage','admin_home',array('ad_success',array(),'adminzone'),make_string_tempcode('Ad success'))
+			array('audit','menu/_generic_admin/tool',array('ad_success',array(),'adminzone'),make_string_tempcode('Ad success'))
 		);
 	}
 

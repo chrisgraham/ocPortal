@@ -45,11 +45,16 @@ class Module_admin_addons
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'ADDONS','modules'=>'MODULE_MANAGEMENT','addon_import'=>'IMPORT_ADDON','addon_export'=>'EXPORT_ADDON');
+		return array(
+			'misc'=>'ADDONS',
+			'modules'=>array('MODULE_MANAGEMENT','menu/_generic_admin/component'),
+			'addon_import'=>array('IMPORT_ADDON','menu/_generic_admin/import'),
+			'addon_export'=>array('EXPORT_ADDON','menu/_generic_admin/export'),
+		);
 	}
 
 	/**
@@ -124,7 +129,6 @@ class Module_admin_addons
 
 		if ($type=='misc')
 		{
-			set_helper_panel_pic('pagepics/addons');
 			set_helper_panel_tutorial('tut_adv_configuration');
 
 			$this->title=get_screen_title('ADDONS');

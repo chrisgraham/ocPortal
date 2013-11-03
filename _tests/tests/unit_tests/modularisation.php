@@ -30,8 +30,6 @@ class modularisation_test_set extends ocp_test_case
 		global $GFILE_ARRAY;
 
 		// Volatile files not in git that are referenced by addons that could have possibly gone missing
-		@touch(get_custom_file_base().'/site/pages/html_custom/EN/download_tree_made.htm');
-		@touch(get_custom_file_base().'/site/pages/html_custom/EN/wiki_tree_made.htm');
 		@touch(get_custom_file_base().'/ocp_sitemap.xml');
 		@touch(get_custom_file_base().'/ocp_news_sitemap.xml');
 

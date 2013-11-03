@@ -40,7 +40,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -62,7 +62,6 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 
 		require_lang('ocf');
 
-		set_helper_panel_pic('pagepics/forums');
 		set_helper_panel_tutorial('tut_forums');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_forums:misc',do_lang_tempcode('SECTION_FORUMS'))));
@@ -79,9 +78,8 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	{
 		$this->extra_donext_whatever_title=do_lang('SECTION_FORUMS');
 		$this->extra_donext_whatever=array(
-			/*	 type							  page	 	params					zone	  */
-			array('add_one',array('admin_ocf_forums',array('type'=>'ad'),get_module_zone('admin_ocf_forums'))),
-			array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
+			array('menu/_generic_admin/add_one',array('admin_ocf_forums',array('type'=>'ad'),get_module_zone('admin_ocf_forums'))),
+			array('menu/_generic_admin/edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
 		);
 
 		$this->add_one_cat_label=do_lang_tempcode('ADD_FORUM_GROUPING');
@@ -212,11 +210,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	function add_actualisation()
 	{
 		$tmp=strval(ocf_make_forum_grouping(post_param('title'),post_param('description'),post_param_integer('expanded_by_default',0)));
-		$this->extra_donext_whatever=					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('admin_ocf_forums',array('type'=>'ad','forum_grouping_id'=>$tmp),get_module_zone('admin_ocf_forums'))),
-						array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
-					);
+		$this->extra_donext_whatever=array(
+			array('add_one',array('admin_ocf_forums',array('type'=>'ad','forum_grouping_id'=>$tmp),get_module_zone('admin_ocf_forums'))),
+			array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
+		);
 		return $tmp;
 	}
 
@@ -228,12 +225,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	function edit_actualisation($id)
 	{
 		ocf_edit_forum_grouping(intval($id),post_param('title'),post_param('description',STRING_MAGIC_NULL),post_param_integer('expanded_by_default',fractional_edit()?INTEGER_MAGIC_NULL:0));
-		$this->extra_donext_whatever=
-					array(
-						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('admin_ocf_forums',array('type'=>'ad','forum_grouping_id'=>$id),get_module_zone('admin_ocf_forums'))),
-						array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
-					);
+		$this->extra_donext_whatever=array(
+			array('menu/_generic_admin/add_one',array('admin_ocf_forums',array('type'=>'ad','forum_grouping_id'=>$id),get_module_zone('admin_ocf_forums'))),
+			array('menu/_generic_admin/edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
+		);
 	}
 
 	/**

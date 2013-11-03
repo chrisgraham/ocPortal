@@ -127,17 +127,32 @@ class standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
 		$entry_points=array();
 		if (method_exists($this,'add_actualisation'))
-			$entry_points=array_merge($entry_points,array('ad'=>'ADD_'.$this->lang_type,'ed'=>'EDIT_'.$this->lang_type));
+		{
+			$entry_points=array_merge($entry_points,array(
+				'ad'=>array('ADD_'.$this->lang_type,'menu/_generic_admin/add_one'),
+				'ed'=>array('EDIT_'.$this->lang_type,'menu/_generic_admin/edit_one'),
+			));
+		}
 		if (!is_null($this->cat_crud_module))
-			$entry_points=array_merge($entry_points,array('ac'=>'ADD_'.$this->cat_crud_module->lang_type,'ec'=>'EDIT_'.$this->cat_crud_module->lang_type));
+		{
+			$entry_points=array_merge($entry_points,array(
+				'ac'=>array('ADD_'.$this->cat_crud_module->lang_type,'menu/_generic_admin/add_one_category'),
+				'ec'=>array('EDIT_'.$this->cat_crud_module->lang_type,'menu/_generic_admin/edit_one_category'),
+			));
+		}
 		if (!is_null($this->alt_crud_module))
-			$entry_points=array_merge($entry_points,array('av'=>'ADD_'.$this->alt_crud_module->lang_type,'ev'=>'EDIT_'.$this->alt_crud_module->lang_type));
+		{
+			$entry_points=array_merge($entry_points,array(
+				'av'=>array('ADD_'.$this->alt_crud_module->lang_type,'menu/_generic_admin/add_one'),
+				'ev'=>array('EDIT_'.$this->alt_crud_module->lang_type,'menu/_generic_admin/edit_one'),
+			));
+		}
 		return $entry_points;
 	}
 
@@ -565,18 +580,17 @@ class standard_crud_module
 		return do_next_manager($title,$description,
 			NULL,
 			NULL,
-			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-			/*	 page	 params				  zone	  */
-			$this->do_next_editing_categories?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_label)?$this->add_one_label:NULL),									 // Add one
-			$this->do_next_editing_categories?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_label)?$this->edit_this_label:NULL)),					  // Edit this
-			$this->do_next_editing_categories?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_label)?$this->edit_one_label:NULL)),									 // Edit one
-			$this->do_next_editing_categories?NULL:(is_null($id))?NULL:$view_url,																				 // View this
-			$archive_url,																			 // View archive
-			NULL,																						 // Add to category
-			(!$this->do_next_editing_categories)?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_cat_label)?$this->add_one_cat_label:NULL),									 // Add one category
-			(!$this->do_next_editing_categories)?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_cat_label)?$this->edit_one_cat_label:NULL)),									 // Edit one category
-			(!$this->do_next_editing_categories)?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_cat_label)?$this->edit_this_cat_label:NULL)),					  // Edit this category
-			(!$this->do_next_editing_categories)?NULL:$view_url,																				 // View this category
+			/* TYPED-ORDERED LIST OF 'LINKS'	 */
+			$this->do_next_editing_categories?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_label)?$this->add_one_label:NULL), // Add one
+			$this->do_next_editing_categories?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_label)?$this->edit_this_label:NULL)), // Edit this
+			$this->do_next_editing_categories?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_label)?$this->edit_one_label:NULL)), // Edit one
+			$this->do_next_editing_categories?NULL:(is_null($id))?NULL:$view_url, // View this
+			$archive_url, // View archive
+			NULL, // Add to category
+			(!$this->do_next_editing_categories)?NULL:array('_SELF',array('type'=>'a'.$this->type_code),'_SELF',!is_null($this->add_one_cat_label)?$this->add_one_cat_label:NULL), // Add one category
+			(!$this->do_next_editing_categories)?NULL:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name)))?NULL:array('_SELF',array('type'=>'e'.$this->type_code),'_SELF',!is_null($this->edit_one_cat_label)?$this->edit_one_cat_label:NULL)), // Edit one category
+			(!$this->do_next_editing_categories)?NULL:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_'.$this->permissions_require.'range_content',is_null($this->permission_page_name)?get_page_name():$this->permission_page_name))))?NULL:array('_SELF',array('type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',!is_null($this->edit_this_cat_label)?$this->edit_this_cat_label:NULL)), // Edit this category
+			(!$this->do_next_editing_categories)?NULL:$view_url, // View this category
 			$this->extra_donext_entries,
 			$this->extra_donext_categories,
 			$this->extra_donext_whatever,

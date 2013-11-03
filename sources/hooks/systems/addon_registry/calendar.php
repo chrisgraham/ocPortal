@@ -155,7 +155,6 @@ class Hook_addon_registry_calendar
 			'sources/hooks/systems/preview/calendar.php',
 			'sources/hooks/systems/rss/calendar.php',
 			'themes/default/css/calendar.css',
-			'themes/default/images/bigicons/calendar.png',
 			'themes/default/images/calendar/activity.png',
 			'themes/default/images/calendar/anniversary.png',
 			'themes/default/images/calendar/appointment.png',
@@ -174,7 +173,6 @@ class Hook_addon_registry_calendar
 			'themes/default/images/calendar/priority_na.png',
 			'themes/default/images/calendar/rss.png',
 			'themes/default/images/calendar/system_command.png',
-			'themes/default/images/pagepics/calendar.png',
 			'sources/hooks/systems/notifications/member_calendar_changes.php',
 		);
 	}

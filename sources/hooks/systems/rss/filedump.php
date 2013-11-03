@@ -93,7 +93,7 @@ class Hook_rss_filedump
 		}
 
 		require_lang('filedump');
-		return array($content,do_lang('FILE_DUMP'));
+		return array($content,do_lang('FILEDUMP'));
 	}
 
 }

@@ -94,7 +94,7 @@ class Module_admin_security
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -117,7 +117,6 @@ class Module_admin_security
 
 		require_lang('security');
 
-		set_helper_panel_pic('pagepics/securitylog');
 		set_helper_panel_tutorial('tut_security');
 
 		if ($type=='misc')

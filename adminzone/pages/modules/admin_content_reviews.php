@@ -44,7 +44,7 @@ class Module_admin_content_reviews
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -98,7 +98,6 @@ class Module_admin_content_reviews
 
 		require_lang('content_reviews');
 
-		set_helper_panel_pic('pagepics/unvalidated');
 		set_helper_panel_text(comcode_lang_string('DOC_CONTENT_REVIEWS'));
 
 		return NULL;

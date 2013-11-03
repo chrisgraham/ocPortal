@@ -87,7 +87,6 @@ class Hook_addon_registry_recommend
 			'sources/hooks/systems/config/points_RECOMMEND_SITE.php',
 			'sources/hooks/systems/realtime_rain/recommend.php',
 			'sources/hooks/systems/addon_registry/recommend.php',
-			'themes/default/images/menu_items/community_navigation/recommend.png',
 			'lang/EN/recommend.ini',
 			'pages/modules/recommend.php',
 			'pages/comcode/EN/recommend_help.txt',
@@ -104,6 +103,7 @@ class Hook_addon_registry_recommend
 			'themes/default/css/screen_actions.css',
 			'themes/default/templates/BLOCK_MAIN_SCREEN_ACTIONS.tpl',
 			'sources/hooks/systems/config/enable_csv_recommend.php',
+			'sources/hooks/systems/do_next_menus/recommend.php',
 		);
 	}
 

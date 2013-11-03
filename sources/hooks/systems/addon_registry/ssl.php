@@ -89,8 +89,6 @@ class Hook_addon_registry_ssl
 			'themes/default/templates/SSL_CONFIGURATION_ENTRY.tpl',
 			'adminzone/pages/modules/admin_ssl.php',
 			'sources/hooks/systems/do_next_menus/ssl.php',
-			'themes/default/images/pagepics/ssl.png',
-			'themes/default/images/bigicons/ssl.png',
 			'lang/EN/ssl.ini',
 		);
 	}

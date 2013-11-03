@@ -27,7 +27,7 @@
 	</p>
 {+END}
 
-<h2>{!SITE_MAP}</h2>
+<h2>{!SITEMAP}</h2>
 
 {$BLOCK,block=main_sitemap,quick_cache=1}
 

@@ -97,14 +97,10 @@ class Hook_addon_registry_themewizard
 			'themes/default/templates/THEMEWIZARD_2_PREVIEW.tpl',
 			'adminzone/themewizard.php',
 			'sources/hooks/systems/do_next_menus/themewizard.php',
-			'themes/default/images/pagepics/themewizard.png',
-			'themes/default/images/bigicons/themewizard.png',
 			'themes/default/templates/LOGOWIZARD_2.tpl',
 			'adminzone/logowizard.php',
-			'themes/default/images/bigicons/make_logo.png',
 			'themes/default/images/logo_template.png',
 			'themes/default/images/trimmed_logo_template.png',
-			'themes/default/images/pagepics/logowizard.png',
 		);
 	}
 

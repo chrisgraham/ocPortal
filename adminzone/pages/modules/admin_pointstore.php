@@ -44,11 +44,14 @@ class Module_admin_pointstore
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'POINTSTORE_MANAGE_SALES','p'=>'POINTSTORE_MANAGE_INVENTORY');
+		return array(
+			'misc'=>'POINTSTORE_MANAGE_SALES',
+			'p'=>'POINTSTORE_MANAGE_INVENTORY',
+		);
 	}
 
 	var $title;
@@ -64,7 +67,6 @@ class Module_admin_pointstore
 
 		require_lang('pointstore');
 
-		set_helper_panel_pic('pagepics/pointstore');
 		set_helper_panel_tutorial('tut_points');
 
 		if ($type=='misc')
@@ -81,7 +83,7 @@ class Module_admin_pointstore
 		if ($type=='p')
 		{
 			$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_AUDIT',escape_html($also_url->evaluate())),'inform');
 		}
 
 		if ($type=='p' || $type=='_p')

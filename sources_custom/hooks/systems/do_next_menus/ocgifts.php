@@ -24,10 +24,9 @@ class Hook_do_next_menus_ocgifts
 	function run()
 	{
 		require_lang('ocgifts');
-		//if (!addon_installed('ocgifts')) return array();
 
 		return array(
-			array('setup','ocgifts',array('admin_ocgifts',array(),get_page_zone('admin_ocgifts')),do_lang_tempcode('MANAGE_GIFTS'),('DOC_OCGIFTS'))
+			array('setup','menu/ocgifts',array('admin_ocgifts',array(),get_page_zone('admin_ocgifts')),do_lang_tempcode('ocgifts:MANAGE_GIFTS'),'ocgifts:DOC_OCGIFTS')
 		);
 	}
 

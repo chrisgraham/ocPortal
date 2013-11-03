@@ -90,8 +90,6 @@ class Hook_addon_registry_welcome_emails
 			'lang/EN/ocf_welcome_emails.ini',
 			'sources/hooks/systems/cron/ocf_welcome_emails.php',
 			'sources/hooks/systems/preview/ocf_welcome_email.php',
-			'themes/default/images/bigicons/welcome_emails.png',
-			'themes/default/images/pagepics/welcome_emails.png',
 		);
 	}
 

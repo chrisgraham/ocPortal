@@ -98,8 +98,6 @@ class Hook_addon_registry_backup
 			'exports/backups/index.html',
 			'themes/default/templates/BACKUP_LAUNCH_SCREEN.tpl',
 			'adminzone/pages/modules/admin_backup.php',
-			'themes/default/images/bigicons/backups.png',
-			'themes/default/images/pagepics/backups.png',
 			'data/modules/admin_backup/index.html',
 			'data/modules/admin_backup/restore.php.pre',
 			'data_custom/modules/admin_backup/index.html',

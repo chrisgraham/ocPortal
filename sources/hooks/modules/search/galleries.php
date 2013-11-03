@@ -24,13 +24,18 @@ class Hook_search_galleries
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (!module_installed('galleries')) return NULL;
 
-		if (!has_actual_page_access(get_member(),'galleries')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'galleries')) return NULL;
+		}
+
 		if ($GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)')<=1) return NULL;
 
 		require_lang('galleries');
@@ -38,6 +43,18 @@ class Hook_search_galleries
 		$info=array();
 		$info['lang']=do_lang_tempcode('GALLERIES');
 		$info['default']=true;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('galleries'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('galleries'),
+				'page_name'=>'galleries',
+			),
+		);
 
 		return $info;
 	}

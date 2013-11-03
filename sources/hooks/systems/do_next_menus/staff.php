@@ -32,7 +32,8 @@ class Hook_do_next_menus_staff
 		if (!addon_installed('staff')) return array();
 
 		return array(
-			array('security','staff',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff')),do_lang_tempcode('STAFF'),('DOC_STAFF')),
+			array('security','menu/site_meta/staff_view',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff')),do_lang_tempcode('staff:STAFF'),'staff:DOC_STAFF'),
+			array('site_meta','menu/site_meta/staff_view',array('staff',array(),get_module_zone('staff')),do_lang_tempcode('staff:STAFF')),
 		);
 	}
 

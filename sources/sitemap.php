@@ -71,7 +71,7 @@ function init__sitemap()
  *
  * @param  ?ID_TEXT 		The page-link we are finding (NULL: root).
  * @param  ?mixed  		Callback function to send discovered page-links to (NULL: return).
- * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+ * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
  * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
  * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
  * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
@@ -80,7 +80,7 @@ function init__sitemap()
  * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
  * @return ?array			Node structure (NULL: working via callback).
  */
-function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_validation=false,$consider_secondary_categories=false,$meta_gather=0)
+function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_validation=false,$consider_secondary_categories=false,$meta_gather=0)
 {
 	$hook=mixed();
 	$is_virtual=false;
@@ -113,8 +113,8 @@ function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_content
 	}
 
 	if ($is_virtual)
-		return $ob->get_virtual_nodes($pagelink,$callback,$valid_node_content_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
-	return $ob->get_node($pagelink,$callback,$valid_node_content_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+		return $ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+	return $ob->get_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
 }
 
 abstract class Hook_sitemap_base
@@ -155,7 +155,7 @@ abstract class Hook_sitemap_base
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
 	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
@@ -166,14 +166,14 @@ abstract class Hook_sitemap_base
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	abstract function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
+	abstract function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
 
 	/**
 	 * Find details of a position in the sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
 	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
@@ -184,7 +184,7 @@ abstract class Hook_sitemap_base
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			Node structure (NULL: working via callback).
 	 */
-	abstract function get_node($pagelink,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
+	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
 
 	/**
 	 * Convert a page-link to a category ID and category permission module type.
@@ -192,7 +192,10 @@ abstract class Hook_sitemap_base
 	 * @param  string	The page-link
 	 * @return ?array	The pair (NULL: permission modules not handled)
 	 */
-	abstract function extract_child_pagelink_permission_pair($pagelink);
+	function extract_child_pagelink_permission_pair($pagelink)
+	{
+		return NULL;
+	}
 }
 
 abstract class Hook_sitemap_content extends Hook_sitemap_base
@@ -271,7 +274,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
 	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
@@ -282,7 +285,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			A tuple: content ID, row, partial node structure (NULL: filtered).
 	 */
-	function _create_partial_node_structure($pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row)
+	function _create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row)
 	{
 		$content_id=$this->_get_pagelink_id($pagelink);
 		if ($row===NULL)
@@ -430,7 +433,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  ID_TEXT  		The content ID.
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
 	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
@@ -440,16 +443,18 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @param  string			Extra SQL piece for considering which entries to load.
+	 * @param  ?string		Order by for entries (NULL: alphabetical title)
+	 * @param  ?string		Order by for categories (NULL: alphabetical title)
 	 * @return array			Child nodes.
 	 */
-	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='')
+	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='',$explicit_order_by_entries=NULL,$explicit_order_by_categories=NULL)
 	{
 		// Filters...
 		if ($recurse_level>=$max_recurse_depth)
 		{
 			return array();
 		}
-		if (($valid_node_content_types!==NULL) && (!in_array($this->content_type,$valid_node_content_types)))
+		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
 		{
 			return array();
 		}
@@ -500,11 +505,11 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 							$where[$cma_entry_info['category_field']]=$cma_entry_info['id_field_numeric']?intval($content_id):$content_id;
 							if (($consider_validation) && (isset($cma_entry_info['validated_field'])))
 								$where[$cma_entry_info['validated_field']]=1;
-							$rows=$cma_entry_info['connection']->query_select($cma_entry_info['table'].' r'.$privacy_join,array('*'),$where,$extra_where_entries.$privacy_where,SITEMAP_MAX_ROWS_PER_LOOP,$start);
+							$rows=$cma_entry_info['connection']->query_select($cma_entry_info['table'].' r'.$privacy_join,array('*'),$where,$extra_where_entries.$privacy_where.(is_null($explicit_order_by_entries)?'':(' ORDER BY '.$explicit_order_by_entries)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
 							foreach ($rows as $child_row)
 							{
 								$child_pagelink=$zone.':'.$page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
-								$node=$child_hook_ob->_create_partial_node_structure($child_pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+								$node=$child_hook_ob->_create_partial_node_structure($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 								if ($node!==NULL)
 									$children_entries[]=$node;
 							}
@@ -512,8 +517,11 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 						}
 						while (count($rows)>0);
 
-						multi_sort($children_entries,'title');
-						$children=array_merge($children,$children_entries);
+						if (is_null($explicit_order_by_entries))
+						{
+							multi_sort($children_entries,'title');
+							$children=array_merge($children,$children_entries);
+						}
 					}
 				}
 			}
@@ -531,11 +539,17 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 				$where[$cma_info['parent_spec__parent_name']]=$cma_info['category_is_string']?$content_id:intval($content_id);
 				if (($consider_validation) && (isset($cma_info['validated_field'])))
 					$where[$cma_info['validated_field']]=1;
-				$rows=$cma_info['connection']->query_select($cma_info['table'],array('*'),$where,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+				$rows=$cma_info['connection']->query_select($cma_info['parent_spec__table_name'],array('*'),$where,(is_null($explicit_order_by_entries)?'':('ORDER BY '.$explicit_order_by_subcategories)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
 				foreach ($rows as $child_row)
 				{
-					$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.($cma_info['category_is_string']?$child_row[$cma_info['id_field']]:strval($child_row[$cma_info['id_field']]));
-					$node=$this->_create_partial_node_structure($child_pagelink,$callback,$valid_node_content_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+					if ($this->content_type=='comcode_page')
+					{
+						$child_pagelink=$zone.':'.$child_row['the_page'];
+					} else
+					{
+						$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.($cma_info['category_is_string']?$child_row[$cma_info['parent_spec__field_name']]:strval($child_row[$cma_info['parent_spec__field_name']]));
+					}
+					$node=$this->_create_partial_node_structure($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 					if ($node!==NULL)
 						$children_categories[]=$node;
 				}
@@ -543,8 +557,11 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			}
 			while (count($rows)>0);
 
-			multi_sort($children_categories,'title');
-			$children=array_merge($children,$children_categories);
+			if (is_null($explicit_order_by_categories))
+			{
+				multi_sort($children_categories,'title');
+				$children=array_merge($children,$children_categories);
+			}
 		}
 
 		return $children;
@@ -575,8 +592,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
  *
  * @param  ID_TEXT  		The page-link we are starting from.
  * @param  ?ID_TEXT		Default selection (NULL: none).
- * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
- * @param  ?array			List of node content types we will allow to be selectable (NULL: no limit)
+ * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
+ * @param  ?array			List of node types we will allow to be selectable (NULL: no limit)
  * @param  integer		Check permissions according to this bitmask of possibilities (requiring all in the bitmask to be matched)
  * @param  ?MEMBER		The member we are checking permissions for (NULL: current member)
  * @param  boolean		Whether to filter out non-validated entries if the $check_permissions_for user doesn't have the privilege to see them AND doesn't own them
@@ -585,7 +602,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
  * @param  ?mixed  		Filter function for limiting what rows will be included (NULL: none).
  * @return tempcode		List.
  */
-function create_selection_list($root_pagelink,$default=NULL,$valid_node_content_types=NULL,$valid_selectable_content_types=NULL,$check_permissions_against=0,$check_permissions_for=NULL,$consider_validation=false,$only_owned=NULL,$use_compound_list=false,$filter_func=NULL)
+function create_selection_list($root_pagelink,$default=NULL,$valid_node_types=NULL,$valid_selectable_content_types=NULL,$check_permissions_against=0,$check_permissions_for=NULL,$consider_validation=false,$only_owned=NULL,$use_compound_list=false,$filter_func=NULL)
 {
 	if (is_null($check_permissions_for)) $check_permissions_for=get_member();
 
@@ -604,7 +621,7 @@ function create_selection_list($root_pagelink,$default=NULL,$valid_node_content_
  * @param  tempcode  	Output Tempcode.
  * @param  array  		Node being recursed.
  * @param  ?ID_TEXT		Default selection (NULL: none).
- * @param  ?array			List of node content types we will allow to be selectable (NULL: no limit)
+ * @param  ?array			List of node types we will allow to be selectable (NULL: no limit)
  * @param  integer		Check permissions according to this bitmask of possibilities (requiring all in the bitmask to be matched)
  * @param  ?MEMBER		The member we are checking permissions for (NULL: current member)
  * @param  ?MEMBER		The member we are only finding owned content of (NULL: no such limit); nodes leading up to owned content will be shown, but not as selectable
@@ -624,6 +641,11 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 			{
 				switch ($permission['type'])
 				{
+					case 'non_guests':
+						if (is_guest($check_permissions_for))
+							return '';
+						break;
+
 					case 'zone':
 						if (!has_zone_access($check_permissions_for,$permission['zone_name']))
 							return '';

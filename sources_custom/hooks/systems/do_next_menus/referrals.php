@@ -24,8 +24,6 @@ class Hook_do_next_menus_referrals
 	 */
 	function run()
 	{
-		require_lang('referrals');
-
 		$ret=array();
 
 		$path=get_custom_file_base().'/text_custom/referrals.txt';
@@ -42,12 +40,12 @@ class Hook_do_next_menus_referrals
 
 					$scheme_title=isset($scheme['title'])?$scheme['title']:$ini_file_section_name;
 
-					$ret[]=array('usage','referrals',array('admin_referrals',array('type'=>'misc','scheme'=>$scheme_name),'adminzone'),$scheme_title,('DOC_REFERRALS'));
+					$ret[]=array('audit','referrals',array('admin_referrals',array('type'=>'misc','scheme'=>$scheme_name),'adminzone'),$scheme_title,'referrals:DOC_REFERRALS');
 				}
 			}
 		}
 
-		$ret[]=array('setup','referrals',array('referrals',array('type'=>'misc'),'adminzone'),do_lang_tempcode('REFERRALS'),('DOC_REFERRALS'));
+		$ret[]=array('setup','menu/referrals',array('referrals',array('type'=>'misc'),'adminzone'),do_lang_tempcode('referrals:REFERRALS'),'referrals:DOC_REFERRALS');
 
 		return $ret;
 	}

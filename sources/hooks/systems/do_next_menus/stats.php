@@ -32,7 +32,7 @@ class Hook_do_next_menus_stats
 		if (!addon_installed('stats')) return array();
 
 		return array(
-			array('usage','statistics',array('admin_stats',array('type'=>'misc'),get_module_zone('admin_stats')),do_lang_tempcode('STATISTICS'),('DOC_STATISTICS')),
+			array('audit','menu/adminzone/audit/statistics/statistics',array('admin_stats',array('type'=>'misc'),get_module_zone('admin_stats')),do_lang_tempcode('stats:STATISTICS'),'stats:DOC_STATISTICS'),
 		);
 	}
 

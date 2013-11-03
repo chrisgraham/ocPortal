@@ -24,10 +24,8 @@ class Hook_do_next_menus_booking
 	 */
 	function run()
 	{
-		require_lang('booking');
-
 		return array(
-			array('cms','booking',array('cms_booking',array(),get_page_zone('cms_booking')),do_lang_tempcode('BOOKINGS'),('DOC_BOOKING'))
+			array('cms','menu/booking',array('cms_booking',array(),get_page_zone('cms_booking')),do_lang_tempcode('booking:BOOKINGS'),'booking:DOC_BOOKING')
 		);
 	}
 

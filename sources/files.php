@@ -334,8 +334,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 			'_config.php'=>'',
 			'map.ini'=>'themes',
 			'functions.dat'=>'data_custom',
-			'download_tree_made.htm'=>'pages/html_custom/EN',
-			'wiki_tree_made.htm'=>'site/pages/html_custom/EN',
 			'ocp_sitemap.xml'=>'',
 			'ocp_news_sitemap.xml'=>'',
 			'errorlog.php'=>'data_custom',
@@ -478,7 +476,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 			{
 				if ($place=='sources_custom')
 				{
-					require_code('addons2');
+					require_code('addons');
 					$addon_info=read_addon_info($hook);
 					$addon_files=array_merge($addon_files,$addon_info['files']);
 				}

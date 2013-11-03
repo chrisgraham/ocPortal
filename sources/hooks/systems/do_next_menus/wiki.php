@@ -32,7 +32,8 @@ class Hook_do_next_menus_wiki
 		if (!addon_installed('wiki')) return array();
 
 		return array(
-			array('cms','wiki',array('cms_wiki',array('type'=>'misc'),get_module_zone('cms_wiki')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('WIKI'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','COUNT(*)',NULL,'',true))))),('DOC_WIKI')),
+			array('cms','menu/rich_content/wiki',array('cms_wiki',array('type'=>'misc'),get_module_zone('cms_wiki')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('wiki:WIKI'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','COUNT(*)',NULL,'',true))))),'wiki:DOC_WIKI'),
+			array('rich_content','menu/rich_content/wiki',array('wiki',array(),get_module_zone('wiki')),do_lang_tempcode('wiki:WIKI')),
 		);
 	}
 

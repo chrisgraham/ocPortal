@@ -1787,7 +1787,7 @@ class Hook_addon_registry_core_form_interfaces
 		}
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_HELPER_BLOCK_GROUP',array(
-				'IMG'=>'themes/default/images/bigicons/add_one.png',
+				'IMG'=>'themes/default/images/icons/24x24/menu/_generic_admin/add_one.png',
 				'TITLE'=>lorem_phrase(),
 				'LINKS'=>$links
 			)), NULL, '', true)

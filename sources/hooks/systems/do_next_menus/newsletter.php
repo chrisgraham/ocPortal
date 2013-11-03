@@ -32,7 +32,8 @@ class Hook_do_next_menus_newsletter
 		if (!addon_installed('newsletter')) return array();
 
 		return array(
-			array('tools','newsletters',array('admin_newsletter',array('type'=>'misc'),get_module_zone('admin_newsletter')),do_lang_tempcode('NEWSLETTER'),('DOC_NEWSLETTER')),
+			array('tools','menu/site_meta/newsletters',array('admin_newsletter',array('type'=>'misc'),get_module_zone('admin_newsletter')),do_lang_tempcode('newsletter:NEWSLETTER'),'newsletter:DOC_NEWSLETTER'),
+			array('site_meta','menu/site_meta/newsletters',array('newsletter',array(),get_module_zone('newsletter')),do_lang_tempcode('newsletter:NEWSLETTER')),
 		);
 	}
 

@@ -99,8 +99,6 @@ class Hook_addon_registry_tickets
 			'themes/default/templates/SUPPORT_TICKETS_SEARCH_SCREEN.tpl',
 			'adminzone/pages/modules/admin_tickets.php',
 			'themes/default/css/tickets.css',
-			'themes/default/images/bigicons/tickets.png',
-			'themes/default/images/pagepics/tickets.png',
 			'lang/EN/tickets.ini',
 			'site/pages/modules/tickets.php',
 			'sources/hooks/systems/change_detection/tickets.php',

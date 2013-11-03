@@ -33,8 +33,8 @@ class Hook_admin_stats_downloads
 		require_lang('downloads');
 
 		return array(
-			array('downloads'=>'SECTION_DOWNLOADS',),
-			array('downloads',array('_SELF',array('type'=>'downloads'),'_SELF'),do_lang('SECTION_DOWNLOADS'),('DESCRIPTION_DOWNLOADS_STATISTICS')),
+			array('downloads'=>array('SECTION_DOWNLOADS','menu/rich_content/downloads'),),
+			array('menu/rich_content/downloads',array('_SELF',array('type'=>'downloads'),'_SELF'),do_lang('SECTION_DOWNLOADS'),'DESCRIPTION_DOWNLOADS_STATISTICS'),
 		);
 	}
 

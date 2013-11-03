@@ -24,12 +24,8 @@ class Hook_do_next_menus_workflows
 	 */
 	function run()
 	{
-		if (!addon_installed('workflows',true)) return array();
-
-		require_lang('workflows');
-
 		return array(
-			array('cms','workflows',array('admin_workflow',array('type'=>'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value('workflow_requirements','COUNT(DISTINCT workflow_name)'))))),('DOC_WORKFLOWS')),
+			array('cms','menu/workflows',array('admin_workflow',array('type'=>'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('workflows:WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value('workflow_requirements','COUNT(DISTINCT workflow_name)'))))),'workflows:DOC_WORKFLOWS'),
 		);
 	}
 

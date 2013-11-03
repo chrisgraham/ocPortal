@@ -133,7 +133,7 @@ table.points_summary_table .answer {
 
 /* Leaderboard */
 
-.leaderboard_table th, .leaderboard_table td {
+.leader_board_table th, .leader_board_table td {
 	vertical-align: middle;
 }
 

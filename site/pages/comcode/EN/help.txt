@@ -21,7 +21,7 @@ Please have fun with the system and use your gift-points well.
 {+END}
 {+START,IF,{$ADDON_INSTALLED,pointstore}}[title="2"]The Point Store[/title]
 
-{$ANCHOR,POINT_STORE}The [page="_SEARCH:pointstore"]Point Store[/page] contains all the items you can buy using your points. You can then select some and buy them.
+{$ANCHOR,POINTSTORE}The [page="_SEARCH:pointstore"]Point Store[/page] contains all the items you can buy using your points. You can then select some and buy them.
 
 The items that are purchasable may include:
  - Community billboard messages. These are messages displayed in a prominent position on the website. All community billboard messages are placed in a queue and activated manually (and thus subject to moderation).
@@ -63,3 +63,5 @@ The staff will make clear how the Wiki+ system is employed on this website.
 [title="2"]Comcode[/title]
 
 You can use [page="_SEARCH:userguide_comcode"]Comcode[/page] to spice up your posts.
+
+[block]main_comcode_page_children[/block]

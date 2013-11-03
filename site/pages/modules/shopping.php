@@ -186,11 +186,22 @@ class Module_shopping
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
-		return is_guest()?array('misc'=>'SHOPPING'):array('my_orders'=>'MY_ORDERS','misc'=>'SHOPPING');
+		if (!$check_perms || !is_guest($member_id))
+		{
+			return array(
+				'my_orders'=>array('MY_ORDERS','menu/rich_content/ecommerce/orders'),
+				'misc'=>'SHOPPING',
+			);
+		}
+		return array(
+			'misc'=>'SHOPPING',
+		);
 	}
 
 	var $title;

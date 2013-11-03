@@ -162,7 +162,7 @@ The final step is to configure ocPortal to use the key pair to encrypt data. In 
 
 [title="2"]PHP-Info[/title]
 
-{!menus:DOC_PHP_INFO}
+{!menus:DOC_PHPINFO}
 
 [concepts
  1_key="web host"           1_value="A provider of Internet server facilities"

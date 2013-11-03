@@ -23,10 +23,8 @@ class Hook_do_next_menus_facebook
 	 */
 	function run()
 	{
-		require_lang('facebook');
-
 		return array(
-			array('setup','facebook',array('facebook_oauth',array(),'adminzone'),do_lang_tempcode('FACEBOOK_SYNDICATION'),('DOC_FACEBOOK_SYNDICATION'))
+			array('setup','menu/facebook',array('facebook_oauth',array(),'adminzone'),do_lang_tempcode('facebook:FACEBOOK_SYNDICATION'),'facebook:DOC_FACEBOOK_SYNDICATION')
 		);
 	}
 

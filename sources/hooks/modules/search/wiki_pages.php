@@ -24,11 +24,16 @@ class Hook_search_wiki_pages
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
-		if (!has_actual_page_access(get_member(),'wiki')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'wiki')) return NULL;
+		}
+
 		if ($GLOBALS['SITE_DB']->query_select_value('wiki_pages','COUNT(*)')<=1) return NULL;
 
 		require_lang('wiki');
@@ -36,6 +41,18 @@ class Hook_search_wiki_pages
 		$info=array();
 		$info['lang']=do_lang_tempcode('WIKI_PAGES');
 		$info['default']=true;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('wiki'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('wiki'),
+				'page_name'=>'wiki',
+			),
+		);
 
 		return $info;
 	}

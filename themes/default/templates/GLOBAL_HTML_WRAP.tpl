@@ -219,7 +219,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					<nav class="global_minilinks" role="navigation">
 						<ul class="horizontal_links">
 							{+START,IF,{$CONFIG_OPTION,bottom_show_sitemap_button}}
-								<li><a accesskey="3" rel="site_map" href="{$PAGE_LINK*,_SEARCH:sitemap}">{!SITE_MAP}</a></li>
+								<li><a accesskey="3" rel="site_map" href="{$PAGE_LINK*,_SEARCH:sitemap}">{!SITEMAP}</a></li>
 							{+END}
 							{+START,IF,{$CONFIG_OPTION,bottom_show_rules_link}}
 								<li><a onclick="return open_link_as_overlay(this);" rel="site_rules" accesskey="7" href="{$PAGE_LINK*,_SEARCH:rules}">{!RULES}</a></li>

@@ -23,10 +23,8 @@ class Hook_do_next_menus_classifieds
 	 */
 	function run()
 	{
-		require_lang('classifieds');
-
 		return array(
-			array('setup','classifieds',array('admin_classifieds',array(),'adminzone'),do_lang_tempcode('CLASSIFIEDS_PRICING'),('DOC_CLASSIFIEDS_PRICING'))
+			array('setup','menu/classifieds',array('admin_classifieds',array(),'adminzone'),do_lang_tempcode('classifieds:CLASSIFIEDS_PRICING'),'classifieds:DOC_CLASSIFIEDS_PRICING')
 		);
 	}
 

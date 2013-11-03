@@ -763,7 +763,7 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 	{
 		$update_map['rep_image']=$rep_image;
 		require_code('files2');
-		delete_upload('uploads/grepimages','catalogue_categories','rep_image','id',$id,$rep_image);
+		delete_upload('uploads/repimages','catalogue_categories','rep_image','id',$id,$rep_image);
 	}
 
 	if (!is_null($add_time))
@@ -833,7 +833,7 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 	$GLOBALS['SITE_DB']->query_delete('catalogue_childcountcache',array('cc_id'=>$id));
 
 	require_code('files2');
-	delete_upload('uploads/grepimages','catalogue_categories','rep_image','id',$id);
+	delete_upload('uploads/repimages','catalogue_categories','rep_image','id',$id);
 
 	if (!$deleting_all) // If not deleting the whole catalogue
 	{

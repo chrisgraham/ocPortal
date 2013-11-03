@@ -34,7 +34,7 @@ class Hook_members_ocworld
 		if (!is_null($id))
 		{
 			require_lang('ocworld');
-			return array(array('usage',do_lang_tempcode('OCWORLD'),build_url(array('page'=>'ocworld','type'=>'inventory','member'=>$member_id),get_page_zone('ocworld'))));
+			return array(array('audit',do_lang_tempcode('OCWORLD'),build_url(array('page'=>'ocworld','type'=>'inventory','member'=>$member_id),get_page_zone('ocworld'))));
 		}
 		return array();
 	}

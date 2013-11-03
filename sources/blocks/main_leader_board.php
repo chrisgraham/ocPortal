@@ -100,7 +100,7 @@ class Block_main_leader_board
 		$rows=collapse_2d_complexity('lb_member','lb_points',$rows);
 		if (count($rows)==0)
 		{
-			$rows=$this->calculate_leaderboard($limit,$staff);
+			$rows=$this->calculate_leader_board($limit,$staff);
 		} else
 		{
 			arsort($rows);
@@ -133,7 +133,7 @@ class Block_main_leader_board
 
 			if ($i==0) set_value('site_bestmember',$username);
 
-			$out->attach(do_template('POINTS_LEADERBOARD_ROW',array(
+			$out->attach(do_template('POINTS_LEADER_BOARD_ROW',array(
 				'_GUID'=>'68caa55091aade84bc7ca760e6655a45',
 				'ID'=>strval($member),
 				'POINTS_URL'=>$points_url,
@@ -148,17 +148,17 @@ class Block_main_leader_board
 
 		$url=build_url(array('page'=>'leader_board'),$zone);
 
-		return do_template('POINTS_LEADERBOARD',array('_GUID'=>'c875cce925e73f46408acc0a153a2902','URL'=>$url,'LIMIT'=>integer_format($limit),'ROWS'=>$out));
+		return do_template('POINTS_LEADER_BOARD',array('_GUID'=>'c875cce925e73f46408acc0a153a2902','URL'=>$url,'LIMIT'=>integer_format($limit),'ROWS'=>$out));
 	}
 
 	/**
-	 * Calculate the leaderboard.
+	 * Calculate the leader-board.
 	 *
-	 * @param  integer		The number to show on the leaderboard
+	 * @param  integer		The number to show on the leader-board
 	 * @param  BINARY			Whether to include staff
-	 * @return array			A map of member-ids to points, sorted by leaderboard status, of the top posters (doing for points would be too inefficient)
+	 * @return array			A map of member-ids to points, sorted by leader-board status, of the top posters (doing for points would be too inefficient)
 	 */
-	function calculate_leaderboard($limit,$staff)
+	function calculate_leader_board($limit,$staff)
 	{
 		$all_members=$GLOBALS['FORUM_DRIVER']->get_top_posters(max(100,$limit));
 		$points=array();

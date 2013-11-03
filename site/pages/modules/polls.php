@@ -159,7 +159,7 @@ class Module_polls
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -215,7 +215,7 @@ class Module_polls
 				'title'=>$_title,
 				'identifier'=>'_SEARCH:polls:view:'.strval($id),
 				'description'=>'',
-				'image'=>find_theme_image('bigicons/polls'),
+				'image'=>find_theme_image('icons/48x48/menu/social/polls'),
 			));
 
 			$this->title=get_screen_title('POLL');

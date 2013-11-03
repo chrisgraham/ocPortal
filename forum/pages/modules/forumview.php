@@ -44,7 +44,7 @@ class Module_forumview
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -119,7 +119,7 @@ class Module_forumview
 				'title'=>$forum_info['f_name'],
 				'identifier'=>'_SEARCH:forumview:misc:'.strval($id),
 				'description'=>$description_text,
-				'image'=>find_theme_image('bigicons/forums'),
+				'image'=>find_theme_image('icons/48x48/menu/social/forum/forums'),
 				//'category'=>???,
 			));
 

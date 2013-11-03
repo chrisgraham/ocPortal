@@ -24,13 +24,18 @@ class Hook_search_download_categories
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (!module_installed('downloads')) return NULL;
 
-		if (!has_actual_page_access(get_member(),'downloads')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'downloads')) return NULL;
+		}
+
 		if ($GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)')<=1) return NULL;
 
 		require_lang('downloads');
@@ -38,6 +43,18 @@ class Hook_search_download_categories
 		$info=array();
 		$info['lang']=do_lang_tempcode('DOWNLOAD_CATEGORIES');
 		$info['default']=true;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('downloads'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('downloads'),
+				'page_name'=>'downloads',
+			),
+		);
 
 		return $info;
 	}

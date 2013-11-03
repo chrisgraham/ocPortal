@@ -92,8 +92,6 @@ class Hook_addon_registry_redirects_editor
 			'themes/default/templates/REDIRECTE_TABLE_SCREEN.tpl',
 			'themes/default/templates/REDIRECTE_TABLE_REDIRECT.tpl',
 			'adminzone/pages/modules/admin_redirects.php',
-			'themes/default/images/bigicons/redirect.png',
-			'themes/default/images/pagepics/redirect.png',
 			'lang/EN/redirects.ini',
 			'themes/default/images/EN/page/redirect.png',
 			'themes/default/css/redirects_editor.css',

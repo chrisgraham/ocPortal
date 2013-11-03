@@ -44,7 +44,7 @@ class Module_admin_setupwizard
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -64,7 +64,6 @@ class Module_admin_setupwizard
 
 		require_lang('config');
 
-		set_helper_panel_pic('pagepics/configwizard');
 		set_helper_panel_tutorial('tut_configuration');
 
 		if ($type=='misc')
@@ -1108,11 +1107,10 @@ class Module_admin_setupwizard
 		// Show nice interface to start adding pages
 		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				addon_installed('page_management')?array('pagewizard',array('admin_sitemap',array('type'=>'pagewizard'),get_module_zone('admin_sitemap')),do_lang('PAGE_WIZARD')):NULL,
-				array('main_home',array(NULL,array(),'')),
-				array('cms_home',array(NULL,array(),'cms')),
-				array('admin_home',array(NULL,array(),'adminzone')),
+				addon_installed('page_management')?array('menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'pagewizard'),get_module_zone('admin_sitemap')),do_lang('PAGE_WIZARD')):NULL,
+				array('menu/pages/help',array(NULL,array(),'')),
+				array('menu/cms/cms',array(NULL,array(),'cms')),
+				array('menu/adminzone/adminzone',array(NULL,array(),'adminzone')),
 			),
 			do_lang('PAGES'),
 			NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,

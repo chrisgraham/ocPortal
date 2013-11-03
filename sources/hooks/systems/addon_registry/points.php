@@ -85,10 +85,9 @@ class Hook_addon_registry_points
 	{
 		return array(
 			'themes/default/templates/POINTS_PROFILE.tpl',
-			'themes/default/images/bigicons/points.png',
 			'sources/hooks/systems/notifications/received_points.php',
 			'sources/hooks/systems/notifications/receive_points_staff.php',
-			'sources/hooks/systems/config/leaderboard_start_date.php',
+			'sources/hooks/systems/config/leader_board_start_date.php',
 			'sources/hooks/systems/config/points_joining.php',
 			'sources/hooks/systems/config/points_per_daily_visit.php',
 			'sources/hooks/systems/config/points_per_day.php',
@@ -102,7 +101,6 @@ class Hook_addon_registry_points
 			'sources/hooks/systems/config/points_voting.php',
 			'sources/hooks/systems/realtime_rain/points.php',
 			'sources/hooks/modules/admin_setupwizard/leader_board.php',
-			'themes/default/images/pagepics/points.png',
 			'sources/hooks/systems/addon_registry/points.php',
 			'sources/hooks/modules/admin_import_types/points.php',
 			'sources/hooks/systems/profiles_tabs/points.php',
@@ -112,13 +110,12 @@ class Hook_addon_registry_points
 			'themes/default/templates/POINTS_SEARCH_SCREEN.tpl',
 			'themes/default/templates/POINTS_SEARCH_RESULT.tpl',
 			'themes/default/templates/POINTS_TRANSACTIONS_WRAP.tpl',
-			'themes/default/templates/POINTS_LEADERBOARD.tpl',
-			'themes/default/templates/POINTS_LEADERBOARD_SCREEN.tpl',
-			'themes/default/templates/POINTS_LEADERBOARD_ROW.tpl',
-			'themes/default/templates/POINTS_LEADERBOARD_WEEK.tpl',
+			'themes/default/templates/POINTS_LEADER_BOARD.tpl',
+			'themes/default/templates/POINTS_LEADER_BOARD_SCREEN.tpl',
+			'themes/default/templates/POINTS_LEADER_BOARD_ROW.tpl',
+			'themes/default/templates/POINTS_LEADER_BOARD_WEEK.tpl',
 			'adminzone/pages/modules/admin_points.php',
 			'themes/default/css/points.css',
-			'themes/default/images/bigicons/pointslog.png',
 			'themes/default/images/EN/pageitem/points.png',
 			'lang/EN/points.ini',
 			'site/pages/modules/points.php',
@@ -150,10 +147,10 @@ class Hook_addon_registry_points
 	function tpl_previews()
 	{
 		return array(
-			'POINTS_LEADERBOARD_ROW.tpl'=>'points_leaderboard',
-			'POINTS_LEADERBOARD.tpl'=>'points_leaderboard',
-			'POINTS_LEADERBOARD_WEEK.tpl'=>'points_leaderboard_screen',
-			'POINTS_LEADERBOARD_SCREEN.tpl'=>'points_leaderboard_screen',
+			'POINTS_LEADER_BOARD_ROW.tpl'=>'points_leader_board',
+			'POINTS_LEADER_BOARD.tpl'=>'points_leader_board',
+			'POINTS_LEADER_BOARD_WEEK.tpl'=>'points_leader_board_screen',
+			'POINTS_LEADER_BOARD_SCREEN.tpl'=>'points_leader_board_screen',
 			'POINTS_SEARCH_RESULT.tpl'=>'points_search_screen',
 			'POINTS_SEARCH_SCREEN.tpl'=>'points_search_screen',
 			'POINTS_GIVE.tpl'=>'points_screen',
@@ -170,12 +167,12 @@ class Hook_addon_registry_points
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__points_leaderboard()
+	function tpl_preview__points_leader_board()
 	{
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$out->attach(do_lorem_template('POINTS_LEADERBOARD_ROW',array(
+			$out->attach(do_lorem_template('POINTS_LEADER_BOARD_ROW',array(
 				'ID'=>placeholder_id(),
 				'POINTS_URL'=>placeholder_url(),
 				'PROFILE_URL'=>placeholder_url(),
@@ -186,7 +183,7 @@ class Hook_addon_registry_points
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('POINTS_LEADERBOARD',array(
+			lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD',array(
 				'URL'=>placeholder_url(),
 				'LIMIT'=>placeholder_number(),
 				'ROWS'=>$out
@@ -201,7 +198,7 @@ class Hook_addon_registry_points
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__points_leaderboard_screen()
+	function tpl_preview__points_leader_board_screen()
 	{
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
@@ -209,7 +206,7 @@ class Hook_addon_registry_points
 			$week_tpl=new ocp_tempcode();
 			foreach (placeholder_array() as $_k=>$_v)
 			{
-				$week_tpl->attach(do_lorem_template('POINTS_LEADERBOARD_ROW',array(
+				$week_tpl->attach(do_lorem_template('POINTS_LEADER_BOARD_ROW',array(
 					'ID'=>placeholder_id(),
 					'POINTS_URL'=>placeholder_url(),
 					'PROFILE_URL'=>placeholder_url(),
@@ -217,14 +214,14 @@ class Hook_addon_registry_points
 					'USERNAME'=>lorem_phrase()
 				)));
 			}
-			$out->attach(do_lorem_template('POINTS_LEADERBOARD_WEEK',array(
+			$out->attach(do_lorem_template('POINTS_LEADER_BOARD_WEEK',array(
 				'WEEK'=>placeholder_number(),
 				'ROWS'=>$week_tpl
 			)));
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('POINTS_LEADERBOARD_SCREEN',array(
+			lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'WEEKS'=>$out
 			)), NULL, '', true)

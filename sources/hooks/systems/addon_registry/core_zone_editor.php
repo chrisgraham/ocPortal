@@ -91,10 +91,7 @@ class Hook_addon_registry_core_zone_editor
 			'themes/default/templates/ZONE_EDITOR_SCREEN.tpl',
 			'themes/default/templates/ZONE_EDITOR_PANEL.tpl',
 			'themes/default/templates/JAVASCRIPT_ZONE_EDITOR.tpl',
-			'themes/default/images/bigicons/zone_editor.png',
-			'themes/default/images/bigicons/zones.png',
 			'adminzone/pages/modules/admin_zones.php',
-			'themes/default/images/pagepics/zones.png',
 		);
 	}
 

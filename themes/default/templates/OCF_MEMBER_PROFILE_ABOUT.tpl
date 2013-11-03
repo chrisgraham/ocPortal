@@ -83,16 +83,16 @@
 			</div>
 		{+END}
 
-		{+START,IF_NON_EMPTY,{ACTIONS_usage}}
+		{+START,IF_NON_EMPTY,{ACTIONS_audit}}
 			<div>
 				<h3>
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!USAGE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!USAGE}</a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!AUDIT}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!AUDIT}</a>
 				</h3>
 
 				<nav class="toggleable_tray" style="display: {$JS_ON,none,block}" role="navigation" aria-expanded="false">
 					<ul>
-						{ACTIONS_usage}
+						{ACTIONS_audit}
 					</ul>
 				</nav>
 			</div>

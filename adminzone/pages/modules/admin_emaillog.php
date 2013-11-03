@@ -44,7 +44,7 @@ class Module_admin_emaillog
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -66,8 +66,6 @@ class Module_admin_emaillog
 
 		if ($type=='misc')
 		{
-			//set_helper_panel_pic('pagepics/email');	Actually, we need the space
-
 			$this->title=get_screen_title('EMAIL_LOG');
 		}
 

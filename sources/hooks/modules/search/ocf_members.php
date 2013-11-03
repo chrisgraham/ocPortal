@@ -24,11 +24,13 @@ class Hook_search_ocf_members
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (get_forum_type()!='ocf') return NULL;
+
 		if (($GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)')<=3) && (get_param('id','')!='ocf_members') && (get_param_integer('search_ocf_members',0)!=1)) return NULL;
 
 		require_lang('ocf');
@@ -52,6 +54,8 @@ class Hook_search_ocf_members
 			}
 		}
 		$info['extra_sort_fields']=$extra_sort_fields;
+
+		$info['permissions']=array();
 
 		return $info;
 	}

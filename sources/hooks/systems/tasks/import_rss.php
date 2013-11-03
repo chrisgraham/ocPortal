@@ -176,10 +176,10 @@ class Hook_task_import_rss
 				}
 
 				// Work out rep-image
-				if (!file_exists(get_custom_file_base().'/uploads/grepimages'))
+				if (!file_exists(get_custom_file_base().'/uploads/repimages'))
 				{
 					require_code('files2');
-					make_missing_directory(get_custom_file_base().'/uploads/grepimages');
+					make_missing_directory(get_custom_file_base().'/uploads/repimages');
 				}
 				$rep_image='';
 				if (array_key_exists('rep_image',$item))
@@ -187,15 +187,15 @@ class Hook_task_import_rss
 					$rep_image=$item['rep_image'];
 					if ($download_images==1)
 					{
-						$stem='uploads/grepimages/'.basename(urldecode($rep_image));
+						$stem='uploads/repimages/'.basename(urldecode($rep_image));
 						$target_path=get_custom_file_base().'/'.$stem;
-						$rep_image='uploads/grepimages/'.basename($rep_image);
+						$rep_image='uploads/repimages/'.basename($rep_image);
 						while (file_exists($target_path))
 						{
 							$uniqid=uniqid('',true);
-							$stem='uploads/grepimages/'.$uniqid.'_'.basename(urldecode($rep_image));
+							$stem='uploads/repimages/'.$uniqid.'_'.basename(urldecode($rep_image));
 							$target_path=get_custom_file_base().'/'.$stem;
-							$rep_image='uploads/grepimages/'.$uniqid.'_'.basename($rep_image);
+							$rep_image='uploads/repimages/'.$uniqid.'_'.basename($rep_image);
 						}
 						$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
 						$result=http_download_file($item['rep_image'],NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);

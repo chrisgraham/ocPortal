@@ -28,7 +28,7 @@ function do_next_manager_admin_simplified()
 	$sections=new ocp_tempcode();
 	$sections->attach(do_next_manager_hooked('CMS',NULL,'cms'));
 	$sections->attach(do_next_manager_hooked('STRUCTURE',NULL,'structure'));
-	$sections->attach(do_next_manager_hooked('USAGE',NULL,'usage'));
+	$sections->attach(do_next_manager_hooked('AUDIT',NULL,'audit'));
 	$sections->attach(do_next_manager_hooked('STYLE',NULL,'style'));
 	$sections->attach(do_next_manager_hooked('SETUP',NULL,'setup'));
 	$sections->attach(do_next_manager_hooked('TOOLS',NULL,'tools'));
@@ -125,7 +125,6 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	if (!is_null($_text)) $text=$_text;
 
 	require_lang('do_next');
-
 	require_css('do_next');
 
 	$sections=new ocp_tempcode();
@@ -136,7 +135,14 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	$current_page_type=get_param('type','');
 
 	// Entry stuff
-	$entry_passed=array('add_to_category','add_one','edit_this','edit_one','view_this','view_archive');
+	$entry_passed=array(
+		'menu/_generic_admin/add_to_category',
+		'menu/_generic_admin/add_one',
+		'menu/_generic_admin/edit_this',
+		'menu/_generic_admin/edit_one',
+		'menu/_generic_admin/view_this',
+		'menu/_generic_admin/view_archive',
+	);
 	$entry_passed_2=array();
 	foreach ($entry_passed as $option)
 	{
@@ -144,10 +150,10 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 		$auto_add=mixed();
 		switch ($option)
 		{
-			case 'add_to_category':
+			case 'menu/_generic_admin/add_to_category':
 				$x=$url_add_to_category;
 				break;
-			case 'add_one':
+			case 'menu/_generic_admin/add_one':
 				$x=$url_add_one;
 				if (($current_page_type=='_ad') || ($current_page_type=='_add_entry'))
 				{
@@ -160,13 +166,13 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 					$auto_add='auto__add_one';
 				}
 				break;
-			case 'edit_this':
+			case 'menu/_generic_admin/edit_this':
 				$x=$url_edit_this;
 				break;
-			case 'edit_one':
+			case 'menu/_generic_admin/edit_one':
 				$x=$url_edit_one;
 				break;
-			case 'view_this':
+			case 'menu/_generic_admin/view_this':
 				$x=$url_view_this;
 				if (!is_null($x))
 				{
@@ -178,7 +184,7 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 					}
 				}
 				break;
-			case 'view_archive':
+			case 'menu/_generic_admin/view_archive':
 				$x=$url_view_archive;
 				break;
 		}
@@ -193,7 +199,12 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	$sections->attach(_do_next_section($entry_passed_2,is_null($entries_title)?do_lang_tempcode('ENTRIES'):$entries_title));
 
 	// Category stuff
-	$category_passed=array('add_one_category','edit_one_category','edit_this_category','view_this_category');
+	$category_passed=array(
+		'menu/_generic_admin/add_one_category',
+		'menu/_generic_admin/edit_one_category',
+		'menu/_generic_admin/edit_this_category',
+		'menu/_generic_admin/view_this_category',
+	);
 	$category_passed_2=array();
 	foreach ($category_passed as $option)
 	{
@@ -201,7 +212,7 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 		$auto_add=mixed();
 		switch ($option)
 		{
-			case 'add_one_category':
+			case 'menu/_generic_admin/add_one_category':
 				$x=$url_add_one_category;
 				if (($current_page_type=='_ac') || ($current_page_type=='_add_category'))
 				{
@@ -214,13 +225,13 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 					$auto_add='auto__add_one_category';
 				}
 				break;
-			case 'edit_one_category':
+			case 'menu/_generic_admin/edit_one_category':
 				$x=$url_edit_one_category;
 				break;
-			case 'edit_this_category':
+			case 'menu/_generic_admin/edit_this_category':
 				$x=$url_edit_this_category;
 				break;
-			case 'view_this_category':
+			case 'menu/_generic_admin/view_this_category':
 				$x=$url_view_this_category;
 				if (!is_null($x))
 				{
@@ -231,9 +242,6 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 						return redirect_screen($title,$_url_redirect,$text);
 					}
 				}
-				break;
-			case 'view_archive':
-				$x=$url_view_archive;
 				break;
 		}
 		if (!is_null($x))
@@ -253,9 +261,9 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	{
 		// These go on a new row
 		$disjunct_items=array(
-							array('main_home',array(NULL,array(),'')),
-							array('cms_home',array(NULL,array(),'cms')),
-							array('admin_home',array(NULL,array(),'adminzone')),
+			array('menu/start',array(NULL,array(),'')),
+			array('menu/cms/cms',array(NULL,array(),'cms')),
+			array('menu/adminzone/adminzone',array(NULL,array(),'adminzone')),
 		);
 		$sections->attach(_do_next_section($disjunct_items,do_lang_tempcode('GLOBAL_NAVIGATION')));
 		$question=do_lang_tempcode('WHERE_NEXT');
@@ -314,7 +322,7 @@ function _do_next_section($list,$title)
 		$page=$url[0];
 		if ($page=='_SELF') $page=get_page_name();
 
-		$description=(array_key_exists(2,$_option) && (!is_null($_option[2])))?$_option[2]:do_lang_tempcode('NEXT_ITEM_'.$option);
+		$description=(array_key_exists(2,$_option) && (!is_null($_option[2])))?$_option[2]:do_lang_tempcode('NEXT_ITEM_'.basename($option));
 		$url_final=(is_null($page))?build_url(array_merge($url[1],array('page'=>'')),$zone):build_url(array_merge(array('page'=>$page),$url[1]),$zone);
 		$doc=array_key_exists(3,$_option)?$_option[3]:'';
 		if ((is_string($doc)) && ($doc!=''))

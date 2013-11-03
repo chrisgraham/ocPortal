@@ -32,8 +32,9 @@ class Hook_do_next_menus_pointstore
 		if (!addon_installed('pointstore')) return array();
 
 		return array(
-			array('usage','pointstorelog',array('admin_pointstore',array('type'=>'misc'),get_module_zone('admin_pointstore')),do_lang_tempcode('POINTSTORE_MANAGE_SALES'),('DOC_POINT_STORE')),
-			array('setup','pointstore',array('admin_pointstore',array('type'=>'p'),get_module_zone('admin_pointstore')),do_lang_tempcode('POINTSTORE_MANAGE_INVENTORY'),('DOC_POINT_STORE')),
+			array('audit','menu/adminzone/audit/pointstore_log',array('admin_pointstore',array('type'=>'misc'),get_module_zone('admin_pointstore')),do_lang_tempcode('pointstore:POINTSTORE_MANAGE_SALES'),'pointstore:DOC_POINTSTORE'),
+			array('setup','menu/social/pointstore',array('admin_pointstore',array('type'=>'p'),get_module_zone('admin_pointstore')),do_lang_tempcode('pointstore:POINTSTORE_MANAGE_INVENTORY'),'pointstore:DOC_POINTSTORE'),
+			array('social','menu/social/pointstore',array('pointstore',array(),get_module_zone('pointstore')),do_lang_tempcode('pointstore:POINTSTORE')),
 		);
 	}
 

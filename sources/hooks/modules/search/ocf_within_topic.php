@@ -24,13 +24,18 @@ class Hook_search_ocf_within_topic
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (get_forum_type()!='ocf') return NULL;
 
-		if (!has_actual_page_access(get_member(),'topicview')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'topicview')) return NULL;
+		}
+
 		if (get_param('search_under','',true)=='') return NULL;
 
 		require_lang('ocf');
@@ -43,6 +48,18 @@ class Hook_search_ocf_within_topic
 		$info['category']='p_topic_id';
 		$info['integer_category']=true;
 		$info['advanced_only']=true;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('topicview'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('topicview'),
+				'page_name'=>'topicview',
+			),
+		);
 
 		return $info;
 	}

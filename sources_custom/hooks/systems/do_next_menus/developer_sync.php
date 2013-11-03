@@ -13,7 +13,6 @@
  * @package		developer_sync
  */
 
-
 class Hook_do_next_menus_developer_sync
 {
 
@@ -25,8 +24,8 @@ class Hook_do_next_menus_developer_sync
 	function run()
 	{
 		return array(
-			array('tools','admin_home',array('sql_dump',array(),'adminzone'),make_string_tempcode('Backup tools: Create SQL dump (MySQL syntax)')),
-			array('tools','admin_home',array('tar_dump',array(),'adminzone'),make_string_tempcode('Backup tools: Create files dump (TAR file)')),
+			array('tools','menu/_generic_admin/tool',array('sql_dump',array(),'adminzone'),make_string_tempcode('Backup tools: Create SQL dump (MySQL syntax)')),
+			array('tools','menu/_generic_admin/tool',array('tar_dump',array(),'adminzone'),make_string_tempcode('Backup tools: Create files dump (TAR file)')),
 		);
 	}
 

@@ -87,6 +87,7 @@ class Hook_addon_registry_help_page
 		return array(
 			'sources/hooks/systems/addon_registry/help_page.php',
 			'site/pages/comcode/EN/help.txt',
+			'sources/hooks/systems/do_next_menus/help_page.php',
 		);
 	}
 

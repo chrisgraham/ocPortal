@@ -32,7 +32,8 @@ class Hook_do_next_menus_authors
 		if (!addon_installed('authors')) return array();
 
 		return array(
-			array('cms','authors',array('cms_authors',array('type'=>'misc'),get_module_zone('cms_authors')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('AUTHORS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('authors','COUNT(*)',NULL,'',true))))),('DOC_AUTHORS')),
+			array('cms','menu/rich_content/authors',array('cms_authors',array('type'=>'misc'),get_module_zone('cms_authors')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('authors:AUTHORS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('authors','COUNT(*)',NULL,'',true))))),'authors:DOC_AUTHORS'),
+			array('rich_content','menu/rich_content/authors',array('authors',array(),get_module_zone('authors')),do_lang_tempcode('authors:AUTHORS')),
 		);
 	}
 

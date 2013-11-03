@@ -30,7 +30,7 @@ class Hook_do_next_menus_filedump
 	function run()
 	{
 		return array(
-			array('cms','filedump',array('filedump',array('type'=>'misc'),get_module_zone('filedump')),do_lang_tempcode('FILE_DUMP'),('DOC_FILEDUMP')),
+			array('cms','menu/cms/filedump',array('filedump',array('type'=>'misc'),get_module_zone('filedump')),do_lang_tempcode('filedump:FILEDUMP'),'filedump:DOC_FILEDUMP'),
 		);
 	}
 

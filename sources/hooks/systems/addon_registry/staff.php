@@ -97,8 +97,6 @@ class Hook_addon_registry_staff
 			'adminzone/pages/modules/admin_staff.php',
 			'site/pages/modules/staff.php',
 			'lang/EN/staff.ini',
-			'themes/default/images/pagepics/staff.png',
-			'themes/default/images/bigicons/staff.png',
 			'sources/hooks/systems/ocf_cpf_filter/staff_filter.php',
 		);
 	}

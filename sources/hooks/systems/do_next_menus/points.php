@@ -32,8 +32,10 @@ class Hook_do_next_menus_points
 		if (!addon_installed('points')) return array();
 
 		return array(
-			array('usage','pointslog',array('admin_points',array('type'=>'misc'),get_module_zone('admin_points')),do_lang_tempcode('GIFT_TRANSACTIONS'),('DOC_POINTS')),
-			array('usage','points',array('admin_points',array('type'=>'export'),get_module_zone('admin_points')),do_lang_tempcode('EXPORT_POINTS'),('DOC_EXPORT_POINTS')),
+			array('audit','menu/adminzone/audit/points_log',array('admin_points',array('type'=>'misc'),get_module_zone('admin_points')),do_lang_tempcode('points:GIFT_TRANSACTIONS'),'points:DOC_POINTS'),
+			array('audit','menu/social/points',array('admin_points',array('type'=>'export'),get_module_zone('admin_points')),do_lang_tempcode('points:EXPORT_POINTS'),'points:DOC_EXPORT_POINTS'),
+			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:array('social','menu/social/points',array('points',array(),get_module_zone('points')),do_lang_tempcode('points:VIEW_POINTS')),
+			array('social','menu/social/leader_board',array('leader_board',array(),get_module_zone('leader_board')),do_lang_tempcode('points:POINT_LEADER_BOARD')),
 		);
 	}
 

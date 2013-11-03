@@ -32,7 +32,7 @@ class Hook_do_next_menus_backup
 		if (!addon_installed('backup')) return array();
 
 		return array(
-			array('tools','backups',array('admin_backup',array('type'=>'misc'),get_module_zone('admin_backup')),do_lang_tempcode('BACKUPS'),('DOC_BACKUPS')),
+			array('tools','menu/adminzone/tools/bulk_content_actions/backups',array('admin_backup',array('type'=>'misc'),get_module_zone('admin_backup')),do_lang_tempcode('backups:BACKUPS'),'backups:DOC_BACKUPS'),
 		);
 	}
 

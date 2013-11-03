@@ -32,7 +32,8 @@ class Hook_do_next_menus_galleries
 		if (!addon_installed('galleries')) return array();
 
 		return array(
-			array('cms','galleries',array('cms_galleries',array('type'=>'misc'),get_module_zone('cms_galleries')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('GALLERIES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('images','COUNT(*)',NULL,'',true)+$GLOBALS['SITE_DB']->query_select_value_if_there('videos','COUNT(*)',NULL,'',true))))),('DOC_GALLERIES')),
+			array('cms','menu/rich_content/galleries',array('cms_galleries',array('type'=>'misc'),get_module_zone('cms_galleries')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('galleries:GALLERIES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('images','COUNT(*)',NULL,'',true)+$GLOBALS['SITE_DB']->query_select_value_if_there('videos','COUNT(*)',NULL,'',true))))),'galleries:DOC_GALLERIES'),
+			array('rich_content','menu/rich_content/galleries',array('galleries',array(),get_module_zone('galleries')),do_lang_tempcode('galleries:GALLERIES')),
 		);
 	}
 

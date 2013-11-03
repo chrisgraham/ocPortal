@@ -83,11 +83,14 @@ class Module_admin_aggregate_types extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return parent::get_entry_points()+array('xml'=>'EDIT_AGGREGATE_TYPES','sync'=>'SYNCHRONISE_AGGREGATE_TYPES');
+		return parent::get_entry_points()+array(
+			'xml'=>array('EDIT_AGGREGATE_TYPES','menu/adminzone/tools/bulk_content_actions/xml_syndication'),
+			'sync'=>array('SYNCHRONISE_AGGREGATE_TYPES','menu/_generic_admin/sync'),
+		);
 	}
 
 	var $title;
@@ -163,11 +166,10 @@ class Module_admin_aggregate_types extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('AGGREGATE_TYPES'),comcode_lang_string('DOC_AGGREGATE_TYPES'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_AGGREGATE_TYPE_INSTANCE')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPE_INSTANCE')),
-				array('xml',array('_SELF',array('type'=>'xml'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPES')),
-				array('sync',array('_SELF',array('type'=>'sync'),'_SELF'),do_lang('SYNCHRONISE_AGGREGATE_TYPES')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_AGGREGATE_TYPE_INSTANCE')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPE_INSTANCE')),
+				array('menu/adminzone/structure/aggregate_types',array('_SELF',array('type'=>'xml'),'_SELF'),do_lang('EDIT_AGGREGATE_TYPES')),
+				array('menu/_generic_admin/sync',array('_SELF',array('type'=>'sync'),'_SELF'),do_lang('SYNCHRONISE_AGGREGATE_TYPES')),
 			),
 			do_lang('AGGREGATE_TYPES')
 		);

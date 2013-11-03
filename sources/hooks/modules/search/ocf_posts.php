@@ -24,13 +24,18 @@ class Hook_search_ocf_posts
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (get_forum_type()!='ocf') return NULL;
 
-		if (!has_actual_page_access(get_member(),'topicview')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'topicview')) return NULL;
+		}
+
 		if ($GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)')==0) return NULL;
 
 		require_lang('ocf');
@@ -43,6 +48,18 @@ class Hook_search_ocf_posts
 		if ((has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $info['special_off']['unvalidated']=do_lang_tempcode('POST_SEARCH_UNVALIDATED');
 		$info['category']='s.t_forum_id';
 		$info['integer_category']=true;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('topicview'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('topicview'),
+				'page_name'=>'topicview',
+			),
+		);
 
 		return $info;
 	}

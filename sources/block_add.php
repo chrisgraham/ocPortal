@@ -27,6 +27,7 @@ function block_helper_script()
 	require_lang('blocks');
 	require_code('zones2');
 	require_code('zones3');
+	require_code('addons');
 
 	check_privilege('comcode_dangerous');
 
@@ -76,10 +77,6 @@ function block_helper_script()
 				}
 				foreach ($addon_files as $file)
 				{
-					if ((substr($file,0,31)=='themes/default/images/bigicons/') && (!array_key_exists($addon_name,$addon_icons)))
-					{
-						$addon_icons[$addon_name]=find_theme_image('bigicons/'.basename($file,'.png'),false,true);
-					}
 					if ((substr($file,0,21)=='sources_custom/blocks/') || (substr($file,0,15)=='sources/blocks/'))
 					{
 						if ($addon_name=='staff_messaging') $addon_name='core_feedback_features';
@@ -88,6 +85,7 @@ function block_helper_script()
 					}
 				}
 			}
+			$addon_icons[$addon_name]=find_addon_icon($addon_name);
 		}
 
 		// Find where blocks have been used

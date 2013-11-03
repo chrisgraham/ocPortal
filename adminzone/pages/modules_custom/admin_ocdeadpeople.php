@@ -111,7 +111,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -174,9 +174,8 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('OCDEADPEOPLE_TITLE'),comcode_lang_string('DOC_OCDEADPEOPLE'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DISEASE')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DISEASE')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DISEASE')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DISEASE')),
 			),
 			do_lang('OCDEADPEOPLE_TITLE')
 		);

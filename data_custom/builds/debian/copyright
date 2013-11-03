@@ -640,7 +640,7 @@ Files: sources/utf8tohtml.php
 Copyright: silverbeat on php.net
 License: Creative Commons Attribution
 
-Files: themes/default/images/bigicons/*, themes/default/images/calendar/*, themes/default/images/filetypes/*, themes/default/images/newscats/*, themes/default/images/pagepics/*, themes/default/images/recommend/*, themes/default/images/results/*, themes/default/images/src/*, themes/default/images/add_note.png, themes/default/images/background_image.png, themes/default/images/cedi*, themes/default/images/dispatch.png, themes/default/images/hold.png, themes/default/images/return.png, themes/default/images/view.gif
+Files: themes/default/images/filetypes/*, themes/default/images/newscats/*
 License: LGPL-3+
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public

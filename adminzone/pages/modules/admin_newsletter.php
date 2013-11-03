@@ -38,13 +38,19 @@ class Module_admin_newsletter extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		$ret=array('misc'=>'MANAGE_NEWSLETTER','new'=>'NEWSLETTER_SEND','subscribers'=>'VIEW_NEWSLETTER_SUBSCRIBERS','archive'=>'NEWSLETTER_ARCHIVE','whatsnew'=>'NEW');
+		$ret=array(
+			'misc'=>'MANAGE_NEWSLETTER',
+			'new'=>array('NEWSLETTER_SEND','menu/site_meta/newsletters'),
+			'subscribers'=>array('VIEW_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/subscribers'),
+			'archive'=>array('NEWSLETTER_ARCHIVE','menu/_generic_admin/view_archive'),
+			'whatsnew'=>array('NEW_CONTENT','menu/adminzone/tools/newsletter/newsletter_from_changes'),
+		);
 		if (!GOOGLE_APPENGINE)
-			$ret['bounce_filter_a']='BOUNCE_FILTER';
+			$ret['bounce_filter_a']=array('BOUNCE_FILTER','menu/adminzone/tools/newsletter/newsletter_email_bounce');
 		$ret+=parent::get_entry_points();
 		return $ret;
 	}
@@ -67,10 +73,8 @@ class Module_admin_newsletter extends standard_crud_module
 		set_helper_panel_tutorial('tut_newsletter');
 		if ($type=='whatsnew')
 		{
-			set_helper_panel_pic('pagepics/newsletter_from_changes');
 		} else
 		{
-			set_helper_panel_pic('pagepics/newsletter');
 		}
 
 		if ($type=='confirm')
@@ -151,16 +155,16 @@ class Module_admin_newsletter extends standard_crud_module
 		$this->cache_level_counts=array();
 
 		$this->extra_donext_entries=array(
-			array('newsletters',array('_SELF',array('type'=>'new'),'_SELF'),do_lang('NEWSLETTER_SEND')),
-			array('newsletter_from_changes',array('_SELF',array('type'=>'whatsnew'),'_SELF'),do_lang('NEW_CONTENT'),('DOC_NEWSLETTER_CONTENT')),
-			array('view_archive',array('_SELF',array('type'=>'archive'),'_SELF'),do_lang('NEWSLETTER_ARCHIVE')),
-			array('subscribers',array('_SELF',array('type'=>'subscribers'),'_SELF'),do_lang('VIEW_SUBSCRIBERS')),
-			array('import_subscribers',array('_SELF',array('type'=>'import_subscribers'),'_SELF'),do_lang('IMPORT_NEWSLETTER_SUBSCRIBERS')),
+			array('menu/site_meta/newsletters',array('_SELF',array('type'=>'new'),'_SELF'),do_lang('NEWSLETTER_SEND')),
+			array('menu/adminzone/tools/newsletter/newsletter_from_changes',array('_SELF',array('type'=>'whatsnew'),'_SELF'),do_lang('NEW_CONTENT'),'DOC_NEWSLETTER_CONTENT'),
+			array('menu/_generic_admin/view_archive',array('_SELF',array('type'=>'archive'),'_SELF'),do_lang('NEWSLETTER_ARCHIVE')),
+			array('menu/adminzone/tools/newsletter/subscribers',array('_SELF',array('type'=>'subscribers'),'_SELF'),do_lang('VIEW_SUBSCRIBERS')),
+			array('menu/adminzone/tools/newsletter/import_subscribers',array('_SELF',array('type'=>'import_subscribers'),'_SELF'),do_lang('IMPORT_NEWSLETTER_SUBSCRIBERS')),
 		);
 
 		if (!GOOGLE_APPENGINE)
 		{
-			$this->extra_donext_entries[]=array('newsletter_email_bounce',array('_SELF',array('type'=>'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER'));
+			$this->extra_donext_entries[]=array('menu/adminzone/tools/newsletter/newsletter_email_bounce',array('_SELF',array('type'=>'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER'));
 		}
 
 		$this->add_one_label=do_lang_tempcode('ADD_NEWSLETTER');
@@ -197,9 +201,8 @@ class Module_admin_newsletter extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_NEWSLETTER'),comcode_lang_string('DOC_NEWSLETTER'),
 			array_merge(array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWSLETTER')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWSLETTER')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWSLETTER')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWSLETTER')),
 			),$this->extra_donext_entries),
 			do_lang('MANAGE_NEWSLETTER')
 		);

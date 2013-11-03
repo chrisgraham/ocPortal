@@ -27,7 +27,7 @@
 {+START,IF,{$EQ,{TEXT},{!MISSING_RESOURCE}}}
 	<p class="red_alert" role="error">{!MISSING_RESOURCE}</p>
 
-	<h2>{!SITE_MAP}</h2>
+	<h2>{!SITEMAP}</h2>
 
 	{$BLOCK,block=main_sitemap,quick_cache=1}
 
@@ -40,7 +40,7 @@
 
 {+START,IF,{PROVIDE_BACK}}{+START,IF,{$JS_ON}}{+START,IF,{$NOT,{$RUNNING_SCRIPT,preview}}}
 	<p class="back_button">
-		<a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></a>
+		<a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,icons/48x48/menu/_generic_admin/back}" /></a>
 	</p>
 {+END}{+END}{+END}
 

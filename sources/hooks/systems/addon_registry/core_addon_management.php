@@ -110,8 +110,6 @@ class Hook_addon_registry_core_addon_management
 			'imports/.htaccess',
 			'imports/addons/.htaccess',
 			'imports/addons/index.html',
-			'themes/default/images/bigicons/addons.png',
-			'themes/default/images/pagepics/addons.png',
 			'lang/EN/addons.ini',
 			'sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php',
 			'themes/default/images/tableitem/install.png',

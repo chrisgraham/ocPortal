@@ -97,8 +97,6 @@ class Hook_addon_registry_awards
 			'sources/awards2.php',
 			'site/pages/modules/awards.php',
 			'lang/EN/awards.ini',
-			'themes/default/images/pagepics/awards.png',
-			'themes/default/images/bigicons/awards.png',
 			'sources/hooks/blocks/main_staff_checklist/awards.php',
 			'themes/default/css/awards.css',
 			'themes/default/images/awarded.png',

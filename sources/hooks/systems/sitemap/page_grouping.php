@@ -32,24 +32,23 @@ TODO (uses do_next_menus for grouping guidance)
 class Hook_sitemap_page_grouping extends Hook_sitemap_base
 {
 	/**
-	 * Find details of a virtual position in the sitemap.
+	 * Find if a page-link will be covered by this node.
 	 *
-	 * @param  ID_TEXT  		The page-link we are finding.
-	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
-	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
-	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
-	 * @param  boolean		Whether to filter out non-validated content.
-	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
-	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-	 * @param  ?array			Database row (NULL: lookup).
-	 * @return ?array			List of node structures (NULL: working via callback).
+	 * @param  ID_TEXT		The page-link.
+	 * @return integer		A SITEMAP_NODE_* constant.
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function handles_pagelink($pagelink)
 	{
-		// TODO
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
+		$page=$matches[2];
+
+		if ($page=='search')
+		{
+			if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED;
+			return SITEMAP_NODE_HANDLED_VIRTUALLY;
+		}
+		return SITEMAP_NODE_NOT_HANDLED;
 	}
 
 	/**
@@ -57,7 +56,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node content types we will return/recurse-through (NULL: no limit)
+	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
 	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
@@ -68,8 +67,82 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			Node structure (NULL: working via callback).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_content_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
 	{
-		// TODO
+		$matches=array();
+		preg_match('#^([^:]*):#',$pagelink,$matches);
+		$zone=$matches[1];
+
+		if (!isset($row))
+		{
+			$rows=$GLOBALS['SITE_DB']->query_select('zones',array('zone_title','zone_default_page'),array('zone_name'=>$zone),'',1);
+			$row=array($zone,get_translated_text($rows[0]['zone_title']),false,$rows[0]['zone_default_page']);
+		}
+		$title=$row[1];
+		$default_page=$row[3];
+
+		$path=get_custom_file_base().'/'.$zone.'/index.php';
+		if (!is_file($path)) $path=get_file_base().'/'.$zone.'/index.php';
+
+		$struct=array(
+			'title'=>$title,
+			'content_type'=>'zone',
+			'content_id'=>$zone,
+			'pagelink'=>$pagelink,
+			'extra_meta'=>array(
+				'description'=>NULL,
+				'image'=>NULL,
+				'image_2x'=>NULL,
+				'add_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filectime($path):NULL,
+				'edit_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filemtime($path):NULL,
+				'submitter'=>NULL,
+				'views'=>NULL,
+				'rating'=>NULL,
+				'meta_keywords'=>NULL,
+				'meta_description'=>NULL,
+				'categories'=>NULL,
+				'validated'=>NULL,
+				'db_row'=>(($meta_gather & SITEMAP_GATHER_DB_ROW)!=0)?$row:NULL,
+			),
+			'permissions'=>array(
+				array(
+					'type'=>'zone',
+					'zone_name'=>$zone,
+				),
+			),
+			'has_possible_children'=>true,
+
+			// These are likely to be changed in individual hooks
+			'sitemap_priority'=>SITEMAP_IMPORTANCE_ULTRA,
+			'sitemap_refreshfreq'=>'daily',
+
+			'permission_page'=>'cms_comcode_pages', // Where privileges are overridden on
+		);
+
+		if ($callback!==NULL)
+			call_user_func($callback,$struct);
+
+		// Categories done after node callback, to ensure sensible ordering
+		$children=array();
+		if ($recurse_level<$max_recurse_depth)
+		{
+			$page_sitemap_ob=$this->_get_sitemap_object('page');
+
+			$pages=find_all_pages_wrap($zone,false,/*$consider_redirects=*/true);
+			foreach ($pages as $page)
+			{
+				$child_pagelink=$pagelink.':'.$page;
+				$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+				if ($child_node['pagelink']==$zone.':'.$default_page)
+				{
+					$child_node['sitemap_priority']=SITEMAP_IMPORTANCE_ULTRA;
+					$child_node['sitemap_refreshfreq']='daily';
+				}
+				$children[]=$child_node;
+			}
+		}
+		$struct['children']=$children;
+
+		return ($callback===NULL)?$struct:NULL;
 	}
 }

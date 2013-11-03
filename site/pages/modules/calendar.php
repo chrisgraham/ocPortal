@@ -241,7 +241,7 @@ class Module_calendar
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -344,7 +344,7 @@ class Module_calendar
 				'title'=>get_translated_text($event['e_title']),
 				'identifier'=>'_SEARCH:calendar:view:'.strval($id),
 				'description'=>get_translated_text($event['e_content']),
-				'image'=>find_theme_image('bigicons/calendar'),
+				'image'=>find_theme_image('icons/48x48/menu/rich_content/calendar'),
 				//'category'=>???,
 			);
 

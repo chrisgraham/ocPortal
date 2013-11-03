@@ -132,6 +132,8 @@ foreach ($zones2 as $z)
 				{
 					foreach ($entrypoints as $entrypoint=>$title)
 					{
+						if (!is_string($title)) $title=$title[0];
+
 						if ($entrypoint=='!')
 						{
 							$url=build_url(array('page'=>$page),$zone,NULL,false,false,true);

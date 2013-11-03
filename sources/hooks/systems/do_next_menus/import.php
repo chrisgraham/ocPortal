@@ -32,8 +32,8 @@ class Hook_do_next_menus_import
 		if (!addon_installed('import')) return array();
 
 		return array(
-			array('tools','import',array('admin_import',array('type'=>'misc'),get_module_zone('admin_import')),do_lang_tempcode('IMPORT'),('DOC_IMPORT')),
-			array('tools','xml',array('admin_xml_storage',array('type'=>'misc'),get_module_zone('admin_xml_storage')),do_lang_tempcode('XML_DATA_MANAGEMENT'),('DOC_XML_DATA_MANAGEMENT')),
+			array('tools','menu/_generic_admin/import',array('admin_import',array('type'=>'misc'),get_module_zone('admin_import')),do_lang_tempcode('import:IMPORT'),'import:DOC_IMPORT'),
+			array('tools','menu/adminzone/tools/bulk_content_actions/xml_syndication',array('admin_xml_storage',array('type'=>'misc'),get_module_zone('admin_xml_storage')),do_lang_tempcode('xml_storage:XML_DATA_MANAGEMENT'),'xml_storage:DOC_XML_DATA_MANAGEMENT'),
 		);
 	}
 

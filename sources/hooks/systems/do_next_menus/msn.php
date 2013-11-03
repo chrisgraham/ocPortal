@@ -35,7 +35,7 @@ class Hook_do_next_menus_msn
 		if (is_null($zone)) return array();
 
 		return array(
-			array('structure','multisitenetwork',array('netlink',array(),$zone),do_lang_tempcode('PARTNER_SITES'),('DOC_NETLINK_1')),
+			array('structure','menu/adminzone/structure/multi_site_network',array('netlink',array(),$zone),do_lang_tempcode('menus:PARTNER_SITES'),'menus:DOC_NETLINK_1'),
 		);
 	}
 

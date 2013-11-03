@@ -3415,9 +3415,9 @@ insert into `ocp6_sp_list` values('SUBMISSION','delete_own_lowrange_content','0'
  ('TESTER','edit_own_tests','1'),
  ('SUPPORT_TICKETS','support_operator','0'),
  ('SUPPORT_TICKETS','view_others_tickets','0'),
- ('FILE_DUMP','upload_anything_filedump','0'),
- ('FILE_DUMP','upload_filedump','1'),
- ('FILE_DUMP','delete_anything_filedump','0');
+ ('FILEDUMP','upload_anything_filedump','0'),
+ ('FILEDUMP','upload_filedump','1'),
+ ('FILEDUMP','delete_anything_filedump','0');
 
 DROP TABLE IF EXISTS `ocp6_translate`;
 

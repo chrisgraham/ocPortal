@@ -44,7 +44,7 @@ class Module_admin_backup
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -90,7 +90,6 @@ class Module_admin_backup
 
 		require_lang('backups');
 
-		set_helper_panel_pic('pagepics/backups');
 		set_helper_panel_tutorial('tut_backup');
 		set_helper_panel_text(comcode_lang_string('DOC_BACKUPS_2'));
 

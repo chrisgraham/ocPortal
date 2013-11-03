@@ -88,8 +88,6 @@ class Hook_addon_registry_ocf_clubs
 			'sources/hooks/systems/notifications/ocf_club.php',
 			'sources/hooks/systems/addon_registry/ocf_clubs.php',
 			'sources/hooks/modules/search/ocf_clubs.php',
-			'themes/default/images/bigicons/clubs.png',
-			'themes/default/images/pagepics/clubs.png',
 			'cms/pages/modules/cms_ocf_groups.php',
 			'sources/hooks/systems/config/club_forum_parent_forum_grouping.php',
 			'sources/hooks/systems/config/club_forum_parent_forum.php',

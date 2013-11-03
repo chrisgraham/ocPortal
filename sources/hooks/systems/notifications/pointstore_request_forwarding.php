@@ -36,7 +36,7 @@ class Hook_Notification_pointstore_request_forwarding extends Hook_Notification_
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['pointstore_request_forwarding']=array(do_lang('pointstore:POINT_STORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_forwarding'));
+		$list['pointstore_request_forwarding']=array(do_lang('pointstore:POINTSTORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_forwarding'));
 		return $list;
 	}
 }

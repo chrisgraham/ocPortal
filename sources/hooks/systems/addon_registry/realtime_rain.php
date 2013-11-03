@@ -96,7 +96,6 @@ class Hook_addon_registry_realtime_rain
 			'themes/default/templates/JAVASCRIPT_BUTTON_REALTIME_RAIN.tpl',
 			'lang/EN/realtime_rain.ini',
 			'themes/default/images/realtime_rain/index.html',
-			'themes/default/images/bigicons/realtime_rain.png',
 			'sources/hooks/systems/realtime_rain/.htaccess',
 			'sources/hooks/systems/realtime_rain/index.html',
 			'sources/hooks/systems/addon_registry/realtime_rain.php',

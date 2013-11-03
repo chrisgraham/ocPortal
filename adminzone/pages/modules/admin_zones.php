@@ -44,11 +44,15 @@ class Module_admin_zones
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'ZONES','edit'=>'EDIT_ZONE','add'=>'ADD_ZONE');
+		return array(
+			'misc'=>'ZONES',
+			'edit'=>array('EDIT_ZONE','menu/_generic_admin/edit_one'),
+			'add'=>array('ADD_ZONE','menu/_generic_admin/add_one'),
+		);
 	}
 
 	/**
@@ -96,7 +100,6 @@ class Module_admin_zones
 
 		if ($type!='editor' && $type!='_editor' && $type!='__editor')
 		{
-			set_helper_panel_pic('pagepics/zones');
 			set_helper_panel_tutorial('tut_structure');
 		}
 
@@ -205,9 +208,8 @@ class Module_admin_zones
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('ZONES'),comcode_lang_string('DOC_ZONES'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'add'),'_SELF'),do_lang('ADD_ZONE')),
-				array('edit_one',array('_SELF',array('type'=>'edit'),'_SELF'),do_lang('EDIT_ZONE')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'add'),'_SELF'),do_lang('ADD_ZONE')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'edit'),'_SELF'),do_lang('EDIT_ZONE')),
 			),
 			do_lang('ZONES')
 		);

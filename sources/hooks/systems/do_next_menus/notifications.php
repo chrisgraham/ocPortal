@@ -32,7 +32,7 @@ class Hook_do_next_menus_notifications
 		if (get_forum_type()!='ocf') return array();
 
 		return array(
-			array('setup','notifications',array('admin_notifications',array('type'=>'misc'),get_module_zone('admin_notifications')),do_lang_tempcode('NOTIFICATIONS_LOCKDOWN'),('DOC_NOTIFICATIONS')),
+			array('setup','menu/adminzone/setup/notifications',array('admin_notifications',array('type'=>'misc'),get_module_zone('admin_notifications')),do_lang_tempcode('notifications:NOTIFICATIONS_LOCKDOWN'),'notifications:DOC_NOTIFICATIONS'),
 		);
 	}
 

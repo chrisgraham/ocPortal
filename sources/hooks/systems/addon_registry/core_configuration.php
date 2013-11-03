@@ -246,8 +246,6 @@ class Hook_addon_registry_core_configuration
 			'themes/default/templates/CONFIG_CATEGORY_SCREEN.tpl',
 			'themes/default/templates/CONFIG_GROUP.tpl',
 			'adminzone/pages/modules/admin_config.php',
-			'themes/default/images/bigicons/config.png',
-			'themes/default/images/pagepics/config.png',
 			'lang/EN/config.ini',
 			'sources/hooks/systems/config/.htaccess',
 			'sources/hooks/systems/config/index.html',

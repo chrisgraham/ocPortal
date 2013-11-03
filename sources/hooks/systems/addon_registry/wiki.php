@@ -111,8 +111,6 @@ class Hook_addon_registry_wiki
 			'themes/default/templates/WIKI_SUBCATEGORY_CHILDREN.tpl',
 			'themes/default/templates/WIKI_SUBCATEGORY_LINK.tpl',
 			'themes/default/css/wiki.css',
-			'themes/default/images/bigicons/wiki.png',
-			'themes/default/images/pagepics/wiki.png',
 			'sources/hooks/systems/ajax_tree/choose_wiki_page.php',
 			'cms/pages/modules/cms_wiki.php',
 			'lang/EN/wiki.ini',
@@ -133,7 +131,6 @@ class Hook_addon_registry_wiki
 			'sources/hooks/systems/rss/wiki.php',
 			'sources/hooks/systems/module_permissions/wiki_page.php',
 			'themes/default/images/EN/page/edit_tree.png',
-			'site/pages/html_custom/EN/wiki_tree_made.htm',
 			'sources/hooks/systems/notifications/wiki.php',
 		);
 	}

@@ -24,13 +24,18 @@ class Hook_search_quiz
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		if (!module_installed('quiz')) return NULL;
 
-		if (!has_actual_page_access(get_member(),'quiz')) return NULL;
+		if ($check_permissions)
+		{
+			if (!has_actual_page_access(get_member(),'quiz')) return NULL;
+		}
+
 		if ($GLOBALS['SITE_DB']->query_select_value('quizzes','COUNT(*)')==0) return NULL;
 
 		require_lang('quiz');
@@ -38,6 +43,18 @@ class Hook_search_quiz
 		$info=array();
 		$info['lang']=do_lang_tempcode('QUIZZES');
 		$info['default']=false;
+
+		$info['permissions']=array(
+			array(
+				'type'=>'zone',
+				'zone_name'=>get_module_zone('quiz'),
+			),
+			array(
+				'type'=>'page',
+				'zone_name'=>get_module_zone('quiz'),
+				'page_name'=>'quiz',
+			),
+		);
 
 		return $info;
 	}

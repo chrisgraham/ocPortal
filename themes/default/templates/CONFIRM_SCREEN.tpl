@@ -31,7 +31,7 @@
 {+START,IF_NON_PASSED,BACK_URL}
 	{+START,IF,{$JS_ON}}
 		<p class="back_button">
-			<a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></a>
+			<a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,icons/48x48/menu/_generic_admin/back}" /></a>
 		</p>
 	{+END}
 {+END}
@@ -40,7 +40,7 @@
 	<form class="back_button" title="{!_NEXT_ITEM_BACK}" action="{BACK_URL*}" method="post">
 		<div>
 			{FIELDS}
-			<button class="button_icon" type="submit"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></button>
+			<button class="button_icon" type="submit"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,icons/48x48/menu/_generic_admin/back}" /></button>
 		</div>
 	</form>
 {+END}

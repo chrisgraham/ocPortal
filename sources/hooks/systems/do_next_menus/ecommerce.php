@@ -31,10 +31,18 @@ class Hook_do_next_menus_ecommerce
 	{
 		if (!addon_installed('ecommerce')) return array();
 
-		return array(
-			array('setup','ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),('DOC_ECOMMERCE')),
-			array('usage','ecommerce',array('admin_ecommerce',array('type'=>'ecom_usage'),get_module_zone('admin_ecommerce')),do_lang_tempcode('ECOMMERCE'),('DOC_ECOMMERCE')),
+		$ret=array(
+			array('setup','menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('ecommerce:CUSTOM_PRODUCT_USERGROUP'),'ecommerce:DOC_ECOMMERCE'),
+			array('audit','menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'ecom_audit'),get_module_zone('admin_ecommerce')),do_lang_tempcode('ecommerce:ECOMMERCE'),'ecommerce:DOC_ECOMMERCE'),
+			array('rich_content','menu/rich_content/ecommerce/purchase',array('purchase',array(),get_module_zone('purchase')),do_lang_tempcode('ecommerce:PURCHASING')),
 		);
+		if (addon_installed('shopping'))
+		{
+			$ret=array_merge($ret,array(
+				array('rich_content','menu/rich_content/ecommerce/shopping_cart',array('shopping',array(),get_module_zone('shopping')),do_lang_tempcode('ecommerce:SHOPPING')),
+			));
+		}
+		return $ret;
 	}
 
 }

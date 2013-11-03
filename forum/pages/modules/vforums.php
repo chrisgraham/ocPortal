@@ -44,11 +44,27 @@ class Module_vforums
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
-		return is_guest()?array('misc'=>'POSTS_SINCE','unanswered'=>'UNANSWERED_TOPICS'):array('misc'=>'POSTS_SINCE','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ','unanswered'=>'UNANSWERED_TOPICS','involved'=>'INVOLVED_TOPICS');
+		if ($check_perms && is_guest($member_id))
+		{
+			return array(
+				'misc'=>array('POSTS_SINCE','menu/social/forum/vforums/posts_since_last_visit'),
+				'unanswered'=>array('UNANSWERED_TOPICS','menu/social/forum/vforums/unanswered_topics')
+			);
+		}
+
+		return array(
+			'misc'=>array('POSTS_SINCE','menu/social/forum/vforums/posts_since_last_visit'),
+			'unread'=>array('TOPICS_UNREAD','menu/social/forum/vforums/unread_topics'),
+			'recently_read'=>array('RECENTLY_READ','menu/social/forum/vforums/recently_read_topics'),
+			'unanswered'=>array('UNANSWERED_TOPICS','menu/social/forum/vforums/unanswered_topics'),
+			'involved'=>array('INVOLVED_TOPICS','menu/social/forum/vforums/involved_topics'),
+		);
 	}
 
 	var $title;

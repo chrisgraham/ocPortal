@@ -93,9 +93,6 @@ class Hook_addon_registry_securitylogging
 			'themes/default/templates/SECURITY_SCREEN.tpl',
 			'themes/default/templates/SECURITY_ALERT_SCREEN.tpl',
 			'adminzone/pages/modules/admin_security.php',
-			'themes/default/images/bigicons/securitylog.png',
-			'themes/default/images/pagepics/securitylog.png',
-			'themes/default/images/bigicons/security.png',
 			'themes/default/templates/HACK_ATTEMPT_MAIL.tpl',
 			'adminzone/pages/modules/admin_ipban.php',
 			'lang/EN/lookup.ini',
@@ -263,7 +260,7 @@ class Hook_addon_registry_securitylogging
 				'AUTHOR_URL'=>placeholder_url(),
 				'POINTS_URL'=>placeholder_url(),
 				'PROFILE_URL'=>placeholder_url(),
-				'ACTION_LOG_URL'=>placeholder_url()
+				'ACTIONLOG_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}

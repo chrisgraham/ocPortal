@@ -24,9 +24,10 @@ class Hook_search_comcode_pages
 	/**
 	 * Standard modular info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @return ?array		Map of module info (NULL: module is disabled).
 	 */
-	function info()
+	function info($check_permissions=true)
 	{
 		require_lang('zones');
 
@@ -35,6 +36,8 @@ class Hook_search_comcode_pages
 		$info['default']=false;
 		$info['category']='the_zone';
 		$info['integer_category']=false;
+
+		$info['permissions']=array();
 
 		return $info;
 	}

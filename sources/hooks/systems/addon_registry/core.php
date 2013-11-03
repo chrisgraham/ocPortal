@@ -316,8 +316,8 @@ class Hook_addon_registry_core
 			'themes/default/templates/BROKEN_LANG_STRINGS.tpl',
 			'themes/default/templates/BROKEN_URLS.tpl',
 			'themes/default/templates/FORUMS_EMBED.tpl',
-			'themes/default/templates/ACTION_LOGS_SCREEN.tpl',
-			'themes/default/templates/ACTION_LOGS_TOGGLE_LINK.tpl',
+			'themes/default/templates/ACTIONLOGS_SCREEN.tpl',
+			'themes/default/templates/ACTIONLOGS_TOGGLE_LINK.tpl',
 			'themes/default/templates/FORUM_ATTACHMENT_IMAGE.tpl',
 			'themes/default/templates/FORUM_ATTACHMENT_IMAGE_THUMB.tpl',
 			'themes/default/templates/FORUM_ATTACHMENT_LINK.tpl',
@@ -434,8 +434,6 @@ class Hook_addon_registry_core
 			'themes/default/css/index.html',
 			'themes/default/css/no_cache.css',
 			'data/editarea/reg_syntax/index.html',
-			'themes/default/images/pagepics/export.png',
-			'themes/default/images/pagepics/email.png',
 			'themes/default/css_custom/index.html',
 			'themes/default/index.html',
 			'themes/default/templates/.htaccess',
@@ -458,33 +456,6 @@ class Hook_addon_registry_core
 			'themes/default/images/arrow_box.png',
 			'themes/default/images/arrow_box_hover.png',
 			'themes/default/images/background_image.png',
-			'themes/default/images/bigicons/import.png',
-			'themes/default/images/bigicons/export.png',
-			'themes/default/images/bigicons/add_one.png',
-			'themes/default/images/bigicons/add_one_category.png',
-			'themes/default/images/bigicons/add_one_image.png',
-			'themes/default/images/bigicons/add_to_category.png',
-			'themes/default/images/bigicons/admin_home.png',
-			'themes/default/images/bigicons/back.png',
-			'themes/default/images/bigicons/baseconfig.png',
-			'themes/default/images/bigicons/cms_home.png',
-			'themes/default/images/bigicons/delete.png',
-			'themes/default/images/bigicons/edit_one.png',
-			'themes/default/images/bigicons/edit_one_category.png',
-			'themes/default/images/bigicons/edit_this.png',
-			'themes/default/images/bigicons/edit_this_category.png',
-			'themes/default/images/bigicons/index.html',
-			'themes/default/images/bigicons/investigateuser.png',
-			'themes/default/images/bigicons/ipban.png',
-			'themes/default/images/bigicons/main_home.png',
-			'themes/default/images/bigicons/merge.png',
-			'themes/default/images/bigicons/move.png',
-			'themes/default/images/bigicons/ocp-logo.png',
-			'themes/default/images/bigicons/pagewizard.png',
-			'themes/default/images/bigicons/usergroups.png',
-			'themes/default/images/bigicons/view_archive.png',
-			'themes/default/images/bigicons/view_this.png',
-			'themes/default/images/bigicons/view_this_category.png',
 			'themes/default/images/blank.gif',
 			'themes/default/images/footer/home.png',
 			'themes/default/images/footer/index.html',
@@ -572,10 +543,6 @@ class Hook_addon_registry_core
 			'themes/default/images/boxless_title_leadin_leftcomp.png',
 			'themes/default/images/boxless_title_leadin_rightcomp.png',
 			'themes/default/images/zone_gradient.png',
-			'themes/default/images/pagepics/index.html',
-			'themes/default/images/pagepics/investigateuser.png',
-			'themes/default/images/pagepics/ipban.png',
-			'themes/default/images/pagepics/ocp-logo.png',
 			'sources/hooks/systems/startup/index.html',
 			'data/confirm_session.php',
 			'data/cron_bridge.php',
@@ -848,12 +815,11 @@ class Hook_addon_registry_core
 			'themes/default/templates/QUERY_SCREEN.tpl',
 			'themes/default/templates/JAVASCRIPT_CUSTOM_GLOBALS.tpl',
 			'themes/default/templates/JAVASCRIPT_MODALWINDOW.tpl',
+			'themes/default/images/product_logo.png',
 			'themes/default/images/button_lightbox_close.png',
 			'sources/blocks/main_greeting.php',
 			'themes/default/images/iphone.png',
 			'themes/default/images/quote_gradient.png',
-			'themes/default/images/bigicons/xml.png',
-			'themes/default/images/bigicons/email.png',
 			'sources/hooks/systems/content_meta_aware/.htaccess',
 			'sources/hooks/systems/content_meta_aware/index.html',
 			'sources/hooks/systems/meta/.htaccess',
@@ -925,8 +891,8 @@ class Hook_addon_registry_core
 	function tpl_previews()
 	{
 		return array(
-			'ACTION_LOGS_SCREEN.tpl'=>'administrative__action_logs_screen',
-			'ACTION_LOGS_TOGGLE_LINK.tpl'=>'administrative__action_logs_toggle_link',
+			'ACTIONLOGS_SCREEN.tpl'=>'administrative__actionlogs_screen',
+			'ACTIONLOGS_TOGGLE_LINK.tpl'=>'administrative__actionlogs_toggle_link',
 			'LOGIN_SCREEN.tpl'=>'login_screen',
 			'LOGIN_REDIRECT_SCREEN.tpl'=>'login_redirect_screen',
 			'FORUMS_EMBED.tpl'=>'forums_embed',
@@ -1087,10 +1053,10 @@ class Hook_addon_registry_core
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__action_logs_toggle_link()
+	function tpl_preview__administrative__actionlogs_toggle_link()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ACTION_LOGS_TOGGLE_LINK',array(
+			lorem_globalise(do_lorem_template('ACTIONLOGS_TOGGLE_LINK',array(
 				'URL'=>placeholder_url(),
 				'page'=>lorem_phrase(),
 				'type'=>lorem_phrase(),
@@ -1108,10 +1074,10 @@ class Hook_addon_registry_core
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__action_logs_screen()
+	function tpl_preview__administrative__actionlogs_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ACTION_LOGS_SCREEN',array(
+			lorem_globalise(do_lorem_template('ACTIONLOGS_SCREEN',array(
 				'TABLE'=>placeholder_table(),
 				'TITLE'=>lorem_title()
 			)), NULL, '', true)

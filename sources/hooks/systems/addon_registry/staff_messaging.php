@@ -89,8 +89,6 @@ class Hook_addon_registry_staff_messaging
 			'sources/hooks/systems/config/messaging_forum_name.php',
 			'sources/hooks/systems/addon_registry/staff_messaging.php',
 			'sources/hooks/systems/do_next_menus/messaging.php',
-			'themes/default/images/bigicons/messaging.png',
-			'themes/default/images/pagepics/messaging.png',
 			'themes/default/templates/BLOCK_MAIN_CONTACT_SIMPLE.tpl',
 			'themes/default/templates/BLOCK_MAIN_CONTACT_US.tpl',
 			'adminzone/pages/modules/admin_messaging.php',

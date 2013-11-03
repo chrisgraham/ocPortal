@@ -32,8 +32,10 @@ class Hook_do_next_menus_chat
 		if (!addon_installed('chat')) return array();
 
 		return array(
-			array('cms','chatrooms',array('cms_chat',array('type'=>'misc'),get_module_zone('cms_chat')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('ROOMS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','COUNT(*)',NULL,'',true))))),('DOC_CHAT')),
-			array('structure','chatrooms',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang_tempcode('ROOMS'),('DOC_CHAT')),
+			array('cms','menu/social/chat',array('cms_chat',array('type'=>'misc'),get_module_zone('cms_chat')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('chat:ROOMS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','COUNT(*)',NULL,'',true))))),'chat:DOC_CHAT'),
+			array('structure','menu/social/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang_tempcode('chat:ROOMS'),'chat:DOC_CHAT'),
+			array('social','menu/social/chat',array('chat',array(),get_module_zone('chat')),do_lang_tempcode('chat:CHAT_LOBBY')),
+			// userguide_chatcode and popup_blockers are children of help_page
 		);
 	}
 

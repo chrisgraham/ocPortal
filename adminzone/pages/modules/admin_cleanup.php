@@ -45,7 +45,7 @@ class Module_admin_cleanup
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -65,7 +65,6 @@ class Module_admin_cleanup
 
 		require_lang('cleanup');
 
-		set_helper_panel_pic('pagepics/cleanup');
 		set_helper_panel_tutorial('tut_cleanup');
 
 		if ($type=='rebuild')

@@ -104,11 +104,15 @@ class Module_admin_themes
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'THEMES','add_theme'=>'ADD_THEME','tempcode_tester'=>'TEMPCODE_TESTER');
+		return array(
+			'misc'=>'THEMES',
+			'add_theme'=>array('ADD_THEME','menu/_generic_admin/add_one'),
+			'tempcode_tester'=>array('TEMPCODE_TESTER','menu/_generic_admin/tool'),
+		);
 	}
 
 	var $title;
@@ -129,7 +133,6 @@ class Module_admin_themes
 
 		if ($type!='list' && $type!='view')
 		{
-			set_helper_panel_pic('pagepics/themes');
 			set_helper_panel_tutorial('tut_themes');
 		}
 
@@ -835,29 +838,27 @@ class Module_admin_themes
 		return do_next_manager($title,$description,
 			NULL,
 			NULL,
-			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-			/*	 page	 params				  zone	  */
-			$add_one,								 // Add one
-			$edit_this,								 // Edit this
-			$edit_one,																						// Edit one
-			NULL,																						// View this
-			NULL,																						// View archive
-			NULL,																						// Add to category
-			NULL,																						// Add one category
-			NULL,																						// Edit one category
-			NULL,																						// Edit this category
-			NULL,																						// View this category
-			/*	  SPECIALLY TYPED 'LINKS'				  */
+			/* TYPED-ORDERED LIST OF 'LINKS'	 */
+			$add_one, // Add one
+			$edit_this, // Edit this
+			$edit_one, // Edit one
+			NULL, // View this
+			NULL, // View archive
+			NULL, // Add to category
+			NULL, // Add one category
+			NULL, // Edit one category
+			NULL, // Edit this category
+			NULL, // View this category
+			/* SPECIALLY TYPED 'LINKS' */
 			array(),
 			array(),
 			array(
-				/*	 type							  page			 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'add_theme'),'_SELF'),do_lang_tempcode('ADD_THEME')),								 // Add one
-				is_null($theme)?NULL:array('edit_this',array('_SELF',array('type'=>'edit_theme','theme'=>$theme),'_SELF'),do_lang_tempcode('EDIT_THEME')),
-				is_null($theme)?NULL:array('edit_css',array('_SELF',array('type'=>'choose_css','theme'=>$theme),'_SELF')),
-				is_null($theme)?NULL:array('edit_templates',array('_SELF',array('type'=>'edit_templates','theme'=>$theme),'_SELF')),
-				is_null($theme)?NULL:array('manage_images',array('_SELF',array('type'=>'manage_images','theme'=>$theme,'lang'=>$lang),'_SELF')),
-				array('manage_themes',array('_SELF',array('type'=>'misc'),'_SELF'))
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'add_theme'),'_SELF'),do_lang_tempcode('ADD_THEME')), // Add one
+				is_null($theme)?NULL:array('menu/_generic_admin/edit_this',array('_SELF',array('type'=>'edit_theme','theme'=>$theme),'_SELF'),do_lang_tempcode('EDIT_THEME')),
+				is_null($theme)?NULL:array('menu/adminzone/style/themes/css',array('_SELF',array('type'=>'choose_css','theme'=>$theme),'_SELF'),do_lang('EDIT_CSS')),
+				is_null($theme)?NULL:array('menu/adminzone/style/themes/templates',array('_SELF',array('type'=>'edit_templates','theme'=>$theme),'_SELF'),do_lang('EDIT_TEMPLATES')),
+				is_null($theme)?NULL:array('menu/adminzone/style/themes/theme_images',array('_SELF',array('type'=>'manage_images','theme'=>$theme,'lang'=>$lang),'_SELF'),do_lang('MANAGE_THEME_IMAGES')),
+				array('menu/adminzone/style/themes/themes',array('_SELF',array('type'=>'misc'),'_SELF'),do_lang('MANAGE_THEMES'))
 			),
 			do_lang('THEMES'),
 			NULL,

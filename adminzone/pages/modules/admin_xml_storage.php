@@ -44,7 +44,7 @@ class Module_admin_xml_storage
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -64,7 +64,6 @@ class Module_admin_xml_storage
 
 		require_lang('xml_storage');
 
-		set_helper_panel_pic('pagepics/xml');
 		set_helper_panel_text(comcode_lang_string('DOC_XML_DATA_MANAGEMENT'));
 
 		if ($type=='_import' || $type=='_export')

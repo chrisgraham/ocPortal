@@ -109,7 +109,7 @@ class Hook_task_download_gallery
 				$name=basename(urldecode($gallery_row['rep_image']));
 				$data=http_download_file($gallery_row['rep_image']);
 			}
-			$array[]=array('name'=>preg_replace('#^uploads/(galleries|grepimages)/#','',$name),'time'=>$time,'data'=>$data);
+			$array[]=array('name'=>preg_replace('#^uploads/(galleries|repimages)/#','',$name),'time'=>$time,'data'=>$data);
 		}
 
 		$outfile_path=ocp_tempnam('csv');

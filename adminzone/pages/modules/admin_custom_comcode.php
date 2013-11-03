@@ -70,7 +70,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -139,7 +139,6 @@ class Module_admin_custom_comcode extends standard_crud_module
 
 		require_lang('custom_comcode');
 
-		set_helper_panel_pic('pagepics/customcomcode');
 		set_helper_panel_tutorial('tut_adv_comcode');
 
 		return parent::pre_run($top_level);
@@ -196,9 +195,8 @@ class Module_admin_custom_comcode extends standard_crud_module
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('CUSTOM_COMCODE'),comcode_lang_string('DOC_CUSTOM_COMCODE'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_COMCODE_TAG')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CUSTOM_COMCODE_TAG')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CUSTOM_COMCODE_TAG')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CUSTOM_COMCODE_TAG')),
 			),
 			do_lang('CUSTOM_COMCODE')
 		);

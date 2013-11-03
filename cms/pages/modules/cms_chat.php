@@ -44,7 +44,7 @@ class Module_cms_chat
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -77,7 +77,6 @@ class Module_cms_chat
 
 		require_lang('chat');
 
-		set_helper_panel_pic('pagepics/forums');
 		set_helper_panel_tutorial('tut_chat');
 
 		if ($type=='misc')
@@ -510,24 +509,22 @@ class Module_cms_chat
 			return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
 				NULL,
 				NULL,
-				/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-				/*	 page	 params				  zone	  */
-				NULL,																						 // Add one
-				array('_SELF',array('type'=>'ed','id'=>$message_id,'room_id'=>$room_id),'_SELF'),	 // Edit this
-				array('_SELF',array('type'=>'room','id'=>$room_id),'_SELF'),											  // Edit one
-				NULL,	// View this
-				array('_SELF',array(),'_SELF'),											 // View archive
-				NULL,																						// Add to category
-				NULL,																						// Add one category
-				NULL,																						// Edit one category
-				NULL,																						// Edit this category
-				NULL,																							// View this category
-				/*	  SPECIALLY TYPED 'LINKS'				  */
+				/* TYPED-ORDERED LIST OF 'LINKS'	 */
+				NULL, // Add one
+				array('_SELF',array('type'=>'ed','id'=>$message_id,'room_id'=>$room_id),'_SELF'), // Edit this
+				array('_SELF',array('type'=>'room','id'=>$room_id),'_SELF'), // Edit one
+				NULL, // View this
+				array('_SELF',array(),'_SELF'), // View archive
+				NULL, // Add to category
+				NULL, // Add one category
+				NULL, // Edit one category
+				NULL, // Edit this category
+				NULL, // View this category
+				/* SPECIALLY TYPED 'LINKS' */
 				array(),
 				array(),
 				array(
-					/*	 type							  page	 params													 zone	  */
-					has_actual_page_access(get_member(),'admin_chat')?array('chatrooms',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('ROOMS')):NULL,
+					has_actual_page_access(get_member(),'admin_chat')?array('menu/social/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('ROOMS')):NULL,
 				),
 				do_lang('SETUP')
 			);
@@ -568,22 +565,20 @@ class Module_cms_chat
 		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
 			NULL,
 			NULL,
-			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-			/*	 page	 params				  zone	  */
-			NULL,																						 // Add one
-			NULL,	 // Edit this
-			array('_SELF',array('type'=>'room','id'=>$room_id),'_SELF'),											  // Edit one
-			NULL,	// View this
-			array('_SELF',array(),'_SELF'),											 // View archive
-			NULL,																						// Add to category
-			NULL,																						// Add one category
-			NULL,																						// Edit one category
-			NULL,																						// Edit this category
-			NULL,																							// View this category
-			/*	  SPECIALLY TYPED 'LINKS'				  */
+			/* TYPED-ORDERED LIST OF 'LINKS'	 */
+			NULL, // Add one
+			NULL, // Edit this
+			array('_SELF',array('type'=>'room','id'=>$room_id),'_SELF'), // Edit one
+			NULL, // View this
+			array('_SELF',array(),'_SELF'), // View archive
+			NULL, // Add to category
+			NULL, // Add one category
+			NULL, // Edit one category
+			NULL, // Edit this category
+			NULL, // View this category
+			/* SPECIALLY TYPED 'LINKS' */
 			array(
-				/*	 type							  page	 params													 zone	  */
-				has_actual_page_access(get_member(),'admin_chat')?array('chatrooms',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('SETUP')):NULL,
+				has_actual_page_access(get_member(),'admin_chat')?array('menu/social/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('SETUP')):NULL,
 			)
 		);
 	}

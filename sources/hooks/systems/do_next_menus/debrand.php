@@ -30,7 +30,7 @@ class Hook_do_next_menus_debrand
 	function run()
 	{
 		return array(
-			array('style','debrand',array('admin_debrand',array('type'=>'misc'),get_module_zone('admin_debrand')),do_lang_tempcode('SUPER_DEBRAND'),('DOC_SUPERDEBRAND')),
+			array('style','menu/adminzone/style/debrand',array('admin_debrand',array('type'=>'misc'),get_module_zone('admin_debrand')),do_lang_tempcode('debrand:SUPER_DEBRAND'),'debrand:DOC_SUPERDEBRAND'),
 		);
 	}
 

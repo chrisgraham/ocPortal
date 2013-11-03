@@ -44,11 +44,24 @@ class Module_cms_galleries extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_GALLERIES')+(has_privilege(get_member(),'mass_import','cms_galleries')?array('gimp'=>'GALLERY_IMPORT'):array()),parent::get_entry_points());
+		$ret=array(
+			'misc'=>'MANAGE_GALLERIES',
+			'av'=>array('ADD_VIDEO','menu/_generic_admin/add_one'),
+			'ev'=>array('EDIT_VIDEO','menu/_generic_admin/edit_one'),
+		);
+
+		if (has_privilege(get_member(),'mass_import','cms_galleries'))
+		{
+			$ret['gimp']=array('GALLERY_IMPORT','menu/_generic_admin/import');
+		}
+
+		$ret=array_merge(parent::get_entry_points(),$ret);
+
+		return $ret;
 	}
 
 	/**
@@ -138,7 +151,6 @@ class Module_cms_galleries extends standard_crud_module
 		}
 
 		set_helper_panel_tutorial('tut_galleries');
-		set_helper_panel_pic('pagepics/images');
 
 		return parent::pre_run($top_level);
 	}
@@ -231,14 +243,13 @@ class Module_cms_galleries extends standard_crud_module
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_GALLERIES'),comcode_lang_string('DOC_GALLERIES'),
 			array_merge(array(
-				/*	 type							  page	 params													 zone	  */
-				has_privilege(get_member(),'submit_cat_midrange_content','cms_galleries')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_GALLERY')):NULL,
-				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_GALLERY')):NULL,
-				has_privilege(get_member(),'mass_import','cms_galleries')?array('import',array('_SELF',array('type'=>'gimp'),'_SELF'),do_lang('GALLERY_IMPORT'),('DOC_GALLERY_IMPORT')):NULL,
-				(!$allow_images)?NULL:has_privilege(get_member(),'submit_midrange_content','cms_galleries')?array('add_one_image',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IMAGE')):NULL,
-				(!$allow_images)?NULL:has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_image',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_IMAGE')):NULL,
-				(!$allow_videos)?NULL:has_privilege(get_member(),'submit_midrange_content','cms_galleries')?array('add_one_video',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_VIDEO')):NULL,
-				(!$allow_videos)?NULL:has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_video',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_VIDEO')):NULL,
+				has_privilege(get_member(),'submit_cat_midrange_content','cms_galleries')?array('menu/_generic_admin/add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_GALLERY')):NULL,
+				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('menu/_generic_admin/edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_GALLERY')):NULL,
+				has_privilege(get_member(),'mass_import','cms_galleries')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'gimp'),'_SELF'),do_lang('GALLERY_IMPORT'),'DOC_GALLERY_IMPORT'):NULL,
+				(!$allow_images)?NULL:has_privilege(get_member(),'submit_midrange_content','cms_galleries')?array('menu/cms/galleries/add_one_image',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IMAGE')):NULL,
+				(!$allow_images)?NULL:has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array('menu/cms/galleries/edit_one_image',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_IMAGE')):NULL,
+				(!$allow_videos)?NULL:has_privilege(get_member(),'submit_midrange_content','cms_galleries')?array('menu/cms/galleries/add_one_video',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_VIDEO')):NULL,
+				(!$allow_videos)?NULL:has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array('menu/cms/galleries/edit_one_video',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_VIDEO')):NULL,
 			),manage_custom_fields_donext_link('image'),manage_custom_fields_donext_link('video'),manage_custom_fields_donext_link('gallery')),
 			do_lang('MANAGE_GALLERIES')
 		);
@@ -2235,10 +2246,10 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$accept_videos=post_param_integer('accept_videos',0);
 		$is_member_synched=post_param_integer('is_member_synched',0);
 		$flow_mode_interface=post_param_integer('flow_mode_interface',0);
-		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
+		$urls=get_url('image_url','rep_image','uploads/repimages',0,OCP_UPLOAD_IMAGE);
 		$url=$urls[0];
 		if (($url!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
-			convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
+			convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/repimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 		$watermark_top_left=get_url('','watermark_top_left','uploads/watermarks',0,OCP_UPLOAD_IMAGE);
 		$watermark_top_right=get_url('','watermark_top_right','uploads/watermarks',0,OCP_UPLOAD_IMAGE);
 		$watermark_bottom_left=get_url('','watermark_bottom_left','uploads/watermarks',0,OCP_UPLOAD_IMAGE);
@@ -2276,10 +2287,10 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$flow_mode_interface=post_param_integer('flow_mode_interface',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		if (!fractional_edit())
 		{
-			$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
+			$urls=get_url('image_url','rep_image','uploads/repimages',0,OCP_UPLOAD_IMAGE);
 			$url=$urls[0];
 			if (($url!='') && (function_exists('imagecreatefromstring')) && (get_value('resize_rep_images')!=='0'))
-				convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
+				convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/uploads/repimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 			if (($url=='') && (post_param_integer('rep_image_unlink',0)!=1)) $url=NULL;
 
 			$watermark_top_left=get_url('','watermark_top_left','uploads/watermarks',0,OCP_UPLOAD_IMAGE);
@@ -2405,21 +2416,19 @@ class Module_cms_galleries_cat extends standard_crud_module
 			return do_next_manager($title,$description,
 				NULL,
 				NULL,
-				/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-				/*	 page	 params				  zone	  */
-				NULL,							// Add one
-				NULL,							 // Edit this
-				NULL,											// Edit one
-				NULL,							// View this
-				array('galleries',array('type'=>'misc'),get_module_zone('galleries'),do_lang_tempcode('GALLERIES')),									 // View archive
-				NULL,	  // Add to category
-				has_privilege(get_member(),'submit_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang('ADD_GALLERY')):NULL,					  // Add one category
-				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang('EDIT_GALLERY')):NULL,					  // Edit one category
-				is_null($cat)?NULL:array('_SELF',array('type'=>'_ec','id'=>$cat),'_SELF',do_lang_tempcode('EDIT_THIS_GALLERY')),			 // Edit this category
-				is_null($cat)?NULL:array('galleries',array('type'=>'misc','id'=>$cat),get_module_zone('galleries'),do_lang_tempcode('VIEW_THIS_GALLERY')),																						 // View this category
-				/*	  SPECIALLY TYPED 'LINKS'				  */
+				/* TYPED-ORDERED LIST OF 'LINKS'	 */
+				NULL, // Add one
+				NULL, // Edit this
+				NULL, // Edit one
+				NULL, // View this
+				array('galleries',array('type'=>'misc'),get_module_zone('galleries'),do_lang_tempcode('GALLERIES')), // View archive
+				NULL, // Add to category
+				has_privilege(get_member(),'submit_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang('ADD_GALLERY')):NULL, // Add one category
+				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang('EDIT_GALLERY')):NULL, // Edit one category
+				is_null($cat)?NULL:array('_SELF',array('type'=>'_ec','id'=>$cat),'_SELF',do_lang_tempcode('EDIT_THIS_GALLERY')), // Edit this category
+				is_null($cat)?NULL:array('galleries',array('type'=>'misc','id'=>$cat),get_module_zone('galleries'),do_lang_tempcode('VIEW_THIS_GALLERY')), // View this category
+				/* SPECIALLY TYPED 'LINKS' */
 				array_merge($extra,array(
-					/*	 type																page	 params													 zone	  */
 					array('add_one_image',array('_SELF',array('type'=>'ad'),'_SELF')),
 					array('add_one_video',array('_SELF',array('type'=>'av'),'_SELF')),
 					has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_image',array('_SELF',array('type'=>'ed'),'_SELF',do_lang('EDIT_IMAGE'))):NULL,
@@ -2449,26 +2458,24 @@ class Module_cms_galleries_cat extends standard_crud_module
 		return do_next_manager($title,$description,
 			NULL,
 			NULL,
-			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-			/*	 page	 params				  zone	  */
-			NULL,				 // Add one
-			(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_galleries',array('galleries',$cat))))?NULL:array('_SELF',array('type'=>$video?'_ev':'_ed','id'=>$id),'_SELF'),			// Edit this
-			NULL,							// Edit one
-			is_null($id)?NULL:array('galleries',array('type'=>$video?'video':'image','id'=>$id,'wide'=>1),get_module_zone('galleries')),	  // View this
-			array('galleries',array('type'=>'misc'),get_module_zone('galleries'),do_lang_tempcode('GALLERIES')),							// View archive
-			NULL,		// Add to category
-			has_privilege(get_member(),'submit_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang('ADD_GALLERY')):NULL,				// Add one category
-			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang('EDIT_GALLERY')):NULL,				// Edit one category
-			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'_ec','id'=>$cat),'_SELF',do_lang_tempcode('EDIT_THIS_GALLERY')):NULL,		 // Edit this category
-			array('galleries',array('type'=>'misc','id'=>$cat),get_module_zone('galleries'),do_lang_tempcode('VIEW_THIS_GALLERY')),					  // View this category
-			/*	  SPECIALLY TYPED 'LINKS'				  */
+			/* TYPED-ORDERED LIST OF 'LINKS'	 */
+			NULL, // Add one
+			(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_galleries',array('galleries',$cat))))?NULL:array('_SELF',array('type'=>$video?'_ev':'_ed','id'=>$id),'_SELF'), // Edit this
+			NULL, // Edit one
+			is_null($id)?NULL:array('galleries',array('type'=>$video?'video':'image','id'=>$id,'wide'=>1),get_module_zone('galleries')), // View this
+			array('galleries',array('type'=>'misc'),get_module_zone('galleries'),do_lang_tempcode('GALLERIES')), // View archive
+			NULL, // Add to category
+			has_privilege(get_member(),'submit_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang('ADD_GALLERY')):NULL, // Add one category
+			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang('EDIT_GALLERY')):NULL, // Edit one category
+			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('_SELF',array('type'=>'_ec','id'=>$cat),'_SELF',do_lang_tempcode('EDIT_THIS_GALLERY')):NULL, // Edit this category
+			array('galleries',array('type'=>'misc','id'=>$cat),get_module_zone('galleries'),do_lang_tempcode('VIEW_THIS_GALLERY')), // View this category
+			/* SPECIALLY TYPED 'LINKS' */
 			array_merge($extra,array(
-				/*	 type																page	 params													 zone	  */
-				array($video?'add_one_video':'add_one_image',array('_SELF',array('type'=>$video?'av':'ad','cat'=>((!$video && !$support_images) || ($video && !$support_videos) || (is_null($cat)))?NULL:$cat),'_SELF'),do_lang($video?'ADD_VIDEO':'ADD_IMAGE')),
-				array($video?'add_one_image':'add_one_video',array('_SELF',array('type'=>$video?'av':'ad','cat'=>(($video && !$support_images) || (!$video && !$support_videos) || (is_null($cat)))?NULL:$cat),'_SELF'),do_lang($video?'ADD_IMAGE':'ADD_VIDEO')),
-				(has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array($video?'edit_one_video':'edit_one_image',array('_SELF',array('type'=>$video?'ev':'ed'),'_SELF'),do_lang($video?'EDIT_VIDEO':'EDIT_IMAGE')):NULL),							// Edit one
-				(has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array($video?'edit_one_image':'edit_one_video',array('_SELF',array('type'=>$video?'ed':'ev'),'_SELF'),do_lang($video?'EDIT_IMAGE':'EDIT_VIDEO')):NULL),							// Edit one
-				has_privilege(get_member(),'mass_import','cms_galleries')?array('import',array('_SELF',array('type'=>'_gimp','name'=>$cat),'_SELF'),do_lang('GALLERY_IMPORT')):NULL
+				array($video?'menu/cms/galleries/add_one_video':'menu/cms/galleries/add_one_image',array('_SELF',array('type'=>$video?'av':'ad','cat'=>((!$video && !$support_images) || ($video && !$support_videos) || (is_null($cat)))?NULL:$cat),'_SELF'),do_lang($video?'ADD_VIDEO':'ADD_IMAGE')),
+				array($video?'menu/cms/galleries/add_one_image':'menu/cms/galleries/add_one_video',array('_SELF',array('type'=>$video?'av':'ad','cat'=>(($video && !$support_images) || (!$video && !$support_videos) || (is_null($cat)))?NULL:$cat),'_SELF'),do_lang($video?'ADD_IMAGE':'ADD_VIDEO')),
+				(has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array($video?'menu/cms/galleries/edit_one_video':'menu/cms/galleries/edit_one_image',array('_SELF',array('type'=>$video?'ev':'ed'),'_SELF'),do_lang($video?'EDIT_VIDEO':'EDIT_IMAGE')):NULL), // Edit one
+				(has_privilege(get_member(),'edit_own_midrange_content','cms_galleries')?array($video?'menu/cms/galleries/edit_one_image':'menu/cms/galleries/edit_one_video',array('_SELF',array('type'=>$video?'ed':'ev'),'_SELF'),do_lang($video?'EDIT_IMAGE':'EDIT_VIDEO')):NULL), // Edit one
+				has_privilege(get_member(),'mass_import','cms_galleries')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'_gimp','name'=>$cat),'_SELF'),do_lang('GALLERY_IMPORT')):NULL
 			)),
 			NULL,
 			NULL,

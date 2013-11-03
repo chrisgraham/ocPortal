@@ -118,13 +118,24 @@ class Module_admin_stats
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
 		require_lang('stats');
 
-		$ret=array('misc'=>'SITE_STATISTICS','overview'=>'OVERVIEW_STATISTICS','users_online'=>'USERS_ONLINE_STATISTICS','submission_rates'=>'SUBMISSION_STATISTICS','referrers'=>'TOP_REFERRERS','keywords'=>'TOP_SEARCH_KEYWORDS','page'=>'PAGES_STATISTICS','load_times'=>'LOAD_TIMES','clear'=>'CLEAR_STATISTICS','install_data'=>'INSTALL_GEOLOCATION_DATA');
+		$ret=array(
+			'misc'=>'SITE_STATISTICS',
+			'overview'=>array('OVERVIEW_STATISTICS','menu/adminzone/audit/statistics/statistics'),
+			'users_online'=>array('USERS_ONLINE_STATISTICS','menu/adminzone/audit/statistics/users_online'),
+			'submission_rates'=>array('SUBMISSION_STATISTICS','menu/adminzone/audit/statistics/submits'),
+			'referrers'=>array('TOP_REFERRERS','menu/adminzone/audit/statistics/top_referrers'),
+			'keywords'=>array('TOP_SEARCH_KEYWORDS','menu/adminzone/audit/statistics/top_keywords'),
+			'page'=>array('PAGES_STATISTICS','menu/adminzone/audit/statistics/page_views'),
+			'load_times'=>array('LOAD_TIMES','menu/adminzone/audit/statistics/load_times'),
+			'clear'=>array('CLEAR_STATISTICS','menu/adminzone/audit/statistics/clear_stats'),
+			'install_data'=>array('INSTALL_GEOLOCATION_DATA','menu/adminzone/audit/statistics/geolocate'),
+		);
 		$hooks=find_all_hooks('modules','admin_stats');
 		foreach (array_keys($hooks) as $hook)
 		{
@@ -176,14 +187,11 @@ class Module_admin_stats
 		set_helper_panel_tutorial('tut_statistics');
 		if ($type=='clear' || $type=='_clear')
 		{
-			set_helper_panel_pic('pagepics/statistics_clear');
 		}
 		elseif ($type=='install_data')
 		{
-			set_helper_panel_pic('pagepics/installgeolocationdata');
 		} else
 		{
-			set_helper_panel_pic('pagepics/statistics');
 		}
 
 		if ($type=='users_online')
@@ -298,14 +306,13 @@ class Module_admin_stats
 		require_code('templates_donext');
 		$test=$GLOBALS['SITE_DB']->query_select_value('ip_country','COUNT(*)');
 		$actions=array(
-			/*	 type							  page	 params													 zone	  */
-			array('statistics',array('_SELF',array('type'=>'overview'),'_SELF'),do_lang('OVERVIEW_STATISTICS'),('DESCRIPTION_OVERVIEW_STATISTICS')),
-			array('page_views',array('_SELF',array('type'=>'page'),'_SELF'),do_lang('PAGES_STATISTICS'),('DOC_PAGE_STATISTICS')),
-			array('users_online',array('_SELF',array('type'=>'users_online'),'_SELF'),do_lang('USERS_ONLINE_STATISTICS'),('DOC_USERS_ONLINE_STATISTICS')),
-			array('submits',array('_SELF',array('type'=>'submission_rates'),'_SELF'),do_lang('SUBMISSION_STATISTICS'),('DOC_SUBMISSION_STATISTICS')),
-			array('load_times',array('_SELF',array('type'=>'load_times'),'_SELF'),do_lang('LOAD_TIMES'),('DOC_LOAD_TIMES')),
-			array('top_referrers',array('_SELF',array('type'=>'referrers'),'_SELF'),do_lang('TOP_REFERRERS'),('DOC_TOP_REFERRERS')),
-			array('top_keywords',array('_SELF',array('type'=>'keywords'),'_SELF'),do_lang('TOP_SEARCH_KEYWORDS'),('DOC_TOP_SEARCH_KEYWORDS')),
+			array('menu/adminzone/audit/statistics/statistics',array('_SELF',array('type'=>'overview'),'_SELF'),do_lang('OVERVIEW_STATISTICS'),'DESCRIPTION_OVERVIEW_STATISTICS'),
+			array('menu/adminzone/audit/statistics/page_views',array('_SELF',array('type'=>'page'),'_SELF'),do_lang('PAGES_STATISTICS'),'DOC_PAGE_STATISTICS'),
+			array('menu/adminzone/audit/statistics/users_online',array('_SELF',array('type'=>'users_online'),'_SELF'),do_lang('USERS_ONLINE_STATISTICS'),'DOC_USERS_ONLINE_STATISTICS'),
+			array('menu/adminzone/audit/statistics/submits',array('_SELF',array('type'=>'submission_rates'),'_SELF'),do_lang('SUBMISSION_STATISTICS'),'DOC_SUBMISSION_STATISTICS'),
+			array('menu/adminzone/audit/statistics/load_times',array('_SELF',array('type'=>'load_times'),'_SELF'),do_lang('LOAD_TIMES'),'DOC_LOAD_TIMES'),
+			array('menu/adminzone/audit/statistics/top_referrers',array('_SELF',array('type'=>'referrers'),'_SELF'),do_lang('TOP_REFERRERS'),'DOC_TOP_REFERRERS'),
+			array('menu/adminzone/audit/statistics/top_keywords',array('_SELF',array('type'=>'keywords'),'_SELF'),do_lang('TOP_SEARCH_KEYWORDS'),'DOC_TOP_SEARCH_KEYWORDS'),
 		);
 		$hooks=find_all_hooks('modules','admin_stats');
 		foreach (array_keys($hooks) as $hook)
@@ -316,8 +323,8 @@ class Module_admin_stats
 			$info=$ob->info();
 			if (!is_null($info)) $actions=array_merge($actions,array($info[1]));
 		}
-		if ($test==0) $actions[]=array('geolocate',array('_SELF',array('type'=>'install_data'),'_SELF'),do_lang('INSTALL_GEOLOCATION_DATA'),('DOC_INSTALL_GEOLOCATION_DATA'));
-		$actions[]=array('clear_stats',array('_SELF',array('type'=>'clear'),'_SELF'),do_lang('CLEAR_STATISTICS'),do_lang_tempcode('DESCRIPTION_CLEAR_STATISTICS'));
+		if ($test==0) $actions[]=array('menu/adminzone/audit/statistics/geolocate',array('_SELF',array('type'=>'install_data'),'_SELF'),do_lang('INSTALL_GEOLOCATION_DATA'),'DOC_INSTALL_GEOLOCATION_DATA');
+		$actions[]=array('menu/adminzone/audit/statistics/clear_stats',array('_SELF',array('type'=>'clear'),'_SELF'),do_lang('CLEAR_STATISTICS'),do_lang_tempcode('DESCRIPTION_CLEAR_STATISTICS'));
 		return do_next_manager(get_screen_title('SITE_STATISTICS'),comcode_lang_string('DOC_STATISTICS'),
 			$actions,
 			do_lang('SITE_STATISTICS')

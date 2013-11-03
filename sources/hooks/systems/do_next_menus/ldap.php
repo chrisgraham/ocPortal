@@ -32,7 +32,7 @@ class Hook_do_next_menus_ldap
 		if (!addon_installed('ldap')) return array();
 
 		return array(
-			(get_forum_type()!='ocf')?NULL:array('security','ldap',array('admin_ocf_ldap',array('type'=>'misc'),get_module_zone('admin_ocf_ldap')),do_lang_tempcode('LDAP'),('DOC_LDAP')),
+			(get_forum_type()!='ocf')?NULL:array('security','menu/adminzone/security/ldap',array('admin_ocf_ldap',array('type'=>'misc'),get_module_zone('admin_ocf_ldap')),do_lang_tempcode('ldap:LDAP'),'ldap:DOC_LDAP'),
 		);
 	}
 

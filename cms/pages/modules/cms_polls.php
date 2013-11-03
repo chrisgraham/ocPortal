@@ -53,7 +53,6 @@ class Module_cms_polls extends standard_crud_module
 
 		require_lang('polls');
 
-		set_helper_panel_pic('pagepics/polls');
 		set_helper_panel_tutorial('tut_feedback');
 
 		return parent::pre_run($top_level);
@@ -83,7 +82,7 @@ class Module_cms_polls extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -112,9 +111,8 @@ class Module_cms_polls extends standard_crud_module
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
 			array_merge(array(
-				/*	 type							  page	 params													 zone	  */
-				has_privilege(get_member(),'submit_midrange_content','cms_polls')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
-				has_privilege(get_member(),'edit_own_midrange_content','cms_polls')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):NULL,
+				has_privilege(get_member(),'submit_midrange_content','cms_polls')?array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
+				has_privilege(get_member(),'edit_own_midrange_content','cms_polls')?array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):NULL,
 			),manage_custom_fields_donext_link('poll')),
 			do_lang('MANAGE_POLLS')
 		);

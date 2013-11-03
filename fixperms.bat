@@ -51,7 +51,7 @@ cacls uploads\ocf_photos\* /e /g %user%:F
 cacls uploads\ocf_photos_thumbs\* /e /g %user%:F
 cacls uploads\ocf_avatars\* /e /g %user%:F
 cacls uploads\ocf_cpf_upload\* /e /g %user%:F
-cacls uploads\grepimages\* /e /g %user%:F
+cacls uploads\repimages\* /e /g %user%:F
 cacls uploads\watermarks\* /e /g %user%:F
 cacls pages\comcode_custom /e /g %user%:F
 cacls pages\comcode_custom\* /e /g %user%:F
@@ -189,7 +189,7 @@ icacls uploads\ocf_photos\* /grant %user%:(M)
 icacls uploads\ocf_photos_thumbs\* /grant %user%:(M)
 icacls uploads\ocf_avatars\* /grant %user%:(M)
 icacls uploads\ocf_cpf_upload\* /grant %user%:(M)
-icacls uploads\grepimages\* /grant %user%:(M)
+icacls uploads\repimages\* /grant %user%:(M)
 icacls uploads\watermarks\* /grant %user%:(M)
 icacls pages\comcode_custom /grant %user%:(M)
 icacls pages\comcode_custom\* /grant %user%:(M)

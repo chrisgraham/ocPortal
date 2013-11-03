@@ -85,11 +85,11 @@ class Module_admin_menus
 		// main_content
 
 		// main_community
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'SECTION_FORUMS','forum:forumview',0,0,true,'',0,'menu_items/community_navigation/forums');
-		elseif (!in_array(get_forum_type(),array('none'))) add_menu_item_simple('main_community',NULL,'SECTION_FORUMS',get_forum_base_url(true),0,0,true,'',0,'menu_items/community_navigation/forums');
-		add_menu_item_simple('main_community',NULL,'RULES','_SEARCH:rules',0,0,true,'',0,'menu_items/community_navigation/rules');
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'MEMBERS','_SEARCH:members:type=misc',0,0,true,'',0,'menu_items/community_navigation/members');
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'USERGROUPS','_SEARCH:groups:type=misc',0,0,true,'',0,'menu_items/community_navigation/groups');
+		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'SECTION_FORUMS','forum:forumview',0,0,true,'',0,'icons/24x24/menu/social/forum/forums');
+		elseif (!in_array(get_forum_type(),array('none'))) add_menu_item_simple('main_community',NULL,'SECTION_FORUMS',get_forum_base_url(true),0,0,true,'',0,'icons/24x24/menu/social/forum/forums');
+		add_menu_item_simple('main_community',NULL,'RULES','_SEARCH:rules',0,0,true,'',0,'icons/24x24/menu/pages/rules');
+		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'MEMBERS','_SEARCH:members:type=misc',0,0,true,'',0,'icons/24x24/menu/social/members');
+		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'USERGROUPS','_SEARCH:groups:type=misc',0,0,true,'',0,'icons/24x24/menu/social/groups');
 
 		// member_features
 		add_menu_item_simple('member_features',NULL,'_JOIN','_SEARCH:join:type=misc',0,1);
@@ -117,13 +117,12 @@ class Module_admin_menus
 			add_menu_item_simple('zone_menu',NULL,'COLLABORATION','collaboration'.':',0,1);
 		add_menu_item_simple('zone_menu',NULL,'CMS','cms'.':',0,1);
 		add_menu_item_simple('zone_menu',NULL,'ADMIN_ZONE','adminzone'.':',0,1);
-		//add_menu_item_simple('zone_menu',NULL,'GUIDES','docs'.':userguide',0,1);
 	}
 
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -145,7 +144,6 @@ class Module_admin_menus
 
 		if ($type=='misc')
 		{
-			set_helper_panel_pic('pagepics/menus');
 			set_helper_panel_tutorial('tut_menus');
 
 			$this->title=get_screen_title('MENU_MANAGEMENT');
@@ -322,7 +320,7 @@ class Module_admin_menus
 		$list=new ocp_tempcode();
 		$list->attach(form_input_list_entry('',false,do_lang_tempcode('NONE_EM')));
 		require_code('themes2');
-		$list->attach(create_selection_list_theme_images(NULL,NULL,false,true,'menu_items/'));
+		$list->attach(create_selection_list_theme_images(NULL,NULL,false,true,'icons/'));
 		$fields_template->attach(form_input_list(do_lang_tempcode('THEME_IMAGE'),do_lang_tempcode('DESCRIPTION_THEME_IMAGE_FOR_MENU_ITEM'),'theme_img_code',$list,NULL,false,false));
 		$fields_template->attach(form_input_line(do_lang_tempcode('RESTRICT_PAGE_VISIBILITY'),do_lang_tempcode('MENU_ENTRY_MATCH_KEYS'),'match_tags','',false));
 

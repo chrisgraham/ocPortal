@@ -32,7 +32,7 @@ class Hook_do_next_menus_realtime_rain
 		if (!addon_installed('realtime_rain')) return array();
 
 		return array(
-			array('usage','realtime_rain',array('admin_realtime_rain',array('type'=>'misc'),get_module_zone('admin_realtime_rain')),do_lang_tempcode('_REALTIME_RAIN'),do_lang_tempcode('DOC_REALTIME_RAIN')),
+			array('audit','menu/adminzone/audit/realtime_rain',array('admin_realtime_rain',array('type'=>'misc'),get_module_zone('admin_realtime_rain')),do_lang_tempcode('realtime_rain:_REALTIME_RAIN'),do_lang_tempcode('realtime_rain:DOC_REALTIME_RAIN')),
 		);
 	}
 

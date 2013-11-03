@@ -44,7 +44,7 @@ class Module_cms
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -86,8 +86,6 @@ class Module_cms
 	function run()
 	{
 		require_code('templates_donext');
-
-		require_all_lang();
 
 		if ($this->simplified)
 		{

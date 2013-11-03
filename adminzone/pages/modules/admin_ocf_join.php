@@ -44,11 +44,18 @@ class Module_admin_ocf_join
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array('menu'=>'MEMBERS','misc'=>'ADD_MEMBER','delurk'=>'DELETE_LURKERS','download_csv'=>'DOWNLOAD_MEMBER_CSV','import_csv'=>'IMPORT_MEMBER_CSV','group_member_timeouts'=>'GROUP_MEMBER_TIMEOUTS');
+		return array(
+			'menu'=>array('MEMBERS','menu/social/members'),
+			'misc'=>array('ADD_MEMBER','menu/adminzone/tools/users/member_add'),
+			'delurk'=>array('DELETE_LURKERS','menu/adminzone/tools/users/delete_lurkers'),
+			'download_csv'=>array('DOWNLOAD_MEMBER_CSV','menu/_generic_admin/download_csv'),
+			'import_csv'=>array('IMPORT_MEMBER_CSV','menu/_generic_admin/import_csv'),
+			'group_member_timeouts'=>array('GROUP_MEMBER_TIMEOUTS','menu/adminzone/security/usergroups_temp'),
+		);
 	}
 
 	var $title;
@@ -64,12 +71,10 @@ class Module_admin_ocf_join
 
 		require_lang('ocf');
 
-		set_helper_panel_pic('pagepics/addmember');
 		set_helper_panel_tutorial('tut_adv_members');
 
 		if ($type=='misc')
 		{
-			set_helper_panel_pic('pagepics/editmember');
 			set_helper_panel_tutorial('tut_members');
 
 			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
@@ -78,17 +83,14 @@ class Module_admin_ocf_join
 
 		if ($type=='group_member_timeouts' || $type=='_group_member_timeouts')
 		{
-			set_helper_panel_pic('pagepics/usergroups_temp');
 		}
 
 		if ($type=='delurk' || $type=='_delurk' || $type=='__delurk')
 		{
-			set_helper_panel_pic('pagepics/deletelurkers');
 		}
 
 		if ($type=='import_csv' || $type=='_import_csv')
 		{
-			set_helper_panel_pic('pagepics/import_csv');
 		}
 
 		if ($type=='step2')
@@ -202,20 +204,19 @@ class Module_admin_ocf_join
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MEMBERS'),comcode_lang_string('DOC_MEMBERS'),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('addmember',array('admin_ocf_join',array('type'=>'misc'),get_module_zone('admin_ocf_join')),do_lang_tempcode('ADD_MEMBER'),('DOC_ADD_MEMBER')),
-				(!has_privilege(get_member(),'member_maintenance'))?NULL:array('editmember',array('members',array('type'=>'misc'),get_module_zone('members'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('EDIT_MEMBER'),('DOC_EDIT_MEMBER')),
-				array('merge_members',array('admin_ocf_merge_members',array('type'=>'misc'),get_module_zone('admin_ocf_merge_members')),do_lang_tempcode('MERGE_MEMBERS'),('DOC_MERGE_MEMBERS')),
-				array('deletelurkers',array('admin_ocf_join',array('type'=>'delurk'),get_module_zone('admin_ocf_join')),do_lang_tempcode('DELETE_LURKERS'),('DOC_DELETE_LURKERS')),
-				array('download_csv',array('admin_ocf_join',array('type'=>'download_csv'),get_module_zone('admin_ocf_join')),do_lang_tempcode('DOWNLOAD_MEMBER_CSV'),('DOC_DOWNLOAD_MEMBER_CSV')),
-				array('import_csv',array('admin_ocf_join',array('type'=>'import_csv'),get_module_zone('admin_ocf_join')),do_lang_tempcode('IMPORT_MEMBER_CSV'),('DOC_IMPORT_MEMBER_CSV')),
-				addon_installed('ocf_cpfs')?array('customprofilefields',array('admin_ocf_customprofilefields',array('type'=>'misc'),get_module_zone('admin_ocf_customprofilefields')),do_lang_tempcode('CUSTOM_PROFILE_FIELDS'),('DOC_CUSTOM_PROFILE_FIELDS')):NULL,
-				addon_installed('welcome_emails')?array('welcome_emails',array('admin_ocf_welcome_emails',array('type'=>'misc'),get_module_zone('admin_ocf_welcome_emails')),do_lang_tempcode('WELCOME_EMAILS'),('DOC_WELCOME_EMAILS')):NULL,
-				addon_installed('securitylogging')?array('investigateuser',array('admin_lookup',array(),get_module_zone('admin_lookup')),do_lang_tempcode('INVESTIGATE_USER'),('DOC_INVESTIGATE_USER')):NULL,
-				array('usergroups_temp',array('admin_ocf_join',array('type'=>'group_member_timeouts'),get_module_zone('admin_ocf_join')),do_lang_tempcode('GROUP_MEMBER_TIMEOUTS'),('DOC_GROUP_MEMBER_TIMEOUTS')),
-				addon_installed('ecommerce')?array('ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),('DOC_ECOMMERCE')):NULL,
-				array('usergroups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('USERGROUPS'),('DOC_GROUPS')),
-				addon_installed('staff')?array('staff',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('STAFF'),('DOC_STAFF')):NULL,
+				array('menu/adminzone/tools/users/member_add',array('admin_ocf_join',array('type'=>'misc'),get_module_zone('admin_ocf_join')),do_lang_tempcode('ADD_MEMBER'),'DOC_ADD_MEMBER'),
+				(!has_privilege(get_member(),'member_maintenance'))?NULL:array('menu/adminzone/tools/users/member_edit',array('members',array('type'=>'misc'),get_module_zone('members'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('EDIT_MEMBER'),'DOC_EDIT_MEMBER'),
+				array('menu/adminzone/tools/users/merge_members',array('admin_ocf_merge_members',array('type'=>'misc'),get_module_zone('admin_ocf_merge_members')),do_lang_tempcode('MERGE_MEMBERS'),'DOC_MERGE_MEMBERS'),
+				array('menu/adminzone/tools/users/delete_lurkers',array('admin_ocf_join',array('type'=>'delurk'),get_module_zone('admin_ocf_join')),do_lang_tempcode('DELETE_LURKERS'),'DOC_DELETE_LURKERS'),
+				array('menu/_generic_admin/download_csv',array('admin_ocf_join',array('type'=>'download_csv'),get_module_zone('admin_ocf_join')),do_lang_tempcode('DOWNLOAD_MEMBER_CSV'),'DOC_DOWNLOAD_MEMBER_CSV'),
+				array('/menu/_generic_admin/import_csv',array('admin_ocf_join',array('type'=>'import_csv'),get_module_zone('admin_ocf_join')),do_lang_tempcode('IMPORT_MEMBER_CSV'),'DOC_IMPORT_MEMBER_CSV'),
+				addon_installed('ocf_cpfs')?array('menu/adminzone/tools/users/custom_profile_fields',array('admin_ocf_customprofilefields',array('type'=>'misc'),get_module_zone('admin_ocf_customprofilefields')),do_lang_tempcode('CUSTOM_PROFILE_FIELDS'),'DOC_CUSTOM_PROFILE_FIELDS'):NULL,
+				addon_installed('welcome_emails')?array('menu/adminzone/setup/welcome_emails',array('admin_ocf_welcome_emails',array('type'=>'misc'),get_module_zone('admin_ocf_welcome_emails')),do_lang_tempcode('WELCOME_EMAILS'),'DOC_WELCOME_EMAILS'):NULL,
+				addon_installed('securitylogging')?array('menu/adminzone/tools/users/investigate_user',array('admin_lookup',array(),get_module_zone('admin_lookup')),do_lang_tempcode('INVESTIGATE_USER'),'DOC_INVESTIGATE_USER'):NULL,
+				array('menu/adminzone/security/usergroups_temp',array('admin_ocf_join',array('type'=>'group_member_timeouts'),get_module_zone('admin_ocf_join')),do_lang_tempcode('GROUP_MEMBER_TIMEOUTS'),'DOC_GROUP_MEMBER_TIMEOUTS'),
+				addon_installed('ecommerce')?array('menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),'DOC_ECOMMERCE'):NULL,
+				array('menu/social/groups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('USERGROUPS'),'DOC_GROUPS'),
+				addon_installed('staff')?array('menu/site_meta/staff_view',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('STAFF'),'DOC_STAFF'):NULL,
 			),do_lang('MEMBERS')
 		);
 	}
@@ -320,26 +321,25 @@ class Module_admin_ocf_join
 		if (addon_installed('galleries'))
 		{
 			require_lang('galleries');
-			$special_links[]=array('galleries',array('cms_galleries',array('type'=>'gimp','member_id'=>$id),get_module_zone('cms_galleries')),do_lang('ADD_GALLERY'));
+			$special_links[]=array('menu/rich_content/galleries',array('cms_galleries',array('type'=>'gimp','member_id'=>$id),get_module_zone('cms_galleries')),do_lang('ADD_GALLERY'));
 		}
 
 		require_code('templates_donext');
 		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
 			NULL,
 			NULL,
-			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-			/*	 page	 params				  zone	  */
-			array('_SELF',array('type'=>'misc'),'_SELF'),								 // Add one
+			/* TYPED-ORDERED LIST OF 'LINKS'	 */
+			array('_SELF',array('type'=>'misc'),'_SELF'), // Add one
 			NULL,// Edit this
-			NULL,																						// Edit one
-			array('members',array('type'=>'view','id'=>$id),get_module_zone('members')),		 // View this
-			array('members',array('type'=>'misc'),get_module_zone('members'),do_lang_tempcode('MEMBERS')),				// View archive
-			NULL,						// Add to category
-			NULL,							 // Add one category
-			NULL,							 // Edit one category
-			NULL,  // Edit this category
-			NULL,						// View this category
-			/*	  SPECIALLY TYPED 'LINKS'				  */
+			NULL, // Edit one
+			array('members',array('type'=>'view','id'=>$id),get_module_zone('members')), // View this
+			array('members',array('type'=>'misc'),get_module_zone('members'),do_lang_tempcode('MEMBERS')), // View archive
+			NULL, // Add to category
+			NULL, // Add one category
+			NULL, // Edit one category
+			NULL, // Edit this category
+			NULL, // View this category
+			/* SPECIALLY TYPED 'LINKS' */
 			$special_links,
 			NULL,
 			NULL,

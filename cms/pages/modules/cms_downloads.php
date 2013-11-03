@@ -44,11 +44,27 @@ class Module_cms_downloads extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_DOWNLOADS')+(has_privilege(get_member(),'mass_import','cms_downloads')?array('import'=>'FTP_DOWNLOADS','import2'=>'FILESYSTEM_DOWNLOADS'):array()),parent::get_entry_points());
+		$ret=array(
+			'misc'=>'MANAGE_DOWNLOADS',
+			'av'=>array('ADD_DOWNLOAD_LICENCE','menu/cms/downloads/add_one_licence'),
+			'ev'=>array('EDIT_DOWNLOAD_LICENCE','menu/cms/downloads/edit_one_licence'),
+		);
+
+		if (has_privilege(get_member(),'mass_import','cms_downloads'))
+		{
+			if (function_exists('ftp_connect'))
+				$ret['import']=array('FTP_DOWNLOADS','menu/_generic_admin/import');
+
+			$ret['import2']=array('FILESYSTEM_DOWNLOADS','menu/_generic_admin/import');
+		}
+
+		$ret=array_merge(parent::get_entry_points(),$ret);
+
+		return $ret;
 	}
 
 	/**
@@ -85,7 +101,6 @@ class Module_cms_downloads extends standard_crud_module
 		inform_non_canonical_parameter('validated');
 		inform_non_canonical_parameter('cat');
 
-		set_helper_panel_pic('pagepics/downloads');
 		set_helper_panel_tutorial('tut_downloads');
 
 		if ($type=='import' || $type=='_import')
@@ -156,15 +171,14 @@ class Module_cms_downloads extends standard_crud_module
 		require_code('fields');
 		return do_next_manager(get_screen_title('MANAGE_DOWNLOADS'),comcode_lang_string('DOC_DOWNLOADS'),
 			array_merge(array(
-				/*	 type							  page	 params													 zone	  */
-				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_DOWNLOAD_CATEGORY')):NULL,
-				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_DOWNLOAD_CATEGORY')):NULL,
-				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
-				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL,
-				has_privilege(get_member(),'mass_import')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL,
-				has_privilege(get_member(),'mass_import')?array('import',array('_SELF',array('type'=>'import2'),'_SELF'),do_lang('LOAD_FILESYSTEM_FILES')):NULL,
-				has_privilege(get_member(),'submit_midrange_content','cms_downloads')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DOWNLOAD')):NULL,
-				has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DOWNLOAD')):NULL,
+				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('menu/_generic_admin/add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_DOWNLOAD_CATEGORY')):NULL,
+				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('menu/_generic_admin/edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_DOWNLOAD_CATEGORY')):NULL,
+				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
+				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL,
+				has_privilege(get_member(),'mass_import')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL,
+				has_privilege(get_member(),'mass_import')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'import2'),'_SELF'),do_lang('LOAD_FILESYSTEM_FILES')):NULL,
+				has_privilege(get_member(),'submit_midrange_content','cms_downloads')?array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DOWNLOAD')):NULL,
+				has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DOWNLOAD')):NULL,
 			),manage_custom_fields_donext_link('download'),manage_custom_fields_donext_link('download_category')),
 			do_lang('MANAGE_DOWNLOADS')
 		);
@@ -910,7 +924,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 		$parent_id=post_param_integer('parent_id');
 		$description=post_param('description');
 		$notes=post_param('notes','');
-		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
+		$urls=get_url('image_url','rep_image','uploads/repimages',0,OCP_UPLOAD_IMAGE);
 		$rep_image=$urls[0];
 
 		$meta_data=actual_meta_data_get_fields('download_category',NULL);
@@ -940,7 +954,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 		$notes=post_param('notes',STRING_MAGIC_NULL);
 		if (!fractional_edit())
 		{
-			$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
+			$urls=get_url('image_url','rep_image','uploads/repimages',0,OCP_UPLOAD_IMAGE);
 			$rep_image=$urls[0];
 			if (($rep_image=='') && (post_param_integer('rep_image_unlink',0)!=1)) $rep_image=NULL;
 		} else $rep_image=STRING_MAGIC_NULL;
@@ -1003,26 +1017,23 @@ class Module_cms_downloads_cat extends standard_crud_module
 			return do_next_manager($title,$description,
 				NULL,
 				NULL,
-				/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-				/*	 page	 params				  zone	  */
-				array('_SELF',array('type'=>'ad'),'_SELF'),							// Add one
-				NULL,							 // Edit this
-				has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
-				NULL,							// View this
-				array('downloads',array('type'=>'misc'),get_module_zone('downloads')),									 // View archive
-				NULL,	  // Add to category
-				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
-				NULL,			 // Edit this category
-				NULL,																						 // View this category
-				/*	  SPECIALLY TYPED 'LINKS'				  */
+				/* TYPED-ORDERED LIST OF 'LINKS'	 */
+				array('_SELF',array('type'=>'ad'),'_SELF'), // Add one
+				NULL, // Edit this
+				has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL, // Edit one
+				NULL, // View this
+				array('downloads',array('type'=>'misc'),get_module_zone('downloads')), // View archive
+				NULL, // Add to category
+				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL, // Add one category
+				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL, // Edit one category
+				NULL, // Edit this category
+				NULL, // View this category
+				/* SPECIALLY TYPED 'LINKS' */
 				array(
-					/*	 type							  page	 params													 zone	  */
 					has_privilege(get_member(),'mass_import','cms_downloads')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL,
 				),
 				array(),
 				array(
-					/*	 type							  page	 params													 zone	  */
 					has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
 					has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL
 				),
@@ -1041,25 +1052,23 @@ class Module_cms_downloads_cat extends standard_crud_module
 		return do_next_manager($title,$description,
 			NULL,
 			NULL,
-			/*		TYPED-ORDERED LIST OF 'LINKS'		*/
-			/*	 page	 params				  zone	  */
-			is_null($id)?NULL:array('_SELF',array('type'=>'ad','cat'=>$category_id),'_SELF'),											// Add one
-			(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_downloads',array('downloads',$category_id))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
-			has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
-			is_null($id)?NULL:array('downloads',array('type'=>'entry','id'=>$id),get_module_zone('downloads')),						  // View this
-			array('downloads',array('type'=>'misc'),get_module_zone('downloads')),									 // View archive
-			(!is_null($id))?NULL:array('_SELF',array('type'=>'ad','cat'=>$category_id),'_SELF'),	  // Add to category
-			has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,				// Add one category
-			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,				// Edit one category
-			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'_ec','id'=>$category_id),'_SELF'):NULL,			// Edit this category
-			array('downloads',array('type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id),get_module_zone('downloads')),	// View this category
-			/*	  SPECIALLY TYPED 'LINKS'				  */
+			/* TYPED-ORDERED LIST OF 'LINKS'	 */
+			is_null($id)?NULL:array('_SELF',array('type'=>'ad','cat'=>$category_id),'_SELF'), // Add one
+			(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_downloads',array('downloads',$category_id))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'), // Edit this
+			has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL, // Edit one
+			is_null($id)?NULL:array('downloads',array('type'=>'entry','id'=>$id),get_module_zone('downloads')), // View this
+			array('downloads',array('type'=>'misc'),get_module_zone('downloads')), // View archive
+			(!is_null($id))?NULL:array('_SELF',array('type'=>'ad','cat'=>$category_id),'_SELF'), // Add to category
+			has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL, // Add one category
+			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL, // Edit one category
+			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'_ec','id'=>$category_id),'_SELF'):NULL, // Edit this category
+			array('downloads',array('type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id),get_module_zone('downloads')), // View this category
+			/* SPECIALLY TYPED 'LINKS' */
 			$special_links,
 			array(),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
-				has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL
+				has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
+				has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL
 			),
 			do_lang('LICENCES')
 		);

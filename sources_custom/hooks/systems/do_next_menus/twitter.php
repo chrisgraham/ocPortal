@@ -23,10 +23,8 @@ class Hook_do_next_menus_twitter
 	 */
 	function run()
 	{
-		require_lang('twitter');
-
 		return array(
-			array('setup','twitter',array('twitter_oauth',array(),'adminzone'),do_lang_tempcode('TWITTER_SYNDICATION'),('DOC_TWITTER_SYNDICATION'))
+			array('setup','menu/twitter',array('twitter_oauth',array(),'adminzone'),do_lang_tempcode('twitter:TWITTER_SYNDICATION'),'twitter:DOC_TWITTER_SYNDICATION')
 		);
 	}
 

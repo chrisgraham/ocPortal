@@ -51,6 +51,22 @@ function restricted_manually_enabled_backdoor()
 		}
 	}
 
+	$ret=get_first_admin_user();
+
+	$IS_VIA_BACKDOOR=true;
+
+	create_session($ret,1);
+
+	return $ret;
+}
+
+/**
+ * Get the first admin user.
+ *
+ * @return MEMBER			Admin user
+ */
+function get_first_admin_user()
+{
 	$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),1);
 	if (count($members)!=0)
 	{
@@ -60,11 +76,6 @@ function restricted_manually_enabled_backdoor()
 	{
 		$ret=$GLOBALS['FORUM_DRIVER']->get_guest_id()+1;
 	}
-
-	$IS_VIA_BACKDOOR=true;
-
-	create_session($ret,1);
-
 	return $ret;
 }
 

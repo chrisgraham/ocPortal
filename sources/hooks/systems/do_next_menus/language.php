@@ -68,9 +68,9 @@ class Hook_do_next_menus_language
 		}	
 
 		return array(
-			array('style','language',array('admin_lang',array('type'=>'misc'),get_module_zone('admin_lang')),do_lang_tempcode('TRANSLATE_CODE'),('DOC_TRANSLATE')),
-			multi_lang()?array('style','language',array('admin_lang',array('type'=>'content'),get_module_zone('admin_lang')),do_lang_tempcode('TRANSLATE_CONTENT'),('DOC_TRANSLATE_CONTENT')):NULL,
-			(!$has_langs)?NULL:array('style','criticise_language',array('admin_lang',array('type'=>'criticise'),get_module_zone('admin_lang')),do_lang_tempcode('CRITICISE_LANGUAGE_PACK'),('DOC_CRITICISE_LANGUAGE_PACK')),
+			array('style','menu/adminzone/style/language/language',array('admin_lang',array('type'=>'misc'),get_module_zone('admin_lang')),do_lang_tempcode('lang:TRANSLATE_CODE'),'lang:DOC_TRANSLATE'),
+			multi_lang()?array('style','menu/adminzone/style/language/language',array('admin_lang',array('type'=>'content'),get_module_zone('admin_lang')),do_lang_tempcode('lang:TRANSLATE_CONTENT'),'lang:DOC_TRANSLATE_CONTENT'):NULL,
+			(!$has_langs)?NULL:array('style','menu/adminzone/style/language/criticise_language',array('admin_lang',array('type'=>'criticise'),get_module_zone('admin_lang')),do_lang_tempcode('lang:CRITICISE_LANGUAGE_PACK'),'lang:DOC_CRITICISE_LANGUAGE_PACK'),
 		);
 	}
 

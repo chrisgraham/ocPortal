@@ -23,10 +23,8 @@ class Hook_do_next_menus_installprofile_generator
 	 */
 	function run()
 	{
-		require_lang('facebook');
-
 		return array(
-			array('setup','admin_home',array('installprofile_generator',array(),'adminzone'),'Export installprofile')
+			array('setup','menu/_generic_admin/tool',array('installprofile_generator',array(),'adminzone'),'Export installprofile')
 		);
 	}
 

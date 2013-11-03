@@ -36,8 +36,7 @@ function adminzone_special_cases($codename)
 	}
 	elseif (($codename=='netlink') && (get_page_name()=='netlink'))
 	{
-		set_helper_panel_pic('pagepics/multisitenetworking');
-		set_helper_panel_text(comcode_lang_string('DOC_NETLINK'));
+		set_helper_panel_text(comcode_lang_string('menus:DOC_NETLINK'));
 		set_helper_panel_tutorial('tut_msn');
 	}
 */

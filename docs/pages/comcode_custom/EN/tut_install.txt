@@ -129,7 +129,7 @@ Set the following to [b]777[/b]: (full directory permissions)
  - uploads/filedump
  - uploads/galleries
  - uploads/galleries_thumbs
- - uploads/grepimages
+ - uploads/repimages
  - uploads/incoming
  - uploads/ocf_avatars
  - uploads/ocf_cpf_upload

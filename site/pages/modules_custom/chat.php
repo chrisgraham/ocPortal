@@ -11,6 +11,18 @@ class Mx_chat extends Module_chat
 {
 
 	/**
+	 * Standard modular entry-point finder function.
+	 *
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 */
+	function get_entry_points($check_perms=true,$member_id=NULL)
+	{
+		return array('misc'=>'CHAT_LOBBY');
+	}
+
+	/**
 	 * Standard modular run function.
 	 *
 	 * @return tempcode	The result of execution.

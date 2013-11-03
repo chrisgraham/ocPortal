@@ -106,12 +106,7 @@ class Hook_addon_registry_search
 			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl',
 			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl',
 			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl',
-			'themes/default/templates/SEARCH_SAVED_DELETION_BUTTON.tpl',
-			'themes/default/templates/SEARCH_SAVED_SCREEN.tpl',
-			'themes/default/templates/SEARCH_SAVED_RUN_BUTTON.tpl',
 			'themes/default/css/search.css',
-			'themes/default/images/bigicons/searchstats.png',
-			'themes/default/images/EN/page/search.png',
 			'lang/EN/search.ini',
 			'site/pages/modules/search.php',
 			'sources/blocks/main_search.php',
@@ -122,6 +117,7 @@ class Hook_addon_registry_search
 			'data/opensearch.php',
 			'sources/hooks/systems/config/search_results_per_page.php',
 			'sources/hooks/systems/config/enable_boolean_search.php',
+			'sources/hooks/systems/do_next_menus/search.php',
 		);
 	}
 
@@ -138,9 +134,6 @@ class Hook_addon_registry_search
 			'BLOCK_SIDE_TAG_CLOUD.tpl'=>'block_side_tag_cloud',
 			'TAGS.tpl'=>'tags',
 			'OPENSEARCH.tpl'=>'opensearch',
-			'SEARCH_SAVED_DELETION_BUTTON.tpl'=>'search_saved_screen',
-			'SEARCH_SAVED_RUN_BUTTON.tpl'=>'search_saved_screen',
-			'SEARCH_SAVED_SCREEN.tpl'=>'search_saved_screen',
 			'SEARCH_RESULT.tpl'=>'search_form_screen',
 			'SEARCH_RESULT_TABLE.tpl'=>'search_form_screen',
 			'SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl'=>'search_form_screen',
@@ -255,84 +248,6 @@ class Hook_addon_registry_search
 			lorem_globalise(do_lorem_template('OPENSEARCH',array(
 				'DESCRIPTION'=>lorem_paragraph()
 			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__search_saved_screen()
-	{
-		$entries=new ocp_tempcode();
-
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$deletion_button=do_lorem_template('SEARCH_SAVED_DELETION_BUTTON',array(
-				'NAME'=>lorem_phrase(),
-				'URL'=>placeholder_url(),
-				'ID'=>placeholder_random()
-			));
-			$run_button=do_lorem_template('SEARCH_SAVED_RUN_BUTTON',array(
-				'NAME'=>lorem_phrase(),
-				'URL'=>placeholder_url(),
-				'HIDDEN'=>''
-			));
-
-			$cells=new ocp_tempcode();
-
-			$entry_data=array(
-				'Title'=>lorem_word(),
-				'Date'=>placeholder_date(),
-				'Delete'=>$deletion_button,
-				'Run search'=>$run_button
-			);
-
-			foreach ($entry_data as $_k=>$_v)
-			{
-				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
-					'VALUE'=>$_v
-				)));
-			}
-			$entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array(
-				'VALUES'=>$cells
-			)));
-		}
-
-		$fields_title=new ocp_tempcode();
-		foreach (array(
-			'Title',
-			'Date',
-			'Delete',
-			'Run search'
-		) as $k=>$v)
-		{
-			$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
-				'VALUE'=>$v
-			)));
-		}
-
-		$results_table=do_lorem_template('RESULTS_TABLE',array(
-			'WIDTHS'=>array(),
-			'TEXT_ID'=>lorem_phrase(),
-			'FIELDS_TITLE'=>$fields_title,
-			'FIELDS'=>$entries,
-			'MESSAGE'=>new ocp_tempcode(),
-			'SORT'=>'',
-			'PAGINATION'=>new ocp_tempcode()
-		));
-
-		$saved_search_screen=do_lorem_template('SEARCH_SAVED_SCREEN',array(
-			'TITLE'=>lorem_title(),
-			'SEARCHES'=>placeholder_table(),
-			'URL'=>placeholder_url()
-		));
-
-		return array(
-			lorem_globalise($saved_search_screen, NULL, '', true)
 		);
 	}
 

@@ -62,6 +62,7 @@ class Hook_occle_command_find_entry_points
 								$_entry_points=$object->get_entry_points();
 								foreach ($_entry_points as $key=>$val)
 								{
+									if (!is_string($val)) $val=$val[0];
 									$entry_points[$zone.':'.$page.':'.$key]=do_lang($val);
 								}
 							}

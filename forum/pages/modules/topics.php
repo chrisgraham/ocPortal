@@ -44,11 +44,19 @@ class Module_topics
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
-		return is_guest()?array():array('new_pt'=>'ADD_PRIVATE_TOPIC');
+		if ($check_perms && is_guest($member_id))
+		{
+			return array();
+		}
+		return array(
+			'new_pt'=>array('ADD_PRIVATE_TOPIC','buttons/new_topic'),
+		);
 	}
 
 	/**

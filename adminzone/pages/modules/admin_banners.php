@@ -44,7 +44,7 @@ class Module_admin_banners
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -82,7 +82,7 @@ class Module_admin_banners
 	 */
 	function run()
 	{
-		require_all_lang();
+		require_lang('banners');
 
 		$type=get_param('type','misc');
 

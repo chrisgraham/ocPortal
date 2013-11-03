@@ -44,7 +44,7 @@ class Module_admin_lookup
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -65,7 +65,6 @@ class Module_admin_lookup
 
 		require_lang('lookup');
 
-		set_helper_panel_pic('pagepics/investigateuser');
 		set_helper_panel_tutorial('tut_trace');
 
 		if (addon_installed('securitylogging'))
@@ -228,8 +227,8 @@ class Module_admin_lookup
 			$profile_url=(is_guest($id))?NULL:$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 			if (addon_installed('actionlog'))
 			{
-				$action_log_url=(is_guest($id))?NULL:build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$id),get_module_zone('admin_actionlog'));
-			} else $action_log_url=NULL;
+				$actionlog_url=(is_guest($id))?NULL:build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$id),get_module_zone('admin_actionlog'));
+			} else $actionlog_url=NULL;
 
 			$alerts=($ip=='')?new ocp_tempcode():find_security_alerts(array('ip'=>$ip));
 
@@ -253,15 +252,15 @@ class Module_admin_lookup
 			{
 				if (((get_forum_type()=='ocf') && (!is_guest($id))) && ($id!=get_member()))
 				{
-					$member_ban_link=do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'840c361ab217959f8b85141497e6e6a6','URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_member_ban','id'=>$id,'redirect'=>get_self_url(true)),get_module_zone('admin_actionlog'))));
+					$member_ban_link=do_template('ACTIONLOGS_TOGGLE_LINK',array('_GUID'=>'840c361ab217959f8b85141497e6e6a6','URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_member_ban','id'=>$id,'redirect'=>get_self_url(true)),get_module_zone('admin_actionlog'))));
 				}
 				if (($ip!='') && ($ip!=get_ip_address()))
 				{
-					$ip_ban_link=do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'76979d80cdd7d3e664c9a4ec04419bc6','URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_ip_ban','id'=>$ip),get_module_zone('admin_actionlog'))));
+					$ip_ban_link=do_template('ACTIONLOGS_TOGGLE_LINK',array('_GUID'=>'76979d80cdd7d3e664c9a4ec04419bc6','URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_ip_ban','id'=>$ip),get_module_zone('admin_actionlog'))));
 				}
 				if ((!is_guest($id)) && ($id!=get_member()))
 				{
-					$submitter_ban_link=do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'03834262af908bf78c4eef69e78c8cff','URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_submitter_ban','id'=>$id,'redirect'=>get_self_url(true)),get_module_zone('admin_actionlog'))));
+					$submitter_ban_link=do_template('ACTIONLOGS_TOGGLE_LINK',array('_GUID'=>'03834262af908bf78c4eef69e78c8cff','URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_submitter_ban','id'=>$id,'redirect'=>get_self_url(true)),get_module_zone('admin_actionlog'))));
 				}
 			}
 
@@ -286,7 +285,7 @@ class Module_admin_lookup
 					'AUTHOR_URL'=>$author_url,
 					'POINTS_URL'=>$points_url,
 					'PROFILE_URL'=>$profile_url,
-					'ACTION_LOG_URL'=>$action_log_url
+					'ACTIONLOG_URL'=>$actionlog_url
 				)
 			);
 

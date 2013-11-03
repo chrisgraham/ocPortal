@@ -67,7 +67,7 @@ The Point Store provides a number of products/services that members can access u
  - topic pinning
 [surround]
 [media width="150" description="Configuring the Point Store" float="right"]data_custom/images/docs/points_pointstore_config.png[/media]
-{!pointstore:DOC_POINT_STORE}
+{!pointstore:DOC_POINTSTORE}
 [/surround]
 [surround]
 [media width="150" description="Configuring the Point Store's prices" float="right"]data_custom/images/docs/points_prices.png[/media]
@@ -197,7 +197,7 @@ Note that rank changes are triggered by actions. Someone will not go up in rank 
 
 [title="2"]The leader-board[/title]
 [surround]
-[media width="150" description="The points leader-board" float="right"]data_custom/images/docs/points_leaderboard.png[/media]
+[media width="150" description="The points leader-board" float="right"]data_custom/images/docs/points_leader_board.png[/media]
 The leader-board is a block, and corresponding archive viewing module, for the displaying of the top point holders for a week. Like rank, this is another incentive for members to earn points.
 
 Please be aware that the leader-board is not entirely accurate, as it actually only calculates the point count of top post count holders, and orders according to this; the reason for this is that, as explained earlier, point count is not actually stored, and calculating it for all members simultaneously would not be efficient. This is unlikely to be noticed, however, because more post count holders are chosen for point calculation than point holders shown, hence a buffer zone exists to reduce the chance of error.

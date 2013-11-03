@@ -30,7 +30,7 @@ class Hook_do_next_menus_custom_comcode
 	function run()
 	{
 		return array(
-			array('setup','custom-comcode',array('admin_custom_comcode',array('type'=>'misc'),get_module_zone('admin_custom_comcode')),do_lang_tempcode('CUSTOM_COMCODE'),('DOC_CUSTOM_COMCODE')),
+			array('setup','menu/adminzone/setup/custom_comcode',array('admin_custom_comcode',array('type'=>'misc'),get_module_zone('admin_custom_comcode')),do_lang_tempcode('custom_comcode:CUSTOM_COMCODE'),'custom_comcode:DOC_CUSTOM_COMCODE'),
 		);
 	}
 

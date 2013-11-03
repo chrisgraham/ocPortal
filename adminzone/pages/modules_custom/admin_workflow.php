@@ -118,7 +118,7 @@ class Module_admin_workflow extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -142,8 +142,7 @@ class Module_admin_workflow extends standard_crud_module
 
 		require_lang('workflows');
 
-		// TODO: Add pic & tutorial
-		//set_helper_panel_pic('pagepics/workflow');
+		// TODO: Add tutorial
 		//set_helper_panel_tutorial('tut_workflow');
 
 		if ($type=='_ad')
@@ -237,9 +236,8 @@ class Module_admin_workflow extends standard_crud_module
 		require_lang('workflows');
 		return do_next_manager(get_screen_title('MANAGE_WORKFLOWS'),comcode_to_tempcode(do_lang('DOC_WORKFLOWS'),NULL,true),
 			array(
-				/*	 type							  page	 params													 zone	  */
-				array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
-				array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_WORKFLOW')),
+				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
+				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_WORKFLOW')),
 			),
 			do_lang('MANAGE_WORKFLOWS')
 		);
@@ -642,7 +640,7 @@ class Module_admin_workflow extends standard_crud_module
 
 		clear_ocp_autosave();
 
-//		if ($this->redirect_type=='!')
+		//if ($this->redirect_type=='!')
 		{
 			$url=get_param('redirect',NULL);
 			if (!is_null($url)) return redirect_screen($this->title,$url,$description);

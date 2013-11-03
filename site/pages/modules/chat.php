@@ -119,7 +119,7 @@ class Module_chat
 
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_chat',20,1,0,0,0,'','integer');
 
-			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc',0,0,true,'',0,'menu_items/community_navigation/chat');
+			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc',0,0,true,'',0,'icons/24x24/menu/social/chat/chat');
 
 			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($usergroups) as $id)
@@ -192,21 +192,52 @@ class Module_chat
 
 			$GLOBALS['SITE_DB']->alter_table_field('chat_messages','user_id','MEMBER','member_id');
 		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<12))
+		{
+			require_code('users_active_actions');
+			$admin_user=get_first_admin_user();
+
+			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+				'the_zone'=>'site',
+				'the_page'=>'userguide_chatcode',
+				'p_parent_page'=>'help',
+				'p_validated'=>1,
+				'p_edit_date'=>NULL,
+				'p_add_date'=>time(),
+				'p_submitter'=>$admin_user,
+				'p_show_as_edit'=>0
+			));
+
+			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+				'the_zone'=>'site',
+				'the_page'=>'popup_blockers',
+				'p_parent_page'=>'help',
+				'p_validated'=>1,
+				'p_edit_date'=>NULL,
+				'p_add_date'=>time(),
+				'p_submitter'=>$admin_user,
+				'p_show_as_edit'=>0
+			));
+		}
 	}
 
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL)
 	{
-		$ret=array('misc'=>'CHAT_LOBBY');
-		if (!is_guest())
+		$ret=array();
+		$ret['misc']='CHAT_LOBBY';
+		if (!$check_perms || !is_guest($member_id))
 		{
-			$ret['set_effects']='CHAT_SET_EFFECTS';
-			$ret['private']='CREATE_PRIVATE_ROOM';
-			$ret['blocking_interface']='MEMBER_BLOCKING';
+			$ret['set_effects']=array('CHAT_SET_EFFECTS','menu/social/chat/sounds');
+			$ret['private']=array('CREATE_PRIVATE_ROOM','menu/social/chat/chatroom_add');
+			$ret['blocking_interface']=array('MEMBER_BLOCKING','menu/social/chat/member_blocking');
 		}
 		return $ret;
 	}
