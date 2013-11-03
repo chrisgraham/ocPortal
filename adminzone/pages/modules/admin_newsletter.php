@@ -76,15 +76,21 @@ class Module_admin_newsletter extends standard_aed_module
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_NEWSLETTER');
 		$this->edit_one_label=do_lang_tempcode('EDIT_NEWSLETTER');
 
+		$this->add_text=do_lang_tempcode('HELP_ADD_NEWSLETTER',escape_html(static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'new'),'_SELF'))));
+
 		if ($type=='misc') return $this->misc();
+
 		if ($type=='import_subscribers') return $this->import_subscribers();
 		if ($type=='subscribers') return $this->view_subscribers();
+
+		if ($type=='whatsnew') return $this->automatic_whats_new();
+		if ($type=='new') return $this->send_gui();
 		if ($type=='confirm') return $this->confirm_send();
 		if ($type=='send') return $this->send_message();
-		if ($type=='whatsnew') return $this->automatic_whats_new();
+
 		if ($type=='archive') return $this->archive();
 		if ($type=='view') return $this->view();
-		if ($type=='new') return $this->send_gui();
+
 		if ($type=='bounce_filter_a') return $this->bounce_filter_a();
 		if ($type=='bounce_filter_b') return $this->bounce_filter_b();
 		if ($type=='bounce_filter_c') return $this->bounce_filter_c();
@@ -100,6 +106,12 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function misc()
 	{
+		$num_in_queue=$GLOBALS['SITE_DB']->query_value('newsletter_drip_send','COUNT(*)');
+		if ($num_in_queue>0)
+		{
+			attach_message(do_lang_tempcode('NEWSLETTER_DRIP_SEND_QUEUE',integer_format($num_in_queue)),'inform');
+		}
+
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_NEWSLETTER'),comcode_lang_string('DOC_NEWSLETTER'),
 					array_merge(array(
@@ -120,7 +132,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 * @param  ID_TEXT		The language
 	 * @return integer		The count
 	 */
-	function count_level($id,$level,$lang)
+	function _count_level($id,$level,$lang)
 	{
 		$map=array();
 		$map[strval($id)]=$level;
@@ -876,7 +888,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 		$in_full=(post_param_integer('in_full',0)==1);
 		$chosen_categories=post_param('chosen_categories');
-		$message=$this->generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
+		$message=$this->_generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
 
 		return $this->send_gui($message);
 	}
@@ -890,7 +902,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 * @param  TIME					When to cut off content from
 	 * @return tempcode				The Comcode, in template form
 	 */
-	function generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time)
+	function _generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time)
 	{
 		$_hooks=find_all_hooks('modules','admin_newsletter');
 
@@ -1079,7 +1091,7 @@ class Module_admin_newsletter extends standard_aed_module
 		} else
 		{
 			$default=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f44','CONTENT'=>$_existing,'LANG'=>$lang));
-			if (strpos($default->evaluate(),'<html')!==false) // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
+			if (strpos($default->evaluate(),'<html')!==false && strpos($_existing,'<html')===false) // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
 			{
 				if ($comcode_given)
 				{
@@ -1162,6 +1174,8 @@ class Module_admin_newsletter extends standard_aed_module
 			$_csv_data[]=array(do_lang('EMAIL_ADDRESS'),do_lang('NAME'),do_lang('NEWSLETTER_SEND_ID'));
 			foreach (array_keys($_POST) as $post_key)
 			{
+				if (!is_string($post_key)) $post_key=strval($post_key);
+
 				$matches=array();
 				if ((preg_match('#^result\_\_member_(\d+)$#',$post_key,$matches)!=0) && (post_param_integer($post_key,0)==1))
 				{
@@ -1185,11 +1199,11 @@ class Module_admin_newsletter extends standard_aed_module
 		{
 			$level=post_param_integer(strval($newsletter['id']),post_param_integer('level',-1));
 
-			$c4=$this->count_level($newsletter['id'],4,$lang);
-			$c3=$this->count_level($newsletter['id'],3,$lang);
-			$c2=$this->count_level($newsletter['id'],2,$lang);
-			$c1=$this->count_level($newsletter['id'],1,$lang);
-			if ($c1!=0)
+			$c4=$this->_count_level($newsletter['id'],4,$lang);
+			$c3=$this->_count_level($newsletter['id'],3,$lang);
+			$c2=$this->_count_level($newsletter['id'],2,$lang);
+			$c1=$this->_count_level($newsletter['id'],1,$lang);
+			//if ($c1!=0)	Actually, this just confuses people if we don't show it
 			{
 				$newsletter_title=get_translated_text($newsletter['title']);
 				$newsletter_description=get_translated_text($newsletter['description']);
@@ -1212,7 +1226,7 @@ class Module_admin_newsletter extends standard_aed_module
 		}
 		if (get_forum_type()=='ocf')
 		{
-			$c5=$this->count_level(-1,5,$lang);
+			$c5=$this->_count_level(-1,5,$lang);
 			$fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_OCF'),do_lang_tempcode('NUM_READERS',integer_format($c5)),'-1',false));
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 			foreach ($groups as $group_id=>$group)
@@ -1370,7 +1384,7 @@ class Module_admin_newsletter extends standard_aed_module
 			$extra_post_data['make_periodic']='1';
 
 			// Re-generate preview from latest chosen_categories
-			$message=$this->generate_whats_new_comcode(post_param('chosen_categories',''),$in_full,$lang,get_input_date('cutoff'));
+			$message=$this->_generate_whats_new_comcode(post_param('chosen_categories',''),$in_full,$lang,get_input_date('cutoff'));
 		}
 
 		$address=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());

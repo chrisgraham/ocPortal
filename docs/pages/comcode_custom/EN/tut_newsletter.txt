@@ -27,7 +27,7 @@ Newsletters are created using Comcode, and sent out in a dual format: both text 
 [box="Important note" width="25em" float="right"]You can use the WYSIWYG editor for making newsletters if you wish, but it is not advisable because plain-text readers will get some really ugly plain-text from it. If you make the newsletter using manual Comcode, the plain-text readers will see the Comcode, which is intrinsically easy to read.[/box]
 When you send a newsletter you choose where to send it. Usergroups/newsletters with no members (to be precise, no members that can receive emails) will not be shown as options.
 
-In order to change the newsletter appearance, to something more pleasing, you may wish to edit the [tt]NEWSLETTER_DEFAULT[/tt] template. This is a template that defines the default newsletter, and hence you may fill it with Comcode to surround your actual newsletter text, such as to format your newsletter mails in an attractive manner. Also, the US CAN-SPAM act and the UK-equivalent (and likely many other laws in various countries) require you to include a physical address in your mailings, so you should include this in the template. You also are likely to want to edit the [tt]MAIL_WRAP[/tt] template, which defines how e-mails generally look. You will almost certainly want to edit these templates within the default theme, because if you are sending newsletters from the Admin Zone almost certainly the default theme will be the active theme when the newsletters are generated.
+In order to change the newsletter appearance, to something more pleasing, you may wish to edit the [tt]NEWSLETTER_DEFAULT_FCOMCODE[/tt] template. This is a template that defines the default newsletter, and hence you may fill it with Comcode to surround your actual newsletter text, such as to format your newsletter mails in an attractive manner. Also, the US CAN-SPAM act and the UK-equivalent (and likely many other laws in various countries) require you to include a physical address in your mailings, so you should include this in the template. You also are likely to want to edit the [tt]MAIL_WRAP[/tt] template, which defines how e-mails generally look. You will almost certainly want to edit these templates within the default theme, because if you are sending newsletters from the Admin Zone almost certainly the default theme will be the active theme when the newsletters are generated.
 
 On the 'compose newsletter' screen there is a link to view newsletter subscribers. This will show all newsletter subscribers at all subscription levels.
 
@@ -68,7 +68,7 @@ Note that if you are using interest levels, each set of users with a different i
 
 Want to take things to the next level with your newsletters? You can create full HTML newsletters, with embedded unsubscribe links, using newsletter templating.
 
-Creating templated newsletters is best shown by example (this is the newsletter itself, fed into the field when you send the newsletter, or put inside the [tt]NEWSLETTER_DEFAULT[/tt] template that prepopulates that field):
+Creating templated newsletters is best shown by example (this is the newsletter itself, fed into the field when you send the newsletter, or put inside the [tt]NEWSLETTER_DEFAULT_FCOMCODE[/tt] template that prepopulates that field):
 [codebox]
 [semihtml]<html lang="{$LANG*}" dir="{!dir}">
 <head>
@@ -76,17 +76,17 @@ Creating templated newsletters is best shown by example (this is the newsletter 
 <title>{title*}</title>
 </head>
 <body>
-	<!-- Try and figure out the best greeting from the data available - we prefer to welcome people by forename but we might not have it-->
-	<p>Dear {+START,IF_NON_EMPTY,{forename}}{forename}{+END}{+START,IF_EMPTY,{forename}}{name}{+END},</p>
+	{$,Try and figure out the best greeting from the data available - we prefer to welcome people by forename but we might not have it}
+	<p>Dear \{+START,IF_NON_EMPTY,{forename}\}{forename}\{+END\}\{+START,IF_EMPTY,{forename}\}{name}\{+END\},</p>
 
-	<p>Your text goes here.</p>
+	{$PARAGRAPH,{$?,{$IS_EMPTY,{CONTENT}},Your text goes here.,{CONTENT}}}
 
-	{+START,IF_NON_EMPTY,{unsub_url}}
+	\{+START,IF_NON_EMPTY,{unsub_url}\}
 	<p>You're receiving this newsletter because you subscribed at some point. Not interested anymore? <a href="{unsub_url*}">Unsubscribe</a>.</p>
-	{+END}
-	{+START,IF_EMPTY,{unsub_url}}
+	\{+END\}
+	\{+START,IF_EMPTY,{unsub_url}\}
 	<p>You're receiving this e-mail because you are a member on {$SITE_NAME*}.</p>
-	{+END}
+	\{+END\}
 </body>
 </html>[/semihtml]
 [/codebox]

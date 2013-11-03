@@ -1,7 +1,7 @@
 {TITLE}
 
 <div class="ocf_whisper_lead_in">
-	<img src="{$IMG*,bigicons/subscribers}" alt="" class="right" />
+	<img src="{$IMG*,bigicons/addmember}" alt="" class="right" />
 
 	{+START,IF,{$HAS_PRIVILEGE,use_pt}}<p>{!WHISPER_TEXT}</p>{+END}
 </div>

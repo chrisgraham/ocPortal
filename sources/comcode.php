@@ -176,8 +176,9 @@ function comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap_
 	if ($semiparse_mode) $wrap_pos=100000;
 
 	$attachments=(count($_FILES)!=0);
-	foreach($_POST as $key=>$value)
+	foreach ($_POST as $key=>$value)
 	{
+		if (!is_string($key)) $key=strval($key);
 		if (preg_match('#^hidFileID\_#i',$key)!=0) $attachments=true;
 	}
 	if ((!$attachments || ($GLOBALS['IN_MINIKERNEL_VERSION']==1)) && (preg_match('#^[\w\d\-\_\(\) \.,:;/"\!\?]*$#'/*NB: No apostophes allowed in here, as they get changed by escape_html and can interfere then with apply_emoticons*/,$comcode)!=0) && (strpos($comcode,'  ')===false) && (strpos($comcode,'://')===false))
