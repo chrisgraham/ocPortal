@@ -100,7 +100,7 @@ class Module_cms_iotds extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_IOTDS'),parent::get_entry_points());
+		return array('misc'=>'MANAGE_IOTDS')+parent::get_entry_points();
 	}
 
 	/**

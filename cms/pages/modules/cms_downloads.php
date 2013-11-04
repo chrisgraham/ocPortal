@@ -48,6 +48,8 @@ class Module_cms_downloads extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
+		require_code('fields');
+
 		$ret=array(
 			'misc'=>'MANAGE_DOWNLOADS',
 			'av'=>array('ADD_DOWNLOAD_LICENCE','menu/cms/downloads/add_one_licence'),
@@ -62,7 +64,9 @@ class Module_cms_downloads extends standard_crud_module
 			$ret['import2']=array('FILESYSTEM_DOWNLOADS','menu/_generic_admin/import');
 		}
 
-		$ret=array_merge(parent::get_entry_points(),$ret);
+		$ret+=parent::get_entry_points();
+
+		$ret+=manage_custom_fields_entry_points('download')+manage_custom_fields_entry_points('download_category');
 
 		return $ret;
 	}

@@ -50,7 +50,8 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_NEWS'),parent::get_entry_points());
+		require_code('fields');
+		return array('misc'=>'MANAGE_NEWS')+parent::get_entry_points()+manage_custom_fields_entry_points('news');
 	}
 
 	/**

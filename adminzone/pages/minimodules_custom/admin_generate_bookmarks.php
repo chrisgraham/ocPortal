@@ -92,6 +92,7 @@ foreach ($zones2 as $z)
 				if ($entrypoints==array('!'))
 				{
 					$url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
+
 					$title=titleify($page);
 					if (substr($page_type,0,7)=='comcode')
 					{
@@ -139,9 +140,16 @@ foreach ($zones2 as $z)
 							$url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
 						} else
 						{
-							$url=build_url(array('page'=>$page,'type'=>$entrypoint),$zone,NULL,false,false,true);
+							if (strpos($entrypoint,':')!==false)
+							{
+								list($zone,$attributes,$hash)=page_link_decode($type);
+								$url=build_url($attributes,$zone,NULL,false,false,true,$hash);
+							} else
+							{
+								$url=build_url(array('page'=>$page,'type'=>$entrypoint),$zone,NULL,false,false,true);
+							}
 						}
-						$_entrypoints[$title]='<DT><A HREF="'.escape_html($url->evaluate()).'">'.do_lang($title).'</A>';
+						$_entrypoints[$title]='<DT><A HREF="'.escape_html($url->evaluate()).'">'.((preg_match('#^[A-Z\_]+$#',$title)==0)?$title:do_lang($title)).'</A>';
 					}
 					//ksort($_entrypoints);
 					$url=new ocp_tempcode();

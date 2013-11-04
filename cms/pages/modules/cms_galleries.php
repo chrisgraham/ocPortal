@@ -48,6 +48,8 @@ class Module_cms_galleries extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
+		require_code('fields');
+
 		$ret=array(
 			'misc'=>'MANAGE_GALLERIES',
 			'av'=>array('ADD_VIDEO','menu/_generic_admin/add_one'),
@@ -59,7 +61,9 @@ class Module_cms_galleries extends standard_crud_module
 			$ret['gimp']=array('GALLERY_IMPORT','menu/_generic_admin/import');
 		}
 
-		$ret=array_merge(parent::get_entry_points(),$ret);
+		$ret+=parent::get_entry_points();
+
+		$ret+=manage_custom_fields_entry_points('image')+manage_custom_fields_entry_points('video')+manage_custom_fields_entry_points('gallery');
 
 		return $ret;
 	}

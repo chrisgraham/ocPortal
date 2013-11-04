@@ -41,10 +41,10 @@ class Module_admin_chat extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array(
+		return array(
 			'misc'=>'MANAGE_CHATROOMS',
 			'delete_all'=>array('DELETE_ALL_ROOMS','menu/_generic_admin/delete'),
-		),parent::get_entry_points());
+		)+parent::get_entry_points();
 	}
 
 	var $title;

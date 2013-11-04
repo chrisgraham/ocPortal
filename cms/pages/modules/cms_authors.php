@@ -48,11 +48,12 @@ class Module_cms_authors
 	 */
 	function get_entry_points()
 	{
+		require_code('fields');
 		return array(
 			'misc'=>'AUTHOR_MANAGE',
 			'_ad'=>array('EDIT_MY_AUTHOR_PROFILE','menu/cms/author_set_own_profile'),
 			'ed'=>array('EDIT_MERGE_AUTHORS','menu/_generic_admin/edit_one'),
-		);
+		)+manage_custom_fields_entry_points('author');
 	}
 
 	/**

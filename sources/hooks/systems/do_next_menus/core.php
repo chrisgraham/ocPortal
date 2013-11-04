@@ -88,10 +88,10 @@ class Hook_do_next_menus_core
 			array('','menu/site_meta',array(NULL,array(),NULL)),do_lang_tempcode('menus:SITE_META')),
 			array('','menu/social',array(NULL,array(),NULL)),do_lang_tempcode('SECTION_SOCIAL')),
 
-			(get_comcode_zone('about')===NULL)?NULL:array('pages','menu/pages/about_us',array('about',array(),get_comcode_zone('about')),do_lang_tempcode('menus:ABOUT')),
-			(get_comcode_zone('keymap')===NULL || get_option('collapse_user_zones')=='1'/*If collapsed then will show as child page of help page*/)?NULL:array('pages','menu/pages/keymap',array('keymap',array(),get_comcode_zone('keymap')),do_lang_tempcode('KEYBOARD_MAP')),
-			(get_comcode_zone('privacy')===NULL || get_option('bottom_show_privacy_link')=='1')?NULL:array('pages','menu/pages/privacy_policy',array('privacy',array(),get_comcode_zone('privacy')),do_lang_tempcode('PRIVACY')),
-			(get_comcode_zone('rules')===NULL || get_option('bottom_show_rules_link')=='1')?NULL:array('pages','menu/pages/rules',array('rules',array(),get_comcode_zone('rules')),do_lang_tempcode('RULES')),
+			(get_comcode_zone('about')===NULL)?NULL:array('pages','menu/pages/about_us',array('about',array(),get_comcode_zone('site_meta')),do_lang_tempcode('menus:ABOUT')),
+			(get_comcode_zone('keymap')===NULL || get_option('collapse_user_zones')=='1'/*If collapsed then will show as child page of help page*/)?NULL:array('site_meta','menu/pages/keymap',array('keymap',array(),get_comcode_zone('keymap')),do_lang_tempcode('KEYBOARD_MAP')),
+			(get_comcode_zone('privacy')===NULL || get_option('bottom_show_privacy_link')=='1')?NULL:array('site_meta','menu/pages/privacy_policy',array('privacy',array(),get_comcode_zone('privacy')),do_lang_tempcode('PRIVACY')),
+			(get_comcode_zone('rules')===NULL || get_option('bottom_show_rules_link')=='1')?NULL:array('site_meta','menu/pages/rules',array('rules',array(),get_comcode_zone('rules')),do_lang_tempcode('RULES')),
 			(get_comcode_zone('feedback')===NULL || get_option('bottom_show_feedback_link')=='1')?NULL:array('site_meta','menu/site_meta/contact_us',array('feedback',array(),get_comcode_zone('feedback')),do_lang_tempcode('FEEDBACK')),
 			//(get_comcode_zone('sitemap')===NULL || get_option('bottom_show_sitemap_button')=='1')?NULL:array('site_meta','tool_buttons/sitemap',array('sitemap',array(),get_comcode_zone('sitemap')),do_lang_tempcode('SITEMAP')),	Redundant, menu itself is a sitemap
 			// userguide_comcode is child of help_page
@@ -104,6 +104,11 @@ class Hook_do_next_menus_core
 			(get_forum_type()=='ocf')?NULL:array('social','menu/social/groups',array('groups',array(),get_module_zone('groups')),do_lang_tempcode('ocf:USERGROUPS')),
 			(get_forum_type()=='ocf')?NULL:array('social','menu/social/members',array('members',array(),get_module_zone('members')),do_lang_tempcode('ocf:MEMBER_DIRECTORY')),
 			(get_forum_type()=='ocf')?NULL:array('social','menu/social/users_online',array('online_members',array(),get_module_zone('online_members')),do_lang_tempcode('USERS_ONLINE')),
+
+			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:get_forum_base_url(),
+			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),true),
+			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:$GLOBALS['FORUM_DRIVER']->join_url(),
+			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:$GLOBALS['FORUM_DRIVER']->online_members_url(),
 		);
 	}
 

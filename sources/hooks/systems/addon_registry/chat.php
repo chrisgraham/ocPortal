@@ -102,6 +102,8 @@ class Hook_addon_registry_chat
 			'themes/default/images/icons/48x48/menu/social/chat/member_blocking.png',
 			'themes/default/images/icons/24x24/tabs/member_account/friends.png',
 			'themes/default/images/icons/48x48/tabs/member_account/friends.png',
+			'themes/default/images/icons/24x24/menu/social/chat/sound.png',
+			'themes/default/images/icons/48x48/menu/social/chat/sound.png',
 			'themes/default/images/icons/24x24/menu/social/chat/index.html',
 			'themes/default/images/icons/48x48/menu/social/chat/index.html',
 			'sources/chat_shoutbox.php',

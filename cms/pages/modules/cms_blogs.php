@@ -51,10 +51,10 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array(
+		return array(
 			'misc'=>'MANAGE_BLOGS',
 			'import_wordpress'=>array('IMPORT_WORDPRESS','menu/_generic_admin/import'),
-		),parent::get_entry_points());
+		)+parent::get_entry_points();
 	}
 
 	var $title;

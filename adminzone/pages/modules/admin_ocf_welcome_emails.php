@@ -101,7 +101,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'WELCOME_EMAILS'),parent::get_entry_points());
+		return array('misc'=>'WELCOME_EMAILS')+parent::get_entry_points();
 	}
 
 	var $title;

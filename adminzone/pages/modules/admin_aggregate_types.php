@@ -87,10 +87,10 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return parent::get_entry_points()+array(
+		return array(
 			'xml'=>array('EDIT_AGGREGATE_TYPES','menu/_generic_admin/xml'),
 			'sync'=>array('SYNCHRONISE_AGGREGATE_TYPES','menu/_generic_admin/sync'),
-		);
+		)+parent::get_entry_points();
 	}
 
 	var $title;

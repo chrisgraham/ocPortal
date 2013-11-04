@@ -54,7 +54,9 @@ class Module_cms_catalogues extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		$ret=array_merge(parent::get_entry_points(),array(
+		require_code('fields');
+
+		$ret=array(
 			'misc'=>'MANAGE_CATALOGUES',
 			'import'=>array('IMPORT_CATALOGUE_ENTRIES','menu/_generic_admin/import_csv'),
 			'export'=>array('CATALOGUE_EXPORT','menu/_generic_admin/export_csv'),
@@ -64,7 +66,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 			'add_catalogue'=>array('ADD_CATALOGUE','menu/cms/catalogues/add_one_catalogue'),
 			'edit_catalogue'=>array('EDIT_CATALOGUE','menu/cms/catalogues/edit_one_catalogue'),
-		));
+		)+parent::get_entry_points()+manage_custom_fields_entry_points('catalogue')+manage_custom_fields_entry_points('catalogue_category');
 		unset($ret['ac']);
 		unset($ret['ec']);
 		unset($ret['av']);

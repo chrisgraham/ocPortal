@@ -479,7 +479,7 @@ class Module_admin
 							if (!file_exists(get_file_base().'/'.$path)) $path=zone_black_magic_filterer(filter_naughty($zone).'/pages/modules/'.filter_naughty($page).'.php',true);
 							if ((!HIPHOP_PHP) && ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') || (get_option('has_low_memory_limit')==='1')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_crud_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
 							{
-								$new_code=str_replace(',parent::get_entry_points()','',str_replace('parent::get_entry_points(),','',$_entrypoints[0]));
+								$new_code=str_replace('parent::get_entry_points()','array()',$_entrypoints[0]);
 								if (strpos($new_code,'parent::')!==false) continue;
 								$entry_points=eval($new_code);
 							} else
@@ -507,7 +507,7 @@ class Module_admin
 							if (!is_string($lang)) $lang=$lang[0];
 
 							$type=str_replace('!','',$type); // The ! was a hackerish thing just to multiply-up possibilities for the single entry-point
-							$n=do_lang_tempcode($lang);
+							$n=(preg_match('#^[A-Z\_]+$#',$val)==0)?make_string_tempcode($val):do_lang_tempcode($val);
 							if (($this->_keyword_match($n->evaluate())) && (has_actual_page_access(get_member(),$page,$zone)))
 							{
 								$breadcrumbs=new ocp_tempcode();
@@ -556,7 +556,14 @@ class Module_admin
 										$breadcrumbs->attach(hyperlink(build_url(array('page'=>$page),$zone),$page));
 									}
 								}
-								$_url=build_url(array('page'=>$page,'type'=>$type),$zone);
+								if (strpos($type,':')!==false)
+								{
+									list($zone,$attributes,$hash)=page_link_decode($type);
+									$_url=build_url($attributes,$zone,NULL,false,false,false,$hash);
+								} else
+								{
+									$_url=build_url(array('page'=>$page,'type'=>$type),$zone);
+								}
 								$sup=$breadcrumbs->is_empty()?NULL:do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 								$sitemap_editor_url=build_url(array('page'=>'admin_sitemap','type'=>'sitemap','id'=>$zone.':'.$page),'adminzone');
 								$permission_tree_editor_url=build_url(array('page'=>'admin_permissions','id'=>$zone.':'.$page),'adminzone');

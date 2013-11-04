@@ -49,7 +49,8 @@ class Module_cms_wiki
 	 */
 	function get_entry_points()
 	{
-		return array('add_page'=>'WIKI_ADD_PAGE');
+		require_code('fields');
+		return array('add_page'=>'WIKI_ADD_PAGE')+manage_custom_fields_entry_points('wiki_post')+manage_custom_fields_entry_points('wiki_page');
 	}
 
 	/**

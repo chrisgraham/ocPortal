@@ -46,7 +46,8 @@ class Module_admin_ocf_groups extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_USERGROUPS'),parent::get_entry_points());
+		require_code('fields');
+		return array('misc'=>'MANAGE_USERGROUPS')+parent::get_entry_points()+manage_custom_fields_entry_points('group');
 	}
 
 	var $title;

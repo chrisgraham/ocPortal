@@ -38,6 +38,17 @@ class Module_cms_polls extends standard_crud_module
 	var $title_is_multi_lang=true;
 	var $content_type='poll';
 
+	/**
+	 * Standard modular entry-point finder function.
+	 *
+	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 */
+	function get_entry_points()
+	{
+		require_code('fields');
+		return array('misc'=>'MANAGE_POLLS')+parent::get_entry_points()+manage_custom_fields_entry_points('poll');
+	}
+
 	var $title;
 
 	/**
@@ -77,16 +88,6 @@ class Module_cms_polls extends standard_crud_module
 		if ($type=='misc') return $this->misc();
 
 		return new ocp_tempcode();
-	}
-
-	/**
-	 * Standard modular entry-point finder function.
-	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
-	 */
-	function get_entry_points()
-	{
-		return array_merge(array('misc'=>'MANAGE_POLLS'),parent::get_entry_points());
 	}
 
 	/**

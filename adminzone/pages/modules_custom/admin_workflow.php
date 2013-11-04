@@ -122,8 +122,7 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		require_lang('workflows');
-		return array_merge(array('misc'=>'MANAGE_WORKFLOWS'),parent::get_entry_points());
+		return array('misc'=>'MANAGE_WORKFLOWS')+parent::get_entry_points();
 	}
 
 	var $title;

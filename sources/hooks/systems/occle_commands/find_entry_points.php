@@ -63,7 +63,16 @@ class Hook_occle_command_find_entry_points
 								foreach ($_entry_points as $key=>$val)
 								{
 									if (!is_string($val)) $val=$val[0];
-									$entry_points[$zone.':'.$page.':'.$key]=do_lang($val);
+
+									if (strpos($key,':')!==false)
+									{
+										$page_link=$key;
+									} else
+									{
+										$page_link=$zone.':'.$page.':'.$key;
+									}
+
+									$entry_points[$page_link]=(preg_match('#^[A-Z\_]+$#',$val)==0)?$val:do_lang($val);
 								}
 							}
 						}

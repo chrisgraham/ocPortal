@@ -166,7 +166,7 @@ class Module_cms_banners extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_BANNERS'),parent::get_entry_points());
+		return array('misc'=>'MANAGE_BANNERS')+parent::get_entry_points();
 	}
 
 	/**

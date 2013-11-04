@@ -319,7 +319,7 @@ ocPortal uses boxes to show featured areas, including featured content and categ
 
 The rest of this section will focus on how the content API uses boxes...
 
-Almost every kind of content (and category) has an award hook defined. That award hook will specify how a box of that content (or category) will be rendered. The convention is that the award hooks glue themselves to the [tt]render_<content-type>_box[/tt] functions, which glue themselves to particular templates.
+Almost every kind of content (and category) has an content type hook defined. That content type hook will specify how a box of that content (or category) will be rendered. The convention is that the content type hooks glue themselves to the [tt]render_<content-type>_box[/tt] functions, which glue themselves to particular templates.
 
 So, how do the templates work? Any content type will probably have two main templates used to display it:
  - A box template ([tt]<content_type>_BOX.tpl[/tt]) [what we are discussing here]

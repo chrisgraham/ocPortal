@@ -80,7 +80,7 @@ function get_fields_hook($type)
 /**
  * Get extra do-next icon for managing custom fields for a content type.
  *
- * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content type hook codename
  * @return array			Extra do-next icon (single item array, or empty array if catalogues not installed)
  */
 function manage_custom_fields_donext_link($content_type)
@@ -98,7 +98,39 @@ function manage_custom_fields_donext_link($content_type)
 			$exists=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'_'.$content_type)));
 
 			return array(
-				array('edit_one_catalogue',array('cms_catalogues',array('type'=>$exists?'_edit_catalogue':'add_catalogue','id'=>'_'.$content_type,'redirect'=>get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',do_lang($info['content_type_label']))),
+				array('menu/cms/catalogues/edit_one_catalogue',array('cms_catalogues',array('type'=>$exists?'_edit_catalogue':'add_catalogue','id'=>'_'.$content_type,'redirect'=>get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',do_lang($info['content_type_label']))),
+			);
+		}
+	}
+
+	return array();
+}
+
+/**
+ * Get extra entry point data for managing custom fields for a content type.
+ *
+ * @param  ID_TEXT		Content type hook codename
+ * @return array			Extra get_entry_points data
+ */
+function manage_custom_fields_entry_points($content_type)
+{
+	if (addon_installed('catalogues'))
+	{
+		require_lang('fields');
+
+		require_code('content');
+		$ob=get_content_object($content_type);
+		$info=$ob->info();
+
+		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']) && (has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')) && (has_privilege(get_member(),'edit_cat_highrange_content','cms_catalogues')))
+		{
+			$exists=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'_'.$content_type)));
+
+			return array(
+				'_SEARCH:cms_catalogues:'.($exists?'_edit_catalogue':'add_catalogue').':_'.$content_type=>array(
+					do_lang('EDIT_CUSTOM_FIELDS',do_lang($info['content_type_label'])),
+					'menu/cms/catalogues/edit_one_catalogue'
+				),
 			);
 		}
 	}
@@ -109,7 +141,7 @@ function manage_custom_fields_donext_link($content_type)
 /**
  * Find whether a content type has a tied catalogue.
  *
- * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content type hook codename
  * @return boolean		Whether it has
  */
 function has_tied_catalogue($content_type)
@@ -142,7 +174,7 @@ function has_tied_catalogue($content_type)
 /**
  * Get catalogue entry ID bound to a content entry.
  *
- * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content type hook codename
  * @param  ID_TEXT		Content entry ID
  * @return ?AUTO_LINK	Bound catalogue entry ID (NULL: none)
  */
@@ -157,7 +189,7 @@ function get_bound_content_entry($content_type,$id)
 /**
  * Append fields to content add/edit form for gathering custom fields.
  *
- * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content type hook codename
  * @param  ?ID_TEXT		Content entry ID (NULL: new entry)
  * @param  tempcode		Fields (passed by reference)
  * @param  tempcode		Hidden Fields (passed by reference)
@@ -250,7 +282,7 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$field_fi
 /**
  * Save custom fields to a content item.
  *
- * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content type hook codename
  * @param  ID_TEXT		Content entry ID
  */
 function save_form_custom_fields($content_type,$id)
@@ -298,7 +330,7 @@ function save_form_custom_fields($content_type,$id)
 /**
  * Delete custom fields for content item.
  *
- * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content type hook codename
  * @param  ID_TEXT		Content entry ID
  */
 function delete_form_custom_fields($content_type,$id)
@@ -349,7 +381,7 @@ function create_selection_list_field_type($type='',$limit_to_storage_set=false)
 		do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','upload_multi','picture','picture_multi','video','video_multi','url','url_multi','page_link','theme_image','theme_image_multi',
 		do_lang_tempcode('FIELD_TYPES__MAGIC'),'auto_increment','random','guid',
 		do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference','reference_multi','content_link','content_link_multi','member','member_multi','author',
-//			do_lang_tempcode('FIELD_TYPES__OTHER'),'date',			Will go under OTHER automatically
+		//do_lang_tempcode('FIELD_TYPES__OTHER'),'date',			Will go under OTHER automatically
 	);
 	$_types=array();
 	$done_one_in_section=true;

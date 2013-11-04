@@ -42,7 +42,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'EMOTICONS'),parent::get_entry_points());
+		return array('misc'=>'EMOTICONS')+parent::get_entry_points();
 	}
 
 	var $title;

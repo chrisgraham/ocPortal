@@ -42,7 +42,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'POST_TEMPLATES'),parent::get_entry_points());
+		return array('misc'=>'POST_TEMPLATES')+parent::get_entry_points();
 	}
 
 	var $title;

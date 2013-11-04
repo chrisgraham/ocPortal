@@ -46,7 +46,8 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_FORUMS'),parent::get_entry_points());
+		require_code('fields');
+		return array('misc'=>'MANAGE_FORUMS')+parent::get_entry_points()+manage_custom_fields_donext_link('post'),manage_custom_fields_entry_points('topic')+manage_custom_fields_entry_points('forum');
 	}
 
 	var $title;

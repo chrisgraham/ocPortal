@@ -32,7 +32,7 @@ class Hook_do_next_menus_help_page
 		if (!addon_installed('help_page')) return array();
 
 		return array(
-			array('pages','menu/pages/help',array('help',array(),get_comcode_zone('help')),do_lang_tempcode('HELP')),
+			array('site_meta','menu/pages/help',array('help',array(),get_comcode_zone('help')),do_lang_tempcode('HELP')),
 		);
 	}
 

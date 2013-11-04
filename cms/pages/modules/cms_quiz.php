@@ -59,7 +59,8 @@ class Module_cms_quiz extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_QUIZZES'),parent::get_entry_points());
+		require_code('fields');
+		return array('misc'=>'MANAGE_QUIZZES')+manage_custom_fields_entry_points('quiz')+parent::get_entry_points();
 	}
 
 	var $title;

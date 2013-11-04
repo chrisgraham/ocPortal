@@ -139,7 +139,7 @@ class Module_admin_ocgifts extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_GIFTS'),parent::get_entry_points());
+		return array('misc'=>'MANAGE_GIFTS')+parent::get_entry_points();
 	}
 
 	var $title;

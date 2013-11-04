@@ -39,10 +39,10 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array(
+		return array(
 			'misc'=>'CUSTOM_PROFILE_FIELDS',
 			'stats'=>'CUSTOM_PROFILE_FIELD_STATS',
-		),parent::get_entry_points());
+		)+parent::get_entry_points();
 	}
 
 	var $title;

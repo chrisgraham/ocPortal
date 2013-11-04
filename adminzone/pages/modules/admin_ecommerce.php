@@ -75,13 +75,13 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(parent::get_entry_points(),array(
+		return array(
 			'misc'=>'CUSTOM_PRODUCT_USERGROUP',
 			'trigger'=>array('MANUAL_TRANSACTION','menu/adminzone/audit/ecommerce/add_to_category'),
 			'logs'=>array('TRANSACTIONS','menu/adminzone/audit/ecommerce/transactions'),
 			'profit_loss'=>array('PROFIT_LOSS','menu/adminzone/audit/ecommerce/profit_loss'),
 			'cash_flow'=>array('CASH_FLOW','menu/adminzone/audit/ecommerce/cash_flow'),
-		));
+		)+parent::get_entry_points();
 	}
 
 	var $title;

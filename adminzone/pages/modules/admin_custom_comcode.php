@@ -74,7 +74,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'CUSTOM_COMCODE'),parent::get_entry_points());
+		return array('misc'=>'CUSTOM_COMCODE')+parent::get_entry_points();
 	}
 
 	/**
