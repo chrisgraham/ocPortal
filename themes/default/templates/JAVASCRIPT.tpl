@@ -1862,11 +1862,11 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		}
 		if (!force_width)
 		{
-			tooltip_element.style.maxWidth=width+'px';
+			tooltip_element.style.maxWidth=width;
 			tooltip_element.style.width='auto'; /* Needed for Opera, else it uses maxWidth for width too */
 		} else
 		{
-			tooltip_element.style.width=width+'px';
+			tooltip_element.style.width=width;
 		}
 		if ((height) && (height!='auto'))
 		{
