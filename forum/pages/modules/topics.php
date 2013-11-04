@@ -82,6 +82,11 @@ class Module_topics
 
 		$type=get_param('type','misc');
 
+		if (strpos($type,'__')!==false)
+		{
+			list($type,$_GET['id'])=explode('__',$type,2);
+		}
+
 		$valid_types=array(
 			'whisper',
 			'mark_read',
@@ -1008,6 +1013,8 @@ class Module_topics
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_categorise_pts'),'_SELF');
 
+		$default_filter_cat=get_param('id','',true);
+
 		// Certain aspects relating to the posting system
 		$fields=new ocp_tempcode();
 		$filter_cats=ocf_get_filter_cats();
@@ -1015,7 +1022,8 @@ class Module_topics
 		foreach ($filter_cats as $filter_cat)
 		{
 			$filter_cat_text=($filter_cat=='')?do_lang_tempcode('NONE_EM'):make_string_tempcode($filter_cat);
-			$list->attach(form_input_list_entry($filter_cat,$filter_cat=='',$filter_cat_text));
+			$selected=($filter_cat==$default_filter_cat);
+			$list->attach(form_input_list_entry($filter_cat,$selected,$filter_cat_text));
 		}
 
 		$set_name='category';
@@ -1049,8 +1057,7 @@ class Module_topics
 		if (count($topics)==0) warn_exit(do_lang_tempcode('NO_MARKERS_SELECTED'));
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
-		$category=post_param('category_b','');
-		if ($category=='') $category=post_param('category_a');
+		$category=post_param('category_b',post_param('category_a',''));
 		foreach ($topics as $topic_id)
 		{
 			$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_from','t_pt_to','t_pt_from_category','t_pt_to_category'),array('id'=>$topic_id),'',1);
