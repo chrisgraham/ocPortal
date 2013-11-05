@@ -96,6 +96,8 @@ class Hook_addon_registry_ecommerce
 		return array(
 			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/ecommerce.png',
 			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/ecommerce.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/subscriptions.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/ecommerce/subscriptions.png',
 			'themes/default/images/icons/24x24/menu/rich_content/ecommerce/purchase.png',
 			'themes/default/images/icons/48x48/menu/rich_content/ecommerce/purchase.png',
 			'themes/default/images/icons/24x24/menu/adminzone/audit/ecommerce/cash_flow.png',

@@ -186,6 +186,7 @@ class Module_admin
 			array('usergroup','group','promote','rank'),
 			array('member','user'),
 			array('profile','account','memberaccount'),
+			array('intl','internationalisation','regionalisation'),
 			array('permission','privilege','authorisation','authorization','right'),
 			array('option','setting','value'),
 			array('configure','configuration','setup','install','core_configuration'),
