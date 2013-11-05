@@ -469,7 +469,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		if (!$avoid_remap) $USE_REWRITE_PARAMS=$use_rewrite_params;
 	} else $use_rewrite_params=$USE_REWRITE_PARAMS;
 	$test_rewrite=NULL;
-	$self_page=((!isset($vars['page'])) || ((get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_param('page',''))))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='#_top');
+	$self_page=((!isset($vars['page'])) || ((get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_param('page',''))))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type','misc'))) && ($hash!='#_top');
 	if ($use_rewrite_params)
 	{
 		if ((!$self_page) || ($WHAT_IS_RUNNING==='index'))

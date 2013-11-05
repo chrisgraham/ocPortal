@@ -1914,7 +1914,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .alphabetical_jumper.pagination a, .alphabetical_jumper.pagination a:hover {
-	padding: 3px 6px !important;
+	padding: 2px 6px !important;
 }
 
 .results_continue, .results_page_num {

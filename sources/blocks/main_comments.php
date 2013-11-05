@@ -35,7 +35,7 @@ class Block_main_comments
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','page','extra_param_from','reverse','forum','invisible_if_no_comments','reviews');
+		$info['parameters']=array('param','page','extra_param_from','reverse','forum','invisible_if_no_comments','reviews','title');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_comments
 	/*
 	function cacheing_environment() // We can't cache this block, because it needs to execute in order to allow commenting
 	{
-		$info['cache_on']='array(((!array_key_exists(\'reviews\',$map)) || ($map[\'reviews\']==\'1\')),has_specific_permission(get_member(),\'comment\'),array_key_exists(\'extra_param_from\',$map)?$map[\'extra_param_from\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:\'main\',array_key_exists(\'page\',$map)?$map[\'page\']:get_page_name(),array_key_exists(\'forum\',$map)?$map[\'forum\']:NULL,((array_key_exists(\'invisible_if_no_comments\',$map)) && ($map[\'invisible_if_no_comments\']==\'1\')),((array_key_exists(\'reverse\',$map)) && ($map[\'reverse\']==\'1\')))';
+		$info['cache_on']='array(((!array_key_exists(\'reviews\',$map)) || ($map[\'reviews\']==\'1\')),has_specific_permission(get_member(),\'comment\'),array_key_exists(\'extra_param_from\',$map)?$map[\'extra_param_from\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:\'main\',array_key_exists(\'page\',$map)?$map[\'page\']:get_page_name(),array_key_exists(\'forum\',$map)?$map[\'forum\']:NULL,((array_key_exists(\'invisible_if_no_comments\',$map)) && ($map[\'invisible_if_no_comments\']==\'1\')),((array_key_exists(\'reverse\',$map)) && ($map[\'reverse\']==\'1\')),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
 		$info['ttl']=60*5;
 		return $info;
 	}*/
@@ -92,7 +92,7 @@ class Block_main_comments
 		$submitted=(post_param_integer('_comment_form_post',0)==1);
 
 		$self_url=build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true);
-		$self_title=$map['page'];
+		$self_title=empty($map['title'])?$map['page']:$map['title'];
 		$test_changed=post_param('title',NULL);
 		if (!is_null($test_changed))
 		{

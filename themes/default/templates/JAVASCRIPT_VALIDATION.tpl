@@ -877,13 +877,13 @@ function choose_picture(id,ob,name,event)
 	var r=document.getElementById(id);
 	if (!r) return;
 	var e=r.form.elements[name];
-	if (e.length<100)
+	for (var i=0;i<e.length;i++)
 	{
-		for (var i=0;i<e.length;i++)
+		if (e[i].disabled) continue;
+		var img=e[i].parentNode.parentNode.parentNode.getElementsByTagName('img')[0];
+		if ((img) && (img!=ob))
 		{
-			if (e[i].disabled) continue;
-			var img=e[i].parentNode.parentNode.parentNode.getElementsByTagName('img')[0];
-			if ((img) && (img!=ob))
+			if (img.parentNode.className.indexOf(' selected')!=-1)
 			{
 				img.parentNode.className=img.parentNode.className.replace(' selected','');
 				img.style.outline='0';
@@ -896,11 +896,8 @@ function choose_picture(id,ob,name,event)
 	r.checked=true;
 	//if (r.onclick) r.onclick(); causes loop
 	if (typeof r.fakeonchange!='undefined' && r.fakeonchange) r.fakeonchange(event);
-	if (e.length<100)
-	{
-		ob.parentNode.className+=' selected';
-		if (!browser_matches('opera')) ob.style.outline='1px dotted';
-	}
+	ob.parentNode.className+=' selected';
+	if (!browser_matches('opera')) ob.style.outline='1px dotted';
 }
 
 function disable_preview_scripts(under)

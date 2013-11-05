@@ -7,7 +7,7 @@
 
 {+START,IF_PASSED,SYMBOLS}
 	<div class="float_surrounder"><div class="pagination alphabetical_jumper">
-		{+START,LOOP,SYMBOLS}<a class="results_continue alphabetical_jumper_cont" target="_self" href="{$PAGE_LINK*,_SELF:_SELF:start={START}:sort=m_username ASC}">{SYMBOL*}</a>{+END}
+		{+START,LOOP,SYMBOLS}{+START,IF,{$EQ,{$_GET,md_start},{START}}}<span class="results_page_num">{SYMBOL*}</span>{+END}{+START,IF,{$NEQ,{$_GET,md_start},{START}}}<a class="results_continue alphabetical_jumper_cont" target="_self" href="{$PAGE_LINK*,_SELF:_SELF:md_start={START}:md_max={MAX}:md_sort=m_username ASC}">{SYMBOL*}</a>{+END}{+END}
 	</div></div>
 {+END}
 

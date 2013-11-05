@@ -198,6 +198,17 @@ class Hook_search_ocf_members
 		$rows=ocf_get_all_custom_fields_match(NULL,has_specific_permission(get_member(),'view_any_profile_field')?NULL:1,has_specific_permission(get_member(),'view_any_profile_field')?NULL:1);
 		$table='';
 		require_code('fields');
+		$non_trans_fields=0;
+		foreach ($rows as $i=>$row)
+		{
+			$ob=get_fields_hook($row['cf_type']);
+			list(,,$storage_type)=$ob->get_field_value_row_bits($row);
+			if (strpos($storage_type,'_trans')===false)
+			{
+				$non_trans_fields++;
+			}
+		}
+		$index_issue=($non_trans_fields>16);
 		foreach ($rows as $i=>$row)
 		{
 			if (!array_key_exists('field_'.strval($row['id']),$indexes)) continue;
@@ -222,13 +233,16 @@ class Hook_search_ocf_members
 					$where_clause.=preg_replace('#\?#','t'.strval(count($trans_fields)+1).'.text_original',$temp);
 				} else
 				{
-					if (count($raw_fields)<16) // MySQL limit for fulltext index querying
-						$where_clause.=preg_replace('#\?#','field_'.strval($row['id']),$temp);
+					if ($index_issue) // MySQL limit for fulltext index querying
+					{
+						$temp=db_like_assemble($param);
+					}
+					$where_clause.=preg_replace('#\?#','field_'.strval($row['id']),$temp);
 				}
 			}
 			if (strpos($storage_type,'_trans')===false)
 			{
-				if (count($raw_fields)<16) // MySQL limit for fulltext index querying
+				if (!$index_issue) // MySQL limit for fulltext index querying
 					$raw_fields[]='field_'.strval($row['id']);
 			} else
 			{
