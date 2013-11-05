@@ -242,7 +242,6 @@ function user_sync__inbound($since=NULL)
 				$ip_address=NULL;
 				$validated_email_confirm_code='';
 				$salt='';
-				$zone_wide=NULL;
 				$last_submit_time=NULL;
 				$highlighted_name=0;
 				$pt_allow='*';
@@ -250,7 +249,7 @@ function user_sync__inbound($since=NULL)
 
 				$check_correctness=false;
 
-				$member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$cpf_values,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$check_correctness,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+				$member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$cpf_values,$timezone,$primary_group,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$check_correctness,$password_compatibility_scheme,$salt,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 			} else
 			{
 				// Delete?
@@ -278,7 +277,6 @@ function user_sync__inbound($since=NULL)
 				$check_correctness=NULL;
 				$password_compatibility_scheme=NULL;
 				$salt=NULL;
-				$zone_wide=NULL;
 				$last_submit_time=NULL;
 				$highlighted_name=NULL;
 				$pt_allow=NULL;
@@ -286,7 +284,7 @@ function user_sync__inbound($since=NULL)
 
 				$skip_checks=true;
 
-				ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$cpf_values,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,$skip_checks);
+				ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$cpf_values,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,$skip_checks);
 
 				require_code('ocf_groups_action2');
 				$members_groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);

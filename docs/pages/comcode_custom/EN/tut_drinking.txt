@@ -51,7 +51,7 @@ There are two ways to make an article:
 
 News articles are best used if you do not consider your article to be a long-term part of your website itself, but merely a long-term resource which is archived. You are in the driving seat, however, and you can add as many new pages as you wish, without having to have each linked to from your menu if you do not wish them to be.
 
-You can create a new page and add it to your menus really easily by heading along to the 'Structure' section of the Admin Zone, and choosing the 'Add-New-Page Wizard'.
+You can create a new page and add it to your menus really easily by heading along to the 'Content' section of the Admin Zone, and choosing the 'Pages (Comcode Pages)'.
 
 To add as a news article, head along to 'Content Management' and you'll find an icon for it. Once added, it will appear in any news blocks you have (there is one on your front page, by default) and in the news archive. As mentioned, there is nothing stopping you adding a link to anything within ocPortal to your menus -- you can just visit the resource, grab the URL that your browser displays for it, and edit one of your menus with the caption of your choice.
 

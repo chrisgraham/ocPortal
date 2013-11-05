@@ -55,8 +55,6 @@ class Module_tickets
 		delete_privilege('support_operator');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets'));
-
-		delete_menu_item_simple('_SEARCH:tickets:type=misc');
 	}
 
 	/**
@@ -113,17 +111,18 @@ class Module_tickets
 
 			add_privilege('SUPPORT_TICKETS','view_others_tickets',false);
 			add_privilege('SUPPORT_TICKETS','support_operator',false);
-
-			add_menu_item_simple('main_website',NULL,'SUPPORT_TICKETS','_SEARCH:tickets:type=misc');
 		}
 	}
 
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'SUPPORT_TICKETS');
 	}

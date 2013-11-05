@@ -169,6 +169,7 @@ class Hook_addon_registry_ecommerce
 			'sources/hooks/systems/notifications/manual_subscription.php',
 			'sources/hooks/systems/cron/manual_subscription_notification.php',
 			'adminzone/pages/modules/admin_ecommerce.php',
+			'adminzone/pages/modules/admin_ecommerce_logs.php',
 			'adminzone/pages/modules/admin_invoices.php',
 			'themes/default/css/ecommerce.css',
 			'data/ecommerce.php',

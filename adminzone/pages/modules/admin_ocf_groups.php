@@ -42,12 +42,21 @@ class Module_admin_ocf_groups extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		require_code('fields');
-		return array('misc'=>'MANAGE_USERGROUPS')+parent::get_entry_points()+manage_custom_fields_entry_points('group');
+		$ret=array('misc'=>'MANAGE_USERGROUPS')+parent::get_entry_points();
+
+		if ($support_crosslinks)
+		{
+			require_code('fields');
+			$ret+=manage_custom_fields_entry_points('group');
+		}
+		return $ret;
 	}
 
 	var $title;

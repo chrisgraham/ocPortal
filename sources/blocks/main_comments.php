@@ -53,25 +53,6 @@ class Block_main_comments
 	}*/
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		//delete_menu_item_simple('_SEARCH:guestbook');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		//add_menu_item_simple('main_website',NULL,'GUESTBOOK','_SEARCH:guestbook');		Not in this addon anymore. But nowhere else to put the code.
-	}
-
-	/**
 	 * Standard modular run function.
 	 *
 	 * @param  array		A map of parameters.

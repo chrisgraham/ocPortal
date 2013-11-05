@@ -50,12 +50,13 @@ class Module_cms_catalogues extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		require_code('fields');
-
 		$ret=array(
 			'misc'=>'MANAGE_CATALOGUES',
 			'import'=>array('IMPORT_CATALOGUE_ENTRIES','menu/_generic_admin/import_csv'),
@@ -66,11 +67,17 @@ class Module_cms_catalogues extends standard_crud_module
 
 			'add_catalogue'=>array('ADD_CATALOGUE','menu/cms/catalogues/add_one_catalogue'),
 			'edit_catalogue'=>array('EDIT_CATALOGUE','menu/cms/catalogues/edit_one_catalogue'),
-		)+parent::get_entry_points()+manage_custom_fields_entry_points('catalogue')+manage_custom_fields_entry_points('catalogue_category');
+		)+parent::get_entry_points();
 		unset($ret['ac']);
 		unset($ret['ec']);
 		unset($ret['av']);
 		unset($ret['ev']);
+
+		if ($support_crosslinks)
+		{
+			require_code('fields');
+			$ret+=manage_custom_fields_entry_points('catalogue')+manage_custom_fields_entry_points('catalogue_category');
+		}
 		return $ret;
 	}
 
@@ -896,7 +903,7 @@ class Module_cms_catalogues extends standard_crud_module
 				has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
 				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$c_name),'_SELF')):NULL,
 				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
-				array('menu/_generic_admin/view_this',array('menu/cms/catalogues/catalogues',array('type'=>'index','id'=>$c_name),get_module_zone('catalogues')),do_lang('VIEW_CATALOGUE'))
+				array('menu/_generic_admin/view_this',array('catalogues',array('type'=>'index','id'=>$c_name),get_module_zone('catalogues')),do_lang('VIEW_CATALOGUE'))
 			),
 			do_lang('MANAGE_CATALOGUES')
 		);
@@ -1419,7 +1426,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 				has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
 				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$catalogue_name),'_SELF')):NULL,
 				has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
-				array('view_this',array('menu/cms/catalogues/catalogues',array('type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues')),do_lang('INDEX'))
+				array('menu/_generic_admin/view_this',array('catalogues',array('type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues')),do_lang('INDEX'))
 			),
 			do_lang('MANAGE_CATALOGUES')
 		);
@@ -1571,8 +1578,6 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$actions=new ocp_tempcode();
 			if (($name!='') && (get_value('disable_cat_cat_perms')!=='1'))
 				$actions->attach(form_input_tick(do_lang_tempcode('RESET_CATEGORY_PERMISSIONS'),do_lang_tempcode('DESCRIPTION_RESET_CATEGORY_PERMISSIONS'),'reset_category_permissions',false));
-			if ($name=='')
-				$actions->attach(form_input_tick(do_lang_tempcode('ADD_TO_MENU'),do_lang_tempcode('DESCRIPTION_ADD_TO_MENU'),'add_to_menu',true));
 		}
 
 		if (addon_installed('content_reviews'))
@@ -1740,21 +1745,6 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$put_in_category=array_key_exists('put_in_category',$field)?intval($field['put_in_category']):0;
 			$put_in_search=array_key_exists('put_in_search',$field)?intval($field['put_in_search']):0;
 			if ($field['name']!='') actual_add_catalogue_field($name,$field['name'],$field['description'],$field['type'],$field['order'],$defines_order,$visible,$searchable,$field['default'],$required,$put_in_category,$put_in_search);
-		}
-
-		$add_to_menu=post_param_integer('add_to_menu',0);
-		if ($add_to_menu==1)
-		{
-			require_code('menus2');
-			$menu_name='main_content';
-			if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_menu',array('i_menu'=>'site')))) $menu_name='site';
-			if ($is_tree==1)
-			{
-				add_menu_item_simple($menu_name,NULL,$title,'_SEARCH:catalogues:type=category:catalogue_name='.$name);
-			} else
-			{
-				add_menu_item_simple($menu_name,NULL,$title,'_SEARCH:catalogues:type=index:'.$name);
-			}
 		}
 
 		// Auto-fill feature

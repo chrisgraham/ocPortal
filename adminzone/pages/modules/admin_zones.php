@@ -44,9 +44,12 @@ class Module_admin_zones
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
 			'misc'=>'ZONES',
@@ -267,7 +270,7 @@ class Module_admin_zones
 		$row=$rows[0];
 		$header_text=get_translated_text($row['zone_header_text'],NULL,$lang);
 		$default_page=$row['zone_default_page'];
-		list($fields,,)=$this->get_form_fields(true,get_translated_text($row['zone_title'],NULL,$lang),$default_page,$header_text,$row['zone_theme'],$row['zone_wide'],$row['zone_require_session'],$row['zone_displayed_in_menu'],$id);
+		list($fields,,)=$this->get_form_fields(true,get_translated_text($row['zone_title'],NULL,$lang),$default_page,$header_text,$row['zone_theme'],$row['zone_require_session'],$id);
 
 		// Page editing stuff
 		$editor=array();
@@ -453,8 +456,7 @@ class Module_admin_zones
 		$wide=post_param_integer('wide');
 		if ($wide==-1) $wide=NULL;
 		$require_session=post_param_integer('require_session',0);
-		$displayed_in_menu=post_param_integer('displayed_in_menu',0);
-		actual_edit_zone($id,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$id);
+		actual_edit_zone($id,$_title,$default_page,$header_text,$theme,$wide,$require_session,$id);
 		if ($id!='') $this->set_permissions($id);
 
 		// Edit pages
@@ -546,7 +548,7 @@ class Module_admin_zones
 	 * @param  ?ID_TEXT		Name of the zone (NULL: unknown)
 	 * @return array			A tuple: The tempcode for the fields, hidden fields, and extra Javascript
 	 */
-	function get_form_fields($in_zone_editor=false,$title='',$default_page='start',$header_text='',$theme=NULL,$wide=0,$require_session=0,$displayed_in_menu=1,$zone=NULL)
+	function get_form_fields($in_zone_editor=false,$title='',$default_page='start',$header_text='',$theme=NULL,$wide=0,$require_session=0,$zone=NULL)
 	{
 		require_lang('permissions');
 
@@ -570,7 +572,6 @@ class Module_admin_zones
 		$list.=static_evaluate_tempcode(form_input_list_entry('1',($wide==1),do_lang_tempcode('YES')));
 		$list.=static_evaluate_tempcode(form_input_list_entry('-1',is_null($wide),do_lang_tempcode('RELY_FORUMS')));
 		$fields.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('WIDE'),do_lang_tempcode('DESCRIPTION_WIDE'),'wide',make_string_tempcode($list)));
-		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('DISPLAYED_IN_MENU'),do_lang_tempcode('DESCRIPTION_DISPLAYED_IN_MENU'),'displayed_in_menu',($displayed_in_menu==1)));
 
 		// Theme
 		require_code('themes2');
@@ -727,10 +728,9 @@ class Module_admin_zones
 		$wide=post_param_integer('wide');
 		if ($wide==-1) $wide=NULL;
 		$require_session=post_param_integer('require_session',0);
-		$displayed_in_menu=post_param_integer('displayed_in_menu',0);
 		$base_url=post_param('base_url','');
 
-		actual_add_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,false,$base_url);
+		actual_add_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,false,$base_url);
 
 		sync_htaccess_with_zones();
 
@@ -772,7 +772,6 @@ class Module_admin_zones
 			do_lang_tempcode('TITLE'),
 			do_lang_tempcode('DEFAULT_PAGE'),
 			do_lang_tempcode('THEME'),
-			do_lang_tempcode('DISPLAYED_IN_MENU'),
 			do_lang_tempcode('WIDE'),
 			do_lang_tempcode('REQUIRE_SESSION'),
 			do_lang_tempcode('ACTIONS'),
@@ -794,7 +793,6 @@ class Module_admin_zones
 				$zone_default_page,
 				($remaining_row['zone_theme']=='-1')?do_lang_tempcode('NA_EM'):hyperlink(build_url(array('page'=>'admin_themes'),'adminzone'),escape_html($remaining_row['zone_theme'])),
 				($zone_show_in_menu==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
-				($remaining_row['zone_wide']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 				($remaining_row['zone_require_session']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 				protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,$zone_name)),
 			)),true);
@@ -826,7 +824,7 @@ class Module_admin_zones
 		$row=$rows[0];
 
 		$header_text=get_translated_text($row['zone_header_text']);
-		list($fields,$hidden,$javascript)=$this->get_form_fields(false,get_translated_text($row['zone_title']),$row['zone_default_page'],$header_text,$row['zone_theme'],$row['zone_wide'],$row['zone_require_session'],$row['zone_displayed_in_menu'],$zone);
+		list($fields,$hidden,$javascript)=$this->get_form_fields(false,get_translated_text($row['zone_title']),$row['zone_default_page'],$header_text,$row['zone_theme'],$row['zone_require_session'],$zone);
 		$hidden->attach(form_input_hidden('zone',$zone));
 		$no_delete_zones=(get_forum_type()=='ocf')?array('','adminzone','forum'):array('','adminzone');
 		$no_rename_zones=array('','adminzone','forum');
@@ -884,7 +882,6 @@ class Module_admin_zones
 			$wide=post_param_integer('wide');
 			if ($wide==-1) $wide=NULL;
 			$require_session=post_param_integer('require_session',0);
-			$displayed_in_menu=post_param_integer('displayed_in_menu',0);
 			$base_url=post_param('base_url','');
 
 			$new_zone=post_param('new_zone');
@@ -893,7 +890,7 @@ class Module_admin_zones
 				appengine_live_guard();
 				check_zone_name($new_zone);
 			}
-			actual_edit_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone,false,false,$base_url);
+			actual_edit_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$new_zone,false,false,$base_url);
 
 			if ($new_zone!='') $this->set_permissions($new_zone);
 

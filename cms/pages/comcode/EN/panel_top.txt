@@ -1,1 +1,1 @@
-[block="_management" type="dropdown"]menu[/block]
+[block="[include=adminzone][include=,limit_to=cms]" type="dropdown"]menu[/block]

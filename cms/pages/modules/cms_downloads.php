@@ -44,12 +44,13 @@ class Module_cms_downloads extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		require_code('fields');
-
 		$ret=array(
 			'misc'=>'MANAGE_DOWNLOADS',
 			'av'=>array('ADD_DOWNLOAD_LICENCE','menu/cms/downloads/add_one_licence'),
@@ -66,8 +67,11 @@ class Module_cms_downloads extends standard_crud_module
 
 		$ret+=parent::get_entry_points();
 
-		$ret+=manage_custom_fields_entry_points('download')+manage_custom_fields_entry_points('download_category');
-
+		if ($support_crosslinks)
+		{
+			require_code('fields');
+			$ret+=manage_custom_fields_entry_points('download')+manage_custom_fields_entry_points('download_category');
+		}
 		return $ret;
 	}
 
@@ -1034,23 +1038,23 @@ class Module_cms_downloads_cat extends standard_crud_module
 				NULL, // View this category
 				/* SPECIALLY TYPED 'LINKS' */
 				array(
-					has_privilege(get_member(),'mass_import','cms_downloads')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL,
+					has_privilege(get_member(),'mass_import','cms_downloads')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL,
 				),
 				array(),
 				array(
-					has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
-					has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL
+					has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
+					has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL
 				),
 				do_lang('LICENCES')
 			);
 		}
 
-		$special_links=array(has_privilege(get_member(),'mass_import','cms_downloads')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL);
+		$special_links=array(has_privilege(get_member(),'mass_import','cms_downloads')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL);
 
 		if ((addon_installed('galleries')) && (!is_null($id)))
 		{
 			require_lang('galleries');
-			$special_links[]=(has_privilege(get_member(),'submit_midrange_content','cms_galleries',array('galleries','download_'.strval($id))) && (!is_null($id)))?array('add_image_to_this',array('cms_galleries',array('type'=>'ad','cat'=>'download_'.strval($id)),get_module_zone('cms_galleries'))):NULL;
+			$special_links[]=(has_privilege(get_member(),'submit_midrange_content','cms_galleries',array('galleries','download_'.strval($id))) && (!is_null($id)))?array('menu/cms/downloads/add_image_to_this',array('cms_galleries',array('type'=>'ad','cat'=>'download_'.strval($id)),get_module_zone('cms_galleries'))):NULL;
 		}
 
 		return do_next_manager($title,$description,

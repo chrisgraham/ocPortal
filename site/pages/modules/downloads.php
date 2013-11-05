@@ -65,8 +65,6 @@ class Module_downloads
 
 		require_code('files');
 		deldir_contents(get_custom_file_base().'/uploads/downloads',true);
-
-		delete_menu_item_simple('_SEARCH:downloads:type=misc');
 	}
 
 	/**
@@ -154,9 +152,6 @@ class Module_downloads
 			));
 			$GLOBALS['SITE_DB']->create_index('download_logging','calculate_bandwidth',array('date_and_time'));
 
-			require_lang('downloads');
-			add_menu_item_simple('main_content',NULL,'SECTION_DOWNLOADS','_SEARCH:downloads:type=misc',0,0,true,'',0,'',1);
-
 			$GLOBALS['SITE_DB']->create_table('download_licences',array(
 				'id'=>'*AUTO',
 				'l_title'=>'SHORT_TEXT',
@@ -182,9 +177,12 @@ class Module_downloads
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'DOWNLOADS_HOME');
 	}

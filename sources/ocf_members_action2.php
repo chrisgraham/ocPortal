@@ -320,11 +320,11 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
  * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
  * @return array				A pair: The form fields, Hidden fields (both Tempcode).
  */
-function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$custom_fields=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$custom_fields=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
 	$fields=new ocp_tempcode();
 	$hidden=new ocp_tempcode();
-	list($_fields,$_hidden)=ocf_get_member_fields_settings($mini_mode,$member_id,$groups,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$primary_group,$username,$is_perm_banned,$special_type,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+	list($_fields,$_hidden)=ocf_get_member_fields_settings($mini_mode,$member_id,$groups,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$primary_group,$username,$is_perm_banned,$special_type,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 	$fields->attach($_fields);
 	$hidden->attach($_hidden);
 	if (!$mini_mode) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'14205f6bf83c469a1404d24967d7b6f6','TITLE'=>do_lang_tempcode('PROFILE'))));
@@ -366,12 +366,11 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
  * @return array				A pair: The form fields, Hidden fields (both Tempcode).
  */
-function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=NULL,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=NULL,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
 	require_code('form_templates');
 
 	$preview_posts=take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
-	$zone_wide=take_param_int_modeavg($zone_wide,'m_zone_wide','f_members',1);
 
 	require_code('ocf_field_editability');
 
@@ -382,7 +381,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 	$hidden=new ocp_tempcode();
 
-	if (has_actual_page_access(get_member(),'admin_ocf_join'))
+	if (has_actual_page_access(get_member(),'admin_ocf_members'))
 	{
 		$dob_optional=true;
 	} else
@@ -407,7 +406,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	// Human name / Username
 	if (ocf_field_editable('username',$special_type))
 	{
-		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_privilege($member_id,'rename_self')))
+		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_members')) || (has_privilege($member_id,'rename_self')))
 		{
 			if (get_option('signup_fullname')=='1')
 			{
@@ -488,9 +487,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$doing_langs=multi_lang();
 	$doing_email_option=(get_option('allow_email_disable')=='1') && (addon_installed('contact_member'));
 	$doing_email_from_staff_option=(get_option('allow_email_from_staff_disable')=='1');
-	$unspecced_width_zone_exists=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_wide'=>NULL));
 	$unspecced_theme_zone_exists=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'zones WHERE '.db_string_equal_to('zone_theme','').' OR '.db_string_equal_to('zone_theme','-1'));
-	$doing_wide_option=(!is_null($unspecced_width_zone_exists)) && (!$mini_mode);
 	$doing_theme_option=($unspecced_theme_zone_exists!=0) && (!$mini_mode);
 	$doing_local_forum_options=(addon_installed('ocf_forum')) && (!$mini_mode);
 
@@ -531,13 +528,6 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 	if (!$mini_mode)
 	{
-		// Wide-option, if we have any zones giving a choice
-		require_lang('zones');
-		if ($doing_wide_option)
-		{
-			$fields->attach(form_input_tick(do_lang_tempcode('WIDE'),do_lang_tempcode('DESCRIPTION_MEMBER_ZONE_WIDE'),'zone_wide',$zone_wide==1));
-		}
-
 		// Theme, if we have any zones giving a choice
 		require_code('themes2');
 		$entries=create_selection_list_themes($theme,false,false,'RELY_SITE_DEFAULT');
@@ -805,7 +795,7 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
  * @param  ?ID_TEXT			Password compatibility scheme (NULL: don't change)
  * @param  boolean			Whether to skip security checks and most of the change-triggered emails
  */
-function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated=NULL,$username=NULL,$password=NULL,$zone_wide=1,$highlighted_name=NULL,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL,$join_time=NULL,$avatar_url=NULL,$signature=NULL,$is_perm_banned=NULL,$photo_url=NULL,$photo_thumb_url=NULL,$salt=NULL,$password_compatibility_scheme=NULL,$skip_checks=false)
+function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated=NULL,$username=NULL,$password=NULL,$highlighted_name=NULL,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL,$join_time=NULL,$avatar_url=NULL,$signature=NULL,$is_perm_banned=NULL,$photo_url=NULL,$photo_thumb_url=NULL,$salt=NULL,$password_compatibility_scheme=NULL,$skip_checks=false)
 {
 	require_code('type_validation');
 
@@ -913,7 +903,6 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($language)) $update['m_language']=$language;
 	if (!is_null($allow_emails)) $update['m_allow_emails']=$allow_emails;
 	if (!is_null($allow_emails_from_staff)) $update['m_allow_emails_from_staff']=$allow_emails_from_staff;
-	if (!is_null($zone_wide)) $update['m_zone_wide']=$zone_wide;
 	if (!is_null($pt_allow)) $update['m_pt_allow']=$pt_allow;
 	if (!is_null($pt_rules_text)) $update['m_pt_rules_text']=lang_remap_comcode($_pt_rules_text,$pt_rules_text,$GLOBALS['FORUM_DB']);
 	if (($skip_checks) || (has_privilege(get_member(),'probate_members')))
@@ -926,7 +915,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($photo_thumb_url)) $update['m_photo_thumb_url']=$photo_thumb_url;
 
 	$old_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
-	if ((!is_null($username)) && ($username!=$old_username) && (($skip_checks) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_privilege($member_id,'rename_self'))))
+	if ((!is_null($username)) && ($username!=$old_username) && (($skip_checks) || (has_actual_page_access(get_member(),'admin_ocf_members')) || (has_privilege($member_id,'rename_self'))))
 	{
 		$update['m_username']=$username;
 
@@ -950,7 +939,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		if (!$skip_checks)
 		{
 			$part_b='';
-			if (!has_actual_page_access(get_member(),'admin_ocf_join'))
+			if (!has_actual_page_access(get_member(),'admin_ocf_members'))
 				$part_b=do_lang('PASSWORD_CHANGED_MAIL_BODY_2',get_ip_address());
 			$mail=do_lang('PASSWORD_CHANGED_MAIL_BODY',get_site_name(),$part_b,NULL,get_lang($member_id));
 			$old_email_address=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
@@ -962,7 +951,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 
 			if (($member_id==get_member()) || (get_value('disable_password_change_notifications_for_staff')!=='1'))
 			{
-				if (get_page_name()!='admin_ocf_join')
+				if (get_page_name()!='admin_ocf_members')
 				{
 					require_code('notifications');
 					dispatch_notification('ocf_password_changed',NULL,do_lang('PASSWORD_CHANGED_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($member_id),NULL,2);
@@ -1393,7 +1382,7 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	}
 
 	// Check lengths
-	if (get_page_name()!='admin_ocf_join')
+	if (get_page_name()!='admin_ocf_members')
 	{
 		if (!is_null($username))
 		{
@@ -1444,7 +1433,7 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	}
 
 	// Check against restricted usernames
-	if ((get_page_name()!='admin_ocf_join') && ($username_changed))
+	if ((get_page_name()!='admin_ocf_members') && ($username_changed))
 	{
 		$restricted_usernames=explode(',',get_option('restricted_usernames'));
 		$restricted_usernames[]=do_lang('GUEST');

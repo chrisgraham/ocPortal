@@ -561,7 +561,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		if (((isset($SITE_INFO['no_disk_sanity_checks'])) && ($SITE_INFO['no_disk_sanity_checks']=='1')) || (is_file(get_file_base().'/'.$zone['zone_name'].'/index.php')))
 		{
 			$zones[]=$zone['zone_name'];
-			$zones_titled[$zone['zone_name']]=array($zone['zone_name'],$zone['zone_title'],array_key_exists('zone_displayed_in_menu',$zone)?$zone['zone_displayed_in_menu']:1,$zone['zone_default_page'],$zone);
+			$zones_titled[$zone['zone_name']]=array($zone['zone_name'],$zone['zone_title'],$zone['zone_default_page'],$zone);
 		}
 
 		$ZONE_DEFAULT_PAGES_CACHE[$zone['zone_name']]=$zone['zone_default_page'];

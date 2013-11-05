@@ -37,7 +37,6 @@ function upgrade_addon_soft($addon)
 {
 	require_code('database_action');
 	require_code('config2');
-	require_code('menus2');
 	require_code('files2');
 
 	$rows=$GLOBALS['SITE_DB']->query_select('addons',array('*'),array('addon_name'=>$addon),'',1);
@@ -77,7 +76,6 @@ function reinstall_addon_soft($addon,$ini_info=NULL)
 
 	require_code('database_action');
 	require_code('config2');
-	require_code('menus2');
 	require_code('files2');
 
 	require_code('hooks/systems/addon_registry/'.filter_naughty($addon));
@@ -152,7 +150,6 @@ function uninstall_addon_soft($addon)
 
 	require_code('database_action');
 	require_code('config2');
-	require_code('menus2');
 	require_code('files2');
 
 	require_code('hooks/systems/addon_registry/'.filter_naughty($addon));
@@ -589,10 +586,6 @@ function install_addon($file,$files=NULL)
 				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_name'=>$zone));
 				if (is_null($test))
 				{
-					require_code('menus2');
-					add_menu_item_simple('zone_menu',NULL,$zone,$zone.':',0,1);
-					$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($zone,1),'zone_default_page'=>'start','zone_header_text'=>insert_lang('???',2),'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>0,'zone_displayed_in_menu'=>1));
-
 					$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 					foreach (array_keys($groups) as $group_id)
 						$GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>$zone,'group_id'=>$group_id));

@@ -51,8 +51,6 @@ class Module_pointstore
 		$GLOBALS['SITE_DB']->drop_table_if_exists('sales');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('pstore_customs');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('pstore_permissions');
-
-		delete_menu_item_simple('_SEARCH:pointstore:type=misc');
 	}
 
 	/**
@@ -78,9 +76,6 @@ class Module_pointstore
 				'details'=>'SHORT_TEXT',
 				'details2'=>'SHORT_TEXT'
 			));
-
-			require_lang('pointstore');
-			add_menu_item_simple('main_community',NULL,'POINTSTORE','_SEARCH:pointstore:type=misc',0,0,true,'',0,'icons/24x24/menu/social/pointstore');
 
 			// Custom
 				$GLOBALS['SITE_DB']->create_table('pstore_customs',array(
@@ -135,9 +130,10 @@ class Module_pointstore
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL)
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return (!$check_perms || !is_guest($member_id))?array('!'=>'POINTSTORE'):array();
 	}

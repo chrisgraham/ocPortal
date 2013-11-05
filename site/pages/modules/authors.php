@@ -47,9 +47,6 @@ class Module_authors
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('authors');
-
-		delete_menu_item_simple('_SELF:authors:type=misc');
-		delete_menu_item_simple('_SEARCH:cms_authors:type=_ad');
 	}
 
 	/**
@@ -71,11 +68,6 @@ class Module_authors
 			));
 
 			$GLOBALS['SITE_DB']->create_index('authors','findmemberlink',array('member_id'));
-
-			// collab_features
-			require_lang('authors');
-			add_menu_item_simple('collab_features',NULL,'VIEW_MY_AUTHOR_PROFILE','_SELF:authors:type=misc');
-			add_menu_item_simple('collab_features',NULL,'EDIT_MY_AUTHOR_PROFILE','_SEARCH:cms_authors:type=_ad',0,0,true,do_lang('ZONE_BETWEEN'),1);
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
@@ -94,9 +86,10 @@ class Module_authors
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL)
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return ($check_perms && is_guest($member_id))?array():array('misc'=>'VIEW_MY_AUTHOR_PROFILE');
 	}

@@ -45,9 +45,12 @@ class Module_cms_comcode_pages
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'COMCODE_PAGE_MANAGEMENT');
 	}
@@ -123,7 +126,6 @@ class Module_cms_comcode_pages
 	}
 
 	var $title;
-	var $simple_add;
 	var $page_link;
 	var $zone;
 	var $file;
@@ -155,19 +157,6 @@ class Module_cms_comcode_pages
 			require_lang('menus');
 			set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
 
-			if (addon_installed('page_management'))
-			{
-				if (has_actual_page_access(get_member(),'admin_sitemap'))
-				{
-					require_lang('zones');
-					$page_wizard=build_url(array('page'=>'admin_sitemap','type'=>'page_wizard'),get_module_zone('admin_sitemap'));
-					$sitemap_editor=build_url(array('page'=>'admin_sitemap','type'=>'sitemap'),get_module_zone('admin_sitemap'));
-					attach_message(do_lang_tempcode('SUGGEST_PAGE_WIZARD',escape_html($page_wizard->evaluate()),escape_html($sitemap_editor->evaluate())),'inform');
-				}
-			}
-
-			$simple_add=(get_param_integer('simple_add',0)==1);
-
 			// Work out what we're editing, and where it's coming from (support for two pagelink specifying parameters for destination, with addition of restore_from to override source if different from destination)
 			$page_link=filter_naughty(get_param('page_link',''));
 			if ($page_link=='') $page_link=get_param('page_link_2');
@@ -177,13 +166,11 @@ class Module_cms_comcode_pages
 			$zone=$page_link_parts[0];
 			$file=$page_link_parts[1];
 
-			if (!$simple_add && ($page_link!='')) breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGE_EDIT'));
-			if (!$simple_add)
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc:lang='.get_param('lang',''),do_lang_tempcode('CHOOSE'))));
+			if ($page_link!='') breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGE_EDIT'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc:lang='.get_param('lang',''),do_lang_tempcode('CHOOSE'))));
 
-			$this->title=get_screen_title(($simple_add || ($file==''))?'COMCODE_PAGE_ADD':'_COMCODE_PAGE_EDIT',true,array(escape_html($zone),escape_html($file)));
+			$this->title=get_screen_title(($file=='')?'COMCODE_PAGE_ADD':'_COMCODE_PAGE_EDIT',true,array(escape_html($zone),escape_html($file)));
 
-			$this->simple_add=$simple_add;
 			$this->page_link=$page_link;
 			$this->zone=$zone;
 			$this->file=$file;
@@ -193,9 +180,7 @@ class Module_cms_comcode_pages
 		{
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 
-			$simple_add=get_param_integer('simple_add',0)==1;
-
-			$this->title=get_screen_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT');
+			$this->title=get_screen_title('COMCODE_PAGE_EDIT');
 		}
 
 		return NULL;
@@ -630,7 +615,6 @@ class Module_cms_comcode_pages
 	{
 		require_code('form_templates');
 
-		$simple_add=$this->simple_add;
 		$page_link=$this->page_link;
 		$zone=$this->zone;
 		$file=$this->file;
@@ -640,18 +624,8 @@ class Module_cms_comcode_pages
 		require_code('type_validation');
 		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
-		$lang=choose_language(get_screen_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT'),true);
+		$lang=choose_language(get_screen_title(($file=='')?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT'),true);
 		if (is_object($lang)) return $lang;
-
-		if (addon_installed('page_management'))
-		{
-			// Add to menu
-			if ((get_param('menu',STRING_MAGIC_NULL)!=STRING_MAGIC_NULL) && (has_actual_page_access(get_member(),'admin_sitemap')))
-			{
-				require_code('menus2');
-				add_menu_item_simple(get_param('menu'),NULL,get_param('title'),get_param('page_link'),0,0,false);
-			}
-		}
 
 		$resource_owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		if (is_null($resource_owner)) // Add
@@ -707,15 +681,9 @@ class Module_cms_comcode_pages
 				}
 
 				$new=false;
-			} elseif (get_param('title','')!='') // If this came from the 'add new page wizard', then we make a simple template
-			{
-				$page_pretty_title=get_param('title','');
-				$contents='[title]'.$page_pretty_title."[/title]\n\n".do_lang('PAGE_DEFAULT_TEXT');
-
-				$new=true;
 			} else
 			{
-				$contents='[title]'.do_lang('PAGE_DEFAULT_TITLE')."[/title]\n\n";
+				$contents='[title]'.do_lang('PAGE_DEFAULT_TITLE')."[/title]\n\n".do_lang('PAGE_DEFAULT_TEXT');
 
 				$new=true;
 			}
@@ -738,9 +706,7 @@ class Module_cms_comcode_pages
 		}
 
 		// Actualiser URL
-		$map=array('page'=>'_SELF','type'=>'__ed');
-		if ($simple_add) $map['simple_add']='1';
-		$post_url=build_url($map,'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'__ed'),'_SELF');
 
 		// Revision history
 		$filesarray=$this->get_comcode_revisions($zone,'comcode_custom/'.$lang,$file.'.txt');
@@ -827,13 +793,7 @@ class Module_cms_comcode_pages
 		{
 			if (has_actual_page_access(get_member(),'admin_sitemap'))
 			{
-				if ($simple_add)
-				{
-					$hidden_fields->attach(form_input_hidden('title',$file));
-				} else
-				{
-					$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'title',$file,true));
-				}
+				$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'title',$file,true));
 			}
 		}
 		$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$file));
@@ -861,34 +821,27 @@ class Module_cms_comcode_pages
 			if (!is_string($page)) $page=strval($page);
 			if ($page!=$file) $pages->attach(form_input_list_entry($page,$parent_page==$page));
 		}
-		if (!$simple_add) // We don't want to imply the 'validated' has an effect on the menu addition for the add new page wizard, so we don't show validation for that wizard at all
-		{
-			if (!$validated) $validated=(get_param_integer('validated',0)==1);
-			if (has_bypass_validation_comcode_page_permission($zone))
-			{
-				if (addon_installed('unvalidated'))
-					$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated));
-			}
 
-			if (!$new)
-			{
-				if ($delete_url->is_empty())
-				{
-					$fields2->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
-				}
-			}
-		} else
+		if (!$validated) $validated=(get_param_integer('validated',0)==1);
+		if (has_bypass_validation_comcode_page_permission($zone))
 		{
-			$hidden_fields->attach(form_input_hidden('validated','1'));
+			if (addon_installed('unvalidated'))
+				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated));
 		}
+
+		if (!$new)
+		{
+			if ($delete_url->is_empty())
+			{
+				$fields2->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
+			}
+		}
+
 		if (get_option('is_on_comcode_page_children')=='1')
 		{
 			$fields2->attach(form_input_list(do_lang_tempcode('PARENT_PAGE'),do_lang_tempcode('DESCRIPTION_PARENT_PAGE'),'parent_page',$pages,NULL,false,false));
 		}
-		if (!$simple_add)
-		{
-			$fields2->attach(form_input_tick(do_lang_tempcode('SHOW_AS_EDITED'),do_lang_tempcode('DESCRIPTION_SHOW_AS_EDITED'),'show_as_edit',$show_as_edit));
-		}
+		$fields2->attach(form_input_tick(do_lang_tempcode('SHOW_AS_EDITED'),do_lang_tempcode('DESCRIPTION_SHOW_AS_EDITED'),'show_as_edit',$show_as_edit));
 
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
 			'_GUID'=>'a42341a9a2de532cecdcfbecaff00a0f',
@@ -923,7 +876,7 @@ class Module_cms_comcode_pages
 		$hidden_fields->attach(form_input_hidden('zone',$zone));
 		$hidden_fields->attach(form_input_hidden('redirect',get_param('redirect','')));
 
-		$posting_form=get_posting_form(do_lang($simple_add?'COMCODE_PAGE_ADD':'SAVE'),$contents,$post_url,$hidden_fields,$fields,do_lang_tempcode('COMCODE_PAGE'),'',$fields2,$parsed,NULL,NULL,false);
+		$posting_form=get_posting_form(do_lang(($file=='')?'COMCODE_PAGE_ADD':'SAVE'),$contents,$post_url,$hidden_fields,$fields,do_lang_tempcode('COMCODE_PAGE'),'',$fields2,$parsed,NULL,NULL,false);
 
 		if ($file=='') url_default_parameters__disable();
 
@@ -959,8 +912,6 @@ class Module_cms_comcode_pages
 	 */
 	function __ed()
 	{
-		$simple_add=get_param_integer('simple_add',0)==1;
-
 		// Load up settings from the environments
 		$file=filter_naughty(post_param('file'));
 		$lang=filter_naughty(post_param('lang'));

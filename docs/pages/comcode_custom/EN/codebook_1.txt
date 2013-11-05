@@ -132,13 +132,13 @@ returns a mapping for two entry-points: the 'misc' screen (which almost any modu
 
 [title="5"]The '[tt]get_page_links[/tt]' function[/title]
 
-This function finds some of the page links that a module can provide. This usually involves looking at the categories added to the module and providing page links to each of those categories.
+This function finds some of the page-links that a module can provide. This usually involves looking at the categories added to the module and providing page-links to each of those categories.
 
 This is advanced functionality, so it's best to skip over this function until you are more advanced.
 
 [title="5"]The '[tt]extract_page_link_permissions[/tt]' function[/title]
 
-This function converts a page links scoped toward our module into permission-module/permission-ID pairs. It is used by the permission tree editor for getting/setting permissions corresponding to sitemap nodes.
+This function converts a page-links scoped toward our module into permission-module/permission-ID pairs. It is used by the permission tree editor for getting/setting permissions corresponding to sitemap nodes.
 
 This is advanced functionality, so it's best to skip over this function until you are more advanced.
 

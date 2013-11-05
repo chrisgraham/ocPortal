@@ -44,9 +44,12 @@ class Module_staff
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'STAFF');
 	}
@@ -56,8 +59,6 @@ class Module_staff
 	 */
 	function uninstall()
 	{
-		delete_menu_item_simple('_SEARCH:staff:type=misc');
-
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('sites');
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('role');
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('fullname');
@@ -71,9 +72,6 @@ class Module_staff
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		require_lang('staff');
-		add_menu_item_simple('main_website',NULL,'STAFF','_SEARCH:staff:type=misc');
-
 		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('sites',100,1,0,0,0,'','short_text');
 		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('role',100,1,0,1,0,'','short_text');
 		$GLOBALS['FORUM_DRIVER']->install_create_custom_field('fullname',100,1,0,1,0,'','short_text');

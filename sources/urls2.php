@@ -82,7 +82,7 @@ function remove_url_mistakes($url)
 function pagelink_as_url($url)
 {
 	$parts=array();
-	if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto')) // Specially encoded page link. Complex regexp to make sure URLs do not match
+	if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto')) // Specially encoded page-link. Complex regexp to make sure URLs do not match
 	{
 		list($zone,$map,$hash)=page_link_decode($url);
 		$url=static_evaluate_tempcode(build_url($map,$zone,array(),false,false,false,$hash));
@@ -319,7 +319,7 @@ function _fixup_protocolless_urls($in)
  * @param  URLPATH		The URL to convert. Note it may not be a short URL, and it must be based on the local base URL (else failure WILL occur).
  * @param  boolean		Whether to only convert absolute URLs. Turn this on if you're not sure what you're passing is a URL not and you want to be extra safe.
  * @param  boolean		Whether to only allow perfect conversions.
- * @return string			The page link (blank: could not convert).
+ * @return string			The page-link (blank: could not convert).
  */
 function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 {
@@ -450,7 +450,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
  * Convert a local page file path to a written page-link.
  *
  * @param  string			The path.
- * @return string			The page link (blank: could not convert).
+ * @return string			The page-link (blank: could not convert).
  */
 function _page_path_to_pagelink($page)
 {
@@ -687,7 +687,7 @@ function _generate_moniker($moniker_src)
 }
 
 /**
- * Take a moniker and it's page link details, and make a full path from it.
+ * Take a moniker and it's page-link details, and make a full path from it.
  *
  * @param  ID_TEXT		Page name.
  * @param  ID_TEXT		Screen type code.
@@ -762,7 +762,7 @@ function _give_moniker_scope($page,$type,$id,$zone,$main)
 }
 
 /**
- * Take a moniker and it's page link details, and make a full path from it.
+ * Take a moniker and it's page-link details, and make a full path from it.
  *
  * @param  ID_TEXT		The content type.
  * @param  SHORT_TEXT	The URL moniker.

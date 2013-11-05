@@ -266,14 +266,10 @@ class Hook_wowbb
 				$secondary_groups=array();
 
 				$custom_fields=array(
-										ocf_make_boiler_custom_field('im_icq')=>$row['user_icq'],
-										ocf_make_boiler_custom_field('im_aim')=>$row['user_aim'],
-										ocf_make_boiler_custom_field('im_msn')=>$row['user_msnm'],
-										ocf_make_boiler_custom_field('im_yahoo')=>$row['user_ym'],
-										ocf_make_boiler_custom_field('interests')=>$row['user_interests'],
-										ocf_make_boiler_custom_field('location')=>$row['user_city'].','.$row['user_region'].','.$row['user_country'],
-										ocf_make_boiler_custom_field('occupation')=>$row['user_occupation'],
-									);
+					ocf_make_boiler_custom_field('interests')=>$row['user_interests'],
+					ocf_make_boiler_custom_field('location')=>$row['user_city'].','.$row['user_region'].','.$row['user_country'],
+					ocf_make_boiler_custom_field('occupation')=>$row['user_occupation'],
+				);
 				if ($row['user_homepage']!='')
 					$custom_fields[ocf_make_boiler_custom_field('website')]=(strlen($row['user_homepage'])>0)?('[url]'.$row['user_homepage'].'[/url]'):'';
 

@@ -44,7 +44,7 @@ ocPortal is written to the '[url="front controller"]http://en.wikipedia.org/wiki
 
 Dynamic pages (modules) are written in PHP and can output a set of different 'screens'. Screens are constructed out of templates (nested in a tree structure), with the PHP code specifying a certain kind of template structure, calling up templates with appropriate parameters to match the data being displayed.
 
-Static pages are simpler. Static pages may be easily developed and edited by regular ocPortal webmasters. To create a static page, you can just add a Comcode page (via 'adminzone' and 'Add New Page Wizard' functioanlity) and either write it in Comcode (for more info see the [page="userguide_comcode"]Comcode tutorial[/page]), or just put your HTML between Comcode '[tt][html][/tt]' tags.
+Static pages are simpler. Static pages may be easily developed and edited by regular ocPortal webmasters. To create a static page, you can just add a Comcode page and either write it in Comcode (for more info see the [page="userguide_comcode"]Comcode tutorial[/page]), or just put your HTML between Comcode '[tt][html][/tt]' tags.
 
 Page output is displayed  by wrapping the primary page output within  the GLOBAL template, prefixed with the HEADER template, and followed by the FOOTER template. The GLOBAL template references panels, and if those panels exist, they will also be included. Typically zones will include a 'panel_left' and a 'panel_right', so any pages within said zone will be surrounded by these panels.
 
@@ -60,7 +60,7 @@ Here is a glossary of some of the terms that are used to describe ocPortal conce
  - Custom Profile Field (CPF's), A custom field for members. Such fields are supported by some forum/member software including our own OCF. In OCF CPF's can be assigned to individual usergroups. CPF's are an important tool on most websites, as it is very common to need to assign extra data to members that is specific to an individual website. CPF data is always entered manually, either by the member themselves, or by staff.
  - Do-next manager, An full-screen icon-based menu interface that lays out the available/suggested routes a user may take.
  - [url="Emoticons"]http://en.wikipedia.org/wiki/Emoticon[/url], Little images of faces to represent emotions.
- - Entry points, See 'Page links'.
+ - Entry points, See 'Page-links'.
  - Entry scripts, Scripts such as [tt]site/dload.php[/tt] or [tt]index.php[/tt] that are launched directly by URL. These might be called 'front controllers' by some programmers.
  - Feedback, A system for collecting and returning feedback from any ocPortal resource (e.g. rating and posting comments on a download).
  - Forum, A place where forum topics sit (and posts site within the topics). Forums may be organised in a tree structure. We do not use the term 'board'  that some software uses.
@@ -75,7 +75,7 @@ Here is a glossary of some of the terms that are used to describe ocPortal conce
   - 'html pages' -- written in HTML
   - modules pages -- pages, that belong to a modules.
  - Panels, These are pages (usually Comcode pages) that are named with the prefix 'panel_'. They may be referenced in the templates using the 'LOAD_PANEL' symbol. The default ocPortal templates automatically place panels named 'panel_left' or 'panel_right'.
- - Page link, These are paths formatted like "zone:page:screentype:id:param=value(:...)" that ocPortal uses for detailing links. They are like URLs, but local to an ocPortal website. Page links are converted to URLs and this conversion sometimes adds extra URL parameters (for instance, any parameters prefixed 'keep_' are propagated across screens). Entry points are a special case of page link -- entry points are the page links to screens that modules provide regardless of the current state of the modules content (e.g. the catalogue index will always be there -- it is a stable entry point into the system).
+ - Page-link, These are paths formatted like "zone:page:screentype:id:param=value(:...)" that ocPortal uses for detailing links. They are like URLs, but local to an ocPortal website. Page-links are converted to URLs and this conversion sometimes adds extra URL parameters (for instance, any parameters prefixed 'keep_' are propagated across screens). Entry points are a special case of page-link -- entry points are the page-links to screens that modules provide regardless of the current state of the modules content (e.g. the catalogue index will always be there -- it is a stable entry point into the system).
  - Personal post, a post either within a private topic or within a normal topic, that can only be seen by the sender, the recipient, and administration staff
  - Private topic, a topic only seen by a select group of members (currently, the initiator and target members)
  - Points, Members of a site can earn 'points' by participating in site activities. The site administrator can adjust the value of different activities. Members can then gift these points to each other or redeem them at the point-store.

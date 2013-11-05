@@ -42,12 +42,28 @@ class Module_admin_ocf_forums extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		require_code('fields');
-		return array('misc'=>'MANAGE_FORUMS')+parent::get_entry_points()+manage_custom_fields_donext_link('post'),manage_custom_fields_entry_points('topic')+manage_custom_fields_entry_points('forum');
+		$ret=array('misc'=>'MANAGE_FORUMS')+parent::get_entry_points();
+
+		if ($support_crosslinks)
+		{
+			require_code('fields');
+			$ret+=manage_custom_fields_donext_link('post'),manage_custom_fields_entry_points('topic')+manage_custom_fields_entry_points('forum');
+
+			$ret['_SEARCH:admin_ocf_forum_groupings:ad']=array('ADD_FORUM_GROUPING','menu/_generic_admin/add_one_category');
+			$ret['_SEARCH:admin_ocf_forum_groupings:ed']=array('EDIT_FORUM_GROUPING','menu/_generic_admin/edit_one_category');
+			if (addon_installed('ocf_post_templates'))
+				$ret['_SEARCH:admin_ocf_post_templates:misc']=array('POST_TEMPLATES','menu/adminzone/structure/forum/post_templates');
+			if (addon_installed('ocf_multi_moderations'))
+				$ret['_SEARCH:admin_ocf_multimoderations:misc']=array('MULTI_MODERATIONS','menu/adminzone/structure/forum/multi_moderations');
+		}
+		return $ret;
 	}
 
 	var $title;

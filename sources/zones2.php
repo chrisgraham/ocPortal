@@ -94,12 +94,11 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
  * @param  ID_TEXT		The theme
  * @param  BINARY			Whether the zone is wide
  * @param  BINARY			Whether the zone requires a session for pages to be used
- * @param  BINARY			Whether the zone in displayed in the menu coded into some themes
  * @param  boolean		Whether to force the name as unique, if there's a conflict
  * @param  string			The base URL (blank: natural)
  * @return ID_TEXT		The name
  */
-function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$wide=0,$require_session=0,$displayed_in_menu=1,$uniqify=false,$base_url='')
+function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$wide=0,$require_session=0,$uniqify=false,$base_url='')
 {
 	require_code('type_validation');
 	if (!is_alphanumeric($zone)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
@@ -152,27 +151,15 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 		{
 			afm_make_file($zone.'/'.$i.'/index.html','',false);
 		}
-		$default_menu=<<<END
-[block="zone_{$zone}_menu" title="Menu"]menu[/block]
-[block failsafe="1"]side_users_online[/block]
-[block failsafe="1"]side_stats[/block]
-[block]side_personal_stats[/block]
-END;
-		afm_make_file($zone.'/pages/comcode_custom/EN/panel_left.txt',$default_menu,true);
+		afm_make_file($zone.'/pages/comcode_custom/EN/panel_left.txt','',true);
 	}
 	afm_make_file($zone.'/pages/comcode_custom/EN/'.filter_naughty($default_page).'.txt','[title]'.do_lang('YOUR_NEW_ZONE').'[/title]'."\n\n".do_lang('YOUR_NEW_ZONE_PAGE',$zone.':'.$default_page)."\n\n".'[block]main_comcode_page_children[/block]',true);
 
-	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($title,1),'zone_default_page'=>$default_page,'zone_header_text'=>insert_lang($header_text,1),'zone_theme'=>$theme,'zone_wide'=>$wide,'zone_require_session'=>$require_session,'zone_displayed_in_menu'=>$displayed_in_menu));
-
-	require_code('menus2');
-	$menu_item_count=$GLOBALS['SITE_DB']->query_select_value('menu_items','COUNT(*)',array('i_menu'=>'zone_menu'));
-	if ($menu_item_count<40)
-		add_menu_item_simple('zone_menu',NULL,($zone=='forum')?do_lang('SECTION_SOCIAL'):$title,$zone.':',0,1);
+	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($title,1),'zone_default_page'=>$default_page,'zone_header_text'=>insert_lang($header_text,1),'zone_theme'=>$theme,'zone_require_session'=>$require_session));
 
 	persistent_cache_delete('ALL_ZONES');
 
 	decache('main_sitemap');
-	decache('menu');
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
@@ -312,7 +299,6 @@ function upgrade_module($zone,$module)
 		{
 			require_code('database_action');
 			require_code('config2');
-			require_code('menus2');
 			require_code('files2');
 
 			if (is_array($functions[1]))
@@ -346,7 +332,6 @@ function reinstall_module($zone,$module)
 
 	require_code('database_action');
 	require_code('config2');
-	require_code('menus2');
 	require_code('files2');
 
 	$GLOBALS['SITE_DB']->query_delete('modules',array('module_the_name'=>$module),'',1);
@@ -412,7 +397,6 @@ function uninstall_module($zone,$module)
 
 	require_code('database_action');
 	require_code('config2');
-	require_code('menus2');
 	require_code('files2');
 
 	$GLOBALS['SITE_DB']->query_delete('modules',array('module_the_name'=>$module),'',1);
@@ -538,7 +522,6 @@ function upgrade_block($block)
 		{
 			require_code('database_action');
 			require_code('config2');
-			require_code('menus2');
 			require_code('files2');
 
 			if (is_array($functions[1]))
@@ -570,7 +553,6 @@ function reinstall_block($block)
 	$GLOBALS['SITE_DB']->query_delete('blocks',array('block_name'=>$block),'',1);
 
 	require_code('database_action');
-	require_code('menus2');
 	require_code('config2');
 	require_code('files2');
 
@@ -617,7 +599,6 @@ function uninstall_block($block)
 
 	require_code('database_action');
 	require_code('config2');
-	require_code('menus2');
 	require_code('files2');
 
 	$GLOBALS['SITE_DB']->query_delete('blocks',array('block_name'=>$block),'',1);

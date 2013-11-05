@@ -28,14 +28,13 @@
  * @param  ID_TEXT		The theme
  * @param  BINARY			Whether the zone is wide
  * @param  BINARY			Whether the zone requires a session for pages to be used
- * @param  BINARY			Whether the zone in displayed in the menu coded into some themes
  * @param  ID_TEXT		The new name of the zone
  * @param  boolean		Whether to force the name as unique, if there's a conflict
  * @param  boolean		Whether to skip the AFM because we know it's not needed (or can't be loaded)
  * @param  string			The base URL (blank: natural)
  * @return ID_TEXT		The name
  */
-function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$new_zone,$uniqify=false,$skip_afm=false,$base_url='')
+function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$new_zone,$uniqify=false,$skip_afm=false,$base_url='')
 {
 	if ($zone!=$new_zone)
 	{
@@ -66,21 +65,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 	$_header_text=$GLOBALS['SITE_DB']->query_select_value('zones','zone_header_text',array('zone_name'=>$zone));
 	$_title=$GLOBALS['SITE_DB']->query_select_value('zones','zone_title',array('zone_name'=>$zone));
 
-	if (get_translated_text($_title)!=$title)
-	{
-		// Update menu item
-		$i_caption=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_caption',array('i_menu'=>'zone_menu','i_url'=>$zone.':'));
-		if (!is_null($i_caption))
-		{
-			if (get_translated_text($i_caption)==get_translated_text($_title))
-			{
-				lang_remap($i_caption,$title);
-				decache('menu');
-			}
-		}
-	}
-
-	$GLOBALS['SITE_DB']->query_update('zones',array('zone_name'=>$new_zone,'zone_title'=>lang_remap($_title,$title),'zone_default_page'=>$default_page,'zone_header_text'=>lang_remap($_header_text,$header_text),'zone_theme'=>$theme,'zone_wide'=>$wide,'zone_require_session'=>$require_session,'zone_displayed_in_menu'=>$displayed_in_menu),array('zone_name'=>$zone),'',1);
+	$GLOBALS['SITE_DB']->query_update('zones',array('zone_name'=>$new_zone,'zone_title'=>lang_remap($_title,$title),'zone_default_page'=>$default_page,'zone_header_text'=>lang_remap($_header_text,$header_text),'zone_theme'=>$theme,'zone_require_session'=>$require_session),array('zone_name'=>$zone),'',1);
 
 	if ($new_zone!=$zone)
 	{
@@ -96,7 +81,6 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		$ZONE['theme']=$theme;
 	}
 
-	decache('menu');
 	decache('main_sitemap');
 	persistent_cache_delete(array('ZONE',$zone));
 	persistent_cache_delete('ALL_ZONES');
@@ -259,7 +243,7 @@ function sitemap_do_next_manager($title,$page,$zone,$completion_text)
 
 	require_code('templates_donext');
 	$special=array(
-		array('menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'page_wizard','zone'=>$zone),get_module_zone('admin_sitemap')),do_lang_tempcode('PAGE_WIZARD')),
+		array('menu/_generic_admin/add_one',array('cms_comcode_pages',array('type'=>'ed'),get_module_zone('cms_comcode_pages')),do_lang('COMCODE_PAGE_ADD')):NULL,
 		array('menu/cms/comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('COMCODE_PAGE_EDIT')),
 	);
 	if (addon_installed('redirects_editor'))
@@ -533,6 +517,7 @@ function delete_ocp_page($zone,$page,$type=NULL,$use_afm=false)
 	elseif (substr($type,0,4)=='html') $_page=$page.'.htm';
 
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'.$page));
+	decache('menu');
 
 	if ((substr($type,0,7)=='comcode') || (substr($type,0,4)=='html'))
 	{

@@ -62,12 +62,11 @@
  * @param  ?TIME				When the member is on probation until (NULL: not on probation)
  * @return AUTO_LINK			The ID of the new member.
  */
-function ocf_make_member($username,$password,$email_address,$secondary_groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=NULL,$reveal_age=0,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=NULL,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_make_member($username,$password,$email_address,$secondary_groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=NULL,$reveal_age=0,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
 	require_code('form_templates');
 
 	$preview_posts=take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
-	$zone_wide=take_param_int_modeavg($zone_wide,'m_zone_wide','f_members',1);
 	if (is_null($auto_monitor_contrib_content))
 	{
 		$auto_monitor_contrib_content=(get_option('allow_auto_notifications')=='0')?0:1;
@@ -128,7 +127,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	if ($check_correctness)
 	{
 		if (!in_array($password_compatibility_scheme,array('ldap','httpauth'))) ocf_check_name_valid($username,NULL,($password_compatibility_scheme=='')?$password:NULL);
-		if ((!function_exists('has_actual_page_access')) || (!has_actual_page_access(get_member(),'admin_ocf_join')))
+		if ((!function_exists('has_actual_page_access')) || (!has_actual_page_access(get_member(),'admin_ocf_members')))
 		{
 			require_code('type_validation');
 			if ((!is_valid_email_address($email_address)) && ($email_address!=''))
@@ -180,7 +179,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 
 		if (array_key_exists($field_id,$custom_fields))
 		{
-			if (($check_correctness) && ($field[array_key_exists('cf_show_on_join_form',$field)?'cf_show_on_join_form':'cf_required']==0) && ($field['cf_owner_set']==0) && (!has_actual_page_access(get_member(),'admin_ocf_join')))
+			if (($check_correctness) && ($field[array_key_exists('cf_show_on_join_form',$field)?'cf_show_on_join_form':'cf_required']==0) && ($field['cf_owner_set']==0) && (!has_actual_page_access(get_member(),'admin_ocf_members')))
 			{
 				access_denied('I_ERROR');
 			}
@@ -222,7 +221,6 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 		'm_pt_rules_text'=>insert_lang_comcode($pt_rules_text,4,$GLOBALS['FORUM_DB']),
 		'm_language'=>$language,
 		'm_ip_address'=>$ip_address,
-		'm_zone_wide'=>$zone_wide,
 		'm_allow_emails'=>$allow_emails,
 		'm_allow_emails_from_staff'=>$allow_emails_from_staff,
 		'm_password_change_code'=>'',

@@ -13,9 +13,8 @@ A Comcode page is a page written in Comcode, and thus is almost written in plain
 [media width="150" description="The WYSIWYG editor may be used to edit Comcode pages, although it provides less control" float="right"]data_custom/images/docs/comcode_pages_wysiwyg.png[/media]
 [media width="150" description="Editing a Comcode page" float="right"]data_custom/images/docs/comcode_pages_edit.png[/media]
 
-There are three supported ways to add a new Comcode page in ocPortal:
- - Go to the 'Structure' section of the Admin Zone and choose the 'Add-New-Page Wizard' icon. The wizard is the most user-friendly method and will actually automatically add a link to your page onto one of your menus if you wish.
- - Go to the Content Management Zone, choose the 'Comcode pages' icon, and give a new page name in the '<zone>:<page-name>' format ocPortal uses in the list of pages that already exist (where a page in the Welcome Zone would just be ':<page-name>').
+There are two supported ways to add a new Comcode page in ocPortal:
+ - Go to the Content Management Zone, choose the 'Comcode pages' icon, and give a new page name in the '<zone>:<page-name>' format ocPortal uses in the list of pages that already exist (where a page in the Welcome Zone would just be ':<page-name>'). If you don't use a colon, a default zone will be picked.
  - Just to type in the URL to where you want the page to be, and click the given link to add the missing page.
 
 [media width="150" description="The easy way to add a Comcode page" float="left"]data_custom/images/docs/comcode_pages_easyadd.png[/media]

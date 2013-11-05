@@ -171,9 +171,7 @@ function load_zone_data()
 			$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$real_zone),'',1);
 			if ((!array_key_exists(0,$zones)) && (is_dir(get_file_base().'/'.$real_zone.'/'.'pages')))
 			{
-				$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$real_zone,'zone_title'=>insert_lang($real_zone,1),'zone_default_page'=>'start','zone_header_text'=>insert_lang($real_zone,1),'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>0,'zone_displayed_in_menu'=>0));
-				require_code('menus2');
-				add_menu_item_simple('zone_menu',NULL,$real_zone,$real_zone.':',0,1);
+				$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$real_zone,'zone_title'=>insert_lang($real_zone,1),'zone_default_page'=>'start','zone_header_text'=>insert_lang($real_zone,1),'zone_theme'=>'default','zone_require_session'=>0));
 				$zones=$GLOBALS['SITE_DB']->query_select('zones z LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND z.zone_header_text=t.id',array('z.*','text_original AS zone_header_text_trans'),array('zone_name'=>$real_zone),'',1);
 			}
 			if (array_key_exists(0,$zones))
@@ -190,10 +188,6 @@ function load_zone_data()
 				warn_exit(do_lang_tempcode('BAD_ZONE',escape_html($real_zone)));
 			}
 			unset($zones);
-		}
-		if (($ZONE!==NULL) && ($ZONE['zone_wide']===NULL))
-		{
-			$ZONE['zone_wide']=(get_forum_type()=='ocf')?$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_zone_wide'):1;
 		}
 	}
 
@@ -447,7 +441,7 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint=true)
 	global $BREADCRUMB_SET_PARENTS,$DISPLAYED_TITLE,$BREADCRUMB_SET_SELF;
 	$stub=new ocp_tempcode();
 
-	// Special hard-coded link to menu structure for Admin and CMS zones
+	// Special hard-coded link to sitemap structure for Admin and CMS zones
 	$zone=get_zone_name();
 	if ((($zone=='adminzone') || ($zone=='cms')) && (get_option('deeper_admin_breadcrumbs')=='1'))
 	{

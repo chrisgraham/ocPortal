@@ -106,9 +106,12 @@ class Module_admin_import
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'IMPORT');
 	}
@@ -745,11 +748,9 @@ class Module_admin_import
 		sync_file($FILE_BASE.'/'.$config_file);
 		$out->attach(paragraph(do_lang_tempcode('OCF_CONVERTED_INFO')));
 
-		// Add menu link
+		// Add zone formally
 		$trans5=insert_lang(do_lang('FORUM'),1,NULL,false,NULL,get_site_default_lang());
-		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'forum','zone_title'=>insert_lang(do_lang('SECTION_FORUMS'),1),'zone_default_page'=>'forumview','zone_header_text'=>$trans5,'zone_theme'=>'-1','zone_wide'=>NULL,'zone_require_session'=>0,'zone_displayed_in_menu'=>1));
-		require_code('menus2');
-		add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS','forum'.':forumview',0,1);
+		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'forum','zone_title'=>insert_lang(do_lang('SECTION_FORUMS'),1),'zone_default_page'=>'forumview','zone_header_text'=>$trans5,'zone_theme'=>'-1','zone_require_session'=>0));
 
 		return $out;
 	}

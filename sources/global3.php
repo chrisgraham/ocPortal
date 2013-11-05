@@ -614,7 +614,7 @@ function is_wide()
 	if ($IS_WIDE_CACHE!==NULL) return $IS_WIDE_CACHE;
 
 	global $ZONE;
-	$IS_WIDE_CACHE=get_param_integer('wide',get_param_integer('keep_wide',(is_wide_high()==1)?1:$ZONE['zone_wide']));
+	$IS_WIDE_CACHE=get_param_integer('wide',get_param_integer('keep_wide',(is_wide_high()==1)?1:0));
 	if ($IS_WIDE_CACHE==0) return 0;
 
 	// Need to check it is allowed

@@ -42,7 +42,7 @@ class Hook_sw_ocf_forum
 			$settings['have_default_full_emoticon_set']=(count($test)!=0)?'1':'0';
 
 			$have_default_cpf_set=false;
-			$fields_l=array('im_aim','im_msn','im_jabber','im_yahoo','im_skype','interests','location','occupation','sn_google','sn_facebook','sn_twitter');
+			$fields_l=array('im_jabber','im_skype','interests','location','occupation','sn_google','sn_facebook','sn_twitter');
 			foreach ($fields_l as $field)
 			{
 				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
@@ -134,7 +134,7 @@ class Hook_sw_ocf_forum
 			}
 			if (post_param_integer('have_default_cpf_set',0)==0)
 			{
-				$fields=array('im_aim','im_msn','im_yahoo','im_skype','interests','location','occupation');
+				$fields=array('im_skype','interests','location','occupation');
 				foreach ($fields as $field)
 				{
 					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));

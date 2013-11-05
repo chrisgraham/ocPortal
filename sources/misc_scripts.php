@@ -300,7 +300,7 @@ function pagelink_redirect_script()
 }
 
 /**
- * Outputs the page link chooser popup.
+ * Outputs the page-link chooser popup.
  */
 function page_link_chooser_script()
 {

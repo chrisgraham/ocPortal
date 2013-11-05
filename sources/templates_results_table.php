@@ -37,7 +37,7 @@
  * @param  ?tempcode		Message to show (NULL: auto)
  * @param  ?array			Widths to specify to the table (NULL: none sent)
  * @param  ?string		The template set to use (NULL: default)
- * @param  integer		The maximum number of quick-jump page links to show
+ * @param  integer		The maximum number of quick-jump page-links to show
  * @param  string			GUID to pass to template
  * @param  boolean		Whether to skip showing a sort form (useful if there is another form wrapped around this)
  * @param  ?ID_TEXT		URL hash component (NULL: none)

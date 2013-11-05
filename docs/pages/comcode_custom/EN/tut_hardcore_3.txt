@@ -98,7 +98,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
    //removed-assert
 
    global $ZONE;
-   $wide=(($ZONE['zone_wide']==1) || (get_param_integer('wide',get_param_integer('wide_high',0))==1));
+   $wide=(get_param_integer('wide',get_param_integer('wide_high',0))==1);
    if (!$wide)
    {
       $show_personal_bar=false;

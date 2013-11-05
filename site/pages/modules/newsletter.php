@@ -58,8 +58,6 @@ class Module_newsletter
 		delete_value('newsletter_send_time');
 
 		delete_privilege('change_newsletter_subscriptions');
-
-		delete_menu_item_simple('_SEARCH:newsletter:type=misc');
 	}
 
 	/**
@@ -96,9 +94,6 @@ class Module_newsletter
 			));
 
 			add_privilege('NEWSLETTER','change_newsletter_subscriptions',false);
-
-			require_lang('newsletter');
-			//add_menu_item_simple('main_website',NULL,'NEWSLETTER','_SEARCH:newsletter:type=misc');
 
 			$GLOBALS['SITE_DB']->create_table('newsletters',array( // Would have been better named 'newsletter_subscribers' (but isn't for legacy reasons)
 				'id'=>'*AUTO',
@@ -164,9 +159,12 @@ class Module_newsletter
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return ($GLOBALS['SITE_DB']->query_select_value('newsletters','COUNT(*)')==0)?array():array('misc'=>'NEWSLETTER_JOIN');
 	}

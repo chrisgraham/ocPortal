@@ -320,13 +320,9 @@ class Hook_ipb_base
 				if (either_param('importer')=='ipb1')
 				{
 					$custom_fields=array(
-											ocf_make_boiler_custom_field('im_icq')=>$row['icq_number'],
-											ocf_make_boiler_custom_field('im_aim')=>$row['aim_name'],
-											ocf_make_boiler_custom_field('im_msn')=>$row['msnname'],
-											ocf_make_boiler_custom_field('im_yahoo')=>$row['yahoo'],
-											ocf_make_boiler_custom_field('interests')=>$row['interests'],
-											ocf_make_boiler_custom_field('location')=>$row['location'],
-										);
+						ocf_make_boiler_custom_field('interests')=>$row['interests'],
+						ocf_make_boiler_custom_field('location')=>$row['location'],
+					);
 					if ($row['website']!='')
 						$custom_fields[ocf_make_boiler_custom_field('website')]=(strlen($row['website'])>0)?('[url]'.$row['website'].'[/url]'):'';
 				} else
@@ -350,16 +346,11 @@ class Hook_ipb_base
 						$signature=html_to_comcode($this->clean_ipb_post_2($row2['signature']));
 						ocf_over_local();
 						$custom_fields=array(
-												ocf_make_boiler_custom_field('im_aim')=>$row2['aim_name'],
-												ocf_make_boiler_custom_field('im_msn')=>$row2['msnname'],
-												ocf_make_boiler_custom_field('im_yahoo')=>$row2['yahoo'],
 												ocf_make_boiler_custom_field('interests')=>$row2['interests'],
 												ocf_make_boiler_custom_field('location')=>$row2['location'],
 											);
 						if ($row2['website']!='')
 							$custom_fields[ocf_make_boiler_custom_field('website')]=(strlen($row2['website'])>0)?('[url]'.$row2['website'].'[/url]'):'';
-						if ($row2['icq_number']!=0)
-							$custom_fields[ocf_make_boiler_custom_field('im_icq')]=$row2['icq_number'];
 					}
 				}
 				if (either_param('importer')=='ipb1')

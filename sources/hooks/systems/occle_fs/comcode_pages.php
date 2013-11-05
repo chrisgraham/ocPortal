@@ -93,9 +93,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 			'default_page'=>'ID_TEXT',
 			'header_text'=>'SHORT_TRANS',
 			'theme'=>'ID_TEXT',
-			'wide'=>'BINARY',
 			'require_session'=>'BINARY',
-			'displayed_in_menu'=>'BINARY',
 		);
 	}
 
@@ -133,13 +131,11 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		if ($default_page=='') $default_page='start';
 		$header_text=$this->_default_property_str($properties,'header_text');
 		$theme=$this->_default_property_str($properties,'theme');
-		$wide=$this->_default_property_int($properties,'wide');
 		$require_session=$this->_default_property_int($properties,'require_session');
-		$displayed_in_menu=$this->_default_property_int($properties,'displayed_in_menu');
 
 		$zone=$this->_create_name_from_label($label);
 
-		$zone=actual_add_zone($zone,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,true);
+		$zone=actual_add_zone($zone,$human_title,$default_page,$header_text,$theme,$require_session,true);
 
 		return $zone;
 	}
@@ -165,9 +161,7 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 			'default_page'=>$row['zone_default_page'],
 			'header_text'=>$row['zone_header_text'],
 			'theme'=>$row['zone_theme'],
-			'wide'=>$row['zone_wide'],
 			'require_session'=>$row['zone_require_session'],
-			'displayed_in_menu'=>$row['zone_displayed_in_menu'],
 		);
 	}
 
@@ -192,12 +186,10 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 		if ($default_page=='') $default_page='start';
 		$header_text=$this->_default_property_str($properties,'header_text');
 		$theme=$this->_default_property_str($properties,'theme');
-		$wide=$this->_default_property_int($properties,'wide');
 		$require_session=$this->_default_property_int($properties,'require_session');
-		$displayed_in_menu=$this->_default_property_int($properties,'displayed_in_menu');
 		$zone=$this->_create_name_from_label($label);
 
-		$zone=actual_edit_zone($resource_id,$human_title,$default_page,$header_text,$theme,$wide,$require_session,$displayed_in_menu,$zone,true,true);
+		$zone=actual_edit_zone($resource_id,$human_title,$default_page,$header_text,$theme,$require_session,$zone,true,true);
 
 		return $resource_id;
 	}

@@ -104,7 +104,7 @@ You may use the config editor to:
 
 You may delete, and move pages using the [concept]Sitemap editor[/concept].
 
-If you are moving a page from one zone to another, any page links to that page (for example, in the menus or via 'page' tags) will become invalid, unless they were specified as being in the zone named '_SEARCH' (which is used to create a link by dynamically searching all zones for the named page). You may wish to temporarily set up a redirection from the page as named in its original zone, to the page as named in the new zone. Details of this are given in the 'Creating Sub-communities' tutorial. Setting up a redirection is also advisable if the page being moved is already well-indexed on search engines.
+If you are moving a page from one zone to another, any page-links to that page (for example, in the menus or via 'page' tags) will become invalid, unless they were specified as being in the zone named '_SEARCH' (which is used to create a link by dynamically searching all zones for the named page). You may wish to temporarily set up a redirection from the page as named in its original zone, to the page as named in the new zone. Details of this are given in the 'Creating Sub-communities' tutorial. Setting up a redirection is also advisable if the page being moved is already well-indexed on search engines.
 
 It is recommended that you never move pages because it complicates the upgrade process. It is advisable to use the redirects feature instead (Structure section of the Admin Zone, Redirects icon).
 

@@ -37,7 +37,7 @@ function init__templates_pagination()
  * @param  ID_TEXT		The parameter name used to store the total number of results to show per-page (usually, 'max')
  * @param  integer		The maximum number of rows in the entire dataset
  * @param  boolean		Whether to keep post data when browsing through
- * @param  integer		The maximum number of quick-jump page links to show
+ * @param  integer		The maximum number of quick-jump page-links to show
  * @param  ?array			List of per-page selectors to show (NULL: show hard-coded ones)
  * @param  ID_TEXT		Hash component to URL
  * @return tempcode		The results browser
@@ -111,8 +111,8 @@ function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_pos
 		} else $previous=do_template('PAGINATION_PREVIOUS');
 
 		// CALCULATIONS FOR CROPPING OF SEQUENCE
-		// $from is the index number (one less than written page number) we start showing page links from
-		// $to is the index number (one less than written page number) we stop showing page links from
+		// $from is the index number (one less than written page number) we start showing page-links from
+		// $to is the index number (one less than written page number) we stop showing page-links from
 		if ($max!=0)
 		{
 			$max_dispersal=$max_page_links/2;

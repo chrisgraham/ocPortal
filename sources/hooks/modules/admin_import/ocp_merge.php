@@ -1425,15 +1425,11 @@ class Hook_ocp_merge
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_name'=>$row['zone_name']));
 			if ((is_null($test)) && ($test!='wiki') && ($test!='supermembercentre') && ($test!='admincentre') && ($test!='membersonly') && ($test!='personalcentre') && ($test!='membercentre'))
 			{
-				if (!array_key_exists('zone_displayed_in_menu',$row)) $row['zone_displayed_in_menu']=1;
 				$old_title=$this->get_lang_string($db,$row['zone_title']);
 				$row['zone_title']=array_key_exists('zone_title',$row)?insert_lang($old_title,1):insert_lang($row['zone_name'],1);
 				$row['zone_header_text']=insert_lang($this->get_lang_string($db,$row['zone_header_text']),1);
 				unset($row['access_denied_counter']); // Just to support old-version compatibility a little
 				$GLOBALS['SITE_DB']->query_insert('zones',$row);
-
-				require_code('menus2');
-				add_menu_item_simple('zone_menu',NULL,$old_title,$row['zone_name'].':'.$row['zone_default_page'],0,1);
 			}
 		}
 	}
@@ -1911,7 +1907,7 @@ class Hook_ocp_merge
 				$timezone=$row['m_timezone_offset'];
 				if (is_integer($timezone)) $timezone=strval($timezone);
 				if (!isset($row['m_auto_monitor_contrib_content'])) $row['m_auto_monitor_contrib_content']=$row['m_track_contributed_topics'];
-				$id_new=ocf_make_member($row['m_username'],$row['m_pass_hash_salted'],$row['m_email_address'],NULL,$row['m_dob_day'],$row['m_dob_month'],$row['m_dob_year'],$custom_fields,$timezone,$primary_group,$row['m_validated'],$row['m_join_time'],$row['m_last_visit_time'],$row['m_theme'],$row['m_avatar_url'],$this->get_lang_string($db,$row['m_signature']),$row['m_is_perm_banned'],$row['m_preview_posts'],$row['m_reveal_age'],$row['m_title'],$row['m_photo_url'],$row['m_photo_thumb_url'],$row['m_views_signatures'],$row['m_auto_monitor_contrib_content'],$row['m_language'],$row['m_allow_emails'],array_key_exists('m_allow_emails_from_staff',$row)?$row['m_allow_emails_from_staff']:$row['m_allow_emails'],$row['m_ip_address'],$row['m_validated_email_confirm_code'],false,array_key_exists('m_password_compat_scheme',$row)?$row['m_password_compat_scheme']:$row['m_password_compatibility_scheme'],$row['m_pass_salt'],$row['m_zone_wide'],$row['m_last_submit_time'],$id,array_key_exists('m_highlighted_name',$row)?$row['m_highlighted_name']:0,array_key_exists('m_pt_allow',$row)?$row['m_pt_allow']:'*',array_key_exists('m_pt_rules_text',$row)?$this->get_lang_string($db,$row['m_pt_rules_text']):'',$row['m_on_probation_until']);
+				$id_new=ocf_make_member($row['m_username'],$row['m_pass_hash_salted'],$row['m_email_address'],NULL,$row['m_dob_day'],$row['m_dob_month'],$row['m_dob_year'],$custom_fields,$timezone,$primary_group,$row['m_validated'],$row['m_join_time'],$row['m_last_visit_time'],$row['m_theme'],$row['m_avatar_url'],$this->get_lang_string($db,$row['m_signature']),$row['m_is_perm_banned'],$row['m_preview_posts'],$row['m_reveal_age'],$row['m_title'],$row['m_photo_url'],$row['m_photo_thumb_url'],$row['m_views_signatures'],$row['m_auto_monitor_contrib_content'],$row['m_language'],$row['m_allow_emails'],array_key_exists('m_allow_emails_from_staff',$row)?$row['m_allow_emails_from_staff']:$row['m_allow_emails'],$row['m_ip_address'],$row['m_validated_email_confirm_code'],false,array_key_exists('m_password_compat_scheme',$row)?$row['m_password_compat_scheme']:$row['m_password_compatibility_scheme'],$row['m_pass_salt'],$row['m_last_submit_time'],$id,array_key_exists('m_highlighted_name',$row)?$row['m_highlighted_name']:0,array_key_exists('m_pt_allow',$row)?$row['m_pt_allow']:'*',array_key_exists('m_pt_rules_text',$row)?$this->get_lang_string($db,$row['m_pt_rules_text']):'',$row['m_on_probation_until']);
 				$rows2=$db->query('SELECT * FROM '.$table_prefix.'f_member_custom_fields WHERE mf_member_id='.strval($row['id']),1);
 				if (array_key_exists(0,$rows2))
 				{

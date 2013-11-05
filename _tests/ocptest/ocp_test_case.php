@@ -38,7 +38,7 @@ class ocp_test_case extends WebTestCase
 	function get($url,$parameters=NULL)
 	{
 		$parts=array();
-		if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto')) // Specially encoded page link. Complex regexp to make sure URLs do not match
+		if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto')) // Specially encoded page-link. Complex regexp to make sure URLs do not match
 		{
 			list($zone_name,$vars,$hash)=page_link_decode($url);
 			$real_url=static_evaluate_tempcode(build_url($vars,$zone_name,NULL,false,false,false,$hash));

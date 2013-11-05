@@ -200,7 +200,7 @@ class Hook_addon_registry_core_ocf
 			'adminzone/pages/modules/admin_ocf_emoticons.php',
 			'adminzone/pages/modules/admin_ocf_groups.php',
 			'adminzone/pages/modules/admin_ocf_merge_members.php',
-			'adminzone/pages/modules/admin_ocf_join.php',
+			'adminzone/pages/modules/admin_ocf_members.php',
 			'sources/hooks/modules/admin_import/csv_members.php',
 			'themes/default/templates/OCF_BIRTHDAYS.tpl',
 			'themes/default/templates/OCF_EMOTICON_CELL.tpl',

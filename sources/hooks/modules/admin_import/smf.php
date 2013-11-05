@@ -354,11 +354,7 @@ class Hook_smf
 				}
 
 				$custom_fields=array(
-										ocf_make_boiler_custom_field('im_icq')=>$row['ICQ'],
-										ocf_make_boiler_custom_field('im_aim')=>$row['AIM'],
-										ocf_make_boiler_custom_field('im_msn')=>$row['MSN'],
-										ocf_make_boiler_custom_field('im_yahoo')=>$row['YIM'],
-									);
+				);
 				if ($row['websiteUrl']!='')
 					$custom_fields[ocf_make_boiler_custom_field('website')]=$row['websiteUrl'];
 

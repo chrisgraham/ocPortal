@@ -332,15 +332,9 @@ class Hook_vb3
 					$secondary_groups=explode(',',$row['membergroupids']);
 				}
 
-				$custom_fields=array(
-										ocf_make_boiler_custom_field('im_icq')=>$row['icq'],
-										ocf_make_boiler_custom_field('im_aim')=>$row['aim'],
-										ocf_make_boiler_custom_field('im_yahoo')=>$row['yahoo'],
-									);
+				$custom_fields=array();
 				if ($row['homepage']!='')
 					$custom_fields[ocf_make_boiler_custom_field('website')]=(strlen($row['homepage'])>0)?('[url]'.$row['homepage'].'[/url]'):'';
-				if ($row['msn']!='')
-					$custom_fields[ocf_make_boiler_custom_field('im_msn')]=$row['msn'];
 
 				$signature=$row['signature'];
 				$validated=1;

@@ -32,7 +32,7 @@ class Hook_realtime_rain_recommend
 	{
 		$drops=array();
 
-		if ((has_actual_page_access(get_member(),'admin_ocf_join')) && (get_forum_type()=='ocf'))
+		if ((has_actual_page_access(get_member(),'admin_ocf_members')) && (get_forum_type()=='ocf'))
 		{
 			$rows=$GLOBALS['FORUM_DB']->query('SELECT i_email_address,i_inviter AS member_id,i_time AS timestamp FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_invites WHERE i_time BETWEEN '.strval($from).' AND '.strval($to));
 

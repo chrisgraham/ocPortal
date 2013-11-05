@@ -84,7 +84,7 @@ class Hook_content_meta_aware_member
 
 			'addon_name'=>'core_ocf',
 
-			'cms_page'=>'admin_ocf_join',
+			'cms_page'=>'admin_ocf_members',
 			'module'=>'members',
 
 			'occle_filesystem_hook'=>'groups',

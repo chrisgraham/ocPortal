@@ -45,17 +45,25 @@ class Module_admin_sitemap
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array(
-			'misc'=>'ZONES',
-			'page_wizard'=>'PAGE_WIZARD',
-			'sitemap'=>'SITEMAP_EDITOR',
-			'move'=>array('MOVE_PAGES','menu/adminzone/structure/site_tree/page_move'),
-			'delete'=>array('DELETE_PAGES','menu/adminzone/structure/site_tree/page_delete'),
+		$ret=array(
+			'sitemap'=>array('SITEMAP_EDITOR','menu/adminzone/structure/sitemap/sitemap_editor'),
 		);
+		if (!has_js())
+		{
+			$ret+=array(
+				'misc'=>array('SITEMAP_TOOLS','menu/adminzone/structure/sitemap/sitemap_editor'),
+				'move'=>array('MOVE_PAGES','menu/adminzone/structure/sitemap/page_move'),
+				'delete'=>array('DELETE_PAGES','menu/adminzone/structure/sitemap/page_delete'),
+			);
+		}
+		return $ret;
 	}
 
 	var $title;
@@ -95,22 +103,6 @@ class Module_admin_sitemap
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
 
 			$this->title=get_screen_title('SITEMAP_EDITOR');
-		}
-
-		if ($type=='page_wizard')
-		{
-			//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
-			breadcrumb_set_self(do_lang_tempcode('PAGE_WIZARD'));
-
-			$this->title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(1),integer_format(3)));
-		}
-
-		if ($type=='_page_wizard')
-		{
-			breadcrumb_set_parents(array(/*array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),*/array('_SELF:_SELF:page_wizard',do_lang_tempcode('PAGE_WIZARD'))));
-			breadcrumb_set_self(do_lang_tempcode('DETAILS'));
-
-			$this->title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(2),integer_format(3)));
 		}
 
 		if ($type=='delete')
@@ -166,9 +158,7 @@ class Module_admin_sitemap
 
 		$type=get_param('type','misc');
 
-		if ($type=='misc') return $this->misc();
-		if ($type=='page_wizard') return $this->page_wizard();
-		if ($type=='_page_wizard') return $this->_page_wizard();
+		if ($type=='misc') return $this->misc(); // Do-next menu
 		if ($type=='sitemap') return $this->sitemap();
 		if ($type=='delete') return $this->delete();
 		if ($type=='_delete') return $this->_delete();
@@ -240,157 +230,6 @@ class Module_admin_sitemap
 		require_javascript('javascript_sitemap_editor');
 
 		return do_template('SITEMAP_EDITOR_SCREEN',array('_GUID'=>'2d42cb71e03d31c855a6b6467d2082d2','TITLE'=>$this->title));
-	}
-
-	/**
-	 * The UI for the add-new-page wizard (choose zone, page name).
-	 *
-	 * @return tempcode		The UI
-	 */
-	function page_wizard()
-	{
-		$zone=get_param('zone','site');
-
-		require_code('form_templates');
-		require_code('zones2');
-		require_code('zones3');
-		$fields=new ocp_tempcode();
-		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),do_lang_tempcode('MENU_ZONE'),'zone',create_selection_list_zones($zone),NULL,true));
-		$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_PAGE_NAME'),'name','',true));
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_page_wizard'),'_SELF',NULL,false,true);
-		$submit_name=do_lang_tempcode('PROCEED');
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'4c982255f035472282b5a3740d8df82d','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
-	}
-
-	/**
-	 * The UI for the add-new-page wizard (choose which menu to add it to, and what title to give it - or choose not to add to a menu).
-	 *
-	 * @return tempcode		The UI
-	 */
-	function _page_wizard()
-	{
-		require_code('type_validation');
-		if (!is_alphanumeric(str_replace(':','',post_param('name')))) warn_exit(do_lang('BAD_CODENAME'));
-
-		$zone=post_param('zone','');
-		$zones=find_all_zones(false,true);
-		$pages=array();
-		foreach ($zones as $_zone)
-		{
-			$pages[$_zone[0]]=find_all_pages_wrap($_zone[0],true);
-		}
-
-		require_code('form_templates');
-		$fields=new ocp_tempcode();
-
-		// Get list of menus
-		$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
-		$list=new ocp_tempcode();
-		$list2=new ocp_tempcode();
-		$list->attach(form_input_list_entry(STRING_MAGIC_NULL,false,do_lang_tempcode('NA_EM')));
-		// See if we can discern nice names for the menus, to help relate them
-		$list_existing_used=new ocp_tempcode();
-		$list_existing_unused=new ocp_tempcode();
-		foreach ($rows as $row)
-		{
-			$menu_name=make_string_tempcode(escape_html($row['i_menu']));
-			$found=false;
-			foreach ($pages as $zone_under=>$under)
-			{
-				foreach ($under as $filename=>$type)
-				{
-					if (substr(strtolower($filename),-4)=='.txt')
-					{
-						$matches=array();
-						$path=zone_black_magic_filterer(((substr($type,0,15)=='comcode_custom/')?get_custom_file_base():get_file_base()).'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/'.$type.'/'.$filename);
-						if (!file_exists($path))
-							$path=zone_black_magic_filterer(get_file_base().'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/'.$type.'/'.$filename);
-						$contents='';
-						if (file_exists($path))
-						{
-							$contents.=file_get_contents($path);
-						} else
-						{
-							$fallback=zone_black_magic_filterer(get_file_base().'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/comcode/'.fallback_lang().'/'.$filename);
-							if (file_exists($fallback)) $contents.=file_get_contents($fallback);
-						}
-						if (preg_match('#\[block="'.preg_quote($row['i_menu'],'#').'"[^\]]* title="([^"]*)"[^\]]*\]menu\[/block\]#',$contents,$matches)!=0)
-						{
-							$zone_title=preg_replace('# '.preg_quote(do_lang('ZONE'),'#').'$#','',$zones[$zone_under][1]);
-							$menu_name=do_lang_tempcode('MENU_FULL_DETAILS',$menu_name,comcode_to_tempcode($matches[1]),make_string_tempcode(escape_html($zone_title)));
-							$found=true;
-							break 2;
-						}
-					}
-				}
-			}
-
-			$selected=(($zone=='forum') && ($row['i_menu']=='forum_features')) || (($zone=='collaboration') && ($row['i_menu']=='collab_website')) || ((($zone=='site') || (($zone=='') && (get_option('collapse_user_zones')=='1'))) && (($row['i_menu']=='site') || ($row['i_menu']=='main_website'))) || (($zone=='') && ($row['i_menu']=='root_website'));
-
-			if (($found) || ($row['i_menu']=='zone_menu'))
-			{
-				$list_existing_used->attach(form_input_list_entry($row['i_menu'],$selected,$menu_name));
-			} else
-			{
-				$list_existing_unused->attach(form_input_list_entry($row['i_menu'],false,$menu_name));
-			}
-		}
-		// Now see if there are any menus pending creation
-		$list_new=new ocp_tempcode();
-		foreach ($pages as $zone_under=>$under)
-		{
-			foreach ($under as $filename=>$type)
-			{
-				if (substr(strtolower($filename),-4)=='.txt')
-				{
-					$matches=array();
-					$path=zone_black_magic_filterer(((substr($type,0,15)=='comcode_custom/')?get_custom_file_base():get_file_base()).'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/'.$type.'/'.$filename);
-					if (!file_exists($path))
-						$path=zone_black_magic_filterer(get_file_base().'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/'.$type.'/'.$filename);
-					$contents='';
-					if (file_exists($path))
-					{
-						$contents.=file_get_contents($path);
-					} else
-					{
-						$fallback=zone_black_magic_filterer(get_file_base().'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/comcode/'.fallback_lang().'/'.$filename);
-						if (file_exists($fallback)) $contents.=file_get_contents($fallback);
-					}
-					$num_matches=preg_match_all('#\[block="([^"]*)"[^\]]* title="([^"]*)"[^\]]*\]menu\[/block\]#',$contents,$matches);
-					for ($i=0;$i<$num_matches;$i++)
-					{
-						$menu_name=$matches[1][$i];
-
-						foreach ($rows as $row)
-						{
-							if ($row['i_menu']==$menu_name)
-								continue 2;
-						}
-
-						$zone_title=$zones[$zone_under][1];
-						$menu_name=do_lang_tempcode('MENU_FULL_DETAILS',$menu_name,comcode_to_tempcode($matches[2][$i]),make_string_tempcode(escape_html($zone_title)));
-						$list_new->attach(form_input_list_entry($matches[1][$i],$selected,$menu_name));
-					}
-				}
-			}
-		}
-		require_lang('menus');
-		$list->attach(form_input_list_group(do_lang('MENUS_EXISTING_USED'),$list_existing_used));
-		$list->attach(form_input_list_group(do_lang('MENUS_EXISTING_UNUSED'),$list_existing_unused));
-		$list->attach(form_input_list_group(do_lang('MENUS_NEW'),$list_new));
-		$fields->attach(form_input_list(do_lang_tempcode('MENU'),do_lang_tempcode('MENU_TO_ADD_TO'),'menu',$list,NULL,true));
-
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_MENU_TITLE'),'title',titleify(post_param('name')),true));
-
-		$post_url=build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','simple_add'=>1),get_module_zone('cms_comcode_pages'));
-
-		$submit_name=do_lang_tempcode('PROCEED');
-
-		$hidden=new ocp_tempcode();
-		$hidden->attach(form_input_hidden('page_link',$zone.':'.post_param('name')));
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'3281970772c410cf071c422792d1571d','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>$hidden,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

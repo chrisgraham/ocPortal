@@ -25,9 +25,9 @@
  * @param  string			Label 1 (given as a parameter to the language string code)
  * @param  string			Label 2 (given as a parameter to the language string code)
  * @param  string			Label 3 (given as a parameter to the language string code)
- * @param  string			Page link 1
- * @param  string			Page link 2
- * @param  string			Page link 3
+ * @param  string			Page-link 1
+ * @param  string			Page-link 2
+ * @param  string			Page-link 3
  * @param  string			Addon that caused the event
  * @param  BINARY			Whether this post should be public or friends-only
  * @param  ?MEMBER		Member being written for (NULL: current member)

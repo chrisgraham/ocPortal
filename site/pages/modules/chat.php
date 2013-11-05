@@ -63,9 +63,6 @@ class Module_chat
 		$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>'cms_chat'));
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'chat'));
 
-		delete_menu_item_simple('_SEARCH:chat:type=misc');
-		delete_menu_item_simple('_SEARCH:chat:type=misc:member_id={$MEMBER_OVERRIDE}');
-
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_chat');
 	}
 
@@ -118,8 +115,6 @@ class Module_chat
 			$GLOBALS['SITE_DB']->create_index('chat_messages','room_id',array('room_id'));
 
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_chat',20,1,0,0,0,'','integer');
-
-			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc',0,0,true,'',0,'icons/24x24/menu/social/chat/chat');
 
 			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($usergroups) as $id)
@@ -227,9 +222,10 @@ class Module_chat
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL)
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array();
 		$ret['misc']='CHAT_LOBBY';

@@ -65,10 +65,6 @@ class Module_wiki
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'wiki_page'));
 
-		delete_menu_item_simple('_SEARCH:wiki:type=misc');
-		delete_menu_item_simple('_SEARCH:wiki:type=random');
-		delete_menu_item_simple('_SEARCH:wiki:type=changes');
-
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_wiki');
 	}
 
@@ -145,12 +141,6 @@ class Module_wiki
 
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_wiki',20,1,0,0,0,'','integer');
 
-			require_lang('wiki');
-			//add_menu_item_simple('main_content',NULL,'WIKI','_SEARCH:wiki:type=misc');
-			add_menu_item_simple('wiki_features',NULL,'HOME','_SEARCH:wiki:type=misc');
-			add_menu_item_simple('wiki_features',NULL,'RANDOM_PAGE','_SEARCH:wiki:type=random');
-			add_menu_item_simple('wiki_features',NULL,'WIKI_CHANGELOG','_SEARCH:wiki:type=changes');
-
 			$GLOBALS['SITE_DB']->create_index('wiki_posts','ftjoin_spm',array('the_message'));
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spt',array('title'));
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spd',array('description'));
@@ -214,9 +204,12 @@ class Module_wiki
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
 			'misc'=>'WIKI_HOME',

@@ -1,3 +1,0 @@
-[block="main_website" title="{$SITE_NAME}"]menu[/block]
-[block="main_content" title="{!CONTENT}"]menu[/block]
-[block="wiki_features" silent_failure="1" title="{!wiki:WIKI}"]menu[/block]

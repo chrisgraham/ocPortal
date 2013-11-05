@@ -162,9 +162,12 @@ class Module_cms_banners extends standard_crud_module
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'MANAGE_BANNERS')+parent::get_entry_points();
 	}
@@ -191,7 +194,7 @@ class Module_cms_banners extends standard_crud_module
 		return do_next_manager(get_screen_title('MANAGE_BANNERS'),comcode_lang_string('DOC_BANNERS'),
 			array(
 				has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('menu/_generic_admin/add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_BANNER_TYPE')):NULL,
-				has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_BANNER_TYPE')):NULL,
+				has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('menu/_generic_admin/edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_BANNER_TYPE')):NULL,
 				has_privilege(get_member(),'submit_midrange_content','cms_banners')?array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_BANNER')):NULL,
 				has_privilege(get_member(),'edit_own_midrange_content','cms_banners')?array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_BANNER')):NULL,
 			),

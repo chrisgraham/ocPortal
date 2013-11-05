@@ -107,7 +107,7 @@ Don't worry too much about entry point syntax as ocPortal will automatically con
 To copy an entry point to a branch you need to:
  - select the caption field of an item in the menu (this will cause an editing form to become available for that menu item)
  - click the entry point in the sitemap tool
-You will then see the URL has been changed to the entry point you want. Do not be alarmed that this was placed in the 'URL' field, as the field also supports page links (of which entry points are a type of).
+You will then see the URL has been changed to the entry point you want. Do not be alarmed that this was placed in the 'URL' field, as the field also supports page-links (of which entry points are a type of).
 
 [title="2"]Images[/title]
 
@@ -122,22 +122,22 @@ You can also find many icons online using websites such as [url="http://iconlet.
 
 [title="2"]Match-keys[/title]
 
-[concept]Match-key[/concept]s are basically page links (entry points are a type of page link) that are used for matching against the URL the menu is being viewed from, to determine whether a branch will be shown. If the URL matches against one of the match-keys for a branch, then the branch will be shown, otherwise it won't. Note that if you leave the 'match-keys' field blank, none of this checking happens, and the branch is shown.
+[concept]Match-key[/concept]s are basically page-links (entry points are a type of page-link) that are used for matching against the URL the menu is being viewed from, to determine whether a branch will be shown. If the URL matches against one of the match-keys for a branch, then the branch will be shown, otherwise it won't. Note that if you leave the 'match-keys' field blank, none of this checking happens, and the branch is shown.
 
-Match-keys are entered into the field with commas to separate them. The only differences between a page link and a match-key are:
+Match-keys are entered into the field with commas to separate them. The only differences between a page-link and a match-key are:
  - Match-keys may use '_WILD' as the zone in order to skip checking against zone
  - Match-keys may use '_WILD' as the page in order to skip checking against page
  - The additional '<key>=<value>' parts of the match-key enforce a match from the URL the menu is being viewed from, but the URL may also have additional parameters and the match-key does not need to state them
  - It makes no sense to use '_SEARCH' or '_SELF' in a match-key
 
-An example match-key list is '_WILD:downloads:type=ad,adminzone:admin_downloads:type=ed'. This would match URLs that were generated from the following page links (whether these page links points themselves actually work is irrelevant):
+An example match-key list is '_WILD:downloads:type=ad,adminzone:admin_downloads:type=ed'. This would match URLs that were generated from the following page-links (whether these page-links points themselves actually work is irrelevant):
  - [tt]site:downloads:type=ad[/tt]
  - [tt]randomzone:downloads:type=ad[/tt]
  - [tt]:downloads:type=ad:wide=1[/tt]
  - [tt]adminzone:admin_downloads:type=ed[/tt]
  - [tt]adminzone:admin_downloads:type=ed:keep_novalidate=1[/tt]
 
-It would not match URLs generated from the following page links:
+It would not match URLs generated from the following page-links:
  - [tt]site:galleries:type=ad[/tt]
  - [tt]randomzone:downloads[/tt]
  - [tt]:downloads:type=ed:wide=1[/tt]
@@ -158,7 +158,7 @@ There are some advanced features for those wanting to have auto-generated deep m
  - If a menu branch's tooltip is set to [tt]@@<menuname>[/tt] then the menu will be inserted underneath that branch. This is very useful for generating drop-down menus that automatically absorb the left-hand-side menus from multiple zones -- removing the need to maintain two sets of menus
 
 [concepts
- 1_key="Match-key"      1_value="Page link style identifiers used to do pattern matching against URLs"
+ 1_key="Match-key"      1_value="Page-link style identifiers used to do pattern matching against URLs"
  2_key="Comcode menu"   2_value="A menu created via the Comcode 'menu' tag"
  3_key="Managed menu"   3_value="A menu created by the menu editor"
  4_key="Panel page"     4_value="A specially named page that sits on an edge of the main page for all pages in its zone (although a templator could place it anywhere, edges are most common)"

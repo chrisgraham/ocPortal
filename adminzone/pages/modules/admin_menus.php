@@ -42,89 +42,14 @@ class Module_admin_menus
 	}
 
 	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		require_code('menus');
-
-		require_all_lang();
-
-		/* Our idealised choice of installed links is built for minimalism by assuming we also have:
-			 zone menu
-			 tailored menus in non-site/welcome zones
-			 NO panel_top (if there is that's fine, it's just a supplementary source of navigation)
-			 footer menu
-			 donate/hosting/advertise linked to by banners
-			 side_personal_stats/side_search/main_newsletter_signup/main_leaderboard/main_poll/main_news/side_news_categories/side_calendar blocks
-			 implicit links to authors/awards/member-actions/online_members
-
-			(not all links defined here, various modules also install them)
-		*/
-
-		// root_website
-		add_menu_item_simple('root_website',NULL,'FRONT_PAGE',':');
-		add_menu_item_simple('root_website',NULL,'RULES','_SEARCH:rules');
-		//add_menu_item_simple('root_website',NULL,'FEEDBACK','_SEARCH:feedback');
-		if (!in_array(get_forum_type(),array('ocf','none'))) add_menu_item_simple('root_website',NULL,'SECTION_FORUMS',get_forum_base_url(true));
-
-		// main_website
-		add_menu_item_simple('main_website',NULL,'FRONT_PAGE','site:');
-		add_menu_item_simple('main_website',NULL,'HELP','_SEARCH:help');
-
-		// main_content
-
-		// main_community
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'SECTION_FORUMS','forum:forumview',0,0,true,'',0,'icons/24x24/menu/social/forum/forums');
-		elseif (!in_array(get_forum_type(),array('none'))) add_menu_item_simple('main_community',NULL,'SECTION_FORUMS',get_forum_base_url(true),0,0,true,'',0,'icons/24x24/menu/social/forum/forums');
-		add_menu_item_simple('main_community',NULL,'RULES','_SEARCH:rules',0,0,true,'',0,'icons/24x24/menu/pages/rules');
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'MEMBERS','_SEARCH:members:type=misc',0,0,true,'',0,'icons/24x24/menu/social/members');
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'USERGROUPS','_SEARCH:groups:type=misc',0,0,true,'',0,'icons/24x24/menu/social/groups');
-
-		// member_features
-		add_menu_item_simple('member_features',NULL,'_JOIN','_SEARCH:join:type=misc',0,1);
-		add_menu_item_simple('member_features',NULL,'RESET_PASSWORD','_SEARCH:lost_password:type=misc');
-
-		// collab_website
-		add_menu_item_simple('collab_website',NULL,'FRONT_PAGE','collaboration:');
-		add_menu_item_simple('collab_website',NULL,'ABOUT','collaboration:about');
-
-		// forum_features
-		add_menu_item_simple('forum_features',NULL,'RULES','_SEARCH:rules');
-		add_menu_item_simple('forum_features',NULL,'MEMBERS','_SEARCH:members:type=misc');
-		add_menu_item_simple('forum_features',NULL,'USERGROUPS','_SEARCH:groups:type=misc');
-
-		// Zones
-		add_menu_item_simple('zone_menu',NULL,'SITE','site'.':',0,1);
-		if (get_forum_type()=='ocf')
-		{
-			add_menu_item_simple('zone_menu',NULL,'SECTION_SOCIAL','forum'.':',0,1);
-		} elseif (get_forum_type()!='none')
-		{
-			add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS',get_forum_base_url(),0,1);
-		}
-		if (file_exists(get_file_base().'/collaboration'))
-			add_menu_item_simple('zone_menu',NULL,'COLLABORATION','collaboration'.':',0,1);
-		add_menu_item_simple('zone_menu',NULL,'CMS','cms'.':',0,1);
-		add_menu_item_simple('zone_menu',NULL,'ADMIN_ZONE','adminzone'.':',0,1);
-	}
-
-	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'MENU_MANAGEMENT');
 	}

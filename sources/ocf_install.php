@@ -182,7 +182,7 @@ function install_ocf($upgrade_from=NULL)
 		uninstall_ocf(); // Remove if already installed
 	}
 
-	// Upgrade code for making changes (<7 not supported)
+	// Upgrade code for making changes (<7 not supported) lots of LEGACY code below
 	if ((!is_null($upgrade_from)) && ($upgrade_from<7.2))
 	{
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT m_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'db_meta WHERE ('.db_string_equal_to('m_type','?INTEGER').' OR '.db_string_equal_to('m_type','BINARY').') AND '.db_string_equal_to('m_table','f_member_custom_fields'));
@@ -287,6 +287,7 @@ function install_ocf($upgrade_from=NULL)
 			rename_privilege($old,$new);
 		}
 		$GLOBALS['FORUM_DB']->delete_table_field('f_members','m_notes');
+		$GLOBALS['FORUM_DB']->delete_table_field('f_members','m_zone_wide');
 		delete_config_option('skip_email_confirm_join');
 		delete_config_option('prevent_shouting');
 
@@ -361,11 +362,7 @@ function install_ocf($upgrade_from=NULL)
 		));
 
 		ocf_make_boiler_custom_field('SELF_DESCRIPTION');
-		//ocf_make_boiler_custom_field('im_aim'); Old-school
-		//ocf_make_boiler_custom_field('im_msn'); Old-school
-		//ocf_make_boiler_custom_field('im_yahoo'); Old-school
-		//ocf_make_boiler_custom_field('im_icq'); Old-school
-		//ocf_make_boiler_custom_field('im_jabber'); Old-school
+		//ocf_make_boiler_custom_field('im_jabber'); Old-school, although XMPP is still popular for some, so we won't remove entirely
 		ocf_make_boiler_custom_field('im_skype');
 		ocf_make_boiler_custom_field('sn_facebook');
 		ocf_make_boiler_custom_field('sn_google');
@@ -425,7 +422,6 @@ function install_ocf($upgrade_from=NULL)
 			'm_ip_address'=>'IP',
 			'm_allow_emails'=>'BINARY',
 			'm_allow_emails_from_staff'=>'BINARY',
-			'm_zone_wide'=>'BINARY',
 			'm_highlighted_name'=>'BINARY',
 			'm_pt_allow'=>'SHORT_TEXT',
 			'm_pt_rules_text'=>'LONG_TRANS',	// Comcode

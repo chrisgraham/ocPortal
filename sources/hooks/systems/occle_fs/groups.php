@@ -315,7 +315,6 @@ class Hook_occle_fs_groups extends resource_fs_base
 			'allow_emails_from_staff'=>'BINARY',
 			'ip_address'=>'IP',
 			'validated_email_confirm_code'=>'SHORT_TEXT',
-			'zone_wide'=>'BINARY',
 			'last_submit_time'=>'TIME',
 			'highlighted_name'=>'BINARY',
 			'pt_allow'=>'SHORT_TEXT',
@@ -430,7 +429,6 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$validated_email_confirm_code=$this->_default_property_str($properties,'validated_email_confirm_code');
 		$password_compatibility_scheme=$this->_default_property_str_null($properties,'password_compatibility_scheme');
 		$salt=$this->_default_property_str($properties,'salt');
-		$zone_wide=$this->_default_property_int_modeavg($properties,'zone_wide','f_members',1,'m_zone_wide');
 		$last_submit_time=$this->_default_property_int_null($properties,'last_submit_time');
 		$highlighted_name=$this->_default_property_int($properties,'highlighted_name');
 		$pt_allow=$this->_default_property_str($properties,'pt_allow');
@@ -458,7 +456,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 			$actual_custom_fields[$custom_field['id']]=$value;
 		}
 
-		return array($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+		return array($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 	}
 
 	/**
@@ -478,9 +476,9 @@ class Hook_occle_fs_groups extends resource_fs_base
 
 		require_code('ocf_members_action');
 
-		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until)=$this->__file_read_in_properties($path,$properties);
+		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until)=$this->__file_read_in_properties($path,$properties);
 
-		$id=ocf_make_member($label,$password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$category,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+		$id=ocf_make_member($label,$password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$category,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$last_submit_time,NULL,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 
 		return strval($id);
 	}
@@ -537,7 +535,6 @@ class Hook_occle_fs_groups extends resource_fs_base
 			'allow_emails_from_staff'=>$row['m_allow_emails_from_staff'],
 			'ip_address'=>$row['m_ip_address'],
 			'validated_email_confirm_code'=>$row['m_validated_email_confirm_code'],
-			'zone_wide'=>$row['m_zone_wide'],
 			'last_submit_time'=>$row['m_last_submit_time'],
 			'highlighted_name'=>$row['m_highlighted_name'],
 			'pt_allow'=>$row['m_pt_allow'],
@@ -581,9 +578,9 @@ class Hook_occle_fs_groups extends resource_fs_base
 		require_code('ocf_members_action2');
 
 		$label=$this->_default_property_str($properties,'label');
-		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$zone_wide,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until)=$this->__file_read_in_properties($path,$properties);
+		list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until)=$this->__file_read_in_properties($path,$properties);
 
-		ocf_edit_member(intval($resource_id),$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$category,$actual_custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$label,$password_hashed,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
+		ocf_edit_member(intval($resource_id),$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$category,$actual_custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$label,$password_hashed,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
 
 		return $resource_id;
 	}

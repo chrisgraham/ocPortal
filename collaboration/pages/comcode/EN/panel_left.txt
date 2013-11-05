@@ -1,5 +1,3 @@
-[block="collab_website" title="{!_COLLABORATION}"]menu[/block]
-[block="collab_features" type="tree" title="{!FEATURES}"]menu[/block]
 [block failsafe="1"]side_users_online[/block]
 [block failsafe="1"]side_stats[/block]
 [block]side_personal_stats[/block]

@@ -375,11 +375,7 @@ class Hook_mybb
 				if ($row['usergroup']==4) $secondary_groups[]=db_get_first_id()+1;
 
 				$custom_fields=array(
-										ocf_make_boiler_custom_field('im_icq')=>$row['icq'],
-										ocf_make_boiler_custom_field('im_aim')=>$row['aim'],
-										ocf_make_boiler_custom_field('im_msn')=>$row['msn'],
-										ocf_make_boiler_custom_field('im_yahoo')=>$row['yahoo'],
-									);
+				);
 				if ($row['website']!='')
 					$custom_fields[ocf_make_boiler_custom_field('website')]=(strlen($row['website'])>0)?('[url]'.$row['website'].'[/url]'):'';
 

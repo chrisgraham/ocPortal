@@ -44,9 +44,12 @@ class Module_admin_setupwizard
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'SETUP_WIZARD');
 	}
@@ -786,7 +789,6 @@ class Module_admin_setupwizard
 		if (function_exists('set_time_limit')) @set_time_limit(600);
 
 		require_code('config2');
-		require_code('menus2');
 		require_code('themes2');
 		require_lang('zones');
 
@@ -797,19 +799,6 @@ class Module_admin_setupwizard
 
 		if ($installprofile!='')
 		{
-			// Simplify down to a single menu
-			foreach (array('main_content','main_website') as $merge_item)
-			{
-				$GLOBALS['SITE_DB']->query_update('menu_items',array('i_menu'=>'site'),array('i_menu'=>$merge_item));
-			}
-			$duplicates=$GLOBALS['SITE_DB']->query_select('menu_items',array('id','COUNT(*) AS cnt'),array('i_menu'=>'site'),'GROUP BY i_url');
-			foreach ($duplicates as $duplicate)
-			{
-				if ($duplicate['cnt']>1)
-					delete_menu_item($duplicate['id']);
-			}
-			delete_menu_item_simple('site:');
-
 			// Run any specific code for the profile
 			$object=mixed();
 			if ((is_file(get_file_base().'/sources/hooks/modules/admin_setupwizard_installprofiles/'.$installprofile.'.php')) || (is_file(get_file_base().'/sources_custom/hooks/modules/admin_setupwizard_installprofiles/'.$installprofile.'.php')))
@@ -1107,7 +1096,7 @@ class Module_admin_setupwizard
 		// Show nice interface to start adding pages
 		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
 			array(
-				addon_installed('page_management')?array('menu/adminzone/structure/page_wizard',array('admin_sitemap',array('type'=>'page_wizard'),get_module_zone('admin_sitemap')),do_lang('PAGE_WIZARD')):NULL,
+				array('menu/cms/comcode_page_edit',array('cms_comcode_pages',array('type'=>'ed'),get_module_zone('cms_comcode_pages')),do_lang('COMCODE_PAGE_ADD')):NULL,
 				array('menu/pages/help',array(NULL,array(),'')),
 				array('menu/cms/cms',array(NULL,array(),'cms')),
 				array('menu/adminzone/adminzone',array(NULL,array(),'adminzone')),

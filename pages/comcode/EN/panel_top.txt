@@ -2,8 +2,6 @@
 {$SET,HAS_SOCIAL_MENU,{$AND,{$OCF},{$ADDON_INSTALLED,redirects_editor},{$OR,{$EQ,{$PAGE},chat,online_members,points,pointstore,warnings,contact_member,groups,rules,members,leader_board},{$EQ,{$ZONE},forum}}}}
 
 {+START,IF,{$GET,HAS_SOCIAL_MENU}}
-	[block="main_community" type="top"]menu[/block]
-
 	{+START,IF,{$ADDON_INSTALLED,ocf_forum}}
 		{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OR,{$WIDE},{$EQ,{$PAGE},forumview}}}}
 			[block]main_member_bar[/block]

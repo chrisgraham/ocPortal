@@ -375,14 +375,10 @@ class Hook_phpbb3
 				}
 
 				$custom_fields=array(
-										ocf_make_boiler_custom_field('im_icq')=>$row['user_icq'],
-										ocf_make_boiler_custom_field('im_aim')=>$row['user_aim'],
-										ocf_make_boiler_custom_field('im_msn')=>$row['user_msnm'],
-										ocf_make_boiler_custom_field('im_yahoo')=>$row['user_yim'],
-										ocf_make_boiler_custom_field('interests')=>$row['user_interests'],
-										ocf_make_boiler_custom_field('location')=>$row['user_from'],
-										ocf_make_boiler_custom_field('occupation')=>$row['user_occ'],
-									);
+					ocf_make_boiler_custom_field('interests')=>$row['user_interests'],
+					ocf_make_boiler_custom_field('location')=>$row['user_from'],
+					ocf_make_boiler_custom_field('occupation')=>$row['user_occ'],
+				);
 				if ($row['user_website']!='')
 					$custom_fields[ocf_make_boiler_custom_field('website')]=(strlen($row['user_website'])>0)?('[url]'.$row['user_website'].'[/url]'):'';
 

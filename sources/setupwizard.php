@@ -133,10 +133,6 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 				$comcode.=unixify_line_format(file_get_contents(get_file_base().'/pages/comcode/'.fallback_lang().'/panel_left.txt'));
 			else
 				$comcode.=unixify_line_format(file_get_contents(get_file_base().'/site/pages/comcode/'.fallback_lang().'/panel_left.txt'));
-		} elseif ($left!='')
-		{
-			if ($GLOBALS['SITE_DB']->query_select_value('menu_items','COUNT(*)',array('i_menu'=>'site'))>1)
-				$comcode.="[block=\"site\" title=\"".do_lang('PAGES')."\"]menu[/block]\n";
 		}
 		$comcode.=$left;
 		if ($installprofile=='')
@@ -151,11 +147,6 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 
 		// Right panel
 		$comcode='';
-		if (($left=='') && ($installprofile!=''))
-		{
-			if ($GLOBALS['SITE_DB']->query_select_value('menu_items','COUNT(*)',array('i_menu'=>'site'))>1)
-				$comcode.="[block=\"site\" title=\"".do_lang('PAGES')."\"]menu[/block]\n";
-		}
 		$comcode.=$right;
 		$page_structure[$zone]['right']=$comcode;
 	}

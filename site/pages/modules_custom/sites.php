@@ -109,7 +109,7 @@ class Module_sites
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	 A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @return ?array	 A map of entry points (screen-name=>language-code or screen-name=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{

@@ -141,7 +141,7 @@ class Hook_Profiles_Tabs_Edit_settings
 				$highlighted_name=NULL;
 				$on_probation_until=NULL;
 			}
-			if ((has_actual_page_access($member_id_viewing,'admin_ocf_join')) || (has_privilege($member_id_of,'rename_self')))
+			if ((has_actual_page_access($member_id_viewing,'admin_ocf_members')) || (has_privilege($member_id_of,'rename_self')))
 			{
 				$username=($is_ldap)?NULL:post_param('edit_username',NULL/*May not be passed if username not editable for member type*/);
 			} else $username=NULL;
@@ -154,14 +154,12 @@ class Hook_Profiles_Tabs_Edit_settings
 			if (fractional_edit())
 			{
 				$preview_posts=NULL;
-				$zone_wide=NULL;
 				$auto_monitor_contrib_content=NULL;
 				$views_signatures=NULL;
 				$timezone=NULL;
 			} else
 			{
 				$preview_posts=post_param_integer('preview_posts',0);
-				$zone_wide=post_param_integer('zone_wide',0);
 				$auto_monitor_contrib_content=NULL;//post_param_integer('auto_monitor_contrib_content',0);	Moved to notifications tab
 				$views_signatures=post_param_integer('views_signatures',0);
 				$timezone=post_param('timezone',get_site_timezone());
@@ -179,7 +177,7 @@ class Hook_Profiles_Tabs_Edit_settings
 				$dob_year=post_param_integer('dob_year',NULL);
 			}
 
-			ocf_edit_member($member_id_of,$email,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$auto_monitor_contrib_content,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+			ocf_edit_member($member_id_of,$email,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$auto_monitor_contrib_content,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 
 			if (addon_installed('content_reviews'))
 			{
@@ -246,7 +244,7 @@ class Hook_Profiles_Tabs_Edit_settings
 		if (is_null($myrow)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 		require_code('ocf_members_action2');
-		list($fields,$hidden)=ocf_get_member_fields_settings(false,$member_id_of,NULL,$myrow['m_email_address'],$myrow['m_preview_posts'],$myrow['m_dob_day'],$myrow['m_dob_month'],$myrow['m_dob_year'],get_users_timezone($member_id_of),$myrow['m_theme'],$myrow['m_reveal_age'],$myrow['m_views_signatures'],$myrow['m_auto_monitor_contrib_content'],$myrow['m_language'],$myrow['m_allow_emails'],$myrow['m_allow_emails_from_staff'],$myrow['m_validated'],$myrow['m_primary_group'],$myrow['m_username'],$myrow['m_is_perm_banned'],'',$myrow['m_zone_wide'],$myrow['m_highlighted_name'],$myrow['m_pt_allow'],get_translated_text($myrow['m_pt_rules_text'],$GLOBALS['FORUM_DB']),$myrow['m_on_probation_until']);
+		list($fields,$hidden)=ocf_get_member_fields_settings(false,$member_id_of,NULL,$myrow['m_email_address'],$myrow['m_preview_posts'],$myrow['m_dob_day'],$myrow['m_dob_month'],$myrow['m_dob_year'],get_users_timezone($member_id_of),$myrow['m_theme'],$myrow['m_reveal_age'],$myrow['m_views_signatures'],$myrow['m_auto_monitor_contrib_content'],$myrow['m_language'],$myrow['m_allow_emails'],$myrow['m_allow_emails_from_staff'],$myrow['m_validated'],$myrow['m_primary_group'],$myrow['m_username'],$myrow['m_is_perm_banned'],'',$myrow['m_highlighted_name'],$myrow['m_pt_allow'],get_translated_text($myrow['m_pt_rules_text'],$GLOBALS['FORUM_DB']),$myrow['m_on_probation_until']);
 
 		// Awards?
 		if (addon_installed('awards'))

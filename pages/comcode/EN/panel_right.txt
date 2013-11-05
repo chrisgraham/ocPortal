@@ -1,3 +1,2 @@
-{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}[block="root_website" title="Welcome"]menu[/block]{+END}
 [block failsafe="1"]side_stats[/block]
 [block]side_personal_stats[/block]

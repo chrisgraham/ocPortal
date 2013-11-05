@@ -61,7 +61,7 @@ A link "mypage.htm" would go to the ocPortal ":mypage" entry point.
 
 As ocPortal can only rewrite the simple links, the process of fixing broken links is often a matter of simplifying them. For example:
  - [tt]http://mybaseurl/mypage.htm[/tt] could not be fixed by ocPortal, because it is not a local link. Change it to [tt]mypage.htm[/tt].
- - [tt]../mypage.htm[/tt] might be used from a page located in a subdirectory. Unfortunately ocPortal can't realistically recognise this, so it can't translate this link. In this case, you would need to replace the link with the proper ocPortal page link.
+ - [tt]../mypage.htm[/tt] might be used from a page located in a subdirectory. Unfortunately ocPortal can't realistically recognise this, so it can't translate this link. In this case, you would need to replace the link with the proper ocPortal page-link.
 
 To clarify, the following linking situations confuse ocPortal:
  - full links to local pages

@@ -70,13 +70,6 @@ class Module_catalogues
 		deldir_contents(get_custom_file_base().'/uploads/catalogues',true);
 
 		delete_privilege('high_catalogue_entry_timeout');
-
-		delete_menu_item_simple('_SEARCH:catalogues:type=misc');
-		$cf=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','id',array('i_menu'=>'collab_features','i_url'=>''));
-		if (!is_null($cf))
-			delete_menu_item($cf);
-		delete_menu_item_simple('_SEARCH:catalogues:type=index:id=projects');
-		delete_menu_item_simple('_SEARCH:cms_catalogues:type=add_entry:catalogue_name=projects');
 	}
 
 	/**
@@ -264,10 +257,6 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'projects','group_id'=>$group_id));
 			}
-			//add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_PROJECTS_TITLE','_SEARCH:catalogues:type=index:id=projects');
-			$projects=add_menu_item_simple('collab_features',NULL,'_DEFAULT_CATALOGUE_PROJECTS_TITLE');
-			add_menu_item_simple('collab_features',$projects,'VIEW','_SEARCH:catalogues:type=index:id=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
-			add_menu_item_simple('collab_features',$projects,'ADD','_SEARCH:cms_catalogues:type=add_entry:catalogue_name=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
 
 			// Links
 			actual_add_catalogue('links',lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),C_DT_TABULAR,1,'',0);
@@ -285,7 +274,6 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($links_category),'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'links','group_id'=>$group_id));
 			}
-			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_LINKS_TITLE','_SEARCH:catalogues:type=index:id=links');
 
 			// FAQs
 			actual_add_catalogue('faqs',lang_code_to_default_content('DEFAULT_CATALOGUE_FAQS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_FAQS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',0);
@@ -302,7 +290,6 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'faqs','group_id'=>$group_id));
 			}
-			add_menu_item_simple('main_content',NULL,'_DEFAULT_CATALOGUE_FAQS_TITLE','_SEARCH:catalogues:type=index:id=faqs',0,0,true,do_lang('DEFAULT_CATALOGUE_FAQS_TITLE'));
 
 			// Contacts
 			actual_add_catalogue('contacts',lang_code_to_default_content('CONTACTS',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_CONTACTS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',30);
@@ -324,7 +311,6 @@ class Module_catalogues
 			foreach ($fields as $i=>$field)
 				actual_add_catalogue_field('contacts',lang_code_to_default_content($field[0],false,3),insert_lang('',2),$field[2],$i,$field[3],1,1,'',$field[4]);
 			actual_add_catalogue_category('contacts',lang_code_to_default_content('CONTACTS',false,2),'','',NULL,'');
-			add_menu_item_simple('main_content',NULL,'CONTACTS','_SEARCH:catalogues:type=index:id=contacts');
 
 			actual_add_catalogue('products',lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),C_DT_GRID,1,'',0,1);
 			$cat_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('c_name'=>'products'));
@@ -365,8 +351,6 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'products','group_id'=>$group_id));
 			}
-
-			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_PRODUCTS_TITLE','_SEARCH:catalogues:type=category:catalogue_name=products');
 
 			add_privilege('CATALOGUES','high_catalogue_entry_timeout',false);
 
@@ -456,9 +440,10 @@ class Module_catalogues
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL)
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		if ($check_perms && is_guest($member_id)) return array(); // Guest (sitemap) won't want a catalogue list - too low level
 		return array('misc'=>'CATALOGUES');

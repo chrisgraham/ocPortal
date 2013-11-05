@@ -796,9 +796,9 @@ function qualify_url($url,$url_base)
 }
 
 /**
- * Take a page link and convert to attributes and zone.
+ * Take a page-link and convert to attributes and zone.
  *
- * @param  SHORT_TEXT	The page link
+ * @param  SHORT_TEXT	The page-link
  * @return array			Triple: zone, attribute-array, hash part of a URL including the hash (or blank)
  */
 function page_link_decode($param)
@@ -926,7 +926,7 @@ function fixup_protocolless_urls($in)
  * @param  URLPATH		The URL to convert. Note it may not be a short URL, and it must be based on the local base URL (else failure WILL occur).
  * @param  boolean		Whether to only convert absolute URLs. Turn this on if you're not sure what you're passing is a URL not and you want to be extra safe.
  * @param  boolean		Whether to only allow perfect conversions.
- * @return string			The page link (blank: could not convert).
+ * @return string			The page-link (blank: could not convert).
  */
 function url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 {
@@ -938,7 +938,7 @@ function url_to_pagelink($url,$abs_only=false,$perfect_only=true)
  * Convert a local page file path to a written page-link.
  *
  * @param  string			The path.
- * @return string			The page link (blank: could not convert).
+ * @return string			The page-link (blank: could not convert).
  */
 function page_path_to_pagelink($page)
 {

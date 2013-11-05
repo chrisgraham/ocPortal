@@ -45,42 +45,14 @@ class Module_recommend
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'RECOMMEND_SITE');
-	}
-
-	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_menu_item_simple('_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
-		delete_menu_item_simple('_SEARCH:recommend');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		require_lang('recommend');
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE&,:,%3A,{$SELF_URL}}');
-			delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE,:,%3A,{$SELF_URL&,0,0,0,from=<null>}}');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
-			add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend'); // We could append ":from={$SELF_URL&,0,0,0,from=<null>}" to page-link, but we probably don't want context-sensitivity
-		}
 	}
 
 	var $title;

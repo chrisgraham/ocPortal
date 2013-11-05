@@ -35,7 +35,7 @@ function update_details_box(element)
 			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!zones:ZONE_EDITOR;^}').replace(/\[2\]/,window.zone_editor_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
 			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE;^}').replace(/\[2\]/,window.permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));
 			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!zones:EDIT_ZONE;^}').replace(/\[2\]/,window.edit_zone_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
-			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!zones:PAGE_WIZARD;^}').replace(/\[2\]/,window.add_page_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
+			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!zones:COMCODE_PAGE_ADD;^}').replace(/\[2\]/,window.add_page_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
 			break;
 
 		case 'modules':

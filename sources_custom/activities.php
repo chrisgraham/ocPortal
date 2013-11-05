@@ -262,9 +262,9 @@ function render_activity($row,$use_inside_ocp=true)
 }
 
 /**
- * Convert a page link into a tempcode.
+ * Convert a page-link into a tempcode.
  *
- * @param  string			The page link
+ * @param  string			The page-link
  * @param  boolean		Whether the link is for putting out externally to the site (so no keep_* parameters)
  * @return array			tempcode url
  */

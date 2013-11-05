@@ -52,12 +52,6 @@ class Module_purchase
 
 		delete_privilege('access_ecommerce_in_test_mode');
 
-		delete_menu_item_simple('_SELF:purchase:type=misc');
-		delete_menu_item_simple('_SELF:invoices:type=misc');
-		delete_menu_item_simple('_SEARCH:purchase:type=misc');
-		delete_menu_item_simple('_SEARCH:invoices:type=misc');
-		delete_menu_item_simple('_SEARCH:subscriptions:type=misc');
-
 		$cpf=array('currency','payment_cardholder_name','payment_type','payment_card_number','payment_card_start_date','payment_card_expiry_date','payment_card_issue_number','payment_card_cv2');
 		foreach ($cpf as $_cpf)
 			$GLOBALS['FORUM_DRIVER']->install_delete_custom_field($_cpf);
@@ -96,11 +90,6 @@ class Module_purchase
 			foreach ($cpf as $f=>$l)
 				$GLOBALS['FORUM_DRIVER']->install_create_custom_field($f,$l[0],1,0,1,0,'',$l[1],1,$l[2]);
 
-			require_lang('ecommerce');
-			add_menu_item_simple('ecommerce_features',NULL,'PURCHASING','_SEARCH:purchase:type=misc');
-			add_menu_item_simple('ecommerce_features',NULL,'INVOICES','_SEARCH:invoices:type=misc');
-			add_menu_item_simple('ecommerce_features',NULL,'MODULE_TRANS_NAME_subscriptions','_SEARCH:subscriptions:type=misc');
-
 			$GLOBALS['SITE_DB']->create_table('transactions',array(
 				'id'=>'*ID_TEXT',
 				'purchase_id'=>'ID_TEXT',
@@ -121,7 +110,7 @@ class Module_purchase
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @return ?array		A map of entry points (screen-name=>language-code or screen-name=>[language-code, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{

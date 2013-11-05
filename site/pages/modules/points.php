@@ -57,9 +57,6 @@ class Module_points
 		delete_privilege('use_points');
 		delete_privilege('trace_anonymous_gifts');
 
-		delete_menu_item_simple('_SEARCH:points:type=member:id={$MEMBER_OVERRIDE}');
-		delete_menu_item_simple('_SEARCH:points:type=member');
-
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_used');
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('gift_points_used');
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_given');
@@ -126,9 +123,10 @@ class Module_points
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @return ?array		A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL)
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		if (get_forum_type()=='ocf') return array();
 		$ret=array(

@@ -30,7 +30,7 @@ class Hook_csv_members
 		$info=array();
 		$info['product']='Members (CSV files)';
 		$info['hook_type']='redirect';
-		$info['import_module']='admin_ocf_join';
+		$info['import_module']='admin_ocf_members';
 		$info['import_method_name']='import_csv';
 		return $info;
 	}

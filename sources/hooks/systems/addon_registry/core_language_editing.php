@@ -95,10 +95,12 @@ class Hook_addon_registry_core_language_editing
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/style/language/criticise_language.png',
 			'themes/default/images/icons/24x24/menu/adminzone/style/language/language.png',
-			'themes/default/images/icons/48x48/menu/adminzone/style/language/criticise_language.png',
 			'themes/default/images/icons/48x48/menu/adminzone/style/language/language.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/language/language_content.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/language/language_content.png',
+			'themes/default/images/icons/24x24/menu/adminzone/style/language/criticise_language.png',
+			'themes/default/images/icons/48x48/menu/adminzone/style/language/criticise_language.png',
 			'themes/default/images/icons/24x24/menu/adminzone/style/language/index.html',
 			'themes/default/images/icons/48x48/menu/adminzone/style/language/index.html',
 			'themes/default/css/translations_editor.css',

@@ -44,9 +44,12 @@ class Module_admin_invoices
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
 			'misc'=>array('INVOICES','menu/adminzone/audit/ecommerce/create_invoice'),
@@ -74,12 +77,12 @@ class Module_admin_invoices
 		if ($type=='misc')
 		{
 			breadcrumb_set_self(do_lang_tempcode('INVOICES'));
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE'))));
 		}
 
 		if ($type=='ad')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
 			$this->title=get_screen_title('CREATE_INVOICE');
 		}
@@ -87,28 +90,28 @@ class Module_admin_invoices
 		if ($type=='_ad')
 		{
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:ad',do_lang_tempcode('CREATE_INVOICE'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:ad',do_lang_tempcode('CREATE_INVOICE'))));
 
 			$this->title=get_screen_title('CREATE_INVOICE');
 		}
 
 		if ($type=='outstanding')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
 			$this->title=get_screen_title('OUTSTANDING_INVOICES');
 		}
 
 		if ($type=='undelivered')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES'))));
 
 			$this->title=get_screen_title('UNDELIVERED_INVOICES');
 		}
 
 		if ($type=='delete')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
 			if (post_param_integer('confirmed',0)!=1)
 			{
 				breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
@@ -123,7 +126,7 @@ class Module_admin_invoices
 		if ($type=='deliver')
 		{
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_audit',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('INVOICES')),array('_SELF:_SELF:undelivered',do_lang_tempcode('UNDELIVERED_INVOICES'))));
 
 			$this->title=get_screen_title('MARK_AS_DELIVERED');
 		}

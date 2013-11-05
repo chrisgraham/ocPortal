@@ -55,8 +55,6 @@ class Module_filedump
 
 		//require_code('files');
 		//deldir_contents(get_custom_file_base().'/uploads/filedump',true);
-
-		delete_menu_item_simple('_SEARCH:filedump:type=misc');
 	}
 
 	/**
@@ -80,12 +78,6 @@ class Module_filedump
 			add_privilege('FILEDUMP','upload_anything_filedump',false);
 			add_privilege('FILEDUMP','upload_filedump',true);
 			add_privilege('FILEDUMP','delete_anything_filedump',false);
-
-			require_lang('filedump');
-			if (addon_installed('collaboration_zone'))
-			{
-				add_menu_item_simple('collab_features',NULL,'FILEDUMP','_SEARCH:filedump:type=misc');
-			}
 		}
 
 		if (addon_installed('redirects_editor'))
@@ -97,9 +89,12 @@ class Module_filedump
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('misc'=>'FILEDUMP');
 	}

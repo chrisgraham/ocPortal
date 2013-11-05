@@ -44,41 +44,14 @@ class Module_forumview
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array('!'=>'ROOT_FORUM');
-	}
-
-	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		delete_menu_item_simple('_SEARCH:forumview:type=misc');
-		delete_menu_item_simple('_SEARCH:forumview:type=pt:id={$MEMBER_OVERRIDE}');
-		delete_menu_item_simple('_SEARCH:forumview:type=pt');
-		delete_menu_item_simple('_SEARCH:vforums:type=misc');
-		delete_menu_item_simple('_SEARCH:vforums:type=unread');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		require_lang('ocf');
-		add_menu_item_simple('forum_features',NULL,'ROOT_FORUM','_SEARCH:forumview:type=misc');
-		add_menu_item_simple('forum_features',NULL,'PRIVATE_TOPICS','_SEARCH:forumview:type=pt');
-		add_menu_item_simple('forum_features',NULL,'POSTS_SINCE','_SEARCH:vforums:type=misc');
-		add_menu_item_simple('forum_features',NULL,'_TOPICS_UNREAD','_SEARCH:vforums:type=unread');
-		add_menu_item_simple('forum_features',NULL,'RECENTLY_READ','_SEARCH:vforums:type=recently_read');
-		add_menu_item_simple('forum_features',NULL,'UNANSWERED_TOPICS','_SEARCH:vforums:type=unanswered_topics');
-		add_menu_item_simple('forum_features',NULL,'INVOLVED_TOPICS','_SEARCH:vforums:type=involved_topics');
 	}
 
 	var $title;

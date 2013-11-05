@@ -249,12 +249,8 @@ class Hook_aef
 				$secondary_groups=array();
 
 				$custom_fields=array(
-										ocf_make_boiler_custom_field('im_icq')=>$row['icq'],
-										ocf_make_boiler_custom_field('im_aim')=>$row['aim'],
-										ocf_make_boiler_custom_field('im_msn')=>$row['msn'],
-										ocf_make_boiler_custom_field('im_yahoo')=>$row['yim'],
-										ocf_make_boiler_custom_field('location')=>$row['location'],
-									);
+					ocf_make_boiler_custom_field('location')=>$row['location'],
+				);
 				if ($row['www']!='')
 					$custom_fields[ocf_make_boiler_custom_field('website')]=(strlen($row['www'])>0)?('[url]'.$row['www'].'[/url]'):'';
 

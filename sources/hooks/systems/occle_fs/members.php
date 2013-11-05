@@ -308,7 +308,6 @@ class Hook_occle_fs_members
 				'language'=>'m_language',
 				'allow_e-mails'=>'m_allow_emails',
 				'allow_e-mails_from_staff'=>'m_allow_emails_from_staff',
-				'wide'=>'m_zone_wide',
 				'max_attach_size'=>'m_max_email_attach_size_mb'
 			);
 			if (array_key_exists($file_name,$coded_fields)) return $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members',$coded_fields[$file_name],array('id'=>$GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0])));
@@ -379,7 +378,6 @@ class Hook_occle_fs_members
 				'language'=>'m_language',
 				'allow_e-mails'=>'m_allow_emails',
 				'allow_e-mails_from_staff'=>'m_allow_emails_from_staff',
-				'wide'=>'m_zone_wide',
 				'max_attach_size'=>'m_max_email_attach_size_mb',
 				'highlighted_name'=>'m_highlighted_name',
 			);

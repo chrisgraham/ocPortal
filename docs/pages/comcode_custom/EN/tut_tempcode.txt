@@ -712,7 +712,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$PAGE_LINK,site:about}</td>
-		<td>Link to a page, using [concept]page link[/concept] syntax (e.g. "_SELF:pagename:type:1")</td>
+		<td>Link to a page, using [concept]page-link[/concept] syntax (e.g. "_SELF:pagename:type:1")</td>
 	</tr>
 	<tr style="background: #FFDDDD">
 		<td>{$ADDON_INSTALLED,galleries}</td>

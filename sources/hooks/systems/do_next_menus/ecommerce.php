@@ -33,7 +33,7 @@ class Hook_do_next_menus_ecommerce
 
 		$ret=array(
 			array('setup','menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('ecommerce:CUSTOM_PRODUCT_USERGROUP'),'ecommerce:DOC_ECOMMERCE'),
-			array('audit','menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'ecom_audit'),get_module_zone('admin_ecommerce')),do_lang_tempcode('ecommerce:ECOMMERCE'),'ecommerce:DOC_ECOMMERCE'),
+			array('audit','menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce_logs',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('ecommerce:ECOMMERCE'),'ecommerce:DOC_ECOMMERCE'),
 			array('rich_content','menu/rich_content/ecommerce/purchase',array('purchase',array(),get_module_zone('purchase')),do_lang_tempcode('ecommerce:PURCHASING')),
 		);
 		if (addon_installed('shopping'))

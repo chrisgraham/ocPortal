@@ -44,16 +44,25 @@ class Module_cms_authors
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code or type-code=>[language-code, icon-theme-image]) (NULL: disabled).
+	 * @param  boolean	Whether to check permissions.
+	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points()
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		require_code('fields');
-		return array(
+		$ret=array(
 			'misc'=>'AUTHOR_MANAGE',
 			'_ad'=>array('EDIT_MY_AUTHOR_PROFILE','menu/cms/author_set_own_profile'),
 			'ed'=>array('EDIT_MERGE_AUTHORS','menu/_generic_admin/edit_one'),
-		)+manage_custom_fields_entry_points('author');
+		);
+
+		if ($support_crosslinks)
+		{
+			require_code('fields');
+			$ret+=manage_custom_fields_entry_points('author');
+		}
+		return $ret;
 	}
 
 	/**

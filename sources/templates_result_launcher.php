@@ -27,7 +27,7 @@
  * @param  integer		The maximum number of rows to show per browser page
  * @param  integer		The maximum number of rows in the entire dataset
  * @param  ID_TEXT		The page type this browser is browsing through (e.g. 'category')
- * @param  integer		The maximum number of quick-jump page links to show
+ * @param  integer		The maximum number of quick-jump page-links to show
  * @return tempcode		The results launcher
  */
 function results_launcher($title,$page,$category_id,$max,$max_rows,$type,$max_page_links=5)
