@@ -58,8 +58,6 @@ class Block_main_recent_members
 		$number=array_key_exists('max',$map)?intval($map['max']):10;
 		$filter=array_key_exists('filter',$map)?$map['filter']:'*';
 
-		$out=new ocp_tempcode();
-
 		require_code('ocf_members');
 		require_code('ocf_members2');
 		require_code('ocfiltering');
@@ -70,15 +68,20 @@ class Block_main_recent_members
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT m.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON (m.id=g.gm_member_id AND gm_validated=1) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f ON m.id=f.mf_member_id WHERE (('.$sql_filter.') OR ('.$sql_filter_2.')) AND id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).(can_arbitrary_groupby()?' GROUP BY m.id':'').' ORDER BY m.m_join_time DESC',$number);
 		$rows=remove_duplicate_rows($rows,'id');
 
+		require_css('recent_members');
+
 		if (count($rows)==0)
 		{
 			return do_template('BLOCK_NO_ENTRIES',array('HIGH'=>false,'TITLE'=>do_lang_tempcode('RECENT',make_string_tempcode(integer_format($number)),do_lang_tempcode('MEMBERS')),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>'','SUBMIT_URL'=>''));
 		} else
 		{
+			$out=new ocp_tempcode();
+			$out->attach('<div class="recent_members">');
 			foreach ($rows as $row)
 			{
 				$out->attach(render_member_box($row['id'],true));
 			}
+			$out->attach('</div>');
 		}
 
 		return $out;

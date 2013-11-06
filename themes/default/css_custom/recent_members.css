@@ -1,0 +1,24 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.recent_members {
+	width: 450px;
+}
+
+.recent_members .ocf_member_box_avatar {
+	margin-top: 1em;
+	margin-right: 0;
+	float: right;
+}
+
+.recent_members table {
+	float: left;
+	margin: 1em 0;
+	width: 355px;
+}
+
+.recent_members table th {
+	width: 10em;
+}

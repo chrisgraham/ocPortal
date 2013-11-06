@@ -1339,6 +1339,7 @@ oc_thanks
 oc_noobs
 --------
  - sources_custom/blocks/main_recent_members.php
+ - themes/default/css_custom/recent_members.css
  - lang_custom/EN/recent_members.ini
 
 oc_prose

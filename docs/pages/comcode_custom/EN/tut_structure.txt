@@ -18,7 +18,6 @@ The default zones in ocPortal are for the following purposes:
  - [b]Content Management[/b]: this is where content is added, edited and deleted
 And if you are using OCF, the following additional zones are usable:
  - [b]Forum[/b]: this is where the forum resides
- - [b]Account[/b]: this is where members change their settings
 
 [title="2"]Pages[/title]
 
@@ -144,7 +143,7 @@ The main forms of navigation are:
  - Bottom menu; this is the menu of small icons placed at the bottom of each page
  - The admin popup menu; this is the popup menu that may be activated by clicking an icon in the bottom menu -- this menu provides an alternative to the use of the admin and management menus
 
-Some website adminstrators may wish to remove the zone menu in favour of their own, more tailored, navigation. This is perfectly acceptable and possible, and can be done by removing the relevant portion of Tempcode from the [tt]TOP.tpl[/tt] template. Alternatively you can change the zone menu into a normal editable menu by enabling a special Theme Option (Admin Zone, Setup Section, Configuration icon, Theme options).
+Some website adminstrators may wish to remove the zone menu in favour of their own, more tailored, navigation. This is perfectly acceptable and possible, and can be done by removing the relevant portion of Tempcode from the [tt]GLOBAL_HTML_WRAP.tpl[/tt] template. Alternatively you can change the zone menu into a normal editable menu by enabling a special Theme Option (Admin Zone, Setup Section, Configuration icon, Theme options).
 
 The admin and community menus may also be converted into normal editable menus quite easily should you wish to edit them. They are implemented via the 'menu' block being placed on 'panel_top' pages within their respective zones. All you need to do is to edit those 'panel_top' pages from the Comcode page editor (located in the CMS zone) to reference a different menu code (you can make a code up and you'll then be given the option to create it when the non-existent menu fails to display). The default menu codes start with the '_' letter which indicates they are code-generated menus that may not be edited, but if you change the referenced codes, normal menu editing may be applied.
 
