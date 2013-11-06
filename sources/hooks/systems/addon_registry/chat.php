@@ -666,7 +666,8 @@ class Hook_addon_registry_chat
 				'SUBMIT_NAME'=>lorem_word(),
 				'HIDDEN'=>'',
 				'POST_URL'=>placeholder_url(),
-				'SETTING_BLOCKS'=>$setting_blocks
+				'SETTING_BLOCKS'=>$setting_blocks,
+				'CHAT_SOUND'=>'',
 			)), NULL, '', true)
 		);
 	}

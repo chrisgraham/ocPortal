@@ -1200,7 +1200,7 @@ class Module_chat
 		require_code('form_templates');
 		handle_max_file_size($hidden);
 
-		return do_template('CHAT_SET_EFFECTS_SCREEN',array('_GUID'=>'f965b4376d603fc14dbcac7fb3c5580d','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'HIDDEN'=>$hidden,'POST_URL'=>$post_url,'SETTING_BLOCKS'=>$setting_blocks));
+		return do_template('CHAT_SET_EFFECTS_SCREEN',array('_GUID'=>'f965b4376d603fc14dbcac7fb3c5580d','CHAT_SOUND'=>get_chat_sound_tpl(),'TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'HIDDEN'=>$hidden,'POST_URL'=>$post_url,'SETTING_BLOCKS'=>$setting_blocks));
 	}
 
 	/**

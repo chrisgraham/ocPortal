@@ -5420,11 +5420,11 @@ function uploadError(ob,error) {
 
 	var progress = new FileProgress(file, ob.settings.progress_target);
 	progress.setError();
-	progress.setStatus("{!SWFUPLOAD_FAILED^#}: "+error.message);
+	progress.setStatus(error.message);
 
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
 	if (txtFileName.value != "")
-		window.fauxmodal_alert("{!SWFUPLOAD_FAILED^#}: "+error.message);
+		window.fauxmodal_alert(error.message);
 	txtFileName.value = "";
 
 	if (file)

@@ -272,12 +272,12 @@ th, .fake_th {
 th a, th a:hover, th a:visited, .fake_th a, .fake_th a:hover, .fake_th a:visited {
 	color: {$GET,box_title_text};
 }
-thead>tr>th, .boxless_space .box thead>tr>th, .pte_set_box .box thead>tr>th {
+thead>tr>th, .boxless_space .box>table>thead>tr>th, .pte_set_box .box>table>thead>tr>th {
 	background-color: {$GET,box_title_background};
 	color: {$GET,box_title_text};
 	background-repeat: repeat-x;
 }
-.box thead>tr>th {
+.box>table>thead>tr>th {
 	background: {$GET,point_of_interest_background};
 	color: {$GET,area_key_text};
 }

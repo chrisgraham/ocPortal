@@ -104,7 +104,7 @@ class Hook_addon_registry_core_comcode_pages
 	function tpl_previews()
 	{
 		return array(
-			'COMCODE_PAGE_EXPORT_SCREEN.tpl'=>'comcode_page_export_screen',
+			'COMCODE_PAGE_EXPORT_SCREEN.tpl'=>'administrative__comcode_page_export_screen',
 			'COMCODE_PAGE_SCREEN.tpl'=>'comcode_page_screen',
 			'COMCODE_PAGE_EDIT_ACTIONS.tpl'=>'comcode_page_edit_actions',
 			'COMCODE_PAGE_BOX.tpl'=>'comcode_page_preview'
@@ -136,7 +136,7 @@ class Hook_addon_registry_core_comcode_pages
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__comcode_page_export_screen()
+	function tpl_preview__administrative__comcode_page_export_screen()
 	{
 		require_lang('zones');
 		return array(
