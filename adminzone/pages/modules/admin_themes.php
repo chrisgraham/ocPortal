@@ -143,7 +143,7 @@ class Module_admin_themes
 
 		require_lang('themes');
 
-		if ($type!='list' && $type!='view')
+		if ($type!='screen_previews' && $type!='screen_preview')
 		{
 			set_helper_panel_tutorial('tut_themes');
 		}
@@ -349,20 +349,20 @@ class Module_admin_themes
 			}
 		}
 
-		if ($type=='list')
+		if ($type=='screen_previews')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMES'))));
 
 			$this->title=get_screen_title('SCREEN_PREVIEWS');
 		}
 
-		if ($type=='view')
+		if ($type=='screen_preview')
 		{
 			$function=get_param('function');
 
 			//get_screen_title('SCREEN_PREVIEW',true,array(escape_html($function))); // Affects breadcrumbs etc
 			get_screen_title($function,false); // Affects breadcrumbs etc
-			breadcrumb_set_parents(array(array('_SELF:_SELF:list',do_lang_tempcode('SCREEN_PREVIEWS'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:screen_previews',do_lang_tempcode('SCREEN_PREVIEWS'))));
 		}
 
 		if ($type=='tempcode_tester')
@@ -410,8 +410,8 @@ class Module_admin_themes
 		if ($type=='_add_theme') return $this->_add_theme();
 		if ($type=='edit_theme') return $this->edit_theme();
 		if ($type=='_edit_theme') return $this->_edit_theme();
-		if ($type=='list') return $this->list_screen_previews();
-		if ($type=='view') return $this->view_screen_preview();
+		if ($type=='screen_previews') return $this->list_screen_previews();
+		if ($type=='screen_preview') return $this->view_screen_preview();
 		if ($type=='tempcode_tester') return $this->tempcode_tester();
 
 		return new ocp_tempcode();
@@ -459,7 +459,7 @@ class Module_admin_themes
 			$deletable=($theme!='default');
 			$edit_url=build_url(array('page'=>'_SELF','type'=>'edit_theme','theme'=>$theme),'_SELF');
 			$delete_url=build_url(array('page'=>'_SELF','type'=>'delete_theme','theme'=>$theme),'_SELF');
-			$screen_preview_url=build_url(array('page'=>'_SELF','type'=>'list','keep_theme'=>$theme),'_SELF');
+			$screen_preview_url=build_url(array('page'=>'_SELF','type'=>'screen_previews','keep_theme'=>$theme),'_SELF');
 
 			// Theme date
 			$date=filemtime(($theme=='default')?(get_file_base().'/themes/default'):(get_custom_file_base().'/themes/'.$theme));
@@ -1424,7 +1424,7 @@ class Module_admin_themes
 				$all_previews=find_all_previews__by_template();
 				if (array_key_exists(basename($file),$all_previews))
 				{
-					$_preview_url=build_url(array('page'=>'_SELF','type'=>'view','id'=>basename($file),'hook'=>$all_previews[basename($file)][0],'function'=>$all_previews[basename($file)][1],'arg'=>'','keep_theme'=>$theme,'keep_wide_high'=>1),'_SELF');
+					$_preview_url=build_url(array('page'=>'_SELF','type'=>'screen_preview','id'=>basename($file),'hook'=>$all_previews[basename($file)][0],'function'=>$all_previews[basename($file)][1],'arg'=>'','keep_theme'=>$theme,'keep_wide_high'=>1),'_SELF');
 					$preview_url=$_preview_url->evaluate();
 				}
 			}
@@ -2140,7 +2140,7 @@ class Module_admin_themes
 				{
 					$func=$all_previews[$t][1];
 
-					$preview_url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$t,'hook'=>$all_previews[$t][0],'function'=>$func),'_SELF');
+					$preview_url=build_url(array('page'=>'_SELF','type'=>'screen_preview','id'=>$t,'hook'=>$all_previews[$t][0],'function'=>$func),'_SELF');
 
 					$template_used="(".implode(', ',$all_previews__by_screen[$func]).")";
 

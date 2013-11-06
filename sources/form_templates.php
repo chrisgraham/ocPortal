@@ -1553,7 +1553,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 		{
 			$cut_pos=strpos($cat,'/');
 			$cut_pos=($cut_pos===false)?($avatars?strlen($cat):0):($cut_pos+1);
-			$cat=ucwords(substr($cat,$cut_pos)); // Make the category name a bit nicer
+			$cat=titleify(substr($cat,$cut_pos)); // Make the category name a bit nicer
 		}
 
 		if ((!$avatars) && ($cat=='')) $cat=do_lang('GENERAL');
