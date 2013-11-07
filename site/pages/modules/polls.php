@@ -166,7 +166,9 @@ class Module_polls
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'POLLS');
+		return array(
+			'misc'=>array('POLLS','menu/social/polls'),
+		);
 	}
 
 	var $title;

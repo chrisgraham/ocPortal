@@ -46,7 +46,7 @@ class Module_admin_newsletter extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'misc'=>'MANAGE_NEWSLETTER',
+			'misc'=>array('MANAGE_NEWSLETTER','menu/site_meta/newsletters'),
 			'new'=>array('NEWSLETTER_SEND','menu/site_meta/newsletters'),
 			'subscribers'=>array('VIEW_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/subscribers'),
 			'archive'=>array('NEWSLETTER_ARCHIVE','menu/_generic_admin/view_archive'),

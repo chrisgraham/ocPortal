@@ -22,7 +22,12 @@
 Notes:
  - We cannot/do-not fully recurse the Sitemap with arbitrary permissions or as an arbitrary user.
    We do collect permission data, but this is collected for the Permission Tree Editor, not for node availability meta processing.
+   Node availability (of view access) is checked automatically as a part of the sitemap crawl.
    This isn't for no good reason - the Sitemap is intrinsicly variable on a user-to-user basis, it is not necessarily shared.
+ - When get_node is called, it is assumed that the node object really can handle the requested page-link.
+   If it cannot, it is allowed to crash out in any way.
+   This is why you should know what you are calling, or check with handles_pagelink.
+ - Any node called directly will not respect the content-type/validation requirements.
 */
 
 /**
@@ -64,10 +69,10 @@ function init__sitemap()
 	define('SITEMAP_IMPORTANCE_ULTRA',1.0);
 
 	// Defining how the content-selection list should be put together
-	define('CSL_PERMISSION_VIEW',1);
-	define('CSL_PERMISSION_ADD',2);
-	define('CSL_PERMISSION_EDIT',4);
-	define('CSL_PERMISSION_DELETE',8);
+	define('CSL_PERMISSION_VIEW',0);
+	define('CSL_PERMISSION_ADD',1);
+	define('CSL_PERMISSION_EDIT',2);
+	define('CSL_PERMISSION_DELETE',4);
 
 	// Other constants
 	define('SITEMAP_MAX_ROWS_PER_LOOP',500);
@@ -87,7 +92,7 @@ function init__sitemap()
  * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
  * @return ?array			Node structure (NULL: working via callback / error).
  */
-function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_validation=false,$consider_secondary_categories=false,$meta_gather=0)
+function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 {
 	$hook=mixed();
 	$is_virtual=false;
@@ -170,10 +175,9 @@ abstract class Hook_sitemap_base
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	abstract function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
+	abstract function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0);
 
 	/**
 	 * Find details of a position in the Sitemap.
@@ -192,6 +196,85 @@ abstract class Hook_sitemap_base
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
 	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
+
+	/**
+	 * Check the permissions of the node structure, returning false if they fail for the current user.
+	 *
+	 * @param  array			Node structure
+	 * @return boolean		Whether the permissions pass
+	 */
+	function _check_node_permissions($struct)
+	{
+		// Check defined permissions
+		foreach ($struct['permissions'] as $permission)
+		{
+			switch ($permission['type'])
+			{
+				case 'non_guests':
+					if (is_guest(get_member()))
+						return false;
+					break;
+
+				case 'zone':
+					if (!has_zone_access(get_member(),$permission['zone_name']))
+						return false;
+					break;
+
+				case 'page':
+					if (!has_page_access(get_member(),$permission['zone_name'],$permission['page_name']))
+						return false;
+					break;
+
+				case 'category':
+					if (!has_category_access(get_member(),$permission['permission_module'],$permission['category_name']))
+						return false;
+					break;
+			}
+		}
+
+		// Checked implicit match-key permissions
+		$matches=array();
+		if (preg_match('#^([^:]*):([^:]*):([^:]*)#',$pagelink,$matches)!=0)
+		{
+			$zone=$matches[1];
+			$page=$matches[2];
+			$type=$matches[3];
+
+			$groups=_get_where_clause_groups(get_member(),false);
+			if ($groups!==NULL)
+			{
+				list(,$params)=page_link_decode($pagelink);
+
+				$groups2=filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false));
+
+				$pg_where='1=0';
+				$pg_where.=' OR page_name LIKE \''.db_encode_like('\_WILD:'.$page.':%').'\'';
+				$pg_where.=' OR page_name LIKE \''.db_encode_like($zone.':'.$page.':%').'\'';
+				$pg_where.=' OR page_name LIKE \''.db_encode_like('\_WILD:\_WILD:%').'\'';
+				$pg_where.=' OR page_name LIKE \''.db_encode_like($zone.':\_WILD:%').'\'';
+				$perhaps=$GLOBALS['SITE_DB']->query_select('SELECT COUNT(*) FROM '.get_table_prefix().'member_page_access WHERE ('.$pg_where.') AND ('.$groups.')');
+
+				$denied_groups=array();
+				foreach ($groups2 as $group)
+				{
+					foreach ($perhaps as $praps)
+					{
+						if (($praps['group_id']==$group) && ($praps['zone_name']=='/'))
+						{
+							if (match_key_match($praps['page_name'],true,$params,$zone,$page))
+							{
+								$denied_groups[$group]=true;
+							}
+						}
+					}
+				}
+
+				if (count($denied_groups)==count($groups2)) return false;
+			}
+		}
+
+		return true;
+	}
 
 	/**
 	 * Get the permission page that nodes matching $pagelink in this hook are tied to.
@@ -236,12 +319,14 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 		$matches=array();
 		if (preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches)!=0)
 		{
+			$zone=$matches[1];
 			$page=$matches[2];
 
 			require_code('content');
 			$cma_ob=get_content_object($this->content_type);
 			$cma_info=$cma_ob->info();
-			if ($cma_info['module']==$page)
+			require_code('site');
+			if (($cma_info['module']==$page) && ($zone!='_SEARCH') && (_request_page($page,$zone)!==false)) // Ensure the given page matches the content type, and it really does exist in the given zone
 			{
 				if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED_VIRTUALLY; // No type/ID specified
 				if (preg_match('#^([^:]*):([^:]*):'.$this->screen_type.'(:|$)#',$pagelink,$matches)!=0)
@@ -333,6 +418,20 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			}
 		}
 
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$pagelink,$matches);
+		if ($matches[1]!=$zone)
+		{
+			if ($zone=='_SEARCH')
+			{
+				$zone=$matches[1];
+			} else
+			{
+				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			}
+		}
+		$page=$matches[2];
+
 		$struct=array(
 			'title'=>$title,
 			'content_type'=>$this->content_type,
@@ -354,6 +453,17 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 				'db_row'=>NULL,
 			),
 			'permissions'=>array(
+				array(
+					'type'=>'zone',
+					'zone_name'=>$zone,
+					'is_owned_at_this_level'=>false,
+				),
+				array(
+					'type'=>'page',
+					'zone_name'=>$zone,
+					'page_name'=>$page,
+					'is_owned_at_this_level'=>false,
+				),
 			),
 			'has_possible_children'=>$cma_info['is_category'],
 
@@ -364,15 +474,12 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 
 		if (isset($cma_info['permissions_type_code']))
 		{
-			$matches=array();
-			preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$pagelink,$matches);
-			$page=$matches[2];
-
 			$struct['permissions'][]=array(
 				'type'=>'category',
 				'permission_module'=>$cma_info['permissions_type_code'],
 				'category_name'=>$cma_info['id_category']?$content_id:$row[$cma_info['category_field']],
 				'page_name'=>$page,
+				'is_owned_at_this_level'=>true,
 			);
 		}
 
@@ -532,9 +639,9 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 							foreach ($rows as $child_row)
 							{
 								$child_pagelink=$zone.':'.$page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
-								$node=$child_hook_ob->_create_partial_node_structure($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
-								if ($node!==NULL)
-									$children_entries[]=$node;
+								$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+								if ($child_node!==NULL)
+									$children_entries[]=$child_node;
 							}
 							$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 						}
@@ -572,9 +679,9 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 					{
 						$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.($cma_info['category_is_string']?$child_row[$cma_info['parent_spec__field_name']]:strval($child_row[$cma_info['parent_spec__field_name']]));
 					}
-					$node=$this->_create_partial_node_structure($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
-					if ($node!==NULL)
-						$children_categories[]=$node;
+					$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+					if ($child_node!==NULL)
+						$children_categories[]=$child_node;
 				}
 				$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 			}
@@ -660,31 +767,6 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 	{
 		foreach ($node['permissions'] as $permission)
 		{
-			if (($check_permissions_against & CSL_PERMISSION_VIEW) != 0)
-			{
-				switch ($permission['type'])
-				{
-					case 'non_guests':
-						if (is_guest($check_permissions_for))
-							return '';
-						break;
-
-					case 'zone':
-						if (!has_zone_access($check_permissions_for,$permission['zone_name']))
-							return '';
-						break;
-
-					case 'page':
-						if (!has_page_access($check_permissions_for,$permission['zone_name'],$permission['page_name']))
-							return '';
-						break;
-
-					case 'category':
-						if (!has_category_access($check_permissions_for,$permission['permission_module'],$permission['category_name']))
-							return '';
-						break;
-				}
-			}
 			if ($permission['type']=='privilege')
 			{
 				if (($check_permissions_against & CSL_PERMISSION_ADD) != 0)

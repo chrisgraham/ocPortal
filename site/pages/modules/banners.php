@@ -177,7 +177,10 @@ class Module_banners
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return ($check_perms && is_guest($member_id))?array():array('misc'=>'BANNERS');
+		if ($check_perms && is_guest($member_id)) return array();
+		return array(
+			'misc'=>array('BANNERS','menu/cms/banners'),
+		);
 	}
 
 	var $title;

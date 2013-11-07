@@ -53,7 +53,7 @@ class Module_admin_ecommerce_logs
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'misc'=>'ECOMMERCE',
+			'misc'=>array('ECOMMERCE','menu/adminzone/audit/ecommerce/ecommerce'),
 			'trigger'=>array('MANUAL_TRANSACTION','menu/adminzone/audit/ecommerce/add_to_category'),
 			'logs'=>array('TRANSACTIONS','menu/adminzone/audit/ecommerce/transactions'),
 			'profit_loss'=>array('PROFIT_LOSS','menu/adminzone/audit/ecommerce/profit_loss'),

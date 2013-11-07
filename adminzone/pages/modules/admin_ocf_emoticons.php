@@ -45,7 +45,9 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'EMOTICONS')+parent::get_entry_points();
+		return array(
+			'misc'=>array('EMOTICONS','menu/adminzone/style/emoticons'),
+		)+parent::get_entry_points();
 	}
 
 	var $title;

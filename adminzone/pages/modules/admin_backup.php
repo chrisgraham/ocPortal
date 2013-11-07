@@ -51,7 +51,9 @@ class Module_admin_backup
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'BACKUP');
+		return array(
+			'misc'=>array('BACKUP','menu/adminzone/tools/bulk_content_actions/backups'),
+		);
 	}
 
 	/**

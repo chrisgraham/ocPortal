@@ -96,7 +96,9 @@ class Module_filedump
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'FILEDUMP');
+		return array(
+			'misc'=>array('FILEDUMP','menu/cms/filedump'),
+		);
 	}
 
 	var $title;

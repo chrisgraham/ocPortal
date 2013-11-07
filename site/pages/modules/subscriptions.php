@@ -110,7 +110,13 @@ class Module_subscriptions
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return ((!$check_perms || !is_guest($member_id)) && ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)')>0))?array('misc'=>'MY_SUBSCRIPTIONS'):array();
+		if ((!$check_perms || !is_guest($member_id)) && ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)')>0))
+		{
+			return array(
+				'misc'=>array('MY_SUBSCRIPTIONS','menu/adminzone/audit/ecommerce/subscriptions'),
+			);
+		}
+		return array();
 	}
 
 	var $title;

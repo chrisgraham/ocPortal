@@ -52,7 +52,9 @@ class Module_supermembers
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'SUPER_MEMBERS');
+		return array(
+			'!'=>array('SUPER_MEMBERS','menu/collaboration/supermember_directory'),
+		);
 	}
 
 	/**

@@ -152,6 +152,8 @@ class Hook_addon_registry_community_billboard
 			'sources/hooks/systems/config/is_on_community_billboard_buy.php',
 			'sources/hooks/systems/notifications/pointstore_request_community_billboard.php',
 			'themes/default/css_custom/community_billboard.css',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/community_billboard.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/community_billboard.png',
 		);
 	}
 

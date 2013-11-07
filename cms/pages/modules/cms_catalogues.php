@@ -58,7 +58,7 @@ class Module_cms_catalogues extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'misc'=>'MANAGE_CATALOGUES',
+			'misc'=>array('MANAGE_CATALOGUES','menu/rich_content/catalogues/catalogues'),
 			'import'=>array('IMPORT_CATALOGUE_ENTRIES','menu/_generic_admin/import_csv'),
 			'export'=>array('CATALOGUE_EXPORT','menu/_generic_admin/export_csv'),
 

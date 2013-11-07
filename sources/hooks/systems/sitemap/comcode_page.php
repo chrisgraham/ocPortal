@@ -30,6 +30,30 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	protected $entry_sitetree_hook=NULL;
 
 	/**
+	 * Find if a page-link will be covered by this node.
+	 *
+	 * @param  ID_TEXT		The page-link.
+	 * @return integer		A SITEMAP_NODE_* constant.
+	 */
+	function handles_pagelink($pagelink)
+	{
+		$matches=array();
+		if (preg_match('#^([^:]*):([^:]*)$#',$pagelink,$matches)!=0)
+		{
+			$zone=$matches[1];
+			$page=$matches[2];
+
+			require_code('site');
+			$details=_request_page($page,$zone);
+			if (strpos($details[0],'COMCODE')!==false)
+			{
+				return SITEMAP_NODE_HANDLED;
+			}
+		}
+		return SITEMAP_NODE_NOT_HANDLED;
+	}
+
+	/**
 	 * Get the permission page that nodes matching $pagelink in this hook are tied to.
 	 * The permission page is where privileges may be overridden against.
 	 *
@@ -59,35 +83,131 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	 */
 	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
 	{
-		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,NULL/*$row is not compatible with this as our $row actually contains Title and Icon, from page groupings*/);
-		if ($_===NULL) return NULL;
-		list($content_id,$row_db,$partial_struct)=$_;
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
+		if ($matches[1]!=$zone)
+		{
+			if ($zone=='_SEARCH')
+			{
+				$zone=$matches[1];
+			} else
+			{
+				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			}
+		}
+		$page=$matches[2];
 
 		$zone_default_page=$GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page',array('zone_name'=>$zone));
 
-		$row=$this->_load_row($row);
+		require_code('site');
+		$details=_request_page($page,$zone);
+
+		$path=end($details);
+
+		$row=$this->_load_row($row,$zone,$page);
 
 		$struct=array(
-			'sitemap_priority'=>SITEMAP_IMPORTANCE_HIGH,
-			'sitemap_refreshfreq'=>'weekly',
-
-			'permission_module'=>'zone_page',
+			'title'=>titleify($page),
+			'content_type'=>'comcode_page',
+			'content_id'=>$zone.':'.$page,
+			'pagelink'=>$pagelink,
+			'extra_meta'=>array(
+				'description'=>NULL,
+				'image'=>NULL,
+				'image_2x'=>NULL,
+				'add_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filectime(get_file_base().'/'.$path):NULL,
+				'edit_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filemtime(get_file_base().'/'.$path):NULL,
+				'submitter'=>NULL,
+				'views'=>NULL,
+				'rating'=>NULL,
+				'meta_keywords'=>NULL,
+				'meta_description'=>NULL,
+				'categories'=>NULL,
+				'validated'=>NULL,
+				'db_row'=>(($meta_gather & SITEMAP_GATHER_DB_ROW)!=0)?$row:NULL,
+			),
+			'permissions'=>array(
+				array(
+					'type'=>'zone',
+					'zone_name'=>$zone,
+					'is_owned_at_this_level'=>false,
+				),
+				array(
+					'type'=>'page',
+					'zone_name'=>$zone,
+					'page_name'=>$page,
+					'is_owned_at_this_level'=>true,
+				),
+			),
+			'has_possible_children'=>true,
 
 			// These are likely to be changed in individual hooks
 			'sitemap_priority'=>($zone_default_page==$page)?SITEMAP_IMPORTANCE_ULTRA:SITEMAP_IMPORTANCE_HIGH,
 			'sitemap_refreshfreq'=>($zone_default_page==$page)?'daily':'weekly',
 
 			'permission_page'=>$this->get_permission_page($pagelink),
-		)+$partial_struct;
+		);
 
 		$this->_ameliorate_with_row($struct,$row);
+
+		// In the DB?
+		$db_row=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN comcode_pages b ON a.the_zone=b.the_zone AND a.the_page=b.the_page',array('*'),array('the_zone'=>$zone,'the_page'=>$page),'',1);
+		if (isset($db_row[0]))
+		{
+			if (($meta_gather & SITEMAP_GATHER_DB_ROW)!=0)
+			{
+				$struct['db_row']=$db_row+$struct['db_row'];
+			}
+			if (isset($row_db[0]['p_add_date']))
+			{
+				$struct['add_date']=$row_db[0]['p_add_date'];
+			}
+			if (isset($row_db[0]['p_edit_date']))
+			{
+				$struct['edit_date']=$row_db[0]['p_edit_date'];
+			}
+			if (isset($row_db[0]['p_submitter']))
+			{
+				$struct['submitter']=$row_db[0]['p_submitter'];
+			}
+			if (isset($row_db[0]['cc_page_title']))
+			{
+				$struct['title']=make_string_tempcode(escape_html(get_translated_text($row_db[0]['cc_page_title'])));
+			}
+		}
+
+		if (!$this->_check_node_permissions($struct)) return NULL;
 
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
-		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-		$struct['children']=$children;
+		$children=array();
+		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
+		{
+			if (($valid_node_types===NULL) || (in_array('comcode_page',$valid_node_types)))
+			{
+				$where=array('p_parent_page'=>$page,'the_zone'=>$zone);
+				if ($consider_validation) $where['p_validated']=1;
+
+				$start=0;
+				do
+				{
+					$child_rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page'),$where,'ORDER BY the_page',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+					foreach ($child_rows as $child_row)
+					{
+						$child_pagelink=$zone.':'.$child_row['the_page'];
+						$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+						if ($child_node!==NULL)
+							$children[]=$child_node;
+					}
+					$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+				}
+				while (count($child_rows)>0);
+			}
+
+			$struct['children']=$children;
+		}
 
 		return ($callback===NULL)?$struct:NULL;
 	}

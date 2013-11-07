@@ -44,7 +44,7 @@ class Module_cms_booking extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'BOOKINGS',
+			'misc'=>array('BOOKINGS','menu/booking'),
 			'ab'=>array('ADD_BOOKING','menu/_generic_admin/add_one'),
 			'eb'=>array('EDIT_BOOKING','menu/_generic_admin/edit_one'),
 			'av'=>array('ADD_BOOKABLE_BLACKED','menu/_generic_admin/add_one'),

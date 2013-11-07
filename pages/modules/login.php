@@ -79,16 +79,16 @@ class Module_login
 		if ($check_perms && is_guest($member_id))
 		{
 			return array(
-				'misc'=>'_LOGIN',
+				'misc'=>array('_LOGIN','menu/site_meta/user_actions/login'),
 			);
 		}
 		$ret=array(
-			'misc'=>'_LOGIN',
-			'logout'=>'LOGOUT',
-			'concede'=>'CONCEDED_MODE',
+			'misc'=>'_LOGIN','menu/site_meta/user_actions/login'),
+			'logout'=>'LOGOUT','menu/site_meta/user_actions/logout'),
+			'concede'=>'CONCEDED_MODE','menu/site_meta/user_actions/concede'),
 		);
 		if (get_option('is_on_invisibility')=='1')
-			$ret['invisible']='INVISIBLE';
+			$ret['invisible']='INVISIBLE','menu/site_meta/user_actions/invisible');
 		return $ret;
 	}
 

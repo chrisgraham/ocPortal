@@ -51,7 +51,9 @@ class Module_admin_actionlog
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'VIEW_ACTIONLOGS');
+		return array(
+			'misc'=>array('VIEW_ACTIONLOGS','menu/adminzone/audit/actionlog'),
+		);
 	}
 
 	var $title;

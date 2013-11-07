@@ -51,7 +51,9 @@ class Module_admin_notifications
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'NOTIFICATIONS_LOCKDOWN');
+		return array(
+			'misc'=>array('NOTIFICATIONS_LOCKDOWN','menu/adminzone/setup/notifications'),
+		);
 	}
 
 	/**

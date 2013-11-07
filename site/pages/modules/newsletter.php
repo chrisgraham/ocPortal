@@ -166,7 +166,10 @@ class Module_newsletter
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return ($GLOBALS['SITE_DB']->query_select_value('newsletters','COUNT(*)')==0)?array():array('misc'=>'NEWSLETTER_JOIN');
+		if ($GLOBALS['SITE_DB']->query_select_value('newsletters','COUNT(*)')==0) return array();
+		return array(
+			'misc'=>array('NEWSLETTER_JOIN','menu/site_meta/newsletters'),
+		);
 	}
 
 	var $title;

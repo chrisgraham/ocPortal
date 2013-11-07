@@ -801,25 +801,25 @@ function qualify_url($url,$url_base)
  * @param  SHORT_TEXT	The page-link
  * @return array			Triple: zone, attribute-array, hash part of a URL including the hash (or blank)
  */
-function page_link_decode($param)
+function page_link_decode($pagelink)
 {
-	if (strpos($param,'#')===false)
+	if (strpos($pagelink,'#')===false)
 	{
 		$hash='';
 	} else
 	{
-		$hash_pos=strpos($param,'#');
-		$hash=substr($param,$hash_pos);
-		$param=substr($param,0,$hash_pos);
+		$hash_pos=strpos($pagelink,'#');
+		$hash=substr($pagelink,$hash_pos);
+		$pagelink=substr($pagelink,0,$hash_pos);
 	}
-	if (strpos($param,"\n")===false)
+	if (strpos($pagelink,"\n")===false)
 	{
-		$bits=explode(':',$param);
+		$bits=explode(':',$pagelink);
 	} else // If there's a line break then we ignore any colons after that line-break. It's to allow complex stuff to be put on the end of the page-link
 	{
-		$term_pos=strpos($param,"\n");
-		$bits=explode(':',substr($param,0,$term_pos));
-		$bits[count($bits)-1].=substr($param,$term_pos);
+		$term_pos=strpos($pagelink,"\n");
+		$bits=explode(':',substr($pagelink,0,$term_pos));
+		$bits[count($bits)-1].=substr($pagelink,$term_pos);
 	}
 	$zone=$bits[0];
 	if ($zone=='_SEARCH')

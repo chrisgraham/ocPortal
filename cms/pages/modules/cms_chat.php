@@ -51,7 +51,9 @@ class Module_cms_chat
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'CHAT_MOD_PANEL');
+		return array(
+			'misc'=>array('CHAT_MOD_PANEL','menu/social/chat'),
+		);
 	}
 
 	/**

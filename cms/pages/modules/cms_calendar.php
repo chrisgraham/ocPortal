@@ -57,7 +57,9 @@ class Module_cms_calendar extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		$ret=array('misc'=>'MANAGE_CALENDARS')+parent::get_entry_points();
+		$ret=array(
+			'misc'=>array('MANAGE_CALENDARS','menu/rich_content/calendar'),
+		)+parent::get_entry_points();
 
 		if ($support_crosslinks)
 		{

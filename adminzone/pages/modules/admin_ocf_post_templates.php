@@ -45,7 +45,9 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'POST_TEMPLATES')+parent::get_entry_points();
+		return array(
+			'misc'=>array('POST_TEMPLATES','menu/adminzone/structure/forum/post_templates'),
+		)+parent::get_entry_points();
 	}
 
 	var $title;

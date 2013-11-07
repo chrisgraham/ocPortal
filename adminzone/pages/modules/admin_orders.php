@@ -52,8 +52,8 @@ class Module_admin_orders
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'ORDERS',
-			'show_orders'=>array('OUTSTANDING_ORDERS','menu/adminzone/audit/ecommerce/orders'),
+			'misc'=>array('ORDERS','menu/adminzone/audit/ecommerce/orders'),
+			'show_orders'=>array('OUTSTANDING_ORDERS','menu/adminzone/audit/ecommerce/undispatched'),
 		);
 	}
 

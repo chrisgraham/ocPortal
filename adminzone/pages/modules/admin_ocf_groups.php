@@ -49,7 +49,9 @@ class Module_admin_ocf_groups extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		$ret=array('misc'=>'MANAGE_USERGROUPS')+parent::get_entry_points();
+		$ret=array(
+			'misc'=>array('MANAGE_USERGROUPS','menu/social/groups'),
+		)+parent::get_entry_points();
 
 		if ($support_crosslinks)
 		{

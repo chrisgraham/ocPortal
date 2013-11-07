@@ -51,7 +51,9 @@ class Module_admin_ocf_merge_members
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MERGE_MEMBERS');
+		return array(
+			'misc'=>array('MERGE_MEMBERS','menu/adminzone/tools/users/merge_members'),
+		);
 	}
 
 	var $title;

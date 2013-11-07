@@ -158,7 +158,9 @@ class Module_quiz
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'QUIZZES');
+		return array(
+			'misc'=>array('QUIZZES','menu/rich_content/quiz'),
+		);
 	}
 
 	var $title;

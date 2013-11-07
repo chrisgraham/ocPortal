@@ -82,7 +82,9 @@ class Module_admin_messaging
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'CONTACT_US_MESSAGING');
+		return array(
+			'misc'=>array('CONTACT_US_MESSAGING','menu/adminzone/audit/messaging'),
+		);
 	}
 
 	var $title;

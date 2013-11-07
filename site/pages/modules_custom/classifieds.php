@@ -96,7 +96,10 @@ class Module_classifieds
 		require_lang('classifieds');
 
 		$ret=array();
-		if (!$check_perms || !is_guest($member_id)) $ret['adverts']='CLASSIFIED_ADVERTS';
+		if (!$check_perms || !is_guest($member_id))
+		{
+			$ret['adverts']=array('CLASSIFIED_ADVERTS','menu/classifieds');
+		}
 		return $ret;
 	}
 

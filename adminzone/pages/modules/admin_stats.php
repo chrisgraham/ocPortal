@@ -128,7 +128,7 @@ class Module_admin_stats
 		require_lang('stats');
 
 		$ret=array(
-			'misc'=>'SITE_STATISTICS',
+			'misc'=>array('SITE_STATISTICS','menu/adminzone/audit/statistics/statistics'),
 			'overview'=>array('OVERVIEW_STATISTICS','menu/adminzone/audit/statistics/statistics'),
 			'users_online'=>array('USERS_ONLINE_STATISTICS','menu/adminzone/audit/statistics/users_online'),
 			'submission_rates'=>array('SUBMISSION_STATISTICS','menu/adminzone/audit/statistics/submits'),

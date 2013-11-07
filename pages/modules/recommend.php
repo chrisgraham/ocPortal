@@ -36,10 +36,43 @@ class Module_recommend
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=4;
+		$info['version']=5;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
+	}
+
+	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+	}
+
+	/**
+	 * Standard modular install function.
+	 *
+	 * @param  ?integer	What version we're upgrading from (NULL: new install)
+	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+	 */
+	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
+	{
+		if ((is_null($upgrade_from)) || ($upgrade_from<5))
+		{
+			require_code('users_active_actions');
+			$admin_user=get_first_admin_user();
+
+			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+				'the_zone'=>'',
+				'the_page'=>'recommend_help',
+				'p_parent_page'=>'recommend',
+				'p_validated'=>1,
+				'p_edit_date'=>NULL,
+				'p_add_date'=>time(),
+				'p_submitter'=>$admin_user,
+				'p_show_as_edit'=>0
+			));
+		}
 	}
 
 	/**
@@ -52,7 +85,16 @@ class Module_recommend
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'RECOMMEND_SITE');
+		$ret=array(
+			'misc'=>array('RECOMMEND_SITE','menu/site_meta/recommend'),
+		);
+
+		if ($support_crosslinks)
+		{
+			$ret[':recommend_help']=array('HELP','menu/pages/help');
+		}
+
+		return $ret;
 	}
 
 	var $title;

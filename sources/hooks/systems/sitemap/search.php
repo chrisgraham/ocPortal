@@ -61,10 +61,9 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 	{
 		$nodes=($callback===NULL)?array():mixed();
 
@@ -158,6 +157,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 						'permission_module'=>'catalogues_catalogue',
 						'category_name'=>$catalogue_name,
 						'page_name'=>$page,
+						'is_owned_at_this_level'=>false,
 					),
 				),
 				'has_possible_children'=>false,
@@ -167,6 +167,8 @@ class Hook_sitemap_search extends Hook_sitemap_base
 				'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
 				'sitemap_refreshfreq'=>'yearly',
 			);
+
+			if (!$this->_check_node_permissions($struct)) return NULL;
 
 			if ($callback!==NULL)
 				call_user_func($callback,$struct);
@@ -209,6 +211,8 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			'permission_page'=>NULL,
 		);
 
+		if (!$this->_check_node_permissions($struct)) return NULL;
+
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 
@@ -216,13 +220,15 @@ class Hook_sitemap_search extends Hook_sitemap_base
 		$children=array();
 		if ($hook=='catalogue_entry')
 		{
-			if ($recurse_level<$max_recurse_depth)
+			if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'));
 				foreach ($rows as $row)
 				{
 					$child_pagelink=$pagelink.':'.$row['c_name'];
-					$children[]=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+					$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+					if ($child_node!==NULL)
+						$children[]=$child_node;
 				}
 			}
 		}

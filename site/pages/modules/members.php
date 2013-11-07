@@ -52,7 +52,7 @@ class Module_members
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'misc'=>'MEMBERS',
+			'misc'=>array('MEMBERS','menu/social/members'),
 		);
 		if (!$check_perms || !is_guest($member_id))
 			$ret['view']=array('MY_PROFILE','tabs/member_account/profile');

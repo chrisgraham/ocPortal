@@ -51,7 +51,9 @@ class Module_admin_menus
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MENU_MANAGEMENT');
+		return array(
+			'misc'=>array('MENU_MANAGEMENT','menu/adminzone/structure/menus'),
+		);
 	}
 
 	var $title;

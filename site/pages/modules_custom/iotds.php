@@ -103,7 +103,9 @@ class Module_iotds
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'IOTDS');
+		return array(
+			'misc'=>array('IOTDS','menu/rich_content/iotds'),
+		);
 	}
 
 	var $title;

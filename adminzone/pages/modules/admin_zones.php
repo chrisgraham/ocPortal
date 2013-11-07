@@ -52,7 +52,7 @@ class Module_admin_zones
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'ZONES',
+			'misc'=>array('ZONES','menu/adminzone/structure/zones/zones'),
 			'edit'=>array('EDIT_ZONE','menu/_generic_admin/edit_one'),
 			'add'=>array('ADD_ZONE','menu/_generic_admin/add_one'),
 		);

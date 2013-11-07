@@ -52,8 +52,8 @@ class Module_admin_pointstore
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'POINTSTORE_MANAGE_SALES',
-			'p'=>'POINTSTORE_MANAGE_INVENTORY',
+			'misc'=>array('POINTSTORE_MANAGE_SALES','menu/adminzone/audit/pointstore_log'),
+			'p'=>array('POINTSTORE_MANAGE_INVENTORY','menu/social/pointstore'),
 		);
 	}
 

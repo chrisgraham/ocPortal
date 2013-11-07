@@ -84,6 +84,8 @@ class Hook_sitemap_news extends Hook_sitemap_content
 			$struct['extra_meta']['categories']=array_unique($categories);
 		}
 
+		if (!$this->_check_node_permissions($struct)) return NULL;
+
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 

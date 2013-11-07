@@ -230,7 +230,7 @@ function load_up_all_self_page_permissions($member)
  * @param  MEMBER			The member being checked whether to have the access
  * @param  ID_TEXT		The ID code for the page being checked
  * @param  ID_TEXT		The ID code for the zone being checked
- * @param  boolean		Whether we want to check we have access to the CURRENT page, using any match tag permissions
+ * @param  boolean		Whether we want to check we have access to the CURRENT page, using any match-key permissions
  * @return boolean		Whether the member has page access
  */
 function has_page_access($member,$page,$zone,$at_now=false)
@@ -284,7 +284,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 			{
 				if (($praps['page_name']==$page) || (($at_now) && ($praps['zone_name']=='/') && (match_key_match($praps['page_name'],true))))
 				{
-					$denied_groups[$group]=1;
+					$denied_groups[$group]=true;
 				}
 			}
 		}

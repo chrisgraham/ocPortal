@@ -90,7 +90,9 @@ class Module_admin_ipban
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'IP_BANS');
+		return array(
+			'misc'=>array('IP_BANS','menu/adminzone/security/ipban'),
+		);
 	}
 
 	var $title;

@@ -653,7 +653,9 @@ class Module_admin_customers
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'CHARGE_CUSTOMER');
+		return array(
+			'misc'=>array('CHARGE_CUSTOMER','menu/_generic_admin/tool'),
+		);
 	}
 
 	var $title;

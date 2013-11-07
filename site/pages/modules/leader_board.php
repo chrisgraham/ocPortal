@@ -51,7 +51,11 @@ class Module_leader_board
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return ($GLOBALS['SITE_DB']->query_select_value('leader_board','COUNT(*)')==0)?array():array('!'=>'POINT_LEADER_BOARD');
+		if ($GLOBALS['SITE_DB']->query_select_value('leader_board','COUNT(*)')==0)
+			return array();
+		return array(
+			'!'=>array('POINT_LEADER_BOARD','menu/social/leader_board'),
+		);
 	}
 
 	var $title;

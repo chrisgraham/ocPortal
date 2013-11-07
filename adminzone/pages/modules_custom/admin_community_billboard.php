@@ -155,7 +155,9 @@ class Module_admin_community_billboard extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'COMMUNITY_BILLBOARD_MANAGE');
+		return array(
+			'misc'=>array('COMMUNITY_BILLBOARD_MANAGE','menu/adminzone/audit/community_billboard'),
+		);
 	}
 
 	/**

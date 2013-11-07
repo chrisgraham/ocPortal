@@ -52,7 +52,7 @@ class Module_cms_galleries extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'misc'=>'MANAGE_GALLERIES',
+			'misc'=>array('MANAGE_GALLERIES','menu/rich_content/galleries'),
 			'av'=>array('ADD_VIDEO','menu/_generic_admin/add_one'),
 			'ev'=>array('EDIT_VIDEO','menu/_generic_admin/edit_one'),
 		);

@@ -51,7 +51,9 @@ class Module_admin_emaillog
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'EMAIL_LOG');
+		return array(
+			'misc'=>array('EMAIL_LOG','menu/adminzone/audit/email_logs'),
+		);
 	}
 
 	var $title;

@@ -48,7 +48,9 @@ class Module_cms_polls extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		$ret=array('misc'=>'MANAGE_POLLS')+parent::get_entry_points();
+		$ret=array(
+			'misc'=>array('MANAGE_POLLS','menu/social/polls'),
+		)+parent::get_entry_points();
 
 		if ($support_crosslinks)
 		{

@@ -51,7 +51,10 @@ class Module_admin_themewizard
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'THEMEWIZARD','make_logo'=>'LOGOWIZARD');
+		return array(
+			'misc'=>array('THEMEWIZARD','menu/adminzone/style/themes/themewizard'),
+			'make_logo'=>array('LOGOWIZARD','menu/adminzone/style/themes/logowizard'),
+		);
 	}
 
 	var $title;

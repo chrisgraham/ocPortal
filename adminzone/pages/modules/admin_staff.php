@@ -74,7 +74,9 @@ class Module_admin_staff
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MANAGE_STAFF');
+		return array(
+			'misc'=>array('MANAGE_STAFF','menu/site_meta/staff_view'),
+		);
 	}
 
 	var $title;

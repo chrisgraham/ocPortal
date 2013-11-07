@@ -52,7 +52,7 @@ class Module_cms_authors
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'misc'=>'AUTHOR_MANAGE',
+			'misc'=>array('AUTHOR_MANAGE','menu/rich_content/authors'),
 			'_ad'=>array('EDIT_MY_AUTHOR_PROFILE','menu/cms/author_set_own_profile'),
 			'ed'=>array('EDIT_MERGE_AUTHORS','menu/_generic_admin/edit_one'),
 		);

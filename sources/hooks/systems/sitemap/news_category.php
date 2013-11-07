@@ -52,10 +52,9 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 	{
 		$nodes=($callback===NULL)?array():mixed();
 
@@ -118,6 +117,8 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 			'permission_page'=>$this->get_permission_page($pagelink),
 		)+$partial_struct;
 
+		if (!$this->_check_node_permissions($struct)) return NULL;
+
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 
@@ -127,6 +128,18 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 		{
 			if (strpos($pagelink,':blog=0')!==false) $child['pagelink'].=':blog=0';
 			if (strpos($pagelink,':blog=1')!==false) $child['pagelink'].=':blog=1';
+		}
+		if ($consider_secondary_categories)
+		{
+			$child_hook_ob=$this->_get_sitemap_object($entry_sitetree_hook);
+
+			$child_rows=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry'),array('news_entry_category'=>intval($content_id)));
+			foreach ($child_rows as $child_row)
+			{
+				$child_node=$news_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+				if ($child_node!==NULL)
+					$children[]=$child_node;
+			}
 		}
 		$struct['children']=$children;
 

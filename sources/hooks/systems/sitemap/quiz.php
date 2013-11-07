@@ -52,10 +52,9 @@ class Hook_sitemap_quiz extends Hook_sitemap_content
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 	{
 		$nodes=($callback===NULL)?array():mixed();
 
@@ -115,6 +114,8 @@ class Hook_sitemap_quiz extends Hook_sitemap_content
 
 			'permission_page'=>$this->get_permission_page($pagelink),
 		)+$partial_struct;
+
+		if (!$this->_check_node_permissions($struct)) return NULL;
 
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);

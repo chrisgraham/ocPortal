@@ -147,11 +147,11 @@ class Module_admin_permissions
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'page'=>'PAGE_ACCESS',
-			'privileges'=>'PRIVILEGES',
+			'page'=>array('PAGE_ACCESS','menu/adminzone/security/permissions/permission_tree_editor'),
+			'privileges'=>array('PRIVILEGES','menu/adminzone/security/permissions/privileges'),
 		);
 		if (addon_installed('match_key_permissions'))
-			$ret['keys']='MATCH_KEYS';
+			$ret['keys']=array('MATCH_KEYS','menu/adminzone/security/permissions/match_key_security');
 		return $ret;
 	}
 

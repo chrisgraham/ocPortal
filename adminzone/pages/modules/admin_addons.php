@@ -53,7 +53,7 @@ class Module_admin_addons
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'ADDONS',
+			'misc'=>array('ADDONS','menu/adminzone/structure/addons'),
 			'modules'=>array('MODULE_MANAGEMENT','menu/_generic_admin/component'),
 			'addon_import'=>array('IMPORT_ADDON','menu/_generic_admin/import'),
 			'addon_export'=>array('EXPORT_ADDON','menu/_generic_admin/export'),

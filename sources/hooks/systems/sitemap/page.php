@@ -36,7 +36,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 			require_code('site');
 			$details=_request_page($page,$zone);
-			if (strpos($details[0],'COMCODE')===false)
+			if (strpos($details[0],'COMCODE')===false) // We don't handle Comcode pages here, comcode_page handles those
 			{
 				return SITEMAP_NODE_HANDLED;
 			}
@@ -48,9 +48,11 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	 * Find details for this node.
 	 *
 	 * @param  ?array			Faked database row (NULL: derive).
+	 * @param  ID_TEXT		The zone.
+	 * @param  ID_TEXT		The page.
 	 * @return ?array			Faked database row (NULL: derive).
 	 */
-	protected function _load_row($row)
+	protected function _load_row($row,$zone,$page)
 	{
 		if ($row===NULL) // Find from page grouping
 		{
@@ -63,7 +65,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 				$links=$ob->run();
 				foreach ($links as $link)
 				{
-					if ($link[2][0]==$row_db['the_page'] && $link[2][2]==$row_db['the_zone'])
+					if ($link[2][2]==$zone && $link[2][0]==$page)
 					{
 						$title=$link[3];
 						$icon=$link[0];
@@ -131,7 +133,16 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
-		$zone=$matches[1];
+		if ($matches[1]!=$zone)
+		{
+			if ($zone=='_SEARCH')
+			{
+				$zone=$matches[1];
+			} else
+			{
+				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			}
+		}
 		$page=$matches[2];
 
 		$zone_default_page=$GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page',array('zone_name'=>$zone));
@@ -141,12 +152,12 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 		$path=end($details);
 
-		$row=$this->_load_row($row);
+		$row=$this->_load_row($row,$zone,$page);
 
 		$struct=array(
 			'title'=>titleify($page),
 			'content_type'=>'page',
-			'content_id'=>$zone,
+			'content_id'=>$zone.':'.$page,
 			'pagelink'=>$pagelink,
 			'extra_meta'=>array(
 				'description'=>NULL,
@@ -165,9 +176,15 @@ class Hook_sitemap_page extends Hook_sitemap_base
 			),
 			'permissions'=>array(
 				array(
+					'type'=>'zone',
+					'zone_name'=>$zone,
+					'is_owned_at_this_level'=>false,
+				),
+				array(
 					'type'=>'page',
 					'zone_name'=>$zone,
 					'page_name'=>$page,
+					'is_owned_at_this_level'=>true,
 				),
 			),
 			'has_possible_children'=>false,
@@ -181,7 +198,12 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 		$this->_ameliorate_with_row($struct,$row);
 
-		// Look for virtual nodes to put unswe this
+		if (!$this->_check_node_permissions($struct)) return NULL;
+
+		if ($callback!==NULL)
+			call_user_func($callback,$struct);
+
+		// Look for virtual nodes to put under this
 		$child_sitemap_hook=mixed();
 		$hooks=find_all_hooks('systems','sitemap');
 		foreach (array_keys($hooks) as $_hook)
@@ -197,8 +219,8 @@ class Hook_sitemap_page extends Hook_sitemap_base
 					$child_sitemap_hook=$ob;
 					$struct['permission_page']=$child_sitemap_hook->get_permission_page($pagelink);
 					$struct['has_possible_children']=true;
-					// TODO
-					break;
+
+					$children=array_merge($children,$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather));
 				}
 			}
 		}
@@ -206,21 +228,39 @@ class Hook_sitemap_page extends Hook_sitemap_base
 		// Look for entry points to put under this
 		if ($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM')
 		{
-			$functions=extract_module_functions($module_path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+			$functions=extract_module_functions($path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
 			if (!is_null($functions[0])
 			{
-				$struct['has_possible_children']=true;
 				$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
-				// TODO
+
+				$struct['has_possible_children']=true;
+
+				$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
+
+				if (isset($entry_points['misc']))
+				{
+					unset($entry_points['misc']);
+				} else
+				{
+					array_shift($entry_points);
+				}
+
+				foreach (array_keys($entry_points) as $entry_point)
+				{
+					$child_pagelink=$pagelink.':'.$entry_point;
+					$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+					if ($child_node!==NULL)
+						$children[]=$child_node;
+				}
 			}
 		}
 
-		if ($callback!==NULL)
-			call_user_func($callback,$struct);
-
-		// Categories done after node callback, to ensure sensible ordering
-		$children=array();
-		// TODO
+		// Finalise children
+		foreach ($children as $child_struct)
+		{
+			if ($callback!==NULL)
+				call_user_func($callback,$child_struct);
+		}
 		$struct['children']=$children;
 
 		return ($callback===NULL)?$struct:NULL;

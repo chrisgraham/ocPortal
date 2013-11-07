@@ -51,7 +51,9 @@ class Module_forums
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'SECTION_FORUMS');
+		return array(
+			'!'=>array('SECTION_FORUMS','menu/social/forums'),
+		);
 	}
 
 	var $title;

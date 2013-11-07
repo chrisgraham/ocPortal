@@ -51,7 +51,9 @@ class Module_admin_trackbacks
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MANAGE_TRACKBACKS');
+		return array(
+			'misc'=>array('MANAGE_TRACKBACKS','menu/adminzone/audit/trackbacks'),
+		);
 	}
 
 	var $title;

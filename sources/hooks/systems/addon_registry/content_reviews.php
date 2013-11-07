@@ -103,6 +103,8 @@ class Hook_addon_registry_content_reviews
 			'sources/content_reviews2.php',
 			'lang/EN/content_reviews.ini',
 			'themes/default/templates/REVIEW_STATUS.tpl',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/content_reviews.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/content_reviews.png',
 		);
 	}
 

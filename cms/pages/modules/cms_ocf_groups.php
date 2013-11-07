@@ -45,7 +45,9 @@ class Module_cms_ocf_groups extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MANAGE_CLUBS')+parent::get_entry_points();
+		return array(
+			'misc'=>array('MANAGE_CLUBS','menu/cms/clubs'),
+		)+parent::get_entry_points();
 	}
 
 	var $title;

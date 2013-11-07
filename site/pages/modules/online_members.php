@@ -51,7 +51,11 @@ class Module_online_members
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return (get_option('session_prudence')==='1')?array():array('!'=>'USERS_ONLINE');
+		if (get_option('session_prudence')==='1')
+			return array();
+		return array(
+			'!'=>array('USERS_ONLINE','menu/social/users_online'),
+		);
 	}
 
 	var $title;

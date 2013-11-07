@@ -46,7 +46,9 @@ class Module_admin_referrals
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'REFERRALS');
+		return array(
+			'misc'=>array('REFERRALS','menu/referrals'),
+		);
 	}
 
 	var $title;

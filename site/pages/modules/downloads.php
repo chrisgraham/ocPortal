@@ -184,7 +184,9 @@ class Module_downloads
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'DOWNLOADS_HOME');
+		return array(
+			'misc'=>array('DOWNLOADS_HOME','menu/rich_content/downloads'),
+		);
 	}
 
 	var $title;

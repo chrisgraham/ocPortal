@@ -189,16 +189,16 @@ class Module_shopping
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
+		$ret=array(
+			'misc'=>array('SHOPPING','menu/rich_content/ecommerce/shopping_cart'),
+		);
 		if (!$check_perms || !is_guest($member_id))
 		{
-			return array(
+			$ret+=array(
 				'my_orders'=>array('MY_ORDERS','menu/rich_content/ecommerce/orders'),
-				'misc'=>'SHOPPING',
 			);
 		}
-		return array(
-			'misc'=>'SHOPPING',
-		);
+		return $ret;
 	}
 
 	var $title;

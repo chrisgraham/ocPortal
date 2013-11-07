@@ -91,6 +91,34 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			}
 		}
 
+		if ($zone=='_SEARCH')
+		{
+			// Work out what the zone should be from the $page_grouping (overrides $zone, which we don't trust and must replace)
+			switch ($page_grouping)
+			{
+				case 'structure':
+				case 'audit':
+				case 'style':
+				case 'setup':
+				case 'tools':
+				case 'security':
+					$zone='adminzone';
+					break;
+
+				case 'cms':
+					$zone='cms';
+					break;
+
+				case 'pages':
+				case 'rich_content':
+				case 'site_meta':
+				case 'social':
+				default:
+					$zone=(get_option('collapse_user_zones')=='1')?'':'site';
+					break;
+			}
+		}
+
 		// Our node
 		$struct=array(
 			'title'=>do_lang($page_grouping),
@@ -113,6 +141,11 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 				'db_row'=>NULL,
 			),
 			'permissions'=>array(
+				array(
+					'type'=>'zone',
+					'zone_name'=>$zone,
+					'is_owned_at_this_level'=>false,
+				),
 			),
 			'has_possible_children'=>true,
 
@@ -123,40 +156,15 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			'permission_page'=>NULL,
 		);
 
+		if (!$this->_check_node_permissions($struct)) return NULL;
+
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
 		$children=array();
-		if ($recurse_level<$max_recurse_depth)
+		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 		{
-			// Work out what the zone should be from the $page_grouping (overrides $zone, which we don't trust and must replace)
-			switch ($page_grouping)
-			{
-				case 'structure':
-				case 'audit':
-				case 'style':
-				case 'setup':
-				case 'tools':
-				case 'security':
-					$zone='adminzone';
-					break;
-
-				case 'cms':
-					$zone='cms';
-					break;
-
-				case 'structure',
-				case 'audit',
-				case 'style',
-				case 'setup',
-				case 'tools',
-				case 'security',
-				default:
-					$zone=(get_option('collapse_user_zones')=='1')?'':'site';
-					break;
-			}
-
 			$root_comcode_pages=collapse_2d_complexity('the_page','p_validated',$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>'')));
 
 			require_code('hooks/systems/page_groupings/'.filter_naughty($page_grouping));
@@ -175,8 +183,15 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					$title=do_lang($link[3]);
 					$icon=$link[1];
 
-					$_zone=$link[2][2];
 					$page=$link[2][0];
+					$_zone=$link[2][2];
+					if ($zone!=$_zone) // Not doesn't match. If the page exists in our node's zone as a transparent redirect, override it as in here
+					{
+						require_code('site');
+						$details=_request_page($page,$zone,'redirect');
+						if ($details!==false) $_zone=$zone;
+					}
+
 					$child_pagelink=$_zone.':'.$page;
 					foreach ($link[2][1] as $key=>$val)
 					{
@@ -256,7 +271,8 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 
 					$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 				}
-				$children[]=$child_node;
+				if ($child_node!==NULL)
+					$children[]=$child_node;
 			}
 		}
 		$struct['children']=$children;

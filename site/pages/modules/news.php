@@ -155,7 +155,7 @@ class Module_news
 		$has_blogs=($GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)',NULL,'nc_owner IS NOT NULL')>0);
 
 		$ret=array(
-			'misc'=>'NEWS_ARCHIVE',
+			'misc'=>array('NEWS_ARCHIVE','menu/rich_content/news'),
 			'cat_select'=>array('NEWS_CATEGORIES','menu/_generic_admin/view_archive'),
 		);
 		if ($has_blogs)

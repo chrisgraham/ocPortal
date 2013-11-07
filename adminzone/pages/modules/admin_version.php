@@ -357,6 +357,31 @@ class Module_admin_version
 				't_send_notification'=>'BINARY',
 				't_locked'=>'BINARY',
 			));
+
+			require_code('users_active_actions');
+			$admin_user=get_first_admin_user();
+
+			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+				'the_zone'=>'site',
+				'the_page'=>'userguide_comcode',
+				'p_parent_page'=>'help',
+				'p_validated'=>1,
+				'p_edit_date'=>NULL,
+				'p_add_date'=>time(),
+				'p_submitter'=>$admin_user,
+				'p_show_as_edit'=>0
+			));
+
+			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+				'the_zone'=>'site',
+				'the_page'=>'keymap',
+				'p_parent_page'=>'help',
+				'p_validated'=>1,
+				'p_edit_date'=>NULL,
+				'p_add_date'=>time(),
+				'p_submitter'=>$admin_user,
+				'p_show_as_edit'=>0
+			));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<17))
@@ -384,30 +409,6 @@ class Module_admin_version
 
 			$GLOBALS['SITE_DB']->delete_table_field('zones','zone_displayed_in_menu');
 			$GLOBALS['SITE_DB']->delete_table_field('zones','zone_wide');
-
-			require_code('users_active_actions');
-			$admin_user=get_first_admin_user();
-			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
-				'the_zone'=>'site',
-				'the_page'=>'userguide_comcode',
-				'p_parent_page'=>'help',
-				'p_validated'=>1,
-				'p_edit_date'=>NULL,
-				'p_add_date'=>time(),
-				'p_submitter'=>$admin_user,
-				'p_show_as_edit'=>0
-			));
-
-			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
-				'the_zone'=>'site',
-				'the_page'=>'keymap',
-				'p_parent_page'=>'help',
-				'p_validated'=>1,
-				'p_edit_date'=>NULL,
-				'p_add_date'=>time(),
-				'p_submitter'=>$admin_user,
-				'p_show_as_edit'=>0
-			));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
@@ -590,19 +591,6 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('rating','alt_key',array('rating_for_type','rating_for_id'));
 			$GLOBALS['SITE_DB']->create_index('rating','rating_for_id',array('rating_for_id'));
 		}
-	}
-
-	/**
-	 * Standard modular entry-point finder function.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
-	{
-		return array();
 	}
 
 	var $title;

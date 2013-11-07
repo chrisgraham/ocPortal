@@ -446,7 +446,9 @@ class Module_catalogues
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		if ($check_perms && is_guest($member_id)) return array(); // Guest (sitemap) won't want a catalogue list - too low level
-		return array('misc'=>'CATALOGUES');
+		return array(
+			'misc'=>array('CATALOGUES','menu/rich_content/catalogues/catalogues'),
+		);
 	}
 
 	var $title;

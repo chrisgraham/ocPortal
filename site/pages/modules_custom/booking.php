@@ -173,8 +173,9 @@ class Module_booking
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		require_lang('booking');
-		return array('misc'=>'CREATE_BOOKING');
+		return array(
+			'misc'=>array('CREATE_BOOKING','menu/booking'),
+		);
 	}
 
 	var $title;

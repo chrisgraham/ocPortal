@@ -52,7 +52,9 @@ class Module_cms_comcode_pages
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'COMCODE_PAGE_MANAGEMENT');
+		return array(
+			'misc'=>array('COMCODE_PAGE_MANAGEMENT','menu/cms/comcode_page_edit'),
+		);
 	}
 
 	/**

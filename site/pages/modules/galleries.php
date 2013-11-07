@@ -231,7 +231,9 @@ class Module_galleries
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'GALLERIES_HOME');
+		return array(
+			'misc'=>array('GALLERIES_HOME','menu/rich_content/galleries'),
+		);
 	}
 
 	var $title;

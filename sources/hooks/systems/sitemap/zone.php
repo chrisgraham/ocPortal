@@ -119,6 +119,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 				array(
 					'type'=>'zone',
 					'zone_name'=>$zone,
+					'is_owned_at_this_level'=>true,
 				),
 			),
 			'has_possible_children'=>true,
@@ -129,6 +130,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 			'permission_page'=>$this->get_permission_page($pagelink),
 		);
+
+		if (!$this->_check_node_permissions($struct)) return NULL;
 
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
@@ -171,7 +174,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 		// Categories done after node callback, to ensure sensible ordering
 		$children=array();
-		if ($recurse_level<$max_recurse_depth)
+		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 		{
 			$root_comcode_pages=collapse_2d_complexity('the_page','p_validated',$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>'')));
 
@@ -244,7 +247,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 					}
 
 					$child_node=$page_grouping_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-					$children[]=$child_node;
+					if ($child_node!==NULL)
+						$children[]=$child_node;
 				}
 
 				// Any remaining orphaned pages (we have to tag these on as there was no catch-all page grouping in this zone)
@@ -277,7 +281,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 							$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
 						}
-						$children[]=$child_node;
+						if ($child_node!==NULL)
+							$children[]=$child_node;
 					}
 				}
 			} elseif (count($page_groupings)==1)
@@ -346,7 +351,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 							$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 						}
-						$children[]=$child_node;
+						if ($child_node!==NULL)
+							$children[]=$child_node;
 					}
 				}
 			}

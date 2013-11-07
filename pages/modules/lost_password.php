@@ -105,7 +105,13 @@ class Module_lost_password
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return ($check_perms && is_guest($member_id))?array('misc'=>'RESET_PASSWORD'):array();
+		if ($check_perms && is_guest($member_id))
+		{
+			return array(
+				'misc'=>array('RESET_PASSWORD','menu/site_meta/user_actions/reset_password'),
+			);
+		}
+		return array();
 	}
 
 	/**

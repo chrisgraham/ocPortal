@@ -52,7 +52,9 @@ class Module_cms_wiki
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		$ret=array('add_page'=>'WIKI_ADD_PAGE');
+		$ret=array(
+			'add_page'=>array('WIKI_ADD_PAGE','menu/rich_content/wiki'),
+		);
 		if ($support_crosslinks)
 		{
 			require_code('fields');

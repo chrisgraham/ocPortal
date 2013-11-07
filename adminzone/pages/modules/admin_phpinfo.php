@@ -51,7 +51,9 @@ class Module_admin_phpinfo
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'PHPINFO');
+		return array(
+			'!'=>array('PHPINFO','menu/adminzone/tools/phpinfo'),
+		);
 	}
 
 	/**

@@ -51,7 +51,9 @@ class Module_admin_debrand
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'SUPER_DEBRAND');
+		return array(
+			'misc'=>array('SUPER_DEBRAND','menu/adminzone/style/debrand'),
+		);
 	}
 
 	var $title;

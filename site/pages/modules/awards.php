@@ -51,7 +51,12 @@ class Module_awards
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return ($GLOBALS['SITE_DB']->query_select_value('award_types','COUNT(*)')==0)?array():array('misc'=>'AWARDS','overview'=>'AWARD_OVERVIEW');
+		if ($GLOBALS['SITE_DB']->query_select_value('award_types','COUNT(*)')==0)
+			return array();
+		return array(
+			'misc'=>array('AWARDS','menu/adminzone/setup/awards'),
+			'overview'=>array('AWARD_OVERVIEW','menu/_generic_admin/view_archive'),
+		);
 	}
 
 	var $title;

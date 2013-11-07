@@ -51,7 +51,9 @@ class Module_join
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'_JOIN');
+		return array(
+			'misc'=>array('_JOIN','menu/site_meta/user_actions/join'),
+		);
 	}
 
 	var $title;

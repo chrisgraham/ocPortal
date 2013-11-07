@@ -89,7 +89,9 @@ class Module_admin_wordfilter
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MANAGE_WORDFILTER');
+		return array(
+			'misc'=>array('MANAGE_WORDFILTER','menu/adminzone/security/wordfilter'),
+		);
 	}
 
 	var $title;

@@ -114,7 +114,9 @@ class Module_purchase
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'PURCHASING');
+		return array(
+			'misc'=>array('PURCHASING','menu/rich_content/ecommerce/purchase'),
+		);
 	}
 
 	var $title;

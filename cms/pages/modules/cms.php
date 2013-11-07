@@ -51,7 +51,9 @@ class Module_cms
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'CMS');
+		return array(
+			'!'=>array('CMS','menu/cms/cms'),
+		);
 	}
 
 	var $title;

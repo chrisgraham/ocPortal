@@ -46,7 +46,9 @@ class Module_admin_unvalidated
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'UNVALIDATED_RESOURCES');
+		return array(
+			'!'=>array('UNVALIDATED_RESOURCES','menu/adminzone/audit/unvalidated'),
+		);
 	}
 
 	var $title;

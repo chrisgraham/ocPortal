@@ -44,7 +44,9 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MULTI_MODERATIONS')+parent::get_entry_points();
+		return array(
+			'misc'=>array('MULTI_MODERATIONS','menu/adminzone/structure/forum/multi_moderations'),
+		)+parent::get_entry_points();
 	}
 
 	var $title;

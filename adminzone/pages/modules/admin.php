@@ -54,13 +54,13 @@ class Module_admin
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'ADMIN_ZONE',
-			'structure'=>'STRUCTURE',
-			'audit'=>'AUDIT',
-			'style'=>'STYLE',
-			'setup'=>'SETUP',
-			'tools'=>'TOOLS',
-			'security'=>'SECURITY_GROUP_SETUP',
+			'misc'=>array('ADMIN_ZONE','menu/adminzone/adminzone'),
+			'structure'=>array('STRUCTURE','menu/adminzone/structure'),
+			'audit'=>array('AUDIT','menu/adminzone/audit'),
+			'style'=>array('STYLE','menu/adminzone/style'),
+			'setup'=>array('SETUP','menu/adminzone/setup'),
+			'tools'=>array('TOOLS','menu/adminzone/tools'),
+			'security'=>array('SECURITY_GROUP_SETUP','menu/adminzone/security'),
 		);
 	}
 

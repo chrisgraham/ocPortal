@@ -51,7 +51,9 @@ class Module_admin_tickets
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MANAGE_TICKET_TYPES');
+		return array(
+			'misc'=>array('MANAGE_TICKET_TYPES','menu/site_meta/tickets'),
+		);
 	}
 
 	var $title;

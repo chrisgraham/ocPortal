@@ -51,7 +51,9 @@ class Module_admin_content_reviews
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'_CONTENT_NEEDING_REVIEWING');
+		return array(
+			'!'=>array('_CONTENT_NEEDING_REVIEWING','menu/adminzone/audit/content_reviews'),
+		);
 	}
 
 	/**

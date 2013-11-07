@@ -51,7 +51,9 @@ class Module_admin_lookup
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'INVESTIGATE_USER');
+		return array(
+			'!'=>array('INVESTIGATE_USER','menu/adminzone/tools/users/investigate_user'),
+		);
 	}
 
 	var $title;

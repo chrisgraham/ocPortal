@@ -55,7 +55,7 @@ class Module_cms_blogs extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'MANAGE_BLOGS',
+			'misc'=>array('MANAGE_BLOGS','tabs/member_account/blog'),
 			'import_wordpress'=>array('IMPORT_WORDPRESS','menu/_generic_admin/import'),
 		)+parent::get_entry_points();
 	}

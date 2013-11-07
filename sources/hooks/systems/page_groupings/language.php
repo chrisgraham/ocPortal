@@ -68,7 +68,7 @@ class Hook_page_groupings_language
 
 		return array(
 			array('style','menu/adminzone/style/language/language',array('admin_lang',array('type'=>'misc'),get_module_zone('admin_lang')),do_lang_tempcode('lang:TRANSLATE_CODE'),'lang:DOC_TRANSLATE'),
-			multi_lang()?array('style','menu/adminzone/style/language/language',array('admin_lang',array('type'=>'content'),get_module_zone('admin_lang')),do_lang_tempcode('lang:TRANSLATE_CONTENT'),'lang:DOC_TRANSLATE_CONTENT'):NULL,
+			multi_lang()?array('style','menu/adminzone/style/language/language_content',array('admin_lang',array('type'=>'content'),get_module_zone('admin_lang')),do_lang_tempcode('lang:TRANSLATE_CONTENT'),'lang:DOC_TRANSLATE_CONTENT'):NULL,
 			(!$has_langs)?NULL:array('style','menu/adminzone/style/language/criticise_language',array('admin_lang',array('type'=>'criticise'),get_module_zone('admin_lang')),do_lang_tempcode('lang:CRITICISE_LANGUAGE_PACK'),'lang:DOC_CRITICISE_LANGUAGE_PACK'),
 		);
 	}

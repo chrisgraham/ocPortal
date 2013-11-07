@@ -51,7 +51,9 @@ class Module_admin_ssl
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'SSL_CONFIGURATION');
+		return array(
+			'misc'=>array('SSL_CONFIGURATION','menu/adminzone/security/ssl'),
+		);
 	}
 
 	var $title;

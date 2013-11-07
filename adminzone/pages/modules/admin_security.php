@@ -101,7 +101,9 @@ class Module_admin_security
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'SECURITY_LOGGING');
+		return array(
+			'misc'=>array('SECURITY_LOGGING','menu/adminzone/audit/security_log'),
+		);
 	}
 
 	var $title;

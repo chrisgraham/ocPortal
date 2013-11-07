@@ -45,10 +45,9 @@ class Hook_sitemap_root extends Hook_sitemap_base
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-	 * @param  ?array			Database row (NULL: lookup).
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 	{
 		$nodes=($callback===NULL)?array():mixed();
 
@@ -104,11 +103,13 @@ class Hook_sitemap_root extends Hook_sitemap_base
 			'sitemap_refreshfreq'=>'daily',
 		);
 
+		if (!$this->_check_node_permissions($struct)) return NULL;
+
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
-		if ($recurse_level<$max_recurse_depth)
+		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 		{
 			$zone_sitemap_ob=$this->_get_sitemap_object('zone');
 			$children=array();
@@ -120,7 +121,9 @@ class Hook_sitemap_root extends Hook_sitemap_base
 					list($zone,$title)=$_zone;
 
 					$child_pagelink=$zone.':';
-					$children[]=$zone_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
+					$child_node=$zone_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
+					if ($child_node!==NULL)
+						$children[]=$child_node;
 				}
 				$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 			}

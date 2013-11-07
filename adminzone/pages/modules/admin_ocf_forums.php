@@ -49,7 +49,9 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		$ret=array('misc'=>'MANAGE_FORUMS')+parent::get_entry_points();
+		$ret=array(
+			'misc'=>array('MANAGE_FORUMS','menu/social/forums'),
+		)+parent::get_entry_points();
 
 		if ($support_crosslinks)
 		{

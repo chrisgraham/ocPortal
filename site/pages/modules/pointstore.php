@@ -135,7 +135,13 @@ class Module_pointstore
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return (!$check_perms || !is_guest($member_id))?array('!'=>'POINTSTORE'):array();
+		if (!$check_perms || !is_guest($member_id))
+		{
+			return array(
+				'!'=>array('POINTSTORE','menu/social/pointstore'),
+			);
+		}
+		return array();
 	}
 
 	var $title;

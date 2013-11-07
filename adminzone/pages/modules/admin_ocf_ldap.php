@@ -52,7 +52,9 @@ class Module_admin_ocf_ldap
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'LDAP_SYNC');
+		return array(
+			'misc'=>array('LDAP_SYNC','menu/adminzone/security/ldap'),
+		);
 	}
 
 	var $title;

@@ -112,7 +112,7 @@ class Module_admin_themes
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'misc'=>'THEMES',
+			'misc'=>array('THEMES','menu/adminzone/style/themes/themes'),
 			'add_theme'=>array('ADD_THEME','menu/_generic_admin/add_one'),
 			'tempcode_tester'=>array('TEMPCODE_TESTER','menu/_generic_admin/tool'),
 		);

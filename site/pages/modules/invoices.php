@@ -79,7 +79,13 @@ class Module_invoices
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return ((!$check_perms || !is_guest($member_id)) && ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id'=>get_member()))>0))?array('misc'=>'MY_INVOICES'):array();
+		if ((!$check_perms || !is_guest($member_id)) && ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id'=>get_member()))>0))
+		{
+			return array(
+				'misc'=>array('MY_INVOICES','menu/adminzone/audit/ecommerce/invoices'),
+			);
+		}
+		return array();
 	}
 
 	var $title;

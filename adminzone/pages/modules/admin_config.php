@@ -52,7 +52,9 @@ class Module_admin_config
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		$ret=array('misc'=>'CONFIGURATION');
+		$ret=array(
+			'misc'=>array('CONFIGURATION','menu/adminzone/setup/config/config'),
+		);
 
 		$ret['base']='BASE_CONFIGURATION';
 

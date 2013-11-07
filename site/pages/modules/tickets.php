@@ -124,7 +124,9 @@ class Module_tickets
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'SUPPORT_TICKETS');
+		return array(
+			'misc'=>array('SUPPORT_TICKETS','menu/site_meta/tickets'),
+		);
 	}
 
 	var $title;

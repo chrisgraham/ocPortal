@@ -118,7 +118,9 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'MANAGE_DISEASES')+parent::get_entry_points();
+		return array(
+			'misc'=>array('MANAGE_DISEASES','menu/ocdeadpeoplelog'),
+		)+parent::get_entry_points();
 	}
 
 	var $title;

@@ -51,7 +51,9 @@ class Module_admin_errorlog
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'ERROR_LOG');
+		return array(
+			'!'=>array('ERROR_LOG','menu/adminzone/audit/errorlog'),
+		);
 	}
 
 	var $title;

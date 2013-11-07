@@ -52,7 +52,9 @@ class Module_admin_cleanup
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'CLEANUP_TOOLS');
+		return array(
+			'misc'=>array('CLEANUP_TOOLS','menu/adminzone/tools/cleanup'),
+		);
 	}
 
 	var $title;

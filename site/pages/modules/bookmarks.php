@@ -78,7 +78,7 @@ class Module_bookmarks
 	{
 		if ($check_perms && is_guest($member_id)) return array();
 		return array(
-			'misc'=>'MANAGE_BOOKMARKS',
+			'misc'=>array('MANAGE_BOOKMARKS','menu/site_meta/bookmarks'),
 			'ad'=>array('ADD_BOOKMARK','menu/_generic_admin/add_one'),
 		);
 	}

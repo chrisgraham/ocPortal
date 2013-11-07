@@ -51,7 +51,9 @@ class Module_forumview
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'ROOT_FORUM');
+		return array(
+			'!'=>array('ROOT_FORUM','menu/social/forums'),
+		);
 	}
 
 	var $title;

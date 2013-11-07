@@ -212,7 +212,7 @@ class Module_wiki
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'WIKI_HOME',
+			'misc'=>array('WIKI_HOME','menu/rich_content/wiki'),
 			'random'=>array('RANDOM_PAGE','menu/rich_content/wiki/random_page'),
 			'changes'=>array('WIKI_CHANGELOG','menu/rich_content/wiki/change_log'),
 		);

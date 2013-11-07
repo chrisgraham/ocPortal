@@ -1251,25 +1251,31 @@ function fix_id($param)
 }
 
 /**
- * See if the current URL matches the given ocPortal match tags.
+ * See if the current URL matches the given ocPortal match-keys.
  *
- * @param  string			Match tags
+ * @param  string			Match keys
  * @param  boolean		Check against POSTed data too
+ * @param  ?array			Parameters to check against (NULL: get from environment GET/POST) - if set, $support_post is ignored)
+ * @param  ?ID_TEXT		Current zone name (NULL: get from environment)
+ * @param  ?ID_TEXT		Current page name (NULL: get from environment)
  * @return boolean		Whether there is a match
  */
-function match_key_match($match_tag,$support_post=false)
+function match_key_match($match_key,$support_post=false,$current_params=NULL,$current_zone_name=NULL,$current_page_name=NULL)
 {
 	$req_func=$support_post?'either_param':'get_param';
 
-	$potentials=explode(',',$match_tag);
+	if ($current_zone_name===NULL) $current_zone_name=get_zone_name();
+	if ($current_page_name===NULL) $current_page_name=get_page_name();
+
+	$potentials=explode(',',$match_key);
 	foreach ($potentials as $potential)
 	{
 		$parts=explode(':',$potential);
-		if (($parts[0]=='_WILD') || ($parts[0]=='_SEARCH')) $parts[0]=get_zone_name();
-		if ((!array_key_exists(1,$parts)) || ($parts[1]=='_WILD')) $parts[1]=get_page_name();
+		if (($parts[0]=='_WILD') || ($parts[0]=='_SEARCH')) $parts[0]=$current_zone_name;
+		if ((!array_key_exists(1,$parts)) || ($parts[1]=='_WILD')) $parts[1]=$current_page_name;
 		if (($parts[0]=='site') && (get_option('collapse_user_zones')=='1')) $parts[0]='';
-		$zone_matches=(($parts[0]==get_zone_name()) || ((strpos($parts[0],'*')!==false) && (simulated_wildcard_match(get_zone_name(),$parts[0],true))));
-		$page_matches=((($parts[1]=='') && (get_page_name()==get_zone_default_page(get_zone_name()))) || ($parts[1]==get_page_name()) || ((strpos($parts[1],'*')!==false) && (simulated_wildcard_match(get_page_name(),$parts[1],true))));
+		$zone_matches=(($parts[0]==$current_zone_name) || ((strpos($parts[0],'*')!==false) && (simulated_wildcard_match($current_zone_name,$parts[0],true))));
+		$page_matches=((($parts[1]=='') && ($current_page_name==get_zone_default_page($current_zone_name))) || ($parts[1]==$current_page_name) || ((strpos($parts[1],'*')!==false) && (simulated_wildcard_match($current_page_name,$parts[1],true))));
 		if (($zone_matches) && ($page_matches))
 		{
 			$bad=false;
@@ -1288,7 +1294,18 @@ function match_key_match($match_tag,$support_post=false)
 				}
 
 				$subparts=explode('=',$parts[$i]);
-				if ((count($subparts)!=2) || (call_user_func_array($req_func,array($subparts[0],'misc'))!=$subparts[1]))
+				if ($subparts[0]=='type')
+				{
+					$default='misc';
+				} else
+				{
+					$default='';
+				}
+				if (
+					(count($subparts)!=2) || 
+					(($current_params!=NULL) && ((isset($current_params[$subparts[0]])?$current_params[$subparts[0]]:$default)==$subparts[1])) || 
+					(($current_params==NULL) && (call_user_func_array($req_func,array($subparts[0],$default))!=$subparts[1]))
+				)
 				{
 					$bad=true;
 					continue;

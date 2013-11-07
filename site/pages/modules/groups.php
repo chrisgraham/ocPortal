@@ -51,7 +51,9 @@ class Module_groups
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'USERGROUPS');
+		return array(
+			'misc'=>array('USERGROUPS','menu/social/groups'),
+		);
 	}
 
 	var $title;

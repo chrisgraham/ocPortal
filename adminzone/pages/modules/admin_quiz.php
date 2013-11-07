@@ -52,7 +52,7 @@ class Module_admin_quiz
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'MANAGE_QUIZZES',
+			'misc'=>array('MANAGE_QUIZZES','menu/rich_content/quiz'),
 			'find_winner'=>array('FIND_WINNER','menu/cms/quiz/find_winners'),
 			'survey_results'=>array('SURVEY_RESULTS','menu/cms/quiz/survey_results'),
 			'export'=>array('EXPORT_QUIZ','menu/_generic_admin/export'),

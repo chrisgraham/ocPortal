@@ -68,6 +68,8 @@ class Hook_sitemap_image extends Hook_sitemap_content
 			'permission_page'=>$this->get_permission_page($pagelink),
 		)+$partial_struct;
 
+		if (!$this->_check_node_permissions($struct)) return NULL;
+
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 

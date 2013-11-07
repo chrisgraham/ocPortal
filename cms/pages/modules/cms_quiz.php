@@ -62,7 +62,9 @@ class Module_cms_quiz extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		$ret=array('misc'=>'MANAGE_QUIZZES')+parent::get_entry_points();
+		$ret=array(
+			'misc'=>array('MANAGE_QUIZZES','menu/rich_content/quiz'),
+		)+parent::get_entry_points();
 
 		if ($support_crosslinks)
 		{

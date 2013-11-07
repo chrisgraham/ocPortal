@@ -244,7 +244,9 @@ class Module_calendar
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'CALENDAR');
+		return array(
+			'misc'=>array('CALENDAR','menu/rich_content/calendar'),
+		);
 	}
 
 	var $title;

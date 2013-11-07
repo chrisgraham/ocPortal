@@ -52,7 +52,7 @@ class Module_cms_downloads extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		$ret=array(
-			'misc'=>'MANAGE_DOWNLOADS',
+			'misc'=>array('MANAGE_DOWNLOADS','menu/rich_content/downloads'),
 			'av'=>array('ADD_DOWNLOAD_LICENCE','menu/cms/downloads/add_one_licence'),
 			'ev'=>array('EDIT_DOWNLOAD_LICENCE','menu/cms/downloads/edit_one_licence'),
 		);

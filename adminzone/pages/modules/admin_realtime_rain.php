@@ -51,7 +51,9 @@ class Module_admin_realtime_rain
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('!'=>'REALTIME_RAIN');
+		return array(
+			'!'=>array('REALTIME_RAIN','menu/adminzone/audit/realtime_rain'),
+		);
 	}
 
 	var $title;

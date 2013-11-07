@@ -93,8 +93,8 @@ class Hook_page_groupings_core
 			//(get_comcode_zone('sitemap')===NULL || get_option('bottom_show_sitemap_button')=='1')?NULL:array('site_meta','tool_buttons/sitemap',array('sitemap',array(),get_comcode_zone('sitemap')),do_lang_tempcode('SITEMAP')),	Redundant, menu itself is a sitemap
 			// userguide_comcode is child of help_page
 
-			(get_forum_type()=='none' || !is_guest($member_id))?NULL:array('site_meta','menu/user_actions/login',array('login',array(),'')),do_lang_tempcode('_LOGIN')),
-			(get_forum_type()=='none' || is_guest($member_id))?NULL:array('site_meta','menu/user_actions/logout',array('login',array(),'')),do_lang_tempcode('LOGOUT')),
+			(get_forum_type()=='none' || !is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/login',array('login',array(),'')),do_lang_tempcode('_LOGIN')),
+			(get_forum_type()=='none' || is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/logout',array('login',array(),'')),do_lang_tempcode('LOGOUT')),
 
 			(get_forum_type()=='ocf')?NULL:array('site_meta','menu/site_meta/user_actions/join',array('join',array(),get_module_zone('join')),do_lang_tempcode('_JOIN')),
 			(get_forum_type()=='ocf')?NULL:array('site_meta','menu/site_meta/user_actions/reset_password',array('lost_password',array(),get_module_zone('lost_password')),do_lang_tempcode('ocf:RESET_PASSWORD')),

@@ -51,7 +51,9 @@ class Module_admin_banners
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'BANNER_STATISTICS');
+		return array(
+			'misc'=>array('BANNER_STATISTICS','menu/cms/banners'),
+		);
 	}
 
 	var $title;

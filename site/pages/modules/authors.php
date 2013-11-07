@@ -91,7 +91,10 @@ class Module_authors
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return ($check_perms && is_guest($member_id))?array():array('misc'=>'VIEW_MY_AUTHOR_PROFILE');
+		if ($check_perms && is_guest($member_id)) return array();
+		return array(
+			'misc'=>array('VIEW_MY_AUTHOR_PROFILE','menu/rich_content/authors'),
+		);
 	}
 
 	var $title;

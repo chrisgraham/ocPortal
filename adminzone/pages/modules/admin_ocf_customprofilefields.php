@@ -43,8 +43,8 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>'CUSTOM_PROFILE_FIELDS',
-			'stats'=>'CUSTOM_PROFILE_FIELD_STATS',
+			'misc'=>array('CUSTOM_PROFILE_FIELDS','menu/adminzone/tools/users/custom_profile_fields'),
+			'stats'=>array('CUSTOM_PROFILE_FIELD_STATS','menu/adminzone/tools/users/custom_profile_fields'),
 		)+parent::get_entry_points();
 	}
 

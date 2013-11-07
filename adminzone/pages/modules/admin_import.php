@@ -113,7 +113,9 @@ class Module_admin_import
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('misc'=>'IMPORT');
+		return array(
+			'misc'=>array('IMPORT','menu/_generic_admin/import'),
+		);
 	}
 
 	var $title;
