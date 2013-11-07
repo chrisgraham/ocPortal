@@ -478,6 +478,8 @@ description=".$description."
 
 	tar_close($tar);
 
+	if ($max_mtime==0) $max_mtime=time();
+
 	@touch($_full,$max_mtime);
 
 	fix_permissions($_full);
