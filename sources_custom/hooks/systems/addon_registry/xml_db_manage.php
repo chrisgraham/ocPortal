@@ -134,7 +134,7 @@ class Hook_addon_registry_xml_db_manage
 			'sources_custom/hooks/systems/addon_registry/xml_db_manage.php',
 			'adminzone/pages/minimodules_custom/sql_dump.php',
 			'data_custom/xml_db_import.php',
-			'sources_custom/hooks/systems/do_next_menus/developer_sync.php',
+			'sources_custom/hooks/systems/page_groupings/developer_sync.php',
 			'sources_custom/database_toolkit.php',
 		);
 	}

@@ -114,7 +114,7 @@ class Hook_addon_registry_unvalidated
 			'sources/hooks/blocks/main_staff_checklist/unvalidated.php',
 			'sources/hooks/modules/admin_unvalidated/.htaccess',
 			'sources/hooks/modules/admin_unvalidated/index.html',
-			'sources/hooks/systems/do_next_menus/unvalidated.php',
+			'sources/hooks/systems/page_groupings/unvalidated.php',
 		);
 	}
 

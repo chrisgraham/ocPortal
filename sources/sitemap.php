@@ -18,12 +18,19 @@
  * @package		core
  */
 
+/*
+Notes:
+ - We cannot/do-not fully recurse the Sitemap with arbitrary permissions or as an arbitrary user.
+   We do collect permission data, but this is collected for the Permission Tree Editor, not for node availability meta processing.
+   This isn't for no good reason - the Sitemap is intrinsicly variable on a user-to-user basis, it is not necessarily shared.
+*/
+
 /**
  * Standard code module initialisation function.
  */
 function init__sitemap()
 {
-	// Defining what should be gathered with the sitemap
+	// Defining what should be gathered with the Sitemap
 	define('SITEMAP_GATHER_DESCRIPTION',1);
 	define('SITEMAP_GATHER_IMAGE',2);
 	define('SITEMAP_GATHER_TIMES',4);
@@ -67,18 +74,18 @@ function init__sitemap()
 }
 
 /**
- * Find details of a position in the sitemap (shortcut into the object structure).
+ * Find details of a position in the Sitemap (shortcut into the object structure).
  *
  * @param  ?ID_TEXT 		The page-link we are finding (NULL: root).
  * @param  ?mixed  		Callback function to send discovered page-links to (NULL: return).
  * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
- * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
+ * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
  * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
  * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
  * @param  boolean		Whether to filter out non-validated content.
  * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
  * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
- * @return ?array			Node structure (NULL: working via callback).
+ * @return ?array			Node structure (NULL: working via callback / error).
  */
 function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_validation=false,$consider_secondary_categories=false,$meta_gather=0)
 {
@@ -113,7 +120,7 @@ function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=N
 	}
 
 	if ($is_virtual)
-		return $ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+		return array('children'=>$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather));
 	return $ob->get_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
 }
 
@@ -138,10 +145,10 @@ abstract class Hook_sitemap_base
 	abstract function handles_pagelink($pagelink);
 
 	/**
-	 * Get a particular sitemap object. Used for easily tying in a different kind of child node.
+	 * Get a particular Sitemap object. Used for easily tying in a different kind of child node.
 	 *
-	 * @param  ID_TEXT		The hook, i.e. the sitemap object type. Usually the same as a content type.
-	 * @return object			The sitemap object.
+	 * @param  ID_TEXT		The hook, i.e. the Sitemap object type. Usually the same as a content type.
+	 * @return object			The Sitemap object.
 	 */
 	protected function _get_sitemap_object($hook)
 	{
@@ -150,14 +157,14 @@ abstract class Hook_sitemap_base
 	}
 
 	/**
-	 * Find all nodes at the top level position in the sitemap for this hook.
+	 * Find all nodes at the top level position in the Sitemap for this hook.
 	 * May be a single node (i.e. a category root) or multiple nodes (if there's a flat structure).
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
+	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
+	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to filter out non-validated content.
@@ -169,28 +176,40 @@ abstract class Hook_sitemap_base
 	abstract function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
 
 	/**
-	 * Find details of a position in the sitemap.
+	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
+	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
+	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
-	 * @return ?array			Node structure (NULL: working via callback).
+	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
 	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
 
 	/**
+	 * Get the permission page that nodes matching $pagelink in this hook are tied to.
+	 * The permission page is where privileges may be overridden against.
+	 *
+	 * @param  string			The page-link
+	 * @return ?ID_TEXT		The permission page (NULL: none)
+	 */
+	function get_permission_page($pagelink)
+	{
+		return NULL;
+	}
+
+	/**
 	 * Convert a page-link to a category ID and category permission module type.
 	 *
-	 * @param  string	The page-link
-	 * @return ?array	The pair (NULL: permission modules not handled)
+	 * @param  string			The page-link
+	 * @return ?array			The pair (NULL: permission modules not handled)
 	 */
 	function extract_child_pagelink_permission_pair($pagelink)
 	{
@@ -204,6 +223,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	protected $entry_content_type=NULL;
 	protected $entry_sitetree_hook=NULL;
 	protected $cma_info=NULL;
+	protected $screen_type='misc';
 
 	/**
 	 * Find if a page-link will be covered by this node.
@@ -214,16 +234,19 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	function handles_pagelink($pagelink)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
-		$page=$matches[2];
-
-		require_code('content');
-		$cma_ob=get_content_object($this->content_type);
-		$cma_info=$cma_ob->info();
-		if ($cma_info['module']==$page)
+		if (preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches)!=0)
 		{
-			if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED;
-			return SITEMAP_NODE_HANDLED_VIRTUALLY;
+			$page=$matches[2];
+
+			require_code('content');
+			$cma_ob=get_content_object($this->content_type);
+			$cma_info=$cma_ob->info();
+			if ($cma_info['module']==$page)
+			{
+				if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED_VIRTUALLY; // No type/ID specified
+				if (preg_match('#^([^:]*):([^:]*):'.$this->screen_type.'(:|$)#',$pagelink,$matches)!=0)
+					return SITEMAP_NODE_HANDLED;
+			}
 		}
 		return SITEMAP_NODE_NOT_HANDLED;
 	}
@@ -275,8 +298,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
+	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
+	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to filter out non-validated content.
@@ -434,8 +457,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
+	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
+	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to filter out non-validated content.
@@ -588,7 +611,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 }
 
 /**
- * Get an HTML selection list for some part of the sitemap.
+ * Get an HTML selection list for some part of the Sitemap.
  *
  * @param  ID_TEXT  		The page-link we are starting from.
  * @param  ?ID_TEXT		Default selection (NULL: none).

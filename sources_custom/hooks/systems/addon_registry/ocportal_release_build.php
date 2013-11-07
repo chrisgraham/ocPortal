@@ -135,7 +135,7 @@ class Hook_addon_registry_ocportal_release_build
 			'data_custom/build_rewrite_rules.php',
 			'sources_custom/make_release.php',
 			'adminzone/pages/minimodules_custom/make_release.php',
-			'sources_custom/hooks/systems/do_next_menus/make_release.php',
+			'sources_custom/hooks/systems/page_groupings/make_release.php',
 			'adminzone/pages/minimodules_custom/push_bugfix.php',
 			'adminzone/pages/minimodules_custom/plug_guid.php',
 			'exports/builds/index.html',

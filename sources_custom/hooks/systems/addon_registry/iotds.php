@@ -156,7 +156,7 @@ class Hook_addon_registry_iotds
 			'sources/blocks/main_iotd.php',
 			'sources/hooks/blocks/main_staff_checklist/iotds.php',
 			'sources/hooks/modules/search/iotds.php',
-			'sources/hooks/systems/do_next_menus/iotds.php',
+			'sources/hooks/systems/page_groupings/iotds.php',
 			'sources/hooks/systems/rss/iotds.php',
 			'sources/hooks/systems/trackback/iotds.php',
 			'sources/iotds.php',

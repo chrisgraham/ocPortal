@@ -133,7 +133,7 @@ class Hook_addon_registry_ad_success
 		return array(
 			'sources_custom/hooks/systems/addon_registry/ad_success.php',
 			'adminzone/pages/minimodules_custom/ad_success.php',
-			'sources_custom/hooks/systems/do_next_menus/ad_success.php',
+			'sources_custom/hooks/systems/page_groupings/ad_success.php',
 		);
 	}
 }

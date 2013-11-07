@@ -113,7 +113,7 @@ class Hook_addon_registry_authors
 			'lang/EN/authors.ini',
 			'site/pages/modules/authors.php',
 			'sources/authors.php',
-			'sources/hooks/systems/do_next_menus/authors.php',
+			'sources/hooks/systems/page_groupings/authors.php',
 			'sources/hooks/systems/rss/authors.php',
 			'sources/hooks/systems/content_meta_aware/author.php',
 			'sources/hooks/systems/occle_fs/authors.php',

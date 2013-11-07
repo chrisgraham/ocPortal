@@ -58,11 +58,11 @@ function do_next_manager_hooked($title,$text,$type,$main_title=NULL)
 
 	if (is_null($main_title)) $main_title=$title;
 
-	$hooks=find_all_hooks('systems','do_next_menus');
+	$hooks=find_all_hooks('systems','page_groupings');
 	foreach (array_keys($hooks) as $hook)
 	{
-		require_code('hooks/systems/do_next_menus/'.filter_naughty_harsh($hook));
-		$object=object_factory('Hook_do_next_menus_'.filter_naughty_harsh($hook),true);
+		require_code('hooks/systems/page_groupings/'.filter_naughty_harsh($hook));
+		$object=object_factory('Hook_page_groupings_'.filter_naughty_harsh($hook),true);
 		if (is_null($object)) continue;
 		$info=$object->run(true);
 		foreach ($info as $i)

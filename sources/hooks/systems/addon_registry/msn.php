@@ -104,7 +104,7 @@ class Hook_addon_registry_msn
 			'adminzone/pages/comcode/EN/netlink.txt',
 			'text/netlink.txt',
 			'netlink.php',
-			'sources/hooks/systems/do_next_menus/msn.php',
+			'sources/hooks/systems/page_groupings/msn.php',
 			'sources/multi_site_networks.php',
 			'sources/blocks/side_network.php',
 		);

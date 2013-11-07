@@ -29,13 +29,21 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	function handles_pagelink($pagelink)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
-		$page=$matches[2];
-
-		if ($page=='search')
+		if (preg_match('#^([^:]*):([^:]*)$#',$pagelink,$matches)!=0)
 		{
-			if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED;
-			return SITEMAP_NODE_HANDLED_VIRTUALLY;
+			$zone=$matches[1];
+			$page=$matches[2];
+
+			if ($page=='search')
+			{
+				require_code('site');
+				$details=_request_page($page,$zone);
+				if ($details!==false)
+				{
+					if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED;
+					return SITEMAP_NODE_HANDLED_VIRTUALLY;
+				}
+			}
 		}
 		return SITEMAP_NODE_NOT_HANDLED;
 	}
@@ -91,20 +99,20 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	}
 
 	/**
-	 * Find details of a position in the sitemap.
+	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
+	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
+	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
-	 * @return ?array			Node structure (NULL: working via callback).
+	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
 	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
 	{
@@ -198,7 +206,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
 			'sitemap_refreshfreq'=>'yearly',
 
-			'permission_page'=>NULL, // Where privileges are overridden on
+			'permission_page'=>NULL,
 		);
 
 		if ($callback!==NULL)

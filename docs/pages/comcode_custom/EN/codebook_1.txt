@@ -633,7 +633,7 @@ In ocPortal content types are implemented via a lot of different files. The best
  - [tt]sources_custom/hooks/modules/search/iotds.php[/tt] -- This is a search hook, to allow IOTDs to be searchable from the ocPortal search module.
  - [tt]sources_custom/hooks/systems/addon_registry/iotds.php[/tt] -- This is an addon-registry hook, and essentially just lists the files associated with the IOTD system/addon. You only need to worry about writing addon-registry hooks if you are writing code that is going to be bundled with the main ocPortal distribution. These hooks exist so that the addon manager can package/delete all files relating to IOTDs.
  - [tt]sources_custom/hooks/systems/content_meta_aware/iotd.php[/tt] -- This hook is used to provide the search-engine-friendly URLs for IOTDs. It specifies the details ocPortal needs to be able to automatically generate URL keywords and tie them into ID numbers. In the future it is likely ocPortal will use this kind of hook for more things, and can generally be considered as a way for a content type to declare/define some of it's properties.
- - [tt]sources_custom/hooks/systems/do_next_menus/iotds.php[/tt] -- This hook places IOTD icons in the Admin Zone/CMS Zone do-next menus.
+ - [tt]sources_custom/hooks/systems/page_groupings/iotds.php[/tt] -- This hook places IOTD icons in the Admin Zone/CMS Zone do-next menus.
  - [tt]sources_custom/hooks/systems/preview/iotd.php[/tt] -- This hook allows IOTDs to have user-friendly previews from the add/edit form. It provides a method to scan to see if you are trying to preview an IOTD, and another method to generate a preview from the data passed to the preview script via the POST environment.
  - [tt]sources_custom/hooks/systems/rss/iotds.php[/tt] -- This hook provides an RSS feed for IOTDs.
  - [tt]sources_custom/hooks/systems/trackback/iotds.php[/tt] -- This hook determines whether a specific IOTD has trackbacks enabled (this is used by the trackback-reception script, to check to see whether it has access to save the trackback).
@@ -1027,7 +1027,7 @@ Going from top to bottom:
  - the link caption
  - the hover text
 
-To place a new item into the Admin Zone or CMS "Where to go" menus, create a new hook file in [tt]sources/hooks/systems/do_next_menus[/tt]. The syntax is essentially as above, and there are plenty of existing files to use as examples.
+To place a new item into the Admin Zone or CMS "Where to go" menus, create a new hook file in [tt]sources/hooks/systems/page_groupings[/tt]. The syntax is essentially as above, and there are plenty of existing files to use as examples.
 
 [title="3"]The translation table[/title]
 

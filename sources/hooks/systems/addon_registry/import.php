@@ -125,7 +125,7 @@ class Hook_addon_registry_import
 			'sources/hooks/modules/admin_import/aef.php',
 			'sources/hooks/modules/admin_import/smf.php',
 			'sources/hooks/modules/admin_import/smf2.php',
-			'sources/hooks/systems/do_next_menus/import.php',
+			'sources/hooks/systems/page_groupings/import.php',
 			'sources/hooks/modules/admin_import/wordpress.php',
 			'sources/hooks/systems/ocf_auth/wordpress.php',
 			'sources/import.php',

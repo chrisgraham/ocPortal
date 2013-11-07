@@ -155,7 +155,7 @@ ocPortal supports 'redirects' which let you have pages within multiple zones. Th
 As a module-based CMS, the Sitemap isn't fully configurable, but rather mirrors the structure of your website's functionality. A module-based CMS has a number of advantages, particularly that it is able to organise a lot of rich functionality for you automatically, without forcing you to create a complex structure that is hard to understand or manage.
 
 The disadvantage of a module-based CMS is that it does impose a structure on you that may not match what you ideally want. This is why you can:
-1) choose to define your website navigation and breadcrumbs separately from the Sitemap
+1) choose to define your website navigation and breadcrumbs separately from the Sitemap, including in parts of the Sitemap into your own structure as required
 2) use virtualisation features to make content appear in places other than the primary Sitemap position (transparent redirects, and virtual roots)
 
 You therefore get the benefits of rich, automatically-organised, functionality -- with the benefits of full structural control in the cases where you need it.

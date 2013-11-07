@@ -134,7 +134,7 @@ class Hook_addon_registry_static_export
 			'sources_custom/hooks/systems/addon_registry/static_export.php',
 			'adminzone/pages/minimodules_custom/static_export.php',
 			'sources_custom/static_export.php',
-			'sources_custom/hooks/systems/do_next_menus/static_export.php',
+			'sources_custom/hooks/systems/page_groupings/static_export.php',
 		);
 	}
 }

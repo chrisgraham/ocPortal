@@ -169,7 +169,7 @@ You may wish to deny access to the usergroup and member directories when using t
 			'themes/default/templates_custom/BOOKING_JOIN_OR_LOGIN_SCREEN.tpl',
 			'themes/default/templates_custom/BOOK_DATE_CHOOSE.tpl',
 			'themes/default/templates_custom/BOOKABLE_NOTES.tpl',
-			'sources_custom/hooks/systems/do_next_menus/booking.php',
+			'sources_custom/hooks/systems/page_groupings/booking.php',
 			'themes/default/images_custom/calendar/booking.png',
 			'themes/default/images_custom/calendar/index.html',
 			'sources_custom/hooks/systems/config/bookings_max_ahead_months.php',

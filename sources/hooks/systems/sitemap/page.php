@@ -1,20 +1,3 @@
-SITEMAP_IMPORTANCE_HIGH
-weekly
-
-array(
-	'type'=>'page',
-	'zone_name'=>TODO,
-	'page_name'=>TODO,
-),
-
-//if ((($meta_gather & SITEMAP_GATHER_IMAGE)!=0) && (isset($cma_info['thumb_field'])))	We don't have 2x images for content
-//	$struct['extra_meta']['image_2x']=$row[$cma_info['thumb_field']];
-
-
-If not running OCF, filter certain stuff
-
-recommend_help under recommend
-
 <?php /*
 
  ocPortal
@@ -46,61 +29,131 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	function handles_pagelink($pagelink)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
-		$page=$matches[2];
-
-		if ($page=='search')
+		if (preg_match('#^([^:]*):([^:]*)$#',$pagelink,$matches)!=0)
 		{
-			if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED;
-			return SITEMAP_NODE_HANDLED_VIRTUALLY;
+			$zone=$matches[1];
+			$page=$matches[2];
+
+			require_code('site');
+			$details=_request_page($page,$zone);
+			if (strpos($details[0],'COMCODE')===false)
+			{
+				return SITEMAP_NODE_HANDLED;
+			}
 		}
 		return SITEMAP_NODE_NOT_HANDLED;
 	}
 
 	/**
-	 * Find details of a position in the sitemap.
+	 * Find details for this node.
+	 *
+	 * @param  ?array			Faked database row (NULL: derive).
+	 * @return ?array			Faked database row (NULL: derive).
+	 */
+	protected function _load_row($row)
+	{
+		if ($row===NULL) // Find from page grouping
+		{
+			$hooks=find_all_hooks('systems','page_groupings');
+			foreach (array_keys($hooks) as $hook)
+			{
+				require_code('hooks/systems/page_groupings/'.$hook);
+
+				$ob=object_factory('Hook_page_groupings_'.$hook);
+				$links=$ob->run();
+				foreach ($links as $link)
+				{
+					if ($link[2][0]==$row_db['the_page'] && $link[2][2]==$row_db['the_zone'])
+					{
+						$title=$link[3];
+						$icon=$link[0];
+						$row=array($title,$icon,NULL);
+						break 2;
+					}
+				}
+			}
+
+			if ($row===NULL) // Get from stored menus?
+			{
+				$test=$GLOBALS['SITE_DB']->query_select('menu_items',array('i_caption','i_theme_img_code','i_caption_long'),array('i_url'=>$zone.':'.$page),'',1);
+				if (array_key_exists(0,$test))
+				{
+					$title=get_translated_text($test[0]['i_caption'];
+					$icon=$test[0]['i_theme_img_code'];
+					$description=get_translated_text($test[0]['i_caption_long']);
+					$row=array($title,$icon,$description);
+				}
+			}
+		}
+		return $row;
+	}
+
+	/**
+	 * Extend the node structure with added details from our row data (if we have it).
+	 *
+	 * @param  ?array			Structure.
+	 * @param  ?array			Faked database row (NULL: we don't have row data).
+	 */
+	protected function _ameliorate_with_row(&$struct,&$row)
+	{
+		if ($row!==NULL)
+		{
+			$title=$row[0];
+			$icon=$row[1];
+			$description=$row[2];
+
+			$struct['title']=$title;
+
+			$struct['extra_meta']['description']=($description===NULL)?NULL:$description;
+
+			$struct['extra_meta']['image']=($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon);
+			$struct['extra_meta']['image_2x']=($icon===NULL)?NULL:find_theme_image('icons/48x48/'.$icon);
+		}
+	}
+
+	/**
+	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
+	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
+	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
-	 * @return ?array			Node structure (NULL: working via callback).
+	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
 	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):#',$pagelink,$matches);
+		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
 		$zone=$matches[1];
+		$page=$matches[2];
 
-		if (!isset($row))
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select('zones',array('zone_title','zone_default_page'),array('zone_name'=>$zone),'',1);
-			$row=array($zone,get_translated_text($rows[0]['zone_title']),false,$rows[0]['zone_default_page']);
-		}
-		$title=$row[1];
-		$default_page=$row[3];
+		$zone_default_page=$GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page',array('zone_name'=>$zone));
 
-		$path=get_custom_file_base().'/'.$zone.'/index.php';
-		if (!is_file($path)) $path=get_file_base().'/'.$zone.'/index.php';
+		require_code('site');
+		$details=_request_page($page,$zone);
+
+		$path=end($details);
+
+		$row=$this->_load_row($row);
 
 		$struct=array(
-			'title'=>$title,
-			'content_type'=>'zone',
+			'title'=>titleify($page),
+			'content_type'=>'page',
 			'content_id'=>$zone,
 			'pagelink'=>$pagelink,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>NULL,
 				'image_2x'=>NULL,
-				'add_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filectime($path):NULL,
-				'edit_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filemtime($path):NULL,
+				'add_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filectime(get_file_base().'/'.$path):NULL,
+				'edit_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filemtime(get_file_base().'/'.$path):NULL,
 				'submitter'=>NULL,
 				'views'=>NULL,
 				'rating'=>NULL,
@@ -112,41 +165,62 @@ class Hook_sitemap_page extends Hook_sitemap_base
 			),
 			'permissions'=>array(
 				array(
-					'type'=>'zone',
+					'type'=>'page',
 					'zone_name'=>$zone,
+					'page_name'=>$page,
 				),
 			),
-			'has_possible_children'=>true,
+			'has_possible_children'=>false,
 
 			// These are likely to be changed in individual hooks
-			'sitemap_priority'=>SITEMAP_IMPORTANCE_ULTRA,
-			'sitemap_refreshfreq'=>'daily',
+			'sitemap_priority'=>($zone_default_page==$page)?SITEMAP_IMPORTANCE_ULTRA:SITEMAP_IMPORTANCE_HIGH,
+			'sitemap_refreshfreq'=>($zone_default_page==$page)?'daily':'weekly',
 
-			'permission_page'=>'cms_comcode_pages', // Where privileges are overridden on
+			'permission_page'=>NULL,
 		);
+
+		$this->_ameliorate_with_row($struct,$row);
+
+		// Look for virtual nodes to put unswe this
+		$child_sitemap_hook=mixed();
+		$hooks=find_all_hooks('systems','sitemap');
+		foreach (array_keys($hooks) as $_hook)
+		{
+			require_code('hooks/systems/sitemap/'.$_hook);
+			$ob=object_factory('Hook_sitemap_'.$_hook);
+			if ($ob->is_active())
+			{
+				$is_handled=$ob->handles_pagelink($pagelink);
+				if ($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY)
+				{
+					$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
+					$child_sitemap_hook=$ob;
+					$struct['permission_page']=$child_sitemap_hook->get_permission_page($pagelink);
+					$struct['has_possible_children']=true;
+					// TODO
+					break;
+				}
+			}
+		}
+
+		// Look for entry points to put under this
+		if ($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM')
+		{
+			$functions=extract_module_functions($module_path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+			if (!is_null($functions[0])
+			{
+				$struct['has_possible_children']=true;
+				$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
+				// TODO
+			}
+		}
 
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
 		$children=array();
-		if ($recurse_level<$max_recurse_depth)
-		{
-			$page_sitemap_ob=$this->_get_sitemap_object('page');
-
-			$pages=find_all_pages_wrap($zone,false,/*$consider_redirects=*/true);
-			foreach ($pages as $page)
-			{
-				$child_pagelink=$pagelink.':'.$page;
-				$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				if ($child_node['pagelink']==$zone.':'.$default_page)
-				{
-					$child_node['sitemap_priority']=SITEMAP_IMPORTANCE_ULTRA;
-					$child_node['sitemap_refreshfreq']='daily';
-				}
-				$children[]=$child_node;
-			}
-		}
+		// TODO
 		$struct['children']=$children;
 
 		return ($callback===NULL)?$struct:NULL;

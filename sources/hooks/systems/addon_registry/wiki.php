@@ -145,7 +145,7 @@ class Hook_addon_registry_wiki
 			'sources/hooks/modules/search/wiki_posts.php',
 			'sources/hooks/systems/attachments/wiki_page.php',
 			'sources/hooks/systems/attachments/wiki_post.php',
-			'sources/hooks/systems/do_next_menus/wiki.php',
+			'sources/hooks/systems/page_groupings/wiki.php',
 			'sources/hooks/systems/preview/wiki_page.php',
 			'sources/hooks/systems/preview/wiki_post.php',
 			'sources/hooks/systems/rss/wiki.php',

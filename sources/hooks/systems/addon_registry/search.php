@@ -131,7 +131,7 @@ class Hook_addon_registry_search
 			'data/opensearch.php',
 			'sources/hooks/systems/config/search_results_per_page.php',
 			'sources/hooks/systems/config/enable_boolean_search.php',
-			'sources/hooks/systems/do_next_menus/search.php',
+			'sources/hooks/systems/page_groupings/search.php',
 		);
 	}
 

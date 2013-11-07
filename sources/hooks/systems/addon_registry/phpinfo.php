@@ -98,7 +98,7 @@ class Hook_addon_registry_phpinfo
 			'themes/default/images/icons/24x24/menu/adminzone/tools/phpinfo.png',
 			'themes/default/images/icons/48x48/menu/adminzone/tools/phpinfo.png',
 			'themes/default/css/phpinfo.css',
-			'sources/hooks/systems/do_next_menus/phpinfo.php',
+			'sources/hooks/systems/page_groupings/phpinfo.php',
 			'sources/hooks/systems/addon_registry/phpinfo.php',
 			'adminzone/pages/modules/admin_phpinfo.php',
 		);

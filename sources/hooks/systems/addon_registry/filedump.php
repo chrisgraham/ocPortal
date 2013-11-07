@@ -102,7 +102,7 @@ class Hook_addon_registry_filedump
 			'sources/hooks/blocks/side_stats/stats_filedump.php',
 			'sources/hooks/systems/addon_registry/filedump.php',
 			'sources/hooks/systems/ajax_tree/choose_filedump_file.php',
-			'sources/hooks/systems/do_next_menus/filedump.php',
+			'sources/hooks/systems/page_groupings/filedump.php',
 			'sources/hooks/modules/admin_import_types/filedump.php',
 			'themes/default/templates/FILEDUMP_SCREEN.tpl',
 			'uploads/filedump/index.html',

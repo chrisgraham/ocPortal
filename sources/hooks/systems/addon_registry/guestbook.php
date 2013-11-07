@@ -100,7 +100,7 @@ class Hook_addon_registry_guestbook
 			'themes/default/images/icons/48x48/menu/site_meta/guestbook.png',
 			'sources/hooks/systems/addon_registry/guestbook.php',
 			'site/pages/comcode/EN/guestbook.txt',
-			'sources/hooks/systems/do_next_menus/guestbook.php',
+			'sources/hooks/systems/page_groupings/guestbook.php',
 		);
 	}
 

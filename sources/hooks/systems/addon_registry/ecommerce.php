@@ -184,7 +184,7 @@ class Hook_addon_registry_ecommerce
 			'sources/ecommerce.php',
 			'sources/ecommerce2.php',
 			'sources/hooks/modules/members/ecommerce.php',
-			'sources/hooks/systems/do_next_menus/ecommerce.php',
+			'sources/hooks/systems/page_groupings/ecommerce.php',
 			'sources/hooks/systems/ecommerce/.htaccess',
 			'sources/hooks/systems/ecommerce/index.html',
 			'sources/hooks/systems/ecommerce/interest.php',

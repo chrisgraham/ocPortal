@@ -135,7 +135,7 @@ class Hook_addon_registry_addon_publish
 			'adminzone/pages/minimodules_custom/publish_addons_as_downloads.php',
 			'adminzone/pages/minimodules_custom/build_addons.php',
 			'adminzone/pages/minimodules_custom/admin_generate_adhoc_upgrade.php',
-			'sources_custom/hooks/systems/do_next_menus/addon_publish.php',
+			'sources_custom/hooks/systems/page_groupings/addon_publish.php',
 		);
 	}
 }

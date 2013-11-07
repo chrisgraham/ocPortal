@@ -132,7 +132,7 @@ class Hook_addon_registry_installprofile_generator
 	{
 		return array(
 			'sources_custom/hooks/systems/addon_registry/installprofile_generator.php',
-			'sources_custom/hooks/systems/do_next_menus/installprofile_generator.php',
+			'sources_custom/hooks/systems/page_groupings/installprofile_generator.php',
 			'adminzone/pages/minimodules_custom/installprofile_generator.php',
 		);
 	}

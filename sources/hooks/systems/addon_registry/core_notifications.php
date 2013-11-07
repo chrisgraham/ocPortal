@@ -127,7 +127,7 @@ class Hook_addon_registry_core_notifications
 			'themes/default/templates/NOTIFICATION_BUTTONS.tpl',
 			'site/pages/modules/notifications.php',
 			'adminzone/pages/modules/admin_notifications.php',
-			'sources/hooks/systems/do_next_menus/notifications.php',
+			'sources/hooks/systems/page_groupings/notifications.php',
 			'sources/hooks/systems/config/allow_auto_notifications.php',
 			'sources/hooks/systems/config/pt_notifications_as_web.php',
 			'sources/hooks/systems/config/notification_keep_days.php',

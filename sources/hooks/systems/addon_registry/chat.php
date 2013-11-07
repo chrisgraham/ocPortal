@@ -197,7 +197,7 @@ class Hook_addon_registry_chat
 			'sources/hooks/systems/occle_commands/watch_chatroom.php',
 			'sources/hooks/systems/occle_notifications/chat.php',
 			'sources/hooks/modules/members/chat.php',
-			'sources/hooks/systems/do_next_menus/chat.php',
+			'sources/hooks/systems/page_groupings/chat.php',
 			'sources/hooks/systems/rss/chat.php',
 			'site/dllogs.php',
 			'site/messages.php',

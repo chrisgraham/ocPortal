@@ -140,7 +140,7 @@ Ever wished it was quicker to navigate around your site? If you\'re anything lik
 		return array(
 			'sources_custom/hooks/systems/addon_registry/oc_browser_bookmarks.php',
 			'adminzone/pages/minimodules_custom/admin_generate_bookmarks.php',
-			'sources_custom/hooks/systems/do_next_menus/ocbrowserbookmarks.php',
+			'sources_custom/hooks/systems/page_groupings/ocbrowserbookmarks.php',
 		);
 	}
 }

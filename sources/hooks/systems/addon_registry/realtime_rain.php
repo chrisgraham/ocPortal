@@ -105,7 +105,7 @@ class Hook_addon_registry_realtime_rain
 			'sources/realtime_rain.php',
 			'data/realtime_rain.php',
 			'sources/hooks/systems/snippets/realtime_rain_load.php',
-			'sources/hooks/systems/do_next_menus/realtime_rain.php',
+			'sources/hooks/systems/page_groupings/realtime_rain.php',
 			'themes/default/css/realtime_rain.css',
 			'themes/default/templates/REALTIME_RAIN_OVERLAY.tpl',
 			'themes/default/templates/REALTIME_RAIN_BUBBLE.tpl',

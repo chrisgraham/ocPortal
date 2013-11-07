@@ -138,7 +138,7 @@ class Hook_addon_registry_points
 			'lang/EN/points.ini',
 			'site/pages/modules/points.php',
 			'sources/hooks/blocks/main_staff_checklist/points.php',
-			'sources/hooks/systems/do_next_menus/points.php',
+			'sources/hooks/systems/page_groupings/points.php',
 			'sources/hooks/systems/ocf_cpf_filter/points.php',
 			'sources/hooks/systems/rss/points.php',
 			'sources/points.php',

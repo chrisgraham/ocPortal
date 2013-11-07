@@ -106,7 +106,7 @@ class Hook_addon_registry_aggregate_types
 			'sources/hooks/systems/occle_fs/aggregate_type_instances.php',
 			'sources/aggregate_types.php',
 			'sources/hooks/modules/admin_import_types/aggregate_types.php',
-			'sources/hooks/systems/do_next_menus/aggregate_types.php',
+			'sources/hooks/systems/page_groupings/aggregate_types.php',
 		);
 	}
 

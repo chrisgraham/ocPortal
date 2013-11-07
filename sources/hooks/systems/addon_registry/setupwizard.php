@@ -117,7 +117,7 @@ class Hook_addon_registry_setupwizard
 			'text/EN/rules_liberal.txt',
 			'sources/hooks/modules/admin_setupwizard/.htaccess',
 			'sources/hooks/modules/admin_setupwizard/index.html',
-			'sources/hooks/systems/do_next_menus/setupwizard.php',
+			'sources/hooks/systems/page_groupings/setupwizard.php',
 			'sources/hooks/modules/admin_setupwizard/core.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/minimalistic.php',
 		);

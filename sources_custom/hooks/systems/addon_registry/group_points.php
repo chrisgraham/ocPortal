@@ -133,7 +133,7 @@ class Hook_addon_registry_group_points
 		return array(
 			'sources_custom/hooks/systems/addon_registry/group_points.php',
 			'sources_custom/points.php',
-			'sources_custom/hooks/systems/do_next_menus/group_points.php',
+			'sources_custom/hooks/systems/page_groupings/group_points.php',
 			'adminzone/pages/minimodules_custom/group_points.php',
 			'themes/default/templates_custom/POINTS_PROFILE.tpl',
 			'sources_custom/hooks/systems/symbols/POINTS_FROM_USERGROUPS.php',

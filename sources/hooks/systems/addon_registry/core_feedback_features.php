@@ -107,7 +107,7 @@ class Hook_addon_registry_core_feedback_features
 			'sources/hooks/systems/notifications/like.php',
 			'sources/hooks/systems/notifications/comment_posted.php',
 			'themes/default/templates/TRACKBACK_DELETE_SCREEN.tpl',
-			'sources/hooks/systems/do_next_menus/trackbacks.php',
+			'sources/hooks/systems/page_groupings/trackbacks.php',
 			'lang/EN/trackbacks.ini',
 			'sources/hooks/systems/trackback/.htaccess',
 			'sources/hooks/systems/trackback/index.html',

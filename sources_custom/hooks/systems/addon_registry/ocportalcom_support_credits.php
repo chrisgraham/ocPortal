@@ -133,7 +133,7 @@ class Hook_addon_registry_ocportalcom_support_credits
 		return array(
 			'sources_custom/hooks/systems/addon_registry/ocportalcom_support_credits.php',
 			'adminzone/pages/minimodules_custom/outstanding_credits.php',
-			'sources_custom/hooks/systems/do_next_menus/support_credits.php',
+			'sources_custom/hooks/systems/page_groupings/support_credits.php',
 			'adminzone/pages/modules_custom/admin_customers.php',
 			'lang_custom/EN/customers.ini',
 			'text_custom/EN/support_credits_licence.txt',

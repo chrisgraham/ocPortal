@@ -100,7 +100,7 @@ class Hook_addon_registry_wordfilter
 			'themes/default/images/icons/24x24/menu/adminzone/security/wordfilter.png',
 			'themes/default/images/icons/48x48/menu/adminzone/security/wordfilter.png',
 			'sources/hooks/systems/addon_registry/wordfilter.php',
-			'sources/hooks/systems/do_next_menus/wordfilter.php',
+			'sources/hooks/systems/page_groupings/wordfilter.php',
 			'lang/EN/wordfilter.ini',
 			'themes/default/templates/WORDFILTER_SCREEN.tpl',
 			'adminzone/pages/modules/admin_wordfilter.php',

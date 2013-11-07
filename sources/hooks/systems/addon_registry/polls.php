@@ -123,7 +123,7 @@ class Hook_addon_registry_polls
 			'site/pages/modules/polls.php',
 			'sources/hooks/blocks/main_staff_checklist/polls.php',
 			'sources/hooks/modules/search/polls.php',
-			'sources/hooks/systems/do_next_menus/polls.php',
+			'sources/hooks/systems/page_groupings/polls.php',
 			'sources/hooks/systems/rss/polls.php',
 			'sources/hooks/systems/trackback/polls.php',
 			'sources/polls.php',

@@ -130,7 +130,7 @@ class Hook_addon_registry_collaboration_zone
 			'collaboration/pages/modules/index.html',
 			'collaboration/pages/modules_custom/.htaccess',
 			'collaboration/pages/modules_custom/index.html',
-			'sources/hooks/systems/do_next_menus/collaboration_zone.php',
+			'sources/hooks/systems/page_groupings/collaboration_zone.php',
 		);
 	}
 

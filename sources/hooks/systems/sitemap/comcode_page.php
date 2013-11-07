@@ -1,5 +1,3 @@
-Lots to do, custom
-
 <?php /*
 
  ocPortal
@@ -20,7 +18,9 @@ Lots to do, custom
  * @package		core_comcode_pages
  */
 
-class Hook_sitemap_comcode_page extends Hook_sitemap_content
+require_code('hooks/systems/sitemap/page');
+
+class Hook_sitemap_comcode_page extends Hook_sitemap_page
 {
 	protected $content_type='comcode_page';
 	protected $screen_type='';
@@ -30,82 +30,42 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_content
 	protected $entry_sitetree_hook=NULL;
 
 	/**
-	 * Find details of a virtual position in the sitemap. Virtual positions have no structure of their own, but can find child structures to be absorbed down the tree. We do this for modularity reasons.
+	 * Get the permission page that nodes matching $pagelink in this hook are tied to.
+	 * The permission page is where privileges may be overridden against.
 	 *
-	 * @param  ID_TEXT  		The page-link we are finding.
-	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
-	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
-	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
-	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
-	 * @param  boolean		Whether to filter out non-validated content.
-	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
-	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
-	 * @param  ?array			Database row (NULL: lookup).
-	 * @return ?array			List of node structures (NULL: working via callback).
+	 * @param  string			The page-link
+	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_permission_page($pagelink)
 	{
-		$nodes=($callback===NULL)?array():mixed();
-
-		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
-		{
-			return $nodes;
-		}
-
-		if ($require_permission_support)
-		{
-			return $nodes;
-		}
-
-		$matches=array();
-		preg_match('#^([^:]*)#',$pagelink,$matches);
-		$zone=$matches[1];
-
-		$where=array('p_parent_page'=>'');
-		if ($consider_validation) $where['p_validated']=1;
-		if ($zone!='_SEARCH') $where['the_zone']=$zone;
-
-		$start=0;
-		do
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),$where,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
-			foreach ($rows as $row)
-			{
-				$child_pagelink=$zone.':'.$row['the_page']);
-				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				if ($callback===NULL) $nodes[]=$node;
-			}
-
-			$start+=SITEMAP_MAX_ROWS_PER_LOOP;
-		}
-		while (count($rows)>0);
-
-		return $nodes;
+		return 'cms_comcode_pages';
 	}
 
 	/**
-	 * Find details of a position in the sitemap.
+	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
-	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
-	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
+	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
+	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
-	 * @return ?array			Node structure (NULL: working via callback).
+	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
 	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
 	{
-		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-		if ($_===NULL) return array();
-		list($content_id,$row,$partial_struct)=$_;
+		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,NULL/*$row is not compatible with this as our $row actually contains Title and Icon, from page groupings*/);
+		if ($_===NULL) return NULL;
+		list($content_id,$row_db,$partial_struct)=$_;
+
+		$zone_default_page=$GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page',array('zone_name'=>$zone));
+
+		$row=$this->_load_row($row);
 
 		$struct=array(
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_HIGH,
@@ -113,8 +73,14 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_content
 
 			'permission_module'=>'zone_page',
 
-			'permission_page'=>'cms_comcode_pages', // Where privileges are overridden on
+			// These are likely to be changed in individual hooks
+			'sitemap_priority'=>($zone_default_page==$page)?SITEMAP_IMPORTANCE_ULTRA:SITEMAP_IMPORTANCE_HIGH,
+			'sitemap_refreshfreq'=>($zone_default_page==$page)?'daily':'weekly',
+
+			'permission_page'=>$this->get_permission_page($pagelink),
 		)+$partial_struct;
+
+		$this->_ameliorate_with_row($struct,$row);
 
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);

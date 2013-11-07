@@ -110,7 +110,7 @@ class Hook_addon_registry_themewizard
 			'themes/default/templates/THEMEWIZARD_2_SCREEN.tpl',
 			'themes/default/templates/THEMEWIZARD_2_PREVIEW.tpl',
 			'adminzone/themewizard.php',
-			'sources/hooks/systems/do_next_menus/themewizard.php',
+			'sources/hooks/systems/page_groupings/themewizard.php',
 			'themes/default/templates/LOGOWIZARD_2.tpl',
 			'adminzone/logowizard.php',
 			'themes/default/images/logo_template.png',

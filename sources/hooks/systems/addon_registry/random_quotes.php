@@ -105,7 +105,7 @@ class Hook_addon_registry_random_quotes
 			'text/EN/quotes.txt',
 			'lang/EN/quotes.ini',
 			'sources/blocks/main_quotes.php',
-			'sources/hooks/systems/do_next_menus/quotes.php',
+			'sources/hooks/systems/page_groupings/quotes.php',
 			'themes/default/css/random_quotes.css',
 		);
 	}

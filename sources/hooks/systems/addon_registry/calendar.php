@@ -163,7 +163,7 @@ class Hook_addon_registry_calendar
 			'sources/hooks/modules/search/calendar.php',
 			'sources/hooks/systems/attachments/calendar.php',
 			'sources/hooks/systems/cron/calendar.php',
-			'sources/hooks/systems/do_next_menus/calendar.php',
+			'sources/hooks/systems/page_groupings/calendar.php',
 			'sources/hooks/systems/preview/calendar.php',
 			'sources/hooks/systems/rss/calendar.php',
 			'themes/default/css/calendar.css',

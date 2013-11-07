@@ -210,7 +210,7 @@ class Hook_addon_registry_occle
 			'sources/hooks/systems/occle_fs/root.php',
 			'sources/hooks/systems/occle_notifications/index.html',
 			'sources/hooks/systems/occle_notifications/occlechat.php',
-			'sources/hooks/systems/do_next_menus/occle.php',
+			'sources/hooks/systems/page_groupings/occle.php',
 			'sources/hooks/systems/snippets/occle.php',
 			'sources/occle.php',
 			'sources/occle_fs.php',

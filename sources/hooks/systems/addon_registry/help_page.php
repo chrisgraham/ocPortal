@@ -99,7 +99,7 @@ class Hook_addon_registry_help_page
 			'themes/default/images/icons/48x48/menu/pages/help.png',
 			'sources/hooks/systems/addon_registry/help_page.php',
 			'site/pages/comcode/EN/help.txt',
-			'sources/hooks/systems/do_next_menus/help_page.php',
+			'sources/hooks/systems/page_groupings/help_page.php',
 		);
 	}
 

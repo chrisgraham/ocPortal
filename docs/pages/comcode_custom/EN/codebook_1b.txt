@@ -260,7 +260,7 @@ To run extra startup code write a '[tt]systems/startup[/tt]' hook. You can set i
 
 [title="3"]Adding to the Admin Zone/CMS menus[/title]
 
-To do this write a '[tt]systems/do_next_menus[/tt]' hook. Look at existing hooks as examples.
+To do this write a '[tt]systems/page_groupings[/tt]' hook. Look at existing hooks as examples.
 
 [title="3"]Adding a new symbol, to refer to custom data and functions within templates[/title]
 

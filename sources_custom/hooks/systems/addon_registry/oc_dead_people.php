@@ -143,7 +143,7 @@ To configure the diseases go to Admin Zone > Setup > Manage Diseases.';
 			'lang_custom/EN/ocdeadpeople.ini',
 			'sources_custom/hooks/modules/pointstore/ocdeadpeople.php',
 			'sources_custom/hooks/systems/cron/ocdeadpeople.php',
-			'sources_custom/hooks/systems/do_next_menus/ocdeadpeople.php',
+			'sources_custom/hooks/systems/page_groupings/ocdeadpeople.php',
 			'themes/default/templates_custom/POINTSTORE_OCDEADPEOPLE.tpl',
 			'themes/default/templates_custom/POINTSTORE_OCDEADPEOPLE_DISEASES.tpl',
 			'uploads/diseases_addon/index.html',

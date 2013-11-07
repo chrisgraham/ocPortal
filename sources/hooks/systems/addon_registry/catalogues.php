@@ -121,7 +121,7 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/systems/module_permissions/catalogues_catalogue.php',
 			'sources/hooks/systems/module_permissions/catalogues_category.php',
 			'sources/hooks/systems/rss/catalogues.php',
-			'sources/hooks/systems/do_next_menus/catalogues.php',
+			'sources/hooks/systems/page_groupings/catalogues.php',
 			'sources/hooks/systems/trackback/catalogues.php',
 			'sources/hooks/modules/search/catalogue_categories.php',
 			'sources/hooks/modules/search/catalogue_entries.php',

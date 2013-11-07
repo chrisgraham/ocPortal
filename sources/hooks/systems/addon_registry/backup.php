@@ -117,7 +117,7 @@ class Hook_addon_registry_backup
 			'sources/backup.php',
 			'sources/hooks/blocks/main_staff_checklist/backup.php',
 			'sources/hooks/systems/cron/backups.php',
-			'sources/hooks/systems/do_next_menus/backup.php',
+			'sources/hooks/systems/page_groupings/backup.php',
 			'sources/hooks/systems/snippets/backup_size.php',
 			'exports/backups/.htaccess',
 			'sources/hooks/systems/tasks/make_backup.php',

@@ -117,7 +117,7 @@ class Hook_addon_registry_ldap
 			'themes/default/templates/OCF_LDAP_SYNC_SCREEN.tpl',
 			'adminzone/pages/modules/admin_ocf_ldap.php',
 			'sources/ocf_ldap.php',
-			'sources/hooks/systems/do_next_menus/ldap.php',
+			'sources/hooks/systems/page_groupings/ldap.php',
 		);
 	}
 

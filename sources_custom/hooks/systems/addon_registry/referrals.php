@@ -155,7 +155,7 @@ Allows people to specify who referred them when they join your site or other con
 			'sources_custom/hooks/systems/ecommerce/usergroup.php',
 			'sources_custom/hooks/systems/ecommerce/cart_orders.php',
 			'sources_custom/hooks/systems/referrals/index.html',
-			'sources_custom/hooks/systems/do_next_menus/referrals.php',
+			'sources_custom/hooks/systems/page_groupings/referrals.php',
 			'sources_custom/hooks/modules/members/referrals.php',
 			'adminzone/pages/comcode_custom/EN/referrals.txt',
 			'adminzone/pages/modules_custom/admin_referrals.php',

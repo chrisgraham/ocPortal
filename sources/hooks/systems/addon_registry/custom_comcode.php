@@ -110,7 +110,7 @@ class Hook_addon_registry_custom_comcode
 			'themes/default/templates/CUSTOM_COMCODE_TAG_ROW.tpl',
 			'lang/EN/custom_comcode.ini',
 			'sources/blocks/main_custom_comcode_tags.php',
-			'sources/hooks/systems/do_next_menus/custom_comcode.php',
+			'sources/hooks/systems/page_groupings/custom_comcode.php',
 			'sources/hooks/blocks/main_custom_gfx/index.html',
 			'sources/hooks/blocks/main_custom_gfx/text_overlay.php',
 			'sources/hooks/blocks/main_custom_gfx/.htaccess',

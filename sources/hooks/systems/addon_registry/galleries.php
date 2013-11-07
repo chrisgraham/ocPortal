@@ -197,7 +197,7 @@ class Hook_addon_registry_galleries
 			'sources/hooks/modules/galleries_users/.htaccess',
 			'sources/hooks/modules/galleries_users/index.html',
 			'sources/hooks/modules/search/galleries.php',
-			'sources/hooks/systems/do_next_menus/galleries.php',
+			'sources/hooks/systems/page_groupings/galleries.php',
 			'sources/hooks/systems/module_permissions/galleries.php',
 			'sources/hooks/systems/rss/galleries.php',
 			'sources/hooks/modules/admin_unvalidated/videos.php',

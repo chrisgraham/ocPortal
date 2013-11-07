@@ -102,7 +102,7 @@ class Hook_addon_registry_staff
 			'sources/hooks/systems/config/is_on_sync_staff.php',
 			'sources/hooks/systems/config/staff_text.php',
 			'sources/hooks/systems/addon_registry/staff.php',
-			'sources/hooks/systems/do_next_menus/staff.php',
+			'sources/hooks/systems/page_groupings/staff.php',
 			'themes/default/templates/STAFF_SCREEN.tpl',
 			'themes/default/templates/STAFF_EDIT_WRAPPER.tpl',
 			'themes/default/templates/STAFF_ADMIN_SCREEN.tpl',

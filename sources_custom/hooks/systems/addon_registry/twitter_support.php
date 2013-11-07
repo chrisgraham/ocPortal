@@ -148,7 +148,7 @@ Set up is a little tricky, you need to set up an application on Twitter, and aut
 			'adminzone/pages/minimodules_custom/twitter_oauth.php',
 			'lang_custom/EN/twitter.ini',
 			'sources_custom/hooks/systems/syndication/twitter.php',
-			'sources_custom/hooks/systems/do_next_menus/twitter.php',
+			'sources_custom/hooks/systems/page_groupings/twitter.php',
 			'sources_custom/hooks/systems/config/twitter_api_key.php',
 			'sources_custom/hooks/systems/config/twitter_api_secret.php',
 		);

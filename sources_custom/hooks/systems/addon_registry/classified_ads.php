@@ -153,7 +153,7 @@ Fully integrated with catalogues, eCommerce, and OCF member accounts.';
 			'sources_custom/classifieds.php',
 			'sources_custom/hooks/modules/members/classifieds.php',
 			'sources_custom/hooks/systems/cron/classifieds.php',
-			'sources_custom/hooks/systems/do_next_menus/classifieds.php',
+			'sources_custom/hooks/systems/page_groupings/classifieds.php',
 			'sources_custom/hooks/systems/ecommerce/classifieds.php',
 			'sources_custom/hooks/systems/notifications/classifieds.php',
 			'sources_custom/miniblocks/main_classifieds_prices.php',

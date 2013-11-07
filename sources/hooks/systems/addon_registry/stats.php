@@ -121,7 +121,7 @@ class Hook_addon_registry_stats
 			'data/modules/admin_cleanup/page_stats.php.pre',
 			'sources/hooks/systems/cleanup/page_stats.php',
 			'sources/hooks/systems/cron/stats_clean.php',
-			'sources/hooks/systems/do_next_menus/stats.php',
+			'sources/hooks/systems/page_groupings/stats.php',
 			'sources/hooks/systems/non_active_urls/stats.php',
 			'sources/hooks/systems/addon_registry/stats.php',
 			'sources/hooks/modules/admin_import_types/stats.php',

@@ -146,7 +146,7 @@ Note that this addon only affects galleries at the moment, and it requires the \
 			'sources_custom/workflows.php',
 			'sources_custom/galleries2.php',
 			'sources_custom/form_templates.php',
-			'sources_custom/hooks/systems/do_next_menus/workflows.php',
+			'sources_custom/hooks/systems/page_groupings/workflows.php',
 			'sources_custom/hooks/modules/admin_unvalidated/images.php',
 			'sources_custom/hooks/modules/admin_unvalidated/videos.php',
 			'themes/default/templates_custom/FORM_SCREEN_INPUT_VARIOUS_TICKS.tpl',

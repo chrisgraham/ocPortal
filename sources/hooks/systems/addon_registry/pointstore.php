@@ -166,7 +166,7 @@ class Hook_addon_registry_pointstore
 			'sources/hooks/modules/pointstore/permission.php',
 			'sources/hooks/modules/pointstore/pop3.php',
 			'sources/hooks/modules/pointstore/topic_pin.php',
-			'sources/hooks/systems/do_next_menus/pointstore.php',
+			'sources/hooks/systems/page_groupings/pointstore.php',
 			'sources/pointstore.php',
 		);
 	}

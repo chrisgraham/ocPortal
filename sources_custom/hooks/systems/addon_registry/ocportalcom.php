@@ -134,7 +134,7 @@ class Hook_addon_registry_ocportalcom
 			'sources_custom/hooks/systems/addon_registry/ocportalcom.php',
 			'adminzone/pages/modules_custom/admin_ocpusers.php',
 			'adminzone/pages/minimodules_custom/make_ocportal_release.php',
-			'sources_custom/hooks/systems/do_next_menus/ocportalcom.php',
+			'sources_custom/hooks/systems/page_groupings/ocportalcom.php',
 			'data_custom/ocpcom_web_service.php',
 			'lang_custom/EN/sites.ini',
 			'lang_custom/EN/ocpcom.ini',

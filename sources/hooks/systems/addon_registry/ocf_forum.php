@@ -170,7 +170,7 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/ocf_general/redirect.png',
 			'sources/hooks/modules/search/ocf_within_topic.php',
 			'sources/hooks/systems/addon_registry/ocf_forum.php',
-			'sources/hooks/systems/do_next_menus/ocf_forum.php',
+			'sources/hooks/systems/page_groupings/ocf_forum.php',
 			'sources/hooks/modules/admin_themewizard/ocf_forum.php',
 			'sources/hooks/modules/admin_setupwizard/ocf_forum.php',
 			'sources/hooks/modules/admin_import_types/ocf_forum.php',

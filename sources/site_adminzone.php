@@ -71,7 +71,7 @@ function adminzone_extend_breadcrumbs(&$stub)
 	if (($page!='admin') && ($page!='cms'))
 	{
 		// Loop over menus, hunting for connection
-		$hooks=find_all_hooks('systems','do_next_menus');
+		$hooks=find_all_hooks('systems','page_groupings');
 		$_hooks=array();
 		$page_looking=$page;
 		$page_looking=preg_replace('#^(cms|admin)\_#','',$page_looking);
@@ -83,7 +83,7 @@ function adminzone_extend_breadcrumbs(&$stub)
 		}
 		foreach ($hooks as $hook=>$sources_dir)
 		{
-			$run_function=extract_module_functions(get_file_base().'/'.$sources_dir.'/hooks/systems/do_next_menus/'.$hook.'.php',array('run'));
+			$run_function=extract_module_functions(get_file_base().'/'.$sources_dir.'/hooks/systems/page_groupings/'.$hook.'.php',array('run'));
 			if ($run_function[0]!==NULL)
 			{
 				$info=is_array($run_function[0])?call_user_func_array($run_function[0][0],$run_function[0][1]):eval($run_function[0]);

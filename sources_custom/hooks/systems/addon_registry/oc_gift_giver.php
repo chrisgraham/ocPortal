@@ -151,7 +151,7 @@ When creating new gifts please only use images which are free to use, we suggest
 			'lang_custom/EN/ocgifts.ini',
 			'sources_custom/hooks/modules/members/gifts.php',
 			'sources_custom/hooks/modules/pointstore/ocgifts.php',
-			'sources_custom/hooks/systems/do_next_menus/ocgifts.php',
+			'sources_custom/hooks/systems/page_groupings/ocgifts.php',
 			'themes/default/templates_custom/POINTSTORE_OCGIFTS.tpl',
 			'themes/default/templates_custom/POINTSTORE_OCGIFTS_GIFTS.tpl',
 			'themes/default/templates_custom/OCF_MEMBER_SCREEN_GIFTS_WRAP.tpl',

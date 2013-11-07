@@ -128,7 +128,7 @@ class Hook_addon_registry_newsletter
 			'sources/hooks/modules/admin_import/newsletter_subscribers.php',
 			'sources/hooks/blocks/main_staff_checklist/newsletter.php',
 			'sources/hooks/modules/admin_newsletter/.htaccess',
-			'sources/hooks/systems/do_next_menus/newsletter.php',
+			'sources/hooks/systems/page_groupings/newsletter.php',
 			'sources/newsletter.php',
 			'sources/hooks/systems/config/max_newsletter_whatsnew.php',
 			'sources/hooks/modules/admin_newsletter/index.html',

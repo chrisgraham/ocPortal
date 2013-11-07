@@ -183,7 +183,7 @@ Please be aware that this addon overrides some common templates to add Facebook 
 			'sources_custom/users_active_actions.php',
 			'sources_custom/hooks/systems/syndication/facebook.php',
 			'sources_custom/hooks/systems/syndication/.htaccess',
-			'sources_custom/hooks/systems/do_next_menus/facebook.php',
+			'sources_custom/hooks/systems/page_groupings/facebook.php',
 			'sources_custom/hooks/systems/login_providers/facebook.php',
 			'sources_custom/hooks/systems/login_providers/index.html',
 			'adminzone/pages/minimodules_custom/facebook_oauth.php',

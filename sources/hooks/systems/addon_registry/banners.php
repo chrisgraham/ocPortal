@@ -142,7 +142,7 @@ class Hook_addon_registry_banners
 			'themes/default/templates/POINTSTORE_BANNERS_2.tpl',
 			'themes/default/templates/POINTSTORE_BANNERS_ACTIVATE.tpl',
 			'themes/default/templates/POINTSTORE_BANNERS_UPGRADE.tpl',
-			'sources/hooks/systems/do_next_menus/banners.php',
+			'sources/hooks/systems/page_groupings/banners.php',
 			'sources/hooks/systems/content_meta_aware/banner.php',
 			'sources/hooks/systems/content_meta_aware/banner_type.php',
 			'sources/hooks/systems/occle_fs/banners.php',
