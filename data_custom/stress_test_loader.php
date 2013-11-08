@@ -138,7 +138,7 @@ function do_work()
 	require_code('abstract_file_manager');
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');$i<min($num_wanted,1000/* lets be somewhat reasonable! */);$i++)
 	{
-		actual_add_zone(uniqid('',true),random_line(),'start',random_line(),'default',0,0,0);
+		actual_add_zone(uniqid('',true),random_line(),'start',random_line(),'default',0,0);
 	}
 	echo 'done zone stuff'."\n";
 

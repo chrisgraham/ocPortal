@@ -2570,7 +2570,6 @@ function ob_get_clean()
  */
 function ob_clean()
 {
-	return '';
 }
 
 /**

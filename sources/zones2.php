@@ -92,13 +92,12 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
  * @param  ID_TEXT		The zones default page
  * @param  SHORT_TEXT	The header text
  * @param  ID_TEXT		The theme
- * @param  BINARY			Whether the zone is wide
  * @param  BINARY			Whether the zone requires a session for pages to be used
  * @param  boolean		Whether to force the name as unique, if there's a conflict
  * @param  string			The base URL (blank: natural)
  * @return ID_TEXT		The name
  */
-function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$wide=0,$require_session=0,$uniqify=false,$base_url='')
+function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$require_session=0,$uniqify=false,$base_url='')
 {
 	require_code('type_validation');
 	if (!is_alphanumeric($zone)) warn_exit(do_lang_tempcode('BAD_CODENAME'));

@@ -1099,7 +1099,7 @@ class Module_admin_setupwizard
 		// Show nice interface to start adding pages
 		return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
 			array(
-				array('menu/cms/comcode_page_edit',array('cms_comcode_pages',array('type'=>'ed'),get_module_zone('cms_comcode_pages')),do_lang('COMCODE_PAGE_ADD')):NULL,
+				array('menu/cms/comcode_page_edit',array('cms_comcode_pages',array('type'=>'ed'),get_module_zone('cms_comcode_pages')),do_lang('COMCODE_PAGE_ADD')),
 				array('menu/pages/help',array(NULL,array(),'')),
 				array('menu/cms/cms',array(NULL,array(),'cms')),
 				array('menu/adminzone/adminzone',array(NULL,array(),'adminzone')),

@@ -1303,8 +1303,8 @@ function match_key_match($match_key,$support_post=false,$current_params=NULL,$cu
 				}
 				if (
 					(count($subparts)!=2) || 
-					(($current_params!=NULL) && ((isset($current_params[$subparts[0]])?$current_params[$subparts[0]]:$default)==$subparts[1])) || 
-					(($current_params==NULL) && (call_user_func_array($req_func,array($subparts[0],$default))!=$subparts[1]))
+					(($current_params!==NULL) && ((isset($current_params[$subparts[0]])?$current_params[$subparts[0]]:$default)==$subparts[1])) || 
+					(($current_params===NULL) && (call_user_func_array($req_func,array($subparts[0],$default))!=$subparts[1]))
 				)
 				{
 					$bad=true;

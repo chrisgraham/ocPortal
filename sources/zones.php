@@ -121,7 +121,6 @@ function zone_black_magic_filterer($path,$relative=false)
 		if ($zbmf_cache===NULL) $zbmf_cache=array();
 	}
 
-	global $zbmf_cache;
 	if (isset($zbmf_cache[$path])) return $zbmf_cache[$path];
 
 	if ($relative)

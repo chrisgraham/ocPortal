@@ -245,12 +245,12 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 		if (!is_null($directory))
 		{
 			// Is there an explicitly defined addon?
-			$data=tar_get_file($tar_file,'sources_custom/hooks/systems/addon_registry/'.$addon_name.'.php',true);
-			if ($data===NULL)
-				$data=tar_get_file($tar_file,'sources/hooks/systems/addon_registry/'.$addon_name.'.php',true);
-			if ($data!==NULL)
+			$_data=tar_get_file($tar_file,'sources_custom/hooks/systems/addon_registry/'.$addon_name.'.php',true);
+			if ($_data===NULL)
+				$_data=tar_get_file($tar_file,'sources/hooks/systems/addon_registry/'.$addon_name.'.php',true);
+			if ($_data!==NULL)
 			{
-				$data=str_replace('<'.'?php','',$data);
+				$data=str_replace('<'.'?php','',$_data['data']);
 				@eval($data);
 				$ob=object_factory('Hook_addon_registry_'.$addon_name,true);
 				if (($ob!==NULL) && (method_exists($ob,'get_default_icon')))

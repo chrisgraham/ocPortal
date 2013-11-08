@@ -90,7 +90,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			if (($hook=='catalogue_entries') || (array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (method_exists($ob,'get_tree')) || (method_exists($ob,'ajax_tree')))
 			{
 				$child_pagelink=$zone.':search:misc:'.$hook;
-				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
 				if ($callback===NULL || $return_anyway) $nodes[]=$node;
 			}
 		}
@@ -180,7 +180,6 @@ class Hook_sitemap_search extends Hook_sitemap_base
 
 		require_code('hooks/modules/search/'.filter_naughty_harsh($hook));
 		$ob=object_factory('Hook_search_'.filter_naughty_harsh($hook),true);
-		if (is_null($ob)) continue;
 		$info=$ob->info(false);
 
 		$struct=array(
@@ -203,7 +202,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 				'validated'=>NULL,
 				'db_row'=>NULL,
 			),
-			'permissions'=>$info['permissions']
+			'permissions'=>$info['permissions'],
 			'has_possible_children'=>($hook=='catalogue_entry'),
 
 			// These are likely to be changed in individual hooks

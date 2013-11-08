@@ -36,6 +36,8 @@ class ocp_filecache
 
 	/**
 	 * Instruction to load up the objects list.
+	 *
+	 * @return array			The list of objects
 	 */
 	function load_objects_list()
 	{

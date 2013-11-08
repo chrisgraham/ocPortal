@@ -26,7 +26,6 @@
  * @param  ID_TEXT		The zones default page
  * @param  SHORT_TEXT	The header text
  * @param  ID_TEXT		The theme
- * @param  BINARY			Whether the zone is wide
  * @param  BINARY			Whether the zone requires a session for pages to be used
  * @param  ID_TEXT		The new name of the zone
  * @param  boolean		Whether to force the name as unique, if there's a conflict
@@ -34,7 +33,7 @@
  * @param  string			The base URL (blank: natural)
  * @return ID_TEXT		The name
  */
-function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$require_session,$new_zone,$uniqify=false,$skip_afm=false,$base_url='')
+function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$require_session,$new_zone,$uniqify=false,$skip_afm=false,$base_url='')
 {
 	if ($zone!=$new_zone)
 	{
@@ -243,7 +242,7 @@ function sitemap_do_next_manager($title,$page,$zone,$completion_text)
 
 	require_code('templates_donext');
 	$special=array(
-		array('menu/_generic_admin/add_one',array('cms_comcode_pages',array('type'=>'ed'),get_module_zone('cms_comcode_pages')),do_lang('COMCODE_PAGE_ADD')):NULL,
+		array('menu/_generic_admin/add_one',array('cms_comcode_pages',array('type'=>'ed'),get_module_zone('cms_comcode_pages')),do_lang('COMCODE_PAGE_ADD')),
 		array('menu/cms/comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('COMCODE_PAGE_EDIT')),
 	);
 	if (addon_installed('redirects_editor'))

@@ -454,10 +454,8 @@ class Module_admin_zones
 		$default_page=post_param('default_page');
 		$header_text=post_param('header_text');
 		$theme=post_param('theme');
-		$wide=post_param_integer('wide');
-		if ($wide==-1) $wide=NULL;
 		$require_session=post_param_integer('require_session',0);
-		actual_edit_zone($id,$_title,$default_page,$header_text,$theme,$wide,$require_session,$id);
+		actual_edit_zone($id,$_title,$default_page,$header_text,$theme,$require_session,$id);
 		if ($id!='') $this->set_permissions($id);
 
 		// Edit pages
@@ -567,10 +565,6 @@ class Module_admin_zones
 		$fields.=static_evaluate_tempcode(form_input_line(do_lang_tempcode('DEFAULT_PAGE'),do_lang_tempcode('DESCRIPTION_DEFAULT_PAGE'),'default_page',$default_page,true));
 		$fields.=static_evaluate_tempcode(form_input_line(do_lang_tempcode('HEADER_TEXT'),do_lang_tempcode('DESCRIPTION_HEADER_TEXT'),'header_text',$header_text,false));
 		$list='';
-		$list.=static_evaluate_tempcode(form_input_list_entry('0',($wide==0),do_lang_tempcode('NO')));
-		$list.=static_evaluate_tempcode(form_input_list_entry('1',($wide==1),do_lang_tempcode('YES')));
-		$list.=static_evaluate_tempcode(form_input_list_entry('-1',is_null($wide),do_lang_tempcode('RELY_FORUMS')));
-		$fields.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('WIDE'),do_lang_tempcode('DESCRIPTION_WIDE'),'wide',make_string_tempcode($list)));
 
 		// Theme
 		require_code('themes2');
@@ -724,12 +718,10 @@ class Module_admin_zones
 		$default_page=post_param('default_page');
 		$header_text=post_param('header_text');
 		$theme=post_param('theme');
-		$wide=post_param_integer('wide');
-		if ($wide==-1) $wide=NULL;
 		$require_session=post_param_integer('require_session',0);
 		$base_url=post_param('base_url','');
 
-		actual_add_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,false,$base_url);
+		actual_add_zone($zone,$_title,$default_page,$header_text,$theme,$require_session,false,$base_url);
 
 		sync_htaccess_with_zones();
 
@@ -878,8 +870,6 @@ class Module_admin_zones
 			$default_page=post_param('default_page');
 			$header_text=post_param('header_text');
 			$theme=post_param('theme');
-			$wide=post_param_integer('wide');
-			if ($wide==-1) $wide=NULL;
 			$require_session=post_param_integer('require_session',0);
 			$base_url=post_param('base_url','');
 
@@ -889,7 +879,7 @@ class Module_admin_zones
 				appengine_live_guard();
 				check_zone_name($new_zone);
 			}
-			actual_edit_zone($zone,$_title,$default_page,$header_text,$theme,$wide,$require_session,$new_zone,false,false,$base_url);
+			actual_edit_zone($zone,$_title,$default_page,$header_text,$theme,$require_session,$new_zone,false,false,$base_url);
 
 			if ($new_zone!='') $this->set_permissions($new_zone);
 

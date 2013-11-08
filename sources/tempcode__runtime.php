@@ -491,7 +491,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				if (!is_null($ob_info))
 				{
 					if (!isset($LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']]))
-						$LOADED_MONIKERS_CACHE[[$url_parts['type']]$url_parts['page']][$url_parts['id']]=true; // Indicator to preload this
+						$LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']]=true; // Indicator to preload this
 				}
 			}
 			return;

@@ -9,8 +9,7 @@ if (!isset($_SERVER['APPLICATION_ID']))
 	exit('This can only run on Google App Engine.');
 }
 
-if ((!is_writable(__FILE__)/*suggests locked-down live environment*/)
- 	|| (preg_replace('#:.*$#','',$_SERVER['HTTP_HOST'])!='localhost'))
+if ((!is_writable(__FILE__)/*suggests locked-down live environment*/) || (preg_replace('#:.*$#','',$_SERVER['HTTP_HOST'])!='localhost'))
 {
 	header('Content-type: text/plain');
 	exit('This cannot run on live Google App Engine, for security reasons.');

@@ -485,7 +485,7 @@ class Module_admin
 						if (is_null($entry_points)) $entry_points=array();
 						foreach ($entry_points as $type=>$ep_parts)
 						{
-							$lang=$ep_parts[0];
+							$val=$ep_parts[0];
 
 							$type=str_replace('!','',$type); // The ! was a hackerish thing just to multiply-up possibilities for the single entry-point
 							$n=(preg_match('#^[A-Z\_]+$#',$val)==0)?make_string_tempcode($val):do_lang_tempcode($val);

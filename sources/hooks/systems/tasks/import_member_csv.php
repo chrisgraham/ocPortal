@@ -329,14 +329,14 @@ class Hook_task_import_member_csv
 				if (is_null($password_compatibility_scheme))
 					$password_compatibility_scheme=($use_temporary_passwords?'temporary':'');
 
-				$linked_id=ocf_make_member($username,$password,is_null($email_address)?'':$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,NULL,$primary_group,$validated,$join_time,NULL,'',$avatar_url,$signature,$is_perm_banned,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,NULL,'',false,$password_compatibility_scheme,$salt,1,NULL,NULL,0,'*','');
+				$linked_id=ocf_make_member($username,$password,is_null($email_address)?'':$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,NULL,$primary_group,$validated,$join_time,NULL,'',$avatar_url,$signature,$is_perm_banned,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,NULL,'',false,$password_compatibility_scheme,$salt,1,NULL,0,'*','');
 				$num_added++;
 			} else
 			{
 				$old_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($linked_id,'m_username');
 				if ($old_username==$username) $username=NULL;
 
-				ocf_edit_member($linked_id,$email_address,NULL,$dob_day,$dob_month,$dob_year,NULL,$primary_group,$custom_fields,NULL,$reveal_age,NULL,NULL,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,NULL,NULL,NULL,NULL,NULL,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
+				ocf_edit_member($linked_id,$email_address,NULL,$dob_day,$dob_month,$dob_year,NULL,$primary_group,$custom_fields,NULL,$reveal_age,NULL,NULL,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,NULL,NULL,NULL,NULL,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
 				if (!is_null($groups))
 				{
 					foreach ($groups as $g_id)

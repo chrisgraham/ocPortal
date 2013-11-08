@@ -84,12 +84,12 @@ class Module_login
 			);
 		}
 		$ret=array(
-			'misc'=>'_LOGIN','menu/site_meta/user_actions/login'),
-			'logout'=>'LOGOUT','menu/site_meta/user_actions/logout'),
-			'concede'=>'CONCEDED_MODE','menu/site_meta/user_actions/concede'),
+			'misc'=>array('_LOGIN','menu/site_meta/user_actions/login'),
+			'logout'=>array('LOGOUT','menu/site_meta/user_actions/logout'),
+			'concede'=>array('CONCEDED_MODE','menu/site_meta/user_actions/concede'),
 		);
 		if (get_option('is_on_invisibility')=='1')
-			$ret['invisible']='INVISIBLE','menu/site_meta/user_actions/invisible');
+			$ret['invisible']=array('INVISIBLE','menu/site_meta/user_actions/invisible');
 		return $ret;
 	}
 

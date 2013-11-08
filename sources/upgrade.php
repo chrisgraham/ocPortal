@@ -1636,10 +1636,9 @@ function upgrade_modules()
 		{
 			if ($type=='sources_custom') continue;
 
-			if (reinstall_addon_soft($addon))
-			{
-				$out.='<li>'.do_lang('FU_INSTALLED_ADDON','<kbd>'.escape_html($addon).'</kbd>').'</li>';
-			}
+			reinstall_addon_soft($addon);
+
+			$out.='<li>'.do_lang('FU_INSTALLED_ADDON','<kbd>'.escape_html($addon).'</kbd>').'</li>';
 		}
 	}
 

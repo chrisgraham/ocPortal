@@ -162,7 +162,7 @@ class Hook_html_site
 			require_code('zones2');
 			foreach ($new_zones as $zone)
 			{
-				actual_add_zone($zone,titleify($zone),'start','',$theme,0,0);
+				actual_add_zone($zone,titleify($zone),'start','',$theme,0);
 			}
 
 			sync_htaccess_with_zones();

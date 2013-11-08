@@ -59,7 +59,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		if ($support_crosslinks)
 		{
 			require_code('fields');
-			$ret+=manage_custom_fields_donext_link('post'),manage_custom_fields_entry_points('topic')+manage_custom_fields_entry_points('forum');
+			$ret+=manage_custom_fields_donext_link('post')+manage_custom_fields_entry_points('topic')+manage_custom_fields_entry_points('forum');
 
 			$ret['_SEARCH:admin_ocf_forum_groupings:ad']=array('ADD_FORUM_GROUPING','menu/_generic_admin/add_one_category');
 			$ret['_SEARCH:admin_ocf_forum_groupings:ed']=array('EDIT_FORUM_GROUPING','menu/_generic_admin/edit_one_category');

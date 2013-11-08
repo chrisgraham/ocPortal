@@ -1042,7 +1042,7 @@ function in_safe_mode()
 	global $SITE_INFO;
 	if (isset($SITE_INFO['safe_mode'])) return ($SITE_INFO['safe_mode']=='1'); // Useful for testing HPHP support, and generally more robust and fast
 
-	global $CHECKING_SAFEMODE;
+	global $CHECKING_SAFEMODE,$REQUIRED_CODE;
 	if (!isset($REQUIRED_CODE['lang']) || $REQUIRED_CODE['lang']==0) return false; // Too early. We can get in horrible problems when doing get_member() below if lang hasn't loaded yet
 	if ($CHECKING_SAFEMODE) return false; // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
 	$CHECKING_SAFEMODE=true;
