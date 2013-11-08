@@ -498,7 +498,7 @@ $featuretree=array(
 				array('IP address tools','Audit, check, and ban them <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Lookup Tools" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_lookup"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				array('<abbr title="Completely Automated Public Turing test to tell Computers and Humans Apart">CAPTCHA</abbr>, to stop spammers'),
 				array('Track failed logins <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Security" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_security&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
-				array('Automatic detection and banning of hackers <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of IP Banning" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_ipban&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
+				array('Automatic detection and banning of hackers <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of IP Banning" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_ip_ban&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				array('Architectural approaches to combat all major exploit techniques'),
 				array('Defence-in-depth','Multiple layers of built-in security'),
 				array('<abbr title="Cross-Site scripting">XSS</abbr> protection','Developed using unique technology to auto-detect XSS security holes before the software gets even released'),
@@ -587,7 +587,7 @@ $featuretree=array(
 				array('Member signatures, photos, and personal titles <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Personal Zone" href="http://shareddemo.myocp.com/personalzone/index.php?page=myhome&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				array('Profiles','Browse through and search for members, and view member profiles <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Member Directory" href="http://shareddemo.myocp.com/site/index.php?page=members&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				array('Member e-mailing','Allow your members to e-mail other members through your website <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Member Contact Form" href="http://shareddemo.myocp.com/site/index.php?page=contact_member&amp;type=misc&amp;id=3"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
-				array('Users online','See which members are currently online, unless they logged in as invisible <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Online Members" href="http://shareddemo.myocp.com/site/index.php?page=online_members"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
+				array('Users online','See which members are currently online, unless they logged in as invisible <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Online Members" href="http://shareddemo.myocp.com/site/index.php?page=users_online"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 			),
 		),
 		'ocfforum'=>array(

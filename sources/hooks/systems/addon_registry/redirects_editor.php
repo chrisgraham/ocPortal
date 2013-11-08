@@ -86,7 +86,7 @@ class Hook_addon_registry_redirects_editor
 	 */
 	function get_default_icon()
 	{
-		return 'themes/default/images/icons/48x48/menu/adminzone/structure/redirect.png';
+		return 'themes/default/images/icons/48x48/menu/adminzone/structure/redirects.png';
 	}
 
 	/**
@@ -97,8 +97,8 @@ class Hook_addon_registry_redirects_editor
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/structure/redirect.png',
-			'themes/default/images/icons/48x48/menu/adminzone/structure/redirect.png',
+			'themes/default/images/icons/24x24/menu/adminzone/structure/redirects.png',
+			'themes/default/images/icons/48x48/menu/adminzone/structure/redirects.png',
 			'sources/hooks/systems/addon_registry/redirects_editor.php',
 			'sources/hooks/systems/occle_fs_extended_config/redirect.php',
 			'themes/default/templates/REDIRECTE_TABLE_SCREEN.tpl',

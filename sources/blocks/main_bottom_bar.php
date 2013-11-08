@@ -61,7 +61,7 @@ class Block_main_bottom_bar
 		$users_online=new ocp_tempcode();
 		$count=0;
 		require_code('users2');
-		$members=get_online_members(false,NULL,$count);
+		$members=get_users_online(false,NULL,$count);
 		$groups_seen=array();
 		$num_members=0;
 		$num_guests=0;
@@ -145,7 +145,7 @@ class Block_main_bottom_bar
 			'NUM_POSTS'=>integer_format($stats['num_posts']),
 			'BIRTHDAYS'=>$birthdays,
 			'USERS_ONLINE'=>$users_online,
-			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'online_members')?build_url(array('page'=>'online_members'),get_module_zone('online_members')):new ocp_tempcode(),
+			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'users_online')?build_url(array('page'=>'users_online'),get_module_zone('users_online')):new ocp_tempcode(),
 			'GROUPS'=>$groups,
 			'_NUM_GUESTS'=>strval($num_guests),
 			'_NUM_MEMBERS'=>strval($num_members),

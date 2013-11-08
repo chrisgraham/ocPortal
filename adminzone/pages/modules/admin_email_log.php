@@ -21,7 +21,7 @@
 /**
  * Module page class.
  */
-class Module_admin_emaillog
+class Module_admin_email_log
 {
 
 	/**
@@ -52,7 +52,7 @@ class Module_admin_emaillog
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>array('EMAIL_LOG','menu/adminzone/audit/email_logs'),
+			'misc'=>array('EMAIL_LOG','menu/adminzone/audit/email_log'),
 		);
 	}
 
@@ -67,7 +67,7 @@ class Module_admin_emaillog
 	{
 		$type=get_param('type','misc');
 
-		require_lang('emaillog');
+		require_lang('email_log');
 
 		if ($type=='misc')
 		{
@@ -175,7 +175,7 @@ class Module_admin_emaillog
 		$mass_delete_url=build_url(array('page'=>'_SELF','type'=>'mass_delete'),'_SELF');
 		$mass_send_url=build_url(array('page'=>'_SELF','type'=>'mass_send'),'_SELF');
 
-		$tpl=do_template('EMAILLOG_SCREEN',array('_GUID'=>'8c249a372933e1215d8b9ff6d4bb0de3','TITLE'=>$this->title,'RESULTS_TABLE'=>$results_table,'MASS_DELETE_URL'=>$mass_delete_url,'MASS_SEND_URL'=>$mass_send_url));
+		$tpl=do_template('EMAIL_LOG_SCREEN',array('_GUID'=>'8c249a372933e1215d8b9ff6d4bb0de3','TITLE'=>$this->title,'RESULTS_TABLE'=>$results_table,'MASS_DELETE_URL'=>$mass_delete_url,'MASS_SEND_URL'=>$mass_send_url));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

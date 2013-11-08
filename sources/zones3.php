@@ -249,7 +249,7 @@ function sitemap_do_next_manager($title,$page,$zone,$completion_text)
 	if (addon_installed('redirects_editor'))
 	{
 		require_lang('redirects');
-		$special[]=array('menu/adminzone/structure/redirect',array('admin_redirects',array('type'=>'misc'),get_module_zone('admin_redirects')),do_lang_tempcode('REDIRECTS'));
+		$special[]=array('menu/adminzone/structure/redirects',array('admin_redirects',array('type'=>'misc'),get_module_zone('admin_redirects')),do_lang_tempcode('REDIRECTS'));
 	}
 	if (!has_js())
 	{

@@ -590,9 +590,9 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL to the members-online page
 	 */
-	function _online_members_url($tempcode_okay=false)
+	function _users_online_url($tempcode_okay=false)
 	{
-		$_url=build_url(array('page'=>'online_members'),get_module_zone('online_members'));
+		$_url=build_url(array('page'=>'users_online'),get_module_zone('users_online'));
 		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);

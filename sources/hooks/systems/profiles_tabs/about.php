@@ -95,7 +95,7 @@ class Hook_Profiles_Tabs_about
 		if (has_actual_page_access($member_id_viewing,'admin_security'))
 		{
 			require_lang('security');
-			$modules[]=array('audit',do_lang_tempcode('SECURITY_LOGGING'),build_url(array('page'=>'admin_security','member_id'=>$member_id_of),'adminzone'));
+			$modules[]=array('audit',do_lang_tempcode('SECURITY_LOG'),build_url(array('page'=>'admin_security','member_id'=>$member_id_of),'adminzone'));
 		}
 		if (addon_installed('actionlog'))
 		{

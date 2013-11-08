@@ -51,10 +51,15 @@ class Module_admin_orders
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('ORDERS','menu/adminzone/audit/ecommerce/orders'),
-			'show_orders'=>array('OUTSTANDING_ORDERS','menu/adminzone/audit/ecommerce/undispatched'),
+			'show_orders'=>array('SHOW_ORDERS','menu/adminzone/audit/ecommerce/orders'),
 		);
+		if ($support_crosslinks)
+		{
+			$ret[get_module_zone('admin_orders').':admin_orders:show_orders:filter=undispatched']=array('SHOW_UNDISPATCHED_ORDERS','menu/adminzone/audit/ecommerce/undispatched_orders');
+		}
+		return $ret;
 	}
 
 	var $title;
@@ -84,10 +89,10 @@ class Module_admin_orders
 			$filter=get_param('filter',NULL);
 			if ($filter=='undispatched')
 			{
-				$this->title=get_screen_title('UNDISPATCHED_ORDER_LIST');
+				$this->title=get_screen_title('SHOW_UNDISPATCHED_ORDERS');
 			} else
 			{
-				$this->title=get_screen_title('ORDER_LIST');
+				$this->title=get_screen_title('SHOW_ORDERS');
 			}
 		}
 
@@ -95,7 +100,7 @@ class Module_admin_orders
 
 		if ($type=='order_det' || $action=='order_act' || $action=='_add_note' || $action=='order_export' || $action=='_order_export')
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDER_LIST'))));
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce_logs:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS')),array('_SELF:_SELF:show_orders',do_lang_tempcode('ORDERS'))));
 		}
 
 		if ($action=='order_act')
@@ -206,7 +211,7 @@ class Module_admin_orders
 		return do_next_manager(get_screen_title('ORDERS'),comcode_lang_string('DOC_ECOMMERCE'),
 			array(
 				array('menu/adminzone/audit/ecommerce/orders',array('_SELF',array('type'=>'show_orders'),'_SELF'),do_lang('SHOW_ORDERS')),
-				array('menu/adminzone/audit/ecommerce/undispatched',array('_SELF',array('type'=>'show_orders','filter'=>'undispatched'),'_SELF'),do_lang('UNDISPATCHED_ORDERS')),
+				array('menu/adminzone/audit/ecommerce/undispatched_orders',array('_SELF',array('type'=>'show_orders','filter'=>'undispatched'),'_SELF'),do_lang('SHOW_UNDISPATCHED_ORDERS')),
 			),
 			do_lang('ORDERS')
 		);

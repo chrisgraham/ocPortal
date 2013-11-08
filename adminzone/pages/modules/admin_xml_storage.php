@@ -52,7 +52,7 @@ class Module_admin_xml_storage
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>array('XML_DATA_MANAGEMENT','menu/adminzone/tools/bulk_content_actions/xml_syndication'),
+			'misc'=>array('XML_DATA_MANAGEMENT','menu/adminzone/tools/bulk_content_actions/xml_storage'),
 		);
 	}
 

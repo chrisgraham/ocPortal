@@ -392,7 +392,7 @@ class forum_driver_mybb extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the members-online page
 	 */
-	function _online_members_url()
+	function _users_online_url()
 	{
 		return get_forum_base_url().'/online.php';
 	}

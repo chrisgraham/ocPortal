@@ -75,7 +75,7 @@ class Module_admin_lookup
 		if (addon_installed('securitylogging'))
 		{
 			require_lang('actionlog');
-			$ip_ban_url=build_url(array('page'=>'admin_ipban'),get_module_zone('admin_ipban'));
+			$ip_ban_url=build_url(array('page'=>'admin_ip_ban'),get_module_zone('admin_ip_ban'));
 			set_helper_panel_text(comcode_to_tempcode(do_lang('DOC_ACTIONLOG_BAN_HELP',$ip_ban_url->evaluate())));
 		}
 

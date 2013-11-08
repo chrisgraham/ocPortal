@@ -1864,7 +1864,7 @@ function get_num_users_site()
 		$NUM_USERS_SITE_CACHE=get_value('users_online');
 		$count=0;
 		require_code('users2');
-		get_online_members(false,NULL,$count);
+		get_users_online(false,NULL,$count);
 		$NUM_USERS_SITE_CACHE=strval($count);
 		if (!$GLOBALS['SITE_DB']->table_is_locked('values'))
 			set_value('users_online',$NUM_USERS_SITE_CACHE);

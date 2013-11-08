@@ -232,7 +232,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 
       // Users online
       $users_online=new ocp_tempcode();
-      $members=get_online_members();
+      $members=get_users_online();
       $members=collapse_2d_complexity('member_id','cache_username',$members);
       $guests=0;
       foreach ($members as $member=>$username)
@@ -282,7 +282,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
          'NUM_POSTS'=>number_format($stats['num_posts']),
          'BIRTHDAYS'=>$birthdays,
          'USERS_ONLINE'=>$users_online,
-         'USERS_ONLINE_URL'=>build_url(array('page'=>'online_members'),get_module_zone('online_members')),
+         'USERS_ONLINE_URL'=>build_url(array('page'=>'users_online'),get_module_zone('users_online')),
          'GROUPS'=>$groups
       ));
    } else $foot=new ocp_tempcode();

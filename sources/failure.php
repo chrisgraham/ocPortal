@@ -631,7 +631,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 				syndicate_spammer_report($alt_ip?$ip2:$ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_TRIGGERED_SPAM_HEURISTICS'));
 			}
 			$ban_happened=add_ip_ban($alt_ip?$ip2:$ip,$full_reason);
-			$_ip_ban_url=build_url(array('page'=>'admin_ipban','type'=>'misc'),get_module_zone('admin_ipban'),NULL,false,false,true);
+			$_ip_ban_url=build_url(array('page'=>'admin_ip_ban','type'=>'misc'),get_module_zone('admin_ip_ban'),NULL,false,false,true);
 			$ip_ban_url=$_ip_ban_url->evaluate();
 			if ($ban_happened)
 				$ip_ban_todo=do_lang('AUTO_BAN_HACK_MESSAGE',$alt_ip?$ip2:$ip,integer_format($hack_threshold),array($summary,$ip_ban_url),get_site_default_lang());

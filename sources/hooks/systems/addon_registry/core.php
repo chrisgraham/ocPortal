@@ -201,8 +201,8 @@ class Hook_addon_registry_core
 			'themes/default/images/icons/48x48/menu/_generic_admin/edit_this.png',
 			'themes/default/images/icons/24x24/menu/_generic_admin/edit_this_category.png',
 			'themes/default/images/icons/48x48/menu/_generic_admin/edit_this_category.png',
-			'themes/default/images/icons/24x24/menu/adminzone/audit/email_logs.png',
-			'themes/default/images/icons/48x48/menu/adminzone/audit/email_logs.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/email_log.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/email_log.png',
 			'themes/default/images/icons/24x24/buttons/export.png',
 			'themes/default/images/icons/48x48/buttons/export.png',
 			'themes/default/images/icons/24x24/buttons/fullsize.png',
@@ -704,7 +704,7 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/tasks/sitemap.php',
 			'data/force_sitemap_generation.php',
 			'sources/hooks/systems/cron/sitemap.php',
-			'themes/default/templates/IPBAN_SCREEN.tpl',
+			'themes/default/templates/IP_BAN_SCREEN.tpl',
 			'themes/default/templates/LOOKUP_IP_LIST_GROUP.tpl',
 			'themes/default/templates/BLOCK_MAIN_COMCODE_PAGE_CHILDREN.tpl',
 			'adminzone/pages/modules/admin_version.php',
@@ -1198,10 +1198,10 @@ class Hook_addon_registry_core
 			'themes/default/images/.htaccess',
 			'themes/default/images/favicon.ico',
 			'themes/default/images/appleicon.png',
-			'adminzone/pages/modules/admin_emaillog.php',
+			'adminzone/pages/modules/admin_email_log.php',
 			'sources/hooks/systems/cron/mail_queue.php',
-			'lang/EN/emaillog.ini',
-			'themes/default/templates/EMAILLOG_SCREEN.tpl',
+			'lang/EN/email_log.ini',
+			'themes/default/templates/EMAIL_LOG_SCREEN.tpl',
 			'themes/default/templates/QUICK_JS_LOADER.tpl',
 			'sources/hooks/systems/cron/implicit_usergroup_sync.php',
 			'sources/hooks/systems/ocf_implicit_usergroups/index.html',
@@ -1272,7 +1272,7 @@ class Hook_addon_registry_core
 			'FORUM_ATTACHMENT_LINK.tpl'=>'forum_attachment_link',
 			'tempcode_test.tpl'=>'administrative__tempcode_test',
 			'JAVA_DETECT.tpl'=>'java_detect',
-			'EMAILLOG_SCREEN.tpl'=>'email_log_screen',
+			'EMAIL_LOG_SCREEN.tpl'=>'email_log_screen',
 			'QUICK_JS_LOADER.tpl'=>'quick_js_loader',
 			'BLOCK_MAIN_CONTENT_FILTERING.tpl'=>'block_main_content_filtering',
 			'BLOCK_MAIN_CONTENT.tpl'=>'block_main_content',
@@ -1361,10 +1361,10 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__email_log_screen()
 	{
-		require_lang('emaillog');
+		require_lang('email_log');
 
 		return array(
-			lorem_globalise(do_lorem_template('EMAILLOG_SCREEN',array(
+			lorem_globalise(do_lorem_template('EMAIL_LOG_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'RESULTS_TABLE'=>placeholder_table(),
 				'MASS_DELETE_URL'=>placeholder_url(),

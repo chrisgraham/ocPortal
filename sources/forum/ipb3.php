@@ -731,7 +731,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 *
 	 * @return URLPATH		The URL to the members-online page
 	 */
-	function _online_members_url()
+	function _users_online_url()
 	{
 		return get_forum_base_url().'/index.php?app=members&module=online&sort_order=desc';
 	}

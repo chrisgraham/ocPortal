@@ -65,7 +65,7 @@ function show_im_contacts($member_id=NULL,$simpler=false,$max=NULL)
 
 	$can_im=has_privilege(get_member(),'start_im');
 
-	$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url();
+	$online_url=$GLOBALS['FORUM_DRIVER']->users_online_url();
 	$friends_offline=array();
 	$friends_online=array();
 	$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes'=>$member_id),'ORDER BY date_and_time',300);

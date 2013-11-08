@@ -107,7 +107,7 @@ class Module_admin_redirects
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>array('REDIRECTS','menu/adminzone/structure/redirect'),
+			'misc'=>array('REDIRECTS','menu/adminzone/structure/redirects'),
 		);
 	}
 

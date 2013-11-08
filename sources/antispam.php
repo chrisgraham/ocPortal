@@ -329,7 +329,7 @@ function handle_perceived_spammer_by_confidence($user_ip,$confidence_level,$bloc
 	if (intval($confidence_level*100.0)>=$spam_ban_threshold)
 	{
 		require_code('failure');
-		$ban_happened=add_ip_ban($user_ip,do_lang('IPBAN_LOG_AUTOBAN_ANTISPAM',$blocked_by),time()+60*intval(get_option('spam_cache_time')));
+		$ban_happened=add_ip_ban($user_ip,do_lang('IP_BAN_LOG_AUTOBAN_ANTISPAM',$blocked_by),time()+60*intval(get_option('spam_cache_time')));
 
 		if ($ban_happened)
 		{

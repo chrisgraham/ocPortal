@@ -56,22 +56,22 @@ class Module_lost_password
 
 		if ($type=='misc')
 		{
-			breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
+			breadcrumb_set_self(do_lang_tempcode('LOST_PASSWORD'));
 
-			$this->title=get_screen_title('RESET_PASSWORD');
+			$this->title=get_screen_title('LOST_PASSWORD');
 		}
 
 		if ($type=='step2')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('RESET_PASSWORD'))));
-			breadcrumb_set_self(do_lang_tempcode('RESET_PASSWORD'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('LOST_PASSWORD'))));
+			breadcrumb_set_self(do_lang_tempcode('LOST_PASSWORD'));
 
-			$this->title=get_screen_title('RESET_PASSWORD');
+			$this->title=get_screen_title('LOST_PASSWORD');
 		}
 
 		if ($type=='step3')
 		{
-			$this->title=get_screen_title('RESET_PASSWORD');
+			$this->title=get_screen_title('LOST_PASSWORD');
 		}
 
 		return NULL;
@@ -108,7 +108,7 @@ class Module_lost_password
 		if ($check_perms && is_guest($member_id))
 		{
 			return array(
-				'misc'=>array('RESET_PASSWORD','menu/site_meta/user_actions/reset_password'),
+				'misc'=>array('LOST_PASSWORD','menu/site_meta/user_actions/lost_password'),
 			);
 		}
 		return array();
@@ -180,7 +180,7 @@ class Module_lost_password
 		$code=get_rand_password();
 		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>$code.'__'.strval(get_session_id())),array('id'=>$member_id),'',1);
 
-		log_it('RESET_PASSWORD',strval($member_id),$code);
+		log_it('LOST_PASSWORD',strval($member_id),$code);
 
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		if ($email=='') warn_exit(do_lang_tempcode('MEMBER_NO_EMAIL_ADDRESS_RESET_TO'));
@@ -195,9 +195,9 @@ class Module_lost_password
 			$url=$_url->evaluate();
 			$_url_simple=build_url(array('page'=>'lost_password','type'=>'step3','code'=>NULL,'username'=>NULL,'member'=>NULL),$zone,NULL,false,false,true);
 			$url_simple=$_url_simple->evaluate();
-			$message=do_lang($temporary_passwords?'RESET_PASSWORD_TEXT_TEMPORARY':'RESET_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array($url,comcode_escape($url_simple),strval($member_id),$code),get_lang($member_id));
+			$message=do_lang($temporary_passwords?'LOST_PASSWORD_TEXT_TEMPORARY':'LOST_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array($url,comcode_escape($url_simple),strval($member_id),$code),get_lang($member_id));
 			require_code('mail');
-			mail_wrap(do_lang('RESET_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
+			mail_wrap(do_lang('LOST_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 		} else
 		{
 			$old_php_self=ocp_srv('PHP_SELF');
@@ -290,7 +290,7 @@ class Module_lost_password
 		}
 		if ($code!=$correct_code)
 		{
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','date_and_time',array('the_type'=>'RESET_PASSWORD','param_a'=>strval($member_id),'param_b'=>$code));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','date_and_time',array('the_type'=>'LOST_PASSWORD','param_a'=>strval($member_id),'param_b'=>$code));
 			if (!is_null($test)) warn_exit(do_lang_tempcode('INCORRECT_PASSWORD_RESET_CODE')); // Just an old code that has expired
 			log_hack_attack_and_exit('HACK_ATTACK_PASSWORD_CHANGE'); // Incorrect code, hack attack
 		}
@@ -309,7 +309,7 @@ class Module_lost_password
 			$login_url=$_login_url->evaluate();
 			$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,get_site_name());
 			require_code('mail');
-			mail_wrap(do_lang('RESET_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
+			mail_wrap(do_lang('LOST_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 		}
 
 		if ((get_value('no_password_hashing')==='1') && (!$temporary_passwords))

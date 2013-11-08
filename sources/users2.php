@@ -27,7 +27,7 @@
 function member_is_online($member_id)
 {
 	$count=0;
-	$online=get_online_members(false,$member_id,$count);
+	$online=get_users_online(false,$member_id,$count);
 	foreach ($online as $m)
 	{
 		if ($m['member_id']==$member_id) return true;
@@ -43,7 +43,7 @@ function member_is_online($member_id)
  * @param  integer		The total online members, returned by reference
  * @return ?array			Database rows (NULL: too many)
  */
-function get_online_members($longer_time,$filter,&$count)
+function get_users_online($longer_time,$filter,&$count)
 {
 	if (get_value('no_member_tracking')==='1') return array();
 

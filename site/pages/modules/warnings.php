@@ -418,7 +418,7 @@ class Module_warnings extends standard_crud_module
 			}
 			if (addon_installed('securitylogging'))
 			{
-				if (has_actual_page_access(get_member(),'admin_ipban'))
+				if (has_actual_page_access(get_member(),'admin_ip_ban'))
 				{
 					$fields->attach(form_input_tick(do_lang_tempcode('WHETHER_BANNED_IP'),do_lang_tempcode('DESCRIPTION_WHETHER_BANNED_IP'),'banned_ip',false));
 				}
@@ -726,7 +726,7 @@ class Module_warnings extends standard_crud_module
 		$banned_ip='';
 		if (addon_installed('securitylogging'))
 		{
-			if (has_actual_page_access(get_member(),'admin_ipban'))
+			if (has_actual_page_access(get_member(),'admin_ip_ban'))
 			{
 				$_banned_ip=post_param_integer('banned_ip',0);
 				if ($_banned_ip==1)

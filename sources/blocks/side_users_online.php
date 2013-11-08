@@ -63,7 +63,7 @@ class Block_side_users_online
 	{
 		$count=0;
 		require_code('users2');
-		$members=get_online_members(false,NULL,$count);
+		$members=get_users_online(false,NULL,$count);
 		if (is_null($members)) return new ocp_tempcode(); // Too many to show
 
 		if (get_forum_type()=='ocf')

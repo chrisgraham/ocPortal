@@ -102,7 +102,7 @@ class Module_admin_security
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>array('SECURITY_LOGGING','menu/adminzone/audit/security_log'),
+			'misc'=>array('SECURITY_LOG','menu/adminzone/audit/security_log'),
 		);
 	}
 
@@ -129,17 +129,17 @@ class Module_admin_security
 			inform_non_canonical_parameter('alert_sort');
 			inform_non_canonical_parameter('failed_sort');
 
-			$this->title=get_screen_title('SECURITY_LOGGING');
+			$this->title=get_screen_title('SECURITY_LOG');
 		}
 
 		if ($type=='clean')
 		{
-			$this->title=get_screen_title('SECURITY_LOGGING');
+			$this->title=get_screen_title('SECURITY_LOG');
 		}
 
 		if ($type=='view')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECURITY_LOGGING'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECURITY_LOG'))));
 
 			$id=get_param_integer('id');
 			$rows=$GLOBALS['SITE_DB']->query_select('hackattack',array('*'),array('id'=>$id));

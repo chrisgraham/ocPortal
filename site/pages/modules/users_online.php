@@ -21,7 +21,7 @@
 /**
  * Module page class.
  */
-class Module_online_members
+class Module_users_online
 {
 
 	/**
@@ -89,10 +89,10 @@ class Module_online_members
 
 		$count=0;
 		require_code('users2');
-		$members=get_online_members(has_privilege(get_member(),'show_user_browsing'),NULL,$count);
+		$members=get_users_online(has_privilege(get_member(),'show_user_browsing'),NULL,$count);
 		if ((is_null($members)) && (has_privilege(get_member(),'show_user_browsing')))
 		{
-			$members=get_online_members(false,NULL,$count);
+			$members=get_users_online(false,NULL,$count);
 		}
 		if (is_null($members)) warn_exit(do_lang_tempcode('TOO_MANY_USERS_ONLINE'));
 

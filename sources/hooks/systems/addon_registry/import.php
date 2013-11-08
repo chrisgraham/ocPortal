@@ -94,8 +94,8 @@ class Hook_addon_registry_import
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/tools/bulk_content_actions/xml_syndication.png',
-			'themes/default/images/icons/48x48/menu/adminzone/tools/bulk_content_actions/xml_syndication.png',
+			'themes/default/images/icons/24x24/menu/adminzone/tools/bulk_content_actions/xml_storage.png',
+			'themes/default/images/icons/48x48/menu/adminzone/tools/bulk_content_actions/xml_storage.png',
 			'themes/default/css/importing.css',
 			'sources/hooks/modules/admin_import/html_site.php',
 			'sources/hooks/modules/admin_import/index.html',

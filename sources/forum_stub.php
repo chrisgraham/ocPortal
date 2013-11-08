@@ -132,9 +132,9 @@ class forum_driver_base
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL
 	 */
-	function online_members_url($tempcode_okay=false)
+	function users_online_url($tempcode_okay=false)
 	{
-		$url=$this->_online_members_url($tempcode_okay);
+		$url=$this->_users_online_url($tempcode_okay);
 		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal')=='1'))
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;

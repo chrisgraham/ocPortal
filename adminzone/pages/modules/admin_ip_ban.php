@@ -21,7 +21,7 @@
 /**
  * Module page class.
  */
-class Module_admin_ipban
+class Module_admin_ip_ban
 {
 
 	/**
@@ -91,7 +91,7 @@ class Module_admin_ipban
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>array('IP_BANS','menu/adminzone/security/ipban'),
+			'misc'=>array('IP_BANS','menu/adminzone/security/ip_ban'),
 		);
 	}
 
@@ -240,7 +240,7 @@ class Module_admin_ipban
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		return do_template('IPBAN_SCREEN',array('_GUID'=>'963d24852ba87e9aa84e588862bcfecb','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$this->title,'LOCKED_BANS'=>$locked_bans,'BANS'=>$bans,'URL'=>$post_url));
+		return do_template('IP_BAN_SCREEN',array('_GUID'=>'963d24852ba87e9aa84e588862bcfecb','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$this->title,'LOCKED_BANS'=>$locked_bans,'BANS'=>$bans,'URL'=>$post_url));
 	}
 
 	/**

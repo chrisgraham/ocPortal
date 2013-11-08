@@ -75,7 +75,7 @@ class Module_admin_ocf_members
 				$ret['_SEARCH:admin_ecommerce:misc']=array('CUSTOM_PRODUCT_USERGROUP','menu/adminzone/audit/ecommerce/ecommerce');
 			$ret['_SEARCH:admin_ocf_groups:misc']=array('USERGROUPS','menu/social/groups');
 			if (addon_installed('staff'))
-				$ret['_SEARCH:admin_staff:misc']=array('STAFF','menu/site_meta/staff_view');
+				$ret['_SEARCH:admin_staff:misc']=array('STAFF','menu/site_meta/staff');
 		}
 		return $ret;
 	}
@@ -226,7 +226,7 @@ class Module_admin_ocf_members
 				array('menu/adminzone/security/usergroups_temp',array('admin_ocf_members',array('type'=>'group_member_timeouts'),get_module_zone('admin_ocf_members')),do_lang_tempcode('GROUP_MEMBER_TIMEOUTS'),'DOC_GROUP_MEMBER_TIMEOUTS'),
 				addon_installed('ecommerce')?array('menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),'DOC_ECOMMERCE'):NULL,
 				array('menu/social/groups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('USERGROUPS'),'DOC_GROUPS'),
-				addon_installed('staff')?array('menu/site_meta/staff_view',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('STAFF'),'DOC_STAFF'):NULL,
+				addon_installed('staff')?array('menu/site_meta/staff',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('STAFF'),'DOC_STAFF'):NULL,
 			),do_lang('MEMBERS')
 		);
 	}

@@ -117,7 +117,7 @@ class Module_admin_permissions
 
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_redirects','zone_name'=>'adminzone','group_id'=>$id)); // We don't want people to redirect themselves passed the page/zone security unless they are admins already
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_addons','zone_name'=>'adminzone','group_id'=>$id)); // We don't want people installing new code
-				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_emaillog','zone_name'=>'adminzone','group_id'=>$id)); // We don't want people snooping on admin emails (e.g. password reset)
+				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_email_log','zone_name'=>'adminzone','group_id'=>$id)); // We don't want people snooping on admin emails (e.g. password reset)
 			}
 			$GLOBALS['SITE_DB']->create_index('group_page_access','group_id',array('group_id'));
 
@@ -151,7 +151,7 @@ class Module_admin_permissions
 			'privileges'=>array('PRIVILEGES','menu/adminzone/security/permissions/privileges'),
 		);
 		if (addon_installed('match_key_permissions'))
-			$ret['keys']=array('MATCH_KEYS','menu/adminzone/security/permissions/match_key_security');
+			$ret['match_keys']=array('MATCH_KEYS','menu/adminzone/security/permissions/match_keys');
 		return $ret;
 	}
 
@@ -173,7 +173,7 @@ class Module_admin_permissions
 			set_helper_panel_tutorial('tut_permissions');
 		}
 
-		if ($type=='keys' || $type=='_keys')
+		if ($type=='match_keys' || $type=='_match_keys')
 		{
 			set_helper_panel_tutorial('tut_permissions');
 		}
@@ -220,9 +220,9 @@ class Module_admin_permissions
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 		}
 
-		if ($type=='_keys')
+		if ($type=='_match_keys')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:keys',do_lang_tempcode('PAGE_MATCH_KEY_ACCESS'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:match_keys',do_lang_tempcode('PAGE_MATCH_KEY_ACCESS'))));
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 		}
 
@@ -253,7 +253,7 @@ class Module_admin_permissions
 			$this->title=get_screen_title('PERMISSIONS_TREE');
 		}
 
-		if ($type=='keys' || $type=='_keys')
+		if ($type=='match_keys' || $type=='_match_keys')
 		{
 			$this->title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
 		}
@@ -285,8 +285,8 @@ class Module_admin_permissions
 		if ($type=='_absorb') return $this->_absorb();
 		if (addon_installed('match_key_permissions'))
 		{
-			if ($type=='keys') return $this->interface_keys_access();
-			if ($type=='_keys') return $this->set_keys_access();
+			if ($type=='match_keys') return $this->interface_match_keys_access();
+			if ($type=='_match_keys') return $this->set_match_keys_access();
 		}
 		if ($type=='page') return $this->interface_page_access();
 		if ($type=='_page') return $this->set_page_access();
@@ -476,11 +476,11 @@ class Module_admin_permissions
 	 *
 	 * @return tempcode		The UI
 	 */
-	function interface_keys_access()
+	function interface_match_keys_access()
 	{
 		require_css('permissions_editor');
 
-		$url=build_url(array('page'=>'_SELF','type'=>'_keys'),'_SELF');
+		$url=build_url(array('page'=>'_SELF','type'=>'_match_keys'),'_SELF');
 
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -544,7 +544,7 @@ class Module_admin_permissions
 	 *
 	 * @return tempcode		The UI
 	 */
-	function set_keys_access()
+	function set_match_keys_access()
 	{
 		// Delete to cleanup
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE page_name LIKE \''.db_encode_like('%:%').'\'');
@@ -600,7 +600,7 @@ class Module_admin_permissions
 		log_it('PAGE_MATCH_KEY_ACCESS');
 
 		// Show it worked / Refresh
-		$url=build_url(array('page'=>'_SELF','type'=>'keys'),'_SELF');
+		$url=build_url(array('page'=>'_SELF','type'=>'match_keys'),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
