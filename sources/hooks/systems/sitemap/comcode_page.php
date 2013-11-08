@@ -79,9 +79,10 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
@@ -158,21 +159,21 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 			{
 				$struct['db_row']=$db_row+$struct['db_row'];
 			}
-			if (isset($row_db[0]['p_add_date']))
+			if (isset($db_row[0]['p_add_date']))
 			{
-				$struct['add_date']=$row_db[0]['p_add_date'];
+				$struct['add_date']=$db_row[0]['p_add_date'];
 			}
-			if (isset($row_db[0]['p_edit_date']))
+			if (isset($db_row[0]['p_edit_date']))
 			{
-				$struct['edit_date']=$row_db[0]['p_edit_date'];
+				$struct['edit_date']=$db_row[0]['p_edit_date'];
 			}
-			if (isset($row_db[0]['p_submitter']))
+			if (isset($db_row[0]['p_submitter']))
 			{
-				$struct['submitter']=$row_db[0]['p_submitter'];
+				$struct['submitter']=$db_row[0]['p_submitter'];
 			}
-			if (isset($row_db[0]['cc_page_title']))
+			if (isset($db_row[0]['cc_page_title']))
 			{
-				$struct['title']=make_string_tempcode(escape_html(get_translated_text($row_db[0]['cc_page_title'])));
+				$struct['title']=make_string_tempcode(escape_html(get_translated_text($db_row[0]['cc_page_title'])));
 			}
 		} else
 		{
@@ -219,6 +220,6 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 			$struct['children']=$children;
 		}
 
-		return ($callback===NULL)?$struct:NULL;
+		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
 }

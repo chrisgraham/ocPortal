@@ -29,7 +29,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	function handles_pagelink($pagelink)
 	{
 		$matches=array();
-		if (preg_match('#^([^:]*):([^:]*)$#',$pagelink,$matches)!=0)
+		if (preg_match('#^([^:]*):([^:]*)(:misc|$)#',$pagelink,$matches)!=0)
 		{
 			$zone=$matches[1];
 			$page=$matches[2];
@@ -80,7 +80,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 				$test=$GLOBALS['SITE_DB']->query_select('menu_items',array('i_caption','i_theme_img_code','i_caption_long'),array('i_url'=>$zone.':'.$page),'',1);
 				if (array_key_exists(0,$test))
 				{
-					$title=get_translated_text($test[0]['i_caption'];
+					$title=get_translated_text($test[0]['i_caption']);
 					$icon=$test[0]['i_theme_img_code'];
 					$description=get_translated_text($test[0]['i_caption_long']);
 					$row=array($title,$icon,$description);
@@ -127,9 +127,10 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
@@ -206,14 +207,16 @@ class Hook_sitemap_page extends Hook_sitemap_base
 				{
 					$start=strpos($page_contents,$matches[0])+strlen($matches[0]);
 					$end=strpos($page_contents,'</title>',$start);
-					$struct['title']=make_string_tempcode(substr($page_contents,$start,$end-$start),ENT_QUOTES,get_charset());
+					$struct['title']=make_string_tempcode(substr($page_contents,$start,$end-$start));
 				}
 				break;
 
 			case 'MODULES':
 			case 'MODULES_CUSTOM':
 				require_all_lang();
-				$struct['title']=do_lang_tempcode('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
+				$test=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
+				if ($test!==NULL)
+					$struct['title']=do_lang_tempcode('MODULE_TRANS_NAME_'.$page);
 				break;
 		}
 
@@ -221,8 +224,9 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
 
-		if ($callback!==NULL)
-			call_user_func($callback,$struct);
+		$call_struct=true;
+
+		$children=array();
 
 		// Look for virtual nodes to put under this
 		$child_sitemap_hook=mixed();
@@ -241,7 +245,19 @@ class Hook_sitemap_page extends Hook_sitemap_base
 					$struct['permission_page']=$child_sitemap_hook->get_permission_page($pagelink);
 					$struct['has_possible_children']=true;
 
-					$children=array_merge($children,$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather));
+					$virtual_child_nodes=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,true);
+					foreach ($virtual_child_nodes as $child_node)
+					{
+						if (preg_match('#^'.preg_quote($pagelink,'#').':misc(:[^:=]*$|$)#',$child_node['pagelink'])!=0)
+						{
+							$struct=$child_node; // Put as container instead
+							$call_struct=false; // Already been called in get_virtual_nodes
+						} else
+						{
+							if ($callback!==NULL)
+								$children[$child_node['pagelink']]=$child_node;
+						}
+					}
 				}
 			}
 		}
@@ -250,40 +266,52 @@ class Hook_sitemap_page extends Hook_sitemap_base
 		if ($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM')
 		{
 			$functions=extract_module_functions($path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
-			if (!is_null($functions[0])
+			if (!is_null($functions[0]))
 			{
 				$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
-				$struct['has_possible_children']=true;
-
-				$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
-
-				if ((isset($entry_points['misc'])) || (isset($entry_points['!'])))
+				if (!is_null($entry_points))
 				{
-					unset($entry_points['misc']);
-				} else
-				{
-					array_shift($entry_points);
+					$struct['has_possible_children']=true;
+
+					$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
+
+					if ((isset($entry_points['misc'])) || (isset($entry_points['!'])))
+					{
+						unset($entry_points['misc']);
+					} else
+					{
+						array_shift($entry_points);
+					}
+
+					foreach (array_keys($entry_points) as $entry_point)
+					{
+						$child_pagelink=$pagelink.':'.$entry_point;
+						$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+						if ($child_node!==NULL)
+							$children[$child_node['pagelink']]=$child_node;
+					}
 				}
-
-				foreach (array_keys($entry_points) as $entry_point)
-				{
-					$child_pagelink=$pagelink.':'.$entry_point;
-					$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
-					if ($child_node!==NULL)
-						$children[]=$child_node;
-				}
+			} else
+			{
+				$call_struct=true; // Module is disabled
 			}
 		}
 
-		// Finalise children
-		foreach ($children as $child_struct)
-		{
-			if ($callback!==NULL)
-				call_user_func($callback,$child_struct);
-		}
-		$struct['children']=$children;
+		if ($callback!==NULL && $call_struct)
+			call_user_func($callback,$struct);
 
-		return ($callback===NULL)?$struct:NULL;
+		// Finalise children
+		if ($callback!==NULL)
+		{
+			foreach ($children as $child_struct)
+			{
+				call_user_func($callback,$child_struct);
+			}
+			$children=array();
+		}
+		$struct['children']=array_values($children);
+
+		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
 }

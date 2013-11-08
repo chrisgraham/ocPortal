@@ -57,9 +57,10 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$orphaned_pages=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$orphaned_pages=NULL,$return_anyway=false)
 	{
 		require_lang('menus');
 
@@ -84,7 +85,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 				if ($page_grouping!='')
 				{
 					$pages_found[$link[2][0]]=true;
-				} elseif ($link[2][1]==array('type'=>$page_groping))
+				} elseif ($link[2][1]==array('type'=>$page_grouping))
 				{
 					$icon=$link[1];
 				}
@@ -170,6 +171,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			require_code('hooks/systems/page_groupings/'.filter_naughty($page_grouping));
 
 			$page_sitemap_ob=$this->_get_sitemap_object('page');
+			$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
 			$comcode_page_sitemap_ob=$this->_get_sitemap_object('comcode_page');
 
 			// Directly defined in page grouping hook
@@ -198,7 +200,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 						$child_pagelink.=':'.urlencode($key).'='.urlencode($val);
 					}
 
-					$child_links[]=array($title,$child_pagelink,$icon,NULL/*unknown/irrelevant $page_type*/,isset($link[4])?comcode_lang_string($link[4]));
+					$child_links[]=array($title,$child_pagelink,$icon,NULL/*unknown/irrelevant $page_type*/,isset($link[4])?comcode_lang_string($link[4]):NULL);
 				}
 			}
 
@@ -234,7 +236,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			}
 
 			// Render children, in title order
-			multi_sort($child_links,0);
+			sort_maps_by($child_links,0);
 			foreach ($child_links as $child_link)
 			{
 				$title=$child_link[0];
@@ -270,7 +272,13 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 						continue;
 					}
 
-					$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+					if (preg_match('#^([^:]*):([^:]*)(:misc|$)#',$pagelink,$matches)!=0)
+					{
+						$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+					} else
+					{
+						$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+					}
 				}
 				if ($child_node!==NULL)
 					$children[]=$child_node;
@@ -278,6 +286,6 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 		}
 		$struct['children']=$children;
 
-		return ($callback===NULL)?$struct:NULL;
+		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
 }

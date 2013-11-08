@@ -76,9 +76,10 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):#',$pagelink,$matches);
@@ -295,6 +296,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 				foreach ($page_groupings[$page_grouping] as $links) // Will only be 1 loop iteration, but this finds us that one easily
 				{
+					$child_links=array();
+
 					foreach ($links as $link)
 					{
 						$title=do_lang($link[3]);
@@ -308,7 +311,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 							$child_pagelink.=':'.urlencode($key).'='.urlencode($val);
 						}
 
-						$child_links[]=array($title,$child_pagelink,$icon,NULL/*unknown/irrelevant $page_type*/,isset($link[4])?comcode_lang_string($link[4]));
+						$child_links[]=array($title,$child_pagelink,$icon,NULL/*unknown/irrelevant $page_type*/,isset($link[4])?comcode_lang_string($link[4]):NULL);
 					}
 
 					foreach ($orphaned_pages as $page=>$page_type)
@@ -321,7 +324,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 					}
 
 					// Render children, in title order
-					multi_sort($child_links,0);
+					sort_maps_by($child_links,0);
 					foreach ($child_links as $child_link)
 					{
 						$title=$child_link[0];
@@ -362,6 +365,6 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 		}
 		$struct['children']=$children;
 
-		return ($callback===NULL)?$struct:NULL;
+		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
 }

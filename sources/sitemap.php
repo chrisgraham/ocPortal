@@ -138,45 +138,13 @@ abstract class Hook_sitemap_base
 	 */
 	protected function _is_page_omitted_from_sitemap($zone,$page)
 	{
-		// Omitted due to not being OCF
-		static $main_zone=NULL;
-		static $ocf_pages=NULL;
-		if ($main_zone===NULL)
-		{
-			$main_zone=(get_option('collapse_user_zones')=='1')?'':'site');
-		}
-		if ($ocf_pages===NULL)
-		{
-			$ocf_pages=array(
-				':join',
-				':lost_password',
-				$main_zone.':users_online',
-				$main_zone.':groups',
-				$main_zone.':members',
-				'forum:vforums',
-				'forum:forumview',
-				'forum:topicview',
-				'forum:topics',
-			);
-		}
-		if ((get_forum_type()!='ocf') && ((preg_match('#^(admin\_|cms\_)?ocf\_#',$page)!=0) || (in_array($zone.':'.$page,$ocf_pages))))
-		{
-			return true;
-		}
-
-		// Omitted due to being OCF
-		if (($page=='forums') && ($zone=='') && ((get_forum_type()=='ocf') || (get_forum_type()=='none')))
-			return true;
-
-		// Other kinds of hidden pages are omitted
+		// Some kinds of hidden pages
 		if (substr($page,0,6)=='panel_') return true;
 		if (substr($page,0,1)=='_') return true;
 		if ($page=='404') return true;
 		if ($page=='sitemap') return true;
 
-		// Omitted due to being logged in
-		if (($page=='join') && ($zone=='') && (is_guest()))
-			return true;
+		// Note that other things are disabled via get_entry_points returning NULL
 
 		return false;
 	}
@@ -225,9 +193,10 @@ abstract class Hook_sitemap_base
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	abstract function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0);
+	abstract function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false);
 
 	/**
 	 * Find details of a position in the Sitemap.
@@ -243,9 +212,10 @@ abstract class Hook_sitemap_base
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL);
+	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false);
 
 	/**
 	 * Check the permissions of the node structure, returning false if they fail for the current user.
@@ -284,6 +254,7 @@ abstract class Hook_sitemap_base
 
 		// Checked implicit match-key permissions
 		$matches=array();
+		$pagelink=$struct['pagelink'];
 		if (preg_match('#^([^:]*):([^:]*):([^:]*)#',$pagelink,$matches)!=0)
 		{
 			$zone=$matches[1];
@@ -437,10 +408,10 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
-	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			A tuple: content ID, row, partial node structure (NULL: filtered).
 	 */
 	function _create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row)
@@ -618,8 +589,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
-	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
+	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @param  string			Extra SQL piece for considering which entries to load.
@@ -627,7 +598,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  ?string		Order by for categories (NULL: alphabetical title)
 	 * @return array			Child nodes.
 	 */
-	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='',$explicit_order_by_entries=NULL,$explicit_order_by_categories=NULL)
+	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='',$explicit_order_by_entries=NULL,$explicit_order_by_subcategories=NULL)
 	{
 		// Filters...
 		if ($recurse_level>=$max_recurse_depth)
@@ -699,7 +670,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 
 						if (is_null($explicit_order_by_entries))
 						{
-							multi_sort($children_entries,'title');
+							sort_maps_by($children_entries,'title');
 							$children=array_merge($children,$children_entries);
 						}
 					}
@@ -737,9 +708,9 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			}
 			while (count($rows)>0);
 
-			if (is_null($explicit_order_by_categories))
+			if (is_null($explicit_order_by_subcategories))
 			{
-				multi_sort($children_categories,'title');
+				sort_maps_by($children_categories,'title');
 				$children=array_merge($children,$children_categories);
 			}
 		}
@@ -787,7 +758,7 @@ function create_selection_list($root_pagelink,$default=NULL,$valid_node_types=NU
 	if (is_null($check_permissions_for)) $check_permissions_for=get_member();
 
 	$out=new ocp_tempcode();
-	$root_node=retrieve_sitemap_node($root_pagelink,NULL,NULL,false,'_SEARCH',$consider_validation,false,is_null($filter_func)?0:SITEMAP_GATHER_DB_ROW);
+	$root_node=retrieve_sitemap_node($root_pagelink,NULL,NULL,NULL,false,'_SEARCH',false,$consider_validation,is_null($filter_func)?0:SITEMAP_GATHER_DB_ROW);
 	foreach ($root_node['children'] as $child_node)
 	{
 		_create_selection_list($out,$child_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func);

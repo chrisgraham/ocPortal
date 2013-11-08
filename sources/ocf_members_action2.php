@@ -313,7 +313,6 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
  * @param  SHORT_TEXT		The username.
  * @param  BINARY				Whether the member is permanently banned.
  * @param  ID_TEXT			The special type of profile this is (blank: not a special type).
- * @param  BINARY				Whether the member likes to view zones without menus, when a choice is available.
  * @param  BINARY				Whether the member username will be highlighted.
  * @param  SHORT_TEXT		Usergroups that may PT the member.
  * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
@@ -359,7 +358,6 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  SHORT_TEXT		The username.
  * @param  BINARY				Whether the member is permanently banned.
  * @param  ID_TEXT			The special type of profile this is (blank: not a special type).
- * @param  ?BINARY			Whether the member likes to view zones without menus, when a choice is available (NULL: calculate statistically).
  * @param  BINARY				Whether the member username will be highlighted.
  * @param  SHORT_TEXT		Usergroups that may PT the member.
  * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
@@ -780,7 +778,6 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
  * @param  ?BINARY			Whether the profile has been validated (NULL: do not change this). (NULL: don't change)
  * @param  ?string			The username. (NULL: don't change)
  * @param  ?string			The password. (NULL: don't change)
- * @param  ?BINARY			Whether the member likes to view zones without menus, when a choice is available. (NULL: don't change)
  * @param  ?BINARY			Whether the member username will be highlighted. (NULL: don't change)
  * @param  ?SHORT_TEXT		Usergroups that may PT the member. (NULL: don't change)
  * @param  ?LONG_TEXT		Rules that other members must agree to before they may start a PT with the member. (NULL: don't change)

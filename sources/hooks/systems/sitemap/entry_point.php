@@ -43,7 +43,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 			if ($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM')
 			{
 				$functions=extract_module_functions($path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
-				if (!is_null($functions[0])
+				if (!is_null($functions[0]))
 				{
 					$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
@@ -77,9 +77,10 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*):([^:]*)$#',$pagelink,$matches);
@@ -167,6 +168,6 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 
 		$struct['children']=array();
 
-		return ($callback===NULL)?$struct:NULL;
+		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
 }

@@ -240,7 +240,7 @@ function init__validation2()
 	$enforce_list_style_image='(none|'.$enforce_functional_url.')';
 	$enforce_id='[a-zA-Z][\w\-\:\.]*';
 	$enforce_name='[\w\-\:\.]+(\[\])?';
-	if (function_exists('require_code'))
+	if (function_exists('get_forum_type'))
 	{
 		require_code('obfuscate');
 		$enforce_link=((get_forum_type()=='none')?'(mailto:.*)?':'').'(mailto:.*|'.preg_quote(mailto_obfuscated(),'#').'.*)?[^\s\#]*(\#[^\s\#]*)?';

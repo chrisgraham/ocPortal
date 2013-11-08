@@ -470,15 +470,23 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		static $addon_files=NULL;
 		if ($addon_files===NULL)
 		{
-			$addon_files=array_map('strtolower',collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'))));
+			$addon_files=function_exists('collapse_1d_complexity')?array_map('strtolower',collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename')))):array();
 			$hooks=find_all_hooks('systems','addon_registry');
 			foreach ($hooks as $hook=>$place)
 			{
 				if ($place=='sources_custom')
 				{
-					require_code('addons');
-					$addon_info=read_addon_info($hook);
-					$addon_files=array_merge($addon_files,$addon_info['files']);
+					if (function_exists('filter_naughty_harsh'))
+					{
+						require_code('addons');
+						$addon_info=read_addon_info($hook);
+						$addon_files=array_merge($addon_files,$addon_info['files']);
+					} else // Running from outside ocPortal
+					{
+						require_code('hooks/systems/addon_registry/'.$hook);
+						$ob=object_factory('Hook_addon_registry_'.$hook);
+						$addon_files=array_merge($addon_files,array_map('strtolower',$ob->get_file_list()));
+					}
 				}
 			}
 		}

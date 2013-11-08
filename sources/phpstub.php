@@ -2425,8 +2425,8 @@ function min($arg1,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=
  *
  * @param  PATH			The path to the directory to make.
  * @param  integer		The mode (e.g. 0777).
- * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @param  boolean		Whether to do recursively.
+ * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return boolean		Success status.
  */
 function mkdir($path,$mode,$recursive=false,$context=NULL)

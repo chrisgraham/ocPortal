@@ -28,6 +28,34 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 	protected $entry_sitetree_hook=array('catalogue_category');
 
 	/**
+	 * Find if a page-link will be covered by this node.
+	 *
+	 * @param  ID_TEXT		The page-link.
+	 * @return integer		A SITEMAP_NODE_* constant.
+	 */
+	function handles_pagelink($pagelink)
+	{
+		$matches=array();
+		if (preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches)!=0)
+		{
+			$zone=$matches[1];
+			$page=$matches[2];
+
+			require_code('content');
+			$cma_ob=get_content_object($this->content_type);
+			$cma_info=$cma_ob->info();
+			require_code('site');
+			if (($cma_info['module']==$page) && ($zone!='_SEARCH') && (_request_page($page,$zone)!==false)) // Ensure the given page matches the content type, and it really does exist in the given zone
+			{
+				if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED_VIRTUALLY; // No type/ID specified
+				if (preg_match('#^([^:]*):([^:]*):(index|atoz|misc)(:|$)#',$pagelink,$matches)!=0)
+					return SITEMAP_NODE_HANDLED;
+			}
+		}
+		return SITEMAP_NODE_NOT_HANDLED;
+	}
+
+	/**
 	 * Get the permission page that nodes matching $pagelink in this hook are tied to.
 	 * The permission page is where privileges may be overridden against.
 	 *
@@ -52,11 +80,12 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
-		$nodes=($callback===NULL)?array():mixed();
+		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
 		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
 		{
@@ -71,7 +100,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 		$start=0;
 		do
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),NULL,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+			$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_is_tree'),NULL,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
 				if (substr($row['c_name'],0,1)!='_')
@@ -79,20 +108,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 					// Index
 					$child_pagelink=$zone.':catalogues:index:'.$row['c_name'];
 					$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-					if ($callback===NULL) $nodes[]=$node;
-
-					// A-to-Z
-					$child_pagelink=$zone.':catalogues:atoz:'.$row['c_name'];
-					$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-					if ($callback===NULL) $nodes[]=$node;
-
-					// Categories
-					$lots=($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']))>1000) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read));
-					if (!$lots)
-					{
-						$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-						if ($callback===NULL) $nodes=array_merge($nodes,$children);
-					}
+					if ($callback===NULL || $return_anyway) $nodes[]=$node;
 				}
 			}
 
@@ -117,9 +133,10 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		if ($_===NULL) return NULL;
@@ -132,7 +149,33 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 			'permission_page'=>$this->get_permission_page($pagelink),
 		)+$partial_struct;
 
-		if (strpos($pagelink,':atoz:')!==false)
+		if (strpos($pagelink,':index:')!==false)
+		{
+			$test=find_theme_image('icons/24x24/menu/rich_content/catalogues/'.$content_id,true);
+			if ($test!='')
+				$struct['image']=$test;
+			$test=find_theme_image('icons/48x48/menu/rich_content/catalogues/'.$content_id,true);
+			if ($test!='')
+				$struct['image_2x']=$test;
+
+			$children=array();
+
+			// A-to-Z
+			$child_pagelink=$zone.':catalogues:atoz:'.$row['c_name'];
+			$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+			if ($child_node!==NULL) $children[]=$child_node;
+
+			// Categories
+			$lots=($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']))>1000);
+			if (!$lots)
+			{
+				$more_children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+				$children=array_merge($children,$more_children);
+			}
+
+			$this->children=$children;
+		}
+		elseif (strpos($pagelink,':atoz:')!==false)
 		{
 			$test=find_theme_image('icons/24x24/menu/rich_content/atoz',true);
 			if ($test!='')
@@ -142,12 +185,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 				$struct['image_2x']=$test;
 		} else
 		{
-			$test=find_theme_image('icons/24x24/menu/rich_content/catalogues/'.$content_id,true);
-			if ($test!='')
-				$struct['image']=$test;
-			$test=find_theme_image('icons/48x48/menu/rich_content/catalogues/'.$content_id,true);
-			if ($test!='')
-				$struct['image_2x']=$test;
+			warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		}
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
@@ -155,6 +193,6 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 
-		return ($callback===NULL)?$struct:NULL;
+		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
 }

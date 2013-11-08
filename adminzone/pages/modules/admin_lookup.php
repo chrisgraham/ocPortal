@@ -47,10 +47,13 @@ class Module_admin_lookup
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
 	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
+		if ($be_deferential && get_forum_type()=='ocf') return NULL;
+
 		return array(
 			'!'=>array('INVESTIGATE_USER','menu/adminzone/tools/users/investigate_user'),
 		);

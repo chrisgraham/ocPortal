@@ -31,7 +31,7 @@ class Hook_page_groupings_collaboration_zone
 		if (!addon_installed('collaboration_zone')) return array();
 
 		return array(
-			array('collaboration','menu/collaboration',array('start',array(),'collaboration')),do_lang_tempcode('COLLABORATION')),
+			array('collaboration','menu/collaboration',array('start',array(),'collaboration'),do_lang_tempcode('COLLABORATION')),
 		);
 	}
 

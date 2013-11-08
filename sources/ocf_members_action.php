@@ -53,7 +53,6 @@
  * @param  boolean			Whether to check details for correctness.
  * @param  ?ID_TEXT			The compatibility scheme that the password operates in (blank: none) (NULL: none [meaning normal ocPortal salted style] or plain, depending on whether passwords are encrypted).
  * @param  SHORT_TEXT		The password salt (blank: password compatibility scheme does not use a salt / auto-generate).
- * @param  ?BINARY			Whether the member likes to view zones without menus, when a choice is available (NULL: calculate statistically).
  * @param  ?TIME				The time the member last made a submission (NULL: set to now).
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
  * @param  BINARY				Whether the member username will be highlighted.

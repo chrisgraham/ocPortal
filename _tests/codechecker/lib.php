@@ -34,8 +34,6 @@ function parse_file($to_use,$verbose=false,$very_verbose=false,$i=NULL,$count=NU
 
 	if ($verbose) echo '<hr /><p>DOING '.$to_use.'</p>';
 	if ($verbose) echo '<pre>';
-	if ($very_verbose) echo '0000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999'."\n";
-	if ($very_verbose) echo '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789'."\n";
 	if ($very_verbose) echo '<b>Our code...</b>'."\n";
 	if ($very_verbose) echo htmlentities($TEXT);
 	if ($verbose) echo "\n\n".'<b>Starting lexing...</b>'."\n";
@@ -74,6 +72,50 @@ function unixify_line_format($in)
 {
 	$in=str_replace("\r\n","\n",$in);
 	return str_replace("\r","\n",$in);
+}
+
+function object_factory($class)
+{
+	return new $class;
+}
+
+function find_all_hooks($type,$entry)
+{
+	$out=array();
+
+	if (strpos($type,'..')!==false)
+		$type=filter_naughty($type);
+	if (strpos($entry,'..')!==false)
+		$entry=filter_naughty($entry);
+	$dir=get_file_base().'/sources/hooks/'.$type.'/'.$entry;
+	$dh=@scandir($dir);
+	if ($dh!==false)
+	{
+		foreach ($dh as $file)
+		{
+			$basename=basename($file,'.php');
+			if (($file[0]!='.') && ($file==$basename.'.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/)
+			{
+				$out[$basename]='sources';
+			}
+		}
+	}
+
+	$dir=get_file_base().'/sources_custom/hooks/'.$type.'/'.$entry;
+	$dh=@scandir($dir);
+	if ($dh!==false)
+	{
+		foreach ($dh as $file)
+		{
+			$basename=basename($file,'.php');
+			if (($file[0]!='.') && ($file==$basename.'.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/)
+			{
+				$out[$basename]='sources_custom';
+			}
+		}
+	}
+
+	return $out;
 }
 
 function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
@@ -206,5 +248,61 @@ function log_special($type,$value)
 	if (!isset($GLOBALS[$type])) $GLOBALS[$type]=fopen('special_'.$START_TIME.'_'.$type.'.log','at');
 	fwrite($GLOBALS[$type],$value."\n");
 	//fclose($GLOBALS[$$type]);
+}
+
+function require_code($codename)
+{
+	global $OCPORTAL_PATH;
+	if (file_exists($OCPORTAL_PATH.'/sources_custom/'.$codename.'.php'))
+		require_once($OCPORTAL_PATH.'/sources_custom/'.$codename.'.php');
+	else
+		require_once($OCPORTAL_PATH.'/sources/'.$codename.'.php');
+}
+
+function filter_naughty($in)
+{
+	return $in;
+}
+
+function do_lang_tempcode($x,$a=NULL,$b=NULL,$c=NULL,$d=NULL)
+{
+	global $PARSED;
+	if (!isset($PARSED))
+	{
+		$temp=file_get_contents('lang/php.ini');
+		$temp_2=explode("\n",$temp);
+		$PARSED=array();
+		foreach ($temp_2 as $p)
+		{
+			$pos=strpos($p,'=');
+			if ($pos!==false)
+			{
+				$PARSED[substr($p,0,$pos)]=substr($p,$pos+1);
+			}
+		}
+	}
+	$out=strip_tags(str_replace('{1}',$a,str_replace('{2}',$b,$PARSED[$x])));
+	if (is_string($c))
+	{
+		$out=str_replace('{3}',$c,$out);
+	} else
+	{
+		$out=@str_replace('{3}',$c[0],$out);
+		$out=@str_replace('{4}',$c[1],$out);
+		$out=@str_replace('{5}',$c[2],$out);
+		$out=@str_replace('{6}',$c[3],$out);
+	}
+	return rtrim($out);
+}
+
+function escape_html($in)
+{
+	return $in;
+}
+
+function fatal_exit($message)
+{
+	global $TO_USE,$LINE,$OCPORTAL_PATH;
+	echo('ISSUE "'.substr($TO_USE,strlen($OCPORTAL_PATH)+1).'" '.strval($LINE).' 0 '.$message.cnl());
 }
 

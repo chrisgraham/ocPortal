@@ -47,9 +47,10 @@ class Module_admin_zones
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
 	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
+	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
 			'misc'=>array('ZONES','menu/adminzone/structure/zones/zones'),
@@ -542,13 +543,11 @@ class Module_admin_zones
 	 * @param  ID_TEXT		The zones default page
 	 * @param  SHORT_TEXT	The header text
 	 * @param  ?ID_TEXT		The theme (NULL: no override)
-	 * @param  BINARY			Whether the zone is wide
 	 * @param  BINARY			Whether the zone requires a session for pages to be used
-	 * @param  BINARY			Whether the zone in displayed in the menu coded into some themes
 	 * @param  ?ID_TEXT		Name of the zone (NULL: unknown)
 	 * @return array			A tuple: The tempcode for the fields, hidden fields, and extra Javascript
 	 */
-	function get_form_fields($in_zone_editor=false,$title='',$default_page='start',$header_text='',$theme=NULL,$wide=0,$require_session=0,$zone=NULL)
+	function get_form_fields($in_zone_editor=false,$title='',$default_page='start',$header_text='',$theme=NULL,$require_session=0,$zone=NULL)
 	{
 		require_lang('permissions');
 

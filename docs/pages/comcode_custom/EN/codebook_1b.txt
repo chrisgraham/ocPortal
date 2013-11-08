@@ -723,7 +723,7 @@ Rather than an CRUD module having a '[tt]run[/tt]' method like most modules, the
 
 CRUD module's define entry-points in a [tt]get_entry_point[/tt] method like other module's do, however they also tie into the base class's function to return a compound result, as follows:
 [code="PHP"]
-function get_entry_points()
+function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 {
 	return array_merge(array('misc'=>'IOTDS'),parent::get_entry_points());
 }

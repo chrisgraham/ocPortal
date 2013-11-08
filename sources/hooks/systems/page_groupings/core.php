@@ -80,10 +80,10 @@ class Hook_page_groupings_core
 			(addon_installed('code_editor'))?array('tools','menu/adminzone/tools/code_editor',array('admin_config',array('type'=>'code_editor'),get_module_zone('admin_config')),do_lang_tempcode('CODE_EDITOR'),'DOC_CODE_EDITOR'):NULL,
 
 			(get_comcode_zone('start')===NULL)?NULL:array('','menu/start',array('start',array(),get_comcode_zone('start')),do_lang_tempcode('HOME')),
-			array('','menu/pages',array(NULL,array(),NULL)),do_lang_tempcode('PAGES')),
-			array('','menu/rich_content',array(NULL,array(),NULL)),do_lang_tempcode('menus:RICH_CONTENT')),
-			array('','menu/site_meta',array(NULL,array(),NULL)),do_lang_tempcode('menus:SITE_META')),
-			array('','menu/social',array(NULL,array(),NULL)),do_lang_tempcode('SECTION_SOCIAL')),
+			array('','menu/pages',array(NULL,array(),NULL),do_lang_tempcode('PAGES')),
+			array('','menu/rich_content',array(NULL,array(),NULL),do_lang_tempcode('menus:RICH_CONTENT')),
+			array('','menu/site_meta',array(NULL,array(),NULL),do_lang_tempcode('menus:SITE_META')),
+			array('','menu/social',array(NULL,array(),NULL),do_lang_tempcode('SECTION_SOCIAL')),
 
 			(get_comcode_zone('about')===NULL)?NULL:array('pages','menu/pages/about_us',array('about',array(),get_comcode_zone('site_meta')),do_lang_tempcode('menus:ABOUT')),
 			(get_comcode_zone('keymap')===NULL || get_option('collapse_user_zones')=='1'/*If collapsed then will show as child page of help page*/)?NULL:array('site_meta','menu/pages/keymap',array('keymap',array(),get_comcode_zone('keymap')),do_lang_tempcode('KEYBOARD_MAP')),
@@ -93,8 +93,8 @@ class Hook_page_groupings_core
 			//(get_comcode_zone('sitemap')===NULL || get_option('bottom_show_sitemap_button')=='1')?NULL:array('site_meta','tool_buttons/sitemap',array('sitemap',array(),get_comcode_zone('sitemap')),do_lang_tempcode('SITEMAP')),	Redundant, menu itself is a sitemap
 			// userguide_comcode is child of help_page
 
-			(get_forum_type()=='none' || !is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/login',array('login',array(),'')),do_lang_tempcode('_LOGIN')),
-			(get_forum_type()=='none' || is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/logout',array('login',array(),'')),do_lang_tempcode('LOGOUT')),
+			(get_forum_type()=='none' || !is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/login',array('login',array(),''),do_lang_tempcode('_LOGIN')),
+			(get_forum_type()=='none' || is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/logout',array('login',array(),''),do_lang_tempcode('LOGOUT')),
 
 			(get_forum_type()=='ocf')?NULL:array('site_meta','menu/site_meta/user_actions/join',array('join',array(),get_module_zone('join')),do_lang_tempcode('_JOIN')),
 			(get_forum_type()=='ocf')?NULL:array('site_meta','menu/site_meta/user_actions/lost_password',array('lost_password',array(),get_module_zone('lost_password')),do_lang_tempcode('ocf:LOST_PASSWORD')),

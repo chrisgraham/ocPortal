@@ -61,11 +61,12 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
-		$nodes=($callback===NULL)?array():mixed();
+		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
 		if (($valid_node_types!==NULL) && (!in_array('search',$valid_node_types)))
 		{
@@ -90,7 +91,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			{
 				$child_pagelink=$zone.':search:misc:'.$hook;
 				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				if ($callback===NULL) $nodes[]=$node;
+				if ($callback===NULL || $return_anyway) $nodes[]=$node;
 			}
 		}
 
@@ -111,9 +112,10 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
+	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$pagelink,$matches);
@@ -173,7 +175,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			if ($callback!==NULL)
 				call_user_func($callback,$struct);
 
-			return ($callback===NULL)?$struct:NULL;
+			return ($callback===NULL || $return_anyway)?$struct:NULL;
 		}
 
 		require_code('hooks/modules/search/'.filter_naughty_harsh($hook));
@@ -234,6 +236,6 @@ class Hook_sitemap_search extends Hook_sitemap_base
 		}
 		$struct['children']=$children;
 
-		return ($callback===NULL)?$struct:NULL;
+		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
 }
