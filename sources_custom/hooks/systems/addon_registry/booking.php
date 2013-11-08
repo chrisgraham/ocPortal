@@ -122,7 +122,7 @@ You may wish to deny access to the usergroup and member directories when using t
 	 */
 	function get_default_icon()
 	{
-		return 'themes/default/images_custom/icons/48x48/menu/booking.png';
+		return 'themes/default/images_custom/icons/48x48/menu/book.png';
 	}
 
 	/**
@@ -133,10 +133,12 @@ You may wish to deny access to the usergroup and member directories when using t
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images_custom/icons/24x24/menu/book.png',
 			'themes/default/images_custom/icons/24x24/menu/blacked.png',
 			'themes/default/images_custom/icons/24x24/menu/bookable.png',
 			'themes/default/images_custom/icons/24x24/menu/booking.png',
 			'themes/default/images_custom/icons/24x24/menu/supplement.png',
+			'themes/default/images_custom/icons/48x48/menu/book.png',
 			'themes/default/images_custom/icons/48x48/menu/blacked.png',
 			'themes/default/images_custom/icons/48x48/menu/bookable.png',
 			'themes/default/images_custom/icons/48x48/menu/booking.png',

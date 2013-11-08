@@ -76,7 +76,7 @@
 			}
 			if (data[i][6]==1)
 			{
-				var starIcon="{$BASE_URL#}/themes/default/images_custom/star-3.png";
+				var starIcon="{$BASE_URL#}/themes/default/images_custom/star_highlight.png";
 				marker_options.icon=starIcon;
 			}
 

@@ -53,12 +53,12 @@ form.activities_remove .remove_cross {
 }
 
 form.activities_remove .remove_cross:hover {
-	background: url('{$IMG;,stop12Hover}') transparent no-repeat;
+	background: url('{$IMG;,stop12_hover}') transparent no-repeat;
 	cursor: pointer;
 }
 
 form.activities_remove .remove_cross:active {
-	background: url('{$IMG;,stop12Active}') transparent no-repeat;
+	background: url('{$IMG;,stop12_active}') transparent no-repeat;
 	cursor: pointer;
 }
 

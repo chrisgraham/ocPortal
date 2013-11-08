@@ -196,6 +196,27 @@ class Hook_sitemap_page extends Hook_sitemap_base
 			'permission_page'=>NULL,
 		);
 
+		switch ($details[0])
+		{
+			case 'HTML':
+			case 'HTML_CUSTOM':
+				$page_contents=file_get_contents($path);
+				$matches=array();
+				if (preg_match('#\<title[^\>]*\>#',$page_contents,$matches)!=0)
+				{
+					$start=strpos($page_contents,$matches[0])+strlen($matches[0]);
+					$end=strpos($page_contents,'</title>',$start);
+					$struct['title']=make_string_tempcode(substr($page_contents,$start,$end-$start),ENT_QUOTES,get_charset());
+				}
+				break;
+
+			case 'MODULES':
+			case 'MODULES_CUSTOM':
+				require_all_lang();
+				$struct['title']=do_lang_tempcode('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
+				break;
+		}
+
 		$this->_ameliorate_with_row($struct,$row);
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
@@ -237,7 +258,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 				$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
 
-				if (isset($entry_points['misc']))
+				if ((isset($entry_points['misc'])) || (isset($entry_points['!'])))
 				{
 					unset($entry_points['misc']);
 				} else

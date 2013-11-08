@@ -101,7 +101,13 @@ class Module_tester
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		return array('add_test'=>'ADD_TEST','ad'=>'ADD_TEST_SECTION','ed'=>'EDIT_TEST_SECTION','go'=>'RUN_THROUGH_TESTS','stats'=>'TEST_STATISTICS');
+		return array(
+			'add_test'=>array('ADD_TEST','menu/_generic_admin/add_one'),
+			'ad'=>array('ADD_TEST_SECTION','menu/_generic_admin/add_one_category'),
+			'ed'=>array('EDIT_TEST_SECTION','menu/_generic_admin/edit_one_category'),
+			'go'=>array('RUN_THROUGH_TESTS','buttons/proceed'),
+			'stats'=>array('TEST_STATISTICS','menu/_generic_admin/view_this'),
+		);
 	}
 
 	var $title;

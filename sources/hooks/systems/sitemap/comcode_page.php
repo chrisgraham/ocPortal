@@ -174,6 +174,16 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 			{
 				$struct['title']=make_string_tempcode(escape_html(get_translated_text($row_db[0]['cc_page_title'])));
 			}
+		} else
+		{
+			$page_contents=file_get_contents($path);
+			$matches=array();
+			if (preg_match('#\[title[^\]]*\]#',$page_contents,$matches)!=0)
+			{
+				$start=strpos($page_contents,$matches[0])+strlen($matches[0]);
+				$end=strpos($page_contents,'[/title]',$start);
+				$struct['title']=comcode_to_tempcode(substr($page_contents,$start,$end-$start),NULL,true);
+			}
 		}
 
 		if (!$this->_check_node_permissions($struct)) return NULL;

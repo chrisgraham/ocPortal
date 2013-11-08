@@ -24,7 +24,7 @@ class Hook_page_groupings_booking
 	function run()
 	{
 		return array(
-			array('cms','menu/booking',array('cms_booking',array(),get_page_zone('cms_booking')),do_lang_tempcode('booking:BOOKINGS'),'booking:DOC_BOOKING')
+			array('cms','menu/book',array('cms_booking',array(),get_page_zone('cms_booking')),do_lang_tempcode('booking:BOOKINGS'),'booking:DOC_BOOKING')
 		);
 	}
 

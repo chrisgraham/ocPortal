@@ -210,22 +210,23 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					// Any left-behind pages
 					$orphaned_pages=array();
 					$pages=find_all_pages_wrap($zone,false,/*$consider_redirects=*/true);
-					$main_zone=(get_option('collapse_user_zones')=='1')?'':'site');
-					$ocf_pages=array('forum:vforums','forum:forumview','forum:topicview','forum:topics',$main_zone.':groups',$main_zone.':members');
 					foreach ($pages as $page=>$page_type)
 					{
+						if (is_integer($page)) $page=strval($page);
+
 						if ((!isset($pages_found[$page])) && ((strpos($page_type,'comcode_page')===false) || (isset($root_comcode_pages[$page]))))
 						{
-							if ((get_forum_type()!='ocf') && ((preg_match('#^(admin\_|cms\_)?ocf\_#',$page)!=0) || (in_array($zone.':'.$page,$ocf_pages))))
-								continue;
+							if ($this->_is_page_omitted_from_sitemap($zone,$page)) continue;
 
 							$orphaned_pages[$page]=$page_type;
 						}
 					}
 				}
 
-				foreach ($orphaned_pages as $page=>$oage_type)
+				foreach ($orphaned_pages as $page=>$page_type)
 				{
+					if (is_integer($page)) $page=strval($page);
+
 					$child_pagelink=$zone.':'.$page;
 
 					$child_links[]=array(titleify($page),$child_pagelink,NULL,$page_type,NULL);

@@ -119,6 +119,16 @@ ocWorld is a full zone addon for ocPortal.';
 	}
 
 	/**
+	 * Explicitly say which icon should be used
+	 *
+	 * @return URLPATH		Icon
+	 */
+	function get_default_icon()
+	{
+		return 'themes/default/images_custom/icons/48x48/menu/ocworld.png';
+	}
+
+	/**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
@@ -126,6 +136,8 @@ ocWorld is a full zone addon for ocPortal.';
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images_custom/icons/24x24/menu/ocworld.png',
+			'themes/default/images_custom/icons/48x48/menu/ocworld.png',
 			'sources_custom/hooks/systems/addon_registry/oc_world.php',
 			'data_custom/modules/ocworld/index.html',
 			'sources_custom/hooks/modules/admin_themewizard/ocworld.php',

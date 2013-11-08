@@ -52,7 +52,7 @@ class Module_admin_setupwizard
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
 		return array(
-			'misc'=>array('SETUP_WIZARD','menu/adminzone/setup/setup_wizard'),
+			'misc'=>array('SETUPWIZARD','menu/adminzone/setup/SETUPWIZARD'),
 		);
 	}
 
@@ -81,7 +81,7 @@ class Module_admin_setupwizard
 			//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
 		}
 
-		$this->title=get_screen_title('SETUP_WIZARD_STEP',true,array(integer_format(max(10,intval(substr($type,4)))),integer_format(10)));
+		$this->title=get_screen_title('SETUPWIZARD_STEP',true,array(integer_format(max(10,intval(substr($type,4)))),integer_format(10)));
 
 		return NULL;
 	}
@@ -139,7 +139,7 @@ class Module_admin_setupwizard
 			if (!addon_installed($aa))
 			{
 				$addon_management=build_url(array('page'=>'admin_addons'),get_module_zone('admin_addons'));
-				attach_message(do_lang_tempcode('ADDONS_NOT_INSTALLED_IN_SETUP_WIZARD',escape_html($addon_management->evaluate())),'notice');
+				attach_message(do_lang_tempcode('ADDONS_NOT_INSTALLED_IN_SETUPWIZARD',escape_html($addon_management->evaluate())),'notice');
 				break;
 			}
 		}
@@ -149,9 +149,9 @@ class Module_admin_setupwizard
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF',array('keep_theme_seed','keep_theme_dark','keep_theme_source','keep_theme_algorithm'));
 		$text=new ocp_tempcode();
-		$text->attach(paragraph(do_lang_tempcode($done_once?'SETUP_WIZARD_1_DESCRIBE_ALT':'SETUP_WIZARD_1_DESCRIBE')));
+		$text->attach(paragraph(do_lang_tempcode($done_once?'SETUPWIZARD_1_DESCRIBE_ALT':'SETUPWIZARD_1_DESCRIBE')));
 		$rescue_url=build_url(array('page'=>'','keep_safe_mode'=>'1'),'');
-		$text->attach(paragraph(do_lang_tempcode('SETUP_WIZARD_SAFE_MODE',escape_html($rescue_url->evaluate()),escape_html(find_theme_image('footer/ocpchat')))));
+		$text->attach(paragraph(do_lang_tempcode('SETUPWIZARD_SAFE_MODE',escape_html($rescue_url->evaluate()),escape_html(find_theme_image('footer/ocpchat')))));
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		$fields=new ocp_tempcode();
@@ -182,7 +182,7 @@ class Module_admin_setupwizard
 	function step3()
 	{
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step4'),'_SELF');
-		$text=do_lang_tempcode('SETUP_WIZARD_3_DESCRIBE');
+		$text=do_lang_tempcode('SETUPWIZARD_3_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		require_code('form_templates');
@@ -247,7 +247,7 @@ class Module_admin_setupwizard
 	function step4()
 	{
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step5'),'_SELF');
-		$text=do_lang_tempcode('SETUP_WIZARD_4_DESCRIBE');
+		$text=do_lang_tempcode('SETUPWIZARD_4_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		require_code('form_templates');
@@ -476,7 +476,7 @@ class Module_admin_setupwizard
 		require_lang('menus');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step6'),'_SELF');
-		$text=do_lang_tempcode('SETUP_WIZARD_5_DESCRIBE');
+		$text=do_lang_tempcode('SETUPWIZARD_5_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		require_code('form_templates');
@@ -583,7 +583,7 @@ class Module_admin_setupwizard
 		ksort($side_blocks);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step7'),'_SELF');
-		$text=do_lang_tempcode('SETUP_WIZARD_6_DESCRIBE');
+		$text=do_lang_tempcode('SETUPWIZARD_6_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		require_code('form_templates');
@@ -684,7 +684,7 @@ class Module_admin_setupwizard
 	function step7()
 	{
 		$post_url=build_url(array('page'=>'_SELF','type'=>(addon_installed('themewizard') && (function_exists('imagecreatefromstring')))?'step8':'step9'),'_SELF');
-		$text=do_lang_tempcode('SETUP_WIZARD_7_DESCRIBE');
+		$text=do_lang_tempcode('SETUPWIZARD_7_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		$installprofile=post_param('installprofile','');
@@ -697,9 +697,9 @@ class Module_admin_setupwizard
 
 		require_code('form_templates');
 		$list=new ocp_tempcode();
-		$list->attach(form_input_list_entry('balanced',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='balanced'):true,do_lang_tempcode('SETUP_WIZARD_RULES_balanced')));
-		$list->attach(form_input_list_entry('liberal',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='liberal'):false,do_lang_tempcode('SETUP_WIZARD_RULES_liberal')));
-		$list->attach(form_input_list_entry('corporate',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='corporate'):false,do_lang_tempcode('SETUP_WIZARD_RULES_corporate')));
+		$list->attach(form_input_list_entry('balanced',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='balanced'):true,do_lang_tempcode('SETUPWIZARD_RULES_balanced')));
+		$list->attach(form_input_list_entry('liberal',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='liberal'):false,do_lang_tempcode('SETUPWIZARD_RULES_liberal')));
+		$list->attach(form_input_list_entry('corporate',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='corporate'):false,do_lang_tempcode('SETUPWIZARD_RULES_corporate')));
 		$fields=form_input_list(do_lang_tempcode('RULES'),do_lang_tempcode('DESCRIPTION_RULES'),'rules',$list,NULL,true);
 		$javascript="document.getElementById('rules').onchange=function () { var items=['preview_box_balanced','preview_box_liberal','preview_box_corporate']; var i; for (i=0;i<items.length;i++) document.getElementById(items[i]).style.display=(this.selectedIndex!=i)?'none':'block'; }";
 		$form=do_template('FORM',array('_GUID'=>'bf01a2b90967e86213ae0672c36a4b4e','SKIPPABLE'=>'skip_7','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),'JAVASCRIPT'=>$javascript));
@@ -722,7 +722,7 @@ class Module_admin_setupwizard
 		require_code('themewizard');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step9'),'_SELF');
-		$text=do_lang_tempcode('SETUP_WIZARD_8_DESCRIBE');
+		$text=do_lang_tempcode('SETUPWIZARD_8_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		require_code('form_templates');
@@ -752,7 +752,7 @@ class Module_admin_setupwizard
 	function step9()
 	{
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step10'),'_SELF');
-		$text=do_lang_tempcode('SETUP_WIZARD_9_DESCRIBE');
+		$text=do_lang_tempcode('SETUPWIZARD_9_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		require_code('form_templates');
@@ -1105,7 +1105,7 @@ class Module_admin_setupwizard
 			),
 			do_lang('PAGES'),
 			NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
-			paragraph(do_lang_tempcode('SETUP_WIZARD_10_DESCRIBE'))
+			paragraph(do_lang_tempcode('SETUPWIZARD_10_DESCRIBE'))
 		);
 	}
 }

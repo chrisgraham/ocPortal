@@ -474,31 +474,7 @@ class Module_admin
 					$_entrypoints=extract_module_functions_page($zone,$page,array('get_entry_points'));
 					if (!is_null($_entrypoints[0]))
 					{
-						if ((is_array($_entrypoints[0])) || (strpos($_entrypoints[0],'::')===false))
-						{
-							$entry_points=is_array($_entrypoints[0])?call_user_func_array($_entrypoints[0][0],$_entrypoints[0][1]):eval($_entrypoints[0]);
-						} else
-						{
-							$path=zone_black_magic_filterer(filter_naughty($zone).(($zone=='')?'':'/').'pages/modules_custom/'.filter_naughty($page).'.php',true);
-							if (!file_exists(get_file_base().'/'.$path)) $path=zone_black_magic_filterer(filter_naughty($zone).'/pages/modules/'.filter_naughty($page).'.php',true);
-							if ((!HIPHOP_PHP) && ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') || (get_option('has_low_memory_limit')==='1')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_crud_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
-							{
-								$new_code=str_replace('parent::get_entry_points()','array()',$_entrypoints[0]);
-								if (strpos($new_code,'parent::')!==false) continue;
-								$entry_points=eval($new_code);
-							} else
-							{
-								require_code($path);
-								if (class_exists('Mx_'.filter_naughty_harsh($page)))
-								{
-									$object=object_factory('Mx_'.filter_naughty_harsh($page));
-								} else
-								{
-									$object=object_factory('Module_'.filter_naughty_harsh($page));
-								}
-								$entry_points=$object->get_entry_points();
-							}
-						}
+						$entry_points=is_array($_entrypoints[0])?call_user_func_array($_entrypoints[0][0],$_entrypoints[0][1]):eval($_entrypoints[0]);
 						if ($page=='admin_themes')
 						{
 							$entry_points['!themes']='EDIT_CSS';
@@ -506,9 +482,9 @@ class Module_admin
 							$entry_points['!!!themes']='MANAGE_THEME_IMAGES';
 						}
 						if (is_null($entry_points)) $entry_points=array();
-						foreach ($entry_points as $type=>$lang)
+						foreach ($entry_points as $type=>$ep_parts)
 						{
-							if (!is_string($lang)) $lang=$lang[0];
+							$lang=$ep_parts[0];
 
 							$type=str_replace('!','',$type); // The ! was a hackerish thing just to multiply-up possibilities for the single entry-point
 							$n=(preg_match('#^[A-Z\_]+$#',$val)==0)?make_string_tempcode($val):do_lang_tempcode($val);

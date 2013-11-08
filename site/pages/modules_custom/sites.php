@@ -113,7 +113,10 @@ class Module_sites
 	 */
 	function get_entry_points()
 	{
-		return array('myocp'=>'MO_ADD_SITE','misc'=>'OC_DOWNLOAD_NOW');
+		return array(
+			'myocp'=>array('MO_ADD_SITE','menu/_generic_admin/add_one'),
+			'misc'=>array('OC_DOWNLOAD_NOW','menu/rich_content/downloads'),
+		);
 	}
 
 	var $title;

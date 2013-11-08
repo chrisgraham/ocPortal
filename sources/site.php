@@ -824,7 +824,7 @@ function do_site()
 				require_lang('config');
 				$setupwizard_url=build_url(array('page'=>'admin_setupwizard'),get_module_zone('admin_setupwizard'));
 				$cancel_sw_url=get_self_url(false,false,array('cancel_sw_warn'=>1));
-				attach_message(do_lang_tempcode('SETUP_WIZARD_NOT_RUN',escape_html($setupwizard_url->evaluate()),escape_html($cancel_sw_url->evaluate())),'notice');
+				attach_message(do_lang_tempcode('SETUPWIZARD_NOT_RUN',escape_html($setupwizard_url->evaluate()),escape_html($cancel_sw_url->evaluate())),'notice');
 			}
 		}
 	}

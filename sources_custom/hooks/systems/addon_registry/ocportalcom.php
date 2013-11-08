@@ -105,6 +105,7 @@ class Hook_addon_registry_ocportalcom
 	{
 		return array(
 			'requires'=>array(
+				'downloads',
 			),
 			'recommends'=>array(
 			),

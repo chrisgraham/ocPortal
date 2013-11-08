@@ -93,8 +93,6 @@ class Module_classifieds
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true)
 	{
-		require_lang('classifieds');
-
 		$ret=array();
 		if (!$check_perms || !is_guest($member_id))
 		{

@@ -70,12 +70,12 @@ foreach ($zones2 as $z)
 
 			if (has_page_access(get_member(),$page,$zone))
 			{
-				$_entrypoints=array();
-				$__entrypoints=extract_module_functions_page($zone,$page,array('get_entry_points'));
-				if (!is_null($__entrypoints[0]))
+				$_entry_points=array();
+				$__entry_points=extract_module_functions_page($zone,$page,array('get_entry_points'));
+				if (!is_null($__entry_points[0]))
 				{
-					$entrypoints=is_array($__entrypoints[0])?call_user_func_array($__entrypoints[0][0],$__entrypoints[0][1]):((strpos($__entrypoints[0],'::')!==false)?NULL:eval($__entrypoints[0])); // The strpos thing is a little hack that allows it to work for base-class derived modules
-					if (is_null($entrypoints))
+					$entry_points=is_array($__entry_points[0])?call_user_func_array($__entry_points[0][0],$__entry_points[0][1]):((strpos($__entry_points[0],'::')!==false)?NULL:eval($__entry_points[0])); // The strpos thing is a little hack that allows it to work for base-class derived modules
+					if (is_null($entry_points))
 					{
 						require_code(zone_black_magic_filterer($zone.'/pages/'.$page_type.'/'.$page.'.php',true));
 						if (class_exists('Mx_'.filter_naughty_harsh($page)))
@@ -85,11 +85,11 @@ foreach ($zones2 as $z)
 						{
 							$object=object_factory('Module_'.filter_naughty_harsh($page));
 						}
-						$entrypoints=$object->get_entry_points();
+						$entry_points=$object->get_entry_points();
 					}
-				} else $entrypoints=array('!');
-				if (!is_array($entrypoints)) $entrypoints=array('!');
-				if ($entrypoints==array('!'))
+				} else $entry_points=array('!');
+				if (!is_array($entry_points)) $entry_points=array('!');
+				if ($entry_points==array('!'))
 				{
 					$url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
 
@@ -129,39 +129,39 @@ foreach ($zones2 as $z)
 					}
 					$temp='<DT><A HREF="'.escape_html($url->evaluate()).'">'.escape_html($title).'</A>';
 					$_pages[$title]=$temp;
-				} elseif (count($entrypoints)!=0)
+				} elseif (count($entry_points)!=0)
 				{
-					foreach ($entrypoints as $entrypoint=>$title)
+					foreach ($entry_points as $entry_point=>$ep_parts)
 					{
-						if (!is_string($title)) $title=$title[0];
+						$title=$ep_parts[0];
 
-						if ($entrypoint=='!')
+						if ($entry_point=='!')
 						{
 							$url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
 						} else
 						{
-							if (strpos($entrypoint,':')!==false)
+							if (strpos($entry_point,':')!==false)
 							{
 								list($zone,$attributes,$hash)=page_link_decode($type);
 								$url=build_url($attributes,$zone,NULL,false,false,true,$hash);
 							} else
 							{
-								$url=build_url(array('page'=>$page,'type'=>$entrypoint),$zone,NULL,false,false,true);
+								$url=build_url(array('page'=>$page,'type'=>$entry_point),$zone,NULL,false,false,true);
 							}
 						}
-						$_entrypoints[$title]='<DT><A HREF="'.escape_html($url->evaluate()).'">'.((preg_match('#^[A-Z\_]+$#',$title)==0)?$title:do_lang($title)).'</A>';
+						$_entry_points[$title]='<DT><A HREF="'.escape_html($url->evaluate()).'">'.((preg_match('#^[A-Z\_]+$#',$title)==0)?$title:do_lang($title)).'</A>';
 					}
-					//ksort($_entrypoints);
+					//ksort($_entry_points);
 					$url=new ocp_tempcode();
 					$title=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
 					if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.preg_quote($zone,'#').'_#','',preg_replace('#^'.preg_quote(str_replace('zone','',$zone),'#').'_#','',$page))));
-					if ((count($_entrypoints)==1) && ($url->is_empty()))
+					if ((count($_entry_points)==1) && ($url->is_empty()))
 					{
-						$temp_keys=array_keys($_entrypoints);
-						$temp=$_entrypoints[$temp_keys[0]];
+						$temp_keys=array_keys($_entry_points);
+						$temp=$_entry_points[$temp_keys[0]];
 					} else
 					{
-						$temp='<DT><H3>'.escape_html($title).'</H3><DL><p>'.implode('',$_entrypoints).'</p></DL>';
+						$temp='<DT><H3>'.escape_html($title).'</H3><DL><p>'.implode('',$_entry_points).'</p></DL>';
 					}
 					$_pages[$title]=$temp;
 				}

@@ -31,7 +31,7 @@ class Hook_page_groupings_setupwizard
 		if (!addon_installed('setupwizard')) return array();
 
 		return array(
-			array('setup','menu/adminzone/setup/setup_wizard',array('admin_setupwizard',array('type'=>'misc'),get_module_zone('admin_setupwizard')),do_lang_tempcode('config:SETUP_WIZARD'),'config:DOC_SETUPWIZARD'),
+			array('setup','menu/adminzone/setup/SETUPWIZARD',array('admin_setupwizard',array('type'=>'misc'),get_module_zone('admin_setupwizard')),do_lang_tempcode('config:SETUPWIZARD'),'config:DOC_SETUPWIZARD'),
 		);
 	}
 

@@ -1256,6 +1256,11 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 			$new_func=str_replace('function '.$function.'(','function '.$function.$r.'(',$func).'return '.filter_naughty_harsh($function).$r.'('.$_params.'); ';
 			$out[]=$pre."\n\n".$new_func;
 
+			if ((strpos($new_func,'parent::')!==false) || (strpos($new_func,'$this->')!==false))
+			{
+				return extract_module_functions($path,$functions,$params,true,$class_name);
+			}
+
 			$pre=''; // Can only load that bit once
 		}
 	}

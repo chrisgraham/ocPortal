@@ -132,6 +132,56 @@ function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=N
 abstract class Hook_sitemap_base
 {
 	/**
+	 * Find whether a page should be omitted from the sitemap.
+	 *
+	 * @return boolean		Whether the page should be omitted.
+	 */
+	protected function _is_page_omitted_from_sitemap($zone,$page)
+	{
+		// Omitted due to not being OCF
+		static $main_zone=NULL;
+		static $ocf_pages=NULL;
+		if ($main_zone===NULL)
+		{
+			$main_zone=(get_option('collapse_user_zones')=='1')?'':'site');
+		}
+		if ($ocf_pages===NULL)
+		{
+			$ocf_pages=array(
+				':join',
+				':lost_password',
+				$main_zone.':users_online',
+				$main_zone.':groups',
+				$main_zone.':members',
+				'forum:vforums',
+				'forum:forumview',
+				'forum:topicview',
+				'forum:topics',
+			);
+		}
+		if ((get_forum_type()!='ocf') && ((preg_match('#^(admin\_|cms\_)?ocf\_#',$page)!=0) || (in_array($zone.':'.$page,$ocf_pages))))
+		{
+			return true;
+		}
+
+		// Omitted due to being OCF
+		if (($page=='forums') && ($zone=='') && ((get_forum_type()=='ocf') || (get_forum_type()=='none')))
+			return true;
+
+		// Other kinds of hidden pages are omitted
+		if (substr($page,0,6)=='panel_') return true;
+		if (substr($page,0,1)=='_') return true;
+		if ($page=='404') return true;
+		if ($page=='sitemap') return true;
+
+		// Omitted due to being logged in
+		if (($page=='join') && ($zone=='') && (is_guest()))
+			return true;
+
+		return false;
+	}
+
+	/**
 	 * Find whether the hook is active.
 	 *
 	 * @return boolean		Whether the hook is active.
@@ -203,7 +253,7 @@ abstract class Hook_sitemap_base
 	 * @param  array			Node structure
 	 * @return boolean		Whether the permissions pass
 	 */
-	function _check_node_permissions($struct)
+	protected function _check_node_permissions($struct)
 	{
 		// Check defined permissions
 		foreach ($struct['permissions'] as $permission)
