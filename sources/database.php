@@ -1090,12 +1090,15 @@ class database_driver
 			elseif ($max!==NULL) $real_query.=' LIMIT '.strval($max);
 			elseif ($start!==NULL) $real_query.=' LIMIT '.strval($start).',30000000';
 
-			$ret=$this->static_ob->db_query('SHOW FULL PROCESSLIST',$connection);
-			foreach ($ret as $process)
+			$ret=$this->static_ob->db_query('SHOW FULL PROCESSLIST',$connection,NULL,NULL,true);
+			if (is_array($ret))
 			{
-				if ($process['Info']==$real_query)
+				foreach ($ret as $process)
 				{
-					$this->static_ob->db_query('KILL '.strval($process['Id']),$connection,NULL,NULL,true);
+					if ($process['Info']==$real_query)
+					{
+						$this->static_ob->db_query('KILL '.strval($process['Id']),$connection,NULL,NULL,true);
+					}
 				}
 			}
 		}

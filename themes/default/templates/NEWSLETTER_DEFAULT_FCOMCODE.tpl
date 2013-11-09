@@ -1,5 +1,7 @@
 {CONTENT}
 
+\{+START,IF_NON_EMPTY,{unsub_url}\}
 -------------------------
 
-[font size="0.8"]{!NEWSLETTER_UNSUBSCRIBE,{$PAGE_LINK,_SEARCH:newsletter,0,1}}[/font]
+[font size="0.8"]{!NEWSLETTER_UNSUBSCRIBE,{unsub_url}}[/font]
+\{+END\}

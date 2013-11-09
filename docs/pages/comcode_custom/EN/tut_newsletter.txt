@@ -70,7 +70,7 @@ Want to take things to the next level with your newsletters? You can create full
 
 Creating templated newsletters is best shown by example (this is the newsletter itself, fed into the field when you send the newsletter, or put inside the [tt]NEWSLETTER_DEFAULT_FCOMCODE[/tt] template that prepopulates that field):
 [codebox]
-[semihtml]<html lang="{$LANG*}" dir="{!dir}">
+<html lang="{$LANG*}" dir="{!dir}">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={!charset}" />
 <title>{title*}</title>
@@ -88,7 +88,7 @@ Creating templated newsletters is best shown by example (this is the newsletter 
 	<p>You're receiving this e-mail because you are a member on {$SITE_NAME*}.</p>
 	\{+END\}
 </body>
-</html>[/semihtml]
+</html>
 [/codebox]
 
 Note how the example includes the 'html' tag, etc -- it is not a snippet, it is a full piece of HTML. This is optional, but if you do write your newsletters like this ocPortal will be clever enough to bypass wrapping the newsletter in the standard '[tt]MAIL[/tt]' template.
