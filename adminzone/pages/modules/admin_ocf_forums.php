@@ -30,7 +30,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 	var $protect_first=1;
 	var $archive_entry_point='_SEARCH:forumview';
 	var $archive_label='SECTION_FORUMS';
-	var $view_entry_point='_SEARCH:forumview:id=_ID';
+	var $view_entry_point='_SEARCH:forumview:_ID';
 	var $special_edit_frontend=true;
 	var $permission_page='topics';
 	var $permission_module='forums';

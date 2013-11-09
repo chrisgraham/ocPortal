@@ -28,6 +28,9 @@ Notes:
    If it cannot, it is allowed to crash out in any way.
    This is why you should know what you are calling, or check with handles_pagelink.
  - Any node called directly will not respect the content-type/validation requirements.
+ - The system is designed to be able to recurse the whole structure without using a lot of memory. This is what the callbacks are for.
+   If no callback is used, you should probably set a recurse depth limit.
+ - Each recursion level should be operable independently, so that we can re-enter across separate AJAX requests.
 */
 
 /**
@@ -94,6 +97,8 @@ function init__sitemap()
  */
 function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 {
+	$GLOBALS['NO_QUERY_LIMIT']=true;
+
 	$hook=mixed();
 	$is_virtual=false;
 	if (is_null($pagelink))
@@ -125,7 +130,11 @@ function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=N
 	}
 
 	if ($is_virtual)
-		return array('children'=>$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather));
+	{
+		$children=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+		if (is_null($children)) $children=array();
+		return array('children'=>$children);
+	}
 	return $ob->get_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
 }
 
@@ -196,7 +205,12 @@ abstract class Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	abstract function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false);
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
+	{
+		$nodes=($callback===NULL || $return_anyway)?array():mixed();
+
+		return $nodes;
+	}
 
 	/**
 	 * Find details of a position in the Sitemap.
@@ -487,6 +501,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 				),
 			),
 			'has_possible_children'=>$cma_info['is_category'],
+			'children'=>array(),
 
 			// These are likely to be changed in individual hooks
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
@@ -727,7 +742,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	function extract_child_pagelink_permission_pair($pagelink)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*):type=misc:id=(.*)$#',$pagelink,$matches);
+		preg_match('#^([^:]*):([^:]*):misc:(.*)$#',$pagelink,$matches);
 		$id=$matches[3];
 
 		require_code('content');

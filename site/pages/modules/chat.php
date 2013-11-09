@@ -229,7 +229,7 @@ class Module_chat
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		$ret=array();
-		$ret['misc']=array('CHAT_LOBBY','menu/social/chat');
+		$ret['misc']=array('CHAT_LOBBY','menu/social/chat/chat');
 		if (!$check_perms || !is_guest($member_id))
 		{
 			$ret['set_effects']=array('CHAT_SET_EFFECTS','menu/social/chat/sounds');

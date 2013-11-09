@@ -68,7 +68,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 					if ($link[2][2]==$zone && $link[2][0]==$page)
 					{
 						$title=$link[3];
-						$icon=$link[0];
+						$icon=$link[1];
 						$row=array($title,$icon,NULL);
 						break 2;
 					}
@@ -201,7 +201,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 		{
 			case 'HTML':
 			case 'HTML_CUSTOM':
-				$page_contents=file_get_contents($path);
+				$page_contents=file_get_contents(get_file_base().'/'.$path);
 				$matches=array();
 				if (preg_match('#\<title[^\>]*\>#',$page_contents,$matches)!=0)
 				{
@@ -228,73 +228,84 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 		$children=array();
 
-		// Look for virtual nodes to put under this
-		$child_sitemap_hook=mixed();
-		$hooks=find_all_hooks('systems','sitemap');
-		foreach (array_keys($hooks) as $_hook)
+		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 		{
-			require_code('hooks/systems/sitemap/'.$_hook);
-			$ob=object_factory('Hook_sitemap_'.$_hook);
-			if ($ob->is_active())
+			// Look for virtual nodes to put under this
+			$child_sitemap_hook=mixed();
+			$hooks=find_all_hooks('systems','sitemap');
+			foreach (array_keys($hooks) as $_hook)
 			{
-				$is_handled=$ob->handles_pagelink($pagelink);
-				if ($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY)
+				require_code('hooks/systems/sitemap/'.$_hook);
+				$ob=object_factory('Hook_sitemap_'.$_hook);
+				if ($ob->is_active())
 				{
-					$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
-					$child_sitemap_hook=$ob;
-					$struct['permission_page']=$child_sitemap_hook->get_permission_page($pagelink);
-					$struct['has_possible_children']=true;
-
-					$virtual_child_nodes=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,true);
-					foreach ($virtual_child_nodes as $child_node)
+					$is_handled=$ob->handles_pagelink($pagelink);
+					if ($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY)
 					{
-						if (preg_match('#^'.preg_quote($pagelink,'#').':misc(:[^:=]*$|$)#',$child_node['pagelink'])!=0)
+						$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
+						$child_sitemap_hook=$ob;
+						$struct['permission_page']=$child_sitemap_hook->get_permission_page($pagelink);
+						$struct['has_possible_children']=true;
+
+						$virtual_child_nodes=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,true);
+						if (is_null($virtual_child_nodes)) $virtual_child_nodes=array();
+						foreach ($virtual_child_nodes as $child_node)
 						{
-							$struct=$child_node; // Put as container instead
-							$call_struct=false; // Already been called in get_virtual_nodes
-						} else
-						{
-							if ($callback!==NULL)
-								$children[$child_node['pagelink']]=$child_node;
+							if ((preg_match('#^'.preg_quote($pagelink,'#').':misc(:[^:=]*$|$)#',$child_node['pagelink'])!=0) && (!$require_permission_support))
+							{
+								//$struct=$child_node; // Put as container instead		Actually this breaks the re-entryable requirement
+								$call_struct=false; // Already been called in get_virtual_nodes
+							} else
+							{
+								if ($callback!==NULL)
+									$children[$child_node['pagelink']]=$child_node;
+							}
 						}
 					}
 				}
 			}
-		}
 
-		// Look for entry points to put under this
-		if ($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM')
-		{
-			$functions=extract_module_functions($path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
-			if (!is_null($functions[0]))
+			// Look for entry points to put under this
+			if (($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM') && (!$require_permission_support))
 			{
-				$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
-
-				if (!is_null($entry_points))
+				$functions=extract_module_functions($path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+				if (!is_null($functions[0]))
 				{
-					$struct['has_possible_children']=true;
+					$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
-					$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
+					if (!is_null($entry_points))
+					{
+						$struct['has_possible_children']=true;
 
-					if ((isset($entry_points['misc'])) || (isset($entry_points['!'])))
-					{
-						unset($entry_points['misc']);
-					} else
-					{
-						array_shift($entry_points);
+						$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
+
+						if ((isset($entry_points['misc'])) || (isset($entry_points['!'])))
+						{
+							unset($entry_points['misc']);
+						} else
+						{
+							array_shift($entry_points);
+						}
+
+						foreach (array_keys($entry_points) as $entry_point)
+						{
+							if (strpos($entry_point,':')===false)
+							{
+								$child_pagelink=$zone.':'.$page.':'.$entry_point;
+							} else
+							{
+								$child_pagelink=preg_replace('#^_SEARCH:#',$zone.':',$entry_point);
+							}
+
+							$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+							if ($child_node!==NULL)
+								$children[$child_node['pagelink']]=$child_node;
+						}
 					}
-
-					foreach (array_keys($entry_points) as $entry_point)
-					{
-						$child_pagelink=$pagelink.':'.$entry_point;
-						$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
-						if ($child_node!==NULL)
-							$children[$child_node['pagelink']]=$child_node;
-					}
+				} else
+				{
+					$call_struct=true; // Module is disabled
 				}
-			} else
-			{
-				$call_struct=true; // Module is disabled
 			}
 		}
 

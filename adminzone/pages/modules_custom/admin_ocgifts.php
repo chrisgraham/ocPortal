@@ -27,7 +27,7 @@ class Module_admin_ocgifts extends standard_crud_module
 	var $output_of_action_is_confirmation=true;
 	var $menu_label='OCGIFTS_TITLE';
 	var $do_preview=NULL;
-	var $view_entry_point='_SEARCH:admin_ocgifts:view:id=_ID';
+	var $view_entry_point='_SEARCH:admin_ocgifts:view:_ID';
 
 	/**
 	 * Standard modular info function.

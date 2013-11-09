@@ -28,6 +28,9 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 	 */
 	function handles_pagelink($pagelink)
 	{
+		if (preg_match('#^cms:cms_catalogues:add_catalogue:#',$pagelink))
+			return SITEMAP_NODE_HANDLED;
+
 		$matches=array();
 		if (preg_match('#^([^:]*):([^:]*):([^:]*)$#',$pagelink,$matches)!=0)
 		{
@@ -83,7 +86,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*):([^:]*)$#',$pagelink,$matches);
+		preg_match('#^([^:]*):([^:]*):([^:]*)#',$pagelink,$matches);
 
 		if ($matches[1]!=$zone)
 		{

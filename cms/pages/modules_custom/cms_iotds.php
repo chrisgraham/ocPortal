@@ -22,8 +22,8 @@ class Module_cms_iotds extends standard_crud_module
 {
 	var $lang_type='IOTD';
 	var $special_edit_frontend=true;
-	var $archive_entry_point='_SEARCH:iotds:type=misc';
-	var $view_entry_point='_SEARCH:iotds:type=view:id=_ID';
+	var $archive_entry_point='_SEARCH:iotds:misc';
+	var $view_entry_point='_SEARCH:iotds:view:_ID';
 	var $user_facing=true;
 	var $send_validation_request=false;
 	var $upload='image';

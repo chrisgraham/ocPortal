@@ -81,11 +81,11 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			$links=$ob->run();
 			foreach ($links as $link)
 			{
-				list($page_grouping)=$link;
-				if ($page_grouping!='')
+				list($_page_grouping)=$link;
+				if ($_page_grouping!='')
 				{
 					$pages_found[$link[2][0]]=true;
-				} elseif ($link[2][1]==array('type'=>$page_grouping))
+				} elseif ($link[2][1]==array('type'=>$_page_grouping))
 				{
 					$icon=$link[1];
 				}
@@ -122,7 +122,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 
 		// Our node
 		$struct=array(
-			'title'=>do_lang($page_grouping),
+			'title'=>do_lang_tempcode(strtoupper($page_grouping)),
 			'content_type'=>'page_grouping',
 			'content_id'=>$page_grouping,
 			'pagelink'=>$pagelink,
@@ -168,15 +168,25 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 		{
 			$root_comcode_pages=collapse_2d_complexity('the_page','p_validated',$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>'')));
 
-			require_code('hooks/systems/page_groupings/'.filter_naughty($page_grouping));
+			$links=array();
+			$hooks=find_all_hooks('systems','page_groupings');
+			foreach (array_keys($hooks) as $hook)
+			{
+				require_code('hooks/systems/page_groupings/'.$hook);
+
+				$ob=object_factory('Hook_page_groupings_'.$hook);
+				$_links=$ob->run();
+				foreach ($links as $link)
+				{
+					$links=array_merge($links,$_links);
+				}
+			}
 
 			$page_sitemap_ob=$this->_get_sitemap_object('page');
 			$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
 			$comcode_page_sitemap_ob=$this->_get_sitemap_object('comcode_page');
 
 			// Directly defined in page grouping hook
-			$ob=object_factory('Hook_page_groupings_'.$page_grouping);
-			$links=$ob->run();
 			$child_links=array();
 			foreach ($links as $link)
 			{

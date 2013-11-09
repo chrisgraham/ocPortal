@@ -53,4 +53,35 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('sitemap');
+
+	$pagelink=NULL;
+	$callback=NULL;
+	$valid_node_types=NULL;
+	$max_recurse_depth=NULL;
+	$require_permission_support=false;
+	$zone='_SEARCH';
+	$consider_secondary_categories=true;
+	$consider_validation=false;
+	$meta_gather=SITEMAP_GATHER__ALL;
+
+	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+	var_dump(filter($node));
+	exit();
+}
+
+function filter($node)
+{
+	if (isset($node['title']) && !array_key_exists('image',$node['extra_meta'])) {@var_dump($node);exit('error');}
+	if (isset($node['title']) && !isset($node['extra_meta']))
+	{
+		@var_dump($node);exit();
+	}
+if (isset($node['title']) && !is_object($node['title'])) @exit($node['title']);
+	return array(
+		'title'=>isset($node['title'])?$node['title']->evaluate():'',
+		'image'=>isset($node['extra_meta']['image'])?$node['extra_meta']['image']:'',
+		'pagelink'=>isset($node['pagelink'])?$node['pagelink']:NULL,
+		'children'=>array_map('filter',$node['children']),
+	);
 }

@@ -78,7 +78,7 @@ class Hook_sitemap_root extends Hook_sitemap_base
 	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$struct=array(
-			'title'=>do_lang('ROOT'),
+			'title'=>do_lang_tempcode('ROOT'),
 			'content_type'=>'root',
 			'content_id'=>NULL,
 			'pagelink'=>':',
@@ -124,7 +124,7 @@ class Hook_sitemap_root extends Hook_sitemap_base
 					list($zone,$title)=$_zone;
 
 					$child_pagelink=$zone.':';
-					$child_node=$zone_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
+					$child_node=$zone_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
 					if ($child_node!==NULL)
 						$children[]=$child_node;
 				}

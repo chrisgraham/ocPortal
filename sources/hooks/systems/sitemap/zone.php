@@ -96,15 +96,44 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 		$path=get_custom_file_base().'/'.$zone.'/index.php';
 		if (!is_file($path)) $path=get_file_base().'/'.$zone.'/index.php';
 
+		$icon=mixed();
+		switch ($zone)
+		{
+			case '':
+				if (get_option('collapse_user_zones')=='0')
+				{
+					$icon='menu/welcome';
+					break;
+				} // else flow on
+			case 'site':
+				$icon='menu/start';
+				break;
+			case 'collaboration':
+				$icon='menu/collaboration';
+				break;
+			case 'adminzone':
+				$icon='menu/adminzone/adminzone';
+				break;
+			case 'cms':
+				$icon='menu/cms/cms';
+				break;
+			case 'forum':
+				$icon='menu/social/forum/forums';
+				break;
+			case 'docs':
+				$icon='menu/pages/help';
+				break;
+		}
+
 		$struct=array(
-			'title'=>$title,
+			'title'=>make_string_tempcode($title),
 			'content_type'=>'zone',
 			'content_id'=>$zone,
 			'pagelink'=>$pagelink,
 			'extra_meta'=>array(
 				'description'=>NULL,
-				'image'=>NULL,
-				'image_2x'=>NULL,
+				'image'=>($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon),
+				'image_2x'=>($icon===NULL)?NULL:find_theme_image('icons/48x48/'.$icon),
 				'add_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filectime($path):NULL,
 				'edit_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filemtime($path):NULL,
 				'submitter'=>NULL,
@@ -138,6 +167,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			call_user_func($callback,$struct);
 
 		// What page groupings may apply in what zones?
+		$applicable_page_groupings=array();
 		switch ($zone)
 		{
 			case 'adminzone':
@@ -294,17 +324,18 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 				$comcode_page_sitemap_ob=$this->_get_sitemap_object('comcode_page');
 				$page_sitemap_ob=$this->_get_sitemap_object('page');
 
-				foreach ($page_groupings[$page_grouping] as $links) // Will only be 1 loop iteration, but this finds us that one easily
+				foreach ($page_groupings as $links) // Will only be 1 loop iteration, but this finds us that one easily
 				{
 					$child_links=array();
 
 					foreach ($links as $link)
 					{
-						$title=do_lang($link[3]);
+						$title=$link[3];
 						$icon=$link[1];
 
 						$_zone=$link[2][2];
 						$page=$link[2][0];
+
 						$child_pagelink=$_zone.':'.$page;
 						foreach ($link[2][1] as $key=>$val)
 						{
@@ -335,7 +366,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 						$child_row=($icon===NULL)?NULL/*we know nothing of relevance*/:array($title,$icon,$description);
 
-						if (strpos($page_type,'comcode')!==false)
+						if (($page_type!==NULL) && (strpos($page_type,'comcode')!==false))
 						{
 							if (($valid_node_types!==NULL) && (!in_array('comcode_page',$valid_node_types)))
 							{

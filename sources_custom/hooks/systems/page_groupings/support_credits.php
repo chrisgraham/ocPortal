@@ -13,7 +13,7 @@
  * @package		ocportalcom_support_credits
  */
 
-class Hook_page_groupings_ocportalcom_support_credits
+class Hook_page_groupings_support_credits
 {
 
 	/**

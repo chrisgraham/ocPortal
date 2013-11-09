@@ -27,7 +27,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	var $output_of_action_is_confirmation=true;
 	var $menu_label='OCDEADPEOPLE_TITLE';
 	var $do_preview=NULL;
-	var $view_entry_point='_SEARCH:admin_ocdeadpeople:view:id=_ID';
+	var $view_entry_point='_SEARCH:admin_ocdeadpeople:view:_ID';
 
 	/**
 	 * Standard modular info function.

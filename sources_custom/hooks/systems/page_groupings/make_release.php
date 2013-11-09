@@ -13,7 +13,7 @@
  * @package		ocportal_release_build
  */
 
-class Hook_page_groupings_ocportal_release_build
+class Hook_page_groupings_make_release
 {
 
 	/**

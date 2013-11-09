@@ -60,7 +60,7 @@ class Module_admin_orders
 		);
 		if ($support_crosslinks)
 		{
-			$ret[get_module_zone('admin_orders').':admin_orders:show_orders:filter=undispatched']=array('SHOW_UNDISPATCHED_ORDERS','menu/adminzone/audit/ecommerce/undispatched_orders');
+			$ret['_SEARCH:admin_orders:show_orders:filter=undispatched']=array('SHOW_UNDISPATCHED_ORDERS','menu/adminzone/audit/ecommerce/undispatched_orders');
 		}
 		return $ret;
 	}

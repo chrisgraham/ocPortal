@@ -30,7 +30,7 @@ class Module_admin_chat extends standard_crud_module
 	var $author='Philip Withnall';
 	var $archive_entry_point='_SEARCH:chat';
 	var $archive_label='CHAT_LOBBY';
-	var $view_entry_point='_SEARCH:chat:type=room:id=_ID';
+	var $view_entry_point='_SEARCH:chat:type=room:_ID';
 	var $permission_module='chat';
 	var $menu_label='SECTION_CHAT';
 
@@ -46,7 +46,7 @@ class Module_admin_chat extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
-			'misc'=>array('MANAGE_CHATROOMS','menu/social/chat'),
+			'misc'=>array('MANAGE_CHATROOMS','menu/social/chat/chat'),
 			'delete_all'=>array('DELETE_ALL_ROOMS','menu/_generic_admin/delete'),
 		)+parent::get_entry_points();
 	}

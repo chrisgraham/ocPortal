@@ -26,8 +26,8 @@ require_code('crud_module');
 class Module_cms_polls extends standard_crud_module
 {
 	var $lang_type='POLL';
-	var $archive_entry_point='_SEARCH:polls:type=misc';
-	var $view_entry_point='_SEARCH:polls:type=view:id=_ID';
+	var $archive_entry_point='_SEARCH:polls:misc';
+	var $view_entry_point='_SEARCH:polls:view:_ID';
 	var $user_facing=true;
 	var $send_validation_request=false;
 	var $permissions_require='mid';

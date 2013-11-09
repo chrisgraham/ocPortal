@@ -32,7 +32,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 	var $output_of_action_is_confirmation=true;
 	var $menu_label='CLUBS';
 	var $do_preview=NULL;
-	var $view_entry_point='_SEARCH:groups:view:id=_ID';
+	var $view_entry_point='_SEARCH:groups:view:_ID';
 	var $orderer='g_name';
 
 	/**

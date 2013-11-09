@@ -26,7 +26,7 @@ require_code('crud_module');
 class Module_cms_banners extends standard_crud_module
 {
 	var $lang_type='BANNER';
-	var $view_entry_point='_SEARCH:banners:type=view:source=_ID';
+	var $view_entry_point='_SEARCH:banners:view:source=_ID';
 	var $user_facing=true;
 	var $permissions_require='mid';
 	var $select_name='NAME';

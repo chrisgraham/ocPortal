@@ -20,7 +20,7 @@
 
 class Hook_sitemap_poll extends Hook_sitemap_content
 {
-	protected $content_type='polls';
+	protected $content_type='poll';
 	protected $screen_type='view';
 
 	// If we have a different content type of entries, under this content type

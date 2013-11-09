@@ -34,7 +34,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 	var $do_preview=NULL;
 	var $archive_entry_point='_SEARCH:groups';
 	var $archive_label='USERGROUPS';
-	var $view_entry_point='_SEARCH:groups:view:id=_ID';
+	var $view_entry_point='_SEARCH:groups:view:_ID';
 	var $menu_label='USERGROUPS';
 	var $orderer='g_name';
 	var $title_is_multi_lang=true;

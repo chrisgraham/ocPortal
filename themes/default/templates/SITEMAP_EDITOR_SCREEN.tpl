@@ -36,7 +36,7 @@
 				var edit_zone_url='{$PAGE_LINK*;,_SEARCH:admin_zones:type=_edit:id=!}';
 				var add_zone_url='{$PAGE_LINK*;,_SEARCH:admin_zones:type=add}';
 				var zone_editor_url='{$PAGE_LINK*;,_SEARCH:admin_zones:type=_editor:id=!}';
-				var permission_tree_editor_url='{$PAGE_LINK*;,_SEARCH:admin_permissions:type=misc:id=!}';
+				var permission_tree_editor_url='{$PAGE_LINK*;,_SEARCH:admin_permissions:misc:!}';
 				var edit_page_url='{$PAGE_LINK*;,cms:cms_comcode_pages:type=_ed:page_link=!}';
 				var export_page_url='{$PAGE_LINK*;,_SELF:_SELF:type=export:page_link=!}';
 				var add_page_url='{$PAGE_LINK*;,_SEARCH:cms_comcode_pages:type=_ed:page_link=!:example}';

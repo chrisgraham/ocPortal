@@ -1206,7 +1206,7 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 	}
 
 	if (!is_file($path)) return array(NULL);
-	$file=unixify_line_format(file_get_contents($path),NULL,false,true);
+	$file=unixify_line_format(file_get_contents(get_file_base().'/'.$path),NULL,false,true);
 
 	if (strpos($file,'class Mx_')!==false)
 	{

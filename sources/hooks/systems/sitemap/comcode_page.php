@@ -152,7 +152,7 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 		$this->_ameliorate_with_row($struct,$row);
 
 		// In the DB?
-		$db_row=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN comcode_pages b ON a.the_zone=b.the_zone AND a.the_page=b.the_page',array('*'),array('the_zone'=>$zone,'the_page'=>$page),'',1);
+		$db_row=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN '.get_table_prefix().'comcode_pages b ON a.the_zone=b.the_zone AND a.the_page=b.the_page',array('*'),array('a.the_zone'=>$zone,'a.the_page'=>$page),'',1);
 		if (isset($db_row[0]))
 		{
 			if (($meta_gather & SITEMAP_GATHER_DB_ROW)!=0)
@@ -177,7 +177,7 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 			}
 		} else
 		{
-			$page_contents=file_get_contents($path);
+			$page_contents=file_get_contents(get_file_base().'/'.$path);
 			$matches=array();
 			if (preg_match('#\[title[^\]]*\]#',$page_contents,$matches)!=0)
 			{

@@ -33,7 +33,7 @@ class Hook_page_groupings_catalogues
 
 		$ret=array();
 		if (has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues'))
-			$ret[]=array('cms','catalogues',array('cms_catalogues',array('type'=>'misc'),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('catalogues:CATALOGUES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','COUNT(*)',NULL,'',true))))),'catalogues:DOC_CATALOGUES');
+			$ret[]=array('cms','menu/rich_content/catalogues/catalogues',array('cms_catalogues',array('type'=>'misc'),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('catalogues:CATALOGUES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','COUNT(*)',NULL,'',true))))),'catalogues:DOC_CATALOGUES');
 		if ($exhaustive)
 		{
 			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title','c_description','c_ecommerce'),NULL,'',10,NULL,true);

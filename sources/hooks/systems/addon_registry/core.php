@@ -277,6 +277,8 @@ class Hook_addon_registry_core
 			'themes/default/images/icons/48x48/tool_buttons/software_chat.png',
 			'themes/default/images/icons/24x24/menu/start.png',
 			'themes/default/images/icons/48x48/menu/start.png',
+			'themes/default/images/icons/24x24/menu/welcome.png',
+			'themes/default/images/icons/48x48/menu/welcome.png',
 			'themes/default/images/icons/24x24/menu/adminzone/start.png',
 			'themes/default/images/icons/48x48/menu/adminzone/start.png',
 			'themes/default/images/icons/32x32/admin/start.png',

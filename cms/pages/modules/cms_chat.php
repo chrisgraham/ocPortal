@@ -53,7 +53,7 @@ class Module_cms_chat
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
-			'misc'=>array('CHAT_MOD_PANEL','menu/social/chat'),
+			'misc'=>array('CHAT_MOD_PANEL','menu/social/chat/chat'),
 		);
 	}
 
@@ -530,7 +530,7 @@ class Module_cms_chat
 				array(),
 				array(),
 				array(
-					has_actual_page_access(get_member(),'admin_chat')?array('menu/social/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('ROOMS')):NULL,
+					has_actual_page_access(get_member(),'admin_chat')?array('menu/social/chat/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('ROOMS')):NULL,
 				),
 				do_lang('SETUP')
 			);
@@ -584,7 +584,7 @@ class Module_cms_chat
 			NULL, // View this category
 			/* SPECIALLY TYPED 'LINKS' */
 			array(
-				has_actual_page_access(get_member(),'admin_chat')?array('menu/social/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('SETUP')):NULL,
+				has_actual_page_access(get_member(),'admin_chat')?array('menu/social/chat/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('SETUP')):NULL,
 			)
 		);
 	}
