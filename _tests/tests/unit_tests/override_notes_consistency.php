@@ -25,18 +25,22 @@ class override_notes_consistency_test_set extends ocp_test_case
 		$files=get_directory_contents(get_file_base(),'',true);
 		foreach ($files as $file)
 		{
-			if (should_ignore_file($file,IGNORE_NONBUNDLED_SCATTERED)) continue;
+			if (substr($file,-4)!='.php') continue;
 
-			if (substr($file,-4)=='.php')
+			if (should_ignore_file($file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS)) continue;
+
+			if (file_exists(dirname($file).'/index.php')) continue; // Zone directory, no override support
+
+			$contents=file_get_contents(get_file_base().'/'.$file);
+
+			if (strpos($contents,'CQC: No check')!==false) continue;
+
+			if (strpos($file,'_custom/')===false)
 			{
-				$contents=file_get_contents(get_file_base().'/'.$file);
-				if (strpos($file,'_custom')===false)
-				{
-					$this->assertTrue(strpos($contents,'NOTE TO PROGRAMMERS:')!==false,'Missing "NOTE TO PROGRAMMERS:" in '.$file);
-				} else
-				{
-					$this->assertFalse(strpos($contents,'NOTE TO PROGRAMMERS:')!==false,'Undesirable "NOTE TO PROGRAMMERS:" in '.$file);
-				}
+				$this->assertTrue(strpos($contents,'NOTE TO PROGRAMMERS:')!==false,'Missing "NOTE TO PROGRAMMERS:" in '.$file);
+			} else
+			{
+				$this->assertFalse(strpos($contents,'NOTE TO PROGRAMMERS:')!==false,'Undesirable "NOTE TO PROGRAMMERS:" in '.$file);
 			}
 		}
 	}

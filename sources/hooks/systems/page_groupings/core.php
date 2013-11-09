@@ -79,18 +79,18 @@ class Hook_page_groupings_core
 			(addon_installed('syndication'))?array('tools','action_links/rss',array('admin_config',array('type'=>'backend'),get_module_zone('admin_config')),do_lang_tempcode('FEEDS'),'rss:OPML_INDEX_DESCRIPTION'):NULL,
 			(addon_installed('code_editor'))?array('tools','menu/adminzone/tools/code_editor',array('admin_config',array('type'=>'code_editor'),get_module_zone('admin_config')),do_lang_tempcode('CODE_EDITOR'),'DOC_CODE_EDITOR'):NULL,
 
-			(get_comcode_zone('start')===NULL)?NULL:array('','menu/start',array('start',array(),get_comcode_zone('start')),do_lang_tempcode('HOME')),
+			(get_comcode_zone('start',false)===NULL)?NULL:array('','menu/start',array('start',array(),get_comcode_zone('start')),do_lang_tempcode('HOME')),
 			array('','menu/pages',array(NULL,array(),NULL),do_lang_tempcode('PAGES')),
 			array('','menu/rich_content',array(NULL,array(),NULL),do_lang_tempcode('menus:RICH_CONTENT')),
 			array('','menu/site_meta',array(NULL,array(),NULL),do_lang_tempcode('menus:SITE_META')),
 			array('','menu/social',array(NULL,array(),NULL),do_lang_tempcode('SECTION_SOCIAL')),
 
-			(get_comcode_zone('about')===NULL)?NULL:array('pages','menu/pages/about_us',array('about',array(),get_comcode_zone('site_meta')),do_lang_tempcode('menus:ABOUT')),
-			(get_comcode_zone('keymap')===NULL || get_option('collapse_user_zones')=='1'/*If collapsed then will show as child page of help page*/)?NULL:array('site_meta','menu/pages/keymap',array('keymap',array(),get_comcode_zone('keymap')),do_lang_tempcode('KEYBOARD_MAP')),
-			(get_comcode_zone('privacy')===NULL || get_option('bottom_show_privacy_link')=='1')?NULL:array('site_meta','menu/pages/privacy_policy',array('privacy',array(),get_comcode_zone('privacy')),do_lang_tempcode('PRIVACY')),
-			(get_comcode_zone('rules')===NULL || get_option('bottom_show_rules_link')=='1')?NULL:array('site_meta','menu/pages/rules',array('rules',array(),get_comcode_zone('rules')),do_lang_tempcode('RULES')),
-			(get_comcode_zone('feedback')===NULL || get_option('bottom_show_feedback_link')=='1')?NULL:array('site_meta','menu/site_meta/contact_us',array('feedback',array(),get_comcode_zone('feedback')),do_lang_tempcode('FEEDBACK')),
-			//(get_comcode_zone('sitemap')===NULL || get_option('bottom_show_sitemap_button')=='1')?NULL:array('site_meta','tool_buttons/sitemap',array('sitemap',array(),get_comcode_zone('sitemap')),do_lang_tempcode('SITEMAP')),	Redundant, menu itself is a sitemap
+			(get_comcode_zone('about',false)===NULL)?NULL:array('pages','menu/pages/about_us',array('about',array(),get_comcode_zone('about')),do_lang_tempcode('menus:ABOUT')),
+			(get_comcode_zone('keymap',false)===NULL || get_option('collapse_user_zones')=='1'/*If collapsed then will show as child page of help page*/)?NULL:array('site_meta','menu/pages/keymap',array('keymap',array(),get_comcode_zone('keymap')),do_lang_tempcode('KEYBOARD_MAP')),
+			(get_comcode_zone('privacy',false)===NULL || get_option('bottom_show_privacy_link')=='1')?NULL:array('site_meta','menu/pages/privacy_policy',array('privacy',array(),get_comcode_zone('privacy')),do_lang_tempcode('PRIVACY')),
+			(get_comcode_zone('rules',false)===NULL || get_option('bottom_show_rules_link')=='1')?NULL:array('site_meta','menu/pages/rules',array('rules',array(),get_comcode_zone('rules')),do_lang_tempcode('RULES')),
+			(get_comcode_zone('feedback',false)===NULL || get_option('bottom_show_feedback_link')=='1')?NULL:array('site_meta','menu/site_meta/contact_us',array('feedback',array(),get_comcode_zone('feedback')),do_lang_tempcode('FEEDBACK')),
+			//(get_comcode_zone('sitemap',false)===NULL || get_option('bottom_show_sitemap_button')=='1')?NULL:array('site_meta','tool_buttons/sitemap',array('sitemap',array(),get_comcode_zone('sitemap')),do_lang_tempcode('SITEMAP')),	Redundant, menu itself is a sitemap
 			// userguide_comcode is child of help_page
 
 			(get_forum_type()=='none' || !is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/login',array('login',array(),''),do_lang_tempcode('_LOGIN')),

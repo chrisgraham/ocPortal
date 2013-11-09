@@ -210,6 +210,9 @@ function do_access($given_password)
 		'safe_mode'=>'<em>Development:</em> Whether ocPortal is to be forced into Safe Mode, meaning no custom files will load and most caching will be disabled.',
 		'no_email_output'=>'<em>Development:</em> Whether emails should never be sent.',
 		'email_to'=>'<em>Development:</em> If you have set up a customised critical error screen, and a background e-mailing process, this defines where error e-mails will be sent.',
+
+		'gae_application'=>'<em>Google App Engine:</em> Application name',
+		'gae_bucket_name'=>'<em>Google App Engine:</em> Cloud Storage bucket name',
 	);
 
 	global $SITE_INFO;

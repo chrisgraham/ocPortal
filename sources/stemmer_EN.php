@@ -4,24 +4,25 @@
 /*CQC: No check*/
 
 /**
-* Copyright (c) 2005 Richard Heyes (http://www.phpguru.org/)
-*
-* All rights reserved.
-*
-* This script is free software.
-*/
+ * Copyright (c) 2005 Richard Heyes (http://www.phpguru.org/)
+ *
+ * All rights reserved.
+ *
+ * This script is free software.
+ */
 
 /**
-* PHP5 Implementation of the Porter Stemmer algorithm. Certain elements
-* were borrowed from the (broken) implementation by Jon Abernathy.
-*
-* Usage:
-*
-*  $stem = PorterStemmer::Stem($word);
-*
-* How easy is that?
-*/
-
+ * PHP5 Implementation of the Porter Stemmer algorithm. Certain elements
+ * were borrowed from the (broken) implementation by Jon Abernathy.
+ *
+ * Usage:
+ *
+ *  $stem = PorterStemmer::Stem($word);
+ *
+ * How easy is that?
+ *
+ * @package		 core
+ */
 class Stemmer_EN
 {
     /**

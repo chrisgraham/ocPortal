@@ -258,7 +258,7 @@ class Hook_occle_fs_banners extends resource_fs_base
 		$direct_code=$this->_default_property_str($properties,'direct_code');
 		$campaignremaining=$this->_default_property_int($properties,'campaignremaining');
 		$site_url=$this->_default_property_str($properties,'site_url');
-		$importancemodulus=$this->_default_property_int_null($properties,'importancemodulus');
+		$importancemodulus=$this->_default_property_int($properties,'importancemodulus');
 		$notes=$this->_default_property_str($properties,'notes');
 		$the_type=$this->_default_property_int($properties,'the_type');
 		$expiry_date=$this->_default_property_int_null($properties,'expiry_date');

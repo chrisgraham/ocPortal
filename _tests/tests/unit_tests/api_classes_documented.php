@@ -31,11 +31,11 @@ class api_classes_documented_test_set extends ocp_test_case
 			while (($f=readdir($dh))!==false)
 			{
 				if (substr($f,-4)!='.php') continue;
-				if ($f=='jsmin.php') continue;
-				if ($f=='firephp.php') continue;
-				if ($f=='diff.php') continue;
 
 				$c=file_get_contents($path.'/'.$f);
+
+				if (strpos($c,'CQC: No check')!==false) continue;
+
 				$matches=array();
 				$num_matches=preg_match_all('#\n\t*class ([\w\_]+)#',$c,$matches);
 				for ($i=0;$i<$num_matches;$i++)

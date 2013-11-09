@@ -34,10 +34,10 @@ class google_appengine_test_set extends ocp_test_case
 					$this->assertTrue(false,'regexp /e not allowed (in '.$file.')');
 				}
 
-				if ((strpos($contents,'\'PHP_SELF\'')!==false) && (basename($file)!='phpstub.php') && (basename($file)!='lost_password.php'))
+				if ((strpos($contents,'\'PHP_SELF\'')!==false) && (basename($file)!='minikernel.php') && (basename($file)!='global.php') && (basename($file)!='global2.php') && (basename($file)!='phpstub.php') && (basename($file)!='lost_password.php'))
 					$this->assertTrue(false,'PHP_SELF does not work stably across platforms (in '.$file.')');
 
-				if ((strpos($contents,'\'SCRIPT_FILENAME\'')!==false) && (basename($file)!='phpstub.php'))
+				if ((strpos($contents,'\'SCRIPT_FILENAME\'')!==false) && (basename($file)!='minikernel.php') && (basename($file)!='global.php') && (basename($file)!='global2.php') && (basename($file)!='phpstub.php'))
 					$this->assertTrue(false,'SCRIPT_FILENAME does not work stably across platforms (in '.$file.')');
 			}
 		}
@@ -50,8 +50,10 @@ class google_appengine_test_set extends ocp_test_case
 		$file_counts=array();
 		$directory_counts=array();
 		$hooks=find_all_hooks('systems','addon_registry');
-		foreach (array_keys($hooks) as $hook)
+		foreach ($hooks as $hook=>$place)
 		{
+			if ($place=='sources_custom') continue;
+
 			if (in_array($hook,array(
 				'installer',
 				'devguide',
@@ -98,7 +100,7 @@ class google_appengine_test_set extends ocp_test_case
 		// Any large directories?
 		foreach ($directory_counts as $dir=>$count)
 		{
-			if ($dir=='.') continue; // Templates/CSS usually, and we account for templates separately ; certainly not a lot of CSS or root files, in general (it'd get noticed ;-) )
+			if ($dir=='themes/default/templates') continue;
 			$this->assertTrue($count<=1000,'Must be less than 1000 files in any directory (except templates, which is checked separately): '.$dir);
 		}
 

@@ -1,12 +1,11 @@
 <?php
 
 /*NO_API_CHECK*/
+/*CQC: No check*/
 
 // Based on PHP:Text_Diff, which is under the LGPL licence.
 //
 // Modified for ocPortal. This file remains LGPL.
-
-/*CQC: No check*/
 
 /**
  * @license	LGPL

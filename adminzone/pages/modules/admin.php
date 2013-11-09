@@ -478,9 +478,9 @@ class Module_admin
 						$entry_points=is_array($_entrypoints[0])?call_user_func_array($_entrypoints[0][0],$_entrypoints[0][1]):eval($_entrypoints[0]);
 						if ($page=='admin_themes')
 						{
-							$entry_points['!themes']='EDIT_CSS';
-							$entry_points['!!themes']='EDIT_TEMPLATES';
-							$entry_points['!!!themes']='MANAGE_THEME_IMAGES';
+							$entry_points['!themes']=array('EDIT_CSS','menu/adminzone/style/themes/css');
+							$entry_points['!!themes']=array('EDIT_TEMPLATES','menu/adminzone/style/themes/templates');
+							$entry_points['!!!themes']=array('MANAGE_THEME_IMAGES','menu/adminzone/style/themes/theme_images');
 						}
 						if (is_null($entry_points)) $entry_points=array();
 						foreach ($entry_points as $type=>$ep_parts)

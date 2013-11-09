@@ -125,6 +125,7 @@ class Module_admin_themes
 				$ret['_SEARCH:admin_themewizard:misc']=array('THEMEWIZARD','menu/adminzone/style/themes/themewizard');
 			}
 		}
+
 		return $ret;
 	}
 

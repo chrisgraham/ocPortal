@@ -263,7 +263,7 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 			foreach ($directory as $d)
 			{
 				$file=$d['path'];
-				if (preg_match('themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)',$file,$matches)!=0)
+				if (preg_match('#^themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)$#',$file,$matches)!=0)
 				{
 					require_code('mime_types');
 					$data=tar_get_file($tar_file,$file);
@@ -285,7 +285,7 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 		$addon_files=$addon_info['files'];
 		foreach ($addon_files as $file)
 		{
-			if (preg_match('themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)',$file,$matches)!=0)
+			if (preg_match('#^themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)$#',$file,$matches)!=0)
 			{
 				return get_base_url().'/'.urlencode($file);
 			}

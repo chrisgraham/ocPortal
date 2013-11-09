@@ -6,6 +6,7 @@
  */
 
 /*NO_API_CHECK*/
+/*CQC: No check*/
 
 /******
  * <external entry point>

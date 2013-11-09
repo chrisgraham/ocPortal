@@ -1,5 +1,7 @@
 <?php
 
+/*CQC: No check*/
+
 // M-ZIP Library: unzipping files using command line tools
 //
 // Feel free to use, modify and distribute this but please keep this note intact

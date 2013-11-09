@@ -18,6 +18,9 @@
  * @package		core
  */
 
+/*NO_API_CHECK*/
+/*CQC: No check*/
+
 /**
  * jsmin.php - PHP implementation of Douglas Crockford's JSMin.
  *

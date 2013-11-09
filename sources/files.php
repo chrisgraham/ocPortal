@@ -194,7 +194,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'.git'=>'',
 		'.gitattributes'=>'',
 		'.gitignore'=>'',
-		'cvs'=>'.*',
 		'phpdoc.dist.xml'=>'',
 
 		// Web server extensions / leave-behinds
@@ -242,6 +241,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		// IDE projects
 		'nbproject'=>'',
 		'.project'=>'',
+		'.idea'=>'',
 
 		// ocPortal control files
 		'closed.html'=>'',
@@ -265,7 +265,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 		// LEGACY: Old files
 		'info.php'=>'', // Pre-v10 equivalent to _config.php
-		'persistant_cache'=>'',
+		'persistant_cache'=>'', // Old misspelling
 		'docs4'=>'',
 		'mods'=>'imports|exports',
 	);
@@ -297,13 +297,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'clpprj'=>'',
 		'tmproj'=>'',
 		'zpj'=>'',
-
-		// PHP compiler temporary files
-		'o'=>'',
-		'scm'=>'',
-		'heap'=>'',
-		'sch'=>'',
-		'dll'=>'',
 
 		// CGI files
 		'fcgi'=>'',
@@ -394,7 +387,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		} else
 		{
 			$ignore_filename_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
-				array('(?!wiki_tree_made\.htm$)(?!download_tree_made\.htm$)(?!index\.html$)(?!\.htaccess$).*','.*_custom(/.*)?'), // Stuff under custom folders; wiki_tree_made/download_tree_made is defined as an exception - it allows setting fewer permissions on the html_custom directory if wanted (ideally we would do this in a more modular way, but not worth the overhead)
+				array('(?!index\.html$)(?!\.htaccess$).*','.*_custom(/.*)?'), // Stuff under custom folders
 			));
 			$ignore_filename_and_dir_name_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
 				//'.*\_custom'=>'.*', Let it find them, but work on the contents
@@ -462,10 +455,10 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 	if (($bitmask & IGNORE_NONBUNDLED_SCATTERED)!=0)
 	{
-		if (strtolower($filepath)=='data_custom/addon_screenshots') return true; // Relating to addon build, but not defined in addons
-		if (strtolower($filepath)=='exports/static') return true; // Empty directory, so has to be a special exception
-		if (strtolower($filepath)=='exports/builds') return true; // Needed to stop build recursion
-		if (strtolower($filepath)=='_tests') return true; // Test set may have various temporary files buried within
+		if (preg_match('#^data_custom/addon_screenshots(/|$)#',strtolower($filepath))!=0) return true; // Relating to addon build, but not defined in addons
+		if (preg_match('#^exports/static(/|$)#',strtolower($filepath))!=0) return true; // Empty directory, so has to be a special exception
+		if (preg_match('#^exports/builds(/|$)#',strtolower($filepath))!=0) return true; // Needed to stop build recursion
+		if (preg_match('#^_tests(/|$)#',strtolower($filepath))!=0) return true; // Test set may have various temporary files buried within
 
 		static $addon_files=NULL;
 		if ($addon_files===NULL)
@@ -480,7 +473,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 					{
 						require_code('addons');
 						$addon_info=read_addon_info($hook);
-						$addon_files=array_merge($addon_files,$addon_info['files']);
+						$addon_files=array_merge($addon_files,array_map('strtolower',$addon_info['files']));
 					} else // Running from outside ocPortal
 					{
 						require_code('hooks/systems/addon_registry/'.$hook);
@@ -489,8 +482,9 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 					}
 				}
 			}
+			$addon_files=array_flip($addon_files);
 		}
-		if (in_array(strtolower($filepath),$addon_files)) return true;
+		if (isset($addon_files[strtolower($filepath)])) return true;
 		// Note that we have no support for identifying directories related to addons, only files inside. Code using this function should detect directories with no usable files in as relating to addons.
 	}
 

@@ -153,7 +153,7 @@ class Module_news
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		$has_blogs=($GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)',NULL,'nc_owner IS NOT NULL')>0);
+		$has_blogs=($GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)',NULL,'WHERE nc_owner IS NOT NULL')>0);
 
 		$ret=array(
 			'misc'=>array('NEWS_ARCHIVE','menu/rich_content/news'),

@@ -1,17 +1,22 @@
-<?php /**
-* THIRD PARTY CODE
-* <external entry point>
-*
-* This script is designed to be able to run both standalone and from within ocPortal.
-* Hence ocPortal API functions are used - but defined here with simple implementations if this is being called standalone.
-*
-*
-* SpellChecker backend, Heavily modified for ocPortal
-*
-* @package core_form_interfaces
-* @author Yermo Lamers http://www.formvista.com/contact.html
-* @copyright DTLink, LLC 2005
-*/
+<?php
+
+/*NO_API_CHECK*/
+/*CQC: No check*/
+
+/**
+ * THIRD PARTY CODE
+ * <external entry point>
+ *
+ * This script is designed to be able to run both standalone and from within ocPortal.
+ * Hence ocPortal API functions are used - but defined here with simple implementations if this is being called standalone.
+ *
+ *
+ * SpellChecker backend, Heavily modified for ocPortal
+ *
+ * @package core_form_interfaces
+ * @author Yermo Lamers http://www.formvista.com/contact.html
+ * @copyright DTLink, LLC 2005
+ */
 
 /*EXTRA FUNCTIONS: (pspell\_.+|shell_exec)*/
 
@@ -425,7 +430,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 						//$niceposition=strval($lineindex).','.strval($absposition);
 						$beforeword=substr($textarray[$lineindex],0,$position);
 						$afterword=substr($textarray[$lineindex],$position+strlen($word));
-	//						$textarray[$lineindex]=$beforeword.$word.$afterword;
+						//$textarray[$lineindex]=$beforeword.$word.$afterword;
 						$textarray[$lineindex]=$beforeword.'<span class="HA-spellcheck-error">'.$word.'</span><span class="HA-spellcheck-suggestions">'.$word.'</span>'.$afterword;
 						$poscorrect=$poscorrect+88+strlen($word);
 					} else
@@ -493,7 +498,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 		$infolines.='"Language Used":"'.$lang.'",';
 		$infolines.='"Mispelled words":"'.strval($counter).'",';
 		$infolines.='"Total words suggested":"'.strval($suggest_count).'"';
-	//	$infolines.=',"Total Lines Checked":"'.strval($returnlines).'"';	Who cares?
+		//$infolines.=',"Total Lines Checked":"'.strval($returnlines).'"';	Who cares?
 		$infolines.='};';
 		$varlines=substr($varlines,0,strlen($varlines)-1);
 		if (!$ret)
@@ -503,8 +508,8 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 
 		if (!$ret)
 		{
-		echo '</head>
-		<body onload="window.parent.finishedSpellChecking();">';
+			echo '</head>
+			<body onload="window.parent.finishedSpellChecking();">';
 		}
 
 		foreach ($textarray as $value)

@@ -124,6 +124,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 		}
 	}
 
+	require_code('abstract_file_manager');
 	if (!file_exists(get_file_base().'/'.$zone))
 	{
 		// Create structure
