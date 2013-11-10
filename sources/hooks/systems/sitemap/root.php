@@ -28,7 +28,13 @@ class Hook_sitemap_root extends Hook_sitemap_base
 	 */
 	function handles_pagelink($pagelink)
 	{
-		if ($pagelink==':') return SITEMAP_NODE_HANDLED;
+		if (get_option('collapse_user_zones')=='0')
+		{
+			if ($pagelink=='') return SITEMAP_NODE_HANDLED; // Imaginery node
+		} else
+		{
+			if ($pagelink==':') return SITEMAP_NODE_HANDLED; // Welcome zone
+		}
 		return SITEMAP_NODE_NOT_HANDLED;
 	}
 
@@ -53,7 +59,7 @@ class Hook_sitemap_root extends Hook_sitemap_base
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
 		$node=$this->get_node(':',$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
-		if ($callback===NULL || $return_anyway) $nodes[]=$node;
+		if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 
 		return $nodes;
 	}
@@ -81,7 +87,7 @@ class Hook_sitemap_root extends Hook_sitemap_base
 			'title'=>do_lang_tempcode('ROOT'),
 			'content_type'=>'root',
 			'content_id'=>NULL,
-			'pagelink'=>':',
+			'pagelink'=>'',
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>NULL,
@@ -105,7 +111,13 @@ class Hook_sitemap_root extends Hook_sitemap_base
 			'sitemap_refreshfreq'=>'daily',
 		);
 
-		if (!$this->_check_node_permissions($struct)) return NULL;
+		if (get_option('collapse_user_zones')=='0')
+		{
+			$struct['title']=do_lang_tempcode('_WELCOME');
+			$struct['pagelink']=':';
+			$struct['extra_meta']['image']=find_theme_image('icons/24x24/menu/welcome');
+			$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/menu/welcome');
+		}
 
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
@@ -114,14 +126,53 @@ class Hook_sitemap_root extends Hook_sitemap_base
 		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 		{
 			$zone_sitemap_ob=$this->_get_sitemap_object('zone');
+
 			$children=array();
+
+			// Ones going first
+			$first_zones=find_all_zones(false,true,false,0,SITEMAP_MAX_ROWS_PER_LOOP);
+			foreach ($first_zones as $_zone)
+			{
+				list($zone)=$_zone;
+				if ($zone==((get_option('collapse_user_zones')=='0')?'site':''))
+				{
+					$child_pagelink=$zone.':';
+					$child_node=$zone_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
+					if ($child_node!==NULL)
+						$children[]=$child_node;
+				}
+			}
+
+			$last_ones=array();
+
+			// Middle ones
 			$start=0;
 			do
 			{
-				$zones=find_all_zones(false,true,false,$start,SITEMAP_MAX_ROWS_PER_LOOP);
+				if ($start==0)
+				{
+					$zones=$first_zones;
+				} else
+				{
+					$zones=find_all_zones(false,true,false,$start,SITEMAP_MAX_ROWS_PER_LOOP);
+				}
 				foreach ($zones as $_zone)
 				{
-					list($zone,$title)=$_zone;
+					list($zone)=$_zone;
+
+					// We force a certain order for some
+					if ($zone=='') continue;
+					if ($zone=='site') continue;
+					if ($zone=='cms')
+					{
+						array_unshift($last_ones,$_zone);
+						continue;
+					}
+					if ($zone=='adminzone')
+					{
+						array_push($last_ones,$_zone);
+						continue;
+					}
 
 					$child_pagelink=$zone.':';
 					$child_node=$zone_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
@@ -131,6 +182,17 @@ class Hook_sitemap_root extends Hook_sitemap_base
 				$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 			}
 			while (count($zones)>0);
+
+			// Ones going last
+			foreach ($last_ones as $_zone)
+			{
+				list($zone)=$_zone;
+				$child_pagelink=$zone.':';
+				$child_node=$zone_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
+				if ($child_node!==NULL)
+					$children[]=$child_node;
+			}
+
 			$struct['children']=$children;
 		}
 

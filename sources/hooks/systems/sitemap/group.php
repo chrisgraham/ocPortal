@@ -67,15 +67,18 @@ class Hook_sitemap_group extends Hook_sitemap_content
 			return $nodes;
 		}
 
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$start=0;
 		do
 		{
 			$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),has_privilege(get_member(),'see_hidden_groups')?NULL:array('g_hidden'=>0),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
+				if ($row['id']==db_get_first_id()) continue;
 				$child_pagelink=$zone.':groups:'.$this->screen_type.':'.strval($row['id']);
 				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				if ($callback===NULL || $return_anyway) $nodes[]=$node;
+				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
 
 			$start+=SITEMAP_MAX_ROWS_PER_LOOP;

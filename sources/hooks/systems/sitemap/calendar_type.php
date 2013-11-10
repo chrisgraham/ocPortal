@@ -69,6 +69,8 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 			return $nodes;
 		}
 
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$start=0;
 		do
 		{
@@ -79,7 +81,7 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 				{
 					$child_pagelink=$zone.':calendar:'.$this->screen_type.':int_'.strval($row['id']).'=1';
 					$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-					if ($callback===NULL || $return_anyway) $nodes[]=$node;
+					if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 				}
 			}
 
@@ -109,7 +111,8 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 	 */
 	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
-		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		$pagelink_fudged=preg_replace('#:int_(\d+)=1#',':${1}',$pagelink);
+		$_=$this->_create_partial_node_structure($pagelink_fudged,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		if ($_===NULL) return NULL;
 		list($content_id,$row,$partial_struct)=$_;
 

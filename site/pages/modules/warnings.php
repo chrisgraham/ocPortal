@@ -36,6 +36,16 @@ class Module_warnings extends standard_crud_module
 	var $title_is_multi_lang=true;
 
 	/**
+	 * Standard modular icon finder function, to find icon for wrapper node. Defined when there is no entry-point for a default page call.
+	 *
+	 * @return string		Icon.
+	 */
+	function get_wrapper_icon()
+	{
+		return 'tabs/member_account/warnings';
+	}
+
+	/**
 	 * Standard modular entry-point finder function.
 	 *
 	 * @param  boolean	Whether to check permissions.

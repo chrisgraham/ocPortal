@@ -97,10 +97,12 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 			return $nodes;
 		}
 
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$start=0;
 		do
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_is_tree'),NULL,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+			$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),NULL,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
 				if (substr($row['c_name'],0,1)!='_')
@@ -108,7 +110,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 					// Index
 					$child_pagelink=$zone.':catalogues:index:'.$row['c_name'];
 					$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-					if ($callback===NULL || $return_anyway) $nodes[]=$node;
+					if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 				}
 			}
 
@@ -142,6 +144,12 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 		if ($_===NULL) return NULL;
 		list($content_id,$row,$partial_struct)=$_;
 
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
+		$page=$matches[2];
+
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$struct=array(
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
 			'sitemap_refreshfreq'=>'weekly',
@@ -169,14 +177,36 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 			$lots=($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']))>1000);
 			if (!$lots)
 			{
-				$more_children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				$children=array_merge($children,$more_children);
+				$child_hook_ob=$this->_get_sitemap_object('catalogue_category');
+
+				$children_entries=array();
+				$start=0;
+				do
+				{
+					$where=array('c_name'=>$content_id,'cc_parent_id'=>NULL);
+					$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),$where,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+					foreach ($rows as $child_row)
+					{
+						$child_pagelink=$zone.':'.$page.':entry:'.strval($child_row['id']);
+						$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+						if ($child_node!==NULL)
+							$children_entries[]=$child_node;
+					}
+					$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+				}
+				while (count($rows)>0);
+
+				sort_maps_by($children_entries,'title');
+
+				$children=array_merge($children,$children_entries);
 			}
 
-			$this->children=$children;
+			$struct['children']=$children;
 		}
 		elseif (strpos($pagelink,':atoz:')!==false)
 		{
+			$struct['title']=do_lang_tempcode('catalogues:ATOZ');
+
 			$test=find_theme_image('icons/24x24/menu/rich_content/atoz',true);
 			if ($test!='')
 				$struct['image']=$test;

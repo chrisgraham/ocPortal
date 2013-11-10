@@ -147,10 +147,18 @@ class Module_admin_permissions
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		$ret=array(
-			'page'=>array('PAGE_ACCESS','menu/adminzone/security/permissions/permission_tree_editor'),
-			'privileges'=>array('PRIVILEGES','menu/adminzone/security/permissions/privileges'),
-		);
+		if (has_js())
+		{
+			$ret=array(
+				'misc'=>array('PERMISSIONS_TREE','menu/adminzone/security/permissions/permission_tree_editor'),
+			);
+		} else
+		{
+			$ret=array(
+				'page'=>array('PAGE_ACCESS','menu/adminzone/security/permissions/permission_tree_editor'),
+			);
+		}
+		$ret['privileges']=array('PRIVILEGES','menu/adminzone/security/permissions/privileges');
 		if (addon_installed('match_key_permissions'))
 			$ret['match_keys']=array('MATCH_KEYS','menu/adminzone/security/permissions/match_keys');
 		return $ret;

@@ -69,6 +69,8 @@ class Hook_sitemap_gallery extends Hook_sitemap_content
 			return $nodes;
 		}
 
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$start=0;
 		do
 		{
@@ -77,7 +79,7 @@ class Hook_sitemap_gallery extends Hook_sitemap_content
 			{
 				$child_pagelink=$zone.':galleries:'.$this->screen_type.':'.$row['name'];
 				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				if ($callback===NULL || $return_anyway) $nodes[]=$node;
+				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
 
 			$start+=SITEMAP_MAX_ROWS_PER_LOOP;

@@ -69,6 +69,8 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 			return $nodes;
 		}
 
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$start=0;
 		do
 		{
@@ -79,7 +81,7 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 				if (strpos($pagelink,':blog=0')!==false) $child_pagelink.=':blog=0';
 				if (strpos($pagelink,':blog=1')!==false) $child_pagelink.=':blog=1';
 				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				if ($callback===NULL || $return_anyway) $nodes[]=$node;
+				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
 
 			$start+=SITEMAP_MAX_ROWS_PER_LOOP;
@@ -114,8 +116,9 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
-		$zone=$matches[1];
 		$page=$matches[2];
+
+		$this->_make_zone_concrete($zone,$pagelink);
 
 		$struct=array(
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_HIGH,
@@ -138,7 +141,7 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 		}
 		if ($consider_secondary_categories)
 		{
-			$child_hook_ob=$this->_get_sitemap_object($this->entry_sitetree_hook);
+			$child_hook_ob='news';
 
 			$child_rows=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry'),array('news_entry_category'=>intval($content_id)));
 			foreach ($child_rows as $child_row)

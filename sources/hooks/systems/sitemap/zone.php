@@ -40,6 +40,11 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 	 */
 	function handles_pagelink($pagelink)
 	{
+		if (get_option('collapse_user_zones')=='0')
+		{
+			if ($pagelink==':') return SITEMAP_NODE_NOT_HANDLED;
+		}
+
 		if (preg_match('#^([^:]*):$#',$pagelink)!=0)
 		{
 			return SITEMAP_NODE_HANDLED;
@@ -88,10 +93,10 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 		if (!isset($row))
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('zones',array('zone_title','zone_default_page'),array('zone_name'=>$zone),'',1);
-			$row=array($zone,get_translated_text($rows[0]['zone_title']),false,$rows[0]['zone_default_page']);
+			$row=array($zone,get_translated_text($rows[0]['zone_title']),$rows[0]['zone_default_page']);
 		}
 		$title=$row[1];
-		$default_page=$row[3];
+		$default_page=$row[2];
 
 		$path=get_custom_file_base().'/'.$zone.'/index.php';
 		if (!is_file($path)) $path=get_file_base().'/'.$zone.'/index.php';
@@ -100,11 +105,6 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 		switch ($zone)
 		{
 			case '':
-				if (get_option('collapse_user_zones')=='0')
-				{
-					$icon='menu/welcome';
-					break;
-				} // else flow on
 			case 'site':
 				$icon='menu/start';
 				break;
@@ -163,9 +163,6 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
 
-		if ($callback!==NULL)
-			call_user_func($callback,$struct);
-
 		// What page groupings may apply in what zones?
 		$applicable_page_groupings=array();
 		switch ($zone)
@@ -188,12 +185,15 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 				} // else flow on...
 
 			case 'site':
-				$applicable_page_groupings=array(
-					'pages',
-					'rich_content',
-					'site_meta',
-					'social',
-				);
+				if ($use_page_groupings)
+				{
+					$applicable_page_groupings=array(
+						'pages',
+						'rich_content',
+						'site_meta',
+						'social',
+					);
+				}
 				break;
 
 			case 'cms':
@@ -202,6 +202,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 				);
 				break;
 		}
+
+		$call_struct=true;
 
 		// Categories done after node callback, to ensure sensible ordering
 		$children=array();
@@ -222,6 +224,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 				foreach ($links as $link)
 				{
 					list($page_grouping)=$link;
+
+					// In a page grouping that is explicitly included
 					if (($page_grouping!='') && (in_array($page_grouping,$applicable_page_groupings)))
 					{
 						if (!isset($page_groupings[$page_grouping]))
@@ -240,7 +244,14 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			{
 				if (is_integer($page)) $page=strval($page);
 
-				if ((!isset($pages_found[$page])) && ((strpos($page_type,'comcode_page')===false) || (isset($root_comcode_pages[$page]))))
+				if (preg_match('#^redirect:#',$page_type)!=0)
+				{
+					$details=$this->_request_page_details($page,$zone);
+					$page_type=strtolower($details[0]);
+					$pages[$page]=$page_type;
+				}
+
+				if ((!isset($pages_found[$page])) && ((strpos($page_type,'comcode')===false) || (!isset($root_comcode_pages[$page]))))
 				{
 					if ($this->_is_page_omitted_from_sitemap($zone,$page)) continue;
 
@@ -249,7 +260,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			}
 
 			// Do page-groupings
-			if (count($page_groupings)>1)
+			if (count($page_groupings)!=1)
 			{
 				$comcode_page_sitemap_ob=$this->_get_sitemap_object('comcode_page');
 				$page_sitemap_ob=$this->_get_sitemap_object('page');
@@ -284,12 +295,11 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 				// Any remaining orphaned pages (we have to tag these on as there was no catch-all page grouping in this zone)
 				if (count($orphaned_pages)>0)
 				{
-					$page_sitemap_ob=$this->_get_sitemap_object('page');
 					foreach ($orphaned_pages as $page=>$page_type)
 					{
 						if (is_integer($page)) $page=strval($page);
 
-						$child_pagelink=$pagelink.':'.$page;
+						$child_pagelink=$zone.':'.$page;
 
 						if (strpos($page_type,'comcode')!==false)
 						{
@@ -313,8 +323,18 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 							$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
 						}
-						if ($child_node!==NULL)
-							$children[]=$child_node;
+
+						if ($page==$default_page)
+						{
+							// Put as container instead
+							$struct=$child_node;
+							$children=array_merge($children,$struct['children']);
+							$call_struct=false; // Already been called in get_virtual_nodes
+						} else
+						{
+							if ($child_node!==NULL)
+								$children[]=$child_node;
+						}
 					}
 				}
 			} elseif (count($page_groupings)==1)
@@ -395,6 +415,9 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			}
 		}
 		$struct['children']=$children;
+
+		if ($callback!==NULL && $call_struct)
+			call_user_func($callback,$struct);
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}

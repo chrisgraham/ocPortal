@@ -152,7 +152,7 @@ class breadcrumb_substitution_loader
 				{
 					$zones=find_all_zones(false,true);
 					if (isset($zones[$zone]))
-						$attributes['page']='(?!'.$zones[$zone][3].')'.REGEXP_CODENAME;
+						$attributes['page']='(?!'.$zones[$zone][2].')'.REGEXP_CODENAME;
 					else
 						$attributes['page']='_WILD';
 				}

@@ -38,28 +38,40 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 			$page=$matches[2];
 			$type=$matches[3];
 
-			require_code('site');
-			$details=_request_page($page,$zone);
+			$details=$this->_request_page_details($page,$zone);
 
-			$path=end($details);
-
-			if ($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM')
+			if ($details!==false)
 			{
-				$functions=extract_module_functions($path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
-				if (!is_null($functions[0]))
+				$path=end($details);
+				if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
+					$path=str_replace('/modules_custom/','/modules/',$path);
+
+				if ($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM')
 				{
-					$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
-
-					if (isset($entry_points['misc']))
+					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+					if (!is_null($functions[0]))
 					{
-						unset($entry_points['misc']);
-					} else
-					{
-						array_shift($entry_points);
+						if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
+						{
+							$path=str_replace('/modules_custom/','/modules/',$path);
+							$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+						}
 					}
+					if (!is_null($functions[0]))
+					{
+						$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
-					if (isset($entry_points[$type]))
-						return SITEMAP_NODE_HANDLED;
+						if (isset($entry_points['misc']))
+						{
+							unset($entry_points['misc']);
+						} else
+						{
+							array_shift($entry_points);
+						}
+
+						if (isset($entry_points[$type]))
+							return SITEMAP_NODE_HANDLED;
+					}
 				}
 			}
 		}
@@ -86,31 +98,39 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*):([^:]*)#',$pagelink,$matches);
-
-		if ($matches[1]!=$zone)
-		{
-			if ($zone=='_SEARCH')
-			{
-				$zone=$matches[1];
-			} else
-			{
-				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-			}
-		}
+		preg_match('#^([^:]*):([^:]*):([^:]*)(:.*|$)#',$pagelink,$matches);
 		$page=$matches[2];
 		$type=$matches[3];
 
-		require_code('site');
-		$details=_request_page($page,$zone);
+		$orig_pagelink=$pagelink;
+		$this->_make_zone_concrete($zone,$pagelink);
+
+		$details=$this->_request_page_details($page,$zone);
 
 		$path=end($details);
 
-		$functions=extract_module_functions($path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+		if (($type=='add_catalogue') && ($matches[4]!='') && ($matches[4][1]=='_'))
+		{
+			require_code('fields');
+			$entry_points=manage_custom_fields_entry_points(substr($matches[4],2));
+			$entry_point=$entry_points[$orig_pagelink];
+		} else
+		{
+			$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+			if (!is_null($functions[0]))
+			{
+				if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
+				{
+					$path=str_replace('/modules_custom/','/modules/',$path);
+					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+				}
+			}
 
-		$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
+			$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
-		$entry_point=$entry_points[$type];
+			$entry_point=$entry_points[$type];
+		}
+
 		$icon=mixed();
 		if (is_array($entry_point))
 		{

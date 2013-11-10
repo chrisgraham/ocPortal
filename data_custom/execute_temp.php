@@ -55,10 +55,10 @@ function execute_temp()
 {
 	require_code('sitemap');
 
-	$pagelink=NULL;
+	$pagelink='site:catalogues';
 	$callback=NULL;
 	$valid_node_types=NULL;
-	$max_recurse_depth=NULL;
+	$max_recurse_depth=20;
 	$require_permission_support=false;
 	$zone='_SEARCH';
 	$consider_secondary_categories=true;
@@ -66,22 +66,21 @@ function execute_temp()
 	$meta_gather=SITEMAP_GATHER__ALL;
 
 	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+	if (is_null($node)) @exit('NULL');
 	var_dump(filter($node));
 	exit();
 }
 
 function filter($node)
 {
-	if (isset($node['title']) && !array_key_exists('image',$node['extra_meta'])) {@var_dump($node);exit('error');}
-	if (isset($node['title']) && !isset($node['extra_meta']))
-	{
-		@var_dump($node);exit();
-	}
-if (isset($node['title']) && !is_object($node['title'])) @exit($node['title']);
+	if (isset($node['title']) && !array_key_exists('image',$node['extra_meta'])) {@var_dump($node);@exit('missing image meta data');}
+	if (isset($node['title']) && !is_object($node['title'])) {@var_dump($node);@exit('Non-Tempcode title');}
+
 	return array(
 		'title'=>isset($node['title'])?$node['title']->evaluate():'',
 		'image'=>isset($node['extra_meta']['image'])?$node['extra_meta']['image']:'',
 		'pagelink'=>isset($node['pagelink'])?$node['pagelink']:NULL,
+		'content_type'=>isset($node['content_type'])?$node['content_type']:NULL,
 		'children'=>array_map('filter',$node['children']),
 	);
 }

@@ -82,7 +82,7 @@ class Module_admin_ocpusers
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
-			'misc'=>array('OC_SITES_INSTALLED','menu/_generic_admin/tools'),
+			'misc'=>array('OC_SITES_INSTALLED','menu/_generic_admin/tool'),
 		);
 	}
 

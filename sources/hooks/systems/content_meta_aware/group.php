@@ -83,7 +83,7 @@ class Hook_content_meta_aware_group
 			'addon_name'=>'core_ocf',
 
 			'cms_page'=>'groups',
-			'module'=>NULL,
+			'module'=>'groups',
 
 			'occle_filesystem_hook'=>'groups',
 			'occle_filesystem__is_folder'=>true,

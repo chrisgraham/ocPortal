@@ -17,11 +17,11 @@
 Tips...
 
 Query to find test sections not yet started:
-SELECT s.* FROM `ocp4_test_sections` s WHERE NOT EXISTS(SELECT * FROM `ocp4_tests` WHERE t_section=s.id AND t_status<>0)
+SELECT s.* FROM `ocp_test_sections` s WHERE NOT EXISTS(SELECT * FROM `ocp_tests` WHERE t_section=s.id AND t_status<>0)
 AND s_assigned_to<>4 AND s_assigned_to<>89
 ORDER BY s_assigned_to
 
-UPDATE ocp4_test_sections SET s_assigned_to=4 WHERE id IN (2,18,19,20,21,22,34,35,36,72,73,77,78,79,80,81,82,83,84,85,86,89,90,91,92,93,94,95,96,97,98,99,100,101,103)
+UPDATE ocp_test_sections SET s_assigned_to=4 WHERE id IN (2,18,19,20,21,22,34,35,36,72,73,77,78,79,80,81,82,83,84,85,86,89,90,91,92,93,94,95,96,97,98,99,100,101,103)
 */
 
 /**
@@ -89,6 +89,16 @@ class Module_tester
 		add_privilege('TESTER','perform_tests',false);
 		add_privilege('TESTER','add_tests',true);
 		add_privilege('TESTER','edit_own_tests',true);
+	}
+
+	/**
+	 * Standard modular icon finder function, to find icon for wrapper node. Defined when there is no entry-point for a default page call.
+	 *
+	 * @return string		Icon.
+	 */
+	function get_wrapper_icon()
+	{
+		return 'menu/_generic_admin/tool';
 	}
 
 	/**

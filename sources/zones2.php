@@ -667,7 +667,7 @@ function extract_module_info($path)
  *
  * @param  ID_TEXT		The zone name
  * @param  boolean		Whether to leave file extensions on the page name
- * @param  boolean		Whether to take redirects into account
+ * @param  boolean		Whether to take transparent redirects into account
  * @param  integer		Selection algorithm constant
  * @set 0 1 2
  * @param  ?ID_TEXT		Page type to show (NULL: all)

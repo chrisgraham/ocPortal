@@ -79,11 +79,11 @@ class Hook_page_groupings_core
 			(addon_installed('syndication'))?array('tools','action_links/rss',array('admin_config',array('type'=>'backend'),get_module_zone('admin_config')),do_lang_tempcode('FEEDS'),'rss:OPML_INDEX_DESCRIPTION'):NULL,
 			(addon_installed('code_editor'))?array('tools','menu/adminzone/tools/code_editor',array('admin_config',array('type'=>'code_editor'),get_module_zone('admin_config')),do_lang_tempcode('CODE_EDITOR'),'DOC_CODE_EDITOR'):NULL,
 
-			(get_comcode_zone('start',false)===NULL)?NULL:array('','menu/start',array('start',array(),get_comcode_zone('start')),do_lang_tempcode('HOME')),
-			array('','menu/pages',array(NULL,array(),NULL),do_lang_tempcode('PAGES')),
-			array('','menu/rich_content',array(NULL,array(),NULL),do_lang_tempcode('menus:RICH_CONTENT')),
-			array('','menu/site_meta',array(NULL,array(),NULL),do_lang_tempcode('menus:SITE_META')),
-			array('','menu/social',array(NULL,array(),NULL),do_lang_tempcode('SECTION_SOCIAL')),
+			//(get_comcode_zone('start',false)===NULL)?NULL:array('','menu/start',array('start',array(),get_comcode_zone('start')),do_lang_tempcode('HOME')),	Attached to zone, so this is not needed
+			array('','menu/pages',array('admin',array('type'=>'pages'),'adminzone'),do_lang_tempcode('PAGES')),
+			array('','menu/rich_content',array('admin',array('type'=>'rich_content'),'adminzone'),do_lang_tempcode('menus:RICH_CONTENT')),
+			array('','menu/site_meta',array('admin',array('type'=>'site_meta'),'adminzone'),do_lang_tempcode('menus:SITE_META')),
+			array('','menu/social',array('admin',array('type'=>'social'),'adminzone'),do_lang_tempcode('SECTION_SOCIAL')),
 
 			(get_comcode_zone('about',false)===NULL)?NULL:array('pages','menu/pages/about_us',array('about',array(),get_comcode_zone('about')),do_lang_tempcode('menus:ABOUT')),
 			(get_comcode_zone('keymap',false)===NULL || get_option('collapse_user_zones')=='1'/*If collapsed then will show as child page of help page*/)?NULL:array('site_meta','menu/pages/keymap',array('keymap',array(),get_comcode_zone('keymap')),do_lang_tempcode('KEYBOARD_MAP')),

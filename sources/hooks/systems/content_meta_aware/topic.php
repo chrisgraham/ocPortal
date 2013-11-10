@@ -87,7 +87,7 @@ class Hook_content_meta_aware_topic
 			'addon_name'=>'ocf_forum',
 
 			'cms_page'=>'topics',
-			'module'=>'forumview',
+			'module'=>'topicview',
 
 			'occle_filesystem_hook'=>'forums',
 			'occle_filesystem__is_folder'=>true,

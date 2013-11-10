@@ -502,7 +502,7 @@ function load_module_page($string,$codename,&$out=NULL)
  * @param  boolean		Whether to insist on getting all zones without $start/$max parameters (there could be thousands in theory...)
  * @param  integer		Start position to get results from (ignored if $force_all is on)
  * @param  integer		Maximum zones to get
- * @return array			A list of zone names / a list of quartets (name, title, show in menu, default page)
+ * @return array			A list of zone names / a list of quartets (name, title, default page, zone row)
  */
 function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=0,$max=50)
 {
@@ -1092,7 +1092,7 @@ function block_installed($block)
  *
  * @param  ID_TEXT		The zone name
  * @param  boolean		Whether to leave file extensions on the page name
- * @param  boolean		Whether to take redirects into account
+ * @param  boolean		Whether to take transparent redirects into account
  * @param  integer		Selection algorithm constant
  * @set 0 1 2
  * @param  ?ID_TEXT		Page type to show (NULL: all)
@@ -1206,7 +1206,7 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 	}
 
 	if (!is_file($path)) return array(NULL);
-	$file=unixify_line_format(file_get_contents(get_file_base().'/'.$path),NULL,false,true);
+	$file=unixify_line_format(file_get_contents($path),NULL,false,true);
 
 	if (strpos($file,'class Mx_')!==false)
 	{

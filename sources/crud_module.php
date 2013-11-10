@@ -138,24 +138,24 @@ class standard_crud_module
 		$entry_points=array();
 		if (method_exists($this,'add_actualisation'))
 		{
-			$entry_points=array_merge($entry_points,array(
+			$entry_points+=array(
 				'ad'=>array('ADD_'.$this->lang_type,'menu/_generic_admin/add_one'),
 				'ed'=>array('EDIT_'.$this->lang_type,'menu/_generic_admin/edit_one'),
-			));
+			);
 		}
 		if (!is_null($this->cat_crud_module))
 		{
-			$entry_points=array_merge($entry_points,array(
+			$entry_points+=array(
 				'ac'=>array('ADD_'.$this->cat_crud_module->lang_type,'menu/_generic_admin/add_one_category'),
 				'ec'=>array('EDIT_'.$this->cat_crud_module->lang_type,'menu/_generic_admin/edit_one_category'),
-			));
+			);
 		}
 		if (!is_null($this->alt_crud_module))
 		{
-			$entry_points=array_merge($entry_points,array(
+			$entry_points+=array(
 				'av'=>array('ADD_'.$this->alt_crud_module->lang_type,'menu/_generic_admin/add_one'),
 				'ev'=>array('EDIT_'.$this->alt_crud_module->lang_type,'menu/_generic_admin/edit_one'),
-			));
+			);
 		}
 		return $entry_points;
 	}

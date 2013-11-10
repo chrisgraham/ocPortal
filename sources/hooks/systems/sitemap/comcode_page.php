@@ -38,16 +38,18 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	function handles_pagelink($pagelink)
 	{
 		$matches=array();
-		if (preg_match('#^([^:]*):([^:]*)$#',$pagelink,$matches)!=0)
+		if (preg_match('#^([^:]*):([^:]+)$#',$pagelink,$matches)!=0)
 		{
 			$zone=$matches[1];
 			$page=$matches[2];
 
-			require_code('site');
-			$details=_request_page($page,$zone);
-			if (strpos($details[0],'COMCODE')!==false)
+			$details=$this->_request_page_details($page,$zone);
+			if ($details!==false)
 			{
-				return SITEMAP_NODE_HANDLED;
+				if (strpos($details[0],'COMCODE')!==false)
+				{
+					return SITEMAP_NODE_HANDLED;
+				}
 			}
 		}
 		return SITEMAP_NODE_NOT_HANDLED;
@@ -86,29 +88,20 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
-		if ($matches[1]!=$zone)
-		{
-			if ($zone=='_SEARCH')
-			{
-				$zone=$matches[1];
-			} else
-			{
-				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-			}
-		}
 		$page=$matches[2];
+
+		$this->_make_zone_concrete($zone,$pagelink);
 
 		$zone_default_page=$GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page',array('zone_name'=>$zone));
 
-		require_code('site');
-		$details=_request_page($page,$zone);
+		$details=$this->_request_page_details($page,$zone);
 
 		$path=end($details);
 
 		$row=$this->_load_row($row,$zone,$page);
 
 		$struct=array(
-			'title'=>titleify($page),
+			'title'=>make_string_tempcode(escape_html(titleify($page))),
 			'content_type'=>'comcode_page',
 			'content_id'=>$zone.':'.$page,
 			'pagelink'=>$pagelink,
@@ -152,30 +145,37 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 		$this->_ameliorate_with_row($struct,$row);
 
 		// In the DB?
+		$got_title=false;
 		$db_row=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN '.get_table_prefix().'comcode_pages b ON a.the_zone=b.the_zone AND a.the_page=b.the_page',array('*'),array('a.the_zone'=>$zone,'a.the_page'=>$page),'',1);
 		if (isset($db_row[0]))
 		{
-			if (($meta_gather & SITEMAP_GATHER_DB_ROW)!=0)
+			if (isset($db_row[0]['cc_page_title']))
 			{
-				$struct['db_row']=$db_row+$struct['db_row'];
+				$_title=get_translated_text($db_row[0]['cc_page_title']);
+				if ($_title!='')
+				{
+					$struct['title']=make_string_tempcode(escape_html($_title));
+					$got_title=true;
+				}
 			}
 			if (isset($db_row[0]['p_add_date']))
 			{
-				$struct['add_date']=$db_row[0]['p_add_date'];
+				$struct['extra_meta']['add_date']=$db_row[0]['p_add_date'];
 			}
 			if (isset($db_row[0]['p_edit_date']))
 			{
-				$struct['edit_date']=$db_row[0]['p_edit_date'];
+				$struct['extra_meta']['edit_date']=$db_row[0]['p_edit_date'];
 			}
 			if (isset($db_row[0]['p_submitter']))
 			{
-				$struct['submitter']=$db_row[0]['p_submitter'];
+				$struct['extra_meta']['submitter']=$db_row[0]['p_submitter'];
 			}
-			if (isset($db_row[0]['cc_page_title']))
+			if (($meta_gather & SITEMAP_GATHER_DB_ROW)!=0)
 			{
-				$struct['title']=make_string_tempcode(escape_html(get_translated_text($db_row[0]['cc_page_title'])));
+				$struct['extra_meta']['db_row']=$db_row[0]+(($row===NULL)?array():$struct['extra_meta']['db_row']);
 			}
-		} else
+		}
+		if (!$got_title)
 		{
 			$page_contents=file_get_contents(get_file_base().'/'.$path);
 			$matches=array();
@@ -183,7 +183,9 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 			{
 				$start=strpos($page_contents,$matches[0])+strlen($matches[0]);
 				$end=strpos($page_contents,'[/title]',$start);
-				$struct['title']=comcode_to_tempcode(substr($page_contents,$start,$end-$start),NULL,true);
+				$_title=substr($page_contents,$start,$end-$start);
+				if ($_title!='')
+					$struct['title']=comcode_to_tempcode($_title,NULL,true);
 			}
 		}
 
@@ -216,9 +218,8 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 				}
 				while (count($child_rows)>0);
 			}
-
-			$struct['children']=$children;
 		}
+		$struct['children']=$children;
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}

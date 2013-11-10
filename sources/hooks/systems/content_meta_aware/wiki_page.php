@@ -39,7 +39,7 @@ class Hook_content_meta_aware_wiki_page
 			'id_field'=>'id',
 			'id_field_numeric'=>true,
 			'parent_category_field'=>NULL,
-			'parent_category_meta_aware_type'=>NULL,
+			'parent_category_meta_aware_type'=>'wiki_page',
 			'is_category'=>true,
 			'is_entry'=>false,
 			'category_field'=>'id', // For category permissions

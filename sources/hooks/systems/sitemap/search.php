@@ -28,22 +28,9 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	 */
 	function handles_pagelink($pagelink)
 	{
-		$matches=array();
-		if (preg_match('#^([^:]*):([^:]*)$#',$pagelink,$matches)!=0)
+		if (preg_match('#^([^:]*):search$#',$pagelink)!=0)
 		{
-			$zone=$matches[1];
-			$page=$matches[2];
-
-			if ($page=='search')
-			{
-				require_code('site');
-				$details=_request_page($page,$zone);
-				if ($details!==false)
-				{
-					if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED;
-					return SITEMAP_NODE_HANDLED_VIRTUALLY;
-				}
-			}
+			return SITEMAP_NODE_HANDLED_VIRTUALLY;
 		}
 		return SITEMAP_NODE_NOT_HANDLED;
 	}
@@ -78,6 +65,8 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			return $nodes;
 		}
 
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$_hooks=find_all_hooks('modules','search');
 		foreach (array_keys($_hooks) as $hook)
 		{
@@ -91,7 +80,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			{
 				$child_pagelink=$zone.':search:misc:'.$hook;
 				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
-				if ($callback===NULL || $return_anyway) $nodes[]=$node;
+				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
 		}
 

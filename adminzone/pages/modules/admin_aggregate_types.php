@@ -92,6 +92,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
+			'misc'=>array('AGGREGATE_TYPES','menu/adminzone/structure/aggregate_types'),
 			'xml'=>array('EDIT_AGGREGATE_TYPES','menu/_generic_admin/xml'),
 			'sync'=>array('SYNCHRONISE_AGGREGATE_TYPES','menu/_generic_admin/sync'),
 		)+parent::get_entry_points();

@@ -79,15 +79,17 @@ class Hook_sitemap_forum extends Hook_sitemap_content
 			return $nodes;
 		}
 
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$start=0;
 		do
 		{
-			$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),NULL,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('f_parent_forum'=>NULL),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
 				$child_pagelink=$zone.':forumview:'.$this->screen_type.':'.strval($row['id']);
 				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				if ($callback===NULL || $return_anyway) $nodes[]=$node;
+				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
 
 			$start+=SITEMAP_MAX_ROWS_PER_LOOP;
@@ -159,13 +161,19 @@ class Hook_sitemap_forum extends Hook_sitemap_content
 		foreach ($children as $child)
 		{
 			$child_row=$child['extra_meta']['db_row'];
-			if (($backup_meta_gather & SITEMAP_GATHER_DB_ROW)==0)
-				$child['extra_meta']['db_row']=NULL;
-			$num_posts=$child_row['t_cache_num_posts'];
-			$children2[]=$child;
-			for ($i=$per_page;$i<$num_posts;$i+=$per_page)
+			if ($child['content_type']=='topic')
 			{
-				$children2[]=array('page_link'=>$child['page_link'].':start='.strval($i))+$child;
+				if (($backup_meta_gather & SITEMAP_GATHER_DB_ROW)==0)
+					$child['extra_meta']['db_row']=NULL;
+				$num_posts=$child_row['t_cache_num_posts'];
+				$children2[]=$child;
+				for ($i=$per_page;$i<$num_posts;$i+=$per_page)
+				{
+					$children2[]=array('page_link'=>$child['page_link'].':start='.strval($i))+$child;
+				}
+			} else
+			{
+				$children2[]=$child;
 			}
 		}
 		$struct['children']=$children2;

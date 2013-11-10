@@ -301,14 +301,14 @@ function create_selection_list_zones($sel=NULL,$no_go=NULL,$reorder=NULL)
 		$_zones_b=array();
 		foreach ($zones as $_zone)
 		{
-			list($zone,$title,)=$_zone;
+			list($zone,$title)=$_zone;
 			if (in_array($zone,$reorder)) $_zones_a[]=$_zone; else $_zones_b[]=$_zone;
 		}
 		$zones=array_merge($_zones_a,$_zones_b);
 	}
 	foreach ($zones as $_zone)
 	{
-		list($zone,$title,)=$_zone;
+		list($zone,$title)=$_zone;
 		if ((has_zone_access(get_member(),$zone)) && (!in_array($zone,$no_go)))
 		{
 			$content->attach(form_input_list_entry($zone,((!is_null($sel)) && ($zone==$sel)),$title));

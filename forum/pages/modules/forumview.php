@@ -55,7 +55,7 @@ class Module_forumview
 		if (get_forum_type()!='ocf') return NULL;
 
 		return array(
-			'!'=>array('ROOT_FORUM','menu/social/forums'),
+			'!'=>array('ROOT_FORUM','menu/social/forum/forums'),
 		);
 	}
 

@@ -62,6 +62,8 @@ class Hook_sitemap_video extends Hook_sitemap_content
 		if ($_===NULL) return NULL;
 		list($content_id,$row,$partial_struct)=$_;
 
+		if (get_translated_text($row['title'])=='') return NULL;
+
 		$struct=array(
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_HIGH,
 			'sitemap_refreshfreq'=>'yearly',

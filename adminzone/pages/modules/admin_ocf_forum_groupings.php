@@ -52,7 +52,11 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 
 		if ($be_deferential) return NULL;
 
-		return parent::get_entry_points();
+		$ret=array(
+			'misc'=>array('FORUM_GROUPINGS','menu/_generic_admin/view_this_category'),
+		)+parent::get_entry_points();
+
+		return $ret;
 	}
 
 	var $title;

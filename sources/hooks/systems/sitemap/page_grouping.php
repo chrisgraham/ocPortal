@@ -69,6 +69,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 		$page_grouping=$matches[3];
 
 		$icon=mixed();
+		$lang_string=strtoupper($page_grouping);
 
 		// Locate all pages in page groupings, and the icon for this page grouping
 		$pages_found=array();
@@ -85,9 +86,11 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 				if ($_page_grouping!='')
 				{
 					$pages_found[$link[2][0]]=true;
-				} elseif ($link[2][1]==array('type'=>$_page_grouping))
+				}
+				if (($_page_grouping=='') && (($link[2][0]=='cms') || ($link[2][0]=='admin')) && ($link[2][1]==array('type'=>$page_grouping)))
 				{
 					$icon=$link[1];
+					$lang_string=$link[3];
 				}
 			}
 		}
@@ -122,7 +125,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 
 		// Our node
 		$struct=array(
-			'title'=>do_lang_tempcode(strtoupper($page_grouping)),
+			'title'=>is_object($lang_string)?$lang_string:do_lang_tempcode($lang_string),
 			'content_type'=>'page_grouping',
 			'content_id'=>$page_grouping,
 			'pagelink'=>$pagelink,
@@ -226,7 +229,14 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					{
 						if (is_integer($page)) $page=strval($page);
 
-						if ((!isset($pages_found[$page])) && ((strpos($page_type,'comcode_page')===false) || (isset($root_comcode_pages[$page]))))
+						if (preg_match('#^redirect:#',$page_type)!=0)
+						{
+							$details=$this->_request_page_details($page,$zone);
+							$page_type=strtolower($details[0]);
+							$pages[$page]=$page_type;
+						}
+
+						if ((!isset($pages_found[$page])) && ((strpos($page_type,'comcode')===false) || (!isset($root_comcode_pages[$page]))))
 						{
 							if ($this->_is_page_omitted_from_sitemap($zone,$page)) continue;
 
@@ -282,7 +292,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 						continue;
 					}
 
-					if (preg_match('#^([^:]*):([^:]*)(:misc|$)#',$pagelink,$matches)!=0)
+					if (preg_match('#^([^:]*):([^:]*)(:misc|$)#',$child_pagelink,$matches)!=0)
 					{
 						$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 					} else

@@ -232,7 +232,7 @@ class Module_chat
 		$ret['misc']=array('CHAT_LOBBY','menu/social/chat/chat');
 		if (!$check_perms || !is_guest($member_id))
 		{
-			$ret['set_effects']=array('CHAT_SET_EFFECTS','menu/social/chat/sounds');
+			$ret['set_effects']=array('CHAT_SET_EFFECTS','menu/social/chat/sound');
 			$ret['private']=array('CREATE_PRIVATE_ROOM','menu/social/chat/chatroom_add');
 			$ret['blocking_interface']=array('MEMBER_BLOCKING','menu/social/chat/member_blocking');
 		}

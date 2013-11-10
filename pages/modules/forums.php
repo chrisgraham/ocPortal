@@ -57,7 +57,7 @@ class Module_forums
 			return NULL;
 
 		return array(
-			'!'=>array('SECTION_FORUMS','menu/social/forums'),
+			'!'=>array('SECTION_FORUMS','menu/social/forum/forums'),
 		);
 	}
 

@@ -84,7 +84,7 @@ function init__sitemap()
 /**
  * Find details of a position in the Sitemap (shortcut into the object structure).
  *
- * @param  ?ID_TEXT 		The page-link we are finding (NULL: root).
+ * @param  ID_TEXT 		The page-link we are finding (blank: root).
  * @param  ?mixed  		Callback function to send discovered page-links to (NULL: return).
  * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
  * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
@@ -95,20 +95,21 @@ function init__sitemap()
  * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
  * @return ?array			Node structure (NULL: working via callback / error).
  */
-function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
+function retrieve_sitemap_node($pagelink='',$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
-	$hook=mixed();
-	$is_virtual=false;
-	if (is_null($pagelink))
+	if ($pagelink=='')
 	{
 		$hook='root';
 		require_code('hooks/systems/sitemap/root');
 		$ob=object_factory('Hook_sitemap_root');
-		$is_virtual=true;
+
+		$is_virtual=false;
 	} else
 	{
+		$hook=mixed();
+		$matches=array();
 		$hooks=find_all_hooks('systems','sitemap');
 		foreach (array_keys($hooks) as $_hook)
 		{
@@ -119,11 +120,18 @@ function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=N
 				$is_handled=$ob->handles_pagelink($pagelink);
 				if ($is_handled!=SITEMAP_NODE_NOT_HANDLED)
 				{
-					$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
-					$hook=$_hook;
-					break;
+					$matches['_'.strval($is_handled)]=$_hook;
 				}
 			}
+		}
+		if (count($matches)!=0)
+		{
+			ksort($matches);
+			$hook=current($matches);
+			$ob=object_factory('Hook_sitemap_'.$hook);
+
+			$is_handled=intval(substr(key($matches),1));
+			$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
 		}
 		if (is_null($hook))
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -135,11 +143,32 @@ function retrieve_sitemap_node($pagelink=NULL,$callback=NULL,$valid_node_types=N
 		if (is_null($children)) $children=array();
 		return array('children'=>$children);
 	}
-	return $ob->get_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+	return $ob->get_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
 }
 
 abstract class Hook_sitemap_base
 {
+	/**
+	 * Take the specified parameters, and try to find the corresponding page.
+	 *
+	 * @param  ID_TEXT			The codename of the page to load
+	 * @param  ID_TEXT			The zone the page is being loaded in
+	 * @return ~array				A list of details (false: page not found)
+	 */
+	function _request_page_details($page,$zone)
+	{
+		require_code('site');
+		$details=_request_page($page,$zone);
+		if ($details!==false)
+		{
+			if ($details[0]=='REDIRECT')
+			{
+				$details=_request_page($details[1]['r_to_page'],$details[1]['r_to_zone']);
+			}
+		}
+		return $details;
+	}
+
 	/**
 	 * Find whether a page should be omitted from the sitemap.
 	 *
@@ -166,6 +195,37 @@ abstract class Hook_sitemap_base
 	function is_active()
 	{
 		return true;
+	}
+
+	/**
+	 * Remap '_SEARCH' zones if we can derive the zone from the page-link / or fix _SEARCH in the page-link if there's a known zone.
+	 *
+	 * @param  ID_TEXT		The zone in the recurse tree (replaced by reference).
+	 * @param  ID_TEXT		The page-link (replaced by reference).
+	 */
+	protected function _make_zone_concrete(&$zone,&$pagelink)
+	{
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
+
+		if ($zone=='_SEARCH')
+		{
+			if ($matches[1]!=$zone)
+			{
+				$zone=$matches[1];
+			}
+		} else
+		{
+			if ($matches[1]=='_SEARCH')
+			{
+				$details=$this->_request_page_details($matches[2],$zone);
+				if ($details===false)
+				{
+					$zone=get_page_zone($matches[2]);
+				}
+				$pagelink=preg_replace('#^_SEARCH(:|$)#',$zone.'${1}',$pagelink);
+			}
+		}
 	}
 
 	/**
@@ -287,7 +347,7 @@ abstract class Hook_sitemap_base
 				$pg_where.=' OR page_name LIKE \''.db_encode_like($zone.':'.$page.':%').'\'';
 				$pg_where.=' OR page_name LIKE \''.db_encode_like('\_WILD:\_WILD:%').'\'';
 				$pg_where.=' OR page_name LIKE \''.db_encode_like($zone.':\_WILD:%').'\'';
-				$perhaps=$GLOBALS['SITE_DB']->query_select('SELECT COUNT(*) FROM '.get_table_prefix().'member_page_access WHERE ('.$pg_where.') AND ('.$groups.')');
+				$perhaps=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'group_page_access WHERE ('.$pg_where.') AND ('.$groups.')',NULL,NULL,false,true);
 
 				$denied_groups=array();
 				foreach ($groups2 as $group)
@@ -446,10 +506,16 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			$title_value=$row[$cma_info['title_field']];
 			if ((isset($cma_info['title_field_supports_comcode'])) && ($cma_info['title_field_supports_comcode']))
 			{
-				$title=get_translated_tempcode($title_value,$cma_info['connection']);
+				if ($cma_info['title_field_dereference'])
+				{
+					$title=get_translated_tempcode($title_value,$cma_info['connection']);
+				} else
+				{
+					$title=comcode_to_tempcode($title_value,$GLOBALS['FORUM_DRIVER']->get_guest_id());
+				}
 			} else
 			{
-				$title=make_string_tempcode(escape_html($cma_info['title_field_dereference']?get_translated_text($title_value,$cma_info['connection']):$title_value));
+				$title=make_string_tempcode(escape_html(($cma_info['title_field_dereference'] && is_integer($title_value))?get_translated_text($title_value,$cma_info['connection']):$title_value));
 			}
 		}
 
@@ -510,10 +576,11 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 
 		if (isset($cma_info['permissions_type_code']))
 		{
+			if (is_array($cma_info['category_field'])) $cma_info['category_field']=array_pop($cma_info['category_field']);
 			$struct['permissions'][]=array(
 				'type'=>'category',
 				'permission_module'=>$cma_info['permissions_type_code'],
-				'category_name'=>$cma_info['id_category']?$content_id:$row[$cma_info['category_field']],
+				'category_name'=>$cma_info['is_category']?$content_id:$row[$cma_info['category_field']],
 				'page_name'=>$page,
 				'is_owned_at_this_level'=>true,
 			);
@@ -625,6 +692,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			return array();
 		}
 
+		$this->_make_zone_concrete($zone,$pagelink);
+
 		$cma_info=$this->_get_cma_info();
 
 		$matches=array();
@@ -668,13 +737,17 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 						do
 						{
 							$where=array();
+							if (is_array($cma_entry_info['category_field'])) $cma_entry_info['category_field']=array_pop($cma_entry_info['category_field']);
 							$where[$cma_entry_info['category_field']]=$cma_entry_info['id_field_numeric']?intval($content_id):$content_id;
 							if (($consider_validation) && (isset($cma_entry_info['validated_field'])))
 								$where[$cma_entry_info['validated_field']]=1;
-							$rows=$cma_entry_info['connection']->query_select($cma_entry_info['table'].' r'.$privacy_join,array('*'),$where,$extra_where_entries.$privacy_where.(is_null($explicit_order_by_entries)?'':(' ORDER BY '.$explicit_order_by_entries)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
+							$table=$cma_entry_info['table'].' r';
+							$table.=$privacy_join;
+							$rows=$cma_entry_info['connection']->query_select($table,array('*'),$where,$extra_where_entries.$privacy_where.(is_null($explicit_order_by_entries)?'':(' ORDER BY '.$explicit_order_by_entries)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
+							$child_page=($cma_entry_info['module']==$cma_info['module'])?$page:$cma_entry_info['module']/*assumed in same zone*/;
 							foreach ($rows as $child_row)
 							{
-								$child_pagelink=$zone.':'.$page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
+								$child_pagelink=$zone.':'.$child_page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
 								$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 								if ($child_node!==NULL)
 									$children_entries[]=$child_node;
@@ -686,8 +759,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 						if (is_null($explicit_order_by_entries))
 						{
 							sort_maps_by($children_entries,'title');
-							$children=array_merge($children,$children_entries);
 						}
+						$children=array_merge($children,$children_entries);
 					}
 				}
 			}
@@ -705,7 +778,12 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 				$where[$cma_info['parent_spec__parent_name']]=$cma_info['category_is_string']?$content_id:intval($content_id);
 				if (($consider_validation) && (isset($cma_info['validated_field'])))
 					$where[$cma_info['validated_field']]=1;
-				$rows=$cma_info['connection']->query_select($cma_info['parent_spec__table_name'],array('*'),$where,(is_null($explicit_order_by_entries)?'':('ORDER BY '.$explicit_order_by_subcategories)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
+				$table=$cma_info['parent_spec__table_name'].' r';
+				if ($cma_info['parent_spec__table_name']!=$cma_info['table'])
+				{
+					$table.=' JOIN '.$cma_info['connection']->get_table_prefix().$cma_info['table'].' r2 ON r2.'.$cma_info['id_field'].'=r.'.$cma_info['parent_spec__field_name'];
+				}
+				$rows=$cma_info['connection']->query_select($table,array('*'),$where,(is_null($explicit_order_by_subcategories)?'':('ORDER BY '.$explicit_order_by_subcategories)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
 				foreach ($rows as $child_row)
 				{
 					if ($this->content_type=='comcode_page')
@@ -726,8 +804,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			if (is_null($explicit_order_by_subcategories))
 			{
 				sort_maps_by($children_categories,'title');
-				$children=array_merge($children,$children_categories);
 			}
+			$children=array_merge($children,$children_categories);
 		}
 
 		return $children;

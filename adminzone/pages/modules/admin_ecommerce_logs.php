@@ -55,7 +55,7 @@ class Module_admin_ecommerce_logs
 	{
 		$ret=array(
 			'misc'=>array('ECOMMERCE','menu/adminzone/audit/ecommerce/ecommerce'),
-			'trigger'=>array('MANUAL_TRANSACTION','menu/adminzone/audit/ecommerce/add_to_category'),
+			'trigger'=>array('MANUAL_TRANSACTION','menu/rich_content/ecommerce/purchase'),
 			'logs'=>array('TRANSACTIONS','menu/adminzone/audit/ecommerce/transactions'),
 			'profit_loss'=>array('PROFIT_LOSS','menu/adminzone/audit/ecommerce/profit_loss'),
 			'cash_flow'=>array('CASH_FLOW','menu/adminzone/audit/ecommerce/cash_flow'),
