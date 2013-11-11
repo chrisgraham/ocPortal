@@ -402,7 +402,7 @@ class Module_admin_newsletter extends standard_aed_module
 		foreach ($_folders as $folder)
 		{
 			$label=preg_replace('#@.*$#','',preg_replace('#\{[^{}]+\}#','',$folder));
-			$folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce')!==false),$label);
+			$folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce')!==false,$label));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'),new ocp_tempcode(),'box',$folders));
 
@@ -437,7 +437,10 @@ class Module_admin_newsletter extends standard_aed_module
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
-		$all_subscribers=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
+		$all_subscribers=array();
+		$all_subscribers+=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
+		if (get_forum_type()=='ocf')
+			$all_subscribers+=collapse_2d_complexity('m_email_address','id',$GLOBALS['FORUM_DB']->query_select('f_members',array('m_email_address','id'),array('m_allow_emails_from_staff'=>1)));
 
 		$headers=imap_search($mbox,'UNDELETED');
 		if ($headers===false) $headers=array();
@@ -446,7 +449,7 @@ class Module_admin_newsletter extends standard_aed_module
 		{
 		   $msg=imap_body($mbox,$val);
 		   $matches=array();
-		   $num_matches=preg_match_all("#<([^\n<>@]+@[^\n<>@]+)>#",$msg,$matches);
+		   $num_matches=preg_match_all("#(?<!(Message-ID|Content-ID): )<([^\"\n<>@]+@[^\n<>@]+)>#",$msg,$matches);
 		   if ($num_matches!=0)
 		   {
 				$overview=imap_headerinfo($mbox,$val);
@@ -455,7 +458,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 		      for ($i=0;$i<$num_matches;$i++)
 		      {
-		         $m=$matches[1][$i];
+		         $m=$matches[2][$i];
 		         $m=str_replace('@localhost.localdomain','',$m);
 		         if (($m!=get_option('staff_address')) && (array_key_exists($m,$all_subscribers)))
 		         {
@@ -486,19 +489,34 @@ class Module_admin_newsletter extends standard_aed_module
 	{
 		$title=get_screen_title('BOUNCE_FILTER');
 
-		$sup='';
+		$delete_sql='';
+		$delete_sql_members='';
 		foreach (array_keys($_POST) as $key)
 		{
 			if (substr($key,0,6)=='email_')
 			{
-			   if ($sup!='') $sup.=' OR ';
-			   $sup.=db_string_equal_to('email',post_param($key));
+			   if ($delete_sql!='')
+				{
+					$delete_sql.=' OR ';
+					$delete_sql_members.=' OR ';
+				}
+			   $delete_sql.=db_string_equal_to('email',post_param($key));
+			   $delete_sql_members.=db_string_equal_to('m_email_address',post_param($key));
 			}
 		}
-		if ($sup=='') warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
+		if ($delete_sql=='') warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
 
-		$query='DELETE FROM '.get_table_prefix().'newsletter WHERE '.$sup;
+		$query='DELETE FROM '.get_table_prefix().'newsletter WHERE '.$delete_sql;
 		$GLOBALS['SITE_DB']->query($query);
+
+		$query='DELETE FROM '.get_table_prefix().'newsletter_subscribe WHERE '.$delete_sql;
+		$GLOBALS['SITE_DB']->query($query);
+
+		if (get_forum_type()=='ocf')
+		{
+			$query='UPDATE '.get_table_prefix().'f_members SET m_allow_emails_from_staff=0 WHERE '.$delete_sql_members;
+			$GLOBALS['FORUM_DB']->query($query);
+		}
 
 		return inform_screen($title,do_lang_tempcode('SUCCESS'));
 	}

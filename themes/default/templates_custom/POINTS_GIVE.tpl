@@ -61,7 +61,7 @@
 				<label for="give_reason_pre">
 					Their role
 					<select id="give_reason_pre" name="reason_pre" onclick="this.onchange(event);" onchange="var reason=document.getElementById('give_reason'); if ((reason.value.substr(reason.value.indexOf(': ')).length&lt;=3) &amp;&amp; (this.selectedIndex!=0)) reason.value=this.options[this.selectedIndex].value+': ';">
-						{$SET,roles}
+						{$GET,roles}
 					</select>
 				</label>:
 
