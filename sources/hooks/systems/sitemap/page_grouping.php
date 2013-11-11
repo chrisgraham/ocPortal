@@ -74,25 +74,18 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 
 		// Locate all pages in page groupings, and the icon for this page grouping
 		$pages_found=array();
-		$hooks=find_all_hooks('systems','page_groupings');
-		foreach (array_keys($hooks) as $hook)
+		$links=get_page_grouping_links();
+		foreach ($links as $link)
 		{
-			require_code('hooks/systems/page_groupings/'.$hook);
-
-			$ob=object_factory('Hook_page_groupings_'.$hook);
-			$links=$ob->run();
-			foreach ($links as $link)
+			list($_page_grouping)=$link;
+			if ($_page_grouping!='')
 			{
-				list($_page_grouping)=$link;
-				if ($_page_grouping!='')
-				{
-					$pages_found[$link[2][0]]=true;
-				}
-				if (($_page_grouping=='') && (($link[2][0]=='cms') || ($link[2][0]=='admin')) && ($link[2][1]==array('type'=>$page_grouping)))
-				{
-					$icon=$link[1];
-					$lang_string=$link[3];
-				}
+				$pages_found[$link[2][0]]=true;
+			}
+			if (($_page_grouping=='') && (($link[2][0]=='cms') || ($link[2][0]=='admin')) && ($link[2][1]==array('type'=>$page_grouping)))
+			{
+				$icon=$link[1];
+				$lang_string=$link[3];
 			}
 		}
 
@@ -172,17 +165,9 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 		{
 			$children=array();
 
-			$root_comcode_pages=collapse_2d_complexity('the_page','p_validated',$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>'')));
+			$root_comcode_pages=get_root_comcode_pages($zone);
 
-			$links=array();
-			$hooks=find_all_hooks('systems','page_groupings');
-			foreach (array_keys($hooks) as $hook)
-			{
-				require_code('hooks/systems/page_groupings/'.$hook);
-
-				$ob=object_factory('Hook_page_groupings_'.$hook);
-				$links=array_merge($links,$ob->run());
-			}
+			$links=get_page_grouping_links();
 
 			$page_sitemap_ob=$this->_get_sitemap_object('page');
 			$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');

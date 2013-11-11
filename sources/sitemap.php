@@ -859,6 +859,42 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 }
 
 /**
+ * Get all the details (links) of our page groupings.
+ *
+ * @return tempcode		List of link tuples (one of the elements of which defines the page grouping -- see the page grouping hooks to see the structure).
+ */
+function get_page_grouping_links()
+{
+	static $links=NULL;
+	if ($links===NULL)
+	{
+		$links=array();
+
+		$hooks=find_all_hooks('systems','page_groupings');
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/systems/page_groupings/'.$hook);
+
+			$ob=object_factory('Hook_page_groupings_'.$hook);
+			$links=array_merge($links,$ob->run());
+		}
+	}
+	return $links;
+}
+
+/**
+ * Get Comcode pages from a zone, that sit in the root of that zone.
+ *
+ * @param  ID_TEXT  		The zone to get for.
+ * @return array			Root Comcode pages.
+ */
+function get_root_comcode_pages($zone)
+{
+	$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>''));
+	return collapse_2d_complexity('the_page','p_validated',$rows);
+}
+
+/**
  * Get an HTML selection list for some part of the Sitemap.
  *
  * @param  ID_TEXT  		The page-link we are starting from.

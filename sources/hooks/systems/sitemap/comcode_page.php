@@ -93,7 +93,7 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 
 		$this->_make_zone_concrete($zone,$pagelink);
 
-		$zone_default_page=$GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page',array('zone_name'=>$zone));
+		$zone_default_page=get_zone_default_page($zone);
 
 		$details=$this->_request_page_details($page,$zone);
 

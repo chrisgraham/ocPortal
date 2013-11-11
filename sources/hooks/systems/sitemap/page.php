@@ -62,22 +62,15 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 			if ($row===NULL) $row=array();
 
-			$hooks=find_all_hooks('systems','page_groupings');
-			foreach (array_keys($hooks) as $hook)
+			$links=get_page_grouping_links();
+			foreach ($links as $link)
 			{
-				require_code('hooks/systems/page_groupings/'.$hook);
-
-				$ob=object_factory('Hook_page_groupings_'.$hook);
-				$links=$ob->run();
-				foreach ($links as $link)
+				if ($link[2][0]==$page)
 				{
-					if ($link[2][0]==$page)
-					{
-						$title=$link[3];
-						$icon=$link[1];
-						$row+=array($title,$icon,NULL);
-						if ($link[2][2]==$zone) break 2; // If was a perfect match, break out
-					}
+					$title=$link[3];
+					$icon=$link[1];
+					$row+=array($title,$icon,NULL);
+					if ($link[2][2]==$zone) break; // If was a perfect match, break out
 				}
 			}
 
@@ -157,7 +150,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 		$this->_make_zone_concrete($zone,$pagelink);
 
-		$zone_default_page=$GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page',array('zone_name'=>$zone));
+		$zone_default_page=get_zone_default_page($zone);
 
 		$details=$this->_request_page_details($page,$zone);
 

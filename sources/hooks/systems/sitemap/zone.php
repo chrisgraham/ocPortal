@@ -212,30 +212,23 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 		{
 			$children=array();
 
-			$root_comcode_pages=collapse_2d_complexity('the_page','p_validated',$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>'')));
+			$root_comcode_pages=get_root_comcode_pages($zone);
 
 			// Locate all page groupings and pages in them
 			$page_groupings=array();
 			$pages_found=array();
-			$hooks=find_all_hooks('systems','page_groupings');
-			foreach (array_keys($hooks) as $hook)
+			$links=get_page_grouping_links();
+			foreach ($links as $link)
 			{
-				require_code('hooks/systems/page_groupings/'.$hook);
+				list($page_grouping)=$link;
 
-				$ob=object_factory('Hook_page_groupings_'.$hook);
-				$links=$ob->run();
-				foreach ($links as $link)
+				// In a page grouping that is explicitly included
+				if (($page_grouping!='') && (in_array($page_grouping,$applicable_page_groupings)))
 				{
-					list($page_grouping)=$link;
-
-					// In a page grouping that is explicitly included
-					if (($page_grouping!='') && (in_array($page_grouping,$applicable_page_groupings)))
-					{
-						if (!isset($page_groupings[$page_grouping]))
-							$page_groupings[$page_grouping]=array();
-						$page_groupings[$page_grouping][]=$link;
-						$pages_found[$link[2][0]]=true;
-					}
+					if (!isset($page_groupings[$page_grouping]))
+						$page_groupings[$page_grouping]=array();
+					$page_groupings[$page_grouping][]=$link;
+					$pages_found[$link[2][0]]=true;
 				}
 			}
 			ksort($page_groupings);
