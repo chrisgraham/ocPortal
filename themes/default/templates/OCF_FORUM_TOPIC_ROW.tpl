@@ -20,7 +20,7 @@
 
 			{+START,IF_NON_EMPTY,{TOPIC_ROW_MODIFIERS}}{TOPIC_ROW_MODIFIERS}{+END}
 
-			<a href="{URL*}" title="{$ALTERNATOR_TRUNCATED,{TITLE},60,{!TOPIC_STARTED_DATE_TIME,{HOVER;~*}},,1}">{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:topics:type=_edit_topic:id={ID}}{+START,IF,{UNREAD}}<span class="ocf_unread_topic_title">{+END}{$TRUNCATE_LEFT,{TITLE},46,1}{+START,IF,{UNREAD}}</span>{+END}{+END}</a>
+			<a href="{URL*}" title="{$ALTERNATOR_TRUNCATED,{TITLE},60,{!TOPIC_STARTED_DATE_TIME,{HOVER;~*}},,1}">{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:topics:_edit_topic:{ID}}{+START,IF,{UNREAD}}<span class="ocf_unread_topic_title">{+END}{$TRUNCATE_LEFT,{TITLE},46,1}{+START,IF,{UNREAD}}</span>{+END}{+END}</a>
 
 			{PAGES}
 

@@ -4,7 +4,7 @@
 	{+END}
 
 	{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-		<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION_PLAIN},question,_SEARCH:cms_polls:type=__ed:id={PID},1}{QUESTION}{+END}</h3>
+		<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION_PLAIN},question,_SEARCH:cms_polls:__ed:{PID},1}{QUESTION}{+END}</h3>
 	{+END}
 
 	<a id="poll_jump" rel="dovote"></a>

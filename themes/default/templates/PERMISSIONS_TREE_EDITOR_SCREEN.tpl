@@ -1,6 +1,6 @@
 {TITLE}
 
-<p>{!PERMISSIONS_TREE_EDITOR_ABOUT_PRIVILEGE,{$PAGE_LINK*,adminzone:admin_permissions:type=specific}}</p>
+<p>{!PERMISSIONS_TREE_EDITOR_ABOUT_PRIVILEGE,{$PAGE_LINK*,adminzone:admin_permissions:specific}}</p>
 
 <div class="float_surrounder">
 	<div class="pte_help_box">

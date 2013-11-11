@@ -68,7 +68,7 @@ function render_group_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 		'ENTRY_DETAILS'=>$entry_details,
 		'URL'=>$url,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'name',
-		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_ocf_groups:type=__ed:id='.strval($row['id']),
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_ocf_groups:__ed:'.strval($row['id']),
 	));
 }
 

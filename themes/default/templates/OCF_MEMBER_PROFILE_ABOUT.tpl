@@ -129,7 +129,7 @@
 											{+START,IF_EMPTY,{ENCRYPTED_VALUE}}
 												{+START,IF_PASSED,EDITABILITY}
 													{$SET,edit_type,{EDIT_TYPE}}
-													{+START,FRACTIONAL_EDITABLE,{VALUE},field_{FIELD_ID},_SEARCH:members:type=view:id={MEMBER_ID}:only_tab=edit:only_subtab=settings,{EDITABILITY}}{VALUE}{+END}
+													{+START,FRACTIONAL_EDITABLE,{VALUE},field_{FIELD_ID},_SEARCH:members:view:{MEMBER_ID}:only_tab=edit:only_subtab=settings,{EDITABILITY}}{VALUE}{+END}
 												{+END}
 												{+START,IF_NON_PASSED,EDITABILITY}
 													{VALUE}
@@ -226,7 +226,7 @@
 						{+START,IF,{$HAS_PRIVILEGE,member_maintenance}}{+START,IF_NON_EMPTY,{EMAIL_ADDRESS}}
 							<tr>
 								<th class="de_th">{!EMAIL_ADDRESS}:</th>
-								<td><a class="email" href="mailto:{EMAIL_ADDRESS*}">{+START,FRACTIONAL_EDITABLE,{EMAIL_ADDRESS},email_address,_SEARCH:members:type=view:id={MEMBER_ID}:only_tab=edit:only_subtab=settings,0}{EMAIL_ADDRESS*}{+END}</a></td>
+								<td><a class="email" href="mailto:{EMAIL_ADDRESS*}">{+START,FRACTIONAL_EDITABLE,{EMAIL_ADDRESS},email_address,_SEARCH:members:view:{MEMBER_ID}:only_tab=edit:only_subtab=settings,0}{EMAIL_ADDRESS*}{+END}</a></td>
 							</tr>
 						{+END}{+END}
 

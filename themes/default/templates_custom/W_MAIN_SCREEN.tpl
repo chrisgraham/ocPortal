@@ -230,19 +230,19 @@
 		<h3>{!W_TOOLS}</h3>
 
 		<div class="ocw_icon" style="width: 14%;">
-			<a title="{!W_INVENTORY}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SELF:_SELF:type=inventory}"><img alt="{!W_INVENTORY}" src="{$IMG,ocworld/inventory}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=inventory}">{!W_INVENTORY}</a>
+			<a title="{!W_INVENTORY}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SELF:_SELF:inventory}"><img alt="{!W_INVENTORY}" src="{$IMG,ocworld/inventory}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:inventory}">{!W_INVENTORY}</a>
 		</div>
 		<div class="ocw_icon" style="width: 14%;">
 			<a title="{!W_MAP}: {!LINK_NEW_WINDOW}" target="_blank" href="{$FIND_SCRIPT*,map}{$KEEP*,1,1}"><img alt="{!W_MAP}" src="{$IMG,ocworld/map}" /></a><br /><a href="{$FIND_SCRIPT*,map}{$KEEP*,1,1}">{!W_MAP}</a>
 		</div>
 		<div class="ocw_icon" style="width: 14%;">
-			<a href="{$PAGE_LINK*,_SELF:_SELF:type=realms}"><img alt="{!W_REALMS}" src="{$IMG,ocworld/realms}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=realms}">{!W_REALMS}</a>
+			<a href="{$PAGE_LINK*,_SELF:_SELF:realms}"><img alt="{!W_REALMS}" src="{$IMG,ocworld/realms}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:realms}">{!W_REALMS}</a>
 		</div>
 		<div class="ocw_icon" style="width: 14%;">
 			<a href="{$PAGE_LINK*,_SELF:_SELF}"><img alt="{!W_REFRESH}" src="{$IMG,ocworld/refresh}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF}">{!W_REFRESH}</a>
 		</div>
 		<div class="ocw_icon" style="width: 14%;">
-			<a href="{$PAGE_LINK*,_SELF:_SELF:type=confirm:btype=emergency}"><img alt="{!W_TELEPORT}" src="{$IMG,ocworld/emergencyteleport}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=emergency}">{!W_TELEPORT}</a>
+			<a href="{$PAGE_LINK*,_SELF:_SELF:confirm:btype=emergency}"><img alt="{!W_TELEPORT}" src="{$IMG,ocworld/emergencyteleport}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:emergency}">{!W_TELEPORT}</a>
 		</div>
 		<div class="ocw_icon" style="width: 14%;">
 			<a title="{!RULES}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SELF:rules}"><img alt="{!RULES}" src="{$IMG,ocworld/rules}" /></a><br /><a href="{$PAGE_LINK*,_SELF:rules}">{!RULES}</a>
@@ -346,7 +346,7 @@
 						</tr>
 					</table>
 				</form>
-				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:type=confirm}">
+				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:confirm}">
 					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
@@ -404,7 +404,7 @@
 						</tr>
 					</table>
 				</form>
-				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:type=confirm}">
+				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:confirm}">
 					<table class="columned_table results_table wide_table autosized_table">
 						<colgroup>
 							<col style="width: 20%" />
@@ -690,21 +690,21 @@
 			<div class="toggleable_tray" style="{$JS_ON,{HIDE_ADDITIONS*},}"{+START,IF,{HIDE_ADDITIONS}} aria-expanded="false"{+END}>
 				<div class="float_surrounder">
 					<div class="ocw_icon" style="width: {$?,{MAY_ADD_PORTAL},20%,25%};">
-						<a href="{$PAGE_LINK*,_SELF:_SELF:type=addrealm}"><img alt="{!W_ADD_REALM}" src="{$IMG,ocworld/realms}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=addrealm}">{!W_ADD_REALM}</a>
+						<a href="{$PAGE_LINK*,_SELF:_SELF:addrealm}"><img alt="{!W_ADD_REALM}" src="{$IMG,ocworld/realms}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:addrealm}">{!W_ADD_REALM}</a>
 					</div>
 					<div class="ocw_icon" style="width: {$?,{MAY_ADD_PORTAL},20%,25%};">
-						<a href="{$PAGE_LINK*,_SELF:_SELF:type=addroom}"><img alt="{!W_ADD_ADJOINING_ROOM}" src="{$IMG,ocworld/addroom}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=addroom}">{!W_ADD_ADJOINING_ROOM}</a>
+						<a href="{$PAGE_LINK*,_SELF:_SELF:addroom}"><img alt="{!W_ADD_ADJOINING_ROOM}" src="{$IMG,ocworld/addroom}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:addroom}">{!W_ADD_ADJOINING_ROOM}</a>
 					</div>
 					{+START,IF,{MAY_ADD_PORTAL}}
 					<div class="ocw_icon" style="width: {$?,{MAY_ADD_PORTAL},20%,25%};">
-						<a href="{$PAGE_LINK*,_SELF:_SELF:type=addportal}"><img alt="{!W_ADD_PORTAL}" src="{$IMG,ocworld/addportal}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=addportal}">{!W_ADD_PORTAL}</a>
+						<a href="{$PAGE_LINK*,_SELF:_SELF:addportal}"><img alt="{!W_ADD_PORTAL}" src="{$IMG,ocworld/addportal}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:addportal}">{!W_ADD_PORTAL}</a>
 					</div>
 					{+END}
 					<div class="ocw_icon" style="width: {$?,{MAY_ADD_PORTAL},20%,25%};">
-						<a href="{$PAGE_LINK*,_SELF:_SELF:type=additem}"><img alt="{!W_ADD_ITEM}" src="{$IMG,ocworld/additem}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=additem}">{!W_ADD_ITEM}</a>
+						<a href="{$PAGE_LINK*,_SELF:_SELF:additem}"><img alt="{!W_ADD_ITEM}" src="{$IMG,ocworld/additem}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:additem}">{!W_ADD_ITEM}</a>
 					</div>
 					<div class="ocw_icon" style="width: {$?,{MAY_ADD_PORTAL},20%,25%};">
-						<a href="{$PAGE_LINK*,_SELF:_SELF:type=additemcopy}"><img alt="{!W_ADD_ITEM_COPY}" src="{$IMG,ocworld/additemcopy}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=additemcopy}">{!W_ADD_ITEM_COPY}</a>
+						<a href="{$PAGE_LINK*,_SELF:_SELF:additemcopy}"><img alt="{!W_ADD_ITEM_COPY}" src="{$IMG,ocworld/additemcopy}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:additemcopy}">{!W_ADD_ITEM_COPY}</a>
 					</div>
 				</div>
 			</div>
@@ -737,18 +737,18 @@
 				<div class="float_surrounder">
 					{+START,IF,{IS_ROOM_OWNER}}
 						<div class="ocw_icon" style="width: {$?,{IS_REALM_OWNER},25%,50%};">
-							<a href="{$PAGE_LINK*,_SELF:_SELF:type=editroom}"><img alt="{!W_EDIT_ROOM}" src="{$IMG,ocworld/addroom}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=editroom}">{!W_EDIT_ROOM}</a>
+							<a href="{$PAGE_LINK*,_SELF:_SELF:editroom}"><img alt="{!W_EDIT_ROOM}" src="{$IMG,ocworld/addroom}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:editroom}">{!W_EDIT_ROOM}</a>
 						</div>
 						<div class="ocw_icon" style="width: {$?,{IS_REALM_OWNER},25%,50%};">
-							<a href="{$PAGE_LINK*,_SELF:_SELF:type=confirm:btype=deleteroom}"><img alt="{!W_DELETE_ROOM}" src="{$IMG,ocworld/delroom}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=deleteroom}">{!W_DELETE_ROOM}</a>
+							<a href="{$PAGE_LINK*,_SELF:_SELF:confirm:btype=deleteroom}"><img alt="{!W_DELETE_ROOM}" src="{$IMG,ocworld/delroom}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:deleteroom}">{!W_DELETE_ROOM}</a>
 						</div>
 					{+END}
 					{+START,IF,{IS_REALM_OWNER}}
 						<div class="ocw_icon" style="width: {$?,{IS_ROOM_OWNER},25%,50%};">
-							<a href="{$PAGE_LINK*,_SELF:_SELF:type=editrealm}"><img alt="{!W_EDIT_REALM}" src="{$IMG,ocworld/realms}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=editrealm}">{!W_EDIT_REALM}</a>
+							<a href="{$PAGE_LINK*,_SELF:_SELF:editrealm}"><img alt="{!W_EDIT_REALM}" src="{$IMG,ocworld/realms}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:editrealm}">{!W_EDIT_REALM}</a>
 						</div>
 						<div class="ocw_icon" style="width: {$?,{IS_ROOM_OWNER},25%,50%};">
-							<a href="{$PAGE_LINK*,_SELF:_SELF:type=confirm:btype=deleterealm}"><img alt="{!W_DELETE_REALM}" src="{$IMG,ocworld/delrealm}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:type=deleterealm}">{!W_DELETE_REALM}</a>
+							<a href="{$PAGE_LINK*,_SELF:_SELF:confirm:btype=deleterealm}"><img alt="{!W_DELETE_REALM}" src="{$IMG,ocworld/delrealm}" /></a><br /><a href="{$PAGE_LINK*,_SELF:_SELF:deleterealm}">{!W_DELETE_REALM}</a>
 						</div>
 					{+END}
 				</div>

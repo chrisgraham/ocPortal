@@ -45,13 +45,14 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
@@ -65,7 +66,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			return $nodes;
 		}
 
-		$this->_make_zone_concrete($zone,$pagelink);
+		$page=$this->_make_zone_concrete($zone,$pagelink);
 
 		$_hooks=find_all_hooks('modules','search');
 		foreach (array_keys($_hooks) as $hook)
@@ -78,8 +79,8 @@ class Hook_sitemap_search extends Hook_sitemap_base
 
 			if (($hook=='catalogue_entries') || (array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (method_exists($ob,'get_tree')) || (method_exists($ob,'ajax_tree')))
 			{
-				$child_pagelink=$zone.':search:misc:'.$hook;
-				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+				$child_pagelink=$zone.':'.$page.':misc:'.$hook;
+				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
 		}
@@ -97,6 +98,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
@@ -104,7 +106,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$pagelink,$matches);
@@ -207,22 +209,22 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
-		$children=array();
 		if ($hook=='catalogue_entry')
 		{
+			$children=array();
 			if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'));
 				foreach ($rows as $row)
 				{
 					$child_pagelink=$pagelink.':'.$row['c_name'];
-					$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+					$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 					if ($child_node!==NULL)
 						$children[]=$child_node;
 				}
 			}
+			$struct['children']=$children;
 		}
-		$struct['children']=$children;
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}

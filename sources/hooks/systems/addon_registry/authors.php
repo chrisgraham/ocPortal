@@ -117,6 +117,7 @@ class Hook_addon_registry_authors
 			'sources/hooks/systems/rss/authors.php',
 			'sources/hooks/systems/content_meta_aware/author.php',
 			'sources/hooks/systems/occle_fs/authors.php',
+			'sources/hooks/systems/sitemap/author.php',
 		);
 	}
 

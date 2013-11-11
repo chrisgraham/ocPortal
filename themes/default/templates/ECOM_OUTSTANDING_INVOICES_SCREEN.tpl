@@ -29,9 +29,9 @@
 					{TIME*}
 				</td>
 				<td>
-					<a title="{!DELETE}: #{ID}" href="{$PAGE_LINK*,_SELF:_SELF:type=delete:id={ID}:from={FROM}}"><img src="{$IMG*,tableitem/delete}" title="{!DELETE_INVOICE}" alt="{!DELETE_INVOICE}" /></a>
+					<a title="{!DELETE}: #{ID}" href="{$PAGE_LINK*,_SELF:_SELF:delete:{ID}:from={FROM}}"><img src="{$IMG*,tableitem/delete}" title="{!DELETE_INVOICE}" alt="{!DELETE_INVOICE}" /></a>
 					{+START,IF,{$EQ,{STATE},paid}}
-						<a title="{!MARK_AS_DELIVERED}: #{ID}" href="{$PAGE_LINK*,_SELF:_SELF:type=deliver:id={ID}}">{!MARK_AS_DELIVERED}</a>
+						<a title="{!MARK_AS_DELIVERED}: #{ID}" href="{$PAGE_LINK*,_SELF:_SELF:deliver:{ID}}">{!MARK_AS_DELIVERED}</a>
 					{+END}
 				</td>
 			</tr>

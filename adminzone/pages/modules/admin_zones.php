@@ -56,6 +56,7 @@ class Module_admin_zones
 			'misc'=>array('ZONES','menu/adminzone/structure/zones/zones'),
 			'edit'=>array('EDIT_ZONE','menu/_generic_admin/edit_one'),
 			'add'=>array('ADD_ZONE','menu/_generic_admin/add_one'),
+			'editor'=>array('ZONE_EDITOR','menu/adminzone/structure/zones/zone_editor'),
 		);
 	}
 

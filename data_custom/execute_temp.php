@@ -55,17 +55,18 @@ function execute_temp()
 {
 	require_code('sitemap');
 
-	$pagelink='site:catalogues';
+	$pagelink='';
 	$callback=NULL;
 	$valid_node_types=NULL;
 	$max_recurse_depth=20;
 	$require_permission_support=false;
 	$zone='_SEARCH';
 	$consider_secondary_categories=true;
+	$use_page_groupings=true;
 	$consider_validation=false;
 	$meta_gather=SITEMAP_GATHER__ALL;
 
-	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 	if (is_null($node)) @exit('NULL');
 	var_dump(filter($node));
 	exit();
@@ -81,6 +82,7 @@ function filter($node)
 		'image'=>isset($node['extra_meta']['image'])?$node['extra_meta']['image']:'',
 		'pagelink'=>isset($node['pagelink'])?$node['pagelink']:NULL,
 		'content_type'=>isset($node['content_type'])?$node['content_type']:NULL,
-		'children'=>array_map('filter',$node['children']),
+		'has_possible_children'=>isset($node['has_possible_children'])?$node['has_possible_children']:NULL,
+		'children'=>isset($node['children'])?array_map('filter',$node['children']):NULL,
 	);
 }

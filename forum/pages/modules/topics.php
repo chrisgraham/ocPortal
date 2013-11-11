@@ -1696,11 +1696,11 @@ class Module_topics
 	{
 		if (is_null($forum_id))
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PRIVATE_TOPICS')),array('_SEARCH:topicview:id='.strval($topic_id),$topic_title)));
+			breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PRIVATE_TOPICS')),array('_SEARCH:topicview:'.strval($topic_id),$topic_title)));
 		} else
 		{
 			$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-			breadcrumb_add_segment($breadcrumbs,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_title),array('',protect_from_escaping('<span>'.escape_html($doing->evaluate()).'</span>'))));
+			breadcrumb_add_segment($breadcrumbs,array(array('_SEARCH:topicview:'.strval($topic_id),$topic_title),array('',protect_from_escaping('<span>'.escape_html($doing->evaluate()).'</span>'))));
 		}
 	}
 

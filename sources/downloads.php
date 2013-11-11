@@ -208,7 +208,7 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
 		'ENTRY_DETAILS'=>$entry_details,
 		'URL'=>$url,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'title',
-		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_downloads:type=__ec:id='.strval($row['id']),
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_downloads:__ec:'.strval($row['id']),
 	));
 }
 

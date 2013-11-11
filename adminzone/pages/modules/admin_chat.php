@@ -30,7 +30,7 @@ class Module_admin_chat extends standard_crud_module
 	var $author='Philip Withnall';
 	var $archive_entry_point='_SEARCH:chat';
 	var $archive_label='CHAT_LOBBY';
-	var $view_entry_point='_SEARCH:chat:type=room:_ID';
+	var $view_entry_point='_SEARCH:chat:room:_ID';
 	var $permission_module='chat';
 	var $menu_label='SECTION_CHAT';
 

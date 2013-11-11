@@ -116,7 +116,7 @@ class Module_admin_quiz
 			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$row=$rows[0];
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:_survey_results:id='.strval($row['q_quiz']),do_lang_tempcode('SURVEY_RESULTS'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:_survey_results:'.strval($row['q_quiz']),do_lang_tempcode('SURVEY_RESULTS'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
 			$this->row=$row;

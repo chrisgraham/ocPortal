@@ -178,7 +178,7 @@ class Module_points
 		{
 			$member_id_of=get_param_integer('id');
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBER_POINT_FIND')),array('_SELF:_SELF:member:id='.strval($member_id_of),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true))))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBER_POINT_FIND')),array('_SELF:_SELF:member:'.strval($member_id_of),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true))))));
 
 			$this->title=get_screen_title('POINTS');
 		}

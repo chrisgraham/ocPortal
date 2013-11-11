@@ -95,7 +95,7 @@ function init__sitemap()
  * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
  * @return ?array			Node structure (NULL: working via callback / error).
  */
-function retrieve_sitemap_node($pagelink='',$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
+function retrieve_sitemap_node($pagelink='',$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -139,11 +139,11 @@ function retrieve_sitemap_node($pagelink='',$callback=NULL,$valid_node_types=NUL
 
 	if ($is_virtual)
 	{
-		$children=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+		$children=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 		if (is_null($children)) $children=array();
 		return array('children'=>$children);
 	}
-	return $ob->get_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+	return $ob->get_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 }
 
 abstract class Hook_sitemap_base
@@ -202,30 +202,42 @@ abstract class Hook_sitemap_base
 	 *
 	 * @param  ID_TEXT		The zone in the recurse tree (replaced by reference).
 	 * @param  ID_TEXT		The page-link (replaced by reference).
+	 * @return ID_TEXT		The page name (only returned because it could also be useful, saves some code).
 	 */
 	protected function _make_zone_concrete(&$zone,&$pagelink)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
+		$page=$matches[2];
 
-		if ($zone=='_SEARCH')
+		if ($zone=='_SEARCH') // Make zone concrete, from page-link
 		{
-			if ($matches[1]!=$zone)
+			if ($zone==='_SEARCH') // Do a search even, if we're desperate
 			{
-				$zone=$matches[1];
+				$zone=get_page_zone($page); // $pagelink was unknown, $zone was unknown
+			} else
+			{
+				$zone=$matches[1]; // $pagelink was known, $zone was unknown, we assume $pagelink can contain no error
 			}
 		} else
 		{
-			if ($matches[1]=='_SEARCH')
+			if ($matches[1]=='_SEARCH') // Test zone, fix up if necessary
 			{
-				$details=$this->_request_page_details($matches[2],$zone);
-				if ($details===false)
+				// $pagelink was unknown, $zone was known
+				$details=$this->_request_page_details($page,$zone);
+				if ($details===false) // Do a search, if we're desperate
 				{
-					$zone=get_page_zone($matches[2]);
+					$zone=get_page_zone($page); // $pagelink was unknown, $zone was known, but $zone was wrong
 				}
-				$pagelink=preg_replace('#^_SEARCH(:|$)#',$zone.'${1}',$pagelink);
-			}
+			} elseif ($matches[1]!=$zone) // Correct the zone from what is in the page-link
+			{
+				$zone=$matches[1]; // $pagelink was known, $zone was known, but mismatch so assume $zone was wrong
+			} // else change nothing ($pagelink was known, $zone was known)
 		}
+		// Correct the page-link from the zone
+		$pagelink=preg_replace('#^_SEARCH(:|$)#',$zone.'${1}',$pagelink);
+
+		return $page;
 	}
 
 	/**
@@ -259,13 +271,14 @@ abstract class Hook_sitemap_base
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
@@ -282,6 +295,7 @@ abstract class Hook_sitemap_base
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
@@ -289,7 +303,7 @@ abstract class Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false);
+	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false);
 
 	/**
 	 * Check the permissions of the node structure, returning false if they fail for the current user.
@@ -488,8 +502,13 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			A tuple: content ID, row, partial node structure (NULL: filtered).
 	 */
-	function _create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row)
+	function _create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row)
 	{
+		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
+		{
+			return array();
+		}
+
 		$content_id=$this->_get_pagelink_id($pagelink);
 		if ($row===NULL)
 		{
@@ -533,6 +552,9 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 		}
 		$page=$matches[2];
 
+		$has_entries=($cma_info['is_category']) && ($this->entry_content_type!==NULL);
+		$has_subcategories=(isset($cma_info['parent_spec__parent_name'])) && ($cma_info['parent_category_meta_aware_type']==$this->content_type);
+
 		$struct=array(
 			'title'=>$title,
 			'content_type'=>$this->content_type,
@@ -566,8 +588,8 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 					'is_owned_at_this_level'=>false,
 				),
 			),
-			'has_possible_children'=>$cma_info['is_category'],
-			'children'=>array(),
+			'has_possible_children'=>$has_entries || $has_subcategories,
+			'children'=>NULL,
 
 			// These are likely to be changed in individual hooks
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
@@ -672,24 +694,20 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @param  string			Extra SQL piece for considering which entries to load.
-	 * @param  ?string		Order by for entries (NULL: alphabetical title)
-	 * @param  ?string		Order by for categories (NULL: alphabetical title)
-	 * @return array			Child nodes.
+	 * @param  ?string		Order by for entries (NULL: alphabetical title).
+	 * @param  ?string		Order by for categories (NULL: alphabetical title).
+	 * @return ?array			Child nodes (NULL: not retrieved yet).
 	 */
-	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='',$explicit_order_by_entries=NULL,$explicit_order_by_subcategories=NULL)
+	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='',$explicit_order_by_entries=NULL,$explicit_order_by_subcategories=NULL)
 	{
-		// Filters...
 		if ($recurse_level>=$max_recurse_depth)
 		{
-			return array();
-		}
-		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
-		{
-			return array();
+			return NULL;
 		}
 
 		$this->_make_zone_concrete($zone,$pagelink);
@@ -702,72 +720,76 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 
 		$children=array();
 
-		// Entries...
-		if ($cma_info['is_category'])
+		$has_entries=($cma_info['is_category']) && ($this->entry_content_type!==NULL);
+		$has_subcategories=(isset($cma_info['parent_spec__parent_name'])) && ($cma_info['parent_category_meta_aware_type']==$this->content_type);
+		if (!$has_entries && !$has_subcategories)
 		{
-			if ($this->entry_content_type!==NULL)
+			return NULL;
+		}
+
+		// Entries...
+		if ($has_entries)
+		{
+			for ($i=0;$i<count($this->entry_content_type);$i++)
 			{
-				for ($i=0;$i<count($this->entry_content_type);$i++)
+				$entry_content_type=$this->entry_content_type[$i];
+				$entry_sitetree_hook=$this->entry_sitetree_hook[$i];
+
+				require_code('content');
+				$cma_entry_ob=get_content_object($entry_content_type);
+				$cma_entry_info=$cma_entry_ob->info();
+
+				if ((!$require_permission_support) || (isset($cma_entry_info['permissions_type_code'])))
 				{
-					$entry_content_type=$this->entry_content_type[$i];
-					$entry_sitetree_hook=$this->entry_sitetree_hook[$i];
+					$child_hook_ob=$this->_get_sitemap_object($entry_sitetree_hook);
 
-					require_code('content');
-					$cma_entry_ob=get_content_object($entry_content_type);
-					$cma_entry_info=$cma_entry_ob->info();
+					$children_entries=array();
 
-					if ((!$require_permission_support) || (isset($cma_entry_info['permissions_type_code'])))
+					$privacy_join='';
+					$privacy_where='';
+					if ((isset($cma_entry_info['supports_privacy'])) && ($cma_entry_info['supports_privacy']))
 					{
-						$child_hook_ob=$this->_get_sitemap_object($entry_sitetree_hook);
-
-						$children_entries=array();
-
-						$privacy_join='';
-						$privacy_where='';
-						if ((isset($cma_entry_info['supports_privacy'])) && ($cma_entry_info['supports_privacy']))
+						if (addon_installed('content_privacy'))
 						{
-							if (addon_installed('content_privacy'))
-							{
-								require_code('content_privacy');
-								list($privacy_join,$privacy_where)=get_privacy_where_clause($entry_content_type,'r');
-							}
+							require_code('content_privacy');
+							list($privacy_join,$privacy_where)=get_privacy_where_clause($entry_content_type,'r');
 						}
-
-						$start=0;
-						do
-						{
-							$where=array();
-							if (is_array($cma_entry_info['category_field'])) $cma_entry_info['category_field']=array_pop($cma_entry_info['category_field']);
-							$where[$cma_entry_info['category_field']]=$cma_entry_info['id_field_numeric']?intval($content_id):$content_id;
-							if (($consider_validation) && (isset($cma_entry_info['validated_field'])))
-								$where[$cma_entry_info['validated_field']]=1;
-							$table=$cma_entry_info['table'].' r';
-							$table.=$privacy_join;
-							$rows=$cma_entry_info['connection']->query_select($table,array('*'),$where,$extra_where_entries.$privacy_where.(is_null($explicit_order_by_entries)?'':(' ORDER BY '.$explicit_order_by_entries)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
-							$child_page=($cma_entry_info['module']==$cma_info['module'])?$page:$cma_entry_info['module']/*assumed in same zone*/;
-							foreach ($rows as $child_row)
-							{
-								$child_pagelink=$zone.':'.$child_page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
-								$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
-								if ($child_node!==NULL)
-									$children_entries[]=$child_node;
-							}
-							$start+=SITEMAP_MAX_ROWS_PER_LOOP;
-						}
-						while (count($rows)>0);
-
-						if (is_null($explicit_order_by_entries))
-						{
-							sort_maps_by($children_entries,'title');
-						}
-						$children=array_merge($children,$children_entries);
 					}
+
+					$start=0;
+					do
+					{
+						$where=array();
+						if (is_array($cma_entry_info['category_field'])) $cma_entry_info['category_field']=array_pop($cma_entry_info['category_field']);
+						$where[$cma_entry_info['category_field']]=$cma_entry_info['id_field_numeric']?intval($content_id):$content_id;
+						if (($consider_validation) && (isset($cma_entry_info['validated_field'])))
+							$where[$cma_entry_info['validated_field']]=1;
+						$table=$cma_entry_info['table'].' r';
+						$table.=$privacy_join;
+						$rows=$cma_entry_info['connection']->query_select($table,array('*'),$where,$extra_where_entries.$privacy_where.(is_null($explicit_order_by_entries)?'':(' ORDER BY '.$explicit_order_by_entries)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
+						$child_page=($cma_entry_info['module']==$cma_info['module'])?$page:$cma_entry_info['module']/*assumed in same zone*/;
+						foreach ($rows as $child_row)
+						{
+							$child_pagelink=$zone.':'.$child_page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
+							$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+							if ($child_node!==NULL)
+								$children_entries[]=$child_node;
+						}
+						$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+					}
+					while (count($rows)>0);
+
+					if (is_null($explicit_order_by_entries))
+					{
+						sort_maps_by($children_entries,'title');
+					}
+					$children=array_merge($children,$children_entries);
 				}
 			}
 		}
 
 		// Subcategories...
-		if ((isset($cma_info['parent_spec__parent_name'])) && ($cma_info['parent_category_meta_aware_type']==$this->content_type))
+		if ($has_subcategories)
 		{
 			$children_categories=array();
 
@@ -793,7 +815,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 					{
 						$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.($cma_info['category_is_string']?$child_row[$cma_info['parent_spec__field_name']]:strval($child_row[$cma_info['parent_spec__field_name']]));
 					}
-					$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+					$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 					if ($child_node!==NULL)
 						$children_categories[]=$child_node;
 				}

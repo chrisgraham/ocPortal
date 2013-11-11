@@ -62,7 +62,7 @@ function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 		'ENTRY_DETAILS'=>$entry_details,
 		'BREADCRUMBS'=>$breadcrumbs,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'title',
-		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:topics:type=_edit_topic:id='.strval($row['id']),
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:topics:_edit_topic:'.strval($row['id']),
 	));
 }
 

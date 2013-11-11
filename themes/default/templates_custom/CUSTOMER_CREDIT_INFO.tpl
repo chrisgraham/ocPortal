@@ -8,4 +8,4 @@
 	<tr><th>{!SUPPORT_PRIORITY_normal}</th><td>{+START,IF,{$LT,{$GET,credits},4}}{!NOT_ENOUGH_CREDITS,{$PAGE_LINK*,_SEARCH:purchase}}{+END}{+START,IF,{$NOT,{$LT,{$GET,credits},4}}}{$TIME_PERIOD,{$MULT,{$GET,credits},480}}{+END}{$ 8 minutes }</td><td>{!SUPPORT_PRIORITY_DESCRIPTION_normal}</td></tr>
 	<tr><th>{!SUPPORT_PRIORITY_budget}</th><td>{+START,IF,{$LT,{$GET,credits},3}}{!NOT_ENOUGH_CREDITS,{$PAGE_LINK*,_SEARCH:purchase}}{+END}{+START,IF,{$NOT,{$LT,{$GET,credits},3}}}{$TIME_PERIOD,{$MULT,{$GET,credits},600}}{+END}{$ 10 minutes }</td><td>{!SUPPORT_PRIORITY_DESCRIPTION_budget}</td></tr>
 </table></div>
-<p>{!SUPPORT_CREDITS_EXPLANATION,{$CURRENCY,{$CONFIG_OPTION,support_credit_value},{$CONFIG_OPTION,currency},,1},{$PAGE_LINK*,_SEARCH:purchase},{$PAGE_LINK*,_SEARCH:tickets:type=ticket:default={$GET,request_payment_update}}}</p>
+<p>{!SUPPORT_CREDITS_EXPLANATION,{$CURRENCY,{$CONFIG_OPTION,support_credit_value},{$CONFIG_OPTION,currency},,1},{$PAGE_LINK*,_SEARCH:purchase},{$PAGE_LINK*,_SEARCH:tickets:ticket:default={$GET,request_payment_update}}}</p>

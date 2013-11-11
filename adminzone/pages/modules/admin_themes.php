@@ -285,7 +285,7 @@ class Module_admin_themes
 		{
 			$theme=post_param('theme');
 			$id=post_param('id');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:manage_images:theme='.$theme,do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:edit_theme_image:id='.$id,do_lang_tempcode('EDIT_THEME_IMAGE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:manage_images:theme='.$theme,do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:edit_theme_image:'.$id,do_lang_tempcode('EDIT_THEME_IMAGE'))));
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 			$this->title=get_screen_title('EDIT_THEME_IMAGE');

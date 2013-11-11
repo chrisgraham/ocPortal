@@ -33,16 +33,16 @@
 				var info_tpl='<div class="wide_table_wrap"><table class="map_table results_table wide_table autosized_table"><tbody>[1]<\/tbody><\/table><\/div>';
 				var info_tpl_item='<tr><th>[1]<\/th><td>[2]<\/td><\/tr>';
 
-				var edit_zone_url='{$PAGE_LINK*;,_SEARCH:admin_zones:type=_edit:id=!}';
-				var add_zone_url='{$PAGE_LINK*;,_SEARCH:admin_zones:type=add}';
-				var zone_editor_url='{$PAGE_LINK*;,_SEARCH:admin_zones:type=_editor:id=!}';
+				var edit_zone_url='{$PAGE_LINK*;,_SEARCH:admin_zones:_edit:!}';
+				var add_zone_url='{$PAGE_LINK*;,_SEARCH:admin_zones:add}';
+				var zone_editor_url='{$PAGE_LINK*;,_SEARCH:admin_zones:_editor:!}';
 				var permission_tree_editor_url='{$PAGE_LINK*;,_SEARCH:admin_permissions:misc:!}';
-				var edit_page_url='{$PAGE_LINK*;,cms:cms_comcode_pages:type=_ed:page_link=!}';
-				var export_page_url='{$PAGE_LINK*;,_SELF:_SELF:type=export:page_link=!}';
-				var add_page_url='{$PAGE_LINK*;,_SEARCH:cms_comcode_pages:type=_ed:page_link=!:example}';
-				var delete_url='{$PAGE_LINK*;,_SELF:_SELF:type=_delete:zone=[1]:page__[2]=1}';
-				var stats_url='{+START,IF,{$ADDON_INSTALLED,stats}}{$PAGE_LINK*;,_SEARCH:admin_stats:type=_page:iscreen=!}{+END}';
-				var move_url='{$PAGE_LINK;,_SELF:_SELF:type=_move:zone=[1]:destination_zone=[3]:page__[2]=1}'; // Intentionally not escaped
+				var edit_page_url='{$PAGE_LINK*;,cms:cms_comcode_pages:_ed:page_link=!}';
+				var export_page_url='{$PAGE_LINK*;,_SELF:_SELF:export:page_link=!}';
+				var add_page_url='{$PAGE_LINK*;,_SEARCH:cms_comcode_pages:_ed:page_link=!:example}';
+				var delete_url='{$PAGE_LINK*;,_SELF:_SELF:_delete:zone=[1]:page__[2]=1}';
+				var stats_url='{+START,IF,{$ADDON_INSTALLED,stats}}{$PAGE_LINK*;,_SEARCH:admin_stats:_page:iscreen=!}{+END}';
+				var move_url='{$PAGE_LINK;,_SELF:_SELF:_move:zone=[1]:destination_zone=[3]:page__[2]=1}'; // Intentionally not escaped
 			//]]></script>
 		</div></div>
 	</div>

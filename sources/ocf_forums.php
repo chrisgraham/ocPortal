@@ -84,7 +84,7 @@ function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 		'ENTRY_DETAILS'=>protect_from_escaping($entry_details),
 		'BREADCRUMBS'=>$breadcrumbs,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'name',
-		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_ocf_forums:type=__ed:'.strval($row['id']),
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_ocf_forums:__ed:'.strval($row['id']),
 	));
 }
 

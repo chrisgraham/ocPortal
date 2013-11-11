@@ -3,8 +3,8 @@
 		<div class="ocf_forum_grouping_toggleable_tray_button">
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('c_{GROUPING_ID;*}');"><img title="{!TOGGLE_GROUPING_VISIBILITY}" alt="{!TOGGLE_GROUPING_VISIBILITY}" src="{$IMG*,{EXPAND_TYPE*}}" /></a>
 		</div>
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('c_{GROUPING_ID;*}');">{+START,FRACTIONAL_EDITABLE,{GROUPING_TITLE},title,_SEARCH:admin_ocf_forum_groupings:type=__ed:id={GROUPING_ID}}{GROUPING_TITLE*}{+END}</a>
-		{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_forum_groupings}}<span class="associated_details">(<a href="{$PAGE_LINK*,_SEARCH:admin_ocf_forum_groupings:type=_ed:id={GROUPING_ID}}">{!EDIT}</a>)</span>{+END}
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('c_{GROUPING_ID;*}');">{+START,FRACTIONAL_EDITABLE,{GROUPING_TITLE},title,_SEARCH:admin_ocf_forum_groupings:__ed:{GROUPING_ID}}{GROUPING_TITLE*}{+END}</a>
+		{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_forum_groupings}}<span class="associated_details">(<a href="{$PAGE_LINK*,_SEARCH:admin_ocf_forum_groupings:_ed:{GROUPING_ID}}">{!EDIT}</a>)</span>{+END}
 
 		{+START,IF_NON_EMPTY,{GROUPING_DESCRIPTION}}
 			&ndash; <span class="associated_details">{GROUPING_DESCRIPTION*}</span>

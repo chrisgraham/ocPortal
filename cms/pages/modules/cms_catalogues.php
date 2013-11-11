@@ -1990,8 +1990,8 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		require_code('catalogues2');
 
 		require_code('menus2');
-		delete_menu_item_simple('_SEARCH:catalogues:type=category:catalogue_name='.$id);
-		delete_menu_item_simple('_SEARCH:catalogues:type=index:'.$id);
+		delete_menu_item_simple('_SEARCH:catalogues:category:catalogue_name='.$id);
+		delete_menu_item_simple('_SEARCH:catalogues:index:'.$id);
 
 		actual_delete_catalogue($id);
 	}

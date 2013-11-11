@@ -100,7 +100,7 @@ In the form part of the interface there are the following fields:
 
 [title="2"]The sitemap tool[/title]
 
-Entry points are described in full in the 'Site structure' tutorial, but basically they are ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:type=ad[/tt]' is the entry point to a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
+Entry points are described in full in the 'Site structure' tutorial, but basically they are ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:ad[/tt]' is the entry point to a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
 
 Don't worry too much about entry point syntax as ocPortal will automatically convert any local URLs that you paste.
 
@@ -130,19 +130,19 @@ Match-keys are entered into the field with commas to separate them. The only dif
  - The additional '<key>=<value>' parts of the match-key enforce a match from the URL the menu is being viewed from, but the URL may also have additional parameters and the match-key does not need to state them
  - It makes no sense to use '_SEARCH' or '_SELF' in a match-key
 
-An example match-key list is '_WILD:downloads:type=ad,adminzone:admin_downloads:type=ed'. This would match URLs that were generated from the following page-links (whether these page-links points themselves actually work is irrelevant):
- - [tt]site:downloads:type=ad[/tt]
- - [tt]randomzone:downloads:type=ad[/tt]
- - [tt]:downloads:type=ad:wide=1[/tt]
- - [tt]adminzone:admin_downloads:type=ed[/tt]
- - [tt]adminzone:admin_downloads:type=ed:keep_novalidate=1[/tt]
+An example match-key list is '_WILD:downloads:ad,adminzone:admin_downloads:ed'. This would match URLs that were generated from the following page-links (whether these page-links points themselves actually work is irrelevant):
+ - [tt]site:downloads:ad[/tt]
+ - [tt]randomzone:downloads:ad[/tt]
+ - [tt]:downloads:ad:wide=1[/tt]
+ - [tt]adminzone:admin_downloads:ed[/tt]
+ - [tt]adminzone:admin_downloads:ed:keep_novalidate=1[/tt]
 
 It would not match URLs generated from the following page-links:
- - [tt]site:galleries:type=ad[/tt]
+ - [tt]site:galleries:ad[/tt]
  - [tt]randomzone:downloads[/tt]
- - [tt]:downloads:type=ed:wide=1[/tt]
- - [tt]adminzone:admin_downloads:type=ad[/tt]
- - [tt]adminzone:admin_downloads:type=ad:keep_novalidate=1[/tt]
+ - [tt]:downloads:ed:wide=1[/tt]
+ - [tt]adminzone:admin_downloads:ad[/tt]
+ - [tt]adminzone:admin_downloads:ad:keep_novalidate=1[/tt]
 
 [title="2"]Indicating of the current page[/title]
 

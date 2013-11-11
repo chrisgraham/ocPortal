@@ -2,7 +2,7 @@
 
 <a id="poll_jump" rel="dovote"></a>
 <form class="ocf_topic_poll_form" title="{!VOTE}" action="{VOTE_URL*}" method="post" onsubmit="return ocf_check_poll(this,{MINIMUM_SELECTIONS*},{MAXIMUM_SELECTIONS*},({MINIMUM_SELECTIONS*}=={MAXIMUM_SELECTIONS*})?'{!POLL_NOT_ENOUGH_ERROR_2;,{MINIMUM_SELECTIONS*}}':'{!POLL_NOT_ENOUGH_ERROR;,{MINIMUM_SELECTIONS*},{MAXIMUM_SELECTIONS*}}');">
-	<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION},question,_SEARCH:topics:type=_edit_poll:id={ID}}{QUESTION*}{+END}</h3>
+	<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION},question,_SEARCH:topics:_edit_poll:{ID}}{QUESTION*}{+END}</h3>
 
 	<div class="wide_table_wrap">
 		<table class="spread_table autosized_table ocf_topic_poll wide_table">

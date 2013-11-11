@@ -141,6 +141,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
@@ -148,7 +149,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
@@ -197,6 +198,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 					'is_owned_at_this_level'=>true,
 				),
 			),
+			'children'=>NULL,
 			'has_possible_children'=>false,
 
 			// These are likely to be changed in individual hooks
@@ -318,10 +320,10 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 							if (preg_match('#^([^:]*):([^:]*):([^:]*)(:.*|$)#',$child_pagelink)!=0)
 							{
-								$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+								$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 							} else
 							{
-								$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather);
+								$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 							}
 							if ($child_node!==NULL)
 								$children[$child_node['pagelink']]=$child_node;
@@ -352,7 +354,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 						$struct['permission_page']=$child_sitemap_hook->get_permission_page($pagelink);
 						$struct['has_possible_children']=true;
 
-						$virtual_child_nodes=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,true);
+						$virtual_child_nodes=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,true);
 						if (is_null($virtual_child_nodes)) $virtual_child_nodes=array();
 						foreach ($virtual_child_nodes as $child_node)
 						{
@@ -365,7 +367,8 @@ class Hook_sitemap_page extends Hook_sitemap_base
 									$child_node['extra_meta']['image_2x']=$struct['extra_meta']['image_2x'];
 								}
 								$struct=$child_node;
-								$children=array_merge($children,$struct['children']);
+								if ($struct['children']!==NULL)
+									$children=array_merge($children,$struct['children']);
 								$struct['children']=NULL;
 								$call_struct=false; // Already been called in get_virtual_nodes
 							} else

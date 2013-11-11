@@ -1,7 +1,7 @@
 {$REQUIRE_JAVASCRIPT,javascript_ocf_forum}
 
 <div class="ocf_topic_poll_form">
-	<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION},question,_SEARCH:topics:type=_edit_poll:id={ID}}{QUESTION*}{+END}</h3>
+	<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION},question,_SEARCH:topics:_edit_poll:{ID}}{QUESTION*}{+END}</h3>
 
 	<div class="wide_table_wrap">
 		<table class="spread_table autosized_table ocf_topic_poll wide_table">

@@ -63,7 +63,7 @@ function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 		'SUMMARY'=>'',
 		'URL'=>$url,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'room_name',
-		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_chat:type=__ed:id='.strval($row['id']),
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_chat:__ed:'.strval($row['id']),
 	));
 }
 

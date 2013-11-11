@@ -14,7 +14,7 @@
 	</td>
 	<td>
 		{+START,IF,{$GT,{ID},0}}
-			<a title="{!W_INVENTORY}: {NAME*} {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,_SELF:_SELF:type=inventory:member={ID}}" target="_blank">{!W_INVENTORY}</a>
+			<a title="{!W_INVENTORY}: {NAME*} {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,_SELF:_SELF:inventory:member={ID}}" target="_blank">{!W_INVENTORY}</a>
 		{+END}
 	</td>
 </tr>

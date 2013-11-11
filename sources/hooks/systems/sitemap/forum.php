@@ -59,13 +59,14 @@ class Hook_sitemap_forum extends Hook_sitemap_content
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
@@ -79,7 +80,7 @@ class Hook_sitemap_forum extends Hook_sitemap_content
 			return $nodes;
 		}
 
-		$this->_make_zone_concrete($zone,$pagelink);
+		$page=$this->_make_zone_concrete($zone,$pagelink);
 
 		$start=0;
 		do
@@ -87,8 +88,8 @@ class Hook_sitemap_forum extends Hook_sitemap_content
 			$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('f_parent_forum'=>NULL),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
-				$child_pagelink=$zone.':forumview:'.$this->screen_type.':'.strval($row['id']);
-				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+				$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.strval($row['id']);
+				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
 
@@ -109,6 +110,7 @@ class Hook_sitemap_forum extends Hook_sitemap_content
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
@@ -116,9 +118,9 @@ class Hook_sitemap_forum extends Hook_sitemap_content
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
-		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		if ($_===NULL) return NULL;
 		list($content_id,$row,$partial_struct)=$_;
 
@@ -156,27 +158,30 @@ class Hook_sitemap_forum extends Hook_sitemap_content
 		$per_page=intval(get_option('forum_posts_per_page'));
 		$backup_meta_gather=$meta_gather;
 		$meta_gather|=SITEMAP_GATHER_DB_ROW;
-		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$row,'',$explicit_order_by_entries,$explicit_order_by_categories);
-		$children2=array();
-		foreach ($children as $child)
+		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row,'',$explicit_order_by_entries,$explicit_order_by_categories);
+		if (!is_null($children))
 		{
-			$child_row=$child['extra_meta']['db_row'];
-			if ($child['content_type']=='topic')
+			$children2=array();
+			foreach ($children as $child)
 			{
-				if (($backup_meta_gather & SITEMAP_GATHER_DB_ROW)==0)
-					$child['extra_meta']['db_row']=NULL;
-				$num_posts=$child_row['t_cache_num_posts'];
-				$children2[]=$child;
-				for ($i=$per_page;$i<$num_posts;$i+=$per_page)
+				$child_row=$child['extra_meta']['db_row'];
+				if ($child['content_type']=='topic')
 				{
-					$children2[]=array('page_link'=>$child['page_link'].':start='.strval($i))+$child;
+					if (($backup_meta_gather & SITEMAP_GATHER_DB_ROW)==0)
+						$child['extra_meta']['db_row']=NULL;
+					$num_posts=$child_row['t_cache_num_posts'];
+					$children2[]=$child;
+					for ($i=$per_page;$i<$num_posts;$i+=$per_page)
+					{
+						$children2[]=array('page_link'=>$child['page_link'].':start='.strval($i))+$child;
+					}
+				} else
+				{
+					$children2[]=$child;
 				}
-			} else
-			{
-				$children2[]=$child;
 			}
+			$struct['children']=$children2;
 		}
-		$struct['children']=$children2;
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}

@@ -54,6 +54,7 @@ class Module_admin_points
 	{
 		return array(
 			'misc'=>array('GIFT_TRANSACTIONS','menu/adminzone/audit/points_log'),
+			'export'=>array('EXPORT_POINTS','menu/social/points'),
 		);
 	}
 

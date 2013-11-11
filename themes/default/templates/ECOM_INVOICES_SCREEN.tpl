@@ -44,9 +44,9 @@
 					{+END}
 					{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_invoices}}
 						<ul class="horizontal_links horiz_field_sep">
-							<li><a title="{!DELETE}: #{ID}" href="{$PAGE_LINK*,adminzone:admin_invoices:type=delete:id={ID}}"><img class="button_pageitem" src="{$IMG*,pageitem/delete}" alt="{!DELETE}" title="{!DELETE}" /></a></li>
+							<li><a title="{!DELETE}: #{ID}" href="{$PAGE_LINK*,adminzone:admin_invoices:delete:{ID}}"><img class="button_pageitem" src="{$IMG*,pageitem/delete}" alt="{!DELETE}" title="{!DELETE}" /></a></li>
 							{+START,IF,{DELIVERABLE}}
-								<li><a title="{!DELIVER}: #{ID}" href="{$PAGE_LINK*,adminzone:admin_invoices:type=deliver:id={ID}}">{!DELIVER}</a></li>
+								<li><a title="{!DELIVER}: #{ID}" href="{$PAGE_LINK*,adminzone:admin_invoices:deliver:{ID}}">{!DELIVER}</a></li>
 							{+END}
 						</ul>
 					{+END}

@@ -56,7 +56,7 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 		'SUMMARY'=>$summary,
 		'URL'=>$url,
 		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'name',
-		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_banners:type=__ed:id='.$row['name'],
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_banners:__ed:'.$row['name'],
 	));
 }
 

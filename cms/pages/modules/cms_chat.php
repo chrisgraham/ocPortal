@@ -108,7 +108,7 @@ class Module_cms_chat
 		if ($type=='ban')
 		{
 			$id=get_param_integer('id');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
 
 			$this->title=get_screen_title('CHAT_BAN');
 		}
@@ -116,7 +116,7 @@ class Module_cms_chat
 		if ($type=='unban')
 		{
 			$id=get_param_integer('id');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
 
 			$this->title=get_screen_title('CHAT_UNBAN');
 		}
@@ -132,7 +132,7 @@ class Module_cms_chat
 			}
 			$myrow=$rows[0];
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($myrow['room_id']),do_lang_tempcode('CHAT_MOD_PANEL'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($myrow['room_id']),do_lang_tempcode('CHAT_MOD_PANEL'))));
 
 			$this->title=get_screen_title('EDIT_MESSAGE');
 
@@ -155,7 +155,7 @@ class Module_cms_chat
 				}
 				$myrow=$rows[0];
 
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($myrow['room_id']),do_lang_tempcode('CHAT_MOD_PANEL'))));
+				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($myrow['room_id']),do_lang_tempcode('CHAT_MOD_PANEL'))));
 
 				$this->title=get_screen_title('DELETE_MESSAGE');
 
@@ -170,7 +170,7 @@ class Module_cms_chat
 		if ($type=='delete')
 		{
 			$id=get_param_integer('id');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
 
 			$this->title=get_screen_title('DELETE_ALL_MESSAGES');
 		}

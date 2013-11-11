@@ -6,7 +6,7 @@
 			{+END}
 
 			{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-				{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:cms_galleries:type=__ev:id={ID},0}{TITLE*}{+END}
+				{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:cms_galleries:__ev:{ID},0}{TITLE*}{+END}
 			{+END}
 		</h3>
 	{+END}

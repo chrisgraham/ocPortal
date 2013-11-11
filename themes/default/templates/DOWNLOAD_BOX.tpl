@@ -6,7 +6,7 @@
 
 		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 			{+START,IF_NON_EMPTY,{ID}}
-				<a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a>
+				<a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:__ed:{ID}}{NAME*}{+END}</a>
 			{+END}
 			{+START,IF_EMPTY,{ID}}
 				{NAME*}
@@ -30,7 +30,7 @@
 	</div>
 
 	<div class="hide_if_not_in_panel">
-		<p class="tiny_paragraph"><a title="{NAME*}: {!BY_SIMPLE,{AUTHOR*}}" href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a></p>
+		<p class="tiny_paragraph"><a title="{NAME*}: {!BY_SIMPLE,{AUTHOR*}}" href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:__ed:{ID}}{NAME*}{+END}</a></p>
 
 		<p class="tiny_paragraph associated_details">
 			{+START,IF_PASSED,RATING}<span class="right">{RATING}</span>{+END}

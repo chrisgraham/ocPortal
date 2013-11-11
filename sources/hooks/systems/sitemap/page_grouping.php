@@ -53,6 +53,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
+	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
 	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
@@ -60,7 +61,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$orphaned_pages=NULL,$return_anyway=false)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$orphaned_pages=NULL,$return_anyway=false)
 	{
 		require_lang('menus');
 
@@ -151,6 +152,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					'is_owned_at_this_level'=>false,
 				),
 			),
+			'children'=>NULL,
 			'has_possible_children'=>true,
 
 			// These are likely to be changed in individual hooks
@@ -166,9 +168,10 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
-		$children=array();
 		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 		{
+			$children=array();
+
 			$root_comcode_pages=collapse_2d_complexity('the_page','p_validated',$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>'')));
 
 			$links=array();
@@ -178,11 +181,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 				require_code('hooks/systems/page_groupings/'.$hook);
 
 				$ob=object_factory('Hook_page_groupings_'.$hook);
-				$_links=$ob->run();
-				foreach ($links as $link)
-				{
-					$links=array_merge($links,$_links);
-				}
+				$links=array_merge($links,$ob->run());
 			}
 
 			$page_sitemap_ob=$this->_get_sitemap_object('page');
@@ -195,7 +194,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			{
 				if ($link[0]==$page_grouping)
 				{
-					$title=do_lang($link[3]);
+					$title=$link[3];
 					$icon=$link[1];
 
 					$page=$link[2][0];
@@ -210,10 +209,25 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					$child_pagelink=$_zone.':'.$page;
 					foreach ($link[2][1] as $key=>$val)
 					{
-						$child_pagelink.=':'.urlencode($key).'='.urlencode($val);
+						if ($key=='type' || $key=='id')
+						{
+							$child_pagelink.=':'.urlencode($val);
+						} else
+						{
+							$child_pagelink.=':'.urlencode($key).'='.urlencode($val);
+						}
 					}
 
-					$child_links[]=array($title,$child_pagelink,$icon,NULL/*unknown/irrelevant $page_type*/,isset($link[4])?comcode_lang_string($link[4]):NULL);
+					$details=$this->_request_page_details($page,$_zone);
+					$page_type=strtolower($details[0]);
+
+					$description=NULL;
+					if (isset($link[4]))
+					{
+						$description=(is_object($link[4]))?$link[4]:comcode_lang_string($link[4]);
+					}
+
+					$child_links[]=array($title,$child_pagelink,$icon,$page_type,$description);
 				}
 			}
 
@@ -284,7 +298,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 						continue;
 					}
 
-					$child_node=$comcode_page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+					$child_node=$comcode_page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 				} else
 				{
 					if (($valid_node_types!==NULL) && (!in_array('page',$valid_node_types)))
@@ -292,19 +306,20 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 						continue;
 					}
 
-					if (preg_match('#^([^:]*):([^:]*)(:misc|$)#',$child_pagelink,$matches)!=0)
+					if (preg_match('#^([^:]*):([^:]*)(:misc|:\w+=|$)#',$child_pagelink,$matches)!=0)
 					{
-						$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+						$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 					} else
 					{
-						$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+						$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 					}
 				}
 				if ($child_node!==NULL)
 					$children[]=$child_node;
 			}
+
+			$struct['children']=$children;
 		}
-		$struct['children']=$children;
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
