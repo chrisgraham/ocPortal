@@ -52,6 +52,8 @@ class Module_admin_trackbacks
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
+		if ((get_option('is_on_trackbacks')=='0') || ($GLOBALS['SITE_DB']->query_select_value_if_there('trackbacks','COUNT(*)',NULL,'',true)==0)) return NULL;
+
 		return array(
 			'misc'=>array('MANAGE_TRACKBACKS','menu/adminzone/audit/trackbacks'),
 		);

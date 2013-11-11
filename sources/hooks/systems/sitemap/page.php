@@ -71,12 +71,12 @@ class Hook_sitemap_page extends Hook_sitemap_base
 				$links=$ob->run();
 				foreach ($links as $link)
 				{
-					if ($link[2][2]==$zone && $link[2][0]==$page)
+					if ($link[2][0]==$page)
 					{
 						$title=$link[3];
 						$icon=$link[1];
 						$row+=array($title,$icon,NULL);
-						break 2;
+						if ($link[2][2]==$zone) break 2; // If was a perfect match, break out
 					}
 				}
 			}

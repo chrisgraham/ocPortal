@@ -62,6 +62,7 @@ class Module_admin
 			'setup'=>array('SETUP','menu/adminzone/setup'),
 			'tools'=>array('TOOLS','menu/adminzone/tools'),
 			'security'=>array('SECURITY_GROUP_SETUP','menu/adminzone/security'),
+			'docs'=>array('SECURITY_GROUP_SETUP','menu/adminzone/help'),
 		);
 	}
 
@@ -86,7 +87,51 @@ class Module_admin
 			set_helper_panel_text(do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN'));
 		} else
 		{
-			breadcrumb_set_self(do_lang_tempcode(($type=='misc')?'ADMIN_ZONE':strtoupper($type)));
+			switch ($type)
+			{
+				case 'misc':
+				case 'structure':
+				case 'audit':
+				case 'style':
+				case 'setup':
+				case 'tools':
+				case 'security':
+					breadcrumb_set_self(do_lang_tempcode(($type=='misc')?'ADMIN_ZONE':strtoupper($type)));
+					break;
+			}
+
+			switch ($type)
+			{
+				case 'misc':
+					$this->title=get_screen_title('ADMIN_ZONE');
+					break;
+				case 'structure':
+					$this->title=get_screen_title('STRUCTURE');
+					break;
+				case 'audit':
+					$this->title=get_screen_title('AUDIT');
+					break;
+				case 'style':
+					$this->title=get_screen_title('STYLE');
+					break;
+				case 'setup':
+					$this->title=get_screen_title('SETUP');
+					break;
+				case 'tools':
+					$this->title=get_screen_title('TOOLS');
+					break;
+				case 'security':
+					$this->title=get_screen_title('SECURITY');
+					break;
+
+				case 'docs':
+					$this->title=get_screen_title('DOCS');
+					break;
+
+				case 'search':
+					$this->title=get_screen_title('ADMIN_ZONE_SEARCH_RESULTS');
+					break;
+			}
 		}
 
 		return NULL;
@@ -127,6 +172,9 @@ class Module_admin
 				return do_next_manager_hooked('TOOLS','DOC_TOOLS','tools');
 			case 'security':
 				return do_next_manager_hooked('SECURITY','DOC_SECURITY','security');
+
+			case 'docs':
+				return $this->docs();
 
 			case 'search':
 				return $this->search();
@@ -317,6 +365,19 @@ class Module_admin
 		}
 
 		return false;
+	}
+
+	/**
+	 * Go to ocPortal documentation.
+	 *
+	 * @return tempcode	Interface.
+	 */
+	function docs()
+	{
+		require_code('site2');
+		$url=get_brand_base_url().'/docs'.strval(ocp_version()).'/';
+		assign_refresh($url,0.0);
+		return redirect_screen($this->title,$url);
 	}
 
 	/**
@@ -1155,7 +1216,7 @@ class Module_admin
 			return $this->search();
 		}
 
-		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'b34d4765744c359a25a0b71449eafed1','TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>$found_some?NULL:true,'ARRAY'=>true,'CONTENT'=>$found_some?$content:array(),'PRE'=>$pre,'POST'=>$post));
+		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'b34d4765744c359a25a0b71449eafed1','TITLE'=>$this->title,'EMPTY'=>$found_some?NULL:true,'ARRAY'=>true,'CONTENT'=>$found_some?$content:array(),'PRE'=>$pre,'POST'=>$post));
 	}
 
 }

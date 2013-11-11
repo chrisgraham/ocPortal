@@ -55,7 +55,7 @@ function execute_temp()
 {
 	require_code('sitemap');
 
-	$pagelink='';
+	$pagelink='adminzone:website';
 	$callback=NULL;
 	$valid_node_types=NULL;
 	$max_recurse_depth=20;

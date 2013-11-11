@@ -182,6 +182,11 @@ abstract class Hook_sitemap_base
 		if ($page=='404') return true;
 		if ($page=='sitemap') return true;
 
+		// Pages shown in the footer should not repeat in the Sitemap
+		if ((get_option('bottom_show_privacy_link')=='1') && ($page=='privacy')) return true;
+		if ((get_option('bottom_show_rules_link')=='1') && ($page=='rules')) return true;
+		if ((get_option('bottom_show_feedback_link')=='1') && ($page=='feedback')) return true;
+
 		// Note that other things are disabled via get_entry_points returning NULL
 
 		return false;

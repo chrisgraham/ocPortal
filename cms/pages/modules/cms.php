@@ -66,7 +66,7 @@ class Module_cms
 	 */
 	function pre_run()
 	{
-		$type=get_param('type','misc');
+		$type=get_param('type','cms');
 
 		require_code('menus');
 
@@ -80,6 +80,8 @@ class Module_cms
 		{
 			breadcrumb_set_self(do_lang_tempcode('CMS_ZONE'));
 		}
+
+		$this->title=get_screen_title('MODULE_TRANS_NAME_cms');
 
 		return NULL;
 	}
