@@ -151,6 +151,7 @@ class Hook_addon_registry_calendar
 			'themes/default/images/calendar/festival.png',
 			'themes/default/images/calendar/general.png',
 			'themes/default/images/calendar/public_holiday.png',
+			'themes/default/images/calendar/vacation.png',
 			'themes/default/images/calendar/index.html',
 			'themes/default/images/calendar/priority_1.png',
 			'themes/default/images/calendar/priority_2.png',
