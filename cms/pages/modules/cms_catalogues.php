@@ -636,7 +636,7 @@ class Module_cms_catalogues extends standard_aed_module
 				$map_copy=$map;
 				$title=array_shift($map_copy);
 				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
-				syndicate_described_activity(($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CATALOGUE_GENERIC':'catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,$submitter);
+				syndicate_described_activity(($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CATALOGUE_GENERIC':'catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,NULL/*$submitter*/);
 			}
 		}
 

@@ -373,7 +373,7 @@ class Module_cms_iotds extends standard_aed_module
 			$submitter=$GLOBALS['SITE_DB']->query_value('iotd','submitter',array('id'=>$id));
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
-				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds',1,$submitter);
+				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds',1,NULL/*$submitter*/);
 		}
 
 		edit_iotd($id,$title,post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
