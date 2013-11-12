@@ -407,8 +407,6 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		{
 			if (is_array($val))
 			{
-				if (is_null($val)) continue;
-
 				if ($keep_all)
 				{
 					if ((!array_key_exists($key,$vars)) && (!isset($skip[$key])))

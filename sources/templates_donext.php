@@ -233,19 +233,20 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 				break;
 			case 'menu/_generic_admin/view_this_category':
 				$x=$url_view_this_category;
-				if (!is_null($x))
-				{
-					$keep_simplified_donext=get_param_integer('keep_simplified_donext',NULL);
-					if ((($keep_simplified_donext!==0) && (get_option('simplified_donext')=='1')) || ($keep_simplified_donext==1))
-					{
-						$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
-						return redirect_screen($title,$_url_redirect,$text);
-					}
-				}
 				break;
 		}
 		if (!is_null($x))
 		{
+			if ($option=='view_this' || $option=='view_archive')
+			{
+				$keep_simplified_donext=get_param_integer('keep_simplified_donext',NULL);
+				if ((($keep_simplified_donext!==0) && (get_option('simplified_donext')=='1')) || ($keep_simplified_donext==1))
+				{
+					$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
+					return redirect_screen($title,$_url_redirect,$text);
+				}
+			}
+
 			if (array_key_exists(3,$x)) $map=array($option,array($x[0],$x[1],$x[2]),$x[3]); else $map=array($option,$x);
 			if (!is_null($auto_add)) $map[5]=$auto_add;
 			$category_passed_2[]=$map;
