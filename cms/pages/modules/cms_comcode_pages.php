@@ -1074,6 +1074,8 @@ class Module_cms_comcode_pages
 				'p_parent_page'=>$new_file,
 			),array('the_zone'=>$zone,'p_parent_page'=>$file));
 
+			$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$new_file),array('cv_value'=>$file,'cf_type'=>'comcode_page'));
+
 			foreach ($rename_map as $path=>$new_path)
 			{
 				if ($afm_needed)

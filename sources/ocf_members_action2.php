@@ -977,6 +977,8 @@ function ocf_delete_member($member_id)
 		sync_file(rawurldecode($old));
 	}
 
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($member_id),'cf_type'=>'member'));
+
 	log_it('DELETE_MEMBER',strval($member_id),$username);
 }
 

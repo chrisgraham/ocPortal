@@ -165,6 +165,8 @@ function delete_news_category($id)
 
 	$old_title=get_translated_text($myrow['nc_title']);
 
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'news_category'));
+
 	log_it('DELETE_NEWS_CATEGORY',strval($id),$old_title);
 
 	delete_lang($myrow['nc_title']);
@@ -548,6 +550,8 @@ function delete_news($id)
 	$title=$rows[0]['title'];
 	$news=$rows[0]['news'];
 	$news_article=$rows[0]['news_article'];
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'news'));
 
 	$_title=get_translated_text($title);
 	log_it('DELETE_NEWS',strval($id),$_title);
