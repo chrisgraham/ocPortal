@@ -95,7 +95,7 @@ function init__sitemap()
  * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
  * @return ?array			Node structure (NULL: working via callback / error).
  */
-function retrieve_sitemap_node($pagelink='',$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
+function retrieve_sitemap_node($pagelink='',$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -139,11 +139,11 @@ function retrieve_sitemap_node($pagelink='',$callback=NULL,$valid_node_types=NUL
 
 	if ($is_virtual)
 	{
-		$children=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$max_recurse_depth,0,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+		$children=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,0,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 		if (is_null($children)) $children=array();
 		return array('children'=>$children);
 	}
-	return $ob->get_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+	return $ob->get_node($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 }
 
 abstract class Hook_sitemap_base
@@ -283,7 +283,7 @@ abstract class Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
@@ -308,7 +308,7 @@ abstract class Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false);
+	abstract function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false);
 
 	/**
 	 * Check the permissions of the node structure, returning false if they fail for the current user.
@@ -507,7 +507,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			A tuple: content ID, row, partial node structure (NULL: filtered).
 	 */
-	function _create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row)
+	function _create_partial_node_structure($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row)
 	{
 		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
 		{
@@ -708,7 +708,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 * @param  ?string		Order by for categories (NULL: alphabetical title).
 	 * @return ?array			Child nodes (NULL: not retrieved yet).
 	 */
-	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='',$explicit_order_by_entries=NULL,$explicit_order_by_subcategories=NULL)
+	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='',$explicit_order_by_entries=NULL,$explicit_order_by_subcategories=NULL)
 	{
 		if ($recurse_level>=$max_recurse_depth)
 		{
@@ -761,28 +761,39 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 						}
 					}
 
-					$start=0;
-					do
+					$where=array();
+					if (is_array($cma_entry_info['category_field'])) $cma_entry_info['category_field']=array_pop($cma_entry_info['category_field']);
+					$where[$cma_entry_info['category_field']]=$cma_entry_info['id_field_numeric']?intval($content_id):$content_id;
+					if (($consider_validation) && (isset($cma_entry_info['validated_field'])))
+						$where[$cma_entry_info['validated_field']]=1;
+					$table=$cma_entry_info['table'].' r';
+					$table.=$privacy_join;
+
+					$skip_children=false;
+					if ($child_cutoff!==NULL)
 					{
-						$where=array();
-						if (is_array($cma_entry_info['category_field'])) $cma_entry_info['category_field']=array_pop($cma_entry_info['category_field']);
-						$where[$cma_entry_info['category_field']]=$cma_entry_info['id_field_numeric']?intval($content_id):$content_id;
-						if (($consider_validation) && (isset($cma_entry_info['validated_field'])))
-							$where[$cma_entry_info['validated_field']]=1;
-						$table=$cma_entry_info['table'].' r';
-						$table.=$privacy_join;
-						$rows=$cma_entry_info['connection']->query_select($table,array('*'),$where,$extra_where_entries.$privacy_where.(is_null($explicit_order_by_entries)?'':(' ORDER BY '.$explicit_order_by_entries)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
-						$child_page=($cma_entry_info['module']==$cma_info['module'])?$page:$cma_entry_info['module']/*assumed in same zone*/;
-						foreach ($rows as $child_row)
-						{
-							$child_pagelink=$zone.':'.$child_page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
-							$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
-							if ($child_node!==NULL)
-								$children_entries[]=$child_node;
-						}
-						$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+						$count=$GLOBALS['SITE_DB']->query_select_value($table,'COUNT(*)',$where,$extra_where_entries.$privacy_where);
+						if ($count>$child_cutoff) $skip_children=true;
 					}
-					while (count($rows)>0);
+
+					if (!$skip_children)
+					{
+						$start=0;
+						do
+						{
+							$rows=$cma_entry_info['connection']->query_select($table,array('*'),$where,$extra_where_entries.$privacy_where.(is_null($explicit_order_by_entries)?'':(' ORDER BY '.$explicit_order_by_entries)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
+							$child_page=($cma_entry_info['module']==$cma_info['module'])?$page:$cma_entry_info['module']/*assumed in same zone*/;
+							foreach ($rows as $child_row)
+							{
+								$child_pagelink=$zone.':'.$child_page.':'.$child_hook_ob->screen_type.':'.($cma_entry_info['id_field_numeric']?strval($child_row[$cma_entry_info['id_field']]):$child_row[$cma_entry_info['id_field']]);
+								$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+								if ($child_node!==NULL)
+									$children_entries[]=$child_node;
+							}
+							$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+						}
+						while (count($rows)==SITEMAP_MAX_ROWS_PER_LOOP);
+					}
 
 					if (is_null($explicit_order_by_entries))
 					{
@@ -798,35 +809,46 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 		{
 			$children_categories=array();
 
-			$start=0;
-			do
+			$where=array();
+			$where[$cma_info['parent_spec__parent_name']]=$cma_info['category_is_string']?$content_id:intval($content_id);
+			if (($consider_validation) && (isset($cma_info['validated_field'])))
+				$where[$cma_info['validated_field']]=1;
+			$table=$cma_info['parent_spec__table_name'].' r';
+			if ($cma_info['parent_spec__table_name']!=$cma_info['table'])
 			{
-				$where=array();
-				$where[$cma_info['parent_spec__parent_name']]=$cma_info['category_is_string']?$content_id:intval($content_id);
-				if (($consider_validation) && (isset($cma_info['validated_field'])))
-					$where[$cma_info['validated_field']]=1;
-				$table=$cma_info['parent_spec__table_name'].' r';
-				if ($cma_info['parent_spec__table_name']!=$cma_info['table'])
-				{
-					$table.=' JOIN '.$cma_info['connection']->get_table_prefix().$cma_info['table'].' r2 ON r2.'.$cma_info['id_field'].'=r.'.$cma_info['parent_spec__field_name'];
-				}
-				$rows=$cma_info['connection']->query_select($table,array('*'),$where,(is_null($explicit_order_by_subcategories)?'':('ORDER BY '.$explicit_order_by_subcategories)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
-				foreach ($rows as $child_row)
-				{
-					if ($this->content_type=='comcode_page')
-					{
-						$child_pagelink=$zone.':'.$child_row['the_page'];
-					} else
-					{
-						$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.($cma_info['category_is_string']?$child_row[$cma_info['parent_spec__field_name']]:strval($child_row[$cma_info['parent_spec__field_name']]));
-					}
-					$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
-					if ($child_node!==NULL)
-						$children_categories[]=$child_node;
-				}
-				$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+				$table.=' JOIN '.$cma_info['connection']->get_table_prefix().$cma_info['table'].' r2 ON r2.'.$cma_info['id_field'].'=r.'.$cma_info['parent_spec__field_name'];
 			}
-			while (count($rows)>0);
+
+			$skip_children=false;
+			if ($child_cutoff!==NULL)
+			{
+				$count=$GLOBALS['SITE_DB']->query_select_value($table,'COUNT(*)',$where);
+				if ($count>$child_cutoff) $skip_children=true;
+			}
+
+			if (!$skip_children)
+			{
+				$start=0;
+				do
+				{
+					$rows=$cma_info['connection']->query_select($table,array('*'),$where,(is_null($explicit_order_by_subcategories)?'':('ORDER BY '.$explicit_order_by_subcategories)),SITEMAP_MAX_ROWS_PER_LOOP,$start);
+					foreach ($rows as $child_row)
+					{
+						if ($this->content_type=='comcode_page')
+						{
+							$child_pagelink=$zone.':'.$child_row['the_page'];
+						} else
+						{
+							$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.($cma_info['category_is_string']?$child_row[$cma_info['parent_spec__field_name']]:strval($child_row[$cma_info['parent_spec__field_name']]));
+						}
+						$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+						if ($child_node!==NULL)
+							$children_categories[]=$child_node;
+					}
+					$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+				}
+				while (count($rows)==SITEMAP_MAX_ROWS_PER_LOOP);
+			}
 
 			if (is_null($explicit_order_by_subcategories))
 			{

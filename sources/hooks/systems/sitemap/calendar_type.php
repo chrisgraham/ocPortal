@@ -56,7 +56,7 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
@@ -72,6 +72,12 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 
 		$page=$this->_make_zone_concrete($zone,$pagelink);
 
+		if ($child_cutoff!==NULL)
+		{
+			$count=$GLOBALS['SITE_DB']->query_select_value('calendar_types','COUNT(*)');
+			if ($count>$child_cutoff) return $nodes;
+		}
+
 		$start=0;
 		do
 		{
@@ -81,14 +87,14 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 				if (($row['id']!=db_get_first_id()) || (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (cron_installed()))) // Filters system commands
 				{
 					$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':int_'.strval($row['id']).'=1';
-					$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+					$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 					if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 				}
 			}
 
 			$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 		}
-		while (count($rows)>0);
+		while (count($rows)==SITEMAP_MAX_ROWS_PER_LOOP);
 
 		return $nodes;
 	}
@@ -111,10 +117,10 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$pagelink_fudged=preg_replace('#:int_(\d+)=1#',':${1}',$pagelink);
-		$_=$this->_create_partial_node_structure($pagelink_fudged,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		$_=$this->_create_partial_node_structure($pagelink_fudged,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		if ($_===NULL) return NULL;
 		list($content_id,$row,$partial_struct)=$_;
 
@@ -131,7 +137,7 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
-		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		$struct['children']=$children;
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;

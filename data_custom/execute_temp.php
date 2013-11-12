@@ -58,6 +58,7 @@ function execute_temp()
 	$pagelink='adminzone:website';
 	$callback=NULL;
 	$valid_node_types=NULL;
+	$child_cutoff=NULL;
 	$max_recurse_depth=20;
 	$require_permission_support=false;
 	$zone='_SEARCH';
@@ -66,7 +67,7 @@ function execute_temp()
 	$consider_validation=false;
 	$meta_gather=SITEMAP_GATHER__ALL;
 
-	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 	if (is_null($node)) @exit('NULL');
 	var_dump(filter($node));
 	exit();

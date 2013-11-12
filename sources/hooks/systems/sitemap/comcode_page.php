@@ -85,7 +85,7 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
 		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
@@ -204,20 +204,30 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 				$where=array('p_parent_page'=>$page,'the_zone'=>$zone);
 				if ($consider_validation) $where['p_validated']=1;
 
-				$start=0;
-				do
+				$skip_children=false;
+				if ($child_cutoff!==NULL)
 				{
-					$child_rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page'),$where,'ORDER BY the_page',SITEMAP_MAX_ROWS_PER_LOOP,$start);
-					foreach ($child_rows as $child_row)
-					{
-						$child_pagelink=$zone.':'.$child_row['the_page'];
-						$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
-						if ($child_node!==NULL)
-							$children[]=$child_node;
-					}
-					$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+					$count=$GLOBALS['SITE_DB']->query_select_value('comcode_pages','COUNT(*)',$where);
+					if ($count>$child_cutoff) $skip_children=true;
 				}
-				while (count($child_rows)>0);
+
+				if (!$skip_children)
+				{
+					$start=0;
+					do
+					{
+						$child_rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page'),$where,'ORDER BY the_page',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+						foreach ($child_rows as $child_row)
+						{
+							$child_pagelink=$zone.':'.$child_row['the_page'];
+							$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+							if ($child_node!==NULL)
+								$children[]=$child_node;
+						}
+						$start+=SITEMAP_MAX_ROWS_PER_LOOP;
+					}
+					while (count($child_rows)>0);
+				}
 			}
 			$struct['children']=$children;
 		}

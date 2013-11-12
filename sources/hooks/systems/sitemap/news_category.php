@@ -56,7 +56,7 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
+	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
@@ -72,6 +72,12 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 
 		$page=$this->_make_zone_concrete($zone,$pagelink);
 
+		if ($child_cutoff!==NULL)
+		{
+			$count=$GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)');
+			if ($count>$child_cutoff) return $nodes;
+		}
+
 		$start=0;
 		do
 		{
@@ -81,13 +87,13 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 				$child_pagelink=$zone.':'.$page.':'.$this->screen_type.':'.strval($row['id']);
 				if (strpos($pagelink,':blog=0')!==false) $child_pagelink.=':blog=0';
 				if (strpos($pagelink,':blog=1')!==false) $child_pagelink.=':blog=1';
-				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+				$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
 
 			$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 		}
-		while (count($rows)>0);
+		while (count($rows)==SITEMAP_MAX_ROWS_PER_LOOP);
 
 		return $nodes;
 	}
@@ -110,9 +116,9 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
-		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		$_=$this->_create_partial_node_structure($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		if ($_===NULL) return NULL;
 		list($content_id,$row,$partial_struct)=$_;
 
@@ -135,7 +141,7 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 			call_user_func($callback,$struct);
 
 		// Categories done after node callback, to ensure sensible ordering
-		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		$children=$this->_get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		if (!is_null($children))
 		{
 			foreach ($children as &$child)
@@ -147,13 +153,23 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
 			{
 				$child_hook_ob='news';
 
-				$child_rows=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry'),array('news_entry_category'=>intval($content_id)));
-				foreach ($child_rows as $child_row)
+				$skip_children=false;
+				if ($child_cutoff!==NULL)
 				{
-					$child_pagelink=$zone.':'.$page.':view:'.strval($child_row['news_entry']);
-					$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-					if ($child_node!==NULL)
-						$children[]=$child_node;
+					$count=$GLOBALS['SITE_DB']->query_select_value('news_category_entries','COUNT(*)',array('news_entry_category'=>intval($content_id)));
+					if ($count>$child_cutoff) $skip_children=true;
+				}
+
+				if (!$skip_children)
+				{
+					$child_rows=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry'),array('news_entry_category'=>intval($content_id)));
+					foreach ($child_rows as $child_row)
+					{
+						$child_pagelink=$zone.':'.$page.':view:'.strval($child_row['news_entry']);
+						$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+						if ($child_node!==NULL)
+							$children[]=$child_node;
+					}
 				}
 			}
 			$struct['children']=$children;
