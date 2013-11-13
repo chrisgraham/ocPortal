@@ -109,6 +109,24 @@ The vast majority of email applications have HTML capabilities nowadays, so you 
 This bit may confuse you: [tt]{+START,IF_NON_EMPTY,{forename}}{forename}{+END}{+START,IF_EMPTY,{forename}}{name}{+END}[/tt]
 It is saying "if the forename is available, use the forename, if the forename is not available, use the username".
 
+[title="2"]Bounce filtering[/title]
+
+There is a feature for removing newsletter subscribers that bounce e-mails (i.e. dead e-mail accounts). This stops noise coming back when you send out a newsletter, and increases the efficiency of future sends.
+
+The removal process also removes the "allow staff e-mails" setting from members who have a matching e-mail address.
+
+For this tool to work, you must have the PHP IMAP extension on your server.
+
+You should manually move anything sent to your website e-mail address that looks like a bounce e-mail into a new bounces folder, and then run the tool upon that folder:
+ - Go to the Admin Zone, then the Tools section, then the Newsletter icon
+ - Select the "Bounce filter" icon.
+ - Enter your server IMAP details.
+ - Select your bounces folder (if ocPortal can see one that matches the word "bounce", it will be auto-selected). Note that if you select a folder with too many e-mail messages in (i.e. something that doesn't just contain bounce e-mails) then ocPortal could give you an error due to running out of memory
+
+ocPortal will then show e-mail addresses found within e-mails in the selected folder, where it can find a matching newsletter/member account for an e-mail address. Any e-mail address attached to an e-mail that looks like a bounce e-mail will be auto-ticked (auto-checked). If you are confident the IMAP folder only contained bounces, you can tick (check) the remaining addresses.
+
+If you proceed through, all ticked (checked) e-mails will be removed from the newsletter / have their "allow staff e-mail" member setting disabled.
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_news"]Releasing news & running a blog[/page]
