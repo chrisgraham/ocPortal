@@ -361,6 +361,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 			if ((get_option('ticket_mail_on')=='1') && (cron_installed()) && (function_exists('imap_open')))
 			{
 				require_code('tickets_email_integration');
+            if ($uid_email=='') $uid_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($uid);
 				ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$title,$post,$uid_displayname,$uid_email,$staff_displayname);
 			} elseif (!is_guest($uid))
 			{

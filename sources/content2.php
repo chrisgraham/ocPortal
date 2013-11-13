@@ -280,6 +280,7 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 					list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
 					$page=$attributes['page'];
 					$type=$attributes['type'];
+					$_content_id=$content_id;
 				}
 
 				$ok=true;
@@ -297,10 +298,19 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 					);
 				}
 				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_resource_id',$conflict_test_map);
-				if (($test!==NULL) && ($test!==$content_id))
+				if (($test!==NULL) && ($test!==$_content_id))
 				{
 					$ok=false;
-					attach_message(do_lang_tempcode('URL_MONIKER_TAKEN',escape_html($page.':'.$type.':'.$test),escape_html($url_moniker)),'warn');
+					if ($content_type=='comcode_page')
+					{
+						$competing_pagelink=$test.':'.$page;
+					} else
+					{
+						$competing_pagelink='_WILD'.':'.$page;
+						if ($type!='' || $test!='') $competing_pagelink.=':'.$type;
+						if ($test!='') $competing_pagelink.=':'.$test;
+					}
+					attach_message(do_lang_tempcode('URL_MONIKER_TAKEN',escape_html($competing_pagelink),escape_html($url_moniker)),'warn');
 				}
 
 				if (substr($url_moniker,0,1)=='/') // ah, relative to zones, better run some anti-conflict tests!
@@ -321,10 +331,10 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 					{
 						// Test there are no page conflicts, from perspective of welcome zone
 						require_code('site');
-						$test1=_request_page($parts[0],'');
+						$test1=(count($parts)<2)?_request_page($parts[0],''):false;
 						$test2=false;
 						if (isset($parts[1]))
-							$test2=_request_page($parts[1],$parts[0]);
+							$test2=(count($parts)<3)?_request_page($parts[1],$parts[0]):false;
 						if (($test1!==false) || ($test2!==false))
 						{
 							$ok=false;
@@ -343,7 +353,7 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 							$zones=find_all_zones(false,false,false,$start,50);
 							foreach ($zones as $zone_name)
 							{
-								$test1=_request_page($parts[0],$zone_name);
+								$test1=(count($parts)<2)?_request_page($parts[0],$zone_name):false;
 								if ($test1!==false)
 								{
 									$ok=false;

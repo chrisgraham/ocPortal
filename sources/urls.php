@@ -1016,6 +1016,14 @@ function find_id_moniker($url_parts,$zone)
 				return NULL;
 		}
 
+		// Moniker may be held the other side of a redirect
+		$page_place=_request_page($url_parts['page'],$zone);
+		if ($page_place[0]=='REDIRECT')
+		{
+			$url_parts['page']=$page_place[1]['r_to_page'];
+			$zone=$page_place[1]['r_to_zone'];
+		}
+
 		$url_parts['type']='';
 		$effective_id=$zone;
 		$url_parts['id']=$zone;

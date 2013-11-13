@@ -651,6 +651,11 @@ function process_url_monikers($page,$redirect_if_non_canonical=true)
 	{
 		// Monikers relative to the zone
 		$page_place=_request_page($page,$zone);
+		if ($page_place[0]=='REDIRECT')
+		{
+			$zone=$page_place[1]['r_to_zone'];
+			$page_place=_request_page($page_place[1]['r_to_page'],$page_place[1]['r_to_zone']);
+		}
 		if (($page_place===false) || ((substr($page_place[0],0,7)=='COMCODE') && ($type!==NULL/*looking deeper than a normal Comcode page*/)))
 		{
 			// Reassemble source URL moniker from incorrectly-derived URL components
