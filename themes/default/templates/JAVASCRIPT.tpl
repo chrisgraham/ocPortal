@@ -2544,20 +2544,24 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 /* Put some new HTML around the given element */
 function set_outer_html(element,tHTML)
 {
-	set_inner_html(element,tHTML);
 	var p=element.parentNode;
-	var c=element.childNodes;
+	p.removeChild(element);
+
+	set_inner_html(element,tHTML,false,true);
+
+	var c=element.childNodes,ci;
 	for (var i=c.length-1;i>=0;i--)
 	{
+		ci=c[i];
+		element.removeChild(ci);
 		if (element.nextSibling)
 		{
-			p.insertBefore(c[i],element.nextSibling);
+			p.insertBefore(ci,element.nextSibling);
 		} else
 		{
-			p.appendChild(c[i]);
+			p.appendChild(ci);
 		}
 	}
-	p.removeChild(element);
 }
 
 /* Put some new HTML into the given element */
