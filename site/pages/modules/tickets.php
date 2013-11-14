@@ -307,10 +307,13 @@ class Module_tickets
 			$last_poster=$topic['lastusername'];
 		}
 
+		$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+		$title=do_lang('_VIEW_SUPPORT_TICKET',$_title,is_null($ticket_type_id)?do_lang('UNKNOWN'):get_translated_text($ticket_type_id));
+
 		return do_template('SUPPORT_TICKET_LINK',array('_GUID'=>'4a39a6b5a7d56ead2d9c20b8a7a71398','NUM_POSTS'=>integer_format($topic['num']-1),
 			'CLOSED'=>strval($topic['closed']),
 			'URL'=>$url,
-			'TITLE'=>$_title,
+			'TITLE'=>$ttitle,
 			'FIRST_DATE'=>$first_date,
 			'FIRST_DATE_RAW'=>strval($topic['firsttime']),
 			'FIRST_POSTER_PROFILE_URL'=>$first_poster_profile_url,

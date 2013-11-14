@@ -449,8 +449,28 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 				//if (!is_null($new_description)) $out['description']=$new_description;	Actually, it's a bit redundant
 				if (!is_null($new_post)) $_postdetails['message']=$new_post;
 
-				$out['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$out['title']);
-				$_postdetails['p_title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$_postdetails['p_title']);
+				$is_ticket=false;
+				if (addon_installed('tickets'))
+				{
+					require_code('tickets');
+					if (is_ticket_forum($forum_id))
+					{
+						$is_ticket=true;
+					}
+				}
+				if ($is_ticket)
+				{
+					require_lang('tickets');
+					require_code('feedback');
+					$ticket_id=extract_topic_identifier($out['description']);
+					$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+					$out['title']=do_lang('_VIEW_SUPPORT_TICKET',$out['title'],is_null($ticket_type_id)?do_lang('UNKNOWN'):get_translated_text($ticket_type_id));
+					$_postdetails['p_title']='';
+				} else
+				{
+					$out['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$out['title']);
+					$_postdetails['p_title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$_postdetails['p_title']);
+				}
 			}
 
 			// Put together
