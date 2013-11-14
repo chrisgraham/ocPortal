@@ -118,7 +118,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 		} else
 		{
 			$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
-			if (!is_null($functions[0]))
+			if (is_null($functions[0]))
 			{
 				if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
 				{
@@ -129,7 +129,13 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 
 			$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
-			$entry_point=$entry_points[$type];
+			if ($matches[4]=='')
+			{
+				$entry_point=$entry_points[$type];
+			} else
+			{
+				$entry_point=$entry_points[$orig_pagelink];
+			}
 		}
 
 		$icon=mixed();

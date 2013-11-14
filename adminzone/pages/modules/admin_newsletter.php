@@ -49,9 +49,10 @@ class Module_admin_newsletter extends standard_crud_module
 		$ret=array(
 			'misc'=>array('MANAGE_NEWSLETTER','menu/site_meta/newsletters'),
 			'new'=>array('NEWSLETTER_SEND','menu/site_meta/newsletters'),
-			'subscribers'=>array('VIEW_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/subscribers'),
-			'archive'=>array('NEWSLETTER_ARCHIVE','menu/_generic_admin/view_archive'),
 			'whatsnew'=>array('NEW_CONTENT','menu/adminzone/tools/newsletter/newsletter_from_changes'),
+			'subscribers'=>array('VIEW_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/subscribers'),
+			'import_subscribers'=>array('IMPORT_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/import_subscribers'),
+			'archive'=>array('NEWSLETTER_ARCHIVE','menu/_generic_admin/view_archive'),
 		);
 		if (!GOOGLE_APPENGINE)
 			$ret['bounce_filter_a']=array('BOUNCE_FILTER','menu/adminzone/tools/newsletter/newsletter_email_bounce');

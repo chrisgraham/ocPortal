@@ -1296,6 +1296,7 @@ class forum_driver_ocf extends forum_driver_base
 		if (!function_exists('require_lang')) require_code('lang');
 		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id'.$where.$sup;
 		static $rows_cache=array();
+		$rows=mixed();
 		if (!$too_many)
 			$rows=persistent_cache_get('GROUPS'.($only_permissive?'_PO':''));
 		if ($rows===NULL)

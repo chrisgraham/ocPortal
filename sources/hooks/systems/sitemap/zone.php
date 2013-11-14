@@ -163,6 +163,52 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			'permission_page'=>$this->get_permission_page($pagelink),
 		);
 
+		$comcode_page_sitemap_ob=$this->_get_sitemap_object('comcode_page');
+		$page_sitemap_ob=$this->_get_sitemap_object('page');
+
+		$children=array();
+
+		// Get more details from default page? (which isn't linked as a child)
+		$page_details=_request_page($default_page,$zone);
+		if ($page_details!==false)
+		{
+			$page_type=$page_details[0];
+
+			if (strpos($page_type,'comcode')!==false)
+			{
+				if (($valid_node_types!==NULL) && (!in_array('comcode_page',$valid_node_types)))
+				{
+					continue;
+				}
+
+				if (($consider_validation) && (isset($root_comcode_pages[$page])) && ($root_comcode_pages[$page]==0))
+				{
+					continue;
+				}
+
+				$child_node=$comcode_page_sitemap_ob->get_node($pagelink.$default_page,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+			} else
+			{
+				if (($valid_node_types!==NULL) && (!in_array('page',$valid_node_types)))
+				{
+					continue;
+				}
+
+				$child_node=$page_sitemap_ob->get_node($pagelink.$default_page,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+			}
+
+			if ($child_node!==NULL)
+			{
+				$struct['title']=$child_node['title'];
+				foreach (array('description','image','image_2x','submitter','views','meta_keywords','meta_description','validated') as $key)
+				{
+					if ($child_node['extra_meta'][$key]!==NULL) $struct['extra_meta'][$key]=$child_node['extra_meta'][$key];
+				}
+				$struct['permissions']=array_merge($struct['permissions'],$child_node['permissions']);
+				if ($struct['children']!==NULL) $children=array_merge($children,$struct['children']);
+			}
+		}
+
 		if (!$this->_check_node_permissions($struct)) return NULL;
 
 		// What page groupings may apply in what zones?
@@ -210,8 +256,6 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 		// Categories done after node callback, to ensure sensible ordering
 		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 		{
-			$children=array();
-
 			$root_comcode_pages=get_root_comcode_pages($zone);
 
 			// Locate all page groupings and pages in them
@@ -247,7 +291,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 					$pages[$page]=$page_type;
 				}
 
-				if ((!isset($pages_found[$page])) && ((strpos($page_type,'comcode')===false) || (!isset($root_comcode_pages[$page]))))
+				if ((!isset($pages_found[$page])) && ((strpos($page_type,'comcode')===false) || (isset($root_comcode_pages[$page]))))
 				{
 					if ($this->_is_page_omitted_from_sitemap($zone,$page)) continue;
 
@@ -258,8 +302,6 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			// Do page-groupings
 			if (count($page_groupings)!=1)
 			{
-				$comcode_page_sitemap_ob=$this->_get_sitemap_object('comcode_page');
-				$page_sitemap_ob=$this->_get_sitemap_object('page');
 				$page_grouping_sitemap_ob=$this->_get_sitemap_object('page_grouping');
 
 				foreach (array_keys($page_groupings) as $page_grouping)
@@ -295,6 +337,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 					{
 						if (is_integer($page)) $page=strval($page);
 
+						if ($page==$default_page && $zone!='adminzone'/*dashboard explicitly will show as a zone child as it is not repeated in a page grouping like other zone start pages are yet deserves/needs special focus beyond just being a zone's default page*/) continue;
+
 						$child_pagelink=$zone.':'.$page;
 
 						if (strpos($page_type,'comcode')!==false)
@@ -320,17 +364,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 							$child_node=$page_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 						}
 
-						if ($page==$default_page)
-						{
-							// Put as container instead
-							$struct=$child_node;
-							$children=array_merge($children,$struct['children']);
-							$call_struct=false; // Already been called in get_virtual_nodes
-						} else
-						{
-							if ($child_node!==NULL)
-								$children[]=$child_node;
-						}
+						if ($child_node!==NULL)
+							$children[]=$child_node;
 					}
 				}
 			} elseif (count($page_groupings)==1)

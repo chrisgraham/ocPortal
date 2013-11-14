@@ -53,9 +53,11 @@ class Module_cms_galleries extends standard_crud_module
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		$ret=array(
-			'misc'=>array('MANAGE_GALLERIES','menu/rich_content/galleries'),
-			'av'=>array('ADD_VIDEO','menu/_generic_admin/add_one'),
-			'ev'=>array('EDIT_VIDEO','menu/_generic_admin/edit_one'),
+			'misc'=>array('MANAGE_GALLERIES','menu/cms/galleries/galleries'),
+			'ad'=>array('ADD_IMAGE','menu/cms/galleries/add_one_image'),
+			'ed'=>array('EDIT_IMAGE','menu/cms/galleries/edit_one_image'),
+			'av'=>array('ADD_VIDEO','menu/cms/galleries/add_one_video'),
+			'ev'=>array('EDIT_VIDEO','menu/cms/galleries/edit_one_video'),
 		);
 
 		if (has_privilege(get_member(),'mass_import','cms_galleries'))

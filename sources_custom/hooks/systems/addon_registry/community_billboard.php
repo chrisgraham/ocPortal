@@ -122,7 +122,7 @@ class Hook_addon_registry_community_billboard
 	 */
 	function get_default_icon()
 	{
-		return 'themes/default/images_custom/icons/48x48/menu/adminzone/setup/community_billboard.png';
+		return 'themes/default/images_custom/icons/48x48/menu/adminzone/audit/community_billboard.png';
 	}
 
 	/**
@@ -133,8 +133,8 @@ class Hook_addon_registry_community_billboard
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images_custom/icons/24x24/menu/adminzone/setup/community_billboard.png',
-			'themes/default/images_custom/icons/48x48/menu/adminzone/setup/community_billboard.png',
+			'themes/default/images/icons/24x24/menu/adminzone/audit/community_billboard.png',
+			'themes/default/images/icons/48x48/menu/adminzone/audit/community_billboard.png',
 			'sources/hooks/systems/config/system_community_billboard.php',
 			'sources/hooks/systems/addon_registry/community_billboard.php',
 			'sources/hooks/modules/admin_import_types/community_billboard.php',
@@ -152,8 +152,6 @@ class Hook_addon_registry_community_billboard
 			'sources/hooks/systems/config/is_on_community_billboard_buy.php',
 			'sources/hooks/systems/notifications/pointstore_request_community_billboard.php',
 			'themes/default/css_custom/community_billboard.css',
-			'themes/default/images/icons/24x24/menu/adminzone/audit/community_billboard.png',
-			'themes/default/images/icons/48x48/menu/adminzone/audit/community_billboard.png',
 		);
 	}
 

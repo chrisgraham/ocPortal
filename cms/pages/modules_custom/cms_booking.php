@@ -46,10 +46,14 @@ class Module_cms_booking extends standard_crud_module
 	{
 		return array(
 			'misc'=>array('BOOKINGS','menu/booking'),
-			'ab'=>array('ADD_BOOKING','menu/_generic_admin/add_one'),
-			'eb'=>array('EDIT_BOOKING','menu/_generic_admin/edit_one'),
-			'av'=>array('ADD_BOOKABLE_BLACKED','menu/_generic_admin/add_one'),
-			'ev'=>array('EDIT_BOOKABLE_BLACKED','menu/_generic_admin/edit_one'),
+			'ad'=>array('ADD_BOOKABLE','menu/bookable'),
+			'ed'=>array('EDIT_BOOKABLE','menu/bookable'),
+			'ac'=>array('ADD_BOOKABLE_SUPPLEMENT','menu/supplement'),
+			'ec'=>array('EDIT_BOOKABLE_SUPPLEMENT','menu/supplement'),
+			'ab'=>array('ADD_BOOKING','menu/booking'),
+			'eb'=>array('EDIT_BOOKING','menu/booking'),
+			'av'=>array('ADD_BOOKABLE_BLACKED','menu/blacked'),
+			'ev'=>array('EDIT_BOOKABLE_BLACKED','menu/blacked'),
 		)+parent::get_entry_points();
 	}
 

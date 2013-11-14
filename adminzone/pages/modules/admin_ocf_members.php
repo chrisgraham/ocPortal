@@ -65,7 +65,7 @@ class Module_admin_ocf_members
 
 		if ($support_crosslinks)
 		{
-			if (!has_privilege(get_member(),'member_maintenance'))
+			if (has_privilege(get_member(),'member_maintenance'))
 				$ret['_SEARCH:members:misc']=array('MEMBERS','menu/adminzone/tools/users/member_edit');
 			$ret['_SEARCH:admin_ocf_merge_members:misc']=array('MERGE_MEMBERS','menu/adminzone/tools/users/merge_members');
 			if (addon_installed('ocf_cpfs'))

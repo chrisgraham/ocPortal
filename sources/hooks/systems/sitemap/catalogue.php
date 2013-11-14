@@ -169,22 +169,22 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 		{
 			$test=find_theme_image('icons/24x24/menu/rich_content/catalogues/'.$content_id,true);
 			if ($test!='')
-				$struct['image']=$test;
+				$struct['extra_meta']['image']=$test;
 			$test=find_theme_image('icons/48x48/menu/rich_content/catalogues/'.$content_id,true);
 			if ($test!='')
-				$struct['image_2x']=$test;
+				$struct['extra_meta']['image_2x']=$test;
 
 			if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 			{
 				$children=array();
 
 				// A-to-Z
-				$child_pagelink=$zone.':'.$page.':atoz:'.$row['c_name'];
+				$child_pagelink=$zone.':'.$page.':atoz:'.$content_id;
 				$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 				if ($child_node!==NULL) $children[]=$child_node;
 
 				// Categories
-				$count=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']));
+				$count=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name'=>$content_id));
 				$lots=($count>3000) || ($child_cutoff!==NULL) && ($count>$child_cutoff);
 				if (!$lots)
 				{
@@ -198,10 +198,19 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 						$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),$where,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 						foreach ($rows as $child_row)
 						{
-							$child_pagelink=$zone.':'.$page.':entry:'.strval($child_row['id']);
+							$child_pagelink=$zone.':'.$page.':misc:'.strval($child_row['id']);
 							$child_node=$child_hook_ob->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 							if ($child_node!==NULL)
+							{
+								$test=find_theme_image('icons/24x24/menu/_generic_admin/view_this_category',true);
+								if ($test!='')
+									$child_node['extra_meta']['image']=$test;
+								$test=find_theme_image('icons/48x48/menu/_generic_admin/view_this_category',true);
+								if ($test!='')
+									$child_node['extra_meta']['image_2x']=$test;
+
 								$children_entries[]=$child_node;
+							}
 						}
 						$start+=SITEMAP_MAX_ROWS_PER_LOOP;
 					}
@@ -221,10 +230,10 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 
 			$test=find_theme_image('icons/24x24/menu/rich_content/atoz',true);
 			if ($test!='')
-				$struct['image']=$test;
+				$struct['extra_meta']['image']=$test;
 			$test=find_theme_image('icons/48x48/menu/rich_content/atoz',true);
 			if ($test!='')
-				$struct['image_2x']=$test;
+				$struct['extra_meta']['image_2x']=$test;
 		} else
 		{
 			warn_exit(do_lang_tempcode('INTERNAL_ERROR'));

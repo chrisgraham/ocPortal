@@ -37,6 +37,7 @@ class Hook_page_groupings_core
 			array('','menu/adminzone/setup',array('admin',array('type'=>'setup'),get_module_zone('admin')),do_lang_tempcode('menus:SETUP'),'menus:DOC_SETUP'),
 			array('','menu/adminzone/tools',array('admin',array('type'=>'tools'),get_module_zone('admin')),do_lang_tempcode('menus:TOOLS'),'menus:DOC_TOOLS'),
 			array('','menu/adminzone/security',array('admin',array('type'=>'security'),get_module_zone('admin')),do_lang_tempcode('menus:SECURITY_GROUP_SETUP'),'menus:DOC_SECURITY'),
+			array('','menu/adminzone/start',array('start',array(),'adminzone'),do_lang_tempcode('menus:DASHBOARD')),
 			(_request_page('website','adminzone')===NULL)?array('','menu/adminzone/help',array('admin',array('type'=>'docs'),get_module_zone('admin')),do_lang_tempcode('menus:DOCS')):NULL,
 			(_request_page('website','adminzone')===NULL)?NULL:array('','menu/adminzone/help',array('website',array(),'adminzone'),do_lang_tempcode('menus:DOCS')),
 			array('','menu/cms/cms',array('cms',array('type'=>'cms'),get_module_zone('cms')),do_lang_tempcode('CMS'),'menus:DOC_CMS'),

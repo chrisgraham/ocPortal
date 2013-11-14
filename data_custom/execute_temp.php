@@ -55,7 +55,10 @@ function execute_temp()
 {
 	require_code('sitemap');
 
-	$pagelink='adminzone:website';
+	global $ICONS;
+	$ICONS=array();
+
+	$pagelink='';
 	$callback=NULL;
 	$valid_node_types=NULL;
 	$child_cutoff=NULL;
@@ -67,9 +70,19 @@ function execute_temp()
 	$consider_validation=false;
 	$meta_gather=SITEMAP_GATHER__ALL;
 
+	require_code('themes2');
+	$a=(array_map('find_theme_image',get_all_image_ids_type('icons',true)));
+
 	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 	if (is_null($node)) @exit('NULL');
-	var_dump(filter($node));
+	/*var_dump*/(filter($node));
+
+	ksort($ICONS);
+	$b=(array_keys($ICONS));
+
+	//var_dump($a);
+	//var_dump($b);
+	var_dump(array_diff($a,$b));
 	exit();
 }
 
@@ -77,6 +90,9 @@ function filter($node)
 {
 	if (isset($node['title']) && !array_key_exists('image',$node['extra_meta'])) {@var_dump($node);@exit('missing image meta data');}
 	if (isset($node['title']) && !is_object($node['title'])) {@var_dump($node);@exit('Non-Tempcode title');}
+
+	global $ICONS;
+	$ICONS[isset($node['extra_meta']['image'])?$node['extra_meta']['image']:'']=true;
 
 	return array(
 		'title'=>isset($node['title'])?$node['title']->evaluate():'',

@@ -53,7 +53,7 @@ class Module_admin_setupwizard
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
-			'misc'=>array('SETUPWIZARD','menu/adminzone/setup/SETUPWIZARD'),
+			'misc'=>array('SETUPWIZARD','menu/adminzone/setup/setupwizard'),
 		);
 	}
 

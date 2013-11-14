@@ -134,7 +134,9 @@ function retrieve_sitemap_node($pagelink='',$callback=NULL,$valid_node_types=NUL
 			$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
 		}
 		if (is_null($hook))
+		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		}
 	}
 
 	if ($is_virtual)
@@ -163,7 +165,9 @@ abstract class Hook_sitemap_base
 		{
 			if ($details[0]=='REDIRECT')
 			{
-				$details=_request_page($details[1]['r_to_page'],$details[1]['r_to_zone']);
+				if ($details[1]['r_is_transparent']==0) return false;
+
+				$details=_request_page($details[1]['r_to_page'],$details[1]['r_to_zone'],NULL,NULL,true);
 			}
 		}
 		return $details;
@@ -186,6 +190,9 @@ abstract class Hook_sitemap_base
 		if ((get_option('bottom_show_privacy_link')=='1') && ($page=='privacy')) return true;
 		if ((get_option('bottom_show_rules_link')=='1') && ($page=='rules')) return true;
 		if ((get_option('bottom_show_feedback_link')=='1') && ($page=='feedback')) return true;
+
+		// Disabled, maybe via a looped redirect?
+		if ($this->_request_page_details($page,$zone)===false) return true;
 
 		// Note that other things are disabled via get_entry_points returning NULL
 
@@ -217,7 +224,7 @@ abstract class Hook_sitemap_base
 
 		if ($zone=='_SEARCH') // Make zone concrete, from page-link
 		{
-			if ($zone==='_SEARCH') // Do a search even, if we're desperate
+			if ($matches[1]==='_SEARCH') // Do a search even, if we're desperate
 			{
 				$zone=get_page_zone($page); // $pagelink was unknown, $zone was unknown
 			} else

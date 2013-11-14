@@ -265,15 +265,14 @@ class Module_vforums
 		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
 		{
 			$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false,true);
-			$group_or_list='';
+			$group_or_list='1=0';
 			foreach ($groups as $group)
 			{
-				if ($group_or_list!='') $group_or_list.=' OR ';
+				$group_or_list.=' OR ';
 				$group_or_list.='group_id='.strval($group);
 			}
 
 			if ($extra!='') $extra.=' AND ';
-			$or_list='';
 			global $SITE_INFO;
 			if (is_guest())
 			{
@@ -282,6 +281,7 @@ class Module_vforums
 			{
 				$forum_access=$GLOBALS['FORUM_DB']->query('SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval(get_member()).' AND (active_until IS NULL OR active_until>'.strval(time()).')) AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
 			}
+			$or_list='1=0';
 			foreach ($forum_access as $access)
 			{
 				if ($or_list!='') $or_list.=' OR ';
