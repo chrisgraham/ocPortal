@@ -255,7 +255,6 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			}
 
 			// Render children, in title order
-			sort_maps_by($child_links,0);
 			foreach ($child_links as $child_link)
 			{
 				$title=$child_link[0];
@@ -302,6 +301,8 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 				if ($child_node!==NULL)
 					$children[]=$child_node;
 			}
+
+			sort_maps_by($children,'title');
 
 			$struct['children']=$children;
 		}

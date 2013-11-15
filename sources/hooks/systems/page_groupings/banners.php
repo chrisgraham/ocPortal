@@ -35,6 +35,7 @@ class Hook_page_groupings_banners
 			array('audit','menu/cms/banners',array('admin_banners',array('type'=>'misc'),get_module_zone('admin_banners')),do_lang_tempcode('banners:BANNER_STATISTICS'),'banners:DOC_BANNERS'),
 			(get_comcode_zone('donate',false)===NULL)?NULL:array('site_meta','menu/pages/donate',array('donate',array(),get_comcode_zone('donate')),do_lang_tempcode('banners:DONATE')),
 			(get_comcode_zone('advertise',false)===NULL)?NULL:array('site_meta','menu/pages/advertise',array('advertise',array(),get_comcode_zone('advertise')),do_lang_tempcode('banners:ADVERTISE')),
+			array('site_meta','menu/cms/banners',array('banners',array('type'=>'misc'),get_module_zone('banners')),do_lang_tempcode('banners:BANNERS')),
 		);
 	}
 

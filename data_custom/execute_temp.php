@@ -62,7 +62,7 @@ function execute_temp()
 	$callback=NULL;
 	$valid_node_types=NULL;
 	$child_cutoff=NULL;
-	$max_recurse_depth=20;
+	$max_recurse_depth=4;
 	$require_permission_support=false;
 	$zone='_SEARCH';
 	$consider_secondary_categories=true;
@@ -75,14 +75,14 @@ function execute_temp()
 
 	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 	if (is_null($node)) @exit('NULL');
-	/*var_dump*/(filter($node));
+	var_dump(filter($node));
 
 	ksort($ICONS);
 	$b=(array_keys($ICONS));
 
 	//var_dump($a);
 	//var_dump($b);
-	var_dump(array_diff($a,$b));
+//	var_dump(array_diff($a,$b));
 	exit();
 }
 

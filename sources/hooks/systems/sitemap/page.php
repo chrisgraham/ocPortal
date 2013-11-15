@@ -390,16 +390,21 @@ class Hook_sitemap_page extends Hook_sitemap_base
 		if ($callback!==NULL && $call_struct)
 			call_user_func($callback,$struct);
 
-		// Finalise children
-		if ($callback!==NULL)
+		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
 		{
-			foreach ($children as $child_struct)
+			// Finalise children
+			if ($callback!==NULL)
 			{
-				call_user_func($callback,$child_struct);
+				foreach ($children as $child_struct)
+				{
+					call_user_func($callback,$child_struct);
+				}
+				$children=array();
 			}
-			$children=array();
+			$struct['children']=array_values($children);
+
+			sort_maps_by($children,'title');
 		}
-		$struct['children']=array_values($children);
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
