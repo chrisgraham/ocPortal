@@ -90,6 +90,7 @@ class Hook_sitemap_root extends Hook_sitemap_base
 			'content_type'=>'root',
 			'content_id'=>NULL,
 			'pagelink'=>'',
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>NULL,

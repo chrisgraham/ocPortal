@@ -29,7 +29,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	function handles_pagelink($pagelink)
 	{
 		$matches=array();
-		if (preg_match('#^([^:]*):([^:]+)(:misc|$)#',$pagelink,$matches)!=0)
+		if (preg_match('#^([^:]*):([^:]+)(:misc)?$#',$pagelink,$matches)!=0)
 		{
 			$zone=$matches[1];
 			$page=$matches[2];
@@ -65,6 +65,8 @@ class Hook_sitemap_page extends Hook_sitemap_base
 			$links=get_page_grouping_links();
 			foreach ($links as $link)
 			{
+				if (!is_array($link[2])) continue;
+
 				if (($link[2][0]==$page) && ((!isset($link[2][1]['type'])) || ($link[2][1]['type']=='misc')) && (($link[2][2]==$zone) || ($page!='start')))
 				{
 					$title=$link[3];
@@ -162,6 +164,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 			'content_type'=>'page',
 			'content_id'=>$zone.':'.$page,
 			'pagelink'=>$pagelink,
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>NULL,

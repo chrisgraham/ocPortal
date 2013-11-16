@@ -157,6 +157,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 			'content_type'=>'page',
 			'content_id'=>$zone,
 			'pagelink'=>$pagelink,
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon),

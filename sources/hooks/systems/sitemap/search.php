@@ -28,7 +28,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 	 */
 	function handles_pagelink($pagelink)
 	{
-		if (preg_match('#^([^:]*):search$#',$pagelink)!=0)
+		if (preg_match('#^([^:]*):search(:misc)?$#',$pagelink)!=0)
 		{
 			return SITEMAP_NODE_HANDLED_VIRTUALLY;
 		}
@@ -135,6 +135,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 				'content_type'=>NULL,
 				'content_id'=>NULL,
 				'pagelink'=>$pagelink,
+				'url'=>NULL,
 				'extra_meta'=>array(
 					'description'=>NULL,
 					'image'=>NULL,
@@ -184,6 +185,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			'content_type'=>NULL,
 			'content_id'=>NULL,
 			'pagelink'=>$pagelink,
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>NULL,

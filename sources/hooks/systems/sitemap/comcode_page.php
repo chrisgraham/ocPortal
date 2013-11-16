@@ -106,6 +106,7 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 			'content_type'=>'comcode_page',
 			'content_id'=>$zone.':'.$page,
 			'pagelink'=>$pagelink,
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>NULL,

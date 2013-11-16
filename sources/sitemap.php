@@ -449,9 +449,14 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			require_code('site');
 			if (($cma_info['module']==$page) && ($zone!='_SEARCH') && (_request_page($page,$zone)!==false)) // Ensure the given page matches the content type, and it really does exist in the given zone
 			{
-				if ($matches[0]==$pagelink) return SITEMAP_NODE_HANDLED_VIRTUALLY; // No type/ID specified
+				if ($matches[0]==$pagelink)
+				{
+					return SITEMAP_NODE_HANDLED_VIRTUALLY; // No type/ID specified
+				}
 				if (preg_match('#^([^:]*):([^:]*):'.$this->screen_type.'(:|$)#',$pagelink,$matches)!=0)
+				{
 					return SITEMAP_NODE_HANDLED;
+				}
 			}
 		}
 		return SITEMAP_NODE_NOT_HANDLED;
@@ -572,6 +577,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			'content_type'=>$this->content_type,
 			'content_id'=>$content_id,
 			'pagelink'=>$pagelink,
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>NULL,
@@ -717,7 +723,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	 */
 	function _get_children_nodes($content_id,$pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row,$extra_where_entries='',$explicit_order_by_entries=NULL,$explicit_order_by_subcategories=NULL)
 	{
-		if ($recurse_level>=$max_recurse_depth)
+		if ((!is_null($max_recurse_depth)) && ($recurse_level>=$max_recurse_depth))
 		{
 			return NULL;
 		}
@@ -942,6 +948,7 @@ function get_root_comcode_pages($zone)
  * Get an HTML selection list for some part of the Sitemap.
  *
  * @param  ID_TEXT  		The page-link we are starting from.
+ * @param  boolean  		Create from under this node, rather than at it.
  * @param  ?ID_TEXT		Default selection (NULL: none).
  * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
  * @param  ?array			List of node types we will allow to be selectable (NULL: no limit)
@@ -953,16 +960,27 @@ function get_root_comcode_pages($zone)
  * @param  ?mixed  		Filter function for limiting what rows will be included (NULL: none).
  * @return tempcode		List.
  */
-function create_selection_list($root_pagelink,$default=NULL,$valid_node_types=NULL,$valid_selectable_content_types=NULL,$check_permissions_against=0,$check_permissions_for=NULL,$consider_validation=false,$only_owned=NULL,$use_compound_list=false,$filter_func=NULL)
+function create_selection_list($root_pagelink,$under_only=false,$default=NULL,$valid_node_types=NULL,$valid_selectable_content_types=NULL,$check_permissions_against=0,$check_permissions_for=NULL,$consider_validation=false,$only_owned=NULL,$use_compound_list=false,$filter_func=NULL)
 {
 	if (is_null($check_permissions_for)) $check_permissions_for=get_member();
 
 	$out=new ocp_tempcode();
-	$root_node=retrieve_sitemap_node($root_pagelink,NULL,NULL,NULL,false,'_SEARCH',false,$consider_validation,is_null($filter_func)?0:SITEMAP_GATHER_DB_ROW);
-	foreach ($root_node['children'] as $child_node)
+	$root_node=retrieve_sitemap_node($root_pagelink,NULL,NULL,NULL,NULL,false,'_SEARCH',false,false,$consider_validation,is_null($filter_func)?0:SITEMAP_GATHER_DB_ROW);
+
+	if (!$under_only)
 	{
-		_create_selection_list($out,$child_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func);
+		_create_selection_list($out,$root_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func);
+	} else
+	{
+		if (isset($root_node['children']))
+		{
+			foreach ($root_node['children'] as $child_node)
+			{
+				_create_selection_list($out,$child_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func);
+			}
+		}
 	}
+
 	return $out;
 }
 
@@ -1027,20 +1045,25 @@ function _create_selection_list(&$out,$node,$default,$valid_selectable_content_t
 	}
 
 	$content_id=$node['content_id'];
+	if (is_null($content_id)) $content_id=$node['pagelink'];
+	if (is_null($content_id)) $content_id='';
 
 	// Recurse, working out $children and $compound_list
 	$children=new ocp_tempcode();
 	$child_compound_list='';
-	foreach ($node['children'] as $child_node)
+	if (isset($node['children']))
 	{
-		$_child_compound_list=_create_selection_list($children,$child_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func,$depth+1);
-		if ($_child_compound_list!='')
-			$child_compound_list.=($child_compound_list!='')?(','.$_child_compound_list):$_child_compound_list;
+		foreach ($node['children'] as $child_node)
+		{
+			$_child_compound_list=_create_selection_list($children,$child_node,$default,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$only_owned,$use_compound_list,$filter_func,$depth+1);
+			if ($_child_compound_list!='')
+				$child_compound_list.=($child_compound_list!='')?(','.$_child_compound_list):$_child_compound_list;
+		}
 	}
 	$compound_list=$content_id.(($child_compound_list!='')?(','.$child_compound_list):'');
 
 	// Handle node
-	$title=str_repeat(' ',$depth).$node['title'];
+	$title=str_repeat('-',$depth).$node['title']->evaluate();
 	$selected=($content_id===(is_integer($default)?strval($default):$default));
 	$disabled=(!is_null($valid_selectable_content_types) && !in_array($node['content_type'],$valid_selectable_content_types));
 	$_content_id=$use_compound_list?$compound_list:$content_id;

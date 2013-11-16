@@ -166,6 +166,7 @@ class sitemap_test_set extends ocp_test_case
 			'content_type',
 			'content_id',
 			'pagelink',
+			'url',
 			'extra_meta',
 			'permissions',
 			'has_possible_children',

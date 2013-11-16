@@ -79,55 +79,46 @@ class Module_admin
 
 		require_code('menus');
 
-		$this->simplified=(((!has_privilege(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE));
-
-		if ($this->simplified)
+		switch ($type)
 		{
-			breadcrumb_set_self(do_lang_tempcode('CMS'));
-			set_helper_panel_text(do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN'));
-		} else
+			case 'misc':
+			case 'structure':
+			case 'audit':
+			case 'style':
+			case 'setup':
+			case 'tools':
+			case 'security':
+				breadcrumb_set_self(do_lang_tempcode(($type=='misc')?'ADMIN_ZONE':strtoupper($type)));
+				break;
+		}
+
+		switch ($type)
 		{
-			switch ($type)
-			{
-				case 'misc':
-				case 'structure':
-				case 'audit':
-				case 'style':
-				case 'setup':
-				case 'tools':
-				case 'security':
-					breadcrumb_set_self(do_lang_tempcode(($type=='misc')?'ADMIN_ZONE':strtoupper($type)));
-					break;
-			}
+			case 'misc':
+				$this->title=get_screen_title('ADMIN_ZONE');
+				break;
+			case 'structure':
+				$this->title=get_screen_title('STRUCTURE');
+				break;
+			case 'audit':
+				$this->title=get_screen_title('AUDIT');
+				break;
+			case 'style':
+				$this->title=get_screen_title('STYLE');
+				break;
+			case 'setup':
+				$this->title=get_screen_title('SETUP');
+				break;
+			case 'tools':
+				$this->title=get_screen_title('TOOLS');
+				break;
+			case 'security':
+				$this->title=get_screen_title('SECURITY');
+				break;
 
-			switch ($type)
-			{
-				case 'misc':
-					$this->title=get_screen_title('ADMIN_ZONE');
-					break;
-				case 'structure':
-					$this->title=get_screen_title('STRUCTURE');
-					break;
-				case 'audit':
-					$this->title=get_screen_title('AUDIT');
-					break;
-				case 'style':
-					$this->title=get_screen_title('STYLE');
-					break;
-				case 'setup':
-					$this->title=get_screen_title('SETUP');
-					break;
-				case 'tools':
-					$this->title=get_screen_title('TOOLS');
-					break;
-				case 'security':
-					$this->title=get_screen_title('SECURITY');
-					break;
-
-				case 'search':
-					$this->title=get_screen_title('ADMIN_ZONE_SEARCH_RESULTS');
-					break;
-			}
+			case 'search':
+				$this->title=get_screen_title('ADMIN_ZONE_SEARCH_RESULTS');
+				break;
 		}
 
 		return NULL;
@@ -146,11 +137,6 @@ class Module_admin
 		require_all_lang();
 
 		$type=get_param('type','misc');
-
-		if ($this->simplified)
-		{
-			if ($type=='misc') return do_next_manager_admin_simplified();
-		}
 
 		switch ($type)
 		{

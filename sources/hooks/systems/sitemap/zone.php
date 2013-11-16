@@ -131,6 +131,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			'content_type'=>'zone',
 			'content_id'=>$zone,
 			'pagelink'=>$pagelink,
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon),

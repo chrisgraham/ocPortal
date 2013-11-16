@@ -229,7 +229,6 @@ function get_true_permissions()
 		array('_FEEDBACK','comment'),
 		array('VOTE','vote_in_polls'),
 		array('GENERAL_SETTINGS','jump_to_unvalidated'),
-		array('GENERAL_SETTINGS','avoid_simplified_adminzone_look'),
 		array('_COMCODE','reuse_others_attachments'),
 	);
 }

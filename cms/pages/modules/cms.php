@@ -70,16 +70,7 @@ class Module_cms
 
 		require_code('menus');
 
-		$this->simplified=(((!has_privilege(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE));
-
-		if ($this->simplified)
-		{
-			breadcrumb_set_self(do_lang_tempcode('CMS'));
-			set_helper_panel_text(do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN'));
-		} else
-		{
-			breadcrumb_set_self(do_lang_tempcode('CMS_ZONE'));
-		}
+		breadcrumb_set_self(do_lang_tempcode('CMS_ZONE'));
 
 		$this->title=get_screen_title('MODULE_TRANS_NAME_cms');
 
@@ -94,11 +85,6 @@ class Module_cms
 	function run()
 	{
 		require_code('templates_donext');
-
-		if ($this->simplified)
-		{
-			return do_next_manager_admin_simplified();
-		}
 
 		return do_next_manager_hooked('CMS_ZONE','DOC_CMS','cms','MODULE_TRANS_NAME_cms');
 	}

@@ -47,10 +47,6 @@ This section provides a selection of useful links. The links may be edited via t
 
 This section shows recent administrative/content actions on your website.
 
-[title="2"]Simplified Admin Zone[/title]
-
-If a user who does not have permission to use many aspects of the Admin Zone enters either the Admin or CMS zones, then they will be presented with a simplified interface, consisting just of one screen of icons, and an informative front page. This feature is particularly useful if you are using ocPortal to create a website for somebody else, and you do not want them to be off-put by the full complexity of the Admin Zone. By using this feature you'll be able to tailor your clients administration experience to the extent that they won't really consider the website to be an ocPortal website, but rather a website built from scratch just for them.
-
 [title="2"]Miscellaneous other Admin features[/title]
 
 This part of the tutorial details some miscellaneous administrative features that are not covered in other tutorials.

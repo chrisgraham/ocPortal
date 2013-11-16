@@ -85,7 +85,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					$pages_found[$link[2][2].':'.$link[2][0]]=true;
 			}
 
-			if (($_page_grouping=='') && (($link[2][0]=='cms') || ($link[2][0]=='admin')) && ($link[2][1]==array('type'=>$page_grouping)))
+			if (($_page_grouping=='') && (is_array($link[2])) && (($link[2][0]=='cms') || ($link[2][0]=='admin')) && ($link[2][1]==array('type'=>$page_grouping)))
 			{
 				$icon=$link[1];
 				$lang_string=$link[3];
@@ -127,6 +127,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			'content_type'=>'page_grouping',
 			'content_id'=>$page_grouping,
 			'pagelink'=>$pagelink,
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon),
@@ -171,8 +172,6 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 
 			$root_comcode_pages=get_root_comcode_pages($zone);
 
-			$links=get_page_grouping_links();
-
 			$page_sitemap_ob=$this->_get_sitemap_object('page');
 			$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
 			$comcode_page_sitemap_ob=$this->_get_sitemap_object('comcode_page');
@@ -185,6 +184,39 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 				{
 					$title=$link[3];
 					$icon=$link[1];
+
+					if (!is_array($link[2])) // Plain URL
+					{
+						$children[]=array(
+							'title'=>$title,
+							'content_type'=>'url',
+							'content_id'=>NULL,
+							'pagelink'=>NULL,
+							'url'=>$link[2],
+							'extra_meta'=>array(
+								'description'=>NULL,
+								'image'=>NULL,
+								'image_2x'=>NULL,
+								'add_date'=>NULL,
+								'edit_date'=>NULL,
+								'submitter'=>NULL,
+								'views'=>NULL,
+								'rating'=>NULL,
+								'meta_keywords'=>NULL,
+								'meta_description'=>NULL,
+								'categories'=>NULL,
+								'validated'=>NULL,
+								'db_row'=>NULL,
+							),
+							'permissions'=>array(),
+							'has_possible_children'=>false,
+
+							// These are likely to be changed in individual hooks
+							'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
+							'sitemap_refreshfreq'=>'weekly',
+						);
+						continue;
+					}
 
 					$page=$link[2][0];
 					$_zone=$link[2][2];

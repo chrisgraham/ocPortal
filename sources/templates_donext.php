@@ -19,31 +19,6 @@
  */
 
 /**
- * Get the tempcode for a simplified admin do next manager.
- *
- * @return tempcode		The do next manager
- */
-function do_next_manager_admin_simplified()
-{
-	$sections=new ocp_tempcode();
-	$sections->attach(do_next_manager_hooked('CMS',NULL,'cms'));
-	$sections->attach(do_next_manager_hooked('STRUCTURE',NULL,'structure'));
-	$sections->attach(do_next_manager_hooked('AUDIT',NULL,'audit'));
-	$sections->attach(do_next_manager_hooked('STYLE',NULL,'style'));
-	$sections->attach(do_next_manager_hooked('SETUP',NULL,'setup'));
-	$sections->attach(do_next_manager_hooked('TOOLS',NULL,'tools'));
-	$sections->attach(do_next_manager_hooked('SECURITY',NULL,'security'));
-
-	return do_template('DO_NEXT_SCREEN',array(
-		'_GUID'=>'3c5fa0d04c28c81cac64a481e1c96800',
-		'INTRO'=>'',
-		'QUESTION'=>do_lang_tempcode('WHAT_NEXT'),
-		'TITLE'=>get_screen_title(has_zone_access(get_member(),'adminzone')?'ADMIN_ZONE':'CMS'),
-		'SECTIONS'=>$sections,
-	));
-}
-
-/**
  * Get the tempcode for a do next manager. A do next manager is a series of linked icons that are presented after performing an action. Modules that do not use do-next pages, usually use REFRESH_PAGE's.
  *
  * @param  ID_TEXT		The title of what we are doing (a language string)
@@ -64,15 +39,15 @@ function do_next_manager_hooked($title,$text,$type,$main_title=NULL)
 		require_code('hooks/systems/page_groupings/'.filter_naughty_harsh($hook));
 		$object=object_factory('Hook_page_groupings_'.filter_naughty_harsh($hook),true);
 		if (is_null($object)) continue;
-		$info=$object->run(true);
-		foreach ($info as $i)
+		$_links=$object->run();
+		foreach ($_links as $link)
 		{
-			if (is_null($i)) continue;
+			if (is_null($link)) continue;
 
-			if ($i[0]==$type)
+			if (($link[0]==$type) && (is_array($link[2])))
 			{
-				array_shift($i);
-				$links[]=$i;
+				array_shift($link);
+				$links[]=$link;
 			}
 		}
 	}
@@ -318,13 +293,13 @@ function _do_next_section($list,$title)
 		if (is_null($_option)) continue;
 
 		$option=$_option[0];
-		$url=$_option[1];
-		$zone=array_key_exists(2,$url)?$url[2]:'';
-		$page=$url[0];
+		$url_map=$_option[1];
+		$zone=array_key_exists(2,$url_map)?$url_map[2]:'';
+		$page=$url_map[0];
 		if ($page=='_SELF') $page=get_page_name();
 
 		$description=(array_key_exists(2,$_option) && (!is_null($_option[2])))?$_option[2]:do_lang_tempcode('NEXT_ITEM_'.basename($option));
-		$url_final=(is_null($page))?build_url(array_merge($url[1],array('page'=>'')),$zone):build_url(array_merge(array('page'=>$page),$url[1]),$zone);
+		$url=(is_null($page))?build_url(array_merge($url_map[1],array('page'=>'')),$zone):build_url(array_merge(array('page'=>$page),$url_map[1]),$zone);
 		$doc=array_key_exists(3,$_option)?$_option[3]:'';
 		if ((is_string($doc)) && ($doc!=''))
 		{
@@ -338,6 +313,7 @@ function _do_next_section($list,$title)
 		}
 		$target=array_key_exists(4,$_option)?$_option[4]:NULL;
 		$auto_add=array_key_exists(5,$_option)?$_option[5]:NULL;
+
 		$next_items->attach(do_template('DO_NEXT_ITEM',array(
 			'_GUID'=>'f39b6055d1127edb452595e7eeaf2f01',
 			'AUTO_ADD'=>$auto_add,
@@ -347,7 +323,7 @@ function _do_next_section($list,$title)
 			'TARGET'=>$target,
 			'PICTURE'=>$option,
 			'DESCRIPTION'=>$description,
-			'URL'=>$url_final,
+			'URL'=>$url,
 			'DOC'=>$doc,
 			'WARNING'=>array_key_exists(3,$url)?$url[3]:'',
 		)));

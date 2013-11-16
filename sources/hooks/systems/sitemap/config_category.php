@@ -28,7 +28,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 	 */
 	function handles_pagelink($pagelink)
 	{
-		if (preg_match('#^([^:]*):admin_config:misc$#',$pagelink)!=0)
+		if (preg_match('#^([^:]*):admin_config(:misc)?$#',$pagelink)!=0)
 		{
 			return SITEMAP_NODE_HANDLED_VIRTUALLY;
 		}
@@ -137,6 +137,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 			'content_type'=>NULL,
 			'content_id'=>NULL,
 			'pagelink'=>$pagelink,
+			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
 				'image'=>NULL,

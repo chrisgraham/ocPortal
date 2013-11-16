@@ -54,52 +54,17 @@ if (!headers_sent())
 function execute_temp()
 {
 	require_code('sitemap');
-
-	global $ICONS;
-	$ICONS=array();
-
-	$pagelink='adminzone:';
-	$callback=NULL;
+	$root_pagelink='';
+	$under_only=false;
+	$default=NULL;
 	$valid_node_types=NULL;
-	$child_cutoff=NULL;
-	$max_recurse_depth=10;
-	$require_permission_support=false;
-	$zone='_SEARCH';
-	$consider_secondary_categories=true;
-	$use_page_groupings=true;
+	$valid_selectable_content_types=NULL;
+	$check_permissions_against=0;
+	$check_permissions_for=NULL;
 	$consider_validation=false;
-	$meta_gather=SITEMAP_GATHER__ALL;
-
-	require_code('themes2');
-	$a=(array_map('find_theme_image',get_all_image_ids_type('icons',true)));
-
-	$node=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-	if (is_null($node)) @exit('NULL');
-	var_dump(filter($node));
-
-	ksort($ICONS);
-	$b=(array_keys($ICONS));
-
-	//var_dump($a);
-	//var_dump($b);
-//	var_dump(array_diff($a,$b));
-	exit();
-}
-
-function filter($node)
-{
-	if (isset($node['title']) && !array_key_exists('image',$node['extra_meta'])) {@var_dump($node);@exit('missing image meta data');}
-	if (isset($node['title']) && !is_object($node['title'])) {@var_dump($node);@exit('Non-Tempcode title');}
-
-	global $ICONS;
-	$ICONS[isset($node['extra_meta']['image'])?$node['extra_meta']['image']:'']=true;
-
-	return array(
-		'title'=>isset($node['title'])?$node['title']->evaluate():'',
-		'image'=>isset($node['extra_meta']['image'])?$node['extra_meta']['image']:'',
-		'pagelink'=>isset($node['pagelink'])?$node['pagelink']:NULL,
-		'content_type'=>isset($node['content_type'])?$node['content_type']:NULL,
-		'has_possible_children'=>isset($node['has_possible_children'])?$node['has_possible_children']:NULL,
-		'children'=>isset($node['children'])?array_map('filter',$node['children']):NULL,
-	);
+	$only_owned=NULL;
+	$use_compound_list=false;
+	$filter_func=NULL;
+	$out=create_selection_list($root_pagelink,$under_only,$default,$valid_node_types,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$consider_validation,$only_owned,$use_compound_list,$filter_func);
+	echo $out->evaluate();
 }
