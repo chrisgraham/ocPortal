@@ -16,7 +16,7 @@
 /**
  * ocPortal test case class (unit testing).
  */
-class newscategory_test_set extends ocp_test_case
+class news_category_test_set extends ocp_test_case
 {
 	var $news_id;
 

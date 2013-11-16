@@ -24,7 +24,7 @@ class Hook_page_groupings_ad_success
 	function run()
 	{
 		return array(
-			array('audit','menu/_generic_admin/tool',array('ad_success',array(),'adminzone'),make_string_tempcode('Ad success'))
+			array('audit','menu/_generic_admin/tool',array('ad_success',array(),get_page_zone('ad_success')),make_string_tempcode('Ad success')),
 		);
 	}
 

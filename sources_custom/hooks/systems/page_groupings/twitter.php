@@ -23,7 +23,7 @@ class Hook_page_groupings_twitter
 	function run()
 	{
 		return array(
-			array('setup','menu/twitter',array('twitter_oauth',array(),'adminzone'),do_lang_tempcode('twitter:TWITTER_SYNDICATION'),'twitter:DOC_TWITTER_SYNDICATION')
+			array('setup','menu/twitter',array('twitter_oauth',array(),get_page_zone('twitter_oauth')),do_lang_tempcode('twitter:TWITTER_SYNDICATION'),'twitter:DOC_TWITTER_SYNDICATION'),
 		);
 	}
 

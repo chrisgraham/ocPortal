@@ -24,8 +24,8 @@ class Hook_page_groupings_static_export
 	function run()
 	{
 		return array(
-			array('tools','menu/_generic_admin/tool',array('static_export',array('keep_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),'adminzone'),make_string_tempcode('Export static site (tar)')),
-			array('tools','menu/_generic_admin/tool',array('static_export',array('dir'=>'1','keep_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),'adminzone'),make_string_tempcode('Export static site (exports/static, with mtimes)')),
+			array('tools','menu/_generic_admin/tool',array('static_export',array('keep_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),get_page_zone('static_export')),make_string_tempcode('Export static site (tar)')),
+			array('tools','menu/_generic_admin/tool',array('static_export',array('dir'=>'1','keep_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),get_page_zone('static_export')),make_string_tempcode('Export static site (exports/static, with mtimes)')),
 		);
 	}
 

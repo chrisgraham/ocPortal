@@ -52,11 +52,17 @@ class Module_admin_lang
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('TRANSLATE_CODE','menu/adminzone/style/language/language'),
-			'content'=>array('TRANSLATE_CONTENT','menu/adminzone/style/language/language_content'),
-			'criticise'=>array('CRITICISE_LANGUAGE_PACK','menu/adminzone/style/language/criticise_language'),
 		);
+		if (!$be_deferential)
+		{
+			$ret+=array(
+				'content'=>array('TRANSLATE_CONTENT','menu/adminzone/style/language/language_content'),
+				'criticise'=>array('CRITICISE_LANGUAGE_PACK','menu/adminzone/style/language/criticise_language'),
+			);
+		}
+		return $ret;
 	}
 
 	/**

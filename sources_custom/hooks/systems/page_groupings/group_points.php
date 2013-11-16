@@ -23,7 +23,7 @@ class Hook_page_groupings_group_points
 	function run()
 	{
 		return array(
-			array('setup','menu/social/pointstore',array('group_points',array('type'=>'misc'),'adminzone'),'Usergroup point assignments'),
+			array('setup','menu/social/pointstore',array('group_points',array('type'=>'misc'),get_page_zone('group_points')),make_string_tempcode('Usergroup point assignments')),
 		);
 	}
 

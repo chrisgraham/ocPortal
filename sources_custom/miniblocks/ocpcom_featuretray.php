@@ -604,7 +604,7 @@ $featuretree=array(
 				array('Over 40 bundled emoticons','Also, support for batch importing new ones <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Emoticons" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_ocf_emoticons"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				array('Unlimited sub-forum depth'),
 				array('Mass-moderation','Perform actions on many posts and topics at once'),
-				array('Multi-moderation','Record and perform complex routine tasks <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Multi Moderation" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_ocf_multimoderations"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
+				array('Multi-moderation','Record and perform complex routine tasks <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Multi Moderation" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_ocf_multi_moderations"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 			),
 		),
 		'tracking'=>array(

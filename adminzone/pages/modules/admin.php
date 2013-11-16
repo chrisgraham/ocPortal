@@ -124,10 +124,6 @@ class Module_admin
 					$this->title=get_screen_title('SECURITY');
 					break;
 
-				case 'docs':
-					$this->title=get_screen_title('DOCS');
-					break;
-
 				case 'search':
 					$this->title=get_screen_title('ADMIN_ZONE_SEARCH_RESULTS');
 					break;
@@ -172,9 +168,6 @@ class Module_admin
 				return do_next_manager_hooked('TOOLS','DOC_TOOLS','tools');
 			case 'security':
 				return do_next_manager_hooked('SECURITY','DOC_SECURITY','security');
-
-			case 'docs':
-				return $this->docs();
 
 			case 'search':
 				return $this->search();
@@ -368,19 +361,6 @@ class Module_admin
 	}
 
 	/**
-	 * Go to ocPortal documentation.
-	 *
-	 * @return tempcode	Interface.
-	 */
-	function docs()
-	{
-		require_code('site2');
-		$url=get_brand_base_url().'/docs'.strval(ocp_version()).'/';
-		assign_refresh($url,0.0);
-		return redirect_screen($this->title,$url);
-	}
-
-	/**
 	 * Actualiser to perform Admin Zone search.
 	 *
 	 * @return tempcode	Interface.
@@ -549,7 +529,13 @@ class Module_admin
 							$val=$ep_parts[0];
 
 							$type=str_replace('!','',$type); // The ! was a hackerish thing just to multiply-up possibilities for the single entry-point
-							$n=(preg_match('#^[A-Z\_]+$#',$val)==0)?make_string_tempcode($val):do_lang_tempcode($val);
+							if (is_object($val))
+							{
+								$n=$val;
+							} else
+							{
+								$n=(preg_match('#^[A-Z\_]+$#',$val)==0)?make_string_tempcode($val):do_lang_tempcode($val);
+							}
 							if (($this->_keyword_match($n->evaluate())) && (has_actual_page_access(get_member(),$page,$zone)))
 							{
 								$breadcrumbs=new ocp_tempcode();

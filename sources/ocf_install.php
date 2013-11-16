@@ -832,11 +832,11 @@ function install_ocf($upgrade_from=NULL)
 		global $OCF_TRUE_PERMISSIONS,$OCF_FALSE_PERMISSIONS;
 		foreach ($OCF_TRUE_PERMISSIONS as $permission)
 		{
-			add_privilege('SECTION_FORUMS',$permission,true);
+			add_privilege('FORUMS_AND_MEMBERS',$permission,true);
 		}
 		foreach ($OCF_FALSE_PERMISSIONS as $permission)
 		{
-			add_privilege('SECTION_FORUMS',$permission,false,($permission=='view_other_pt'));
+			add_privilege('FORUMS_AND_MEMBERS',$permission,false,($permission=='view_other_pt'));
 		}
 	}
 

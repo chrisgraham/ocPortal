@@ -98,6 +98,7 @@ class Hook_addon_registry_core_configuration
 		return array(
 			'themes/default/images/icons/24x24/menu/adminzone/setup/config/config.png',
 			'themes/default/images/icons/48x48/menu/adminzone/setup/config/config.png',
+			'sources/hooks/systems/sitemap/config_category.php',
 			'sources/hooks/systems/config/header_menu_call_string.php',
 			'sources/hooks/systems/config/max_moniker_length.php',
 			'sources/hooks/systems/config/enable_seo_fields.php',

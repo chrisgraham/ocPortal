@@ -100,7 +100,7 @@ class Hook_addon_registry_ocf_multi_moderations
 			'sources/hooks/systems/resource_meta_aware/multi_moderation.php',
 			'sources/hooks/systems/occle_fs/multi_moderations.php',
 			'sources/hooks/systems/addon_registry/ocf_multi_moderations.php',
-			'adminzone/pages/modules/admin_ocf_multimoderations.php',
+			'adminzone/pages/modules/admin_ocf_multi_moderations.php',
 		);
 	}
 

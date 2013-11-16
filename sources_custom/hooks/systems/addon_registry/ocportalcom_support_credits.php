@@ -62,7 +62,9 @@ class Hook_addon_registry_ocportalcom_support_credits
 	 */
 	function get_copyright_attribution()
 	{
-		return array();
+		return array(
+			'Incorporates MantisBT',
+		);
 	}
 
 	/**
@@ -72,7 +74,7 @@ class Hook_addon_registry_ocportalcom_support_credits
 	 */
 	function get_licence()
 	{
-		return 'Licensed on the same terms as ocPortal';
+		return 'Licensed on the same terms as ocPortal / MantisBT under GPL';
 	}
 
 	/**
@@ -82,7 +84,7 @@ class Hook_addon_registry_ocportalcom_support_credits
 	 */
 	function get_description()
 	{
-		return 'The ocPortal.com support credits system.';
+		return 'The ocPortal.com support credits system, and issue tracker.';
 	}
 
 	/**
@@ -105,6 +107,7 @@ class Hook_addon_registry_ocportalcom_support_credits
 	{
 		return array(
 			'requires'=>array(
+				'tickets',
 			),
 			'recommends'=>array(
 			),

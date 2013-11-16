@@ -1,6 +1,6 @@
-[title]ocWorld guide[/title]
+[title]Guide[/title]
 
-This guide was mostly written, very kindly, by "MrDefender" (with help from woohoo16yoman and Chris Graham). Its set through a series of tutorials directed at adding content to ocWorld, but should be read through by all users in its completeness, to get a proper understanding of how things work.
+This guide was mostly written, very kindly, by "MrDefender" (with help from woohoo16yoman and Chris Graham). It's set through a series of tutorials directed at adding content to ocWorld, but should be read through by all users in its completeness, to get a proper understanding of how things work.
 
 Since it was written there have been some changes to the user interface, but those are self-explanatory. This tutorial shows a common example for a 'Star Trek' themed ocWorld; this is just an example, and ocWorld can be used for anything from a 'Wizard of Oz' recreation to a board game.
 

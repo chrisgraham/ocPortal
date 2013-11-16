@@ -79,9 +79,11 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('CUSTOM_PRODUCT_USERGROUP','menu/adminzone/audit/ecommerce/subscriptions'),
-		)+parent::get_entry_points();
+		);
+		$ret+=parent::get_entry_points();
+		return $ret;
 	}
 
 	var $title;

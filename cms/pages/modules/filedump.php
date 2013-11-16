@@ -36,7 +36,7 @@ class Module_filedump
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=3;
+		$info['version']=4;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -80,9 +80,14 @@ class Module_filedump
 			add_privilege('FILEDUMP','delete_anything_filedump',false);
 		}
 
-		if (addon_installed('redirects_editor'))
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
-			$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'filedump','r_from_zone'=>'collaboration','r_to_page'=>'filedump','r_to_zone'=>'cms','r_is_transparent'=>1));
+			if (addon_installed('redirects_editor'))
+			{
+				$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'filedump','r_from_zone'=>'collaboration','r_to_page'=>'filedump','r_to_zone'=>'cms','r_is_transparent'=>1));
+			}
+
+			$GLOBALS['SITE_DB']->query_update('privilege_list',array('p_section'=>'FILEDUMP'),array('p_section'=>'FILE_DUMP'));
 		}
 	}
 

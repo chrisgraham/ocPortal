@@ -24,9 +24,9 @@ class Hook_page_groupings_theme_debug
 	function run()
 	{
 		return array(
-			array('style','menu/_generic_admin/tool',array('theme_debug',array(),''),make_string_tempcode('Theme testing / fixup tools')),
-			array('style','menu/_generic_admin/tool',array('fix_partial_themewizard_css',array(),'adminzone'),make_string_tempcode('Fixup themewizard themes')),
-			array('style','menu/_generic_admin/tool',array('css_check',array(),'adminzone'),make_string_tempcode('Look for unused CSS')),
+			array('style','menu/_generic_admin/tool',array('theme_debug',array(),get_page_zone('theme_debug')),make_string_tempcode('Theme testing / fixup tools')),
+			array('style','menu/_generic_admin/tool',array('fix_partial_themewizard_css',array(),get_page_zone('fix_partial_themewizard_css')),make_string_tempcode('Fixup themewizard themes')),
+			array('style','menu/_generic_admin/tool',array('css_check',array(),get_page_zone('css_check')),make_string_tempcode('Look for unused CSS')),
 		);
 	}
 

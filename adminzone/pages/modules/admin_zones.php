@@ -52,12 +52,18 @@ class Module_admin_zones
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('ZONES','menu/adminzone/structure/zones/zones'),
 			'edit'=>array('EDIT_ZONE','menu/_generic_admin/edit_one'),
 			'add'=>array('ADD_ZONE','menu/_generic_admin/add_one'),
-			'editor'=>array('ZONE_EDITOR','menu/adminzone/structure/zones/zone_editor'),
 		);
+
+		if (!$be_deferential)
+		{
+			$ret['editor']=array('ZONE_EDITOR','menu/adminzone/structure/zones/zone_editor');
+		}
+
+		return $ret;
 	}
 
 	/**

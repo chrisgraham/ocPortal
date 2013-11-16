@@ -148,6 +148,7 @@ class Hook_addon_registry_tester
 			'sources_custom/hooks/systems/content_meta_aware/tester.php',
 			'sources_custom/hooks/systems/config/bug_report_text.php',
 			'sources_custom/hooks/systems/config/tester_forum_name.php',
+			'sources_custom/hooks/systems/page_groupings/tester.php',
 		);
 	}
 }

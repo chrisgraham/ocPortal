@@ -82,7 +82,7 @@ class Hook_addon_registry_ocportalcom
 	 */
 	function get_description()
 	{
-		return 'The ocPortal deployment platform.';
+		return 'The ocPortal deployment/hosting platform. The hosting side of the build addon (ocportal_release_build).';
 	}
 
 	/**
@@ -134,7 +134,7 @@ class Hook_addon_registry_ocportalcom
 		return array(
 			'sources_custom/hooks/systems/addon_registry/ocportalcom.php',
 			'adminzone/pages/modules_custom/admin_ocpusers.php',
-			'adminzone/pages/minimodules_custom/make_ocportal_release.php',
+			'adminzone/pages/minimodules_custom/_make_release.php',
 			'sources_custom/hooks/systems/page_groupings/ocportalcom.php',
 			'data_custom/ocpcom_web_service.php',
 			'lang_custom/EN/sites.ini',

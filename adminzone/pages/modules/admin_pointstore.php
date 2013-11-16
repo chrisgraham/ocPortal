@@ -52,10 +52,16 @@ class Module_admin_pointstore
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('POINTSTORE_MANAGE_SALES','menu/adminzone/audit/pointstore_log'),
-			'p'=>array('POINTSTORE_MANAGE_INVENTORY','menu/social/pointstore'),
 		);
+		if (!$be_deferential)
+		{
+			$ret+=array(
+				'p'=>array('POINTSTORE_MANAGE_INVENTORY','menu/social/pointstore'),
+			);
+		}
+		return $ret;
 	}
 
 	var $title;

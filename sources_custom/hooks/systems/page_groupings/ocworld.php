@@ -10,9 +10,9 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		installprofile_generator
  */
-class Hook_page_groupings_installprofile_generator
+
+class Hook_page_groupings_ocworld
 {
 
 	/**
@@ -22,8 +22,10 @@ class Hook_page_groupings_installprofile_generator
 	 */
 	function run()
 	{
+		require_lang('ocgifts');
+
 		return array(
-			array('setup','menu/_generic_admin/tool',array('installprofile_generator',array(),get_page_zone('installprofile_generator')),make_string_tempcode('Export installprofile')),
+			array('rich_content','menu/ocworld',array('ocworld',array(),get_module_zone('ocworld')),do_lang_tempcode('ocworld:OCWORLD')),
 		);
 	}
 

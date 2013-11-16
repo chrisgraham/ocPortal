@@ -52,8 +52,6 @@ class Module_admin_ocf_groups extends standard_crud_module
 	{
 		if (get_forum_type()!='ocf') return NULL;
 
-		if ($be_deferential) return NULL;
-
 		$ret=array(
 			'misc'=>array('MANAGE_USERGROUPS','menu/social/groups'),
 		)+parent::get_entry_points();

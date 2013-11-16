@@ -24,8 +24,8 @@ class Hook_page_groupings_support_credits
 	function run()
 	{
 		return array(
-			array('audit','menu/_generic_admin/tool',array('outstanding_credits',array(),'adminzone'),do_lang_tempcode('customers:UNSPENT_SUPPORT_CREDITS')),
-			array('tools','menu/_generic_admin/tool',array('admin_customers',array(),'adminzone'),do_lang_tempcode('customers:CHARGE_CUSTOMER')),
+			array('audit','menu/_generic_admin/tool',array('outstanding_credits',array(),get_page_zone('outstanding_credits')),do_lang_tempcode('customers:UNSPENT_SUPPORT_CREDITS')),
+			array('tools','menu/_generic_admin/tool',array('admin_customers',array(),get_module_zone('admin_customers')),do_lang_tempcode('customers:CHARGE_CUSTOMER')),
 		);
 	}
 

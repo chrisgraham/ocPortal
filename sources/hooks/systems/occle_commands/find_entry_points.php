@@ -60,9 +60,9 @@ class Hook_occle_command_find_entry_points
 							if ((!is_null($object)) && (method_exists($object,'get_entry_points')))
 							{
 								$_entry_points=$object->get_entry_points();
-								foreach ($_entry_points as $key=>$val)
+								foreach ($_entry_points as $key=>$_val)
 								{
-									if (!is_string($val)) $val=$val[0];
+									$val=$_val[0];
 
 									if (strpos($key,':')!==false)
 									{
@@ -72,7 +72,15 @@ class Hook_occle_command_find_entry_points
 										$page_link=$zone.':'.$page.':'.$key;
 									}
 
-									$entry_points[$page_link]=(preg_match('#^[A-Z\_]+$#',$val)==0)?$val:do_lang($val);
+									if (is_object($val))
+									{
+										$_title=$val;
+									} else
+									{
+										$_title=(preg_match('#^[A-Z\_]+$#',$val)==0)?$val:do_lang($val);
+									}
+
+									$entry_points[$page_link]=$_title;
 								}
 							}
 						}

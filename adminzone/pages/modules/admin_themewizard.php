@@ -54,10 +54,8 @@ class Module_admin_themewizard
 	{
 		$ret=array(
 			'misc'=>array('THEMEWIZARD','menu/adminzone/style/themes/themewizard'),
+			'make_logo'=>array('LOGOWIZARD','menu/adminzone/style/themes/logowizard'),
 		);
-
-		if (!$be_deferential)
-			$ret['make_logo']=array('LOGOWIZARD','menu/adminzone/style/themes/logowizard');
 
 		return $ret;
 	}

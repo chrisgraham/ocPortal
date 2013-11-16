@@ -10,9 +10,9 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		installprofile_generator
  */
-class Hook_page_groupings_installprofile_generator
+
+class Hook_page_groupings_community_billboard
 {
 
 	/**
@@ -23,7 +23,7 @@ class Hook_page_groupings_installprofile_generator
 	function run()
 	{
 		return array(
-			array('setup','menu/_generic_admin/tool',array('installprofile_generator',array(),get_page_zone('installprofile_generator')),make_string_tempcode('Export installprofile')),
+			array('audit','menu/adminzone/audit/community_billboard',array('admin_community_billboard',array('type'=>'misc'),get_module_zone('admin_community_billboard')),do_lang_tempcode('community_billboard:COMMUNITY_BILLBOARD'),'community_billboard:DOC_COMMUNITY_BILLBOARD'),
 		);
 	}
 

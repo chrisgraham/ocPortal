@@ -10,9 +10,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		installprofile_generator
+ * @package		tester
  */
-class Hook_page_groupings_installprofile_generator
+
+class Hook_page_groupings_tester
 {
 
 	/**
@@ -23,7 +24,7 @@ class Hook_page_groupings_installprofile_generator
 	function run()
 	{
 		return array(
-			array('setup','menu/_generic_admin/tool',array('installprofile_generator',array(),get_page_zone('installprofile_generator')),make_string_tempcode('Export installprofile')),
+			array('rich_content','menu/_generic_admin/tool',array('tester',array('type'=>'go'),get_page_zone('tester')),do_lang_tempcode('tester:TESTER')),
 		);
 	}
 

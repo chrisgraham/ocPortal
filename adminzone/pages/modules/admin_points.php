@@ -52,10 +52,16 @@ class Module_admin_points
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('GIFT_TRANSACTIONS','menu/adminzone/audit/points_log'),
-			'export'=>array('EXPORT_POINTS','menu/social/points'),
 		);
+		if (!$be_deferential)
+		{
+			$ret+=array(
+				'export'=>array('EXPORT_POINTS','menu/social/points'),
+			);
+		}
+		return $ret;
 	}
 
 	var $title;

@@ -75,8 +75,6 @@ class Module_admin_staff
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		if ($be_deferential && get_forum_type()=='ocf') return NULL;
-
 		return array(
 			'misc'=>array('MANAGE_STAFF','menu/site_meta/staff'),
 		);

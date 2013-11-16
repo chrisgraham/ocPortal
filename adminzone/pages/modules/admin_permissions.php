@@ -158,9 +158,15 @@ class Module_admin_permissions
 				'page'=>array('PAGE_ACCESS','menu/adminzone/security/permissions/permission_tree_editor'),
 			);
 		}
-		$ret['privileges']=array('PRIVILEGES','menu/adminzone/security/permissions/privileges');
-		if (addon_installed('match_key_permissions'))
-			$ret['match_keys']=array('MATCH_KEYS','menu/adminzone/security/permissions/match_keys');
+
+		if (!$be_deferential)
+		{
+			$ret['privileges']=array('PRIVILEGES','menu/adminzone/security/permissions/privileges');
+
+			if (addon_installed('match_key_permissions'))
+				$ret['match_keys']=array('MATCH_KEYS','menu/adminzone/security/permissions/match_keys');
+		}
+
 		return $ret;
 	}
 
@@ -732,16 +738,10 @@ class Module_admin_permissions
 		$_sections=list_to_map('p_section',$GLOBALS['SITE_DB']->query_select('privilege_list',array('DISTINCT p_section')));
 		foreach ($_sections as $i=>$s)
 		{	
-			if ($s['p_section']=='SECTION_FORUMS')
-			{
-				$_sections[$i]['trans']=do_lang('FORUMS_AND_MEMBERS');
-			} else
-			{
-				$_sections[$i]['trans']=do_lang($s['p_section']);
-			}
+			$_sections[$i]['trans']=do_lang($s['p_section']);
 		}
 		sort_maps_by($_sections,'trans');
-		$orderings=array('SUBMISSION','GENERAL_SETTINGS','SECTION_FORUMS','STAFF_ACTIONS','_COMCODE','_FEEDBACK','POINTS');
+		$orderings=array('SUBMISSION','GENERAL_SETTINGS','FORUMS_AND_MEMBERS','STAFF_ACTIONS','_COMCODE','_FEEDBACK','POINTS');
 		$_sections_prior=array();
 		foreach ($orderings as $ordering)
 		{

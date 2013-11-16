@@ -23,7 +23,7 @@ class Hook_page_groupings_insults
 	function run()
 	{
 		return array(
-			array('setup','menu/insults',array('insults',array(),get_page_zone('insults')),do_lang_tempcode('insults:MANAGE_INSULTS'),'insults:DOC_INSULTS')
+			array('setup','menu/insults',array('insults',array(),get_page_zone('insults')),do_lang_tempcode('insults:MANAGE_INSULTS'),'insults:DOC_INSULTS'),
 		);
 	}
 

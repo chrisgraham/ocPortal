@@ -59,20 +59,23 @@ class Module_admin_config
 
 		$ret['base']=array('BASE_CONFIGURATION','menu/adminzone/setup/config/base_config');
 
-		if (addon_installed('xml_fields'))
-			$ret['xml_fields']=array('FIELD_FILTERS','menu/adminzone/setup/xml_fields');
+		if (!$be_deferential)
+		{
+			if (addon_installed('xml_fields'))
+				$ret['xml_fields']=array('FIELD_FILTERS','menu/adminzone/setup/xml_fields');
 
-		if (addon_installed('breadcrumbs'))
-			$ret['xml_breadcrumbs']=array('BREADCRUMB_OVERRIDES','menu/adminzone/structure/breadcrumbs');
+			if (addon_installed('breadcrumbs'))
+				$ret['xml_breadcrumbs']=array('BREADCRUMB_OVERRIDES','menu/adminzone/structure/breadcrumbs');
 
-		if (is_null(get_value('brand_base_url')))
-			$ret['upgrader']=array('FU_UPGRADER_TITLE','menu/adminzone/tools/upgrade');
+			if (is_null(get_value('brand_base_url')))
+				$ret['upgrader']=array('FU_UPGRADER_TITLE','menu/adminzone/tools/upgrade');
 
-		if (addon_installed('syndication'))
-			$ret['backend']=array('FEEDS','action_links/rss');
+			if (addon_installed('syndication'))
+				$ret['backend']=array('FEEDS','action_links/rss');
 
-		if (addon_installed('code_editor'))
-			$ret['code_editor']=array('CODE_EDITOR','menu/adminzone/tools/code_editor');
+			if (addon_installed('code_editor'))
+				$ret['code_editor']=array('CODE_EDITOR','menu/adminzone/tools/code_editor');
+		}
 
 		return $ret;
 	}

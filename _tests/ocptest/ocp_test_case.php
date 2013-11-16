@@ -32,7 +32,8 @@ class ocp_test_case extends WebTestCase
 
 	function tearDown()
 	{
-		set_option('site_closed',$this->site_closed);
+		if ($this->site_closed!==NULL)
+			set_option('site_closed',$this->site_closed);
 	}
 
 	function get($url,$parameters=NULL)

@@ -23,8 +23,8 @@ class Hook_page_groupings_developer_sync
 	function run()
 	{
 		return array(
-			array('tools','menu/_generic_admin/tool',array('sql_dump',array(),'adminzone'),make_string_tempcode('Backup tools: Create SQL dump (MySQL syntax)')),
-			array('tools','menu/_generic_admin/tool',array('tar_dump',array(),'adminzone'),make_string_tempcode('Backup tools: Create files dump (TAR file)')),
+			array('tools','menu/_generic_admin/tool',array('sql_dump',array(),get_page_zone('sql_dump')),make_string_tempcode('Backup tools: Create SQL dump (MySQL syntax)')),
+			array('tools','menu/_generic_admin/tool',array('tar_dump',array(),get_page_zone('tar_dump')),make_string_tempcode('Backup tools: Create files dump (TAR file)')),
 		);
 	}
 

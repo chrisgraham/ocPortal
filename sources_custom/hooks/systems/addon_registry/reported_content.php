@@ -121,14 +121,14 @@ change to:
 2_REL=edit
 3_URL={NEWSLETTER_URL*}
 3_TITLE={+START,IF_NON_EMPTY,{NEWSLETTER_URL}}{!newsletter:NEWSLETTER_SEND}{+END}
-4_URL={$PAGE_LINK,_SEARCH:reportcontent:content_type=news:content_id={ID}:url={$SELF_URL&}}
+4_URL={$PAGE_LINK,_SEARCH:report_content:content_type=news:content_id={ID}:url={$SELF_URL&}}
 4_TITLE=Report this
 {+END}
 [/codebox]
 
-So, you are probably thinking: what does [tt]_SEARCH:reportcontent:content_type=download:content_id={ID}:url={$SELF_URL&}[/tt] mean?
- - [tt]_SEARCH[/tt] -- look for the reportcontent module, wherever it is; you could put [tt]site[/tt] instead, it doesn\'t matter much
- - [tt]reportcontent[/tt] -- our reporting module that does the work
+So, you are probably thinking: what does [tt]_SEARCH:report_content:content_type=download:content_id={ID}:url={$SELF_URL&}[/tt] mean?
+ - [tt]_SEARCH[/tt] -- look for the report_content module, wherever it is; you could put [tt]site[/tt] instead, it doesn\'t matter much
+ - [tt]report_content[/tt] -- our reporting module that does the work
  - [tt]news[/tt] -- the content type; the name of a file in [tt]sources/hooks/systems/content_meta_aware[/tt]
  - [tt]{ID}[/tt] -- content ID; usually it\'s passed into a template as a parameter named \'ID\' like it is here
  - [tt]{$SELF_URL&}[/tt] -- the current URL needs to be passed through';
@@ -181,8 +181,8 @@ So, you are probably thinking: what does [tt]_SEARCH:reportcontent:content_type=
 	{
 		return array(
 			'sources_custom/hooks/systems/addon_registry/reported_content.php',
-			'lang_custom/EN/reportcontent.ini',
-			'site/pages/modules_custom/reportcontent.php',
+			'lang_custom/EN/report_content.ini',
+			'site/pages/modules_custom/report_content.php',
 			'themes/default/templates_custom/REPORTED_CONTENT_FCOMCODE.tpl',
 			'sources_custom/hooks/systems/config/reported_times.php',
 		);

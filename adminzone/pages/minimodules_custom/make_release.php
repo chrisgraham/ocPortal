@@ -223,7 +223,7 @@ function phase_2()
 	$is_old_tree=(post_param_integer('old_tree',0)==1);
 	$is_substantial=(substr($version_dotted,-2)=='.0') || (strpos($version_dotted,'beta1')!==false) || (strpos($version_dotted,'RC1')!==false);
 
-	$push_url=brand_base_url().'/adminzone/index.php?page=make_ocportal_release&version='.urlencode($version_dotted).'&is_bleeding_edge='.($is_bleeding_edge?'1':'0').'&is_old_tree='.($is_old_tree?'1':'0').'&descrip='.urlencode($descrip).'&needed='.urlencode($needed).'&justification='.urlencode($justification);
+	$push_url=brand_base_url().'/adminzone/index.php?page=_make_release&version='.urlencode($version_dotted).'&is_bleeding_edge='.($is_bleeding_edge?'1':'0').'&is_old_tree='.($is_old_tree?'1':'0').'&descrip='.urlencode($descrip).'&needed='.urlencode($needed).'&justification='.urlencode($justification);
 
 	echo '
 	<p>Here\'s a list of things for you to do. Get to it!</p>

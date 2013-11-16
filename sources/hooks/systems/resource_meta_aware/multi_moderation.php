@@ -53,9 +53,9 @@ class Hook_resource_meta_aware_multi_moderation
 			'title_field_dereference'=>true,
 
 			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>'_SEARCH:admin_ocf_multimoderations:_ed:_WILD',
+			'edit_pagelink_pattern'=>'_SEARCH:admin_ocf_multi_moderations:_ed:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_ocf_multimoderations'))?(get_module_zone('admin_ocf_multimoderations').':admin_ocf_multimoderations:ad'):NULL,
+			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_ocf_multi_moderations'))?(get_module_zone('admin_ocf_multi_moderations').':admin_ocf_multi_moderations:ad'):NULL,
 			'archive_url'=>NULL,
 
 			'support_url_monikers'=>false,
@@ -77,7 +77,7 @@ class Hook_resource_meta_aware_multi_moderation
 
 			'addon_name'=>'ocf_multi_moderations',
 
-			'cms_page'=>'admin_ocf_multimoderations',
+			'cms_page'=>'admin_ocf_multi_moderations',
 			'module'=>NULL,
 
 			'occle_filesystem_hook'=>'multi_moderations',

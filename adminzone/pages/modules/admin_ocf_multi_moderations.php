@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_multimoderations extends standard_crud_module
+class Module_admin_ocf_multi_moderations extends standard_crud_module
 {
 	var $lang_type='MULTI_MODERATION';
 	var $select_name='NAME';
@@ -50,7 +50,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 		if ($be_deferential) return NULL;
 
 		return array(
-			'misc'=>array('MULTI_MODERATIONS','menu/adminzone/structure/forum/multi_moderations'),
+			'misc'=>array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('MULTI_MODERATIONS'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_multi_moderations','COUNT(*)',NULL,'',true))))),'menu/adminzone/structure/forum/multi_moderations'),
 		)+parent::get_entry_points();
 	}
 
@@ -121,7 +121,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 	 * @param  ?BINARY		What to change the pin state to (NULL: don't change)
 	 * @param  ?BINARY		What to change the open state to (NULL: don't change)
 	 * @param  ?BINARY		What to change the sink state to (NULL: don't change)
-	 * @param  SHORT_TEXT	The forum multicode identifying where the multimoderation is applicable
+	 * @param  SHORT_TEXT	The forum multicode identifying where the multi-moderation is applicable
 	 * @param  SHORT_TEXT	The title suffix
 	 * @return array			A pair: The input fields, Hidden fields
 	 */

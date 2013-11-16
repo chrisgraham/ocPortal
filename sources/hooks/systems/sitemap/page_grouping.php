@@ -78,10 +78,13 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 		foreach ($links as $link)
 		{
 			list($_page_grouping)=$link;
-			if ($_page_grouping!='')
+
+			if (($_page_grouping=='') || ($_page_grouping==$page_grouping))
 			{
-				$pages_found[$link[2][0]]=true;
+				if (is_array($link))
+					$pages_found[$link[2][2].':'.$link[2][0]]=true;
 			}
+
 			if (($_page_grouping=='') && (($link[2][0]=='cms') || ($link[2][0]=='admin')) && ($link[2][1]==array('type'=>$page_grouping)))
 			{
 				$icon=$link[1];
@@ -107,6 +110,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					$zone='cms';
 					break;
 
+				case 'collaboration':
 				case 'pages':
 				case 'rich_content':
 				case 'site_meta':
@@ -235,7 +239,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 							$pages[$page]=$page_type;
 						}
 
-						if ((!isset($pages_found[$page])) && ((strpos($page_type,'comcode')===false) || (!isset($root_comcode_pages[$page]))))
+						if ((!isset($pages_found[$zone.':'.$page])) && ((strpos($page_type,'comcode')===false) || (isset($root_comcode_pages[$page]))))
 						{
 							if ($this->_is_page_omitted_from_sitemap($zone,$page)) continue;
 
@@ -247,6 +251,8 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 				foreach ($orphaned_pages as $page=>$page_type)
 				{
 					if (is_integer($page)) $page=strval($page);
+
+					if ($page==get_zone_default_page($zone)) continue;
 
 					$child_pagelink=$zone.':'.$page;
 

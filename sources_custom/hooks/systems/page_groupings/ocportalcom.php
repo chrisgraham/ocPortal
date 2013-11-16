@@ -24,7 +24,8 @@ class Hook_page_groupings_ocportalcom
 	function run()
 	{
 		return array(
-			array('tools','menu/_generic_admin/tool',array('admin_ocpusers',array(),'adminzone'),make_string_tempcode('ocPortal.com: Table of ocP users')),
+			array('tools','menu/_generic_admin/tool',array('admin_ocpusers',array(),get_module_zone('admin_ocpusers')),make_string_tempcode('ocPortal.com: Table of ocP users')),
+			array('pages','menu/_generic_spare/page',array('sites',array('type'=>'misc'),get_module_zone('sites')),make_string_tempcode('ocPortal.com')),
 		);
 	}
 

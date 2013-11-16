@@ -62,7 +62,9 @@ class Hook_addon_registry_oc_world
 	 */
 	function get_copyright_attribution()
 	{
-		return array();
+		return array(
+			'Clip art from "Madlantern Arts Clipart" used with permission.',
+		);
 	}
 
 	/**
@@ -180,10 +182,8 @@ ocWorld is a full zone addon for ocPortal.';
 			'ocworld/pages/comcode/EN/.htaccess',
 			'ocworld/pages/comcode/EN/docs.txt',
 			'ocworld/pages/comcode/EN/index.html',
-			'ocworld/pages/comcode/EN/licence.txt',
 			'ocworld/pages/comcode/EN/rules.txt',
 			'ocworld/pages/comcode/EN/start.txt',
-			'ocworld/pages/comcode/EN/todo.txt',
 			'ocworld/pages/comcode/index.html',
 			'ocworld/pages/comcode_custom/.htaccess',
 			'ocworld/pages/comcode_custom/EN/.htaccess',
@@ -225,6 +225,7 @@ ocWorld is a full zone addon for ocPortal.';
 			'themes/default/css_custom/ocworld.css',
 			'sources_custom/hooks/modules/members/ocworld.php',
 			'sources_custom/hooks/modules/topicview/ocworld.php',
+			'sources_custom/hooks/systems/page_groupings/ocworld.php',
 			'uploads/ocworld/index.html',
 			'data_custom/modules/ocworld/docs/basics2.0.png',
 			'data_custom/modules/ocworld/docs/basics2.1.png',

@@ -39,12 +39,12 @@ class Hook_page_groupings_referrals
 
 					$scheme_title=isset($scheme['title'])?$scheme['title']:$ini_file_section_name;
 
-					$ret[]=array('audit','menu/referrals',array('admin_referrals',array('type'=>'misc','scheme'=>$scheme_name),'adminzone'),$scheme_title,'referrals:DOC_REFERRALS');
+					$ret[]=array('audit','menu/referrals',array('admin_referrals',array('type'=>'misc','scheme'=>$scheme_name),get_page_zone('admin_referrals')),$scheme_title,'referrals:DOC_REFERRALS');
 				}
 			}
 		}
 
-		$ret[]=array('setup','menu/referrals',array('referrals',array('type'=>'misc'),'adminzone'),do_lang_tempcode('referrals:REFERRALS'),'referrals:DOC_REFERRALS');
+		$ret[]=array('setup','menu/referrals',array('referrals',array(),get_page_zone('referrals')),do_lang_tempcode('referrals:REFERRALS'),'referrals:DOC_REFERRALS');
 
 		return $ret;
 	}

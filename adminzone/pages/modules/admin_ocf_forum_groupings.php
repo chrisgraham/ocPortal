@@ -54,6 +54,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 
 		$ret=array(
 			'misc'=>array('FORUM_GROUPINGS','menu/_generic_admin/view_this_category'),
+			'ed'=>array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('EDIT_FORUM_GROUPING'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','COUNT(*)',NULL,'',true))))),'menu/_generic_admin/view_this_category'),
 		)+parent::get_entry_points();
 
 		return $ret;

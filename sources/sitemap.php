@@ -188,7 +188,7 @@ abstract class Hook_sitemap_base
 
 		// Pages shown in the footer should not repeat in the Sitemap
 		if ((get_option('bottom_show_privacy_link')=='1') && ($page=='privacy')) return true;
-		if ((get_option('bottom_show_rules_link')=='1') && ($page=='rules')) return true;
+		if ((get_option('bottom_show_rules_link')=='1') && ($page=='rules') && (($zone=='') || ($zone=='site') || ($zone=='forum'))) return true;
 		if ((get_option('bottom_show_feedback_link')=='1') && ($page=='feedback')) return true;
 
 		// Disabled, maybe via a looped redirect?
@@ -919,8 +919,23 @@ function get_page_grouping_links()
  */
 function get_root_comcode_pages($zone)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>''));
-	return collapse_2d_complexity('the_page','p_validated',$rows);
+	/*$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','p_validated'),array('the_zone'=>$zone,'p_parent_page'=>''));
+	return collapse_2d_complexity('the_page','p_validated',$rows);*/
+
+	// This uses more memory than the above, but is needed as pages may not have got into the database yet...
+
+	disable_php_memory_limit();
+
+	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,p_validated FROM '.get_table_prefix().'comcode_pages WHERE '.db_string_equal_to('the_zone',$zone).' AND '.db_string_not_equal_to('p_parent_page',''));
+	$non_root=collapse_2d_complexity('the_page','p_validated',$rows);
+
+	$pages=find_all_pages_wrap($zone,false,/*$consider_redirects=*/true);
+	foreach ($pages as $page=>$page_type)
+	{
+		if (isset($non_root[$page])) unset($pages[$page]);
+	}
+
+	return $pages;
 }
 
 /**

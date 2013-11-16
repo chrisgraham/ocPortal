@@ -103,6 +103,7 @@ class Hook_addon_registry_core_permission_management
 			'themes/default/css/permissions_editor.css',
 			'themes/default/templates/PERMISSION_COLUMN_SIZER.tpl',
 			'sources/hooks/systems/addon_registry/core_permission_management.php',
+			'sources/hooks/systems/sitemap/privilege_category.php',
 			'themes/default/templates/PERMISSION_KEYS_PERMISSIONS_SCREEN.tpl',
 			'themes/default/templates/PERMISSION_KEYS_PERMISSION_ROW.tpl',
 			'themes/default/templates/PERMISSION_SCREEN_PERMISSIONS_SCREEN.tpl',

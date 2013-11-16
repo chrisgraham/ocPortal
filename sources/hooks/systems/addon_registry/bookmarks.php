@@ -108,6 +108,8 @@ class Hook_addon_registry_bookmarks
 			'site/pages/modules/bookmarks.php',
 			'sources/hooks/systems/snippets/bookmarks_menu.php',
 			'themes/default/css/bookmarks.css',
+			'sources/hooks/systems/sitemap/bookmarks.php',
+			'sources/hooks/systems/page_groupings/bookmarks.php',
 		);
 	}
 

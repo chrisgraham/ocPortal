@@ -53,7 +53,7 @@ class Module_admin_xml_storage
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
-			'misc'=>array('XML_DATA_MANAGEMENT','menu/adminzone/tools/bulk_content_actions/xml_storage'),
+			'misc'=>array('XML_STORAGE','menu/adminzone/tools/bulk_content_actions/xml_storage'),
 		);
 	}
 
@@ -70,17 +70,17 @@ class Module_admin_xml_storage
 
 		require_lang('xml_storage');
 
-		set_helper_panel_text(comcode_lang_string('DOC_XML_DATA_MANAGEMENT'));
+		set_helper_panel_text(comcode_lang_string('DOC_XML_STORAGE'));
 
 		if ($type=='_import' || $type=='_export')
 		{
 			breadcrumb_set_self(do_lang_tempcode('_RESULTS'));
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('XML_DATA_MANAGEMENT'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('XML_STORAGE'))));
 		}
 
 		if ($type=='misc')
 		{
-			$this->title=get_screen_title('XML_DATA_MANAGEMENT');
+			$this->title=get_screen_title('XML_STORAGE');
 		}
 
 		if ($type=='_import')

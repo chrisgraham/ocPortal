@@ -24,7 +24,7 @@ class Hook_page_groupings_ocbrowserbookmarks
 	function run()
 	{
 		return array(
-			array('tools','menu/_generic_admin/tool',array('admin_generate_bookmarks',array(),'adminzone'),make_string_tempcode('Generate bookmarks.html for browser'))
+			array('tools','menu/_generic_admin/tool',array('admin_generate_bookmarks',array(),get_page_zone('admin_generate_bookmarks')),make_string_tempcode('Generate bookmarks.html for browser')),
 		);
 	}
 

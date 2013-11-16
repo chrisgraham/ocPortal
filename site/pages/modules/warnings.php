@@ -56,6 +56,8 @@ class Module_warnings extends standard_crud_module
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
+		if ($be_deferential) return NULL;
+
 		return (!$check_perms || !is_guest($member_id))?(parent::get_entry_points()):array();
 	}
 

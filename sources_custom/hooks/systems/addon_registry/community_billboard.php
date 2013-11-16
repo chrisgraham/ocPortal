@@ -152,6 +152,7 @@ class Hook_addon_registry_community_billboard
 			'sources/hooks/systems/config/is_on_community_billboard_buy.php',
 			'sources/hooks/systems/notifications/pointstore_request_community_billboard.php',
 			'themes/default/css_custom/community_billboard.css',
+			'sources_custom/hooks/systems/page_groupings/community_billboard.php',
 		);
 	}
 
@@ -262,7 +263,6 @@ class Hook_addon_registry_community_billboard
 			'COMCODE'=>''
 		));
 
-		//Create 'COMMUNITY_BILLBOARD_MANAGE_SCREEN' using the sub-templates 'COMMUNITY_BILLBOARD_DETAILS' and 'COMMUNITY_BILLBOARD_STORE_LIST_LINE'
 		return array(
 			lorem_globalise(do_lorem_template('FORM_SCREEN',array(
 				'TITLE'=>lorem_title(),

@@ -82,7 +82,7 @@ class Hook_addon_registry_testing_platform
 	 */
 	function get_description()
 	{
-		return 'The ocPortal testing platform.';
+		return 'The ocPortal testing platform. Do not run this on a production system as it will interfere with installs and may contain security holes.';
 	}
 
 	/**
@@ -372,6 +372,7 @@ class Hook_addon_registry_testing_platform
 			'_tests/tests/unit_tests/cqc_welcome.php',
 			'_tests/tests/unit_tests/css_and_js.php',
 			'_tests/tests/unit_tests/dev_environment.php',
+			'_tests/tests/unit_tests/sitemap.php',
 			'_tests/tests/unit_tests/blocks.php',
 			'_tests/tests/unit_tests/occle_fs.php',
 			'_tests/tests/unit_tests/downloads.php',
@@ -396,7 +397,7 @@ class Hook_addon_registry_testing_platform
 			'_tests/tests/unit_tests/moderation.php',
 			'_tests/tests/unit_tests/modularisation.php',
 			'_tests/tests/unit_tests/news.php',
-			'_tests/tests/unit_tests/newscategory.php',
+			'_tests/tests/unit_tests/news_category.php',
 			'_tests/tests/unit_tests/newsletter.php',
 			'_tests/tests/unit_tests/points.php',
 			'_tests/tests/unit_tests/poll.php',
@@ -410,7 +411,7 @@ class Hook_addon_registry_testing_platform
 			'_tests/tests/unit_tests/standard_dir_files.php',
 			'_tests/tests/unit_tests/tempcode.php',
 			'_tests/tests/unit_tests/template_previews.php',
-			'_tests/tests/unit_tests/tickettype.php',
+			'_tests/tests/unit_tests/ticket_type.php',
 			'_tests/tests/unit_tests/user.php',
 			'_tests/tests/unit_tests/user_banunban.php',
 			'_tests/tests/unit_tests/usergroup.php',

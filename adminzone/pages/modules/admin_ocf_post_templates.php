@@ -51,7 +51,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 		if ($be_deferential) return NULL;
 
 		return array(
-			'misc'=>array('POST_TEMPLATES','menu/adminzone/structure/forum/post_templates'),
+			'misc'=>array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('POST_TEMPLATES'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates','COUNT(*)',NULL,'',true))))),'menu/adminzone/structure/forum/post_templates'),
 		)+parent::get_entry_points();
 	}
 

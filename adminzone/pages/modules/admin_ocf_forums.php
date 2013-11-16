@@ -62,11 +62,11 @@ class Module_admin_ocf_forums extends standard_crud_module
 			$ret+=manage_custom_fields_entry_points('post')+manage_custom_fields_entry_points('topic')+manage_custom_fields_entry_points('forum');
 
 			$ret['_SEARCH:admin_ocf_forum_groupings:ad']=array('ADD_FORUM_GROUPING','menu/_generic_admin/add_one_category');
-			$ret['_SEARCH:admin_ocf_forum_groupings:ed']=array('EDIT_FORUM_GROUPING','menu/_generic_admin/edit_one_category');
+			$ret['_SEARCH:admin_ocf_forum_groupings:ed']=array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('EDIT_FORUM_GROUPING'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','COUNT(*)',NULL,'',true))))),'menu/_generic_admin/edit_one_category');
 			if (addon_installed('ocf_post_templates'))
-				$ret['_SEARCH:admin_ocf_post_templates:misc']=array('POST_TEMPLATES','menu/adminzone/structure/forum/post_templates');
+				$ret['_SEARCH:admin_ocf_post_templates:misc']=array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('POST_TEMPLATES'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates','COUNT(*)',NULL,'',true))))),'menu/adminzone/structure/forum/post_templates');
 			if (addon_installed('ocf_multi_moderations'))
-				$ret['_SEARCH:admin_ocf_multimoderations:misc']=array('MULTI_MODERATIONS','menu/adminzone/structure/forum/multi_moderations');
+				$ret['_SEARCH:admin_ocf_multi_moderations:misc']=array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('MULTI_MODERATIONS'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_multi_moderations','COUNT(*)',NULL,'',true))))),'menu/adminzone/structure/forum/multi_moderations');
 		}
 		return $ret;
 	}
@@ -146,7 +146,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		if (addon_installed('ocf_post_templates'))
 			$menu_links[]=array('menu/adminzone/structure/forum/post_templates',array('admin_ocf_post_templates',array('type'=>'misc'),get_module_zone('admin_ocf_post_templates')),do_lang_tempcode('POST_TEMPLATES'),'DOC_POST_TEMPLATES');
 		if (addon_installed('ocf_multi_moderations'))
-			$menu_links[]=array('menu/adminzone/structure/forum/multi_moderations',array('admin_ocf_multimoderations',array('type'=>'misc'),get_module_zone('admin_ocf_multimoderations')),do_lang_tempcode('MULTI_MODERATIONS'),'DOC_MULTI_MODERATIONS');
+			$menu_links[]=array('menu/adminzone/structure/forum/multi_moderations',array('admin_ocf_multi_moderations',array('type'=>'misc'),get_module_zone('admin_ocf_multi_moderations')),do_lang_tempcode('MULTI_MODERATIONS'),'DOC_MULTI_MODERATIONS');
 
 		require_code('templates_donext');
 		require_code('fields');

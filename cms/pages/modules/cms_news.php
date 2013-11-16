@@ -61,7 +61,7 @@ class Module_cms_news extends standard_crud_module
 		if ($support_crosslinks)
 		{
 			require_code('fields');
-			$ret+=manage_custom_fields_entry_points('wiki_post')+manage_custom_fields_entry_points('news');
+			$ret+=manage_custom_fields_entry_points('news_category')+manage_custom_fields_entry_points('news');
 		}
 		return $ret;
 	}

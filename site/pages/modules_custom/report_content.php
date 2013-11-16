@@ -15,7 +15,7 @@
 /**
  * Module page class.
  */
-class Module_reportcontent
+class Module_report_content
 {
 
 	/**
@@ -51,7 +51,7 @@ class Module_reportcontent
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		require_lang('reportcontent');
+		require_lang('report_content');
 
 		$GLOBALS['SITE_DB']->create_table('reported_content',array(
 			'r_session_id'=>'*AUTO_LINK',
@@ -60,20 +60,6 @@ class Module_reportcontent
 			'r_counts'=>'BINARY', // If the content is marked unvalidated, r_counts is set to 0 for each row for it, so if it's revalidated the counts apply elsewhere
 		));
 		$GLOBALS['SITE_DB']->create_index('reported_content','reported_already',array('r_content_type','r_content_id'));
-	}
-
-	/**
-	 * Standard modular entry-point finder function.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		return array();
 	}
 
 	var $title;
@@ -87,7 +73,7 @@ class Module_reportcontent
 	{
 		$type=get_param('type','misc');
 
-		require_lang('reportcontent');
+		require_lang('report_content');
 
 		if ($type=='misc')
 		{

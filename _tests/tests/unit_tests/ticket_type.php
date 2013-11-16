@@ -16,9 +16,9 @@
 /**
  * ocPortal test case class (unit testing).
  */
-class tickettype_test_set extends ocp_test_case
+class ticket_type_test_set extends ocp_test_case
 {
-	var $tickettype_id;
+	var $ticket_type_id;
 
 	function setUp()
 	{
@@ -26,23 +26,23 @@ class tickettype_test_set extends ocp_test_case
 		require_code('tickets2');
 		add_ticket_type("platinum",0,0);
 		// Test the forum was actually created
-		$this->tickettype_id=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('text_original'=>"platinum"));
-		$this->assertTrue('platinum'==get_translated_text($this->tickettype_id));
+		$this->ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('text_original'=>"platinum"));
+		$this->assertTrue('platinum'==get_translated_text($this->ticket_type_id));
 	}
 
 	function testEditTicketType()
 	{
 		// Test the forum edits
-		$this->tickettype_id=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('text_original'=>"platinum"));
-		edit_ticket_type($this->tickettype_id,"gold",0,0);
+		$this->ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('text_original'=>"platinum"));
+		edit_ticket_type($this->ticket_type_id,"gold",0,0);
 		// Test the forum was actually created
-		$this->assertTrue('gold'==get_translated_text($this->tickettype_id));;
+		$this->assertTrue('gold'==get_translated_text($this->ticket_type_id));;
 	}
 
 
 	function tearDown()
 	{
-		delete_ticket_type($this->tickettype_id);
+		delete_ticket_type($this->ticket_type_id);
 		parent::tearDown();
 	}
 }

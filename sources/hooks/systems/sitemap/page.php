@@ -65,7 +65,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 			$links=get_page_grouping_links();
 			foreach ($links as $link)
 			{
-				if (($link[2][0]==$page) && (($link[2][2]==$zone) || ($page!='start')))
+				if (($link[2][0]==$page) && ((!isset($link[2][1]['type'])) || ($link[2][1]['type']=='misc')) && (($link[2][2]==$zone) || ($page!='start')))
 				{
 					$title=$link[3];
 					$icon=$link[1];
@@ -239,20 +239,20 @@ class Hook_sitemap_page extends Hook_sitemap_base
 		// Look for entry points to put under this
 		if (($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM') && (!$require_permission_support))
 		{
-			$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+			$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
 			if (is_null($functions[0]))
 			{
 				if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
 				{
 					$path=str_replace('/modules_custom/','/modules/',$path);
-					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
 				}
 			}
 
+			$has_entry_points=false;
+
 			if (!is_null($functions[0]))
 			{
-				$has_entry_points=false;
-
 				$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
 				if ((!is_null($entry_points)) && (count($entry_points)>0))
@@ -267,7 +267,13 @@ class Hook_sitemap_page extends Hook_sitemap_base
 					{
 						// "!" indicates no entry-points but that the page is accessible without them
 						$_title=$entry_points['!'][0];
-						$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
+						if (is_object($_title))
+						{
+							$struct['title']=$_title;
+						} else
+						{
+							$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
+						}
 						if (!is_null($entry_points['!'][1]))
 						{
 							$struct['extra_meta']['image']=find_theme_image('icons/24x24/'.$entry_points['!'][1]);
@@ -281,8 +287,14 @@ class Hook_sitemap_page extends Hook_sitemap_base
 						$move_down_entry_point=(count($entry_points)==1)?key($entry_points):'misc';
 						if (substr($struct['pagelink'],-strlen(':'.$move_down_entry_point))!=':'.$move_down_entry_point)
 							$struct['pagelink'].=':'.$move_down_entry_point;
-						//$_title=$entry_points[$move_down_entry_point][0];	Actually our name derived from the page grouping or natural name is more appropriate
-						//$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
+						/*$_title=$entry_points[$move_down_entry_point][0];	Actually our name derived from the page grouping or natural name is more appropriate
+						if (is_object($_title))
+						{
+							$struct['title']=$_title;
+						} else
+						{
+							$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
+						}*/
 						if (!is_null($entry_points[$move_down_entry_point][1]))
 						{
 							$struct['extra_meta']['image']=find_theme_image('icons/24x24/'.$entry_points[$move_down_entry_point][1]);
@@ -345,7 +357,6 @@ class Hook_sitemap_page extends Hook_sitemap_base
 				$is_handled=$ob->handles_pagelink($pagelink);
 				if ($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY)
 				{
-					$is_virtual=($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY);
 					$struct['permission_page']=$ob->get_permission_page($pagelink);
 					$struct['has_possible_children']=true;
 

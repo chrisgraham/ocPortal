@@ -48,25 +48,28 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 
 				if ($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM')
 				{
-					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
 					if (!is_null($functions[0]))
 					{
 						if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
 						{
 							$path=str_replace('/modules_custom/','/modules/',$path);
-							$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+							$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
 						}
 					}
 					if (!is_null($functions[0]))
 					{
 						$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
-						if (isset($entry_points['misc']))
+						if ($entry_points!==NULL)
 						{
-							unset($entry_points['misc']);
-						} else
-						{
-							array_shift($entry_points);
+							if (isset($entry_points['misc']))
+							{
+								unset($entry_points['misc']);
+							} else
+							{
+								array_shift($entry_points);
+							}
 						}
 
 						if (isset($entry_points[$type]))
@@ -117,13 +120,13 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 			$entry_point=$entry_points[$orig_pagelink];
 		} else
 		{
-			$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+			$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/false));
 			if (is_null($functions[0]))
 			{
 				if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
 				{
 					$path=str_replace('/modules_custom/','/modules/',$path);
-					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true));
+					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/false));
 				}
 			}
 
@@ -139,15 +142,15 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 		}
 
 		$icon=mixed();
-		if (is_array($entry_point))
+		$_title=$entry_point[0];
+		$icon=$entry_point[1];
+		if (is_object($_title))
 		{
-			$_title=$entry_point[0];
-			$icon=$entry_point[1];
+			$title=$_title;
 		} else
 		{
-			$_title=$entry_point;
+			$title=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
 		}
-		$title=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
 
 		$struct=array(
 			'title'=>$title,
@@ -193,6 +196,40 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 		);
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
+
+		// Look for virtual nodes to put under this
+		if ($type!='misc')
+		{
+			$hooks=find_all_hooks('systems','sitemap');
+			foreach (array_keys($hooks) as $_hook)
+			{
+				require_code('hooks/systems/sitemap/'.$_hook);
+				$ob=object_factory('Hook_sitemap_'.$_hook);
+				if ($ob->is_active())
+				{
+					$is_handled=$ob->handles_pagelink($pagelink);
+					if ($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY)
+					{
+						$struct['has_possible_children']=true;
+
+						if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
+						{
+							$children=array();
+
+							$virtual_child_nodes=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,true);
+							if (is_null($virtual_child_nodes)) $virtual_child_nodes=array();
+							foreach ($virtual_child_nodes as $child_node)
+							{
+								if ($callback===NULL)
+									$children[$child_node['pagelink']]=$child_node;
+							}
+
+							$struct['children']=$children;
+						}
+					}
+				}
+			}
+		}
 
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);

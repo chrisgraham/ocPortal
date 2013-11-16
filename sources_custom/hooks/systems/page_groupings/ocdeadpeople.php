@@ -23,7 +23,7 @@ class Hook_page_groupings_ocdeadpeople
 	function run()
 	{
 		return array(
-			array('setup','menu/ocdeadpeople_log',array('admin_ocdeadpeople',array('type'=>'misc'),get_module_zone('admin_ocdeadpeople')),do_lang_tempcode('ocdeadpeople:MANAGE_DISEASES'),'ocdeadpeople:DOC_OCDEADPEOPLE')
+			array('setup','menu/ocdeadpeople_log',array('admin_ocdeadpeople',array('type'=>'misc'),get_module_zone('admin_ocdeadpeople')),do_lang_tempcode('ocdeadpeople:MANAGE_DISEASES'),'ocdeadpeople:DOC_OCDEADPEOPLE'),
 		);
 	}
 

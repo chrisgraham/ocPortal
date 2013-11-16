@@ -23,7 +23,7 @@ class Hook_page_groupings_facebook
 	function run()
 	{
 		return array(
-			array('setup','menu/facebook',array('facebook_oauth',array(),'adminzone'),do_lang_tempcode('facebook:FACEBOOK_SYNDICATION'),'facebook:DOC_FACEBOOK_SYNDICATION')
+			array('setup','menu/facebook',array('facebook_oauth',array(),get_page_zone('facebook_oauth')),do_lang_tempcode('facebook:FACEBOOK_SYNDICATION'),'facebook:DOC_FACEBOOK_SYNDICATION'),
 		);
 	}
 

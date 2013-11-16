@@ -74,11 +74,12 @@ class Module_admin_ocf_members
 				$ret['_SEARCH:admin_ocf_welcome_emails:misc']=array('WELCOME_EMAILS','menu/adminzone/setup/welcome_emails');
 			if (addon_installed('securitylogging'))
 				$ret['_SEARCH:admin_lookup']=array('INVESTIGATE_USER','menu/adminzone/tools/users/investigate_user');
-			if (addon_installed('ecommerce'))
-				$ret['_SEARCH:admin_ecommerce:misc']=array('CUSTOM_PRODUCT_USERGROUP','menu/adminzone/audit/ecommerce/ecommerce');
-			$ret['_SEARCH:admin_ocf_groups:misc']=array('USERGROUPS','menu/social/groups');
-			if (addon_installed('staff'))
-				$ret['_SEARCH:admin_staff:misc']=array('STAFF','menu/site_meta/staff');
+			//if (addon_installed('ecommerce'))
+			//	$ret['_SEARCH:admin_ecommerce:misc']=array('CUSTOM_PRODUCT_USERGROUP','menu/adminzone/audit/ecommerce/ecommerce');
+			//$ret['_SEARCH:admin_ocf_groups:misc']=array('USERGROUPS','menu/social/groups');
+			//if (addon_installed('staff'))
+			//	$ret['_SEARCH:admin_staff:misc']=array('STAFF','menu/site_meta/staff');
+			$ret['_SEARCH:warnings:ed']=array('WARNINGS','tabs/member_account/warnings');
 		}
 		return $ret;
 	}
@@ -230,6 +231,7 @@ class Module_admin_ocf_members
 				addon_installed('ecommerce')?array('menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),'DOC_ECOMMERCE'):NULL,
 				array('menu/social/groups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('USERGROUPS'),'DOC_GROUPS'),
 				addon_installed('staff')?array('menu/site_meta/staff',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('STAFF'),'DOC_STAFF'):NULL,
+				array('tabs/member_account/warnings',array('warnings',array('type'=>'misc')),get_module_zone('warnings'),do_lang_tempcode('WARNINGS')),
 			),do_lang('MEMBERS')
 		);
 	}

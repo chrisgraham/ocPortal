@@ -45,12 +45,24 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	{
 		if (get_forum_type()!='ocf') return NULL;
 
-		if ($be_deferential) return NULL;
+		$ret=array();
+		if (!$be_deferential)
+		{
+			$ret+=array(
+				'misc'=>array('CUSTOM_PROFILE_FIELDS','menu/adminzone/tools/users/custom_profile_fields'),
+			);
+		}
 
-		return array(
-			'misc'=>array('CUSTOM_PROFILE_FIELDS','menu/adminzone/tools/users/custom_profile_fields'),
+		$ret+=array(
 			'stats'=>array('CUSTOM_PROFILE_FIELD_STATS','menu/adminzone/tools/users/custom_profile_fields'),
-		)+parent::get_entry_points();
+		);
+
+		if (!$be_deferential)
+		{
+			$ret+=parent::get_entry_points();
+		}
+
+		return $ret;
 	}
 
 	var $title;

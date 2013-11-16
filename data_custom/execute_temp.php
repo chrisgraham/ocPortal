@@ -58,11 +58,11 @@ function execute_temp()
 	global $ICONS;
 	$ICONS=array();
 
-	$pagelink='';
+	$pagelink='adminzone:';
 	$callback=NULL;
 	$valid_node_types=NULL;
 	$child_cutoff=NULL;
-	$max_recurse_depth=4;
+	$max_recurse_depth=10;
 	$require_permission_support=false;
 	$zone='_SEARCH';
 	$consider_secondary_categories=true;
