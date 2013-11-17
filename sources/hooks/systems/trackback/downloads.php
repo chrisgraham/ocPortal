@@ -18,7 +18,6 @@
  * @package		downloads
  */
 
-
 class Hook_trackback_downloads
 {
 	/**

@@ -18,7 +18,6 @@
  * @package		polls
  */
 
-
 class Hook_trackback_polls
 {
 	/**

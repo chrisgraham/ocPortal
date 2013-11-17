@@ -18,7 +18,6 @@
  * @package		calendar
  */
 
-
 class Hook_trackback_events
 {
 	/**

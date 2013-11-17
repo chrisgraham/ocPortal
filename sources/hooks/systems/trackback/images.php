@@ -18,7 +18,6 @@
  * @package		galleries
  */
 
-
 class Hook_trackback_images
 {
 	/**

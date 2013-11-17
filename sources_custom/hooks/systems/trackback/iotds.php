@@ -13,7 +13,6 @@
  * @package		iotds
  */
 
-
 class Hook_trackback_iotds
 {
 	/**

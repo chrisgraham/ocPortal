@@ -12,7 +12,6 @@
  * @copyright	ocProducts Ltd
  */
 
-
 class Hook_comcode_flip
 {
 	/**

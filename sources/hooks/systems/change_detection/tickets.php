@@ -18,7 +18,6 @@
  * @package		tickets
  */
 
-
 class Hook_tickets
 {
 	/**

@@ -18,7 +18,6 @@
  * @package		news
  */
 
-
 class Hook_trackback_news
 {
 	/**

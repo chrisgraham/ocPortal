@@ -18,7 +18,6 @@
  * @package		catalogues
  */
 
-
 class Hook_trackback_catalogues
 {
 	/**
