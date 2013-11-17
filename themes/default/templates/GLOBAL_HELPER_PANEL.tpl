@@ -31,10 +31,6 @@
 					</div></div>
 				</div>
 			{+END}
-
-			{+START,IF_NON_EMPTY,{$HELPER_PANEL_PIC}}
-				<div id="global_helper_panel_pic" class="global_helper_panel_pic"><img width="220" alt="" src="{$IMG*,{$HELPER_PANEL_PIC}}" /></div>
-			{+END}
 		</div>
 	</div>
 </div>

@@ -1774,7 +1774,7 @@ function convert_tooltip(element)
 				element,
 				'mouseover',
 				function(event) {
-					win.activate_tooltip(element,event,element.ocp_tooltip_title,'250px','',null,false,false,false,false,win);
+					win.activate_tooltip(element,event,element.ocp_tooltip_title,'300px','',null,false,false,false,false,win);
 				}
 			);
 

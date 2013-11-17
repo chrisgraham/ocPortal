@@ -1609,9 +1609,8 @@ function ecv_HELPER_PANEL_TUTORIAL($lang,$escaped,$param)
  */
 function ecv_HELPER_PANEL_PIC($lang,$escaped,$param)
 {
-	if ($GLOBALS['HELPER_PANEL_PIC']===NULL) set_helper_panel_pic('');
-	$value=$GLOBALS['HELPER_PANEL_PIC'];
-	if (($value!='') && (find_theme_image($value,true)=='')) $value='';
+	// LEGACY
+	$value='';
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;

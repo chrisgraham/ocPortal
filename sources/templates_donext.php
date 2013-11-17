@@ -70,6 +70,8 @@ function do_next_manager_hooked($title,$text,$type,$main_title=NULL)
 		} else $_text=make_string_tempcode($text);
 	} else $_text=new ocp_tempcode();
 
+	set_helper_panel_text(comcode_lang_string('menus:DOC_HELPER_PANEL'));
+
 	return do_next_manager(is_null($text)?NULL:get_screen_title($title),$_text,$links,do_lang($main_title));
 }
 
@@ -318,7 +320,7 @@ function _do_next_section($list,$title)
 		$doc=array_key_exists(3,$_option)?$_option[3]:'';
 		if ((is_string($doc)) && ($doc!=''))
 		{
-			if (preg_match('#^[\w\d]+$#',$doc)==0)
+			if (preg_match('#^[:\w\d]+$#',$doc)==0)
 			{
 				$doc=comcode_to_tempcode($doc,NULL,true);
 			} else

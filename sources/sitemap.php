@@ -435,6 +435,7 @@ abstract class Hook_sitemap_base
 	 * @param  ?array			Faked database row (NULL: derive).
 	 * @param  ID_TEXT		The zone.
 	 * @param  ID_TEXT		The page.
+	 * @param  ID_TEXT		The type.
 	 * @return ?array			Faked database row (NULL: derive).
 	 */
 	protected function _load_row_from_page_groupings($row,$zone,$page,$type='misc')
@@ -454,7 +455,8 @@ abstract class Hook_sitemap_base
 				{
 					$title=$link[3];
 					$icon=$link[1];
-					$row=array($title,$icon,NULL)+$row;
+					$description=isset($link[4])?comcode_lang_string($link[4]):NULL;
+					$row=array($title,$icon,$description)+$row;
 					if ($link[2][2]==$zone) break; // If was a perfect match, break out
 				}
 			}
@@ -482,7 +484,7 @@ abstract class Hook_sitemap_base
 	 * @param  ?array			Faked database row (NULL: we don't have row data).
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 */
-	protected function _ameliorate_with_row(&$struct,&$row,$meta_gather)
+	protected function _ameliorate_with_row(&$struct,$row,$meta_gather)
 	{
 		if (isset($row[0]))
 		{
@@ -505,13 +507,19 @@ abstract class Hook_sitemap_base
 
 			if (($meta_gather & SITEMAP_GATHER_DESCRIPTION)!=0)
 			{
-				$struct['extra_meta']['description']=($description===NULL)?NULL:$description;
+				if (!isset($struct['extra_meta']['description']))
+				{
+					$struct['extra_meta']['description']=($description===NULL)?NULL:$description;
+				}
 			}
 
 			if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)
 			{
-				$struct['extra_meta']['image']=($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon);
-				$struct['extra_meta']['image_2x']=($icon===NULL)?NULL:find_theme_image('icons/48x48/'.$icon);
+				if (!isset($struct['extra_meta']['image']))
+				{
+					$struct['extra_meta']['image']=($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon);
+					$struct['extra_meta']['image_2x']=($icon===NULL)?NULL:find_theme_image('icons/48x48/'.$icon);
+				}
 			}
 		}
 	}

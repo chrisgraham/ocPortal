@@ -203,6 +203,9 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 			'permission_page'=>NULL,
 		);
 
+		$row_x=$this->_load_row_from_page_groupings(NULL,$zone,$page,$type);
+		$this->_ameliorate_with_row($struct,$row_x,$meta_gather);
+
 		if (!$this->_check_node_permissions($struct)) return NULL;
 
 		// Look for virtual nodes to put under this

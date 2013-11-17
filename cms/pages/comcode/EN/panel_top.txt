@@ -1,1 +1,1 @@
-[block="adminzone:,include=contents,max_recurse_depth=3,use_page_groupings=1 + cms:,include=wrapper,max_recurse_depth=2,use_page_groupings=1" type="dropdown"]menu[/block]
+[block="adminzone:,include=contents,max_recurse_depth=3,use_page_groupings=1 + cms:,include=wrapper,max_recurse_depth=2,use_page_groupings=1" type="dropdown" quick_cache="1"]menu[/block]

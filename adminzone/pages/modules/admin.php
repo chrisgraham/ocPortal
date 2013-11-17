@@ -97,20 +97,21 @@ class Module_admin
 			case 'misc':
 				$this->title=get_screen_title('ADMIN_ZONE');
 				break;
+
 			case 'structure':
-				$this->title=get_screen_title('STRUCTURE');
+				$this->title=get_screen_title('menus:STRUCTURE');
 				break;
 			case 'audit':
-				$this->title=get_screen_title('AUDIT');
+				$this->title=get_screen_title('menus:AUDIT');
 				break;
 			case 'style':
-				$this->title=get_screen_title('STYLE');
+				$this->title=get_screen_title('menus:STYLE');
 				break;
 			case 'setup':
 				$this->title=get_screen_title('SETUP');
 				break;
 			case 'tools':
-				$this->title=get_screen_title('TOOLS');
+				$this->title=get_screen_title('menus:TOOLS');
 				break;
 			case 'security':
 				$this->title=get_screen_title('SECURITY');

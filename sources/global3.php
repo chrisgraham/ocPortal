@@ -106,7 +106,6 @@ function init__global3()
 		'EXTRA_HEAD',
 		'EXTRA_FOOT',
 		'HELPER_PANEL_TEXT',
-		'HELPER_PANEL_PIC',
 		'HELPER_PANEL_TUTORIAL',
 		'JAVASCRIPT',
 		'JAVASCRIPTS',
@@ -278,9 +277,8 @@ function _load_blank_output_state($just_tempcode=false,$true_blank=false)
 		$EXTRA_HEAD=NULL;
 		$EXTRA_FOOT=NULL;
 
-		global $HELPER_PANEL_TEXT,$HELPER_PANEL_PIC,$HELPER_PANEL_TUTORIAL;
+		global $HELPER_PANEL_TEXT,$HELPER_PANEL_TUTORIAL;
 		$HELPER_PANEL_TEXT='';
-		$HELPER_PANEL_PIC='';
 		$HELPER_PANEL_TUTORIAL='';
 
 		// Register basic CSS and Javascript requirements

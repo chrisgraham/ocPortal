@@ -610,19 +610,6 @@ function set_helper_panel_tutorial($tutorial)
 }
 
 /**
- * Set the helper panel picture.
- *
- * @sets_output_state
- *
- * @param  ID_TEXT		Theme image code
- */
-function set_helper_panel_pic($pic)
-{
-	global $HELPER_PANEL_PIC;
-	$HELPER_PANEL_PIC=$pic;
-}
-
-/**
  * Sets the short title, used for screen header text if set.
  *
  * @sets_output_state

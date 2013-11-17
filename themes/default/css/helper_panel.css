@@ -53,14 +53,6 @@
 .global_helper_panel_text_over {
 }
 
-.global_helper_panel_pic {
-	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block;/*Needed for IE8*/
-	position: absolute;
-	z-index: 2;
-	bottom: 0;
-	left: 25px;
-}
-
 .global_helper_panel_html {
 	position: absolute;
 	/*bottom: -270px;*/

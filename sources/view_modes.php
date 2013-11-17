@@ -94,7 +94,6 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 	$GLOBALS['IS_WIDE_CACHE']=1;
 	$GLOBALS['TEMPCODE_SETGET']=array();
 	$GLOBALS['LOADED_TPL_CACHE']=array();
-	$GLOBALS['HELPER_PANEL_PIC']=NULL;
 	$GLOBALS['HELPER_PANEL_TEXT']=NULL;
 	$GLOBALS['HELPER_PANEL_TUTORIAL']=NULL;
 

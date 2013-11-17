@@ -144,7 +144,10 @@ function pop_up_menu(id,place,menu,event)
 	var position_t=function() {
 		var pos_top=t;
 		if (pos_top+find_height(e)+10>full_height)
-			pos_top-=find_height(e,true,true,true)+e_parent_height-10;
+		{
+			var above_pos_top=pos_top-find_height(e,true,true,true)+e_parent_height-10;
+			if (above_pos_top>0) pos_top=above_pos_top;
+		}
 		e.style.top=pos_top+'px';
 	};
 	position_t();
