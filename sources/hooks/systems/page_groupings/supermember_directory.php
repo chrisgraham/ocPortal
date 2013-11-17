@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_supermember_directory
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,5 +35,4 @@ class Hook_page_groupings_supermember_directory
 			array('collaboration','menu/collaboration/supermember_directory',array('supermembers',array(),get_module_zone('supermembers')),do_lang_tempcode('supermembers:MODULE_TRANS_NAME_supermembers')),
 		);
 	}
-
 }

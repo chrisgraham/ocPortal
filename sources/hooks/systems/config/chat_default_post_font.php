@@ -20,7 +20,6 @@
 
 class Hook_config_chat_default_post_font
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_chat_default_post_font
 	{
 		return 'Verdana';
 	}
-
 }
 
 

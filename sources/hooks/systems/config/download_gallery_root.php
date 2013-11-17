@@ -20,7 +20,6 @@
 
 class Hook_config_download_gallery_root
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_download_gallery_root
 	{
 		return addon_installed('galleries')?'root':NULL;
 	}
-
 }
 
 

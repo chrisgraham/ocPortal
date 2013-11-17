@@ -457,6 +457,5 @@ class field_restriction_loader
 	{
 		$this->text_so_far.=$data;
 	}
-
 }
 

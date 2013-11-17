@@ -20,7 +20,6 @@
 
 class Block_main_contact_catalogues
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -188,5 +187,4 @@ class Block_main_contact_catalogues
 
 		return do_template('FORM',array('_GUID'=>'7dc3957edf3b47399b688d72fae54128','FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('SEND'),'URL'=>$url,'TEXT'=>$text));
 	}
-
 }

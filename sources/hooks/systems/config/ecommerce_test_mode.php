@@ -20,7 +20,6 @@
 
 class Hook_config_ecommerce_test_mode
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_ecommerce_test_mode
 	{
 		return '0';
 	}
-
 }
 
 

@@ -23,7 +23,6 @@
  */
 class Module_subscriptions
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -231,7 +230,6 @@ class Module_subscriptions
 		$url=build_url(array('page'=>'_SELF'),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

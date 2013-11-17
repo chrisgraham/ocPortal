@@ -20,7 +20,6 @@
 
 class Hook_config_spam_check_level
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_spam_check_level
 	{
 		return 'NEVER';
 	}
-
 }
 
 

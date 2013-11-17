@@ -20,7 +20,6 @@
 
 class Hook_attachments_comcode_page
 {
-
 	/**
 	 * Standard modular run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
@@ -36,7 +35,6 @@ class Hook_attachments_comcode_page
 		if (count($parts)!=2) return false;
 		return (has_actual_page_access(get_member(),$parts[1],$parts[0]));
 	}
-
 }
 
 

@@ -14,7 +14,6 @@
 
 class Block_main_facebook_facepile
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -49,7 +48,6 @@ class Block_main_facebook_facepile
 		if ($appid=='') return new ocp_tempcode();
 		return do_template('BLOCK_MAIN_FACEBOOK_FACEPILE',array());
 	}
-
 }
 
 

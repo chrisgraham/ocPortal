@@ -15,7 +15,6 @@
 
 class Block_main_iotd
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -103,7 +102,6 @@ class Block_main_iotd
 		if ((get_option('is_on_comments')=='1') && (get_forum_type()!='none') && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
 		return do_template('BLOCK_MAIN_IOTD',$map2);
 	}
-
 }
 
 

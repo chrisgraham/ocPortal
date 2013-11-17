@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_collaboration_zone
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -133,5 +132,4 @@ class Hook_addon_registry_collaboration_zone
 			'sources/hooks/systems/page_groupings/collaboration_zone.php',
 		);
 	}
-
 }

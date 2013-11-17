@@ -20,7 +20,6 @@
 
 class Hook_config_enable_staff_notes
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_enable_staff_notes
 	{
 		return '0';
 	}
-
 }
 
 

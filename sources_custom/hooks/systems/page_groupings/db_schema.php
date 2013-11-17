@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_db_schema
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -31,7 +30,6 @@ class Hook_page_groupings_db_schema
 			array('tools','menu/_generic_admin/tool',array('sql_show_tables_by_addon',array(),get_page_zone('sql_show_tables_by_addon')),make_string_tempcode('Doc build: Show database tables, by addon')),
 		);
 	}
-
 }
 
 

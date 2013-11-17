@@ -20,7 +20,6 @@
 
 class Hook_main_custom_gfx_text_overlay
 {
-
 	/**
 	 * Standard modular run function. Creates custom graphics from parameters.
 	 *
@@ -45,7 +44,6 @@ class Hook_main_custom_gfx_text_overlay
 		if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($ret);
 		return make_string_tempcode($ret);
 	}
-
 }
 
 

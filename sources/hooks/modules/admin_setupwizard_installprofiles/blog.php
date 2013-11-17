@@ -20,7 +20,6 @@
 
 class Hook_admin_setupwizard_installprofiles_blog
 {
-
 	/**
 	 * Get info about the installprofile
 	 *
@@ -127,5 +126,4 @@ class Hook_admin_setupwizard_installprofiles_blog
 	function install_code()
 	{
 	}
-
 }

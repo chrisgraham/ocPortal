@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_xml_fields
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -101,5 +100,4 @@ class Hook_addon_registry_xml_fields
 			'sources/hooks/systems/addon_registry/xml_fields.php',
 		);
 	}
-
 }

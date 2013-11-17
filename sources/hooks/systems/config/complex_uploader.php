@@ -20,7 +20,6 @@
 
 class Hook_config_complex_uploader
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_complex_uploader
 	{
 		return '1';
 	}
-
 }
 
 

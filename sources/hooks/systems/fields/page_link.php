@@ -20,7 +20,6 @@
 
 class Hook_fields_page_link
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -128,7 +127,6 @@ class Hook_fields_page_link
 		$value=post_param($tmp_name,STRING_MAGIC_NULL);
 		return $value;
 	}
-
 }
 
 

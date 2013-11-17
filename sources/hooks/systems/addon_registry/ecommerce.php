@@ -840,5 +840,4 @@ class Hook_addon_registry_ecommerce
 			)), NULL, '', true)
 		);
 	}
-
 }

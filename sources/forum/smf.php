@@ -1217,7 +1217,6 @@ class forum_driver_smf extends forum_driver_base
 		$usergroups=array_diff($usergroups,array(strval($group_id)));
 		$this->connection->query_update('members',array('additionalGroups'=>implode(',',$usergroups)),array('ID_MEMBER'=>$member));
 	}
-
 }
 
 

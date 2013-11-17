@@ -70,6 +70,5 @@ class Hook_occle_command_passwd
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

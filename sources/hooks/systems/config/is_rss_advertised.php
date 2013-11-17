@@ -20,7 +20,6 @@
 
 class Hook_config_is_rss_advertised
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_is_rss_advertised
 	{
 		return '0';
 	}
-
 }
 
 

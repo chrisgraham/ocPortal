@@ -20,7 +20,6 @@
 
 class Hook_fields_just_date
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -166,7 +165,6 @@ class Hook_fields_just_date
 
 		return str_pad(strval($year),4,'0',STR_PAD_LEFT).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT);
 	}
-
 }
 
 

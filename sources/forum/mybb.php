@@ -1381,7 +1381,6 @@ class forum_driver_mybb extends forum_driver_base
 		//return the default guest id
 		return $this->get_guest_id();
 	}
-
 }
 
 

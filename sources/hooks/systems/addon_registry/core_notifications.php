@@ -481,5 +481,4 @@ class Hook_addon_registry_core_notifications
 			lorem_globalise($out, NULL, '', true)
 		);
 	}
-
 }

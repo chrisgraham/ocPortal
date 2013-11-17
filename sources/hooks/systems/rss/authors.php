@@ -20,7 +20,6 @@
 
 class Hook_rss_authors
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -69,7 +68,6 @@ class Hook_rss_authors
 		require_lang('authors');
 		return array($content,do_lang('AUTHORS'));
 	}
-
 }
 
 

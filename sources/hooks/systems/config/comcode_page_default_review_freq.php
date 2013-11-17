@@ -20,7 +20,6 @@
 
 class Hook_config_comcode_page_default_review_freq
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_comcode_page_default_review_freq
 	{
 		return '0';
 	}
-
 }
 
 

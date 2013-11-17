@@ -39,7 +39,6 @@
 
 class Hook_chat_bot_octavius
 {
-
 	/**
 	 * Give ability to reply to any communication.
 	 *
@@ -372,7 +371,6 @@ class Hook_chat_bot_octavius
 
 		return $response;
 	}
-
 }
 
 

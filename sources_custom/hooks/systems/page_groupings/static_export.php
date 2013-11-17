@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_static_export
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -30,7 +29,6 @@ class Hook_page_groupings_static_export
 			array('tools','menu/_generic_admin/tool',array('static_export',array('dir'=>'1','keep_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),get_page_zone('static_export')),make_string_tempcode('Export static site (exports/static, with mtimes)')),
 		);
 	}
-
 }
 
 

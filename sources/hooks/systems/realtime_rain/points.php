@@ -20,7 +20,6 @@
 
 class Hook_realtime_rain_points
 {
-
 	/**
 	 * Standard modular run function for realtime-rain hooks.
 	 *
@@ -93,5 +92,4 @@ class Hook_realtime_rain_points
 
 		return $drops;
 	}
-
 }

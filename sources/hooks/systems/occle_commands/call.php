@@ -40,6 +40,5 @@ class Hook_occle_command_call
 			return array('window.open(unescape("'.urlencode($url->evaluate()).'"),"occle_window1","");','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

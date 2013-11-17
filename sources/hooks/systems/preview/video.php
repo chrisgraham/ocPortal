@@ -20,7 +20,6 @@
 
 class Hook_Preview_video
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -84,7 +83,6 @@ class Hook_Preview_video
 
 		return array($preview,NULL);
 	}
-
 }
 
 

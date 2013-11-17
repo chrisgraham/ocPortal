@@ -20,7 +20,6 @@
 
 class Hook_attachments_ocf_post
 {
-
 	/**
 	 * Standard modular run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
@@ -64,7 +63,6 @@ class Hook_attachments_ocf_post
 		}
 		return (has_category_access(get_member(),'forums',strval($forum_id)));
 	}
-
 }
 
 

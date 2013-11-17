@@ -20,7 +20,6 @@
 
 class Hook_config_attachment_default_width
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_attachment_default_width
 	{
 		return '560'; // NB: This is for videos (etc), not images
 	}
-
 }
 
 

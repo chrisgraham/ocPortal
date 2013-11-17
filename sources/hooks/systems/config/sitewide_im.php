@@ -20,7 +20,6 @@
 
 class Hook_config_sitewide_im
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_sitewide_im
 	{
 		return '0';
 	}
-
 }
 
 

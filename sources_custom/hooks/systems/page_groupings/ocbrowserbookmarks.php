@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_ocbrowserbookmarks
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -29,7 +28,6 @@ class Hook_page_groupings_ocbrowserbookmarks
 			array('tools','menu/_generic_admin/tool',array('admin_generate_bookmarks',array(),get_page_zone('admin_generate_bookmarks')),make_string_tempcode('Generate bookmarks.html for browser')),
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Block_main_screen_actions
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -67,7 +66,6 @@ class Block_main_screen_actions
 			'TITLE'=>array_key_exists('title',$map)?$map['title']:'',
 		));
 	}
-
 }
 
 

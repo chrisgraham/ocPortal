@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_topic_pin_buy
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_is_on_topic_pin_buy
 	{
 		return (!addon_installed('ocf_forum'))?NULL:'1';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Block_main_block_help
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -76,7 +75,6 @@ class Block_main_block_help
 
 		return $blocks;
 	}
-
 }
 
 

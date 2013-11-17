@@ -20,7 +20,6 @@
 
 class Hook_templates
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -47,7 +46,6 @@ class Hook_templates
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

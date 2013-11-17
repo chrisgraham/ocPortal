@@ -20,7 +20,6 @@
 
 class Hook_config_windows_auth_is_enabled
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_windows_auth_is_enabled
 	{
 		return '0';
 	}
-
 }
 
 

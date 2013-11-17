@@ -20,7 +20,6 @@
 
 class Hook_config_site_closed
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -68,7 +67,6 @@ class Hook_config_site_closed
 		$list.=static_evaluate_tempcode(form_input_radio_entry($name,'1','1'==get_option($name),do_lang('OPEN')));
 		return form_input_radio($human_name,$explanation,$name,make_string_tempcode($list),true);
 	}
-
 }
 
 

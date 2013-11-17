@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_Edit_title
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -72,7 +71,6 @@ class Hook_Profiles_Tabs_Edit_title
 
 		return array($title,$fields,$text,$javascript,$order);
 	}
-
 }
 
 

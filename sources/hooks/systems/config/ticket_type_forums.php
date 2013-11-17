@@ -20,7 +20,6 @@
 
 class Hook_config_ticket_type_forums
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_ticket_type_forums
 	{
 		return '0';
 	}
-
 }
 
 

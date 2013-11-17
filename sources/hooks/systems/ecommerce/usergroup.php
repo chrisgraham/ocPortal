@@ -122,7 +122,6 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
  */
 class Hook_usergroup
 {
-
 	/**
 	 * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
 	 *

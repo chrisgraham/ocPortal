@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_ocf_forum
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_ocf_forum
 			array('social','menu/social/forum/forums',array('forumview',array(),get_module_zone('forumview')),do_lang_tempcode('SECTION_FORUMS')),
 		);
 	}
-
 }
 
 

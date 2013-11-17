@@ -15,7 +15,6 @@
 
 class Hook_content_meta_aware_chat
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -82,5 +81,4 @@ class Hook_content_meta_aware_chat
 			'actionlog_regexp'=>'\w+_CHAT',
 		);
 	}
-
 }

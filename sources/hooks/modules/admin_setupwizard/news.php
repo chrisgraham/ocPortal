@@ -20,7 +20,6 @@
 
 class Hook_sw_news
 {
-
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
@@ -113,7 +112,6 @@ class Hook_sw_news
 	{
 		return array(array('main_news'=>array('NO','YES')),array('side_news_archive'=>array('PANEL_NONE','PANEL_NONE'),'side_news_categories'=>array('PANEL_RIGHT','PANEL_RIGHT'),'side_news'=>array('PANEL_NONE','PANEL_NONE')));
 	}
-
 }
 
 

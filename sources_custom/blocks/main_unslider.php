@@ -98,5 +98,4 @@ class Block_main_unslider
 			'BGCOLORS'=>$bgcolors,
 		));
 	}
-
 }

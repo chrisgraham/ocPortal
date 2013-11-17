@@ -94,6 +94,5 @@ class Hook_occle_command_find_entry_points
 			return array('',do_template('OCCLE_ENTRY_POINTS',array('_GUID'=>'afaf0b0451ccbdae399dd56e39359c0e','ENTRY_POINTS'=>$entry_points)),'','');
 		}
 	}
-
 }
 

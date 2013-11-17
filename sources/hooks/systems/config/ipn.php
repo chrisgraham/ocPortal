@@ -20,7 +20,6 @@
 
 class Hook_config_ipn
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_ipn
 	{
 		return get_option('staff_address');
 	}
-
 }
 
 

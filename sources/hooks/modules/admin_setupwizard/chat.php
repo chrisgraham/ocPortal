@@ -20,7 +20,6 @@
 
 class Hook_sw_chat
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_chat
 
 		return array(array(),array('side_shoutbox'=>array('PANEL_NONE','PANEL_RIGHT')));
 	}
-
 }
 
 

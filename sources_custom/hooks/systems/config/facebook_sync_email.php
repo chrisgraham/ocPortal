@@ -15,7 +15,6 @@
 
 class Hook_config_facebook_sync_email
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_facebook_sync_email
 	{
 		return '0';
 	}
-
 }
 
 

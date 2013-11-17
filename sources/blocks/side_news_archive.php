@@ -20,7 +20,6 @@
 
 class Block_side_news_archive
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -171,5 +170,4 @@ class Block_side_news_archive
 
 		return do_template('BLOCK_SIDE_NEWS_ARCHIVE',array('_GUID'=>'10d6267d943ad77a4025a4e286c41ee7','YEARS'=>$years,'TITLE'=>$title));
 	}
-
 }

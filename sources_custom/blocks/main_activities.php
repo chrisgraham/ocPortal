@@ -15,7 +15,6 @@
 
 class Block_main_activities
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -201,7 +200,6 @@ class Block_main_activities
 			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
-
 }
 
 

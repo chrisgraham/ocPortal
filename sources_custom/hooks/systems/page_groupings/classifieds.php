@@ -14,7 +14,6 @@
  */
 class Hook_page_groupings_classifieds
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -29,7 +28,6 @@ class Hook_page_groupings_classifieds
 			array('site_meta','menu/classifieds',array('classifieds',array(),get_module_zone('classifieds')),do_lang_tempcode('classifieds:CLASSIFIED_ADVERTS')),
 		);
 	}
-
 }
 
 

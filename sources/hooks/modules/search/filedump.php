@@ -20,7 +20,6 @@
 
 class Hook_search_filedump
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -183,7 +182,6 @@ class Hook_search_filedump
 
 		return $out;
 	}
-
 }
 
 

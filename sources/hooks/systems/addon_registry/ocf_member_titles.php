@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_member_titles
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -102,5 +101,4 @@ class Hook_addon_registry_ocf_member_titles
 			'sources/hooks/systems/config/max_member_title_length.php',
 		);
 	}
-
 }

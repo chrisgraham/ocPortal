@@ -20,7 +20,6 @@
 
 class Hook_config_ldap_is_windows
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_ldap_is_windows
 	{
 		return (DIRECTORY_SEPARATOR=='/')?'0':'1';
 	}
-
 }
 
 

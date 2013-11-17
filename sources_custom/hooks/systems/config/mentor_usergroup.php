@@ -15,7 +15,6 @@
 
 class Hook_config_mentor_usergroup
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_mentor_usergroup
 	{
 		return do_lang('SUPER_MEMBERS');
 	}
-
 }
 
 

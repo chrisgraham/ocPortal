@@ -20,7 +20,6 @@
 
 class Hook_orphaned_uploads
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -57,7 +56,6 @@ class Hook_orphaned_uploads
 		require_code('tasks');
 		return call_user_func_array__long_task(do_lang('ORPHANED_UPLOADS'),NULL,'find_orphaned_uploads');
 	}
-
 }
 
 

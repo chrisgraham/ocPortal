@@ -94,7 +94,6 @@ class Hook_rss_tickets
 		require_lang('tickets');
 		return array($content,do_lang('SUPPORT_TICKETS'));
 	}
-
 }
 
 

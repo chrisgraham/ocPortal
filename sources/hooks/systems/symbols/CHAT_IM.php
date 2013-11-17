@@ -20,7 +20,6 @@
 
 class Hook_symbol_CHAT_IM
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -70,5 +69,4 @@ class Hook_symbol_CHAT_IM
 
 		return $value;
 	}
-
 }

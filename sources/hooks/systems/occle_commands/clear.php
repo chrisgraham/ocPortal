@@ -33,6 +33,5 @@ class Hook_occle_command_clear
 		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('clear',array('h'),array()),'','');
 		else return array('clear_cl();','',do_lang('SUCCESS'),'');
 	}
-
 }
 

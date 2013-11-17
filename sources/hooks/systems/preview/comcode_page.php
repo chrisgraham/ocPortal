@@ -20,7 +20,6 @@
 
 class Hook_Preview_comcode_page
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -31,7 +30,6 @@ class Hook_Preview_comcode_page
 		$applies=(get_param('page','')=='cms_comcode_pages');
 		return array($applies,'comcode_page',false,array('post'));
 	}
-
 }
 
 

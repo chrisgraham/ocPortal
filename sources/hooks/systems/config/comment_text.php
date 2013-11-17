@@ -20,7 +20,6 @@
 
 class Hook_config_comment_text
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_comment_text
 	{
 		return has_no_forum()?NULL:static_evaluate_tempcode(do_template('COMMENTS_DEFAULT_TEXT'));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_match_key_permissions
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -101,5 +100,4 @@ class Hook_addon_registry_match_key_permissions
 			'sources/hooks/systems/addon_registry/match_key_permissions.php',
 		);
 	}
-
 }

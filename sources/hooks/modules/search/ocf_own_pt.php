@@ -20,7 +20,6 @@
 
 class Hook_search_ocf_own_pt
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -159,7 +158,6 @@ class Hook_search_ocf_own_pt
 		require_code('ocf_posts2');
 		return render_post_box($row);
 	}
-
 }
 
 

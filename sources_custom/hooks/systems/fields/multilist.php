@@ -15,7 +15,6 @@
 
 class Hook_fields_multilist
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -170,7 +169,6 @@ class Hook_fields_multilist
 		}
 		return implode("\n",$_POST[$tmp_name]);
 	}
-
 }
 
 

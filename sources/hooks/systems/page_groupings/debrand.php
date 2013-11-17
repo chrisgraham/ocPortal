@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_debrand
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -34,7 +33,6 @@ class Hook_page_groupings_debrand
 			array('style','menu/adminzone/style/debrand',array('admin_debrand',array('type'=>'misc'),get_module_zone('admin_debrand')),do_lang_tempcode('debrand:SUPER_DEBRAND'),'debrand:DOC_SUPERDEBRAND'),
 		);
 	}
-
 }
 
 

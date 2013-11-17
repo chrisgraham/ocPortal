@@ -20,7 +20,6 @@
 
 class Hook_sw_polls
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_polls
 
 		return array(array('main_poll'=>array('NO','YES_CELL')),array());
 	}
-
 }
 
 

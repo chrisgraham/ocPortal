@@ -20,7 +20,6 @@
 
 class Hook_admin_import_types_points
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -32,7 +31,6 @@ class Hook_admin_import_types_points
 			'points_gifts_and_charges'=>'POINTS',
 		);
 	}
-
 }
 
 

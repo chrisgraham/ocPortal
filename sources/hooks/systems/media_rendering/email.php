@@ -86,5 +86,4 @@ class Hook_media_rendering_email
 
 		return new ocp_tempcode();
 	}
-
 }

@@ -20,7 +20,6 @@
 
 class Hook_config_delete_trashed_pts
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_delete_trashed_pts
 	{
 		return '0';
 	}
-
 }
 
 

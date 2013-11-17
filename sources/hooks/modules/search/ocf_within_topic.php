@@ -20,7 +20,6 @@
 
 class Hook_search_ocf_within_topic
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -161,7 +160,6 @@ class Hook_search_ocf_within_topic
 		require_code('ocf_posts2');
 		return render_post_box($row,false,false);
 	}
-
 }
 
 

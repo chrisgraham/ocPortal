@@ -99,5 +99,4 @@ class Hook_occle_command_themewizard_find_color
 			return array('','',$results_printed,'');
 		}
 	}
-
 }

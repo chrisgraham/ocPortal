@@ -15,7 +15,6 @@
 
 class Hook_classifieds
 {
-
 	/**
 	 * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
 	 *
@@ -102,7 +101,6 @@ class Hook_classifieds
 
 		return strval($entry_id);
 	}
-
 }
 
 /**

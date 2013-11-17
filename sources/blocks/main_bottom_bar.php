@@ -20,7 +20,6 @@
 
 class Block_main_bottom_bar
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -151,6 +150,5 @@ class Block_main_bottom_bar
 			'_NUM_MEMBERS'=>strval($num_members),
 		));
 	}
-
 }
 

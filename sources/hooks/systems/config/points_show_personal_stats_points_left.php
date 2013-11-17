@@ -20,7 +20,6 @@
 
 class Hook_config_points_show_personal_stats_points_left
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_points_show_personal_stats_points_left
 	{
 		return '0';
 	}
-
 }
 
 

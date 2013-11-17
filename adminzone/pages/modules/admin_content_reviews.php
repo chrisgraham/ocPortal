@@ -23,7 +23,6 @@
  */
 class Module_admin_content_reviews
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -175,6 +174,5 @@ class Module_admin_content_reviews
 
 		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'c8574404597d25e3c027766c74d1a008','TITLE'=>$_title,'SECTIONS'=>$out));
 	}
-
 }
 

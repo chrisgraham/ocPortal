@@ -29,7 +29,6 @@ You also need:
 
 class Module_sites
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -471,5 +470,4 @@ class Module_sites
 
 		return do_template('INFORM_SCREEN',array('_GUID'=>'bedc8955800508d6b91515e44e8a58ef','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('MO_NEW_SITE',escape_html($codename))));
 	}
-
 }

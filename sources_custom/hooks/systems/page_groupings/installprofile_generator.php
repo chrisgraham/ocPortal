@@ -14,7 +14,6 @@
  */
 class Hook_page_groupings_installprofile_generator
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -28,7 +27,6 @@ class Hook_page_groupings_installprofile_generator
 			array('setup','menu/_generic_admin/tool',array('installprofile_generator',array(),get_page_zone('installprofile_generator')),make_string_tempcode('Export installprofile')),
 		);
 	}
-
 }
 
 

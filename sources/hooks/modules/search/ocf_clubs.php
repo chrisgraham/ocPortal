@@ -20,7 +20,6 @@
 
 class Hook_search_ocf_clubs
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -147,7 +146,6 @@ class Hook_search_ocf_clubs
 			'URL'=>$url,
 		));
 	}
-
 }
 
 

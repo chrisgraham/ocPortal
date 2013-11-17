@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_blog
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -75,5 +74,4 @@ class Hook_Profiles_Tabs_blog
 
 		return array($title,$content,$order);
 	}
-
 }

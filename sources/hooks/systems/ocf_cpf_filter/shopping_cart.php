@@ -20,7 +20,6 @@
 
 class Hook_ocf_cpf_filter_shopping_cart
 {
-
 	/**
 	 * Find which special CPF's to enable.
 	 *

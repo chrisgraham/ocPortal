@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_stats
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_stats
 			array('audit','menu/adminzone/audit/statistics/statistics',array('admin_stats',array('type'=>'misc'),get_module_zone('admin_stats')),do_lang_tempcode('stats:STATISTICS'),'stats:DOC_STATISTICS'),
 		);
 	}
-
 }
 
 

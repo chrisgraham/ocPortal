@@ -20,7 +20,6 @@
 
 class Hook_checklist_usergroup_membership
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -47,7 +46,6 @@ class Hook_checklist_usergroup_membership
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'cccf866e2ea104ac41685a8756e182f8','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('USERGROUP_APPLICATIONS'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($cnt)))));
 		return array(array($tpl,NULL,$cnt,NULL));
 	}
-
 }
 
 

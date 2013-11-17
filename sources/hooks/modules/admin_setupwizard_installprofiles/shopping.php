@@ -20,7 +20,6 @@
 
 class Hook_admin_setupwizard_installprofiles_shopping
 {
-
 	/**
 	 * Get info about the installprofile
 	 *
@@ -114,5 +113,4 @@ class Hook_admin_setupwizard_installprofiles_shopping
 	function install_code()
 	{
 	}
-
 }

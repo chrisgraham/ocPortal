@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_clubs
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -105,5 +104,4 @@ class Hook_addon_registry_ocf_clubs
 			'sources/hooks/systems/config/club_forum_parent_forum.php',
 		);
 	}
-
 }

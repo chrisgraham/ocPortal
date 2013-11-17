@@ -23,7 +23,6 @@
  */
 class Module_admin_occle
 {
-
 	/**
 	 * Standard modular info function.
 	 *

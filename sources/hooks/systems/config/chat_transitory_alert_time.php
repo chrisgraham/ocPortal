@@ -20,7 +20,6 @@
 
 class Hook_config_chat_transitory_alert_time
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_chat_transitory_alert_time
 	{
 		return '7000';
 	}
-
 }
 
 

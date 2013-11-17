@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_ocportalcom
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -30,7 +29,6 @@ class Hook_page_groupings_ocportalcom
 			array('pages','menu/_generic_spare/page',array('sites',array('type'=>'misc'),get_module_zone('sites')),make_string_tempcode('ocPortal.com')),
 		);
 	}
-
 }
 
 

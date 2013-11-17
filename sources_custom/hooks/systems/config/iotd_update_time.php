@@ -15,7 +15,6 @@
 
 class Hook_config_iotd_update_time
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_iotd_update_time
 	{
 		return '24';
 	}
-
 }
 
 

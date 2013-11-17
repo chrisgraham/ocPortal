@@ -20,7 +20,6 @@
 
 class Hook_config_probation_usergroup
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_probation_usergroup
 	{
 		return (get_forum_type()!='ocf')?NULL:do_lang('PROBATION');
 	}
-
 }
 
 

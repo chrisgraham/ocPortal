@@ -20,7 +20,6 @@
 
 class Hook_Preview_setupwizard_blocks
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -64,5 +63,4 @@ class Hook_Preview_setupwizard_blocks
 
 		return array($preview,NULL);
 	}
-
 }

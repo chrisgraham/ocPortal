@@ -20,7 +20,6 @@
 
 class Hook_main_custom_gfx_rollover_button
 {
-
 	/**
 	 * Standard modular run function. Creates custom graphics from parameters.
 	 *
@@ -60,7 +59,6 @@ class Hook_main_custom_gfx_rollover_button
 		if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($ret);
 		return make_string_tempcode($ret);
 	}
-
 }
 
 

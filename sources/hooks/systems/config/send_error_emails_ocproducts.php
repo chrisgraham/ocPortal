@@ -20,7 +20,6 @@
 
 class Hook_config_send_error_emails_ocproducts
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_send_error_emails_ocproducts
 	{
 		return '1';
 	}
-
 }
 
 

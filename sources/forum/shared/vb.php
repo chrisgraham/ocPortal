@@ -916,7 +916,6 @@ class forum_driver_vb_shared extends forum_driver_base
 		$row=$this->get_member_row($member);
 		return is_null($row)?NULL:$row[$field];
 	}
-
 }
 
 

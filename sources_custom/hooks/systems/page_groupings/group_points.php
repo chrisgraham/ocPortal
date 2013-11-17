@@ -14,7 +14,6 @@
  */
 class Hook_page_groupings_group_points
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -28,7 +27,6 @@ class Hook_page_groupings_group_points
 			array('setup','menu/social/pointstore',array('group_points',array('type'=>'misc'),get_page_zone('group_points')),make_string_tempcode('Usergroup point assignments')),
 		);
 	}
-
 }
 
 

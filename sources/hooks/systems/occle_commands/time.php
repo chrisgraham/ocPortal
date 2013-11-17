@@ -33,6 +33,5 @@ class Hook_occle_command_time
 		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('time',array('h'),array()),'','');
 		else return array('','',strval(time()),'');
 	}
-
 }
 

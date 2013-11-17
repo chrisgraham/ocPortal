@@ -20,7 +20,6 @@
 
 class Hook_im_friends_rejig
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -54,5 +53,4 @@ class Hook_im_friends_rejig
 
 		return show_im_contacts($member_id,$simpler,$max);
 	}
-
 }

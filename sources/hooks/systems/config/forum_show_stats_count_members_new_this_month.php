@@ -20,7 +20,6 @@
 
 class Hook_config_forum_show_stats_count_members_new_this_month
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_forum_show_stats_count_members_new_this_month
 	{
 		return ((get_forum_type()=='ocf') && (!has_no_forum()) && (addon_installed('stats_block')))?'0':NULL;
 	}
-
 }
 
 

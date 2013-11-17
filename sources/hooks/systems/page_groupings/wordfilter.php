@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_wordfilter
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -34,7 +33,6 @@ class Hook_page_groupings_wordfilter
 			array('security','menu/adminzone/security/wordfilter',array('admin_wordfilter',array('type'=>'misc'),get_module_zone('admin_wordfilter')),do_lang_tempcode('wordfilter:WORD_FILTER'),'wordfilter:DOC_WORDFILTER'),
 		);
 	}
-
 }
 
 

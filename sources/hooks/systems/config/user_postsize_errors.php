@@ -20,7 +20,6 @@
 
 class Hook_config_user_postsize_errors
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_user_postsize_errors
 	{
 		return '1';
 	}
-
 }
 
 

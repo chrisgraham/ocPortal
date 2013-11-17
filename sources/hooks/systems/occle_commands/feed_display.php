@@ -81,6 +81,5 @@ class Hook_occle_command_feed_display
 			return array('',do_template('OCCLE_RSS',array('_GUID'=>'c01334f868079f9e0c2dba751550aa40','TITLE'=>$rss->gleamed_feed['title'],'CONTENT'=>$content)),'','');
 		}
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Block_main_rss
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -215,7 +214,6 @@ class Block_main_rss
 
 		return do_template('BLOCK_MAIN_RSS',array('_GUID'=>'6c9c1287abff88fda881e3e25ef7b296','FEED_URL'=>$url,'TITLE'=>$rss->gleamed_feed['title'],'COPYRIGHT'=>$rss->gleamed_feed['copyright'],'AUTHOR'=>$author,'CONTENT'=>$content));
 	}
-
 }
 
 /**

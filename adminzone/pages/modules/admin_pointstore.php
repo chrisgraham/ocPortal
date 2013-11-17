@@ -23,7 +23,6 @@
  */
 class Module_admin_pointstore
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -292,7 +291,6 @@ class Module_admin_pointstore
 		$url=build_url(array('page'=>'_SELF','type'=>'p'),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

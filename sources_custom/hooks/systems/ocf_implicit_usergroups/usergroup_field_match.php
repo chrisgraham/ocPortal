@@ -14,7 +14,6 @@
 
 class Hook_implicit_usergroups_usergroup_field_match
 {
-
 	function _get_structure()
 	{
 		if (!function_exists('get_translated_text')) return array();
@@ -152,7 +151,6 @@ class Hook_implicit_usergroups_usergroup_field_match
 
 		return false;
 	}
-
 }
 
 

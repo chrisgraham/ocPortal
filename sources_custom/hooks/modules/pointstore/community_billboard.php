@@ -15,7 +15,6 @@
 
 class Hook_pointstore_community_billboard
 {
-
 	/**
 	 * Standard pointstore item initialisation function.
 	 */
@@ -178,7 +177,6 @@ class Hook_pointstore_community_billboard
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('ORDER_COMMUNITY_BILLBOARD_DONE'));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_ticket_text
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_ticket_text
 	{
 		return do_lang('tickets:NEW_TICKET_WELCOME');
 	}
-
 }
 
 

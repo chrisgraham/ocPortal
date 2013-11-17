@@ -14,7 +14,6 @@
 
 class Block_main_google_map_users
 {
-
 	/**
 	 * Standard modular info function.
 	 *

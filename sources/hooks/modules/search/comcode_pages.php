@@ -20,7 +20,6 @@
 
 class Hook_search_comcode_pages
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -310,7 +309,6 @@ class Hook_search_comcode_pages
 			'GIVE_CONTEXT'=>true,
 		));
 	}
-
 }
 
 

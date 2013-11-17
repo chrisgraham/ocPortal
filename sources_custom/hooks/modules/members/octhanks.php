@@ -14,7 +14,6 @@
 
 class Hook_members_octhanks
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -27,7 +26,6 @@ class Hook_members_octhanks
 		$num_replies=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(DISTINCT p_topic_id)',array('p_poster'=>$member_id))-$topics_opened;
 		return array('Forum contributions'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id,true).' has opened '.integer_format($topics_opened).' '.(($topics_opened==1)?'topic':'topics').' and replied to '.integer_format($num_replies).' '.(($num_replies==1)?'topic':'topics').' by other people.');
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_one_per_email_address
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_one_per_email_address
 	{
 		return '1';
 	}
-
 }
 
 

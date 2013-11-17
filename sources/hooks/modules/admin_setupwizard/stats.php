@@ -20,7 +20,6 @@
 
 class Hook_sw_stats
 {
-
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
@@ -63,7 +62,6 @@ class Hook_sw_stats
 
 		set_option('stats_store_time',post_param('stats_store_time'));
 	}
-
 }
 
 

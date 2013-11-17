@@ -20,7 +20,6 @@
 
 class Hook_config_search_results_per_page
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_search_results_per_page
 	{
 		return '10';
 	}
-
 }
 
 

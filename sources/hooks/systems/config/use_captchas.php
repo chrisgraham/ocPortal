@@ -20,7 +20,6 @@
 
 class Hook_config_use_captchas
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_use_captchas
 	{
 		return '1';
 	}
-
 }
 
 

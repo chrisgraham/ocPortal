@@ -20,7 +20,6 @@
 
 class Hook_cron_sitemap
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -42,7 +41,6 @@ class Hook_cron_sitemap
 		require_code('tasks');
 		call_user_func_array__long_task(do_lang('GENERATE_SITEMAP'),get_screen_title('GENERATE_SITEMAP'),'sitemap',array(),false,false,false);
 	}
-
 }
 
 

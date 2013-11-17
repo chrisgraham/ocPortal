@@ -20,7 +20,6 @@
 
 class Hook_fields_short_trans_multi
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -138,7 +137,6 @@ class Hook_fields_short_trans_multi
 		while ($_value!==NULL);
 		return $value;
 	}
-
 }
 
 

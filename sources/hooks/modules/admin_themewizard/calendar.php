@@ -20,7 +20,6 @@
 
 class Hook_admin_themewizard_calendar
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -30,7 +29,6 @@ class Hook_admin_themewizard_calendar
 	{
 		return array(array('calendar/priority*',),array());
 	}
-
 }
 
 

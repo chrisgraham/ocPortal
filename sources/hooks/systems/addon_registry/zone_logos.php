@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_zone_logos
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -100,5 +99,4 @@ class Hook_addon_registry_zone_logos
 			'themes/default/images/EN/logo/cms-logo.png',
 		);
 	}
-
 }

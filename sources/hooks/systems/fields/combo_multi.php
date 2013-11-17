@@ -20,7 +20,6 @@
 
 class Hook_fields_combo_multi
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -183,7 +182,6 @@ class Hook_fields_combo_multi
 
 		return $value;
 	}
-
 }
 
 

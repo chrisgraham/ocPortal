@@ -89,5 +89,4 @@ class Hook_media_rendering_video_general
 	{
 		return do_template('MEDIA_VIDEO_GENERAL',array('_GUID'=>'cda7bc497e1d968557e8026c2d0fc6e4','HOOK'=>'video_general')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
-
 }

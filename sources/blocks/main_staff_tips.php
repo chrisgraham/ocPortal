@@ -20,7 +20,6 @@
 
 class Block_main_staff_tips
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -141,7 +140,6 @@ class Block_main_staff_tips
 			'COUNT'=>integer_format($count),
 		));
 	}
-
 }
 
 

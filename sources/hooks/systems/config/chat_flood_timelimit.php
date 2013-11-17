@@ -20,7 +20,6 @@
 
 class Hook_config_chat_flood_timelimit
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_chat_flood_timelimit
 	{
 		return '5';
 	}
-
 }
 
 

@@ -18,7 +18,6 @@
  */
 class Module_admin_unvalidated
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -141,7 +140,6 @@ class Module_admin_unvalidated
 
 		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'fd41829ff0848f23d1f428a840eeb72a','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('UNVALIDATED_PAGE_TEXT'),'SECTIONS'=>$out));
 	}
-
 }
 
 

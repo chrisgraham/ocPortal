@@ -101,6 +101,5 @@ class Hook_occle_command_continue_import
 
 		return array('','',do_lang('SUCCESS'),'');
 	}
-
 }
 

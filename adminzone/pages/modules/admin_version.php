@@ -23,7 +23,6 @@
  */
 class Module_admin_version
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -618,7 +617,6 @@ class Module_admin_version
 		// This used to be a real module, before ocPortal was free
 		return new ocp_tempcode();
 	}
-
 }
 
 

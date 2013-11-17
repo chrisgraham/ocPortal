@@ -20,7 +20,6 @@
 
 class Hook_config_allow_email_from_staff_disable
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_allow_email_from_staff_disable
 	{
 		return '0';
 	}
-
 }
 
 

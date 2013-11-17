@@ -20,7 +20,6 @@
 
 class Hook_admin_stats_search
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -120,7 +119,6 @@ class Hook_admin_stats_search
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
-
 }
 
 

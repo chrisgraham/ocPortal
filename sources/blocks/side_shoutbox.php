@@ -20,7 +20,6 @@
 
 class Block_side_shoutbox
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -144,7 +143,6 @@ class Block_side_shoutbox
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
 		));
 	}
-
 }
 
 

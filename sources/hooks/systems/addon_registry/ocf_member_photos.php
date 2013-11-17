@@ -139,5 +139,4 @@ class Hook_addon_registry_ocf_member_photos
 			)), NULL, '', true)
 		);
 	}
-
 }

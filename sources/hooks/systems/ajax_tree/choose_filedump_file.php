@@ -20,7 +20,6 @@
 
 class Hook_choose_filedump_file
 {
-
 	/**
 	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
 	 *
@@ -130,7 +129,6 @@ class Hook_choose_filedump_file
 
 		return make_string_tempcode($out);
 	}
-
 }
 
 

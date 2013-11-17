@@ -20,7 +20,6 @@
 
 class Hook_config_chat_default_post_colour
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_chat_default_post_colour
 	{
 		return 'inherit';
 	}
-
 }
 
 

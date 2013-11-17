@@ -15,7 +15,6 @@
 
 class Hook_members_classifieds
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -35,6 +34,5 @@ class Hook_members_classifieds
 
 		return $result;
 	}
-
 }
 

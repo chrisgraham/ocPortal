@@ -20,7 +20,6 @@
 
 class Hook_config_galleries_default_sort_order
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_galleries_default_sort_order
 	{
 		return 'add_date DESC';
 	}
-
 }
 
 

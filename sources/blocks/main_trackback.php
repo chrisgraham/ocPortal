@@ -20,7 +20,6 @@
 
 class Block_main_trackback
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -60,7 +59,6 @@ class Block_main_trackback
 
 		return get_trackbacks($map['page'],$id,get_option('is_on_trackbacks')=='1');
 	}
-
 }
 
 

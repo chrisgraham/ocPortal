@@ -20,7 +20,6 @@
 
 class Hook_config_has_low_memory_limit
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_has_low_memory_limit
 	{
 		return ((ini_get('memory_limit')=='-1' || ini_get('memory_limit')=='0' || ini_get('memory_limit')=='')?'0':NULL);
 	}
-
 }
 
 

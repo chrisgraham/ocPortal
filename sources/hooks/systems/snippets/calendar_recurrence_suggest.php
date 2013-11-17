@@ -20,7 +20,6 @@
 
 class Hook_calendar_recurrence_suggest
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -42,6 +41,5 @@ class Hook_calendar_recurrence_suggest
 
 		return monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_spec_type);
 	}
-
 }
 

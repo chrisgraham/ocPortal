@@ -20,7 +20,6 @@
 
 class Block_main_awards
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -156,7 +155,6 @@ class Block_main_awards
 			'ARCHIVE_URL'=>$archive_url,
 		));
 	}
-
 }
 
 

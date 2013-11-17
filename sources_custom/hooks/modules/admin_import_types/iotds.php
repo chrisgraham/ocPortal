@@ -15,7 +15,6 @@
 
 class Hook_admin_import_types_iotds
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -27,7 +26,6 @@ class Hook_admin_import_types_iotds
 			'iotds'=>'IOTD_ARCHIVE',
 		);
 	}
-
 }
 
 

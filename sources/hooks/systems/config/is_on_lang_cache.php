@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_lang_cache
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_is_on_lang_cache
 	{
 		return '1';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_fields_guid
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -135,7 +134,6 @@ class Hook_fields_guid
 		require_code('global4');
 		return generate_guid();
 	}
-
 }
 
 

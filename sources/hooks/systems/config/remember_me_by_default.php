@@ -20,7 +20,6 @@
 
 class Hook_config_remember_me_by_default
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_remember_me_by_default
 	{
 		return '0';
 	}
-
 }
 
 

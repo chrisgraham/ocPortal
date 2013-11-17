@@ -40,5 +40,4 @@ class Hook_occle_command_check_perms
 			return array('',$result,'','');
 		}
 	}
-
 }

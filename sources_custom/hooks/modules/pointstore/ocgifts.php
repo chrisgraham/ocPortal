@@ -15,7 +15,6 @@
 
 class Hook_pointstore_ocgifts
 {
-
 	/**
 	 * Standard pointstore item initialisation function.
 	 */

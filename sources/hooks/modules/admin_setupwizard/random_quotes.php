@@ -20,7 +20,6 @@
 
 class Hook_sw_random_quotes
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_random_quotes
 
 		return array(array('main_quotes'=>array('YES','NO')),array());
 	}
-
 }
 
 

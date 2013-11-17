@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_realtime_rain
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_realtime_rain
 			array('audit','menu/adminzone/audit/realtime_rain',array('admin_realtime_rain',array('type'=>'misc'),get_module_zone('admin_realtime_rain')),do_lang_tempcode('realtime_rain:_REALTIME_RAIN'),'realtime_rain:DOC_REALTIME_RAIN'),
 		);
 	}
-
 }
 
 

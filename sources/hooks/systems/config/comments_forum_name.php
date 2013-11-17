@@ -20,7 +20,6 @@
 
 class Hook_config_comments_forum_name
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -52,7 +51,6 @@ class Hook_config_comments_forum_name
 	{
 		return has_no_forum()?NULL:do_lang('COMMENT_FORUM_NAME','','','',get_site_default_lang());
 	}
-
 }
 
 

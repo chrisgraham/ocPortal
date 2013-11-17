@@ -20,7 +20,6 @@
 
 class Hook_checklist_backup
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -57,7 +56,6 @@ class Hook_checklist_backup
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'432685ec6c9f7548ce8b488b6ce00030','CONFIG_URL'=>$config_url,'URL'=>$url,'STATUS'=>$_status,'TASK'=>do_lang_tempcode('BACKUP'),'INFO'=>$info));
 		return array(array($tpl,$seconds_due_in,NULL,'backup_time'));
 	}
-
 }
 
 

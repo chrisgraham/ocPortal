@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_search
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,5 +35,4 @@ class Hook_page_groupings_search
 			array('site_meta','menu/site_meta/search',array('search',array(),get_module_zone('search')),do_lang_tempcode('search:SEARCH')),
 		);
 	}
-
 }

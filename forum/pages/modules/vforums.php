@@ -23,7 +23,6 @@
  */
 class Module_vforums
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -401,7 +400,6 @@ class Module_vforums
 		if (!is_null($extra_tpl_map)) $tpl_map+=$extra_tpl_map;
 		return do_template('OCF_FORUM',$tpl_map);
 	}
-
 }
 
 

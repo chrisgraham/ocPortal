@@ -20,7 +20,6 @@
 
 class Hook_Preview_setupwizard
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -48,5 +47,4 @@ class Hook_Preview_setupwizard
 
 		return array($preview,NULL);
 	}
-
 }

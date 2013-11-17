@@ -20,7 +20,6 @@
 
 class Hook_checklist_blog
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -69,7 +68,6 @@ class Hook_checklist_blog
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'a75d4a165aa5e16ad3aa06d2e0bab5db','CONFIG_URL'=>$config_url,'URL'=>$url,'STATUS'=>$_status,'TASK'=>do_lang_tempcode('BLOG'),'INFO'=>$info));
 		return array(array($tpl,$seconds_due_in,NULL,'blog_update_time'));
 	}
-
 }
 
 

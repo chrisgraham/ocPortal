@@ -22,7 +22,6 @@
 
 class Block_main_staff_website_monitoring
 {
-
 	/**
 	 * Standard modular info function.
 	 *

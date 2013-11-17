@@ -49,7 +49,6 @@ function list_to_map_2($map_value,$list)
  */
 class Hook_criticise_mysql_fields
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -230,5 +229,4 @@ class Hook_criticise_mysql_fields
 
 		return do_lang_tempcode('MYSQL_QUERY_CHANGES_MADE',escape_html($sql));
 	}
-
 }

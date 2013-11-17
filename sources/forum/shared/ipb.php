@@ -621,7 +621,6 @@ class forum_driver_ipb_shared extends forum_driver_base
 		$row=$this->get_member_row($member);
 		return is_null($row)?NULL:(array_key_exists($field,$row)?$row[$field]:NULL);
 	}
-
 }
 
 

@@ -18,7 +18,6 @@
  */
 class Module_booking
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -593,7 +592,6 @@ class Module_booking
 		$customer_name=post_param('customer_name',is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
 		return inform_screen($this->title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($customer_name)));
 	}
-
 }
 
 /*

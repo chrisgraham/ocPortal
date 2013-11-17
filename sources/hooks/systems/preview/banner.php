@@ -20,7 +20,6 @@
 
 class Hook_Preview_banner
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -78,5 +77,4 @@ class Hook_Preview_banner
 
 		return array($preview,NULL);
 	}
-
 }

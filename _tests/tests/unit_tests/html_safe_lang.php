@@ -163,6 +163,5 @@ class html_safe_lang_test_set extends ocp_test_case
 		if (!isset($LANGUAGE_CURRENT[$matches[1]])) $LANGUAGE_CURRENT[$matches[1]]=array();
 		$LANGUAGE_CURRENT[$matches[1]][]=$FILE2;
 	}
-
 }
 

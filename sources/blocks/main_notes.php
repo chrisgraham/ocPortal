@@ -20,7 +20,6 @@
 
 class Block_main_notes
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -81,7 +80,6 @@ class Block_main_notes
 		foreach ($map as $key=>$val) $map_comcode.=' '.$key.'="'.addslashes($val).'"';
 		return do_template('BLOCK_MAIN_NOTES',array('_GUID'=>'f737053505de3bd8ccfe806ec014b8fb','TITLE'=>$title,'BLOCK_NAME'=>'main_notes','MAP'=>$map_comcode,'CONTENTS'=>$contents,'SCROLLS'=>array_key_exists('scrolls',$map) && ($map['scrolls']=='1'),'URL'=>$post_url));
 	}
-
 }
 
 

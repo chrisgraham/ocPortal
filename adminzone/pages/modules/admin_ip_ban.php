@@ -23,7 +23,6 @@
  */
 class Module_admin_ip_ban
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -495,7 +494,6 @@ class Module_admin_ip_ban
 
 		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

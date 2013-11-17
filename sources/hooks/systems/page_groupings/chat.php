@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_chat
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -39,7 +38,6 @@ class Hook_page_groupings_chat
 			// userguide_chatcode and popup_blockers are children of help_page
 		);
 	}
-
 }
 
 

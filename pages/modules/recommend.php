@@ -23,7 +23,6 @@
  */
 class Module_recommend
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -737,7 +736,6 @@ class Module_recommend
 
 		return inform_screen($this->title,do_lang_tempcode('RECOMMENDATION_MADE'));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_captcha_wrong
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -35,5 +34,4 @@ class Hook_captcha_wrong
 
 		return make_string_tempcode(strip_html(do_lang('INVALID_SECURITY_CODE_ENTERED')));
 	}
-
 }

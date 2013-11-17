@@ -23,7 +23,6 @@
  */
 class Module_shopping
 {
-
 	/**
 	 * Standard modular info function.
 	 *

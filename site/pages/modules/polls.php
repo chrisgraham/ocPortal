@@ -23,7 +23,6 @@
  */
 class Module_polls
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -337,7 +336,6 @@ class Module_polls
 			'POLL_DETAILS'=>$poll_details,
 		));
 	}
-
 }
 
 

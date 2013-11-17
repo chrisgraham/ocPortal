@@ -20,7 +20,6 @@
 
 class Hook_cron_calendar
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -118,7 +117,6 @@ class Hook_cron_calendar
 		}
 		while (array_key_exists(0,$jobs));
 	}
-
 }
 
 

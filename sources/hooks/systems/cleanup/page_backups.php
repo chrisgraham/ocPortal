@@ -20,7 +20,6 @@
 
 class Hook_page_backups
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -104,7 +103,6 @@ class Hook_page_backups
 			closedir($dh);
 		}
 	}
-
 }
 
 

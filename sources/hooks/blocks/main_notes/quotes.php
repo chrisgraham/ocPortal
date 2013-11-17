@@ -20,7 +20,6 @@
 
 class Hook_notes_quotes
 {
-
 	/**
 	 * Standard modular run function. See if we have to decache based on the passed filename.
 	 *
@@ -30,7 +29,6 @@ class Hook_notes_quotes
 	{
 		if ((strpos($file,'/quotes')!==false) || ($file=='quotes')) decache('main_quotes');
 	}
-
 }
 
 

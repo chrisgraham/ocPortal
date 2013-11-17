@@ -20,7 +20,6 @@
 
 class Hook_occle_fs_extended_config__privilege
 {
-
 	/**
 	 * Standard modular date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
@@ -97,5 +96,4 @@ class Hook_occle_fs_extended_config__privilege
 		}
 		return true;
 	}
-
 }

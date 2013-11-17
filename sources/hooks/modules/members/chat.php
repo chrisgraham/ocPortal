@@ -20,7 +20,6 @@
 
 class Hook_members_chat
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,7 +63,6 @@ class Hook_members_chat
 		}
 		return $modules;
 	}
-
 }
 
 

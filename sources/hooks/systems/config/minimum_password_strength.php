@@ -20,7 +20,6 @@
 
 class Hook_config_minimum_password_strength
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_minimum_password_strength
 	{
 		return (get_forum_type()!='ocf')?NULL:'1';
 	}
-
 }
 
 

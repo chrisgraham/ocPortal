@@ -15,7 +15,6 @@
 
 class Hook_cron_gallery_syndication
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -44,7 +43,6 @@ class Hook_cron_gallery_syndication
 			}
 		}
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_Edit_delete
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -89,7 +88,6 @@ class Hook_Profiles_Tabs_Edit_delete
 
 		return array($title,$fields,$text,$javascript,$order);
 	}
-
 }
 
 

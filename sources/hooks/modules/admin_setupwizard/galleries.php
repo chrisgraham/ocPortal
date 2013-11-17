@@ -20,7 +20,6 @@
 
 class Hook_sw_galleries
 {
-
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
@@ -81,7 +80,6 @@ class Hook_sw_galleries
 
 		return array(array('main_image_fader'=>array('NO','NO')),array('side_galleries'=>array('PANEL_NONE','PANEL_NONE')));
 	}
-
 }
 
 

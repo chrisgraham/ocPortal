@@ -20,7 +20,6 @@
 
 class Hook_rating
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -59,6 +58,5 @@ class Hook_rating
 
 		return do_lang_tempcode('THANKYOU_FOR_RATING_SHORT');
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Block_main_quotes
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -107,7 +106,6 @@ class Block_main_quotes
 		fclose($myfile);
 		return trim($line[$r]);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_points_ADD_NEWS
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_points_ADD_NEWS
 	{
 		return addon_installed('points')?'225':NULL;
 	}
-
 }
 
 

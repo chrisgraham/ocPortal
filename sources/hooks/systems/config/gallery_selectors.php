@@ -20,7 +20,6 @@
 
 class Hook_config_gallery_selectors
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_gallery_selectors
 	{
 		return '12,24,36,64,128';
 	}
-
 }
 
 

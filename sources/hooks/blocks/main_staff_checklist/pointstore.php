@@ -20,7 +20,6 @@
 
 class Hook_checklist_pointstore
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -38,7 +37,6 @@ class Hook_checklist_pointstore
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'f9ec73adbee71411a915004d9d052cfd','URL'=>'','STATUS'=>$status,'TASK'=>urlise_lang(do_lang('NAG_POINTSTORE'),$url),'INFO'=>''));
 		return array(array($tpl,NULL,NULL,NULL));
 	}
-
 }
 
 

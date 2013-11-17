@@ -20,7 +20,6 @@
 
 class Block_main_leader_board
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -185,7 +184,6 @@ class Block_main_leader_board
 		}
 		return $points;
 	}
-
 }
 
 

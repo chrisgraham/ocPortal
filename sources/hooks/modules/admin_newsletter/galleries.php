@@ -20,7 +20,6 @@
 
 class Hook_whats_news_galleries
 {
-
 	/**
 	 * Standard modular run function for newsletter hooks.
 	 *
@@ -102,7 +101,6 @@ class Hook_whats_news_galleries
 
 		return array($new,do_lang('GALLERIES','','','',$lang));
 	}
-
 }
 
 

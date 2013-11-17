@@ -23,7 +23,6 @@
  */
 class Module_contact_member
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -275,7 +274,6 @@ class Module_contact_member
 		$url=get_param('redirect');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

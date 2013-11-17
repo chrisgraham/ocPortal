@@ -245,6 +245,5 @@ class breadcrumb_substitution_loader
 	{
 		$this->text_so_far.=$data;
 	}
-
 }
 

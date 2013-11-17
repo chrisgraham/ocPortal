@@ -20,7 +20,6 @@
 
 class Hook_config_reported_posts_forum
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_reported_posts_forum
 	{
 		return do_lang('ocf:REPORTED_POSTS_FORUM','','','',get_site_default_lang());
 	}
-
 }
 
 

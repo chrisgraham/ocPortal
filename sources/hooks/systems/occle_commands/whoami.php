@@ -39,6 +39,5 @@ class Hook_occle_command_whoami
 			return array('','',$username.' (#'.strval($member_id).')','');
 		}
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_points
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -39,7 +38,6 @@ class Hook_page_groupings_points
 			array('social','menu/social/leader_board',array('leader_board',array(),get_module_zone('leader_board')),do_lang_tempcode('points:POINT_LEADER_BOARD')),
 		);
 	}
-
 }
 
 

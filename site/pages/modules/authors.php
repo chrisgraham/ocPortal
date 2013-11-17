@@ -23,7 +23,6 @@
  */
 class Module_authors
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -323,7 +322,6 @@ class Module_authors
 			'DESCRIPTION'=>$description,
 		));
 	}
-
 }
 
 

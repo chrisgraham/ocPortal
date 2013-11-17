@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_downloads
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -47,7 +46,6 @@ class Hook_unvalidated_downloads
 
 		return $info;
 	}
-
 }
 
 

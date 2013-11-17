@@ -20,7 +20,6 @@
 
 class Hook_config_honeypot_phrase
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_honeypot_phrase
 	{
 		return '';
 	}
-
 }
 
 

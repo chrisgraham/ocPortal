@@ -49,6 +49,5 @@ class Hook_occle_command_rmdir
 			else return array('','','',do_lang('INCOMPLETE_ERROR'));
 		}
 	}
-
 }
 

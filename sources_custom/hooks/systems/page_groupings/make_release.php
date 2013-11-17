@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_make_release
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -32,7 +31,6 @@ class Hook_page_groupings_make_release
 			array('tools','menu/_generic_admin/tool',array('doc_index_build',array(),get_page_zone('doc_index_build')),make_string_tempcode('Doc tools: Make addon tutorial index')),
 		);
 	}
-
 }
 
 

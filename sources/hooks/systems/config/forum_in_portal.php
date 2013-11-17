@@ -20,7 +20,6 @@
 
 class Hook_config_forum_in_portal
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_forum_in_portal
 	{
 		return ((has_no_forum()) || (get_forum_type()=='ocf'))?NULL:'0';
 	}
-
 }
 
 

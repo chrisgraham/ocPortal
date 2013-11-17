@@ -20,7 +20,6 @@
 
 class Hook_members_news
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -44,7 +43,6 @@ class Hook_members_news
 		}
 		return array();
 	}
-
 }
 
 

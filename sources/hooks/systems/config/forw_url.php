@@ -20,7 +20,6 @@
 
 class Hook_config_forw_url
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_forw_url
 	{
 		return 'http://'.get_domain().':2082/frontend/x/mail/addfwd.html';
 	}
-
 }
 
 

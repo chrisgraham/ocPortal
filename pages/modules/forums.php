@@ -23,7 +23,6 @@
  */
 class Module_forums
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -116,7 +115,6 @@ class Module_forums
 		require_code('integrator');
 		return do_template('COMCODE_SURROUND',array('_GUID'=>'4d5a8ce37df94f7d61f1a96f5689b9c0','CLASS'=>'float_surrounder','CONTENT'=>protect_from_escaping(reprocess_url($forums,$base_url))));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_Preview_ocf_post
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -189,7 +188,6 @@ class Hook_Preview_ocf_post
 
 		return array($out,$post_comcode);
 	}
-
 }
 
 

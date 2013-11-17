@@ -30,7 +30,6 @@ To complicate matters further "user time" is not the timestamp that would exist 
  */
 class Module_calendar
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1776,7 +1775,6 @@ class Module_calendar
 		$url=build_url(array('page'=>'_SELF','type'=>'misc','view'=>get_param('view'),'id'=>get_param('id')),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

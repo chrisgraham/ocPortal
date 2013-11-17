@@ -15,7 +15,6 @@
 
 class Hook_cron_password_censor
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -30,5 +29,4 @@ class Hook_cron_password_censor
 			password_censor(true,false);
 		}
 	}
-
 }

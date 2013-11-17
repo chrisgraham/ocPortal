@@ -20,7 +20,6 @@
 
 class Hook_config_js_overlays
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_js_overlays
 	{
 		return '1';
 	}
-
 }
 
 

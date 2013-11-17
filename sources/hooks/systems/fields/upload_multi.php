@@ -20,7 +20,6 @@
 
 class Hook_fields_upload_multi
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -225,7 +224,6 @@ class Hook_fields_upload_multi
 			sync_file(rawurldecode($value));
 		}
 	}
-
 }
 
 

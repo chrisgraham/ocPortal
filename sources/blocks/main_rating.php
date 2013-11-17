@@ -20,7 +20,6 @@
 
 class Block_main_rating
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -82,7 +81,6 @@ class Block_main_rating
 
 		return get_rating_box($self_url,$self_title,'block_main_rating',$id,true);
 	}
-
 }
 
 

@@ -1587,7 +1587,6 @@ class forum_driver_ocf extends forum_driver_base
 		$row=$this->get_member_row($member);
 		return ($row===NULL)?NULL:$row[$field];
 	}
-
 }
 
 

@@ -23,7 +23,6 @@
  */
 class Module_filedump
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -541,7 +540,6 @@ class Module_filedump
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

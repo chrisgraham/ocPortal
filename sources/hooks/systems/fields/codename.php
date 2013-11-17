@@ -20,7 +20,6 @@
 
 class Hook_fields_codename
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -135,7 +134,6 @@ class Hook_fields_codename
 		}
 		return $value;
 	}
-
 }
 
 

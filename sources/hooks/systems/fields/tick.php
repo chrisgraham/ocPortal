@@ -20,7 +20,6 @@
 
 class Hook_fields_tick
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -134,7 +133,6 @@ class Hook_fields_tick
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,($editing && is_null(post_param('tick_on_form__'.$tmp_name,NULL)))?STRING_MAGIC_NULL:'');
 	}
-
 }
 
 

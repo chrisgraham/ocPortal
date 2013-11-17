@@ -20,7 +20,6 @@
 
 class Hook_config_valid_images
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_valid_images
 	{
 		return 'jpg,jpeg,gif,png,ico';
 	}
-
 }
 
 

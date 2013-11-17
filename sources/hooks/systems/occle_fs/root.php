@@ -217,6 +217,5 @@ class Hook_occle_fs_root
 
 		return $path;
 	}
-
 }
 

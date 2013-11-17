@@ -14,7 +14,6 @@
  */
 class Hook_page_groupings_facebook
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -28,7 +27,6 @@ class Hook_page_groupings_facebook
 			array('setup','menu/facebook',array('facebook_oauth',array(),get_page_zone('facebook_oauth')),do_lang_tempcode('facebook:FACEBOOK_SYNDICATION'),'facebook:DOC_FACEBOOK_SYNDICATION'),
 		);
 	}
-
 }
 
 

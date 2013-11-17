@@ -20,7 +20,6 @@
 
 class Hook_occle_fs_extended_config__match_key_message
 {
-
 	/**
 	 * Standard modular date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
@@ -85,5 +84,4 @@ class Hook_occle_fs_extended_config__match_key_message
 		}
 		return true;
 	}
-
 }

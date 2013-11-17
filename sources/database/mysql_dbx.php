@@ -285,7 +285,6 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		}
 		return $out;
 	}
-
 }
 
 

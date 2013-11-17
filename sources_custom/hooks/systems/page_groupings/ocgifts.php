@@ -14,7 +14,6 @@
 
 class Hook_page_groupings_ocgifts
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -30,7 +29,6 @@ class Hook_page_groupings_ocgifts
 			array('setup','menu/ocgifts',array('admin_ocgifts',array(),get_page_zone('admin_ocgifts')),do_lang_tempcode('ocgifts:MANAGE_GIFTS'),'ocgifts:DOC_OCGIFTS'),
 		);
 	}
-
 }
 
 

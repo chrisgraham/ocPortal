@@ -38,7 +38,6 @@ function init__hooks__modules__admin_import__vb3()
  */
 class Hook_vb3
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1314,7 +1313,6 @@ adminlog
 			if ($word!='') add_wordfilter_word($word);
 		}
 	}
-
 }
 
 

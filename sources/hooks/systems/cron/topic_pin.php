@@ -20,7 +20,6 @@
 
 class Hook_cron_topic_pin
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -40,7 +39,6 @@ class Hook_cron_topic_pin
 			set_long_value('last_time_cron_topic_pin',strval($time));
 		}
 	}
-
 }
 
 

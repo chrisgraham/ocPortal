@@ -20,7 +20,6 @@
 
 class Hook_profile_tab
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -60,5 +59,4 @@ class Hook_profile_tab
 		}
 		return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'aae58043638dac785405a42e9578202b','MESSAGE'=>do_lang_tempcode('INTERNAL_ERROR')));
 	}
-
 }

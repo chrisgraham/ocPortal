@@ -20,7 +20,6 @@
 
 class Hook_config_enable_pt_restrict
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_enable_pt_restrict
 	{
 		return '1';
 	}
-
 }
 
 

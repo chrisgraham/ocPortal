@@ -264,7 +264,6 @@ class forum_driver_vb22 extends forum_driver_vb_shared
 		$out['id']=$row['userid'];
 		return $out;
 	}
-
 }
 
 

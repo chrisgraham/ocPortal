@@ -20,7 +20,6 @@
 
 class Block_top_notifications
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -68,7 +67,6 @@ class Block_top_notifications
 			'MAX'=>strval($max),
 		));
 	}
-
 }
 
 

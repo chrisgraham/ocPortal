@@ -20,7 +20,6 @@
 
 class Hook_config_ticket_mail_on
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -53,7 +52,6 @@ class Hook_config_ticket_mail_on
 
 		return '0';
 	}
-
 }
 
 

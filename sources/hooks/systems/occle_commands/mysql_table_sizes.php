@@ -85,6 +85,5 @@ class Hook_occle_command_mysql_table_sizes
 			return array('',$out,'','');
 		}
 	}
-
 }
 

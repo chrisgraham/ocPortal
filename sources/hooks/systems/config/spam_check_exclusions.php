@@ -20,7 +20,6 @@
 
 class Hook_config_spam_check_exclusions
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_spam_check_exclusions
 	{
 		return '127.0.0.1,'.ocp_srv('SERVER_ADDR').'';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_search_quiz
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -138,7 +137,6 @@ class Hook_search_quiz
 		require_code('quiz');
 		return render_quiz_box($row);
 	}
-
 }
 
 

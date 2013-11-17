@@ -20,7 +20,6 @@
 
 class Block_side_rss
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -148,7 +147,6 @@ class Block_side_rss
 
 		return do_template('BLOCK_SIDE_RSS',array('_GUID'=>'fe3319e942d75fedb83e4cf80f80e19f','TICKER'=>$ticker,'FEED_URL'=>$url,'TITLE'=>$rss->gleamed_feed['title'],'CONTENT'=>$content));
 	}
-
 }
 
 /**

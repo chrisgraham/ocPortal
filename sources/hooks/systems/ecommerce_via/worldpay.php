@@ -20,7 +20,6 @@
 
 class Hook_worldpay
 {
-
 	// Requires:
 	//  callback URL set in control panel ('CMS') to be set to "http://<WPDISPLAY ITEM=MC_callback>"
 	//  digest password sent as 'secret' to WorldPay tech support
@@ -311,7 +310,6 @@ class Hook_worldpay
 
 		return NULL;
 	}
-
 }
 
 

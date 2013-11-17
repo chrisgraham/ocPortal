@@ -58,5 +58,4 @@ class Hook_occle_command_themewizard_compute_equation
 			return array('','<span style="padding: 0.5em 0.8em; display: inline-block; background: white"><span style="border: 1px solid black; width: 2em; height: 1em; display: inline-block; background: #'.escape_html($answer).'"></span></span>','#'.$answer,'');
 		}
 	}
-
 }

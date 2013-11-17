@@ -20,7 +20,6 @@
 
 class Hook_config_spam_ban_threshold
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_spam_ban_threshold
 	{
 		return '90';
 	}
-
 }
 
 

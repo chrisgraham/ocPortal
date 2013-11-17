@@ -20,7 +20,6 @@
 
 class Hook_config_interest_levels
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_interest_levels
 	{
 		return '0';
 	}
-
 }
 
 

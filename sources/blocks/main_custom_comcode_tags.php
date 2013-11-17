@@ -20,7 +20,6 @@
 
 class Block_main_custom_comcode_tags
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -84,7 +83,6 @@ class Block_main_custom_comcode_tags
 
 		return do_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS',array('_GUID'=>'b8d3436e6e5fe679ae9b0a368e607610','TAGS'=>$content));
 	}
-
 }
 
 

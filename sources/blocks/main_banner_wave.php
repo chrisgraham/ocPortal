@@ -20,7 +20,6 @@
 
 class Block_main_banner_wave
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -86,7 +85,6 @@ class Block_main_banner_wave
 
 		return do_template('BLOCK_MAIN_BANNER_WAVE',array('_GUID'=>'8bced3f44675de9ef0bd5f4d286aea76','TYPE'=>$map['param'],'ASSEMBLE'=>$assemble));
 	}
-
 }
 
 

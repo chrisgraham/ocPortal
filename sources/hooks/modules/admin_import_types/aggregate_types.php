@@ -20,7 +20,6 @@
 
 class Hook_admin_import_types_aggregate_types
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -32,7 +31,6 @@ class Hook_admin_import_types_aggregate_types
 			'aggregate_type_instances'=>'AGGREGATE_TYPE_INSTANCES',
 		);
 	}
-
 }
 
 

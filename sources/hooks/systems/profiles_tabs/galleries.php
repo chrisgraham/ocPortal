@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_galleries
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -62,7 +61,6 @@ class Hook_Profiles_Tabs_galleries
 
 		return array($title,$content,$order);
 	}
-
 }
 
 

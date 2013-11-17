@@ -20,7 +20,6 @@
 
 class Hook_config_leader_board_start_date
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_leader_board_start_date
 	{
 		return strval(filemtime(get_file_base().'/index.php'));
 	}
-
 }
 
 

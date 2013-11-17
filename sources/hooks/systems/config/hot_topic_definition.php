@@ -20,7 +20,6 @@
 
 class Hook_config_hot_topic_definition
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_hot_topic_definition
 	{
 		return '20';
 	}
-
 }
 
 

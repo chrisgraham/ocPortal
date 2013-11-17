@@ -20,7 +20,6 @@
 
 class Hook_cron_ocf_confirm_reminder
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -53,7 +52,6 @@ class Hook_cron_ocf_confirm_reminder
 			}
 		}
 	}
-
 }
 
 

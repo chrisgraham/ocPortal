@@ -20,7 +20,6 @@
 
 class Hook_search_ocf_posts
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -190,7 +189,6 @@ class Hook_search_ocf_posts
 
 		return render_post_box($row,false);
 	}
-
 }
 
 

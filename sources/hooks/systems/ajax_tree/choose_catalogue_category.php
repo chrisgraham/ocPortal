@@ -20,7 +20,6 @@
 
 class Hook_choose_catalogue_category
 {
-
 	/**
 	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
 	 *
@@ -119,7 +118,6 @@ class Hook_choose_catalogue_category
 			return create_selection_list_catalogue_category_tree($catalogue_name,is_null($it)?NULL:intval($it),$addable_filter,$compound_list);
 		}
 	}
-
 }
 
 

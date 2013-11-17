@@ -9,7 +9,6 @@
 
 class upon_query_google_maps
 {
-
 	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
 		if (preg_match('#^DELETE FROM '.get_table_prefix().'cache WHERE .*main_cc_embed#',$query)!=0) // If main_cc_embed being decached

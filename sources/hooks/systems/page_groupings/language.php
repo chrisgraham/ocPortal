@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_language
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -74,7 +73,6 @@ class Hook_page_groupings_language
 			(!$has_langs)?NULL:array('style','menu/adminzone/style/language/criticise_language',array('admin_lang',array('type'=>'criticise'),get_module_zone('admin_lang')),do_lang_tempcode('lang:CRITICISE_LANGUAGE_PACK'),'lang:DOC_CRITICISE_LANGUAGE_PACK'),
 		);
 	}
-
 }
 
 

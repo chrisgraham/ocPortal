@@ -20,7 +20,6 @@
 
 class Hook_config_allow_international
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_allow_international
 	{
 		return (get_forum_type()!='ocf')?NULL:'1';
 	}
-
 }
 
 

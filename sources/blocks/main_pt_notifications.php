@@ -20,7 +20,6 @@
 
 class Block_main_pt_notifications
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -69,7 +68,6 @@ class Block_main_pt_notifications
 
 		return do_template('BLOCK_MAIN_PT_NOTIFICATIONS',array('_GUID'=>'7606c3bf73f059ec5b194bc33d881763','NOTIFICATIONS'=>$notifications));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_unzip_dir
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_unzip_dir
 		if (function_exists('zip_open')) return NULL;
 		return (DIRECTORY_SEPARATOR=='/')?'/tmp/':ocp_srv('TMP');
 	}
-
 }
 
 

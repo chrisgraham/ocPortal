@@ -20,7 +20,6 @@
 
 class Hook_config_transcoding_server
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_transcoding_server
 	{
 		return '';
 	}
-
 }
 
 

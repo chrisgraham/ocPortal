@@ -15,7 +15,6 @@
 
 class Hook_members_booking
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -50,5 +49,4 @@ class Hook_members_booking
 
 		return $links;
 	}
-
 }

@@ -224,7 +224,6 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
 
 		return $out;
 	}
-
 }
 
 

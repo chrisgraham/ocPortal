@@ -20,7 +20,6 @@
 
 class Hook_search_news
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -178,7 +177,6 @@ class Hook_search_news
 		require_code('news');
 		return render_news_box($myrow);
 	}
-
 }
 
 

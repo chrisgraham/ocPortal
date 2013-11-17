@@ -20,7 +20,6 @@
 
 class Hook_fields_posting_field
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -184,7 +183,6 @@ class Hook_fields_posting_field
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
-
 }
 
 

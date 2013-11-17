@@ -20,7 +20,6 @@
 
 class Hook_config_show_gallery_counts
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_show_gallery_counts
 	{
 		return ((get_forum_type()=='ocf')?'0':NULL);
 	}
-
 }
 
 

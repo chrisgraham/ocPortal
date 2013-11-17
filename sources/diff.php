@@ -269,7 +269,6 @@ class Text_Diff {
 
 		return true;
 	}
-
 }
 
 /**
@@ -320,7 +319,6 @@ class Text_MappedDiff extends Text_Diff {
 			}
 		}
 	}
-
 }
 
 /**
@@ -351,7 +349,6 @@ class Text_Diff_Op {
 	{
 		return $this->final ? count($this->final) : 0;
 	}
-
 }
 
 /**
@@ -376,7 +373,6 @@ class Text_Diff_Op_copy extends Text_Diff_Op {
 		$reverse=new Text_Diff_Op_copy($this->final, $this->orig);
 		return $reverse;
 	}
-
 }
 
 /**
@@ -398,7 +394,6 @@ class Text_Diff_Op_delete extends Text_Diff_Op {
 		$reverse=new Text_Diff_Op_add($this->orig);
 		return $reverse;
 	}
-
 }
 
 /**
@@ -420,7 +415,6 @@ class Text_Diff_Op_add extends Text_Diff_Op {
 		$reverse=new Text_Diff_Op_delete($this->final);
 		return $reverse;
 	}
-
 }
 
 /**
@@ -442,7 +436,6 @@ class Text_Diff_Op_change extends Text_Diff_Op {
 		$reverse=new Text_Diff_Op_change($this->final, $this->orig);
 		return $reverse;
 	}
-
 }
 
 /**
@@ -571,7 +564,6 @@ class Text_Diff3 extends Text_Diff {
 
 		return $edits;
 	}
-
 }
 
 /**
@@ -615,7 +607,6 @@ class Text_Diff3_Op {
 	{
 		return $this->merged()===false;
 	}
-
 }
 
 /**
@@ -642,7 +633,6 @@ class Text_Diff3_Op_copy extends Text_Diff3_Op {
 	{
 		return false;
 	}
-
 }
 
 /**
@@ -706,7 +696,6 @@ class Text_Diff3_BlockBuilder {
 	{
 		array_splice($array, sizeof($array), 0, $lines);
 	}
-
 }
 
 /**
@@ -1368,7 +1357,6 @@ class Text_Diff_Engine_native {
 			}
 		}
 	}
-
 }
 
 /**
@@ -1582,7 +1570,6 @@ class Text_Diff_Renderer {
 	{
 		return $this->_deleted($orig) . "---\n" . $this->_added($final);
 	}
-
 }
 
 /**
@@ -1734,7 +1721,6 @@ class Text_Diff_Renderer_inline extends Text_Diff_Renderer {
 	{
 		$string=htmlspecialchars($string);
 	}
-
 }
 
 /**
@@ -1785,7 +1771,6 @@ class Text_Diff_Renderer_unified extends Text_Diff_Renderer {
 	{
 		return $this->_deleted($orig) . $this->_added($final);
 	}
-
 }
 
 

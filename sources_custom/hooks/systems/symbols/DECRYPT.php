@@ -15,7 +15,6 @@
 
 class Hook_symbol_DECRYPT
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -37,5 +36,4 @@ class Hook_symbol_DECRYPT
 
 		return $value;
 	}
-
 }

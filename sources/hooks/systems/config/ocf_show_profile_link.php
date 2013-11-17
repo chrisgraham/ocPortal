@@ -20,7 +20,6 @@
 
 class Hook_config_ocf_show_profile_link
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_ocf_show_profile_link
 	{
 		return has_no_forum()?NULL:'1';
 	}
-
 }
 
 

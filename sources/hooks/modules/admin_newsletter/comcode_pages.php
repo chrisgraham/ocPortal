@@ -20,7 +20,6 @@
 
 class Hook_whats_news_comcode_pages
 {
-
 	/**
 	 * Standard modular run function for newsletter hooks.
 	 *
@@ -93,7 +92,6 @@ class Hook_whats_news_comcode_pages
 
 		return array($new,do_lang('PAGES','','','',$lang));
 	}
-
 }
 
 

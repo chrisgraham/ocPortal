@@ -20,7 +20,6 @@
 
 class Hook_config_notification_keep_days
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_notification_keep_days
 	{
 		return '100';
 	}
-
 }
 
 

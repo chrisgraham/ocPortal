@@ -20,7 +20,6 @@
 
 class Hook_cron_block_caching
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */

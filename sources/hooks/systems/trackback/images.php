@@ -21,7 +21,6 @@
 
 class Hook_trackback_images
 {
-
 	/**
 	 * Standard modular run function for trackback hooks. They see if content of an ID relating to this content has trackback enabled.
 	 *
@@ -34,7 +33,6 @@ class Hook_trackback_images
 		if (!array_key_exists(0,$rows)) return false;
 		return $rows[0]['allow_trackbacks']==1;
 	}
-
 }
 
 

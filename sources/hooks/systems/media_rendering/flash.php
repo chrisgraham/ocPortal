@@ -79,5 +79,4 @@ class Hook_media_rendering_flash
 	{
 		return do_template('MEDIA_FLASH',array('_GUID'=>'4ce841bd751ec736d146ab46246974f5','HOOK'=>'flash')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
-
 }

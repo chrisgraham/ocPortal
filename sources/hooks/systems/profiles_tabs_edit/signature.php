@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_Edit_signature
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -159,7 +158,6 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		return array($title,$fields,$text,$javascript,$order);
 	}
-
 }
 
 

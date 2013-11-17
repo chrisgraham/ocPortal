@@ -20,7 +20,6 @@
 
 class Hook_admin_setupwizard_installprofiles_minimalistic
 {
-
 	/**
 	 * Get info about the installprofile
 	 *
@@ -140,5 +139,4 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
 	function install_code()
 	{
 	}
-
 }

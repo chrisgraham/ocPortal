@@ -20,7 +20,6 @@
 
 class Hook_fields_url
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -131,7 +130,6 @@ class Hook_fields_url
 		if ($value!=STRING_MAGIC_NULL) $value=fixup_protocolless_urls($value);
 		return $value;
 	}
-
 }
 
 

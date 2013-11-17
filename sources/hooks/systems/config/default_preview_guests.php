@@ -20,7 +20,6 @@
 
 class Hook_config_default_preview_guests
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_default_preview_guests
 	{
 		return (get_forum_type()!='ocf')?NULL:'0';
 	}
-
 }
 
 

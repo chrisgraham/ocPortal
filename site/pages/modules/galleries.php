@@ -23,7 +23,6 @@
  */
 class Module_galleries
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1494,5 +1493,4 @@ class Module_galleries
 		}
 		return array($sort,$sort_backwards,$suffix_images,$suffix_videos);
 	}
-
 }

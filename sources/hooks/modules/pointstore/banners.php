@@ -20,7 +20,6 @@
 
 class Hook_pointstore_banners
 {
-
 	/**
 	 * Standard pointstore item initialisation function.
 	 */
@@ -378,7 +377,6 @@ class Hook_pointstore_banners
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('BANNER_UPGRADED'));
 	}
-
 }
 
 

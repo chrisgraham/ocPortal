@@ -23,7 +23,6 @@
  */
 class Module_admin_ocf_history
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -336,7 +335,6 @@ class Module_admin_ocf_history
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,true);
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

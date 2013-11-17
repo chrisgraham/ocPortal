@@ -191,5 +191,4 @@ class Mx_chat extends Module_chat
 		$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>get_param('id'),'no_reenter_message'=>1),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }

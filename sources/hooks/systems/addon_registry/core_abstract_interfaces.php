@@ -1047,5 +1047,4 @@ class Hook_addon_registry_core_abstract_interfaces
 		);
 
 	}
-
 }

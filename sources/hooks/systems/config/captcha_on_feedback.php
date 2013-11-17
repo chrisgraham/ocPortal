@@ -20,7 +20,6 @@
 
 class Hook_config_captcha_on_feedback
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_captcha_on_feedback
 	{
 		return '0';
 	}
-
 }
 
 

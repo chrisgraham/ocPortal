@@ -15,7 +15,6 @@
 
 class Hook_comcode_flip
 {
-
 	/**
 	 * Standard modular run function for Comcode hooks. They find the custom-comcode-row-like attributes of the tag.
 	 *
@@ -35,7 +34,6 @@ class Hook_comcode_flip
 			'tag_dangerous_tag'=>0,
 		);
 	}
-
 }
 
 

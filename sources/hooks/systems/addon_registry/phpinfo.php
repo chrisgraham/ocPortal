@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_phpinfo
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -103,5 +102,4 @@ class Hook_addon_registry_phpinfo
 			'adminzone/pages/modules/admin_phpinfo.php',
 		);
 	}
-
 }

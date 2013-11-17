@@ -80,5 +80,4 @@ class Hook_media_rendering_video_microsoft
 	{
 		return do_template('MEDIA_VIDEO_GENERAL',array('_GUID'=>'ff0826858882a48040397fb7bbe99549','HOOK'=>'video_microsoft')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
-
 }

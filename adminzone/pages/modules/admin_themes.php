@@ -23,7 +23,6 @@
  */
 class Module_admin_themes
 {
-
 	/**
 	 * Standard modular info function.
 	 *

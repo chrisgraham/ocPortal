@@ -41,6 +41,5 @@ class Hook_occle_command_ban_ip
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

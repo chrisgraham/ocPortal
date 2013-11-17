@@ -86,7 +86,6 @@ function get_sales_permission_map($row,$member)
  */
 class Hook_permission
 {
-
 	/**
 	 * Get the products handled by this eCommerce hook.
 	 *
@@ -169,5 +168,4 @@ class Hook_permission
 	{
 		return NULL;
 	}
-
 }

@@ -182,6 +182,5 @@ class Hook_occle_fs_home
 		}
 		else return false; // File doesn't exist
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Hook_cron_implicit_usergroup_sync
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -69,7 +68,6 @@ class Hook_cron_implicit_usergroup_sync
 			}
 		}
 	}
-
 }
 
 

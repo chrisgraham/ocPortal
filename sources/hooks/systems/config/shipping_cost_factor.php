@@ -20,7 +20,6 @@
 
 class Hook_config_shipping_cost_factor
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_shipping_cost_factor
 	{
 		return '0';
 	}
-
 }
 
 

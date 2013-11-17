@@ -20,7 +20,6 @@
 
 class Hook_sw_wordfilter
 {
-
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *

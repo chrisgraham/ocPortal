@@ -20,7 +20,6 @@
 
 class Block_main_staff_checklist
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -219,7 +218,6 @@ class Block_main_staff_checklist
 
 		return do_template('BLOCK_MAIN_STAFF_CHECKLIST',array('_GUID'=>'aefbca8252dc1d6edc44fc6d1e78b3ec','URL'=>get_self_url(),'DATES'=>$out_dates,'NO_TIMES'=>$out_no_times,'TODO_COUNTS'=>$out_todo_counts,'CUSTOM_TASKS'=>$custasks));
 	}
-
 }
 
 /**

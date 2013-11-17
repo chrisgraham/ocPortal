@@ -20,7 +20,6 @@
 
 class Hook_chat_bot_default
 {
-
 	/**
 	 * Handle hooks supported bot commands. Note multiple bots may support the same commands, and all respond. It is recommended all bots support the command 'help'.
 	 *
@@ -76,7 +75,6 @@ class Hook_chat_bot_default
 
 		return NULL;
 	}
-
 }
 
 

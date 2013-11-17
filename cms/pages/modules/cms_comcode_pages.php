@@ -23,7 +23,6 @@
  */
 class Module_cms_comcode_pages
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1023,7 +1022,6 @@ class Module_cms_comcode_pages
 		}
 		return $this->do_next_manager($this->title,$file,$zone,$completion_text);
 	}
-
 }
 
 

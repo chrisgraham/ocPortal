@@ -20,7 +20,6 @@
 
 class Hook_config_simplified_donext
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_simplified_donext
 	{
 		return '0';
 	}
-
 }
 
 

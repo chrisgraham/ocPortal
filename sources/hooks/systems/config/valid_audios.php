@@ -20,7 +20,6 @@
 
 class Hook_config_valid_audios
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_valid_audios
 	{
 		return 'ra,mid,mp3,wav,wma,aif,aifc,aiff';
 	}
-
 }
 
 

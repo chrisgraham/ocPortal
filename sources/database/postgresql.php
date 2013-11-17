@@ -405,7 +405,6 @@ class Database_Static_postgresql
 		pg_free_result($results);
 		return $out;
 	}
-
 }
 
 

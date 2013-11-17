@@ -20,7 +20,6 @@
 
 class Hook_config_invites_per_day
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_invites_per_day
 	{
 		return '1';
 	}
-
 }
 
 

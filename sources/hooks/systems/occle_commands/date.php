@@ -33,6 +33,5 @@ class Hook_occle_command_date
 		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('date',array('h'),array()),'','');
 		else return array('','',get_timezoned_date(time(),true,true),'');
 	}
-
 }
 

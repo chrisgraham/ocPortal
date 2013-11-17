@@ -124,7 +124,6 @@ class Block_side_amazon_wishlist
 
 		return $return;
 	}
-
 }
 
 

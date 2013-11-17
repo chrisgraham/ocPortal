@@ -20,7 +20,6 @@
 
 class Hook_config_finish_profile
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_finish_profile
 	{
 		return '1';
 	}
-
 }
 
 

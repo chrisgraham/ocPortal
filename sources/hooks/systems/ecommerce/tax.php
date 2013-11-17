@@ -20,7 +20,6 @@
 
 class Hook_tax
 {
-
 	/**
 	 * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
 	 *
@@ -48,7 +47,6 @@ class Hook_tax
 		);
 		return $products;
 	}
-
 }
 
 

@@ -24,7 +24,6 @@
  */
 class Database_super_mysql
 {
-
 	/**
 	 * Find whether the database may run GROUP BY unfettered with restrictions on the SELECT'd fields having to be represented in it or aggregate functions
 	 *
@@ -296,7 +295,6 @@ class Database_super_mysql
 		$this->cache_db=array();
 		$this->last_select_db=NULL;
 	}
-
 }
 
 

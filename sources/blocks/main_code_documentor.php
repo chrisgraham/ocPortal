@@ -20,7 +20,6 @@
 
 class Block_main_code_documentor
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -96,7 +95,6 @@ class Block_main_code_documentor
 
 		return do_template('PHP_FILE',array('_GUID'=>'6f422e6a6e846d49864d7325b212109f','FILENAME'=>$filename,'CLASSES'=>$classes));
 	}
-
 }
 
 

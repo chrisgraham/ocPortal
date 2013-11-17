@@ -20,7 +20,6 @@
 
 class Block_main_staff_actions
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -147,7 +146,6 @@ class Block_main_staff_actions
 			'CONTENT'=>$content,
 		));
 	}
-
 }
 
 

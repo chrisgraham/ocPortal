@@ -20,7 +20,6 @@
 
 class Hook_admin_import_types_quotes
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -32,7 +31,6 @@ class Hook_admin_import_types_quotes
 			'quotes'=>'QUOTES',
 		);
 	}
-
 }
 
 

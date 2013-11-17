@@ -20,7 +20,6 @@
 
 class Block_main_custom_gfx
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -135,5 +134,4 @@ class Block_main_custom_gfx
 
 		return $url;
 	}
-
 }

@@ -20,7 +20,6 @@
 
 class Hook_config_bottom_show_admin_menu
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_bottom_show_admin_menu
 	{
 		return '1';
 	}
-
 }
 
 

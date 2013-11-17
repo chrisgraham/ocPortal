@@ -1194,7 +1194,6 @@ class Module_admin
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'b34d4765744c359a25a0b71449eafed1','TITLE'=>$this->title,'EMPTY'=>$found_some?NULL:true,'ARRAY'=>true,'CONTENT'=>$found_some?$content:array(),'PRE'=>$pre,'POST'=>$post));
 	}
-
 }
 
 

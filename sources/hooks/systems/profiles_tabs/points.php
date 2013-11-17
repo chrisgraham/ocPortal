@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_points
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -58,7 +57,6 @@ class Hook_Profiles_Tabs_points
 
 		return array($title,$content,$order);
 	}
-
 }
 
 

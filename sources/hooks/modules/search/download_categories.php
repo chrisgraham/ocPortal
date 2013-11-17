@@ -20,7 +20,6 @@
 
 class Hook_search_download_categories
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -134,7 +133,6 @@ class Hook_search_download_categories
 		require_code('downloads');
 		return render_download_category_box($row);
 	}
-
 }
 
 

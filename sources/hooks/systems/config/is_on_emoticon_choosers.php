@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_emoticon_choosers
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_is_on_emoticon_choosers
 	{
 		return '1';
 	}
-
 }
 
 

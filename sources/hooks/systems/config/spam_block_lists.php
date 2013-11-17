@@ -20,7 +20,6 @@
 
 class Hook_config_spam_block_lists
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_spam_block_lists
 	{
 		return ''; // Not listing "*.opm.tornevall.org" by default, because it keeps IPs for over 365 days, which is okay for blocking e-mail servers/proxies, but not for normal dynamic web IPs
 	}
-
 }
 
 

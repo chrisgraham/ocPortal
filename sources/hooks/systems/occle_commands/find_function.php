@@ -138,7 +138,6 @@ class Hook_occle_command_find_function
 			return array('',occle_make_normal_html_visible($tpl),'','');
 		}
 	}
-
 }
 
 

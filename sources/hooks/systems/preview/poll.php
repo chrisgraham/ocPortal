@@ -20,7 +20,6 @@
 
 class Hook_Preview_poll
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *

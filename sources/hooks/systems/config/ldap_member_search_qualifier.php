@@ -20,7 +20,6 @@
 
 class Hook_config_ldap_member_search_qualifier
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_ldap_member_search_qualifier
 	{
 		return '';
 	}
-
 }
 
 

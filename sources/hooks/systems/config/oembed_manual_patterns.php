@@ -20,7 +20,6 @@
 
 class Hook_config_oembed_manual_patterns
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -90,7 +89,6 @@ class Hook_config_oembed_manual_patterns
 		// iframely is interesting. It is self-hosted.
 		// Largely though, ocPortal contains equivalent features to these products.
 	}
-
 }
 
 

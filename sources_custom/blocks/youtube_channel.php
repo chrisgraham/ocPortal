@@ -11,7 +11,6 @@
 
 class Block_youtube_channel
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -303,7 +302,6 @@ class Block_youtube_channel
 			'CHANNEL_URL'=>$channel_url,
 			'CONTENT'=>$content));
 	}
-
 }
 
 /**

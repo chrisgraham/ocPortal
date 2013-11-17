@@ -20,7 +20,6 @@
 
 class Block_main_forum_news
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -187,7 +186,6 @@ class Block_main_forum_news
 			'ATOM_URL'=>'',
 		));
 	}
-
 }
 
 

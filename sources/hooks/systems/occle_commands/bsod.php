@@ -36,6 +36,5 @@ class Hook_occle_command_bsod
 			return array('bsod();','','','(A(*$&(*!$*$!@$!*$NO CARRIER');
 		}
 	}
-
 }
 

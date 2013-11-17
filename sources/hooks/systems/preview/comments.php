@@ -20,7 +20,6 @@
 
 class Hook_Preview_comments
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -117,5 +116,4 @@ class Hook_Preview_comments
 		));
 		return array($tpl,NULL);
 	}
-
 }

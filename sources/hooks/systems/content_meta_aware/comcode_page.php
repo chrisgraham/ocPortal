@@ -20,7 +20,6 @@
 
 class Hook_content_meta_aware_comcode_page
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -111,5 +110,4 @@ class Hook_content_meta_aware_comcode_page
 
 		return render_comcode_page_box($row,$give_context,$include_breadcrumbs,$root,$guid);
 	}
-
 }

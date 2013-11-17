@@ -715,7 +715,6 @@ class Module_cms_downloads extends standard_crud_module
 	{
 		return $this->cat_crud_module->_do_next_manager($title,$description,is_null($id)?NULL:intval($id),$this->donext_type);
 	}
-
 }
 
 /**
@@ -826,7 +825,6 @@ class Module_cms_downloads_alt extends standard_crud_module
 	{
 		return $GLOBALS['MODULE_CMS_DOWNLOADS']->cat_crud_module->_do_next_manager($title,$description,NULL,NULL,$id);
 	}
-
 }
 
 /**
@@ -1086,7 +1084,6 @@ class Module_cms_downloads_cat extends standard_crud_module
 		);
 
 	}
-
 }
 
 

@@ -23,7 +23,6 @@
  */
 class Module_admin_orders
 {
-
 	/**
 	 * Standard modular info function.
 	 *

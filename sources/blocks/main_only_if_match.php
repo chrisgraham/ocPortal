@@ -20,7 +20,6 @@
 
 class Block_main_only_if_match
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -56,7 +55,6 @@ class Block_main_only_if_match
 		}
 		return new ocp_tempcode();
 	}
-
 }
 
 

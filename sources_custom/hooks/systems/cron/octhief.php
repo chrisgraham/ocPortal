@@ -15,7 +15,6 @@
 
 class Hook_cron_octhief
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */

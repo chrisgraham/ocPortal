@@ -35,7 +35,6 @@ function init__hooks__modules__admin_import__shared__ipb()
  */
 class Hook_ipb_base
 {
-
 	/**
 	 * Decode an IPB post to be plain-text (ala comcode).
 	 *
@@ -1013,7 +1012,6 @@ class Hook_ipb_base
 			add_wordfilter_word($row['type'],$row['swop'],$row['m_exact']);
 		}
 	}
-
 }
 
 

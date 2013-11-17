@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_rootkit_detector
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -99,5 +98,4 @@ class Hook_addon_registry_rootkit_detector
 			'rootkit_detection.php',
 		);
 	}
-
 }

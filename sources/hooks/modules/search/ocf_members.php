@@ -20,7 +20,6 @@
 
 class Hook_search_ocf_members
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -313,7 +312,6 @@ class Hook_search_ocf_members
 		$box=render_member_box($row['id']);
 		return $box;
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_immediate_downloads
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_immediate_downloads
 	{
 		return '0';
 	}
-
 }
 
 

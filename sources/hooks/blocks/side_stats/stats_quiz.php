@@ -20,7 +20,6 @@
 
 class Hook_stats_quiz
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -39,7 +38,6 @@ class Hook_stats_quiz
 
 		return $section;
 	}
-
 }
 
 

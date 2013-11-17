@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_unvalidated
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_unvalidated
 			array('audit','menu/adminzone/audit/unvalidated',array('admin_unvalidated',array(),get_module_zone('admin_unvalidated')),do_lang_tempcode('unvalidated:UNVALIDATED_RESOURCES'),'DOC_UNVALIDATED'),
 		);
 	}
-
 }
 
 

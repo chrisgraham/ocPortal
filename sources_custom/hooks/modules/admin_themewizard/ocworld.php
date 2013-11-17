@@ -15,7 +15,6 @@
 
 class Hook_admin_themewizard_ocworld
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -25,7 +24,6 @@ class Hook_admin_themewizard_ocworld
 	{
 		return array(array('logo/ocworld-logo',),array());
 	}
-
 }
 
 

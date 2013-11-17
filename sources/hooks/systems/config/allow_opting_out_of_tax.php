@@ -20,7 +20,6 @@
 
 class Hook_config_allow_opting_out_of_tax
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_allow_opting_out_of_tax
 	{
 		return '1';
 	}
-
 }
 
 

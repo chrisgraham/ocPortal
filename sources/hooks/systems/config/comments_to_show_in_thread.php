@@ -20,7 +20,6 @@
 
 class Hook_config_comments_to_show_in_thread
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_comments_to_show_in_thread
 	{
 		return '30';
 	}
-
 }
 
 

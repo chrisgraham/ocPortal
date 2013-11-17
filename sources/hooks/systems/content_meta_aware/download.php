@@ -20,7 +20,6 @@
 
 class Hook_content_meta_aware_download
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -112,5 +111,4 @@ class Hook_content_meta_aware_download
 
 		return render_download_box($row,true,$include_breadcrumbs,$zone,NULL,$give_context,is_null($root)?NULL:intval($root),$guid);
 	}
-
 }

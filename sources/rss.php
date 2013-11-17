@@ -686,7 +686,6 @@ class rss
 				break;
 		}
 	}
-
 }
 
 /**

@@ -20,7 +20,6 @@
 
 class Block_main_member_bar
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -128,6 +127,5 @@ class Block_main_member_bar
 
 		return do_template('BLOCK_MAIN_MEMBER_BAR',array('_GUID'=>'0ef12f7b17b7b40dca473db519e58a52','BAR'=>$bar));
 	}
-
 }
 

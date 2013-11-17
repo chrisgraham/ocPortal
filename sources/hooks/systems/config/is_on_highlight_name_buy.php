@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_highlight_name_buy
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_is_on_highlight_name_buy
 	{
 		return (get_forum_type()!='ocf')?NULL:'1';
 	}
-
 }
 
 

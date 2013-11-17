@@ -20,7 +20,6 @@
 
 class Hook_config_mail_queue_debug
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_mail_queue_debug
 	{
 		return '0';
 	}
-
 }
 
 

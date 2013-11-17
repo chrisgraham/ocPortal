@@ -731,5 +731,4 @@ class Module_cms_blogs extends standard_crud_module
 
 		return new ocp_tempcode(); // Should not get here
 	}
-
 }

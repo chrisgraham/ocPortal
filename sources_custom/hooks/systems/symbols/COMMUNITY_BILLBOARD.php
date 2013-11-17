@@ -15,7 +15,6 @@
 
 class Hook_symbol_COMMUNITY_BILLBOARD
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -58,5 +57,4 @@ class Hook_symbol_COMMUNITY_BILLBOARD
 
 		return $value;
 	}
-
 }

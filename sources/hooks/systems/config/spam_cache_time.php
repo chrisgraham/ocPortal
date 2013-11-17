@@ -20,7 +20,6 @@
 
 class Hook_config_spam_cache_time
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_spam_cache_time
 	{
 		return '60';
 	}
-
 }
 
 

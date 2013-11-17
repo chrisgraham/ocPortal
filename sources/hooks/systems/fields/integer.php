@@ -20,7 +20,6 @@
 
 class Hook_fields_integer
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -119,7 +118,6 @@ class Hook_fields_integer
 		if ($ret!=STRING_MAGIC_NULL && $ret!='') $ret=str_pad($ret,10,'0',STR_PAD_LEFT);
 		return $ret;
 	}
-
 }
 
 

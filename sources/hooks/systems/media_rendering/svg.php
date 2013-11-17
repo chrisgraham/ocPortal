@@ -78,5 +78,4 @@ class Hook_media_rendering_svg
 	{
 		return do_template('MEDIA_SVG',array('_GUID'=>'180c3e1190e1df1120eeafd2464014eb','HOOK'=>'svg')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
-
 }

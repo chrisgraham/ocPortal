@@ -20,7 +20,6 @@
 
 class Hook_config_dload_search_index
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_dload_search_index
 	{
 		return '1';
 	}
-
 }
 
 

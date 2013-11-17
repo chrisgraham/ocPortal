@@ -20,7 +20,6 @@
 
 class Block_side_galleries
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -130,7 +129,6 @@ class Block_side_galleries
 
 		return $content;
 	}
-
 }
 
 

@@ -1431,7 +1431,6 @@ class Module_cms_galleries extends standard_crud_module
 	{
 		return $this->cat_crud_module->_do_next_manager($title,$description,$this->donext_type,is_null($id)?NULL:intval($id));
 	}
-
 }
 
 /**
@@ -2017,7 +2016,6 @@ class Module_cms_galleries_alt extends standard_crud_module
 	{
 		return $GLOBALS['MODULE_CMS_GALLERIES']->cat_crud_module->_do_next_manager($title,$description,$this->donext_type,is_null($id)?NULL:intval($id),true);
 	}
-
 }
 
 /**
@@ -2496,5 +2494,4 @@ class Module_cms_galleries_cat extends standard_crud_module
 			do_lang_tempcode('GALLERIES')
 		);
 	}
-
 }

@@ -59,6 +59,5 @@ class Hook_occle_command_find_codes
 			else return array('','','',do_lang('INCOMPLETE_ERROR')); // Directory doesn't exist
 		}
 	}
-
 }
 

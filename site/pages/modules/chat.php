@@ -23,7 +23,6 @@
  */
 class Module_chat
 {
-
 	/**
 	 * Standard modular info function.
 	 *

@@ -23,7 +23,6 @@
  */
 class Module_awards
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -301,7 +300,6 @@ class Module_awards
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
-
 }
 
 

@@ -432,7 +432,6 @@ class Database_Static_access
 		odbc_free_result($results);
 		return $out;
 	}
-
 }
 
 

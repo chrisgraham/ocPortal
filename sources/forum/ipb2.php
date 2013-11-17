@@ -822,7 +822,6 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 		$this->MEMBER_ROWS_CACHED[$member]=array_key_exists(0,$rows)?$rows[0]:NULL;
 		return $this->MEMBER_ROWS_CACHED[$member];
 	}
-
 }
 
 

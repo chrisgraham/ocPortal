@@ -20,7 +20,6 @@
 
 class Hook_bookmarks_menu
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -37,7 +36,6 @@ class Hook_bookmarks_menu
 		}
 		return new ocp_tempcode();
 	}
-
 }
 
 

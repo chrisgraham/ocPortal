@@ -17,7 +17,6 @@
  */
 class Module_report_content
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -255,7 +254,6 @@ class Module_report_content
 			$content_url=make_string_tempcode($_url);
 		return redirect_screen($this->title,$content_url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

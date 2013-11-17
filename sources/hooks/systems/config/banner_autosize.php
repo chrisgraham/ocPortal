@@ -20,7 +20,6 @@
 
 class Hook_config_banner_autosize
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_banner_autosize
 	{
 		return '0';
 	}
-
 }
 
 

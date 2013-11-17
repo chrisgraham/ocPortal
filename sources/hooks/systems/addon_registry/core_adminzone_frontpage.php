@@ -400,5 +400,4 @@ class Hook_addon_registry_core_adminzone_frontpage
 			)), NULL, '', true)
 		);
 	}
-
 }

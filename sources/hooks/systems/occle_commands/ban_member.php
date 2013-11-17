@@ -50,6 +50,5 @@ class Hook_occle_command_ban_member
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

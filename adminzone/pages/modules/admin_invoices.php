@@ -23,7 +23,6 @@
  */
 class Module_admin_invoices
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -333,7 +332,6 @@ class Module_admin_invoices
 		$url=build_url(array('page'=>'_SELF','type'=>'undelivered'),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

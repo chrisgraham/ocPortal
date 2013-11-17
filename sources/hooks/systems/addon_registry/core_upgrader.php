@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_upgrader
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -105,5 +104,4 @@ class Hook_addon_registry_core_upgrader
 			'data/upgrader2.php',
 		);
 	}
-
 }

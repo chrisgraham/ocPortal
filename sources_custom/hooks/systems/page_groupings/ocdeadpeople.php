@@ -14,7 +14,6 @@
 
 class Hook_page_groupings_ocdeadpeople
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -28,7 +27,6 @@ class Hook_page_groupings_ocdeadpeople
 			array('setup','menu/ocdeadpeople_log',array('admin_ocdeadpeople',array('type'=>'misc'),get_module_zone('admin_ocdeadpeople')),do_lang_tempcode('ocdeadpeople:MANAGE_DISEASES'),'ocdeadpeople:DOC_OCDEADPEOPLE'),
 		);
 	}
-
 }
 
 

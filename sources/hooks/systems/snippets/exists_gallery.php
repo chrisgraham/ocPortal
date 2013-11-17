@@ -20,7 +20,6 @@
 
 class Hook_exists_gallery
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -35,5 +34,4 @@ class Hook_exists_gallery
 
 		return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
 	}
-
 }

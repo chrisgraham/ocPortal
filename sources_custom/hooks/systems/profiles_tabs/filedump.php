@@ -15,7 +15,6 @@
 
 class Hook_Profiles_Tabs_filedump
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -52,7 +51,6 @@ class Hook_Profiles_Tabs_filedump
 
 		return array($title,$content,$order);
 	}
-
 }
 
 

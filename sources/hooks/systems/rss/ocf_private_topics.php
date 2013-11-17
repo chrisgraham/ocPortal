@@ -20,7 +20,6 @@
 
 class Hook_rss_ocf_private_topics
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -79,7 +78,6 @@ class Hook_rss_ocf_private_topics
 		require_lang('ocf');
 		return array($content,do_lang('PRIVATE_TOPICS'));
 	}
-
 }
 
 

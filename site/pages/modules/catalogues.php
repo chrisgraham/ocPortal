@@ -23,7 +23,6 @@
  */
 class Module_catalogues
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1054,7 +1053,6 @@ class Module_catalogues
 	{
 		return $this->screen;
 	}
-
 }
 
 

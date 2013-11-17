@@ -20,7 +20,6 @@
 
 class Hook_config_show_empty_cpfs
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_show_empty_cpfs
 	{
 		return '0';
 	}
-
 }
 
 

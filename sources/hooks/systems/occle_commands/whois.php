@@ -62,6 +62,5 @@ class Hook_occle_command_whois
 			return array('',occle_make_normal_html_visible(do_template('OCCLE_WHOIS',array('_GUID'=>'f315a705e9a2a2fb50b78ae3a8fc6a05','STATS'=>$stats,'IP_LIST'=>$ip_list,'ID'=>strval($id),'IP'=>$ip,'NAME'=>$name))),'','');
 		}
 	}
-
 }
 

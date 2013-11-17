@@ -20,7 +20,6 @@
 
 class Block_main_poll
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -103,7 +102,6 @@ class Block_main_poll
 			'CONTENT'=>$content,
 		));
 	}
-
 }
 
 

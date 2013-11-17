@@ -20,7 +20,6 @@
 
 class Hook_config_video_width_setting
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_video_width_setting
 	{
 		return '720';
 	}
-
 }
 
 

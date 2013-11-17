@@ -15,7 +15,6 @@
 
 class Hook_checklist_community_billboard
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -69,7 +68,6 @@ class Hook_checklist_community_billboard
 		if (is_null($c)) return 0;
 		return $c;
 	}
-
 }
 
 

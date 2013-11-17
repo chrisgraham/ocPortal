@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_linux_helper_scripts
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -114,5 +113,4 @@ class Hook_addon_registry_linux_helper_scripts
 			// Various tools are also built into the Admin Zone menus
 		);
 	}
-
 }

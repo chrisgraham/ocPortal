@@ -23,7 +23,6 @@
  */
 class Module_login
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -389,7 +388,6 @@ class Module_login
 		}
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

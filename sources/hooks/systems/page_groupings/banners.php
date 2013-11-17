@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_banners
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -40,7 +39,6 @@ class Hook_page_groupings_banners
 			array('site_meta','menu/cms/banners',array('banners',array('type'=>'misc'),get_module_zone('banners')),do_lang_tempcode('banners:BANNERS')),
 		);
 	}
-
 }
 
 

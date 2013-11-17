@@ -23,7 +23,6 @@
  */
 class Module_admin_realtime_rain
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -100,6 +99,5 @@ class Module_admin_realtime_rain
 		if (is_null($min_time)) $min_time=time();
 		return do_template('REALTIME_RAIN_OVERLAY',array('_GUID'=>'d7cb1b8286311a9505c3de2d1b9a5185','MIN_TIME'=>strval($min_time)));
 	}
-
 }
 

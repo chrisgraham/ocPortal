@@ -20,7 +20,6 @@
 
 class Hook_config_cdn
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_cdn
 	{
 		return '<autodetect>';
 	}
-
 }
 
 

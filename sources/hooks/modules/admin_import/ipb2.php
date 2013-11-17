@@ -365,7 +365,6 @@ class Hook_ipb2 extends Hook_ipb_base
 			import_id_remap_put('pt',strval($row['mt_msg_id']),$topic_id);
 		}
 	}
-
 }
 
 

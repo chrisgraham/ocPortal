@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_code_editor
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -102,5 +101,4 @@ class Hook_addon_registry_code_editor
 			'exports/file_backups/index.html',
 		);
 	}
-
 }

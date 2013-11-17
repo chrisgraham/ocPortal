@@ -15,7 +15,6 @@
 
 class Hook_config_gallery_sync_orphaned_handling
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_gallery_sync_orphaned_handling
 	{
 		return '2';
 	}
-
 }
 
 

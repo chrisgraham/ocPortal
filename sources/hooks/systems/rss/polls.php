@@ -20,7 +20,6 @@
 
 class Hook_rss_polls
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -76,7 +75,6 @@ class Hook_rss_polls
 		require_lang('polls');
 		return array($content,do_lang('POLLS'));
 	}
-
 }
 
 

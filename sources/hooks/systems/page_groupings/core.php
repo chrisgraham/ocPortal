@@ -19,7 +19,6 @@
  */
 class Hook_page_groupings_core
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -115,7 +114,6 @@ class Hook_page_groupings_core
 			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:array('social','menu/social/users_online',$GLOBALS['FORUM_DRIVER']->users_online_url(),do_lang_tempcode('USERS_ONLINE')),
 		);
 	}
-
 }
 
 

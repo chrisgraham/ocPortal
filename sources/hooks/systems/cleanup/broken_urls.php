@@ -20,7 +20,6 @@
 
 class Hook_broken_urls
 {
-
 	/**
 	 * Standard modular info function.
 	 *

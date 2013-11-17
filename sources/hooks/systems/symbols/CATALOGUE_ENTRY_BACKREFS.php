@@ -20,7 +20,6 @@
 
 class Hook_symbol_CATALOGUE_ENTRY_BACKREFS
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -75,5 +74,4 @@ class Hook_symbol_CATALOGUE_ENTRY_BACKREFS
 		}
 		return $value;
 	}
-
 }

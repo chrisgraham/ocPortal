@@ -20,7 +20,6 @@
 
 class Block_side_users_online
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -160,7 +159,6 @@ class Block_side_users_online
 			'NEWEST'=>$newest,
 		));
 	}
-
 }
 
 

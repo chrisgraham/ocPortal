@@ -20,7 +20,6 @@
 
 class Hook_fields_password
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -117,7 +116,6 @@ class Hook_fields_password
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
-
 }
 
 

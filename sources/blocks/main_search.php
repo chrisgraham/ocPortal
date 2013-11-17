@@ -20,7 +20,6 @@
 
 class Block_main_search
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -154,7 +153,6 @@ class Block_main_search
 			'FULL_SEARCH_URL'=>$full_link,
 		));
 	}
-
 }
 
 

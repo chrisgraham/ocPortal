@@ -20,7 +20,6 @@
 
 class Hook_attachments_news
 {
-
 	/**
 	 * Standard modular run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
@@ -42,7 +41,6 @@ class Hook_attachments_news
 		if (is_null($cat_id)) return false;
 		return (has_category_access(get_member(),'news',strval($cat_id)));
 	}
-
 }
 
 

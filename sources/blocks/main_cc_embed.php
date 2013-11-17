@@ -20,7 +20,6 @@
 
 class Block_main_cc_embed
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -182,7 +181,6 @@ class Block_main_cc_embed
 			'MAX_PARAM'=>$block_id.'_max',
 		),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');
 	}
-
 }
 
 

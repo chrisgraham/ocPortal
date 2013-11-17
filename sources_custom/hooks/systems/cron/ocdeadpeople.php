@@ -15,7 +15,6 @@
 
 class Hook_cron_ocdeadpeople
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -179,7 +178,6 @@ class Hook_cron_ocdeadpeople
 			$GLOBALS['SITE_DB']->query_update('diseases',array('last_spread_time'=>strval(time())),array('id'=>strval($disease['id'])),'',1);
 		}
 	}
-
 }
 
 

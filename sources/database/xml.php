@@ -127,7 +127,6 @@ function _get_sql_keywords()
  */
 class Database_Static_xml
 {
-
 	/**
 	 * Find whether the database may run GROUP BY unfettered with restrictions on the SELECT'd fields having to be represented in it or aggregate functions
 	 *
@@ -3464,5 +3463,4 @@ class Database_Static_xml
 	{
 		return str_replace(array('!equals!','!colon!','!comma!','!slash!','!pipe!'),array('=',':',',','/','|'),$in);
 	}
-
 }

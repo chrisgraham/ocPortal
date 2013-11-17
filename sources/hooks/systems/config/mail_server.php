@@ -20,7 +20,6 @@
 
 class Hook_config_mail_server
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_mail_server
 	{
 		return 'mail.'.get_domain();
 	}
-
 }
 
 

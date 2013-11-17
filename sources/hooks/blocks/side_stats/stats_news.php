@@ -20,7 +20,6 @@
 
 class Hook_stats_news
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -40,7 +39,6 @@ class Hook_stats_news
 
 		return $section;
 	}
-
 }
 
 

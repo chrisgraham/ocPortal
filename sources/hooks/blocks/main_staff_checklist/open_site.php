@@ -20,7 +20,6 @@
 
 class Hook_checklist_open_site
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -37,6 +36,5 @@ class Hook_checklist_open_site
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'83cfd2a7553a4820f2930484bfa85e47','URL'=>'','STATUS'=>$_status,'TASK'=>$task));
 		return array(array($tpl,($status==0)?-1:0,1,NULL));
 	}
-
 }
 

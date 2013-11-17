@@ -15,7 +15,6 @@
 
 class Hook_sw_iotds
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -27,7 +26,6 @@ class Hook_sw_iotds
 
 		return array(array('main_iotd'=>array('YES_CELL','YES_CELL')),array());
 	}
-
 }
 
 

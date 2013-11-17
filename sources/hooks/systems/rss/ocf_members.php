@@ -20,7 +20,6 @@
 
 class Hook_rss_ocf_members
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -65,7 +64,6 @@ class Hook_rss_ocf_members
 		require_lang('ocf');
 		return array($content,do_lang('MEMBERS'));
 	}
-
 }
 
 

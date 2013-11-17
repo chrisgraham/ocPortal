@@ -23,7 +23,6 @@
  */
 class Module_admin_cleanup
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -182,7 +181,6 @@ class Module_admin_cleanup
 
 		return do_template('CLEANUP_COMPLETED_SCREEN',array('_GUID'=>'598510a9ad9f01f3c0806319b32b5033','TITLE'=>$this->title,'MESSAGES'=>$messages));
 	}
-
 }
 
 

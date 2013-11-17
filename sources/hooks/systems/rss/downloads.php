@@ -20,7 +20,6 @@
 
 class Hook_rss_downloads
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -110,7 +109,6 @@ class Hook_rss_downloads
 		require_lang('downloads');
 		return array($content,do_lang('SECTION_DOWNLOADS'));
 	}
-
 }
 
 

@@ -1853,7 +1853,6 @@ class Module_admin_newsletter extends standard_crud_module
 	{
 		delete_newsletter(intval($id));
 	}
-
 }
 
 

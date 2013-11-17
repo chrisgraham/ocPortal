@@ -20,7 +20,6 @@
 
 class Hook_config_backup_overwrite
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_backup_overwrite
 	{
 		return '0';
 	}
-
 }
 
 

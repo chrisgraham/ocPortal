@@ -20,7 +20,6 @@
 
 class Hook_symbol_GALLERY_VIDEO_FOR_URL
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -78,5 +77,4 @@ class Hook_symbol_GALLERY_VIDEO_FOR_URL
 
 		return $value;
 	}
-
 }

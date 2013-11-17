@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_notifications
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_notifications
 			array('setup','menu/adminzone/setup/notifications',array('admin_notifications',array('type'=>'misc'),get_module_zone('admin_notifications')),do_lang_tempcode('notifications:NOTIFICATIONS_LOCKDOWN'),'notifications:DOC_NOTIFICATIONS'),
 		);
 	}
-
 }
 
 

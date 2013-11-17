@@ -23,7 +23,6 @@
  */
 class Module_banners
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -428,7 +427,6 @@ class Module_banners
 			'NAME'=>$source,
 		));
 	}
-
 }
 
 

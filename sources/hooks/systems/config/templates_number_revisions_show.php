@@ -20,7 +20,6 @@
 
 class Hook_config_templates_number_revisions_show
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_templates_number_revisions_show
 	{
 		return '5';
 	}
-
 }
 
 

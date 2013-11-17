@@ -20,7 +20,6 @@
 
 class Hook_config_forum_show_personal_stats_posts
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_forum_show_personal_stats_posts
 	{
 		return has_no_forum()?NULL:'0';
 	}
-
 }
 
 

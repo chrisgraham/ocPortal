@@ -20,7 +20,6 @@
 
 class Block_main_ocf_involved_topics
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -135,7 +134,6 @@ class Block_main_ocf_involved_topics
 			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
-
 }
 
 

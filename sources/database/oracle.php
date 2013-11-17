@@ -506,7 +506,6 @@ class Database_Static_oracle
 
 		return $out;
 	}
-
 }
 
 

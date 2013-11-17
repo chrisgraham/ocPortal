@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_forum_drivers
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -124,5 +123,4 @@ class Hook_addon_registry_core_forum_drivers
 			'sources_custom/forum/index.html',
 		);
 	}
-
 }

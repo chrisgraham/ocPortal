@@ -15,7 +15,6 @@
 
 class Hook_config_bug_report_text
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_bug_report_text
 	{
 		return do_lang('tester:DEFAULT_BUG_REPORT_TEMPLATE');
 	}
-
 }
 
 

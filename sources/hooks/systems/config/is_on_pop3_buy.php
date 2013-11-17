@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_pop3_buy
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_is_on_pop3_buy
 	{
 		return '0';
 	}
-
 }
 
 

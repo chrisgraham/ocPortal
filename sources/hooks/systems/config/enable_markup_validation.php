@@ -20,7 +20,6 @@
 
 class Hook_config_enable_markup_validation
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_enable_markup_validation
 	{
 		return '0';
 	}
-
 }
 
 

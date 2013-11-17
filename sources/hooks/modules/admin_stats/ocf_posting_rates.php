@@ -20,7 +20,6 @@
 
 class Hook_admin_stats_ocf_posting_rates
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -182,7 +181,6 @@ class Hook_admin_stats_ocf_posting_rates
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
-
 }
 
 

@@ -15,7 +15,6 @@
 
 class Hook_members_customers
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -32,6 +31,5 @@ class Hook_members_customers
 			array('views',do_lang_tempcode('CHARGE_CUSTOMER'),build_url(array('page'=>'admin_customers','type'=>'charge','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)),get_module_zone('admin_customers'))),
 		);
 	}
-
 }
 

@@ -42,6 +42,5 @@ class Hook_occle_command_feedback
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

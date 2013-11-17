@@ -137,5 +137,4 @@ class Hook_addon_registry_ocf_reported_posts
 			)), NULL, '', true)
 		);
 	}
-
 }

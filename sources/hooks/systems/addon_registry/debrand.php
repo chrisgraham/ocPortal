@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_debrand
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -102,5 +101,4 @@ class Hook_addon_registry_debrand
 			'sources/hooks/systems/page_groupings/debrand.php',
 		);
 	}
-
 }

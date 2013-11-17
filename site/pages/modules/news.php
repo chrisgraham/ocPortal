@@ -23,7 +23,6 @@
  */
 class Module_news
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -667,6 +666,5 @@ class Module_news
 			'WARNING_DETAILS'=>$warning_details,
 		));
 	}
-
 }
 

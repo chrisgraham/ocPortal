@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_Edit_avatar
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -157,7 +156,6 @@ class Hook_Profiles_Tabs_Edit_avatar
 
 		return array($title,$fields,$text,$javascript,$order,$hidden);
 	}
-
 }
 
 

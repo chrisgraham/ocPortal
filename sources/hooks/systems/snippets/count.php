@@ -20,7 +20,6 @@
 
 class Hook_count
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -33,5 +32,4 @@ class Hook_count
 
 		return new ocp_tempcode();
 	}
-
 }

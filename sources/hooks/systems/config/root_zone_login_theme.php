@@ -20,7 +20,6 @@
 
 class Hook_config_root_zone_login_theme
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_root_zone_login_theme
 	{
 		return '0';
 	}
-
 }
 
 

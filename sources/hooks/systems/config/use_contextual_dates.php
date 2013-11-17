@@ -20,7 +20,6 @@
 
 class Hook_config_use_contextual_dates
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_use_contextual_dates
 	{
 		return '1';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_import
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -37,7 +36,6 @@ class Hook_page_groupings_import
 			array('tools','menu/adminzone/tools/bulk_content_actions/xml_storage',array('admin_xml_storage',array('type'=>'misc'),get_module_zone('admin_xml_storage')),do_lang_tempcode('xml_storage:XML_STORAGE'),'xml_storage:DOC_XML_STORAGE'),
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_content_meta_aware_image
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -112,5 +111,4 @@ class Hook_content_meta_aware_image
 
 		return render_image_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:$root,$guid);
 	}
-
 }

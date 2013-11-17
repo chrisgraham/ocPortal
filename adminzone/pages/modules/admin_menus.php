@@ -23,7 +23,6 @@
  */
 class Module_admin_menus
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -508,7 +507,6 @@ class Module_admin_menus
 			$order++;
 		}
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_site_name
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -52,7 +51,6 @@ class Hook_config_site_name
 	{
 		return do_lang('UNNAMED');
 	}
-
 }
 
 

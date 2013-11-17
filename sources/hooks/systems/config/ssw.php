@@ -20,7 +20,6 @@
 
 class Hook_config_ssw
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_ssw
 	{
 		return '0';
 	}
-
 }
 
 

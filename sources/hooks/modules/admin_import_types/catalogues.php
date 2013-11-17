@@ -20,7 +20,6 @@
 
 class Hook_admin_import_types_catalogues
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -38,7 +37,6 @@ class Hook_admin_import_types_catalogues
 			'reviews'=>'REVIEWS',
 		);
 	}
-
 }
 
 

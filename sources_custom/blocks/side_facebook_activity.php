@@ -14,7 +14,6 @@
 
 class Block_side_facebook_activity
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -45,7 +44,6 @@ class Block_side_facebook_activity
 
 		return do_template('BLOCK_SIDE_FACEBOOK_ACTIVITY',array());
 	}
-
 }
 
 

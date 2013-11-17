@@ -20,7 +20,6 @@
 
 class Hook_rss_comcode_pages
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -114,7 +113,6 @@ class Hook_rss_comcode_pages
 		require_lang('zones');
 		return array($content,do_lang('COMCODE_PAGES'));
 	}
-
 }
 
 

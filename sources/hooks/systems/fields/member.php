@@ -20,7 +20,6 @@
 
 class Hook_fields_member
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -141,7 +140,6 @@ class Hook_fields_member
 		}
 		return $value;
 	}
-
 }
 
 

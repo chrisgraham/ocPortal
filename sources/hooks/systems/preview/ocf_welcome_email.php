@@ -20,7 +20,6 @@
 
 class Hook_Preview_ocf_welcome_email
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -58,7 +57,6 @@ class Hook_Preview_ocf_welcome_email
 
 		return array($preview,NULL);
 	}
-
 }
 
 

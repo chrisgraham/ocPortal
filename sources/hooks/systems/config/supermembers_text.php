@@ -20,7 +20,6 @@
 
 class Hook_config_supermembers_text
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_supermembers_text
 	{
 		return do_lang('supermembers:SUPERMEMBERS_TEXT');
 	}
-
 }
 
 

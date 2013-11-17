@@ -20,7 +20,6 @@
 
 class Hook_paypal
 {
-
 	/**
 	 * Get the PayPal payment address.
 	 *

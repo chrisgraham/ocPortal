@@ -20,7 +20,6 @@
 
 class Hook_ocf_auth_vb3
 {
-
 	/**
 	 * Try and authenticate for our password compatibility scheme.
 	 *
@@ -50,7 +49,6 @@ class Hook_ocf_auth_vb3
 
 		return NULL;
 	}
-
 }
 
 

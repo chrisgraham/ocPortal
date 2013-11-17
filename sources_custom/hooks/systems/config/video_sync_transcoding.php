@@ -15,7 +15,6 @@
 
 class Hook_config_video_sync_transcoding
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -72,7 +71,6 @@ class Hook_config_video_sync_transcoding
 
 		return form_input_list($human_name,$explanation,'video_sync_transcoding',make_string_tempcode($list));
 	}
-
 }
 
 

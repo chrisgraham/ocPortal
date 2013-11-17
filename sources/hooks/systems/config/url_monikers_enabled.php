@@ -20,7 +20,6 @@
 
 class Hook_config_url_monikers_enabled
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_url_monikers_enabled
 	{
 		return '1';
 	}
-
 }
 
 

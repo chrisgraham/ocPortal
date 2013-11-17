@@ -20,7 +20,6 @@
 
 class Hook_Preview_image
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -69,7 +68,6 @@ class Hook_Preview_image
 
 		return array($preview,NULL);
 	}
-
 }
 
 

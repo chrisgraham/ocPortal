@@ -20,7 +20,6 @@
 
 class Hook_rss_ocf_birthdays
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -101,7 +100,6 @@ class Hook_rss_ocf_birthdays
 		require_lang('ocf');
 		return array($content,do_lang('BIRTHDAYS'));
 	}
-
 }
 
 

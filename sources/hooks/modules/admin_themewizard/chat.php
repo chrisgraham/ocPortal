@@ -20,7 +20,6 @@
 
 class Hook_admin_themewizard_chat
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -30,7 +29,6 @@ class Hook_admin_themewizard_chat
 	{
 		return array(array('chatcodeeditor/*',),array());
 	}
-
 }
 
 

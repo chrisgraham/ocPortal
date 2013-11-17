@@ -20,7 +20,6 @@
 
 class Hook_config_password_expiry_days
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_password_expiry_days
 	{
 		return (get_forum_type()!='ocf')?NULL:'0';
 	}
-
 }
 
 

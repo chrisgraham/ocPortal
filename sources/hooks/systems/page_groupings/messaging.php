@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_messaging
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_messaging
 			array('audit','menu/adminzone/audit/messaging',array('admin_messaging',array('type'=>'misc'),get_module_zone('admin_messaging')),do_lang_tempcode('messaging:CONTACT_US_MESSAGING'),'messaging:DOC_MESSAGING'),
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_anonymous_posts
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_is_on_anonymous_posts
 	{
 		return '1';
 	}
-
 }
 
 

@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_support_credits
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -30,7 +29,6 @@ class Hook_page_groupings_support_credits
 			array('tools','menu/_generic_admin/tool',array('admin_customers',array(),get_module_zone('admin_customers')),do_lang_tempcode('customers:CHARGE_CUSTOMER')),
 		);
 	}
-
 }
 
 

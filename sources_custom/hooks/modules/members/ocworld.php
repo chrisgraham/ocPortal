@@ -15,7 +15,6 @@
 
 class Hook_members_ocworld
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -38,7 +37,6 @@ class Hook_members_ocworld
 		}
 		return array();
 	}
-
 }
 
 

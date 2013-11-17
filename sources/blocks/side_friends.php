@@ -20,7 +20,6 @@
 
 class Block_side_friends
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -64,5 +63,4 @@ class Block_side_friends
 
 		return do_template('BLOCK_SIDE_FRIENDS',array('_GUID'=>'ce94db14f9a212f38d0fce1658866e2c','FRIENDS'=>$friends));
 	}
-
 }

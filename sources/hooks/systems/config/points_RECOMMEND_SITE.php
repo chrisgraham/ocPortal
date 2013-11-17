@@ -20,7 +20,6 @@
 
 class Hook_config_points_RECOMMEND_SITE
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_points_RECOMMEND_SITE
 	{
 		return addon_installed('points')?'350':NULL;
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_validation_javascript
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_validation_javascript
 	{
 		return NULL; // Way too slow, and unlikely to be accurate with quickly-evolving JS standards
 	}
-
 }
 
 

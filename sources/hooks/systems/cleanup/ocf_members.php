@@ -20,7 +20,6 @@
 
 class Hook_ocf_members
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -55,7 +54,6 @@ class Hook_ocf_members
 		require_code('tasks');
 		return call_user_func_array__long_task(do_lang('CACHE_MEMBERS'),NULL,'ocf_members_recache');
 	}
-
 }
 
 

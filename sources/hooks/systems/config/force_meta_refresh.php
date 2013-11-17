@@ -20,7 +20,6 @@
 
 class Hook_config_force_meta_refresh
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_force_meta_refresh
 	{
 		return '0';
 	}
-
 }
 
 

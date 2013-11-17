@@ -20,7 +20,6 @@
 
 class Hook_admin_import_types_ocf_forum
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -43,7 +42,6 @@ class Hook_admin_import_types_ocf_forum
 			'ocf_private_topics'=>'PRIVATE_TOPICS',
 		);
 	}
-
 }
 
 

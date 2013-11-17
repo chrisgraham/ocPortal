@@ -20,7 +20,6 @@
 
 class Hook_rss_admin_recent_actions
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -75,7 +74,6 @@ class Hook_rss_admin_recent_actions
 
 		return array($content,do_lang('VIEW_ACTIONLOGS'));
 	}
-
 }
 
 

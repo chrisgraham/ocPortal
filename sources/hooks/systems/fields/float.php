@@ -20,7 +20,6 @@
 
 class Hook_fields_float
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -120,7 +119,6 @@ class Hook_fields_float
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
-
 }
 
 

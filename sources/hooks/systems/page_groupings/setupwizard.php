@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_setupwizard
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_setupwizard
 			array('setup','menu/adminzone/setup/SETUPWIZARD',array('admin_setupwizard',array('type'=>'misc'),get_module_zone('admin_setupwizard')),do_lang_tempcode('config:SETUPWIZARD'),'config:DOC_SETUPWIZARD'),
 		);
 	}
-
 }
 
 

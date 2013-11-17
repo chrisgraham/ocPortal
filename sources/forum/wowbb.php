@@ -1196,7 +1196,6 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return date('Y-m-d H:i:s',$timestamp);
 	}
-
 }
 
 

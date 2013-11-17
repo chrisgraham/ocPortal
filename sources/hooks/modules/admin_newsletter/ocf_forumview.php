@@ -20,7 +20,6 @@
 
 class Hook_whats_news_ocf_forumview
 {
-
 	/**
 	 * Standard modular run function for newsletter hooks.
 	 *
@@ -69,7 +68,6 @@ class Hook_whats_news_ocf_forumview
 
 		return array($new,do_lang('SECTION_FORUMS','','','',$lang));
 	}
-
 }
 
 

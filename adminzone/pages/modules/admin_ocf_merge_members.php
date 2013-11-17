@@ -23,7 +23,6 @@
  */
 class Module_admin_ocf_merge_members
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -218,7 +217,6 @@ class Module_admin_ocf_merge_members
 		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($to_id,false,'',false);
 		return inform_screen($this->title,do_lang_tempcode('MERGED_MEMBERS',$username));
 	}
-
 }
 
 

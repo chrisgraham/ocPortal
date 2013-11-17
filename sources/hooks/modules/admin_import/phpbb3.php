@@ -46,7 +46,6 @@ function init__hooks__modules__admin_import__phpbb3()
  */
 class Hook_phpbb3
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1463,7 +1462,6 @@ class Hook_phpbb3
 			ocf_make_post($topic_id,$title,$post->evaluate(),0,true,1,0,$member,NULL,$row['report_time'],NULL,NULL,NULL,NULL,false,true,NULL,true,$title,0,NULL,false,$forum_id);
 		}
 	}
-
 }
 
 

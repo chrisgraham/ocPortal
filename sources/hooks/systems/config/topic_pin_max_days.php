@@ -20,7 +20,6 @@
 
 class Hook_config_topic_pin_max_days
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_topic_pin_max_days
 	{
 		return '365';
 	}
-
 }
 
 

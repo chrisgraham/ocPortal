@@ -15,7 +15,6 @@
 
 class Hook_rss_iotds
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -85,7 +84,6 @@ class Hook_rss_iotds
 		require_lang('iotds');
 		return array($content,do_lang('IOTDS'));
 	}
-
 }
 
 

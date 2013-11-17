@@ -15,7 +15,6 @@
 
 class Hook_rss_activities
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -63,7 +62,6 @@ class Hook_rss_activities
 
 		return array($content,do_lang('ACTIVITIES_TITLE'));
 	}
-
 }
 
 

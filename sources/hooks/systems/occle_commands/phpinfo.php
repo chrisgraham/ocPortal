@@ -84,6 +84,5 @@ class Hook_occle_command_phpinfo
 			return array('',xhtmlise_html($out,true),'','');
 		}
 	}
-
 }
 

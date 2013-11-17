@@ -20,7 +20,6 @@
 
 class Block_main_personal_galleries_list
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -154,6 +153,5 @@ class Block_main_personal_galleries_list
 			$this->attach_gallery_subgalleries($row['name'],$galleries,$member_id,$member_id_viewing);
 		}
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Hook_symbol_BETA_CSS_PROPERTY
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -77,5 +76,4 @@ class Hook_symbol_BETA_CSS_PROPERTY
 
 		return $value;
 	}
-
 }

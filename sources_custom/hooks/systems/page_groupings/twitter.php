@@ -14,7 +14,6 @@
  */
 class Hook_page_groupings_twitter
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -28,7 +27,6 @@ class Hook_page_groupings_twitter
 			array('setup','menu/twitter',array('twitter_oauth',array(),get_page_zone('twitter_oauth')),do_lang_tempcode('twitter:TWITTER_SYNDICATION'),'twitter:DOC_TWITTER_SYNDICATION'),
 		);
 	}
-
 }
 
 

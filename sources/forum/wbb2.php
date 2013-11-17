@@ -218,7 +218,6 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 		$group=$this->get_member_row_field($member,'groupid');
 		return array($group);
 	}
-
 }
 
 

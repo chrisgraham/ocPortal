@@ -20,7 +20,6 @@
 
 class Hook_pointstore_permission
 {
-
 	/**
 	 * Standard pointstore item initialisation function.
 	 */
@@ -407,7 +406,6 @@ class Hook_pointstore_permission
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there(filter_naughty_harsh($row['p_type']),'member_id',$map);
 		return (!is_null($test));
 	}
-
 }
 
 

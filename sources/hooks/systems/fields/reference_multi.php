@@ -20,7 +20,6 @@
 
 class Hook_fields_reference_multi
 {
-
 	/**
 	 * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
 	 *
@@ -173,6 +172,5 @@ class Hook_fields_reference_multi
 		}
 		return $value;
 	}
-
 }
 

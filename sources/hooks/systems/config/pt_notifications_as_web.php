@@ -20,7 +20,6 @@
 
 class Hook_config_pt_notifications_as_web
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_pt_notifications_as_web
 	{
 		return '0';
 	}
-
 }
 
 

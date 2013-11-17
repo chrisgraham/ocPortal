@@ -20,7 +20,6 @@
 
 class Hook_checklist_polls
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -71,7 +70,6 @@ class Hook_checklist_polls
 		if (is_null($c)) return 0;
 		return $c;
 	}
-
 }
 
 

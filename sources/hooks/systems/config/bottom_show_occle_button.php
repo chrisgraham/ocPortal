@@ -20,7 +20,6 @@
 
 class Hook_config_bottom_show_occle_button
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_bottom_show_occle_button
 	{
 		return (get_file_base()!=get_custom_file_base())?'0':'1';
 	}
-
 }
 
 

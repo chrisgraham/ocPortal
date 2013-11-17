@@ -20,7 +20,6 @@
 
 class Hook_rss_catalogues
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -126,7 +125,6 @@ class Hook_rss_catalogues
 		require_lang('catalogues');
 		return array($content,do_lang('CATALOGUE_ENTRIES'));
 	}
-
 }
 
 

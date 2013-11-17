@@ -20,7 +20,6 @@
 
 class Hook_rss_chat
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -95,6 +94,5 @@ class Hook_rss_chat
 		require_lang('chat');
 		return array($content,do_lang('MESSAGES'));
 	}
-
 }
 

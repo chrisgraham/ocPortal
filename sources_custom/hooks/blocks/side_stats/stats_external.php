@@ -14,7 +14,6 @@
 
 class Hook_stats_external
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -39,7 +38,6 @@ class Hook_stats_external
 
 		return $section;
 	}
-
 }
 
 function getAlexaRank($url)

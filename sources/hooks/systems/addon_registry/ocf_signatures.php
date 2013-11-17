@@ -214,5 +214,4 @@ class Hook_addon_registry_ocf_signatures
 			)), NULL, '', true)
 		);
 	}
-
 }

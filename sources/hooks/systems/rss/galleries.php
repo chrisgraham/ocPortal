@@ -20,7 +20,6 @@
 
 class Hook_rss_galleries
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -142,7 +141,6 @@ class Hook_rss_galleries
 		require_lang('galleries');
 		return array($content,do_lang('GALLERIES'));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_vote_member_ip_restrict
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_vote_member_ip_restrict
 	{
 		return '1';
 	}
-
 }
 
 

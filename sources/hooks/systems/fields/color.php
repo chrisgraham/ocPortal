@@ -20,7 +20,6 @@
 
 class Hook_fields_color
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -117,7 +116,6 @@ class Hook_fields_color
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
-
 }
 
 

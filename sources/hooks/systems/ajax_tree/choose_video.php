@@ -20,7 +20,6 @@
 
 class Hook_choose_video
 {
-
 	/**
 	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
 	 *
@@ -94,7 +93,6 @@ class Hook_choose_video
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
 		return create_selection_list_gallery_content_tree('videos',$it,$only_owned,false,$editable_filter);
 	}
-
 }
 
 

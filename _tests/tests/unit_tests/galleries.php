@@ -332,5 +332,4 @@ class galleries_test_set extends ocp_test_case
 	{
 		return $this->cms_gal_category->delete_actualisation('a_test_gallery_for_ut');
 	}
-
 }

@@ -20,7 +20,6 @@
 
 class Block_main_include_module
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -189,7 +188,6 @@ class Block_main_include_module
 		$ret=make_string_tempcode($_out);
 		return $ret;
 	}
-
 }
 
 

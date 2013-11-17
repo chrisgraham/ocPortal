@@ -15,7 +15,6 @@
 
 class Hook_cron_classifieds
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -75,7 +74,6 @@ class Hook_cron_classifieds
 
 		set_value('last_classified_refresh',strval($time));
 	}
-
 }
 
 

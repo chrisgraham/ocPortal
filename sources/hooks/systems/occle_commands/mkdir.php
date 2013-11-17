@@ -45,6 +45,5 @@ class Hook_occle_command_mkdir
 			else return array('','','',do_lang('INCOMPLETE_ERROR'));
 		}
 	}
-
 }
 

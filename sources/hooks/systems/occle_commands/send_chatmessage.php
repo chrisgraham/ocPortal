@@ -53,6 +53,5 @@ class Hook_occle_command_send_chatmessage
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

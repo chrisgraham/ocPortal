@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_strong_forum_tie
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_is_on_strong_forum_tie
 	{
 		return '0';
 	}
-
 }
 
 

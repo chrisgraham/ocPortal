@@ -20,7 +20,6 @@
 
 class Block_side_language
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -63,7 +62,6 @@ class Block_side_language
 		$langs=create_selection_list_langs(user_lang());
 		return do_template('BLOCK_SIDE_LANGUAGE',array('_GUID'=>'5dd7dd434722d7fd958773bd08e838c7','LANGS'=>$langs));
 	}
-
 }
 
 

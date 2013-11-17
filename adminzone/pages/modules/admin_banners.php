@@ -23,7 +23,6 @@
  */
 class Module_admin_banners
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -186,6 +185,5 @@ class Module_admin_banners
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Hook_config_notification_poll_frequency
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_notification_poll_frequency
 	{
 		return '15';
 	}
-
 }
 
 

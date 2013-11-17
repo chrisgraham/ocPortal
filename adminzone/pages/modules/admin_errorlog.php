@@ -23,7 +23,6 @@
  */
 class Module_admin_errorlog
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -224,7 +223,6 @@ class Module_admin_errorlog
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
-
 }
 
 

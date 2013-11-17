@@ -79,5 +79,4 @@ class Hook_media_rendering_realaudio
 	{
 		return do_template('MEDIA_REALMEDIA',array('_GUID'=>'ae662cde8913c0982ced8ec903b052d9','HOOK'=>'realaudio')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
-
 }

@@ -23,7 +23,6 @@
  */
 class Module_admin_lang
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -973,7 +972,6 @@ msgstr ""
 		}
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

@@ -50,6 +50,5 @@ class Hook_occle_command_cd
 			return array('','',$occle_fs->print_working_directory(),'');
 		}
 	}
-
 }
 

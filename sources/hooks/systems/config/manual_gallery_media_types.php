@@ -20,7 +20,6 @@
 
 class Hook_config_manual_gallery_media_types
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_manual_gallery_media_types
 	{
 		return '1';
 	}
-
 }
 
 

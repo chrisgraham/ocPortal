@@ -23,7 +23,6 @@
  */
 class Module_admin_themewizard
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -450,7 +449,6 @@ class Module_admin_themewizard
 		$message=do_lang_tempcode('LOGOWIZARD_3_DESCRIBE',escape_html($theme));
 		return inform_screen($this->title,$message);
 	}
-
 }
 
 

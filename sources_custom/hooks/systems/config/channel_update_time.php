@@ -15,7 +15,6 @@
 
 class Hook_config_channel_update_time
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_channel_update_time
 	{
 		return '60';
 	}
-
 }
 
 

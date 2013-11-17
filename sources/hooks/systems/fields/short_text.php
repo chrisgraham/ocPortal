@@ -20,7 +20,6 @@
 
 class Hook_fields_short_text
 {
-
 	/**
 	 * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
 	 *
@@ -137,7 +136,6 @@ class Hook_fields_short_text
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
-
 }
 
 

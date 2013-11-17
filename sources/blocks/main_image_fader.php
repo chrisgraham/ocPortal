@@ -20,7 +20,6 @@
 
 class Block_main_image_fader
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -186,5 +185,4 @@ class Block_main_image_fader
 			'MILL'=>strval($mill),
 		));
 	}
-
 }

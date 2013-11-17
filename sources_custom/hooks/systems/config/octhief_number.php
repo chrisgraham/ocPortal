@@ -15,7 +15,6 @@
 
 class Hook_config_octhief_number
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_octhief_number
 	{
 		return '1';
 	}
-
 }
 
 

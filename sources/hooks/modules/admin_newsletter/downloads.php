@@ -20,7 +20,6 @@
 
 class Hook_whats_news_downloads
 {
-
 	/**
 	 * Standard modular run function for newsletter hooks.
 	 *
@@ -94,7 +93,6 @@ class Hook_whats_news_downloads
 
 		return array($new,do_lang('SECTION_DOWNLOADS','','','',$lang));
 	}
-
 }
 
 

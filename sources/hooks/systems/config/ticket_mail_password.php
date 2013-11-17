@@ -20,7 +20,6 @@
 
 class Hook_config_ticket_mail_password
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -52,7 +51,6 @@ class Hook_config_ticket_mail_password
 
 		return '';
 	}
-
 }
 
 

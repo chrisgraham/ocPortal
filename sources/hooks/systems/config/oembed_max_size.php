@@ -20,7 +20,6 @@
 
 class Hook_config_oembed_max_size
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_oembed_max_size
 	{
 		return '550'; // A good example of a wide thing is an embedded Tweet
 	}
-
 }
 
 

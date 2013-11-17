@@ -50,5 +50,4 @@ class Hook_occle_command_alien_check
 			return array('',$result,'','');
 		}
 	}
-
 }

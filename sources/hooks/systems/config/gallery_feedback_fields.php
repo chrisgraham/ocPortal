@@ -20,7 +20,6 @@
 
 class Hook_config_gallery_feedback_fields
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_gallery_feedback_fields
 	{
 		return '1';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_realtime_rain_chat
 {
-
 	/**
 	 * Standard modular run function for realtime-rain hooks.
 	 *
@@ -73,5 +72,4 @@ class Hook_realtime_rain_chat
 
 		return $drops;
 	}
-
 }

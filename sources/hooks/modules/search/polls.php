@@ -20,7 +20,6 @@
 
 class Hook_search_polls
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -139,7 +138,6 @@ class Hook_search_polls
 		require_code('polls');
 		return render_poll_box(true,$row);
 	}
-
 }
 
 

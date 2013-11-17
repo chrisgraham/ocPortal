@@ -38,6 +38,5 @@ class Hook_occle_command_echo
 			return array('','',$parameters[0],'');
 		}
 	}
-
 }
 

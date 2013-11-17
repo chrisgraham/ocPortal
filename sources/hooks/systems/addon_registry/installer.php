@@ -530,5 +530,4 @@ class Hook_addon_registry_installer
 			)), NULL, '', true)
 		);
 	}
-
 }

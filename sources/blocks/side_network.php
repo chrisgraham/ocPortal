@@ -20,7 +20,6 @@
 
 class Block_side_network
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -77,7 +76,6 @@ class Block_side_network
 		}
 		return new ocp_tempcode();
 	}
-
 }
 
 

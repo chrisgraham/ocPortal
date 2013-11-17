@@ -20,7 +20,6 @@
 
 class Hook_config_proxy_port
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_proxy_port
 	{
 		return '8080';
 	}
-
 }
 
 

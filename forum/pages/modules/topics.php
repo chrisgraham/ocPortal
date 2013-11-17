@@ -23,7 +23,6 @@
  */
 class Module_topics
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -3876,7 +3875,6 @@ END;
 		$_GET['id']=strval($forum_id);
 		return $this->new_topic(false,NULL,file_exists(get_file_base().'/themes/default/images/emoticons/index.html')?'emoticons/birthday':'ocf_emoticons/birthday');
 	}
-
 }
 
 

@@ -1437,7 +1437,6 @@ class Module_cms_catalogues_cat extends standard_crud_module
 			do_lang('MANAGE_CATALOGUES')
 		);
 	}
-
 }
 
 /**

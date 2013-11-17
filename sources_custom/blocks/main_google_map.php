@@ -18,7 +18,6 @@ CUSTOMISED FOR PROJECT: DO NOT OVERWRITE WITH A NEWER ADDON VERSION
 
 class Block_main_google_map
 {
-
 	/**
 	 * Standard modular info function.
 	 *

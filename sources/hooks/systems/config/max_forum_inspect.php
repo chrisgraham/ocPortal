@@ -20,7 +20,6 @@
 
 class Hook_config_max_forum_inspect
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_max_forum_inspect
 	{
 		return (get_forum_type()!='ocf')?NULL:'300';
 	}
-
 }
 
 

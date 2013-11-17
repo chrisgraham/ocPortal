@@ -20,7 +20,6 @@
 
 class Hook_Preview_ocf_emoticon
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -67,5 +66,4 @@ class Hook_Preview_ocf_emoticon
 
 		return array($preview,NULL);
 	}
-
 }

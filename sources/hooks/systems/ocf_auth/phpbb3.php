@@ -20,7 +20,6 @@
 
 class Hook_ocf_auth_phpbb3
 {
-
 	/**
 	 * Try and authenticate for our password compatibility scheme.
 	 *
@@ -52,7 +51,6 @@ class Hook_ocf_auth_phpbb3
 
 		return NULL;
 	}
-
 }
 
 

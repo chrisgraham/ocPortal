@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_help_page
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,5 +35,4 @@ class Hook_page_groupings_help_page
 			array('site_meta','menu/pages/help',array('help',array(),get_comcode_zone('help')),do_lang_tempcode('HELP')),
 		);
 	}
-
 }

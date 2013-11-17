@@ -20,7 +20,6 @@
 
 class Hook_choose_wiki_page
 {
-
 	/**
 	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
 	 *
@@ -117,7 +116,6 @@ class Hook_choose_wiki_page
 
 		return wiki_show_tree(is_null($it)?NULL:intval($it));
 	}
-
 }
 
 

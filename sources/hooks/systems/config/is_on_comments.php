@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_comments
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_is_on_comments
 	{
 		return has_no_forum()?NULL:'1';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_network_links
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_network_links
 	{
 		return get_base_url().'/netlink.php';
 	}
-
 }
 
 

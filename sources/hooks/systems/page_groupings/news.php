@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_news
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -41,7 +40,6 @@ class Hook_page_groupings_news
 			array('rich_content','menu/rich_content/news',array('news',array(),get_module_zone('news')),do_lang_tempcode('NEWS')),
 		);
 	}
-
 }
 
 

@@ -18,7 +18,6 @@
  */
 class Module_admin_ocpusers
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -208,6 +207,5 @@ class Module_admin_ocpusers
 
 		return do_template('OC_SITES_SCREEN',array('_GUID'=>'7f4b56c730f2b613994a3fe6f00ed525','TITLE'=>$this->title,'ROWS'=>$_rows,'NAMEORD'=>$nameord,'ACPORD'=>$acpord,'KEYORD'=>$keyord,'VERORD'=>$versord));
 	}
-
 }
 

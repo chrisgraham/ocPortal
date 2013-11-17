@@ -20,7 +20,6 @@
 
 class Hook_checklist_newsletter
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,7 +58,6 @@ class Hook_checklist_newsletter
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'fb9483bb05ad90b9f2b7eba0c53996f4','CONFIG_URL'=>$config_url,'URL'=>$url,'STATUS'=>$_status,'TASK'=>do_lang_tempcode('NEWSLETTER_SEND'),'INFO'=>$info));
 		return array(array($tpl,$seconds_due_in,NULL,'news_update_time'));
 	}
-
 }
 
 

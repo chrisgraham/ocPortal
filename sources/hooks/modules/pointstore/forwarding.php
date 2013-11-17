@@ -20,7 +20,6 @@
 
 class Hook_pointstore_forwarding
 {
-
 	/**
 	 * Standard pointstore item initialisation function.
 	 */
@@ -276,7 +275,6 @@ class Hook_pointstore_forwarding
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,$text);
 	}
-
 }
 
 

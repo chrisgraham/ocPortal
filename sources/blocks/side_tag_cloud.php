@@ -20,7 +20,6 @@
 
 class Block_side_tag_cloud
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -156,7 +155,6 @@ class Block_side_tag_cloud
 
 		return do_template('BLOCK_SIDE_TAG_CLOUD',array('_GUID'=>'5cd3ece0f5c087fe1ce7db26d5356989','TAGS'=>$tpl_tags,'TITLE'=>$title));
 	}
-
 }
 
 

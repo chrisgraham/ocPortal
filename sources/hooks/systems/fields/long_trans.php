@@ -20,7 +20,6 @@
 
 class Hook_fields_long_trans
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -121,7 +120,6 @@ class Hook_fields_long_trans
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
-
 }
 
 

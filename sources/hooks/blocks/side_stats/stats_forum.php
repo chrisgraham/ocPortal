@@ -20,7 +20,6 @@
 
 class Hook_stats_forum
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -116,7 +115,6 @@ class Hook_stats_forum
 
 		return $forums;
 	}
-
 }
 
 

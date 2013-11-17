@@ -20,7 +20,6 @@
 
 class Hook_checklist_ecommerce_orders
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -48,7 +47,6 @@ class Hook_checklist_ecommerce_orders
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'440a79b164533416f4d086a93efba9ea','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('ORDERS'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($to_dispatch_order_cnt)))));
 		return array(array($tpl,NULL,$to_dispatch_order_cnt,NULL));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_search_calendar
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -156,7 +155,6 @@ class Hook_search_calendar
 		require_code('calendar');
 		return render_event_box($row);
 	}
-
 }
 
 

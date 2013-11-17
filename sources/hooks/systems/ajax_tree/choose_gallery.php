@@ -20,7 +20,6 @@
 
 class Hook_choose_gallery
 {
-
 	/**
 	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
 	 *
@@ -127,7 +126,6 @@ class Hook_choose_gallery
 
 		return create_selection_list_gallery_tree($it,$filter,$must_accept_images,$must_accept_videos,$purity,$compound_list,$member_id,$addable_filter,$editable_filter);
 	}
-
 }
 
 

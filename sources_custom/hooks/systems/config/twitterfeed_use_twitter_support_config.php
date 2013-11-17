@@ -15,7 +15,6 @@
 
 class Hook_config_twitterfeed_use_twitter_support_config
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_twitterfeed_use_twitter_support_config
 	{
 		return '0';
 	}
-
 }
 
 

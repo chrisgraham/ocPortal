@@ -369,7 +369,6 @@ class Module_admin_awards extends standard_crud_module
 	{
 		delete_award_type(intval($id));
 	}
-
 }
 
 

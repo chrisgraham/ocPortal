@@ -23,7 +23,6 @@
  */
 class Module_cms_chat
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -693,7 +692,6 @@ class Module_cms_chat
 		// Redirect
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_stats_wiki
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -41,7 +40,6 @@ class Hook_stats_wiki
 
 		return $wiki;
 	}
-
 }
 
 

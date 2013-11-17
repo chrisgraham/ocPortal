@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_wiki
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -37,7 +36,6 @@ class Hook_page_groupings_wiki
 			array('rich_content','menu/rich_content/wiki',array('wiki',array(),get_module_zone('wiki')),do_lang_tempcode('wiki:WIKI')),
 		);
 	}
-
 }
 
 

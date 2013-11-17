@@ -20,7 +20,6 @@
 
 class Hook_checklist_news
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,7 +57,6 @@ class Hook_checklist_news
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'dd14f34eafa4f24c4c173c195cd84fe3','CONFIG_URL'=>$config_url,'URL'=>$url,'STATUS'=>$_status,'TASK'=>do_lang_tempcode('ADD_NEWS'),'INFO'=>$info));
 		return array(array($tpl,$seconds_due_in,NULL,'news_update_time'));
 	}
-
 }
 
 

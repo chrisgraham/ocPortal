@@ -45,6 +45,5 @@ class Hook_occle_command_give
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

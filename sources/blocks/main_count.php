@@ -20,7 +20,6 @@
 
 class Block_main_count
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -82,7 +81,6 @@ class Block_main_count
 
 		return do_template('BLOCK_MAIN_COUNT',array('_GUID'=>'49d3ba8fb5b5544ac817f9a7d18f9d35','NAME'=>$name,'UPDATE'=>$update,'VALUE'=>strval($current_value+1)));
 	}
-
 }
 
 

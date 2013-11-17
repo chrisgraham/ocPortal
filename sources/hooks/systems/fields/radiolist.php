@@ -20,7 +20,6 @@
 
 class Hook_fields_radiolist
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -144,7 +143,6 @@ class Hook_fields_radiolist
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,fractional_edit()?STRING_MAGIC_NULL:'');
 	}
-
 }
 
 

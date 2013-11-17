@@ -20,7 +20,6 @@
 
 class Hook_rss_wiki
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -75,7 +74,6 @@ class Hook_rss_wiki
 		require_lang('wiki');
 		return array($content,do_lang('WIKI_POSTS'));
 	}
-
 }
 
 

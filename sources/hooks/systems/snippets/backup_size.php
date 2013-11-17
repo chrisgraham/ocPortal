@@ -20,7 +20,6 @@
 
 class Hook_backup_size
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -44,7 +43,6 @@ class Hook_backup_size
 
 		return make_string_tempcode(clean_file_size($size));
 	}
-
 }
 
 

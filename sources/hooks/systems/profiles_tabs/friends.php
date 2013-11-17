@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_friends
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -72,6 +71,5 @@ class Hook_Profiles_Tabs_friends
 
 		return array($title,$content,$order);
 	}
-
 }
 

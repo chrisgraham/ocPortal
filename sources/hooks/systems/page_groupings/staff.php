@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_staff
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -37,7 +36,6 @@ class Hook_page_groupings_staff
 			array('site_meta','menu/site_meta/staff',array('staff',array(),get_module_zone('staff')),do_lang_tempcode('staff:STAFF')),
 		);
 	}
-
 }
 
 

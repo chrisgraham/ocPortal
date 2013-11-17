@@ -23,7 +23,6 @@
  */
 class Module_admin_email_log
 {
-
 	/**
 	 * Standard modular info function.
 	 *

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_breadcrumbs
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -102,5 +101,4 @@ class Hook_addon_registry_breadcrumbs
 			'sources/breadcrumbs.php',
 		);
 	}
-
 }

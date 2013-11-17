@@ -20,7 +20,6 @@
 
 class Hook_fields_member_multi
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -157,7 +156,6 @@ class Hook_fields_member_multi
 		while ($_value!==NULL);
 		return $value;
 	}
-
 }
 
 

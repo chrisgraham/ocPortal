@@ -20,7 +20,6 @@
 
 class Hook_sw_newsletter
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_newsletter
 
 		return array(array(),array('main_newsletter_signup'=>array('PANEL_NONE','PANEL_RIGHT')));
 	}
-
 }
 
 

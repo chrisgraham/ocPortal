@@ -20,7 +20,6 @@
 
 class Hook_email_exists
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -37,5 +36,4 @@ class Hook_email_exists
 
 		return make_string_tempcode(strip_tags(strip_html(do_lang('EMAIL_ADDRESS_IN_USE',escape_html(get_site_name())))));
 	}
-
 }

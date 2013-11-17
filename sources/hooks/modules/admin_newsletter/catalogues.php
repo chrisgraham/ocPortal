@@ -20,7 +20,6 @@
 
 class Hook_whats_news_catalogues
 {
-
 	/**
 	 * Standard modular run function for newsletter hooks.
 	 *
@@ -149,7 +148,6 @@ class Hook_whats_news_catalogues
 
 		return array($new,do_lang('CATALOGUE_ENTRIES','','','',$lang));
 	}
-
 }
 
 

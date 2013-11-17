@@ -20,7 +20,6 @@
 
 class Block_side_calendar
 {
-
 	/**
 	 * Standard modular info function.
 	 *

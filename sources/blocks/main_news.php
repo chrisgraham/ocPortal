@@ -20,7 +20,6 @@
 
 class Block_main_news
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -440,7 +439,6 @@ class Block_main_news
 			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
-
 }
 
 

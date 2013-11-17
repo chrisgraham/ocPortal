@@ -20,7 +20,6 @@
 
 class Hook_config_bottom_show_sitemap_button
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_bottom_show_sitemap_button
 	{
 		return '1';
 	}
-
 }
 
 

@@ -9,7 +9,6 @@
 
 class Hook_cron_user_import
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -27,7 +26,6 @@ class Hook_cron_user_import
 			do_user_import();
 		}
 	}
-
 }
 
 

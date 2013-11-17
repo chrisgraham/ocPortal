@@ -20,7 +20,6 @@
 
 class Hook_sw_stats_block
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_stats_block
 
 		return array(array(),array('side_stats'=>array('PANEL_LEFT','PANEL_RIGHT')));
 	}
-
 }
 
 

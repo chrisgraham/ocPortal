@@ -20,7 +20,6 @@
 
 class Hook_config_personal_under_members
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_personal_under_members
 	{
 		return '0';
 	}
-
 }
 
 

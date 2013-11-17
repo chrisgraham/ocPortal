@@ -91,7 +91,6 @@ class Block_main_greeting
 
 		return $out;
 	}
-
 }
 
 

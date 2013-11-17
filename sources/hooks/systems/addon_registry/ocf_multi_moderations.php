@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_multi_moderations
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -103,5 +102,4 @@ class Hook_addon_registry_ocf_multi_moderations
 			'adminzone/pages/modules/admin_ocf_multi_moderations.php',
 		);
 	}
-
 }

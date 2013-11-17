@@ -849,7 +849,6 @@ class forum_driver_none extends forum_driver_base
 	{
 		return '';
 	}
-
 }
 
 

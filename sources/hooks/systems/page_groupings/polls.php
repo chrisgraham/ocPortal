@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_polls
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -37,7 +36,6 @@ class Hook_page_groupings_polls
 			array('social','menu/social/polls',array('polls',array(),get_module_zone('polls')),do_lang_tempcode('polls:POLLS')),
 		);
 	}
-
 }
 
 

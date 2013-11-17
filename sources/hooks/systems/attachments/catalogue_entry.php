@@ -20,7 +20,6 @@
 
 class Hook_attachments_catalogue_entry
 {
-
 	/**
 	 * Standard modular run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
@@ -43,7 +42,6 @@ class Hook_attachments_catalogue_entry
 
 		return ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_member(),'catalogues_category',strval($info[0]['cc_id']))));
 	}
-
 }
 
 

@@ -23,7 +23,6 @@
  */
 class Module_admin_notifications
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -273,7 +272,6 @@ class Module_admin_notifications
 			'ACTION_URL'=>get_self_url(),
 		));
 	}
-
 }
 
 

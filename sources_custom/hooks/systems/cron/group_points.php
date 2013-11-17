@@ -15,7 +15,6 @@
 
 class Hook_cron_group_points
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -62,5 +61,4 @@ class Hook_cron_group_points
 
 		set_value('last_group_points',strval($time));
 	}
-
 }

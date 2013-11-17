@@ -159,7 +159,6 @@ class Hook_fields_random
 
 		return $value;
 	}
-
 }
 
 

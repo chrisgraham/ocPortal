@@ -20,7 +20,6 @@
 
 class Hook_Preview_quiz
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -127,7 +126,6 @@ class Hook_Preview_quiz
 
 		return array(do_template('FORM',array('_GUID'=>'671da928305bee72d7508beb7687d6df','SUBMIT_NAME'=>'','TEXT'=>'','URL'=>'','HIDDEN'=>'','FIELDS'=>$preview)),NULL);
 	}
-
 }
 
 

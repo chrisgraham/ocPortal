@@ -20,7 +20,6 @@
 
 class Hook_config_url_scheme
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -52,7 +51,6 @@ class Hook_config_url_scheme
 		if (GOOGLE_APPENGINE) return 'HTM';
 		return 'RAW';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_image_thumbs
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -76,7 +75,6 @@ class Hook_image_thumbs
 		}
 		closedir($dh);
 	}
-
 }
 
 

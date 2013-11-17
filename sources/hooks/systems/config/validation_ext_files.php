@@ -20,7 +20,6 @@
 
 class Hook_config_validation_ext_files
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_validation_ext_files
 	{
 		return NULL;//'0';	Way too slow for modern sites
 	}
-
 }
 
 

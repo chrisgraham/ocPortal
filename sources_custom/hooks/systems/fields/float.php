@@ -15,7 +15,6 @@
 
 class Hook_fields_float
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -171,7 +170,6 @@ class Hook_fields_float
 
 		return post_param($tmp_name,$default);
 	}
-
 }
 
 

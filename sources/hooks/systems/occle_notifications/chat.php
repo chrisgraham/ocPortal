@@ -54,6 +54,5 @@ class Hook_occle_notification_chat
 		}
 		else return false;
 	}
-
 }
 

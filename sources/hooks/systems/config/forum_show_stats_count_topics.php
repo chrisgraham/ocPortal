@@ -20,7 +20,6 @@
 
 class Hook_config_forum_show_stats_count_topics
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_forum_show_stats_count_topics
 	{
 		return '1';
 	}
-
 }
 
 

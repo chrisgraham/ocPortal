@@ -20,7 +20,6 @@
 
 class Hook_config_general_safety_listing_limit
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_general_safety_listing_limit
 	{
 		return '400';
 	}
-
 }
 
 

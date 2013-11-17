@@ -20,7 +20,6 @@
 
 class Hook_config_show_personal_adminzone_link
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_show_personal_adminzone_link
 	{
 		return '1';
 	}
-
 }
 
 

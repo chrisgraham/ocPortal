@@ -20,7 +20,6 @@
 
 class Hook_fields_url_multi
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -146,7 +145,6 @@ class Hook_fields_url_multi
 		while ($_value!==NULL);
 		return $value;
 	}
-
 }
 
 

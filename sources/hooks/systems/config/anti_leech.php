@@ -20,7 +20,6 @@
 
 class Hook_config_anti_leech
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_anti_leech
 	{
 		return '0';
 	}
-
 }
 
 

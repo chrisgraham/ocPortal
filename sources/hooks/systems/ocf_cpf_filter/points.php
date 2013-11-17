@@ -20,7 +20,6 @@
 
 class Hook_ocf_cpf_filter_points
 {
-
 	/**
 	 * Find which special CPF's to enable.
 	 *
@@ -30,7 +29,6 @@ class Hook_ocf_cpf_filter_points
 	{
 		return array('points_used'=>1,'gift_points_used'=>1,'points_gained_given'=>1,'points_gained_rating'=>1,'points_gained_voting'=>1);
 	}
-
 }
 
 

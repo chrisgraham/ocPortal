@@ -20,7 +20,6 @@
 
 class Block_menu
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -89,7 +88,6 @@ class Block_menu
 
 		return $menu;
 	}
-
 }
 
 /**

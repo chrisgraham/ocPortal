@@ -20,7 +20,6 @@
 
 class Hook_admin_theme_images
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -65,7 +64,6 @@ class Hook_admin_theme_images
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

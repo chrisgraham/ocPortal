@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_ad_success
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -29,7 +28,6 @@ class Hook_page_groupings_ad_success
 			array('audit','menu/_generic_admin/tool',array('ad_success',array(),get_page_zone('ad_success')),make_string_tempcode('Ad success')),
 		);
 	}
-
 }
 
 

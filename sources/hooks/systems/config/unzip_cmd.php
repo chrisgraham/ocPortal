@@ -20,7 +20,6 @@
 
 class Hook_config_unzip_cmd
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_unzip_cmd
 		if (function_exists('zip_open')) return NULL;
 		return '/usr/bin/unzip -o @_SRC_@ -x -d @_DST_@';
 	}
-
 }
 
 

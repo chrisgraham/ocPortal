@@ -23,7 +23,6 @@
  */
 class Module_admin_lookup
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -301,7 +300,6 @@ class Module_admin_lookup
 			return internalise_own_screen($tpl);
 		}
 	}
-
 }
 
 

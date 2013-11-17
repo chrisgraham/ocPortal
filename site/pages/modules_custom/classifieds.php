@@ -228,5 +228,4 @@ class Module_classifieds
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
-
 }

@@ -23,7 +23,6 @@
  */
 class Module_tickets
 {
-
 	/**
 	 * Standard modular info function.
 	 *

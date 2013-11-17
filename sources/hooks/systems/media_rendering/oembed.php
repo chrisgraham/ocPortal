@@ -357,5 +357,4 @@ class Hook_media_rendering_oembed
 
 		return NULL;
 	}
-
 }

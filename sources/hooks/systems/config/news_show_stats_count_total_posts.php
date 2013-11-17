@@ -20,7 +20,6 @@
 
 class Hook_config_news_show_stats_count_total_posts
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_news_show_stats_count_total_posts
 	{
 		return addon_installed('stats_block')?'0':NULL;
 	}
-
 }
 
 

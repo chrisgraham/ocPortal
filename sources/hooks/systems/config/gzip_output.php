@@ -20,7 +20,6 @@
 
 class Hook_config_gzip_output
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_gzip_output
 		if (GOOGLE_APPENGINE) return NULL;
 		return '0';
 	}
-
 }
 
 

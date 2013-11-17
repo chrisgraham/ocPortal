@@ -18,7 +18,6 @@
  */
 class Module_admin_customers
 {
-
 	/**
 	 * Standard modular info function.
 	 *

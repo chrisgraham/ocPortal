@@ -23,7 +23,6 @@
  */
 class Module_admin_addons
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1268,7 +1267,6 @@ class Module_admin_addons
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$zone),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

@@ -2,7 +2,6 @@
 
 class Hook_image_thumbs
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -12,6 +11,5 @@ class Hook_image_thumbs
 	{
 		return NULL; // Disabled if thumbnails are controlled manually
 	}
-
 }
 

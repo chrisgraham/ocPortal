@@ -20,7 +20,6 @@
 
 class Hook_config_messaging_forum_name
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_messaging_forum_name
 	{
 		return do_lang('messaging:MESSAGING_FORUM_NAME','','','',get_site_default_lang());
 	}
-
 }
 
 

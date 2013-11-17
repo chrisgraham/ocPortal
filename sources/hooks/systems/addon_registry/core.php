@@ -2136,5 +2136,4 @@ class Hook_addon_registry_core
 			)), NULL, '', true)
 		);
 	}
-
 }

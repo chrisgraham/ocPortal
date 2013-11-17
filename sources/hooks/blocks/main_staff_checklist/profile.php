@@ -20,7 +20,6 @@
 
 class Hook_checklist_profile
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -43,7 +42,6 @@ class Hook_checklist_profile
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'276b29a1dac30addf9459fd960a260cd','URL'=>'','STATUS'=>$_status,'TASK'=>urlise_lang(do_lang('NAG_SETUP_PROFILE'),$url)));
 		return array(array($tpl,NULL,$todo,NULL));
 	}
-
 }
 
 

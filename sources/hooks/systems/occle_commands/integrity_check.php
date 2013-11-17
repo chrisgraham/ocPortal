@@ -40,5 +40,4 @@ class Hook_occle_command_integrity_check
 			return array('',$result,'','');
 		}
 	}
-
 }

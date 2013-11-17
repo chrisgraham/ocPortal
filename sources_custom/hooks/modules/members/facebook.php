@@ -14,7 +14,6 @@
 
 class Hook_members_facebook
 {
-
 	/**
 	 * Standard modular run function.
 	 *

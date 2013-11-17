@@ -15,7 +15,6 @@
 
 class Hook_config_enable_google_translate
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_enable_google_translate
 	{
 		return '0';
 	}
-
 }
 
 

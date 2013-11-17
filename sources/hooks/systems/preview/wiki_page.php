@@ -20,7 +20,6 @@
 
 class Hook_Preview_wiki_page
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -31,7 +30,6 @@ class Hook_Preview_wiki_page
 		$applies=(get_param('page','')=='cms_wiki');
 		return array($applies,'wiki_page',false);
 	}
-
 }
 
 

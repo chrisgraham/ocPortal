@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_help_page
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -100,5 +99,4 @@ class Hook_addon_registry_help_page
 			'sources/hooks/systems/page_groupings/help_page.php',
 		);
 	}
-
 }

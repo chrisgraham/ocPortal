@@ -15,7 +15,6 @@
 
 class Hook_cron_site_cleanup
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -44,7 +43,6 @@ class Hook_cron_site_cleanup
 			myocp_add_site_raw($server,$codename,$email_address,$password);
 		}
 	}
-
 }
 
 

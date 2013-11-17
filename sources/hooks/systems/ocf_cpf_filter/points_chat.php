@@ -20,7 +20,6 @@
 
 class Hook_ocf_cpf_filter_points_chat
 {
-
 	/**
 	 * Find which special CPF's to enable.
 	 *
@@ -30,7 +29,6 @@ class Hook_ocf_cpf_filter_points_chat
 	{
 		return array();//Actually, hide all these  array('points_gained_chat'=>1);
 	}
-
 }
 
 

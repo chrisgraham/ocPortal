@@ -20,7 +20,6 @@
 
 class Block_side_forum_news
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -165,7 +164,6 @@ class Block_side_forum_news
 			return new ocp_tempcode();
 		}
 	}
-
 }
 
 

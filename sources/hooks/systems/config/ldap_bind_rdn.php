@@ -20,7 +20,6 @@
 
 class Hook_config_ldap_bind_rdn
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_ldap_bind_rdn
 	{
 		return (DIRECTORY_SEPARATOR=='/')?'NotManager':'NotAdministrator';
 	}
-
 }
 
 

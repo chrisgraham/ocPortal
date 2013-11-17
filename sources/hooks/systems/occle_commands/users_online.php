@@ -50,6 +50,5 @@ class Hook_occle_command_users_online
 			return array('',do_template('OCCLE_USERS_ONLINE',array('_GUID'=>'fcf779ef175895d425b706e40fb3252a','MEMBERS'=>$valid_members,'GUESTS'=>integer_format($guests))),'','');
 		}
 	}
-
 }
 

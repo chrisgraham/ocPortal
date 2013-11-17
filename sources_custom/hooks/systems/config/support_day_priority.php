@@ -15,7 +15,6 @@
 
 class Hook_config_support_day_priority
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_support_day_priority
 	{
 		return '7';
 	}
-
 }
 
 

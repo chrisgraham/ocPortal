@@ -15,7 +15,6 @@
 
 class Hook_Preview_iotd
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -97,5 +96,4 @@ class Hook_Preview_iotd
 
 		return array($preview,NULL);
 	}
-
 }

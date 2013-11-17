@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_Edit_photo
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -122,7 +121,6 @@ class Hook_Profiles_Tabs_Edit_photo
 
 		return array($title,$fields,$text,$javascript,$order,$hidden);
 	}
-
 }
 
 

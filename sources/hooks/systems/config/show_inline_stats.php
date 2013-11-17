@@ -20,7 +20,6 @@
 
 class Hook_config_show_inline_stats
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_show_inline_stats
 	{
 		return '1';
 	}
-
 }
 
 

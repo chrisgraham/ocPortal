@@ -23,7 +23,6 @@
  */
 class Module_users_online
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -158,7 +157,6 @@ class Module_users_online
 
 		return do_template('OCF_MEMBERS_ONLINE_SCREEN',array('_GUID'=>'2f63e2926c5a4690d905f97661afe6cc','TITLE'=>$this->title,'ROWS'=>$rows));
 	}
-
 }
 
 

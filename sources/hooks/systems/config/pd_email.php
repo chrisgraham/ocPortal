@@ -20,7 +20,6 @@
 
 class Hook_config_pd_email
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_pd_email
 	{
 		return get_option('staff_address');
 	}
-
 }
 
 

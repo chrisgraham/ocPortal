@@ -20,7 +20,6 @@
 
 class Hook_cron_staff_checklist_notify
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -78,7 +77,6 @@ class Hook_cron_staff_checklist_notify
 			dispatch_notification('staff_checklist',NULL,$subject,$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
 		}
 	}
-
 }
 
 

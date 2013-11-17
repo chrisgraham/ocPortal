@@ -57,7 +57,6 @@ function handle_custom_purchase($purchase_id,$details,$product)
  */
 class Hook_custom
 {
-
 	/**
 	 * Get the products handled by this eCommerce hook.
 	 *
@@ -145,5 +144,4 @@ class Hook_custom
 	{
 		return NULL;
 	}
-
 }

@@ -23,7 +23,6 @@
  */
 class Module_members
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -374,6 +373,5 @@ class Module_members
 		require_code('ocf_profiles');
 		return render_profile_tabset($this->title,$this->member_id_of,get_member(),$this->username);
 	}
-
 }
 

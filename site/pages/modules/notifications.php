@@ -23,7 +23,6 @@
  */
 class Module_notifications
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -202,7 +201,6 @@ class Module_notifications
 
 		return notifications_ui_advanced($notification_code);
 	}
-
 }
 
 

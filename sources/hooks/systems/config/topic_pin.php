@@ -20,7 +20,6 @@
 
 class Hook_config_topic_pin
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_topic_pin
 	{
 		return (!addon_installed('ocf_forum'))?NULL:'50';
 	}
-
 }
 
 

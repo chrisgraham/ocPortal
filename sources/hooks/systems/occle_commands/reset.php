@@ -38,6 +38,5 @@ class Hook_occle_command_reset
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Hook_Preview_news
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *

@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_wiki
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -48,7 +47,6 @@ class Hook_unvalidated_wiki
 
 		return $info;
 	}
-
 }
 
 

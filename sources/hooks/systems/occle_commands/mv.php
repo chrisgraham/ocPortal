@@ -46,6 +46,5 @@ class Hook_occle_command_mv
 			else return array('','','',do_lang('INCOMPLETE_ERROR'));
 		}
 	}
-
 }
 

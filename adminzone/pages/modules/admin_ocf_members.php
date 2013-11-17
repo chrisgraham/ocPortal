@@ -23,7 +23,6 @@
  */
 class Module_admin_ocf_members
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -707,7 +706,6 @@ class Module_admin_ocf_members
 		require_code('tasks');
 		return call_user_func_array__long_task(do_lang('IMPORT_MEMBER_CSV'),$this->title,'import_member_csv',array($default_password,$use_temporary_passwords,$target_path));
 	}
-
 }
 
 

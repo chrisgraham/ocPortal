@@ -20,7 +20,6 @@
 
 class Hook_cron_tickets_email_integration
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -31,7 +30,6 @@ class Hook_cron_tickets_email_integration
 		require_code('tickets_email_integration');
 		ticket_incoming_scan();
 	}
-
 }
 
 

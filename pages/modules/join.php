@@ -23,7 +23,6 @@
  */
 class Module_join
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -285,6 +284,5 @@ class Module_join
 		$url=build_url($map,get_module_zone('login'));
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESSFUL_CONFIRM'));
 	}
-
 }
 

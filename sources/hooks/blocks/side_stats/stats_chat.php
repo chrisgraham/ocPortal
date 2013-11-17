@@ -20,7 +20,6 @@
 
 class Hook_stats_chat
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -42,7 +41,6 @@ class Hook_stats_chat
 
 		return $chat;
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_activity_show_stats_count_users_online
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_activity_show_stats_count_users_online
 	{
 		return '0';
 	}
-
 }
 
 

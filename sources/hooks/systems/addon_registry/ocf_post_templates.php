@@ -171,5 +171,4 @@ class Hook_addon_registry_ocf_post_templates
 			)), NULL, '', true)
 		);
 	}
-
 }

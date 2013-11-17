@@ -40,5 +40,4 @@ class Hook_occle_command_database_upgrade
 			return array('',$result,'','');
 		}
 	}
-
 }

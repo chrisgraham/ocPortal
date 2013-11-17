@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_contact_member
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -101,5 +100,4 @@ class Hook_addon_registry_ocf_contact_member
 			'sources/hooks/systems/addon_registry/ocf_contact_member.php',
 		);
 	}
-
 }

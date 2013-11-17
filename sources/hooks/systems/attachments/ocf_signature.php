@@ -20,7 +20,6 @@
 
 class Hook_attachments_ocf_signature
 {
-
 	/**
 	 * Standard modular run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
@@ -33,7 +32,6 @@ class Hook_attachments_ocf_signature
 		if (get_forum_type()!='ocf') return false; // Shouldn't be here, but maybe it's left over somehow
 		return true;
 	}
-
 }
 
 

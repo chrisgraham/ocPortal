@@ -20,7 +20,6 @@
 
 class Hook_config_show_avatar
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_show_avatar
 	{
 		return (has_no_forum() || ((get_forum_type()=='ocf') && (!addon_installed('ocf_member_avatars'))))?NULL:'0';
 	}
-
 }
 
 

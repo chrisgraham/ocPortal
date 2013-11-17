@@ -20,7 +20,6 @@
 
 class Hook_fields_content_link_multi
 {
-
 	/**
 	 * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
 	 *
@@ -210,7 +209,6 @@ class Hook_fields_content_link_multi
 		}
 		return $value;
 	}
-
 }
 
 

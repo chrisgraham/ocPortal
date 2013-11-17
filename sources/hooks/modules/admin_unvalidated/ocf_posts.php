@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_ocf_posts
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -49,7 +48,6 @@ class Hook_unvalidated_ocf_posts
 
 		return $info;
 	}
-
 }
 
 

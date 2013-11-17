@@ -20,7 +20,6 @@
 
 class Hook_config_signup_fullname
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_signup_fullname
 	{
 		return '0';
 	}
-
 }
 
 

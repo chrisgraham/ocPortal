@@ -20,7 +20,6 @@
 
 class Hook_stats_downloads
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -43,7 +42,6 @@ class Hook_stats_downloads
 
 		return $files;
 	}
-
 }
 
 

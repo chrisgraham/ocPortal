@@ -20,7 +20,6 @@
 
 class Hook_config_password_reset_process
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_password_reset_process
 	{
 		return (get_forum_type()!='ocf')?NULL:'temporary';
 	}
-
 }
 
 

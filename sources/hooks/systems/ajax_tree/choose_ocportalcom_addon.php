@@ -20,7 +20,6 @@
 
 class Hook_choose_ocportalcom_addon
 {
-
 	/**
 	 * This will get the XML file from ocportal.com.
 	 *
@@ -98,7 +97,6 @@ class Hook_choose_ocportalcom_addon
 		}
 		return $list;
 	}
-
 }
 
 

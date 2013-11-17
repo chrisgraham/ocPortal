@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_trackbacks
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -35,7 +34,6 @@ class Hook_page_groupings_trackbacks
 			array('audit','menu/adminzone/audit/trackbacks',array('admin_trackbacks',array('type'=>'misc'),get_module_zone('admin_trackbacks')),do_lang_tempcode('trackbacks:MANAGE_TRACKBACKS'),'trackbacks:DOC_TRACKBACKS'),
 		);
 	}
-
 }
 
 

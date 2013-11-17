@@ -20,7 +20,6 @@
 
 class Hook_search_videos
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -168,7 +167,6 @@ class Hook_search_videos
 		require_code('galleries');
 		return render_video_box($row);
 	}
-
 }
 
 

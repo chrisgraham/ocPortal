@@ -14,7 +14,6 @@
 
 class Hook_implicit_usergroups_under18s
 {
-
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds the group IDs it is bound to.
 	 *
@@ -64,7 +63,6 @@ class Hook_implicit_usergroups_under18s
 	{
 		return !is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE ('.$this->_where().') AND id='.strval($member_id)));
 	}
-
 }
 
 

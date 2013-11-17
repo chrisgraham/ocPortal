@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_calendar
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -45,7 +44,6 @@ class Hook_unvalidated_calendar
 
 		return $info;
 	}
-
 }
 
 

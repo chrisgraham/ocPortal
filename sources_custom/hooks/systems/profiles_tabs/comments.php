@@ -15,7 +15,6 @@
 
 class Hook_Profiles_Tabs_comments
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -76,7 +75,6 @@ class Hook_Profiles_Tabs_comments
 
 		return array($title,$content,$order);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_admin_themewizard_ocf_forum
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -30,7 +29,6 @@ class Hook_admin_themewizard_ocf_forum
 	{
 		return array(array('ocf_general/no_new_posts_redirect','ocf_general/new_posts_redirect','ocf_general/no_new_posts','ocf_general/new_posts','1x/ocf_topic_modifiers/involved','2x/ocf_topic_modifiers/involved',),array('pageitem/warn',));
 	}
-
 }
 
 

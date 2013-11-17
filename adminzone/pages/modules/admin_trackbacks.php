@@ -23,7 +23,6 @@
  */
 class Module_admin_trackbacks
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -173,6 +172,5 @@ class Module_admin_trackbacks
 		}
 		return redirect_screen($this->title,$url,$text);
 	}
-
 }
 

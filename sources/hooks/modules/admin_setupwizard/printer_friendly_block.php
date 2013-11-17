@@ -20,7 +20,6 @@
 
 class Hook_sw_printer_friendly_block
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_printer_friendly_block
 
 		return array(array(),array('side_printer_friendly'=>array('PANEL_NONE','PANEL_NONE')));
 	}
-
 }
 
 

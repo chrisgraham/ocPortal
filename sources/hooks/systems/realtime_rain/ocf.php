@@ -20,7 +20,6 @@
 
 class Hook_realtime_rain_ocf
 {
-
 	/**
 	 * Standard modular run function for realtime-rain hooks.
 	 *
@@ -106,5 +105,4 @@ class Hook_realtime_rain_ocf
 
 		return $drops;
 	}
-
 }

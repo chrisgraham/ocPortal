@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_ecommerce
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -45,7 +44,6 @@ class Hook_page_groupings_ecommerce
 		}
 		return $ret;
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_search_catalogue_categories
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -153,7 +152,6 @@ class Hook_search_catalogue_categories
 		require_code('catalogues');
 		return render_catalogue_category_box($row);
 	}
-
 }
 
 

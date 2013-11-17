@@ -20,7 +20,6 @@
 
 class Block_side_news_categories
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -105,7 +104,6 @@ class Block_side_news_categories
 		}
 		return do_template('BLOCK_SIDE_NEWS_CATEGORIES',array('_GUID'=>'b47a0047247096373e5aa626348c4ebb','CONTENT'=>$content,'PRE'=>'','POST'=>''));
 	}
-
 }
 
 

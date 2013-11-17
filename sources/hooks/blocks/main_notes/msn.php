@@ -20,7 +20,6 @@
 
 class Hook_notes_msn
 {
-
 	/**
 	 * Standard modular run function. See if we have to decache based on the passed filename.
 	 *
@@ -30,7 +29,6 @@ class Hook_notes_msn
 	{
 		if ((strpos($file,'/netlink')!==false) || ($file=='netlink')) decache('side_network');
 	}
-
 }
 
 

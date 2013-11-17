@@ -20,7 +20,6 @@
 
 class Hook_config_enable_add_topic_btn_in_topic
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_enable_add_topic_btn_in_topic
 	{
 		return '1';
 	}
-
 }
 
 

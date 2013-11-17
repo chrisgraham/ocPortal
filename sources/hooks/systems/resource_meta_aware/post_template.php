@@ -20,7 +20,6 @@
 
 class Hook_resource_meta_aware_post_template
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -88,5 +87,4 @@ class Hook_resource_meta_aware_post_template
 			'actionlog_regexp'=>'\w+_POST_TEMPLATE',
 		);
 	}
-
 }

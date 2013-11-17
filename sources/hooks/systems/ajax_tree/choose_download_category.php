@@ -20,7 +20,6 @@
 
 class Hook_choose_download_category
 {
-
 	/**
 	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
 	 *
@@ -100,7 +99,6 @@ class Hook_choose_download_category
 
 		return create_selection_list_download_category_tree(is_null($it)?NULL:intval($it),$compound_list,$addable_filter);
 	}
-
 }
 
 

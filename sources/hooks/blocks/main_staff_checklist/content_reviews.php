@@ -20,7 +20,6 @@
 
 class Hook_checklist_content_reviews
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -46,7 +45,6 @@ class Hook_checklist_content_reviews
 		));
 		return array(array($tpl,NULL,$num_to_review,NULL));
 	}
-
 }
 
 

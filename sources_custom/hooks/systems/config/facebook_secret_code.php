@@ -15,7 +15,6 @@
 
 class Hook_config_facebook_secret_code
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_facebook_secret_code
 	{
 		return '';
 	}
-
 }
 
 

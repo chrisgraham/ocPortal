@@ -20,7 +20,6 @@
 
 class Hook_sw_leader_board
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_leader_board
 
 		return array(array('main_leader_board'=>array('NO','YES')),array());
 	}
-
 }
 
 

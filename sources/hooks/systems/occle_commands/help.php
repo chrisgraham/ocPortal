@@ -56,6 +56,5 @@ class Hook_occle_command_help
 			return array('window.open(unescape("'.urlencode(get_tutorial_url('occle')).'"),"occle_window1","");','',do_lang('SUCCESS'),'');
 		}
 	}
-
 }
 

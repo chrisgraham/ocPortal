@@ -15,7 +15,6 @@
 
 class Hook_admin_import_types_community_billboard
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -27,7 +26,6 @@ class Hook_admin_import_types_community_billboard
 			'community_billboard'=>'COMMUNITY_BILLBOARD_ARCHIVE',
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_exists_emoticon
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -37,5 +36,4 @@ class Hook_exists_emoticon
 
 		return make_string_tempcode(strip_tags(strip_html(do_lang('CONFLICTING_EMOTICON_CODE',escape_html($val)))));
 	}
-
 }

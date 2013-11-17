@@ -20,7 +20,6 @@
 
 class Hook_config_session_expiry_time
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_session_expiry_time
 	{
 		return '1';
 	}
-
 }
 
 

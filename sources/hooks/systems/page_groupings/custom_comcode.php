@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_custom_comcode
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -34,7 +33,6 @@ class Hook_page_groupings_custom_comcode
 			array('setup','menu/adminzone/setup/custom_comcode',array('admin_custom_comcode',array('type'=>'misc'),get_module_zone('admin_custom_comcode')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('custom_comcode:CUSTOM_COMCODE'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('custom_comcode','COUNT(*)',NULL,'',true))))),'custom_comcode:DOC_CUSTOM_COMCODE'),
 		);
 	}
-
 }
 
 

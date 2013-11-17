@@ -15,7 +15,6 @@
 
 class Hook_checklist_iotds
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -67,7 +66,6 @@ class Hook_checklist_iotds
 		if (is_null($c)) return 0;
 		return $c;
 	}
-
 }
 
 

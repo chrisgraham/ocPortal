@@ -1450,7 +1450,6 @@ class forum_driver_phpbb3 extends forum_driver_base
 		$row=$this->get_member_row($member);
 		return is_null($row)?NULL:$row[$field];
 	}
-
 }
 
 

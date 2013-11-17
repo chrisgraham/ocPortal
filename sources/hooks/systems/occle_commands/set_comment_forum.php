@@ -47,5 +47,4 @@ class Hook_occle_command_set_comment_forum
 			return array('',$result,'','');
 		}
 	}
-
 }

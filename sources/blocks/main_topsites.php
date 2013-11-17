@@ -20,7 +20,6 @@
 
 class Block_main_topsites
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -99,7 +98,6 @@ class Block_main_topsites
 
 		return do_template('BLOCK_MAIN_TOPSITES',array('_GUID'=>'776cecc3769b4f4e082be327da5b7248','TYPE'=>$map['param'],'BANNERS'=>$banners,'SUBMIT_URL'=>$submit_url));
 	}
-
 }
 
 

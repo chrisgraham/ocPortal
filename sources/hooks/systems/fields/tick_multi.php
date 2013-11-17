@@ -20,7 +20,6 @@
 
 class Hook_fields_tick_multi
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -156,7 +155,6 @@ class Hook_fields_tick_multi
 
 		return $value;
 	}
-
 }
 
 

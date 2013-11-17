@@ -38,7 +38,6 @@ function init__hooks__modules__admin_import__wowbb()
  */
 class Hook_wowbb
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1000,7 +999,6 @@ class Hook_wowbb
 			import_id_remap_put('event',strval($row['event_id']),$id_new);
 		}
 	}
-
 }
 
 

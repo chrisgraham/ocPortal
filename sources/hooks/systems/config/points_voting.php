@@ -20,7 +20,6 @@
 
 class Hook_config_points_voting
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_points_voting
 	{
 		return '5';
 	}
-
 }
 
 

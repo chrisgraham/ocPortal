@@ -23,7 +23,6 @@
  */
 class Module_admin_actionlog
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -453,7 +452,6 @@ class Module_admin_actionlog
 		require_code('templates_map_table');
 		return map_table($this->title,$fields);
 	}
-
 }
 
 

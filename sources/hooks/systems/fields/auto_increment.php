@@ -20,7 +20,6 @@
 
 class Hook_fields_auto_increment
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -153,7 +152,6 @@ class Hook_fields_auto_increment
 
 		return $value;
 	}
-
 }
 
 

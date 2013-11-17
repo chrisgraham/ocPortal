@@ -23,7 +23,6 @@
  */
 class Module_purchase
 {
-
 	/**
 	 * Standard modular info function.
 	 *

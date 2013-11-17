@@ -20,7 +20,6 @@
 
 class Hook_search_galleries
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -142,7 +141,6 @@ class Hook_search_galleries
 		require_code('galleries');
 		return render_gallery_box($row,'root',true,get_module_zone('galleries'),false,false);
 	}
-
 }
 
 

@@ -15,7 +15,6 @@
 
 class Hook_search_iotds
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -133,7 +132,6 @@ class Hook_search_iotds
 		require_code('iotds');
 		return render_iotd_box($row);
 	}
-
 }
 
 

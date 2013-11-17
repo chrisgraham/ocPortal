@@ -101,5 +101,4 @@ class Hook_media_rendering_code
 			'TITLE'=>$title,
 		));
 	}
-
 }

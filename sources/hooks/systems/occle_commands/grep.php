@@ -76,6 +76,5 @@ class Hook_occle_command_grep
 			return array('','',$output,'');
 		}
 	}
-
 }
 

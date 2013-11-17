@@ -20,7 +20,6 @@
 
 class Hook_rss_calendar
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -93,7 +92,6 @@ class Hook_rss_calendar
 		require_lang('calendar');
 		return array($content,do_lang('CALENDAR'));
 	}
-
 }
 
 

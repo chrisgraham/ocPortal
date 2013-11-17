@@ -35,7 +35,6 @@ function init__hooks__modules__admin_import__smf2()
 
 class Hook_smf2
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1933,6 +1932,5 @@ class Hook_smf2
 		}
 		while (count($rows)>0);
 	}
-
 }
 

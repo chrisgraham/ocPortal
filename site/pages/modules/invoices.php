@@ -23,7 +23,6 @@
  */
 class Module_invoices
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -205,7 +204,6 @@ class Module_invoices
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'e90a4019b37c8bf5bcb64086416bcfb3','TITLE'=>$this->title,'SKIP_VALIDATION'=>'1','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_PAYMENT')));
 	}
-
 }
 
 

@@ -15,7 +15,6 @@
 
 class Block_side_shoutbox
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -133,7 +132,6 @@ class Block_side_shoutbox
 			'BLOCK_PARAMS'=>'',
 		));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_symbol_CATALOGUE_ENTRY_FOR
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -43,5 +42,4 @@ class Hook_symbol_CATALOGUE_ENTRY_FOR
 
 		return $value;
 	}
-
 }

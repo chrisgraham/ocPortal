@@ -414,6 +414,5 @@ class Hook_occle_fs_members
 
 		return true;
 	}
-
 }
 

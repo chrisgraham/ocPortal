@@ -23,7 +23,6 @@
  */
 class Module_cms_authors
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -467,7 +466,6 @@ class Module_cms_authors
 
 		return $out;
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_sw_downloads
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_downloads
 
 		return array(array('main_awards'=>array('YES_CELL','NO')),array());
 	}
-
 }
 
 

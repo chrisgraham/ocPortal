@@ -20,7 +20,6 @@
 
 class Block_main_contact_simple
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -140,7 +139,6 @@ class Block_main_contact_simple
 
 		return $out;
 	}
-
 }
 
 

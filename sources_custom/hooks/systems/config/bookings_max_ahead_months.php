@@ -15,7 +15,6 @@
 
 class Hook_config_bookings_max_ahead_months
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_bookings_max_ahead_months
 	{
 		return '36';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_sw_ocf_forum
 {
-
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *
@@ -164,7 +163,6 @@ class Hook_sw_ocf_forum
 		}
 		return array(array(),array());
 	}
-
 }
 
 

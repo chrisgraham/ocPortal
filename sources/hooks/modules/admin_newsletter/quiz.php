@@ -20,7 +20,6 @@
 
 class Hook_whats_news_quiz
 {
-
 	/**
 	 * Standard modular run function for newsletter hooks.
 	 *
@@ -56,7 +55,6 @@ class Hook_whats_news_quiz
 
 		return array($new,do_lang('QUIZZES','','','',$lang));
 	}
-
 }
 
 

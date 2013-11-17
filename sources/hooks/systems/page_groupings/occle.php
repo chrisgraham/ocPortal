@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_occle
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_occle
 			array('tools','menu/adminzone/tools/occle',array('admin_occle',array('type'=>'misc'),get_module_zone('admin_occle')),do_lang_tempcode('occle:OCCLE'),'DOC_OCCLE'),
 		);
 	}
-
 }
 
 

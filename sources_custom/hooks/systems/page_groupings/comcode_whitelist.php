@@ -14,7 +14,6 @@
 
 class Hook_page_groupings_comcode_whitelist
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -28,7 +27,6 @@ class Hook_page_groupings_comcode_whitelist
 			array('setup','menu/adminzone/setup/custom_comcode',array('comcode_whitelist',array(),get_page_zone('comcode_whitelist')),make_string_tempcode('Edit Comcode whitelist')),
 		);
 	}
-
 }
 
 

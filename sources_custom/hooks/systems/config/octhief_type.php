@@ -15,7 +15,6 @@
 
 class Hook_config_octhief_type
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_octhief_type
 	{
 		return 'Members that are inactive, but has lots points';
 	}
-
 }
 
 

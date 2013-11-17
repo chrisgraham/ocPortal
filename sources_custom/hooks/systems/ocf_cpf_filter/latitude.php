@@ -15,7 +15,6 @@
 
 class Hook_ocf_cpf_filter_latitude
 {
-
 	/**
 	 * Find which special CPF's to enable.
 	 *
@@ -29,7 +28,6 @@ class Hook_ocf_cpf_filter_latitude
 		$cpf['longitude']=1;
 		return $cpf;
 	}
-
 }
 
 

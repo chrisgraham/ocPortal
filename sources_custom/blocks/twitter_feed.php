@@ -14,7 +14,6 @@
 
 class Block_twitter_feed
 {
-
 	/**
 	 * Standard modular info function.
 	 *

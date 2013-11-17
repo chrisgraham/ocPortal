@@ -23,7 +23,6 @@
  */
 class Module_admin_quiz
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -498,7 +497,6 @@ class Module_admin_quiz
 
 		return do_template('MAP_TABLE_SCREEN',array('_GUID'=>'02b4dd6d52feaf3844e631e56395c4da','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('SURVEY_WAS_ENTERED_AS_FOLLOWS',escape_html($username),escape_html($member_url),escape_html($date)),'FIELDS'=>$fields));
 	}
-
 }
 
 

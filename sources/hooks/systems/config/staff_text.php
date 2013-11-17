@@ -20,7 +20,6 @@
 
 class Hook_config_staff_text
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_staff_text
 	{
 		return do_lang('staff:POST_STAFF');
 	}
-
 }
 
 

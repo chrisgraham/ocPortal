@@ -23,7 +23,6 @@
  */
 class Module_supermembers
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -166,7 +165,6 @@ class Module_supermembers
 
 		return do_template('SUPERMEMBERS_SCREEN',array('_GUID'=>'93b875bc00b094810ca9cc3e2f4968b8','TITLE'=>$this->title,'GROUPS'=>$groups,'TEXT'=>$text));
 	}
-
 }
 
 

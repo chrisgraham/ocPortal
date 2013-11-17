@@ -20,7 +20,6 @@
 
 class Hook_checklist_points
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -40,7 +39,6 @@ class Hook_checklist_points
 		}
 		return array();
 	}
-
 }
 
 

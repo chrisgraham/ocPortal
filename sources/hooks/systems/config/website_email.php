@@ -20,7 +20,6 @@
 
 class Hook_config_website_email
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_website_email
 	{
 		$staff_address=get_option('staff_address'); $website_email='website@'.get_domain(); if (substr($staff_address,-strlen(get_domain())-1)=='@'.get_domain()) $website_email=$staff_address; return $website_email;
 	}
-
 }
 
 

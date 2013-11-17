@@ -14,7 +14,6 @@
 
 class Block_main_facebook_like
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -48,7 +47,6 @@ class Block_main_facebook_like
 
 		return do_template('BLOCK_MAIN_FACEBOOK_LIKE');
 	}
-
 }
 
 

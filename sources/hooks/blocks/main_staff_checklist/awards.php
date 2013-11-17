@@ -20,7 +20,6 @@
 
 class Hook_checklist_awards
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -90,7 +89,6 @@ class Hook_checklist_awards
 
 		return $out;
 	}
-
 }
 
 

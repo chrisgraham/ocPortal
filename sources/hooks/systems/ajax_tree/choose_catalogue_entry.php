@@ -20,7 +20,6 @@
 
 class Hook_choose_catalogue_entry
 {
-
 	/**
 	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
 	 *
@@ -89,7 +88,6 @@ class Hook_choose_catalogue_entry
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
 		return create_selection_list_catalogue_entries_tree($catalogue_name,is_null($it)?NULL:intval($it),$only_owned,$editable_filter);
 	}
-
 }
 
 

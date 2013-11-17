@@ -23,7 +23,6 @@
  */
 class Module_cms
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -88,7 +87,6 @@ class Module_cms
 
 		return do_next_manager_hooked('menus:CMS_ZONE','menus:DOC_CMS','cms','menus:MODULE_TRANS_NAME_cms');
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_comments
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -47,6 +46,5 @@ class Hook_comments
 		$renderer=new OCP_Topic();
 		return $renderer->render_posts_from_topic($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,NULL,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id);
 	}
-
 }
 

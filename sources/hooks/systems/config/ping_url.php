@@ -20,7 +20,6 @@
 
 class Hook_config_ping_url
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -53,7 +52,6 @@ class Hook_config_ping_url
 		// Note that we also ping the major search engines directly with the RSS feed, as a sitemap; those do not need specifying in the ping URLs
 		return 'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}';
 	}
-
 }
 
 

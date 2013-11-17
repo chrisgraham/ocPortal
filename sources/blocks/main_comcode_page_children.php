@@ -20,7 +20,6 @@
 
 class Block_main_comcode_page_children
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -109,6 +108,5 @@ class Block_main_comcode_page_children
 
 		return do_template('BLOCK_MAIN_COMCODE_PAGE_CHILDREN',array('_GUID'=>'375aa1907fc6b2ca6b23ab5b5139aaef','CHILDREN'=>$children,'THE_PAGE'=>$page,'THE_ZONE'=>$zone));
 	}
-
 }
 

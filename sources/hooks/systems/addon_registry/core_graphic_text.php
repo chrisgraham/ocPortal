@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_graphic_text
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -137,5 +136,4 @@ class Hook_addon_registry_core_graphic_text
 			'data_custom/fonts/.htaccess',
 		);
 	}
-
 }

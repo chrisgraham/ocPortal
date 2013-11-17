@@ -38,7 +38,6 @@ function init__hooks__modules__admin_import__mybb()
  */
 class Hook_mybb
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1379,5 +1378,4 @@ class Hook_mybb
 			$GLOBALS['SITE_DB']->query_insert('f_multi_moderations',array('mm_name'=>insert_lang($mm_name,3),'mm_forum_multi_code'=>$mm_forum_multi_code,'mm_sink_state'=>$mm_sink_state,'mm_open_state'=>$mm_open_state,'mm_move_to'=>$mm_move_to,'mm_title_suffix'=>$mm_title_suffix,'mm_post_text'=>$mm_post_text));
 		}
 	}
-
 }

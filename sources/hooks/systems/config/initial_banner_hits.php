@@ -20,7 +20,6 @@
 
 class Hook_config_initial_banner_hits
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_initial_banner_hits
 	{
 		return (!addon_installed('banners'))?NULL:'100';
 	}
-
 }
 
 

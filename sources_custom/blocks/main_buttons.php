@@ -15,7 +15,6 @@
 
 class Block_main_buttons
 {
-
 	/**
 	 * Standard modular info function.
 	 *

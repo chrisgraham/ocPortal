@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_iotds
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -30,7 +29,6 @@ class Hook_page_groupings_iotds
 			array('rich_content','menu/rich_content/iotds',array('iotds',array(),get_module_zone('iotds')),do_lang_tempcode('iotds:IOTDS')),
 		);
 	}
-
 }
 
 

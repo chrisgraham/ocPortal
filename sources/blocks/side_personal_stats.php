@@ -20,7 +20,6 @@
 
 class Block_side_personal_stats
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -92,7 +91,6 @@ class Block_side_personal_stats
 			return do_template('BLOCK_SIDE_PERSONAL_STATS_NO',array('_GUID'=>'32aade68b98dfd191f0f84c6648f7dde','TITLE'=>$title,'FULL_LOGIN_URL'=>$full_link,'JOIN_URL'=>$join_url,'LOGIN_URL'=>$login_url));
 		}
 	}
-
 }
 
 

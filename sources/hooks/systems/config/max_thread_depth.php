@@ -20,7 +20,6 @@
 
 class Hook_config_max_thread_depth
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_max_thread_depth
 	{
 		return '6';
 	}
-
 }
 
 

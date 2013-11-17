@@ -20,7 +20,6 @@
 
 class Hook_config_maximum_gamble_amount
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_maximum_gamble_amount
 	{
 		return '200';
 	}
-
 }
 
 

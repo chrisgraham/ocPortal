@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_ssl
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_ssl
 			array('security','menu/adminzone/security/ssl',array('admin_ssl',array('type'=>'misc'),get_module_zone('admin_ssl')),do_lang_tempcode('ssl:SSL_CONFIGURATION'),'ssl:DOC_SSL'),
 		);
 	}
-
 }
 
 

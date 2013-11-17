@@ -20,7 +20,6 @@
 
 class Hook_config_calendar_show_stats_count_events_this_year
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_calendar_show_stats_count_events_this_year
 	{
 		return addon_installed('stats_block')?'0':NULL;
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_fields_video
 {
-
 	// ==============
 	// Module: search
 	// ==============

@@ -20,7 +20,6 @@
 
 class Hook_checklist_unvalidated
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -74,7 +73,6 @@ class Hook_checklist_unvalidated
 
 		return array($sum,$sum2);
 	}
-
 }
 
 

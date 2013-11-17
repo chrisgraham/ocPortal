@@ -20,7 +20,6 @@
 
 class Block_main_forum_topics
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -223,7 +222,6 @@ class Block_main_forum_topics
 			return new ocp_tempcode();
 		}
 	}
-
 }
 
 

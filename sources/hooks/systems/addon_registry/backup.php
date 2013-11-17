@@ -176,5 +176,4 @@ class Hook_addon_registry_backup
 			)), NULL, '', true)
 		);
 	}
-
 }

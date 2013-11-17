@@ -20,7 +20,6 @@
 
 class Hook_cron_newsletter_periodic
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -201,5 +200,4 @@ class Hook_cron_newsletter_periodic
 
 		return $time;
 	}
-
 }

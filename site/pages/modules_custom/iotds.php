@@ -18,7 +18,6 @@
  */
 class Module_iotds
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -271,7 +270,6 @@ class Module_iotds
 			'URL'=>$url,
 		));
 	}
-
 }
 
 

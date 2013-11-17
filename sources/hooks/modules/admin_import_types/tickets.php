@@ -20,7 +20,6 @@
 
 class Hook_admin_import_types_tickets
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -32,7 +31,6 @@ class Hook_admin_import_types_tickets
 			'support_tickets'=>'SUPPORT_TICKETS',
 		);
 	}
-
 }
 
 

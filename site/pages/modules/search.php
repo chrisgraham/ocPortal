@@ -23,7 +23,6 @@
  */
 class Module_search
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -572,7 +571,6 @@ class Module_search
 
 		return array($out,$pagination,$GLOBALS['TOTAL_SEARCH_RESULTS']);
 	}
-
 }
 
 

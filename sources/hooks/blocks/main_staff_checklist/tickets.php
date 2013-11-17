@@ -20,7 +20,6 @@
 
 class Hook_checklist_tickets
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -58,7 +57,6 @@ class Hook_checklist_tickets
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'8202af47a2f1d24675acbe4c6d20c8b4','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('SUPPORT_TICKETS'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
 		return array(array($tpl,NULL,$outstanding,NULL));
 	}
-
 }
 
 

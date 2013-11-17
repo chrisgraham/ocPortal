@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_recommend
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,5 +35,4 @@ class Hook_page_groupings_recommend
 			array('site_meta','menu/site_meta/recommend',array('recommend',array(),get_module_zone('recommend')),do_lang_tempcode('recommend:RECOMMEND_SITE')),
 		);
 	}
-
 }

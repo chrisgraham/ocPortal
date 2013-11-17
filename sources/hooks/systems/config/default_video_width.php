@@ -20,7 +20,6 @@
 
 class Hook_config_default_video_width
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_default_video_width
 	{
 		return '480';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_ldap_member_property
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_ldap_member_property
 	{
 		return (get_option('ldap_is_windows')=='1')?'sAMAccountName':'cn';
 	}
-
 }
 
 

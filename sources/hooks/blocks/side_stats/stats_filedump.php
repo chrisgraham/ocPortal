@@ -20,7 +20,6 @@
 
 class Hook_stats_filedump
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -44,7 +43,6 @@ class Hook_stats_filedump
 
 		return $section;
 	}
-
 }
 
 

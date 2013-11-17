@@ -1098,7 +1098,6 @@ class Module_cms_news_cat extends standard_crud_module
 			NULL // View this category
 		);
 	}
-
 }
 
 

@@ -15,7 +15,6 @@
 
 class Hook_cron_insults
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */

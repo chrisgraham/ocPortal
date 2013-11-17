@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_quiz
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -47,7 +46,6 @@ class Hook_unvalidated_quiz
 
 		return $info;
 	}
-
 }
 
 

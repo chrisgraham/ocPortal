@@ -23,7 +23,6 @@
  */
 class Module_wiki
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1111,7 +1110,6 @@ class Module_wiki
 		$url=get_param('redirect');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

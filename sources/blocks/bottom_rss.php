@@ -20,7 +20,6 @@
 
 class Block_bottom_rss
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -95,7 +94,6 @@ class Block_bottom_rss
 
 		return do_template('BLOCK_BOTTOM_NEWS',array('_GUID'=>'0fc123199c4d4b7af5a26706271b1f4f','POSTS'=>$_postdetailss));
 	}
-
 }
 
 /**

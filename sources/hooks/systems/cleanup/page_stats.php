@@ -20,7 +20,6 @@
 
 class Hook_page_stats
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -121,7 +120,6 @@ class Hook_page_stats
 
 		return do_template('CLEANUP_PAGE_STATS',array('_GUID'=>'1df213eee7c5c6b97168e5a34e92d3b0','STATS_BACKUP_URL'=>$stats_backup_url));
 	}
-
 }
 
 

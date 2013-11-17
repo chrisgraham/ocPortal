@@ -20,7 +20,6 @@
 
 class Hook_cron_newsletter_drip_send
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -56,7 +55,6 @@ class Hook_cron_newsletter_drip_send
 			}
 		}
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_comcode_pages
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -43,7 +42,6 @@ class Hook_unvalidated_comcode_pages
 
 		return $info;
 	}
-
 }
 
 

@@ -23,7 +23,6 @@
  */
 class Module_quiz
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -748,7 +747,6 @@ class Module_quiz
 			'MESSAGE'=>$message,
 		));
 	}
-
 }
 
 

@@ -23,7 +23,6 @@
  */
 class Module_pointstore
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -262,7 +261,6 @@ class Module_pointstore
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		return do_template('POINTSTORE_SCREEN',array('_GUID'=>'1b66923dd1a3da6afb934a07909b8aa7','TITLE'=>$this->title,'ITEMS'=>$items,'POINTS_LEFT'=>integer_format($points_left),'USERNAME'=>$username));
 	}
-
 }
 
 

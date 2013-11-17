@@ -38,7 +38,6 @@ function init__hooks__modules__admin_import__phpbb2()
  */
 class Hook_phpbb2
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -905,7 +904,6 @@ class Hook_phpbb2
 			add_wordfilter_word($row['word'],$row['replacement']);
 		}
 	}
-
 }
 
 

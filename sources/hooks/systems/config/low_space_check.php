@@ -20,7 +20,6 @@
 
 class Hook_config_low_space_check
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_low_space_check
 	{
 		return '20';
 	}
-
 }
 
 

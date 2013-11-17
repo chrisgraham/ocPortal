@@ -54,6 +54,5 @@ class Hook_occle_command_cat
 			return array('','',$output,'');
 		}
 	}
-
 }
 

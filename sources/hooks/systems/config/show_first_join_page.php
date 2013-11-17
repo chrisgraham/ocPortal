@@ -20,7 +20,6 @@
 
 class Hook_config_show_first_join_page
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_show_first_join_page
 	{
 		return '1';
 	}
-
 }
 
 

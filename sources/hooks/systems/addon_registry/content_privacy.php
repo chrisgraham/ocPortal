@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_content_privacy
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -102,5 +101,4 @@ class Hook_addon_registry_content_privacy
 			'lang/EN/content_privacy.ini',
 		);
 	}
-
 }

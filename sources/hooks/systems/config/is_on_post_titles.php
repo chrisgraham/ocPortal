@@ -20,7 +20,6 @@
 
 class Hook_config_is_on_post_titles
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_is_on_post_titles
 	{
 		return '0';
 	}
-
 }
 
 

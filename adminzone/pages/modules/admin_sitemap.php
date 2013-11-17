@@ -23,7 +23,6 @@
  */
 class Module_admin_sitemap
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -571,7 +570,6 @@ class Module_admin_sitemap
 		}
 		return $this->do_next_manager($this->title,$moved_something,$new_zone,new ocp_tempcode());
 	}
-
 }
 
 

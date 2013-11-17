@@ -20,7 +20,6 @@
 
 class Hook_rss_points
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -77,7 +76,6 @@ class Hook_rss_points
 		require_lang('points');
 		return array($content,do_lang('POINTS'));
 	}
-
 }
 
 

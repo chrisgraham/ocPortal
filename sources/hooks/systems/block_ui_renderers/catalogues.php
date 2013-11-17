@@ -20,7 +20,6 @@
 
 class Hook_block_ui_renderers_catalogues
 {
-
 	/**
 	 * See if a particular block parameter's UI input can be rendered by this.
 	 *
@@ -59,5 +58,4 @@ class Hook_block_ui_renderers_catalogues
 		}
 		return NULL;
 	}
-
 }

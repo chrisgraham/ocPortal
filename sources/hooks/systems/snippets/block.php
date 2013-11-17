@@ -20,7 +20,6 @@
 
 class Hook_block
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -67,6 +66,5 @@ class Hook_block
 		$out->attach(do_block($map['block'],$map));
 		return $out;
 	}
-
 }
 

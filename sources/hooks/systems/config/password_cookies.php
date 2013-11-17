@@ -20,7 +20,6 @@
 
 class Hook_config_password_cookies
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_password_cookies
 	{
 		return '1';
 	}
-
 }
 
 

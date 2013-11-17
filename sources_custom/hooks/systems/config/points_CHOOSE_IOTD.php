@@ -15,7 +15,6 @@
 
 class Hook_config_points_CHOOSE_IOTD
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_points_CHOOSE_IOTD
 	{
 		return addon_installed('points')?'35':NULL;
 	}
-
 }
 
 

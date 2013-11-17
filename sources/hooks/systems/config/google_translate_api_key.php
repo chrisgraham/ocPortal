@@ -20,7 +20,6 @@
 
 class Hook_config_google_translate_api_key
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_google_translate_api_key
 	{
 		return '';
 	}
-
 }
 
 

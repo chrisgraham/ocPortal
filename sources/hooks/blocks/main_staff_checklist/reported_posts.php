@@ -20,7 +20,6 @@
 
 class Hook_checklist_reported_posts
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -52,7 +51,6 @@ class Hook_checklist_reported_posts
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'9ee69e250c997730a3670ed77d681e5f','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('REPORTED_POSTS_FORUM'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
 		return array(array($tpl,NULL,$outstanding,NULL));
 	}
-
 }
 
 

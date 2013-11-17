@@ -23,7 +23,6 @@
  */
 class Module_admin_import
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -757,7 +756,6 @@ class Module_admin_import
 
 		return $out;
 	}
-
 }
 
 

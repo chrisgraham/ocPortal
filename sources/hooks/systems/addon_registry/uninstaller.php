@@ -125,5 +125,4 @@ class Hook_addon_registry_uninstaller
 			lorem_globalise(do_lorem_template('UNINSTALL_SCREEN',array()), NULL, '', true)
 		);
 	}
-
 }

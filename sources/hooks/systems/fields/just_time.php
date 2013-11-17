@@ -20,7 +20,6 @@
 
 class Hook_fields_just_time
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -154,7 +153,6 @@ class Hook_fields_just_time
 
 		return strval($hour).':'.strval($minute);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_admin_import_types_downloads
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -32,7 +31,6 @@ class Hook_admin_import_types_downloads
 			'downloads_and_categories'=>'SECTION_DOWNLOADS',
 		);
 	}
-
 }
 
 

@@ -79,5 +79,4 @@ class Hook_media_rendering_realmedia
 	{
 		return do_template('MEDIA_REALMEDIA',array('_GUID'=>'313a28331ac2ab936b57a26dffb363c1','HOOK'=>'realmedia')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
-
 }

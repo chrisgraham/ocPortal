@@ -20,7 +20,6 @@
 
 class Hook_whats_news_calendar
 {
-
 	/**
 	 * Standard modular run function for newsletter hooks.
 	 *
@@ -81,7 +80,6 @@ class Hook_whats_news_calendar
 
 		return array($new,do_lang('CALENDAR','','','',$lang));
 	}
-
 }
 
 

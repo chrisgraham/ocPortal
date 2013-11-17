@@ -20,7 +20,6 @@
 
 class Hook_Preview_block_comcode
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -72,5 +71,4 @@ class Hook_Preview_block_comcode
 
 		return array($preview,NULL);
 	}
-
 }

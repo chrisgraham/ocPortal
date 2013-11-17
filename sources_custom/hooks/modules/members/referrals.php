@@ -15,7 +15,6 @@
 
 class Hook_members_referrals
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -132,7 +131,6 @@ class Hook_members_referrals
 
 		return $ret;
 	}
-
 }
 
 

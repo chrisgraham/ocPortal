@@ -20,7 +20,6 @@
 
 class Block_main_emoticon_codes
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -77,7 +76,6 @@ class Block_main_emoticon_codes
 
 		return do_template('BLOCK_MAIN_EMOTICON_CODES',array('_GUID'=>'56c12281d7e3662b13a7ad7d9958a65c','ENTRIES'=>$entries));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_sw_forum_blocks
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -36,7 +35,6 @@ class Hook_sw_forum_blocks
 		}
 		return array(array(),array());
 	}
-
 }
 
 

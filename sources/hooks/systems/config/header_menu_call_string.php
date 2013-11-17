@@ -20,7 +20,6 @@
 
 class Hook_config_header_menu_call_string
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_header_menu_call_string
 	{
 		return 'zone_menu';
 	}
-
 }
 
 

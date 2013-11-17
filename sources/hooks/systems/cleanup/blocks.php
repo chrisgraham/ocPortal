@@ -20,7 +20,6 @@
 
 class Hook_blocks
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -48,7 +47,6 @@ class Hook_blocks
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

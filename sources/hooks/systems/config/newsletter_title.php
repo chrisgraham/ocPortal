@@ -20,7 +20,6 @@
 
 class Hook_config_newsletter_title
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_newsletter_title
 	{
 		return get_option('site_name').' '.ocp_mb_strtolower(do_lang('NEWSLETTER'));
 	}
-
 }
 
 

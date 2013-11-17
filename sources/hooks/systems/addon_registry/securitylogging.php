@@ -280,5 +280,4 @@ class Hook_addon_registry_securitylogging
 			)), NULL, '', true)
 		);
 	}
-
 }

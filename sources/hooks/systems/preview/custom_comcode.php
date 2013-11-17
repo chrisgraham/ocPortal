@@ -20,7 +20,6 @@
 
 class Hook_Preview_custom_comcode
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -70,5 +69,4 @@ class Hook_Preview_custom_comcode
 
 		return array($temp_tpl,NULL);
 	}
-
 }

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_apache_config_files
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -100,5 +99,4 @@ class Hook_addon_registry_apache_config_files
 			'recommended.htaccess',
 		);
 	}
-
 }

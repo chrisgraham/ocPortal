@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_videos
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -49,7 +48,6 @@ class Hook_unvalidated_videos
 
 		return $info;
 	}
-
 }
 
 

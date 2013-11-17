@@ -20,7 +20,6 @@
 
 class Hook_config_club_forum_parent_forum_grouping
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_club_forum_parent_forum_grouping
 	{
 		return strval(db_get_first_id());
 	}
-
 }
 
 

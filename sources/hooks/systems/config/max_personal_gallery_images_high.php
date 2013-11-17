@@ -20,7 +20,6 @@
 
 class Hook_config_max_personal_gallery_images_high
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_max_personal_gallery_images_high
 	{
 		return '100';
 	}
-
 }
 
 

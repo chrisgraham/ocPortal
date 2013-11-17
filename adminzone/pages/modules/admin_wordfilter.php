@@ -23,7 +23,6 @@
  */
 class Module_admin_wordfilter
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -238,7 +237,6 @@ class Module_admin_wordfilter
 
 		log_it('DELETE_WORDFILTER',$word);
 	}
-
 }
 
 

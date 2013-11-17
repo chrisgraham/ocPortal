@@ -41,7 +41,6 @@ function init__hooks__modules__admin_import__aef()
  */
 class Hook_aef
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1017,7 +1016,6 @@ class Hook_aef
 			add_wordfilter_word($censor_words_from_array[$key],(isset($censor_words_to_array[$key])&&$censor_words_to_array[$key]!='')?$censor_words_to_array[$key]:'');
 		}
 	}
-
 }
 
 

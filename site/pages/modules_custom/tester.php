@@ -29,7 +29,6 @@ UPDATE ocp_test_sections SET s_assigned_to=4 WHERE id IN (2,18,19,20,21,22,34,35
  */
 class Module_tester
 {
-
 	/**
 	 * Standard modular info function.
 	 *

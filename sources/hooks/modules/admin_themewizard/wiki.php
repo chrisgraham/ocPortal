@@ -20,7 +20,6 @@
 
 class Hook_admin_themewizard_wiki
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -30,7 +29,6 @@ class Hook_admin_themewizard_wiki
 	{
 		return array(array(),array('page/edit_tree',));
 	}
-
 }
 
 

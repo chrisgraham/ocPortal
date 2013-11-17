@@ -20,7 +20,6 @@
 
 class Hook_fields_picture_multi
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -229,7 +228,6 @@ class Hook_fields_picture_multi
 			sync_file(rawurldecode($value));
 		}
 	}
-
 }
 
 

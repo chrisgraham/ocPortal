@@ -20,7 +20,6 @@
 
 class Hook_Preview_ticket
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -31,7 +30,6 @@ class Hook_Preview_ticket
 		$applies=(get_param('page','')=='tickets');
 		return array($applies,'ocf_post',false,array('post'));
 	}
-
 }
 
 

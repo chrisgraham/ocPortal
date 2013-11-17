@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_ldap
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_ldap
 			(get_forum_type()!='ocf')?NULL:array('security','menu/adminzone/security/ldap',array('admin_ocf_ldap',array('type'=>'misc'),get_module_zone('admin_ocf_ldap')),do_lang_tempcode('ldap:LDAP'),'ldap:DOC_LDAP'),
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_enable_mark_topic_unread
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_enable_mark_topic_unread
 	{
 		return '1';
 	}
-
 }
 
 

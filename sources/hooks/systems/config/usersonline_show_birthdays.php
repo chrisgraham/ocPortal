@@ -20,7 +20,6 @@
 
 class Hook_config_usersonline_show_birthdays
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_usersonline_show_birthdays
 	{
 		return ((has_no_forum()) || (get_forum_type()!='ocf'))?NULL:'0';
 	}
-
 }
 
 

@@ -59,6 +59,5 @@ class Hook_occle_command_watch_chatroom
 			return array('','',$_chatroom,'');
 		}
 	}
-
 }
 

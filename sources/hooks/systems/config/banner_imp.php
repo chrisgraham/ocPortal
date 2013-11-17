@@ -20,7 +20,6 @@
 
 class Hook_config_banner_imp
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_banner_imp
 	{
 		return (!addon_installed('banners'))?NULL:'700';
 	}
-
 }
 
 

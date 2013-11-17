@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_authors
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -37,7 +36,6 @@ class Hook_page_groupings_authors
 			array('rich_content','menu/rich_content/authors',array('authors',array(),get_module_zone('authors')),do_lang_tempcode('authors:AUTHORS')),
 		);
 	}
-
 }
 
 

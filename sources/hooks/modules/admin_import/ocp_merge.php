@@ -20,7 +20,6 @@
 
 class Hook_ocp_merge
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -2499,5 +2498,4 @@ class Hook_ocp_merge
 			}
 		}
 	}
-
 }

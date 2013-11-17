@@ -20,7 +20,6 @@
 
 class Hook_config_currency
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -71,7 +70,6 @@ class Hook_config_currency
 		}
 		return form_input_list($human_name,$explanation,$name,make_string_tempcode($list));
 	}
-
 }
 
 

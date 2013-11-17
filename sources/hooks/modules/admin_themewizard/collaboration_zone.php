@@ -20,7 +20,6 @@
 
 class Hook_admin_themewizard_collaboration_zone
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -30,5 +29,4 @@ class Hook_admin_themewizard_collaboration_zone
 	{
 		return array(array('logo/collaboration-logo'),array());
 	}
-
 }

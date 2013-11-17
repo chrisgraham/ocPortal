@@ -20,7 +20,6 @@
 
 class Hook_rss_ocf_topicview
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -83,7 +82,6 @@ class Hook_rss_ocf_topicview
 		require_lang('ocf');
 		return array($content,do_lang('FORUM_TOPICS'));
 	}
-
 }
 
 

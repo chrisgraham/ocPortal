@@ -20,7 +20,6 @@
 
 class Hook_config_points_show_personal_stats_gift_points_used
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_points_show_personal_stats_gift_points_used
 	{
 		return '0';
 	}
-
 }
 
 

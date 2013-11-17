@@ -15,7 +15,6 @@
 
 class upon_query_insults
 {
-
 	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
 		if (!isset($GLOBALS['FORUM_DB'])) return;

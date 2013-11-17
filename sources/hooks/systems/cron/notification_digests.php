@@ -20,7 +20,6 @@
 
 class Hook_cron_notification_digests
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -85,5 +84,4 @@ class Hook_cron_notification_digests
 			while (count($members)==100);
 		}
 	}
-
 }

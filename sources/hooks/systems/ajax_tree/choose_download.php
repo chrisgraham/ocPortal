@@ -20,7 +20,6 @@
 
 class Hook_choose_download
 {
-
 	/**
 	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
 	 *
@@ -166,7 +165,6 @@ class Hook_choose_download
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
 		return create_selection_list_downloads_tree(is_null($it)?NULL:intval($it),$only_owned,$shun,false,$editable_filter);
 	}
-
 }
 
 

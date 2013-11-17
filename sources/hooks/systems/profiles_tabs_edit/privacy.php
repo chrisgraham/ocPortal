@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_Edit_privacy
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -207,7 +206,6 @@ class Hook_Profiles_Tabs_Edit_privacy
 
 		return array($title,$fields,$text,$javascript,$order,$cpfs_hidden);
 	}
-
 }
 
 

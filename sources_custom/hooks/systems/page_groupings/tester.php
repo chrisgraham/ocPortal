@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_tester
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -29,7 +28,6 @@ class Hook_page_groupings_tester
 			array('rich_content','menu/_generic_admin/tool',array('tester',array('type'=>'go'),get_page_zone('tester')),do_lang_tempcode('tester:TESTER')),
 		);
 	}
-
 }
 
 

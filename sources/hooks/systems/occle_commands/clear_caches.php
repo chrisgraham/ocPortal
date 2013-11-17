@@ -47,6 +47,5 @@ class Hook_occle_command_clear_caches
 			return array('',$messages,'','');
 		}
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Hook_config_smtp_sockets_username
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -53,7 +52,6 @@ class Hook_config_smtp_sockets_username
 		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) return NULL;
 		return '';
 	}
-
 }
 
 

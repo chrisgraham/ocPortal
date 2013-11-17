@@ -15,7 +15,6 @@
 
 class Hook_config_bookings_show_warnings_for_months
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_bookings_show_warnings_for_months
 	{
 		return '6';
 	}
-
 }
 
 

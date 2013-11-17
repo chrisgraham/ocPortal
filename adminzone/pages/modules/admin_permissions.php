@@ -23,7 +23,6 @@
  */
 class Module_admin_permissions
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1026,7 +1025,6 @@ class Module_admin_permissions
 		$url=build_url(array('page'=>'_SELF','type'=>'privileges','id'=>$next_section),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS_NOW_NEXT_SCREEN'));
 	}
-
 }
 
 

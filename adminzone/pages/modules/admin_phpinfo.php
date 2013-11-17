@@ -23,7 +23,6 @@
  */
 class Module_admin_phpinfo
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -131,7 +130,6 @@ class Module_admin_phpinfo
 		$ret=make_string_tempcode(xhtmlise_html($out));
 		return $ret;
 	}
-
 }
 
 

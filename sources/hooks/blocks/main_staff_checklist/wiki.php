@@ -20,7 +20,6 @@
 
 class Hook_checklist_wiki
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -38,7 +37,6 @@ class Hook_checklist_wiki
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'f32f27f6f9aa77bea277e2f5d4deb6e7','URL'=>'','STATUS'=>$status,'TASK'=>urlise_lang(do_lang('NAG_WIKI'),$url),'INFO'=>''));
 		return array(array($tpl,NULL,NULL,NULL));
 	}
-
 }
 
 

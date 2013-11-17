@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_hphp_buildkit
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -101,5 +100,4 @@ class Hook_addon_registry_hphp_buildkit
 			'ocp.hdf',
 		);
 	}
-
 }

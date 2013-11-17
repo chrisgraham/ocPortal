@@ -15,7 +15,6 @@
 
 class Hook_config_max_classified_listings_per_screen
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_max_classified_listings_per_screen
 	{
 		return '30';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_enable_birthdays
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_enable_birthdays
 	{
 		return '1';
 	}
-
 }
 
 

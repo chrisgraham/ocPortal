@@ -20,7 +20,6 @@
 
 class Hook_checklist_forum
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -44,7 +43,6 @@ class Hook_checklist_forum
 		}
 		return array();
 	}
-
 }
 
 

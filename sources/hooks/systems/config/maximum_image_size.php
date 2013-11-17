@@ -20,7 +20,6 @@
 
 class Hook_config_maximum_image_size
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_maximum_image_size
 	{
 		return '1024';
 	}
-
 }
 
 

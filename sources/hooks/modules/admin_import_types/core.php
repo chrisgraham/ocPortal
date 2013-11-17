@@ -20,7 +20,6 @@
 
 class Hook_admin_import_types_core
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -63,7 +62,6 @@ class Hook_admin_import_types_core
 			$ret['redirects']='REDIRECTS';
 		return $ret;
 	}
-
 }
 
 

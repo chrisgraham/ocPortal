@@ -23,7 +23,6 @@
  */
 class Module_admin_backup
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -365,7 +364,6 @@ class Module_admin_backup
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

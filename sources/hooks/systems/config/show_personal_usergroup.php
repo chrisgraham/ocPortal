@@ -20,7 +20,6 @@
 
 class Hook_config_show_personal_usergroup
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_show_personal_usergroup
 	{
 		return has_no_forum()?NULL:'0';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_call_home
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_call_home
 	{
 		$test=get_long_value('call_home'); if ($test!==NULL) return strval(intval($test)); return '1';
 	}
-
 }
 
 

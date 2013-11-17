@@ -20,7 +20,6 @@
 
 class Block_main_newsletter_signup
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -103,7 +102,6 @@ class Block_main_newsletter_signup
 			return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array('_GUID'=>'c0e6f9cdab3d624bf3d27b745e3de38f','NEWSLETTER_TITLE'=>$newsletter_title,'NID'=>strval($newsletter_id),'URL'=>get_self_url()));
 		}
 	}
-
 }
 
 

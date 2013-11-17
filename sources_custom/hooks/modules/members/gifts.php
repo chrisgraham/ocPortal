@@ -14,7 +14,6 @@
 
 class Hook_members_gifts
 {
-
 	/**
 	 * Standard modular run function.
 	 *

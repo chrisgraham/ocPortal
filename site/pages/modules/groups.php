@@ -23,7 +23,6 @@
  */
 class Module_groups
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -774,7 +773,6 @@ class Module_groups
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

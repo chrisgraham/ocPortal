@@ -20,7 +20,6 @@
 
 class Hook_sw_calendar
 {
-
 	/**
 	 * Standard modular run function for blocks in the setup wizard.
 	 *
@@ -32,7 +31,6 @@ class Hook_sw_calendar
 
 		return array(array(),array('side_calendar'=>array('PANEL_NONE','PANEL_RIGHT')));
 	}
-
 }
 
 

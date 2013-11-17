@@ -20,7 +20,6 @@
 
 class Hook_Profiles_Tabs_Edit_notifications
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -72,7 +71,6 @@ class Hook_Profiles_Tabs_Edit_notifications
 
 		return array($title,new ocp_tempcode(),$text,$javascript,$order);
 	}
-
 }
 
 

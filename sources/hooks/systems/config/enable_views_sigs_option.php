@@ -20,7 +20,6 @@
 
 class Hook_config_enable_views_sigs_option
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_enable_views_sigs_option
 	{
 		return '0';
 	}
-
 }
 
 

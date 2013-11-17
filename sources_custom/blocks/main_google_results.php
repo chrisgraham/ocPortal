@@ -57,7 +57,6 @@ class Block_main_google_results
 
 		return do_template('BLOCK_MAIN_GOOGLE_SEARCH_RESULTS',array('_GUID'=>'e2bd264817a6ad7852918583986bd373'));
 	}
-
 }
 
 

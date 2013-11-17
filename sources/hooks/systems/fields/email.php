@@ -20,7 +20,6 @@
 
 class Hook_fields_email
 {
-
 	// ==============
 	// Module: search
 	// ==============
@@ -121,7 +120,6 @@ class Hook_fields_email
 		if (($value!='') && ($value!=STRING_MAGIC_NULL) && (!is_valid_email_address($value))) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
 		return $value;
 	}
-
 }
 
 

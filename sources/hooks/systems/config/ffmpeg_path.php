@@ -20,7 +20,6 @@
 
 class Hook_config_ffmpeg_path
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -52,7 +51,6 @@ class Hook_config_ffmpeg_path
 		if (GOOGLE_APPENGINE) return NULL;
 		return '';
 	}
-
 }
 
 

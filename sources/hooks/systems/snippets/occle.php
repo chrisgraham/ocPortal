@@ -20,7 +20,6 @@
 
 class Hook_occle
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -47,7 +46,6 @@ class Hook_occle
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

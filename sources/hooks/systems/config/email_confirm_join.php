@@ -20,7 +20,6 @@
 
 class Hook_config_email_confirm_join
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_email_confirm_join
 	{
 		return '1';
 	}
-
 }
 
 

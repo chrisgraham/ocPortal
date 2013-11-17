@@ -92,6 +92,5 @@ class Hook_occle_command_antispam_check
 			return array('','',$ret,'');
 		}
 	}
-
 }
 

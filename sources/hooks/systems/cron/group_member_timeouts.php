@@ -20,7 +20,6 @@
 
 class Hook_cron_group_member_timeouts
 {
-
 	/**
 	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
 	 */
@@ -30,5 +29,4 @@ class Hook_cron_group_member_timeouts
 
 		cleanup_member_timeouts();
 	}
-
 }

@@ -23,7 +23,6 @@
  */
 class Module_admin_messaging
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -289,6 +288,5 @@ class Module_admin_messaging
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id,'message_type'=>$message_type),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 

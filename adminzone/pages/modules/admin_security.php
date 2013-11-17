@@ -23,7 +23,6 @@
  */
 class Module_admin_security
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -278,7 +277,6 @@ class Module_admin_security
 			'URL'=>$row['url'],
 		));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Block_main_db_notes
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -77,7 +76,6 @@ class Block_main_db_notes
 			'URL'=>$post_url,
 		));
 	}
-
 }
 
 

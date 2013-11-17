@@ -20,7 +20,6 @@
 
 class Hook_ocf_cpf_filter_notifications
 {
-
 	/**
 	 * Find which special CPF's to enable.
 	 *
@@ -32,7 +31,6 @@ class Hook_ocf_cpf_filter_notifications
 
 		return $cpf;
 	}
-
 }
 
 

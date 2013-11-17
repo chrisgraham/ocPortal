@@ -20,7 +20,6 @@
 
 class Hook_comcode_pages
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -51,7 +50,6 @@ class Hook_comcode_pages
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

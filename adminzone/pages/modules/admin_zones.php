@@ -23,7 +23,6 @@
  */
 class Module_admin_zones
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -961,7 +960,6 @@ class Module_admin_zones
 		erase_block_cache();
 		erase_persistent_cache();
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_aggregate_types
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -109,5 +108,4 @@ class Hook_addon_registry_aggregate_types
 			'sources/hooks/systems/page_groupings/aggregate_types.php',
 		);
 	}
-
 }

@@ -20,7 +20,6 @@
 
 class Block_main_gallery_embed
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -341,7 +340,6 @@ class Block_main_gallery_embed
 			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
-
 }
 
 

@@ -423,7 +423,6 @@ class Database_Static_ibm
 	//	echo '<p>End '.microtime(false);
 		return $out;
 	}
-
 }
 
 

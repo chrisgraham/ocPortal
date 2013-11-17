@@ -20,7 +20,6 @@
 
 class Hook_resource_meta_aware_forum_grouping
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -88,5 +87,4 @@ class Hook_resource_meta_aware_forum_grouping
 			'actionlog_regexp'=>'\w+_FORUM_GROUPING',
 		);
 	}
-
 }

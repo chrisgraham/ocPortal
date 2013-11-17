@@ -20,7 +20,6 @@
 
 class Hook_search_images
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -163,7 +162,6 @@ class Hook_search_images
 		require_code('galleries');
 		return render_image_box($row);
 	}
-
 }
 
 

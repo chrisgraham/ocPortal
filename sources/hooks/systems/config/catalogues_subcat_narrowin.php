@@ -20,7 +20,6 @@
 
 class Hook_config_catalogues_subcat_narrowin
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_catalogues_subcat_narrowin
 	{
 		return '0';
 	}
-
 }
 
 

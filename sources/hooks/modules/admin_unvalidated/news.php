@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_news
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -47,7 +46,6 @@ class Hook_unvalidated_news
 
 		return $info;
 	}
-
 }
 
 

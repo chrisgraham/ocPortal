@@ -32,7 +32,6 @@ No need for presetting up, or usernames or passwords.
  */
 class Database_Static_sqlite
 {
-
 	var $cache_db=array();
 
 	/**
@@ -384,7 +383,6 @@ class Database_Static_sqlite
 		}
 		return $out;
 	}
-
 }
 
 

@@ -371,7 +371,6 @@ class Hook_occle_fs_database
 	{
 		return str_replace(array('!colon!','!comma!','!slash!'),array(':',',','/'),$in);
 	}
-
 }
 
 

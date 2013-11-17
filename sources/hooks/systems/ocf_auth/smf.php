@@ -20,7 +20,6 @@
 
 class Hook_ocf_auth_smf
 {
-
 	/**
 	 * Try and authenticate for our password compatibility scheme.
 	 *
@@ -53,7 +52,6 @@ class Hook_ocf_auth_smf
 
 		return NULL;
 	}
-
 }
 
 

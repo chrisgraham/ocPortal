@@ -20,7 +20,6 @@
 
 class Hook_css_compile__text
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -35,5 +34,4 @@ class Hook_css_compile__text
 		}
 		return new ocp_tempcode();
 	}
-
 }

@@ -20,7 +20,6 @@
 
 class Hook_config_java_ftp_path
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_java_ftp_path
 	{
 		return '/public_html/uploads/incoming/';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_points_ADD_DOWNLOAD
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_points_ADD_DOWNLOAD
 	{
 		return addon_installed('points')?'150':NULL;
 	}
-
 }
 
 

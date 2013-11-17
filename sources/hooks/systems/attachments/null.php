@@ -20,7 +20,6 @@
 
 class Hook_attachments_null
 {
-
 	/**
 	 * Standard modular run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
@@ -32,6 +31,5 @@ class Hook_attachments_null
 	{
 		return true;
 	}
-
 }
 

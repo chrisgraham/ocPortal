@@ -20,7 +20,6 @@
 
 class Hook_content_meta_aware_member
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -120,5 +119,4 @@ class Hook_content_meta_aware_member
 
 		return render_member_box($row['id'],false,NULL,NULL,true,NULL,$give_context,$guid);
 	}
-
 }

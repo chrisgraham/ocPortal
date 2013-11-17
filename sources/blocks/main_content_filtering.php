@@ -20,7 +20,6 @@
 
 class Block_main_content_filtering
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -108,7 +107,6 @@ class Block_main_content_filtering
 		}
 		return $pairs;
 	}
-
 }
 
 

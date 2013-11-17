@@ -18,7 +18,6 @@
  */
 class Module_admin_referrals
 {
-
 	/**
 	 * Standard modular info function.
 	 *

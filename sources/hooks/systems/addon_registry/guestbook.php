@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_guestbook
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -103,5 +102,4 @@ class Hook_addon_registry_guestbook
 			'sources/hooks/systems/page_groupings/guestbook.php',
 		);
 	}
-
 }

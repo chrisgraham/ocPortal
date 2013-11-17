@@ -744,7 +744,6 @@ class Module_cms_banners_cat extends standard_crud_module
 			do_lang_tempcode('BANNER_TYPES')
 		);
 	}
-
 }
 
 

@@ -23,7 +23,6 @@
  */
 class Module_admin_staff
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -256,7 +255,6 @@ class Module_admin_staff
 
 		log_it('REMOVE_STAFF',strval($id));
 	}
-
 }
 
 

@@ -59,6 +59,5 @@ class Hook_occle_command_ls
 			);
 		}
 	}
-
 }
 

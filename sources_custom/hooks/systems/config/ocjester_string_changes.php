@@ -15,7 +15,6 @@
 
 class Hook_config_ocjester_string_changes
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_ocjester_string_changes
 	{
 		return "it's=its\nits=it's";
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_stats_calendar
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -57,7 +56,6 @@ class Hook_stats_calendar
 
 		return $section;
 	}
-
 }
 
 

@@ -15,7 +15,6 @@
 
 class Hook_Profiles_Tabs_related
 {
-
 	/**
 	 * Find whether this hook is active.
 	 *
@@ -56,7 +55,6 @@ class Hook_Profiles_Tabs_related
 
 		return array($title,$content,$order);
 	}
-
 }
 
 

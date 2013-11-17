@@ -20,7 +20,6 @@
 
 class Hook_config_edit_under
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_edit_under
 	{
 		return '1';
 	}
-
 }
 
 

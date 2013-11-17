@@ -20,7 +20,6 @@
 
 class Hook_config_max_download_size
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_max_download_size
 	{
 		return '20000';
 	}
-
 }
 
 

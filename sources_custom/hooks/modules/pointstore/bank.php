@@ -15,7 +15,6 @@
 
 class Hook_pointstore_bank
 {
-
 	/**
 	 * Standard pointstore item initialisation function.
 	 */
@@ -113,7 +112,6 @@ class Hook_pointstore_bank
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,$result);
 	}
-
 }
 
 

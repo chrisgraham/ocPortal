@@ -55,6 +55,5 @@ class Hook_occle_command_rm
 		if ($success) return array('','',do_lang('SUCCESS'),'');
 		else return array('','','',do_lang('INCOMPLETE_ERROR'));
 	}
-
 }
 

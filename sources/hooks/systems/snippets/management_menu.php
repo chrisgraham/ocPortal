@@ -20,7 +20,6 @@
 
 class Hook_management_menu
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -35,7 +34,6 @@ class Hook_management_menu
 		}
 		return new ocp_tempcode();
 	}
-
 }
 
 

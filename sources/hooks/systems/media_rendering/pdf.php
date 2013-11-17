@@ -78,5 +78,4 @@ class Hook_media_rendering_pdf
 	{
 		return do_template('MEDIA_PDF',array('_GUID'=>'8e37123f120505eea27f482edaf78357','HOOK'=>'pdf')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
-
 }

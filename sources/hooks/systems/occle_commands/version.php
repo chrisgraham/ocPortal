@@ -46,6 +46,5 @@ class Hook_occle_command_version
 		else
 			return array('','',ocp_version_pretty(),'');
 	}
-
 }
 

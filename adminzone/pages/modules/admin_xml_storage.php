@@ -23,7 +23,6 @@
  */
 class Module_admin_xml_storage
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -193,7 +192,6 @@ class Module_admin_xml_storage
 
 		return do_template('XML_STORAGE_EXPORT_RESULTS_SCREEN',array('_GUID'=>'c7053f328b27709b529f2cd88513d85d','TITLE'=>$this->title,'XML'=>$xml));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE_PLAIN
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -72,5 +71,4 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE_PLAIN
 		}
 		return $value;
 	}
-
 }

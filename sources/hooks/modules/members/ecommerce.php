@@ -20,7 +20,6 @@
 
 class Hook_members_ecommerce
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -48,7 +47,6 @@ class Hook_members_ecommerce
 
 		return $modules;
 	}
-
 }
 
 

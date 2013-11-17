@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_tickets
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -37,7 +36,6 @@ class Hook_page_groupings_tickets
 			array('site_meta','menu/site_meta/tickets',array('tickets',array(),get_module_zone('tickets')),do_lang_tempcode('tickets:SUPPORT_TICKETS')),
 		);
 	}
-
 }
 
 

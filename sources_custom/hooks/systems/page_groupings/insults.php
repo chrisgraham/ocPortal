@@ -14,7 +14,6 @@
  */
 class Hook_page_groupings_insults
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -28,7 +27,6 @@ class Hook_page_groupings_insults
 			array('setup','menu/insults',array('insults',array(),get_page_zone('insults')),do_lang_tempcode('insults:MANAGE_INSULTS'),'insults:DOC_INSULTS'),
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_config_bottom_show_privacy_link
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_bottom_show_privacy_link
 	{
 		return '1';
 	}
-
 }
 
 

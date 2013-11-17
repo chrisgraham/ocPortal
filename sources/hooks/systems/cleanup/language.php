@@ -20,7 +20,6 @@
 
 class Hook_language
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -47,7 +46,6 @@ class Hook_language
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

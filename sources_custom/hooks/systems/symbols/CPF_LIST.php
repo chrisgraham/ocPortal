@@ -2,7 +2,6 @@
 
 class Hook_symbol_CPF_LIST
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -60,5 +59,4 @@ class Hook_symbol_CPF_LIST
 
 		return $value;
 	}
-
 }

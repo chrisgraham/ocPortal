@@ -20,7 +20,6 @@
 
 class Hook_unvalidated_catalogue_entry
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -46,7 +45,6 @@ class Hook_unvalidated_catalogue_entry
 
 		return $info;
 	}
-
 }
 
 

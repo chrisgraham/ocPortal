@@ -20,7 +20,6 @@
 
 class Hook_config_use_local_payment
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_use_local_payment
 	{
 		return '0';
 	}
-
 }
 
 

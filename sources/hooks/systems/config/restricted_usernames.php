@@ -20,7 +20,6 @@
 
 class Hook_config_restricted_usernames
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_restricted_usernames
 	{
 		return do_lang('GUEST').', '.do_lang('STAFF').', '.do_lang('ADMIN').', '.do_lang('MODERATOR').', googlebot';
 	}
-
 }
 
 

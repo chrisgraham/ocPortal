@@ -20,7 +20,6 @@
 
 class Block_side_stats
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -161,7 +160,6 @@ class Block_side_stats
 
 		return do_template('BLOCK_SIDE_STATS',array('_GUID'=>'0e9986c117c2a3c04690840fedcbddcd','CONTENT'=>$full_tpl));
 	}
-
 }
 
 

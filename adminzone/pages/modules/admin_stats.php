@@ -24,7 +24,6 @@
  */
 class Module_admin_stats
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1612,6 +1611,5 @@ class Module_admin_stats
 		fix_permissions($path);
 		sync_file($path);
 	}
-
 }
 

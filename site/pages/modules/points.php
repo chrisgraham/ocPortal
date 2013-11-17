@@ -23,7 +23,6 @@
  */
 class Module_points
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -398,7 +397,6 @@ class Module_points
 		}
 		return warn_screen($this->title,$message);
 	}
-
 }
 
 

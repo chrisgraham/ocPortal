@@ -22,7 +22,6 @@
 
 class Hook_mysql
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -84,7 +83,6 @@ class Hook_mysql
 
 		return $out;
 	}
-
 }
 
 

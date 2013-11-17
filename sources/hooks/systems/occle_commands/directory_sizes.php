@@ -55,6 +55,5 @@ class Hook_occle_command_directory_sizes
 			return array('',$out,'','');
 		}
 	}
-
 }
 

@@ -46,7 +46,6 @@ $profile=<<<END
 
 class Hook_admin_setupwizard_installprofiles_mycustomprofile
 {
-
 	/**
 	 * Get info about the installprofile
 	 *
@@ -222,7 +221,6 @@ END;
 		}
 $profile.=<<<END
 	}
-
 }
 END;
 

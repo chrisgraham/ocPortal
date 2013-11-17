@@ -35,7 +35,6 @@ function init__hooks__modules__admin_import__smf()
  */
 class Hook_smf
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -1280,5 +1279,4 @@ class Hook_smf
 			import_id_remap_put('event',strval($row['ID_HOLIDAY']),$id_new);
 		}
 	}
-
 }

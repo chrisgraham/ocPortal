@@ -20,7 +20,6 @@
 
 class Hook_rss_ocf_unread_topics
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -77,7 +76,6 @@ class Hook_rss_ocf_unread_topics
 		require_lang('ocf');
 		return array($content,do_lang('TOPICS_UNREAD'));
 	}
-
 }
 
 

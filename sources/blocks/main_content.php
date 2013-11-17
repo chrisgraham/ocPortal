@@ -20,7 +20,6 @@
 
 class Block_main_content
 {
-
 	/**
 	 * Standard modular info function.
 	 *

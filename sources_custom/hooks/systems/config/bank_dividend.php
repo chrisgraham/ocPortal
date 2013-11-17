@@ -15,7 +15,6 @@
 
 class Hook_config_bank_dividend
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -45,7 +44,6 @@ class Hook_config_bank_dividend
 	{
 		return '4';
 	}
-
 }
 
 

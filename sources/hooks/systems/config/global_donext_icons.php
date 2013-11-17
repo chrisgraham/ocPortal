@@ -20,7 +20,6 @@
 
 class Hook_config_global_donext_icons
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_global_donext_icons
 	{
 		return '1';
 	}
-
 }
 
 

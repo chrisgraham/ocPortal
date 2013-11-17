@@ -20,7 +20,6 @@
 
 class Hook_search_wiki_pages
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -132,7 +131,6 @@ class Hook_search_wiki_pages
 	{
 		return render_wiki_page_box($row);
 	}
-
 }
 
 

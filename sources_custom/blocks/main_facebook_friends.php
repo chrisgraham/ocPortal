@@ -79,7 +79,6 @@ class Block_main_facebook_friends
 			'STREAM'=>$stream,
 		));
 	}
-
 }
 
 

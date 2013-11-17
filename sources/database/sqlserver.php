@@ -539,7 +539,6 @@ class Database_Static_sqlserver
 		}
 		return $out;
 	}
-
 }
 
 

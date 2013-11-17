@@ -20,7 +20,6 @@
 
 class Hook_config_show_screen_actions
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_show_screen_actions
 	{
 		return '1';
 	}
-
 }
 
 

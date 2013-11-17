@@ -15,7 +15,6 @@
 
 class Hook_symbol_POINTS_FROM_USERGROUPS
 {
-
 	/**
 	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
     *
@@ -29,5 +28,4 @@ class Hook_symbol_POINTS_FROM_USERGROUPS
 		$value=strval(total_points($member)-non_overridden__total_points($member));
 		return $value;
 	}
-
 }

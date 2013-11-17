@@ -20,7 +20,6 @@
 
 class Hook_content_meta_aware_news_category
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -109,5 +108,4 @@ class Hook_content_meta_aware_news_category
 
 		return render_news_category_box($row,$zone,$give_context,$attach_to_url_filter,NULL,$guid);
 	}
-
 }

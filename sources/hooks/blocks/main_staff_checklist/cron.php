@@ -20,7 +20,6 @@
 
 class Hook_checklist_cron
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -49,6 +48,5 @@ class Hook_checklist_cron
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'543258b74e72bb3bd3b9acd5de1a623d','INFO'=>$info,'URL'=>'','STATUS'=>$_status,'TASK'=>urlise_lang(do_lang('NAG_SETUP_CRON'),$url)));
 		return array(array($tpl,($status==0)?-1:0,1,NULL));
 	}
-
 }
 

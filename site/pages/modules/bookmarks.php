@@ -23,7 +23,6 @@
  */
 class Module_bookmarks
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -283,7 +282,6 @@ class Module_bookmarks
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
-
 }
 
 

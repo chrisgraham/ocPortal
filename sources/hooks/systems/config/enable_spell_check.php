@@ -20,7 +20,6 @@
 
 class Hook_config_enable_spell_check
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_enable_spell_check
 	{
 		return function_exists('pspell_check')?'0':NULL;
 	}
-
 }
 
 

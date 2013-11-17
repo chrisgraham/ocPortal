@@ -20,7 +20,6 @@
 
 class Hook_config_main_forum_name
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_main_forum_name
 	{
 		return has_no_forum()?NULL:do_lang('DEFAULT_FORUM_TITLE','','','',get_site_default_lang());
 	}
-
 }
 
 

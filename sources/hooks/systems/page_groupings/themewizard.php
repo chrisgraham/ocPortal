@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_themewizard
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -35,7 +34,6 @@ class Hook_page_groupings_themewizard
 			array('style','menu/adminzone/style/themes/logowizard',array('admin_themewizard',array('type'=>'make_logo'),get_module_zone('admin_themewizard')),do_lang_tempcode('themes:LOGOWIZARD'),'themes:DOC_LOGOWIZARD'),
 		);
 	}
-
 }
 
 

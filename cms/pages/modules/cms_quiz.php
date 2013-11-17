@@ -447,7 +447,6 @@ class Module_cms_quiz extends standard_crud_module
 
 		delete_quiz($id);
 	}
-
 }
 
 

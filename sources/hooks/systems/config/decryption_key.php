@@ -20,7 +20,6 @@
 
 class Hook_config_decryption_key
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_decryption_key
 	{
 		require_code('encryption'); if (get_forum_type()!='ocf') return NULL; return is_encryption_available()?'':NULL;
 	}
-
 }
 
 

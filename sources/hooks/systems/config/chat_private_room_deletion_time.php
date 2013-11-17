@@ -20,7 +20,6 @@
 
 class Hook_config_chat_private_room_deletion_time
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_chat_private_room_deletion_time
 	{
 		return '1440';
 	}
-
 }
 
 

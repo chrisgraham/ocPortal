@@ -20,7 +20,6 @@
 
 class Hook_themewizard_equation
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -49,5 +48,4 @@ class Hook_themewizard_equation
 
 		return make_string_tempcode('#'.$answer);
 	}
-
 }

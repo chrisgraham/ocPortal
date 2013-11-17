@@ -20,7 +20,6 @@
 
 class Block_main_countdown
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -144,7 +143,6 @@ class Block_main_countdown
 			'DISTANCE_FOR_PRECISION'=>strval($distance_for_precision),
 		));
 	}
-
 }
 
 

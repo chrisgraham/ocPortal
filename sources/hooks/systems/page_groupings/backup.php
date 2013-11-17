@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_backup
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_backup
 			array('tools','menu/adminzone/tools/bulk_content_actions/backups',array('admin_backup',array('type'=>'misc'),get_module_zone('admin_backup')),do_lang_tempcode('backups:BACKUPS'),'backups:DOC_BACKUPS'),
 		);
 	}
-
 }
 
 

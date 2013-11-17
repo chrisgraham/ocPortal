@@ -23,7 +23,6 @@
  */
 class Module_downloads
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -760,7 +759,6 @@ class Module_downloads
 			'MAY_DOWNLOAD'=>$may_download,
 		));
 	}
-
 }
 
 

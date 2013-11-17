@@ -20,7 +20,6 @@
 
 class Hook_config_max_member_title_length
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_max_member_title_length
 	{
 		return '20';
 	}
-
 }
 
 

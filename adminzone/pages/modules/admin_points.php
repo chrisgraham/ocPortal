@@ -23,7 +23,6 @@
  */
 class Module_admin_points
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -309,7 +308,6 @@ class Module_admin_points
 		}
 		return redirect_screen($this->title,$url,$text);
 	}
-
 }
 
 

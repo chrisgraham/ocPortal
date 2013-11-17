@@ -81,6 +81,5 @@ class Hook_occle_command_db_search
 			return array('',$out,'','');
 		}
 	}
-
 }
 

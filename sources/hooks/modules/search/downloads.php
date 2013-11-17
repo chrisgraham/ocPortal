@@ -20,7 +20,6 @@
 
 class Hook_search_downloads
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -188,7 +187,6 @@ class Hook_search_downloads
 
 		return render_download_box($row,true,true,NULL,$text_summary);
 	}
-
 }
 
 

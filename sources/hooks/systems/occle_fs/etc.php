@@ -182,6 +182,5 @@ class Hook_occle_fs_etc
 
 		return true;
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Block_main_friends_list
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -164,6 +163,5 @@ class Block_main_friends_list
 			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
-
 }
 

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_avatars
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -113,5 +112,4 @@ class Hook_addon_registry_ocf_avatars
 			'themes/default/images/ocf_default_avatars/default_set/berries.png',
 		);
 	}
-
 }

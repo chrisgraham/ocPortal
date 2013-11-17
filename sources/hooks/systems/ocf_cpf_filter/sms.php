@@ -20,7 +20,6 @@
 
 class Hook_ocf_cpf_filter_sms
 {
-
 	/**
 	 * Find which special CPF's to enable.
 	 *
@@ -32,7 +31,6 @@ class Hook_ocf_cpf_filter_sms
 		if (get_option('sms_username')!='') $cpf['mobile_phone_number']=1;
 		return $cpf;
 	}
-
 }
 
 

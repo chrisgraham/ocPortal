@@ -20,7 +20,6 @@
 
 class Hook_Preview_ocf_signature
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -41,7 +40,6 @@ class Hook_Preview_ocf_signature
 		}
 		return array($applies,'ocf_signature',true,array('post'));
 	}
-
 }
 
 

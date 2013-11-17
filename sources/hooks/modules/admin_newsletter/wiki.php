@@ -20,7 +20,6 @@
 
 class Hook_whats_news_wiki
 {
-
 	/**
 	 * Standard modular run function for newsletter hooks.
 	 *
@@ -56,7 +55,6 @@ class Hook_whats_news_wiki
 
 		return array($new,do_lang('WIKI','','','',$lang));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_sms
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -153,5 +152,4 @@ class Hook_addon_registry_sms
 			/*$GLOBALS['SITE_DB']->create_index('confirmed_mobiles','confirmed_numbers',array('m_confirm_code'));*/
 		}
 	}
-
 }

@@ -43,6 +43,5 @@ class Hook_occle_command_find_guid_via_id
 			else return array('','','',do_lang('MISSING_RESOURCE'));
 		}
 	}
-
 }
 

@@ -23,7 +23,6 @@
  */
 class Module_lost_password
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -352,7 +351,6 @@ class Module_lost_password
 		// Email new password
 		return inform_screen($this->title,do_lang_tempcode('NEW_PASSWORD_MAILED',escape_html($email)));
 	}
-
 }
 
 

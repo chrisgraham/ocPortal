@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_msn
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -39,7 +38,6 @@ class Hook_page_groupings_msn
 			array('structure','menu/adminzone/structure/multi_site_network',array('netlink',array(),$zone),do_lang_tempcode('menus:PARTNER_SITES'),'menus:DOC_NETLINK_1'),
 		);
 	}
-
 }
 
 

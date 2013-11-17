@@ -126,5 +126,4 @@ This notification hook was created using the classifieds notification hook as a 
 		
 		set_value('last_downloads_followup_email_send',strval($time));
 	}
-
 }

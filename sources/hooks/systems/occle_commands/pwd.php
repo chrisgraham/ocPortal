@@ -33,6 +33,5 @@ class Hook_occle_command_pwd
 		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('pwd',array('h'),array()),'','');
 		else return array('','',$occle_fs->print_working_directory(),'');
 	}
-
 }
 

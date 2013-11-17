@@ -20,7 +20,6 @@
 
 class Hook_comcode
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -49,7 +48,6 @@ class Hook_comcode
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

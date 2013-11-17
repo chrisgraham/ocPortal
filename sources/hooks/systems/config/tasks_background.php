@@ -20,7 +20,6 @@
 
 class Hook_config_tasks_background
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_tasks_background
 		if (GOOGLE_APPENGINE) return '1';
 		return '0';
 	}
-
 }
 
 

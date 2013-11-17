@@ -43,6 +43,5 @@ class Hook_occle_command_find_id_via_occlefs_filename
 			else return array('','','',do_lang('MISSING_RESOURCE'));
 		}
 	}
-
 }
 

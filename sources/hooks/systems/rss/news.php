@@ -20,7 +20,6 @@
 
 class Hook_rss_news
 {
-
 	/**
 	 * Standard modular run function for RSS hooks.
 	 *
@@ -114,7 +113,6 @@ class Hook_rss_news
 
 		return array($content,do_lang('NEWS'));
 	}
-
 }
 
 

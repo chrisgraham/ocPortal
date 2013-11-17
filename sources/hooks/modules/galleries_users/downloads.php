@@ -20,7 +20,6 @@
 
 class Hook_gu_downloads
 {
-
 	/**
 	 * Add in new icons to a worked-within gallery.
 	 *
@@ -38,7 +37,6 @@ class Hook_gu_downloads
 			array('menu/rich_content/downloads',array('downloads',array('type'=>'entry','id'=>$id),get_module_zone('downloads')),do_lang('VIEW'))
 		);
 	}
-
 }
 
 

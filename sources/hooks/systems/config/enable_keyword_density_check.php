@@ -20,7 +20,6 @@
 
 class Hook_config_enable_keyword_density_check
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_enable_keyword_density_check
 	{
 		return '0';
 	}
-
 }
 
 

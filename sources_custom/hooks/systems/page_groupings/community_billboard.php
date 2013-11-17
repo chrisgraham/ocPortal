@@ -14,7 +14,6 @@
 
 class Hook_page_groupings_community_billboard
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -28,7 +27,6 @@ class Hook_page_groupings_community_billboard
 			array('audit','menu/adminzone/audit/community_billboard',array('admin_community_billboard',array('type'=>'misc'),get_module_zone('admin_community_billboard')),do_lang_tempcode('community_billboard:COMMUNITY_BILLBOARD'),'community_billboard:DOC_COMMUNITY_BILLBOARD'),
 		);
 	}
-
 }
 
 

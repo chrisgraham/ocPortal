@@ -20,7 +20,6 @@
 
 class Hook_ocf_cpf_filter_staff_filter
 {
-
 	/**
 	 * Find which special CPF's to enable.
 	 *
@@ -38,7 +37,6 @@ class Hook_ocf_cpf_filter_staff_filter
 		}
 		return $cpf;
 	}
-
 }
 
 

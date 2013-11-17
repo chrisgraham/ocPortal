@@ -15,7 +15,6 @@
 
 class Hook_ocworld
 {
-
 	/**
 	 * Standard modular run function.
 	 *
@@ -50,7 +49,6 @@ class Hook_ocworld
 		}
 		return NULL;
 	}
-
 }
 
 

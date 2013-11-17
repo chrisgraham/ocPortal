@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_aggregate_types
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_aggregate_types
 			array('structure','menu/adminzone/structure/aggregate_types',array('admin_aggregate_types',array('type'=>'misc'),get_module_zone('admin_aggregate_types')),do_lang_tempcode('aggregate_types:AGGREGATE_TYPES'),'aggregate_types:DOC_AGGREGATE_TYPES'),
 		);
 	}
-
 }
 
 

@@ -15,7 +15,6 @@
 
 class Hook_members_filedump
 {
-
 	/**
 	 * Standard modular run function.
 	 *

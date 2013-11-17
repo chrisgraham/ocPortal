@@ -20,7 +20,6 @@
 
 class Hook_config_points_chat
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_points_chat
 	{
 		return addon_installed('points')?'1':NULL;
 	}
-
 }
 
 

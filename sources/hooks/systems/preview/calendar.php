@@ -20,7 +20,6 @@
 
 class Hook_Preview_calendar
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -32,7 +31,6 @@ class Hook_Preview_calendar
 		$applies=(get_param('page','')=='cms_calendar') && ((get_param('type')=='_ed') || (get_param('type')=='ad')) && ((is_swf_upload()) || (count($_FILES)!=0));
 		return array($applies,'calendar',false);
 	}
-
 }
 
 

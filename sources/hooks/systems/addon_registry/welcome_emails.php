@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_welcome_emails
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -104,5 +103,4 @@ class Hook_addon_registry_welcome_emails
 			'sources/hooks/systems/preview/ocf_welcome_email.php',
 		);
 	}
-
 }

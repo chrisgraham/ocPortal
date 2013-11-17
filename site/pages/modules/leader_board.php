@@ -23,7 +23,6 @@
  */
 class Module_leader_board
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -147,7 +146,6 @@ class Module_leader_board
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
-
 }
 
 

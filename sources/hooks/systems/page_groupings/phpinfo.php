@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_phpinfo
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -36,7 +35,6 @@ class Hook_page_groupings_phpinfo
 			array('tools','menu/adminzone/tools/phpinfo',array('admin_phpinfo',array(),get_module_zone('admin_phpinfo')),do_lang_tempcode('menus:PHPINFO'),'menus:DOC_PHPINFO'),
 		);
 	}
-
 }
 
 

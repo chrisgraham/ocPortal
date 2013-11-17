@@ -23,7 +23,6 @@
  */
 class Module_admin_setupwizard
 {
-
 	/**
 	 * Standard modular info function.
 	 *

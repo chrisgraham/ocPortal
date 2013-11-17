@@ -23,7 +23,6 @@
  */
 class Module_forumview
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -218,7 +217,6 @@ class Module_forumview
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
-
 }
 
 

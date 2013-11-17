@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_google_appengine
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -107,5 +106,4 @@ class Hook_addon_registry_google_appengine
 			'sources/google_appengine.php',
 		);
 	}
-
 }

@@ -15,7 +15,6 @@
 
 class Hook_page_groupings_booking
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -30,7 +29,6 @@ class Hook_page_groupings_booking
 			array('pages','menu/book',array('booking',array('type'=>'misc'),get_page_zone('booking')),do_lang_tempcode('booking:BOOKINGS')),
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_stats
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -56,7 +55,6 @@ class Hook_stats
 
 		return new ocp_tempcode();
 	}
-
 }
 
 

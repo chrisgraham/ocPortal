@@ -20,7 +20,6 @@
 
 class Hook_Preview_wiki_post
 {
-
 	/**
 	 * Find whether this preview hook applies.
 	 *
@@ -51,7 +50,6 @@ class Hook_Preview_wiki_post
 
 		return array($post_html,$post_comcode);
 	}
-
 }
 
 

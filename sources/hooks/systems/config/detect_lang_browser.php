@@ -20,7 +20,6 @@
 
 class Hook_config_detect_lang_browser
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_detect_lang_browser
 	{
 		return '0';
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_windows_helper_scripts
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -100,5 +99,4 @@ class Hook_addon_registry_windows_helper_scripts
 			'fixperms.bat',
 		);
 	}
-
 }

@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_pointstore
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *

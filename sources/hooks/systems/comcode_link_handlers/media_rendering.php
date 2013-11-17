@@ -25,7 +25,6 @@
 
 class Hook_comcode_link_handler_media_rendering
 {
-
 	/**
 	 * Standard modular bind function for Comcode link handler hooks. They see if they can bind a pasted URL to a lump of handler Tempcode.
 	 *
@@ -47,7 +46,6 @@ class Hook_comcode_link_handler_media_rendering
 		require_code('media_renderer');
 		return render_media_url($url,$url,array('context'=>'comcode_link'),$as_admin,$source_member);
 	}
-
 }
 
 

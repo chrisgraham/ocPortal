@@ -20,7 +20,6 @@
 
 class Hook_content_meta_aware_gallery
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -110,5 +109,4 @@ class Hook_content_meta_aware_gallery
 
 		return render_gallery_box($row,is_null($root)?$root:'root',false,$zone,false,false,$give_context,$include_breadcrumbs,$attach_to_url_filter,$guid);
 	}
-
 }

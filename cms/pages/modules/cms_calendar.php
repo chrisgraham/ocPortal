@@ -1565,7 +1565,6 @@ class Module_cms_calendar_cat extends standard_crud_module
 			do_lang_tempcode('EVENT_TYPES')
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_realtime_rain_load
 {
-
 	/**
 	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
@@ -33,5 +32,4 @@ class Hook_realtime_rain_load
 		$min_time=$GLOBALS['SITE_DB']->query_select_value('stats','MIN(date_and_time)');
 		return do_template('REALTIME_RAIN_OVERLAY',array('_GUID'=>'1b3535932bbefcb9474fbfc2297b4d71','MIN_TIME'=>strval($min_time)));
 	}
-
 }

@@ -20,7 +20,6 @@
 
 class Hook_admin_setupwizard_installprofiles_community
 {
-
 	/**
 	 * Get info about the installprofile
 	 *
@@ -119,5 +118,4 @@ class Hook_admin_setupwizard_installprofiles_community
 	function install_code()
 	{
 	}
-
 }

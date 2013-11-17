@@ -570,7 +570,6 @@ Let's look at one of our hook implementations to see what code it has in it. We 
 [code="PHP"]
 class Hook_members_calendar
 {
-
 /**
  * Standard modular run function.
  *

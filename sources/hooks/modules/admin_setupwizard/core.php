@@ -20,7 +20,6 @@
 
 class Hook_sw_core
 {
-
 	/**
 	 * Standard modular run function for features in the setup wizard.
 	 *

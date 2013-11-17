@@ -15,7 +15,6 @@
 
 class Hook_config_tester_forum_name
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -47,7 +46,6 @@ class Hook_config_tester_forum_name
 	{
 		return do_lang('tester:DEFAULT_TESTER_FORUM','','','',get_site_default_lang());
 	}
-
 }
 
 

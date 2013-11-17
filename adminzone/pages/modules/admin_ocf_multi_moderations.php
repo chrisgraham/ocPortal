@@ -329,7 +329,6 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
 	{
 		ocf_delete_multi_moderation(intval($id));
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_block_ui_renderers_news
 {
-
 	/**
 	 * See if a particular block parameter's UI input can be rendered by this.
 	 *
@@ -41,5 +40,4 @@ class Hook_block_ui_renderers_news
 		}
 		return NULL;
 	}
-
 }

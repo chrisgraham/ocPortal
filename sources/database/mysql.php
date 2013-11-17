@@ -351,7 +351,6 @@ class Database_Static_mysql extends Database_super_mysql
 		mysql_free_result($results);
 		return $out;
 	}
-
 }
 
 

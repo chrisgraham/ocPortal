@@ -1363,7 +1363,6 @@ class database_driver
 		while (($locked) && ($tries<5));
 		return $locked;
 	}
-
 }
 
 

@@ -15,7 +15,6 @@
 
 class Hook_config_support_credit_value
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -46,7 +45,6 @@ class Hook_config_support_credit_value
 	{
 		return '5.5';
 	}
-
 }
 
 

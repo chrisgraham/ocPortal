@@ -497,7 +497,6 @@ class forum_driver_base
 	{
 		return array();
 	}
-
 }
 
 

@@ -23,7 +23,6 @@
  */
 class Module_newsletter
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -507,7 +506,6 @@ class Module_newsletter
 
 		return warn_screen($this->title,do_lang_tempcode(($correct_confirm==0)?'ALREADY_CONFIRMED':'INCORRECT_CONFIRMATION'));
 	}
-
 }
 
 

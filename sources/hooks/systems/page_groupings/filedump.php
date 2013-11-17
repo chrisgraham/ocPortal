@@ -20,7 +20,6 @@
 
 class Hook_page_groupings_filedump
 {
-
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
@@ -34,7 +33,6 @@ class Hook_page_groupings_filedump
 			array('cms','menu/cms/filedump',array('filedump',array('type'=>'misc'),get_module_zone('filedump')),do_lang_tempcode('filedump:FILEDUMP'),'filedump:DOC_FILEDUMP'),
 		);
 	}
-
 }
 
 

@@ -20,7 +20,6 @@
 
 class Hook_pointstore_custom
 {
-
 	/**
 	 * Standard pointstore item initialisation function.
 	 */
@@ -269,7 +268,6 @@ class Hook_pointstore_custom
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('ORDER_GENERAL_DONE'));
 	}
-
 }
 
 

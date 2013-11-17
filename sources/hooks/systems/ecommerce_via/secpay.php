@@ -20,7 +20,6 @@
 
 class Hook_secpay
 {
-
 	/**
 	 * Get the gateway username.
 	 *
@@ -463,7 +462,6 @@ class Hook_secpay
 
 		return NULL;
 	}
-
 }
 
 

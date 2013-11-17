@@ -20,7 +20,6 @@
 
 class Hook_config_points_COMCODE_PAGE_ADD
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -50,7 +49,6 @@ class Hook_config_points_COMCODE_PAGE_ADD
 	{
 		return addon_installed('points')?'10':NULL;
 	}
-
 }
 
 

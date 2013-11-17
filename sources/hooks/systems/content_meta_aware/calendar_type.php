@@ -20,7 +20,6 @@
 
 class Hook_content_meta_aware_calendar_type
 {
-
 	/**
 	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
@@ -110,5 +109,4 @@ class Hook_content_meta_aware_calendar_type
 
 		return render_calendar_type_box($row,$zone,$give_context,$guid);
 	}
-
 }

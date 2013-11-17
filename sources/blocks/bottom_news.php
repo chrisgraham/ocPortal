@@ -20,7 +20,6 @@
 
 class Block_bottom_news
 {
-
 	/**
 	 * Standard modular info function.
 	 *
@@ -129,7 +128,6 @@ class Block_bottom_news
 
 		return do_template('BLOCK_BOTTOM_NEWS',array('_GUID'=>'a2076520b171bdf36e5369f0541f92c5','BLOG'=>$blogs===1,'POSTS'=>$_postdetailss));
 	}
-
 }
 
 

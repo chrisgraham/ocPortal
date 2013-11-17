@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_thematic_avatars
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -112,5 +111,4 @@ class Hook_addon_registry_ocf_thematic_avatars
 			'themes/default/images/ocf_default_avatars/default_set/thematic/tech.png',
 		);
 	}
-
 }

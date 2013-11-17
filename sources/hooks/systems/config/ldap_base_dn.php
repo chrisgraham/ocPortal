@@ -20,7 +20,6 @@
 
 class Hook_config_ldap_base_dn
 {
-
 	/**
 	 * Gets the details relating to the config option.
 	 *
@@ -51,7 +50,6 @@ class Hook_config_ldap_base_dn
 	{
 		return 'dc='.str_replace('.',',dc=',get_domain());
 	}
-
 }
 
 
