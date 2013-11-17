@@ -24,15 +24,17 @@ class Hook_page_groupings_chat
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
+	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
+	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run()
+	function run($member_id=NULL,$extensive_docs=false)
 	{
 		if (!addon_installed('chat')) return array();
 
 		return array(
-			array('cms','menu/social/chat/chat',array('cms_chat',array('type'=>'misc'),get_module_zone('cms_chat')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('chat:ROOMS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','COUNT(*)',NULL,'',true))))),'chat:DOC_CHAT'),
-			array('structure','menu/social/chat/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang_tempcode('chat:ROOMS'),'chat:DOC_CHAT'),
+			array('cms','menu/social/chat/chat',array('cms_chat',array('type'=>'misc'),get_module_zone('cms_chat')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('chat:CHAT_MODERATION'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','COUNT(*)',NULL,'',true))))),'chat:DOC_CHAT'),
+			array('structure','menu/social/chat/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang_tempcode('chat:CHATROOMS'),'chat:DOC_CHAT'),
 			array('social','menu/social/chat/chat',array('chat',array(),get_module_zone('chat')),do_lang_tempcode('chat:CHAT_LOBBY')),
 			// userguide_chatcode and popup_blockers are children of help_page
 		);

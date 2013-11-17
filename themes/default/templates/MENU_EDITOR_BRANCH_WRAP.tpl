@@ -11,6 +11,7 @@
 		<input type="hidden" id="order_{I*}" name="order_{I*}" value="{ORDER*}" />
 		<input type="hidden" id="new_window_{I*}" name="new_window_{I*}" value="0" />
 		<input type="hidden" id="check_perms_{I*}" name="check_perms_{I*}" value="0" />
+		<input type="hidden" id="include_sitemap_{I*}" name="include_sitemap_{I*}" value="0" />
 		<div class="accessibility_hidden"><label id="label_branch_type_{I*}" for="branch_type_{I*}">{!MENU_ENTRY_BRANCH}</label></div>
 		<select style="display: none" onclick="this.onchange(event);" onchange="menu_editor_branch_type_change(this.name.substr(12,this.name.length));" title="{$STRIP_TAGS,{!MENU_ENTRY_BRANCH;}}" id="branch_type_{I*}" name="branch_type_{I*}">
 			{+START,IF,{$NOT,{CLICKABLE_SECTIONS}}}

@@ -18,9 +18,11 @@ class Hook_page_groupings_community_billboard
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
+	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
+	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run()
+	function run($member_id=NULL,$extensive_docs=false)
 	{
 		return array(
 			array('audit','menu/adminzone/audit/community_billboard',array('admin_community_billboard',array('type'=>'misc'),get_module_zone('admin_community_billboard')),do_lang_tempcode('community_billboard:COMMUNITY_BILLBOARD'),'community_billboard:DOC_COMMUNITY_BILLBOARD'),

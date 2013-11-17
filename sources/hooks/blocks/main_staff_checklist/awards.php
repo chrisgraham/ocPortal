@@ -38,6 +38,8 @@ class Hook_checklist_awards
 			if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($award['a_content_type']).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($award['a_content_type']).'.php')))
 				continue;
 
+			require_lang('awards');
+
 			require_code('content');
 			$hook_object=get_content_object($award['a_content_type']);
 			if (is_null($hook_object)) continue;

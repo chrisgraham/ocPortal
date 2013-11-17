@@ -12,7 +12,7 @@
 					{+START,INCLUDE,NOTIFICATION_BUTTONS}
 						NOTIFICATIONS_TYPE=ocf_topic
 						NOTIFICATIONS_ID={ID}
-						NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_topic:{ID}
+						NOTIFICATIONS_PAGE_LINK=forum:topics:toggle_notifications_topic:{ID}
 					{+END}
 					{SCREEN_BUTTONS}
 				</div>
@@ -172,7 +172,7 @@
 			{+START,INCLUDE,NOTIFICATION_BUTTONS}
 				NOTIFICATIONS_TYPE=ocf_topic
 				NOTIFICATIONS_ID={ID}
-				NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_topic:{ID}
+				NOTIFICATIONS_PAGE_LINK=forum:topics:toggle_notifications_topic:{ID}
 			{+END}
 			{SCREEN_BUTTONS}
 		</div>

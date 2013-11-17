@@ -24,23 +24,24 @@ class Hook_page_groupings_core
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
+	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL)
+	function run($member_id=NULL,$extensive_docs=false)
 	{
 		require_code('site');
 
 		return array(
-			array('','menu/adminzone/structure',array('admin',array('type'=>'structure'),get_module_zone('admin')),do_lang_tempcode('menus:STRUCTURE'),'menus:DOC_STRUCTURE'),
-			array('','menu/adminzone/audit',array('admin',array('type'=>'audit'),get_module_zone('admin')),do_lang_tempcode('menus:AUDIT'),'menus:DOC_AUDIT'),
-			array('','menu/adminzone/style',array('admin',array('type'=>'style'),get_module_zone('admin')),do_lang_tempcode('menus:STYLE'),'menus:DOC_STYLE'),
-			array('','menu/adminzone/setup',array('admin',array('type'=>'setup'),get_module_zone('admin')),do_lang_tempcode('menus:SETUP'),'menus:DOC_SETUP'),
-			array('','menu/adminzone/tools',array('admin',array('type'=>'tools'),get_module_zone('admin')),do_lang_tempcode('menus:TOOLS'),'menus:DOC_TOOLS'),
-			array('','menu/adminzone/security',array('admin',array('type'=>'security'),get_module_zone('admin')),do_lang_tempcode('menus:SECURITY_GROUP_SETUP'),'menus:DOC_SECURITY'),
-			array('','menu/adminzone/start',array('start',array(),'adminzone'),do_lang_tempcode('menus:DASHBOARD'),'menus:DOC_DASHBOARD'),
+			array('','menu/adminzone/start',array('start',array(),'adminzone'),do_lang_tempcode('menus:DASHBOARD'),$extensive_docs?'menus:DOC_DASHBOARD':'menus:MM_TOOLTIP_DASHBOARD'),
+			array('','menu/adminzone/audit',array('admin',array('type'=>'audit'),get_module_zone('admin')),do_lang_tempcode('menus:AUDIT'),$extensive_docs?'menus:DOC_AUDIT':'menus:MM_TOOLTIP_AUDIT'),
+			array('','menu/adminzone/security',array('admin',array('type'=>'security'),get_module_zone('admin')),do_lang_tempcode('SECURITY'),$extensive_docs?'menus:DOC_SECURITY':'menus:MM_TOOLTIP_SECURITY'),
+			array('','menu/adminzone/setup',array('admin',array('type'=>'setup'),get_module_zone('admin')),do_lang_tempcode('menus:SETUP'),$extensive_docs?'menus:DOC_SETUP':'menus:MM_TOOLTIP_SETUP'),
+			array('','menu/adminzone/structure',array('admin',array('type'=>'structure'),get_module_zone('admin')),do_lang_tempcode('menus:STRUCTURE'),$extensive_docs?'menus:DOC_STRUCTURE':'menus:MM_TOOLTIP_STRUCTURE'),
+			array('','menu/adminzone/style',array('admin',array('type'=>'style'),get_module_zone('admin')),do_lang_tempcode('menus:STYLE'),$extensive_docs?'menus:DOC_STYLE':'menus:MM_TOOLTIP_STYLE'),
+			array('','menu/adminzone/tools',array('admin',array('type'=>'tools'),get_module_zone('admin')),do_lang_tempcode('menus:TOOLS'),$extensive_docs?'menus:DOC_TOOLS':'menus:MM_TOOLTIP_TOOLS'),
 			(_request_page('website','adminzone')===NULL)?array('','menu/adminzone/help',get_brand_base_url().'/docs'.strval(ocp_version()).'/',do_lang_tempcode('menus:DOCS')):NULL,
 			(_request_page('website','adminzone')===NULL)?NULL:array('','menu/adminzone/help',array('website',array(),'adminzone'),do_lang_tempcode('menus:DOCS')),
-			array('','menu/cms/cms',array('cms',array('type'=>'cms'),get_module_zone('cms')),do_lang_tempcode('CMS'),'menus:DOC_CMS'),
+			array('','menu/cms/cms',array('cms',array('type'=>'cms'),get_module_zone('cms')),do_lang_tempcode('CONTENT'),$extensive_docs?'menus:CONTENT':'menus:MM_TOOLTIP_CMS'),
 
 			((has_some_edit_comcode_page_permission(COMCODE_EDIT_OWN | COMCODE_EDIT_ANY)) || (get_comcode_page_editability_per_zone()!=array()))?array('cms','menu/cms/comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('menus:_COMCODE_PAGES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT the_zone,the_page) FROM '.get_table_prefix().'comcode_pages WHERE '.db_string_not_equal_to('the_zone','!')))))),'zones:DOC_COMCODE_PAGE_EDIT'):NULL,
 

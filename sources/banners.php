@@ -126,7 +126,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		if (!array_key_exists(0,$rows)) fatal_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$myrow=$rows[0];
 		$url=$myrow['site_url'];
-		$page_link=url_to_pagelink($url);
+		$page_link=url_to_page_link($url);
 		if ($page_link!='')
 		{
 			$keep=symbol_tempcode('KEEP',array((strpos($url,'?')===false)?'1':'0'));

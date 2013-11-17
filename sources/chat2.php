@@ -142,12 +142,12 @@ function get_chatroom_fields($id=NULL,$is_made_by_me=false,$room_name='',$welcom
 
 	$fields=new ocp_tempcode();
 
-	$fields->attach(form_input_line(do_lang_tempcode('ROOM_NAME'),do_lang_tempcode('DESCRIPTION_ROOM_NAME'),'room_name',$room_name,true));
+	$fields->attach(form_input_line(do_lang_tempcode('CHATROOM_NAME'),do_lang_tempcode('DESCRIPTION_CHATROOM_NAME'),'room_name',$room_name,true));
 	$fields->attach(form_input_line_comcode(do_lang_tempcode('WELCOME_MESSAGE'),do_lang_tempcode('DESCRIPTION_WELCOME_MESSAGE'),'c_welcome',$welcome,false));
-	if (!$is_made_by_me) $fields->attach(form_input_username(do_lang_tempcode('ROOM_OWNER'),do_lang_tempcode('DESCRIPTION_ROOM_OWNER'),'room_owner',$username,false));
+	if (!$is_made_by_me) $fields->attach(form_input_username(do_lang_tempcode('CHATROOM_OWNER'),do_lang_tempcode('DESCRIPTION_CHATROOM_OWNER'),'room_owner',$username,false));
 	$langs=find_all_langs();
 	if (count($langs)>1)
-		$fields->attach(form_input_list(do_lang_tempcode('ROOM_LANG'),do_lang_tempcode('DESCRIPTION_ROOM_LANG'),'room_lang',create_selection_list_langs()));
+		$fields->attach(form_input_list(do_lang_tempcode('CHATROOM_LANG'),do_lang_tempcode('DESCRIPTION_CHATROOM_LANG'),'room_lang',create_selection_list_langs()));
 	require_lang('permissions');
 	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'4381fe8487426cc3ae8afa090c2d4a44','SECTION_HIDDEN'=>$allow2=='' && $allow2_groups=='' && !$is_made_by_me,'TITLE'=>do_lang_tempcode($is_made_by_me?'PERMISSIONS':'LOWLEVEL_PERMISSIONS'))));
 	$fields->attach(form_input_username_multi(do_lang_tempcode('ALLOW_LIST'),do_lang_tempcode('DESCRIPTION_ALLOW_LIST'),'allow_list',array_map(array($GLOBALS['FORUM_DRIVER'],'get_username'),($allow2=='')?array():array_map('intval',explode(',',$allow2))),0,true));
@@ -364,7 +364,7 @@ function delete_chatroom($id)
 	decache('side_shoutbox');
 
 	if ($rows[0]['is_im']==0)
-		log_it('DELETE_ROOM',strval($id),$rows[0]['room_name']);
+		log_it('DELETE_CHATROOM',strval($id),$rows[0]['room_name']);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
@@ -413,7 +413,7 @@ function delete_all_chatrooms()
 
 	decache('side_shoutbox');
 
-	log_it('DELETE_ALL_ROOMS');
+	log_it('DELETE_ALL_CHATROOMS');
 }
 
 /**

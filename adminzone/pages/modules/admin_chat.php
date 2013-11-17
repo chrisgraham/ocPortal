@@ -39,16 +39,20 @@ class Module_admin_chat extends standard_crud_module
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('MANAGE_CHATROOMS','menu/social/chat/chat'),
-			'delete_all'=>array('DELETE_ALL_ROOMS','menu/_generic_admin/delete'),
-		)+parent::get_entry_points();
+		);
+		$ret+=parent::get_entry_points();
+		$ret+=array(
+			'delete_all'=>array('DELETE_ALL_CHATROOMS','menu/_generic_admin/delete'),
+		);
+		return $ret;
 	}
 
 	var $title;
@@ -76,7 +80,7 @@ class Module_admin_chat extends standard_crud_module
 
 		if ($type=='delete_all' || $type=='_delete_all')
 		{
-			$this->title=get_screen_title('DELETE_ALL_ROOMS');
+			$this->title=get_screen_title('DELETE_ALL_CHATROOMS');
 		}
 
 		return parent::pre_run($top_level);
@@ -91,7 +95,7 @@ class Module_admin_chat extends standard_crud_module
 	function run_start($type)
 	{
 		$this->extra_donext_entries=array(
-			array('menu/_generic_admin/delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')),
+			array('menu/_generic_admin/delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_CHATROOMS')),
 		);
 
 		require_code('chat');
@@ -120,7 +124,7 @@ class Module_admin_chat extends standard_crud_module
 			array(
 				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_CHATROOM')),
 				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CHATROOM')),
-				array('menu/_generic_admin/delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')),
+				array('menu/_generic_admin/delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_CHATROOMS')),
 			),
 			do_lang('MANAGE_CHATROOMS')
 		);
@@ -196,7 +200,7 @@ class Module_admin_chat extends standard_crud_module
 
 		$delete_fields=new ocp_tempcode();
 		$logs_url=build_url(array('page'=>'chat','type'=>'download_logs','id'=>$id),get_module_zone('chat'));
-		$delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_CHAT_ROOM',escape_html($logs_url->evaluate())),'delete',false));
+		$delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_CHATROOM',escape_html($logs_url->evaluate())),'delete',false));
 
 		return array($fields,$hidden,$delete_fields,NULL,true);
 	}
@@ -274,7 +278,7 @@ class Module_admin_chat extends standard_crud_module
 		$fields->attach(form_input_tick(do_lang_tempcode('PROCEED'),do_lang_tempcode('Q_SURE'),'continue_delete',false));
 		$posting_name=do_lang_tempcode('PROCEED');
 		$posting_url=build_url(array('page'=>'_SELF','type'=>'_delete_all'),'_SELF');
-		$text=paragraph(do_lang_tempcode('CONFIRM_DELETE_ALL_ROOMS'));
+		$text=paragraph(do_lang_tempcode('CONFIRM_DELETE_ALL_CHATROOMS'));
 		return do_template('FORM_SCREEN',array('_GUID'=>'fdf02f5b3a3b9ce6d1abaccf0970ed73','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
 	}
 

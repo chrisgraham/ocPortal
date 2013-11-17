@@ -111,7 +111,7 @@ class Module_admin_version
 				'm_deprecated'=>'BINARY',
 				'm_manually_chosen'=>'BINARY',
 			));
-			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_pagelink',array('m_resource_page','m_resource_type','m_resource_id'));
+			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_page_link',array('m_resource_page','m_resource_type','m_resource_id'));
 			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_moniker',array('m_moniker'));
 
 			$GLOBALS['SITE_DB']->create_table('review_supplement',array(
@@ -407,6 +407,8 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_json_discovery','URLPATH');
 			$GLOBALS['SITE_DB']->add_table_field('url_title_cache','t_xml_discovery','URLPATH');
 
+			$GLOBALS['SITE_DB']->add_table_field('menu_items','i_include_sitemap','SHORT_INTEGER',0);
+
 			$GLOBALS['SITE_DB']->delete_table_field('zones','zone_displayed_in_menu');
 			$GLOBALS['SITE_DB']->delete_table_field('zones','zone_wide');
 		}
@@ -423,10 +425,11 @@ class Module_admin_version
 				'i_parent'=>'?AUTO_LINK',
 				'i_caption'=>'SHORT_TRANS', // Comcode
 				'i_caption_long'=>'SHORT_TRANS', // Comcode
-				'i_url'=>'SHORT_TEXT', // Supports zone:page followed by many :attribute=value
+				'i_url'=>'SHORT_TEXT', // Supports page-links
 				'i_check_permissions'=>'BINARY',
 				'i_expanded'=>'BINARY',
 				'i_new_window'=>'BINARY',
+				'i_include_sitemap'=>'SHORT_INTEGER',
 				'i_page_only'=>'ID_TEXT', // Only show up if the page is this (allows page specific menus)
 				'i_theme_img_code'=>'ID_TEXT',
 			));

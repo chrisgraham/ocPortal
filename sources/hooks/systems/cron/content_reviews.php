@@ -60,7 +60,7 @@ class Hook_cron_content_reviews
 			if (is_null($object)) continue; // Weird :S
 			$info=$object->info();
 			$auto_action_str=do_lang('CONTENT_REVIEW_AUTO_ACTION_'.$auto_action);
-			list($zone,$attributes,)=page_link_decode($info['edit_pagelink_pattern']);
+			list($zone,$attributes,)=page_link_decode($info['edit_page_link_pattern']);
 			foreach ($attributes as $key=>$val)
 			{
 				if ($val=='_WILD')

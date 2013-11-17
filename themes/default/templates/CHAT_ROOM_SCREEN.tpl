@@ -6,25 +6,25 @@
 
 <div class="chat_you_are">{!LOGGED_IN_AS,{YOUR_NAME*}}</div>
 
-<h2>{+START,FRACTIONAL_EDITABLE,{ROOM_NAME},room_name,_SEARCH:admin_chat:__ed:{ROOM_ID}}{ROOM_NAME*}{+END}</h2>
+<h2>{+START,FRACTIONAL_EDITABLE,{CHATROOM_NAME},room_name,_SEARCH:admin_chat:__ed:{CHATROOM_ID}}{CHATROOM_NAME*}{+END}</h2>
 
 <div class="chat_posting_area">
 	<div class="float_surrounder">
 		<div class="left">
-			<form autocomplete="off" title="{!MESSAGE}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
+			<form autocomplete="off" title="{!MESSAGE}" action="{MESSAGES_PHP*}?action=post&amp;room_id={CHATROOM_ID*}" method="post" style="display: inline;">
 				{$INSERT_SPAMMER_BLACKHOLE}
 
 				<div style="display: inline;">
 					<p class="accessibility_hidden"><label for="post">{!MESSAGE}</label></p>
-					<textarea style="font-family: {FONT_NAME_DEFAULT;*}" class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,{ROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="{$?,{$MOBILE},37,39}" rows="1"></textarea>
+					<textarea style="font-family: {FONT_NAME_DEFAULT;*}" class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,{CHATROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="{$?,{$MOBILE},37,39}" rows="1"></textarea>
 					<input type="hidden" name="font" id="font" value="{FONT_NAME_DEFAULT*}" />
 					<input type="hidden" name="colour" id="colour" value="{TEXT_COLOUR_DEFAULT*}" />
 				</div>
 			</form>
 		</div>
 		<div class="left">
-			<form autocomplete="off" title="{SUBMIT_VALUE*}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
-				<input type="button" class="button_micro" name="post_now" onclick="return chat_post(event,{ROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value);" value="{SUBMIT_VALUE*}" />
+			<form autocomplete="off" title="{SUBMIT_VALUE*}" action="{MESSAGES_PHP*}?action=post&amp;room_id={CHATROOM_ID*}" method="post" style="display: inline;">
+				<input type="button" class="button_micro" name="post_now" onclick="return chat_post(event,{CHATROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value);" value="{SUBMIT_VALUE*}" />
 			</form>
 			{+START,IF,{$NOT,{$MOBILE}}}
 				{MICRO_BUTTONS}
@@ -64,7 +64,7 @@
 
 <div class="box box___chat_screen_chatters"><div class="box_inner">
 	<p>
-		{!USERS_IN_ROOM} <span id="chat_members_update">{CHATTERS}</span>
+		{!USERS_IN_CHATROOM} <span id="chat_members_update">{CHATTERS}</span>
 	</p>
 </div></div>
 
@@ -117,7 +117,7 @@
 
 <script>// <![CDATA[
 	add_event_listener_abstract(window,'real_load',function () {
-		chat_load({ROOM_ID%});
+		chat_load({CHATROOM_ID%});
 	} );
 // ]]></script>
 
@@ -132,11 +132,11 @@
 	</ul>
 {+END}
 
-{$REVIEW_STATUS,chat,{ROOM_ID}}
+{$REVIEW_STATUS,chat,{CHATROOM_ID}}
 
 {+START,INCLUDE,NOTIFICATION_BUTTONS}
 	NOTIFICATIONS_TYPE=member_entered_chatroom
-	NOTIFICATIONS_ID={ROOM_ID}
+	NOTIFICATIONS_ID={CHATROOM_ID}
 	BREAK=1
 	RIGHT=1
 {+END}

@@ -422,7 +422,7 @@ $featuretree=array(
 				array('Configurable access','Restrict to no/partial/full access based on usergroup'),
 				array('Configure a staff roster, for an automatically created staff page <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Staff" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_staff&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 				array('Detect broken URLs <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Cleanup Tools" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_cleanup&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
-				array('Content versioning <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Page Versioning" href="http://shareddemo.myocp.com/cms/index.php?page=cms_comcode_pages&amp;type=_ed&amp;pagelink=:start"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
+				array('Content versioning <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Page Versioning" href="http://shareddemo.myocp.com/cms/index.php?page=cms_comcode_pages&amp;type=_ed&amp;page_link=:start"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>'),
 			),
 		),
 		'tools'=>array(

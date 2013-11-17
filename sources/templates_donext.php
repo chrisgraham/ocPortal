@@ -39,13 +39,21 @@ function do_next_manager_hooked($title,$text,$type,$main_title=NULL)
 		require_code('hooks/systems/page_groupings/'.filter_naughty_harsh($hook));
 		$object=object_factory('Hook_page_groupings_'.filter_naughty_harsh($hook),true);
 		if (is_null($object)) continue;
-		$_links=$object->run();
+		$_links=$object->run(NULL,true);
 		foreach ($_links as $link)
 		{
 			if (is_null($link)) continue;
 
 			if (($link[0]==$type) && (is_array($link[2])))
 			{
+				if ($type=='')
+				{
+					// Skip front-end ones, which are never listed like this
+					if (!isset($link[2][1]['type'])) continue;
+					if (in_array($link[2][1]['type'],array('site_meta','pages','social','collaboration','rich_content')))
+						continue;
+				}
+
 				array_shift($link);
 				$links[]=$link;
 			}
@@ -256,7 +264,14 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 
 	if (is_null($title)) return $sections;
 
-	return do_template('DO_NEXT_SCREEN',array('_GUID'=>'a00e89bece6b7ce870ad5096930d5a94','INTRO'=>$intro,'TEXT'=>$text,'QUESTION'=>$question,'TITLE'=>$title,'SECTIONS'=>$sections));
+	return do_template('DO_NEXT_SCREEN',array(
+		'_GUID'=>'a00e89bece6b7ce870ad5096930d5a94',
+		'INTRO'=>$intro,
+		'TEXT'=>$text,
+		'QUESTION'=>$question,
+		'TITLE'=>$title,
+		'SECTIONS'=>$sections,
+	));
 }
 
 /**
@@ -332,6 +347,11 @@ function _do_next_section($list,$title)
 
 	if ($next_items->is_empty()) return new ocp_tempcode();
 
-	return do_template('DO_NEXT_SECTION',array('_GUID'=>'18589e9e8ec1971f692cb76d71f33ec1','I'=>strval($i),'TITLE'=>$title,'CONTENT'=>$next_items));
+	return do_template('DO_NEXT_SECTION',array(
+		'_GUID'=>'18589e9e8ec1971f692cb76d71f33ec1',
+		'I'=>strval($i),
+		'TITLE'=>$title,
+		'CONTENT'=>$next_items,
+	));
 }
 

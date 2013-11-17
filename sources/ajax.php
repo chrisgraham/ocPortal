@@ -70,9 +70,9 @@ function find_permissions_script()
 		$zone=$matches[1];
 		$page=$matches[2];
 
-		$_pagelinks=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,false,NULL,true));
+		$_page_links=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,false,NULL,true));
 
-		$bits=(is_null($_pagelinks[0]))?array('!',''):(is_array($_pagelinks[0])?call_user_func_array($_pagelinks[0][0],$_pagelinks[0][1]):eval($_pagelinks[0])); // If $_pagelinks[0] is NULL then it's an error: extract_page_link_permissions is always there when there are cat permissions
+		$bits=(is_null($_page_links[0]))?array('!',''):(is_array($_page_links[0])?call_user_func_array($_page_links[0][0],$_page_links[0][1]):eval($_page_links[0])); // If $_page_links[0] is NULL then it's an error: extract_page_link_permissions is always there when there are cat permissions
 		$module=$bits[1];
 
 		echo has_privilege_group($group_id,$privilege,$module)?do_lang('YES'):do_lang('NO');

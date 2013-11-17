@@ -26,9 +26,9 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 	 * @param  ID_TEXT		The page-link.
 	 * @return integer		A SITEMAP_NODE_* constant.
 	 */
-	function handles_pagelink($pagelink)
+	function handles_page_link($page_link)
 	{
-		if (preg_match('#^([^:]*):admin_config(:misc)?$#',$pagelink)!=0)
+		if (preg_match('#^([^:]*):admin_config(:misc)?$#',$page_link)!=0)
 		{
 			return SITEMAP_NODE_HANDLED_VIRTUALLY;
 		}
@@ -41,18 +41,19 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
+	 * @param  ?integer		Maximum number of children before we cut off all children (NULL: no limit).
 	 * @param  ?integer		How deep to go from the sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by Google sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
-	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
+	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
+	function get_virtual_nodes($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
@@ -66,7 +67,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 			return $nodes;
 		}
 
-		$page=$this->_make_zone_concrete($zone,$pagelink);
+		$page=$this->_make_zone_concrete($zone,$page_link);
 
 		// Find all categories
 		$hooks=find_all_hooks('systems','config');
@@ -86,7 +87,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 				}
 			}
 		}
-		ksort($categories);
+		uksort($categories,'strnatcasecmp');
 
 		if ($child_cutoff!==NULL)
 		{
@@ -95,8 +96,8 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 
 		foreach (array_keys($categories) as $category)
 		{
-			$child_pagelink=$zone.':'.$page.':misc:'.$category;
-			$node=$this->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+			$child_page_link=$zone.':'.$page.':misc:'.$category;
+			$node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 			if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 		}
 
@@ -109,22 +110,23 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
+	 * @param  ?integer		Maximum number of children before we cut off all children (NULL: no limit).
 	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
-	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
+	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$pagelink,$matches);
+		preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$page_link,$matches);
 		$page=$matches[2];
 		$category=$matches[4];
 
@@ -136,7 +138,9 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 			'title'=>$_category_name,
 			'content_type'=>NULL,
 			'content_id'=>NULL,
-			'pagelink'=>$pagelink,
+			'modifiers'=>array(),
+			'only_on_page'=>'',
+			'page_link'=>$page_link,
 			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,

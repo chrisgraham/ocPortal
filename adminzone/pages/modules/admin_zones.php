@@ -46,7 +46,7 @@ class Module_admin_zones
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -54,8 +54,8 @@ class Module_admin_zones
 	{
 		$ret=array(
 			'misc'=>array('ZONES','menu/adminzone/structure/zones/zones'),
-			'edit'=>array('EDIT_ZONE','menu/_generic_admin/edit_one'),
 			'add'=>array('ADD_ZONE','menu/_generic_admin/add_one'),
+			'edit'=>array('EDIT_ZONE','menu/_generic_admin/edit_one'),
 		);
 
 		if (!$be_deferential)
@@ -956,7 +956,7 @@ class Module_admin_zones
 			}
 		}
 
-		decache('main_sitemap');
+		decache('menu');
 		require_code('caches3');
 		erase_block_cache();
 		erase_persistent_cache();

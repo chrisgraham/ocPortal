@@ -27,7 +27,7 @@ class sitemap_test_set extends ocp_test_case
 
 		require_code('sitemap');
 
-		$pagelink='';
+		$page_link='';
 		$callback=NULL;
 		$valid_node_types=NULL;
 		$child_cutoff=NULL;
@@ -39,7 +39,7 @@ class sitemap_test_set extends ocp_test_case
 		$consider_validation=false;
 		$meta_gather=SITEMAP_GATHER__ALL;
 
-		$this->sitemap=retrieve_sitemap_node($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+		$this->sitemap=retrieve_sitemap_node($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 		$this->flattened=$this->flatten_sitemap($this->sitemap);
 
 		parent::setUp();
@@ -47,12 +47,12 @@ class sitemap_test_set extends ocp_test_case
 
 	function flatten_sitemap($sitemap)
 	{
-		if ($sitemap['pagelink']=='collaboration:' || $sitemap['pagelink']=='forum:' || $sitemap['pagelink']=='ocworld:')
+		if ($sitemap['page_link']=='collaboration:' || $sitemap['page_link']=='forum:' || $sitemap['page_link']=='ocworld:')
 			return array();
 
 		$children=isset($sitemap['children'])?$sitemap['children']:NULL;
 		unset($sitemap['children']);
-		$ret=array($sitemap['pagelink']=>$sitemap);
+		$ret=array($sitemap['page_link']=>$sitemap);
 		if (!is_null($children))
 		{
 			foreach ($children as $c)
@@ -165,7 +165,9 @@ class sitemap_test_set extends ocp_test_case
 			'title',
 			'content_type',
 			'content_id',
-			'pagelink',
+			'modifiers',
+			'only_on_page',
+			'page_link',
 			'url',
 			'extra_meta',
 			'permissions',

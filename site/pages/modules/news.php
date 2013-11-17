@@ -147,7 +147,7 @@ class Module_news
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -315,7 +315,7 @@ class Module_news
 					$parent_title=do_lang_tempcode('NEWS_ARCHIVE');
 				}
 			}
-			breadcrumb_set_parents(array($first_bc,array('_SELF:_SELF:misc'.(($blog===1)?':blog=1':(($blog===0)?':blog=0':'')).(($filter=='*')?'':(is_numeric($filter)?(':id='.$filter):(':filter='.$filter))).(($filter_and=='*')?'':(':filter_and='.$filter_and)).propagate_ocselect_pagelink(),$parent_title)));
+			breadcrumb_set_parents(array($first_bc,array('_SELF:_SELF:misc'.(($blog===1)?':blog=1':(($blog===0)?':blog=0':'')).(($filter=='*')?'':(is_numeric($filter)?(':id='.$filter):(':filter='.$filter))).(($filter_and=='*')?'':(':filter_and='.$filter_and)).propagate_ocselect_page_link(),$parent_title)));
 			breadcrumb_set_self(get_translated_tempcode($myrow['title']));
 
 			// Permissions

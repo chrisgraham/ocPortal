@@ -52,9 +52,9 @@ class Hook_resource_meta_aware_multi_moderation
 			'title_field'=>'mm_name',
 			'title_field_dereference'=>true,
 
-			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>'_SEARCH:admin_ocf_multi_moderations:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>NULL,
+			'edit_page_link_pattern'=>'_SEARCH:admin_ocf_multi_moderations:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_ocf_multi_moderations'))?(get_module_zone('admin_ocf_multi_moderations').':admin_ocf_multi_moderations:ad'):NULL,
 			'archive_url'=>NULL,
 

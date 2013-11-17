@@ -19,9 +19,11 @@ class Hook_page_groupings_workflows
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
+	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
+	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run()
+	function run($member_id=NULL,$extensive_docs=false)
 	{
 		return array(
 			array('setup','menu/workflows',array('admin_workflow',array('type'=>'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('workflows:WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value('workflow_requirements','COUNT(DISTINCT workflow_name)'))))),'workflows:DOC_WORKFLOWS'),

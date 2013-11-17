@@ -54,9 +54,9 @@ class Hook_content_meta_aware_banner
 			'description_field'=>'caption',
 			'thumb_field'=>'img_url',
 
-			'view_pagelink_pattern'=>'_SEARCH:banners:view:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:cms_banners:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>'_SEARCH:banners:view:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:cms_banners:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_banners'))?(get_module_zone('cms_banners').':cms_banners:ad'):NULL,
 			'archive_url'=>NULL,
 

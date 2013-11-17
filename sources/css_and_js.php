@@ -128,18 +128,18 @@ function js_compile($j,$js_cache_path,$minify=true)
 			require_code('content');
 			$content_type_ob=get_content_object($content_type);
 			$info=$content_type_ob->info();
-			if (!is_null($info['view_pagelink_pattern']))
+			if (!is_null($info['view_page_link_pattern']))
 			{
-				list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
+				list($zone,$attributes,)=page_link_decode($info['view_page_link_pattern']);
 				$url=build_url($attributes,$zone,NULL,false,false,true);
 				$url_patterns[$url->evaluate()]=array(
 					'PATTERN'=>$url->evaluate(),
 					'HOOK'=>$content_type,
 				);
 			}
-			if (!is_null($info['edit_pagelink_pattern']))
+			if (!is_null($info['edit_page_link_pattern']))
 			{
-				list($zone,$attributes,)=page_link_decode($info['edit_pagelink_pattern']);
+				list($zone,$attributes,)=page_link_decode($info['edit_page_link_pattern']);
 				$url=build_url($attributes,$zone,NULL,false,false,true);
 				$url_patterns[$url->evaluate()]=array(
 					'PATTERN'=>$url->evaluate(),

@@ -38,7 +38,7 @@ class Module_cms_booking extends standard_crud_module
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -46,12 +46,12 @@ class Module_cms_booking extends standard_crud_module
 	{
 		return array(
 			'misc'=>array('BOOKINGS','menu/booking'),
+			'ab'=>array('ADD_BOOKING','menu/booking'),
+			'eb'=>array('EDIT_BOOKING','menu/booking'),
 			'ad'=>array('ADD_BOOKABLE','menu/bookable'),
 			'ed'=>array('EDIT_BOOKABLE','menu/bookable'),
 			'ac'=>array('ADD_BOOKABLE_SUPPLEMENT','menu/supplement'),
 			'ec'=>array('EDIT_BOOKABLE_SUPPLEMENT','menu/supplement'),
-			'ab'=>array('ADD_BOOKING','menu/booking'),
-			'eb'=>array('EDIT_BOOKING','menu/booking'),
 			'av'=>array('ADD_BOOKABLE_BLACKED','menu/blacked'),
 			'ev'=>array('EDIT_BOOKABLE_BLACKED','menu/blacked'),
 		)+parent::get_entry_points();

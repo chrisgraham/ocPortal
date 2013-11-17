@@ -124,8 +124,9 @@ class Hook_occle_fs_menus extends resource_fs_base
 		$new_window=0;
 		$caption_long='';
 		$theme_image_code='';
+		$include_sitemap=0;
 
-		add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code);
+		add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code,$include_sitemap);
 
 		if ((addon_installed('occle')) && (!running_script('install')))
 		{
@@ -208,6 +209,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 			'new_window'=>'BINARY',
 			'page_only'=>'ID_TEXT',
 			'theme_img_code'=>'ID_TEXT',
+			'include_sitemap'=>'SHORT_INTEGER';
 		);
 	}
 
@@ -249,8 +251,9 @@ class Hook_occle_fs_menus extends resource_fs_base
 		$new_window=$this->_default_property_int($properties,'new_window');
 		$caption_long=$this->_default_property_str($properties,'caption_long');
 		$theme_image_code=$this->_default_property_str($properties,'theme_image_code');
+		$include_sitemap=$this->_default_property_int($properties,'include_sitemap');
 
-		$id=add_menu_item($category,$order,$parent,$label,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code);
+		$id=add_menu_item($category,$order,$parent,$label,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code,$include_sitemap);
 		return strval($id);
 	}
 
@@ -280,6 +283,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 			'new_window'=>$row['i_new_window'],
 			'page_only'=>$row['i_page_only'],
 			'theme_img_code'=>$row['i_theme_img_code'],
+			'include_sitemap'=>$row['i_include_sitemap'],
 		);
 	}
 
@@ -311,8 +315,9 @@ class Hook_occle_fs_menus extends resource_fs_base
 		$new_window=$this->_default_property_int($properties,'new_window');
 		$caption_long=$this->_default_property_str($properties,'caption_long');
 		$theme_image_code=$this->_default_property_str($properties,'theme_image_code');
+		$include_sitemap=$this->_default_property_int($properties,'include_sitemap');
 
-		edit_menu_item(intval($resource_id),$category,$order,$parent,$label,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code);
+		edit_menu_item(intval($resource_id),$category,$order,$parent,$label,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code,$include_sitemap);
 
 		return $resource_id;
 	}

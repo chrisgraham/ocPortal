@@ -50,9 +50,9 @@ class Hook_content_meta_aware_iotd
 			'description_field'=>'caption',
 			'thumb_field'=>'thumb_url',
 
-			'view_pagelink_pattern'=>'_SEARCH:iotds:view:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:cms_iotds:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>'_SEARCH:iotds:view:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:cms_iotds:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_iotds'))?(get_module_zone('cms_iotds').':cms_iotds:ad'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('iotds')).':iotds',
 

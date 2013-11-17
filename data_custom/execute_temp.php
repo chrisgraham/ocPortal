@@ -53,18 +53,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('sitemap');
-	$root_pagelink='';
-	$under_only=false;
-	$default=NULL;
-	$valid_node_types=NULL;
-	$valid_selectable_content_types=NULL;
-	$check_permissions_against=0;
-	$check_permissions_for=NULL;
-	$consider_validation=false;
-	$only_owned=NULL;
-	$use_compound_list=false;
-	$filter_func=NULL;
-	$out=create_selection_list($root_pagelink,$under_only,$default,$valid_node_types,$valid_selectable_content_types,$check_permissions_against,$check_permissions_for,$consider_validation,$only_owned,$use_compound_list,$filter_func);
-	echo $out->evaluate();
+	$GLOBALS['SITE_DB']->add_table_field('menu_items','i_include_sitemap','SHORT_INTEGER');
 }

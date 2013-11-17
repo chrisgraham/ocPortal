@@ -46,7 +46,7 @@ class Module_admin_content_reviews
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -132,7 +132,7 @@ class Module_admin_content_reviews
 			$info=$object->info();
 			if (is_null($info)) continue;
 
-			if (is_null($info['edit_pagelink_pattern'])) continue;
+			if (is_null($info['edit_page_link_pattern'])) continue;
 
 			$content=new ocp_tempcode();
 			$content_ids=collapse_1d_complexity('content_id',$GLOBALS['SITE_DB']->query('SELECT content_id FROM '.get_table_prefix().'content_reviews WHERE '.db_string_equal_to('content_type',$content_type).' AND next_review_time<='.strval(time()),100));
@@ -152,7 +152,7 @@ class Module_admin_content_reviews
 
 			if (!$content->is_empty())
 			{
-				list($zone,$attributes,)=page_link_decode($info['edit_pagelink_pattern']);
+				list($zone,$attributes,)=page_link_decode($info['edit_page_link_pattern']);
 				$edit_identifier='id';
 				foreach ($attributes as $key=>$val)
 				{

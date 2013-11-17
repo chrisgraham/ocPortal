@@ -52,7 +52,7 @@ class Module_cms_catalogues extends standard_crud_module
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -60,15 +60,20 @@ class Module_cms_catalogues extends standard_crud_module
 	{
 		$ret=array(
 			'misc'=>array('MANAGE_CATALOGUES','menu/rich_content/catalogues/catalogues'),
-			'import'=>array('IMPORT_CATALOGUE_ENTRIES','menu/_generic_admin/import_csv'),
-			'export'=>array('CATALOGUE_EXPORT','menu/_generic_admin/export'),
 
 			'add_category'=>array('ADD_CATALOGUE_CATEGORY','menu/_generic_admin/add_one_category'),
 			'edit_category'=>array('EDIT_CATALOGUE_CATEGORY','menu/_generic_admin/edit_one_category'),
 
 			'add_catalogue'=>array('ADD_CATALOGUE','menu/cms/catalogues/add_one_catalogue'),
 			'edit_catalogue'=>array('EDIT_CATALOGUE','menu/cms/catalogues/edit_one_catalogue'),
-		)+parent::get_entry_points();
+		);
+
+		$ret+=array(
+			'import'=>array('IMPORT_CATALOGUE_ENTRIES','menu/_generic_admin/import_csv'),
+			'export'=>array('CATALOGUE_EXPORT','menu/_generic_admin/export'),
+		);
+
+		$ret+=parent::get_entry_points();
 		unset($ret['ac']);
 		unset($ret['ec']);
 		unset($ret['av']);
@@ -1973,7 +1978,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			}
 		}
 
-		// Do this last as it causes a main_sitemap decache which can cause memory errors if we do a warn_exit (i.e. we want the warn_exit's before this)
+		// Do this last as it causes a menu decache which can cause memory errors if we do a warn_exit (i.e. we want the warn_exit's before this)
 		if (!fractional_edit())
 		{
 			$this->set_permissions($name);

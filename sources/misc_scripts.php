@@ -284,12 +284,12 @@ function iframe_script()
 }
 
 /**
- * Redirect the browser to where a pagelink specifies.
+ * Redirect the browser to where a page_link specifies.
  */
-function pagelink_redirect_script()
+function page_link_redirect_script()
 {
-	$pagelink=get_param('id');
-	$tpl=symbol_tempcode('PAGE_LINK',array($pagelink));
+	$page_link=get_param('id');
+	$tpl=symbol_tempcode('PAGE_LINK',array($page_link));
 
 	$x=$tpl->evaluate();
 

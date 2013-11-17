@@ -131,7 +131,7 @@ class Hook_media_rendering_hyperlink
 		$comcode='';
 
 		// Render as a 'page' link?
-		$page_link=url_to_pagelink($_url_safe,true);
+		$page_link=url_to_page_link($_url_safe,true);
 		if ($page_link!='')
 		{
 			return _do_tags_comcode('page',array('param'=>$page_link),make_string_tempcode(escape_html($link_captions_title)),false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false);

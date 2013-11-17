@@ -41,7 +41,7 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		$_hooks=find_all_hooks('systems','content_meta_aware');
 		foreach (array_keys($_hooks) as $content_type)
@@ -55,15 +55,15 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
 			$lang=do_lang($info['content_type_label'],NULL,NULL,NULL,NULL,false);
 			if (is_null($lang)) continue;
 
-			$pagelinks[]=array(
+			$page_links[]=array(
 				'id'=>$content_type,
 				'title'=>$lang,
 			);
 		}
 
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

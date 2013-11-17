@@ -105,7 +105,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 				} else
 				{
 					$_content_id=$content_id;
-					list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
+					list($zone,$attributes,)=page_link_decode($info['view_page_link_pattern']);
 					$url_moniker=find_id_moniker(array('id'=>$_content_id)+$attributes,$zone);
 				}
 
@@ -277,7 +277,7 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 					$_content_id=$zone;
 				} else
 				{
-					list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
+					list($zone,$attributes,)=page_link_decode($info['view_page_link_pattern']);
 					$page=$attributes['page'];
 					$type=$attributes['type'];
 					$_content_id=$content_id;
@@ -303,14 +303,14 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 					$ok=false;
 					if ($content_type=='comcode_page')
 					{
-						$competing_pagelink=$test.':'.$page;
+						$competing_page_link=$test.':'.$page;
 					} else
 					{
-						$competing_pagelink='_WILD'.':'.$page;
-						if ($type!='' || $test!='') $competing_pagelink.=':'.$type;
-						if ($test!='') $competing_pagelink.=':'.$test;
+						$competing_page_link='_WILD'.':'.$page;
+						if ($type!='' || $test!='') $competing_page_link.=':'.$type;
+						if ($test!='') $competing_page_link.=':'.$test;
 					}
-					attach_message(do_lang_tempcode('URL_MONIKER_TAKEN',escape_html($competing_pagelink),escape_html($url_moniker)),'warn');
+					attach_message(do_lang_tempcode('URL_MONIKER_TAKEN',escape_html($competing_page_link),escape_html($url_moniker)),'warn');
 				}
 
 				if (substr($url_moniker,0,1)=='/') // ah, relative to zones, better run some anti-conflict tests!

@@ -42,9 +42,9 @@ class Hook_Notification_downloads_followup_email extends Hook_Notification
 			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 		}
 
-		$pagelinks=get_downloads_tree(NULL,is_null($id)?NULL:intval($id),NULL,NULL,NULL,is_null($id)?0:1);
+		$page_links=get_downloads_tree(NULL,is_null($id)?NULL:intval($id),NULL,NULL,NULL,is_null($id)?0:1);
 		$filtered=array();
-		foreach ($pagelinks as $p)
+		foreach ($page_links as $p)
 		{
 			if (strval($p['id'])!==$id) $filtered[]=$p;
 		}

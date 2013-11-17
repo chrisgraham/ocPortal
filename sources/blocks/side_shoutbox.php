@@ -139,7 +139,7 @@ class Block_side_shoutbox
 			'_GUID'=>'dd737145479155961a1252162a43d4ef',
 			'MESSAGES'=>$tpl,
 			'URL'=>$url,
-			'ROOM_ID'=>strval($room_id),
+			'CHATROOM_ID'=>strval($room_id),
 			'NUM_MESSAGES'=>strval($num_messages),
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
 		));

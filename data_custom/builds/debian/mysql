@@ -378,7 +378,7 @@ insert into `ocp6_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('chat_flood_timelimit','FLOOD_TIMELIMIT','0','','integer','return \'5\';','FEATURE','SECTION_CHAT','CONFIG_OPTION_chat_flood_timelimit','0',''),
  ('chat_default_post_colour','CHAT_OPTIONS_COLOUR_NAME','0','','colour','return \'inherit\';','FEATURE','SECTION_CHAT','CONFIG_OPTION_chat_default_post_colour','0',''),
  ('chat_default_post_font','CHAT_OPTIONS_TEXT_NAME','0','','list','return \'Verdana\';','FEATURE','SECTION_CHAT','CONFIG_OPTION_chat_default_post_font','0','Arial|Courier|Georgia|Impact|Times| Trebuchet|Verdana|Tahoma|Geneva|Helvetica'),
- ('chat_private_room_deletion_time','PRIVATE_ROOM_DELETION_TIME','0','','integer','return \'1440\';','FEATURE','SECTION_CHAT','CONFIG_OPTION_chat_private_room_deletion_time','0',''),
+ ('chat_private_room_deletion_time','PRIVATE_CHATROOM_DELETION_TIME','0','','integer','return \'1440\';','FEATURE','SECTION_CHAT','CONFIG_OPTION_chat_private_room_deletion_time','0',''),
  ('username_click_im','USERNAME_CLICK_IM','0','','tick','return \'0\';','FEATURE','SECTION_CHAT','CONFIG_OPTION_username_click_im','0',''),
  ('points_chat','CHATTING','0','','integer','return addon_installed(\'points\')?\'1\':NULL;','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_chat','0',''),
  ('chat_show_stats_count_users','COUNT_CHATTERS','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_chat_show_stats_count_users','0',''),
@@ -2151,7 +2151,7 @@ insert into `ocp6_db_meta_indices` values('adminlogs','aip','ip'),
  ('translate','equiv_lang','text_original(4)'),
  ('translate','importance_level','importance_level'),
  ('url_id_monikers','uim_moniker','m_moniker'),
- ('url_id_monikers','uim_pagelink','m_resource_page,m_resource_type,m_resource_id'),
+ ('url_id_monikers','uim_page_link','m_resource_page,m_resource_type,m_resource_id'),
  ('usersonline_track','peak_track','peak'),
  ('values','date_and_time','date_and_time'),
  ('videos','category_list','cat'),
@@ -5904,7 +5904,7 @@ CREATE TABLE `ocp6_url_id_monikers` (
   `m_moniker` varchar(255) COLLATE latin1_bin NOT NULL,
   `m_deprecated` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `uim_pagelink` (`m_resource_page`,`m_resource_type`,`m_resource_id`),
+  KEY `uim_page_link` (`m_resource_page`,`m_resource_type`,`m_resource_id`),
   KEY `uim_moniker` (`m_moniker`)
 ) ENGINE=MyISAM;
 

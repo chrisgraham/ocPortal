@@ -82,7 +82,7 @@ require_code('sitemap');
 require_code('static_export');
 if (get_param_integer('save__pages',1)==1)
 {
-	spawn_page_crawl('_pagelink_to_static',$GLOBALS['FORUM_DRIVER']->get_guest_id(),NULL,DEPTH__ENTRIES);
+	spawn_page_crawl('_page_link_to_static',$GLOBALS['FORUM_DRIVER']->get_guest_id(),NULL,DEPTH__ENTRIES);
 }
 
 // Other media

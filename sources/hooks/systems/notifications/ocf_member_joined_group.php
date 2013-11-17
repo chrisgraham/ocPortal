@@ -41,21 +41,21 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		$map=array();
 		if (!has_privilege(get_member(),'see_hidden_groups')) $map['g_hidden']=0;
 		$types=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map);
 		foreach ($types as $type)
 		{
-			$pagelinks[]=array(
+			$page_links[]=array(
 				'id'=>$type['id'],
 				'title'=>get_translated_text($type['g_name'],$GLOBALS['FORUM_DB']),
 			);
 		}
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

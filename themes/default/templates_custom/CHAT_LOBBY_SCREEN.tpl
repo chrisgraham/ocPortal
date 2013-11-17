@@ -1,6 +1,6 @@
 {TITLE}
 
-<h2>{!SELECT_ROOM}</h2>
+<h2>{!SELECT_CHATROOM}</h2>
 
 <ul role="navigation" class="actions_list" id="rooms">
 	<li class="vertical_alignment"><img aria-busy="true" src="{$IMG*,loading}" title="{!LOADING}" alt="{!LOADING}" /> <span>{!LOADING}</span></li>
@@ -27,7 +27,7 @@ function on_login_completed_lobby()
 		{
 			var date=new Date().getHours()+":"+((new Date().getMinutes()<10)?"0":"")+new Date().getMinutes();
 			var room_name=rooms[i].name.replace(/ \(.*/,'');
-			set_inner_html(rooms_ul,"<li><a href=\""+"{ROOM_URL*}".replace(/room_id/,room_name)+"\">"+room_name+"<\/a> ("+"{!STATIC_USERS_ONLINE}".replace('\{1}',date).replace('\{2}','<span id=\"usernames_'+room_name+'\">(loading)<\/span>')+")<\/li>",true);
+			set_inner_html(rooms_ul,"<li><a href=\""+"{CHATROOM_URL*}".replace(/room_id/,room_name)+"\">"+room_name+"<\/a> ("+"{!STATIC_USERS_ONLINE}".replace('\{1}',date).replace('\{2}','<span id=\"usernames_'+room_name+'\">(loading)<\/span>')+")<\/li>",true);
 			rooms[i].createState().getParticipants(
 				function(room, participants) {
 					var inThere='';

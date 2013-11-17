@@ -5,7 +5,7 @@
 		{+END}
 
 		<a target="_blank" title="{USERNAME*}: {$STRIP_TAGS,{!MEMBER_PROFILE,{USERNAME*}}} {!LINK_NEW_WINDOW}" href="{PROFILE_URL*}">{USERNAME*}</a>
-		<span id="participant_online__{ROOM_ID*}__{ID*}"><em>{ONLINE*}</em></span>
+		<span id="participant_online__{CHATROOM_ID*}__{ID*}"><em>{ONLINE*}</em></span>
 	</div>
 	<div class="associated_details">
 		<p class="lonely_label">{!ACTIONS}:</p>

@@ -19,9 +19,11 @@ class Hook_page_groupings_addon_publish
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
+	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
+	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run()
+	function run($member_id=NULL,$extensive_docs=false)
 	{
 		return array(
 			array('tools','menu/_generic_admin/tool',array('admin_generate_adhoc_upgrade',array(),get_page_zone('admin_generate_adhoc_upgrade')),make_string_tempcode('Release tools: Create adhoc-upgrade-TAR/guidance')),

@@ -79,7 +79,7 @@ function remove_url_mistakes($url)
  * @param  string			URL or page-link
  * @return URLPATH		URL
  */
-function pagelink_as_url($url)
+function page_link_as_url($url)
 {
 	$parts=array();
 	if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto')) // Specially encoded page-link. Complex regexp to make sure URLs do not match
@@ -197,7 +197,7 @@ function _url_to_filename($url_full)
 	foreach ($bad_chars as $bad_char)
 	{
 		$good_char='!'.strval(ord($bad_char));
-		if ($bad_char==':') $good_char=';'; // So pagelinks save nice
+		if ($bad_char==':') $good_char=';'; // So page_links save nice
 		$new_name=str_replace($bad_char,$good_char,$new_name);
 	}
 	if (strlen($new_name)<=255) return $new_name;
@@ -321,7 +321,7 @@ function _fixup_protocolless_urls($in)
  * @param  boolean		Whether to only allow perfect conversions.
  * @return string			The page-link (blank: could not convert).
  */
-function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
+function _url_to_page_link($url,$abs_only=false,$perfect_only=true)
 {
 	if (($abs_only) && (substr($url,0,7)!='http://') && (substr($url,0,8)!='https://')) return '';
 
@@ -452,7 +452,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
  * @param  string			The path.
  * @return string			The page-link (blank: could not convert).
  */
-function _page_path_to_pagelink($page)
+function _page_path_to_page_link($page)
 {
 	if ((substr($page,0,1)=='/') && (substr($page,0,6)!='/pages')) $page=substr($page,1);
 	$matches=array();
@@ -574,7 +574,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=fa
 			$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
 			if (!is_null($ob_info))
 			{
-				$parts=explode(':',$ob_info['view_pagelink_pattern']);
+				$parts=explode(':',$ob_info['view_page_link_pattern']);
 				$category_page=$parts[1];
 				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'url_id_monikers SET m_deprecated=1 WHERE '.db_string_equal_to('m_resource_page',$category_page).' AND m_moniker LIKE \''.db_encode_like($old.'/%').'\''); // Deprecate
 			}
@@ -741,13 +741,13 @@ function _give_moniker_scope($page,$type,$id,$zone,$main)
 			$tree=NULL;
 		} else
 		{
-			$view_category_pagelink_pattern=explode(':',$ob_info['view_category_pagelink_pattern']);
+			$view_category_page_link_pattern=explode(':',$ob_info['view_category_page_link_pattern']);
 			if ($type=='')
 			{
 				$tree=find_id_moniker(array('page'=>$parent),$zone);
 			} else
 			{
-				$tree=find_id_moniker(array('page'=>$view_category_pagelink_pattern[1],'type'=>$view_category_pagelink_pattern[2],'id'=>$parent),$zone);
+				$tree=find_id_moniker(array('page'=>$view_category_page_link_pattern[1],'type'=>$view_category_page_link_pattern[2],'id'=>$parent),$zone);
 			}
 		}
 
@@ -780,7 +780,7 @@ function find_id_via_url_moniker($content_type,$url_moniker)
 	$cma_info=$cma_ob->info();
 	if (!$cma_info['support_url_monikers']) return NULL;
 
-	list(,$url_bits)=page_link_decode($cma_info['view_pagelink_pattern']);
+	list(,$url_bits)=page_link_decode($cma_info['view_page_link_pattern']);
 	$where=array('m_resource_page'=>$url_bits['page'],'m_resource_type'=>$url_bits['type'],'m_moniker'=>$url_moniker);
 
 	$ret=$cma_info['connection']->query_select_value_if_there('url_id_monikers','m_resource_id',$where);

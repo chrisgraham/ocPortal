@@ -153,8 +153,8 @@ If you have menu items that only vary based on some other parameter you will nee
 [title="2"]Chaining menus together / menu auto-generation (advanced)[/title]
 
 There are some advanced features for those wanting to have auto-generated deep menus.
- - If a menu branch's tooltip is set to [tt]!!!<pagelink>[/tt] (e.g. [tt]!!!site:downloads[/tt]) then the category tree from the module will be inserted underneath that branch. This works with virtually any module that supports categories, including [tt]forum:forumview[/tt]
- - ... also, if you ask the [tt]menu[/tt] block to load a menu named [tt]!!!<pagelink>[/tt], this will insert the category tree as if it were a standalone menu
+ - If a menu branch's tooltip is set to [tt]!!!<page_link>[/tt] (e.g. [tt]!!!site:downloads[/tt]) then the category tree from the module will be inserted underneath that branch. This works with virtually any module that supports categories, including [tt]forum:forumview[/tt]
+ - ... also, if you ask the [tt]menu[/tt] block to load a menu named [tt]!!!<page_link>[/tt], this will insert the category tree as if it were a standalone menu
  - If a menu branch's tooltip is set to [tt]@@<menuname>[/tt] then the menu will be inserted underneath that branch. This is very useful for generating drop-down menus that automatically absorb the left-hand-side menus from multiple zones -- removing the need to maintain two sets of menus
 
 [concepts

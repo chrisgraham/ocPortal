@@ -52,9 +52,9 @@ class Hook_resource_meta_aware_usergroup_subscription
 			'title_field'=>'s_title',
 			'title_field_dereference'=>true,
 
-			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>'_SEARCH:admin_ecommerce:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>NULL,
+			'edit_page_link_pattern'=>'_SEARCH:admin_ecommerce:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_ecommerce'))?(get_module_zone('admin_ecommerce').':admin_ecommerce:ad'):NULL,
 			'archive_url'=>NULL,
 

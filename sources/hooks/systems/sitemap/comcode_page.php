@@ -35,10 +35,10 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	 * @param  ID_TEXT		The page-link.
 	 * @return integer		A SITEMAP_NODE_* constant.
 	 */
-	function handles_pagelink($pagelink)
+	function handles_page_link($page_link)
 	{
 		$matches=array();
-		if (preg_match('#^([^:]*):([^:]+)$#',$pagelink,$matches)!=0)
+		if (preg_match('#^([^:]*):([^:]+)$#',$page_link,$matches)!=0)
 		{
 			$zone=$matches[1];
 			$page=$matches[2];
@@ -56,13 +56,13 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	}
 
 	/**
-	 * Get the permission page that nodes matching $pagelink in this hook are tied to.
+	 * Get the permission page that nodes matching $page_link in this hook are tied to.
 	 * The permission page is where privileges may be overridden against.
 	 *
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_permission_page($pagelink)
+	function get_permission_page($page_link)
 	{
 		return 'cms_comcode_pages';
 	}
@@ -73,25 +73,26 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
+	 * @param  ?integer		Maximum number of children before we cut off all children (NULL: no limit).
 	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
-	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
+	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
+		preg_match('#^([^:]*):([^:]*)#',$page_link,$matches);
 		$page=$matches[2];
 
-		$this->_make_zone_concrete($zone,$pagelink);
+		$this->_make_zone_concrete($zone,$page_link);
 
 		$zone_default_page=get_zone_default_page($zone);
 
@@ -99,13 +100,15 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 
 		$path=end($details);
 
-		$row=$this->_load_row($row,$zone,$page);
+		$row=$this->_load_row_from_page_groupings($row,$zone,$page);
 
 		$struct=array(
 			'title'=>make_string_tempcode(escape_html(titleify($page))),
 			'content_type'=>'comcode_page',
 			'content_id'=>$zone.':'.$page,
-			'pagelink'=>$pagelink,
+			'modifiers'=>array(),
+			'only_on_page'=>'',
+			'page_link'=>$page_link,
 			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
@@ -141,10 +144,10 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 			'sitemap_priority'=>($zone_default_page==$page)?SITEMAP_IMPORTANCE_ULTRA:SITEMAP_IMPORTANCE_HIGH,
 			'sitemap_refreshfreq'=>($zone_default_page==$page)?'daily':'weekly',
 
-			'permission_page'=>$this->get_permission_page($pagelink),
+			'permission_page'=>$this->get_permission_page($page_link),
 		);
 
-		$this->_ameliorate_with_row($struct,$row);
+		$this->_ameliorate_with_row($struct,$row,$meta_gather);
 
 		// In the DB?
 		$got_title=false;
@@ -220,8 +223,8 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 						$child_rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page'),$where,'ORDER BY the_page',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 						foreach ($child_rows as $child_row)
 						{
-							$child_pagelink=$zone.':'.$child_row['the_page'];
-							$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+							$child_page_link=$zone.':'.$child_row['the_page'];
+							$child_node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 							if ($child_node!==NULL)
 								$children[]=$child_node;
 						}

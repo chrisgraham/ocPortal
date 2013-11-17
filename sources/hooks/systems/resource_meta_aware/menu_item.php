@@ -52,9 +52,9 @@ class Hook_resource_meta_aware_menu_item
 			'title_field'=>'i_caption',
 			'title_field_dereference'=>true,
 
-			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>NULL,
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>NULL,
+			'edit_page_link_pattern'=>NULL,
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>NULL,
 			'archive_url'=>NULL,
 

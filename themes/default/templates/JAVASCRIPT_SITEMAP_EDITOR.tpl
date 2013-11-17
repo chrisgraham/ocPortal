@@ -90,10 +90,10 @@ function update_details_box(element)
 	// All
 	if (full_type!='root')
 	{
-		action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!VIEW;^}').replace(/\[2\]/,('{$BASE_URL;,0}/data/pagelink_redirect.php?id='+window.encodeURIComponent(page_link)+keep_stub()).htmlEntities());
+		action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!VIEW;^}').replace(/\[2\]/,('{$BASE_URL;,0}/data/page_link_redirect.php?id='+window.encodeURIComponent(page_link)+keep_stub()).htmlEntities());
 		info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!PAGE_LINK;^}').replace(/\[2\]/,'<kbd>'+page_link.htmlEntities()+'</kbd>');
 		if (element.selected_editlink)
-			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!EDIT;^}').replace(/\[2\]/,escape_html('{$FIND_SCRIPT_NOHTTP;,pagelink_redirect}?id='+element.selected_editlink+keep_stub()));
+			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!EDIT;^}').replace(/\[2\]/,escape_html('{$FIND_SCRIPT_NOHTTP;,page_link_redirect}?id='+element.selected_editlink+keep_stub()));
 	}
 
 	// Output

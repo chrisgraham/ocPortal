@@ -28,7 +28,7 @@ class Block_main_activities
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=1;
+		$info['version']=2;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		$info['parameters']=array('max','start','param','member','mode','grow','refresh_time');
@@ -53,30 +53,40 @@ class Block_main_activities
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		$GLOBALS['SITE_DB']->create_table('activities',array(
-			'id'=>'*AUTO',
-			'a_member_id'=>'*MEMBER',
-			'a_also_involving'=>'?MEMBER',
-			'a_language_string_code'=>'*ID_TEXT',
-			'a_label_1'=>'SHORT_TEXT',
-			'a_label_2'=>'SHORT_TEXT',
-			'a_label_3'=>'SHORT_TEXT',
-			'a_pagelink_1'=>'SHORT_TEXT',
-			'a_pagelink_2'=>'SHORT_TEXT',
-			'a_pagelink_3'=>'SHORT_TEXT',
-			'a_time'=>'TIME',
-			'a_addon'=>'ID_TEXT',
-			'a_is_public'=>'BINARY'
-		));
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('activities',array(
+				'id'=>'*AUTO',
+				'a_member_id'=>'*MEMBER',
+				'a_also_involving'=>'?MEMBER',
+				'a_language_string_code'=>'*ID_TEXT',
+				'a_label_1'=>'SHORT_TEXT',
+				'a_label_2'=>'SHORT_TEXT',
+				'a_label_3'=>'SHORT_TEXT',
+				'a_page_link_1'=>'SHORT_TEXT',
+				'a_page_link_2'=>'SHORT_TEXT',
+				'a_page_link_3'=>'SHORT_TEXT',
+				'a_time'=>'TIME',
+				'a_addon'=>'ID_TEXT',
+				'a_is_public'=>'BINARY'
+			));
 
-		$GLOBALS['SITE_DB']->create_index('activities','a_member_id',array('a_member_id'));
-		$GLOBALS['SITE_DB']->create_index('activities','a_time',array('a_time'));
-		$GLOBALS['SITE_DB']->create_index('activities','a_filtered_ordered',array('a_member_id','a_time'));
+			$GLOBALS['SITE_DB']->create_index('activities','a_member_id',array('a_member_id'));
+			$GLOBALS['SITE_DB']->create_index('activities','a_time',array('a_time'));
+			$GLOBALS['SITE_DB']->create_index('activities','a_filtered_ordered',array('a_member_id','a_time'));
 
-		require_code('activities_submission');
-		log_newest_activity(0,1000,true);
+			require_code('activities_submission');
+			log_newest_activity(0,1000,true);
 
-		add_privilege('SUBMISSION','syndicate_site_activity',false);
+			add_privilege('SUBMISSION','syndicate_site_activity',false);
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<2))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('activities','a_pagelink_1','SHORT_TEXT','a_page_link_1');
+			$GLOBALS['SITE_DB']->alter_table_field('activities','a_pagelink_2','SHORT_TEXT','a_page_link_2');
+			$GLOBALS['SITE_DB']->alter_table_field('activities','a_pagelink_3','SHORT_TEXT','a_page_link_3');
+		}
 	}
 
 	// CACHE MESSES WITH POST REMOVAL

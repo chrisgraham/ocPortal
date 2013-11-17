@@ -43,7 +43,7 @@ class Hook_realtime_rain_stats
 				$timestamp=$row['timestamp'];
 				$member_id=$row['member_id'];
 
-				$page_link=str_replace(':',': ',page_path_to_pagelink($row['the_page']));
+				$page_link=str_replace(':',': ',page_path_to_page_link($row['the_page']));
 				if ($row['the_page']=='/access_denied') $page_link=do_lang('ACCESS_DENIED_SCREEN');
 				if ($row['the_page']=='/closed') $page_link=do_lang('CLOSED_SITE_SCREEN');
 				if ($row['the_page']=='/flood') $page_link=do_lang('FLOOD_CONTROL_SCREEN');

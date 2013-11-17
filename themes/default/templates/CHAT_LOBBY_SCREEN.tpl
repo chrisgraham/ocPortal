@@ -5,19 +5,19 @@
 <p>{!USE_CHAT_RULES,{$PAGE_LINK*,:rules},{$PAGE_LINK*,:privacy}}</p>
 
 <div class="box box___chat_lobby_screen_rooms"><div class="box_inner">
-	<h2>{!ROOMS_LOBBY_TITLE}</h2>
+	<h2>{!CHATROOMS_LOBBY_TITLE}</h2>
 
 	<div class="float_surrounder">
-		{+START,IF_NON_EMPTY,{ADD_ROOM_URL}{PRIVATE_ROOM}{BLOCKING_LINK}{MOD_LINK}{SETEFFECTS_LINK}}
+		{+START,IF_NON_EMPTY,{ADD_CHATROOM_URL}{PRIVATE_CHATROOM}{BLOCKING_LINK}{MOD_LINK}{SETEFFECTS_LINK}}
 			<nav class="chat_actions" role="navigation">
 				<h2>{!ADVANCED_ACTIONS}</h2>
 
 				<ul role="navigation" class="actions_list spaced_list">
-					{+START,IF_NON_EMPTY,{ADD_ROOM_URL}}
-						<li><a href="{ADD_ROOM_URL*}" rel="add">{!ADD_CHATROOM}</a></li>
+					{+START,IF_NON_EMPTY,{ADD_CHATROOM_URL}}
+						<li><a href="{ADD_CHATROOM_URL*}" rel="add">{!ADD_CHATROOM}</a></li>
 					{+END}
-					{+START,IF_NON_EMPTY,{PRIVATE_ROOM}}
-						<li>{PRIVATE_ROOM}</li>
+					{+START,IF_NON_EMPTY,{PRIVATE_CHATROOM}}
+						<li>{PRIVATE_CHATROOM}</li>
 					{+END}
 					{+START,IF_NON_EMPTY,{BLOCKING_LINK}}
 						<li>{BLOCKING_LINK}</li>
@@ -33,16 +33,16 @@
 		{+END}
 
 		<div class="chat_rooms">
-			<h2>{!SELECT_ROOM}</h2>
+			<h2>{!SELECT_CHATROOM}</h2>
 
-			{+START,IF_NON_EMPTY,{ROOMS}}
+			{+START,IF_NON_EMPTY,{CHATROOMS}}
 				<ul class="spaced_list">
-					{ROOMS}
+					{CHATROOMS}
 				</ul>
 
-				<p class="chat_multi_tab">{!OPEN_ROOMS_IN_TABS}</p>
+				<p class="chat_multi_tab">{!OPEN_CHATROOMS_IN_TABS}</p>
 			{+END}
-			{+START,IF_EMPTY,{ROOMS}}
+			{+START,IF_EMPTY,{CHATROOMS}}
 				<p class="nothing_here">{!NO_CATEGORIES}</p>
 			{+END}
 		</div>

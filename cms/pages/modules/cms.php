@@ -46,7 +46,7 @@ class Module_cms
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -70,7 +70,7 @@ class Module_cms
 
 		require_code('menus');
 
-		breadcrumb_set_self(do_lang_tempcode('CMS_ZONE'));
+		breadcrumb_set_self(do_lang_tempcode('menus:CMS_ZONE'));
 
 		$this->title=get_screen_title('MODULE_TRANS_NAME_cms');
 
@@ -86,7 +86,7 @@ class Module_cms
 	{
 		require_code('templates_donext');
 
-		return do_next_manager_hooked('CMS_ZONE','DOC_CMS','cms','MODULE_TRANS_NAME_cms');
+		return do_next_manager_hooked('menus:CMS_ZONE','menus:DOC_CMS','cms','menus:MODULE_TRANS_NAME_cms');
 	}
 
 }

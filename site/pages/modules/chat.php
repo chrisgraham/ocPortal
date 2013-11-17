@@ -97,7 +97,7 @@ class Module_chat
 			$GLOBALS['SITE_DB']->create_index('chat_rooms','allow_list',array('allow_list(30)'));
 
 			// Create our default chat room. By default, this will be as the shoutbox
-			$GLOBALS['SITE_DB']->query_insert('chat_rooms',array('is_im'=>0,'allow_list_groups'=>'','disallow_list_groups'=>'','allow_list'=>'','disallow_list'=>'','room_name'=>do_lang('DEFAULT_ROOM_GENERAL_CHAT'),'room_language'=>get_site_default_lang(),'room_owner'=>NULL,'c_welcome'=>insert_lang('',2)));
+			$GLOBALS['SITE_DB']->query_insert('chat_rooms',array('is_im'=>0,'allow_list_groups'=>'','disallow_list_groups'=>'','allow_list'=>'','disallow_list'=>'','room_name'=>do_lang('DEFAULT_CHATROOM_GENERAL_CHAT'),'room_language'=>get_site_default_lang(),'room_owner'=>NULL,'c_welcome'=>insert_lang('',2)));
 
 			$GLOBALS['SITE_DB']->create_table('chat_messages',array(
 				'id'=>'*AUTO',
@@ -222,7 +222,7 @@ class Module_chat
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -233,7 +233,7 @@ class Module_chat
 		if (!$check_perms || !is_guest($member_id))
 		{
 			$ret['set_effects']=array('CHAT_SET_EFFECTS','menu/social/chat/sound');
-			$ret['private']=array('CREATE_PRIVATE_ROOM','menu/social/chat/chatroom_add');
+			$ret['private']=array('CREATE_PRIVATE_CHATROOM','menu/social/chat/chatroom_add');
 			$ret['blocking_interface']=array('MEMBER_BLOCKING','menu/social/chat/member_blocking');
 		}
 		return $ret;
@@ -268,7 +268,7 @@ class Module_chat
 
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
 
-			$this->title=get_screen_title('ROOM');
+			$this->title=get_screen_title('CHATROOM');
 		}
 
 		if ($type=='download_logs')
@@ -285,12 +285,12 @@ class Module_chat
 
 		if ($type=='private')
 		{
-			$this->title=get_screen_title('CREATE_PRIVATE_ROOM');
+			$this->title=get_screen_title('CREATE_PRIVATE_CHATROOM');
 		}
 
 		if ($type=='_private')
 		{
-			$this->title=get_screen_title('CREATE_PRIVATE_ROOM');
+			$this->title=get_screen_title('CREATE_PRIVATE_CHATROOM');
 		}
 
 		if ($type=='blocking_interface')
@@ -325,7 +325,7 @@ class Module_chat
 
 		if ($type=='chat_save_options')
 		{
-			$this->title=get_screen_title('ROOM');
+			$this->title=get_screen_title('CHATROOM');
 		}
 
 		if ($type=='_chat_download_logs')
@@ -450,7 +450,7 @@ class Module_chat
 				$users=get_chatters_in_room($myrow['id']);
 				$usernames=get_chatters_in_room_tpl($users);
 				$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$myrow['id']),'_SELF');
-				$room_link=do_template('CHAT_ROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
+				$room_link=do_template('CHAT_CHATROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
 				$fields->attach($room_link);
 			}
 		}
@@ -458,7 +458,7 @@ class Module_chat
 		// Extra links
 		if (has_actual_page_access($member_id,'cms_chat'))
 		{
-			$mod_link=hyperlink(build_url(array('page'=>'cms_chat'),get_module_zone('cms_chat')),do_lang_tempcode('CHAT_MOD_PANEL'));
+			$mod_link=hyperlink(build_url(array('page'=>'cms_chat'),get_module_zone('cms_chat')),do_lang_tempcode('CHAT_MODERATION'));
 		} else $mod_link=new ocp_tempcode();
 		if (!is_guest())
 		{
@@ -466,7 +466,7 @@ class Module_chat
 		} else $blocking_link=new ocp_tempcode();
 		if ((has_privilege($member_id,'create_private_room')) && (!is_guest()))
 		{
-			$private_room=hyperlink(build_url(array('page'=>'_SELF','type'=>'private'),'_SELF'),do_lang_tempcode('CREATE_PRIVATE_ROOM'));
+			$private_room=hyperlink(build_url(array('page'=>'_SELF','type'=>'private'),'_SELF'),do_lang_tempcode('CREATE_PRIVATE_CHATROOM'));
 		} else $private_room=new ocp_tempcode();
 
 		// Friend list and IM
@@ -482,7 +482,7 @@ class Module_chat
 		}
 		$friends=show_im_contacts($member_id);
 		$messages_php=find_script('messages');
-		$im_area_template=do_template('CHAT_LOBBY_IM_AREA',array('_GUID'=>'cd230527da03caa596135f74647b2ca7','MESSAGES_PHP'=>$messages_php,'ROOM_ID'=>'__room_id__'));
+		$im_area_template=do_template('CHAT_LOBBY_IM_AREA',array('_GUID'=>'cd230527da03caa596135f74647b2ca7','MESSAGES_PHP'=>$messages_php,'CHATROOM_ID'=>'__room_id__'));
 		$make_friend_url=build_url(array('page'=>'_SELF','type'=>'friend_add','member_id'=>'__id__'),'_SELF');
 		$block_member_url=build_url(array('page'=>'_SELF','type'=>'blocking_add','member_id'=>'__id__'),'_SELF');
 		$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url(-100,true,true);
@@ -492,7 +492,7 @@ class Module_chat
 			'_GUID'=>'9a36efe3a449dabac6ef9866d1f6f48a',
 			'PROFILE_URL'=>$profile_url,
 			'ID'=>'__id__',
-			'ROOM_ID'=>'__room_id__',
+			'CHATROOM_ID'=>'__room_id__',
 			'USERNAME'=>'__username__',
 			'ONLINE'=>'__online__',
 			'AVATAR_URL'=>'__avatar_url__',
@@ -506,7 +506,7 @@ class Module_chat
 		} else $seteffects_link=new ocp_tempcode();
 
 		$message=new ocp_tempcode();
-		$message->attach(do_lang_tempcode('WELCOME_CHAT_LOBBY',$private_room->is_empty()?new ocp_tempcode():do_lang_tempcode('WELCOME_CHAT_LOBBY_PRIVATE_ROOMS'),$can_im?do_lang_tempcode('WELCOME_CHAT_LOBBY_USE_IM'):new ocp_tempcode(),$can_im?do_lang_tempcode((get_option('sitewide_im')=='1')?'WELCOME_CHAT_LOBBY_USE_IM2_SITEWIDE':'WELCOME_CHAT_LOBBY_USE_IM2_NO_SITEWIDE'):new ocp_tempcode()));
+		$message->attach(do_lang_tempcode('WELCOME_CHAT_LOBBY',$private_room->is_empty()?new ocp_tempcode():do_lang_tempcode('WELCOME_CHAT_LOBBY_PRIVATE_CHATROOMS'),$can_im?do_lang_tempcode('WELCOME_CHAT_LOBBY_USE_IM'):new ocp_tempcode(),$can_im?do_lang_tempcode((get_option('sitewide_im')=='1')?'WELCOME_CHAT_LOBBY_USE_IM2_SITEWIDE':'WELCOME_CHAT_LOBBY_USE_IM2_NO_SITEWIDE'):new ocp_tempcode()));
 
 		if (has_actual_page_access(get_member(),'admin_chat'))
 		{
@@ -516,7 +516,7 @@ class Module_chat
 		return do_template('CHAT_LOBBY_SCREEN',array(
 			'_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2',
 			'TITLE'=>$this->title,
-			'ADD_ROOM_URL'=>$add_room_url,
+			'ADD_CHATROOM_URL'=>$add_room_url,
 			'MESSAGE'=>$message,
 			'CHAT_SOUND'=>get_chat_sound_tpl(),
 			'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,
@@ -525,8 +525,8 @@ class Module_chat
 			'CAN_IM'=>$can_im,
 			'URL_ADD_FRIEND'=>$post_url_add_friend,
 			'URL_REMOVE_FRIENDS'=>$post_url_remove_friends,
-			'ROOMS'=>$fields,
-			'PRIVATE_ROOM'=>$private_room,
+			'CHATROOMS'=>$fields,
+			'PRIVATE_CHATROOM'=>$private_room,
 			'MOD_LINK'=>$mod_link,
 			'BLOCKING_LINK'=>$blocking_link,
 			'SETEFFECTS_LINK'=>$seteffects_link,
@@ -609,7 +609,7 @@ class Module_chat
 		if (has_actual_page_access(get_member(),'cms_chat',NULL,array('chat',strval($room_id)),array('edit_lowrange_content',($room_check[0]['room_owner']==get_member())?'moderate_my_private_rooms':NULL)))
 		{
 			$mod_url=build_url(array('page'=>'cms_chat','type'=>'room','id'=>$room_id),get_module_zone('cms_chat'));
-			$mod_link=hyperlink($mod_url,do_lang_tempcode('CHAT_MOD_PANEL'),true);
+			$mod_link=hyperlink($mod_url,do_lang_tempcode('CHAT_MODERATION'),true);
 		}
 
 		$admin_link=new ocp_tempcode();
@@ -630,11 +630,11 @@ class Module_chat
 
 		$links=array($admin_link,$mod_link,$refresh_link,$download_link,$seteffects_link);
 
-		return do_template('CHAT_ROOM_SCREEN',array(
+		return do_template('CHAT_CHATROOM_SCREEN',array(
 			'_GUID'=>'867a0b050c050c81d33482d131783eb0',
 			'CHATTERS'=>get_chatters_in_room_tpl(get_chatters_in_room($room_id)),
 			'CHAT_SOUND'=>get_chat_sound_tpl(),
-			'ROOM_ID'=>strval($room_id),
+			'CHATROOM_ID'=>strval($room_id),
 			'DEBUG'=>$debug,
 			'MESSAGES_PHP'=>$messages_php,
 			'TEXT_COLOUR_DEFAULT'=>$user_colour,
@@ -642,7 +642,7 @@ class Module_chat
 			'OPTIONS_URL'=>$cs_post_url,
 			'COMCODE_HELP'=>$comcode_help,
 			'CHATCODE_HELP'=>$chatcode_help,
-			'ROOM_NAME'=>get_chatroom_name(get_param_integer('id',1)),
+			'CHATROOM_NAME'=>get_chatroom_name(get_param_integer('id',1)),
 			'MICRO_BUTTONS'=>$micro_buttons,
 			'BUTTONS'=>$buttons,
 			'YOUR_NAME'=>$your_name,
@@ -671,12 +671,12 @@ class Module_chat
 		require_code('form_templates');
 
 		url_default_parameters__enable();
-		list($fields,$hidden)=get_chatroom_fields(NULL,true,do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'','',strval(get_member()));
+		list($fields,$hidden)=get_chatroom_fields(NULL,true,do_lang('CHAT_PRIVATE_DEFAULT_CHATROOM_NAME',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'','',strval(get_member()));
 		url_default_parameters__disable();
 
-		$posting_name=do_lang_tempcode('CREATE_PRIVATE_ROOM');
+		$posting_name=do_lang_tempcode('CREATE_PRIVATE_CHATROOM');
 		$posting_url=build_url(array('page'=>'_SELF','type'=>'_private'),'_SELF');
-		$text=paragraph(do_lang_tempcode('CHAT_PRIVATE_ROOM_DESCRIPTION',display_time_period(60*intval(get_option('chat_private_room_deletion_time')))));
+		$text=paragraph(do_lang_tempcode('CHAT_PRIVATE_CHATROOM_DESCRIPTION',display_time_period(60*intval(get_option('chat_private_room_deletion_time')))));
 		if (intval(get_option('chat_private_room_deletion_time'))==0) $text=new ocp_tempcode();
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'5697add8e81f641559a212697d35a470','HIDDEN'=>$hidden,'TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
@@ -696,7 +696,7 @@ class Module_chat
 		check_privilege('create_private_room');
 
 		// Check the input
-		$room_name=post_param('room_name',do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
+		$room_name=post_param('room_name',do_lang('CHAT_PRIVATE_DEFAULT_CHATROOM_NAME',$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
 		$room_lang=post_param('room_lang',user_lang());
 		list($allow2,$allow2_groups,$disallow2,$disallow2_groups)=read_in_chat_perm_fields();
 		$allow=explode(',',$allow2);
@@ -1016,7 +1016,7 @@ class Module_chat
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-		$fields->attach(form_input_list(do_lang_tempcode('ROOM_NAME'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_ROOM_NAME'),'room_name',$select));
+		$fields->attach(form_input_list(do_lang_tempcode('CHATROOM_NAME'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_CHATROOM_NAME'),'room_name',$select));
 		$fields->attach(form_input_date(do_lang_tempcode('CHAT_DOWNLOAD_LOGS_START_DATE'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_START_DATE_DESCRIPTION'),'start',false,false,true,time()-4*60*60,26));
 		$fields->attach(form_input_date(do_lang_tempcode('CHAT_DOWNLOAD_LOGS_FINISH_DATE'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_FINISH_DATE_DESCRIPTION'),'finish',false,false,true,time(),26));
 

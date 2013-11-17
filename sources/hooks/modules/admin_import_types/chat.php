@@ -29,7 +29,7 @@ class Hook_admin_import_types_chat
 	function run()
 	{
 		return array(
-			'chat_rooms'=>'ROOMS',
+			'chat_rooms'=>'CHATROOMS',
 		);
 	}
 

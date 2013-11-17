@@ -54,9 +54,9 @@ class Hook_content_meta_aware_news
 			'description_field'=>'news',
 			'thumb_field'=>'news_image',
 
-			'view_pagelink_pattern'=>'_SEARCH:news:view:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:cms_news:_ed:_WILD',
-			'view_category_pagelink_pattern'=>'_SEARCH:news:misc:_WILD',
+			'view_page_link_pattern'=>'_SEARCH:news:view:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:cms_news:_ed:_WILD',
+			'view_category_page_link_pattern'=>'_SEARCH:news:misc:_WILD',
 			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_news'))?(get_module_zone('cms_news').':cms_news:ad'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('news')).':news',
 

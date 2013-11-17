@@ -54,9 +54,9 @@ class Hook_content_meta_aware_wiki_page
 			'description_field'=>'description',
 			'thumb_field'=>NULL,
 
-			'view_pagelink_pattern'=>'_SEARCH:wiki:misc:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:cms_wiki:edit_page:_WILD',
-			'view_category_pagelink_pattern'=>'_SEARCH:wiki:misc:_WILD',
+			'view_page_link_pattern'=>'_SEARCH:wiki:misc:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:cms_wiki:edit_page:_WILD',
+			'view_category_page_link_pattern'=>'_SEARCH:wiki:misc:_WILD',
 			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('cat_low',get_member(),get_ip_address(),'cms_wiki'))?(get_module_zone('cms_wiki').':cms_wiki:add_page'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('wiki')).':wiki',
 

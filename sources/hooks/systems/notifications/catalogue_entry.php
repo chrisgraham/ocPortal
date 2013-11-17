@@ -48,9 +48,9 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 		$total=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name'=>$name));
 		if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 
-		$pagelinks=get_catalogue_category_tree($name,is_null($id)?NULL:intval($id),NULL,NULL,1);
+		$page_links=get_catalogue_category_tree($name,is_null($id)?NULL:intval($id),NULL,NULL,1);
 		$filtered=array();
-		foreach ($pagelinks as $p)
+		foreach ($page_links as $p)
 		{
 			if (strval($p['id'])!==$id) $filtered[]=$p;
 		}

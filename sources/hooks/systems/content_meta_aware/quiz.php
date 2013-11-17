@@ -54,9 +54,9 @@ class Hook_content_meta_aware_quiz
 			'description_field'=>'q_start_text',
 			'thumb_field'=>NULL,
 
-			'view_pagelink_pattern'=>'_SEARCH:quiz:do:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:cms_quiz:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>'_SEARCH:quiz:do:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:cms_quiz:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('high',get_member(),get_ip_address(),'cms_quiz'))?(get_module_zone('cms_quiz').':cms_quiz:ad'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('quiz')).':quiz',
 

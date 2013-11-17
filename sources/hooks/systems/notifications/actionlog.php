@@ -41,7 +41,7 @@ class Hook_Notification_actionlog extends Hook_Notification__Staff
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		require_all_lang();
 
@@ -52,14 +52,14 @@ class Hook_Notification_actionlog extends Hook_Notification__Staff
 		{
 			$lang=do_lang($type['the_type'],NULL,NULL,NULL,NULL,false);
 			if (is_null($lang)) continue;
-			$pagelinks[]=array(
+			$page_links[]=array(
 				'id'=>$type['the_type'],
 				'title'=>$lang,
 			);
 		}
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

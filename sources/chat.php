@@ -53,7 +53,7 @@ function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$url=build_url(array('page'=>'chat','type'=>'room','id'=>$row['id']),$zone);
 
 	$_title=$row['room_name'];
-	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('ROOM'),$_title):$_title;
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('CHATROOM'),$_title):$_title;
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'dacd41bad78b545f179582f83209c070',
@@ -347,7 +347,7 @@ function chat_room_prune($room_id)
 					require_code('lang');
 					require_code('tempcode');
 					require_lang('chat');
-					$left_room_msg=do_lang('LEFT_ROOM',$GLOBALS['FORUM_DRIVER']->get_username($p['member_id']));
+					$left_room_msg=do_lang('LEFT_CHATROOM',$GLOBALS['FORUM_DRIVER']->get_username($p['member_id']));
 					if ($left_room_msg!='')
 					{
 						require_code('comcode');
@@ -1152,7 +1152,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 			sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		}
 
-		$enter_room_msg=do_lang('ENTERED_THE_ROOM',$their_username);
+		$enter_room_msg=do_lang('ENTERED_THE_CHATROOM',$their_username);
 		if ($enter_room_msg!='')
 		{
 			require_code('comcode');
@@ -1394,7 +1394,7 @@ function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
 			if (!is_null($room_id))
 			{
 				// Display the invite
-				$invite_code=do_template('CHAT_INVITE',array('_GUID'=>'493ac2dcabc763fe03e7eee072dd9629','USERNAME'=>$username,'ROOM'=>html_entity_decode($pm_message,ENT_QUOTES,get_charset()),'LINK'=>hyperlink(build_url(array('page'=>'chat','type'=>'room','room_id'=>strval($room_id)),$zone),do_lang_tempcode('CHAT_INVITE_TEXT_REPLY'))));
+				$invite_code=do_template('CHAT_INVITE',array('_GUID'=>'493ac2dcabc763fe03e7eee072dd9629','USERNAME'=>$username,'CHATROOM'=>html_entity_decode($pm_message,ENT_QUOTES,get_charset()),'LINK'=>hyperlink(build_url(array('page'=>'chat','type'=>'room','room_id'=>strval($room_id)),$zone),do_lang_tempcode('CHAT_INVITE_TEXT_REPLY'))));
 				$text=preg_replace('#\[invite=&quot;([^&]*)&quot;\]([^\[]*)\[/invite\]#',$invite_code->evaluate(),$text,1);
 			}
 		}

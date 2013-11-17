@@ -679,8 +679,6 @@ class Hook_addon_registry_core
 			'themes/default/templates/STACK_TRACE_WRAP.tpl',
 			'themes/default/templates/BLOCK_MAIN_EMOTICON_CODES_ENTRY.tpl',
 			'themes/default/templates/BLOCK_MAIN_EMOTICON_CODES.tpl',
-			'themes/default/templates/BLOCK_MAIN_SITEMAP.tpl',
-			'themes/default/templates/BLOCK_MAIN_SITEMAP_NEST.tpl',
 			'themes/default/templates/BLOCK_NO_ENTRIES.tpl',
 			'adminzone/index.php',
 			'adminzone/pages/comcode/.htaccess',
@@ -904,7 +902,7 @@ class Hook_addon_registry_core
 			'data/index.html',
 			'data/javascript.php',
 			'data/modules/index.html',
-			'data/pagelink_redirect.php',
+			'data/page_link_redirect.php',
 			'data/quash_referer.php',
 			'data/sheet.php',
 			'data/sitemap.php',
@@ -1033,7 +1031,6 @@ class Hook_addon_registry_core
 			'sources/blocks/main_db_notes.php',
 			'sources/blocks/main_notes.php',
 			'sources/blocks/main_only_if_match.php',
-			'sources/blocks/main_sitemap.php',
 			'sources/blocks/side_personal_stats.php',
 			'sources/caches.php',
 			'sources/caches2.php',
@@ -1210,7 +1207,6 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/ocf_implicit_usergroups/index.html',
 			'sources/hooks/systems/ocf_implicit_usergroups/.htaccess',
 			'themes/default/css/personal_stats.css',
-			'themes/default/css/sitemap.css',
 			'themes/default/templates/MASS_SELECT_MARKER.tpl',
 			'themes/default/templates/MASS_SELECT_DELETE_FORM.tpl',
 			'themes/default/templates/MASS_SELECT_FORM_BUTTONS.tpl',
@@ -1263,8 +1259,6 @@ class Hook_addon_registry_core
 			'BLOCK_MAIN_EMOTICON_CODES_ENTRY.tpl'=>'block_main_emoticon_codes',
 			'BLOCK_MAIN_EMOTICON_CODES.tpl'=>'block_main_emoticon_codes',
 			'BLOCK_MAIN_COMCODE_PAGE_CHILDREN.tpl'=>'block_main_comcode_page_children',
-			'BLOCK_MAIN_SITEMAP_NEST.tpl'=>'block_main_sitemap',
-			'BLOCK_MAIN_SITEMAP.tpl'=>'block_main_sitemap',
 			'QUERY_LOG.tpl'=>'administrative__query_screen',
 			'QUERY_SCREEN.tpl'=>'administrative__query_screen',
 			'BROKEN_URLS.tpl'=>'administrative__broken_urls',
@@ -1842,50 +1836,6 @@ class Hook_addon_registry_core
 				'THE_PAGE'=>lorem_phrase(),
 				'THE_ZONE'=>lorem_phrase(),
 				'TITLE'=>lorem_phrase()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_main_sitemap()
-	{
-		$children=array();
-		foreach (placeholder_array() as $v)
-		{
-			$children1=array();
-			foreach (placeholder_array(2) as $_v)
-			{
-				$children2=array();
-				foreach (placeholder_array(1) as $__v)
-				{
-					$children2[]=do_lorem_template('BLOCK_MAIN_SITEMAP_NEST',array(
-						'URL'=>placeholder_url(),
-						'NAME'=>lorem_word(),
-						'CHILDREN'=>placeholder_array()
-					));
-				}
-
-				$children1[]=do_lorem_template('BLOCK_MAIN_SITEMAP_NEST',array(
-					'URL'=>placeholder_url(),
-					'NAME'=>lorem_word(),
-					'CHILDREN'=>$children2
-				));
-			}
-			$children[]=do_lorem_template('BLOCK_MAIN_SITEMAP_NEST',array(
-				'URL'=>placeholder_url(),
-				'NAME'=>lorem_word(),
-				'CHILDREN'=>$children1
-			));
-		}
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_SITEMAP',array(
-				'CHILDREN'=>$children
 			)), NULL, '', true)
 		);
 	}

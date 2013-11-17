@@ -34,7 +34,7 @@
  * @param  boolean		Whether to push this out as a site event if user requested
  * @param  ?MEMBER		Member also 'intimately' involved, such as a content submitter who is a friend (NULL: none)
  */
-function syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=1,$a_member_id=NULL,$sitewide_too=false,$a_also_involving=NULL)
+function syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_page_link_1='',$a_page_link_2='',$a_page_link_3='',$a_addon='',$a_is_public=1,$a_member_id=NULL,$sitewide_too=false,$a_also_involving=NULL)
 {
 	if (running_script('install')) return;
 	$hooks=find_all_hooks('systems','activities');
@@ -44,10 +44,10 @@ function syndicate_described_activity($a_language_string_code='',$a_label_1='',$
 		$ob=object_factory('Activity_'.$hook);
 		if (get_param_integer('keep_debug_notifications',0)==1)
 		{
-			$ob->syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
+			$ob->syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_page_link_1,$a_page_link_2,$a_page_link_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
 		} else
 		{
-			register_shutdown_function(array($ob,'syndicate_described_activity'),$a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
+			register_shutdown_function(array($ob,'syndicate_described_activity'),$a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_page_link_1,$a_page_link_2,$a_page_link_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
 		}
 	}
 }

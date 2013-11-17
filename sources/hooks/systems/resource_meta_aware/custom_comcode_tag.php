@@ -52,9 +52,9 @@ class Hook_resource_meta_aware_custom_comcode_tag
 			'title_field'=>'tag_tag',
 			'title_field_dereference'=>false,
 
-			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>'_SEARCH:admin_custom_comcode:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>NULL,
+			'edit_page_link_pattern'=>'_SEARCH:admin_custom_comcode:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_custom_comcode'))?(get_module_zone('admin_custom_comcode').':admin_custom_comcode:ad'):NULL,
 			'archive_url'=>NULL,
 

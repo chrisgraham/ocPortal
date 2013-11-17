@@ -120,7 +120,7 @@ class Module_admin_stats
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -569,7 +569,7 @@ class Module_admin_stats
 		foreach ($rows as $row)
 		{
 			$page=$row['the_page'];
-			$page2=page_path_to_pagelink($page);
+			$page2=page_path_to_page_link($page);
 			if ($page2=='') $page2=$page;
 
 			$avg=$row['avg']/1000.0;
@@ -910,7 +910,7 @@ class Module_admin_stats
 				continue;
 			} else
 			{
-				$page2=page_path_to_pagelink($page);
+				$page2=page_path_to_page_link($page);
 				if ($page2=='') $page2=$page;
 			}
 			$where=db_string_equal_to('the_page',$page);

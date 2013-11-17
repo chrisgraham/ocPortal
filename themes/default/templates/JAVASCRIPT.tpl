@@ -16,10 +16,10 @@ function script_load_stuff()
 
 	if (window==window.top && !window.opener || window.name=='') window.name='_site_opener';
 
-	/* Are we dealing with a touch device? */
+	// Are we dealing with a touch device?
 	if (typeof window.TouchEvent!='undefined') document.body.className+=' touch_enabled';
 
-	/* Dynamic images need preloading */
+	// Dynamic images need preloading
 	var preloader=new Image();
 	var images=[];
 	/*images.push('{$IMG;,menus/menu_bullet_hover}'.replace(/^http:/,window.location.protocol));	Menu type no longer on by default
@@ -30,10 +30,10 @@ function script_load_stuff()
 	images.push('{$IMG;,loading}'.replace(/^http:/,window.location.protocol));
 	for (i=0;i<images.length;i++) preloader.src=images[i];
 
-	/* Textarea scroll support */
+	// Textarea scroll support
 	handle_textarea_scrolling();
 
-	/* Tell the server we have Javascript, so do not degrade things for reasons of compatibility - plus also set other things the server would like to know */
+	// Tell the server we have Javascript, so do not degrade things for reasons of compatibility - plus also set other things the server would like to know
 	{+START,IF,{$CONFIG_OPTION,detect_javascript}}
 		set_cookie('js_on',1,120);
 	{+END}
@@ -60,7 +60,7 @@ function script_load_stuff()
 		new_html__initialise(document.images[i]);
 	}
 
-	/* Mouse/keyboard listening */
+	// Mouse/keyboard listening
 	window.mouse_x=0;
 	window.mouse_y=0;
 	window.ctrl_pressed=false;
@@ -69,9 +69,9 @@ function script_load_stuff()
 	window.shift_pressed=false;
 	add_event_listener_abstract(document.body,'mousemove',get_mouse_xy);
 	if (typeof window.addEventListener!='undefined')
-		window.addEventListener('click',capture_click_key_states,true); /* Workaround for a dodgy firefox extension */
+		window.addEventListener('click',capture_click_key_states,true); // Workaround for a dodgy firefox extension
 
-	/* So we can change base tag especially when on debug mode */
+	// So we can change base tag especially when on debug mode
 	if (document.getElementsByTagName('base')[0])
 	{
 		for (i=0;i<document.links.length;i++)
@@ -84,7 +84,7 @@ function script_load_stuff()
 		}
 	}
 
-	/* Pinning to top if scroll out */
+	// Pinning to top if scroll out
 	var stuck_navs=get_elements_by_class_name(document,'stuck_nav');
 	if (stuck_navs.length>0)
 	{
@@ -131,7 +131,7 @@ function script_load_stuff()
 		} );
 	}
 
-	/* Font size */
+	// Font size
 	var font_size=read_cookie('font_size');
 	if (font_size!='')
 	{
@@ -189,14 +189,14 @@ function new_html__initialise(element)
 	switch (element.nodeName.toLowerCase())
 	{
 		case 'img':
-			/* Convert a/img title attributes into ocPortal tooltips */
+			// Convert a/img title attributes into ocPortal tooltips
 			{+START,IF,{$CONFIG_OPTION,js_overlays}}
 				convert_tooltip(element);
 			{+END}
 			break;
 
 		case 'a':
-			/* Lightboxes */
+			// Lightboxes
 			{+START,IF,{$CONFIG_OPTION,js_overlays}}
 				var rel=element.getAttribute('rel');
 				if (rel && rel.match(/(^|\s)lightbox($|\s)/))
@@ -210,7 +210,7 @@ function new_html__initialise(element)
 				}
 			{+END}
 
-			/* Convert a/img title attributes into ocPortal tooltips */
+			// Convert a/img title attributes into ocPortal tooltips
 			{+START,IF,{$CONFIG_OPTION,js_overlays}}
 				if (typeof element['original-title']=='undefined'/*check tipsy not used*/) convert_tooltip(element);
 			{+END}
@@ -223,25 +223,25 @@ function new_html__initialise(element)
 			} else
 			{
 				var dont_autocomplete=['edit_username','edit_password'];
-				for (var j=0;j<dont_autocomplete.length;j++) /* Done in very specific way, as Firefox will nuke any explicitly non-autocompleted values when clicking back also */
+				for (var j=0;j<dont_autocomplete.length;j++) // Done in very specific way, as Firefox will nuke any explicitly non-autocompleted values when clicking back also
 					if (element.elements[dont_autocomplete[j]]) element.elements[dont_autocomplete[j]].setAttribute('autocomplete','off');
 			}
 
-			/* HTML editor */
+			// HTML editor
 			if (typeof window.load_html_edit!='undefined')
 			{
 				load_html_edit(element);
 			}
 
-			/* Remove tooltips from forms for mouse users as they are for screenreader accessibility only */
+			// Remove tooltips from forms for mouse users as they are for screenreader accessibility only
 			if (element.getAttribute('target')!='_blank')
 				add_event_listener_abstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){};/*IE6 does not like*/ } );
 
-			/* Convert a/img title attributes into ocPortal tooltips */
+			// Convert a/img title attributes into ocPortal tooltips
 			{+START,IF,{$CONFIG_OPTION,js_overlays}}
 				//convert_tooltip(element);	Not useful
 
-				/* Convert a/img title attributes into ocPortal tooltips */
+				// Convert a/img title attributes into ocPortal tooltips
 				var elements,j;
 				elements=element.elements;
 				for (j=0;j<elements.length;j++)
@@ -297,7 +297,7 @@ function initialise_error_mechanism()
 
 				false // Just to allow above lines to be reordered
 			)
-				return null; /* Comes up on due to various Firefox/extension/etc bugs */
+				return null; // Comes up on due to various Firefox/extension/etc bugs
 
 			if ((typeof window.done_one_error=='undefined') || (!window.done_one_error))
 			{
@@ -366,8 +366,8 @@ function undo_staff_unload_action()
 /* Very simple form control flow */
 function check_field_for_blankness(field,event)
 {
-	if (!field) return true; /* Shame we need this, seems on Google Chrome things can get confused on JS assigned to page-changing events */
-	if (typeof field.nodeName=='undefined') return true; /* Also bizarre */
+	if (!field) return true; // Shame we need this, seems on Google Chrome things can get confused on JS assigned to page-changing events
+	if (typeof field.nodeName=='undefined') return true; // Also bizarre
 
 	var value;
 	if (field.nodeName.toLowerCase()=='select')
@@ -460,7 +460,7 @@ function handle_textarea_scrolling()
 		if (elements[i].className.indexOf('textarea_scroll')!=-1)
 		{
 			elements[i].setAttribute('wrap','off');
-			elements[i].style.overflow='auto'; /* This just forces a redraw, might not be needed for its own property */
+			elements[i].style.overflow='auto'; // This just forces a redraw, might not be needed for its own property
 		}
 	}
 }
@@ -486,7 +486,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 		var height=180;
 		if (button_set.length>4) height+=5*(button_set.length-4);
 
-		/* Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups do not know if they run on HTTPS if behind a transparent reverse proxy */
+		// Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups do not know if they run on HTTPS if behind a transparent reverse proxy
 		var url=maintain_theme_in_link('{$FIND_SCRIPT;,question_ui}?message='+window.encodeURIComponent(message)+'&image_set='+window.encodeURIComponent(image_set.join(','))+'&button_set='+window.encodeURIComponent(button_set.join(','))+'&window_title='+window.encodeURIComponent(window_title)+keep_stub());
 		window.faux_showModalDialog(
 			url,
@@ -636,7 +636,7 @@ function doc_onmouseover(i)
 /* Tidying up after the page is rendered */
 function script_page_rendered()
 {
-	/* Move the help panel if needed */
+	// Move the help panel if needed
 	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
 		if (get_window_width()<990)
 		{
@@ -667,7 +667,7 @@ function script_page_rendered()
 	{+END}
 }
 
-/* The help panel */
+// The help panel
 function help_panel(show)
 {
 	var panel_right=document.getElementById('panel_right');
@@ -733,7 +733,7 @@ function capture_click_key_states(event)
 }
 function magic_keypress(event)
 {
-	/* Cmd+Shift works on Mac - cannot hold down control or alt in Mac firefox at least */
+	// Cmd+Shift works on Mac - cannot hold down control or alt in Mac firefox at least
 	if (typeof window.capture_event!='undefined') event=window.capture_event;
 	var count=0;
 	if (event.shiftKey) count++;
@@ -760,7 +760,7 @@ function create_rollover(rand,rollover)
 {
 	var img=document.getElementById(rand);
 	if (!img) return;
-	new Image().src=rollover; /* precache */
+	new Image().src=rollover; // precache
 	var activate=function()
 	{
 		img.old_src=img.getAttribute('src');
@@ -842,7 +842,7 @@ function get_elements_by_class_name(node,class_name)
 
 		return a;
 	}
-	return []; /* Error actually, but to avoid typing error, we will just return an empty list */
+	return []; // Error actually, but to avoid typing error, we will just return an empty list
 }
 
 /* Type checking */
@@ -916,7 +916,7 @@ function browser_matches(code)
 			return is_safari;
 	}
 
-	/* Should never get here */
+	// Should never get here
 	return false;
 }
 
@@ -1165,7 +1165,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 		{
 			element.style.visibility='hidden';
 			element.style.width=find_width(element)+'px';
-			element.style.position='absolute'; /* So things do not just around now it is visible */
+			element.style.position='absolute'; // So things do not just around now it is visible
 			if (pic)
 			{
 				pic.src='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol);
@@ -1220,7 +1220,7 @@ function begin_toggleable_tray_animation(element,animate_dif,animate_ticks,final
 		element.style.visibility='visible';
 		element.style.position='static';
 	}
-	if (fullHeight>300) /* Quick finish in the case of huge expand areas */
+	if (fullHeight>300) // Quick finish in the case of huge expand areas
 	{
 		animate_dif*=6;
 	}
@@ -1298,7 +1298,7 @@ function animate_frame_load(pf,frame,leave_gap_top)
 	if (!pf) return;
 	if (typeof leave_gap_top=='undefined') var leave_gap_top=0;
 
-	pf.style.height=window.top.get_window_height()+'px'; /* Enough to stop jumping around */
+	pf.style.height=window.top.get_window_height()+'px'; // Enough to stop jumping around
 
 	illustrate_frame_load(pf,frame);
 
@@ -1366,7 +1366,7 @@ function illustrate_frame_load(pf,frame)
 				de.appendChild(head_element);
 			}
 
-			if (de.getElementsByTagName('style').length==0) /* The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice */
+			if (de.getElementsByTagName('style').length==0) // The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice
 				set_inner_html(head_element,head);
 			set_inner_html(body[0],'<div aria-busy="true" class="spaced"><div class="ajax_loading"><img id="loading_image" class="vertical_alignment" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div>');
 		}
@@ -1390,7 +1390,7 @@ function illustrate_frame_load(pf,frame)
 			0
 		);
 		var style=de.getElementsByTagName('style')[0];
-		if ((style) && (style.styleSheet)) style.styleSheet.cssText=cssText; /* For IE */
+		if ((style) && (style.styleSheet)) style.styleSheet.cssText=cssText; // For IE
 	{+END}
 }
 
@@ -1409,7 +1409,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	var scroll_y=get_window_scroll_y();
 	if (typeof dest_y=='string') dest_y=find_pos_y(document.getElementById(dest_y),true);
 	if (dest_y<0) dest_y=0;
-	if ((typeof expected_scroll_y!='undefined') && (expected_scroll_y!=null) && (expected_scroll_y!=scroll_y)) return; /* We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already */
+	if ((typeof expected_scroll_y!='undefined') && (expected_scroll_y!=null) && (expected_scroll_y!=scroll_y)) return; // We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already
 	if (typeof dir=='undefined' || !null) var dir=(dest_y>scroll_y)?1:-1;
 
 	var distance_to_go=(dest_y-scroll_y)*dir;
@@ -1695,7 +1695,7 @@ function key_pressed(event,key,no_error_if_bad)
 	{
 		for (var i=0;i<key.length;i++)
 		{
-			if (key[i]==null) /* This specifies that control characters allowed (arrow keys, backspace, etc) */
+			if (key[i]==null) // This specifies that control characters allowed (arrow keys, backspace, etc)
 			{
 				if ((event.keyCode) && ((window.anykeyokay) || (event.keyCode<48) || (event.keyCode==86) || (event.keyCode==91) || (event.keyCode==224)) && (event.keyCode!=32))
 				{
@@ -1723,22 +1723,22 @@ function key_pressed(event,key,no_error_if_bad)
 		return false;
 	}
 
-	/* Special cases */
-	if ((key=='-') && (event.keyCode==189)) key=189; /* Safari */
-	if ((key==190) && (event.keyCode==110)) key=110; /* Keypad '.' */
+	// Special cases
+	if ((key=='-') && (event.keyCode==189)) key=189; // Safari
+	if ((key==190) && (event.keyCode==110)) key=110; // Keypad '.'
 	if (key=='-') key=109;
 	if (key=='/') key=191;
-	if ((key=='_') && (event.keyCode==189)) key=189; /* Safari */
-	else if (key=='_') key=0; /* This one is a real shame as the key code 0 is shared by lots of symbols */
+	if ((key=='_') && (event.keyCode==189)) key=189; // Safari
+	else if (key=='_') key=0; // This one is a real shame as the key code 0 is shared by lots of symbols //
 
-	/* Where we have an ASCII correspondance or can automap to one */
-	if (key.constructor==String) /* NB we are not case sensitive on letters. And we cannot otherwise pass in characters that need shift pressed. */
+	// Where we have an ASCII correspondance or can automap to one
+	if (key.constructor==String) // NB we are not case sensitive on letters. And we cannot otherwise pass in characters that need shift pressed.
 	{
-		if ((event.shiftKey) && (key.toUpperCase()==key.toLowerCase())) return false; /* We are not case sensitive on letters but otherwise we have no way to map the shift key. As we have to assume shift is not pressed for any ASCII based symbol conversion (keycode is same whether shift pressed or not) we cannot handle shifted ones. */
+		if ((event.shiftKey) && (key.toUpperCase()==key.toLowerCase())) return false; // We are not case sensitive on letters but otherwise we have no way to map the shift key. As we have to assume shift is not pressed for any ASCII based symbol conversion (keycode is same whether shift pressed or not) we cannot handle shifted ones.
 
 		key=key.toUpperCase().charCodeAt(0);
 
-		if ((event.keyCode) && (event.keyCode>=96) && (event.keyCode<106) && (key>=48) && (key<58)) key+=48; /* Numeric keypad special case */
+		if ((event.keyCode) && (event.keyCode>=96) && (event.keyCode<106) && (key>=48) && (key<58)) key+=48; // Numeric keypad special case
 	}
 
 	return ((typeof event.keyCode!='undefined') && (event.keyCode==key));
@@ -1774,7 +1774,7 @@ function convert_tooltip(element)
 				element,
 				'mouseover',
 				function(event) {
-					win.activate_tooltip(element,event,element.ocp_tooltip_title,null,null,null,null,false,false,false,win);
+					win.activate_tooltip(element,event,element.ocp_tooltip_title,'250px','',null,false,false,false,false,win);
 				}
 			);
 
@@ -1799,7 +1799,7 @@ function convert_tooltip(element)
 
 /* Tooltips that can work on any element with rich HTML support */
 //  ac is the object to have the tooltip
-//  myevent is the event handler
+//  event is the event handler
 //  tooltip is the text for the tooltip
 //  width is in pixels (but you need 'px' on the end), can be null or auto but both of these will actually instead result in the default max-width of 360px
 //  pic is the picture to show in the top-left corner of the tooltip; should be around 30px x 30px
@@ -1808,11 +1808,11 @@ function convert_tooltip(element)
 //  no_delay is set to true if the tooltip should appear instantly
 //  lights_off is set to true if the image is to be dimmed
 //  force_width is set to true if you want width to not be a max width
-function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lights_off,force_width,win)
+function activate_tooltip(ac,event,tooltip,width,pic,height,bottom,no_delay,lights_off,force_width,win)
 {
-	if (typeof width=='undefined') var width='auto';
+	if (typeof width=='undefined' || !width) var width='auto';
 	if (typeof pic=='undefined') var pic='';
-	if (typeof height=='undefined') var height='auto';
+	if (typeof height=='undefined' || !height) var height='auto';
 	if (typeof bottom=='undefined') var bottom=false;
 	if (typeof no_delay=='undefined') var no_delay=false;
 	if (typeof lights_off=='undefined') var lights_off=false;
@@ -1849,7 +1849,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		tooltip_element=win.document.getElementById(ac.tooltip_id);
 		tooltip_element.style.display='none';
 		set_inner_html(tooltip_element,'');
-		reposition_tooltip(ac,myevent,bottom,true,tooltip_element,force_width);
+		reposition_tooltip(ac,event,bottom,true,tooltip_element,force_width);
 	} else
 	{
 		tooltip_element=win.document.createElement('div');
@@ -1863,7 +1863,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		if (!force_width)
 		{
 			tooltip_element.style.maxWidth=width;
-			tooltip_element.style.width='auto'; /* Needed for Opera, else it uses maxWidth for width too */
+			tooltip_element.style.width='auto'; // Needed for Opera, else it uses maxWidth for width too
 		} else
 		{
 			tooltip_element.style.width=width;
@@ -1876,7 +1876,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		tooltip_element.style.position='absolute';
 		tooltip_element.id=Math.floor(Math.random()*1000);
 		ac.tooltip_id=tooltip_element.id;
-		reposition_tooltip(ac,myevent,bottom,true,tooltip_element,force_width);
+		reposition_tooltip(ac,event,bottom,true,tooltip_element,force_width);
 		document.body.appendChild(tooltip_element);
 	}
 
@@ -1890,18 +1890,18 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		tooltip_element.className+=' tooltip_with_img';
 	}
 
-	var myevent_copy;
+	var event_copy;
 	try {
-		myevent_copy={ /* Needs to be copied as it will get erased on IE after this function ends */
-			'pageX': myevent.pageX,
-			'pageY': myevent.pageY,
-			'clientX': myevent.clientX,
-			'clientY': myevent.clientY,
-			'type': myevent.type
+		event_copy={ // Needs to be copied as it will get erased on IE after this function ends
+			'pageX': event.pageX,
+			'pageY': event.pageY,
+			'clientX': event.clientX,
+			'clientY': event.clientY,
+			'type': event.type
 		};
 	}
-	catch (e) { /* Can happen if IE has lost the event */
-		myevent_copy={
+	catch (e) { // Can happen if IE has lost the event
+		event_copy={
 			'pageX': 0,
 			'pageY': 0,
 			'clientX': 0,
@@ -1913,7 +1913,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	window.setTimeout(function() {
 		if (!ac.is_over) return;
 
-		if ((!ac.tooltip_on) || (tooltip_element.childNodes.length==0 /* Some other tooltip jumped in and wiped out tooltip on a delayed-show yet never triggers due to losing focus during that delay */))
+		if ((!ac.tooltip_on) || (tooltip_element.childNodes.length==0)) // Some other tooltip jumped in and wiped out tooltip on a delayed-show yet never triggers due to losing focus during that delay
 			set_inner_html(tooltip_element,tooltip,true);
 
 		ac.tooltip_on=true;
@@ -1922,11 +1922,11 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		if (!no_delay)
 		{
 			// If delayed we will sub in what the currently known global mouse coordinate is
-			myevent_copy.pageX=win.mouse_x;
-			myevent_copy.pageY=win.mouse_y;
+			event_copy.pageX=win.mouse_x;
+			event_copy.pageY=win.mouse_y;
 		}
 
-		reposition_tooltip(ac,myevent_copy,bottom,true,tooltip_element,force_width,win);
+		reposition_tooltip(ac,event_copy,bottom,true,tooltip_element,force_width,win);
 	}, no_delay?0:666);
 }
 function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width,win)
@@ -1935,11 +1935,11 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 	{
 		if (ac.getAttribute('title')) ac.setAttribute('title','');
 		if ((ac.parentNode.nodeName.toLowerCase()=='a') && (ac.parentNode.getAttribute('title')) && ((ac.nodeName.toLowerCase()=='abbr') || (ac.parentNode.getAttribute('title').indexOf('{!LINK_NEW_WINDOW;^}')!=-1)))
-			ac.parentNode.setAttribute('title',''); /* Do not want second tooltips that are not useful */
+			ac.parentNode.setAttribute('title',''); // Do not want second tooltips that are not useful
 	}
 
 	if (!page_loaded) return;
-	if (!ac.tooltip_id) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; };  /* Should not happen but written as a fail-safe */
+	if (!ac.tooltip_id) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; };  // Should not happen but written as a fail-safe
 
 	if ((typeof tooltip_element=='undefined') || (!tooltip_element)) var tooltip_element=document.getElementById(ac.tooltip_id);
 	if (tooltip_element)
@@ -1982,7 +1982,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 		var width=find_width(tooltip_element);
 		var height=find_height(tooltip_element);
 		var x_excess=x-get_window_width(win)-get_window_scroll_x(win)+width;
-		if (x_excess>0) /* Either we explicitly gave too much width, or the width auto-calculated exceeds what we THINK is the maximum width in which case we have to re-compensate with an extra contingency to stop CSS/JS vicious disagreement cycles */
+		if (x_excess>0) // Either we explicitly gave too much width, or the width auto-calculated exceeds what we THINK is the maximum width in which case we have to re-compensate with an extra contingency to stop CSS/JS vicious disagreement cycles
 		{
 			x-=x_excess+20+style__offset_x;
 		}
@@ -2032,7 +2032,7 @@ function resize_frame(name,min_height)
 				frame_element.style.height=((h>=min_height)?h:min_height)+'px';
 				if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
 				frame_element.scrolling='no';
-				frame_window.onscroll=function(event) { if (typeof event=='undefined') var event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancel_bubbling(event); }; /* Needed for Opera */
+				frame_window.onscroll=function(event) { if (typeof event=='undefined') var event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancel_bubbling(event); }; // Needed for Opera
 			}
 		}
 	}
@@ -2079,10 +2079,10 @@ function add_form_marked_posts(work_on,prefix)
 		}
 	} else
 	{
-		/* Strip old marks out of the URL */
+		// Strip old marks out of the URL
 		work_on.action=work_on.action.replace('?','&');
 		work_on.action=work_on.action.replace(new RegExp('&'+prefix.replace('_','\_')+'\d+=1$','g'),'');
-		work_on.action=work_on.action.replace('&','?'); /* will just do first due to how JS works */
+		work_on.action=work_on.action.replace('&','?'); // will just do first due to how JS works
 	}
 	for (i=0;i<elements.length;i++)
 	{
@@ -2171,7 +2171,7 @@ function add_event_listener_abstract(element,the_event,func,capture)
 
 		if (typeof element.addEventListener!='undefined')
 		{
-			/* W3C */
+			// W3C
 			if (the_event=='load') // Try and be smarter
 			{
 				element.addEventListener('DOMContentLoaded',function() { page_loaded=true; window.has_DOMContentLoaded=true; window.setTimeout(func,0); },capture);
@@ -2185,7 +2185,7 @@ function add_event_listener_abstract(element,the_event,func,capture)
 		}
 		else if (typeof element.attachEvent!='undefined')
 		{
-			/* Microsoft - no capturing :( */
+			// Microsoft - no capturing :(
 			if ((the_event=='load') || (the_event=='real_load'))
 			{
 				return element.attachEvent('onload',function() { page_loaded=true; page_fully_loaded=true; func(); });
@@ -2557,7 +2557,7 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 			{
 				if ((dom_node.nodeName=='STYLE') && (!dom_node.ownerDocument.createCDATASection))
 				{
-					dom_node.cssText=text; /* needed for IE */
+					dom_node.cssText=text; // needed for IE
 				} else
 				{
 					dom_node.appendChild(dom_node.ownerDocument.createTextNode(text));
@@ -2570,7 +2570,7 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:'')));
 			if ((dom_node.nodeName=='STYLE') && (!dom_node.ownerDocument.createCDATASection))
 			{
-				dom_node.cssText=text; /* needed for IE */
+				dom_node.cssText=text; // needed for IE
 			} else
 			{
 				dom_node.appendChild(dom_node.ownerDocument./*createCDATASection*/createTextNode(text)); // use of createCDATASection causes weird bug in Firefox (sibling DOM nodes skipped)
@@ -2613,7 +2613,7 @@ function set_outer_html(element,tHTML)
 // Note that embedded Javascript IS run unlike the normal .innerHTML - in fact we go to effort to guarantee it - even onload attached Javascript
 function set_inner_html(element,tHTML,append,force_dom)
 {
-	/* Parser hint: .innerHTML okay */
+	// Parser hint: .innerHTML okay
 	if (typeof tHTML=='number') tHTML=tHTML+'';
 
 	if (((typeof force_dom=='undefined') || (!force_dom)) && (document.write) && (typeof element.innerHTML!='undefined') && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
@@ -2684,7 +2684,7 @@ function set_inner_html(element,tHTML,append,force_dom)
 
 	tHTML=entities_to_unicode(tHTML);
 
-	/* load the XML and copies to DOM */
+	// load the XML and copies to DOM
 	tHTML='<root>'+tHTML.replace(/^\s*\<\!DOCTYPE[^<>]*\>/,'')+'</root>';
 	var xml_doc=inner_html_load(tHTML);
 	if (element && xml_doc) {

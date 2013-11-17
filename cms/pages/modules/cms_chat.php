@@ -46,14 +46,14 @@ class Module_cms_chat
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
-			'misc'=>array('CHAT_MOD_PANEL','menu/social/chat/chat'),
+			'misc'=>array('CHAT_MODERATION','menu/social/chat/chat'),
 		);
 	}
 
@@ -95,20 +95,20 @@ class Module_cms_chat
 
 			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
-			$this->title=get_screen_title('CHAT_MOD_PANEL');
+			$this->title=get_screen_title('CHAT_MODERATION');
 		}
 
 		if ($type=='room')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
 
-			$this->title=get_screen_title('CHAT_MOD_PANEL');
+			$this->title=get_screen_title('CHAT_MODERATION');
 		}
 
 		if ($type=='ban')
 		{
 			$id=get_param_integer('id');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MODERATION'))));
 
 			$this->title=get_screen_title('CHAT_BAN');
 		}
@@ -116,7 +116,7 @@ class Module_cms_chat
 		if ($type=='unban')
 		{
 			$id=get_param_integer('id');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MODERATION'))));
 
 			$this->title=get_screen_title('CHAT_UNBAN');
 		}
@@ -132,7 +132,7 @@ class Module_cms_chat
 			}
 			$myrow=$rows[0];
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($myrow['room_id']),do_lang_tempcode('CHAT_MOD_PANEL'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($myrow['room_id']),do_lang_tempcode('CHAT_MODERATION'))));
 
 			$this->title=get_screen_title('EDIT_MESSAGE');
 
@@ -155,7 +155,7 @@ class Module_cms_chat
 				}
 				$myrow=$rows[0];
 
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($myrow['room_id']),do_lang_tempcode('CHAT_MOD_PANEL'))));
+				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($myrow['room_id']),do_lang_tempcode('CHAT_MODERATION'))));
 
 				$this->title=get_screen_title('DELETE_MESSAGE');
 
@@ -170,7 +170,7 @@ class Module_cms_chat
 		if ($type=='delete')
 		{
 			$id=get_param_integer('id');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MOD_PANEL'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:'.strval($id),do_lang_tempcode('CHAT_MODERATION'))));
 
 			$this->title=get_screen_title('DELETE_ALL_MESSAGES');
 		}
@@ -225,18 +225,18 @@ class Module_cms_chat
 	 */
 	function chat_choose_room()
 	{
-		$introtext=do_lang_tempcode('CHAT_PANEL_INTRO');
+		$introtext=do_lang_tempcode('CHAT_MODERATION_INTRO');
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
-		$sortables=array('room_name'=>do_lang_tempcode('ROOM_NAME'),'messages'=>do_lang_tempcode('MESSAGES'));
+		$sortables=array('room_name'=>do_lang_tempcode('CHATROOM_NAME'),'messages'=>do_lang_tempcode('MESSAGES'));
 		$test=explode(' ',either_param('sort','room_name DESC'));
 		if (count($test)==1) $test[1]='DESC';
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		require_code('templates_results_table');
-		$fields_title=results_field_title(array(do_lang_tempcode('ROOM_NAME'),do_lang_tempcode('ROOM_OWNER'),do_lang_tempcode('ROOM_LANG'),do_lang_tempcode('MESSAGES')),$sortables,'sort',$sortable.' '.$sort_order);
+		$fields_title=results_field_title(array(do_lang_tempcode('CHATROOM_NAME'),do_lang_tempcode('CHATROOM_OWNER'),do_lang_tempcode('CHATROOM_LANG'),do_lang_tempcode('MESSAGES')),$sortables,'sort',$sortable.' '.$sort_order);
 
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','COUNT(*)',array('is_im'=>0));
 		$sort_clause=($sortable=='room_name')?('ORDER BY room_name '.$sort_order):'';
@@ -264,7 +264,7 @@ class Module_cms_chat
 		}
 		if ($fields->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 
-		$results_table=results_table(do_lang_tempcode('ROOMS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
+		$results_table=results_table(do_lang_tempcode('CHATROOMS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
 		$tpl=do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'c59cb6c8409d0e678b05628d92e423db','TITLE'=>$this->title,'INTRODUCTION'=>$introtext,'CONTENT'=>$results_table,'LINKS'=>array()));
 
@@ -530,7 +530,7 @@ class Module_cms_chat
 				array(),
 				array(),
 				array(
-					has_actual_page_access(get_member(),'admin_chat')?array('menu/social/chat/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('ROOMS')):NULL,
+					has_actual_page_access(get_member(),'admin_chat')?array('menu/social/chat/chat',array('admin_chat',array('type'=>'misc'),get_module_zone('admin_chat')),do_lang('CHATROOMS')):NULL,
 				),
 				do_lang('SETUP')
 			);

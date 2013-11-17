@@ -52,12 +52,12 @@ class Hook_Notification_filedump extends Hook_Notification
 
 		if (count($files)>30) return array(); // Too many, so don't show
 
-		$pagelinks=array();
+		$page_links=array();
 		foreach ($files as $file)
 		{
 			if (is_dir($path.'/'.$file))
 			{
-				$pagelinks[]=array(
+				$page_links[]=array(
 					'id'=>(($id=='')?'':($id.'/')).$file,
 					'title'=>$file,
 					'child_count'=>count($this->create_category_tree($notification_code,(($id=='')?'':($id.'/')).$file)),
@@ -65,7 +65,7 @@ class Hook_Notification_filedump extends Hook_Notification
 			}
 		}
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

@@ -53,19 +53,19 @@ class Hook_Notification_pointstore_request_custom extends Hook_Notification__Sta
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		$types=$GLOBALS['SITE_DB']->query_select('pstore_customs',array('id','c_title'));
 		foreach ($types as $type)
 		{
-			$pagelinks[]=array(
+			$page_links[]=array(
 				'id'=>$type['id'],
 				'title'=>get_translated_text($type['c_title']),
 			);
 		}
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

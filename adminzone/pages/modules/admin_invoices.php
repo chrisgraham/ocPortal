@@ -46,7 +46,7 @@ class Module_admin_invoices
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -55,10 +55,10 @@ class Module_admin_invoices
 		if ($be_deferential) return NULL;
 
 		return array(
-			'misc'=>array('INVOICES','menu/adminzone/audit/ecommerce/create_invoice'),
+			'misc'=>array('INVOICES','menu/adminzone/audit/ecommerce/invoices'),
 			'outstanding'=>array('OUTSTANDING_INVOICES','menu/adminzone/audit/ecommerce/outstanding_invoices'),
 			'undelivered'=>array('UNDELIVERED_INVOICES','menu/adminzone/audit/ecommerce/undelivered_invoices'),
-			'ad'=>array('CREATE_INVOICE','menu/_generic_admin/add_one'),
+			'ad'=>array('CREATE_INVOICE','menu/adminzone/audit/ecommerce/create_invoice'),
 		);
 	}
 

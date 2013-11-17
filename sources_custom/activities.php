@@ -215,8 +215,8 @@ function render_activity($row,$use_inside_ocp=true)
 	for ($i=1;$i<=3;$i++)
 	{
 		$label[$i]=comcode_to_tempcode($row['a_label_'.strval($i)],$guest_id,false,NULL);
-		$link[$i]=($row['a_pagelink_'.strval($i)]=='')?new ocp_tempcode():pagelink_to_tempcode($row['a_pagelink_'.strval($i)],!$use_inside_ocp);
-		if (($row['a_pagelink_'.strval($i)]!='') && (strpos($test,'{'.strval($i+3).'}')===false))
+		$link[$i]=($row['a_page_link_'.strval($i)]=='')?new ocp_tempcode():page_link_to_tempcode($row['a_page_link_'.strval($i)],!$use_inside_ocp);
+		if (($row['a_page_link_'.strval($i)]!='') && (strpos($test,'{'.strval($i+3).'}')===false))
 		{
 			$label[$i]=hyperlink($link[$i],$label[$i]->evaluate());
 		}
@@ -268,9 +268,9 @@ function render_activity($row,$use_inside_ocp=true)
  * @param  boolean		Whether the link is for putting out externally to the site (so no keep_* parameters)
  * @return array			tempcode url
  */
-function pagelink_to_tempcode($pagelink,$external=false)
+function page_link_to_tempcode($page_link,$external=false)
 {
-	list($zone,$map,$hash)=page_link_decode($pagelink);
+	list($zone,$map,$hash)=page_link_decode($page_link);
 
 	return build_url($map,$zone,array(),false,false,$external,$hash);
 }

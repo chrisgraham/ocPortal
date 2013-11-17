@@ -52,9 +52,9 @@ class Hook_resource_meta_aware_download_licence
 			'title_field'=>'l_title',
 			'title_field_dereference'=>false,
 
-			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>'_SEARCH:cms_downloads:_ev:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>NULL,
+			'edit_page_link_pattern'=>'_SEARCH:cms_downloads:_ev:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'cms_downloads'))?(get_module_zone('cms_downloads').':cms_downloads:av'):NULL,
 			'archive_url'=>NULL,
 

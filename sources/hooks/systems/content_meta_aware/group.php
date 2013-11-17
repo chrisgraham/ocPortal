@@ -57,9 +57,9 @@ class Hook_content_meta_aware_group
 			'thumb_field'=>'g_rank_image',
 			'thumb_field_is_theme_image'=>true,
 
-			'view_pagelink_pattern'=>'_SEARCH:groups:view:_WILD',
-			'edit_pagelink_pattern'=>'adminzone:admin_ocf_groups:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>'_SEARCH:groups:view:_WILD',
+			'edit_page_link_pattern'=>'adminzone:admin_ocf_groups:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>'',
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('groups')).':groups',
 

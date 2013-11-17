@@ -54,9 +54,9 @@ class Hook_content_meta_aware_wiki_post
 			'description_field'=>'the_message',
 			'thumb_field'=>NULL,
 
-			'view_pagelink_pattern'=>'_SEARCH:wiki:find_post:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:wiki:post:post_id=_WILD',
-			'view_category_pagelink_pattern'=>'_SEARCH:wiki:misc:_WILD',
+			'view_page_link_pattern'=>'_SEARCH:wiki:find_post:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:wiki:post:post_id=_WILD',
+			'view_category_page_link_pattern'=>'_SEARCH:wiki:misc:_WILD',
 			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('low',get_member(),get_ip_address(),'wiki'))?(get_module_zone('wiki').':wiki:add_post'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('wiki')).':wiki',
 

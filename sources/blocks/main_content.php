@@ -96,7 +96,7 @@ class Block_main_content
 		if ($info===NULL) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
 		if (((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric'])) && ($content_id!==NULL) && (!is_numeric($content_id)))
 		{
-			list(,$resource_page,$resource_type)=explode(':',$info['view_pagelink_pattern']);
+			list(,$resource_page,$resource_type)=explode(':',$info['view_page_link_pattern']);
 			$content_id=$info['connection']->query_select_value_if_there('url_id_monikers','m_resource_id',array('m_resource_page'=>$resource_page,'m_resource_type'=>$resource_type,'m_moniker'=>$content_id));
 			if ($content_id===NULL) return new ocp_tempcode();
 		}

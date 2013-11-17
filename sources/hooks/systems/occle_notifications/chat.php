@@ -48,7 +48,7 @@ class Hook_occle_notification_chat
 				if (is_null($room_data)) return false; // Selected room deleted
 				$rooms[$room_data]=build_url(array('page'=>'chat','type'=>'room','id'=>$room),get_module_zone('chat'));
 
-				return array(do_lang('SECTION_CHAT'),do_lang('NEW_MESSAGES'),do_template('OCCLE_CHAT_NOTIFICATION',array('_GUID'=>'2c63d91d1e3c88d5620b2122a73a8e1f','MESSAGE_COUNT'=>integer_format($messages),'ROOMS'=>$rooms)));
+				return array(do_lang('SECTION_CHAT'),do_lang('NEW_MESSAGES'),do_template('OCCLE_CHAT_NOTIFICATION',array('_GUID'=>'2c63d91d1e3c88d5620b2122a73a8e1f','MESSAGE_COUNT'=>integer_format($messages),'CHATROOMS'=>$rooms)));
 			}
 			else return false;
 		}

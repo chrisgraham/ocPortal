@@ -141,7 +141,7 @@ class Module_admin_permissions
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -572,7 +572,7 @@ class Module_admin_permissions
 			if (get_magic_quotes_gpc()) $val=stripslashes($val);
 
 			// See if we can tidy it back to a page-link (assuming it's not one already)
-			$page_link=url_to_pagelink($val,true);
+			$page_link=url_to_page_link($val,true);
 			if ($page_link!='') $val=$page_link;
 
 			if ((substr($key,0,4)=='key_') && ($val!=''))
@@ -610,7 +610,7 @@ class Module_admin_permissions
 			delete_lang($lid);
 		}
 
-		decache('main_sitemap');
+		decache('menu');
 
 		log_it('PAGE_MATCH_KEY_ACCESS');
 
@@ -716,7 +716,7 @@ class Module_admin_permissions
 			}
 		}
 
-		decache('main_sitemap');
+		decache('menu');
 		require_code('caches3');
 		erase_block_cache();
 		erase_persistent_cache();
@@ -1015,7 +1015,7 @@ class Module_admin_permissions
 			}
 		}
 
-		decache('main_sitemap');
+		decache('menu');
 		require_code('caches3');
 		erase_block_cache();
 		erase_persistent_cache();

@@ -47,7 +47,7 @@ class Module_cms_comcode_pages
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -160,7 +160,7 @@ class Module_cms_comcode_pages
 			require_lang('menus');
 			set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
 
-			// Work out what we're editing, and where it's coming from (support for two pagelink specifying parameters for destination, with addition of restore_from to override source if different from destination)
+			// Work out what we're editing, and where it's coming from (support for two page_link specifying parameters for destination, with addition of restore_from to override source if different from destination)
 			$page_link=filter_naughty(get_param('page_link',''));
 			if ($page_link=='') $page_link=get_param('page_link_2');
 			if (strpos($page_link,':')===false) $page_link=':'.$page_link;
@@ -367,7 +367,7 @@ class Module_cms_comcode_pages
 			'page_title'=>do_lang_tempcode('TITLE'),
 			'page'=>do_lang_tempcode('PAGE'),
 			'zone_name'=>do_lang_tempcode('ZONE'),
-			'pagelink'=>do_lang_tempcode('PAGE_LINK'),
+			'page_link'=>do_lang_tempcode('PAGE_LINK'),
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
@@ -408,7 +408,7 @@ class Module_cms_comcode_pages
 				case 'zone_name':
 					$orderer='c.the_zone '.$sort_order;
 					break;
-				case 'pagelink':
+				case 'page_link':
 					$orderer='c.the_zone '.$sort_order.',c.the_page '.$sort_order;
 					break;
 			}
@@ -478,14 +478,14 @@ class Module_cms_comcode_pages
 
 		// Render table rows
 		$_table_rows=array();
-		foreach ($filesarray as $pagelink=>$path_bits)
+		foreach ($filesarray as $page_link=>$path_bits)
 		{
-			list($zone,$page)=explode(':',$pagelink,2);
+			list($zone,$page)=explode(':',$page_link,2);
 			if (!is_string($page)) $page=strval($page);
 
 			if (!has_actual_page_access(get_member(),$page,$zone)) continue;
 
-			$edit_link=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$pagelink,'lang'=>$lang),'_SELF');
+			$edit_link=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$page_link,'lang'=>$lang),'_SELF');
 
 			$clone_link=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$zone.':','restore_from'=>$path_bits[0].'.txt','lang'=>$lang),'_SELF');
 
@@ -535,7 +535,7 @@ class Module_cms_comcode_pages
 				$validated=do_lang_tempcode('YES');
 			}
 
-			$wrappable_pagelink=preg_replace('#([^ ]):([\w\-]{10,})$#','${1}: ${2}',preg_replace('#(^[\w\-]{10,}):#','${1}: ',$pagelink));
+			$wrappable_page_link=preg_replace('#([^ ]):([\w\-]{10,})$#','${1}: ${2}',preg_replace('#(^[\w\-]{10,}):#','${1}: ',$page_link));
 
 			$actions=do_template('COMCODE_PAGE_EDIT_ACTIONS',array('_GUID'=>'6cc8c492ba9ae4035c394fbe28a56c26','EDIT_URL'=>$edit_link,'CLONE_URL'=>$clone_link));
 
@@ -544,8 +544,8 @@ class Module_cms_comcode_pages
 				'page'=>$page,
 				'zone'=>$zone,
 				'zone_name'=>$zone_name,
-				'pagelink'=>$pagelink,
-				'wrappable_pagelink'=>$wrappable_pagelink,
+				'page_link'=>$page_link,
+				'wrappable_page_link'=>$wrappable_page_link,
 				'actions'=>$actions,
 			);
 		}
@@ -571,7 +571,7 @@ class Module_cms_comcode_pages
 				protect_from_escaping(hyperlink(build_url(array('page'=>$table_row['page']),$table_row['zone']),$table_row['page_title'])),
 				protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'56e1af60e09524c20fc62dd55cda1eb9','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['page']))))),
 				protect_from_escaping(hyperlink(build_url(array('page'=>''),$table_row['zone']),$table_row['zone_name'])),
-				protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'bf4dbed562e189c84aa33c17d06c2791','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['wrappable_pagelink']))))),
+				protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'bf4dbed562e189c84aa33c17d06c2791','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['wrappable_page_link']))))),
 				//$parent_page,	Save space
 				//$username,
 				//$add_date,

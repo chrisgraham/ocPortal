@@ -42,7 +42,7 @@
 							{+START,INCLUDE,NOTIFICATION_BUTTONS}
 								NOTIFICATIONS_TYPE=ocf_topic
 								NOTIFICATIONS_ID=forum:{ID}
-								NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
+								NOTIFICATIONS_PAGE_LINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
 							{+END}
 						{+END}
 						{BUTTONS}
@@ -62,7 +62,7 @@
 				{+START,INCLUDE,NOTIFICATION_BUTTONS}
 					NOTIFICATIONS_TYPE=ocf_topic
 					NOTIFICATIONS_ID=forum:{ID}
-					NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
+					NOTIFICATIONS_PAGE_LINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
 				{+END}
 			{+END}
 			{BUTTONS}

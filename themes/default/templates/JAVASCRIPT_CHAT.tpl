@@ -212,7 +212,7 @@ function do_input_invite(field_name)
 			if (va!=null)
 			{
 				var vb=window.fauxmodal_prompt(
-					'{!ENTER_ROOM;^}',
+					'{!ENTER_CHATROOM;^}',
 					'',
 					function(vb)
 					{
@@ -229,7 +229,7 @@ function do_input_new_room(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	window.fauxmodal_prompt(
-		'{!ENTER_ROOM;^}',
+		'{!ENTER_CHATROOM;^}',
 		'',
 		function(va)
 		{

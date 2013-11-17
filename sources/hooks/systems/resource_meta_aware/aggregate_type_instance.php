@@ -52,9 +52,9 @@ class Hook_resource_meta_aware_aggregate_type_instance
 			'title_field'=>'aggregate_label',
 			'title_field_dereference'=>false,
 
-			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>'_SEARCH:admin_aggregate_types:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>NULL,
+			'edit_page_link_pattern'=>'_SEARCH:admin_aggregate_types:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_aggregate_types'))?(get_module_zone('admin_aggregate_types').':admin_aggregate_types:ad'):NULL,
 			'archive_url'=>NULL,
 

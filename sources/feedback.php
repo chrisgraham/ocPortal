@@ -669,18 +669,18 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 					$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES';
 					$_safe_content_url=is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url;
 					if ($_safe_content_url=='') $_safe_content_url=preg_replace('#keep_session=\d*#','filtered=1',is_object($content_url)?$content_url->evaluate():$content_url);
-					$content_pagelink=url_to_pagelink($_safe_content_url);
+					$content_page_link=url_to_page_link($_safe_content_url);
 					require_code('activities');
 					if ($content_title=='')
 					{
-						syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',$content_pagelink,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+						syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',$content_page_link,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
 					} else
 					{
 						if ($content_type_title==$content_type)
 						{
 							$activity_type.='_UNTYPED';
 						}
-						syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,$content_pagelink,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+						syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,$content_page_link,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
 					}
 				}
 			}
@@ -946,18 +946,18 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 				$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON';
 				$_safe_content_url=is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url;
 				if ($_safe_content_url=='') $_safe_content_url=preg_replace('#keep_session=\d*#','filtered=1',is_object($content_url)?$content_url->evaluate():$content_url);
-				$content_pagelink=url_to_pagelink($_safe_content_url);
+				$content_page_link=url_to_page_link($_safe_content_url);
 				require_code('activities');
 				if ($content_title=='')
 				{
-					syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',$content_pagelink,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+					syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',$content_page_link,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
 				} else
 				{
 					if ($content_type_title==$content_type)
 					{
 						$activity_type.='_UNTYPED';
 					}
-					syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,$content_pagelink,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+					syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,$content_page_link,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
 				}
 			}
 		}

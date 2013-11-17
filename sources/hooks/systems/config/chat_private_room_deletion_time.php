@@ -29,7 +29,7 @@ class Hook_config_chat_private_room_deletion_time
 	function get_details()
 	{
 		return array(
-			'human_name'=>'PRIVATE_ROOM_DELETION_TIME',
+			'human_name'=>'PRIVATE_CHATROOM_DELETION_TIME',
 			'type'=>'integer',
 			'category'=>'FEATURE',
 			'group'=>'SECTION_CHAT',

@@ -56,12 +56,12 @@ class Hook_rss_comments
 			}
 
 			// Page/Zone access
-			if (!is_null($info['view_pagelink_pattern']))
+			if (!is_null($info['view_page_link_pattern']))
 			{
-				$view_pagelink_bits=explode(':',$info['view_pagelink_pattern']);
-				$zone=$view_pagelink_bits[0];
-				if ($zone=='_SEARCH') $zone=get_module_zone($view_pagelink_bits[1]);
-				if (!has_actual_page_access(get_member(),$view_pagelink_bits[1],$zone)) return NULL;
+				$view_page_link_bits=explode(':',$info['view_page_link_pattern']);
+				$zone=$view_page_link_bits[0];
+				if ($zone=='_SEARCH') $zone=get_module_zone($view_page_link_bits[1]);
+				if (!has_actual_page_access(get_member(),$view_page_link_bits[1],$zone)) return NULL;
 			}
 
 			// Privacy

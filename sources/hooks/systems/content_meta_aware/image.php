@@ -55,9 +55,9 @@ class Hook_content_meta_aware_image
 			'description_field'=>'description',
 			'thumb_field'=>'thumb_url',
 
-			'view_pagelink_pattern'=>'_SEARCH:galleries:image:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:cms_galleries:_ed:_WILD',
-			'view_category_pagelink_pattern'=>'_SEARCH:galleries:misc:_WILD',
+			'view_page_link_pattern'=>'_SEARCH:galleries:image:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:cms_galleries:_ed:_WILD',
+			'view_category_page_link_pattern'=>'_SEARCH:galleries:misc:_WILD',
 			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries'))?(get_module_zone('cms_galleries').':cms_galleries:ad'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('galleries')).':galleries',
 

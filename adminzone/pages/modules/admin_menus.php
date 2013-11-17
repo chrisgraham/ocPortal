@@ -46,7 +46,7 @@ class Module_admin_menus
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -251,6 +251,11 @@ class Module_admin_menus
 		$list->attach(create_selection_list_theme_images(NULL,NULL,false,true,'icons/'));
 		$fields_template->attach(form_input_list(do_lang_tempcode('THEME_IMAGE'),do_lang_tempcode('DESCRIPTION_THEME_IMAGE_FOR_MENU_ITEM'),'theme_img_code',$list,NULL,false,false));
 		$fields_template->attach(form_input_line(do_lang_tempcode('RESTRICT_PAGE_VISIBILITY'),do_lang_tempcode('MENU_ENTRY_MATCH_KEYS'),'match_tags','',false));
+		$list=new ocp_tempcode();
+		$list->attach(form_input_list_entry('0',false,do_lang_tempcode('INCLUDE_SITEMAP_NO')));
+		$list->attach(form_input_list_entry('1',false,do_lang_tempcode('INCLUDE_SITEMAP_OVER')));
+		$list->attach(form_input_list_entry('2',false,do_lang_tempcode('INCLUDE_SITEMAP_UNDER')));
+		$fields_template->attach(form_input_list(do_lang_tempcode('INCLUDE_SITEMAP'),new ocp_tempcode(),'theme_img_code',$list,NULL,false,false));
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_more');
@@ -305,6 +310,7 @@ class Module_admin_menus
 				$theme_img_code=$menu_item['i_theme_img_code'];
 				$new_window=$menu_item['i_new_window'];
 				$check_perms=$menu_item['i_check_permissions'];
+				$include_sitemap=$menu_item['i_include_sitemap'];
 				$caption_long=get_translated_text($menu_item['i_caption_long']);
 				$branch_type=0;
 				foreach ($menu_items as $_menu_item)
@@ -329,6 +335,7 @@ class Module_admin_menus
 					'BRANCH_TYPE'=>strval($branch_type),
 					'NEW_WINDOW'=>strval($new_window),
 					'CHECK_PERMS'=>strval($check_perms),
+					'INCLUDE_SITEMAP'=>strval($include_sitemap),
 					'CAPTION'=>$caption,
 					'CAPTION_LONG'=>$caption_long,
 					'URL'=>$url,
@@ -434,12 +441,13 @@ class Module_admin_menus
 		$branch_type=post_param('branch_type_'.strval($id),'branch_plus'); // Default needed to workaround Opera problem
 		if ($branch_type=='branch_plus') $expanded=1; else $expanded=0;
 		$new_window=post_param_integer('new_window_'.strval($id),0);
+		$include_sitemap=post_param_integer('include_sitemap_'.strval($id),0);
 
 		$url=post_param('url_'.strval($id),'');
 
 		// See if we can tidy it back to a page-link
 		if (preg_match('#^\w+$#',$url)!=0) $url=':'.$url; // So users do not have to think about zones
-		$page_link=url_to_pagelink($url,true);
+		$page_link=url_to_page_link($url,true);
 		if ($page_link!='')
 		{
 			$url=$page_link;
@@ -456,8 +464,9 @@ class Module_admin_menus
 			'i_check_permissions'=>$check_permissions,
 			'i_expanded'=>$expanded,
 			'i_new_window'=>$new_window,
+			'i_include_sitemap'=>$include_sitemap,
 			'i_page_only'=>$page_only,
-			'i_theme_img_code'=>$theme_img_code
+			'i_theme_img_code'=>$theme_img_code,
 		);
 
 		// Save

@@ -231,7 +231,7 @@ function get_category_permissions_for_environment($module,$category,$page=NULL,$
 /**
  * Create a form field input matrix for permission setting.
  *
- * @param  ID_TEXT		Permission ID (pagelink style) for the resource being set
+ * @param  ID_TEXT		Permission ID (page_link style) for the resource being set
  * @param  array			An inverted list showing what view permissions are set for what we're setting permissions for
  * @param  array			List of overridable privilege codes for what we're setting permissions for
  * @param  array			List of privilege settings relating to what we're setting permissions for, from the database
@@ -428,7 +428,7 @@ function set_category_permissions_from_environment($module,$category,$page=NULL)
 		}
 	}
 
-	decache('main_sitemap');
+	decache('menu');
 }
 
 /**
@@ -501,7 +501,7 @@ function set_page_permissions_from_environment($zone,$page)
 		}
 	}
 
-	decache('main_sitemap');
+	decache('menu');
 	require_code('caches3');
 	erase_block_cache();
 	erase_persistent_cache();

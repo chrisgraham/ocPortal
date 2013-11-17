@@ -85,17 +85,21 @@ class Module_admin_aggregate_types extends standard_crud_module
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('AGGREGATE_TYPES','menu/adminzone/structure/aggregate_types'),
+		);
+		$ret+=parent::get_entry_points();
+		$ret+=array(
 			'xml'=>array('EDIT_AGGREGATE_TYPES','menu/_generic_admin/xml'),
 			'sync'=>array('SYNCHRONISE_AGGREGATE_TYPES','menu/_generic_admin/sync'),
-		)+parent::get_entry_points();
+		);
+		return $ret;
 	}
 
 	var $title;

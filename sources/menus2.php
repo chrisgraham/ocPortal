@@ -65,6 +65,7 @@ function menu_management_script()
 	$changes['i_order']=post_param_integer('order_'.strval($id),0);
 	$changes['i_new_window']=post_param_integer('new_window_'.strval($id),0);
 	$changes['i_check_permissions']=post_param_integer('check_perms_'.strval($id),0);
+	$changes['i_include_sitemap']=post_param_integer('include_sitemap_'.strval($id),0);
 	$changes['i_expanded']=0;
 	$changes['i_parent']=NULL;
 
@@ -80,20 +81,21 @@ function menu_management_script()
 /**
  * Add a menu item, without giving tedious/unnecessary detail.
  *
- * @param  SHORT_TEXT	The name of the menu to add the item to.
- * @param  ?mixed			The menu item ID of the parent branch of the menu item (AUTO_LINK) / the URL of something else on the same menu (URLPATH) (NULL: is on root).
- * @param  SHORT_TEXT	The caption.
- * @param  SHORT_TEXT	The URL (in entry point form).
- * @param  BINARY			Whether it is an expanded branch.
- * @param  BINARY			Whether people who may not view the entry point do not see the link.
- * @param  boolean		Whether the caption is a language code.
- * @param  SHORT_TEXT	The tooltip (blank: none).
- * @param  BINARY			Whether the link will open in a new window.
- * @param  ID_TEXT		The theme image code.
- * @param  ?integer		Order to use (NULL: automatic, after the ones that have it specified).
- * @return AUTO_LINK		The ID of the newly added menu item.
+ * @param  SHORT_TEXT		The name of the menu to add the item to.
+ * @param  ?mixed				The menu item ID of the parent branch of the menu item (AUTO_LINK) / the URL of something else on the same menu (URLPATH) (NULL: is on root).
+ * @param  SHORT_TEXT		The caption.
+ * @param  SHORT_TEXT		The URL (in entry point form).
+ * @param  BINARY				Whether it is an expanded branch.
+ * @param  BINARY				Whether people who may not view the entry point do not see the link.
+ * @param  boolean			Whether the caption is a language code.
+ * @param  SHORT_TEXT		The tooltip (blank: none).
+ * @param  BINARY				Whether the link will open in a new window.
+ * @param  ID_TEXT			The theme image code.
+ * @param  SHORT_INTEGER	An INCLUDE_SITEMAP_* constant
+ * @param  ?integer			Order to use (NULL: automatic, after the ones that have it specified).
+ * @return AUTO_LINK			The ID of the newly added menu item.
  */
-function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_permissions=0,$dereference_caption=true,$caption_long='',$new_window=0,$theme_image_code='',$order=NULL)
+function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_permissions=0,$dereference_caption=true,$caption_long='',$new_window=0,$theme_image_code='',$include_sitemap=0,$order=NULL)
 {
 	global $ADD_MENU_COUNTER;
 
@@ -106,7 +108,7 @@ function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_
 
 	$_caption=(strpos($caption,':')===false)?do_lang($caption,NULL,NULL,NULL,NULL,false):NULL;
 	if (is_null($_caption)) $_caption=$caption;
-	$id=add_menu_item($menu,$ADD_MENU_COUNTER,$parent,$dereference_caption?$_caption:$caption,$url,$check_permissions,'',$expanded,$new_window,$caption_long,$theme_image_code);
+	$id=add_menu_item($menu,$ADD_MENU_COUNTER,$parent,$dereference_caption?$_caption:$caption,$url,$check_permissions,'',$expanded,$new_window,$caption_long,$theme_image_code,$include_sitemap);
 
 	$ADD_MENU_COUNTER++;
 
@@ -130,20 +132,21 @@ function delete_menu_item_simple($url)
 /**
  * Add a menu item.
  *
- * @param  SHORT_TEXT	The name of the menu to add the item to.
- * @param  integer		The relative order of this item on the menu.
- * @param  ?AUTO_LINK	The menu item ID of the parent branch of the menu item (NULL: is on root).
- * @param  SHORT_TEXT	The caption.
- * @param  SHORT_TEXT	The URL (in entry point form).
- * @param  BINARY			Whether people who may not view the entry point do not see the link.
- * @param  SHORT_TEXT	Match-keys to identify what pages the item is shown on.
- * @param  BINARY			Whether it is an expanded branch.
- * @param  BINARY			Whether the link will open in a new window.
- * @param  SHORT_TEXT	The tooltip (blank: none).
- * @param  ID_TEXT		The theme image code.
- * @return AUTO_LINK		The ID of the newly added menu item.
+ * @param  SHORT_TEXT		The name of the menu to add the item to.
+ * @param  integer			The relative order of this item on the menu.
+ * @param  ?AUTO_LINK		The menu item ID of the parent branch of the menu item (NULL: is on root).
+ * @param  SHORT_TEXT		The caption.
+ * @param  SHORT_TEXT		The URL (in entry point form).
+ * @param  BINARY				Whether people who may not view the entry point do not see the link.
+ * @param  SHORT_TEXT		Match-keys to identify what pages the item is shown on.
+ * @param  BINARY				Whether it is an expanded branch.
+ * @param  BINARY				Whether the link will open in a new window.
+ * @param  SHORT_TEXT		The tooltip (blank: none).
+ * @param  ID_TEXT			The theme image code.
+ * @param  SHORT_INTEGER	An INCLUDE_SITEMAP_* constant
+ * @return AUTO_LINK			The ID of the newly added menu item.
  */
-function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code='')
+function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code='',$include_sitemap=0)
 {
 	$id=$GLOBALS['SITE_DB']->query_insert('menu_items',array(
 		'i_menu'=>$menu,
@@ -173,20 +176,21 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
 /**
  * Edit a menu item.
  *
- * @param  AUTO_LINK		The ID of the menu item to edit.
- * @param  SHORT_TEXT	The name of the menu to add the item to.
- * @param  integer		The relative order of this item on the menu.
- * @param  ?AUTO_LINK	The menu item ID of the parent branch of the menu item (NULL: is on root).
- * @param  SHORT_TEXT	The caption.
- * @param  SHORT_TEXT	The URL (in entry point form).
- * @param  BINARY			Whether people who may not view the entry point do not see the link.
- * @param  SHORT_TEXT	Match-keys to identify what pages the item is shown on.
- * @param  BINARY			Whether it is an expanded branch.
- * @param  BINARY			Whether the link will open in a new window.
- * @param  SHORT_TEXT	The tooltip (blank: none).
- * @param  ID_TEXT		The theme image code.
+ * @param  AUTO_LINK			The ID of the menu item to edit.
+ * @param  SHORT_TEXT		The name of the menu to add the item to.
+ * @param  integer			The relative order of this item on the menu.
+ * @param  ?AUTO_LINK		The menu item ID of the parent branch of the menu item (NULL: is on root).
+ * @param  SHORT_TEXT		The caption.
+ * @param  SHORT_TEXT		The URL (in entry point form).
+ * @param  BINARY				Whether people who may not view the entry point do not see the link.
+ * @param  SHORT_TEXT		Match-keys to identify what pages the item is shown on.
+ * @param  BINARY				Whether it is an expanded branch.
+ * @param  BINARY				Whether the link will open in a new window.
+ * @param  SHORT_TEXT		The tooltip (blank: none).
+ * @param  ID_TEXT			The theme image code.
+ * @param  SHORT_INTEGER	An INCLUDE_SITEMAP_* constant
  */
-function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code)
+function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code,$include_sitemap)
 {
 	$_caption=$GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption',array('id'=>$id));
 	$_caption_long=$GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption_long',array('id'=>$id));
@@ -202,6 +206,7 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
 		'i_page_only'=>$page_only,
 		'i_expanded'=>$expanded,
 		'i_new_window'=>$new_window,
+		'i_include_sitemap'=>$include_sitemap,
 	),array('id'=>$id),'',1);
 
 	log_it('EDIT_MENU_ITEM',strval($id),$caption);

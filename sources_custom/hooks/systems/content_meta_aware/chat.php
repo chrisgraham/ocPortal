@@ -27,7 +27,7 @@ class Hook_content_meta_aware_chat
 		return array(
 			'supports_custom_fields'=>false,
 
-			'content_type_label'=>'chat:ROOM',
+			'content_type_label'=>'chat:CHATROOM',
 
 			'connection'=>$GLOBALS['SITE_DB'],
 			'table'=>'chat_rooms',
@@ -46,9 +46,9 @@ class Hook_content_meta_aware_chat
 			'description_field'=>NULL,
 			'thumb_field'=>NULL,
 
-			'view_pagelink_pattern'=>'_SEARCH:chat:room:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:cms_chat:room:_WILD',
-			'view_category_pagelink_pattern'=>'_SEARCH:chat:room:_WILD',
+			'view_page_link_pattern'=>'_SEARCH:chat:room:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:cms_chat:room:_WILD',
+			'view_category_page_link_pattern'=>'_SEARCH:chat:room:_WILD',
 			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_chat'))?(get_module_zone('cms_chat').':cms_chat:ac'):NULL,
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('chat')).':chat',
 

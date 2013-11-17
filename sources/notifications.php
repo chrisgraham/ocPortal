@@ -766,7 +766,7 @@ class Hook_Notification
 	 */
 	function _create_category_tree($notification_code,$id,$for_any_member=false)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
@@ -783,7 +783,7 @@ class Hook_Notification
 		{
 			if ($type['l_code_category']!='')
 			{
-				$pagelinks[]=array(
+				$page_links[]=array(
 					'id'=>$type['l_code_category'],
 					'title'=>$type['l_code_category'],
 				);
@@ -795,14 +795,14 @@ class Hook_Notification
 		}
 		if (!$done_in_url)
 		{
-			$pagelinks[]=array(
+			$page_links[]=array(
 				'id'=>$notification_category,
 				'title'=>$notification_category,
 			);
 		}
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

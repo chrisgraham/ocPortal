@@ -55,24 +55,24 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			{
 				$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_cache_first_title',array('id'=>intval($id)));
 
-				$pagelinks=array();
-				$pagelinks[]=array(
+				$page_links=array();
+				$page_links[]=array(
 					'id'=>$id,
 					'title'=>do_lang('A_TOPIC',$title),
 				);
-				return $pagelinks;
+				return $page_links;
 			}
 			$id=substr($id,6);
 		}
 
-		$_pagelinks=ocf_get_forum_tree_secure(NULL,is_null($id)?NULL:intval($id),false,NULL,'',NULL,NULL,false,1);
+		$_page_links=ocf_get_forum_tree_secure(NULL,is_null($id)?NULL:intval($id),false,NULL,'',NULL,NULL,false,1);
 
-		$pagelinks=array();
-		foreach ($_pagelinks as $p)
+		$page_links=array();
+		foreach ($_page_links as $p)
 		{
 			$p['id']='forum:'.strval($p['id']);
 			$p['title']=do_lang('A_FORUM',$p['title']);
-			$pagelinks[]=$p;
+			$page_links[]=$p;
 
 			if (!$done_in_url)
 			{
@@ -92,7 +92,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 					$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_cache_first_title',array('id'=>intval($type['l_code_category'])));
 					if (!is_null($title))
 					{
-						$pagelinks[]=array(
+						$page_links[]=array(
 							'id'=>$type['l_code_category'],
 							'title'=>do_lang('A_TOPIC',$title),
 						);
@@ -110,13 +110,13 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 		{
 			$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_cache_first_title',array('id'=>intval($notification_category)));
 
-			$pagelinks[]=array(
+			$page_links[]=array(
 				'id'=>$notification_category,
 				'title'=>do_lang('A_TOPIC',$title),
 			);
 		}
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

@@ -36,7 +36,7 @@ class Hook_Notification_activity extends Hook_Notification
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		$notification_category=get_param('id',NULL);
 		$done_in_url=is_null($notification_category);
@@ -53,7 +53,7 @@ class Hook_Notification_activity extends Hook_Notification
 
 			if (!is_null($username))
 			{
-				$pagelinks[$type['member_liked']]=array(
+				$page_links[$type['member_liked']]=array(
 					'id'=>strval($type['member_liked']),
 					'title'=>$username,
 				);
@@ -65,14 +65,14 @@ class Hook_Notification_activity extends Hook_Notification
 		}
 		if (!$done_in_url)
 		{
-			$pagelinks[]=array(
+			$page_links[]=array(
 				'id'=>$notification_category,
 				'title'=>$GLOBALS['FORUM_DRIVER']->get_username(intval($notification_category)),
 			);
 		}
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return array_values($pagelinks);
+		return array_values($page_links);
 	}
 
 	/**

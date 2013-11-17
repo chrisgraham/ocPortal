@@ -24,16 +24,16 @@
  * @param  string		The title of the node.
  * @param  boolean	Whether the category is accessible by the user the sitemap is being generated for (Guest for a Sitemaps XML file).
  */
-function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$priority,$title,$accessible=true)
+function _page_link_to_static($page_link,$parent_page_link,$add_date,$edit_date,$priority,$title,$accessible=true)
 {
-	if (($accessible) && (strpos($pagelink,':static_export')===false))
+	if (($accessible) && (strpos($page_link,':static_export')===false))
 	{
 		global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;
 
-		$only_pagelinks=get_param('only_pagelinks',NULL);
-		if (!is_null($only_pagelinks))
+		$only_page_links=get_param('only_page_links',NULL);
+		if (!is_null($only_page_links))
 		{
-			if (!in_array($pagelink,explode(',',$only_pagelinks))) return;
+			if (!in_array($page_link,explode(',',$only_page_links))) return;
 		}
 
 		$date=time();
@@ -51,14 +51,14 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 		{
 			if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang,'',true,false,true))<5)) continue; // Probably this is just the utf8 addon
 
-			$url_test=static_evaluate_tempcode(symbol_tempcode('PAGE_LINK',array($pagelink,'0','1')));
+			$url_test=static_evaluate_tempcode(symbol_tempcode('PAGE_LINK',array($page_link,'0','1')));
 			if (strpos($url_test,'?')!==false) continue;
 
-			$extended_pagelink=$pagelink;
-			if ($pagelink=='') $extended_pagelink=':'.get_zone_default_page('');
+			$extended_page_link=$page_link;
+			if ($page_link=='') $extended_page_link=':'.get_zone_default_page('');
 			if (count($langs)!=1)
-				$extended_pagelink.=':keep_lang='.$lang.':max=10000';
-			$url=static_evaluate_tempcode(symbol_tempcode('PAGE_LINK',array($extended_pagelink,'0','1')));
+				$extended_page_link.=':keep_lang='.$lang.':max=10000';
+			$url=static_evaluate_tempcode(symbol_tempcode('PAGE_LINK',array($extended_page_link,'0','1')));
 
 			$target_path=urldecode(preg_replace('#\?.*$#','',preg_replace('#^'.preg_quote(get_base_url(),'#').'/#','',$url)));
 
@@ -86,7 +86,7 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 			// Redirect forms to mailer
 			if (strpos($data,'<form')!==false)
 			{
-				$STATIC_EXPORT_WARNINGS[]='Form(s) on '.$pagelink.' redirected to mailer.php if POST, else left alone if GET. Check this is correct! If it is a sort form you might want to remove that from the templates and re-export.';
+				$STATIC_EXPORT_WARNINGS[]='Form(s) on '.$page_link.' redirected to mailer.php if POST, else left alone if GET. Check this is correct! If it is a sort form you might want to remove that from the templates and re-export.';
 
 				$new_form_action=escape_html(get_base_url().((count($langs)>1)?('/'.$lang):'').'/mailer.php');
 				$data=preg_replace('#(\s)action="[^"]*"([^>]*\smethod="post")#','${1}action="'.$new_form_action.'"${2}',$data);
@@ -109,7 +109,7 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 			// Potential warnings
 			if (strpos($data,'javascript_ajax')!==false)
 			{
-				$STATIC_EXPORT_WARNINGS[]='AJAX being included on '.$pagelink.', likely it doesn\'t work!';
+				$STATIC_EXPORT_WARNINGS[]='AJAX being included on '.$page_link.', likely it doesn\'t work!';
 			}
 
 			tar_add_file($STATIC_EXPORT_TAR,$save_target_path,$data,0644,$date,false);

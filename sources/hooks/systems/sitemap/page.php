@@ -26,10 +26,10 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	 * @param  ID_TEXT		The page-link.
 	 * @return integer		A SITEMAP_NODE_* constant.
 	 */
-	function handles_pagelink($pagelink)
+	function handles_page_link($page_link)
 	{
 		$matches=array();
-		if (preg_match('#^([^:]*):([^:]+)(:misc)?$#',$pagelink,$matches)!=0)
+		if (preg_match('#^([^:]*):([^:]+)(:misc)?$#',$page_link,$matches)!=0)
 		{
 			$zone=$matches[1];
 			$page=$matches[2];
@@ -47,123 +47,46 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	}
 
 	/**
-	 * Find details for this node.
-	 *
-	 * @param  ?array			Faked database row (NULL: derive).
-	 * @param  ID_TEXT		The zone.
-	 * @param  ID_TEXT		The page.
-	 * @return ?array			Faked database row (NULL: derive).
-	 */
-	protected function _load_row($row,$zone,$page)
-	{
-		if (!isset($row[0])) // If the first tuple element is not defined (a property map may be, for Comcode pages)
-		{
-			// Find from page grouping
-
-			if ($row===NULL) $row=array();
-
-			$links=get_page_grouping_links();
-			foreach ($links as $link)
-			{
-				if (!is_array($link[2])) continue;
-
-				if (($link[2][0]==$page) && ((!isset($link[2][1]['type'])) || ($link[2][1]['type']=='misc')) && (($link[2][2]==$zone) || ($page!='start')))
-				{
-					$title=$link[3];
-					$icon=$link[1];
-					$row=array($title,$icon,NULL)+$row;
-					if ($link[2][2]==$zone) break; // If was a perfect match, break out
-				}
-			}
-
-			if ($row===NULL) // Get from stored menus?
-			{
-				$test=$GLOBALS['SITE_DB']->query_select('menu_items',array('i_caption','i_theme_img_code','i_caption_long'),array('i_url'=>$zone.':'.$page),'',1);
-				if (array_key_exists(0,$test))
-				{
-					$title=get_translated_tempcode($test[0]['i_caption']);
-					$icon=$test[0]['i_theme_img_code'];
-					$description=get_translated_tempcode($test[0]['i_caption_long']);
-					$row+=array($title,$icon,$description);
-				}
-			}
-		}
-
-		return $row;
-	}
-
-	/**
-	 * Extend the node structure with added details from our row data (if we have it).
-	 *
-	 * @param  ?array			Structure.
-	 * @param  ?array			Faked database row (NULL: we don't have row data).
-	 */
-	protected function _ameliorate_with_row(&$struct,&$row)
-	{
-		if (isset($row[0]))
-		{
-			$title=$row[0];
-			$icon=$row[1];
-			$description=$row[2];
-
-			if (is_string($title))
-			{
-				$title=(preg_match('#^[A-Z\_]+$#',$title)==0)?make_string_tempcode($title):do_lang_tempcode($title);
-			}
-
-			if (is_string($description))
-			{
-				$description=(preg_match('#^[A-Z\_]+$#',$description)==0)?make_string_tempcode($description):comcode_lang_string($description);
-			}
-
-			if (!$title->is_empty())
-				$struct['title']=$title;
-
-			$struct['extra_meta']['description']=($description===NULL)?NULL:$description;
-
-			$struct['extra_meta']['image']=($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon);
-			$struct['extra_meta']['image_2x']=($icon===NULL)?NULL:find_theme_image('icons/48x48/'.$icon);
-		}
-	}
-
-	/**
 	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
 	 * @param  ?string  		Callback function to send discovered page-links to (NULL: return).
 	 * @param  ?array			List of node types we will return/recurse-through (NULL: no limit)
+	 * @param  ?integer		Maximum number of children before we cut off all children (NULL: no limit).
 	 * @param  ?integer		How deep to go from the Sitemap root (NULL: no limit).
 	 * @param  integer		Our recursion depth (used to limit recursion, or to calculate importance of page-link, used for instance by XML Sitemap [deeper is typically less important]).
 	 * @param  boolean		Only go so deep as needed to find nodes with permission-support (typically, stopping prior to the entry-level).
 	 * @param  ID_TEXT		The zone we will consider ourselves to be operating in (needed due to transparent redirects feature)
 	 * @param  boolean		Whether to make use of page groupings, to organise stuff with the hook schema, supplementing the default zone organisation.
-	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  boolean		Whether to consider secondary categorisations for content that primarily exists elsewhere.
+	 * @param  boolean		Whether to filter out non-validated content.
 	 * @param  integer		A bitmask of SITEMAP_GATHER_* constants, of extra data to include.
 	 * @param  ?array			Database row (NULL: lookup).
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($pagelink,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
+	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*)#',$pagelink,$matches);
+		preg_match('#^([^:]*):([^:]*)#',$page_link,$matches);
 		$page=$matches[2];
 
-		$this->_make_zone_concrete($zone,$pagelink);
+		$this->_make_zone_concrete($zone,$page_link);
 
 		$zone_default_page=get_zone_default_page($zone);
 
 		$details=$this->_request_page_details($page,$zone);
 
 		$path=end($details);
-		$row=$this->_load_row($row,$zone,$page);
+		$row=$this->_load_row_from_page_groupings($row,$zone,$page);
 
 		$struct=array(
 			'title'=>make_string_tempcode(escape_html(titleify($page))),
 			'content_type'=>'page',
 			'content_id'=>$zone.':'.$page,
-			'pagelink'=>$pagelink,
+			'modifiers'=>array(),
+			'only_on_page'=>'',
+			'page_link'=>$page_link,
 			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>NULL,
@@ -229,7 +152,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 		}
 
 		// Get more details from menu link / page grouping?
-		$this->_ameliorate_with_row($struct,$row);
+		$this->_ameliorate_with_row($struct,$row,$meta_gather);
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
 
@@ -239,165 +162,183 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 		$has_entry_points=true;
 
-		// Look for entry points to put under this
-		if (($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM') && (!$require_permission_support))
+		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth) || (!isset($row[1])))
 		{
-			$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
-			if (is_null($functions[0]))
+			// Look for entry points to put under this
+			if (($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM') && (!$require_permission_support))
 			{
-				if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
+				$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
+				if (is_null($functions[0]))
 				{
-					$path=str_replace('/modules_custom/','/modules/',$path);
-					$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
+					if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
+					{
+						$path=str_replace('/modules_custom/','/modules/',$path);
+						$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
+					}
+				}
+
+				$has_entry_points=false;
+
+				if (!is_null($functions[0]))
+				{
+					$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
+
+					if ((!is_null($entry_points)) && (count($entry_points)>0))
+					{
+						$struct['has_possible_children']=true;
+
+						$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
+
+						$has_entry_points=true;
+
+						if (isset($entry_points['!']))
+						{
+							// "!" indicates no entry-points but that the page is accessible without them
+							if (!isset($row[1]))
+							{
+								$_title=$entry_points['!'][0];
+								if (is_object($_title))
+								{
+									$struct['title']=$_title;
+								} else
+								{
+									$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
+								}
+								if (!is_null($entry_points['!'][1]))
+								{
+									if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)
+									{
+										$struct['extra_meta']['image']=find_theme_image('icons/24x24/'.$entry_points['!'][1]);
+										$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/'.$entry_points['!'][1]);
+									}
+								}
+							}
+							unset($entry_points['!']);
+						}
+						elseif ((isset($entry_points['misc'])) || (count($entry_points)==1))
+						{
+							// Misc/only moves some details down and is then skipped (alternatively we could haved blanked out our container node to make it a non-link)
+							if (!isset($row[1]))
+							{
+								$move_down_entry_point=(count($entry_points)==1)?key($entry_points):'misc';
+								if (substr($struct['page_link'],-strlen(':'.$move_down_entry_point))!=':'.$move_down_entry_point)
+									$struct['page_link'].=':'.$move_down_entry_point;
+								/*$_title=$entry_points[$move_down_entry_point][0];	Actually our name derived from the page grouping or natural name is more appropriate
+								if (is_object($_title))
+								{
+									$struct['title']=$_title;
+								} else
+								{
+									$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
+								}*/
+								if (!is_null($entry_points[$move_down_entry_point][1]))
+								{
+									if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)
+									{
+										$struct['extra_meta']['image']=find_theme_image('icons/24x24/'.$entry_points[$move_down_entry_point][1]);
+										$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/'.$entry_points[$move_down_entry_point][1]);
+									}
+								}
+							}
+							unset($entry_points[$move_down_entry_point]);
+						} else
+						{
+							$struct['page_link']=''; // Container node is non-clickable
+
+							// Is the icon for the container explicitly defined within get_wrapper_icon()?
+							if (!is_null($functions[1]))
+							{
+								if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)
+								{
+									$icon=is_array($functions[1])?call_user_func_array($functions[1][0],$functions[1][1]):eval($functions[1]);
+									$struct['extra_meta']['image']=find_theme_image('icons/24x24/'.$icon);
+									$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/'.$icon);
+								}
+							}
+						}
+
+						if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
+						{
+							foreach (array_keys($entry_points) as $entry_point)
+							{
+								if (strpos($entry_point,':')===false)
+								{
+									$child_page_link=$zone.':'.$page.':'.$entry_point;
+								} else
+								{
+									$child_page_link=$entry_point;
+								}
+
+								if (preg_match('#^([^:]*):([^:]*):([^:]*)(:.*|$)#',$child_page_link)!=0)
+								{
+									$child_node=$entry_point_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+								} else
+								{
+									$child_node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+								}
+								if ($child_node!==NULL)
+									$children[$child_node['page_link']]=$child_node;
+							}
+						}
+					}
 				}
 			}
 
-			$has_entry_points=false;
-
-			if (!is_null($functions[0]))
+			if (!$has_entry_points)
 			{
-				$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
+				$struct['page_link']='';
+			}
 
-				if ((!is_null($entry_points)) && (count($entry_points)>0))
+			// Look for virtual nodes to put under this
+			$hooks=find_all_hooks('systems','sitemap');
+			foreach (array_keys($hooks) as $_hook)
+			{
+				require_code('hooks/systems/sitemap/'.$_hook);
+				$ob=object_factory('Hook_sitemap_'.$_hook);
+				if ($ob->is_active())
 				{
-					$struct['has_possible_children']=true;
-
-					$entry_point_sitemap_ob=$this->_get_sitemap_object('entry_point');
-
-					$has_entry_points=true;
-
-					if (isset($entry_points['!']))
+					$is_handled=$ob->handles_page_link($page_link);
+					if ($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY)
 					{
-						// "!" indicates no entry-points but that the page is accessible without them
-						$_title=$entry_points['!'][0];
-						if (is_object($_title))
-						{
-							$struct['title']=$_title;
-						} else
-						{
-							$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
-						}
-						if (!is_null($entry_points['!'][1]))
-						{
-							$struct['extra_meta']['image']=find_theme_image('icons/24x24/'.$entry_points['!'][1]);
-							$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/'.$entry_points['!'][1]);
-						}
-						unset($entry_points['!']);
-					}
-					elseif ((isset($entry_points['misc'])) || (count($entry_points)==1))
-					{
-						// Misc/only moves some details down and is then skipped (alternatively we could haved blanked out our container node to make it a non-link)
-						$move_down_entry_point=(count($entry_points)==1)?key($entry_points):'misc';
-						if (substr($struct['pagelink'],-strlen(':'.$move_down_entry_point))!=':'.$move_down_entry_point)
-							$struct['pagelink'].=':'.$move_down_entry_point;
-						/*$_title=$entry_points[$move_down_entry_point][0];	Actually our name derived from the page grouping or natural name is more appropriate
-						if (is_object($_title))
-						{
-							$struct['title']=$_title;
-						} else
-						{
-							$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
-						}*/
-						if (!is_null($entry_points[$move_down_entry_point][1]))
-						{
-							$struct['extra_meta']['image']=find_theme_image('icons/24x24/'.$entry_points[$move_down_entry_point][1]);
-							$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/'.$entry_points[$move_down_entry_point][1]);
-						}
-						unset($entry_points[$move_down_entry_point]);
-					} else
-					{
-						$struct['pagelink']=''; // Container node is non-clickable
+						$struct['permission_page']=$ob->get_permission_page($page_link);
+						$struct['has_possible_children']=true;
 
-						// Is the icon for the container explicitly defined within get_wrapper_icon()?
-						if (!is_null($functions[1]))
+						$virtual_child_nodes=$ob->get_virtual_nodes($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,true);
+						if (is_null($virtual_child_nodes)) $virtual_child_nodes=array();
+						foreach ($virtual_child_nodes as $child_node)
 						{
-							$icon=is_array($functions[1])?call_user_func_array($functions[1][0],$functions[1][1]):eval($functions[1]);
-							$struct['extra_meta']['image']=find_theme_image('icons/24x24/'.$icon);
-							$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/'.$icon);
-						}
-					}
-
-					if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
-					{
-						foreach (array_keys($entry_points) as $entry_point)
-						{
-							if (strpos($entry_point,':')===false)
+							if ((count($virtual_child_nodes)==1) && (preg_match('#^'.preg_quote($page_link,'#').':misc(:[^:=]*$|$)#',$child_node['page_link'])!=0) && (!$require_permission_support))
 							{
-								$child_pagelink=$zone.':'.$page.':'.$entry_point;
+								// Put as container instead
+								if ($child_node['extra_meta']['image']=='')
+								{
+									$child_node['extra_meta']['image']=$struct['extra_meta']['image'];
+									$child_node['extra_meta']['image_2x']=$struct['extra_meta']['image_2x'];
+								}
+								$struct=$child_node;
+								if ($struct['children']!==NULL)
+									$children=array_merge($children,$struct['children']);
+								$struct['children']=NULL;
+								$call_struct=false; // Already been called in get_virtual_nodes
 							} else
 							{
-								$child_pagelink=$entry_point;
+								if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
+								{
+									if ($callback===NULL)
+										$children[$child_node['page_link']]=$child_node;
+								}
 							}
-
-							if (preg_match('#^([^:]*):([^:]*):([^:]*)(:.*|$)#',$child_pagelink)!=0)
-							{
-								$child_node=$entry_point_sitemap_ob->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-							} else
-							{
-								$child_node=$this->get_node($child_pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-							}
-							if ($child_node!==NULL)
-								$children[$child_node['pagelink']]=$child_node;
 						}
 					}
 				}
 			}
-		}
 
-		if (!$has_entry_points)
-		{
-			$struct['pagelink']='';
-		}
-
-		// Look for virtual nodes to put under this
-		$hooks=find_all_hooks('systems','sitemap');
-		foreach (array_keys($hooks) as $_hook)
-		{
-			require_code('hooks/systems/sitemap/'.$_hook);
-			$ob=object_factory('Hook_sitemap_'.$_hook);
-			if ($ob->is_active())
+			if (!$has_entry_points)
 			{
-				$is_handled=$ob->handles_pagelink($pagelink);
-				if ($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY)
+				if ($children==array())
 				{
-					$struct['permission_page']=$ob->get_permission_page($pagelink);
-					$struct['has_possible_children']=true;
-
-					$virtual_child_nodes=$ob->get_virtual_nodes($pagelink,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,true);
-					if (is_null($virtual_child_nodes)) $virtual_child_nodes=array();
-					foreach ($virtual_child_nodes as $child_node)
-					{
-						if ((count($virtual_child_nodes)==1) && (preg_match('#^'.preg_quote($pagelink,'#').':misc(:[^:=]*$|$)#',$child_node['pagelink'])!=0) && (!$require_permission_support))
-						{
-							// Put as container instead
-							if ($child_node['extra_meta']['image']=='')
-							{
-								$child_node['extra_meta']['image']=$struct['extra_meta']['image'];
-								$child_node['extra_meta']['image_2x']=$struct['extra_meta']['image_2x'];
-							}
-							$struct=$child_node;
-							if ($struct['children']!==NULL)
-								$children=array_merge($children,$struct['children']);
-							$struct['children']=NULL;
-							$call_struct=false; // Already been called in get_virtual_nodes
-						} else
-						{
-							if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
-							{
-								if ($callback===NULL)
-									$children[$child_node['pagelink']]=$child_node;
-							}
-						}
-					}
+					return NULL;
 				}
-			}
-		}
-
-		if (!$has_entry_points)
-		{
-			if ($children==array())
-			{
-				return NULL;
 			}
 		}
 

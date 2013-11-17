@@ -42,6 +42,9 @@ Notes about hook info...
  */
 function get_content_object($content_type)
 {
+	static $cache=array();
+	if (isset($cache[$content_type])) return $cache[$content_type];
+
 	$path='hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type);
 	if ((file_exists(get_file_base().'/sources/'.$path.'.php')) || (file_exists(get_file_base().'/sources_custom/'.$path.'.php')))
 	{
@@ -52,6 +55,8 @@ function get_content_object($content_type)
 		require_code('hooks/systems/resource_meta_aware/'.filter_naughty_harsh($content_type));
 		$ob=object_factory('Hook_resource_meta_aware_'.filter_naughty_harsh($content_type),true);
 	}
+
+	$cache[$content_type]=$ob;
 	return $ob;
 }
 
@@ -242,9 +247,9 @@ function content_get_details($content_type,$content_id,$resourcefs_style=false)
 
 	$content_url=mixed();
 	$content_url_email_safe=mixed();
-	if (!is_null($cma_info['view_pagelink_pattern']))
+	if (!is_null($cma_info['view_page_link_pattern']))
 	{
-		list($zone,$url_bits,$hash)=page_link_decode(str_replace('_WILD',$content_id,$cma_info['view_pagelink_pattern']));
+		list($zone,$url_bits,$hash)=page_link_decode(str_replace('_WILD',$content_id,$cma_info['view_page_link_pattern']));
 		$content_url=build_url($url_bits,$zone,NULL,false,false,false,$hash);
 		$content_url_email_safe=build_url($url_bits,$zone,NULL,false,false,true,$hash);
 	}

@@ -234,10 +234,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$edit_text=$param[0]->evaluate();
 					$edit_param_name=$param[1]->evaluate();
-					$edit_pagelink=$param[2]->evaluate();
+					$edit_page_link=$param[2]->evaluate();
 					$supports_comcode=(isset($param[4])?$param[3]->evaluate():'0')=='1';
 
-					list($zone,$attributes,)=page_link_decode($edit_pagelink);
+					list($zone,$attributes,)=page_link_decode($edit_page_link);
 					if ($zone=='_SEARCH') $zone=get_module_zone($attributes['page']);
 					if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (((array_key_exists(4,$param)) && ($param[3]->evaluate()=='1')) || (has_zone_access(get_member(),'adminzone'))))
 					{

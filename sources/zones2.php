@@ -159,7 +159,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 
 	persistent_cache_delete('ALL_ZONES');
 
-	decache('main_sitemap');
+	decache('menu');
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
@@ -226,18 +226,18 @@ function get_module_overridables($zone,$page,$for_permissions=false)
 	$overridables=array();
 	$privilege_page=$page;
 
-	$_pagelinks=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,$for_permissions,NULL,true));
-	if (!is_null($_pagelinks[0])) // If it's a CMS-supporting module (e.g. downloads)
+	$_page_links=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,$for_permissions,NULL,true));
+	if (!is_null($_page_links[0])) // If it's a CMS-supporting module (e.g. downloads)
 	{
-		$pagelinks=is_array($_pagelinks[0])?call_user_func_array($_pagelinks[0][0],$_pagelinks[0][1]):eval($_pagelinks[0]);
-		if ((!is_null($pagelinks[0])) && (!is_null($pagelinks[1]))) // If it's not disabled
+		$page_links=is_array($_page_links[0])?call_user_func_array($_page_links[0][0],$_page_links[0][1]):eval($_page_links[0]);
+		if ((!is_null($page_links[0])) && (!is_null($page_links[1]))) // If it's not disabled
 		{
-			$_overridables=extract_module_functions_page(get_module_zone($pagelinks[1]),$pagelinks[1],array('get_privilege_overrides'));
+			$_overridables=extract_module_functions_page(get_module_zone($page_links[1]),$page_links[1],array('get_privilege_overrides'));
 			if (!is_null($_overridables[0])) // If it's a CMS-supporting module with privilege overrides
 			{
 				$overridables=is_array($_overridables[0])?call_user_func_array($_overridables[0][0],$_overridables[0][1]):eval($_overridables[0]);
 			}
-			$privilege_page=$pagelinks[1];
+			$privilege_page=$page_links[1];
 		}
 	} else
 	{

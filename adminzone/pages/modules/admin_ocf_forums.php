@@ -44,7 +44,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -58,15 +58,15 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		if ($support_crosslinks)
 		{
-			require_code('fields');
-			$ret+=manage_custom_fields_entry_points('post')+manage_custom_fields_entry_points('topic')+manage_custom_fields_entry_points('forum');
-
 			$ret['_SEARCH:admin_ocf_forum_groupings:ad']=array('ADD_FORUM_GROUPING','menu/_generic_admin/add_one_category');
 			$ret['_SEARCH:admin_ocf_forum_groupings:ed']=array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('EDIT_FORUM_GROUPING'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','COUNT(*)',NULL,'',true))))),'menu/_generic_admin/edit_one_category');
 			if (addon_installed('ocf_post_templates'))
 				$ret['_SEARCH:admin_ocf_post_templates:misc']=array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('POST_TEMPLATES'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates','COUNT(*)',NULL,'',true))))),'menu/adminzone/structure/forum/post_templates');
 			if (addon_installed('ocf_multi_moderations'))
 				$ret['_SEARCH:admin_ocf_multi_moderations:misc']=array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('MULTI_MODERATIONS'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_multi_moderations','COUNT(*)',NULL,'',true))))),'menu/adminzone/structure/forum/multi_moderations');
+
+			require_code('fields');
+			$ret+=manage_custom_fields_entry_points('post')+manage_custom_fields_entry_points('topic')+manage_custom_fields_entry_points('forum');
 		}
 		return $ret;
 	}

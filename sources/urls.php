@@ -799,25 +799,25 @@ function qualify_url($url,$url_base)
  * @param  SHORT_TEXT	The page-link
  * @return array			Triple: zone, attribute-array, hash part of a URL including the hash (or blank)
  */
-function page_link_decode($pagelink)
+function page_link_decode($page_link)
 {
-	if (strpos($pagelink,'#')===false)
+	if (strpos($page_link,'#')===false)
 	{
 		$hash='';
 	} else
 	{
-		$hash_pos=strpos($pagelink,'#');
-		$hash=substr($pagelink,$hash_pos);
-		$pagelink=substr($pagelink,0,$hash_pos);
+		$hash_pos=strpos($page_link,'#');
+		$hash=substr($page_link,$hash_pos);
+		$page_link=substr($page_link,0,$hash_pos);
 	}
-	if (strpos($pagelink,"\n")===false)
+	if (strpos($page_link,"\n")===false)
 	{
-		$bits=explode(':',$pagelink);
+		$bits=explode(':',$page_link);
 	} else // If there's a line break then we ignore any colons after that line-break. It's to allow complex stuff to be put on the end of the page-link
 	{
-		$term_pos=strpos($pagelink,"\n");
-		$bits=explode(':',substr($pagelink,0,$term_pos));
-		$bits[count($bits)-1].=substr($pagelink,$term_pos);
+		$term_pos=strpos($page_link,"\n");
+		$bits=explode(':',substr($page_link,0,$term_pos));
+		$bits[count($bits)-1].=substr($page_link,$term_pos);
 	}
 	$zone=$bits[0];
 	if ($zone=='_SEARCH')
@@ -926,10 +926,10 @@ function fixup_protocolless_urls($in)
  * @param  boolean		Whether to only allow perfect conversions.
  * @return string			The page-link (blank: could not convert).
  */
-function url_to_pagelink($url,$abs_only=false,$perfect_only=true)
+function url_to_page_link($url,$abs_only=false,$perfect_only=true)
 {
 	require_code('urls2');
-	return _url_to_pagelink($url,$abs_only,$perfect_only);
+	return _url_to_page_link($url,$abs_only,$perfect_only);
 }
 
 /**
@@ -938,10 +938,10 @@ function url_to_pagelink($url,$abs_only=false,$perfect_only=true)
  * @param  string			The path.
  * @return string			The page-link (blank: could not convert).
  */
-function page_path_to_pagelink($page)
+function page_path_to_page_link($page)
 {
 	require_code('urls2');
-	return _page_path_to_pagelink($page);
+	return _page_path_to_page_link($page);
 }
 
 /**
@@ -979,7 +979,7 @@ function load_moniker_hooks()
 
 				if ($ob_info===NULL) continue;
 				$ob_info['_hook']=$hook;
-				$CONTENT_OBS[$ob_info['view_pagelink_pattern']]=$ob_info;
+				$CONTENT_OBS[$ob_info['view_page_link_pattern']]=$ob_info;
 
 				if (($ob_info['title_field']!==NULL) && (strpos($ob_info['title_field'],'CALL:')!==false))
 					require_code('hooks/systems/content_meta_aware/'.$hook);

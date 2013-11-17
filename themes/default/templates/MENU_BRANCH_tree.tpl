@@ -4,7 +4,7 @@
 {$SET,RAND,{$RAND}}
 
 <li class="{$?,{CURRENT},current,non_current} {$?,{$IS_EMPTY,{IMG}},has_no_img,has_img}">
-	{+START,IF_NON_EMPTY,{IMG}}<img alt="" src="{$IMG*,{IMG}}" />{+END}
+	{+START,IF_NON_EMPTY,{IMG}}<img alt="" src="{IMG*}" />{+END}
 	{+START,IF,{$NOT,{$GET,HAS_CHILDREN}}}
 		<a{+START,INCLUDE,MENU_LINK_PROPERTIES}{+END}>{CAPTION}</a>
 	{+END}

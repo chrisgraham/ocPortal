@@ -41,22 +41,22 @@ class Hook_Notification_news_entry extends Hook_Notification
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		$types=$GLOBALS['SITE_DB']->query_select('news_categories',array('id','nc_title'));
 		foreach ($types as $type)
 		{
 			if (has_category_access(get_member(),'news',strval($type['id'])))
 			{
-				$pagelinks[]=array(
+				$page_links[]=array(
 					'id'=>$type['id'],
 					'title'=>get_translated_text($type['nc_title']),
 				);
 			}
 		}
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

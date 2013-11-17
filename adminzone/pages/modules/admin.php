@@ -48,7 +48,7 @@ class Module_admin
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -61,8 +61,8 @@ class Module_admin
 			'style'=>array('STYLE','menu/adminzone/style'),
 			'setup'=>array('SETUP','menu/adminzone/setup'),
 			'tools'=>array('TOOLS','menu/adminzone/tools'),
-			'security'=>array('SECURITY_GROUP_SETUP','menu/adminzone/security'),
-			'docs'=>array('SECURITY_GROUP_SETUP','menu/adminzone/help'),
+			'security'=>array('SECURITY','menu/adminzone/security'),
+			'docs'=>array('DOCS','menu/adminzone/help'),
 		);
 	}
 
@@ -140,23 +140,27 @@ class Module_admin
 
 		switch ($type)
 		{
-			case 'misc':
-				return do_next_manager_hooked('ADMIN_ZONE','DOC_ADMIN_ZONE','');
-			case 'structure':
-				return do_next_manager_hooked('STRUCTURE','DOC_STRUCTURE','structure');
-			case 'audit':
-				return do_next_manager_hooked('AUDIT','DOC_AUDIT','audit');
-			case 'style':
-				return do_next_manager_hooked('STYLE','DOC_STYLE','style');
-			case 'setup':
-				return do_next_manager_hooked('SETUP','DOC_SETUP','setup');
-			case 'tools':
-				return do_next_manager_hooked('TOOLS','DOC_TOOLS','tools');
-			case 'security':
-				return do_next_manager_hooked('SECURITY','DOC_SECURITY','security');
-
 			case 'search':
 				return $this->search();
+
+			case 'misc':
+				return do_next_manager_hooked('ADMIN_ZONE','menus:DOC_ADMIN_ZONE','');
+
+			case 'structure':
+				return do_next_manager_hooked('menus:STRUCTURE','menus:DOC_STRUCTURE','structure');
+			case 'audit':
+				return do_next_manager_hooked('menus:AUDIT','menus:DOC_AUDIT','audit');
+			case 'style':
+				return do_next_manager_hooked('menus:STYLE','menus:DOC_STYLE','style');
+			case 'setup':
+				return do_next_manager_hooked('SETUP','menus:DOC_SETUP','setup');
+			case 'tools':
+				return do_next_manager_hooked('menus:TOOLS','menus:DOC_TOOLS','tools');
+			case 'security':
+				return do_next_manager_hooked('SECURITY','menus:DOC_SECURITY','security');
+
+			default:
+				return do_next_manager_hooked('MENU','menus:DOC_FRONTEND_ICONS',$type);
 		}
 
 		return new ocp_tempcode();

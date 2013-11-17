@@ -52,9 +52,9 @@ class Hook_resource_meta_aware_menu
 			'title_field'=>'i_menu',
 			'title_field_dereference'=>false,
 
-			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>'_SEARCH:admin_menus:_edit:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>NULL,
+			'edit_page_link_pattern'=>'_SEARCH:admin_menus:_edit:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_menus'))?(get_module_zone('admin_menus').':admin_menus:edit'):NULL,
 			'archive_url'=>NULL,
 

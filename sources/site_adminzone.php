@@ -92,7 +92,7 @@ function adminzone_extend_breadcrumbs(&$stub)
 				{
 					if ($i===NULL) continue;
 
-					if (($page==$i[2][0]) && (((!array_key_exists('type',$i[2][1])) && ($type=='misc')) || ((array_key_exists('type',$i[2][1])) && (($type==$i[2][1]['type']) || ($i[2][1]['type']=='misc')))) && ($zone==$i[2][2]))
+					if ((is_array($i[2])) && ($page==$i[2][0]) && (((!isset($i[2][1]['type'])) && ($type=='misc')) || ((isset($i[2][1]['type'])) && (($type==$i[2][1]['type']) || ($i[2][1]['type']=='misc')))) && ($zone==$i[2][2]))
 					{
 						if ($i[0]=='cms')
 						{
@@ -102,9 +102,9 @@ function adminzone_extend_breadcrumbs(&$stub)
 							$url=build_url(array('page'=>'admin','type'=>$i[0]),'adminzone');
 						}
 
-						require_lang('menus');
+						$title=$i[3];
 
-						$stub->attach(hyperlink($url,do_lang_tempcode(strtoupper($i[0])),false,false,do_lang_tempcode('GO_BACKWARDS_TO',@html_entity_decode(strip_tags(do_lang(strtoupper($i[0]))),ENT_QUOTES,get_charset()))));
+						$stub->attach(hyperlink($url,$title,false,false,do_lang_tempcode('GO_BACKWARDS_TO',@html_entity_decode(strip_tags($title->evaluate()),ENT_QUOTES,get_charset()))));
 
 						return;
 					}

@@ -29,7 +29,7 @@ class Hook_config_chat_show_stats_count_rooms
 	function get_details()
 	{
 		return array(
-			'human_name'=>'ROOMS',
+			'human_name'=>'CHATROOMS',
 			'type'=>'tick',
 			'category'=>'BLOCKS',
 			'group'=>'STATISTICS',

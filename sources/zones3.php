@@ -80,7 +80,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$requir
 		$ZONE['theme']=$theme;
 	}
 
-	decache('main_sitemap');
+	decache('menu');
 	persistent_cache_delete(array('ZONE',$zone));
 	persistent_cache_delete('ALL_ZONES');
 
@@ -210,7 +210,6 @@ function actual_delete_zone_lite($zone)
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'));
 
 	decache('menu');
-	decache('main_sitemap');
 	persistent_cache_delete(array('ZONE',$zone));
 	persistent_cache_delete('ALL_ZONES');
 
@@ -478,7 +477,7 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	erase_persistent_cache();
 	//persistent_cache_delete(array('PAGE_INFO'));
 	decache('main_comcode_page_children');
-	decache('main_sitemap');
+	decache('menu');
 	$caches=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),array('the_zone'=>$zone,'the_page'=>$file));
 	$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$file));
 	foreach ($caches as $cache)

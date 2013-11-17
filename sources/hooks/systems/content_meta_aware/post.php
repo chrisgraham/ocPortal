@@ -56,9 +56,9 @@ class Hook_content_meta_aware_post
 			'description_field'=>'p_post',
 			'thumb_field'=>NULL,
 
-			'view_pagelink_pattern'=>'_SEARCH:topicview:findpost:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:topics:edit_post:_WILD',
-			'view_category_pagelink_pattern'=>'_SEARCH:topicview:misc:_WILD',
+			'view_page_link_pattern'=>'_SEARCH:topicview:findpost:_WILD',
+			'edit_page_link_pattern'=>'_SEARCH:topics:edit_post:_WILD',
+			'view_category_page_link_pattern'=>'_SEARCH:topicview:misc:_WILD',
 			'add_url'=>'',
 			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('forumview')).':forumview',
 

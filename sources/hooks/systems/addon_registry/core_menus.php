@@ -214,7 +214,23 @@ class Hook_addon_registry_core_menus
 	{
 		$branch=do_lorem_template('MENU_EDITOR_BRANCH',array('CLICKABLE_SECTIONS'=>'true','I'=>placeholder_id(),'CHILD_BRANCH_TEMPLATE'=>'','CHILD_BRANCHES'=>''));
 
-		$child_branch_template=do_lorem_template('MENU_EDITOR_BRANCH_WRAP',array('DISPLAY'=>'display: block','CLICKABLE_SECTIONS'=>true,'ORDER'=>'replace_me_with_order','PARENT'=>'replace_me_with_parent','BRANCH_TYPE'=>'0','NEW_WINDOW'=>'0','CHECK_PERMS'=>'0','CAPTION_LONG'=>'','CAPTION'=>'','URL'=>'','PAGE_ONLY'=>'','THEME_IMG_CODE'=>'','I'=>placeholder_id(),'BRANCH'=>$branch));
+		$child_branch_template=do_lorem_template('MENU_EDITOR_BRANCH_WRAP',array(
+			'DISPLAY'=>'display: block',
+			'CLICKABLE_SECTIONS'=>true,
+			'ORDER'=>'replace_me_with_order',
+			'PARENT'=>'replace_me_with_parent',
+			'BRANCH_TYPE'=>'0',
+			'NEW_WINDOW'=>'0',
+			'CHECK_PERMS'=>'0',
+			'INCLUDE_SITEMAP'=>'0',
+			'CAPTION_LONG'=>'',
+			'CAPTION'=>'',
+			'URL'=>'',
+			'PAGE_ONLY'=>'',
+			'THEME_IMG_CODE'=>'',
+			'I'=>placeholder_id(),
+			'BRANCH'=>$branch,
+		));
 
 		$root_branch=do_lorem_template('MENU_EDITOR_BRANCH',array('CLICKABLE_SECTIONS'=>'true','CHILD_BRANCH_TEMPLATE'=>$child_branch_template,'CHILD_BRANCHES'=>'','I'=>''));
 
@@ -276,9 +292,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>false,
-				'POPUP_WIDTH'=>'',
-				'POPUP_HEIGHT'=>'',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>'',
@@ -302,9 +315,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>true,
-				'POPUP_WIDTH'=>'500',
-				'POPUP_HEIGHT'=>'500',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>$child,
@@ -317,10 +327,14 @@ class Hook_addon_registry_core_menus
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
-				'CURRENT_ZONE'=>False,
+				'CURRENT_ZONE'=>false,
 			)));
 
-			$content->attach(do_lorem_template('MENU_SPACER_tree',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_tree',array(
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+			)));
 		}
 		$menu=do_lorem_template('MENU_tree',array(
 			'CONTENT'=>$content,
@@ -361,9 +375,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>false,
-				'POPUP_WIDTH'=>'',
-				'POPUP_HEIGHT'=>'',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>'',
@@ -379,7 +390,11 @@ class Hook_addon_registry_core_menus
 				'CURRENT_ZONE'=>false,
 			)));
 
-			$child->attach(do_lorem_template('MENU_SPACER_dropdown',array('TOP_LEVEL'=>false,)));
+			$child->attach(do_lorem_template('MENU_SPACER_dropdown',array(
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+			)));
 		}
 		foreach (placeholder_array(3) as $v)
 		{
@@ -389,9 +404,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>true,
-				'POPUP_WIDTH'=>'500',
-				'POPUP_HEIGHT'=>'500',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>$child,
@@ -404,7 +416,7 @@ class Hook_addon_registry_core_menus
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
-				'CURRENT_ZONE'=>False,
+				'CURRENT_ZONE'=>false,
 			)));
 		}
 		$menu=do_lorem_template('MENU_dropdown',array(
@@ -438,9 +450,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>false,
-				'POPUP_WIDTH'=>'',
-				'POPUP_HEIGHT'=>'',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>'',
@@ -464,9 +473,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>true,
-				'POPUP_WIDTH'=>'500',
-				'POPUP_HEIGHT'=>'500',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>$child,
@@ -479,10 +485,14 @@ class Hook_addon_registry_core_menus
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
-				'CURRENT_ZONE'=>False,
+				'CURRENT_ZONE'=>false,
 			)));
 
-			$content->attach(do_lorem_template('MENU_SPACER_embossed',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_embossed',array(
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+			)));
 		}
 		$menu=do_lorem_template('MENU_embossed',array(
 			'CONTENT'=>$content,
@@ -523,9 +533,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>false,
-				'POPUP_WIDTH'=>'',
-				'POPUP_HEIGHT'=>'',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>'',
@@ -549,9 +556,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>true,
-				'POPUP_WIDTH'=>'500',
-				'POPUP_HEIGHT'=>'500',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>$child,
@@ -564,10 +568,14 @@ class Hook_addon_registry_core_menus
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
-				'CURRENT_ZONE'=>False,
+				'CURRENT_ZONE'=>false,
 			)));
 
-			$content->attach(do_lorem_template('MENU_SPACER_popup',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_popup',array(
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+			)));
 		}
 		$menu=do_lorem_template('MENU_popup',array(
 			'CONTENT'=>$content,
@@ -608,9 +616,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>false,
-				'POPUP_WIDTH'=>'',
-				'POPUP_HEIGHT'=>'',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>'',
@@ -634,9 +639,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>true,
-				'POPUP_WIDTH'=>'500',
-				'POPUP_HEIGHT'=>'500',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>$child,
@@ -649,10 +651,14 @@ class Hook_addon_registry_core_menus
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
-				'CURRENT_ZONE'=>False,
+				'CURRENT_ZONE'=>false,
 			)));
 
-			$content->attach(do_lorem_template('MENU_SPACER_select',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_select',array(
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+			)));
 		}
 		$menu=do_lorem_template('MENU_select',array(
 			'CONTENT'=>$content,
@@ -693,9 +699,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>false,
-				'POPUP_WIDTH'=>'',
-				'POPUP_HEIGHT'=>'',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>'',
@@ -713,18 +716,21 @@ class Hook_addon_registry_core_menus
 		}
 		foreach (placeholder_array(3) as $k=>$v)
 		{
-			if($k==1)
-				$content->attach(do_lorem_template('MENU_SPACER_top',array()));
-			else
+			if ($k==1)
+			{
+				$content->attach(do_lorem_template('MENU_SPACER_top',array(
+					'MENU'=>lorem_word_2(),
+					'TOP_LEVEL'=>true,
+					'THE_LEVEL'=>'0',
+				)));
+			} else
+			{
 				$content->attach(do_lorem_template('MENU_BRANCH_top',array(
 					'CAPTION'=>lorem_word(),
 					'IMG'=>'',
 					'URL'=>placeholder_url(),
 					'PAGE_LINK'=>placeholder_link(),
 					'ACCESSKEY'=>'',
-					'POPUP'=>true,
-					'POPUP_WIDTH'=>'500',
-					'POPUP_HEIGHT'=>'500',
 					'NEW_WINDOW'=>false,
 					'TOOLTIP'=>lorem_phrase(),
 					'CHILDREN'=>$child,
@@ -737,8 +743,9 @@ class Hook_addon_registry_core_menus
 					'LAST'=>false,
 					'BRETHREN_COUNT'=>'3',
 					'CURRENT'=>false,
-					'CURRENT_ZONE'=>False,
+					'CURRENT_ZONE'=>false,
 				)));
+			}
 		}
 		$menu=do_lorem_template('MENU_top',array(
 			'CONTENT'=>$content,
@@ -771,9 +778,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>false,
-				'POPUP_WIDTH'=>'',
-				'POPUP_HEIGHT'=>'',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>'',
@@ -797,9 +801,6 @@ class Hook_addon_registry_core_menus
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
-				'POPUP'=>true,
-				'POPUP_WIDTH'=>'500',
-				'POPUP_HEIGHT'=>'500',
 				'NEW_WINDOW'=>false,
 				'TOOLTIP'=>lorem_phrase(),
 				'CHILDREN'=>$child,
@@ -812,10 +813,14 @@ class Hook_addon_registry_core_menus
 				'LAST'=>false,
 				'BRETHREN_COUNT'=>'3',
 				'CURRENT'=>false,
-				'CURRENT_ZONE'=>False,
+				'CURRENT_ZONE'=>false,
 			)));
 
-			$content->attach(do_lorem_template('MENU_SPACER_zone',array()));
+			$content->attach(do_lorem_template('MENU_SPACER_zone',array(
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+			)));
 		}
 		$menu=do_lorem_template('MENU_zone',array(
 			'CONTENT'=>$content,

@@ -41,7 +41,7 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		require_code('chat');
 		$types=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im'=>0));
@@ -49,15 +49,15 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
 		{
 			if (check_chatroom_access($type,true))
 			{
-				$pagelinks[]=array(
+				$page_links[]=array(
 					'id'=>$type['id'],
 					'title'=>$type['room_name'],
 				);
 			}
 		}
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

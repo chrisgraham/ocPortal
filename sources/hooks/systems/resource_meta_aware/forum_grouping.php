@@ -52,9 +52,9 @@ class Hook_resource_meta_aware_forum_grouping
 			'title_field'=>'c_title',
 			'title_field_dereference'=>false,
 
-			'view_pagelink_pattern'=>NULL,
-			'edit_pagelink_pattern'=>'_SEARCH:admin_ocf_forum_groupings:_ed:_WILD',
-			'view_category_pagelink_pattern'=>NULL,
+			'view_page_link_pattern'=>NULL,
+			'edit_page_link_pattern'=>'_SEARCH:admin_ocf_forum_groupings:_ed:_WILD',
+			'view_category_page_link_pattern'=>NULL,
 			'add_url'=>(function_exists('get_member') && has_actual_page_access(get_member(),'admin_ocf_forum_groupings'))?(get_module_zone('admin_ocf_forum_groupings').':admin_ocf_forum_groupings:ad'):NULL,
 			'archive_url'=>NULL,
 

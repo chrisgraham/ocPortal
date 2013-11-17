@@ -128,7 +128,7 @@ class Block_side_shoutbox
 			'LAST_MESSAGE_ID'=>strval($last_message_id),
 			'MESSAGES'=>$tpl,
 			'URL'=>$url,
-			'ROOM_ID'=>strval($room_id),
+			'CHATROOM_ID'=>strval($room_id),
 			'NUM_MESSAGES'=>strval($num_messages),
 			'BLOCK_PARAMS'=>'',
 		));

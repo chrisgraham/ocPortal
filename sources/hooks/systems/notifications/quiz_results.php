@@ -53,19 +53,19 @@ class Hook_Notification_quiz_results extends Hook_Notification__Staff
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		$pagelinks=array();
+		$page_links=array();
 
 		$types=$GLOBALS['SITE_DB']->query_select('quizzes',array('id','q_name'));
 		foreach ($types as $type)
 		{
-			$pagelinks[]=array(
+			$page_links[]=array(
 				'id'=>$type['id'],
 				'title'=>get_translated_text($type['q_name']),
 			);
 		}
-		sort_maps_by($pagelinks,'title');
+		sort_maps_by($page_links,'title');
 
-		return $pagelinks;
+		return $page_links;
 	}
 
 	/**

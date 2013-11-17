@@ -2537,7 +2537,7 @@ function propagate_ocselect($prefix='')
  *
  * @return string				Extra page-link mappings
  */
-function propagate_ocselect_pagelink()
+function propagate_ocselect_page_link()
 {
 	$map=propagate_ocselect();
 	$_map='';
@@ -2564,8 +2564,8 @@ function make_fractionable_editable($content_type,$id,$title)
 
 	$parameters=array(
 		is_object($title)?$title->evaluate():$title,
-		array_key_exists('edit_pagelink_field',$info)?$info['edit_pagelink_field']:preg_replace('#^\w\w?_#','',$info['title_field']),
-		str_replace('_WILD',is_integer($id)?strval($id):$id,array_key_exists('edit_pagelink_pattern_post',$info)?$info['edit_pagelink_pattern_post']:preg_replace('#:_(.*)#',':__${1}',$info['edit_pagelink_pattern'])),
+		array_key_exists('edit_page_link_field',$info)?$info['edit_page_link_field']:preg_replace('#^\w\w?_#','',$info['title_field']),
+		str_replace('_WILD',is_integer($id)?strval($id):$id,array_key_exists('edit_page_link_pattern_post',$info)?$info['edit_page_link_pattern_post']:preg_replace('#:_(.*)#',':__${1}',$info['edit_page_link_pattern'])),
 		(array_key_exists('title_field_supports_comcode',$info) && $info['title_field_supports_comcode'])?'1':'0',
 	);
 	return directive_tempcode('FRACTIONAL_EDITABLE',is_object($title)?$title:escape_html($title),$parameters);

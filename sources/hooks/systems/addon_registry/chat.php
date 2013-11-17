@@ -385,7 +385,7 @@ class Hook_addon_registry_chat
 		return array(
 			lorem_globalise(do_lorem_template('CHAT_INVITE',array(
 				'USERNAME'=>lorem_word(),
-				'ROOM'=>lorem_phrase(),
+				'CHATROOM'=>lorem_phrase(),
 				'LINK'=>placeholder_link(),
 				'page'=>lorem_phrase(),
 				'type'=>lorem_phrase(),
@@ -412,7 +412,7 @@ class Hook_addon_registry_chat
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_SHOUTBOX',array(
-				'ROOM_ID'=>placeholder_id(),
+				'CHATROOM_ID'=>placeholder_id(),
 				'NUM_MESSAGES'=>placeholder_number(),
 				'LAST_MESSAGE_ID'=>placeholder_id(),
 				'MESSAGES'=>$tpl,
@@ -496,13 +496,13 @@ class Hook_addon_registry_chat
 
 		$im_area_template=do_lorem_template('CHAT_LOBBY_IM_AREA',array(
 			'MESSAGES_PHP'=>find_script('messages'),
-			'ROOM_ID'=>'__room_id__'
+			'CHATROOM_ID'=>'__room_id__'
 		));
 
 		$im_participant_template=do_lorem_template('CHAT_LOBBY_IM_PARTICIPANT',array(
 			'PROFILE_URL'=>placeholder_url(),
 			'ID'=>'__id__',
-			'ROOM_ID'=>'__room_id__',
+			'CHATROOM_ID'=>'__room_id__',
 			'USERNAME'=>'__username__',
 			'ONLINE'=>'__online__',
 			'AVATAR_URL'=>'__avatar_url__',
@@ -575,14 +575,14 @@ class Hook_addon_registry_chat
 				'FRIENDS'=>$friends_tpl,
 				'URL_ADD_FRIEND'=>placeholder_url(),
 				'URL_REMOVE_FRIENDS'=>placeholder_url(),
-				'ROOMS'=>$fields,
-				'PRIVATE_ROOM'=>placeholder_link(),
-				'ROOM_URL'=>placeholder_url(),
+				'CHATROOMS'=>$fields,
+				'PRIVATE_CHATROOM'=>placeholder_link(),
+				'CHATROOM_URL'=>placeholder_url(),
 				'PASSWORD_HASH'=>placeholder_random(),
 				'MOD_LINK'=>placeholder_link(),
 				'BLOCKING_LINK'=>placeholder_link(),
 				'SETEFFECTS_LINK'=>placeholder_link(),
-				'ADD_ROOM_URL'=>placeholder_url(),
+				'ADD_CHATROOM_URL'=>placeholder_url(),
 				'MEMBER_ID'=>placeholder_id(),
 			)), NULL, '', true)
 		);
@@ -658,11 +658,11 @@ class Hook_addon_registry_chat
 			lorem_globalise(do_lorem_template('CHAT_ROOM_SCREEN',array(
 				'CHATTERS'=>$usernames,
 				'CHAT_SOUND'=>$chat_sound,
-				'ROOM_ID'=>placeholder_number(),
+				'CHATROOM_ID'=>placeholder_number(),
 				'DEBUG'=>'0',
 				'MESSAGES_PHP'=>find_script('messages'),
 				'CHATCODE_HELP'=>lorem_phrase(),
-				'ROOM_NAME'=>lorem_word(),
+				'CHATROOM_NAME'=>lorem_word(),
 				'MICRO_BUTTONS'=>$micro_buttons,
 				'BUTTONS'=>$buttons,
 				'YOUR_NAME'=>lorem_word(),
@@ -742,7 +742,7 @@ class Hook_addon_registry_chat
 	{
 		$im_area_template=do_lorem_template('CHAT_LOBBY_IM_AREA',array(
 			'MESSAGES_PHP'=>find_script('messages'),
-			'ROOM_ID'=>placeholder_id()
+			'CHATROOM_ID'=>placeholder_id()
 		));
 		return array(
 			lorem_globalise(do_lorem_template('CHAT_SITEWIDE_IM_POPUP',array(

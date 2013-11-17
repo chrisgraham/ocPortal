@@ -70,7 +70,7 @@ function add_bookmark_form($post_url)
 
 	$url=base64_decode(get_param('url','',true));
 	$url=convert_to_internal_encoding($url,'UTF-8'); // Note that this is intentionally passed in to not be a short URL
-	$page_link=convert_to_internal_encoding(url_to_pagelink($url,false,false),'UTF-8');
+	$page_link=convert_to_internal_encoding(url_to_page_link($url,false,false),'UTF-8');
 	$default_title=get_param('title','',true);
 	$default_title=convert_to_internal_encoding($default_title,'UTF-8');
 	$default_title=preg_replace('#\s.\s'.preg_quote(get_site_name(),'#').'$#s','',$default_title);

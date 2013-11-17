@@ -15,7 +15,7 @@ class Mx_chat extends Module_chat
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-pagelink rather than a screen-name).
+	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
@@ -116,12 +116,12 @@ class Mx_chat extends Module_chat
 		$password_hash=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
 		return do_template('CHAT_LOBBY_SCREEN',array(
 			'_GUID'=>'fb96937da8ac1796b80f1f618ba9a01e',
-			'ROOM_URL'=>$room_url,
+			'CHATROOM_URL'=>$room_url,
 			'FRIENDS'=>$friends,
 			'PASSWORD_HASH'=>$password_hash,
 			'CHAT_SOUND'=>get_chat_sound_tpl(),
 			'TITLE'=>$this->title,
-			'ROOMS'=>$fields,
+			'CHATROOMS'=>$fields,
 			'SETEFFECTS_LINK'=>$seteffectslink,
 		));
 	}
@@ -160,15 +160,15 @@ class Mx_chat extends Module_chat
 
 		$messages_php=find_script('messages');
 		$password_hash=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
-		return do_template('CHAT_ROOM_SCREEN',array(
+		return do_template('CHAT_CHATROOM_SCREEN',array(
 			'_GUID'=>'0b4adbe09e9cf38b2104b12b4381b256',
 			'MESSAGES_PHP'=>$messages_php,
 			'PASSWORD_HASH'=>$password_hash,
 			'CHAT_SOUND'=>get_chat_sound_tpl(),
-			'ROOM_ID'=>$room_id,
+			'CHATROOM_ID'=>$room_id,
 			'DEBUG'=>$debug,
 			'OPTIONS_URL'=>$cs_post_url,
-			'ROOM_NAME'=>'',
+			'CHATROOM_NAME'=>'',
 			'YOUR_NAME'=>$yourname,
 			'SUBMIT_VALUE'=>$posting_name,
 			'INTRODUCTION'=>'',

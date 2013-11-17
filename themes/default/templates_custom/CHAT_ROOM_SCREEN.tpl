@@ -6,20 +6,20 @@
 
 <div class="chat_you_are">{!LOGGED_IN_AS,{YOUR_NAME*}}</div>
 
-<h2>{ROOM_ID*}</h2>
+<h2>{CHATROOM_ID*}</h2>
 
 <div class="float_surrounder">
 	<div class="left">
 		<form title="{!MESSAGE}" onsubmit="return false;" action="#" method="post" style="display: inline;">
 			<div style="display: inline;">
 				<p style="display: none;"><label for="post">{!MESSAGE}</label></p>
-				<textarea class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,'{ROOM_ID;*}','post'); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="42" rows="1"></textarea>
+				<textarea class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,'{CHATROOM_ID;*}','post'); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="42" rows="1"></textarea>
 			</div>
 		</form>
 	</div>
 	<div class="left">
-		<form title="{SUBMIT_VALUE*}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
-			<input type="button" name="post_now" onclick="return chat_post(event,'{ROOM_ID;*}','post');" value="{SUBMIT_VALUE*}" />
+		<form title="{SUBMIT_VALUE*}" action="{MESSAGES_PHP*}?action=post&amp;room_id={CHATROOM_ID*}" method="post" style="display: inline;">
+			<input type="button" name="post_now" onclick="return chat_post(event,'{CHATROOM_ID;*}','post');" value="{SUBMIT_VALUE*}" />
 		</form>
 		{+START,IF,{$OCF}}
 			<span class="horiz_field_sep associated_link"><a tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT;*,emoticons}?field_name=post{$KEEP;*}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a></span>
@@ -41,7 +41,7 @@
 <div class="messages_window"><div class="messages_window_full_chat" id="messages_window"></div></div>
 
 <p>
-	{!USERS_IN_ROOM} <span id="chat_members_update" class="vertical_alignment"><img aria-busy="true" src="{$IMG*,loading}" title="{!LOADING}" alt="{!LOADING}" /> <span>{!LOADING}</span></span>
+	{!USERS_IN_CHATROOM} <span id="chat_members_update" class="vertical_alignment"><img aria-busy="true" src="{$IMG*,loading}" title="{!LOADING}" alt="{!LOADING}" /> <span>{!LOADING}</span></span>
 </p>
 
 <script>// <![CDATA[
@@ -50,9 +50,9 @@ function on_login_completed_room()
 	var messages=document.getElementById('messages_window');
 	set_inner_html(messages,'');
 
-	chat_load('{ROOM_ID%}');
+	chat_load('{CHATROOM_ID%}');
 	window.con.jid='{$REPLACE;*, ,.,{$USERNAME}}@{$DOMAIN;*}';
-	window.room=mucMan.getRoom( "{ROOM_ID*}" ).createState();
+	window.room=mucMan.getRoom( "{CHATROOM_ID*}" ).createState();
 	window.room.join('{$REPLACE;*, ,.,{$USERNAME}}');
 	function loadRoomMembers()
 	{

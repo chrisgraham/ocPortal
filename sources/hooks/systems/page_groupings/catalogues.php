@@ -24,12 +24,15 @@ class Hook_page_groupings_catalogues
 	/**
 	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
-	 * @param  boolean		Whether to look deep into the database (or whatever else might be time-intensive) for links
+	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
+	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($exhaustive=false)
+	function run($member_id=NULL,$extensive_docs=false)
 	{
 		if (!addon_installed('catalogues')) return array();
+
+		$exhaustive=true;
 
 		$ret=array();
 		if (has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues'))
