@@ -777,7 +777,7 @@ class Hook_phpbb2
 					{
 						$answer=$answers[$row2['vote_cast']-1];
 					}
-					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer));
+					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer,'pv_ip'=>''));
 				}
 			}
 

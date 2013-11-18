@@ -2289,7 +2289,7 @@ class Hook_ocp_merge
 				if (!array_key_exists($id_ordinal_map[$vote],$answers)) continue;
 				$answer=$answers[$id_ordinal_map[$vote]];
 				if (is_null($row2['pv_member_id'])) continue;
-				$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$row2['pv_member_id'],'pv_answer_id'=>$answer));
+				$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$row2['pv_member_id'],'pv_answer_id'=>$answer,'pv_ip'=>array_key_exists('pv_ip',$row2)?$row2['pv_ip']:''));
 			}
 
 			import_id_remap_put('f_poll',strval($row['id']),$id_new);

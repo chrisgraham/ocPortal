@@ -946,7 +946,7 @@ class Hook_vb3
 				if ((!is_null($member_id)) && ($member_id!=0))
 				{
 					$answer=array_key_exists($row2['voteoption']-1,$answers)?$answers[$row2['voteoption']-1]:-1;
-					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer));
+					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer,'pv_ip'=>''));
 				}
 			}
 

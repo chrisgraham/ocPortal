@@ -115,8 +115,15 @@ function ocf_poll_get_results($poll_id,$request_results=true)
 	if ($request_results)
 	{
 		// Forfeighting this by viewing results?
-		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_answer_id',array('pv_poll_id'=>$poll_id,'pv_member_id'=>get_member()));
-		if (is_null($test))
+		if (is_guest())
+		{
+			$voted_already_map=array('pv_poll_id'=>$poll_id,'pv_ip'=>get_ip_address());
+		} else
+		{
+			$voted_already_map=array('pv_poll_id'=>$poll_id,'pv_member_id'=>get_member());
+		}
+		$voted_already=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_member_id',$voted_already_map);
+		if (is_null($voted_already))
 		{
 			$forfeight=!has_privilege(get_member(),'view_poll_results_before_voting');
 			if ($forfeight)
@@ -124,7 +131,8 @@ function ocf_poll_get_results($poll_id,$request_results=true)
 				$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array(
 					'pv_poll_id'=>$poll_id,
 					'pv_member_id'=>get_member(),
-					'pv_answer_id'=>-1
+					'pv_answer_id'=>-1,
+					'pv_ip'=>get_ip_address(),
 				));
 			}
 		}

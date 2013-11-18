@@ -612,7 +612,7 @@ class Module_topicview
 					$button=do_lang_tempcode('POLL_REQUIRES_REPLY');
 				} else
 				{
-					if ((!has_privilege(get_member(),'vote_in_polls')) || (is_guest()))
+					if (!has_privilege(get_member(),'vote_in_polls'))
 					{
 						$button=do_lang_tempcode('VOTE_DENIED');
 					} else

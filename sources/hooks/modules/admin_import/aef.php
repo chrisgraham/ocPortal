@@ -846,7 +846,7 @@ class Hook_aef
 					{
 						$answer=$answers[$answer_map[$row2['pv_pooid']]];
 					}
-					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer));
+					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer,'pv_ip'=>''));
 				}
 			}
 

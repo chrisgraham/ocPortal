@@ -134,7 +134,6 @@ function ocf_vote_in_poll($poll_id,$votes,$member_id=NULL,$topic_info=NULL)
 {
 	// Who's voting
 	if (is_null($member_id)) $member_id=get_member();
-	if ($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id()) warn_exit(do_lang_tempcode('GUESTS_CANT_VOTE_IN_POLLS'));
 
 	// Check they're allowed to vote
 	if (!has_privilege($member_id,'vote_in_polls')) warn_exit(do_lang_tempcode('VOTE_DENIED'));
@@ -144,6 +143,15 @@ function ocf_vote_in_poll($poll_id,$votes,$member_id=NULL,$topic_info=NULL)
 	$forum_id=$topic_info[0]['t_forum_id'];
 	if ((!has_category_access($member_id,'forums',strval($forum_id))) && (!is_null($forum_id))) warn_exit(do_lang_tempcode('VOTE_CHEAT'));
 	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_member_id',array('pv_poll_id'=>$poll_id,'pv_member_id'=>$member_id));
+	if (is_guest($member_id))
+	{
+		$voted_already_map=array('pv_poll_id'=>$poll_id,'pv_ip'=>get_ip_address());
+	} else
+	{
+		$voted_already_map=array('pv_poll_id'=>$poll_id,'pv_member_id'=>$member_id);
+	}
+	$voted_already=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_member_id',$voted_already_map);
+	if (!is_null($voted_already)) warn_exit(do_lang_tempcode('NOVOTE'));
 	if (!is_null($test)) warn_exit(do_lang_tempcode('NOVOTE'));
 
 	// Check their vote is valid
@@ -162,7 +170,8 @@ function ocf_vote_in_poll($poll_id,$votes,$member_id=NULL,$topic_info=NULL)
 		$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array(
 			'pv_poll_id'=>$poll_id,
 			'pv_member_id'=>$member_id,
-			'pv_answer_id'=>$vote
+			'pv_answer_id'=>$vote,
+			'pv_ip'=>get_ip_address(),
 		));
 
 		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_poll_answers SET pa_cache_num_votes=(pa_cache_num_votes+1) WHERE id='.strval($vote),1);

@@ -279,6 +279,15 @@ function install_ocf($upgrade_from=NULL)
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<10.0))
 	{
+		if (strpos(get_db_type(),'mysql')!==false)
+		{
+			$GLOBALS['FORUM_DB']->query('ALTER TABLE '.get_table_prefix().'f_poll_votes ADD COLUMN id int NOT NULL AUTO_INCREMENT, DROP PRIMARY KEY, ADD PRIMARY KEY (id)');
+			$GLOBALS['FORUM_DB']->query_update('db_meta',array('m_type'=>'AUTO_LINK'),array('m_table'=>'f_poll_votes','m_type'=>'*AUTO_LINK'));
+			$GLOBALS['FORUM_DB']->query_update('db_meta',array('m_type'=>'USER'),array('m_table'=>'f_poll_votes','m_type'=>'*USER'));
+			$GLOBALS['FORUM_DB']->query_insert('db_meta',array('m_table'=>'f_poll_votes','m_name'=>'id','m_type'=>'*AUTO'));
+		}
+		$GLOBALS['FORUM_DB']->add_table_field('f_poll_votes','pv_ip','IP');
+
 		$GLOBALS['FORUM_DB']->rename_table('f_categories','f_forum_groupings');
 		$GLOBALS['FORUM_DB']->alter_table_field('f_forums','f_category_id','AUTO_LINK','f_forum_grouping_id');
 		$privileges=array('moderate_private_topic'=>'moderate_private_topic','edit_private_topic_posts'=>'edit_private_topic_posts','delete_private_topic_posts'=>'delete_private_topic_posts');
@@ -760,9 +769,10 @@ function install_ocf($upgrade_from=NULL)
 		));
 
 		$GLOBALS['FORUM_DB']->create_table('f_poll_votes',array(
-			'pv_poll_id'=>'*AUTO_LINK',
-			'pv_member_id'=>'*MEMBER',
-			'pv_answer_id'=>'*AUTO_LINK' // -1 means "forfeited". We'd use NULL, but we aren't allowed NULL fragments in keys
+			'id'=>'AUTO',
+			'pv_poll_id'=>'AUTO_LINK',
+			'pv_member_id'=>'MEMBER',
+			'pv_answer_id'=>'AUTO_LINK' // -1 means "forfeited". We'd use NULL, but we aren't allowed NULL fragments in keys
 		));
 
 		$GLOBALS['FORUM_DB']->create_table('f_multi_moderations',array(
