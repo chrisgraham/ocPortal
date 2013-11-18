@@ -133,7 +133,7 @@ function _build_sitemap_menu($menu)
 		$use_page_groupings=false;
 		$consider_secondary_categories=false;
 		$consider_validation=false;
-		$include='contents';
+		$include='children';
 
 		// Parse options
 		if ($menu!='')
@@ -194,13 +194,15 @@ function _build_sitemap_menu($menu)
 			SITEMAP_GATHER_DESCRIPTION | SITEMAP_GATHER_IMAGE
 		);
 
+		if ($node===NULL) continue;
+
 		switch ($include)
 		{
-			case 'contents':
+			case 'children':
 				$root['children']=array_merge($root['children'],$node['children']);
 				break;
 
-			case 'wrapper':
+			case 'node':
 				$root['children'][]=$node;
 				break;
 		}
@@ -281,7 +283,7 @@ function _build_stored_menu_branch($item,$items)
 
 	if ($is_page_link)
 	{
-		// TODO: Category permissions?
+		// TODO: Category permissions? #140 on tracker
 
 		if ($item['i_include_sitemap']!=INCLUDE_SITEMAP_NO)
 		{
@@ -434,7 +436,7 @@ function _render_menu_branch($branch,$codename,$source_member,$level,$type,$as_a
 	// Work out the page-link
 	if ($branch['page_link']===NULL) // Try and convert URL to a page-link, if we can
 	{
-		$page_link=url_to_page_link($branch['url']);
+		$page_link=($branch['url']=='')?'':url_to_page_link($branch['url']);
 	} else
 	{
 		$page_link=$branch['page_link'];

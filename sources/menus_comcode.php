@@ -39,15 +39,9 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 	$i=0;
 	$lines=explode("\n",$comcode);
 	$stack=array(); // Stores the previous level(s) if we are jumping down to a further one
-	$root_branch=array( // Our root branch is the first branch we load up
-		'type'=>'root',
-		'caption'=>$type,
-		'special'=>$menu,
-		'children'=>array(),
-		'only_on_page'=>NULL,
-		'modifiers'=>array()
-	);
-	$current_level=$root_branch;
+	$root=_get_menu_root_wrapper();
+	$root['content_id']=$menu;
+	$current_level=$root;
 
 	if (count($lines)==0) return new ocp_tempcode();
 
@@ -58,13 +52,22 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 			if (($i!=0) && ($i<count($lines)-2))
 			{
 				$current=array(
-					'type'=>'blank',
-					'caption'=>NULL,
-					'special'=>NULL,
-					'children'=>NULL,
-					'only_on_page'=>NULL,
-					'modifiers'=>array()
+					'title'=>'',
+					'content_type'=>'spacer',
+					'content_id'=>NULL,
+					'modifiers'=>array(),
+					'only_on_page'=>'',
+					'page_link'=>NULL,
+					'url'=>NULL,
+					'extra_meta'=>array(
+						'description'=>NULL,
+						'image'=>NULL,
+						'image_2x'=>NULL,
+					),
+					'has_possible_children'=>true,
+					'children'=>array(),
 				);
+
 				$current_level[]=$current;
 			}
 			continue;
@@ -85,7 +88,7 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 			require_code('comcode_renderer');
 			comcode_parse_error(false,array('CCP_MENU_JUMPYNESS'),$i,$comcode);
 		}
-		if (($last_level-$level==0) && ($current_level['type']=='drawer') && (strpos($line,'=')===false)) // little hack to make case of branch having no children work
+		if (($last_level-$level==0) && ($current_level['content_type']=='comcode_drawer_branch') && (strpos($line,'=')===false)) // little hack to make case of branch having no children work
 		{
 			$last_level++;
 		}
@@ -144,12 +147,20 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 
 			array_push($stack,$current_level);
 			$current_level=array(
-				'type'=>'drawer',
-				'caption'=>$caption,
-				'special'=>NULL,
+				'title'=>make_string_tempcode($caption),
+				'content_type'=>'comcode_drawer_branch',
+				'content_id'=>NULL,
+				'modifiers'=>$modifiers,
+				'only_on_page'=>'',
+				'page_link'=>NULL,
+				'url'=>'',
+				'extra_meta'=>array(
+					'description'=>NULL,
+					'image'=>NULL,
+					'image_2x'=>NULL,
+				),
+				'has_possible_children'=>true,
 				'children'=>array(),
-				'only_on_page'=>NULL,
-				'modifiers'=>$modifiers
 			);
 		} else // For simple link branches
 		{
@@ -166,12 +177,20 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 			}*/
 
 			$current_level['children'][]=array(
-				'type'=>'link',
-				'caption'=>$caption,
-				'special'=>@html_entity_decode($url,ENT_QUOTES,get_charset()),
+				'title'=>make_string_tempcode($caption),
+				'content_type'=>'comcode_end_branch',
+				'content_id'=>NULL,
+				'modifiers'=>$modifiers,
+				'only_on_page'=>'',
+				'page_link'=>NULL,
+				'url'=>@html_entity_decode($url,ENT_QUOTES,get_charset()),
+				'extra_meta'=>array(
+					'description'=>NULL,
+					'image'=>NULL,
+					'image_2x'=>NULL,
+				),
+				'has_possible_children'=>true,
 				'children'=>array(),
-				'only_on_page'=>NULL,
-				'modifiers'=>$modifiers
 			);
 		}
 
@@ -185,6 +204,6 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 		$current_level['children'][]=$this_level;
 	}
 
-	return render_menu($current_level,$source_member,$type);
+	return _render_menu($current_level,$source_member,$type);
 }
 

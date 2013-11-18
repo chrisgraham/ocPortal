@@ -164,6 +164,8 @@ class Module_admin_ecommerce_logs
 			if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		}
 
+		$type=get_param('type','misc');
+
 		if ($type=='misc') return $this->misc();
 		if ($type=='cash_flow') return $this->cash_flow();
 		if ($type=='profit_loss') return $this->profit_loss();
@@ -188,7 +190,7 @@ class Module_admin_ecommerce_logs
 			array(
 				array('menu/adminzone/audit/ecommerce/cash_flow',array('_SELF',array('type'=>'cash_flow'),'_SELF'),do_lang('CASH_FLOW')),
 				array('menu/adminzone/audit/ecommerce/profit_loss',array('_SELF',array('type'=>'profit_loss'),'_SELF'),do_lang('PROFIT_LOSS')),
-				array('menu/_generic_admin/add_to_category',array('_SELF',array('type'=>'trigger'),'_SELF'),do_lang('MANUAL_TRANSACTION')),
+				array('menu/rich_content/ecommerce/purchase',array('_SELF',array('type'=>'trigger'),'_SELF'),do_lang('MANUAL_TRANSACTION')),
 				array('menu/adminzone/audit/ecommerce/transactions',array('_SELF',array('type'=>'logs'),'_SELF'),do_lang('LOGS')),
 				array('menu/adminzone/audit/ecommerce/invoices',array('admin_invoices',array('type'=>'misc'),get_module_zone('admin_invoices')),do_lang('INVOICES')),
 				addon_installed('shopping')?array('menu/adminzone/audit/ecommerce/orders',array('admin_orders',array('type'=>'misc'),get_module_zone('admin_orders')),do_lang('shopping:ORDERS')):NULL,

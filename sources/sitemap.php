@@ -143,7 +143,8 @@ function retrieve_sitemap_node($page_link='',$callback=NULL,$valid_node_types=NU
 		}
 		if (is_null($hook))
 		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			attach_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
+			return NULL;
 		}
 	}
 
