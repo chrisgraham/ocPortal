@@ -468,7 +468,7 @@ class Module_topicview
 				{
 					if ((!has_specific_permission(get_member(),'vote_in_polls')) || (is_guest()))
 					{
-						$button=do_lang_tempcode('VOTE_DENIED');
+						$button=do_lang_tempcode(is_guest()?'GUESTS_CANT_VOTE_IN_POLLS':'VOTE_DENIED');
 					} else
 					{
 						if (!is_null($voted_already))
