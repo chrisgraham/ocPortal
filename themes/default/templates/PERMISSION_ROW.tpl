@@ -6,7 +6,7 @@
 	{CELLS}
 	<td>
 		{+START,IF,{$JS_ON}}
-			<input class="button_micro" type="button" value="{$?,{HAS},-,+}" onclick="{CODE*}; this.value=(this.value=='-')?'+':'-';" />
+			<input title="{!SET_ALL_PERMISSIONS_ON_ROW}" class="button_micro" type="button" value="{$?,{HAS},-,+}" onclick="{CODE*}; this.value=(this.value=='-')?'+':'-';" />
 		{+END}
 	</td>
 </tr>
