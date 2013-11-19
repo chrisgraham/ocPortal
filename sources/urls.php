@@ -842,7 +842,7 @@ function page_link_decode($page_link)
 			}
 		} else
 		{
-			$attributes=array();
+			$attributes=array('page'=>get_zone_default_page($zone));
 		}
 		unset($bits[1]);
 	} else

@@ -324,7 +324,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			// Do page-groupings
 			if (count($page_groupings)!=1)
 			{
-				$page_grouping_sitemap_ob=$this->_get_sitemap_object('page_grouping');
+				$page_grouping_sitemap_xml_ob=$this->_get_sitemap_object('page_grouping');
 
 				foreach ($page_groupings as $page_grouping=>$page_grouping_pages)
 				{
@@ -349,7 +349,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 						continue;
 					}
 
-					$child_node=$page_grouping_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+					$child_node=$page_grouping_sitemap_xml_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 					if ($child_node!==NULL)
 						$children[]=$child_node;
 				}

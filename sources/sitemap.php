@@ -42,6 +42,8 @@ Node structure includes the following special data for menu rendering:
  */
 function init__sitemap()
 {
+	if (function_exists('set_time_limit')) @set_time_limit(100);
+
 	// Defining what should be gathered with the Sitemap
 	define('SITEMAP_GATHER_DESCRIPTION',1);
 	define('SITEMAP_GATHER_IMAGE',2);
@@ -104,8 +106,6 @@ function init__sitemap()
 function retrieve_sitemap_node($page_link='',$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0)
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
-
-	if (function_exists('set_time_limit')) @set_time_limit(100);
 
 	if ($page_link=='')
 	{

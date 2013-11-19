@@ -146,5 +146,5 @@ function build_news_sitemap()
 	sync_file($path);
 
 	require_code('sitemap');
-	ping_sitemap(get_custom_base_url().'/ocp_news_sitemap.xml');
+	ping_sitemap_xml(get_custom_base_url().'/ocp_news_sitemap.xml');
 }

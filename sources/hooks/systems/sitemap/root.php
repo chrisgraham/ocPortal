@@ -127,10 +127,10 @@ class Hook_sitemap_root extends Hook_sitemap_base
 				$struct['extra_meta']['image']=find_theme_image('icons/24x24/menu/welcome');
 				$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/menu/welcome');
 			}
-		}
 
-		if ($callback!==NULL)
-			call_user_func($callback,$struct);
+			if ($callback!==NULL)
+				call_user_func($callback,$struct);
+		}
 
 		// Categories done after node callback, to ensure sensible ordering
 		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
