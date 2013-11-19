@@ -228,7 +228,7 @@ class Block_side_calendar
 			$day_start=mktime(12,0,0,intval($bits[1]),intval($bits[2]),intval($bits[0]));
 			if (!array_key_exists($day_start,$days))
 			{
-				$date_section=get_timezoned_date($day_start,false,false,true);
+				$date_section=get_timezoned_date($day_start,false); // Must be rendered in user's timezone not GMT, as GMT day may be ahead of the user's timezoned day and hence render the wrong contextual date.
 				if ($from<$period_start)
 					$date_section=do_lang('DATE_IN_PAST',$date_section);
 				$days[$day_start]=array('TIMESTAMP'=>strval($day_start),'TIME'=>$date_section,'EVENTS'=>array());
