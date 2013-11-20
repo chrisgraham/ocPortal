@@ -18,7 +18,6 @@
  * @package		stats
  */
 
-
 /**
  * Module page class.
  */

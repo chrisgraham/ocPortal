@@ -10,9 +10,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_form_interfaces
  */
-
 
 /**
  * Get the tempcode for a checkbox input.
