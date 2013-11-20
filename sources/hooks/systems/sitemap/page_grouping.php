@@ -93,7 +93,10 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 				$lang_string=$link[3];
 				if (($meta_gather & SITEMAP_GATHER_DESCRIPTION)!=0)
 				{
-					$description=comcode_lang_string($link[4]);
+					if (isset($link[4]))
+					{
+						$description=comcode_lang_string($link[4]);
+					}
 				}
 			}
 		}
