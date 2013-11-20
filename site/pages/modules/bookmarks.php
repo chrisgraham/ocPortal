@@ -77,10 +77,20 @@ class Module_bookmarks
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		if ($check_perms && is_guest($member_id)) return array();
-		return array(
-			'misc'=>array('MANAGE_BOOKMARKS','menu/site_meta/bookmarks'),
+
+		$cnt=$GLOBALS['SITE_DB']->query_select_value('bookmarks','COUNT(*)',array('b_owner'=>is_null($member_id)?get_member():$member_id));
+
+		$ret=array();
+		if ($cnt!=0)
+		{
+			$ret+=array(
+				'misc'=>array('MANAGE_BOOKMARKS','menu/site_meta/bookmarks'),
+			);
+		}
+		$ret+=array(
 			'ad'=>array('ADD_BOOKMARK','menu/_generic_admin/add_one'),
 		);
+		return $ret;
 	}
 
 	var $title;

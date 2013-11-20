@@ -7,6 +7,16 @@
 
 */
 
+/*
+Implementation notes...
+
+The output HTML is a mess, but it has to be.
+If you try and put p's in the right place, or close tags, Chrome won't import the bookmarks.
+p's go before and after each dl tag, and are not associated with dt tags.
+Neither dl nor dt tags should close.
+Folders can't themselves be links, so a node may have both a link and a separate folder (if it has children).
+*/
+
 header('Content-type: text/html; charset='.get_charset());
 header('Content-Disposition: attachment; filename="bookmarks.html"');
 
@@ -27,161 +37,53 @@ echo <<<END
   <DL><p>
 END;
 
-$comcode_page_rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'));
+require_code('sitemap');
 
-require_all_lang();
+$root=retrieve_sitemap_node(
+	/*$page_link=*/'',
+	/*$callback=*/NULL,
+	/*$valid_node_types=*/array('root','zone','page_grouping','page','comcode_page'),
+	/*$child_cutoff=*/NULL,
+	/*$max_recurse_depth=*/NULL,
+	/*$require_permission_support=*/false,
+	/*$zone=*/'_SEARCH',
+	true
+);
 
-$_zones=array();
-$zones=find_all_zones(false,true);
-
-// Reorder a bit
-$zones2=array();
-foreach (array('','site') as $zone_match)
+if (isset($root['children']))
 {
-	foreach ($zones as $i=>$zone)
+	foreach ($root['children'] as $child)
 	{
-		if ($zone[0]==$zone_match)
-		{
-			$zones2[]=$zone;
-			unset($zones[$i]);
-		}
-	}
-}
-$zones2=array_merge($zones2,$zones);
-
-require_code('zones2');
-
-foreach ($zones2 as $z)
-{
-	list($zone,$zone_title,,)=$z;
-	if (has_zone_access(get_member(),$zone))
-	{
-		$_pages=array();
-		$pages=find_all_pages_wrap($zone);
-		foreach ($pages as $page=>$page_type)
-		{
-			if (is_integer($page)) $page=strval($page);
-			if (substr($page,0,6)=='panel_') continue;
-			if (substr($page,0,1)=='_') continue;
-			if ($page=='404') continue;
-			if ($page=='sitemap') continue;
-			if (($page=='forums') && (substr($page_type,0,7)=='modules') && ((get_forum_type()=='ocf') || (get_forum_type()=='none'))) continue;
-			if (($page=='join') && (substr($page_type,0,7)=='modules') && (!is_guest())) continue;
-
-			if (has_page_access(get_member(),$page,$zone))
-			{
-				$_entry_points=array();
-				$__entry_points=extract_module_functions_page($zone,$page,array('get_entry_points'));
-				if (!is_null($__entry_points[0]))
-				{
-					$entry_points=is_array($__entry_points[0])?call_user_func_array($__entry_points[0][0],$__entry_points[0][1]):((strpos($__entry_points[0],'::')!==false)?NULL:eval($__entry_points[0])); // The strpos thing is a little hack that allows it to work for base-class derived modules
-					if (is_null($entry_points))
-					{
-						require_code(zone_black_magic_filterer($zone.'/pages/'.$page_type.'/'.$page.'.php',true));
-						if (class_exists('Mx_'.filter_naughty_harsh($page)))
-						{
-							$object=object_factory('Mx_'.filter_naughty_harsh($page));
-						} else
-						{
-							$object=object_factory('Module_'.filter_naughty_harsh($page));
-						}
-						$entry_points=$object->get_entry_points();
-					}
-				} else $entry_points=array('!');
-				if (!is_array($entry_points)) $entry_points=array('!');
-				if ($entry_points==array('!'))
-				{
-					$url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
-
-					$title=titleify($page);
-					if (substr($page_type,0,7)=='comcode')
-					{
-						foreach ($comcode_page_rows as $page_row)
-						{
-							if (($page_row['p_validated']==0) && ($page_row['the_page']==$page) && ($page_row['the_zone']==$zone))
-							{
-								continue 2;
-							}
-						}
-
-						$path=zone_black_magic_filterer(((strpos($page_type,'_custom')!==false)?get_custom_file_base():get_file_base()).'/'.filter_naughty($zone).'/pages/'.filter_naughty($page_type).'/'.$page.'.txt');
-						$page_contents=file_get_contents($path);
-						$matches=array();
-						if (preg_match('#\[title[^\]]*\]#',$page_contents,$matches)!=0)
-						{
-							$start=strpos($page_contents,$matches[0])+strlen($matches[0]);
-							$end=strpos($page_contents,'[/title]',$start);
-							$_title=comcode_to_tempcode(substr($page_contents,$start,$end-$start),NULL,true);
-							$title=strip_tags(@html_entity_decode($_title->evaluate(),ENT_QUOTES,get_charset()));
-						}
-					}
-					elseif (substr($page_type,0,4)=='html')
-					{
-						$path=zone_black_magic_filterer(((strpos($page_type,'_custom')!==false)?get_custom_file_base():get_file_base()).'/'.filter_naughty($zone).'/pages/'.filter_naughty($page_type).'/'.$page.'.htm');
-						$page_contents=file_get_contents($path);
-						$matches=array();
-						if (preg_match('#\<title[^\>]*\>#',$page_contents,$matches)!=0)
-						{
-							$start=strpos($page_contents,$matches[0])+strlen($matches[0]);
-							$end=strpos($page_contents,'</title>',$start);
-							$title=strip_tags(@html_entity_decode(substr($page_contents,$start,$end-$start),ENT_QUOTES,get_charset()));
-						}
-					}
-					$temp='<DT><A HREF="'.escape_html($url->evaluate()).'">'.escape_html($title).'</A>';
-					$_pages[$title]=$temp;
-				} elseif (count($entry_points)!=0)
-				{
-					foreach ($entry_points as $entry_point=>$ep_parts)
-					{
-						$title=$ep_parts[0];
-
-						if ($entry_point=='!')
-						{
-							$url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
-						} else
-						{
-							if (strpos($entry_point,':')!==false)
-							{
-								list($zone,$attributes,$hash)=page_link_decode($type);
-								$url=build_url($attributes,$zone,NULL,false,false,true,$hash);
-							} else
-							{
-								$url=build_url(array('page'=>$page,'type'=>$entry_point),$zone,NULL,false,false,true);
-							}
-						}
-						$_entry_points[$title]='<DT><A HREF="'.escape_html($url->evaluate()).'">'.((preg_match('#^[A-Z\_]+$#',$title)==0)?$title:do_lang($title)).'</A>';
-					}
-					//ksort($_entry_points);
-					$url=new ocp_tempcode();
-					$title=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
-					if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.preg_quote($zone,'#').'_#','',preg_replace('#^'.preg_quote(str_replace('zone','',$zone),'#').'_#','',$page))));
-					if ((count($_entry_points)==1) && ($url->is_empty()))
-					{
-						$temp_keys=array_keys($_entry_points);
-						$temp=$_entry_points[$temp_keys[0]];
-					} else
-					{
-						$temp='<DT><H3>'.escape_html($title).'</H3><DL><p>'.implode('',$_entry_points).'</p></DL>';
-					}
-					$_pages[$title]=$temp;
-				}
-			}
-		}
-		$url=new ocp_tempcode();
-		ksort($_pages);
-		$temp='<DT><H3>'.escape_html($zone_title).'</H3><DL><p>'.implode('',$_pages).'</p></DL>';
-		$_zones[]=$temp;
+		bookmarks_process_node($child);
 	}
 }
 
-foreach ($_zones as $zone)
+function bookmarks_process_node($node)
 {
-	echo $zone;
-}
+	if (!is_null($node['page_link']))
+	{
+		list($zone,$attributes,$hash)=page_link_decode($node['page_link']);
+		$url=_build_url($attributes,$zone,NULL,false,false,true,$hash);
+	} else
+	{
+		$url=$node['url'];
+	}
+	$title=$node['title']->evaluate();
+	if (!is_null($url))
+	{
+		echo '<DT><A HREF="'.escape_html($url).'">'.escape_html($title).'</A>'."\n";
+	}
 
-echo <<<END
-	</DL><p>
-	</DL><p>
-END;
+	if ((isset($node['children'])) && (count($node['children'])>0))
+	{
+		echo '<DT><H3>'.escape_html($title).'</H3>'."\n";
+		echo '<DL><p>'."\n";
+		foreach ($node['children'] as $child)
+		{
+			bookmarks_process_node($child);
+		}
+		echo '</DL><p>'."\n";
+	}
+}
 
 exit();

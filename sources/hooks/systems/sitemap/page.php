@@ -123,7 +123,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 			'sitemap_priority'=>($zone_default_page==$page)?SITEMAP_IMPORTANCE_ULTRA:SITEMAP_IMPORTANCE_HIGH,
 			'sitemap_refreshfreq'=>($zone_default_page==$page)?'daily':'weekly',
 
-			'permission_page'=>NULL,
+			'privilege_page'=>NULL,
 		);
 
 		switch ($details[0])
@@ -218,9 +218,9 @@ class Hook_sitemap_page extends Hook_sitemap_base
 						elseif ((isset($entry_points['misc'])) || (count($entry_points)==1))
 						{
 							// Misc/only moves some details down and is then skipped (alternatively we could haved blanked out our container node to make it a non-link)
+							$move_down_entry_point=(count($entry_points)==1)?key($entry_points):'misc';
 							if (!isset($row[1]))
 							{
-								$move_down_entry_point=(count($entry_points)==1)?key($entry_points):'misc';
 								if (substr($struct['page_link'],-strlen(':'.$move_down_entry_point))!=':'.$move_down_entry_point)
 									$struct['page_link'].=':'.$move_down_entry_point;
 								/*$_title=$entry_points[$move_down_entry_point][0];	Actually our name derived from the page grouping or natural name is more appropriate
@@ -300,7 +300,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 					$is_handled=$ob->handles_page_link($page_link);
 					if ($is_handled==SITEMAP_NODE_HANDLED_VIRTUALLY)
 					{
-						$struct['permission_page']=$ob->get_permission_page($page_link);
+						$struct['privilege_page']=$ob->get_privilege_page($page_link);
 						$struct['has_possible_children']=true;
 
 						$virtual_child_nodes=$ob->get_virtual_nodes($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,true);

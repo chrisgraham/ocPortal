@@ -113,7 +113,7 @@ class Hook_pointstore_permission
 			$temp=form_input_list_entry($_page,$page==$_page);
 			$pages->attach($temp);
 		}
-		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_page'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_page'),'permission_page'.$name_suffix,$pages,NULL,false,false));
+		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_page'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_page'),'privilege_page'.$name_suffix,$pages,NULL,false,false));
 		$modules=new ocp_tempcode();
 		$temp=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
 		$modules->attach($temp);
@@ -178,7 +178,7 @@ class Hook_pointstore_permission
 			$type=post_param('permission_type_'.strval($i));
 			$privilege=post_param('permission_privilege_'.strval($i));
 			$zone=post_param('permission_zone_'.strval($i));
-			$page=post_param('permission_page_'.strval($i));
+			$page=post_param('privilege_page_'.strval($i));
 			$module=post_param('permission_module_'.strval($i));
 			$category=post_param('permission_category_'.strval($i));
 			$mail_subject=post_param('permission_mail_subject_'.strval($i));
@@ -228,7 +228,7 @@ class Hook_pointstore_permission
 			$type=post_param('permission_type');
 			$privilege=post_param('permission_privilege');
 			$zone=post_param('permission_zone');
-			$page=post_param('permission_page');
+			$page=post_param('privilege_page');
 			$module=post_param('permission_module');
 			$category=post_param('permission_category');
 			$mail_subject=post_param('permission_mail_subject');

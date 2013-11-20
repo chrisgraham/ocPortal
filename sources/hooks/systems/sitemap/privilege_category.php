@@ -158,7 +158,7 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_LOW,
 			'sitemap_refreshfreq'=>'yearly',
 
-			'permission_page'=>NULL,
+			'privilege_page'=>NULL,
 		);
 
 		if (!$this->_check_node_permissions($struct)) return NULL;

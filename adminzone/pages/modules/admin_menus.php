@@ -254,7 +254,7 @@ class Module_admin_menus
 		$list->attach(form_input_list_entry('0',false,do_lang_tempcode('INCLUDE_SITEMAP_NO')));
 		$list->attach(form_input_list_entry('1',false,do_lang_tempcode('INCLUDE_SITEMAP_OVER')));
 		$list->attach(form_input_list_entry('2',false,do_lang_tempcode('INCLUDE_SITEMAP_UNDER')));
-		$fields_template->attach(form_input_list(do_lang_tempcode('INCLUDE_SITEMAP'),new ocp_tempcode(),'theme_img_code',$list,NULL,false,false));
+		$fields_template->attach(form_input_list(do_lang_tempcode('INCLUDE_SITEMAP'),new ocp_tempcode(),'include_sitemap',$list,NULL,false,false));
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_more');

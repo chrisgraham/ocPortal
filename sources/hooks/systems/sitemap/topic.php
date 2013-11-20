@@ -34,7 +34,7 @@ class Hook_sitemap_topic extends Hook_sitemap_content
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_permission_page($page_link)
+	function get_privilege_page($page_link)
 	{
 		return 'topics';
 	}
@@ -85,7 +85,7 @@ class Hook_sitemap_topic extends Hook_sitemap_content
 
 			'has_possible_children'=>false,
 
-			'permission_page'=>$this->get_permission_page($page_link),
+			'privilege_page'=>$this->get_privilege_page($page_link),
 		)+$partial_struct;
 
 		if (!$this->_check_node_permissions($struct)) return NULL;

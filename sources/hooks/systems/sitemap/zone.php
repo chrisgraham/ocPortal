@@ -27,7 +27,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_permission_page($page_link)
+	function get_privilege_page($page_link)
 	{
 		return 'cms_comcode_pages';
 	}
@@ -165,7 +165,7 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_ULTRA,
 			'sitemap_refreshfreq'=>'daily',
 
-			'permission_page'=>$this->get_permission_page($page_link),
+			'privilege_page'=>$this->get_privilege_page($page_link),
 		);
 
 		$comcode_page_sitemap_ob=$this->_get_sitemap_object('comcode_page');

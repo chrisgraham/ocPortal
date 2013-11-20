@@ -50,7 +50,6 @@ function find_permissions_script()
 
 	header('Content-Type: text/plain');
 
-	require_code('zones2');
 	require_code('permissions2');
 
 	$serverid=get_param('serverid');
@@ -66,16 +65,20 @@ function find_permissions_script()
 		echo has_privilege_group($group_id,$privilege)?do_lang('YES'):do_lang('NO');
 	} else
 	{
-		preg_match('#^([^:]*):([^:]*)(:|$)#',$serverid,$matches);
-		$zone=$matches[1];
-		$page=$matches[2];
+		require_code('sitemap');
 
-		$_page_links=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,false,NULL,true));
+		$test=find_sitemap_object($serverid);
+		if (!is_null($test))
+		{
+			list($ob,)=$test;
 
-		$bits=(is_null($_page_links[0]))?array('!',''):(is_array($_page_links[0])?call_user_func_array($_page_links[0][0],$_page_links[0][1]):eval($_page_links[0])); // If $_page_links[0] is NULL then it's an error: extract_page_link_permissions is always there when there are cat permissions
-		$module=$bits[1];
+			$privilege_page=$ob->get_privilege_page($serverid);
+		} else
+		{
+			$privilege_page='';
+		}
 
-		echo has_privilege_group($group_id,$privilege,$module)?do_lang('YES'):do_lang('NO');
+		echo has_privilege_group($group_id,$privilege,$privilege_page)?do_lang('YES'):do_lang('NO');
 	}
 }
 

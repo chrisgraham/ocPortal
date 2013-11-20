@@ -62,7 +62,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_permission_page($page_link)
+	function get_privilege_page($page_link)
 	{
 		return 'cms_catalogues';
 	}
@@ -164,7 +164,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
 			'sitemap_refreshfreq'=>'weekly',
 
-			'permission_page'=>$this->get_permission_page($page_link),
+			'privilege_page'=>$this->get_privilege_page($page_link),
 		)+$partial_struct;
 
 		if (strpos($page_link,':index:')!==false)

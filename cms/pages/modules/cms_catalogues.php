@@ -551,7 +551,7 @@ class Module_cms_catalogues extends standard_crud_module
 		{
 			$_submitter=$this->get_submitter($id);
 			$submitter=$_submitter[0];
-			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,is_null($this->permission_page_name)?get_page_name():$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat(strval($id)),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b(strval($id))));
+			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,is_null($this->privilege_page_name)?get_page_name():$this->privilege_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat(strval($id)),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b(strval($id))));
 			if ($delete_permission)
 			{
 				$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'f38200840366846dd7d9ed769f673657','TITLE'=>do_lang_tempcode('ACTIONS'),'SECTION_HIDDEN'=>true)));
@@ -803,7 +803,7 @@ class Module_cms_catalogues extends standard_crud_module
 		{
 			$_submitter=$this->get_submitter($id);
 			$submitter=$_submitter[0];
-			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,is_null($this->permission_page_name)?get_page_name():$this->permission_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat(strval($id)),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b(strval($id))));
+			$delete_permission=has_delete_permission($this->permissions_require,get_member(),$submitter,is_null($this->privilege_page_name)?get_page_name():$this->privilege_page_name,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat(strval($id)),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b(strval($id))));
 			if ($delete_permission)
 			{
 				$start=0;
@@ -1783,7 +1783,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 						if (!is_null($parent_id)) $parent_id=$_parent_id;
 						require_code('permissions2');
 						if (get_value('disable_cat_cat_perms')!=='1')
-							set_category_permissions_from_environment('catalogues_category',strval($parent_id),$this->permission_page);
+							set_category_permissions_from_environment('catalogues_category',strval($parent_id),$this->privilege_page);
 						$categories[$bit]=$parent_id;
 					}
 				}

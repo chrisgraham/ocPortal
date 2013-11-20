@@ -79,12 +79,13 @@ function copy_fields_into_bottom(i,changed)
 
 	//set_inner_html(form.elements['branch_type'],get_inner_html(document.getElementById('branch_type_'+i))); Breaks in IE due to strict container rules
 	form.elements['branch_type'].selectedIndex=document.getElementById('branch_type_'+i).selectedIndex;
-	form.elements['branch_type'].onchange=function (event) { document.getElementById('branch_type_'+i).selectedIndex=this.selectedIndex;
-	if (document.getElementById('branch_type_'+i).onchange) document.getElementById('branch_type_'+i).onchange(event); };
+	form.elements['branch_type'].onchange=function (event) {
+		document.getElementById('branch_type_'+i).selectedIndex=this.selectedIndex;
+		if (document.getElementById('branch_type_'+i).onchange) document.getElementById('branch_type_'+i).onchange(event);
+	};
 
-	form.elements['include_sitemap'].selectedIndex=document.getElementById('include_sitemap_'+i).selectedIndex;
-	form.elements['include_sitemap'].onchange=function (event) { document.getElementById('include_sitemap_'+i).selectedIndex=this.selectedIndex;
-	if (document.getElementById('include_sitemap_'+i).onchange) document.getElementById('include_sitemap_'+i).onchange(event); };
+	form.elements['include_sitemap'].selectedIndex=document.getElementById('include_sitemap_'+i).value;
+	form.elements['include_sitemap'].onchange=function (event) { document.getElementById('include_sitemap_'+i).value=this.selectedIndex; };
 
 	var mfh=document.getElementById('mini_form_hider');
 

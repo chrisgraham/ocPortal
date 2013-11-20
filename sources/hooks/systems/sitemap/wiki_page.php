@@ -34,7 +34,7 @@ class Hook_sitemap_wiki_page extends Hook_sitemap_content
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_permission_page($page_link)
+	function get_privilege_page($page_link)
 	{
 		return 'cms_wiki';
 	}
@@ -126,7 +126,7 @@ class Hook_sitemap_wiki_page extends Hook_sitemap_content
 			'sitemap_priority'=>($content_id==strval(db_get_first_id()))?SITEMAP_IMPORTANCE_HIGH:SITEMAP_IMPORTANCE_MEDIUM,
 			'sitemap_refreshfreq'=>'weekly',
 
-			'permission_page'=>$this->get_permission_page($page_link),
+			'privilege_page'=>$this->get_privilege_page($page_link),
 		)+$partial_struct;
 
 		if (!$this->_check_node_permissions($struct)) return NULL;

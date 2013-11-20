@@ -134,7 +134,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			'content_id'=>$page_grouping,
 			'modifiers'=>array(),
 			'only_on_page'=>'',
-			'page_link'=>$page_link,
+			'page_link'=>'',//$page_link,	Can't actually visit it (well you can, but we don't want to promote it)
 			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>$description,
@@ -165,7 +165,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
 			'sitemap_refreshfreq'=>'weekly',
 
-			'permission_page'=>NULL,
+			'privilege_page'=>NULL,
 		);
 
 		if (!$this->_check_node_permissions($struct)) return NULL;

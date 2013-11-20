@@ -114,7 +114,7 @@ class Hook_sitemap_author extends Hook_sitemap_content
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_LOW,
 			'sitemap_refreshfreq'=>'yearly',
 
-			'permission_page'=>$this->get_permission_page($page_link),
+			'privilege_page'=>$this->get_privilege_page($page_link),
 		)+$partial_struct;
 
 		if (!$this->_check_node_permissions($struct)) return NULL;

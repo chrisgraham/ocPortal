@@ -691,9 +691,9 @@ function process_url_monikers($page,$redirect_if_non_canonical=true)
 				$ob=get_content_object($hook);
 				if ($ob===NULL) continue;
 				$ob_info=$ob->info();
-				$ob_info['view_pagelink_pattern']=preg_replace('#:[^:]*$#',':_WILD',$ob_info['view_pagelink_pattern']);
+				$ob_info['view_page_link_pattern']=preg_replace('#:[^:]*$#',':_WILD',$ob_info['view_page_link_pattern']);
 
-				if (($ob_info['view_pagelink_pattern']==$looking_for) && ($ob_info['support_url_monikers']))
+				if (($ob_info['view_page_link_pattern']==$looking_for) && ($ob_info['support_url_monikers']))
 				{
 					if (is_numeric($url_id)) // Lookup and redirect to moniker
 					{

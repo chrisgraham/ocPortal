@@ -214,44 +214,6 @@ function save_zone_base_url($zone,$base_url)
 }
 
 /**
- * Get a list of overridable privileges for a module.
- *
- * @param  ID_TEXT		The zone it is in
- * @param  ID_TEXT		The page name
- * @param  boolean		Whether this is for permissions querying
- * @return array			A pair: List of overridable privileges, privilege-page
- */
-function get_module_overridables($zone,$page,$for_permissions=false)
-{
-	$overridables=array();
-	$privilege_page=$page;
-
-	$_page_links=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,$for_permissions,NULL,true));
-	if (!is_null($_page_links[0])) // If it's a CMS-supporting module (e.g. downloads)
-	{
-		$page_links=is_array($_page_links[0])?call_user_func_array($_page_links[0][0],$_page_links[0][1]):eval($_page_links[0]);
-		if ((!is_null($page_links[0])) && (!is_null($page_links[1]))) // If it's not disabled
-		{
-			$_overridables=extract_module_functions_page(get_module_zone($page_links[1]),$page_links[1],array('get_privilege_overrides'));
-			if (!is_null($_overridables[0])) // If it's a CMS-supporting module with privilege overrides
-			{
-				$overridables=is_array($_overridables[0])?call_user_func_array($_overridables[0][0],$_overridables[0][1]):eval($_overridables[0]);
-			}
-			$privilege_page=$page_links[1];
-		}
-	} else
-	{
-		$_overridables=extract_module_functions_page($zone,$page,array('get_privilege_overrides'));
-		if (!is_null($_overridables[0])) // If it's a CMS-supporting module with privilege overrides
-		{
-			$overridables=is_array($_overridables[0])?call_user_func_array($_overridables[0][0],$_overridables[0][1]):eval($_overridables[0]);
-		}
-	}
-
-	return array($overridables,$privilege_page);
-}
-
-/**
  * Upgrade the specified module.
  *
  * @param  ID_TEXT		The zone name

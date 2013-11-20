@@ -312,7 +312,7 @@ class Module_cms_news extends standard_crud_module
 
 				if (!is_null($this->permissions_require))
 				{
-					check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->permission_page_name);
+					check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)),$this->privilege_page_name);
 				}
 
 				$ret=$this->fill_in_edit_form($id);

@@ -125,7 +125,7 @@ class Hook_sitemap_group extends Hook_sitemap_content
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_LOW,
 			'sitemap_refreshfreq'=>'yearly',
 
-			'permission_page'=>NULL,
+			'privilege_page'=>NULL,
 		)+$partial_struct;
 
 		if (!$this->_check_node_permissions($struct)) return NULL;

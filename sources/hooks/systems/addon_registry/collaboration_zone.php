@@ -106,7 +106,7 @@ class Hook_addon_registry_collaboration_zone
 			'collaboration/pages/comcode/EN/.htaccess',
 			'collaboration/pages/comcode/EN/about.txt',
 			'collaboration/pages/comcode/EN/index.html',
-			'collaboration/pages/comcode/EN/panel_left.txt',
+			'collaboration/pages/comcode/EN/panel_right.txt',
 			'collaboration/pages/comcode/EN/start.txt',
 			'collaboration/pages/comcode/index.html',
 			'collaboration/pages/comcode_custom/.htaccess',

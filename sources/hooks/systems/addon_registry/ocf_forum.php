@@ -229,7 +229,7 @@ class Hook_addon_registry_ocf_forum
 			'forum/pages/comcode/.htaccess',
 			'forum/pages/comcode/EN/.htaccess',
 			'forum/pages/comcode/EN/index.html',
-			'forum/pages/comcode/EN/panel_left.txt',
+			'forum/pages/comcode/EN/panel_right.txt',
 			'forum/pages/comcode/index.html',
 			'forum/pages/comcode_custom/.htaccess',
 			'forum/pages/comcode_custom/EN/.htaccess',

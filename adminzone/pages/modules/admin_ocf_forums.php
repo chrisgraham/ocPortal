@@ -32,7 +32,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 	var $archive_label='SECTION_FORUMS';
 	var $view_entry_point='_SEARCH:forumview:_ID';
 	var $special_edit_frontend=true;
-	var $permission_page='topics';
+	var $privilege_page='topics';
 	var $permission_module='forums';
 	var $content_type='forum';
 	var $javascript='if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { form.elements[\'target_forum\'].disabled=(!form.elements[\'delete\'].checked); form.elements[\'delete_topics\'].disabled=(!form.elements[\'delete\'].checked); }; crf(); form.elements[\'delete\'].onchange=crf; }';

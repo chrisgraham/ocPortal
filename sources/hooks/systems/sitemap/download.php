@@ -34,7 +34,7 @@ class Hook_sitemap_download extends Hook_sitemap_content
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_permission_page($page_link)
+	function get_privilege_page($page_link)
 	{
 		return 'cms_downloads';
 	}
@@ -68,7 +68,7 @@ class Hook_sitemap_download extends Hook_sitemap_content
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_HIGH,
 			'sitemap_refreshfreq'=>'monthly',
 
-			'permission_page'=>$this->get_permission_page($page_link),
+			'privilege_page'=>$this->get_privilege_page($page_link),
 		)+$partial_struct;
 
 		if (!$this->_check_node_permissions($struct)) return NULL;

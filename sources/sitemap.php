@@ -107,6 +107,27 @@ function retrieve_sitemap_node($page_link='',$callback=NULL,$valid_node_types=NU
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
+	$test=find_sitemap_object($page_link);
+	if (is_null($test)) return NULL;
+	list($ob,$is_virtual)=$test;
+
+	if ($is_virtual)
+	{
+		$children=$ob->get_virtual_nodes($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,0,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+		if (is_null($children)) $children=array();
+		return array('children'=>$children);
+	}
+	return $ob->get_node($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+}
+
+/**
+ * Find the Sitemap object that serves a particular page-link.
+ *
+ * @param  ID_TEXT 		The page-link we are finding a Sitemap object for (blank: root).
+ * @return ?array			A pair: the Sitemap object, and whether you need to make a virtual call (NULL: cannot find one).
+ */
+function find_sitemap_object($page_link)
+{
 	if ($page_link=='')
 	{
 		$hook='root';
@@ -148,13 +169,7 @@ function retrieve_sitemap_node($page_link='',$callback=NULL,$valid_node_types=NU
 		}
 	}
 
-	if ($is_virtual)
-	{
-		$children=$ob->get_virtual_nodes($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,0,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-		if (is_null($children)) $children=array();
-		return array('children'=>$children);
-	}
-	return $ob->get_node($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+	return array($ob,$is_virtual);
 }
 
 abstract class Hook_sitemap_base
@@ -414,7 +429,7 @@ abstract class Hook_sitemap_base
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_permission_page($page_link)
+	function get_privilege_page($page_link)
 	{
 		return NULL;
 	}
@@ -487,39 +502,48 @@ abstract class Hook_sitemap_base
 	 */
 	protected function _ameliorate_with_row(&$struct,$row,$meta_gather)
 	{
-		if (isset($row[0]))
+		if (array_key_exists(0,$row))
 		{
 			$title=$row[0];
 			$icon=$row[1];
 			$description=$row[2];
 
-			if (is_string($title))
+			if ($title!==NULL)
 			{
-				$title=(preg_match('#^[A-Z\_]+$#',$title)==0)?make_string_tempcode($title):do_lang_tempcode($title);
-			}
-
-			if (is_string($description))
-			{
-				$description=(preg_match('#^[A-Z\_]+$#',$description)==0)?make_string_tempcode($description):comcode_lang_string($description);
-			}
-
-			if (!$title->is_empty())
-				$struct['title']=$title;
-
-			if (($meta_gather & SITEMAP_GATHER_DESCRIPTION)!=0)
-			{
-				if (!isset($struct['extra_meta']['description']))
+				if (is_string($title))
 				{
-					$struct['extra_meta']['description']=($description===NULL)?NULL:$description;
+					$title=(preg_match('#^[A-Z\_]+$#',$title)==0)?make_string_tempcode($title):do_lang_tempcode($title);
+				}
+
+				if (!$title->is_empty())
+					$struct['title']=$title;
+			}
+
+			if ($description!==NULL)
+			{
+				if (is_string($description))
+				{
+					$description=(preg_match('#^[A-Z\_]+$#',$description)==0)?make_string_tempcode($description):comcode_lang_string($description);
+				}
+
+				if (($meta_gather & SITEMAP_GATHER_DESCRIPTION)!=0)
+				{
+					if (!isset($struct['extra_meta']['description']))
+					{
+						$struct['extra_meta']['description']=($description===NULL)?NULL:$description;
+					}
 				}
 			}
 
-			if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)
+			if ($icon!==NULL)
 			{
-				if (!isset($struct['extra_meta']['image']))
+				if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)
 				{
-					$struct['extra_meta']['image']=($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon);
-					$struct['extra_meta']['image_2x']=($icon===NULL)?NULL:find_theme_image('icons/48x48/'.$icon);
+					if (!isset($struct['extra_meta']['image']))
+					{
+						$struct['extra_meta']['image']=($icon===NULL)?NULL:find_theme_image('icons/24x24/'.$icon);
+						$struct['extra_meta']['image_2x']=($icon===NULL)?NULL:find_theme_image('icons/48x48/'.$icon);
+					}
 				}
 			}
 		}

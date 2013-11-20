@@ -40,7 +40,7 @@ class Module_cms_blogs extends standard_crud_module
 	var $table='news';
 	var $orderer='title';
 	var $title_is_multi_lang=true;
-	var $permission_page_name='cms_news';
+	var $privilege_page_name='cms_news';
 
 	var $donext_type=NULL;
 

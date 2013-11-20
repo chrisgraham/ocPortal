@@ -282,7 +282,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 		if (is_object($vars['type']))
 		{
 			$page_link.=':';
-			$page_link.=$vars['type'];
+			$page_link.=$vars['type']->evaluate();
 		} else
 		{
 			$page_link.=':'.(($vars['type']===NULL)?'<null>':urlencode($vars['type']));
@@ -296,7 +296,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 			} elseif (is_object($id))
 			{
 				$page_link.=':';
-				$page_link.=$id;
+				$page_link.=$id->evaluate();
 			} else
 			{
 				$page_link.=':'.(($id===NULL)?'<null>':urlencode($id));
@@ -317,7 +317,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 			if (is_object($val))
 			{
 				$page_link.=':'.$key.'=';
-				$page_link.=$val;
+				$page_link.=$val->evaluate();
 			} else
 			{
 				$page_link.=':'.$key.'='.(($val===NULL)?'<null>':urlencode($val));

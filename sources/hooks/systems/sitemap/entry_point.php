@@ -200,11 +200,16 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
 			'sitemap_refreshfreq'=>'monthly',
 
-			'permission_page'=>NULL,
+			'privilege_page'=>NULL,
 		);
 
 		$row_x=$this->_load_row_from_page_groupings(NULL,$zone,$page,$type);
-		$this->_ameliorate_with_row($struct,$row_x,$meta_gather);
+		if ($row_x!=array())
+		{
+			$row_x[0]=NULL; // We have a better title
+			$row_x[1]=NULL; // We have a better icon
+			$this->_ameliorate_with_row($struct,$row_x,$meta_gather);
+		}
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
 

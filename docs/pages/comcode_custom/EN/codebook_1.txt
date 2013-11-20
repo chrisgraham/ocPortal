@@ -119,7 +119,7 @@ function run()
 [title="5"]The '[tt]get_entry_points[/tt]' function[/title]
 
 This function returns a mapping that identifies all the supported 'types' (screens) that may be launched directly via URL (i.e. all the ones that don't rely on form submissions to have been sent to them). The mapping maps from the 'type' to a language string codename that provides a human-readable label to describe the screen.
-It is used by the menu editor to help ocPortal website administrators find links to add to their menus.
+It is used in the Sitemap, which in turn is used by things like the menu editor (to help ocPortal website administrators find links to add to their menus).
 
 For example,
 [code="PHP"]
@@ -129,18 +129,6 @@ function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=
 }
 [/code]
 returns a mapping for two entry-points: the 'misc' screen (which almost any module will have), and the 'tree_view' screen. 'ROOT' and 'TREE' are language strings.
-
-[title="5"]The '[tt]get_page_links[/tt]' function[/title]
-
-This function finds some of the page-links that a module can provide. This usually involves looking at the categories added to the module and providing page-links to each of those categories.
-
-This is advanced functionality, so it's best to skip over this function until you are more advanced.
-
-[title="5"]The '[tt]extract_page_link_permissions[/tt]' function[/title]
-
-This function converts a page-links scoped toward our module into permission-module/permission-ID pairs. It is used by the permission tree editor for getting/setting permissions corresponding to sitemap nodes.
-
-This is advanced functionality, so it's best to skip over this function until you are more advanced.
 
 [title="5"]The '[tt]install[/tt]' and '[tt]uninstall[/tt]' functions[/title]
 

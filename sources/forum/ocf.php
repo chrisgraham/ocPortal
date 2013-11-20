@@ -1300,8 +1300,6 @@ class forum_driver_ocf extends forum_driver_base
 		if (!$too_many)
 			$rows=persistent_cache_get('GROUPS'.($only_permissive?'_PO':''));
 		if ($rows===NULL)
-			$rows=array();
-		if ($rows===NULL)
 		{
 			if (isset($rows_cache[$where]))
 			{

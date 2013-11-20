@@ -214,7 +214,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
 			'sitemap_refreshfreq'=>'yearly',
 
-			'permission_page'=>NULL,
+			'privilege_page'=>NULL,
 		);
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
