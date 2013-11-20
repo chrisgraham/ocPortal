@@ -53,5 +53,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->add_table_field('menu_items','i_include_sitemap','SHORT_INTEGER');
+	require_code('hooks/systems/cron/newsletter_no_members');
+	$ob=new Hook_cron_ocf_welcome_emails();
+	$ob->run();
 }

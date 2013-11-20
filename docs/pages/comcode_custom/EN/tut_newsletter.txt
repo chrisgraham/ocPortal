@@ -64,6 +64,18 @@ You can also import from a CSV file. ocPortal is quite flexible in supporting di
 
 Note that if you are using interest levels, each set of users with a different interest level should be stored in a different CSV file, as when you import them they would all be imported to the same one.
 
+[title="2"]Manually unsubscribing a member[/title]
+
+The easiest way is to go to where members signup, and act on their behalf.
+
+To unsubscribe a member from a newsletter:
+1) Log in with your administrative account, if you haven't already got an admin login open
+2) Go to the newsletter page (the [tt]site:newsletter[/tt] page-link)
+3) Enter the email address you wish to unsubscribe. Leave all other fields blank.
+4) If you have interest levels enabled: change "Subscription level for <newsletter name>" to "Not subscribed". If you do not have interest levels enabled, untick (uncheck) "Subscribe to <newsletter name>".
+5) Click “Join newsletter/Change settings”
+This works, even though the maintenance password was left blank, because ocPortal acknowledges your overriding administrative access.
+
 [title="2"]Templated newsletters[/title]
 
 Want to take things to the next level with your newsletters? You can create full HTML newsletters, with embedded unsubscribe links, using newsletter templating.
