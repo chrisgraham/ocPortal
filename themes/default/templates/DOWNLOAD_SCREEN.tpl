@@ -140,6 +140,7 @@
 			<h2>{!IMAGES}</h2>
 
 			{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+			{$REQUIRE_CSS,carousels}
 
 			{$SET,carousel_id,{$RAND}}
 

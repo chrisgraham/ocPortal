@@ -26,12 +26,13 @@
 function adminzone_special_cases($codename)
 {
 /*
-	The current design does not require these, but this code may be useful in the future...
+	The current design does not require these, but this code may be useful in the future.
+	If we put it back, we should do it with hooks, for proper modularity.
 
 	if (($codename=='start') && (get_page_name()=='start') && (get_option('show_docs')!=='0'))
 	{
 		require_lang('menus');
-		set_helper_panel_text(comcode_lang_string('DOC_ADMIN_ZONE'));
+		set_helper_panel_text(comcode_lang_string('menus:DOC_ADMIN_ZONE'));
 		set_helper_panel_tutorial('tut_adminzone');
 	}
 	elseif (($codename=='netlink') && (get_page_name()=='netlink'))
@@ -102,7 +103,7 @@ function adminzone_extend_breadcrumbs(&$stub)
 							$url=build_url(array('page'=>'admin','type'=>$i[0]),'adminzone');
 						}
 
-						$title=$i[3];
+						$title=do_lang_tempcode(strtoupper($i[0])); // The lang string version of the page grouping we found our current module was in
 
 						$stub->attach(hyperlink($url,$title,false,false,do_lang_tempcode('GO_BACKWARDS_TO',@html_entity_decode(strip_tags($title->evaluate()),ENT_QUOTES,get_charset()))));
 

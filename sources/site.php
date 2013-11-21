@@ -929,7 +929,7 @@ function do_site()
 		$subject=do_lang('AFA_NOTIFICATION_MAIL_SUBJECT',$current_username,get_site_name());
 		$mail=do_lang('AFA_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($current_username));
 
-		dispatch_notification('adminzone_frontpage_accessed',NULL,$subject,$mail);
+		dispatch_notification('adminzone_dashboard_accessed',NULL,$subject,$mail);
 
 		// Track very basic details of what sites use ocPortal. You can remove if you like.
 		if ((!running_locally()) && (get_option('call_home')=='1'))

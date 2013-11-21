@@ -25,7 +25,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 				{$,Main menu}
 				<div class="global_navigation">
-					{$BLOCK,block=menu,param={$CONFIG_OPTION,header_menu_call_string},type=zone}
+					{$BLOCK,block=menu,param={$CONFIG_OPTION,header_menu_call_string},type=dropdown}
 				</div>
 
 				{$,Outside the Admin Zone we have a spot for the banner}
@@ -38,6 +38,8 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 				{$,Inside the Admin Zone we have the Admin Zone search}
 				{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}
+					{$REQUIRE_CSS,adminzone}
+
 					<div class="adminzone_search">
 						<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,adminzone:admin:search}}" method="get" class="inline">
 							{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,adminzone:admin:search}}

@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_adminzone_frontpage
+ * @package		core_adminzone_dashboard
  */
 
 class Block_main_staff_tips
@@ -68,7 +68,7 @@ class Block_main_staff_tips
 	 */
 	function run($map)
 	{
-		require_css('adminzone_frontpage');
+		require_css('adminzone_dashboard');
 		require_lang('tips');
 
 		// Anything to dismiss?

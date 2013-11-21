@@ -50,7 +50,7 @@ function block_helper_script()
 		$hook_files=array();
 		foreach ($hook_keys as $hook)
 		{
-			$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
+			$path=get_custom_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
 			if (!file_exists($path))
 			{
 				$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
@@ -167,9 +167,9 @@ function block_helper_script()
 			$block_types=array_merge(array($type_wanted=>$x),$block_types);
 		}*/
 		ksort($block_types); // We sort now instead
-		$move_after=$block_types['adminzone_frontpage'];
-		unset($block_types['adminzone_frontpage']);
-		$block_types['adminzone_frontpage']=$move_after;
+		$move_after=$block_types['adminzone_dashboard'];
+		unset($block_types['adminzone_dashboard']);
+		$block_types['adminzone_dashboard']=$move_after;
 		foreach ($block_types as $block_type=>$_links)
 		{
 			switch ($block_type)
@@ -318,7 +318,7 @@ function block_helper_script()
 						$list->attach(form_input_list_entry($option,$has_default && $option==$default));
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif ($block.':'.$parameter=='menu:param') // special case for menus
+				/*elseif ($block.':'.$parameter=='menu:param') // special case for menus		Disabled so Sitemap nodes may be entered
 				{
 					$list=new ocp_tempcode();
 					$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
@@ -327,8 +327,8 @@ function block_helper_script()
 						$list->attach(form_input_list_entry($row['i_menu'],$has_default && $row['i_menu']==$default));
 					}
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
-				}
-				elseif ($parameter=='zone') // Zone list
+				}*/
+				elseif ($parameter=='zone') // zone list
 				{
 					$list=new ocp_tempcode();
 					$list->attach(form_input_list_entry('_SEARCH',($default=='')));

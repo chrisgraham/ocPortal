@@ -37,8 +37,8 @@ The following template sets exist:
  - [b]embossed[/b] (the default type, a very simple single-layered type for side-placed menus; does not support multiple-levels)
  - [b]tree[/b] (for side-placed menus where branches can be contracted and expanded as drawers; supports multiple-levels)
  - [b]popup[/b] (a very nice type for side-placed menus where branches may popup as overlays by hovering the mouse over other branches; supports multiple-levels)
- - [b]dropdown[/b] (a nice type for top-placed menus, similar to dropdown menus on Windows applications; supports multiple-levels)
- - [b]top[/b] (a very simple single-layered type for top-placed menus that provides the same look as the Admin Zone uses for navigation between sections; does not support multiple-levels)
+ - [b]dropdown[/b] (a nice type for top-placed menus; supports multiple-levels)
+ - [b]sitemap[/b] (a spaced out menu type with expanders and contractors, designed for display on a page)
  - [b]select[/b] (select menu items via a dropdown list; does not support multiple-levels)
 
 The menus themselves aren't saved against how the data is to be used, but for usability reasons ocPortal will adapt the menu interface a bit depending on the context you're editing for (i.e. the edit menu button will open up the menu editor in with an interface optimised for how the menu was displayed for that instance).

@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_adminzone_frontpage
+ * @package		core_adminzone_dashboard
  */
 
-class Hook_addon_registry_core_adminzone_frontpage
+class Hook_addon_registry_core_adminzone_dashboard
 {
 	/**
 	 * Get a list of file permissions to set
@@ -94,8 +94,8 @@ class Hook_addon_registry_core_adminzone_frontpage
 	function get_file_list()
 	{
 		return array(
-			'themes/default/css/adminzone_frontpage.css',
-			'sources/hooks/systems/addon_registry/core_adminzone_frontpage.php',
+			'themes/default/css/adminzone_dashboard.css',
+			'sources/hooks/systems/addon_registry/core_adminzone_dashboard.php',
 			'themes/default/templates/BLOCK_MAIN_STAFF_NEW_VERSION.tpl',
 			'themes/default/templates/BLOCK_MAIN_STAFF_TIPS.tpl',
 			'themes/default/templates/BLOCK_MAIN_STAFF_CHECKLIST.tpl',

@@ -18,7 +18,7 @@
  * @package		core
  */
 
-class Hook_Notification_adminzone_frontpage_accessed extends Hook_Notification__Staff
+class Hook_Notification_adminzone_dashboard_accessed extends Hook_Notification__Staff
 {
 	/**
 	 * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
@@ -41,7 +41,7 @@ class Hook_Notification_adminzone_frontpage_accessed extends Hook_Notification__
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['adminzone_frontpage_accessed']=array(do_lang('security:SECURITY'),do_lang('NOTIFICATION_TYPE_adminzone_frontpage_accessed'));
+		$list['adminzone_dashboard_accessed']=array(do_lang('security:SECURITY'),do_lang('NOTIFICATION_TYPE_adminzone_dashboard_accessed'));
 		return $list;
 	}
 }

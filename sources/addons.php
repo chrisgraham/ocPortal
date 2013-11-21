@@ -255,7 +255,7 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 				$ob=object_factory('Hook_addon_registry_'.$addon_name,true);
 				if (($ob!==NULL) && (method_exists($ob,'get_default_icon')))
 				{
-					return get_base_url().'/'.urlencode($ob->get_default_icon());
+					return get_base_url().'/'.str_replace('%2F','/',urlencode($ob->get_default_icon()));
 				}
 			}
 
@@ -278,7 +278,7 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 		// Is there an explicitly defined addon?
 		if ($addon_info['default_icon']!==NULL)
 		{
-			return get_base_url().'/'.urlencode($addon_info['default_icon']);
+			return get_base_url().'/'.str_replace('%2F','/',urlencode($addon_info['default_icon']));
 		}
 
 		// Search through for an icon
@@ -287,7 +287,7 @@ function find_addon_icon($addon_name,$pick_default=true,$tar_path=NULL)
 		{
 			if (preg_match('#^themes/default/(images|images_custom)/icons/48x48/(.*)\.(png|jpg|jpeg|gif)$#',$file,$matches)!=0)
 			{
-				return get_base_url().'/'.urlencode($file);
+				return get_base_url().'/'.str_replace('%2F','/',urlencode($file));
 			}
 		}
 	}

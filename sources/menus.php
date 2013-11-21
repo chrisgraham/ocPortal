@@ -346,6 +346,7 @@ function _render_menu($menu,$source_member,$type,$as_admin=false)
 	if ($source_member===NULL) $source_member=get_member();
 
 	$codename=$menu['content_id'];
+	if ($codename===NULL) $codename='';
 
 	// Pre-process to calculate the true number of rendered items
 	$new_children=array();

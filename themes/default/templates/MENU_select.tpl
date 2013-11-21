@@ -1,3 +1,5 @@
+{$REQUIRE_CSS,menu__select}
+
 <div class="menu_type__select">
 	{+START,IF,{$JS_ON}}
 		<form title="{!MENU} ({!FORM_AUTO_SUBMITS})" method="get" action="#">

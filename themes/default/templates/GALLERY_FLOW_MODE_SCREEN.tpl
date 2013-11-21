@@ -27,6 +27,7 @@
 			<h2>{!OTHER_IMAGES_IN_GALLERY}</h2>
 
 			{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+			{$REQUIRE_CSS,carousels}
 
 			{$SET,carousel_id,{$RAND}}
 

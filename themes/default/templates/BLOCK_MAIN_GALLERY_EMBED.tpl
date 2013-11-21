@@ -20,6 +20,7 @@
 
 	{+START,IF,{$EQ,{_GUID},carousel}}
 		{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+		{$REQUIRE_CSS,carousels}
 
 		{$SET,carousel_id,{$RAND}}
 
