@@ -12,7 +12,7 @@
 	</p>
 
 	<p class="proceed_button">
-		<input class="button_page" type="submit" value="{!PROCEED}" />
+		<input class="buttons__proceed button_page" type="submit" value="{!PROCEED}" />
 	</p>
 </form>
 

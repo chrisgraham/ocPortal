@@ -117,12 +117,8 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/icons/48x48/menu/social/forum/vforums/unanswered_topics.png',
 			'themes/default/images/icons/48x48/menu/social/forum/vforums/unread_topics.png',
 			'themes/default/images/icons/24x24/buttons/mark_read_forum.png',
-			'themes/default/images/icons/24x24/buttons/mark_read_topic.png',
-			'themes/default/images/icons/24x24/buttons/mark_unread_forum.png',
 			'themes/default/images/icons/24x24/buttons/mark_unread_topic.png',
 			'themes/default/images/icons/48x48/buttons/mark_read_forum.png',
-			'themes/default/images/icons/48x48/buttons/mark_read_topic.png',
-			'themes/default/images/icons/48x48/buttons/mark_unread_forum.png',
 			'themes/default/images/icons/48x48/buttons/mark_unread_topic.png',
 			'themes/default/images/icons/24x24/buttons/forum.png',
 			'themes/default/images/icons/48x48/buttons/forum.png',
@@ -134,10 +130,8 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/icons/48x48/buttons/threaded.png',
 			'themes/default/images/icons/24x24/buttons/whisper.png',
 			'themes/default/images/icons/48x48/buttons/whisper.png',
-			'themes/default/images/icons/24x24/buttons/quote.png',
-			'themes/default/images/icons/48x48/buttons/quote.png',
-			'themes/default/images/icons/24x24/buttons/quick_reply.png',
-			'themes/default/images/icons/48x48/buttons/quick_reply.png',
+			'themes/default/images/icons/24x24/buttons/new_quote.png',
+			'themes/default/images/icons/48x48/buttons/new_quote.png',
 			'themes/default/images/icons/24x24/menu/adminzone/structure/forum/index.html',
 			'themes/default/images/icons/24x24/menu/social/forum/index.html',
 			'themes/default/images/icons/24x24/menu/social/forum/vforums/index.html',
@@ -309,20 +303,6 @@ class Hook_addon_registry_ocf_forum
 			'sources/ocf_forumview.php',
 			'sources/ocf_forumview_pt.php',
 			'sources/ocf_topicview.php',
-			'themes/default/images/EN/page/forum.png',
-			'themes/default/images/EN/page/threaded.png',
-			'themes/default/images/EN/page/linear.png',
-			'themes/default/images/EN/page/send_message.png',
-			'themes/default/images/EN/page/mark_read.png',
-			'themes/default/images/EN/page/mark_unread.png',
-			'themes/default/images/EN/page/new_post.png',
-			'themes/default/images/EN/page/new_topic.png',
-			'themes/default/images/EN/page/quick_reply.png',
-			'themes/default/images/EN/page/reply.png',
-			'themes/default/images/EN/pageitem/quote.png',
-			'themes/default/images/EN/pageitem/reply.png',
-			'themes/default/images/EN/pageitem/whisper.png',
-			'themes/default/images/EN/pageitem/send_message.png',
 			'themes/default/images/birthday_icon.png',
 			'sources/hooks/modules/topicview/.htaccess',
 			'sources/hooks/modules/topicview/index.html',
@@ -657,7 +637,7 @@ class Hook_addon_registry_ocf_forum
 		$buttons=do_lorem_template('SCREEN_ITEM_BUTTON',array(
 			'REL'=>lorem_word(),
 			'IMMEDIATE'=>false,
-			'IMG'=>placeholder_img_code('pageitem'),
+			'IMG'=>'buttons__proceed',
 			'TITLE'=>lorem_phrase(),
 			'URL'=>placeholder_url()
 		));
@@ -1066,7 +1046,7 @@ class Hook_addon_registry_ocf_forum
 			$buttons->attach(do_lorem_template('SCREEN_BUTTON',array(
 				'REL'=>lorem_word(),
 				'URL'=>placeholder_url(),
-				'IMG'=>placeholder_img_code('page'),
+				'IMG'=>'buttons__proceed',
 				'TITLE'=>lorem_word(),
 				'IMMEDIATE'=>false
 			)));
@@ -1694,7 +1674,7 @@ class Hook_addon_registry_ocf_forum
 					'REL'=>lorem_word(),
 					'IMMEDIATE'=>NULL,
 					'URL'=>placeholder_url(),
-					'IMG'=>placeholder_img_code('page'),
+					'IMG'=>'buttons__proceed',
 					'TITLE'=>lorem_word()
 				)));
 			}
@@ -1763,7 +1743,7 @@ class Hook_addon_registry_ocf_forum
 					'REL'=>lorem_word(),
 					'IMMEDIATE'=>'',
 					'URL'=>placeholder_url(),
-					'IMG'=>placeholder_img_code('pageitem'),
+					'IMG'=>'buttons__proceed',
 					'TITLE'=>lorem_word()
 				)));
 			}
@@ -1807,7 +1787,7 @@ class Hook_addon_registry_ocf_forum
 				'REL'=>lorem_word(),
 				'IMMEDIATE'=>'',
 				'URL'=>placeholder_url(),
-				'IMG'=>placeholder_img_code('pageitem'),
+				'IMG'=>'buttons__proceed',
 				'TITLE'=>lorem_word()
 			)));
 		}

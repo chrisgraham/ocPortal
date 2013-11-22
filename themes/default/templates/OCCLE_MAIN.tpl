@@ -9,7 +9,7 @@
 			<div id="command_prompt">
 				<label for="occle_command">{PROMPT*}</label>
 				<input type="text" id="occle_command" name="command" onkeyup="return occle_handle_history(this,event.keyCode?event.keyCode:event.charCode,event);" value="" />
-				<input class="button_micro" type="submit" value="{!GO_COMMAND=}" />
+				<input class="buttons__proceed button_micro" type="submit" value="{!GO_COMMAND=}" />
 			</div>
 		</form>
 	</div>

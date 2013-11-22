@@ -744,9 +744,11 @@ body.popup_spacer h2 {
 	margin-{!en_right}: 13em;
 	padding-{!en_right}: 3.5em;
 }
-#panel_right:first-child ~ .global_middle { /* If no left panel, lets give some extra space */
-	margin-{!en_right}: 16em;
-}
+{+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
+	.zone_running_ #panel_right:first-child ~ .global_middle { /* If no left panel on welcome zone, lets give some extra space */
+		margin-{!en_right}: 16em;
+	}
+{+END}
 
 .global_side_panel .hide_if_in_panel {
 	display: none;
@@ -2853,33 +2855,17 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	width: 88%;
 }
 
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
 .wide_field, .wide_button {
 	width: 100%;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	margin-left: 0 !important;
 	margin-right: 0 !important;
-}
-
-input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
-input[type="submit"].wide_button, input[type="submit"].button_micro, input[type="submit"].button_page, input[type="submit"].button_pageitem,
-input[type="button"].wide_button, input[type="button"].button_micro, input[type="button"].button_page, input[type="button"].button_pageitem,
-button.wide_button, button.button_micro, button.button_page, button.button_pageitem, .hero_section .hero_button a
-{
-	display: inline-block;
-	border: none;
-	cursor: pointer;
-	border: 1px solid {$GET,dark_border};
-	background-color: {$GET,lgrad};
-	color: {$GET,box_title_text};
-	{$BETA_CSS_PROPERTY,border-radius: 6px;}
-	background-image: url('{$IMG_INLINE;,gradient}');
-	text-shadow: 1px 1px 1px {$GET,dark_shadow};
-	margin: 0 2px;
-	-webkit-appearance: none;
-}
-.button_micro {
-	background-image: none !important; /* Too loud for such a small space */
-	font-size: 0.9em;
 }
 
 /* This is used to overlay special out-of-flow edit buttons, for staff only */
@@ -2894,50 +2880,50 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	background-image: none !important;
 }
 
-input[type="reset"].button_micro, input[type="submit"].button_micro, input[type="button"].button_micro, button.button_micro
-{
-	padding: 0 3px 1px 3px !important;
+.wide_button, .button_micro, .button_page, .button_pageitem, .hero_section .hero_button a {
+	display: inline-block;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	border: 1px solid {$GET,dark_border};
+	{$BETA_CSS_PROPERTY,border-radius: 6px;}
+	margin: 0 0.25em;
+	text-shadow: 1px 1px 1px {$GET,dark_shadow};
+	background-color: {$GET,lgrad};
+	background-repeat: no-repeat;
+	background-position: 6px 1px;
+	background-image: url('{$IMG_INLINE;,gradient}');
+	color: {$GET,box_title_text} !important;
+	text-decoration: none !important;
+	-webkit-appearance: none;
+	vertical-align: middle;
+	cursor: pointer;
 }
-input[type="reset"].wide_button, input[type="submit"].wide_button, input[type="button"].wide_button, button.wide_button, input[type="submit"].button_pageitem, input[type="button"].button_pageitem, button.button_pageitem
-{
-	padding: 2px 4px 3px 4px !important;
+
+.wide_button, .button_page, .button_pageitem {
+	padding: 5px 7px 5px 35px !important
 }
-input[type="reset"].button_page, input[type="submit"].button_page, input[type="button"].button_page, button.button_page
-{
-	padding: 3px 5px 4px 5px !important;
+.button_page {
 	min-width: {$?,{$MOBILE},5.8,9.8}em;
 }
-input[type="reset"].wide_button:hover, input[type="reset"].button_micro:hover, input[type="reset"].button_page:hover, input[type="reset"].button_pageitem:hover,
-input[type="submit"].wide_button:hover, input[type="submit"].button_micro:hover, input[type="submit"].button_page:hover, input[type="submit"].button_pageitem:hover,
-input[type="button"].wide_button:hover, input[type="button"].button_micro:hover, input[type="button"].button_page:hover, input[type="button"].button_pageitem:hover,
-button.wide_button:hover, button.button_micro:hover, button.button_page:hover, button.button_pageitem:hover
-{
-	{$BETA_CSS_PROPERTY,opacity: 1.0;}
-}
-input[type="reset"].wide_button:disabled, input[type="reset"].button_micro:disabled, input[type="reset"].button_page:disabled, input[type="reset"].button_pageitem:disabled,
-input[type="submit"].wide_button:disabled, input[type="submit"].button_micro:disabled, input[type="submit"].button_page:disabled, input[type="submit"].button_pageitem:disabled,
-input[type="button"].wide_button:disabled, input[type="button"].button_micro:disabled, input[type="button"].button_page:disabled, input[type="button"].button_pageitem:disabled,
-button.wide_button:disabled, button.button_micro:disabled, button.button_page:disabled, button.button_pageitem:disabled
-{
-	{$BETA_CSS_PROPERTY,opacity: 0.4 !important;}
-	cursor: default;
+.button_micro {
+	padding: 0 3px 1px 3px !important;
+	background-image: none !important; /* Too loud for such a small space */
+	font-size: 0.9em;
 }
 
 .button_page, .button_pageitem, .button_micro, .wide_button, .toggleable_tray_button img {
 	{$BETA_CSS_PROPERTY,opacity: 0.85;}
 	display: inline-block;
 }
-
+.wide_button:hover, .button_micro:hover, .button_page:hover, .button_pageitem:hover {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
+}
 .button_page:hover, .button_pageitem:hover, .button_micro:hover, .wide_button:hover, .toggleable_tray_button:hover img,
 body.touch_enabled .button_page, body.touch_enabled .button_pageitem, body.touch_enabled .button_micro, body.touch_enabled .wide_button, body.touch_enabled .toggleable_tray_button img {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} /* Needed for Opera */
 }
-
-.button_page, .button_pageitem {
-	vertical-align: middle;
-	{+START,IF,{$MOBILE}}
-		margin-bottom: 5px;
-	{+END}
+.wide_button:disabled, .button_micro:disabled, .button_page:disabled, .button_pageitem:disabled {
+	{$BETA_CSS_PROPERTY,opacity: 0.4 !important;}
+	cursor: default;
 }
 
 .proceed_button {
@@ -2976,6 +2962,307 @@ Form buttons are wrapped in either:
  - .mini_proceed_button
  - .buttons_group (defined elsewhere, in "Associations/Summaries")
 */
+
+/*
+Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
+*/
+.buttons__gotopage {
+	background-image: url('{$IMG,icons/24x24/buttons/gotopage}');
+}
+.buttons__perpage {
+	background-image: url('{$IMG,icons/24x24/buttons/perpage}');
+}
+.buttons__skip {
+	background-image: url('{$IMG,icons/24x24/buttons/skip}');
+}
+.buttons__add_ticket {
+	background-image: url('{$IMG,icons/24x24/buttons/add_ticket}');
+}
+.buttons__all {
+	background-image: url('{$IMG,icons/24x24/buttons/all}');
+}
+.buttons__all2 {
+	background-image: url('{$IMG,icons/24x24/buttons/all2}');
+}
+.buttons__calculate {
+	background-image: url('{$IMG,icons/24x24/buttons/calculate}');
+}
+.buttons__cart_add {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_add}');
+}
+.buttons__cart_checkout {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_checkout}');
+}
+.buttons__cart_empty {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_empty}');
+}
+.buttons__cart_update {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_update}');
+}
+.buttons__cart_view {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_view}');
+}
+.buttons__changes {
+	background-image: url('{$IMG,icons/24x24/buttons/changes}');
+}
+.buttons__choose {
+	background-image: url('{$IMG,icons/24x24/buttons/choose}');
+}
+.buttons__clear {
+	background-image: url('{$IMG,icons/24x24/buttons/clear}');
+}
+.buttons__closed {
+	background-image: url('{$IMG,icons/24x24/buttons/closed}');
+}
+.buttons__disable_notifications {
+	background-image: url('{$IMG,icons/24x24/buttons/disable_notifications}');
+}
+.buttons__edit {
+	background-image: url('{$IMG,icons/24x24/buttons/edit}');
+}
+.buttons__edit_tree {
+	background-image: url('{$IMG,icons/24x24/buttons/edit_tree}');
+}
+.buttons__enable_notifications {
+	background-image: url('{$IMG,icons/24x24/buttons/enable_notifications}');
+}
+.buttons__filter {
+	background-image: url('{$IMG,icons/24x24/buttons/filter}');
+}
+.buttons__forum {
+	background-image: url('{$IMG,icons/24x24/buttons/forum}');
+}
+.buttons__goto {
+	background-image: url('{$IMG,icons/24x24/buttons/goto}');
+}
+.buttons__history {
+	background-image: url('{$IMG,icons/24x24/buttons/history}');
+}
+.buttons__ignore {
+	background-image: url('{$IMG,icons/24x24/buttons/ignore}');
+}
+.buttons__join {
+	background-image: url('{$IMG,icons/24x24/buttons/join}');
+}
+.buttons__mark_read_forum {
+	background-image: url('{$IMG,icons/24x24/buttons/mark_read_forum}');
+}
+.buttons__mark_unread_topic {
+	background-image: url('{$IMG,icons/24x24/buttons/mark_unread_topic}');
+}
+.buttons__more {
+	background-image: url('{$IMG,icons/24x24/buttons/more}');
+}
+.buttons__move {
+	background-image: url('{$IMG,icons/24x24/buttons/move}');
+}
+.buttons__new_post_full {
+	background-image: url('{$IMG,icons/24x24/buttons/new_post_full}');
+}
+.buttons__new_topic {
+	background-image: url('{$IMG,icons/24x24/buttons/new_topic}');
+}
+.buttons__no {
+	background-image: url('{$IMG,icons/24x24/buttons/no}');
+}
+.buttons__yes {
+	background-image: url('{$IMG,icons/24x24/buttons/yes}');
+}
+.buttons__proceed {
+	background-image: url('{$IMG,icons/24x24/buttons/proceed}');
+}
+.buttons__cancel {
+	background-image: url('{$IMG,icons/24x24/buttons/cancel}');
+}
+.buttons__points {
+	background-image: url('{$IMG,icons/24x24/buttons/points}');
+}
+.buttons__next {
+	background-image: url('{$IMG,icons/24x24/buttons/next}');
+}
+.buttons__previous {
+	background-image: url('{$IMG,icons/24x24/buttons/previous}');
+}
+.buttons__previous_none {
+	background-image: url('{$IMG,icons/24x24/buttons/previous_none}');
+}
+.buttons__next_none {
+	background-image: url('{$IMG,icons/24x24/buttons/next_none}');
+}
+.buttons__new_comment {
+	background-image: url('{$IMG,icons/24x24/buttons/new_comment}');
+}
+.buttons__new_quote {
+	background-image: url('{$IMG,icons/24x24/buttons/new_quote}');
+}
+.buttons__redirect {
+	background-image: url('{$IMG,icons/24x24/buttons/redirect}');
+}
+.buttons__new_reply {
+	background-image: url('{$IMG,icons/24x24/buttons/new_reply}');
+}
+.buttons__report {
+	background-image: url('{$IMG,icons/24x24/buttons/report}');
+}
+.buttons__restore {
+	background-image: url('{$IMG,icons/24x24/buttons/restore}');
+}
+.buttons__save {
+	background-image: url('{$IMG,icons/24x24/buttons/save}');
+}
+.buttons__save_and_stay {
+	background-image: url('{$IMG,icons/24x24/buttons/save_and_stay}');
+}
+.buttons__search {
+	background-image: url('{$IMG,icons/24x24/buttons/search}');
+}
+.buttons__send {
+	background-image: url('{$IMG,icons/24x24/buttons/send}');
+}
+.buttons__slideshow {
+	background-image: url('{$IMG,icons/24x24/buttons/slideshow}');
+}
+.buttons__sort {
+	background-image: url('{$IMG,icons/24x24/buttons/sort}');
+}
+.buttons__new_reply_staff_only {
+	background-image: url('{$IMG,icons/24x24/buttons/new_reply_staff_only}');
+}
+.buttons__linear {
+	background-image: url('{$IMG,icons/24x24/buttons/linear}');
+}
+.buttons__threaded {
+	background-image: url('{$IMG,icons/24x24/buttons/threaded}');
+}
+.buttons__upload {
+	background-image: url('{$IMG,icons/24x24/buttons/upload}');
+}
+.buttons__validate {
+	background-image: url('{$IMG,icons/24x24/buttons/validate}');
+}
+.buttons__vote {
+	background-image: url('{$IMG,icons/24x24/buttons/vote}');
+}
+.buttons__whisper {
+	background-image: url('{$IMG,icons/24x24/buttons/whisper}');
+}
+.feedback__rate {
+	background-image: url('{$IMG,icons/24x24/feedback/rate}');
+}
+.menu___generic_admin__add_one {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_one}');
+}
+.menu___generic_admin__add_one_category {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_one_category}');
+}
+.menu___generic_admin__add_to_category {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_to_category}');
+}
+.menu___generic_admin__delete {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/delete}');
+}
+.menu___generic_admin__edit_one {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_one}');
+}
+.menu___generic_admin__edit_one_category {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_one_category}');
+}
+.menu___generic_admin__edit_this {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_this}');
+}
+.menu___generic_admin__edit_this_category {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_this_category}');
+}
+.menu___generic_admin__export {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/export}');
+}
+.menu___generic_admin__import {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/import}');
+}
+.menu___generic_admin__merge {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/merge}');
+}
+.menu___generic_admin__sync {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/sync}');
+}
+.menu___generic_admin__view_archive {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/view_archive}');
+}
+.menu___generic_admin__view_this {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/view_this}');
+}
+.menu___generic_spare__8 {
+	background-image: url('{$IMG,icons/24x24/menu/_generic_spare/8}');
+}
+.menu__adminzone__audit__ecommerce__subscriptions {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/audit/ecommerce/subscriptions}');
+}
+.menu__adminzone__audit {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/audit}');
+}
+.menu__adminzone__structure__forum__multi_moderations {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/structure/forum/multi_moderations}');
+}
+.menu__adminzone__structure {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/structure}');
+}
+.menu__adminzone__tools__cleanup {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools/cleanup}');
+}
+.menu__adminzone__tools__upgrade {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools/upgrade}');
+}
+.menu__adminzone__tools {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools}');
+}
+.menu__cms__catalogues__add_one_catalogue {
+	background-image: url('{$IMG,icons/24x24/menu/cms/catalogues/add_one_catalogue}');
+}
+.menu__cms__catalogues__edit_this_catalogue {
+	background-image: url('{$IMG,icons/24x24/menu/cms/catalogues/edit_this_catalogue}');
+}
+.menu__rich_content__catalogues__products {
+	background-image: url('{$IMG,icons/24x24/menu/rich_content/catalogues/products}');
+}
+.menu__rich_content__ecommerce__purchase {
+	background-image: url('{$IMG,icons/24x24/menu/rich_content/ecommerce/purchase}');
+}
+.menu__rich_content {
+	background-image: url('{$IMG,icons/24x24/menu/rich_content}');
+}
+.menu__site_meta__newsletters {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/newsletters}');
+}
+.menu__site_meta__recommend {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/recommend}');
+}
+.menu__site_meta__user_actions__join {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/join}');
+}
+.menu__site_meta__user_actions__login {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/login}');
+}
+.menu__site_meta__user_actions__lost_password {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/lost_password}');
+}
+.menu__site_meta {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta}');
+}
+.menu__social__chat__chat {
+	background-image: url('{$IMG,icons/24x24/menu/social/chat/chat}');
+}
+.menu__social__chat__sound {
+	background-image: url('{$IMG,icons/24x24/menu/social/chat/sound}');
+}
+.menu__social {
+	background-image: url('{$IMG,icons/24x24/menu/social}');
+}
+.tabs__member_account__warnings {
+	background-image: url('{$IMG,icons/24x24/tabs/member_account/warnings}');
+}
+.tabs__preview {
+	background-image: url('{$IMG,icons/24x24/tabs/preview}');
+}
 
 /*
 =========================

@@ -13,7 +13,7 @@
 	<input type="hidden" name="md_flds" value="trans_id:req_cv2" />
 
 	<div class="purchase_button">
-		<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!MAKE_PAYMENT}" />
+		<input onclick="disable_button_just_clicked(this);" class="menu__rich_content__ecommerce__purchase button_page" type="submit" value="{!MAKE_PAYMENT}" />
 	</div>
 </form>
 

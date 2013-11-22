@@ -172,7 +172,7 @@ class Module_admin_staff
 		if (!$available->is_empty())
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'edit'),'_SELF');
-			$available=do_template('FORM_GROUPED',array('_GUID'=>'5b74208b6c420edcdeb34bb49f1e9dcb','TEXT'=>'','URL'=>$post_url,'FIELD_GROUPS'=>$available,'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+			$available=do_template('FORM_GROUPED',array('_GUID'=>'5b74208b6c420edcdeb34bb49f1e9dcb','TEXT'=>'','URL'=>$post_url,'FIELD_GROUPS'=>$available,'SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 		}
 
 		return do_template('STAFF_ADMIN_SCREEN',array('_GUID'=>'101087b0dbe5d679a55bb661ad7350fa','TITLE'=>$this->title,'TEXT'=>$text,'FORUM_STAFF'=>$available));

@@ -105,7 +105,6 @@ class Hook_addon_registry_redirects_editor
 			'themes/default/templates/REDIRECTE_TABLE_REDIRECT.tpl',
 			'adminzone/pages/modules/admin_redirects.php',
 			'lang/EN/redirects.ini',
-			'themes/default/images/EN/page/redirect.png',
 			'themes/default/css/redirects_editor.css',
 		);
 	}

@@ -18,7 +18,7 @@
 	<div>
 		{HIDDEN}
 
-		<label for="member_filter"><span class="invisible_ref_point"></span><input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" id="member_filter" name="filter" value="{SEARCH*}" /> <input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SEARCH}" /> ({!SEARCH_MEMBER_EXAMPLE})</label>
+		<label for="member_filter"><span class="invisible_ref_point"></span><input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" id="member_filter" name="filter" value="{SEARCH*}" /> <input onclick="disable_button_just_clicked(this);" class="buttons__search button_micro" type="submit" value="{!SEARCH}" /> ({!SEARCH_MEMBER_EXAMPLE})</label>
 	</div>
 </form>
 

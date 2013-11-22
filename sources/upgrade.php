@@ -223,7 +223,7 @@ function upgrade_script()
 					{
 						echo '<br /><label for="upload">'.do_lang('UPLOAD').'</label> <input type="file" id="upload" name="upload" />';
 					}
-					echo '<input class="button_page" type="submit" value="'.do_lang('PROCEED').'" />';
+					echo '<input class="buttons__proceed button_page" type="submit" value="'.do_lang('PROCEED').'" />';
 					echo '</form>';
 					$show_more_link=false;
 					break;
@@ -503,7 +503,7 @@ function fu_link($url,$text,$disabled=false,$js='')
 	$hidden=(strpos($url,'http://ocportal.com')!==false)?'':post_fields_relay();
 	if (get_param_integer('keep_safe_mode',0)==1) $url.='&keep_safe_mode=1';
 	if (get_param_integer('keep_show_loading',0)==1) $url.='&keep_show_loading=1';
-	return '<form title="'.escape_html($text).'" style="display: inline" action="'.escape_html($url).'" method="post">'.$hidden.'<input '.(empty($js)?'':'onclick="return window.confirm(\''.addslashes($js).'\');" ').'accesskey="c" style="margin: 1px; padding: 0" '.($disabled?'disabled="disabled"':'').' class="button_page" type="submit" value="'.escape_html($text).'" /></form>';
+	return '<form title="'.escape_html($text).'" style="display: inline" action="'.escape_html($url).'" method="post">'.$hidden.'<input '.(empty($js)?'':'onclick="return window.confirm(\''.addslashes($js).'\');" ').'accesskey="c" style="margin: 1px; padding: 0" '.($disabled?'disabled="disabled"':'').' class="buttons__proceed button_page" type="submit" value="'.escape_html($text).'" /></form>';
 }
 
 /**
@@ -1181,7 +1181,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		}
 		if (($moved!='') || ($alien!=''))
 		{
-			$ret_str.='<input class="button_page" accesskey="c" style="margin: 1px; padding: 0" type="submit" value="'.do_lang('FU_AUTO_HANDLE').'" />';
+			$ret_str.='<input class="buttons__proceed button_page" accesskey="c" type="submit" value="'.do_lang('FU_AUTO_HANDLE').'" />';
 		}
 		$ret_str.='</form>';
 	}

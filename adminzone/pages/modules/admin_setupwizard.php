@@ -156,7 +156,7 @@ class Module_admin_setupwizard
 
 		$fields=new ocp_tempcode();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'71316d91703e3549301f57182405c997','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'71316d91703e3549301f57182405c997','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Module_admin_setupwizard
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step3'),'_SELF');
 		$submit_name=do_lang_tempcode('PROCEED');
 
-		return do_template('SETUPWIZARD_2_SCREEN',array('_GUID'=>'2042f3786d10c7c5be5d38ea28942b47','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('SETUPWIZARD_2_SCREEN',array('_GUID'=>'2042f3786d10c7c5be5d38ea28942b47','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -236,7 +236,7 @@ class Module_admin_setupwizard
 		} else $include_ocp_advert=false;
 		$fields->attach(form_input_tick(do_lang_tempcode('INCLUDE_OCP_ADVERT'),do_lang_tempcode('DESCRIPTION_INCLUDE_OCP_ADVERT'),'include_ocp_advert',$include_ocp_advert));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'3126441524b51cba6a1e0de336c8a9d5','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'SKIPPABLE'=>'skip_3','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3126441524b51cba6a1e0de336c8a9d5','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'SKIPPABLE'=>'skip_3','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
 	}
 
 	/**
@@ -463,7 +463,7 @@ class Module_admin_setupwizard
 		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'00948cc876d0ecb8b511800eabd8cae2','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields.=$fields_advanced;
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0f361a3ac0e020ba71f3a7a900eca0e4','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'SKIPPABLE'=>'skip_4','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0f361a3ac0e020ba71f3a7a900eca0e4','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'SKIPPABLE'=>'skip_4','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -534,6 +534,7 @@ class Module_admin_setupwizard
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
 			'TEXT'=>$text,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>$submit_name,
 			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
 		));
@@ -659,6 +660,7 @@ class Module_admin_setupwizard
 			'URL'=>$post_url,
 			'TEXT'=>$text,
 			'PREVIEW'=>true,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>$submit_name,
 			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
 		));
@@ -702,7 +704,7 @@ class Module_admin_setupwizard
 		$list->attach(form_input_list_entry('corporate',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='corporate'):false,do_lang_tempcode('SETUPWIZARD_RULES_corporate')));
 		$fields=form_input_list(do_lang_tempcode('RULES'),do_lang_tempcode('DESCRIPTION_RULES'),'rules',$list,NULL,true);
 		$javascript="document.getElementById('rules').onchange=function () { var items=['preview_box_balanced','preview_box_liberal','preview_box_corporate']; var i; for (i=0;i<items.length;i++) document.getElementById(items[i]).style.display=(this.selectedIndex!=i)?'none':'block'; }";
-		$form=do_template('FORM',array('_GUID'=>'bf01a2b90967e86213ae0672c36a4b4e','SKIPPABLE'=>'skip_7','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),'JAVASCRIPT'=>$javascript));
+		$form=do_template('FORM',array('_GUID'=>'bf01a2b90967e86213ae0672c36a4b4e','SKIPPABLE'=>'skip_7','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),'JAVASCRIPT'=>$javascript));
 
 		$balanced=comcode_to_tempcode($this->get_rules_file('balanced'),NULL,true);
 		$liberal=comcode_to_tempcode($this->get_rules_file('liberal'),NULL,true);
@@ -739,6 +741,7 @@ class Module_admin_setupwizard
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
 			'TEXT'=>$text,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>$submit_name,
 			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
 		));
@@ -770,6 +773,7 @@ class Module_admin_setupwizard
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
 			'TEXT'=>$text,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>$submit_name,
 			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
 			'JAVASCRIPT'=>$javascript,

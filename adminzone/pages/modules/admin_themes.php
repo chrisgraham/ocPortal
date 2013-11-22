@@ -694,7 +694,7 @@ class Module_admin_themes
 				};
 		";
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'08b45be04f4035c7595458a719260bd9','HIDDEN'=>'','JAVASCRIPT'=>$javascript,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'08b45be04f4035c7595458a719260bd9','HIDDEN'=>'','JAVASCRIPT'=>$javascript,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -748,7 +748,7 @@ class Module_admin_themes
 
 		$javascript='var themee=document.getElementById(\'theme\'), themet=document.getElementById(\'title\'), copy=document.getElementById(\'copy\'); if (copy) copy.onchange=function() { if (copy.checked && themee.value.indexOf(\'-copy\')==-1) { themee.value+=\'-copy\'; themet.value+=\' copy\'; } };';
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'2734c55cd4d7cfa785d307d932ce8af1','JAVASCRIPT'=>$javascript,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'2734c55cd4d7cfa785d307d932ce8af1','JAVASCRIPT'=>$javascript,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__edit_this','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -880,7 +880,7 @@ class Module_admin_themes
 	}
 
 	/**
-	 * The UI to choose a theme.
+	 * The UI to choose a theme to work with.
 	 *
 	 * @param  tempcode		The title to show when choosing a theme
 	 * @param  boolean		Whether to also choose a language
@@ -905,7 +905,7 @@ class Module_admin_themes
 
 		$post_url=get_self_url(false,false,NULL,false,true);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'01030dc8f338138ac36ff4f59c7892fc','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'01030dc8f338138ac36ff4f59c7892fc','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 	}
 
 	/**
@@ -949,6 +949,7 @@ class Module_admin_themes
 			'GET'=>true,
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>'',
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
 			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
@@ -1335,7 +1336,7 @@ class Module_admin_themes
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme),'_SELF');
-		$edit_form=do_template('FORM',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
+		$edit_form=do_template('FORM',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
 
 		list($warning_details,$ping_url)=handle_conflict_resolution(''); // Intentionally blank, because only one person should edit any of all templates at any time (because they depend on each other)
 
@@ -1924,7 +1925,7 @@ class Module_admin_themes
 			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'7b8066b63002cda0a7628ddadddd9962','HIDDEN'=>$hidden,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'7b8066b63002cda0a7628ddadddd9962','HIDDEN'=>$hidden,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -1992,7 +1993,7 @@ class Module_admin_themes
 		$fields=form_input_theme_image(do_lang_tempcode('CODENAME'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang,true,true);
 		$hidden=form_input_hidden('theme',$theme);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');
-		$edit_form=do_template('FORM',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
+		$edit_form=do_template('FORM',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
 
 		$add_url=build_url(array('page'=>'_SELF','type'=>'add_image','theme'=>$theme,'lang'=>$lang),'_SELF');
 
@@ -2060,7 +2061,7 @@ class Module_admin_themes
 			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'b0e178ad1f840a07c4967f3c266c750b','HIDDEN'=>$hidden,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'b0e178ad1f840a07c4967f3c266c750b','HIDDEN'=>$hidden,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_ICON'=>'menu___generic_admin__edit_this','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

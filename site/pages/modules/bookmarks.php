@@ -182,7 +182,7 @@ class Module_bookmarks
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'ec1bb050b1a6b31a8c2774c6994f3fb2','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_manage'),'_SELF');
-		$form=do_template('FORM',array('_GUID'=>'5d9a17c5be18674991c3b17a4a4e7bfe','HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('MOVE_OR_DELETE_BOOKMARKS')));
+		$form=do_template('FORM',array('_GUID'=>'5d9a17c5be18674991c3b17a4a4e7bfe','HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('MOVE_OR_DELETE_BOOKMARKS')));
 
 		$bookmarks=array();
 		$_bookmarks=$GLOBALS['SITE_DB']->query_select('bookmarks',array('*'),array('b_owner'=>get_member()),'ORDER BY b_folder');

@@ -637,7 +637,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$action_url=build_url($map,get_module_zone('topics'));
 		$_title=do_lang_tempcode('VALIDATE_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'712fdaee35f378e37b007f3a73246690','REL'=>'validate','IMMEDIATE'=>true,'IMG'=>'validate','TITLE'=>$_title,'URL'=>$action_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'712fdaee35f378e37b007f3a73246690','REL'=>'validate','IMMEDIATE'=>true,'IMG'=>'buttons__validate','TITLE'=>$_title,'URL'=>$action_url)));
 	}
 	if (($may_reply) && (is_null(get_bot_type())))
 	{
@@ -667,19 +667,19 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		}
 		$_title=do_lang_tempcode(($topic_info['is_threaded']==1)?'REPLY':'QUOTE_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'reply':'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'buttons__new_reply':'buttons__new_quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
 		if ($topic_info['is_threaded']==1) // Second button for replying with explicit quote
 		{
 			$_title=do_lang_tempcode('QUOTE_POST');
 			$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-			$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript_explicit_quote)));
+			$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'buttons__new_quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript_explicit_quote)));
 		}
 	}
 	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])) && (has_privilege($_postdetails['poster'],'use_points')))
 	{
 		$action_url=build_url(array('page'=>'points','type'=>'member','id'=>$_postdetails['poster']),get_module_zone('points'));
 		$_title=do_lang_tempcode('POINTS_THANKS');
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'a66f98cb4d56bd0d64e9ecc44d357141','IMMEDIATE'=>false,'IMG'=>'points','TITLE'=>$_title,'URL'=>$action_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'a66f98cb4d56bd0d64e9ecc44d357141','IMMEDIATE'=>false,'IMG'=>'buttons__points','TITLE'=>$_title,'URL'=>$action_url)));
 	}
 	if ((array_key_exists('may_pt_members',$topic_info)) && ($may_reply) && ($_postdetails['poster']!=get_member()) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (ocf_may_whisper($_postdetails['poster'])) && (get_option('overt_whisper_suggestion')=='1'))
 	{
@@ -687,14 +687,14 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$action_url=build_url(array('page'=>'topics','type'=>$whisper_type,'id'=>$_postdetails['topic_id'],'quote'=>$_postdetails['id'],'intended_solely_for'=>$_postdetails['poster']),get_module_zone('topics'));
 		$_title=do_lang_tempcode('WHISPER');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply contact','IMMEDIATE'=>false,'IMG'=>(get_option('inline_pp_advertise')=='0')?'send_message':'whisper','TITLE'=>$_title,'URL'=>$action_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply contact','IMMEDIATE'=>false,'IMG'=>(get_option('inline_pp_advertise')=='0')?'buttons__send':'buttons__whisper','TITLE'=>$_title,'URL'=>$action_url)));
 	}
 	if ((array_key_exists('may_report_posts',$topic_info)) && (addon_installed('ocf_reported_posts')) && (is_null(get_bot_type())))
 	{
 		$action_url=build_url(array('page'=>'topics','type'=>'report_post','id'=>$_postdetails['id']),get_module_zone('topics'));
 		$_title=do_lang_tempcode('REPORT_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'f81cbe84f524b4ed9e089c6e89a7c717','REL'=>'report','IMMEDIATE'=>false,'IMG'=>'report_post','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>'return open_link_as_overlay(this,null,\'100%\');')));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'f81cbe84f524b4ed9e089c6e89a7c717','REL'=>'report','IMMEDIATE'=>false,'IMG'=>'buttons__report','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>'return open_link_as_overlay(this,null,\'100%\');')));
 	}
 	if (array_key_exists('may_edit',$_postdetails))
 	{
@@ -710,7 +710,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$edit_url=build_url($map,get_module_zone('topics'));
 		$_title=do_lang_tempcode('EDIT_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'f341cfc94b3d705437d43e89f572bff6','REL'=>'edit','IMMEDIATE'=>false,'IMG'=>'edit','TITLE'=>$_title,'URL'=>$edit_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'f341cfc94b3d705437d43e89f572bff6','REL'=>'edit','IMMEDIATE'=>false,'IMG'=>'buttons__edit','TITLE'=>$_title,'URL'=>$edit_url)));
 	}
 	if (array_key_exists('may_delete',$_postdetails))
 	{
@@ -726,7 +726,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$delete_url=build_url($map,get_module_zone('topics'));
 		$_title=do_lang_tempcode('DELETE_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'8bf6d098ddc217eef75718464dc03d41','REL'=>'delete','IMMEDIATE'=>false,'IMG'=>'delete','TITLE'=>$_title,'URL'=>$delete_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'8bf6d098ddc217eef75718464dc03d41','REL'=>'delete','IMMEDIATE'=>false,'IMG'=>'menu___generic_admin__delete','TITLE'=>$_title,'URL'=>$delete_url)));
 	}
 	if ((array_key_exists('may_warn_members',$topic_info)) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (addon_installed('ocf_warnings')))
 	{
@@ -735,14 +735,14 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$action_url=build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$_postdetails['poster'],'post_id'=>$_postdetails['id'],'redirect'=>$redir_url),get_module_zone('warnings'));
 		$_title=do_lang_tempcode('WARN_MEMBER');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'punish','TITLE'=>$_title,'URL'=>$action_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'tabs__member_account__warnings','TITLE'=>$_title,'URL'=>$action_url)));
 	}
 	if ((has_privilege(get_member(),'view_content_history')) && ($_postdetails['has_history']))
 	{
 		$action_url=build_url(array('page'=>'admin_ocf_history','type'=>'misc','post_id'=>$_postdetails['id']),'adminzone');
 		$_title=do_lang_tempcode('POST_HISTORY');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'6086b2ae226bf2a69d1e34641d22ae21','REL'=>'history','IMMEDIATE'=>false,'IMG'=>'history','TITLE'=>$_title,'URL'=>$action_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'6086b2ae226bf2a69d1e34641d22ae21','REL'=>'history','IMMEDIATE'=>false,'IMG'=>'buttons__history','TITLE'=>$_title,'URL'=>$action_url)));
 	}
 	return $buttons;
 }

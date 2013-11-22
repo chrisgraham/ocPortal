@@ -135,7 +135,7 @@ class Module_admin_xml_storage
 		$import_url=build_url(array('page'=>'_SELF','type'=>'_import'),'_SELF');
 		$import_fields=new ocp_tempcode();
 		$import_fields->attach(form_input_huge(do_lang_tempcode('XML_DATA'),'','xml','',true));
-		$import_form=do_template('FORM',array('_GUID'=>'82005575f2a31c362d4a1a79d7a0c247','TABINDEX'=>strval(get_form_field_tabindex()),'URL'=>$import_url,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('XML_IMPORT_TEXT'),'FIELDS'=>$import_fields,'SUBMIT_NAME'=>do_lang_tempcode('IMPORT')));
+		$import_form=do_template('FORM',array('_GUID'=>'82005575f2a31c362d4a1a79d7a0c247','TABINDEX'=>strval(get_form_field_tabindex()),'URL'=>$import_url,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('XML_IMPORT_TEXT'),'FIELDS'=>$import_fields,'SUBMIT_ICON'=>'menu___generic_admin__import','SUBMIT_NAME'=>do_lang_tempcode('IMPORT')));
 		url_default_parameters__disable();
 
 		$all_tables=find_all_xml_tables();
@@ -148,7 +148,7 @@ class Module_admin_xml_storage
 		}
 		require_lang('comcode');
 		$export_fields->attach(form_input_multi_list(do_lang_tempcode('TABLES'),do_lang_tempcode('DESCRIPTION_TABLES'),'tables',$nice_tables,NULL,15));
-		$export_form=do_template('FORM',array('_GUID'=>'fafc396037e375bdd84582ef8170ec1b','TABINDEX'=>strval(get_form_field_tabindex()),'URL'=>$export_url,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('XML_EXPORT_TEXT'),'FIELDS'=>$export_fields,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT')));
+		$export_form=do_template('FORM',array('_GUID'=>'fafc396037e375bdd84582ef8170ec1b','TABINDEX'=>strval(get_form_field_tabindex()),'URL'=>$export_url,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('XML_EXPORT_TEXT'),'FIELDS'=>$export_fields,'SUBMIT_ICON'=>'menu___generic_admin__export','SUBMIT_NAME'=>do_lang_tempcode('EXPORT')));
 
 		return do_template('XML_STORAGE_SCREEN',array('_GUID'=>'8618fbb96fe29689dbbf8edd60444b1e','TITLE'=>$this->title,'IMPORT_FORM'=>$import_form,'EXPORT_FORM'=>$export_form));
 	}

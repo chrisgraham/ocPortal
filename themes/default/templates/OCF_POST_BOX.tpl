@@ -13,7 +13,7 @@
 
 	{+START,IF_PASSED,URL}
 		<p class="shunted_button">
-			<a href="{URL*}"><img class="button_pageitem" src="{$IMG*,pageitem/goto}" alt="{!FORUM_POST} #{ID*}" /></a>
+			<a class="buttons__goto button_pageitem" href="{URL*}"><span>{!FORUM_POST} #{ID*}</span></a>
 		</p>
 	{+END}
 </div>

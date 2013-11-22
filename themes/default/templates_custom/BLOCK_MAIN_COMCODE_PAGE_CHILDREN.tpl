@@ -23,7 +23,7 @@
 				{$STRIP_TAGS,{$TRUNCATE_LEFT,{$GET,PAGE},400,0,1},<div><p><em><i><b><strong><br>}
 
 				<p>
-					<a href="{$PAGE_LINK*,{ZONE}:{PAGE}}"><img class="button_pageitem" alt="{!VIEW}" title="{!VIEW}" src="{$IMG*,pageitem/goto}" /></a>
+					<a class="buttons__goto button_pageitem" href="{$PAGE_LINK*,{ZONE}:{PAGE}}"><span>{!GOTO}</span></a>
 				</p>
 			</div></div>
 		{+END}

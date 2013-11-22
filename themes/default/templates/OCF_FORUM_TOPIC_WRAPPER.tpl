@@ -85,7 +85,7 @@
 							<option value="misc">-</option>
 							{MODERATOR_ACTIONS}
 						</select>
-						<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
+						<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="buttons__proceed button_micro" type="submit" value="{!PROCEED}" />
 					</div>
 				</form>
 
@@ -103,7 +103,7 @@
 								<option value="100"{$?,{$EQ,{MAX},100}, selected="selected",}>100</option>
 								<option value="300"{$?,{$EQ,{MAX},300}, selected="selected",}>300</option>
 							</select>
-							<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
+							<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="buttons__proceed button_micro" type="submit" value="{!PROCEED}" />
 						</div>
 					</form>
 
@@ -119,7 +119,7 @@
 							</select>
 							</label>
 							{+START,IF,{$NOT,{$JS_ON}}}
-								<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SORT}" />
+								<input onclick="disable_button_just_clicked(this);" class="buttons__sort button_micro" type="submit" value="{!SORT}" />
 							{+END}
 						</div>
 					</form>

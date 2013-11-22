@@ -70,7 +70,7 @@ class Hook_pointstore_bank
 
 		$text=do_lang_tempcode('BANK_A',integer_format($points_left));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'f58cd830101bd4b440d42a8b8d4e39aa','TITLE'=>$title,'TEXT'=>$text,'URL'=>$next_url,'FIELDS'=>$fields,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'f58cd830101bd4b440d42a8b8d4e39aa','TITLE'=>$title,'TEXT'=>$text,'URL'=>$next_url,'FIELDS'=>$fields,'HIDDEN'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 	}
 
 	/**

@@ -121,12 +121,12 @@ class Block_main_staff_checklist
 		require_javascript('javascript_ajax');
 
 		// Handle custom tasks
-		$newtask=post_param('newtask',NULL);
+		$new_task=post_param('new_task',NULL);
 		$recurint=post_param_integer('recur',0);
 		$recurevery=post_param('recurevery',NULL);
-		if ((!is_null($newtask)) && (!is_null($recurint)) && (!is_null($recurevery)))
+		if ((!is_null($new_task)) && (!is_null($recurint)) && (!is_null($recurevery)))
 		{
-			$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$newtask,'datetimeadded'=>time(),'recurinterval'=>$recurint,'recurevery'=>$recurevery,'taskisdone'=>NULL));
+			$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$new_task,'datetimeadded'=>time(),'recurinterval'=>$recurint,'recurevery'=>$recurevery,'taskisdone'=>NULL));
 			decache('main_staff_checklist');
 		}
 		$custasks=new ocp_tempcode();

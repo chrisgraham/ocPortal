@@ -581,7 +581,7 @@ class Module_cms_comcode_pages
 
 		$table=results_table(do_lang('COMCODE_PAGES'),$start,'start',$max,'max',$max_rows,$header_row,$table_rows,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fdgfdfdfdggfd',true);
 
-		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a','TITLE'=>$this->title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name));
+		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a','TITLE'=>$this->title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -878,7 +878,7 @@ class Module_cms_comcode_pages
 		$hidden_fields->attach(form_input_hidden('zone',$zone));
 		$hidden_fields->attach(form_input_hidden('redirect',get_param('redirect','')));
 
-		$posting_form=get_posting_form(do_lang(($file=='')?'COMCODE_PAGE_ADD':'SAVE'),$contents,$post_url,$hidden_fields,$fields,do_lang_tempcode('COMCODE_PAGE'),'',$fields2,$parsed,NULL,NULL,false);
+		$posting_form=get_posting_form(do_lang(($file=='')?'COMCODE_PAGE_ADD':'SAVE'),($file=='')?'menu___generic_admin__add_one':'menu___generic_admin__edit_this',$contents,$post_url,$hidden_fields,$fields,do_lang_tempcode('COMCODE_PAGE'),'',$fields2,$parsed,NULL,NULL,false);
 
 		if ($file=='') url_default_parameters__disable();
 

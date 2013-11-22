@@ -134,7 +134,6 @@ class Hook_addon_registry_points
 			'themes/default/templates/POINTS_LEADER_BOARD_WEEK.tpl',
 			'adminzone/pages/modules/admin_points.php',
 			'themes/default/css/points.css',
-			'themes/default/images/EN/pageitem/points.png',
 			'lang/EN/points.ini',
 			'site/pages/modules/points.php',
 			'sources/hooks/blocks/main_staff_checklist/points.php',

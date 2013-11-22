@@ -58,14 +58,14 @@
 							</select>
 
 							{+START,IF,{SIMPLISTIC}}
-								<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!RATE}" />
+								<input onclick="disable_button_just_clicked(this);" class="feedback__rate button_micro" type="submit" value="{!RATE}" />
 							{+END}
 						</div>
 					</div>
 				{+END}
 				{+START,IF,{$NOT,{SIMPLISTIC}}}
 					<div>
-						<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!RATE}" />
+						<input onclick="disable_button_just_clicked(this);" class="feedback__rate button_micro" type="submit" value="{!RATE}" />
 					</div>
 				{+END}
 			</form>

@@ -80,7 +80,7 @@ class Hook_pointstore_community_billboard
 
 		// Return template
 		$post_url=build_url(array('page'=>'_SELF','type'=>'__community_billboard','id'=>'community_billboard'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'3584ba6a16c9a51829dc3b25b58067f6','HIDDEN'=>'','TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWCOMMUNITY_BILLBOARD'),'TEXT'=>$text,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3584ba6a16c9a51829dc3b25b58067f6','HIDDEN'=>'','TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWCOMMUNITY_BILLBOARD'),'TEXT'=>$text,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
 	}
 
 	/**

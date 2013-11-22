@@ -21,7 +21,7 @@ echo <<<END
 <div>You can generate an upgrader from any version of ocPortal to any other version. If you access this upgrade post via the version information box on your Admin Zone front page then we'll automatically know what version you're running.
 <br />If you'd prefer though you can enter in your version number right here:</div>
 <br />
-<form onsubmit="this.elements['submitbtn'].disabled=true;" action="#" method="post">
+<form onsubmit="this.elements['make_upgrader_button'].disabled=true;" action="#" method="post">
 	<p style="margin: 4px 0">
 		<label style="width: 170px; float: left" for="from_version_a">Major version (e.g. <kbd>4</kbd>)</label>
 		<input size="1" maxlength="1" type="text" name="from_version_a" id="from_version_a" value="" />
@@ -40,7 +40,7 @@ echo <<<END
 	</p>
 	<p>(example above is for upgrading from 4.3.2 beta1)</p>
 	<p>
-		<input class="button_pageitem" id="submitbtn" type="submit" value="Generate" />
+		<input class="buttons__proceed button_pageitem" id="make_upgrader_button" type="submit" value="Generate" />
 	</p>
 </form>
 END;

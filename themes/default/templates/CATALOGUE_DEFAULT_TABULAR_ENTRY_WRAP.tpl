@@ -7,7 +7,7 @@
 	{+START,IF_NON_EMPTY,{VIEW_URL}}
 		<td>
 			<!--VIEWLINK-->
-			<a href="{VIEW_URL*}"><img title="{!COMMENTS} / {!VIEW}" alt="{!COMMENTS} / {!VIEW}" class="button_pageitem" src="{$IMG*,pageitem/more}" /></a>
+			<a class="buttons__more button_pageitem" href="{VIEW_URL*}"><span>{!VIEW}</span></a>
 		</td>
 	{+END}
 	{$, Uncomment to show ratings

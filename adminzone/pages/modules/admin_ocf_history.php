@@ -203,17 +203,17 @@ class Module_admin_ocf_history
 			if (has_privilege(get_member(),'delete_content_history')) // Delete permanently
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'delete','h_id'=>$post['id']),'_SELF',NULL,true);
-				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'11c9f9ef4a646493544cb29778134960','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'delete','TITLE'=>do_lang_tempcode('DELETE_HISTORY_POST'))));
+				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'11c9f9ef4a646493544cb29778134960','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'menu___generic_admin__delete','TITLE'=>do_lang_tempcode('DELETE_HISTORY_POST'))));
 			}
 			if ((has_privilege(get_member(),'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action']=='DELETE_POST')) // Restore
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'restore','h_id'=>$post['id']),'_SELF',NULL,true);
-				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'49623e00065f488bb27097bb722232dc','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'restore','TITLE'=>do_lang_tempcode('RESTORE_HISTORY_POST'))));
+				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'49623e00065f488bb27097bb722232dc','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'buttons__restore','TITLE'=>do_lang_tempcode('RESTORE_HISTORY_POST'))));
 			}
 			if ((has_privilege(get_member(),'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action']=='EDIT_POST')) // Restore
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'revert','h_id'=>$post['id']),'_SELF',NULL,true);
-				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'3f41d4d399676972c01ebb14f6ee56db','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'choose','TITLE'=>do_lang_tempcode('REVERT_HISTORY_POST'))));
+				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'3f41d4d399676972c01ebb14f6ee56db','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'buttons__choose','TITLE'=>do_lang_tempcode('REVERT_HISTORY_POST'))));
 			}
 
 			$content->attach(do_template('OCF_HISTORY_POST',array(

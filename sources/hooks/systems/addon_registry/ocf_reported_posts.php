@@ -99,7 +99,6 @@ class Hook_addon_registry_ocf_reported_posts
 			'sources/hooks/systems/addon_registry/ocf_reported_posts.php',
 			'themes/default/templates/OCF_REPORTED_POST_FCOMCODE.tpl',
 			'sources/hooks/blocks/main_staff_checklist/reported_posts.php',
-			'themes/default/images/EN/pageitem/report_post.png',
 			'sources/hooks/systems/config/reported_posts_forum.php',
 		);
 	}

@@ -14,10 +14,10 @@
 		<div class="trinav_left">
 			{$,Back}
 			{+START,IF_NON_EMPTY,{BACK_URL}}
-				<a {+START,IF,{SLIDESHOW}}onclick="return slideshow_backward();" {+END}rel="prev" accesskey="j" href="{BACK_URL*}"><img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!PREVIOUS}" alt="{!PREVIOUS}" src="{$IMG*,page/previous}" /></a>
+				<a class="buttons__previous button_page" {+START,IF,{SLIDESHOW}}onclick="return slideshow_backward();" {+END}rel="prev" accesskey="j" href="{BACK_URL*}"><span>{!PREVIOUS}</span></a>
 			{+END}
 			{+START,IF_EMPTY,{BACK_URL}}
-				<img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!PREVIOUS}" alt="{!PREVIOUS}" src="{$IMG*,page/no_previous}" />
+				<span class="buttons__no_previous button_page"><span>{!PREVIOUS}</span></span>
 			{+END}
 		</div>
 
@@ -26,17 +26,17 @@
 			{+START,IF_NON_EMPTY,{SLIDESHOW_URL}}
 				{+START,IF,{$NOT,{$MOBILE}}}
 					{+START,IF,{$JS_ON}}{+START,IF,{$NOT,{SLIDESHOW}}}
-						<a class="link_exempt" rel="nofollow" target="_blank" title="{!SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{SLIDESHOW_URL*}"><img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!SLIDESHOW}" alt="{!SLIDESHOW}" src="{$IMG*,page/slideshow}" /></a>
+						<a class="buttons__slideshow button_page link_exempt" rel="nofollow" target="_blank" title="{!SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{SLIDESHOW_URL*}"><span>{!SLIDESHOW}</span></a>
 					{+END}{+END}
 				{+END}
 			{+END}
 
 			{$,Next}
 			{+START,IF_NON_EMPTY,{NEXT_URL}}
-				<a {+START,IF,{SLIDESHOW}}onclick="return slideshow_forward();" {+END}rel="next" accesskey="k" href="{NEXT_URL*}"><img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!NEXT}" alt="{!NEXT}" src="{$IMG*,page/next}" /></a>
+				<a class="buttons__next button_page" {+START,IF,{SLIDESHOW}}onclick="return slideshow_forward();" {+END}rel="next" accesskey="k" href="{NEXT_URL*}"><span>{!NEXT}</span></a>
 			{+END}
 			{+START,IF_EMPTY,{NEXT_URL}}
-				<img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!NEXT}" alt="{!NEXT}" src="{$IMG*,page/no_next}" />
+				<span class="buttons__no_next button_page"><span>{!NEXT}</span></span>
 			{+END}
 		</div>
 
@@ -75,7 +75,7 @@
 		{+START,IF,{$MOBILE}}
 			{+START,IF,{$JS_ON}}{+START,IF,{$NOT,{SLIDESHOW}}}
 				<div class="right">
-					<a class="link_exempt" rel="nofollow" target="_blank" title="{!SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{SLIDESHOW_URL*}"><img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!SLIDESHOW}" alt="{!SLIDESHOW}" src="{$IMG*,page/slideshow}" /></a>
+					<a class="buttons__slideshow button_page link_exempt" rel="nofollow" target="_blank" title="{!SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{SLIDESHOW_URL*}"><span>{!SLIDESHOW}</span></a>
 				</div>
 			{+END}{+END}
 		{+END}

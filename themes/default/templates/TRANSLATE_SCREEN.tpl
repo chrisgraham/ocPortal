@@ -40,7 +40,7 @@
 	</table></div>
 
 	<p class="proceed_button">
-		<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />
+		<input accesskey="u" onclick="disable_button_just_clicked(this);" class="buttons__save button_page" type="submit" value="{!SAVE}" />
 	</p>
 </form>
 

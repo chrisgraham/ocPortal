@@ -181,6 +181,7 @@ class Module_contact_member
 			'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'',
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
+			'SUBMIT_ICON'=>'buttons__send',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 			'SUPPORT_AUTOSAVE'=>true,

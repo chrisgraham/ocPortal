@@ -17,7 +17,7 @@
 	{+END}{+END}
 
 	<p class="shunted_button">
-		<a href="{URL*}"><img class="button_pageitem" alt="{!VIEW}" title="{!VIEW}" src="{$IMG*,pageitem/goto}" /></a>
+		<a class="buttons__goto button_pageitem" href="{URL*}"><span>{!VIEW}</span></a>
 	</p>
 {+END}
 

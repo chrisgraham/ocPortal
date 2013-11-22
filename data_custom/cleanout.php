@@ -55,7 +55,7 @@ function cleanup()
 	$password=post_param('password',NULL);
 	if (is_null($password))
 	{
-		@exit('<form action="#" method="post"><label>Master password <input type="password" name="password" value="" /></label><input type="submit" value="Delete programmed data" /></form>');
+		@exit('<form action="#" method="post"><label>Master password <input type="password" name="password" value="" /></label><input class="menu___generic_admin__delete button_page" type="submit" value="Delete programmed data" /></form>');
 	}
 	if (!check_master_password($password)) warn_exit('Access denied - you must pass the master password through correctly');
 

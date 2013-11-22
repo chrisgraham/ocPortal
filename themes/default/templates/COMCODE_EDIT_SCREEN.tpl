@@ -11,7 +11,7 @@
 
 {+START,IF,{$NOT,{NEW}}}
 	<div class="buttons_group">
-		<a href="{DELETE_URL*}" title="{!DELETE}: {ZONE*}:{FILE*}"><img class="button_pageitem" src="{$IMG*,pageitem/delete}" title="{!DELETE}" alt="{!DELETE}" /></a>
+		<a class="menu___generic_admin__delete button_pageitem" href="{DELETE_URL*}"><span>{!DELETE}: {ZONE*}:{FILE*}</span></a>
 	</div>
 {+END}
 

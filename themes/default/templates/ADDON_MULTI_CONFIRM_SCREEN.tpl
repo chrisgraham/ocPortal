@@ -24,7 +24,7 @@
 		<form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
 			<div class="inline_block">
 				<p>
-					<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!PROCEED}" />
+					<input onclick="disable_button_just_clicked(this);" class="buttons__proceed button_page" type="submit" value="{!PROCEED}" />
 					{HIDDEN}
 				</p>
 			</div>

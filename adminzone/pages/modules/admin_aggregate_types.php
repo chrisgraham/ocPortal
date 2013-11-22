@@ -211,7 +211,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 				$fields->attach(form_input_list(do_lang_tempcode('AGGREGATE_TYPE'),'','aggregate_type',$list,NULL,true,true));
 				$submit_name=do_lang_tempcode('PROCEED');
 				$url=get_self_url();
-				return do_template('FORM_SCREEN',array('_GUID'=>'8bd97d858f2ab1dc885a7453b3dd781c','TITLE'=>$this->title,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'URL'=>$url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
+				return do_template('FORM_SCREEN',array('_GUID'=>'8bd97d858f2ab1dc885a7453b3dd781c','TITLE'=>$this->title,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'URL'=>$url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 			}
 		}
 
@@ -442,6 +442,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 			'URL'=>$url,
 			'FIELDS'=>$fields,
 			'TEXT'=>do_lang_tempcode('SELECT_AGGREGATE_TYPES_FOR_SYNC'),
+			'SUBMIT_ICON'=>'menu___generic_admin__sync',
 			'SUBMIT_NAME'=>$submit_name,
 		));
 	}

@@ -16,7 +16,7 @@
 	</div>
 
 	<div class="buttons_group">
-		<a href="{ADD_TO_CART*}"><img class="button_pageitem" src="{$IMG*,pageitem/cart_add}" title="{!ADD_TO_CART}" alt="{!ADD_TO_CART}"/></a>
-		<a href="{VIEW_URL*}"><img class="button_pageitem" src="{$IMG*,pageitem/goto}" title="{!GO_FOR_IT}" alt="{!GO_FOR_IT}"/></a>			
+		<a class="buttons__cart_add button_pageitem" href="{ADD_TO_CART*}"><span>{!ADD_TO_CART}</span></a>
+		<a class="buttons__goto button_pageitem" href="{VIEW_URL*}"><span>{!GO_FOR_IT}</span></a>			
 	</div>
 </div></section>

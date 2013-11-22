@@ -243,7 +243,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$post_url=build_url(array('page'=>'admin_lang','type'=>'_content','contextual'=>1),'adminzone');
 		$hidden=form_input_hidden('redirect',get_self_url(true,true));
 		$hidden=form_input_hidden('lang',user_lang());
-		$middle_spt=do_template('FORM_SCREEN',array('_GUID'=>'0d4dd16b023d0a7960f3eac85f54ddc4','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		$middle_spt=do_template('FORM_SCREEN',array('_GUID'=>'0d4dd16b023d0a7960f3eac85f54ddc4','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 	}
 
 	// Language mode
@@ -286,7 +286,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$post_url=build_url(array('page'=>'admin_lang','type'=>'_code2'),'adminzone');
 		$hidden=form_input_hidden('redirect',get_self_url(true,true));
 		$hidden=form_input_hidden('lang',user_lang());
-		$middle_spt=do_template('FORM_SCREEN',array('_GUID'=>'47a2934eaec30ed5eea635d4c462cee0','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		$middle_spt=do_template('FORM_SCREEN',array('_GUID'=>'47a2934eaec30ed5eea635d4c462cee0','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 	}
 
 	// Template mode?

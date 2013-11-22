@@ -958,6 +958,7 @@ class Module_cms_booking_bookings extends standard_crud_module
 					'TEXT'=>'',
 					'URL'=>$post_url,
 					'FIELDS'=>$fields,
+					'SUBMIT_ICON'=>'buttons__proceed',
 					'SUBMIT_NAME'=>$submit_name,
 				));
 			}

@@ -109,7 +109,7 @@ class Module_admin_menus
 
 		$type=get_param('type','misc');
 
-		if ($type=='misc') return $this->get_menu_name();
+		if ($type=='misc') return $this->choose_menu_name();
 		if ($type=='edit') return $this->edit_menu();
 		if ($type=='_edit') return $this->_edit_menu();
 
@@ -121,7 +121,7 @@ class Module_admin_menus
 	 *
 	 * @return tempcode		The UI
 	 */
-	function get_menu_name()
+	function choose_menu_name()
 	{
 		require_code('form_templates');
 		$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
@@ -159,6 +159,7 @@ class Module_admin_menus
 			'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>$submit_name,
 		));
 	}

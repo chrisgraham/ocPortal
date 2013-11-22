@@ -8,7 +8,7 @@
 	</div>
 
 	<p class="proceed_button">
-		<input onclick="disable_button_just_clicked(this);" value="{!EDIT_TEMPLATES}" class="button_page" type="submit" />
+		<input onclick="disable_button_just_clicked(this);" value="{!EDIT_TEMPLATES}" class="buttons__edit button_page" type="submit" />
 	</p>
 </form>
 

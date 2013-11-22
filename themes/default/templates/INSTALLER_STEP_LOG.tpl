@@ -16,7 +16,7 @@
 		{HIDDEN}
 
 		<p class="proceed_button">
-			<input id="proceed_button" class="button_page" type="submit" value="{!PROCEED}" />
+			<input id="proceed_button" class="buttons__proceed button_page" type="submit" value="{!PROCEED}" />
 		</p>
 	</div>
 </form>

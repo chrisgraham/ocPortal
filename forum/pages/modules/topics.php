@@ -231,6 +231,7 @@ class Module_topics
 	{
 		$title=get_screen_title($_title);
 		$text=paragraph(do_lang_tempcode('OPTIONAL_REASON'));
+		$submit_icon='buttons__proceed';
 		$submit_name=do_lang_tempcode('PROCEED');
 		$type='_'.get_param('type','misc');
 		$post_url=build_url(array('page'=>'_SELF','type'=>$type,'id'=>get_param_integer('id',-1)),'_SELF',NULL,true);
@@ -249,6 +250,7 @@ class Module_topics
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
+			'SUBMIT_ICON'=>$submit_icon,
 			'SUBMIT_NAME'=>$submit_name,
 		));
 	}
@@ -480,6 +482,7 @@ class Module_topics
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
+			'SUBMIT_ICON'=>'buttons__move',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -525,6 +528,7 @@ class Module_topics
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
+			'SUBMIT_ICON'=>'buttons__move',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -961,6 +965,7 @@ class Module_topics
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
+			'SUBMIT_ICON'=>'menu__adminzone__structure__forum__multi_moderations',
 			'SUBMIT_NAME'=>$submit_name,
 		));
 	}
@@ -1027,6 +1032,7 @@ class Module_topics
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
+			'SUBMIT_ICON'=>'buttons__move',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -1190,7 +1196,7 @@ class Module_topics
 
 		$title=get_screen_title('CATEGORISE_PTS');
 		$submit_name=do_lang_tempcode('CATEGORISE_PTS');
-		return do_template('FORM_SCREEN',array('_GUID'=>'c6d0e273b5ce0e84d50a1c6294ece157','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'c6d0e273b5ce0e84d50a1c6294ece157','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -1623,7 +1629,7 @@ class Module_topics
 		}
 
 		// Render form
-		$posting_form=get_posting_form(do_lang($private_topic?'ADD_PRIVATE_TOPIC':'ADD_TOPIC'),$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''));
+		$posting_form=get_posting_form(do_lang($private_topic?'ADD_PRIVATE_TOPIC':'ADD_TOPIC'),'buttons__new_topic',$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''));
 
 		url_default_parameters__disable();
 
@@ -1919,7 +1925,7 @@ class Module_topics
 		if (!$topic_posts->is_empty()) $topic_posts=do_template('OCF_POSTING_SCREEN_POSTS',array('_GUID'=>'3d3b14cf3a48b2a16eed5b1bd92b1187','POSTS'=>$topic_posts));
 
 		if (is_object($post)) $post=$post->evaluate();
-		$posting_form=get_posting_form(do_lang('MAKE_POST'),$post,$post_url,$hidden_fields,$specialisation,NULL,$topic_posts->evaluate(),$specialisation2,NULL,$this->_post_javascript());
+		$posting_form=get_posting_form(do_lang('MAKE_POST'),'buttons__new_reply',$post,$post_url,$hidden_fields,$specialisation,NULL,$topic_posts->evaluate(),$specialisation2,NULL,$this->_post_javascript());
 
 		$title=get_screen_title('_ADD_POST',true,array(escape_html($topic_title)));
 
@@ -2006,7 +2012,7 @@ class Module_topics
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add_reply'),'_SELF');
 
-		$posting_form=get_posting_form(do_lang('REPORT_POST'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,'','',NULL,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''),NULL,true,false,true);
+		$posting_form=get_posting_form(do_lang('REPORT_POST'),'buttons__report',$post->evaluate(),$post_url,$hidden_fields,$specialisation,'','',NULL,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''),NULL,true,false,true);
 
 		url_default_parameters__disable();
 
@@ -2481,6 +2487,7 @@ END;
 				'TEXT'=>$text,
 				'URL'=>$post_url,
 				'FIELDS'=>$fields,
+				'SUBMIT_ICON'=>'menu___generic_admin__delete',
 				'SUBMIT_NAME'=>$submit_name,
 			));
 		}
@@ -2730,7 +2737,7 @@ END;
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'],$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('ADD_TOPIC_POLL'));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'ce1752a0c5508a061bffbf242a13e5bd','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'JAVASCRIPT'=>$javascript));
+		return do_template('FORM_SCREEN',array('_GUID'=>'ce1752a0c5508a061bffbf242a13e5bd','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_ICON'=>'menu___generic_admin__add_to_category','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'JAVASCRIPT'=>$javascript));
 	}
 
 	/**
@@ -2914,7 +2921,7 @@ END;
 		{
 			$parsed=get_translated_tempcode($post_details[0]['p_post'],$GLOBALS['FORUM_DB']);
 		} else $parsed=NULL;
-		$posting_form=get_posting_form(do_lang('SAVE'),$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,$parsed,$this->_post_javascript());
+		$posting_form=get_posting_form(do_lang('SAVE'),'buttons__edit',$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,$parsed,$this->_post_javascript());
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
@@ -3174,6 +3181,7 @@ END;
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
+			'SUBMIT_ICON'=>'menu___generic_admin__edit_this',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -3270,6 +3278,7 @@ END;
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
+			'SUBMIT_ICON'=>'menu___generic_admin__delete',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -3328,6 +3337,7 @@ END;
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'TEXT'=>$text,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -3402,6 +3412,7 @@ END;
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
+			'SUBMIT_ICON'=>'menu___generic_admin__edit_this',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -3526,6 +3537,7 @@ END;
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
+			'SUBMIT_ICON'=>'buttons__move',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -3732,6 +3744,7 @@ END;
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
+			'SUBMIT_ICON'=>'menu__adminzone__structure__forum__multi_moderations',
 			'SUBMIT_NAME'=>$submit_name,
 		));
 	}
@@ -3818,6 +3831,7 @@ END;
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>$submit_name,
 		));
 	}

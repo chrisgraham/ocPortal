@@ -390,6 +390,7 @@ class Hook_addon_registry_pointstore
 					'TITLE'=>lorem_title(),
 					'FIELDS'=>$fields,
 					'TEXT'=>$text,
+					'SUBMIT_ICON'=>'buttons__proceed',
 					'SUBMIT_NAME'=>lorem_word()
 				)
 			),NULL,'',true),

@@ -274,7 +274,7 @@ class Module_cms_wiki
 			$fields2->attach(get_award_fields('wiki_page'));
 		}
 
-		$posting_form=get_posting_form(do_lang('WIKI_ADD_PAGE'),'',$add_url,$hidden,$fields,NULL,'',$fields2);
+		$posting_form=get_posting_form(do_lang('WIKI_ADD_PAGE'),'menu___generic_admin__add_one_category','',$add_url,$hidden,$fields,NULL,'',$fields2);
 
 		url_default_parameters__disable();
 
@@ -346,7 +346,7 @@ class Module_cms_wiki
 		$archive_url=build_url(array('page'=>'wiki'),get_module_zone('wiki'));
 		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($search_url->evaluate()),escape_html($archive_url->evaluate())));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e64757db1c77d752d813638f8a80581d','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','SUBMIT_NAME'=>$submit_name,'TEXT'=>$text,'FIELDS'=>$fields,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'e64757db1c77d752d813638f8a80581d','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'TEXT'=>$text,'FIELDS'=>$fields,'URL'=>$post_url));
 	}
 
 	/**
@@ -407,7 +407,7 @@ class Module_cms_wiki
 			$_description=NULL;
 		}
 
-		$posting_form=get_posting_form(do_lang('SAVE'),$description,$edit_url,new ocp_tempcode(),$fields,do_lang_tempcode('PAGE_TEXT'),'',$fields2,$_description,NULL,NULL,false);
+		$posting_form=get_posting_form(do_lang('SAVE'),'menu___generic_admin__edit_this_category',$description,$edit_url,new ocp_tempcode(),$fields,do_lang_tempcode('PAGE_TEXT'),'',$fields2,$_description,NULL,NULL,false);
 
 		// Revision history
 		require_code('files');
@@ -553,10 +553,10 @@ class Module_cms_wiki
 		require_code('form_templates');
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		$fields=new ocp_tempcode();
 		require_code('form_templates');
+		$fields=new ocp_tempcode();
 		$fields->attach(form_input_text(do_lang_tempcode('CHILD_PAGES'),new ocp_tempcode(),'children',$children,false,NULL,true));
-		$form=do_template('FORM',array('_GUID'=>'b908438ccfc9be6166cf7c5c81d5de8b','FIELDS'=>$fields,'URL'=>$post_url,'HIDDEN'=>'','TEXT'=>'','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		$form=do_template('FORM',array('_GUID'=>'b908438ccfc9be6166cf7c5c81d5de8b','FIELDS'=>$fields,'URL'=>$post_url,'HIDDEN'=>'','TEXT'=>'','SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 
 		return do_template('WIKI_MANAGE_TREE_SCREEN',array('_GUID'=>'83da3f20799b66b8846eafa4251a5d01','PAGE_TITLE'=>$page_title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$this->title,'FORM'=>$form,'WIKI_TREE'=>$wiki_tree));
 	}

@@ -9,7 +9,7 @@
 		{TRACKBACKS}
 
 		<p class="proceed_button">
-			<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!DELETE}" />
+			<input onclick="disable_button_just_clicked(this);" class="menu___generic_admin__delete button_page" type="submit" value="{!DELETE}" />
 		</p>
 	</form>
 {+END}

@@ -78,7 +78,7 @@
 					<em>{!PERMISSIONS_TREE_EDITOR_NONE_SELECTED}</em>
 				</p>
 				<div>
-					<input type="button" class="button_page" id="selection_button" disabled="disabled" value="{!SET}" onclick="set_permissions(document.getElementById('tree_list'));" />
+					<input type="button" class="buttons__save button_page" id="selection_button" disabled="disabled" value="{!SET}" onclick="set_permissions(document.getElementById('tree_list'));" />
 				</div>
 			</div>
 		</form>

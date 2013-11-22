@@ -17,7 +17,7 @@
 		</div>
 
 		<p class="constrain_field">
-			<input class="wide_button" type="submit" value="{!SUBSCRIBE}" />
+			<input class="menu__site_meta__newsletters wide_button" type="submit" value="{!SUBSCRIBE}" />
 		</p>
 	</form>
 </div></section>

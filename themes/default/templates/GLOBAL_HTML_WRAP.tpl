@@ -51,7 +51,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 									<div class="accessibility_hidden"><label for="new_window">{!NEW_WINDOW}</label></div>
 									<input title="{!NEW_WINDOW}" type="checkbox" value="1" id="new_window" name="new_window" />
 								{+END}
-								<input onclick="if ((form.new_window) &amp;&amp; (form.new_window.checked)) form.target='_blank'; else form.target='_top';" id="search_button" class="button_micro" type="image" src="{$IMG*,admin_search}" alt="{!SEARCH}" value="{!SEARCH}" />
+								<input onclick="if ((form.new_window) &amp;&amp; (form.new_window.checked)) form.target='_blank'; else form.target='_top';" id="search_button" class="buttons__search button_micro" type="submit" value="{!SEARCH}" />
 							</div>
 						</form>
 					</div>
@@ -188,7 +188,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 								<div class="accessibility_hidden"><label for="su">{!SU}</label></div>
 								<input accesskey="w" size="10" onfocus="if (this.value=='{$USERNAME;*}') this.value='';" type="text" value="{$USERNAME;*}" id="su" name="keep_su" />
 								{+START,IF,{$NOT,{$JS_ON}}}
-									<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SU}" />
+									<input onclick="disable_button_just_clicked(this);" class="menu__site_meta__user_actions__login button_micro" type="submit" value="{!SU}" />
 								{+END}
 							</div>
 						</form>
@@ -203,7 +203,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 								<select id="special_page_type" name="special_page_type">
 									{$STAFF_ACTIONS}
 								</select>
-								<input class="button_micro" type="submit" value="{!PROCEED_SHORT}" />
+								<input class="buttons__proceed button_micro" type="submit" value="{!PROCEED_SHORT}" />
 							</div>
 						</form>
 					{+END}{+END}{+END}

@@ -500,11 +500,11 @@ class Module_topicview
 				if ($threaded)
 				{
 					$view_as_linear_url=get_self_url(false,false,array('threaded'=>0));
-					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('VIEW_AS_LINEAR'),'url'=>$view_as_linear_url,'img'=>'linear');
+					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('VIEW_AS_LINEAR'),'url'=>$view_as_linear_url,'img'=>'buttons__linear');
 				} else
 				{
 					$view_as_threaded_url=get_self_url(false,false,array('threaded'=>1));
-					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('VIEW_AS_THREADED'),'url'=>$view_as_threaded_url,'img'=>'threaded');
+					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('VIEW_AS_THREADED'),'url'=>$view_as_threaded_url,'img'=>'buttons__threaded');
 				}
 			}
 
@@ -519,7 +519,7 @@ class Module_topicview
 					$test=get_param_integer('threaded',-1);
 					if ($test!=-1) $map['threaded']=$test;
 					$mark_unread_url=build_url($map,get_module_zone('topics'));
-					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_UNREAD'),'url'=>$mark_unread_url,'img'=>'mark_unread');
+					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_UNREAD'),'url'=>$mark_unread_url,'img'=>'buttons__mark_unread_topic');
 				}
 			}
 
@@ -543,7 +543,7 @@ class Module_topicview
 						$test=get_param_integer('threaded',-1);
 						if ($test!=-1) $map['threaded']=$test;
 						$new_post_url=build_url($map,get_module_zone('topics'));
-						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('TICKET_STAFF_ONLY_REPLY'),'url'=>$new_post_url,'img'=>'staff_only_reply');
+						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('TICKET_STAFF_ONLY_REPLY'),'url'=>$new_post_url,'img'=>'buttons__new_reply_staff_only');
 					}
 				}
 
@@ -557,7 +557,7 @@ class Module_topicview
 						$test=get_param_integer('threaded',-1);
 						if ($test!=-1) $map['threaded']=$test;
 						$new_post_url=build_url($map,get_module_zone('topics'));
-						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode($topic_info['is_open']?'REPLY':'CLOSED'),'url'=>$new_post_url,'img'=>$topic_info['is_open']?'reply':'closed');
+						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode($topic_info['is_open']?'REPLY':'CLOSED'),'url'=>$new_post_url,'img'=>$topic_info['is_open']?'buttons__new_reply':'buttons__closed');
 					}
 				} else
 				{
@@ -572,7 +572,7 @@ class Module_topicview
 				$test=get_param_integer('threaded',-1);
 				if ($test!=-1) $map['threaded']=$test;
 				$new_post_url=build_url($map,get_module_zone('topics'));
-				$button_array[]=array('immediate'=>false,'rel'=>'edit','title'=>do_lang_tempcode('LAST_POST'),'url'=>$new_post_url,'img'=>'amend');
+				$button_array[]=array('immediate'=>false,'rel'=>'edit','title'=>do_lang_tempcode('LAST_POST'),'url'=>$new_post_url,'img'=>'buttons__edit');
 			}
 
 			if (!is_null($topic_info['forum_id']))
@@ -582,13 +582,13 @@ class Module_topicview
 					if (ocf_may_post_topic($topic_info['forum_id'],get_member()))
 					{
 						$new_topic_url=build_url(array('page'=>'topics','type'=>'new_topic','id'=>$topic_info['forum_id']),get_module_zone('topics'));
-						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_TOPIC'),'url'=>$new_topic_url,'img'=>'new_topic');
+						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_TOPIC'),'url'=>$new_topic_url,'img'=>'buttons__new_topic');
 					}
 				}
 			} else
 			{
 				$invite_url=build_url(array('page'=>'topics','type'=>'invite_member','id'=>$id),get_module_zone('topics'));
-				$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('INVITE_MEMBER_TO_PT'),'url'=>$invite_url,'img'=>'invite_member');
+				$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('INVITE_MEMBER_TO_PT'),'url'=>$invite_url,'img'=>'menu___generic_admin__add_to_category');
 			}
 		}
 		$buttons=ocf_screen_button_wrap($button_array);

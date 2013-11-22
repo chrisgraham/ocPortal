@@ -9,7 +9,7 @@
 
 	<div>
 		<div class="proceed_button">
-			<input class="button_page" onclick="this.disabled=true; this.form.submit();" accesskey="u" type="submit" value="{!PROCEED}" />
+			<input class="buttons__proceed button_page" onclick="this.disabled=true; this.form.submit();" accesskey="u" type="submit" value="{!PROCEED}" />
 		</div>
 	</div>
 </form>

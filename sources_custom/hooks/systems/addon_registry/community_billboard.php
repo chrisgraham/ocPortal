@@ -271,6 +271,7 @@ class Hook_addon_registry_community_billboard
 				'URL'=>placeholder_url(),
 				'GET'=>true,
 				'FIELDS'=>$fields,
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word()
 			)), NULL, '', true)
 		);

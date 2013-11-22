@@ -30,7 +30,7 @@
 			{+END}
 
 			<p class="proceed_button">
-				<input class="button_pageitem" type="submit" value="{!SEARCH}" />
+				<input class="buttons__search button_pageitem" type="submit" value="{!SEARCH}" />
 			</p>
 
 			{+START,LOOP,LIMIT_TO}

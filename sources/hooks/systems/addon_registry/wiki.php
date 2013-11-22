@@ -150,7 +150,6 @@ class Hook_addon_registry_wiki
 			'sources/hooks/systems/preview/wiki_post.php',
 			'sources/hooks/systems/rss/wiki.php',
 			'sources/hooks/systems/module_permissions/wiki_page.php',
-			'themes/default/images/EN/page/edit_tree.png',
 			'sources/hooks/systems/notifications/wiki.php',
 		);
 	}
@@ -232,7 +231,7 @@ class Hook_addon_registry_wiki
 			'IMMEDIATE'=>false,
 			'URL'=>placeholder_url(),
 			'TITLE'=>do_lang_tempcode('EDIT'),
-			'IMG'=>'edit'
+			'IMG'=>'buttons__edit'
 		));
 
 		$extra->attach(do_lorem_template('SCREEN_ITEM_BUTTON',array(
@@ -240,7 +239,7 @@ class Hook_addon_registry_wiki
 			'IMMEDIATE'=>false,
 			'URL'=>placeholder_url(),
 			'TITLE'=>do_lang_tempcode('MOVE'),
-			'IMG'=>'move'
+			'IMG'=>'buttons__move'
 		)));
 
 		$all_rating_criteria=array();
@@ -355,6 +354,7 @@ class Hook_addon_registry_wiki
 			'EXTRA'=>'',
 			'POST_COMMENT'=>lorem_phrase(),
 			'EMOTICON_CHOOSER'=>lorem_phrase(),
+			'SUBMIT_ICON'=>'menu___generic_admin__add_one',
 			'SUBMIT_NAME'=>lorem_word(),
 			'HIDDEN_FIELDS'=>'',
 			'URL'=>placeholder_url(),

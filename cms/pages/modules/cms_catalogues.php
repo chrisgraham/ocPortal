@@ -987,7 +987,7 @@ class Module_cms_catalogues extends standard_crud_module
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically(1,1,1);
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,'',$allow_comments==2,false,false));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0ad5a822bccb3de8e53fcc47594eb404','TITLE'=>$this->title,'JAVASCRIPT'=>$javascript,'TEXT'=>do_lang_tempcode('CATALOGUE_IMPORT_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0ad5a822bccb3de8e53fcc47594eb404','TITLE'=>$this->title,'JAVASCRIPT'=>$javascript,'TEXT'=>do_lang_tempcode('CATALOGUE_IMPORT_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__import','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**

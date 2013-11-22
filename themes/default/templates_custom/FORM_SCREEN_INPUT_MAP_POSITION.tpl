@@ -74,13 +74,3 @@
 	Longitude
 	<input onchange="place_marker(this.form.elements['latitude'].value,this.form.elements['longitude'].value);" type="number" step="any" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_longitude" name="longitude" value="{LONGITUDE*}" />
 </label>
-
-{$REQUIRE_JAVASCRIPT,javascript_ajax}
-<form action="{$SELF_URL*}" onsubmit="return false;">
-	<div>
-		<label for="location">Look at Location:</label>
-		<input onclick="return geoposition_user_input('location');" class="search_button" src="{$IMG*,you}" type="image" title="Find yourself" />
-		<input id="location" name="location" type="search" value="" />
-		<input class="search_button" onclick="return geoposition_map_goto('location',map);" src="{$IMG*,search}" type="image" title="Look around for Location" />
-	</div>
-</form>

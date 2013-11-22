@@ -34,7 +34,9 @@
 		{+END}
 
 		{+START,IF_PASSED,SUBMIT_NAME}
-			<p class="proceed_button"><input class="button_page" type="submit" value="{SUBMIT_NAME*}" /></p>
+			<p class="proceed_button">
+				<input class="button_page" type="submit" value="{SUBMIT_ICON*} {SUBMIT_NAME*}" />
+			</p>
 		{+END}
 	</form>
 

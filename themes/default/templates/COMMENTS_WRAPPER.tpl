@@ -41,7 +41,7 @@
 				</select>
 
 				{+START,IF,{$NOT,{$JS_ON}}}
-					<input type="submit" value="{!SORT}" class="button_micro" />
+					<input type="submit" value="{!SORT}" class="buttons__sort button_micro" />
 				{+END}
 			</form>
 		</div>

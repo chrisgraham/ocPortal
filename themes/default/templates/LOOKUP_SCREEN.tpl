@@ -96,7 +96,7 @@
 			{IP_LIST}
 		</ul>
 
-		<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SET}" />
+		<input onclick="disable_button_just_clicked(this);" class="buttons__save button_page" type="submit" value="{!SET}" />
 	</form>
 {+END}
 {+START,IF_EMPTY,{IP_LIST}}

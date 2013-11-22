@@ -740,7 +740,7 @@ class Module_admin_customers
 			$text=do_lang_tempcode('CUSTOMER_CURRENTLY_HAS',escape_html(number_format($num_credits)));
 		} else $text=new ocp_tempcode();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'f91185ee725f47ffa652d5fef8d85c0b','TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>$text,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'f91185ee725f47ffa652d5fef8d85c0b','TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>$text,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**

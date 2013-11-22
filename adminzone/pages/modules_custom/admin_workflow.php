@@ -1052,6 +1052,7 @@ class Module_admin_workflow extends standard_crud_module
 			'TEXT'=>'',
 			'HIDDEN'=>$hidden,
 			'URL'=>is_object($self_url)?$self_url->evaluate():$self_url,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),
 		));
 	}

@@ -17,7 +17,7 @@
 	<input type="hidden" name="rm" value="2" />
 
 	<div class="purchase_button">
-		<input style="border: 0px" class="button_page" type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but23.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!" />
+		<input style="border: 0px" type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but23.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!" />
 	</div>
 </form>
 

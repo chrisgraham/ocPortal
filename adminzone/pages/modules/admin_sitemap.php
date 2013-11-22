@@ -251,7 +251,7 @@ class Module_admin_sitemap
 
 		$post_url=get_self_url(false,false,NULL,false,true);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'df58e16290a783d24f9f81fc9227e6ff','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'df58e16290a783d24f9f81fc9227e6ff','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 	}
 
 	/**
@@ -291,6 +291,7 @@ class Module_admin_sitemap
 			'SKIP_VALIDATION'=>true,
 			'FIELDS'=>$fields,
 			'TITLE'=>$this->title,
+			'SUBMIT_ICON'=>'menu___generic_admin__delete',
 			'SUBMIT_NAME'=>$submit_name,
 			'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_DELETE')),
 			'URL'=>$post_url,
@@ -435,7 +436,7 @@ class Module_admin_sitemap
 
 		$hidden=form_input_hidden('zone',$zone);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'79869440ede2482fe51839df04b9d880','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'TITLE'=>$this->title,'SUBMIT_NAME'=>$submit_name,'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_MOVE')),'URL'=>$post_url,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'79869440ede2482fe51839df04b9d880','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'TITLE'=>$this->title,'SUBMIT_ICON'=>'buttons__move','SUBMIT_NAME'=>$submit_name,'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_MOVE')),'URL'=>$post_url,'HIDDEN'=>$hidden));
 	}
 
 	/**

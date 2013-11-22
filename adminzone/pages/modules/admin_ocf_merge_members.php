@@ -136,7 +136,7 @@ class Module_admin_ocf_merge_members
 		$submit_name=do_lang_tempcode('MERGE_MEMBERS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$text=do_lang_tempcode('MERGE_MEMBERS_TEXT');
-		return do_template('FORM_SCREEN',array('_GUID'=>'6f6b18d90bbe9550303ab41be0a26dcb','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'HIDDEN'=>'','TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'6f6b18d90bbe9550303ab41be0a26dcb','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'HIDDEN'=>'','TEXT'=>$text,'SUBMIT_ICON'=>'menu___generic_admin__merge','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

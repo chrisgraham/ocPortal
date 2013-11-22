@@ -141,7 +141,7 @@ class Module_admin_cleanup
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3ddb387dba8c42ac4ef7b85621052e11','TITLE'=>do_lang_tempcode('CACHES_PAGE_EXP_CACHES'),'HELP'=>do_lang_tempcode('CACHES_PAGE_CACHES'))));
 		$fields->attach($fields_cache);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'85bfdf171484604594a157aa8983f920','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('CACHES_PAGE'),'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'85bfdf171484604594a157aa8983f920','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('CACHES_PAGE'),'SUBMIT_ICON'=>'menu__adminzone__tools__cleanup','SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$url));
 	}
 
 	/**

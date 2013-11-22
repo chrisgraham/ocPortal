@@ -32,12 +32,12 @@
 				<label class="accessibility_hidden" for="recur">{!TASK_LENGTH}</label>
 				<label class="accessibility_hidden" for="recurevery">{!TASK_LENGTH_UNITS}</label>
 				{!RECUR_EVERY,<input maxlength="8" value="" type="text" id="recur" name="recur" size="3" />,<select id="recurevery" name="recurevery"><option value="mins">{!dates:_MINUTES}</option><option value="hours">{!dates:_HOURS}</option><option value="days">{!dates:_DAYS}</option><option value="months">{!dates:_MONTHS}</option></select>}
-				<input class="button_micro" type="submit" name="save" title="{!ADD} ({!CUSTOM_TASKS})" value="{!ADD}" />
+				<input class="menu___generic_admin__add_one button_micro" type="submit" name="save" title="{!ADD} ({!CUSTOM_TASKS})" value="{!ADD}" />
 			</div>
 			<div class="constrain_field">
 				<a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img class="comcode_supported_icon" alt="{!COMCODE_MESSAGE,Comcode}" src="{$IMG*,comcode}" title="{!COMCODE_MESSAGE,Comcode}" /></a>
-				<label class="accessibility_hidden" for="newtask">{!DESCRIPTION}</label>
-				<input maxlength="255" value="" type="text" id="newtask" name="newtask" size="32" />
+				<label class="accessibility_hidden" for="new_task">{!DESCRIPTION}</label>
+				<input maxlength="255" value="" type="text" id="new_task" name="new_task" size="32" />
 			</div>
 		</form>
 

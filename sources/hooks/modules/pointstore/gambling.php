@@ -72,7 +72,7 @@ class Hook_pointstore_gambling
 
 		$text=do_lang_tempcode('GAMBLE_A',integer_format($cost),integer_format($max),integer_format($points_left));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'ae703225db618f2bc938290fbae4d6d8','TITLE'=>$title,'TEXT'=>$text,'URL'=>$next_url,'FIELDS'=>$fields,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'ae703225db618f2bc938290fbae4d6d8','TITLE'=>$title,'TEXT'=>$text,'URL'=>$next_url,'FIELDS'=>$fields,'HIDDEN'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 	}
 
 	/**

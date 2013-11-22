@@ -542,9 +542,9 @@ class Module_wiki
 			if ((has_edit_permission('low',get_member(),$poster,'cms_wiki',array('wiki_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
 			{
 				$edit_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain,'post_id'=>$post_id),'_SELF');
-				$extra=do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'37404e2e5cf7e4cb806f796e9df90898','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'edit'));
+				$extra=do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'37404e2e5cf7e4cb806f796e9df90898','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'buttons__edit'));
 				$move_url=build_url(array('page'=>'_SELF','type'=>'move','id'=>$chain,'post_id'=>$post_id),'_SELF');
-				$extra->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'b4325cd1bac924cc83771d4c3c41be8b','REL'=>'move','IMMEDIATE'=>false,'URL'=>$move_url,'TITLE'=>do_lang_tempcode('MOVE'),'IMG'=>'move')));
+				$extra->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'b4325cd1bac924cc83771d4c3c41be8b','REL'=>'move','IMMEDIATE'=>false,'URL'=>$move_url,'TITLE'=>do_lang_tempcode('MOVE'),'IMG'=>'buttons__move')));
 			} else $extra=new ocp_tempcode();
 			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($poster,false,true);
 			$rate_url=get_self_url(true);
@@ -605,24 +605,24 @@ class Module_wiki
 		if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search')))
 		{
 			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
-			$search_button=do_template('SCREEN_BUTTON',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'search'));
+			$search_button=do_template('SCREEN_BUTTON',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'buttons__search'));
 		} else $search_button=new ocp_tempcode();
 		$changes_url=build_url(array('page'=>'_SELF','type'=>'changes','id'=>$chain),'_SELF');
-		$changes_button=do_template('SCREEN_BUTTON',array('_GUID'=>'99ad7faac817326510583a69ac719d58','IMMEDIATE'=>false,'REL'=>'history','URL'=>$changes_url,'TITLE'=>do_lang_tempcode('WIKI_CHANGELOG'),'IMG'=>'changes'));
+		$changes_button=do_template('SCREEN_BUTTON',array('_GUID'=>'99ad7faac817326510583a69ac719d58','IMMEDIATE'=>false,'REL'=>'history','URL'=>$changes_url,'TITLE'=>do_lang_tempcode('WIKI_CHANGELOG'),'IMG'=>'buttons__changes'));
 		if ((has_privilege(get_member(),'wiki_manage_tree','cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
 		{
 			$tree_url=build_url(array('page'=>'cms_wiki','type'=>'edit_tree','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
-			$tree_button=do_template('SCREEN_BUTTON',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('WIKI_EDIT_TREE'),'IMG'=>'edit_tree'));
+			$tree_button=do_template('SCREEN_BUTTON',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('WIKI_EDIT_TREE'),'IMG'=>'buttons__edit_tree'));
 		} else $tree_button=new ocp_tempcode();
 		if ((has_edit_permission('cat_low',get_member(),NULL,'cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
 		{
 			$edit_url=build_url(array('page'=>'cms_wiki','type'=>'edit_page','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
-			$edit_button=do_template('SCREEN_BUTTON',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'edit'));
+			$edit_button=do_template('SCREEN_BUTTON',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'buttons__edit'));
 		} else $edit_button=new ocp_tempcode();
 		if (($may_post) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_wiki',array('wiki_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain),'_SELF');
-			$post_button=do_template('SCREEN_BUTTON',array('_GUID'=>'c26462f34a64c4bf80c1fb7c40102eb0','IMMEDIATE'=>false,'URL'=>$post_url,'TITLE'=>do_lang_tempcode('_POST'),'IMG'=>'new_post'));
+			$post_button=do_template('SCREEN_BUTTON',array('_GUID'=>'c26462f34a64c4bf80c1fb7c40102eb0','IMMEDIATE'=>false,'URL'=>$post_url,'TITLE'=>do_lang_tempcode('_POST'),'IMG'=>'buttons__new_reply'));
 		} else $post_button=new ocp_tempcode();
 
 		$tpl=new ocp_tempcode();
@@ -734,7 +734,7 @@ class Module_wiki
 
 		require_code('form_templates');
 
-		$posting_form=get_posting_form(do_lang('MERGE_WIKI_POSTS'),$merged,$merge_url,new ocp_tempcode(),new ocp_tempcode());
+		$posting_form=get_posting_form(do_lang('MERGE_WIKI_POSTS'),'menu___generic_admin__merge',$merged,$merge_url,new ocp_tempcode(),new ocp_tempcode());
 
 		return do_template('POSTING_SCREEN',array('_GUID'=>'4372327fb689ef70a9ac5d275dd454f1','POSTING_FORM'=>$posting_form,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('WIKI_MERGE_TEXT')));
 	}
@@ -808,6 +808,7 @@ class Module_wiki
 			'TEXT'=>do_lang_tempcode('SELECT_TARGET_POST_DESTINATION'),
 			'FIELDS'=>$fields,
 			'HIDDEN'=>$hidden,
+			'SUBMIT_ICON'=>'buttons__move',
 			'SUBMIT_NAME'=>do_lang_tempcode('MOVE'),
 		));
 	}
@@ -986,7 +987,7 @@ class Module_wiki
 
 		$javascript=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
 
-		$posting_form=get_posting_form($submit_name,$message,$post_url,$hidden_fields,new ocp_tempcode(),NULL,'',$specialisation,$parsed,$javascript);
+		$posting_form=get_posting_form($submit_name,($mode=='edit')?'menu___generic_admin__edit_this':'menu___generic_admin__add_one',$message,$post_url,$hidden_fields,new ocp_tempcode(),NULL,'',$specialisation,$parsed,$javascript);
 
 		if ($mode=='post') url_default_parameters__disable();
 

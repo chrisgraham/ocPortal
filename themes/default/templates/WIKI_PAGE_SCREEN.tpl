@@ -63,7 +63,7 @@
 			<form title="{!MERGE_WIKI_POSTS}" action="{$PAGE_LINK*,_SEARCH:wiki:mg:{ID},1}" method="post">
 				<div class="float_surrounder">
 					<div class="wiki_merge_posts_button">
-						<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_page" type="submit" value="{!MERGE_WIKI_POSTS}" />
+						<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="menu___generic_admin__merge button_page" type="submit" value="{!MERGE_WIKI_POSTS}" />
 					</div>
 				</div>
 			</form>

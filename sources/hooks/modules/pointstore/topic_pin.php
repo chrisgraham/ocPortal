@@ -100,6 +100,7 @@ class Hook_pointstore_topic_pin
 			'ACTION'=>do_lang_tempcode('TOPIC_PINNING'),
 			'TEXT'=>$text,
 			'URL'=>$post_url,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),
 			'FIELDS'=>$fields,
 			'JAVASCRIPT'=>$javascript,

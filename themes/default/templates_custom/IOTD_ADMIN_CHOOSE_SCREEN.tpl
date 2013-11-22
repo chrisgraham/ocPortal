@@ -33,7 +33,7 @@
 		{!NOT_SHOWING_OLD_IOTDS_YET}
 	</p>
 	<p>
-		<a href="{USED_URL*}#used"><img class="button_page" src="{$IMG*,page/all2}" title="{!SHOW_OLD_TOO}" alt="{!SHOW_OLD_TOO}" /></a>
+		<a class="buttons__all2 button_page" href="{USED_URL*}#used"><span>{!SHOW_OLD_TOO}</span></a>
 	</p>
 {+END}
 

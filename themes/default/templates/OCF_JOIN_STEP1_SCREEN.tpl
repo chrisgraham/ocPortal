@@ -27,10 +27,10 @@
 
 	<p>
 		{+START,IF,{$JS_ON}}
-			<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!PROCEED}" disabled="disabled" id="proceed_button" />
+			<input accesskey="u" onclick="disable_button_just_clicked(this);" class="buttons__proceed button_page" type="submit" value="{!PROCEED}" disabled="disabled" id="proceed_button" />
 		{+END}
 		{+START,IF,{$NOT,{$JS_ON}}}
-			<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!PROCEED}" id="proceed_button" />
+			<input accesskey="u" onclick="disable_button_just_clicked(this);" class="buttons__proceed button_page" type="submit" value="{!PROCEED}" id="proceed_button" />
 		{+END}
 	</p>
 </form>

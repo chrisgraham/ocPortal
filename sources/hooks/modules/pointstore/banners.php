@@ -114,7 +114,7 @@ class Hook_pointstore_banners
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'45b8878d92712e07c4eb5497f1a33e33','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('ADD_BANNER'),'JAVASCRIPT'=>$javascript));
+		return do_template('FORM_SCREEN',array('_GUID'=>'45b8878d92712e07c4eb5497f1a33e33','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('ADD_BANNER'),'JAVASCRIPT'=>$javascript));
 	}
 
 	/**
@@ -284,7 +284,7 @@ class Hook_pointstore_banners
 		$text=paragraph(do_lang_tempcode('IMPORTANCE_BUY',integer_format($hitcost),integer_format($impcost)));
 		$fields=form_input_line(do_lang_tempcode('IMPORTANCE'),do_lang_tempcode('IMPORTANCE_UPGRADE_DESCRIPTION'),'importance','1',true);
 		$fields->attach(form_input_line(do_lang_tempcode('EXTRA_HITS'),do_lang_tempcode('EXTRA_HITS_DESCRIPTION'),'hits','50',true));
-		return do_template('FORM_SCREEN',array('_GUID'=>'550b0368236dcf58726a1895162ad6c2','SUBMIT_NAME'=>do_lang_tempcode('UPGRADE'),'HIDDEN'=>'','URL'=>$post_url,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'550b0368236dcf58726a1895162ad6c2','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('UPGRADE'),'HIDDEN'=>'','URL'=>$post_url,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text));
 	}
 
 	/**

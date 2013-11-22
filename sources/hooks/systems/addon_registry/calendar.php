@@ -145,7 +145,6 @@ class Hook_addon_registry_calendar
 			'themes/default/templates/BLOCK_SIDE_CALENDAR.tpl',
 			'themes/default/templates/BLOCK_SIDE_CALENDAR_LISTING.tpl',
 			'themes/default/templates/CALENDAR_EVENT_BOX.tpl',
-			'themes/default/images/EN/page/add_event.png',
 			'sources/hooks/systems/trackback/events.php',
 			'cms/pages/modules/cms_calendar.php',
 			'lang/EN/calendar.ini',

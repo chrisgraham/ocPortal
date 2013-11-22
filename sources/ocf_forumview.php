@@ -301,7 +301,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 		if (get_option('enable_mark_forum_read')=='1')
 		{
 			$read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>$id),get_module_zone('topics'));
-			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_READ'),'url'=>$read_url,'img'=>'mark_read');
+			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_READ'),'url'=>$read_url,'img'=>'buttons__mark_read_forum');
 		}
 	}
 	if ($type!='pt')
@@ -309,7 +309,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 		if (addon_installed('search'))
 		{
 			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'ocf_posts','search_under'=>$id),get_module_zone('search'));
-			$button_array[]=array('immediate'=>false,'rel'=>'search','title'=>do_lang_tempcode('SEARCH'),'url'=>$search_url,'img'=>'search');
+			$button_array[]=array('immediate'=>false,'rel'=>'search','title'=>do_lang_tempcode('SEARCH'),'url'=>$search_url,'img'=>'buttons__search');
 		}
 		$new_topic_url=build_url(array('page'=>'topics','type'=>'new_topic','id'=>$id),get_module_zone('topics'));
 	} else
@@ -317,7 +317,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 		if (addon_installed('search'))
 		{
 			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'ocf_own_pt'),get_module_zone('search'));
-			$button_array[]=array('immediate'=>false,'rel'=>'search','title'=>do_lang_tempcode('SEARCH'),'url'=>$search_url,'img'=>'search');
+			$button_array[]=array('immediate'=>false,'rel'=>'search','title'=>do_lang_tempcode('SEARCH'),'url'=>$search_url,'img'=>'buttons__search');
 		}
 		$new_topic_url=build_url(array('page'=>'topics','type'=>'new_pt','id'=>get_member()),get_module_zone('topics'));
 	}
@@ -325,16 +325,16 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 	{
 		//There has been debate in the past whether to have a link from PTs to the forum or not! Currently using the Social menu is considered canon - templating could add a button in though.
 		//$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(),true);
-		//$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('ROOT_FORUM'),'url'=>$archive_url,'img'=>'forum');
+		//$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('ROOT_FORUM'),'url'=>$archive_url,'img'=>'buttons__forum');
 	}
 	if (array_key_exists('may_post_topic',$details))
 	{
 		if ($type=='pt')
 		{
-			$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_PRIVATE_TOPIC'),'url'=>$new_topic_url,'img'=>'send_message');
+			$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_PRIVATE_TOPIC'),'url'=>$new_topic_url,'img'=>'buttons__send');
 		} else
 		{
-			$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_TOPIC'),'url'=>$new_topic_url,'img'=>'new_topic');
+			$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_TOPIC'),'url'=>$new_topic_url,'img'=>'buttons__new_topic');
 		}
 	}
 	$buttons=ocf_screen_button_wrap($button_array);

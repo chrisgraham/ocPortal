@@ -677,11 +677,11 @@ function set_task_hiding(hide_done)
 
 function submit_custom_task(form)
 {
-	var new_task=load_snippet('checklist_task_manage&type=add&recurevery='+window.encodeURIComponent(form.elements['recurevery'].value)+'&recurinterval='+window.encodeURIComponent(form.elements['recur'].value)+'&tasktitle='+window.encodeURIComponent(form.elements['newtask'].value));
+	var new_task=load_snippet('checklist_task_manage&type=add&recurevery='+window.encodeURIComponent(form.elements['recurevery'].value)+'&recurinterval='+window.encodeURIComponent(form.elements['recur'].value)+'&tasktitle='+window.encodeURIComponent(form.elements['new_task'].value));
 
 	form.elements['recurevery'].value='';
 	form.elements['recur'].value='';
-	form.elements['newtask'].value='';
+	form.elements['new_task'].value='';
 
 	set_inner_html(document.getElementById('customtasksgohere'),new_task,true);
 

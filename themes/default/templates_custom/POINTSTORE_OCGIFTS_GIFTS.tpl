@@ -62,7 +62,7 @@
 					{+END}
 				</select>
 
-				<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!FILTER}" />
+				<input onclick="disable_button_just_clicked(this);" class="buttons__filter button_micro" type="submit" value="{!FILTER}" />
 			</p>
 		</form>
 

@@ -135,7 +135,6 @@ class Hook_addon_registry_ecommerce
 			'sources/hooks/systems/config/vpn_password.php',
 			'sources/hooks/systems/config/vpn_username.php',
 			'sources/hooks/systems/realtime_rain/ecommerce.php',
-			'themes/default/images/EN/pageitem/pay.png',
 			'sources/hooks/systems/addon_registry/ecommerce.php',
 			'sources/hooks/modules/admin_import_types/ecommerce.php',
 			'themes/default/templates/ECOM_CASH_FLOW_SCREEN.tpl',

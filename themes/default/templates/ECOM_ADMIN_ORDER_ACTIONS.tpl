@@ -23,7 +23,7 @@
 		</select>
 
 		{+START,IF,{$NOT,{$JS_ON}}}
-			<input class="button_pageitem" type="submit" name="action_button" title="{!PROCEED}: {ORDER_TITLE*}" value="{!GO_BUTTON_TEXT}" />
+			<input class="buttons__proceed button_pageitem" type="submit" name="action_button" title="{!PROCEED}: {ORDER_TITLE*}" value="{!GO_BUTTON_TEXT}" />
 		{+END}
 	</form>
 </div>

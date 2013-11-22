@@ -5347,8 +5347,8 @@ function fireFakeChangeFor(name,value)
 			// plupload does not support cancelling mid-way (ob.stop won't do that unfortunately)
 			// Actually the clear button DOES work during upload, but not visibly. So we can still call it's onclick with success. It's just the upload, and plupload object, and UI, will continue until it's finished uploading.
 			// When upload finishes/fails, we put these back on.
-			var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
-			if (clearBtn) clearBtn.style.display='none';
+			var clear_button=document.getElementById('fsClear_'+ob.settings.txtName);
+			if (clear_button) clear_button.style.display='none';
 			var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
 			if (uploadBtn) uploadBtn.disabled=true;
 		}
@@ -5423,8 +5423,8 @@ function uploadSuccess(ob,file,data) {
 		}
 	}
 
-	var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
-	if (clearBtn) clearBtn.style.display='inline';
+	var clear_button=document.getElementById('fsClear_'+ob.settings.txtName);
+	if (clear_button) clear_button.style.display='inline';
 	var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
 	if (uploadBtn) uploadBtn.disabled=false;
 
@@ -5477,8 +5477,8 @@ function uploadError(ob,error) {
 
 	document.getElementById(ob.settings.btnSubmitID).disabled = false;
 
-	var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
-	if (clearBtn) clearBtn.style.display='inline';
+	var clear_button=document.getElementById('fsClear_'+ob.settings.txtName);
+	if (clear_button) clear_button.style.display='inline';
 	var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
 	if (uploadBtn) uploadBtn.disabled=false;
 }
@@ -5844,8 +5844,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	}
 
 	// Rearrange clear buttons
-	var clearBtn=document.getElementById('clearBtn_'+name);
-	if (clearBtn) clearBtn.style.display='none';
+	var clear_button=document.getElementById('clear_button_'+name);
+	if (clear_button) clear_button.style.display='none';
 	var newClearBtn=document.createElement('input');
 	newClearBtn.id='fsClear_'+name;
 	//newClearBtn.type='image';

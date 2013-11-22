@@ -171,6 +171,7 @@ class Hook_addon_registry_setupwizard
 				'SKIP_VALIDATION'=>true,
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word()
 			)), NULL, '', true)
 		);

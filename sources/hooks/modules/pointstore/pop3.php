@@ -194,6 +194,7 @@ class Hook_pointstore_pop3
 			'TITLE'=>$title,
 			'TEXT'=>paragraph(do_lang_tempcode('ADDRESSES_ABOUT')),
 			'URL'=>$newpop_url,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),
 			'FIELDS'=>$fields,
 		));
@@ -365,7 +366,7 @@ class Hook_pointstore_pop3
 		$text=do_template('POINTSTORE_QUOTA',array('_GUID'=>'1282fae968b4919bcd0ba1e3ca169fe8','POINTS_LEFT'=>integer_format($points_left),'PRICE'=>integer_format($price),'TOP_AMOUNT'=>integer_format($topamount),'EMAIL'=>$prefix.$suffix));
 		require_code('form_templates');
 		$fields=form_input_integer(do_lang_tempcode('QUOTA'),do_lang_tempcode('QUOTA_DESCRIPTION'),'quota',100,true);
-		return do_template('FORM_SCREEN',array('_GUID'=>'1c82c713beaa03d1e3045e50295c722c','HIDDEN'=>'','URL'=>$post_url,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'1c82c713beaa03d1e3045e50295c722c','HIDDEN'=>'','URL'=>$post_url,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

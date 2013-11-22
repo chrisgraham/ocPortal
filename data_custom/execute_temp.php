@@ -53,7 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('hooks/systems/cron/newsletter_no_members');
-	$ob=new Hook_cron_ocf_welcome_emails();
-	$ob->run();
 }

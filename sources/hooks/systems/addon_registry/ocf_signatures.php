@@ -195,6 +195,7 @@ class Hook_addon_registry_ocf_signatures
 			'EXTRA'=>'',
 			'POST_COMMENT'=>lorem_phrase(),
 			'EMOTICON_CHOOSER'=>'',
+			'SUBMIT_ICON'=>'buttons__save',
 			'SUBMIT_NAME'=>lorem_word(),
 			'HIDDEN_FIELDS'=>new ocp_tempcode(),
 			'URL'=>placeholder_url(),

@@ -326,7 +326,7 @@ class Module_filedump
 			$hidden=new ocp_tempcode();
 			$hidden->attach(form_input_hidden('place',$place));
 			handle_max_file_size($hidden);
-			$upload_form=do_template('FORM',array('_GUID'=>'50116ca24bf9abd803f2fb2456f3e7c0','TABINDEX'=>strval(get_form_field_tabindex()),'SKIP_REQUIRED'=>true,'HIDDEN'=>$hidden,'TEXT'=>$text,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+			$upload_form=do_template('FORM',array('_GUID'=>'50116ca24bf9abd803f2fb2456f3e7c0','TABINDEX'=>strval(get_form_field_tabindex()),'SKIP_REQUIRED'=>true,'HIDDEN'=>$hidden,'TEXT'=>$text,'FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 		} else $upload_form=new ocp_tempcode();
 
 		// Do a form so people can make folders
@@ -339,7 +339,7 @@ class Module_filedump
 			url_default_parameters__disable();
 			$hidden=form_input_hidden('place',$place);
 			$submit_name=do_lang_tempcode('FILEDUMP_CREATE_FOLDER');
-			$create_folder_form=do_template('FORM',array('_GUID'=>'043f9b595d3699b7d8cd7f2284cdaf98','TABINDEX'=>strval(get_form_field_tabindex()),'SKIP_REQUIRED'=>true,'SECONDARY_FORM'=>true,'HIDDEN'=>$hidden,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+			$create_folder_form=do_template('FORM',array('_GUID'=>'043f9b595d3699b7d8cd7f2284cdaf98','TABINDEX'=>strval(get_form_field_tabindex()),'SKIP_REQUIRED'=>true,'SECONDARY_FORM'=>true,'HIDDEN'=>$hidden,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__add_one_category','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 		} else
 		{
 			$create_folder_form=new ocp_tempcode();

@@ -93,7 +93,7 @@
 							{MODERATOR_ACTIONS}
 						</select>
 						</label>
-						<input class="button_pageitem" type="submit" onclick="if (document.getElementById('tma_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; }  return false;" value="{!PROCEED}" />
+						<input class="buttons__proceed button_pageitem" type="submit" onclick="if (document.getElementById('tma_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; }  return false;" value="{!PROCEED}" />
 					</div>
 				</form>
 			{+END}
@@ -113,7 +113,7 @@
 									{MARKED_POST_ACTIONS}
 								</select>
 								</label>
-								<input class="button_pageitem" type="submit" onclick="if (!add_form_marked_posts(this.form,'mark_')) { window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />
+								<input class="buttons__proceed button_pageitem" type="submit" onclick="if (!add_form_marked_posts(this.form,'mark_')) { window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />
 							</div>
 						</form>
 					{+END}
@@ -136,7 +136,7 @@
 								<option value="300"{$?,{$EQ,{MAX},300}, selected="selected",}>300</option>
 							</select>
 							</label>
-							<input onclick="disable_button_just_clicked(this);" class="button_pageitem" type="submit" value="{!CHANGE}" />
+							<input onclick="disable_button_just_clicked(this);" class="buttons__perpage button_pageitem" type="submit" value="{!CHANGE}" />
 						</div>
 					</form>
 				{+END}
@@ -154,7 +154,7 @@
 							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},compound_rating}}selected="selected" {+END}value="compound_rating">{!POPULARITY}</option>
 						</select>
 						</label>
-						<input type="submit" value="{!SORT}" class="button_pageitem" />
+						<input type="submit" value="{!SORT}" class="buttons__sort button_pageitem" />
 					</div>
 				</form>
 			{+END}

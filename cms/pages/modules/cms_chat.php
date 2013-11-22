@@ -475,7 +475,7 @@ class Module_cms_chat
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'43ca9d141f23445a018634bdc70f1c7c','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_MESSAGE'),'delete',false));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'bf92ecd4d5f923f78bbed4faca6c0cb6','HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'bf92ecd4d5f923f78bbed4faca6c0cb6','HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 	}
 
 	/**
@@ -611,7 +611,7 @@ class Module_cms_chat
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_delete','id'=>$id),'_SELF');
 		$submit_name=do_lang_tempcode('DELETE');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'31b488e5d4ff52ffd5e097876c0b13c7','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'31b488e5d4ff52ffd5e097876c0b13c7','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__delete','SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
 	}
 
 	/**

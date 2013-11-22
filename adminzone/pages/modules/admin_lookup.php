@@ -135,7 +135,7 @@ class Module_admin_lookup
 			$post_url=build_url(array('page'=>'_SELF'),'_SELF',NULL,false,true);
 			$fields=form_input_line(do_lang_tempcode('DETAILS'),do_lang_tempcode('DESCRIPTION_INVESTIGATE'),'param','',false);
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'9cc407037ec01a8f3483746a22889471','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'URL'=>$post_url));
+			return do_template('FORM_SCREEN',array('_GUID'=>'9cc407037ec01a8f3483746a22889471','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'URL'=>$post_url));
 		} else
 		{
 			$test=explode(' ',get_param('sort','date_and_time DESC'),2);

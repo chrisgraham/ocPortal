@@ -110,7 +110,7 @@
 	</div>
 
 	<p class="proceed_button">
-		<input class="button_page" type="submit" value="{!SURE}" />
+		<input class="buttons__yes button_page" type="submit" value="{!SURE}" />
 	</p>
 </form>
 

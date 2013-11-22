@@ -9,7 +9,7 @@
 	<input type="hidden" name="ftp_folder" value="{FTP_FOLDER*}" />
 
 	<div class="proceed_button">
-		<input type="submit" value="{!PROCEED}" />
+		<input buttons__proceed type="submit" value="{!PROCEED}" />
 	</div>
 </form>
 

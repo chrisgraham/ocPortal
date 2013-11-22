@@ -124,7 +124,7 @@ class Hook_Preview_quiz
 
 		$preview=render_quiz($questions);
 
-		return array(do_template('FORM',array('_GUID'=>'671da928305bee72d7508beb7687d6df','SUBMIT_NAME'=>'','TEXT'=>'','URL'=>'','HIDDEN'=>'','FIELDS'=>$preview)),NULL);
+		return array(do_template('FORM',array('_GUID'=>'671da928305bee72d7508beb7687d6df','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>'','TEXT'=>'','URL'=>'','HIDDEN'=>'','FIELDS'=>$preview)),NULL);
 	}
 }
 

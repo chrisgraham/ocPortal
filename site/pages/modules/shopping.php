@@ -329,7 +329,6 @@ class Module_shopping
 		if ($max_rows>0)
 		{
 			$shopping_cart=new ocp_tempcode();
-			$checkout_details=new ocp_tempcode();
 
 			$fields_title=results_field_title(
 				array(
@@ -383,8 +382,8 @@ class Module_shopping
 
 			$results_table=results_table(do_lang_tempcode('SHOPPING'),0,'cart_start',$max_rows,'cart_max',$max_rows,$fields_title,$shopping_cart,NULL,NULL,NULL,'sort',NULL,$width,'cart');
 
-			$update_cart=build_url(array('page'=>'_SELF','type'=>'update_cart'),'_SELF');
-			$empty_cart=build_url(array('page'=>'_SELF','type'=>'empty_cart'),'_SELF');
+			$update_cart_url=build_url(array('page'=>'_SELF','type'=>'update_cart'),'_SELF');
+			$empty_cart_url=build_url(array('page'=>'_SELF','type'=>'empty_cart'),'_SELF');
 
 			$payment_form=payment_form();			
 
@@ -399,9 +398,8 @@ class Module_shopping
 			));
 		} else
 		{	
-			$update_cart=new ocp_tempcode();
-			$empty_cart=new ocp_tempcode();
-			$checkout=new ocp_tempcode();
+			$update_cart_url=new ocp_tempcode();
+			$empty_cart_url=new ocp_tempcode();
 
 			$results_table=do_lang_tempcode('CART_EMPTY');
 			$proceed_box=new ocp_tempcode();
@@ -409,7 +407,7 @@ class Module_shopping
 
 		$ecom_catalogue=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_ecommerce'=>1));
 
-		$cont_shopping=is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
+		$cont_shopping_url=is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
 
 		// Product id string for hidden field in Shopping cart
 		$pro_ids_val=is_array($pro_ids)?implode(',',$pro_ids):'';
@@ -424,11 +422,11 @@ class Module_shopping
 			'RESULTS_TABLE'=>$results_table,
 			'CONTENT'=>'',
 			'FORM_URL'=>$update_cart,
-			'CONT_SHOPPING'=>$cont_shopping,
+			'CONT_SHOPPING_URL'=>$cont_shopping_url,
 			'MESSAGE'=>'',
 			'BACK'=>$cont_shopping,
 			'PRO_IDS'=>$pro_ids_val,
-			'EMPTY_CART'=>$empty_cart,
+			'EMPTY_CART_URL'=>$empty_cart_url,
 			'EMPTY'=>do_lang_tempcode('EMPTY_CART'),
 			'UPDATE'=>do_lang_tempcode('UPDATE'),
 			'CONTINUE_SHOPPING'=>do_lang_tempcode('CONTINUE_SHOPPING'),

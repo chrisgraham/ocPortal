@@ -7,6 +7,6 @@
 	</div>
 
 	<p class="purchase_button">
-		<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!I_AGREE}" />
+		<input onclick="disable_button_just_clicked(this);" class="buttons__yes button_page" type="submit" value="{!I_AGREE}" />
 	</p>
 </form>

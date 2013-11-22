@@ -8,7 +8,7 @@
 			{LIST}
 		</select>
 		{+START,IF,{$NOT,{$JS_ON}}}
-			<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!JUMP}: {$GET*,TEXT_ID}" />
+			<input onclick="disable_button_just_clicked(this);" class="buttons__gotopage button_micro" type="submit" value="{!JUMP}: {$GET*,TEXT_ID}" />
 		{+END}
 	</div>
 </form>

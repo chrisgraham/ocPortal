@@ -657,6 +657,7 @@ class standard_crud_module
 			'TEXT'=>paragraph(do_lang_tempcode('CHOOSE_CATALOGUE')),
 			'URL'=>$post_url,
 			'FIELDS'=>$fields,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>$submit_name,
 			'SKIP_VALIDATION'=>true,
 		));
@@ -812,6 +813,8 @@ class standard_crud_module
 
 		url_default_parameters__disable();
 
+		$submit_icon=($this->type_code=='c')?'menu___generic_admin__add_one_category':'menu___generic_admin__add_one';
+
 		if (get_param('type','ad')=='add_catalogue')
 		{
 			require_javascript('javascript_catalogues');
@@ -835,13 +838,14 @@ class standard_crud_module
 				'URL'=>$post_url,
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
 				'FIELDS_NEW'=>$fields_new->evaluate()/*FUDGEFUDGE*/,
+				'SUBMIT_ICON'=>'menu__cms__catalogues__add_one_catalogue',
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
 			)+$extra_tpl_params);
 		}
 		elseif (!is_null($this->posting_form_title))
 		{
-			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$posting_form_tabindex,$this->posting_field_required);
+			$posting_form=get_posting_form($submit_name,$submit_icon,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$posting_form_tabindex,$this->posting_field_required);
 			return do_template('POSTING_SCREEN',array(
 				'_GUID'=>'15930ba8cc02634ed3a225c9714c3eac'.get_class($this),
 				'TITLE'=>$this->title,
@@ -864,6 +868,7 @@ class standard_crud_module
 				'TEXT'=>$this->add_text,
 				'URL'=>$post_url,
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+				'SUBMIT_ICON'=>$submit_icon,
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
 				'SUPPORT_AUTOSAVE'=>true,
@@ -1108,7 +1113,15 @@ class standard_crud_module
 				$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_TABLE'));
 			}
 
-			$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'3a3e7cf1bef6ca31f8c992c69a80449e','TITLE'=>$this->title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,'POST_URL'=>get_self_url()));
+			$tpl=do_template('COLUMNED_TABLE_SCREEN',array(
+				'_GUID'=>'3a3e7cf1bef6ca31f8c992c69a80449e',
+				'TITLE'=>$this->title,
+				'TEXT'=>$text,
+				'TABLE'=>$table,
+				'SUBMIT_ICON'=>'buttons__sort',
+				'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,
+				'POST_URL'=>get_self_url()),
+			);
 
 			require_code('templates_internalise_screen');
 			return internalise_own_screen($tpl);
@@ -1166,6 +1179,7 @@ class standard_crud_module
 			'TEXT'=>$text,
 			'URL'=>$post_url,
 			'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+			'SUBMIT_ICON'=>'menu___generic_admin__edit_this',
 			'SUBMIT_NAME'=>$submit_name,
 			'SKIP_VALIDATION'=>true,
 			'EXTRA_BUTTONS'=>$extra_buttons,
@@ -1368,14 +1382,19 @@ class standard_crud_module
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
 				'FIELDS_EXISTING'=>$fields_existing->evaluate()/*FUDGEFUDGE*/,
 				'FIELDS_NEW'=>$fields_new->evaluate()/*FUDGEFUDGE*/,
+				'SUBMIT_ICON'=>'menu__cms__catalogues__edit_this_catalogue',
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
 			)+$extra_tpl_params);
 		}
+
 		list($warning_details,$ping_url)=handle_conflict_resolution();
+
+		$submit_icon=($this->type_code=='c')?'menu___generic_admin__edit_one_category':'menu___generic_admin__edit_one';
+
 		if (!is_null($this->posting_form_title))
 		{
-			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$this->posting_form_tabindex,$this->posting_field_required);
+			$posting_form=get_posting_form($submit_name,$submit_icon,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$this->posting_form_tabindex,$this->posting_field_required);
 			return do_template('POSTING_SCREEN',array(
 				'_GUID'=>'841b9af3aa80bcab86b907e4b942786a'.get_class($this),
 				'PREVIEW'=>$this->do_preview,
@@ -1402,6 +1421,7 @@ class standard_crud_module
 				'TEXT'=>$this->edit_text,
 				'URL'=>$post_url,
 				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+				'SUBMIT_ICON'=>$submit_icon,
 				'SUBMIT_NAME'=>$submit_name,
 				'JAVASCRIPT'=>$this->javascript,
 				'SUPPORT_AUTOSAVE'=>true,

@@ -169,7 +169,7 @@ class Module_report_content
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 
 		$post=do_template('REPORTED_CONTENT_FCOMCODE',array('_GUID'=>'cb40aa1900eefcd24a0786b9d980fef6','URL'=>$url,'CONTENT_ID'=>$content_id,'MEMBER'=>$member,'CONTENT_TITLE'=>$content_title,'POSTER'=>$poster));
-		$posting_form=get_posting_form(do_lang('REPORT_CONTENT'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,'','',NULL,NULL,NULL,NULL,true,false,true);
+		$posting_form=get_posting_form(do_lang('REPORT_CONTENT'),'buttons__send',$post->evaluate(),$post_url,$hidden_fields,$specialisation,'','',NULL,NULL,NULL,NULL,true,false,true);
 
 		url_default_parameters__disable();
 

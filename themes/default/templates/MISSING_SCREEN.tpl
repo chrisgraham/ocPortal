@@ -12,12 +12,12 @@
 
 {+START,SET,BUTTONS}
 	{+START,IF_NON_EMPTY,{ADD_URL}}
-		<a rel="add" href="{ADD_URL*}"><img class="button_page" src="{$IMG*,page/new}" alt="{!ADD_NEW_PAGE}" title="{!ADD_NEW_PAGE}" /></a>
+		<a class="menu___generic_admin__add_one button_page" rel="add" href="{ADD_URL*}"><span>{!ADD_NEW_PAGE}</span></a>
 	{+END}
 
 	{+START,IF_PASSED,ADD_REDIRECT_URL}
 		{+START,IF_NON_EMPTY,{ADD_REDIRECT_URL}}
-			<a href="{ADD_REDIRECT_URL*}"><img class="button_page" src="{$IMG*,page/redirect}" alt="{!redirects:NEW_REDIRECT}" title="{!redirects:NEW_REDIRECT}" /></a>
+			<a class="buttons__redirect button_page" href="{ADD_REDIRECT_URL*}"><span>{!redirects:NEW_REDIRECT}</span></a>
 		{+END}
 	{+END}
 {+END}

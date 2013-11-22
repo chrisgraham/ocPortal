@@ -681,7 +681,7 @@ class Module_calendar
 		{
 			$fields->attach(form_input_line(do_lang_tempcode('FEED',integer_format($i+1)),'','feed_'.strval($i),ocp_admirecookie('feed_'.strval($i)),false));
 		}
-		$rss_form=do_template('FORM',array('_GUID'=>'1756a3c6a5a105ef8b2b9d2ebc9e4e86','HIDDEN'=>'','TEXT'=>do_lang_tempcode('DESCRIPTION_FEEDS_TO_OVERLAY'),'URL'=>get_self_url(),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+		$rss_form=do_template('FORM',array('_GUID'=>'1756a3c6a5a105ef8b2b9d2ebc9e4e86','HIDDEN'=>'','TEXT'=>do_lang_tempcode('DESCRIPTION_FEEDS_TO_OVERLAY'),'URL'=>get_self_url(),'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 
 		return do_template('CALENDAR_MAIN_SCREEN',array(
 			'_GUID'=>'147a58dbe05366ac37698a8cdd501d12',
@@ -1640,7 +1640,7 @@ class Module_calendar
 		$fields->attach(form_input_float(do_lang_tempcode('REMINDER_TIME'),do_lang_tempcode('DESCRIPTION_REMINDER_TIME'),'hours_before',1.0,true));
 		$submit_name=do_lang_tempcode('SUBSCRIBE_EVENT');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'8f6a962617031264ee1af552701804ca','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'8f6a962617031264ee1af552701804ca','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

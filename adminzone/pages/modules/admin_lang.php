@@ -234,6 +234,7 @@ class Module_admin_lang
 			'GET'=>true,
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>'',
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
@@ -675,7 +676,7 @@ msgstr ""
 			$hidden=new ocp_tempcode();
 			$hidden->attach(form_input_hidden('redirect',get_self_url(true)));
 			$hidden->attach(form_input_hidden('lang',$lang));
-			return do_template('FORM_SCREEN',array('_GUID'=>'2d7356fd2c4497ceb19450e65331c9c5','TITLE'=>$this->title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>'','SUBMIT_NAME'=>do_lang('TRANSLATE_CODE')));
+			return do_template('FORM_SCREEN',array('_GUID'=>'2d7356fd2c4497ceb19450e65331c9c5','TITLE'=>$this->title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>'','SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang('TRANSLATE_CODE')));
 		}
 		$lang_file=get_param('lang_file');
 		if (!file_exists($map_b)) $map_b=$map_a;

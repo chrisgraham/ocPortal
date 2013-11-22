@@ -879,6 +879,7 @@ class Hook_addon_registry_core_form_interfaces
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'FIELDS'=>$fields,
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
@@ -1281,6 +1282,7 @@ class Hook_addon_registry_core_form_interfaces
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'FIELDS'=>$fields,
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
@@ -1336,6 +1338,7 @@ class Hook_addon_registry_core_form_interfaces
 			lorem_globalise(do_lorem_template('FORM_GROUPED',array(
 				'TEXT'=>lorem_sentence_html(),
 				'FIELD_GROUPS'=>lorem_phrase(),
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'SUBMIT_BUTTON_CLASS'=>lorem_phrase(),
 				'URL'=>placeholder_url()
@@ -1525,6 +1528,7 @@ class Hook_addon_registry_core_form_interfaces
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'FIELDS'=>$fields,
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
@@ -1620,6 +1624,7 @@ class Hook_addon_registry_core_form_interfaces
 				'EXTRA'=>lorem_phrase(),
 				'POST_COMMENT'=>lorem_phrase(),
 				'EMOTICON_CHOOSER'=>lorem_phrase(),
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'HIDDEN_FIELDS'=>'',
 				'URL'=>placeholder_url(),
@@ -1712,6 +1717,7 @@ class Hook_addon_registry_core_form_interfaces
 				'URL'=>'#',
 				'FIELD_GROUPS'=>$field,
 				'TEXT'=>'',
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word_2()
 			)), NULL, '', true)
 		);
@@ -1758,6 +1764,7 @@ class Hook_addon_registry_core_form_interfaces
 				'FIELDS'=>$fields,
 				'HIDDEN'=>'',
 				'TEXT'=>'',
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word_2()
 			)), NULL, '', true)
 		);

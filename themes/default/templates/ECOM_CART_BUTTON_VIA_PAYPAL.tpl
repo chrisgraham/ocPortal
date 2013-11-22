@@ -26,7 +26,7 @@
 	{+END}
 
 	<p class="purchase_button">
-		<input class="button_page" type="image" src="{$IMG*,page/cart_checkout}" name="submit" alt="{!PROCEED}" title="{!PROCEED}" />
+		<input class="buttons__cart_checkout button_page" type="submit" name="submit" value="{!PROCEED}" />
 	</p>	
 </form>
 

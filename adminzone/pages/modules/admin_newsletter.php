@@ -284,7 +284,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$hidden->attach(form_input_hidden('lang',$_lang));
 			handle_max_file_size($hidden);
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'7e0387bcc4a1b7e2846ba357d36dbc15','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+			return do_template('FORM_SCREEN',array('_GUID'=>'7e0387bcc4a1b7e2846ba357d36dbc15','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__import','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 		}
 
 		// Read data
@@ -450,7 +450,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$post_url=get_self_url();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_b'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'87f79d177931bab13f614b9cb24fb877','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('ENTER_IMAP_DETAILS'),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'87f79d177931bab13f614b9cb24fb877','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('ENTER_IMAP_DETAILS'),'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -497,7 +497,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$post_url=get_self_url();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_c'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'69437ad3611c0ee55d09907985df8205','SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'69437ad3611c0ee55d09907985df8205','SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -563,7 +563,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$post_url=get_self_url();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_d'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'a517b87e2080204262d0bcf7fcebdf99','SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('BOUNCE_WHICH'),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'a517b87e2080204262d0bcf7fcebdf99','SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('BOUNCE_WHICH'),'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -656,6 +656,7 @@ class Module_admin_newsletter extends standard_crud_module
 				'TITLE'=>$this->title,
 				'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),
 				'FIELDS'=>$fields,
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>$submit_name,
 				'URL'=>$post_url,
 			));
@@ -948,6 +949,7 @@ class Module_admin_newsletter extends standard_crud_module
 				'TITLE'=>$this->title,
 				'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),
 				'FIELDS'=>$fields,
+				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),
 				'URL'=>get_self_url(false,false,array('lang'=>$lang)),
 			));
@@ -1397,10 +1399,10 @@ class Module_admin_newsletter extends standard_crud_module
 			$weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'b0c43b5f6883be80af5911a587fc85bf','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_weekly','CONTENT'=>$week_days_weekly,'INLINE_LIST'=>'0')));
 			$radios->attach(form_input_radio_entry('periodic_when','weekly',$frequency=='weekly',$weekly_desc,NULL,''));
 
-			$weekly_desc=new ocp_tempcode();
-			$weekly_desc->attach(do_lang('PERIODIC_BIWEEKLY_ON'));
-			$weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'533afb6cdf1da813dd55ae694b962151','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_biweekly','CONTENT'=>$week_days_biweekly,'INLINE_LIST'=>'0')));
-			$radios->attach(form_input_radio_entry('periodic_when','biweekly',$frequency=='biweekly',$weekly_desc,NULL,''));
+			$biweekly_desc=new ocp_tempcode();
+			$biweekly_desc->attach(do_lang('PERIODIC_BIWEEKLY_ON'));
+			$biweekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'533afb6cdf1da813dd55ae694b962151','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_biweekly','CONTENT'=>$week_days_biweekly,'INLINE_LIST'=>'0')));
+			$radios->attach(form_input_radio_entry('periodic_when','biweekly',$frequency=='biweekly',$biweekly_desc,NULL,''));
 
 			$month_days=new ocp_tempcode();
 			foreach (range(1,28) as $this_day)
@@ -1426,6 +1428,7 @@ class Module_admin_newsletter extends standard_crud_module
 			'TEXT'=>(($periodic_action=='make' || $periodic_action=='replace')? do_lang_tempcode('PERIODIC_NO_EDIT') : do_lang_tempcode('NEWSLETTER_SEND_TEXT')),
 			'HIDDEN'=>$hidden,
 			'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+			'SUBMIT_ICON'=>'tabs__preview',
 			'SUBMIT_NAME'=>$submit_name,
 			'URL'=>$post_url,
 		));
@@ -1698,7 +1701,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$submit_name=do_lang_tempcode('VIEW');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'view'),'_SELF',NULL,false,true);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'ee295e41dc86c4583c123e6e0e445380','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'ee295e41dc86c4583c123e6e0e445380','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__view_archive','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**

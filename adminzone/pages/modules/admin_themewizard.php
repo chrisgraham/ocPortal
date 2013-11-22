@@ -227,7 +227,7 @@ class Module_admin_themewizard
 				};
 		";
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'98963f4d7ff60744382f937e6cc5acbf','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'JAVASCRIPT'=>$javascript,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'98963f4d7ff60744382f937e6cc5acbf','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'JAVASCRIPT'=>$javascript,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -296,7 +296,7 @@ class Module_admin_themewizard
 		$hidden->attach(form_input_hidden('dark',strval($dark)));
 		$hidden->attach(form_input_hidden('inherit_css',strval($inherit_css)));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'349383d77ecfce8c65f3303cfec86ea0','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('REFRESH_TO_FINISH'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'349383d77ecfce8c65f3303cfec86ea0','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('REFRESH_TO_FINISH'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -393,7 +393,7 @@ class Module_admin_themewizard
 
 		$fields->attach(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode('DESCRIPTION_LOGOWIZARD_THEME'),'theme',create_selection_list_themes($theme,true)));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'08449c0ae8edf5c0b3510611c9ac9618','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'08449c0ae8edf5c0b3510611c9ac9618','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
 	}
 
 	/**

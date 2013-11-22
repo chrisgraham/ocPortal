@@ -346,7 +346,7 @@ class Module_admin_permissions
 		$fields->attach(form_input_list(do_lang_tempcode('FROM'),do_lang_tempcode('PERMISSIONS_FROM'),'from',$list1));
 		$fields->attach(form_input_list(do_lang_tempcode('TO'),do_lang_tempcode('PERMISSIONS_TO'),'to',$list2));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'9e20011006a26b240fc898279338875c','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'9e20011006a26b240fc898279338875c','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -482,7 +482,7 @@ class Module_admin_permissions
 
 		$post_url=get_self_url(false,false,NULL,false,true);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'457a5b8200991996b383bf75515382ab','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'457a5b8200991996b383bf75515382ab','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 	}
 
 	/**
@@ -803,7 +803,7 @@ class Module_admin_permissions
 
 			$post_url=get_self_url(false,false,NULL,false,true);
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'e5d457a49a76706afebc92da3d846e74','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+			return do_template('FORM_SCREEN',array('_GUID'=>'e5d457a49a76706afebc92da3d846e74','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_privileges','id'=>$p_section),'_SELF');

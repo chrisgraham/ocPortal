@@ -142,7 +142,7 @@ class Module_lost_password
 		$submit_name=do_lang_tempcode('PASSWORD_RESET_BUTTON');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'080e516fef7c928dbb9fb85beb6e435a','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'080e516fef7c928dbb9fb85beb6e435a','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_ICON'=>'menu__site_meta__user_actions__lost_password','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -234,6 +234,7 @@ class Module_lost_password
 				'URL'=>$_url,
 				'FIELDS'=>$fields,
 				'TEXT'=>do_lang_tempcode('ENTER_CODE_FROM_EMAIL'),
+				'SUBMIT_ICON'=>'menu__site_meta__user_actions__lost_password',
 				'SUBMIT_NAME'=>$submit_name,
 			));
 		}
@@ -265,6 +266,7 @@ class Module_lost_password
 				'URL'=>get_self_url(false,false,NULL,false,true),
 				'FIELDS'=>$fields,
 				'TEXT'=>do_lang_tempcode('MISSING_CONFIRM_CODE'),
+				'SUBMIT_ICON'=>'buttons_menu__site_meta__user_actions__lost_password_proceed',
 				'SUBMIT_NAME'=>$submit_name,
 			));
 		}

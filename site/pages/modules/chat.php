@@ -678,7 +678,7 @@ class Module_chat
 		$text=paragraph(do_lang_tempcode('CHAT_PRIVATE_CHATROOM_DESCRIPTION',display_time_period(60*intval(get_option('chat_private_room_deletion_time')))));
 		if (intval(get_option('chat_private_room_deletion_time'))==0) $text=new ocp_tempcode();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'5697add8e81f641559a212697d35a470','HIDDEN'=>$hidden,'TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'5697add8e81f641559a212697d35a470','HIDDEN'=>$hidden,'TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));
 	}
 
 	/**
@@ -772,7 +772,7 @@ class Module_chat
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'blocking_set'),'_SELF');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'74e0700f4d2b52d71a0cbf8eb3045ecf','TITLE'=>$this->title,'HIDDEN'=>'','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('ABOUT_BLOCKING'),'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'FIELDS'=>$fields,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'74e0700f4d2b52d71a0cbf8eb3045ecf','TITLE'=>$this->title,'HIDDEN'=>'','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('ABOUT_BLOCKING'),'SUBMIT_ICON'=>'buttons__ignore','SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'FIELDS'=>$fields,'URL'=>$post_url));
 	}
 
 	/**
@@ -1024,7 +1024,7 @@ class Module_chat
 
 		if (count($chatrooms)==0) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'6741ef01d1c6dd8d2de9be3290666db7','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'6741ef01d1c6dd8d2de9be3290666db7','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>''));
 	}
 
 	/**
@@ -1131,7 +1131,7 @@ class Module_chat
 		require_code('form_templates');
 		handle_max_file_size($hidden);
 
-		return do_template('CHAT_SET_EFFECTS_SCREEN',array('_GUID'=>'f965b4376d603fc14dbcac7fb3c5580d','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'HIDDEN'=>$hidden,'POST_URL'=>$post_url,'SETTING_BLOCKS'=>$setting_blocks));
+		return do_template('CHAT_SET_EFFECTS_SCREEN',array('_GUID'=>'f965b4376d603fc14dbcac7fb3c5580d','TITLE'=>$this->title,'SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'HIDDEN'=>$hidden,'POST_URL'=>$post_url,'SETTING_BLOCKS'=>$setting_blocks));
 	}
 
 	/**

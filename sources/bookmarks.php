@@ -110,7 +110,7 @@ function add_bookmark_form($post_url)
 
 	$javascript='var title=document.getElementById(\'title\'); if (((title.value==\'\') || (title.value==\'0\')) && (window.opener)) title.value=get_inner_html(window.opener.document.getElementsByTagName(\'title\')[0]); ';
 
-	return do_template('FORM_SCREEN',array('_GUID'=>'7e94bb97008de4fa0fffa2b5f91c95eb','TITLE'=>$title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$javascript));
+	return do_template('FORM_SCREEN',array('_GUID'=>'7e94bb97008de4fa0fffa2b5f91c95eb','TITLE'=>$title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$javascript));
 }
 
 /**

@@ -208,7 +208,7 @@ class Module_admin_backup
 			if (cron_installed()) $javascript='var d_ob=[document.getElementById(\'schedule_day\'),document.getElementById(\'schedule_month\'),document.getElementById(\'schedule_year\'),document.getElementById(\'schedule_hour\'),document.getElementById(\'schedule_minute\')]; var hide_func=function () { document.getElementById(\'recurrance_days\').disabled=((d_ob[0].selectedIndex+d_ob[1].selectedIndex+d_ob[2].selectedIndex+d_ob[3].selectedIndex+d_ob[4].selectedIndex)>0); }; d_ob[0].onchange=hide_func; d_ob[1].onchange=hide_func; d_ob[2].onchange=hide_func; d_ob[3].onchange=hide_func; d_ob[4].onchange=hide_func; hide_func();';
 		}
 
-		$form=do_template('FORM',array('_GUID'=>'64ae569b2cce398e89d1b4167f116193','HIDDEN'=>'','JAVASCRIPT'=>$javascript,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('BACKUP'),'URL'=>$url));
+		$form=do_template('FORM',array('_GUID'=>'64ae569b2cce398e89d1b4167f116193','HIDDEN'=>'','JAVASCRIPT'=>$javascript,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('BACKUP'),'URL'=>$url));
 
 		$results=$this->get_results();
 

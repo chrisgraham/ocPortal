@@ -383,7 +383,7 @@ class Module_admin_stats
 			$message=do_lang_tempcode($stats_table?'SELECT_STATS_RANGE':'_SELECT_STATS_RANGE',escape_html(get_timezoned_date($first_stat,false)));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'3e76584f20ecfb947b00638211e63321','SKIP_VALIDATION'=>true,'GET'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$message,'HIDDEN'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3e76584f20ecfb947b00638211e63321','SKIP_VALIDATION'=>true,'GET'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$message,'HIDDEN'=>'','URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
 	}
 
 	/**
@@ -1310,8 +1310,8 @@ class Module_admin_stats
 	 */
 	function clear()
 	{
-		// Someone obviously wants to clear out all their statistics
-		// Let's give them the option of only clearing out stored graphs, or deleting everything
+		// Someone obviously wants to clear out all their statistics.
+		// Let's give them the option of only clearing out stored graphs, or deleting everything.
 
 		require_code('form_templates');
 		$controls=new ocp_tempcode();
@@ -1325,6 +1325,7 @@ class Module_admin_stats
 			'_GUID'=>'82f3410d45e4d9ea53b2c033792a3207',
 			'SKIP_VALIDATION'=>true,
 			'TITLE'=>$this->title,
+			'SUBMIT_ICON'=>'buttons__clear',
 			'SUBMIT_NAME'=>do_lang_tempcode('CLEAR_STATISTICS'),
 			'TEXT'=>paragraph(do_lang_tempcode('DESCRIPTION_CLEAR_STATISTICS')),
 			'URL'=>build_url(array('page'=>'_SELF','type'=>'_clear'),'_SELF'),

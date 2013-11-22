@@ -699,7 +699,7 @@ class Module_admin_zones
 				};
 		";
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'d8f08884cc370672c2e5604aefe78c6c','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text));
+		return do_template('FORM_SCREEN',array('_GUID'=>'d8f08884cc370672c2e5604aefe78c6c','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text));
 	}
 
 	/**
@@ -798,7 +798,7 @@ class Module_admin_zones
 		$table=results_table(do_lang('ZONES'),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order);
 
 		$text=do_lang_tempcode('CHOOSE_EDIT_LIST');
-		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'a33d3ff1178e7898b42acd83b38b5dcb','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
+		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'a33d3ff1178e7898b42acd83b38b5dcb','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_ICON'=>'menu___generic_admin__edit_this','SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
@@ -849,7 +849,7 @@ class Module_admin_zones
 		$post_url=build_url($map,'_SELF');
 		$submit_name=do_lang_tempcode('SAVE');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'54a578646aed86da06f30c459c9586c2','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'54a578646aed86da06f30c459c9586c2','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_ICON'=>'menu___generic_admin__edit_this','SUBMIT_NAME'=>$submit_name,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 	}
 
 	/**

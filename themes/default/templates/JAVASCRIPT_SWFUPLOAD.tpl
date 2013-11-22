@@ -1661,8 +1661,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	rep2.name=name;
 	rep2.id=name;
 	rep.parentNode.appendChild(rep2);
-	var clearBtn=document.getElementById('clearBtn_'+name);
-	if (clearBtn) clearBtn.style.display='none';
+	var clear_button=document.getElementById('clear_button_'+name);
+	if (clear_button) clear_button.style.display='none';
 
 	if (java_method)
 	{

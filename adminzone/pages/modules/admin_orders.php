@@ -203,7 +203,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * The do-next manager for order module
+	 * The do-next manager for order module.
 	 * 
 	 * @return tempcode		The UI
 	 */
@@ -220,7 +220,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * UI to show all orders
+	 * UI to show all orders.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -379,7 +379,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * UI to show details of an order
+	 * UI to show details of an order.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -503,7 +503,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Method to dispatch an order
+	 * Method to dispatch an order.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -523,7 +523,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * UI to add note to an order
+	 * UI to add note to an order.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -555,7 +555,6 @@ class Module_admin_orders
 		{	
 			// Display dispatch mail preview
 			$res=$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$id),'',1);
-
 			$order_det=$res[0];
 
 			$member_name=$GLOBALS['FORUM_DRIVER']->get_username($order_det['c_member']);
@@ -572,12 +571,13 @@ class Module_admin_orders
 			'HIDDEN'=>'',
 			'FIELDS'=>$fields,
 			'URL'=>$update_url,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('ADD_NOTE'),
 		));
 	}
 
 	/**
-	 * Actualiser to add a note to an order
+	 * Actualiser to add a note to an order.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -602,7 +602,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Method to dispatch a notification for an order
+	 * Method to dispatch a notification for an order.
 	 *
 	 * @param	AUTO_LINK	Order ID
 	 */
@@ -620,7 +620,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Method to delete order
+	 * Method to delete order.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -637,7 +637,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Method to return order items
+	 * Method to return order items.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -654,7 +654,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Method to hold an order
+	 * Method to hold an order.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -671,7 +671,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Method to display export order list filters
+	 * Method to display export order list filters.
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -708,6 +708,7 @@ class Module_admin_orders
 			'_GUID'=>'e2e5097798c963f4977ba22b50ddf2f3',
 			'SKIP_VALIDATION'=>true,
 			'TITLE'=>$this->title,
+			'SUBMIT_ICON'=>'menu___generic_admin__export',
 			'SUBMIT_NAME'=>do_lang_tempcode('EXPORT_ORDER_LIST'),
 			'TEXT'=>paragraph(do_lang_tempcode('EXPORT_ORDER_LIST_TEXT')),
 			'URL'=>build_url(array('page'=>'_SELF','type'=>'_order_export'),'_SELF'),
@@ -717,7 +718,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Actulizer to build csv from the selected filters
+	 * Actualiser to build CSV from the selected filters.
 	 *
 	 * @param  boolean	Whether to avoid exit (useful for unit test).
 	 */

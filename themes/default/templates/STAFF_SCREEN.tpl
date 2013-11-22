@@ -44,9 +44,9 @@
 
 <div class="buttons_group">
 	{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_staff}}
-		<a rel="edit" href="{$PAGE_LINK*,_SEARCH:admin_staff}"><img class="button_page" src="{$IMG*,page/edit}" title="{!EDIT}" alt="{!EDIT}" /></a>
+		<a class="buttons__edit button_page" rel="edit" href="{$PAGE_LINK*,_SEARCH:admin_staff}"><span>{!EDIT}</span></a>
 	{+END}
 
-	<a href="{ALL_STAFF_URL*}"><img class="button_page" src="{$IMG*,page/all2}" title="{!VIEW_ALL_STAFF}" alt="{!VIEW_ALL_STAFF}" /></a>
+	<a class="buttons__edit button_page" href="{ALL_STAFF_URL*}"><span>{!VIEW_ALL_STAFF}</span></a>
 </div>
 

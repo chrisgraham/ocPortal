@@ -17,17 +17,17 @@
 	<div class="buttons_group" itemprop="significantLinks">
 		{$,Put first, so it associates with the enter key}
 		{+START,IF_NON_EMPTY,{PRO_IDS}}
-			<input class="button_page" type="image" name="update" src="{$IMG*,page/cart_update}" onclick="return update_cart('{PRO_IDS;*}');" alt="{!UPDATE}" title="{!UPDATE}"/>
+			<input class="buttons__cart_update button_page" type="submit" name="update" onclick="return update_cart('{PRO_IDS;*}');" value="{!UPDATE}"/>
 		{+END}
 
-		{+START,IF_NON_EMPTY,{EMPTY_CART*}}
-			<input class="button_page" type="image" src="{$IMG*,page/cart_empty}" onclick="return confirm_empty('{!EMPTY_CONFIRM}','{EMPTY_CART;*}',this.form);" alt="{!EMPTY_CART}" title="{!EMPTY_CART}"/>
+		{+START,IF_NON_EMPTY,{EMPTY_CART_URL*}}
+			<input class="buttons__cart_empty button_page" type="submit" onclick="return confirm_empty('{!EMPTY_CONFIRM}','{EMPTY_CART_URL;*}',this.form);" value="{!EMPTY_CART}"/>
 		{+END}
 
 		<input type="hidden" name="product_ids" id="product_ids" value="{PRO_IDS*}"/>
 
 		{+START,IF_NON_EMPTY,{CONT_SHOPPING}}
-			<a href="{CONT_SHOPPING*}"><img class="button_page" src="{$IMG*,page/shopping_continue}" alt="{!CONTINUE_SHOPPING}" title="{!CONTINUE_SHOPPING}"/></a>
+			<a class="menu__rich_content__catalogues__products button_page" href="{CONT_SHOPPING_URL*}"><span>{!CONTINUE_SHOPPING}</span></a>
 		{+END}
 	</div>
 </form>

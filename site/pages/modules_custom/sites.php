@@ -202,7 +202,7 @@ class Module_sites
 		$fields->attach(form_input_line(do_lang_tempcode('SEARCH_UNDERNEATH'),do_lang_tempcode('DESCRIPTION_FTP_SEARCH_UNDER'),'search_under','/',false));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'hostingcopy_step2'),'_SELF');
 		$submit_name=do_lang('PROCEED');
-		$hostingcopy_form=do_template('FORM',array('_GUID'=>'e9f51de85f7cf800aa3097366a03ca5e','HIDDEN'=>'','URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('OC_COPYWAIT'),'SUBMIT_NAME'=>$submit_name));
+		$hostingcopy_form=do_template('FORM',array('_GUID'=>'e9f51de85f7cf800aa3097366a03ca5e','HIDDEN'=>'','URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('OC_COPYWAIT'),'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 
 		// Put together details about releases
 		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.description','name',array('text_original'=>'This is the latest version.'));
@@ -361,7 +361,7 @@ class Module_sites
 		$post_url=build_url(array('page'=>'_SELF','type'=>'hostingcopy_step3'),'_SELF');
 		$submit_name=do_lang('HOSTING_COPY');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0758605aeb4ee00f1eee562c14d16a5f','HIDDEN'=>$hidden,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0758605aeb4ee00f1eee562c14d16a5f','HIDDEN'=>$hidden,'TITLE'=>$this->title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_ICON'=>'buttons__upload','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -390,26 +390,13 @@ class Module_sites
 
 		$array=array('install.php'=>get_file_base().'/uploads/downloads/install.php','data.ocp'=>get_file_base().'/uploads/downloads/data.ocp');
 		foreach ($array as $filename=>$tmp_file)
-//		$zip=zip_open($t);
-//		$tmp_file=ocp_tempnam('hosting_copy');
-//		while (($zip_entry=zip_read($zip))!==false)
 		{
-//			$_temp_file=fopen($tmp_file,'wb');
-//			fwrite($_temp_file,zip_entry_read($zip_entry,zip_entry_filesize($zip_entry)));
-//			fclose($_temp_file);
-//			$filename=zip_entry_name($zip_entry);
 			if (!@ftp_put($conn_id,$filename,$tmp_file,FTP_BINARY))
 			{
-//				zip_entry_close($zip_entry);
-//				zip_close($zip);
-//				@unlink($tmp_file);
 				ftp_close($conn_id);
 				warn_exit(do_lang_tempcode('HOSTING_NO_UPLOAD',@strval($php_errormsg)));
 			}
-//			zip_entry_close($zip_entry);
 		}
-//		@unlink($tmp_file);
-//		zip_close($zip);
 		$file_list=ftp_nlist($conn_id,'.');
 		if ((is_array($file_list)) && (!in_array($filename,$file_list)))
 			warn_exit(do_lang_tempcode('HOSTING_FILE_GONE_MISSING'));
@@ -445,7 +432,7 @@ class Module_sites
 		$text=do_lang_tempcode('MO_ENTER_DETAILS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_myocp'),'_SELF');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0ed12af5b64c65a673b9837bd47a80b1','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang('PROCEED'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0ed12af5b64c65a673b9837bd47a80b1','TITLE'=>$this->title,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang('PROCEED'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>''));
 	}
 
 	/**

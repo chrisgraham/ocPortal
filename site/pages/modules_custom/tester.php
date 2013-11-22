@@ -561,7 +561,7 @@ class Module_tester
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add_test'),'_SELF');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'133ed356bc7cf270d9763f8cdc7f1d41','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang_tempcode('ADD_TEST'),'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>'','HIDDEN'=>''));
+		return do_template('FORM_SCREEN',array('_GUID'=>'133ed356bc7cf270d9763f8cdc7f1d41','TITLE'=>$this->title,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>do_lang_tempcode('ADD_TEST'),'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>'','HIDDEN'=>''));
 	}
 
 	/**
@@ -603,7 +603,7 @@ class Module_tester
 
 		$tests='';
 
-		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'49172fc2c5ace05a632f9a5fdd91abd0','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang_tempcode('ADD_TEST_SECTION'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
+		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'49172fc2c5ace05a632f9a5fdd91abd0','TITLE'=>$this->title,'SUBMIT_ICON'=>'menu___generic_admin__add_one_category','SUBMIT_NAME'=>do_lang_tempcode('ADD_TEST_SECTION'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
 	}
 
 	/**
@@ -686,7 +686,7 @@ class Module_tester
 		$fields=form_input_list(do_lang_tempcode('NAME'),'','id',$list,NULL,true);
 		$submit_name=do_lang_tempcode('PROCEED');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'37f70ba9d23204bceda6e84375b52270','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'37f70ba9d23204bceda6e84375b52270','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -728,7 +728,7 @@ class Module_tester
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'__ed','id'=>$id),'_SELF');
 
-		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'ee10a568b6dacd8baf1efeac3e7bcb40','TITLE'=>$this->title,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
+		return do_template('TESTER_ADD_SECTION_SCREEN',array('_GUID'=>'ee10a568b6dacd8baf1efeac3e7bcb40','TITLE'=>$this->title,'SUBMIT_ICON'=>'menu___generic_admin__edit_one_category','SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'TESTS'=>$tests,'URL'=>$post_url,'FIELDS'=>$fields,'ADD_TEMPLATE'=>$add_template));
 	}
 
 	/**

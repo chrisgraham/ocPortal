@@ -5,7 +5,7 @@
 			{LIST}
 		</select></label>
 
-		<input onclick="disable_button_just_clicked(this);" class="button_pageitem" type="submit" value="{!PROCEED}" />
+		<input onclick="disable_button_just_clicked(this);" class="buttons__proceed button_pageitem" type="submit" value="{!PROCEED}" />
 	</form>
 
 	<hr class="spaced_rule" />

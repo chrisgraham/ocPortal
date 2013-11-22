@@ -641,6 +641,7 @@ class Hook_addon_registry_catalogues
 				'URL'=>placeholder_url(),
 				'FIELDS'=>placeholder_fields(),
 				'FIELDS_NEW'=>placeholder_form(),
+				'SUBMIT_ICON'=>'menu___generic_admin__add_one',
 				'SUBMIT_NAME'=>lorem_word()
 			)), NULL, '', true)
 		);
@@ -666,6 +667,7 @@ class Hook_addon_registry_catalogues
 				'FIELDS'=>placeholder_fields(),
 				'FIELDS_EXISTING'=>placeholder_form(),
 				'FIELDS_NEW'=>placeholder_form(),
+				'SUBMIT_ICON'=>'menu___generic_admin__edit_this',
 				'SUBMIT_NAME'=>lorem_word()
 			)), NULL, '', true)
 		);

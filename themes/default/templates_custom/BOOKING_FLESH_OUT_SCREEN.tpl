@@ -70,7 +70,7 @@
 	{+END}
 
 	<p class="proceed_button">
-		<input class="button_page" type="submit" value="{$?,{$IS_GUEST},{!PROCEED},{!BOOK}}" />
+		<input class="buttons__proceed button_page" type="submit" value="{$?,{$IS_GUEST},{!PROCEED},{!BOOK}}" />
 	</p>
 </form>
 

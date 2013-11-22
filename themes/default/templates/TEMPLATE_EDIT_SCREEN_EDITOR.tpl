@@ -24,7 +24,7 @@
 					{+START,IF_NON_EMPTY,{GUID}}
 						<div class="float_surrounder {$CYCLE,tep,tpl_dropdown_row_a,tpl_dropdown_row_b}">
 							<div class="right">
-								<input class="button_micro" onclick="window.fauxmodal_confirm('{$STRIP_TAGS,{!HELP_INSERT_DISTINGUISHING_TEMPCODE;}}',function(result) { if (result) { insert_textbox(document.getElementById('f{I*}_new'),'{'+'+START,IF,{'+'$EQ,{'+'_GUID},{GUID*}}}\n{'+'+END}'); } }); return false;" type="button" value="{$STRIP_TAGS,{!INSERT_DISTINGUISHING_TEMPCODE}}" />
+								<input class="menu___generic_admin__add_one button_micro" onclick="window.fauxmodal_confirm('{$STRIP_TAGS,{!HELP_INSERT_DISTINGUISHING_TEMPCODE;}}',function(result) { if (result) { insert_textbox(document.getElementById('f{I*}_new'),'{'+'+START,IF,{'+'$EQ,{'+'_GUID},{GUID*}}}\n{'+'+END}'); } }); return false;" type="button" value="{$STRIP_TAGS,{!INSERT_DISTINGUISHING_TEMPCODE}}" />
 							</div>
 						</div>
 					{+END}
@@ -91,7 +91,7 @@
 			{REVISION_HISTORY}
 
 			<p class="right">
-				<input onclick="this.form.target='_blank'; this.form.action='{PREVIEW_URL;*}';" accesskey="p" class="button_pageitem" type="submit" value="{!PREVIEW}" />
+				<input onclick="this.form.target='_blank'; this.form.action='{PREVIEW_URL;*}';" accesskey="p" class="tabs__preview button_pageitem" type="submit" value="{!PREVIEW}" />
 			</p>
 		</div>
 	</div></div>

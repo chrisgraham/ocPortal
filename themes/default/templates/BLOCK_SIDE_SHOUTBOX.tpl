@@ -15,7 +15,7 @@
 
 			<div class="constrain_field">
 				<p class="proceed_button">
-					<input type="submit" value="{!SEND_MESSAGE}" class="wide_button" />
+					<input type="submit" value="{!SEND_MESSAGE}" class="buttons__send wide_button" />
 				</p>
 			</div>
 		</form>

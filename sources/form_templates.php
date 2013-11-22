@@ -281,6 +281,7 @@ function get_attachments($posting_field_name)
  * Creates a posting form, with attachment support.
  *
  * @param  mixed			The title of the form submission button
+ * @param  ID_TEXT		The submit icon CSS class.
  * @param  LONG_TEXT		The default post to put in.
  * @param  mixed			Where the form is sent (URLPATH or Tempcode).
  * @param  tempcode		A form_input_hidden buildup of hidden fields (additional parameters sent to the target URL).
@@ -296,7 +297,7 @@ function get_attachments($posting_field_name)
  * @param  boolean		Whether to avoid WYSIWYG mode
  * @return tempcode		The posting form
  */
-function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialisation,$post_comment=NULL,$extra='',$specialisation2=NULL,$default_parsed=NULL,$javascript=NULL,$tabindex=NULL,$required=true,$has_preview=true,$avoid_wysiwyg=false)
+function get_posting_form($submit_name,$submit_icon,$post,$post_url,$hidden_fields,$specialisation,$post_comment=NULL,$extra='',$specialisation2=NULL,$default_parsed=NULL,$javascript=NULL,$tabindex=NULL,$required=true,$has_preview=true,$avoid_wysiwyg=false)
 {
 	require_lang('javascript');
 	require_javascript('javascript_posting');
@@ -354,6 +355,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 		'EXTRA'=>$extra,
 		'POST_COMMENT'=>$post_comment,
 		'EMOTICON_CHOOSER'=>$emoticon_chooser,
+		'SUBMIT_ICON'=>$submit_icon,
 		'SUBMIT_NAME'=>$submit_name,
 		'HIDDEN_FIELDS'=>$hidden_fields,
 		'URL'=>$post_url,

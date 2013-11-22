@@ -7,7 +7,7 @@
 	</div>
 
 	<p class="proceed_button">
-		<input class="button_page" id="submit_button" accesskey="u" type="submit" value="{!SAVE}" />
+		<input class="buttons__save button_page" id="submit_button" accesskey="u" type="submit" value="{!SAVE}" />
 	</p>
 </form>
 

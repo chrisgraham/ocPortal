@@ -325,7 +325,7 @@ if ($has_jump)
 			<script type=\"text/javascript\">/* <![CDATA[ */
 				var div=document.getElementById('link_pos_".strval($i)."');
 				var upgrader_link=get_base_url()+'/".$upgrade_script."';
-				var h='<form style=\"display: inline\" action=\"'+upgrader_link+'\" target=\"_blank\" method=\"post\"><button title=\"Upgrade to ".escape_html($higher_versions[$i]['version'])."\"><span>Launch upgrader<\/span><\/button><\/form>';
+				var h='<form style=\"display: inline\" action=\"'+upgrader_link+'\" target=\"_blank\" method=\"post\"><input class=\"menu__adminzone__tools__upgrade button_pageitem\" type=\"submit\" title=\"Upgrade to ".escape_html($higher_versions[$i]['version'])."\" value=\"Launch upgrader\" /<\/form>';
 				if (window.setInnerHTML)
 				{
 					setInnerHTML(div,h);
@@ -351,7 +351,7 @@ if ($has_jump)
 			$out="
 			<noscript>
 				<form style=\"display: inline\" action=\"../".$upgrade_script."\" target=\"_blank\" method=\"post\">
-					<button title=\"Upgrade to ".escape_html($higher_versions[$i]['version'])."\"><span style=\"color: red\">Launch upgrader</span></button>
+					<input class=\"menu__adminzone__tools__upgrade button_pageitem\" type=\"submit\" title=\"Upgrade to ".escape_html($higher_versions[$i]['version'])."\" value=\"Launch upgrader\" />
 				</form>
 			</noscript>
 			";

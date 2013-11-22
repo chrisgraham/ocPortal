@@ -202,7 +202,7 @@ class Module_invoices
 
 		$text=do_lang_tempcode('TRANSACT_INFO');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e90a4019b37c8bf5bcb64086416bcfb3','TITLE'=>$this->title,'SKIP_VALIDATION'=>'1','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_PAYMENT')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'e90a4019b37c8bf5bcb64086416bcfb3','TITLE'=>$this->title,'SKIP_VALIDATION'=>'1','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>'','SUBMIT_ICON'=>'menu__rich_content__ecommerce__purchase','SUBMIT_NAME'=>do_lang_tempcode('MAKE_PAYMENT')));
 	}
 }
 

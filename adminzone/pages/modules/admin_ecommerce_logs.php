@@ -313,7 +313,7 @@ class Module_admin_ecommerce_logs
 
 			url_default_parameters__disable();
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'a2fe914c23e378c493f6e1dad0dc11eb','TITLE'=>$this->title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>get_self_url(),'GET'=>true,'HIDDEN'=>''));
+			return do_template('FORM_SCREEN',array('_GUID'=>'a2fe914c23e378c493f6e1dad0dc11eb','TITLE'=>$this->title,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>get_self_url(),'GET'=>true,'HIDDEN'=>''));
 		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_trigger','redirect'=>get_param('redirect',NULL)),'_SELF');
@@ -336,7 +336,7 @@ class Module_admin_ecommerce_logs
 
 				url_default_parameters__disable();
 
-				return do_template('FORM_SCREEN',array('_GUID'=>'90ee397ac24dcf0b3a0176da9e9c9741','TITLE'=>$this->title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>is_array($needed_fields)?$needed_fields[1]:$needed_fields,'TEXT'=>'','URL'=>get_self_url(),'HIDDEN'=>$extra_hidden));
+				return do_template('FORM_SCREEN',array('_GUID'=>'90ee397ac24dcf0b3a0176da9e9c9741','TITLE'=>$this->title,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'FIELDS'=>is_array($needed_fields)?$needed_fields[1]:$needed_fields,'TEXT'=>'','URL'=>get_self_url(),'HIDDEN'=>$extra_hidden));
 			}
 		}
 
@@ -372,7 +372,7 @@ class Module_admin_ecommerce_logs
 
 		url_default_parameters__disable();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'990d955cb14b6681685ec9e1d1448d9d','TITLE'=>$this->title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>$text,'URL'=>$post_url,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array('_GUID'=>'990d955cb14b6681685ec9e1d1448d9d','TITLE'=>$this->title,'SUBMIT_ICON'=>'menu__rich_content__ecommerce__purchase','SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>$text,'URL'=>$post_url,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -473,6 +473,7 @@ class Module_admin_ecommerce_logs
 			'TEXT'=>'',
 			'HIDDEN'=>'',
 			'URL'=>get_self_url(false,false,NULL,false,true),
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
 		));
 	}

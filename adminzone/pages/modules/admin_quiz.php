@@ -216,7 +216,7 @@ class Module_admin_quiz
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');
 		$submit_name=do_lang_tempcode('EXPORT_QUIZ');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'3110ee0e917e2e0f83a41ab27ec7eafe','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('EXPORT_QUIZ_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'POST'=>true));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3110ee0e917e2e0f83a41ab27ec7eafe','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('EXPORT_QUIZ_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__export','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'POST'=>true));
 	}
 
 	/**
@@ -254,7 +254,7 @@ class Module_admin_quiz
 		$submit_name=do_lang_tempcode('CHOOSE_WINNERS');
 		$text=do_lang_tempcode('CHOOSE_WINNERS');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'830097b15c232b10a8204cfed86082de','HIDDEN'=>'','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'830097b15c232b10a8204cfed86082de','HIDDEN'=>'','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -376,7 +376,7 @@ class Module_admin_quiz
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_survey_results'),'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('SURVEY_RESULTS');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'03f611727000c1cb1c40780773bb8ebd','SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'TITLE'=>$this->title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'03f611727000c1cb1c40780773bb8ebd','SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'TITLE'=>$this->title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

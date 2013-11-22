@@ -322,7 +322,6 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/profiles_tabs_edit/.htaccess',
 			'sources/hooks/systems/occle_fs/members.php',
 			'sources/hooks/modules/admin_stats/ocf_demographics.php',
-			'themes/default/images/EN/page/join.png',
 			'pages/modules/join.php',
 			'sources/ocf_join.php',
 			'pages/modules/lost_password.php',
@@ -341,7 +340,6 @@ class Hook_addon_registry_core_ocf
 			'sources/ocf_popups.php',
 			'sources/hooks/systems/preview/ocf_emoticon.php',
 			'sources/hooks/systems/cron/ocf_confirm_reminder.php',
-			'themes/default/images/EN/page/invite_member.png',
 			'themes/default/templates/OCF_TOPIC_POST_AVATAR.tpl',
 			'themes/default/templates/OCF_GROUP_DIRECTORY_SCREEN.tpl',
 			'themes/default/css/ocf.css',
@@ -659,6 +657,7 @@ class Hook_addon_registry_core_ocf
 			'TEXT'=>'',
 			'HIDDEN'=>'',
 			'FIELDS'=>$fields,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),
 			'URL'=>placeholder_url(),
 			'BATCH_IMPORT_ARCHIVE_CONTENTS'=>lorem_phrase()
@@ -923,6 +922,7 @@ class Hook_addon_registry_core_ocf
 		);
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_EDIT',array(
 			'URL'=>placeholder_url(),
+			'SUBMIT_ICON'=>'buttons__edit',
 			'SUBMIT_NAME'=>lorem_phrase(),
 			'AUTOCOMPLETE'=>false,
 			'SKIP_VALIDATION'=>true,

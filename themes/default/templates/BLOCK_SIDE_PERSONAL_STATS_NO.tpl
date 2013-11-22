@@ -26,7 +26,7 @@
 					</div>
 				{+END}
 
-				<p class="constrain_field"><input class="wide_button" type="submit" value="{!_LOGIN}" /></p>
+				<p class="constrain_field"><input class="menu__site_meta__user_actions__login wide_button" type="submit" value="{!_LOGIN}" /></p>
 			</div>
 		</form>
 

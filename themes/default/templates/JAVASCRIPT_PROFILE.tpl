@@ -52,7 +52,7 @@ function decrypt_data(encrypted_data)
 	// Cancel button
 	var button=document.createElement('input');
 	button.type='button';
-	button.className='button_pageitem';
+	button.className='buttons__cancel button_pageitem';
 	button.value='{!INPUTSYSTEM_CANCEL;^}';
 	// Remove the form when it's cancelled
 	add_event_listener_abstract(button,'click',function () { document.getElementsByTagName('body')[0].removeChild(container); return false; });
@@ -61,7 +61,7 @@ function decrypt_data(encrypted_data)
 	// Submit button
 	button=document.createElement('input');
 	button.type='submit';
-	button.className='button_pageitem';
+	button.className='buttons__proceed button_pageitem';
 	button.value='{!encryption:DECRYPT;^}';
 	// Hide the form upon submission
 	add_event_listener_abstract(button,'click',function () { container.style.display='none'; return true; });

@@ -595,6 +595,7 @@ class Module_admin_config
 			'TITLE'=>$this->title,
 			'URL'=>$post_url,
 			'GROUPS'=>$groups_tempcode,
+			'SUBMIT_ICON'=>'buttons__save',
 			'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),
 		));
 	}

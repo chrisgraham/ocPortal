@@ -18,7 +18,7 @@
 			<label class="accessibility_hidden" for="search_filedump">{!SEARCH}</label>
 			<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" onkeyup="update_ajax_search_list(this,event);" type="search" id="search_filedump" name="content" style="color: gray" onblur="if (this.value=='') { this.value='{!SEARCH;}'; this.style.color='gray'; }" onfocus="if (this.value=='{!SEARCH;}') this.value=''; this.style.color='black';" value="{!SEARCH}" />
 
-			<input class="button_micro" type="submit" value="{!SEARCH}" />
+			<input class="buttons__search button_micro" type="submit" value="{!SEARCH}" />
 		</p>
 	</form>
 {+END}

@@ -222,7 +222,7 @@ class Hook_addon_registry_core_abstract_components
 				'IMMEDIATE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
-				'IMG'=>'edit'
+				'IMG'=>'buttons__edit'
 			)), NULL, '', true)
 		);
 	}
@@ -307,13 +307,12 @@ class Hook_addon_registry_core_abstract_components
 	 */
 	function tpl_preview__screen_button()
 	{
-		$img="login";
 		return array(
 			lorem_globalise(do_lorem_template('SCREEN_BUTTON',array(
 				'IMMEDIATE'=>true,
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
-				'IMG'=>$img
+				'IMG'=>'buttons__proceed',
 			)), NULL, '', true)
 		);
 	}

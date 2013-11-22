@@ -32,6 +32,6 @@
 	 </div>
 
 	<p class="proceed_button">
-		<input class="button_page" type="submit" value="{!I_AGREE}" />
+		<input class="buttons__proceed button_page" type="submit" value="{!I_AGREE}" />
 	</p>
 </form>

@@ -152,6 +152,7 @@ class Hook_pointstore_forwarding
 			'ACTION'=>do_lang_tempcode('TITLE_NEWFORWARDING'),
 			'TEXT'=>paragraph(do_lang_tempcode('ADDRESSES_ABOUT')),
 			'URL'=>$newfor_url,
+			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),
 			'FIELDS'=>$fields,
 		));
