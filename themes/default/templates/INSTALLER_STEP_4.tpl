@@ -16,7 +16,7 @@
 		</div>
 
 		<p class="proceed_button">
-			<input class="buttons__proceed button_page" type="submit" value="{!INSTALL} ocPortal" />
+			<input class="buttons__proceed button_screen" type="submit" value="{!INSTALL} ocPortal" />
 		</p>
 	</div>
 </form>

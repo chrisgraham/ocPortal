@@ -50,7 +50,7 @@
 				{WIKI_TREE}
 			</select>
 
-			<input class="menu___generic_admin__add_to_category button_pageitem" type="button" value="{!ADD}" onclick="if (this.form.elements['tree'].value!='') document.getElementById('children').value+=this.form.elements['tree'].value+'\n'" />
+			<input class="menu___generic_admin__add_to_category button_screen_item" type="button" value="{!ADD}" onclick="if (this.form.elements['tree'].value!='') document.getElementById('children').value+=this.form.elements['tree'].value+'\n'" />
 		{+END}{+END}
 	</div>
 </form>

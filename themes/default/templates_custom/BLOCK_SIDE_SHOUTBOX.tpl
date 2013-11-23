@@ -1,3 +1,5 @@
+{$REQUIRE_CSS,shoutbox}
+
 <section class="box box___block_side_shoutbox" role="marquee"><div class="box_inner">
 	<h3>{!SHOUTBOX}</h3>
 

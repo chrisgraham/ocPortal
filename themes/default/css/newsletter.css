@@ -6,3 +6,13 @@
 .box___newsletter_confirm_wrap, textarea#chosen_categories {
 	font-family: courier, monospace;
 }
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.menu__site_meta__newsletters {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/newsletters}');
+}

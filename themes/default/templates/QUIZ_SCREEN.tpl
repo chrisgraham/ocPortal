@@ -44,7 +44,7 @@
 		</table></div>
 
 		<p class="proceed_button">
-			<input accesskey="u" class="buttons__save button_page" type="submit" value="{!SAVE}" />
+			<input accesskey="u" class="buttons__save button_screen" type="submit" value="{!SAVE}" />
 		</p>
 	</div>
 </form>

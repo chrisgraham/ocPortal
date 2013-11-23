@@ -431,7 +431,7 @@ function delete_menu_branch(ob)
 
 	if ((typeof window.showModalDialog!='undefined'{+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END}) || (ob.form.elements['branch_type_'+id]!='page'))
 	{
-		var choices=['{!INPUTSYSTEM_CANCEL;^}','{!DELETE;^}','{!menus:MOVETO_MENU;^}'];
+		var choices={button__cancel: '{!INPUTSYSTEM_CANCEL;^}',menu___generic_admin__delete: '{!DELETE;^}',buttons__move: '{!menus:MOVETO_MENU;^}'};
 		generate_question_ui(
 			'{!CONFIRM_DELETE_LINK_NICE;^,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
 			choices,
@@ -444,10 +444,10 @@ function delete_menu_branch(ob)
 					delete_branch('branch_wrap_'+ob.name.substr(4,ob.name.length));
 				} else if (result.toLowerCase()=='{!menus:MOVETO_MENU;^}'.toLowerCase())
 				{
-					var choices=['{!INPUTSYSTEM_CANCEL;^}'];
+					var choices={buttons__cancel: '{!INPUTSYSTEM_CANCEL;^}'};
 					for (var i=0;i<window.all_menus.length;i++)
 					{
-						choices.push(window.all_menus[i]);
+						choices['button__choose___'+i]=window.all_menus[i];
 					}
 					generate_question_ui(
 						'{!menus:CONFIRM_MOVE_LINK_NICE;^,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),

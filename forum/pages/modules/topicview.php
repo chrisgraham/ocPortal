@@ -591,7 +591,7 @@ class Module_topicview
 				$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('INVITE_MEMBER_TO_PT'),'url'=>$invite_url,'img'=>'menu___generic_admin__add_to_category');
 			}
 		}
-		$buttons=ocf_screen_button_wrap($button_array);
+		$buttons=ocf_button_screen_wrap($button_array);
 
 		// Poll
 		if (array_key_exists('poll',$topic_info))
@@ -731,7 +731,7 @@ class Module_topicview
 				'MORE_URL'=>$more_url,
 				'COMMENT_URL'=>$post_url,
 				'TITLE'=>do_lang_tempcode('QUICK_REPLY'),
-				'SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),
+				'SUBMIT_NAME'=>do_lang_tempcode('REPLY'),
 			));
 		} else $quick_reply=new ocp_tempcode();
 
@@ -868,7 +868,7 @@ class Module_topicview
 			'QUICK_REPLY'=>$quick_reply,
 			'BREADCRUMBS'=>$this->breadcrumbs,
 			'POLL'=>$poll,
-			'SCREEN_BUTTONS'=>$buttons,
+			'BUTTON_SCREENS'=>$buttons,
 			'POSTS'=>$posts,
 			'THREADED'=>$threaded,
 			'FORUM_ID'=>is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']),

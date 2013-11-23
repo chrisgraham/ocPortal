@@ -1304,7 +1304,7 @@ th.meta_data_title {
 	padding: 0.4em 0.8em 0.4em 0.3em;
 	width: 100%;
 }
-.box_inner>h2>.right .button_page {
+.box_inner>h2>.right .button_screen {
 	vertical-align: top;
 }
 
@@ -2876,14 +2876,14 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	color: {$GET,slightly_seeded_text} !important;
 }
 
-.button_pageitem_tall {
+.button_screen_item_tall {
 	background-image: none !important;
 }
 
-.wide_button, .button_micro, .button_page, .button_pageitem, .hero_section .hero_button a {
+.wide_button, .button_micro, .button_screen, .button_screen_item, .hero_section .hero_button a {
 	display: inline-block;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
-	border: 2px solid {$GET,dark_border};
+	border: 1px solid {$GET,dark_border};
 	{$BETA_CSS_PROPERTY,border-radius: 6px;}
 	margin: 0 0.25em;
 	{$BETA_CSS_PROPERTY,box-shadow: 0 0 5px {$GET,standard_border};}
@@ -2899,38 +2899,43 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	cursor: pointer;
 }
 
-.wide_button, .button_page {
-	padding: 7px 35px 7px 7px;
+.wide_button, .button_screen {
+	padding: 6px 39px 7px 7px;
+	border-width: 2px;
+	font-size: 13px;
 }
-.buttons__previous.button_page, .buttons__previous_none.button_page {
-	padding: 7px 7px 7px 35px !important;
+.buttons__previous.button_screen, .buttons__previous_none.button_screen {
+	padding: 6px 7px 7px 39px !important;
 	background-position: left 7px top 3px !important;
 }
-.button_pageitem {
-	padding: 3px 29px 3px 7px;
-	background-size: 20px;
+.button_screen_item {
+	padding: 3px 33px 4px 7px;
+	background-position: right 7px top 3px;
+	background-size: 18px;
+	font-size: 13px;
 }
-.button_page {
-	min-width: {$?,{$MOBILE},5.8,9.8}em;
+.button_screen {
+	min-width: {$?,{$MOBILE},5.8,8}em;
 }
 .button_micro {
 	padding: 0 3px 1px 3px;
 	background-image: none !important; /* Too loud for such a small space */
-	font-size: 0.9em;
+	font-size: 11px;
+	margin: 1px 0.25em 0 0.25em; /* Push it up a bit due to confined space */
 }
 
-.button_page, .button_pageitem, .button_micro, .wide_button, .toggleable_tray_button img {
+.button_screen, .button_screen_item, .button_micro, .wide_button, .toggleable_tray_button img {
 	{$BETA_CSS_PROPERTY,opacity: 0.85;}
 	display: inline-block;
 }
-.wide_button:hover, .button_micro:hover, .button_page:hover, .button_pageitem:hover {
+.wide_button:hover, .button_micro:hover, .button_screen:hover, .button_screen_item:hover {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
-.button_page:hover, .button_pageitem:hover, .button_micro:hover, .wide_button:hover, .toggleable_tray_button:hover img,
-body.touch_enabled .button_page, body.touch_enabled .button_pageitem, body.touch_enabled .button_micro, body.touch_enabled .wide_button, body.touch_enabled .toggleable_tray_button img {
+.button_screen:hover, .button_screen_item:hover, .button_micro:hover, .wide_button:hover, .toggleable_tray_button:hover img,
+body.touch_enabled .button_screen, body.touch_enabled .button_screen_item, body.touch_enabled .button_micro, body.touch_enabled .wide_button, body.touch_enabled .toggleable_tray_button img {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} /* Needed for Opera */
 }
-.wide_button:disabled, .button_micro:disabled, .button_page:disabled, .button_pageitem:disabled {
+.wide_button:disabled, .button_micro:disabled, .button_screen:disabled, .button_screen_item:disabled {
 	{$BETA_CSS_PROPERTY,opacity: 0.4 !important;}
 	cursor: default;
 }
@@ -2987,32 +2992,23 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 .buttons__sort {
 	background-image: url('{$IMG,icons/24x24/buttons/sort}');
 }
-.buttons__add_ticket {
-	background-image: url('{$IMG,icons/24x24/buttons/add_ticket}');
-}
 .buttons__all {
 	background-image: url('{$IMG,icons/24x24/buttons/all}');
 }
 .buttons__all2 {
 	background-image: url('{$IMG,icons/24x24/buttons/all2}');
 }
+.buttons__convert {
+	background-image: url('{$IMG,icons/24x24/buttons/convert}');
+}
+.buttons__thumbnail {
+	background-image: url('{$IMG,icons/24x24/buttons/thumbnail}');
+}
+.buttons__fullsize {
+	background-image: url('{$IMG,icons/24x24/buttons/fullsize}');
+}
 .buttons__calculate {
 	background-image: url('{$IMG,icons/24x24/buttons/calculate}');
-}
-.buttons__cart_add {
-	background-image: url('{$IMG,icons/24x24/buttons/cart_add}');
-}
-.buttons__cart_checkout {
-	background-image: url('{$IMG,icons/24x24/buttons/cart_checkout}');
-}
-.buttons__cart_empty {
-	background-image: url('{$IMG,icons/24x24/buttons/cart_empty}');
-}
-.buttons__cart_update {
-	background-image: url('{$IMG,icons/24x24/buttons/cart_update}');
-}
-.buttons__cart_view {
-	background-image: url('{$IMG,icons/24x24/buttons/cart_view}');
 }
 .buttons__changes {
 	background-image: url('{$IMG,icons/24x24/buttons/changes}');
@@ -3035,38 +3031,14 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 .buttons__edit {
 	background-image: url('{$IMG,icons/24x24/buttons/edit}');
 }
-.buttons__edit_tree {
-	background-image: url('{$IMG,icons/24x24/buttons/edit_tree}');
-}
-.buttons__forum {
-	background-image: url('{$IMG,icons/24x24/buttons/forum}');
-}
 .buttons__goto {
 	background-image: url('{$IMG,icons/24x24/buttons/goto}');
-}
-.buttons__history {
-	background-image: url('{$IMG,icons/24x24/buttons/history}');
-}
-.buttons__ignore {
-	background-image: url('{$IMG,icons/24x24/buttons/ignore}');
-}
-.buttons__mark_read_forum {
-	background-image: url('{$IMG,icons/24x24/buttons/mark_read_forum}');
-}
-.buttons__mark_unread_topic {
-	background-image: url('{$IMG,icons/24x24/buttons/mark_unread_topic}');
 }
 .buttons__more {
 	background-image: url('{$IMG,icons/24x24/buttons/more}');
 }
 .buttons__move {
 	background-image: url('{$IMG,icons/24x24/buttons/move}');
-}
-.buttons__new_post_full {
-	background-image: url('{$IMG,icons/24x24/buttons/new_post_full}');
-}
-.buttons__new_topic {
-	background-image: url('{$IMG,icons/24x24/buttons/new_topic}');
 }
 .buttons__no {
 	background-image: url('{$IMG,icons/24x24/buttons/no}');
@@ -3086,9 +3058,6 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 .buttons__cancel {
 	background-image: url('{$IMG,icons/24x24/buttons/cancel}');
 }
-.buttons__points {
-	background-image: url('{$IMG,icons/24x24/buttons/points}');
-}
 .buttons__next {
 	background-image: url('{$IMG,icons/24x24/buttons/next}');
 }
@@ -3104,14 +3073,11 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 .buttons__new_comment {
 	background-image: url('{$IMG,icons/24x24/buttons/new_comment}');
 }
-.buttons__new_quote {
-	background-image: url('{$IMG,icons/24x24/buttons/new_quote}');
+.buttons__new_reply {
+	background-image: url('{$IMG,icons/24x24/buttons/new_reply}');
 }
 .buttons__redirect {
 	background-image: url('{$IMG,icons/24x24/buttons/redirect}');
-}
-.buttons__new_reply {
-	background-image: url('{$IMG,icons/24x24/buttons/new_reply}');
 }
 .buttons__report {
 	background-image: url('{$IMG,icons/24x24/buttons/report}');
@@ -3131,29 +3097,14 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 .buttons__send {
 	background-image: url('{$IMG,icons/24x24/buttons/send}');
 }
-.buttons__slideshow {
-	background-image: url('{$IMG,icons/24x24/buttons/slideshow}');
-}
-.buttons__new_reply_staff_only {
-	background-image: url('{$IMG,icons/24x24/buttons/new_reply_staff_only}');
-}
-.buttons__linear {
-	background-image: url('{$IMG,icons/24x24/buttons/linear}');
-}
-.buttons__threaded {
-	background-image: url('{$IMG,icons/24x24/buttons/threaded}');
-}
 .buttons__upload {
 	background-image: url('{$IMG,icons/24x24/buttons/upload}');
 }
-.buttons__menu__adminzone__audit__validate {
-	background-image: url('{$IMG,icons/24x24/menu/adminzone/audit/validate}');
+.menu__adminzone__audit__unvalidated {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/audit/unvalidated}');
 }
 .buttons__vote {
 	background-image: url('{$IMG,icons/24x24/buttons/vote}');
-}
-.buttons__whisper {
-	background-image: url('{$IMG,icons/24x24/buttons/whisper}');
 }
 .feedback__rate {
 	background-image: url('{$IMG,icons/24x24/feedback/rate}');
@@ -3197,56 +3148,11 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 .menu___generic_admin__view_archive {
 	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/view_archive}');
 }
-.menu___generic_spare__8 {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_spare/8}');
-}
-.menu__adminzone__audit__ecommerce__subscriptions {
-	background-image: url('{$IMG,icons/24x24/menu/adminzone/audit/ecommerce/subscriptions}');
-}
-.menu__adminzone__structure__forum__multi_moderations {
-	background-image: url('{$IMG,icons/24x24/menu/adminzone/structure/forum/multi_moderations}');
-}
-.menu__adminzone__tools__cleanup {
-	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools/cleanup}');
-}
-.menu__adminzone__tools__upgrade {
-	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools/upgrade}');
-}
-.menu__cms__catalogues__add_one_catalogue {
-	background-image: url('{$IMG,icons/24x24/menu/cms/catalogues/add_one_catalogue}');
-}
-.menu__cms__catalogues__edit_this_catalogue {
-	background-image: url('{$IMG,icons/24x24/menu/cms/catalogues/edit_this_catalogue}');
-}
-.menu__rich_content__catalogues__products {
-	background-image: url('{$IMG,icons/24x24/menu/rich_content/catalogues/products}');
-}
-.menu__rich_content__ecommerce__purchase {
-	background-image: url('{$IMG,icons/24x24/menu/rich_content/ecommerce/purchase}');
-}
-.menu__site_meta__newsletters {
-	background-image: url('{$IMG,icons/24x24/menu/site_meta/newsletters}');
-}
-.menu__site_meta__recommend {
-	background-image: url('{$IMG,icons/24x24/menu/site_meta/recommend}');
-}
 .menu__site_meta__user_actions__join {
 	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/join}');
 }
 .menu__site_meta__user_actions__login {
 	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/login}');
-}
-.menu__site_meta__user_actions__lost_password {
-	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/lost_password}');
-}
-.menu__social__chat__chat {
-	background-image: url('{$IMG,icons/24x24/menu/social/chat/chat}');
-}
-.menu__social__chat__sound {
-	background-image: url('{$IMG,icons/24x24/menu/social/chat/sound}');
-}
-.tabs__member_account__warnings {
-	background-image: url('{$IMG,icons/24x24/tabs/member_account/warnings}');
 }
 .tabs__preview {
 	background-image: url('{$IMG,icons/24x24/tabs/preview}');

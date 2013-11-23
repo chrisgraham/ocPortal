@@ -23,7 +23,7 @@
 						{+START,IF_NON_EMPTY,{GROUPS}}
 							<div class="usergroups ocf_group_colours">
 								<p>
-									<span class="field_name">{!USERGROUPS}:</span>
+									<span class="field_name">{!USERGROUPS}:&nbsp;</span>
 								</p>
 								<ul class="horizontal_links_comma">
 									{+START,LOOP,GROUPS}

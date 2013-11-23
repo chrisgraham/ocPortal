@@ -137,6 +137,10 @@ table.points_summary_table .answer {
 	vertical-align: middle;
 }
 
+.leader_board_rank {
+	display: none;
+}
+
 /* Point store */
 
 .pointstore_item_tag {
@@ -145,4 +149,14 @@ table.points_summary_table .answer {
 
 .pointstore_welcome {
 	text-align: center;
+}
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.buttons__points {
+	background-image: url('{$IMG,icons/24x24/buttons/points}');
 }

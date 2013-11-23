@@ -1925,7 +1925,7 @@ class Module_topics
 		if (!$topic_posts->is_empty()) $topic_posts=do_template('OCF_POSTING_SCREEN_POSTS',array('_GUID'=>'3d3b14cf3a48b2a16eed5b1bd92b1187','POSTS'=>$topic_posts));
 
 		if (is_object($post)) $post=$post->evaluate();
-		$posting_form=get_posting_form(do_lang('MAKE_POST'),'buttons__new_reply',$post,$post_url,$hidden_fields,$specialisation,NULL,$topic_posts->evaluate(),$specialisation2,NULL,$this->_post_javascript());
+		$posting_form=get_posting_form(do_lang('REPLY'),'buttons__new_reply',$post,$post_url,$hidden_fields,$specialisation,NULL,$topic_posts->evaluate(),$specialisation2,NULL,$this->_post_javascript());
 
 		$title=get_screen_title('_ADD_POST',true,array(escape_html($topic_title)));
 

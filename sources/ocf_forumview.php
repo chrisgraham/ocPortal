@@ -337,7 +337,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 			$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_TOPIC'),'url'=>$new_topic_url,'img'=>'buttons__new_topic');
 		}
 	}
-	$buttons=ocf_screen_button_wrap($button_array);
+	$buttons=ocf_button_screen_wrap($button_array);
 
 	$starter_title=($type=='pt')?do_lang_tempcode('WITH_TITLING'):new ocp_tempcode();
 
@@ -569,20 +569,20 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 	{
 		$first_unread_url=build_url(array('page'=>'topicview','id'=>$topic['id'],'type'=>'first_unread'),get_module_zone('topicview'));
 		$first_unread_url->attach('#first_unread');
-		$topic_row_links->attach(do_template('OCF_TOPIC_ROW_LINK',array('_GUID'=>'6f52881ed999f4c543c9d8573b37fa48','URL'=>$first_unread_url,'IMG'=>'unread','ALT'=>do_lang_tempcode('JUMP_TO_FIRST_UNREAD'))));
+		$topic_row_links->attach(do_template('OCF_FORUM_TOPIC_ROW_LINK',array('_GUID'=>'6f52881ed999f4c543c9d8573b37fa48','URL'=>$first_unread_url,'IMG'=>'unread','ALT'=>do_lang_tempcode('JUMP_TO_FIRST_UNREAD'))));
 	}
 	$topic_row_modifiers=new ocp_tempcode();
 	foreach ($modifiers as $modifier)
 	{
 		if ($modifier!='unread')
 		{
-			$topic_row_modifiers->attach(do_template('OCF_TOPIC_ROW_MODIFIER',array('_GUID'=>'fbcb8791b571187fd699aa6796c3f401','IMG'=>$modifier,'ALT'=>do_lang_tempcode('MODIFIER_'.$modifier))));
+			$topic_row_modifiers->attach(do_template('OCF_FORUM_TOPIC_ROW_MODIFIER',array('_GUID'=>'fbcb8791b571187fd699aa6796c3f401','IMG'=>$modifier,'ALT'=>do_lang_tempcode('MODIFIER_'.$modifier))));
 		}
 	}
 
 	// Emoticon
-	if ($topic['emoticon']!='') $emoticon=do_template('OCF_TOPIC_EMOTICON',array('_GUID'=>'dfbe0e4a11b3caa4d2da298ff23ca221','EMOTICON'=>$topic['emoticon']));
-	else $emoticon=do_template('OCF_TOPIC_EMOTICON_NONE');
+	if ($topic['emoticon']!='') $emoticon=do_template('OCF_FORUM_TOPIC_EMOTICON',array('_GUID'=>'dfbe0e4a11b3caa4d2da298ff23ca221','EMOTICON'=>$topic['emoticon']));
+	else $emoticon=do_template('OCF_FORUM_TOPIC_EMOTICON_NONE');
 
 	if ((!is_null($topic['first_member_id'])) && (!is_guest($topic['first_member_id'])))
 	{

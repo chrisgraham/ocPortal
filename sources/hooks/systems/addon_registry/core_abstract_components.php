@@ -100,8 +100,8 @@ class Hook_addon_registry_core_abstract_components
 			'themes/default/templates/IMG_THUMB.tpl',
 			'themes/default/templates/POST.tpl',
 			'themes/default/templates/POST_CHILD_LOAD_LINK.tpl',
-			'themes/default/templates/SCREEN_BUTTON.tpl',
-			'themes/default/templates/SCREEN_ITEM_BUTTON.tpl',
+			'themes/default/templates/BUTTON_SCREEN.tpl',
+			'themes/default/templates/BUTTON_SCREEN_ITEM.tpl',
 			'themes/default/templates/STANDARDBOX_default.tpl',
 			'themes/default/templates/STANDARDBOX_accordion.tpl',
 			'themes/default/templates/REVISION_HISTORY_LINE.tpl',
@@ -131,12 +131,12 @@ class Hook_addon_registry_core_abstract_components
 			'REVISION_HISTORY_LINE.tpl'=>'administrative__show_revision_history',
 			'REVISION_HISTORY_WRAP.tpl'=>'administrative__show_revision_history',
 			'REVISION_RESTORE.tpl'=>'administrative__revision_restore',
-			'SCREEN_ITEM_BUTTON.tpl'=>'screen_item_button',
+			'BUTTON_SCREEN_ITEM.tpl'=>'button_screen_item',
 			'FRACTIONAL_EDIT.tpl'=>'administrative__fractional_edit',
 			'CROP_TEXT_MOUSE_OVER_INLINE.tpl'=>'crop_text_mouse_over_inline',
 			'IMG_THUMB.tpl'=>'img_thumb',
 			'CROP_TEXT_MOUSE_OVER.tpl'=>'crop_text_mouse_over',
-			'SCREEN_BUTTON.tpl'=>'screen_button',
+			'BUTTON_SCREEN.tpl'=>'button_screen',
 			'STANDARDBOX_default.tpl'=>'standardbox_default',
 			'STANDARDBOX_accordion.tpl'=>'standardbox_accordion',
 			'HANDLE_CONFLICT_RESOLUTION.tpl'=>'administrative__handle_conflict_resolution',
@@ -214,14 +214,15 @@ class Hook_addon_registry_core_abstract_components
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__screen_item_button()
+	function tpl_preview__button_screen_item()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SCREEN_ITEM_BUTTON',array(
+			lorem_globalise(do_lorem_template('BUTTON_SCREEN_ITEM',array(
 				'REL'=>lorem_phrase(),
 				'IMMEDIATE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
+				'TITLE_FULL'=>lorem_phrase(),
 				'IMG'=>'buttons__edit'
 			)), NULL, '', true)
 		);
@@ -305,10 +306,10 @@ class Hook_addon_registry_core_abstract_components
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__screen_button()
+	function tpl_preview__button_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('SCREEN_BUTTON',array(
+			lorem_globalise(do_lorem_template('BUTTON_SCREEN',array(
 				'IMMEDIATE'=>true,
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),

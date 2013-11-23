@@ -23,7 +23,7 @@
 		{FIELDS}
 
 		<p class="proceed_button">
-			<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__proceed button_page" type="submit" value="{!PROCEED}" />
+			<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__proceed button_screen" type="submit" value="{!PROCEED}" />
 		</p>
 	</div>
 </form>

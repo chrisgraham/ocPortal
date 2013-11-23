@@ -40,7 +40,7 @@ echo <<<END
 	</p>
 	<p>(example above is for upgrading from 4.3.2 beta1)</p>
 	<p>
-		<input class="buttons__proceed button_pageitem" id="make_upgrader_button" type="submit" value="Generate" />
+		<input class="buttons__proceed button_screen_item" id="make_upgrader_button" type="submit" value="Generate" />
 	</p>
 </form>
 END;

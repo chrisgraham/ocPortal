@@ -12,7 +12,7 @@
 <div class="right">
 	<form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
 		<p>
-			<input class="menu___generic_admin__delete button_page" type="submit" value="{!PROCEED}" />
+			<input class="menu___generic_admin__delete button_screen" type="submit" value="{!PROCEED}" />
 			<input type="hidden" name="name" value="{NAME*}" />
 		</p>
 	</form>

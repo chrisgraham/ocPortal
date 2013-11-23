@@ -417,3 +417,19 @@
 	padding: 0 1em;
 	margin-left: -1em;*/
 }
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.buttons__ignore {
+	background-image: url('{$IMG,icons/24x24/buttons/ignore}');
+}
+.menu__social__chat__chat {
+	background-image: url('{$IMG,icons/24x24/menu/social/chat/chat}');
+}
+.menu__social__chat__sound {
+	background-image: url('{$IMG,icons/24x24/menu/social/chat/sound}');
+}

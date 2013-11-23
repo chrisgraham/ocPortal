@@ -209,14 +209,14 @@ function ocf_find_birthdays($time=NULL)
  * @param  array		List of maps (each map contains: url, img, title).
  * @return tempcode  The button panel.
  */
-function ocf_screen_button_wrap($buttons)
+function ocf_button_screen_wrap($buttons)
 {
 	if (count($buttons)==0) return new ocp_tempcode();
 
 	$b=new ocp_tempcode();
 	foreach ($buttons as $button)
 	{
-		$b->attach(do_template('SCREEN_BUTTON',array('_GUID'=>'bdd441c40c5b03134ce6541335fece2c','REL'=>array_key_exists('rel',$button)?$button['rel']:NULL,'IMMEDIATE'=>$button['immediate'],'URL'=>$button['url'],'IMG'=>$button['img'],'TITLE'=>$button['title'])));
+		$b->attach(do_template('BUTTON_SCREEN',array('_GUID'=>'bdd441c40c5b03134ce6541335fece2c','REL'=>array_key_exists('rel',$button)?$button['rel']:NULL,'IMMEDIATE'=>$button['immediate'],'URL'=>$button['url'],'IMG'=>$button['img'],'TITLE'=>$button['title'])));
 	}
 	return $b;
 }

@@ -126,6 +126,7 @@ class Hook_addon_registry_recommend
 			'themes/default/templates/BLOCK_MAIN_SCREEN_ACTIONS.tpl',
 			'sources/hooks/systems/config/enable_csv_recommend.php',
 			'sources/hooks/systems/page_groupings/recommend.php',
+			'themes/default/css/recommend.css',
 		);
 	}
 

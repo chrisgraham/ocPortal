@@ -109,7 +109,7 @@
 			</div>
 
 			<div class="chat_options">
-				<input class="buttons__proceed button_pageitem" onclick="var form=this.form; window.fauxmodal_confirm('{!SAVE_COMPUTER_USING_COOKIE}',function(answer) { if (answer) form.submit(); }); return false;" type="submit" value="{!CHAT_CHANGE_OPTIONS=}" />
+				<input class="buttons__proceed button_screen_item" onclick="var form=this.form; window.fauxmodal_confirm('{!SAVE_COMPUTER_USING_COOKIE}',function(answer) { if (answer) form.submit(); }); return false;" type="submit" value="{!CHAT_CHANGE_OPTIONS=}" />
 			</div>
 		</div>
 	</div></div>

@@ -9,7 +9,7 @@
 	</div>
 
 	<p>
-		<input class="menu___generic_admin__delete button_page" type="submit" value="{!UNINSTALL}" />
+		<input class="menu___generic_admin__delete button_screen" type="submit" value="{!UNINSTALL}" />
 	</p>
 </form>
 

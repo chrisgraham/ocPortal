@@ -284,3 +284,13 @@
 	width: 100%;
 	height: 600px;
 }
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.buttons__slideshow {
+	background-image: url('{$IMG,icons/24x24/buttons/slideshow}');
+}

@@ -24,7 +24,7 @@
 
 		<div class="search_fields float_surrounder">
 			<div class="search_button">
-				<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__filter button_pageitem" type="submit" value="{!member_directory_boxes:FILTER_RESULTS}" />
+				<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__filter button_screen_item" type="submit" value="{!member_directory_boxes:FILTER_RESULTS}" />
 			</div>
 
 			{+START,LOOP,{$GET,filters_row_a}}
@@ -38,7 +38,7 @@
 		<div class="search_fields float_surrounder">
 			{+START,IF_NON_EMPTY,{$_GET,active_filter}}
 				<div class="search_button">
-					<input onclick="window.location.href='{$PAGE_LINK;*,_SELF:_SELF}';" class="buttons__clear button_pageitem" type="button" value="{!member_directory_boxes:RESET_FILTER}" />
+					<input onclick="window.location.href='{$PAGE_LINK;*,_SELF:_SELF}';" class="buttons__clear button_screen_item" type="button" value="{!member_directory_boxes:RESET_FILTER}" />
 				</div>
 			{+END}
 
@@ -86,7 +86,7 @@
 
 		<div class="float_surrounder">
 			<p class="proceed_button right">
-				<input class="buttons__send button_page" type="submit" value="{!newsletter:NEWSLETTER_SEND_TO_ALL}" />
+				<input class="buttons__send button_screen" type="submit" value="{!newsletter:NEWSLETTER_SEND_TO_ALL}" />
 			</p>
 		</div>
 	</form>

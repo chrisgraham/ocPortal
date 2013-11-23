@@ -86,7 +86,7 @@ function _toggle_wysiwyg(name,saving_cookies)
 		{
 			generate_question_ui(
 				'{!comcode:DISCARD_WYSIWYG_CHANGES_NICE;^}',
-				{cancel: '{!INPUTSYSTEM_CANCEL;^}',convert: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE_CONVERT;^}',discard: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE;^}'},
+				{button__cancel: '{!INPUTSYSTEM_CANCEL;^}',button__convert: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE_CONVERT;^}',button__no: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE;^}'},
 				'{!comcode:DISABLE_WYSIWYG;^}',
 				'{!comcode:DISCARD_WYSIWYG_CHANGES;^}',
 				function(prompt)

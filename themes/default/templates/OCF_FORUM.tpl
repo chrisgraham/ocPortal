@@ -37,7 +37,7 @@
 		{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
 			<div class="non_accessibility_redundancy">
 				<div class="float_surrounder">
-					<div class="buttons_group ocf_screen_buttons">
+					<div class="buttons_group ocf_buttons_screen">
 						{+START,IF_PASSED,ID}
 							{+START,INCLUDE,NOTIFICATION_BUTTONS}
 								NOTIFICATIONS_TYPE=ocf_topic
@@ -57,7 +57,7 @@
 
 {+START,IF,{$NOT,{$WIDE_HIGH}}}
 	<div class="float_surrounder">
-		<div class="buttons_group ocf_screen_buttons">
+		<div class="buttons_group ocf_buttons_screen">
 			{+START,IF_PASSED,ID}
 				{+START,INCLUDE,NOTIFICATION_BUTTONS}
 					NOTIFICATIONS_TYPE=ocf_topic

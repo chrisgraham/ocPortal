@@ -226,19 +226,21 @@ class Hook_addon_registry_wiki
 	{
 		require_lang('ocf');
 		$extra=new ocp_tempcode();
-		$extra=do_lorem_template('SCREEN_ITEM_BUTTON',array(
+		$extra=do_lorem_template('BUTTON_SCREEN_ITEM',array(
 			'REL'=>'edit',
 			'IMMEDIATE'=>false,
 			'URL'=>placeholder_url(),
 			'TITLE'=>do_lang_tempcode('EDIT'),
+			'TITLE_FULL'=>do_lang_tempcode('EDIT'),
 			'IMG'=>'buttons__edit'
 		));
 
-		$extra->attach(do_lorem_template('SCREEN_ITEM_BUTTON',array(
+		$extra->attach(do_lorem_template('BUTTON_SCREEN_ITEM',array(
 			'REL'=>'move',
 			'IMMEDIATE'=>false,
 			'URL'=>placeholder_url(),
 			'TITLE'=>do_lang_tempcode('MOVE'),
+			'TITLE_FULL'=>do_lang_tempcode('MOVE'),
 			'IMG'=>'buttons__move'
 		)));
 

@@ -198,8 +198,8 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/templates/OCF_POSTING_SCREEN_POSTS.tpl',
 			'themes/default/templates/OCF_QUOTE_FCOMCODE.tpl',
 			'themes/default/templates/BLOCK_MAIN_BOTTOM_BAR.tpl',
-			'themes/default/templates/OCF_TOPIC_EMOTICON.tpl',
-			'themes/default/templates/OCF_TOPIC_EMOTICON_NONE.tpl',
+			'themes/default/templates/OCF_FORUM_TOPIC_EMOTICON.tpl',
+			'themes/default/templates/OCF_FORUM_TOPIC_EMOTICON_NONE.tpl',
 			'themes/default/templates/OCF_TOPIC_FIRST_UNREAD.tpl',
 			'themes/default/templates/OCF_TOPIC_MARKER.tpl',
 			'themes/default/templates/OCF_TOPIC_POLL.tpl',
@@ -210,8 +210,8 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/templates/OCF_TOPIC_POLL_VIEW_RESULTS.tpl',
 			'themes/default/templates/OCF_TOPIC_POST.tpl',
 			'themes/default/templates/OCF_MEMBER_BOX_CUSTOM_FIELD.tpl',
-			'themes/default/templates/OCF_TOPIC_ROW_LINK.tpl',
-			'themes/default/templates/OCF_TOPIC_ROW_MODIFIER.tpl',
+			'themes/default/templates/OCF_FORUM_TOPIC_ROW_LINK.tpl',
+			'themes/default/templates/OCF_FORUM_TOPIC_ROW_MODIFIER.tpl',
 			'themes/default/templates/OCF_TOPIC_SCREEN.tpl',
 			'themes/default/templates/OCF_WHISPER_CHOICE_SCREEN.tpl',
 			'themes/default/templates/BLOCK_SIDE_OCF_PRIVATE_TOPICS.tpl',
@@ -374,10 +374,10 @@ class Hook_addon_registry_ocf_forum
 			'BLOCK_MAIN_PT_NOTIFICATIONS.tpl'=>'block_pt_notifications',
 			'OCF_NOTIFICATION.tpl'=>'block_pt_notifications',
 			'OCF_FORUM_TOPIC_ROW_LAST_POST.tpl'=>'ocf_forum',
-			'OCF_TOPIC_ROW_LINK.tpl'=>'ocf_forum',
-			'OCF_TOPIC_ROW_MODIFIER.tpl'=>'ocf_forum',
-			'OCF_TOPIC_EMOTICON.tpl'=>'ocf_forum',
-			'OCF_TOPIC_EMOTICON_NONE.tpl'=>'ocf_forum',
+			'OCF_FORUM_TOPIC_ROW_LINK.tpl'=>'ocf_forum',
+			'OCF_FORUM_TOPIC_ROW_MODIFIER.tpl'=>'ocf_forum',
+			'OCF_FORUM_TOPIC_EMOTICON.tpl'=>'ocf_forum',
+			'OCF_FORUM_TOPIC_EMOTICON_NONE.tpl'=>'ocf_forum',
 			'OCF_PT_BETWEEN.tpl'=>'ocf_forum',
 			'OCF_TOPIC_MARKER.tpl'=>'ocf_forum',
 			'OCF_FORUM_TOPIC_ROW.tpl'=>'ocf_forum',
@@ -634,12 +634,13 @@ class Hook_addon_registry_ocf_forum
 			'IS_LEADER'=>lorem_phrase()
 		));
 
-		$buttons=do_lorem_template('SCREEN_ITEM_BUTTON',array(
+		$buttons=do_lorem_template('BUTTON_SCREEN_ITEM',array(
 			'REL'=>lorem_word(),
 			'IMMEDIATE'=>false,
 			'IMG'=>'buttons__proceed',
-			'TITLE'=>lorem_phrase(),
-			'URL'=>placeholder_url()
+			'URL'=>placeholder_url(),
+			'TITLE_FULL'=>lorem_phrase(),
+			'TITLE'=>lorem_word(),
 		));
 
 		$map=array(
@@ -1043,7 +1044,7 @@ class Hook_addon_registry_ocf_forum
 		$buttons=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$buttons->attach(do_lorem_template('SCREEN_BUTTON',array(
+			$buttons->attach(do_lorem_template('BUTTON_SCREEN',array(
 				'REL'=>lorem_word(),
 				'URL'=>placeholder_url(),
 				'IMG'=>'buttons__proceed',
@@ -1061,21 +1062,21 @@ class Hook_addon_registry_ocf_forum
 				'ID'=>placeholder_id().strval($k)
 			));
 
-			$topic_row_links=do_lorem_template('OCF_TOPIC_ROW_LINK',array(
+			$topic_row_links=do_lorem_template('OCF_FORUM_TOPIC_ROW_LINK',array(
 				'URL'=>placeholder_url(),
 				'IMG'=>placeholder_img_code('ocf_topic_modifiers'),
 				'ALT'=>lorem_phrase()
 			));
 
-			$topic_row_modifiers=do_lorem_template('OCF_TOPIC_ROW_MODIFIER',array(
+			$topic_row_modifiers=do_lorem_template('OCF_FORUM_TOPIC_ROW_MODIFIER',array(
 				'IMG'=>placeholder_img_code('ocf_topic_modifiers'),
 				'ALT'=>lorem_phrase()
 			));
 
-			$emoticon=do_lorem_template('OCF_TOPIC_EMOTICON',array(
+			$emoticon=do_lorem_template('OCF_FORUM_TOPIC_EMOTICON',array(
 				'EMOTICON'=>'ocf_emoticons/constipated'
 			));
-			$emoticon->attach(do_lorem_template('OCF_TOPIC_EMOTICON_NONE',array()));
+			$emoticon->attach(do_lorem_template('OCF_FORUM_TOPIC_EMOTICON_NONE',array()));
 
 			$b=do_lorem_template('OCF_USER_MEMBER',array(
 				'FIRST'=>true,
@@ -1380,18 +1381,18 @@ class Hook_addon_registry_ocf_forum
 					'ID'=>placeholder_id().strval($k)
 				));
 
-				$topic_row_links=do_lorem_template('OCF_TOPIC_ROW_LINK',array(
+				$topic_row_links=do_lorem_template('OCF_FORUM_TOPIC_ROW_LINK',array(
 					'URL'=>placeholder_url(),
 					'IMG'=>placeholder_img_code('ocf_topic_modifiers'),
 					'ALT'=>lorem_phrase()
 				));
 
-				$topic_row_modifiers=do_lorem_template('OCF_TOPIC_ROW_MODIFIER',array(
+				$topic_row_modifiers=do_lorem_template('OCF_FORUM_TOPIC_ROW_MODIFIER',array(
 					'IMG'=>placeholder_img_code('ocf_topic_modifiers'),
 					'ALT'=>lorem_phrase()
 				));
 
-				$emoticon=do_lorem_template('OCF_TOPIC_EMOTICON',array(
+				$emoticon=do_lorem_template('OCF_FORUM_TOPIC_EMOTICON',array(
 					'EMOTICON'=>'ocf_emoticons/depressed'
 				));
 
@@ -1670,7 +1671,7 @@ class Hook_addon_registry_ocf_forum
 			$buttons=new ocp_tempcode();
 			foreach (placeholder_array(1) as $_k=>$_v)
 			{
-				$buttons->attach(do_lorem_template('SCREEN_BUTTON',array(
+				$buttons->attach(do_lorem_template('BUTTON_SCREEN',array(
 					'REL'=>lorem_word(),
 					'IMMEDIATE'=>NULL,
 					'URL'=>placeholder_url(),
@@ -1739,12 +1740,13 @@ class Hook_addon_registry_ocf_forum
 			$buttons=new ocp_tempcode();
 			foreach (placeholder_array(1) as $_k=>$_v)
 			{
-				$buttons->attach(do_lorem_template('SCREEN_ITEM_BUTTON',array(
+				$buttons->attach(do_lorem_template('BUTTON_SCREEN_ITEM',array(
 					'REL'=>lorem_word(),
 					'IMMEDIATE'=>'',
 					'URL'=>placeholder_url(),
 					'IMG'=>'buttons__proceed',
-					'TITLE'=>lorem_word()
+					'TITLE_FULL'=>lorem_phrase(),
+					'TITLE'=>lorem_word(),
 				)));
 			}
 
@@ -1783,7 +1785,7 @@ class Hook_addon_registry_ocf_forum
 		$buttons=new ocp_tempcode();
 		foreach (placeholder_array(1) as $k=>$v)
 		{
-			$buttons->attach(do_lorem_template('SCREEN_BUTTON',array(
+			$buttons->attach(do_lorem_template('BUTTON_SCREEN',array(
 				'REL'=>lorem_word(),
 				'IMMEDIATE'=>'',
 				'URL'=>placeholder_url(),
@@ -1809,7 +1811,7 @@ class Hook_addon_registry_ocf_forum
 			'QUICK_REPLY'=>$quick_reply,
 			'BREADCRUMBS'=>placeholder_breadcrumbs(),
 			'POLL'=>$poll,
-			'SCREEN_BUTTONS'=>$buttons,
+			'BUTTON_SCREENS'=>$buttons,
 			'POSTS'=>$posts,
 			'MAY_CHANGE_MAX'=>lorem_word(),
 			'LAST_POSTER'=>placeholder_random(),

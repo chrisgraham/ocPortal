@@ -21,7 +21,7 @@
 
 	<div class="shunted_button">
 		<form title="{!START} {!QUIZ}: {NAME*}" method="post" action="{URL*}">
-			<input class="buttons__goto button_pageitem" type="submit" value="{!START}" />
+			<input class="buttons__goto button_screen_item" type="submit" value="{!START}" />
 		</form>
 	</div>
 

@@ -60,3 +60,27 @@ table.cart_payment_summary .price {
 table.shipping_address {
 	border: 0;
 }
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.buttons__cart_add {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_add}');
+}
+.buttons__cart_checkout {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_checkout}');
+}
+.buttons__cart_empty {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_empty}');
+}
+.buttons__cart_update {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_update}');
+}
+.buttons__cart_view {
+	background-image: url('{$IMG,icons/24x24/buttons/cart_view}');
+}
+.menu__rich_content__catalogues__products {
+	background-image: url('{$IMG,icons/24x24/menu/rich_content/catalogues/products}');
+}

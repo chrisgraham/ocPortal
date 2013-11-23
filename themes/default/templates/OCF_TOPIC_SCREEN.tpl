@@ -8,13 +8,13 @@
 	{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
 		<div class="non_accessibility_redundancy">
 			<div class="float_surrounder">
-				<div class="buttons_group ocf_screen_buttons">
+				<div class="buttons_group ocf_buttons_screen">
 					{+START,INCLUDE,NOTIFICATION_BUTTONS}
 						NOTIFICATIONS_TYPE=ocf_topic
 						NOTIFICATIONS_ID={ID}
 						NOTIFICATIONS_PAGE_LINK=forum:topics:toggle_notifications_topic:{ID}
 					{+END}
-					{SCREEN_BUTTONS}
+					{BUTTON_SCREENS}
 				</div>
 			</div>
 		</div>
@@ -93,7 +93,7 @@
 							{MODERATOR_ACTIONS}
 						</select>
 						</label>
-						<input class="buttons__proceed button_pageitem" type="submit" onclick="if (document.getElementById('tma_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; }  return false;" value="{!PROCEED}" />
+						<input class="buttons__proceed button_micro" type="submit" onclick="if (document.getElementById('tma_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; }  return false;" value="{!PROCEED}" />
 					</div>
 				</form>
 			{+END}
@@ -113,7 +113,7 @@
 									{MARKED_POST_ACTIONS}
 								</select>
 								</label>
-								<input class="buttons__proceed button_pageitem" type="submit" onclick="if (!add_form_marked_posts(this.form,'mark_')) { window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />
+								<input class="buttons__proceed button_micro" type="submit" onclick="if (!add_form_marked_posts(this.form,'mark_')) { window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />
 							</div>
 						</form>
 					{+END}
@@ -136,7 +136,7 @@
 								<option value="300"{$?,{$EQ,{MAX},300}, selected="selected",}>300</option>
 							</select>
 							</label>
-							<input onclick="disable_button_just_clicked(this);" class="buttons__perpage button_pageitem" type="submit" value="{!CHANGE}" />
+							<input onclick="disable_button_just_clicked(this);" class="buttons__perpage button_screen_item" type="submit" value="{!CHANGE}" />
 						</div>
 					</form>
 				{+END}
@@ -154,7 +154,7 @@
 							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},compound_rating}}selected="selected" {+END}value="compound_rating">{!POPULARITY}</option>
 						</select>
 						</label>
-						<input type="submit" value="{!SORT}" class="buttons__sort button_pageitem" />
+						<input type="submit" value="{!SORT}" class="buttons__sort button_screen_item" />
 					</div>
 				</form>
 			{+END}
@@ -168,17 +168,17 @@
 	{+END}
 
 	<div class="float_surrounder">
-		<div class="buttons_group ocf_screen_buttons">
+		<div class="buttons_group ocf_buttons_screen">
 			{+START,INCLUDE,NOTIFICATION_BUTTONS}
 				NOTIFICATIONS_TYPE=ocf_topic
 				NOTIFICATIONS_ID={ID}
 				NOTIFICATIONS_PAGE_LINK=forum:topics:toggle_notifications_topic:{ID}
 			{+END}
-			{SCREEN_BUTTONS}
+			{BUTTON_SCREENS}
 		</div>
 
 		{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
-			<div class="non_accessibility_redundancy float_surrounder"><nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
+			<div class="non_accessibility_redundancy left"><nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
 				<p class="breadcrumbs">
 					<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
 					{BREADCRUMBS}

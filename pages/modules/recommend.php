@@ -225,6 +225,8 @@ class Module_recommend
 	{
 		require_code('form_templates');
 
+		require_css('recommend');
+
 		$page_title=get_param('page_title',NULL,true);
 
 		$submit_name=(!is_null($page_title))?make_string_tempcode($page_title):do_lang_tempcode('SEND');

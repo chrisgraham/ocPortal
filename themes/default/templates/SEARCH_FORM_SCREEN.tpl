@@ -150,7 +150,7 @@
 			</table></div>
 
 			<p class="proceed_button">
-				<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__search button_page" type="submit" value="{!SEARCH_TITLE}" />
+				<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__search button_screen" type="submit" value="{!SEARCH_TITLE}" />
 			</p>
 		</form>
 	</div>
@@ -169,7 +169,7 @@
 			<div class="google_search_button">
 				<input type="hidden" name="as_sitesearch" value="{$BASE_URL*}" />
 				<div class="accessibility_hidden"><label for="q">{!SEARCH}</label></div>
-				<input type="text" id="q" name="q" value="{!SEARCH_FOR}" />  <input onclick="disable_button_just_clicked(this);" class="buttons__search button_pageitem" type="submit" />
+				<input type="text" id="q" name="q" value="{!SEARCH_FOR}" />  <input onclick="disable_button_just_clicked(this);" class="buttons__search button_screen_item" type="submit" />
 			</div>
 		</div></div>
 	</form>

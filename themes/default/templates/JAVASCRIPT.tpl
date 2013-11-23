@@ -471,16 +471,13 @@ function handle_textarea_scrolling()
 function generate_question_ui(message,button_set,window_title,fallback_message,callback)
 {
 	var image_set=[];
-	if (typeof button_set.length=='undefined')
+	var new_button_set=[];
+	for (var s in button_set)
 	{
-		var new_button_set=[];
-		for (var s in button_set)
-		{
-			new_button_set.push(button_set[s]);
-			image_set.push(s);
-		}
-		button_set=new_button_set;
+		new_button_set.push(button_set[s]);
+		image_set.push(s);
 	}
+	button_set=new_button_set;
 
 	if ((typeof window.showModalDialog!='undefined'){+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END})
 	{

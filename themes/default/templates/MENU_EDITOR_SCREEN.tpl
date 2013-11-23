@@ -32,7 +32,7 @@
 			</div>
 
 			<p class="proceed_button">
-				<input accesskey="u" class="buttons__save button_page" type="submit" value="{!SAVE}" onclick="if (validate_menu('{!MISSING_CAPTION_ERROR;}','{!MISSING_URL_ERROR;}')) { disable_button_just_clicked(this); return true; } else return false;" />
+				<input accesskey="u" class="buttons__save button_screen" type="submit" value="{!SAVE}" onclick="if (validate_menu('{!MISSING_CAPTION_ERROR;}','{!MISSING_URL_ERROR;}')) { disable_button_just_clicked(this); return true; } else return false;" />
 			</p>
 		</div>
 
@@ -95,7 +95,7 @@
 				<p class="proceed_button">
 					<input type="hidden" name="confirm" value="1" />
 
-					<input class="menu___generic_admin__delete button_pageitem" type="submit" value="{!DELETE}" onclick="var form=this.form; window.fauxmodal_confirm('{!CONFIRM_DELETE;,{MENU_NAME*}}',function(answer) { if (answer) form.submit(); }); return false;" />
+					<input class="menu___generic_admin__delete button_screen_item" type="submit" value="{!DELETE}" onclick="var form=this.form; window.fauxmodal_confirm('{!CONFIRM_DELETE;,{MENU_NAME*}}',function(answer) { if (answer) form.submit(); }); return false;" />
 				</p>
 			</form>
 		</div>

@@ -142,6 +142,7 @@ After installing this addon your shout box will essentially be treated as an emb
 			'themes/default/templates_custom/JAVASCRIPT_TEXT_GHOSTS.tpl',
 			'sources_custom/blocks/side_shoutbox.php',
 			'themes/default/templates_custom/BLOCK_SIDE_SHOUTBOX.tpl',
+			'themes/default/css_custom/shoutbox.css',
 		);
 	}
 }

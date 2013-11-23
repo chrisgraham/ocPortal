@@ -108,7 +108,7 @@ function phase_0()
 			<input type="checkbox" name="skip" id="skip" value="1" '.$skip_check.' /><label for="skip">Installer already compiled</label>
 			<input type="checkbox" name="bleeding_edge" '.(((strpos($release_description,'patch release')===false) && (strpos($release_description,'gold')===false))?'checked="checked" ':'').'id="bleeding_edge" value="1" /><label for="bleeding_edge">Bleeding-edge release</label>
 			<input type="checkbox" name="old_tree" id="old_tree" value="1" /><label for="old_tree">Older-tree maintenance release</label>
-			<p><input type="submit" class="buttons__proceed button_page" value="Shake it baby" /></p>
+			<p><input type="submit" class="buttons__proceed button_screen" value="Shake it baby" /></p>
 		</fieldset>
 	</form>
 	';
@@ -152,7 +152,7 @@ function phase_1_pre()
 		';
 	}
 	echo '
-			<input class="buttons__yes button_page" type="submit" value="Okay, I\'ve done these" />
+			<input class="buttons__yes button_screen" type="submit" value="Okay, I\'ve done these" />
 		</form>
 	';
 }
@@ -198,7 +198,7 @@ function phase_1()
 			<input type="hidden" name="changes" value="'.escape_html($changes).'" />
 			<input type="hidden" name="descrip" value="'.escape_html($descrip).'" />
 
-			<input type="submit" class="buttons__proceed button_page" value="Move on to instructions about how to release this" />
+			<input type="submit" class="buttons__proceed button_screen" value="Move on to instructions about how to release this" />
 		</form>
 	';
 }

@@ -39,15 +39,15 @@
 
 <div class="trinav_wrap nograd">
 	<div class="trinav_left">
-		<a class="buttons__previous button_page" href="{PREVIOUS_URL*}" rel="{+START,IF,{PREVIOUS_NO_FOLLOW}}nofollow {+END}prev" accesskey="j"><span>{!PREVIOUS}</span></a>
+		<a class="buttons__previous button_screen" href="{PREVIOUS_URL*}" rel="{+START,IF,{PREVIOUS_NO_FOLLOW}}nofollow {+END}prev" accesskey="j"><span>{!PREVIOUS}</span></a>
 	</div>
 	<div class="trinav_right">
-		<a class="buttons__next button_page" href="{NEXT_URL*}" rel="{+START,IF,{NEXT_NO_FOLLOW}}nofollow {+END}next" accesskey="k"><span>{!NEXT}</span></a>
+		<a class="buttons__next button_screen" href="{NEXT_URL*}" rel="{+START,IF,{NEXT_NO_FOLLOW}}nofollow {+END}next" accesskey="k"><span>{!NEXT}</span></a>
 	</div>
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<div class="trinav_mid">
 			{+START,IF_NON_EMPTY,{ADD_URL}}
-				<a class="menu___generic_admin__add_one button_page" rel="add" href="{ADD_URL*}"><span>{!ADD_CALENDAR_EVENT}</span></a>
+				<a class="menu___generic_admin__add_one button_screen" rel="add" href="{ADD_URL*}"><span>{!ADD_CALENDAR_EVENT}</span></a>
 			{+END}
 		</div>
 	{+END}
@@ -59,7 +59,7 @@
 
 {+START,IF_NON_EMPTY,{ADD_URL}}
 	<p class="buttons_group">
-		<a class="menu___generic_admin__add_one button_page" rel="add" href="{ADD_URL*}"><span>{!ADD_CALENDAR_EVENT}</span></a>
+		<a class="menu___generic_admin__add_one button_screen" rel="add" href="{ADD_URL*}"><span>{!ADD_CALENDAR_EVENT}</span></a>
 	</p>
 {+END}
 
@@ -81,7 +81,7 @@
 						</div>
 
 						<p class="proceed_button">
-							<input onclick="disable_button_just_clicked(this);" class="buttons__choose button_page" type="submit" value="{!INTERESTS}" />
+							<input onclick="disable_button_just_clicked(this);" class="buttons__choose button_screen" type="submit" value="{!INTERESTS}" />
 						</p>
 					</form>
 				</div></section></div>
@@ -98,7 +98,7 @@
 						</div>
 
 						<p class="proceed_button">
-							<input onclick="disable_button_just_clicked(this);" class="buttons__filter button_page" type="submit" value="{!FILTER}" />
+							<input onclick="disable_button_just_clicked(this);" class="buttons__filter button_screen" type="submit" value="{!FILTER}" />
 						</p>
 					</form>
 				</div></section></div>

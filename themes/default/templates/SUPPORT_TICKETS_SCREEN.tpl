@@ -15,7 +15,7 @@
 					<option value="{TICKET_TYPE*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
 				{+END}
 			</select>
-			<input onclick="disable_button_just_clicked(this);" class="buttons__filter button_pageitem" type="submit" value="{!FILTER}" />
+			<input onclick="disable_button_just_clicked(this);" class="buttons__filter button_screen_item" type="submit" value="{!FILTER}" />
 		</form>
 	</div></div>
 
@@ -50,6 +50,6 @@
 {+END}
 
 <p class="buttons_group">
-	<a class="buttons__add_ticket button_page" rel="add" href="{ADD_TICKET_URL*}"><span>{!ADD_TICKET}</span></a>
+	<a class="buttons__add_ticket button_screen" rel="add" href="{ADD_TICKET_URL*}"><span>{!ADD_TICKET}</span></a>
 </p>
 

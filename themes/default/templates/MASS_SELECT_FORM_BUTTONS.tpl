@@ -1,5 +1,5 @@
 {+START,IF,{$JS_ON}}
-	<input id="mass_select_button" disabled="disabled" onclick="mass_delete_click(this);" class="menu___generic_admin__delete button_page" type="button" value="{!DELETE_SELECTION}" />
+	<input id="mass_select_button" disabled="disabled" onclick="mass_delete_click(this);" class="menu___generic_admin__delete button_screen" type="button" value="{!DELETE_SELECTION}" />
 
 	<script type="text/javascript">// <![CDATA[
 		function initialise_button_visibility()

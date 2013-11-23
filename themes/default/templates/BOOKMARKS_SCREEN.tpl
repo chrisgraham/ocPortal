@@ -45,8 +45,8 @@
 					<tr>
 						<th>{!ACTIONS}</th>
 						<td class="vertical_alignment">
-							 <input class="buttons__edit button_pageitem" type="submit" value="{!EDIT}" />
-							 <input class="menu___generic_admin__delete button_pageitem" type="submit" name="delete" value="{!DELETE}" />
+							 <input class="buttons__edit button_screen_item" type="submit" value="{!EDIT}" />
+							 <input class="menu___generic_admin__delete button_screen_item" type="submit" name="delete" value="{!DELETE}" />
 
 							 <label class="horiz_field_sep vertical_alignment" for="bookmark_{ID*}">{!CHOOSE}:</label> <input onclick="handle_bookmark_selection(this,'{ID;*}',event);" type="checkbox" id="bookmark_{ID*}" name="bookmark_{ID*}" value="1" />
 						</td>

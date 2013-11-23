@@ -774,7 +774,7 @@ function ModalWindow()
 					{
 						var button=this.element('button',{
 							'html': this.yes_button,
-							'class': 'buttons__proceed button_pageitem'
+							'class': 'buttons__proceed button_screen_item'
 						});
 						this.add_event(button,'click',function() { _this.option('yes'); });
 						window.setTimeout(function() { _this.add_event(_this.box_wrapper,'click',_this.clickout_yes); },1000);
@@ -788,14 +788,14 @@ function ModalWindow()
 				case 'confirm':
 					var button=this.element('button',{
 						'html': this.yes_button,
-						'class': 'buttons__yes button_pageitem',
+						'class': 'buttons__yes button_screen_item',
 						'style': 'font-weight: bold;'
 					});
 					this.add_event(button,'click',function() { _this.option('yes'); });
 					this.button_container.appendChild(button);
 					var button=this.element('button',{
 						'html': this.no_button,
-						'class': 'buttons__no button_pageitem'
+						'class': 'buttons__no button_screen_item'
 					});
 					this.add_event(button,'click',function() { _this.option('no'); });
 					this.button_container.appendChild(button);
@@ -820,7 +820,7 @@ function ModalWindow()
 					{
 						var button=this.element('button',{
 							'html': this.yes_button,
-							'class': 'buttons__yes button_pageitem',
+							'class': 'buttons__yes button_screen_item',
 							'style': 'font-weight: bold;'
 						});
 						this.add_event(button,'click',function() { _this.option('yes'); });
@@ -828,13 +828,13 @@ function ModalWindow()
 
 						var button=this.element('button',{
 							'html': this.cancel_button,
-							'class': 'buttons__no button_pageitem'
+							'class': 'buttons__no button_screen_item'
 						});
 					} else
 					{
 						var button=this.element('button',{
 							'html': this.cancel_button,
-							'class': 'buttons__proceed button_pageitem'
+							'class': 'buttons__proceed button_screen_item'
 						});
 					}
 					window.setTimeout(function() { _this.add_event(_this.box_wrapper,'click',_this.clickout_cancel); },1000);
@@ -849,7 +849,7 @@ function ModalWindow()
 				{
 					button=this.element('button',{
 						'html': this.cancel_button,
-						'class': 'button_pageitem button_cancel'
+						'class': 'button_screen_item button_cancel'
 					});
 					this.button_container.appendChild(button);
 				} else

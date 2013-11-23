@@ -55,7 +55,7 @@
 }
 
 .ocf_forum_topic_wrapper_column_column6 {
-	width: 18.5em;
+	width: 14em;
 }
 
 .ocf_forum_topic_wrapper_column_column6_shorter {
@@ -155,10 +155,10 @@
 	text-align: center;
 }
 
-.ocf_screen_buttons {
+.ocf_buttons_screen {
 	float: {!en_right};
 	white-space: nowrap;
-	margin: 1em 0 1em 1em !important;
+	margin: 1.5em 0 1.5em 1em !important;
 }
 
 .ocf_member_signature {
@@ -318,7 +318,7 @@
 
 .ocf_post_details {
 	text-align: {!en_left};
-	padding: 0.2em 0.3em 0.4em 0.2em;
+	padding: 0.6em 0.2em;
 }
 
 .ocf_post_details_date {
@@ -468,7 +468,7 @@ hr.ocf_sig_barrier {
 }
 
 .ocf_topic_list th, .ocf_forum_grouping th {
-	padding: 0.3em;
+	padding: 0.5em;
 }
 
 .ocf_forum_grouping_centered_header {
@@ -551,6 +551,10 @@ hr.ocf_sig_barrier {
 
 .ocf_forum_topic_row_preview {
 	padding: 0.5em;
+}
+
+.ocf_forum_topic_indent {
+	margin-left: 0.25em;
 }
 
 .ocf_unread_topic_title {
@@ -1254,4 +1258,50 @@ table.ocf_profile_statistics th {
 	.ocf_member_signature .comcode_hide {
 		display: none;
 	}
+}
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.buttons__forum {
+	background-image: url('{$IMG,icons/24x24/buttons/forum}');
+}
+.buttons__history {
+	background-image: url('{$IMG,icons/24x24/buttons/history}');
+}
+.buttons__mark_read_forum {
+	background-image: url('{$IMG,icons/24x24/buttons/mark_read_forum}');
+}
+.buttons__mark_unread_topic {
+	background-image: url('{$IMG,icons/24x24/buttons/mark_unread_topic}');
+}
+.buttons__new_post_full {
+	background-image: url('{$IMG,icons/24x24/buttons/new_post_full}');
+}
+.buttons__new_topic {
+	background-image: url('{$IMG,icons/24x24/buttons/new_topic}');
+}
+.buttons__new_quote {
+	background-image: url('{$IMG,icons/24x24/buttons/new_quote}');
+}
+.buttons__whisper {
+	background-image: url('{$IMG,icons/24x24/buttons/whisper}');
+}
+.menu__adminzone__structure__forum__multi_moderations {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/structure/forum/multi_moderations}');
+}
+.menu__site_meta__user_actions__lost_password {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/lost_password}');
+}
+.tabs__member_account__warnings {
+	background-image: url('{$IMG,icons/24x24/tabs/member_account/warnings}');
+}
+.buttons__linear {
+	background-image: url('{$IMG,icons/24x24/buttons/linear}');
+}
+.buttons__threaded {
+	background-image: url('{$IMG,icons/24x24/buttons/threaded}');
 }

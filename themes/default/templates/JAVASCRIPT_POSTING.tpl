@@ -377,7 +377,7 @@ function do_input_thumb(field_name,va)
 			{
 				generate_question_ui(
 					'{!THUMB_OR_IMG_2;^}',
-					{thumbnail: '{!THUMBNAIL;^}',fullsize: '{!IMAGE;^}'},
+					{button__thumbnail: '{!THUMBNAIL;^}',button__fullsize: '{!IMAGE;^}'},
 					'{!_ATTACHMENT;^}',
 					null,
 					function(vb)

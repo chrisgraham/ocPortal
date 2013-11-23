@@ -1,0 +1,14 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2014
+*/
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.menu__site_meta__recommend {
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/recommend}');
+}
