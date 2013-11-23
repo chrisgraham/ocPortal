@@ -96,7 +96,7 @@ class Module_search
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		return array(
-			'misc'=>array('SEARCH_TITLE','menu/site_meta/search'),
+			'misc'=>array('SEARCH_TITLE','buttons/search'),
 		);
 	}
 

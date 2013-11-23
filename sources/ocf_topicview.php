@@ -637,7 +637,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$action_url=build_url($map,get_module_zone('topics'));
 		$_title=do_lang_tempcode('VALIDATE_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'712fdaee35f378e37b007f3a73246690','REL'=>'validate','IMMEDIATE'=>true,'IMG'=>'buttons__validate','TITLE'=>$_title,'URL'=>$action_url)));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'712fdaee35f378e37b007f3a73246690','REL'=>'validate','IMMEDIATE'=>true,'IMG'=>'buttons__menu__adminzone__audit__validate','TITLE'=>$_title,'URL'=>$action_url)));
 	}
 	if (($may_reply) && (is_null(get_bot_type())))
 	{

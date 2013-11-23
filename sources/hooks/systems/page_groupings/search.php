@@ -32,7 +32,7 @@ class Hook_page_groupings_search
 		if (!addon_installed('search')) return array();
 
 		return array(
-			array('site_meta','menu/site_meta/search',array('search',array(),get_module_zone('search')),do_lang_tempcode('search:SEARCH')),
+			array('site_meta','buttons/search',array('search',array(),get_module_zone('search')),do_lang_tempcode('search:SEARCH')),
 		);
 	}
 }

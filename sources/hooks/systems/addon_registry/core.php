@@ -211,8 +211,6 @@ class Hook_addon_registry_core
 			'themes/default/images/icons/32x32/menu/adminzone/help.png',
 			'themes/default/images/icons/24x24/menu/site_meta/user_actions/join.png',
 			'themes/default/images/icons/48x48/menu/site_meta/user_actions/join.png',
-			'themes/default/images/icons/24x24/buttons/join.png',
-			'themes/default/images/icons/48x48/buttons/join.png',
 			'themes/default/images/icons/24x24/menu/pages/keymap.png',
 			'themes/default/images/icons/48x48/menu/pages/keymap.png',
 			'themes/default/images/icons/24x24/menu/site_meta/user_actions/login.png',
