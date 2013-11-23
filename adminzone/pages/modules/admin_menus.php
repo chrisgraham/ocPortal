@@ -197,6 +197,7 @@ class Module_admin_menus
 			'BRANCH_TYPE'=>'0',
 			'NEW_WINDOW'=>'0',
 			'CHECK_PERMS'=>'0',
+			'INCLUDE_SITEMAP'=>'0',
 			'CAPTION_LONG'=>'',
 			'CAPTION'=>'',
 			'URL'=>'',

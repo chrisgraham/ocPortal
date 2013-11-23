@@ -81,6 +81,21 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_privacy');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('content_primary__members');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('task_queue');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('comcode_pages');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('cached_comcode_pages');
+
+		/*$zones=find_all_zones(true);		We don't want to get rid of on-disk data when reinstalling
+		require_code('files');
+		$langs=find_all_langs(true);
+		foreach ($zones as $zone)
+		{
+			foreach (array_keys($langs) as $lang)
+			{
+				deldir_contents(zone_black_magic_filterer(get_custom_file_base().(($zone=='')?'':'/').$zone.'/pages/comcode_custom/'.$lang,true),true);
+			}
+		}*/
+
+		delete_attachments('comcode_page');
 
 		delete_privilege('edit_meta_fields');
 		delete_privilege('view_private_content');
@@ -96,6 +111,214 @@ class Module_admin_version
 	{
 		// A lot of "peripheral architectural" tables are defined here. Central ones are defined in the installer -- as they need to be installed before any module.
 		// This is always the first module to be installed.
+
+		if (is_null($upgrade_from)) // These are only for fresh installs
+		{
+			set_value('version',float_to_raw_string(ocp_version_number()));
+			set_value('ocf_version',float_to_raw_string(ocp_version_number()));
+
+			$GLOBALS['SITE_DB']->create_table('menu_items',array(
+				'id'=>'*AUTO',
+				'i_menu'=>'ID_TEXT', // Foreign key in the future - currently it just binds together
+				'i_order'=>'INTEGER',
+				'i_parent'=>'?AUTO_LINK',
+				'i_caption'=>'SHORT_TRANS', // Comcode
+				'i_caption_long'=>'SHORT_TRANS', // Comcode
+				'i_url'=>'SHORT_TEXT', // Supports page-links
+				'i_check_permissions'=>'BINARY',
+				'i_expanded'=>'BINARY',
+				'i_new_window'=>'BINARY',
+				'i_include_sitemap'=>'SHORT_INTEGER',
+				'i_page_only'=>'ID_TEXT', // Only show up if the page is this (allows page specific menus)
+				'i_theme_img_code'=>'ID_TEXT',
+			));
+			$GLOBALS['SITE_DB']->create_index('menu_items','menu_extraction',array('i_menu'));
+
+			$GLOBALS['SITE_DB']->create_table('trackbacks',array(
+				'id'=>'*AUTO',
+				'trackback_for_type'=>'ID_TEXT',
+				'trackback_for_id'=>'ID_TEXT',
+				'trackback_ip'=>'IP',
+				'trackback_time'=>'TIME',
+				'trackback_url'=>'SHORT_TEXT',
+				'trackback_title'=>'SHORT_TEXT',
+				'trackback_excerpt'=>'LONG_TEXT',
+				'trackback_name'=>'SHORT_TEXT'
+			));
+			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_for_type',array('trackback_for_type'));
+			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_for_id',array('trackback_for_id'));
+			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_time',array('trackback_time'));
+
+			$GLOBALS['SITE_DB']->create_table('captchas',array(
+				'si_session_id'=>'*INTEGER',
+				'si_time'=>'TIME',
+				'si_code'=>'INTEGER'
+			));
+			$GLOBALS['SITE_DB']->create_index('captchas','si_time',array('si_time'));
+
+			$GLOBALS['SITE_DB']->create_table('member_tracking',array(
+				'mt_member_id'=>'*MEMBER',
+				'mt_cache_username'=>'ID_TEXT',
+				'mt_time'=>'*TIME',
+				'mt_page'=>'*ID_TEXT',
+				'mt_type'=>'*ID_TEXT',
+				'mt_id'=>'*ID_TEXT'
+			));
+			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_page',array('mt_page'));
+			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_id',array('mt_page','mt_id','mt_type'));
+			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_time',array('mt_time'));
+
+			$GLOBALS['SITE_DB']->create_table('cache_on',array(
+				'cached_for'=>'*ID_TEXT',
+				'cache_on'=>'LONG_TEXT',
+				'cache_ttl'=>'INTEGER',
+			));
+
+			$GLOBALS['SITE_DB']->create_table('validated_once',array(
+				'hash'=>'*MD5'
+			));
+
+			$GLOBALS['SITE_DB']->create_table('edit_pings',array(
+				'id'=>'*AUTO',
+				'the_page'=>'ID_TEXT',
+				'the_type'=>'ID_TEXT',
+				'the_id'=>'ID_TEXT',
+				'the_time'=>'TIME',
+				'the_member'=>'MEMBER'
+			));
+			$GLOBALS['SITE_DB']->create_index('edit_pings','edit_pings_on',array('the_page','the_type','the_id'));
+
+			$GLOBALS['SITE_DB']->create_table('translate_history',array(
+				'id'=>'*AUTO',
+				'lang_id'=>'AUTO_LINK',
+				'language'=>'*LANGUAGE_NAME',
+				'text_original'=>'LONG_TEXT',
+				'broken'=>'BINARY',
+				'action_member'=>'MEMBER',
+				'action_time'=>'TIME'
+			));
+
+			$GLOBALS['SITE_DB']->create_table('long_values',array(
+				'the_name'=>'*ID_TEXT',
+				'the_value'=>'LONG_TEXT',
+				'date_and_time'=>'TIME',
+			));
+			set_long_value('call_home',strval(post_param_integer('advertise_on',0))); // Relayed from installer
+
+			$GLOBALS['SITE_DB']->create_table('tutorial_links',array(
+				'the_name'=>'*ID_TEXT',
+				'the_value'=>'LONG_TEXT',
+			));
+
+			$GLOBALS['SITE_DB']->create_table('member_privileges',array(
+				'member_id'=>'*INTEGER',
+				'privilege'=>'*ID_TEXT',
+				'the_page'=>'*ID_TEXT',
+				'module_the_name'=>'*ID_TEXT',
+				'category_name'=>'*ID_TEXT',
+				'the_value'=>'BINARY',
+				'active_until'=>'?TIME',
+			));
+			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_name',array('privilege','the_page','module_the_name','category_name'));
+			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_member',array('member_id'));
+
+			$GLOBALS['SITE_DB']->create_table('member_zone_access',array(
+				'zone_name'=>'*ID_TEXT',
+				'member_id'=>'*MEMBER',
+				'active_until'=>'?TIME',
+			));
+			$GLOBALS['SITE_DB']->create_index('member_zone_access','mzazone_name',array('zone_name'));
+			$GLOBALS['SITE_DB']->create_index('member_zone_access','mzamember_id',array('member_id'));
+
+			$GLOBALS['SITE_DB']->create_table('member_page_access',array(
+				'page_name'=>'*ID_TEXT',
+				'zone_name'=>'*ID_TEXT',
+				'member_id'=>'*MEMBER',
+				'active_until'=>'?TIME',
+			));
+			$GLOBALS['SITE_DB']->create_index('member_page_access','mzaname',array('page_name','zone_name'));
+			$GLOBALS['SITE_DB']->create_index('member_page_access','mzamember_id',array('member_id'));
+
+			$GLOBALS['SITE_DB']->create_table('member_category_access',array(
+				'module_the_name'=>'*ID_TEXT',
+				'category_name'=>'*ID_TEXT',
+				'member_id'=>'*MEMBER',
+				'active_until'=>'?TIME',
+			));
+			$GLOBALS['SITE_DB']->create_index('member_category_access','mcaname',array('module_the_name','category_name'));
+			$GLOBALS['SITE_DB']->create_index('member_category_access','mcamember_id',array('member_id'));
+
+			$GLOBALS['SITE_DB']->create_table('autosave',array(
+				'id'=>'*AUTO',
+				'a_member_id'=>'MEMBER',
+				'a_key'=>'LONG_TEXT',
+				'a_value'=>'LONG_TEXT',
+				'a_time'=>'TIME',
+			));
+			$GLOBALS['SITE_DB']->create_index('autosave','myautosaves',array('a_member_id'));
+
+			$GLOBALS['SITE_DB']->create_table('messages_to_render',array(
+				'id'=>'*AUTO',
+				'r_session_id'=>'AUTO_LINK',
+				'r_message'=>'LONG_TEXT',
+				'r_type'=>'ID_TEXT',
+				'r_time'=>'TIME',
+			));
+			$GLOBALS['SITE_DB']->create_index('messages_to_render','forsession',array('r_session_id'));
+
+			$GLOBALS['SITE_DB']->create_table('url_title_cache',array(
+				'id'=>'*AUTO',
+				't_url'=>'URLPATH',
+				't_title'=>'SHORT_TEXT',
+				't_meta_title'=>'LONG_TEXT',
+				't_keywords'=>'LONG_TEXT',
+				't_description'=>'LONG_TEXT',
+				't_image_url'=>'URLPATH',
+				't_mime_type'=>'ID_TEXT',
+				// oEmbed...
+				't_json_discovery'=>'URLPATH',
+				't_xml_discovery'=>'URLPATH',
+			));
+			$GLOBALS['SITE_DB']->create_index('url_title_cache','t_url',array('t_url'));
+
+			$GLOBALS['SITE_DB']->create_table('rating',array(
+				'id'=>'*AUTO',
+				'rating_for_type'=>'ID_TEXT',
+				'rating_for_id'=>'ID_TEXT',
+				'rating_member'=>'MEMBER',
+				'rating_ip'=>'IP',
+				'rating_time'=>'TIME',
+				'rating'=>'SHORT_INTEGER'
+			));
+			$GLOBALS['SITE_DB']->create_index('rating','alt_key',array('rating_for_type','rating_for_id'));
+			$GLOBALS['SITE_DB']->create_index('rating','rating_for_id',array('rating_for_id'));
+
+			$GLOBALS['SITE_DB']->create_table('comcode_pages',array(
+				'the_zone'=>'*ID_TEXT',
+				'the_page'=>'*ID_TEXT',
+				'p_parent_page'=>'ID_TEXT',
+				'p_validated'=>'BINARY',
+				'p_edit_date'=>'?TIME',
+				'p_add_date'=>'TIME',
+				'p_submitter'=>'MEMBER',
+				'p_show_as_edit'=>'BINARY'
+			));
+			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_submitter',array('p_submitter'));
+			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_add_date',array('p_add_date'));
+			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_validated',array('p_validated'));
+
+			$GLOBALS['SITE_DB']->create_table('cached_comcode_pages',array(
+				'the_zone'=>'*ID_TEXT',
+				'the_page'=>'*ID_TEXT',
+				'string_index'=>'LONG_TRANS',	// Comcode
+				'the_theme'=>'*ID_TEXT',
+				'cc_page_title'=>'?SHORT_TRANS'
+			));
+
+			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','ftjoin_ccpt',array('cc_page_title'));
+			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','ftjoin_ccsi',array('string_index'));
+			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','ccp_join',array('the_page','the_zone'));
+		}
 
 		// A lot of core upgrade is also here. When absolutely necessary it is put in upgrade.php.
 
@@ -410,188 +633,6 @@ class Module_admin_version
 
 			$GLOBALS['SITE_DB']->delete_table_field('zones','zone_displayed_in_menu');
 			$GLOBALS['SITE_DB']->delete_table_field('zones','zone_wide');
-		}
-
-		if (is_null($upgrade_from)) // These are only for fresh installs
-		{
-			set_value('version',float_to_raw_string(ocp_version_number()));
-			set_value('ocf_version',float_to_raw_string(ocp_version_number()));
-
-			$GLOBALS['SITE_DB']->create_table('menu_items',array(
-				'id'=>'*AUTO',
-				'i_menu'=>'ID_TEXT', // Foreign key in the future - currently it just binds together
-				'i_order'=>'INTEGER',
-				'i_parent'=>'?AUTO_LINK',
-				'i_caption'=>'SHORT_TRANS', // Comcode
-				'i_caption_long'=>'SHORT_TRANS', // Comcode
-				'i_url'=>'SHORT_TEXT', // Supports page-links
-				'i_check_permissions'=>'BINARY',
-				'i_expanded'=>'BINARY',
-				'i_new_window'=>'BINARY',
-				'i_include_sitemap'=>'SHORT_INTEGER',
-				'i_page_only'=>'ID_TEXT', // Only show up if the page is this (allows page specific menus)
-				'i_theme_img_code'=>'ID_TEXT',
-			));
-			$GLOBALS['SITE_DB']->create_index('menu_items','menu_extraction',array('i_menu'));
-
-			$GLOBALS['SITE_DB']->create_table('trackbacks',array(
-				'id'=>'*AUTO',
-				'trackback_for_type'=>'ID_TEXT',
-				'trackback_for_id'=>'ID_TEXT',
-				'trackback_ip'=>'IP',
-				'trackback_time'=>'TIME',
-				'trackback_url'=>'SHORT_TEXT',
-				'trackback_title'=>'SHORT_TEXT',
-				'trackback_excerpt'=>'LONG_TEXT',
-				'trackback_name'=>'SHORT_TEXT'
-			));
-			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_for_type',array('trackback_for_type'));
-			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_for_id',array('trackback_for_id'));
-			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_time',array('trackback_time'));
-
-			$GLOBALS['SITE_DB']->create_table('captchas',array(
-				'si_session_id'=>'*INTEGER',
-				'si_time'=>'TIME',
-				'si_code'=>'INTEGER'
-			));
-			$GLOBALS['SITE_DB']->create_index('captchas','si_time',array('si_time'));
-
-			$GLOBALS['SITE_DB']->create_table('member_tracking',array(
-				'mt_member_id'=>'*MEMBER',
-				'mt_cache_username'=>'ID_TEXT',
-				'mt_time'=>'*TIME',
-				'mt_page'=>'*ID_TEXT',
-				'mt_type'=>'*ID_TEXT',
-				'mt_id'=>'*ID_TEXT'
-			));
-			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_page',array('mt_page'));
-			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_id',array('mt_page','mt_id','mt_type'));
-			$GLOBALS['SITE_DB']->create_index('member_tracking','mt_time',array('mt_time'));
-
-			$GLOBALS['SITE_DB']->create_table('cache_on',array(
-				'cached_for'=>'*ID_TEXT',
-				'cache_on'=>'LONG_TEXT',
-				'cache_ttl'=>'INTEGER',
-			));
-
-			$GLOBALS['SITE_DB']->create_table('validated_once',array(
-				'hash'=>'*MD5'
-			));
-
-			$GLOBALS['SITE_DB']->create_table('edit_pings',array(
-				'id'=>'*AUTO',
-				'the_page'=>'ID_TEXT',
-				'the_type'=>'ID_TEXT',
-				'the_id'=>'ID_TEXT',
-				'the_time'=>'TIME',
-				'the_member'=>'MEMBER'
-			));
-			$GLOBALS['SITE_DB']->create_index('edit_pings','edit_pings_on',array('the_page','the_type','the_id'));
-
-			$GLOBALS['SITE_DB']->create_table('translate_history',array(
-				'id'=>'*AUTO',
-				'lang_id'=>'AUTO_LINK',
-				'language'=>'*LANGUAGE_NAME',
-				'text_original'=>'LONG_TEXT',
-				'broken'=>'BINARY',
-				'action_member'=>'MEMBER',
-				'action_time'=>'TIME'
-			));
-
-			$GLOBALS['SITE_DB']->create_table('long_values',array(
-				'the_name'=>'*ID_TEXT',
-				'the_value'=>'LONG_TEXT',
-				'date_and_time'=>'TIME',
-			));
-			set_long_value('call_home',strval(post_param_integer('advertise_on',0))); // Relayed from installer
-
-			$GLOBALS['SITE_DB']->create_table('tutorial_links',array(
-				'the_name'=>'*ID_TEXT',
-				'the_value'=>'LONG_TEXT',
-			));
-
-			$GLOBALS['SITE_DB']->create_table('member_privileges',array(
-				'member_id'=>'*INTEGER',
-				'privilege'=>'*ID_TEXT',
-				'the_page'=>'*ID_TEXT',
-				'module_the_name'=>'*ID_TEXT',
-				'category_name'=>'*ID_TEXT',
-				'the_value'=>'BINARY',
-				'active_until'=>'?TIME',
-			));
-			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_name',array('privilege','the_page','module_the_name','category_name'));
-			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_member',array('member_id'));
-
-			$GLOBALS['SITE_DB']->create_table('member_zone_access',array(
-				'zone_name'=>'*ID_TEXT',
-				'member_id'=>'*MEMBER',
-				'active_until'=>'?TIME',
-			));
-			$GLOBALS['SITE_DB']->create_index('member_zone_access','mzazone_name',array('zone_name'));
-			$GLOBALS['SITE_DB']->create_index('member_zone_access','mzamember_id',array('member_id'));
-
-			$GLOBALS['SITE_DB']->create_table('member_page_access',array(
-				'page_name'=>'*ID_TEXT',
-				'zone_name'=>'*ID_TEXT',
-				'member_id'=>'*MEMBER',
-				'active_until'=>'?TIME',
-			));
-			$GLOBALS['SITE_DB']->create_index('member_page_access','mzaname',array('page_name','zone_name'));
-			$GLOBALS['SITE_DB']->create_index('member_page_access','mzamember_id',array('member_id'));
-
-			$GLOBALS['SITE_DB']->create_table('member_category_access',array(
-				'module_the_name'=>'*ID_TEXT',
-				'category_name'=>'*ID_TEXT',
-				'member_id'=>'*MEMBER',
-				'active_until'=>'?TIME',
-			));
-			$GLOBALS['SITE_DB']->create_index('member_category_access','mcaname',array('module_the_name','category_name'));
-			$GLOBALS['SITE_DB']->create_index('member_category_access','mcamember_id',array('member_id'));
-
-			$GLOBALS['SITE_DB']->create_table('autosave',array(
-				'id'=>'*AUTO',
-				'a_member_id'=>'MEMBER',
-				'a_key'=>'LONG_TEXT',
-				'a_value'=>'LONG_TEXT',
-				'a_time'=>'TIME',
-			));
-			$GLOBALS['SITE_DB']->create_index('autosave','myautosaves',array('a_member_id'));
-
-			$GLOBALS['SITE_DB']->create_table('messages_to_render',array(
-				'id'=>'*AUTO',
-				'r_session_id'=>'AUTO_LINK',
-				'r_message'=>'LONG_TEXT',
-				'r_type'=>'ID_TEXT',
-				'r_time'=>'TIME',
-			));
-			$GLOBALS['SITE_DB']->create_index('messages_to_render','forsession',array('r_session_id'));
-
-			$GLOBALS['SITE_DB']->create_table('url_title_cache',array(
-				'id'=>'*AUTO',
-				't_url'=>'URLPATH',
-				't_title'=>'SHORT_TEXT',
-				't_meta_title'=>'LONG_TEXT',
-				't_keywords'=>'LONG_TEXT',
-				't_description'=>'LONG_TEXT',
-				't_image_url'=>'URLPATH',
-				't_mime_type'=>'ID_TEXT',
-				// oEmbed...
-				't_json_discovery'=>'URLPATH',
-				't_xml_discovery'=>'URLPATH',
-			));
-			$GLOBALS['SITE_DB']->create_index('url_title_cache','t_url',array('t_url'));
-
-			$GLOBALS['SITE_DB']->create_table('rating',array(
-				'id'=>'*AUTO',
-				'rating_for_type'=>'ID_TEXT',
-				'rating_for_id'=>'ID_TEXT',
-				'rating_member'=>'MEMBER',
-				'rating_ip'=>'IP',
-				'rating_time'=>'TIME',
-				'rating'=>'SHORT_INTEGER'
-			));
-			$GLOBALS['SITE_DB']->create_index('rating','alt_key',array('rating_for_type','rating_for_id'));
-			$GLOBALS['SITE_DB']->create_index('rating','rating_for_id',array('rating_for_id'));
 		}
 	}
 

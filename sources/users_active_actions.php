@@ -71,7 +71,6 @@ function get_first_admin_user()
 	if (count($members)!=0)
 	{
 		$ret=$GLOBALS['FORUM_DRIVER']->mrow_id($members[key($members)]);
-		$GLOBALS['FORUM_DRIVER']->ocf_flood_control($ret);
 	} else
 	{
 		$ret=$GLOBALS['FORUM_DRIVER']->get_guest_id()+1;

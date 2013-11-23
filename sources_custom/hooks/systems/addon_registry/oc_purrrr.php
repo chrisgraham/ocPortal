@@ -275,6 +275,6 @@ class Hook_addon_registry_oc_purrrr
 
 	function add_iotds($url='',$thumb_url='',$title='',$caption='',$notes='',$allow_rating=0,$allow_comments=0,$allow_trackbacks=0,$current=0)
 	{
-		add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes,time(),$GLOBALS['FORUM_DRIVER']->get_guest_id());
 	}
 }

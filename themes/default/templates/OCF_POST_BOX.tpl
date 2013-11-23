@@ -9,11 +9,11 @@
 		<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p>
 			{!LOCATED_IN,{BREADCRUMBS}}
 		</p></nav>
-	{+END}
 
-	{+START,IF_PASSED,URL}
-		<p class="shunted_button">
-			<a class="buttons__goto button_screen_item" href="{URL*}" title="{!FORUM_POST} #{ID*}"><span>{!VIEW}</span></a>
-		</p>
+		{+START,IF_PASSED,URL}
+			<p class="shunted_button">
+				<a class="buttons__goto button_screen_item" href="{URL*}" title="{!FORUM_POST} #{ID*}"><span>{!VIEW}</span></a>
+			</p>
+		{+END}
 	{+END}
 </div>

@@ -69,6 +69,8 @@ class Module_newsletter
 	{
 		if (is_null($upgrade_from))
 		{
+			require_lang('newsletter');
+
 			$GLOBALS['SITE_DB']->create_table('newsletter',array(
 				'id'=>'*AUTO',
 				'email'=>'SHORT_TEXT',

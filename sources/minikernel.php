@@ -765,4 +765,36 @@ function simulated_wildcard_match($context,$word,$full_cover=false)
 
 	return preg_match('#'.str_replace('#','\#',$rexp).'#i',$context)!=0;
 }
+/**
+ * Get data from the persistent cache.
+ *
+ * @param  mixed			Key
+ * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
+ * @return ?mixed			The data (NULL: not found / NULL entry)
+ */
+function persistent_cache_get($key,$min_cache_date=NULL)
+{
+	return NULL;
+}
 
+/**
+ * Put data into the persistent cache.
+ *
+ * @param  mixed			Key
+ * @param  mixed			The data
+ * @param  boolean		Whether it is server-wide data
+ * @param  ?integer		The expiration time in seconds. (NULL: Default expiry in 60 minutes, or never if it is server-wide).
+ */
+function persistent_cache_set($key,$data,$server_wide=false,$expire_secs=NULL)
+{
+}
+
+/**
+ * Delete data from the persistent cache.
+ *
+ * @param  mixed			Key name
+ * @param  boolean		Whether we are deleting via substring
+ */
+function persistent_cache_delete($key,$substring=false)
+{
+}

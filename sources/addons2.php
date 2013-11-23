@@ -21,7 +21,7 @@
 /**
  * Standard code module initialisation function.
  */
-function init__addons()
+function init__addons2()
 {
 	require_code('files');
 	require_code('addons');
@@ -103,7 +103,7 @@ function reinstall_addon_soft($addon,$ini_info=NULL)
 		'addon_organisation'=>$addon_info['organisation'],
 		'addon_version'=>$addon_info['version'],
 		'addon_category'=>$addon_info['category'],
-		'addon_copyright_attribution'=>$addon_info['copyright_attribution'],
+		'addon_copyright_attribution'=>implode(chr(10),$addon_info['copyright_attribution']),
 		'addon_licence'=>$addon_info['licence'],
 		'addon_description'=>$addon_info['description'],
 		'addon_install_time'=>time()

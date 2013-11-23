@@ -63,6 +63,16 @@ class Module_chat
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'chat'));
 
 		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_chat');
+
+		$GLOBALS['SITE_DB']->query_delete('comcode_pages',array(
+			'the_zone'=>'site',
+			'the_page'=>'userguide_chatcode',
+		));
+
+		$GLOBALS['SITE_DB']->query_delete('comcode_pages',array(
+			'the_zone'=>'site',
+			'the_page'=>'popup_blockers',
+		));
 	}
 
 	/**

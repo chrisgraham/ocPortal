@@ -7,9 +7,9 @@
 			</select>
 		</div>
 		{+START,IF,{$NOT,{$JS_ON}}}
-			<div class="constrain_field">
-				<input onclick="disable_button_just_clicked(this);" type="submit" value="{!PROCEED}" class="buttons__proceed wide_button" />
-			</div>
+			<p class="proceed_button">
+				<input onclick="disable_button_just_clicked(this);" type="submit" value="{!PROCEED}" class="buttons__proceed button_screen_item" />
+			</p>
 		{+END}
 	</div>
 </form>

@@ -67,66 +67,6 @@ class Module_cms_comcode_pages
 		return array('submit_highrange_content'=>array(1,'COMCODE_PAGE_ADD'),'edit_highrange_content'=>array(1,'COMCODE_PAGE_EDIT'),'edit_own_highrange_content'=>array(1,'COMCODE_PAGE_OWN_EDIT'),'bypass_validation_highrange_content'=>array(1,'BYPASS_COMCODE_PAGE_VALIDATION'));
 	}
 
-	/**
-	 * Standard modular uninstall function.
-	 */
-	function uninstall()
-	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('comcode_pages');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('cached_comcode_pages');
-
-		/*$zones=find_all_zones(true);		We don't want to get rid of on-disk data when reinstalling
-		require_code('files');
-		$langs=find_all_langs(true);
-		foreach ($zones as $zone)
-		{
-			foreach (array_keys($langs) as $lang)
-			{
-				deldir_contents(zone_black_magic_filterer(get_custom_file_base().(($zone=='')?'':'/').$zone.'/pages/comcode_custom/'.$lang,true),true);
-			}
-		}*/
-
-		delete_attachments('comcode_page');
-	}
-
-	/**
-	 * Standard modular install function.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		if (is_null($upgrade_from))
-		{
-			$GLOBALS['SITE_DB']->create_table('comcode_pages',array(
-				'the_zone'=>'*ID_TEXT',
-				'the_page'=>'*ID_TEXT',
-				'p_parent_page'=>'ID_TEXT',
-				'p_validated'=>'BINARY',
-				'p_edit_date'=>'?TIME',
-				'p_add_date'=>'TIME',
-				'p_submitter'=>'MEMBER',
-				'p_show_as_edit'=>'BINARY'
-			));
-			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_submitter',array('p_submitter'));
-			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_add_date',array('p_add_date'));
-			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_validated',array('p_validated'));
-
-			$GLOBALS['SITE_DB']->create_table('cached_comcode_pages',array(
-				'the_zone'=>'*ID_TEXT',
-				'the_page'=>'*ID_TEXT',
-				'string_index'=>'LONG_TRANS',	// Comcode
-				'the_theme'=>'*ID_TEXT',
-				'cc_page_title'=>'?SHORT_TRANS'
-			));
-
-			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','ftjoin_ccpt',array('cc_page_title'));
-			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','ftjoin_ccsi',array('string_index'));
-			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','ccp_join',array('the_page','the_zone'));
-		}
-	}
-
 	var $title;
 	var $page_link;
 	var $zone;

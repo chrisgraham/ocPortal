@@ -769,7 +769,7 @@ function install_ocf($upgrade_from=NULL)
 		));
 
 		$GLOBALS['FORUM_DB']->create_table('f_poll_votes',array(
-			'id'=>'AUTO',
+			'id'=>'*AUTO',
 			'pv_poll_id'=>'AUTO_LINK',
 			'pv_member_id'=>'MEMBER',
 			'pv_answer_id'=>'AUTO_LINK' // -1 means "forfeited". We'd use NULL, but we aren't allowed NULL fragments in keys

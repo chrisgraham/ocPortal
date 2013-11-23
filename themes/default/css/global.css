@@ -2861,7 +2861,7 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 =========================
 */
 
-.wide_field, .wide_button {
+.wide_field {
 	width: 100%;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	margin-left: 0 !important;
@@ -2880,7 +2880,7 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	background-image: none !important;
 }
 
-.wide_button, .button_micro, .button_screen, .button_screen_item, .hero_section .hero_button a {
+.button_micro, .button_screen, .button_screen_item, .hero_section .hero_button a {
 	display: inline-block;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	border: 1px solid {$GET,dark_border};
@@ -2899,7 +2899,7 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	cursor: pointer;
 }
 
-.wide_button, .button_screen {
+.button_screen {
 	padding: 6px 39px 7px 7px;
 	border-width: 2px;
 	font-size: 13px;
@@ -2924,18 +2924,18 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	margin: 1px 0.25em 0 0.25em; /* Push it up a bit due to confined space */
 }
 
-.button_screen, .button_screen_item, .button_micro, .wide_button, .toggleable_tray_button img {
+.button_screen, .button_screen_item, .button_micro, .toggleable_tray_button img {
 	{$BETA_CSS_PROPERTY,opacity: 0.85;}
 	display: inline-block;
 }
-.wide_button:hover, .button_micro:hover, .button_screen:hover, .button_screen_item:hover {
+.button_micro:hover, .button_screen:hover, .button_screen_item:hover {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
-.button_screen:hover, .button_screen_item:hover, .button_micro:hover, .wide_button:hover, .toggleable_tray_button:hover img,
-body.touch_enabled .button_screen, body.touch_enabled .button_screen_item, body.touch_enabled .button_micro, body.touch_enabled .wide_button, body.touch_enabled .toggleable_tray_button img {
+.button_screen:hover, .button_screen_item:hover, .button_micro:hover, .toggleable_tray_button:hover img,
+body.touch_enabled .button_screen, body.touch_enabled .button_screen_item, body.touch_enabled .button_micro, body.touch_enabled .toggleable_tray_button img {
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} /* Needed for Opera */
 }
-.wide_button:disabled, .button_micro:disabled, .button_screen:disabled, .button_screen_item:disabled {
+.button_micro:disabled, .button_screen:disabled, .button_screen_item:disabled {
 	{$BETA_CSS_PROPERTY,opacity: 0.4 !important;}
 	cursor: default;
 }

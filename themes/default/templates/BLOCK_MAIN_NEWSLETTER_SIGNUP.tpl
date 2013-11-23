@@ -16,8 +16,8 @@
 			<input class="wide_field" id="baddress" name="address{NID*}" onfocus="if (this.value=='{!EMAIL_ADDRESS;}') this.value='';" onblur="if (this.value=='') this.value='{!EMAIL_ADDRESS;}';" value="{!EMAIL_ADDRESS}" />
 		</div>
 
-		<p class="constrain_field">
-			<input class="menu__site_meta__newsletters wide_button" type="submit" value="{!SUBSCRIBE}" />
+		<p class="proceed_button">
+			<input class="menu__site_meta__newsletters button_screen_item" type="submit" value="{!SUBSCRIBE}" />
 		</p>
 	</form>
 </div></section>

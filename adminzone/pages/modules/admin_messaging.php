@@ -67,6 +67,7 @@ class Module_admin_messaging
 			require_code('ocf_forums_action');
 			require_code('ocf_forums_action2');
 			$GLOBALS['OCF_DRIVER']=$GLOBALS['FORUM_DRIVER'];
+			require_lang('messaging');
 			ocf_make_forum(do_lang('MESSAGING_FORUM_NAME'),'',db_get_first_id()+1,$staff_access,db_get_first_id());
 		}
 	}

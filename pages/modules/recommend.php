@@ -46,6 +46,10 @@ class Module_recommend
 	 */
 	function uninstall()
 	{
+		$GLOBALS['SITE_DB']->query_delete('comcode_pages',array(
+			'the_zone'=>'',
+			'the_page'=>'recommend_help',
+		));
 	}
 
 	/**

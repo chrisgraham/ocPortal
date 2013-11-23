@@ -2069,8 +2069,10 @@ function step_7()
 
 	require_code('addons2');
 	$addons=find_all_hooks('systems','addon_registry');
-	foreach (array_keys($addons) as $addon)
+	foreach ($addons as $addon=>$place)
 	{
+		if ($place=='sources_custom') continue;
+
 		reinstall_addon_soft($addon);
 		$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'9fafb3dd014d589fcc057bba54fc4ag3','SOMETHING'=>do_lang_tempcode('INSTALL_ADDON',escape_html($addon)))));
 	}

@@ -13,11 +13,9 @@
 				<p class="constrain_field"><input autocomplete="off" value="" type="text" onfocus="if (this.value=='{!MESSAGE;}') this.value='';" id="shoutbox_message" name="shoutbox_message" alt="{!MESSAGE}" class="wide_field" /></p>
 			</div>
 
-			<div class="constrain_field">
-				<p class="proceed_button">
-					<input type="submit" value="{!SEND_MESSAGE}" class="buttons__send wide_button" />
-				</p>
-			</div>
+			<p class="proceed_button">
+				<input type="submit" value="{!SEND_MESSAGE}" class="buttons__send button_screen_item" />
+			</p>
 		</form>
 	</div></section>
 

@@ -155,7 +155,6 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/templates/OCF_BIRTHDAY_LINK.tpl',
 			'themes/default/templates/OCF_FORUM_INTRO_QUESTION_POPUP.tpl',
 			'themes/default/templates/OCF_MEMBER_PT_RULES_SCREEN.tpl',
-			'themes/default/templates/OCF_POSTING_SCREEN_POST.tpl',
 			'themes/default/templates/OCF_PT_BETWEEN.tpl',
 			'themes/default/templates/JAVASCRIPT_OCF_FORUM.tpl',
 			'themes/default/templates/BLOCK_MAIN_OCF_INVOLVED_TOPICS.tpl',
@@ -408,7 +407,6 @@ class Hook_addon_registry_ocf_forum
 			'OCF_WHISPER_CHOICE_SCREEN.tpl'=>'ocf_whisper_choice_screen',
 			'OCF_QUOTE_FCOMCODE.tpl'=>'ocf_quote_fcomcode',
 			'OCF_MEMBER_PT_RULES_SCREEN.tpl'=>'ocf_member_pt_rules_screen',
-			'OCF_POSTING_SCREEN_POST.tpl'=>'ocf_posting_screen_posts',
 			'OCF_POSTING_SCREEN_POSTS.tpl'=>'ocf_posting_screen_posts',
 			'OCF_TOPIC_FIRST_UNREAD.tpl'=>'ocf_topic_screen',
 			'OCF_TOPIC_POLL_BUTTON.tpl'=>'ocf_topic_screen',
@@ -1345,12 +1343,7 @@ class Hook_addon_registry_ocf_forum
 		$posts=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$posts->attach(do_lorem_template('OCF_POSTING_SCREEN_POST',array(
-				'TITLE'=>lorem_phrase(),
-				'ID'=>placeholder_id(),
-				'POSTER'=>lorem_phrase(),
-				'POST'=>lorem_paragraph_html()
-			)));
+			$posts->attach(lorem_paragraph_html());
 		}
 
 		return array(

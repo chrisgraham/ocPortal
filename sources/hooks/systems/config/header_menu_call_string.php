@@ -47,7 +47,7 @@ class Hook_config_header_menu_call_string
 	 */
 	function get_default()
 	{
-		return 'zone_menu';
+		return 'site:';
 	}
 }
 

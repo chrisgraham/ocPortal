@@ -1017,6 +1017,7 @@ function find_id_moniker($url_parts,$zone)
 		}
 
 		// Moniker may be held the other side of a redirect
+		if (!function_exists('_request_page')) return NULL; // In installer
 		$page_place=_request_page($url_parts['page'],$zone);
 		if ($page_place[0]=='REDIRECT')
 		{
