@@ -63,7 +63,7 @@ class Block_side_rss
 		require_css('news');
 		require_code('obfuscate');
 
-		$url=array_key_exists('param',$map)?$map['param']:(brand_base_url().'/backend.php?type=rss&mode=news&filter=16,17,18,19,20'); // http://channel9.msdn.com/Feeds/RSS/
+		$url=array_key_exists('param',$map)?$map['param']:(get_brand_base_url().'/backend.php?type=rss&mode=news&filter=16,17,18,19,20'); // http://channel9.msdn.com/Feeds/RSS/
 
 		if (strpos($url,'{')!==false)
 		{

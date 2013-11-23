@@ -264,10 +264,10 @@ function block_helper_script()
 					case 'defer':
 					case 'block_id':
 					case 'failsafe':
-						$description=do_lang('BLOCK_PARAM_'.$parameter,brand_base_url());
+						$description=do_lang('BLOCK_PARAM_'.$parameter,get_brand_base_url());
 						break;
 					default:
-						$description=do_lang('BLOCK_'.$block.'_PARAM_'.$parameter,brand_base_url());
+						$description=do_lang('BLOCK_'.$block.'_PARAM_'.$parameter,get_brand_base_url());
 						break;
 				}
 				$description=str_replace(do_lang('BLOCK_IND_STRIPPABLE_1'),'',$description);

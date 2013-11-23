@@ -505,12 +505,8 @@ class Hook_addon_registry_shopping
 				'FORM_URL'=>placeholder_url(),
 				'CONT_SHOPPING_URL'=>placeholder_url(),
 				'MESSAGE'=>lorem_phrase(),
-				'BACK'=>placeholder_link(),
 				'PRO_IDS'=>placeholder_id(),
 				'EMPTY_CART_URL'=>placeholder_url(),
-				'EMPTY'=>lorem_phrase(),
-				'UPDATE_URL'=>placeholder_url(),
-				'CONTINUE_SHOPPING'=>lorem_phrase(),
 				'PROCEED_BOX'=>$proceed_box,
 				'ALLOW_OPTOUT_TAX'=>lorem_phrase(),
 				'ALLOW_OPTOUT_TAX_VALUE'=>lorem_phrase()

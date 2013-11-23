@@ -30,11 +30,11 @@ class Hook_sitemap_bookmarks extends Hook_sitemap_base
 	{
 		return SITEMAP_NODE_NOT_HANDLED; // TODO
 
-		if (preg_match('#^([^:]*):bookmarks$#',$page_link)!=0)
+		/*if (preg_match('#^([^:]*):bookmarks$#',$page_link)!=0)
 		{
 			return SITEMAP_NODE_HANDLED_VIRTUALLY;
 		}
-		return SITEMAP_NODE_NOT_HANDLED;
+		return SITEMAP_NODE_NOT_HANDLED;*/
 	}
 
 	/**

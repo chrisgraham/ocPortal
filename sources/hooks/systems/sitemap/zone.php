@@ -182,24 +182,9 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
 			if (strpos($page_type,'comcode')!==false)
 			{
-				if (($valid_node_types!==NULL) && (!in_array('comcode_page',$valid_node_types)))
-				{
-					continue;
-				}
-
-				if (($consider_validation) && (isset($root_comcode_pages[$page])) && ($root_comcode_pages[$page]==0))
-				{
-					continue;
-				}
-
 				$child_node=$comcode_page_sitemap_ob->get_node($page_link.$zone_default_page,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 			} else
 			{
-				if (($valid_node_types!==NULL) && (!in_array('page',$valid_node_types)))
-				{
-					continue;
-				}
-
 				$child_node=$page_sitemap_ob->get_node($page_link.$zone_default_page,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 			}
 

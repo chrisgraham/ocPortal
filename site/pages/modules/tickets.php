@@ -312,7 +312,7 @@ class Module_tickets
 		return do_template('SUPPORT_TICKET_LINK',array('_GUID'=>'4a39a6b5a7d56ead2d9c20b8a7a71398','NUM_POSTS'=>integer_format($topic['num']-1),
 			'CLOSED'=>strval($topic['closed']),
 			'URL'=>$url,
-			'TITLE'=>$ttitle,
+			'TITLE'=>$title,
 			'FIRST_DATE'=>$first_date,
 			'FIRST_DATE_RAW'=>strval($topic['firsttime']),
 			'FIRST_POSTER_PROFILE_URL'=>$first_poster_profile_url,

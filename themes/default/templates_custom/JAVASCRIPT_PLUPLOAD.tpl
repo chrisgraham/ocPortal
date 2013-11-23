@@ -5850,8 +5850,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	newClearBtn.id='fsClear_'+name;
 	//newClearBtn.type='image';
 	newClearBtn.type='button';
-	newClearBtn.className='button_micro clear_button';
-	//newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
+	newClearBtn.className='buttons__clear button_micro clear_button';
 	newClearBtn.style.marginLeft='8px';
 	newClearBtn.alt='{!CLEAR;^}';
 	newClearBtn.value='{!CLEAR;^}';

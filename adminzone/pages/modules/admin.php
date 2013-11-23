@@ -1172,8 +1172,8 @@ class Module_admin
 		{
 			$_search_url=build_url(array('page'=>'search','type'=>'results','content'=>$raw_search_string,'days'=>'-1','search_comcode_pages'=>1,'all_defaults'=>1),get_module_zone('search'));
 			$search_url=$_search_url->evaluate();
-			$software_search_url=brand_base_url().'/site/index.php?page=search&type=results&search_under=docs&search_comcode_pages=1&days=-1&content='.urlencode($raw_search_string);
-			$software_search_url_2=brand_base_url().'/site/index.php?page=search&type=results&search_ocf_posts=1&days=-1&content='.urlencode($raw_search_string);
+			$software_search_url=get_brand_base_url().'/site/index.php?page=search&type=results&search_under=docs&search_comcode_pages=1&days=-1&content='.urlencode($raw_search_string);
+			$software_search_url_2=get_brand_base_url().'/site/index.php?page=search&type=results&search_ocf_posts=1&days=-1&content='.urlencode($raw_search_string);
 			$pre=do_lang_tempcode('ADMINZONE_SEARCH_RESULTS',escape_html($raw_search_string),escape_html($search_url),array(escape_html($software_search_url),escape_html($software_search_url_2)));
 		} else $pre=new ocp_tempcode();
 		$found_some=false;

@@ -41,7 +41,7 @@ function get_problem_match()
 			{
 				$output=str_replace('ocPortal',$brand,$output);
 				$output=str_replace('ocProducts','The Developers',$output);
-				$output=str_replace(brand_base_url(),$brand_base_url,$output);
+				$output=str_replace(get_brand_base_url(),$brand_base_url,$output);
 			}
 		}
 		echo $output;

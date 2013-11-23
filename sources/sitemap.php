@@ -1030,7 +1030,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 /**
  * Get all the details (links) of our page groupings.
  *
- * @return tempcode		List of link tuples (one of the elements of which defines the page grouping -- see the page grouping hooks to see the structure).
+ * @return array		List of link tuples (one of the elements of which defines the page grouping -- see the page grouping hooks to see the structure).
  */
 function get_page_grouping_links()
 {

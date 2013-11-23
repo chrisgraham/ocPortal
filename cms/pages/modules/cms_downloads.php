@@ -868,7 +868,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 	 * @param  URLPATH		The rep-image for the download category
 	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($id,$category='',$parent_id=NULL,$description='',$notes='',$category_id=-1,$rep_image='')
+	function get_form_fields($id=NULL,$category='',$parent_id=NULL,$description='',$notes='',$category_id=-1,$rep_image='')
 	{
 		if ((is_null($parent_id)) && ($category_id==-1))
 		{

@@ -17,7 +17,7 @@
 				<a class="buttons__previous button_page" {+START,IF,{SLIDESHOW}}onclick="return slideshow_backward();" {+END}rel="prev" accesskey="j" href="{BACK_URL*}"><span>{!PREVIOUS}</span></a>
 			{+END}
 			{+START,IF_EMPTY,{BACK_URL}}
-				<span class="buttons__no_previous button_page"><span>{!PREVIOUS}</span></span>
+				<span class="buttons__previous_none button_page"><span>{!PREVIOUS}</span></span>
 			{+END}
 		</div>
 
@@ -36,7 +36,7 @@
 				<a class="buttons__next button_page" {+START,IF,{SLIDESHOW}}onclick="return slideshow_forward();" {+END}rel="next" accesskey="k" href="{NEXT_URL*}"><span>{!NEXT}</span></a>
 			{+END}
 			{+START,IF_EMPTY,{NEXT_URL}}
-				<span class="buttons__no_next button_page"><span>{!NEXT}</span></span>
+				<span class="buttons__next_none button_page"><span>{!NEXT}</span></span>
 			{+END}
 		</div>
 

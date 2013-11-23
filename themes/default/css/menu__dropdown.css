@@ -153,6 +153,7 @@ For example:
 
 .menu_type__dropdown .nlevel .has_img img {
 	width: 20px;
+	float: left; /* So that wrapping alignment is neat */
 }
 
 

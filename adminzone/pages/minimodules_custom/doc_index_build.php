@@ -141,7 +141,7 @@ $path=get_custom_file_base().'/docs/pages/comcode_custom/EN/tut_addon_index.txt'
 $addon_index_file=file_get_contents($path);
 $marker='[staff_note]Automatic code inserts after this[/staff_note]';
 $pos=strpos($addon_index_file,$marker);
-$addon_index_file=substr($addon_index_file,0,$pos+strlen($marker)).'[semihtml]'.str_replace(get_custom_base_url(),brand_base_url(),$out).'[/semihtml]';
+$addon_index_file=substr($addon_index_file,0,$pos+strlen($marker)).'[semihtml]'.str_replace(get_custom_base_url(),get_brand_base_url(),$out).'[/semihtml]';
 file_put_contents($path,$addon_index_file);
 fix_permissions($path);
 sync_file($path);

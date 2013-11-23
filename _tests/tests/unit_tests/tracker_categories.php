@@ -21,7 +21,7 @@ class tracker_categories_test_set extends ocp_test_case
 	function testHasAddons()
 	{
 		$post=array();
-		$categories=unserialize(http_download_file(brand_base_url().'/data_custom/ocpcom_web_service.php?call=get_tracker_categories',NULL,true,false,'ocPortal Test Platform',$post));
+		$categories=unserialize(http_download_file(get_brand_base_url().'/data_custom/ocpcom_web_service.php?call=get_tracker_categories',NULL,true,false,'ocPortal Test Platform',$post));
 		$addons=find_all_hooks('systems','addon_registry');
 		foreach ($addons as $addon=>$place)
 		{
@@ -33,7 +33,7 @@ class tracker_categories_test_set extends ocp_test_case
 	function testNoUnknownAddons()
 	{
 		$post=array();
-		$categories=unserialize(http_download_file(brand_base_url().'/data_custom/ocpcom_web_service.php?call=get_tracker_categories',NULL,true,false,'ocPortal Test Platform',$post));
+		$categories=unserialize(http_download_file(get_brand_base_url().'/data_custom/ocpcom_web_service.php?call=get_tracker_categories',NULL,true,false,'ocPortal Test Platform',$post));
 		$addons=find_all_hooks('systems','addon_registry');
 		foreach ($categories as $category)
 		{

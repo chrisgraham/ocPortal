@@ -209,7 +209,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 			'new_window'=>'BINARY',
 			'page_only'=>'ID_TEXT',
 			'theme_img_code'=>'ID_TEXT',
-			'include_sitemap'=>'SHORT_INTEGER';
+			'include_sitemap'=>'SHORT_INTEGER',
 		);
 	}
 

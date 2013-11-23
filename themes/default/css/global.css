@@ -2898,8 +2898,12 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	cursor: pointer;
 }
 
-.wide_button, .button_page, .button_pageitem {
+.wide_button, .button_page {
 	padding: 5px 7px 5px 35px !important
+}
+.button_pageitem {
+	padding: 3px 7px 3px 29px !important;
+	background-size: 20px;
 }
 .button_page {
 	min-width: {$?,{$MOBILE},5.8,9.8}em;

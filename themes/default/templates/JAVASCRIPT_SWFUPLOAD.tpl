@@ -1835,8 +1835,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 		var newClearBtn=document.createElement('input');
 		newClearBtn.id='fsClear_'+name;
-		newClearBtn.type='image';
-		newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
+		newClearBtn.type='button';
+		newClearBtn.className='buttons__clear button_micro clear_button';
 		newClearBtn.style.marginLeft='8px';
 		newClearBtn.value='{!UPLOAD;^}: {!CLEAR;^}';
 		subdiv.appendChild(newClearBtn);

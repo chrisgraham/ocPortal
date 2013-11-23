@@ -1120,8 +1120,8 @@ class standard_crud_module
 				'TABLE'=>$table,
 				'SUBMIT_ICON'=>'buttons__sort',
 				'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,
-				'POST_URL'=>get_self_url()),
-			);
+				'POST_URL'=>get_self_url(),
+			));
 
 			require_code('templates_internalise_screen');
 			return internalise_own_screen($tpl);

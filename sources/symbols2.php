@@ -246,7 +246,7 @@ function ecv2_BRAND_NAME($lang,$escaped,$param)
  */
 function ecv2_BRAND_BASE_URL($lang,$escaped,$param)
 {
-	$value=brand_base_url();
+	$value=get_brand_base_url();
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;

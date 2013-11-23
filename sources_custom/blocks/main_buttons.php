@@ -82,7 +82,7 @@ class Block_main_buttons
 		require_code('banners3');
 
 		//create default banners, if they don't exist
-		add_banner_quiet('ocportal','data_custom/causes/ocportal.gif',brand_name(),brand_name(),0,brand_base_url().'/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
+		add_banner_quiet('ocportal','data_custom/causes/ocportal.gif',brand_name(),brand_name(),0,get_brand_base_url().'/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
 		add_banner_quiet('firefox','data_custom/causes/firefox.gif','Firefox','Firefox',0,'http://www.mozilla.com/firefox/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
 		add_banner_quiet('w3cxhtml','data_custom/causes/w3c-xhtml.gif','W3C XHTML','W3C XHTML',0,'http://www.w3.org/MarkUp/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
 		add_banner_quiet('w3ccss','data_custom/causes/w3c-css.gif','W3C CSS','W3C CSS',0,'http://www.w3.org/Style/CSS/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
