@@ -169,7 +169,7 @@ Allows people to specify who referred them when they join your site or other con
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('referrer_override');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('referrals_qualified_for');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('referees_qualified_for');
 	}
 
 	/**

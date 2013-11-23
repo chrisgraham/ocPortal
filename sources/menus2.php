@@ -157,6 +157,7 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
 		'i_url'=>$url,
 		'i_check_permissions'=>$check_permissions,
 		'i_page_only'=>$page_only,
+		'i_include_sitemap'=>$include_sitemap,
 		'i_expanded'=>$expanded,
 		'i_new_window'=>$new_window,
 		'i_theme_img_code'=>$theme_image_code,

@@ -141,15 +141,16 @@ class modularisation_test_set extends ocp_test_case
 		while (($file=readdir($dh))!==false)
 		{
 			if (should_ignore_file($dir.$file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_UNSHIPPED_VOLATILE,0))
+			{
 				continue;
+			}
 
 			$is_dir=is_dir($full_dir.$file);
 
 			if ($is_dir)
 			{
 				$this->do_dir($dir.$file.'/');
-			}
-			else
+			} else
 			{
 				$GFILE_ARRAY[]=$dir.$file;
 			}

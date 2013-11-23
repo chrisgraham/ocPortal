@@ -61,6 +61,7 @@ class addon_screenshots_test_set extends ocp_test_case
 					'simplified_emails',
 					'twitter_support',
 					'usergroup_field_match',
+					'newsletter_no_members',
 				))) continue;
 
 				$exists=false;

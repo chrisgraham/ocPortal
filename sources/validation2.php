@@ -225,7 +225,7 @@ function init__validation2()
 	$enforce_border_style='(none|dotted|dashed|solid|double|groove|ridge|inset|outset|transparent)'; // 'transparent' not supported in IE6
 	$enforce_background_repeat='(repeat|repeat-x|repeat-y|no-repeat)';
 	$enforce_attachment='(scroll|fixed)';
-	$_enforce_background_position='(('.$enforce_length.'|top|center|bottom)|('.$enforce_length.'|left|center|right))';
+	$_enforce_background_position='(('.$enforce_length.'|top( '.$enforce_length.')?|center|bottom( '.$enforce_length.')?)|('.$enforce_length.'|left( '.$enforce_length.')?|center|right( '.$enforce_length.')?))';
 	$enforce_background_position='(('.$_enforce_background_position.')|('.$_enforce_background_position.' '.$_enforce_background_position.'))';
 	$enforce_border='(('.$enforce_border_width.'|'.$enforce_border_style.'|'.$enforce_css_color.')( |$))+';
 	$enforce_potential_4d_length=$enforce_length.'( '.$enforce_length.'( '.$enforce_length.'( '.$enforce_length.'|)|)|)';

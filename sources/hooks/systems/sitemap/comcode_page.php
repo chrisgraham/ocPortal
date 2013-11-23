@@ -94,9 +94,14 @@ class Hook_sitemap_comcode_page extends Hook_sitemap_page
 
 		$this->_make_zone_concrete($zone,$page_link);
 
-		$zone_default_page=get_zone_default_page($zone);
-
 		$details=$this->_request_page_details($page,$zone);
+		if (($details===false) && (get_option('collapse_user_zones')=='0'))
+		{
+			$zone=($zone=='site')?'':'site'; // Try different zone
+			$details=$this->_request_page_details($page,$zone);
+		}
+
+		$zone_default_page=get_zone_default_page($zone);
 
 		$path=end($details);
 

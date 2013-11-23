@@ -23,10 +23,11 @@ class Hook_page_groupings_ocworld
 	 */
 	function run($member_id=NULL,$extensive_docs=false)
 	{
-		require_lang('ocgifts');
+		$zone=get_module_zone('ocworld');
+		if ($zone===NULL) return array(); // Zone not installed yet
 
 		return array(
-			array('rich_content','menu/ocworld',array('ocworld',array(),get_module_zone('ocworld')),do_lang_tempcode('ocworld:OCWORLD')),
+			array('rich_content','menu/ocworld',array('ocworld',array(),$zone),do_lang_tempcode('ocworld:OCWORLD')),
 		);
 	}
 }

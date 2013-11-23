@@ -23,8 +23,6 @@ class Hook_page_groupings_ocgifts
 	 */
 	function run($member_id=NULL,$extensive_docs=false)
 	{
-		require_lang('ocgifts');
-
 		return array(
 			array('setup','menu/ocgifts',array('admin_ocgifts',array(),get_page_zone('admin_ocgifts')),do_lang_tempcode('ocgifts:MANAGE_GIFTS'),'ocgifts:DOC_OCGIFTS'),
 		);

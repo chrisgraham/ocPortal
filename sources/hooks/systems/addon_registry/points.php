@@ -228,7 +228,8 @@ class Hook_addon_registry_points
 					'POINTS_URL'=>placeholder_url(),
 					'PROFILE_URL'=>placeholder_url(),
 					'POINTS'=>placeholder_number(),
-					'USERNAME'=>lorem_phrase()
+					'USERNAME'=>lorem_phrase(),
+					'HAS_RANK_IMAGES'=>true,
 				)));
 			}
 			$out->attach(do_lorem_template('POINTS_LEADER_BOARD_WEEK',array(

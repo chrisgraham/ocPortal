@@ -142,8 +142,6 @@ class Hook_addon_registry_core_menus
 			'sources/blocks/menu.php',
 			'sources/hooks/systems/snippets/management_menu.php',
 			'sources/menus.php',
-			'sources/menus_sitemap.php',
-			'sources/menus_bookmarks.php',
 			'sources/menus_comcode.php',
 			'sources/menus2.php',
 			'themes/default/templates/PAGE_LINK_CHOOSER.tpl',
