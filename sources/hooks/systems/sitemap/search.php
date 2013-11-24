@@ -76,6 +76,7 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			if (count($_hooks)>$child_cutoff) return $nodes;
 		}
 
+		$hooks=array();
 		foreach (array_keys($_hooks) as $hook)
 		{
 			require_code('hooks/modules/search/'.filter_naughty_harsh($hook));
@@ -83,13 +84,19 @@ class Hook_sitemap_search extends Hook_sitemap_base
 			if (is_null($ob)) continue;
 			$info=$ob->info(false);
 			if (is_null($info)) continue;
-
 			if (($hook=='catalogue_entries') || (array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (method_exists($ob,'get_tree')) || (method_exists($ob,'ajax_tree')))
 			{
-				$child_page_link=$zone.':'.$page.':misc:'.$hook;
-				$node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
+				$hooks[$hook]=$info;
 			}
+		}
+
+		sort_maps_by($hooks,'lang');
+
+		foreach ($hooks as $hook=>$info)
+		{
+			$child_page_link=$zone.':'.$page.':misc:'.$hook;
+			$node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+			if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 		}
 
 		return $nodes;

@@ -97,6 +97,11 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 		}
 		while (count($rows)==SITEMAP_MAX_ROWS_PER_LOOP);
 
+		if (is_array($nodes))
+		{
+			sort_maps_by($nodes,'title');
+		}
+
 		return $nodes;
 	}
 
@@ -127,6 +132,8 @@ class Hook_sitemap_calendar_type extends Hook_sitemap_content
 		list($content_id,$row,$partial_struct)=$_;
 
 		$struct=array(
+			'page_link'=>$page_link,
+
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
 			'sitemap_refreshfreq'=>'weekly',
 

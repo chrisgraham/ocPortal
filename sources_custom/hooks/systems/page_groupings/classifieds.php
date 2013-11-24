@@ -25,7 +25,7 @@ class Hook_page_groupings_classifieds
 	{
 		return array(
 			array('setup','menu/classifieds',array('admin_classifieds',array(),get_module_zone('admin_classifieds')),do_lang_tempcode('classifieds:CLASSIFIEDS_PRICING'),'classifieds:DOC_CLASSIFIEDS_PRICING'),
-			array('site_meta','menu/classifieds',array('classifieds',array(),get_module_zone('classifieds')),do_lang_tempcode('classifieds:CLASSIFIED_ADVERTS')),
+			array('social','menu/classifieds',array('classifieds',array(),get_module_zone('classifieds')),do_lang_tempcode('classifieds:CLASSIFIED_ADVERTS')),
 		);
 	}
 }

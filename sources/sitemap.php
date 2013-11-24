@@ -452,9 +452,10 @@ abstract class Hook_sitemap_base
 	 * @param  ID_TEXT		The zone.
 	 * @param  ID_TEXT		The page.
 	 * @param  ID_TEXT		The type.
+	 * @param  ?ID_TEXT		The ID (NULL: unknown).
 	 * @return ?array			Faked database row (NULL: derive).
 	 */
-	protected function _load_row_from_page_groupings($row,$zone,$page,$type='misc')
+	protected function _load_row_from_page_groupings($row,$zone,$page,$type='misc',$id=NULL)
 	{
 		if (!isset($row[0])) // If the first tuple element is not defined (a property map may be, for Comcode pages)
 		{
@@ -467,7 +468,30 @@ abstract class Hook_sitemap_base
 			{
 				if (!is_array($link[2])) continue;
 
-				if (($link[2][0]==$page) && ((!isset($link[2][1]['type'])) || ($link[2][1]['type']==$type)) && (($link[2][2]==$zone) || ($page!='start')))
+				$is_a_match=true;
+				if ($link[2][0]!=$page)
+				{
+					$is_a_match=false;
+				} else
+				{
+					if ((isset($link[2][1]['type'])) && ($link[2][1]['type']!=$type))
+					{
+						$is_a_match=false;
+					} else
+					{
+						if (($link[2][2]!=$zone) && ($page=='start'))
+						{
+							$is_a_match=false;
+						} else
+						{
+							if ((isset($link[2][1]['id'])) && ($link[2][1]['id']!==$id))
+							{
+								$is_a_match=false;
+							}
+						}
+					}
+				}
+				if ($is_a_match)
 				{
 					$title=$link[3];
 					$icon=$link[1];
@@ -759,7 +783,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			);
 		}
 
-		if ((($meta_gather & SITEMAP_GATHER_DESCRIPTION)!=0) && (isset($cma_info['description_field'])))
+		/*if ((($meta_gather & SITEMAP_GATHER_DESCRIPTION)!=0) && (isset($cma_info['description_field'])))	Description field generally not appropriate for Sitemap
 		{
 			$description=$row[$cma_info['description_field']];
 			if (is_integer($description))
@@ -769,21 +793,33 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			{
 				$struct['extra_meta']['description']=make_string_tempcode(escape_html($description));
 			}
-		}
+		}*/
 
 		if ((($meta_gather & SITEMAP_GATHER_IMAGE)!=0) && (isset($cma_info['thumb_field'])))
 		{
-			if (strpos($cma_info['thumb_field'],'CALL:')!==false)
+			if (method_exists($this,'_find_theme_image'))
 			{
-				$struct['extra_meta']['image']=call_user_func(trim(substr($cma_info['thumb_field'],5)),array('id'=>$content_id),false);
+				$this->_find_theme_image($row,$struct);
 			} else
 			{
-				$struct['extra_meta']['image']=$row[$cma_info['thumb_field']];
-			}
-			if ((isset($cma_info['thumb_field_is_theme_image'])) && ($cma_info['thumb_field_is_theme_image']))
-			{
-				if ($struct['extra_meta']['image']!='')
-					$struct['extra_meta']['image']=find_theme_image($struct['extra_meta']['image']);
+				if (strpos($cma_info['thumb_field'],'CALL:')!==false)
+				{
+					$struct['extra_meta']['image']=call_user_func(trim(substr($cma_info['thumb_field'],5)),array('id'=>$content_id),false);
+				} else
+				{
+					$struct['extra_meta']['image']=$row[$cma_info['thumb_field']];
+				}
+				if ((isset($cma_info['thumb_field_is_theme_image'])) && ($cma_info['thumb_field_is_theme_image']))
+				{
+					if ($struct['extra_meta']['image']!='')
+						$struct['extra_meta']['image']=find_theme_image($struct['extra_meta']['image']);
+				} else
+				{
+					if ((url_is_local($struct['extra_meta']['image'])) && ($struct['extra_meta']['image']!=''))
+					{
+						$struct['extra_meta']['image']=get_custom_base_url().'/'.$struct['extra_meta']['image'];
+					}
+				}
 			}
 		}
 

@@ -89,7 +89,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 				{+START,IF,{$OR,{$GET,helper_panel},{$IS_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}}}
 					<div id="panel_right" class="global_side_panel{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,right}}} helper_panel{+START,IF,{$HIDE_HELP_PANEL}} helper_panel_hidden{+END}{+END}" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
 						{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
-							{$LOAD_PANEL,right}
+							<div class="stuck_nav">{$LOAD_PANEL,right}</div>
 						{+END}
 
 						{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}

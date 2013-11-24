@@ -194,7 +194,7 @@ function content_review_set($content_type,$content_id,$old_content_id=NULL)
  * @set leave unvalidate delete
  * @param  BINARY			Whether to display the review status publicly
  */
-function schedule_content_review($content_type,$content_id,$review_freq,$next_review_time=NULL,$auto_action='leave',$display_review_status=1)
+function schedule_content_review($content_type,$content_id,$review_freq,$next_review_time=NULL,$auto_action='leave',$display_review_status=0)
 {
 	// Tidy up, if conflicting entry in database
 	$GLOBALS['SITE_DB']->query_delete('content_reviews',array(

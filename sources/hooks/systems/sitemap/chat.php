@@ -94,6 +94,11 @@ class Hook_sitemap_chat extends Hook_sitemap_content
 		}
 		while (count($rows)==SITEMAP_MAX_ROWS_PER_LOOP);
 
+		if (is_array($nodes))
+		{
+			sort_maps_by($nodes,'title');
+		}
+
 		return $nodes;
 	}
 
@@ -128,6 +133,9 @@ class Hook_sitemap_chat extends Hook_sitemap_content
 
 			'privilege_page'=>$this->get_privilege_page($page_link),
 		)+$partial_struct;
+
+		$struct['extra_meta']['image']=find_theme_image('icons/24x24/menu/social/chat/chat');
+		$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/menu/social/chat/chat');
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
 

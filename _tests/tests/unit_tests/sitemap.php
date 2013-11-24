@@ -145,7 +145,7 @@ class sitemap_test_set extends ocp_test_case
 				$test=_request_page($page,$zone);
 				if ($test===false) continue;
 
-				if ((strpos($test[0],'_CUSTOM')===false) && (!in_array($k,array('adminzone:admin_config:base'))))
+				if ((strpos($test[0],'_CUSTOM')===false) && (!in_array($k,array('adminzone:admin_config:base',':keymap'))))
 					$this->assertTrue($c['extra_meta']['image']!='','Missing icon for: '.$k);
 			}
 		}

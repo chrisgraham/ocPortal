@@ -33,7 +33,7 @@ class Hook_page_groupings_calendar
 
 		return array(
 			array('cms','menu/rich_content/calendar',array('cms_calendar',array('type'=>'misc'),get_module_zone('cms_calendar')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('calendar:CALENDAR'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('calendar_events','COUNT(*)',NULL,'',true))))),'calendar:DOC_CALENDAR'),
-			array('rich_content','menu/rich_content/calendar',array('calendar',array(),get_module_zone('calendar')),do_lang_tempcode('calendar:CALENDAR')),
+			array('social','menu/rich_content/calendar',array('calendar',array(),get_module_zone('calendar')),do_lang_tempcode('calendar:CALENDAR')),
 		);
 	}
 }

@@ -82,7 +82,7 @@ class Hook_sitemap_download_category extends Hook_sitemap_content
 		$start=0;
 		do
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('parent_id'=>db_get_first_id()),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+			$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('parent_id'=>NULL),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
 				$child_page_link=$zone.':'.$page.':'.$this->screen_type.':'.strval($row['id']);

@@ -110,6 +110,12 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 		if (!isset($matches[5])) $matches[5]='';
 		$type=$matches[4];
 		if ($type=='') $type='misc';
+		$id=mixed();
+		if ($matches[5]!='')
+		{
+			$_id=substr($matches[5],1);
+			if (strpos($_id,'=')===false) $id=$_id;
+		}
 
 		$orig_page_link=$page_link;
 		$this->_make_zone_concrete($zone,$page_link);
@@ -142,14 +148,41 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 				$entry_point=$entry_points[$type];
 			} else
 			{
-				$entry_point=$entry_points[$orig_page_link];
+				if (isset($entry_points[$orig_page_link]))
+				{
+					$entry_point=$entry_points[$orig_page_link];
+				} else
+				{
+					$entry_point=array(NULL,NULL);
+
+					// Not actually an entry-point, so maybe something else handles it directly?
+					// Technically this would be better code to have in page_grouping.php, but we don't want to do a scan for entry-points that are easy to find.
+					$hooks=find_all_hooks('systems','sitemap');
+					foreach (array_keys($hooks) as $_hook)
+					{
+						require_code('hooks/systems/sitemap/'.$_hook);
+						$ob=object_factory('Hook_sitemap_'.$_hook);
+						if ($ob->is_active())
+						{
+							$is_handled=$ob->handles_page_link($page_link);
+							if ($is_handled==SITEMAP_NODE_HANDLED)
+							{
+								return $ob->get_node($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,NULL,$return_anyway);
+							}
+						}
+					}
+				}
 			}
 		}
 
 		$icon=mixed();
 		$_title=$entry_point[0];
 		$icon=$entry_point[1];
-		if (is_object($_title))
+		if (is_null($_title))
+		{
+			$title=new ocp_tempcode();
+		}
+		elseif (is_object($_title))
 		{
 			$title=$_title;
 		} else
@@ -203,11 +236,11 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 			'privilege_page'=>NULL,
 		);
 
-		$row_x=$this->_load_row_from_page_groupings(NULL,$zone,$page,$type);
+		$row_x=$this->_load_row_from_page_groupings(NULL,$zone,$page,$type,$id);
 		if ($row_x!=array())
 		{
-			$row_x[0]=NULL; // We have a better title
-			$row_x[1]=NULL; // We have a better icon
+			if ($_title!==NULL) $row_x[0]=NULL; // We have a better title
+			if ($icon!==NULL) $row_x[1]=NULL; // We have a better icon
 			$this->_ameliorate_with_row($struct,$row_x,$meta_gather);
 		}
 

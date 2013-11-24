@@ -82,7 +82,7 @@ class Hook_sitemap_banner extends Hook_sitemap_content
 		$start=0;
 		do
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),$consider_validation?array('validated'=>1):array(),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+			$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),$consider_validation?array('validated'=>1):array(),'ORDER BY name',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
 				$child_page_link=$zone.':'.$page.':'.$this->screen_type.':'.$row['name'];
@@ -144,5 +144,15 @@ class Hook_sitemap_banner extends Hook_sitemap_content
 			call_user_func($callback,$struct);
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;
+	}
+
+	/**
+	 * Find the image for a position in the Sitemap.
+	 *
+	 * @param  array  		Calendar type row.
+	 * @param  array  		Target structure.
+	 */
+	function _find_theme_image($row,&$struct)
+	{
 	}
 }

@@ -82,7 +82,7 @@ class Hook_sitemap_poll extends Hook_sitemap_content
 		$start=0;
 		do
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),NULL,($consider_validation?' AND date_and_time IS NOT NULL':''),SITEMAP_MAX_ROWS_PER_LOOP,$start);
+			$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),NULL,($consider_validation?' AND date_and_time IS NOT NULL':'').' ORDER BY date_and_time',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
 				$child_page_link=$zone.':'.$page.':'.$this->screen_type.':'.strval($row['id']);

@@ -193,7 +193,13 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 				//$struct['title']=$child_node['title'];
 				foreach (array('description','image','image_2x','submitter','views','meta_keywords','meta_description','validated') as $key)
 				{
-					if ($child_node['extra_meta'][$key]!==NULL) $struct['extra_meta'][$key]=$child_node['extra_meta'][$key];
+					if ($child_node['extra_meta'][$key]!==NULL)
+					{
+						if (($struct['extra_meta'][$key]===NULL) || (!in_array($key,array('image','image_2x'))))
+						{
+							$struct['extra_meta'][$key]=$child_node['extra_meta'][$key];
+						}
+					}
 				}
 				$struct['permissions']=array_merge($struct['permissions'],$child_node['permissions']);
 				if ($struct['children']!==NULL) $children=array_merge($children,$struct['children']);

@@ -20,11 +20,6 @@
 			{$PARAGRAPH,{SUMMARY}}
 		</div>
 	{+END}
-	{+START,IF_EMPTY,{SUMMARY}}
-		<p>
-			{!NO_SUMMARY}
-		</p>
-	{+END}
 
 	{+START,IF_PASSED,ENTRY_DETAILS}
 		<p class="associated_details">

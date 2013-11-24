@@ -47,7 +47,7 @@ class Hook_config_header_menu_call_string
 	 */
 	function get_default()
 	{
-		return 'site:';
+		return 'site:,use_page_groupings=1,max_recurse_depth=3';
 	}
 }
 

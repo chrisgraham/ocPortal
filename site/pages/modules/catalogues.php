@@ -447,10 +447,13 @@ class Module_catalogues
 	{
 		if ($be_deferential) return NULL;
 
-		if ($check_perms && is_guest($member_id)) return array(); // Guest (sitemap) won't want a catalogue list - too low level
-		return array(
-			'misc'=>array('CATALOGUES','menu/rich_content/catalogues/catalogues'),
-		);
+		$ret=array();
+		if (!$support_crosslinks) // Too low level if doing a full Sitemap
+		{
+			$ret['misc']=array('CATALOGUES','menu/rich_content/catalogues/catalogues');
+		}
+
+		return $ret;
 	}
 
 	var $title;

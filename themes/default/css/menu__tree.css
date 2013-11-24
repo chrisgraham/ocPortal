@@ -8,7 +8,7 @@
 }
 
 .menu_type__tree ul ul {
-	padding-{!en_left}: 5px;
+	padding-{!en_left}: 24px;
 }
 
 .menu_type__tree li {
@@ -32,10 +32,14 @@
 	background: transparent url('{$IMG;,menus/menu_bullet_hover}') no-repeat 5px 6px;
 }
 
-.menu_type__tree .has_no_img .drawer {
+.menu_type__tree .has_no_img>.drawer {
 	background: url('{$IMG;,menus/menu_bullet_expand}') no-repeat 0 5px !important;
 }
 
-.menu_type__tree .has_no_img .drawer:hover {
+.menu_type__tree .has_no_img>.drawer:hover {
 	background: url('{$IMG;,menus/menu_bullet_expand_hover}') no-repeat 0 5px !important;
+}
+
+.menu_type__tree img {
+	width: 20px;
 }

@@ -4,11 +4,6 @@
 			{$TRUNCATE_LEFT,{SUMMARY`},300,0,1}
 		</div>
 	{+END}
-	{+START,IF_EMPTY,{SUMMARY}}
-		<p>
-			{!NO_SUMMARY}
-		</p>
-	{+END}
 
 	{+START,IF_PASSED,BREADCRUMBS}{+START,IF_NON_EMPTY,{BREADCRUMBS}}
 		<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p>

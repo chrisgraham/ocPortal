@@ -71,7 +71,7 @@ class Hook_sitemap_iotd extends Hook_sitemap_content
 		$start=0;
 		do
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),$consider_validation?array('used'=>1):array(),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+			$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),$consider_validation?array('used'=>1):array(),'ORDER BY date_and_time',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
 				$child_page_link=$zone.':'.$page.':'.$this->screen_type.':'.strval($row['id']);

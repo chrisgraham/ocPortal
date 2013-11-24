@@ -453,58 +453,14 @@ header h1 {
 	border: 0;
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
-	.logo {
-		float: left;
-	}
-
-	/*
-	Commented out by default.
-	If you enable it will turn off the standard logo and replace it with a big header image.
-	Don't enable if banners addon is still installed
-
-	Find how to edit the referenced "header" theme image by doing an Admin Zone search for "header"
-	*/
-	/*
-	.logo_outer {
-		margin-bottom: 8px;
-		width: 980px;
-		height: 100px;
-		float: left;
-		background: url('{$IMG_INLINE;,header}') no-repeat !important;
-	}
-
-	.logo_outer * {
-		display: none;
-	}
-
-	.global_navigation {
-		margin-top: 99px !important;
-		text-align: center !important;
-		min-height: 30px !important;
-	}
-	*/
-{+END}
+.logo_outer {
+	width: 980px;
+	height: 100px;
+	text-align: center;
+	display: block;
+}
 
 .global_navigation {
-	font-size: 0.95em;
-	{+START,IF,{$MOBILE}}
-		text-align: center !important;
-		margin: 0 auto;
-		padding: 8px 0 9px 0;
-	{+END}
-	{+START,IF,{$NOT,{$MOBILE}}}
-		text-align: right;
-		margin-top: 60px;
-		padding: 5px 5px 0 0;
-		background: url('{$IMG_INLINE;,zone_gradient}') repeat-x;
-		min-height: 24px;
-	{+END}
-	font-weight: bold;
-	color: {$GET,navigation_text};
-	background-color: {$GET,navigation_background};
-	background-position: left bottom;
-	background-size: 100% 100%;
 }
 
 .global_banner {
@@ -2869,11 +2825,12 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 }
 
 /* This is used to overlay special out-of-flow edit buttons, for staff only */
-.magic_image_edit_link {
-	font-size: 15px;
+input.magic_image_edit_link {
+	font-size: 13px;
 	border: 1px solid {$GET,light_error_border} !important;
 	background: {$GET,light_error_background} !important;
 	color: {$GET,slightly_seeded_text} !important;
+	text-shadow: 0 0 0;
 }
 
 .button_screen_item_tall {
@@ -3281,7 +3238,7 @@ ul.nl, .nl ul {
 	list-style-image: none;
 }
 
-.has_img a {
+.has_img>a {
 	background: none !important;
 	padding-{!en_left}: 0 !important;
 	vertical-align: middle;

@@ -48,20 +48,24 @@ class Hook_page_groupings_catalogues
 
 					if (($row['c_ecommerce']==0) || (addon_installed('shopping')))
 					{
-						$menu_icon='menu/cms/catalogues/'.$row['c_name'];
+						$menu_icon='menu/rich_content/catalogues/'.$row['c_name'];
 						if (find_theme_image('icons/24x24/'.$menu_icon,true)=='')
-							$menu_icon='menu/cms/catalogues/catalogues';
+							$menu_icon='menu/rich_content/catalogues/catalogues';
 
 						if (has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$row['c_name'])))
 							$ret2[]=array('cms',$menu_icon,array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',get_translated_text($row['c_title']),escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_text($row['c_description']));
 
-						$ret2[]=array('rich_content',$menu_icon,array('catalogues',array('type'=>'index','id'=>$row['c_name']),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))));
+						$page_grouping='rich_content';
+						if ($row['c_name']=='projects') $page_grouping='collaboration';
+						if ($row['c_name']=='classifieds') $page_grouping='social';
+
+						$ret2[]=array($page_grouping,$menu_icon,array('catalogues',array('type'=>'index','id'=>$row['c_name']),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))));
 					}
 				}
-				/*if (count($ret2)<20)	Why would people add 20+. Weird use case, and we can't make assumptions if they do, linking should still happen.
-				{
+				//if (count($ret2)<20)	Why would people add 20+. Weird use case, and we can't make assumptions if they do, linking should still happen.
+				//{
 					$ret=array_merge($ret,$ret2);
-				}*/
+				//}
 			}
 		}
 

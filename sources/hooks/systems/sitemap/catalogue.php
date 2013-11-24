@@ -126,6 +126,11 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 		}
 		while (count($rows)==SITEMAP_MAX_ROWS_PER_LOOP);
 
+		if (is_array($nodes))
+		{
+			sort_maps_by($nodes,'title');
+		}
+
 		return $nodes;
 	}
 
@@ -169,6 +174,8 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 
 		if (strpos($page_link,':index:')!==false)
 		{
+			$struct['extra_meta']['description']=NULL;
+
 			if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)
 			{
 				$test=find_theme_image('icons/24x24/menu/rich_content/catalogues/'.$content_id,true);
@@ -234,6 +241,8 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 		}
 		elseif (strpos($page_link,':atoz:')!==false)
 		{
+			$struct['extra_meta']['description']=NULL;
+
 			$struct['title']=do_lang_tempcode('catalogues:ATOZ');
 
 			if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)

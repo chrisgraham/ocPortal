@@ -32,7 +32,7 @@ class Hook_page_groupings_guestbook
 		if (!addon_installed('guestbook')) return array();
 
 		return array(
-			array('site_meta','menu/site_meta/guestbook',array('guestbook',array(),get_comcode_zone('guestbook')),do_lang_tempcode('menus:GUESTBOOK')),
+			array('social','menu/site_meta/guestbook',array('guestbook',array(),get_comcode_zone('guestbook')),do_lang_tempcode('menus:GUESTBOOK')),
 		);
 	}
 }

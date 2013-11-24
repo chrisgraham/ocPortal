@@ -60,7 +60,7 @@ class Block_menu
 	 */
 	function run($map)
 	{
-		if (!array_key_exists('param',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','param'); // can't function like that
+		if (!array_key_exists('param',$map)) $map['param']='';
 
 		$type=array_key_exists('type',$map)?$map['type']:'embossed';
 		$silent_failure=array_key_exists('silent_failure',$map)?$map['silent_failure']:'0';
