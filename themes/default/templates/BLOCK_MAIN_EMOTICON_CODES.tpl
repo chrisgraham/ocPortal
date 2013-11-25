@@ -1,4 +1,4 @@
-<div class="wide_table_wrap"><table class="columned_table autosized_table results_table wide_table">
+<table class="columned_table autosized_table results_table">
 	<thead>
 		<tr>
 			<th>{!CODE}</th>
@@ -9,4 +9,4 @@
 	<tbody>
 		{ENTRIES}
 	</tbody>
-</table></div>
+</table>

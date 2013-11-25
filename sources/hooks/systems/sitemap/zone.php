@@ -303,15 +303,6 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 				}
 			}
 
-			// Dashboard is not in a page grouping, and is default page, we need to render it anyway
-			if (($zone=='adminzone') && ($callback===NULL))
-			{
-				$child_page_link='adminzone:start';
-				$child_node=$comcode_page_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-				if ($child_node!==NULL)
-					$children[]=$child_node;
-			}
-
 			// Do page-groupings
 			if (count($page_groupings)!=1)
 			{

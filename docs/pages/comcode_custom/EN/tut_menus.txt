@@ -145,6 +145,8 @@ It consists of:
   - [tt]child_cutoff[/tt] -- the maximum number of children a node may have (if this limit is exceeded [i]no[/i] children will be shown for that node)
   - [tt]consider_secondary_categories[/tt] -- if set to 1, secondary categorisations will be considered, meaning nodes may be duplicated
   - [tt]consider_validation[/tt] -- if set to 1, non-validated resources will not be shown
+  - [tt]title[/tt] -- forced override for node title
+  - [tt]icon[/tt] -- forced override for node icon (a theme image under [tt]icons/24x24[/tt])
 
 When you add a new branch to a managed menu, you can choose to include the Sitemap at the given page-link "over" or "under" that branch. This allows you to chain parts of the Sitemap into your managed menu, giving you the best of both worlds (configurability but also auto-maintenance of displayed categories).
 

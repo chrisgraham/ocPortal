@@ -99,7 +99,7 @@ class Block_main_comcode_page_children
 
 			$child['TITLE']=$title;
 			$child['PAGE']=$child['the_page'];
-			$child['ZONE']=$child['the_zone'];
+			$child['ZONE']=get_comcode_zone($child['the_page']);
 
 			$children[$i]=$child;
 		}

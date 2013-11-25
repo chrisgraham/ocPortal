@@ -252,6 +252,9 @@ function closed_site()
  */
 function page_not_found($codename,$zone)
 {
+	global $PAGE_NAME_CACHE;
+	$PAGE_NAME_CACHE='404';
+
 	set_http_status_code('404');
 
 	// Maybe problem with SEO URLs

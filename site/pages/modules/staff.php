@@ -149,7 +149,9 @@ class Module_staff
 		foreach ($rows as $row_staff)
 		{
 			$id=$GLOBALS['FORUM_DRIVER']->mrow_id($row_staff);
+
 			if (!$GLOBALS['FORUM_DRIVER']->is_staff($id)) continue;
+
 			$username=$row_staff['username'];
 			$url=build_url(array('page'=>'_SELF','id'=>$username,'type'=>'view'),'_SELF');
 			$role=get_ocp_cpf('role',$id);

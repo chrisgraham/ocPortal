@@ -92,7 +92,7 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false,$g
 		'SUBMITTER'=>strval($row['submitter']),
 		'DATE'=>get_timezoned_date($row['date_and_time']),
 		'DATE_RAW'=>strval($row['date_and_time']),
-		'FULL_URL'=>$url,
+		'URL'=>$url,
 		'NEWS_TITLE'=>$title,
 		'NEWS_TITLE_PLAIN'=>$title_plain,
 	);

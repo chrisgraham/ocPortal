@@ -1,4 +1,4 @@
-[title="1"]{$SITE_NAME} help[/title]
+[title="1" sub="{$SITE_NAME} help"]Help[/title]
 
 [title="2"]Logging-in[/title]
 

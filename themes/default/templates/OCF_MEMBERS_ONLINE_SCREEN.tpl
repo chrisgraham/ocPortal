@@ -16,10 +16,12 @@
 					</th>
 				{+END}
 			{+END}
-			{+START,IF,{$HAS_PRIVILEGE,see_ip}}
-				<th>
-					{!IP_ADDRESS}
-				</th>
+			{+START,IF,{$ADDON_INSTALLED,securitylogging}}
+				{+START,IF,{$HAS_PRIVILEGE,see_ip}}
+					<th>
+						{!IP_ADDRESS}
+					</th>
+				{+END}
 			{+END}
 		</tr>
 	</thead>

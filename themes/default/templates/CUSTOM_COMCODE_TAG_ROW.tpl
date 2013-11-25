@@ -1,6 +1,6 @@
 <tr>
 	<td>{TITLE*}</td>
 	<td>{DESCRIPTION*}</td>
-	<td>{EXAMPLE*}</td>
+	<td><kbd>{EXAMPLE*}</kbd></td>
 </tr>
 

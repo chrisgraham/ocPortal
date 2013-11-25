@@ -1215,6 +1215,9 @@ th.meta_data_title {
 
 	overflow: hidden;
 }
+td>.box {
+	margin: 0;
+}
 /* Accordion boxes don't have margins */
 .box___standardbox_accordion {
 	margin: 0 !important;
@@ -3295,17 +3298,20 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 /* .comcode_quote is used where the [quote] tag is parsed. */
 /* .comcode_code is used where the [code] tag is parsed. */
 .comcode_quote, .comcode_code {
-	margin: 15px;
+	margin: 1em;
 
 	/* To prevent horizontal overlapping with floats */
 	outline: 0;
 	overflow: auto;
 }
+td>.comcode_code_wrap>.comcode_quote, td>.comcode_code_wrap>.comcode_code {
+	margin: 0;
+}
 
 .comcode_quote>h4, .comcode_code>h4 {
 	border: 1px solid {$GET,code_border};
 	padding: 4px;
-	margin-bottom: 0;
+	margin: 0;
 	background: {$GET,code_title_background} url('{$IMG;,quote_gradient}') repeat-y;
 }
 

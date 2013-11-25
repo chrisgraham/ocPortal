@@ -1,4 +1,4 @@
-[title]Enabling popups from {$SITE_NAME}[/title]
+[title]Enabling popups[/title]
 
 Some of our systems rely on your web browser allowing {$SITE_NAME} to allow popup windows.
 {+START,IF,{$EQ,{$_GET,failure},1}}

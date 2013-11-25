@@ -85,7 +85,7 @@ class Hook_sitemap_banner extends Hook_sitemap_content
 			$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),$consider_validation?array('validated'=>1):array(),'ORDER BY name',SITEMAP_MAX_ROWS_PER_LOOP,$start);
 			foreach ($rows as $row)
 			{
-				$child_page_link=$zone.':'.$page.':'.$this->screen_type.':'.$row['name'];
+				$child_page_link=$zone.':'.$page.':'.$this->screen_type.':source='.$row['name'];
 				$node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 			}
@@ -118,11 +118,14 @@ class Hook_sitemap_banner extends Hook_sitemap_content
 	 */
 	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
+		$page_link_fudged=preg_replace('#:source=#','',$page_link);
 		$_=$this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
 		if ($_===NULL) return NULL;
 		list($content_id,$row,$partial_struct)=$_;
 
 		$struct=array(
+			'page_link'=>$page_link,
+
 			'sitemap_priority'=>SITEMAP_IMPORTANCE_NONE,
 			'sitemap_refreshfreq'=>'never',
 

@@ -29,24 +29,3 @@
 		</td>
 	</tr>
 {+END}
-
-{+START,SET,commented_out}
-	{+START,IF,{$NOT,{$IS_GUEST}}}
-		<tr>
-			<td colspan="3">
-				<h3 class="search_tabular_header">{!SAVE_SEARCH}&hellip;</h3>
-			</td>
-		</tr>
-		<tr>
-			<th class="form_table_field_name">{!SAVE_SEARCH}</th>
-			<td class="form_table_field_input" colspan="2">
-				<p>{!SAVE_SEARCH_DESCRIPTION}</p>
-				<div class="accessibility_hidden"><label for="save_title">{!TITLE}</label></div>
-				<input maxlength="255" type="text" size="48" value="" id="save_title" name="save_title" />
-				<ul class="actions_list" role="navigation">
-					<a href="{$PAGE_LINK*,_SELF:_SELF:my}">{!SAVED_SEARCHES}</a>
-				</ul>
-			</td>
-		</tr>
-	{+END}
-{+END}

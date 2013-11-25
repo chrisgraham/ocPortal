@@ -47,7 +47,7 @@ class Hook_config_header_menu_call_string
 	 */
 	function get_default()
 	{
-		return 'site:,use_page_groupings=1,max_recurse_depth=3';
+		return 'site:start,include=node,title='.do_lang('HOME').',icon=menu/start + site:,use_page_groupings=1,max_recurse_depth=4';
 	}
 }
 

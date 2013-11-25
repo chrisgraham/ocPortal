@@ -25,7 +25,7 @@
 			{+START,INCLUDE,NOTIFICATION_BUTTONS}
 				NOTIFICATIONS_TYPE=comment_posted
 				NOTIFICATIONS_ID={TYPE}_{ID}
-				BUTTON_TYPE=pageitem
+				BUTTON_TYPE=button_screen_item
 			{+END}
 		</span>
 

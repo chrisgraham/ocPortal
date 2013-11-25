@@ -1128,12 +1128,8 @@ table.ocf_profile_statistics th {
 =========================
 */
 
-.group_add_member {
-	text-align: center;
-}
-
-.group_add_member>div {
-	display: inline-block;
+.group_add_member form * {
+	vertical-align: middle;
 }
 
 /*

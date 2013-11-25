@@ -160,7 +160,7 @@ class Mx_chat extends Module_chat
 
 		$messages_php=find_script('messages');
 		$password_hash=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
-		return do_template('CHAT_CHATROOM_SCREEN',array(
+		return do_template('CHAT_ROOM_SCREEN',array(
 			'_GUID'=>'0b4adbe09e9cf38b2104b12b4381b256',
 			'MESSAGES_PHP'=>$messages_php,
 			'PASSWORD_HASH'=>$password_hash,

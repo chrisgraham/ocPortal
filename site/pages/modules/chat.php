@@ -459,7 +459,7 @@ class Module_chat
 				$users=get_chatters_in_room($myrow['id']);
 				$usernames=get_chatters_in_room_tpl($users);
 				$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$myrow['id']),'_SELF');
-				$room_link=do_template('CHAT_CHATROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
+				$room_link=do_template('CHAT_ROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
 				$fields->attach($room_link);
 			}
 		}
@@ -639,7 +639,7 @@ class Module_chat
 
 		$links=array($admin_link,$mod_link,$refresh_link,$download_link,$seteffects_link);
 
-		return do_template('CHAT_CHATROOM_SCREEN',array(
+		return do_template('CHAT_ROOM_SCREEN',array(
 			'_GUID'=>'867a0b050c050c81d33482d131783eb0',
 			'CHATTERS'=>get_chatters_in_room_tpl(get_chatters_in_room($room_id)),
 			'CHAT_SOUND'=>get_chat_sound_tpl(),

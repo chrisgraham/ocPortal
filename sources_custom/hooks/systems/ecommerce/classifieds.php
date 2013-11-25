@@ -49,6 +49,9 @@ class Hook_classifieds
 	{
 		require_lang('classifieds');
 
+		$num_products_for_sale=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries e JOIN '.get_table_prefix().'classifieds_prices c ON c.c_catalogue_name=e.c_name','COUNT(*)');
+		if ($num_products_for_sale==0) return array();
+
 		$prices=$GLOBALS['SITE_DB']->query_select('classifieds_prices',array('id','c_label','c_price'),NULL,'ORDER BY c_price');
 
 		$products=array();

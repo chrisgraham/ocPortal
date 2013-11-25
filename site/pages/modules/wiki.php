@@ -617,12 +617,12 @@ class Module_wiki
 		if ((has_edit_permission('cat_low',get_member(),NULL,'cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
 		{
 			$edit_url=build_url(array('page'=>'cms_wiki','type'=>'edit_page','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
-			$edit_button=do_template('BUTTON_SCREEN',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'buttons__edit'));
+			$edit_button=do_template('BUTTON_SCREEN',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('WIKI_EDIT_PAGE'),'IMG'=>'buttons__edit'));
 		} else $edit_button=new ocp_tempcode();
 		if (($may_post) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_wiki',array('wiki_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain),'_SELF');
-			$post_button=do_template('BUTTON_SCREEN',array('_GUID'=>'c26462f34a64c4bf80c1fb7c40102eb0','IMMEDIATE'=>false,'URL'=>$post_url,'TITLE'=>do_lang_tempcode('_POST'),'IMG'=>'buttons__new_reply'));
+			$post_button=do_template('BUTTON_SCREEN',array('_GUID'=>'c26462f34a64c4bf80c1fb7c40102eb0','IMMEDIATE'=>false,'URL'=>$post_url,'TITLE'=>do_lang_tempcode('MAKE_POST'),'IMG'=>'buttons__new_reply'));
 		} else $post_button=new ocp_tempcode();
 
 		$tpl=new ocp_tempcode();
@@ -970,7 +970,7 @@ class Module_wiki
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('wiki_post',($post_id==-1)?NULL:strval($post_id)));
+			$specialisation->attach(get_award_fields('wiki_post',($post_id===NULL)?NULL:strval($post_id)));
 		} else $awards=array();
 
 		$message=post_param('message',$message);
@@ -983,7 +983,7 @@ class Module_wiki
 		$redir_url=$_redir_url->evaluate();
 		$post_url=build_url(array('page'=>'_SELF','id'=>get_param('id',strval(db_get_first_id()),false),'redirect'=>$redir_url,'type'=>'_post'),'_SELF');
 
-		$hidden_fields->attach(form_input_hidden('post_id',strval($post_id)));
+		$hidden_fields->attach(form_input_hidden('post_id',($post_id===NULL)?'':strval($post_id)));
 
 		$javascript=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
 
@@ -1046,6 +1046,7 @@ class Module_wiki
 
 			check_submit_permission('low',NULL,'cms_wiki');
 
+			require_code('content2');
 			$meta_data=actual_meta_data_get_fields('wiki_post',NULL);
 
 			require_code('content2');

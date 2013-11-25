@@ -134,6 +134,8 @@ function _build_sitemap_menu($menu)
 		$consider_secondary_categories=false;
 		$consider_validation=false;
 		$include='children';
+		$title=mixed();
+		$icon=mixed();
 
 		// Parse options
 		if ($menu!='')
@@ -175,6 +177,14 @@ function _build_sitemap_menu($menu)
 						case 'include':
 							$include=$setting;
 							break;
+
+						case 'title':
+							$title=$setting;
+							break;
+
+						case 'icon':
+							$icon=$setting;
+							break;
 					}
 				}
 			}
@@ -193,6 +203,16 @@ function _build_sitemap_menu($menu)
 			$consider_validation,
 			SITEMAP_GATHER_DESCRIPTION | SITEMAP_GATHER_IMAGE
 		);
+
+		if ($title!==NULL)
+		{
+			$node['title']=comcode_to_tempcode($title);
+		}
+		if ($icon!==NULL)
+		{
+			$node['extra_meta']['image']=find_theme_image('icons/24x24/'.$icon);
+			$node['extra_meta']['image_2x']=find_theme_image('icons/48x48/'.$icon);
+		}
 
 		if ($node===NULL) continue;
 
