@@ -4,8 +4,8 @@
 */
 
 .not_too_tall_addons {
-	overflow: scroll;
-	height: 500px;
+	/*overflow: scroll;	Actually, this annoys some users
+	height: 500px;*/
 }
 
 .addon_name {

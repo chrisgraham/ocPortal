@@ -47,6 +47,6 @@
 		<a class="buttons__edit button_screen" rel="edit" href="{$PAGE_LINK*,_SEARCH:admin_staff}"><span>{!EDIT}</span></a>
 	{+END}
 
-	<a class="buttons__edit button_screen" href="{ALL_STAFF_URL*}"><span>{!VIEW_ALL_STAFF}</span></a>
+	<a class="buttons__all button_screen" href="{ALL_STAFF_URL*}"><span>{!VIEW_ALL_STAFF}</span></a>
 </div>
 

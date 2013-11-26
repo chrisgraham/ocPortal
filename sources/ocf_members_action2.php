@@ -560,7 +560,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			}
 			if (get_option('enable_pt_restrict')=='1')
 			{
-				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PRIVATE_TOPICS'))));
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'7e5deb351a7a5214fbff10049839e258','TITLE'=>do_lang_tempcode('PRIVATE_TOPICS'))));
 				$fields->attach(form_input_multi_list(do_lang_tempcode('PT_ALLOW'),addon_installed('chat')?do_lang_tempcode('PT_ALLOW_DESCRIPTION_CHAT'):do_lang_tempcode('PT_ALLOW_DESCRIPTION'),'pt_allow',$usergroup_list));
 				$fields->attach(form_input_text_comcode(do_lang_tempcode('PT_RULES_TEXT'),do_lang_tempcode('PT_RULES_TEXT_DESCRIPTION'),'pt_rules_text',$pt_rules_text,false));
 			}

@@ -14,7 +14,7 @@
 	<form class="left" role="search" title="{!SEARCH}" onsubmit="if (typeof this.elements['content']=='undefined') { disable_button_just_clicked(this); return true; } if (check_field_for_blankness(this.elements['content'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{$URL_FOR_GET_FORM*,{$GET,search_url}}" method="get">
 		{$HIDDENS_FOR_GET_FORM,{$GET,search_url}}
 
-		<p>
+		<p class="vertical_alignment">
 			<label class="accessibility_hidden" for="search_filedump">{!SEARCH}</label>
 			<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" onkeyup="update_ajax_search_list(this,event);" type="search" id="search_filedump" name="content" style="color: gray" onblur="if (this.value=='') { this.value='{!SEARCH;}'; this.style.color='gray'; }" onfocus="if (this.value=='{!SEARCH;}') this.value=''; this.style.color='black';" value="{!SEARCH}" />
 

@@ -207,10 +207,10 @@ class Hook_addon_registry_core_ocf
 			'themes/default/templates/OCF_EMOTICON_ROW.tpl',
 			'themes/default/templates/OCF_EMOTICON_TABLE.tpl',
 			'themes/default/templates/OCF_JOIN_STEP1_SCREEN.tpl',
-			'themes/default/templates/OCF_MEMBERS_ONLINE_SCREEN.tpl',
+			'themes/default/templates/OCF_USERS_ONLINE_SCREEN.tpl',
 			'themes/default/templates/OCF_MEMBER_ACTION.tpl',
 			'themes/default/templates/OCF_MEMBER_DIRECTORY_SCREEN.tpl',
-			'themes/default/templates/OCF_MEMBER_ONLINE_ROW.tpl',
+			'themes/default/templates/OCF_USERS_ONLINE_ROW.tpl',
 			'themes/default/templates/OCF_MEMBER_PROFILE_SCREEN.tpl',
 			'themes/default/templates/OCF_MEMBER_PROFILE_ABOUT.tpl',
 			'themes/default/templates/OCF_MEMBER_PROFILE_EDIT.tpl',
@@ -409,8 +409,8 @@ class Hook_addon_registry_core_ocf
 			'OCF_MEMBER_PROFILE_SCREEN.tpl'=>'ocf_member_profile_screen',
 			'OCF_MEMBER_PROFILE_ABOUT.tpl'=>'ocf_member_profile_screen',
 			'OCF_MEMBER_PROFILE_EDIT.tpl'=>'ocf_member_profile_screen',
-			'OCF_MEMBER_ONLINE_ROW.tpl'=>'ocf_members_online_screen',
-			'OCF_MEMBERS_ONLINE_SCREEN.tpl'=>'ocf_members_online_screen',
+			'OCF_USERS_ONLINE_ROW.tpl'=>'ocf_users_online_screen',
+			'OCF_USERS_ONLINE_SCREEN.tpl'=>'ocf_users_online_screen',
 			'OCF_GROUP_DIRECTORY_SCREEN.tpl'=>'ocf_group_directory_screen',
 			'OCF_VIEW_GROUP_MEMBER.tpl'=>'ocf_view_group_screen',
 			'OCF_VIEW_GROUP_MEMBER_PROSPECTIVE.tpl'=>'ocf_view_group_screen',
@@ -953,12 +953,12 @@ class Hook_addon_registry_core_ocf
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__ocf_members_online_screen()
+	function tpl_preview__ocf_users_online_screen()
 	{
 		$rows=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$rows->attach(do_lorem_template('OCF_MEMBER_ONLINE_ROW',array(
+			$rows->attach(do_lorem_template('OCF_USERS_ONLINE_ROW',array(
 				'IP'=>placeholder_ip(),
 				'AT_URL'=>placeholder_url(),
 				'LOCATION'=>lorem_word(),
@@ -968,7 +968,7 @@ class Hook_addon_registry_core_ocf
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('OCF_MEMBERS_ONLINE_SCREEN',array(
+			lorem_globalise(do_lorem_template('OCF_USERS_ONLINE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'ROWS'=>$rows
 			)), NULL, '', true)

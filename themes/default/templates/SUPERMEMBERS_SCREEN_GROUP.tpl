@@ -5,19 +5,7 @@
 		<tr>
 			<th>{!USERNAME}</th>
 			<th>{!DAYS_LAST_VISIT}</th>
-			{+START,IF,{$NOT,{$MOBILE}}}
-				<th>{!VIEW_PROFILE}</th>
-				{+START,IF,{$ADDON_INSTALLED,authors}}
-					<th>{!VIEW_AUTHOR}</th>
-				{+END}
-				{+START,IF,{$ADDON_INSTALLED,points}}
-					<th>{!VIEW_POINTS}</th>
-				{+END}
-				<th>{!SEND_PM}</th>
-			{+END}
-			{+START,IF,{$MOBILE}}
-				<th>{!ACTIONS}</th>
-			{+END}
+			<th>{!ACTIONS}</th>
 			<th>{!SKILLS}</th>
 		</tr>
 	</thead>

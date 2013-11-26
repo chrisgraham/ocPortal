@@ -10,10 +10,10 @@
 					{!SITE}
 				</th>
 				<th>
-					{!_BANNER_HITSFROM}
+					{!BANNER_HITSFROM}
 				</th>
 				<th>
-					{!_BANNER_HITSTO}
+					{!BANNER_HITSTO}
 				</th>
 			</tr>
 		</thead>

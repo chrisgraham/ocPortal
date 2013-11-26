@@ -1150,7 +1150,7 @@ class standard_crud_module
 
 		$post_url=build_url($map,'_SELF',NULL,false,true);
 
-		$submit_name=do_lang_tempcode('PROCEED');
+		$submit_name=do_lang_tempcode('EDIT');
 
 		$keep=symbol_tempcode('KEEP');
 		$iframe_url=mixed();

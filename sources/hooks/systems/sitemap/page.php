@@ -223,14 +223,17 @@ class Hook_sitemap_page extends Hook_sitemap_base
 							{
 								if (substr($struct['page_link'],-strlen(':'.$move_down_entry_point))!=':'.$move_down_entry_point)
 									$struct['page_link'].=':'.$move_down_entry_point;
-								/*$_title=$entry_points[$move_down_entry_point][0];	Actually our name derived from the page grouping or natural name is more appropriate
-								if (is_object($_title))
+								if (!isset($entry_points['misc']))
 								{
-									$struct['title']=$_title;
-								} else
-								{
-									$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
-								}*/
+									$_title=$entry_points[$move_down_entry_point][0];
+									if (is_object($_title))
+									{
+										$struct['title']=$_title;
+									} else
+									{
+										$struct['title']=(preg_match('#^[A-Z\_]+$#',$_title)==0)?make_string_tempcode($_title):do_lang_tempcode($_title);
+									}
+								}
 								if (!is_null($entry_points[$move_down_entry_point][1]))
 								{
 									if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)

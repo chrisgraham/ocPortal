@@ -1173,7 +1173,7 @@ th.meta_data_title {
 }
 
 .help_jumpout {
-	padding: 2px 0;
+	padding: 5px 0;
 	padding-left: 50px;
 	background: url('{$IMG;,help_jumpout}') no-repeat left center;
 }
@@ -1727,7 +1727,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 
 .table_heading_cell {
 	padding: 1em 0.5em !important;
-	text-align: {!en_left};
+	text-align: {!en_left} !important;
 	background-color: {$GET,area_background} !important; /*  !important so precedence over th.dh */
 	font-weight: normal;
 }

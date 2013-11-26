@@ -235,7 +235,7 @@ class Module_banners
 				//'category'=>$type,
 			));
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('BANNERS'))));
 
 			$this->title=get_screen_title('BANNER_INFORMATION');
 

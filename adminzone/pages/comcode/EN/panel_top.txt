@@ -1,1 +1,0 @@
-[block="adminzone:start,include=node,title={!DASHBOARD},icon=menu/adminzone/start + adminzone:,include=children,max_recurse_depth=4,use_page_groupings=1 + cms:,include=node,max_recurse_depth=3,use_page_groupings=1" type="dropdown" quick_cache="1"]menu[/block]

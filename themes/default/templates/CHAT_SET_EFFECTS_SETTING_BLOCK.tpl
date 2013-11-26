@@ -17,9 +17,15 @@
 
 			<tbody>
 				{+START,LOOP,EFFECTS}
+					<tr class="form_table_field_spacer">
+						<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END} class="table_heading_cell">
+							<span class="faux_h2">{EFFECT_TITLE*}</span>
+						</th>
+					</tr>
+
 					<tr class="field_input">
 						<th id="form_table_field_name__select_{KEY*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}" class="form_table_field_name">
-							<label for="select_{KEY*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}"><span class="form_field_name field_name">{EFFECT_TITLE*}</span></label>
+							<label for="select_{KEY*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}"><span class="form_field_name field_name">{!BROWSE}</span></label>
 						</th>
 
 						{+START,IF,{$MOBILE}}

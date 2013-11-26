@@ -235,7 +235,7 @@ class Module_admin_lang
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>'',
 			'SUBMIT_ICON'=>'buttons__proceed',
-			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
+			'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),
 			'TITLE'=>$title,
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,

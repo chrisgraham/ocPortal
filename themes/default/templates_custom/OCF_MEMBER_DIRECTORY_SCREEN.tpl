@@ -14,7 +14,7 @@
 {$SET,filters_row_a,m_username={!USERNAME},{!DEFAULT_CPF_interests_NAME}={!DEFAULT_CPF_interests_NAME},{!DEFAULT_CPF_location_NAME}={!DEFAULT_CPF_location_NAME}}
 {$SET,filters_row_b,{!DEFAULT_CPF_occupation_NAME}={!DEFAULT_CPF_occupation_NAME},{!DEFAULT_CPF_SELF_DESCRIPTION_NAME}={!DEFAULT_CPF_SELF_DESCRIPTION_NAME}}
 
-<div class="box"><div class="box_inner">
+<div class="box box__ocf_member_directory_screen"><div class="box_inner">
 	<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}" target="_self" method="get" class="advanced_member_search">
 		{$HIDDENS_FOR_GET_FORM,{$SELF_URL}}
 

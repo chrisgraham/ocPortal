@@ -16,13 +16,16 @@ if ($theme===NULL)
 
 	require_code('themes2');
 	$themes=find_all_themes();
+	$cnt=0;
 	foreach (array_keys($themes) as $theme)
 	{
 		if ($theme!='default')
 		{
 			echo '<li><a href="'.static_evaluate_tempcode(build_url(array('page'=>'fix_partial_themewizard_css','theme'=>$theme),'adminzone')).'">'.escape_html($theme).'</a></li>';
+			$cnt++;
 		}
 	}
+	if ($cnt==0) echo '<li>(No non-default themes)</li>';
 
 	echo '</ul>';
 

@@ -107,7 +107,7 @@ For example:
 	overflow: hidden; /* Needed as images are set to float */
 }
 
-.menu_type__dropdown .nlevel li:hover {
+.menu_type__dropdown .nlevel li:hover, .menu_type__dropdown .nlevel li.current {
 	background-color: {$GET,dropdown_menu_text};
 }
 

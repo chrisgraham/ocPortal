@@ -85,7 +85,7 @@ class Hook_addon_registry_supermember_directory
 	 */
 	function get_default_icon()
 	{
-		return 'themes/default/images/icons/48x48/menu/collaboration/supermember_directory.png';
+		return 'themes/default/images/icons/48x48/menu/collaboration/supermembers.png';
 	}
 
 	/**
@@ -96,8 +96,8 @@ class Hook_addon_registry_supermember_directory
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images/icons/24x24/menu/collaboration/supermember_directory.png',
-			'themes/default/images/icons/48x48/menu/collaboration/supermember_directory.png',
+			'themes/default/images/icons/24x24/menu/collaboration/supermembers.png',
+			'themes/default/images/icons/48x48/menu/collaboration/supermembers.png',
 			'sources/hooks/systems/config/supermembers_text.php',
 			'sources/hooks/systems/addon_registry/supermember_directory.php',
 			'lang/EN/supermembers.ini',

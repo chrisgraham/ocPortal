@@ -23,12 +23,15 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 				{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
 				<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
 
-				{+START,IF,{$NEQ,{$ZONE},adminzone,cms}}
-					{$,Main menu}
-					<div class="global_navigation">
+				{$,Main menu}
+				<div class="global_navigation">
+					{+START,IF,{$NEQ,{$ZONE},adminzone,cms}}
 						{$BLOCK,block=menu,param={$CONFIG_OPTION,header_menu_call_string},type=dropdown}
-					</div>
-				{+END}
+					{+END}
+					{+START,IF,{$EQ,{$ZONE},adminzone,cms}}
+						{$BLOCK,block=menu,param=adminzone:start\,include=node\,title={!menus:DASHBOARD}\,icon=menu/adminzone/start + adminzone:\,include=children\,max_recurse_depth=4\,use_page_groupings=1 + cms:\,include=node\,max_recurse_depth=3\,use_page_groupings=1,type=dropdown}
+					{+END}
+				</div>
 
 				{$,Outside the Admin Zone we have a spot for the banner}
 				{+START,IF,{$NAND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}{+START,IF,{$NOT,{$MOBILE}}}

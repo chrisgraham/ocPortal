@@ -71,7 +71,7 @@ class Module_cms
 
 		breadcrumb_set_self(do_lang_tempcode('menus:CMS_ZONE'));
 
-		$this->title=get_screen_title('MODULE_TRANS_NAME_cms');
+		$this->title=get_screen_title('menus:MODULE_TRANS_NAME_cms');
 
 		return NULL;
 	}

@@ -32,7 +32,7 @@ class Hook_page_groupings_supermember_directory
 		if (!addon_installed('supermember_directory')) return array();
 
 		return array(
-			array('collaboration','menu/collaboration/supermember_directory',array('supermembers',array(),get_module_zone('supermembers')),do_lang_tempcode('supermembers:MODULE_TRANS_NAME_supermembers')),
+			array('collaboration','menu/collaboration/supermembers',array('supermembers',array(),get_module_zone('supermembers')),do_lang_tempcode('supermembers:MODULE_TRANS_NAME_supermembers')),
 		);
 	}
 }

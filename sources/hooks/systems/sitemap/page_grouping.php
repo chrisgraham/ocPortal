@@ -130,6 +130,21 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			}
 		}
 
+		$deployed_page_link=$page_link;
+		if (!$require_permission_support)
+		{
+			if ($zone!='adminzone' && $zone!='cms')
+			{
+				if ($page_grouping=='collaboration')
+				{
+					$deployed_page_link='collaboration:';
+				} else
+				{
+					$deployed_page_link=mixed(); // Can't actually always visit it (well you can, but we don't want to promote it);
+				}
+			}
+		}
+
 		// Our node
 		$struct=array(
 			'title'=>is_object($lang_string)?$lang_string:do_lang_tempcode($lang_string),
@@ -137,7 +152,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 			'content_id'=>$page_grouping,
 			'modifiers'=>array(),
 			'only_on_page'=>'',
-			'page_link'=>($zone=='adminzone' || $zone=='cms')?$page_link:NULL, // Can't actually always visit it (well you can, but we don't want to promote it)
+			'page_link'=>$deployed_page_link,
 			'url'=>NULL,
 			'extra_meta'=>array(
 				'description'=>$description,

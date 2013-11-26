@@ -145,7 +145,7 @@ class Module_admin_tickets
 			$submit_name=do_lang_tempcode('CHOOSE');
 			$fields=form_input_list(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type',$list);
 
-			$tpl=do_template('FORM',array('_GUID'=>'2d2e76f5cfc397a78688db72170918d4','TABINDEX'=>strval(get_form_field_tabindex()),'GET'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$edit_url,'SUBMIT_ICON'=>'menu___generic_admin__edit_this','SUBMIT_NAME'=>$submit_name));
+			$tpl=do_template('FORM',array('_GUID'=>'2d2e76f5cfc397a78688db72170918d4','TABINDEX'=>strval(get_form_field_tabindex()),'GET'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$edit_url,'SUBMIT_ICON'=>'menu___generic_admin__edit_this_category','SUBMIT_NAME'=>$submit_name));
 		} else $tpl=new ocp_tempcode();
 
 		// Do a form so people can add
@@ -163,7 +163,7 @@ class Module_admin_tickets
 			if (in_array($id,$admin_groups)) continue;
 			$fields->attach(form_input_tick(do_lang_tempcode('ACCESS_FOR',escape_html($group_name)),do_lang_tempcode('DESCRIPTION_ACCESS_FOR',escape_html($group_name)),'access_'.strval($id),true));
 		}
-		$add_form=do_template('FORM',array('_GUID'=>'382f6fab6c563d81303ecb26495e76ec','TABINDEX'=>strval(get_form_field_tabindex()),'SECONDARY_FORM'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		$add_form=do_template('FORM',array('_GUID'=>'382f6fab6c563d81303ecb26495e76ec','TABINDEX'=>strval(get_form_field_tabindex()),'SECONDARY_FORM'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__add_one_category','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 
 		return do_template('SUPPORT_TICKET_TYPE_SCREEN',array('_GUID'=>'28645dc4a86086fa865ec7e166b84bb6','TITLE'=>$this->title,'TPL'=>$tpl,'ADD_FORM'=>$add_form));
 	}

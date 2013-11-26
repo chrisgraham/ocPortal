@@ -33,7 +33,7 @@ class Hook_page_groupings_collaboration_zone
 
 		return array(
 			array('','menu/collaboration',array('admin',array('type'=>'collaboration'),'adminzone'),do_lang_tempcode('_COLLABORATION')),
-			array('collaboration','menu/collaboration',array('about',array(),'collaboration'),do_lang_tempcode('ABOUT')),
+			array('collaboration','menu/collaboration/start',array('about',array(),'collaboration'),do_lang_tempcode('ABOUT')),
 		);
 	}
 }

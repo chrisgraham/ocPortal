@@ -149,7 +149,7 @@ class Module_admin_banners
 			$banner_type=$myrow['b_type'];
 			if ($banner_type=='') $banner_type=do_lang('GENERAL');
 
-			$date_and_time=get_timezoned_date($myrow['add_date']);
+			$date_and_time=get_timezoned_date($myrow['add_date'],false);
 
 			$hits_from=integer_format($myrow['hits_from']);
 			$views_from=integer_format($myrow['views_from']);
@@ -157,7 +157,7 @@ class Module_admin_banners
 			$views_to=($myrow['site_url']=='')?do_lang_tempcode('CANT_TRACK'):protect_from_escaping(escape_html(integer_format($myrow['views_to'])));
 
 			if ($myrow['views_to']!=0)
-				$click_through=protect_from_escaping(escape_html(integer_format(intval(round(100.0*($myrow['hits_to']/$myrow['views_to']))))));
+				$click_through=protect_from_escaping(escape_html(integer_format(intval(round(100.0*($myrow['hits_to']/$myrow['views_to'])))).'%'));
 			else $click_through=do_lang_tempcode('NA_EM');
 
 			$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['submitter']);

@@ -123,8 +123,6 @@ function upgrade_script()
 					$closed=comcode_to_tempcode(get_option('closed'),NULL,true);
 					$closed_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'SITE'),get_module_zone('admin_config'),NULL,false,false,false,'group_CLOSED_SITE');
 
-					$l_columned_table=do_lang('COLUMNED_TABLE');
-
 					echo "
 <p>{$l_choices}</p>
 
@@ -144,7 +142,7 @@ function upgrade_script()
 	</ul>";
 
 					echo "
-	<h2 style=\"margin-top: 40px\">{$l_upgrading}&hellip;</h2>
+	<h2 style=\"margin-top: 2em\">{$l_upgrading}&hellip;</h2>
 
 	<h3>{$l_important}</h3>
 
@@ -156,7 +154,7 @@ function upgrade_script()
 
 	<h3>{$l_upgrade_steps}</h3>
 
-	<div class=\"wide_table_wrap\"><table summary=\"{$l_columned_table}\" style=\"margin-top: 5px\" class=\"autosized_table results_table wide_table spaced_table\">
+	<div class=\"wide_table_wrap\"><table class=\"columned_table autosized_table results_table wide_table spaced_table\">
 		<thead>
 			<tr>
 				<th>{$l_step}</th>
@@ -179,9 +177,9 @@ function upgrade_script()
 
 	<p>&dagger; {$l_customisations}</p>
 
-	<h2 style=\"margin-top: 40px\">{$l_error_correction}&hellip;</h2><ul style=\"margin-top: 5px\">
-		<li>{$l_safe_mode}</li>
-		<li>{$l_addon_management}</li>
+	<h2 style=\"margin-top: 2em\">{$l_error_correction}&hellip;</h2><ul class=\"compact_list\">
+		<li style=\"padding: 0.5em\">{$l_safe_mode}</li>
+		<li style=\"padding: 0.5em\">{$l_addon_management}</li>
 	</ul>
 </div>
 ";
@@ -577,10 +575,12 @@ function up_do_login($message=NULL)
 		<hr class=\"spaced_rule\" />
 		{$l_ftp_info}
 		<table>
-			<tr><th>{$l_ftp_domain}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_domain\" value=\"".escape_html($ftp_domain)."\" /></td></tr>
-			<tr><th>{$l_ftp_directory}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_folder\" value=\"".escape_html($ftp_folder)."\" /></td></tr>
-			<tr><th>{$l_ftp_username}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_username\" value=\"".escape_html($ftp_username)."\" /></td></tr>
-			<tr><th>{$l_ftp_password}:</th><td><input size=\"50\" type=\"password\" name=\"ftp_password\" /></td></tr>
+			<tbody>
+				<tr><th>{$l_ftp_domain}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_domain\" value=\"".escape_html($ftp_domain)."\" /></td></tr>
+				<tr><th>{$l_ftp_directory}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_folder\" value=\"".escape_html($ftp_folder)."\" /></td></tr>
+				<tr><th>{$l_ftp_username}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_username\" value=\"".escape_html($ftp_username)."\" /></td></tr>
+				<tr><th>{$l_ftp_password}:</th><td><input size=\"50\" type=\"password\" name=\"ftp_password\" /></td></tr>
+			</tbody>
 		</table>
 		<hr class=\"spaced_rule\" />
 		";

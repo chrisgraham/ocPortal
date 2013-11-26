@@ -452,8 +452,8 @@ class Module_cms_booking_supplements extends standard_crud_module
 				'supports_quantities'=>0,
 				'title'=>NULL,
 				'promo_code'=>'',
-				'supports_notes'=>'BINARY',
-				'sort_order'=>'INTEGER',
+				'supports_notes'=>0,
+				'sort_order'=>1,
 			);
 
 			$bookables=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('bookable',array('id')));

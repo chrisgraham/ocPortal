@@ -256,9 +256,15 @@ class Module_cms_chat
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$row['id']),'_SELF');
 				$messages=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$row['id']));
-				$username=$GLOBALS['FORUM_DRIVER']->get_username($row['room_owner']);
-				if (is_null($username)) $username='';//do_lang('UNKNOWN');
-				$fields->attach(results_entry(array(hyperlink($url,escape_html($row['room_name'])),escape_html($username),escape_html($row['room_language']),escape_html(integer_format($messages)))));
+				$_username=$GLOBALS['FORUM_DRIVER']->get_username($row['room_owner']);
+				if (is_null($_username))
+				{
+					$username=do_lang('NA_EM');
+				} else
+				{
+					$username=make_string_tempcode($_username);
+				}
+				$fields->attach(results_entry(array(hyperlink($url,escape_html($row['room_name'])),$username,escape_html($row['room_language']),escape_html(integer_format($messages)))));
 			}
 		}
 		if ($fields->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));

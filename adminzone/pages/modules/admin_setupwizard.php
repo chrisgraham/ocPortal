@@ -74,14 +74,18 @@ class Module_admin_setupwizard
 		if ($type=='misc')
 		{
 			//breadcrumb_set_self(do_lang_tempcode('START'));
+
+			$step=1;
 		}
 
 		if ($type!='misc')
 		{
 			//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
+
+			$step=min(10,intval(substr($type,4)));
 		}
 
-		$this->title=get_screen_title('SETUPWIZARD_STEP',true,array(integer_format(max(10,intval(substr($type,4)))),integer_format(10)));
+		$this->title=get_screen_title('SETUPWIZARD_STEP',true,array(integer_format($step),integer_format(10)));
 
 		return NULL;
 	}

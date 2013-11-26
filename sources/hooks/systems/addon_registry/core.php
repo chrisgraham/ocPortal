@@ -619,8 +619,6 @@ class Hook_addon_registry_core
 			'themes/default/images/filetypes/page_txt.png',
 			'themes/default/images/filetypes/page_xls.png',
 			'data/autosave.php',
-			'adminzone/pages/comcode/EN/panel_top.txt',
-			'cms/pages/comcode/EN/panel_top.txt',
 			'sources/hooks/systems/addon_registry/core.php',
 			'sources/hooks/systems/non_active_urls/.htaccess',
 			'sources/hooks/systems/non_active_urls/index.html',

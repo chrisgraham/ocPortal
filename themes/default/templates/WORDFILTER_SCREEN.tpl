@@ -7,7 +7,7 @@
 </p>
 
 {+START,IF_NON_EMPTY,{TPL}}
-	<div>
+	<div class="box">
 		<h3 class="toggleable_tray_title">
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!PROCEED}</a>

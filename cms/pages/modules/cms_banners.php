@@ -232,15 +232,28 @@ class Module_cms_banners extends standard_crud_module
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 
+		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_banners')?NULL:get_member();
+		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned));
+
+		$has_expiry_dates=false; // Save space by default
+		foreach ($rows as $row)
+		{
+			foreach ($rows as $row)
+			{
+				if (!is_null($row['expiry_date'])) $has_expiry_dates=true;
+			}
+		}
+
 		$hr=array(
 			do_lang_tempcode('CODENAME'),
-			do_lang_tempcode('_BANNER_TYPE'),
+			do_lang_tempcode('TYPE'),
 			do_lang_tempcode('DEPLOYMENT_AGREEMENT'),
 			//do_lang_tempcode('HITS_ALLOCATED'),		Save space by not putting in
-			do_lang_tempcode('IMPORTANCE_MODULUS'),
-			do_lang_tempcode('EXPIRY_DATE'),
-			do_lang_tempcode('ADDED'),
+			do_lang_tempcode('_IMPORTANCE_MODULUS'),
 		);
+		if ($has_expiry_dates)
+			$hr[]=do_lang_tempcode('EXPIRY_DATE');
+		$hr[]=do_lang_tempcode('ADDED');
 		if (addon_installed('unvalidated')) $hr[]=do_lang_tempcode('VALIDATED');
 		$hr[]=do_lang_tempcode('ACTIONS');
 		$header_row=results_field_title($hr,$sortables,'sort',$sortable.' '.$sort_order);
@@ -248,8 +261,6 @@ class Module_cms_banners extends standard_crud_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_banners')?NULL:get_member();
-		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned));
 		foreach ($rows as $row)
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['name']),'_SELF');
@@ -274,9 +285,10 @@ class Module_cms_banners extends standard_crud_module
 				$deployment_agreement,
 				//integer_format($row['campaign_remaining']),
 				strval($row['importance_modulus']),
-				is_null($row['expiry_date'])?protect_from_escaping(do_lang_tempcode('NA_EM')):make_string_tempcode(get_timezoned_date($row['expiry_date'])),
-				get_timezoned_date($row['add_date']),
 			);
+			if ($has_expiry_dates)
+				$fr[]=is_null($row['expiry_date'])?protect_from_escaping(do_lang_tempcode('NA_EM')):make_string_tempcode(get_timezoned_date($row['expiry_date']));
+			$fr[]=get_timezoned_date($row['add_date'],false);
 			if (addon_installed('unvalidated')) $fr[]=($row['validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,$row['name']));
 

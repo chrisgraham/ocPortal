@@ -240,6 +240,8 @@ class Module_quiz
 			$this->quiz_name=$quiz_name;
 			$this->title_to_use=$title_to_use;
 			$this->title_to_use_2=$title_to_use_2;
+
+			$this->title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
 		}
 
 		if ($type=='_do')

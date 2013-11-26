@@ -20,7 +20,7 @@
 	</div></div>
 
 	{+START,IF_EMPTY,{LINKS}}
-		<p>{!SUPPORT_NO_TICKETS}</p>
+		{$?,{$HAS_PRIVILEGE,support_operator},<p class="nothing_here">{!NO_ENTRIES}</p>,<p>{!SUPPORT_NO_TICKETS}</p>}
 	{+END}
 	{+START,IF_NON_EMPTY,{LINKS}}
 		<div class="wide_table_wrap"><table class="columned_table results_table wide_table support_tickets autosized_table">

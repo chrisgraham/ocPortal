@@ -163,9 +163,9 @@ class Module_iotds
 
 			$this->title=get_screen_title('IOTD');
 
-			$id=$this->id;
-			$myrow=$this->myrow;
-			$url=$this->url;
+			$this->id=$id;
+			$this->myrow=$myrow;
+			$this->url=$url;
 		}
 
 		return NULL;

@@ -150,12 +150,12 @@ class Module_users_online
 			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member);
 
 			if ($ip!='') // CRON?
-				$rows->attach(do_template('OCF_MEMBER_ONLINE_ROW',array('_GUID'=>'2573786f3bccf9e613b125befb3730e8','IP'=>$ip,'AT_URL'=>$at_url,'LOCATION'=>$location,'MEMBER'=>$link,'TIME'=>integer_format(intval((time()-$last_activity)/60)))));
+				$rows->attach(do_template('OCF_USERS_ONLINE_ROW',array('_GUID'=>'2573786f3bccf9e613b125befb3730e8','IP'=>$ip,'AT_URL'=>$at_url,'LOCATION'=>$location,'MEMBER'=>$link,'TIME'=>integer_format(intval((time()-$last_activity)/60)))));
 		}
 
 		if ($rows->is_empty()) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		return do_template('OCF_MEMBERS_ONLINE_SCREEN',array('_GUID'=>'2f63e2926c5a4690d905f97661afe6cc','TITLE'=>$this->title,'ROWS'=>$rows));
+		return do_template('OCF_USERS_ONLINE_SCREEN',array('_GUID'=>'2f63e2926c5a4690d905f97661afe6cc','TITLE'=>$this->title,'ROWS'=>$rows));
 	}
 }
 
