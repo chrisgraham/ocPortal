@@ -2308,20 +2308,25 @@ END;
 		$rep_post_id=post_param_integer('o_post_id',-1);
 		if ($rep_post_id!=-1)
 		{
-			$map=array('page'=>'topicview','id'=>$rep_post_id,'type'=>'findpost');
-			$_url=build_url($map,get_module_zone('topicview'));
-			$url=$_url->evaluate();
-			$url.='#post_'.strval($rep_post_id);
+			require_code('ocf_topicview');
+			$url=find_post_id_url($rep_post_id);
 		} else
 		{
-			$map=array('page'=>'topicview','id'=>$post_id,'type'=>'findpost');
-			$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
-			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
-			$test=get_param_integer('threaded',-1);
-			if ($test!=-1) $map['threaded']=$test;
-			$_url=build_url($map,get_module_zone('topicview'));
-			$url=$_url->evaluate();
-			if ($validated!=0) $url.='#post_'.strval($post_id);
+			if ($validated!=0)
+			{
+				require_code('ocf_topicview');
+				$url=find_post_id_url($post_id);
+			} else
+			{
+				$map=array('page'=>'topicview','id'=>$post_id,'type'=>'findpost');
+				$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
+				if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
+				$test=get_param_integer('threaded',-1);
+				if ($test!=-1) $map['threaded']=$test;
+				$_url=build_url($map,get_module_zone('topicview'));
+				$url=$_url->evaluate();
+				$url.='#post_'.strval($post_id);
+			}
 		}
 
 		if (($new_topic) && ($forum_id==-1))

@@ -43,11 +43,13 @@ function init__users()
 	$GETTING_MEMBER=false;
 	$USER_THEME_CACHE=NULL;
 	$EMOTICON_SET_DIR=NULL;
+	global $IS_ACTUALLY;
 	global $IS_ACTUALLY_ADMIN;
 	/** Find whether ocPortal is running in SU mode, and therefore the real user is an admin
 	 * @global boolean $IS_ACTUALLY_ADMIN
 	 */
 	$IS_ACTUALLY_ADMIN=false;
+	$IS_ACTUALLY=NULL;
 	global $IS_A_COOKIE_LOGIN;
 	$IS_A_COOKIE_LOGIN=false;
 	global $DOING_USERS_INIT;

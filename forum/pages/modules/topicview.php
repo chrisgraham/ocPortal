@@ -891,6 +891,11 @@ class Module_topicview
 				{
 					$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$this->id),'',1);
 					$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$this->id,'l_time'=>time()),false,true); // race condition
+					if ($GLOBALS['IS_ACTUALLY']!==NULL) // If posting with SU, mark the SUing user as read too, otherwise it is annoying
+					{
+						$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_member_id'=>$GLOBALS['IS_ACTUALLY'],'l_topic_id'=>$this->id),'',1);
+						$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>$GLOBALS['IS_ACTUALLY'],'l_topic_id'=>$this->id,'l_time'=>time()),false,true); // race condition
+					}
 				}
 			}
 		}

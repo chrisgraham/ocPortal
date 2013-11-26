@@ -120,6 +120,11 @@ As a screen uses many instances of menu branch templates, it is wise to simplify
 
 ocPortal won't hard-code image dimensions into templates, but some may use the [tt]IMG_WIDTH[/tt]/[tt]IMG_HEIGHT[/tt] symbols to auto-detect them. This has a very small performance impact -- you may wish to hard-code it once your theme is complete.
 
+[title="2"]E-mails[/title]
+
+Sending e-mails can be an intensive task because ocPortal has to work out what CSS to include for each e-mail, put templating together, and connect through and send to the e-mail server.
+Turning on the "E-mail queue" option will avoid this happening immediately during user actions, deferring it. It will make forum posting, for example, faster.
+
 [title="2"]Server[/title]
 
 A faster and more dedicated server will make ocPortal run faster. This may seem obvious, but in the efforts of optimisation, is easily forgotten.

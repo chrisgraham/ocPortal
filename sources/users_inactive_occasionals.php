@@ -266,6 +266,7 @@ function try_su_login($member)
 			}
 		}
 		$GLOBALS['IS_ACTUALLY_ADMIN']=true;
+		$GLOBALS['IS_ACTUALLY']=$member;
 
 		if ((get_forum_type()=='ocf') && (get_param_integer('keep_su_online',0)==1))
 		{
