@@ -783,6 +783,7 @@ function remove_ip_ban($ip)
 function get_webservice_result($error_message)
 {
 	if (get_domain()=='ocportal.com') return NULL;
+	if (get_domain()=='localhost') return NULL; // In case of no Internet connection
 
 	if ((!function_exists('has_zone_access')) || (!has_zone_access(get_member(),'adminzone'))) return NULL;
 

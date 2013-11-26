@@ -80,6 +80,16 @@ class Hook_sitemap_catalogue_category extends Hook_sitemap_content
 
 		if (!$this->_check_node_permissions($struct)) return NULL;
 
+		// Sometimes page groupings link direct to catalogue categories, so search for an icon
+		$row_x=$this->_load_row_from_page_groupings(NULL,$zone,'catalogues','misc',$content_id);
+		if ($row_x!=array())
+		{
+			$struct['title']=NULL;
+			$struct['extra_meta']['image']=NULL;
+			$struct['extra_meta']['image_2x']=NULL;
+			$this->_ameliorate_with_row($struct,$row_x,$meta_gather);
+		}
+
 		if ($callback!==NULL)
 			call_user_func($callback,$struct);
 

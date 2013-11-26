@@ -1153,7 +1153,6 @@ function _multi_sort($a,$b)
 function ocf_require_all_forum_stuff()
 {
 	require_lang('ocf');
-	require_css('ocf');
 
 	require_code('ocf_members');
 	require_code('ocf_topics');

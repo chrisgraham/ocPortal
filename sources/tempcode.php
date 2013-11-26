@@ -43,7 +43,7 @@ function init__tempcode()
 	define('PURE_STRING',16); // Used to indicating we just put something directly into the output. Works with __toString on PHP5 or normal strings. Does no escaping.
 
 	define('TC_SYMBOL',0);
-	define('TC_KNOWN',1); // Either tempcode or string
+	define('TC_KNOWN',1); // Either Tempcode or string
 	define('TC_LANGUAGE_REFERENCE',2);
 	define('TC_PARAMETER',3); // A late parameter for a compiled template
 	define('TC_DIRECTIVE',4);
@@ -184,7 +184,7 @@ function missing_template_parameter($origin)
 }
 
 /**
- * Build a conventional tempcode object
+ * Build a conventional Tempcode object
  *
  * @param  integer			The type of symbol this is (TC_SYMBOL, TC_LANGUAGE_REFERENCE)
  * @set    0 2
@@ -269,12 +269,12 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 }
 
 /**
- * This will create a new tempcode object that is containing a single specifed symbol
+ * This will create a new Tempcode object that is containing a single specifed symbol
  *
  * @param  ID_TEXT		The ID of the symbol to use
  * @param  ?array			Symbol parameters (NULL: none)
  * @param  ?array			Escaping (NULL: none)
- * @return tempcode		A symbol tempcode object
+ * @return tempcode		A symbol Tempcode object
  */
 function symbol_tempcode($symbol,$parameters=NULL,$escape=NULL)
 {
@@ -284,12 +284,12 @@ function symbol_tempcode($symbol,$parameters=NULL,$escape=NULL)
 }
 
 /**
- * This will create a new tempcode object that is containing a single specifed directive
+ * This will create a new Tempcode object that is containing a single specifed directive
  *
  * @param  ID_TEXT		The ID of the directive to use
  * @param  mixed			The contents (Tempcode or string)
  * @param  ?array			Directive parameters (NULL: none)
- * @return tempcode		A directive tempcode object
+ * @return tempcode		A directive Tempcode object
  */
 function directive_tempcode($directive,$content,$parameters=NULL)
 {
@@ -429,7 +429,7 @@ function closure_loop($param,$args,$main_function)
 }
 
 /**
- * Convert a string to tempcode.
+ * Convert a string to Tempcode.
  *
  * @param  string			String
  * @return tempcode		Tempcode
@@ -513,13 +513,13 @@ function apply_tempcode_escaping_inline($escaped,$value)
 }
 
 /**
- * This will create a new tempcode object that is containing a single specifed language code
+ * This will create a new Tempcode object that is containing a single specifed language code
  *
  * @param  ID_TEXT		The ID of the language string to use
- * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
- * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
+ * @param  ?mixed			The first token [string or Tempcode] (replaces {1}) (NULL: none)
+ * @param  ?mixed			The second token [string or Tempcode] (replaces {2}) (NULL: none)
  * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
- * @return tempcode		A language tempcode object
+ * @return tempcode		A language Tempcode object
  */
 function do_lang_tempcode($lang_string,$token1=NULL,$token2=NULL,$token3=NULL)
 {
@@ -541,7 +541,7 @@ function do_lang_tempcode($lang_string,$token1=NULL,$token2=NULL,$token3=NULL)
 }
 
 /**
- * Get a tempcoded version of a normal XHTML template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the tempcode attach method.
+ * Get a Tempcoded version of a normal XHTML template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the Tempcode attach method.
  *
  * @param  ID_TEXT			The codename of the template being loaded
  * @param  ?array				A map of parameters for the template (key to value) (NULL: no parameters)
@@ -552,7 +552,7 @@ function do_lang_tempcode($lang_string,$token1=NULL,$token2=NULL,$token3=NULL)
  * @param  string				Subdirectory type to look in
  * @set    templates css
  * @param  ?ID_TEXT			Theme to use (NULL: current theme)
- * @return tempcode			The tempcode for this template
+ * @return tempcode			The Tempcode for this template
  */
 function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$fallback=NULL,$suffix='.tpl',$type='templates',$theme=NULL)
 {
@@ -1079,7 +1079,7 @@ class ocp_tempcode
 	var $children=NULL,$fresh=NULL;
 
 	/**
-	 * Constructor of tempcode
+	 * Constructor of Tempcode
 	 *
 	 * @param  ?array			Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
 	 */
@@ -1203,9 +1203,9 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Attach the specified tempcode to the right of the current tempcode object.
+	 * Attach the specified Tempcode to the right of the current Tempcode object.
 	 *
-	 * @param  mixed				The tempcode/string to attach
+	 * @param  mixed				The Tempcode/string to attach
 	 * @param  boolean			If we've already merged the children from what we're attaching into the child tree (at bind stage)
 	 */
 	function attach($attach,$avoid_child_merge=false)
@@ -1216,7 +1216,7 @@ class ocp_tempcode
 
 		$this->cached_output=NULL;
 
-		if (is_object($attach)) // Consider it another piece of tempcode
+		if (is_object($attach)) // Consider it another piece of Tempcode
 		{
 			foreach ($attach->seq_parts as $seq_part_group)
 			{
@@ -1281,7 +1281,7 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Assemble the current tempcode object into a single serialised (compiled) tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
+	 * Assemble the current Tempcode object into a single serialised (compiled) Tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
 	 *
 	 * @return string			The assembly result
 	 */
@@ -1294,7 +1294,7 @@ class ocp_tempcode
 	}
 
 	/**
-	 * The opposite of to_assembly - it decodes a tempcode storage representation and turns it into a proper tempcode object. This version handles the result of evaled code.
+	 * The opposite of to_assembly - it decodes a Tempcode storage representation and turns it into a proper Tempcode object. This version handles the result of evaled code.
 	 *
 	 * @param  PATH			The file to load
 	 * @param  array			List of parameters for a forced reload if required
@@ -1327,7 +1327,7 @@ class ocp_tempcode
 
 		if ($GLOBALS['XSS_DETECT'])
 		{
-			$this->_mark_all_as_escaped();
+			//$this->_mark_all_as_escaped();
 		}
 
 		return true;
@@ -1335,31 +1335,50 @@ class ocp_tempcode
 
 	/**
 	 * Recursively mark all parameters in this Tempcode as escaped. This is needed when loading from cache, as escape tainting data would have been lost.
+	 *
+	 * @param  boolean		Whether this is the top-level call
 	 */
-	function _mark_all_as_escaped()
+	function _mark_all_as_escaped($top_level=true)
 	{
+		static $done=array();
+
 		foreach ($this->seq_parts as &$seq_parts_group)
 		{
 			foreach ($seq_parts_group as &$seq_part)
 			{
-				foreach ($seq_part[1] as &$val)
+				if (!isset($seq_part[1]['_escaped']))
 				{
-					if (is_string($val))
+					foreach ($seq_part[1] as &$val)
 					{
-						ocp_mark_as_escaped($val);
-					} elseif (is_object($val))
-					{
-						$val->_mark_all_as_escaped();
+						if (is_string($val))
+						{
+							ocp_mark_as_escaped($val);
+						} elseif (is_object($val))
+						{
+							$val->_mark_all_as_escaped(false);
+						}
 					}
+					$seq_part[1]['_escaped']=true; // Temporarily mark as escaped. Many seq_parts share a referenced list of parameters, and its naive/slow to re-mark for each
+					$done[]=&$seq_part[1];
 				}
 			}
+		}
+
+		if ($top_level)
+		{
+			// Remove the escaping markers, as the escaping marking does not persist with serialisation
+			foreach ($done as $d)
+			{
+				unset($d['_escaped']);
+			}
+			$done=array();
 		}
 	}
 
 	/**
-	 * The opposite of to_assembly - it decodes a tempcode storage representation and turns it into a proper tempcode object.
+	 * The opposite of to_assembly - it decodes a Tempcode storage representation and turns it into a proper Tempcode object.
 	 *
-	 * @param  string			The assembled tempcode
+	 * @param  string			The assembled Tempcode
 	 * @param  boolean		Return error code on failure, rather than exiting
 	 * @return boolean		Success status (it can fail, if the compiled cache file is corrupt)
 	 */
@@ -1411,11 +1430,11 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Bind the parameter bits, or recursively bind children (doesn't change self, returns a bound tempcode object)
+	 * Bind the parameter bits, or recursively bind children (doesn't change self, returns a bound Tempcode object)
 	 *
 	 * @param  array			Map of parameters to bind parameter bits to
-	 * @param  ID_TEXT		The codename of the template this tempcode is from
-	 * @return tempcode		The new bound tempcode object
+	 * @param  ID_TEXT		The codename of the template this Tempcode is from
+	 * @return tempcode		The new bound Tempcode object
 	 */
 	function bind(&$parameters,$codename)
 	{
@@ -1547,7 +1566,7 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty. This is also useful if you want to avoid early evaluation, which will mess up GET/SET flow.
+	 * Find whether the Tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty. This is also useful if you want to avoid early evaluation, which will mess up GET/SET flow.
 	 *
 	 * @return boolean		Whether it is entirely empty
 	 */
@@ -1561,9 +1580,9 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Find whether the tempcode object is blank or not.
+	 * Find whether the Tempcode object is blank or not.
 	 *
-	 * @return boolean		Whether the tempcode object is empty
+	 * @return boolean		Whether the Tempcode object is empty
 	 */
 	function is_empty()
 	{
@@ -1664,7 +1683,7 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Parses the current tempcode object, then return the parsed string
+	 * Parses the current Tempcode object, then return the parsed string
 	 *
 	 * @return string				The evaluated thing.
 	 */
@@ -1674,7 +1693,7 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Parses the current tempcode object, then return the parsed string
+	 * Parses the current Tempcode object, then return the parsed string
 	 *
 	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current user's language)
 	 * @return string				The evaluated thing. Voila, it's all over!
@@ -1764,7 +1783,7 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Parse the current tempcode object, then echo it to the browser.
+	 * Parse the current Tempcode object, then echo it to the browser.
 	 *
 	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current users language)
 	 * @param  boolean			Whether to stop if we are stuck of a seq_part with parameters yet-unbound, and to continue from last resume point

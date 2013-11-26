@@ -38,7 +38,7 @@ class Hook_page_groupings_catalogues
 			$ret[]=array('cms','menu/rich_content/catalogues/catalogues',array('cms_catalogues',array('type'=>'misc'),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('catalogues:CATALOGUES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','COUNT(*)',NULL,'',true))))),'catalogues:DOC_CATALOGUES');
 		if ($exhaustive)
 		{
-			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title','c_description','c_ecommerce'),NULL,'',10,NULL,true);
+			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title','c_description','c_ecommerce','c_is_tree'),NULL,'',10,NULL,true);
 			if (!is_null($catalogues))
 			{
 				$ret2=array();
@@ -53,13 +53,28 @@ class Hook_page_groupings_catalogues
 							$menu_icon='menu/rich_content/catalogues/catalogues';
 
 						if (has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$row['c_name'])))
-							$ret2[]=array('cms',$menu_icon,array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',get_translated_text($row['c_title']),escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_text($row['c_description']));
+							$ret2[]=array('cms',$menu_icon,array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',get_translated_text($row['c_title']),escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_tempcode($row['c_description']));
 
 						$page_grouping='rich_content';
 						if ($row['c_name']=='projects') $page_grouping='collaboration';
 						if ($row['c_name']=='classifieds') $page_grouping='social';
 
-						$ret2[]=array($page_grouping,$menu_icon,array('catalogues',array('type'=>'index','id'=>$row['c_name']),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))));
+						if ($row['c_is_tree']==0)
+						{
+							$num_categories=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']));
+							/*if ($num_categories==0)	Actually we should show an empty index - catalogue exists, show it does
+							{
+								continue;
+							}
+							else*/if ($num_categories==1)
+							{
+								$only_category=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','id',array('c_name'=>$row['c_name']));
+								$ret2[]=array($page_grouping,$menu_icon,array('catalogues',array('type'=>'misc','id'=>strval($only_category)),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))),get_translated_tempcode($row['c_description']));
+								continue;
+							}
+						}
+
+						$ret2[]=array($page_grouping,$menu_icon,array('catalogues',array('type'=>'index','id'=>$row['c_name']),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))),get_translated_tempcode($row['c_description']));
 					}
 				}
 				//if (count($ret2)<20)	Why would people add 20+. Weird use case, and we can't make assumptions if they do, linking should still happen.

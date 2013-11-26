@@ -129,7 +129,7 @@ function upgrade_script()
 <p>{$l_choices}</p>
 
 <div style=\"margin: 0 50px\">
-	<h2>{$l_maintenance}&hellip;</h2><ul>
+	<h2>{$l_maintenance}&hellip;</h2><ul class=\"compact_list\">
 		<li>{$l_clear_caches}</li>";
 					if (!is_suexec_like()) echo "
 					";
@@ -167,7 +167,7 @@ function upgrade_script()
 		<tbody>
 			<tr><th>X</th><td>{$l_not_for_patch} {$l_tutorial}</td><td>".escape_html(display_time_period(60*120))."</td></tr>
 			<tr><th>1</th><td>{$l_take_backup}</td><td>".escape_html(display_time_period(60*120))."</td></tr>
-			<tr><th>2</th><td>{$l_close_site}  {$l_fu_closedness}<br /><q style=\"font-style: italic\">".$closed->evaluate()."</q> <span class=\"associated_link\">[<a href=\"".escape_html($closed_url->evaluate())."\" title=\"(this link will open in a new window)\" target=\"_blank\">".do_lang('CHANGE')."</a>]</span></td><td>".escape_html(display_time_period(60))."</td></tr>
+			<tr><th>2</th><td>{$l_close_site}  {$l_fu_closedness}<br /><q style=\"font-style: italic\">".$closed->evaluate()."</q> <span class=\"associated_link\"><a href=\"".escape_html($closed_url->evaluate())."\" title=\"(this link will open in a new window)\" target=\"_blank\">".do_lang('CHANGE')."</a></span></td><td>".escape_html(display_time_period(60))."</td></tr>
 			<tr><th>3</th><td>{$l_download}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
 			<tr><th>4</th><td>{$l_not_for_patch} {$l_integrity_scan_no_merging}<!-- ".do_lang('OR')." {$l_integrity_scan}--></td><td>".str_replace(' ','&nbsp;',escape_html(display_time_period(60*10)))."&nbsp;&dagger;</td></tr>
 			<tr><th>5</th><td>{$l_not_for_patch} {$l_database_upgrade}<br />{$l_up_info}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
@@ -503,7 +503,7 @@ function fu_link($url,$text,$disabled=false,$js='')
 	$hidden=(strpos($url,'http://ocportal.com')!==false)?'':post_fields_relay();
 	if (get_param_integer('keep_safe_mode',0)==1) $url.='&keep_safe_mode=1';
 	if (get_param_integer('keep_show_loading',0)==1) $url.='&keep_show_loading=1';
-	return '<form title="'.escape_html($text).'" style="display: inline" action="'.escape_html($url).'" method="post">'.$hidden.'<input '.(empty($js)?'':'onclick="return window.confirm(\''.addslashes($js).'\');" ').'accesskey="c" style="margin: 1px; padding: 0" '.($disabled?'disabled="disabled"':'').' class="buttons__proceed button_screen" type="submit" value="'.escape_html($text).'" /></form>';
+	return '<form title="'.escape_html($text).'" style="display: inline" action="'.escape_html($url).'" method="post">'.$hidden.'<input '.(empty($js)?'':'onclick="return window.confirm(\''.addslashes($js).'\');" ').'accesskey="c" '.($disabled?'disabled="disabled"':'').' class="buttons__proceed button_screen_item" type="submit" value="'.escape_html($text).'" /></form>';
 }
 
 /**
@@ -588,7 +588,7 @@ function up_do_login($message=NULL)
 
 	echo "
 	<p>
-		<input class=\"button_screen\" type=\"submit\" value=\"{$l_login}\" />
+		<input class=\"menu__site_meta__user_actions__login button_screen\" type=\"submit\" value=\"{$l_login}\" />
 	</p>
 	</form>
 	";
@@ -627,7 +627,7 @@ function up_do_header()
 END;
 @print(file_get_contents(css_enforce('global','default',false)));
 echo <<<END
-			.screen_title { text-decoration: underline; display: block; background: url('themes/default/images/icons/24x24/menu/adminzone/tools/upgrade.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
+			.screen_title { text-decoration: underline; display: block; background: url('themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 		/*]]>*/</style>
 

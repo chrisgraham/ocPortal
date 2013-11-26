@@ -112,13 +112,14 @@ function pop_up_menu(id,place,menu,event)
 	}
 
 	var full_height=get_window_scroll_height(); // Has to be got before e is visible, else results skewed
+	e.style.position='absolute';
+	e.style.left='0'; // Setting this lets the browser calculate a more appropriate (larger) width, before we set the correct left for that width will fit
 	e.style.display='block';
 	if (typeof window.fade_transition!='undefined')
 	{
 		set_opacity(e,0.0);
 		fade_transition(e,100,30,8);
 	}
-	e.style.position='absolute';
 	var full_width=(window.scrollX==0)?get_window_width():get_window_scroll_width();
 	{+START,IF,{$CONFIG_OPTION,fixed_width}}
 		var main_website_inner=document.getElementById('main_website_inner');
@@ -132,7 +133,7 @@ function pop_up_menu(id,place,menu,event)
 		var pos_left=l;
 		if (place=='below') // Top-level of drop-down
 		{
-			if (pos_left+e_width+10>full_width) pos_left=full_width-e_width-10;
+			if (pos_left+e_width>full_width) pos_left=full_width-e_width;
 		} else
 		{ // NB: For non-below, we can't assume 'left' is absolute, as it is actually relative to parent node which is itself positioned
 			if (find_pos_x(e.parentNode,true)+e_width+e_parent_width+10>full_width) pos_left-=e_width+e_parent_width;

@@ -495,8 +495,15 @@ abstract class Hook_sitemap_base
 				{
 					$title=$link[3];
 					$icon=$link[1];
-					$description=isset($link[4])?comcode_lang_string($link[4]):NULL;
+
+					$description=NULL;
+					if (isset($link[4]))
+					{
+						$description=(is_object($link[4]))?$link[4]:comcode_lang_string($link[4]);
+					}
+
 					$row=array($title,$icon,$description)+$row;
+
 					if ($link[2][2]==$zone) break; // If was a perfect match, break out
 				}
 			}

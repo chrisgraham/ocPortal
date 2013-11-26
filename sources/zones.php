@@ -817,7 +817,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 					if (!$DO_NOT_CACHE_THIS)
 					{
 						require_code('caches2');
-						if ((isset($map['quick_cache'])) && ($map['quick_cache']=='1') && (has_cookies())) $cache=make_string_tempcode(preg_replace('#((\?)|(&(amp;)?))keep\_[^="]*=[^&"]*#','\2',$cache->evaluate()));
+						if ((isset($map['quick_cache'])) && ($map['quick_cache']=='1')/* && (has_cookies())*/) $cache=make_string_tempcode(preg_replace('#((\?)|(&(amp;)?))keep\_[^="]*=[^&"]*#','\2',$cache->evaluate()));
 						put_into_cache($codename,$ttl,$cache_identifier,$cache,array_keys($LANGS_REQUESTED),array_keys($JAVASCRIPTS),array_keys($CSSS),true);
 					} elseif (($ttl!=-1) && ($cache->is_empty())) // Try again with no TTL, if we currently failed but did impose a TTL
 					{

@@ -545,6 +545,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 			}
 
 			if (!is_file($lang_file_default)) $lang_file_default=$lang_file;
+
 			if ((is_file($cache_path)) && ((!is_file($lang_file)) || ((@/*race conditions*/filemtime($cache_path)>filemtime($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file_default)))))
 			{
 				$tmp=@file_get_contents($cache_path);

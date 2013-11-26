@@ -48,7 +48,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 			if (($cma_info['module']==$page) && ($zone!='_SEARCH') && (_request_page($page,$zone)!==false)) // Ensure the given page matches the content type, and it really does exist in the given zone
 			{
 				if ($matches[0]==$page_link) return SITEMAP_NODE_HANDLED_VIRTUALLY; // No type/ID specified
-				if (preg_match('#^([^:]*):([^:]*):(index|atoz|misc)(:|$)#',$page_link,$matches)!=0)
+				if (preg_match('#^([^:]*):([^:]*):(index|atoz)(:|$)#',$page_link,$matches)!=0)
 					return SITEMAP_NODE_HANDLED;
 			}
 		}

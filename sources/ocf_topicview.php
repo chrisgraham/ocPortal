@@ -40,6 +40,8 @@ function find_post_id_url($post_id)
 	$map=array('page'=>'topicview','type'=>NULL,'id'=>$id,'topic_start'=>($start==0)?NULL:$start,'post_id'=>$post_id);
 	foreach ($_GET as $key=>$val)
 		if ((substr($key,0,3)=='kfs') || (in_array($key,array('topic_start','topic_max')))) $map[$key]=$val;
+	$test=get_param_integer('threaded',-1);
+	if ($test!=-1) $map['threaded']=$test;
 	$_redirect=build_url($map,'_SELF',NULL,true);
 	$redirect=$_redirect->evaluate();
 	$redirect.='#post_'.strval($post_id);

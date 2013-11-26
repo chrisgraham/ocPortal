@@ -154,7 +154,7 @@ function get_option($name,$missing_ok=false)
 	// Maybe missing a DB row, or has an old NULL one, so we need to auto-create from hook
 	if (!isset($CONFIG_OPTIONS_CACHE[$name]['c_value']))
 	{
-		if ((running_script('upgrader')) || (running_script('execute_temp'))) return NULL; // Upgrade scenario, probably can't do this robustly
+		if ((running_script('upgrader')) || (running_script('execute_temp'))) return ''; // Upgrade scenario, probably can't do this robustly
 
 		if ($missing_ok) return NULL;
 

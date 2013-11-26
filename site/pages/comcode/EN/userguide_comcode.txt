@@ -1,4 +1,4 @@
-[title sub="Comcode help"]Help[/title]
+[title]Comcode help[/title]
 
 Comcode is used for formatting input data (the data marked as being comcode).
 

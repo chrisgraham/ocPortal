@@ -184,6 +184,7 @@ class Module_groups
 	function run()
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
+		require_css('ocf');
 		require_code('ocf_groups_action');
 		require_code('ocf_groups_action2');
 		require_code('ocf_groups2');

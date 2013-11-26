@@ -243,6 +243,8 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					$child_page_link=$_zone.':'.$page;
 					foreach ($link[2][1] as $key=>$val)
 					{
+						if (!is_string($val)) $val=strval($val);
+
 						if ($key=='type' || $key=='id')
 						{
 							$child_page_link.=':'.urlencode($val);
@@ -255,13 +257,13 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 					$details=$this->_request_page_details($page,$_zone);
 					$page_type=strtolower($details[0]);
 
-					$description=NULL;
+					$child_description=NULL;
 					if (isset($link[4]))
 					{
-						$description=(is_object($link[4]))?$link[4]:comcode_lang_string($link[4]);
+						$child_description=(is_object($link[4]))?$link[4]:comcode_lang_string($link[4]);
 					}
 
-					$child_links[]=array($title,$child_page_link,$icon,$page_type,$description);
+					$child_links[]=array($title,$child_page_link,$icon,$page_type,$child_description);
 				}
 			}
 
@@ -341,7 +343,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 						continue;
 					}
 
-					if (preg_match('#^([^:]*):([^:]*)(:misc|:\w+=|$)#',$child_page_link,$matches)!=0)
+					if (preg_match('#^([^:]*):([^:]*)(:\w+=|$)#',$child_page_link,$matches)!=0)
 					{
 						$child_node=$page_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
 					} else

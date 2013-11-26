@@ -2289,13 +2289,13 @@ function require_code($codename)
 		if (function_exists('init__'.str_replace('/','__',$codename))) call_user_func('init__'.str_replace('/','__',$codename));
 	}
 
-	if (!array_key_exists('type',$_GET))
+	/*if (!array_key_exists('type',$_GET))	Memory usage debugging. Not safe, as can mess up Tempcode generation (mixed echos)
 	{
 		if (function_exists('memory_get_usage'))
 		{
 			echo '<!-- Memory diff for '.$codename.' was: '.number_format(memory_get_usage()-$prior).' -->'."\n";
 		}
-	}
+	}*/
 }
 
 /**

@@ -406,7 +406,13 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 							$child_page_link.=':'.urlencode($key).'='.urlencode($val);
 						}
 
-						$child_links[]=array($title,$child_page_link,$icon,NULL/*unknown/irrelevant $page_type*/,isset($link[4])?comcode_lang_string($link[4]):NULL);
+						$child_description=NULL;
+						if (isset($link[4]))
+						{
+							$child_description=(is_object($link[4]))?$link[4]:comcode_lang_string($link[4]);
+						}
+
+						$child_links[]=array($title,$child_page_link,$icon,NULL/*unknown/irrelevant $page_type*/,$child_description);
 					}
 
 					foreach ($orphaned_pages as $page=>$page_type)

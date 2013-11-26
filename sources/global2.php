@@ -1772,7 +1772,6 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 		$seed=get_param('keep_theme_seed','');
 	}
 
-	$text_only=(get_param_integer('keep_textonly',0)==1);
 	$minify=(get_param_integer('keep_no_minify',0)==0);
 	if ($seed!='') $minify=false;
 	$https=((addon_installed('ssl')) && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
@@ -1789,7 +1788,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 	{
 		if (is_integer($c)) $c=strval($c);
 
-		_css_tempcode($c,$css,$css_need_inline,$inline,$context,$theme,$seed,$text_only,$minify,$https,$mobile,$do_enforce==1);
+		_css_tempcode($c,$css,$css_need_inline,$inline,$context,$theme,$seed,NULL,NULL,NULL,NULL,$do_enforce==1);
 	}
 	$css_need_inline->attach($css);
 	return $css_need_inline;
@@ -1814,15 +1813,43 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 function _css_tempcode($c,&$css,&$css_need_inline,$inline=false,$context=NULL,$theme=NULL,$_seed=NULL,$_text_only=NULL,$_minify=NULL,$_https=NULL,$_mobile=NULL,$do_enforce=true)
 {
 	static $seed=NULL;
-	if ($_seed!==NULL) $seed=$_seed;
+	if ($_seed!==NULL)
+	{
+		$seed=$_seed;
+	}
 	static $text_only=NULL;
-	if ($_text_only!==NULL) $text_only=$_text_only;
+	if ($_text_only!==NULL)
+	{
+		$text_only=$_text_only;
+	} elseif ($text_only===NULL)
+	{
+		$text_only=(get_param_integer('keep_textonly',0)==1);
+	}
 	static $minify=NULL;
-	if ($_minify!==NULL) $minify=$_minify;
+	if ($_minify!==NULL)
+	{
+		$minify=$_minify;
+	} elseif ($minify===NULL)
+	{
+		$minify=(get_param_integer('keep_no_minify',0)==0);
+		if ($seed!='') $minify=false;
+	}
 	static $https=NULL;
-	if ($_https!==NULL) $https=$_https;
+	if ($_https!==NULL)
+	{
+		$https=$_https;
+	} elseif ($https===NULL)
+	{
+		$https=((addon_installed('ssl')) && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
+	}
 	static $mobile=NULL;
-	if ($_mobile!==NULL) $mobile=$_mobile;
+	if ($_mobile!==NULL)
+	{
+		$mobile=$_mobile;
+	} elseif ($mobile===NULL)
+	{
+		$mobile=is_mobile();
+	}
 
 	if ($seed!='')
 	{
@@ -1874,7 +1901,7 @@ function require_css($css)
 {
 	global $CSSS;
 
-	// Has to do this inline, as you're not allowed to reference sheets outside head
+	// Has to move into footer
 	if ((!isset($CSSS[$css])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED']))
 	{
 		$value=new ocp_tempcode();
