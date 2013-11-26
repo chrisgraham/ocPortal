@@ -618,7 +618,7 @@ class Module_cms_galleries extends standard_crud_module
 				$url='uploads/galleries/'.str_replace('%2F','/',rawurlencode($file));
 				$thumb_url='uploads/galleries_thumbs/'.str_replace('%2F','/',rawurlencode($file));
 				if (substr($thumb_url,-4,4)=='.gif') $thumb_url=substr($thumb_url,0,strlen($thumb_url)-4).'.png';
-				if (is_video($url,has_privilege(get_member(),'comcode_dangerous')))
+				if (!is_image($url))
 				{
 					$ret=get_video_details(get_custom_file_base().'/uploads/galleries/'.filter_naughty($file),$file,true);
 					if ($ret!==false)
@@ -814,7 +814,7 @@ class Module_cms_galleries extends standard_crud_module
 		if (is_null($time)) $time=time();
 
 		if (substr($thumb_url,-4,4)=='.gif') $thumb_url=substr($thumb_url,0,strlen($thumb_url)-4).'.png';
-		if (is_video($url,has_privilege(get_member(),'comcode_dangerous')))
+		if (!is_image($url))
 		{
 			$ret=get_video_details(get_custom_file_base().'/'.rawurldecode($url),$file,true);
 			if ($ret!==false)
