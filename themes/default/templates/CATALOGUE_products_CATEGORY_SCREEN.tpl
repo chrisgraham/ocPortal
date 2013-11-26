@@ -1,5 +1,7 @@
 {TITLE}
 
+{$REQUIRE_CSS,shopping}
+
 {+START,IF_NON_EMPTY,{DESCRIPTION}}
 	<div class="box box___catalogue_products_category_screen__description"><div class="box_inner">
 		<div itemprop="description">

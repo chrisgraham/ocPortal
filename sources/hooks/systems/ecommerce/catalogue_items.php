@@ -702,7 +702,7 @@ class Hook_catalogue_items
 			'CART_URL'=>$shopping_cart_url,
 		));
 
-		$map['CART_LINK']=show_cart_image();
+		$map['CART_LINK']=show_cart_link();
 	}
 }
 

@@ -150,7 +150,7 @@ class Hook_addon_registry_shopping
 			'themes/default/images/results/return.gif',
 			'themes/default/images/results/view.gif',
 			'themes/default/templates/ECOM_ADMIN_ORDER_ACTIONS.tpl',
-			'themes/default/templates/ECOM_CART_LOGO.tpl',
+			'themes/default/templates/ECOM_CART_LINK.tpl',
 			'themes/default/templates/ECOM_ADMIN_ORDERS_DETAILS_SCREEN.tpl',
 			'themes/default/templates/ECOM_ADMIN_ORDERS_SCREEN.tpl',
 			'themes/default/templates/ECOM_ORDERS_DETAILS_SCREEN.tpl',
@@ -188,7 +188,7 @@ class Hook_addon_registry_shopping
 			'RESULTS_cart_TABLE.tpl'=>'shopping_cart_screen',
 			'RESULTS_TABLE_cart_ENTRY.tpl'=>'shopping_cart_screen',
 			'RESULTS_TABLE_cart_FIELD.tpl'=>'shopping_cart_screen',
-			'ECOM_CART_LOGO.tpl'=>'products_entry_screen',
+			'ECOM_CART_LINK.tpl'=>'products_entry_screen',
 			'CATALOGUE_products_ENTRY_SCREEN.tpl'=>'products_entry_screen',
 			'CATALOGUE_products_FIELDMAP_ENTRY_FIELD.tpl'=>'products_entry_screen',
 			'CATALOGUE_ENTRY_ADD_TO_CART.tpl'=>'products_entry_screen',
@@ -615,7 +615,7 @@ class Hook_addon_registry_shopping
 			'PURCHASE_ACTION_URL'=>placeholder_url(),
 			'CART_URL'=>placeholder_url()
 		));
-		$cart_link=do_lorem_template('ECOM_CART_LOGO',array(
+		$cart_link=do_lorem_template('ECOM_CART_LINK',array(
 			'URL'=>placeholder_url(),
 			'TITLE'=>lorem_phrase()
 		), NULL, false);
@@ -698,7 +698,7 @@ class Hook_addon_registry_shopping
 			'PURCHASE_ACTION_URL'=>placeholder_url(),
 			'CART_URL'=>placeholder_url()
 		));
-		$cart_link=do_lorem_template('ECOM_CART_LOGO',array(
+		$cart_link=do_lorem_template('ECOM_CART_LINK',array(
 			'URL'=>placeholder_url(),
 			'TITLE'=>lorem_phrase()
 		), NULL, false);

@@ -164,11 +164,11 @@ function delete_incomplete_orders()
 }
 
 /**
- * Show cart image
+ * Show cart link
  *
  * @return tempcode
  */
-function show_cart_image()
+function show_cart_link()
 {
 	$cart_url=build_url(array('page'=>'shopping','type'=>'misc'),get_module_zone('shopping'));
 
@@ -183,11 +183,11 @@ function show_cart_image()
 	$item_count=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_cart','count(*)',$where);
 
 	if ($item_count>0)
-		$title=do_lang_tempcode('CART_ITEMS',strval($item_count));
+		$title=do_lang_tempcode('BUTTON_CART_ITEMS',strval($item_count));
 	else
-		$title=do_lang_tempcode('CART_EMPTY');
+		$title=do_lang_tempcode('BUTTON_CART_EMPTY');
 
-	return do_template('ECOM_CART_LOGO',array('_GUID'=>'46ae00c8a605b84fee1b1c68fc57cd32','URL'=>$cart_url,'ITEMS'=>strval($item_count),'TITLE'=>$title));
+	return do_template('ECOM_CART_LINK',array('_GUID'=>'46ae00c8a605b84fee1b1c68fc57cd32','URL'=>$cart_url,'ITEMS'=>strval($item_count),'TITLE'=>$title));
 }
 
 /**

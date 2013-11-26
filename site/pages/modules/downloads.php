@@ -420,7 +420,7 @@ class Module_downloads
 
 		// Decide what to do
 		if ($type=='misc') return $this->view_category_screen();
-		if ($type=='index') return $this->show_all_downloads();
+		if ($type=='index') return $this->view_atoz_screen();
 		if ($type=='entry') return $this->view_download_screen();
 
 		return new ocp_tempcode();
@@ -525,7 +525,7 @@ class Module_downloads
 	 *
 	 * @return tempcode		The UI
 	 */
-	function show_all_downloads()
+	function view_atoz_screen()
 	{
 		$id=get_param('id',strval(db_get_first_id()));
 

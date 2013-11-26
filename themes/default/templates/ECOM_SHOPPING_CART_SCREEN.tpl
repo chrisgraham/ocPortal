@@ -26,7 +26,7 @@
 
 		<input type="hidden" name="product_ids" id="product_ids" value="{PRO_IDS*}"/>
 
-		{+START,IF_NON_EMPTY,{CONT_SHOPPING}}
+		{+START,IF_NON_EMPTY,{CONT_SHOPPING_URL}}
 			<a class="menu__rich_content__catalogues__products button_screen" href="{CONT_SHOPPING_URL*}"><span>{!CONTINUE_SHOPPING}</span></a>
 		{+END}
 	</div>

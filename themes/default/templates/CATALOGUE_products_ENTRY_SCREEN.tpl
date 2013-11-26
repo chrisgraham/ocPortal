@@ -1,6 +1,8 @@
 <div itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_view">
 	{TITLE}
 
+	{$REQUIRE_CSS,shopping}
+
 	{WARNINGS}
 
 	{CART_LINK}

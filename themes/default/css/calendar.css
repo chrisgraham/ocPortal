@@ -189,9 +189,10 @@ abbr.dtstart, abbr.dtend {
 */
 
 .calendar_top_navigation {
-	border-collapse: collapse;
 	margin-left: 1px;
 	margin-bottom: 1em;
+	padding-left: 1px; /* To compensate for -1px offset on calendar_date_span_link_inner */
+	overflow: hidden;
 }
 
 .calendar_date_span_link {
@@ -206,7 +207,8 @@ abbr.dtstart, abbr.dtend {
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_4_background}\, {$GET,area_5_background});}
 	color: {$GET,area_key_text};
 	padding: 0.3em;
-	margin-left: -1px;
+	margin-left: -1px; /* To stop the double borders at join points */
+	padding: 0.5em 0;
 }
 
 .calendar_date_span_link:first-child .calendar_date_span_link_inner {

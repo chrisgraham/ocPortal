@@ -602,22 +602,22 @@ class Module_wiki
 		$page_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF');
 		$pos=strpos($chain,'/');
 		$id=intval(substr($chain,($pos===false)?0:($pos+1)));
-		if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search')))
+		/*if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search')))	Not enough space
 		{
 			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
 			$search_button=do_template('BUTTON_SCREEN',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'buttons__search'));
-		} else $search_button=new ocp_tempcode();
+		} else */$search_button=new ocp_tempcode();
 		$changes_url=build_url(array('page'=>'_SELF','type'=>'changes','id'=>$chain),'_SELF');
 		$changes_button=do_template('BUTTON_SCREEN',array('_GUID'=>'99ad7faac817326510583a69ac719d58','IMMEDIATE'=>false,'REL'=>'history','URL'=>$changes_url,'TITLE'=>do_lang_tempcode('WIKI_CHANGELOG'),'IMG'=>'buttons__changes'));
 		if ((has_privilege(get_member(),'wiki_manage_tree','cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
 		{
 			$tree_url=build_url(array('page'=>'cms_wiki','type'=>'edit_tree','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
-			$tree_button=do_template('BUTTON_SCREEN',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('WIKI_EDIT_TREE'),'IMG'=>'buttons__edit_tree'));
+			$tree_button=do_template('BUTTON_SCREEN',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('__WIKI_EDIT_TREE'),'IMG'=>'buttons__edit_tree'));
 		} else $tree_button=new ocp_tempcode();
 		if ((has_edit_permission('cat_low',get_member(),NULL,'cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
 		{
 			$edit_url=build_url(array('page'=>'cms_wiki','type'=>'edit_page','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
-			$edit_button=do_template('BUTTON_SCREEN',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('WIKI_EDIT_PAGE'),'IMG'=>'buttons__edit'));
+			$edit_button=do_template('BUTTON_SCREEN',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('_WIKI_EDIT_PAGE'),'IMG'=>'buttons__edit'));
 		} else $edit_button=new ocp_tempcode();
 		if (($may_post) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_wiki',array('wiki_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
 		{

@@ -432,6 +432,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								$_GET=$tmp;
 								$current_level_data[]=$new_line;
 								$current_level_data[]='ecv_KEEP($cl,array('.implode(',',$escaped).'),array("'.((strpos($new_line,'?')===false)?'1':'0').'"))';
+								$GLOBALS['HAS_KEEP_IN_URL_CACHE']=NULL; // The temporary $_GET change can cause this to go wrong
 								break;
 							}
 						}

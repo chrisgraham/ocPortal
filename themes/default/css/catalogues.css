@@ -53,12 +53,11 @@
 /* eCommerce cart button (logo) template */
 
 .cart_info {
-	text-align: right;
 	overflow: hidden;
 	margin: 1.5em 0;
 }
 
-.cart_logo {
+.cart_link {
 	float: right;
 }
 

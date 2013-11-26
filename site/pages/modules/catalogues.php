@@ -684,7 +684,7 @@ class Module_catalogues
 
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.(is_ecommerce_catalogue($category['c_name'])?':ecommerce=1':''),do_lang_tempcode('CATALOGUES'))));
 
-			$_title=get_translated_text($category);
+			$_title=get_translated_text($category['cc_title']);
 			$title_to_use=do_lang_tempcode('DEFAULT__CATALOGUE_CATEGORY_ATOZ',escape_html($_title));
 			$this->title=get_screen_title($title_to_use,false);
 
@@ -723,7 +723,7 @@ class Module_catalogues
 		if ($type=='misc') return $this->list_catalogues();
 		if ($type=='index') return $this->view_catalogue_index();
 		if ($type=='category') return $this->view_catalogue_category();
-		if ($type=='atoz') return $this->show_all_catalogue_entries();
+		if ($type=='atoz') return $this->view_atoz();
 		if ($type=='entry') return $this->view_catalogue_entry();
 
 		return new ocp_tempcode();
@@ -833,7 +833,7 @@ class Module_catalogues
 	 *
 	 * @return tempcode		The UI
 	 */
-	function show_all_catalogue_entries()
+	function view_atoz()
 	{
 		$id=$this->id;
 		$category=$this->category;
@@ -884,6 +884,8 @@ class Module_catalogues
 			$cats[$letter][]=$row;
 		}
 		unset($rows);
+
+		if (count($cats)==0) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 
 		ksort($cats);
 		foreach ($cats as $letter=>$entries)
@@ -969,7 +971,7 @@ class Module_catalogues
 			require_code('shopping');
 			require_lang('shopping');
 
-			$cart_link=show_cart_image();
+			$cart_link=show_cart_link();
 		}
 
 		// Management links
