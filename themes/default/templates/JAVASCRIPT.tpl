@@ -25,9 +25,14 @@ function script_load_stuff()
 	var images=[];
 	/*images.push('{$IMG;,menus/menu_bullet_hover}'.replace(/^http:/,window.location.protocol));	Menu type no longer on by default
 	images.push('{$IMG;,menus/menu_bullet_expand_hover}'.replace(/^http:/,window.location.protocol));*/
-	/*images.push('{$IMG;,expand}'.replace(/^http:/,window.location.protocol)); Expanders and contracters no longer prominent in UI
-	images.push('{$IMG;,contract}'.replace(/^http:/,window.location.protocol));
-	images.push('{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol));*/
+	/* Expanders and contracters no longer prominent in UI
+	images.push('{$IMG;,1x/trays/expand}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,1x/trays/contract}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,1x/trays/exp_con}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,2x/trays/expand}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,2x/trays/contract}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,2x/trays/exp_con}'.replace(/^http:/,window.location.protocol));
+	*/
 	images.push('{$IMG;,loading}'.replace(/^http:/,window.location.protocol));
 	for (i=0;i<images.length;i++) preloader.src=images[i];
 
@@ -1152,7 +1157,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 	{
 		pic=document.getElementById('e_'+element.id);
 	}
-	if ((pic) && (pic.src=='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol))) return; // Currently in action
+	if ((pic) && (pic.src=='{$IMG;,1x/trays/exp_con}'.replace(/^http:/,window.location.protocol))) return; // Currently in action
 
 	element.setAttribute('aria-expanded',(type=='none')?'false':'true');
 
@@ -1166,7 +1171,9 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 			element.style.position='absolute'; // So things do not just around now it is visible
 			if (pic)
 			{
-				pic.src='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol);
+				pic.src='{$IMG;,1x/trays/exp_con}'.replace(/^http:/,window.location.protocol);
+				if (typeof pic.srcset!='undefined')
+					pic.srcset='{$IMG;,2x/trays/exp_con} 2x'.replace(/^http:/,window.location.protocol);
 			}
 			window.setTimeout(function() { begin_toggleable_tray_animation(element,20,70,-1,pic); } ,20);
 		} else
@@ -1179,7 +1186,9 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 
 			if (pic)
 			{
-				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,contract}').replace(/^http:/,window.location.protocol);
+				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,1x/trays/contract}').replace(/^http:/,window.location.protocol);
+				if (typeof pic.srcset!='undefined')
+					pic.srcset=((pic.src.indexOf('themewizard.php')!=-1)?pic.srcset.replace('expand','contract'):'{$IMG;,2x/trays/contract} 2x').replace(/^http:/,window.location.protocol);
 			}
 		}
 	} else
@@ -1188,14 +1197,18 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 		{
 			if (pic)
 			{
-				pic.src='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol);
+				pic.src='{$IMG;,1x/trays/exp_con}'.replace(/^http:/,window.location.protocol);
+				if (typeof pic.srcset!='undefined')
+					pic.srcset='{$IMG;,2x/trays/exp_con} 2x'.replace(/^http:/,window.location.protocol);
 			}
 			window.setTimeout(function() { begin_toggleable_tray_animation(element,-20,70,0,pic); } ,20);
 		} else
 		{
 			if (pic)
 			{
-				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^http:/,window.location.protocol);
+				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('contract','expand'):'{$IMG;,1x/trays/expand}').replace(/^http:/,window.location.protocol);
+				if (typeof pic.srcset!='undefined')
+					pic.srcset=((pic.srcset.indexOf('themewizard.php')!=-1)?pic.srcset.replace('contract','expand'):'{$IMG;,2x/trays/expand} 2x').replace(/^http:/,window.location.protocol);
 				pic.setAttribute('alt',pic.getAttribute('alt').replace('{!CONTRACT;}','{!EXPAND;}'));
 				pic.title='{!EXPAND;}'; // Needs doing because convert_tooltip may not have run yet
 				pic.ocp_tooltip_title='{!EXPAND;}';
@@ -1266,7 +1279,9 @@ function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,
 		element.style.outline='0';
 		if (pic)
 		{
-			pic.src=((animate_dif<0)?'{$IMG;,expand}':'{$IMG;,contract}').replace(/^http:/,window.location.protocol);
+			pic.src=((animate_dif<0)?'{$IMG;,1x/trays/expand}':'{$IMG;,1x/trays/contract}').replace(/^http:/,window.location.protocol);
+			if (typeof pic.srcset!='undefined')
+				pic.srcset=((animate_dif<0)?'{$IMG;,2x/trays/expand} 2x':'{$IMG;,2x/trays/contract} 2x').replace(/^http:/,window.location.protocol);
 			pic.setAttribute('alt',pic.getAttribute('alt').replace((animate_dif<0)?'{!CONTRACT;}':'{!EXPAND;}',(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}'));
 			pic.ocp_tooltip_title=(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}';
 		}

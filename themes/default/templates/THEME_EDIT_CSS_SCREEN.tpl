@@ -44,7 +44,7 @@
 
 			<div>
 				<h4 class="toggleable_tray_title">
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: " title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: " title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Background Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
@@ -85,7 +85,7 @@
 
 			<div>
 				<h4 class="toggleable_tray_title">
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Background Properties" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Background Properties" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Border Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
@@ -141,7 +141,7 @@
 
 			<div>
 				<h4 class="toggleable_tray_title">
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Dimension Properties" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Dimension Properties" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Dimension Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
@@ -187,7 +187,7 @@
 
 			<div>
 				<h4 class="toggleable_tray_title">
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: List Properties" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: List Properties" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">List Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
@@ -213,7 +213,7 @@
 
 			<div>
 				<h4 class="toggleable_tray_title">
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Margin/Padding Properties" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Margin/Padding Properties" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Margin/Padding Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
@@ -279,7 +279,7 @@
 
 			<div>
 				<h4 class="toggleable_tray_title">
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Positioning Properties" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Positioning Properties" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Positioning Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
@@ -350,7 +350,7 @@
 
 			<div>
 				<h4 class="toggleable_tray_title">
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Text/Font Properties" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: Text/Font Properties" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">Text/Font Properties</a>
 				</h4>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
@@ -461,7 +461,7 @@
 
 <div class="original_template">
 	<h2 class="toggleable_tray_title">
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 		<label for="f_old"><a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode.parentNode);">{!ORIGINAL}</a>:</label>
 	</h2>
 	<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">

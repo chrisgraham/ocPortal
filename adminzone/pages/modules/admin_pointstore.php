@@ -81,7 +81,7 @@ class Module_admin_pointstore
 		if ($type=='misc')
 		{
 			$also_url=build_url(array('page'=>'_SELF','type'=>'p'),'_SELF');
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform',true);
 		}
 
 		if ($type=='misc' || $type=='_logs')
@@ -92,7 +92,7 @@ class Module_admin_pointstore
 		if ($type=='p')
 		{
 			$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_AUDIT',escape_html($also_url->evaluate())),'inform');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_AUDIT',escape_html($also_url->evaluate())),'inform',true);
 		}
 
 		if ($type=='p' || $type=='_p')

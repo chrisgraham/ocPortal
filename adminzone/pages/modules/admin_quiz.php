@@ -84,7 +84,7 @@ class Module_admin_quiz
 		if ($type=='misc')
 		{
 			$also_url=build_url(array('page'=>'cms_quiz'),get_module_zone('cms_quiz'));
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform',true);
 		}
 
 		if ($type=='find_winner')

@@ -742,7 +742,7 @@ body.popup_spacer h2 {
 	vertical-align: middle;
 }
 .global_message strong {
-	text-shadow: 1px 1px 0px {$GET,message_highlighted_part};
+	text-shadow: 1px 0px 0px {$GET,message_highlighted_part};
 	font-weight: normal;
 }
 .global_message img {
@@ -1308,7 +1308,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	margin: 0;
 }
 .boxless_space .box>.box_inner>h1, .boxless_space .box>.box_inner>h2, .boxless_space .box>.box_inner>h3, .boxless_space .box>.box_inner>h4, .boxless_space .box>.box_inner>h5, .boxless_space .box>.box_inner>h6, .boxless_space .box>.toggleable_tray_title {
-	background: url('{$IMG_INLINE;,boxless_title_leadin_rightcomp}') no-repeat !important;
+	background: url('{$IMG_INLINE;,1x/boxless_title_leadin_rightcomp}') no-repeat !important;
 	color: {$GET,slightly_seeded_right_complement_text} !important;
 	text-align: {!en_left};
 	font-size: 15px;
@@ -1321,8 +1321,18 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	{$BETA_CSS_PROPERTY,border-radius: 0;}
 }
 .global_side_panel .boxless_space .box>.box_inner>h1, .global_side_panel .boxless_space .box>.box_inner>h2, .global_side_panel .boxless_space .box>.box_inner>h3, .global_side_panel .boxless_space .box>.box_inner>h4, .global_side_panel .boxless_space .box>.box_inner>h5, .global_side_panel .boxless_space .box>.box_inner>h6 {
-	background: url('{$IMG_INLINE;,boxless_title_leadin_leftcomp}') no-repeat !important;
+	background: url('{$IMG_INLINE;,1x/boxless_title_leadin_leftcomp}') no-repeat !important;
 	color: {$GET,slightly_seeded_left_complement_text} !important;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.boxless_space .box>.box_inner>h1, .boxless_space .box>.box_inner>h2, .boxless_space .box>.box_inner>h3, .boxless_space .box>.box_inner>h4, .boxless_space .box>.box_inner>h5, .boxless_space .box>.box_inner>h6, .boxless_space .box>.toggleable_tray_title {
+		background: url('{$IMG_INLINE;,2x/boxless_title_leadin_rightcomp}') no-repeat !important;
+	}
+	.global_side_panel .boxless_space .box>.box_inner>h1, .global_side_panel .boxless_space .box>.box_inner>h2, .global_side_panel .boxless_space .box>.box_inner>h3, .global_side_panel .boxless_space .box>.box_inner>h4, .global_side_panel .boxless_space .box>.box_inner>h5, .global_side_panel .boxless_space .box>.box_inner>h6 {
+		background: url('{$IMG_INLINE;,2x/boxless_title_leadin_leftcomp}') no-repeat !important;
+	}
+}
+.global_side_panel .boxless_space .box>.box_inner>h1, .global_side_panel .boxless_space .box>.box_inner>h2, .global_side_panel .boxless_space .box>.box_inner>h3, .global_side_panel .boxless_space .box>.box_inner>h4, .global_side_panel .boxless_space .box>.box_inner>h5, .global_side_panel .boxless_space .box>.box_inner>h6 {
 }
 .boxless_space .buttons_group, .boxless_space .associated_links_block_group, .boxless_space .media_box, .boxless_space .proceed_button {
 	text-align: left;
@@ -1385,7 +1395,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 
 .toggleable_tray_button img {
 	float: {!en_right};
-	padding: 0 5px !important;
+	padding: 0 0.3em !important;
 }
 .ttb_left_spaced, .ttb_left_spaced div {
 	margin-top: 0.3em;
@@ -2541,10 +2551,6 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 =========================
 */
 
-.comcode_supported_icon {
-	vertical-align: middle;
-}
-
 .quick_self_edit_link {
 	font-size: 0.8em;
 	text-align: center;
@@ -2992,9 +2998,6 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 }
 .buttons__edit {
 	background-image: url('{$IMG,icons/24x24/buttons/edit}');
-}
-.buttons__goto {
-	background-image: url('{$IMG,icons/24x24/buttons/goto}');
 }
 .buttons__more {
 	background-image: url('{$IMG,icons/24x24/buttons/more}');

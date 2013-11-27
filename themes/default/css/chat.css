@@ -26,11 +26,16 @@
 }
 
 .chat_multi_tab {
-	background: url('{$IMG;,help}') no-repeat;
+	background: url('{$IMG;,1x/help}') no-repeat;
 	padding-{!en_left}: 20px;
 	margin: 21px 0 8px 4px;
 	font-size: 0.9em;
 	width: 70%;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.chat_multi_tab {
+		background: url('{$IMG;,2x/help}') no-repeat;
+	}
 }
 
 /* Chat rooms */

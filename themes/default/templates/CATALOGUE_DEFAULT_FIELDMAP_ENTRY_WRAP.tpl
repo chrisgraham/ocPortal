@@ -39,7 +39,7 @@
 
 			{+START,IF_NON_EMPTY,{VIEW_URL}}
 				<p class="{$?,{GIVE_CONTEXT},shunted_button,right}">
-					<a class="buttons__goto button_screen_item" title="{!VIEW}: {$STRIP_TAGS*,{FIELD_0}} {+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} ({$STRIP_TAGS,{$COMMENT_COUNT,catalogues,{ID}}}){+END}" href="{VIEW_URL*}"><span>{!VIEW}</span></a>
+					<a class="buttons__more button_screen_item" title="{!VIEW}: {$STRIP_TAGS*,{FIELD_0}} {+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} ({$STRIP_TAGS,{$COMMENT_COUNT,catalogues,{ID}}}){+END}" href="{VIEW_URL*}"><span>{!VIEW}</span></a>
 				</p>
 			{+END}
 			{+START,IF_EMPTY,{VIEW_URL}}{+START,IF_NON_EMPTY,{EDIT_URL}}

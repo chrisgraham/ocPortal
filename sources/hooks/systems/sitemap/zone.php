@@ -403,7 +403,15 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 						$child_page_link=$_zone.':'.$page;
 						foreach ($link[2][1] as $key=>$val)
 						{
-							$child_page_link.=':'.urlencode($key).'='.urlencode($val);
+							if (!is_string($val)) $val=strval($val);
+
+							if ($key=='type' || $key=='id')
+							{
+								$child_page_link.=':'.urlencode($val);
+							} else
+							{
+								$child_page_link.=':'.urlencode($key).'='.urlencode($val);
+							}
 						}
 
 						$child_description=NULL;

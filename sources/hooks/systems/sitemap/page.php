@@ -68,8 +68,9 @@ class Hook_sitemap_page extends Hook_sitemap_base
 	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
 		$matches=array();
-		preg_match('#^([^:]*):([^:]*)#',$page_link,$matches);
+		preg_match('#^([^:]*):([^:]*)(.*$)#',$page_link,$matches);
 		$page=$matches[2];
+		$extra=$matches[3];
 
 		$this->_make_zone_concrete($zone,$page_link);
 
@@ -167,13 +168,15 @@ class Hook_sitemap_page extends Hook_sitemap_base
 			// Look for entry points to put under this
 			if (($details[0]=='MODULES' || $details[0]=='MODULES_CUSTOM') && (!$require_permission_support))
 			{
-				$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
+				$simplified=(strpos($extra,':catalogue_name=')!==false);
+
+				$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true,$simplified));
 				if (is_null($functions[0]))
 				{
 					if (is_file(get_file_base().'/'.str_replace('/modules_custom/','/modules/',$path)))
 					{
 						$path=str_replace('/modules_custom/','/modules/',$path);
-						$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
+						$functions=extract_module_functions(get_file_base().'/'.$path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true,$simplified));
 					}
 				}
 
@@ -274,6 +277,11 @@ class Hook_sitemap_page extends Hook_sitemap_base
 
 								if (preg_match('#^([^:]*):([^:]*):([^:]*)(:.*|$)#',$child_page_link)!=0)
 								{
+									if (strpos($extra,':catalogue_name=')!==false)
+									{
+										$child_page_link.=preg_replace('#^:\w+#','',$extra);
+									}
+
 									$child_node=$entry_point_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 								} else
 								{

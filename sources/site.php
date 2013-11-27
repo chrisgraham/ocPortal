@@ -284,9 +284,10 @@ function inform_non_canonical_parameter($param)
  * @param  mixed			The type of special message
  * @param  ID_TEXT		The template to use
  * @set    inform notice warn
+ * @param  boolean		Whether to put into the helper panel instead of the normal header area
  * @return string			Blank string so it can be chained in the Tempcode compiler. You will rarely want to use this return value. It's kind of a failsafe.
  */
-function attach_message($message,$type='inform')
+function attach_message($message,$type='inform',$put_in_helper_panel=false)
 {
 	if ((error_reporting()==0) && ($type=='warn')) return ''; // Suppressing errors
 
@@ -338,15 +339,21 @@ function attach_message($message,$type='inform')
 		'MESSAGE'=>is_string($message)?escape_html($message):$message
 	));
 
-	$ATTACHED_MESSAGES_RAW[]=array($message,$type);
-	if ($GLOBALS['TEMPCODE_OUTPUT_STARTED'])
+	if ($put_in_helper_panel)
 	{
-		if ($LATE_ATTACHED_MESSAGES===NULL) $LATE_ATTACHED_MESSAGES=new ocp_tempcode();
-		$LATE_ATTACHED_MESSAGES->attach($message_tpl);
+		set_helper_panel_text($message_tpl,true,false);
 	} else
 	{
-		if ($ATTACHED_MESSAGES===NULL) $ATTACHED_MESSAGES=new ocp_tempcode();
-		$ATTACHED_MESSAGES->attach($message_tpl);
+		$ATTACHED_MESSAGES_RAW[]=array($message,$type);
+		if ($GLOBALS['TEMPCODE_OUTPUT_STARTED'])
+		{
+			if ($LATE_ATTACHED_MESSAGES===NULL) $LATE_ATTACHED_MESSAGES=new ocp_tempcode();
+			$LATE_ATTACHED_MESSAGES->attach($message_tpl);
+		} else
+		{
+			if ($ATTACHED_MESSAGES===NULL) $ATTACHED_MESSAGES=new ocp_tempcode();
+			$ATTACHED_MESSAGES->attach($message_tpl);
+		}
 	}
 
 	$ATTACH_MESSAGE_CALLED--;
@@ -589,11 +596,25 @@ function set_feed_url($url)
  * @sets_output_state
  *
  * @param  tempcode		The text
+ * @param  boolean		Whether to append
+ * @param  boolean		Whether to add a box around the parameter
  */
-function set_helper_panel_text($text)
+function set_helper_panel_text($text,$append=true,$put_in_box=true)
 {
+	if ($put_in_box)
+	{
+		$text=put_in_standard_box($text);
+	}
+
 	global $HELPER_PANEL_TEXT;
-	$HELPER_PANEL_TEXT=$text;
+	if ($append)
+	{
+		if (is_string($HELPER_PANEL_TEXT)) $HELPER_PANEL_TEXT=make_string_tempcode($HELPER_PANEL_TEXT);
+		$HELPER_PANEL_TEXT->attach($text);
+	} else
+	{
+		$HELPER_PANEL_TEXT=$text;
+	}
 }
 
 /**

@@ -106,7 +106,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		if ($type=='misc')
 		{
 			$also_url=build_url(array('page'=>'admin_ecommerce_logs','type'=>'misc'),get_module_zone('admin_ecommerce_logs'));
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_AUDIT',escape_html($also_url->evaluate())),'inform');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_AUDIT',escape_html($also_url->evaluate())),'inform',true);
 
 			$this->title=get_screen_title('CUSTOM_PRODUCT_USERGROUP');
 		}
@@ -187,7 +187,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		if (($title=='') && (get_forum_type()=='ocf'))
 		{
 			$add_usergroup_url=build_url(array('page'=>'admin_ocf_groups','type'=>'ad'),get_module_zone('admin_ocf_groups'));
-			attach_message(do_lang_tempcode('ADD_USER_GROUP_FIRST',escape_html($add_usergroup_url->evaluate())),'inform');
+			attach_message(do_lang_tempcode('ADD_USER_GROUP_FIRST',escape_html($add_usergroup_url->evaluate())),'inform',true);
 		}
 
 		if (is_null($group_id)) $group_id=get_param_integer('group_id',db_get_first_id()+3);

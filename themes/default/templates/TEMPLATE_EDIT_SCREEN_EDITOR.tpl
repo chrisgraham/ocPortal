@@ -8,7 +8,7 @@
 
 			<div>
 				<div class="toggleable_tray_title">
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('f{I*}sdp');"><img alt="{!EXPAND}: {!SYMBOLS_AND_DIRECTIVES}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('f{I*}sdp');"><img alt="{!EXPAND}: {!SYMBOLS_AND_DIRECTIVES}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('f{I*}sdp');">{!SYMBOLS_AND_DIRECTIVES}</a>
 				</div>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" id="f{I*}sdp" aria-expanded="false">
@@ -38,7 +38,7 @@
 
 			<div class="original_template">
 				<h3>
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 					<label for="f{I*}_old"><a class="non_link" href="#" onclick="event.returnValue=false; toggleable_tray(this.parentNode.parentNode.parentNode); return false;">{!ORIGINAL}</a>:</label>
 				</h3>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
@@ -51,7 +51,7 @@
 			{+START,IF_NON_EMPTY,{GUIDS}}
 				<div>
 					<h3>
-						<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+						<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 						<a class="non_link" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">GUIDs</a>
 					</h3>
 					<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">

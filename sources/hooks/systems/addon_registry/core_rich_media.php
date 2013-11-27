@@ -222,7 +222,6 @@ class Hook_addon_registry_core_rich_media
 			'themes/default/css/comcode_mistakes.css',
 			'themes/default/images/wiki_link.png',
 			'themes/default/images/wiki_link_hover.png',
-			'themes/default/images/comcode_emoticon.png',
 			'themes/default/images/carousel/button_left_hover.png',
 			'themes/default/images/carousel/button_left.png',
 			'themes/default/images/carousel/button_right_hover.png',

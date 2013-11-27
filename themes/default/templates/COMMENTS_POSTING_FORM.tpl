@@ -15,7 +15,7 @@
 					{TITLE*}
 				{+END}
 				{+START,IF_PASSED,EXPAND_TYPE}
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{$?,{$EQ,{EXPAND_TYPE},contract},{!CONTRACT},{!EXPAND}}" title="{$?,{$EQ,{EXPAND_TYPE},contract},{!CONTRACT},{!EXPAND}}" src="{$IMG*,{EXPAND_TYPE*}}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{$?,{$EQ,{EXPAND_TYPE},contract},{!CONTRACT},{!EXPAND}}" title="{$?,{$EQ,{EXPAND_TYPE},contract},{!CONTRACT},{!EXPAND}}" src="{$IMG*,1x/trays/{EXPAND_TYPE*}}" srcset="{$IMG*,2x/trays/{EXPAND_TYPE*}} 2x" /></a>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{TITLE*}</a>
 				{+END}
 			</h3>
@@ -97,7 +97,7 @@
 
 									<td>
 										{+START,IF,{$JS_ON}}
-											<img id="review_bar_1__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" alt="" src="{$IMG*,rating}" /><img id="review_bar_2__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_3__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_4__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_5__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" />
+											<img id="review_bar_1__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" /><img id="review_bar_2__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" /><img id="review_bar_3__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" /><img id="review_bar_4__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" /><img id="review_bar_5__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" />
 											<script>// <![CDATA[
 												function new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{$FIX_ID,{ID}}(review,first_time)
 												{
@@ -148,8 +148,10 @@
 
 								{$SET,needs_msg_label,{$OR,{$GET,GET_TITLE},{GET_EMAIL},{$AND,{$IS_GUEST},{$OCF}}}}
 								{+START,IF,{$GET,needs_msg_label}}
-									<img class="comcode_supported_icon" alt="" src="{$IMG*,comcode}" />
-									<label for="post">{!POST_COMMENT}:</label>
+									<div class="vertical_alignment">
+										<img alt="" src="{$IMG*,comcode}" />
+										<label for="post">{!POST_COMMENT}:</label>
+									</div>
 								{+END}
 
 								{+START,IF_NON_EMPTY,{FIRST_POST}{COMMENT_TEXT}}
@@ -165,8 +167,10 @@
 								{+END}
 
 								{+START,IF,{$NOT,{$GET,needs_msg_label}}}
-									<img class="comcode_supported_icon" alt="" src="{$IMG*,comcode}" />
-									<label class="accessibility_hidden" for="post">{!POST_COMMENT}:</label>
+									<div class="vertical_alignment">
+										<img alt="" src="{$IMG*,comcode}" />
+										<label class="accessibility_hidden" for="post">{!POST_COMMENT}:</label>
+									</div>
 								{+END}
 
 								{+START,IF,{$NOT,{$MOBILE}}}

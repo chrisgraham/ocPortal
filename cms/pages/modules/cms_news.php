@@ -126,8 +126,7 @@ class Module_cms_news extends standard_crud_module
 
 		if ($type=='ad' || $type=='_ed')
 		{
-			require_lang('menus');
-			set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
+			set_helper_panel_text(comcode_lang_string('DOC_NEWS'));
 		}
 
 		if ($type=='import' || $type=='_import_news')

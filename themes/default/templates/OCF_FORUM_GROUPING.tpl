@@ -1,7 +1,7 @@
 <div class="ocf_forum_grouping">
 	<h3 class="toggleable_tray_title_heading">
 		<div class="ocf_forum_grouping_toggleable_tray_button">
-			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('c_{GROUPING_ID;*}');"><img title="{!TOGGLE_GROUPING_VISIBILITY}" alt="{!TOGGLE_GROUPING_VISIBILITY}" src="{$IMG*,{EXPAND_TYPE*}}" /></a>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('c_{GROUPING_ID;*}');"><img title="{!TOGGLE_GROUPING_VISIBILITY}" alt="{!TOGGLE_GROUPING_VISIBILITY}" src="{$IMG*,1x/trays/{EXPAND_TYPE*}}" srcset="{$IMG*,2x/trays/{EXPAND_TYPE*}} 2x" /></a>
 		</div>
 		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('c_{GROUPING_ID;*}');">{+START,FRACTIONAL_EDITABLE,{GROUPING_TITLE},title,_SEARCH:admin_ocf_forum_groupings:__ed:{GROUPING_ID}}{GROUPING_TITLE*}{+END}</a>
 		{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_forum_groupings}}<span class="associated_details">(<a href="{$PAGE_LINK*,_SEARCH:admin_ocf_forum_groupings:_ed:{GROUPING_ID}}">{!EDIT}</a>)</span>{+END}

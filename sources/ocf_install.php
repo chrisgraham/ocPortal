@@ -465,12 +465,12 @@ function install_ocf($upgrade_from=NULL)
 			':('=>'sad',
 			':)'=>'smile',
 			':thumbs:'=>'thumbs',
-			':offtopic:'=>'offtopic',
 			':|'=>'mellow',
 			':ninja:'=>'ph34r',
 			':o'=>'shocked'
 		);
 		$supported_emoticons=array(
+			':offtopic:'=>'offtopic', // Larger than normal, so don't put in core set
 			':rolleyes:'=>'rolleyes',
 			':D'=>'grin',
 			'^_^'=>'glee',

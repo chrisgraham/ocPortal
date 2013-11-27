@@ -467,6 +467,7 @@ function init__validation2()
 		'img.ismap'=>'ismap',
 		'img.longdesc'=>'.+',
 		'img.src'=>$enforce_link,
+		'img.srcset'=>'('.$enforce_link.' \d+x ( |$))*',
 		'img.usemap'=>'.+',
 		'img.width'=>$enforce_inumber,
 		'embed.type'=>'.*',

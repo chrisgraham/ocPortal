@@ -99,7 +99,7 @@ class Module_cms_quiz extends standard_crud_module
 			if (has_actual_page_access(get_member(),'admin_quiz'))
 			{
 				$also_url=build_url(array('page'=>'admin_quiz'),get_module_zone('admin_quiz'));
-				attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
+				attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform',true);
 			}
 		}
 

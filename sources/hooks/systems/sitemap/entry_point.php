@@ -143,7 +143,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 
 			$entry_points=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
 
-			if (($matches[5]=='') && (isset($entry_points[$type])))
+			if ((($matches[5]=='') || ($page=='cms_catalogues' && $matches[5]!=''/*masquerades as direct content types but fulfilled as normal entry points*/)) && (isset($entry_points[$type])))
 			{
 				$entry_point=$entry_points[$type];
 			} else

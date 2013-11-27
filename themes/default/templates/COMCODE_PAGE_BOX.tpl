@@ -12,7 +12,7 @@
 	{+END}{+END}
 
 	<p class="shunted_button">
-		<a class="buttons__goto button_screen_item" href="{URL*}"><span>{!VIEW}</span></a>
+		<a class="buttons__more button_screen_item" href="{URL*}"><span>{!VIEW}</span></a>
 	</p>
 {+END}
 

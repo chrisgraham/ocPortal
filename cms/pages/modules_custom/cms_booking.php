@@ -859,7 +859,7 @@ class Module_cms_booking_bookings extends standard_crud_module
 	 */
 	function create_selection_list_choose_table($url_map)
 	{
-		attach_message(do_lang_tempcode('EASIER_TO_EDIT_BOOKING_VIA_MEMBER'),'inform');
+		attach_message(do_lang_tempcode('EASIER_TO_EDIT_BOOKING_VIA_MEMBER'),'inform',true);
 
 		require_code('templates_results_table');
 

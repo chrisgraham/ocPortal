@@ -120,7 +120,7 @@
 					{$,is on/offline}
 					{+START,IF,{$NOT,{$VALUE_OPTION,no_member_tracking}}}
 						{+START,IF_PASSED,POSTER_ONLINE}
-							<img title="{!ONLINE_NOW}: {$?,{POSTER_ONLINE},{!YES},{!NO}}" alt="{!ONLINE_NOW}: {$?,{POSTER_ONLINE},{!YES},{!NO}}" src="{$IMG*,ocf_general/{$?,{POSTER_ONLINE},ison,isoff}}" />
+							<img title="{!ONLINE_NOW}: {$?,{POSTER_ONLINE},{!YES},{!NO}}" alt="{!ONLINE_NOW}: {$?,{POSTER_ONLINE},{!YES},{!NO}}" src="{$IMG*,1x/ocf_general/{$?,{POSTER_ONLINE},ison,isoff}}" srcset="{$IMG*,1x/ocf_general/{$?,{POSTER_ONLINE},ison,isoff}} 2x" />
 						{+END}
 					{+END}
 

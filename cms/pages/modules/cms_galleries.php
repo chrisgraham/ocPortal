@@ -142,7 +142,7 @@ class Module_cms_galleries extends standard_crud_module
 			{
 				$cat=get_param('cat',NULL);
 				$mass_url=build_url(array('page'=>'_SELF','type'=>'gimp','cat'=>$cat),'_SELF');
-				attach_message(do_lang_tempcode('CAN_MASS_UPLOAD',escape_html($mass_url->evaluate())),'inform');
+				attach_message(do_lang_tempcode('CAN_MASS_UPLOAD',escape_html($mass_url->evaluate())),'inform',true);
 			}
 		}
 

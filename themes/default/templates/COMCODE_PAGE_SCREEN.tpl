@@ -31,13 +31,15 @@
 		{+START,IF,{IS_PANEL}}
 			{+START,IF,{$EQ,{NAME},panel_left,panel_right}}
 				<p class="quick_self_edit_link associated_link">
-					<img class="comcode_supported_icon" title="{!_COMCODE}" alt="{!_COMCODE}" width="{$IMG_WIDTH*,{$IMG,comcode}}" height="{$IMG_HEIGHT*,{$IMG,comcode}}" src="{$IMG*,comcode}" />
+					<img title="{!_COMCODE}" alt="{!_COMCODE}" width="{$IMG_WIDTH*,{$IMG,comcode}}" height="{$IMG_HEIGHT*,{$IMG,comcode}}" src="{$IMG*,comcode}" />
 					<a href="{EDIT_URL*}" title="{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}: {NAME*} ({!IN,&quot;{$?,{$IS_EMPTY,{$ZONE}},{!_WELCOME},{$ZONE*}}&quot;})">{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}</a>
 				</p>
 			{+END}
 
 			{+START,IF,{$EQ,{NAME},panel_top,panel_bottom}}
-				<a class="edit_page_link_inline" href="{EDIT_URL*}"><img width="17" height="17" class="comcode_supported_icon" title="{!EDIT_PAGE}: {NAME*}" alt="{!EDIT_PAGE}: {NAME*}" src="{$IMG*,comcode}" /></a>
+				<div>
+					<a class="edit_page_link_inline" href="{EDIT_URL*}"><img width="17" height="17" title="{!EDIT_PAGE}: {NAME*}" alt="{!EDIT_PAGE}: {NAME*}" src="{$IMG*,comcode}" /></a>
+				</div>
 			{+END}
 		{+END}
 

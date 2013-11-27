@@ -312,8 +312,6 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/templates/TOPIC_LIST.tpl',
 			'themes/default/templates/OCF_PT_FILTERS.tpl',
 			'themes/default/templates/OCF_MEMBER_PROFILE_POSTS.tpl',
-			'themes/default/images/ocf_general/isoff.png',
-			'themes/default/images/ocf_general/ison.png',
 			'sources/hooks/systems/config/enable_add_topic_btn_in_topic.php',
 			'sources/hooks/systems/config/enable_forum_dupe_buttons.php',
 			'sources/hooks/systems/config/enable_mark_forum_read.php',

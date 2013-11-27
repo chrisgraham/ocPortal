@@ -10,7 +10,7 @@
 {+START,SET,advanced_help}
 	<div class="ttb_left_spaced">
 		<div>
-			<a class="toggleable_tray_button ttb_left" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ADVANCED}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			<a class="toggleable_tray_button ttb_left" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ADVANCED}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 			<a class="toggleable_tray_button ttb_light" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!WIKI_MANAGE_TREE_TEXT_ADVANCED_LABEL}</a>:
 		</div>
 

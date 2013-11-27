@@ -120,7 +120,6 @@ class Hook_addon_registry_core_feedback_features
 			'themes/default/images/like.png',
 			'themes/default/images/dislike.png',
 			'sources/hooks/systems/rss/comments.php',
-			'themes/default/images/rating.png',
 			'themes/default/templates/COMMENTS_POSTING_FORM.tpl',
 			'themes/default/templates/COMMENTS_WRAPPER.tpl',
 			'themes/default/templates/COMMENTS_DEFAULT_TEXT.tpl',

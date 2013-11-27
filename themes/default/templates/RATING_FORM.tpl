@@ -21,7 +21,7 @@
 
 					{$,Star ratings}
 					{+START,IF,{$NOT,{LIKES}}}
-						<img id="rating_bar_2__{$GET,identifier}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_4__{$GET,identifier}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_6__{$GET,identifier}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_8__{$GET,identifier}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_10__{$GET,identifier}" alt="" src="{$IMG*,rating}" />
+						<img id="rating_bar_2__{$GET,identifier}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" /><img id="rating_bar_4__{$GET,identifier}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" /><img id="rating_bar_6__{$GET,identifier}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" /><img id="rating_bar_8__{$GET,identifier}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" /><img id="rating_bar_10__{$GET,identifier}" alt="" src="{$IMG*,1x/rating}" srcset="{$IMG*,2x/rating} 2x" />
 					{+END}
 
 					<script type="text/javascript">// <![CDATA[

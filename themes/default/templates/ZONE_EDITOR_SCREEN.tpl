@@ -7,7 +7,7 @@
 {+END}
 
 <p class="vertical_alignment">
-	<img src="{$IMG*,help}" alt="" /> <span>{!ZE_HOW_TO_SAVE}</span>
+	<img src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" alt="" /> <span>{!ZE_HOW_TO_SAVE}</span>
 </p>
 
 <div class="float_surrounder" id="ze_panels_wrap">
@@ -36,5 +36,5 @@
 </form>
 
 <p class="vertical_alignment">
-	<img src="{$IMG*,help}" alt="" /> <span>{!MANY_PANEL_TYPES,{$PAGE_LINK*,cms:cms_comcode_pages:_ed:lang={LANG}:page_link={ID}%3Apanel_top},{$PAGE_LINK*,cms:cms_comcode_pages:_ed:lang={LANG}:page_link={ID}%3Apanel_bottom}}</span>
+	<img src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" alt="" /> <span>{!MANY_PANEL_TYPES,{$PAGE_LINK*,cms:cms_comcode_pages:_ed:lang={LANG}:page_link={ID}%3Apanel_top},{$PAGE_LINK*,cms:cms_comcode_pages:_ed:lang={LANG}:page_link={ID}%3Apanel_bottom}}</span>
 </p>

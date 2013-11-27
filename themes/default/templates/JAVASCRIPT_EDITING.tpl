@@ -160,7 +160,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 					if ((textarea.value.indexOf('{\$,page hint: no_wysiwyg}')==-1) && (textarea.value!='')) textarea.value+='{\$,page hint: no_wysiwyg}';
 				}
 				if (document.getElementById('toggle_wysiwyg_'+id))
-					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!comcode:ENABLE_WYSIWYG;^}');
+					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'<img src="{$IMG*;^,1x/editor/wysiwyg_on}" srcset="{$IMG;^,1x/editor/wysiwyg_on} 2x" alt="{!comcode:ENABLE_WYSIWYG;^}" title="{!comcode:ENABLE_WYSIWYG;^}" class="vertical_alignment" />');
 
 				// Unload editor
 				window.wysiwyg_editors[id].elementMode=window.CKEDITOR.ELEMENT_MODE_NONE;
@@ -235,7 +235,7 @@ function load_html_edit(posting_form,ajax_copy)
 
 			count++;
 			if (document.getElementById('toggle_wysiwyg_'+id))
-				set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!comcode:DISABLE_WYSIWYG;^}');
+				set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'<img src="{$IMG*;^,1x/editor/wysiwyg_off}" srcset="{$IMG;^,2x/editor/wysiwyg_off} 2x" alt="{!comcode:DISABLE_WYSIWYG;^}" title="{!comcode:DISABLE_WYSIWYG;^}" class="vertical_alignment" />');
 
 			window.wysiwyg_original_comcode[id]=e.value;
 			if (!ajax_copy)

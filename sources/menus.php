@@ -627,7 +627,7 @@ function _render_menu_branch($branch,$codename,$source_member,$level,$type,$as_a
 
 	// Image
 	$img=isset($branch['extra_meta']['image'])?$branch['extra_meta']['image']:'';
-	$img_2x=isset($branch['extra_meta']['image_2x'])?$branch['extra_meta']['image_2x']:$img;
+	$img_2x=empty($branch['extra_meta']['image_2x'])?$img:$branch['extra_meta']['image_2x'];
 
 	// Render!
 	$rendered_branch=array(

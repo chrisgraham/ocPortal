@@ -4,7 +4,7 @@
 {$SET,RAND,{$RAND}}
 
 <li{+START,IF,{$GET,HAS_CHILDREN}} onmousemove="return pop_up_menu('{MENU|;*}_pexpand_{$GET;*,RAND}',null,'{MENU|;*}_p');"{+END} class="{$?,{CURRENT},current,non_current} {$?,{$IS_EMPTY,{IMG}},has_no_img,has_img}">
-	{+START,IF_NON_EMPTY,{IMG}}<img alt="" src="{IMG*}" />{+END}
+	{+START,IF_NON_EMPTY,{IMG}}<img alt="" src="{IMG*}" srcset="{IMG_2X*} 2x" />{+END}
 	{+START,IF_NON_EMPTY,{URL}}
 		<a{+START,INCLUDE,MENU_LINK_PROPERTIES}{+END}{+START,IF,{$GET,HAS_CHILDREN}} class="drawer" onclick="deset_active_menu();" onfocus="return pop_up_menu('{MENU|;*}_pexpand_{$GET;*,RAND}',null,'{MENU|;*}_p');"{+END}>{CAPTION}</a>
 	{+END}

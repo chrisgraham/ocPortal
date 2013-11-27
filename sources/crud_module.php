@@ -204,7 +204,7 @@ class standard_crud_module
 					$this->alt_crud_module->pre_run(false,$type);
 			} else
 			{
-				$this->pre_run(false,$type);
+				self::pre_run(false,$type);
 			}
 		} else
 		{
@@ -215,6 +215,19 @@ class standard_crud_module
 
 			if ($type=='ad' || $type=='av' || $type=='ac' || $type=='add_entry' || $type=='add_category')
 			{
+				if (multi_lang())
+				{
+					require_code('lang2');
+					$switch_url=get_self_url(false,false,array('keep_lang'=>get_site_default_lang()));
+					if ((has_actual_page_access(get_member(),'admin_lang')) && (user_lang()!=get_site_default_lang()))
+					{
+						set_helper_panel_text(do_lang_tempcode('lang:ADDING_CONTENT_IN_LANGUAGE_STAFF',escape_html(lookup_language_full_name(user_lang())),escape_html(lookup_language_full_name(get_site_default_lang())),escape_html($switch_url->evaluate())));
+					} else
+					{
+						set_helper_panel_text(do_lang_tempcode('lang:ADDING_CONTENT_IN_LANGUAGE',escape_html(lookup_language_full_name(user_lang()))));
+					}
+				}
+
 				$doing='ADD_'.$this->lang_type;
 
 				if (($this->catalogue) && (get_param('catalogue_name','')!=''))
@@ -290,6 +303,13 @@ class standard_crud_module
 			if ($type=='_ed' || $type=='_ev' || $type=='_ec' || $type=='_edit_entry' || $type=='_edit_category')
 			{
 				$doing='EDIT_'.$this->lang_type;
+
+				if ((multi_lang()) && (has_actual_page_access(get_member(),'admin_lang')) && (user_lang()!=get_site_default_lang()))
+				{
+					require_code('lang2');
+					$switch_url=get_self_url(false,false,array('keep_lang'=>get_site_default_lang()));
+					set_helper_panel_text(do_lang_tempcode('lang:EDITING_CONTENT_IN_LANGUAGE_STAFF',escape_html(lookup_language_full_name(user_lang())),escape_html(lookup_language_full_name(get_site_default_lang())),escape_html($switch_url->evaluate())));
+				}
 
 				if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 				{
@@ -708,19 +728,6 @@ class standard_crud_module
 
 		$test=$this->choose_catalogue($this->title);
 		if (!is_null($test)) return $test;
-
-		if (multi_lang())
-		{
-			require_code('lang2');
-			$switch_url=get_self_url(false,false,array('keep_lang'=>get_site_default_lang()));
-			if ((has_actual_page_access(get_member(),'admin_lang')) && (user_lang()!=get_site_default_lang()))
-			{
-				attach_message(do_lang_tempcode('lang:ADDING_CONTENT_IN_LANGUAGE_STAFF',escape_html(lookup_language_full_name(user_lang())),escape_html(lookup_language_full_name(get_site_default_lang())),escape_html($switch_url->evaluate())),'warn');
-			} else
-			{
-				attach_message(do_lang_tempcode('lang:ADDING_CONTENT_IN_LANGUAGE',escape_html(lookup_language_full_name(user_lang()))),'inform');
-			}
-		}
 
 		$submit_name=(strpos($this->doing,' ')!==false)?protect_from_escaping($this->doing):do_lang($this->doing);
 		if (!is_null($this->add_submit_name)) $submit_name=$this->add_submit_name;
@@ -1204,13 +1211,6 @@ class standard_crud_module
 		if (!is_null(get_param('continue',NULL))) $map['continue']=get_param('continue');
 		if ((!is_null($this->upload)) || ($this->possibly_some_kind_of_upload)) $map['uploading']=1;
 		$post_url=build_url($map,'_SELF');
-
-		if ((multi_lang()) && (has_actual_page_access(get_member(),'admin_lang')) && (user_lang()!=get_site_default_lang()))
-		{
-			require_code('lang2');
-			$switch_url=get_self_url(false,false,array('keep_lang'=>get_site_default_lang()));
-			attach_message(do_lang_tempcode('lang:EDITING_CONTENT_IN_LANGUAGE_STAFF',escape_html(lookup_language_full_name(user_lang())),escape_html(lookup_language_full_name(get_site_default_lang())),escape_html($switch_url->evaluate())),'warn');
-		}
 
 		if (method_exists($this,'get_submitter'))
 		{

@@ -89,7 +89,7 @@ class Module_cms_chat
 			if (has_actual_page_access(get_member(),'admin_chat'))
 			{
 				$also_url=build_url(array('page'=>'admin_chat'),get_module_zone('admin_chat'));
-				attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
+				attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform',true);
 			}
 
 			breadcrumb_set_self(do_lang_tempcode('CHATROOMS'));

@@ -2,7 +2,7 @@
 	{+START,IF_PASSED,EXPANDED}
 		<h4 class="comcode_quote_h4">
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">
-				<img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,{$?,{EXPANDED},contract,expand}}" />
+				<img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/{$?,{EXPANDED},contract,expand}}" srcset="{$IMG*,2x/trays/{$?,{EXPANDED},contract,expand}} 2x" />
 			</a>
 
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{SECTION_TITLE*}</a>

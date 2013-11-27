@@ -87,8 +87,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		if ($type=='ad' || $type=='_ed')
 		{
-			require_lang('menus');
-			set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
+			set_helper_panel_text(comcode_lang_string('DOC_NEWS'));
 		}
 
 		if ($type=='import_wordpress' || $type=='_import_wordpress')

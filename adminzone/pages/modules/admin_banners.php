@@ -72,7 +72,7 @@ class Module_admin_banners
 		if ($type=='misc')
 		{
 			$also_url=build_url(array('page'=>'cms_banners'),get_module_zone('cms_banners'));
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
+			attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform',true);
 
 			$this->title=get_screen_title('BANNER_STATISTICS');
 		}

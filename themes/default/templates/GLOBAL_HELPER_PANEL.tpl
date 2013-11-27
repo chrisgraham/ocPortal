@@ -11,9 +11,7 @@
 
 		<div class="global_helper_panel">
 			{+START,IF_NON_EMPTY,{$HELPER_PANEL_TEXT}}
-				<div class="box box___global_helper_panel__text"><div class="box_inner">
-					<div id="help" class="global_helper_panel_text">{$HELPER_PANEL_TEXT}</div>
-				</div></div>
+				<div id="help" class="global_helper_panel_text">{$HELPER_PANEL_TEXT}</div>
 			{+END}
 
 			{+START,IF_NON_EMPTY,{$GET,HELPER_PANEL_TUTORIAL}}

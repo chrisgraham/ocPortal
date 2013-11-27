@@ -1,5 +1,5 @@
 {+START,IF_NON_EMPTY,{CONTENT}}
-	<ul>
+	<ul class="compact_list">
 		{CONTENT}
 	</ul>
 {+END}
@@ -9,8 +9,10 @@
 	</p>
 {+END}
 
-<hr />
+{+START,IF_PASSED,NEXT_URL}
+	<hr />
 
-<ul class="actions_list" role="navigation">
-	<li><a title="{!MORE}: {!AUTHORS}" href="{NEXT_URL*}">{!MORE}</a></li>
-</ul>
+	<ul class="actions_list" role="navigation">
+		<li><a title="{!MORE}: {!AUTHORS}" href="{NEXT_URL*}">{!MORE}</a></li>
+	</ul>
+{+END}

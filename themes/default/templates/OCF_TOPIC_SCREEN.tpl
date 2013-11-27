@@ -180,7 +180,7 @@
 		{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
 			<div class="non_accessibility_redundancy left"><nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
 				<p class="breadcrumbs">
-					<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
+					<img class="breadcrumbs_img" src="{$IMG*,1x/breadcrumbs}" srcset="{$IMG*,2x/breadcrumbs} 2x" alt="&gt; " title="{!YOU_ARE_HERE}" />
 					{BREADCRUMBS}
 				</p>
 			</nav></div>

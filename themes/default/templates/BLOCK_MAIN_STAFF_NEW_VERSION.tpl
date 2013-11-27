@@ -1,6 +1,6 @@
 <section id="tray_{!VERSION_ABOUT|,{VERSION}}" class="box box___block_main_staff_new_version">
 	<h3 class="toggleable_tray_title">
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!VERSION_ABOUT|,{VERSION}}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!VERSION_ABOUT,{VERSION*}}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!VERSION_ABOUT|,{VERSION}}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!VERSION_ABOUT,{VERSION*}}}" title="{!CONTRACT}" src="{$IMG*,1x/trays/contract}" srcset="{$IMG*,2x/trays/contract} 2x" /></a>
 
 		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!VERSION_ABOUT|,{VERSION}}');">{!VERSION_ABOUT,{VERSION*}}</a>
 	</h3>

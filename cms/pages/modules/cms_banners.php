@@ -63,7 +63,7 @@ class Module_cms_banners extends standard_crud_module
 
 		if ((has_privilege(get_member(),'banner_free')) && (get_option('admin_banners')=='0'))
 		{
-			attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'),'inform');
+			attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'),'inform',true);
 		}
 
 		if ($type=='misc')
@@ -71,7 +71,7 @@ class Module_cms_banners extends standard_crud_module
 			if (has_actual_page_access(get_member(),'admin_banners'))
 			{
 				$also_url=build_url(array('page'=>'admin_banners'),get_module_zone('admin_banners'));
-				attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
+				attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform',true);
 			}
 		}
 

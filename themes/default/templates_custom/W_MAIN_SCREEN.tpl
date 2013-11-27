@@ -256,7 +256,7 @@
 		<h2 class="toggleable_tray_title">
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideActions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;">{!W_ENVIRONMENT_ACTIONS}</a>
 			{+START,IF,{$JS_ON}}
-				<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideActions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+				<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideActions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 			{+END}
 		</h2>
 
@@ -683,7 +683,7 @@
 			<h2 class="toggleable_tray_title">
 				<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideAdditions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;">{!W_ENVIRONMENT_ADDITIONS}</a>
 				{+START,IF,{$JS_ON}}
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideAdditions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode); set_cookie('hideAdditions',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 				{+END}
 			</h2>
 
@@ -715,7 +715,7 @@
 		<h2 class="toggleable_tray_title">
 			<a class="toggleable_tray_button" href="#" onclick="toggleable_tray(this.parentNode.parentNode); set_cookie('hideMod',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;">{!W_ENVIRONMENT_MODIFICATIONS}</a>
 			{+START,IF,{$JS_ON}}
-				<a class="toggleable_tray_button" href="#" onclick="toggleable_tray(this.parentNode.parentNode); set_cookie('hideMod',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+				<a class="toggleable_tray_button" href="#" onclick="toggleable_tray(this.parentNode.parentNode); set_cookie('hideMod',(this.getElementsByTagName('img')[0].getAttribute('src')=='{$IMG;*,contract}')?'0':'1'); return false;"><img alt="{!EXPAND}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
 			{+END}
 		</h2>
 

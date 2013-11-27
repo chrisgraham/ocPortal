@@ -857,7 +857,9 @@ function toggle_subordinate_fields(pic,help_id)
 
 	if (((!next) && (pic.src.indexOf('expand')!=-1)) || ((next) && (next.style.display=='none'))) /* Expanding now */
 	{
-		pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,contract}').replace(/^http:/,window.location.protocol);
+		pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,1x/trays/contract}').replace(/^http:/,window.location.protocol);
+		if (typeof pic.srcset!='undefined')
+			pic.srcset=((pic.srcset.indexOf('themewizard.php')!=-1)?pic.srcset.replace('expand','contract'):'{$IMG;,2x/trays/contract} 2x').replace(/^http:/,window.location.protocol);
 		pic.setAttribute('alt','{!CONTRACT;}');
 		pic.setAttribute('title','{!CONTRACT;}');
 		new_state=(field_input.nodeName.toLowerCase()=='tr')?'table-row':'block';
@@ -865,7 +867,9 @@ function toggle_subordinate_fields(pic,help_id)
 		new_state_3='1px dashed';
 	} else /* Contracting now */
 	{
-		pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('contract','expand'):'{$IMG;,expand}').replace(/^http:/,window.location.protocol);
+		pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('contract','expand'):'{$IMG;,1x/trays/expand}').replace(/^http:/,window.location.protocol);
+		if (typeof pic.srcset!='undefined')
+			pic.srcset=((pic.src.indexOf('themewizard.php')!=-1)?pic.srcset.replace('contract','expand'):'{$IMG;,2x/trays/expand} 2x').replace(/^http:/,window.location.protocol);
 		pic.setAttribute('alt','{!EXPAND;}');
 		pic.setAttribute('title','{!EXPAND;}');
 		new_state='none';

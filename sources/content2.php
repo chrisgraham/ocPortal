@@ -300,17 +300,34 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_resource_id',$conflict_test_map);
 				if (($test!==NULL) && ($test!==$_content_id))
 				{
-					$ok=false;
+					$test_page=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_resource_page',$conflict_test_map);
 					if ($content_type=='comcode_page')
 					{
-						$competing_page_link=$test.':'.$page;
+						if (_request_page($test_page,$test,NULL,get_site_default_lang(),true)!==false)
+						{
+							$ok=false;
+						}
 					} else
 					{
-						$competing_page_link='_WILD'.':'.$page;
-						if ($type!='' || $test!='') $competing_page_link.=':'.$type;
-						if ($test!='') $competing_page_link.=':'.$test;
+						$test2=content_get_details(convert_ocportal_type_codes('module',$test_page,'content_type'),$test);
+						if ($test2[0]!==NULL)
+						{
+							$ok=false;
+						}
 					}
-					attach_message(do_lang_tempcode('URL_MONIKER_TAKEN',escape_html($competing_page_link),escape_html($url_moniker)),'warn');
+					if (!$ok)
+					{
+						if ($content_type=='comcode_page')
+						{
+							$competing_page_link=$test.':'.$page;
+						} else
+						{
+							$competing_page_link='_WILD'.':'.$page;
+							if ($type!='' || $test!='') $competing_page_link.=':'.$type;
+							if ($test!='') $competing_page_link.=':'.$test;
+						}
+						attach_message(do_lang_tempcode('URL_MONIKER_TAKEN',escape_html($competing_page_link),escape_html($url_moniker)),'warn');
+					}
 				}
 
 				if (substr($url_moniker,0,1)=='/') // ah, relative to zones, better run some anti-conflict tests!
