@@ -2,7 +2,7 @@
 	<th class="translate_line_first">
 		<a id="jmp_{NAME*}"></a>
 
-		{NAME*}
+		<kbd>{NAME*}</kbd>
 
 		{+START,IF_NON_EMPTY,{DESCRIPTION}}
 			<p>

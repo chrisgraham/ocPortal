@@ -858,7 +858,7 @@ class Module_admin_addons
 
 			while (false!==($file=readdir($_dir)))
 			{
-				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file,IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES))
+				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file,IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES | IGNORE_UPLOADS))
 				{
 					$temp[$file]=1;
 				}
@@ -873,9 +873,9 @@ class Module_admin_addons
 
 			if (is_dir($full.$file)) // If there is a custom equiv we don't do it: we only do custom, or indeterminate-custom
 			{
-				if ((!array_key_exists($file.'_custom',$temp)) || (substr($dir,0,7)=='themes/'))
+				if ((!array_key_exists($file.'_custom',$temp)) || ((substr($dir,0,7)=='themes/') && (substr($dir.'/',0,15)!='themes/default/')))
 				{
-					$under=$this->do_dir($dir.'/'.$file);
+					$under=$this->do_dir((($dir=='')?'':($dir.'/')).$file);
 					if ((count($under)!=1) || (!array_key_exists((($dir=='')?'':($dir.'/')).$file.'/index.html',$under)) || (substr($dir,0,7)=='themes/'))
 						$out=array_merge($out,$under);
 				}

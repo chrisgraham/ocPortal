@@ -13,12 +13,7 @@
 {+END}
 
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
-	<div class="wide_table_wrap really_long_table_wrap"><table class="columned_table results_table wide_table">
-		<colgroup>
-			<col class="translate_field_name_column" />
-			<col class="field_input_column" />
-		</colgroup>
-
+	<div class="wide_table_wrap really_long_table_wrap"><table class="autosized_table columned_table results_table wide_table">
 		<thead>
 			<tr>
 				<th class="translate_line_first">

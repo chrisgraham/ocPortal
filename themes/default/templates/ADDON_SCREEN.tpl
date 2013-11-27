@@ -3,8 +3,6 @@
 <p>{!ADDONS_SCREEN}</p>
 
 {+START,IF_NON_EMPTY,{ADDONS}}
-	<h2>{!ADDONS}</h2>
-
 	{+START,IF_NON_EMPTY,{UPDATED_ADDONS}}
 		{$,Link repeated here and below because it is important}
 		<ul role="navigation" class="actions_list spaced_list">

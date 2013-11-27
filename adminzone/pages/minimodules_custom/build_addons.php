@@ -19,7 +19,7 @@ echo '<p>What follows is details if you are republishing addons and want to easi
 
 echo '<hr />';
 
-require_code('addons');
+require_code('addons2');
 require_code('version');
 require_code('version2');
 

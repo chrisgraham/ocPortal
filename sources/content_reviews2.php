@@ -196,6 +196,8 @@ function content_review_set($content_type,$content_id,$old_content_id=NULL)
  */
 function schedule_content_review($content_type,$content_id,$review_freq,$next_review_time=NULL,$auto_action='leave',$display_review_status=0)
 {
+	if ($review_freq===0) $review_freq=NULL;
+
 	// Tidy up, if conflicting entry in database
 	$GLOBALS['SITE_DB']->query_delete('content_reviews',array(
 		'content_type'=>$content_type,

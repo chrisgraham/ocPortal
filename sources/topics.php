@@ -210,7 +210,7 @@ class OCP_Topic
 				'HASH'=>$hash,
 				'SERIALIZED_OPTIONS'=>$serialized_options,
 				'SORT'=>$sort,
-				'TOTAL_POSTS'=>strval($this->total_posts),
+				'TOTAL_POSTS'=>is_null($this->total_posts)?'0':strval($this->total_posts),
 				'IS_THREADED'=>$this->is_threaded,
 			));
 		}

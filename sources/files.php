@@ -43,6 +43,7 @@ function init__files()
 		define('IGNORE_BUNDLED_VOLATILE',1024);
 		define('IGNORE_BUNDLED_UNSHIPPED_VOLATILE',2048);
 		define('IGNORE_NON_EN_SCATTERED_LANGS',4096);
+		define('IGNORE_UPLOADS',8192);
 	}
 }
 
@@ -399,6 +400,13 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 				array('.*','exports/builds/.*'),
 			));
 		}
+	}
+
+	if (($bitmask & IGNORE_UPLOADS)!=0)
+	{
+		$ignore_filename_and_dir_name_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
+			array('.*','uploads/.*'), // Uploads
+		));
 	}
 
 	if (($bitmask & IGNORE_HIDDEN_FILES)!=0)

@@ -134,18 +134,25 @@ class Module_admin_content_reviews
 			if (is_null($info['edit_page_link_pattern'])) continue;
 
 			$content=new ocp_tempcode();
-			$content_ids=collapse_1d_complexity('content_id',$GLOBALS['SITE_DB']->query('SELECT content_id FROM '.get_table_prefix().'content_reviews WHERE '.db_string_equal_to('content_type',$content_type).' AND next_review_time<='.strval(time()),100));
-			foreach ($content_ids as $content_id)
+			$content_ids=collapse_2d_complexity('content_id','next_review_time',$GLOBALS['SITE_DB']->query('SELECT content_id,next_review_time FROM '.get_table_prefix().'content_reviews WHERE '.db_string_equal_to('content_type',$content_type).' AND next_review_time<='.strval(time()).' ORDER BY next_review_time',100));
+			$_content_ids=array();
+			foreach ($content_ids as $content_id=>$next_review_time)
 			{
 				list($title,)=content_get_details($content_type,$content_id);
 				if (!is_null($title))
 				{
-					$content->attach(form_input_list_entry($content_id,false,strip_comcode($title)));
+					$title=($content_type=='comcode_page')?$content_id:strip_comcode($title);
+					$title.=' ('.get_timezoned_date($next_review_time,false).')';
+					$_content_ids[$content_id]=$title;
 				} else
 				{
 					$GLOBALS['SITE_DB']->query_delete('content_reviews',array('content_type'=>$content_id,'content_id'=>$content_id),'',1); // The actual content was deleted, I guess
 					continue;
 				}
+			}
+			foreach ($_content_ids as $content_id=>$title)
+			{
+				$content->attach(form_input_list_entry($content_id,false,$title));
 			}
 			if (count($content_ids)==100) attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'warn');
 

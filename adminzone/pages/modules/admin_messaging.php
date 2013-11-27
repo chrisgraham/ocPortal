@@ -241,10 +241,12 @@ class Module_admin_messaging
 			$rows=$GLOBALS['FORUM_DB']->query_select('f_read_logs',array('l_member_id','l_time'),array('l_topic_id'=>$topic_id));
 			foreach ($rows as $row)
 			{
+				if (is_guest($row['l_member_id'])) continue;
+
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($row['l_member_id']);
 				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['l_member_id'],false,true);
 				$date=get_timezoned_date($row['l_time']);
-				$whos_read[]=array('USERNAME'=>$username,'MEMBER_URL'=>$member_link,'DATE'=>$date);
+				$whos_read[]=array('USERNAME'=>$username,'MEMBER_ID'=>strval($row['l_member_id']),'MEMBER_URL'=>$member_link,'DATE'=>$date);
 			}
 		}
 

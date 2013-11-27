@@ -6,9 +6,9 @@
 			<div class="box box___messaging_message_screen"><div class="box_inner">
 				<h2>{!THIS_HAS_BEEN_READ_BY}</h2>
 
-				<ul>
+				<ul class="nl">
 					{+START,LOOP,WHOS_READ}
-						<li><a title="{USERNAME*}" href="{MEMBER_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a> &ndash; <span class="associated_details">{DATE*}</span></li>
+						<li><a title="{USERNAME*}" href="{MEMBER_URL*}">{$DISPLAYED_USERNAME*,{USERNAME}}</a> {+START,INCLUDE,MEMBER_TOOLTIP}SUBMITTER={MEMBER_ID}{+END} &ndash; <span class="associated_details">{DATE*}</span></li>
 					{+END}
 				</ul>
 			</div></div>
