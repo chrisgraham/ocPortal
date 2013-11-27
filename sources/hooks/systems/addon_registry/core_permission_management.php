@@ -107,8 +107,8 @@ class Hook_addon_registry_core_permission_management
 			'themes/default/templates/PERMISSION_KEYS_PERMISSIONS_SCREEN.tpl',
 			'themes/default/templates/PERMISSION_KEYS_PERMISSION_ROW.tpl',
 			'themes/default/templates/PERMISSION_SCREEN_PERMISSIONS_SCREEN.tpl',
-			'themes/default/templates/PERMISSION_S_CONFIG_SECTION.tpl',
-			'themes/default/templates/PERMISSION_S_PERMISSIONS_SCREEN.tpl',
+			'themes/default/templates/PERMISSION_PRIVILEGES_SECTION.tpl',
+			'themes/default/templates/PERMISSION_PRIVILEGES_SCREEN.tpl',
 			'themes/default/templates/PERMISSION_CELL.tpl',
 			'themes/default/templates/PERMISSION_HEADER_CELL.tpl',
 			'themes/default/templates/PERMISSION_ROW.tpl',
@@ -144,8 +144,8 @@ class Hook_addon_registry_core_permission_management
 			'PERMISSION_COLUMN_SIZER.tpl'=>'administrative__permission_screen_permissions_screen',
 			'PERMISSION_ROW.tpl'=>'administrative__permission_screen_permissions_screen',
 			'PERMISSION_SCREEN_PERMISSIONS_SCREEN.tpl'=>'administrative__permission_screen_permissions_screen',
-			'PERMISSION_S_CONFIG_SECTION.tpl'=>'administrative__permission_s_permissions_screen',
-			'PERMISSION_S_PERMISSIONS_SCREEN.tpl'=>'administrative__permission_s_permissions_screen'
+			'PERMISSION_PRIVILEGES_SECTION.tpl'=>'administrative__permission_s_permissions_screen',
+			'PERMISSION_PRIVILEGES_SCREEN.tpl'=>'administrative__permission_s_permissions_screen'
 		);
 	}
 
@@ -400,14 +400,14 @@ class Hook_addon_registry_core_permission_management
 			'GROUP'=>'+/-'
 		)));
 
-		$sections->attach(do_lorem_template('PERMISSION_S_CONFIG_SECTION',array(
+		$sections->attach(do_lorem_template('PERMISSION_PRIVILEGES_SECTION',array(
 			'HEADER_CELLS'=>$header_cells,
 			'SECTION'=>$rows,
 			'COLS'=>'',
 			'CURRENT_SECTION'=>lorem_word()
 		)));
 
-		$out=do_lorem_template('PERMISSION_S_PERMISSIONS_SCREEN',array(
+		$out=do_lorem_template('PERMISSION_PRIVILEGES_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'URL'=>placeholder_url(),
 			'SECTIONS'=>$sections

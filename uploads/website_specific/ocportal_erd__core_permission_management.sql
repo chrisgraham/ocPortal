@@ -20,6 +20,14 @@
 
 		CREATE TABLE ocp10_f_members
 		(
+			m_dob_month tinyint NOT NULL,
+			m_dob_day tinyint NOT NULL,
+			m_is_perm_banned tinyint(1) NOT NULL,
+			m_preview_posts tinyint(1) NOT NULL,
+			m_signature integer NOT NULL,
+			m_last_visit_time integer unsigned NOT NULL,
+			m_last_submit_time integer unsigned NOT NULL,
+			m_primary_group integer NOT NULL,
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
 			m_pass_hash_salted varchar(255) NOT NULL,
@@ -32,14 +40,6 @@
 			m_cache_warnings integer NOT NULL,
 			m_join_time integer unsigned NOT NULL,
 			m_timezone_offset varchar(255) NOT NULL,
-			m_primary_group integer NOT NULL,
-			m_last_visit_time integer unsigned NOT NULL,
-			m_last_submit_time integer unsigned NOT NULL,
-			m_signature integer NOT NULL,
-			m_is_perm_banned tinyint(1) NOT NULL,
-			m_preview_posts tinyint(1) NOT NULL,
-			m_dob_day tinyint NOT NULL,
-			m_dob_month tinyint NOT NULL,
 			m_dob_year integer NOT NULL,
 			m_reveal_age tinyint(1) NOT NULL,
 			m_email_address varchar(255) NOT NULL,
@@ -52,7 +52,6 @@
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
 			m_allow_emails_from_staff tinyint(1) NOT NULL,
-			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
 			m_pt_allow varchar(255) NOT NULL,
 			m_pt_rules_text integer NOT NULL,
@@ -65,6 +64,25 @@
 
 		CREATE TABLE ocp10_f_groups
 		(
+			g_is_private_club tinyint(1) NOT NULL,
+			g_open_membership tinyint(1) NOT NULL,
+			g_rank_image_pri_only tinyint(1) NOT NULL,
+			g_order integer NOT NULL,
+			g_hidden tinyint(1) NOT NULL,
+			g_rank_image varchar(80) NOT NULL,
+			g_enquire_on_new_ips tinyint(1) NOT NULL,
+			g_max_sig_length_comcode integer NOT NULL,
+			g_max_post_length_comcode integer NOT NULL,
+			g_max_avatar_height integer NOT NULL,
+			g_max_avatar_width integer NOT NULL,
+			g_max_attachments_per_post integer NOT NULL,
+			g_max_daily_upload_mb integer NOT NULL,
+			g_gift_points_per_day integer NOT NULL,
+			g_flood_control_submit_secs integer NOT NULL,
+			g_flood_control_access_secs integer NOT NULL,
+			g_gift_points_base integer NOT NULL,
+			g_promotion_threshold integer NOT NULL,
+			g_promotion_target integer NOT NULL,
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
 			g_is_default tinyint(1) NOT NULL,
@@ -73,25 +91,6 @@
 			g_is_super_moderator tinyint(1) NOT NULL,
 			g_group_leader integer NOT NULL,
 			g_title integer NOT NULL,
-			g_promotion_target integer NOT NULL,
-			g_promotion_threshold integer NOT NULL,
-			g_flood_control_submit_secs integer NOT NULL,
-			g_flood_control_access_secs integer NOT NULL,
-			g_gift_points_base integer NOT NULL,
-			g_gift_points_per_day integer NOT NULL,
-			g_max_daily_upload_mb integer NOT NULL,
-			g_max_attachments_per_post integer NOT NULL,
-			g_max_avatar_width integer NOT NULL,
-			g_max_avatar_height integer NOT NULL,
-			g_max_post_length_comcode integer NOT NULL,
-			g_max_sig_length_comcode integer NOT NULL,
-			g_enquire_on_new_ips tinyint(1) NOT NULL,
-			g_rank_image varchar(80) NOT NULL,
-			g_hidden tinyint(1) NOT NULL,
-			g_order integer NOT NULL,
-			g_rank_image_pri_only tinyint(1) NOT NULL,
-			g_open_membership tinyint(1) NOT NULL,
-			g_is_private_club tinyint(1) NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -102,14 +101,17 @@
 		CREATE INDEX `translate.source_user` ON ocp10_translate(source_user);
 		ALTER TABLE ocp10_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
-		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
-
 		CREATE INDEX `f_members.m_signature` ON ocp10_f_members(m_signature);
 		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp10_translate (id);
 
+		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
+
 		CREATE INDEX `f_members.m_pt_rules_text` ON ocp10_f_members(m_pt_rules_text);
 		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp10_translate (id);
+
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);
 
 		CREATE INDEX `f_groups.g_name` ON ocp10_f_groups(g_name);
 		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp10_translate (id);
@@ -119,6 +121,3 @@
 
 		CREATE INDEX `f_groups.g_title` ON ocp10_f_groups(g_title);
 		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp10_translate (id);
-
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
-		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);

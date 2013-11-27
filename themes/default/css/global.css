@@ -577,7 +577,7 @@ header h1 {
 .title_tagline {
 	font-size: 0.95em;
 	padding-bottom: 2em;
-	margin-top: -1.5em;
+	margin-top: -1.2em;
 	color: {$GET,area_key_text};
 }
 
@@ -1654,6 +1654,7 @@ table.scrollable_inside {
 
 .results_table {
 	border-collapse: separate;
+	border: 0 !important;
 	border-spacing: 0;
 	margin: 1em 0;
 }
@@ -1664,6 +1665,9 @@ table.scrollable_inside {
 	margin-top: 1em;
 }
 
+.results_table>thead>tr:first-child *:first-child, .results_table>thead>tr:first-child *:last-child {
+	border: 0;
+}
 .results_table>thead>tr:first-child *:first-child, .results_table>tbody>tr:first-child>*:first-child {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 5px;}
 }
@@ -2863,6 +2867,7 @@ input.magic_image_edit_link {
 	padding: 6px 39px 7px 7px;
 	border-width: 2px;
 	font-size: 13px;
+	min-width: {$?,{$MOBILE},5.8,8}em;
 }
 .buttons__previous.button_screen, .buttons__previous_none.button_screen {
 	padding: 6px 7px 7px 39px !important;
@@ -2873,9 +2878,6 @@ input.magic_image_edit_link {
 	background-position: right 7px top 3px;
 	background-size: 18px;
 	font-size: 13px;
-}
-.button_screen {
-	min-width: {$?,{$MOBILE},5.8,8}em;
 }
 .button_micro {
 	padding: 0 3px 1px 3px;
@@ -3561,8 +3563,8 @@ a[rel="lightbox"] {
 
 {+START,IF,{$CONFIG_OPTION,filetype_icons}}
 	a[href^="mailto:"] {
-		background: url('{$IMG;,filetypes/email_link}') no-repeat right top;
-		padding: 0 22px 5px 0;
+		background: url('{$IMG;,filetypes/email_link}') no-repeat right top !important; /* Important because the URL may contain arbitrary stuff, including ".php", due to embedded mail body */
+		padding: 0 22px 5px 0 !important;
 	}
 
 	a[href$=".pdf"].user_link, a[href$=".ps"].user_link, body div a.pdf_link {
@@ -3721,7 +3723,6 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 	.post_buttons,
 	.quick_self_edit_link, .staff_actions,
 	.comments_form,
-	.community_message,
 	.ratings, .trackbacks {
 		display: none;
 	}

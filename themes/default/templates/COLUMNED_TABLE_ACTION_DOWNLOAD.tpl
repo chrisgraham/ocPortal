@@ -1,1 +1,1 @@
-<form title="{!DOWNLOAD_NOW}: {NAME*}" onsubmit="disable_button_just_clicked(this);" class="inline vertical_alignment" action="{URL*}" method="post"><input name="submit" type="image" src="{$IMG*,tableitem/download}" title="{!DOWNLOAD_NOW}: {NAME*}" alt="{!DOWNLOAD_NOW}: {NAME*}" /></form>
+<form title="{!DOWNLOAD_NOW}: {NAME*}" onsubmit="disable_button_just_clicked(this);" class="inline vertical_alignment" action="{URL*}" method="post"><input name="submit" type="image" src="{$IMG*,icons/14x14/download}" title="{!DOWNLOAD_NOW}: {NAME*}" alt="{!DOWNLOAD_NOW}: {NAME*}" /></form>

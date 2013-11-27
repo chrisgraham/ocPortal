@@ -35,7 +35,7 @@
 	border-collapse: collapse;
 }
 
-.theme_manage_table td, .theme_manage_table th {
+.theme_manage_table th, .theme_manage_table td {
 	border: 1px solid {$GET,standard_border};
 }
 

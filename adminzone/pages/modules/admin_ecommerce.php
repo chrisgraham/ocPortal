@@ -233,6 +233,8 @@ class Module_admin_ecommerce extends standard_crud_module
 		$fields->attach(form_input_list(do_lang_tempcode('GROUP'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_GROUP'),'group_id',$list));
 		$fields->attach(form_input_tick(do_lang_tempcode('USES_PRIMARY'),do_lang_tempcode('DESCRIPTION_USES_PRIMARY'),'uses_primary',$uses_primary==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_ENABLED'),'enabled',$enabled==1));
+
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'a03ec5b2afe5be764bd10694fc401fex','TITLE'=>do_lang_tempcode('SUBSCRIPTION_EVENT_EMAILS'))));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MAIL_START'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_MAIL_START'),'mail_start',$mail_start,true,NULL,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MAIL_END'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_MAIL_END'),'mail_end',$mail_end,true,NULL,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MAIL_UHOH'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_MAIL_UHOH'),'mail_uhoh',$mail_uhoh,false,NULL,true));

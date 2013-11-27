@@ -25,7 +25,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Audit-trail functionality.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_censor&amp;keep_devtest=1">Dealing with annoying users</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_censor.htm?keep_devtest=1">Dealing with annoying users</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=actionlog&amp;status_id=10">Link</a></td>
 		</tr>
@@ -35,7 +35,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Define complex aggregate types in XML, and spawn them.</td>
 			<!--<td>No</td>-->
 			<td><kbd>occle<br /><br />import</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_aggregate_types&amp;keep_devtest=1">Aggregate Content Types</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_aggregate_types.htm?keep_devtest=1">Aggregate Content Types</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=aggregate_types&amp;status_id=10">Link</a></td>
 		</tr>
@@ -45,7 +45,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Sample .htaccess files to help achieve optimal configuration on the Apache web server.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adv_configuration&amp;keep_devtest=1">Advanced configuration</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adv_configuration.htm?keep_devtest=1">Advanced configuration</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=apache_config_files&amp;status_id=10">Link</a></td>
 		</tr>
@@ -55,7 +55,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Certain kinds of content can have authors instead of submitters (e.g. &#039;ocProducts&#039;). The authors may be independently described and searched under.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_authors&amp;keep_devtest=1">Authors</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_users&amp;keep_devtest=1">People in their roles</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_authors.htm?keep_devtest=1">Authors</a><br /><br /><a href="http://ocportal.com/docs10/tut_users.htm?keep_devtest=1">People in their roles</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=authors&amp;status_id=10">Link</a></td>
 		</tr>
@@ -65,7 +65,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Pick out content for featuring.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_featured&amp;keep_devtest=1">Providing featured content</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_featured.htm?keep_devtest=1">Providing featured content</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=awards&amp;status_id=10">Link</a></td>
 		</tr>
@@ -75,7 +75,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Perform incremental or full backups of files and the database. Supports scheduling.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_backup&amp;keep_devtest=1">Backing up your site</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_backup.htm?keep_devtest=1">Backing up your site</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=backup&amp;status_id=10">Link</a></td>
 		</tr>
@@ -85,7 +85,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>An advanced banner system, with support for multiple banner rotations, commercial banner campaigns, and webring-style systems. Support for graphical, text, and flash banners. Hotword activation support.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_banners&amp;keep_devtest=1">Running advertisements (via the banner system)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_banners.htm?keep_devtest=1">Running advertisements (via the banner system)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=banners&amp;status_id=10">Link</a></td>
 		</tr>
@@ -95,7 +95,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Allow members to bookmark screens of the website. As the bookmarks are tied to their member profile they can access them from any computer they can log in on.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=bookmarks&amp;status_id=10">Link</a></td>
 		</tr>
@@ -105,7 +105,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Advanced breadcrumb editing.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_structure&amp;keep_devtest=1">ocPortal site structure</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_structure.htm?keep_devtest=1">ocPortal site structure</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=breadcrumbs&amp;status_id=10">Link</a></td>
 		</tr>
@@ -115,7 +115,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>An advanced community calendar.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_calendar&amp;keep_devtest=1">Running a calendar/diary</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_calendar.htm?keep_devtest=1">Running a calendar/diary</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=calendar&amp;status_id=10">Link</a></td>
 		</tr>
@@ -125,7 +125,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Stop spam-bots from performing actions on the website.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=captcha&amp;status_id=10">Link</a></td>
 		</tr>
@@ -135,7 +135,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Describe your own custom data record types (by choosing and configuring fields) and populate with records. Supports tree structures, and most standard ocPortal features (e.g. ratings).</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_catalogues&amp;keep_devtest=1">Custom structured content (via catalogues)</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_information&amp;keep_devtest=1">Choosing how to publish</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_catalogues.htm?keep_devtest=1">Custom structured content (via catalogues)</a><br /><br /><a href="http://ocportal.com/docs10/tut_information.htm?keep_devtest=1">Choosing how to publish</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=catalogues&amp;status_id=10">Link</a></td>
 		</tr>
@@ -145,7 +145,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Chat rooms and instant messaging.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_chat&amp;keep_devtest=1">Running chatrooms (features and advice)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_chat.htm?keep_devtest=1">Running chatrooms (features and advice)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=chat&amp;status_id=10">Link</a></td>
 		</tr>
@@ -155,7 +155,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>For programmers- A simple editor for editing ocPortal code files, with support for override support and saving via FTP.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_framework&amp;keep_devtest=1">The ocPortal programming framework</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_framework.htm?keep_devtest=1">The ocPortal programming framework</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=code_editor&amp;status_id=10">Link</a></td>
 		</tr>
@@ -165,7 +165,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Collaboration Zone.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_collaboration&amp;keep_devtest=1">Running a collaboration hub: the Collaboration Zone</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_collaboration.htm?keep_devtest=1">Running a collaboration hub: the Collaboration Zone</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=collaboration_zone&amp;status_id=10">Link</a></td>
 		</tr>
@@ -175,7 +175,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Allows users to specify privacy level for their content.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_censor&amp;keep_devtest=1">Dealing with annoying users</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_censor.htm?keep_devtest=1">Dealing with annoying users</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=content_privacy&amp;status_id=10">Link</a></td>
 		</tr>
@@ -185,7 +185,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Regularly review content for accuracy.</td>
 			<!--<td>No</td>-->
 			<td><kbd>unvalidated<br /><br />occle</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adminzone&amp;keep_devtest=1">Admin Zone overview</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adminzone.htm?keep_devtest=1">Admin Zone overview</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=content_reviews&amp;status_id=10">Link</a></td>
 		</tr>
@@ -195,7 +195,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>(Core ocPortal code)</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_webapp&amp;keep_devtest=1">Web-applications, ocPortal, and PHP</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_do&amp;keep_devtest=1">Dos and Do-nots of an (ocPortal) website</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_drinking&amp;keep_devtest=1">Drinking from the feature pool</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_webapp.htm?keep_devtest=1">Web-applications, ocPortal, and PHP</a><br /><br /><a href="http://ocportal.com/docs10/tut_do.htm?keep_devtest=1">Dos and Do-nots of an (ocPortal) website</a><br /><br /><a href="http://ocportal.com/docs10/tut_drinking.htm?keep_devtest=1">Drinking from the feature pool</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core&amp;status_id=10">Link</a></td>
 		</tr>
@@ -205,7 +205,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Core rendering functionality.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_themes&amp;keep_devtest=1">Themeing your site</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_themes.htm?keep_devtest=1">Themeing your site</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_abstract_components&amp;status_id=10">Link</a></td>
 		</tr>
@@ -215,7 +215,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Core rendering functionality.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_themes&amp;keep_devtest=1">Themeing your site</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_themes.htm?keep_devtest=1">Themeing your site</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_abstract_interfaces&amp;status_id=10">Link</a></td>
 		</tr>
@@ -225,7 +225,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Install or uninstall addons.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_framework&amp;keep_devtest=1">The ocPortal programming framework</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_framework.htm?keep_devtest=1">The ocPortal programming framework</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_addon_management&amp;status_id=10">Link</a></td>
 		</tr>
@@ -235,7 +235,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>The dashboard tools shown in the Admin Zone.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adminzone&amp;keep_devtest=1">Admin Zone overview</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adminzone.htm?keep_devtest=1">Admin Zone overview</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_adminzone_dashboard&amp;status_id=10">Link</a></td>
 		</tr>
@@ -245,7 +245,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Behind-the-scenes maintenance tasks.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_cleanup&amp;keep_devtest=1">Cleanup tools</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_cleanup.htm?keep_devtest=1">Cleanup tools</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_cleanup_tools&amp;status_id=10">Link</a></td>
 		</tr>
@@ -255,7 +255,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Manage new pages on the website, known as Comcode pages.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_comcode_pages&amp;keep_devtest=1">Custom pages of information (via Comcode)</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_comcode_pages&amp;keep_devtest=1">Advanced custom pages of information</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_information&amp;keep_devtest=1">Choosing how to publish</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_comcode_pages.htm?keep_devtest=1">Custom pages of information (via Comcode)</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_comcode_pages.htm?keep_devtest=1">Advanced custom pages of information</a><br /><br /><a href="http://ocportal.com/docs10/tut_information.htm?keep_devtest=1">Choosing how to publish</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_comcode_pages&amp;status_id=10">Link</a></td>
 		</tr>
@@ -265,7 +265,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Set configuration options.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_configuration&amp;keep_devtest=1">Basic configuration</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_configuration&amp;keep_devtest=1">Advanced configuration</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_moving&amp;keep_devtest=1">Moving servers (including copying themes manually)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_configuration.htm?keep_devtest=1">Basic configuration</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_configuration.htm?keep_devtest=1">Advanced configuration</a><br /><br /><a href="http://ocportal.com/docs10/tut_moving.htm?keep_devtest=1">Moving servers (including copying themes manually)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_configuration&amp;status_id=10">Link</a></td>
 		</tr>
@@ -275,7 +275,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>The code layer that binds the software to one of various different kinds of database software.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_web_hosting&amp;keep_devtest=1">Web hosting for ocPortal</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_install&amp;keep_devtest=1">Basic Installation</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_installation&amp;keep_devtest=1">Advanced installation</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_web_hosting.htm?keep_devtest=1">Web hosting for ocPortal</a><br /><br /><a href="http://ocportal.com/docs10/tut_install.htm?keep_devtest=1">Basic Installation</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_installation.htm?keep_devtest=1">Advanced installation</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_database_drivers&amp;status_id=10">Link</a></td>
 		</tr>
@@ -285,7 +285,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Features for user interaction with content.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_feedback&amp;keep_devtest=1">Feedback and user interaction</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_news&amp;keep_devtest=1">Advanced news</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_feedback.htm?keep_devtest=1">Feedback and user interaction</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_news.htm?keep_devtest=1">Advanced news</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_feedback_features&amp;status_id=10">Link</a></td>
 		</tr>
@@ -295,7 +295,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>(Core fields API)</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_catalogues&amp;keep_devtest=1">Custom structured content (via catalogues)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_catalogues.htm?keep_devtest=1">Custom structured content (via catalogues)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_fields&amp;status_id=10">Link</a></td>
 		</tr>
@@ -305,7 +305,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Core rendering functionality for forms.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_themes&amp;keep_devtest=1">Themeing your site</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_themes.htm?keep_devtest=1">Themeing your site</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_form_interfaces&amp;status_id=10">Link</a></td>
 		</tr>
@@ -315,7 +315,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>The code layer that binds the software to one of various different forum/member systems.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_nuances&amp;keep_devtest=1">Nuances of forum integration</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=codebook_1b&amp;keep_devtest=1">ocPortal Code Book</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_nuances.htm?keep_devtest=1">Nuances of forum integration</a><br /><br /><a href="http://ocportal.com/docs10/codebook_1b.htm?keep_devtest=1">ocPortal Code Book</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_forum_drivers&amp;status_id=10">Link</a></td>
 		</tr>
@@ -325,7 +325,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Core rendering functionality for imagery.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_fringe&amp;keep_devtest=1">Favicons, Web fonts, Media file compatibility</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_fringe.htm?keep_devtest=1">Favicons, Web fonts, Media file compatibility</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_graphic_text&amp;status_id=10">Link</a></td>
 		</tr>
@@ -335,7 +335,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Core rendering functionality.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_themes&amp;keep_devtest=1">Themeing your site</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_themes.htm?keep_devtest=1">Themeing your site</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_html_abstractions&amp;status_id=10">Link</a></td>
 		</tr>
@@ -345,7 +345,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Translate the software, or just change what it says for stylistic reasons.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_intl&amp;keep_devtest=1">Localisation and internationalisation</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_intl_users&amp;keep_devtest=1">Translating ocPortal</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_intl.htm?keep_devtest=1">Localisation and internationalisation</a><br /><br /><a href="http://ocportal.com/docs10/tut_intl_users.htm?keep_devtest=1">Translating ocPortal</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_language_editing&amp;status_id=10">Link</a></td>
 		</tr>
@@ -355,7 +355,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Edit menus.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_menus&amp;keep_devtest=1">Customising what&#039;s on the menus</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_menus.htm?keep_devtest=1">Customising what&#039;s on the menus</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_menus&amp;status_id=10">Link</a></td>
 		</tr>
@@ -365,7 +365,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Sends out action-triggered notifications to members listening to them.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_notifications&amp;keep_devtest=1">Notifications</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_notifications.htm?keep_devtest=1">Notifications</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_notifications&amp;status_id=10">Link</a></td>
 		</tr>
@@ -375,7 +375,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>The ocPortal member/usergroup system.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_members&amp;keep_devtest=1">Advanced ocPortal member system</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_users&amp;keep_devtest=1">People in their roles</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_httpauth&amp;keep_devtest=1">Integrating ocPortal into a network via HTTP authentication</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_emoticons&amp;keep_devtest=1">The ocPortal emoticon system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_members.htm?keep_devtest=1">Advanced ocPortal member system</a><br /><br /><a href="http://ocportal.com/docs10/tut_users.htm?keep_devtest=1">People in their roles</a><br /><br /><a href="http://ocportal.com/docs10/tut_httpauth.htm?keep_devtest=1">Integrating ocPortal into a network via HTTP authentication</a><br /><br /><a href="http://ocportal.com/docs10/tut_emoticons.htm?keep_devtest=1">The ocPortal emoticon system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_ocf&amp;status_id=10">Link</a></td>
 		</tr>
@@ -385,7 +385,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Manage permissions.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_permissions&amp;keep_devtest=1">Access control and privileges</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_permissions.htm?keep_devtest=1">Access control and privileges</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_permission_management&amp;status_id=10">Link</a></td>
 		</tr>
@@ -395,7 +395,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Core rendering functionality.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_themes&amp;keep_devtest=1">Themeing your site</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_designer_themes&amp;keep_devtest=1">Designer themes, implementing a clean-room design</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_themes.htm?keep_devtest=1">Themeing your site</a><br /><br /><a href="http://ocportal.com/docs10/tut_designer_themes.htm?keep_devtest=1">Designer themes, implementing a clean-room design</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_primary_layout&amp;status_id=10">Link</a></td>
 		</tr>
@@ -405,7 +405,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Comcode and attachments.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_comcode&amp;keep_devtest=1">Comcode and the attachment system</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_comcode&amp;keep_devtest=1">Advanced Comcode</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_wysiwyg&amp;keep_devtest=1">WYSIWYG editing</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_comcode.htm?keep_devtest=1">Comcode and the attachment system</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_comcode.htm?keep_devtest=1">Advanced Comcode</a><br /><br /><a href="http://ocportal.com/docs10/tut_wysiwyg.htm?keep_devtest=1">WYSIWYG editing</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_rich_media&amp;status_id=10">Link</a></td>
 		</tr>
@@ -415,7 +415,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Themeing the website, via CSS, HTML, and images.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_themes&amp;keep_devtest=1">Themeing your site</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_releasing_themes&amp;keep_devtest=1">Releasing a theme</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_tempcode&amp;keep_devtest=1">Tempcode programming</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_fixed_width&amp;keep_devtest=1">Fixed-width layouts</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_design&amp;keep_devtest=1">Introduction to web design</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_designer_themes&amp;keep_devtest=1">Designer themes, implementing a clean-room design</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_themes.htm?keep_devtest=1">Themeing your site</a><br /><br /><a href="http://ocportal.com/docs10/tut_releasing_themes.htm?keep_devtest=1">Releasing a theme</a><br /><br /><a href="http://ocportal.com/docs10/tut_tempcode.htm?keep_devtest=1">Tempcode programming</a><br /><br /><a href="http://ocportal.com/docs10/tut_fixed_width.htm?keep_devtest=1">Fixed-width layouts</a><br /><br /><a href="http://ocportal.com/docs10/tut_design.htm?keep_devtest=1">Introduction to web design</a><br /><br /><a href="http://ocportal.com/docs10/tut_designer_themes.htm?keep_devtest=1">Designer themes, implementing a clean-room design</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_themeing&amp;status_id=10">Link</a></td>
 		</tr>
@@ -425,7 +425,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>The upgrader code.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_upgrade&amp;keep_devtest=1">Performing an upgrade</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_upgrade.htm?keep_devtest=1">Performing an upgrade</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_upgrader&amp;status_id=10">Link</a></td>
 		</tr>
@@ -435,7 +435,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Web Standards validation tools.</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_accessibility&amp;keep_devtest=1">Helping improve site accessibility for disabled users</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_markup&amp;keep_devtest=1">Introduction to XHTML, CSS and Javascript</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_accessibility.htm?keep_devtest=1">Helping improve site accessibility for disabled users</a><br /><br /><a href="http://ocportal.com/docs10/tut_markup.htm?keep_devtest=1">Introduction to XHTML, CSS and Javascript</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_validation&amp;status_id=10">Link</a></td>
 		</tr>
@@ -445,7 +445,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Manage zones (sub-sites).</td>
 			<!--<td>Yes</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_structure&amp;keep_devtest=1">ocPortal site structure</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_structure.htm?keep_devtest=1">ocPortal site structure</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=core_zone_editor&amp;status_id=10">Link</a></td>
 		</tr>
@@ -455,7 +455,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Blocks for hit counters, and count-downs.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_featured&amp;keep_devtest=1">Providing featured content</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_featured.htm?keep_devtest=1">Providing featured content</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=counting_blocks&amp;status_id=10">Link</a></td>
 		</tr>
@@ -465,7 +465,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Create new Comcode tags.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adv_comcode&amp;keep_devtest=1">Advanced Comcode</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adv_comcode.htm?keep_devtest=1">Advanced Comcode</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=custom_comcode&amp;status_id=10">Link</a></td>
 		</tr>
@@ -475,7 +475,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Allow easy debranding of the website software.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=codebook_3&amp;keep_devtest=1">ocPortal Code Book</a></td>
+			<td><a href="http://ocportal.com/docs10/codebook_3.htm?keep_devtest=1">ocPortal Code Book</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=debrand&amp;status_id=10">Link</a></td>
 		</tr>
@@ -485,7 +485,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>For programmers - blocks and infrastructure to help turn the phpdoc code comments ocPortal uses into HTML pages.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=codebook&amp;keep_devtest=1">ocPortal Code Book</a></td>
+			<td><a href="http://ocportal.com/docs10/codebook.htm?keep_devtest=1">ocPortal Code Book</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=devguide&amp;status_id=10">Link</a></td>
 		</tr>
@@ -495,7 +495,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Host a downloads directory.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_downloads&amp;keep_devtest=1">Providing downloads</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_downloads&amp;keep_devtest=1">Advanced provision of downloads</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_information&amp;keep_devtest=1">Choosing how to publish</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_downloads.htm?keep_devtest=1">Providing downloads</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_downloads.htm?keep_devtest=1">Advanced provision of downloads</a><br /><br /><a href="http://ocportal.com/docs10/tut_information.htm?keep_devtest=1">Choosing how to publish</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=downloads&amp;status_id=10">Link</a></td>
 		</tr>
@@ -505,7 +505,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>eCommerce infrastructure, with support for digital purchase and usergroup subscriptions. Accounting functionality.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_ecommerce&amp;keep_devtest=1">eCommerce</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_ecommerce.htm?keep_devtest=1">eCommerce</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ecommerce&amp;status_id=10">Link</a></td>
 		</tr>
@@ -515,7 +515,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Log of errors that have happened on the website.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adminzone&amp;keep_devtest=1">Admin Zone overview</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adminzone.htm?keep_devtest=1">Admin Zone overview</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=errorlog&amp;status_id=10">Link</a></td>
 		</tr>
@@ -525,7 +525,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>File/media library, for use in attachments or for general ad-hoc sharing.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_collaboration&amp;keep_devtest=1">Running a collaboration hub: the Collaboration Zone</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_collaboration.htm?keep_devtest=1">Running a collaboration hub: the Collaboration Zone</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=filedump&amp;status_id=10">Link</a></td>
 		</tr>
@@ -535,7 +535,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Blocks to draw forum posts and topics into the main website.</td>
 			<!--<td>No</td>-->
 			<td><kbd>news_shared</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_featured&amp;keep_devtest=1">Providing featured content</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_featured.htm?keep_devtest=1">Providing featured content</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=forum_blocks&amp;status_id=10">Link</a></td>
 		</tr>
@@ -545,7 +545,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Galleries, including support for video galleries, and member personal galleries.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_galleries&amp;keep_devtest=1">Providing galleries</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_galleries&amp;keep_devtest=1">Advanced galleries</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_galleries.htm?keep_devtest=1">Providing galleries</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_galleries.htm?keep_devtest=1">Advanced galleries</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=galleries&amp;status_id=10">Link</a></td>
 		</tr>
@@ -555,7 +555,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Support for deploying to Google App Engine (for developers).</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_google_appengine&amp;keep_devtest=1">Installing on Google App Engine</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_google_appengine.htm?keep_devtest=1">Installing on Google App Engine</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=google_appengine&amp;status_id=10">Link</a></td>
 		</tr>
@@ -565,7 +565,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A simple guestbook. Note that removing this will not remove the menu link automatically.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_feedback&amp;keep_devtest=1">Feedback and user interaction</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_configuration&amp;keep_devtest=1">Basic configuration</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_feedback.htm?keep_devtest=1">Feedback and user interaction</a><br /><br /><a href="http://ocportal.com/docs10/tut_configuration.htm?keep_devtest=1">Basic configuration</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=guestbook&amp;status_id=10">Link</a></td>
 		</tr>
@@ -575,7 +575,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A simple website help page. Note that removing this will not remove the menu link automatically.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_configuration&amp;keep_devtest=1">Basic configuration</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_configuration.htm?keep_devtest=1">Basic configuration</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=help_page&amp;status_id=10">Link</a></td>
 		</tr>
@@ -585,7 +585,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A script to compile ocPortal to run on Facebook HipHop PHP (not Roadsend PHP anymore - we have removed that support).</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_optimisation&amp;keep_devtest=1">Optimising</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_optimisation.htm?keep_devtest=1">Optimising</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=hphp_buildkit&amp;status_id=10">Link</a></td>
 		</tr>
@@ -595,7 +595,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Switch to ocPortal from other software. This addon provides the architecture for importing, and a number of prewritten importers.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_importer&amp;keep_devtest=1">Importing data into ocPortal</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_importer.htm?keep_devtest=1">Importing data into ocPortal</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=import&amp;status_id=10">Link</a></td>
 		</tr>
@@ -605,7 +605,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>The installer files (can be removed immediately after installing; in-fact ocPortal makes you remove install.php manually).</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_install&amp;keep_devtest=1">Basic Installation</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_installation&amp;keep_devtest=1">Advanced installation</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_chmod&amp;keep_devtest=1">Linux file permissions</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_install.htm?keep_devtest=1">Basic Installation</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_installation.htm?keep_devtest=1">Advanced installation</a><br /><br /><a href="http://ocportal.com/docs10/tut_chmod.htm?keep_devtest=1">Linux file permissions</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=installer&amp;status_id=10">Link</a></td>
 		</tr>
@@ -615,7 +615,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A block to allow visitors to choose their language.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_intl&amp;keep_devtest=1">Localisation and internationalisation</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_intl_users&amp;keep_devtest=1">Translating ocPortal</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_intl.htm?keep_devtest=1">Localisation and internationalisation</a><br /><br /><a href="http://ocportal.com/docs10/tut_intl_users.htm?keep_devtest=1">Translating ocPortal</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=language_block&amp;status_id=10">Link</a></td>
 		</tr>
@@ -625,7 +625,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Support for integrating OCF with an LDAP server, so usergroup and members can be the same as those already on the network</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_ldap&amp;keep_devtest=1">Integrating ocPortal into a corporate network via LDAP</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_ldap.htm?keep_devtest=1">Integrating ocPortal into a corporate network via LDAP</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ldap&amp;status_id=10">Link</a></td>
 		</tr>
@@ -635,7 +635,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Bash shell scripts to help configure permissions on Linux/Unix servers.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adv_installation&amp;keep_devtest=1">Advanced installation</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adv_installation.htm?keep_devtest=1">Advanced installation</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=linux_helper_scripts&amp;status_id=10">Link</a></td>
 		</tr>
@@ -645,7 +645,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Match-key-permissions allow advanced setting of permissions on a screen-by-screen basis.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_permissions&amp;keep_devtest=1">Access control and privileges</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_permissions.htm?keep_devtest=1">Access control and privileges</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=match_key_permissions&amp;status_id=10">Link</a></td>
 		</tr>
@@ -655,7 +655,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Features to support multi-site-networks (networks of linked sites that usually share a common member system).</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_msn&amp;keep_devtest=1">Advanced techniques for multi-site-networks</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_msn.htm?keep_devtest=1">Advanced techniques for multi-site-networks</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=msn&amp;status_id=10">Link</a></td>
 		</tr>
@@ -665,7 +665,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>News and blogging.</td>
 			<!--<td>No</td>-->
 			<td><kbd>news_shared</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_news&amp;keep_devtest=1">Releasing news &amp; running a Blog</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_news&amp;keep_devtest=1">Advanced news</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_information&amp;keep_devtest=1">Choosing how to publish</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_news.htm?keep_devtest=1">Releasing news &amp; running a Blog</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_news.htm?keep_devtest=1">Advanced news</a><br /><br /><a href="http://ocportal.com/docs10/tut_information.htm?keep_devtest=1">Choosing how to publish</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=news&amp;status_id=10">Link</a></td>
 		</tr>
@@ -675,7 +675,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>(Common files needed for RSS and News addons)</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_news&amp;keep_devtest=1">Releasing news &amp; running a Blog</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_news&amp;keep_devtest=1">Advanced news</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_news.htm?keep_devtest=1">Releasing news &amp; running a Blog</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_news.htm?keep_devtest=1">Advanced news</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=news_shared&amp;status_id=10">Link</a></td>
 		</tr>
@@ -685,7 +685,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Support for users to join newsletters, and for the staff to send out newsletters to subscribers, and to specific usergroups.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_newsletter&amp;keep_devtest=1">Running a newsletter</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_newsletter.htm?keep_devtest=1">Running a newsletter</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=newsletter&amp;status_id=10">Link</a></td>
 		</tr>
@@ -695,7 +695,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A command-line environment for managing your website, designed for Linux/Unix lovers.</td>
 			<!--<td>No</td>-->
 			<td><kbd>import</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_occle&amp;keep_devtest=1">OcCLE</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_repository&amp;keep_devtest=1">The ocPortal repository</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_occle.htm?keep_devtest=1">OcCLE</a><br /><br /><a href="http://ocportal.com/docs10/tut_repository.htm?keep_devtest=1">The ocPortal repository</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=occle&amp;status_id=10">Link</a></td>
 		</tr>
@@ -705,7 +705,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A selection of avatars for OCF</td>
 			<!--<td>No</td>-->
 			<td><kbd>ocf_member_avatars</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_avatars&amp;status_id=10">Link</a></td>
 		</tr>
@@ -715,7 +715,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A selection of avatars for OCF (sketched characters)</td>
 			<!--<td>No</td>-->
 			<td><kbd>ocf_member_avatars</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_cartoon_avatars&amp;status_id=10">Link</a></td>
 		</tr>
@@ -725,7 +725,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Clubs for members, each of which comes with a forum.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_subcom&amp;keep_devtest=1">Creating sub-communities (and sub-sites)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_subcom.htm?keep_devtest=1">Creating sub-communities (and sub-sites)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_clubs&amp;status_id=10">Link</a></td>
 		</tr>
@@ -735,7 +735,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Off-site e-mailing of members (more private, and may be used by guests).</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_correspondance&amp;keep_devtest=1">Correspondence between members</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_correspondance.htm?keep_devtest=1">Correspondence between members</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_contact_member&amp;status_id=10">Link</a></td>
 		</tr>
@@ -745,7 +745,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Custom profile fields, so members may save additional details. If this is uninstalled any existing custom profile fields will remain in the system.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adv_members&amp;keep_devtest=1">Advanced ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adv_members.htm?keep_devtest=1">Advanced ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_cpfs&amp;status_id=10">Link</a></td>
 		</tr>
@@ -755,7 +755,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>The OCF forum- a modern advanced forum for members to interact on.</td>
 			<!--<td>No</td>-->
 			<td><kbd>polls</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_forums&amp;keep_devtest=1">Organising discussion forums</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_forum_helpdesk&amp;keep_devtest=1">Running a discussion-forum-based helpdesk</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_forum_tracking&amp;keep_devtest=1">Keeping on track of busy forums</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_mod&amp;keep_devtest=1">Basic forum moderation</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_information&amp;keep_devtest=1">Choosing how to publish</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_forums.htm?keep_devtest=1">Organising discussion forums</a><br /><br /><a href="http://ocportal.com/docs10/tut_forum_helpdesk.htm?keep_devtest=1">Running a discussion-forum-based helpdesk</a><br /><br /><a href="http://ocportal.com/docs10/tut_forum_tracking.htm?keep_devtest=1">Keeping on track of busy forums</a><br /><br /><a href="http://ocportal.com/docs10/tut_mod.htm?keep_devtest=1">Basic forum moderation</a><br /><br /><a href="http://ocportal.com/docs10/tut_information.htm?keep_devtest=1">Choosing how to publish</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_forum&amp;status_id=10">Link</a></td>
 		</tr>
@@ -765,7 +765,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Member avatars.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_member_avatars&amp;status_id=10">Link</a></td>
 		</tr>
@@ -775,7 +775,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Member photos.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_member_photos&amp;status_id=10">Link</a></td>
 		</tr>
@@ -785,7 +785,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Member titles.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_member_titles&amp;status_id=10">Link</a></td>
 		</tr>
@@ -795,7 +795,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Multi-moderations for the OCF forum.</td>
 			<!--<td>No</td>-->
 			<td><kbd>ocf_forum</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_forum_helpdesk&amp;keep_devtest=1">Running a discussion-forum-based helpdesk</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_forum_helpdesk.htm?keep_devtest=1">Running a discussion-forum-based helpdesk</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_multi_moderations&amp;status_id=10">Link</a></td>
 		</tr>
@@ -805,7 +805,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Post templates for the OCF forum.</td>
 			<!--<td>No</td>-->
 			<td><kbd>ocf_forum</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_forum_helpdesk&amp;keep_devtest=1">Running a discussion-forum-based helpdesk</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_forum_helpdesk.htm?keep_devtest=1">Running a discussion-forum-based helpdesk</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_post_templates&amp;status_id=10">Link</a></td>
 		</tr>
@@ -815,7 +815,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Post reporting with the OCF forum.</td>
 			<!--<td>No</td>-->
 			<td><kbd>ocf_forum</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_staff&amp;keep_devtest=1">The staff/member divide</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_staff.htm?keep_devtest=1">The staff/member divide</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_reported_posts&amp;status_id=10">Link</a></td>
 		</tr>
@@ -825,7 +825,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Member signatures.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_signatures&amp;status_id=10">Link</a></td>
 		</tr>
@@ -835,7 +835,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A selection of avatars for OCF</td>
 			<!--<td>No</td>-->
 			<td><kbd>ocf_member_avatars</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_thematic_avatars&amp;status_id=10">Link</a></td>
 		</tr>
@@ -845,7 +845,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Member warnings and punishment.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_censor&amp;keep_devtest=1">Dealing with annoying users</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_staff&amp;keep_devtest=1">The staff/member divide</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_censor.htm?keep_devtest=1">Dealing with annoying users</a><br /><br /><a href="http://ocportal.com/docs10/tut_staff.htm?keep_devtest=1">The staff/member divide</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ocf_warnings&amp;status_id=10">Link</a></td>
 		</tr>
@@ -855,7 +855,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Manage pages on the website.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_structure&amp;keep_devtest=1">ocPortal site structure</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_structure.htm?keep_devtest=1">ocPortal site structure</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=page_management&amp;status_id=10">Link</a></td>
 		</tr>
@@ -865,7 +865,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Access PHP configurational information from inside ocPortal.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_web_hosting&amp;keep_devtest=1">Web hosting for ocPortal</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_web_hosting.htm?keep_devtest=1">Web hosting for ocPortal</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=phpinfo&amp;status_id=10">Link</a></td>
 		</tr>
@@ -875,7 +875,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Allow members to accumulate points via a number of configurable activities, as well as exchange points with each other. Points act as a ranking system as well as a virtual currency.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_points&amp;keep_devtest=1">Creating an economy/reward-system for members via points</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_points.htm?keep_devtest=1">Creating an economy/reward-system for members via points</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=points&amp;status_id=10">Link</a></td>
 		</tr>
@@ -885,7 +885,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Provide a number of virtual products to your members in exchange for the points they have accumulated by their activity</td>
 			<!--<td>No</td>-->
 			<td><kbd>points</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_points&amp;keep_devtest=1">Creating an economy/reward-system for members via points</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_points.htm?keep_devtest=1">Creating an economy/reward-system for members via points</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=pointstore&amp;status_id=10">Link</a></td>
 		</tr>
@@ -895,7 +895,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A poll (voting) system.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_featured&amp;keep_devtest=1">Providing featured content</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_featured.htm?keep_devtest=1">Providing featured content</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=polls&amp;status_id=10">Link</a></td>
 		</tr>
@@ -905,7 +905,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A block to provide a link for the current screen to be turned into it&#039;s printer-friendly equivalent.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_browsers&amp;keep_devtest=1">Browser version requirements</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_browsers.htm?keep_devtest=1">Browser version requirements</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=printer_friendly_block&amp;status_id=10">Link</a></td>
 		</tr>
@@ -915,7 +915,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Construct competitions, surveys, and tests, for members to perform. Highly configurable, and comes with administrative tools to handle the results.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_quizzes&amp;keep_devtest=1">Quizzes</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_quizzes.htm?keep_devtest=1">Quizzes</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=quizzes&amp;status_id=10">Link</a></td>
 		</tr>
@@ -925,7 +925,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A block to display random quotes on your website, and an administrative tool to choose them.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_featured&amp;keep_devtest=1">Providing featured content</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_featured.htm?keep_devtest=1">Providing featured content</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=random_quotes&amp;status_id=10">Link</a></td>
 		</tr>
@@ -935,7 +935,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Real-time/historic display of website activity.</td>
 			<!--<td>No</td>-->
 			<td><kbd>stats</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_statistics&amp;keep_devtest=1">Activity statistics for your site (analytics)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_statistics.htm?keep_devtest=1">Activity statistics for your site (analytics)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=realtime_rain&amp;status_id=10">Link</a></td>
 		</tr>
@@ -945,7 +945,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Allow members to easily recommend the website to others.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=recommend&amp;status_id=10">Link</a></td>
 		</tr>
@@ -955,7 +955,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Manage redirects between pages.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_subcom&amp;keep_devtest=1">Creating sub-communities (and sub-sites)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_subcom.htm?keep_devtest=1">Creating sub-communities (and sub-sites)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=redirects_editor&amp;status_id=10">Link</a></td>
 		</tr>
@@ -965,7 +965,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A tool to help power-user webmasters identify if a &quot;rootkit&quot; has been placed on the server.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_security&amp;keep_devtest=1">Security</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_security.htm?keep_devtest=1">Security</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=rootkit_detector&amp;status_id=10">Link</a></td>
 		</tr>
@@ -975,7 +975,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Multi-content search engine.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_search&amp;keep_devtest=1">Searching your website</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_search.htm?keep_devtest=1">Searching your website</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=search&amp;status_id=10">Link</a></td>
 		</tr>
@@ -985,7 +985,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Log/display security alerts.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_security&amp;keep_devtest=1">Security</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_trace&amp;keep_devtest=1">IP addresses and tracing users</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_security.htm?keep_devtest=1">Security</a><br /><br /><a href="http://ocportal.com/docs10/tut_trace.htm?keep_devtest=1">IP addresses and tracing users</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=securitylogging&amp;status_id=10">Link</a></td>
 		</tr>
@@ -995,7 +995,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Quick-start setup wizard.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_configuration&amp;keep_devtest=1">Basic configuration</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_drinking&amp;keep_devtest=1">Drinking from the feature pool</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_configuration.htm?keep_devtest=1">Basic configuration</a><br /><br /><a href="http://ocportal.com/docs10/tut_drinking.htm?keep_devtest=1">Drinking from the feature pool</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=setupwizard&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1005,7 +1005,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Online store functionality.</td>
 			<!--<td>No</td>-->
 			<td><kbd>ecommerce</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_ecommerce&amp;keep_devtest=1">eCommerce</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_ecommerce.htm?keep_devtest=1">eCommerce</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=shopping&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1015,7 +1015,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Provides an option for the software to send SMS messages, via the commercial Clickatell web service.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_notifications&amp;keep_devtest=1">Notifications</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_notifications.htm?keep_devtest=1">Notifications</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=sms&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1025,7 +1025,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Choose which pages of your website run over HTTPS (SSL). Requires an SSL certificate to be installed on the webserver, and a dedicated IP address.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_security&amp;keep_devtest=1">Security</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_security.htm?keep_devtest=1">Security</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=ssl&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1035,7 +1035,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Choose and display a selection of staff from the super-administator/super-moderator usergroups. This is useful for multi-site networks, where members with privileges may not be considered staff on all websites on the network.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_staff&amp;keep_devtest=1">The staff/member divide</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_staff_advice&amp;keep_devtest=1">Advice for choosing and managing staff</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_users&amp;keep_devtest=1">People in their roles</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_staff.htm?keep_devtest=1">The staff/member divide</a><br /><br /><a href="http://ocportal.com/docs10/tut_staff_advice.htm?keep_devtest=1">Advice for choosing and managing staff</a><br /><br /><a href="http://ocportal.com/docs10/tut_users.htm?keep_devtest=1">People in their roles</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=staff&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1045,7 +1045,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Blocks to allow visitors to contact the staff, either via email, or via a special administrative interface which the staff may use to comment on the messages and assign task ownership.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_feedback&amp;keep_devtest=1">Feedback and user interaction</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_support_desk&amp;keep_devtest=1">Running a virtual support desk</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_feedback.htm?keep_devtest=1">Feedback and user interaction</a><br /><br /><a href="http://ocportal.com/docs10/tut_support_desk.htm?keep_devtest=1">Running a virtual support desk</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=staff_messaging&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1055,7 +1055,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Show advanced graphs (analytics) and dumps of raw data relating to your website activity.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_statistics&amp;keep_devtest=1">Activity statistics for your site (analytics)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_statistics.htm?keep_devtest=1">Activity statistics for your site (analytics)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=stats&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1065,7 +1065,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A block to show a selection of your website statistics to your visitors.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_statistics&amp;keep_devtest=1">Activity statistics for your site (analytics)</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_statistics.htm?keep_devtest=1">Activity statistics for your site (analytics)</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=stats_block&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1075,7 +1075,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Show a list of all members in the configured &quot;Super member&quot; usergroup. Useful for communities that need to provide a list of VIPs.</td>
 			<!--<td>No</td>-->
 			<td><kbd>collaboration_zone</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_collaboration&amp;keep_devtest=1">Running a collaboration hub: the Collaboration Zone</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_collaboration.htm?keep_devtest=1">Running a collaboration hub: the Collaboration Zone</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=supermember_directory&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1085,7 +1085,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Syndicate RSS/Atom feeds of your content.</td>
 			<!--<td>No</td>-->
 			<td><kbd>syndication_blocks</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_integration&amp;keep_devtest=1">Integration of ocPortal and other installed scripts/applications</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_news&amp;keep_devtest=1">Releasing news &amp; running a Blog</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_news&amp;keep_devtest=1">Advanced news</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_integration.htm?keep_devtest=1">Integration of ocPortal and other installed scripts/applications</a><br /><br /><a href="http://ocportal.com/docs10/tut_news.htm?keep_devtest=1">Releasing news &amp; running a Blog</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_news.htm?keep_devtest=1">Advanced news</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=syndication&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1095,7 +1095,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Show RSS and Atom feeds from other websites.</td>
 			<!--<td>No</td>-->
 			<td><kbd>news</kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_news&amp;keep_devtest=1">Releasing news &amp; running a Blog</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_adv_news&amp;keep_devtest=1">Advanced news</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_news.htm?keep_devtest=1">Releasing news &amp; running a Blog</a><br /><br /><a href="http://ocportal.com/docs10/tut_adv_news.htm?keep_devtest=1">Advanced news</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=syndication_blocks&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1105,7 +1105,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A persistent data cache, using disk files for data storage.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_optimisation&amp;keep_devtest=1">Optimising</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_optimisation.htm?keep_devtest=1">Optimising</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=textbased_persistent_cacheing&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1115,7 +1115,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Automatically generate your own colour schemes using the default theme as a base. Uses the sophisticated chromographic equations built into ocPortal.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_themes&amp;keep_devtest=1">Themeing your site</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_designer_themes&amp;keep_devtest=1">Designer themes, implementing a clean-room design</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_themes.htm?keep_devtest=1">Themeing your site</a><br /><br /><a href="http://ocportal.com/docs10/tut_designer_themes.htm?keep_devtest=1">Designer themes, implementing a clean-room design</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=themewizard&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1125,7 +1125,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A support ticket system.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_support_desk&amp;keep_devtest=1">Running a virtual support desk</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_support_desk.htm?keep_devtest=1">Running a virtual support desk</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=tickets&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1135,7 +1135,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>The uninstaller.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_uninstall&amp;keep_devtest=1">Uninstalling ocPortal from a server</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_uninstall.htm?keep_devtest=1">Uninstalling ocPortal from a server</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=uninstaller&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1145,7 +1145,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Subject member&#039;s to validation (approval) of their content submissions, and enable/disable content.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_censor&amp;keep_devtest=1">Dealing with annoying users</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_censor.htm?keep_devtest=1">Dealing with annoying users</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=unvalidated&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1155,7 +1155,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A block to show which users who are currently visiting the website, and birthdays.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_members&amp;keep_devtest=1">ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_members.htm?keep_devtest=1">ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=users_online_block&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1165,7 +1165,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Welcome e-mails for new members.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adv_members&amp;keep_devtest=1">Advanced ocPortal member system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adv_members.htm?keep_devtest=1">Advanced ocPortal member system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=welcome_emails&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1175,7 +1175,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Collaborative/encyclopaedic database interface. A WIKI-like community database with rich media capabilities.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_wiki&amp;keep_devtest=1">Custom structured content (via Wiki+)</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_information&amp;keep_devtest=1">Choosing how to publish</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_wiki.htm?keep_devtest=1">Custom structured content (via Wiki+)</a><br /><br /><a href="http://ocportal.com/docs10/tut_information.htm?keep_devtest=1">Choosing how to publish</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=wiki&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1185,7 +1185,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>A .bat script to help configure permissions on Windows servers.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_adv_installation&amp;keep_devtest=1">Advanced installation</a><br /><br /><a href="http://ocportal.com/docs10/index.php?page=tut_windows&amp;keep_devtest=1">Installing ocPortal on a Windows desktop</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_adv_installation.htm?keep_devtest=1">Advanced installation</a><br /><br /><a href="http://ocportal.com/docs10/tut_windows.htm?keep_devtest=1">Installing ocPortal on a Windows desktop</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=windows_helper_scripts&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1195,7 +1195,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Block rude/offensive/inappropriate words.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_censor&amp;keep_devtest=1">Dealing with annoying users</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_censor.htm?keep_devtest=1">Dealing with annoying users</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=wordfilter&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1205,7 +1205,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Advanced form field filtering.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_fields_filter&amp;keep_devtest=1">The form field filter system</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_fields_filter.htm?keep_devtest=1">The form field filter system</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=xml_fields&amp;status_id=10">Link</a></td>
 		</tr>
@@ -1215,10 +1215,10 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 			<td>Different logos for individual zones.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
-			<td><a href="http://ocportal.com/docs10/index.php?page=tut_configuration&amp;keep_devtest=1">Basic configuration</a></td>
+			<td><a href="http://ocportal.com/docs10/tut_configuration.htm?keep_devtest=1">Basic configuration</a></td>
 			<td></td>
 			<td><a href="http://ocportal.com/tracker/search.php?project_id=1&amp;category=zone_logos&amp;status_id=10">Link</a></td>
 		</tr>
 	
 </table></div>
-[title="2"]Other tutorials[/title]<p>The following tutorials do not link into any specific addon:</p><ul><li><a href="http://ocportal.com/docs10/index.php?page=tut_cookies&amp;keep_devtest=1">Introduction to Cookies and sessions (and Javascript)</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_disaster&amp;keep_devtest=1">Disaster recovery</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_domain_names&amp;keep_devtest=1">How domain names work</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_email&amp;keep_devtest=1">Understanding and configuring e-mail</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_filter&amp;keep_devtest=1">Filtering using ocFilter syntax</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_hardcore_1&amp;keep_devtest=1">Making an addon (part 1)</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_hardcore_2&amp;keep_devtest=1">Making an addon (part 2)</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_hardcore_3&amp;keep_devtest=1">Making an addon (part 3)</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_how_internet_works&amp;keep_devtest=1">How the Internet actually works</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_keymap&amp;keep_devtest=1">ocPortal keyboard shortcuts</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_legal&amp;keep_devtest=1">Legal and social responsibilities</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_ocselect&amp;keep_devtest=1">Filtering using ocSelect syntax</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_programming&amp;keep_devtest=1">Introduction to programming</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_seo&amp;keep_devtest=1">Improving your search engine ranking</a></li><li><a href="http://ocportal.com/docs10/index.php?page=tut_sql&amp;keep_devtest=1">Manually editing your database with phpMyAdmin</a></li></ul>[/semihtml]
+[title="2"]Other tutorials[/title]<p>The following tutorials do not link into any specific addon:</p><ul><li><a href="http://ocportal.com/docs10/tut_cookies.htm?keep_devtest=1">Introduction to Cookies and sessions (and Javascript)</a></li><li><a href="http://ocportal.com/docs10/tut_disaster.htm?keep_devtest=1">Disaster recovery</a></li><li><a href="http://ocportal.com/docs10/tut_domain_names.htm?keep_devtest=1">How domain names work</a></li><li><a href="http://ocportal.com/docs10/tut_email.htm?keep_devtest=1">Understanding and configuring e-mail</a></li><li><a href="http://ocportal.com/docs10/tut_filter.htm?keep_devtest=1">Filtering using ocFilter syntax</a></li><li><a href="http://ocportal.com/docs10/tut_hardcore_1.htm?keep_devtest=1">Making an addon (part 1)</a></li><li><a href="http://ocportal.com/docs10/tut_hardcore_2.htm?keep_devtest=1">Making an addon (part 2)</a></li><li><a href="http://ocportal.com/docs10/tut_hardcore_3.htm?keep_devtest=1">Making an addon (part 3)</a></li><li><a href="http://ocportal.com/docs10/tut_how_internet_works.htm?keep_devtest=1">How the Internet actually works</a></li><li><a href="http://ocportal.com/docs10/tut_keymap.htm?keep_devtest=1">ocPortal keyboard shortcuts</a></li><li><a href="http://ocportal.com/docs10/tut_legal.htm?keep_devtest=1">Legal and social responsibilities</a></li><li><a href="http://ocportal.com/docs10/tut_ocselect.htm?keep_devtest=1">Filtering using ocSelect syntax</a></li><li><a href="http://ocportal.com/docs10/tut_programming.htm?keep_devtest=1">Introduction to programming</a></li><li><a href="http://ocportal.com/docs10/tut_seo.htm?keep_devtest=1">Improving your search engine ranking</a></li><li><a href="http://ocportal.com/docs10/tut_sql.htm?keep_devtest=1">Manually editing your database with phpMyAdmin</a></li></ul>[/semihtml]

@@ -41,7 +41,7 @@ function find_existing()
 	{
 		if (substr($e,-4)=='.css')
 		{
-			$contents=file_get_contents($e);
+			$contents=file_get_contents(get_file_base().'/themes/default/css/'.$e);
 			$matches=array();
 			$found=preg_match_all('#\.([a-z][a-z_\d]*)[ ,:]#',$contents,$matches);
 			for ($i=0;$i<$found;$i++)
@@ -63,7 +63,7 @@ function find_used()
 	{
 		if (substr($e,-4)=='.tpl')
 		{
-			$contents=file_get_contents($e);
+			$contents=file_get_contents(get_file_base().'/themes/default/templates/'.$e);
 			$matches=array();
 			$found=preg_match_all('#class="([\w ]+)"#',$contents,$matches);
 			for ($i=0;$i<$found;$i++)

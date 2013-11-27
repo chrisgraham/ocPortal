@@ -248,8 +248,21 @@ class Module_admin_pointstore
 					if (!$fg[2]->is_empty())
 					{
 						$submit_name=do_lang_tempcode('ADD');
+
 						$post_url=build_url(array('page'=>'_SELF','type'=>'_p'),'_SELF');
-						$fg[2]=do_template('FORM',array('_GUID'=>'e98141bc0a2a54abcca59a5c947a6738','SECONDARY_FORM'=>true,'TABINDEX'=>strval(get_form_field_tabindex(NULL)),'HIDDEN'=>'','TEXT'=>$fg[3],'FIELDS'=>$fg[2],'SUBMIT_BUTTON_CLASS'=>'proceed_button_left','SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+
+						$fg[2]=do_template('FORM',array(
+							'_GUID'=>'e98141bc0a2a54abcca59a5c947a6738',
+							'SECONDARY_FORM'=>true,
+							'TABINDEX'=>strval(get_form_field_tabindex(NULL)),
+							'HIDDEN'=>'',
+							'TEXT'=>$fg[3],
+							'FIELDS'=>$fg[2],
+							'SUBMIT_BUTTON_CLASS'=>'proceed_button_left',
+							'SUBMIT_ICON'=>'menu___generic_admin__add_one',
+							'SUBMIT_NAME'=>$submit_name,
+							'URL'=>$post_url,
+						));
 						$add_forms->attach(do_template('POINTSTORE_PRICES_FORM_WRAP',array('_GUID'=>'3956550ebff14bbb923b57c8341b0862','TITLE'=>$fg[1],'FORM'=>$fg[2])));
 					}
 				}
@@ -257,12 +270,35 @@ class Module_admin_pointstore
 		}
 
 		$submit_name=do_lang_tempcode('SAVE_ALL');
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_p'),'_SELF');
-		$edit_form=$field_groups->is_empty()?new ocp_tempcode():do_template('FORM_GROUPED',array('_GUID'=>'bf025026dcfc86cfd0a8ef3728bbf6d8','TEXT'=>'','FIELD_GROUPS'=>$field_groups,'SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>$submit_name,'SUBMIT_BUTTON_CLASS'=>'proceed_button_left_2','URL'=>$post_url));
+
+		if ($field_groups->is_empty())
+		{
+			$edit_form=new ocp_tempcode();
+		} else
+		{
+			$edit_form=do_template('FORM_GROUPED',array(
+				'_GUID'=>'bf025026dcfc86cfd0a8ef3728bbf6d8',
+				'TEXT'=>'',
+				'FIELD_GROUPS'=>$field_groups,
+				'SUBMIT_ICON'=>'buttons__save',
+				'SUBMIT_NAME'=>$submit_name,
+				'SUBMIT_BUTTON_CLASS'=>'proceed_button_left_2',
+				'URL'=>$post_url,
+			));
+		}
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		return do_template('POINTSTORE_PRICE_SCREEN',array('_GUID'=>'278c8244c7f1743370198dfc437b7bbf','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$this->title,'EDIT_FORM'=>$edit_form,'ADD_FORMS'=>$add_forms));
+		return do_template('POINTSTORE_PRICE_SCREEN',array(
+			'_GUID'=>'278c8244c7f1743370198dfc437b7bbf',
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'TITLE'=>$this->title,
+			'EDIT_FORM'=>$edit_form,
+			'ADD_FORMS'=>$add_forms,
+		));
 	}
 
 	/**

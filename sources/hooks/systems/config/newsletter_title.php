@@ -48,7 +48,7 @@ class Hook_config_newsletter_title
 	 */
 	function get_default()
 	{
-		return get_option('site_name').' '.ocp_mb_strtolower(do_lang('NEWSLETTER'));
+		return get_option('site_name').' '.ocp_mb_strtolower(do_lang('newsletter:NEWSLETTER'));
 	}
 }
 

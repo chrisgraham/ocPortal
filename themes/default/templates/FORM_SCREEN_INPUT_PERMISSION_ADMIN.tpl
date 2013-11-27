@@ -1,19 +1,18 @@
 <tr id="access_{GROUP_ID*}_privilege_container" class="{$CYCLE,permissions_zebra,zebra_0,zebra_1}">
-	<th class="de_th">
+	<th class="form_table_field_name">
 		<p class="form_field_name field_name">{GROUP_NAME*}</p>
-		<p><em>{!ADMIN}</em></p>
 	</th>
 
 	<td class="form_table_field_input">
 		{+START,IF_NON_EMPTY,{OVERRIDES}}
 			<div class="accessibility_hidden"><label for="access_{GROUP_ID*}">{PINTERFACE_VIEW*} ({GROUP_NAME*})</label></div>
-			<input id="access_{GROUP_ID*}" name="_ignore" type="checkbox" checked="checked" disabled="disabled" />
+			<input id="access_{GROUP_ID*}" name="_ignore" type="checkbox" checked="checked" disabled="disabled" /> <span class="right">(<em>{!ADMIN}</em>)</span>
 		{+END}
 
 		{+START,IF_EMPTY,{OVERRIDES}}
 			<label for="access_{GROUP_ID*}">
 				<div class="accessibility_hidden"><label for="access_{GROUP_ID*}">{PINTERFACE_VIEW*} ({GROUP_NAME*})</label></div>
-				<input id="access_{GROUP_ID*}" name="_ignore" type="checkbox" checked="checked" disabled="disabled" />
+				<input id="access_{GROUP_ID*}" name="_ignore" type="checkbox" checked="checked" disabled="disabled" /> <span class="right">(<em>{!ADMIN}</em>)</span>
 				{PINTERFACE_VIEW*}
 			</label>
 		{+END}

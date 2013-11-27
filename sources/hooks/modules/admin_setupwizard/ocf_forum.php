@@ -32,6 +32,8 @@ class Hook_sw_ocf_forum
 		$dbs_back=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
+		require_lang('ocf');
+
 		if (!is_ocf_satellite_site())
 		{
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_groups','id',array('id'=>db_get_first_id()+7));

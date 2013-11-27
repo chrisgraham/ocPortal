@@ -201,7 +201,7 @@ class Module_pointstore
 			}
 		}
 
-		if ($type=='misc') return $this->do_module_gui();
+		if ($type=='misc') return $this->interface_pointstore();
 		return new ocp_tempcode();
 	}
 
@@ -210,7 +210,7 @@ class Module_pointstore
 	 *
 	 * @return tempcode		The UI
 	 */
-	function do_module_gui()
+	function interface_pointstore()
 	{
 		$points_left=available_points(get_member());
 

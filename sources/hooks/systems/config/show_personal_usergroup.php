@@ -28,7 +28,7 @@ class Hook_config_show_personal_usergroup
 	function get_details()
 	{
 		return array(
-			'human_name'=>'_USERGROUP',
+			'human_name'=>'GROUP',
 			'type'=>'tick',
 			'category'=>'BLOCKS',
 			'group'=>'PERSONAL_BLOCK',

@@ -125,7 +125,7 @@ class Module_admin_zones
 
 			$nice_zone_name=($id=='')?do_lang('_WELCOME'):$id;
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF:editor',do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:editor',do_lang_tempcode('ZONE'))));
 			breadcrumb_set_self($nice_zone_name);
 
 			$this->title=get_screen_title('_ZONE_EDITOR',true,array(escape_html($nice_zone_name)));
@@ -769,7 +769,6 @@ class Module_admin_zones
 			do_lang_tempcode('TITLE'),
 			do_lang_tempcode('DEFAULT_PAGE'),
 			do_lang_tempcode('THEME'),
-			do_lang_tempcode('WIDE'),
 			do_lang_tempcode('REQUIRE_SESSION'),
 			do_lang_tempcode('ACTIONS'),
 		),$sortables,'sort',$sortable.' '.$sort_order);
@@ -780,7 +779,7 @@ class Module_admin_zones
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');
 		foreach ($_zones as $_zone_details)
 		{
-			list($zone_name,$zone_title,$zone_show_in_menu,$zone_default_page,$remaining_row)=$_zone_details;
+			list($zone_name,$zone_title,$zone_default_page,$remaining_row)=$_zone_details;
 
 			$edit_link=build_url($url_map+array('id'=>$zone_name),'_SELF');
 
@@ -789,7 +788,6 @@ class Module_admin_zones
 				$zone_title,
 				$zone_default_page,
 				($remaining_row['zone_theme']=='-1')?do_lang_tempcode('NA_EM'):hyperlink(build_url(array('page'=>'admin_themes'),'adminzone'),escape_html($remaining_row['zone_theme'])),
-				($zone_show_in_menu==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 				($remaining_row['zone_require_session']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 				protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,$zone_name)),
 			)),true);

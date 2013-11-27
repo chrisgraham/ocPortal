@@ -17,8 +17,11 @@ Neither dl nor dt tags should close.
 Folders can't themselves be links, so a node may have both a link and a separate folder (if it has children).
 */
 
-header('Content-type: text/html; charset='.get_charset());
-header('Content-Disposition: attachment; filename="bookmarks.html"');
+if (get_param_integer('debug',0)!=1)
+{
+	header('Content-type: text/html; charset='.get_charset());
+	header('Content-Disposition: attachment; filename="bookmarks.html"');
+}
 
 $site_name=escape_html(get_site_name());
 

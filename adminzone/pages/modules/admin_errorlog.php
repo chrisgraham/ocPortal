@@ -114,7 +114,10 @@ class Module_admin_errorlog
 				if (($_line!='') && (strpos($_line,'<?php')===false))
 				{
 					$matches=array();
-					if (preg_match('#\[(.+?) (.+?)\] (.+?):  ?(.*)#',$_line,$matches)!=0) $stuff[]=$matches;
+					if (preg_match('#^\[(.+?) (.+?)\] (.{1,20}):  ?(.*)#',$_line,$matches)!=0)
+					{
+						$stuff[]=$matches;
+					}
 				}
 			}
 		} else
@@ -127,7 +130,7 @@ class Module_admin_errorlog
 			$log_service=new $_log_service;
 			$options=array();
 			$options['include_app_logs']=true;
-			$options['minimum_log_level']=$log_service::LEVEL_WARNING; // = PHP notice
+			$options['minimum_log_level']=eval('return $log_service::LEVEL_WARNING;'); // = PHP notice
 			$options['batch_size']=300;
 
 			$logs=$log_service->fetch($options);
@@ -140,9 +143,9 @@ class Module_admin_errorlog
 
 					$level=$app_log->getLevel();
 					$_level='';
-					if ($level==$log_service::LEVEL_WARNING) $_level='notice';
-					elseif ($level==$log_service::LEVEL_ERROR) $_level='warning';
-					elseif ($level==$log_service::LEVEL_CRITICAL) $_level='error';
+					if ($level==eval('return $log_service::LEVEL_WARNING;')) $_level='notice';
+					elseif ($level==eval('return $log_service::LEVEL_ERROR;')) $_level='warning';
+					elseif ($level==eval('return $log_service::LEVEL_CRITICAL;')) $_level='error';
 					else continue;
 
 					$time=intval($app_log->getTimeUsec()/1000000.0);
@@ -170,7 +173,12 @@ class Module_admin_errorlog
 			if (!array_key_exists($i,$stuff)) break;
 
 			$message=str_replace(get_file_base(),'',$stuff[$i][4]);
-			$fields->attach(results_entry(array(escape_html($stuff[$i][1].' '.$stuff[$i][2]),escape_html($stuff[$i][3]),escape_html($message))));
+
+			$fields->attach(results_entry(array(
+				escape_html($stuff[$i][1].' '.$stuff[$i][2]),
+				escape_html($stuff[$i][3]),
+				escape_html($message)
+			)));
 		}
 		$error=results_table(do_lang_tempcode('ERROR_LOG'),$start,'start',$max,'max',$i,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',new ocp_tempcode());
 

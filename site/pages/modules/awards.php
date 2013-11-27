@@ -78,14 +78,12 @@ class Module_awards
 
 		if ($type=='misc')
 		{
-			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
-
 			$this->title=get_screen_title('AWARDS');
 		}
 
 		if ($type=='award')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AWARDS'))));
 
 			$id=get_param_integer('id');
 			$_award_type_row=$GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('id'=>$id),'',1);

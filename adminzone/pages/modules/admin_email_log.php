@@ -117,9 +117,13 @@ class Module_admin_email_log
 	 */
 	function show()
 	{
+		require_code('mail');
+
+		if (function_exists('set_time_limit')) @set_time_limit(60);
+
 		// Put errors into table
 		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',50);
+		$max=get_param_integer('max',20);
 		$sortables=array('m_date_and_time'=>do_lang_tempcode('DATE_TIME'),'m_to_name'=>do_lang_tempcode('FROM'),'m_from_name'=>do_lang_tempcode('TO'),'m_subject'=>do_lang_tempcode('SUBJECT'));
 		$test=explode(' ',get_param('sort','m_date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
@@ -162,10 +166,14 @@ class Module_admin_email_log
 			if ((is_null($to_name)) || ($to_name==array(NULL)) || ($to_name==array(''))) $to_name=array(get_site_name());
 			if (!array_key_exists(0,$to_name)) $to_name[0]=get_site_name();
 
+			$to_link='mailto:'.$to_email[0];
+			$to_link.='?subject='.rawurlencode($row['m_subject']);
+			$to_link.='&body='.rawurlencode(comcode_to_clean_text($row['m_message']));
+
 			$fields->attach(results_entry(array(
 				$date_time,
 				hyperlink('mailto:'.$from_email,$from_name,false,true),
-				hyperlink('mailto:'.$to_email[0],$to_name[0],false,true),
+				hyperlink($to_link,$to_name[0],false,true),
 				do_template('CROP_TEXT_MOUSE_OVER',array('_GUID'=>'c2fd45ce32e1c03a536674108b937098','TEXT_LARGE'=>escape_html($row['m_message']),'TEXT_SMALL'=>escape_html($row['m_subject']))),
 			)));
 		}

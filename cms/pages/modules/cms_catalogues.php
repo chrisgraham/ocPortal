@@ -143,7 +143,26 @@ class Module_cms_catalogues extends standard_crud_module
 			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
 		}
 
-		return parent::pre_run($top_level);
+		switch ($type)
+		{
+			case 'add_catalogue':
+				$type='av';
+				break;
+			case '_add_catalogue':
+				$type='_av';
+				break;
+			case 'edit_catalogue':
+				$type='ev';
+				break;
+			case '_edit_catalogue':
+				$type='_ev';
+				break;
+			case '__edit_catalogue':
+				$type='__ev';
+				break;
+		}
+
+		return parent::pre_run($top_level,$type);
 	}
 
 	/**

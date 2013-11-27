@@ -64,15 +64,6 @@
 	white-space: nowrap;
 }
 
-.points_give_choices_line {
-	margin: 0;
-}
-
-.points_give_choices_line.first {
-	padding-bottom: 0.5em;
-	border-bottom: 1px solid {$GET,pale_border};
-}
-
 .points_give_shared_options {
 	float: right;
 	{+START,IF,{$MOBILE}}

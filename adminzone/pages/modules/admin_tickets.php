@@ -71,10 +71,13 @@ class Module_admin_tickets
 
 		set_helper_panel_tutorial('tut_support_desk');
 
-		if ($type=='misc')
+		if ($type!='misc')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_TICKET_TYPES'))));
+		}
 
+		if ($type=='misc')
+		{
 			$this->title=get_screen_title('MANAGE_TICKET_TYPES');
 		}
 
@@ -142,7 +145,7 @@ class Module_admin_tickets
 		if (!$list->is_empty())
 		{
 			$edit_url=build_url(array('page'=>'_SELF','type'=>'edit'),'_SELF',NULL,false,true);
-			$submit_name=do_lang_tempcode('CHOOSE');
+			$submit_name=do_lang_tempcode('EDIT');
 			$fields=form_input_list(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type',$list);
 
 			$tpl=do_template('FORM',array('_GUID'=>'2d2e76f5cfc397a78688db72170918d4','TABINDEX'=>strval(get_form_field_tabindex()),'GET'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$edit_url,'SUBMIT_ICON'=>'menu___generic_admin__edit_this_category','SUBMIT_NAME'=>$submit_name));
@@ -200,10 +203,12 @@ class Module_admin_tickets
 		$ticket_type=get_param_integer('ticket_type');
 		$details=get_ticket_type($ticket_type);
 		$type_text=get_translated_text($ticket_type);
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit','ticket_type'=>$ticket_type),'_SELF');
+
 		$submit_name=do_lang_tempcode('SAVE');
+
 		$fields=new ocp_tempcode();
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'0746afdfa7033291cc1897bf67c1f22a','TITLE'=>do_lang_tempcode('SETTINGS'))));
 		$fields->attach(form_input_line(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'new_type',$type_text,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'),do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'),'guest_emails_mandatory',$details['guest_emails_mandatory']));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'),do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'),'search_faq',$details['search_faq']));

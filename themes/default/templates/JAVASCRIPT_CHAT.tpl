@@ -811,7 +811,7 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 		}
 	};
 	var imgclose=document.createElement('img');
-	imgclose.setAttribute('src','{$IMG;,tableitem/delete}'.replace(/^http:/,window.location.protocol));
+	imgclose.setAttribute('src','{$IMG;,icons/14x14/delete}'.replace(/^http:/,window.location.protocol));
 	imgclose.className='im_popup_close_button blend';
 	imgclose.onclick=close_popup;
 	div.appendChild(imgclose);

@@ -41,7 +41,7 @@ class Hook_sw_news
 		}
 		$settings['keep_news_categories']=$keep_news_categories?'1':'0';
 
-		$test=$GLOBALS['SITE_DB']->query_select_value('gsp','COUNT(*)',array('privilege'=>'have_personal_category','the_page'=>'cms_news'));
+		$test=$GLOBALS['SITE_DB']->query_select_value('group_privileges','COUNT(*)',array('privilege'=>'have_personal_category','the_page'=>'cms_news'));
 		$settings['keep_blogs']=($test==0)?'0':'1';
 
 		return $settings;

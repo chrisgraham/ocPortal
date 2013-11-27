@@ -485,7 +485,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .permission_field_name_column {
-	width: 25em;
+	width: 24em;
 }
 
 .permission_column {

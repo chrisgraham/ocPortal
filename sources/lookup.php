@@ -148,7 +148,7 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
  * Get a results table showing security alerts matching WHERE constraints.
  *
  * @param  ?array			WHERE constraints (NULL: none)
- * @return tempcode		The results table
+ * @return array			A pair: The results table, The number
  */
 function find_security_alerts($where)
 {
@@ -189,7 +189,7 @@ function find_security_alerts($where)
 
 		$fields->attach(results_entry($_row));
 	}
-	return results_table(do_lang_tempcode('SECURITY_ALERTS'),$start,'alert_start',$max,'alert_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'alert_sort');
+	return array(results_table(do_lang_tempcode('SECURITY_ALERTS'),$start,'alert_start',$max,'alert_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'alert_sort'),count($rows));
 }
 
 

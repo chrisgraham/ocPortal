@@ -126,9 +126,9 @@ class Hook_addon_registry_core_addon_management
 			'imports/addons/index.html',
 			'lang/EN/addons.ini',
 			'sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php',
-			'themes/default/images/tableitem/install.png',
-			'themes/default/images/tableitem/reinstall.png',
-			'themes/default/images/tableitem/upgrade.png',
+			'themes/default/images/icons/14x14/install.png',
+			'themes/default/images/icons/14x14/reinstall.png',
+			'themes/default/images/icons/14x14/upgrade.png',
 		);
 	}
 

@@ -98,7 +98,7 @@ class Module_cms_wiki
 		{
 			set_helper_panel_text(comcode_lang_string('DOC_WIKI'));
 
-			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+			breadcrumb_set_self(do_lang_tempcode('PAGE'));
 
 			$this->title=get_screen_title('WIKI_EDIT_PAGE');
 		}
@@ -117,7 +117,7 @@ class Module_cms_wiki
 		{
 			$breadcrumbs=wiki_breadcrumbs(get_param('id',false,true),NULL,true,true);
 			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('WIKI_EDIT_PAGE').'</span>'));
-			breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('PAGE'))));
 
 			$this->title=get_screen_title('WIKI_EDIT_PAGE');
 		}
@@ -340,7 +340,7 @@ class Module_cms_wiki
 		$fields=form_input_list(do_lang_tempcode('_WIKI_PAGE'),'','id',$list,NULL,true);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_page'),'_SELF',NULL,false,true);
-		$submit_name=do_lang_tempcode('CHOOSE');
+		$submit_name=do_lang_tempcode('PAGE');
 
 		$search_url=build_url(array('page'=>'search','id'=>'wiki_pages'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'wiki'),get_module_zone('wiki'));

@@ -1,6 +1,6 @@
 {TITLE}
 
-<h2>{!MANAGE_WORDFILTER}</h2>
+<h2>{!EDIT}</h2>
 
 <p>
 	{!OBSCENITY_WARNING}

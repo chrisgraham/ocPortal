@@ -48,7 +48,7 @@ class Hook_config_reported_posts_forum
 	 */
 	function get_default()
 	{
-		return do_lang('ocf:REPORTED_POSTS_FORUM','','','',get_site_default_lang());
+		return do_lang('ocf_config:REPORTED_POSTS_FORUM','','','',get_site_default_lang());
 	}
 }
 

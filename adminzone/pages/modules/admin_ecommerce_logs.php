@@ -84,6 +84,11 @@ class Module_admin_ecommerce_logs
 
 		require_lang('ecommerce');
 
+		if ($type=='logs')
+		{
+			$this->title=get_screen_title('TRANSACTIONS');
+		}
+
 		if ($type!='logs')
 		{
 			set_helper_panel_tutorial('tut_ecommerce');
@@ -115,13 +120,12 @@ class Module_admin_ecommerce_logs
 
 		if ($type=='trigger')
 		{
-			breadcrumb_set_self(do_lang_tempcode('PRODUCT'));
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ECOMMERCE'))));
 
 			$this->title=get_screen_title('MANUAL_TRANSACTION');
 		}
 
-		if ($type=='trigger')
+		if ($type=='_trigger')
 		{
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 			$item_name=get_param('item_name',NULL);
@@ -167,6 +171,7 @@ class Module_admin_ecommerce_logs
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->misc();
+		if ($type=='logs') return $this->logs();
 		if ($type=='cash_flow') return $this->cash_flow();
 		if ($type=='profit_loss') return $this->profit_loss();
 		//if ($type=='balance_sheet') return $this->balance_sheet();
@@ -474,7 +479,7 @@ class Module_admin_ecommerce_logs
 			'HIDDEN'=>'',
 			'URL'=>get_self_url(false,false,NULL,false,true),
 			'SUBMIT_ICON'=>'buttons__proceed',
-			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
+			'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),
 		));
 	}
 
@@ -489,23 +494,23 @@ class Module_admin_ecommerce_logs
 	function get_types($from,$to,$unpaid_invoices_count=false)
 	{
 		$types=array(
-					'OPENING'=>array('TYPE'=>do_lang_tempcode('OPENING_BALANCE'),'AMOUNT'=>0,'SPECIAL'=>true),
-					'INTEREST_PLUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_PLUS'),'AMOUNT'=>0,'SPECIAL'=>false),
-					);
+			'OPENING'=>array('TYPE'=>do_lang_tempcode('OPENING_BALANCE'),'AMOUNT'=>0,'SPECIAL'=>true),
+			'INTEREST_PLUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_PLUS'),'AMOUNT'=>0,'SPECIAL'=>false),
+		);
 		$products=find_all_products();
 		foreach ($products as $product=>$details)
 		{
 			$types[$product]=array('TYPE'=>$details[4],'AMOUNT'=>0,'SPECIAL'=>false);
 		}
 		$types+=array(
-					'COST'=>array('TYPE'=>do_lang_tempcode('EXPENSES'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'TRANS'=>array('TYPE'=>do_lang_tempcode('TRANSACTION_FEES'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'WAGE'=>array('TYPE'=>do_lang_tempcode('WAGES'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'INTEREST_MINUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_MINUS'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'TAX'=>array('TYPE'=>do_lang_tempcode('TAX_GENERAL'),'AMOUNT'=>0,'SPECIAL'=>false),
-					'CLOSING'=>array('TYPE'=>do_lang_tempcode('CLOSING_BALANCE'),'AMOUNT'=>0,'SPECIAL'=>true),
-					'PROFIT'=>array('TYPE'=>do_lang_tempcode('NET_PROFIT'),'AMOUNT'=>0,'SPECIAL'=>true),
-					);
+			'COST'=>array('TYPE'=>do_lang_tempcode('EXPENSES'),'AMOUNT'=>0,'SPECIAL'=>false),
+			'TRANS'=>array('TYPE'=>do_lang_tempcode('TRANSACTION_FEES'),'AMOUNT'=>0,'SPECIAL'=>false),
+			'WAGE'=>array('TYPE'=>do_lang_tempcode('WAGES'),'AMOUNT'=>0,'SPECIAL'=>false),
+			'INTEREST_MINUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_MINUS'),'AMOUNT'=>0.0,'SPECIAL'=>false),
+			'TAX'=>array('TYPE'=>do_lang_tempcode('TAX_GENERAL'),'AMOUNT'=>0,'SPECIAL'=>false),
+			'CLOSING'=>array('TYPE'=>do_lang_tempcode('CLOSING_BALANCE'),'AMOUNT'=>0,'SPECIAL'=>true),
+			'PROFIT'=>array('TYPE'=>do_lang_tempcode('NET_PROFIT'),'AMOUNT'=>0,'SPECIAL'=>true),
+		);
 
 		require_code('currency');
 
@@ -527,7 +532,7 @@ class Module_admin_ecommerce_logs
 
 			$product=$transaction['item'];
 
-			$transaction['amount']=currency_convert($transaction['amount'],$transaction['t_currency'],get_option('currency'));
+			$transaction['amount']=currency_convert(floatval($transaction['amount']),$transaction['t_currency'],get_option('currency'));
 
 			$types['CLOSING']['AMOUNT']+=$transaction['amount'];
 
@@ -584,7 +589,7 @@ class Module_admin_ecommerce_logs
 
 		foreach ($types as $item=>$details)
 		{
-			$types[$item]['AMOUNT']=integer_format($types[$item]['AMOUNT']);
+			$types[$item]['AMOUNT']=float_to_raw_string($types[$item]['AMOUNT']);
 		}
 
 		foreach ($types as $i=>$t)

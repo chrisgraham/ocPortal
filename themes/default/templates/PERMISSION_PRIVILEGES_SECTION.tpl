@@ -1,4 +1,4 @@
-<h2>{CURRENT_SECTION}</h2>
+<!--<h2>{CURRENT_SECTION}</h2> Actually we only show one section at a time now-->
 
 <div class="wide_table_wrap"><table class="map_table form_table results_table wide_table privileges">
 	<colgroup>

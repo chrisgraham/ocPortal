@@ -209,11 +209,19 @@ class Module_admin_security
 
 		$member_id=post_param_integer('member_id',NULL);
 		$map=(!is_null($member_id))?array('member_id'=>$member_id):NULL;
-		$alerts=find_security_alerts($map);
+		list($alerts,$num_alerts)=find_security_alerts($map);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'clean','start'=>$start,'max'=>$max),'_SELF');
 
-		$tpl=do_template('SECURITY_SCREEN',array('_GUID'=>'e0b5e6557686b2320a8ce8166df07328','TITLE'=>$this->title,'FAILED_LOGINS'=>$failed_logins,'ALERTS'=>$alerts,'URL'=>$post_url));
+		$tpl=do_template('SECURITY_SCREEN',array(
+			'_GUID'=>'e0b5e6557686b2320a8ce8166df07328',
+			'TITLE'=>$this->title,
+			'FAILED_LOGINS'=>$failed_logins,
+			'NUM_FAILED_LOGINS'=>strval(count($rows)),
+			'ALERTS'=>$alerts,
+			'NUM_ALERTS'=>strval($num_alerts),
+			'URL'=>$post_url,
+		));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

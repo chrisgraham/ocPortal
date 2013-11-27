@@ -202,7 +202,9 @@ class Hook_addon_registry_securitylogging
 			lorem_globalise(do_lorem_template('SECURITY_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FAILED_LOGINS'=>placeholder_table(),
+				'NUM_FAILED_LOGINS'=>placeholder_number(),
 				'ALERTS'=>lorem_phrase(),
+				'NUM_ALERTS'=>placeholder_number(),
 				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);

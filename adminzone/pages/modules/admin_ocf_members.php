@@ -230,7 +230,7 @@ class Module_admin_ocf_members
 				addon_installed('ecommerce')?array('menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),'DOC_ECOMMERCE'):NULL,
 				array('menu/social/groups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('USERGROUPS'),'DOC_GROUPS'),
 				addon_installed('staff')?array('menu/site_meta/staff',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('STAFF'),'DOC_STAFF'):NULL,
-				array('tabs/member_account/warnings',array('warnings',array('type'=>'misc')),get_module_zone('warnings'),do_lang_tempcode('WARNINGS')),
+				array('tabs/member_account/warnings',array('warnings',array('type'=>'ed'),get_module_zone('warnings')),do_lang_tempcode('WARNINGS')),
 			),do_lang('MEMBERS')
 		);
 	}
@@ -380,7 +380,7 @@ class Module_admin_ocf_members
 		$max_rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_group_member_timeouts','COUNT(*)');
 		$fields_title=results_field_title(array(
 			do_lang_tempcode('USERNAME'),
-			do_lang_tempcode('_USERGROUP'),
+			do_lang_tempcode('GROUP'),
 			do_lang_tempcode('TIME'),
 		));
 
@@ -398,7 +398,13 @@ class Module_admin_ocf_members
 			),true));
 		}
 
-		$results_table=results_table(do_lang('GROUP_MEMBER_TIMEOUTS'),$start,'start',$max,'max',$max_rows,$fields_title,$tfields);
+		if ($tfields->is_empty())
+		{
+			$results_table=new ocp_tempcode();
+		} else
+		{
+			$results_table=results_table(do_lang('GROUP_MEMBER_TIMEOUTS'),$start,'start',$max,'max',$max_rows,$fields_title,$tfields);
+		}
 
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),'','username','',true));
@@ -409,13 +415,13 @@ class Module_admin_ocf_members
 				$_usergroups->attach(form_input_list_entry($uid,false,$name));
 		}
 		require_lang('dates');
-		$fields->attach(form_input_list(do_lang_tempcode('_USERGROUP'),'','group_id',$_usergroups,NULL,false,true));
+		$fields->attach(form_input_list(do_lang_tempcode('GROUP'),'','group_id',$_usergroups,NULL,false,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('_MINUTES'),do_lang_tempcode('DESCRIPTION_GROUPMT_MINUTES'),'num_minutes',60,true));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_group_member_timeouts'),'_SELF');
 		$submit_name=do_lang_tempcode('ADD');
 
-		$form=do_template('FORM',array('_GUID'=>'2afadffabe2becb6eac071db085edc57','TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
+		$form=do_template('FORM',array('_GUID'=>'2afadffabe2becb6eac071db085edc57','TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name));
 
 		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'e9ce4084126653162ad84839fb7f47e3','TITLE'=>$this->title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
 

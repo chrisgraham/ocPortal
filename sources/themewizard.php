@@ -794,10 +794,6 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					{
 						$img=generate_recoloured_image($path,'#82A3D8',$colours['navigation_top'],'#82A3D8',$colours['navigation_top']);
 					}
-					elseif ($show=='zone_gradient')
-					{
-						$img=generate_recoloured_image($path,'#FFFFFF','#FFFFFF','#82A3D8',$colours['navigation_top'],'#3865A9',$colours['navigation_bot']);
-					}
 					elseif (($show=='trimmed_logo_template') || ($show=='logo_template') || (substr($show,0,5)=='logo/'))
 					{
 						$pixel_x_start_array=array();

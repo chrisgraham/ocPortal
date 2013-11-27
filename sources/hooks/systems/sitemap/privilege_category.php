@@ -85,7 +85,7 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
 
 		foreach (array_keys($_sections) as $category)
 		{
-			$child_page_link=$zone.':'.$page.':privilege:'.$category;
+			$child_page_link=$zone.':'.$page.':privileges:'.$category;
 			$node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
 			if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
 		}

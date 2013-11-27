@@ -512,7 +512,7 @@ class Module_admin
 						{
 							$entry_points['!themes']=array('EDIT_CSS','menu/adminzone/style/themes/css');
 							$entry_points['!!themes']=array('EDIT_TEMPLATES','menu/adminzone/style/themes/templates');
-							$entry_points['!!!themes']=array('MANAGE_THEME_IMAGES','menu/adminzone/style/themes/theme_images');
+							$entry_points['!!!themes']=array('EDIT_THEME_IMAGES','menu/adminzone/style/themes/theme_images');
 						}
 						if (is_null($entry_points)) $entry_points=array();
 						foreach ($entry_points as $type=>$ep_parts)
@@ -766,7 +766,7 @@ class Module_admin
 			// Themes
 			$content[$current_results_type]=new ocp_tempcode();
 			$map=array();
-			foreach (array(do_lang('SUPPORTS_WIDE'),do_lang('MOBILE_PAGES')) as $n)
+			foreach (array(do_lang('MOBILE_PAGES')) as $n)
 			{
 				if ($this->_keyword_match($n))
 				{
@@ -927,7 +927,6 @@ class Module_admin
 			// Member settings
 			$content[$current_results_type]=new ocp_tempcode();
 			$applicable_langstrings=array(
-				array('WIDE','DESCRIPTION_WIDE'),
 				array('REVEAL_AGE','DESCRIPTION_REVEAL_AGE'),
 				array('PREVIEW_POSTS','DESCRIPTION_PREVIEW_POSTS'),
 				array('AUTO_NOTIFICATION_CONTRIB_CONTENT','DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),
@@ -960,7 +959,6 @@ class Module_admin
 			$applicable_langstrings=array(
 				array('DEFAULT_PAGE','DESCRIPTION_DEFAULT_PAGE'),
 				array('HEADER_TEXT','DESCRIPTION_HEADER_TEXT'),
-				array('WIDE','DESCRIPTION_WIDE'),
 				array('REQUIRE_SESSION','DESCRIPTION_REQUIRE_SESSION'),
 				array('THEME',(get_forum_type()=='ocf')?'_DESCRIPTION_THEME_OCF':'_DESCRIPTION_THEME'),
 			);
@@ -1075,7 +1073,7 @@ class Module_admin
 		}
 
 		// Theme images
-		$current_results_type=do_lang('MANAGE_THEME_IMAGES');
+		$current_results_type=do_lang('EDIT_THEME_IMAGES');
 		if (($this->_section_match($section_limitations,$current_results_type)) && (has_actual_page_access(get_member(),'admin_themes','adminzone')))
 		{
 			$content[$current_results_type]=new ocp_tempcode();

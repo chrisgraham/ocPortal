@@ -117,7 +117,7 @@ class Hook_addon_registry_core_language_editing
 			'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISM.tpl',
 			'adminzone/pages/modules/admin_lang.php',
 			'sources/hooks/systems/page_groupings/language.php',
-			'themes/default/images/tableitem/translate.png',
+			'themes/default/images/icons/14x14/translate.png',
 			'sources/hooks/systems/config/google_translate_api_key.php',
 		);
 	}

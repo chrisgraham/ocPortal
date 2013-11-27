@@ -80,6 +80,25 @@
 
 		CREATE TABLE ocp10_f_groups
 		(
+			g_is_private_club tinyint(1) NOT NULL,
+			g_open_membership tinyint(1) NOT NULL,
+			g_rank_image_pri_only tinyint(1) NOT NULL,
+			g_order integer NOT NULL,
+			g_hidden tinyint(1) NOT NULL,
+			g_rank_image varchar(80) NOT NULL,
+			g_enquire_on_new_ips tinyint(1) NOT NULL,
+			g_max_sig_length_comcode integer NOT NULL,
+			g_max_post_length_comcode integer NOT NULL,
+			g_max_avatar_height integer NOT NULL,
+			g_max_avatar_width integer NOT NULL,
+			g_max_attachments_per_post integer NOT NULL,
+			g_max_daily_upload_mb integer NOT NULL,
+			g_gift_points_per_day integer NOT NULL,
+			g_flood_control_submit_secs integer NOT NULL,
+			g_flood_control_access_secs integer NOT NULL,
+			g_gift_points_base integer NOT NULL,
+			g_promotion_threshold integer NOT NULL,
+			g_promotion_target integer NOT NULL,
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
 			g_is_default tinyint(1) NOT NULL,
@@ -88,25 +107,6 @@
 			g_is_super_moderator tinyint(1) NOT NULL,
 			g_group_leader integer NOT NULL,
 			g_title integer NOT NULL,
-			g_promotion_target integer NOT NULL,
-			g_promotion_threshold integer NOT NULL,
-			g_flood_control_submit_secs integer NOT NULL,
-			g_flood_control_access_secs integer NOT NULL,
-			g_gift_points_base integer NOT NULL,
-			g_gift_points_per_day integer NOT NULL,
-			g_max_daily_upload_mb integer NOT NULL,
-			g_max_attachments_per_post integer NOT NULL,
-			g_max_avatar_width integer NOT NULL,
-			g_max_avatar_height integer NOT NULL,
-			g_max_post_length_comcode integer NOT NULL,
-			g_max_sig_length_comcode integer NOT NULL,
-			g_enquire_on_new_ips tinyint(1) NOT NULL,
-			g_rank_image varchar(80) NOT NULL,
-			g_hidden tinyint(1) NOT NULL,
-			g_order integer NOT NULL,
-			g_rank_image_pri_only tinyint(1) NOT NULL,
-			g_open_membership tinyint(1) NOT NULL,
-			g_is_private_club tinyint(1) NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -139,6 +139,14 @@
 
 		CREATE TABLE ocp10_f_members
 		(
+			m_dob_month tinyint NOT NULL,
+			m_dob_day tinyint NOT NULL,
+			m_is_perm_banned tinyint(1) NOT NULL,
+			m_preview_posts tinyint(1) NOT NULL,
+			m_signature integer NOT NULL,
+			m_last_visit_time integer unsigned NOT NULL,
+			m_last_submit_time integer unsigned NOT NULL,
+			m_primary_group integer NOT NULL,
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
 			m_pass_hash_salted varchar(255) NOT NULL,
@@ -151,14 +159,6 @@
 			m_cache_warnings integer NOT NULL,
 			m_join_time integer unsigned NOT NULL,
 			m_timezone_offset varchar(255) NOT NULL,
-			m_primary_group integer NOT NULL,
-			m_last_visit_time integer unsigned NOT NULL,
-			m_last_submit_time integer unsigned NOT NULL,
-			m_signature integer NOT NULL,
-			m_is_perm_banned tinyint(1) NOT NULL,
-			m_preview_posts tinyint(1) NOT NULL,
-			m_dob_day tinyint NOT NULL,
-			m_dob_month tinyint NOT NULL,
 			m_dob_year integer NOT NULL,
 			m_reveal_age tinyint(1) NOT NULL,
 			m_email_address varchar(255) NOT NULL,
@@ -171,7 +171,6 @@
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
 			m_allow_emails_from_staff tinyint(1) NOT NULL,
-			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
 			m_pt_allow varchar(255) NOT NULL,
 			m_pt_rules_text integer NOT NULL,
@@ -206,40 +205,70 @@
 			field_8 varchar(255) NOT NULL,
 			field_9 integer NOT NULL,
 			field_10 integer NOT NULL,
+			field_32 varchar(255) NOT NULL,
 			field_11 integer NOT NULL,
 			field_12 varchar(255) NOT NULL,
 			field_13 varchar(255) NOT NULL,
 			field_14 varchar(255) NOT NULL,
 			field_15 varchar(255) NOT NULL,
 			field_16 longtext NOT NULL,
+			field_18 varchar(255) NOT NULL,
+			field_19 varchar(255) NOT NULL,
 			field_17 integer NOT NULL,
-			field_18 integer NOT NULL,
-			field_19 integer NOT NULL,
-			field_20 integer NOT NULL,
-			field_21 integer NOT NULL,
-			field_22 integer NOT NULL,
-			field_23 longtext NOT NULL,
+			field_46 varchar(255) NOT NULL,
+			field_20 varchar(255) NOT NULL,
+			field_21 varchar(255) NOT NULL,
+			field_22 longtext NOT NULL,
 			field_24 varchar(255) NOT NULL,
-			field_25 longtext NOT NULL,
-			field_26 integer NOT NULL,
+			field_25 varchar(255) NOT NULL,
+			field_23 integer NOT NULL,
+			field_47 varchar(255) NOT NULL,
+			field_48 longtext NOT NULL,
+			field_26 varchar(255) NOT NULL,
 			field_27 varchar(255) NOT NULL,
-			field_28 varchar(255) NOT NULL,
-			field_29 varchar(255) NOT NULL,
+			field_28 longtext NOT NULL,
 			field_30 varchar(255) NOT NULL,
 			field_31 varchar(255) NOT NULL,
-			field_32 varchar(255) NOT NULL,
-			field_33 longtext NOT NULL,
-			field_34 varchar(255) NOT NULL,
-			field_35 varchar(255) NOT NULL,
+			field_29 integer NOT NULL,
+			field_33 varchar(255) NOT NULL,
+			field_34 longtext NOT NULL,
 			field_36 varchar(255) NOT NULL,
-			field_37 longtext NOT NULL,
+			field_37 varchar(255) NOT NULL,
+			field_35 integer NOT NULL,
 			field_38 varchar(255) NOT NULL,
 			field_39 varchar(255) NOT NULL,
-			field_40 varchar(255) NOT NULL,
-			field_41 integer NOT NULL,
-			field_42 varchar(255) NOT NULL,
-			field_43 varchar(255) NOT NULL,
+			field_40 longtext NOT NULL,
 			field_44 varchar(255) NOT NULL,
+			field_45 varchar(255) NOT NULL,
+			field_43 integer NOT NULL,
+			field_52 integer NOT NULL,
+			field_53 integer NOT NULL,
+			field_54 integer NOT NULL,
+			field_55 integer NOT NULL,
+			field_56 integer NOT NULL,
+			field_57 integer NOT NULL,
+			field_58 longtext NOT NULL,
+			field_59 varchar(255) NOT NULL,
+			field_60 longtext NOT NULL,
+			field_61 integer NOT NULL,
+			field_62 varchar(255) NOT NULL,
+			field_63 varchar(255) NOT NULL,
+			field_64 varchar(255) NOT NULL,
+			field_65 varchar(255) NOT NULL,
+			field_66 varchar(255) NOT NULL,
+			field_67 varchar(255) NOT NULL,
+			field_68 longtext NOT NULL,
+			field_69 varchar(255) NOT NULL,
+			field_70 varchar(255) NOT NULL,
+			field_71 varchar(255) NOT NULL,
+			field_72 longtext NOT NULL,
+			field_73 varchar(255) NOT NULL,
+			field_74 varchar(255) NOT NULL,
+			field_75 varchar(255) NOT NULL,
+			field_76 integer NOT NULL,
+			field_77 varchar(255) NOT NULL,
+			field_78 varchar(255) NOT NULL,
+			field_79 varchar(255) NOT NULL,
 			PRIMARY KEY (mf_member_id)
 		) TYPE=InnoDB;
 
@@ -311,14 +340,17 @@
 
 		CREATE TABLE ocp10_f_poll_votes
 		(
-			pv_poll_id integer NULL,
-			pv_member_id integer NULL,
-			pv_answer_id integer NULL,
-			PRIMARY KEY (pv_poll_id,pv_member_id,pv_answer_id)
+			id integer auto_increment NULL,
+			pv_poll_id integer NOT NULL,
+			pv_member_id integer NOT NULL,
+			pv_answer_id integer NOT NULL,
+			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
 		CREATE TABLE ocp10_f_posts
 		(
+			p_skip_sig tinyint(1) NOT NULL,
+			p_parent_id integer NOT NULL,
 			id integer auto_increment NULL,
 			p_title varchar(255) NOT NULL,
 			p_post integer NOT NULL,
@@ -333,8 +365,6 @@
 			p_last_edit_time integer unsigned NOT NULL,
 			p_last_edit_by integer NOT NULL,
 			p_is_emphasised tinyint(1) NOT NULL,
-			p_skip_sig tinyint(1) NOT NULL,
-			p_parent_id integer NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -387,6 +417,13 @@
 
 		CREATE TABLE ocp10_f_topics
 		(
+			t_cache_last_username varchar(80) NOT NULL,
+			t_cache_last_time integer unsigned NOT NULL,
+			t_cache_last_title varchar(255) NOT NULL,
+			t_cache_last_member_id integer NOT NULL,
+			t_cache_num_posts integer NOT NULL,
+			t_cache_last_post_id integer NOT NULL,
+			t_cache_first_member_id integer NOT NULL,
 			id integer auto_increment NULL,
 			t_pinned tinyint(1) NOT NULL,
 			t_sunk tinyint(1) NOT NULL,
@@ -408,13 +445,6 @@
 			t_cache_first_title varchar(255) NOT NULL,
 			t_cache_first_post integer NOT NULL,
 			t_cache_first_username varchar(80) NOT NULL,
-			t_cache_first_member_id integer NOT NULL,
-			t_cache_last_post_id integer NOT NULL,
-			t_cache_last_time integer unsigned NOT NULL,
-			t_cache_last_title varchar(255) NOT NULL,
-			t_cache_last_username varchar(80) NOT NULL,
-			t_cache_last_member_id integer NOT NULL,
-			t_cache_num_posts integer NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
@@ -485,6 +515,9 @@
 		CREATE INDEX `f_forum_intro_member.i_member_id` ON ocp10_f_forum_intro_member(i_member_id);
 		ALTER TABLE ocp10_f_forum_intro_member ADD FOREIGN KEY `f_forum_intro_member.i_member_id` (i_member_id) REFERENCES ocp10_f_members (id);
 
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
+		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);
+
 		CREATE INDEX `f_groups.g_name` ON ocp10_f_groups(g_name);
 		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp10_translate (id);
 
@@ -493,9 +526,6 @@
 
 		CREATE INDEX `f_groups.g_title` ON ocp10_f_groups(g_title);
 		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp10_translate (id);
-
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp10_f_groups(g_promotion_target);
-		ALTER TABLE ocp10_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp10_f_groups (id);
 
 		CREATE INDEX `f_group_join_log.member_id` ON ocp10_f_group_join_log(member_id);
 		ALTER TABLE ocp10_f_group_join_log ADD FOREIGN KEY `f_group_join_log.member_id` (member_id) REFERENCES ocp10_f_members (id);
@@ -512,11 +542,11 @@
 		CREATE INDEX `f_invites.i_inviter` ON ocp10_f_invites(i_inviter);
 		ALTER TABLE ocp10_f_invites ADD FOREIGN KEY `f_invites.i_inviter` (i_inviter) REFERENCES ocp10_f_members (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
-		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
-
 		CREATE INDEX `f_members.m_signature` ON ocp10_f_members(m_signature);
 		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp10_translate (id);
+
+		CREATE INDEX `f_members.m_primary_group` ON ocp10_f_members(m_primary_group);
+		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp10_f_groups (id);
 
 		CREATE INDEX `f_members.m_pt_rules_text` ON ocp10_f_members(m_pt_rules_text);
 		ALTER TABLE ocp10_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp10_translate (id);
@@ -566,6 +596,9 @@
 		CREATE INDEX `f_poll_votes.pv_answer_id` ON ocp10_f_poll_votes(pv_answer_id);
 		ALTER TABLE ocp10_f_poll_votes ADD FOREIGN KEY `f_poll_votes.pv_answer_id` (pv_answer_id) REFERENCES ocp10_f_poll_answers (id);
 
+		CREATE INDEX `f_posts.p_parent_id` ON ocp10_f_posts(p_parent_id);
+		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_parent_id` (p_parent_id) REFERENCES ocp10_f_posts (id);
+
 		CREATE INDEX `f_posts.p_post` ON ocp10_f_posts(p_post);
 		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_post` (p_post) REFERENCES ocp10_translate (id);
 
@@ -583,9 +616,6 @@
 
 		CREATE INDEX `f_posts.p_last_edit_by` ON ocp10_f_posts(p_last_edit_by);
 		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_last_edit_by` (p_last_edit_by) REFERENCES ocp10_f_members (id);
-
-		CREATE INDEX `f_posts.p_parent_id` ON ocp10_f_posts(p_parent_id);
-		ALTER TABLE ocp10_f_posts ADD FOREIGN KEY `f_posts.p_parent_id` (p_parent_id) REFERENCES ocp10_f_posts (id);
 
 		CREATE INDEX `f_post_history.h_owner_member_id` ON ocp10_f_post_history(h_owner_member_id);
 		ALTER TABLE ocp10_f_post_history ADD FOREIGN KEY `f_post_history.h_owner_member_id` (h_owner_member_id) REFERENCES ocp10_f_members (id);
@@ -611,6 +641,15 @@
 		CREATE INDEX `f_special_pt_access.s_topic_id` ON ocp10_f_special_pt_access(s_topic_id);
 		ALTER TABLE ocp10_f_special_pt_access ADD FOREIGN KEY `f_special_pt_access.s_topic_id` (s_topic_id) REFERENCES ocp10_f_topics (id);
 
+		CREATE INDEX `f_topics.t_cache_last_member_id` ON ocp10_f_topics(t_cache_last_member_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_last_member_id` (t_cache_last_member_id) REFERENCES ocp10_f_members (id);
+
+		CREATE INDEX `f_topics.t_cache_last_post_id` ON ocp10_f_topics(t_cache_last_post_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_last_post_id` (t_cache_last_post_id) REFERENCES ocp10_f_posts (id);
+
+		CREATE INDEX `f_topics.t_cache_first_member_id` ON ocp10_f_topics(t_cache_first_member_id);
+		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_member_id` (t_cache_first_member_id) REFERENCES ocp10_f_members (id);
+
 		CREATE INDEX `f_topics.t_forum_id` ON ocp10_f_topics(t_forum_id);
 		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_forum_id` (t_forum_id) REFERENCES ocp10_f_forums (id);
 
@@ -628,15 +667,6 @@
 
 		CREATE INDEX `f_topics.t_cache_first_post` ON ocp10_f_topics(t_cache_first_post);
 		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_post` (t_cache_first_post) REFERENCES ocp10_translate (id);
-
-		CREATE INDEX `f_topics.t_cache_first_member_id` ON ocp10_f_topics(t_cache_first_member_id);
-		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_first_member_id` (t_cache_first_member_id) REFERENCES ocp10_f_members (id);
-
-		CREATE INDEX `f_topics.t_cache_last_post_id` ON ocp10_f_topics(t_cache_last_post_id);
-		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_last_post_id` (t_cache_last_post_id) REFERENCES ocp10_f_posts (id);
-
-		CREATE INDEX `f_topics.t_cache_last_member_id` ON ocp10_f_topics(t_cache_last_member_id);
-		ALTER TABLE ocp10_f_topics ADD FOREIGN KEY `f_topics.t_cache_last_member_id` (t_cache_last_member_id) REFERENCES ocp10_f_members (id);
 
 		CREATE INDEX `f_warnings.w_member_id` ON ocp10_f_warnings(w_member_id);
 		ALTER TABLE ocp10_f_warnings ADD FOREIGN KEY `f_warnings.w_member_id` (w_member_id) REFERENCES ocp10_f_members (id);

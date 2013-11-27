@@ -183,7 +183,7 @@ class Module_admin_points
 	{
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
-		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
+		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'),'amount'=>do_lang_tempcode('AMOUNT'));
 		$test=explode(' ',get_param('sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
 		list($sortable,$sort_order)=$test;
@@ -198,11 +198,13 @@ class Module_admin_points
 		}
 		$fields=new ocp_tempcode();
 		require_code('templates_results_table');
-		$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON'),do_lang_tempcode('REVERSE')),$sortables,'sort',$sortable.' '.$sort_order);
+		$fields_title=results_field_title(array(do_lang_tempcode('DATE_TIME'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON'),do_lang_tempcode('REVERSE')),$sortables,'sort',$sortable.' '.$sort_order);
 		foreach ($rows as $myrow)
 		{
 			$date=get_timezoned_date($myrow['date_and_time']);
+
 			$reason=get_translated_tempcode($myrow['reason']);
+
 			if (is_guest($myrow['gift_to']))
 			{
 				$to=do_lang_tempcode('USER_SYSTEM');
@@ -221,8 +223,13 @@ class Module_admin_points
 				$from_url=build_url(array('page'=>'points','type'=>'member','id'=>$myrow['gift_from']),get_module_zone('points'));
 				$from=is_null($from_name)?do_lang_tempcode('UNKNOWN_EM'):hyperlink($from_url,escape_html($from_name));
 			}
-			$deleteurl=build_url(array('page'=>'_SELF','type'=>'reverse','redirect'=>get_self_url(true)),'_SELF');
-			$delete=hyperlink($deleteurl,do_lang_tempcode('REVERSE'),false,false,'',NULL,form_input_hidden('id',strval($myrow['id'])));
+
+			$delete_url=build_url(array('page'=>'_SELF','type'=>'reverse','redirect'=>get_self_url(true)),'_SELF');
+			$delete=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array(
+				'NAME'=>do_lang_tempcode('REVERSE'),
+				'URL'=>$delete_url,
+				'HIDDEN'=>form_input_hidden('id',strval($myrow['id'])),
+			));
 
 			$fields->attach(results_entry(array($date,integer_format($myrow['amount']),$from,$to,$reason,$delete),true));
 		}

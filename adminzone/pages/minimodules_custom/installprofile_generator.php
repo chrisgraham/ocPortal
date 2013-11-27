@@ -242,6 +242,8 @@ $filename='mycustomprofile.tar';
 header('Content-Type: application/octet-stream'.'; authoritative=true;');
 header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 
+require_code('tar');
+
 $tar=tar_open(NULL,'wb');
 
 tar_add_file($tar,'sources_custom/hooks/modules/admin_setupwizard_installprofiles/mycustomprofile.php',$profile);

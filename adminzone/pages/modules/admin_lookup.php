@@ -237,7 +237,13 @@ class Module_admin_lookup
 				$actionlog_url=(is_guest($id))?NULL:build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$id),get_module_zone('admin_actionlog'));
 			} else $actionlog_url=NULL;
 
-			$alerts=($ip=='')?new ocp_tempcode():find_security_alerts(array('ip'=>$ip));
+			if ($ip=='')
+			{
+				$alerts=new ocp_tempcode();
+			} else
+			{
+				list($alerts,)=find_security_alerts(array('ip'=>$ip));
+			}
 
 			$member_banned=$GLOBALS['FORUM_DRIVER']->is_banned($id);
 			$ip_banned=false;

@@ -868,12 +868,14 @@ a.ocf_gcol_15, a.ocf_gcol_15:visited, a.ocf_gcol_15:hover {
 
 .ocf_post_history_header {
 	margin-top: 1em;
-	text-align: {!en_left};
+	text-align: {!en_left} !important;
+}
+
+.ocf_post_history_header span {
 	color: {$GET,box_title_text};
 }
 
 .ocf_history_post_meta {
-	border: 1px solid;
 }
 
 .ocf_history_post_meta .field_name {
@@ -882,6 +884,7 @@ a.ocf_gcol_15, a.ocf_gcol_15:visited, a.ocf_gcol_15:hover {
 
 .ocf_history_post_head {
 	font-style: italic;
+	margin-top: 0;
 }
 
 h2.ocf_post_history_header {
@@ -890,25 +893,21 @@ h2.ocf_post_history_header {
 
 .ocf_history_post_links {
 	text-align: {!en_right};
-	border: 1px solid;
-	padding: 5px;
+	padding: 0.5em;
 	font-style: italic;
 }
 
 .ocf_history_post_buttons {
-	text-align: {!en_right};
-	border: 1px solid;
-	padding-bottom: 20px;
+	padding-bottom: 1.5em !important;
 }
 
 .ocf_history_post {
 	width: 62%;
-	border: 1px solid;
 }
 
 .ocf_history_post textarea {
 	border: 0;
-	padding-{!en_left}: 10px;
+	padding-{!en_left}: 1em;
 }
 
 /*
@@ -1249,7 +1248,7 @@ table.ocf_profile_statistics th {
 
 @media print {
 	.ocf_member_bar_etc,
-	.ocf_page_buttons,
+	.ocf_buttons_screen,
 	.ocf_topic_marker,
 	.ocf_member_signature .comcode_hide {
 		display: none;

@@ -685,7 +685,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 	{
 		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
 		{
-			return array();
+			return NULL;
 		}
 
 		$content_id=$this->_get_page_link_id($page_link);
