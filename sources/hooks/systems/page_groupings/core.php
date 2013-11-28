@@ -56,7 +56,7 @@ class Hook_page_groupings_core
 			addon_installed('errorlog')?array('audit','menu/adminzone/audit/errorlog',array('admin_errorlog',array(),get_module_zone('admin_errorlog')),do_lang_tempcode('errorlog:ERROR_LOG'),'errorlog:DOC_ERROR_LOG'):NULL,
 			addon_installed('actionlog')?array('audit','menu/adminzone/audit/actionlog',array('admin_actionlog',array('type'=>'misc'),get_module_zone('admin_actionlog')),do_lang_tempcode('actionlog:VIEW_ACTIONLOGS'),'actionlog:DOC_ACTIONLOG'):NULL,
 			addon_installed('securitylogging')?array('audit','menu/adminzone/audit/security_log',array('admin_security',array('type'=>'misc'),get_module_zone('admin_security')),do_lang_tempcode('security:SECURITY_LOG'),'security:DOC_SECURITY_LOG'):NULL,
-			array('audit','menu/adminzone/audit/email_log',array('admin_email_log',array('type'=>'misc'),get_module_zone('admin_email_log')),do_lang_tempcode('EMAIL_LOG'),'DOC_EMAIL_LOG'),
+			array('audit','menu/adminzone/audit/email_log',array('admin_email_log',array('type'=>'misc'),get_module_zone('admin_email_log')),do_lang_tempcode('emaillog:EMAIL_LOG'),'emaillog:DOC_EMAIL_LOG'),
 			(get_forum_type()!='ocf')?NULL:array('audit','buttons/history',array('admin_ocf_history',array('type'=>'misc'),get_module_zone('admin_ocf_history')),do_lang_tempcode('ocf:POST_HISTORY'),'ocf:DOC_POST_HISTORY'),
 			(!addon_installed('content_reviews'))?NULL:array('audit','menu/adminzone/audit/content_reviews',array('admin_content_reviews',array('type'=>'misc'),get_module_zone('admin_content_reviews')),do_lang_tempcode('content_reviews:CONTENT_REVIEWS'),'content_reviews:DOC_CONTENT_REVIEWS'),
 
@@ -72,9 +72,9 @@ class Hook_page_groupings_core
 
 			(get_forum_type()!='ocf')?NULL:array('tools','menu/adminzone/tools/users/member_add',array('admin_ocf_members',array('type'=>'misc'),get_module_zone('admin_ocf_members')),do_lang_tempcode('MEMBERS'),'ocf:DOC_MEMBERS'),
 			//((get_forum_type()!='ocf')||(!has_privilege(get_member(),'control_usergroups')))?NULL:array('tools','menu/social/groups',array('groups',array('type'=>'misc'),get_module_zone('groups'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'),'DOC_SECONDARY_GROUP_MEMBERSHIP'),
-			array('tools','menu/adminzone/tools/cleanup',array('admin_cleanup',array('type'=>'misc'),get_module_zone('admin_cleanup')),do_lang_tempcode('CLEANUP_TOOLS'),'DOC_CLEANUP_TOOLS'),
+			array('tools','menu/adminzone/tools/cleanup',array('admin_cleanup',array('type'=>'misc'),get_module_zone('admin_cleanup')),do_lang_tempcode('cleanup:CLEANUP_TOOLS'),'cleanup:DOC_CLEANUP_TOOLS'),
 			(is_null(get_value('brand_base_url')))?array('tools','menu/adminzone/tools/upgrade',array('admin_config',array('type'=>'upgrader'),get_module_zone('admin_config')),do_lang_tempcode('upgrade:FU_UPGRADER_TITLE'),'upgrade:FU_UPGRADER_INTRO'):NULL,
-			(addon_installed('syndication'))?array('tools','action_links/rss',array('admin_config',array('type'=>'backend'),get_module_zone('admin_config')),do_lang_tempcode('FEEDS'),'rss:OPML_INDEX_DESCRIPTION'):NULL,
+			(addon_installed('syndication'))?array('tools','links/rss',array('admin_config',array('type'=>'backend'),get_module_zone('admin_config')),do_lang_tempcode('FEEDS'),'rss:OPML_INDEX_DESCRIPTION'):NULL,
 			(addon_installed('code_editor'))?array('tools','menu/adminzone/tools/code_editor',array('admin_config',array('type'=>'code_editor'),get_module_zone('admin_config')),do_lang_tempcode('CODE_EDITOR'),'DOC_CODE_EDITOR'):NULL,
 
 			array('security','menu/adminzone/security/permissions/permission_tree_editor',array('admin_permissions',array('type'=>'misc'),get_module_zone('admin_permissions')),do_lang_tempcode('permissions:PERMISSIONS_TREE'),'permissions:DOC_PERMISSIONS_TREE'),

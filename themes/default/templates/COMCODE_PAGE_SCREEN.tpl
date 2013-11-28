@@ -11,7 +11,7 @@
 
 	{+START,IF,{SHOW_AS_EDIT}}{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
 		<div class="edited" role="note">
-			<img alt="" src="{$IMG*,edited}" />
+			<img alt="" src="{$IMG*,1x/edited}" srcset="{$IMG*,2x/edited} 2x" />
 			{!EDITED}
 			<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}" pubdate="pubdate">{$DATE*,{EDIT_DATE_RAW}}</time>
 		</div>
@@ -31,14 +31,14 @@
 		{+START,IF,{IS_PANEL}}
 			{+START,IF,{$EQ,{NAME},panel_left,panel_right}}
 				<p class="quick_self_edit_link associated_link">
-					<img title="{!_COMCODE}" alt="{!_COMCODE}" width="{$IMG_WIDTH*,{$IMG,comcode}}" height="{$IMG_HEIGHT*,{$IMG,comcode}}" src="{$IMG*,comcode}" />
+					<img title="{!_COMCODE}" alt="{!_COMCODE}" width="{$IMG_WIDTH*,{$IMG,1x/editor/comcode}}" height="{$IMG_HEIGHT*,{$IMG,1x/editor/comcode}}" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" />
 					<a href="{EDIT_URL*}" title="{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}: {NAME*} ({!IN,&quot;{$?,{$IS_EMPTY,{$ZONE}},{!_WELCOME},{$ZONE*}}&quot;})">{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}</a>
 				</p>
 			{+END}
 
 			{+START,IF,{$EQ,{NAME},panel_top,panel_bottom}}
 				<div>
-					<a class="edit_page_link_inline" href="{EDIT_URL*}"><img width="17" height="17" title="{!EDIT_PAGE}: {NAME*}" alt="{!EDIT_PAGE}: {NAME*}" src="{$IMG*,comcode}" /></a>
+					<a class="edit_page_link_inline" href="{EDIT_URL*}"><img width="17" height="17" title="{!EDIT_PAGE}: {NAME*}" alt="{!EDIT_PAGE}: {NAME*}" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
 				</div>
 			{+END}
 		{+END}

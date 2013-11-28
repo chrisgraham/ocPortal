@@ -901,7 +901,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 		</tr>
 	
 		<tr>
-			<td><img class="right" src="http://ocportal.com/themes/default/images/icons/48x48/action_links/print.png" />Printer Friendly Block<br />(<kbd>printer_friendly_block</kbd>)</td>
+			<td><img class="right" src="http://ocportal.com/themes/default/images/icons/48x48/links/print.png" />Printer Friendly Block<br />(<kbd>printer_friendly_block</kbd>)</td>
 			<td>A block to provide a link for the current screen to be turned into it&#039;s printer-friendly equivalent.</td>
 			<!--<td>No</td>-->
 			<td><kbd></kbd></td>
@@ -1081,7 +1081,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 		</tr>
 	
 		<tr>
-			<td><img class="right" src="http://ocportal.com/themes/default/images/icons/48x48/action_links/rss.png" />Syndication<br />(<kbd>syndication</kbd>)</td>
+			<td><img class="right" src="http://ocportal.com/themes/default/images/icons/48x48/links/rss.png" />Syndication<br />(<kbd>syndication</kbd>)</td>
 			<td>Syndicate RSS/Atom feeds of your content.</td>
 			<!--<td>No</td>-->
 			<td><kbd>syndication_blocks</kbd></td>
@@ -1091,7 +1091,7 @@ This tutorial features an index of the ocPortal addons, with links to tutorials 
 		</tr>
 	
 		<tr>
-			<td><img class="right" src="http://ocportal.com/themes/default/images/icons/48x48/action_links/rss.png" />Syndication Blocks<br />(<kbd>syndication_blocks</kbd>)</td>
+			<td><img class="right" src="http://ocportal.com/themes/default/images/icons/48x48/links/rss.png" />Syndication Blocks<br />(<kbd>syndication_blocks</kbd>)</td>
 			<td>Show RSS and Atom feeds from other websites.</td>
 			<!--<td>No</td>-->
 			<td><kbd>news</kbd></td>

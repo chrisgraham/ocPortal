@@ -124,7 +124,6 @@ class Hook_addon_registry_search
 			'sources/blocks/main_search.php',
 			'sources/hooks/modules/search/.htaccess',
 			'sources/hooks/modules/search/index.html',
-			'themes/default/images/google.png',
 			'themes/default/templates/OPENSEARCH.tpl',
 			'data/opensearch.php',
 			'sources/hooks/systems/config/search_results_per_page.php',

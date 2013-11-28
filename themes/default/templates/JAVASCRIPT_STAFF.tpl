@@ -424,138 +424,7 @@ function handle_image_click(event,ob,force)
 	return true;
 }
 
-function handle_zone_click(src,event,zone_name)
-{
-	if (magic_keypress(event))
-	{
-		zone_name=zone_name.replace(/:.*$/,'');
-
-		// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
-		cancel_bubbling(event);
-		if (typeof event.preventDefault!='undefined') event.preventDefault();
-
-		var target='{$BASE_URL;,0}/adminzone/index.php?page=admin_zones&type=_edit&id='+window.encodeURIComponent(zone_name)+'&redirect='+window.encodeURIComponent(window.location.href)+keep_stub();
-		window.location.href=target;
-		src.disabled=true; // Our handler is on onmousedown because IE will not capture events on onclick if ctrl is held. We need to disable the link to stop onclick firing.
-		src.onclick=function() { cancel_bubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); return false; }; // Needed for some browsers as you can't cancel on onmousedown
-
-		return false;
-	}
-
-	return true;
-}
-
-function load_management_menu(type,no_confirm_needed)
-{
-	if ((typeof type=='undefined') || (!type)) var type='management';
-
-	var on_url,off_url;
-
-	if (type=='management')
-	{
-		on_url='{$IMG;,footer/managementmenu}'.replace(/^http:/,window.location.protocol);
-		off_url='{$IMG;,footer/managementmenu}'.replace(/^http:/,window.location.protocol);
-	} else
-	{
-		{+START,IF,{$ADDON_INSTALLED,bookmarks}}
-			on_url='{$IMG;,footer/bookmarksmenu}'.replace(/^http:/,window.location.protocol);
-			off_url='{$IMG;,footer/bookmarksmenu}'.replace(/^http:/,window.location.protocol);
-		{+END}
-	}
-
-	var tmp_element,img;
-	var management_menu_box=document.getElementById(type+'_menu_box');
-	if (management_menu_box)
-	{
-		img=document.getElementById(type+'_menu_img');
-		if (management_menu_box.style.display!='block')
-		{
-			management_menu_box.style.display='block';
-			img.src=off_url;
-		} else
-		{
-			management_menu_box.style.display='none';
-			img.src=on_url;
-		}
-		return false;
-	}
-
-	if ((!window.pop_up_menu) || (typeof window.do_ajax_request=='undefined'))
-	{
-		if (document.getElementById(type+'_menu_img_loader'))
-		{
-			window.setTimeout(function() { load_management_menu(type,no_confirm_needed); },200);
-			return false;
-		}
-
-		img=document.getElementById(type+'_menu_img');
-		set_opacity(img,0.4);
-		tmp_element=document.createElement('img');
-		tmp_element.style.position='absolute';
-		tmp_element.style.left=find_pos_x(img,true)+'px';
-		tmp_element.style.top=find_pos_y(img,true)+'px'; 
-		tmp_element.id=type+'_menu_img_loader';
-		tmp_element.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
-		document.body.appendChild(tmp_element);
-
-		require_javascript('javascript_ajax');
-		require_javascript('javascript_menu_popup');
-		window.setTimeout(function() { load_management_menu(type,no_confirm_needed); },200);
-
-		return false;
-	}
-	if (typeof window.do_ajax_request!='undefined')
-	{
-		var show_overlay=function()
-		{
-			add_event_listener_abstract(document,'click',function (e) { if (typeof e=='undefined') var e=window.event; var el=e.target; if (!el) el=e.srcElement; if (el.id!=type+'_menu_img') { document.getElementById(type+'_menu_img').src=on_url; document.getElementById(type+'_menu_box').style.display='none'; } },false);
-
-			var img=document.getElementById(type+'_menu_img');
-			img.src=off_url;
-
-			tmp_element=document.getElementById(type+'_menu_img_loader');
-			if (tmp_element) tmp_element.parentNode.removeChild(tmp_element);
-			set_opacity(img,1.0);
-			var e=document.createElement('div');
-			e.setAttribute('id',type+'_menu_box');
-			e.style.zIndex=200;
-			e.style.position='absolute';
-			document.body.style.position='relative';
-			var x=find_pos_x(img,true);
-			var y=find_pos_y(img,true);
-			if (y<200)
-			{
-				e.style.right=(get_window_width()-x-find_width(img))+'px';
-				e.style.top=(y+find_height(img)+3)+'px';
-			} else
-			{
-				e.style.left=x+'px';
-				e.style.bottom=(get_window_scroll_height()-y+3)+'px';
-			}
-			set_inner_html(e,load_snippet(type+'_menu'));
-			document.body.appendChild(e);
-		}
-
-		if (no_confirm_needed)
-		{
-			show_overlay();
-		} else
-		{
-			confirm_session(
-				function(result)
-				{
-					if (result) show_overlay();
-				}
-			);
-		}
-
-		return false; // No need to load link now, because we've done an overlay
-	}
-	window.location.href=document.getElementById(type+'_menu_button').href;
-	return false;
-}
-
-function load_ocpchat(event)
+function load_software_chat(event)
 {
 	cancel_bubbling(event);
 	if (typeof event.preventDefault!='undefined') event.preventDefault();
@@ -563,23 +432,23 @@ function load_ocpchat(event)
 	var html=' \
 		<div class="ocp_chat"> \
 			<h2>{!OCP_COMMUNITY_HELP}</h2> \
-			<ul class="spaced_list">{!OCP_CHAT_EXTRA;}</ul> \
-			<p class="associated_link associated_links_block_group"><a title="{!OCP_CHAT_STANDALONE}: {!LINK_NEW_WINDOW}" target="_blank" href="http://chat.zoho.com/guest.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;participants=true">{!OCP_CHAT_STANDALONE}</a> <a href="#" onclick="return load_ocpchat(event);">{!HIDE}</a></p> \
+			<ul class="spaced_list">{!SOFTWARE_CHAT_EXTRA;}</ul> \
+			<p class="associated_link associated_links_block_group"><a title="{!SOFTWARE_CHAT_STANDALONE}: {!LINK_NEW_WINDOW}" target="_blank" href="http://chat.zoho.com/guest.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;participants=true">{!SOFTWARE_CHAT_STANDALONE}</a> <a href="#" onclick="return load_software_chat(event);">{!HIDE}</a></p> \
 		</div> \
 		<iframe class="ocp_chat_iframe" frameborder="0" border="0" src="http://chat.zoho.com/shout.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;chaturl=ocPortal%20chat&amp;V=000000-70a9e1-eff4f9-70a9e1-ocPortal%20chat&amp;user={$SITE_NAME.*}'+((typeof window.ocp_username!='undefined')?window.encodeURIComponent('/'+window.ocp_username):'')+'&amp;participants=true"></iframe> \
 	'.replace(/\\{1\\}/,escape_html((window.location+'').replace(get_base_url(),'http://baseurl')));
 
-	var box=document.getElementById('ocpchat_box');
+	var box=document.getElementById('software_chat_box');
 	if (box)
 	{
 		box.parentNode.removeChild(box);
 
-		set_opacity(document.getElementById('ocpchat_img'),1.0);
+		set_opacity(document.getElementById('software_chat_img'),1.0);
 	} else
 	{
 		box=document.createElement('div');
 
-		box.id='ocpchat_box';
+		box.id='software_chat_box';
 		box.style.width='750px';
 		box.style.background='#EEE';
 		box.style.color='#000';
@@ -597,7 +466,7 @@ function load_ocpchat(event)
 
 		smooth_scroll(0);
 
-		set_opacity(document.getElementById('ocpchat_img'),0.5);
+		set_opacity(document.getElementById('software_chat_img'),0.5);
 
 		//window.setTimeout( function() { try { window.frames[window.frames.length-1].documentElement.getElementById('texteditor').focus(); } catch (e) {} } ), 5000);		Unfortunately cannot do, JS security context issue
 	}
@@ -683,7 +552,7 @@ function submit_custom_task(form)
 	form.elements['recur'].value='';
 	form.elements['new_task'].value='';
 
-	set_inner_html(document.getElementById('customtasksgohere'),new_task,true);
+	set_inner_html(document.getElementById('custom_tasks_go_here'),new_task,true);
 
 	return false;
 }

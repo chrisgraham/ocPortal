@@ -118,9 +118,6 @@ class Hook_addon_registry_realtime_rain
 			'sources/hooks/systems/addon_registry/realtime_rain.php',
 			'sources/hooks/systems/config/bottom_show_realtime_rain_button.php',
 
-			'themes/default/images/footer/realtime_rain.png',
-			'themes/default/images/footer/realtime_rain_off.png',
-
 			'themes/default/images/realtime_rain/email-icon.png',
 			'themes/default/images/realtime_rain/news-icon.png',
 			'themes/default/images/realtime_rain/phone-icon.png',

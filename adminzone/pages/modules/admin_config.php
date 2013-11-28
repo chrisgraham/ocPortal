@@ -70,7 +70,7 @@ class Module_admin_config
 				$ret['upgrader']=array('FU_UPGRADER_TITLE','menu/adminzone/tools/upgrade');
 
 			if (addon_installed('syndication'))
-				$ret['backend']=array('FEEDS','action_links/rss');
+				$ret['backend']=array('FEEDS','links/rss');
 
 			if (addon_installed('code_editor'))
 				$ret['code_editor']=array('CODE_EDITOR','menu/adminzone/tools/code_editor');

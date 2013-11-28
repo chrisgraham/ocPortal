@@ -92,9 +92,9 @@ class Module_admin_themes
 			),false,true);
 
 			$GLOBALS['SITE_DB']->query_insert('theme_images',array(
-				'id'=>'appleicon',
+				'id'=>'webclipicon',
 				'theme'=>'default',
-				'path'=>'appleicon.png',
+				'path'=>'webclipicon.png',
 				'lang'=>fallback_lang()
 			),false,true);
 		}

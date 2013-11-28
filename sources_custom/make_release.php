@@ -286,33 +286,9 @@ function make_installers($skip_file_grab=false)
 		$prefix=$builds_path.'/builds/debian-build/ocportal-'.$version_dotted;
 		unlink($prefix.'/sources/hooks/systems/addon_registry/jwplayer.php');
 		unlink($prefix.'/data/flvplayer.swf');
-		unlink($prefix.'/themes/default/templates/ATTACHMENT_FLV.tpl');
-		unlink($prefix.'/themes/default/templates/COMCODE_FLV.tpl');
-		unlink($prefix.'/themes/default/templates/GALLERY_VIDEO_FLV.tpl');
 		unlink($prefix.'/themes/default/templates/JAVASCRIPT_JWPLAYER.tpl');
 		unlink($prefix.'/sources/jsmin.php');
-		unlink($prefix.'/themes/default/images/newscats/entertainment.jpg');
-		unlink($prefix.'/themes/default/images/newscats/art.jpg');
-		unlink($prefix.'/themes/default/images/newscats/business.jpg');
-		unlink($prefix.'/themes/default/images/newscats/general.jpg');
-		unlink($prefix.'/themes/default/images/newscats/difficulties.jpg');
-		unlink($prefix.'/themes/default/images/newscats/community.jpg');
-		unlink($prefix.'/themes/default/images/newscats/technology.jpg');
-		unlink($prefix.'/themes/default/images/under_construction_animated.gif');
-		unlink($prefix.'/themes/default/images/filetypes/page_ods.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_media.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_archive.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_odp.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_torrent.png');
-		unlink($prefix.'/themes/default/images/filetypes/feed.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_doc.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_txt.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_odt.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_xls.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_ppt.png');
-		unlink($prefix.'/themes/default/images/filetypes/external_link.png');
-		unlink($prefix.'/themes/default/images/filetypes/email_link.png');
-		unlink($prefix.'/themes/default/images/filetypes/page_pdf.png');
+		// TODO: Outdated code ^
 
 		// Create "ocportal-<version>.tar.gz" package from "ocportal-<version>"
 		chdir($builds_path.'/builds/debian-build');

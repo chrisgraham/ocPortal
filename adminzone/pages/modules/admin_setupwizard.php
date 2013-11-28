@@ -155,7 +155,7 @@ class Module_admin_setupwizard
 		$text=new ocp_tempcode();
 		$text->attach(paragraph(do_lang_tempcode($done_once?'SETUPWIZARD_1_DESCRIBE_ALT':'SETUPWIZARD_1_DESCRIBE')));
 		$rescue_url=build_url(array('page'=>'','keep_safe_mode'=>'1'),'');
-		$text->attach(paragraph(do_lang_tempcode('SETUPWIZARD_SAFE_MODE',escape_html($rescue_url->evaluate()),escape_html(find_theme_image('footer/ocpchat')))));
+		$text->attach(paragraph(do_lang_tempcode('SETUPWIZARD_SAFE_MODE',escape_html($rescue_url->evaluate()),escape_html(find_theme_image('icons/24x24/tool_buttons/software_chat')),escape_html(find_theme_image('icons/48x48/tool_buttons/software_chat')))));
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		$fields=new ocp_tempcode();

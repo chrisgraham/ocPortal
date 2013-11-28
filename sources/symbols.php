@@ -2608,7 +2608,7 @@ function ecv_PREVIEW_URL($lang,$escaped,$param)
  */
 function ecv_HIDE_HELP_PANEL($lang,$escaped,$param)
 {
-	$value=((array_key_exists('hide_help_panel',$_COOKIE)) && ($_COOKIE['hide_help_panel']=='1'))?'1':'0';
+	$value=((array_key_exists('hide_helper_panel',$_COOKIE)) && ($_COOKIE['hide_helper_panel']=='1'))?'1':'0';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;

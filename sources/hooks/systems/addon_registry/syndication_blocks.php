@@ -86,7 +86,7 @@ class Hook_addon_registry_syndication_blocks
 	 */
 	function get_default_icon()
 	{
-		return 'themes/default/images/icons/48x48/action_links/rss.png';
+		return 'themes/default/images/icons/48x48/links/rss.png';
 	}
 
 	/**

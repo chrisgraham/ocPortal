@@ -142,8 +142,6 @@ class Hook_addon_registry_core_notifications
 			'themes/default/templates/NOTIFICATION_BROWSE_SCREEN.tpl',
 			'themes/default/templates/NOTIFICATION_VIEW_SCREEN.tpl',
 			'themes/default/images/notifications/notifications.ico',
-			'themes/default/images/notifications/pts.png',
-			'themes/default/images/notifications/web_notifications.png',
 			'themes/default/images/notifications/index.html',
 			'data_custom/modules/web_notifications/.htaccess',
 			'data_custom/modules/web_notifications/index.html',

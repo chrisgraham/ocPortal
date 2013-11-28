@@ -104,7 +104,7 @@ a.progressCancel {
 	display: block;
 	height: 14px;
 	width: 14px;
-	background-image: url('{$IMG;,swfupload/cancelbutton}');
+	background-image: url('{$IMG;,uploader/cancelbutton}');
 	background-repeat: no-repeat;
 	background-position: -14px 0;
 	float: right;

@@ -29,7 +29,7 @@
 </div>
 
 <p>
-	<a class="right" title="{!RETURN_TO_FUNCTION_INDEX}" href="#class_index_{CLASS*}" target="_self"><img class="top_vertical_alignment" src="{$IMG*,top}" alt="{!RETURN_TO_FUNCTION_INDEX}"/></a>
+	<a class="right" title="{!RETURN_TO_FUNCTION_INDEX}" href="#class_index_{CLASS*}" target="_self"><img class="top_vertical_alignment" src="{$IMG*,icons/24x24/tool_buttons/top}" srcset="{$IMG*,icons/48x48/tool_buttons/top} 2x" alt="{!RETURN_TO_FUNCTION_INDEX}"/></a>
 </p>
 
 {+START,IF_NON_EMPTY,{CODE}}

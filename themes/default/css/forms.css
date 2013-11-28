@@ -46,8 +46,13 @@ div.comcode_supported {
 	display: block;
 	padding: 1em 1em 1em 35px;
 	border: 1px solid {$GET,light_error_border};
-	background: url('{$IMG;,messageicons/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
+	background: url('{$IMG;,icons/24x24/status/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.input_error_here {
+		background: url('{$IMG;,icons/48x48/status/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
+	}
 }
 
 /* This is used to fix a problem on screen readers (we don't want a paragraph used) */

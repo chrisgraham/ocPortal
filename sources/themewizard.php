@@ -782,17 +782,13 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					{
 						$img=generate_recoloured_image($path,'#335082',$colours['special_borderer'],'#091C3D',$colours['special_middle']);
 					}
-					elseif ($show=='arrow_box')
+					elseif ($show=='1x/arrow_box' || $show=='2x/arrow_box')
 					{
 						$img=generate_recoloured_image($path,'#12467A',$colours['a.link'],'#0A223D',$colours['a.link__dark']);
 					}
-					elseif ($show=='arrow_box_hover')
+					elseif ($show=='1x/arrow_box_hover' || $show=='2x/arrow_box_hover')
 					{
 						$img=generate_recoloured_image($path,'#12467A',$colours['a.hover'],'#0A223D',$colours['a.hover__dark']);
-					}
-					elseif ($show=='help_panel_hide')
-					{
-						$img=generate_recoloured_image($path,'#82A3D8',$colours['navigation_top'],'#82A3D8',$colours['navigation_top']);
 					}
 					elseif (($show=='trimmed_logo_template') || ($show=='logo_template') || (substr($show,0,5)=='logo/'))
 					{

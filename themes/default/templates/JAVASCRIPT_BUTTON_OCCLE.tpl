@@ -66,7 +66,9 @@ function load_occle()
 
 					if (img)
 					{
-						img.src='{$IMG;,footer/occle_off}'.replace(/^http:/,window.location.protocol);
+						img.src='{$IMG;,icons/24x24/tool_buttons/occle_off}'.replace(/^http:/,window.location.protocol);
+						if (typeof img.srcset!='undefined')
+							img.srcset='{$IMG;,icons/48x48/tool_buttons/occle_off} 2x'.replace(/^http:/,window.location.protocol);
 						img.className='';
 					}
 
@@ -96,7 +98,9 @@ function load_occle()
 				{
 					if (img)
 					{
-						img.src='{$IMG;,footer/occle}'.replace(/^http:/,window.location.protocol);
+						img.src='{$IMG;,icons/24x24/tool_buttons/occle_on}'.replace(/^http:/,window.location.protocol);
+						if (typeof img.srcset!='undefined')
+							img.srcset='{$IMG;,icons/48x48/tool_buttons/occle_on} 2x'.replace(/^http:/,window.location.protocol);
 						set_opacity(img,1.0);
 					}
 

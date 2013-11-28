@@ -32,31 +32,61 @@
 }
 
 .screen_actions .print {
-	background-image: url('{$IMG_INLINE;,recommend/print}');
+	background-image: url('{$IMG_INLINE;,icons/24x24/links/print}');
 }
 
 .screen_actions .recommend {
-	background-image: url('{$IMG_INLINE;,recommend/recommend}');
+	background-image: url('{$IMG_INLINE;,icons/24x24/menu/site_meta/recommend}');
 }
 
 .screen_actions .favorites {
-	background-image: url('{$IMG_INLINE;,recommend/favorites}');
+	background-image: url('{$IMG_INLINE;,icons/24x24/links/favorites}');
 }
 
 .screen_actions .facebook {
-	background-image: url('{$IMG_INLINE;,recommend/facebook}');
+	background-image: url('{$IMG_INLINE;,icons/24x24/links/facebook}');
 }
 
 .screen_actions .twitter {
-	background-image: url('{$IMG_INLINE;,recommend/twitter}');
+	background-image: url('{$IMG_INLINE;,icons/24x24/links/twitter}');
 }
 
 .screen_actions .stumbleupon {
-	background-image: url('{$IMG_INLINE;,recommend/stumbleupon}');
+	background-image: url('{$IMG_INLINE;,icons/24x24/links/stumbleupon}');
 }
 
 .screen_actions .digg {
-	background-image: url('{$IMG_INLINE;,recommend/digg}');
+	background-image: url('{$IMG_INLINE;,icons/24x24/links/digg}');
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.screen_actions .print {
+		background-image: url('{$IMG;,icons/48x48/links/print}');
+	}
+
+	.screen_actions .recommend {
+		background-image: url('{$IMG;,icons/48x48/menu/site_meta/recommend}');
+	}
+
+	.screen_actions .favorites {
+		background-image: url('{$IMG;,icons/48x48/links/favorites}');
+	}
+
+	.screen_actions .facebook {
+		background-image: url('{$IMG;,icons/48x48/links/facebook}');
+	}
+
+	.screen_actions .twitter {
+		background-image: url('{$IMG;,icons/48x48/links/twitter}');
+	}
+
+	.screen_actions .stumbleupon {
+		background-image: url('{$IMG;,icons/48x48/links/stumbleupon}');
+	}
+
+	.screen_actions .digg {
+		background-image: url('{$IMG;,icons/48x48/links/digg}');
+	}
 }
 
 .screen_actions .google_plusone {

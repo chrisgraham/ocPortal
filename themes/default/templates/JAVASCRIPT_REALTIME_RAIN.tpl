@@ -20,11 +20,15 @@ function realtime_rain_button_load_handler()
 			window.bubble_timer_2=null;
 		}
 		if (e.parentNode) e.parentNode.parentNode.removeChild(e.parentNode);
-		img.src='{$IMG;,footer/realtime_rain}'.replace(/^http:/,window.location.protocol);
+		img.src='{$IMG;,icons/24x24/tool_buttons/realtime_rain_on}'.replace(/^http:/,window.location.protocol);
+		if (typeof img.srcset!='undefined')
+			img.srcset='{$IMG;,icons/48x48/tool_buttons/realtime_rain_on} 2x'.replace(/^http:/,window.location.protocol);
 		return false;
 	}
 
-	img.src='{$IMG;,footer/realtime_rain_off}'.replace(/^http:/,window.location.protocol);
+	img.src='{$IMG;,icons/24x24/tool_buttons/realtime_rain_off}'.replace(/^http:/,window.location.protocol);
+	if (typeof img.srcset!='undefined')
+		img.srcset='{$IMG;,icons/48x48/tool_buttons/realtime_rain_off} 2x'.replace(/^http:/,window.location.protocol);
 	var tmp_element=document.getElementById('realtime_rain_img_loader');
 	if (tmp_element) tmp_element.parentNode.removeChild(tmp_element);
 	img.className='';

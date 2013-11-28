@@ -157,20 +157,3 @@
 {+START,IF_PASSED,RESULTS}
 </div>
 {+END}
-
-{+START,SET,commented_out}
-	<form title="{!SEARCH}: Google" alass="google_search_box" method="get" action="http://www.google.com/search">
-		<div class="box inline_block"><div class="box_inner">
-			<div class="google_search_descrip">
-				<img src="{$IMG*,google}" alt="Google" />
-				 {!GOOGLE_SEARCH_DESCRIPTION,{$SITE_NAME*},<a title="Google: {!LINK_NEW_WINDOW}" rel="external" href="http://www.google.com" target="_blank">Google</a>}
-			</div>
-
-			<div class="google_search_button">
-				<input type="hidden" name="as_sitesearch" value="{$BASE_URL*}" />
-				<div class="accessibility_hidden"><label for="q">{!SEARCH}</label></div>
-				<input type="text" id="q" name="q" value="{!SEARCH_FOR}" />  <input onclick="disable_button_just_clicked(this);" class="buttons__search button_screen_item" type="submit" />
-			</div>
-		</div></div>
-	</form>
-{+END}

@@ -302,7 +302,6 @@ class Hook_addon_registry_ocf_forum
 			'sources/ocf_forumview.php',
 			'sources/ocf_forumview_pt.php',
 			'sources/ocf_topicview.php',
-			'themes/default/images/birthday_icon.png',
 			'sources/hooks/modules/topicview/.htaccess',
 			'sources/hooks/modules/topicview/index.html',
 			'sources/hooks/systems/ajax_tree/choose_topic.php',

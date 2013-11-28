@@ -14,7 +14,7 @@ Please note that on Internet Explorer the favicon will only be used for the web 
 
 [title="3"]Apple web clip icons[/title]
 
-These icons show on the iPhone and iPod Touch home screens, if you choose to bookmark a site there. They can be set by editing the 'appleicon' theme image.
+These icons show on the iPhone and iPod Touch home screens, if you choose to bookmark a site there. They can be set by editing the 'webclipicon' theme image.
 
 [title="2"]Web fonts[/title]
 

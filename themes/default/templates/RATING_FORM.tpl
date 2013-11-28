@@ -16,7 +16,7 @@
 				<div class="rating_inner">
 					{$,Like/dislike}
 					{+START,IF,{LIKES}}
-						<img id="rating_bar_1__{$GET,identifier}" alt="" src="{$IMG*,dislike}" /><img id="rating_bar_10__{$GET,identifier}" alt="" src="{$IMG*,like}" />
+						<img id="rating_bar_1__{$GET,identifier}" alt="" src="{$IMG*,1x/dislike}" srcset="{$IMG*,2x/dislike} 2x" /><img id="rating_bar_10__{$GET,identifier}" alt="" src="{$IMG*,1x/like}" srcset="{$IMG*,2x/like} 2x" />
 					{+END}
 
 					{$,Star ratings}

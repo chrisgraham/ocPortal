@@ -35,7 +35,7 @@
 	<div id="edit_{ID*}" style="{+START,IF_NON_PASSED,PREVIEW}display: block{+END}{+START,IF_PASSED,PREVIEW}display: none{+END}" aria-labeledby="edit_tab_{ID*}" role="tabpanel">
 		<form title="{ID*}: {!COMCODE}" action="index.php" method="post">
 			<p>
-				<label for="edit_{ID*}_textarea">{!COMCODE}:</label> <a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" src="{$IMG*,comcode}" class="vertical_alignment" /></a>
+				<label for="edit_{ID*}_textarea">{!COMCODE}:</label> <a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" class="vertical_alignment" /></a>
 				{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 					{+START,IF,{$JS_ON}}
 						<span class="horiz_field_sep associated_link"><a id="toggle_wysiwyg_edit_{ID*}_textarea" href="#" onclick="return toggle_wysiwyg('edit_{ID*}_textarea');"><abbr title="{!TOGGLE_WYSIWYG_2}"><img src="{$IMG*,1x/editor/wysiwyg_on}" srcset="{$IMG*,2x/editor/wysiwyg_on} 2x" alt="{!comcode:ENABLE_WYSIWYG}" title="{!comcode:ENABLE_WYSIWYG}" class="vertical_alignment" /></abbr></a></span>

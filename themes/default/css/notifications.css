@@ -28,12 +28,21 @@
 	outline: 0;
 }
 #web_notifications_button {
-	background-image: url('{$IMG;,notifications/web_notifications}');
+	background-image: url('{$IMG;,icons/24x24/tool_buttons/notifications}');
 	background-position: 2px 1px;
 }
 #pts_button {
-	background-image: url('{$IMG;,notifications/pts}');
+	background-image: url('{$IMG;,icons/24x24/tool_buttons/inbox}');
 	background-position: 3px 2px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	#web_notifications_button {
+		background-image: url('{$IMG;,icons/48x48/tool_buttons/notifications}');
+	}
+	#pts_button {
+		background-image: url('{$IMG;,icons/48x48/tool_buttons/inbox}');
+	}
 }
 
 #web_notifications_button span, #pts_button span {
@@ -57,13 +66,18 @@
 	margin-top: 9px; /* 7 +2px gap */
 }
 .box.box_arrow>span {
-	background: url('{$IMG;,box_arrow}') no-repeat;
+	background: url('{$IMG;,1x/box_arrow}') no-repeat;
 	margin-top: -7px;
 	display: inline-block;
 	width: 13px;
 	height: 7px;
 	margin-left: 20.48em;
 	position: absolute;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.box.box_arrow>span {
+		background: url('{$IMG;,2x/box_arrow}') no-repeat;
+	}
 }
 
 .notification+.notification, #web_notifications_spot+.associated_links_block_group, #pts_spot+.associated_links_block_group {

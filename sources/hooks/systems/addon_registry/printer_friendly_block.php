@@ -83,7 +83,7 @@ class Hook_addon_registry_printer_friendly_block
 	 */
 	function get_default_icon()
 	{
-		return 'themes/default/images/icons/48x48/action_links/print.png';
+		return 'themes/default/images/icons/48x48/links/print.png';
 	}
 
 	/**

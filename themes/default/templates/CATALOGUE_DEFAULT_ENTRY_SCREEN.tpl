@@ -47,7 +47,7 @@
 
 	{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
 		<div class="edited" role="note">
-			<img alt="" src="{$IMG*,edited}" />
+			<img alt="" src="{$IMG*,1x/edited}" srcset="{$IMG*,2x/edited} 2x" />
 			{!EDITED}
 			<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}">{$DATE*,{EDIT_DATE_RAW}}</time>
 		</div>

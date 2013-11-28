@@ -149,7 +149,7 @@
 								{$SET,needs_msg_label,{$OR,{$GET,GET_TITLE},{GET_EMAIL},{$AND,{$IS_GUEST},{$OCF}}}}
 								{+START,IF,{$GET,needs_msg_label}}
 									<div class="vertical_alignment">
-										<img alt="" src="{$IMG*,comcode}" />
+										<img alt="" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" />
 										<label for="post">{!POST_COMMENT}:</label>
 									</div>
 								{+END}
@@ -168,7 +168,7 @@
 
 								{+START,IF,{$NOT,{$GET,needs_msg_label}}}
 									<div class="vertical_alignment">
-										<img alt="" src="{$IMG*,comcode}" />
+										<img alt="" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" />
 										<label class="accessibility_hidden" for="post">{!POST_COMMENT}:</label>
 									</div>
 								{+END}

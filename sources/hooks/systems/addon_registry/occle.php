@@ -142,8 +142,6 @@ class Hook_addon_registry_occle
 			'themes/default/templates/JAVASCRIPT_BUTTON_OCCLE.tpl',
 			'adminzone/pages/modules/admin_occle.php',
 			'themes/default/css/occle.css',
-			'themes/default/images/footer/occle.png',
-			'themes/default/images/footer/occle_off.png',
 			'data/modules/admin_occle/admin_occlesample_script',
 			'data/modules/admin_occle/index.html',
 			'data/modules/admin_occle/sample_script',

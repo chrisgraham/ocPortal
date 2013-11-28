@@ -1,6 +1,6 @@
 <ul class="horizontal_links associated_links_block_group horiz_field_sep">
 	{+START,IF,{$SHOW_DOCS}}{+START,IF_PASSED,URL}
-		<li><a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{URL*}"><img src="{$IMG*,comcode}" class="vertical_alignment" alt="" /></a></li>
+		<li><a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{URL*}"><img src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" class="vertical_alignment" alt="" /></a></li>
 	{+END}{+END}
 	<li><a rel="nofollow" class="link_exempt" title="{!EMOTICONS_POPUP}: {!LINK_NEW_WINDOW}" target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT;*,emoticons}?field_name={NAME;*}{$KEEP;*,0,1}'),'field_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;"><img src="{$IMG*,1x/editor/insert_emoticons}" alt="" class="vertical_alignment" /></a></li>
 

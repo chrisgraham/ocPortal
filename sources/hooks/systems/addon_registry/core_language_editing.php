@@ -118,6 +118,7 @@ class Hook_addon_registry_core_language_editing
 			'adminzone/pages/modules/admin_lang.php',
 			'sources/hooks/systems/page_groupings/language.php',
 			'themes/default/images/icons/14x14/translate.png',
+			'themes/default/images/icons/28x28/translate.png',
 			'sources/hooks/systems/config/google_translate_api_key.php',
 		);
 	}

@@ -23,8 +23,12 @@ function script_load_stuff()
 	// Dynamic images need preloading
 	var preloader=new Image();
 	var images=[];
-	/*images.push('{$IMG;,menus/menu_bullet_hover}'.replace(/^http:/,window.location.protocol));	Menu type no longer on by default
-	images.push('{$IMG;,menus/menu_bullet_expand_hover}'.replace(/^http:/,window.location.protocol));*/
+	/*	Menu type no longer on by default
+	images.push('{$IMG;,1x/menus/menu_bullet_hover}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,1x/menus/menu_bullet_expand_hover}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,2x/menus/menu_bullet_hover}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,2x/menus/menu_bullet_expand_hover}'.replace(/^http:/,window.location.protocol));
+	*/
 	/* Expanders and contracters no longer prominent in UI
 	images.push('{$IMG;,1x/trays/expand}'.replace(/^http:/,window.location.protocol));
 	images.push('{$IMG;,1x/trays/contract}'.replace(/^http:/,window.location.protocol));
@@ -658,7 +662,7 @@ function script_page_rendered()
 						{
 							boxes[i].style.width='auto';
 						}
-						panel_right.className+=' horiz_help_panel';
+						panel_right.className+=' horiz_helper_panel';
 						panel_right.parentNode.removeChild(panel_right);
 						middle.parentNode.appendChild(panel_right);
 						document.getElementById('helper_panel_toggle').style.display='none';
@@ -671,7 +675,7 @@ function script_page_rendered()
 }
 
 // The help panel
-function help_panel(show)
+function helper_panel(show)
 {
 	var panel_right=document.getElementById('panel_right');
 	var middles=get_elements_by_class_name(document,'global_middle');
@@ -690,35 +694,39 @@ function help_panel(show)
 			set_opacity(helper_panel_contents,0.0);
 			fade_transition(helper_panel_contents,100,30,4);
 		}
-		if (read_cookie('hide_help_panel')=='1') set_cookie('hide_help_panel','0',100);
-		helper_panel_toggle.onclick=function() { return help_panel(false); };
-		helper_panel_toggle.childNodes[0].setAttribute('src','{$IMG;,help_panel_hide}'.replace(/^http:/,window.location.protocol));
+		if (read_cookie('hide_helper_panel')=='1') set_cookie('hide_helper_panel','0',100);
+		helper_panel_toggle.onclick=function() { return helper_panel(false); };
+		helper_panel_toggle.childNodes[0].src='{$IMG;,icons/14x14/helper_panel_hide}'.replace(/^http:/,window.location.protocol);
+		if (typeof helper_panel_toggle.childNodes[0].srcset!='undefined')
+			helper_panel_toggle.childNodes[0].srcset='{$IMG;,icons/28x28/helper_panel_hide} 2x'.replace(/^http:/,window.location.protocol);
 	} else
 	{
-		if (read_cookie('hide_help_panel')=='')
+		if (read_cookie('hide_helper_panel')=='')
 		{
 			window.fauxmodal_confirm(
 				'{!CLOSING_HELP_PANEL_CONFIRM;^}',
 				function(answer)
 				{
 					if (answer)
-						_hide_help_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle);
+						_hide_helper_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle);
 				}
 			);
 			return false;
 		}
-		_hide_help_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle);
+		_hide_helper_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle);
 	}
 	return false;
 }
-function _hide_help_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle)
+function _hide_helper_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle)
 {
 	panel_right.className+=' helper_panel_hidden';
 	helper_panel_contents.setAttribute('aria-expanded','false');
 	helper_panel_contents.style.display='none';
-	set_cookie('hide_help_panel','1',100);
-	helper_panel_toggle.onclick=function() { return help_panel(true); };
-	helper_panel_toggle.childNodes[0].setAttribute('src','{$IMG;,help_panel_show}'.replace(/^http:/,window.location.protocol));
+	set_cookie('hide_helper_panel','1',100);
+	helper_panel_toggle.onclick=function() { return helper_panel(true); };
+	helper_panel_toggle.childNodes[0].src='{$IMG;,icons/14x14/helper_panel_show}'.replace(/^http:/,window.location.protocol);
+	if (typeof helper_panel_toggle.childNodes[0].srcset!='undefined')
+		helper_panel_toggle.childNodes[0].srcset='{$IMG;,icons/28x28/helper_panel_show} 2x'.replace(/^http:/,window.location.protocol);
 }
 
 /* Find the size of a dimensions in pixels without the px (not general purpose, just to simplify code) */

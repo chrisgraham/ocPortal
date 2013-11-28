@@ -102,8 +102,6 @@ class Hook_addon_registry_bookmarks
 			'sources/hooks/modules/admin_import_types/bookmarks.php',
 			'themes/default/templates/BOOKMARKS_SCREEN.tpl',
 			'themes/default/templates/JAVASCRIPT_BOOKMARKS.tpl',
-			'themes/default/images/footer/bookmarksmenu.png',
-			'themes/default/images/footer/bookmarksmenu_off.png',
 			'lang/EN/bookmarks.ini',
 			'site/pages/modules/bookmarks.php',
 			'sources/hooks/systems/snippets/bookmarks_menu.php',

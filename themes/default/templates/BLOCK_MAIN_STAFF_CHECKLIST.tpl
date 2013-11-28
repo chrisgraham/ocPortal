@@ -23,7 +23,7 @@
 
 		<h4 class="checklist_header">{!CUSTOM_TASKS}</h4>
 
-		<div id="customtasksgohere">
+		<div id="custom_tasks_go_here">
 			{CUSTOM_TASKS}
 		</div>
 
@@ -35,7 +35,7 @@
 				<input class="menu___generic_admin__add_one button_micro" type="submit" name="save" title="{!ADD} ({!CUSTOM_TASKS})" value="{!ADD}" />
 			</div>
 			<div class="constrain_field">
-				<a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img class="vertical_alignment" alt="" src="{$IMG*,comcode}" /></a>
+				<a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img class="vertical_alignment" alt="" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
 				<label class="accessibility_hidden" for="new_task">{!DESCRIPTION}</label>
 				<input maxlength="255" value="" type="text" id="new_task" name="new_task" size="32" />
 			</div>
