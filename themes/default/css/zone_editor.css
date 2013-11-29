@@ -20,6 +20,7 @@
 }
 
 .ze_tabs {
+	background-color: {$GET,native_ui_background};
 }
 
 .ze_tabs .tab {
@@ -31,7 +32,7 @@
 }
 
 .ze_panel {
-	width: 17em;
+	width: 19em;
 	position: absolute;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -46,7 +47,7 @@
 }
 
 .ze_middle {
-	margin: 0 17em;
+	margin: 0 19em;
 }
 
 #p_panel_right .tab {

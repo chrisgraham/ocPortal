@@ -31,8 +31,8 @@
 		{+START,IF,{IS_PANEL}}
 			{+START,IF,{$EQ,{NAME},panel_left,panel_right}}
 				<p class="quick_self_edit_link associated_link">
-					<img title="{!_COMCODE}" alt="{!_COMCODE}" width="{$IMG_WIDTH*,{$IMG,1x/editor/comcode}}" height="{$IMG_HEIGHT*,{$IMG,1x/editor/comcode}}" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" />
-					<a href="{EDIT_URL*}" title="{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}: {NAME*} ({!IN,&quot;{$?,{$IS_EMPTY,{$ZONE}},{!_WELCOME},{$ZONE*}}&quot;})">{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}</a>
+					<a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" width="{$IMG_WIDTH*,{$IMG,1x/editor/comcode}}" height="{$IMG_HEIGHT*,{$IMG,1x/editor/comcode}}" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
+					<a href="{EDIT_URL*}" title="{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}: {NAME*} ({!IN,&quot;{$?,{$IS_EMPTY,{$ZONE}},{!_WELCOME},{$ZONE*}}&quot;})"><span>{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}</span></a>
 				</p>
 			{+END}
 
@@ -50,9 +50,11 @@
 				1_NOREDIRECT=1
 				1_ACCESSKEY=q
 				1_REL=edit
+				1_ICON=menu/_generic_admin/edit_this
 				2_URL={$?,{$GET,has_comcode_page_children_block},{ADD_CHILD_URL*}}
 				2_TITLE={!ADD_CHILD_PAGE}
 				2_REL=add
+				2_ICON=menu/_generic_admin/add_one
 			{+END}
 		{+END}
 	{+END}

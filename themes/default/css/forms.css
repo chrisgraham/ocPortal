@@ -52,6 +52,7 @@ div.comcode_supported {
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.input_error_here {
 		background: url('{$IMG;,icons/48x48/status/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
+		background-size: 24px 24px;
 	}
 }
 

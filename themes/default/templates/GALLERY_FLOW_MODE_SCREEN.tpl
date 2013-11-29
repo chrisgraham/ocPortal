@@ -102,19 +102,24 @@
 		1_URL={IMAGE_URL*}
 		1_TITLE={!ADD_IMAGE}
 		1_REL=add
+		1_ICON=menu/cms/galleries/add_one_image
 		2_URL={VIDEO_URL*}
 		2_TITLE={!ADD_VIDEO}
 		2_REL=add
+		2_ICON=menu/cms/galleries/add_one_video
 		3_URL={$?,{$OR,{$NOT,{$HAS_PRIVILEGE,may_download_gallery}},{$IS_EMPTY,{ENTRIES}}},,{$FIND_SCRIPT*,download_gallery}?cat={CAT*}{$KEEP*,0,1}}
 		3_TITLE={!DOWNLOAD_GALLERY_CONTENTS}
 		3_CLASS=archive_link
+		3_ICON=links/download_as_archive
 		4_URL={ADD_GALLERY_URL*}
 		4_TITLE={!ADD_GALLERY}
 		4_REL=edit
+		4_ICON=menu/_generic_admin/add_one_category
 		5_ACCESSKEY=q
 		5_URL={EDIT_URL*}
 		5_TITLE={!EDIT_GALLERY}
 		5_REL=edit
+		5_ICON=menu/_generic_admin/edit_this_category
 	{+END}
 
 	{+START,IF_NON_EMPTY,{ENTRIES}{CURRENT_ENTRY}}

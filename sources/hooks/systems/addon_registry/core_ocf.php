@@ -121,7 +121,7 @@ class Hook_addon_registry_core_ocf
 			'themes/default/images/icons/48x48/tabs/member_account/edit/index.html',
 			'themes/default/images/icons/48x48/tabs/member_account/index.html',
 			'themes/default/images/icons/14x14/birthday.png',
-			'themes/default/images/icons/14x14/birthday.png',
+			'themes/default/images/icons/28x28/birthday.png',
 			'themes/default/images/icons/24x24/menu/adminzone/style/emoticons.png',
 			'themes/default/images/icons/48x48/menu/adminzone/style/emoticons.png',
 			'themes/default/images/icons/24x24/menu/social/groups.png',
@@ -130,12 +130,12 @@ class Hook_addon_registry_core_ocf
 			'themes/default/images/icons/48x48/buttons/ignore.png',
 			'themes/default/images/icons/24x24/menu/site_meta/user_actions/lost_password.png',
 			'themes/default/images/icons/48x48/menu/site_meta/user_actions/lost_password.png',
-			'themes/default/images/1x/ocf/index.html',
-			'themes/default/images/2x/ocf/index.html',
-			'themes/default/images/1x/ocf/isoff.png',
-			'themes/default/images/1x/ocf/ison.png',
-			'themes/default/images/2x/ocf/isoff.png',
-			'themes/default/images/2x/ocf/ison.png',
+			'themes/default/images/1x/ocf_general/index.html',
+			'themes/default/images/2x/ocf_general/index.html',
+			'themes/default/images/1x/ocf_general/isoff.png',
+			'themes/default/images/1x/ocf_general/ison.png',
+			'themes/default/images/2x/ocf_general/isoff.png',
+			'themes/default/images/2x/ocf_general/ison.png',
 			'sources/ocf_forum_driver_helper_auth.php',
 			'sources/hooks/modules/admin_import/emoticons.php',
 			'sources/hooks/systems/notifications/ocf_password_changed.php',
@@ -221,7 +221,6 @@ class Hook_addon_registry_core_ocf
 			'themes/default/templates/OCF_VIEW_GROUP_MEMBER_PROSPECTIVE.tpl',
 			'themes/default/templates/OCF_VIEW_GROUP_MEMBER_SECONDARY.tpl',
 			'validateip.php',
-			'themes/default/images/EN/ocf_emoticons/index.html',
 			'themes/default/images/ocf_emoticons/birthday.png',
 			'themes/default/images/ocf_emoticons/angry.png',
 			'themes/default/images/ocf_emoticons/blink.gif',
@@ -271,6 +270,11 @@ class Hook_addon_registry_core_ocf
 			'themes/default/images/ocf_emoticons/wub.png',
 			'themes/default/images/ocf_emoticons/zzz.png',
 			'themes/default/images/ocf_emoticons/none.png',
+			'themes/default/images/ocf_emoticons/angel.png',
+			'themes/default/images/ocf_emoticons/cowboy.png',
+			'themes/default/images/ocf_emoticons/fight.png',
+			'themes/default/images/ocf_emoticons/goodbye.png',
+			'themes/default/images/ocf_emoticons/idea.png',
 			'lang/EN/ocf.ini',
 			'lang/EN/ocf_components.ini',
 			'lang/EN/ocf_config.ini',
@@ -816,22 +820,15 @@ class Hook_addon_registry_core_ocf
 		);
 		$actions=array();
 		$i=0;
-		$links=new ocp_tempcode();
 		foreach ($sections as $section_code=>$section_title)
 		{
-			$links->attach(do_lorem_template('OCF_MEMBER_ACTION',array(
-				'ID'=>strval($i),
-				'URL'=>placeholder_url(),
-				'LANG'=>lorem_word(),
-				'REL'=>''
-			)));
 			$actions[$section_code]=do_lorem_template('OCF_MEMBER_ACTION',array(
 				'ID'=>strval($i),
 				'URL'=>placeholder_url(),
+				'ICON'=>'menu/_generic_spare/1',
 				'LANG'=>lorem_word(),
 				'REL'=>'',
 				'NAME'=>$section_title,
-				'VALUE'=>$links
 			));
 			$i++;
 		}
@@ -888,8 +885,9 @@ class Hook_addon_registry_core_ocf
 			'CLUBS'=>lorem_phrase()
 		));
 		$tabs[]=array(
-			'TAB_CODE'=>placeholder_id() . '0',
+			'TAB_CODE'=>placeholder_id().'0',
 			'TAB_TITLE'=>lorem_phrase(),
+			'TAB_ICON'=>'tabs/member_account/profile',
 			'TAB_CONTENT'=>$tab_content,
 			'TAB_FIRST'=>true,
 			'TAB_LAST'=>false
@@ -915,6 +913,7 @@ class Hook_addon_registry_core_ocf
 		)));
 		$tabs2[]=array(
 			'TAB_TITLE'=>lorem_phrase(),
+			'TAB_ICON'=>'tabs/member_account/profile',
 			'TAB_FIELDS'=>$fields,
 			'TAB_TEXT'=>lorem_paragraph(),
 			'TAB_FIRST'=>true,
@@ -930,8 +929,9 @@ class Hook_addon_registry_core_ocf
 			'HIDDEN'=>''
 		));
 		$tabs[]=array(
-			'TAB_CODE'=>placeholder_id() . '1',
+			'TAB_CODE'=>placeholder_id().'1',
 			'TAB_TITLE'=>lorem_phrase(),
+			'TAB_ICON'=>'tabs/member_account/profile',
 			'TAB_CONTENT'=>$tab_content,
 			'TAB_FIRST'=>false,
 			'TAB_LAST'=>true

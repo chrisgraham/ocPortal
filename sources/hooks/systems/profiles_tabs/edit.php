@@ -50,7 +50,7 @@ class Hook_Profiles_Tabs_edit
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
+	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -65,7 +65,8 @@ class Hook_Profiles_Tabs_edit
 
 		$only_tab=get_param('only_subtab',NULL);
 
-		if (($leave_to_ajax_if_possible) && (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST')) return array($title,NULL,$order);
+		if (($leave_to_ajax_if_possible) && (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST'))
+			return array($title,NULL,$order,'tabs/settings');
 
 		if (function_exists('set_time_limit')) @set_time_limit(60); // Raise time limit, as can be slow
 
@@ -96,7 +97,7 @@ class Hook_Profiles_Tabs_edit
 			}
 		}
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'tabs/settings');
 
 		sort_maps_by($tabs,4);
 		$tabs=array_values($tabs); // Reindex, needed for lastness check
@@ -137,14 +138,14 @@ class Hook_Profiles_Tabs_edit
 			}
 
 			if (isset($tab[5])) $hidden->attach($tab[5]);
-			$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_FIELDS'=>$tab[1],'TAB_TEXT'=>$tab[2],'TAB_FIRST'=>$tab_first,'TAB_LAST'=>$tab_last);
+			$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_FIELDS'=>$tab[1],'TAB_ICON'=>$tab[6],'TAB_TEXT'=>$tab[2],'TAB_FIRST'=>$tab_first,'TAB_LAST'=>$tab_last);
 			$tab_first=false;
 		}
 		$url=build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,false/*,'tab__edit'  confusing, esp if was not on settings edit tab initially*/);
 
 		$content=do_template('OCF_MEMBER_PROFILE_EDIT',array('_GUID'=>'7a3e2cc210583fe4f3097af48b052351','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'URL'=>$url,'SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'AUTOCOMPLETE'=>false,'SKIP_VALIDATION'=>true,'TABS'=>$_tabs));
 
-		return array($title,$content,$order);
+		return array($title,$content,$order,'tabs/settings');
 	}
 }
 

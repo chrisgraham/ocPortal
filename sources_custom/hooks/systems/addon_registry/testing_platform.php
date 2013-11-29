@@ -104,7 +104,7 @@ class Hook_addon_registry_testing_platform
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(
+			'requires'=>array( // Actually, it's all
 			),
 			'recommends'=>array(
 			),
@@ -391,6 +391,7 @@ class Hook_addon_registry_testing_platform
 			'_tests/tests/unit_tests/iotd.php',
 			'_tests/tests/unit_tests/lang.php',
 			'_tests/tests/unit_tests/menu.php',
+			'_tests/tests/unit_tests/themeini_images.php',
 			'_tests/tests/unit_tests/addon_screenshots.php',
 			'_tests/tests/unit_tests/missing_block_params.php',
 			'_tests/tests/unit_tests/missing_colour_equations.php',

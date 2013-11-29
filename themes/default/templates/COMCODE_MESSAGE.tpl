@@ -2,7 +2,7 @@
 	{+START,IF,{$SHOW_DOCS}}{+START,IF_PASSED,URL}
 		<li><a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{URL*}"><img src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" class="vertical_alignment" alt="" /></a></li>
 	{+END}{+END}
-	<li><a rel="nofollow" class="link_exempt" title="{!EMOTICONS_POPUP}: {!LINK_NEW_WINDOW}" target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT;*,emoticons}?field_name={NAME;*}{$KEEP;*,0,1}'),'field_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;"><img src="{$IMG*,1x/editor/insert_emoticons}" alt="" class="vertical_alignment" /></a></li>
+	<li><a rel="nofollow" class="link_exempt" title="{!EMOTICONS_POPUP}: {!LINK_NEW_WINDOW}" target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT;*,emoticons}?field_name={NAME;*}{$KEEP;*,0,1}'),'field_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;"><img src="{$IMG*,1x/editor/insert_emoticons}" srcset="{$IMG*,2x/editor/insert_emoticons} 2x" alt="" class="vertical_alignment" /></a></li>
 
 	{+START,IF,{$AND,{$JS_ON},{W}}}
 		<li><a rel="nofollow" id="toggle_wysiwyg_{NAME*}" href="#" onclick="return toggle_wysiwyg('{NAME;}');"><abbr title="{!comcode:TOGGLE_WYSIWYG_2}"><img src="{$IMG*,1x/editor/wysiwyg_on}" srcset="{$IMG*,2x/editor/wysiwyg_on} 2x" alt="{!comcode:ENABLE_WYSIWYG}" title="{!comcode:ENABLE_WYSIWYG}" class="vertical_alignment" /></abbr></a></li>

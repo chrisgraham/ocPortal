@@ -67,5 +67,6 @@
 		1_URL={ADD_URL*}
 		1_TITLE={!ADD}
 		1_REL=add
+		1_ICON=menu/_generic_admin/add_one
 	{+END}
 {+END}

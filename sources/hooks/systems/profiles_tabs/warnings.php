@@ -38,7 +38,7 @@ class Hook_Profiles_Tabs_warnings
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
+	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -47,7 +47,7 @@ class Hook_Profiles_Tabs_warnings
 
 		$order=80;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'tabs/member_account/warnings');
 
 		require_lang('ocf');
 		require_css('ocf');
@@ -67,7 +67,7 @@ class Hook_Profiles_Tabs_warnings
 
 		$content=do_template('OCF_MEMBER_PROFILE_WARNINGS',array('_GUID'=>'fea98858f6bf89f1d9dc3ec995785a39','MEMBER_ID'=>strval($member_id_of),'WARNINGS'=>$warnings));
 
-		return array($title,$content,$order);
+		return array($title,$content,$order,'tabs/member_account/warnings');
 	}
 }
 

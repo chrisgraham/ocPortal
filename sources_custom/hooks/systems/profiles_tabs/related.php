@@ -35,7 +35,7 @@ class Hook_Profiles_Tabs_related
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
+	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -45,7 +45,7 @@ class Hook_Profiles_Tabs_related
 
 		$order=150;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'');
 
 		require_css('member_directory_boxes');
 
@@ -53,7 +53,7 @@ class Hook_Profiles_Tabs_related
 		$ocselect=do_lang('RELATED_CPF').'='.$cpf_value.',id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).',id<>'.strval($member_id_of);
 		$content=do_block('main_multi_content',array('param'=>'member','ocselect'=>$ocselect,'no_links'=>'1'));
 
-		return array($title,$content,$order);
+		return array($title,$content,$order,'');
 	}
 }
 

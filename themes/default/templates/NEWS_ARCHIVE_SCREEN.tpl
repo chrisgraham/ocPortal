@@ -28,4 +28,5 @@
 	1_URL={SUBMIT_URL*}
 	1_TITLE={$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}
 	1_REL=add
+	1_ICON=menu/_generic_admin/add_one
 {+END}

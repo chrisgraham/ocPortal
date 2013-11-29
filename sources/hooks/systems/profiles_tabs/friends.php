@@ -38,7 +38,7 @@ class Hook_Profiles_Tabs_friends
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
+	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -49,7 +49,7 @@ class Hook_Profiles_Tabs_friends
 
 		$order=70;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'tabs/member_account/friends');
 
 		$add_friend_url=new ocp_tempcode();
 		$remove_friend_url=new ocp_tempcode();
@@ -69,7 +69,7 @@ class Hook_Profiles_Tabs_friends
 
 		$content=do_template('OCF_MEMBER_PROFILE_FRIENDS',array('_GUID'=>'b24a8607c6e2d3d6ddc29c8e22b972e8','FRIENDS'=>$friends,'MEMBER_ID'=>strval($member_id_of),'ADD_FRIEND_URL'=>$add_friend_url,'REMOVE_FRIEND_URL'=>$remove_friend_url));
 
-		return array($title,$content,$order);
+		return array($title,$content,$order,'tabs/member_account/friends');
 	}
 }
 

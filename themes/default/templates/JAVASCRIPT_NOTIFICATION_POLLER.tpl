@@ -18,7 +18,9 @@ function notification_poller_init(time_barrier)
 
 	window.setInterval(window.poll_for_notifications,window.NOTIFICATION_POLL_FREQUENCY*1000);
 
-	add_event_listener_abstract(document.body,'click',explicit_notifications_enable_request);
+	var web_notifications_button=document.getElementById('web_notifications_button');
+	if (web_notifications_button)
+		add_event_listener_abstract(web_notifications_button,'click',explicit_notifications_enable_request);
 }
 
 function notifications_mark_all_read(event)

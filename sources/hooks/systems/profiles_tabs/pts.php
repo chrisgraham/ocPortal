@@ -38,7 +38,7 @@ class Hook_Profiles_Tabs_pts
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
+	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -46,7 +46,7 @@ class Hook_Profiles_Tabs_pts
 
 		$order=80;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'tool_buttons/inbox');
 
 		require_code('ocf_forumview');
 		require_code('ocf_topics');
@@ -67,7 +67,7 @@ class Hook_Profiles_Tabs_pts
 
 		$content=do_template('OCF_MEMBER_PROFILE_PTS',array('_GUID'=>'5d0cae3320634a1e4eb345154c853c35','CONTENT'=>$content));
 
-		return array($title,$content,$order);
+		return array($title,$content,$order,'tool_buttons/inbox');
 	}
 }
 

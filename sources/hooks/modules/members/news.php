@@ -37,7 +37,7 @@ class Hook_members_news
 			$modules=array();
 			if (has_actual_page_access(get_member(),'news',get_page_zone('news')))
 			{
-				$modules[]=array('content',do_lang_tempcode('BLOG_ARCHIVE'),build_url(array('page'=>'news','type'=>'misc','id'=>$nc_id,'blog'=>1),get_module_zone('news')));
+				$modules[]=array('content',do_lang_tempcode('BLOG_ARCHIVE'),build_url(array('page'=>'news','type'=>'misc','id'=>$nc_id,'blog'=>1),get_module_zone('news')),'tabs/member_account/blog');
 			}
 			return $modules;
 		}

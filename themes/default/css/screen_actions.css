@@ -20,14 +20,12 @@
 }
 
 .screen_actions div a {
-	width: 20px;
-	height: 16px;
+	width: 24px;
+	height: 24px;
 	display: inline-block;
 }
 
 .screen_actions .facebook_like {
-	position: relative;
-	top: -2px;
 	margin-right: 0;
 }
 
@@ -62,33 +60,40 @@
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.screen_actions .print {
 		background-image: url('{$IMG;,icons/48x48/links/print}');
+		background-size: 24px 24px;
 	}
 
 	.screen_actions .recommend {
 		background-image: url('{$IMG;,icons/48x48/menu/site_meta/recommend}');
+		background-size: 24px 24px;
 	}
 
 	.screen_actions .favorites {
 		background-image: url('{$IMG;,icons/48x48/links/favorites}');
+		background-size: 24px 24px;
 	}
 
 	.screen_actions .facebook {
 		background-image: url('{$IMG;,icons/48x48/links/facebook}');
+		background-size: 24px 24px;
 	}
 
 	.screen_actions .twitter {
 		background-image: url('{$IMG;,icons/48x48/links/twitter}');
+		background-size: 24px 24px;
 	}
 
 	.screen_actions .stumbleupon {
 		background-image: url('{$IMG;,icons/48x48/links/stumbleupon}');
+		background-size: 24px 24px;
 	}
 
 	.screen_actions .digg {
 		background-image: url('{$IMG;,icons/48x48/links/digg}');
+		background-size: 24px 24px;
 	}
 }
 
 .screen_actions .google_plusone {
-	margin-top: 1px;
+	margin-top: 2px;
 }

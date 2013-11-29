@@ -20,6 +20,10 @@
 	display: inline-block; /* This says that we want to encourage greedy space consumption rather than wrapping */
 }
 
+.menu_type__tree a {
+	background-size: 6px 6px;
+}
+
 .menu_type__tree .non_current a {
 	background: transparent url('{$IMG;,1x/menus/menu_bullet}') no-repeat 5px 6px;
 }

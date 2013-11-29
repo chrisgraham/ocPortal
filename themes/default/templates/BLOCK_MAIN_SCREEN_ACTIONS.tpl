@@ -13,7 +13,7 @@
 	{+END}
 
 	<div class="google_plusone">
-		<div class="g-plusone" data-size="small" data-count="true" data-href="{EASY_SELF_URL*}"></div>
+		<div class="g-plusone" data-size="medium" data-count="true" data-href="{EASY_SELF_URL*}"></div>
 		{$EXTRA_FOOT,<script src="https://apis.google.com/js/plusone.js"></script>}
 	</div>
 </div></aside>

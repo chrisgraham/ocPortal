@@ -62,6 +62,7 @@
 				{+START,INCLUDE,STAFF_ACTIONS}
 					1_URL={EDIT_URL*}
 					1_TITLE={!EDIT_IMAGE}
+					1_ICON=menu/_generic_admin/edit_this
 				{+END}
 			</div></section>
 		</div>

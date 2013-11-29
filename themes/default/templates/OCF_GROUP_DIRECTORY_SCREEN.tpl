@@ -26,5 +26,6 @@
 		1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_groups:ad}
 		1_TITLE={!ADD_GROUP}
 		1_REL=add
+		1_ICON=menu/_generic_admin/add_one
 	{+END}
 {+END}

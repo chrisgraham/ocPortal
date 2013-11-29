@@ -6,7 +6,7 @@
 	{+START,IF,{$GT,{TABS},1}}
 		<div class="float_surrounder"><div class="tabs" role="tablist">
 			{+START,LOOP,TABS}
-				<a aria-controls="g_{TAB_CODE*}" role="tab" href="#" id="t_{TAB_CODE*}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="event.returnValue=false; select_tab('g','{TAB_CODE;*}'); return false;">{TAB_TITLE*}</a>
+				<a aria-controls="g_{TAB_CODE*}" role="tab" href="#" id="t_{TAB_CODE*}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="event.returnValue=false; select_tab('g','{TAB_CODE;*}'); return false;">{+START,IF_NON_EMPTY,{TAB_ICON}}<img alt="" src="{$IMG*,icons/24x24/{TAB_ICON}}" srcset="{$IMG*,icons/48x48/{TAB_ICON}} 2x" /> {+END}<span>{TAB_TITLE*}</span></a>
 			{+END}
 		</div></div>
 		<div class="tab_surround">

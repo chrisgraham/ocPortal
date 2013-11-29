@@ -75,5 +75,6 @@
 		1_TITLE={!EDIT}
 		1_ACCESSKEY=q
 		1_REL=edit
+		1_ICON=menu/_generic_admin/edit_this
 	{+END}
 </div>

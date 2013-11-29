@@ -33,7 +33,7 @@ class Hook_Profiles_Tabs_comments
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
+	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -43,7 +43,8 @@ class Hook_Profiles_Tabs_comments
 
 		$order=25;
 
-		if ($leave_to_ajax_if_possible && count($_POST)==0) return array($title,NULL,$order);
+		if ($leave_to_ajax_if_possible && count($_POST)==0)
+			return array($title,NULL,$order,'feedback/comment');
 
 		$forum_name=do_lang('MEMBER_COMMENTS_FORUM_NAME');
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
@@ -73,7 +74,7 @@ class Hook_Profiles_Tabs_comments
 		$content=do_template('OCF_MEMBER_PROFILE_COMMENTS',array('_GUID'=>'5ce1949e4fa0d247631f52f48698df4e','MEMBER_ID'=>strval($member_id_of),'FORUM_NAME'=>$forum_name));
 		$content->handle_symbol_preprocessing();
 
-		return array($title,$content,$order);
+		return array($title,$content,$order,'feedback/comment');
 	}
 }
 

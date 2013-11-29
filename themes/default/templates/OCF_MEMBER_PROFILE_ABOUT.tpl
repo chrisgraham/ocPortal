@@ -40,7 +40,7 @@
 				</h3>
 
 				<nav class="toggleable_tray" style="display: block" role="navigation">
-					<ul>
+					<ul class="nl">
 						{ACTIONS_contact}
 						{$GET,messenger_fields}
 					</ul>
@@ -56,7 +56,7 @@
 				</h3>
 
 				<nav class="toggleable_tray" style="display: {$JS_ON,none,block}" role="navigation" aria-expanded="false">
-					<ul>
+					<ul class="nl">
 						{ACTIONS_content}
 					</ul>
 				</nav>
@@ -71,7 +71,7 @@
 				</h3>
 
 				<nav class="toggleable_tray" style="display: {$JS_ON,none,block}" role="navigation" aria-expanded="false">
-					<ul>
+					<ul class="nl">
 						{ACTIONS_views}
 						{ACTIONS_profile}
 					</ul>
@@ -87,7 +87,7 @@
 				</h3>
 
 				<nav class="toggleable_tray" style="display: {$JS_ON,none,block}" role="navigation" aria-expanded="false">
-					<ul>
+					<ul class="nl">
 						{ACTIONS_audit}
 					</ul>
 				</nav>

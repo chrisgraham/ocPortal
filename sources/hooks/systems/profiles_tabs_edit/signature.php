@@ -38,7 +38,7 @@ class Hook_Profiles_Tabs_Edit_signature
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set)
+	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -156,7 +156,7 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		$text=do_template('OCF_EDIT_SIGNATURE_TAB',array('_GUID'=>'f5f2eb2552c34840c9cf46886422401e','SIZE'=>integer_format($size),'SIGNATURE'=>$signature,'TITLE'=>$title));
 
-		return array($title,$fields,$text,$javascript,$order);
+		return array($title,$fields,$text,$javascript,$order,NULL,'tabs/member_account/edit/signature');
 	}
 }
 

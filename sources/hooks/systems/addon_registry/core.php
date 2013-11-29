@@ -269,8 +269,6 @@ class Hook_addon_registry_core
 			'themes/default/images/icons/64x64/menu/adminzone/setup.png',
 			'themes/default/images/icons/24x24/menu/site_meta.png',
 			'themes/default/images/icons/48x48/menu/site_meta.png',
-			'themes/default/images/icons/24x24/tool_buttons/sitemap.png',
-			'themes/default/images/icons/48x48/tool_buttons/sitemap.png',
 			'themes/default/images/icons/24x24/tool_buttons/software_chat.png',
 			'themes/default/images/icons/48x48/tool_buttons/software_chat.png',
 			'themes/default/images/icons/24x24/menu/start.png',
@@ -304,10 +302,6 @@ class Hook_addon_registry_core
 			'themes/default/images/icons/64x64/menu/adminzone/usage.png',
 			'themes/default/images/icons/24x24/menu/social/users_online.png',
 			'themes/default/images/icons/48x48/menu/social/users_online.png',
-			'themes/default/images/icons/24x24/tool_buttons/version_desktop.png',
-			'themes/default/images/icons/48x48/tool_buttons/version_desktop.png',
-			'themes/default/images/icons/24x24/tool_buttons/version_mobile.png',
-			'themes/default/images/icons/48x48/tool_buttons/version_mobile.png',
 			'themes/default/images/icons/24x24/menu/_generic_admin/view_archive.png',
 			'themes/default/images/icons/48x48/menu/_generic_admin/view_archive.png',
 			'themes/default/images/icons/24x24/menu/_generic_admin/view_this.png',
@@ -1186,6 +1180,14 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/tasks/index.html',
 			'sources/hooks/systems/notifications/task_completed.php',
 			'sources/hooks/systems/tasks/.htaccess',
+
+			// These are not used by default, as have text links - but may be useful for some
+			'themes/default/images/icons/24x24/tool_buttons/version_desktop.png',
+			'themes/default/images/icons/48x48/tool_buttons/version_desktop.png',
+			'themes/default/images/icons/24x24/tool_buttons/version_mobile.png',
+			'themes/default/images/icons/48x48/tool_buttons/version_mobile.png',
+			'themes/default/images/icons/24x24/tool_buttons/sitemap.png',
+			'themes/default/images/icons/48x48/tool_buttons/sitemap.png',
 		);
 	}
 

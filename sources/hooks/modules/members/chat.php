@@ -42,22 +42,22 @@ class Hook_members_chat
 				{
 					if (!member_blocked($member_id))
 					{
-						$modules[]=array('contact',do_lang_tempcode('EXPLAINED_BLOCK_MEMBER'),build_url(array('page'=>'chat','type'=>'blocking_add','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')));
+						$modules[]=array('contact',do_lang_tempcode('EXPLAINED_BLOCK_MEMBER'),build_url(array('page'=>'chat','type'=>'blocking_add','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')),'menu/social/chat/member_blocking');
 						if (has_privilege(get_member(),'start_im'))
 						{
-							$modules[]=array('contact',do_lang_tempcode('START_IM'),build_url(array('page'=>'chat','type'=>'misc','enter_im'=>$member_id),get_module_zone('chat')));
+							$modules[]=array('contact',do_lang_tempcode('START_IM'),build_url(array('page'=>'chat','type'=>'misc','enter_im'=>$member_id),get_module_zone('chat')),'menu/social/chat/chat');
 						}
 					} else
 					{
-						$modules[]=array('contact',do_lang_tempcode('EXPLAINED_UNBLOCK_MEMBER'),build_url(array('page'=>'chat','type'=>'blocking_remove','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')));
+						$modules[]=array('contact',do_lang_tempcode('EXPLAINED_UNBLOCK_MEMBER'),build_url(array('page'=>'chat','type'=>'blocking_remove','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')),'menu/social/chat/member_blocking');
 					}
 				}
 				if (!member_befriended($member_id))
 				{
-					$modules[]=array('contact',do_lang_tempcode('MAKE_FRIEND'),build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')));
+					$modules[]=array('contact',do_lang_tempcode('MAKE_FRIEND'),build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')),'tabs/member_account/friends');
 				} else
 				{
-					$modules[]=array('contact',do_lang_tempcode('DUMP_FRIEND'),build_url(array('page'=>'chat','type'=>'friend_remove','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')));
+					$modules[]=array('contact',do_lang_tempcode('DUMP_FRIEND'),build_url(array('page'=>'chat','type'=>'friend_remove','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')),'tabs/member_account/friends');
 				}
 			}
 		}

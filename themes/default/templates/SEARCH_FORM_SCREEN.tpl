@@ -43,6 +43,7 @@
 				1_URL={$TUTORIAL_URL*,tut_search}
 				1_TITLE={!HELP}
 				1_REL=help
+				1_ICON=menu/pages/help
 			{+END}
 		{+END}
 

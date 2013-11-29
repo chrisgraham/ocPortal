@@ -16,7 +16,7 @@
 	{+START,IF,{$GT,{TABS},1}}
 		<div class="float_surrounder"><div class="tabs">
 			{+START,LOOP,TABS}
-				<a aria-controls="g_edit__{$LCASE,{TAB_TITLE|*}}" role="tab" href="#" id="t_edit__{$LCASE,{TAB_TITLE|*}}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="select_tab('g','edit__{$LCASE,{TAB_TITLE|*}}'); return false;">{TAB_TITLE*}</a>
+				<a aria-controls="g_edit__{$LCASE,{TAB_TITLE|*}}" role="tab" href="#" id="t_edit__{$LCASE,{TAB_TITLE|*}}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="select_tab('g','edit__{$LCASE,{TAB_TITLE|*}}'); return false;">{+START,IF_NON_EMPTY,{TAB_ICON}}<img alt="" src="{$IMG*,icons/24x24/{TAB_ICON}}" srcset="{$IMG*,icons/48x48/{TAB_ICON}} 2x" /> {+END}<span>{TAB_TITLE*}</span></a>
 			{+END}
 		</div></div>
 		<div class="tab_surround">

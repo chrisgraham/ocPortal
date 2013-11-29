@@ -87,10 +87,12 @@
 				1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:ad:parent_forum={ID}}
 				1_TITLE={!ADD_FORUM}
 				1_REL=add
+				1_ICON=menu/_generic_admin/add_one_category
 				2_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:_ed:{ID}}
 				2_TITLE={!EDIT_FORUM}
 				2_ACCESSKEY=q
 				2_REL=edit
+				2_ICON=menu/_generic_admin/edit_this_category
 			{+END}
 		{+END}
 	{+END}

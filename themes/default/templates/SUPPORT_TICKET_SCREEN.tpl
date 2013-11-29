@@ -51,14 +51,17 @@
 		{+START,INCLUDE,STAFF_ACTIONS}
 			1_URL={STAFF_DETAILS*}
 			1_TITLE={!VIEW_COMMENT_TOPIC}
+			1_ICON=feedback/comments_topic
 			{+START,IF_PASSED,TICKET_TYPE}{+START,IF,{$HAS_PRIVILEGE,assume_any_member}}
 				{+START,IF,{$NEQ,{USERNAME},{$USERNAME}}}
 					2_URL={$PAGE_LINK,_SEARCH:tickets:ticket:default={TICKET_TYPE}:post={!TICKET_SPLIT_POST&,{USERNAME}}:keep_su={USERNAME}}
 					2_TITLE={!STAFF_NEW_TICKET_AS,{USERNAME}}
+					2_ICON=buttons/add_ticket
 				{+END}{+END}
 				{+START,IF_PASSED,SUPPORT_OPERATOR_URL}
 					3_URL={SUPPORT_OPERATOR_URL}
 					3_TITLE={!SUPPORT_ACCOUNT_SWITCH}
+					3_ICON=menu/site_meta/user_actions/login
 				{+END}
 			{+END}
 		{+END}

@@ -43,15 +43,19 @@
 	1_URL={ADD_ENTRY_URL*}
 	1_TITLE={!CATALOGUE_GENERIC_ADD,{_TITLE*}}
 	1_REL=add
+	1_ICON=menu/_generic_admin/add_one
 	2_URL={ADD_CAT_URL*}
 	2_TITLE={!CATALOGUE_GENERIC_ADD_CATEGORY,{_TITLE*}}
 	2_REL=add
+	2_ICON=menu/_generic_admin/add_one_category
 	3_ACCESSKEY=q
 	3_URL={EDIT_CAT_URL*}
 	3_TITLE={!CATALOGUE_GENERIC_EDIT_CATEGORY,{_TITLE*}}
 	3_REL=edit
+	3_ICON=menu/_generic_admin/edit_this_category
 	4_URL={EDIT_CATALOGUE_URL*}
 	4_TITLE={!EDIT_CATALOGUE}
+	4_ICON=menu/cms/catalogues/edit_this_catalogue
 {+END}
 
 {+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}

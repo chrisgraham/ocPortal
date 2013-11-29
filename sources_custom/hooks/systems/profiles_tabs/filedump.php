@@ -33,7 +33,7 @@ class Hook_Profiles_Tabs_filedump
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
+	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -45,11 +45,11 @@ class Hook_Profiles_Tabs_filedump
 
 		$order=70;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'menu/cms/filedump');
 
 		$content=do_template('OCF_MEMBER_PROFILE_FILEDUMP',array('_GUID'=>'87c683590a6e2d435d877cec1c97baba','MEMBER_ID'=>strval($member_id_of)));
 
-		return array($title,$content,$order);
+		return array($title,$content,$order,'menu/cms/filedump');
 	}
 }
 

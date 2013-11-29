@@ -176,9 +176,11 @@
 		1_TITLE={!EDIT}
 		1_ACCESSKEY=q
 		1_REL=edit
+		1_ICON=menu/_generic_admin/edit_this
 		{+START,IF,{$ADDON_INSTALLED,galleries}}
 		2_URL={ADD_IMG_URL*}
 		2_TITLE={!ADD_IMAGE}
+		2_ICON=menu/_generic_admin/add_one
 		{+END}
 	{+END}
 

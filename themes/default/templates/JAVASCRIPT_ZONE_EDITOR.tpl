@@ -126,6 +126,10 @@ if (typeof window.ze_timer=='undefined')
 }
 function ze_animate_to(ob,amount,towards_expanded,now)
 {
+	// Actually, we won't do an animation, as it's annoying
+	ob.style.width=(amount)+'em';
+	return;
+
 	{+START,IF,{$NOT,{$CONFIG_OPTION,enable_animations}}}
 		ob.style.width=(amount)+'em';
 		return;

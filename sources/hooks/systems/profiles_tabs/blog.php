@@ -38,7 +38,7 @@ class Hook_Profiles_Tabs_blog
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
+	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
@@ -48,7 +48,7 @@ class Hook_Profiles_Tabs_blog
 
 		$order=50;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'tabs/member_account/blog');
 
 		// Show recent blog posts
 		$recent_blog_posts=new ocp_tempcode();
@@ -72,6 +72,6 @@ class Hook_Profiles_Tabs_blog
 		// Wrap it all up
 		$content=do_template('OCF_MEMBER_PROFILE_BLOG',array('_GUID'=>'f76244bc259c3e7da8c98b28fff85953','RSS_URL'=>$rss_url,'ADD_BLOG_POST_URL'=>$add_blog_post_url,'MEMBER_ID'=>strval($member_id_of),'RECENT_BLOG_POSTS'=>$recent_blog_posts));
 
-		return array($title,$content,$order);
+		return array($title,$content,$order,'tabs/member_account/blog');
 	}
 }

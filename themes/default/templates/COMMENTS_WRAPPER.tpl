@@ -106,6 +106,7 @@
 			STAFF_ACTIONS_TITLE={!COMMENTS}
 			1_URL={AUTHORISED_FORUM_URL*}
 			1_TITLE={!VIEW_COMMENT_TOPIC}
+			1_ICON=feedback/comments_topic
 		{+END}
 	{+END}
 </div>

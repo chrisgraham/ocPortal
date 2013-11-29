@@ -38,7 +38,7 @@
 					{+END}
 
 					<ul class="horizontal_links associated_links_block_group">
-						<li><a href="{SUBSCRIBE_URL*}">{!SUBSCRIBE_EVENT}</a></li>
+						<li><img alt="" src="{$IMG*,icons/24x24/buttons/enable_notifications}" srcset="{$IMG*,icons/48x48/buttons/enable_notifications} 2x" /> <a href="{SUBSCRIBE_URL*}">{!SUBSCRIBE_EVENT}</a></li>
 					</ul>
 				</div></div>
 			</div>
@@ -160,6 +160,7 @@
 			1_TITLE={!EDIT}
 			1_ACCESSKEY=q
 			1_REL=edit
+			1_ICON=menu/_generic_admin/edit_this
 
 			{$,Do not auto-redirect back to here as recurrences may break so URL hints may no longer be valid}
 			1_NOREDIRECT=1

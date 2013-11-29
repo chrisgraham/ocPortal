@@ -35,6 +35,7 @@
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.chat_multi_tab {
 		background: url('{$IMG;,2x/help}') no-repeat;
+		background-size: 16px 16px;
 	}
 }
 

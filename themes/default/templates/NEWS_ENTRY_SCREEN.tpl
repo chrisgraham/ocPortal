@@ -39,12 +39,15 @@
 		1_TITLE={$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}
 		1_REL=add
 		1_NOREDIRECT=1
+		1_ICON=menu/_generic_admin/add_one
 		2_URL={EDIT_URL*}
 		2_ACCESSKEY=q
 		2_TITLE={!_EDIT_LINK}
+		2_ICON=menu/_generic_admin/edit_this
 		2_REL=edit
 		3_URL={NEWSLETTER_URL*}
 		3_TITLE={+START,IF_NON_EMPTY,{NEWSLETTER_URL}}{!newsletter:NEWSLETTER_SEND}{+END}
+		3_ICON=menu/site_meta/newsletters
 	{+END}
 
 	<div class="float_surrounder lined_up_boxes">

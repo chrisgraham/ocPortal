@@ -17,13 +17,11 @@
 	position: relative;
 	top: 3px;
 	text-align: center;
-	min-width: 1.7em;
-	height: 1.3em;
+	min-width: 30px;
+	height: 24px;
 	font-size: 1.05em;
 	padding: 1px 0;
 	vertical-align: middle;
-	border: 1px solid {$GET,dark_border};
-	background-color: {$GET,area_background} !important;
 	background-repeat: no-repeat;
 	outline: 0;
 }
@@ -34,14 +32,17 @@
 #pts_button {
 	background-image: url('{$IMG;,icons/24x24/tool_buttons/inbox}');
 	background-position: 3px 2px;
+	margin-left: 5px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	#web_notifications_button {
 		background-image: url('{$IMG;,icons/48x48/tool_buttons/notifications}');
+		background-size: 24px 24px;
 	}
 	#pts_button {
 		background-image: url('{$IMG;,icons/48x48/tool_buttons/inbox}');
+		background-size: 24px 24px;
 	}
 }
 
@@ -77,6 +78,7 @@
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.box.box_arrow>span {
 		background: url('{$IMG;,2x/box_arrow}') no-repeat;
+		background-size: 13px 7px;
 	}
 }
 

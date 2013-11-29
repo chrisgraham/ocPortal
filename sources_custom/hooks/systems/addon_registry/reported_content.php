@@ -97,12 +97,15 @@ In the [tt]NEWS_ENTRY_SCREEN[/tt] template you\'ll find the action links are dri
 1_TITLE={$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}
 1_REL=add
 1_NOREDIRECT=1
+1_ICON=menu/_generic_admin/add_one
 2_URL={EDIT_URL*}
 2_ACCESSKEY=q
 2_TITLE={!_EDIT_LINK}
 2_REL=edit
+2_ICON=menu/_generic_admin/edit_this
 3_URL={NEWSLETTER_URL*}
 3_TITLE={+START,IF_NON_EMPTY,{NEWSLETTER_URL}}{!newsletter:NEWSLETTER_SEND}{+END}
+3_ICON=menu/site_meta/newsletters
 {+END}
 [/codebox]
 
@@ -115,14 +118,18 @@ change to:
 1_TITLE={$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}
 1_REL=add
 1_NOREDIRECT=1
+1_ICON=menu/_generic_admin/add_one
 2_URL={EDIT_URL*}
 2_ACCESSKEY=q
 2_TITLE={!_EDIT_LINK}
 2_REL=edit
+2_ICON=menu/_generic_admin/edit_this
 3_URL={NEWSLETTER_URL*}
 3_TITLE={+START,IF_NON_EMPTY,{NEWSLETTER_URL}}{!newsletter:NEWSLETTER_SEND}{+END}
+3_ICON=menu/site_meta/newsletters
 4_URL={$PAGE_LINK,_SEARCH:report_content:content_type=news:content_id={ID}:url={$SELF_URL&}}
 4_TITLE=Report this
+4_ICON=buttons/report
 {+END}
 [/codebox]
 

@@ -28,7 +28,7 @@ class Hook_members_gifts
 		if (!has_actual_page_access(get_member(),'pointstore',get_module_zone('pointstore'))) return array();
 		if ($member_id==get_member()) return array();
 
-		return array(array('contact',do_lang_tempcode('GIFT_GIFT'),build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocgifts','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)),get_module_zone('pointstore'))));
+		return array(array('contact',do_lang_tempcode('GIFT_GIFT'),build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocgifts','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)),get_module_zone('pointstore')),'menu/ocgifts'));
 	}
 
 	/**
