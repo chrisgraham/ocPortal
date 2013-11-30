@@ -29,7 +29,7 @@ function init__site__pages__modules_custom__galleries($code)
 	// Add workflow warnings to flow mode galleries. This has to be done for
 	// images...
 	$code=str_replace(
-		'$current_entry=do_template(\'GALLERY_FLOWMODE_IMAGE\'',
+		'$current_entry=do_template(\'GALLERY_FLOW_MODE_IMAGE\'',
 		'// Add the workflow form if this entry is unvalidated
 		if (array_key_exists("validated", $row) && $row["validated"]!=1)
 		{
@@ -43,12 +43,12 @@ function init__site__pages__modules_custom__galleries($code)
 				if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
 			}
 		}
-		$current_entry=do_template(\'GALLERY_FLOWMODE_IMAGE\'',
+		$current_entry=do_template(\'GALLERY_FLOW_MODE_IMAGE\'',
 		$code
 	);
 
 	// ...and videos separately.
-	$code=str_replace('$current_entry=do_template(\'GALLERY_FLOWMODE_VIDEO',
+	$code=str_replace('$current_entry=do_template(\'GALLERY_FLOW_MODE_VIDEO',
 		'// Add the workflow form if this entry is unvalidated
 		if (array_key_exists("validated", $row) && $row["validated"]!=1)
 		{
@@ -62,7 +62,7 @@ function init__site__pages__modules_custom__galleries($code)
 				if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
 			}
 		}
-		$current_entry=do_template(\'GALLERY_FLOWMODE_VIDEO',
+		$current_entry=do_template(\'GALLERY_FLOW_MODE_VIDEO',
 		$code
 	);
 

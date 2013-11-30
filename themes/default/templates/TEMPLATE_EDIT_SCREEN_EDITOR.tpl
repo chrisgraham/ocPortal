@@ -1,16 +1,18 @@
 <div id="template_editing_{I*}" style="display: {DISPLAY*}">
 	<div class="box box___template_edit_screen_editor"><div class="box_inner">
 		<div> {$,Extra div needed so the h2 is not a box title}
-			<h2>{!EDITING,{FILE_SAVE_TARGET*}}</h2>
+			{+START,IF,{$NEQ,{$GET,COUNT},1}}
+				<h2>{!EDITING,<kbd>{FILE_SAVE_TARGET*}</kbd>}</h2>
+			{+END}
 
 			<input type="hidden" name="f{I*}file" value="{FILE*}" />
 			<input type="hidden" name="{CODENAME*}" value="f{I*}" />
 
 			<div>
-				<div class="toggleable_tray_title">
+				<h3>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('f{I*}sdp');"><img alt="{!EXPAND}: {!SYMBOLS_AND_DIRECTIVES}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
-					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray('f{I*}sdp');">{!SYMBOLS_AND_DIRECTIVES}</a>
-				</div>
+					<a class="non_link" href="#" onclick="return toggleable_tray('f{I*}sdp');">{!SYMBOLS_AND_DIRECTIVES}</a>
+				</h3>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" id="f{I*}sdp" aria-expanded="false">
 					{PARAMETERS}
 					{DIRECTIVES}
@@ -39,11 +41,11 @@
 			<div class="original_template">
 				<h3>
 					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
-					<label for="f{I*}_old"><a class="non_link" href="#" onclick="event.returnValue=false; toggleable_tray(this.parentNode.parentNode.parentNode); return false;">{!ORIGINAL}</a>:</label>
+					<a class="non_link" href="#" onclick="event.returnValue=false; toggleable_tray(this.parentNode.parentNode); return false;">{!ORIGINAL}</a>:
 				</h3>
 				<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
 					<div class="constrain_field">
-						<textarea id="f{I*}_old" name="f{I*}_old" cols="70" rows="15" readonly="readonly" class="wide_field">{OLD_CONTENTS*}</textarea>
+						<div class="whitespace_visible code">{OLD_CONTENTS*}</div>
 					</div>
 				</div>
 			</div>

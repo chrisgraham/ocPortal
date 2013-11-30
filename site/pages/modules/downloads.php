@@ -252,7 +252,7 @@ class Module_downloads
 			{
 				$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 			}
-			if (has_privilege(get_member(),'open_virtual_roots'))
+			if ((has_privilege(get_member(),'open_virtual_roots')) && ($category_id!=$root))
 			{
 				$url=get_self_url(false,false,array('keep_download_root'=>$category_id));
 				$breadcrumbs->attach(hyperlink($url,escape_html($title_to_use),false,false,do_lang_tempcode('VIRTUAL_ROOT')));

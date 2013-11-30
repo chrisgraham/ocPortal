@@ -604,7 +604,7 @@ class Module_catalogues
 			{
 				$breadcrumbs=catalogue_category_breadcrumbs($id,$root,true,true);
 				if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-				if (has_privilege(get_member(),'open_virtual_roots'))
+				if ((has_privilege(get_member(),'open_virtual_roots')) && ($category_id!=$root))
 				{
 					$url=get_self_url();
 					$breadcrumbs->attach(hyperlink($url,escape_html($_title),false,false,do_lang_tempcode('VIRTUAL_ROOT')));

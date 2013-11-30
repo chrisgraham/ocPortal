@@ -317,7 +317,7 @@ class Module_galleries
 			$breadcrumbs=gallery_breadcrumbs($cat,$root,true,get_module_zone('galleries'),true);
 			if (!$breadcrumbs->is_empty())
 				$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-			if (has_privilege(get_member(),'open_virtual_roots'))
+			if ((has_privilege(get_member(),'open_virtual_roots')) && ($cat!=$root))
 			{
 				$url=get_self_url(false,false,array('keep_gallery_root'=>$cat));
 				$breadcrumbs->attach(hyperlink($url,escape_html($fullname),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
@@ -740,7 +740,7 @@ class Module_galleries
 				$entry_add_date_raw=is_null($row['add_date'])?'':strval($row['add_date']);
 				$entry_edit_date_raw=is_null($row['edit_date'])?'':strval($row['edit_date']);
 				$entry_views=integer_format($row['video_views']);
-				$current_entry=do_template('GALLERY_FLOWMODE_VIDEO',array(
+				$current_entry=do_template('GALLERY_FLOW_MODE_VIDEO',array(
 					'_GUID'=>'b6a795dc3853789df2a2951293d0fb26',
 					'_TITLE'=>get_translated_text($row['title']),
 					'EDIT_URL'=>$entry_edit_url,
@@ -805,7 +805,7 @@ class Module_galleries
 				$entry_edit_date_raw=is_null($row['edit_date'])?'':strval($row['edit_date']);
 				$entry_views=integer_format($row['image_views']);
 
-				$current_entry=do_template('GALLERY_FLOWMODE_IMAGE',array(
+				$current_entry=do_template('GALLERY_FLOW_MODE_IMAGE',array(
 					'_GUID'=>'fd486cf9a3338bc277a7170a1961089b',
 					'_TITLE'=>get_translated_text($row['title']),
 					'EDIT_URL'=>$entry_edit_url,

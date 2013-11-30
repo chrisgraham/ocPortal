@@ -332,7 +332,7 @@ function init__validation2()
 		'text-transform'=>'(capitalize|uppercase|lowercase|none)',
 		'top'=>$enforce_auto_or_length,
 		'unicode-bidi'=>'(bidi-override|normal|embed)',
-		'vertical-align'=>'(baseline|sub|super|top|text-top|middle|bottom|text-bottom)',
+		'vertical-align'=>'(baseline|sub|super|top|text-top|middle|bottom|text-bottom|'.$enforce_length.')',
 		'visibility'=>'(hidden|visible|collapse)',
 		'white-space'=>'(normal|pre|nowrap'.((!$is_ie)?'|pre-wrap|pre-line':'').')',
 		'width'=>$enforce_auto_or_length,

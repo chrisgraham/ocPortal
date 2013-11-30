@@ -159,7 +159,7 @@ class Module_admin_themes
 		if ($type=='choose_css')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
-			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+			breadcrumb_set_self(do_lang_tempcode('CHOOSE_CSS'));
 
 			$this->title=get_screen_title('EDIT_CSS');
 		}
@@ -176,7 +176,7 @@ class Module_admin_themes
 				breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 			} else
 			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:choose_css:theme='.$theme,do_lang_tempcode('CHOOSE'))));
+				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:choose_css:theme='.$theme,do_lang_tempcode('CHOOSE_CSS'))));
 			}
 
 			$file=filter_naughty(get_param('file','global.css'));
@@ -184,11 +184,14 @@ class Module_admin_themes
 			$this->title=get_screen_title('_EDIT_CSS',true,array($file));
 
 			$this->file=$file;
+
+			$file=preg_replace('#\.\d+#','',$file);
+			set_short_title($file);
 		}
 
 		if ($type=='_edit_css')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_css:theme='.$theme,do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_edit_css:file='.$file,do_lang_tempcode('EDIT_CSS'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_css:theme='.$theme,do_lang_tempcode('CHOOSE_CSS')),array('_SELF:_SELF:_edit_css:file='.$file,do_lang_tempcode('EDIT_CSS'))));
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 			$this->title=get_screen_title('EDIT_CSS');
@@ -199,16 +202,8 @@ class Module_admin_themes
 			set_helper_panel_text(comcode_lang_string('DOC_TEMPLATES'));
 			set_helper_panel_tutorial('tut_markup');
 
-			$theme=get_param('theme','');
-			if ($theme=='')
-			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
-				breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
-			} else
-			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
-				breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
-			}
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+			breadcrumb_set_self(do_lang_tempcode('CHOOSE_TEMPLATES'));
 
 			$this->title=get_screen_title('EDIT_TEMPLATES');
 		}
@@ -219,7 +214,7 @@ class Module_admin_themes
 			set_helper_panel_tutorial('tut_themes');
 
 			$theme=get_param('theme');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_templates:theme='.$theme,do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_templates:theme='.$theme,do_lang_tempcode('CHOOSE_TEMPLATES'))));
 
 			$this->title=get_screen_title('EDIT_TEMPLATES');
 		}
@@ -235,7 +230,7 @@ class Module_admin_themes
 					$file=basename($_i);
 				}
 			}
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_templates:theme='.$theme,do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_edit_templates:theme='.$theme.':file='.$file,do_lang_tempcode('EDIT_TEMPLATES'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_templates:theme='.$theme,do_lang_tempcode('CHOOSE_TEMPLATES')),array('_SELF:_SELF:_edit_templates:theme='.$theme.':file='.$file,do_lang_tempcode('EDIT_TEMPLATES'))));
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 			$this->theme=$theme;
@@ -246,7 +241,7 @@ class Module_admin_themes
 		if ($type=='manage_images')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
-			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
+			breadcrumb_set_self(do_lang_tempcode('CHOOSE_THEME_IMAGE'));
 
 			$this->title=get_screen_title('MANAGE_THEME_IMAGES');
 		}
@@ -272,7 +267,9 @@ class Module_admin_themes
 				$theme=get_param('theme');
 			}
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:manage_images:theme='.$theme,do_lang_tempcode('CHOOSE'))));
+			set_short_title($id);
+
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:manage_images:theme='.$theme,do_lang_tempcode('CHOOSE_THEME_IMAGE'))));
 
 			$this->title=get_screen_title('EDIT_THEME_IMAGE');
 
@@ -284,7 +281,7 @@ class Module_admin_themes
 		{
 			$theme=post_param('theme');
 			$id=post_param('id');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:manage_images:theme='.$theme,do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:edit_theme_image:'.$id,do_lang_tempcode('EDIT_THEME_IMAGE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:manage_images:theme='.$theme,do_lang_tempcode('CHOOSE_THEME_IMAGE')),array('_SELF:_SELF:edit_theme_image:'.$id,do_lang_tempcode('EDIT_THEME_IMAGE'))));
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 			$this->title=get_screen_title('EDIT_THEME_IMAGE');
@@ -299,7 +296,7 @@ class Module_admin_themes
 
 		if ($type=='_add_image')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:add_image:theme='.post_param('theme'),do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:add_image:theme='.post_param('theme'),do_lang_tempcode('ADD_THEME_IMAGE'))));
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
@@ -950,7 +947,7 @@ class Module_admin_themes
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>'',
 			'SUBMIT_ICON'=>'buttons__proceed',
-			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
+			'SUBMIT_NAME'=>do_lang_tempcode('EDIT'),
 			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -1336,7 +1333,7 @@ class Module_admin_themes
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme),'_SELF');
-		$edit_form=do_template('FORM',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
+		$edit_form=do_template('FORM',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('EDIT')));
 
 		list($warning_details,$ping_url)=handle_conflict_resolution(''); // Intentionally blank, because only one person should edit any of all templates at any time (because they depend on each other)
 
@@ -1587,91 +1584,91 @@ class Module_admin_themes
 			$parameters=do_template('TEMPLATE_EDIT_SCREEN_DROPDOWN',array('_GUID'=>'50f31c49c99b864c1719fb51ed426274','ID'=>$i,'PARAMETERS'=>$parameters,'NAME'=>'ppparameter','LANG'=>do_lang_tempcode('INSERT_PARAMETER')));
 
 			$_directives=array(
-											array('BOX','1'),
-											array('WHILE','1'),
-											array('IF_NON_EMPTY','1'),
-											array('IF_EMPTY','1'),
-											array('IF','1'),
-											array('SET','1'),
-											array('LOOP','1'), // To simplify things, we won't throw all options at the user
-									);
+				array('BOX','1'),
+				array('WHILE','1'),
+				array('IF_NON_EMPTY','1'),
+				array('IF_EMPTY','1'),
+				array('IF','1'),
+				array('SET','1'),
+				array('LOOP','1'), // To simplify things, we won't throw all options at the user
+			);
 			$directives=$this->generate_from($_directives,'DIRECTIVE',$i);
 
 			$_programmatic_symbols=array(
-											array('RAND','0'),
-											array('SET_RAND','0+'),
-											array('CYCLE','1+'),
-											array('INIT','1'),
-											array('SET','2'),
-											array('GET','1'),
-											array('INC','1'),
-											array('DEC','1'),
-											);
+				array('RAND','0'),
+				array('SET_RAND','0+'),
+				array('CYCLE','1+'),
+				array('INIT','1'),
+				array('SET','2'),
+				array('GET','1'),
+				array('INC','1'),
+				array('DEC','1'),
+			);
 			$programmatic_symbols=$this->generate_from($_programmatic_symbols,'PROGRAMMATIC_SYMBOL',$i);
 
 			$_abstraction_symbols=array(
-											array('IMG','1'),
-											array('PAGE_LINK','1'),
-											array('MAILTO','0'),
-											array('BLOCK','2'),
-											array('THUMBNAIL','2'),
-											array('LOAD_PAGE','1'),
-											array('LOAD_PANEL','1'),
-											);
+				array('IMG','1'),
+				array('PAGE_LINK','1'),
+				array('MAILTO','0'),
+				array('BLOCK','2'),
+				array('THUMBNAIL','2'),
+				array('LOAD_PAGE','1'),
+				array('LOAD_PANEL','1'),
+			);
 			$abstraction_symbols=$this->generate_from($_abstraction_symbols,'ABSTRACTION_SYMBOL',$i);
 
 			$_symbols=array(
-											array('THEME','0'),
-											array('LANG','0'),
-											array('BASE_URL','0'),
-											array('MOBILE','0'),
-											array('SITE_NAME','0'),
-											array('STAFF_ADDRESS','0'),
-											array('MEMBER','0'),
-											array('DATE_AND_TIME','0'),
-											array('DATE','0'),
-											array('TIME','0'),
-											array('USERNAME','0-1'),
-											array('IS_STAFF','0'),
-											array('MATCH_KEY_MATCH','1'),
-											);
+				array('THEME','0'),
+				array('LANG','0'),
+				array('BASE_URL','0'),
+				array('MOBILE','0'),
+				array('SITE_NAME','0'),
+				array('STAFF_ADDRESS','0'),
+				array('MEMBER','0'),
+				array('DATE_AND_TIME','0'),
+				array('DATE','0'),
+				array('TIME','0'),
+				array('USERNAME','0-1'),
+				array('IS_STAFF','0'),
+				array('MATCH_KEY_MATCH','1'),
+			);
 			$symbols=$this->generate_from($_symbols,'SYMBOL',$i);
 
 			$_arithmetical_symbols=array(
-											array('MAX','2'),
-											array('MIN','2'),
-											array('REM','2'),
-											array('DIV','2'),
-											array('SUBTRACT','2'),
-											array('ADD','2'),
-											array('ROUND','2'),
-											array('MULT','2'),
-											);
+				array('MAX','2'),
+				array('MIN','2'),
+				array('REM','2'),
+				array('DIV','2'),
+				array('SUBTRACT','2'),
+				array('ADD','2'),
+				array('ROUND','2'),
+				array('MULT','2'),
+			);
 			$arithmetical_symbols=$this->generate_from($_arithmetical_symbols,'ARITHMETICAL_SYMBOL',$i);
 
 			$_formatting_symbols=array(
-											array('WCASE','1'),
-											array('LCASE','1'),
-											array('UCASE','1'),
-											array('REPLACE','3'),
-											array('AT','2'),
-											array('SUBSTR','3'),
-											array('LENGTH','1'),
-											array('WORDWRAP','2'),
-											array('TRUNCATE_LEFT','2'),
-											array('TRUNCATE_SPREAD','2'),
-											);
+				array('WCASE','1'),
+				array('LCASE','1'),
+				array('UCASE','1'),
+				array('REPLACE','3'),
+				array('AT','2'),
+				array('SUBSTR','3'),
+				array('LENGTH','1'),
+				array('WORDWRAP','2'),
+				array('TRUNCATE_LEFT','2'),
+				array('TRUNCATE_SPREAD','2'),
+			);
 			$formatting_symbols=$this->generate_from($_formatting_symbols,'FORMATTING_SYMBOL',$i);
 
 			$_logical_symbols=array(
-											array('NOT','1'),
-											array('OR','2'),
-											array('AND','2'),
-											array('EQ','2'),
-											array('NEQ','2'),
-											array('LT','2'),
-											array('GT','2'),
-											);
+				array('NOT','1'),
+				array('OR','2'),
+				array('AND','2'),
+				array('EQ','2'),
+				array('NEQ','2'),
+				array('LT','2'),
+				array('GT','2'),
+			);
 			$logical_symbols=$this->generate_from($_logical_symbols,'LOGICAL_SYMBOL',$i);
 
 			$guid=get_param('f'.$i.'guid','?');
@@ -1693,6 +1690,9 @@ class Module_admin_themes
 
 			$display=($count==0)?'block':'none';
 			if ($count==0) $first_id=$i;
+
+			$file_save_target=preg_replace('#^default/#',$theme.'/',$file);
+
 			$template_editors->attach(do_template('TEMPLATE_EDIT_SCREEN_EDITOR',array(
 				'_GUID'=>'9d3b75215c34c2b4b366118605b4cd59',
 				'PREVIEW_URL'=>$preview_url,
@@ -1710,7 +1710,7 @@ class Module_admin_themes
 				'PROGRAMMATIC_SYMBOLS'=>$programmatic_symbols,
 				'SYMBOLS'=>$symbols,
 				'FILE'=>$file,
-				'FILE_SAVE_TARGET'=>str_replace('default/',$theme.'/',$file),
+				'FILE_SAVE_TARGET'=>$file_save_target,
 				'OLD_CONTENTS'=>$old_contents,
 				'CONTENTS'=>$contents,
 				'REVISION_HISTORY'=>$revision_history
@@ -1721,12 +1721,25 @@ class Module_admin_themes
 
 		if ($count==1)
 		{
+			$file_save_target=preg_replace('#^default/#',$theme.'/',$files_seen[0]);
+			$this->title=get_screen_title('_EDIT_TEMPLATE',true,array(escape_html($file_save_target)));
+
 			set_short_title($files_seen[0]);
 		}
 
 		if ($template_editors->is_empty()) warn_exit(do_lang_tempcode('NO_TEMPLATES_SELECTED'));
 
-		return do_template('TEMPLATE_EDIT_SCREEN',array('_GUID'=>'cbcd6d18c2456f94f72624e1a39a36a5','MULTIPLE'=>$count>1,'FIRST_ID'=>$first_id,'THEME'=>$theme,'TEMPLATES'=>$templates,'TITLE'=>$this->title,'URL'=>$post_url,'TEMPLATE_EDITORS'=>$template_editors));
+		return do_template('TEMPLATE_EDIT_SCREEN',array(
+			'_GUID'=>'cbcd6d18c2456f94f72624e1a39a36a5',
+			'TITLE'=>$this->title,
+			'MULTIPLE'=>$count>1,
+			'FIRST_ID'=>$first_id,
+			'THEME'=>$theme,
+			'TEMPLATES'=>$templates,
+			'URL'=>$post_url,
+			'TEMPLATE_EDITORS'=>$template_editors,
+			'COUNT'=>strval($count),
+		));
 	}
 
 	/**
@@ -1993,7 +2006,7 @@ class Module_admin_themes
 		$fields=form_input_theme_image(do_lang_tempcode('CODENAME'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang,true,true);
 		$hidden=form_input_hidden('theme',$theme);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');
-		$edit_form=do_template('FORM',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
+		$edit_form=do_template('FORM',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('EDIT')));
 
 		$add_url=build_url(array('page'=>'_SELF','type'=>'add_image','theme'=>$theme,'lang'=>$lang),'_SELF');
 

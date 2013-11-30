@@ -632,6 +632,7 @@ function set_helper_panel_tutorial($tutorial)
 
 /**
  * Sets the short title, used for screen header text if set.
+ * Does not do anything if output streaming is on and already started.
  *
  * @sets_output_state
  *

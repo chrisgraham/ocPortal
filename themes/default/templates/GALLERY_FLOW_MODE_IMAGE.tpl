@@ -1,10 +1,17 @@
-<div class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/VideoObject">
-	<div class="flowmode_video left float_separation">
-		{VIDEO_PLAYER}
+<div itemscope="itemscope" itemtype="http://schema.org/ImageObject">
+	<div class="media_box">
+		<img src="{THUMB_URL*}" alt="{!IMAGE}" itemprop="contentURL" />
 	</div>
-	<div class="lined_up_boxes">
+
+	{+START,IF_PASSED,DESCRIPTION}
+		<div itemprop="caption">
+			{$PARAGRAPH,{DESCRIPTION}}
+		</div>
+	{+END}
+
+	<div class="float_surrounder lined_up_boxes">
 		<div class="gallery_entry_details right">
-			<section class="box box___gallery_flowmode_video"><div class="box_inner">
+			<section class="box box___gallery_flow_mode_image"><div class="box_inner">
 				<h3>{!DETAILS}</h3>
 
 				<table class="map_table results_table">
@@ -41,19 +48,20 @@
 								<td>{VIEWS*}</td>
 							</tr>
 						{+END}
-
-						{$PREG_REPLACE,</(table|div|tbody|colgroup|col)>,,{$PREG_REPLACE,<(table|div|tbody|colgroup|col)[^>]*>,,{VIDEO_DETAILS}}}
 					</tbody>
 				</table>
 
 				<ul class="horizontal_links associated_links_block_group">
-					<li><a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a></li>
+					{+START,IF,{$ADDON_INSTALLED,recommend}}
+						<li><img src="{$IMG*,1x/filetypes/email_link}" srcset="{$IMG*,1x/filetypes/email_link} 2x" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{FULL_URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></li>
+					{+END}
+					<li><img src="{$IMG*,icons/24x24/feedback/comment}" srcset="{$IMG*,icons/48x48/feedback/comment} 2x" alt="" /> <a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a></li>
 				</ul>
 
 				{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 				{+START,INCLUDE,STAFF_ACTIONS}
 					1_URL={EDIT_URL*}
-					1_TITLE={!EDIT_VIDEO}
+					1_TITLE={!EDIT_IMAGE}
 					1_ICON=menu/_generic_admin/edit_this
 				{+END}
 			</div></section>
@@ -64,9 +72,3 @@
 		</div>
 	</div>
 </div>
-
-{+START,IF_PASSED,DESCRIPTION}
-	<div itemprop="caption">
-		{DESCRIPTION}
-	</div>
-{+END}

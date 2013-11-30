@@ -36,14 +36,6 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 
 /* Header */
 {$THEME_WIZARD_COLOR,#e3e9f2,header_background,100% area_2_background}
-{$THEME_WIZARD_COLOR,#426aa9,navigation_background,100% seed}
-{$THEME_WIZARD_COLOR,#edf2f9,navigation_text,15% navigation_top + 85% WB}
-{$THEME_WIZARD_COLOR,#426aa9,navigation_message_text,100% seed}
-{$THEME_WIZARD_COLOR,#a5bde1,global_navigation_underline_current,75% navigation_top + 25% FFFFFF}
-{$THEME_WIZARD_COLOR,#ffffff,global_navigation_hover,100% WB}
-{$THEME_WIZARD_COLOR,#edf2f9,global_navigation_text,15% navigation_top + 85% WB}
-{$THEME_WIZARD_COLOR,#fbffc1,zone_jump_out_1_shadow,100% FBFFC1}
-{$THEME_WIZARD_COLOR,#ff4264,zone_jump_out_2_shadow,100% FF4264}
 
 /* Colours to mirror UI conventions (i.e. non-thematic) */
 {$THEME_WIZARD_COLOR,#000000,native_ui_foreground,100% 000000}
@@ -96,9 +88,8 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#f2f5f9,area_faded_background,80% area_background + 20% WB}
 {$THEME_WIZARD_COLOR,#d9e1ee,area_zebra_background,20% seed + 80% WB}
 {$THEME_WIZARD_COLOR,#e6d8df,area_hover_background,92% (area_background hue_to 92) + 8% BW}
-{$THEME_WIZARD_COLOR,#d9e1ee,area_hover_2_background,20% seed + 80% WB}
-{$THEME_WIZARD_COLOR,#c2d1e5,area_hover_3_background,93% (area_background sat_to 15) + 7% BW}
-{$THEME_WIZARD_COLOR,#c2d1e5,area_current_background,93% (area_background sat_to 15) + 7% BW}
+{$THEME_WIZARD_COLOR,#c2d1e5,area_hover_2_background,20% seed + 80% WB}
+{$THEME_WIZARD_COLOR,#d9e1ee,area_current_background,93% (area_background sat_to 15) + 7% BW}
 {$THEME_WIZARD_COLOR,#dce2eb,point_of_interest_background,97% area_2_background + 2% BW}
 {$THEME_WIZARD_COLOR,#6b81a1,footer_background,95% (seed sat_to 33) + 5% BW}
 {$THEME_WIZARD_COLOR,#607490,footer_2_background,85% (seed sat_to 33) + 15% BW}
@@ -126,6 +117,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% WB}
 {$THEME_WIZARD_COLOR,#cccccc,box_title_text_hover,80% WB + 20% BW}
 {$THEME_WIZARD_COLOR,#426aa9,box_title_background,100% seed}
+{$THEME_WIZARD_COLOR,#7f9ac5,box_title_background_2,68% seed + 32% WB}
 
 /* Special colour for code/quote boxes */
 {$THEME_WIZARD_COLOR,#8ea6cb,code_title_background,60% seed + 40% WB}
@@ -160,9 +152,6 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#0a1e47,special_middle,45% (seed sat_to 85) + 65% BW}
 {$THEME_WIZARD_COLOR,#597bbf,ocfpostindicator,65% (seed sat_to 100) + 35% WB}
 {$THEME_WIZARD_COLOR,#597bf7,ocfredirectindicator,65% (seed sat_to 100) + 35% WB + 000038 - 061600}
-{$THEME_WIZARD_COLOR,#93a9d5,navigation_peak,90% navigation_top + 10% WB}
-{$THEME_WIZARD_COLOR,#869fd0,navigation_top,48% (seed sat_to 98) + 52% FFFFFF}
-{$THEME_WIZARD_COLOR,#2d5098,navigation_bot,97% (seed sat_to 71) + 3% 000000}
 
 /*
 =========================
@@ -271,6 +260,11 @@ th, .fake_th {
 	color: {$GET,box_title_text};
 	font-weight: bold;
 	text-align: center;
+}
+.columned_table[itemprop="significantLinks"] tbody tr th, .columned_table[itemprop="significantLinks"] tbody tr .fake_th { /* itemprop is for precedence */
+	background-color: {$GET,box_title_background_2} !important;
+	color: {$GET,box_title_text} !important;
+	text-align: left;
 }
 th a, th a:hover, th a:visited, .fake_th a, .fake_th a:hover, .fake_th a:visited {
 	color: {$GET,box_title_text};
@@ -439,9 +433,6 @@ body#standalone_html_wrap {
 
 header {
 	background-color: {$GET,header_background};
-	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
-		{$BETA_CSS_PROPERTY,box-shadow: 0 0 2px 2px {$GET,navigation_background};}
-	{+END}
 }
 
 header h1 {
@@ -521,14 +512,15 @@ header h1 {
 .hero_section .hero_button a {
 	text-decoration: none;
 	padding: 0.5em !important;
-	background-image: none !important;
+	background-image: none !important; /* Will be overridden below if linear-gradient supported by browser */
+	background-position: 0 0 !important;
 	margin-bottom: 1em;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
 	font-size: 0.9em;
 }
 
 .global_breadcrumbs {
-	padding: 7px 0 0 0;
+	padding: 7px 0 7px 0;
 	{+START,IF,{$NOT,{$MOBILE}}}
 		{+START,IF,{$CONFIG_OPTION,fixed_width}}
 			text-align: {!en_right};
@@ -974,7 +966,7 @@ div.edited {
 .media_box a {
 	outline: 0;
 }
-.media_box>a>img,.media_box>img {
+.media_box>a>img, .media_box>img {
 	border: 1px solid {$GET,standard_border};
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
@@ -1061,7 +1053,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 .trinav_left {
 	float: left;
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin-left: 26px;
+		margin-left: 2em;
 	{+END}
 	{+START,IF,{$MOBILE}}
 		width: 33%;
@@ -1083,8 +1075,8 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 .trinav_right {
 	float: right;
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin-left: 10px;
-		margin-right: 26px;
+		margin-left: 1em;
+		margin-right: 2em;
 	{+END}
 	{+START,IF,{$MOBILE}}
 		width: 33%;
@@ -1183,10 +1175,6 @@ th.meta_data_title {
 	font-weight: bold !important;
 }
 
-.global_navigation .inline_wip_message {
-	background-color: {$GET,navigation_message_text};
-}
-
 .help_jumpout {
 	padding: 5px 0;
 	padding-left: 50px;
@@ -1258,6 +1246,9 @@ td>.box {
 
 .box>.box_inner, .box>.toggleable_tray {
 	margin: 0.5em;
+}
+.boxless_space .box>.box_inner, .boxless_space .box>.toggleable_tray {
+	margin: 0;
 }
 
 .box_inner>h1, .box_inner>h2, .box_inner>h3, .box_inner>h4, .box_inner>h5, .box_inner>h6, .toggleable_tray_title, #standalone_html_wrap .box .box .box_inner>h2, #standalone_html_wrap .box .box .box_inner>h3 {
@@ -1414,6 +1405,9 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	float: {!en_right};
 	padding: 0 0.3em !important;
 }
+.toggleable_tray_title .toggleable_tray_button img {
+	margin-top: -1px;
+}
 h3 .toggleable_tray_button img {
 	width: 15px;
 }
@@ -1552,6 +1546,9 @@ h3 .toggleable_tray_button img {
 	overflow: auto;
 	outline: 0;
 	white-space: pre;
+}
+.whitespace_visible.code {
+	font-family: 'Courier New', 'Courier', monospace;
 }
 
 .standard_indent {
@@ -1695,9 +1692,6 @@ table.scrollable_inside {
 	margin-top: 1em;
 }
 
-.results_table>thead>tr:first-child *:first-child, .results_table>thead>tr:first-child *:last-child {
-	border: 0;
-}
 .results_table>thead>tr:first-child *:first-child, .results_table>tbody>tr:first-child>*:first-child {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 5px;}
 }
@@ -1862,7 +1856,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	padding-right: 30px;
 }
 .faded_tooltip_img {
-	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block;/*Needed for IE8*/
+	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block; /*Needed for IE8*/
 }
 
 .diff del {
@@ -1892,7 +1886,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	float: {$?,{$MOBILE},{!en_left},{!en_right}};
 	padding: 0;
 	margin: 2px 0 0 0;
-/*	max-width: 540px; Looks bad on forumview */
+	/*	max-width: 540px; Looks bad on forumview */
 }
 
 .pagination * {
@@ -1915,7 +1909,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	background-color: {$GET,area_background};
 }
 .pagination a:hover, .results_launcher a:hover, .pagination a.button_depressed {
-	background-color: {$GET,area_hover_3_background} !important;
+	background-color: {$GET,area_hover_2_background} !important;
 }
 {+START,IF,{$NOT,{$MOBILE}}}
 	.pagination a,
@@ -2137,6 +2131,9 @@ div.wysiwyg_toolbar_color_finder {
 
 .tree_list__root_tree_list {
 	padding-bottom: 0.5em;
+}
+.tree_list_highlighted *, .tree_list_nonhighlighted * {
+	vertical-align: middle;
 }
 .tree_list_highlighted a, .tree_list_nonhighlighted a {
 	background-color: {$GET,native_ui_background};
@@ -2500,7 +2497,7 @@ ul.actions_list {
 	margin: 0;
 }
 ul.actions_list>li {
-	padding: 1px 0 2px 18px;
+	padding: 2px 0 2px 18px;
 	background: url('{$IMG_INLINE;,icons/14x14/action_link}') left 5px no-repeat;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
@@ -2591,7 +2588,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	vertical-align: middle;
 }
 .quick_self_edit_link:hover {
-	{$BETA_CSS_PROPERTY,opacity: 1;}
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 #panel_top .quick_self_edit_link {
 	display: none;
@@ -2612,7 +2609,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	background-size: 24px 24px;
 }
 .staff_actions:hover, body.touch_enabled .staff_actions {
-	{$BETA_CSS_PROPERTY,opacity: 1;}
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 .staff_actions .box_inner {
 	padding-right: 25px;
@@ -2680,6 +2677,7 @@ span.associated_link, a.associated_link, form.associated_link {
 ul.associated_links_block_group>li:before, span.associated_link:before, a.associated_link:before, form.associated_link:before {
 	content: "(" !important;
 	{$BETA_CSS_PROPERTY,opacity: 0.7;}
+	vertical-align: baseline !important;
 }
 ul.associated_links_block_group.horizontal_links>li:after { /* Undoes the above rules for if 'horizontal_links' is set (the rule further up will run instead and the middot one below) */
 	content: "" !important;
@@ -2695,7 +2693,7 @@ ul.associated_links_block_group.horizontal_links>li:before,
 .horizontal_ticker li:before {
 	content: "\00b7" !important; /* a &middot; */
 	padding: 0 0.5em 0 0.1em;
-	vertical-align: middle;
+	vertical-align: -30%;
 }
 .horizontal_buttons li {
 	padding-left: 3px !important;
@@ -2748,7 +2746,10 @@ ul.associated_link>li {
 ul.horizontal_links li img {
 	width: 20px;
 }
-ul.horizontal_links li img, ul.horizontal_links a {
+ul.associated_link li img {
+	width: 14px;
+}
+ul.horizontal_links li img, ul.associated_link li img, ul.horizontal_links a, ul.horizontal_links form {
 	vertical-align: middle;
 }
 
@@ -2771,9 +2772,6 @@ ul.horizontal_links li img, ul.horizontal_links a {
 }
 ul.buttons_group, ul.associated_links_block_group {
 	margin: 0; /* Margin will go on li elements if its a list */
-}
-table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_block_group { /* In this case no margin is coming from above so we must define one */
-	margin-top: 1em !important;
 }
 .force_normal_margin {
 	margin-top: 1em !important;
@@ -2906,6 +2904,9 @@ input.magic_image_edit_link {
 	-webkit-appearance: none;
 	vertical-align: middle;
 	cursor: pointer;
+}
+.button_micro:first-child, .button_screen:first-child, .button_screen_item:first-child, .hero_section .hero_button a:first-child {
+	margin-left: 2px; /* enough for the shadow */
 }
 
 .button_screen {
@@ -3240,12 +3241,12 @@ a.tab, a.tab:visited, a.tab:hover {
 }
 
 .tab_active {
-	text-shadow: 1px 1px 1px {$GET,standard_border};
-	{$BETA_CSS_PROPERTY,opacity: 1 !important;}
+	text-shadow: 1px 0 1px {$GET,standard_border};
+	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;}
 }
 
 .tab:hover, body.touch_enabled .tab {
-	{$BETA_CSS_PROPERTY,opacity: 1;}
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 
 .tab strong {

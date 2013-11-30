@@ -940,6 +940,23 @@ function choose_picture(id,ob,name,event)
 	}
 }
 
+function preview_mobile_button(ob)
+{
+	ob.form.action=ob.form.action.replace(/keep_mobile=\d/g,'keep_mobile='+(ob.checked?'1':'0'));
+	if (window.parent)
+	{
+		try {
+			window.parent.scrollTo(0,find_pos_y(window.parent.document.getElementById('preview_iframe')));
+		}
+		catch(e) {};
+		window.parent.mobile_version_for_preview=ob.checked;
+		window.parent.document.getElementById('preview_button').onclick(event);
+		return false;
+	}
+	ob.form.submit();
+	return false;
+}
+
 function disable_preview_scripts(under)
 {
 	if (typeof under=='undefined') var under=document;

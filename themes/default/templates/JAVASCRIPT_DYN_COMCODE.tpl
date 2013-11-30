@@ -263,7 +263,7 @@ function flip_page(to,pass_id,sections)
 
 function shocker_tick(id,time,min_color,max_color)
 {
-	if (typeof document.hidden!='undefined') && (document.hidden)) return;
+	if ((typeof document.hidden!='undefined') && (document.hidden)) return;
 
 	if (window.shocker_pos[id]==window.shocker_parts[id].length-1) window.shocker_pos[id]=0;
 	var e_left=document.getElementById('comcodeshocker'+id+'_left');
@@ -296,7 +296,7 @@ if (typeof window.ticker_tick=='undefined')
 }
 function ticker_tick(id,width)
 {
-	if (typeof document.hidden!='undefined') && (document.hidden)) return;
+	if ((typeof document.hidden!='undefined') && (document.hidden)) return;
 
 	if (!window.focused) return;
 
@@ -315,7 +315,7 @@ if (typeof window.jumper_pos=='undefined')
 }
 function jumper_tick(id)
 {
-	if (typeof document.hidden!='undefined') && (document.hidden)) return;
+	if ((typeof document.hidden!='undefined') && (document.hidden)) return;
 
 	if (window.jumper_pos[id]==window.jumper_parts[id].length-1) window.jumper_pos[id]=0;
 	var e=document.getElementById(id);

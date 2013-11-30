@@ -357,7 +357,8 @@ class Hook_addon_registry_core_themeing
 				'TITLE'=>lorem_title(),
 				'PREVIEW_URL'=>placeholder_url(),
 				'URL'=>placeholder_url(),
-				'TEMPLATE_EDITORS'=>$template_editors
+				'TEMPLATE_EDITORS'=>$template_editors,
+				'COUNT'=>'1',
 			)), NULL, '', true)
 		);
 	}

@@ -45,7 +45,6 @@ function init__tempcode_compiler()
 		'ADDON_INSTALLED',
 		'CONFIG_OPTION',
 		'VALUE_OPTION',
-		'MOBILE',
 		'COPYRIGHT',
 		'BASE_URL',
 		'BASE_URL_NOHTTP',

@@ -51,7 +51,7 @@
 	</form>
 
 	{+START,IF_NON_EMPTY,{FULL_SEARCH_URL}}
-		<ul class="horizontal_links associated_links_block_group force_margin">
+		<ul class="horizontal_links associated_links_block_group">
 			<li><a href="{FULL_SEARCH_URL*}" title="{!MORE_OPTIONS}: {!SEARCH_TITLE}">{!MORE_OPTIONS}</a></li>
 		</ul>
 	{+END}

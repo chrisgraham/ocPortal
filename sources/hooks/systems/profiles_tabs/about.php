@@ -81,7 +81,7 @@ class Hook_Profiles_Tabs_about
 		if ((has_privilege($member_id_viewing,'warn_members')) && (has_actual_page_access($member_id_viewing,'warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$redir_url=get_self_url(true);
-			$modules[]=array('audit',do_lang_tempcode('WARN_MEMBER'),build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$member_id_of,'redirect'=>$redir_url),get_module_zone('warnings')),'tabs/member_account/warnings');
+			$modules[]=array('audit',do_lang_tempcode('WARN_MEMBER'),build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$member_id_of,'redirect'=>$redir_url),get_module_zone('warnings')),'buttons/report');
 			$modules[]=array('audit',do_lang_tempcode('PUNITIVE_HISTORY'),build_url(array('page'=>'warnings','type'=>'history','member_id'=>$member_id_of),get_module_zone('warnings')),'tabs/member_account/warnings');
 		}
 		if ((has_privilege($member_id_viewing,'view_content_history')) && (has_actual_page_access($member_id_viewing,'admin_ocf_history')))
@@ -121,7 +121,7 @@ class Hook_Profiles_Tabs_about
 		require_code('ocf_members2');
 		if ((!is_guest()) && (ocf_may_whisper($member_id_of)) && (has_actual_page_access($member_id_viewing,'topics')) && (ocf_may_make_private_topic()) && ($member_id_viewing!=$member_id_of))
 		{
-			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('contact',do_lang_tempcode('ADD_PRIVATE_TOPIC'),build_url(array('page'=>'topics','type'=>'new_pt','id'=>$member_id_of),get_module_zone('topics')),'tool_buttons/inbox','reply');
+			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('contact',do_lang_tempcode('ADD_PRIVATE_TOPIC'),build_url(array('page'=>'topics','type'=>'new_pt','id'=>$member_id_of),get_module_zone('topics')),'buttons/send','reply');
 		}
 		$extra_sections=array();
 		$info_details=array();

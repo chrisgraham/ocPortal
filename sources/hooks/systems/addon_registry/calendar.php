@@ -745,6 +745,7 @@ class Hook_addon_registry_calendar
 		foreach (placeholder_array() as $v)
 		{
 			$subed->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_SUBSCRIPTION',array(
+				'MEMBER_ID'=>placeholder_id(),
 				'MEMBER_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_word()
 			)));

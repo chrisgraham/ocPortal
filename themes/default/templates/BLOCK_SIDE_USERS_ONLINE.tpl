@@ -4,7 +4,7 @@
 	<p>{CONTENT} <span class="associated_details">{!NUM_GUESTS,{GUESTS*}}</span></p>
 
 	{+START,IF_NON_EMPTY,{NEWEST}}
-		<p>{NEWEST}</p>
+		{NEWEST}
 	{+END}
 
 	{+START,IF_NON_EMPTY,{BIRTHDAYS}}
@@ -12,7 +12,7 @@
 	{+END}
 
 	{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,users_online},{$OCF}}}
-		<ul class="horizontal_links associated_links_block_group force_margin">
+		<ul class="horizontal_links associated_links_block_group">
 			<li><a href="{$PAGE_LINK*,_SEARCH:users_online}" title="{!USERS_ONLINE}">{!DETAILS}</a></li>
 		</ul>
 	{+END}

@@ -33,6 +33,6 @@ New rooms can easily be added using chatcode. The room that you create will belo
 
 [title="2"]Emoticons[/title]
 
-Emoticons are inputted just by entering the emoticon code [tt]:)[/tt].
+Emoticons are inputted just by entering the emoticon code, e.g. [tt]:)[/tt].
 
 [block]main_emoticon_codes[/block]

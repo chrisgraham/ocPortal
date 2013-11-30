@@ -22,7 +22,7 @@
 						<h2>{!SUBSCRIBED_REMINDERS}</h2>
 
 						<div class="accessibility_hidden">{!FOLLOWING_SUBSCRIBED}</div>
-						<ul class="compact_list">
+						<ul class="nl">
 							{SUBSCRIBED}
 						</ul>
 					</div></div>

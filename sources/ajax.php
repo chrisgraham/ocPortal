@@ -288,9 +288,11 @@ function comcode_convert_script()
 		require_code('xhtml');
 		$new=xhtmlise_html($out,true);
 
-		if (preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$new))!=preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$out)))
+		$stripped_new=preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$new));
+		$stripped_old=preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$out));
+		if ($stripped_new!=$stripped_old)
 		{
-			/*$myfile=fopen(get_file_base().'/a','wb');		Useful for debugging
+			/*$myfile=fopen(get_file_base().'/a','wb'); // Useful for debugging
 			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',"\n",$new)));
 			fclose($myfile);
 

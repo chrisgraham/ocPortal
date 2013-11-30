@@ -672,6 +672,7 @@ function _generate_moniker($moniker_src)
 	$max_moniker_length=intval(get_option('max_moniker_length'));
 
 	$moniker=str_replace(array('ä','ö','ü','ß'),array('ae','oe','ue','ss'),$moniker_src);
+	$moniker=str_replace("'",'',$moniker);
 	$moniker=strtolower(preg_replace('#[^A-Za-z\d\_\-]#','-',$moniker));
 	if (strlen($moniker)>$max_moniker_length)
 	{

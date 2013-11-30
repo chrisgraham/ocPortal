@@ -16,13 +16,11 @@
 
 	{CURRENT_ENTRY}
 
-	{+START,IF_NON_EMPTY,{CHILDREN}{CURRENT_ENTRY}}
-		<hr class="spaced_rule" />
-	{+END}
-
 	{$SET,support_mass_select,cms_galleries}
 
 	{+START,IF_NON_EMPTY,{ENTRIES}}
+		<hr class="spaced_rule" />
+
 		<div class="box box___gallery_flow_mode_screen__other"><div class="box_inner">
 			<h2>{!OTHER_IMAGES_IN_GALLERY}</h2>
 
@@ -49,11 +47,10 @@
 				} );
 			//]]></script>
 
-			<p class="gallery_start_slideshow">
-				<span class="associated_link"><a target="_blank" title="{!_SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,_SELF:galleries:{FIRST_ENTRY_ID*}:slideshow=1:wide_high=1}">{!_SLIDESHOW}</a></span>
-			</p>
-
-			{SORTING}
+			<ul class="horizontal_links associated_links_block_group">
+				<li>{SORTING}</li>
+				<li><img src="{$IMG*,icons/24x24/buttons/proceed}" srcset="{$IMG*,icons/48x48/buttons/slideshow} 2x" alt="" /> <a target="_blank" title="{!_SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,_SELF:galleries:{FIRST_ENTRY_ID*}:slideshow=1:wide_high=1}">{!_SLIDESHOW}</a></li>
+			</ul>
 
 			{+START,INCLUDE,MASS_SELECT_DELETE_FORM}
 			{+END}
@@ -109,7 +106,6 @@
 		2_ICON=menu/cms/galleries/add_one_video
 		3_URL={$?,{$OR,{$NOT,{$HAS_PRIVILEGE,may_download_gallery}},{$IS_EMPTY,{ENTRIES}}},,{$FIND_SCRIPT*,download_gallery}?cat={CAT*}{$KEEP*,0,1}}
 		3_TITLE={!DOWNLOAD_GALLERY_CONTENTS}
-		3_CLASS=archive_link
 		3_ICON=links/download_as_archive
 		4_URL={ADD_GALLERY_URL*}
 		4_TITLE={!ADD_GALLERY}

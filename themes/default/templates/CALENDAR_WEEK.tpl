@@ -1,4 +1,4 @@
-<table class="spread_table calendar_week spaced_table autosized_table">
+<table class="spread_table calendar_week spaced_table autosized_table columned_table" itemprop="significantLinks">
 	<thead>
 		<tr>
 			<th></th>

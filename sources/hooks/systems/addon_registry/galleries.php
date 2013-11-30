@@ -165,8 +165,8 @@ class Hook_addon_registry_galleries
 			'themes/default/templates/GALLERY_ENTRY_LIST_LINE.tpl',
 			'themes/default/templates/GALLERY_NAV.tpl',
 			'themes/default/templates/GALLERY_IMAGE.tpl',
-			'themes/default/templates/GALLERY_FLOWMODE_IMAGE.tpl',
-			'themes/default/templates/GALLERY_FLOWMODE_VIDEO.tpl',
+			'themes/default/templates/GALLERY_FLOW_MODE_IMAGE.tpl',
+			'themes/default/templates/GALLERY_FLOW_MODE_VIDEO.tpl',
 			'themes/default/templates/GALLERY_VIDEO.tpl',
 			'themes/default/templates/GALLERY_VIDEO_INFO.tpl',
 			'themes/default/templates/GALLERY_REGULAR_MODE_SCREEN.tpl',
@@ -267,10 +267,10 @@ class Hook_addon_registry_galleries
 				'GALLERY_VIDEO_INFO.tpl'=>'gallery_video_info',
 				'GALLERY_BOX.tpl'=>'gallery_regular_mode_screen',
 				'GALLERY_ENTRY_LIST_LINE.tpl'=>'gallery_entry_list_line',
-				'GALLERY_FLOWMODE_IMAGE.tpl'=>'gallery_flowmode_image',
-				'GALLERY_FLOWMODE_VIDEO.tpl'=>'gallery_flowmode_video',
-				'GALLERY_FLOW_ENTRY.tpl'=>'gallery_flowmode_image',
-				'GALLERY_FLOW_MODE_SCREEN.tpl'=>'gallery_flowmode_image',
+				'GALLERY_FLOW_MODE_IMAGE.tpl'=>'gallery_flow_mode_image',
+				'GALLERY_FLOW_MODE_VIDEO.tpl'=>'gallery_flow_mode_video',
+				'GALLERY_FLOW_ENTRY.tpl'=>'gallery_flow_mode_image',
+				'GALLERY_FLOW_MODE_SCREEN.tpl'=>'gallery_flow_mode_image',
 				'GALLERY_REGULAR_MODE_SCREEN.tpl'=>'gallery_regular_mode_screen',
 				'GALLERY_ENTRY_SCREEN.tpl'=>'gallery_entry_screen',
 				'GALLERY_NAV.tpl'=>'gallery_entry_screen',
@@ -600,9 +600,9 @@ class Hook_addon_registry_galleries
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__gallery_flowmode_video()
+	function tpl_preview__gallery_flow_mode_video()
 	{
-		$video=do_lorem_template('GALLERY_FLOWMODE_VIDEO',array(
+		$video=do_lorem_template('GALLERY_FLOW_MODE_VIDEO',array(
 			'MAIN'=>lorem_phrase(),
 			'DESCRIPTION'=>lorem_paragraph_html(),
 			'FILE_SIZE'=>placeholder_filesize(),
@@ -679,9 +679,9 @@ class Hook_addon_registry_galleries
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__gallery_flowmode_image()
+	function tpl_preview__gallery_flow_mode_image()
 	{
-		$image=do_lorem_template('GALLERY_FLOWMODE_IMAGE',array(
+		$image=do_lorem_template('GALLERY_FLOW_MODE_IMAGE',array(
 			'MAIN'=>lorem_phrase(),
 			'DESCRIPTION'=>lorem_paragraph_html(),
 			'FILE_SIZE'=>placeholder_filesize(),

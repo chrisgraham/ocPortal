@@ -30,6 +30,9 @@
 #info_panel_left, #info_panel_right, #edit_panel_left, #edit_panel_right, #view_panel_left, #view_panel_right, #settings_panel_left, #settings_panel_right {
 	padding: 0 1em;
 }
+#view_panel_left {
+	padding: 1em;
+}
 
 .ze_panel {
 	width: 19em;

@@ -85,7 +85,7 @@ class Hook_Profiles_Tabs_Edit_profile
 
 		$text='';
 
-		return array($title,$fields,$text,$javascript,$order,$hidden,'tabs/member_account/profile');
+		return array($title,$fields,$text,$javascript,$order,$hidden,'social/members');
 	}
 }
 

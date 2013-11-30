@@ -1,5 +1,7 @@
 {TITLE}
 
+{$SET,COUNT,{COUNT}}
+
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
 	<div>
 		<input type="hidden" name="theme" value="{THEME*}" />

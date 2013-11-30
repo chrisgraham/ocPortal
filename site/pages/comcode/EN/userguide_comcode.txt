@@ -52,13 +52,13 @@ A list
 [/semihtml]
 [title="2"]Emoticons[/title]
 
-Emoticons are inputted just by entering the emoticon code [tt]:)[/tt].
+Emoticons are inputted just by entering the emoticon code, e.g. [tt]:)[/tt].
 
 [block]main_emoticon_codes[/block]
 
 [title="2"]Shortcuts[/title]
 
-Shortcuts are also entered just by inputting their code [tt](c)[/tt].
+Shortcuts are also entered just by inputting their code, e.g. [tt](c)[/tt].
 
 [semihtml]
 <table class="columned_table results_table">
@@ -114,12 +114,7 @@ function ocp()
 You can put inline images into your text easily and quickly, with the [tt][img][/tt] tag. There is also a thumbnail tag [tt][thumb][/tt] which will show (and cache) a thumbnail of an image. If the tag is given a URL as a parameter as well as the main URL, then that will be used as the thumbnail.
 
 [semihtml]
-<div class="wide_table_wrap"><table class="columned_table results_table wide_table">
-<colgroup>
-	<col style="width: 50%" />
-	<col style="width: 50%" />
-</colgroup>
-
+<div class="wide_table_wrap"><table class="columned_table results_table wide_table autosized_table">
 <thead>
 	<tr>
 		<th>{!CODE}</th>
@@ -194,7 +189,7 @@ You can put things in boxes. For example:
 	<tr><td>[tt][s]text[/s][/tt]</td><td>[s]text[/s]</td></tr>
 	<tr><td>[tt][font param="Helvetica" size="3" color="red"]text[/font][/tt]</td><td>[font param="Helvetica" size="3" color="red"]text[/font]</td></tr>
 	<tr><td>[tt]----------------------[/tt]</td><td>
-----------------------
+[/semihtml]----------------------[semihtml]
 </td></tr>
 </tbody>
 </table></div>
@@ -232,12 +227,7 @@ Users may add attachments according to their quota, and re-use other people's at
 [title="2"]Advanced[/title]
 
 [semihtml]
-<div class="wide_table_wrap"><table class="columned_table results_table wide_table">
-<colgroup>
-	<col style="width: 50%" />
-	<col style="width: 50%" />
-</colgroup>
-
+<div class="wide_table_wrap"><table class="columned_table results_table wide_table autosized_table">
 <thead>
 	<tr>
 		<th>{!CODE}</th>

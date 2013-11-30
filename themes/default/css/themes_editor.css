@@ -71,6 +71,10 @@
 	text-align: center;
 }
 
+.manage_theme_export * {
+	vertical-align: middle;
+}
+
 .theme_image_preview {
 	float: {!en_left};
 	margin-{!en_right}: 0.5em;

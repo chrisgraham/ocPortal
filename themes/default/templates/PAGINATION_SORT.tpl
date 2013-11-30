@@ -1,4 +1,4 @@
-<form title="{!SORT_BY}" action="{$URL_FOR_GET_FORM*,{URL}}{+START,IF_PASSED,HASH}#{HASH*}{+END}" method="get" target="_self">
+<form title="{!SORT_BY}" action="{$URL_FOR_GET_FORM*,{URL}}{+START,IF_PASSED,HASH}#{HASH*}{+END}" method="get" target="_self" class="inline">
 	{$HIDDENS_FOR_GET_FORM,{URL}}
 
 	{$SET,RAND,{$RAND}}
@@ -12,7 +12,7 @@
 			<label for="filter"><span class="field_name">{!SEARCH}:</span> <input value="{FILTER*}" name="filter" id="filter" size="10" /></label>
 		{+END}
 
-		<label {+START,IF_NON_PASSED,FILTER}class="accessibility_hidden" {+END}for="r_{$GET;*,RAND}">{!SORT_BY}: {$GET*,TEXT_ID}</label>
+		<label for="r_{$GET;*,RAND}">{!SORT_BY}: {$GET*,TEXT_ID}</label>
 		<select{+START,IF,{$NOR,{$GET,show_sort_button},{$NOT,{$JS_ON}}}} onchange="/*guarded*/this.form.submit();"{+END} id="r_{$GET;*,RAND}" name="{SORT*}">
 			{SELECTORS}
 		</select>

@@ -270,6 +270,7 @@ class Module_calendar
 		$type=get_param('type','misc');
 
 		require_lang('calendar');
+		require_code('calendar');
 
 		set_feed_url('?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 
@@ -391,7 +392,6 @@ class Module_calendar
 	function run()
 	{
 		require_lang('dates');
-		require_code('calendar');
 		require_css('calendar');
 		require_code('feedback');
 
@@ -1012,7 +1012,7 @@ class Module_calendar
 							$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>date('Y-m-d H:i:s',$timestamp),'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL,'private'=>get_param_integer('private',NULL),'member_id'=>get_param_integer('member_id',NULL)),get_module_zone('cms_calendar'));
 						}
 					}
-					$days->attach(do_template('CALENDAR_WEEK_HOUR_DAY',array('_GUID'=>'e001b4b2ea1995760ef0d4460d93b2e1','CURRENT'=>date('Y-m-d H',utctime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'DOWN'=>strval($down+1),'DAY'=>$day,'HOUR'=>$hour,'CLASS'=>$class,'ENTRIES'=>$entries)));
+					$days->attach(do_template('CALENDAR_WEEK_HOUR_DAY',array('_GUID'=>'e001b4b2ea1995760ef0d4460d93b2e1','CURRENT'=>date('Y-m-d',utctime_to_usertime())==date('Y-m-d',$timestamp),'ADD_URL'=>$add_url,'DOWN'=>strval($down+1),'DAY'=>$day,'HOUR'=>$hour,'CLASS'=>$class,'ENTRIES'=>$entries)));
 				}
 			}
 
@@ -1460,7 +1460,7 @@ class Module_calendar
 					if (!is_null($username))
 					{
 						$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($subscription['n_member_id'],false,true);
-						$subscribed->attach(do_template('CALENDAR_EVENT_SCREEN_SUBSCRIPTION',array('_GUID'=>'c756b8b3f0c57494fd46a94e9abce029','MEMBER_URL'=>$member_url,'USERNAME'=>$username)));
+						$subscribed->attach(do_template('CALENDAR_EVENT_SCREEN_SUBSCRIPTION',array('_GUID'=>'c756b8b3f0c57494fd46a94e9abce029','MEMBER_ID'=>strval($subscription['n_member_id']),'MEMBER_URL'=>$member_url,'USERNAME'=>$username)));
 					}
 				}
 			}
