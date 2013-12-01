@@ -213,6 +213,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		if ($_postdetails['p_poster_name_if_guest']==do_lang('SYSTEM'))
 		{
 			$post['poster_avatar']=find_theme_image('ocf_default_avatars/system',true);
+			$post['poster_title']='';
 		}
 	}
 

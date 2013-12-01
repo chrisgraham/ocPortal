@@ -153,5 +153,5 @@ table.points_summary_table .answer {
 */
 
 .buttons__points {
-	background-image: url('{$IMG,icons/24x24/buttons/points}');
+	background-image: url('{$IMG,icons/24x24/buttons/points}') !important;
 }

@@ -1886,7 +1886,8 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 
 .results_table_sorter {
 	max-width: {$?,{$MOBILE},315,400}px;
-	float: left;
+	float: {!en_left};
+	margin-{!en_right}: 1em;
 }
 
 .pagination_spacing {
@@ -1894,9 +1895,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .pagination {
-	float: {$?,{$MOBILE},{!en_left},{!en_right}};
-	padding: 0;
-	margin: 2px 0 0 0;
+	float: {!en_left};
 	/*	max-width: 540px; Looks bad on forumview */
 }
 
@@ -1967,13 +1966,8 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .pagination_per_page {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		display: inline;
-		padding: 0 20px;
-	{+END}
-	{+START,IF,{$MOBILE}}
-		float: left;
-	{+END}
+	float: {!en_right};
+	margin-{!en_left}: 1em;
 }
 
 .pagination_pages {
@@ -2948,9 +2942,11 @@ input.magic_image_edit_link {
 }
 .button_micro {
 	padding: 1px 3px 2px 3px;
-	background-image: none !important; /* Too loud for such a small space */
 	font-size: 12px;
 	margin: 1px 0.25em 0 0.25em; /* Push it up a bit due to confined space */
+}
+div .button_micro {
+	background-image: none !important; /* Too loud for such a small space */
 }
 
 .button_screen, .button_screen_item, .button_micro, .toggleable_tray_button img {
@@ -3010,181 +3006,181 @@ Form buttons are wrapped in either:
 Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 */
 .buttons__back {
-	background-image: url('{$IMG,icons/24x24/buttons/back}');
+	background-image: url('{$IMG,icons/24x24/buttons/back}') !important;
 }
 .buttons__gotopage {
-	background-image: url('{$IMG,icons/24x24/buttons/gotopage}');
+	background-image: url('{$IMG,icons/24x24/buttons/gotopage}') !important;
 }
 .buttons__perpage {
-	background-image: url('{$IMG,icons/24x24/buttons/perpage}');
+	background-image: url('{$IMG,icons/24x24/buttons/perpage}') !important;
 }
 .buttons__filter {
-	background-image: url('{$IMG,icons/24x24/buttons/filter}');
+	background-image: url('{$IMG,icons/24x24/buttons/filter}') !important;
 }
 .buttons__sort {
-	background-image: url('{$IMG,icons/24x24/buttons/sort}');
+	background-image: url('{$IMG,icons/24x24/buttons/sort}') !important;
 }
 .buttons__all {
-	background-image: url('{$IMG,icons/24x24/buttons/all}');
+	background-image: url('{$IMG,icons/24x24/buttons/all}') !important;
 }
 .buttons__all2 {
-	background-image: url('{$IMG,icons/24x24/buttons/all2}');
+	background-image: url('{$IMG,icons/24x24/buttons/all2}') !important;
 }
 .buttons__convert {
-	background-image: url('{$IMG,icons/24x24/buttons/convert}');
+	background-image: url('{$IMG,icons/24x24/buttons/convert}') !important;
 }
 .buttons__thumbnail {
-	background-image: url('{$IMG,icons/24x24/buttons/thumbnail}');
+	background-image: url('{$IMG,icons/24x24/buttons/thumbnail}') !important;
 }
 .buttons__fullsize {
-	background-image: url('{$IMG,icons/24x24/buttons/fullsize}');
+	background-image: url('{$IMG,icons/24x24/buttons/fullsize}') !important;
 }
 .buttons__calculate {
-	background-image: url('{$IMG,icons/24x24/buttons/calculate}');
+	background-image: url('{$IMG,icons/24x24/buttons/calculate}') !important;
 }
 .buttons__changes {
-	background-image: url('{$IMG,icons/24x24/buttons/changes}');
+	background-image: url('{$IMG,icons/24x24/buttons/changes}') !important;
 }
 .buttons__choose {
-	background-image: url('{$IMG,icons/24x24/buttons/choose}');
+	background-image: url('{$IMG,icons/24x24/buttons/choose}') !important;
 }
 .buttons__clear {
-	background-image: url('{$IMG,icons/24x24/buttons/clear}');
+	background-image: url('{$IMG,icons/24x24/buttons/clear}') !important;
 }
 .buttons__closed {
-	background-image: url('{$IMG,icons/24x24/buttons/closed}');
+	background-image: url('{$IMG,icons/24x24/buttons/closed}') !important;
 }
 .buttons__enable_notifications {
-	background-image: url('{$IMG,icons/24x24/buttons/enable_notifications}');
+	background-image: url('{$IMG,icons/24x24/buttons/enable_notifications}') !important;
 }
 .buttons__disable_notifications {
-	background-image: url('{$IMG,icons/24x24/buttons/disable_notifications}');
+	background-image: url('{$IMG,icons/24x24/buttons/disable_notifications}') !important;
 }
 .buttons__edit {
-	background-image: url('{$IMG,icons/24x24/buttons/edit}');
+	background-image: url('{$IMG,icons/24x24/buttons/edit}') !important;
 }
 .buttons__more {
-	background-image: url('{$IMG,icons/24x24/buttons/more}');
+	background-image: url('{$IMG,icons/24x24/buttons/more}') !important;
 }
 .buttons__move {
-	background-image: url('{$IMG,icons/24x24/buttons/move}');
+	background-image: url('{$IMG,icons/24x24/buttons/move}') !important;
 }
 .buttons__no {
-	background-image: url('{$IMG,icons/24x24/buttons/no}');
+	background-image: url('{$IMG,icons/24x24/buttons/no}') !important;
 }
 .buttons__yes {
-	background-image: url('{$IMG,icons/24x24/buttons/yes}');
+	background-image: url('{$IMG,icons/24x24/buttons/yes}') !important;
 }
 .buttons__proceed {
-	background-image: url('{$IMG,icons/24x24/buttons/proceed}');
+	background-image: url('{$IMG,icons/24x24/buttons/proceed}') !important;
 }
 .buttons__copy {
-	background-image: url('{$IMG,icons/24x24/buttons/copy}');
+	background-image: url('{$IMG,icons/24x24/buttons/copy}') !important;
 }
 .buttons__skip {
-	background-image: url('{$IMG,icons/24x24/buttons/skip}');
+	background-image: url('{$IMG,icons/24x24/buttons/skip}') !important;
 }
 .buttons__cancel {
-	background-image: url('{$IMG,icons/24x24/buttons/cancel}');
-}
-.buttons__next {
-	background-image: url('{$IMG,icons/24x24/buttons/next}');
+	background-image: url('{$IMG,icons/24x24/buttons/cancel}') !important;
 }
 .buttons__previous {
-	background-image: url('{$IMG,icons/24x24/buttons/previous}');
+	background-image: url('{$IMG,icons/24x24/buttons/previous}') !important;
 }
 .buttons__previous_none {
-	background-image: url('{$IMG,icons/24x24/buttons/previous_none}');
+	background-image: url('{$IMG,icons/24x24/buttons/previous_none}') !important;
+}
+.buttons__next {
+	background-image: url('{$IMG,icons/24x24/buttons/next}') !important;
 }
 .buttons__next_none {
-	background-image: url('{$IMG,icons/24x24/buttons/next_none}');
+	background-image: url('{$IMG,icons/24x24/buttons/next_none}') !important;
 }
 .buttons__new_comment {
-	background-image: url('{$IMG,icons/24x24/buttons/new_comment}');
+	background-image: url('{$IMG,icons/24x24/buttons/new_comment}') !important;
 }
 .buttons__new_reply {
-	background-image: url('{$IMG,icons/24x24/buttons/new_reply}');
+	background-image: url('{$IMG,icons/24x24/buttons/new_reply}') !important;
 }
 .buttons__redirect {
-	background-image: url('{$IMG,icons/24x24/buttons/redirect}');
+	background-image: url('{$IMG,icons/24x24/buttons/redirect}') !important;
 }
 .buttons__report {
-	background-image: url('{$IMG,icons/24x24/buttons/report}');
+	background-image: url('{$IMG,icons/24x24/buttons/report}') !important;
 }
 .buttons__restore {
-	background-image: url('{$IMG,icons/24x24/buttons/restore}');
+	background-image: url('{$IMG,icons/24x24/buttons/restore}') !important;
 }
 .buttons__save {
-	background-image: url('{$IMG,icons/24x24/buttons/save}');
+	background-image: url('{$IMG,icons/24x24/buttons/save}') !important;
 }
 .buttons__save_and_stay {
-	background-image: url('{$IMG,icons/24x24/buttons/save_and_stay}');
+	background-image: url('{$IMG,icons/24x24/buttons/save_and_stay}') !important;
 }
 .buttons__search {
-	background-image: url('{$IMG,icons/24x24/buttons/search}');
+	background-image: url('{$IMG,icons/24x24/buttons/search}') !important;
 }
 .buttons__send {
-	background-image: url('{$IMG,icons/24x24/buttons/send}');
+	background-image: url('{$IMG,icons/24x24/buttons/send}') !important;
 }
 .buttons__upload {
-	background-image: url('{$IMG,icons/24x24/buttons/upload}');
+	background-image: url('{$IMG,icons/24x24/buttons/upload}') !important;
 }
 .menu__adminzone__audit__unvalidated {
-	background-image: url('{$IMG,icons/24x24/menu/adminzone/audit/unvalidated}');
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/audit/unvalidated}') !important;
 }
 .buttons__vote {
-	background-image: url('{$IMG,icons/24x24/buttons/vote}');
+	background-image: url('{$IMG,icons/24x24/buttons/vote}') !important;
 }
 .feedback__rate {
-	background-image: url('{$IMG,icons/24x24/feedback/rate}');
+	background-image: url('{$IMG,icons/24x24/feedback/rate}') !important;
 }
 .menu___generic_admin__add_one {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_one}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_one}') !important;
 }
 .menu___generic_admin__add_one_category {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_one_category}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_one_category}') !important;
 }
 .menu___generic_admin__add_to_category {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_to_category}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/add_to_category}') !important;
 }
 .menu___generic_admin__delete {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/delete}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/delete}') !important;
 }
 .menu___generic_admin__edit_one {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_one}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_one}') !important;
 }
 .menu___generic_admin__edit_one_category {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_one_category}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_one_category}') !important;
 }
 .menu___generic_admin__edit_this {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_this}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_this}') !important;
 }
 .menu___generic_admin__edit_this_category {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_this_category}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/edit_this_category}') !important;
 }
 .menu___generic_admin__export {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/export}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/export}') !important;
 }
 .menu___generic_admin__import {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/import}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/import}') !important;
 }
 .menu___generic_admin__merge {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/merge}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/merge}') !important;
 }
 .menu___generic_admin__sync {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/sync}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/sync}') !important;
 }
 .menu___generic_admin__view_archive {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/view_archive}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_admin/view_archive}') !important;
 }
 .menu__site_meta__user_actions__join {
-	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/join}');
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/join}') !important;
 }
 .menu__site_meta__user_actions__login {
-	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/login}');
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/login}') !important;
 }
 .tabs__preview {
-	background-image: url('{$IMG,icons/24x24/tabs/preview}');
+	background-image: url('{$IMG,icons/24x24/tabs/preview}') !important;
 }
 
 /*

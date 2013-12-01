@@ -10,5 +10,5 @@
 */
 
 .menu___generic_spare__8 {
-	background-image: url('{$IMG,icons/24x24/menu/_generic_spare/8}');
+	background-image: url('{$IMG,icons/24x24/menu/_generic_spare/8}') !important;
 }

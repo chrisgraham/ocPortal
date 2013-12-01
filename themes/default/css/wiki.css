@@ -54,5 +54,5 @@
 */
 
 .buttons__edit_tree {
-	background-image: url('{$IMG,icons/24x24/buttons/edit_tree}');
+	background-image: url('{$IMG,icons/24x24/buttons/edit_tree}') !important;
 }

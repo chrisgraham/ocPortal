@@ -91,6 +91,8 @@ class Module_cms_comcode_pages
 		{
 			breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGES'));
 
+			set_helper_panel_text(comcode_lang_string('DOC_COMCODE_PAGE_EDIT'));
+
 			$this->title=get_screen_title('COMCODE_PAGE_EDIT');
 		}
 
@@ -271,7 +273,7 @@ class Module_cms_comcode_pages
 		$add_new_permission=has_add_comcode_page_permission();
 		if ($add_new_permission)
 		{
-			$fields->attach(form_input_line(do_lang_tempcode('NEW'),do_lang_tempcode('DESCRIPTION_NEW_COMCODE_PAGE'),'page_link_2','',true));
+			$fields->attach(form_input_line(do_lang_tempcode('PAGE'),do_lang_tempcode('DESCRIPTION_NEW_COMCODE_PAGE'),'page_link_2','',true));
 			$submit_name=do_lang_tempcode('ADD');
 		} else
 		{
@@ -295,7 +297,7 @@ class Module_cms_comcode_pages
 		{
 			$archive_url=build_url(array('page'=>''),'');
 		}
-		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($search_url->evaluate()),escape_html($archive_url->evaluate())));
+		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_TABLE_EXTRA_COMCODE_PAGES',escape_html($search_url->evaluate()),escape_html($archive_url->evaluate())));
 
 		require_code('templates_results_table');
 
@@ -313,8 +315,8 @@ class Module_cms_comcode_pages
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),
-			do_lang_tempcode('PAGE'),
 			do_lang_tempcode('ZONE'),
+			do_lang_tempcode('PAGE'),
 			do_lang_tempcode('PAGE_LINK'),
 			//do_lang_tempcode('PARENT_PAGE'),
 			//do_lang_tempcode('OWNER'),
@@ -448,7 +450,7 @@ class Module_cms_comcode_pages
 			}
 
 			// Work out meta data
-			$page_title=do_lang_tempcode('NA_EM');
+			$page_title=new ocp_tempcode();
 			if (!is_null($row))
 			{
 				$username=protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['p_submitter']));
@@ -506,11 +508,27 @@ class Module_cms_comcode_pages
 				if ($i>$max+$start) break;
 			}
 
+			if ($table_row['zone']=='')
+			{
+				$zone_hyperlink=new ocp_tempcode();
+			} else
+			{
+				$zone_url=build_url(array('page'=>''),preg_replace('#([\w\d\_]{22})#','${1} ',$table_row['zone']));
+
+				$zone_hyperlink=hyperlink($zone_url,$table_row['zone'],false,true,$table_row['zone_name']);
+				$zone_hyperlink=do_template('COMCODE_TELETYPE',array(
+					'_GUID'=>'46e1af60e09524c20fc62dd55cda1eb9',
+					'CONTENT'=>$zone_hyperlink,
+				));
+			}
+
+			$page_hyperlink=protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'56e1af60e09524c20fc62dd55cda1eb9','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1} ',escape_html($table_row['page'])))));
+
 			$table_rows->attach(results_entry(array(
-				protect_from_escaping(hyperlink(build_url(array('page'=>$table_row['page']),$table_row['zone']),$table_row['page_title'])),
-				protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'56e1af60e09524c20fc62dd55cda1eb9','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['page']))))),
-				protect_from_escaping(hyperlink(build_url(array('page'=>''),$table_row['zone']),$table_row['zone_name'])),
-				protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'bf4dbed562e189c84aa33c17d06c2791','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['wrappable_page_link']))))),
+				protect_from_escaping(hyperlink(build_url(array('page'=>$table_row['page']),$table_row['zone']),$table_row['page_title']->is_empty()?$page_hyperlink:$table_row['page_title'])),
+				protect_from_escaping($zone_hyperlink),
+				$page_hyperlink,
+				protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'bf4dbed562e189c84aa33c17d06c2791','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1} ',escape_html($table_row['wrappable_page_link']))))),
 				//$parent_page,	Save space
 				//$username,
 				//$add_date,
@@ -521,7 +539,19 @@ class Module_cms_comcode_pages
 
 		$table=results_table(do_lang('COMCODE_PAGES'),$start,'start',$max,'max',$max_rows,$header_row,$table_rows,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fdgfdfdfdggfd',true);
 
-		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a','TITLE'=>$this->title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name));
+		$extra=$fields->is_empty()?new ocp_tempcode():do_template('FORM',array('FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>$submit_name,'SUBMIT_ICON'=>'menu___generic_admin__add_one'));
+
+		$tpl=do_template('COLUMNED_TABLE_SCREEN',array(
+			'_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a',
+			'TITLE'=>$this->title,
+			'TEXT'=>$text,
+			'TABLE'=>$table,
+			'POST_URL'=>$post_url,
+			'GET'=>true,
+			'HIDDEN'=>$hidden,
+			'SUB_TITLE'=>$fields->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_PAGE_ADD'),
+			'EXTRA'=>$extra,
+		));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);

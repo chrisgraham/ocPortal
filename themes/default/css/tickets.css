@@ -51,9 +51,9 @@ body table.results_table tbody tr.unclosed_ticket td {
 */
 
 .buttons__add_ticket {
-	background-image: url('{$IMG,icons/24x24/buttons/add_ticket}');
+	background-image: url('{$IMG,icons/24x24/buttons/add_ticket}') !important;
 }
 .buttons__new_reply_staff_only {
-	background-image: url('{$IMG,icons/24x24/buttons/new_reply_staff_only}');
+	background-image: url('{$IMG,icons/24x24/buttons/new_reply_staff_only}') !important;
 }
 

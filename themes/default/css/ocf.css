@@ -318,7 +318,7 @@
 
 .ocf_post_details {
 	text-align: {!en_left};
-	padding: 0.6em 0.2em;
+	padding: 0.5em 0.2em;
 }
 
 .ocf_post_details_date {
@@ -383,11 +383,12 @@
 }
 
 .ocf_post_main_column.buttons_group {
-	margin: 0;
+	padding: 1em;
 }
 
 .ocf_topic_post_area {
 	padding: 0.5em;
+	line-height: 1.6em;
 }
 
 .ocf_topic_post_area img {
@@ -419,6 +420,12 @@ hr.ocf_sig_barrier {
 .ocf_post_back_to_top {
 	padding: 0.5em;
 	text-align: {!en_right};
+}
+
+.ocf_post_back_to_top img {
+	vertical-align: middle;
+	max-width: 20px;
+	margin-left: 0.25em;
 }
 
 .ocf_topic_control_functions {
@@ -469,6 +476,7 @@ hr.ocf_sig_barrier {
 
 .ocf_topic_list th, .ocf_forum_grouping th {
 	padding: 0.5em;
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad});}
 }
 
 .ocf_forum_grouping_centered_header {
@@ -496,6 +504,10 @@ hr.ocf_sig_barrier {
 	padding: 1em; /* This override is in place because unlike most .ocf_column2's, the forums in the forum view should have extensive padding. */
 }
 
+.ocf_forum_in_category_forum .associated_link {
+	text-decoration: none;
+}
+
 .ocf_forum_new_post_indicator {
 	vertical-align: middle;
 }
@@ -511,9 +523,14 @@ hr.ocf_sig_barrier {
 .ocf_forum_latest {
 }
 
+.ocf_forum_topic_title_bits {
+	margin-top: 0.25em;
+}
+
 .ocf_forum_topic_description {
 	font-size: 0.85em;
 	color: {$GET,area_key_text};
+	margin-top: 0.5em;
 }
 
 .ocf_forum_topic_row_poster {
@@ -533,12 +550,13 @@ hr.ocf_sig_barrier {
 
 .ocf_forum_topic_row_preview_button {
 	border: 1px solid {$GET,standard_border};
-	background-color: {$GET,area_background};
+	background-color: {$GET,area_2_background};
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_4_background});}
 	font-size: 0.85em;
 	padding: 0.5em !important;
 	float: {!en_right};
-	margin: 0 0 0.5em 0.5em;
+	margin: 0 0 0 0.5em;
+	text-decoration: none;
 }
 
 .ocf_forum_topic_row_emoticon {
@@ -1258,41 +1276,41 @@ table.ocf_profile_statistics th {
 */
 
 .buttons__forum {
-	background-image: url('{$IMG,icons/24x24/buttons/forum}');
+	background-image: url('{$IMG,icons/24x24/buttons/forum}') !important;
 }
 .buttons__history {
-	background-image: url('{$IMG,icons/24x24/buttons/history}');
+	background-image: url('{$IMG,icons/24x24/buttons/history}') !important;
 }
 .buttons__mark_read_forum {
-	background-image: url('{$IMG,icons/24x24/buttons/mark_read_forum}');
+	background-image: url('{$IMG,icons/24x24/buttons/mark_read_forum}') !important;
 }
 .buttons__mark_unread_topic {
-	background-image: url('{$IMG,icons/24x24/buttons/mark_unread_topic}');
+	background-image: url('{$IMG,icons/24x24/buttons/mark_unread_topic}') !important;
 }
 .buttons__new_post_full {
-	background-image: url('{$IMG,icons/24x24/buttons/new_post_full}');
+	background-image: url('{$IMG,icons/24x24/buttons/new_post_full}') !important;
 }
 .buttons__new_topic {
-	background-image: url('{$IMG,icons/24x24/buttons/new_topic}');
+	background-image: url('{$IMG,icons/24x24/buttons/new_topic}') !important;
 }
 .buttons__new_quote {
-	background-image: url('{$IMG,icons/24x24/buttons/new_quote}');
+	background-image: url('{$IMG,icons/24x24/buttons/new_quote}') !important;
 }
 .buttons__whisper {
-	background-image: url('{$IMG,icons/24x24/buttons/whisper}');
+	background-image: url('{$IMG,icons/24x24/buttons/whisper}') !important;
 }
 .menu__adminzone__structure__forum__multi_moderations {
-	background-image: url('{$IMG,icons/24x24/menu/adminzone/structure/forum/multi_moderations}');
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/structure/forum/multi_moderations}') !important;
 }
 .menu__site_meta__user_actions__lost_password {
-	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/lost_password}');
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/user_actions/lost_password}') !important;
 }
 .tabs__member_account__warnings {
-	background-image: url('{$IMG,icons/24x24/tabs/member_account/warnings}');
+	background-image: url('{$IMG,icons/24x24/tabs/member_account/warnings}') !important;
 }
 .buttons__linear {
-	background-image: url('{$IMG,icons/24x24/buttons/linear}');
+	background-image: url('{$IMG,icons/24x24/buttons/linear}') !important;
 }
 .buttons__threaded {
-	background-image: url('{$IMG,icons/24x24/buttons/threaded}');
+	background-image: url('{$IMG,icons/24x24/buttons/threaded}') !important;
 }

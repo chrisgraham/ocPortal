@@ -431,11 +431,11 @@
 */
 
 .buttons__ignore {
-	background-image: url('{$IMG,icons/24x24/buttons/ignore}');
+	background-image: url('{$IMG,icons/24x24/buttons/ignore}') !important;
 }
 .menu__social__chat__chat {
-	background-image: url('{$IMG,icons/24x24/menu/social/chat/chat}');
+	background-image: url('{$IMG,icons/24x24/menu/social/chat/chat}') !important;
 }
 .menu__social__chat__sound {
-	background-image: url('{$IMG,icons/24x24/menu/social/chat/sound}');
+	background-image: url('{$IMG,icons/24x24/menu/social/chat/sound}') !important;
 }

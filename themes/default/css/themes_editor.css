@@ -140,8 +140,8 @@
 */
 
 .buttons__simple {
-	background-image: url('{$IMG,icons/24x24/buttons/simple}');
+	background-image: url('{$IMG,icons/24x24/buttons/simple}') !important;
 }
 .buttons__advanced {
-	background-image: url('{$IMG,icons/24x24/buttons/advanced}');
+	background-image: url('{$IMG,icons/24x24/buttons/advanced}') !important;
 }

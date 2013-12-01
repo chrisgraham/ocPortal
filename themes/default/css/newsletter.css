@@ -14,5 +14,5 @@
 */
 
 .menu__site_meta__newsletters {
-	background-image: url('{$IMG,icons/24x24/menu/site_meta/newsletters}');
+	background-image: url('{$IMG,icons/24x24/menu/site_meta/newsletters}') !important;
 }

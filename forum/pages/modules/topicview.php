@@ -557,7 +557,7 @@ class Module_topicview
 						$test=get_param_integer('threaded',-1);
 						if ($test!=-1) $map['threaded']=$test;
 						$new_post_url=build_url($map,get_module_zone('topics'));
-						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode($topic_info['is_open']?'REPLY':'CLOSED'),'url'=>$new_post_url,'img'=>$topic_info['is_open']?'buttons__new_reply':'buttons__closed');
+						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode($topic_info['is_open']?'_REPLY':'CLOSED'),'url'=>$new_post_url,'img'=>$topic_info['is_open']?'buttons__new_reply':'buttons__closed');
 					}
 				} else
 				{

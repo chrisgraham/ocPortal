@@ -2,9 +2,6 @@
 	{+START,IF,{$NOT,{$MOBILE}}}
 		{+START,IF,{$CONFIG_OPTION,is_on_topic_emoticons}}
 			<td class="ocf_forum_topic_row_emoticon ocf_column1">
-				{+START,IF_EMPTY,{EMOTICON}}
-					<img class="vertical_alignment" alt="" src="{$IMG*,ocf_emoticons/none}" />
-				{+END}
 				{EMOTICON}
 			</td>
 		{+END}
@@ -15,12 +12,12 @@
 			<a class="ocf_forum_topic_row_preview_button" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$TRUNCATE_LEFT*~;^,{POST},1000,0,1}','30%',null,null,null,true);" href="{URL*}">{!PREVIEW} <span style="display: none">{ID*}</span></a>
 		{+END}
 
-		<div>
+		<div class="ocf_forum_topic_title_bits">
 			{TOPIC_ROW_LINKS}
 
 			{TOPIC_ROW_MODIFIERS}
 
-			<a{+START,IF_NON_EMPTY,{TOPIC_ROW_MODIFIERS}{TOPIC_ROW_LINKS}} class="ocf_forum_topic_indent"{+END} href="{URL*}" title="{$ALTERNATOR_TRUNCATED,{TITLE},60,{!TOPIC_STARTED_DATE_TIME,{HOVER;~*}},,1}">{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:topics:_edit_topic:{ID}}{+START,IF,{UNREAD}}<span class="ocf_unread_topic_title">{+END}{$TRUNCATE_LEFT,{TITLE},46,1}{+START,IF,{UNREAD}}</span>{+END}{+END}</a>
+			<a class="vertical_alignment {+START,IF_NON_EMPTY,{TOPIC_ROW_MODIFIERS}{TOPIC_ROW_LINKS}} ocf_forum_topic_indent{+END}" href="{URL*}" title="{$ALTERNATOR_TRUNCATED,{TITLE},60,{!TOPIC_STARTED_DATE_TIME,{HOVER;~*}},,1}">{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:topics:_edit_topic:{ID}}{+START,IF,{UNREAD}}<span class="ocf_unread_topic_title">{+END}{$TRUNCATE_LEFT,{TITLE},46,1}{+START,IF,{UNREAD}}</span>{+END}{+END}</a>
 
 			{PAGES}
 
