@@ -645,7 +645,6 @@ class Module_cedi
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value('seedy_changes','COUNT(*)',array('the_action'=>'CEDI_MAKE_POST'));
 		$_id=get_param('id',NULL);
 		$id=NULL;
 		if (!is_null($_id))
@@ -654,6 +653,7 @@ class Module_cedi
 		}
 		$where=(!is_null($id))?('the_page='.strval($id)):(db_string_equal_to('the_action','CEDI_MAKE_POST').' OR '.db_string_equal_to('the_action','CEDI_EDIT_PAGE'));
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'seedy_changes WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'seedy_changes WHERE '.$where);
 		$fields=new ocp_tempcode();
 		require_code('templates_results_table');
 		foreach ($rows as $myrow)
