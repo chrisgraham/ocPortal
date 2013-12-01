@@ -214,6 +214,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 	$mindless_mode=false; // If we're doing a semi parse mode and going over a tag we don't actually process
 	$tag_raw='';
 
+	if ((!is_null($wrap_pos)) && (strtolower(get_charset())=='utf-8'))
+		$wrap_pos*=2;
+
 	$stupidity_mode=get_value('stupidity_mode'); // bork or leet
 	if ($comcode_dangerous) $stupidity_mode=get_param('stupidity_mode','');
 	if ($stupidity_mode=='leet')
@@ -585,7 +588,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						{
 							if (($next==' ') || ($next=="\t") || ($just_ended)) $none_wrap_length=0; else
 							{
-								if ((!is_null($wrap_pos)) && ($none_wrap_length>=$wrap_pos) && ($textual_area) && (!$in_semihtml))
+								if ((!is_null($wrap_pos)) && ($none_wrap_length>=$wrap_pos) && ((strtolower(get_charset())!='utf-8') || (preg_replace(array('#[\x09\x0A\x0D\x20-\x7E]#','#[\xC2-\xDF][\x80-\xBF]#','#\xE0[\xA0-\xBF][\x80-\xBF]#','#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','#\xED[\x80-\x9F][\x80-\xBF]#','#\xF0[\x90-\xBF][\x80-\xBF]{2}#','#[\xF1-\xF3][\x80-\xBF]{3}#','#\xF4[\x80-\x8F][\x80-\xBF]{2}#'),array('','','','','','','',''),$continuation)=='')) && ($textual_area) && (!$in_semihtml))
 								{
 									if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 									$tag_output->attach($continuation);
