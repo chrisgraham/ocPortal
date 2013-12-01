@@ -183,14 +183,17 @@ function xhtmlise_html($html,$definitely_want=false)
 				} else break;
 				if (is_null($token)) break;
 			}
-			if (strpos($temp,'<![CDATA[')===false)
-				$new.='// <![CDATA['.chr(10);
-			$temp=str_replace('</','<\/',$temp);
-			if (strpos($temp,'<![CDATA[')===false)
-				$temp=str_replace(']]>',']]\'+\'>',$temp);
-			$new.=$temp;
-			if (strpos($temp,'<![CDATA[')===false)
-				$new.='//]]>';
+			if ($temp!='')
+			{
+				if (strpos($temp,'<![CDATA[')===false)
+					$new.='// <![CDATA['.chr(10);
+				$temp=str_replace('</','<\/',$temp);
+				if (strpos($temp,'<![CDATA[')===false)
+					$temp=str_replace(']]>',']]\'+\'>',$temp);
+				$new.=$temp;
+				if (strpos($temp,'<![CDATA[')===false)
+					$new.='//]]>';
+			}
 		} else
 		{
 			$token=_get_next_tag();

@@ -405,12 +405,27 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		breadcrumb_set_parents(array());
 
 		$fields=new ocp_tempcode();
-		$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_name'));
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_name','cf_type'));
 		require_code('form_templates');
+		require_code('fields');
 		$list=new ocp_tempcode();
+		$_list=array();
 		foreach ($rows as $row)
 		{
-			$list->attach(form_input_list_entry(strval($row['id']),false,get_translated_text($row['cf_name'],$GLOBALS['FORUM_DB'])));
+			$ob=get_fields_hook($row['cf_type']);
+			list(,,$storage_type)=$ob->get_field_value_row_bits(NULL);
+
+			if (strpos($storage_type,'_trans')===false)
+			{
+				$id=$row['id'];
+				$text=get_translated_text($row['cf_name'],$GLOBALS['FORUM_DB']);
+				$_list[$id]=$text;
+			}
+		}
+		asort($_list);
+		foreach ($_list as $id=>$text)
+		{
+			$list->attach(form_input_list_entry(strval($id),false,$text));
 		}
 		if ($list->is_empty())
 		{
