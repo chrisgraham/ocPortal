@@ -97,6 +97,8 @@ class Hook_addon_registry_ocf_warnings
 		return array(
 			'themes/default/images/icons/24x24/tabs/member_account/warnings.png',
 			'themes/default/images/icons/48x48/tabs/member_account/warnings.png',
+			'themes/default/images/icons/24x24/links/warning_add.png',
+			'themes/default/images/icons/48x48/links/warning_add.png',
 			'sources/hooks/systems/addon_registry/ocf_warnings.php',
 			'site/pages/modules/warnings.php',
 			'themes/default/templates/OCF_SAVED_WARNING.tpl',
