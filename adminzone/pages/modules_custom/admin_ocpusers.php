@@ -96,7 +96,7 @@ class Module_admin_ocpusers
 	{
 		$type=get_param('type','misc');
 
-		require_lang('ocpcom');
+		require_lang('ocportalcom');
 
 		$this->title=get_screen_title('OC_SITES_INSTALLED');
 
@@ -110,7 +110,7 @@ class Module_admin_ocpusers
 	 */
 	function run()
 	{
-		require_code('ocpcom');
+		require_code('ocportalcom');
 		require_code('form_templates');
 
 		$type=get_param('type','misc');

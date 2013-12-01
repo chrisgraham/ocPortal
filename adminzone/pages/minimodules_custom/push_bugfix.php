@@ -465,7 +465,7 @@ function make_call($call,$params,$file=NULL)
 	$context=stream_context_create($opts);
 
 	global $REMOTE_BASE_URL;
-	$call_url=$REMOTE_BASE_URL.'/data_custom/ocpcom_web_service.php?call='.urlencode($call);
+	$call_url=$REMOTE_BASE_URL.'/data_custom/ocportalcom_web_service.php?call='.urlencode($call);
 
 	$result=@file_get_contents($call_url,false,$context);
 	if ($result===false)

@@ -133,7 +133,7 @@ class Module_sites
 	{
 		$type=get_param('type','misc');
 
-		require_lang('ocpcom');
+		require_lang('ocportalcom');
 
 		if ($type=='misc')
 		{
@@ -162,7 +162,7 @@ class Module_sites
 	 */
 	function run()
 	{
-		require_code('ocpcom');
+		require_code('ocportalcom');
 		require_lang('installer');
 		require_lang('search');
 		require_lang('downloads');

@@ -17,7 +17,7 @@
 
 restrictify();
 $groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-require_code('ocpcom');
+require_code('ocportalcom');
 
 // Version info / plan
 
@@ -226,7 +226,7 @@ $article="Version {$version_pretty} has now been released. {$descrip}. Upgrading
 To upgrade follow the steps in your website's [tt]http://mybaseurl/upgrader.php[/tt] script. You will need to copy the URL of the attached [tt]TAR[/tt] file (created via the form below) during step 3.
 {$major_release_1}
 
-[block=\"{$version_pretty}\"]ocpcom_make_upgrader[/block]
+[block=\"{$version_pretty}\"]ocportalcom_make_upgrader[/block]
 
 {$changes}";
 

@@ -20,14 +20,14 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_1',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Installation and configuration[/title]
 	<div class="hide_tag" id="doctray_1"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="web_hosting,install,adv_installation,windows,google_appengine,configuration,importer,nuances" view="full"]ocpcom_new_tutorials[/block]
+	[block="web_hosting,install,adv_installation,windows,google_appengine,configuration,importer,nuances" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_v',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Video tutorials[/title]
 	<div class="hide_tag" id="doctray_v"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="v_google_map,v_su,v_custom_comcode,v_themes101,v_themes201" view="full"]ocpcom_new_tutorials[/block]
+	[block="v_google_map,v_su,v_custom_comcode,v_themes101,v_themes201" view="full"]ocportalcom_new_tutorials[/block]
 
 	<p style="text-align: center; font-weight: bold">Also on <a target="_blank" title="YouTube (this link will open in a new window)" href="http://www.youtube.com/user/ocportal">YouTube</a></p>
 	</div>
@@ -36,98 +36,98 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_2',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Introduction and background information[/title]
 	<div class="hide_tag" id="doctray_2"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="addon_index,webapp,drinking,browsers" view="full"]ocpcom_new_tutorials[/block]
+	[block="addon_index,webapp,drinking,browsers" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_3',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>General (non-ocPortal-specific) guides[/title]
 	<div class="hide_tag" id="doctray_3"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="how_internet_works,domain_names,email" view="full"]ocpcom_new_tutorials[/block]
+	[block="how_internet_works,domain_names,email" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_4',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Core ocPortal structure[/title]
 	<div class="hide_tag" id="doctray_4"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="structure,adminzone,menus,comcode,wysiwyg,comcode_pages,adv_comcode_pages,adv_comcode" view="full"]ocpcom_new_tutorials[/block]
+	[block="structure,adminzone,menus,comcode,wysiwyg,comcode_pages,adv_comcode_pages,adv_comcode" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_5',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>On-going configuration and maintenance[/title]
 	<div class="hide_tag" id="doctray_5"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="backup,featured,staff,permissions,chmod,sql,seo,subcom,cleanup" view="full"]ocpcom_new_tutorials[/block]
+	[block="backup,featured,staff,permissions,chmod,sql,seo,subcom,cleanup" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_6',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Integration configuration[/title]
 	<div class="hide_tag" id="doctray_6"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="integration,httpauth,ldap" view="full"]ocpcom_new_tutorials[/block]
+	[block="integration,httpauth,ldap" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_7',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Advanced configuration[/title]
 	<div class="hide_tag" id="doctray_7"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="adv_configuration,filter,ocselect,intl_users,intl,optimisation,msn,security,fields_filter,cookies" view="full"]ocpcom_new_tutorials[/block]
+	[block="adv_configuration,filter,ocselect,intl_users,intl,optimisation,msn,security,fields_filter,cookies" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_8',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Configurational events[/title]
 	<div class="hide_tag" id="doctray_8"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="moving,uninstall,upgrade,disaster" view="full"]ocpcom_new_tutorials[/block]
+	[block="moving,uninstall,upgrade,disaster" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_9',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Advice and guidance[/title]
 	<div class="hide_tag" id="doctray_9"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="legal,staff_advice" view="full"]ocpcom_new_tutorials[/block]
+	[block="legal,staff_advice" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_10',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Content features and usage[/title]
 	<div class="hide_tag" id="doctray_10"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="information,news,adv_news,newsletter,downloads,adv_downloads,galleries,adv_galleries,catalogues,wiki,calendar,quizzes,aggregate_types" view="full"]ocpcom_new_tutorials[/block]
+	[block="information,news,adv_news,newsletter,downloads,adv_downloads,galleries,adv_galleries,catalogues,wiki,calendar,quizzes,aggregate_types" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_11',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Miscellaneous features and usage[/title]
 	<div class="hide_tag" id="doctray_11"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="keymap,search,banners,feedback,ecommerce,occle,repository" view="full"]ocpcom_new_tutorials[/block]
+	[block="keymap,search,banners,feedback,ecommerce,occle,repository" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_12',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>User features and usage[/title]
 	<div class="hide_tag" id="doctray_12"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="chat,points,censor,authors,users,statistics,collaboration,support_desk,trace" view="full"]ocpcom_new_tutorials[/block]
+	[block="chat,points,censor,authors,users,statistics,collaboration,support_desk,trace" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_13',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>OCF features and (Forum/Members) usage[/title]
 	<div class="hide_tag" id="doctray_13"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="members,correspondance,adv_members,forums,mod,forum_helpdesk,forum_tracking,emoticons,notifications" view="full"]ocpcom_new_tutorials[/block]
+	[block="members,correspondance,adv_members,forums,mod,forum_helpdesk,forum_tracking,emoticons,notifications" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_14',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Visual customisation[/title]
 	<div class="hide_tag" id="doctray_14"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="fixed_width,markup,design,themes,designer_themes,tempcode,adv_themes,accessibility,fringe,releasing_themes" view="full"]ocpcom_new_tutorials[/block]
+	[block="fixed_width,markup,design,themes,designer_themes,tempcode,adv_themes,accessibility,fringe,releasing_themes" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_15',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Progmattic customisation[/title]
 	<div class="hide_tag" id="doctray_15"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="framework,programming,hardcore_1,hardcore_2,hardcore_3" view="full"]ocpcom_new_tutorials[/block]
+	[block="framework,programming,hardcore_1,hardcore_2,hardcore_3" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 

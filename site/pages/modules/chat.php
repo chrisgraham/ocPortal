@@ -555,7 +555,7 @@ class Module_chat
 		require_javascript('javascript_posting');
 		require_css('colour_picker');
 
-		$prefs=@$_COOKIE['ocp_chat_prefs'];
+		$prefs=@$_COOKIE['software_chat_prefs'];
 		$prefs=@explode(';',$prefs);
 		$room_id=$this->room_id;
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id'=>$room_id),'',1);
@@ -1002,7 +1002,7 @@ class Module_chat
 	{
 		$value=post_param('text_colour',get_option('chat_default_post_colour')).';'.post_param('font_name',get_option('chat_default_post_font')).';';
 		require_code('users_active_actions');
-		ocp_setcookie('ocp_chat_prefs',$value);
+		ocp_setcookie('software_chat_prefs',$value);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>get_param_integer('id'),'no_reenter_message'=>1),'_SELF');
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));

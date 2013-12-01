@@ -2150,13 +2150,13 @@ div.wysiwyg_toolbar_color_finder {
 .tree_list_nonhighlighted a {
 }
 
-.ocp_chat {
+.software_chat {
 	margin: 20px;
 	font-size: 0.9em;
 	float: right;
 	width: 260px;
 }
-.ocp_chat_iframe {
+.software_chat_iframe {
 	overflow: hidden;
 	width: 450px;
 	height: 90%;

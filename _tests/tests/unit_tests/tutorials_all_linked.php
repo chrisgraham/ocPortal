@@ -21,7 +21,7 @@ class tutorials_all_linked_test_set extends ocp_test_case
 	function testTutorialLinking()
 	{
 		$tutorials_index=file_get_contents(get_custom_file_base().'/docs/pages/comcode_custom/EN/tutorials.txt');
-		$tutorials_summaries=file_get_contents(get_file_base().'/sources_custom/miniblocks/ocpcom_new_tutorials.php');
+		$tutorials_summaries=file_get_contents(get_file_base().'/sources_custom/miniblocks/ocportalcom_new_tutorials.php');
 
 		$dh=opendir(get_custom_file_base().'/docs/pages/comcode_custom/EN');
 		while (($f=readdir($dh))!==false)

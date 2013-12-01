@@ -13,7 +13,7 @@
  * @package		ocportalcom
  */
 
-function init__ocpcom()
+function init__ocportalcom()
 {
 	define('MYOCP_DEMO_LAST_DAYS',30);
 }
@@ -24,7 +24,7 @@ function server__public__demo_reset()
 
 	set_value('last_demo_set_time',strval(time()));
 
-	require_lang('ocpcom');
+	require_lang('ocportalcom');
 
 	$servers=find_all_servers();
 	$server=array_shift($servers);

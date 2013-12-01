@@ -21,7 +21,7 @@ class Hook_cron_site_cleanup
 	function run()
 	{
 		require_lang('sites');
-		require_code('ocpcom');
+		require_code('ocportalcom');
 		myocp_delete_old_sites();
 
 		// Reset demo
@@ -33,7 +33,7 @@ class Hook_cron_site_cleanup
 			global $SITE_INFO;
 			if (!isset($SITE_INFO['mysql_root_password'])) return;
 
-			require_lang('ocpcom');
+			require_lang('ocportalcom');
 
 			$servers=find_all_servers();
 			$server=array_shift($servers);
