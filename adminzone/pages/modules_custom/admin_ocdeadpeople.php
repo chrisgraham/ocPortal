@@ -239,7 +239,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 		$field_set=alternate_fields_set__start($set_name);
 
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','image',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$image,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','url',$image,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$image));
 

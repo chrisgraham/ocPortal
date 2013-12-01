@@ -759,7 +759,7 @@ function _try_for_special_comcode_tag_specific_param_ui($tag,$actual_tag,$param,
 		$set_title=do_lang_tempcode('THUMBNAIL');
 		$field_set=alternate_fields_set__start($set_name);
 
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),$default,'thumb_url__a',$default,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),$default,'thumb_url__a',$default,false));
 
 		$filedump_url=build_url(array('page'=>'filedump'),get_module_zone('filedump'));
 		$field_set->attach(form_input_tree_list(do_lang_tempcode('filedump:FILEDUMP'),do_lang_tempcode('COMCODE_TAG_'.(($tag=='attachment')?'attachment':'media').'_PARAM_thumb_url',escape_html($filedump_url->evaluate())),'thumb_url__b','','choose_filedump_file',array('only_images'=>true),false,$default,false));
@@ -825,7 +825,7 @@ function _try_for_special_comcode_tag_specific_contents_ui($tag,$actual_tag,&$fi
 		$set_title=do_lang_tempcode('FILE');
 		$field_set=alternate_fields_set__start($set_name);
 
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','tag_contents__a',$default_embed,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','tag_contents__a',$default_embed,false));
 
 		$filedump_url=build_url(array('page'=>'filedump'),get_module_zone('filedump'));
 		$field_set->attach(form_input_tree_list(do_lang_tempcode('filedump:FILEDUMP'),do_lang_tempcode('COMCODE_TAG_media_EMBED_FILE',escape_html($filedump_url->evaluate())),'tag_contents__b','','choose_filedump_file',array(),false,'',false));

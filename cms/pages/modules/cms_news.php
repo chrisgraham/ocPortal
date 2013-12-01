@@ -252,7 +252,7 @@ class Module_cms_news extends standard_crud_module
 				$fr[]=($row['validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$username=protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['submitter']));
 			$fr[]=$username;
-			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id'])));
 
 			$fields->attach(results_entry($fr,true));
 		}
@@ -864,7 +864,7 @@ class Module_cms_news_cat extends standard_crud_module
 			$total=$GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)',array('news_category'=>$row['id']));
 			$total+=$GLOBALS['SITE_DB']->query_select_value('news_category_entries','COUNT(*)',array('news_entry_category'=>$row['id']));
 
-			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'archive','filter'=>$row['id']),get_module_zone('news')),get_translated_text($row['nc_title']))),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'archive','filter'=>$row['id']),get_module_zone('news')),get_translated_text($row['nc_title']))),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
 		}
 
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);

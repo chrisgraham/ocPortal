@@ -536,6 +536,30 @@ function form_input_line($pretty_name,$description,$name,$default,$required,$tab
 }
 
 /**
+ * Get the tempcode for a URL.
+ *
+ * @param  mixed			A human intelligible name for this input field
+ * @param  mixed			A description for this input field
+ * @param  ID_TEXT		The name which this input field is for
+ * @param  ?string		The default value for this input field (NULL: blank)
+ * @param  boolean		Whether this is a required input field
+ * @param  ?integer		The tab index of the field (NULL: not specified)
+ * @return tempcode		The input field
+ */
+function form_input_url($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
+{
+	if (is_null($default)) $default='';
+
+	$default=filter_form_field_default($name,$default);
+
+	$tabindex=get_form_field_tabindex($tabindex);
+
+	$_required=($required)?'_required':'';
+	$input=do_template('FORM_SCREEN_INPUT_URL',array('_GUID'=>'12789c9af25cbc971e86bfcc0ad322d5','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
+	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+}
+
+/**
  * Get the tempcode for a username input line.
  *
  * @param  mixed			A human intelligible name for this input field

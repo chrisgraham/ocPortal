@@ -182,7 +182,7 @@ class Module_cms_quiz extends standard_crud_module
 
 			$type=do_lang_tempcode($row['q_type']);
 
-			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz')),get_translated_text($row['q_name']))),$type,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz')),get_translated_text($row['q_name']))),$type,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
 		}
 
 		$search_url=build_url(array('page'=>'search','id'=>'quiz'),get_module_zone('search'));

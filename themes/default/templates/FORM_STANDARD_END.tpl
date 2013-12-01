@@ -28,6 +28,12 @@
 {+END}{+END}{+END}
 
 <p class="proceed_button{+START,IF_PASSED,SUBMIT_BUTTON_CLASS} {SUBMIT_BUTTON_CLASS*}{+END}">
+	{+START,IF_PASSED_AND_TRUE,BACK}
+		{+START,IF,{$JS_ON}}
+			<input class="buttons__back button_screen" type="button" onclick="history.back(); return false;" value="{!GO_BACK}" />
+		{+END}
+	{+END}
+
 	{+START,IF_PASSED,EXTRA_BUTTONS}{EXTRA_BUTTONS}{+END}
 	{+START,IF_PASSED_AND_TRUE,PREVIEW}{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}
 		<input class="tabs__preview button_screen" onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; if (form.onsubmit) { var test=form.onsubmit.call(form,event); if (!test) return false; } if (do_form_preview(form,'{$PREVIEW_URL;*}{$KEEP;*}{+START,IF_PASSED,THEME}&amp;utheme={THEME*}{+END}'{+START,IF_PASSED_AND_TRUE,SEPARATE_PREVIEW},true{+END})) { if ((typeof window.just_checking_requirements=='undefined') || (!window.just_checking_requirements)) form.submit(); return true; } return false;" id="preview_button" accesskey="p" tabindex="{+START,IF_PASSED,TABINDEX}{TABINDEX}{+END}{+START,IF_NON_PASSED,TABINDEX}250{+END}" type="button" value="{!PREVIEW}" />

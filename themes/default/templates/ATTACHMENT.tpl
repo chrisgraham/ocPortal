@@ -48,7 +48,7 @@
 {+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput((typeof window.plUploadLoaded!='undefined')?'attachment_multi':'attachment','file{I}',null,'{POSTING_FIELD_NAME;/}'{+START,IF_PASSED,FILTER},'{FILTER;/}'{+END});
+			preinit_file_input((typeof window.plUploadLoaded!='undefined')?'attachment_multi':'attachment','file{I}',null,'{POSTING_FIELD_NAME;/}'{+START,IF_PASSED,FILTER},'{FILTER;/}'{+END});
 		} );
 	//]]></script>
 {+END}

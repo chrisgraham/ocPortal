@@ -12,7 +12,7 @@
 			<label for="filter"><span class="field_name">{!SEARCH}:</span> <input value="{FILTER*}" name="filter" id="filter" size="10" /></label>
 		{+END}
 
-		<label for="r_{$GET;*,RAND}">{!SORT_BY}: {$GET*,TEXT_ID}</label>
+		<label for="r_{$GET;*,RAND}">{!SORT_BY}: <span class="accessibility_hidden">{$GET*,TEXT_ID}</span></label>
 		<select{+START,IF,{$NOR,{$GET,show_sort_button},{$NOT,{$JS_ON}}}} onchange="/*guarded*/this.form.submit();"{+END} id="r_{$GET;*,RAND}" name="{SORT*}">
 			{SELECTORS}
 		</select>

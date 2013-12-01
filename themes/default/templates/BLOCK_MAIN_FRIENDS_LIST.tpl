@@ -29,7 +29,7 @@
 			{+END}
 		{+END}
 		{+START,IF_EMPTY,{FRIENDS_FORWARD}}
-			<p class="nothing_here">{!NO_ENTRIES}</p>
+			<p class="nothing_here">{!_NO_FRIEND_ENTRIES}</p>
 		{+END}
 
 		<script>// <![CDATA[

@@ -372,8 +372,8 @@ function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,
 	if (typeof ajax_loading[0]!='undefined')
 	{
 		ajax_loading[0].parentNode.parentNode.removeChild(ajax_loading[0].parentNode);
-		window.document.body.style.cursor='';
 	}
+	window.document.body.style.cursor='';
 
 	// Put in HTML
 	show_block_html(new_html,target_div,append,inner);

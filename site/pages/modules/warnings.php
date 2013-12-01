@@ -562,7 +562,7 @@ class Module_warnings extends standard_crud_module
 			if (addon_installed('points'))
 				$map[]=integer_format($row['p_charged_points']);
 
-			$map[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
+			$map[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id'])));
 
 			$fields->attach(results_entry($map),true);
 		}

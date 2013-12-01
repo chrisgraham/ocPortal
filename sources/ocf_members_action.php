@@ -102,7 +102,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 				$results=array();
 				foreach ($codes as $code)
 				{
-					if (strpos($code,'ocp_fanatic')!==false) continue;
+					if ($code=='system') continue;
 
 					$count=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','SUM(m_cache_num_posts)',array('m_avatar_url'=>find_theme_image($code,false,true)));
 					if (is_null($count)) $count=0;

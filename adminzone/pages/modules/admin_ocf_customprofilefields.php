@@ -346,7 +346,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 			$fr[]=protect_from_escaping($orderer);
 			if ($used)
 			{
-				$edit_link=hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']));
+				$edit_link=hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']));
 			} else
 			{
 				$edit_link=do_lang_tempcode('UNUSED_CPF');

@@ -1051,7 +1051,7 @@ class Module_chat
 
 		// We have the messages, now we have to create a nice little text file...
 		$keep=symbol_tempcode('KEEP');
-		$mod_url=find_script('dllogs').'?room='.strval($room).'&start='.strval($start_date_and_time).'&finish='.strval($finish_date_and_time).'&zone='.get_zone_name().$keep->evaluate();
+		$mod_url=find_script('download_chat_logs').'?room='.strval($room).'&start='.strval($start_date_and_time).'&finish='.strval($finish_date_and_time).'&zone='.get_zone_name().$keep->evaluate();
 
 		require_code('site2');
 		assign_refresh($mod_url,0.0);

@@ -986,7 +986,7 @@ function close_chat_conversation(room_id)
 			{
 				if (logs.toLowerCase()=='{!YES*;^}'.toLowerCase())
 				{
-					window.open('{$FIND_SCRIPT*;,dllogs}?room='+room_id+'{$KEEP*;^}');
+					window.open('{$FIND_SCRIPT*;,download_chat_logs}?room='+room_id+'{$KEEP*;^}');
 					deinvolve_im(room_id,true,is_popup);
 					return;
 				}

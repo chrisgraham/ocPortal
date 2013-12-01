@@ -105,7 +105,6 @@ class Hook_addon_registry_ocf_avatars
 			'themes/default/images/ocf_default_avatars/default_set/horse.png',
 			'themes/default/images/ocf_default_avatars/default_set/index.html',
 			'themes/default/images/ocf_default_avatars/default_set/music.png',
-			'themes/default/images/ocf_default_avatars/default_set/ocp_fanatic.png',
 			'themes/default/images/ocf_default_avatars/default_set/trees.png',
 			'themes/default/images/ocf_default_avatars/default_set/chess.png',
 			'themes/default/images/ocf_default_avatars/default_set/fireman.png',

@@ -77,7 +77,7 @@ span.form_field_name {
 
 /* Layout of the form table */
 
-.form_table { /* Some people think tables for forms are bad semantics. You can change it if you like, but we consider tables the optimal semantics (field name column, field input column, each field being a row). It's a conscious decision. Also all modern browsers allow complete styling control to change how tables are displayed, so there is no visual constraint here. */
+table.form_table { /* Some people think tables for forms are bad semantics. You can change it if you like, but we consider tables the optimal semantics (field name column, field input column, each field being a row). It's a conscious decision. Also all modern browsers allow complete styling control to change how tables are displayed, so there is no visual constraint here. */
 	border-collapse: collapse;
 	border: 1px dotted {$GET,pale_border};
 	margin: 1em 0;
@@ -462,6 +462,13 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	margin-top: 0.5em !important;
 }
 
+.emoticon_chooser a {
+	text-decoration: none; /* Tone minor link down a bit */
+}
+.emoticon_chooser a:hover {
+	text-decoration: underline;
+}
+
 .attachments_field_name_column {
 	width: 18em;
 }
@@ -544,7 +551,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 
 /* Spruce up defaults for form fields */
 
-.form_table input[type="text"], .form_table input[type="password"], .form_table textarea {
+.form_table input[type="text"], .form_table input[type="email"], .form_table input[type="password"], .form_table textarea {
 	{$BETA_CSS_PROPERTY,border-radius: 4px;}
 	border: 1px solid {$GET,standard_border};
 	padding: 0.2em;

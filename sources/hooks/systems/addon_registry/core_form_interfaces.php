@@ -139,6 +139,7 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/templates/FORM_SCREEN_INPUT_HUGE_LIST.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_INTEGER.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_LINE.tpl',
+			'themes/default/templates/FORM_SCREEN_INPUT_URL.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_CODENAME.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_LINE_MULTI.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_TEXT_MULTI.tpl',
@@ -451,6 +452,7 @@ class Hook_addon_registry_core_form_interfaces
 			'COMCODE_EDITOR_MICRO_BUTTON.tpl'=>'posting_form',
 			'FORM_SCREEN_INPUT_CODENAME.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_LINE.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_URL.tpl'=>'form_screen_1',
 			'FORM_SCREEN_FIELDS_SET_ITEM.tpl'=>'form_screen_1',
 			'FORM_SCREEN_FIELDS_SET.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_USERNAME.tpl'=>'form_screen_2',
@@ -584,32 +586,31 @@ class Hook_addon_registry_core_form_interfaces
 			'MAXLENGTH'=>placeholder_number(),
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
-			'NAME'=>$name . '1',
+			'NAME'=>$name.'1',
 			'DEFAULT'=>''
 		));
 		$input1=do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
 			'SET_NAME'=>$name,
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
-			'NAME'=>$name . '1',
+			'NAME'=>$name.'1',
 			'PRETTY_NAME'=>lorem_word(),
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',
 			'INPUT'=>$_input1,
 			'COMCODE'=>''
 		));
-		$_input2=do_lorem_template('FORM_SCREEN_INPUT_LINE',array(
-			'MAXLENGTH'=>placeholder_number(),
+		$_input2=do_lorem_template('FORM_SCREEN_INPUT_URL',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
-			'NAME'=>$name . '2',
+			'NAME'=>$name.'2',
 			'DEFAULT'=>''
 		));
 		$input2=do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
 			'SET_NAME'=>$name,
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
-			'NAME'=>$name . '2',
+			'NAME'=>$name.'2',
 			'PRETTY_NAME'=>lorem_word(),
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',
@@ -750,7 +751,7 @@ class Hook_addon_registry_core_form_interfaces
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
-			'NAME'=>$name . '_list',
+			'NAME'=>$name.'_list',
 			'PRETTY_NAME'=>lorem_word(),
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',
@@ -1491,7 +1492,7 @@ class Hook_addon_registry_core_form_interfaces
 			$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 				'REQUIRED'=>true,
 				'SKIP_LABEL'=>false,
-				'NAME'=>'path' . "_" . $val,
+				'NAME'=>'path'."_".$val,
 				'PRETTY_NAME'=>lorem_word(),
 				'DESCRIPTION'=>lorem_sentence_html(),
 				'DESCRIPTION_SIDE'=>'',

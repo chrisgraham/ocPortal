@@ -569,7 +569,7 @@ function placeholder_emoticons()
  */
 function placeholder_avatar()
 {
-	return find_theme_image('ocf_default_avatars/default_set/ocp_fanatic',true);
+	return find_theme_image('ocf_default_avatars/system',true);
 }
 
 /**

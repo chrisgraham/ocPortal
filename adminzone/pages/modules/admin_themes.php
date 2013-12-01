@@ -1913,7 +1913,7 @@ class Module_admin_themes
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		//	$fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),'',$list));
 
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','path',$path,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','path',$path,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 

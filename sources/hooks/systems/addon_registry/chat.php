@@ -199,7 +199,7 @@ class Hook_addon_registry_chat
 			'sources/hooks/modules/members/chat.php',
 			'sources/hooks/systems/page_groupings/chat.php',
 			'sources/hooks/systems/rss/chat.php',
-			'site/dllogs.php',
+			'site/download_chat_logs.php',
 			'site/messages.php',
 			'sources/blocks/side_shoutbox.php',
 			'themes/default/templates/OCF_MEMBER_PROFILE_FRIENDS.tpl',
@@ -282,16 +282,6 @@ class Hook_addon_registry_chat
 
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS',array(
 			'MEMBER_ID'=>placeholder_id(),
-			'FRIENDS_MUTUAL'=>array(),
-			'FRIENDS_NONMUTUAL'=>array(),
-			'FRIENDS_FORWARD'=>array(
-				array(
-					'USERNAME'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'USERGROUP'=>lorem_phrase(),
-					'APPEARS_TWICE'=>false,
-				)
-			),
 			'ADD_FRIEND_URL'=>placeholder_url(),
 			'REMOVE_FRIEND_URL'=>placeholder_url(),
 			'BOX'=>lorem_paragraph()

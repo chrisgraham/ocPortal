@@ -66,7 +66,7 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 		{
 			if ($row['p_poster_name_if_guest']==do_lang('SYSTEM'))
 			{
-				$avatar=find_theme_image('ocf_default_avatars/default_set/ocp_fanatic',true);
+				$avatar=find_theme_image('ocf_default_avatars/system',true);
 			}
 		}
 		if ($avatar!='')

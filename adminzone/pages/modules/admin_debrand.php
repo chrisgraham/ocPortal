@@ -136,7 +136,7 @@ class Module_admin_debrand
 		$fields->attach(form_input_upload(do_lang_tempcode('FAVICON'),do_lang_tempcode('DESCRIPTION_FAVICON'),'favicon',false,find_theme_image('favicon'),NULL,true,str_replace(' ','',get_option('valid_images'))));
 		$fields->attach(form_input_upload(do_lang_tempcode('WEBCLIPICON'),do_lang_tempcode('DESCRIPTION_WEBCLIPICON'),'webclipicon',false,find_theme_image('webclipicon'),NULL,true,str_replace(' ','',get_option('valid_images'))));
 		if (addon_installed('ocf_avatars'))
-			$fields->attach(form_input_upload(do_lang_tempcode('SYSTEM_AVATAR'),do_lang_tempcode('DESCRIPTION_SYSTEM_AVATAR'),'system_avatar',false,find_theme_image('ocf_default_avatars/default_set/ocp_fanatic'),NULL,true,str_replace(' ','',get_option('valid_images'))));
+			$fields->attach(form_input_upload(do_lang_tempcode('SYSTEM_AVATAR'),do_lang_tempcode('DESCRIPTION_SYSTEM_AVATAR'),'system_avatar',false,find_theme_image('ocf_default_avatars/system'),NULL,true,str_replace(' ','',get_option('valid_images'))));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$submit_name=do_lang_tempcode('SUPER_DEBRAND');
@@ -296,7 +296,7 @@ class Module_admin_debrand
 		{
 			$path=get_url('','system_avatar','themes/default/images_custom');
 			if ($path[0]!='')
-				$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>$path[0]),array('id'=>'ocf_default_avatars/default_set/ocp_fanatic'));
+				$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>$path[0]),array('id'=>'ocf_default_avatars/system'));
 		}
 
 		// Redirect them back to editing screen

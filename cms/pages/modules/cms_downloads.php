@@ -353,7 +353,7 @@ class Module_cms_downloads extends standard_crud_module
 
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false));
 
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','url',$url,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 

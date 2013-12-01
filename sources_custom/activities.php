@@ -86,7 +86,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 						if ($blocked_by!='')
 							$friends_check_where.=' AND member_likes NOT IN ('.$blocked_by.')';
 
-						$view_private=!is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM '.get_table_prefix().'chat_friends WHERE '.$friends_check_where));
+						$view_private=!is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM '.get_table_prefix().'chat_friends WHERE '.$friends_check_where,false,true));
 					} else
 					{
 						$view_private=false;

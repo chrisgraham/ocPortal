@@ -444,7 +444,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 			$fr[]=$ordererx;
 
-			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id'])));
 
 			$fields->attach(results_entry($fr,true));
 		}

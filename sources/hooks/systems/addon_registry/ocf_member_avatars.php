@@ -103,6 +103,7 @@ class Hook_addon_registry_ocf_member_avatars
 			'uploads/ocf_avatars/.htaccess',
 			'sources/hooks/systems/profiles_tabs_edit/avatar.php',
 			'themes/default/images/ocf_default_avatars/index.html',
+			'themes/default/images/ocf_default_avatars/system.png',
 			'themes/default/images/ocf_default_avatars/default.png',
 			'sources/hooks/systems/config/random_avatars.php',
 		);

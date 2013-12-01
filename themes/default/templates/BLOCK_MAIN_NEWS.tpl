@@ -10,7 +10,7 @@
 				{CONTENT}
 
 				{+START,IF_NON_EMPTY,{BRIEF}}
-					<h2>{$?,{BLOG},{!BLOG_OLDER_NEWS},{!OLDER_NEWS}}</h2>
+					<h3>{$?,{BLOG},{!BLOG_OLDER_NEWS},{!OLDER_NEWS}}</h3>
 
 					{BRIEF}
 				{+END}

@@ -10,7 +10,7 @@
 
 {$REQUIRE_JAVASCRIPT,javascript_validation}
 
-<form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}" enctype="multipart/form-data">
+<form class="form_table" title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}" enctype="multipart/form-data">
 	{HIDDEN}
 
 	{+START,IF,{$GT,{TABS},1}}

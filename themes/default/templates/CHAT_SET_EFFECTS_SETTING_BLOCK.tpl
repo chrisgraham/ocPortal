@@ -39,7 +39,7 @@
 								{+START,IF_PASSED,USERNAME}
 									<option {+START,IF,{$EQ,-1,{VALUE}}}selected="selected" {+END}value="-1">{$STRIP_TAGS,{!_UNSET}}</option>
 								{+END}
-								<option {+START,IF,{$EQ,,{VALUE}}}selected="selected" {+END}value="">{!NONE}</option>
+								<option {+START,IF,{$EQ,,{VALUE}}}selected="selected" {+END}value="">{!NONE_EM}</option>
 								{+START,LOOP,LIBRARY}
 									<option {+START,IF,{$EQ,{EFFECT},{VALUE}}}selected="selected" {+END}value="{EFFECT*}">{EFFECT_SHORT*}</option>
 								{+END}
@@ -71,7 +71,7 @@
 							{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 								<script>// <![CDATA[
 									add_event_listener_abstract(window,'load',function () {
-										preinitFileInput('chat_effect_settings',"upload_{KEY}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID}{+END}",null,null,'mp3');
+										preinit_file_input('chat_effect_settings','upload_{KEY}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID}{+END}',null,null,'mp3','button_micro');
 									} );
 								//]]></script>
 							{+END}

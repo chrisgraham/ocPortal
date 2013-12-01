@@ -1781,7 +1781,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 			$num_readers=$GLOBALS['SITE_DB']->query_select_value('newsletter n JOIN '.get_table_prefix().'newsletter_subscribe s ON n.id=s.newsletter_id','COUNT(*)',array('code_confirm'=>0));
 
-			$fields->attach(results_entry(array(get_translated_text($row['title']),integer_format($num_readers),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(get_translated_text($row['title']),integer_format($num_readers),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
 		}
 
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);

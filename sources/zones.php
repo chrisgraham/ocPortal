@@ -813,7 +813,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 						if (function_exists('set_time_limit')) @set_time_limit(200);
 					}
 					$cache=$object->run($map);
-					$cache->handle_symbol_preprocessing();
+					$cache->evaluate(); // To force lang files to load, etc
 					if (!$DO_NOT_CACHE_THIS)
 					{
 						require_code('caches2');

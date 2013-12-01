@@ -23,18 +23,16 @@
 		{FIELDS}
 
 		<p class="proceed_button">
+			{+START,IF_NON_PASSED,BACK_URL}
+				{+START,IF,{$JS_ON}}
+					<input class="buttons__back button_screen" type="button" onclick="history.back(); return false;" value="{!GO_BACK}" />
+				{+END}
+			{+END}
+
 			<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__proceed button_screen" type="submit" value="{!PROCEED}" />
 		</p>
 	</div>
 </form>
-
-{+START,IF_NON_PASSED,BACK_URL}
-	{+START,IF,{$JS_ON}}
-		<p class="back_button">
-			<a href="#" onclick="history.back(); return false;"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,icons/48x48/menu/_generic_admin/back}" /></a>
-		</p>
-	{+END}
-{+END}
 
 {+START,IF_PASSED,BACK_URL}
 	<form class="back_button" title="{!_NEXT_ITEM_BACK}" action="{BACK_URL*}" method="post">

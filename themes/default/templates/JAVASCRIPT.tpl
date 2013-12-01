@@ -2669,7 +2669,7 @@ function set_inner_html(element,tHTML,append,force_dom)
 			{
 				var r_id='js_'+Math.random();
 				window['js_runs_test_'+r_id]=false;
-				element.innerHTML+='<script id="'+r_id+'">window[\'js_runs_test_'+r_id+'\']=true;</script>';
+				element.innerHTML+='<script id="'+r_id+'">window[\'js_runs_test_'+r_id+'\']=true; var t=document.getElementById(\''+r_id+'\'); t.parentNode.removeChild(t);</script>';
 
 				window.setTimeout(function() {
 					if (!window['js_runs_test_'+r_id]) // If JS was not run by the above op

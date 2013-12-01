@@ -39,7 +39,7 @@ class Hook_page_groupings_ecommerce
 		if (addon_installed('shopping'))
 		{
 			$ret=array_merge($ret,array(
-				array('rich_content','menu/rich_content/ecommerce/shopping_cart',array('shopping',array(),get_module_zone('shopping')),do_lang_tempcode('ecommerce:SHOPPING')),
+				array('rich_content','menu/rich_content/ecommerce/shopping_cart',array('shopping',array(),get_module_zone('shopping')),do_lang_tempcode('shopping:SHOPPING')),
 			));
 		}
 		return $ret;

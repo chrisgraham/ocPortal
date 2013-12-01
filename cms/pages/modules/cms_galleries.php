@@ -1070,7 +1070,7 @@ class Module_cms_galleries extends standard_crud_module
 		$filter=str_replace(' ','',get_option('valid_images')); // We don't use the filter from get_upload_syndication_json because we're not restricted to what can syndicate
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,$filter,$syndication_json));
 
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','url',$url,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$url));
 
@@ -1085,7 +1085,7 @@ class Module_cms_galleries extends standard_crud_module
 
 			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
-			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
+			$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
 
 			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required,$thumb_url));
 		}
@@ -1641,7 +1641,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,$supported));
 
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','url',$url,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
@@ -1672,7 +1672,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('_DESCRIPTION_THUMBNAIL',integer_format($thumb_width)),$field_set,$required,$thumb_url));
 

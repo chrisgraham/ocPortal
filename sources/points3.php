@@ -205,6 +205,7 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 	if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 		log_hack_attack_and_exit('ORDERBY_HACK');
 	$max_rows=$GLOBALS['SITE_DB']->query_select_value('gifts','COUNT(*)',$where);
+	if ($max_rows==0) return new ocp_tempcode();
 	$rows=$GLOBALS['SITE_DB']->query_select('gifts g LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=g.reason',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 	$out=new ocp_tempcode();
 	$viewing_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);

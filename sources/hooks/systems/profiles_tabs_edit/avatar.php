@@ -123,7 +123,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 
 			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','avatar_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
-			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','avatar_alt_url',$found_it?'':$avatar_url,false));
+			$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','avatar_alt_url',$found_it?'':$avatar_url,false));
 
 			$field_set->attach(form_input_theme_image(do_lang_tempcode('STOCK'),'','avatar_stock',$ids,$avatar_url,NULL,NULL,false));
 

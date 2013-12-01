@@ -13,8 +13,8 @@
 	{+END}
 
 	{+START,SET,commented_out}
-		{+START,IF_EMPTY,{AVATAR}}{+START,IF_NON_EMPTY,{$IMG,ocf_default_avatars/default_set/ocp_fanatic,0,,1}}
-			<img src="{$THUMBNAIL*,{$IMG,ocf_default_avatars/default_set/ocp_fanatic,0,,1},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
+		{+START,IF_EMPTY,{AVATAR}}{+START,IF_NON_EMPTY,{$IMG,ocf_default_avatars/default,0,,1}}
+			<img src="{$THUMBNAIL*,{$IMG,ocf_default_avatars/default,0,,1},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
 		{+END}{+END}
 		{+START,IF_NON_EMPTY,{AVATAR}}
 			<img src="{$THUMBNAIL*,{AVATAR},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />

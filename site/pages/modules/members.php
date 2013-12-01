@@ -54,7 +54,7 @@ class Module_members
 		if (get_forum_type()!='ocf') return NULL;
 
 		$ret=array(
-			'misc'=>array('MEMBERS','menu/social/members'),
+			'misc'=>array('MEMBER_DIRECTORY','menu/social/members'),
 		);
 		if (!$check_perms || !is_guest($member_id))
 			$ret['view']=array('MY_PROFILE','tabs/member_account/profile');
@@ -80,7 +80,7 @@ class Module_members
 		{
 			inform_non_canonical_parameter('md_sort');
 
-			$this->title=get_screen_title('MEMBERS');
+			$this->title=get_screen_title('MEMBER_DIRECTORY');
 		}
 
 		if ($type=='view')

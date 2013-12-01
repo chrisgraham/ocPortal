@@ -29,7 +29,7 @@
 {+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,'load',function () {
-			preinitFileInput('upload','{NAME;/}',null,null,'{FILTER;/}');
+			preinit_file_input('upload','{NAME;/}',null,null,'{FILTER;/}');
 		} );
 	//]]></script>
 {+END}{+END}

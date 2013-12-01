@@ -296,7 +296,7 @@ class Module_banners
 			do_lang_tempcode('_BANNER_TYPE'),
 			//do_lang_tempcode('DEPLOYMENT_AGREEMENT'),
 			//do_lang_tempcode('HITS_ALLOCATED'),
-			do_lang_tempcode('IMPORTANCE_MODULUS'),
+			do_lang_tempcode('_IMPORTANCE_MODULUS'),
 			do_lang_tempcode('EXPIRY_DATE'),
 			do_lang_tempcode('ADDED'),
 		);
@@ -340,7 +340,7 @@ class Module_banners
 				//integer_format($row['campaign_remaining']),	Too much detail
 				strval($row['importance_modulus']),
 				is_null($row['expiry_date'])?protect_from_escaping(do_lang_tempcode('NA_EM')):make_string_tempcode(get_timezoned_date($row['expiry_date'])),
-				get_timezoned_date($row['add_date']),
+				get_timezoned_date($row['add_date'],false),
 			);
 			if (addon_installed('unvalidated')) $fr[]=($row['validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$fr[]=protect_from_escaping(hyperlink($view_link,do_lang_tempcode('VIEW'),false,true,$row['name']));

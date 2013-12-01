@@ -919,6 +919,7 @@ h2.ocf_post_history_header {
 .ocf_profile_column {
 	background-color: {$GET,area_background};
 	border: 1px solid {$GET,pale_border};
+	margin-top: 1em;
 }
 
 .ocf_profile_about_field_name_column {
@@ -1145,7 +1146,7 @@ table.ocf_profile_statistics th {
 .ocf_sig_requirements {
 	{+START,IF,{$NOT,{$MOBILE}}}
 		width: 25em;
-		margin: 1em auto;
+		margin: 1em auto !important;
 	{+END}
 }
 

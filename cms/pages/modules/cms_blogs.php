@@ -193,7 +193,7 @@ class Module_cms_blogs extends standard_crud_module
 			$fr[]=integer_format($row['news_views']);
 			if (addon_installed('unvalidated'))
 				$fr[]=($row['validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
-			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id'])));
 
 			$fields->attach(results_entry($fr,true));
 		}

@@ -1,16 +1,17 @@
-{+START,IF,{$EQ,{MEMBER_ID},{$MEMBER}}}
-	{$BLOCK,block=main_activities_state,member={MEMBER_ID},mode=some_members,param=}
-{+END}
+<div class="float_surrounder">
+	{+START,IF,{$EQ,{MEMBER_ID},{$MEMBER}}}
+		{$BLOCK,block=main_activities_state,member={MEMBER_ID},mode=some_members,param=}
+	{+END}
 
-{$BLOCK,block=main_activities,member={MEMBER_ID},mode=some_members,param=,max=10,grow=1}
+	{$BLOCK,block=main_activities,member={MEMBER_ID},mode=some_members,param=,max=10,grow=1}
 
-<hr />
-
-{+START,INCLUDE,NOTIFICATION_BUTTONS}
-	NOTIFICATIONS_TYPE=activity
-	NOTIFICATIONS_ID={MEMBER_ID}
-	RIGHT=1
-{+END}
+	<div class="right">
+		{+START,INCLUDE,NOTIFICATION_BUTTONS}
+			NOTIFICATIONS_TYPE=activity
+			NOTIFICATIONS_ID={MEMBER_ID}
+		{+END}
+	</div>
+</div>
 
 {+START,IF_NON_EMPTY,{SYNDICATIONS}}
 	<p>{!CREATE_SYNDICATION_LINK}</p>

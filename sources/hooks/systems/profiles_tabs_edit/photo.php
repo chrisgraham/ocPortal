@@ -81,7 +81,7 @@ class Hook_Profiles_Tabs_Edit_photo
 
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','photo_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
-		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','photo_url',$photo_url,false));
+		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','photo_url',$photo_url,false));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,NULL,function_exists('imagetypes')));
 
@@ -96,7 +96,7 @@ class Hook_Profiles_Tabs_Edit_photo
 
 			$field_set->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),'','photo_file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
-			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','photo_thumb_url',$thumb_url,false));
+			$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','photo_thumb_url',$thumb_url,false));
 
 			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required));
 		}

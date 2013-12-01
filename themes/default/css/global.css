@@ -261,6 +261,9 @@ th, .fake_th {
 	font-weight: bold;
 	text-align: center;
 }
+.table_header_sorting {
+	float: right;
+}
 .columned_table[itemprop="significantLinks"] tbody tr th, .columned_table[itemprop="significantLinks"] tbody tr .fake_th { /* itemprop is for precedence */
 	background-color: {$GET,box_title_background_2} !important;
 	color: {$GET,box_title_text} !important;
@@ -1494,6 +1497,10 @@ h3 .toggleable_tray_button img {
 	padding-bottom: 0.5em;
 	margin-bottom: 1em;
 }
+.boxless_space .meta_details {
+	padding-{!en_left}: 0;
+	margin-top: -0.5em !important;
+}
 
 .compacted_subbox_stream h3+.meta_details, .compacted_subbox_stream .newscat_img+.meta_details {
 	border-bottom: 0;
@@ -1659,9 +1666,6 @@ table.scrollable_inside {
 .wide_table_wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
-
-	/* To add in the extra pixel needed for 2x1/2 overhanging borders that tables have, and also to shunt the alignment to compensate http://fantasai.inkedblade.net/style/discuss/collapsed-outer-border/ */
-	padding-right: 3px; /* Actually Chrome seems to need 2 (observed on form tables) */
 }
 
 .wide_table {
@@ -1881,7 +1885,6 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .results_table_sorter {
-	margin-bottom: 3px;
 	max-width: {$?,{$MOBILE},315,400}px;
 	float: left;
 }
@@ -2871,6 +2874,14 @@ ul.buttons_group, ul.associated_links_block_group {
 	width: 88%;
 }
 
+.box___confirm_screen {
+	margin-bottom: 2em;
+}
+
+.box___confirm_screen .box_inner {
+	margin: 1em;
+}
+
 /*
 =========================
 =========Buttons=========
@@ -2936,7 +2947,7 @@ input.magic_image_edit_link {
 	font-size: 13px;
 }
 .button_micro {
-	padding: 0 3px 1px 3px;
+	padding: 1px 3px 2px 3px;
 	background-image: none !important; /* Too loud for such a small space */
 	font-size: 12px;
 	margin: 1px 0.25em 0 0.25em; /* Push it up a bit due to confined space */
@@ -2998,6 +3009,9 @@ Form buttons are wrapped in either:
 /*
 Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 */
+.buttons__back {
+	background-image: url('{$IMG,icons/24x24/buttons/back}');
+}
 .buttons__gotopage {
 	background-image: url('{$IMG,icons/24x24/buttons/gotopage}');
 }
@@ -3218,9 +3232,6 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 	background: {$GET,main_background};
 	overflow: hidden; /* To stop margin collapsing bleeding backgrounds */
 }
-.tab_surround .tab_surround .form_table {
-	margin: 0;
-}
 
 .tabs {
 	border-left: 0;
@@ -3276,12 +3287,27 @@ a.tab, a.tab:visited, a.tab:hover {
 	border-color: {$GET,tab_border};
 }
 
+div[role="tabpanel"] {
+	padding-left: 1em;
+	padding-right: 1em;
+}
+div[role="tabpanel"]>:first-child {
+	margin-top: 1em;
+}
+div[role="tabpanel"]>:last-child {
+	margin-bottom: 1em;
+}
+
 /* Sub-tabs */
+
+.tabs .tabs {
+	margin-top: 0.5em;
+}
 
 .tab_surround .tab {
 	padding-top: 5px !important;
 	height: 21px;
-	font-size: 0.88em;
+	font-size: 0.9em;
 }
 
 .tab_surround .tab img {

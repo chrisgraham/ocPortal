@@ -38,7 +38,7 @@ public class Uploader extends JApplet implements Runnable
 	private String nameID = "file";
 	
 	// stuff relayed back if we cancel (params to ocPortal replace_file_input function)
-	private String _btnSubmitID = "submit_button";
+	private String _btn_submit_id = "submit_button";
 	private String page_type = "file";
 	private String posting_field_name = "post";
 	
@@ -108,8 +108,8 @@ public class Uploader extends JApplet implements Runnable
 		if (temp != null) this.types = temp;
 		temp = this.getParameter("maxLength");
 		if (temp != null) this.maxLength = Integer.parseInt(temp);
-		temp = this.getParameter("_btnSubmitID");
-		if (temp != null) this._btnSubmitID = temp;
+		temp = this.getParameter("_btn_submit_id");
+		if (temp != null) this._btn_submit_id = temp;
 		temp = this.getParameter("page_type");
 		if (temp != null) this.page_type = temp;
 		temp = this.getParameter("posting_field_name");
@@ -213,7 +213,7 @@ public class Uploader extends JApplet implements Runnable
 			JOptionPane.showMessageDialog(null, this.fail_message, this.reverting_title, JOptionPane.WARNING_MESSAGE);
 
 			JSObject win = (JSObject) JSObject.getWindow(this);
-			win.eval("restoreFormerInput(null,null,null,'"+this.nameID+"','"+page_type+"','"+this._btnSubmitID+"',true,'"+this.posting_field_name+"');");
+			win.eval("restoreFormerInput(null,null,null,'"+this.nameID+"','"+page_type+"','"+this._btn_submit_id+"',true,'"+this.posting_field_name+"');");
 		}
 	}
 	

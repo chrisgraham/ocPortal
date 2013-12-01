@@ -620,7 +620,7 @@ function import_rss_fields($import_to_blog)
 	$field_set=alternate_fields_set__start($set_name);
 
 	$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file_novalidate',false,NULL,NULL,true,'rss,xml,atom'));
-	$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','rss_feed_url','',false));
+	$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','rss_feed_url','',false));
 
 	$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_WP_XML'),$field_set,$required));
 

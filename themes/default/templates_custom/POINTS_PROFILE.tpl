@@ -1,5 +1,5 @@
 <div class="points_boxes">
-	<div class="points_box medborder">
+	<div class="points_box box">
 		{+START,IF,{$HAS_PRIVILEGE,use_points,{MEMBER}}}
 			<p class="intro">{!CURRENT_POINTS}:</p>
 			<p>{!POINTS_TO_SPEND,<span class="figure">{REMAINING*}</span>}</p>
@@ -9,7 +9,7 @@
 		{+END}
 	</div>
 
-	<div class="points_box medborder">
+	<div class="points_box box">
 		<p class="intro">{!COUNT_GIFT_POINTS_LEFT}:</p>
 		<p>{!POINTS_TO_GIVE,<span class="figure">{GIFT_POINTS_AVAILABLE*}</span>}</p>
 	</div>
@@ -92,7 +92,9 @@
 	</table>
 </div>
 
-<p>{!POINTS_IN_ADDITION,{$DISPLAYED_USERNAME*,{USERNAME}},{POINTS_GAINED_GIVEN*}}</p>
+{+START,IF_NON_EMPTY,{TO}}
+	<p>{!POINTS_IN_ADDITION,{$DISPLAYED_USERNAME*,{USERNAME}},{POINTS_GAINED_GIVEN*}}</p>
+{+END}
 
 <h2>{!POINTS_RECEIVED}</h2>
 

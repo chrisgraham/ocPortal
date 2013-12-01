@@ -376,7 +376,7 @@ class Module_recommend
 			'HIDDEN'=>$hidden,
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
-			'SUBMIT_ICON'=>'menu__site_meta__recommend',
+			'SUBMIT_ICON'=>'buttons__send',
 			'SUBMIT_NAME'=>$submit_name,
 			'TEXT'=>$text,
 			'SUPPORT_AUTOSAVE'=>true,

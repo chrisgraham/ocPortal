@@ -4,7 +4,7 @@
 	{!CHOOSE_SOUND_EFFECTS}
 </p>
 
-<form title="{!PRIMARY_PAGE_FORM}" action="{POST_URL*}" method="post" enctype="multipart/form-data">
+<form class="chat_set_effects" title="{!PRIMARY_PAGE_FORM}" action="{POST_URL*}" method="post" enctype="multipart/form-data">
 	{HIDDEN}
 
 	<div>

@@ -348,7 +348,7 @@ class Module_cms_catalogues extends standard_crud_module
 			$fr[]=$username;
 			if (addon_installed('unvalidated'))
 				$fr[]=$row['ce_validated']?do_lang_tempcode('YES'):do_lang_tempcode('NO');
-			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id'])));
 
 			$_fields[]=array('row'=>$fr,'title'=>$name);
 		}
@@ -1168,7 +1168,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 			$fr=array();
 			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'catalogues','type'=>'category','id'=>$row['id']),get_module_zone('catalogues')),get_translated_text($row['cc_title'])));
 			$fr[]=get_timezoned_date($row['cc_add_date']);
-			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id'])));
 
 			$fields->attach(results_entry($fr,true));
 		}

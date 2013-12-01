@@ -1331,7 +1331,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 			nextField.setAttribute('type','file');
 			nextField.name=nameStub+nextNum;
 			txtFileName.parentNode.parentNode.parentNode.appendChild(nextField);
-			replaceFileInput(page_type,nextField.name,null,posting_field_name);
+			replace_file_input(page_type,nextField.name,null,posting_field_name);
 		}
 	}
 }
@@ -1480,7 +1480,7 @@ function uploadError(file, errorCode, message, ob) {
 	}
 }
 
-function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
+function preinit_file_input(page_type,name,_btn_submit_id,posting_field_name,filter,button_type)
 {
 	if (('{$CONFIG_OPTION,complex_uploader}'=='0') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
 	if ('{$MOBILE}'=='1') return;
@@ -1490,10 +1490,10 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	var rep=document.getElementById(name);
 	rep.originally_disabled=rep.disabled;
 	rep.disabled=true;
-	replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter);
+	replace_file_input(page_type,name,_btn_submit_id,posting_field_name,filter,button_type);
 }
 
-function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
+function replace_file_input(page_type,name,_btn_submit_id,posting_field_name,filter,button_type)
 {
 	if (typeof filter=='undefined') var filter='{$CONFIG_OPTION;,valid_types}';
 	if (filter=='') filter='{$CONFIG_OPTION;,valid_types}';
@@ -1508,6 +1508,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 	if (('{$CONFIG_OPTION,complex_uploader}'=='0') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
 	if ('{$MOBILE}'=='1') return;
+
+	if (typeof button_type=='undefined') var button_type='button_micro';
 
 	if (typeof window.no_java=='undefined') window.no_java=false;
 
@@ -1566,19 +1568,19 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		}
 	}
 
-	if (!_btnSubmitID)
+	if (!_btn_submit_id)
 	{
-		_btnSubmitID='submit_button';
-		if (!document.getElementById(_btnSubmitID))
+		_btn_submit_id='submit_button';
+		if (!document.getElementById(_btn_submit_id))
 		{
-			_btnSubmitID=null;
+			_btn_submit_id=null;
 			var inputs=rep.form.elements;
 			for (var i=0;i<inputs.length;i++)
 			{
 				if ((inputs[i].nodeName.toLowerCase()=='button') || (inputs[i].type=='image') || (inputs[i].type=='submit') || (inputs[i].type=='button'))
 				{
 					if (!inputs[i].id) inputs[i].id='rand_id_'+Math.floor(Math.random()*10000);
-					_btnSubmitID=inputs[i].id;
+					_btn_submit_id=inputs[i].id;
 					if (inputs[i].getAttribute('accesskey')=='u') /* Identifies submit button */
 						break; // Ideal, let us definitely use this (otherwise we end up using the last)
 				}
@@ -1666,7 +1668,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 	if (java_method)
 	{
-		var btnSubmit=document.getElementById(_btnSubmitID);
+		var btnSubmit=document.getElementById(_btn_submit_id);
 
 		var hidFileName=document.createElement('input');
 		hidFileName.setAttribute('id','hidFileName_'+name);
@@ -1721,7 +1723,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		out+='	<param name="maxLength" value="'+maxLength+'" />';
 		out+='	<param name="page_type" value="'+page_type+'" />';
 		out+='	<param name="posting_field_name" value="'+posting_field_name+'" />';
-		out+='	<param name="_btnSubmitID" value="'+_btnSubmitID+'" />';
+		out+='	<param name="_btn_submit_id" value="'+_btn_submit_id+'" />';
 		out+='	<param name="types" value="'+escape_html(filter)+'" />';
 		out+='	<param name="fail_message" value="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message;^}}" />';
 		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message*;^}" />';
@@ -1738,7 +1740,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		out+='	<param name="max_size_label" value="{!JAVA_FTP_max_size_label*;^}" />';
 		out+='	<param name="too_large" value="{!JAVA_FTP_too_large*;^}" />';
 		out+='	<comment>';
-		out+='		<embed width="430" height="29" fail_message="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message;^}}" uploaded_message="{!JAVA_FTP_uploaded_message*;^}" reverting_title="{!JAVA_FTP_reverting_title*;^}" valid_types_label="{!JAVA_FTP_valid_types_label*;^}" refused_connection="{!JAVA_FTP_refused_connection*;^}" output_complete="{!JAVA_FTP_output_complete*;^}" transfer_error="{!JAVA_FTP_transfer_error*;^}" file_name_label="{!JAVA_FTP_file_name_label*;^}" browse_label="{!JAVA_FTP_browse_label*;^}" upload_label="{!JAVA_FTP_upload_label*;^}" please_choose_file="{!JAVA_FTP_please_choose_file*;^}" wrong_path="{!JAVA_FTP_wrong_path*;^}" max_size_label="{!JAVA_FTP_max_size_label*;^}" too_large="{!JAVA_FTP_too_large*;^}" _btnSubmitID="'+_btnSubmitID+'" page_type="'+page_type+'" nameID="'+name+'" types="{$CONFIG_OPTION,valid_types}" maxLength="'+maxLength+'" fileNameID="hidFileName_'+name+'" address="{$CONFIG_OPTION*;,java_ftp_host}" username="{$CONFIG_OPTION*;,java_username}" password="{$CONFIG_OPTION*;,java_password}" uploadedFileName="'+base+random+'.dat" backgroundColor="'+backgroundColor+'" foregroundColor="'+foregroundColor+'" scriptable="true" mayscript="true" codebase="{$BASE_URL*;}/data/javaupload/" code="Uploader.class" archive="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" type="application/x-java-applet" pluginspage="http://java.sun.com/products/plugin/index.html#download">';
+		out+='		<embed width="430" height="29" fail_message="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message;^}}" uploaded_message="{!JAVA_FTP_uploaded_message*;^}" reverting_title="{!JAVA_FTP_reverting_title*;^}" valid_types_label="{!JAVA_FTP_valid_types_label*;^}" refused_connection="{!JAVA_FTP_refused_connection*;^}" output_complete="{!JAVA_FTP_output_complete*;^}" transfer_error="{!JAVA_FTP_transfer_error*;^}" file_name_label="{!JAVA_FTP_file_name_label*;^}" browse_label="{!JAVA_FTP_browse_label*;^}" upload_label="{!JAVA_FTP_upload_label*;^}" please_choose_file="{!JAVA_FTP_please_choose_file*;^}" wrong_path="{!JAVA_FTP_wrong_path*;^}" max_size_label="{!JAVA_FTP_max_size_label*;^}" too_large="{!JAVA_FTP_too_large*;^}" _btn_submit_id="'+_btn_submit_id+'" page_type="'+page_type+'" nameID="'+name+'" types="{$CONFIG_OPTION,valid_types}" maxLength="'+maxLength+'" fileNameID="hidFileName_'+name+'" address="{$CONFIG_OPTION*;,java_ftp_host}" username="{$CONFIG_OPTION*;,java_username}" password="{$CONFIG_OPTION*;,java_password}" uploadedFileName="'+base+random+'.dat" backgroundColor="'+backgroundColor+'" foregroundColor="'+foregroundColor+'" scriptable="true" mayscript="true" codebase="{$BASE_URL*;}/data/javaupload/" code="Uploader.class" archive="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" type="application/x-java-applet" pluginspage="http://java.sun.com/products/plugin/index.html#download">';
 		out+='		</embed>';
 		out+='	</comment>';
 		out+='</object>';
@@ -1783,7 +1785,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			txtFileDbID : 'hidFileID_'+name,
 			txtName : name,
 			page_type : page_type,
-			btnSubmitID: _btnSubmitID,
+			btnSubmitID: _btn_submit_id,
 			required: rep.className.indexOf('required')!=-1,
 			posting_field_name: posting_field_name,
 
@@ -1836,8 +1838,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var newClearBtn=document.createElement('input');
 		newClearBtn.id='fsClear_'+name;
 		newClearBtn.type='button';
-		newClearBtn.className='buttons__clear button_micro clear_button';
-		newClearBtn.style.marginLeft='8px';
+		newClearBtn.className='buttons__clear '+button_type+' clear_button';
+		newClearBtn.style.marginLeft='0.5em';
 		newClearBtn.value='{!UPLOAD;^}: {!CLEAR;^}';
 		subdiv.appendChild(newClearBtn);
 
@@ -1861,11 +1863,11 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	catch (e) {
 		//window.fauxmodal_alert(e.message);
 		// Failed to load - so restore normal file input
-		restoreFormerInput(maindiv,rep2,rep,name,page_type,_btnSubmitID,posting_field_name);
+		restoreFormerInput(maindiv,rep2,rep,name,page_type,_btn_submit_id,posting_field_name);
 	}
 }
 
-function restoreFormerInput(maindiv,rep2,rep,name,page_type,_btnSubmitID,thenRefresh,posting_field_name)
+function restoreFormerInput(maindiv,rep2,rep,name,page_type,_btn_submit_id,thenRefresh,posting_field_name)
 {
 	if (!maindiv) maindiv=document.getElementById('hidFileID_'+name).parentNode;
 	if (!rep2) rep2=document.getElementById(name+'_old');
@@ -1892,7 +1894,7 @@ function restoreFormerInput(maindiv,rep2,rep,name,page_type,_btnSubmitID,thenRef
 	if (thenRefresh)
 	{
 		window.no_java=true;
-		replaceFileInput(page_type,name,_btnSubmitID,posting_field_name);
+		replace_file_input(page_type,name,_btn_submit_id,posting_field_name);
 	}
 }
 
