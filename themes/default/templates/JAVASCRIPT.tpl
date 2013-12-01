@@ -1452,7 +1452,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	{
 		window.scrollBy(0,dist);
 	}
-	catch (e) {return;}; // May be stopped by popup blocker
+	catch (e) { return; }; // May be stopped by popup blocker
 
 	window.setTimeout(function() { smooth_scroll(dest_y,scroll_y+dist,dir,event_after); } , 30);
 }

@@ -132,3 +132,16 @@
 .original_template {
 	margin-top: 3em;
 }
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.buttons__simple {
+	background-image: url('{$IMG,icons/24x24/buttons/simple}');
+}
+.buttons__advanced {
+	background-image: url('{$IMG,icons/24x24/buttons/advanced}');
+}

@@ -424,7 +424,7 @@
 
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
 	<div>
-		<p class="lonely_label"><label for="css">CSS</label>:</p>
+		<p class="lonely_label accessibility_hidden"><label for="css">CSS</label>:</p>
 
 		<div class="constrain_field">
 			<textarea onkeydown="if (key_pressed(event,9)) { insert_textbox(this,'	'); return false; }" id="css" class="wide_field textarea_scroll" cols="70" rows="30" name="css">{CSS*}</textarea>
@@ -460,22 +460,24 @@
 </form>
 
 <div class="original_template">
-	<h2 class="toggleable_tray_title">
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
-		<label for="f_old"><a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode.parentNode);">{!ORIGINAL}</a>:</label>
-	</h2>
-	<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
-		<form title="{!ORIGINAL}" action="{$BASE_URL*}/index.php" method="post">
-			<div class="constrain_field">
-				<textarea id="f_old" name="f_old" cols="70" rows="15" readonly="readonly" class="wide_field">{OLD_CONTENTS*}</textarea>
-			</div>
-		</form>
+	<div class="box">
+		<h2 class="toggleable_tray_title">
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
+			<label for="f_old"><a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode.parentNode);">{!ORIGINAL}</a>:</label>
+		</h2>
+		<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
+			<form title="{!ORIGINAL}" action="{$BASE_URL*}/index.php" method="post">
+				<div class="constrain_field">
+					<textarea id="f_old" name="f_old" cols="70" rows="23" readonly="readonly" class="wide_field">{OLD_CONTENTS*}</textarea>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
 
 {+START,IF,{$JS_ON}}
 	<p id="switch_button" class="buttons_group">
-		<a href="{SWITCH_URL*}"><img src="{$IMG*,{SWITCH_ICON}}" title="{SWITCH_STRING*}" alt="{SWITCH_STRING*}" /></a>
+		<a class="{SWITCH_ICON*} button_screen" href="{SWITCH_URL*}">{SWITCH_STRING*}</a>
 	</p>
 {+END}
 
@@ -512,11 +514,13 @@
 		<p>{!DESCRIP_CSS_EQUATION_HELPER}</p>
 
 		<form title="{!CSS_EQUATION_HELPER}" action="{$BASE_URL*}/index.php" onsubmit="return false;" method="post">
-			<p>
+			<p class="vertical_alignment">
 				<label for="css_equation">{!CSS_EQUATION_HELPER}</label>
 				<input name="css_equation" id="css_equation" type="text" value="100% seed" />
 
 				<input onclick="cancel_bubbling(event,this); var result=load_snippet('themewizard_equation&amp;theme={THEME;*}&amp;css_equation='+window.encodeURIComponent(document.getElementById('css_equation').value),false); if (result=='' || result.indexOf('&lt;html')!=-1) window.fauxmodal_alert('{!ERROR_OCCURRED;}'); else document.getElementById('css_result').value=result; return false;" class="buttons__calculate button_screen_item" type="submit" value="{!CALCULATE}" />
+
+				&rarr;
 
 				<label class="accessibility_hidden" for="css_result">{!RESULT}</label>
 				<output><input readonly="readonly" name="css_result" id="css_result" type="text" value="({!RESULT})" /></output>

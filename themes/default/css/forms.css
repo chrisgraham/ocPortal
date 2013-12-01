@@ -70,9 +70,9 @@ span.form_field_name {
 	color: {$GET,heading_text} !important;
 	font-weight: normal !important;
 }
-.form_table .toggleable_tray_button .help_icon
-{
+.form_table .toggleable_tray_button .help_icon {
 	float: none;
+	vertical-align: middle;
 }
 
 /* Layout of the form table */
@@ -291,6 +291,10 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	font-size: 0.8em;
 	min-height: 35px;
 	min-width: 35px;
+	cursor: pointer;
+}
+.radio_list_picture label {
+	cursor: pointer;
 }
 
 .radio_list_picture.linear {
@@ -455,6 +459,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 
 .emoticon_chooser {
 	padding: 0.5em;
+	margin-top: 0.5em !important;
 }
 
 .attachments_field_name_column {

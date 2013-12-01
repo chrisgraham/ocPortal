@@ -1,5 +1,7 @@
 <div id="template_editing_{I*}" style="display: {DISPLAY*}">
+	{+START,IF,{$NEQ,{$GET,COUNT},1}}
 	<div class="box box___template_edit_screen_editor"><div class="box_inner">
+	{+END}
 		<div> {$,Extra div needed so the h2 is not a box title}
 			{+START,IF,{$NEQ,{$GET,COUNT},1}}
 				<h2>{!EDITING,<kbd>{FILE_SAVE_TARGET*}</kbd>}</h2>
@@ -92,11 +94,17 @@
 
 			{REVISION_HISTORY}
 
-			<p class="right">
-				<input onclick="this.form.target='_blank'; this.form.action='{PREVIEW_URL;*}';" accesskey="p" class="tabs__preview button_screen_item" type="submit" value="{!PREVIEW}" />
-			</p>
+			{+START,SET,button}
+				<div class="right">
+					<input onclick="this.form.target='_blank'; this.form.action='{PREVIEW_URL;*}';" accesskey="p" class="tabs__preview {$?,{$EQ,{$GET,COUNT},1},button_screen,button_screen_item}" type="submit" value="{!PREVIEW}" />
+				</div>
+			{+END}
+
+			{+START,IF,{$NEQ,{$GET,COUNT},1}}
+				{$GET,button}
+			{+END}
 		</div>
+	{+START,IF,{$NEQ,{$GET,COUNT},1}}
 	</div></div>
+	{+END}
 </div>
-
-

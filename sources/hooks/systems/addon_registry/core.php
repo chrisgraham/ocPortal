@@ -158,6 +158,8 @@ class Hook_addon_registry_core
 			'themes/default/images/icons/48x48/menu/adminzone/adminzone.png',
 			'themes/default/images/icons/24x24/buttons/advanced.png',
 			'themes/default/images/icons/48x48/buttons/advanced.png',
+			'themes/default/images/icons/24x24/buttons/simple.png',
+			'themes/default/images/icons/48x48/buttons/simple.png',
 			'themes/default/images/icons/24x24/buttons/all.png',
 			'themes/default/images/icons/48x48/buttons/all.png',
 			'themes/default/images/icons/24x24/buttons/all2.png',

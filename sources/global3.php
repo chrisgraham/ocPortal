@@ -2482,6 +2482,7 @@ function get_zone_default_page($zone_name)
  */
 function titleify($boring)
 {
+	$boring=preg_replace('#([/\\\\])#','${1} ',$boring);
 	$ret=ucwords(str_replace('_',' ',$boring));
 
 	// Fixup ocPortal addon naming
@@ -2489,6 +2490,7 @@ function titleify($boring)
 	$ret=str_replace('Ocselect','ocSelect',$ret);
 	$ret=str_replace('Ocfilter','ocFilter',$ret);
 	$ret=str_replace('Ocf','OCF',$ret);
+	$ret=str_replace('Cms','CMS',$ret);
 	$ret=str_replace('Html','HTML',$ret);
 	$ret=str_replace('Occle','OcCLE',$ret);
 	$ret=str_replace('Msn','M.S.N.',$ret);

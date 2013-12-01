@@ -64,9 +64,8 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		// UI
 
-		$_signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
-		$signature=($_signature->is_empty())?do_lang_tempcode('NONE_EM'):$_signature;
-		$_signature_original=get_translated_text($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
+		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
+		$signature_original=get_translated_text($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
 
 		$size=ocf_get_member_best_group_property($member_id_of,'max_sig_length_comcode');
 
@@ -119,8 +118,7 @@ class Hook_Profiles_Tabs_Edit_signature
 		$comcode_editor=get_comcode_editor();
 		$comcode_editor_small=get_comcode_editor('signature',true);
 
-		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($_signature_original,'{$,page hint: no_wysiwyg}')===false));
-
+		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($signature_original,'{$,page hint: no_wysiwyg}')===false));
 		$class='';
 		attach_wysiwyg();
 		if ($w) $class.=' wysiwyg';
@@ -129,7 +127,7 @@ class Hook_Profiles_Tabs_Edit_signature
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
 		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-		/*Make sure we reparse with semi-parse mode if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($_signature_original,NULL,false,60,NULL,NULL,true);
+		/*Make sure we reparse with semi-parse mode if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($signature_original,NULL,false,60,NULL,NULL,true);
 		$LAX_COMCODE=$temp;
 
 		$fields=new ocp_tempcode();
@@ -148,7 +146,7 @@ class Hook_Profiles_Tabs_Edit_signature
 			'EXTRA'=>'',
 			'POST_COMMENT'=>$post_comment,
 			'EMOTICON_CHOOSER'=>$emoticon_chooser,
-			'POST'=>$_signature_original,
+			'POST'=>$signature_original,
 			'DEFAULT_PARSED'=>$default_parsed,
 			'CONTINUE_URL'=>$continue_url,
 			'ATTACHMENTS'=>$attachments,

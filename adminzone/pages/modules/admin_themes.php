@@ -243,7 +243,7 @@ class Module_admin_themes
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
 			breadcrumb_set_self(do_lang_tempcode('CHOOSE_THEME_IMAGE'));
 
-			$this->title=get_screen_title('MANAGE_THEME_IMAGES');
+			$this->title=get_screen_title('EDIT_THEME_IMAGES');
 		}
 
 		if ($type=='edit_image')
@@ -867,7 +867,7 @@ class Module_admin_themes
 				is_null($theme)?NULL:array('menu/_generic_admin/edit_this',array('_SELF',array('type'=>'edit_theme','theme'=>$theme),'_SELF'),do_lang_tempcode('EDIT_THEME')),
 				is_null($theme)?NULL:array('menu/adminzone/style/themes/css',array('_SELF',array('type'=>'choose_css','theme'=>$theme),'_SELF'),do_lang('EDIT_CSS')),
 				is_null($theme)?NULL:array('menu/adminzone/style/themes/templates',array('_SELF',array('type'=>'edit_templates','theme'=>$theme),'_SELF'),do_lang('EDIT_TEMPLATES')),
-				is_null($theme)?NULL:array('menu/adminzone/style/themes/theme_images',array('_SELF',array('type'=>'manage_images','theme'=>$theme,'lang'=>$lang),'_SELF'),do_lang('MANAGE_THEME_IMAGES')),
+				is_null($theme)?NULL:array('menu/adminzone/style/themes/theme_images',array('_SELF',array('type'=>'manage_images','theme'=>$theme,'lang'=>$lang),'_SELF'),do_lang('EDIT_THEME_IMAGES')),
 				array('menu/adminzone/style/themes/themes',array('_SELF',array('type'=>'misc'),'_SELF'),do_lang('MANAGE_THEMES'))
 			),
 			do_lang('MANAGE_THEMES'),
@@ -916,6 +916,8 @@ class Module_admin_themes
 
 		$theme=get_param('theme',false,true);
 
+		single_field__start();
+
 		$css=new ocp_tempcode();
 		$files=array();
 		$_dir=opendir(get_file_base().'/themes/default/css');
@@ -937,21 +939,28 @@ class Module_admin_themes
 		{
 			$css->attach(form_input_list_entry($file,$file=='global.css'));
 		}
-		$fields=form_input_list(do_lang_tempcode('FILE'),'','file',$css,NULL,true);
+		$fields=form_input_huge_list(do_lang_tempcode('FILE'),'','file',$css,NULL,true,true,50);
+
+		single_field__end();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_css','theme'=>$theme),'_SELF',array(),false,true);
 
-		return do_template('FORM_SCREEN',array(
-			'_GUID'=>'16dfd6f0d77889f2438c2371e90738a3',
+		$form=do_template('FORM_SINGLE_FIELD',array(
+			'_GUID'=>'26dfd6f0d77889f2438c2371e90738ag',
 			'GET'=>true,
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>'',
 			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('EDIT'),
-			'TITLE'=>$this->title,
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
 			'TEXT'=>do_lang_tempcode('CSS_CHOOSE_TO_EDIT'),
+		));
+
+		return do_template('PAGINATION_SCREEN',array(
+			'_GUID'=>'16dfd6f0d77889f2438c2371e90738a3',
+			'TITLE'=>$this->title,
+			'CONTENT'=>$form,
 		));
 	}
 
@@ -1038,7 +1047,7 @@ class Module_admin_themes
 		}
 
 		$switch_string=($advanced_mode==1)?do_lang_tempcode('SWITCH_TO_SIMPLE_MODE'):do_lang_tempcode('SWITCH_TO_ADVANCED_MODE');
-		$switch_icon=($advanced_mode==1)?'page/simple':'page/advanced';
+		$switch_icon=($advanced_mode==1)?'buttons__simple':'buttons__advanced';
 		$switch_url=build_url(array('page'=>'_SELF','type'=>'edit_css','file'=>$file,'theme'=>$theme,'advanced_mode'=>1-$advanced_mode),'_SELF');
 
 		// Revision history
@@ -1330,10 +1339,10 @@ class Module_admin_themes
 
 		$field_set->attach(form_input_codename(do_lang_tempcode('NEW'),do_lang_tempcode('NEW_TEMPLATE'),'f0file2','',false));
 
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,NULL,true));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme),'_SELF');
-		$edit_form=do_template('FORM',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('EDIT')));
+		$edit_form=do_template('FORM_SINGLE_FIELD',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('EDIT')));
 
 		list($warning_details,$ping_url)=handle_conflict_resolution(''); // Intentionally blank, because only one person should edit any of all templates at any time (because they depend on each other)
 
@@ -1999,14 +2008,23 @@ class Module_admin_themes
 		regen_theme_images($theme,array($lang=>1));
 		if ($theme!='default') regen_theme_images('default',array($lang=>1),$theme);
 
-		// Choose image to edit
 		require_code('form_templates');
 		require_code('themes2');
-		$ids=get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme,false,true); // The final 'true' stops new theme images being detected, as we know regen_theme_images did that (and more conservatively - it won't scan images_custom dirs for NEW codes which an unbridled get_all_image_ids_type call would)
+
+		$skip=array(
+			'icons', // Too many of these to show
+		);
+		$ids=get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme,false,true,$skip); // The final 'true' stops new theme images being detected, as we know regen_theme_images did that (and more conservatively - it won't scan images_custom dirs for NEW codes which an unbridled get_all_image_ids_type call would)
+
+		single_field__start();
 		$fields=form_input_theme_image(do_lang_tempcode('CODENAME'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang,true,true);
+		single_field__end();
+
 		$hidden=form_input_hidden('theme',$theme);
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');
-		$edit_form=do_template('FORM',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('EDIT')));
+
+		$edit_form=do_template('FORM_SINGLE_FIELD',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('EDIT')));
 
 		$add_url=build_url(array('page'=>'_SELF','type'=>'add_image','theme'=>$theme,'lang'=>$lang),'_SELF');
 

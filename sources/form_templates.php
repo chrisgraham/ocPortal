@@ -1562,7 +1562,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 			$cat=titleify(substr($cat,$cut_pos)); // Make the category name a bit nicer
 		}
 
-		if ((!$avatars) && ($cat=='')) $cat=do_lang('GENERAL');
+		if ($cat=='') $cat=do_lang($avatars?'GENERAL':'UNNAMED');
 
 		$_category=new ocp_tempcode();
 		$i=0;
@@ -1900,7 +1900,7 @@ function alternate_fields_set__start($set_name)
 /**
  * Show a field set that has just been finished off.
  *
- * @param  ID_TEXT		The codename for this field set
+ * @param  ID_TEXT		The codename for this field set (blank: just collect raw fields, no actual field set)
  * @param  mixed			The human-readable name for this field set
  * @param  mixed			The human-readable description for this field set
  * @param  tempcode		The field set tempcode
@@ -1908,7 +1908,7 @@ function alternate_fields_set__start($set_name)
  * @param  ?URLPATH		Image URL to show, of the existing selection for this field (NULL: N/A) (blank: N/A)
  * @return tempcode		The field set
  */
-function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required,$existing_image_preview_url=NULL)
+function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required,$existing_image_preview_url=NULL,$raw=false)
 {
 	global $DOING_ALTERNATE_FIELDS_SET;
 	if ($DOING_ALTERNATE_FIELDS_SET===NULL) return $fields; // Didn't actually start set, probably because some logic said not to - so just flow to append as normal
@@ -1922,9 +1922,31 @@ function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$
 	}
 
 	$set=do_template('FORM_SCREEN_FIELDS_SET',array('_GUID'=>'ae81cf68280aef067de1e8e71b2919a7','FIELDS'=>$fields,'PRETTY_NAME'=>$pretty_name,'SET_NAME'=>$set_name,'REQUIRED'=>$required,'EXISTING_IMAGE_PREVIEW_URL'=>$existing_image_preview_url));
+
 	if (is_null($DOING_ALTERNATE_FIELDS_SET)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	$DOING_ALTERNATE_FIELDS_SET=NULL;
+
+	if ($raw) return $set;
+
 	return _form_input('',$pretty_name,$description,$set,$required);
+}
+
+/**
+ * Start serving single field.
+ */
+function single_field__start()
+{
+	global $DOING_ALTERNATE_FIELDS_SET;
+	$DOING_ALTERNATE_FIELDS_SET='';
+}
+
+/**
+ * Stop serving single field.
+ */
+function single_field__end()
+{
+	global $DOING_ALTERNATE_FIELDS_SET;
+	$DOING_ALTERNATE_FIELDS_SET=NULL;
 }
 
 /**
@@ -1973,6 +1995,8 @@ function _form_input($name,$pretty_name,$description,$input,$required,$comcode=f
 	global $DOING_ALTERNATE_FIELDS_SET;
 	if ($DOING_ALTERNATE_FIELDS_SET!==NULL)
 	{
+		if ($DOING_ALTERNATE_FIELDS_SET=='') return $input;
+
 		$tpl=do_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
 			'_GUID'=>'23f2e2df7fcacc01d9f5158dc635e73d',
 			'SET_NAME'=>$DOING_ALTERNATE_FIELDS_SET,

@@ -916,6 +916,7 @@ class Hook_addon_registry_core_ocf
 			'TAB_ICON'=>'tabs/member_account/profile',
 			'TAB_FIELDS'=>$fields,
 			'TAB_TEXT'=>lorem_paragraph(),
+			'TAB_SINGLE_FIELD'=>false,
 			'TAB_FIRST'=>true,
 			'TAB_LAST'=>true
 		);

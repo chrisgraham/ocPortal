@@ -120,6 +120,7 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/templates/JAVASCRIPT_VALIDATION.tpl',
 			'themes/default/templates/FORM_FIELD_SET_GROUPER.tpl',
 			'themes/default/templates/FORM.tpl',
+			'themes/default/templates/FORM_SINGLE_FIELD.tpl',
 			'themes/default/templates/FORM_DESCRIP_SEP.tpl',
 			'themes/default/templates/FORM_GROUP.tpl',
 			'themes/default/templates/FORM_GROUPED.tpl',
@@ -431,6 +432,7 @@ class Hook_addon_registry_core_form_interfaces
 			'FORM_SCREEN_FIELD_SPACER.tpl'=>'form_screen_1',
 			'FORM_STANDARD_END.tpl'=>'form_screen_1',
 			'FORM.tpl'=>'form_screen_1',
+			'FORM_SINGLE_FIELD.tpl'=>'form_single_field',
 			'POSTING_SCREEN.tpl'=>'posting_screen',
 			'FORM_SCREEN_INPUT_LIST_ENTRY.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_LIST_GROUP.tpl'=>'form_screen_1',
@@ -525,6 +527,39 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS',array()), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__form_single_field()
+	{
+		$fields=new ocp_tempcode();
+
+		$name=placeholder_random_id();
+		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_FLOAT',array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
+		)));
+
+		return array(
+			lorem_globalise(do_lorem_template('FORM_SINGLE_FIELD',array(
+				'GET'=>NULL,
+				'HIDDEN'=>'',
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'FIELDS'=>$fields,
+				'SUBMIT_ICON'=>'buttons__proceed',
+				'SUBMIT_NAME'=>lorem_word(),
+				'TEXT'=>lorem_sentence_html()
+			)), NULL, '', true)
 		);
 	}
 

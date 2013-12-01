@@ -1151,7 +1151,7 @@ table.ocf_profile_statistics th {
 
 .ocf_avatar_page_old_avatar {
 	float: {!en_right};
-	padding: 1em 0 1em 1em;
+	padding: 1em 0.5em 1em 1em;
 	text-align: {!en_right};
 }
 

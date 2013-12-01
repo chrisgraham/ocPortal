@@ -127,12 +127,16 @@ class Hook_Profiles_Tabs_Edit_avatar
 
 			$field_set->attach(form_input_theme_image(do_lang_tempcode('STOCK'),'','avatar_stock',$ids,$avatar_url,NULL,NULL,false));
 
-			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,NULL,true));
 
 			handle_max_file_size($hidden,'image');
 		} else
 		{
+			single_field__start();
+
 			$fields->attach(form_input_theme_image(do_lang_tempcode('STOCK'),'','avatar_stock',$ids,$avatar_url,NULL,NULL,true));
+
+			single_field__end();
 		}
 
 		if ($avatar_url!='')
@@ -154,7 +158,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 
 		$javascript='';
 
-		return array($title,$fields,$text,$javascript,$order,$hidden,'tabs/member_account/edit/avatar');
+		return array($title,$fields,$text,$javascript,$order,$hidden,'tabs/member_account/edit/avatar',true);
 	}
 }
 

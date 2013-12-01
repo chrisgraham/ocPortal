@@ -37,18 +37,24 @@
 						{+END}
 					{+END}
 
-					<div class="wide_table_wrap"><table class="map_table form_table wide_table">
-						{+START,IF,{$NOT,{$MOBILE}}}
-							<colgroup>
-								<col class="field_name_column_shorter" />
-								<col class="field_input_column" />
-							</colgroup>
-						{+END}
+					{+START,IF,{TAB_SINGLE_FIELD}}
+						{TAB_FIELDS}
+					{+END}
 
-						<tbody>
-							{TAB_FIELDS}
-						</tbody>
-					</table></div>
+					{+START,IF,{$NOT,{TAB_SINGLE_FIELD}}}
+						<div class="wide_table_wrap"><table class="map_table form_table wide_table">
+							{+START,IF,{$NOT,{$MOBILE}}}
+								<colgroup>
+									<col class="field_name_column_shorter" />
+									<col class="field_input_column" />
+								</colgroup>
+							{+END}
+
+							<tbody>
+								{TAB_FIELDS}
+							</tbody>
+						</table></div>
+					{+END}
 
 				{+START,IF,{$GT,{TABS},1}}
 				</div>

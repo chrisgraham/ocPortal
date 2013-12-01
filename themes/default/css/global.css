@@ -1009,7 +1009,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 	border-style: none !important;
 	background-color: transparent !important;
 	background-image: none !important;
-	font-weight: bold !important;
+	/*font-weight: bold !important;*/
 	border-radius: 0 !important;
 	border: 0 !important;
 	margin: 0 !important;
@@ -1017,7 +1017,8 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 	cursor: pointer !important;
 	text-align: {!en_left} !important;
 	vertical-align: baseline !important;
-	color: inherit !important;
+	/*color: inherit !important;*/
+	text-decoration: underline;
 }
 
 /* Used to make a button look more like an icon - i.e. undoes button-face styling */
@@ -1146,6 +1147,9 @@ div.red_alert, p.red_alert {
 	font-size: 0.9em;
 	position: relative;
 }
+.associated_links_block_group>li .comment_count {
+	top: 2px;
+}
 .comment_count:hover {
 	border-right-color: transparent;
 }
@@ -1176,9 +1180,13 @@ th.meta_data_title {
 }
 
 .help_jumpout {
-	padding: 5px 0;
+	padding: 0.5em 0;
 	padding-left: 50px;
 	background: url('{$IMG;,help_jumpout}') no-repeat left center;
+}
+
+.help_jumpout p {
+	margin: 0;
 }
 
 .being_dragged {
@@ -1716,7 +1724,7 @@ table.scrollable_inside {
 }
 
 .results_table thead th {
-	text-align: center;
+	text-align: left;
 }
 
 .results_table td, .results_table th {
@@ -2677,6 +2685,8 @@ span.associated_link, a.associated_link, form.associated_link {
 ul.associated_links_block_group>li:before, span.associated_link:before, a.associated_link:before, form.associated_link:before {
 	content: "(" !important;
 	{$BETA_CSS_PROPERTY,opacity: 0.7;}
+}
+ul.associated_links_block_group>li:first-child:before, span.associated_link:first-child:before, a.associated_link:first-child:before, form.associated_link:first-child:before {
 	vertical-align: baseline !important;
 }
 ul.associated_links_block_group.horizontal_links>li:after { /* Undoes the above rules for if 'horizontal_links' is set (the rule further up will run instead and the middot one below) */
@@ -2744,10 +2754,10 @@ ul.associated_link>li {
 	display: block !important; /* Undoes "display: inline" above */
 }
 ul.horizontal_links li img {
-	width: 20px;
+	max-width: 20px;
 }
 ul.associated_link li img {
-	width: 14px;
+	max-width: 14px;
 }
 ul.horizontal_links li img, ul.associated_link li img, ul.horizontal_links a, ul.horizontal_links form {
 	vertical-align: middle;

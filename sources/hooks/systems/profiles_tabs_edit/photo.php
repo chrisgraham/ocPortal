@@ -83,7 +83,7 @@ class Hook_Profiles_Tabs_Edit_photo
 
 		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','photo_url',$photo_url,false));
 
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,NULL,function_exists('imagetypes')));
 
 		if (!function_exists('imagetypes'))
 		{
@@ -119,7 +119,7 @@ class Hook_Profiles_Tabs_Edit_photo
 
 		$javascript='';
 
-		return array($title,$fields,$text,$javascript,$order,$hidden,'tabs/member_account/edit/photo');
+		return array($title,$fields,$text,$javascript,$order,$hidden,'tabs/member_account/edit/photo',function_exists('imagetypes'));
 	}
 }
 

@@ -23,6 +23,10 @@
 		{TEMPLATE_EDITORS}
 
 		<div class="float_surrounder buttons_group">
+			{+START,IF,{$EQ,{$GET,COUNT},1}}
+				{$GET,button}
+			{+END}
+
 			<div class="right">
 				<input onclick="disable_button_just_clicked(this); this.form.target='_self'; this.form.action='{URL;*}';" class="buttons__save button_screen" type="submit" value="{!SAVE}" />
 			</div>
