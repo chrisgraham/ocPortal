@@ -306,6 +306,9 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 						if (_request_page($test_page,$test,NULL,get_site_default_lang(),true)!==false)
 						{
 							$ok=false;
+						} else // Deleted, so clean up
+						{
+							$GLOBALS['SITE_DB']->query_delete('url_id_monikers','m_resource_page',$conflict_test_map);
 						}
 					} else
 					{
@@ -313,6 +316,9 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 						if ($test2[0]!==NULL)
 						{
 							$ok=false;
+						} else // Deleted, so clean up
+						{
+							$GLOBALS['SITE_DB']->query_delete('url_id_monikers','m_resource_page',$conflict_test_map);
 						}
 					}
 					if (!$ok)
