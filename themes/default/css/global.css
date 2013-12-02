@@ -368,9 +368,6 @@ body.website_body {
 	color: {$GET,slightly_seeded_text};
 	background: {$GET,main_background};
 }
-.email_body .box {
-	color: {$GET,slightly_seeded_text};
-}
 body.website_body.frame {
 	background: transparent; /* Don't assume too much for a frame, it may be nested inside a box for example */
 }
@@ -1028,6 +1025,10 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 .button_icon {
 	background: none;
 	border: none;
+	cursor: pointer;
+}
+
+.help_icon {
 	cursor: pointer;
 }
 
@@ -2368,12 +2369,13 @@ div.wysiwyg_toolbar_color_finder {
 	border-right: 1px solid {$GET,pale_border};
 	text-align: right;
 }
-.comments_posting_form_inner th * {
+.comments_posting_form_inner th>* {
 	text-align: right !important;
 }
 
 .comments_posting_form_inner td {
 	padding-left: 1.5em;
+	padding-right: 1em;
 }
 
 .comments_posting_form_inner textarea {
@@ -2394,6 +2396,13 @@ div.wysiwyg_toolbar_color_finder {
 
 .comments_posting_form_emoticons p {
 	margin-bottom: 0;
+}
+
+.comments_posting_form_emoticons a {
+	text-decoration: none;
+}
+.comments_posting_form_emoticons a:hover {
+	text-decoration: underline;
 }
 
 .comments_posting_form_inner .associated_links_block_group {
@@ -2435,11 +2444,6 @@ div.wysiwyg_toolbar_color_finder {
 		float: none;
 	}
 {+END}
-
-.comments_posting_form_outer .attachments {
-	text-align: {!en_left};
-	margin: 1em;
-}
 
 /*
 =========================

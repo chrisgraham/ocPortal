@@ -5924,6 +5924,7 @@ function FileProgress(file, targetID) {
 		this.fileProgressWrapper.appendChild(this.fileProgressElement);
 
 		document.getElementById(targetID).appendChild(this.fileProgressWrapper);
+		document.getElementById(targetID).style.display='block';
 
 		this.fileProgressElement.completed = false;
 	} else {

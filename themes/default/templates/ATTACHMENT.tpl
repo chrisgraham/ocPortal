@@ -15,15 +15,9 @@
 
 	<tbody>
 		<tr>
-			<td colspan="2" class="form_table_field_name table_heading_cell">
-				<h3>{!ATTACHMENT,{I*}}</h3>
-			</td>
-		</tr>
-
-		<tr>
-			<th class="form_table_field_name">
-				{!UPLOAD}
-				<span class="horiz_field_sep"><img onkeydown="this.onmouseover(event);" onkeyup="this.onmouseout(event);" onclick="this.onmouseover(event);" class="right" title="{!ATTACHMENT_HELP_2=,{$GET,IMAGE_TYPES}}" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,this.ttitle,'auto',null,null,false,true);" alt="{!HELP}" src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" /></span>
+			<th class="form_table_field_name vertical_alignment">
+				{!ATTACHMENT,{I*}}
+				<span class="horiz_field_sep"><img class="help_icon" onkeydown="this.onmouseover(event);" onkeyup="this.onmouseout(event);" onclick="this.onmouseover(event);" class="right" title="{!ATTACHMENT_HELP_2=,{$GET,IMAGE_TYPES}}" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,this.ttitle,'auto',null,null,false,true);" alt="{!HELP}" src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" /></span>
 			</th>
 			<td class="form_table_field_input">
 				<div class="accessibility_hidden"><label for="file{I*}">{!UPLOAD}</label></div>

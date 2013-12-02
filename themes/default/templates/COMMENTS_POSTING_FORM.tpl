@@ -35,7 +35,7 @@
 
 						{+START,IF,{$AND,{$IS_GUEST},{$OCF}}}
 							<tr>
-								<th class="de_th">
+								<th class="de_th vertical_alignment">
 									<label for="poster_name_if_guest">{!ocf:GUEST_NAME}:</label>
 								</th>
 
@@ -58,7 +58,7 @@
 
 						{+START,IF,{$GET,GET_TITLE}}
 							<tr>
-								<th class="de_th">
+								<th class="de_th vertical_alignment">
 									<label for="title">{!POST_TITLE}:</label>
 								</th>
 
@@ -74,7 +74,7 @@
 
 						{+START,IF,{GET_EMAIL}}
 							<tr>
-								<th class="de_th">
+								<th class="de_th vertical_alignment">
 									<label for="email">{!EMAIL_ADDRESS}:</label>{+START,IF,{EMAIL_OPTIONAL}} <span class="associated_details">({!OPTIONAL})</span>{+END}
 								</th>
 
@@ -91,7 +91,7 @@
 						{+START,IF_PASSED,REVIEW_RATING_CRITERIA}{+START,IF_PASSED,TYPE}{+START,IF_PASSED,ID}
 							{+START,LOOP,REVIEW_RATING_CRITERIA}
 								<tr>
-									<th class="de_th">
+									<th class="de_th vertical_alignment">
 										{+START,IF,{$NOT,{$JS_ON}}}<label class="accessibility_hidden" for="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}">{+END}{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}{+START,IF,{$NOT,{$JS_ON}}}</label>{+END}
 									</th>
 
@@ -196,6 +196,16 @@
 								</div>
 
 								<div id="error_post" style="display: none" class="input_error_here"></div>
+
+								{+START,IF_PASSED,ATTACHMENTS}
+									<div class="attachments">
+										{+START,IF_PASSED,ATTACH_SIZE_FIELD}
+											{ATTACH_SIZE_FIELD}
+										{+END}
+										<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
+										{ATTACHMENTS}
+									</div>
+								{+END}
 							</td>
 						</tr>
 
@@ -234,16 +244,6 @@
 					</div>
 				</div>
 			</div>
-
-			{+START,IF_PASSED,ATTACHMENTS}
-				<div class="attachments">
-					{+START,IF_PASSED,ATTACH_SIZE_FIELD}
-						{ATTACH_SIZE_FIELD}
-					{+END}
-					<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
-					{ATTACHMENTS}
-				</div>
-			{+END}
 		</div>
 	</div>
 

@@ -7,13 +7,31 @@
 <title>{TITLE*}</title>
 {CSS}
 </head>
-<body style="font-size: 12px" class="email_body">
-	<div style="font-size: 12px">
-		<p><a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed_logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a></p>
+<body>
+	<div class="email_body">
+		<p class="email_logo">
+			<a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed_logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a>
+		</p>
 
 		<div class="box box___mail"><div class="box_inner">
-			{CONTENT}
+			<div>
+				<h2>{TITLE*}</h2>
+
+				{CONTENT}
+			</div>
 		</div></div>
+
+		<hr class="spaced_rule" />
+
+		<div class="email_footer">
+			<div class="email_copyright">
+				{$COPYRIGHT`}
+			</div>
+
+			<div class="email_url">
+				{$PREG_REPLACE*,^.*://,,{$BASE_URL}}
+			</div>
+		</div>
 	</div>
 </body>
 </html>

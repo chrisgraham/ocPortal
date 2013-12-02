@@ -475,6 +475,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 				'CONTENT'=>$_html_content,
 			),$lang,false,NULL,'.tpl','templates',$theme);
 		}
+		require_css('email');
 		$css=css_tempcode(true,true,$message_html->evaluate($lang),$theme);
 		$_css=$css->evaluate($lang);
 		if (!GOOGLE_APPENGINE)

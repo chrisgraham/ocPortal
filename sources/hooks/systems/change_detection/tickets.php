@@ -18,7 +18,7 @@
  * @package		tickets
  */
 
-class Hook_tickets
+class Hook_change_detection_tickets
 {
 	/**
 	 * Standard modular run function for change_detection hooks. They see if their own something has changed in comparison to sample data.
@@ -44,6 +44,7 @@ class Hook_tickets
 		$topic_id=0;
 		$ticket_type=0;
 		$_comments=get_ticket_posts($id,$forum,$topic_id,$ticket_type);
+
 		return md5(serialize($_comments))!=$data;
 	}
 }

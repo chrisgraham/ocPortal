@@ -184,9 +184,9 @@ function change_detection_script()
 	require_code('hooks/systems/change_detection/'.filter_naughty($page),true);
 
 	$refresh_if_changed=either_param('refresh_if_changed');
-	$object=object_factory('Hook_'.$page);
+	$object=object_factory('Hook_change_detection_'.$page);
 	$result=$object->run($refresh_if_changed);
-	echo ($result)?'1':'0';
+	echo $result?'1':'0';
 }
 
 /**

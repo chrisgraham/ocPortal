@@ -1782,7 +1782,15 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 
 	$css=new ocp_tempcode();
 	$css_need_inline=new ocp_tempcode();
-	$css_to_do=$only_global?array('global'=>1,'no_cache'=>1):$CSSS;
+	if ($only_global)
+	{
+		$css_to_do=array('global'=>1,'no_cache'=>1);
+		if (isset($CSSS['email']))
+			$css_to_do['email']=1;
+	} else
+	{
+		$css_to_do=$CSSS;
+	}
 
 	foreach ($css_to_do as $c=>$do_enforce)
 	{

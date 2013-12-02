@@ -26,7 +26,7 @@
 			window.detect_interval=window.setInterval(
 				function() {
 					{+START,IF_PASSED,CHANGE_DETECTION_URL}
-						if ((window.detect_change) && (detect_change('{CHANGE_DETECTION_URL;/}','{REFRESH_IF_CHANGED;/}')) && ((!document.getElementById('post')) || (document.getElementById('post').value=='')))
+						if ((typeof window.detect_change!='undefined') && (detect_change('{CHANGE_DETECTION_URL;/}','{REFRESH_IF_CHANGED;/}')) && ((!document.getElementById('post')) || (document.getElementById('post').value=='')))
 					{+END}
 							call_block('{URL;/}','',document.getElementById('{$GET;,wrapper_id}'),false,null,true);
 				},

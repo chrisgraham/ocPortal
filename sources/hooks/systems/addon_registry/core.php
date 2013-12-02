@@ -778,6 +778,7 @@ class Hook_addon_registry_core
 			'lang_custom/index.html',
 			'themes/default/css/sitemap_editor.css',
 			'themes/default/css/global.css',
+			'themes/default/css/email.css',
 			'themes/default/css/font_sizer.css',
 			'themes/default/templates/FONT_SIZER.tpl',
 			'themes/default/css/index.html',
