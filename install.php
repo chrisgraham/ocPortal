@@ -2402,13 +2402,13 @@ function handle_self_referencing_embedment()
 		if ($type=='logo')
 		{
 			header('Content-type: image/png');
-			if (!file_exists(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png'))
+			if (!file_exists(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/standalone_logo.png'))
 			{
-				$out=file_array_get('themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png');
+				$out=file_array_get('themes/default/images/'.get_site_default_lang().'/logo/standalone_logo.png');
 				echo $out;
 			} else
 			{
-				print(file_get_contents(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png'));
+				print(file_get_contents(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/standalone_logo.png'));
 				exit();
 			}
 

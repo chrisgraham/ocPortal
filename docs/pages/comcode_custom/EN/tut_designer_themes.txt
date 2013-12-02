@@ -257,7 +257,7 @@ Obviously the pages you reference must exist to show. Go to Content Management >
 
 [title="3"]Logo wizard[/title]
 
-If you want the Logo Wizard to be able to modify your logo, you will need to make a copy of your logo called [tt]themes/<yourthemename>/images/logo_template.png[/tt] but without any site-name or slogan on it. The Logo Wizard will then write it on. If you need the logo wizard to put them in different places to the default ocPortal logo, or to use different colours, you can put the following into your [tt]themes/<yourthemename>/theme.ini[/tt] file:
+If you want the Logo Wizard to be able to modify your logo, you will need to make a copy of your logo called [tt]themes/<yourthemename>/images/logo/EN/logo_template.png[/tt] but without any site-name or slogan on it. The Logo Wizard will then write it on. If you need the logo wizard to put them in different places to the default ocPortal logo, or to use different colours, you can put the following into your [tt]themes/<yourthemename>/theme.ini[/tt] file:
 [code]
 site_name_colour=FFFFFF
 slogan_colour=6082BF

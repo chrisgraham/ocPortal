@@ -140,7 +140,7 @@ function rss_backend_script()
 	$date=date($date_string);
 
 	$site_about=xmlentities(get_option('description'));
-	$logo_url=xmlentities(find_theme_image('logo/trimmed_logo'));
+	$logo_url=xmlentities(find_theme_image('logo/standalone_logo'));
 	$copyright=xmlentities(trim(str_replace('&copy;','',str_replace('$CURRENT_YEAR',date('Y'),get_option('copyright')))));
 
 	$cutoff=get_param_integer('cutoff',time()-60*60*24*get_param_integer('days',30));

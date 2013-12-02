@@ -445,19 +445,21 @@ header h1 {
 }
 
 .logo_outer {
-	width: 980px;
-	height: 100px;
 	text-align: center;
 	display: block;
+	margin: 0.5em;
+}
+
+.logo_outer .logo {
+	max-width: 100%;
 }
 
 .global_navigation {
 }
 
 .global_banner {
-	position: absolute;
-	top: 0;
-	right: 0;
+	text-align: center;
+	margin: 1em;
 }
 
 .text_banner {

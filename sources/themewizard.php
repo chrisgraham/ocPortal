@@ -267,7 +267,7 @@ function find_theme_image_themewizard_preview($id)
  * @param  string		The logo img file to base upon.
  * @return resource  The image resource.
  */
-function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template')
+function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo/logo_template')
 {
 	require_code('character_sets');
 	require_code('files');
@@ -301,7 +301,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 	$file_path_stub=convert_url_to_path($logo_url);
 	if (!is_null($file_path_stub))
 	{
-		if (!file_exists($file_path_stub)) $file_path_stub=get_file_base().'/themes/default/images/trimmed_logo_template.png'; // Exceptional situation. Maybe theme got corrupted?
+		if (!file_exists($file_path_stub)) $file_path_stub=get_file_base().'/themes/default/images/EN/logo/standalone_logo_template.png'; // Exceptional situation. Maybe theme got corrupted?
 		$data=file_get_contents($file_path_stub);
 	} else
 	{
@@ -790,14 +790,14 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					{
 						$img=generate_recoloured_image($path,'#12467A',$colours['a.hover'],'#0A223D',$colours['a.hover__dark']);
 					}
-					elseif (($show=='trimmed_logo_template') || ($show=='logo_template') || (substr($show,0,5)=='logo/'))
+					elseif (($show=='logo/standalone_logo_template') || ($show=='logo/logo_template') || (substr($show,0,5)=='logo/'))
 					{
 						$pixel_x_start_array=array();
-						for ($y=0;$y<=59+((strpos($show,'trimmed')===false)?0:13);$y++)
+						for ($y=0;$y<=59+((strpos($show,'standalone')===false)?0:13);$y++)
 						{
 							$pixel_x_start_array[]=324; // i.e. the line is skipped (324 is the far right)
 						}
-						if (strpos($show,'trimmed')===false)
+						if (strpos($show,'standalone')===false)
 						{
 							$pixel_x_start_array=array_merge($pixel_x_start_array,array(320,319,318,317,316,316,315,315,314,314,313,312,309));
 						}

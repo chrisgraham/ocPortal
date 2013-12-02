@@ -839,7 +839,7 @@ class Module_admin_setupwizard
 			}
 			foreach (array($theme,'default') as $logo_save_theme)
 			{
-				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'logo_template');
+				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'logo/logo_template');
 				$path='themes/'.$logo_save_theme.'/images_custom/-logo.png';
 				if (!file_exists(dirname($path)))
 				{
@@ -851,10 +851,10 @@ class Module_admin_setupwizard
 				if (addon_installed('collaboration_zone'))
 					actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,get_site_default_lang(),'logo/collaboration-logo',$path,true);
 				imagedestroy($logo);
-				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'trimmed_logo_template');
-				$path='themes/'.$logo_save_theme.'/images_custom/trimmed_logo.png';
+				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'logo/standalone_logo_template');
+				$path='themes/'.$logo_save_theme.'/images_custom/standalone_logo.png';
 				@imagepng($logo,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
-				actual_edit_theme_image('logo/trimmed_logo',$logo_save_theme,get_site_default_lang(),'logo/trimmed_logo',$path,true);
+				actual_edit_theme_image('logo/standalone_logo',$logo_save_theme,get_site_default_lang(),'logo/standalone_logo',$path,true);
 				imagedestroy($logo);
 			}
 			$myfile=fopen(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini',GOOGLE_APPENGINE?'wb':'wt');

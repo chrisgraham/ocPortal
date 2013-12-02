@@ -17,8 +17,13 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 		{$,This is the main site header; if you like your layout in one place you can move it to GLOBAL.tpl}
 		{+START,IF,{$SHOW_HEADER}}
 			<header class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+				{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
+				{+START,IF_NON_EMPTY,{$GET,BANNER}}
+					<div class="global_banner">{$GET,BANNER}</div>
+				{+END}
+
 				{$,The main logo}
-				<h1><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$?,{$MOBILE},{$IMG*,logo/trimmed_logo},{$LOGO_URL*}}" width="{$IMG_WIDTH*,{$?,{$MOBILE},{$IMG,logo/trimmed_logo},{$LOGO_URL}}}" height="{$IMG_HEIGHT*,{$?,{$MOBILE},{$IMG,logo/trimmed_logo},{$LOGO_URL}}}" title="{!FRONT_PAGE}" alt="{$SITE_NAME*}" /></a></h1>
+				<h1><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$LOGO_URL*}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!FRONT_PAGE}" alt="{$SITE_NAME*}" /></a></h1>
 
 				{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
 				<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
@@ -32,14 +37,6 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 						{$BLOCK,block=menu,param=adminzone:start\,include=node\,title={!menus:DASHBOARD}\,icon=menu/adminzone/start + adminzone:\,include=children\,max_recurse_depth=4\,use_page_groupings=1 + cms:\,include=node\,max_recurse_depth=3\,use_page_groupings=1,type=dropdown}
 					{+END}
 				</div>
-
-				{$,Outside the Admin Zone we have a spot for the banner}
-				{+START,IF,{$NAND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}{+START,IF,{$NOT,{$MOBILE}}}
-					{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
-					{+START,IF_NON_EMPTY,{$GET,BANNER}}
-						<div class="global_banner" style="text-align: {!en_right}">{$GET,BANNER}</div>
-					{+END}
-				{+END}{+END}
 
 				{$,Inside the Admin Zone we have the Admin Zone search}
 				{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}

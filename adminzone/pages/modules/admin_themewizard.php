@@ -431,7 +431,7 @@ class Module_admin_themewizard
 				make_missing_directory(dirname($path));
 			}
 
-			$img=generate_logo(post_param('name'),post_param('title'),false,$logo_save_theme,'logo_template');
+			$img=generate_logo(post_param('name'),post_param('title'),false,$logo_save_theme,'logo/logo_template');
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);
 			actual_edit_theme_image('logo/-logo',$logo_save_theme,user_lang(),'logo/-logo',$path);
@@ -439,10 +439,10 @@ class Module_admin_themewizard
 				actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,user_lang(),'logo/collaboration-logo',$path);
 			$rand=uniqid('',true);
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
-			$img=generate_logo(post_param('name'),post_param('title'),false,NULL,'trimmed_logo_template');
+			$img=generate_logo(post_param('name'),post_param('title'),false,NULL,'logo/standalone_logo_template');
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);
-			actual_edit_theme_image('logo/trimmed_logo',$logo_save_theme,user_lang(),'logo/trimmed_logo',$path);
+			actual_edit_theme_image('logo/standalone_logo',$logo_save_theme,user_lang(),'logo/standalone_logo',$path);
 		}
 		persistent_cache_delete('THEME_IMAGES');
 

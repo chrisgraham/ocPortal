@@ -76,7 +76,7 @@
 	Facebook does not like unregistered types so best to just leave it out {+START,IF_NON_EMPTY,{$META_DATA,type}}<meta property="og:type" content="{$REPLACE*, ,_,{$LCASE,{$META_DATA,type}}}" />{+END}
 {+END}
 {+START,IF_NON_EMPTY,{$META_DATA,description}}<meta property="og:description" content="{$META_DATA*,description}" />{+END}
-{+START,IF_NON_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$META_DATA*,image}" />{$,NB: You may also want to define a image_src link tag for some social sites}{+END}{+START,IF_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$IMG*,logo/trimmed_logo}" />{+END}
+{+START,IF_NON_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$META_DATA*,image}" />{$,NB: You may also want to define a image_src link tag for some social sites}{+END}{+START,IF_EMPTY,{$META_DATA,image}}<meta property="og:image" content="{$IMG*,logo/standalone_logo}" />{+END}
 {+START,IF_NON_EMPTY,{$META_DATA,video}}<meta property="og:video" content="{$META_DATA*,video}" /><meta property="og:video:height" content="{$META_DATA*,video:height}" /><meta property="og:video:width" content="{$META_DATA*,video:width}" /><meta property="og:video:type" content="{$META_DATA*,video:type}" />{+END}
 <meta property="og:locale" content="{$REPLACE,-,_,{!locale}}" />
 {+START,IF,{$EQ,{$META_DATA,type},Article}}

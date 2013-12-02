@@ -821,7 +821,7 @@ class Hook_addon_registry_core
 			'themes/default/images/EN/index.html',
 			'themes/default/images/EN/logo/-logo.png',
 			'themes/default/images/EN/logo/index.html',
-			'themes/default/images/EN/logo/trimmed_logo.png',
+			'themes/default/images/EN/logo/standalone_logo.png',
 			'themes/default/images/icons/14x14/helper_panel_hide.png',
 			'themes/default/images/icons/14x14/helper_panel_show.png',
 			'themes/default/images/icons/28x28/helper_panel_hide.png',

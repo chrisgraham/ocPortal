@@ -15,7 +15,7 @@
 
 	<body id="installer_body" class="website_body">
 		<div class="installer_main">
-			<img alt="ocPortal" src="{$BASE_URL*}/themes/default/images/EN/logo/trimmed_logo.png" />
+			<img alt="ocPortal" src="{$BASE_URL*}/themes/default/images/EN/logo/standalone_logo.png" />
 		</div>
 
 		<div class="installer_main_inner">

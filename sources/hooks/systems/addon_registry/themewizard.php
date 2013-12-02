@@ -113,8 +113,8 @@ class Hook_addon_registry_themewizard
 			'sources/hooks/systems/page_groupings/themewizard.php',
 			'themes/default/templates/LOGOWIZARD_2.tpl',
 			'adminzone/logowizard.php',
-			'themes/default/images/logo_template.png',
-			'themes/default/images/trimmed_logo_template.png',
+			'themes/default/images/logo/EN/logo_template.png',
+			'themes/default/images/logo/EN/standalone_logo_template.png',
 		);
 	}
 
