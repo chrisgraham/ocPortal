@@ -14,7 +14,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 {$,You can use main_website_inner to help you create fixed width designs; never put fixed-width stuff directly on ".website_body" or "body" because it will affects things like the preview or banner frames or popups/overlays}
 <body class="website_body zone_running_{$ZONE*} page_running_{$PAGE*}" id="main_website" itemscope="itemscope" itemtype="http://schema.org/WebPage">
 	<div id="main_website_inner">
-		{$,This is the main site header; if you like your layout in one place you can move it to GLOBAL.tpl}
+		{$,This is the main site header}
 		{+START,IF,{$SHOW_HEADER}}
 			<header class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
 				{$,The main logo}
@@ -148,7 +148,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			{+END}
 		{+END}
 
-		{$,This is the main site footer; if you like your layout in one place you can move it to GLOBAL.tpl}
+		{$,This is the main site footer}
 		{+START,IF,{$SHOW_FOOTER}}
 			<footer class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
 				<div class="global_footer_left">
