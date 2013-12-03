@@ -54,8 +54,8 @@ class Module_notifications
 		if (get_forum_type()=='ocf') return array();
 		if ($check_perms && is_guest($member_id)) return array();
 		return array(
-			'misc'=>array('NOTIFICATION_MANAGEMENT','tool_buttons/notifications'),
-			'browse'=>array('NOTIFICATIONS','tool_buttons/inbox'),
+			'misc'=>array('NOTIFICATION_MANAGEMENT','tool_buttons/notifications2'),
+			'browse'=>array('NOTIFICATIONS','tool_buttons/notifications'),
 		);
 	}
 

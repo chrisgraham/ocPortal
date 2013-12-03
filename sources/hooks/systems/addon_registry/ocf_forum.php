@@ -100,6 +100,8 @@ class Hook_addon_registry_ocf_forum
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/menu/social/forum/inline_personal_posts.png',
+			'themes/default/images/icons/48x48/menu/social/forum/inline_personal_posts.png',
 			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/posting_rates.png',
 			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/posting_rates.png',
 			'themes/default/images/icons/24x24/menu/social/forum/forums.png',

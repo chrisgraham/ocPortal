@@ -1982,8 +1982,8 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 	if ((typeof tooltip_element=='undefined') || (!tooltip_element)) var tooltip_element=document.getElementById(ac.tooltip_id);
 	if (tooltip_element)
 	{
-		var style__offset_x=18;
-		var style__offset_y=18;
+		var style__offset_x=9;
+		var style__offset_y=9;
 
 		// Find mouse position
 		var x,y;

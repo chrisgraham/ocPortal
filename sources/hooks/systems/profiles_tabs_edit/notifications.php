@@ -69,7 +69,7 @@ class Hook_Profiles_Tabs_Edit_notifications
 
 		$javascript='';
 
-		return array($title,new ocp_tempcode(),$text,$javascript,$order,NULL,'tool_buttons/notifications');
+		return array($title,new ocp_tempcode(),$text,$javascript,$order,NULL,'tool_buttons/notifications2');
 	}
 }
 

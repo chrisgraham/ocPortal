@@ -98,6 +98,10 @@ class Hook_addon_registry_core_ocf
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/24x24/tool_buttons/inbox.png',
+			'themes/default/images/icons/48x48/tool_buttons/inbox.png',
+			'themes/default/images/icons/24x24/tool_buttons/inbox2.png',
+			'themes/default/images/icons/48x48/tool_buttons/inbox2.png',
 			'themes/default/images/icons/24x24/menu/adminzone/tools/users/member_add.png',
 			'themes/default/images/icons/48x48/menu/adminzone/tools/users/member_add.png',
 			'themes/default/images/icons/24x24/menu/adminzone/security/usergroups_temp.png',

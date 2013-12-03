@@ -46,7 +46,7 @@ class Hook_Profiles_Tabs_pts
 
 		$order=80;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'tool_buttons/inbox');
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'tool_buttons/inbox2');
 
 		require_code('ocf_forumview');
 		require_code('ocf_topics');
@@ -67,7 +67,7 @@ class Hook_Profiles_Tabs_pts
 
 		$content=do_template('OCF_MEMBER_PROFILE_PTS',array('_GUID'=>'5d0cae3320634a1e4eb345154c853c35','CONTENT'=>$content));
 
-		return array($title,$content,$order,'tool_buttons/inbox');
+		return array($title,$content,$order,'tool_buttons/inbox2');
 	}
 }
 

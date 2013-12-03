@@ -83,7 +83,7 @@ class Hook_addon_registry_core_notifications
 	 */
 	function get_default_icon()
 	{
-		return 'themes/default/images/icons/48x48/tool_buttons/notifications.png';
+		return 'themes/default/images/icons/48x48/tool_buttons/notifications2.png';
 	}
 
 	/**
@@ -94,10 +94,10 @@ class Hook_addon_registry_core_notifications
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images/icons/24x24/tool_buttons/inbox.png',
 			'themes/default/images/icons/24x24/tool_buttons/notifications.png',
-			'themes/default/images/icons/48x48/tool_buttons/inbox.png',
 			'themes/default/images/icons/48x48/tool_buttons/notifications.png',
+			'themes/default/images/icons/24x24/tool_buttons/notifications2.png',
+			'themes/default/images/icons/48x48/tool_buttons/notifications2.png',
 			'themes/default/images/icons/24x24/menu/adminzone/setup/notifications.png',
 			'themes/default/images/icons/48x48/menu/adminzone/setup/notifications.png',
 			'themes/default/images/icons/24x24/buttons/disable_notifications.png',
