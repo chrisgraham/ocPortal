@@ -509,7 +509,7 @@ class Module_cms_cedi
 				else // New
 				{
 					$title=$newlink;
-					$child_id=cedi_add_page($title,'','',$hide_posts);
+					$child_id=cedi_add_page($title,'','',$hide_posts,NULL,false);
 					$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 					$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 					foreach (array_keys($groups) as $group_id)

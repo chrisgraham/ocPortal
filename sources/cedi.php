@@ -211,9 +211,10 @@ function cedi_delete_post($post_id,$member=NULL)
  * @param  LONG_TEXT		Hidden notes pertaining to the page
  * @param  BINARY			Whether to hide the posts on the page by default
  * @param  ?MEMBER		The member doing the action (NULL: current member)
+ * @param  boolean		Whether to send a notification; this is useful as false if the page was added in bulk or automatically
  * @return AUTO_LINK		The page ID
  */
-function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL)
+function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL,$send_notification=true)
 {
 	if (is_null($member)) $member=get_member();
 
@@ -238,9 +239,12 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL)
 	require_code('seo2');
 	seo_meta_set_for_implicit('seedy_page',strval($id),array($title,$description),$description);
 
-	if (post_param_integer('send_notification',NULL)!==0)
+	if ($send_notification)
 	{
-		dispatch_cedi_page_notification($id,'ADD');
+		if (post_param_integer('send_notification',NULL)!==0)
+		{
+			dispatch_cedi_page_notification($id,'ADD');
+		}
 	}
 
 	return $id;
