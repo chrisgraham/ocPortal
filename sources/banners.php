@@ -373,7 +373,7 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 				$banner_type_row=$_banner_type_row[0];
 			} else
 			{
-				$banner_type_row=array('t_image_width'=>468,'t_image_height'=>60);
+				$banner_type_row=array('t_image_width'=>728,'t_image_height'=>90);
 			}
 			$content=do_template('BANNER_FLASH',array('_GUID'=>'25525a3722715e79a83af4cec53fe072','B_TYPE'=>$b_type,'WIDTH'=>strval($banner_type_row['t_image_width']),'HEIGHT'=>strval($banner_type_row['t_image_height']),'SOURCE'=>$source,'DEST'=>$name,'CAPTION'=>$caption,'IMG'=>$img_url));
 		}
@@ -401,7 +401,7 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 					$banner_type_row=$_banner_type_row[0];
 				} else
 				{
-					$banner_type_row=array('t_image_width'=>468,'t_image_height'=>60);
+					$banner_type_row=array('t_image_width'=>728,'t_image_height'=>90);
 				}
 				$banner_type_rows[$b_type]=$banner_type_row;
 			}
@@ -415,7 +415,7 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 				$banner_type_row=$_banner_type_row[0];
 			} else
 			{
-				$banner_type_row=array('t_image_width'=>468,'t_image_height'=>60);
+				$banner_type_row=array('t_image_width'=>728,'t_image_height'=>90);
 			}
 			$content=do_template('BANNER_IFRAME',array('_GUID'=>'deeef9834bc308b5d07e025ab9c04c0e','B_TYPE'=>$b_type,'IMG'=>$img_url,'WIDTH'=>strval($banner_type_row['t_image_width']),'HEIGHT'=>strval($banner_type_row['t_image_height'])));
 		}

@@ -14,55 +14,48 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 {$,You can use main_website_inner to help you create fixed width designs; never put fixed-width stuff directly on ".website_body" or "body" because it will affects things like the preview or banner frames or popups/overlays}
 <body class="website_body zone_running_{$ZONE*} page_running_{$PAGE*}" id="main_website" itemscope="itemscope" itemtype="http://schema.org/WebPage">
 	<div id="main_website_inner">
-		{$,This is the main site header; if you like your layout in one place you can move it to GLOBAL.tpl}
 		{+START,IF,{$SHOW_HEADER}}
-			<header class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
-				{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
+			<header itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+				{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
+				<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
+
+				{$,The banner}
+				{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner twice}
 				{+START,IF_NON_EMPTY,{$GET,BANNER}}
 					<div class="global_banner">{$GET,BANNER}</div>
 				{+END}
 
 				{$,The main logo}
-				<h1><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$LOGO_URL*}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!FRONT_PAGE}" alt="{$SITE_NAME*}" /></a></h1>
-
-				{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
-				<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
+				<h1 class="logo_outer"><a target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$LOGO_URL*}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!FRONT_PAGE}" alt="{$SITE_NAME*}" /></a></h1>
 
 				{$,Main menu}
 				<div class="global_navigation">
-					{+START,IF,{$NEQ,{$ZONE},adminzone,cms}}
-						{$BLOCK,block=menu,param={$CONFIG_OPTION,header_menu_call_string},type=dropdown}
+					{$BLOCK,block=menu,param={$CONFIG_OPTION,header_menu_call_string},type=dropdown}
+
+					{$,Login form for guests}
+					{+START,IF,{$IS_GUEST}}
+						<div class="top_form">
+							{$BLOCK,block=top_login}
+						</div>
 					{+END}
-					{+START,IF,{$EQ,{$ZONE},adminzone,cms}}
-						{$BLOCK,block=menu,param=adminzone:start\,include=node\,title={!menus:DASHBOARD}\,icon=menu/adminzone/start + adminzone:\,include=children\,max_recurse_depth=4\,use_page_groupings=1 + cms:\,include=node\,max_recurse_depth=3\,use_page_groupings=1,type=dropdown}
+
+					{$,Search box for logged in users [could show to guests, except space is lacking]}
+					{+START,IF,{$AND,{$ADDON_INSTALLED,search},{$NOT,{$IS_GUEST}}}}
+						<div class="top_form">
+							{$BLOCK,block=top_search,failsafe=1}
+						</div>
+					{+END}
+
+					{+START,IF,{$NOT,{$IS_GUEST}}}
+						<div class="top_notifications">
+							{$BLOCK,block=top_personal_stats}
+
+							{$BLOCK,block=top_notifications}
+						</div>
 					{+END}
 				</div>
-
-				{$,Inside the Admin Zone we have the Admin Zone search}
-				{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}
-					{$REQUIRE_CSS,adminzone}
-
-					<div class="adminzone_search">
-						<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,adminzone:admin:search}}" method="get" class="inline">
-							{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,adminzone:admin:search}}
-
-							<div>
-								<label for="search_content">{!ADMINZONE_SEARCH_LOST}</label> <span class="arr">&rarr;</span>
-								<input size="25" type="search" id="search_content" name="search_content" style="{$?,{$MATCH_KEY_MATCH,adminzone:admin:search},,color: gray}" onblur="if (this.value=='') { this.value='{!ADMINZONE_SEARCH;}'; this.style.color='gray'; }" onkeyup="if (typeof update_ajax_admin_search_list!='undefined') update_ajax_admin_search_list(this,event);" onfocus="require_javascript('javascript_ajax_people_lists'); require_javascript('javascript_ajax'); if (this.value=='{!ADMINZONE_SEARCH;}') this.value=''; this.style.color='black';" value="{$?,{$MATCH_KEY_MATCH,adminzone:admin:search},{$_GET*,search_content},{!ADMINZONE_SEARCH}}" title="{!ADMIN_ZONE_SEARCH_SYNTAX}" />
-								{+START,IF,{$JS_ON}}
-									<div class="accessibility_hidden"><label for="new_window">{!NEW_WINDOW}</label></div>
-									<input title="{!NEW_WINDOW}" type="checkbox" value="1" id="new_window" name="new_window" />
-								{+END}
-								<input onclick="if ((form.new_window) &amp;&amp; (form.new_window.checked)) form.target='_blank'; else form.target='_top';" id="search_button" class="buttons__search button_micro" type="submit" value="{!SEARCH}" />
-							</div>
-						</form>
-					</div>
-				{+END}
 			</header>
 		{+END}
-
-		{$,Make sure the system knows we have not rendered our primary title for this output yet}
-		{$SET,done_first_title,0}
 
 		{+START,IF,{$NOT,{$MOBILE}}}
 			{$,By default the top panel contains the admin menu, community menu, member bar, etc}
@@ -85,18 +78,10 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					</div>
 				{+END}
 
-				{$,Deciding whether/how to show the right panel requires some complex logic}
-				{$SET,HELPER_PANEL_TUTORIAL,{$?,{$HAS_PRIVILEGE,see_software_docs},{$HELPER_PANEL_TUTORIAL}}}
-				{$SET,helper_panel,{$OR,{$IS_NON_EMPTY,{$GET,HELPER_PANEL_TUTORIAL}},{$IS_NON_EMPTY,{$HELPER_PANEL_TEXT}}}}
-				{+START,IF,{$OR,{$GET,helper_panel},{$IS_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}}}
-					<div id="panel_right" class="global_side_panel{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,right}}} helper_panel{+START,IF,{$HIDE_HELP_PANEL}} helper_panel_hidden{+END}{+END}" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+				{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
+					<div id="panel_right" class="global_side_panel" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
 						{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
 							<div class="stuck_nav">{$LOAD_PANEL,right}</div>
-						{+END}
-
-						{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
-							{$REQUIRE_CSS,helper_panel}
-							{+START,INCLUDE,GLOBAL_HELPER_PANEL}{+END}
 						{+END}
 					</div>
 				{+END}
@@ -114,12 +99,12 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					<a id="maincontent"></a>
 
 					{$,The main site, whatever 'page' is being loaded}
-		{+END}
-		{$,Intentional breakup of directive so that output streaming has a top-level stopping point before MIDDLE}
-		{+START,IF,{$NOT,{$MOBILE}}}
-					{MIDDLE}
-		{+END}
-		{+START,IF,{$NOT,{$MOBILE}}}
+					{+END}
+					{$,Intentional breakup of directive so that output streaming has a top-level stopping point before MIDDLE}
+					{+START,IF,{$NOT,{$MOBILE}}}
+						{MIDDLE}
+					{+END}
+					{+START,IF,{$NOT,{$MOBILE}}}
 				</article>
 			</div>
 
@@ -150,7 +135,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			<script>merge_global_messages();</script>
 		{+END}
 
-		{$,This is the main site footer; if you like your layout in one place you can move it to GLOBAL.tpl}
+		{$,This is the main site footer}
 		{+START,IF,{$SHOW_FOOTER}}
 			<footer class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
 				<div class="global_footer_left">
@@ -169,7 +154,6 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 								<li><a id="software_chat_button" accesskey="-" onclick="if (typeof window.load_software_chat!='undefined') return load_software_chat(event); else return false;" href="#"><img id="software_chat_img" title="{!SOFTWARE_CHAT}" alt="{!SOFTWARE_CHAT}" src="{$IMG*,icons/24x24/tool_buttons/software_chat}" srcset="{$IMG*,icons/48x48/tool_buttons/software_chat} 2x" /></a></li>
 							{+END}{+END}
 						{+END}
-						<li>{$BLOCK,block=top_notifications}</li>
 					{+END}
 					{+START,IF_NON_EMPTY,{$TRIM,{$GET,FOOTER_BUTTONS}}}
 						<ul class="horizontal_buttons">
@@ -179,14 +163,11 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 					{+START,IF,{$HAS_SU}}
 						<form title="{!SU_2} {!LINK_NEW_WINDOW}" class="inline su_form" method="get" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" target="_blank">
-							<div class="inline">
-								{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},keep_su}
+							{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},keep_su}
 
+							<div class="inline">
 								<div class="accessibility_hidden"><label for="su">{!SU}</label></div>
-								<input accesskey="w" size="10" onfocus="if (this.value=='{$USERNAME;*}') this.value='';" type="text" value="{$USERNAME;*}" id="su" name="keep_su" />
-								{+START,IF,{$NOT,{$JS_ON}}}
-									<input onclick="disable_button_just_clicked(this);" class="menu__site_meta__user_actions__login button_micro" type="submit" value="{!SU}" />
-								{+END}
+								<input accesskey="w" size="10" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" type="text" value="{$USERNAME;*}" id="su" name="keep_su" /><input onclick="disable_button_just_clicked(this);" class="menu__site_meta__user_actions__login button_micro" type="submit" value="{!SU}" />
 							</div>
 						</form>
 					{+END}
@@ -197,10 +178,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 							<div class="inline">
 								<p class="accessibility_hidden"><label for="special_page_type">{!SCREEN_DEV_TOOLS}</label></p>
-								<select id="special_page_type" name="special_page_type">
-									{$STAFF_ACTIONS}
-								</select>
-								<input class="buttons__proceed button_micro" type="submit" value="{!PROCEED_SHORT}" />
+								<select id="special_page_type" name="special_page_type">{$STAFF_ACTIONS}</select><input class="buttons__proceed button_micro" type="submit" value="{!PROCEED_SHORT}" />
 							</div>
 						</form>
 					{+END}{+END}{+END}
@@ -208,10 +186,10 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 				<div class="global_footer_right">
 					<div class="global_copyright">
-						{$,Uncomment to show user"s time {$DATE} {$TIME}}
+						{$,Uncomment to show user's time {$DATE} {$TIME}}
+
 						{$COPYRIGHT`}
 
-						{$REQUIRE_CSS,font_sizer}
 						{+START,INCLUDE,FONT_SIZER}{+END}
 					</div>
 

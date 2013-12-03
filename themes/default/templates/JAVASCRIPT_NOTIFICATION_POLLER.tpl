@@ -218,6 +218,7 @@ function _toggle_messaging_box(event,name,hide)
 	}
 
 	var button=document.getElementById(name+'_button');
+	button.title='';
 	var set_position=function() {
 		e.style.left=(find_pos_x(button,true)+find_width(button)-find_width(e))+'px';
 		e.style.top=(find_pos_y(button,true)+find_height(button))+'px';

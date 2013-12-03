@@ -31,8 +31,10 @@ class Hook_page_groupings_collaboration_zone
 	{
 		if (!addon_installed('collaboration_zone')) return array();
 
+		if (is_null($member_id)) $member_id=get_member();
+
 		return array(
-			array('','menu/collaboration',array('admin',array('type'=>'collaboration'),'adminzone'),do_lang_tempcode('_COLLABORATION')),
+			has_zone_access($member_id,'collaboration')?array('','menu/collaboration',array('admin',array('type'=>'collaboration'),'adminzone'),do_lang_tempcode('_COLLABORATION')):NULL,
 			array('collaboration','menu/collaboration/start',array('about',array(),'collaboration'),do_lang_tempcode('ABOUT')),
 		);
 	}

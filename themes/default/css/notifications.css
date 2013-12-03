@@ -5,17 +5,10 @@
 
 /* Web UI */
 
-.top_notifications {
-	margin-left: 1.5em;
-	display: inline;
-}
-
 #web_notifications_button, #pts_button {
 	color: {$GET,heading_text};
 	display: inline-block;
-	margin-top: -3px;
 	position: relative;
-	top: 3px;
 	text-align: center;
 	min-width: 30px;
 	height: 24px;
@@ -32,7 +25,6 @@
 #pts_button {
 	background-image: url('{$IMG;,icons/24x24/tool_buttons/inbox}');
 	background-position: 3px 2px;
-	margin-left: 5px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
@@ -64,7 +56,7 @@
 
 .box.box_arrow {
 	overflow: visible;
-	margin-top: 9px; /* 7 +2px gap */
+	margin-top: 5px; /* 3 +2px gap */
 }
 .box.box_arrow>span {
 	background: url('{$IMG;,1x/box_arrow}') no-repeat;
@@ -72,7 +64,7 @@
 	display: inline-block;
 	width: 13px;
 	height: 7px;
-	margin-left: 20.48em;
+	margin-left: 20.3em;
 	position: absolute;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {

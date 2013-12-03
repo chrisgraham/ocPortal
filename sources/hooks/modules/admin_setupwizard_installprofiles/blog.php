@@ -90,9 +90,6 @@ class Hook_admin_setupwizard_installprofiles_blog
 				'side_news_archive',
 				'main_newsletter_signup',
 				'side_tag_cloud',
-				'side_personal_stats',
-				'side_calendar',
-				'main_search',
 				'main_poll',
 			),
 		);

@@ -12,7 +12,7 @@
 		<div id="install_newsletter">
 			<p class="accessibility_hidden"><label for="email">{!EMAIL_ADDRESS}</label></p>
 			<div class="constrain_field">
-				<input maxlength="255" class="wide_field" id="email" name="email" type="text" alt="{!EMAIL_ADDRESS}" value="{!EMAIL_ADDRESS}" size="25" onfocus="if (this.value=='{!EMAIL_ADDRESS;}') this.value='';" />
+				<input maxlength="255" class="wide_field field_input_non_filled" id="email" name="email" type="text" alt="{!EMAIL_ADDRESS}" value="{!EMAIL_ADDRESS}" size="25" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" />
 			</div>
 
 			<p class="accessibility_hidden"><label for="interest_level">{!INST_SUBSCRIPTION_LEVEL}</label></p>

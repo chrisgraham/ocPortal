@@ -1,5 +1,5 @@
-{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
 [semihtml]
+{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
 [surround="hero_section"]
 	[title="1"]Welcome to {$SITE_NAME}[/title]
 
@@ -7,12 +7,10 @@
 	[surround="hero_button"][page="site:start"]{$SITE_NAME}[/page][/surround]
 [/surround]
 
-[block failsafe="1"]main_image_fader[/block]
-[/semihtml]
+[block failsafe="1"]main_image_fader_news[/block]
 {+END}
 
 {+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
-[semihtml]
 [title="1"]{$SITE_NAME}[/title]
 
 [block="3" failsafe="1"]main_greeting[/block]
@@ -34,5 +32,5 @@
 [block failsafe="1"]main_quotes[/block]
 
 [block]main_comcode_page_children[/block]
-[/semihtml]
 {+END}
+[/semihtml]

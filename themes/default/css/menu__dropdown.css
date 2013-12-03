@@ -13,16 +13,8 @@ For example:
 */
 
 
-.menu_type__dropdown {
-	overflow: hidden;
-	/* Invisible borders to stop margin collapsing */
-	border-top: 1px solid {$GET,standard_border};
-	border-bottom: 1px solid {$GET,standard_border};
-}
-
-
-.menu_type__dropdown, .menu_type__dropdown li.toplevel {
-	background-color: {$GET,area_background};
+.global_navigation .menu_type__dropdown {
+	float: left;
 }
 
 .menu_type__dropdown li.toplevel {
@@ -37,6 +29,7 @@ For example:
 	{+START,IF,{$NEQ,{$LANG},EN}}
 		font-size: 0.72em;
 	{+END}
+	padding: 0.5em 0.25em;
 }
 
 .menu_type__dropdown li.toplevel.first {
@@ -52,16 +45,6 @@ For example:
 	border-left: 0;
 }
 
-.menu_type__dropdown .toplevel.current {
-	color: {$GET,slightly_seeded_text};
-	background-color: {$GET,area_highlight_left_complement_background} !important;
-	font-weight: bold;
-}
-
-.menu_type__dropdown .toplevel:hover {
-	background-color: {$GET,area_highlight_right_complement_background} !important;
-}
-
 .menu_type__dropdown li.toplevel.menu_spacer {
 	height: 1.15em;
 	width: 4em;
@@ -74,6 +57,16 @@ For example:
 	padding: 0.4em 0.5em;
 	outline: 0;
 	text-decoration: none;
+	color: inherit;
+}
+
+.menu_type__dropdown a.toplevel_link:after {
+	content: "\025BC"; /* Downward arrow */
+	vertical-align: middle;
+	padding-left: 0.5em;
+	font-size: 0.8em;
+	display: inline-block;
+	margin-top: 4px;
 }
 
 .menu_type__dropdown li.toplevel.last a {
@@ -81,6 +74,13 @@ For example:
 }
 
 .menu_type__dropdown .toplevel_link a, .menu_type__dropdown .toplevel_link a:visited, .menu_type__dropdown .toplevel_link a:hover {
+	text-decoration: none;
+}
+
+.menu_type__dropdown .toplevel.current .toplevel_link span, .menu_type__dropdown .toplevel .toplevel_link:hover span {
+	text-decoration: underline;
+}
+.menu_type__dropdown .toplevel .toplevel_link.non_link:hover span {
 	text-decoration: none;
 }
 
@@ -115,6 +115,7 @@ For example:
 	background-color: {$GET,dropdown_menu_background};
 	font-weight: normal;
 	border-bottom: 1px solid {$GET,standard_border};
+	min-height: 20px;
 
 	/* We do want wrapping for this, as menu labels could be longer than the available space between the start of the dropdown label and the edge of the fixed width */
 	max-width: 18em;

@@ -89,15 +89,13 @@ class Hook_admin_setupwizard_installprofiles_community
 				'main_poll',
 			),
 			'PANEL_LEFT'=>array(
-				'side_personal_stats',
-				'side_ocf_private_topics',
 			),
 			'PANEL_RIGHT'=>array(
 				'side_users_online',
 				'side_stats',
 				'side_calendar',
 				'side_shoutbox',
-			),
+			)+((get_option('sitewide_im')=='1')?array('side_friends'):array()),
 		);
 	}
 

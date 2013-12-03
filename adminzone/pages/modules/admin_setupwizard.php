@@ -563,7 +563,6 @@ class Module_admin_setupwizard
 
 		$main_blocks=array();
 		$side_blocks=array();
-		if ($installprofile!='') $side_blocks['side_personal_stats']='PANEL_LEFT';
 		$hooks=find_all_hooks('modules','admin_setupwizard');
 		foreach (array_keys($hooks) as $hook)
 		{

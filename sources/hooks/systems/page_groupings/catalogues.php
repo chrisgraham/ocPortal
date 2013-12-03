@@ -33,8 +33,10 @@ class Hook_page_groupings_catalogues
 
 		$exhaustive=true;
 
+		if (is_null($member_id)) $member_id=get_member();
+
 		$ret=array();
-		if (has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues'))
+		if (has_privilege($member_id,'submit_cat_highrange_content','cms_catalogues'))
 			$ret[]=array('cms','menu/rich_content/catalogues/catalogues',array('cms_catalogues',array('type'=>'misc'),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('catalogues:CATALOGUES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','COUNT(*)',NULL,'',true))))),'catalogues:DOC_CATALOGUES');
 		if ($exhaustive)
 		{
@@ -52,11 +54,11 @@ class Hook_page_groupings_catalogues
 						if (find_theme_image('icons/24x24/'.$menu_icon,true)=='')
 							$menu_icon='menu/rich_content/catalogues/catalogues';
 
-						if (has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$row['c_name'])))
+						if (has_submit_permission('mid',$member_id,get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$row['c_name'])))
 							$ret2[]=array('cms',$menu_icon,array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',get_translated_text($row['c_title']),escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_tempcode($row['c_description']));
 
 						$page_grouping='rich_content';
-						if ($row['c_name']=='projects') $page_grouping='collaboration';
+						if ($row['c_name']=='projects') $page_grouping=(has_zone_access($member_id,'collaboration')?'collaboration':'rich_content');
 						if ($row['c_name']=='classifieds') $page_grouping='social';
 
 						if ($row['c_is_tree']==0)

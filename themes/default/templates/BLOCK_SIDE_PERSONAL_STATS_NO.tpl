@@ -6,9 +6,9 @@
 			<div>
 				<div class="constrain_field">
 					<div class="accessibility_hidden"><label for="s_login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
+					<input maxlength="80" accesskey="l" class="wide_field login_block_username field_input_non_filled" type="text" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" value="{!USERNAME}" id="s_login_username" name="login_username" />
 					<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
-					<input maxlength="80" accesskey="l" class="wide_field login_block_username" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="s_login_username" name="login_username" />
-					<input maxlength="255" class="wide_field" type="password" value="" name="password" id="s_password" />
+					<input maxlength="255" class="wide_field" type="password" placeholder="{!PASSWORD}" value="" name="password" id="s_password" />
 				</div>
 
 				{+START,IF,{$CONFIG_OPTION,password_cookies}}

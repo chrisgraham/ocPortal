@@ -427,6 +427,7 @@ class Hook_addon_registry_core
 			'themes/default/images/2x/trays/expand.png',
 			'themes/default/images/2x/trays/exp_con.png',
 			'themes/default/images/2x/trays/index.html',
+			'themes/default/images/banner_frame.png',
 			'sources/hooks/systems/occle_fs_extended_config/.htaccess',
 			'sources/hooks/systems/resource_meta_aware/.htaccess',
 			'sources/hooks/systems/resource_meta_aware/index.html',
@@ -657,13 +658,15 @@ class Hook_addon_registry_core
 			'themes/default/templates/JAVASCRIPT_YAHOO_EVENTS.tpl', // Used only for date chooser
 			'themes/default/templates/JAVASCRIPT_COLOUR_PICKER.tpl',
 			'themes/default/templates/JAVASCRIPT_YAHOO_2.tpl', // Used only by colour picker
-			'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl',
 			'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS.tpl',
 			'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_LINE.tpl',
+			'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl',
 			'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_LINK.tpl',
 			'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_LINK_2.tpl',
 			'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_LOGOUT.tpl',
 			'themes/default/templates/BLOCK_SIDE_PERSONAL_STATS_NO.tpl',
+			'themes/default/templates/BLOCK_TOP_LOGIN.tpl',
+			'themes/default/templates/BLOCK_TOP_PERSONAL_STATS.tpl',
 			'themes/default/templates/BLOCK_MAIN_CONTENT_FILTERING.tpl',
 			'themes/default/templates/LOGIN_REDIRECT_SCREEN.tpl',
 			'themes/default/templates/LOGIN_SCREEN.tpl',
@@ -998,6 +1001,8 @@ class Hook_addon_registry_core
 			'sources/blocks/main_notes.php',
 			'sources/blocks/main_only_if_match.php',
 			'sources/blocks/side_personal_stats.php',
+			'sources/blocks/top_login.php',
+			'sources/blocks/top_personal_stats.php',
 			'sources/caches.php',
 			'sources/caches2.php',
 			'sources/caches3.php',
@@ -1220,13 +1225,15 @@ class Hook_addon_registry_core
 			'INLINE_WIP_MESSAGE.tpl'=>'inline_wip_message',
 			'MISSING_SCREEN.tpl'=>'missing_screen',
 			'PARAM_INFO.tpl'=>'param_info',
+			'BLOCK_SIDE_PERSONAL_STATS.tpl'=>'block_side_personal_stats',
 			'BLOCK_SIDE_PERSONAL_STATS_LINE.tpl'=>'block_side_personal_stats',
 			'BLOCK_SIDE_PERSONAL_STATS_LINK_2.tpl'=>'block_side_personal_stats',
 			'BLOCK_SIDE_PERSONAL_STATS_LINK.tpl'=>'block_side_personal_stats',
 			'BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl'=>'block_side_personal_stats',
 			'BLOCK_SIDE_PERSONAL_STATS_LOGOUT.tpl'=>'block_side_personal_stats',
-			'BLOCK_SIDE_PERSONAL_STATS.tpl'=>'block_side_personal_stats',
 			'BLOCK_SIDE_PERSONAL_STATS_NO.tpl'=>'block_side_personal_stats_no',
+			'BLOCK_TOP_LOGIN.tpl'=>'block_top_login',
+			'BLOCK_TOP_PERSONAL_STATS.tpl'=>'block_top_personal_stats',
 			'BLOCK_NO_ENTRIES.tpl'=>'nothing_here',
 			'BLOCK_MAIN_EMOTICON_CODES_ENTRY.tpl'=>'block_main_emoticon_codes',
 			'BLOCK_MAIN_EMOTICON_CODES.tpl'=>'block_main_emoticon_codes',
@@ -1698,10 +1705,78 @@ class Hook_addon_registry_core
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
+	function tpl_preview__block_top_personal_stats()
+	{
+		$details=new ocp_tempcode();
+		$links=new ocp_tempcode();
+
+		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array(
+			'KEY'=>lorem_word(),
+			'VALUE'=>placeholder_number()
+		)));
+
+		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array(
+			'NAME'=>lorem_word_2(),
+			'DESCRIPTION'=>lorem_phrase(),
+			'URL'=>placeholder_url()
+		)));
+
+		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array(
+			'NAME'=>lorem_word(),
+			'URL'=>placeholder_url(),
+			'REL'=>'me'
+		)));
+
+		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array(
+			'NAME'=>do_lang_tempcode('LOGOUT'),
+			'URL'=>placeholder_url()
+		)));
+
+		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX',array(
+			'KEY'=>do_lang_tempcode('GROUP'),
+			'VALUE'=>placeholder_link()
+		)));
+
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_TOP_PERSONAL_STATS',array(
+				'AVATAR_URL'=>placeholder_avatar(),
+				'LINKS'=>$links,
+				'DETAILS'=>$details,
+				'USERNAME'=>lorem_word()
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_personal_stats_no()
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_NO',array(
+				'TITLE'=>lorem_phrase(),
+				'FULL_LOGIN_URL'=>placeholder_url(),
+				'JOIN_URL'=>placeholder_url(),
+				'LOGIN_URL'=>placeholder_url()
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_top_login()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_TOP_LOGIN',array(
 				'TITLE'=>lorem_phrase(),
 				'FULL_LOGIN_URL'=>placeholder_url(),
 				'JOIN_URL'=>placeholder_url(),

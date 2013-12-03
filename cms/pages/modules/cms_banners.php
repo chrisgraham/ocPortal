@@ -420,7 +420,7 @@ class Module_cms_banners extends standard_crud_module
 			$banner_type_row=$_banner_type_row[0];
 		} else
 		{
-			$banner_type_row=array('t_image_width'=>468,'t_image_height'=>60);
+			$banner_type_row=array('t_image_width'=>728,'t_image_height'=>90);
 		}
 		$stats_url=build_url(array('page'=>'_SELF','type'=>'view','source'=>$name),'_SELF');
 		$banner_code=do_template('BANNER_SHOW_CODE',array('_GUID'=>'745d555fcca3a1320123ad3a5a04418b','TYPE'=>$b_type,'NAME'=>$name,'WIDTH'=>strval($banner_type_row['t_image_width']),'HEIGHT'=>strval($banner_type_row['t_image_height'])));

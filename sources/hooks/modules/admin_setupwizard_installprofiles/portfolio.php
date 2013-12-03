@@ -85,11 +85,11 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 			'YES_CELL'=>array(
 			),
 			'PANEL_LEFT'=>array(
+			),
+			'PANEL_RIGHT'=>array(
 				'side_galleries',
 				'main_image_fader',
 				'side_news',
-			),
-			'PANEL_RIGHT'=>array(
 			),
 		);
 	}

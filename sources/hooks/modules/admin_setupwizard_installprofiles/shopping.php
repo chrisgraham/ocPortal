@@ -87,11 +87,9 @@ class Hook_admin_setupwizard_installprofiles_shopping
 			'YES_CELL'=>array(
 			),
 			'PANEL_LEFT'=>array(
-				'side_personal_stats',
-				'main_search',
-				'main_newsletter_signup',
 			),
 			'PANEL_RIGHT'=>array(
+				'main_newsletter_signup',
 			),
 		);
 	}

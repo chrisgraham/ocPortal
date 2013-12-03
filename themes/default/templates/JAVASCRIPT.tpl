@@ -181,19 +181,6 @@ function merge_global_messages()
 	m2.parentNode.removeChild(m2);
 }
 
-function set_font_size(size)
-{
-	var old_size=read_cookie('font_size');
-	var old_sizer=document.getElementById('font_size_'+old_size);
-	if (old_sizer) old_sizer.className=old_sizer.className.replace(' selected','');
-
-	document.body.style.fontSize=size+'px';
-	set_cookie('font_size',size,120);
-
-	var new_sizer=document.getElementById('font_size_'+size);
-	if (new_sizer) new_sizer.className+=' selected';
-}
-
 function new_html__initialise(element)
 {
 	switch (element.nodeName.toLowerCase())
@@ -222,7 +209,7 @@ function new_html__initialise(element)
 
 			// Convert a/img title attributes into ocPortal tooltips
 			{+START,IF,{$CONFIG_OPTION,js_overlays}}
-				if (typeof element['original-title']=='undefined'/*check tipsy not used*/) convert_tooltip(element);
+				if (typeof element['original-title']=='undefined'/*check tipsy not used*/ && a.className.indexOf('no_tooltip')==-1) convert_tooltip(element);
 			{+END}
 			break;
 
@@ -371,6 +358,36 @@ function undo_staff_unload_action()
 		}
 		bi.className=bi.className.replace(' site_unloading','');
 	}
+}
+
+function placeholder_focus(ob)
+{
+	if (ob.value==ob.defaultValue)
+	{
+		ob.value='';
+		ob.className=ob.className.replace('field_input_non_filled','field_input_filled');
+	}
+}
+function placeholder_blur(ob)
+{
+	if (ob.value=='')
+	{
+		ob.value=ob.defaultValue;
+		ob.className=ob.className.replace('field_input_filled','field_input_non_filled');
+	}
+}
+
+function set_font_size(size)
+{
+	var old_size=read_cookie('font_size');
+	var old_sizer=document.getElementById('font_size_'+old_size);
+	if (old_sizer) old_sizer.className=old_sizer.className.replace(' selected','');
+
+	document.body.style.fontSize=size+'px';
+	set_cookie('font_size',size,120);
+
+	var new_sizer=document.getElementById('font_size_'+size);
+	if (new_sizer) new_sizer.className+=' selected';
 }
 
 /* Very simple form control flow */

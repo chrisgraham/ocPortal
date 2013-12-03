@@ -1,10 +1,5 @@
 [semihtml]
-{+START,IF,{$GET,HAS_SOCIAL_MENU}}
-	{+START,IF,{$ADDON_INSTALLED,ocf_forum}}
-		{+START,IF,{$OR,{$MOBILE},{$NOR,{$WIDE},{$EQ,{$PAGE},forumview,members}}}} {$,If wide, it would have been shown at the top; we show at top for forumview; we do not show on members page as would be confusing}
-			[block]main_member_bar[/block]
-		{+END}
-		[block]main_bottom_bar[/block]
-	{+END}
+{+START,IF,{$AND,{$ADDON_INSTALLED,ocf_forum},{$OCF},{$ADDON_INSTALLED,redirects_editor},{$OR,{$EQ,{$PAGE},chat,users_online,points,pointstore,warnings,contact_member,groups,rules,members,leader_board},{$EQ,{$ZONE},forum}}}}
+	[block]main_bottom_bar[/block]
 {+END}
 [/semihtml]

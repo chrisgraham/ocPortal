@@ -48,6 +48,7 @@ class Block_main_newsletter_signup
 	{
 		require_lang('newsletter');
 		require_lang('javascript');
+		require_css('newsletter');
 
 		$newsletter_id=array_key_exists('param',$map)?intval($map['param']):db_get_first_id();
 

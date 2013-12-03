@@ -30,6 +30,8 @@ class Hook_page_groupings_core
 	{
 		require_code('site');
 
+		if (is_null($member_id)) $member_id=get_member();
+
 		return array(
 			array('','menu/adminzone/start',array('start',array(),'adminzone'),do_lang_tempcode('menus:DASHBOARD'),$extensive_docs?'menus:DOC_DASHBOARD':'menus:MM_TOOLTIP_DASHBOARD'),
 			array('','menu/adminzone/audit',array('admin',array('type'=>'audit'),get_module_zone('admin')),do_lang_tempcode('menus:AUDIT'),$extensive_docs?'menus:DOC_AUDIT':'menus:MM_TOOLTIP_AUDIT'),
@@ -71,7 +73,7 @@ class Hook_page_groupings_core
 			addon_installed('xml_fields')?array('setup','menu/adminzone/setup/xml_fields',array('admin_config',array('type'=>'xml_fields'),get_module_zone('admin_config')),do_lang_tempcode('config:FIELD_FILTERS'),'config:DOC_FIELD_FILTERS'):NULL,
 
 			(get_forum_type()!='ocf')?NULL:array('tools','menu/adminzone/tools/users/member_add',array('admin_ocf_members',array('type'=>'misc'),get_module_zone('admin_ocf_members')),do_lang_tempcode('MEMBERS'),'ocf:DOC_MEMBERS'),
-			//((get_forum_type()!='ocf')||(!has_privilege(get_member(),'control_usergroups')))?NULL:array('tools','menu/social/groups',array('groups',array('type'=>'misc'),get_module_zone('groups'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'),'DOC_SECONDARY_GROUP_MEMBERSHIP'),
+			//((get_forum_type()!='ocf')||(!has_privilege($member_id,'control_usergroups')))?NULL:array('tools','menu/social/groups',array('groups',array('type'=>'misc'),get_module_zone('groups'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'),'DOC_SECONDARY_GROUP_MEMBERSHIP'),
 			array('tools','menu/adminzone/tools/cleanup',array('admin_cleanup',array('type'=>'misc'),get_module_zone('admin_cleanup')),do_lang_tempcode('cleanup:CLEANUP_TOOLS'),'cleanup:DOC_CLEANUP_TOOLS'),
 			(is_null(get_value('brand_base_url')))?array('tools','menu/adminzone/tools/upgrade',array('admin_config',array('type'=>'upgrader'),get_module_zone('admin_config')),do_lang_tempcode('upgrade:FU_UPGRADER_TITLE'),'upgrade:FU_UPGRADER_INTRO'):NULL,
 			(addon_installed('syndication'))?array('tools','links/rss',array('admin_config',array('type'=>'backend'),get_module_zone('admin_config')),do_lang_tempcode('FEEDS'),'rss:OPML_INDEX_DESCRIPTION'):NULL,
@@ -109,7 +111,7 @@ class Hook_page_groupings_core
 			(get_forum_type()!='ocf')?NULL:array('social','menu/social/users_online',array('users_online',array(),get_module_zone('users_online')),do_lang_tempcode('USERS_ONLINE')),
 
 			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:array('social','menu/social/forum/forums',get_forum_base_url(),do_lang_tempcode('SECTION_FORUMS')),
-			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:array('social','menu/social/members',$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),true),do_lang_tempcode('MY_PROFILE')),
+			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:array('social','menu/social/members',$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true),do_lang_tempcode('MY_PROFILE')),
 			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:array('site_meta','menu/site_meta/user_actions/join',$GLOBALS['FORUM_DRIVER']->join_url(),do_lang_tempcode('_JOIN')),
 			(get_forum_type()=='ocf' || get_forum_type()=='none')?NULL:array('social','menu/social/users_online',$GLOBALS['FORUM_DRIVER']->users_online_url(),do_lang_tempcode('USERS_ONLINE')),
 		);

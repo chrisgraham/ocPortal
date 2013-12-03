@@ -34,9 +34,6 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#ffffff,main_background,100% WB}
 {$THEME_WIZARD_COLOR,#ebebeb,main_2_background,92% WB + 8% BW}
 
-/* Header */
-{$THEME_WIZARD_COLOR,#e3e9f2,header_background,100% area_2_background}
-
 /* Colours to mirror UI conventions (i.e. non-thematic) */
 {$THEME_WIZARD_COLOR,#000000,native_ui_foreground,100% 000000}
 {$THEME_WIZARD_COLOR,#ffffff,native_ui_background,100% FFFFFF}
@@ -46,7 +43,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#ffffff,native_ui_button_foreground,100% FFFFFF}
 {$THEME_WIZARD_COLOR,#ff0000,native_ui_alertfield_background,100% FF0000}
 {$THEME_WIZARD_COLOR,#ffffff,native_ui_alertfield_foreground,100% FFFFFF}
-{$THEME_WIZARD_COLOR,#888888,unfilled_input_text,100% 888888}
+{$THEME_WIZARD_COLOR,#A9A9A9,unfilled_input_text,100% A9A9A9}
 {$THEME_WIZARD_COLOR,#888888,locked_input_field,100% 888888}
 {$THEME_WIZARD_COLOR,#94979d,comfortable_input_field_text,65% area_2_background + 35% WB}
 {$THEME_WIZARD_COLOR,#b5b5b5,tab_border,100% b5b5b5}
@@ -78,6 +75,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#6b81a1,standard_border,95% (seed sat_to 33) + 5% BW}
 {$THEME_WIZARD_COLOR,#4b5a71,dark_border,70% standard_border + 30% BW}
 {$THEME_WIZARD_COLOR,#c1cee3,pale_border,33% seed + 67% WB}
+{$THEME_WIZARD_COLOR,#8497b3,point_of_interest_border,50% dark_border + 50% WB}
 
 /* Backgrounds (quiet a variety, as we need to be able to stack them, to have both hover and active effects, to have zebra striping, and various other levels of perceived focus) */
 {$THEME_WIZARD_COLOR,#eaeff6,area_background,11% seed + 89% WB}
@@ -107,7 +105,6 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#0d2d5d,area_link,55% (seed sat_to 86) + 45% BW}
 {$THEME_WIZARD_COLOR,#0a1019,area_2_link,15% seed + 85% BW}
 {$THEME_WIZARD_COLOR,#1a2a44,area_2_link_hover,40% seed + 60% BW}
-{$THEME_WIZARD_COLOR,#8497b3,point_of_interest_border,50% dark_border + 50% WB}
 /* Text, employing color wheel theory */
 {$THEME_WIZARD_COLOR,#214f55,slightly_seeded_left_complement_text,50% (seed hue_add -21) + 50% BW}
 {$THEME_WIZARD_COLOR,#262155,slightly_seeded_right_complement_text,50% (seed hue_add +21) + 50% BW}
@@ -136,7 +133,6 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 /* Footer */
 {$THEME_WIZARD_COLOR,#8ba4ca,footer_tinting,61% seed + 39% WB}
 {$THEME_WIZARD_COLOR,#ffffff,footer_text,100% WB}
-{$THEME_WIZARD_COLOR,#dbe6f7,inverted_text,35% footer_tinting + 65% WB}
 
 /* Used for image generation */
 {$THEME_WIZARD_COLOR,#e8edf6,washed_out,10% (seed sat_to 85) + 90% WB}
@@ -420,7 +416,6 @@ body#main_website {
 
 body#main_website #main_website_inner {
 	min-height: 450px;
-	overflow: hidden;
 }
 
 /* If not #main_website, it'll be one of these (the names correspond to the templates used) */
@@ -432,7 +427,6 @@ body#standalone_html_wrap {
 }
 
 header {
-	background-color: {$GET,header_background};
 }
 
 header h1 {
@@ -444,22 +438,17 @@ header h1 {
 	border: 0;
 }
 
-.logo_outer {
-	text-align: center;
-	display: block;
-	margin: 0.5em;
-}
-
-.logo_outer .logo {
-	max-width: 100%;
-}
-
-.global_navigation {
-}
-
 .global_banner {
 	text-align: center;
-	margin: 1em;
+	background: url('{$IMG;,banner_frame}') center top no-repeat;
+	position: relative;
+	top: -16px;
+	padding-top: 6px;
+	padding-bottom: 3px;
+}
+
+.global_banner + .logo_outer {
+	margin-top: 0;
 }
 
 .text_banner {
@@ -476,6 +465,49 @@ header h1 {
 .text_banner_l_text {
 	color: {$GET,adwords_style_text};
 	font-size: 0.9em;
+}
+
+.logo_outer {
+	text-align: center;
+	display: block;
+	margin: 0.5em;
+}
+
+.logo_outer .logo {
+	max-width: 100%;
+}
+
+.global_navigation {
+	border-top: 1px solid {$GET,standard_border};
+	border-bottom: 1px solid {$GET,standard_border};
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
+	color: {$GET,WB};
+	overflow: hidden;
+}
+
+.global_navigation .top_notifications, .global_navigation .top_form {
+	margin-left: 1.5em;
+	padding: 0.5em 0;
+	margin-right: 1em;
+	float: right;
+}
+
+.global_navigation .top_form * {
+	vertical-align: middle;
+}
+
+.global_navigation .horizontal_links {
+	margin-left: 1em;
+	width: auto;
+	padding-top: 2px; /* To force it align correctly with the form in a different block (which is taller) */
+}
+
+.global_navigation .horizontal_links a {
+	color: inherit;
+	text-decoration: none;
+}
+.global_navigation .horizontal_links a:hover {
+	text-decoration: underline;
 }
 
 /* This is applied to the screen title, which is specially included on each screen; in the case of Comcode pages it is the first level 1 title. The screen title is by default an h1, but we define the styles separately so we can style this special title independently (there are lots of cool things we could do to it) */
@@ -499,7 +531,6 @@ header h1 {
 	margin-bottom: 3em;
 	position: relative;
 	left: -0.8em;
-	margin-top: 3px;
 }
 .hero_section h1 {
 	font-size: 2.6em;
@@ -722,14 +753,16 @@ body.popup_spacer h2 {
 }
 
 .global_messages {
-	margin: 1em;
+	margin: 0 1em;
 }
 .global_middle_faux .global_messages {
-	margin: 1em 0; /* Probably inside a frame, hence already indented outside said frame */
+	margin: 0; /* Probably inside a frame, hence already indented outside said frame */
 }
 
 .global_message {
 	min-height: 21px;
+	margin-top: 1em;
+	margin-bottom: 1em;
 }
 
 .global_message span, .global_message img {
@@ -769,15 +802,12 @@ footer {
 	{+END}
 }
 
-footer .button_hyperlink,
-footer a,
-footer a:visited,
-footer .horizontal_links {
-	color: {$GET,area_2_link};
+footer .button_hyperlink, footer a, footer a:visited, footer .horizontal_links {
+	color: {$GET,footer_text};
 }
 
 footer a:hover, footer .button_hyperlink:hover {
-	color: {$GET,area_2_link_hover};
+	color: {$GET,footer_tinting};
 }
 
 footer .global_footer_left {
@@ -802,9 +832,12 @@ footer .global_footer_left .horizontal_buttons>li {
 	padding-left: 8px !important;
 }
 
-footer .su_form input {
-	padding-top: 0;
-	padding-bottom: 0;
+footer .su_form *, footer .special_page_type_form * {
+	vertical-align: middle;
+}
+
+footer .su_form input[type="text"] {
+	border: 0;
 }
 
 footer .special_page_type_form select, footer .special_page_type_form select option.label {
@@ -860,6 +893,7 @@ footer .global_minilinks {
 	{+START,IF,{$NOT,{$MOBILE}}}
 		text-align: center;
 	{+END}
+	margin-right: 3em; /* Make tidy gap away from the font sizer */
 }
 
 footer .global_minilinks .horizontal_links {
@@ -867,11 +901,15 @@ footer .global_minilinks .horizontal_links {
 	font-size: 1.1em;
 }
 
-footer .global_minilinks a {
+footer .global_minilinks a, footer .global_minilinks .button_hyperlink {
 	white-space: nowrap !important; /* So works on mobiles */
 	{+START,IF,{$MOBILE}}
 		padding: 4px;
 	{+END}
+	text-decoration: none;
+}
+footer .global_minilinks a:hover, footer .global_minilinks .button_hyperlink:hover {
+	text-decoration: underline;
 }
 
 /*
@@ -2953,6 +2991,7 @@ input.magic_image_edit_link {
 }
 div .button_micro {
 	background-image: none !important; /* Too loud for such a small space */
+	{$BETA_CSS_PROPERTY,border-radius: 4px;}
 }
 
 .button_screen, .button_screen_item, .button_micro, .toggleable_tray_button img {

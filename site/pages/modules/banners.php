@@ -132,8 +132,8 @@ class Module_banners
 			$GLOBALS['SITE_DB']->query_insert('banner_types',array(
 				'id'=>'',
 				't_is_textual'=>0,
-				't_image_width'=>468,
-				't_image_height'=>60,
+				't_image_width'=>728,
+				't_image_height'=>90,
 				't_max_file_size'=>80,
 				't_comcode_inline'=>0
 			));

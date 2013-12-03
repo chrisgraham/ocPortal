@@ -228,7 +228,7 @@ class Hook_pointstore_banners
 			$banner_type_row=$_banner_type_row[0];
 		} else
 		{
-			$banner_type_row=array('t_image_width'=>468,'t_image_height'=>60);
+			$banner_type_row=array('t_image_width'=>728,'t_image_height'=>90);
 		}
 		$banner_code=do_template('BANNER_SHOW_CODE',array('_GUID'=>'c96f0ce22de97782b1ab9bee3f43c0ba','TYPE'=>'','NAME'=>$name,'WIDTH'=>strval($banner_type_row['t_image_width']),'HEIGHT'=>strval($banner_type_row['t_image_height'])));
 

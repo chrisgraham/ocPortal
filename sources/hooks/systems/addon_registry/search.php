@@ -111,6 +111,7 @@ class Hook_addon_registry_search
 			'sources/hooks/modules/admin_setupwizard/search.php',
 			'themes/default/templates/SEARCH_ADVANCED.tpl',
 			'themes/default/templates/BLOCK_MAIN_SEARCH.tpl',
+			'themes/default/templates/BLOCK_TOP_SEARCH.tpl',
 			'themes/default/templates/SEARCH_DOMAINS.tpl',
 			'themes/default/templates/SEARCH_FORM_SCREEN.tpl',
 			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN.tpl',
@@ -121,7 +122,9 @@ class Hook_addon_registry_search
 			'themes/default/css/search.css',
 			'lang/EN/search.ini',
 			'site/pages/modules/search.php',
+			'sources/search.php',
 			'sources/blocks/main_search.php',
+			'sources/blocks/top_search.php',
 			'sources/hooks/modules/search/.htaccess',
 			'sources/hooks/modules/search/index.html',
 			'themes/default/templates/OPENSEARCH.tpl',
@@ -142,6 +145,7 @@ class Hook_addon_registry_search
 	{
 		return array(
 			'BLOCK_MAIN_SEARCH.tpl'=>'block_main_search',
+			'BLOCK_TOP_SEARCH.tpl'=>'block_top_search',
 			'BLOCK_SIDE_TAG_CLOUD.tpl'=>'block_side_tag_cloud',
 			'TAGS.tpl'=>'tags',
 			'OPENSEARCH.tpl'=>'opensearch',
@@ -168,9 +172,37 @@ class Hook_addon_registry_search
 	function tpl_preview__block_main_search()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH',array(
+			lorem_globalise(do_lorem_template('BLOCK_TOP_SEARCH',array(
 				'TITLE'=>lorem_phrase(),
 				'INPUT_FIELDS'=>placeholder_array(),
+				'EXTRA'=>placeholder_array(),
+				'SORT'=>lorem_phrase(),
+				'AUTHOR'=>lorem_phrase(),
+				'DAYS'=>lorem_phrase(),
+				'DIRECTION'=>lorem_phrase(),
+				'ONLY_TITLES'=>'1',
+				'ONLY_SEARCH_META'=>'1',
+				'BOOLEAN_SEARCH'=>'1',
+				'CONJUNCTIVE_OPERATOR'=>'AND',
+				'LIMIT_TO'=>placeholder_array(),
+				'URL'=>placeholder_url(),
+				'FULL_SEARCH_URL'=>placeholder_url()
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_top_search()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_TOP_SEARCH',array(
+				'TITLE'=>lorem_phrase(),
 				'EXTRA'=>placeholder_array(),
 				'SORT'=>lorem_phrase(),
 				'AUTHOR'=>lorem_phrase(),
