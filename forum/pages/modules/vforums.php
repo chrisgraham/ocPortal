@@ -52,6 +52,7 @@ class Module_vforums
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
 		if (get_forum_type()!='ocf') return NULL;
+		if ($be_deferential) return array();
 
 		if ($check_perms && is_guest($member_id))
 		{

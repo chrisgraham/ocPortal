@@ -53,9 +53,26 @@ class Module_forumview
 	{
 		if (get_forum_type()!='ocf') return NULL;
 
-		return array(
+		$ret=array(
 			'!'=>array('ROOT_FORUM','menu/social/forum/forums'),
 		);
+		if ($support_crosslinks)
+		{
+			$ret+=array(
+				'_SEARCH:topicview'=>array('INLINE_PERSONAL_POSTS','menu/social/forum/inline_personal_posts'),
+				'_SEARCH:vforums:misc'=>array('POSTS_SINCE','menu/social/forum/vforums/posts_since_last_visit'),
+				'_SEARCH:vforums:unanswered'=>array('UNANSWERED_TOPICS','menu/social/forum/vforums/unanswered_topics')
+			);
+			if (!$check_perms || !is_guest($member_id))
+			{
+				$ret+=array(
+					'_SEARCH:vforums:unread'=>array('TOPICS_UNREAD','menu/social/forum/vforums/unread_topics'),
+					'_SEARCH:vforums:recently_read'=>array('RECENTLY_READ','menu/social/forum/vforums/recently_read_topics'),
+					'_SEARCH:vforums:involved'=>array('INVOLVED_TOPICS','menu/social/forum/vforums/involved_topics'),
+				);
+			}
+		}
+		return $ret;
 	}
 
 	var $title;

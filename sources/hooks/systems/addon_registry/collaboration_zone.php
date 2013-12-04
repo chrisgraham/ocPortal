@@ -102,7 +102,6 @@ class Hook_addon_registry_collaboration_zone
 			'themes/default/images/icons/48x48/menu/collaboration/start.png',
 			'sources/hooks/systems/addon_registry/collaboration_zone.php',
 			'sources/hooks/modules/admin_themewizard/collaboration_zone.php',
-			'themes/default/images/EN/logo/collaboration-logo.png',
 			'collaboration/index.php',
 			'collaboration/pages/comcode/.htaccess',
 			'collaboration/pages/comcode/EN/.htaccess',

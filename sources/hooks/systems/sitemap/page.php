@@ -275,7 +275,7 @@ class Hook_sitemap_page extends Hook_sitemap_base
 									$child_page_link=$entry_point;
 								}
 
-								if (preg_match('#^([^:]*):([^:]*):([^:]*)(:.*|$)#',$child_page_link)!=0)
+								if ((preg_match('#^([^:]*):([^:]*):([^:]*)(:.*|$)#',$child_page_link)!=0) || ($entry_point=='_SEARCH:topicview'/*special case*/))
 								{
 									if (strpos($extra,':catalogue_name=')!==false)
 									{

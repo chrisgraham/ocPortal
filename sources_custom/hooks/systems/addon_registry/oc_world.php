@@ -84,7 +84,9 @@ class Hook_addon_registry_oc_world
 	 */
 	function get_description()
 	{
-		return 'A \"multi user dungeon\" (MUD) environment where members (players) may interact with each other and construct virtual worlds. The system includes an economy based on points.
+		return 'ocWorld -- A world of fun.
+
+A \"multi user dungeon\" (MUD) environment where members (players) may interact with each other and construct virtual worlds. The system includes an economy based on points.
 
 There is a very carefully selected feature-set that allows interesting world interactions; quests, adventures, simulations, and other things may all be created by clever use of this feature-set.
 
@@ -221,7 +223,6 @@ ocWorld is a full zone addon for ocPortal.';
 			'themes/default/images_custom/ocworld/realms.png',
 			'themes/default/images_custom/ocworld/refresh.png',
 			'themes/default/images_custom/ocworld/rules.png',
-			'themes/default/images_custom/EN/logo/ocworld-logo.png',
 			'themes/default/css_custom/ocworld.css',
 			'sources_custom/hooks/modules/members/ocworld.php',
 			'sources_custom/hooks/modules/topicview/ocworld.php',

@@ -95,8 +95,6 @@ class Hook_addon_registry_zone_logos
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/zone_logos.php',
-			'themes/default/images/EN/logo/adminzone-logo.png',
-			'themes/default/images/EN/logo/cms-logo.png',
 		);
 	}
 }
