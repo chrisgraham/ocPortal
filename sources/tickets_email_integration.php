@@ -128,6 +128,7 @@ function ticket_incoming_scan()
 		foreach ($list as $l)
 		{
 			$header=imap_headerinfo($resource,$l);
+			$full_header=imap_fetchheader($resource,$l);
 
 			$subject=$header->subject;
 
@@ -144,7 +145,7 @@ function ticket_incoming_scan()
 			}
 			_imap_get_part($resource,$l,'APPLICATION/OCTET-STREAM',$attachments,$attachment_size_total);
 
-			if (!is_non_human_email($subject,$body))
+			if (!is_non_human_email($subject,$body,$full_header))
 			{
 				imap_clearflag_full($resource,$l,'\\Seen'); // Clear this, as otherwise it is a real pain to debug (have to keep manually marking unread)
 
@@ -276,8 +277,12 @@ function email_comcode_from_text($body)
  * @param  string		Message body
  * @return boolean	Whether it should not be processed
  */
-function is_non_human_email($subject,$body)
+function is_non_human_email($subject,$body,$full_header)
 {
+	$full_header="\r\n".strtolower($full_header);
+	if (strpos($full_header,"\r\nfrom: <>")!==false) return true;
+	if (strpos($full_header,"\r\nauto-submitted: ")!==false && strpos($full_header,"\r\nauto-submitted: no")===false) return true;
+
 	$junk=false;
 	$junk_strings=array(
 		'Delivery Status Notification',
