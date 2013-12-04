@@ -596,7 +596,7 @@ class Module_admin_setupwizard
 		require_lang('zones');
 		require_code('zones2');
 
-		$tmp=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'dfc20251e4f6b37ec1e046d0903250aa','TITLE'=>do_lang_tempcode('FRONT_PAGE')));
+		$tmp=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'dfc20251e4f6b37ec1e046d0903250aa','TITLE'=>do_lang_tempcode('HOME')));
 		$fields.=$tmp->evaluate(); /*XHTMLXHTML*/
 		foreach ($main_blocks as $block=>$position_bits)
 		{

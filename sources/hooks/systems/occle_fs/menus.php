@@ -116,7 +116,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 
 		$order=db_get_first_id();
 		$parent=NULL;
-		$caption=do_lang('FRONT_PAGE');
+		$caption=do_lang('HOME');
 		$url='_SELF:start';
 		$check_permissions=1;
 		$page_only='';

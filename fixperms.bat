@@ -26,6 +26,15 @@ cacls themes\default\templates_custom\* /e /g %user%:F
 cacls themes\default\theme.ini /e /g %user%:F
 cacls themes\default\templates_cached /e /g %user%:F
 cacls themes\default\templates_cached\* /e /g %user%:F
+cacls themes\admin\css_custom /e /g %user%:F
+cacls themes\admin\css_custom\* /e /g %user%:F
+cacls themes\admin\images_custom /e /g %user%:F
+cacls themes\admin\images_custom\* /e /g %user%:F
+cacls themes\admin\templates_custom /e /g %user%:F
+cacls themes\admin\templates_custom\* /e /g %user%:F
+cacls themes\admin\theme.ini /e /g %user%:F
+cacls themes\admin\templates_cached /e /g %user%:F
+cacls themes\admin\templates_cached\* /e /g %user%:F
 cacls data_custom\fields.xml /e /g %user%:F
 cacls data_custom\errorlog.php /e /g %user%:F
 cacls data_custom\ocp_sitemap.xml /e /g %user%:F

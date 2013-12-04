@@ -420,6 +420,15 @@ sites/www/themes/default/templates_cached/index.html
 sites/www/themes/default/templates_custom
 sites/www/themes/default/templates_custom/.htaccess
 sites/www/themes/default/templates_custom/index.html
+sites/www/themes/admin
+sites/www/themes/admin/css_custom
+sites/www/themes/admin/images_custom
+sites/www/themes/admin/templates_cached
+sites/www/themes/admin/templates_cached/EN
+sites/www/themes/admin/templates_cached/index.html
+sites/www/themes/admin/templates_custom
+sites/www/themes/admin/templates_custom/.htaccess
+sites/www/themes/admin/templates_custom/index.html
 sites/www/uploads
 sites/www/uploads/attachments
 sites/www/uploads/attachments/index.html

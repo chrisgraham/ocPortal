@@ -867,6 +867,8 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 			$looping=false;
 
 			$myfile=@fopen($_path2,GOOGLE_APPENGINE?'wb':'ab');
+			if ($myfile===false)
+				critical_error('PASSON',do_lang('WRITE_ERROR',escape_html($path2.'/'.filter_naughty($_codename).$suffix.'.tcp'))); // Bail out hard if would cause a loop
 		}
 
 		@flock($myfile,LOCK_EX);

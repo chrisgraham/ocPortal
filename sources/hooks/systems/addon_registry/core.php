@@ -1189,6 +1189,20 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/notifications/task_completed.php',
 			'sources/hooks/systems/tasks/.htaccess',
 
+			// Admin theme
+			'themes/admin/css/index.html',
+			'themes/admin/css/menu__dropdown.css',
+			'themes/admin/css_custom/.htaccess',
+			'themes/admin/css_custom/index.html',
+			'themes/admin/images/index.html',
+			'themes/admin/images_custom/index.html',
+			'themes/admin/index.html',
+			'themes/admin/templates/.htaccess',
+			'themes/admin/templates/GLOBAL_HTML_WRAP.tpl',
+			'themes/admin/templates/index.html',
+			'themes/admin/templates_custom/.htaccess',
+			'themes/admin/templates_custom/index.html',
+
 			// These are not used by default, as have text links - but may be useful for some
 			'themes/default/images/icons/24x24/tool_buttons/version_desktop.png',
 			'themes/default/images/icons/48x48/tool_buttons/version_desktop.png',

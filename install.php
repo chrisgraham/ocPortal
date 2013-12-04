@@ -1895,10 +1895,10 @@ function step_5_core_2()
 	$trans4=insert_lang(do_lang('A_SITE_ABOUT','???'),1,NULL,false,NULL,$INSTALL_LANG);
 	$trans6=insert_lang(do_lang('CMS'),1,NULL,false,NULL,$INSTALL_LANG);
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'','zone_title'=>insert_lang(do_lang('_WELCOME'),1),'zone_default_page'=>'start','zone_header_text'=>$trans1,'zone_theme'=>'-1','zone_require_session'=>0));
-	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'adminzone','zone_title'=>insert_lang(do_lang('ADMIN_ZONE'),1),'zone_default_page'=>'start','zone_header_text'=>$trans2,'zone_theme'=>'default','zone_require_session'=>1));
+	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'adminzone','zone_title'=>insert_lang(do_lang('ADMIN_ZONE'),1),'zone_default_page'=>'start','zone_header_text'=>$trans2,'zone_theme'=>'admin','zone_require_session'=>1));
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'site','zone_title'=>insert_lang(do_lang('SITE'),1),'zone_default_page'=>'start','zone_header_text'=>$trans4,'zone_theme'=>'-1','zone_require_session'=>0));
 	if (file_exists(get_file_base().'/collaboration')) $GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'collaboration','zone_title'=>insert_lang(do_lang('COLLABORATION'),1),'zone_default_page'=>'start','zone_header_text'=>$trans3,'zone_theme'=>'-1','zone_require_session'=>0));
-	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'cms','zone_title'=>insert_lang(do_lang('CMS'),1),'zone_default_page'=>'cms','zone_header_text'=>$trans6,'zone_theme'=>'default','zone_require_session'=>1));
+	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'cms','zone_title'=>insert_lang(do_lang('CMS'),1),'zone_default_page'=>'cms','zone_header_text'=>$trans6,'zone_theme'=>'admin','zone_require_session'=>1));
 
 	// Forums
 	$forum_type=post_param('forum_type');

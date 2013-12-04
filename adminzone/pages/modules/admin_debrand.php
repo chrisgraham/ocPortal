@@ -122,7 +122,7 @@ class Module_admin_debrand
 		} elseif (file_exists(get_file_base().'/adminzone/pages/comcode/'.get_site_default_lang().'/start.txt'))
 		{
 			$start_page=file_exists(get_file_base().'/adminzone/pages/comcode/'.get_site_default_lang().'/start.txt')?file_get_contents(get_file_base().'/adminzone/pages/comcode/'.get_site_default_lang().'/start.txt'):file_get_contents(get_file_base().'/adminzone/pages/comcode/'.fallback_lang().'/start.txt');
-		} else $start_page=do_lang('REBRAND_FRONT_PAGE');
+		} else $start_page=do_lang('REBRAND_DASHBOARD');
 
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('REBRAND_NAME'),do_lang_tempcode('DESCRIPTION_REBRAND_NAME'),'rebrand_name',$rebrand_name,true));

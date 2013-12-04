@@ -107,6 +107,7 @@ skip_files:
 - ^data_custom/modules/google_appengine/.*
 - ^dump.sql
 - ^themes/default/templates_cached/.*
+- ^themes/admin/templates_cached/.*
 - ^_old/.*
 
 inbound_services:

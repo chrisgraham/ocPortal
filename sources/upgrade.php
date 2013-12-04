@@ -1533,6 +1533,8 @@ function version_specific()
 				$needs_dereference=($option['type']=='transtext' || $option['type']=='transline' || $option['type']=='comcodetext' || $option['type']=='comcodeline')?1:0;
 				$GLOBALS['SITE_DB']->query_update('config',array('c_needs_dereference'=>$needs_dereference),array('c_name'=>$hook),'',1);
 			}
+			$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'adminzone'),'',1);
+			$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'cms'),'',1);
 		}
 		set_value('version',float_to_raw_string($version_files,10,true));
 
