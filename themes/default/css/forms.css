@@ -211,11 +211,6 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	border: 1px solid {$GET,pale_border};
 }
 
-.field_checkbox_description {
-	margin-top: -1.5em !important;
-	margin-{!en_left}: 25px !important;
-}
-
 .password_strength {
 	float: right;
 	width: 100px;
@@ -246,6 +241,48 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 .syndication_options {
 	overflow: hidden;
 	white-space: nowrap;
+}
+
+.field_checkbox_description {
+	margin-top: -2.3em !important;
+	margin-{!en_left}: 30px !important;
+}
+
+/* Special validated checkbox */
+input[name="validated"].input_tick:before, input[type="checkbox"].input_tick {
+	width: {$ADD,5,{$IMG_WIDTH%,{$IMG,1x/editor/off}}}px;
+	height: {$IMG_HEIGHT%,{$IMG,1x/editor/off}}px;
+	display: inline-block;
+	cursor: pointer;
+}
+input[name="validated"].input_tick:before {
+	content: "";
+	background: red;
+	visibility: visible;
+	background: url('{$IMG;,1x/editor/off}') no-repeat;
+}
+input[name="validated"].input_tick:checked:before {
+	background: url('{$IMG;,1x/editor/on}') no-repeat !important;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	input[name="validated"].input_tick:before {
+		background: url('{$IMG;,2x/editor/off}') no-repeat;
+		background-size: {$IMG_WIDTH%,{$IMG,1x/editor/off}}px {$IMG_HEIGHT%,{$IMG,1x/editor/off}}px;
+	}
+	input[name="validated"].input_tick:checked:before {
+		background: url('{$IMG;,2x/editor/on}') no-repeat !important;
+	}
+}
+input[name="validated"].input_tick {
+	padding-right: 0.5em;
+	visibility: hidden;
+	float: left;
+}
+input[name="validated"]+input+.field_checkbox_description {
+	/*margin-top: -33px !important;	We'll use float alignment instead
+	margin-{!en_left}: 99px !important;*/
+	margin-top: 2px !important;
+	margin-{!en_left}: 0 !important;
 }
 
 .various_ticks {

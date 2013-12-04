@@ -1,13 +1,26 @@
 {+START,IF,{$NEQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
-	{+START,IF_NON_EMPTY,{CONTENT}}
-		{$,Example carousel layout if the 'carousel' GUID was passed}
-		{$,With some basic templating you could also achieve simple lists or tables}
-		{+START,IF,{$EQ,{_GUID},carousel}}
-			{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
-			{$REQUIRE_CSS,carousels}
+	{+START,SET,links}
+		{+START,IF_NON_EMPTY,{SUBMIT_URL}{ARCHIVE_URL}}
+			<ul class="horizontal_links associated_links_block_group">
+				{+START,IF_NON_EMPTY,{SUBMIT_URL}}
+					<li><a rel="add" href="{SUBMIT_URL*}">{!ADD}</a></li>
+				{+END}
+				{+START,IF_NON_EMPTY,{ARCHIVE_URL}}
+					<li><a href="{ARCHIVE_URL*}" title="{!ARCHIVES}: {TYPE*}">{!ARCHIVES}</a></li>
+				{+END}
+			</ul>
+		{+END}
+	{+END}
 
-			{$SET,carousel_id,{$RAND}}
+	{$,Example carousel layout if the 'carousel' GUID was passed}
+	{$,With some basic templating you could also achieve simple lists or tables}
+	{+START,IF,{$EQ,{_GUID},carousel}}
+		{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
+		{$REQUIRE_CSS,carousels}
 
+		{$SET,carousel_id,{$RAND}}
+
+		{+START,IF_NON_EMPTY,{CONTENT}}
 			<div id="carousel_{$GET*,carousel_id}" class="carousel" style="display: none">
 				<div class="move_left" onkeypress="this.onmousedown(event);" onmousedown="carousel_move({$GET*,carousel_id},-30); return false;"></div>
 				<div class="move_right" onkeypress="this.onmousedown(event);" onmousedown="carousel_move({$GET*,carousel_id},+30); return false;"></div>
@@ -47,47 +60,46 @@
 			//]]></script>
 		{+END}
 
-		{$,Normal sequential box layout}
-		{$,With some very basic CSS you could also achieve grid layouts}
-		{+START,IF,{$NEQ,{_GUID},carousel}}
-			{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
-			<div id="{$GET*,wrapper_id}">
-				{+START,IF_NON_EMPTY,{TITLE}}
-					<h2>{TITLE*}</h2>
-				{+END}
+		{+START,IF_EMPTY,{CONTENT}}
+			<p class="nothing_here">{!NO_ENTRIES}</p>
+		{+END}
 
-				<div class="float_surrounder cguid_{$FIX_ID*,{_GUID}} raw_ajax_grow_spot">
+		{$GET,links}
+	{+END}
+
+	{$,Normal sequential box layout}
+	{$,With some very basic CSS you could also achieve grid layouts}
+	{+START,IF,{$NEQ,{_GUID},carousel}}
+		{+START,IF_NON_EMPTY,{TITLE}}
+			<h2>{TITLE*}</h2>
+		{+END}
+
+		{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
+		<div id="{$GET*,wrapper_id}" class="box_wrapper">
+			<div class="float_surrounder cguid_{$FIX_ID*,{_GUID}} raw_ajax_grow_spot">
+				{+START,IF_NON_EMPTY,{CONTENT}}
 					{+START,LOOP,CONTENT}
 						{_loop_var}
 					{+END}
-				</div>
+				{+END}
 
-				{+START,IF_PASSED,PAGINATION}
-					{+START,IF_NON_EMPTY,{PAGINATION}}
-						<div class="pagination_spacing float_surrounder ajax_block_wrapper_links">
-							{PAGINATION}
-						</div>
-
-						{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
-					{+END}
+				{+START,IF_EMPTY,{CONTENT}}
+					<p class="nothing_here">{!NO_ENTRIES}</p>
 				{+END}
 			</div>
-		{+END}
-	{+END}
 
-	{+START,IF_EMPTY,{CONTENT}}
-		<p class="nothing_here">{!NO_ENTRIES}</p>
-	{+END}
+			{+START,IF_PASSED,PAGINATION}
+				{+START,IF_NON_EMPTY,{PAGINATION}}
+					<div class="pagination_spacing float_surrounder ajax_block_wrapper_links">
+						{PAGINATION}
+					</div>
 
-	{+START,IF_NON_EMPTY,{SUBMIT_URL}{ARCHIVE_URL}}
-		<ul class="horizontal_links associated_links_block_group force_margin">
-			{+START,IF_NON_EMPTY,{SUBMIT_URL}}
-				<li><a rel="add" href="{SUBMIT_URL*}">{!ADD}</a></li>
+					{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
+				{+END}
 			{+END}
-			{+START,IF_NON_EMPTY,{ARCHIVE_URL}}
-				<li><a href="{ARCHIVE_URL*}" title="{!ARCHIVES}: {TYPE*}">{!ARCHIVES}</a></li>
-			{+END}
-		</ul>
+
+			{$GET,links}
+		</div>
 	{+END}
 {+END}
 

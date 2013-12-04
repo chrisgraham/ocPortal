@@ -301,7 +301,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 		if (get_option('enable_mark_forum_read')=='1')
 		{
 			$read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>$id),get_module_zone('topics'));
-			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_READ'),'url'=>$read_url,'img'=>'buttons__mark_read_forum');
+			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('_MARK_READ'),'url'=>$read_url,'img'=>'buttons__mark_read_forum');
 		}
 	}
 	if ($type!='pt')

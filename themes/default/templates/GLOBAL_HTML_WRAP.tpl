@@ -47,10 +47,10 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					{+END}
 
 					{+START,IF,{$NOT,{$IS_GUEST}}}
-						<div class="top_notifications">
-							{$BLOCK,block=top_personal_stats}
-
+						<div class="top_buttons">
 							{$BLOCK,block=top_notifications}
+
+							{$BLOCK,block=top_personal_stats}
 						</div>
 					{+END}
 				</div>

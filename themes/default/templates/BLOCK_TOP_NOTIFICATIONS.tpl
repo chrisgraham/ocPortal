@@ -1,6 +1,6 @@
 {$REQUIRE_CSS,notifications}
 
-<div class="global_footer_button_ref_point" id="web_notifications_rel" style="display: none">
+<div class="global_button_ref_point" id="web_notifications_rel" style="display: none">
 	<div class="box box_arrow box__block_top_notifications_web"><span></span><div class="box_inner">
 		<div id="web_notifications_spot">
 			{+START,IF_EMPTY,{NOTIFICATIONS}}
@@ -21,7 +21,7 @@
 <a title="{!notifications:NOTIFICATIONS}" id="web_notifications_button" class="no_tooltip count_{NUM_UNREAD_WEB_NOTIFICATIONS%}" onclick="return toggle_web_notifications(event);" href="{$PAGE_LINK*,_SEARCH:notifications:browse}"><span>{NUM_UNREAD_WEB_NOTIFICATIONS*}</span></a>
 
 {+START,IF,{$NOT,{$CONFIG_OPTION,pt_notifications_as_web}}}{+START,IF,{$OCF}}
-	<div class="global_footer_button_ref_point" id="pts_rel" style="display: none">
+	<div class="global_button_ref_point" id="pts_rel" style="display: none">
 		<div class="box box_arrow box__block_top_notifications_pts"><span></span><div class="box_inner">
 			<div id="pts_spot">
 				{+START,IF_EMPTY,{PTS}}

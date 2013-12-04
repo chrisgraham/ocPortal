@@ -47,7 +47,7 @@ class Hook_config_forum_show_personal_stats_posts
 	 */
 	function get_default()
 	{
-		return has_no_forum()?NULL:'0';
+		return has_no_forum()?NULL:'1';
 	}
 }
 

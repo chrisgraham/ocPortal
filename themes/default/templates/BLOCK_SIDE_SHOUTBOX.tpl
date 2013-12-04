@@ -1,5 +1,5 @@
 {$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
-<div id="{$GET*,wrapper_id}">
+<div id="{$GET*,wrapper_id}" class="box_wrapper">
 	<section class="box box___block_side_shoutbox"><div class="box_inner">
 		<h3>{!SHOUTBOX}</h3>
 

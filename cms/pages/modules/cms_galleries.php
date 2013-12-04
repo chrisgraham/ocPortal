@@ -1096,7 +1096,7 @@ class Module_cms_galleries extends standard_crud_module
 			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
 		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
-			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
+			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
 		$do_watermark=($this->has_at_least_one_watermark($cat)) && (function_exists('imagetypes'));
 		$do_rep_image=((get_option('gallery_rep_image')=='1') && (($cat=='') || (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat)))));
@@ -1654,7 +1654,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$validated_field=new ocp_tempcode();
 		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			if (addon_installed('unvalidated'))
-				$validated_field=form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1);
+				$validated_field=form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1);
 
 		$description_field=form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_ACCESSIBILITY'),'description',$description,false);
 		if ($no_thumb_needed)

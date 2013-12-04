@@ -46,17 +46,17 @@ class Block_top_personal_stats
 	 */
 	function run($map)
 	{
+		if (is_guest()) return new ocp_tempcode();
+
 		require_css('personal_stats');
+		require_javascript('javascript_notification_poller');
 
 		$member_id=get_member();
 
 		$avatar_url='';
 		if (!has_no_forum())
 		{
-			if (get_option('show_avatar')==='1')
-			{
-				$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-			}
+			$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 		}
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);

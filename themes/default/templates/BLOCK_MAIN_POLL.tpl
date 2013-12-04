@@ -1,5 +1,5 @@
 {$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
-<div id="{$GET*,wrapper_id}">
+<div id="{$GET*,wrapper_id}" class="box_wrapper">
 	{CONTENT}
 
 	{$REQUIRE_JAVASCRIPT,javascript_ajax}

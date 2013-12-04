@@ -106,6 +106,17 @@
 	max-height: {$GET,gallery_thumb_size};
 }
 
+
+.fp_col_block .img_thumb_wrap {
+	width: 120px;
+	height: 120px;
+}
+.fp_col_block .img_thumb_wrap .img_thumb {
+	max-width: 120px;
+	max-height: 120px;
+	display: block;
+}
+
 .gallery_regular_thumb p, .gallery_regular_thumb .grating {
 	margin: 0.5em;
 }

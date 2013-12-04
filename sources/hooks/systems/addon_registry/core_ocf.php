@@ -114,6 +114,8 @@ class Hook_addon_registry_core_ocf
 			'themes/default/images/icons/48x48/menu/adminzone/tools/users/merge_members.png',
 			'themes/default/images/icons/24x24/tabs/member_account/profile.png',
 			'themes/default/images/icons/48x48/tabs/member_account/profile.png',
+			'themes/default/images/icons/24x24/tabs/member_account/profile2.png',
+			'themes/default/images/icons/48x48/tabs/member_account/profile2.png',
 			'themes/default/images/icons/24x24/tabs/member_account/edit/profile.png',
 			'themes/default/images/icons/48x48/tabs/member_account/edit/profile.png',
 			'themes/default/images/icons/24x24/tabs/member_account/edit/delete.png',

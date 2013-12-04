@@ -904,7 +904,7 @@ class Module_wiki
 			list($warning_details,$ping_url)=handle_conflict_resolution();
 
 			if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$myrow['page_id'])))
-				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
+				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
 		} else
 		{
 			$_id=get_param_wiki_chain('id');
@@ -929,7 +929,7 @@ class Module_wiki
 			$specialisation->attach(meta_data_get_fields('wiki_post',NULL));
 
 			if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki'))
-				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
+				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
 		}
 
 		$hidden_fields=new ocp_tempcode();

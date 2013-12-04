@@ -1,21 +1,32 @@
 {$SET,RAND,{$RAND}}
 
-<div class="gallery_tease_pic_wrap"><div class="gallery_tease_pic">
-	<div class="box box___gallery_tease_pic"><div class="box_inner">
-		<div class="float_surrounder">
-			<div class="gallery_tease_pic_pic">
-				<div class="img_thumb_wrap">
-					<a href="{GALLERY_URL*}"><img class="img_thumb" id="image_fader_{$GET,RAND}" src="{FIRST_URL*}" alt="" /></a>
-				</div>
-			</div>
+{+START,IF,{$GET,simple_image_fader}}
+	<div class="box box___block_main_image_fader"><div class="box_inner">
+		<h2>{!MEDIA}</h2>
 
-			<h2>{!MEDIA}</h2>
-
-			<div class="gallery_tease_pic_teaser" id="image_fader_scrolling_text_{$GET,RAND}">
-			</div>
+		<div class="img_thumb_wrap">
+			<a href="{GALLERY_URL*}"><img class="img_thumb" id="image_fader_{$GET,RAND}" src="{FIRST_URL*}" alt="" /></a>
 		</div>
 	</div></div>
-</div></div>
+{+END}
+{+START,IF,{$NOT,{$GET,simple_image_fader}}}
+	<div class="gallery_tease_pic_wrap"><div class="gallery_tease_pic">
+		<div class="box box___gallery_tease_pic"><div class="box_inner">
+			<div class="float_surrounder">
+				<div class="gallery_tease_pic_pic">
+					<div class="img_thumb_wrap">
+						<a href="{GALLERY_URL*}"><img class="img_thumb" id="image_fader_{$GET,RAND}" src="{FIRST_URL*}" alt="" /></a>
+					</div>
+				</div>
+
+				<h2>{!MEDIA}</h2>
+
+				<div class="gallery_tease_pic_teaser" id="image_fader_scrolling_text_{$GET,RAND}">
+				</div>
+			</div>
+		</div></div>
+	</div></div>
+{+END}
 
 <noscript>
 	{+START,LOOP,HTML}

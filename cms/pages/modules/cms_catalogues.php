@@ -547,7 +547,7 @@ class Module_cms_catalogues extends standard_crud_module
 			{
 				if (count($field_groups)!=1)
 					$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'17e83c2d6412bddc12ac1873f9ec6092','TITLE'=>do_lang_tempcode('SETTINGS'))));
-				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
+				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
 			}
 		}
 

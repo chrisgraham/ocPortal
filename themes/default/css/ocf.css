@@ -318,7 +318,7 @@
 
 .ocf_post_details {
 	text-align: {!en_left};
-	padding: 0.5em 0.2em;
+	padding: 0.6em 0.2em;
 }
 
 .ocf_post_details_date {
@@ -424,7 +424,6 @@ hr.ocf_sig_barrier {
 
 .ocf_post_back_to_top img {
 	vertical-align: middle;
-	max-width: 20px;
 	margin-left: 0.25em;
 }
 

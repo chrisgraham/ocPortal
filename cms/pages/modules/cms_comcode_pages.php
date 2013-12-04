@@ -798,7 +798,7 @@ class Module_cms_comcode_pages
 		if (has_bypass_validation_comcode_page_permission($zone))
 		{
 			if (addon_installed('unvalidated'))
-				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated));
+				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated));
 		}
 
 		if (!$new)

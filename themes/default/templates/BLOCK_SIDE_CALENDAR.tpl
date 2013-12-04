@@ -1,5 +1,5 @@
 <section class="box box___block_side_calendar"><div class="box_inner">
-	<h3><a href="{CALENDAR_URL*}" title="{!CALENDAR}: {MONTH*}">{!CALENDAR}</a> &ndash; {MONTH*}</h3>
+	<h3><a href="{CALENDAR_URL*}" title="{!CALENDAR}: {MONTH*}">{!CALENDAR}</a><!-- &ndash; {MONTH*}--></h3>
 
 	<div class="side_calendar_wrap">
 		<div class="wide_table_wrap_internal_borders"><table class="spread_table autosized_table wide_table side_calendar calendar_year_month_table">

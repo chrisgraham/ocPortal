@@ -82,7 +82,6 @@ class Block_main_content
 		$filter=isset($map['filter'])?$map['filter']:'';
 		$filter_b=isset($map['filter_b'])?$map['filter_b']:'';
 		$title=isset($map['title'])?$map['title']:NULL;
-		if ($title===NULL) $title=do_lang('RANDOM_CONTENT');
 		$give_context=(isset($map['give_context'])?$map['give_context']:'0')=='1';
 		$include_breadcrumbs=(isset($map['include_breadcrumbs'])?$map['include_breadcrumbs']:'0')=='1';
 
@@ -93,6 +92,7 @@ class Block_main_content
 		$object=get_content_object($content_type);
 		$info=$object->info();
 		if ($info===NULL) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
+		if ($title===NULL) $title=do_lang('RANDOM_CONTENT',do_lang($info['content_type_label']));
 		if (((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric'])) && ($content_id!==NULL) && (!is_numeric($content_id)))
 		{
 			list(,$resource_page,$resource_type)=explode(':',$info['view_page_link_pattern']);

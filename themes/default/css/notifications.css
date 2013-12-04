@@ -20,11 +20,11 @@
 }
 #web_notifications_button {
 	background-image: url('{$IMG;,icons/24x24/tool_buttons/notifications}');
-	background-position: 2px 1px;
+	background-position: 2px 2px;
 }
 #pts_button {
 	background-image: url('{$IMG;,icons/24x24/tool_buttons/inbox}');
-	background-position: 3px 2px;
+	background-position: 3px 3px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
@@ -44,40 +44,6 @@
 
 .count_0 {
 	{$BETA_CSS_PROPERTY,opacity: 0.5;}
-}
-
-#web_notifications_rel, #pts_rel {
-	position: absolute;
-	width: 22em;
-}
-#web_notifications_rel .box, #pts_rel .box {
-	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
-}
-
-.box.box_arrow {
-	overflow: visible;
-	margin-top: 5px; /* 3 +2px gap */
-}
-.box.box_arrow>span {
-	background: url('{$IMG;,1x/box_arrow}') no-repeat;
-	margin-top: -7px;
-	display: inline-block;
-	width: 13px;
-	height: 7px;
-	margin-left: 20.3em;
-	position: absolute;
-}
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-	.box.box_arrow>span {
-		background: url('{$IMG;,2x/box_arrow}') no-repeat;
-		background-size: 13px 7px;
-	}
-}
-
-.notification+.notification, #web_notifications_spot+.associated_links_block_group, #pts_spot+.associated_links_block_group {
-	margin-top: 0.5em;
-	border-top: 1px solid {$GET,pale_border};
-	padding-top: 0.5em;
 }
 
 .notification {

@@ -1,6 +1,6 @@
 {+START,IF,{$NEQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
 	{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
-	<div id="{$GET*,wrapper_id}">
+	<div id="{$GET*,wrapper_id}" class="box_wrapper">
 		<section class="box box___block_main_news"><div class="box_inner compacted_subbox_stream">
 			{+START,IF,{$NOT,{BLOG}}}{+START,IF_NON_EMPTY,{TITLE}}
 				<h3>{TITLE}</h3>
@@ -25,7 +25,7 @@
 			{+END}
 
 			{+START,IF_NON_EMPTY,{ARCHIVE_URL}{SUBMIT_URL}{RSS_URL}{ATOM_URL}}
-				<ul class="horizontal_links associated_links_block_group force_margin">
+				<ul class="horizontal_links associated_links_block_group">
 					{+START,IF_NON_EMPTY,{ARCHIVE_URL}}
 						<li><a rel="archives" href="{ARCHIVE_URL*}">{!VIEW_ARCHIVE}</a></li>
 					{+END}

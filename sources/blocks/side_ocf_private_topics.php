@@ -79,19 +79,29 @@ class Block_side_ocf_private_topics
 			$topic_url->attach('#post_'.strval($topic['id']));
 			$title=$topic['t_cache_first_title'];
 			$date=get_timezoned_date($topic['t_cache_last_time'],true);
-			$username=$topic['t_cache_last_username'];
-			$member_link=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['t_cache_last_member_id'],false,true);
 			$num_posts=$topic['t_cache_num_posts'];
+
+			$last_post_by_username=$topic['t_cache_last_username'];
+			$last_post_by_member_url=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['t_cache_last_member_id'],false,true);
+
+			$with_poster_id=($topic['t_pt_from']==get_member())?$topic['t_pt_to']:$topic['t_pt_from'];
+			$with_username=$GLOBALS['FORUM_DRIVER']->get_username($with_poster_id);
+			$with_member_url=$GLOBALS['OCF_DRIVER']->member_profile_url($with_poster_id,false,true);
 
 			$is_unread=($topic['t_cache_last_time']>time()-60*60*24*intval(get_option('post_history_days'))) && ((is_null($topic['l_time'])) || ($topic['l_time']<$topic['p_time']));
 
-			$out->attach(do_template('TOPIC_LIST',array('_GUID'=>'05beab5a3fab191df988bf101f44a47a','POSTER_URL'=>$member_link,
+			$out->attach(do_template('OCF_PRIVATE_TOPIC_LINK',array(
+				'_GUID'=>'05beab5a3fab191df988bf101f44a47a',
 				'TOPIC_URL'=>$topic_url,
 				'TITLE'=>$title,
 				'DATE'=>$date,
 				'DATE_RAW'=>strval($topic['t_cache_last_time']),
-				'USERNAME'=>$username,
-				'POSTER_ID'=>strval($topic['t_cache_last_member_id']),
+				'LAST_POST_BY_POSTER_URL'=>$last_post_by_member_url,
+				'LAST_POST_BY_USERNAME'=>$last_post_by_username,
+				'LAST_POST_BY_POSTER_ID'=>strval($topic['t_cache_last_member_id']),
+				'WITH_POSTER_URL'=>$with_member_url,
+				'WITH_USERNAME'=>$with_username,
+				'WITH_POSTER_ID'=>strval($with_poster_id),
 				'NUM_POSTS'=>integer_format($num_posts),
 				'HAS_READ'=>!$is_unread,
 			)));

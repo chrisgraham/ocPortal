@@ -47,7 +47,7 @@ class Hook_config_forum_show_personal_stats_topics
 	 */
 	function get_default()
 	{
-		return ((has_no_forum()) || (get_forum_type()!='ocf'))?NULL:'0';
+		return ((has_no_forum()) || (get_forum_type()!='ocf'))?NULL:'1';
 	}
 }
 

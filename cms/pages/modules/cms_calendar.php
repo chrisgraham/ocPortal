@@ -490,7 +490,7 @@ class Module_cms_calendar extends standard_crud_module
 		if ($validated==0) $validated=get_param_integer('validated',0);
 		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			if (addon_installed('unvalidated'))
-				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
+				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
 		$fields2=new ocp_tempcode();
 

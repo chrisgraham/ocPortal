@@ -183,9 +183,18 @@ function explicit_notifications_enable_request()
 	window.notify.requestPermission();
 }
 
+function toggle_top_personal_stats(event)
+{
+	if (typeof event=='undefined') var event=window.event;
+	_toggle_messaging_box(event,'pts',true);
+	_toggle_messaging_box(event,'web_notifications',true);
+	return _toggle_messaging_box(event,'top_personal_stats');
+}
+
 function toggle_web_notifications(event)
 {
 	if (typeof event=='undefined') var event=window.event;
+	_toggle_messaging_box(event,'top_personal_stats',true);
 	_toggle_messaging_box(event,'pts',true);
 	return _toggle_messaging_box(event,'web_notifications');
 }
@@ -193,6 +202,7 @@ function toggle_web_notifications(event)
 function toggle_pts(event)
 {
 	if (typeof event=='undefined') var event=window.event;
+	_toggle_messaging_box(event,'top_personal_stats',true);
 	_toggle_messaging_box(event,'web_notifications',true);
 	return _toggle_messaging_box(event,'pts');
 }
@@ -214,7 +224,7 @@ function _toggle_messaging_box(event,name,hide)
 		body.appendChild(e);
 
 		add_event_listener_abstract(e,'click',function(event) { if (typeof event=='undefined') var event=window.event; event.within_message_box=true; });
-		add_event_listener_abstract(body,'click',function(event) { if (typeof event=='undefined') var event=window.event; if (typeof event.within_message_box!='undefined') return; _toggle_messaging_box(event,'web_notifications',true); _toggle_messaging_box(event,'pts',true); });
+		add_event_listener_abstract(body,'click',function(event) { if (typeof event=='undefined') var event=window.event; if (typeof event.within_message_box!='undefined') return; _toggle_messaging_box(event,'top_personal_stats',true); _toggle_messaging_box(event,'web_notifications',true); _toggle_messaging_box(event,'pts',true); });
 	}
 
 	var button=document.getElementById(name+'_button');

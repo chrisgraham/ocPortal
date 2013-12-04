@@ -1253,8 +1253,8 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 			$where.='system_message=0';
 		}
 		$query.=(($where=='')?'':' WHERE '.$where).' ORDER BY date_and_time DESC,id DESC';
-		global $TABLE_LANG_FIELDS;
-		$rows=$GLOBALS['SITE_DB']->query($query,$cutoff,NULL,false,false,array_key_exists('chat_messages',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['chat_messages']:array());
+		global $TABLE_LANG_FIELDS_CACHE;
+		$rows=$GLOBALS['SITE_DB']->query($query,$cutoff,NULL,false,false,array_key_exists('chat_messages',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['chat_messages']:array());
 	} else
 	{
 		$where_array=array('room_id'=>$room_id);

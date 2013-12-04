@@ -94,10 +94,10 @@ class Hook_addon_registry_core_form_interfaces
 	function get_file_list()
 	{
 		return array(
-			'themes/default/images/1x/editor/off.png',
-			'themes/default/images/1x/editor/on.png',
-			'themes/default/images/2x/editor/off.png',
-			'themes/default/images/2x/editor/on.png',
+			'themes/default/images/EN/1x/editor/off.png',
+			'themes/default/images/EN/1x/editor/on.png',
+			'themes/default/images/EN/2x/editor/off.png',
+			'themes/default/images/EN/2x/editor/on.png',
 			'themes/default/images/1x/treefield/category.png',
 			'themes/default/images/1x/treefield/entry.png',
 			'themes/default/images/2x/treefield/category.png',

@@ -485,28 +485,35 @@ header h1 {
 	overflow: hidden;
 }
 
-.global_navigation .top_notifications, .global_navigation .top_form {
+.global_navigation .top_buttons, .global_navigation .top_form {
 	margin-left: 1.5em;
 	padding: 0.5em 0;
 	margin-right: 1em;
 	float: right;
 }
 
+.global_navigation .top_buttons {
+	margin-top: 1px; /* To force it align correctly with the form in a different block (which is taller) */
+}
+
+.global_navigation .top_form {
+	margin-top: 3px; /* To force it align correctly with the form in a different block (which is taller) */
+}
 .global_navigation .top_form * {
 	vertical-align: middle;
 }
 
-.global_navigation .horizontal_links {
+.global_navigation .top_login .horizontal_links {
 	margin-left: 1em;
 	width: auto;
 	padding-top: 2px; /* To force it align correctly with the form in a different block (which is taller) */
 }
 
-.global_navigation .horizontal_links a {
+.global_navigation .top_login .horizontal_links a {
 	color: inherit;
 	text-decoration: none;
 }
-.global_navigation .horizontal_links a:hover {
+.global_navigation .top_login .horizontal_links a:hover {
 	text-decoration: underline;
 }
 
@@ -861,11 +868,6 @@ footer .su_form, footer .special_page_type_form {
 
 footer .global_footer_left img {
 	vertical-align: middle;
-}
-
-footer .global_footer_button_ref_point {
-	position: absolute;
-	font-size: 13px; /* Puts it back, as was set to zero elsewhere */
 }
 
 footer .global_footer_left #special_page_type {
@@ -1356,7 +1358,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 .frame>.boxless_space .box:first-child {
 	margin-top: 0; /* No top margin for boxes in a frame */
 }
-.boxless_space .box:last-child {
+.boxless_space>.box:last-child {
 	margin-bottom: 0; /* No margin on the last box */
 }
 .boxless_space .fp_col_blocks_wrap .box {
@@ -1396,10 +1398,16 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 .boxless_space .buttons_group, .boxless_space .associated_links_block_group, .boxless_space .media_box, .boxless_space .proceed_button {
 	text-align: left;
+	width: auto;
 }
 
 /* ... Dividers within boxless area... */
-.boxless_space .box + .box, .boxless_space .box + .fp_col_blocks_wrap, .boxless_space .fp_col_blocks_wrap + .box {
+.boxless_space .box_wrapper + .box,
+.boxless_space .box_wrapper + .fp_col_blocks_wrap,
+.boxless_space .box + .box,
+.boxless_space .box + .fp_col_blocks_wrap,
+.boxless_space .fp_col_blocks_wrap + .box_wrapper,
+.boxless_space .fp_col_blocks_wrap + .box {
 	border-top: 2px solid {$GET,standard_border} !important;
 	margin-top: 1.5em;
 	padding-top: 0.5em;
@@ -1462,6 +1470,9 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 h3 .toggleable_tray_button img {
 	width: 15px;
+}
+.box h3.toggleable_tray_title .toggleable_tray_button img {
+	width: 20px;
 }
 .ttb_left_spaced, .ttb_left_spaced div {
 	margin-top: 0.3em;
@@ -1574,6 +1585,28 @@ h3 .toggleable_tray_button img {
 
 .box.overlay.lightbox>.box_inner {
 	margin: 0;
+}
+
+/* Boxes with arrows on the top */
+
+.box.box_arrow {
+	overflow: visible;
+	margin-top: 4px; /* 2 +2px gap */
+}
+.box.box_arrow>span {
+	background: url('{$IMG;,1x/box_arrow}') no-repeat;
+	margin-top: -7px;
+	display: inline-block;
+	width: 13px;
+	height: 7px;
+	margin-left: 20.2em;
+	position: absolute;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.box.box_arrow>span {
+		background: url('{$IMG;,2x/box_arrow}') no-repeat;
+		background-size: 13px 7px;
+	}
 }
 
 /*
@@ -2739,12 +2772,15 @@ ul.associated_links_block_group>li:after, span.associated_link:after, a.associat
 }
 
 ul.associated_links_block_group.horizontal_links>li:before,
-.horizontal_links>li:before,
 .horizontal_meta_details li:before,
+.horizontal_links>li:before,
 .horizontal_ticker li:before {
 	content: "\00b7" !important; /* a &middot; */
 	padding: 0 0.5em 0 0.1em;
 	vertical-align: -30%;
+}
+.horizontal_meta_details li:before {
+	vertical-align: middle;
 }
 .horizontal_buttons li {
 	padding-left: 3px !important;
@@ -3038,6 +3074,22 @@ div.proceed_button_left_2 {
 	margin-{!en_left}: 2em;
 	margin-top: 1px; /* To get it past a possible overflow:hidden (may be a browser bug) */
 }
+
+.global_button_ref_point {
+	position: absolute;
+	min-width: 22em;
+	font-size: 13px; /* Puts it back, as was set to zero elsewhere */
+}
+.global_button_ref_point .box {
+	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
+}
+
+.global_button_ref_point .associated_links_block_group, .notification+.notification {
+	margin-top: 0.5em;
+	border-top: 1px solid {$GET,pale_border};
+	padding-top: 0.5em;
+}
+
 
 /*
 Form buttons are wrapped in either:

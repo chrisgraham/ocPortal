@@ -69,7 +69,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
 		if (addon_installed('unvalidated'))
-			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
+			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
 	}
 
 	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b110d585eea7d6e29dab4870c5a15c4a','TITLE'=>do_lang_tempcode('SOURCE_MEDIA'))));

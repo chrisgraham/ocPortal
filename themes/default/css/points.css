@@ -130,6 +130,7 @@ table.points_summary_table .answer {
 
 .leader_board_table th, .leader_board_table td {
 	vertical-align: middle;
+	text-align: left;
 }
 
 .leader_board_rank {

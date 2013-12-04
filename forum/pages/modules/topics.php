@@ -1535,7 +1535,7 @@ class Module_topics
 								array(do_lang_tempcode('PINNED'),'pinned',false,do_lang_tempcode('DESCRIPTION_PINNED')),
 						);
 			if (addon_installed('unvalidated'))
-				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',true,do_lang_tempcode('DESCRIPTION_VALIDATED'));
+				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',true,do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'));
 			if (get_option('enable_sunk')=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',false,do_lang_tempcode('DESCRIPTION_SUNK'));
 			if (!$private_topic) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));
@@ -1788,7 +1788,7 @@ class Module_topics
 								array(do_lang_tempcode('EMPHASISED'),'is_emphasised',false,do_lang_tempcode('DESCRIPTION_EMPHASISED'))
 						);
 			if (addon_installed('unvalidated'))
-				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',true,do_lang_tempcode('DESCRIPTION_VALIDATED'));
+				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',true,do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'));
 			//if ($intended_solely_for==-1) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));		Too much to offer this too
 		} else
 		{
@@ -1890,7 +1890,7 @@ class Module_topics
 					if (($topic_info[0]['t_validated']==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 				}
 
-				$options[]=array(do_lang_tempcode('VALIDATED'),'topic_validated',$topic_info[0]['t_validated']==1,do_lang_tempcode('DESCRIPTION_VALIDATED'));
+				$options[]=array(do_lang_tempcode('VALIDATED'),'topic_validated',$topic_info[0]['t_validated']==1,do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'));
 			}
 			if (get_option('enable_sunk')=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',$topic_info[0]['t_sunk']==1,do_lang_tempcode('DESCRIPTION_SUNK'));
@@ -2872,7 +2872,7 @@ END;
 					$post_details[0]['p_validated']=get_param_integer('validated',0);
 					if (($post_details[0]['p_validated']==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 				}
-				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',$post_details[0]['p_validated']==1,do_lang_tempcode('DESCRIPTION_VALIDATED'));
+				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',$post_details[0]['p_validated']==1,do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'));
 			}
 		} else
 		{
@@ -3135,7 +3135,7 @@ END;
 					$topic_info[0]['t_validated']=get_param_integer('validated',0);
 					if (($topic_info[0]['t_validated']==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 				}
-				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',$topic_info[0]['t_validated']==1,do_lang_tempcode('DESCRIPTION_VALIDATED'));
+				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',$topic_info[0]['t_validated']==1,do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'));
 			}
 			if (get_option('enable_sunk')=='1')
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',$topic_info[0]['t_sunk']==1,do_lang_tempcode('DESCRIPTION_SUNK'));

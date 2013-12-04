@@ -310,7 +310,7 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/systems/ajax_tree/choose_forum.php',
 			'sources/hooks/systems/rss/ocf_unread_topics.php',
 			'sources/hooks/systems/rss/ocf_private_topics.php',
-			'themes/default/templates/TOPIC_LIST.tpl',
+			'themes/default/templates/OCF_PRIVATE_TOPIC_LINK.tpl',
 			'themes/default/templates/OCF_PT_FILTERS.tpl',
 			'themes/default/templates/OCF_MEMBER_PROFILE_POSTS.tpl',
 			'sources/hooks/systems/config/enable_add_topic_btn_in_topic.php',
@@ -416,7 +416,7 @@ class Hook_addon_registry_ocf_forum
 			'OCF_TOPIC_SCREEN.tpl'=>'ocf_topic_screen',
 			'NOTIFICATION_BUTTONS.tpl'=>'ocf_topic_screen',
 			'OCF_TOPIC_POLL_VIEW_RESULTS.tpl'=>'ocf_topic_voted_wrap',
-			'TOPIC_LIST.tpl'=>'topic_list',
+			'OCF_PRIVATE_TOPIC_LINK.tpl'=>'ocf_private_topic_link',
 			'OCF_PT_FILTERS.tpl'=>'ocf_forum',
 			'OCF_MEMBER_PROFILE_POSTS.tpl'=>'ocf_member_profile_posts',
 			'OCF_MEMBER_PROFILE_PTS.tpl'=>'ocf_member_profile_pts',
@@ -465,18 +465,20 @@ class Hook_addon_registry_ocf_forum
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__topic_list()
+	function tpl_preview__ocf_private_topic_link()
 	{
 		require_css('ocf');
 
 		return array(
-			lorem_globalise(do_lorem_template('TOPIC_LIST',array(
-				'POSTER_URL'=>placeholder_url(),
+			lorem_globalise(do_lorem_template('OCF_PRIVATE_TOPIC_LINK',array(
 				'TOPIC_URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
 				'DATE'=>placeholder_time(),
 				'DATE_RAW'=>placeholder_date_raw(),
-				'USERNAME'=>lorem_word(),
+				'LAST_POST_BY_POSTER_URL'=>placeholder_url(),
+				'LAST_POST_BY_USERNAME'=>lorem_word(),
+				'WITH_POSTER_URL'=>placeholder_url(),
+				'WITH_USERNAME'=>lorem_word(),
 				'POSTER_ID'=>placeholder_id(),
 				'NUM_POSTS'=>placeholder_number(),
 				'HAS_READ'=>false,
@@ -723,14 +725,17 @@ class Hook_addon_registry_ocf_forum
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$out->attach(do_lorem_template('TOPIC_LIST',array(
-				'POSTER_URL'=>placeholder_url(),
+			$out->attach(do_lorem_template('OCF_PRIVATE_TOPIC_LINK',array(
 				'TOPIC_URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
 				'DATE'=>placeholder_time(),
 				'DATE_RAW'=>placeholder_date_raw(),
-				'USERNAME'=>lorem_word(),
-				'POSTER_ID'=>placeholder_id(),
+				'LAST_POST_BY_POSTER_URL'=>placeholder_url(),
+				'LAST_POST_BY_USERNAME'=>lorem_word(),
+				'LAST_POST_BY_POSTER_ID'=>placeholder_id(),
+				'WITH_POSTER_URL'=>placeholder_url(),
+				'WITH_USERNAME'=>lorem_word(),
+				'WITH_POSTER_ID'=>placeholder_id(),
 				'NUM_POSTS'=>placeholder_number(),
 				'HAS_READ'=>true,
 			)));

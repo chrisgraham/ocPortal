@@ -519,7 +519,7 @@ class Module_topicview
 					$test=get_param_integer('threaded',-1);
 					if ($test!=-1) $map['threaded']=$test;
 					$mark_unread_url=build_url($map,get_module_zone('topics'));
-					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_UNREAD'),'url'=>$mark_unread_url,'img'=>'buttons__mark_unread_topic');
+					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('_MARK_UNREAD'),'url'=>$mark_unread_url,'img'=>'buttons__mark_unread_topic');
 				}
 			}
 
@@ -588,7 +588,7 @@ class Module_topicview
 			} else
 			{
 				$invite_url=build_url(array('page'=>'topics','type'=>'invite_member','id'=>$id),get_module_zone('topics'));
-				$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('INVITE_MEMBER_TO_PT'),'url'=>$invite_url,'img'=>'menu___generic_admin__add_to_category');
+				$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('_INVITE_MEMBER_TO_PT'),'url'=>$invite_url,'img'=>'menu___generic_admin__add_to_category');
 			}
 		}
 		$buttons=ocf_button_screen_wrap($button_array);
