@@ -47,7 +47,7 @@ class Block_main_download_category
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(get_param_integer(\'max\',30),get_param_integer(\'start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'order\',$map)?$map[\'order\']:NULL,array_key_exists(\'cat_order\',$map)?$map[\'cat_order\']:NULL,array_key_exists(\'title\',$map)?$map[\'title\']:/*notavailableattime do_lang*/(\'SECTION_DOWNLOADS\'),array_key_exists(\'param\',$map)?intval($map[\'param\']):db_get_first_id())';
+		$info['cache_on']='array(get_param_integer(\'max\',30),get_param_integer(\'start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'order\',$map)?$map[\'order\']:NULL,array_key_exists(\'cat_order\',$map)?$map[\'cat_order\']:NULL,array_key_exists(\'title\',$map)?$map[\'title\']:do_lang(\'downloads:SECTION_DOWNLOADS\'),array_key_exists(\'param\',$map)?intval($map[\'param\']):db_get_first_id())';
 		$info['ttl']=60;
 		return $info;
 	}
