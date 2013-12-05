@@ -137,7 +137,10 @@ function pop_up_menu(id,place,menu,event,outside_fixed_width)
 		var pos_left=l;
 		if (place=='below') // Top-level of drop-down
 		{
-			if (pos_left+e_width>full_width) pos_left=full_width-e_width;
+			if (pos_left+e_width>full_width)
+			{
+				pos_left+=e_parent_width-e_width;
+			}
 		} else
 		{ // NB: For non-below, we can't assume 'left' is absolute, as it is actually relative to parent node which is itself positioned
 			if (find_pos_x(e.parentNode,true)+e_width+e_parent_width+10>full_width) pos_left-=e_width+e_parent_width;

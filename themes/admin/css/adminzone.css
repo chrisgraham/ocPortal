@@ -28,6 +28,10 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	margin: 0;
 }
 
+.global_breadcrumbs {
+	padding: 18px 0 7px 0;
+}
+
 .global_middle {
 	padding-left: 0;
 	padding-right: 0;
@@ -72,27 +76,16 @@ footer .global_minilinks {
 /* Admin Zone styles */
 
 .menu_help_section {
-	max-width: 22em !important;
+	max-width: none !important;
+	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 10px;}
 }
 
 .adminzone_search {
 	padding: 0.7em 1em;
 }
 
-.adminzone_search label strong {
-	text-shadow: 1px 1px 1px {$GET,standard_border};
-	font-weight: normal;
-}
-
 .adminzone_search input {
 	vertical-align: middle;
-}
-
-.adminzone_search #search_button {
-	{$BETA_CSS_PROPERTY,opacity: 0.6;} display: inline-block;/*Needed for IE8*/
-}
-.adminzone_search #search_button:hover, body.touch_enabled .adminzone_search #search_button {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
 /*

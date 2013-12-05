@@ -365,7 +365,7 @@ class Module_search
 
 			if (has_zone_access(get_member(),'adminzone'))
 			{
-				$admin_search_url=build_url(array('page'=>'admin','type'=>'search','search_content'=>$content),'adminzone');
+				$admin_search_url=build_url(array('page'=>'admin','type'=>'search','content'=>$content),'adminzone');
 				attach_message(do_lang_tempcode('ALSO_ADMIN_ZONE_SEARCH',escape_html($admin_search_url->evaluate())),'inform');
 			}
 		}

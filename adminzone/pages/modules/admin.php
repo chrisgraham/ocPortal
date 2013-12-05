@@ -370,7 +370,7 @@ class Module_admin
 		$default_theme=$GLOBALS['FORUM_DRIVER']->get_theme('');
 
 		// Mess around to find our search keywords (takes synonyms into account, and generally tidies up)
-		$raw_search_string=get_param('search_content',false,true);
+		$raw_search_string=get_param('content',false,true);
 
 		// Work out our keywords
 		$keyword_string=$raw_search_string;

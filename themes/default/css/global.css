@@ -3105,6 +3105,9 @@ Form buttons are wrapped in either:
 /*
 Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 */
+.buttons__menu__pages__help {
+	background-image: url('{$IMG,icons/24x24/menu/pages/help}') !important;
+}
 .buttons__back {
 	background-image: url('{$IMG,icons/24x24/buttons/back}') !important;
 }
