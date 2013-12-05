@@ -151,7 +151,7 @@ class Hook_addon_registry_staff
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence_html(),
 				'FORUM_STAFF'=>$available
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -174,7 +174,7 @@ class Hook_addon_registry_staff
 				'MEMBER_ID'=>placeholder_id(),
 				'PROFILE_URL'=>placeholder_url(),
 				'ALL_STAFF_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

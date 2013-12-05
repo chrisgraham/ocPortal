@@ -193,7 +193,7 @@ class Hook_addon_registry_wiki
 				'TITLE'=>lorem_title(),
 				'FORM'=>placeholder_form(),
 				'WIKI_TREE'=>placeholder_options(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -211,7 +211,7 @@ class Hook_addon_registry_wiki
 				'BREADCRUMBS'=>lorem_phrase(),
 				'TITLE'=>lorem_word(),
 				'ID'=>placeholder_id()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -310,7 +310,7 @@ class Hook_addon_registry_wiki
 				'POSTS'=>$posts,
 				'NUM_POSTS'=>placeholder_number(),
 				'MENU'=>placeholder_button()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -327,7 +327,7 @@ class Hook_addon_registry_wiki
 			lorem_globalise(do_lorem_template('WIKI_CHANGES_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'RESULTS'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -376,7 +376,7 @@ class Hook_addon_registry_wiki
 				'TEXT'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
 				'POSTING_FORM'=>$posting_form
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

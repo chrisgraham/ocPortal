@@ -149,7 +149,7 @@ class Hook_addon_registry_ldap
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
-				'NAME'=>lorem_word() . placeholder_random(),
+				'NAME'=>lorem_word().placeholder_random(),
 				'NICE_NAME'=>lorem_word()
 			));
 			$members_delete->attach($tpl);
@@ -159,7 +159,7 @@ class Hook_addon_registry_ldap
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
-				'NAME'=>lorem_word() . placeholder_random(),
+				'NAME'=>lorem_word().placeholder_random(),
 				'NICE_NAME'=>lorem_word()
 			));
 			$groups_delete->attach($tpl);
@@ -169,7 +169,7 @@ class Hook_addon_registry_ldap
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
-				'NAME'=>lorem_word() . placeholder_random(),
+				'NAME'=>lorem_word().placeholder_random(),
 				'NICE_NAME'=>lorem_word()
 			));
 			$groups_add->attach($tpl);
@@ -182,7 +182,7 @@ class Hook_addon_registry_ldap
 				'MEMBERS_DELETE'=>$members_delete,
 				'GROUPS_DELETE'=>$groups_delete,
 				'GROUPS_ADD'=>$groups_add
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

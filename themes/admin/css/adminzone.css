@@ -28,6 +28,12 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	margin: 0;
 }
 
+.box___message {
+	background-image: none !important;
+	background-color: #FFF !important;
+	border-color: #bdcde6 !important;
+}
+
 .global_breadcrumbs {
 	padding: 18px 0 7px 0;
 }

@@ -163,7 +163,7 @@ class Hook_addon_registry_stats_block
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_STATS',array(
 				'CONTENT'=>$full_tpl
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

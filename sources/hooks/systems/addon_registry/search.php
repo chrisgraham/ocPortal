@@ -187,7 +187,7 @@ class Hook_addon_registry_search
 				'LIMIT_TO'=>placeholder_array(),
 				'URL'=>placeholder_url(),
 				'FULL_SEARCH_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -215,7 +215,7 @@ class Hook_addon_registry_search
 				'LIMIT_TO'=>placeholder_array(),
 				'URL'=>placeholder_url(),
 				'FULL_SEARCH_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -248,7 +248,7 @@ class Hook_addon_registry_search
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD',array(
 				'TITLE'=>lorem_phrase(),
 				'TAGS'=>$tpl_tags
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -274,7 +274,7 @@ class Hook_addon_registry_search
 					)
 				),
 				'TYPE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -290,7 +290,7 @@ class Hook_addon_registry_search
 		return array(
 			lorem_globalise(do_lorem_template('OPENSEARCH',array(
 				'DESCRIPTION'=>lorem_paragraph()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -409,7 +409,7 @@ class Hook_addon_registry_search
 				'SPECIALISATION'=>$specialisation,
 				'URL'=>placeholder_url(),
 				'HAS_TEMPLATE_SEARCH'=>true
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

@@ -171,7 +171,7 @@ class Hook_addon_registry_core_cleanup_tools
 			lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MESSAGES'=>$message
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

@@ -194,7 +194,7 @@ class Hook_addon_registry_banners
 		return array(
 			lorem_globalise(do_lorem_template('BANNER_PREVIEW',array(
 				'PREVIEW'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -213,7 +213,7 @@ class Hook_addon_registry_banners
 				'WIDTH'=>placeholder_number(),
 				'HEIGHT'=>placeholder_number(),
 				'TYPE'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -233,7 +233,7 @@ class Hook_addon_registry_banners
 				'BANNER_CODE'=>lorem_phrase(),
 				'STATS_URL'=>placeholder_url(),
 				'DO_NEXT'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -255,7 +255,7 @@ class Hook_addon_registry_banners
 				'BANNER'=>lorem_word_2(),
 				'HITSFROM'=>placeholder_number(),
 				'HITSTO'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -307,7 +307,7 @@ class Hook_addon_registry_banners
 				'EXTRA'=>lorem_phrase(),
 				'TYPE'=>lorem_phrase(),
 				'ASSEMBLE'=>$assemble
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -323,7 +323,7 @@ class Hook_addon_registry_banners
 		return array(
 			lorem_globalise(do_lorem_template('BANNERS_NONE',array(
 				'ADD_BANNER_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -345,7 +345,7 @@ class Hook_addon_registry_banners
 				'DEST'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
 				'IMG'=>placeholder_image_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -368,7 +368,7 @@ class Hook_addon_registry_banners
 				'DEST'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
 				'IMG'=>placeholder_image_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -387,7 +387,7 @@ class Hook_addon_registry_banners
 				'IMG'=>placeholder_image_url(),
 				'WIDTH'=>placeholder_number(),
 				'HEIGHT'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -409,7 +409,7 @@ class Hook_addon_registry_banners
 				'DEST'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'FILTERED_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -426,7 +426,7 @@ class Hook_addon_registry_banners
 		return array(
 			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_2',array(
 				'BANNER_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -443,7 +443,7 @@ class Hook_addon_registry_banners
 		return array(
 			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_UPGRADE',array(
 				'UPGRADE_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -460,7 +460,7 @@ class Hook_addon_registry_banners
 		return array(
 			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_ACTIVATE',array(
 				'ACTIVATE_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -479,7 +479,7 @@ class Hook_addon_registry_banners
 				'TITLE'=>lorem_title(),
 				'ACTIVATE'=>lorem_phrase(),
 				'UPGRADE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -499,7 +499,7 @@ class Hook_addon_registry_banners
 				'MAP_TABLE'=>lorem_phrase(),
 				'BANNER'=>lorem_phrase(),
 				'NAME'=>placeholder_id(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

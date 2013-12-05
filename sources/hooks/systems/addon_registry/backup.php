@@ -153,7 +153,7 @@ class Hook_addon_registry_backup
 				'TEXT'=>lorem_sentence(),
 				'RESULTS'=>lorem_phrase(),
 				'FORM'=>placeholder_form_with_field('submit_button')
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -173,7 +173,7 @@ class Hook_addon_registry_backup
 				'MESSAGE'=>lorem_sentence_html(),
 				'CSS_NOCACHE'=>'',
 				'SUCCESS'=>'1'
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

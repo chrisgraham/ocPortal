@@ -206,7 +206,7 @@ class Hook_addon_registry_shopping
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SHOPPING_CART_STAGE_PAY',array(
 				'TRANSACTION_BUTTON'=>placeholder_button()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -229,7 +229,7 @@ class Hook_addon_registry_shopping
 				'SEARCH_URL'=>placeholder_url(),
 				'HIDDEN'=>'',
 				'SEARCH_VAL'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -267,11 +267,11 @@ class Hook_addon_registry_shopping
 
 			foreach ($entry_data as $_k=>$_v)
 			{
-				$cells->attach(do_lorem_template('RESULTS_TABLE_' . $tplset . 'FIELD',array(
+				$cells->attach(do_lorem_template('RESULTS_TABLE_'.$tplset.'FIELD',array(
 					'VALUE'=>$_v
 				)));
 			}
-			$entries->attach(do_lorem_template('RESULTS_TABLE_' . $tplset . 'ENTRY',array(
+			$entries->attach(do_lorem_template('RESULTS_TABLE_'.$tplset.'ENTRY',array(
 				'VALUES'=>$cells
 			)));
 		}
@@ -293,7 +293,7 @@ class Hook_addon_registry_shopping
 			'SELECTORS'=>$selectors
 		));
 
-		return do_lorem_template('RESULTS_' . $tplset . 'TABLE',array(
+		return do_lorem_template('RESULTS_'.$tplset.'TABLE',array(
 			'FIELDS_TITLE'=>$fields_title,
 			'FIELDS'=>$entries,
 			'MESSAGE'=>new ocp_tempcode(),
@@ -346,7 +346,7 @@ class Hook_addon_registry_shopping
 				'PURCHASED_VIA'=>lorem_phrase(),
 				'ORDER_ACTIONS'=>$order_actions,
 				'SHIPPING_ADDRESS'=>$shipping_address
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -362,7 +362,7 @@ class Hook_addon_registry_shopping
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_ITEM_DETAILS',array(
 				'FIELDS'=>placeholder_fields()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -393,7 +393,7 @@ class Hook_addon_registry_shopping
 				'ORDER_ID'=>placeholder_id(),
 				'NOTIFICATION_TEXT'=>lorem_sentence_html(),
 				'MEMBER_ADDRESS'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -437,10 +437,10 @@ class Hook_addon_registry_shopping
 				$product_image,
 				$product_link,
 				$edit_qnty,
-				$currency . (string) placeholder_number(),
-				$currency . (string) placeholder_number(),
-				$currency . (string) placeholder_number(),
-				$currency . placeholder_number(),
+				$currency.(string) placeholder_number(),
+				$currency.(string) placeholder_number(),
+				$currency.(string) placeholder_number(),
+				$currency.placeholder_number(),
 				$del_item
 			);
 			$cells=new ocp_tempcode();
@@ -504,7 +504,7 @@ class Hook_addon_registry_shopping
 				'PROCEED_BOX'=>$proceed_box,
 				'ALLOW_OPTOUT_TAX'=>lorem_phrase(),
 				'ALLOW_OPTOUT_TAX_VALUE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -534,7 +534,7 @@ class Hook_addon_registry_shopping
 				'TITLE'=>lorem_title(),
 				'CURRENCY'=>lorem_phrase(),
 				'ORDERS'=>$orders
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -563,7 +563,7 @@ class Hook_addon_registry_shopping
 				'TITLE'=>lorem_title(),
 				'CURRENCY'=>lorem_phrase(),
 				'PRODUCTS'=>$orders
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -646,7 +646,7 @@ class Hook_addon_registry_shopping
 				'TRACKBACK_DETAILS'=>lorem_phrase(),
 				'RATING_DETAILS'=>lorem_phrase(),
 				'COMMENT_DETAILS'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -737,7 +737,7 @@ class Hook_addon_registry_shopping
 				'CART_LINK'=>placeholder_link(),
 				'TREE'=>lorem_phrase(),
 				'DISPLAY_TYPE'=>'0',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -779,7 +779,7 @@ class Hook_addon_registry_shopping
 			foreach ($array as $k2=>$v)
 			{
 				$tick=do_lorem_template('RESULTS_TABLE_TICK',array(
-					'ID'=>placeholder_id() . '_' . strval($k1) . '_' . strval($k2)
+					'ID'=>placeholder_id().'_'.strval($k1).'_'.strval($k2)
 				));
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
 					'VALUE'=>$tick
@@ -819,7 +819,7 @@ class Hook_addon_registry_shopping
 				'WIDTHS'=>array(
 					placeholder_number()
 				)
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

@@ -212,7 +212,7 @@ class Hook_addon_registry_core_addon_management
 				'ADDONS'=>$add_ons,
 				'MULTI_ACTION'=>placeholder_url(),
 				'UPDATED_ADDONS'=>'',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -237,10 +237,10 @@ class Hook_addon_registry_core_addon_management
 		);
 
 		foreach ($install as $name)
-			$uninstall_files->attach("<li>" . $name . "</li>");
+			$uninstall_files->attach("<li>".$name."</li>");
 
 		foreach ($uninstall as $file)
-			$install_files->attach("<li>" . $file . "</li>");
+			$install_files->attach("<li>".$file."</li>");
 
 		return array(
 			lorem_globalise(do_lorem_template('ADDON_MULTI_CONFIRM_SCREEN',array(
@@ -250,7 +250,7 @@ class Hook_addon_registry_core_addon_management
 				'INSTALL_FILES'=>$install_files,
 				'UNINSTALL_FILES'=>$uninstall_files,
 				'WARNINGS'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -307,7 +307,7 @@ class Hook_addon_registry_core_addon_management
 				'COPYRIGHT_ATTRIBUTION'=>lorem_phrase(),
 				'LICENCE'=>lorem_phrase(),
 				'DESCRIPTION'=>lorem_paragraph_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -327,7 +327,7 @@ class Hook_addon_registry_core_addon_management
 				'NAME'=>lorem_word(),
 				'WARNINGS'=>lorem_phrase(),
 				'FILES'=>placeholder_list_item(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -403,7 +403,7 @@ class Hook_addon_registry_core_addon_management
 				'LANGUAGES'=>$tpl_languages,
 				'FILES'=>$tpl_files,
 				'THEMES'=>$tpl_themes
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -459,7 +459,7 @@ class Hook_addon_registry_core_addon_management
 			lorem_globalise(do_lorem_template('MODULE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MODULES'=>$tpl_modules
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

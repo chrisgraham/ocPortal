@@ -200,7 +200,7 @@ class Hook_addon_registry_core_feedback_features
 	function tpl_preview__comments_default_text()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMMENTS_DEFAULT_TEXT',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('COMMENTS_DEFAULT_TEXT',array()),NULL,'',true)
 		);
 	}
 
@@ -232,7 +232,7 @@ class Hook_addon_registry_core_feedback_features
 				'TITLE'=>lorem_title(),
 				'TRACKBACKS'=>$trackbacks,
 				'LOTS'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -248,7 +248,7 @@ class Hook_addon_registry_core_feedback_features
 		return array(
 			lorem_globalise(do_lorem_template('TRACKBACK_XML_ERROR',array(
 				'TRACKBACK_ERROR'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -270,7 +270,7 @@ class Hook_addon_registry_core_feedback_features
 		return array(
 			lorem_globalise(do_lorem_template('TRACKBACK_XML_WRAPPER',array(
 				'XML'=>$xml
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -329,7 +329,7 @@ class Hook_addon_registry_core_feedback_features
 		)));
 
 		return array(
-			lorem_globalise($ret, NULL, '', true)
+			lorem_globalise($ret,NULL,'',true)
 		);
 	}
 
@@ -361,7 +361,7 @@ class Hook_addon_registry_core_feedback_features
 				'POSTER_NAME'=>lorem_word(),
 				'POSTER'=>NULL,
 				'POSTER_DETAILS'=>new ocp_tempcode(),
-				'ID'=>placeholder_id() . strval($i),
+				'ID'=>placeholder_id().strval($i),
 				'POST'=>lorem_phrase(),
 				'POST_COMCODE'=>lorem_phrase(),
 				'CHILDREN'=>lorem_phrase(),
@@ -432,7 +432,7 @@ class Hook_addon_registry_core_feedback_features
 		)));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -468,7 +468,7 @@ class Hook_addon_registry_core_feedback_features
 				'TRACKBACK_PAGE'=>lorem_word(),
 				'TRACKBACK_ID'=>placeholder_id(),
 				'TRACKBACK_TITLE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -488,7 +488,7 @@ class Hook_addon_registry_core_feedback_features
 		));
 
 		return array(
-			lorem_globalise($content, NULL, '', true)
+			lorem_globalise($content,NULL,'',true)
 		);
 	}
 
@@ -531,7 +531,7 @@ class Hook_addon_registry_core_feedback_features
 				'NUM_RATINGS'=>"10",
 				'RATING_FORM'=>$rating_form,
 				'ERROR'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -551,7 +551,7 @@ class Hook_addon_registry_core_feedback_features
 				'TITLE'=>lorem_word(),
 				'RATING'=>'3',
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
-				'TYPE'=>lorem_word() . strval($i)
+				'TYPE'=>lorem_word().strval($i)
 			);
 		}
 		$rating_form=do_lorem_template('RATING_FORM',array(
@@ -576,7 +576,7 @@ class Hook_addon_registry_core_feedback_features
 				'RATING_FORM'=>$rating_form,
 				'ERROR'=>'',
 				'LIKES'=>false
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -596,7 +596,7 @@ class Hook_addon_registry_core_feedback_features
 				'TITLE'=>lorem_word(),
 				'RATING'=>'3',
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
-				'TYPE'=>lorem_word() . strval($i)
+				'TYPE'=>lorem_word().strval($i)
 			);
 		}
 		$rating_form=do_lorem_template('RATING_FORM',array(
@@ -620,7 +620,7 @@ class Hook_addon_registry_core_feedback_features
 				'RATING_FORM'=>$rating_form,
 				'ERROR'=>'',
 				'LIKES'=>false
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -640,7 +640,7 @@ class Hook_addon_registry_core_feedback_features
 				'TITLE'=>lorem_word(),
 				'RATING'=>'3',
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
-				'TYPE'=>lorem_word() . strval($i)
+				'TYPE'=>lorem_word().strval($i)
 			);
 		}
 		$rating_form=do_lorem_template('RATING_FORM',array(
@@ -665,7 +665,7 @@ class Hook_addon_registry_core_feedback_features
 				'RATING_FORM'=>$rating_form,
 				'ERROR'=>'',
 				'LIKES'=>false
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

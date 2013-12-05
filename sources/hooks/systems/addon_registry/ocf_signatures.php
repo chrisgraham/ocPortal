@@ -212,7 +212,7 @@ class Hook_addon_registry_ocf_signatures
 			lorem_globalise(do_lorem_template('OCF_EDIT_SIGNATURE_TAB',array(
 				'SIZE'=>placeholder_filesize(),
 				'SIGNATURE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

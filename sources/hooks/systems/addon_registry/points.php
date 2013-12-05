@@ -204,7 +204,7 @@ class Hook_addon_registry_points
 				'URL'=>placeholder_url(),
 				'LIMIT'=>placeholder_number(),
 				'ROWS'=>$out
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -242,7 +242,7 @@ class Hook_addon_registry_points
 			lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'WEEKS'=>$out
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -269,7 +269,7 @@ class Hook_addon_registry_points
 			lorem_globalise(do_lorem_template('POINTS_SEARCH_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'RESULTS'=>$results
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -342,7 +342,7 @@ class Hook_addon_registry_points
 			lorem_globalise(do_lorem_template('POINTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>$content
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

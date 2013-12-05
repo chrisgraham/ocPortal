@@ -131,7 +131,7 @@ class Hook_addon_registry_errorlog
 				'TITLE'=>lorem_title(),
 				'ERROR'=>lorem_phrase(),
 				'PERMISSION'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

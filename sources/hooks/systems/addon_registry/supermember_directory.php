@@ -155,7 +155,7 @@ class Hook_addon_registry_supermember_directory
 				'TITLE'=>lorem_title(),
 				'GROUPS'=>$groups,
 				'TEXT'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

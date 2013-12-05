@@ -142,7 +142,7 @@ class Hook_addon_registry_ocf_member_avatars
 				'AVATAR'=>$avatar,
 				'WIDTH'=>placeholder_number(),
 				'HEIGHT'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

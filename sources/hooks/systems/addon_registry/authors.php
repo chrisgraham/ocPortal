@@ -154,7 +154,7 @@ class Hook_addon_registry_authors
 				'TITLE'=>lorem_title(),
 				'DEFINE_FORM'=>placeholder_form(),
 				'MERGE_FORM'=>placeholder_form()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -226,7 +226,7 @@ class Hook_addon_registry_authors
 				'FORUM_DETAILS'=>$forum_details,
 				'SKILLS'=>$skills,
 				'DESCRIPTION'=>$description
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -254,7 +254,7 @@ class Hook_addon_registry_authors
 		$out=do_lorem_template('AUTHOR_POPUP',array('CONTENT'=>$out,'NEXT_URL'=>placeholder_url()));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 }

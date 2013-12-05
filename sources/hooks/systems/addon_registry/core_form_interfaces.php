@@ -514,7 +514,7 @@ class Hook_addon_registry_core_form_interfaces
 	function tpl_preview__wysiwyg_settings()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('WYSIWYG_SETTINGS',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('WYSIWYG_SETTINGS',array()),NULL,'',true)
 		);
 	}
 
@@ -528,7 +528,7 @@ class Hook_addon_registry_core_form_interfaces
 	function tpl_preview__attachment_ui_defaults()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS',array()),NULL,'',true)
 		);
 	}
 
@@ -561,7 +561,7 @@ class Hook_addon_registry_core_form_interfaces
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -922,7 +922,7 @@ class Hook_addon_registry_core_form_interfaces
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1325,7 +1325,7 @@ class Hook_addon_registry_core_form_interfaces
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1344,7 +1344,7 @@ class Hook_addon_registry_core_form_interfaces
 				'HIDDEN'=>'',
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1361,7 +1361,7 @@ class Hook_addon_registry_core_form_interfaces
 			lorem_globalise(do_lorem_template('FORM_GROUP',array(
 				'FIELDS'=>placeholder_fields(),
 				'HIDDEN'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1382,7 +1382,7 @@ class Hook_addon_registry_core_form_interfaces
 				'SUBMIT_NAME'=>lorem_word(),
 				'SUBMIT_BUTTON_CLASS'=>lorem_phrase(),
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1400,7 +1400,7 @@ class Hook_addon_registry_core_form_interfaces
 				'NAME'=>lorem_word(),
 				'ID'=>placeholder_random_id(),
 				'FIELDS'=>placeholder_fields()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1426,7 +1426,7 @@ class Hook_addon_registry_core_form_interfaces
 						'CORRECTIONS'=>'cat'
 					)
 				)
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1446,7 +1446,7 @@ class Hook_addon_registry_core_form_interfaces
 				'KEYWORD'=>lorem_word(),
 				'DENSITY'=>placeholder_id(),
 				'IDEAL_DENSITY'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1463,7 +1463,7 @@ class Hook_addon_registry_core_form_interfaces
 			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_CODE',array(
 				'NEW_POST_VALUE_HTML'=>lorem_phrase(),
 				'NEW_POST_VALUE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1571,7 +1571,7 @@ class Hook_addon_registry_core_form_interfaces
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1585,7 +1585,7 @@ class Hook_addon_registry_core_form_interfaces
 	function tpl_preview__html_edit()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HTML_EDIT',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('HTML_EDIT',array()),NULL,'',true)
 		);
 	}
 
@@ -1675,7 +1675,7 @@ class Hook_addon_registry_core_form_interfaces
 				'SPECIALISATION'=>placeholder_fields(),
 				'SPECIALISATION2'=>placeholder_fields(),
 				'REQUIRED'=>true,
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1689,7 +1689,7 @@ class Hook_addon_registry_core_form_interfaces
 	function tpl_preview__form_descrip_sep()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('FORM_DESCRIP_SEP',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('FORM_DESCRIP_SEP',array()),NULL,'',true)
 		);
 	}
 
@@ -1759,7 +1759,7 @@ class Hook_addon_registry_core_form_interfaces
 				'TEXT'=>'',
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word_2()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1806,7 +1806,7 @@ class Hook_addon_registry_core_form_interfaces
 				'TEXT'=>'',
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word_2()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1826,7 +1826,7 @@ class Hook_addon_registry_core_form_interfaces
 				'VALIDATION'=>lorem_phrase(),
 				'KEYWORD_DENSITY'=>lorem_phrase(),
 				'SPELLING'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1857,7 +1857,7 @@ class Hook_addon_registry_core_form_interfaces
 				'IMG'=>'themes/default/images/icons/24x24/menu/_generic_admin/add_one.png',
 				'TITLE'=>lorem_phrase(),
 				'LINKS'=>$links
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1897,7 +1897,7 @@ class Hook_addon_registry_core_form_interfaces
 				'BLOCK'=>lorem_phrase(),
 				'COMCODE'=>lorem_phrase(),
 				'COMCODE_SEMIHTML'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

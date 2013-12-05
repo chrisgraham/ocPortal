@@ -71,10 +71,10 @@ class Module_admin_setupwizard
 
 		set_helper_panel_tutorial('tut_configuration');
 
+		breadcrumb_set_self(do_lang_tempcode('SETUPWIZARD'));
+
 		if ($type=='misc')
 		{
-			//breadcrumb_set_self(do_lang_tempcode('START'));
-
 			$step=1;
 		}
 
@@ -85,7 +85,7 @@ class Module_admin_setupwizard
 			$step=min(10,intval(substr($type,4)));
 		}
 
-		$this->title=get_screen_title('SETUPWIZARD_STEP',true,array(integer_format($step),integer_format(10)));
+		$this->title=get_screen_title('SETUPWIZARD');
 
 		return NULL;
 	}
@@ -98,6 +98,8 @@ class Module_admin_setupwizard
 	function run()
 	{
 		appengine_live_guard();
+
+		require_css('setupwizard');
 
 		$type=get_param('type','misc');
 
@@ -160,7 +162,8 @@ class Module_admin_setupwizard
 
 		$fields=new ocp_tempcode();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'71316d91703e3549301f57182405c997','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		$inner=do_template('FORM',array('_GUID'=>'71316d91703e3549301f57182405c997','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'1','INNER'=>$inner));
 	}
 
 	/**
@@ -175,7 +178,8 @@ class Module_admin_setupwizard
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step3'),'_SELF');
 		$submit_name=do_lang_tempcode('PROCEED');
 
-		return do_template('SETUPWIZARD_2_SCREEN',array('_GUID'=>'2042f3786d10c7c5be5d38ea28942b47','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
+		$inner=do_template('SETUPWIZARD_2',array('_GUID'=>'2042f3786d10c7c5be5d38ea28942b47','SKIP_VALIDATION'=>true,'URL'=>$post_url,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'2','INNER'=>$inner));
 	}
 
 	/**
@@ -240,7 +244,8 @@ class Module_admin_setupwizard
 		} else $include_ocp_advert=false;
 		$fields->attach(form_input_tick(do_lang_tempcode('INCLUDE_OCP_ADVERT'),do_lang_tempcode('DESCRIPTION_INCLUDE_OCP_ADVERT'),'include_ocp_advert',$include_ocp_advert));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'3126441524b51cba6a1e0de336c8a9d5','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'SKIPPABLE'=>'skip_3','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		$inner=do_template('FORM',array('_GUID'=>'3126441524b51cba6a1e0de336c8a9d5','SKIP_VALIDATION'=>true,'SKIPPABLE'=>'skip_3','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>''));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'3','INNER'=>$inner));
 	}
 
 	/**
@@ -467,7 +472,8 @@ class Module_admin_setupwizard
 		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'00948cc876d0ecb8b511800eabd8cae2','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields.=$fields_advanced;
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0f361a3ac0e020ba71f3a7a900eca0e4','SKIP_VALIDATION'=>true,'TITLE'=>$this->title,'SKIPPABLE'=>'skip_4','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
+		$inner=do_template('FORM',array('_GUID'=>'0f361a3ac0e020ba71f3a7a900eca0e4','SKIP_VALIDATION'=>true,'SKIPPABLE'=>'skip_4','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'4','INNER'=>$inner));
 	}
 
 	/**
@@ -529,11 +535,10 @@ class Module_admin_setupwizard
 
 		$js='var cuz=document.getElementById("collapse_user_zones"); var cuz_func=function() { var gza=document.getElementById("guest_zone_access"); gza.disabled=cuz.checked; if (cuz.checked) gza.checked=true; }; cuz.onchange=cuz_func; cuz_func();';
 
-		return do_template('FORM_SCREEN',array(
+		$inner=do_template('FORM',array(
 			'_GUID'=>'f1e9a4d271c7d68ff9da6dc0438f6e3f',
 			'SKIP_VALIDATION'=>true,
 			'JAVASCRIPT'=>$js,
-			'TITLE'=>$this->title,
 			'SKIPPABLE'=>'skip_5',
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -542,6 +547,7 @@ class Module_admin_setupwizard
 			'SUBMIT_NAME'=>$submit_name,
 			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
 		));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'5','INNER'=>$inner));
 	}
 
 	/**
@@ -654,10 +660,9 @@ class Module_admin_setupwizard
 			$fields.=$tmp->evaluate(); /*XHTMLXHTML*/
 		}
 
-		return do_template('FORM_SCREEN',array(
+		$inner=do_template('FORM',array(
 			'_GUID'=>'d463906b9e2cd8c37577d64783aa844c',
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$this->title,
 			'SKIPPABLE'=>'skip_6',
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -667,6 +672,7 @@ class Module_admin_setupwizard
 			'SUBMIT_NAME'=>$submit_name,
 			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
 		));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'6','INNER'=>$inner));
 	}
 
 	/**
@@ -713,7 +719,8 @@ class Module_admin_setupwizard
 		$liberal=comcode_to_tempcode($this->get_rules_file('liberal'),NULL,true);
 		$corporate=comcode_to_tempcode($this->get_rules_file('corporate'),NULL,true);
 
-		return do_template('SETUPWIZARD_7_SCREEN',array('_GUID'=>'5e46c3a989e42fa6eec5a017e8c644c2','TITLE'=>$this->title,'FORM'=>$form,'BALANCED'=>$balanced,'LIBERAL'=>$liberal,'CORPORATE'=>$corporate));
+		$inner=do_template('SETUPWIZARD_7',array('_GUID'=>'5e46c3a989e42fa6eec5a017e8c644c2','FORM'=>$form,'BALANCED'=>$balanced,'LIBERAL'=>$liberal,'CORPORATE'=>$corporate));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'7','INNER'=>$inner));
 	}
 
 	/**
@@ -735,11 +742,10 @@ class Module_admin_setupwizard
 		$fields->attach(form_input_colour(do_lang_tempcode('SEED_COLOUR'),do_lang_tempcode('DESCRIPTION_SEED_COLOUR'),'seed_hex','#'.find_theme_seed('default'),true));
 		$fields->attach(form_input_tick(do_lang_tempcode('DARK_THEME'),do_lang_tempcode('DESCRIPTION_DARK_THEME'),'dark',get_param_integer('dark',0)==1));
 
-		return do_template('FORM_SCREEN',array(
+		$inner=do_template('FORM',array(
 			'_GUID'=>'7ef31eb9712cff98da57a92fc173f7af',
 			'PREVIEW'=>true,
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$this->title,
 			'SKIPPABLE'=>'skip_8',
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -748,6 +754,7 @@ class Module_admin_setupwizard
 			'SUBMIT_NAME'=>$submit_name,
 			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
 		));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'8','INNER'=>$inner));
 	}
 
 	/**
@@ -768,10 +775,9 @@ class Module_admin_setupwizard
 
 		$javascript="document.getElementById('site_closed').onchange=function() { document.getElementById('closed').disabled=!this.checked; }";
 
-		return do_template('FORM_SCREEN',array(
+		$inner=do_template('FORM',array(
 			'_GUID'=>'c405a64a08328f78ac0e3f22a8365411',
 			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$this->title,
 			'SKIPPABLE'=>'skip_9',
 			'FIELDS'=>$fields,
 			'URL'=>$post_url,
@@ -781,6 +787,7 @@ class Module_admin_setupwizard
 			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
 			'JAVASCRIPT'=>$javascript,
 		));
+		return do_template('SETUPWIZARD_SCREEN',array('TITLE'=>$this->title,'STEP'=>'9','INNER'=>$inner));
 	}
 
 	/**

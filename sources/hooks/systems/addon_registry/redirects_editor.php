@@ -169,7 +169,7 @@ class Hook_addon_registry_redirects_editor
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 }

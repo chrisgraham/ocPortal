@@ -1,5 +1,3 @@
-{TITLE}
-
 {!SETUPWIZARD_2_DESCRIBE}
 
 <div class="box box___setupwizard_2_screen"><div class="box_inner">

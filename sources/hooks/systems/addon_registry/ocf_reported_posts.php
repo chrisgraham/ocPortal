@@ -133,7 +133,7 @@ class Hook_addon_registry_ocf_reported_posts
 				'POST'=>lorem_phrase(),
 				'POSTER'=>lorem_phrase(),
 				'TOPIC_TITLE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

@@ -138,7 +138,7 @@ class Hook_addon_registry_ocf_warnings
 			'WARNINGS'=>lorem_phrase()
 		));
 		return array(
-			lorem_globalise($tab_content, NULL, '', true)
+			lorem_globalise($tab_content,NULL,'',true)
 		);
 	}
 
@@ -158,7 +158,7 @@ class Hook_addon_registry_ocf_warnings
 				'EXPLANATION'=>lorem_phrase(),
 				'TITLE'=>lorem_word(),
 				'DELETE_LINK'=>placeholder_link()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -181,7 +181,7 @@ class Hook_addon_registry_ocf_warnings
 				'VIEW_PROFILE_URL'=>placeholder_url(),
 				'ADD_WARNING_URL'=>placeholder_url(),
 				'RESULTS_TABLE'=>placeholder_table()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

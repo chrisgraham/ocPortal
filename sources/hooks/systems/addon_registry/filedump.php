@@ -147,7 +147,7 @@ class Hook_addon_registry_filedump
 				'UPLOAD_FORM'=>placeholder_form(),
 				'CREATE_FOLDER_FORM'=>placeholder_form(),
 				'PLACE'=>placeholder_id()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

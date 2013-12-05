@@ -151,7 +151,7 @@ class Hook_addon_registry_core_primary_layout
 		$out->attach(do_lorem_template('BREADCRUMB_SEPARATOR',array()));
 		$out->attach(lorem_phrase());
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -169,7 +169,7 @@ class Hook_addon_registry_core_primary_layout
 				'CLOSED'=>lorem_phrase(),
 				'LOGIN_URL'=>placeholder_url(),
 				'JOIN_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -185,7 +185,7 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED_FULL',array(
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -202,7 +202,7 @@ class Hook_addon_registry_core_primary_layout
 			lorem_globalise(do_lorem_template('MESSAGE',array(
 				'TYPE'=>placeholder_img_code('messageicons'),
 				'MESSAGE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -218,7 +218,7 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			lorem_globalise(do_lorem_template('MAIL_SUBJECT',array(
 				'SUBJECT_LINE'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -239,7 +239,7 @@ class Hook_addon_registry_core_primary_layout
 				'LANG'=>fallback_lang(),
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>lorem_paragraph()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -285,7 +285,7 @@ class Hook_addon_registry_core_primary_layout
 			lorem_globalise(do_lorem_template('SCREEN_TITLE',array(
 				'TITLE'=>lorem_phrase(),
 				'AWARDS'=>$awards
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -301,7 +301,7 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			lorem_globalise(do_lorem_template('MINOR_TITLE',array(
 				'TITLE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -317,7 +317,7 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			lorem_globalise(do_lorem_template('SECTION_TITLE',array(
 				'TITLE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

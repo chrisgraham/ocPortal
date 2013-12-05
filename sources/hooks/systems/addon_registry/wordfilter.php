@@ -136,7 +136,7 @@ class Hook_addon_registry_wordfilter
 				'TITLE'=>lorem_title(),
 				'TPL'=>lorem_phrase(),
 				'ADD_FORM'=>placeholder_form()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

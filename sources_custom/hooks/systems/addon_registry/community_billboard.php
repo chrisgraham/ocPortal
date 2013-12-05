@@ -273,7 +273,7 @@ class Hook_addon_registry_community_billboard
 				'FIELDS'=>$fields,
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

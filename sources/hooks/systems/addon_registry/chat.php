@@ -287,7 +287,7 @@ class Hook_addon_registry_chat
 			'BOX'=>lorem_paragraph()
 		));
 		return array(
-			lorem_globalise($tab_content, NULL, '', true)
+			lorem_globalise($tab_content,NULL,'',true)
 		);
 	}
 
@@ -307,7 +307,7 @@ class Hook_addon_registry_chat
 				'INTRODUCTION'=>lorem_phrase(),
 				'CONTENT'=>placeholder_table(),
 				'LINKS'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -341,7 +341,7 @@ class Hook_addon_registry_chat
 				'RAW_TIME'=>placeholder_time(),
 				'FONT_COLOUR'=>'blue',
 				'FONT_FACE'=>'Arial'
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -359,7 +359,7 @@ class Hook_addon_registry_chat
 				'SYSTEM_MESSAGE'=>lorem_phrase(),
 				'MESSAGE'=>lorem_phrase_html(),
 				'MEMBER'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -380,7 +380,7 @@ class Hook_addon_registry_chat
 				'page'=>lorem_phrase(),
 				'type'=>lorem_phrase(),
 				'room_id'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -408,7 +408,7 @@ class Hook_addon_registry_chat
 				'MESSAGES'=>$tpl,
 				'URL'=>placeholder_url(),
 				'BLOCK_PARAMS'=>'',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -426,7 +426,7 @@ class Hook_addon_registry_chat
 				'IM_AREA_TEMPLATE'=>lorem_phrase(),
 				'IM_PARTICIPANT_TEMPLATE'=>lorem_phrase(),
 				'CHAT_SOUND'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -465,7 +465,7 @@ class Hook_addon_registry_chat
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_FRIENDS',array(
 				'FRIENDS'=>$friends_tpl,
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -574,7 +574,7 @@ class Hook_addon_registry_chat
 				'SETEFFECTS_LINK'=>placeholder_link(),
 				'ADD_CHATROOM_URL'=>placeholder_url(),
 				'MEMBER_ID'=>placeholder_id(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -606,7 +606,7 @@ class Hook_addon_registry_chat
 		$buttons=new ocp_tempcode();
 		foreach ($_buttons as $button)
 			$buttons->attach(do_lorem_template('CHATCODE_EDITOR_BUTTON',array(
-				'TITLE'=>do_lang_tempcode('INPUT_CHATCODE_' . $button),
+				'TITLE'=>do_lang_tempcode('INPUT_CHATCODE_'.$button),
 				'B'=>$button
 			)));
 
@@ -624,7 +624,7 @@ class Hook_addon_registry_chat
 		foreach ($_micro_buttons as $button)
 			$micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON',array(
 				'FIELD_NAME'=>'post',
-				'TITLE'=>do_lang_tempcode('INPUT_COMCODE_' . $button),
+				'TITLE'=>do_lang_tempcode('INPUT_COMCODE_'.$button),
 				'B'=>$button
 			)));
 
@@ -668,7 +668,7 @@ class Hook_addon_registry_chat
 				'TEXT_COLOUR_DEFAULT'=>lorem_word(),
 				'FONT_NAME_DEFAULT'=>lorem_word(),
 				'COMCODE_HELP'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -718,7 +718,7 @@ class Hook_addon_registry_chat
 				'HIDDEN'=>'',
 				'POST_URL'=>placeholder_url(),
 				'SETTING_BLOCKS'=>$setting_blocks
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -739,7 +739,7 @@ class Hook_addon_registry_chat
 			lorem_globalise(do_lorem_template('CHAT_SITEWIDE_IM_POPUP',array(
 				'CONTENT'=>$im_area_template,
 				'CHAT_SOUND'=>'',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

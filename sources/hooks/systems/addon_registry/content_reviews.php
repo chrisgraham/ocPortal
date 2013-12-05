@@ -138,7 +138,7 @@ class Hook_addon_registry_content_reviews
 				'CONTENT_TYPE'=>placeholder_id(),
 				'CONTENT_ID'=>placeholder_id(),
 				'DISPLAY'=>true,
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

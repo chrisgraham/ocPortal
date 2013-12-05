@@ -166,7 +166,7 @@ class Hook_addon_registry_core_abstract_components
 		return array(
 			lorem_globalise(do_lorem_template('REVISION_HISTORY_WRAP',array(
 				'CONTENT'=>$revision_history
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -189,7 +189,7 @@ class Hook_addon_registry_core_abstract_components
 				'3_URL'=>placeholder_url(),
 				'4_TITLE'=>lorem_phrase(),
 				'4_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -203,7 +203,7 @@ class Hook_addon_registry_core_abstract_components
 	function tpl_preview__administrative__revision_restore()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('REVISION_RESTORE',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('REVISION_RESTORE',array()),NULL,'',true)
 		);
 	}
 
@@ -224,7 +224,7 @@ class Hook_addon_registry_core_abstract_components
 				'TITLE'=>lorem_word(),
 				'TITLE_FULL'=>lorem_phrase(),
 				'IMG'=>'buttons__edit'
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -243,7 +243,7 @@ class Hook_addon_registry_core_abstract_components
 				'URL'=>placeholder_url(),
 				'EDIT_TEXT'=>lorem_sentence_html(),
 				'EDIT_PARAM_NAME'=>lorem_word_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -260,7 +260,7 @@ class Hook_addon_registry_core_abstract_components
 			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE',array(
 				'TEXT_SMALL'=>lorem_sentence_html(),
 				'TEXT_LARGE'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -278,7 +278,7 @@ class Hook_addon_registry_core_abstract_components
 				'JS_TOOLTIP'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
 				'URL'=>placeholder_image_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -295,7 +295,7 @@ class Hook_addon_registry_core_abstract_components
 			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER',array(
 				'TEXT_LARGE'=>lorem_phrase(),
 				'TEXT_SMALL'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -314,7 +314,7 @@ class Hook_addon_registry_core_abstract_components
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
 				'IMG'=>'buttons__proceed',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -368,7 +368,7 @@ class Hook_addon_registry_core_abstract_components
 		}
 
 		$boxes=new ocp_tempcode();
-		$box=do_lorem_template('STANDARDBOX_' . $type, array(
+		$box=do_lorem_template('STANDARDBOX_'.$type, array(
 				'CONTENT'=>lorem_sentence(),
 				'LINKS'=>$links,
 				'META'=>$meta,
@@ -378,7 +378,7 @@ class Hook_addon_registry_core_abstract_components
 				'WIDTH'=>'',
 		));
 		$boxes->attach($box);
-		$box=do_lorem_template('STANDARDBOX_' . $type, array(
+		$box=do_lorem_template('STANDARDBOX_'.$type, array(
 				'CONTENT'=>lorem_sentence(),
 				'LINKS'=>$links,
 				'META'=>$meta,
@@ -390,7 +390,7 @@ class Hook_addon_registry_core_abstract_components
 		$boxes->attach($box);
 
 		return array(
-			lorem_globalise($boxes, NULL, '', true)
+			lorem_globalise($boxes,NULL,'',true)
 		);
 	}
 

@@ -299,7 +299,7 @@ class Hook_addon_registry_catalogues
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
 				'DISPLAY_TYPE'=>'0',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -367,7 +367,7 @@ class Hook_addon_registry_catalogues
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
 				'DISPLAY_TYPE'=>'0',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -419,7 +419,7 @@ class Hook_addon_registry_catalogues
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
 				'DISPLAY_TYPE'=>'0',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -491,7 +491,7 @@ class Hook_addon_registry_catalogues
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
 				'DISPLAY_TYPE'=>'0',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -558,7 +558,7 @@ class Hook_addon_registry_catalogues
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
 				'DISPLAY_TYPE'=>'0',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -618,7 +618,7 @@ class Hook_addon_registry_catalogues
 				'TAGS'=>$tags,
 				'SUBMITTER'=>placeholder_id(),
 				'FIELD_1'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -643,7 +643,7 @@ class Hook_addon_registry_catalogues
 				'FIELDS_NEW'=>placeholder_form(),
 				'SUBMIT_ICON'=>'menu___generic_admin__add_one',
 				'SUBMIT_NAME'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -669,7 +669,7 @@ class Hook_addon_registry_catalogues
 				'FIELDS_NEW'=>placeholder_form(),
 				'SUBMIT_ICON'=>'menu___generic_admin__edit_this',
 				'SUBMIT_NAME'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -686,7 +686,7 @@ class Hook_addon_registry_catalogues
 			lorem_globalise(do_lorem_template('CATALOGUE_ENTRIES_LIST_LINE',array(
 				'BREADCRUMBS'=>lorem_phrase(),
 				'NAME'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -703,7 +703,7 @@ class Hook_addon_registry_catalogues
 			lorem_globalise(do_lorem_template('CATALOGUE_CATEGORIES_LIST_LINE',array(
 				'BREADCRUMBS'=>lorem_phrase(),
 				'COUNT'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -721,7 +721,7 @@ class Hook_addon_registry_catalogues
 				'BUILDUP'=>lorem_phrase(),
 				'NAME'=>lorem_word_html(),
 				'TITLE'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -755,7 +755,7 @@ class Hook_addon_registry_catalogues
 				'MAX'=>'10',
 				'START_PARAM'=>'x_start',
 				'MAX_PARAM'=>'x_max',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

@@ -456,7 +456,7 @@ class Hook_addon_registry_core_ocf
 					)
 				),
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -480,7 +480,7 @@ class Hook_addon_registry_core_ocf
 				'RULES'=>lorem_chunk_html(),
 				'URL'=>placeholder_url(),
 				'GROUP_SELECT'=>$group_select
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -498,7 +498,7 @@ class Hook_addon_registry_core_ocf
 		require_lang('dates');
 		$fields=new ocp_tempcode();
 
-		$name=lorem_word() . placeholder_random();
+		$name=lorem_word().placeholder_random();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_LINE',array(
 			'MAXLENGTH'=>'3',
 			'TABINDEX'=>placeholder_number(),
@@ -517,7 +517,7 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>''
 		)));
 
-		$name=lorem_word() . placeholder_random();
+		$name=lorem_word().placeholder_random();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
@@ -535,7 +535,7 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>''
 		)));
 
-		$name=lorem_word() . placeholder_random();
+		$name=lorem_word().placeholder_random();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
@@ -553,7 +553,7 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>''
 		)));
 
-		$name=lorem_word() . placeholder_random();
+		$name=lorem_word().placeholder_random();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_EMAIL',array(
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
@@ -571,7 +571,7 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>''
 		)));
 
-		$name=lorem_word() . placeholder_random();
+		$name=lorem_word().placeholder_random();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
 			'UNLIMITED'=>false,
 			'NULL_OK'=>'',
@@ -595,7 +595,7 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>''
 		)));
 
-		$name=lorem_word() . placeholder_random();
+		$name=lorem_word().placeholder_random();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
 			'CHECKED'=>'true',
 			'TABINDEX'=>placeholder_number(),
@@ -617,7 +617,7 @@ class Hook_addon_registry_core_ocf
 			'THEME_ALSO_INCLUDE_PAGES'=>false
 		)));
 
-		$name=lorem_word() . placeholder_random();
+		$name=lorem_word().placeholder_random();
 		$timezone_list=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
@@ -648,7 +648,7 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>''
 		)));
 
-		$name=lorem_word() . placeholder_random();
+		$name=lorem_word().placeholder_random();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
 			'CHECKED'=>'true',
 			'TABINDEX'=>placeholder_number(),
@@ -680,7 +680,7 @@ class Hook_addon_registry_core_ocf
 				'JAVASCRIPT'=>'',
 				'TITLE'=>lorem_title(),
 				'FORM'=>$form
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -701,7 +701,7 @@ class Hook_addon_registry_core_ocf
 				'SELECTED'=>false,
 				'CLASS'=>'',
 				'TEXT'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -723,7 +723,7 @@ class Hook_addon_registry_core_ocf
 				'MEMBER_ID'=>placeholder_id(),
 				'USERGROUP'=>lorem_word_2(),
 				'AT'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -766,7 +766,7 @@ class Hook_addon_registry_core_ocf
 		));
 
 		return array(
-			lorem_globalise($content, NULL, '', true)
+			lorem_globalise($content,NULL,'',true)
 		);
 	}
 
@@ -805,7 +805,7 @@ class Hook_addon_registry_core_ocf
 				'RESULTS_TABLE'=>placeholder_table(),
 				'MEMBER_BOXES'=>array(),
 				'PAGINATION'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -951,7 +951,7 @@ class Hook_addon_registry_core_ocf
 				'TITLE'=>lorem_title(),
 				'MEMBER_ID'=>placeholder_id(),
 				'TABS'=>$tabs
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -980,7 +980,7 @@ class Hook_addon_registry_core_ocf
 			lorem_globalise(do_lorem_template('OCF_USERS_ONLINE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'ROWS'=>$rows
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -999,7 +999,7 @@ class Hook_addon_registry_core_ocf
 				'STAFF'=>lorem_phrase(),
 				'OTHERS'=>lorem_phrase(),
 				'RANKS'=>array(placeholder_table(),placeholder_table())
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1134,7 +1134,7 @@ class Hook_addon_registry_core_ocf
 				'PRIMARY_MEMBERS'=>$primary_members,
 				'SECONDARY_MEMBERS'=>$secondary_members,
 				'PROSPECTIVE_MEMBERS'=>$prospective_members
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

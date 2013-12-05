@@ -126,7 +126,7 @@ class Hook_addon_registry_language_block
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_LANGUAGE',array(
 				'LANGS'=>placeholder_options(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

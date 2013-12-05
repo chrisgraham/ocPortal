@@ -205,7 +205,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -236,7 +236,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -253,7 +253,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -282,7 +282,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -311,7 +311,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -337,7 +337,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -359,7 +359,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -416,7 +416,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 
@@ -472,7 +472,7 @@ class Hook_addon_registry_core_notifications
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 }

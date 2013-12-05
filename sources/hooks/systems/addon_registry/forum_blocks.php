@@ -162,7 +162,7 @@ class Hook_addon_registry_forum_blocks
 				'CONTENT'=>$out,
 				'FORUM_NAME'=>lorem_word_html(),
 				'SUBMIT_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -205,7 +205,7 @@ class Hook_addon_registry_forum_blocks
 				'CONTENT'=>$out,
 				'SUBMIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -259,7 +259,7 @@ class Hook_addon_registry_forum_blocks
 				'SUBMIT_URL'=>placeholder_url(),
 				'RSS_URL'=>placeholder_url(),
 				'ATOM_URL'=>placeholder_url(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

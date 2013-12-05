@@ -172,7 +172,7 @@ class Hook_addon_registry_core_language_editing
 			lorem_globalise(do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'FILES'=>$files
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -192,12 +192,12 @@ class Hook_addon_registry_core_language_editing
 			$actions=do_lorem_template('TRANSLATE_ACTION',array(
 				'LANG_FROM'=>fallback_lang(),
 				'LANG_TO'=>fallback_lang(),
-				'NAME'=>'trans_' . strval($key),
+				'NAME'=>'trans_'.strval($key),
 				'OLD'=>$value
 			));
 			$lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT',array(
 				'ID'=>strval($key),
-				'NAME'=>'trans_' . strval($key),
+				'NAME'=>'trans_'.strval($key),
 				'OLD'=>$value,
 				'CURRENT'=>$value,
 				'ACTIONS'=>$actions,
@@ -218,7 +218,7 @@ class Hook_addon_registry_core_language_editing
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'MAX'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -254,7 +254,7 @@ class Hook_addon_registry_core_language_editing
 				'LINES'=>$lines,
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

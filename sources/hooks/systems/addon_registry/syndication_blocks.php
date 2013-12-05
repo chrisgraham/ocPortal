@@ -175,7 +175,7 @@ class Hook_addon_registry_syndication_blocks
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>$content,
 				'TICKER'=>true
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -246,7 +246,7 @@ class Hook_addon_registry_syndication_blocks
 				'COPYRIGHT'=>lorem_phrase(),
 				'AUTHOR'=>lorem_phrase(),
 				'CONTENT'=>$content
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

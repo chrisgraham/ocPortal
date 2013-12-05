@@ -184,7 +184,7 @@ class Hook_addon_registry_core_fields
 					)
 				),
 				'FIELD_ID'=>placeholder_id()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -202,7 +202,7 @@ class Hook_addon_registry_core_fields
 				'URL'=>placeholder_url(),
 				'THUMB_URL'=>placeholder_image_url(),
 				'I'=>'0'
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

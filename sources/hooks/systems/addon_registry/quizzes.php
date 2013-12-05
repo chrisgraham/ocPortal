@@ -181,7 +181,7 @@ class Hook_addon_registry_quizzes
 				'TITLE'=>lorem_title(),
 				'SUMMARY'=>$summary,
 				'RESULTS'=>placeholder_table(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -223,7 +223,7 @@ class Hook_addon_registry_quizzes
 				'CONTENT_COMPETITIONS'=>$content_competitions,
 				'CONTENT_TESTS'=>$content_tests,
 				'PAGINATION'=>placeholder_pagination()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -254,7 +254,7 @@ class Hook_addon_registry_quizzes
 				'FIELDS'=>placeholder_fields(),
 				'TIMEOUT'=>'5',
 				'EDIT_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -285,7 +285,7 @@ class Hook_addon_registry_quizzes
 				'CORRECTIONS'=>$_corrections,
 				'RESULT'=>lorem_phrase(),
 				'USERNAME'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -310,7 +310,7 @@ class Hook_addon_registry_quizzes
 				'MEMBER_PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_phrase(),
 				'FORUM_DRIVER'=>NULL
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -331,7 +331,7 @@ class Hook_addon_registry_quizzes
 				'MESSAGE'=>lorem_phrase(),
 				'CORRECTIONS_TO_SHOW'=>lorem_phrase(),
 				'POINTS_DIFFERENCE'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

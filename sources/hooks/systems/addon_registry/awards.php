@@ -155,7 +155,7 @@ class Hook_addon_registry_awards
 				'CONTENT'=>lorem_phrase_html(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -176,7 +176,7 @@ class Hook_addon_registry_awards
 				'RAW_AWARD_DATE'=>placeholder_time(),
 				'AWARD_DATE'=>placeholder_time(),
 				'CONTENT'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

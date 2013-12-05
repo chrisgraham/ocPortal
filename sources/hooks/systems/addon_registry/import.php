@@ -188,7 +188,7 @@ class Hook_addon_registry_import
 				'IMPORTER'=>lorem_phrase(),
 				'IMPORT_LIST'=>$import_list,
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -206,7 +206,7 @@ class Hook_addon_registry_import
 				'TITLE'=>lorem_title(),
 				'IMPORT_FORM'=>placeholder_form(),
 				'EXPORT_FORM'=>placeholder_form()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -232,7 +232,7 @@ class Hook_addon_registry_import
 			lorem_globalise(do_lorem_template('XML_STORAGE_IMPORT_RESULTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'OPS'=>$ops_nice
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -249,7 +249,7 @@ class Hook_addon_registry_import
 			lorem_globalise(do_lorem_template('XML_STORAGE_EXPORT_RESULTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'XML'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -270,7 +270,7 @@ class Hook_addon_registry_import
 				'TEXT'=>lorem_sentence_html(),
 				'PAGE_FOOTER'=>lorem_phrase(),
 				'SIGNATURE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -291,7 +291,7 @@ class Hook_addon_registry_import
 				'TEXT'=>lorem_sentence_html(),
 				'PAGE_FOOTER'=>lorem_phrase(),
 				'SIGNATURE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

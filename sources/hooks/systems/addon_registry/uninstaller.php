@@ -122,7 +122,7 @@ class Hook_addon_registry_uninstaller
 	function tpl_preview__administrative__uninstall_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('UNINSTALL_SCREEN',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('UNINSTALL_SCREEN',array()),NULL,'',true)
 		);
 	}
 }

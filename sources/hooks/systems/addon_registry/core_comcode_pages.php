@@ -150,7 +150,7 @@ class Hook_addon_registry_core_comcode_pages
 			lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS',array(
 				'EDIT_URL'=>placeholder_url(),
 				'CLONE_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -177,7 +177,7 @@ class Hook_addon_registry_core_comcode_pages
 				'ADD_CHILD_URL'=>placeholder_url(),
 				'NAME'=>lorem_word(),
 				'NATIVE_ZONE'=>lorem_word(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -197,7 +197,7 @@ class Hook_addon_registry_core_comcode_pages
 				'ZONE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'SUMMARY'=>lorem_paragraph_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

@@ -136,7 +136,7 @@ class Hook_addon_registry_ocf_member_photos
 				'USERNAME'=>lorem_word(),
 				'PHOTO'=>placeholder_image_url(),
 				'TEXT'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

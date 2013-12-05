@@ -198,7 +198,7 @@ class Hook_addon_registry_captcha
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

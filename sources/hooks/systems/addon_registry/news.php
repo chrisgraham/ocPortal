@@ -236,7 +236,7 @@ class Hook_addon_registry_news
 			'MILL'=>'8000',
 		));
 		return array(
-			lorem_globalise($block, NULL, '', true)
+			lorem_globalise($block,NULL,'',true)
 		);
 	}
 
@@ -258,7 +258,7 @@ class Hook_addon_registry_news
 			'ADD_BLOG_POST_URL'=>placeholder_url(),
 		));
 		return array(
-			lorem_globalise($tab_content, NULL, '', true)
+			lorem_globalise($tab_content,NULL,'',true)
 		);
 	}
 
@@ -309,7 +309,7 @@ class Hook_addon_registry_news
 						)
 					)
 				)
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -377,7 +377,7 @@ class Hook_addon_registry_news
 				'MAX'=>'10',
 				'START_PARAM'=>'x_start',
 				'MAX_PARAM'=>'x_max',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -396,7 +396,7 @@ class Hook_addon_registry_news
 				'TITLE'=>lorem_title(),
 				'XML_UPLOAD_FORM'=>placeholder_form(),
 				'DB_IMPORT_FORM'=>placeholder_form()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -424,7 +424,7 @@ class Hook_addon_registry_news
 				'CONTENT'=>$content,
 				'SUBMIT_URL'=>placeholder_url(),
 				'BLOG'=>false,
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -442,7 +442,7 @@ class Hook_addon_registry_news
 		return array(
 			lorem_globalise(do_lorem_template('NEWS_CHICKLETS',array(
 				'RSS_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -480,7 +480,7 @@ class Hook_addon_registry_news
 				'CONTENT'=>$contents,
 				'SUBMIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -508,7 +508,7 @@ class Hook_addon_registry_news
 				'CONTENT'=>$contents,
 				'PRE'=>'',
 				'POST'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 	function tpl_preview__block_bottom_news()
@@ -526,7 +526,7 @@ class Hook_addon_registry_news
 			lorem_globalise(do_lorem_template('BLOCK_BOTTOM_NEWS',array(
 				'BLOG'=>TRUE,
 				'POSTS'=>$contents_arr
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -600,7 +600,7 @@ class Hook_addon_registry_news
 				'ARCHIVE_URL'=>placeholder_url(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

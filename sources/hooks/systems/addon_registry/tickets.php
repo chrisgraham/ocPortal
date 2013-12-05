@@ -198,7 +198,7 @@ class Hook_addon_registry_tickets
 				'ADD_TICKET_URL'=>placeholder_url(),
 				'TYPES'=>placeholder_array(),
 				'LEAD_TIME'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -274,7 +274,7 @@ class Hook_addon_registry_tickets
 				'STAFF_DETAILS'=>placeholder_url(),
 				'URL'=>placeholder_url(),
 				'ADD_TICKET_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -293,7 +293,7 @@ class Hook_addon_registry_tickets
 				'URL'=>placeholder_url(),
 				'POST_FIELDS'=>'',
 				'RESULTS'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -311,7 +311,7 @@ class Hook_addon_registry_tickets
 				'TITLE'=>lorem_title(),
 				'TPL'=>placeholder_form(),
 				'ADD_FORM'=>placeholder_form()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

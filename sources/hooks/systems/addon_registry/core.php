@@ -1303,7 +1303,7 @@ class Hook_addon_registry_core
 				'CONTENT'=>lorem_phrase_html(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1333,7 +1333,7 @@ class Hook_addon_registry_core
 				'MAX'=>'10',
 				'START_PARAM'=>'x_start',
 				'MAX_PARAM'=>'x_max',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1347,7 +1347,7 @@ class Hook_addon_registry_core
 	function tpl_preview__java_detect()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('JAVA_DETECT',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('JAVA_DETECT',array()),NULL,'',true)
 		);
 	}
 
@@ -1368,7 +1368,7 @@ class Hook_addon_registry_core
 				'RESULTS_TABLE'=>placeholder_table(),
 				'MASS_DELETE_URL'=>placeholder_url(),
 				'MASS_SEND_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1382,7 +1382,7 @@ class Hook_addon_registry_core
 	function tpl_preview__quick_js_loader()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('QUICK_JS_LOADER',array()), NULL, '', true)
+			lorem_globalise(do_lorem_template('QUICK_JS_LOADER',array()),NULL,'',true)
 		);
 	}
 
@@ -1403,7 +1403,7 @@ class Hook_addon_registry_core
 				'id'=>lorem_phrase(),
 				'mode'=>lorem_phrase(),
 				'action_id'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1420,7 +1420,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('ACTIONLOGS_SCREEN',array(
 				'TABLE'=>placeholder_table(),
 				'TITLE'=>lorem_title()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1443,7 +1443,7 @@ class Hook_addon_registry_core
 				'TITLE'=>lorem_title(),
 				'LOGIN_URL'=>placeholder_url(),
 				'PASSION'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1463,7 +1463,7 @@ class Hook_addon_registry_core
 				'TEXT'=>lorem_sentence_html(),
 				'URL'=>placeholder_url(),
 				'POST'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1479,7 +1479,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('FORUMS_EMBED',array(
 				'FORUMS'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1495,7 +1495,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('JS_BLOCK',array(
 				'BLOCK_PARAMS'=>'',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1511,7 +1511,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('JAVASCRIPT_NEED_INLINE',array(
 				'CODE'=>placeholder_javascript_code()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1527,7 +1527,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED_INLINE',array(
 				'CODE'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1545,7 +1545,7 @@ class Hook_addon_registry_core
 				'TITLE'=>lorem_title(),
 				'MESSAGE'=>lorem_phrase(),
 				'TRACE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1580,7 +1580,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('STACK_TRACE_HYPER_WRAP',array(
 				'CONTENT'=>$trace,
 				'POST'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1597,7 +1597,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('INLINE_WIP_MESSAGE',array(
 				'MESSAGE'=>lorem_phrase(),
 				'NO_ENTRIES'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1617,7 +1617,7 @@ class Hook_addon_registry_core
 				'PAGE'=>lorem_phrase(),
 				'DID_MEAN'=>lorem_word(),
 				'ADD_REDIRECT_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1636,7 +1636,7 @@ class Hook_addon_registry_core
 					'A'=>'a',
 					'B'=>'b'
 				)
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1652,7 +1652,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('JAVASCRIPT_NEED',array(
 				'CODE'=>placeholder_javascript_code()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1668,7 +1668,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED',array(
 				'CODE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1717,7 +1717,7 @@ class Hook_addon_registry_core
 				'LINKS'=>$links,
 				'DETAILS'=>$details,
 				'USERNAME'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1766,7 +1766,7 @@ class Hook_addon_registry_core
 				'LINKS'=>$links,
 				'DETAILS'=>$details,
 				'USERNAME'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1785,7 +1785,7 @@ class Hook_addon_registry_core
 				'FULL_LOGIN_URL'=>placeholder_url(),
 				'JOIN_URL'=>placeholder_url(),
 				'LOGIN_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1804,7 +1804,7 @@ class Hook_addon_registry_core
 				'FULL_LOGIN_URL'=>placeholder_url(),
 				'JOIN_URL'=>placeholder_url(),
 				'LOGIN_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1827,7 +1827,7 @@ class Hook_addon_registry_core
 				'RECENT'=>lorem_word(),
 				'MEMBERS'=>lorem_word(),
 				'NO_ENTRIES'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1859,7 +1859,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_EMOTICON_CODES',array(
 				'ENTRIES'=>$entries
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1876,7 +1876,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('JOIN_OR_LOGIN',array(
 				'LOGIN_URL'=>placeholder_url(),
 				'JOIN_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1906,7 +1906,7 @@ class Hook_addon_registry_core
 				'THE_PAGE'=>lorem_phrase(),
 				'THE_ZONE'=>lorem_phrase(),
 				'TITLE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1934,7 +1934,7 @@ class Hook_addon_registry_core
 				'TOTAL'=>lorem_phrase(),
 				'TOTAL_TIME'=>placeholder_number(),
 				'QUERIES'=>$queries
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1972,7 +1972,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('BROKEN_URLS',array(
 				'FOUND'=>$found,
 				'FOUND_404'=>$found_404
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -1991,7 +1991,7 @@ class Hook_addon_registry_core
 				'MISSING_LANG_STRINGS'=>placeholder_array(),
 				'FUSED_LANG_STRINGS'=>placeholder_array(),
 				'ORPHANED_LANG_STRINGS'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2007,7 +2007,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('FORUM_ATTACHMENT_IMAGE',array(
 				'URL'=>placeholder_image_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2032,7 +2032,7 @@ class Hook_addon_registry_core
 			'NUM_DOWNLOADS'=>placeholder_number()
 		)));
 		return array(
-			lorem_globalise($content, NULL, '', true)
+			lorem_globalise($content,NULL,'',true)
 		);
 	}
 
@@ -2058,7 +2058,7 @@ class Hook_addon_registry_core
 						'C'=>''
 					)
 				)
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2073,7 +2073,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FONT_SIZER',array(
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2090,7 +2090,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('DELETE_MARKER',array(
 				'_EDIT_URL'=>placeholder_url(),
 				'ID'=>placeholder_id(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2107,7 +2107,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('MASS_SELECT_MARKER',array(
 				'TYPE'=>placeholder_id(),
 				'ID'=>placeholder_id(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2122,7 +2122,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MASS_SELECT_DELETE_FORM',array(
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2165,7 +2165,7 @@ class Hook_addon_registry_core
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2189,7 +2189,7 @@ class Hook_addon_registry_core
 						'URL'=>placeholder_url()
 					)
 				)
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -2204,7 +2204,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('UPLOAD_SYNDICATION_SETUP_SCREEN',array(
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

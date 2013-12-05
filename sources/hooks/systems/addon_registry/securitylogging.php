@@ -157,7 +157,7 @@ class Hook_addon_registry_securitylogging
 				'BANS'=>placeholder_ip(),
 				'LOCKED_BANS'=>placeholder_ip(),
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -184,7 +184,7 @@ class Hook_addon_registry_securitylogging
 				'TIME'=>placeholder_date(),
 				'URL'=>placeholder_url(),
 				'POST'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -206,7 +206,7 @@ class Hook_addon_registry_securitylogging
 				'ALERTS'=>lorem_phrase(),
 				'NUM_ALERTS'=>placeholder_number(),
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -231,7 +231,7 @@ class Hook_addon_registry_securitylogging
 				'USERNAME'=>lorem_word_html(),
 				'POST'=>lorem_phrase(),
 				'URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -279,7 +279,7 @@ class Hook_addon_registry_securitylogging
 				'POINTS_URL'=>placeholder_url(),
 				'PROFILE_URL'=>placeholder_url(),
 				'ACTIONLOG_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

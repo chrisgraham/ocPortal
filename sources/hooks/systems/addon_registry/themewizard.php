@@ -147,7 +147,7 @@ class Hook_addon_registry_themewizard
 		$content=do_lorem_template('THEMEWIZARD_2_PREVIEW');
 
 		return array(
-			lorem_globalise($content, NULL, '', true)
+			lorem_globalise($content,NULL,'',true)
 		);
 	}
 
@@ -176,7 +176,7 @@ class Hook_addon_registry_themewizard
 				'TITLE'=>lorem_title(),
 				'CHANGE_URL'=>placeholder_url(),
 				'STAGE3_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -204,7 +204,7 @@ class Hook_addon_registry_themewizard
 				'PREVIEW'=>$preview,
 				'FIELDS'=>'',
 				'TITLE'=>lorem_title()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

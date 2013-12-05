@@ -225,7 +225,7 @@ class Hook_addon_registry_core_themeing
 				'THEME_DEFAULT_REASON'=>lorem_phrase(),
 				'ZONES'=>$zones,
 				'HAS_FREE_CHOICES'=>true,
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -263,7 +263,7 @@ class Hook_addon_registry_core_themeing
 				'FILE'=>lorem_phrase(),
 				'ENTRIES'=>$colour_chooser,
 				'OLD_CONTENTS'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -283,7 +283,7 @@ class Hook_addon_registry_core_themeing
 				'WARNING_DETAILS'=>'',
 				'TITLE'=>lorem_title(),
 				'EDIT_FORM'=>placeholder_form()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -359,7 +359,7 @@ class Hook_addon_registry_core_themeing
 				'URL'=>placeholder_url(),
 				'TEMPLATE_EDITORS'=>$template_editors,
 				'COUNT'=>'1',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -377,7 +377,7 @@ class Hook_addon_registry_core_themeing
 				'ADD_URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
 				'FORM'=>placeholder_form()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -396,7 +396,7 @@ class Hook_addon_registry_core_themeing
 				'HEIGHT'=>placeholder_number(),
 				'URL'=>placeholder_image_url(),
 				'UNMODIFIED'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -433,7 +433,7 @@ class Hook_addon_registry_core_themeing
 		));
 
 		return array(
-			lorem_globalise($post, NULL, '', true)
+			lorem_globalise($post,NULL,'',true)
 		);
 	}
 
@@ -472,7 +472,7 @@ class Hook_addon_registry_core_themeing
 				'HIDDEN'=>'',
 				'EDIT_URL'=>placeholder_url(),
 				'TREE'=>$tree
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -499,7 +499,7 @@ class Hook_addon_registry_core_themeing
 			lorem_globalise(do_lorem_template('TEMPLATE_LIST_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TEMPLATES'=>$ftemp
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -530,7 +530,7 @@ class Hook_addon_registry_core_themeing
 				'CONTENTS'=>lorem_paragraph_html(),
 				'CODENAME'=>lorem_word(),
 				'EDIT_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 
 	}
@@ -547,7 +547,7 @@ class Hook_addon_registry_core_themeing
 		return array(
 			lorem_globalise(do_lorem_template('TEMPCODE_TESTER_SCREEN',array(
 				'TITLE'=>lorem_title(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

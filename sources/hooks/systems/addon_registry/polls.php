@@ -163,7 +163,7 @@ class Hook_addon_registry_polls
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_POLL',array(
 				'CONTENT'=>$this->poll('poll'),
 				'BLOCK_PARAMS'=>'',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -201,7 +201,7 @@ class Hook_addon_registry_polls
 				'ID'=>placeholder_id(),
 				'NEWS'=>lorem_paragraph(),
 				'DATE'=>placeholder_time()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -314,7 +314,7 @@ class Hook_addon_registry_polls
 		));
 
 		return array(
-			lorem_globalise($wrap_content, NULL, '', true)
+			lorem_globalise($wrap_content,NULL,'',true)
 		);
 	}
 
@@ -331,7 +331,7 @@ class Hook_addon_registry_polls
 			lorem_globalise(do_lorem_template('POLL_LIST_ENTRY',array(
 				'QUESTION'=>lorem_phrase(),
 				'STATUS'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -396,7 +396,7 @@ class Hook_addon_registry_polls
 				'POLL_DETAILS'=>$poll_details,
 				'SUBMITTER'=>placeholder_id(),
 				'ID'=>placeholder_id()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

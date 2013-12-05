@@ -167,13 +167,13 @@ class Hook_addon_registry_installer
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
-				'CSS_URL'=>get_base_url() . '/themes/default/css/installer.css',
-				'CSS_URL_2'=>get_base_url() . '/themes/default/css/installer.css',
+				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
+				'CSS_URL_2'=>get_base_url().'/themes/default/css/installer.css',
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>lorem_paragraph_html(),
 				'VERSION'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -224,13 +224,13 @@ class Hook_addon_registry_installer
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
-				'CSS_URL'=>get_base_url() . '/themes/default/css/installer.css',
-				'CSS_URL_2'=>get_base_url() . '/themes/default/css/installer.css',
+				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
+				'CSS_URL_2'=>get_base_url().'/themes/default/css/installer.css',
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>$content,
 				'VERSION'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -258,13 +258,13 @@ class Hook_addon_registry_installer
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
-				'CSS_URL'=>get_base_url() . '/themes/default/css/installer.css',
-				'CSS_URL_2'=>get_base_url() . '/themes/default/css/installer.css',
+				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
+				'CSS_URL_2'=>get_base_url().'/themes/default/css/installer.css',
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>$content,
 				'VERSION'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -340,7 +340,7 @@ class Hook_addon_registry_installer
 			'JS'=>'',
 			'HIDDEN'=>'',
 			'SIMPLE_FORUMS'=>$simple_forums,
-			'FORUM_PATH_DEFAULT'=>get_file_base() . '/forums',
+			'FORUM_PATH_DEFAULT'=>get_file_base().'/forums',
 			'FORUMS'=>$tforums,
 			'DATABASES'=>$tdatabase,
 			'VERSION'=>$default_version
@@ -351,13 +351,13 @@ class Hook_addon_registry_installer
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
-				'CSS_URL'=>get_base_url() . '/themes/default/css/installer.css',
-				'CSS_URL_2'=>get_base_url() . '/themes/default/css/installer.css',
+				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
+				'CSS_URL_2'=>get_base_url().'/themes/default/css/installer.css',
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>$step3,
 				'VERSION'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -471,13 +471,13 @@ class Hook_addon_registry_installer
 				'CSS_NOCACHE'=>".nocss{}",
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
-				'CSS_URL'=>get_base_url() . '/themes/default/css/installer.css',
-				'CSS_URL_2'=>get_base_url() . '/themes/default/css/installer.css',
+				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
+				'CSS_URL_2'=>get_base_url().'/themes/default/css/installer.css',
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>$content,
 				'VERSION'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -501,7 +501,7 @@ class Hook_addon_registry_installer
 				'URL'=>placeholder_url(),
 				'LOG'=>$message,
 				'HIDDEN'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -527,7 +527,7 @@ class Hook_addon_registry_installer
 				'PREVIOUS_STEP'=>lorem_phrase(),
 				'FINAL'=>lorem_phrase(),
 				'LOG'=>$message
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

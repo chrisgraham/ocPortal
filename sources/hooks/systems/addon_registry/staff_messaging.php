@@ -171,7 +171,7 @@ class Hook_addon_registry_staff_messaging
 				'USERNAME'=>lorem_word(),
 				'DATE'=>placeholder_time(),
 				'MEMBER_URL'=>placeholder_url()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -209,7 +209,7 @@ class Hook_addon_registry_staff_messaging
 				'NOTIFICATIONS_ENABLED'=>lorem_phrase(),
 				'TYPE'=>placeholder_id(),
 				'FIRST_POST'=>lorem_paragraph_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -246,7 +246,7 @@ class Hook_addon_registry_staff_messaging
 				'EMAIL_OPTIONAL'=>lorem_word_html(),
 				'COMMENT_DETAILS'=>$comment_details,
 				'MESSAGE'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

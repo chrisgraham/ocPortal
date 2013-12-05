@@ -201,7 +201,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'BLOCK_NAME'=>'',
 				'MAP'=>'',
 				'BLOCK_PARAMS'=>'',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -239,7 +239,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'URL'=>placeholder_url(),
 				'BLOCK_NAME'=>'',
 				'MAP'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -260,7 +260,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'URL'=>placeholder_url(),
 				'BLOCK_NAME'=>'',
 				'MAP'=>''
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -341,7 +341,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'DATES'=>$dates,
 				'NO_TIMES'=>$no_times,
 				'TODO_COUNTS'=>$todo
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -360,7 +360,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'VERSION'=>lorem_phrase(),
 				'VERSION_TABLE'=>placeholder_table(),
 				'HAS_UPDATED_ADDONS'=>true,
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -380,7 +380,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'TIP_CODE'=>lorem_phrase(),
 				'LEVEL'=>lorem_phrase(),
 				'COUNT'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -397,7 +397,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_ACTIONS',array(
 				'BLOCK_PARAMS'=>'',
 				'CONTENT'=>lorem_paragraph_html(),
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

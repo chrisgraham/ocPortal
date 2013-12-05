@@ -202,7 +202,7 @@ class Hook_addon_registry_core_validation
 		$display->attach(do_lorem_template('VALIDATE_SCREEN_END',array()));
 
 		return array(
-			lorem_globalise($display, NULL, '', true)
+			lorem_globalise($display,NULL,'',true)
 		);
 	}
 
@@ -220,7 +220,7 @@ class Hook_addon_registry_core_validation
 		foreach (placeholder_array() as $key=>$_error)
 		{
 			$errors->attach(do_lorem_template('VALIDATE_ERROR',array(
-				'I'=>lorem_word() . strval($key),
+				'I'=>lorem_word().strval($key),
 				'LINE'=>placeholder_number(),
 				'POS'=>placeholder_number(),
 				'ERROR'=>$_error
@@ -242,7 +242,7 @@ class Hook_addon_registry_core_validation
 		foreach (placeholder_array() as $key=>$_error)
 		{
 			$markers->attach(do_lorem_template('VALIDATE_MARKER',array(
-				'I'=>lorem_word() . strval($key),
+				'I'=>lorem_word().strval($key),
 				'ERROR'=>$_error
 			)));
 		}
@@ -264,7 +264,7 @@ class Hook_addon_registry_core_validation
 		$display->attach(do_lorem_template('VALIDATE_SCREEN_END',array()));
 
 		return array(
-			lorem_globalise($display, NULL, '', true)
+			lorem_globalise($display,NULL,'',true)
 		);
 
 

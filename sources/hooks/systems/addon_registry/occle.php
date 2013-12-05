@@ -263,7 +263,7 @@ class Hook_addon_registry_occle
 				'SUBMIT_URL'=>placeholder_url(),
 				'page'=>lorem_phrase(),
 				'PROMPT'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -286,7 +286,7 @@ class Hook_addon_registry_occle
 			lorem_globalise(do_lorem_template('OCCLE_MAIN_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>$content
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -313,7 +313,7 @@ class Hook_addon_registry_occle
 				'STDHTML'=>lorem_phrase(),
 				'STDCOMMAND'=>lorem_word_2(),
 				'STDERR'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -334,7 +334,7 @@ class Hook_addon_registry_occle
 		return array(
 			lorem_globalise(do_lorem_template('OCCLE_ARRAY',array(
 				'ELEMENTS'=>$elements
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -352,7 +352,7 @@ class Hook_addon_registry_occle
 				'INTRODUCTION'=>lorem_phrase(),
 				'OPTIONS'=>placeholder_array(),
 				'PARAMETERS'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -368,7 +368,7 @@ class Hook_addon_registry_occle
 		return array(
 			lorem_globalise(do_lorem_template('OCCLE_BOX',array(
 				'HTML'=>lorem_sentence_html()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -384,7 +384,7 @@ class Hook_addon_registry_occle
 		return array(
 			lorem_globalise(do_lorem_template('OCCLE_COMMANDS',array(
 				'COMMANDS'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -408,7 +408,7 @@ class Hook_addon_registry_occle
 			lorem_globalise(do_lorem_template('OCCLE_RSS',array(
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>$content
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -427,7 +427,7 @@ class Hook_addon_registry_occle
 				'FILE'=>lorem_phrase(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'FILE_CONTENTS'=>lorem_sentence()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -449,7 +449,7 @@ class Hook_addon_registry_occle
 			lorem_globalise(do_lorem_template('OCCLE_USERS_ONLINE',array(
 				'MEMBERS'=>$memb,
 				'GUESTS'=>placeholder_number()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -465,7 +465,7 @@ class Hook_addon_registry_occle
 		return array(
 			lorem_globalise(do_lorem_template('OCCLE_FIND_CODES',array(
 				'FILES'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -485,7 +485,7 @@ class Hook_addon_registry_occle
 				'ID'=>placeholder_id(),
 				'IP'=>placeholder_ip(),
 				'NAME'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -506,7 +506,7 @@ class Hook_addon_registry_occle
 		return array(
 			lorem_globalise(do_lorem_template('OCCLE_ENTRY_POINTS',array(
 				'ENTRY_POINTS'=>$points
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -524,7 +524,7 @@ class Hook_addon_registry_occle
 				'DIRECTORY'=>lorem_phrase(),
 				'DIRECTORIES'=>placeholder_array(),
 				'FILES'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -548,7 +548,7 @@ class Hook_addon_registry_occle
 			lorem_globalise(do_lorem_template('OCCLE_CHAT_NOTIFICATION',array(
 				'MESSAGE_COUNT'=>placeholder_number(),
 				'ROOMS'=>$rooms
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -565,7 +565,7 @@ class Hook_addon_registry_occle
 			lorem_globalise(do_lorem_template('OCCLE_OCCLECHAT_NOTIFICATION',array(
 				'MESSAGE_COUNT'=>placeholder_number(),
 				'MESSAGES'=>placeholder_array()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -589,7 +589,7 @@ class Hook_addon_registry_occle
 		return array(
 			lorem_globalise(do_lorem_template('OCCLE_OCF_NOTIFICATION',array(
 				'TOPICS'=>$topics
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -613,7 +613,7 @@ class Hook_addon_registry_occle
 		return array(
 			lorem_globalise(do_lorem_template('OCCLE_PT_NOTIFICATION',array(
 				'TOPICS'=>$topics
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

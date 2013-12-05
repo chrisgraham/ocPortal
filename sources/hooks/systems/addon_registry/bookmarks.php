@@ -150,7 +150,7 @@ class Hook_addon_registry_bookmarks
 				'FORM_URL'=>placeholder_url(),
 				'FORM'=>placeholder_form(),
 				'BOOKMARKS'=>$bookmarks
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

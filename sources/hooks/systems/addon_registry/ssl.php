@@ -149,7 +149,7 @@ class Hook_addon_registry_ssl
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>$content
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

@@ -146,7 +146,7 @@ class Hook_addon_registry_page_management
 		return array(
 			lorem_globalise(do_lorem_template('SITEMAP_EDITOR_SCREEN',array(
 				'TITLE'=>lorem_title()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -172,7 +172,7 @@ class Hook_addon_registry_page_management
 			lorem_globalise(do_lorem_template('VALIDATE_CHECK_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CONTENTS'=>$content
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }

@@ -181,7 +181,7 @@ class Hook_addon_registry_core_permission_management
 				'COLOR'=>lorem_phrase(),
 				'GROUPS'=>$groups,
 				'EDITOR'=>lorem_phrase()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -226,7 +226,7 @@ class Hook_addon_registry_core_permission_management
 				$cells->attach(do_lorem_template('PERMISSION_CELL',array(
 					'CHECKED'=>true,
 					'HUMAN'=>lorem_phrase(),
-					'NAME'=>'p_' . strval($id) . '__' . strval($gid)
+					'NAME'=>'p_'.strval($id).'__'.strval($gid)
 				)));
 			}
 
@@ -266,7 +266,7 @@ class Hook_addon_registry_core_permission_management
 				'ROWS'=>$rows,
 				'ROWS2'=>$rows2,
 				'COLS'=>'',
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -316,7 +316,7 @@ class Hook_addon_registry_core_permission_management
 					$cells->attach(do_lorem_template('PERMISSION_CELL',array(
 						'CHECKED'=>true,
 						'HUMAN'=>lorem_phrase(),
-						'NAME'=>"id_" . strval($k)
+						'NAME'=>"id_".strval($k)
 					)));
 					$k++;
 				}
@@ -339,7 +339,7 @@ class Hook_addon_registry_core_permission_management
 				'URL'=>placeholder_url(),
 				'HEADER_CELLS'=>$header_cells,
 				'ROWS'=>$rows
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -372,7 +372,7 @@ class Hook_addon_registry_core_permission_management
 				$cells->attach(do_lorem_template('PERMISSION_CELL',array(
 					'CHECKED'=>true,
 					'HUMAN'=>lorem_phrase(),
-					'NAME'=>$group . strval($k)
+					'NAME'=>$group.strval($k)
 				)));
 			}
 
@@ -414,7 +414,7 @@ class Hook_addon_registry_core_permission_management
 		));
 
 		return array(
-			lorem_globalise($out, NULL, '', true)
+			lorem_globalise($out,NULL,'',true)
 		);
 	}
 }

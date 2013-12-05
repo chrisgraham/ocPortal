@@ -314,7 +314,7 @@ class Hook_addon_registry_core_configuration
 				'GROUPS'=>$groups,
 				'SUBMIT_ICON'=>'buttons__save',
 				'SUBMIT_NAME'=>lorem_word()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -332,7 +332,7 @@ class Hook_addon_registry_core_configuration
 				'XML'=>'<test />',
 				'POST_URL'=>placeholder_url(),
 				'TITLE'=>lorem_title()
-			)), NULL, '', true)
+			)),NULL,'',true)
 		);
 	}
 }
