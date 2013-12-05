@@ -3,34 +3,6 @@
  Copyright (c) ocProducts, 2004-2014
 */
 
-.adminzone_search {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		position: absolute;
-	{+END}
-	{+START,IF,{$MOBILE}}
-		padding: 10px 0;
-		float: left;
-	{+END}
-	top: 20px;
-	right: 80px;
-}
-
-.adminzone_search label strong {
-	text-shadow: 1px 1px 1px {$GET,standard_border};
-	font-weight: normal;
-}
-
-.adminzone_search input {
-	vertical-align: middle;
-}
-
-.adminzone_search #search_button {
-	{$BETA_CSS_PROPERTY,opacity: 0.6;} display: inline-block;/*Needed for IE8*/
-}
-.adminzone_search #search_button:hover, body.touch_enabled .adminzone_search #search_button {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
-}
-
 /*
 =========================
 =========Buttons=========

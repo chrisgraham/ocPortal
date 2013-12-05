@@ -15,12 +15,12 @@ function clean_menus()
 
 	var m=document.getElementById('r_'+window.last_active_menu);
 	if (!m) return;
-	var tags=m.getElementsByTagName('ul');
+	var tags=get_elements_by_class_name(m,'nlevel');
 	var e=(window.active_menu==null)?null:document.getElementById(window.active_menu),t;
 	var i,hideable;
 	for (i=tags.length-1;i>=0;i--)
 	{
-		if (first_class_name(tags[i].className)!='nlevel') continue;
+		if (tags[i].nodeName.toLowerCase()!='ul' && tags[i].nodeName.toLowerCase()!='div') continue;
 
 		hideable=true;
 		if (e)
@@ -63,9 +63,10 @@ function recreate_clean_timeout()
 	window.clean_menus_timeout=window.setTimeout(clean_menus,window.menu_hold_time);
 }
 
-function pop_up_menu(id,place,menu,event)
+function pop_up_menu(id,place,menu,event,outside_fixed_width)
 {
 	if ((typeof place=='undefined') || (!place)) var place='right';
+	if (typeof outside_fixed_width=='undefined') var outside_fixed_width=false;
 
 	var e=document.getElementById(id);
 
@@ -122,8 +123,11 @@ function pop_up_menu(id,place,menu,event)
 	}
 	var full_width=(window.scrollX==0)?get_window_width():get_window_scroll_width();
 	{+START,IF,{$CONFIG_OPTION,fixed_width}}
-		var main_website_inner=document.getElementById('main_website_inner');
-		if (main_website_inner) full_width=find_width(main_website_inner);
+		if (!outside_fixed_width)
+		{
+			var main_website_inner=document.getElementById('main_website_inner');
+			if (main_website_inner) full_width=find_width(main_website_inner);
+		}
 	{+END}
 	var e_parent_width=find_width(e.parentNode);
 	e.style.minWidth=e_parent_width+'px';

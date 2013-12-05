@@ -1,0 +1,109 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2014
+*/
+
+/* Style overrides */
+
+html>body#main_website {
+	background: #f0f3f7;
+}
+
+header {
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, #f9f9f9\, #ebebeb);}
+	border-bottom: 3px solid #cacaca;
+}
+
+#main_website #main_website_inner {
+	border: 0;
+	{$BETA_CSS_PROPERTY,box-shadow: none;}
+	margin-top: 0;
+}
+
+body#main_website #main_website_inner, html>body div.global_middle_faux {
+	background-color: transparent;
+}
+
+.global_messages {
+	margin: 0;
+}
+
+.global_middle {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+#panel_left{
+	margin-left: 0;
+}
+
+#panel_right {
+	margin-right: 0;
+}
+
+#panel_right ~ .global_middle {
+	padding-right: 2em;
+}
+
+.page_running_login #main_website_inner {
+	{$BETA_CSS_PROPERTY,background-image: none !important;}
+}
+
+.footer_inner {
+	{+START,IF,{$CONFIG_OPTION,fixed_width}}{+START,IF,{$NOT,{$MOBILE}}}
+		width: 980px;
+		margin: 0 auto;
+	{+END}{+END}
+}
+
+footer .global_footer_left #special_page_type {
+	width: auto;
+}
+
+footer .global_minilinks {
+	padding-top: 0.6em;
+}
+
+.font_sizers {
+	margin-top: 0 !important;
+	margin-right: 0 !important;
+}
+
+/* Admin Zone styles */
+
+.menu_help_section {
+	max-width: 22em !important;
+}
+
+.adminzone_search {
+	padding: 0.7em 1em;
+}
+
+.adminzone_search label strong {
+	text-shadow: 1px 1px 1px {$GET,standard_border};
+	font-weight: normal;
+}
+
+.adminzone_search input {
+	vertical-align: middle;
+}
+
+.adminzone_search #search_button {
+	{$BETA_CSS_PROPERTY,opacity: 0.6;} display: inline-block;/*Needed for IE8*/
+}
+.adminzone_search #search_button:hover, body.touch_enabled .adminzone_search #search_button {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
+}
+
+/*
+=========================
+=========Buttons=========
+=========================
+*/
+
+.menu__adminzone__tools__cleanup {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools/cleanup}') !important;
+}
+.menu__adminzone__tools__upgrade {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools/upgrade}') !important;
+}

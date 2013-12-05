@@ -193,7 +193,7 @@ class Hook_addon_registry_core
 			'themes/default/images/icons/48x48/menu/cms/cms.png',
 			'themes/default/images/icons/32x32/menu/cms/cms.png',
 			'themes/default/images/icons/64x64/menu/cms/cms.png',
-			'themes/default/images/icons/64x64/menu/adminzone/docs.png',
+			'themes/default/images/icons/64x64/menu/adminzone/help.png',
 			'themes/default/images/icons/24x24/links/download_as_archive.png',
 			'themes/default/images/icons/48x48/links/download_as_archive.png',
 			'themes/default/images/icons/48x48/menu/_generic_admin/download_csv.png',
@@ -1191,6 +1191,7 @@ class Hook_addon_registry_core
 
 			// Admin theme
 			'themes/admin/css/index.html',
+			'themes/admin/css/adminzone.css',
 			'themes/admin/css/menu__dropdown.css',
 			'themes/admin/css_custom/.htaccess',
 			'themes/admin/css_custom/index.html',
@@ -1199,6 +1200,8 @@ class Hook_addon_registry_core
 			'themes/admin/index.html',
 			'themes/admin/templates/.htaccess',
 			'themes/admin/templates/GLOBAL_HTML_WRAP.tpl',
+			'themes/admin/templates/MENU_BRANCH_dropdown.tpl',
+			'themes/admin/templates/MENU_dropdown.tpl',
 			'themes/admin/templates/index.html',
 			'themes/admin/templates_custom/.htaccess',
 			'themes/admin/templates_custom/index.html',

@@ -12,46 +12,25 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 	{+START,INCLUDE,HTML_HEAD}{+END}
 </head>
 
+{$REQUIRE_CSS,adminzone}
+
 {$,You can use main_website_inner to help you create fixed width designs; never put fixed-width stuff directly on ".website_body" or "body" because it will affects things like the preview or banner frames or popups/overlays}
 <body class="website_body zone_running_{$ZONE*} page_running_{$PAGE*}" id="main_website" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+	{$,This is the main site header}
+	{+START,IF,{$SHOW_HEADER}}
+		<header class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+			{$,The main logo}
+			<h1 class="accessibility_hidden"><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$LOGO_URL*}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!HOME}" alt="{$SITE_NAME*}" /></a></h1>
+
+			{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
+			<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
+
+			{$,Main menu}
+			{$BLOCK,block=menu,param=adminzone:start\,include=node\,title={!menus:DASHBOARD}\,icon=menu/adminzone/start + adminzone:\,include=children\,max_recurse_depth=4\,use_page_groupings=1 + cms:\,include=node\,max_recurse_depth=3\,use_page_groupings=1,type=dropdown}
+		</header>
+	{+END}
+
 	<div id="main_website_inner">
-		{$,This is the main site header}
-		{+START,IF,{$SHOW_HEADER}}
-			<header class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
-				{$,The main logo}
-				<h1 class="accesibility_hidden"><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$LOGO_URL*}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!HOME}" alt="{$SITE_NAME*}" /></a></h1>
-
-				{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
-				<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
-
-				{$,Main menu}
-				<div class="global_navigation">
-					{$BLOCK,block=menu,param=adminzone:start\,include=node\,title={!menus:DASHBOARD}\,icon=menu/adminzone/start + adminzone:\,include=children\,max_recurse_depth=4\,use_page_groupings=1 + cms:\,include=node\,max_recurse_depth=3\,use_page_groupings=1,type=dropdown}
-				</div>
-
-				{$,Admin Zone search}
-				{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone}}
-					{$REQUIRE_CSS,adminzone}
-
-					<div class="adminzone_search">
-						<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,adminzone:admin:search}}" method="get" class="inline">
-							{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,adminzone:admin:search}}
-
-							<div>
-								<label for="search_content">{!ADMINZONE_SEARCH_LOST}</label> <span class="arr">&rarr;</span>
-								<input size="25" type="search" id="search_content" name="search_content" style="{$?,{$MATCH_KEY_MATCH,adminzone:admin:search},,color: gray}" onblur="if (this.value=='') { this.value='{!ADMINZONE_SEARCH;}'; this.style.color='gray'; }" onkeyup="if (typeof update_ajax_admin_search_list!='undefined') update_ajax_admin_search_list(this,event);" onfocus="require_javascript('javascript_ajax_people_lists'); require_javascript('javascript_ajax'); if (this.value=='{!ADMINZONE_SEARCH;}') this.value=''; this.style.color='black';" value="{$?,{$MATCH_KEY_MATCH,adminzone:admin:search},{$_GET*,search_content},{!ADMINZONE_SEARCH}}" title="{!ADMIN_ZONE_SEARCH_SYNTAX}" />
-								{+START,IF,{$JS_ON}}
-									<div class="accessibility_hidden"><label for="new_window">{!NEW_WINDOW}</label></div>
-									<input title="{!NEW_WINDOW}" type="checkbox" value="1" id="new_window" name="new_window" />
-								{+END}
-								<input onclick="if ((form.new_window) &amp;&amp; (form.new_window.checked)) form.target='_blank'; else form.target='_top';" id="search_button" class="buttons__search button_micro" type="submit" value="{!SEARCH}" />
-							</div>
-						</form>
-					</div>
-				{+END}
-			</header>
-		{+END}
-
 		{+START,IF,{$NOT,{$MOBILE}}}
 			{$,By default the top panel contains the admin menu, community menu, member bar, etc}
 			{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,top}}}
@@ -137,10 +116,13 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			</div>
 			<script>merge_global_messages();</script>
 		{+END}
+	</div>
 
-		{$,This is the main site footer}
-		{+START,IF,{$SHOW_FOOTER}}
-			<footer class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+	{$,This is the main site footer}
+	{+START,IF,{$SHOW_FOOTER}}
+		<footer class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+			<div class="footer_inner">
 				<div class="global_footer_left">
 					{+START,SET,FOOTER_BUTTONS}
 						{+START,IF,{$CONFIG_OPTION,bottom_show_top_button}}
@@ -221,17 +203,17 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 						{+END}
 					</nav>
 				</div>
-			</footer>
-		{+END}
+			</div>
+		</footer>
+	{+END}
 
-		{$EXTRA_FOOT}
+	{$EXTRA_FOOT}
 
-		{$JS_TEMPCODE,footer}
-		<script>// <![CDATA[
-			script_load_stuff();
+	{$JS_TEMPCODE,footer}
+	<script>// <![CDATA[
+		script_load_stuff();
 
-			{+START,IF,{$EQ,{$_GET,wide_print},1}}try { window.print(); } catch (e) {};{+END}
-		//]]></script>
-	</div>
+		{+START,IF,{$EQ,{$_GET,wide_print},1}}try { window.print(); } catch (e) {};{+END}
+	//]]></script>
 </body>
 </html>

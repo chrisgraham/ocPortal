@@ -2149,7 +2149,10 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	font-weight: bold;
 	margin-bottom: 0.3em;
 	padding: 0 0 0 18px;
-	background: url('{$IMG_INLINE;,action_link}') 0 5px no-repeat;
+	background: url('{$IMG_INLINE;,icons/14x14/action_link}') 0 3px no-repeat;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	background: url('{$IMG_INLINE;,icons/28x28/action_link}') 0 3px no-repeat;
 }
 .index_screen_fancier_entry_count {
 	font-size: 0.9em;
@@ -2777,7 +2780,7 @@ ul.associated_links_block_group.horizontal_links>li:before,
 .horizontal_ticker li:before {
 	content: "\00b7" !important; /* a &middot; */
 	padding: 0 0.5em 0 0.1em;
-	vertical-align: -30%;
+	vertical-align: -20%;
 }
 .horizontal_meta_details li:before {
 	vertical-align: middle;

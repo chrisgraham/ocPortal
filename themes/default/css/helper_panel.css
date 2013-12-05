@@ -15,13 +15,17 @@
 	{$BETA_CSS_PROPERTY,transition: width 0.2s linear !important;}
 }
 .helper_panel_hidden {
-	width: 16px !important;
+	width: 30px !important;
 }
 
 #helper_panel_toggle {
 	outline: 0;
 	float: {!en_right};
-	margin: 1em 0;
+	margin: 12px 6px;
+}
+
+#helper_panel_toggle img {
+	vertical-align: middle;
 }
 
 .global_helper_panel_wrap {

@@ -13,13 +13,16 @@ For example:
 */
 
 
-.global_navigation .menu_type__dropdown {
-	float: left;
+.menu_type__dropdown {
+	{+START,IF,{$CONFIG_OPTION,fixed_width}}{+START,IF,{$NOT,{$MOBILE}}}
+		width: 980px;
+		margin: 0 auto;
+	{+END}{+END}
 }
 
 .menu_type__dropdown li.toplevel {
 	float: {!en_left};
-	border-{!en_left}: 1px solid {$GET,standard_border};
+	border-{!en_left}: 1px solid #cacaca;
 	margin-{!en_right}: -1px;
 	margin-bottom: 0;
 	{$BETA_CSS_PROPERTY,transition: color\,background-color 0.5s linear;}
@@ -30,19 +33,21 @@ For example:
 		font-size: 0.72em;
 	{+END}
 	padding: 0.5em 0.25em;
-}
-
-.menu_type__dropdown li.toplevel.first {
-	border-left: 0;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	{+START,IF,{$AND,{$CONFIG_OPTION,fixed_width},{$NOT,{$MOBILE}}}}
+		width: 109px;
+	{+END}
+	{+START,IF,{$NAND,{$CONFIG_OPTION,fixed_width},{$NOT,{$MOBILE}}}}
+		width: {$DIV_FLOAT*,100,9}%;
+	{+END}
 }
 
 .menu_type__dropdown li.toplevel.last {
+	border-{!en_right}: 1px solid #cacaca;
 	float: none !important; /* so it eats all space remaining */
 	overflow: hidden; /* so it is shunted against it's left-hand neighbours without overlapping */
 	margin-{!en_right}: 0 !important; /* as would cause wrapping with the overflow hidden */
-	position: relative;
-	{!en_left}: -1px; /* In place of margin-right */
-	border-left: 0;
+	width: auto;
 }
 
 .menu_type__dropdown li.toplevel.menu_spacer {
@@ -52,52 +57,39 @@ For example:
 	float: {!en_left};
 }
 
+.menu_type__dropdown li.toplevel.current, .menu_type__dropdown li.toplevel:hover {
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, #ffffff\, #cbdbeb);}
+}
+
 .menu_type__dropdown a.toplevel_link {
 	display: block;
 	padding: 0.4em 0.5em;
 	outline: 0;
 	text-decoration: none;
-	color: inherit;
+	text-align: center;
+	color: {$GET,area_text};
 }
 
-.menu_type__dropdown a.toplevel_link:after {
-	content: "\025BC"; /* Downward arrow */
-	vertical-align: middle;
-	padding-left: 0.5em;
-	font-size: 0.8em;
-	display: inline-block;
-	margin-top: 4px;
-}
-
-.menu_type__dropdown li.toplevel.last a {
-	border-left: 1px solid {$GET,standard_border};
+.menu_type__dropdown a.toplevel_link span {
+	display: block;
 }
 
 .menu_type__dropdown .toplevel_link a, .menu_type__dropdown .toplevel_link a:visited, .menu_type__dropdown .toplevel_link a:hover {
 	text-decoration: none;
 }
 
-.menu_type__dropdown .toplevel.current .toplevel_link span, .menu_type__dropdown .toplevel .toplevel_link:hover span {
-	text-decoration: underline;
-}
-.menu_type__dropdown .toplevel .toplevel_link.non_link:hover span {
-	text-decoration: none;
-}
-
 .menu_type__dropdown .toplevel_link img {
-	max-width: 20px;
+	margin-right: 0;
+	margin-bottom: 0.75em;
 }
 
 
-.menu_type__dropdown ul.nlevel {
-	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
+.menu_type__dropdown ul.nlevel, .menu_type__dropdown div.nlevel {
+	{$BETA_CSS_PROPERTY,box-shadow: 3px 5px 13px #c9c9c9;}
 	line-height: 1.4em;
-	border-top: 1px solid {$GET,standard_border};
-	border-left: 1px solid {$GET,standard_border};
-	border-right: 1px solid {$GET,standard_border};
 }
 
-.menu_type__dropdown ul.nlevel ul.nlevel {
+.menu_type__dropdown .nlevel ul.nlevel {
 	margin-top: -1px; /* To compensate for border size */
 }
 
@@ -111,10 +103,11 @@ For example:
 	background-color: {$GET,dropdown_menu_text};
 }
 
-.menu_type__dropdown .nlevel li, .menu_type__dropdown .nlevel .menu_spacer {
+.menu_type__dropdown .nlevel li, .menu_type__dropdown div.nlevel, .menu_type__dropdown .nlevel .menu_spacer {
 	background-color: {$GET,dropdown_menu_background};
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, #cbdaed\, #d8e4f0);}
 	font-weight: normal;
-	border-bottom: 1px solid {$GET,standard_border};
+	border-bottom: 1px solid #e7eef8;
 	min-height: 20px;
 
 	/* We do want wrapping for this, as menu labels could be longer than the available space between the start of the dropdown label and the edge of the fixed width */
@@ -141,7 +134,7 @@ For example:
 }
 
 .menu_type__dropdown .nlevel, .menu_type__dropdown .nlevel a, .menu_type__dropdown .nlevel a:visited, .menu_type__dropdown .nlevel a:hover {
-	color: {$GET,slightly_seeded_text} !important;
+	color: {$GET,area_text};
 }
 
 .menu_type__dropdown .nlevel .current a {
