@@ -49,6 +49,7 @@
 	display: table;
 	height: 100%;
 	width: 100%;
+	min-height: 90px;
 }
 .do_next_item>div>div {
 	display: table-row;

@@ -32,10 +32,10 @@ function script_load_stuff()
 	/* Expanders and contracters no longer prominent in UI
 	images.push('{$IMG;,1x/trays/expand}'.replace(/^http:/,window.location.protocol));
 	images.push('{$IMG;,1x/trays/contract}'.replace(/^http:/,window.location.protocol));
-	images.push('{$IMG;,1x/trays/exp_con}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,1x/trays/expcon}'.replace(/^http:/,window.location.protocol));
 	images.push('{$IMG;,2x/trays/expand}'.replace(/^http:/,window.location.protocol));
 	images.push('{$IMG;,2x/trays/contract}'.replace(/^http:/,window.location.protocol));
-	images.push('{$IMG;,2x/trays/exp_con}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,2x/trays/expcon}'.replace(/^http:/,window.location.protocol));
 	*/
 	images.push('{$IMG;,loading}'.replace(/^http:/,window.location.protocol));
 	for (i=0;i<images.length;i++) preloader.src=images[i];
@@ -1149,6 +1149,57 @@ function set_display_with_aria(element,mode)
 	element.style.display=mode;
 	element.setAttribute('aria-hidden',(mode=='none')?'true':'false');
 }
+function matches_theme_image(src,url)
+{
+	return (src.replace(/^http:/,window.location.protocol)==url.replace(/^http:/,window.location.protocol));
+}
+function set_tray_theme_image(pic,before_theme_img,after_theme_img,before1_url,after1_url,after1_url_2x,after2_url,after2_url_2x)
+{
+	var is_1=matches_theme_image(pic.src,before1_url);
+
+	if (is_1)
+	{
+		if (pic.src.indexOf('themewizard.php')!=-1)
+		{
+			pic.src=pic.src.replace(before_theme_img,after_theme_img);
+		} else
+		{
+			pic.src=after1_url.replace(/^http:/,window.location.protocol);
+		}
+	} else
+	{
+		if (pic.src.indexOf('themewizard.php')!=-1)
+		{
+			pic.src=pic.src.replace(before_theme_img+'2',after_theme_img+'2');
+		} else
+		{
+			pic.src=after2_url.replace(/^http:/,window.location.protocol);
+		}
+	}
+
+	if (typeof pic.srcset!='undefined')
+	{
+		if (is_1)
+		{
+			if (pic.srcset.indexOf('themewizard.php')!=-1)
+			{
+				pic.srcset=pic.srcset.replace(before_theme_img,after_theme_img);
+			} else
+			{
+				pic.srcset=after1_url_2x.replace(/^http:/,window.location.protocol);
+			}
+		} else
+		{
+			if (pic.srcset.indexOf('themewizard.php')!=-1)
+			{
+				pic.srcset=pic.srcset.replace(before_theme_img+'2',after_theme_img+'2');
+			} else
+			{
+				pic.srcset=after2_url_2x.replace(/^http:/,window.location.protocol);
+			}
+		}
+	}
+}
 function toggleable_tray(element,no_animate,cookie_id_name)
 {
 	if (typeof element=='string') element=document.getElementById(element);
@@ -1182,7 +1233,11 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 	{
 		pic=document.getElementById('e_'+element.id);
 	}
-	if ((pic) && (pic.src=='{$IMG;,1x/trays/exp_con}'.replace(/^http:/,window.location.protocol))) return; // Currently in action
+	if (pic) // Currently in action?
+	{
+		if (matches_theme_image(pic.src,'{$IMG;,1x/trays/expcon}')) return;
+		if (matches_theme_image(pic.src,'{$IMG;,1x/trays/expcon2}')) return;
+	}
 
 	element.setAttribute('aria-expanded',(type=='none')?'false':'true');
 
@@ -1196,9 +1251,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 			element.style.position='absolute'; // So things do not just around now it is visible
 			if (pic)
 			{
-				pic.src='{$IMG;,1x/trays/exp_con}'.replace(/^http:/,window.location.protocol);
-				if (typeof pic.srcset!='undefined')
-					pic.srcset='{$IMG;,2x/trays/exp_con} 2x'.replace(/^http:/,window.location.protocol);
+				set_tray_theme_image(pic,'expand','expcon','{$IMG;,1x/trays/expand}','{$IMG;,1x/trays/expcon}','{$IMG;,2x/trays/expcon}','{$IMG;,1x/trays/expcon2}','{$IMG;,2x/trays/expcon2}');
 			}
 			window.setTimeout(function() { begin_toggleable_tray_animation(element,20,70,-1,pic); } ,20);
 		} else
@@ -1211,9 +1264,7 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 
 			if (pic)
 			{
-				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('expand','contract'):'{$IMG;,1x/trays/contract}').replace(/^http:/,window.location.protocol);
-				if (typeof pic.srcset!='undefined')
-					pic.srcset=((pic.src.indexOf('themewizard.php')!=-1)?pic.srcset.replace('expand','contract'):'{$IMG;,2x/trays/contract} 2x').replace(/^http:/,window.location.protocol);
+				set_tray_theme_image(pic,'expand','contract','{$IMG;,1x/trays/expand}','{$IMG;,1x/trays/contract}','{$IMG;,2x/trays/contract}','{$IMG;,1x/trays/contract2}','{$IMG;,2x/trays/contract2}');
 			}
 		}
 	} else
@@ -1222,18 +1273,14 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 		{
 			if (pic)
 			{
-				pic.src='{$IMG;,1x/trays/exp_con}'.replace(/^http:/,window.location.protocol);
-				if (typeof pic.srcset!='undefined')
-					pic.srcset='{$IMG;,2x/trays/exp_con} 2x'.replace(/^http:/,window.location.protocol);
+				set_tray_theme_image(pic,'contract','expcon','{$IMG;,1x/trays/contract}','{$IMG;,1x/trays/expcon}','{$IMG;,2x/trays/expcon}','{$IMG;,1x/trays/expcon2}','{$IMG;,2x/trays/expcon2}');
 			}
 			window.setTimeout(function() { begin_toggleable_tray_animation(element,-20,70,0,pic); } ,20);
 		} else
 		{
 			if (pic)
 			{
-				pic.src=((pic.src.indexOf('themewizard.php')!=-1)?pic.src.replace('contract','expand'):'{$IMG;,1x/trays/expand}').replace(/^http:/,window.location.protocol);
-				if (typeof pic.srcset!='undefined')
-					pic.srcset=((pic.srcset.indexOf('themewizard.php')!=-1)?pic.srcset.replace('contract','expand'):'{$IMG;,2x/trays/expand} 2x').replace(/^http:/,window.location.protocol);
+				set_tray_theme_image(pic,'contract','expand','{$IMG;,1x/trays/contract}','{$IMG;,1x/trays/expand}','{$IMG;,2x/trays/expand}','{$IMG;,1x/trays/expand2}','{$IMG;,2x/trays/expand2}');
 				pic.setAttribute('alt',pic.getAttribute('alt').replace('{!CONTRACT;}','{!EXPAND;}'));
 				pic.title='{!EXPAND;}'; // Needs doing because convert_tooltip may not have run yet
 				pic.ocp_tooltip_title='{!EXPAND;}';
@@ -1304,9 +1351,13 @@ function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,
 		element.style.outline='0';
 		if (pic)
 		{
-			pic.src=((animate_dif<0)?'{$IMG;,1x/trays/expand}':'{$IMG;,1x/trays/contract}').replace(/^http:/,window.location.protocol);
-			if (typeof pic.srcset!='undefined')
-				pic.srcset=((animate_dif<0)?'{$IMG;,2x/trays/expand} 2x':'{$IMG;,2x/trays/contract} 2x').replace(/^http:/,window.location.protocol);
+			if (animate_dif<0)
+			{
+				set_tray_theme_image(pic,'contract','expand','{$IMG;,1x/trays/contract}','{$IMG;,1x/trays/expand}','{$IMG;,2x/trays/expand}','{$IMG;,1x/trays/expand2}','{$IMG;,2x/trays/expand2}');
+			} else
+			{
+				set_tray_theme_image(pic,'expand','contract','{$IMG;,1x/trays/expand}','{$IMG;,1x/trays/contract}','{$IMG;,2x/trays/contract}','{$IMG;,1x/trays/contract2}','{$IMG;,2x/trays/contract2}');
+			}
 			pic.setAttribute('alt',pic.getAttribute('alt').replace((animate_dif<0)?'{!CONTRACT;}':'{!EXPAND;}',(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}'));
 			pic.ocp_tooltip_title=(animate_dif<0)?'{!EXPAND;}':'{!CONTRACT;}';
 		}

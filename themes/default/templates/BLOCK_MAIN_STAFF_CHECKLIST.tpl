@@ -3,7 +3,7 @@
 		<a href="#" onclick="set_task_hiding(false); return false;" id="checklist_show_all_link" class="top_left_toggleicon" title="{!SHOW_ALL}: {!CHECK_LIST}">{!SHOW_ALL}</a>
 		<a href="#" onclick="set_task_hiding(true); return false;" id="checklist_hide_done_link" class="top_left_toggleicon">{!HIDE_DONE}</a>
 
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!CHECK_LIST|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!CHECK_LIST}}" title="{!CONTRACT}" src="{$IMG*,1x/trays/contract}" srcset="{$IMG*,2x/trays/contract} 2x" /></a>
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!CHECK_LIST|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!CHECK_LIST}}" title="{!CONTRACT}" src="{$IMG*,1x/trays/contract2}" srcset="{$IMG*,2x/trays/contract2} 2x" /></a>
 
 		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!CHECK_LIST|}');">{!CHECK_LIST}</a>
 	</h3>

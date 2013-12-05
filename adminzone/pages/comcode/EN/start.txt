@@ -1,11 +1,6 @@
 [title sub="You are in the Admin Zone"]Dashboard[/title]
 
-If you're not sure how the admin menu above is categorised, hold the mouse to see a tooltip explaining what is under that drop-down menu.
-
-For help, see the [url="{$BRAND_BASE_URL}/docs"]docs[/url]. Add content/categories from the [page="cms:"]content management zone[/page]. Manage site structure from the [page="adminzone:admin_sitemap:sitemap"]sitemap editor[/page].
-
-
-[title="2"]To Do[/title]
+[title="2"]Tasks[/title]
 {| 60%:37% wide floats
 | [block]main_staff_checklist[/block]
 | [block defer="1"]main_staff_new_version[/block]
@@ -35,6 +30,7 @@ For help, see the [url="{$BRAND_BASE_URL}/docs"]docs[/url]. Add content/categori
 
 [title="2"]Recommend ocPortal[/title]
 
-Know someone who needs a website? [page=":recommend:misc:ocp=1"]Recommend ocPortal[/page] and they'll be sent a link to your own site too.
+Know someone who needs a website?
+[page=":recommend:misc:ocp=1"]Recommend ocPortal[/page] and they'll be sent a link to your own site too.
 | [block]main_staff_links[/block]
 |}

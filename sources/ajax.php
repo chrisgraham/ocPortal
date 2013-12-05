@@ -361,7 +361,7 @@ function namelike_script()
 				require_code('hooks/systems/page_groupings/'.filter_naughty_harsh($hook));
 				$object=object_factory('Hook_page_groupings_'.filter_naughty_harsh($hook),true);
 				if (is_null($object)) continue;
-				$info=$object->run(true);
+				$info=$object->run();
 				foreach ($info as $i)
 				{
 					if (is_null($i)) continue;

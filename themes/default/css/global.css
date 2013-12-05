@@ -2369,9 +2369,6 @@ div.wysiwyg_toolbar_color_finder {
 .post_buttons {
 	text-align: left !important; /* Overrides buttons_group */
 }
-.box .buttons_group {
-	margin-bottom: 0 !important;
-}
 
 .post .post_buttons {
 	margin-top: 1.3em;
@@ -2853,7 +2850,7 @@ ul.horizontal_links li img, ul.associated_link li img, ul.horizontal_links a, ul
 .buttons_group, .associated_links_block_group {
 	text-align: center;
 	padding: 0;
-	margin: 2em 0;
+	margin: 1em 0;
 	display: block;
 	list-style: none;
 }

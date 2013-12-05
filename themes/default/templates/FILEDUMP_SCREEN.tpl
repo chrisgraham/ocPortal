@@ -43,7 +43,7 @@
 {+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}
 	<div class="box box___filedump_screen">
 		<h2 class="toggleable_tray_title">
-			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!FILEDUMP_CREATE_FOLDER}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!FILEDUMP_CREATE_FOLDER}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand2}" srcset="{$IMG*,2x/trays/expand2} 2x" /></a>
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!FILEDUMP_CREATE_FOLDER}</a>
 		</h2>
 

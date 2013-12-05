@@ -1358,7 +1358,8 @@ class ocp_tempcode
 							$val->_mark_all_as_escaped(false);
 						}
 					}
-					$seq_part[1]['_escaped']=true; // Temporarily mark as escaped. Many seq_parts share a referenced list of parameters, and its naive/slow to re-mark for each
+					if (!isset($seq_part[1][0])) // Only if it's a parameter map, not a parameter list
+						$seq_part[1]['_escaped']=true; // Temporarily mark as escaped. Many seq_parts share a referenced list of parameters, and its naive/slow to re-mark for each
 					$done[]=&$seq_part[1];
 				}
 			}

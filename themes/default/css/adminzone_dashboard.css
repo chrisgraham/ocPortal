@@ -10,12 +10,12 @@ a.top_left_toggleicon {
 	padding: 1px 0 5px 28px !important;
 	font-size: 0.8em;
 	float: left;
-	background: url('{$IMG;,checklist/toggleicon}') no-repeat 10px 0 !important;
+	background: url('{$IMG;,checklist/toggleicon}') no-repeat 10px 1px !important;
 	{$BETA_CSS_PROPERTY,opacity: 0.7;} display: inline-block;/*Needed for IE8*/
 }
 
 a.top_left_toggleicon:hover {
-	background: url('{$IMG;,checklist/toggleicon2}') no-repeat 10px 0 !important;
+	background: url('{$IMG;,checklist/toggleicon2}') no-repeat 10px 1px !important;
 	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
@@ -28,6 +28,8 @@ a.top_left_toggleicon:hover {
 
 .checklist_row {
 	border: 1px solid {$GET,pale_border};
+	padding: 0.2em;
+	background-color: {$GET,main_background};
 }
 .checklist_row:hover {
 	background-color: {$GET,area_hover_2_background};
@@ -51,21 +53,23 @@ a.top_left_toggleicon:hover {
 	float: left;
 }
 
+.checklist_task>span {
+	display: inline-block;
+	max-width: 350px;
+}
+
 .checklist_task>* {
 	vertical-align: middle;
 }
 
 .checklist_task_status {
-	font-size: 0.8em;
+	font-size: 0.85em;
 	margin: 0.3em 0.5em 0.3em 0;
 	float: {!en_right};
 }
 
-.checklist_task_status a, .checklist_task_status span {
+.checklist_task_status img, .checklist_task_status span {
 	vertical-align: middle;
-}
-.checklist_task_status a img {
-	vertical-align: bottom;
 }
 
 .add_custom_task {

@@ -462,7 +462,7 @@
 <div class="original_template">
 	<div class="box">
 		<h2 class="toggleable_tray_title">
-			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ORIGINAL}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand2}" srcset="{$IMG*,2x/trays/expand2} 2x" /></a>
 			<label for="f_old"><a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode.parentNode);">{!ORIGINAL}</a>:</label>
 		</h2>
 		<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">
