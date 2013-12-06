@@ -294,7 +294,7 @@ function generate_logo($name,$font='Vera',$logo_theme_image='logo/default_logos/
 
 	// Load background image
 	$imgs=array();
-	foreach (array('logo'=>$logo_theme_image,'background'=>$background_theme_image) as $id=>$theme_image)
+	foreach (array('logo'=>$logo_theme_image,'background'=>$background_theme_image,'standalone'=>'logo/standalone_logo') as $id=>$theme_image)
 	{
 		$url=find_theme_image($theme_image,false,false,$theme);
 		$file_path_stub=convert_url_to_path($url);
@@ -313,11 +313,22 @@ function generate_logo($name,$font='Vera',$logo_theme_image='logo/default_logos/
 		}
 		$imgs[$id]=$img;
 	}
-	$canvas=$imgs['background'];
+	if ($standalone_version)
+	{
+		$canvas=imagecreatetruecolor(imagesx($imgs['standalone']),imagesy($imgs['standalone']));
+		imagealphablending($canvas,true);
+		imagecopy($canvas,$imgs['background'],0,0,0,0,imagesx($imgs['standalone']),imagesy($imgs['standalone']));
+		imagedestroy($imgs['background']);
+	} else
+	{
+		$canvas=$imgs['background'];
+		imagealphablending($canvas,true);
+	}
+	imagedestroy($imgs['standalone']);
 
 	// Add logo onto the canvas
-	imagealphablending($canvas,true);
 	imagecopy($canvas,$imgs['logo'],intval($logowizard_details['logo_x_offset']),intval($logowizard_details['logo_y_offset']),0,0,imagesx($imgs['logo']),imagesy($imgs['logo']));
+	imagedestroy($imgs['logo']);
 
 	// Find font details
 	$ttf_font=get_file_base().'/data_custom/fonts/'.$font.'.ttf';

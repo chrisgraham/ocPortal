@@ -33,6 +33,6 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'."\n".'<ht
 
 require_code('themewizard');
 require_code('themes2');
-generate_logo(get_param('name'),get_param('font'),get_param('logo_theme_image'),get_param('background_theme_image'),true,get_param('theme'));
+generate_logo(get_param('name'),get_param('font'),get_param('logo_theme_image'),get_param('background_theme_image'),true,get_param('theme'),get_param_integer('standalone_version',0)==1);
 
 
