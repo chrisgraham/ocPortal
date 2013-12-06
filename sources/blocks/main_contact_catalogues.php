@@ -121,6 +121,7 @@ class Block_main_contact_catalogues
 		url_default_parameters__enable();
 
 		require_code('fields');
+		$found_email=false;
 		foreach ($special_fields as $field_num=>$field)
 		{
 			$ob=get_fields_hook($field['cf_type']);
@@ -159,6 +160,12 @@ class Block_main_contact_catalogues
 			}
 
 			$hidden->attach(form_input_hidden('label_for__field_'.strval($field['id']),$_cf_name));
+
+			if (($field['cf_type']=='email') && (!$found_email))
+			{
+				$hidden->attach(form_input_hidden('field_tagged__field_'.strval($field['id']),'email'));
+				$found_email=true;
+			}
 
 			unset($result);
 			unset($ob);

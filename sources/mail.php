@@ -1010,16 +1010,22 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$outr
 		}
 	}
 
+	$from_email=trim(post_param('email',''));
+
 	$message_raw='';
 	if ($intro!='') $message_raw.=$intro."\n\n------------\n\n";
 	foreach ($fields as $field=>$field_title)
 	{
 		$field_val=post_param($field,NULL);
 		if (!is_null($field_val))
+		{
 			$message_raw.=$field_title.': '.$field_val."\n\n";
+
+			if (($from_email=='') && ($field_val!='') && (post_param('field_tagged__'.$field,'')=='email'))
+				$from_email=$field_val;
+		}
 	}
 	if ($outro!='') $message_raw.="\n\n------------\n\n".$outro;
-	$from_email=trim(post_param('email',''));
 
 	$to_name=mixed();
 	$from_name=post_param('name',$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
