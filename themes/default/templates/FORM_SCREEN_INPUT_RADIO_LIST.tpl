@@ -2,7 +2,9 @@
 	<div id="error_{NAME*}" style="display: none" class="input_error_here"></div>
 {+END}
 
-{CONTENT}
+<div class="radio_list">
+	{CONTENT}
+</div>
 
 {+START,IF_PASSED,NAME}
 	{+START,IF,{REQUIRED}}
