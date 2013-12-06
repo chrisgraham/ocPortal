@@ -109,7 +109,7 @@ Curved borders would be cool, but it does not work well with the carefully defin
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 	text-align: left;
 	color: {$GET,slightly_seeded_text};
-	vertical-align: middle;
+	padding-top: 0.95em !important;
 }
 
 .form_table_field_name h3 {
@@ -346,6 +346,10 @@ input[name="validated"].input_tick {
 
 .radio_list_picture img {
 	max-width: 100px;
+}
+
+.theme_image__background_theme_image .radio_list_picture img {
+	max-width: 100%;
 }
 
 .radio_list_picture {

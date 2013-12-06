@@ -804,6 +804,7 @@ class Hook_addon_registry_core
 			'themes/default/templates_custom/.htaccess',
 			'themes/default/templates_custom/index.html',
 			'themes/default/theme.ini',
+			'themes/admin/theme.ini',
 			'themes/index.html',
 			'themes/map.ini',
 			'sources/hooks/systems/module_permissions/.htaccess',

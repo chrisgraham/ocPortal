@@ -2962,8 +2962,8 @@ ul.buttons_group, ul.associated_links_block_group {
 	margin-bottom: 2em;
 }
 
-.box___confirm_screen .box_inner {
-	margin: 1em;
+.box___confirm_screen img {
+	max-width: 100%;
 }
 
 /*

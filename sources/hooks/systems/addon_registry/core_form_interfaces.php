@@ -1525,6 +1525,7 @@ class Hook_addon_registry_core_form_interfaces
 			$input=do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array(
 				'DISPLAY'=>'block',
 				'CATEGORY'=>$cells,
+				'FIELD_NAME'=>placeholder_id(),
 				'CATEGORY_NAME'=>lorem_word()
 			));
 			$content->attach($input);

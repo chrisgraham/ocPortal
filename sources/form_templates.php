@@ -1625,7 +1625,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 			$i++;
 		}
 
-		$_category=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','CATEGORY'=>$_category,'CATEGORY_NAME'=>(count($categories)==1)?'':$cat));
+		$_category=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','FIELD_NAME'=>$name,'CATEGORY'=>$_category,'CATEGORY_NAME'=>(count($categories)==1)?'':$cat));
 		$content->attach($_category);
 	}
 

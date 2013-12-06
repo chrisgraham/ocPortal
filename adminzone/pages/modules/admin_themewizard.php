@@ -72,12 +72,14 @@ class Module_admin_themewizard
 
 		require_lang('themes');
 
-		set_helper_panel_tutorial('tut_themes');
-		set_helper_panel_text(comcode_lang_string('DOC_THEMEWIZARD'));
 		if ($type=='make_logo' || $type=='_make_logo' || $type=='__make_logo')
 		{
+			//set_helper_panel_text(comcode_lang_string('DOC_LOGOWIZARD'));
 		} else
 		{
+			set_helper_panel_tutorial('tut_themes');
+
+			set_helper_panel_text(comcode_lang_string('DOC_THEMEWIZARD'));
 		}
 
 		if ($type=='misc')
@@ -370,8 +372,12 @@ class Module_admin_themewizard
 		if (!function_exists('imagepng')) warn_exit(do_lang_tempcode('GD_NEEDED'));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_make_logo'),'_SELF');
-		$theme_image_url=build_url(array('page'=>'admin_themes','type'=>'edit_image','id'=>'logo/-logo','lang'=>user_lang(),'theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),get_module_zone('admin_themes'));
-		$text=do_lang_tempcode('LOGOWIZARD_1_DESCRIBE',escape_html($theme_image_url->evaluate()));
+
+		$root_theme=$GLOBALS['FORUM_DRIVER']->get_theme('');
+		$theme_image_url=build_url(array('page'=>'admin_themes','type'=>'edit_image','id'=>'logo/-logo','lang'=>user_lang(),'theme'=>$root_theme),get_module_zone('admin_themes'));
+		$standalone_theme_image_url=build_url(array('page'=>'admin_themes','type'=>'edit_image','id'=>'logo/standalone_logo','lang'=>user_lang(),'theme'=>$root_theme),get_module_zone('admin_themes'));
+		$text=do_lang_tempcode('LOGOWIZARD_1_DESCRIBE',escape_html($theme_image_url->evaluate()),escape_html($standalone_theme_image_url->evaluate()));
+
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		$default_logos=get_all_image_ids_type('logo/default_logos');
@@ -385,6 +391,35 @@ class Module_admin_themewizard
 		$fields->attach(form_input_line(do_lang_tempcode('config:SITE_NAME'),do_lang_tempcode('DESCRIPTION_LOGO_NAME'),'name',get_option('site_name'),true));
 		$fields->attach(form_input_theme_image(do_lang_tempcode('LOGO_THEME_IMAGE'),'','logo_theme_image',$default_logos,NULL));
 		$fields->attach(form_input_theme_image(do_lang_tempcode('BACKGROUND_THEME_IMAGE'),'','background_theme_image',$default_backgrounds));
+		$font_choices=new ocp_tempcode();
+		$dh=opendir(get_file_base().'/data_custom/fonts');
+		$fonts=array();
+		if ($dh!==false)
+		{
+			while ($f=readdir($dh))
+			{
+				if (substr($f,-4)=='.ttf') $fonts[]=$f;
+			}
+			closedir($dh);
+		}
+		$dh=opendir(get_file_base().'/data/fonts');
+		if ($dh!==false)
+		{
+			while ($f=readdir($dh))
+			{
+				if (substr($f,-4)=='.ttf') $fonts[]=$f;
+			}
+			closedir($dh);
+		}
+		$fonts=array_unique($fonts);
+		sort($fonts);
+		require_css('fonts');
+		foreach ($fonts as $font)
+		{
+			$_font=basename($font,'.ttf');
+			$font_choices->attach(form_input_radio_entry('font',$_font,$_font=='Vera','<span style="font-family: '.escape_html($_font).'">'.escape_html($_font).'</span>'));
+		}
+		$fields->attach(form_input_radio(do_lang_tempcode('comcode:FONT'),'','font',$font_choices,true));
 
 		// Find the most appropriate theme to edit for
 		$theme=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name'=>'site'));
@@ -409,7 +444,7 @@ class Module_admin_themewizard
 	 */
 	function _make_logo()
 	{
-		$preview=do_template('LOGOWIZARD_2',array('_GUID'=>'6e5a442860e5b7644b50c2345c3c8dee','NAME'=>post_param('name'),'TITLE'=>post_param('title'),'THEME'=>post_param('theme')));
+		$preview=do_template('LOGOWIZARD_2',array('_GUID'=>'6e5a442860e5b7644b50c2345c3c8dee','NAME'=>post_param('name'),'FONT'=>post_param('font'),'LOGO_THEME_IMAGE'=>post_param('logo_theme_image'),'BACKGROUND_THEME_IMAGE'=>post_param('background_theme_image'),'THEME'=>post_param('theme')));
 
 		require_code('templates_confirm_screen');
 		return confirm_screen($this->title,$preview,'__make_logo','make_logo');
@@ -423,6 +458,7 @@ class Module_admin_themewizard
 	function __make_logo()
 	{
 		$theme=post_param('theme');
+		$font=post_param('font');
 		$logo_theme_image=post_param('logo_theme_image');
 		$background_theme_image=post_param('background_theme_image');
 
@@ -439,7 +475,7 @@ class Module_admin_themewizard
 				make_missing_directory(dirname($path));
 			}
 
-			$img=generate_logo(post_param('name'),$logo_theme_image,$background_theme_image,false,$logo_save_theme);
+			$img=generate_logo(post_param('name'),$font,$logo_theme_image,$background_theme_image,false,$logo_save_theme);
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);
 			actual_edit_theme_image('logo/-logo',$logo_save_theme,user_lang(),'logo/-logo',$path);
@@ -447,7 +483,7 @@ class Module_admin_themewizard
 				actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,user_lang(),'logo/collaboration-logo',$path);
 			$rand=uniqid('',true);
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
-			$img=generate_logo(post_param('name'),post_param('logo_theme_image'),post_param('background_theme_image'),false,NULL,true);
+			$img=generate_logo(post_param('name'),$font,$logo_theme_image,$background_theme_image,false,NULL,true);
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);
 			actual_edit_theme_image('logo/standalone_logo',$logo_save_theme,user_lang(),'logo/standalone_logo',$path);

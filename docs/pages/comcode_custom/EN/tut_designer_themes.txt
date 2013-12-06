@@ -262,18 +262,18 @@ If you want the Logo Wizard to be able to modify your logo, you will need to mak
 1) [tt]themes/<yourthemename>/images/logo/default_backgrounds/1.png[/tt] (the background to the full header)
 The logo wizard will use these as source files when creating the compound logo. If you need the logo wizard to put them in different places to the default ocPortal logo, or to use different colours, you can put the following into your [tt]themes/<yourthemename>/theme.ini[/tt] file:
 [code]
-site_name_colour=FFFFFF
 logo_x_offset=0
 logo_y_offset=0
+site_name_colour=FFFFFF
 site_name_split=425
 site_name_split_gap=6
 site_name_font_size_small=18
 site_name_font_size=26
 site_name_font_size_small_non_ttf=4
 site_name_font_size_nonttf=5
-site_name_x_offset=5
-site_name_y_offset=22
-site_name_y_offset_small=14
+site_name_x_offset=110
+site_name_y_offset=30
+site_name_y_offset_small=20
 [/code]
 and customise the numbers until they work.
 

@@ -95,7 +95,7 @@ class Hook_addon_registry_core_graphic_text
 	{
 		return array(
 			'sources/hooks/systems/addon_registry/core_graphic_text.php',
-			'data/fonts/.htaccess',
+			'themes/default/css/fonts.css',
 			'data/fonts/Aerial.ttf',
 			'data/fonts/AerialBd.ttf',
 			'data/fonts/AerialBdIt.ttf',
@@ -133,7 +133,6 @@ class Hook_addon_registry_core_graphic_text
 			'data/fonts/VeraSeBd.ttf',
 			'data/gd_text.php',
 			'data_custom/fonts/index.html',
-			'data_custom/fonts/.htaccess',
 		);
 	}
 }
