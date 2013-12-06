@@ -113,8 +113,23 @@ class Hook_addon_registry_themewizard
 			'sources/hooks/systems/page_groupings/themewizard.php',
 			'themes/default/templates/LOGOWIZARD_2.tpl',
 			'adminzone/logowizard.php',
-			'themes/default/images/logo/EN/logo_template.png',
-			'themes/default/images/logo/EN/standalone_logo_template.png',
+			'themes/default/images/logos/index.html',
+			'themes/default/images/logos/default_logos/index.html',
+			'themes/default/images/logos/default_logos/1.png',
+			'themes/default/images/logos/default_logos/2.png',
+			'themes/default/images/logos/default_logos/3.png',
+			'themes/default/images/logos/default_logos/4.png',
+			'themes/default/images/logos/default_logos/5.png',
+			'themes/default/images/logos/default_logos/6.png',
+			'themes/default/images/logos/default_logos/7.png',
+			'themes/default/images/logos/default_backgrounds/index.html',
+			'themes/default/images/logos/default_backgrounds/1.png',
+			'themes/default/images/logos/default_backgrounds/2.png',
+			'themes/default/images/logos/default_backgrounds/3.png',
+			'themes/default/images/logos/default_backgrounds/4.png',
+			'themes/default/images/logos/default_backgrounds/5.png',
+			'themes/default/images/logos/default_backgrounds/6.png',
+			'themes/default/images/logos/default_backgrounds/7.png',
 		);
 	}
 
@@ -193,7 +208,8 @@ class Hook_addon_registry_themewizard
 
 		$preview=do_lorem_template('LOGOWIZARD_2',array(
 			'NAME'=>lorem_phrase(),
-			'TITLE'=>lorem_phrase(),
+			'LOGO_THEME_IMAGE'=>'logo/default_logos/1',
+			'BACKGROUND_THEME_IMAGE'=>'logo/default_backgrounds/1',
 			'THEME'=>lorem_phrase()
 		));
 

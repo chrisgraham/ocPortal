@@ -813,6 +813,13 @@ class Module_admin_setupwizard
 		$theme=substr(preg_replace('#[^A-Za-z\d]#','_',$name),0,40);
 		$installprofile=post_param('installprofile','');
 
+		$default_logos=get_all_image_ids_type('logo/default_logos');
+		shuffle($default_logos);
+		$default_backgrounds=get_all_image_ids_type('logo/default_backgrounds');
+		shuffle($default_backgrounds);
+		$logo_theme_image=post_param('logo_theme_image',array_shift($default_logos));
+		$background_theme_image=post_param('background_theme_image',array_shift($default_backgrounds));
+
 		if ($installprofile!='')
 		{
 			// Run any specific code for the profile
@@ -845,7 +852,7 @@ class Module_admin_setupwizard
 			}
 			foreach (array($theme,'default') as $logo_save_theme)
 			{
-				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'logo/logo_template');
+				$logo=generate_logo($name,$logo_theme_image,$background_theme_image,false,$logo_save_theme);
 				$path='themes/'.$logo_save_theme.'/images_custom/-logo.png';
 				if (!file_exists(dirname($path)))
 				{
@@ -857,7 +864,7 @@ class Module_admin_setupwizard
 				if (addon_installed('collaboration_zone'))
 					actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,get_site_default_lang(),'logo/collaboration-logo',$path,true);
 				imagedestroy($logo);
-				$logo=generate_logo($name,$header_text,false,$logo_save_theme,'logo/standalone_logo_template');
+				$logo=generate_logo($name,$logo_theme_image,$background_theme_image,false,$logo_save_theme,true);
 				$path='themes/'.$logo_save_theme.'/images_custom/standalone_logo.png';
 				@imagepng($logo,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 				actual_edit_theme_image('logo/standalone_logo',$logo_save_theme,get_site_default_lang(),'logo/standalone_logo',$path,true);

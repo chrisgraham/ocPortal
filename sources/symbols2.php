@@ -2680,7 +2680,13 @@ function ecv2_UCASE($lang,$escaped,$param)
 
 	if (isset($param[0]))
 	{
-		$value=ocp_mb_strtoupper($param[0]);
+		if ((isset($param[1])) && ($param[1]=='1'))
+		{
+			$value=ocp_mb_strtoupper(ocp_mb_substr($param[0],0,1)).ocp_mb_substr($param[0],1); // ucfirst
+		} else
+		{
+			$value=ocp_mb_strtoupper($param[0]);
+		}
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);

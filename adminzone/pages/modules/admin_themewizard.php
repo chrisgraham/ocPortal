@@ -374,11 +374,17 @@ class Module_admin_themewizard
 		$text=do_lang_tempcode('LOGOWIZARD_1_DESCRIBE',escape_html($theme_image_url->evaluate()));
 		$submit_name=do_lang_tempcode('PROCEED');
 
+		$default_logos=get_all_image_ids_type('logo/default_logos');
+		shuffle($default_logos);
+		$default_backgrounds=get_all_image_ids_type('logo/default_backgrounds');
+		shuffle($default_backgrounds);
+
 		require_code('form_templates');
+
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_LOGO_NAME'),'name',get_option('site_name'),true));
-		$a=$GLOBALS['SITE_DB']->query_select_value('zones','zone_title',array('zone_name'=>''));
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_LOGO_SLOGAN'),'title',get_translated_text($a),true));
+		$fields->attach(form_input_line(do_lang_tempcode('config:SITE_NAME'),do_lang_tempcode('DESCRIPTION_LOGO_NAME'),'name',get_option('site_name'),true));
+		$fields->attach(form_input_theme_image(do_lang_tempcode('LOGO_THEME_IMAGE'),'','logo_theme_image',$default_logos,NULL));
+		$fields->attach(form_input_theme_image(do_lang_tempcode('BACKGROUND_THEME_IMAGE'),'','background_theme_image',$default_backgrounds));
 
 		// Find the most appropriate theme to edit for
 		$theme=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name'=>'site'));
@@ -417,6 +423,8 @@ class Module_admin_themewizard
 	function __make_logo()
 	{
 		$theme=post_param('theme');
+		$logo_theme_image=post_param('logo_theme_image');
+		$background_theme_image=post_param('background_theme_image');
 
 		// Do it
 		require_code('themes2');
@@ -431,7 +439,7 @@ class Module_admin_themewizard
 				make_missing_directory(dirname($path));
 			}
 
-			$img=generate_logo(post_param('name'),post_param('title'),false,$logo_save_theme,'logo/logo_template');
+			$img=generate_logo(post_param('name'),$logo_theme_image,$background_theme_image,false,$logo_save_theme);
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);
 			actual_edit_theme_image('logo/-logo',$logo_save_theme,user_lang(),'logo/-logo',$path);
@@ -439,7 +447,7 @@ class Module_admin_themewizard
 				actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,user_lang(),'logo/collaboration-logo',$path);
 			$rand=uniqid('',true);
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
-			$img=generate_logo(post_param('name'),post_param('title'),false,NULL,'logo/standalone_logo_template');
+			$img=generate_logo(post_param('name'),post_param('logo_theme_image'),post_param('background_theme_image'),false,NULL,true);
 			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
 			imagedestroy($img);
 			actual_edit_theme_image('logo/standalone_logo',$logo_save_theme,user_lang(),'logo/standalone_logo',$path);

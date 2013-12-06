@@ -261,13 +261,15 @@ function find_theme_image_themewizard_preview($id)
  * Generate a logo from the template.
  *
  * @param  string		The site name.
- * @param  string		The site slogan.
+ * @param  string		The logo theme image.
+ * @param  string		The background theme image.
  * @param  boolean	Whether to output the logo to the browser, destroy then image, and exit the script (i.e. never returns)
  * @param  ?string	The theme to use the logo template from (NULL: default root zone theme).
  * @param  string		The logo img file to base upon.
+ * @param  boolean	Whether we are generating the standalone version (smaller, used in e-mails etc).
  * @return resource  The image resource.
  */
-function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo/logo_template')
+function generate_logo($name,$logo_theme_image,$background_theme_image,$raw=false,$theme=NULL,$standalone_version=false)
 {
 	require_code('character_sets');
 	require_code('files');
@@ -278,15 +280,15 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo/logo_temp
 		if (($theme=='') || ($theme=='-1')) $theme='default';
 	}
 
-	$logo_wizard_details=array();
+	$logowizard_details=array();
 	if ($theme!='default')
 	{
 		$ini_path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini';
 		if (file_exists($ini_path))
-			$logo_wizard_details+=better_parse_ini_file($ini_path);
+			$logowizard_details+=better_parse_ini_file($ini_path);
 	}
 	$ini_path=get_file_base().'/themes/default/theme.ini';
-	$logo_wizard_details+=better_parse_ini_file($ini_path);
+	$logowizard_details+=better_parse_ini_file($ini_path);
 
 	$logo_url=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',array('theme'=>$theme,'id'=>$use));
 	if (!is_null($logo_url)) $file_path_stub=convert_url_to_path($logo_url);
@@ -317,7 +319,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo/logo_temp
 
 	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (!file_exists($ttf_font)) || (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')===false))
 	{
-		$font=intval($logo_wizard_details['site_name_font_size_small_non_ttf']);
+		$font=intval($logowizard_details['site_name_font_size_small_non_ttf']);
 		$font_width=imagefontwidth($font)*strlen($name);
 		$font_height=imagefontheight($font);
 	} else
@@ -325,7 +327,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo/logo_temp
 		list(,,$font_width,,,,,$font_height)=imagettfbbox(26.0,0.0,$ttf_font,foxy_utf8_to_nce($name));
 		$font_height=max($font_height,-$font_height);
 	}
-	$white=imagecolorallocate($img,hexdec(substr($logo_wizard_details['site_name_colour'],0,2)),hexdec(substr($logo_wizard_details['site_name_colour'],2,2)),hexdec(substr($logo_wizard_details['site_name_colour'],4,2)));
+	$white=imagecolorallocate($img,hexdec(substr($logowizard_details['site_name_colour'],0,2)),hexdec(substr($logowizard_details['site_name_colour'],2,2)),hexdec(substr($logowizard_details['site_name_colour'],4,2)));
 	$black=imagecolorallocate($img,0,0,0);
 	$matches=array();
 	if (file_exists(get_custom_file_base().'/themes/'.$theme.'/css_custom/global.css'))
@@ -335,19 +337,11 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo/logo_temp
 	{
 		$css_file=file_get_contents(get_file_base().'/themes/default/css/global.css');
 	}
-	if (preg_match('/\{\$THEME\_WIZARD\_COLOR,\#(\w\w)(\w\w)(\w\w),standard_border,.*\}/',$css_file,$matches)!=0)
-	{
-		$blue=imagecolorallocate($img,hexdec($matches[1]),hexdec($matches[2]),hexdec($matches[3]));
-	} else
-	{
-		$blue=imagecolorallocate($img,hexdec(substr($logo_wizard_details['slogan_colour'],0,2)),hexdec(substr($logo_wizard_details['slogan_colour'],2,2)),hexdec(substr($logo_wizard_details['slogan_colour'],4,2)));
-	}
-	$do=array(array($slogan,intval($logo_wizard_details['slogan_x_offset']),intval($logo_wizard_details['slogan_y_offset'])/*73 on some servers?? Weird*/,intval($logo_wizard_details['slogan_font_size']),$ttf_font,$white));
-	if (($font_width>intval($logo_wizard_details['site_name_split'])) && (strpos($name,' ')!==false)) // Split in two
+	if (($font_width>intval($logowizard_details['site_name_split'])) && (strpos($name,' ')!==false)) // Split in two
 	{
 		if ((function_exists('imagettftext')) && (array_key_exists('FreeType Support',gd_info())) && (file_exists($ttf_font)) && (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')!==false))
 		{
-			list(,,$font_width,,,,,$font_height)=imagettfbbox(floatval($logo_wizard_details['site_name_font_size_small']),0.0,$ttf_font,foxy_utf8_to_nce($name));
+			list(,,$font_width,,,,,$font_height)=imagettfbbox(floatval($logowizard_details['site_name_font_size_small']),0.0,$ttf_font,foxy_utf8_to_nce($name));
 			$font_height=max($font_height,-$font_height);
 		}
 		$bits=explode(' ',$name);
@@ -357,19 +351,19 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo/logo_temp
 		{
 			if (strlen($a)<intval(round(floatval(strlen($name))/2.0))) $a.=$bit.' '; else $b.=$bit.' ';
 		}
-		$do[]=array($a,intval($logo_wizard_details['site_name_x_offset']),intval($logo_wizard_details['site_name_y_offset_small'])+$font_height,intval($logo_wizard_details['site_name_font_size_small']),$ttf_font,$blue);
-		$do[]=array($b,intval($logo_wizard_details['site_name_x_offset']),intval($logo_wizard_details['site_name_y_offset_small'])+$font_height*2+intval($logo_wizard_details['site_name_split_gap']),intval($logo_wizard_details['site_name_font_size_small']),$ttf_font,$blue);
-	} elseif ($font_width>intval($logo_wizard_details['site_name_split'])) // Smaller font
+		$do[]=array($a,intval($logowizard_details['site_name_x_offset']),intval($logowizard_details['site_name_y_offset_small'])+$font_height,intval($logowizard_details['site_name_font_size_small']),$ttf_font,$blue);
+		$do[]=array($b,intval($logowizard_details['site_name_x_offset']),intval($logowizard_details['site_name_y_offset_small'])+$font_height*2+intval($logowizard_details['site_name_split_gap']),intval($logowizard_details['site_name_font_size_small']),$ttf_font,$blue);
+	} elseif ($font_width>intval($logowizard_details['site_name_split'])) // Smaller font
 	{
 		if ((function_exists('imagettftext')) && (array_key_exists('FreeType Support',gd_info())) && (file_exists($ttf_font)) && (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')!==false))
 		{
-			list(,,$font_width,,,,,$font_height)=imagettfbbox(floatval($logo_wizard_details['site_name_font_size_small']),0.0,$ttf_font,foxy_utf8_to_nce($name));
+			list(,,$font_width,,,,,$font_height)=imagettfbbox(floatval($logowizard_details['site_name_font_size_small']),0.0,$ttf_font,foxy_utf8_to_nce($name));
 			$font_height=max($font_height,-$font_height);
 		}
-		$do[]=array($name,intval($logo_wizard_details['site_name_x_offset']),intval($logo_wizard_details['site_name_y_offset'])+$font_height,intval($logo_wizard_details['site_name_font_size_small']),$ttf_font,$blue);
+		$do[]=array($name,intval($logowizard_details['site_name_x_offset']),intval($logowizard_details['site_name_y_offset'])+$font_height,intval($logowizard_details['site_name_font_size_small']),$ttf_font,$blue);
 	} else // Show normally
 	{
-		$do[]=array($name,intval($logo_wizard_details['site_name_x_offset']),intval($logo_wizard_details['site_name_y_offset'])+$font_height,floatval($logo_wizard_details['site_name_font_size']),$ttf_font,$blue);
+		$do[]=array($name,intval($logowizard_details['site_name_x_offset']),intval($logowizard_details['site_name_y_offset'])+$font_height,floatval($logowizard_details['site_name_font_size']),$ttf_font,$blue);
 	}
 	foreach ($do as $i=>$doing)
 	{
@@ -379,7 +373,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo/logo_temp
 		} else
 		{
 			// @ needed for bizarre reasons due to type juggling in PHP (brought up by ocProducts PHP only)
-			@imagestring($img,($doing[3]==intval($logo_wizard_details['site_name_font_size_small']))?intval($logo_wizard_details['site_name_font_size_nonttf']):$font,$doing[1],$doing[2]-11,$doing[0],$doing[5]);
+			@imagestring($img,($doing[3]==intval($logowizard_details['site_name_font_size_small']))?intval($logowizard_details['site_name_font_size_nonttf']):$font,$doing[1],$doing[2]-11,$doing[0],$doing[5]);
 		}
 	}
 
@@ -743,7 +737,7 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 			{
 				if ($source_theme=='default')
 				{
-					$needed=array('washed_out','area_background','lgrad','dgrad','dark_border','comcode_quote_left','comcode_quote_right','a.link','a.hover','a.link__dark','a.hover__dark','special_borderer','navigation_top','navigation_bot','navigation_peak','ocfredirectindicator','ocfpostindicator','header_background','slightly_seeded_text','special_middle',);
+					$needed=array('washed_out','area_background','lgrad','dgrad','dark_border','comcode_quote_left','comcode_quote_right','a.link','a.hover','a.link__dark','a.hover__dark','special_borderer','ocfredirectindicator','ocfpostindicator','slightly_seeded_text','special_middle',);
 					foreach ($needed as $colour_needed)
 					{
 						if (!array_key_exists($colour_needed,$colours))
@@ -789,24 +783,6 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					elseif ($show=='1x/arrow_box_hover' || $show=='2x/arrow_box_hover')
 					{
 						$img=generate_recoloured_image($path,'#12467A',$colours['a.hover'],'#0A223D',$colours['a.hover__dark']);
-					}
-					elseif (($show=='logo/standalone_logo_template') || ($show=='logo/logo_template') || (substr($show,0,5)=='logo/'))
-					{
-						$pixel_x_start_array=array();
-						for ($y=0;$y<=59+((strpos($show,'standalone')===false)?0:13);$y++)
-						{
-							$pixel_x_start_array[]=324; // i.e. the line is skipped (324 is the far right)
-						}
-						if (strpos($show,'standalone')===false)
-						{
-							$pixel_x_start_array=array_merge($pixel_x_start_array,array(320,319,318,317,316,316,315,315,314,314,313,312,309));
-						}
-						$img=generate_recoloured_image($path,'#FFFFFF','#FFFFFF','#82A3D8',$colours['navigation_top'],'#3865A9',$colours['navigation_bot'],'vertical',$pixel_x_start_array,60);
-						for ($y=0;$y<=88;$y++)
-						{
-							$pixel_x_start_array[$y]=(array_key_exists($y,$pixel_x_start_array)?$pixel_x_start_array[$y]:0);
-						}
-						$img=generate_recoloured_image(isset($img)?$img:$path,'#8FADDC',$colours['navigation_peak'],'#FFFFFF',$colours['WB'],'#E3EAF2',$colours['header_background'],'horizontal',$pixel_x_start_array,0,true);
 					}
 					elseif (in_array($show,array('ocf_general/no_new_posts_redirect','ocf_general/new_posts_redirect')))
 					{
