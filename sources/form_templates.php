@@ -1368,8 +1368,9 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 		'HOOK'=>$hook,
 		'ROOT_ID'=>is_null($root_id)?'':$root_id,
 		'OPTIONS'=>serialize($options),
+		'DESCRIPTION'=>$description,
 	));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+	return _form_input($name,$pretty_name,'',$input,$required,false,$tabindex);
 }
 
 /**

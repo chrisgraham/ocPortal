@@ -9,15 +9,13 @@
 		{+END}
 		{+START,IF_NON_PASSED,POST_COMMENT}
 			<span class="field_name">
-				<span id="required_readable_marker__{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}" style="display: {$?,{REQUIRED*},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
+				<label class="accessibility_hidden" for="{NAME*}">{!_POST}</label>
 			</span>
 
-			<label class="accessibility_hidden" for="{NAME*}">{!_POST}</label>
+			<span id="required_readable_marker__{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}" style="display: {$?,{REQUIRED*},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
 		{+END}
 
-		{+START,IF_NON_EMPTY,{DESCRIPTION}}
-			<div class="associated_details">{DESCRIPTION}</div>
-		{+END}
+		{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}{+END}
 
 		<input type="hidden" name="comcode__{NAME*}" value="1" />
 		{HIDDEN_FIELDS}
@@ -28,8 +26,8 @@
 					{+START,IF,{$SHOW_DOCS}}{+START,IF_PASSED,COMCODE_URL}
 						{$,<li><a class="link_exempt" title="\{!COMCODE_MESSAGE,Comcode\}: \{!LINK_NEW_WINDOW\}" target="_blank" href="\{COMCODE_URL*\}"><img alt="\{!COMCODE_MESSAGE,Comcode\}" src="\{$IMG*,comcode\}" title="\{!COMCODE_MESSAGE,Comcode\}" /></a> \{!COMCODE_MESSAGE,<a class="link_exempt" title="Comcode: \{!LINK_NEW_WINDOW\}" target="_blank" href="\{COMCODE_URL*\}">Comcode</a>\}</li>}
 						{+START,IF,{$MATCH_KEY_MATCH,_WILD:cms_comcode_pages}}
-							<li><a class="link_exempt" title="{!FULL_COMCODE_TUTORIAL}: {!LINK_NEW_WINDOW}" target="_blank" href="{$TUTORIAL_URL*,tut_comcode}">{!FULL_COMCODE_TUTORIAL}</a></li>
-							<li><a class="link_exempt" title="{!FULL_BLOCK_TUTORIAL}: {!LINK_NEW_WINDOW}" target="_blank" href="{$TUTORIAL_URL*,tut_adv_comcode_pages}">{!FULL_BLOCK_TUTORIAL}</a></li>
+							<li><a class="link_exempt" title="{!FULL_COMCODE_TUTORIAL} {!LINK_NEW_WINDOW}" target="_blank" href="{$TUTORIAL_URL*,tut_comcode}">{!FULL_COMCODE_TUTORIAL}</a></li>
+							<li><a class="link_exempt" title="{!FULL_BLOCK_TUTORIAL} {!LINK_NEW_WINDOW}" target="_blank" href="{$TUTORIAL_URL*,tut_adv_comcode_pages}">{!FULL_BLOCK_TUTORIAL}</a></li>
 						{+END}
 					{+END}{+END}
 					{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
@@ -120,7 +118,7 @@
 				{!ATTACHMENTS}
 
 				{+START,IF,{$NOT,{$MOBILE}}}
-					<img class="help_icon" onkeydown="this.onmouseover(event);" onkeyup="this.onmouseout(event);" onclick="this.onmouseover(event);" title="{!ATTACHMENT_HELP=}" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,this.ttitle,'auto',null,null,false,true);" alt="{!HELP}" src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" />
+					<img class="help_icon" onclick="this.onmouseover(event);" title="{!ATTACHMENT_HELP=}" onmouseover="activate_rich_semantic_tooltip(this,event);" alt="{!HELP}" src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" />
 				{+END}
 			</span>
 

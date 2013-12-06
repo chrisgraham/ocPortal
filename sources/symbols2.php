@@ -1896,6 +1896,22 @@ function ecv2_NO_SAFE_MODE($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
+function ecv2_STRIP_HTML($lang,$escaped,$param)
+{
+	$value=strip_html($param[0]);
+
+	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
+	return $value;
+}
+
+/**
+ * Evaluate a particular Tempcode symbol.
+ *
+ * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  array				Array of escaping operations.
+ * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
+ * @return string				The result.
+ */
 function ecv2_NUMBER_FORMAT($lang,$escaped,$param)
 {
 	$value='';

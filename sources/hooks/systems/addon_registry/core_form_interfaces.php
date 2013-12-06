@@ -177,6 +177,9 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/templates/BLOCK_HELPER_START.tpl',
 			'themes/default/templates/BLOCK_HELPER_BLOCK_GROUP.tpl',
 			'themes/default/templates/BLOCK_HELPER_BLOCK_CHOICE.tpl',
+			'themes/default/templates/FORM_SCREEN_INPUT_COMBO.tpl',
+			'themes/default/templates/FORM_SCREEN_FIELD_DESCRIPTION.tpl',
+			'themes/default/templates/FORM_SCREEN_ARE_REQUIRED.tpl',
 			'data/block_helper.php',
 			'themes/default/templates/JAVASCRIPT_AJAX_PEOPLE_LISTS.tpl',
 			'themes/default/templates/JAVASCRIPT_DATE_CHOOSER.tpl',
@@ -415,7 +418,6 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/images/date_chooser/pdate.gif',
 			'data/namelike.php',
 			'data/username_exists.php',
-			'themes/default/templates/FORM_SCREEN_INPUT_COMBO.tpl',
 		);
 	}
 
@@ -479,6 +481,8 @@ class Hook_addon_registry_core_form_interfaces
 			'FORM_SCREEN_INPUT_RADIO_LIST.tpl'=>'form_screen_2',
 			'FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY.tpl'=>'form_screen',
 			'FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY.tpl'=>'form_screen',
+			'FORM_SCREEN_FIELD_DESCRIPTION.tpl'=>'form_screen',
+			'FORM_SCREEN_ARE_REQUIRED.tpl'=>'form_screen',
 			'POSTING_FIELD.tpl'=>'form_screen',
 			'FORM_SCREEN_INPUT_TIME.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_DATE_NULL.tpl'=>'form_screen_1',
@@ -1141,6 +1145,7 @@ class Hook_addon_registry_core_form_interfaces
 			'HOOK'=>'',
 			'ROOT_ID'=>'',
 			'OPTIONS'=>serialize(''),
+			'DESCRIPTION'=>lorem_sentence_html(),
 			'MULTI_SELECT'=>false
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
@@ -1148,7 +1153,7 @@ class Hook_addon_registry_core_form_interfaces
 			'SKIP_LABEL'=>false,
 			'NAME'=>$name,
 			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION'=>'',
 			'DESCRIPTION_SIDE'=>'',
 			'INPUT'=>$input,
 			'COMCODE'=>''

@@ -33,7 +33,7 @@
 
 					{+START,IF_NON_PASSED_OR_FALSE,SKIP_REQUIRED}
 						{+START,IF,{$IN_STR,{TAB_FIELDS},_required}}
-							<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
+							{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 						{+END}
 					{+END}
 

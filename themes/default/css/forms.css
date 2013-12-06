@@ -9,14 +9,21 @@
 	border: 1px solid {$GET,standard_border};
 	overflow: hidden;
 	padding: 0.5em;
+	/*	Style rather extreme, but re-enable if you wish
 	background-color: {$GET,required_background};
+	*/
 	font-weight: bold;
 	font-size: 0.85em;
-	margin: 28px auto;
+	margin: 1em auto;
 	{+START,IF,{$NOT,{$MOBILE}}}
 		width: 11em;
 	{+END}
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+}
+
+.required_star {
+	{$BETA_CSS_PROPERTY,opacity: 0.4;}
+	color: {$GET,red_highlight_text};
 }
 
 .comcode_supported {
@@ -24,13 +31,8 @@
 }
 
 div.comcode_supported {
-	margin-top: 0.5em;
-}
-
-.required_star {
+	margin-top: 0.25em;
 	float: right;
-	margin-left: 0.3em;
-	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 }
 
 .input_erroneous {
@@ -58,7 +60,7 @@ div.comcode_supported {
 
 /* This is used to fix a problem on screen readers (we don't want a paragraph used) */
 span.form_field_name {
-	display: inline-block;
+	/*display: inline-block;	Actually, this breaks vertical centring, so let it be inline*/
 }
 
 .locked_field {
@@ -79,7 +81,7 @@ span.form_field_name {
 
 table.form_table { /* Some people think tables for forms are bad semantics. You can change it if you like, but we consider tables the optimal semantics (field name column, field input column, each field being a row). It's a conscious decision. Also all modern browsers allow complete styling control to change how tables are displayed, so there is no visual constraint here. */
 	border-collapse: collapse;
-	border: 1px dotted {$GET,pale_border};
+	border: 1px solid {$GET,pale_border};
 	margin: 1em 0;
 }
 
@@ -105,13 +107,9 @@ Curved borders would be cool, but it does not work well with the carefully defin
 
 .form_table_field_name {
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
-	{+START,IF,{$NOT,{$MOBILE}}}
-		text-align: right;
-	{+END}
-	{+START,IF,{$MOBILE}}
-		text-align: left;
-	{+END}
+	text-align: left;
 	color: {$GET,slightly_seeded_text};
+	vertical-align: middle;
 }
 
 .form_table_field_name h3 {
@@ -122,14 +120,18 @@ Curved borders would be cool, but it does not work well with the carefully defin
 .form_table_description_above_cell {
 	text-align: left !important;
 }
+.form_table_description_above_cell .field_name {
+	float: left;
+	margin-top: 4px;
+}
 
 .form_table_field_name, .form_table_field_input, .form_table_huge_field,
 th.form_table_field_name, /* Extra specificity to take precedence over th.de_th */
 .form_table_field_spacer>th, .form_table_field_spacer>td, .form_table_description_above_cell, .form_table_description_under_cell
 {
-	border: 1px dotted {$GET,pale_border};
+	border: 1px solid {$GET,pale_border};
 	color: {$GET,slightly_seeded_text} !important;
-	padding: 0.5em;
+	padding: 0.5em 0.75em;
 	background-color: {$GET,area_background} !important; /* !important is so has priority over .de_th */
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}
 }
@@ -139,11 +141,23 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 .form_table_field_input input {
 	margin-top: 0;
 }
+
 .form_table_field_name a, .form_table_field_input a, .form_table_huge_field a,
 th.form_table_field_name a, /* Extra specificity to take precedence over th.de_th */
 .form_table_field_spacer>th a, .form_table_field_spacer>td a, .form_table_description_above_cell a, .form_table_description_under_cell a
 {
 	color: {$GET,a.link} !important;
+}
+
+.form_table_field_input select, .form_table_field_input input, .form_table_field_input img {
+	vertical-align: middle;
+}
+.form_table_field_input .constrain_field {
+	display: inline;
+}
+.form_table_field_input .wide_field {
+	width: 27em;
+	max-width: 100%;
 }
 
 /* Tone it all down for forms inside tabs */
@@ -160,13 +174,15 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .form_table_huge_field_description_is_under {
-	border-top: 1px dotted {$GET,pale_border};
+	border-top: 1px solid {$GET,pale_border};
 	border-bottom: 0 !important;
 }
 
 .form_table .required {
+	/*	Style rather extreme, but re-enable if you wish
 	background-color: {$GET,required_background} !important;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,required_2_background}\, {$GET,required_background}) !important;}
+	*/
 }
 
 .form_table .filledin .required {
@@ -243,13 +259,8 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	white-space: nowrap;
 }
 
-.field_checkbox_description {
-	margin-top: -2.3em !important;
-	margin-{!en_left}: 30px !important;
-}
-
 /* Special validated checkbox */
-input[name="validated"].input_tick:before, input[type="checkbox"].input_tick {
+input[name="validated"].input_tick:before, input[name="validated"].input_tick {
 	width: {$ADD,5,{$IMG_WIDTH%,{$IMG,1x/editor/off}}}px;
 	height: {$IMG_HEIGHT%,{$IMG,1x/editor/off}}px;
 	display: inline-block;
@@ -276,13 +287,6 @@ input[name="validated"].input_tick:checked:before {
 input[name="validated"].input_tick {
 	padding-right: 0.5em;
 	visibility: hidden;
-	float: left;
-}
-input[name="validated"]+input+.field_checkbox_description {
-	/*margin-top: -33px !important;	We'll use float alignment instead
-	margin-{!en_left}: 99px !important;*/
-	margin-top: 2px !important;
-	margin-{!en_left}: 0 !important;
 }
 
 .various_ticks {
@@ -292,7 +296,7 @@ input[name="validated"]+input+.field_checkbox_description {
 
 .syndication_options span {
 	white-space: nowrap;
-	border-{!en_right}: 1px dotted {$GET,pale_border};
+	border-{!en_right}: 1px solid {$GET,pale_border};
 	font-size: 0.9em;
 	padding-right: 0.5em;
 	margin-right: 0.3em;
@@ -306,7 +310,7 @@ input[name="validated"]+input+.field_checkbox_description {
 	float: {!en_left};
 	font-size: 0.9em;
 	vertical-align: middle;
-	border-{!en_right}: 1px dotted {$GET,pale_border};
+	border-{!en_right}: 1px solid {$GET,pale_border};
 }
 
 .various_ticks .input_individual_tick {
@@ -314,7 +318,7 @@ input[name="validated"]+input+.field_checkbox_description {
 
 .various_ticks .input_other_tick {
 	margin-top: 0.5em;
-	border-top: 1px dotted {$GET,pale_border};
+	border-top: 1px solid {$GET,pale_border};
 }
 
 .various_ticks .input_individual_tick input {
@@ -478,7 +482,7 @@ input[name="validated"]+input+.field_checkbox_description {
 
 .posting_form_wrap_buttons, .posting_form_insert_buttons {
 	float: {!en_right};
-	border: 1px dotted {$GET,standard_border};
+	border: 1px solid {$GET,standard_border};
 	padding: 0.5em;
 	margin-top: 0.5em;
 	margin-left: 0.5em;
@@ -578,8 +582,19 @@ input[name="validated"]+input+.field_checkbox_description {
 	margin-{!en_left}: 2em;
 }
 
-.fields_set_contents {
-	margin-bottom: 1.3em;
+.fields_set_item {
+	background: {$GET,main_background};
+	padding: 0.75em 0.5em;
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+	border: 1px solid {$GET,pale_border};
+}
+
+.fields_set_item + .fields_set_item {
+	margin-top: 1em;
+}
+
+.fields_set_radio {
+	margin-bottom: 0.5em;
 }
 
 .fields_set_contents .associated_details {
@@ -588,8 +603,17 @@ input[name="validated"]+input+.field_checkbox_description {
 
 /* Spruce up defaults for form fields */
 
+.form_table input[type="text"], .form_table input[type="email"], .form_table input[type="password"], .form_table textarea,
+.form_table_field_input select, .form_table_field_input textarea {
+	font-size: 1.12em;
+}
+
 .form_table input[type="text"], .form_table input[type="email"], .form_table input[type="password"], .form_table textarea {
 	{$BETA_CSS_PROPERTY,border-radius: 4px;}
 	border: 1px solid {$GET,standard_border};
 	padding: 0.2em;
+}
+
+.form_table input[type="number"] {
+	width: 6em;
 }

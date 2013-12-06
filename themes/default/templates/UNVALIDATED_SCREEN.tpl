@@ -7,7 +7,7 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{SECTIONS}}
-	<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
+	{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 
 	{SECTIONS}
 {+END}

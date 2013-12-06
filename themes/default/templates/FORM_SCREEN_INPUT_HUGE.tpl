@@ -5,14 +5,12 @@
 		<input type="hidden" name="label_for__{NAME*}" value="{$STRIP_TAGS,{PRETTY_NAME*}}" />
 
 		<span class="field_name">
-			<span id="required_readable_marker__{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}" style="display: {$?,{REQUIRED*},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
-
 			<label for="{NAME*}">{PRETTY_NAME*}</label>
 		</span>
 
-		{+START,IF_NON_EMPTY,{DESCRIPTION}}
-			<div class="associated_details">{DESCRIPTION}</div>
-		{+END}
+		<span id="required_readable_marker__{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}" style="display: {$?,{REQUIRED*},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
+
+		{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}{+END}
 	</th>
 </tr>
 

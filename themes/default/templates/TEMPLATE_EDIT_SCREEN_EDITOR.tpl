@@ -75,7 +75,7 @@
 										</td>
 										<td>
 											{+START,IF,{$ADDON_INSTALLED,code_editor}}
-												<a target="_blank" title="{LINE*}: {!LINK_NEW_WINDOW}" href="{$BASE_URL*}/code_editor.php?path={FILENAME*}&amp;line={LINE*}">{LINE*}</a>
+												<a target="_blank" title="{LINE*} {!LINK_NEW_WINDOW}" href="{$BASE_URL*}/code_editor.php?path={FILENAME*}&amp;line={LINE*}">{LINE*}</a>
 											{+END}
 											{+START,IF,{$NOT,{$ADDON_INSTALLED,code_editor}}}
 												{LINE*}

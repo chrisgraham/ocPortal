@@ -14,7 +14,7 @@
 </p>
 
 {+START,IF_NON_EMPTY,{EDIT_FORM}}
-	<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
+	{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 {+END}
 
 <h2>{!EDIT}</h2>

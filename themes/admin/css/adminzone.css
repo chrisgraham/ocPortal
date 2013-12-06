@@ -28,10 +28,19 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	margin: 0;
 }
 
-.box___message {
+.global_messages .box___message {
 	background-image: none !important;
 	background-color: #FFF !important;
 	border-color: #bdcde6 !important;
+}
+
+.box___message .global_message {
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+.box___message .global_message>span, .box___message .global_message>p {
+	padding-top: 0;
 }
 
 .global_breadcrumbs {

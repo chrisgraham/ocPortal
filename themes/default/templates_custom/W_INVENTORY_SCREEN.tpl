@@ -5,7 +5,7 @@
 		<div class="ocw_avatar">
 			<img alt="{!W_AVATAR}" src="{AVATAR*}" />
 			{+START,IF_NON_EMPTY,{PIC}}
-				[<a title="{!W_PHOTO}: {!LINK_NEW_WINDOW}" target="_blank" href="{PIC*}">{!W_PHOTO}</a>]
+				[<a title="{!W_PHOTO} {!LINK_NEW_WINDOW}" target="_blank" href="{PIC*}">{!W_PHOTO}</a>]
 			{+END}
 		</div>
 	{+END}

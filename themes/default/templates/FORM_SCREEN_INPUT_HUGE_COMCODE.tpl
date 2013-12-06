@@ -1,20 +1,17 @@
 <tr>
 	{$SET,randomised_id,{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}}
 	<th id="form_table_field_name__{$GET,randomised_id}" {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="form_table_description_above_cell{+START,IF,{REQUIRED}} required{+END}">
-		<input type="hidden" name="comcode__{NAME*}" value="1" />
 		<input type="hidden" name="label_for__{NAME*}" value="{$STRIP_TAGS,{PRETTY_NAME*}}" />
 
 		<span class="field_name">
-			<span id="required_readable_marker__{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}" style="display: {$?,{REQUIRED*},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
-
 			<label for="{NAME*}">{PRETTY_NAME*}</label>
 		</span>
 
+		<span id="required_readable_marker__{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}" style="display: {$?,{REQUIRED*},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
+
 		{COMCODE}
 
-		{+START,IF_NON_EMPTY,{DESCRIPTION}}
-			<div class="associated_details">{DESCRIPTION}</div>
-		{+END}
+		{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}{+END}
 	</th>
 </tr>
 

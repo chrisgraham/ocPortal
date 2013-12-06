@@ -129,8 +129,6 @@ function ensure_next_field(this_field)
 		next_field.value='';
 		next_field.name=((this_field.name.indexOf('[]')==-1)?(name_stub+next_num):this_field.name);
 		next_field_wrap.appendChild(next_field);
-		var br=document.createElement('br');
-		next_field_wrap.appendChild(br);
 		this_field.parentNode.parentNode.insertBefore(next_field_wrap,this_field.parentNode.nextSibling);
 	}
 }
@@ -162,8 +160,6 @@ function ensure_next_field_upload(this_field)
 		next_field.onchange=_ensure_next_field_upload;
 		next_field.setAttribute('type','file');
 		next_field.name=name_stub+next_num;
-		var br=document.createElement('br');
-		this_field.parentNode.appendChild(br);
 		this_field.parentNode.appendChild(next_field);
 	}
 }

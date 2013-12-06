@@ -624,6 +624,10 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	/*background: url('{$IMG_INLINE;,inner_background}');*/
 }
 
+.main_website_faux {
+	background-color: {$GET,fixed_width_background} !important;
+}
+
 .global_middle_outer {
 	margin-top: 0.8em;
 }
@@ -1072,6 +1076,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 
 .help_icon {
 	cursor: pointer;
+	margin-left: 0.5em;
 }
 
 /* Makes a link tag (a) look like it's not anything special (we use these tags as tab points sometimes) */
@@ -2195,6 +2200,10 @@ div.wysiwyg_toolbar_color_finder {
 	text-align: center;
 }
 
+.ajax_tree_list {
+	{$BETA_CSS_PROPERTY,user-select: none;}
+}
+
 .ajax_tree_expand_icon {
 	width: 11px;
 	height: 11px;
@@ -2203,6 +2212,7 @@ div.wysiwyg_toolbar_color_finder {
 .ajax_tree_cat_icon {
 	width: 14px;
 	height: 14px;
+	display: none;
 }
 
 .ajax_tree_magic_button {

@@ -4,7 +4,7 @@
 
 {+START,IF_NON_EMPTY,{GOOGLE}}
 	<p>
-		{!POWERED_BY,<a rel="external" title="Google: {!LINK_NEW_WINDOW}" target="_blank" href="http://translate.google.com/">Google</a>}.
+		{!POWERED_BY,<a rel="external" title="Google {!LINK_NEW_WINDOW}" target="_blank" href="http://translate.google.com/">Google</a>}.
 	</p>
 {+END}
 

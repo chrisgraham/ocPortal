@@ -786,7 +786,7 @@ class standard_crud_module
 		if (!is_object($this->add_text)) $this->add_text=make_string_tempcode(is_null($this->add_text)?'':$this->add_text);
 		if ($this->user_facing)
 		{
-			if (($this->care_please) && (do_lang('CARE_PLEASE')!='')) $this->add_text->attach(paragraph(do_lang_tempcode('CARE_PLEASE')));
+			//I think people know how web systems work by now if (($this->care_please) && (do_lang('CARE_PLEASE')!='')) $this->add_text->attach(paragraph(do_lang_tempcode('CARE_PLEASE')));
 			if (addon_installed('points'))
 			{
 				$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>get_self_url(true,true)),get_module_zone('login'));

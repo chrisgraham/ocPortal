@@ -30,7 +30,7 @@
 	RIGHT=1
 {+END}
 
-<p class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</p>
+{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 
 {+START,IF_NON_EMPTY,{UPLOAD_FORM}}
 	<div class="box box___filedump_screen"><div class="box_inner">

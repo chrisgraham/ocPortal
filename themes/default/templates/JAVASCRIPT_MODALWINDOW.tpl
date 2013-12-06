@@ -644,7 +644,7 @@ function ModalWindow()
 			switch (this.type)
 			{
 				case 'iframe':
-					var iframe_width=(this.width.match(/^[\d\.]+$/)!==null)?(this.width+'px'):this.width;
+					var iframe_width=(this.width.match(/^[\d\.]+$/)!==null)?((this.width-14)+'px'):this.width;
 					var iframe_height=(this.height.match(/^[\d\.]+$/)!==null)?(this.height+'px'):((this.height=='auto')?(this.LOADING_SCREEN_HEIGHT+'px'):this.height);
 
 					var iframe=this.element('iframe',{

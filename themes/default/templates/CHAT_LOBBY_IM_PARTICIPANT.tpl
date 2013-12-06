@@ -11,10 +11,10 @@
 		<p class="lonely_label">{!ACTIONS}:</p>
 		<ul role="navigation" class="actions_list_super_compact">
 			<li id="friend__{ID*}">
-				<a onclick="this.style.display='none';" target="_blank" title="{!MAKE_FRIEND}: {!LINK_NEW_WINDOW}" href="{MAKE_FRIEND_URL*}">{!MAKE_FRIEND}</a>
+				<a onclick="this.style.display='none';" target="_blank" title="{!MAKE_FRIEND} {!LINK_NEW_WINDOW}" href="{MAKE_FRIEND_URL*}">{!MAKE_FRIEND}</a>
 			</li>
 			<li id="block__{ID*}">
-				<a target="_blank" title="{!BLOCK_MEMBER}: {!LINK_NEW_WINDOW}" href="{BLOCK_MEMBER_URL*}">{!BLOCK_MEMBER}</a>
+				<a target="_blank" title="{!BLOCK_MEMBER} {!LINK_NEW_WINDOW}" href="{BLOCK_MEMBER_URL*}">{!BLOCK_MEMBER}</a>
 			</li>
 		</ul>
 	</div>

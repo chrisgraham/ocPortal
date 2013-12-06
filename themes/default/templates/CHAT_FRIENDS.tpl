@@ -30,7 +30,7 @@
 
 				{+START,IF,{$NOT,{SIMPLER}}}
 					<th>
-						<a target="_blank" title="{!ONLINE}: {!LINK_NEW_WINDOW}" href="{ONLINE_URL*}">{!ONLINE}</a>
+						<a target="_blank" title="{!ONLINE} {!LINK_NEW_WINDOW}" href="{ONLINE_URL*}">{!ONLINE}</a>
 					</th>
 				{+END}
 

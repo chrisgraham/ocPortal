@@ -10,7 +10,7 @@
 {+END}
 
 {+START,IF,{$IN_STR,{FIELDS},_required}}
-	<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
+	{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 {+END}
 
 {$REQUIRE_JAVASCRIPT,javascript_validation}

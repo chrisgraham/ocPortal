@@ -9,7 +9,7 @@
 
 	<div class="installer_main_min">
 		<p>
-			{!WELCOME_A,<a title="{!WELCOME_B}: {!LINK_NEW_WINDOW}" rel="external" href="{$TUTORIAL_URL*,tut_install}" target="_blank">{!WELCOME_B}</a>}
+			{!WELCOME_A,<a title="{!WELCOME_B} {!LINK_NEW_WINDOW}" rel="external" href="{$TUTORIAL_URL*,tut_install}" target="_blank">{!WELCOME_B}</a>}
 		</p>
 
 		<p>

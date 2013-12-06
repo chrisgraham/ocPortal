@@ -31,7 +31,7 @@
 		{+START,IF,{IS_PANEL}}
 			{+START,IF,{$EQ,{NAME},panel_left,panel_right}}
 				<p class="quick_self_edit_link associated_link">
-					<a onclick="return open_link_as_overlay(this);" class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" width="{$IMG_WIDTH*,{$IMG,1x/editor/comcode}}" height="{$IMG_HEIGHT*,{$IMG,1x/editor/comcode}}" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
+					<a onclick="return open_link_as_overlay(this);" class="link_exempt" title="{!COMCODE_MESSAGE,Comcode} {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" width="{$IMG_WIDTH*,{$IMG,1x/editor/comcode}}" height="{$IMG_HEIGHT*,{$IMG,1x/editor/comcode}}" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
 					<a href="{EDIT_URL*}" title="{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}: {NAME*} ({!IN,&quot;{$?,{$IS_EMPTY,{$ZONE}},{!_WELCOME},{$ZONE*}}&quot;})"><span>{$?,{$HAS_ZONE_ACCESS,adminzone},{!EDIT_ZONE_EDITOR},{!EDIT_PAGE}}</span></a>
 				</p>
 			{+END}

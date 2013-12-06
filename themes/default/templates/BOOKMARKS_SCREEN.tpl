@@ -37,7 +37,7 @@
 						<td>
 							<div class="constrain_field">
 								<div class="accessibility_hidden"><label for="page_link_{ID*}">{!PAGE_LINK}</label></div>
-								<a class="bookmark_preview_link external_link vertical_alignment" href="{$PAGE_LINK*,{PAGE_LINK}}" title="{!PREVIEW}: {!LINK_NEW_WINDOW}" target="_blank">{!PREVIEW}</a>
+								<a class="bookmark_preview_link external_link vertical_alignment" href="{$PAGE_LINK*,{PAGE_LINK}}" title="{!PREVIEW} {!LINK_NEW_WINDOW}" target="_blank">{!PREVIEW}</a>
 								<input maxlength="255" size="{$?,{$MOBILE},30,31}" type="text" id="page_link_{ID*}" name="page_link" value="{PAGE_LINK*}" />
 							</div>
 						</td>

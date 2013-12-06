@@ -15,13 +15,8 @@
 				make_colour_chooser('{NAME;/}','{DEFAULT;/}','',{TABINDEX%},'{PRETTY_NAME;/}','input_colour{_REQUIRED}');
 				do_color_chooser();
 			//]]></script>
+
+			{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}{+END}
 		</td>
 	</tr>
-	{+START,IF_NON_EMPTY,{DESCRIPTION}}
-		<tr>
-			<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="form_table_description_under_cell{+START,IF,{REQUIRED}} required{+END}">
-				<div class="associated_details">{DESCRIPTION}</div>
-			</th>
-		</tr>
-	{+END}
 {+END}

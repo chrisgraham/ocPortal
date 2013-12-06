@@ -2,7 +2,7 @@
 
 {$PARAGRAPH,{TEXT}}
 
-<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
+{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}" target="_top">
 	{$INSERT_SPAMMER_BLACKHOLE}

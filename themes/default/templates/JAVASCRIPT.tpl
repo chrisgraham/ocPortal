@@ -1443,10 +1443,10 @@ function illustrate_frame_load(pf,frame)
 		var body=de.getElementsByTagName('body');
 		if (body.length==0)
 		{
-			set_inner_html(de,'<head>'+head+'<\/head><body aria-busy="true" class="website_body"><div class="spaced"><div class="ajax_loading vertical_alignment"><img id="loading_image" src="'+'{$IMG_INLINE*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div><\/body>');
+			set_inner_html(de,'<head>'+head+'<\/head><body aria-busy="true" class="website_body main_website_faux"><div class="spaced"><div class="ajax_loading vertical_alignment"><img id="loading_image" src="'+'{$IMG_INLINE*;,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div><\/body>');
 		} else
 		{
-			body[0].className='website_body';
+			body[0].className='website_body main_website_faux';
 
 			var head_element=de.getElementsByTagName('head')[0];
 			if (!head_element)
@@ -1886,6 +1886,11 @@ function convert_tooltip(element)
 	}
 }
 
+function activate_rich_semantic_tooltip(ob,event)
+{
+	if (typeof ob.ttitle=='undefined') ob.ttitle=ob.title;
+	activate_tooltip(ob,event,ob.ttitle,'auto',null,null,false,true);
+}
 /* Tooltips that can work on any element with rich HTML support */
 //  ac is the object to have the tooltip
 //  event is the event handler
@@ -1893,7 +1898,7 @@ function convert_tooltip(element)
 //  width is in pixels (but you need 'px' on the end), can be null or auto but both of these will actually instead result in the default max-width of 360px
 //  pic is the picture to show in the top-left corner of the tooltip; should be around 30px x 30px
 //  height is the maximum height of the tooltip for situations where an internal but unusable scrollbar is wanted
-//  bottom is set to true if the tooltip should definitely appear upwards; rarely use this
+//  bottom is set to true if the tooltip should definitely appear upwards; rarely use this parameter
 //  no_delay is set to true if the tooltip should appear instantly
 //  lights_off is set to true if the image is to be dimmed
 //  force_width is set to true if you want width to not be a max width

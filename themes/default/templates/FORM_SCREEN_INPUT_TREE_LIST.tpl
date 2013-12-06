@@ -9,14 +9,9 @@
 //]]></script>
 
 <p class="associated_details">
-	{!TREE_LIST_HELP}
-</p>
-{+START,IF_NON_EMPTY,{DEFAULT}}
-	<p class="associated_details">
+	{+START,IF_NON_EMPTY,{DEFAULT}}
 		{!TREE_LIST_FEEDBACK,<span class="whitespace_visible" id="{NAME*}_mirror">{NICE_LABEL`}</span>}
-	</p>
-{+END}
+	{+END}
 
-{+START,IF_NON_PASSED_OR_FALSE,END_OF_FORM}
-	<hr />
-{+END}
+	{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}DESCRIPTION={DESCRIPTION}<br /><br />{!TREE_LIST_HELP}{+END}
+</p>

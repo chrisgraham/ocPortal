@@ -1,5 +1,5 @@
 {+START,IF,{$IN_STR,{SPECIALISATION}{SPECIALISATION2},_required}}
-	<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
+	{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 {+END}
 
 <form autocomplete="off" title="{!PRIMARY_PAGE_FORM}" id="posting_form" method="post" enctype="multipart/form-data" action="{URL*}"{+START,IF_PASSED_AND_TRUE,AUTOCOMPLETE} class="autocomplete"{+END}>

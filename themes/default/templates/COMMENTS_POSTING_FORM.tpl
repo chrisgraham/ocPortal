@@ -149,7 +149,7 @@
 								{$SET,needs_msg_label,{$OR,{$GET,GET_TITLE},{GET_EMAIL},{$AND,{$IS_GUEST},{$OCF}}}}
 								{+START,IF,{$GET,needs_msg_label}}
 									<div class="vertical_alignment">
-										<a onclick="return open_link_as_overlay(this);" class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
+										<a onclick="return open_link_as_overlay(this);" class="link_exempt" title="{!COMCODE_MESSAGE,Comcode} {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
 										<label for="post">{!POST_COMMENT}:</label>
 									</div>
 								{+END}
@@ -157,7 +157,7 @@
 								{+START,IF_NON_EMPTY,{FIRST_POST}{COMMENT_TEXT}}
 									<ul class="associated_links_block_group">
 										{+START,IF_NON_EMPTY,{FIRST_POST}}
-											<li><a class="non_link" title="{!ocf:FIRST_POST}: {!LINK_NEW_WINDOW}" target="_blank" href="{FIRST_POST_URL*}" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{FIRST_POST*~;^}','30%',null,null,false,true);">{!ocf:FIRST_POST}</a></li>
+											<li><a class="non_link" title="{!ocf:FIRST_POST} {!LINK_NEW_WINDOW}" target="_blank" href="{FIRST_POST_URL*}" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{FIRST_POST*~;^}','30%',null,null,false,true);">{!ocf:FIRST_POST}</a></li>
 										{+END}
 
 										{+START,IF_NON_EMPTY,{COMMENT_TEXT}}
@@ -168,7 +168,7 @@
 
 								{+START,IF,{$NOT,{$GET,needs_msg_label}}}
 									<div class="vertical_alignment">
-										<a onclick="return open_link_as_overlay(this);" class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
+										<a onclick="return open_link_as_overlay(this);" class="link_exempt" title="{!COMCODE_MESSAGE,Comcode} {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img alt="" src="{$IMG*,1x/editor/comcode}" srcset="{$IMG*,2x/editor/comcode} 2x" /></a>
 										<label class="accessibility_hidden" for="post">{!POST_COMMENT}:</label>
 									</div>
 								{+END}
@@ -218,7 +218,7 @@
 						{+START,IF,{USE_CAPTCHA}}
 							<div class="comments_captcha">
 								<div class="box box___comments_posting_form__captcha"><div class="box_inner">
-									<p><label for="captcha">{!DESCRIPTION_CAPTCHA_2,<a target="_blank" title="{!AUDIO_VERSION}: {!LINK_NEW_WINDOW}" href="{$FIND_SCRIPT*,captcha,1}?mode=audio{$KEEP*,0,1}">{!AUDIO_VERSION}</a>}</label></p>
+									<p><label for="captcha">{!DESCRIPTION_CAPTCHA_2,<a target="_blank" title="{!AUDIO_VERSION} {!LINK_NEW_WINDOW}" href="{$FIND_SCRIPT*,captcha,1}?mode=audio{$KEEP*,0,1}">{!AUDIO_VERSION}</a>}</label></p>
 									{+START,IF,{$CONFIG_OPTION,css_captcha}}
 										<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} id="captcha_frame" class="captcha_frame" title="{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}" src="{$FIND_SCRIPT*,captcha}{$KEEP*,1,1}">{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}</iframe>
 									{+END}

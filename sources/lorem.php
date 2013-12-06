@@ -907,6 +907,8 @@ function get_text_templates()
 		'WYSIWYG_SETTINGS',
 		'ATTACHMENT_UI_DEFAULTS',
 		'FONT_SIZER',
+		'FORM_SCREEN_FIELD_DESCRIPTION',
+		'FORM_SCREEN_ARE_REQUIRED',
 		'GALLERY_POPULAR',
 	);
 	return $text_templates;
