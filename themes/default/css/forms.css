@@ -348,10 +348,6 @@ input[name="validated"].input_tick {
 	max-width: 100px;
 }
 
-.theme_image__background_theme_image .radio_list_picture img {
-	max-width: 100%;
-}
-
 .radio_list_picture {
 	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }

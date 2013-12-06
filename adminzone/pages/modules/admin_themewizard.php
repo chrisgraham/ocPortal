@@ -416,8 +416,18 @@ class Module_admin_themewizard
 		require_css('fonts');
 		foreach ($fonts as $font)
 		{
+			if (strpos(strtolower($font),'veranda')!==false) continue; // Not licensed for this, only used as a web standards patch for vertical text
+
 			$_font=basename($font,'.ttf');
-			$font_choices->attach(form_input_radio_entry('font',$_font,$_font=='Vera','<span style="font-family: '.escape_html($_font).'">'.escape_html($_font).'</span>'));
+			$_font_label=$_font;
+			for ($i=0;$i<2;$i++)
+			{
+				$_font_label=preg_replace('#(It|Oblique)($| )#'.((strtolower($_font_label)==$_font_label)?'i':''),' Italic ',$_font_label);
+				$_font_label=preg_replace('#(Bd|Bold)($| )#'.((strtolower($_font_label)==$_font_label)?'i':''),' Bold ',$_font_label);
+			}
+			$_font_label=trim(str_replace('  ',' ',$_font_label));
+			$_font_label=preg_replace('#BI$#'.((strtolower($_font_label)==$_font_label)?'i':''),' Bold Italic',$_font_label);
+			$font_choices->attach(form_input_radio_entry('font',$_font,$_font=='Vera','<span style="font-family: '.escape_html($_font).'">'.escape_html($_font_label).'</span>'));
 		}
 		$fields->attach(form_input_radio(do_lang_tempcode('comcode:FONT'),'','font',$font_choices,true));
 

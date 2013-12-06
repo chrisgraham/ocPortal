@@ -133,6 +133,12 @@
 	margin-top: 3em;
 }
 
+/* Logo Wizard */
+
+.theme_image__background_theme_image .radio_list_picture img, .theme_image__logo_theme_image .radio_list_picture img {
+	max-width: 100%;
+}
+
 /*
 =========================
 =========Buttons=========
