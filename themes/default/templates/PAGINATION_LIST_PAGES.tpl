@@ -3,8 +3,8 @@
 
 	<div class="pagination_pages">
 		{HIDDEN}
-		<div class="accessibility_hidden"><label for="blp_start{$GET;*,RAND}">{!COUNT_PAGES}: {$GET*,TEXT_ID}</label></div>
-		<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} id="blp_start{$GET;*,RAND}" name="{START_NAME*}">
+		<div class="accessibility_hidden"><label for="blp_start{$GET*,RAND}">{!COUNT_PAGES}: {$GET*,TEXT_ID}</label></div>
+		<select{+START,IF,{$JS_ON}} onchange="/*guarded*/this.form.submit();"{+END} id="blp_start{$GET*,RAND}" name="{START_NAME*}">
 			{LIST}
 		</select>
 		{+START,IF,{$NOT,{$JS_ON}}}

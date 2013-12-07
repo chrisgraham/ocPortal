@@ -1,4 +1,5 @@
 {$REQUIRE_CSS,menu__dropdown}
+{$REQUIRE_JAVASCRIPT,javascript_menu_popup}
 
 {+START,IF_NON_EMPTY,{CONTENT}}
 	<nav class="menu_type__dropdown" role="navigation">
@@ -9,7 +10,7 @@
 			<li class="non_current last toplevel"{+START,IF,{$GET,HAS_CHILDREN}}{+START,IF,{$NOT,{$MOBILE}}} onmousemove="if (!this.timer) this.timer=window.setTimeout(function() { var ret=pop_up_menu('{MENU|;*}_dexpand_{$GET;*,RAND}','below','{MENU|;*}_d',event,true); try { document.getElementById('search_content').focus(); } catch (e) {}; return ret; } , 200);" onmouseout="if (this.timer) { window.clearTimeout(this.timer); this.timer=null; }"{+END}{+END}>
 				<a href="{$TUTORIAL_URL*,tutorials}" onkeypress="this.onclick(event);" onclick="cancel_bubbling(event);{+START,IF,{$GET,HAS_CHILDREN}} deset_active_menu();{+END}" class="toplevel_link last"{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone}} onfocus="return pop_up_menu('{MENU|;*}_dexpand_{$GET;*,RAND}','below','{MENU|;*}_d',event,true);"{+END}><img alt="" src="{$IMG*,icons/32x32/menu/adminzone/help}" srcset="{$IMG*,icons/64x64/menu/adminzone/help} 2x" /> <span>{!HELP}</span></a>
 				{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone}}
-					<div aria-haspopup="true" onmouseover="if (active_menu==null) return set_active_menu(this.id,'{MENU|;*}_d'); else return false;" onmouseout="return deset_active_menu();" class="nlevel menu_help_section" id="{MENU|*}_dexpand_{$GET;*,RAND}" style="display: none">
+					<div aria-haspopup="true" onmouseover="if (active_menu==null) return set_active_menu(this.id,'{MENU|;*}_d'); else return false;" onmouseout="return deset_active_menu();" class="nlevel menu_help_section" id="{MENU|*}_dexpand_{$GET*,RAND}" style="display: none">
 						{$,Admin Zone search}
 						<div class="adminzone_search">
 							<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,adminzone:admin:search}}" method="get" class="inline">
@@ -33,7 +34,5 @@
 				{+END}
 			</li>
 		</ul>
-
-		{$REQUIRE_JAVASCRIPT,javascript_menu_popup}
 	</nav>
 {+END}

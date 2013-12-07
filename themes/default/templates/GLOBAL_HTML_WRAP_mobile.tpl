@@ -29,7 +29,7 @@
 		<div class="global_middle">
 			<hr class="spaced_rule" />
 
-			<h2>{!NAVIGATION}</h2>
+			<h2>{!FEATURES}</h2>
 		</div>
 	{+END}
 

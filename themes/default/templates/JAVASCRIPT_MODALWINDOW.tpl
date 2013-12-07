@@ -308,7 +308,7 @@ function ModalWindow()
 {
 	return {
 		// Constants
-		WINDOW_SIDE_GAP: 25,
+		WINDOW_SIDE_GAP: {$?,{$MOBILE},5,25},
 		WINDOW_TOP_GAP: 25, // Will also be used for bottom gap for percentage heights
 		BOX_EAST_PERIPHERARY: 4,
 		BOX_WEST_PERIPHERARY: 4,

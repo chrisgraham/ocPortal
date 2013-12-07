@@ -20,39 +20,43 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 				<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
 
 				{$,The banner}
-				{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner twice}
-				{+START,IF_NON_EMPTY,{$GET,BANNER}}
-					<div class="global_banner">{$GET,BANNER}</div>
+				{+START,IF,{$NOT,{$MOBILE}}}
+					{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner twice}
+					{+START,IF_NON_EMPTY,{$GET,BANNER}}
+						<div class="global_banner">{$GET,BANNER}</div>
+					{+END}
 				{+END}
 
 				{$,The main logo}
-				<h1 class="logo_outer"><a target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$LOGO_URL*}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!HOME}" alt="{$SITE_NAME*}" /></a></h1>
+				<h1 class="logo_outer"><a target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$?*,{$MOBILE},{$IMG,logo/standalone_logo},{$LOGO_URL}}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!HOME}" alt="{$SITE_NAME*}" /></a></h1>
 
 				{$,Main menu}
 				<div class="global_navigation">
-					{$BLOCK,block=menu,param={$CONFIG_OPTION,header_menu_call_string},type=dropdown}
+					{$BLOCK,block=menu,param={$CONFIG_OPTION,header_menu_call_string},type={$?,{$MOBILE},mobile,dropdown}}
 
-					{$,Login form for guests}
-					{+START,IF,{$IS_GUEST}}
-						<div class="top_form">
-							{$BLOCK,block=top_login}
-						</div>
-					{+END}
+					<div class="global_navigation_inner">
+						{$,Login form for guests}
+						{+START,IF,{$IS_GUEST}}
+							<div class="top_form">
+								{$BLOCK,block=top_login}
+							</div>
+						{+END}
 
-					{$,Search box for logged in users [could show to guests, except space is lacking]}
-					{+START,IF,{$AND,{$ADDON_INSTALLED,search},{$NOT,{$IS_GUEST}}}}
-						<div class="top_form">
-							{$BLOCK,block=top_search,failsafe=1}
-						</div>
-					{+END}
+						{$,Search box for logged in users [could show to guests, except space is lacking]}
+						{+START,IF,{$AND,{$ADDON_INSTALLED,search},{$NOT,{$MOBILE}},{$NOT,{$IS_GUEST}}}}
+							<div class="top_form">
+								{$BLOCK,block=top_search,failsafe=1}
+							</div>
+						{+END}
 
-					{+START,IF,{$NOT,{$IS_GUEST}}}
-						<div class="top_buttons">
-							{$BLOCK,block=top_notifications}
+						{+START,IF,{$NOT,{$IS_GUEST}}}
+							<div class="top_buttons">
+								{$BLOCK,block=top_notifications}
 
-							{$BLOCK,block=top_personal_stats}
-						</div>
-					{+END}
+								{$BLOCK,block=top_personal_stats}
+							</div>
+						{+END}
+					</div>
 				</div>
 			</header>
 		{+END}
@@ -148,7 +152,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 						{+END}{+END}{+END}{+END}
 						{+START,IF,{$HAS_ZONE_ACCESS,adminzone}}
 							{+START,IF,{$ADDON_INSTALLED,occle}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_occle}}{+START,IF,{$CONFIG_OPTION,bottom_show_occle_button}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_occle}}
-								<li><a id="occle_button" accesskey="o" onclick="if (typeof window.load_occle!='undefined') return load_occle(); else return false;" href="{$PAGE_LINK*,adminzone:admin_occle}"><img id="occle_img" title="{!occle:OCCLE_DESCRIPTIVE_TITLE}" alt="{!occle:OCCLE_DESCRIPTIVE_TITLE}" src="{$IMG*,icons/24x24/tool_buttons/occle_on}" srcset="{$IMG*,icons/48x48/tool_buttons/occle_on} 2x" /></a></li>
+								<li><a id="occle_button" accesskey="o"{+START,IF,{$NOT,{$MOBILE}}} onclick="if (typeof window.load_occle!='undefined') return load_occle(); else return false;"{+END} href="{$PAGE_LINK*,adminzone:admin_occle}"><img id="occle_img" title="{!occle:OCCLE_DESCRIPTIVE_TITLE}" alt="{!occle:OCCLE_DESCRIPTIVE_TITLE}" src="{$IMG*,icons/24x24/tool_buttons/occle_on}" srcset="{$IMG*,icons/48x48/tool_buttons/occle_on} 2x" /></a></li>
 							{+END}{+END}{+END}{+END}
 							{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$EQ,{$BRAND_NAME},ocPortal}}
 								<li><a id="software_chat_button" accesskey="-" onclick="if (typeof window.load_software_chat!='undefined') return load_software_chat(event); else return false;" href="#"><img id="software_chat_img" title="{!SOFTWARE_CHAT}" alt="{!SOFTWARE_CHAT}" src="{$IMG*,icons/24x24/tool_buttons/software_chat}" srcset="{$IMG*,icons/48x48/tool_buttons/software_chat} 2x" /></a></li>
@@ -167,7 +171,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 							<div class="inline">
 								<div class="accessibility_hidden"><label for="su">{!SU}</label></div>
-								<input accesskey="w" size="10" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" type="text" value="{$USERNAME;*}" id="su" name="keep_su" /><input onclick="disable_button_just_clicked(this);" class="menu__site_meta__user_actions__login button_micro" type="submit" value="{!SU}" />
+								<input accesskey="w" size="{$?,{$MOBILE},15,10}" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" type="text" value="{$USERNAME;*}" id="su" name="keep_su" /><input onclick="disable_button_just_clicked(this);" class="menu__site_meta__user_actions__login button_micro" type="submit" value="{!SU}" />
 							</div>
 						</form>
 					{+END}
@@ -190,7 +194,9 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 						{$COPYRIGHT`}
 
-						{+START,INCLUDE,FONT_SIZER}{+END}
+						{+START,IF,{$NOT,{$MOBILE}}}
+							{+START,INCLUDE,FONT_SIZER}{+END}
+						{+END}
 					</div>
 
 					<nav class="global_minilinks" role="navigation">

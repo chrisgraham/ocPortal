@@ -83,6 +83,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#eef2f7,area_3_background,60% area_2_background + 40% WB}
 {$THEME_WIZARD_COLOR,#d9e1ee,area_4_background,20% seed + 80% WB}
 {$THEME_WIZARD_COLOR,#f4f4f4,area_5_background,3% seed + 97% WB}
+{$THEME_WIZARD_COLOR,#8daede,area_6_background,65% (seed val_to 80) + 35% WB}
 {$THEME_WIZARD_COLOR,#f2f5f9,area_faded_background,80% area_background + 20% WB}
 {$THEME_WIZARD_COLOR,#d9e1ee,area_zebra_background,20% seed + 80% WB}
 {$THEME_WIZARD_COLOR,#e6d8df,area_hover_background,92% (area_background hue_to 92) + 8% BW}
@@ -474,7 +475,12 @@ header h1 {
 	display: block;
 }
 .logo_outer .logo {
-	max-width: 100%;
+	{+START,IF,{$MOBILE}}
+		width: 100%;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		max-width: 100%;
+	{+END}
 }
 
 .global_navigation {
@@ -482,11 +488,23 @@ header h1 {
 	border-bottom: 1px solid {$GET,standard_border};
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
 	color: {$GET,WB};
+	{+START,IF,{$MOBILE}}
+		position: relative;
+	{+END}
+	min-height: 3.4em;
+}
+
+.global_navigation_inner {
 	overflow: hidden;
+	{+START,IF,{$MOBILE}}
+		margin-left: 8em !important; /* Space for the menu button, which is position:absolute */
+	{+END}
 }
 
 .global_navigation .top_buttons, .global_navigation .top_form {
-	margin-left: 1.5em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-left: 1.5em;
+	{+END}
 	padding: 0.5em 0;
 	margin-right: 1em;
 	float: right;
@@ -632,12 +650,15 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	margin-top: 0.8em;
 }
 {+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
-	.zone_running_ .global_middle_outer {
-		margin-top: 0; /* Splash page style design, tighter spacing */
-	}
-	.zone_running_ .global_side_panel {
-		margin-top: 0.8em;
-	}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		.zone_running_ .global_middle_outer {
+			margin-top: 0; /* Splash page style design, tighter spacing */
+		}
+
+		.zone_running_ .global_side_panel {
+			margin-top: 0.8em;
+		}
+	{+END}
 {+END}
 
 .global_middle {
@@ -645,20 +666,24 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 
 	margin-bottom: 1em;
 
-	/* Add some spacing. This will be overwritten to 1.5em in rules below if we have panels */
-	padding-{!en_left}: 1em;
-	padding-{!en_right}: 1em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		/* Add some spacing. This will be overwritten to 1.5em in rules below if we have panels */
+		padding-{!en_left}: 1em;
+		padding-{!en_right}: 1em;
+	{+END}
 }
 
 {+START,IF,{$MOBILE}}
-	.global_middle {
-		padding-{!en_left}: 0.4em;
-		padding-{!en_right}: 0.4em;
+	.global_middle, .panel_solo {
+		padding-{!en_left}: 2px;
+		padding-{!en_right}: 2px;
 		{$BETA_CSS_PROPERTY,text-size-adjust: none;}
+		width: 100% !important; /* Remove this line for 50:50 display of panels */
+		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	}
 
 	body.overlay {
-		width: 285px;
+		width: 100%;
 		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	}
 
@@ -688,20 +713,20 @@ body.popup_spacer h2 {
 		margin-{!en_left}: 1em;
 	{+END}
 	{+START,IF,{$MOBILE}}
-		padding-{!en_left}: 1em;
-		padding-{!en_right}: 0.5em;
+		padding-{!en_left}: 2px;
+		padding-{!en_right}: 1px;
 		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	{+END}
 }
 
 #panel_right {
-	float: {!en_right};
+	float: {$?,{$MOBILE},{!en_left},{!en_right}};
 	{+START,IF,{$NOT,{$MOBILE}}}
 		margin-{!en_right}: 1em;
 	{+END}
 	{+START,IF,{$MOBILE}}
-		padding-{!en_right}: 1em;
-		padding-{!en_left}: 0.5em;
+		padding-{!en_right}: 2px;
+		padding-{!en_left}: 1px;
 		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	{+END}
 }
@@ -719,40 +744,23 @@ body.popup_spacer h2 {
 .global_middle_faux>.global_side_panel {
 	width: auto;
 }
-{+START,IF,{$MOBILE}}
-	.panel_solo {
-		width: 100% !important;
-		padding-left: 1em !important;
-		padding-right: 1em !important;
+
+{+START,IF,{$NOT,{$MOBILE}}}
+	/* Spacing around middle column if it adjoins panels */
+	#panel_left ~ .global_middle {
+		margin-{!en_left}: 13em;
+		padding-{!en_left}: 3.5em;
 	}
-{+END}
-
-/* Spacing around middle column if it adjoins panels */
-#panel_left ~ .global_middle {
-	margin-{!en_left}: 13em;
-	padding-{!en_left}: 3.5em;
-}
-#panel_right ~ .global_middle {
-	margin-{!en_right}: 13em;
-	padding-{!en_right}: 3.5em;
-}
-{+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
-	.zone_running_ #panel_right:first-child ~ .global_middle { /* If no left panel on welcome zone, lets give some extra space */
-		margin-{!en_right}: 16em;
+	#panel_right ~ .global_middle {
+		margin-{!en_right}: 13em;
+		padding-{!en_right}: 3.5em;
 	}
+	{+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
+		.zone_running_ #panel_right:first-child ~ .global_middle { /* If no left panel on welcome zone, lets give some extra space */
+			margin-{!en_right}: 16em;
+		}
+	{+END}
 {+END}
-
-.global_side_panel .hide_if_in_panel {
-	display: none;
-}
-
-.hide_if_not_in_panel {
-	display: none;
-}
-
-.global_side_panel .hide_if_not_in_panel {
-	display: block;
-}
 
 .global_side_panel h2 {
 	border-bottom: 1px solid;
@@ -804,12 +812,14 @@ footer {
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,footer_background}\, {$GET,footer_2_background});}
 
 	color: {$GET,footer_text};
-	padding: 1.5em;
 	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
 		{$BETA_CSS_PROPERTY,box-shadow: 0 0 2px 2px {$GET,footer_tinting};}
 	{+END}
 	{+START,IF,{$MOBILE}}
 		text-align: center;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		padding: 1.5em;
 	{+END}
 }
 
@@ -821,8 +831,22 @@ footer a:hover, footer .button_hyperlink:hover {
 	color: {$GET,footer_tinting};
 }
 
+{+START,IF,{$MOBILE}}
+	footer .global_footer_left, footer .global_footer_right {
+		padding-left: 0.5em;
+		padding-right: 0.5em;
+	}
+{+END}
+
 footer .global_footer_left {
-	float: {!en_left};
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_left};
+	{+END}
+	{+START,IF,{$MOBILE}}
+		overflow: hidden;
+		/*padding-bottom: 0.25em;	Doesn't look good by default
+		border-bottom: 1px solid {$GET,dark_border};*/
+	{+END}
 }
 
 footer .footer_button_loading {
@@ -834,7 +858,16 @@ footer .global_footer_left .horizontal_buttons {
 	white-space: nowrap;
 	margin-top: 0;
 	font-size: 0; /* Fixes wrapping problem */
+	{+START,IF,{$MOBILE}}
+		float: left;
+	{+END}
 }
+
+{+START,IF,{$MOBILE}}
+	footer .global_footer_left .su_form {
+		float: right;
+	}
+{+END}
 
 footer .global_footer_left .horizontal_buttons>li:first-child {
 	padding-left: 0 !important;
@@ -860,8 +893,10 @@ footer .special_page_type_form select option {
 }
 
 footer .global_footer_left .horizontal_buttons, footer .su_form, footer .special_page_type_form {
-	float: left;
-	padding-right: 20px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: left;
+		padding-right: 20px;
+	{+END}
 }
 footer .global_footer_left .horizontal_buttons {
 	margin-top: 5px;
@@ -889,6 +924,9 @@ footer .invisible_ref_point {
 footer .global_copyright {
 	{+START,IF,{$NOT,{$MOBILE}}}
 		text-align: center;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		margin: 0.5em 0;
 	{+END}
 }
 
@@ -3089,6 +3127,7 @@ div.proceed_button_left_2 {
 	position: absolute;
 	min-width: 22em;
 	font-size: 13px; /* Puts it back, as was set to zero elsewhere */
+	z-index: 2000;
 }
 .global_button_ref_point .box {
 	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}

@@ -68,7 +68,7 @@ class Hook_occle_command_themewizard_find_color
 						$color=$matches[1][$i];
 						$equation=$matches[2][$i];
 						list($r,$g,$b)=array(hexdec(substr($color,0,2)),hexdec(substr($color,2,2)),hexdec(substr($color,4,2)));
-						$dist=sqrt(pow($r-$ir,2.0)+pow($g-$ig,2.0)+pow($b-$ib,2.0));
+						$dist=sqrt(pow(floatval($r-$ir),2.0)+pow(floatval($g-$ig),2.0)+pow(floatval($b-$ib),2.0));
 						$results[]=array($color,$dist,$equation,$f,array($r,$g,$b));
 					}
 				}
@@ -85,7 +85,7 @@ class Hook_occle_command_themewizard_find_color
 				$results_printed.='#'.$result[0];
 				$results_printed.=' ('.$result[2].')';
 				$results_printed.=' [';
-				if ($result[1]==0)
+				if ($result[1]==0.0)
 				{
 					$results_printed.='=';
 				} else

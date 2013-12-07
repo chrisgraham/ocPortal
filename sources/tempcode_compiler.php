@@ -396,7 +396,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								break 2;
 							}
 						}
-						if (($first_param=='"?"') && (count($opener_params)==3))
+						if (($first_param=='"?"') && (count($opener_params)==3) && (count($escaped)==0))
 						{
 							$current_level_data[]='((('.implode('.',$opener_params[0]).')=="1")?('.implode('.',$opener_params[1]).'):('.implode('.',$opener_params[2]).'))';
 							break 2;

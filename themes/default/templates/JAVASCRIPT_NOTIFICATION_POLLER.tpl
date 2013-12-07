@@ -230,7 +230,16 @@ function _toggle_messaging_box(event,name,hide)
 	var button=document.getElementById(name+'_button');
 	button.title='';
 	var set_position=function() {
-		e.style.left=(find_pos_x(button,true)+find_width(button)-find_width(e))+'px';
+		var button_x=find_pos_x(button,true);
+		var button_width=find_width(button);
+		var x=(button_x+button_width-find_width(e));
+		if (x<0)
+		{
+			var span=e.getElementsByTagName('span')[0];
+			span.style.marginLeft=(button_x+button_width/4)+'px';
+			x=0;
+		}
+		e.style.left=x+'px';
 		e.style.top=(find_pos_y(button,true)+find_height(button))+'px';
 		try
 		{
