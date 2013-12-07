@@ -1,1 +1,1 @@
-<span>&laquo;&nbsp;{!PREVIOUS}</span>
+<span>&laquo;{+START,IF,{$NOT,{$MOBILE}}}&nbsp;{!PREVIOUS}{+END}</span>

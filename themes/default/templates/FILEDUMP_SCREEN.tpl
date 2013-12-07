@@ -16,9 +16,7 @@
 
 		<p class="vertical_alignment">
 			<label class="accessibility_hidden" for="search_filedump">{!SEARCH}</label>
-			<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" onkeyup="update_ajax_search_list(this,event);" type="search" id="search_filedump" name="content" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" value="{!SEARCH}" />
-
-			<input class="buttons__search button_micro" type="submit" value="{!SEARCH}" />
+			<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" onkeyup="update_ajax_search_list(this,event);" type="search" id="search_filedump" name="content" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" value="{!SEARCH}" /><input class="buttons__search button_micro" type="submit" value="{!SEARCH}" />
 		</p>
 	</form>
 {+END}

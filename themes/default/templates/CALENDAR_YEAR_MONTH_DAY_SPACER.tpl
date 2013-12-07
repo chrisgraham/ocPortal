@@ -1,3 +1,3 @@
-<td>
+<td class="day_spacer">
 </td>
 

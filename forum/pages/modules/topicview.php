@@ -501,11 +501,11 @@ class Module_topicview
 				if ($threaded)
 				{
 					$view_as_linear_url=get_self_url(false,false,array('threaded'=>0));
-					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('VIEW_AS_LINEAR'),'url'=>$view_as_linear_url,'img'=>'buttons__linear');
+					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('_VIEW_AS_LINEAR'),'url'=>$view_as_linear_url,'img'=>'buttons__linear');
 				} else
 				{
 					$view_as_threaded_url=get_self_url(false,false,array('threaded'=>1));
-					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('VIEW_AS_THREADED'),'url'=>$view_as_threaded_url,'img'=>'buttons__threaded');
+					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('_VIEW_AS_THREADED'),'url'=>$view_as_threaded_url,'img'=>'buttons__threaded');
 				}
 			}
 

@@ -101,24 +101,31 @@ class Hook_addon_registry_core_menus
 			'sources/hooks/systems/occle_fs/menus.php',
 			'themes/default/css/menu_editor.css',
 			'sources/hooks/systems/addon_registry/core_menus.php',
+			'themes/admin/templates/MENU_mobile.tpl',
+			'themes/admin/css/menu__dropdown.css',
+			'themes/admin/templates/MENU_BRANCH_dropdown.tpl',
+			'themes/admin/templates/MENU_dropdown.tpl',
 			'themes/default/templates/MENU_dropdown.tpl',
 			'themes/default/templates/MENU_embossed.tpl',
 			'themes/default/templates/MENU_popup.tpl',
 			'themes/default/templates/MENU_select.tpl',
 			'themes/default/templates/MENU_sitemap.tpl',
 			'themes/default/templates/MENU_tree.tpl',
+			'themes/default/templates/MENU_mobile.tpl',
 			'themes/default/templates/MENU_BRANCH_dropdown.tpl',
 			'themes/default/templates/MENU_BRANCH_embossed.tpl',
 			'themes/default/templates/MENU_BRANCH_popup.tpl',
 			'themes/default/templates/MENU_BRANCH_select.tpl',
 			'themes/default/templates/MENU_BRANCH_sitemap.tpl',
 			'themes/default/templates/MENU_BRANCH_tree.tpl',
+			'themes/default/templates/MENU_BRANCH_mobile.tpl',
 			'themes/default/templates/MENU_SPACER_dropdown.tpl',
 			'themes/default/templates/MENU_SPACER_embossed.tpl',
 			'themes/default/templates/MENU_SPACER_popup.tpl',
 			'themes/default/templates/MENU_SPACER_select.tpl',
 			'themes/default/templates/MENU_SPACER_sitemap.tpl',
 			'themes/default/templates/MENU_SPACER_tree.tpl',
+			'themes/default/templates/MENU_SPACER_mobile.tpl',
 			'themes/default/templates/JAVASCRIPT_MENU_POPUP.tpl',
 			'themes/default/templates/MENU_STAFF_LINK.tpl',
 			'themes/default/templates/MENU_EDITOR_BRANCH.tpl',
@@ -173,6 +180,10 @@ class Hook_addon_registry_core_menus
 				'MENU_SPACER_tree.tpl'=>'block_menu__tree',
 				'MENU_BRANCH_tree.tpl'=>'block_menu__tree',
 				'MENU_tree.tpl'=>'block_menu__tree',
+
+				'MENU_SPACER_mobile.tpl'=>'block_menu__mobile',
+				'MENU_BRANCH_mobile.tpl'=>'block_menu__mobile',
+				'MENU_mobile.tpl'=>'block_menu__mobile',
 
 				'MENU_SPACER_dropdown.tpl'=>'block_menu__dropdown',
 				'MENU_BRANCH_dropdown.tpl'=>'block_menu__dropdown',
@@ -263,6 +274,89 @@ class Hook_addon_registry_core_menus
 				do_lorem_template('PAGE_LINK_CHOOSER',array(
 					'NAME'=>lorem_word(),
 					'VALUE'=>lorem_word(),
+				)
+			),NULL,'',true),
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_menu__mobile()
+	{
+		$child=new ocp_tempcode();
+		$content=new ocp_tempcode();
+		foreach (placeholder_array(3) as $v)
+		{
+			$child->attach(do_lorem_template('MENU_BRANCH_mobile',array(
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>'',
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>false,
+				'THE_LEVEL'=>'2',
+				'POSITION'=>'1',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
+		}
+		foreach (placeholder_array(3) as $v)
+		{
+			$content->attach(do_lorem_template('MENU_BRANCH_mobile',array(
+				'CAPTION'=>lorem_word(),
+				'IMG'=>'',
+				'URL'=>placeholder_url(),
+				'PAGE_LINK'=>placeholder_link(),
+				'ACCESSKEY'=>'',
+				'NEW_WINDOW'=>false,
+				'TOOLTIP'=>lorem_phrase(),
+				'CHILDREN'=>$child,
+				'DISPLAY'=>'block',
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+				'POSITION'=>'2',
+				'FIRST'=>false,
+				'LAST'=>false,
+				'BRETHREN_COUNT'=>'3',
+				'CURRENT'=>false,
+				'CURRENT_ZONE'=>false,
+			)));
+
+			$content->attach(do_lorem_template('MENU_SPACER_mobile',array(
+				'MENU'=>lorem_word_2(),
+				'TOP_LEVEL'=>true,
+				'THE_LEVEL'=>'0',
+			)));
+		}
+		$menu=do_lorem_template('MENU_mobile',array(
+			'CONTENT'=>$content,
+			'MENU'=>lorem_word_2(),
+		));
+
+		$menu->attach(do_lorem_template('MENU_STAFF_LINK',array('TYPE'=>'mobile','EDIT_URL'=>placeholder_url(),'NAME'=>lorem_phrase())));
+
+		return array(
+			lorem_globalise(
+				do_lorem_template('BLOCK_MENU',array(
+					'CONTENT'=>$menu,
+					'PARAM'=>lorem_phrase(),
+					'TRAY_STATUS'=>lorem_phrase(),
+					'TITLE'=>lorem_phrase(),
+					'TYPE'=>'mobile',
 				)
 			),NULL,'',true),
 		);

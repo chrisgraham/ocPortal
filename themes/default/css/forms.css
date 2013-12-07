@@ -112,6 +112,23 @@ Curved borders would be cool, but it does not work well with the carefully defin
 	padding-top: 0.95em !important;
 }
 
+{+START,IF,{$MOBILE}}
+	th.form_table_field_name {
+		border-bottom: 0 !important;
+	}
+	td.form_table_field_input {
+		border-top: 0 !important;
+
+		/* No separate gradient, continue on from the end of the form_table_field_name gradient */
+		background-image: none !important;
+		background-color: {$GET,area_2_background} !important;
+	}
+
+	.form_table_field_name .help_icon {
+		float: right;
+	}
+{+END}
+
 .form_table_field_name h3 {
 	border: 0;
 	margin: 0;
@@ -156,7 +173,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	display: inline;
 }
 .form_table_field_input .wide_field {
-	width: 27em;
+	width: {$?,{$MOBILE},100%,27em};
 	max-width: 100%;
 }
 
@@ -212,7 +229,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 /* Particular input types */
 
 .form_table select {
-	max-width: 100%;
+	max-width: 18em;
 }
 
 .upload_field_msg {
@@ -260,31 +277,31 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 /* Special validated checkbox */
-input[name="validated"].input_tick:before, input[name="validated"].input_tick {
+.form_table_field_input>input[name="validated"].input_tick:before, .form_table_field_input>input[name="validated"].input_tick {
 	width: {$ADD,5,{$IMG_WIDTH%,{$IMG,1x/editor/off}}}px;
 	height: {$IMG_HEIGHT%,{$IMG,1x/editor/off}}px;
 	display: inline-block;
 	cursor: pointer;
 }
-input[name="validated"].input_tick:before {
+.form_table_field_input>input[name="validated"].input_tick:before {
 	content: "";
 	background: red;
 	visibility: visible;
 	background: url('{$IMG;,1x/editor/off}') no-repeat;
 }
-input[name="validated"].input_tick:checked:before {
+.form_table_field_input>input[name="validated"].input_tick:checked:before {
 	background: url('{$IMG;,1x/editor/on}') no-repeat !important;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-	input[name="validated"].input_tick:before {
+	.form_table_field_input>input[name="validated"].input_tick:before {
 		background: url('{$IMG;,2x/editor/off}') no-repeat;
 		background-size: {$IMG_WIDTH%,{$IMG,1x/editor/off}}px {$IMG_HEIGHT%,{$IMG,1x/editor/off}}px;
 	}
-	input[name="validated"].input_tick:checked:before {
+	.form_table_field_input>input[name="validated"].input_tick:checked:before {
 		background: url('{$IMG;,2x/editor/on}') no-repeat !important;
 	}
 }
-input[name="validated"].input_tick {
+.form_table_field_input>input[name="validated"].input_tick {
 	padding-right: 0.5em;
 	visibility: hidden;
 }
@@ -310,7 +327,9 @@ input[name="validated"].input_tick {
 	float: {!en_left};
 	font-size: 0.9em;
 	vertical-align: middle;
-	border-{!en_right}: 1px solid {$GET,pale_border};
+	{+START,IF,{$NOT,{$MOBILE}}}
+		border-{!en_right}: 1px solid {$GET,pale_border};
+	{+END}
 }
 
 .various_ticks .input_individual_tick {
@@ -617,3 +636,9 @@ input[name="validated"].input_tick {
 .form_table input[type="number"] {
 	width: 6em;
 }
+
+{+START,IF,{$MOBILE}}
+	.form_table input[type="file"] {
+		max-width: 6em;
+	}
+{+END}

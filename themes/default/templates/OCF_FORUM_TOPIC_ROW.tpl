@@ -10,31 +10,51 @@
 	<td class="ocf_forum_topic_row_preview ocf_column2">
 		{+START,IF,{$NOT,{$MOBILE}}}
 			<a class="ocf_forum_topic_row_preview_button" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$TRUNCATE_LEFT*~;^,{POST},1000,0,1}','30%',null,null,null,true);" href="{URL*}">{!PREVIEW} <span style="display: none">{ID*}</span></a>
+
+			<div class="ocf_forum_topic_title_bits">
+				<span class="ocf_forum_topic_title_bits_left">
+					{TOPIC_ROW_LINKS}
+
+					{TOPIC_ROW_MODIFIERS}
+				</span>
+
+				<a class="vertical_alignment {+START,IF_NON_EMPTY,{TOPIC_ROW_MODIFIERS}{TOPIC_ROW_LINKS}} ocf_forum_topic_indent{+END}" href="{URL*}" title="{$ALTERNATOR_TRUNCATED,{TITLE},60,{!TOPIC_STARTED_DATE_TIME,{HOVER;~*}},,1}">{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:topics:_edit_topic:{ID}}{+START,IF,{UNREAD}}<span class="ocf_unread_topic_title">{+END}{$TRUNCATE_LEFT,{TITLE},46,1}{+START,IF,{UNREAD}}</span>{+END}{+END}</a>
+
+				{PAGES}
+
+				{+START,IF_PASSED,BREADCRUMBS}{+START,IF_NON_EMPTY,{BREADCRUMBS}}
+					<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p class="associated_details">{BREADCRUMBS}</p></nav>
+				{+END}{+END}
+			</div>
+			{+START,IF_NON_EMPTY,{DESCRIPTION}}{+START,IF,{$NEQ,{TITLE},{DESCRIPTION}}}
+				<div class="ocf_forum_topic_description">{DESCRIPTION*}</div>
+			{+END}{+END}
 		{+END}
 
-		<div class="ocf_forum_topic_title_bits">
-			{TOPIC_ROW_LINKS}
-
-			{TOPIC_ROW_MODIFIERS}
-
-			<a class="vertical_alignment {+START,IF_NON_EMPTY,{TOPIC_ROW_MODIFIERS}{TOPIC_ROW_LINKS}} ocf_forum_topic_indent{+END}" href="{URL*}" title="{$ALTERNATOR_TRUNCATED,{TITLE},60,{!TOPIC_STARTED_DATE_TIME,{HOVER;~*}},,1}">{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:topics:_edit_topic:{ID}}{+START,IF,{UNREAD}}<span class="ocf_unread_topic_title">{+END}{$TRUNCATE_LEFT,{TITLE},46,1}{+START,IF,{UNREAD}}</span>{+END}{+END}</a>
-
-			{PAGES}
-
-			{+START,IF_PASSED,BREADCRUMBS}{+START,IF_NON_EMPTY,{BREADCRUMBS}}
-				<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p class="associated_details">{BREADCRUMBS}</p></nav>
-			{+END}{+END}
-		</div>
-		{+START,IF_NON_EMPTY,{DESCRIPTION}}{+START,IF,{$NEQ,{TITLE},{DESCRIPTION}}}
-			<div class="ocf_forum_topic_description">{DESCRIPTION*}</div>
-		{+END}{+END}
-
 		{+START,IF,{$MOBILE}}
+			<div class="ocf_forum_topic_title_bits">
+				<a class="vertical_alignment {+START,IF_NON_EMPTY,{TOPIC_ROW_MODIFIERS}{TOPIC_ROW_LINKS}} ocf_forum_topic_indent{+END}" href="{URL*}" title="{$ALTERNATOR_TRUNCATED,{TITLE},60,{!TOPIC_STARTED_DATE_TIME,{HOVER;~*}},,1}">{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:topics:_edit_topic:{ID}}{+START,IF,{UNREAD}}<span class="ocf_unread_topic_title">{+END}{$TRUNCATE_LEFT,{TITLE},46,1}{+START,IF,{UNREAD}}</span>{+END}{+END}</a>
+
+				{PAGES}
+
+				{+START,IF_PASSED,BREADCRUMBS}{+START,IF_NON_EMPTY,{BREADCRUMBS}}
+					<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p class="associated_details">{BREADCRUMBS}</p></nav>
+				{+END}{+END}
+			</div>
+			{+START,IF_NON_EMPTY,{DESCRIPTION}}{+START,IF,{$NEQ,{TITLE},{DESCRIPTION}}}
+				<div class="ocf_forum_topic_description">{DESCRIPTION*}</div>
+			{+END}{+END}
+
 			<ul class="horizontal_meta_details associated_details" role="contentinfo">
 				<li><span class="field_name">{!COUNT_POSTS}:</span> {$PREG_REPLACE,\,\d\d\d$,k,{NUM_POSTS*}}</li>
 				<li><span class="field_name">{!COUNT_VIEWS}:</span> {$PREG_REPLACE,\,\d\d\d$,k,{NUM_VIEWS*}}</li>
 			</ul>
-			</p>
+
+			<div class="ocf_forum_topic_title_bits_left">
+				{TOPIC_ROW_LINKS}
+
+				{TOPIC_ROW_MODIFIERS}
+			</div>
 		{+END}
 	</td>
 

@@ -13,7 +13,8 @@
 
 	<div class="ocf_forum_box_right ocf_post_details" role="contentinfo">
 		<div class="ocf_post_details_date">
-			{!POST_DATE,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{POST_DATE_RAW}}">{POST_DATE*}</time>}
+			{$SET,post_date,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{POST_DATE_RAW}}">{POST_DATE*}</time>}
+			{$?,{$MOBILE},{$GET,post_date},{!POST_DATE,{$GET,post_date}}}
 		</div>
 
 		{+START,IF_NON_EMPTY,{POSTER}}

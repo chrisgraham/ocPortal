@@ -1170,6 +1170,7 @@ class Hook_addon_registry_core
 			'data/javaupload/index.html',
 			'data/javaupload/Net.jar',
 			'data/javaupload/Uploader.jar',
+			'themes/admin/templates/ADMIN_ZONE_SEARCH.tpl',
 			'themes/default/templates/JAVA_DETECT.tpl',
 			'themes/default/css/swfupload.css',
 			'themes/default/templates/NEWSLETTER_DEFAULT_FCOMCODE.tpl',
@@ -1204,7 +1205,6 @@ class Hook_addon_registry_core
 			// Admin theme
 			'themes/admin/css/index.html',
 			'themes/admin/css/adminzone.css',
-			'themes/admin/css/menu__dropdown.css',
 			'themes/admin/css_custom/.htaccess',
 			'themes/admin/css_custom/index.html',
 			'themes/admin/images/index.html',
@@ -1212,8 +1212,6 @@ class Hook_addon_registry_core
 			'themes/admin/index.html',
 			'themes/admin/templates/.htaccess',
 			'themes/admin/templates/GLOBAL_HTML_WRAP.tpl',
-			'themes/admin/templates/MENU_BRANCH_dropdown.tpl',
-			'themes/admin/templates/MENU_dropdown.tpl',
 			'themes/admin/templates/index.html',
 			'themes/admin/templates_custom/.htaccess',
 			'themes/admin/templates_custom/index.html',
@@ -1276,6 +1274,7 @@ class Hook_addon_registry_core
 			'FORUM_ATTACHMENT_IMAGE_THUMB.tpl'=>'forum_attachment_link',
 			'FORUM_ATTACHMENT_LINK.tpl'=>'forum_attachment_link',
 			'tempcode_test.tpl'=>'administrative__tempcode_test',
+			'ADMIN_ZONE_SEARCH.tpl'=>'admin_zone_search',
 			'JAVA_DETECT.tpl'=>'java_detect',
 			'EMAIL_LOG_SCREEN.tpl'=>'email_log_screen',
 			'QUICK_JS_LOADER.tpl'=>'quick_js_loader',
@@ -1340,6 +1339,20 @@ class Hook_addon_registry_core
 				'START_PARAM'=>'x_start',
 				'MAX_PARAM'=>'x_max',
 			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__admin_zone_search()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('ADMIN_ZONE_SEARCH',array()),NULL,'',true)
 		);
 	}
 

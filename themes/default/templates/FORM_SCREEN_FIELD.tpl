@@ -4,6 +4,12 @@
 
 <tr class="field_input">
 	<th id="form_table_field_name__{$GET,randomised_id}" class="form_table_field_name{+START,IF,{REQUIRED}} required{+END}">
+		{+START,IF,{$MOBILE}}
+			{COMCODE}
+
+			{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}{+END}
+		{+END}
+
 		<span class="form_field_name field_name">
 			{$SET,show_label,{$AND,{$IS_NON_EMPTY,{NAME}},{$NOT,{SKIP_LABEL}}}}
 			{+START,IF,{$GET,show_label}}
@@ -30,11 +36,15 @@
 	{+END}
 
 	<td id="form_table_field_input__{$GET,randomised_id}" class="form_table_field_input{+START,IF,{REQUIRED}} required{+END}">
-		{COMCODE}
+		{+START,IF,{$NOT,{$MOBILE}}}
+			{COMCODE}
+		{+END}
 
 		{INPUT}
 
-		{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}{+END}
+		{+START,IF,{$NOT,{$MOBILE}}}
+			{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}{+END}
+		{+END}
 
 		<div id="error_{$GET,randomised_id}" style="display: none" class="input_error_here"></div>
 

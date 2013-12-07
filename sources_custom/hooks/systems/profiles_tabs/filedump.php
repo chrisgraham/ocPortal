@@ -41,7 +41,7 @@ class Hook_Profiles_Tabs_filedump
 
 		require_lang('filedump');
 
-		$title=do_lang_tempcode('FILEDUMP');
+		$title=do_lang_tempcode('_FILEDUMP');
 
 		$order=70;
 

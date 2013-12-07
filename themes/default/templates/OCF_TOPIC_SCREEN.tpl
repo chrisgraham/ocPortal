@@ -80,20 +80,18 @@
 
 	{+START,IF,{$OR,{$IS_NON_EMPTY,{MODERATOR_ACTIONS}},{$AND,{$NOT,{$MOBILE}},{$IS_NON_EMPTY,{MARKED_POST_ACTIONS}}},{MAY_CHANGE_MAX}}}
 		<div class="box ocf_topic_control_functions"><div class="box_inner">
-			<span class="field_name">{!CONTROL_FUNCTIONS}:</span>
+			{+START,IF,{$NOT,{$MOBILE}}}<span class="field_name">{!CONTROL_FUNCTIONS}:</span>{+END}
 
 			{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
-				<form title="{!TOPIC_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline">
+				<form title="{!TOPIC_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline horiz_field_sep_rightward">
 					{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}
 
 					<div class="inline">
-						<label for="tma_type">{!TOPIC_ACTIONS}:
+						<label for="tma_type">{!TOPIC_ACTIONS}:</label>
 						<select class="dropdown_actions" id="tma_type" name="type">
 							<option value="misc">-</option>
 							{MODERATOR_ACTIONS}
-						</select>
-						</label>
-						<input class="buttons__proceed button_micro" type="submit" onclick="if (document.getElementById('tma_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; }  return false;" value="{!PROCEED}" />
+						</select><input class="buttons__proceed button_micro" type="submit" onclick="if (document.getElementById('tma_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; }  return false;" value="{!PROCEED}" />
 					</div>
 				</form>
 			{+END}
@@ -101,51 +99,27 @@
 			{+START,IF,{$NOT,{$MOBILE}}}
 				{+START,IF_NON_EMPTY,{MARKED_POST_ACTIONS}}
 					{+START,IF,{$JS_ON}}
-						<form title="{!MARKED_POST_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline horiz_field_sep">
+						<form title="{!MARKED_POST_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline horiz_field_sep_rightward">
 							{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}
 
-							<div class="inline">
-								<label for="mpa_type">{!MARKED_POST_ACTIONS}:
+							<div class="inline horiz_field_sep_rightward">
+								<label for="mpa_type">{!MARKED_POST_ACTIONS}:</label>
 								<select id="mpa_type" name="type">
 									{+START,IF,{$GT,{$SUBSTR_COUNT,{MARKED_POST_ACTIONS},<option},1}}
 										<option value="misc">-</option>
 									{+END}
 									{MARKED_POST_ACTIONS}
-								</select>
-								</label>
-								<input class="buttons__proceed button_micro" type="submit" onclick="if (!add_form_marked_posts(this.form,'mark_')) { window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />
+								</select><input class="buttons__proceed button_micro" type="submit" onclick="if (!add_form_marked_posts(this.form,'mark_')) { window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />
 							</div>
 						</form>
 					{+END}
 				{+END}
 			{+END}
 
-			{+START,IF_NON_EMPTY,{PAGINATION}}
-				{+START,IF,{MAY_CHANGE_MAX}}
-					<form title="{!PER_PAGE}" class="inline horiz_field_sep" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" method="get">
-						{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},max}
-
-						<div class="inline">
-							<label for="max">{!PER_PAGE}:
-							<select name="max" id="max">
-								<option value="10"{$?,{$EQ,{MAX},10}, selected="selected",}>10</option>
-								<option value="20"{$?,{$EQ,{MAX},20}, selected="selected",}>20</option>
-								<option value="30"{$?,{$EQ,{MAX},30}, selected="selected",}>30</option>
-								<option value="50"{$?,{$EQ,{MAX},50}, selected="selected",}>50</option>
-								<option value="100"{$?,{$EQ,{MAX},100}, selected="selected",}>100</option>
-								<option value="300"{$?,{$EQ,{MAX},300}, selected="selected",}>300</option>
-							</select>
-							</label>
-							<input onclick="disable_button_just_clicked(this);" class="buttons__perpage button_screen_item" type="submit" value="{!CHANGE}" />
-						</div>
-					</form>
-				{+END}
-			{+END}
-
 			{+START,IF,{THREADED}}
-				<form class="inline horiz_field_sep" action="{$SELF_URL*}" method="post">
+				<form class="inline" action="{$SELF_URL*}" method="post">
 					<div class="inline">
-						<label for="comments_sort">{!SORT}:
+						<label for="comments_sort">{!SORT}:</label>
 						<select id="comments_sort" name="comments_sort">
 							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},relevance}}selected="selected" {+END}value="relevance">{!RELEVANCE}</option>
 							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},newest}}selected="selected" {+END}value="newest">{!NEWEST_FIRST}</option>
@@ -153,7 +127,6 @@
 							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},average_rating}}selected="selected" {+END}value="average_rating">{!RATING}</option>
 							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},compound_rating}}selected="selected" {+END}value="compound_rating">{!POPULARITY}</option>
 						</select>
-						</label>
 						<input type="submit" value="{!SORT}" class="buttons__sort button_screen_item" />
 					</div>
 				</form>

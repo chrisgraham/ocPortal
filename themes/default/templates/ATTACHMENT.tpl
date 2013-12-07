@@ -17,7 +17,10 @@
 		<tr>
 			<th class="form_table_field_name vertical_alignment">
 				{!ATTACHMENT,{I*}}
-				<span class="horiz_field_sep"><img class="help_icon" onclick="this.onmouseover(event);" class="right" title="{!ATTACHMENT_HELP_2=,{$GET,IMAGE_TYPES}}" onmouseover="activate_rich_semantic_tooltip(this,event);" alt="{!HELP}" src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" /></span>
+
+				{+START,IF,{$NOT,{$MOBILE}}}
+					<span class="horiz_field_sep"><img class="help_icon" onclick="this.onmouseover(event);" class="right" title="{!ATTACHMENT_HELP_2=,{$GET,IMAGE_TYPES}}" onmouseover="activate_rich_semantic_tooltip(this,event);" alt="{!HELP}" src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" /></span>
+				{+END}
 			</th>
 			<td class="form_table_field_input">
 				<div class="accessibility_hidden"><label for="file{I*}">{!UPLOAD}</label></div>

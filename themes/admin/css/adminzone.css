@@ -14,6 +14,14 @@ header {
 	border-bottom: 3px solid #cacaca;
 }
 
+{+START,IF,{$MOBILE}}
+	.global_navigation_inner span {
+		float: right;
+		margin: 0.75em;
+		font-size: 1.2em;
+	}
+{+END}
+
 #main_website #main_website_inner {
 	border: 0;
 	{$BETA_CSS_PROPERTY,box-shadow: none;}
@@ -26,6 +34,10 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 
 .global_messages {
 	margin: 0;
+	{+START,IF,{$MOBILE}}
+		padding-left: 2px;
+		padding-right: 2px;
+	{+END}
 }
 
 .global_messages .box___message {
@@ -47,10 +59,12 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	padding: 18px 0 7px 0;
 }
 
-.global_middle {
-	padding-left: 0;
-	padding-right: 0;
-}
+{+START,IF,{$NOT,{$MOBILE}}}
+	.global_middle {
+		padding-left: 0;
+		padding-right: 0;
+	}
+{+END}
 
 #panel_left{
 	margin-left: 0;

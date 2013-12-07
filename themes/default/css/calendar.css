@@ -259,7 +259,9 @@ abbr.dtstart, abbr.dtend {
 .side_calendar .calendar_priority_free_time,
 .side_calendar .calendar_free_time,
 .side_calendar .calendar_active {
-	font-size: 0.8em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		font-size: 0.8em; /* On mobile we don't display in a side panel so actually there is more width - plus we want bigger cells for fat fingers */
+	{+END}
 	padding: 0.5em 0.2em;
 }
 
@@ -321,6 +323,9 @@ abbr.dtstart, abbr.dtend {
 .calendar_day_table td:hover, .calendar_week td:hover, .calendar_month td:hover, .calendar_year_month_table td:hover {
 	color: {$GET,area_key_text};
 	background-color: {$GET,area_hover_2_background};
+}
+td.day_spacer:hover {
+	background-color: transparent !important;
 }
 
 .calendar_multiple {
@@ -468,4 +473,8 @@ abbr.dtstart, abbr.dtend {
 
 .box___block_side_calendar h3 {
 	margin-bottom: 0.3em;
+}
+
+.side_calendar .calendar_year_month_day {
+	background-color: {$GET,area_background};
 }

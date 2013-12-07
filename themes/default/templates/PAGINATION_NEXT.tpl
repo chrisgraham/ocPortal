@@ -1,1 +1,1 @@
-<span class="results_continue">{!NEXT}&nbsp;&raquo;</span>
+<span class="results_continue">{+START,IF,{$NOT,{$MOBILE}}}{!NEXT}&nbsp;{+END}&raquo;</span>

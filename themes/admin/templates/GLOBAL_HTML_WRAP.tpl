@@ -18,15 +18,22 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 <body class="website_body zone_running_{$ZONE*} page_running_{$PAGE*}" id="main_website" itemscope="itemscope" itemtype="http://schema.org/WebPage">
 	{$,This is the main site header}
 	{+START,IF,{$SHOW_HEADER}}
-		<header class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+		<header itemscope="itemscope" itemtype="http://schema.org/WPHeader">
 			{$,The main logo}
 			<h1 class="accessibility_hidden"><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$LOGO_URL*}"{+START,IF,{$NOT,{$MOBILE}}} width="{$IMG_WIDTH*,{$LOGO_URL}}" height="{$IMG_HEIGHT*,{$LOGO_URL}}"{+END} title="{!HOME}" alt="{$SITE_NAME*}" /></a></h1>
 
 			{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
 			<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
 
-			{$,Main menu}
-			{$BLOCK,block=menu,param=adminzone:start\,include=node\,title={!menus:DASHBOARD}\,icon=menu/adminzone/start + adminzone:\,include=children\,max_recurse_depth=4\,use_page_groupings=1 + cms:\,include=node\,max_recurse_depth=3\,use_page_groupings=1,type=dropdown}
+			<div{+START,IF,{$MOBILE}} class="global_navigation"{+END}>
+				{$BLOCK,block=menu,param=adminzone:start\,include=node\,title={!menus:DASHBOARD}\,icon=menu/adminzone/start + adminzone:\,include=children\,max_recurse_depth=4\,use_page_groupings=1 + cms:\,include=node\,max_recurse_depth=3\,use_page_groupings=1,type={$?,{$MOBILE},mobile,dropdown}}
+
+				{+START,IF,{$MOBILE}}
+					<div class="global_navigation_inner">
+						<span>{$?,{$EQ,{$ZONE},adminzone},{!ADMIN_ZONE},{!CMS}}</span>
+					</div>
+				{+END}
+			</div>
 		</header>
 	{+END}
 
@@ -125,24 +132,24 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			<div class="footer_inner">
 				<div class="global_footer_left">
 					{+START,SET,FOOTER_BUTTONS}
-						<li><a accesskey="g" href="#"><img title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,icons/24x24/tool_buttons/top}" srcset="{$IMG*,icons/48x48/tool_buttons/top} 2x" /></a></li>
+						<li><a accesskey="g" href="#">{$?,{$MOBILE},{!_BACK_TO_TOP},<img title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,icons/24x24/tool_buttons/top}" srcset="{$IMG*,icons/48x48/tool_buttons/top} 2x" />}</a></li>
 						{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$ADDON_INSTALLED,realtime_rain}}{+START,IF,{$CONFIG_OPTION,bottom_show_realtime_rain_button}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_realtime_rain}}
-							<li><a id="realtime_rain_button" onclick="if (typeof window.load_realtime_rain!='undefined') return load_realtime_rain(); else return false;" href="{$PAGE_LINK*,adminzone:admin_realtime_rain}"><img id="realtime_rain_img" title="{!realtime_rain:REALTIME_RAIN}" alt="{!realtime_rain:REALTIME_RAIN}" src="{$IMG*,icons/24x24/tool_buttons/realtime_rain_on}" srcset="{$IMG*,icons/48x48/tool_buttons/realtime_rain_on} 2x" /></a></li>
+							<li><a id="realtime_rain_button" onclick="if (typeof window.load_realtime_rain!='undefined') return load_realtime_rain(); else return false;" href="{$PAGE_LINK*,adminzone:admin_realtime_rain}">{$?,{$MOBILE},{!realtime_rain:REALTIME_RAIN},<img id="realtime_rain_img" title="{!realtime_rain:REALTIME_RAIN}" alt="{!realtime_rain:REALTIME_RAIN}" src="{$IMG*,icons/24x24/tool_buttons/realtime_rain_on}" srcset="{$IMG*,icons/48x48/tool_buttons/realtime_rain_on} 2x" />}</a></li>
 						{+END}{+END}{+END}{+END}
 						{+START,IF,{$HAS_ZONE_ACCESS,adminzone}}
 							{+START,IF,{$ADDON_INSTALLED,occle}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_occle}}{+START,IF,{$CONFIG_OPTION,bottom_show_occle_button}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_occle}}
-								<li><a id="occle_button" accesskey="o" onclick="if (typeof window.load_occle!='undefined') return load_occle(); else return false;" href="{$PAGE_LINK*,adminzone:admin_occle}"><img id="occle_img" title="{!occle:OCCLE_DESCRIPTIVE_TITLE}" alt="{!occle:OCCLE_DESCRIPTIVE_TITLE}" src="{$IMG*,icons/24x24/tool_buttons/occle_on}" srcset="{$IMG*,icons/48x48/tool_buttons/occle_on} 2x" /></a></li>
+								<li><a id="occle_button" accesskey="o"{+START,IF,{$NOT,{$MOBILE}}} onclick="if (typeof window.load_occle!='undefined') return load_occle(); else return false;"{+END} href="{$PAGE_LINK*,adminzone:admin_occle}">{$?,{$MOBILE},{!occle:OCCLE},<img id="occle_img" title="{!occle:OCCLE_DESCRIPTIVE_TITLE}" alt="{!occle:OCCLE_DESCRIPTIVE_TITLE}" src="{$IMG*,icons/24x24/tool_buttons/occle_on}" srcset="{$IMG*,icons/48x48/tool_buttons/occle_on} 2x" />}</a></li>
 							{+END}{+END}{+END}{+END}
 							{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$EQ,{$BRAND_NAME},ocPortal}}
-								<li><a id="software_chat_button" accesskey="-" onclick="if (typeof window.load_software_chat!='undefined') return load_software_chat(event); else return false;" href="#"><img id="software_chat_img" title="{!SOFTWARE_CHAT}" alt="{!SOFTWARE_CHAT}" src="{$IMG*,icons/24x24/tool_buttons/software_chat}" srcset="{$IMG*,icons/48x48/tool_buttons/software_chat} 2x" /></a></li>
+								<li><a id="software_chat_button" accesskey="-" onclick="if (typeof window.load_software_chat!='undefined') return load_software_chat(event); else return false;" href="#">{$?,{$MOBILE},{!SOFTWARE_CHAT},<img id="software_chat_img" title="{!SOFTWARE_CHAT}" alt="{!SOFTWARE_CHAT}" src="{$IMG*,icons/24x24/tool_buttons/software_chat}" srcset="{$IMG*,icons/48x48/tool_buttons/software_chat} 2x" />}</a></li>
 							{+END}{+END}
 						{+END}
 					{+END}
-					{+START,IF_NON_EMPTY,{$TRIM,{$GET,FOOTER_BUTTONS}}}
+					{+START,IF_NON_EMPTY,{$TRIM,{$GET,FOOTER_BUTTONS}}}{+START,IF,{$NOT,{$MOBILE}}}
 						<ul class="horizontal_buttons">
 							{$GET,FOOTER_BUTTONS}
 						</ul>
-					{+END}
+					{+END}{+END}
 
 					{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{$STAFF_ACTIONS}}{+START,IF,{$CONFIG_OPTION,show_staff_page_actions}}
 						<form onsubmit="return staff_actions_select(this);" title="{!SCREEN_DEV_TOOLS} {!LINK_NEW_WINDOW}" class="inline special_page_type_form" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" method="get" target="_blank">
@@ -160,12 +167,17 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					<div class="global_copyright">
 						{$,Uncomment to show user's time {$DATE} {$TIME}}
 
-						{+START,INCLUDE,FONT_SIZER}{+END}
+						{+START,IF,{$NOT,{$MOBILE}}}
+							{+START,INCLUDE,FONT_SIZER}{+END}
+						{+END}
 					</div>
 
 					<nav class="global_minilinks" role="navigation">
-						<ul class="horizontal_links">
+						<ul class="{+START,IF,{$NOT,{$MOBILE,1}}}horizontal_links {+END}footer_links">
 							<li><a href="{$PAGE_LINK*,:}">{!HOME}</a></li>
+							{+START,IF,{$MOBILE}}
+								{$GET,FOOTER_BUTTONS}
+							{+END}
 							<li><a accesskey="3" rel="site_map" href="{$PAGE_LINK*,_SEARCH:sitemap}">{!SITEMAP}</a></li>
 							{+START,IF,{$CONFIG_OPTION,bottom_show_rules_link}}
 								<li><a onclick="return open_link_as_overlay(this);" rel="site_rules" accesskey="7" href="{$PAGE_LINK*,_SEARCH:rules}">{!RULES}</a></li>
@@ -176,17 +188,17 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 							{+START,IF,{$CONFIG_OPTION,bottom_show_feedback_link}}
 								<li><a onclick="return open_link_as_overlay(this);" rel="site_contact" accesskey="9" href="{$?,{$OR,{$ADDON_INSTALLED,staff_messaging},{$NOT,{$ADDON_INSTALLED,tickets}}},{$PAGE_LINK*,_SEARCH:feedback:redirect={$SELF_URL&,1}},{$PAGE_LINK*,_SEARCH:tickets}}">{!_FEEDBACK}</a></li>
 							{+END}
-							{+START,IF,{$CONFIG_OPTION,mobile_support}}{+START,IF,{$MOBILE,1}}
-								<li><a href="{$SELF_URL*,1,0,0,keep_mobile=0}">{!NONMOBILE_VERSION}</a>{+END}
-							{+END}
-							{+START,IF,{$NOT,{$MOBILE,1}}}
-								<li><a href="{$SELF_URL*,1,0,0,keep_mobile=1}">{!MOBILE_VERSION}</a></li>
-							{+END}
 							{+START,IF,{$NOR,{$IS_HTTPAUTH_LOGIN},{$IS_GUEST}}}
 								<li><form title="{!LOGOUT}" class="inline" method="post" action="{$PAGE_LINK*,:login:logout}"><input class="button_hyperlink" type="submit" title="{!_LOGOUT,{$USERNAME*}}" value="{!LOGOUT}" /></form></li>
 							{+END}
 							{+START,IF,{$OR,{$IS_HTTPAUTH_LOGIN},{$IS_GUEST}}}
 								<li><a onclick="return open_link_as_overlay(this);" href="{$PAGE_LINK*,:login:{$?,{$NOR,{$GET,login_screen},{$EQ,{$ZONE}:{$PAGE},:login}},redirect={$SELF_URL&*,1}}}">{!_LOGIN}</a></li>
+							{+END}
+							{+START,IF,{$CONFIG_OPTION,mobile_support}}{+START,IF,{$MOBILE,1}}
+								<li><a href="{$SELF_URL*,1,0,0,keep_mobile=0}">{!NONMOBILE_VERSION}</a>{+END}
+							{+END}
+							{+START,IF,{$NOT,{$MOBILE,1}}}
+								<li><a href="{$SELF_URL*,1,0,0,keep_mobile=1}">{!MOBILE_VERSION}</a></li>
 							{+END}
 							{+START,IF_NON_EMPTY,{$HONEYPOT_LINK}}
 								<li class="accessibility_hidden">{$HONEYPOT_LINK}</li>

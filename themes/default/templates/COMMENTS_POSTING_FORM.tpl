@@ -237,10 +237,11 @@
 						{+END}{+END}{+END}
 						{+START,IF_PASSED,MORE_URL}
 							{+START,IF,{$JS_ON}}
-								<input tabindex="6" accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL;*}');" class="buttons__new_post_full {$?,{$IS_EMPTY,{COMMENT_URL}},button_screen,button_screen_item}" type="button" value="{!FULL_EDITOR}" />
+								<input tabindex="6" accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL;*}');" class="buttons__new_post_full {$?,{$IS_EMPTY,{COMMENT_URL}},button_screen,button_screen_item}" type="button" value="{$?,{$MOBILE},{!MORE},{!FULL_EDITOR}}" />
 							{+END}
 						{+END}
-						<input onclick="handle_comments_posting_form_submit(this,event);" tabindex="7" accesskey="u" id="submit_button" class="{+START,IF_NON_PASSED,MORE_URL}buttons__new_comment{+END}{+START,IF_PASSED,MORE_URL}buttons__new_reply{+END} {$?,{$IS_EMPTY,{COMMENT_URL}},button_screen,button_screen_item}" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END} value="{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}" />
+						{+START,SET,button_title}{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}{+END}
+						<input onclick="handle_comments_posting_form_submit(this,event);" tabindex="7" accesskey="u" id="submit_button" class="{+START,IF_NON_PASSED,MORE_URL}buttons__new_comment{+END}{+START,IF_PASSED,MORE_URL}buttons__new_reply{+END} {$?,{$IS_EMPTY,{COMMENT_URL}},button_screen,button_screen_item}" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END} value="{$?,{$MOBILE},{$REPLACE,{!ocf:REPLY},{!_REPLY},{$GET,button_title}},{$GET,button_title}}" />
 					</div>
 				</div>
 			</div>

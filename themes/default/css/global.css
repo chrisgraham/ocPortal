@@ -589,8 +589,8 @@ header h1 {
 		margin-left: 0.5em;
 	{+END}
 }
-.global_breadcrumbs abbr {
-	white-space: nowrap;
+.global_breadcrumbs abbr, .global_breadcrumbs a, .global_breadcrumbs span {
+	white-space: nowrap !important;
 }
 {+START,IF,{$MOBILE}}
 	.global_breadcrumbs {
@@ -700,11 +700,21 @@ body.popup_spacer h2 {
 }
 
 #panel_bottom {
-	margin: 0 1em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin: 0 1em;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		margin: 0 2px;
+	{+END}
 }
 
 #panel_top .ocf_member_bar_etc { /* Should not be flush with site borders (but the menu above it will be, so don't do the whole panel */
-	margin: 0 1em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin: 0 1em;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		margin: 0 2px;
+	{+END}
 }
 
 #panel_left {
@@ -815,9 +825,6 @@ footer {
 	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
 		{$BETA_CSS_PROPERTY,box-shadow: 0 0 2px 2px {$GET,footer_tinting};}
 	{+END}
-	{+START,IF,{$MOBILE}}
-		text-align: center;
-	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
 		padding: 1.5em;
 	{+END}
@@ -841,11 +848,6 @@ footer a:hover, footer .button_hyperlink:hover {
 footer .global_footer_left {
 	{+START,IF,{$NOT,{$MOBILE}}}
 		float: {!en_left};
-	{+END}
-	{+START,IF,{$MOBILE}}
-		overflow: hidden;
-		/*padding-bottom: 0.25em;	Doesn't look good by default
-		border-bottom: 1px solid {$GET,dark_border};*/
 	{+END}
 }
 
@@ -940,16 +942,29 @@ footer .global_minilinks {
 	margin-right: 3em; /* Make tidy gap away from the font sizer */
 }
 
-footer .global_minilinks .horizontal_links {
+footer .global_minilinks .footer_links {
 	width: auto;
 	font-size: 1.1em;
+	{+START,IF,{$MOBILE}}
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+	{+END}
 }
+
+{+START,IF,{$MOBILE}}
+	footer .global_minilinks .footer_links li {
+		min-width: 6em;
+		margin-right: 1em;
+		display: inline-block;
+		list-style-type: none;
+		padding: 0.25em 0 0.25em 18px;
+		background: url('{$IMG_INLINE;,icons/14x14/action_link}') 0 5px no-repeat;
+	}
+{+END}
 
 footer .global_minilinks a, footer .global_minilinks .button_hyperlink {
 	white-space: nowrap !important; /* So works on mobiles */
-	{+START,IF,{$MOBILE}}
-		padding: 4px;
-	{+END}
 	text-decoration: none;
 }
 footer .global_minilinks a:hover, footer .global_minilinks .button_hyperlink:hover {
@@ -1744,8 +1759,11 @@ hr.spaced_rule {
 .horiz_field_sep, ul.horizontal_links.horiz_field_sep {
 	padding-{!en_left}: 0.8em;
 }
-.horiz_field_sep {
-	display: inline-block !important;
+.horiz_field_sep, .horiz_field_sep_rightward {
+	display: inline-block !important; /* Side-effect: stops internal wrapping */
+}
+.horiz_field_sep_rightward {
+	padding-{!en_right}: 0.8em; /* Useful so subsequent wrapped text doesn't get indented */
 }
 ul.horizontal_links.horiz_field_sep {
 	display: inline !important;
@@ -1783,6 +1801,7 @@ table.scrollable_inside {
 .wide_table_wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
+	padding-right: 1px;
 }
 
 .wide_table {
@@ -2027,13 +2046,15 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 .pagination span,
 .results_launcher a,
 .results_launcher span {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		border: 1px solid {$GET,standard_border};
-	{+END}
-	{+START,IF,{$MOBILE}}
-		border: 2px solid {$GET,standard_border};
-	{+END}
+	border: 1px solid {$GET,standard_border};
+	border-left: 0;
 	background-color: {$GET,area_background};
+}
+.pagination a:first-child,
+.pagination span:first-child,
+.results_launcher a:first-child,
+.results_launcher span:first-child {
+	border-left: 1px solid {$GET,standard_border};
 }
 .pagination a:hover, .results_launcher a:hover, .pagination a.button_depressed {
 	background-color: {$GET,area_hover_2_background} !important;
@@ -2124,7 +2145,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 .results_launcher {
 	font-size: 0.8em;
 	display: inline;
-	padding-{!en_left}: 20px;
+	padding-{!en_left}: 2em;
 }
 .results_launcher a,
 .results_launcher a:visited,
@@ -2426,6 +2447,7 @@ div.wysiwyg_toolbar_color_finder {
 	{$BETA_CSS_PROPERTY,opacity: 0.1;} display: inline-block;/*Needed for IE8*/
 	{$BETA_CSS_PROPERTY,transition-property : opacity;}
 	{$BETA_CSS_PROPERTY,transition-duration : 0.5s;}
+	{$BETA_CSS_PROPERTY,transform: translateZ(0);} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 }
 
 .post_buttons a[rel="add reply"] {
@@ -2486,17 +2508,20 @@ div.wysiwyg_toolbar_color_finder {
 
 .comments_posting_form_inner th {
 	font-weight: bold !important;
-	padding: 0.5em 1.5em 0.5em 0.5em;
+	padding: {$?,{$MOBILE},0.5em 0.5em 0.5em 0,0.5em 1.5em 0.5em 0.5em};
 	border-right: 1px solid {$GET,pale_border};
 	text-align: right;
+	{+START,IF,{$MOBILE}}
+		min-width: 4.5em;
+	{+END}
 }
 .comments_posting_form_inner th>* {
 	text-align: right !important;
 }
 
 .comments_posting_form_inner td {
-	padding-left: 1.5em;
-	padding-right: 1em;
+	padding-left: {$?,{$MOBILE},0.5em,1.5em};
+	padding-right: {$?,{$MOBILE},0,1em};
 }
 
 .comments_posting_form_inner textarea {
@@ -2534,7 +2559,7 @@ div.wysiwyg_toolbar_color_finder {
 .comments_posting_form_end {
 	overflow: hidden;
 	{+START,IF,{$MOBILE}}
-		margin: 0 2em 1em 0;
+		margin: 0;
 		padding: 0;
 		text-align: center;
 	{+END}
@@ -2824,7 +2849,7 @@ ul.associated_links_block_group.horizontal_links>li:before,
 .horizontal_links>li:before,
 .horizontal_ticker li:before {
 	content: "\00b7" !important; /* a &middot; */
-	padding: 0 0.5em 0 0.1em;
+	padding: {$?,{$MOBILE},0 0.2em 0 0.1em,0 0.5em 0 0.1em};
 	vertical-align: -20%;
 }
 .horizontal_meta_details li:before {
@@ -2913,12 +2938,6 @@ ul.buttons_group, ul.associated_links_block_group {
 }
 .force_margin {
 	margin-top: 1.5em !important;
-}
-.buttons_group>* {
-	margin-left: 5px !important;
-}
-.buttons_group>*:first-child {
-	margin-left: 0 !important;
 }
 
 .associated_link.suggested {
@@ -3035,7 +3054,7 @@ input.magic_image_edit_link {
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 	border: 1px solid {$GET,dark_border};
 	{$BETA_CSS_PROPERTY,border-radius: 6px;}
-	margin: 0 0.25em;
+	margin: 0.25em;
 	{$BETA_CSS_PROPERTY,box-shadow: 0 0 5px {$GET,standard_border};}
 	text-shadow: 2px 1px 2px {$GET,dark_shadow};
 	background-color: {$GET,lgrad};
@@ -3048,7 +3067,7 @@ input.magic_image_edit_link {
 	vertical-align: middle;
 	cursor: pointer;
 }
-.button_micro:first-child, .button_screen:first-child, .button_screen_item:first-child, .hero_section .hero_button a:first-child {
+div>.button_micro:first-child, div>.button_screen:first-child, div>.button_screen_item:first-child, .hero_section .hero_button a:first-child {
 	margin-left: 2px; /* enough for the shadow */
 }
 
@@ -3056,7 +3075,7 @@ input.magic_image_edit_link {
 	padding: 6px 39px 7px 7px;
 	border-width: 2px;
 	font-size: 13px;
-	min-width: {$?,{$MOBILE},5.8,8}em;
+	min-width: {$?,{$MOBILE},10,8}em; /* On mobile it will wrap, but we want it to look aligned when it does */
 }
 .buttons__previous.button_screen, .buttons__previous_none.button_screen {
 	padding: 6px 7px 7px 39px !important;
@@ -3067,6 +3086,10 @@ input.magic_image_edit_link {
 	background-position: right 7px top 3px;
 	background-size: 18px;
 	font-size: 13px;
+	{+START,IF,{$MOBILE}}
+		min-width: 6.5em;
+		margin: 0.25em 0.1em !important;
+	{+END}
 }
 .button_micro {
 	padding: 1px 3px 2px 3px;
@@ -3080,6 +3103,7 @@ div .button_micro {
 
 .button_screen, .button_screen_item, .button_micro, .toggleable_tray_button img {
 	{$BETA_CSS_PROPERTY,opacity: 0.85;}
+	{$BETA_CSS_PROPERTY,transform: translateZ(0);} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 	display: inline-block;
 }
 .button_micro:hover, .button_screen:hover, .button_screen_item:hover {
@@ -3141,12 +3165,18 @@ div.proceed_button_left_2 {
 
 
 /*
-Form buttons are wrapped in either:
+NB: Form buttons are wrapped in either:
  - .shunted_button
  - .proceed_button
  - .mini_proceed_button
  - .buttons_group (defined elsewhere, in "Associations/Summaries")
 */
+
+
+.menu___generic_admin__delete, .tabs__member_account__warnings, .buttons__report {
+	background-color: {$GET,red_highlight_background};
+	border-color: {$GET,red_highlight_text};
+}
 
 /*
 Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
@@ -3382,8 +3412,10 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 	border-left: 0;
 	border-right: 0;
 	border-top: 0;
-	border-bottom: 1px solid;
-	border-color: {$GET,tab_border};
+	{+START,IF,{$NOT,{$MOBILE}}}
+		border-bottom: 1px solid;
+		border-color: {$GET,tab_border};
+	{+END}
 	height: 25px;
 }
 
@@ -3399,6 +3431,9 @@ a.tab, a.tab:visited, a.tab:hover {
 	text-align: center;
 	cursor: pointer;
 	{$BETA_CSS_PROPERTY,opacity: 0.6;}
+	{+START,IF,{$MOBILE}}
+		min-width: 85px; /* Allows 3 per row, neat alignment */
+	{+END}
 }
 
 .tab * {
@@ -3433,8 +3468,15 @@ a.tab, a.tab:visited, a.tab:hover {
 }
 
 div[role="tabpanel"] {
-	padding-left: 1em;
-	padding-right: 1em;
+	{+START,IF,{$MOBILE}}
+		padding-left: 2px;
+		padding-right: 2px;
+	{+END}
+
+	{+START,IF,{$NOT,{$MOBILE}}}
+		padding-left: 1em;
+		padding-right: 1em;
+	{+END}
 }
 div[role="tabpanel"]>:first-child {
 	margin-top: 1em;
@@ -3493,6 +3535,7 @@ ul.nl, .nl ul {
 .edit_menu_link_inline, .edit_page_link_inline {
 	{$BETA_CSS_PROPERTY,opacity: 0 !important;} display: inline-block;/*Needed for IE8*/
 	{$BETA_CSS_PROPERTY,transition: opacity 0.5s linear;}
+	{$BETA_CSS_PROPERTY,transform: translateZ(0);} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 }
 div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;} display: inline-block;/*Needed for IE8*/
