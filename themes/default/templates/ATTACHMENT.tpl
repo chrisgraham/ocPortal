@@ -19,7 +19,7 @@
 				{!ATTACHMENT,{I*}}
 
 				{+START,IF,{$NOT,{$MOBILE}}}
-					<span class="horiz_field_sep"><img class="help_icon" onclick="this.onmouseover(event);" class="right" title="{!ATTACHMENT_HELP_2=,{$GET,IMAGE_TYPES}}" onmouseover="activate_rich_semantic_tooltip(this,event);" alt="{!HELP}" src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" /></span>
+					<span class="horiz_field_sep"><img class="help_icon" onclick="this.onmouseover(event);" class="right" title="{!ATTACHMENT_HELP_2=,{$GET,IMAGE_TYPES}}" onmouseover="activate_rich_semantic_tooltip(this,event);" alt="{!HELP}" src="{$IMG*,icons/16x16/help}" srcset="{$IMG*,icons/32x32/help} 2x" /></span>
 				{+END}
 			</th>
 			<td class="form_table_field_input">

@@ -278,6 +278,9 @@ thead>tr>th, .boxless_space .box thead>tr>th, .pte_set_box .box thead>tr>th {
 	background: {$GET,point_of_interest_background};
 	color: {$GET,area_key_text};
 }
+.box thead>tr>th a {
+	color: inherit;
+}
 /* .de_th makes a th look like a td, yet allows us to use correct markup */
 td, th.de_th {
 	color: {$GET,slightly_seeded_text};
@@ -790,7 +793,7 @@ body.popup_spacer h2 {
 
 .global_message {
 	min-height: 21px;
-	margin-top: 1em;
+	margin-top: 0.75em;
 	margin-bottom: 1em;
 }
 
@@ -1384,6 +1387,16 @@ td>.box {
 .box_inner>h2>.right .button_screen {
 	vertical-align: top;
 }
+.box.box_prominent>.box_inner {
+	margin: 0;
+}
+.box.box_prominent>.box_inner>h2 {
+	padding: 0.8em;
+	margin: 0;
+	text-align: left;
+	font-size: 1.15em;
+	font-weight: normal;
+}
 
 .box_inner>h1 a, .box_inner>h2 a, .box_inner>h3 a, .box_inner>h4 a, .box_inner>h5 a, .box_inner>h6 a, .toggleable_tray_title a, .box_inner>h1 a:visited, .box_inner>h2 a:visited, .box_inner>h3 a:visited, .box_inner>h4 a:visited, .box_inner>h5 a:visited, .box_inner>h6 a:visited, .toggleable_tray_title a:visited {
 	color: inherit;
@@ -1394,6 +1407,9 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 .box_inner>h1 a:hover, .box_inner>h2 a:hover, .box_inner>h3 a:hover, .box_inner>h4 a:hover, .box_inner>h5 a:hover, .box_inner>h6 a:hover, .toggleable_tray_title a:hover {
 	color: {$GET,box_title_text_hover};
+}
+.boxless_space .box_inner>h1 a:hover, .boxless_space .box_inner>h2 a:hover, .boxless_space .box_inner>h3 a:hover, .boxless_space .box_inner>h4 a:hover, .boxless_space .box_inner>h5 a:hover, .boxless_space .box_inner>h6 a:hover, .boxless_space .toggleable_tray_title a:hover {
+	color: inherit;
 }
 
 /* If we want a box to stand out less, give it 'pale_box' */
@@ -1524,12 +1540,12 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	padding: 0 0.3em !important;
 }
 .toggleable_tray_title .toggleable_tray_button img {
-	margin-top: -1px;
+	margin-top: -2px;
 }
-h3 .toggleable_tray_button img {
-	width: 15px;
+.toggleable_tray_button img {
+	width: 20px;
 }
-.box h3.toggleable_tray_title .toggleable_tray_button img {
+.box .toggleable_tray_title .toggleable_tray_button img {
 	width: 20px;
 }
 .ttb_left_spaced, .ttb_left_spaced div {
@@ -2653,17 +2669,18 @@ ul.actions_list {
 }
 ul.actions_list>li {
 	padding: 2px 0 2px 18px;
-	background: url('{$IMG_INLINE;,icons/14x14/action_link}') left 5px no-repeat;
-}
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-	ul.actions_list>li {
-		background: url('{$IMG_INLINE;,icons/28x28/action_link}') left 5px no-repeat;
-		background-size: 14px 14px;
-	}
 }
 ul.actions_list_compact>li, ul.actions_list_super_compact>li {
 	padding: 0 0 0 18px;
-	background: url('{$IMG_INLINE;,action_link}') left 2px no-repeat;
+}
+ul.actions_list>li, ul.actions_list_compact>li, ul.actions_list_super_compact>li {
+	background: url('{$IMG_INLINE;,icons/14x14/action_link}') left 4px no-repeat;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	ul.actions_list>li, ul.actions_list_compact>li, ul.actions_list_super_compact>li {
+		background: url('{$IMG_INLINE;,icons/28x28/action_link}') left 8px no-repeat;
+		background-size: 14px 14px;
+	}
 }
 ul.actions_list>li, ul.actions_list_compact>li, ul.actions_list_super_compact>li {
 	margin: 0;
@@ -3072,6 +3089,7 @@ div>.button_micro:first-child, div>.button_screen:first-child, div>.button_scree
 }
 
 .button_screen {
+	background-size: 24px 24px;
 	padding: 6px 39px 7px 7px;
 	border-width: 2px;
 	font-size: 13px;
@@ -3084,7 +3102,7 @@ div>.button_micro:first-child, div>.button_screen:first-child, div>.button_scree
 .button_screen_item {
 	padding: 3px 33px 4px 7px;
 	background-position: right 7px top 3px;
-	background-size: 18px;
+	background-size: 18px 18px;
 	font-size: 13px;
 	{+START,IF,{$MOBILE}}
 		min-width: 6.5em;
@@ -3360,6 +3378,189 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 }
 .tabs__preview {
 	background-image: url('{$IMG,icons/24x24/tabs/preview}') !important;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.buttons__menu__pages__help {
+		background-image: url('{$IMG,icons/48x48/menu/pages/help}') !important;
+	}
+	.buttons__back {
+		background-image: url('{$IMG,icons/48x48/buttons/back}') !important;
+	}
+	.buttons__gotopage {
+		background-image: url('{$IMG,icons/48x48/buttons/gotopage}') !important;
+	}
+	.buttons__perpage {
+		background-image: url('{$IMG,icons/48x48/buttons/perpage}') !important;
+	}
+	.buttons__filter {
+		background-image: url('{$IMG,icons/48x48/buttons/filter}') !important;
+	}
+	.buttons__sort {
+		background-image: url('{$IMG,icons/48x48/buttons/sort}') !important;
+	}
+	.buttons__all {
+		background-image: url('{$IMG,icons/48x48/buttons/all}') !important;
+	}
+	.buttons__all2 {
+		background-image: url('{$IMG,icons/48x48/buttons/all2}') !important;
+	}
+	.buttons__convert {
+		background-image: url('{$IMG,icons/48x48/buttons/convert}') !important;
+	}
+	.buttons__thumbnail {
+		background-image: url('{$IMG,icons/48x48/buttons/thumbnail}') !important;
+	}
+	.buttons__fullsize {
+		background-image: url('{$IMG,icons/48x48/buttons/fullsize}') !important;
+	}
+	.buttons__calculate {
+		background-image: url('{$IMG,icons/48x48/buttons/calculate}') !important;
+	}
+	.buttons__changes {
+		background-image: url('{$IMG,icons/48x48/buttons/changes}') !important;
+	}
+	.buttons__choose {
+		background-image: url('{$IMG,icons/48x48/buttons/choose}') !important;
+	}
+	.buttons__clear {
+		background-image: url('{$IMG,icons/48x48/buttons/clear}') !important;
+	}
+	.buttons__closed {
+		background-image: url('{$IMG,icons/48x48/buttons/closed}') !important;
+	}
+	.buttons__enable_notifications {
+		background-image: url('{$IMG,icons/48x48/buttons/enable_notifications}') !important;
+	}
+	.buttons__disable_notifications {
+		background-image: url('{$IMG,icons/48x48/buttons/disable_notifications}') !important;
+	}
+	.buttons__edit {
+		background-image: url('{$IMG,icons/48x48/buttons/edit}') !important;
+	}
+	.buttons__more {
+		background-image: url('{$IMG,icons/48x48/buttons/more}') !important;
+	}
+	.buttons__move {
+		background-image: url('{$IMG,icons/48x48/buttons/move}') !important;
+	}
+	.buttons__no {
+		background-image: url('{$IMG,icons/48x48/buttons/no}') !important;
+	}
+	.buttons__yes {
+		background-image: url('{$IMG,icons/48x48/buttons/yes}') !important;
+	}
+	.buttons__proceed {
+		background-image: url('{$IMG,icons/48x48/buttons/proceed}') !important;
+	}
+	.buttons__copy {
+		background-image: url('{$IMG,icons/48x48/buttons/copy}') !important;
+	}
+	.buttons__skip {
+		background-image: url('{$IMG,icons/48x48/buttons/skip}') !important;
+	}
+	.buttons__cancel {
+		background-image: url('{$IMG,icons/48x48/buttons/cancel}') !important;
+	}
+	.buttons__previous {
+		background-image: url('{$IMG,icons/48x48/buttons/previous}') !important;
+	}
+	.buttons__previous_none {
+		background-image: url('{$IMG,icons/48x48/buttons/previous_none}') !important;
+	}
+	.buttons__next {
+		background-image: url('{$IMG,icons/48x48/buttons/next}') !important;
+	}
+	.buttons__next_none {
+		background-image: url('{$IMG,icons/48x48/buttons/next_none}') !important;
+	}
+	.buttons__new_comment {
+		background-image: url('{$IMG,icons/48x48/buttons/new_comment}') !important;
+	}
+	.buttons__new_reply {
+		background-image: url('{$IMG,icons/48x48/buttons/new_reply}') !important;
+	}
+	.buttons__redirect {
+		background-image: url('{$IMG,icons/48x48/buttons/redirect}') !important;
+	}
+	.buttons__report {
+		background-image: url('{$IMG,icons/48x48/buttons/report}') !important;
+	}
+	.buttons__restore {
+		background-image: url('{$IMG,icons/48x48/buttons/restore}') !important;
+	}
+	.buttons__save {
+		background-image: url('{$IMG,icons/48x48/buttons/save}') !important;
+	}
+	.buttons__save_and_stay {
+		background-image: url('{$IMG,icons/48x48/buttons/save_and_stay}') !important;
+	}
+	.buttons__search {
+		background-image: url('{$IMG,icons/48x48/buttons/search}') !important;
+	}
+	.buttons__send {
+		background-image: url('{$IMG,icons/48x48/buttons/send}') !important;
+	}
+	.buttons__upload {
+		background-image: url('{$IMG,icons/48x48/buttons/upload}') !important;
+	}
+	.menu__adminzone__audit__unvalidated {
+		background-image: url('{$IMG,icons/48x48/menu/adminzone/audit/unvalidated}') !important;
+	}
+	.buttons__vote {
+		background-image: url('{$IMG,icons/48x48/buttons/vote}') !important;
+	}
+	.feedback__rate {
+		background-image: url('{$IMG,icons/48x48/feedback/rate}') !important;
+	}
+	.menu___generic_admin__add_one {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/add_one}') !important;
+	}
+	.menu___generic_admin__add_one_category {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/add_one_category}') !important;
+	}
+	.menu___generic_admin__add_to_category {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/add_to_category}') !important;
+	}
+	.menu___generic_admin__delete {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/delete}') !important;
+	}
+	.menu___generic_admin__edit_one {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/edit_one}') !important;
+	}
+	.menu___generic_admin__edit_one_category {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/edit_one_category}') !important;
+	}
+	.menu___generic_admin__edit_this {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/edit_this}') !important;
+	}
+	.menu___generic_admin__edit_this_category {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/edit_this_category}') !important;
+	}
+	.menu___generic_admin__export {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/export}') !important;
+	}
+	.menu___generic_admin__import {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/import}') !important;
+	}
+	.menu___generic_admin__merge {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/merge}') !important;
+	}
+	.menu___generic_admin__sync {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/sync}') !important;
+	}
+	.menu___generic_admin__view_archive {
+		background-image: url('{$IMG,icons/48x48/menu/_generic_admin/view_archive}') !important;
+	}
+	.menu__site_meta__user_actions__join {
+		background-image: url('{$IMG,icons/48x48/menu/site_meta/user_actions/join}') !important;
+	}
+	.menu__site_meta__user_actions__login {
+		background-image: url('{$IMG,icons/48x48/menu/site_meta/user_actions/login}') !important;
+	}
+	.tabs__preview {
+		background-image: url('{$IMG,icons/48x48/tabs/preview}') !important;
+	}
 }
 
 /*
@@ -3860,76 +4061,76 @@ a[rel="lightbox"] {
 
 {+START,IF,{$CONFIG_OPTION,filetype_icons}}
 	a[href^="mailto:"] {
-		background: url('{$IMG;,1x/filetypes/email_link}') no-repeat right top !important; /* Important because the URL may contain arbitrary stuff, including ".php", due to embedded mail body */
+		background: url('{$IMG;,icons/16x16/filetypes/email_link}') no-repeat right top !important; /* Important because the URL may contain arbitrary stuff, including ".php", due to embedded mail body */
 		padding: 0 22px 5px 0 !important;
 	}
 
 	a[href$=".pdf"].user_link, a[href$=".ps"].user_link, body div a.pdf_link {
-		background: url('{$IMG;,1x/filetypes/page_pdf}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_pdf}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".doc"].user_link, a[href$=".docx"].user_link, a[href$=".rtf"].user_link, body div a.doc_link {
-		background: url('{$IMG;,1x/filetypes/page_doc}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_doc}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".xls"].user_link, a[href$=".xlsx"].user_link, body div a.xls_link {
-		background: url('{$IMG;,1x/filetypes/page_xls}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_xls}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".ppt"].user_link, a[href$=".pptx"].user_link, body div a.ppt_link {
-		background: url('{$IMG;,1x/filetypes/page_ppt}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_ppt}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".log"].user_link, a[href$=".txt"].user_link, body div a.txt_link {
-		background: url('{$IMG;,1x/filetypes/page_txt}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_txt}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".odt"].user_link, body div a.odt_link {
-		background: url('{$IMG;,1x/filetypes/page_odt}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_odt}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".odp"].user_link, body div a.odp_link {
-		background: url('{$IMG;,1x/filetypes/page_odt}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_odt}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".ods"].user_link, body div a.ods_link {
-		background: url('{$IMG;,1x/filetypes/page_ods}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_ods}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".rss"].user_link, body div a.feed_link {
-		background: url('{$IMG;,1x/filetypes/feed}') no-repeat right top; 
+		background: url('{$IMG;,icons/16x16/filetypes/feed}') no-repeat right top; 
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".torrent"].user_link, body div a.torrent_link {
-		background: url('{$IMG;,1x/filetypes/page_torrent}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_torrent}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".zip"].user_link, a[href$=".gz"].user_link, a[href$=".bz2"].user_link, a[href$=".tar"].user_link, a[href$=".rar"].user_link, body div a.archive_link {
-		background: url('{$IMG;,1x/filetypes/page_archive}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_archive}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[href$=".asf"].user_link, a[href$=".ra"].user_link, a[href$=".wma"].user_link, a[href$=".wav"].user_link, a[href$=".mp3"].user_link, a[href$=".ogg"].user_link, a[href$=".mid"].user_link, a[href$=".mov"].user_link, a[href$=".qt"].user_link, a[href$=".wmv"].user_link, a[href$=".ram"].user_link, a[href$=".rm"].user_link, a[href$=".avi"].user_link, a[href$=".mpg"].user_link, a[href$=".mpe"].user_link, a[href$=".mpeg"].user_link, a[href$=".mp4"].user_link, a[href$=".webm"].user_link, body div a.media_link {
-		background: url('{$IMG;,1x/filetypes/page_media}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/page_media}') no-repeat right top;
 		padding: 0 22px 5px 0;
 	}
 
 	a[target="_blank"].user_link { /* Detected external links have styling */
-		background: url('{$IMG;,1x/filetypes/external_link}') no-repeat right top;
+		background: url('{$IMG;,icons/16x16/filetypes/external_link}') no-repeat right top;
 		padding-right: 10px;
 	}
 	body div a.external_link { /* Explicitly marked external links must show the styling with precedence */
-		background: url('{$IMG;,1x/filetypes/external_link}') no-repeat right top !important;
+		background: url('{$IMG;,icons/16x16/filetypes/external_link}') no-repeat right top !important;
 		padding-right: 10px !important;
 	}
 
@@ -3944,76 +4145,76 @@ a[rel="lightbox"] {
 
 	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 		a[href^="mailto:"] {
-			background: url('{$IMG;,2x/filetypes/email_link}') no-repeat right top !important; /* Important because the URL may contain arbitrary stuff, including ".php", due to embedded mail body */
+			background: url('{$IMG;,icons/32x32/filetypes/email_link}') no-repeat right top !important; /* Important because the URL may contain arbitrary stuff, including ".php", due to embedded mail body */
 			background-size: 16px 16px;
 		}
 
 		a[href$=".pdf"].user_link, a[href$=".ps"].user_link, body div a.pdf_link {
-			background: url('{$IMG;,2x/filetypes/page_pdf}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_pdf}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".doc"].user_link, a[href$=".docx"].user_link, a[href$=".rtf"].user_link, body div a.doc_link {
-			background: url('{$IMG;,2x/filetypes/page_doc}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_doc}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".xls"].user_link, a[href$=".xlsx"].user_link, body div a.xls_link {
-			background: url('{$IMG;,2x/filetypes/page_xls}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_xls}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".ppt"].user_link, a[href$=".pptx"].user_link, body div a.ppt_link {
-			background: url('{$IMG;,2x/filetypes/page_ppt}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_ppt}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".log"].user_link, a[href$=".txt"].user_link, body div a.txt_link {
-			background: url('{$IMG;,2x/filetypes/page_txt}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_txt}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".odt"].user_link, body div a.odt_link {
-			background: url('{$IMG;,2x/filetypes/page_odt}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_odt}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".odp"].user_link, body div a.odp_link {
-			background: url('{$IMG;,2x/filetypes/page_odt}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_odt}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".ods"].user_link, body div a.ods_link {
-			background: url('{$IMG;,2x/filetypes/page_ods}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_ods}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".rss"].user_link, body div a.feed_link {
-			background: url('{$IMG;,2x/filetypes/feed}') no-repeat right top; 
+			background: url('{$IMG;,icons/32x32/filetypes/feed}') no-repeat right top; 
 			background-size: 16px 16px;
 		}
 
 		a[href$=".torrent"].user_link, body div a.torrent_link {
-			background: url('{$IMG;,2x/filetypes/page_torrent}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_torrent}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".zip"].user_link, a[href$=".gz"].user_link, a[href$=".bz2"].user_link, a[href$=".tar"].user_link, a[href$=".rar"].user_link, body div a.archive_link {
-			background: url('{$IMG;,2x/filetypes/page_archive}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_archive}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[href$=".asf"].user_link, a[href$=".ra"].user_link, a[href$=".wma"].user_link, a[href$=".wav"].user_link, a[href$=".mp3"].user_link, a[href$=".ogg"].user_link, a[href$=".mid"].user_link, a[href$=".mov"].user_link, a[href$=".qt"].user_link, a[href$=".wmv"].user_link, a[href$=".ram"].user_link, a[href$=".rm"].user_link, a[href$=".avi"].user_link, a[href$=".mpg"].user_link, a[href$=".mpe"].user_link, a[href$=".mpeg"].user_link, a[href$=".mp4"].user_link, a[href$=".webm"].user_link, body div a.media_link {
-			background: url('{$IMG;,2x/filetypes/page_media}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/page_media}') no-repeat right top;
 			background-size: 16px 16px;
 		}
 
 		a[target="_blank"].user_link { /* Detected external links have styling */
-			background: url('{$IMG;,2x/filetypes/external_link}') no-repeat right top;
+			background: url('{$IMG;,icons/32x32/filetypes/external_link}') no-repeat right top;
 			background-size: 7px 8px;
 		}
 		body div a.external_link { /* Explicitly marked external links must show the styling with precedence */
-			background: url('{$IMG;,2x/filetypes/external_link}') no-repeat right top !important;
+			background: url('{$IMG;,icons/32x32/filetypes/external_link}') no-repeat right top !important;
 			background-size: 7px 8px;
 		}
 	}
@@ -4023,6 +4224,13 @@ a[rel="lightbox"] {
 	.print_icon {
 		background: url('{$IMG;,icons/24x24/links/print}') no-repeat left top !important;
 		padding: 0 0 5px 22px !important;
+	}
+
+	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+		.print_icon {
+			background: url('{$IMG;,icons/48x48/links/print}') no-repeat left top !important;
+			background-size: 24px 24px;
+		}
 	}
 {+END}
 

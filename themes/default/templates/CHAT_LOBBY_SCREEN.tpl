@@ -4,39 +4,39 @@
 
 <p>{!USE_CHAT_RULES,{$PAGE_LINK*,:rules},{$PAGE_LINK*,:privacy}}</p>
 
-<div class="box box___chat_lobby_screen_rooms"><div class="box_inner">
+<div class="box box___chat_lobby_screen_rooms box_prominent"><div class="box_inner">
 	<h2>{!CHATROOMS_LOBBY_TITLE}</h2>
 
 	<div class="float_surrounder">
 		{+START,IF_NON_EMPTY,{ADD_CHATROOM_URL}{PRIVATE_CHATROOM}{BLOCKING_LINK}{MOD_LINK}{SETEFFECTS_LINK}}
 			<nav class="chat_actions" role="navigation">
-				<h2>{!ADVANCED_ACTIONS}</h2>
+				<h3>{!OTHER_ACTIONS}</h3>
 
-				<ul role="navigation" class="actions_list spaced_list">
+				<ul role="navigation" class="actions_list">
 					{+START,IF_NON_EMPTY,{ADD_CHATROOM_URL}}
-						<li><a href="{ADD_CHATROOM_URL*}" rel="add">{!ADD_CHATROOM}</a></li>
+						<li class="icon_14_add"><a href="{ADD_CHATROOM_URL*}" rel="add">{!ADD_CHATROOM}</a></li>
 					{+END}
 					{+START,IF_NON_EMPTY,{PRIVATE_CHATROOM}}
-						<li>{PRIVATE_CHATROOM}</li>
+						<li class="icon_14_proceed">{PRIVATE_CHATROOM}</li>
 					{+END}
 					{+START,IF_NON_EMPTY,{BLOCKING_LINK}}
-						<li>{BLOCKING_LINK}</li>
+						<li class="icon_14_remove_manage">{BLOCKING_LINK}</li>
 					{+END}
 					{+START,IF_NON_EMPTY,{MOD_LINK}}
-						<li>{MOD_LINK}</li>
+						<li class="icon_14_tools">{MOD_LINK}</li>
 					{+END}
 					{+START,IF_NON_EMPTY,{SETEFFECTS_LINK}}
-						<li>{SETEFFECTS_LINK}</li>
+						<li class="icon_14_sound_effects">{SETEFFECTS_LINK}</li>
 					{+END}
 				</ul>
 			</nav>
 		{+END}
 
 		<div class="chat_rooms">
-			<h2>{!SELECT_CHATROOM}</h2>
+			<h3>{!SELECT_CHATROOM}</h3>
 
 			{+START,IF_NON_EMPTY,{CHATROOMS}}
-				<ul class="spaced_list">
+				<ul class="actions_list">
 					{CHATROOMS}
 				</ul>
 
@@ -51,13 +51,11 @@
 
 {+START,IF,{$NOT,{$IS_GUEST}}}
 	<div class="chat_im_convos_wrap">
-		<div class="box box___chat_lobby_screen_im"><div class="box_inner">
+		<div class="box box___chat_lobby_screen_im box_prominent"><div class="box_inner">
 			<h2>{!INSTANT_MESSAGING}</h2>
 
 			<div class="float_surrounder chat_im_convos_inner">
 				<div class="chat_lobby_convos">
-					<h3>{!IM_CONVERSATIONS}</h3>
-
 					<div class="chat_lobby_convos_tabs" id="chat_lobby_convos_tabs" style="display: none"></div>
 					<div class="chat_lobby_convos_areas" id="chat_lobby_convos_areas">
 						<p class="nothing_here">
@@ -90,11 +88,11 @@
 
 							<div class="friend_actions">
 								{+START,IF,{CAN_IM}}
-									<input class="menu___generic_admin__add_to_category button_micro" disabled="disabled" id="invite_ongoing_im_button" type="button" value="{!INVITE_CURRENT_IM}" onclick="var people=get_ticked_people(this.form); if (people) invite_im(people);" />
-									<input class="menu__social__chat__chat button_micro" type="button" value="{!START_IM}" onclick="var people=get_ticked_people(this.form); if (people) start_im(people);" />
+									<input class="menu___generic_admin__add_to_category button_screen_item" disabled="disabled" id="invite_ongoing_im_button" type="button" value="{!INVITE_CURRENT_IM}" onclick="var people=get_ticked_people(this.form); if (people) invite_im(people);" />
+									<input class="menu__social__chat__chat button_screen_item" type="button" value="{!START_IM}" onclick="var people=get_ticked_people(this.form); if (people) start_im(people);" />
 								{+END}
 								{+START,IF_NON_EMPTY,{URL_REMOVE_FRIENDS}}
-									<input class="menu___generic_admin__delete button_micro" type="submit" value="{!DUMP_FRIENDS}" onclick="var people=get_ticked_people(this.form); if (!people) return false; var t=this; window.fauxmodal_confirm('{!Q_SURE=;}',function(result) { if (result) { disable_button_just_clicked(t); click_link(t); } }); return false;" />
+									<input class="menu___generic_admin__delete button_screen_item" type="submit" value="{!DUMP_FRIENDS}" onclick="var people=get_ticked_people(this.form); if (!people) return false; var t=this; window.fauxmodal_confirm('{!Q_SURE=;}',function(result) { if (result) { disable_button_just_clicked(t); click_link(t); } }); return false;" />
 								{+END}
 							</div>
 						</form>
@@ -105,8 +103,7 @@
 
 						<form onsubmit="var _this=this; load_snippet('im_friends_rejig&amp;member_id={MEMBER_ID%}','add='+window.encodeURIComponent(this.elements['friend_username'].value),function(ajax_result) { set_inner_html(document.getElementById('friends_wrap'),ajax_result.responseText); _this.elements['friend_username'].value=''; }); return false;" autocomplete="off" title="{!ADD}: {!FRIEND_LIST}" method="post" action="{URL_ADD_FRIEND*}">
 							<label class="accessibility_hidden" for="friend_username">{!USERNAME}: </label>
-							<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" value="{!USERNAME}" id="friend_username" name="friend_username" />
-							<input class="menu___generic_admin__add_one button_screen_item" type="submit" value="{!ADD}" />
+							<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" value="{!USERNAME}" id="friend_username" name="friend_username" /><input class="menu___generic_admin__add_one button_micro" type="submit" value="{!ADD}" />
 						</form>
 					{+END}
 
@@ -114,7 +111,7 @@
 
 					{CHAT_SOUND}
 
-					<form title="{!SOUND_EFFECTS}" action="index.php" method="post" class="inline">
+					<form title="{!SOUND_EFFECTS}" action="index.php" method="post" class="inline sound_effects_form">
 						<p>
 							<label for="play_sound">{!SOUND_EFFECTS}</label> <input type="checkbox" id="play_sound" name="play_sound" checked="checked" />
 						</p>

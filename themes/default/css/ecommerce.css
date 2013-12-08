@@ -40,3 +40,12 @@
 .menu__rich_content__ecommerce__purchase {
 	background-image: url('{$IMG,icons/24x24/menu/rich_content/ecommerce/purchase}') !important;
 }
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.menu__adminzone__audit__ecommerce__subscriptions {
+		background-image: url('{$IMG,icons/48x48/menu/adminzone/audit/ecommerce/subscriptions}') !important;
+	}
+	.menu__rich_content__ecommerce__purchase {
+		background-image: url('{$IMG,icons/48x48/menu/rich_content/ecommerce/purchase}') !important;
+	}
+}

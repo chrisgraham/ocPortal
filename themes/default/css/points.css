@@ -156,3 +156,9 @@ table.points_summary_table .answer {
 .buttons__points {
 	background-image: url('{$IMG,icons/24x24/buttons/points}') !important;
 }
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.buttons__points {
+		background-image: url('{$IMG,icons/48x48/buttons/points}') !important;
+	}
+}

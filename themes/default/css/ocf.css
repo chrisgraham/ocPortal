@@ -1372,3 +1372,45 @@ table.ocf_profile_statistics th {
 .buttons__threaded {
 	background-image: url('{$IMG,icons/24x24/buttons/threaded}') !important;
 }
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.buttons__forum {
+		background-image: url('{$IMG,icons/48x48/buttons/forum}') !important;
+	}
+	.buttons__history {
+		background-image: url('{$IMG,icons/48x48/buttons/history}') !important;
+	}
+	.buttons__mark_read_forum {
+		background-image: url('{$IMG,icons/48x48/buttons/mark_read_forum}') !important;
+	}
+	.buttons__mark_unread_topic {
+		background-image: url('{$IMG,icons/48x48/buttons/mark_unread_topic}') !important;
+	}
+	.buttons__new_post_full {
+		background-image: url('{$IMG,icons/48x48/buttons/new_post_full}') !important;
+	}
+	.buttons__new_topic {
+		background-image: url('{$IMG,icons/48x48/buttons/new_topic}') !important;
+	}
+	.buttons__new_quote {
+		background-image: url('{$IMG,icons/48x48/buttons/new_quote}') !important;
+	}
+	.buttons__whisper {
+		background-image: url('{$IMG,icons/48x48/buttons/whisper}') !important;
+	}
+	.menu__adminzone__structure__forum__multi_moderations {
+		background-image: url('{$IMG,icons/48x48/menu/adminzone/structure/forum/multi_moderations}') !important;
+	}
+	.menu__site_meta__user_actions__lost_password {
+		background-image: url('{$IMG,icons/48x48/menu/site_meta/user_actions/lost_password}') !important;
+	}
+	.tabs__member_account__warnings {
+		background-image: url('{$IMG,icons/48x48/tabs/member_account/warnings}') !important;
+	}
+	.buttons__linear {
+		background-image: url('{$IMG,icons/48x48/buttons/linear}') !important;
+	}
+	.buttons__threaded {
+		background-image: url('{$IMG,icons/48x48/buttons/threaded}') !important;
+	}
+}

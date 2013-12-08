@@ -250,6 +250,8 @@ class Module_chat
 
 	var $title;
 	var $room_id;
+	var $room_name;
+	var $room_row;
 
 	/**
 	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
@@ -275,9 +277,14 @@ class Module_chat
 			set_feed_url('?mode=chat&filter='.strval($room_id));
 			$this->room_id=$room_id;
 
+			$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','room_name','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id'=>$room_id),'',1);
+			if (!array_key_exists(0,$room_check)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$this->room_row=$room_check[0];
+			$this->room_name=$this->room_row['room_name'];
+
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
 
-			$this->title=get_screen_title('CHATROOM');
+			$this->title=get_screen_title('_CHATROOM',true,array(escape_html($this->room_row['room_name'])));
 		}
 
 		if ($type=='download_logs')
@@ -558,12 +565,9 @@ class Module_chat
 		$prefs=@$_COOKIE['software_chat_prefs'];
 		$prefs=@explode(';',$prefs);
 		$room_id=$this->room_id;
-		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id'=>$room_id),'',1);
-		if (!array_key_exists(0,$room_check))
-		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		check_chatroom_access($room_check[0]);
+		$room_row=$this->room_row;
+		$room_name=$this->room_name;
+		check_chatroom_access($room_row);
 
 		$help_zone=get_comcode_zone('userguide_comcode',false);
 		$comcode_help=is_null($help_zone)?new ocp_tempcode():build_url(array('page'=>'userguide_comcode'),$help_zone);
@@ -615,7 +619,7 @@ class Module_chat
 		$debug=(get_param_integer('debug',0)==1)?'block':'none';
 
 		$mod_link=new ocp_tempcode();
-		if (has_actual_page_access(get_member(),'cms_chat',NULL,array('chat',strval($room_id)),array('edit_lowrange_content',($room_check[0]['room_owner']==get_member())?'moderate_my_private_rooms':NULL)))
+		if (has_actual_page_access(get_member(),'cms_chat',NULL,array('chat',strval($room_id)),array('edit_lowrange_content',($room_row['room_owner']==get_member())?'moderate_my_private_rooms':NULL)))
 		{
 			$mod_url=build_url(array('page'=>'cms_chat','type'=>'room','id'=>$room_id),get_module_zone('cms_chat'));
 			$mod_link=hyperlink($mod_url,do_lang_tempcode('CHAT_MODERATION'),true);
@@ -629,18 +633,16 @@ class Module_chat
 			$admin_link=hyperlink($admin_url,do_lang_tempcode('EDIT_CHATROOM'),true);
 		}
 
-		$refresh_url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$room_id),'_SELF');
-		$refresh_link=hyperlink($refresh_url,do_lang_tempcode('CHAT_REFRESH'));
-
 		$download_url=build_url(array('page'=>'_SELF','type'=>'download_logs','id'=>$room_id),'_SELF');
 		$download_link=hyperlink($download_url,do_lang_tempcode('CHAT_DOWNLOAD_LOGS'),true);
 
 		$seteffects_link=hyperlink(build_url(array('page'=>'_SELF','type'=>'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
 
-		$links=array($admin_link,$mod_link,$refresh_link,$download_link,$seteffects_link);
+		$links=array('edit2'=>$admin_link,'tools'=>$mod_link,'export'=>$download_link,'sound_effects'=>$seteffects_link);
 
 		return do_template('CHAT_ROOM_SCREEN',array(
 			'_GUID'=>'867a0b050c050c81d33482d131783eb0',
+			'TITLE'=>$this->title,
 			'CHATTERS'=>get_chatters_in_room_tpl(get_chatters_in_room($room_id)),
 			'CHAT_SOUND'=>get_chat_sound_tpl(),
 			'CHATROOM_ID'=>strval($room_id),
@@ -651,7 +653,7 @@ class Module_chat
 			'OPTIONS_URL'=>$cs_post_url,
 			'COMCODE_HELP'=>$comcode_help,
 			'CHATCODE_HELP'=>$chatcode_help,
-			'CHATROOM_NAME'=>get_chatroom_name(get_param_integer('id',1)),
+			'CHATROOM_NAME'=>$room_name,
 			'MICRO_BUTTONS'=>$micro_buttons,
 			'BUTTONS'=>$buttons,
 			'YOUR_NAME'=>$your_name,
@@ -659,7 +661,6 @@ class Module_chat
 			'POSTING_URL'=>$posting_url,
 			'SUBMIT_VALUE'=>$posting_name,
 			'INTRODUCTION'=>'',
-			'TITLE'=>$this->title,
 			'LINKS'=>$links,
 		));
 	}
@@ -1215,14 +1216,13 @@ class Module_chat
 		}
 
 		$redirect=post_param('redirect',NULL);
-		if (is_null($redirect))
-		{
-			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
-		} else
+		if (!is_null($redirect))
 		{
 			require_code('site2');
 			assign_refresh($redirect,0.0);
 			return redirect_screen($this->title,$redirect,do_lang_tempcode('SUCCESS'));
 		}
+
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 }

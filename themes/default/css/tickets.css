@@ -57,3 +57,11 @@ body table.results_table tbody tr.unclosed_ticket td {
 	background-image: url('{$IMG,icons/24x24/buttons/new_reply_staff_only}') !important;
 }
 
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.buttons__add_ticket {
+		background-image: url('{$IMG,icons/48x48/buttons/add_ticket}') !important;
+	}
+	.buttons__new_reply_staff_only {
+		background-image: url('{$IMG,icons/48x48/buttons/new_reply_staff_only}') !important;
+	}
+}

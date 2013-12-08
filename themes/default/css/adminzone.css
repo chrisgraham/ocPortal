@@ -15,3 +15,12 @@
 .menu__adminzone__tools__upgrade {
 	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools/upgrade}') !important;
 }
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.menu__adminzone__tools__cleanup {
+		background-image: url('{$IMG,icons/48x48/menu/adminzone/tools/cleanup}') !important;
+	}
+	.menu__adminzone__tools__upgrade {
+		background-image: url('{$IMG,icons/48x48/menu/adminzone/tools/upgrade}') !important;
+	}
+}

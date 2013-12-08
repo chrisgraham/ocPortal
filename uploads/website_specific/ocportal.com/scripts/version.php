@@ -342,7 +342,7 @@ if ($has_jump)
 			echo ' ';
 			echo '<span class="version_note">'.$note.'</span>';
 			echo ' ';
-			echo '<img class="version_help_icon" onmouseout="if (typeof window.deactivateTooltip!=\'undefined\') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!=\'undefined\') repositionTooltip(this,event);" onmouseover="if (this.parentNode.title!=undefined) this.parentNode.title=\'\'; if (typeof window.activateTooltip!=\'undefined\') activateTooltip(this,event,\''.escape_html(str_replace("\n",'\n',addslashes($tooltip->evaluate()))).'\',\'600px\',null,null,false,true);" alt="Help" src="'.escape_html(find_theme_image('1x/help')).'" />';
+			echo '<img class="version_help_icon" onmouseout="if (typeof window.deactivateTooltip!=\'undefined\') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!=\'undefined\') repositionTooltip(this,event);" onmouseover="if (this.parentNode.title!=undefined) this.parentNode.title=\'\'; if (typeof window.activateTooltip!=\'undefined\') activateTooltip(this,event,\''.escape_html(str_replace("\n",'\n',addslashes($tooltip->evaluate()))).'\',\'600px\',null,null,false,true);" alt="Help" src="'.escape_html(find_theme_image('icons/16x16/help')).'" />';
 			echo ' ';
 
 			echo '</p>';

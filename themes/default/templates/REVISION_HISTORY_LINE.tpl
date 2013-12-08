@@ -5,6 +5,6 @@
 	{+END}
 
 	{!REVISION_TAG_LINE,{EDITOR*},{DATE*},{RESTORE_URL*},{SIZE*},{$STRIP_TAGS,{DATE*}}}
-	<img onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET;^*,tooltip}','500px',null,'auto',true,true);" onmousemove="if (typeof window.activate_tooltip!='undefined') reposition_tooltip(this,event,true);" src="{$IMG*,1x/help}" srcset="{$IMG*,2x/help} 2x" alt="{!DIFF}" />
+	<img onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET;^*,tooltip}','500px',null,'auto',true,true);" onmousemove="if (typeof window.activate_tooltip!='undefined') reposition_tooltip(this,event,true);" src="{$IMG*,icons/16x16/help}" srcset="{$IMG*,icons/32x32/help} 2x" alt="{!DIFF}" />
 </li>
 

@@ -94,6 +94,8 @@ class Hook_addon_registry_chat
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/icons/14x14/sound_effects.png',
+			'themes/default/images/icons/28x28/sound_effects.png',
 			'themes/default/images/icons/24x24/menu/social/chat/chat.png',
 			'themes/default/images/icons/48x48/menu/social/chat/chat.png',
 			'themes/default/images/icons/24x24/menu/social/chat/chatroom_add.png',

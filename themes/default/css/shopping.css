@@ -85,3 +85,24 @@ table.shipping_address {
 .menu__rich_content__catalogues__products {
 	background-image: url('{$IMG,icons/24x24/menu/rich_content/catalogues/products}') !important;
 }
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.buttons__cart_add {
+		background-image: url('{$IMG,icons/48x48/buttons/cart_add}') !important;
+	}
+	.buttons__cart_checkout {
+		background-image: url('{$IMG,icons/48x48/buttons/cart_checkout}') !important;
+	}
+	.buttons__cart_empty {
+		background-image: url('{$IMG,icons/48x48/buttons/cart_empty}') !important;
+	}
+	.buttons__cart_update {
+		background-image: url('{$IMG,icons/48x48/buttons/cart_update}') !important;
+	}
+	.buttons__cart_view {
+		background-image: url('{$IMG,icons/48x48/buttons/cart_view}') !important;
+	}
+	.menu__rich_content__catalogues__products {
+		background-image: url('{$IMG,icons/48x48/menu/rich_content/catalogues/products}') !important;
+	}
+}

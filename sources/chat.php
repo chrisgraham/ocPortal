@@ -1,7 +1,7 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2012
+ Copyright (c) ocProducts, 2004-2014
 
  See text/EN/licence.txt for full licencing information.
 
@@ -23,18 +23,48 @@
  */
 function init__chat()
 {
-	global $MEMBERS_BEFRIENDED;
-	$MEMBERS_BEFRIENDED=NULL;
+	global $MEMBERS_BEFRIENDED_CACHE;
+	$MEMBERS_BEFRIENDED_CACHE=NULL;
 
 	global $EFFECT_SETTINGS_ROWS;
 	$EFFECT_SETTINGS_ROWS=NULL;
 
 	if (!defined('CHAT_ACTIVITY_PRUNE'))
 	{
-		define('CHAT_ACTIVITY_PRUNE',25);
+		define('CHAT_ACTIVITY_PRUNE',25); // NB: This define is duplicated in chat_poller.php for performance
 		define('CHAT_BACKLOG_TIME',60*5); // 5 minutes of messages if you enter an existing room
 		define('CHAT_EVENT_PRUNE',60*60*24);
 	}
+}
+
+/**
+ * Get tempcode for a chat room 'feature box' for the given row
+ *
+ * @param  array			The database field row of it
+ * @param  ID_TEXT		The zone to use
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
+ * @return tempcode		A box for it, linking to the full page
+ */
+function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
+{
+	require_lang('chat');
+
+	$url=build_url(array('page'=>'chat','type'=>'room','id'=>$row['id']),$zone);
+
+	$_title=$row['room_name'];
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('CHATROOM'),$_title):$_title;
+
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'dacd41bad78b545f179582f83209c070',
+		'ID'=>strval($row['id']),
+		'TITLE'=>$title,
+		'TITLE_PLAIN'=>$_title,
+		'SUMMARY'=>'',
+		'URL'=>$url,
+		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'room_name',
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_chat:__ed:'.strval($row['id']),
+	));
 }
 
 /**
@@ -42,11 +72,15 @@ function init__chat()
  */
 function messages_script()
 {
+	prepare_for_known_ajax_response();
+
 	get_screen_title('',false); // Force session time to be updated
+
+	require_code('xml');
 
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
@@ -66,34 +100,58 @@ function messages_script()
 	elseif ($action=='post')
 	{
 		// Posting a message
-		convert_data_encodings(true);
 		$message=either_param('message');
 		_chat_post_message_ajax(either_param_integer('room_id'),$message,post_param('font',''),post_param('colour',''),post_param_integer('first_message',0));
 	}
 	elseif ($action=='start_im')
 	{
 		require_lang('chat');
+
 		$people=get_param('people');
 		if ($people=='') exit();
-		require_code('chat2');
-		if (strpos($people,',')===false)
+
+		$room=array();
+		$may_recycle=(get_param_integer('may_recycle',0)==1);
+		if ($may_recycle)
 		{
-			$room_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			if (strpos($people,',')===false)
+			{
+				// See if we can find a room to recycle
+				$room=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'chat_rooms WHERE '.db_string_equal_to('allow_list',$people.','.strval(get_member())).' OR '.db_string_equal_to('allow_list',strval(get_member()).','.$people));
+			}
+		}
+
+		$extra_xml='';
+
+		if (!array_key_exists(0,$room)) // No room to recycle
+		{
+			require_code('chat2');
+			if (strpos($people,',')===false)
+			{
+				$room_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			} else
+			{
+				$room_name=do_lang('IM_MULTI',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			}
+			add_chatroom('',$room_name,get_member(),filter_invites_for_blocking(strval(get_member()).','.$people),'','','',user_lang(),1);
 		} else
 		{
-			$room_name=do_lang('IM_MULTI',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			// Resend invite (this is a self-invite)
+			$room[0]['room_name']=$GLOBALS['FORUM_DRIVER']->get_username(intval($people));
+			$num_posts=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room[0]['id']));
+			$extra_xml='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.strval(get_member()).'" participants="'.xmlentities($people.','.strval(get_member())).'" room_name="'.xmlentities($room[0]['room_name']).'" avatar_url="">'.strval($room[0]['id']).'</chat_invite>'."\n";
 		}
-		add_chatroom('',$room_name,get_member(),filter_invites_for_blocking(strval(get_member()).','.$people),'','','',user_lang(),1);
 
 		// Send response of new messages, so we get instant result
-		_chat_messages_script_ajax(-2,false,either_param_integer('message_id'),either_param_integer('event_id'));
+		_chat_messages_script_ajax(-2,false,either_param_integer('message_id'),either_param_integer('event_id'),$extra_xml);
 	}
 	elseif ($action=='join_im')
 	{
 		$room_id=get_param_integer('room_id');
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','c_welcome','allow_list_groups','disallow_list_groups','allow_list','disallow_list','room_owner'),array('id'=>$room_id),'',1);
 		if (!array_key_exists(0,$room_check)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		if (!check_chatroom_access($room_check[0],true,NULL,true)) return; // Possibly the room was closed already
+		$room_row=$room_check[0];
+		if (!check_chatroom_access($room_row,true,NULL,true)) return; // Possibly the room was closed already
 		$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
 			'e_type_code'=>'JOIN_IM',
 			'e_member_id'=>get_member(),
@@ -108,7 +166,7 @@ function messages_script()
 		// Catch up the current user so that they know who else is in the room just joined...
 
 		$events_output='';
-		$peoplea=explode(',',$room_check[0]['allow_list']);
+		$peoplea=explode(',',$room_row['allow_list']);
 		foreach ($peoplea as $person)
 		{
 			$person=trim($person);
@@ -129,30 +187,35 @@ function messages_script()
 	{
 		$room_id=get_param_integer('room_id');
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','c_welcome','allow_list_groups','disallow_list_groups','allow_list','disallow_list','room_owner'),array('id'=>$room_id),'',1);
-		if (!array_key_exists(0,$room_check)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		if (!check_chatroom_access($room_check[0],true,NULL,true)) return; // Possibly the room was closed already
-		$allow_list=str_replace(','.strval(get_member()).',',',',','.$room_check[0]['allow_list'].',');
-		$allow_list=substr($allow_list,1,strlen($allow_list)-2);
-		$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
-			'e_type_code'=>'DEINVOLVE_IM',
-			'e_member_id'=>get_member(),
-			'e_room_id'=>$room_id,
-			'e_date_and_time'=>time()
-		),true);
-		$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
-		fwrite($myfile,strval($event_id));
-		fclose($myfile);
-		sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
-		if ($allow_list=='')
+		if (array_key_exists(0,$room_check))
 		{
-			require_code('chat2');
-			delete_chatroom($room_id);
-		} else
-		{
-			$peoplea=explode(',',$allow_list);
-			$room_owner=$room_check[0]['room_owner'];
-			if ($room_owner==get_member()) $room_owner=intval($peoplea[0]);
-			$GLOBALS['SITE_DB']->query_update('chat_rooms',array('room_owner'=>$room_owner,'allow_list'=>$allow_list),array('id'=>$room_id),'',1);
+			$room_row=$room_check[0];
+			if (check_chatroom_access($room_row,true,NULL,true))
+			{
+				$allow_list=str_replace(','.strval(get_member()).',',',',','.$room_row['allow_list'].',');
+				$allow_list=substr($allow_list,1,strlen($allow_list)-2);
+				$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
+					'e_type_code'=>'DEINVOLVE_IM',
+					'e_member_id'=>get_member(),
+					'e_room_id'=>$room_id,
+					'e_date_and_time'=>time()
+				),true);
+				$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+				fwrite($myfile,strval($event_id));
+				fclose($myfile);
+				sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+				if ($allow_list=='')
+				{
+					require_code('chat2');
+					delete_chatroom($room_id);
+				} else
+				{
+					$peoplea=explode(',',$allow_list);
+					$room_owner=$room_row['room_owner'];
+					if ($room_owner==get_member()) $room_owner=intval($peoplea[0]);
+					$GLOBALS['SITE_DB']->query_update('chat_rooms',array('room_owner'=>$room_owner,'allow_list'=>$allow_list),array('id'=>$room_id),'',1);
+				}
+			}
 		}
 	}
 	elseif ($action=='invite_im')
@@ -177,8 +240,9 @@ function messages_script()
 		}
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','c_welcome','allow_list_groups','disallow_list_groups','allow_list','disallow_list','room_owner'),array('id'=>$room_id),'',1);
 		if (!array_key_exists(0,$room_check)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		if (!check_chatroom_access($room_check[0],true,NULL,true)) return; // Possibly the room was closed already
-		$allow_list=$room_check[0]['allow_list'];
+		$room_row=$room_check[0];
+		if (!check_chatroom_access($room_row,true,NULL,true)) return; // Possibly the room was closed already
+		$allow_list=$room_row['allow_list'];
 		$_people=$allow_list.','.filter_invites_for_blocking($people);
 		$GLOBALS['SITE_DB']->query_update('chat_rooms',array('allow_list'=>$_people),array('id'=>$room_id),'',1);
 	}
@@ -200,164 +264,16 @@ function member_befriended($member_id)
 	if ($member_id==get_member()) return false;
 	if (is_guest()) return false;
 
-	global $MEMBERS_BEFRIENDED;
-	if (is_null($MEMBERS_BEFRIENDED))
+	global $MEMBERS_BEFRIENDED_CACHE;
+	if (is_null($MEMBERS_BEFRIENDED_CACHE))
 	{
-		$MEMBERS_BEFRIENDED=collapse_1d_complexity('member_liked',$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()),'',100));
+		$MEMBERS_BEFRIENDED_CACHE=collapse_1d_complexity('member_liked',$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes'=>get_member()),'',100));
 	}
-	if (count($MEMBERS_BEFRIENDED)==100) // Ah, too much to preload
+	if (count($MEMBERS_BEFRIENDED_CACHE)==100) // Ah, too much to preload
 	{
-		return !is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_liked',array('member_liked'=>$member_id,'member_likes'=>get_member())));
+		return !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_liked',array('member_liked'=>$member_id,'member_likes'=>get_member())));
 	}
-	return (in_array($member_id,$MEMBERS_BEFRIENDED));
-}
-
-/**
- * Outputs the shoutbox iframe.
- *
- * @param  boolean			Whether to get the output instead of outputting it directly
- * @param  ?AUTO_LINK		Chat room ID (NULL: read from environment)
- * @param  ?integer			The maximum number of messages to show (NULL: read from environment)
- * @return ?object			Output (NULL: outputted it already)
- */
-function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
-{
-	if (is_null($room_id)) $room_id=get_param_integer('room_id');
-	if (is_null($num_messages)) $num_messages=get_param_integer('num_messages',5);
-	$zone=get_param('zone',get_module_zone('chat'));
-
-	require_lang('chat');
-	require_code('chat');
-	require_css('chat');
-
-//	if (is_guest()) return; // No guests
-
-	if (is_null($room_id))
-	{
-		$room_id=$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','MIN(id)',array('is_im'=>0/*,'room_language'=>user_lang()*/));
-		if (is_null($room_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	}
-
-	$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id),'',1);
-	if (!array_key_exists(0,$room_check)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	if (!check_chatroom_access($room_check[0])) warn_exit(do_lang_tempcode('ACCESS_DENIED__CHATROOM_UNAUTHORISED',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
-
-	// Did a message get sent last time?
-	$shoutbox_message=post_param('shoutbox_message','');
-	if ($shoutbox_message!='')
-	{
-		if (!chat_post_message($room_id,$shoutbox_message,get_option('chat_default_post_font'),get_option('chat_default_post_colour'),15))
-		{
-			// Error. But actually we'll get it from below
-		}
-	}
-
-	$messages=chat_get_room_content($room_id,$room_check,$num_messages*3,false,false,NULL,NULL,-1,$zone,NULL,true,$shoutbox_message!='');
-	$_tpl=array();
-	foreach ($messages as $_message)
-	{
-		$evaluated=$_message['the_message']->evaluate();
-
-		// We are only interested in private-message system messages and flood-control system messages, no other kinds of system message
-		if (($_message['system_message']==1) && (strpos($evaluated,'[private')===false) && (preg_match('#'.str_replace('\{1\}','\d+',preg_quote(do_lang('FLOOD_CONTROL_BLOCKED'))).'#',$evaluated)==0)) continue;
-
-		if ((strpos($evaluated,'[private')===false) || (($shoutbox_message!='') && (strpos($evaluated,'[private="'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'"]')!==false)))
-		{
-			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_message['username']);
-			$member=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$_message['username']);
-			$_tpl[]=do_template('BLOCK_SIDE_SHOUTBOX_MESSAGE',array('_GUID'=>'a6f86aa48af7de7ec78423864c82c626','USER'=>$member,'MESSAGE'=>$_message['the_message'],'TIME_RAW'=>strval($_message['date_and_time']),'TIME'=>$_message['date_and_time_nice']));
-		}
-	}
-
-	$tpl=new ocp_tempcode();
-	while (count($_tpl)>$num_messages) array_shift($_tpl);
-	foreach ($_tpl as $t)
-	{
-		$tpl->attach($t);
-	}
-
-	if (running_script('shoutbox'))
-	{
-		$keep=symbol_tempcode('KEEP');
-		$_url=find_script('shoutbox').'?room_id='.strval($room_id).'&num_messages='.strval($num_messages).$keep->evaluate();
-		if (get_param('utheme','')!='') $_url.='&utheme='.get_param('utheme');
-		$url=make_string_tempcode($_url);
-	} else
-	{
-		$url=get_self_url(false,(array_keys($_POST)!=array('shoutbox_message')),array('room_id'=>$room_id));
-	}
-	$tpl=do_template('BLOCK_SIDE_SHOUTBOX',array('_GUID'=>'080880eb9ebdb7fcdca1ebdae6b1b9aa','MESSAGES'=>$tpl,'URL'=>$url));
-
-	if ($ret) return $tpl;
-
-	$keep=symbol_tempcode('KEEP');
-	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'aacac778b145bfe7b063317fbcae7fde','FRAME'=>true,'TARGET'=>'_top','TITLE'=>do_lang_tempcode('SHOUTBOX'),'CONTENT'=>$tpl));
-	$echo->evaluate_echo();
-	return NULL;
-}
-
-/**
- * Pass out chat log files.
- */
-function chat_logs_script()
-{
-	// Closed site
-	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
-	{
-		header('Content-Type: text/plain');
-		@exit(get_option('closed'));
-	}
-
-	// Check we are allowed here
-	if (!has_actual_page_access(get_member(),'chat'))
-		access_denied('PAGE_ACCESS');
-
-	require_lang('chat');
-
-	$room=get_param_integer('room',1);
-	$start=get_param_integer('start',0);
-	$finish=get_param_integer('finish',time());
-
-	$start_date_seed=getdate($start);
-	$finish_date_seed=getdate($finish);
-
-	$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id'=>$room),'',1);
-	if (!array_key_exists(0,$room_check))
-	{
-		warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	}
-	check_chatroom_access($room_check[0]);
-
-	$start_date=($start==0)?'':strval($start_date_seed['year']).'-'.strval($start_date_seed['mon']).'-'.strval($start_date_seed['mday']).','.strval($start_date_seed['hours']).':'.strval($start_date_seed['minutes']);
-	$finish_date=strval($finish_date_seed['year']).'-'.strval($finish_date_seed['mon']).'-'.strval($finish_date_seed['mday']).','.strval($finish_date_seed['hours']).':'.strval($finish_date_seed['minutes']);
-
-	$messages=chat_get_room_content(intval($room),$room_check,NULL,false,true,intval($start),intval($finish),NULL,get_param('zone',get_module_zone('chat')));
-
-	if ((is_null($messages)) || (count($messages)==0))
-	{
-		// There are no messages
-		warn_exit(do_lang_tempcode('NO_ENTRIES'));
-	}
-
-	// Build the text file
-	$message_contents=new ocp_tempcode();
-	foreach ($messages as $_message)
-	{
-		$message_contents->attach(do_template('CHAT_MESSAGE',array('_GUID'=>'ff22f181850feaba2a062b7edf71e332','STAFF'=>false,'OLD_MESSAGES'=>true,'SYSTEM_MESSAGE'=>strval($_message['system_message']),'AVATAR_URL'=>'','STAFF_ACTIONS'=>'','USER'=>escape_html($_message['username']),'MESSAGE'=>$_message['the_message'],'TIME'=>$_message['date_and_time_nice'],'TIME_RAW'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name'])));
-	}
-
-	// Send header
-	$room_name=get_chatroom_name($messages[0]['room_id']);
-	$filename='chatlog-'.str_replace(' ','',$room_name).'-'.str_replace(':','-',$start_date).'-'.str_replace(':','-',$finish_date).'.html';
-	header('Content-Type: application/octet-stream'.'; authoritative=true;');
-	if ((strpos($room_name,chr(10))!==false) || (strpos($room_name,chr(13))!==false))
-		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-	header('Content-Disposition: attachment; filename="'.$filename.'"');
-
-	$message_contents=do_template('BASIC_HTML_WRAP',array('TITLE'=>do_lang('CHAT_LOGS',escape_html(get_site_name()),escape_html($room_name),array(escape_html($start_date),escape_html($finish_date))),'CONTENT'=>$message_contents));
-
-	echo $message_contents->evaluate();
+	return (in_array($member_id,$MEMBERS_BEFRIENDED_CACHE));
 }
 
 /**
@@ -368,6 +284,7 @@ function chat_logs_script()
  */
 function filter_invites_for_blocking($people)
 {
+	require_code('users2');
 	$_people=explode(',',$people);
 	$people_new=array();
 	foreach ($_people as $person)
@@ -403,19 +320,28 @@ function chat_room_prune($room_id)
 			// Have they left the lobby? (or site, if it's site-wide IM)
 			if (is_null($p['room_id']))
 			{
-				$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
-					'e_type_code'=>'BECOME_INACTIVE',
-					'e_member_id'=>$p['member_id'],
-					'e_room_id'=>NULL,
-					'e_date_and_time'=>time()
-				),true);
+				$last_become_active=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_events','MAX(e_date_and_time)',array('e_member_id'=>$p['member_id'],'e_type_code'=>'BECOME_ACTIVE','e_room_id'=>NULL));
+				$last_become_inactive=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_events','MAX(e_date_and_time)',array('e_member_id'=>$p['member_id'],'e_type_code'=>'BECOME_INACTIVE','e_room_id'=>NULL));
+				if ((is_null($last_become_inactive)) || ($last_become_active>$last_become_inactive)) // If not already marked inactive
+				{
+					$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
+						'e_type_code'=>'BECOME_INACTIVE',
+						'e_member_id'=>$p['member_id'],
+						'e_room_id'=>NULL,
+						'e_date_and_time'=>time()
+					),true);
 
-				if (!file_exists(get_custom_file_base().'/data_custom/modules/chat'))
-					@mkdir(get_custom_file_base().'/data_custom/modules/chat',0777);
-				$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
-				fwrite($myfile,strval($event_id));
-				fclose($myfile);
-				sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+					$path=get_custom_file_base().'/data_custom/modules/chat';
+					if (!file_exists($path))
+					{
+						require_code('files2');
+						make_missing_directory($path);
+					}
+					$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+					fwrite($myfile,strval($event_id));
+					fclose($myfile);
+					sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+				}
 			} else
 			{
 				// Make "left room" message
@@ -424,12 +350,12 @@ function chat_room_prune($room_id)
 					require_code('lang');
 					require_code('tempcode');
 					require_lang('chat');
-					$left_room_msg=do_lang('LEFT_ROOM',$GLOBALS['FORUM_DRIVER']->get_username($p['member_id']));
+					$left_room_msg=do_lang('LEFT_CHATROOM',$GLOBALS['FORUM_DRIVER']->get_username($p['member_id']));
 					if ($left_room_msg!='')
 					{
 						require_code('comcode');
 						$_message_parsed=insert_lang_comcode($left_room_msg,4);
-						$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$p['room_id'],'user_id'=>$p['member_id'],'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
+						$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$p['room_id'],'member_id'=>$p['member_id'],'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 						$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 						fwrite($myfile,strval($message_id));
 						fclose($myfile);
@@ -449,7 +375,7 @@ function chat_room_prune($room_id)
 	}
 
 	// Prune 'active' indication (delete's us, and anything that needs pruning)
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'chat_active WHERE (member_id='.strval((integer)get_member()).' AND '.$extra2.')'.$extra);
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'chat_active WHERE (member_id='.strval(get_member()).' AND '.$extra2.')'.$extra,NULL,NULL,false,true);
 
 	// Note that *we are still here*
 	$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>($room_id==-1)?NULL:$room_id));
@@ -481,14 +407,18 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			// This room doesn't exist
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
-		if (!check_chatroom_access($room_check[0],true)) return; // Possibly the room was closed already
-		$welcome=((array_key_exists(get_member(),get_chatters_in_room($room_id))) || (!$backlog) || (get_param_integer('no_reenter_message',0)==1))?NULL:$room_check[0]['c_welcome'];
+		$room_row=$room_check[0];
+		if (!check_chatroom_access($room_row,true)) return; // Possibly the room was closed already
+		$welcome=((array_key_exists(get_member(),get_chatters_in_room($room_id))) || (!$backlog) || (get_param_integer('no_reenter_message',0)==1))?NULL:$room_row['c_welcome'];
 	} else $welcome=NULL;
 	if ($room_id>=0)
 	{
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id));
 		if (array_key_exists(0,$room_check))
+		{
+			$room_row=$room_check[0];
 			chat_room_prune($room_id);
+		}
 	} elseif ($room_id!=-2)
 	{
 		// Note that *we are still here*
@@ -500,11 +430,13 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			$GLOBALS['SITE_DB']->query_delete('chat_active',array('member_id'=>get_member(),'room_id'=>$room_id));
 			$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>$room_id),'',1);
 		}
+		chat_room_prune(-1);
 	}
 
 	if (is_null($room_check))
 	{
 		$room_check=$GLOBALS['SITE_DB']->query('SELECT id,is_im,c_welcome,allow_list_groups,disallow_list_groups,allow_list,disallow_list,room_owner FROM '.get_table_prefix().'chat_rooms WHERE is_im=1 AND allow_list LIKE \''.db_encode_like('%'.strval(get_member()).'%').'\'');
+		$room_row=$room_check[0];
 	}
 
 	$from_id=NULL;
@@ -524,11 +456,11 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		$chat_unban_url=new ocp_tempcode();
 		if ((!is_null($room_check)) && (array_key_exists(0,$room_check)))
 		{
-			$moderator=is_chat_moderator($_message['member_id'],$room_id,$room_check[0]['room_owner']);
+			$moderator=is_chat_moderator($_message['member_id'],$room_id,$room_row['room_owner']);
 			$edit_url=build_url(array('page'=>'cms_chat','type'=>'ed','id'=>$_message['id'],'room_id'=>$_message['room_id']),get_module_zone('cms_chat'));
-			if (has_specific_permission(get_member(),'ban_chatters_from_rooms'))
+			if (has_privilege(get_member(),'ban_chatters_from_rooms'))
 			{
-				if (check_chatroom_access($room_check[0],true,$_message['member_id']))
+				if (check_chatroom_access($room_row,true,$_message['member_id']))
 				{
 					$chat_ban_url=build_url(array('page'=>'cms_chat','type'=>'ban','id'=>$_message['room_id'],'member_id'=>$_message['member_id']),get_module_zone('cms_chat'));
 					$chat_unban_url=new ocp_tempcode();
@@ -552,7 +484,6 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			{
 				$ban_url=build_url(array('page'=>'admin_actionlog','type'=>'toggle_submitter_ban','id'=>$_message['member_id']),'adminzone');
 			}
-			//$ban_url=build_url(array('page'=>'admin_actionlog','type'=>'multi_ban','id'=>$_message['ip_address'].':'.$_message['username']),'adminzone');
 		}
 		else $ban_url=new ocp_tempcode();
 
@@ -565,7 +496,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($_message['member_id']);
 		if (!is_guest($_message['member_id']))
 		{
-			$user=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($_message['member_id'],true,$_message['username']);
+			$user=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($_message['member_id'],true,$_message['username'],false);
 		} else
 		{
 			if (preg_match('#[:\.]#',$_message['ip_address'])!=0)
@@ -577,7 +508,20 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			}
 		}
 
-		$template=do_template('CHAT_MESSAGE',array('_GUID'=>'6bcac8d9fdd166cde266f8d23b790b69','SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>$moderator,'OLD_MESSAGES'=>$backlog,'AVATAR_URL'=>$avatar_url,'STAFF_ACTIONS'=>$staff_actions,'USER'=>$user,'MESSAGE'=>$_message['the_message'],'TIME'=>$_message['date_and_time_nice'],'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
+		$template=do_template('CHAT_MESSAGE',array(
+			'_GUID'=>'6bcac8d9fdd166cde266f8d23b790b69',
+			'SYSTEM_MESSAGE'=>strval($_message['system_message']),
+			'STAFF'=>$moderator,
+			'OLD_MESSAGES'=>$backlog,
+			'AVATAR_URL'=>$avatar_url,
+			'STAFF_ACTIONS'=>$staff_actions,
+			'MEMBER'=>$user,
+			'MESSAGE'=>$_message['the_message'],
+			'TIME'=>$_message['date_and_time_nice'],
+			'RAW_TIME'=>strval($_message['date_and_time']),
+			'FONT_COLOUR'=>$_message['text_colour'],
+			'FONT_FACE'=>$_message['font_name'],
+		));
 		$messages_output.='<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="'.strval($_message['id']).'" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 	}
 
@@ -597,16 +541,24 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		{
 			if (check_chatroom_access($room,true,NULL,true))
 			{
-				if (($room['allow_list']==strval(get_member())) && (is_null($event_id))) // If it's just you in the room, close that room down
+				if ((($room['allow_list']==strval(get_member()).','.strval(get_member())/*Opened room with self? Weird*/) || ($room['allow_list']==strval(get_member()))) && (is_null($event_id)/*Only on fresh start, not repeat AJAX requests*/)) // If it's just you in the room, close that room down
 				{
 					require_code('chat2');
 					delete_chatroom($room['id']);
 				} else
 				{
-					$people_in_room=explode(',',$room['allow_list']);
-					if ($room['room_name']==$GLOBALS['FORUM_DRIVER']->get_username(get_member()) && (count($people_in_room)>1)) // If room named after us, try and switch name to that of second person
+					$people_in_room=array_map('intval',explode(',',$room['allow_list']));
+					if (($room['room_name']==$GLOBALS['FORUM_DRIVER']->get_username(get_member()) || ($room['room_owner']==get_member())) && (count($people_in_room)>0)) // If room named after us, try and switch reported owner/name to that of other person
 					{
-						$test=$GLOBALS['FORUM_DRIVER']->get_username(intval($people_in_room[1]));
+						if ($people_in_room[0]!=get_member())
+						{
+							$room['room_owner']=$people_in_room[0];
+						} else
+						{
+							if (array_key_exists(1,$people_in_room))
+								$room['room_owner']=$people_in_room[1];
+						}
+						$test=$GLOBALS['FORUM_DRIVER']->get_username($room['room_owner']);
 						if (!is_null($test)) $room['room_name']=$test;
 					}
 
@@ -614,25 +566,25 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 					$participants='';
 					foreach ($people_in_room as $person)
 					{
-						if (intval($person)!=get_member())
+						if ($person!=get_member())
 						{
 							if ($participants!='') $participants.='';
-							$participants.=$person;
+							$participants.=strval($person);
 						}
 					}
 
-					$num_posts=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
+					$num_posts=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
 
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($room['room_owner']);
 
-					$invitations_output.='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.(is_null($room['room_owner'])?'':strval($room['room_owner'])).'" participants="'.xmlentities($participants).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="'.xmlentities($avatar_url).'">'.strval($room['id']).'</chat_invite>';
+					$invitations_output.='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.(is_null($room['room_owner'])?'':strval($room['room_owner'])).'" participants="'.xmlentities($participants).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="'.xmlentities($avatar_url).'">'.strval($room['id']).'</chat_invite>'."\n";
 				}
 			}
 		}
 
 		if (!is_null($event_id))
 		{
-			$events=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'chat_events WHERE id>'.strval((integer)$event_id));
+			$events=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'chat_events WHERE id>'.strval($event_id));
 			foreach ($events as $event)
 			{
 				if ($event['e_member_id']==get_member()) continue;
@@ -643,12 +595,13 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 				{
 					case 'BECOME_INACTIVE':
 					case 'BECOME_ACTIVE':
+						require_code('users2');
 						if ((!member_blocked(get_member(),$event['e_member_id'])) && (member_befriended($event['e_member_id'])))
 							$send_out=true;
 						break;
 					case 'PREINVITED_TO_IM':
 					case 'JOIN_IM':
-						if ((array_key_exists($event['e_room_id'],$room_check)) && (check_chatroom_access($room_check[$event['e_room_id']],true,NULL,true)))
+						if ((array_key_exists($event['e_room_id'],$room_check)) && (/*Check inviter not left*/check_chatroom_access($room_check[$event['e_room_id']],true,$event['e_member_id'],true)) && (check_chatroom_access($room_check[$event['e_room_id']],true,NULL,true)))
 							$send_out=true;
 						break;
 					case 'DEINVOLVE_IM':
@@ -663,21 +616,21 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 					$username=$GLOBALS['FORUM_DRIVER']->get_username($event['e_member_id']);
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($event['e_member_id']);
 					if (!is_null($username))
-						$events_output.='<chat_event away="'.(chatter_active($event['e_member_id'])?'0':'1').'" event_type="'.$event['e_type_code'].'" member_id="'.strval($event['e_member_id']).'" username="'.xmlentities($username).'" avatar_url="'.xmlentities($avatar_url).'" room_id="'.(is_null($event['e_room_id'])?'':strval($event['e_room_id'])).'">'.strval($event['id']).'</chat_event>';
+						$events_output.='<chat_event away="'.(chatter_active($event['e_member_id'])?'0':'1').'" event_type="'.$event['e_type_code'].'" member_id="'.strval($event['e_member_id']).'" username="'.xmlentities($username).'" avatar_url="'.xmlentities($avatar_url).'" room_id="'.(is_null($event['e_room_id'])?'':strval($event['e_room_id'])).'">'.strval($event['id']).'</chat_event>'."\n";
 				}
 			}
 		} else
 		{
-			$max_id=$GLOBALS['SITE_DB']->query_value('chat_events','MAX(id)');
+			$max_id=$GLOBALS['SITE_DB']->query_select_value('chat_events','MAX(id)');
 			if (is_null($max_id)) $max_id=db_get_first_id()-1;
-			$events_output.='<chat_event type="NULL">'.strval($max_id).'</chat_event>';
+			$events_output.='<chat_event type="NULL">'.strval($max_id).'</chat_event>'."\n";
 		}
 	}
 
-	if ($messages_output=='')
-	{
-		$messages_output='<chat_null>'.strval($room_id).'</chat_null>';
-	}
+	$last_msg=$GLOBALS['SITE_DB']->query_select_value('chat_messages','MAX(id)');
+	$last_event=$GLOBALS['SITE_DB']->query_select_value('chat_events','MAX(id)');
+	$tracking_output='<chat_tracking last_msg="'.strval($last_msg).'" last_event="'.strval($last_event).'">'.strval($room_id).'</chat_tracking>'."\n";
+
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 	header('Content-Type: application/xml');
@@ -710,7 +663,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 
 <response>
 	<result>
-		'.$events_output.$invitations_output.$messages_output.'
+'.$tracking_output.$events_output.$invitations_output.$messages_output.'
 	</result>
 </response>';
 	echo $output;
@@ -732,7 +685,7 @@ function chatter_active($member_id,$room_id=NULL)
 	{
 		$room_clause='room_id='.strval($room_id);
 	}
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT member_id FROM '.get_table_prefix().'chat_active WHERE '.$room_clause.' AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' AND member_id='.(string)$member_id);
+	$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'chat_active WHERE '.$room_clause.' AND date_and_time>='.strval(time()-CHAT_ACTIVITY_PRUNE).' AND member_id='.(string)$member_id);
 	return !is_null($test);
 }
 
@@ -767,16 +720,30 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 		// This room doesn't exist
 		warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	}
-	if (!check_chatroom_access($room_check[0],true))
+	$room_row=$room_check[0];
+	if (!check_chatroom_access($room_row,true))
 	{
 		require_lang('chat');
 		$the_message=do_lang('BANNED_FROM_CHAT');
-		$_message=array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'member_id'=>get_member(),'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font'));
-		$template=do_template('CHAT_MESSAGE',array('SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>false,'OLD_MESSAGES'=>false,'AVATAR_URL'=>'','STAFF_ACTIONS'=>'','USER'=>strval($_message['member_id']),'MESSAGE'=>$the_message,'TIME'=>get_timezoned_date($_message['date_and_time']),'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
-		$messages_output='<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
+		$_message=array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'date_and_time'=>time(),'member_id'=>get_member(),'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font'));
+		$template=do_template('CHAT_MESSAGE',array(
+			'_GUID'=>'f0eb6b037a7cb4b70a114e7e96bde36d',
+			'SYSTEM_MESSAGE'=>strval($_message['system_message']),
+			'STAFF'=>false,
+			'OLD_MESSAGES'=>false,
+			'AVATAR_URL'=>'',
+			'STAFF_ACTIONS'=>'',
+			'MEMBER'=>strval($_message['member_id']),
+			'MESSAGE'=>$the_message,
+			'TIME'=>get_timezoned_date($_message['date_and_time']),
+			'RAW_TIME'=>strval($_message['date_and_time']),
+			'FONT_COLOUR'=>$_message['text_colour'],
+			'FONT_FACE'=>$_message['font_name'],
+		));
+		$messages_output='<div sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 
-		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+		prepare_for_known_ajax_response();
+
 		header('Content-Type: application/xml');
 		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <!DOCTYPE xc:content [
@@ -818,24 +785,20 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 	if ($message=='') $return='0';
 	else
 	{
-		//$prefs=@$_COOKIE['software_chat_prefs'];
-		//$prefs=@explode(';',$prefs);
-		//$font=isset($prefs[1])?$prefs[1]:get_option('chat_default_post_font');
-		//$colour=isset($prefs[0])?$prefs[0]:get_option('chat_default_post_colour');
 		if (chat_post_message($room_id,$message,$font,$colour,60)) $return='1';
 		else $return='0';
 	}
 
-	if (($room_check[0]['is_im']==1)/* && ($first_message==1)*/) // first_message doesn't add much efficiency and a pain to correlate on the client-side
+	if (($room_row['is_im']==1)/* && ($first_message==1)*/) // first_message doesn't add much efficiency and a pain to correlate on the client-side
 	{
 		$invited_already=NULL;
 		$active_members=NULL;
-		$allow_list=explode(',',$room_check[0]['allow_list']);
+		$allow_list=explode(',',$room_row['allow_list']);
 		foreach ($allow_list as $_allow)
 		{
 			$_allow=trim($_allow);
 			$allow=intval($_allow);
-			if (($allow!=$room_check[0]['room_owner']) && ($allow!=get_member()))
+			if (($allow!=$room_row['room_owner']) && ($allow!=get_member()))
 			{
 				if (is_null($invited_already))
 				{
@@ -850,34 +813,29 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 					}
 					if (!array_key_exists($allow,$active_members))
 					{
-						//if (get_forum_type()=='ocf') // Send PT  -- Actually, this'd just get annoying
-						//{
-						//} else // Send e-mail
-						{
-							$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
-								'e_type_code'=>'INVITED_TO_IM',
-								'e_member_id'=>$allow,
-								'e_room_id'=>$room_id,
-								'e_date_and_time'=>time()
-							),true);
-							$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
-							fwrite($myfile,strval($event_id));
-							fclose($myfile);
-							sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+						$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
+							'e_type_code'=>'INVITED_TO_IM',
+							'e_member_id'=>$allow,
+							'e_room_id'=>$room_id,
+							'e_date_and_time'=>time()
+						),true);
+						$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+						fwrite($myfile,strval($event_id));
+						fclose($myfile);
+						sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
 
-							require_lang('chat');
+						require_lang('chat');
 
-							$zone=get_module_zone('chat');
-							$_lobby_url=build_url(array('page'=>'chat'),$zone,NULL,false,false,true);
-							$lobby_url=$_lobby_url->evaluate();
-							$subject=do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow));
-							$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-							$username2=$GLOBALS['FORUM_DRIVER']->get_username($allow);
-							$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message),get_lang($allow));
+						$zone=get_module_zone('chat');
+						$_lobby_url=build_url(array('page'=>'chat'),$zone,NULL,false,false,true);
+						$lobby_url=$_lobby_url->evaluate();
+						$subject=do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow));
+						$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+						$username2=$GLOBALS['FORUM_DRIVER']->get_username($allow);
+						$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message,strval($allow)),get_lang($allow));
 
-							require_code('notifications');
-							dispatch_notification('im_invited',NULL,$subject,$message,array($allow),$room_check[0]['room_owner'],1);
-						}
+						require_code('notifications');
+						dispatch_notification('im_invited',NULL,$subject,$message,array($allow),$room_row['room_owner'],1);
 					}
 				}
 			}
@@ -886,10 +844,10 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 
 	/*if ($return=='0') Flood control creates error, but we'd rather see it shown inline
 	{
-			header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-			header('Content-Type: application/xml');
-			$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
+		prepare_for_known_ajax_response();
+
+		header('Content-Type: application/xml');
+		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <!DOCTYPE xc:content [
 <!ENTITY euro "&#8364;">
 <!ENTITY ldquo "&#8220;">
@@ -923,131 +881,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 	}*/
 
 	// Send response of new messages, so we get instant result
-	_chat_messages_script_ajax(($room_check[0]['is_im']==1)?-1:$room_id,false,either_param_integer('message_id'),either_param_integer('event_id'));
-}
-
-/**
- * Enter the current member to the chat lobby / Mark them available.
-*/
-function enter_chat_lobby()
-{
-	if (is_guest()) return;
-
-	require_css('chat');
-	require_lang('chat');
-	require_javascript('javascript_ajax');
-	require_javascript('javascript_chat');
-	require_javascript('javascript_sound');
-
-	if ((!array_key_exists(get_member(),get_chatters_in_room(NULL))) && (!is_invisible()))
-	{
-		$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>NULL));
-
-		$GLOBALS['SITE_DB']->query_insert('chat_events',array(
-			'e_type_code'=>'BECOME_ACTIVE',
-			'e_member_id'=>get_member(),
-			'e_room_id'=>NULL,
-			'e_date_and_time'=>time()
-		));
-	}
-}
-
-/**
- * Get the people who have posted a message in the specified room within the last x minutes (defaults to five). Note that this function performs no pruning- the chat lobby will do that. It does do an activity time-range select though.
- *
- * @param	?AUTO_LINK		The room ID (NULL: lobby)
- * @return  array				A map of members in the room. User ID=>Username
-*/
-function get_chatters_in_room($room_id)
-{
-	if (is_null($room_id))
-	{
-		$extra2='room_id IS NULL';
-	} else
-	{
-		$extra2='room_id='.strval($room_id);
-	}
-	$active=$GLOBALS['SITE_DB']->query('SELECT DISTINCT member_id FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.the_user=a.member_id WHERE (session_invisible=0 OR session_invisible IS NULL) AND date_and_time>='.strval((integer)time()-60*10).' AND '.$extra2);
-
-	$found_users=array();
-	foreach ($active as $values)
-	{
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($values['member_id']);
-		if (!is_null($username)) $found_users[$values['member_id']]=$username;
-	}
-	return $found_users;
-}
-
-/**
- * Get some template code showing the number of chatters in a room.
- *
- * @param	array				A mapping (user=>username) of the chatters in the room
- * @return	tempcode			The Tempcode
-*/
-function get_chatters_in_room_tpl($users)
-{
-	$usernames=new ocp_tempcode();
-	$some_users=false;
-	foreach ($users as $member_id=>$username)
-	{
-		if (!member_blocked(get_member(),$member_id))
-		{
-			$some_users=true;
-			if (!is_guest($member_id))
-			{
-				if (get_forum_type()=='ocf')
-				{
-					require_code('ocf_general');
-					require_code('ocf_members');
-
-					$colour=get_group_colour(ocf_get_member_primary_group($member_id));
-					$usernames->attach(do_template('OCF_USER_MEMBER',array('PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),'MEMBER_ID'=>strval($member_id),'USERNAME'=>$username,'COLOUR'=>$colour)));
-				} else
-				{
-					$usernames->attach($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$username));
-				}
-			} else
-			{
-				if (!$usernames->is_empty()) $usernames->attach(escape_html(', ')); // NB: OCF_USER_MEMBER would have auto-added comma
-				$usernames->attach(escape_html(do_lang('GUEST')));
-			}
-		}
-	}
-	if (!$some_users)
-	{
-		$usernames=do_lang_tempcode('NONE_EM');
-	}
-	return $usernames;
-}
-
-/**
- * Get the textual name of the specified chatroom, from its room id.
- *
- * @param  AUTO_LINK		The room ID
- * @param  boolean		Allow the chatroom to not be found (i.e. don't die if it can't be)
- * @return ?SHORT_TEXT	The room name (NULL: not found)
-*/
-function get_chatroom_name($room_id,$allow_null=false)
-{
-	if ($allow_null)
-	{
-		return $GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','room_name',array('id'=>$room_id));
-	}
-	return $GLOBALS['SITE_DB']->query_value('chat_rooms','room_name',array('id'=>$room_id));
-}
-
-/**
- * Get the id of the specified chatroom, from its room name.
- *
- * @param  SHORT_TEXT		The name of the chatroom
- * @param  boolean			Make sure the room is not an IM room. If it is an IM room, pretend it does not exist.
- * @return ?AUTO_LINK		The ID of the chatroom (NULL: no such chat room)
-*/
-function get_chatroom_id($room_name,$must_not_be_im=false)
-{
-	$map=array('room_name'=>$room_name);
-	if ($must_not_be_im) $map['is_im']=0;
-	return $GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','id',$map);
+	_chat_messages_script_ajax(($room_row['is_im']==1)?-1:$room_id,false,either_param_integer('message_id'),either_param_integer('event_id'));
 }
 
 /**
@@ -1059,20 +893,20 @@ function get_chatroom_id($room_name,$must_not_be_im=false)
  * @param  SHORT_TEXT		The text colour for the message
  * @param  SHORT_INTEGER	The wrap position for the message
  * @return boolean			Whether the message was successfully posted or not
-*/
+ */
 function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=60)
 {
 	// If it contains chatcode then we'll need to disable the word-filter
 	if ((strpos($message,'[')!==false) && (strpos($message,']')!==false)) $wrap_pos=NULL;
 
 	// Have we been blocked by flood control?
-	$is_im=$GLOBALS['SITE_DB']->query_value('chat_rooms','is_im',array('id'=>$room_id));
+	$is_im=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','is_im',array('id'=>$room_id));
 	if ($is_im==1) // No flood control for IMs
 	{
 		$time_last_message=NULL;
 	} else
 	{
-		$time_last_message=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','MAX(date_and_time)',array('user_id'=>get_member(),'system_message'=>0));
+		$time_last_message=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_messages','MAX(date_and_time)',array('member_id'=>get_member(),'system_message'=>0));
 		if (!is_null($time_last_message)) $time_left=$time_last_message-time()+intval(get_option('chat_flood_timelimit'));
 	}
 	if ((is_null($time_last_message)) || ($time_left<=0))
@@ -1086,7 +920,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 
 		// Store as assembled tempcode
 		$_message_parsed=insert_lang_comcode(wordfilter_text($message),4,NULL,false,NULL,$wrap_pos);
-		$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>$text_colour,'font_name'=>$font_name),true);
+		$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'member_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>$text_colour,'font_name'=>$font_name),true);
 
 		$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		fwrite($myfile,strval($message_id));
@@ -1106,12 +940,48 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 				{
 					// Store bots message
 					$_message_parsed=insert_lang_comcode(wordfilter_text($response),4,NULL,false,NULL,$wrap_pos);
-					$bot_message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>$hook,'room_id'=>$room_id,'user_id'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
+					$bot_message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>$hook,'room_id'=>$room_id,'member_id'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 
 					$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 					fwrite($myfile,strval($bot_message_id));
 					fclose($myfile);
 					sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+				}
+			}
+		}
+
+		// Mirror to private topic, if an IM
+		if (($is_im==1) && (get_forum_type()=='ocf') && (addon_installed('ocf_forum')))
+		{
+			$members=array_map('intval',explode(',',$GLOBALS['SITE_DB']->query_select_value('chat_rooms','allow_list',array('id'=>$room_id))));
+			if (count($members)>=2)
+			{
+				require_lang('chat');
+				$table='f_topics t';
+				for ($i=2;$i<count($members);$i++)
+				{
+					$table.=' JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_special_pt_access a'.strval($i).' ON a'.strval($i).'.s_topic_id=t.id AND a'.strval($i).'.s_member_id='.strval($members[$i]);
+				}
+				$topic_id=$GLOBALS['FORUM_DB']->query_select_value_if_there($table,'id',array('t_cache_first_title'=>do_lang('INSTANT_MESSAGING_CONVO'),'t_pt_from'=>$members[0],'t_pt_to'=>$members[1]));
+				if (is_null($topic_id))
+				{
+					require_code('ocf_topics_action');
+					$topic_id=ocf_make_topic(NULL,'','',1,0,0,0,0,$members[0],$members[1],false);
+					for ($i=2;$i<count($members);$i++)
+					{
+						$GLOBALS['FORUM_DB']->query_insert('f_special_pt_access',array('s_member_id'=>$members[$i],'s_topic_id'=>$topic_id));
+					}
+					$is_starter=true;
+				} else
+				{
+					$is_starter=false;
+				}
+				require_code('ocf_posts_action');
+				ocf_make_post($topic_id,$is_starter?do_lang('INSTANT_MESSAGING_CONVO'):'',$message,0,$is_starter,1,0,NULL,NULL,NULL,get_member(),NULL,NULL,NULL,false,true,NULL,false,'',0,NULL,false,true);
+				require_code('ocf_topics');
+				for ($i=0;$i<count($members);$i++)
+				{
+					ocf_ping_topic_read($topic_id,$members[$i]);
 				}
 			}
 		}
@@ -1133,7 +1003,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 	// Flood prevention has blocked us. Send a PM about it
 	require_lang('chat');
 	$_message_parsed=insert_lang_comcode('[private="'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'"]'.do_lang('FLOOD_CONTROL_BLOCKED',integer_format($time_left)).'[/private]',4,NULL,false,NULL/*,$wrap_pos*/); // Can't wrap system messages, the Comcode parser won't know 'private' is a real tag so will wrap inside it's definition
-	$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
+	$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'member_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 	$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 	fwrite($myfile,strval($message_id));
 	fclose($myfile);
@@ -1142,19 +1012,118 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 }
 
 /**
+ * Get the people who have posted a message in the specified room within the last x minutes (defaults to five). Note that this function performs no pruning- the chat lobby will do that. It does do an activity time-range select though.
+ *
+ * @param	?AUTO_LINK		The room ID (NULL: lobby)
+ * @return  array				A map of members in the room. User ID=>Username
+ */
+function get_chatters_in_room($room_id)
+{
+	if (is_null($room_id))
+	{
+		$extra2='room_id IS NULL';
+	} else
+	{
+		$extra2='room_id='.strval($room_id);
+	}
+	$active=$GLOBALS['SITE_DB']->query('SELECT DISTINCT a.member_id FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.member_id=a.member_id WHERE (session_invisible=0 OR session_invisible IS NULL) AND date_and_time>='.strval(time()-60*10).' AND '.$extra2);
+
+	$found_users=array();
+	foreach ($active as $values)
+	{
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($values['member_id']);
+		if (!is_null($username)) $found_users[$values['member_id']]=$username;
+	}
+	return $found_users;
+}
+
+/**
+ * Get some template code showing the number of chatters in a room.
+ *
+ * @param	array				A mapping (user=>username) of the chatters in the room
+ * @return	tempcode			The Tempcode
+ */
+function get_chatters_in_room_tpl($users)
+{
+	require_code('users2');
+	$usernames=new ocp_tempcode();
+	$some_users=false;
+	foreach ($users as $member_id=>$username)
+	{
+		if (!member_blocked(get_member(),$member_id))
+		{
+			$some_users=true;
+			if (!is_guest($member_id))
+			{
+				if (get_forum_type()=='ocf')
+				{
+					require_code('ocf_general');
+					require_code('ocf_members');
+
+					$colour=get_group_colour(ocf_get_member_primary_group($member_id));
+					$usernames->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'ef5f13f50d242a49474337b8e979c419','FIRST'=>$usernames->is_empty(),'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),'MEMBER_ID'=>strval($member_id),'USERNAME'=>$username,'COLOUR'=>$colour)));
+				} else
+				{
+					$usernames->attach($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$username,false));
+				}
+			} else
+			{
+				if (!$usernames->is_empty()) $usernames->attach(escape_html(', ')); // NB: OCF_USER_MEMBER would have auto-added comma
+				$usernames->attach(escape_html(do_lang('GUEST')));
+			}
+		}
+	}
+	if (!$some_users)
+	{
+		$usernames=do_lang_tempcode('NONE_EM');
+	}
+	return $usernames;
+}
+
+/**
+ * Get the textual name of the specified chatroom, from its room id.
+ *
+ * @param  AUTO_LINK		The room ID
+ * @param  boolean		Allow the chatroom to not be found (i.e. don't die if it can't be)
+ * @return ?SHORT_TEXT	The room name (NULL: not found)
+ */
+function get_chatroom_name($room_id,$allow_null=false)
+{
+	if ($allow_null)
+	{
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','room_name',array('id'=>$room_id));
+	}
+	return $GLOBALS['SITE_DB']->query_select_value('chat_rooms','room_name',array('id'=>$room_id));
+}
+
+/**
+ * Get the ID of the specified chatroom, from its room name.
+ *
+ * @param  SHORT_TEXT		The name of the chatroom
+ * @param  boolean			Make sure the room is not an IM room. If it is an IM room, pretend it does not exist.
+ * @return ?AUTO_LINK		The ID of the chatroom (NULL: no such chat room)
+ */
+function get_chatroom_id($room_name,$must_not_be_im=false)
+{
+	$map=array('room_name'=>$room_name);
+	if ($must_not_be_im) $map['is_im']=0;
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','id',$map);
+}
+
+/**
  * Get an array of all the chatrooms.
  *
  * @return	array			An array of all the chatrooms
-*/
+ */
 function chat_get_all_rooms()
 {
 	return $GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im'=>0),'ORDER BY room_name DESC');
 }
 
 /**
- * Get a multidimensional array of the content of the specified chatroom. It automatically parses for comcode, chatcode, banned words, smilies, and uses complex logic to decide whether or not to show each message; based upon who the member is, the message content, and other such inputs.
+ * Get a multidimensional array of the content of the specified chatroom. It automatically parses for Comcode, chatcode, banned words, smilies, and uses complex logic to decide whether or not to show each message; based upon who the member is, the message content, and other such inputs.
  * If you set the $dereference flag, all the messages will be dereferenced for you, and if you set the $downloading flag, the array is returned in a format appropriate for things like downloading the chat logs.
- * $start and $finish are used to cutoff the number of messages returned, based on their posting date and time, and the $uptoid variable is used to make the function only return the messages newer than the id specified.
+ * $start and $finish are used to cutoff the number of messages returned, based on their posting date and time, and the $uptoid variable is used to make the function only return the messages newer than the ID specified.
  *
  * @param  AUTO_LINK		The room ID (-1 for IM)
  * @param  array			Rooms database rows that we'll need
@@ -1169,7 +1138,7 @@ function chat_get_all_rooms()
  * @param  boolean		Return the current user's messages?
  * @param  boolean		Return system messages
  * @return array			An array of all the messages collected according to the search criteria
-*/
+ */
 function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,$downloading=false,$start=NULL,$finish=NULL,$uptoid=NULL,$zone=NULL,$entering_room=NULL,$return_my_messages=true,$return_system_messages=true)
 {
 	if (is_null($zone)) $zone=get_module_zone('chat');
@@ -1185,27 +1154,27 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 		{
 			require_code('comcode');
 			$_message_parsed=insert_lang_comcode('[private="'.$their_username.'"]'.$_entering_room.'[/private]',4);
-			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
+			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'member_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 			$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 			fwrite($myfile,strval($message_id));
 			fclose($myfile);
 			sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		}
 
-		$enter_room_msg=do_lang('ENTERED_THE_ROOM',$their_username);
+		$enter_room_msg=do_lang('ENTERED_THE_CHATROOM',$their_username);
 		if ($enter_room_msg!='')
 		{
 			require_code('comcode');
 			$_message_parsed=insert_lang_comcode($enter_room_msg,4);
-			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
+			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'member_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 			$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 			fwrite($myfile,strval($message_id));
 			fclose($myfile);
 			sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		}
 
-		$room_name=$GLOBALS['SITE_DB']->query_value('chat_rooms','room_name',array('id'=>$room_id));
-		$room_language=$GLOBALS['SITE_DB']->query_value('chat_rooms','room_language',array('id'=>$room_id));
+		$room_name=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','room_name',array('id'=>$room_id));
+		$room_language=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','room_language',array('id'=>$room_id));
 
 		require_code('notifications');
 		$subject=do_lang('MEC_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$their_username,$room_name,$room_language);
@@ -1221,31 +1190,31 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 		$where='';
 		if ($room_id!=-1)
 		{
-			$where.='room_id='.strval((integer)$room_id);
+			$where.='room_id='.strval($room_id);
 		}
 		if ($downloading)
 		{
 			if ($where!='') $where.=' AND ';
-			$where.='date_and_time>='.strval((integer)$start).' AND date_and_time<='.strval((integer)$finish);
+			$where.='date_and_time>='.strval($start).' AND date_and_time<='.strval($finish);
 		}
 		if ((!is_null($uptoid)) && ($uptoid!=-1))
 		{
 			if (get_db_type()=='xml')
 			{
-				$timestamp=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','date_and_time',array('id'=>$uptoid));
+				$timestamp=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_messages','date_and_time',array('id'=>$uptoid));
 				if (is_null($timestamp)) $timestamp=0;
 				if ($where!='') $where.=' AND ';
-				$where.='main.date_and_time>'.strval((integer)$timestamp);
+				$where.='main.date_and_time>'.strval($timestamp);
 			} else
 			{
 				if ($where!='') $where.=' AND ';
-				$where.='main.id>'.strval((integer)$uptoid);
+				$where.='main.id>'.strval($uptoid);
 			}
 		}
 		if (!$return_my_messages)
 		{
 			if ($where!='') $where.=' AND ';
-			$where.='user_id!='.strval((integer)get_member());
+			$where.='member_id!='.strval(get_member());
 		}
 		if (!$return_system_messages)
 		{
@@ -1267,7 +1236,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 	foreach (array_keys($rows) as $i)
 	{
 		// Compose what we ultimately need to know about our message
-		$rows[$i]['member_id']=$rows[$i]['user_id']; // unfortunately the table schema was designed before our coding standards solidified
+		$rows[$i]['member_id']=$rows[$i]['member_id']; // unfortunately the table schema was designed before our coding standards solidified
 		$rows[$i]['username']=$GLOBALS['FORUM_DRIVER']->get_username($rows[$i]['member_id']);
 		if (is_null($rows[$i]['username'])) $rows[$i]['username']=do_lang('UNKNOWN');
 		$rows[$i]['date_and_time_nice']=get_timezoned_date($rows[$i]['date_and_time']);
@@ -1331,7 +1300,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
  * @param  AUTO_LINK		The room ID the message is in
  * @param  BINARY			Whether this is within a system message
  * @return array			A pair: whether the message was deleted, and the new text of the message
-*/
+ */
 function _deal_with_chatcode_tags($text,$tag,$pm_user,$pm_message,$username,$cutoff,$zone,$room_id,$system_message)
 {
 	switch ($tag)
@@ -1356,7 +1325,7 @@ function _deal_with_chatcode_tags($text,$tag,$pm_user,$pm_message,$username,$cut
  * @param  AUTO_LINK		The room ID the message is in
  * @param  BINARY			Whether this is within a system message
  * @return array			A pair: whether the message was deleted, and the new text of the message
-*/
+ */
 function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_id,$system_message)
 {
 	$pm_message_deleted=false;
@@ -1383,7 +1352,7 @@ function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_
 					$response=$ob->handle_commands($room_id,$pm_message);
 					if (!is_null($response))
 					{
-						if ($response_text!='') $response_text.=chr(10).chr(10);
+						if ($response_text!='') $response_text.="\n\n";
 						$_response=comcode_to_tempcode($response,$from);
 						$response_text.=$_response->evaluate();
 					}
@@ -1393,7 +1362,7 @@ function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_
 		} else
 		{
 			// Display the message
-			$private_code=do_template('CHAT_PRIVATE',array('_GUID'=>'96ef50f1442b319b034fe6f68ca50c12','SYSTEM_MESSAGE'=>strval($system_message),'MESSAGE'=>$pm_message,'USER'=>do_lang_tempcode('CHAT_PRIVATE_TITLE',escape_html($username))));
+			$private_code=do_template('CHAT_PRIVATE',array('_GUID'=>'96ef50f1442b319b034fe6f68ca50c12','SYSTEM_MESSAGE'=>strval($system_message),'MESSAGE'=>$pm_message,'MEMBER'=>do_lang_tempcode('CHAT_PRIVATE_TITLE',escape_html($username))));
 			$text=preg_replace('#\[private=&quot;([^&]*)&quot;\]([^\[]*)\[/private\]#',$private_code->evaluate(),$text,1);
 		}
 	} else // No we are not...
@@ -1418,7 +1387,7 @@ function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_
  * @param  string			The text we are using
  * @param  ID_TEXT		The zone the chat module is in
  * @return array			A pair: whether the message was deleted, and the new text of the message
-*/
+ */
 function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
 {
 	$pm_message_deleted=false;
@@ -1430,11 +1399,11 @@ function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
 		$real_member=(($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user)==get_member()) && (!is_guest($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user))) && (!is_null($GLOBALS['FORUM_DRIVER']->get_member_from_username($quoted_user)))) || ($username==$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		if ($real_member)
 		{
-			$room_id=get_chatroom_id(chat_convert_html_entities($pm_message),true);
+			$room_id=get_chatroom_id(html_entity_decode($pm_message,ENT_QUOTES,get_charset()),true);
 			if (!is_null($room_id))
 			{
 				// Display the invite
-				$invite_code=do_template('CHAT_INVITE',array('_GUID'=>'493ac2dcabc763fe03e7eee072dd9629','USERNAME'=>$username,'ROOM'=>chat_convert_html_entities($pm_message),'LINK'=>hyperlink(build_url(array('page'=>'chat','type'=>'room','room_id'=>strval($room_id)),$zone),do_lang_tempcode('CHAT_INVITE_TEXT_REPLY'))));
+				$invite_code=do_template('CHAT_INVITE',array('_GUID'=>'493ac2dcabc763fe03e7eee072dd9629','USERNAME'=>$username,'CHATROOM'=>html_entity_decode($pm_message,ENT_QUOTES,get_charset()),'LINK'=>hyperlink(build_url(array('page'=>'chat','type'=>'room','room_id'=>strval($room_id)),$zone),do_lang_tempcode('CHAT_INVITE_TEXT_REPLY'))));
 				$text=preg_replace('#\[invite=&quot;([^&]*)&quot;\]([^\[]*)\[/invite\]#',$invite_code->evaluate(),$text,1);
 			}
 		}
@@ -1461,11 +1430,11 @@ function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
  * @param  string			The text we are using
  * @param  ?integer		The maximum number of messages to be returned (NULL: no maximum)
  * @return array			A pair: whether the message was deleted, and the new text of the message
-*/
+ */
 function _deal_with_chatcode_newroom($pm_user,$pm_message,$username,$text,$cutoff)
 {
 	$pm_message_deleted=false;
-	if (!has_specific_permission(get_member(),'create_private_room'))
+	if (!has_privilege(get_member(),'create_private_room'))
 		return array('pm_message_deleted'=>$pm_message_deleted,'text'=>$text);
 
 	// This deals with the [newroom="roomname"]allowlist[/newroom] tag
@@ -1487,7 +1456,7 @@ function _deal_with_chatcode_newroom($pm_user,$pm_message,$username,$text,$cutof
 					if ($room['id']!=$new_room_id)
 					{
 						$_message_parsed=insert_lang_comcode('[invite="'.$person.'"]'.get_chatroom_name($new_room_id).'[/invite]',4);
-						$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('ip_address'=>get_ip_address(),'room_id'=>$room['id'],'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
+						$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('ip_address'=>get_ip_address(),'room_id'=>$room['id'],'member_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 						$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 						fwrite($myfile,strval($message_id));
 						fclose($myfile);
@@ -1512,7 +1481,7 @@ function _deal_with_chatcode_newroom($pm_user,$pm_message,$username,$text,$cutof
  * @param  array			Original list of messages
  * @param  array			List of message IDs to keep
  * @return array			A new list of messages
-*/
+ */
 function _remove_empty_messages($messages,$message_ids)
 {
 	$new=array();
@@ -1528,7 +1497,7 @@ function _remove_empty_messages($messages,$message_ids)
  *
  * @param	string			A comma-separated list of usernames
  * @return  string			A comma-separated list of member IDs
-*/
+ */
 function parse_allow_list_input($_allow)
 {
 	if ($_allow=='') return '';
@@ -1551,17 +1520,6 @@ function parse_allow_list_input($_allow)
 }
 
 /**
- * Takes a chat message, and converts some characters from HTML entities into proper characters.
- *
- * @param  string			Chat message to be parsed
- * @return string			Parsed chat message
-*/
-function chat_convert_html_entities($string)
-{
-	return str_replace('&#039;',"'",$string);
-}
-
-/**
  * Check whether a member has access to the chatroom.
  *
  * @param  mixed				The row of the chat room to check for access OR it's ID (AUTO_LINK)
@@ -1569,7 +1527,7 @@ function chat_convert_html_entities($string)
  * @param  ?MEMBER			The member to check as (NULL: current member)
  * @param  boolean			Whether to also ensure for $member_id having explicit access
  * @return boolean			Whether the current member has access to the chatroom
-*/
+ */
 function check_chatroom_access($room,$ret=false,$member_id=NULL,$must_be_explicit=false)
 {
 	if (!is_array($room))
@@ -1645,127 +1603,12 @@ function check_chatroom_access($room,$ret=false,$member_id=NULL,$must_be_explici
 }
 
 /**
- * Prune timed-out private chatrooms.
- *
- * @param  array			The row of the chat room to possibly prune
- * @return boolean		Whether the room was pruned
-*/
-function handle_chatroom_pruning($row)
-{
-	$deletion_time=intval(get_option('chat_private_room_deletion_time'));
-	if ($deletion_time==0) return false;
-	if (($row['allow_list']!='') || (!is_null($row['room_owner'])))
-	{
-		// As this is a private chatroom, we need to delete it if it has been idle for too long ;-)
-		$message=$GLOBALS['SITE_DB']->query_select('chat_messages',array('date_and_time'),array('room_id'=>$row['id']),'ORDER BY date_and_time DESC',1);
-		if ((isset($message[0])) && (($message[0]['date_and_time']+($deletion_time*60))<=time()))
-		{
-			// Delete the room and its messages
-			$GLOBALS['SITE_DB']->query_delete('chat_rooms',array('id'=>$row['id']),'',1);
-			require_code('chat2');
-			delete_chat_messages(array('room_id'=>$row['id']));
-			return true;
-		}
-	}
-	return false;
-}
-
-/**
- * Get the list of all available chat sound effects.
- *
- * @param  boolean		Map to NULL if it is not overridable.
- * @return map				All available sound effects (mapping between base code, and actual code).
-*/
-function get_effect_set($only_overridable=false)
-{
-	$effects=array(
-		'message_received'=>'message_received',
-		'message_background'=>'message_background',
-		'message_initial'=>$only_overridable?NULL:'message_initial',
-		'message_sent'=>$only_overridable?NULL:'message_sent',
-		'contact_on'=>'contact_on',
-		'contact_off'=>'contact_off',
-		'invited'=>'invited',
-		'you_connect'=>$only_overridable?NULL:'you_connect',
-	);
-
-	return $effects;
-}
-
-/**
- * Get a list of template mappings for the current member, between sound effect IDs and the URLs to the mp3 fiels.
- *
- * @param  boolean		Whether to use full URLs in the mappings.
- * @param  ?MEMBER		Get settings overridden for this specific member (NULL: global settings).
- * @param  boolean		Get global settings and settings overridden for all members (if this is true we'd expect $for_member to be NULL).
- * @return array			The template mappings.
-*/
-function get_effect_settings($full_urls=false,$for_member=NULL,$all_members=false)
-{
-	$effects=get_effect_set(!is_null($for_member));
-
-	global $EFFECT_SETTINGS_ROWS;
-	if (is_null($EFFECT_SETTINGS_ROWS))
-	{
-		$EFFECT_SETTINGS_ROWS=collapse_2d_complexity('s_effect_id','s_url',$GLOBALS['SITE_DB']->query_select('chat_sound_effects',array('s_url','s_effect_id'),array('s_member'=>get_member())));
-	}
-	$effect_settings=array();
-	if ($all_members)
-	{
-		foreach (array_keys($EFFECT_SETTINGS_ROWS) as $effect_id)
-		{
-			$matches=array();
-			if ((!array_key_exists($effect_id,$effects)) && (preg_match('#^(.*)\_(\d+)$#',$effect_id,$matches)!=0) && (array_key_exists($matches[1],$effects)))
-			{
-				$effects[$effect_id]=$matches[1];
-			}
-		}
-	}
-	foreach ($effects as $effect=>$base_effect_code)
-	{
-		if (is_null($base_effect_code)) continue;
-
-		if (is_null($for_member)) // Global settings
-		{
-			if (array_key_exists($effect,$EFFECT_SETTINGS_ROWS))
-			{
-				$member_setting=$EFFECT_SETTINGS_ROWS[$effect];
-			} else
-			{
-				if (true)/* elseif ($effect!='message_sent')*/
-				{
-					$member_setting='data_custom/sounds/'.$effect.'.mp3';
-					if (!file_exists(get_custom_file_base().'/'.$member_setting))
-						$member_setting='data/sounds/'.$effect.'.mp3';
-					if (!file_exists(get_file_base().'/'.$member_setting))
-						$member_setting='';
-				} else $member_setting='';
-			}
-		} else // Overridden settings
-		{
-			if (array_key_exists($effect.'_'.strval($for_member),$EFFECT_SETTINGS_ROWS))
-			{
-				$member_setting=$EFFECT_SETTINGS_ROWS[$effect.'_'.strval($for_member)];
-			} else
-			{
-				$member_setting='-1';
-			}
-		}
-		$effect_settings[$effect]=array(
-			'KEY'=>$effect,
-			'VALUE'=>(($full_urls&&($member_setting!=''))?(((substr($member_setting,0,12)=='data_custom/')?get_custom_base_url():get_base_url()).'/'):'').$member_setting,
-			'EFFECT_TITLE'=>do_lang('CHAT_EFFECT_'.$base_effect_code),
-		);
-	}
-	return $effect_settings;
-}
-
-/**
  * Get a template that will set up the chat sound effects as for what this member needs.
  *
  * @return tempcode		Template to set up chat sound effects.
-*/
+ */
 function get_chat_sound_tpl()
 {
-	return do_template('CHAT_SOUND',array('SOUND_EFFECTS'=>get_effect_settings(true,NULL,true)));
+	require_code('chat_sounds');
+	return do_template('CHAT_SOUND',array('_GUID'=>'102c9574a2563143683970595df74011','SOUND_EFFECTS'=>get_effect_settings(true,NULL,true)));
 }
