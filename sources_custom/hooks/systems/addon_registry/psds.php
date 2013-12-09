@@ -135,9 +135,6 @@ class Hook_addon_registry_psds
 			'data_custom/psds/blank_emoticon.png',
 			'data_custom/psds/chatcode.psd',
 			'data_custom/psds/comcode.psd',
-			'data_custom/psds/page-cart.psd',
-			'data_custom/psds/page.psd',
-			'data_custom/psds/pageitem.psd',
 		);
 	}
 }

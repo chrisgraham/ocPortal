@@ -575,7 +575,7 @@ class Module_admin_zones
 		// Theme
 		require_code('themes2');
 		$entries=create_selection_list_themes($theme,false,true);
-		$fields.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode((get_forum_type()=='ocf')?'_DESCRIPTION_THEME_OCF':'_DESCRIPTION_THEME',substr(preg_replace('#[^A-Za-z\d]#','_',get_site_name()),0,80)),'theme',$entries));
+		$fields.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode((get_forum_type()=='ocf')?'_DESCRIPTION_THEME_OCF':'_DESCRIPTION_THEME',get_default_theme_name()),'theme',$entries));
 
 		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b997e901934b59fa72c944e0ce6fc1b0','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('REQUIRE_SESSION'),do_lang_tempcode('DESCRIPTION_REQUIRE_SESSION'),'require_session',($require_session==1)));

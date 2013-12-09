@@ -383,7 +383,7 @@ class forum_driver_ocf extends forum_driver_base
 		{
 			if (!GOOGLE_APPENGINE) // Requires a Cloud Storage fstat on GAE, so bad idea - user should be explicit in their zone setup (which the Theme Wizard will do)
 			{
-				$theme=substr(preg_replace('#[^A-Za-z\d]#','_',get_site_name()),0,80);
+				$theme=get_default_theme_name();
 				if (is_dir(get_custom_file_base().'/themes/'.$theme)) return $theme;
 				$theme='default';
 			}

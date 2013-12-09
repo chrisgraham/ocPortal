@@ -445,7 +445,7 @@ class Module_admin_themes
 		// Show all themes
 		$site_default_theme=$GLOBALS['FORUM_DRIVER']->_get_theme(true);
 		$themes=new ocp_tempcode();
-		$theme_default_reason=do_lang_tempcode('DEFAULT_THEME_BY_DEFAULT');
+		$theme_default_reason=do_lang_tempcode('DEFAULT_THEME_BY_DEFAULT',escape_html(get_default_theme_name()));
 		foreach ($_themes as $theme=>$details)
 		{
 			if (is_integer($theme)) $theme=strval($theme);

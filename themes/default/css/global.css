@@ -1928,7 +1928,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .thick_border th, .thick_border td {
-	border-top-width: 3px !important;
+	border-top-width: 4px !important;
 }
 
 .field_name_column {
@@ -2755,6 +2755,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.6s linear;}
 	margin-top: 3em;
+	{$BETA_CSS_PROPERTY,transform: translateZ(0);} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 }
 .quick_self_edit_link img, .quick_self_edit_link span {
 	vertical-align: middle;
@@ -3113,6 +3114,7 @@ div>.button_micro:first-child, div>.button_screen:first-child, div>.button_scree
 	padding: 1px 3px 2px 3px;
 	font-size: 12px;
 	margin: 1px 0.25em 0 0.25em; /* Push it up a bit due to confined space */
+	text-shadow: 1px 1px 1px {$GET,dark_shadow};
 }
 div .button_micro {
 	background-image: none !important; /* Too loud for such a small space */

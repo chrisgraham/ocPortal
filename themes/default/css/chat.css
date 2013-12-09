@@ -68,13 +68,8 @@
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
-.chat_posting_area textarea, .chat_posting_area input, .chat_posting_area img, .chat_posting_area a {
+.chat_posting_area textarea, .chat_posting_area input, .chat_posting_area img {
 	vertical-align: middle;
-}
-.chat_posting_area a img {
-	vertical-align: bottom;
-}
-.chat_posting_area .right img {
 }
 
 .chat_posting_area textarea {
@@ -211,6 +206,9 @@
 	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
 	{$BETA_CSS_PROPERTY,transform: translateZ(0);} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 	margin-right: 60px;
+}
+.chat_lobby_convos_area_messages .chat_message>div {
+	margin-right: 40px;
 }
 .chat_message>div:hover, body.touch_enabled .chat_message>div {
 	{$BETA_CSS_PROPERTY,opacity: 1;}

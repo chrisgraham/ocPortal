@@ -150,7 +150,7 @@ And these files don't need translating but could be replaced with equivalents in
 
 [title="3"]Images[/title]
 
-If you look under the [tt]themes/default/images/[/tt] directory you will see there is an [tt]EN[/tt] directory that contains images with English text on. You can copy this to the ISO codename of your language pack (e.g. [tt]FR[/tt]), and then replace the images with translated ones. Make sure you clear your theme image cache (Admin Zone, Tools section, Cleanup tools icon) after doing this. We have the PSD files (requires Adobe Photoshop or compatible software) for many of the images in our [page="site:downloads"]downloads database[/page]. The font is a commercial font called 'Kabel', so you may wish to use a free font like 'Arial' instead.
+If you look under the [tt]themes/default/images/[/tt] directory you will see there is an [tt]EN[/tt] directory that contains images with English text on. You can copy this to the ISO codename of your language pack (e.g. [tt]FR[/tt]), and then replace the images with translated ones. Make sure you clear your theme image cache (Admin Zone, Tools section, Cleanup tools icon) after doing this. We have the PSD files (requires Adobe Photoshop or compatible software) for many of the images in our [page="site:downloads"]downloads database[/page].
 
 [title="3"]WYSIWYG editor[/title]
 

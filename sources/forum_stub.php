@@ -399,7 +399,11 @@ class forum_driver_base
 		if ($USER_THEME_CACHE!==NULL) return $USER_THEME_CACHE;
 
 		global $IN_MINIKERNEL_VERSION;
-		if (($IN_MINIKERNEL_VERSION) || (in_safe_mode())) return 'default';
+		if (($IN_MINIKERNEL_VERSION) || (in_safe_mode()))
+		{
+			if ($zone_for===NULL) $zone_for=get_zone_name();
+			return ($zone_for==='adminzone' || $zone_for==='cms')?'admin':'default';
+		}
 
 		// Try hardcoded in URL
 		$USER_THEME_CACHE=filter_naughty(get_param('keep_theme',get_param('utheme','-1')));

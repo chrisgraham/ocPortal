@@ -579,3 +579,13 @@ function get_ocp_cpf($cpf,$member=NULL)
 
 	return '';
 }
+
+/**
+ * Get the name of the default theme, assuming it exists. This is based on the site name.
+ *
+ * @return string			Theme name
+ */
+function get_default_theme_name()
+{
+	return substr(preg_replace('#[^A-Za-z\d]#','_',get_site_name()),0,80);
+}

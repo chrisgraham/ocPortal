@@ -28,7 +28,7 @@
 		{+END}
 
 		{+START,IF_NON_EMPTY,{THEME_DEFAULT_REASON}}
-			<p><sup>*</sup> {THEME_DEFAULT_REASON*}</p>
+			<p><sup>*</sup> {THEME_DEFAULT_REASON}</p>
 		{+END}
 	</div>
 </div>

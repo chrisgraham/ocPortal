@@ -1816,7 +1816,7 @@ function replace_file_input(page_type,name,_btn_submit_id,posting_field_name,fil
 			upload_complete_handler : uploadComplete,
 
 			// Button Settings
-			button_image_url : '{$IMG;,pageitem/upload}'.replace(/^http:/,window.location.protocol),
+			button_image_url : '{$IMG;,icons/24x24/buttons/upload}'.replace(/^http:/,window.location.protocol),
 			button_placeholder_id : 'spanButtonPlaceholder_'+name,
 			button_width: 66,
 			button_height: 20,

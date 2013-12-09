@@ -44,7 +44,7 @@
 		{+START,IF_NON_EMPTY,{COMCODE_HELP}{CHATCODE_HELP}}
 			<ul class="horizontal_links horiz_field_sep associated_links_block_group">
 				{+START,IF_NON_EMPTY,{COMCODE_HELP}}
-					<li><a href="{COMCODE_HELP*}" title="{!COMCODE_HELP=} {!LINK_NEW_WINDOW}" target="_blank">{!COMCODE_HELP=}</a></li>
+					<li><a onclick="return open_link_as_overlay(this);" class="link_exempt" title="{!COMCODE_MESSAGE,Comcode} {!LINK_NEW_WINDOW}" target="_blank" href="{COMCODE_HELP*}"><img src="{$IMG*,icons/16x16/editor/comcode}" srcset="{$IMG*,icons/32x32/editor/comcode} 2x" class="vertical_alignment" alt="" /></a></li>
 				{+END}
 				{+START,IF_NON_EMPTY,{CHATCODE_HELP}}
 					<li><a href="{CHATCODE_HELP*}" title="{!CHATCODE_HELP=} {!LINK_NEW_WINDOW}" target="_blank">{!CHATCODE_HELP=}</a></li>
