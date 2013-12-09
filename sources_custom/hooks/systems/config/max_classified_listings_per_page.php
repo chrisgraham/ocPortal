@@ -13,7 +13,7 @@
  * @package		classifieds
  */
 
-class Hook_config_max_classified_listings_per_screen
+class Hook_config_max_classified_listings_per_page
 {
 	/**
 	 * Gets the details relating to the config option.
@@ -23,11 +23,11 @@ class Hook_config_max_classified_listings_per_screen
 	function get_details()
 	{
 		return array(
-			'human_name'=>'MAX_CLASSIFIED_LISTINGS_PER_SCREEN',
+			'human_name'=>'MAX_CLASSIFIED_LISTINGS_PER_PAGE',
 			'type'=>'integer',
 			'category'=>'FEATURE',
 			'group'=>'CLASSIFIEDS',
-			'explanation'=>'CONFIG_OPTION_max_classified_listings_per_screen',
+			'explanation'=>'CONFIG_OPTION_max_classified_listings_per_page',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
 			'required'=>true,

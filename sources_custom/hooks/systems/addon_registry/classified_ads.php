@@ -160,7 +160,7 @@ Fully integrated with catalogues, eCommerce, and OCF member accounts.';
 			'themes/default/templates_custom/CLASSIFIED_ADVERTS_SCREEN.tpl',
 			'themes/default/templates_custom/CLASSIFIEDS_PRICING_SCREEN.tpl',
 			'themes/default/templates_custom/CLASSIFIEDS.tpl',
-			'sources_custom/hooks/systems/config/max_classified_listings_per_screen.php',
+			'sources_custom/hooks/systems/config/max_classified_listings_per_page.php',
 		);
 	}
 }
