@@ -96,6 +96,8 @@ class Hook_addon_registry_core_rich_media
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/EN/1x/editor/index.html',
+			'themes/default/images/EN/2x/editor/index.html',
 			'themes/default/images/icons/16x16/editor/insert_emoticons.png',
 			'themes/default/images/icons/16x16/editor/wysiwyg_off.png',
 			'themes/default/images/icons/16x16/editor/wysiwyg_on.png',

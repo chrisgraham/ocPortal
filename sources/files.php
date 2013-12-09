@@ -452,7 +452,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 	if (($bitmask & IGNORE_CUSTOM_THEMES)!=0)
 	{
-		if ((preg_match('#^themes($|/)#i',$dir)!=0) && (substr($filepath,0,strlen('themes/default/'))!='themes/default/') && (!in_array(strtolower($filepath),array('themes/default','themes/index.html','themes/map.ini')))) return true;
+		if ((preg_match('#^themes($|/)#i',$dir)!=0) && (substr($filepath,0,strlen('themes/default/'))!='themes/default/') && (substr($filepath,0,strlen('themes/admin/'))!='themes/admin/') && (!in_array(strtolower($filepath),array('themes/default','themes/admin','themes/index.html','themes/map.ini')))) return true;
 	}
 
 	if (($bitmask & IGNORE_CUSTOM_ZONES)!=0)
