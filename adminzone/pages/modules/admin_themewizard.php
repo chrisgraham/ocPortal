@@ -396,7 +396,7 @@ class Module_admin_themewizard
 		$fonts=array();
 		if ($dh!==false)
 		{
-			while ($f=readdir($dh))
+			while (($f=readdir($dh))!==false)
 			{
 				if (substr($f,-4)=='.ttf') $fonts[]=$f;
 			}
@@ -405,7 +405,7 @@ class Module_admin_themewizard
 		$dh=opendir(get_file_base().'/data/fonts');
 		if ($dh!==false)
 		{
-			while ($f=readdir($dh))
+			while (($f=readdir($dh))!==false)
 			{
 				if (substr($f,-4)=='.ttf') $fonts[]=$f;
 			}

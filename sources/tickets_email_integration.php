@@ -275,6 +275,7 @@ function email_comcode_from_text($body)
  *
  * @param  string		Subject line
  * @param  string		Message body
+ * @param  string		Message headers
  * @return boolean	Whether it should not be processed
  */
 function is_non_human_email($subject,$body,$full_header)

@@ -1931,6 +1931,7 @@ function alternate_fields_set__start($set_name)
  * @param  tempcode		The field set tempcode
  * @param  boolean		Whether it is required that this field set be filled in
  * @param  ?URLPATH		Image URL to show, of the existing selection for this field (NULL: N/A) (blank: N/A)
+ * @param  boolean		Whether we just want the raw set contents, without any wrapper field row
  * @return tempcode		The field set
  */
 function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required,$existing_image_preview_url=NULL,$raw=false)

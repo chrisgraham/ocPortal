@@ -539,7 +539,7 @@ class Module_cms_catalogues extends standard_crud_module
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
-			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'),'inform');
 		}
 		if ((has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require_b)) || (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require)))
 		{
@@ -1550,7 +1550,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$hidden->attach(form_input_hidden('submit_points','0'));
 			$hidden->attach(form_input_hidden('send_view_reports','never'));
 
-			attach_message(do_lang_tempcode('EDITING_CUSTOM_FIELDS_HELP',do_lang_tempcode($info['content_type_label'])),true);
+			attach_message(do_lang_tempcode('EDITING_CUSTOM_FIELDS_HELP',do_lang_tempcode($info['content_type_label'])),'inform',true);
 
 			$actions=new ocp_tempcode();
 		} else

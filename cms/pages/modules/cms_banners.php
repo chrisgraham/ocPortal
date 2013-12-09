@@ -238,10 +238,7 @@ class Module_cms_banners extends standard_crud_module
 		$has_expiry_dates=false; // Save space by default
 		foreach ($rows as $row)
 		{
-			foreach ($rows as $row)
-			{
-				if (!is_null($row['expiry_date'])) $has_expiry_dates=true;
-			}
+			if (!is_null($row['expiry_date'])) $has_expiry_dates=true;
 		}
 
 		$hr=array(

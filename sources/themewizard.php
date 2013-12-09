@@ -266,11 +266,10 @@ function find_theme_image_themewizard_preview($id)
  * @param  string		The background theme image.
  * @param  boolean	Whether to output the logo to the browser, destroy then image, and exit the script (i.e. never returns)
  * @param  ?string	The theme to use the logo template from (NULL: default root zone theme).
- * @param  string		The logo img file to base upon.
  * @param  boolean	Whether we are generating the standalone version (smaller, used in e-mails etc).
  * @return resource  The image resource.
  */
-function generate_logo($name,$font='Vera',$logo_theme_image='logo/default_logos/1',$background_theme_image='logo/default_backgrounds/1',$raw=false,$theme=NULL,$standalone_version=false)
+function generate_logo($name,$font_choice='Vera',$logo_theme_image='logo/default_logos/1',$background_theme_image='logo/default_backgrounds/1',$raw=false,$theme=NULL,$standalone_version=false)
 {
 	require_code('character_sets');
 	require_code('files');
@@ -331,9 +330,9 @@ function generate_logo($name,$font='Vera',$logo_theme_image='logo/default_logos/
 	imagedestroy($imgs['logo']);
 
 	// Find font details
-	$ttf_font=get_file_base().'/data_custom/fonts/'.$font.'.ttf';
+	$ttf_font=get_file_base().'/data_custom/fonts/'.$font_choice.'.ttf';
 	if (!is_file($ttf_font))
-		$ttf_font=get_file_base().'/data/fonts/'.$font.'.ttf';
+		$ttf_font=get_file_base().'/data/fonts/'.$font_choice.'.ttf';
 	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (!file_exists($ttf_font)) || (@imagettfbbox(26.0,0.0,$ttf_font,'test')===false))
 	{
 		$font=intval($logowizard_details['site_name_font_size_small_non_ttf']);
@@ -365,6 +364,7 @@ function generate_logo($name,$font='Vera',$logo_theme_image='logo/default_logos/
 	}
 
 	// Write text onto the canvas
+	$do=array();
 	if (($font_width>intval($logowizard_details['site_name_split'])) && (strpos($name,' ')!==false)) // Split in two
 	{
 		if ((function_exists('imagettftext')) && (array_key_exists('FreeType Support',gd_info())) && (file_exists($ttf_font)) && (@imagettfbbox(26.0,0.0,$ttf_font,'test')!==false))

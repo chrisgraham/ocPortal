@@ -176,14 +176,14 @@ class Hook_addon_registry_setupwizard
 			'URL'=>placeholder_url(),
 			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>lorem_word()
-		);
+		));
 
 		return array(
 			lorem_globalise(do_lorem_template('SETUPWIZARD_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'INNER'=>$inner,
 				'STEP'=>'7',
-			))),NULL,'',true)
+			)),NULL,'',true)
 		);
 	}
 
@@ -204,14 +204,14 @@ class Hook_addon_registry_setupwizard
 			'BALANCED'=>lorem_phrase(),
 			'LIBERAL'=>lorem_phrase(),
 			'CORPORATE'=>lorem_phrase()
-		);
+		));
 
 		return array(
 			lorem_globalise(do_lorem_template('SETUPWIZARD_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'INNER'=>$inner,
 				'STEP'=>'7',
-			))),NULL,'',true)
+			)),NULL,'',true)
 		);
 	}
 }
