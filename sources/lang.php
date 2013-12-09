@@ -719,11 +719,12 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			$pos=strpos($codename,':');
 			if ($pos!==false)
 			{
+				$lang_file=substr($codename,0,$pos);
 				$codename=substr($codename,$pos+1);
 
 				$there=isset($LANGUAGE_STRINGS_CACHE[$lang][$codename]);
 				if (!$there)
-					require_lang(substr($codename,0,$pos),NULL,NULL,!$require_result);
+					require_lang($lang_file,NULL,NULL,!$require_result);
 			}
 
 			$there=isset($LANGUAGE_STRINGS_CACHE[$lang][$codename]);
