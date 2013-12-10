@@ -44,6 +44,7 @@ class Hook_awards_comcode_page
 		$info['category_is_string']=true;
 		$info['archive_url']=build_url(array('page'=>'sitemap'),get_page_zone('sitemap'));
 		$info['cms_page']='cms_comcode_pages';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

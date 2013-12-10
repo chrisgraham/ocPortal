@@ -1269,13 +1269,14 @@ class standard_aed_module
 
 			if (!is_null($this->upload)) require_code('uploads');
 			$description=$this->edit_actualisation($id);
+			$orig_id=$id;
 			if (!is_null($this->new_id)) $id=$this->new_id;
 
 			// Save custom fields
 			if ($this->has_tied_catalogue())
 			{
 				require_code('fields');
-				save_form_custom_fields($this->award_type,$id);
+				save_form_custom_fields($this->award_type,$id,$orig_id);
 			}
 
 			if (($this->output_of_action_is_confirmation) && (!is_null($description))) return $description;
