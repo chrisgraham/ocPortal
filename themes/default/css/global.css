@@ -3754,8 +3754,11 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	margin: 1em;
 }
 /* Make inline images look a little nicer, including with Wordpress imports (but native too) */
-.alignleft, .alignright, .aligncenter, .alignnone, .alignnone, a[rel="lightbox"] img.attachment_img {
+.alignleft, .alignright, .aligncenter, .alignnone, a[rel="lightbox"] img.attachment_img {
 	border: 2px solid {$GET,pale_border};
+}
+.alignleft img, .alignright img, .aligncenter img, .alignnone img {
+	display: block;
 }
 
 .attachment figcaption {
