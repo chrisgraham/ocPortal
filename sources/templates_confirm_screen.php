@@ -23,13 +23,13 @@
  *
  * @param  tempcode		The title for the confirmation page (out of get_screen_title)
  * @param  tempcode		The preview that's being confirmed for actualisation
- * @param  ID_TEXT		The URL type to confirm through to
- * @param  mixed			The URL type if we click back OR a full URL (if long, or if tempcode)
+ * @param  ID_TEXT		The URL type to confirm through to OR a full URL
+ * @param  ?mixed			The URL type if we click back OR a full URL (if long, or if tempcode) (NULL: none)
  * @param  ?array			A map of supplementary post data to get passed through upon confirmation (NULL: none)
  * @param  ?tempcode		Form fields to pass through as post data on confirmation (NULL: none)
  * @return tempcode		The confirmation page
  */
-function confirm_screen($title,$preview,$url_type,$back_url_type,$sup_post=NULL,$fields=NULL)
+function confirm_screen($title,$preview,$url_type,$back_url_type=NULL,$sup_post=NULL,$fields=NULL)
 {
 	if (is_null($sup_post)) $sup_post=array();
 
@@ -37,7 +37,11 @@ function confirm_screen($title,$preview,$url_type,$back_url_type,$sup_post=NULL,
 	{
 		$back_url=build_url(array('page'=>'_SELF','type'=>$back_url_type),'_SELF',NULL,true);
 	} else $back_url=$back_url_type;
-	$url=build_url(array('page'=>'_SELF','type'=>$url_type),'_SELF',NULL,true);
+
+	if ((is_string($back_url_type)) && (strlen($back_url_type)<10))
+	{
+		$url=build_url(array('page'=>'_SELF','type'=>$url_type),'_SELF',NULL,true);
+	} else $url=$url_type;
 
 	if (is_null($fields)) $fields=new ocp_tempcode();
 	$fields->attach(build_keep_post_fields(array_keys($sup_post))); // Everything EXCEPT what might have been passed in sup_post

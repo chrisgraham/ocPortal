@@ -81,7 +81,13 @@ class Module_admin_menus
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MENU_MANAGEMENT'))));
 
 			$id=get_param('id',get_param('id_new',''));
-			$this->title=get_screen_title('_EDIT_MENU',true,array(escape_html($id)));
+			if ($id=='')
+			{
+				$this->title=get_screen_title('EDIT_MENU');
+			} else
+			{
+				$this->title=get_screen_title('_EDIT_MENU',true,array(escape_html($id)));
+			}
 		}
 
 		if ($type=='_edit')
@@ -148,7 +154,7 @@ class Module_admin_menus
 		if (get_param('redirect','!')!='!') $map['redirect']=get_param('redirect');
 		$post_url=build_url($map,'_SELF',NULL,false,true);
 
-		$submit_name=do_lang_tempcode('CHOOSE');
+		$submit_name=do_lang_tempcode('EDIT');
 
 		return do_template('FORM_SCREEN',array(
 			'_GUID'=>'f3c04ea3fb5e429210c5e33e5a2f2092',
@@ -174,8 +180,28 @@ class Module_admin_menus
 		if (!has_js()) warn_exit(do_lang_tempcode('MSG_JS_NEEDED'));
 
 		$id=get_param('id','');
-		if ($id=='') $id=get_param('id_new');
+		if ($id=='') $id=get_param('id_new','');
 		if (substr($id,0,1)=='_') warn_exit(do_lang_tempcode('MENU_UNDERSCORE_RESERVED'));
+
+		// Option to copy to an editable menu
+		if ($id=='')
+		{
+			$preview=do_lang_tempcode('COPY_TO_EDITABLE_MENU');
+			$confirm_url=build_url(array('page'=>'_SELF','type'=>'edit','id'=>'main_menu'),'_SELF');
+			require_code('templates_confirm_screen');
+			return confirm_screen($this->title,$preview,$confirm_url,NULL,array('copy_from'=>get_option('header_menu_call_string'),'switch_over'=>1));
+		}
+		$copy_from=post_param('copy_from',NULL);
+		if ($copy_from!==NULL)
+		{
+			require_code('menus2');
+			delete_menu($id);
+			copy_from_sitemap_to_new_menu($id,$copy_from);
+			if (post_param_integer('switch_over',0)==1)
+			{
+				set_option('header_menu_call_string',$id);
+			}
+		}
 
 		$clickable_sections=(get_param_integer('clickable_sections',0)==1); // This is set to '1 if we have a menu type where pop out sections may be clicked on to be loaded. If we do then we make no UI distinction between page nodes and contracted/expanded, so people don't get compelled to choose a URL for everything, it simply becomes an option for them.
 

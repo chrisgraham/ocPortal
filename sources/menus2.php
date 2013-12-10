@@ -270,3 +270,64 @@ function delete_menu($menu_id)
 	}
 }
 
+/**
+ * Copy a part of the Sitemap to a new menu.
+ *
+ * @param  ID_TEXT		The ID of the menu to save into.
+ * @param  SHORT_TEXT	Sitemap details.
+ */
+function copy_from_sitemap_to_new_menu($target_menu,$source)
+{
+	require_code('comcode_from_html');
+	require_code('menus');
+	$root=_build_sitemap_menu($source);
+	$order=0;
+	_copy_from_sitemap_to_new_menu($target_menu,$root,$order);
+}
+
+/**
+ * Copy a Sitemap node's children into a new menu.
+ *
+ * @param  ID_TEXT		The ID of the menu to save into.
+ * @param  array			Sitemap node, containing children.
+ * @param  integer		Sequence order to save with.
+ * @param  ?AUTO_LINK	Menu parent ID (NULL: root).
+ */
+function _copy_from_sitemap_to_new_menu($target_menu,$node,&$order,$parent=NULL)
+{
+	if (isset($node['children']))
+	{
+		foreach ($node['children'] as $child)
+		{
+			$theme_image_code=mixed();
+			if (!is_null($child['extra_meta']['image']))
+			{
+				$_theme_image_code=$child['extra_meta']['image'];
+				if (substr($_theme_image_code,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/')
+				{
+					$_theme_image_code=substr($_theme_image_code,strlen(get_custom_base_url().'/'));
+					$theme_image_code=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','id',array('path'=>$_theme_image_code));
+				}
+			}
+
+			$branch_id=add_menu_item(
+				$target_menu,
+				$order,
+				$parent,
+				semihtml_to_comcode($child['title']->evaluate(),true),
+				is_null($child['page_link'])?'':$child['page_link'],
+				1,
+				'',
+				1,
+				0,
+				is_null($child['extra_meta']['description'])?'':semihtml_to_comcode($child['extra_meta']['description']->evaluate(),true),
+				is_null($theme_image_code)?'':$theme_image_code,
+				0
+			);
+
+			$order++;
+
+			_copy_from_sitemap_to_new_menu($target_menu,$child,$order,$branch_id);
+		}
+	}
+}

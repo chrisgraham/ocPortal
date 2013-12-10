@@ -3743,13 +3743,15 @@ ul.nl, .nl ul {
 div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;} display: inline-block;/*Needed for IE8*/
 }
-.edit_page_link_inline, .edit_menu_link_inline {
+.edit_menu_link_inline {
+	position: absolute;
+	float: left;
+	margin-left: 0.25em;
+}
+.edit_page_link_inline {
 	position: absolute;
 	right: 1px;
 	z-index: 10000;
-	margin-top: 3px;
-}
-.edit_page_link_inline {
 	margin-top: -1em;
 }
 

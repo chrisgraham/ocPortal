@@ -64,16 +64,16 @@ function build_menu($type,$menu,$silent_failure=false)
 	$content=_render_menu($root,NULL,$type,true);
 
 	// Edit link
-	if ((!$is_sitemap_menu) && (has_actual_page_access(get_member(),'admin_menus')))
+	if (((!$is_sitemap_menu) || ($menu==get_option('header_menu_call_string'))) && (has_actual_page_access(get_member(),'admin_menus')))
 	{
 		$redirect=get_self_url(true,true);
-		$url_map=array('page'=>'admin_menus','type'=>'edit','id'=>$root['content_id'],'redirect'=>$redirect,'clickable_sections'=>(($type=='popup') || ($type=='dropdown'))?1:0);
+		$url_map=array('page'=>'admin_menus','type'=>'edit','id'=>$is_sitemap_menu?NULL:$root['content_id'],'redirect'=>$redirect,'clickable_sections'=>(($type=='popup') || ($type=='dropdown'))?1:0);
 		$url=build_url($url_map,get_module_zone('admin_menus'));
 		$content->attach(do_template('MENU_STAFF_LINK',array(
 			'_GUID'=>'a5209ec65425bed1207e2f667d9116f6',
 			'TYPE'=>$type,
 			'EDIT_URL'=>$url,
-			'NAME'=>$menu,
+			'NAME'=>$is_sitemap_menu?'':$menu,
 		)));
 	}
 

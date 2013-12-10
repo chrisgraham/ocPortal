@@ -53,4 +53,15 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$foo='http://localhost/git/themes/default/images/icons/24x24/menu/_generic_spare/page.png';
+	$theme_image_code=mixed();
+	if (!is_null($foo))
+	{
+		$_theme_image_code=$foo;
+		if (substr($_theme_image_code,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/')
+		{
+			$_theme_image_code=substr($_theme_image_code,strlen(get_custom_base_url().'/'));
+			$theme_image_code=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','id',array('path'=>$_theme_image_code));
+		}
+	}
 }
