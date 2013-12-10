@@ -909,7 +909,7 @@ function do_site()
 	{
 		special_page_types($special_page_type,$out,$out_evaluated);
 	}
-	if (in_safe_mode())
+	if ((in_safe_mode()) && (!isset($GLOBALS['SITE_INFO']['safe_mode'])))
 	{
 		$disable_safe_mode_url=get_self_url(true,true,array('keep_safe_mode'=>NULL));
 		attach_message(do_lang_tempcode('CURRENTLY_HAS_KEEP_SAFE_MODE',escape_html($disable_safe_mode_url)),'notice');

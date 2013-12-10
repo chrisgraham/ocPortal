@@ -3,3 +3,44 @@
  Copyright (c) ocProducts, 2004-2014
 */
 
+.menu_type__sitemap ul {
+	list-style-type: none;
+	list-style-image: none;
+	margin-left: 0;
+	padding-left: 0;
+	font-size: 1.5em;
+}
+
+.menu_type__sitemap ul ul {
+	margin-left: 0;
+	padding-left: 0;
+	font-size: 1em;
+}
+
+.menu_type__sitemap ul li {
+	margin-top: 2em;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+.menu_type__sitemap ul ul ul {
+	margin-left: 0;
+	padding-left: 0;
+	padding-top: 0.5em;
+	list-style: circle;
+	font-size: 0.9em;
+}
+
+.menu_type__sitemap ul ul ul {
+	font-size: 0.8em;
+}
+
+.menu_type__sitemap ul li li {
+	margin-top: 0.5em;
+	font-weight: normal;
+	font-size: 0.9em;
+	margin-left: 2em;
+	padding-left: 0;
+}
