@@ -123,6 +123,9 @@ function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 
 	if (get_option('show_post_validation')=='1') decache('main_staff_checklist');
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('cedi_post',strval($id),$member); // TODO: Fix in v10
+
 	return $id;
 }
 
@@ -246,6 +249,9 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL,$send
 			dispatch_cedi_page_notification($id,'ADD');
 		}
 	}
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('cedi_page',strval($id),$member); // TODO: Fix in v10
 
 	return $id;
 }

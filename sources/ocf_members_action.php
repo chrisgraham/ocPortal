@@ -313,6 +313,9 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 		if (function_exists('decache')) decache('side_stats');
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('member',strval($member_id));
+
 	return $member_id;
 }
 

@@ -122,58 +122,6 @@ function get_details_behind_feedback_code($content_type,$content_id)
 }
 
 /**
- * Given a particular bit of feedback content, check if the user may access it.
- *
- * @param  MEMBER			User to check
- * @param  ID_TEXT		Content type
- * @param  ID_TEXT		Content ID
- * @return boolean		Whether there is permission
- */
-function may_view_content_behind_feedback_code($member_id,$content_type,$content_id)
-{
-	require_code('content');
-
-	$permission_type_code=convert_ocportal_type_codes('feedback_type_code',$content_type,'permissions_type_code');
-
-	$module=convert_ocportal_type_codes('feedback_type_code',$content_type,'module');
-	if ($module=='') $module=$content_id;
-
-	$category_id=mixed();
-	$award_hook=convert_ocportal_type_codes('feedback_type_code',$content_type,'award_hook');
-	if ($award_hook!='')
-	{
-		require_code('hooks/systems/awards/'.$award_hook);
-		$award_hook_ob=object_factory('Hook_awards_'.$award_hook);
-		$info=$award_hook_ob->info();
-		if (isset($info['category_field']))
-		{
-			$cma_hook=convert_ocportal_type_codes('award_hook',$award_hook,'cma_hook');
-			list(,,,$content)=content_get_details($cma_hook,$content_id);
-			if (!is_null($content))
-			{
-				$category_field=$info['category_field'];
-				if (is_array($category_field))
-				{
-					$category_field=array_pop($category_field);
-					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
-					if ($award_hook=='catalogue_entry')
-					{
-						$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
-						if (!has_category_access($member_id,'catalogues_catalogue',$catalogue_name))
-							return false;
-					}
-				} else
-				{
-					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
-				}
-			}
-		}
-	}
-
-	return ((has_actual_page_access($member_id,$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($member_id,$permission_type_code,$category_id))));
-}
-
-/**
  * Main wrapper function to embed miscellaneous feedback systems into a module output.
  *
  * @param  ID_TEXT		The page name
@@ -612,7 +560,8 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
 		// Put on activity wall / whatever
 		$real_content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
-		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$real_content_type,$content_id))
+		require_code('content');
+		if (may_view_content_behind($GLOBALS['FORUM_DRIVER']->get_guest_id(),$real_content_type,$content_id,'feedback_type_code'))
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
@@ -858,7 +807,8 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
 		// Activity
 		$real_content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
-		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$real_content_type,$content_id))
+		require_code('content');
+		if (may_view_content_behind($GLOBALS['FORUM_DRIVER']->get_guest_id(),$real_content_type,$content_id,'feedback_type_code'))
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON';

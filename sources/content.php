@@ -19,6 +19,56 @@
  */
 
 /**
+ * Given a particular bit of feedback content, check if the user may access it.
+ *
+ * @param  MEMBER			User to check
+ * @param  ID_TEXT		Content type
+ * @param  ID_TEXT		Content ID
+ * @return boolean		Whether there is permission
+ */
+function may_view_content_behind($member_id,$content_type,$content_id,$type_has='cma_hook')
+{
+	$permission_type_code=convert_ocportal_type_codes($type_has,$content_type,'permissions_type_code');
+
+	$module=convert_ocportal_type_codes($type_has,$content_type,'module');
+	if ($module=='') $module=$content_id;
+
+	$category_id=mixed();
+	$award_hook=convert_ocportal_type_codes($type_has,$content_type,'award_hook');
+	if ($award_hook!='')
+	{
+		require_code('hooks/systems/awards/'.$award_hook);
+		$award_hook_ob=object_factory('Hook_awards_'.$award_hook);
+		$info=$award_hook_ob->info();
+		if (isset($info['category_field']))
+		{
+			$cma_hook=convert_ocportal_type_codes('award_hook',$award_hook,'cma_hook');
+			list(,,,$content)=content_get_details($cma_hook,$content_id);
+			if (!is_null($content))
+			{
+				$category_field=$info['category_field'];
+				if (is_array($category_field))
+				{
+					$category_field=array_pop($category_field);
+					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
+					if ($award_hook=='catalogue_entry')
+					{
+						$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
+						if (!has_category_access($member_id,'catalogues_catalogue',$catalogue_name))
+							return false;
+					}
+				} else
+				{
+					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
+				}
+			}
+		}
+	}
+
+	return ((has_actual_page_access($member_id,$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($member_id,$permission_type_code,$category_id))));
+}
+
+/**
  * Find a different content type code from the one had. In future we intend to change everything to be cma_hook internally.
  *
  * @param  ID_TEXT		Content type type we know

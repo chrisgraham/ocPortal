@@ -254,6 +254,9 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 		copy_notifications_to_new_child('download',strval($parent_id),strval($id));
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('download_category',strval($id));
+
 	return $id;
 }
 
@@ -720,6 +723,9 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 	decache('main_top_downloads');
 	decache('main_download_category');
 	decache('main_download_tease');
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('download',strval($id),$submitter);
 
 	return $id;
 }

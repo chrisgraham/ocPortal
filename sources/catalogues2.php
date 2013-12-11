@@ -197,6 +197,8 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 
 	log_it('ADD_CATALOGUE',$name);
 
+	// TODO: dispatch_member_mention_notifications call in v10
+
 	return $category;
 }
 
@@ -482,6 +484,9 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 		require_code('notifications2');
 		copy_notifications_to_new_child('catalogue_entry',strval($parent_id),strval($id));
 	}
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('catalogue_category',strval($id),$submitter);
 
 	return $id;
 }
@@ -841,6 +846,9 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 	decache('main_cc_embed');
 	decache('main_recent_cc_entries');
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('catalogue_entry',strval($id),$submitter);
 
 	return $id;
 }

@@ -962,6 +962,9 @@ class Module_cms_comcode_pages
 				'p_submitter'=>$owner,
 				'p_show_as_edit'=>0
 			));
+
+			require_code('member_mentions');
+			dispatch_member_mention_notifications('comcode_page',$zone.':'.$file,$owner);
 		} else // Edit
 		{
 			if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');

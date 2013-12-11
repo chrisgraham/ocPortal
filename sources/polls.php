@@ -291,6 +291,9 @@ function add_poll($question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_option
 
 	log_it('ADD_POLL',strval($id),$question);
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('poll',strval($id),$submitter);
+
 	return $id;
 }
 

@@ -111,6 +111,11 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 	);
 	if (!is_null($id)) $map['id']=$id;
 
-	return $GLOBALS['FORUM_DB']->query_insert('f_topics',$map,true);
+	$topic_id=$GLOBALS['FORUM_DB']->query_insert('f_topics',$map,true);
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('topic',strval($topic_id));
+
+	return $topic_id;
 }
 

@@ -74,6 +74,8 @@ class Hook_addon_registry_core_rich_media
 		return array(
 			'comcode_mistakes.css',
 			'sources/hooks/systems/addon_registry/core_rich_media.php',
+			'sources/hooks/systems/notifications/member_mention.php',
+			'sources/member_mentions.php',
 			'EMOTICON_CLICK_CODE.tpl',
 			'EMOTICON_IMG_CODE_DIR.tpl',
 			'EMOTICON_IMG_CODE_THEMED.tpl',

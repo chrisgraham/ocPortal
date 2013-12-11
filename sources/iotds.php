@@ -47,6 +47,9 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
 
 	log_it('ADD_IOTD',strval($id),$caption);
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('iotd',strval($id),$submitter);
+
 	return $id;
 }
 

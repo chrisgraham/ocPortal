@@ -125,6 +125,9 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 
 	log_it('ADD_CALENDAR_EVENT',strval($id),$title);
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('event',strval($id),$submitter);
+
 	return $id;
 }
 
@@ -299,6 +302,10 @@ function add_event_type($title,$logo,$external_feed='')
 	),true);
 
 	log_it('ADD_EVENT_TYPE',strval($id),$title);
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('calendar_type',strval($id));
+
 	return $id;
 }
 

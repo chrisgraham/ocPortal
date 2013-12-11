@@ -89,6 +89,9 @@ function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
 
 	decache('side_news_categories');
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('news_category',strval($id));
+
 	return $id;
 }
 
@@ -362,6 +365,9 @@ END;
 		require_code('news_sitemap');
 		register_shutdown_function('build_news_sitemap');
 	}
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('news',strval($id),$submitter);
 
 	return $id;
 }

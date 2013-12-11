@@ -294,6 +294,9 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 	decache('main_topsites');
 
 	log_it('ADD_BANNER',$name,$caption);
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('banner',$name,$submitter);
 }
 
 /**
@@ -420,6 +423,9 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
 	));
 
 	log_it('ADD_BANNER_TYPE',$id);
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('banner_type',$id);
 }
 
 /**

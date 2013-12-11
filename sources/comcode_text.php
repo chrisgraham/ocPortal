@@ -121,6 +121,9 @@ function init__comcode_text()
 
 	global $NO_LINK_TITLES;
 	$NO_LINK_TITLES=false;
+
+	global $MEMBER_MENTIONS_IN_COMCODE;
+	$MEMBER_MENTIONS_IN_COMCODE=array();
 }
 
 /**
@@ -863,6 +866,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 														'MEMBER_URL'=>$member_url,
 													));
 													$tag_output->attach($comcode_member_link);
+
+													global $MEMBER_MENTIONS_IN_COMCODE;
+													$MEMBER_MENTIONS_IN_COMCODE[]=$this_member_id;
 												} else
 												{
 													$tag_output->attach(hyperlink($member_url,$username));

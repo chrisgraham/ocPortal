@@ -303,6 +303,9 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 
 	log_it('ADD_QUIZ',strval($id),$name);
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('quiz',strval($id),$submitter);
+
 	return $id;
 }
 

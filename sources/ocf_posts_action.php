@@ -337,6 +337,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		}
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('post',strval($post_id),$anonymous?db_get_first_id():$poster);
+
 	return $post_id;
 }
 

@@ -412,6 +412,9 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	decache('main_download_category');
 	decache('main_image_fader');
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('image',strval($id),$submitter);
+
 	return $id;
 }
 
@@ -709,6 +712,9 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	decache('side_root_galleries');
 	decache('main_gallery_embed');
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('video',strval($id),$submitter);
+
 	return $id;
 }
 
@@ -990,6 +996,9 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 		decache('main_root_galleries');
 		decache('side_root_galleries');
 	}
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('gallery',$name,$g_owner);
 }
 
 /**
