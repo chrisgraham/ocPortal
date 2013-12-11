@@ -22,9 +22,9 @@ If you still are logged in as admin or the default theme is accessible from gues
 
 If you are not logged in as admin, connect to your web server using FTP, then rename all the folders inside the [tt]themes[/tt] folder except [tt]default[/tt]. For instance, if you have folders [tt]my_theme[/tt] and [tt]another_theme[/tt] and [tt]default[/tt], rename the first two to [tt]my_theme.old[/tt] and [tt]another_theme.old[/tt], but leave [tt]default[/tt] along. This renaming will essentially temporarily erase your themes and force ocPortal to use the default theme regardless of permissions. Now change the theme selection on your site back back to default, rename your theme folders back to their prior names (remove the [tt].old[/tt] suffix you added), fix your theme, and then restore your theme selection.
 
-[title="2"]Changing a login password[/title]
+[title="2"]Changing an account password[/title]
 
-If you've misset a password and for whatever reason can't use the 'lost password' feature to reset it (perhaps because of an invalid/non-existant e-mail address for that account, or a faulty/non-existant mail server), then you'll want to manually reset it.
+If you've misset an ocPortal account password and for whatever reason can't use the 'lost password' feature to reset it (perhaps because of an invalid/non-existant e-mail address for that account, or a faulty/non-existant mail server, or a protected admin account), then you'll want to manually reset it.
 Obviously this needs a greater level of access than ordinary members would have. We could either use:
  - Database access
  - Disk access
@@ -63,6 +63,18 @@ $SITE_INFO['backdoor_ip']='12.34.56.78'; // Enable to a real IP address to force
 You will then be logged in as the first admin user there is. Additionally membership bans, probation, and flood control, will not apply when using the backdoor (so it is useful if your account was locked somehow, e.g. by a malicious other staff member).
 
 It should go without saying that you should only use this 'backdoor' for a short space of time and not disclose your IP address to third parties when doing it. ocProducts makes no claims to how secure this backdoor might be and you open it up entirely at your own risk.
+
+[title="2"]Changing the master password[/title]
+
+If you need to log in to the upgrader, config editor, or code editor, you'll need the master password.
+
+If you have forgotten it, to change it just edit the [tt]_config.php[/tt] file:
+[code]
+$SITE_INFO['admin_password']='...';
+[/code]
+Change the [tt]...[/tt] bit to the actual password you want. You don't need to encrypt it, just put it in exactly.
+
+You should then encrypt your password via changing the password within the [tt]/config_editor.php[/tt] script.
 
 [title="2"]Unbanning an IP[/title]
 
