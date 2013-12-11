@@ -243,6 +243,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'nbproject'=>'',
 		'.project'=>'',
 		'.idea'=>'',
+		'.editorconfig'=>'',
 
 		// ocPortal control files
 		'closed.html'=>'',
