@@ -3723,6 +3723,23 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 .shocker_right {
 }
 
+.comcode_member_link {
+	border: 1px solid {$GET,standard_border};
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+	display: inline-block;
+	padding: 0.2em 0.25em;
+	vertical-align: middle;
+	position: relative;
+	top: -0.3em;
+}
+.comcode_member_link img {
+	cursor: inherit;
+}
+.comcode_member_link a {
+	color: {$GET,area_text};
+	text-decoration: none;
+}
+
 .attachment {
 	margin: 1em 0;
 	{+START,IF,{$NOT,{$MOBILE}}}

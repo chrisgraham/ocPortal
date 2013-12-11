@@ -789,19 +789,58 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								}
 
 								// Usernames
-								if (($pos<$len) && ($next=='{') && ($pos+1<$len) && ($comcode[$pos]=='{') && (!$in_code_tag) && (!$semiparse_mode))
+								if (($pos<$len) && ((($next=='{') && ($pos+1<$len) && ($comcode[$pos]=='{')) || (($next=='@') && (get_forum_type()=='ocf'))) && (!$in_code_tag) && (!$semiparse_mode))
 								{
 									$matches=array();
-									if (preg_match('#^\{([^"{}&\'\$<>]+)\}\}#',substr($comcode,$pos,80),$matches)!=0)
+									$explicit_username=($next=='{');
+									if (preg_match($explicit_username?'#^\{([^"{}&\'\$<>]+)\}\}#':'#^(\w[^\n]*)#',substr($comcode,$pos,80),$matches)!=0)
 									{
 										$username=$matches[1];
 
-										if ($username[0]=='?')
+										if ($explicit_username)
+										{
+											if ($username[0]=='?')
+											{
+												$username_info=true;
+												$username=substr($username,1);
+											} else $username_info=false;
+										} else
 										{
 											$username_info=true;
-											$username=substr($username,1);
-										} else $username_info=false;
-										$this_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+										}
+
+										if (!$explicit_username)
+										{
+											$parts=preg_split('#[^\w]#',$username,-1,PREG_SPLIT_DELIM_CAPTURE);
+											$username_part='';
+											$username_sql='1=0';
+											for ($i=0;$i<count($parts);$i+=2)
+											{
+												if ($i!=0)
+												{
+													$delim=$parts[$i-1];
+													for ($j=0;$j<strlen($delim);$j++)
+													{
+														$username_part.=$delim[$j];
+														$username_sql.=' OR '.db_string_equal_to('m_username',$username_part);
+													}
+												}
+												$username_part.=$parts[$i];
+												$username_sql.=' OR '.db_string_equal_to('m_username',$username_part);
+											}
+
+											$this_member_id=mixed();
+											$results=$GLOBALS['FORUM_DB']->query('SELECT id,m_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.$username_sql.' ORDER BY LENGTH(m_username) DESC',1);
+											if (isset($results[0]))
+											{
+												$this_member_id=$results[0]['id'];
+												$username=$results[0]['m_username'];
+											}
+										} else
+										{
+											$this_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+										}
+
 										if (!is_null($this_member_id))
 										{
 											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
@@ -810,23 +849,36 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 											if (!is_guest($this_member_id))
 											{
-												$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
+												$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
 												if ((get_forum_type()=='ocf') && ($username_info))
 												{
 													require_lang('ocf');
 													require_code('ocf_members2');
 													$details=render_member_box($this_member_id);
-													$tag_output->attach(do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false)));
+													$comcode_member_link=do_template('COMCODE_MEMBER_LINK',array(
+														'_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085',
+														'DETAILS'=>$details,
+														'MEMBER_ID'=>strval($this_member_id),
+														'USERNAME'=>$username,
+														'MEMBER_URL'=>$member_url,
+													));
+													$tag_output->attach($comcode_member_link);
 												} else
 												{
-													$tag_output->attach(hyperlink($poster_url,$username));
+													$tag_output->attach(hyperlink($member_url,$username));
 												}
 											} else
 											{
 												$tag_output->attach(escape_html($username));
 											}
 
-											$pos+=strlen($matches[1])+3;
+											if ($explicit_username)
+											{
+												$pos+=strlen($matches[1])+3;
+											} else
+											{
+												$pos+=strlen($username);
+											}
 											$differented=true;
 										}
 									}

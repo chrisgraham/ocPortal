@@ -229,7 +229,8 @@ class Hook_addon_registry_core_rich_media
 			'themes/default/images/EN/page/thumbnail.png',
 			'COMCODE_BIG_TABS_CONTROLLER.tpl',
 			'COMCODE_BIG_TABS_TAB.tpl',
-			'big_tabs.css'
+			'big_tabs.css',
+			'COMCODE_MEMBER_LINK.tpl', // TODO: Full path in v10
 		);
 	}
 
@@ -345,7 +346,8 @@ class Hook_addon_registry_core_rich_media
 			'COMCODE_CODE.tpl'=>'comcode_code',
 			'ATTACHMENT_DOWNLOAD_REMOTE.tpl'=>'attachment_download_remote',
 			'ATTACHMENT_DOWNLOAD.tpl'=>'attachment_download',
-			'COMCODE_CODE_SCROLL.tpl'=>'comcode_table_screens'
+			'COMCODE_CODE_SCROLL.tpl'=>'comcode_table_screens',
+			'COMCODE_MEMBER_LINK.tpl'=>'comcode_member_link',
 		);
 	}
 
@@ -2199,6 +2201,25 @@ class Hook_addon_registry_core_rich_media
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_TELETYPE', array(
 				'CONTENT'=>lorem_sentence()
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__comcode_member_link()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('COMCODE_MEMBER_LINK', array(
+				'DETAILS'=>lorem_sentence(),
+				'MEMBER_ID'=>placeholder_id(),
+				'USERNAME'=>lorem_phrase(),
+				'MEMBER_URL'=>placeholder_url(),
 			)), NULL, '', true)
 		);
 	}
