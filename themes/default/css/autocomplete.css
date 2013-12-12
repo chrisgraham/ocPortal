@@ -17,8 +17,6 @@
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	max-height: 10em;
-	overflow: scroll;
 }
 
 .-sew-list-item {

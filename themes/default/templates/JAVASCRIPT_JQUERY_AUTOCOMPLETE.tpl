@@ -246,7 +246,9 @@ $(function() {
 										.bind('keyup', $.proxy(this.onKeyUp, this))
 										.bind('keydown', $.proxy(this.onKeyDown, this))
 										.bind('focus', $.proxy(this.renderElements, this, this.options.values))
-										.bind('blur', $.proxy(this.remove, this));
+										.bind('blur', $.proxy(this.remove, this))
+										.bind('click', $.proxy(this.remove, this))
+										;
 		} else {
 			var _this = this;
 
@@ -262,6 +264,9 @@ $(function() {
 					_this.renderElements.call(_this, _this.options.values);
 				});
 				editor.document.on('blur', function(e) {
+					_this.remove.call(_this);
+				});
+				editor.document.on('click', function(e) {
 					_this.remove.call(_this);
 				});
 			}
