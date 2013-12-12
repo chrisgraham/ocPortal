@@ -2999,7 +2999,7 @@ function setup_word_counter(post,count_element)
 		{
 			try
 			{
-				var text_value=window.CKEDITOR.instances['post'].getData();
+				var text_value=window.CKEDITOR.instances[post.name].getData();
 				var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
 				var count=0;
 				if(matches) count=matches.length/2;

@@ -47,7 +47,7 @@ $(function() {
 				}
 				catch (ex) {}
 				var range = document.selection.createRange();
-				$('#hskeywords').val(element.scrollTop);
+				$(element).val(element.scrollTop);
 				return {
 					left: range.boundingLeft - elementOffset.left,
 					top: parseInt(range.boundingTop) - elementOffset.top + element.scrollTop
@@ -205,8 +205,8 @@ $(function() {
 		};
 
 	function Plugin(element, options) {
-		this.element = element; // TODO
-		this.$element = $(element); // TODO
+		this.element = element;
+		this.$element = is_wysiwyg_field(element) ? null : $(element);
 		this.$itemList = $(Plugin.MENU_TEMPLATE);
 		this.currentToken = undefined;
 
@@ -241,11 +241,28 @@ $(function() {
 			this.options.onFilterChanged(this);
 		}
 
-		this.$element // TODO
-									.bind('keyup', $.proxy(this.onKeyUp, this))
-									.bind('keydown', $.proxy(this.onKeyDown, this))
-									.bind('focus', $.proxy(this.renderElements, this, this.options.values))
-									.bind('blur', $.proxy(this.remove, this));
+		if (this.$element) {
+			this.$element
+										.bind('keyup', $.proxy(this.onKeyUp, this))
+										.bind('keydown', $.proxy(this.onKeyDown, this))
+										.bind('focus', $.proxy(this.renderElements, this, this.options.values))
+										.bind('blur', $.proxy(this.remove, this));
+		} else {
+			var _this = this;
+
+			this.document.on('keyup', function(e) {
+				this.onKeyUp.call(_this);
+			});
+			this.document.on('keydown', function(e) {
+				this.onKeyDown.call(_this);
+			});
+			this.document.on('focus', function(e) {
+				this.renderElements.call(_this, this.options.values);
+			});
+			this.document.on('blur', function(e) {
+				this.remove.call(_this);
+			});
+		}
 	};
 
 	Plugin.prototype.reset = function () {
@@ -285,12 +302,12 @@ $(function() {
 
 	Plugin.prototype.next = function () {
 		this.index = (this.index + 1) % this.filtered.length;
-		this.hightlightItem();
+		this.highlightItem();
 	};
 
 	Plugin.prototype.prev = function () {
 		this.index = (this.index + this.filtered.length - 1) % this.filtered.length;
-		this.hightlightItem();
+		this.highlightItem();
 	};
 
 	Plugin.prototype.select = function () {
@@ -308,22 +325,31 @@ $(function() {
 	};
 
 	Plugin.prototype.replace = function (replacement) {
-		var startpos = this.$element.getCursorPosition(); // TODO
+		if (this.$element) {
+			var startpos = this.$element.getCursorPosition();
+		} else {
+			var startpos = editor.getSelection().getRanges()[0];
+		}
 
 		var fullStuff = this.getText();
 		var val = fullStuff.substring(0, startpos);
-		var tokenEntered = val.match(new RegExp(this.options.token));
-		val = val.replace(this.expression, '$1' + tokenEntered[0] + replacement);
+		val = val.replace(this.expression, '$1' + '$2' + replacement);
 
 		var posfix = fullStuff.substring(startpos, fullStuff.length);
 		var separator = posfix.match(/^\s/) ? '' : ' ';
 
 		var finalFight = val + separator + posfix;
 		this.setText(finalFight);
-		this.$element.setCursorPosition(val.length + 1); // TODO
+		if (this.$element) {
+			this.$element.setCursorPosition(val.length + 1);
+		} else {
+			var range = editor.createRange();
+			range.moveToPosition( range.root, CKEDITOR.POSITION_BEFORE_END );
+			CKEDITOR.instances[this.element.name].getSelection().selectRanges( [ range ] );
+		}
 	};
 
-	Plugin.prototype.hightlightItem = function () {
+	Plugin.prototype.highlightItem = function () {
 		if (this.filtered.length === 0) {
 			return;
 		}
@@ -354,21 +380,29 @@ $(function() {
 		}
 
 		this.index = 0;
-		this.hightlightItem();
+		this.highlightItem();
 	};
 
 	Plugin.prototype.displayList = function () {
 		if(!this.filtered.length) return;
 
 		this.$itemList.show();
-		var element = this.$element; // TODO
-		var offset = this.$element.offset(); // TODO
-		var pos = element.getCaretPosition(); // TODO
 
-		this.$itemList.css({
-			left: offset.left + pos.left,
-			top: offset.top + pos.top
-		});
+		if (this.$element) {
+			var element = this.$element;
+			var offset = this.$element.offset();
+			var pos = element.getCaretPosition();
+
+			this.$itemList.css({
+				left: offset.left + pos.left,
+				top: offset.top + pos.top
+			});
+		} else {
+			this.$itemList.css({
+				left: win.mouseX,
+				top: win.mouseY
+			});
+		}
 	};
 
 	Plugin.prototype.hideList = function () {
@@ -415,11 +449,19 @@ $(function() {
 	};
 
 	Plugin.prototype.getText = function () {
-		return(this.$element.val() || this.$element.text()); // TODO
+		if (!this.$element) {
+			return CKEDITOR.instances[this.element.name].getSelection().getSelectedText();
+		}
+
+		return(this.$element.val() || this.$element.text());
 	};
 
 	Plugin.prototype.setText = function (text) {
-		if(this.$element.is('input,textarea')) { // TODO
+		if (!this.$element) {
+			return CKEDITOR.instances[this.element.name].setData(text);
+		}
+
+		if(this.$element.is('input,textarea')) {
 			this.$element.val(text);
 		} else {
 			this.$element.html(text);
@@ -427,7 +469,11 @@ $(function() {
 	};
 
 	Plugin.prototype.onKeyUp = function (e) {
-		var startpos = this.$element.getCursorPosition(); // TODO
+		if (this.$element) {
+			var startpos = this.$element.getCursorPosition();
+		} else {
+			var startpos = editor.getSelection().getRanges()[0];
+		}
 		var val = this.getText().substring(0, startpos);
 		var matches = val.match(this.expression);
 
@@ -496,17 +542,22 @@ $(function() {
 		if(this.cleanupHandle) window.clearTimeout(this.cleanupHandle);
 
 		try {
-			this.$element.focus(); // TODO
+			if (this.$element) {
+				this.$element.focus();
+			} else {
+				CKEDITOR.instances[this.element.name].focus();
+			}
 		}
 		catch (ex) {}
 		this.replace(element.val);
-		this.$element.trigger('mention-selected',this.filtered[this.index]); // TODO
+		if (this.$element)
+			this.$element.trigger('mention-selected',this.filtered[this.index]);
 		this.hideList();
 	};
 
 	Plugin.prototype.onItemHover = function (index, e) {
 		this.index = index;
-		this.hightlightItem();
+		this.highlightItem();
 	};
 
 	$.fn[pluginName] = function (options) {
@@ -530,6 +581,8 @@ function autoCompleteElementFactory(element,e) {
 		.text((e.meta=='')?'':'('+e.meta+')').end();
 	element.append(template);
 }
+
+/* ocPortal binder code */
 
 function set_up_comcode_autocomplete(name)
 {
@@ -558,12 +611,13 @@ function set_up_comcode_autocomplete(name)
 
 /* Polyfills for IE8 */
 
-[].filter || (Array.prototype.filter = // Use the native array filter method, if available.
-  function(a, //a function to test each value of the array against. Truthy values will be put into the new array and falsy values will be excluded from the new array
+if (!Array.prototype.filter) {
+  Array.prototype.filter = function(
+	 a, // a function to test each value of the array against. Truthy values will be put into the new array and falsy values will be excluded from the new array
     b, // placeholder
     c, // placeholder 
     d, // placeholder
-    e // placeholder
+    e  // placeholder
   ) {
       c = this; // cache the array
       d = []; // array to hold the new values which match the expression
@@ -573,7 +627,8 @@ function set_up_comcode_autocomplete(name)
         d.push(c[e]); // add it to the new array
       
       return d // give back the new array
-  });
+  };
+}
 
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function (searchElement , fromIndex) {
