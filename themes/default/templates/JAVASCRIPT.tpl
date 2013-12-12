@@ -1436,6 +1436,8 @@ function abstract_get_computed_style(obj,property)
 	}
 	catch(e) {  }
 
+	if (ret===null) ret='';
+
 	return ret;
 }
 

@@ -391,6 +391,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 
 .posting_form_wrap_buttons {
 	background-color: {$GET,point_of_interest_background};
+	white-space: nowrap; /* Needed for IE8 */
 }
 
 .posting_form_wrap_buttons, .posting_form_insert_buttons {
