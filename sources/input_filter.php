@@ -65,14 +65,18 @@ function check_posted_field($name,$val)
 		if (!in_array($name,array('login_username','password','remember','login_invisible')))
 		{
 			$allowed_partners=explode("\n",get_option('allowed_post_submitters'));
-			$allowed_partners[]='paypal.com';
-			$allowed_partners[]='www.paypal.com';
+			foreach ($GLOBALS['SITE_INFO'] as $key=>$val)
+			{
+				if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
+					$allowed_partners[]=$val[0];
+			}
+
 			$found=false;
 			foreach ($allowed_partners as $partner)
 			{
 				if (trim($partner)=='') continue;
 
-				if (strpos(ocp_srv('HTTP_REFERER'),trim($partner))!==false)
+				if (strpos(ocp_srv('HTTP_REFERER'),'://'.trim($partner).'/')!==false && strpos(ocp_srv('HTTP_REFERER'),'://'.trim($partner).':')!==false)
 				{
 					$found=true;
 					break;

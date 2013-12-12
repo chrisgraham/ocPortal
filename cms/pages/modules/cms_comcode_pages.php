@@ -951,7 +951,7 @@ class Module_cms_comcode_pages
 
 		// Main save function
 		require_code('zones3');
-		$path=save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page,$meta_data['add_time'],$meta_data['edit_time'],$show_as_edit,$meta_data['submitter'],$file);
+		$path=save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page,$meta_data['add_time'],$meta_data['edit_time'],$show_as_edit,$meta_data['submitter'],$file,post_param('meta_keywords',''),post_param('meta_description',''));
 
 		// Deleting?
 		if (post_param_integer('delete',0)==1)

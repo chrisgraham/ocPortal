@@ -1338,7 +1338,14 @@ function get_param($name,$default=false,$no_security=false)
 			$_a=str_replace('https://','http://',$a);
 			if ((looks_like_url($_a)) && (substr($_a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
 			{
-				$a=get_base_url(false);
+				// Ok, maybe it is another domain we support?
+				foreach ($GLOBALS['SITE_INFO'] as $key=>$val)
+				{
+					if ((substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_') && (substr($_a,0,strlen('http://'.$val[0].'/'))=='http://'.$val[0].'/'))
+						return $a;
+				}
+
+				$a=$bu;
 			}
 		}
 	}

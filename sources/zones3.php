@@ -412,10 +412,10 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	require_code('seo2');
 	if (($meta_keywords=='') && ($meta_description==''))
 	{
-		seo_meta_set_for_implicit('comcode_page',$new_file,array($text),$text);
+		seo_meta_set_for_implicit('comcode_page',$zone.':'.$new_file,array($text),$text);
 	} else
 	{
-		seo_meta_set_for_explicit('comcode_page',$new_file,$meta_keywords,$meta_description);
+		seo_meta_set_for_explicit('comcode_page',$zone.':'.$new_file,$meta_keywords,$meta_description);
 	}
 
 	// Store in DB
