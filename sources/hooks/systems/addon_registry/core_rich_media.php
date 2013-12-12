@@ -233,6 +233,10 @@ class Hook_addon_registry_core_rich_media
 			'COMCODE_BIG_TABS_TAB.tpl',
 			'big_tabs.css',
 			'COMCODE_MEMBER_LINK.tpl', // TODO: Full path in v10
+			'JAVASCRIPT_JQUERY_AUTOCOMPLETE.tpl', // TODO: Full path in v10
+			'JAVASCRIPT_JQUERY.tpl', // TODO: Full path in v10
+			'autocomplete.css', // TODO: Full path in v10
+			'AUTOCOMPLETE_LOAD.tpl', // TODO: Full path in v10
 		);
 	}
 

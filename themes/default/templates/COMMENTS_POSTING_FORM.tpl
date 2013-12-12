@@ -226,6 +226,10 @@
 </form>
 {+END}
 
+<script type="text/javascript">// <![CDATA[
+	{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
+//]]></script>
+
 {+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}{+START,IF,{$NOT,{$VALUE_OPTION,xhtml_strict}}}
 	{+START,IF,{$FORCE_PREVIEWS}}
 		<script type="text/javascript">// <![CDATA[

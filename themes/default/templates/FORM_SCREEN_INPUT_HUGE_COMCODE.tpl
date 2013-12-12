@@ -35,6 +35,7 @@
 
 		<script type="text/javascript">// <![CDATA[
 			set_up_change_monitor('form_table_field_input__{$GET,randomised_id}');
+			{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
 		//]]></script>
 	</td>
 </tr>

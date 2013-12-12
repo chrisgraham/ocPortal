@@ -369,6 +369,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'REQUIRE_JAVASCRIPT':
 				if (isset($param[0]))
 				{
+					if ((isset($param[1])) && ($param[1]=='1'))
+					{
+						global $JAVASCRIPT_BOTTOM;
+						$JAVASCRIPT_BOTTOM[$param[0]]=1;
+					}
 					require_javascript($param[0]);
 					/*// Has to do this inline, as you're not allowed to reference scripts outside head
 					if (!array_key_exists($param[0],$GLOBALS['JAVASCRIPTS']))

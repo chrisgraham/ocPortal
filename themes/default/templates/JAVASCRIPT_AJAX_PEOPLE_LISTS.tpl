@@ -73,7 +73,7 @@ function update_ajax_member_list(target,special,delayed,e)
 	var v=target.value;
 
 	window.current_list_for=target;
-	var url='{$BASE_URL_NOHTTP}/data/namelike.php?id='+encodeURIComponent(v);
+	var url='{$FIND_SCRIPT;,namelike}?id='+encodeURIComponent(v);
 	if (special) url=url+'&special='+special;
 
 	if (typeof window.do_ajax_request!='undefined') do_ajax_request(url+keep_stub(),update_ajax_member_list_response);

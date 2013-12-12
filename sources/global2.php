@@ -23,7 +23,7 @@
  */
 function init__global2()
 {
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING;
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING,$JAVASCRIPT_BOTTOM;
 
 	if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('output_buffering')))=='1') @ob_end_clean();
 
@@ -230,6 +230,7 @@ function init__global2()
 	}
 
 	$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
+	$JAVASCRIPT_BOTTOM=array();
 	if (($GLOBALS['CURRENT_SHARE_USER']!==NULL) || (get_domain()=='myocp.com')) $JAVASCRIPTS['javascript_ajax']=1;
 	$CSSS=array('no_cache'=>1,'global'=>1);
 
@@ -1777,7 +1778,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
  */
 function javascript_tempcode($position=NULL)
 {
-	global $JAVASCRIPTS,$JAVASCRIPT;
+	global $JAVASCRIPTS,$JAVASCRIPT,$JAVASCRIPT_BOTTOM;
 	$js=new ocp_tempcode();
 
 	$minify=(get_param_integer('keep_no_minify',0)==0);
@@ -1841,7 +1842,7 @@ function javascript_tempcode($position=NULL)
 	}
 
 	// Our main loop
-	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1,'javascript_button_realtime_rain'=>1);
+	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1,'javascript_button_realtime_rain'=>1)+$JAVASCRIPT_BOTTOM;
 	foreach (array_keys($JAVASCRIPTS) as $j)
 	{
 		if (($good_to_merge) && (in_array($j,$to_merge))) continue;

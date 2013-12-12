@@ -9,6 +9,12 @@
 			<input type="hidden" name="comcode__{NAME*}" value="1" />
 			{COMCODE}
 		</span>
+
+		{+START,IF_NON_EMPTY,{NAME}}
+			<script type="text/javascript">// <![CDATA[
+				{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
+			//]]></script>
+		{+END}
 	{+END}
 </div>
 

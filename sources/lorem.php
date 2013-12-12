@@ -903,6 +903,7 @@ function get_text_templates()
 		'TRACKBACK_XML',
 		'POLL_RSS_SUMMARY',
 		'WYSIWYG_SETTINGS',
+		'AUTOCOMPLETE_LOAD',
 	);
 	return $text_templates;
 }

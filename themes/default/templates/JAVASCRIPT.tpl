@@ -1435,6 +1435,7 @@ function abstract_get_computed_style(obj,property)
 		ret=document.defaultView.getComputedStyle(obj,null).getPropertyValue(property);
 	}
 	catch(e) {  }
+	if (ret===null) ret='';
 
 	return ret;
 }

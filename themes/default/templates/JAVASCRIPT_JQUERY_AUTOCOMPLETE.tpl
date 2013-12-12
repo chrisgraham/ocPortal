@@ -1,0 +1,605 @@
+// NB: This is based on andrewsnowden's fork, plus other people's fixes, our own fixes, and changes brought in direct from Bevis Zhao
+
+/**
+ * jQuery plugin for getting position of cursor in textarea
+
+ * @license under Apache license
+ * @author Bevis Zhao (i@bevis.me, http://bevis.me)
+ */
+$(function() {
+
+	var calculator = {
+		// key styles
+		primaryStyles: ['fontFamily', 'fontSize', 'fontWeight', 'fontVariant', 'fontStyle',
+			'paddingLeft', 'paddingTop', 'paddingBottom', 'paddingRight',
+			'marginLeft', 'marginTop', 'marginBottom', 'marginRight',
+			'borderLeftColor', 'borderTopColor', 'borderBottomColor', 'borderRightColor',
+			'borderLeftStyle', 'borderTopStyle', 'borderBottomStyle', 'borderRightStyle',
+			'borderLeftWidth', 'borderTopWidth', 'borderBottomWidth', 'borderRightWidth',
+			'line-height', 'outline', 'text-align'],
+
+		specificStyle: {
+			'word-wrap': 'break-word',
+			'overflow-x': 'hidden',
+			'overflow-y': 'auto'
+		},
+
+		simulator : $('<div id="textarea_simulator"/>').css({
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				visibility: 'hidden'
+			}).appendTo(document.body),
+
+		toHtml : function(text) {
+			return text.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br>')
+				.split(' ').join('<span style="white-space:prev-wrap">&nbsp;</span>');
+		},
+		// calculate position
+		getCaretPosition: function() {
+			var cal = calculator, self = this, element = self[0], elementOffset = self.offset();
+
+			// IE has easy way to get caret offset position
+			if ($.browser.msie) {
+				// must get focus first
+				try {
+					element.focus();
+				}
+				catch (ex) {}
+				var range = document.selection.createRange();
+				$('#hskeywords').val(element.scrollTop);
+				return {
+					left: range.boundingLeft - elementOffset.left,
+					top: parseInt(range.boundingTop) - elementOffset.top + element.scrollTop
+						+ document.documentElement.scrollTop + parseInt(self.getComputedStyle('fontSize'))
+				};
+			}
+			cal.simulator.empty();
+			// clone primary styles to imitate textarea
+			$.each(cal.primaryStyles, function(index, styleName) {
+				self.cloneStyle(cal.simulator, styleName);
+			});
+
+			// calculate width and height
+			cal.simulator.css($.extend({
+				'width': self.width(),
+				'height': self.height()
+			}, cal.specificStyle));
+
+			var value = self.val(), cursorPosition = self.getCursorPosition();
+			var beforeText = value.substring(0, cursorPosition),
+				afterText = value.substring(cursorPosition);
+
+			var before = $('<span class="before"/>').html(cal.toHtml(beforeText)),
+				focus = $('<span class="focus"/>'),
+				after = $('<span class="after"/>').html(cal.toHtml(afterText));
+
+			cal.simulator.append(before).append(focus).append(after);
+			var focusOffset = focus.offset(), simulatorOffset = cal.simulator.offset();
+			// alert(focusOffset.left  + ',' +  simulatorOffset.left + ',' + element.scrollLeft);
+			return {
+				top: focusOffset.top - simulatorOffset.top - element.scrollTop
+					// calculate and add the font height except Firefox
+					+ ($.browser.mozilla ? 0 : parseInt(self.getComputedStyle('fontSize'))),
+				left: focus[0].offsetLeft -  cal.simulator[0].offsetLeft - element.scrollLeft
+			};
+		}
+	};
+
+	$.fn.extend({
+		setCursorPosition : function(position){
+			if(this.length == 0) return this;
+			return $(this).setSelection(position, position);
+		},
+		setSelection: function(selectionStart, selectionEnd) {
+			if(this.length == 0) return this;
+			input = this[0];
+
+			if (input.createTextRange) {
+				var range = input.createTextRange();
+				range.collapse(true);
+				range.moveEnd('character', selectionEnd);
+				range.moveStart('character', selectionStart);
+				range.select();
+			} else if (input.setSelectionRange) {
+				try {
+					input.focus();
+				}
+				catch (ex) {}
+				input.setSelectionRange(selectionStart, selectionEnd);
+			} else {
+				var el = this.get(0);
+
+				var range = document.createRange();
+				range.collapse(true);
+				range.setStart(el.childNodes[0], selectionStart);
+				range.setEnd(el.childNodes[0], selectionEnd);
+
+				var sel = window.getSelection();
+				sel.removeAllRanges();
+				sel.addRange(range);
+			}
+
+			return this;
+		},
+		getComputedStyle: function(styleName) {
+			if (this.length == 0) return;
+			var thiz = this[0];
+			var result = this.css(styleName);
+			result = result || ($.browser.msie ?
+				thiz.currentStyle[styleName]:
+				document.defaultView.getComputedStyle(thiz, null)[styleName]);
+			return result;
+		},
+		// easy clone method
+		cloneStyle: function(target, styleName) {
+			var styleVal = this.getComputedStyle(styleName);
+			if (!!styleVal) {
+				$(target).css(styleName, styleVal);
+			}
+		},
+		cloneAllStyle: function(target, style) {
+			var thiz = this[0];
+			for (var styleName in thiz.style) {
+				var val = thiz.style[styleName];
+				typeof val == 'string' || typeof val == 'number'
+					? this.cloneStyle(target, styleName)
+					: NaN;
+			}
+		},
+		getCursorPosition : function() {
+			var thiz = this[0], result = 0;
+			if ('selectionStart' in thiz) {
+				result = thiz.selectionStart;
+			} else if('selection' in document) {
+				var range = document.selection.createRange();
+				if (parseInt($.browser.version) > 6) {
+					try {
+						thiz.focus();
+					}
+					catch (ex) {}
+					var length = document.selection.createRange().text.length;
+					range.moveStart('character', - thiz.value.length);
+					result = range.text.length - length;
+				} else {
+					var bodyRange = document.body.createTextRange();
+					bodyRange.moveToElementText(thiz);
+					for (; bodyRange.compareEndPoints('StartToStart', range) < 0; result++)
+						bodyRange.moveStart('character', 1);
+					for (var i = 0; i <= result; i ++){
+						if (thiz.value.charAt(i) == '\n')
+							result++;
+					}
+					var enterCount = thiz.value.split('\n').length - 1;
+					result -= enterCount;
+					return result;
+				}
+			}
+			return result;
+		},
+		getCaretPosition: calculator.getCaretPosition
+	});
+});
+
+/**
+ * jQuery plugin for autocompleting within a textarea
+ * @license under dfyw
+ * @author leChantaux (@leChantaux)
+ */
+
+(function ($, window, undefined) {
+	// Create the defaults once
+	var elementFactory = function (element, value, token) {
+		element.text(value.val);
+	};
+
+	var pluginName = 'sew',
+		defaults = {
+			token: '@',
+			elementFactory: elementFactory,
+			values: [],
+			unique: false,
+			repeat: true,
+			onFilterChanged: undefined,
+			preload: false
+		};
+
+	function Plugin(element, options) {
+		this.element = element; // TODO
+		this.$element = $(element); // TODO
+		this.$itemList = $(Plugin.MENU_TEMPLATE);
+		this.currentToken = undefined;
+
+		this.options = $.extend({}, defaults, options);
+		if (!$.isArray(this.options.token)) {
+			this.options.token = [this.options.token];
+		}
+		this.reset();
+
+		this._defaults = defaults;
+		this._name = pluginName;
+
+		var tokens = this.options.token.join('');
+		this.expression = new RegExp('(^|\\s)([' + tokens + '])([\\w.]*)$');
+		this.cleanupHandle = null;
+
+		this.init();
+	}
+
+	Plugin.MENU_TEMPLATE = '<div class="-sew-list-container" style="display: none; position: absolute;"><ul class="-sew-list"></ul></div>';
+
+	Plugin.ITEM_TEMPLATE = '<li class="-sew-list-item"></li>';
+
+	Plugin.KEYS = [40, 38, 13, 27, 9];
+
+	Plugin.prototype.init = function () {
+		if (this.options.values.length < 1 && !this.options.onFilterChanged) {
+			return;
+		}
+
+		if (this.options.preload && this.options.onFilterChanged) {
+			this.options.onFilterChanged(this);
+		}
+
+		this.$element // TODO
+									.bind('keyup', $.proxy(this.onKeyUp, this))
+									.bind('keydown', $.proxy(this.onKeyDown, this))
+									.bind('focus', $.proxy(this.renderElements, this, this.options.values))
+									.bind('blur', $.proxy(this.remove, this));
+	};
+
+	Plugin.prototype.reset = function () {
+		if(this.options.unique) {
+			this.options.values = Plugin.getUniqueElements(this.options.values);
+		}
+
+		this.index = 0;
+		this.matched = false;
+		this.dontFilter = false;
+		this.lastFilter = undefined;
+		this.filtered = this.options.values.slice(0);
+	};
+
+	Plugin.prototype.setValues = function (values) {
+		this.options.values = values;
+
+		var listVisible = this.$itemList.is(':visible');
+		this.reset();
+
+		if (values.length > 0) {
+			if (!listVisible) {
+				this.displayList();
+			}
+
+			var filter = this.lastFilter;
+			if (!filter) {
+				filter = '';
+			}
+			this.lastFilter = '\n';
+			this.filterList(filter);
+		}
+		else {
+			this.hideList();
+		}
+	};
+
+	Plugin.prototype.next = function () {
+		this.index = (this.index + 1) % this.filtered.length;
+		this.hightlightItem();
+	};
+
+	Plugin.prototype.prev = function () {
+		this.index = (this.index + this.filtered.length - 1) % this.filtered.length;
+		this.hightlightItem();
+	};
+
+	Plugin.prototype.select = function () {
+		this.replace(this.filtered[this.index].val);
+		this.$element.trigger('mention-selected',this.filtered[this.index]);
+		this.hideList();
+	};
+
+	Plugin.prototype.remove = function () {
+		this.$itemList.fadeOut('slow');
+
+		this.cleanupHandle = window.setTimeout($.proxy(function () {
+			this.$itemList.remove();
+		}, this), 1000);
+	};
+
+	Plugin.prototype.replace = function (replacement) {
+		var startpos = this.$element.getCursorPosition(); // TODO
+
+		var fullStuff = this.getText();
+		var val = fullStuff.substring(0, startpos);
+		var tokenEntered = val.match(new RegExp(this.options.token));
+		val = val.replace(this.expression, '$1' + tokenEntered[0] + replacement);
+
+		var posfix = fullStuff.substring(startpos, fullStuff.length);
+		var separator = posfix.match(/^\s/) ? '' : ' ';
+
+		var finalFight = val + separator + posfix;
+		this.setText(finalFight);
+		this.$element.setCursorPosition(val.length + 1); // TODO
+	};
+
+	Plugin.prototype.hightlightItem = function () {
+		if (this.filtered.length === 0) {
+			return;
+		}
+
+		this.$itemList.find('.-sew-list-item').removeClass('selected');
+
+		var container = this.$itemList.find('.-sew-list-item').parent();
+		var element = this.filtered[this.index].element.addClass('selected');
+
+		var scrollPosition = element.position().top;
+		container.scrollTop(container.scrollTop() + scrollPosition);
+	};
+
+	Plugin.prototype.renderElements = function (values) {
+		window.sew = this;
+
+		$('body').append(this.$itemList);
+
+		var container = this.$itemList.find('ul').empty();
+		for (var i=0;i<values.length;i++) {
+			var e=values[i];
+
+			var $item = $(Plugin.ITEM_TEMPLATE);
+
+			this.options.elementFactory($item, e, this.currentToken);
+
+			e.element = $item.appendTo(container).bind('click', $.proxy(this.onItemClick, this, e)).bind('mouseover', $.proxy(this.onItemHover, this, i));
+		}
+
+		this.index = 0;
+		this.hightlightItem();
+	};
+
+	Plugin.prototype.displayList = function () {
+		if(!this.filtered.length) return;
+
+		this.$itemList.show();
+		var element = this.$element; // TODO
+		var offset = this.$element.offset(); // TODO
+		var pos = element.getCaretPosition(); // TODO
+
+		this.$itemList.css({
+			left: offset.left + pos.left,
+			top: offset.top + pos.top
+		});
+	};
+
+	Plugin.prototype.hideList = function () {
+		this.$itemList.hide();
+		this.reset();
+	};
+
+	Plugin.prototype.filterList = function (val) {
+		if(val == this.lastFilter) return;
+
+		this.lastFilter = val;
+		this.$itemList.find('.-sew-list-item').remove();
+		var values = this.options.values;
+
+		var vals = this.filtered = values.filter($.proxy(function (e) {
+			var exp = new RegExp('\\W*' + this.options.token + e.val + '(\\W|$)');
+			if(!this.options.repeat && this.getText().match(exp)) {
+				return false;
+			}
+
+			return	val === '' ||
+							e.val.toLowerCase().indexOf(val.toLowerCase()) >= 0 ||
+							(e.meta || '').toLowerCase().indexOf(val.toLowerCase()) >= 0;
+		}, this));
+
+		if(vals.length) {
+			this.renderElements(vals);
+			this.$itemList.show();
+		} else {
+			this.hideList();
+		}
+	};
+
+	Plugin.getUniqueElements = function (elements) {
+		var target = [];
+
+		elements.forEach(function (e) {
+			var hasElement = target.map(function (j) { return j.val; }).indexOf(e.val) >= 0;
+			if(hasElement) return;
+			target.push(e);
+		});
+
+		return target;
+	};
+
+	Plugin.prototype.getText = function () {
+		return(this.$element.val() || this.$element.text()); // TODO
+	};
+
+	Plugin.prototype.setText = function (text) {
+		if(this.$element.is('input,textarea')) { // TODO
+			this.$element.val(text);
+		} else {
+			this.$element.html(text);
+		}
+	};
+
+	Plugin.prototype.onKeyUp = function (e) {
+		var startpos = this.$element.getCursorPosition(); // TODO
+		var val = this.getText().substring(0, startpos);
+		var matches = val.match(this.expression);
+
+		if(!matches && this.matched) {
+			this.matched = false;
+			this.dontFilter = false;
+			this.hideList();
+			return;
+		}
+
+		if (matches) {
+			this.currentToken = matches[2];
+
+			if (this.currentToken != matches[2] && this.currentToken) {
+				this.currentToken = matches[2];
+
+				if (this.options.onFilterChanged) {
+					this.options.values = [];
+					this.reset();
+				}
+			}
+
+			if (this.options.onFilterChanged) {
+				if (this.options.onFilterChanged) {
+					this.options.onFilterChanged(this, matches[3], matches[2]);
+				}
+			}
+
+			if (!this.matched) {
+				this.displayList();
+				this.lastFilter = '\n';
+				this.matched = true;
+			}
+
+			if (!this.dontFilter) {
+				this.filterList(matches[3]);
+			}
+		}
+	};
+
+	Plugin.prototype.onKeyDown = function (e) {
+		var listVisible = this.$itemList.is(':visible');
+		if(!listVisible || (Plugin.KEYS.indexOf(e.keyCode) < 0)) return;
+
+		switch(e.keyCode) {
+			case 9:
+			case 13:
+				this.select();
+				break;
+			case 40:
+				this.next();
+				break;
+			case 38:
+				this.prev();
+				break;
+			case 27:
+				this.$itemList.hide();
+				this.dontFilter = true;
+				break;
+		}
+
+		e.preventDefault();
+	};
+
+	Plugin.prototype.onItemClick = function (element, e) {
+		if(this.cleanupHandle) window.clearTimeout(this.cleanupHandle);
+
+		try {
+			this.$element.focus(); // TODO
+		}
+		catch (ex) {}
+		this.replace(element.val);
+		this.$element.trigger('mention-selected',this.filtered[this.index]); // TODO
+		this.hideList();
+	};
+
+	Plugin.prototype.onItemHover = function (index, e) {
+		this.index = index;
+		this.hightlightItem();
+	};
+
+	$.fn[pluginName] = function (options) {
+		return this.each(function () {
+			if(!$.data(this, 'plugin_' + pluginName)) {
+				$.data(this, 'plugin_' + pluginName, new Plugin(this, options));
+			}
+		});
+	};
+}(jQuery, window));
+
+/**
+ * @param {jQuery} element the target element (LI)
+ * @param {*} e object containing the val and meta properties (from the input list)
+ */
+function autoCompleteElementFactory(element,e) {
+	var customItemTemplate='<div><span />&nbsp;<small /></div>';
+	var template=$(customItemTemplate).find('span')
+		.text('@'+e.val).end()
+		.find('small')
+		.text((e.meta=='')?'':'('+e.meta+')').end();
+	element.append(template);
+}
+
+function set_up_comcode_autocomplete(name)
+{
+	$('#'+name).sew({
+		values: [],
+		token: '@',
+		elementFactory: autoCompleteElementFactory,
+		onFilterChanged: function(sew, token, expression) {
+			do_ajax_request(
+				'{$FIND_SCRIPT;,namelike}?id='+window.encodeURIComponent(token)+keep_stub(),
+				function(result,list_contents) {
+					var new_values = [];
+					for (var i=0;i<list_contents.childNodes.length;i++)
+					{
+						new_values.push({
+							val: list_contents.childNodes[i].getAttribute('value'),
+							meta: '' {$,TODO: Put display name here, for v10}
+						});
+					}
+					sew.setValues(new_values);
+				}
+			);
+		}
+	});
+}
+
+/* Polyfills for IE8 */
+
+[].filter || (Array.prototype.filter = // Use the native array filter method, if available.
+  function(a, //a function to test each value of the array against. Truthy values will be put into the new array and falsy values will be excluded from the new array
+    b, // placeholder
+    c, // placeholder 
+    d, // placeholder
+    e // placeholder
+  ) {
+      c = this; // cache the array
+      d = []; // array to hold the new values which match the expression
+      for (e in c) // for each value in the array, 
+        ~~e + '' == e && e >= 0 && // coerce the array position and if valid,
+        a.call(b, c[e], +e, c) && // pass the current value into the expression and if truthy,
+        d.push(c[e]); // add it to the new array
+      
+      return d // give back the new array
+  });
+
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (searchElement , fromIndex) {
+    var i,
+        pivot = (fromIndex) ? fromIndex : 0,
+        length;
+
+    if (!this) {
+      throw new TypeError();
+    }
+
+    length = this.length;
+
+    if (length === 0 || pivot >= length) {
+      return -1;
+    }
+
+    if (pivot < 0) {
+      pivot = length - Math.abs(pivot);
+    }
+
+    for (i = pivot; i < length; i++) {
+      if (this[i] === searchElement) {
+        return i;
+      }
+    }
+    return -1;
+  };
+}

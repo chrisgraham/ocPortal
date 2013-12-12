@@ -23,6 +23,12 @@
 				<input type="hidden" name="comcode__{$GET,randomised_id}" value="1" />
 				{COMCODE}
 			</div>
+
+			{+START,IF_NON_EMPTY,{NAME}}
+				<script type="text/javascript">// <![CDATA[
+					{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
+				//]]></script>
+			{+END}
 		{+END}
 
 		{+START,IF_PASSED,DESCRIPTION_SIDE}{+START,IF_NON_EMPTY,{DESCRIPTION_SIDE}}
