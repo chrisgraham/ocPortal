@@ -209,6 +209,7 @@ $(function() {
 		this.$element = is_wysiwyg_field(element) ? null : $(element);
 		this.$itemList = $(Plugin.MENU_TEMPLATE);
 		this.currentToken = undefined;
+		this.startpos = null;
 
 		this.options = $.extend({}, defaults, options);
 		if (!$.isArray(this.options.token)) {
@@ -250,18 +251,21 @@ $(function() {
 		} else {
 			var _this = this;
 
-			this.document.on('keyup', function(e) {
-				this.onKeyUp.call(_this);
-			});
-			this.document.on('keydown', function(e) {
-				this.onKeyDown.call(_this);
-			});
-			this.document.on('focus', function(e) {
-				this.renderElements.call(_this, this.options.values);
-			});
-			this.document.on('blur', function(e) {
-				this.remove.call(_this);
-			});
+			var editor = CKEDITOR.instances[this.element.name];
+			if (editor.document) {
+				editor.document.on('keyup', function(e) {
+					_this.onKeyUp.call(_this, e);
+				});
+				editor.document.on('keydown', function(e) {
+					_this.onKeyDown.call(_this, e);
+				});
+				editor.document.on('focus', function(e) {
+					_this.renderElements.call(_this, _this.options.values);
+				});
+				editor.document.on('blur', function(e) {
+					_this.remove.call(_this);
+				});
+			}
 		}
 	};
 
@@ -312,7 +316,8 @@ $(function() {
 
 	Plugin.prototype.select = function () {
 		this.replace(this.filtered[this.index].val);
-		this.$element.trigger('mention-selected',this.filtered[this.index]);
+		if (this.$element)
+			this.$element.trigger('mention-selected',this.filtered[this.index]);
 		this.hideList();
 	};
 
@@ -328,7 +333,7 @@ $(function() {
 		if (this.$element) {
 			var startpos = this.$element.getCursorPosition();
 		} else {
-			var startpos = editor.getSelection().getRanges()[0];
+			var startpos = this.startpos; // CKEDITOR.instances[this.element.name].getSelection().getRanges()[0].startOffset; Has to use this.startpos because focus may have moved away, breaking CKEditor selection
 		}
 
 		var fullStuff = this.getText();
@@ -343,9 +348,31 @@ $(function() {
 		if (this.$element) {
 			this.$element.setCursorPosition(val.length + 1);
 		} else {
-			var range = editor.createRange();
-			range.moveToPosition( range.root, CKEDITOR.POSITION_BEFORE_END );
-			CKEDITOR.instances[this.element.name].getSelection().selectRanges( [ range ] );
+			// Complex code to move CKEditor caret to end
+
+			CKEDITOR.instances[this.element.name].focus();
+
+			var s = CKEDITOR.instances[this.element.name].getSelection(); // getting selection
+			var selected_ranges = s.getRanges(); // getting ranges
+			if (typeof selected_ranges[0] != 'undefined') {
+				var node = selected_ranges[0].startContainer; // selecting the starting node
+				var parents = node.getParents(true);
+
+				node = parents[parents.length - 2].getFirst();
+
+				while (true) {
+					var x = node.getNext();
+					if (x == null) {
+						break;
+					}
+					node = x;
+				}
+
+				s.selectElement(node);
+				selected_ranges = s.getRanges();
+				selected_ranges[0].collapse(false);  //  false collapses the range to the end of the selected node, true before the node.
+				s.selectRanges(selected_ranges);  // putting the current selection there
+			}
 		}
 	};
 
@@ -398,10 +425,33 @@ $(function() {
 				top: offset.top + pos.top
 			});
 		} else {
-			this.$itemList.css({
-				left: win.mouseX,
-				top: win.mouseY
-			});
+			// Complex hack to find cursor position in CKEditor
+
+			var dummyElement = CKEDITOR.instances[this.element.name].document.createElement( 'img',
+				{
+					attributes :
+					{
+						src : '{$IMG;,blank}',
+						width : 0,
+						height : 0
+					}
+				});
+
+			CKEDITOR.instances[this.element.name].insertElement( dummyElement );
+
+			var _this=this;
+			window.setTimeout(function() {
+				var iframe = CKEDITOR.instances[_this.element.name].container.$.getElementsByTagName('iframe')[0];
+				var x = find_pos_x(dummyElement.$) + find_pos_x(iframe,true);
+				var y = find_pos_y(dummyElement.$) + find_pos_y(iframe,true);
+
+				dummyElement.remove();
+
+				_this.$itemList.css({
+					left: x,
+					top: y
+				});
+			}, 0);
 		}
 	};
 
@@ -450,7 +500,7 @@ $(function() {
 
 	Plugin.prototype.getText = function () {
 		if (!this.$element) {
-			return CKEDITOR.instances[this.element.name].getSelection().getSelectedText();
+			return CKEDITOR.instances[this.element.name].getData();
 		}
 
 		return(this.$element.val() || this.$element.text());
@@ -458,7 +508,9 @@ $(function() {
 
 	Plugin.prototype.setText = function (text) {
 		if (!this.$element) {
-			return CKEDITOR.instances[this.element.name].setData(text);
+			//CKEDITOR.instances[this.element.name].setData(text);	Wipes events out
+			CKEDITOR.instances[this.element.name].document.getBody().setHtml(text);
+			return;
 		}
 
 		if(this.$element.is('input,textarea')) {
@@ -472,7 +524,8 @@ $(function() {
 		if (this.$element) {
 			var startpos = this.$element.getCursorPosition();
 		} else {
-			var startpos = editor.getSelection().getRanges()[0];
+			var startpos = CKEDITOR.instances[this.element.name].getSelection().getRanges()[0].startOffset;
+			this.startpos = startpos;
 		}
 		var val = this.getText().substring(0, startpos);
 		var matches = val.match(this.expression);
@@ -515,10 +568,16 @@ $(function() {
 	};
 
 	Plugin.prototype.onKeyDown = function (e) {
-		var listVisible = this.$itemList.is(':visible');
-		if(!listVisible || (Plugin.KEYS.indexOf(e.keyCode) < 0)) return;
+		if (this.$element) {
+			var keyCode = e.keyCode;
+		} else {
+			var keyCode = e.data.getKey();
+		}
 
-		switch(e.keyCode) {
+		var listVisible = this.$itemList.is(':visible');
+		if(!listVisible || (Plugin.KEYS.indexOf(keyCode) < 0)) return;
+
+		switch(keyCode) {
 			case 9:
 			case 13:
 				this.select();
@@ -535,7 +594,9 @@ $(function() {
 				break;
 		}
 
-		e.preventDefault();
+		if (this.$element) {
+			e.preventDefault();
+		}
 	};
 
 	Plugin.prototype.onItemClick = function (element, e) {
@@ -562,7 +623,7 @@ $(function() {
 
 	$.fn[pluginName] = function (options) {
 		return this.each(function () {
-			if(!$.data(this, 'plugin_' + pluginName)) {
+			if(!$.data(this, 'plugin_' + pluginName) || is_wysiwyg_field(this)) {
 				$.data(this, 'plugin_' + pluginName, new Plugin(this, options));
 			}
 		});
