@@ -54,7 +54,7 @@ function generate_menu_sitemap(save_to,key_name,range_a,range_b,level,data,chain
 			under=generate_menu_sitemap(save_to,key_name,url_stub,a,b,level+1,data,chain+'~'+anchor_reference,true);
 			if (under!='')
 			{
-				contents+='<a class=\"toggleable_tray_button\" href=\"#\" onclick=\"return toggleable_tray(this.parentNode);\"><img title=\"\" alt=\"{!EXPAND^#}/{!CONTRACT^#}\" src=\"'+"{$IMG*#,contract}".replace(/^http:/,window.location.protocol)+'\" /></a>\n';
+				contents+='<a class=\"toggleable_tray_button\" href=\"#\" onclick=\"return toggleable_tray(this.parentNode);\"><img title=\"\" alt=\"{!EXPAND^#}/{!CONTRACT^#}\" src=\"'+"{$IMG*#,1x/trays/contract}".replace(/^http:/,window.location.protocol)+'\" srcset=\"'+"{$IMG*#,2x/trays/contract}".replace(/^http:/,window.location.protocol)+' 2x\" /></a>\n';
 				contents+='<ul class=\"toggleable_tray\">\n';
 				contents+=under;
 				contents+='</ul>\n';
