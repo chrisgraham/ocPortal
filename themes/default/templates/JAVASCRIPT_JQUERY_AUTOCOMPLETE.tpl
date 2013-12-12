@@ -198,7 +198,6 @@ $(function() {
 			token: '@',
 			elementFactory: elementFactory,
 			values: [],
-			unique: false,
 			repeat: true,
 			onFilterChanged: undefined,
 			preload: false
@@ -270,10 +269,6 @@ $(function() {
 	};
 
 	Plugin.prototype.reset = function () {
-		if(this.options.unique) {
-			this.options.values = Plugin.getUniqueElements(this.options.values);
-		}
-
 		this.index = 0;
 		this.matched = false;
 		this.dontFilter = false;
@@ -333,7 +328,7 @@ $(function() {
 		if (this.$element) {
 			var startpos = this.$element.getCursorPosition();
 		} else {
-			var startpos = this.startpos; // CKEDITOR.instances[this.element.name].getSelection().getRanges()[0].startOffset; Has to use this.startpos because focus may have moved away, breaking CKEditor selection
+			var startpos = this.startpos; // Has to use this.startpos because focus may have moved away, breaking CKEditor selection
 		}
 
 		var fullStuff = this.getText();
@@ -341,7 +336,7 @@ $(function() {
 		val = val.replace(this.expression, '$1' + '$2' + replacement);
 
 		var posfix = fullStuff.substring(startpos, fullStuff.length);
-		var separator = posfix.match(/^\s/) ? '' : ' ';
+		var separator = posfix.match(/^\s/) ? '' : (this.$element?' ':'&nbsp;');
 
 		var finalFight = val + separator + posfix;
 		this.setText(finalFight);
@@ -486,18 +481,6 @@ $(function() {
 		}
 	};
 
-	Plugin.getUniqueElements = function (elements) {
-		var target = [];
-
-		elements.forEach(function (e) {
-			var hasElement = target.map(function (j) { return j.val; }).indexOf(e.val) >= 0;
-			if(hasElement) return;
-			target.push(e);
-		});
-
-		return target;
-	};
-
 	Plugin.prototype.getText = function () {
 		if (!this.$element) {
 			return CKEDITOR.instances[this.element.name].getData();
@@ -523,11 +506,17 @@ $(function() {
 	Plugin.prototype.onKeyUp = function (e) {
 		if (this.$element) {
 			var startpos = this.$element.getCursorPosition();
+			var val = this.getText().substring(0, startpos);
 		} else {
-			var startpos = CKEDITOR.instances[this.element.name].getSelection().getRanges()[0].startOffset;
-			this.startpos = startpos;
+			var range = CKEDITOR.instances[this.element.name].getSelection().getRanges()[0];
+			if (typeof range == 'undefined') return; // Out of focus :S
+			var text = this.getText();
+			var textNode = range.startContainer.$;
+			var startpos = text.replace(/&nbsp;/g,' ').lastIndexOf(textNode.nodeValue?textNode.nodeValue:textNode.textContent);
+			if (startpos == -1) return; // Could not correlate, maybe some weird HTML encoding problem
+			startpos += range.startOffset; // A but of a fudge. We assume the last occurrence of the element we're on, in the overall HTML, is the one we're working in ; no API to get true cursor position
+			var val = text.substring(0, startpos);
 		}
-		var val = this.getText().substring(0, startpos);
 		var matches = val.match(this.expression);
 
 		if(!matches && this.matched) {
@@ -538,6 +527,8 @@ $(function() {
 		}
 
 		if (matches) {
+			this.startpos = startpos;
+
 			this.currentToken = matches[2];
 
 			if (this.currentToken != matches[2] && this.currentToken) {
