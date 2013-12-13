@@ -450,7 +450,7 @@ function namelike_script()
 				foreach ($likea as $l)
 				{
 					if (count($names)<15)
-						$names[mrow_id($l)]=$GLOBALS['FORUM_DRIVER']->mrow_username($l);
+						$names[$GLOBALS['FORUM_DRIVER']->mrow_id($l)]=$GLOBALS['FORUM_DRIVER']->mrow_username($l);
 				}
 
 				foreach ($names as $member_id=>$name)

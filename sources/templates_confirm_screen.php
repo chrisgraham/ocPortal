@@ -23,7 +23,7 @@
  *
  * @param  tempcode		The title for the confirmation page (out of get_screen_title)
  * @param  tempcode		The preview that's being confirmed for actualisation
- * @param  ID_TEXT		The URL type to confirm through to OR a full URL
+ * @param  mixed			The URL type to confirm through to OR a full URL OR a full URL (if long, or if tempcode)
  * @param  ?mixed			The URL type if we click back OR a full URL (if long, or if tempcode) (NULL: none)
  * @param  ?array			A map of supplementary post data to get passed through upon confirmation (NULL: none)
  * @param  ?tempcode		Form fields to pass through as post data on confirmation (NULL: none)

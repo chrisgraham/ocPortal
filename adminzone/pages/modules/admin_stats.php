@@ -1012,12 +1012,12 @@ class Module_admin_stats
 			while (array_key_exists($i,$rows))
 			{
 				$row=$rows[$i];
-				$week=round($row['date_and_time']/(60*60*24*7));
+				$week=intval(round($row['date_and_time']/(60*60*24*7)));
 				$date=get_timezoned_date(($week-1)*(60*60*24*7),false,false,false,true).' - '.get_timezoned_date(($week)*(60*60*24*7),false,false,false,true);
 				$views=0;
 				while (array_key_exists($i+$views,$rows))
 				{
-					$_week=round($row['date_and_time']/(60*60*24*7));
+					$_week=intval(round($row['date_and_time']/(60*60*24*7)));
 
 					if ($_week!=$week) break;
 
@@ -1240,6 +1240,7 @@ class Module_admin_stats
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 
+		$reasonable_max=10000;
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
 		$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
@@ -1257,12 +1258,12 @@ class Module_admin_stats
 			while (array_key_exists($i,$rows))
 			{
 				$row=$rows[$i];
-				$week=round($row['date_and_time']/(60*60*24*7));
+				$week=intval(round($row['date_and_time']/(60*60*24*7)));
 				$date=get_timezoned_date(($week-1)*(60*60*24*7),false,false,false,true).' - '.get_timezoned_date(($week)*(60*60*24*7),false,false,false,true);
 				$views=0;
 				while (array_key_exists($i+$views,$rows))
 				{
-					$_week=round($row['date_and_time']/(60*60*24*7));
+					$_week=intval(round($row['date_and_time']/(60*60*24*7)));
 
 					if ($_week!=$week) break;
 

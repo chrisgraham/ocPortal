@@ -1793,3 +1793,29 @@ function get_webpage_meta_details($url)
 	$cache[$url]=$meta_details;
 	return $meta_details;
 }
+
+/**
+ * Final filter for downloader output: try a bit harder to detect the character encoding, in case it was not in an HTTP filter.
+ * Manipulates the $HTTP_CHARSET global.
+ *
+ * @param  string                        The HTTP stream we will look through
+ * @return string                        Same as $out
+ */
+function _detect_character_encoding($out)
+{
+	global $HTTP_CHARSET;
+	if ($HTTP_CHARSET===NULL)
+	{
+		$matches=array();
+		if (preg_match('#<'.'?xml[^<>]*\s+encoding="([^"]+)"#',$out,$matches)!=0)
+		{
+			$HTTP_CHARSET=trim($matches[1]);
+		}
+		elseif (preg_match('#<meta\s+http-equiv="Content-Type"\s+content="[^"]*;\s*charset=([^"]+)"#i',$out,$matches)!=0)
+		{
+			$HTTP_CHARSET=trim($matches[1]);
+		}
+	}
+
+	return $out;
+}

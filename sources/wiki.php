@@ -306,6 +306,7 @@ function wiki_delete_post($post_id,$member=NULL)
  * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @param  ?TIME			The edit time (NULL: N/A)
+ * @param  boolean		Whether to send a notification
  * @return AUTO_LINK		The page ID
  */
 function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_time=NULL,$views=0,$meta_keywords='',$meta_description='',$edit_date=NULL,$send_notification=true)

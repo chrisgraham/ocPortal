@@ -168,7 +168,7 @@ function build_preview($multi_return=false)
 
 		if (!$is_hidden)
 		{
-			if ($spellcheck)
+			if ((function_exists('spellchecklogic')) && ($spellcheck))
 			{
 				require_code('comcode_from_html');
 				$mispellings=spellchecklogic('check',semihtml_to_comcode($val,true),$words_skip,true);
