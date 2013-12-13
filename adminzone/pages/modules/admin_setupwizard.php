@@ -912,9 +912,9 @@ class Module_admin_setupwizard
 			$uninstalling=array();
 			foreach ($addons_installed as $addon_info)
 			{
-				if (post_param_integer('addon_'.$addon_info['addon_name'],0)==0)
+				if (post_param_integer('addon_'.$addon_info['name'],0)==0)
 				{
-					$uninstalling[]=$addon_info['name'];
+					$uninstalling[$addon_info['name']]=$addon_info;
 				}
 			}
 			$addons_not_installed=find_available_addons(false);
@@ -926,48 +926,58 @@ class Module_admin_setupwizard
 					$installing[]=$addon_info['name'];
 				}
 			}
-			if (!file_exists(get_file_base().'/.git')) // Only uninstall if we're not working from a git repository
+			do
 			{
+				$cnt=count($uninstalling);
 				foreach ($addons_installed as $addon_info)
 				{
-					if (post_param_integer('addon_'.$addon_info['name'],0)==0)
+					if (array_key_exists($addon_info['name'],$uninstalling))
 					{
-						$addon_info+=read_addon_info($addon_info['name'],true);
+						$addon_info+=read_addon_info($addon_info['name']);
 						$addon_info['author']=''; // Fudge, to stop it dying on warnings for official addons
 
 						// Check dependencies
 						$dependencies=$addon_info['dependencies_on_this'];
-						foreach ($uninstalling as $d)
+						foreach (array_keys($uninstalling) as $d)
 						{
-							if (in_array($d,$dependencies)) unset($dependencies[array_search($d,$dependencies)]);
+							if (in_array($d,$dependencies)) // Can mark this dependency as irrelevant, as we are uninstalling the addon for it anyway
+								unset($dependencies[array_search($d,$dependencies)]);
 						}
 
-						if (count($dependencies)==0) // If nothing left installed depending on this
+						if (count($dependencies)!=0) // Can't uninstall, has dependencies
 						{
-							// Archive it off to exports/addons
-							if ($addon_info['files']!=array())
-							{
-								$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_info['name'])).'.tar';
-								create_addon(
-									$file,
-									$addon_info['files'],
-									$addon_info['name'],
-									implode(',',$addon_info['incompatibilities']),
-									implode(',',$addon_info['dependencies']),
-									$addon_info['author'],
-									$addon_info['organisation'],
-									$addon_info['version'],
-									$addon_info['category'],
-									implode("\n",$addon_info['copyright_attribution']),
-									$addon_info['licence'],
-									$addon_info['description'],
-									'imports/addons'
-								);
-							}
-
-							uninstall_addon($addon_info['name']);
+							unset($uninstalling[$addon_info['name']]);
 						}
 					}
+				}
+			}
+			while ($cnt!=count($uninstalling)); // Dependency chains can be complex, so loop until we're stopped finding anything changing
+			if (!file_exists(get_file_base().'/.git')) // Only uninstall if we're not working from a git repository
+			{
+				foreach ($uninstalling as $addon_info)
+				{
+					// Archive it off to exports/addons
+					if ($addon_info['addon_files']!=array())
+					{
+						$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_info['name'])).'.tar';
+						create_addon(
+							$file,
+							$addon_info['files'],
+							$addon_info['name'],
+							implode(',',$addon_info['incompatibilities']),
+							implode(',',$addon_info['dependencies']),
+							$addon_info['author'],
+							$addon_info['organisation'],
+							$addon_info['version'],
+							$addon_info['category'],
+							implode("\n",$addon_info['copyright_attribution']),
+							$addon_info['licence'],
+							$addon_info['description'],
+							'imports/addons'
+						);
+					}
+
+					uninstall_addon($addon_info['name']);
 				}
 			}
 			foreach ($addons_not_installed as $addon_file=>$addon_info)

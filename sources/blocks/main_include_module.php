@@ -67,7 +67,11 @@ class Block_main_include_module
 		if ($zone=='_SEARCH') $zone=get_page_zone($attributes['page'],false);
 		elseif ($zone=='_SELF') $zone=get_zone_name();
 		if (is_null($zone)) return new ocp_tempcode();
-		if ($merge_parameters) $attributes+=$_GET; // Remember that PHP does not overwrite using the '+' operator (as unintuitive as this is!)
+		foreach ($_GET as $key=>$val)
+		{
+			if ((substr($key,0,5)=='keep_') || ($merge_parameters))
+				$_GET[$key]=get_magic_quotes_gpc()?addslashes($val):$val;
+		}
 
 		// Check permissions
 		if (($only_if_permissions==1) && (!has_actual_page_access(get_member(),$attributes['page'],$zone)))

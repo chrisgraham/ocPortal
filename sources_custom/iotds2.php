@@ -76,6 +76,8 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 	$_caption=$GLOBALS['SITE_DB']->query_select_value('iotd','caption',array('id'=>$id));
 	$_title=$GLOBALS['SITE_DB']->query_select_value('iotd','i_title',array('id'=>$id));
 
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'iotd'));
+
 	require_code('files2');
 	delete_upload('uploads/iotds','iotd','url','id',$id,$url);
 	delete_upload('uploads/iotds_thumbs','iotd','thumb_url','id',$id,$thumb_url);

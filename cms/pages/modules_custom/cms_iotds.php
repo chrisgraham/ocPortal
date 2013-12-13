@@ -406,7 +406,7 @@ class Module_cms_iotds extends standard_crud_module
 			if (has_actual_page_access(get_modal_user(),'iotds'))
 			{
 				require_code('activities');
-				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds',1,$submitter);
+				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds',1,NULL/*$submitter*/);
 			}
 		}
 

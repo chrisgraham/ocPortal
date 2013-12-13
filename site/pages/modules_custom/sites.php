@@ -283,10 +283,12 @@ class Module_sites
 		if ($directory=='') $directory='/';
 		if ($directory[strlen($directory)-1]!='/') $directory.='/';
 
-		$list=form_input_list_entry($directory,($directory=='/public_html/') || ($directory=='/www/') || ($directory=='/httpdocs/') || ($directory=='/htdocs/'));
-		if ($depth==2) return $list;
+		$list=new ocp_tempcode();
+		if (!@ftp_chdir($conn_id,$directory.'/'.$entry)) return $list; // Can't rely on ftp_nlist if not a directory
 		$contents=ftp_nlist($conn_id,$directory);
 		if ($contents===false) return $list;
+		$list->attach(form_input_list_entry($directory,($directory=='/public_html/') || ($directory=='/www/') || ($directory=='/httpdocs/') || ($directory=='/htdocs/')));
+		if ($depth==2) return $list;
 		foreach ($contents as $entry)
 		{
 			$full_entry=$entry;
@@ -299,8 +301,8 @@ class Module_sites
 			}
 			if (($entry=='.') || ($entry=='..') || ($entry=='') || ($entry=='conf') || ($entry=='anon_ftp') || ($entry=='logs') || ($entry=='imap') || ($entry=='statistics') || ($entry=='error_docs') || ($entry=='tmp') || ($entry=='mail') || ($entry[0]=='.') || ($entry=='etc') || (strpos($entry,'logs')!==false) || ($entry=='public_ftp')) continue;
 
-			//Is the entry a directory?
-			if (@ftp_chdir($conn_id,$directory.'/'.$entry))
+			// Is the entry a directory?
+			if ((strpos($entry,'.')===false) && (@ftp_chdir($conn_id,$directory.'/'.$entry)))
 			{
 				$full_path=$directory.$entry.'/';
 				$list->attach($this->_hostingcopy_do_dir($conn_id,$full_path,$depth+1));
@@ -349,15 +351,21 @@ class Module_sites
 
 		$hidden=build_keep_post_fields();
 
+		$search_under=post_param('search_under','/');
+
 		// Find paths
 		$conn_id=$this->_hostingcopy_ftp_connect();
-		$list=$this->_hostingcopy_do_dir($conn_id,post_param('search_under','/'));
+		$list=$this->_hostingcopy_do_dir($conn_id,$search_under);
 		ftp_close($conn_id);
+
+		if ($list->is_empty()) warn_exit(do_lang_tempcode('HOSTING_NO_FIND_DIR'));
+
+		$base_url='http://'.preg_replace('#^ftp\.#','',post_param('ftp_domain')).preg_replace('#/(public_html|www|httpdocs|htdocs)/#','/',$search_under);
 
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_list(do_lang_tempcode('FTP_DIRECTORY'),'','path',$list));
 		$fields->attach(form_input_line(do_lang_tempcode('NEW_DIRECTORY'),do_lang_tempcode('DESCRIPTION_NEW_DIRECTORY'),'extra_path','',false));
-		$fields->attach(form_input_line(do_lang_tempcode('BASE_URL'),do_lang_tempcode('DESCRIPTION_BASE_URL'),'base_url','http://'.preg_replace('#^ftp\.#','',post_param('ftp_domain')).'/',true));
+		$fields->attach(form_input_line(do_lang_tempcode('BASE_URL'),do_lang_tempcode('DESCRIPTION_BASE_URL'),'base_url',$base_url,true));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'hostingcopy_step3'),'_SELF');
 		$submit_name=do_lang('HOSTING_COPY');
 

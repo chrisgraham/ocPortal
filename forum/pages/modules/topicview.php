@@ -615,7 +615,7 @@ class Module_topicview
 				{
 					if (!has_privilege(get_member(),'vote_in_polls'))
 					{
-						$button=do_lang_tempcode('VOTE_DENIED');
+						$button=do_lang_tempcode(is_guest()?'GUESTS_CANT_VOTE_IN_POLLS':'VOTE_DENIED');
 					} else
 					{
 						if (!is_null($voted_already))
@@ -744,6 +744,12 @@ class Module_topicview
 			if (is_null($topic_info['forum_id']))
 			{
 				$moderator_actions.='<option value="categorise_pts">'.do_lang('_CATEGORISE_PTS').'</option>';
+				$filter_cats=ocf_get_filter_cats();
+				foreach ($filter_cats as $filter_cat)
+				{
+					if ($filter_cat!='')
+						$moderator_actions.='<option value="categorise_pts__'.escape_html($filter_cat).'">'.do_lang('CATEGORISE_PTS_AS',escape_html($filter_cat)).'</option>';
+				}
 			}
 			if ((array_key_exists('may_multi_moderate',$topic_info)) && (array_key_exists('forum_id',$topic_info)))
 			{

@@ -68,7 +68,12 @@ function copy_fields_into_bottom(i,changed)
 	var s;
 	for (s=0;s<form.elements['theme_img_code'].options.length;s++)
 		if (document.getElementById('theme_img_code_'+i).value==form.elements['theme_img_code'].options[s].value) break;
-	if (s!=form.elements['theme_img_code'].options.length) form.elements['theme_img_code'].selectedIndex=s;
+	if (s==form.elements['theme_img_code'].options.length)
+	{
+		s=0;
+		fauxmodal_alert('{!menus:MISSING_THEME_IMAGE_FOR_MENU;}'.replace(/\\{1\\}/,document.getElementById('theme_img_code_'+i).value));
+	}
+	form.elements['theme_img_code'].selectedIndex=s;
 	form.elements['theme_img_code'].onchange=function () { document.getElementById('theme_img_code_'+i).value=this.options[this.selectedIndex].value; };
 
 	form.elements['new_window'].checked=document.getElementById('new_window_'+i).value=='1';

@@ -922,6 +922,9 @@ class Module_cms_comcode_pages
 
 			require_code('submit');
 			give_submit_points('COMCODE_PAGE_ADD');
+
+			require_code('member_mentions');
+			dispatch_member_mention_notifications('comcode_page',$zone.':'.$file,$resource_owner);
 		} else // Edit
 		{
 			if (!has_edit_comcode_page_permission($zone,$file,$resource_owner))

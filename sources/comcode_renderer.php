@@ -830,14 +830,18 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 			foreach ($_groups as $group)
 			{
+				$not=(substr($group,0,1)=='!');
+				if ($not) $group=substr($group,1);
 				$find=array_search($group,$all_groups);
 				if ($find===false)
 				{
 					if ($groups!='') $groups.=',';
+					if ($not) $groups.='!';
 					$groups.=$group;
 				} else
 				{
 					if ($groups!='') $groups.=',';
+					if ($not) $groups.='!';
 					$groups.=strval($find);
 				}
 			}

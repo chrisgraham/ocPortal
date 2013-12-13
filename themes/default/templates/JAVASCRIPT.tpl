@@ -1017,6 +1017,7 @@ function _confirm_session(callback,username,url)
 function load_snippet(code,post,callback)
 {
 	var title=get_inner_html(document.getElementsByTagName('title')[0]);
+	title=title.replace(/ \u2013 .*/,'');
 	var metas=document.getElementsByTagName('link');
 	var i;
 	if (!window.location) return null; // In middle of page navigation away
@@ -1543,6 +1544,7 @@ function abstract_get_computed_style(obj,property)
 		ret=document.defaultView.getComputedStyle(obj,null).getPropertyValue(property);
 	}
 	catch(e) {  }
+	if (ret===null) ret='';
 
 	return ret;
 }
@@ -1718,10 +1720,12 @@ function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 }
 function find_width(obj,take_padding,take_margin,take_border)
 {
-	if (!obj) return 0;
 	if (typeof take_padding=='undefined') var take_padding=false;
 	if (typeof take_margin=='undefined') var take_margin=false;
 	if (typeof take_border=='undefined') var take_border=false;
+
+	if (!obj) return 0;
+
 	var ret=obj.offsetWidth;
 	if (take_padding)
 	{
@@ -1742,10 +1746,12 @@ function find_width(obj,take_padding,take_margin,take_border)
 }
 function find_height(obj,take_padding,take_margin,take_border)
 {
-	if (!obj) return 0;
 	if (typeof take_padding=='undefined') var take_padding=false;
 	if (typeof take_margin=='undefined') var take_margin=false;
 	if (typeof take_border=='undefined') var take_border=false;
+
+	if (!obj) return 0;
+
 	var ret=obj.offsetHeight;
 	if (take_padding)
 	{
@@ -1768,6 +1774,8 @@ function find_height(obj,take_padding,take_margin,take_border)
 /* See if a key event was an enter key being pressed */
 function enter_pressed(event,alt_char)
 {
+	if (typeof alt_char=='undefined') var alt_char=false;
+
 	if (typeof event=='undefined') var event=window.event;
 	if ((alt_char) && (((event.which) && (event.which==alt_char.charCodeAt(0))) || ((event.keyCode) && (event.keyCode==alt_char.charCodeAt(0))))) return true;
 	return (((event.which) && (event.which==13)) || ((event.keyCode) && (event.keyCode==13)));
@@ -1838,7 +1846,9 @@ function convert_tooltip(element)
 	var title=element.title;
 	if ((title!='') && (element.className.indexOf('leave_native_tooltip')==-1))
 	{
-		element.title=''; // Remove old tooltip
+		// Remove old tooltip
+		if (element.nodeName=='img' && element.alt=='') element.alt=element.title;
+		element.title='';
 
 		if ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && ((!element.childNodes[0].title) || (element.childNodes[0].title=='')))) // Only put on new tooltip if there's nothing with a tooltip inside the element
 		{
@@ -2685,32 +2695,36 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 }
 
 /* Put some new HTML around the given element */
-function set_outer_html(element,tHTML)
+function set_outer_html(element,target_html)
 {
-	set_inner_html(element,tHTML,false,true);
 	var p=element.parentNode;
-	var c=element.childNodes;
+	p.removeChild(element);
+
+	set_inner_html(element,target_html,false,true);
+
+	var c=element.childNodes,ci;
 	for (var i=c.length-1;i>=0;i--)
 	{
+		ci=c[i];
+		element.removeChild(ci);
 		if (element.nextSibling)
 		{
-			p.insertBefore(c[i],element.nextSibling);
+			p.insertBefore(ci,element.nextSibling);
 		} else
 		{
-			p.appendChild(c[i]);
+			p.appendChild(ci);
 		}
 	}
-	p.removeChild(element);
 }
 
 /* Put some new HTML into the given element */
 // Note that embedded Javascript IS run unlike the normal .innerHTML - in fact we go to effort to guarantee it - even onload attached Javascript
-function set_inner_html(element,tHTML,append,force_dom)
+function set_inner_html(element,target_html,append,force_dom)
 {
 	// Parser hint: .innerHTML okay
-	if (typeof tHTML=='number') tHTML=tHTML+'';
+	if (typeof target_html=='number') target_html=target_html+'';
 
-	if (((typeof force_dom=='undefined') || (!force_dom)) && (document.write) && (typeof element.innerHTML!='undefined') && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
+	if (((typeof force_dom=='undefined') || (!force_dom)) && (document.write) && (typeof element.innerHTML!='undefined') && (!document.xmlVersion) && (target_html.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (target_html.toLowerCase().indexOf('<link')==-1))
 	{
 		var clone=element.cloneNode(true);
 		try
@@ -2719,11 +2733,11 @@ function set_inner_html(element,tHTML,append,force_dom)
 			if (append)
 			{
 				scripts_jump=element.getElementsByTagName('script').length;
-				element.innerHTML+=tHTML;
+				element.innerHTML+=target_html;
 				already_offset=element.getElementsByTagName('*').length
 			} else
 			{
-				element.innerHTML=tHTML;
+				element.innerHTML=target_html;
 			}
 
 			window.setTimeout(function() {
@@ -2738,7 +2752,7 @@ function set_inner_html(element,tHTML,append,force_dom)
 				catch (e) {} // In case its an iframe with changed access in the interim
 			}, 0); // Delayed so we know DOM has loaded
 
-			if (tHTML.toLowerCase().indexOf('<script')!=-1)
+			if (target_html.toLowerCase().indexOf('<script')!=-1)
 			{
 				var r_id='js_'+Math.random();
 				window['js_runs_test_'+r_id]=false;
@@ -2776,11 +2790,11 @@ function set_inner_html(element,tHTML,append,force_dom)
 		catch(ignore) {};
 	}
 
-	tHTML=entities_to_unicode(tHTML);
+	target_html=entities_to_unicode(target_html);
 
 	// load the XML and copies to DOM
-	tHTML='<root>'+tHTML.replace(/^\s*\<\!DOCTYPE[^<>]*\>/,'')+'</root>';
-	var xml_doc=inner_html_load(tHTML);
+	target_html='<root>'+target_html.replace(/^\s*\<\!DOCTYPE[^<>]*\>/,'')+'</root>';
+	var xml_doc=inner_html_load(target_html);
 	if (element && xml_doc) {
 		if (!append)
 		{
@@ -3232,7 +3246,7 @@ function setup_word_counter(post,count_element)
 		{
 			try
 			{
-				var text_value=window.CKEDITOR.instances['post'].getData();
+				var text_value=window.CKEDITOR.instances[post.name].getData();
 				var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
 				var count=0;
 				if(matches) count=matches.length/2;

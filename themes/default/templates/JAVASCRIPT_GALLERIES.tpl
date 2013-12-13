@@ -165,9 +165,9 @@ function slideshow_show_slide(slide)
 		if (typeof fade_elements_old[0]!='undefined')
 		{
 			var fade_element_old=fade_elements_old[0];
-			fade_element_old.style.position='absolute';
 			var left_pos=find_width(fade_element_old.parentNode)/2-find_width(fade_element_old)/2;
 			fade_element_old.style.left=left_pos+'px';
+			fade_element_old.style.position='absolute';
 		} // else probably a video
 
 		var cleaned_slide_html=window.slideshow_slides[slide].replace(/<!DOCTYPE [^>]*>/i,'').replace(/<script[^>]*>(.|\n)*?<\/script>/gi,'');
@@ -179,6 +179,7 @@ function slideshow_show_slide(slide)
 			var fade_element=fade_elements[0];
 			set_opacity(fade_element,0);
 			fade_element.parentNode.insertBefore(fade_element_old,fade_element);
+			fade_element.parentNode.style.position='relative';
 			fade_transition(fade_element,100.0,30,10);
 			set_opacity(fade_element_old,1.0);
 			fade_transition(fade_element_old,0.0,30,-10,true);

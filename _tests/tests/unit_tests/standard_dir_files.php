@@ -60,7 +60,7 @@ class standard_dir_files_test_set extends ocp_test_case
 				$this->assertTrue(false,'touch "'.$dir.'/index.html" ; git add -f "'.$dir.'/index.html"');
 			}
 
-			if ((!file_exists($dir.'/.htaccess')) && (!file_exists($dir.'/index.php')) && (!file_exists($dir.'/html_custom')) && (!file_exists($dir.'/EN')) && (strpos($dir,'ckeditor')===false) && (strpos($dir,'uploads')===false) && (preg_match('#/data(/|$|\_)#',$dir)==0) && (strpos($dir,'themes')===false) && (strpos($dir,'exports')===false))
+			if ((!file_exists($dir.DIRECTORY_SEPARATOR.'.htaccess')) && (!file_exists($dir.'/index.php')) && (!file_exists($dir.'/html_custom')) && (!file_exists($dir.'/EN')) && (strpos($dir,'ckeditor')===false) && (strpos($dir,'uploads')===false) && (preg_match('#/data(/|$|\_)#',$dir)==0) && (strpos($dir,'themes')===false) && (strpos($dir,'exports')===false))
 			{
 				$this->assertTrue(false,'cp "'.get_file_base().'/sources/.htaccess" "'.$dir.'/.htaccess" ; git add "'.$dir.'/.htaccess"');
 			}

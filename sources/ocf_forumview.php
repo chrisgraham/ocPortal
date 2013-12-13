@@ -242,7 +242,13 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 	$moderator_actions='';
 	if (($type=='pt') && ($of_member_id==get_member()) && (get_option('enable_pt_filtering')=='1'))
 	{
-		$moderator_actions.='<option value="categorise_pts">'.do_lang('CATEGORISE_PTS').'</option>';
+		$moderator_actions.='<option value="categorise_pts">'.do_lang('_CATEGORISE_PTS').'</option>';
+		$filter_cats=ocf_get_filter_cats();
+		foreach ($filter_cats as $filter_cat)
+		{
+			if ($filter_cat!='')
+				$moderator_actions.='<option value="categorise_pts__'.escape_html($filter_cat).'">'.do_lang('CATEGORISE_PTS_AS',escape_html($filter_cat)).'</option>';
+		}
 	}
 	if (get_option('enable_mark_forum_read')=='1')
 	{

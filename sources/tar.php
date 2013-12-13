@@ -393,6 +393,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 				if (fwrite($myfile,$data['data'])<strlen($data['data'])) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 				$fullpath=get_custom_file_base().'/'.$path.$file['path'];
 				@chmod($fullpath,$data['mode']);
+				if ($data['mtime']==0) $data['mtime']=time();
 				@touch($fullpath,$data['mtime']);
 				fclose($myfile);
 				fix_permissions($fullpath);

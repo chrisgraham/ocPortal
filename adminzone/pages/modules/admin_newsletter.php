@@ -176,12 +176,18 @@ class Module_admin_newsletter extends standard_crud_module
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_NEWSLETTER');
 		$this->edit_one_label=do_lang_tempcode('EDIT_NEWSLETTER');
 
+		$this->add_text=do_lang_tempcode('HELP_ADD_NEWSLETTER',escape_html(static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'new'),'_SELF'))));
+
 		if ($type=='misc') return $this->misc();
+
 		if ($type=='import_subscribers') return $this->import_subscribers();
 		if ($type=='subscribers') return $this->view_subscribers();
+
+		if ($type=='whatsnew') return $this->automatic_whats_new();
+		if ($type=='new') return $this->send_gui();
 		if ($type=='confirm') return $this->confirm_send();
 		if ($type=='send') return $this->send_message();
-		if ($type=='whatsnew') return $this->automatic_whats_new();
+
 		if ($type=='archive') return $this->archive();
 		if ($type=='view') return $this->view();
 		if ($type=='new') return $this->send_gui();
@@ -203,6 +209,12 @@ class Module_admin_newsletter extends standard_crud_module
 	 */
 	function misc()
 	{
+		$num_in_queue=$GLOBALS['SITE_DB']->query_value('newsletter_drip_send','COUNT(*)');
+		if ($num_in_queue>0)
+		{
+			attach_message(do_lang_tempcode('NEWSLETTER_DRIP_SEND_QUEUE',integer_format($num_in_queue)),'inform');
+		}
+
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_NEWSLETTER'),comcode_lang_string('DOC_NEWSLETTER'),
 			array_merge(array(
@@ -222,7 +234,7 @@ class Module_admin_newsletter extends standard_crud_module
 	 * @param  ID_TEXT		The language
 	 * @return integer		The count
 	 */
-	function count_level($id,$level,$lang)
+	function _count_level($id,$level,$lang)
 	{
 		$map=array();
 		$map[strval($id)]=$level;
@@ -489,7 +501,8 @@ class Module_admin_newsletter extends standard_crud_module
 		$folders=new ocp_tempcode();
 		foreach ($_folders as $folder)
 		{
-			$folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce')!==false));
+			$label=preg_replace('#@.*$#','',preg_replace('#\{[^{}]+\}#','',$folder));
+			$folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce')!==false,$label));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'),new ocp_tempcode(),'box',$folders));
 
@@ -522,20 +535,19 @@ class Module_admin_newsletter extends standard_crud_module
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
-		$all_subscribers=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
+		$all_subscribers=array();
+		$all_subscribers+=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
+		if (get_forum_type()=='ocf')
+			$all_subscribers+=collapse_2d_complexity('m_email_address','id',$GLOBALS['FORUM_DB']->query_select('f_members',array('m_email_address','id'),array('m_allow_emails_from_staff'=>1)));
 
 		$headers=imap_search($mbox,'UNDELETED');
-		//$headers=imap_headers($mbox);	Does not work as expected
-		if ($headers===false)
-		{
-		   warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
-		}
+		if ($headers===false) $headers=array();
 		$num=0;
 		foreach ($headers as $val)
 		{
 		   $msg=imap_body($mbox,$val);
 		   $matches=array();
-		   $num_matches=preg_match_all("#<([^\n<>@]+@[^\n<>@]+)>#",$msg,$matches);
+		   $num_matches=preg_match_all("#(?<!(Message-ID|Content-ID): )<([^\"\n<>@]+@[^\n<>@]+)>#",$msg,$matches);
 		   if ($num_matches!=0)
 		   {
 				$overview=imap_headerinfo($mbox,$val);
@@ -544,7 +556,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 		      for ($i=0;$i<$num_matches;$i++)
 		      {
-		         $m=$matches[1][$i];
+		         $m=$matches[2][$i];
 		         $m=str_replace('@localhost.localdomain','',$m);
 		         if (($m!=get_option('staff_address')) && (array_key_exists($m,$all_subscribers)))
 		         {
@@ -573,19 +585,37 @@ class Module_admin_newsletter extends standard_crud_module
 	 */
 	function bounce_filter_d()
 	{
-		$sup='';
+		$title=get_screen_title('BOUNCE_FILTER');
+
+		$delete_sql='';
+		$delete_sql_members='';
+
 		foreach (array_keys($_POST) as $key)
 		{
 			if (substr($key,0,6)=='email_')
 			{
-			   if ($sup!='') $sup.=' OR ';
-			   $sup.=db_string_equal_to('email',post_param($key));
+			   if ($delete_sql!='')
+				{
+					$delete_sql.=' OR ';
+					$delete_sql_members.=' OR ';
+				}
+			   $delete_sql.=db_string_equal_to('email',post_param($key));
+			   $delete_sql_members.=db_string_equal_to('m_email_address',post_param($key));
 			}
 		}
-		if ($sup=='') warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
+		if ($delete_sql=='') warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
 
-		$query='DELETE FROM '.get_table_prefix().'newsletter WHERE '.$sup;
+		$query='DELETE FROM '.get_table_prefix().'newsletter WHERE '.$delete_sql;
 		$GLOBALS['SITE_DB']->query($query);
+
+		$query='DELETE FROM '.get_table_prefix().'newsletter_subscribe WHERE '.$delete_sql;
+		$GLOBALS['SITE_DB']->query($query);
+
+		if (get_forum_type()=='ocf')
+		{
+			$query='UPDATE '.get_table_prefix().'f_members SET m_allow_emails_from_staff=0 WHERE '.$delete_sql_members;
+			$GLOBALS['FORUM_DB']->query($query);
+		}
 
 		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
@@ -986,7 +1016,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 		$in_full=post_param_integer('in_full',0);
 		$chosen_categories=post_param('chosen_categories');
-		$message=$this->generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
+		$message=$this->_generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
 
 		return $this->send_gui($message);
 	}
@@ -1000,7 +1030,7 @@ class Module_admin_newsletter extends standard_crud_module
 	 * @param  TIME					When to cut off content from
 	 * @return tempcode				The Comcode, in template form
 	 */
-	function generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time)
+	function _generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time)
 	{
 		$_hooks=find_all_hooks('modules','admin_newsletter');
 
@@ -1189,7 +1219,7 @@ class Module_admin_newsletter extends standard_crud_module
 		} else
 		{
 			$default=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f44','CONTENT'=>$_existing,'LANG'=>$lang));
-			if (strpos($default->evaluate(),'<html')!==false) // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
+			if (strpos($default->evaluate(),'<html')!==false && strpos($_existing,'<html')===false) // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
 			{
 				if ($comcode_given)
 				{
@@ -1272,6 +1302,8 @@ class Module_admin_newsletter extends standard_crud_module
 			$_csv_data[]=array(do_lang('EMAIL_ADDRESS'),do_lang('NAME'),do_lang('NEWSLETTER_SEND_ID'));
 			foreach (array_keys($_POST) as $post_key)
 			{
+				if (!is_string($post_key)) $post_key=strval($post_key);
+
 				$matches=array();
 				if ((preg_match('#^result\_\_member_(\d+)$#',$post_key,$matches)!=0) && (post_param_integer($post_key,0)==1))
 				{
@@ -1295,11 +1327,11 @@ class Module_admin_newsletter extends standard_crud_module
 		{
 			$level=post_param_integer(strval($newsletter['id']),post_param_integer('level',-1));
 
-			$c4=$this->count_level($newsletter['id'],4,$lang);
-			$c3=$this->count_level($newsletter['id'],3,$lang);
-			$c2=$this->count_level($newsletter['id'],2,$lang);
-			$c1=$this->count_level($newsletter['id'],1,$lang);
-			if ($c1!=0)
+			$c4=$this->_count_level($newsletter['id'],4,$lang);
+			$c3=$this->_count_level($newsletter['id'],3,$lang);
+			$c2=$this->_count_level($newsletter['id'],2,$lang);
+			$c1=$this->_count_level($newsletter['id'],1,$lang);
+			//if ($c1!=0)	Actually, this just confuses people if we don't show it
 			{
 				$newsletter_title=get_translated_text($newsletter['title']);
 				$newsletter_description=get_translated_text($newsletter['description']);
@@ -1322,7 +1354,7 @@ class Module_admin_newsletter extends standard_crud_module
 		}
 		if (get_forum_type()=='ocf')
 		{
-			$c5=$this->count_level(-1,5,$lang);
+			$c5=$this->_count_level(-1,5,$lang);
 			$fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_OCF'),do_lang_tempcode('NUM_READERS',integer_format($c5)),'-1',false));
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 			foreach ($groups as $group_id=>$group)
@@ -1486,7 +1518,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$extra_post_data['make_periodic']='1';
 
 			// Re-generate preview from latest chosen_categories
-			$message=$this->generate_whats_new_comcode(post_param('chosen_categories',''),$in_full,$lang,get_input_date('cutoff'));
+			$message=$this->_generate_whats_new_comcode(post_param('chosen_categories',''),$in_full,$lang,get_input_date('cutoff'));
 		}
 
 		$address=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());

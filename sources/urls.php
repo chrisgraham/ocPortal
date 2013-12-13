@@ -307,6 +307,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 
 	foreach ($vars as $key=>$val)
 	{
+		if (!is_string($key)) $key=strval($key);
 		if (is_integer($val)) $val=strval($val);
 		if ($val===NULL) $val='<null>';
 
@@ -473,7 +474,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		if (!$avoid_remap) $USE_REWRITE_PARAMS_CACHE=$use_rewrite_params;
 	} else $use_rewrite_params=$USE_REWRITE_PARAMS_CACHE;
 	$test_rewrite=NULL;
-	$self_page=((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_param('page',''))))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='#_top') && (!$KNOWN_AJAX);
+	$self_page=((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_param('page',''))))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type','misc'))) && ($hash!='#_top') && (!$KNOWN_AJAX);
 	if ($use_rewrite_params)
 	{
 		if ((!$self_page) || ($WHAT_IS_RUNNING_CACHE==='index'))

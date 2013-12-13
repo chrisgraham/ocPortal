@@ -169,6 +169,9 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 	persistent_cache_delete('GROUPS');
 	persistent_cache_delete('GROUPS_PO');
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('group',strval($group_id));
+
 	return $group_id;
 }
 

@@ -700,7 +700,7 @@ class Module_cms_news extends standard_crud_module
 				if ($privacy_ok)
 				{
 					require_code('activities');
-					syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$submitter,true);
+					syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL/*$submitter*/,true);
 				}
 			}
 		}

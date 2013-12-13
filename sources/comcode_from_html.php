@@ -307,7 +307,7 @@ function semihtml_to_comcode($semihtml,$force=false)
 			$semihtml=convert_html_headers_to_titles($semihtml);
 		}
 
-		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'[[')+substr_count($semihtml,'<h1');
+		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'@')+substr_count($semihtml,'{')+substr_count($semihtml,'[[')+substr_count($semihtml,'<h1');
 		if (($count==0) && (strpos($semihtml,'<h1')===false)) return ($semihtml=='')?'':('[html]'.$semihtml.'[/html]');
 		$count2=substr_count($semihtml,'[/attachment]')+substr_count($semihtml,'<h1');
 		if ($count2==$count) // All HTML or attachments or headers, so we can encode mostly as 'html' (as opposed to 'semihtml')

@@ -815,7 +815,7 @@ class Module_cms_catalogues extends standard_crud_module
 				{
 					$lang_string='catalogues:ACTIVITY_CATALOGUE_'.$catalogue_name.'_EDIT';
 					if (!is_null(do_lang($lang_string,NULL,NULL,NULL,NULL,false)))
-						syndicate_described_activity($lang_string,$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,$submitter);
+						syndicate_described_activity($lang_string,$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,NULL/*$submitter*/);
 				}
 			}
 		}

@@ -265,7 +265,7 @@ function load_html_edit(posting_form,ajax_copy)
 			}
 			window.setTimeout(function(e,id) {
 				return function() {
-					window.wysiwyg_editors[id]=wysiwyg_editor_init_for(e);
+					wysiwyg_editor_init_for(e,id);
 				}
 			}(e,id),1000);
 		}
@@ -273,7 +273,7 @@ function load_html_edit(posting_form,ajax_copy)
 	if (count==0) return;
 }
 
-function wysiwyg_editor_init_for(element)
+function wysiwyg_editor_init_for(element,id)
 {
 	var pageStyleSheets=[];
 	if (!document) return;
@@ -296,6 +296,7 @@ function wysiwyg_editor_init_for(element)
 	if (typeof window.CKEDITOR.instances[element.id]!='undefined' && window.CKEDITOR.instances[element.id]) delete window.CKEDITOR.instances[element.id]; // Workaround "The instance "xxx" already exists" error in Google Chrome
 	var editor=window.CKEDITOR.replace(element.id,editor_settings);
 	if (!editor) return; // Not supported on this platform
+	window.wysiwyg_editors[id]=editor;
 
 	linked_sheets=document.getElementsByTagName('style');
 	var css='';
@@ -326,6 +327,8 @@ function wysiwyg_editor_init_for(element)
 	} );
 
 	editor.on('instanceReady', function (event) {
+		set_up_comcode_autocomplete(id);
+
 		find_tags_in_editor(editor,element);
 	} );
 	window.setInterval(function() {

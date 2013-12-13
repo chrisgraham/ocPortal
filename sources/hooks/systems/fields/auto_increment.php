@@ -120,7 +120,7 @@ class Hook_fields_auto_increment
 		{
 			return $this->get_field_auto_increment($id,$field['cf_default']);
 		}
-		$ret=post_param($tmp_name,STRING_MAGIC_NULL);
+		$ret=post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 		if ($ret!=STRING_MAGIC_NULL) $ret=str_pad($ret,10,'0',STR_PAD_LEFT);
 		return $ret;
 	}

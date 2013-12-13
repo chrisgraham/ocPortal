@@ -93,17 +93,30 @@ function open_link_as_overlay(ob,width,height,target)
 					window.setTimeout(function() {
 						modal.reset_dimensions(''+width,''+height,false);
 					},0);
+
+					if (img.parentNode)
+					{
+						img.parentNode.parentNode.parentNode.style.width='auto';
+						img.parentNode.parentNode.parentNode.style.height='auto';
+					}
 				};
 
-				dims_func();
-				modal.add_event(window,'resize',function() { dims_func(); });
-
-				var sup=modal.top_window.document.getElementById('lightbox_image').parentNode;
-				sup.removeChild(sup.childNodes[0]);
-				sup.appendChild(img);
+				var lightbox_image=modal.topWindow.document.getElementById('lightbox_image');
+				var sup=lightbox_image.parentNode.parentNode;
+				sup.removeChild(lightbox_image.parentNode);
+				if (sup.childNodes.length!=0)
+				{
+					sup.insertBefore(img,sup.childNodes[0]);
+				} else
+				{
+					sup.appendChild(img);
+				}
 				sup.className='';
 				sup.style.textAlign='center';
 				sup.style.overflow='hidden';
+
+				dims_func();
+				modal.addEvent( window, 'resize', function() { dims_func(); } );
 			}
 			img.src=a.href;
 		},0);
@@ -595,15 +608,15 @@ function ModalWindow()
 			if (this.text!='') {
 				if (this.type=='prompt')
 				{
-					var p=this.element('p');
-					p.appendChild(this.element('label',{
+					var div=this.element('div');
+					div.appendChild(this.element('label',{
 						'for': 'overlay_prompt',
 						'html': this.text
 					}));
-					container.appendChild(p);
+					container.appendChild(div);
 				} else
 				{
-					container.appendChild(this.element('p',{
+					container.appendChild(this.element('div',{
 						'html': this.text
 					}));
 				}

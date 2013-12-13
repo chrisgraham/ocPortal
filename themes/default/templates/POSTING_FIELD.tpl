@@ -104,6 +104,10 @@
 				<p class="posting_rules">{!USE_WEBSITE_RULES,{$PAGE_LINK*,:rules},{$PAGE_LINK*,:privacy}}</p>
 			{+END}
 		{+END}
+
+		<script type="text/javascript">// <![CDATA[
+			{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
+		//]]></script>
 	</td>
 </tr>
 

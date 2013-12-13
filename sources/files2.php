@@ -786,7 +786,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				return '';
 			}
 			$DOWNLOAD_LEVEL--;
-			return $contents;
+			return _detect_character_encoding($contents);
 		}
 	}
 
@@ -1143,7 +1143,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 									$text='';
 								}
 							}
-							return $text;
+							return _detect_character_encoding($text);
 						}
 					}
 				}
@@ -1160,7 +1160,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					fwrite($write_to_file,$text);
 					$text='';
 				}
-				return $text;
+				return _detect_character_encoding($text);
 			}
 		}
 
@@ -1371,7 +1371,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 							fclose($put);
 							if (!$put_no_delete) @unlink($put_path);
 						}
-						return $text;
+						return _detect_character_encoding($text);
 					}
 					if (preg_match("#^Location: (.*)\r\n#i",$line,$matches)!=0)
 					{
@@ -1393,7 +1393,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 									fclose($put);
 									if (!$put_no_delete) @unlink($put_path);
 								}
-								return $text;
+								return _detect_character_encoding($text);
 							}
 						}
 					}
@@ -1526,7 +1526,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				fclose($put);
 				if (!$put_no_delete) @unlink($put_path);
 			}
-			return $input;
+			return _detect_character_encoding($input);
 		}
 
 		$DOWNLOAD_LEVEL--;
@@ -1536,7 +1536,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			fclose($put);
 			if (!$put_no_delete) @unlink($put_path);
 		}
-		return $input;
+		return _detect_character_encoding($input);
 	} else
 	{
 		// PHP streams method

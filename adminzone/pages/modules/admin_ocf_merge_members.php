@@ -158,6 +158,7 @@ class Module_admin_ocf_merge_members
 
 		if ($to_id==$from_id) warn_exit(do_lang_tempcode('MERGE_SAME'));
 
+		// Reassign submitter field values
 		$meta=$GLOBALS['SITE_DB']->query('SELECT m_table,m_name FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_type','MEMBER').' OR '.db_string_equal_to('m_type','?MEMBER').' OR '.db_string_equal_to('m_type','*MEMBER'));
 		foreach ($meta as $m)
 		{
@@ -165,20 +166,49 @@ class Module_admin_ocf_merge_members
 			$db->query_update($m['m_table'],array($m['m_name']=>$to_id),array($m['m_name']=>$from_id),'',NULL,NULL,false,true);
 		}
 
+		// Reassign poster usernames
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_poster_name_if_guest'=>$to_username),array('p_poster'=>$from_id));
 
+		// Merge in post count caching
 		$new_post_count=$GLOBALS['FORUM_DRIVER']->get_member_row_field($from_id,'m_cache_num_posts')+$GLOBALS['FORUM_DRIVER']->get_member_row_field($to_id,'m_cache_num_posts');
 		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_num_posts'=>$new_post_count),array('id'=>$to_id),'',1);
+
+		// Reassign personal galleries
+		if (addon_installed('galleries'))
+		{
+			$personal_galleries=$GLOBALS['SITE_DB']->query('SELECT name FROM galleries WHERE name LIKE \'member_'.strval($from_id).'_\'');
+			foreach ($personal_galleries as $gallery)
+			{
+				$old_gallery_name=$gallery['name'];
+				$new_gallery_name=preg_replace('#^member_\d+_#','member_'.strval($to_id).'_',$old_gallery_name);
+
+				$GLOBALS['SITE_DB']->query_update('galleries',array('parent_id'=>$new_gallery_name),array('parent_id'=>$old_gallery_name));
+				$GLOBALS['SITE_DB']->query_update('images',array('cat'=>$new_gallery_name),array('cat'=>$old_gallery_name));
+				$GLOBALS['SITE_DB']->query_update('videos',array('cat'=>$new_gallery_name),array('cat'=>$old_gallery_name));
+
+				$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$new_gallery_name));
+				if ($test===NULL) // Rename
+				{
+					$GLOBALS['SITE_DB']->query_update('galleries',array('name'=>$new_gallery_name),array('name'=>$old_gallery_name),'',1);
+				} else // Delete
+				{
+					require_code('galleries2');
+					delete_gallery($old_gallery_name);
+				}
+			}
+		}
 
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
 
+		// Merge in CPFs
 		$fields=ocf_get_custom_fields_member($from_id);
 		foreach ($fields as $key=>$val)
 		{
 			if ($val!='') ocf_set_custom_field($to_id,$key,$val);
 		}
 
+		// Delete old member
 		if (post_param_integer('keep',0)!=1)
 			ocf_delete_member($from_id);
 

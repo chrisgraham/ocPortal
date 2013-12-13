@@ -320,6 +320,9 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 		generate_resourcefs_moniker('banner',$name,NULL,NULL,true);
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('banner',$name,$submitter);
+
 	return $name;
 }
 
@@ -365,6 +368,8 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 			}
 		}
+
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$name),array('cv_value'=>$old_name,'cf_type'=>'banner'));
 	}
 
 	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
@@ -434,6 +439,8 @@ function delete_banner($name)
 		warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	}
 
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$name,'cf_type'=>'banner'));
+
 	delete_lang($caption);
 
 	require_code('files2');
@@ -496,6 +503,9 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
 		generate_resourcefs_moniker('banner_type',$id);
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('banner_type',$id);
+
 	return $id;
 }
 
@@ -528,6 +538,8 @@ function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$ma
 			}
 		}
 		$GLOBALS['SITE_DB']->query_update('banners',array('b_type'=>$id),array('b_type'=>$old_id));
+
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$id),array('cv_value'=>$old_id,'cf_type'=>'banner_type'));
 	}
 
 	$GLOBALS['SITE_DB']->query_update('banner_types',array(
@@ -560,6 +572,8 @@ function delete_banner_type($id)
 	$GLOBALS['SITE_DB']->query_update('banners',array('b_type'=>''),array('b_type'=>$id));
 
 	$GLOBALS['SITE_DB']->query_delete('banner_types',array('id'=>$id),'',1);
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'banner_type'));
 
 	log_it('DELETE_BANNER_TYPE',$id);
 

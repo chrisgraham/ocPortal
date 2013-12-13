@@ -124,7 +124,7 @@ class Hook_fields_page_link
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
 
-		$value=post_param($tmp_name,STRING_MAGIC_NULL);
+		$value=post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 		return $value;
 	}
 }

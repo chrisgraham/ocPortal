@@ -167,6 +167,9 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		generate_resourcefs_moniker('event',strval($id),NULL,NULL,true);
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('event',strval($id),$submitter);
+
 	return $id;
 }
 
@@ -415,6 +418,8 @@ function delete_calendar_event($id)
 		}
 	}
 
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'event'));
+
 	log_it('DELETE_CALENDAR_EVENT',strval($id),$e_title);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
@@ -447,6 +452,9 @@ function add_event_type($title,$logo,$external_feed='')
 		require_code('resource_fs');
 		generate_resourcefs_moniker('calendar_type',strval($id),NULL,NULL,true);
 	}
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('calendar_type',strval($id));
 
 	return $id;
 }
@@ -503,6 +511,8 @@ function delete_event_type($id)
 
 	$GLOBALS['SITE_DB']->query_delete('calendar_types',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('calendar_interests',array('t_type'=>$id));
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'event_type'));
 
 	delete_lang($myrow['t_title']);
 

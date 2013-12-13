@@ -114,8 +114,9 @@ class Hook_fields_codename
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
+
 		require_code('type_validation');
-		$value=post_param($tmp_name,STRING_MAGIC_NULL);
+		$value=post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 		if (($value!='') && ($value!=STRING_MAGIC_NULL))
 		{
 			if ((strpos($value,'://')===false) && (substr($value,0,4)=='www.')) $value='http://'.$value;

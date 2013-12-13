@@ -311,6 +311,7 @@ We also have the following which are either unlikely to be useful, or potentiall
   - [tt]edit_with_my_comcode_perms[/tt] -- set this to '1' if content you edit should render with your Comcode permissions. Only enable this if you trust yourself to spot XSS attacks.
   - [tt]site_location[/tt] -- an address for where your website is, sometimes used in meta-data.
   - [tt]google_news_urls[/tt] -- set this to '1' if news URLs should contain a Google-News-friendly entry ID.
+  - [tt]enable_delayed_inserts[/tt] -- set this to '1' to enable MySQL delayed inserts. Delayed inserts can cause a very small performance improvement if log calculations happen quite regularly; however they only work on MyISAM tables and are deprecated as of MySQL 5.6
  - Performance tuning (positive) [not official options as will break normal expectations of how the system will behave / complicate things]
   - [tt]lots_of_data_in_*[/tt] -- set this to '1', with '*' replaced with a database table name, if you want the ocFilter mechanism to work with recursive db lookups rather than one huge flat lookup
   - [tt]disable_cat_cat_perms[/tt] -- set this to '1' if you want to disable catalogue category permissions

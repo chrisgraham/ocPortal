@@ -401,7 +401,7 @@ class Module_cms_quiz extends standard_crud_module
 			if (has_actual_page_access(get_modal_user(),'quiz'))
 			{
 				require_code('activities');
-				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,$submitter);
+				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,NULL/*$submitter*/);
 			}
 		}
 

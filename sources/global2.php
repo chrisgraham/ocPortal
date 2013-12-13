@@ -70,7 +70,7 @@ function init__global2()
 		$output='<?xml version="1.0" ?'.'><response><result></result></response>';
 	}
 
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$KNOWN_AJAX,$KNOWN_UTF8;
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$JAVASCRIPT_BOTTOM,$KNOWN_AJAX,$KNOWN_UTF8;
 
 	@ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
@@ -94,6 +94,7 @@ function init__global2()
 
 	// Initialise some globals
 	$JAVASCRIPTS_DEFAULT=array('javascript'=>1,'javascript_transitions'=>1,'javascript_modalwindow'=>1,'javascript_custom_globals'=>1);
+	$JAVASCRIPT_BOTTOM=array();
 	$RUNNING_SCRIPT_CACHE=array();
 	$BROWSER_DECACHEING_CACHE=NULL;
 	$CHARSET_CACHE=NULL;
@@ -472,10 +473,10 @@ function can_fast_spider_cache()
 	if (isset($_GET['redirect'])) return false;
 	if (isset($_GET['zone'])) return false;
 	if (isset($_GET['date'])) return false;
-	$url_easy=get_self_url_easy();
-	if (strpos($url_easy,'sort=')!==false) return false;
+	/*$url_easy=get_self_url_easy();
+	if (strpos($url_easy,'sort=')!==false) return false;	Actually this stops very useful caching, esp on the forum - better to just reduce the cache time to a fraction of an hour
 	if (strpos($url_easy,'start=')!==false) return false;
-	if (strpos($url_easy,'max=')!==false) return false;
+	if (strpos($url_easy,'max=')!==false) return false;*/
 	return true;
 }
 
@@ -1602,7 +1603,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
  */
 function javascript_tempcode($position=NULL)
 {
-	global $JAVASCRIPTS,$JAVASCRIPT;
+	global $JAVASCRIPTS,$JAVASCRIPT,$JAVASCRIPT_BOTTOM;
 	$js=new ocp_tempcode();
 
 	$minify=(get_param_integer('keep_no_minify',0)==0);
@@ -1620,7 +1621,7 @@ function javascript_tempcode($position=NULL)
 		$JAVASCRIPTS+=$arr_backup;
 	}
 
-	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_button_realtime_rain'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1); // These are all framework ones that add niceities
+	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_button_realtime_rain'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1)+$JAVASCRIPT_BOTTOM; // These are all framework ones that add niceities
 	foreach ($JAVASCRIPTS as $j=>$do_enforce)
 	{
 		if ($position!==NULL)

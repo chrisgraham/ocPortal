@@ -419,7 +419,7 @@ class Module_cms_polls extends standard_crud_module
 			if (has_actual_page_access(get_modal_user(),'polls'))
 			{
 				require_code('activities');
-				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls',1,$submitter);
+				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls',1,NULL/*$submitter*/);
 			}
 		}
 

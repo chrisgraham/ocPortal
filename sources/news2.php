@@ -48,6 +48,9 @@ function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
 
 	decache('side_news_categories');
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('news_category',strval($id));
+
 	return $id;
 }
 
@@ -132,6 +135,8 @@ function delete_news_category($id)
 	}
 
 	$old_title=get_translated_text($myrow['nc_title']);
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'news_category'));
 
 	delete_lang($myrow['nc_title']);
 
@@ -346,6 +351,9 @@ END;
 		require_code('news_sitemap');
 		register_shutdown_function('build_news_sitemap');
 	}
+
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('news_category',strval($id));
 
 	return $id;
 }
@@ -593,6 +601,8 @@ function delete_news($id)
 	decache('side_news');
 	decache('side_news_archive');
 	decache('bottom_news');
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'news'));
 
 	log_it('DELETE_NEWS',strval($id),$_title);
 

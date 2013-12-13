@@ -554,7 +554,7 @@ class Module_cms_blogs extends standard_crud_module
 			if (has_actual_page_access(get_modal_user(),'news')) // NB: no category permission check, as syndication choice was explicit, and news categorisation is a bit more complex
 			{
 				require_code('activities');
-				syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$submitter,true);
+				syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL/*$submitter*/,true);
 			}
 		}
 

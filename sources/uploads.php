@@ -51,6 +51,7 @@ function is_swf_upload($fake_prepopulation=false)
 	foreach ($_POST as $key=>$value)
 	{
 		if (!is_string($value)) continue;	
+		if (!is_string($key)) $key=strval($key);
 
 		if (is_integer($key)) $key=strval($key);
 
@@ -356,7 +357,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			}
 			$result=@rename($path2,$place);
 			global $HTTP_DOWNLOAD_MTIME;
-			if (!is_null($HTTP_DOWNLOAD_MTIME)) @touch($place,$HTTP_DOWNLOAD_MTIME);
+			if ((!is_null($HTTP_DOWNLOAD_MTIME)) && ($HTTP_DOWNLOAD_MTIME!=0)) @touch($place,$HTTP_DOWNLOAD_MTIME);
 			if (!$result)
 			{
 				unlink($path2);

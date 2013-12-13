@@ -116,7 +116,7 @@ class Hook_fields_email
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
 		require_code('type_validation');
-		$value=post_param($tmp_name,STRING_MAGIC_NULL);
+		$value=post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 		if (($value!='') && ($value!=STRING_MAGIC_NULL) && (!is_valid_email_address($value))) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
 		return $value;
 	}

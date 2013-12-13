@@ -293,7 +293,7 @@ class Module_cms_wiki
 		require_code('content2');
 		$meta_data=actual_meta_data_get_fields('wiki_page',NULL);
 
-		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),$meta_data['submitter'],$meta_data['add_time'],$meta_data['views']);
+		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),$meta_data['submitter'],$meta_data['add_time'],$meta_data['views'],false);
 		require_code('permissions2');
 		set_category_permissions_from_environment('wiki_page',strval($id),'cms_wiki');
 
@@ -621,7 +621,7 @@ class Module_cms_wiki
 				else // New
 				{
 					$title=$newlink;
-					$child_id=wiki_add_page($title,'','',$hide_posts);
+					$child_id=wiki_add_page($title,'','',$hide_posts,NULL,false);
 					$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 					$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 					foreach (array_keys($groups) as $group_id)

@@ -459,6 +459,8 @@ function delete_quiz($id)
 	$GLOBALS['SITE_DB']->query_delete('quiz_questions',array('q_quiz'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('quiz_entries',array('q_quiz'=>$id));
 
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'quiz'));
+
 	log_it('DELETE_QUIZ',strval($id),$name);
 
 	if ((addon_installed('occle')) && (!running_script('install')))

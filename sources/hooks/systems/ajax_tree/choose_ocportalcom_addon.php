@@ -37,17 +37,13 @@ class Hook_choose_ocportalcom_addon
 		$url=$stub.'/data/ajax_tree.php?hook=choose_download&id='.rawurlencode($v).'&file_type=tar';
 		require_code('character_sets');
 		$contents=http_download_file($url);
-		$utf=strpos(substr($contents,0,200),'utf-8')!==false; // We have to use 'U' in the regexp to work around a Chrome parser bug (we can't rely on convert_to_internal_encoding being 100% correct)
-		if ((!$utf) && (get_charset()=='utf-8'))
-		{
-			require_code('character_sets');
-			$contents=convert_to_internal_encoding($contents,'iso-8859-1'); // An assumption, that ocPortal.com runs this
-		}
+		$utf=($GLOBALS['HTTP_CHARSET']=='utf-8'); // We have to use 'U' in the regexp to work around a Chrome parser bug (we can't rely on convert_to_internal_encoding being 100% correct)
+		require_code('character_sets');
+		$contents=convert_to_internal_encoding($contents);
 		$contents=preg_replace('#^\s*\<'.'\?xml version="1.0" encoding="[^"]*"\?'.'\>\<request\>#'.($utf?'U':''),'',$contents);
 		$contents=preg_replace('#</request>#'.($utf?'U':''),'',$contents);
 		$contents=preg_replace('#<category [^>]*has_children="false"[^>]*>[^>]*</category>#'.($utf?'U':''),'',$contents);
 		$contents=preg_replace('#<category [^>]*title="Manual install required"[^>]*>[^>]*</category>#'.($utf?'U':''),'',$contents);
-		$contents=convert_to_internal_encoding($contents);
 		return $contents;
 	}
 

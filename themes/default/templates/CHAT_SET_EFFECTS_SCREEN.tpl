@@ -1,5 +1,7 @@
 {TITLE}
 
+{CHAT_SOUND}
+
 <p>
 	{!CHOOSE_SOUND_EFFECTS}
 </p>

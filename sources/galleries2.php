@@ -442,6 +442,9 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	decache('main_gallery_embed');
 	decache('main_image_fader');
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('image',strval($id),$submitter);
+
 	return $id;
 }
 
@@ -575,8 +578,10 @@ function delete_image($id,$delete_full=true)
 	$description=$rows[0]['description'];
 	$cat=$rows[0]['cat'];
 
-	delete_lang($description);
 	delete_lang($title);
+	delete_lang($description);
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'image'));
 
 	// Delete file
 	if ($delete_full)
@@ -855,6 +860,9 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 		}
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('video',strval($id),$submitter);
+
 	return $id;
 }
 
@@ -1007,6 +1015,8 @@ function delete_video($id,$delete_full=true)
 
 	delete_lang($title);
 	delete_lang($description);
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'video'));
 
 	if ($delete_full)
 	{
@@ -1234,6 +1244,9 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 		decache('main_personal_galleries_list');
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('gallery',$name,$g_owner);
+
 	return $name;
 }
 
@@ -1307,6 +1320,8 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 		{
 			$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$name),array('content_id'=>$old_name,'a_type_id'=>$type['id']));
 		}
+
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$name),array('cv_value'=>$old_name,'cf_type'=>'gallery'));
 	}
 
 	if (!is_null($meta_keywords)) seo_meta_set_for_explicit('gallery',$name,$meta_keywords,$meta_description);
@@ -1408,6 +1423,8 @@ function delete_gallery($name)
 	delete_upload('uploads/watermarks','galleries','watermark_top_right','name',$name);
 	delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$name);
 	delete_upload('uploads/watermarks','galleries','watermark_bottom_right','name',$name);
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$name,'cf_type'=>'gallery'));
 
 	delete_lang($rows[0]['fullname']);
 	delete_lang($rows[0]['description']);

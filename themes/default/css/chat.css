@@ -243,8 +243,10 @@
 }
 
 .chat_lobby_friends {
-	float: {!en_left};
-	width: 17em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_left};
+		width: 17em;
+	{+END}
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 
@@ -253,14 +255,16 @@
 }
 
 .chat_lobby_convos {
-	float: {!en_left};
-	width: 24em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_left};
+		width: 24em;
+		margin-{!en_right}: 1em;
+		border-{!en_right}: 1px solid {$GET,pale_border};
+		min-height: 29.5em;
+		padding-{!en_right}: 0.5em;
+	{+END}
 	margin-top: 1em;
 	margin-{!en_left}: 0.75em;
-	padding-{!en_right}: 0.5em;
-	margin-{!en_right}: 1em;
-	border-{!en_right}: 1px solid {$GET,pale_border};
-	min-height: 29.5em;
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 

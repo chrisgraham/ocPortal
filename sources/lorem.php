@@ -910,6 +910,7 @@ function get_text_templates()
 		'FORM_SCREEN_FIELD_DESCRIPTION',
 		'FORM_SCREEN_ARE_REQUIRED',
 		'GALLERY_POPULAR',
+		'AUTOCOMPLETE_LOAD',
 	);
 	return $text_templates;
 }

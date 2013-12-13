@@ -1031,13 +1031,22 @@ class forum_driver_ocf extends forum_driver_base
 	 *
 	 * @param  string			The pattern
 	 * @param  ?integer		Maximum number to return (limits to the most recent active) (NULL: no limit)
+	 * @param  boolean		Whether to limit to friends of the current member, if possible
 	 * @return ?array			The array of matched members (NULL: none found)
 	 */
-	function get_matching_members($pattern,$limit=NULL)
+	function get_matching_members($pattern,$limit=NULL,$friends=false)
 	{
+		if (!addon_installed('chat')) $friends=false;
+		if ($GLOBALS['SITE_DB']->connection_read!=$GLOBALS['FORUM_DB']->connection_read) $friends=false;
+		if (is_guest()) $friends=false;
+
 		$like='m_username LIKE \''.db_encode_like($pattern).'\' AND ';
 		if (($pattern=='') || ($pattern=='%')) $like='';
-		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE '.$like.'id<>'.strval($this->get_guest_id()).' ORDER BY m_last_submit_time DESC',$limit);
+		$sql='SELECT * FROM '.$this->connection->get_table_prefix().'f_members';
+		if ($friends) $sql.=' JOIN '.$this->connection->get_table_prefix().'chat_buddies ON member_liked=id AND member_likes='.strval(get_member());
+		$sql.=' WHERE '.$like.'id<>'.strval($this->get_guest_id());
+		$sql.=' ORDER BY m_last_submit_time DESC';
+		$rows=$this->connection->query($sql,$limit);
 
 		sort_maps_by($rows,'m_username');
 

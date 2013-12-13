@@ -349,6 +349,12 @@ function namelike_script()
 	$id=str_replace('*','%',get_param('id',false,true));
 	$special=get_param('special','');
 
+	@ini_set('ocproducts.xss_detect','0');
+
+	header('Content-Type: text/xml');
+	echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
+	echo '<request><result>';
+
 	if ($special=='admin_search')
 	{
 		$names=array();
@@ -377,6 +383,11 @@ function namelike_script()
 			if (count($names)>10) $names=array();
 			sort($names);
 		}
+
+		foreach ($names as $name)
+		{
+			echo '<option value="'.escape_html($name).'" displayname="" />';
+		}
 	}
 	elseif ($special=='search')
 	{
@@ -396,6 +407,11 @@ function namelike_script()
 			if ($search['cnt']>5)
 				$names[]=$search['s_primary'];
 		}
+
+		foreach ($names as $name)
+		{
+			echo '<option value="'.escape_html($name).'" displayname="" />';
+		}
 	} else
 	{
 		if ((strlen($id)==0) && (addon_installed('chat')))
@@ -404,28 +420,43 @@ function namelike_script()
 			$names=array();
 			foreach ($rows as $row)
 			{
-				$names[]=$GLOBALS['FORUM_DRIVER']->get_username($row['member_liked']);
+				$names[$row['member_liked']]=$GLOBALS['FORUM_DRIVER']->get_username($row['member_liked']);
+			}
+
+			foreach ($names as $name)
+			{
+				echo '<option value="'.escape_html($name).'" displayname="" />';
 			}
 		} else
 		{
 			$names=array();
-			if (addon_installed('authors'))
+			if ((addon_installed('authors')) && ($special=='author'))
 			{
-				if ($special=='author')
+				$num_authors=$GLOBALS['SITE_DB']->query_select_value('authors','COUNT(*)');
+				$like=($num_authors<1000)?db_encode_like('%'.$id.'%'):db_encode_like($id.'%'); // performance issue
+				$rows=$GLOBALS['SITE_DB']->query('SELECT author FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'authors WHERE author LIKE \''.$like.'\' ORDER BY author',15);
+				$names=collapse_1d_complexity('author',$rows);
+
+				foreach ($names as $name)
 				{
-					$num_authors=$GLOBALS['SITE_DB']->query_select_value('authors','COUNT(*)');
-					$like=($num_authors<1000)?db_encode_like('%'.$id.'%'):db_encode_like($id.'%'); // performance issue
-					$rows=$GLOBALS['SITE_DB']->query('SELECT author FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'authors WHERE author LIKE \''.$like.'\' ORDER BY author',15);
-					$names=collapse_1d_complexity('author',$rows);
+					echo '<option value="'.escape_html($name).'" displayname="" />';
 				}
-			}
-
-			$likea=$GLOBALS['FORUM_DRIVER']->get_matching_members($id.'%',15);
-
-			foreach ($likea as $l)
+			} else
 			{
-				if (count($names)<15)
-					$names[]=$GLOBALS['FORUM_DRIVER']->mrow_username($l);
+				$likea=$GLOBALS['FORUM_DRIVER']->get_matching_members($id.'%',15);
+				if ((count($likea)==15) && (addon_installed('chat')) && (!is_guest()))
+					$likea=$GLOBALS['FORUM_DRIVER']->get_matching_members($id.'%',15,true); // Limit to friends, if possible
+
+				foreach ($likea as $l)
+				{
+					if (count($names)<15)
+						$names[mrow_id($l)]=$GLOBALS['FORUM_DRIVER']->mrow_username($l);
+				}
+
+				foreach ($names as $member_id=>$name)
+				{
+					echo '<option value="'.escape_html($name).'" displayname="'.escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id,true)).'" />';
+				}
 			}
 		}
 
@@ -433,15 +464,6 @@ function namelike_script()
 		$names=array_unique($names);
 	}
 
-	@ini_set('ocproducts.xss_detect','0');
-
-	header('Content-Type: text/xml');
-	echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
-	echo '<request><result>';
-	foreach ($names as $name)
-	{
-		echo '<option value="'.escape_html($name).'" />';
-	}
 	echo '</result></request>';
 }
 

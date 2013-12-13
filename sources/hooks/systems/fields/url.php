@@ -126,7 +126,7 @@ class Hook_fields_url
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		$value=post_param($tmp_name,STRING_MAGIC_NULL);
+		$value=post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 		if ($value!=STRING_MAGIC_NULL) $value=fixup_protocolless_urls($value);
 		return $value;
 	}

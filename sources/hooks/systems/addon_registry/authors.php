@@ -129,7 +129,7 @@ class Hook_addon_registry_authors
 	function tpl_previews()
 	{
 		return array(
-			'AUTHOR_MANAGE_SCREEN.tpl'=>'author_manage_screen',
+			'AUTHOR_MANAGE_SCREEN.tpl'=>'administrative__author_manage_screen',
 			'AUTHOR_SCREEN.tpl'=>'author_screen',
 			'AUTHOR_POPUP.tpl'=>'author_popup_window',
 			'AUTHOR_POPUP_WINDOW_DEFINED.tpl'=>'author_popup_window',
@@ -145,7 +145,7 @@ class Hook_addon_registry_authors
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__author_manage_screen()
+	function tpl_preview__administrative__author_manage_screen()
 	{
 		require_lang('global');
 		require_lang('authors');

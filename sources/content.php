@@ -35,6 +35,58 @@ Notes about hook info...
 */
 
 /**
+ * Given a particular bit of feedback content, check if the user may access it.
+ *
+ * @param  MEMBER			User to check
+ * @param  ID_TEXT		Content type
+ * @param  ID_TEXT		Content ID
+ * @param  ID_TEXT		Content type type
+ * @return boolean		Whether there is permission
+ */
+function may_view_content_behind($member_id,$content_type,$content_id,$type_has='content_type')
+{
+	require_code('content');
+
+	$permission_type_code=convert_ocportal_type_codes($type_has,$content_type,'permissions_type_code');
+
+	$module=convert_ocportal_type_codes($type_has,$content_type,'module');
+	if ($module=='') $module=$content_id;
+
+	$category_id=mixed();
+	$content_type=convert_ocportal_type_codes($type_has,$content_type,'content_type');
+	if ($content_type!='')
+	{
+		require_code('content');
+		$content_type_ob=get_content_object($content_type);
+		$info=$content_type_ob->info();
+		if (isset($info['category_field']))
+		{
+			list(,,,$content)=content_get_details($content_type,$content_id);
+			if (!is_null($content))
+			{
+				$category_field=$info['category_field'];
+				if (is_array($category_field))
+				{
+					$category_field=array_pop($category_field);
+					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
+					if ($content_type=='catalogue_entry')
+					{
+						$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
+						if (!has_category_access($member_id,'catalogues_catalogue',$catalogue_name))
+							return false;
+					}
+				} else
+				{
+					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
+				}
+			}
+		}
+	}
+
+	return ((has_actual_page_access($member_id,$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($member_id,$permission_type_code,$category_id))));
+}
+
+/**
  * Get the CMA hook object for a content type. Also works for resource types (i.e. if it's a resource, although not actually considered content technically).
  *
  * @param  ID_TEXT	The content type

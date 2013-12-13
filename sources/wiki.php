@@ -281,6 +281,8 @@ function wiki_delete_post($post_id,$member=NULL)
 
 	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_DELETE_POST','the_page'=>$post_id,'ip'=>get_ip_address(),'member_id'=>$member,'date_and_time'=>time()));
 
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($post_id),'cf_type'=>'wiki_post'));
+
 	// Stat
 	update_stat('num_wiki_posts',-1);
 
@@ -306,7 +308,7 @@ function wiki_delete_post($post_id,$member=NULL)
  * @param  ?TIME			The edit time (NULL: N/A)
  * @return AUTO_LINK		The page ID
  */
-function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_time=NULL,$views=0,$meta_keywords='',$meta_description='',$edit_date=NULL)
+function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_time=NULL,$views=0,$meta_keywords='',$meta_description='',$edit_date=NULL,$send_notification=true)
 {
 	if (is_null($member)) $member=get_member();
 	if (is_null($add_time)) $add_time=time();
@@ -348,9 +350,12 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_
 		seo_meta_set_for_explicit('wiki_page',strval($id),$meta_keywords,$meta_description);
 	}
 
-	if (post_param_integer('send_notification',NULL)!==0)
+	if ($send_notification)
 	{
-		dispatch_wiki_page_notification($id,'ADD');
+		if (post_param_integer('send_notification',NULL)!==0)
+		{
+			dispatch_wiki_page_notification($id,'ADD');
+		}
 	}
 
 	if ((addon_installed('occle')) && (!running_script('install')))
@@ -456,6 +461,8 @@ function wiki_delete_page($id)
 	$GLOBALS['SITE_DB']->query_delete('wiki_children',array('parent_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('wiki_children',array('child_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('wiki_changes',array('the_page'=>$id));
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'wiki_page'));
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
@@ -564,7 +571,7 @@ function wiki_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 				$insbreadcrumbs->attach(hyperlink($url,escape_html($current_title),false,false,$this_link_virtual_root?do_lang_tempcode('VIRTUAL_ROOT'):do_lang_tempcode('GO_BACKWARDS_TO',$current_title),NULL,NULL,'up'));
 			} else
 			{
-				$insbreadcrumbs->attach($current_title);
+				$insbreadcrumbs->attach(protect_from_escaping('<span>'.escape_html($current_title).'</span>'));
 			}
 		}
 

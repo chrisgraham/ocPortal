@@ -458,7 +458,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 	if (($bitmask & IGNORE_CUSTOM_ZONES)!=0)
 	{
-		if ((file_exists(get_file_base().'/'.$filepath.'/index.php')) && (file_exists(get_file_base().'/'.$filepath.'/pages')) && (!in_array(strtolower($filename),array('adminzone','collaboration','cms','forum','site'))))
+		if ((is_dir(get_file_base().'/'.$filepath)) && (file_exists(get_file_base().'/'.$filepath.'/index.php')) && (file_exists(get_file_base().'/'.$filepath.'/pages')) && (!in_array(strtolower($filename),array('adminzone','collaboration','cms','forum','site'))))
 			return true;
 	}
 

@@ -1,5 +1,5 @@
 <div class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/VideoObject">
-	<div class="flow_mode_video left float_separation">
+	<div class="media_box">
 		{VIDEO_PLAYER}
 	</div>
 	<div class="lined_up_boxes">

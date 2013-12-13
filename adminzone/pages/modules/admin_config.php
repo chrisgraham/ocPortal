@@ -612,7 +612,7 @@ class Module_admin_config
 		$category=get_param('id','MAIN');
 
 		// Make sure we haven't locked ourselves out due to clean URL support
-		if ((post_param('url_scheme','RAW')!='RAW') && (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') && ((!file_exists(get_file_base().'/.htaccess')) || (strpos(file_get_contents(get_file_base().'/.htaccess'),'RewriteEngine on')===false)))
+		if ((post_param('url_scheme','RAW')!='RAW') && (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') && ((!file_exists(get_file_base().DIRECTORY_SEPARATOR.'.htaccess')) || (strpos(file_get_contents(get_file_base().DIRECTORY_SEPARATOR.'.htaccess'),'RewriteEngine on')===false)))
 		{
 			warn_exit(do_lang_tempcode('BEFORE_MOD_REWRITE'));
 		}

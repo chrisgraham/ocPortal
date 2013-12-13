@@ -142,8 +142,8 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 			afm_make_directory($zone.'/pages/html/'.$lang,false,true);
 		}
 		afm_make_file($zone.'/index.php',file_get_contents(get_file_base().'/site/index.php'),false);
-		if (file_exists(get_file_base().'/pages/.htaccess'))
-			afm_make_file($zone.'/pages/.htaccess',file_get_contents(get_file_base().'/pages/.htaccess'),false);
+		if (file_exists(get_file_base().'/pages'.DIRECTORY_SEPARATOR.'.htaccess'))
+			afm_make_file($zone.'/pages/.htaccess',file_get_contents(get_file_base().'/pages'.DIRECTORY_SEPARATOR.'.htaccess'),false);
 		$index_php=array('pages/comcode','pages/comcode/EN','pages/comcode_custom','pages/comcode_custom/EN',
 								'pages/html','pages/html/EN','pages/html_custom','pages/html_custom/EN',
 								'pages/modules','pages/modules_custom','pages');

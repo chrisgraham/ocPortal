@@ -17,7 +17,8 @@ Comcode is written and laid out as plain-text. Within this plain text certain sy
 [*] Comcode tags may be used to add content, such as  [tt][block]main_contact_us[/block][/tt] to add a dynamic comments box
 [*] horizontal lines may be added by placing a few '-'s on their own line
 [*] HTML style entities can be use to place special characters inside the text
-[*] member profile links can be placed by typing [tt]{{username-goes-here}}[/tt], or [tt]{{?username-goes-here}}[/tt] to show extra details when the mouse is hovered over ([concept]OCF[/concept] only)
+[*] member profile links can be placed by typing [tt]{{username-goes-here}}[/tt], or [tt]{{?username-goes-here}}[/tt] to show extra details when the mouse is hovered over and send a notification to the referenced member ([concept]OCF[/concept] only)
+[*] member profile links can also be placed by typing the simpler syntax (OCF-only, always shows the extra details), [tt]@username-goes-here[/tt]; the simpler syntax is a bit more flimsy due to the possibility for ambiguity if usernames have spaces
 [*] [concept]Wiki+[/concept] page-links can be placed by typing [tt][[pagename-goes-here]][/tt], or [tt][[pagename-goes-here#anchor]][/tt]
 [*] table syntax (described in separate section)
 [*] list syntax (described in separate section)

@@ -13,11 +13,14 @@
 				{+END}
 			{+END}
 		{+END}
+
+		{+START,IF,{$NEQ,{$GET,rating_loop},0}}
+			<span class="reviews_average horiz_field_sep">({!AVERAGED})</span>
+		{+END}
+
 		{+START,IF,{$EQ,{$GET,rating_loop},0}}
 			{!UNRATED}
 		{+END}
-
-		<span class="reviews_average horiz_field_sep">({!AVERAGE})</span>
 	{+END}
 
 	<div class="boxless_space">

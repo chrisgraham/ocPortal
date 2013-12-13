@@ -114,6 +114,20 @@
 
 			<!-- <p><a href="{URL*}">{!TO_DOWNLOAD_VIDEO}</a></p> -->
 		{+END}
+
+		{+START,IF,{SLIDESHOW}}
+			{+START,IF_NON_EMPTY,{E_TITLE}{COMMENTS}}
+				<p itemprop="caption">
+					{+START,IF_NON_EMPTY,{E_TITLE}}
+						<strong>{E_TITLE*}</strong>{+START,IF_NON_EMPTY,{COMMENTS}} &ndash;{+END}
+					{+END}
+
+					{+START,IF_NON_EMPTY,{COMMENTS}}
+						{COMMENTS}
+					{+END}
+				</p>
+			{+END}
+		{+END}
 	</div>
 
 	{+START,IF,{$NOT,{SLIDESHOW}}}

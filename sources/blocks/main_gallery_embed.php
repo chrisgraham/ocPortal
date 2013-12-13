@@ -193,9 +193,10 @@ class Block_main_gallery_embed
 					case 'image':
 						// Display image
 						$row_image=$c[0];
+						$entry_title=get_translated_text($row_image['title']);
 						$view_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row_image['id'],'root'=>$root),$zone);
 						$thumb_url=ensure_thumbnail($row_image['url'],$row_image['thumb_url'],'galleries','images',$row_image['id']);
-						$thumb=do_image_thumb($thumb_url,'',true);
+						$thumb=do_image_thumb($thumb_url,$entry_title,true);
 						$full_url=$row_image['url'];
 						$file_size=url_is_local($full_url)?file_exists(get_custom_file_base().'/'.rawurldecode($full_url))?strval(filesize(get_custom_file_base().'/'.rawurldecode($full_url))):'':'';
 						if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
@@ -214,7 +215,7 @@ class Block_main_gallery_embed
 						$entry_map=array(
 							'_GUID'=>($guid!='')?$guid:'043ac7d15ce02715ac02309f6e8340ff',
 							'RATING_DETAILS'=>$entry_rating_details,
-							'TITLE'=>get_translated_text($row_image['title']),
+							'TITLE'=>$entry_title,
 							'DESCRIPTION'=>get_translated_tempcode($row_image['description']),
 							'ID'=>strval($row_image['id']),
 							'MEDIA_TYPE'=>'image',
@@ -239,11 +240,12 @@ class Block_main_gallery_embed
 					case 'video':
 						// Display video
 						$row_video=$c[0];
+						$entry_title=get_translated_text($row_video['title']);
 						$view_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row_video['id'],'root'=>$root),$zone);
 						$thumb_url=$row_video['thumb_url'];
 						if (($thumb_url!='') && (url_is_local($thumb_url))) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 						if ($thumb_url=='') $thumb_url=find_theme_image('na');
-						$thumb=do_image_thumb($thumb_url,'',true);
+						$thumb=do_image_thumb($thumb_url,$entry_title,true);
 						$full_url=$row_video['url'];
 						if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
 						$thumb_url=$row_video['thumb_url'];
@@ -261,7 +263,7 @@ class Block_main_gallery_embed
 						$entry_map=array(
 							'_GUID'=>($guid!='')?$guid:'66b7fb4d3b61ef79d6803c170d102cbf',
 							'RATING_DETAILS'=>$entry_rating_details,
-							'TITLE'=>get_translated_text($row_video['title']),
+							'TITLE'=>$entry_title,
 							'DESCRIPTION'=>get_translated_tempcode($row_video['description']),
 							'ID'=>strval($row_video['id']),
 							'MEDIA_TYPE'=>'video',

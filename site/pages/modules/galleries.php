@@ -865,6 +865,7 @@ class Module_galleries
 
 			if (($type==$probe_type) && ($row['id']==$probe_id)) continue;
 
+			$entry_title=get_translated_text($row['title']);
 			$entry_description=get_translated_tempcode($row['description']);
 
 			$probe_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'flow_mode_interface'=>get_param_integer('flow_mode_interface',NULL),'probe_type'=>$type,'probe_id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
@@ -884,11 +885,11 @@ class Module_galleries
 				$_edit_url=build_url(array('page'=>'cms_galleries','type'=>($type=='image')?'__ed':'__ev','id'=>$row['id'],'redirect'=>get_self_url(true)),get_module_zone('cms_galleries'));
 
 			$class=(($type==$probe_type) && ($row['id']==$probe_id))?'currentimage':'';
-			$thumb=do_image_thumb($thumb_url,$entry_description);
+			$thumb=do_image_thumb($thumb_url,$entry_title);
 			$entries->attach(do_template('GALLERY_FLOW_ENTRY',array(
 				'_GUID'=>'ff75c904ba7fe857484874483ed65f5a',
-				'DESCRIPTION'=>get_translated_tempcode($row['description']),
-				'_TITLE'=>get_translated_text($row['title']),
+				'DESCRIPTION'=>$entry_description,
+				'_TITLE'=>$entry_title,
 				'TYPE'=>$type,
 				'ID'=>strval($row['id']),
 				'VIEWS'=>strval($row[$type.'_views']),

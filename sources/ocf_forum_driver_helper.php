@@ -250,7 +250,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	{
 		if (($filter_topic_title=='') && ($filter_topic_description==''))
 		{
-			$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics WHERE ('.$id_list.')'.$topic_filter_sup;
+			$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.')'.$topic_filter_sup;
 		} else
 		{
 			$query='';
@@ -262,7 +262,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 			foreach ($topic_filters as $topic_filter)
 			{
 				if ($query!='') $query.=' UNION ';
-				$query.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
+				$query.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
 			}
 		}
 	} else
@@ -276,13 +276,24 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		foreach ($topic_filters as $topic_filter)
 		{
 			if ($query!='') $query.=' UNION ';
-			$query.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
+			$query.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
 		}
 	}
+
+	$post_query_select='p.p_title,t.text_parsed,t.id,p.p_poster,p.p_poster_name_if_guest';
+	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts('t.text_original');
+	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
+	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.='USE INDEX(in_topic) ';
+	$post_query_sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$post_query_where.' ORDER BY p_time,p.id';
+
+	if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result)
+		$query.=' AND EXISTS('.$post_query_sql.')';
+
 	$max_rows=$this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
 	if ($limit==0) return array();
 	$order_by=(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC';
 	$rows=$this_ref->connection->query($query.' ORDER BY '.$order_by,$limit,$start,false,true);
+
 	$out=array();
 	foreach ($rows as $i=>$r)
 	{
@@ -300,12 +311,8 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['closed']=1-$r['t_is_open'];
 		$out[$i]['forum_id']=$r['t_forum_id'];
 
-		$select='p.p_title,t.text_parsed,t.id,p.p_poster,p.p_poster_name_if_guest';
-		$where='p_validated=1 AND p_topic_id='.strval($out[$i]['id']).' '.not_like_spacer_posts('t.text_original');
-		$sql='SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
-		if (strpos(get_db_type(),'mysql')!==false) $sql.='USE INDEX(in_topic) ';
-		$sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY p_time,p.id';
-		$fp_rows=$this_ref->connection->query($sql,1);
+		$post_query_sql=str_replace('top.id',strval($out[$i]['id']),$post_query_sql);
+		$fp_rows=$this_ref->connection->query($post_query_sql,1);
 		if (!array_key_exists(0,$fp_rows))
 		{
 			unset($out[$i]);

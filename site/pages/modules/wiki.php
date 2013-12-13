@@ -112,7 +112,7 @@ class Module_wiki
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','sadd_date',array('add_date'));
 
 			$lang_key=lang_code_to_default_content('WIKI_HOME',false,1);
-			$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'edit_date'=>NULL,'hide_posts'=>0,'wiki_views'=>0,'add_date'=>time(),'description'=>insert_lang_comcode('',2),'notes'=>'','title'=>$lang_key));
+			$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()+1,'edit_date'=>NULL,'hide_posts'=>0,'wiki_views'=>0,'add_date'=>time(),'description'=>insert_lang_comcode('',2),'notes'=>'','title'=>$lang_key));
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 			{

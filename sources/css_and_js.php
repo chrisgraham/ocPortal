@@ -96,7 +96,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 
 	// Load up as Tempcode
 	$_sheet=_css_compile($destination_theme,$destination_theme,$css_file.'__tmp_copy',$temp_file,false);
-	unlink($temp_file);
+	@unlink($temp_file);
 	sync_file($temp_file);
 	$sheet=$_sheet[1];
 
@@ -178,7 +178,7 @@ function js_compile($j,$js_cache_path,$minify=true)
 	sync_file($js_cache_path);
 	if (!$success_status)
 	{
-		touch($js_cache_path,0); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
+		touch($js_cache_path,time()-60*60*24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
 	}
 }
 
@@ -217,7 +217,7 @@ function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=t
 	sync_file($css_cache_path);
 	if (!$success_status)
 	{
-		touch($css_cache_path,0); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
+		touch($css_cache_path,time()-60*60*24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
 	}
 }
 

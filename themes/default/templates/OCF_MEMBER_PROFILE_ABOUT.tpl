@@ -147,7 +147,7 @@
 						{+END}
 					{+END}
 
-					{+START,IF_NON_EMPTY,{SIGNATURE}}
+					{+START,IF_NON_EMPTY,{$TRIM,{SIGNATURE}}}
 						<tr>
 							<th class="de_th">
 								{!SIGNATURE}:

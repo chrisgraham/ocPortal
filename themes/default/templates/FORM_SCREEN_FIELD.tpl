@@ -24,6 +24,12 @@
 
 		<span id="required_readable_marker__{$GET,randomised_id}" style="display: {$?,{REQUIRED},inline,none}"><span class="required_star">*</span> <span class="accessibility_hidden">{!REQUIRED}</span></span>
 
+		{+START,IF_NON_EMPTY,{NAME}}
+			<script type="text/javascript">// <![CDATA[
+				{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
+			//]]></script>
+		{+END}
+
 		{+START,IF_PASSED,DESCRIPTION_SIDE}{+START,IF_NON_EMPTY,{DESCRIPTION_SIDE}}
 			<p class="associated_details">{DESCRIPTION_SIDE}</p>
 		{+END}{+END}

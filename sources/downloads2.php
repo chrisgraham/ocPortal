@@ -108,7 +108,7 @@ function dload_script()
 	// Filename
 	$full=$myrow['url'];
 	$breakdown=@pathinfo($full) OR warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',$full));
-//	$filename=$breakdown['basename'];
+	//$filename=$breakdown['basename'];
 	if (!array_key_exists('extension',$breakdown)) $extension=''; else $extension=strtolower($breakdown['extension']);
 	if (url_is_local($full)) $_full=get_custom_file_base().'/'.rawurldecode(/*filter_naughty*/($full)); else $_full=rawurldecode($full);
 
@@ -277,6 +277,9 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 		copy_notifications_to_new_child('download',strval($parent_id),strval($id));
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('download_category',strval($id));
+
 	return $id;
 }
 
@@ -350,6 +353,8 @@ function delete_download_category($category_id)
 
 	require_code('files2');
 	delete_upload('uploads/repimages','download_categories','rep_image','id',$category_id);
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($category_id),'cf_type'=>'download_category'));
 
 	$GLOBALS['SITE_DB']->query_delete('download_categories',array('id'=>$category_id),'',1);
 	$GLOBALS['SITE_DB']->query_update('download_downloads',array('category_id'=>$rows[0]['parent_id']),array('category_id'=>$category_id));
@@ -797,6 +802,9 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 		generate_resourcefs_moniker('download',strval($id),NULL,NULL,true);
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('download',strval($id),$submitter);
+
 	return $id;
 }
 
@@ -1000,6 +1008,8 @@ function delete_download($id,$leave=false)
 	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','additional_details'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'download'));
 
 	delete_lang($myrow['name']);
 	delete_lang($myrow['description']);

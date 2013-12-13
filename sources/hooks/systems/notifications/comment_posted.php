@@ -147,7 +147,8 @@ class Hook_Notification_comment_posted extends Hook_Notification
 			$members=array();
 			foreach ($_members as $member=>$setting)
 			{
-				if (may_view_content_behind_feedback_code($member,$type_id,$id))
+				require_code('content');
+				if (may_view_content_behind($member,$type_id,$id,'feedback_type_code'))
 					$members[$member]=$setting;
 			}
 		} else $members=$_members;

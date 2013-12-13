@@ -77,7 +77,7 @@ function update_ajax_member_list(target,special,delayed,e)
 	var v=target.value;
 
 	window.current_list_for=target;
-	var url='{$BASE_URL_NOHTTP}/data/namelike.php?id='+encodeURIComponent(v);
+	var url='{$FIND_SCRIPT;,namelike}?id='+encodeURIComponent(v);
 	if (special) url=url+'&special='+special;
 
 	if (typeof window.do_ajax_request!='undefined') do_ajax_request(url+keep_stub(),update_ajax_member_list_response);
@@ -116,13 +116,16 @@ function update_ajax_member_list_response(result,list_contents)
 
 	if (list_contents.childNodes.length==0) return;
 
-	var i,item;
+	var i,item,displaytext;
 	for (i=0;i<list_contents.childNodes.length;i++)
 	{
 		item=document.createElement('option');
 		item.value=list_contents.childNodes[i].getAttribute('value');
-		item.text=list_contents.childNodes[i].getAttribute('value');
-		item.innerText=list_contents.childNodes[i].getAttribute('value');
+		displaytext=item.value;
+		if (list_contents.childNodes[i].getAttribute('displayname')!='')
+			displaytext+=' ('+list_contents.childNodes[i].getAttribute('displayname')+')';
+		item.text=displaytext;
+		item.innerText=displaytext;
 		list.appendChild(item);
 	}
 	item=document.createElement('option');

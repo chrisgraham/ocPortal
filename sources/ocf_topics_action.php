@@ -119,6 +119,9 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 		generate_resourcefs_moniker('topic',strval($topic_id),NULL,NULL,true);
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('topic',strval($topic_id));
+
 	return $topic_id;
 }
 

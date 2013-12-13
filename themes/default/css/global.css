@@ -269,12 +269,12 @@ th, .fake_th {
 th a, th a:hover, th a:visited, .fake_th a, .fake_th a:hover, .fake_th a:visited {
 	color: {$GET,box_title_text};
 }
-thead>tr>th, .boxless_space .box thead>tr>th, .pte_set_box .box thead>tr>th {
+thead>tr>th, .boxless_space .box>table>thead>tr>th, .pte_set_box .box>table>thead>tr>th {
 	background-color: {$GET,box_title_background};
 	color: {$GET,box_title_text};
 	background-repeat: repeat-x;
 }
-.box thead>tr>th {
+.box>table>thead>tr>th {
 	background: {$GET,point_of_interest_background};
 	color: {$GET,area_key_text};
 }
@@ -559,6 +559,7 @@ header h1 {
 	margin-bottom: 3em;
 	position: relative;
 	left: -0.8em;
+	margin-top: 3px;
 }
 .hero_section h1 {
 	font-size: 2.6em;
@@ -1656,9 +1657,11 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 .box.overlay {
 	{$BETA_CSS_PROPERTY,box-shadow: 0px 0px 20px {$GET,dark_shadow};}
 }
-
 .box.overlay.lightbox>.box_inner {
 	margin: 0;
+}
+.box.overlay .associated_links_block_group {
+	margin: 1em;
 }
 
 /* Boxes with arrows on the top */
@@ -3981,6 +3984,24 @@ td>.comcode_code_wrap>.comcode_quote, td>.comcode_code_wrap>.comcode_code {
 }
 
 .shocker_right {
+}
+
+.comcode_member_link {
+	border: 1px solid {$GET,standard_border};
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+	display: inline-block;
+	padding: 0.2em 0.25em;
+	vertical-align: middle;
+	position: relative;
+	top: -0.3em;
+	margin-top: 0.25em; /* Expands the whole line just enough so that our top offset doesn't cause an overflow */
+}
+.comcode_member_link img {
+	cursor: inherit;
+}
+.comcode_member_link a {
+	color: {$GET,area_text};
+	text-decoration: none;
 }
 
 .attachment {

@@ -986,6 +986,12 @@ function ecv_REQUIRE_JAVASCRIPT($lang,$escaped,$param)
 {
 	if (isset($param[0]))
 	{
+		if ((isset($param[1])) && ($param[1]=='1'))
+		{
+			global $JAVASCRIPT_BOTTOM;
+			$JAVASCRIPT_BOTTOM[$param[0]]=1;
+		}
+
 		require_javascript($param[0]);
 		/*// Has to do this inline, as you're not allowed to reference scripts outside head
 		if (!array_key_exists($param[0],$GLOBALS['JAVASCRIPTS']))
@@ -2162,7 +2168,7 @@ function ecv_IS_IN_GROUP($lang,$escaped,$param)
 		$param_2=array();
 		foreach ($param as $group)
 		{
-			if ((substr($group,0,1)=='!') && (is_numeric(substr($group,1))))
+			if ((substr($group,0,1)=='@') && (is_numeric(substr($group,1))))
 			{
 				$member_id=intval(substr($group,1));
 			} else

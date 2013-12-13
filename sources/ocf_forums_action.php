@@ -146,6 +146,9 @@ function ocf_make_forum($name,$description,$forum_grouping_id,$access_mapping,$p
 		copy_notifications_to_new_child('ocf_topic',strval($parent_forum),strval($forum_id));
 	}
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('forum',strval($forum_id));
+
 	return $forum_id;
 }
 

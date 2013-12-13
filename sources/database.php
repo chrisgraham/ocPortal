@@ -579,7 +579,7 @@ class database_driver
 
 		if (count($all_values)==1) // usually $all_values only has length of 1
 		{
-			if ((in_array($table,array('stats','banner_clicks','member_tracking','usersonline_track','download_logging'))) && (substr(get_db_type(),0,5)=='mysql'))
+			if ((in_array($table,array('stats','banner_clicks','member_tracking','usersonline_track','download_logging'))) && (substr(get_db_type(),0,5)=='mysql') && (get_value('enable_delayed_inserts')==='1'))
 			{
 				$query='INSERT DELAYED INTO '.$this->table_prefix.$table.' ('.$keys.') VALUES ('.$all_values[0].')';
 			} else
@@ -1008,12 +1008,15 @@ class database_driver
 			elseif ($max!==NULL) $real_query.=' LIMIT '.strval($max);
 			elseif ($start!==NULL) $real_query.=' LIMIT '.strval($start).',30000000';
 
-			$ret=$this->static_ob->db_query('SHOW FULL PROCESSLIST',$connection);
-			foreach ($ret as $process)
+			$ret=$this->static_ob->db_query('SHOW FULL PROCESSLIST',$connection,NULL,NULL,true);
+			if (is_array($ret))
 			{
-				if ($process['Info']==$real_query)
+				foreach ($ret as $process)
 				{
-					$this->static_ob->db_query('KILL '.strval($process['Id']),$connection,NULL,NULL,true);
+					if ($process['Info']==$real_query)
+					{
+						$this->static_ob->db_query('KILL '.strval($process['Id']),$connection,NULL,NULL,true);
+					}
 				}
 			}
 		}

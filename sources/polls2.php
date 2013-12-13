@@ -96,6 +96,9 @@ function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a
 
 	log_it('ADD_POLL',strval($id),$question);
 
+	require_code('member_mentions');
+	dispatch_member_mention_notifications('poll',strval($id),$submitter);
+
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
@@ -214,6 +217,8 @@ function delete_poll($id)
 	$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
 
 	persistent_cache_delete('POLL');
+
+	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'poll'));
 
 	$question=get_translated_text($rows[0]['question']);
 

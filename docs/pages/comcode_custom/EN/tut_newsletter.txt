@@ -27,7 +27,7 @@ Newsletters are created using Comcode, and sent out in a dual format: both text 
 [box="Important note" width="25em" float="right"]You can use the WYSIWYG editor for making newsletters if you wish, but it is not advisable because plain-text readers will get some really ugly plain-text from it. If you make the newsletter using manual Comcode, the plain-text readers will see the Comcode, which is intrinsically easy to read.[/box]
 When you send a newsletter you choose where to send it. Usergroups/newsletters with no members (to be precise, no members that can receive emails) will not be shown as options.
 
-In order to change the newsletter appearance, to something more pleasing, you may wish to edit the [tt]NEWSLETTER_DEFAULT[/tt] template. This is a template that defines the default newsletter, and hence you may fill it with Comcode to surround your actual newsletter text, such as to format your newsletter mails in an attractive manner. Also, the US CAN-SPAM act and the UK-equivalent (and likely many other laws in various countries) require you to include a physical address in your mailings, so you should include this in the template. You also are likely to want to edit the [tt]MAIL_WRAP[/tt] template, which defines how e-mails generally look. You will almost certainly want to edit these templates within the default theme, because if you are sending newsletters from the Admin Zone almost certainly the default theme will be the active theme when the newsletters are generated.
+In order to change the newsletter appearance, to something more pleasing, you may wish to edit the [tt]NEWSLETTER_DEFAULT_FCOMCODE[/tt] template. This is a template that defines the default newsletter, and hence you may fill it with Comcode to surround your actual newsletter text, such as to format your newsletter mails in an attractive manner. Also, the US CAN-SPAM act and the UK-equivalent (and likely many other laws in various countries) require you to include a physical address in your mailings, so you should include this in the template. You also are likely to want to edit the [tt]MAIL_WRAP[/tt] template, which defines how e-mails generally look. You will almost certainly want to edit these templates within the default theme, because if you are sending newsletters from the Admin Zone almost certainly the default theme will be the active theme when the newsletters are generated.
 
 On the 'compose newsletter' screen there is a link to view newsletter subscribers. This will show all newsletter subscribers at all subscription levels.
 
@@ -80,27 +80,27 @@ This works, even though the maintenance password was left blank, because ocPorta
 
 Want to take things to the next level with your newsletters? You can create full HTML newsletters, with embedded unsubscribe links, using newsletter templating.
 
-Creating templated newsletters is best shown by example (this is the newsletter itself, fed into the field when you send the newsletter, or put inside the [tt]NEWSLETTER_DEFAULT[/tt] template that prepopulates that field):
+Creating templated newsletters is best shown by example (this is the newsletter itself, fed into the field when you send the newsletter, or put inside the [tt]NEWSLETTER_DEFAULT_FCOMCODE[/tt] template that prepopulates that field):
 [codebox]
-[semihtml]<html lang="{$LANG*}" dir="{!dir}">
+<html lang="{$LANG*}" dir="{!dir}">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={!charset}" />
 <title>{title*}</title>
 </head>
 <body>
-	<!-- Try and figure out the best greeting from the data available - we prefer to welcome people by forename but we might not have it-->
-	<p>Dear {+START,IF_NON_EMPTY,{forename}}{forename}{+END}{+START,IF_EMPTY,{forename}}{name}{+END},</p>
+	{$,Try and figure out the best greeting from the data available - we prefer to welcome people by forename but we might not have it}
+	<p>Dear \{+START,IF_NON_EMPTY,{forename}\}{forename}\{+END\}\{+START,IF_EMPTY,{forename}\}{name}\{+END\},</p>
 
-	<p>Your text goes here.</p>
+	{$PARAGRAPH,{$?,{$IS_EMPTY,{CONTENT}},Your text goes here.,{CONTENT}}}
 
-	{+START,IF_NON_EMPTY,{unsub_url}}
+	\{+START,IF_NON_EMPTY,{unsub_url}\}
 	<p>You're receiving this newsletter because you subscribed at some point. Not interested anymore? <a href="{unsub_url*}">Unsubscribe</a>.</p>
-	{+END}
-	{+START,IF_EMPTY,{unsub_url}}
+	\{+END\}
+	\{+START,IF_EMPTY,{unsub_url}\}
 	<p>You're receiving this e-mail because you are a member on {$SITE_NAME*}.</p>
-	{+END}
+	\{+END\}
 </body>
-</html>[/semihtml]
+</html>
 [/codebox]
 
 Note how the example includes the 'html' tag, etc -- it is not a snippet, it is a full piece of HTML. This is optional, but if you do write your newsletters like this ocPortal will be clever enough to bypass wrapping the newsletter in the standard '[tt]MAIL[/tt]' template.
@@ -120,6 +120,24 @@ The vast majority of email applications have HTML capabilities nowadays, so you 
 
 This bit may confuse you: [tt]{+START,IF_NON_EMPTY,{forename}}{forename}{+END}{+START,IF_EMPTY,{forename}}{name}{+END}[/tt]
 It is saying "if the forename is available, use the forename, if the forename is not available, use the username".
+
+[title="2"]Bounce filtering[/title]
+
+There is a feature for removing newsletter subscribers that bounce e-mails (i.e. dead e-mail accounts). This stops noise coming back when you send out a newsletter, and increases the efficiency of future sends.
+
+The removal process also removes the "allow staff e-mails" setting from members who have a matching e-mail address.
+
+For this tool to work, you must have the PHP IMAP extension on your server.
+
+You should manually move anything sent to your website e-mail address that looks like a bounce e-mail into a new bounces folder, and then run the tool upon that folder:
+ - Go to the Admin Zone, then the Tools section, then the Newsletter icon
+ - Select the "Bounce filter" icon.
+ - Enter your server IMAP details.
+ - Select your bounces folder (if ocPortal can see one that matches the word "bounce", it will be auto-selected). Note that if you select a folder with too many e-mail messages in (i.e. something that doesn't just contain bounce e-mails) then ocPortal could give you an error due to running out of memory
+
+ocPortal will then show e-mail addresses found within e-mails in the selected folder, where it can find a matching newsletter/member account for an e-mail address. Any e-mail address attached to an e-mail that looks like a bounce e-mail will be auto-ticked (auto-checked). If you are confident the IMAP folder only contained bounces, you can tick (check) the remaining addresses.
+
+If you proceed through, all ticked (checked) e-mails will be removed from the newsletter / have their "allow staff e-mail" member setting disabled.
 
 [title="2"]See also[/title]
 

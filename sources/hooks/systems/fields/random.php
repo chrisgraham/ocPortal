@@ -121,7 +121,7 @@ class Hook_fields_random
 		{
 			return $this->get_field_random($id,$field['cf_default']);
 		}
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 	}
 
 	/**

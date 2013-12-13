@@ -463,22 +463,22 @@ function convert_to_internal_encoding($data,$input_charset=NULL,$internal_charse
 	if ((strtolower($input_charset)=='utf-8') && /*test method works...*/(will_be_unicode_neutered($data)) && (in_array(strtolower($internal_charset),array('iso-8859-1','iso-8859-15','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp')))) // Preferred as it will sub entities where there's no equivalent character
 	{
 		$test=entity_utf8_decode($data,$internal_charset);
-		if ($test!==false) return $data;
+		if ($test!==false) return $test;
 	}
 	if ((function_exists('unicode_decode')) && ($internal_charset!='utf-8') && ($input_charset=='utf-8') && ($VALID_ENCODING))
 	{
 		$test=@unicode_decode($data,$input_charset);
-		if ($test!==false) return $data;
+		if ($test!==false) return $test;
 	}
 	if ((function_exists('unicode_encode')) && ($internal_charset=='utf-8') && ($input_charset!='utf-8') && ($VALID_ENCODING))
 	{
 		$test=@unicode_encode($data,$input_charset);
-		if ($test!==false) return $data;
+		if ($test!==false) return $test;
 	}
 	if ((function_exists('iconv')) && ($VALID_ENCODING) && (get_value('disable_iconv')!=='1'))
 	{
 		$test=@iconv($input_charset,$internal_charset.'//TRANSLIT',$data);
-		if ($test!==false) return $data;
+		if ($test!==false) return $test;
 	}
 	if ((function_exists('mb_convert_encoding')) && ($VALID_ENCODING) && (get_value('disable_mbstring')!=='1'))
 	{
@@ -490,18 +490,18 @@ function convert_to_internal_encoding($data,$input_charset=NULL,$internal_charse
 		if ($good_encoding)
 		{
 			$test=@mb_convert_encoding($data,$internal_charset,$input_charset);
-			if ($test!==false) return $data;
+			if ($test!==false) return $test;
 		}
 	}
 	if ((strtolower($input_charset)=='utf-8') && (strtolower(substr($internal_charset,0,3))!='utf'))
 	{
 		$test=utf8_decode($data); // Imperfect as it assumes ISO-8859-1, but it's our last resort.
-		if ($test!==false) return $data;
+		if ($test!==false) return $test;
 	}
 	if ((strtolower($internal_charset)=='utf-8') && (strtolower(substr($input_charset,0,3))!='utf'))
 	{
 		$test=utf8_encode($data); // Imperfect as it assumes ISO-8859-1, but it's our last resort.
-		if ($test!==false) return $data;
+		if ($test!==false) return $test;
 	}
 
 	return $data;

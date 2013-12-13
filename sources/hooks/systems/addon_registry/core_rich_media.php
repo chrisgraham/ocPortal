@@ -239,6 +239,8 @@ class Hook_addon_registry_core_rich_media
 			'themes/default/images/big_tabs_controller_button.png',
 			'data/jwplayer.flash.swf',
 			'themes/default/templates/JAVASCRIPT_JWPLAYER.tpl',
+			'sources/hooks/systems/notifications/member_mention.php',
+			'sources/member_mentions.php',
 			'data/attachment.php',
 			'data/attachment_popup.php',
 			'data/emoticons.php',
@@ -295,6 +297,11 @@ class Hook_addon_registry_core_rich_media
 			'uploads/attachments_thumbs/index.html',
 			'uploads/attachments/.htaccess',
 			'uploads/attachments_thumbs/.htaccess',
+			'themes/default/templates/COMCODE_MEMBER_LINK.tpl',
+			'themes/default/templates/JAVASCRIPT_JQUERY_AUTOCOMPLETE.tpl',
+			'themes/default/templates/JAVASCRIPT_JQUERY.tpl',
+			'themes/default/css/autocomplete.css',
+			'themes/default/templates/AUTOCOMPLETE_LOAD.tpl',
 		);
 	}
 
@@ -415,6 +422,7 @@ class Hook_addon_registry_core_rich_media
 			'MEDIA_YOUTUBE.tpl'=>'media_youtube',
 			'MEDIA_DOWNLOAD.tpl'=>'media_download',
 			'MEDIA__DOWNLOAD_LINK.tpl'=>'media__download_link',
+			'COMCODE_MEMBER_LINK.tpl'=>'comcode_member_link',
 		);
 	}
 
@@ -2270,6 +2278,25 @@ class Hook_addon_registry_core_rich_media
 				'WIDTH'=>placeholder_number(),
 				'HEIGHT'=>placeholder_number(),
 			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__comcode_member_link()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('COMCODE_MEMBER_LINK', array(
+				'DETAILS'=>lorem_sentence(),
+				'MEMBER_ID'=>placeholder_id(),
+				'USERNAME'=>lorem_phrase(),
+				'MEMBER_URL'=>placeholder_url(),
+			)), NULL, '', true)
 		);
 	}
 }

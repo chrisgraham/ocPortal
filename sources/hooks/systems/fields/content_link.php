@@ -187,7 +187,7 @@ class Hook_fields_content_link
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 	}
 }
 

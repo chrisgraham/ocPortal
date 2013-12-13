@@ -170,6 +170,7 @@ Please be aware that this addon overrides some common templates to add Facebook 
 			'sources_custom/hooks/systems/symbols/FB_CONNECT_ACCESS_TOKEN.php',
 			'sources_custom/hooks/systems/symbols/USER_FB_CONNECT.php',
 			'sources_custom/hooks/systems/symbols/FB_CONNECT_LOGGED_OUT.php',
+			'sources_custom/hooks/systems/symbols/FB_CONNECT_FINISHING_PROFILE.php',
 			'sources_custom/users.php',
 			'sources_custom/ocf_members.php',
 			'themes/default/templates_custom/BLOCK_SIDE_PERSONAL_STATS_NO.tpl',

@@ -29,7 +29,7 @@ class Block_twitter_feed
 		$info['version']=2;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
-		$info['parameters']=array('api_key','api_secret','screen_name','title','template_main','template_style','max_statuses','style','show_profile_image','follow_button_size','twitter_logo_color','twitter_logo_size');
+		$info['parameters']=array('consumer_key','consumer_secret','access_token','access_token_secret','screen_name','title','template_main','template_style','max_statuses','style','show_profile_image','follow_button_size','twitter_logo_color','twitter_logo_size');
 		return $info;
 	}
 
@@ -55,11 +55,15 @@ class Block_twitter_feed
 	function run($map)
 	{
 		// Set up variables from parameters
-		$api_key=array_key_exists('api_key',$map)?$map['api_key']:'';
-		$api_secret=array_key_exists('api_secret',$map)?$map['api_secret']:'';
-		if ( (get_option('twitterfeed_use_twitter_support_config')=='1') && $api_key == '' && $api_secret == '' ) {
+		$api_key=array_key_exists('consumer_key',$map)?$map['consumer_key']:'';
+		$api_secret=array_key_exists('consumer_secret',$map)?$map['consumer_secret']:'';
+		$token=array_key_exists('access_token',$map)?$map['access_token']:'';
+		$token_secret=array_key_exists('access_token_secret',$map)?$map['access_token_secret']:'';
+		if ( (get_option('twitterfeed_use_twitter_support_config')=='1') && ($api_key=='' || $api_secret=='' || $token=='' || $token_secret=='') ) {
 			$api_key=get_option('twitter_api_key');
 			$api_secret=get_option('twitter_api_secret');
+			$token=get_long_value('twitter_oauth_token');
+			$token_secret=get_long_value('twitter_oauth_token_secret');
 		}
 		$twitter_name=array_key_exists('screen_name',$map)?$map['screen_name']:'coolweens';
 		$twitter_title=array_key_exists('title',$map)?$map['title']:'';
@@ -107,8 +111,6 @@ class Block_twitter_feed
 
 		// Initiate Twitter connection
 		require_code('twitter');
-		$token=get_long_value('twitter_oauth_token');
-		$token_secret=get_long_value('twitter_oauth_token_secret');
 		$twitter=new Twitter($api_key,$api_secret);
 		$twitter->setOAuthToken($token);
 		$twitter->setOAuthTokenSecret($token_secret);
