@@ -747,7 +747,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title=do_lang_tempcode('__WARN_MEMBER');
 		$_title_full=do_lang_tempcode('WARN_MEMBER');
 		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'tabs__member_account__warnings','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url)));
+		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'buttons__warn','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url)));
 	}
 	if ((has_privilege(get_member(),'view_content_history')) && ($_postdetails['has_history']))
 	{

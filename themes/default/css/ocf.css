@@ -1366,6 +1366,9 @@ table.ocf_profile_statistics th {
 .tabs__member_account__warnings {
 	background-image: url('{$IMG,icons/24x24/tabs/member_account/warnings}') !important;
 }
+.buttons__warn {
+	background-image: url('{$IMG,icons/24x24/buttons/warn}') !important;
+}
 .buttons__linear {
 	background-image: url('{$IMG,icons/24x24/buttons/linear}') !important;
 }
@@ -1406,6 +1409,9 @@ table.ocf_profile_statistics th {
 	}
 	.tabs__member_account__warnings {
 		background-image: url('{$IMG,icons/48x48/tabs/member_account/warnings}') !important;
+	}
+	.buttons__warn {
+		background-image: url('{$IMG,icons/48x48/buttons/warn}') !important;
 	}
 	.buttons__linear {
 		background-image: url('{$IMG,icons/48x48/buttons/linear}') !important;
