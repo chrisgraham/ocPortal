@@ -736,7 +736,7 @@ class Module_cms_downloads extends standard_aed_module
 			$submitter=$GLOBALS['SITE_DB']->query_value('download_downloads','submitter',array('id'=>$id));
 
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category_id))))
-				syndicate_described_activity(($submitter!=get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads',1,$submitter);
+				syndicate_described_activity(($submitter!=get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads',1,NULL/*$submitter*/);
 		}
 
 		edit_download($id,$category_id,$name,$url,$description,$author,$comments,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));

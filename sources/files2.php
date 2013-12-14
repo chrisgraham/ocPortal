@@ -726,7 +726,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						if ($matches[1]!=$url)
 						{
 							$bak=$HTTP_FILENAME;
-							$text=$no_redirect?NULL:_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
+							$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 							$DOWNLOAD_LEVEL--;
 							return _detect_character_encoding($text);
@@ -979,7 +979,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						@fclose($mysock);
 						if (strpos($matches[1],'://')===false) $matches[1]=qualify_url($matches[1],$url);
 						$bak=$HTTP_FILENAME;
-						$text=$no_redirect?NULL:_http_download_file($matches[2],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
+						$text=$no_redirect?mixed():_http_download_file($matches[2],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 						$DOWNLOAD_LEVEL--;
 						return _detect_character_encoding($text);
@@ -993,7 +993,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						if ($matches[1]!=$url)
 						{
 							$bak=$HTTP_FILENAME;
-							$text=$no_redirect?NULL:_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
+							$text=$no_redirect?mixed():_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 							$DOWNLOAD_LEVEL--;
 							return _detect_character_encoding($text);
