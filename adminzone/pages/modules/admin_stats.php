@@ -969,12 +969,12 @@ class Module_admin_stats
 			while (array_key_exists($i,$rows))
 			{
 				$row=$rows[$i];
-				$week=round($row['date_and_time']/(60*60*24*7));
+				$week=intval(round($row['date_and_time']/(60*60*24*7)));
 				$date=get_timezoned_date(($week-1)*(60*60*24*7),false,false,false,true).' - '.get_timezoned_date(($week)*(60*60*24*7),false,false,false,true);
 				$views=0;
 				while (array_key_exists($i+$views,$rows))
 				{
-					$_week=round($row['date_and_time']/(60*60*24*7));
+					$_week=intval(round($row['date_and_time']/(60*60*24*7)));
 
 					if ($_week!=$week) break;
 
@@ -1230,12 +1230,12 @@ class Module_admin_stats
 			while (array_key_exists($i,$rows))
 			{
 				$row=$rows[$i];
-				$week=round($row['date_and_time']/(60*60*24*7));
+				$week=intval(round($row['date_and_time']/(60*60*24*7)));
 				$date=get_timezoned_date(($week-1)*(60*60*24*7),false,false,false,true).' - '.get_timezoned_date(($week)*(60*60*24*7),false,false,false,true);
 				$views=0;
 				while (array_key_exists($i+$views,$rows))
 				{
-					$_week=round($row['date_and_time']/(60*60*24*7));
+					$_week=intval(round($row['date_and_time']/(60*60*24*7)));
 
 					if ($_week!=$week) break;
 

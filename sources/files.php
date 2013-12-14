@@ -248,6 +248,9 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'500.shtml'=>'',
 		'404.shtml'=>'',
 		'403.shtml'=>'',
+		'cron.yaml'=>'',
+		'dos.yaml'=>'',
+		'queue.yaml'=>'',
 		'.htaccess'=>'',
 
 		// Installer files
@@ -268,6 +271,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		// IDE projects
 		'nbproject'=>'',
 		'.project'=>'',
+		'.idea'=>'',
 
 		// ocPortal control files
 		'closed.html'=>'',

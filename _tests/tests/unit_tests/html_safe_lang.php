@@ -129,7 +129,7 @@ class html_safe_lang_test_set extends ocp_test_case
 		{
 			while (($file=readdir($dh))!==false)
 			{
-				if ($file[0]!='.')
+				if (($file[0]!='.') && ($file!='exports'))
 				{
 					if (is_file($dir.'/'.$file))
 					{
