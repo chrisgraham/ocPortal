@@ -132,6 +132,18 @@ function assign_refresh($url,$multiplier)
 
 	$must_show_message=($multiplier!=0.0);
 
+	// Fudge so that redirects can't count as flooding
+	if (get_forum_type()=='ocf')
+	{
+		require_code('ocf_groups');
+		$restrict_answer=ocf_get_best_group_property($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),'flood_control_access_secs');
+		if ($restrict_answer!=0)
+		{
+			$restrict_setting='m_last_visit_time';
+			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_last_visit_time'=>time()-$restrict_answer-1),array('id'=>get_member()),'',1);
+		}
+	}
+
 	if (!$must_show_message)
 	{
 		// Preferably server is gonna redirect before page is shown. This is for accessibility reasons

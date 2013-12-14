@@ -135,6 +135,18 @@ function persistant_cache_delete($key)
  */
 function persistant_cache_empty()
 {
+	// TODO: Fix dir in v10
+	$d=opendir(get_custom_file_base().'/persistant_cache');
+	while (($e=readdir($d))!==false)
+	{
+		if (substr($e,-4)=='.gcd')
+		{
+			// Ideally we'd lock whilst we delete, but it's not stable (and the workaround would be too slow for our efficiency context). So some people reading may get errors whilst we're clearing the cache. Fortunately this is a rare op to perform.
+			@unlink(get_custom_file_base().'/persistant_cache/'.$e);
+		}
+	}
+	closedir($d);
+
 	global $MEM_CACHE;
 	if ($MEM_CACHE===NULL) return NULL;
 	$MEM_CACHE->flush();

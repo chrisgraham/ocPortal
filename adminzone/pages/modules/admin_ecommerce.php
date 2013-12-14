@@ -525,7 +525,7 @@ class Module_admin_ecommerce extends standard_aed_module
 
 		foreach ($types as $item=>$details)
 		{
-			$types[$item]['AMOUNT']=integer_format($types[$item]['AMOUNT']);
+			$types[$item]['AMOUNT']=float_to_raw_string($types[$item]['AMOUNT']);
 		}
 
 		foreach ($types as $i=>$t)

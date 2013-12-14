@@ -401,7 +401,7 @@ class Module_admin_orders
 
 		$fields->attach(form_input_hidden('order_id',strval($id)));
 
-		$title		=	get_page_title('ADD_NOTE_TITLE',true,array($id));
+		$title		=	get_page_title('ADD_NOTE_TITLE',true,array(strval($id)));
 
 		if($last_action=='dispatched')
 		{	
@@ -429,7 +429,7 @@ class Module_admin_orders
 	{
 		$id			=	post_param_integer('order_id');
 
-		$title		=	get_page_title('ADD_NOTE_TITLE',true,array($id));
+		$title		=	get_page_title('ADD_NOTE_TITLE',true,array(strval($id)));
 
 		$notes		=	post_param('note');
 

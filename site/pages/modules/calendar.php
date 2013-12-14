@@ -277,7 +277,7 @@ class Module_calendar
 
 					if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['t_title']);
 
-					if (($row['id']!=db_get_first_id()) || (($GLOBALS['FORUM_DRIVER']->is_super_admin()) && (cron_installed()))) // Filters system commands
+					if (($row['id']!=db_get_first_id()) || (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (cron_installed()))) // Filters system commands
 						$tree[]=array('_SELF:_SELF:type=misc:int_'.strval($row['id']).'=1','calendar',$row['id'],$row['text_original'],array());
 				}
 			}

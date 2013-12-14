@@ -613,6 +613,7 @@ class Hook_addon_registry_chat
 					'HIDDEN'=>'',
 					'POST_URL'=>placeholder_url(),
 					'SETTING_BLOCKS'=>$setting_blocks,
+					'CHAT_SOUND'=>'',
 						)
 			),NULL,'',true),
 		);

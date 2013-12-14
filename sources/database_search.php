@@ -741,6 +741,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		{
 			$t_main_search_rows=$db->query($query,NULL,NULL,false,true);
 		}
+		if ($t_main_search_rows===NULL) $t_main_search_rows=array(); // In case of a failed search query
 		$t_count+=$t_main_search_rows_count;
 		$t_rows=array_merge($t_rows,$t_main_search_rows);
 	} else

@@ -117,6 +117,7 @@ function give_award($award_id,$content_id,$time=NULL)
 	$GLOBALS['SITE_DB']->query_insert('award_archive',array('a_type_id'=>$award_id,'member_id'=>$member_id,'content_id'=>$content_id,'date_and_time'=>$time));
 
 	decache('main_awards');
+	decache('main_multi_content');
 }
 
 /**

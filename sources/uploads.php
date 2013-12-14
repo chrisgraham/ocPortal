@@ -48,6 +48,7 @@ function is_swf_upload($fake_prepopulation=false)
 	foreach($_POST as $key=>$value)
 	{
 		if (!is_string($value)) continue;	
+		if (!is_string($key)) $key=strval($key);
 
 		if ((preg_match('#^hidFileID\_#i',$key)!=0) && ($value!='-1'))
 		{

@@ -1,3 +1,8 @@
+.idea
+cron.yaml
+/data_custom/modules/google_appengine/*
+dos.yaml
+queue.yaml
 www.pid
 *test.png
 /info.php

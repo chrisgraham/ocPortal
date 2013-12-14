@@ -421,14 +421,13 @@ class Module_admin_newsletter extends standard_aed_module
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
-		$all_subscribers=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
+		$all_subscribers=array();
+		$all_subscribers+=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
+		if (get_forum_type()=='ocf')
+			$all_subscribers+=collapse_2d_complexity('m_email_address','id',$GLOBALS['FORUM_DB']->query_select('f_members',array('m_email_address','id'),array('m_allow_emails_from_staff'=>1)));
 
 		$headers=imap_search($mbox,'UNDELETED');
-		//$headers=imap_headers($mbox);
-		if ($headers===false)
-		{
-		   warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
-		}
+		if ($headers===false) $headers=array();
 		$num=0;
 		foreach ($headers as $val)
 		{

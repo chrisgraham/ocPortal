@@ -127,7 +127,7 @@ class Module_admin_ipban
 		$rows=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('ip','i_descrip'));
 		foreach ($rows as $row)
 		{
-			$bans.=$row['ip'].' '.$row['i_descrip'].chr(10);
+			$bans.=$row['ip'].' '.str_replace("\n",' ',$row['i_descrip']).chr(10);
 		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');

@@ -542,32 +542,37 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			$socket=@fsockopen($host,$port,$errno,$errstr,30.0);
 			if ($socket!==false)
 			{
-				$rcv=fgets($socket,1024);
+				$rcv=fread($socket,1024);
 				$base_url=parse_url(get_base_url());
 				$domain=$base_url['host'];
-				fwrite($socket,'HELO '.$domain."\r\n");
-				$rcv=fgets($socket,1024);
 
 				// Login if necessary
 				$username=get_option('smtp_sockets_username');
 				$password=get_option('smtp_sockets_password');
 				if ($username!='')
 				{
+					fwrite($socket,'EHLO '.$domain."\r\n");
+					$rcv=fread($socket,1024);
+
 					fwrite($socket,"AUTH LOGIN\r\n");
-					$rcv=fgets($socket,1024);
+					$rcv=fread($socket,1024);
 					if (strtolower(substr($rcv,0,3))=='334')
 					{
 						fwrite($socket,base64_encode($username)."\r\n");
-						$rcv=fgets($socket,1024);
+						$rcv=fread($socket,1024);
 						if ((strtolower(substr($rcv,0,3))=='235') || (strtolower(substr($rcv,0,3))=='334'))
 						{
 							fwrite($socket,base64_encode($password)."\r\n");
-							$rcv=fgets($socket,1024);
+							$rcv=fread($socket,1024);
 							if (strtolower(substr($rcv,0,3))=='235')
 							{
 							} else $error=do_lang('MAIL_ERROR_CONNECT_PASSWORD').' ('.str_replace($password,'*',$rcv).')';
 						} else $error=do_lang('MAIL_ERROR_CONNECT_USERNAME').' ('.$rcv.')';
 					} else $error=do_lang('MAIL_ERROR_CONNECT_AUTH').' ('.$rcv.')';
+				} else
+				{
+					fwrite($socket,'HELO '.$domain."\r\n");
+					$rcv=fread($socket,1024);
 				}
 
 				if (is_null($error))
@@ -575,19 +580,19 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 					$smtp_from_address=get_option('smtp_from_address');
 					if ($smtp_from_address=='') $smtp_from_address=$from_email;
 					fwrite($socket,'MAIL FROM:<'.$website_email.">\r\n");
-					$rcv=fgets($socket,1024);
+					$rcv=fread($socket,1024);
 					if ((strtolower(substr($rcv,0,3))=='250') || (strtolower(substr($rcv,0,3))=='251'))
 					{
 						$sent_one=false;
 						fwrite($socket,"RCPT TO:<".$to_email[$i].">\r\n");
-						$rcv=fgets($socket,1024);
+						$rcv=fread($socket,1024);
 						if ((strtolower(substr($rcv,0,3))!='250') && (strtolower(substr($rcv,0,3))!='251'))
 							$error=do_lang('MAIL_ERROR_TO').' ('.$rcv.')'.' '.$to_email[$i];
 						else $sent_one=true;
 						if ($sent_one)
 						{
 							fwrite($socket,"DATA\r\n");
-							$rcv=fgets($socket,1024);
+							$rcv=fread($socket,1024);
 							if (strtolower(substr($rcv,0,3))=='354')
 							{
 								$attractive_date=strftime('%d %B %Y  %H:%M:%S',time());
@@ -607,12 +612,14 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 								}
 								fwrite($socket,'Subject: '.$tightened_subject."\r\n");
 								fwrite($socket,'Date: '.$attractive_date."\r\n");
+								$headers=preg_replace('#^\.#m','..',$headers);
+								$sending_message=preg_replace('#^\.#m','..',$sending_message);
 								fwrite($socket,$headers."\r\n");
 								fwrite($socket,$sending_message);
 								fwrite($socket,"\r\n.\r\n");
-								$rcv=fgets($socket,1024);
+								$rcv=fread($socket,1024);
 								fwrite($socket,"QUIT\r\n");
-								$rcv=fgets($socket,1024);
+								$rcv=fread($socket,1024);
 							} else $error=do_lang('MAIL_ERROR_DATA').' ('.$rcv.')';
 						}
 					} else $error=do_lang('MAIL_ERROR_FROM').' ('.$rcv.')';
@@ -621,7 +628,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 					{
 						@fclose($socket);
 						$socket=NULL;
-					} else $rcv=fgets($socket,1024);
+					} else $rcv=fread($socket,1024);
 				}
 
 				if (!is_null($socket)) fclose($socket);
@@ -655,6 +662,10 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			} else
 			{
 				$worked=mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
+			}
+			if ((!$worked) && (isset($php_errormsg)))
+			{
+				$error=$php_errormsg;
 			}
 			$GLOBALS['SUPPRESS_ERROR_DEATH']=false;
 		}

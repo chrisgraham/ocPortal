@@ -591,10 +591,10 @@ function can_fast_spider_cache()
 	if (isset($_GET['redirect'])) return false;
 	if (isset($_GET['zone'])) return false;
 	if (isset($_GET['date'])) return false;
-	$url_easy=get_self_url_easy();
-	if (strpos($url_easy,'sort=')!==false) return false;
+	/*$url_easy=get_self_url_easy();
+	if (strpos($url_easy,'sort=')!==false) return false;	Actually this stops very useful caching, esp on the forum - better to just reduce the cache time to a fraction of an hour
 	if (strpos($url_easy,'start=')!==false) return false;
-	if (strpos($url_easy,'max=')!==false) return false;
+	if (strpos($url_easy,'max=')!==false) return false;*/
 	return true;
 }
 

@@ -772,37 +772,47 @@ class Module_admin_setupwizard
 			{
 				if (post_param_integer('addon_'.$addon_row['addon_name'],0)==0)
 				{
-					$uninstalling[]=$addon_row['addon_name'];
+					$uninstalling[$addon_row['addon_name']]=$addon_row;
 				}
 			}
 			if (!file_exists(get_file_base().'/.svn')) // Only uninstall if we're not working from a SVN repository
 			{
-				foreach ($addons_installed as $addon_row)
+				do
 				{
-					if (post_param_integer('addon_'.$addon_row['addon_name'],0)==0)
+					$cnt=count($uninstalling);
+					foreach ($addons_installed as $addon_row)
 					{
-						$addon_row+=read_addon_info($addon_row['addon_name']);
-						$addon_row['addon_author']=''; // Fudge, to stop it dying on warnings for official addons
-
-						// Check dependencies
-						$dependencies=$addon_row['addon_dependencies_on_this'];
-						foreach ($uninstalling as $d)
+						if (array_key_exists($addon_row['addon_name'],$uninstalling))
 						{
-							if (in_array($d,$dependencies)) unset($dependencies[array_search($d,$dependencies)]);
-						}
+							$addon_row+=read_addon_info($addon_row['addon_name']);
+							$addon_row['addon_author']=''; // Fudge, to stop it dying on warnings for official addons
 
-						if (count($dependencies)==0)
-						{
-							// Archive it off to exports/mods
-							if ($addon_row['addon_files']!='')
+							// Check dependencies
+							$dependencies=$addon_row['addon_dependencies_on_this'];
+							foreach (array_keys($uninstalling) as $d)
 							{
-								$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
-								create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+								if (in_array($d,$dependencies)) // Can mark this dependency as irrelevant, as we are uninstalling the addon for it anyway
+									unset($dependencies[array_search($d,$dependencies)]);
 							}
 
-							uninstall_addon($addon_row['addon_name']);
+							if (count($dependencies)!=0) // Can't uninstall, has dependencies
+							{
+								unset($uninstalling[$addon_row['addon_name']]);
+							}
 						}
 					}
+				}
+				while ($cnt!=count($uninstalling)); // Dependency chains can be complex, so loop until we're stopped finding anything changing
+				foreach ($uninstalling as $addon_row)
+				{
+					// Archive it off to exports/addons
+					if ($addon_row['addon_files']!='')
+					{
+						$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
+						create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+					}
+
+					uninstall_addon($addon_row['addon_name']);
 				}
 			}
 		}

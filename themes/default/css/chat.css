@@ -26,13 +26,17 @@
 }
 
 .chat_lobby_buddies {
-	float: {!en_left};
-	width: 209px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_left};
+		width: 209px;
+	{+END}
 }
 
 .chat_lobby_convos {
-	float: {!en_left};
-	width: 360px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_left};
+		width: 360px;
+	{+END}
 	margin-{!en_right}: 10px;
 	border-{!en_right}: 1px solid #c1cee3; /* {$,wizard, 33% seed + 67% W/B} */
 	padding: 0 5px;

@@ -338,6 +338,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 
 	foreach ($vars as $key=>$val)
 	{
+		if (!is_string($key)) $key=strval($key);
 		if (is_integer($val)) $val=strval($val);
 		if ($val===NULL) $val='<null>';
 
@@ -364,7 +365,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 		$skip_keep?'1':'0',
 		$keep_all?'1':'0'
 	);
-	if ($skip!==NULL) $arr[]=implode(',',array_keys($skip));
+	if ($skip!==NULL) $arr[]=implode('|',array_keys($skip));
 
 	$ret=symbol_tempcode('PAGE_LINK',$arr);
 	global $SITE_INFO;

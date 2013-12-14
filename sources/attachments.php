@@ -368,6 +368,9 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 		if (array_key_exists('description',$attributes)) $attachment['description']=$attributes['description'];
 		if (!array_key_exists('description',$attachment)) $attachment['description']='';
 		$attachment['a_description']=is_object($attachment['description'])?$attachment['description']:comcode_to_tempcode($attachment['description'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,NULL,$on_behalf_of_member);
+	} else
+	{
+		$attachment['a_description']=comcode_to_tempcode($attachment['a_description'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,NULL,$on_behalf_of_member);
 	}
 
 	$attachment['a_type']=$type;

@@ -45,8 +45,8 @@ function getAlexaRank( $url )
 {
 	require_code('files');
 	$p=array();
-	$result=http_download_file('http://data.alexa.com/data?cli=10&dat=s&url=' . $url, NULL, false);
-	if (preg_match( '#<POPULARITY URL="(.*?)" TEXT="([0-9]+){1,}"/>#si', $result, $p )!=0)
+	$result=http_download_file('http://data.alexa.com/data?cli=10&dat=s&url=' . urlencode($url), NULL, false);
+	if (preg_match( '#<POPULARITY URL="(.*?)" TEXT="([0-9]+)"/>#si', $result, $p )!=0)
 		$rank=integer_format(intval($p[2]));
 	else $rank='0';
 	if (preg_match( '#<LINKSIN NUM="([0-9]+){1,}"/>#si', $result, $p )!=0)

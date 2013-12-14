@@ -111,6 +111,9 @@ function init__lang()
 				{
 					$PAGE_CACHE_LAZY_LOAD=true;
 					$LANGUAGE=$PAGE_CACHE_LANG_LOADED;
+				} else
+				{
+					$PAGE_CACHE_LANG_LOADED=array();
 				}
 			}
 			$PAGE_CACHE_FILE=$cache_path;
@@ -472,7 +475,9 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 			open_page_cache_file();
 			$LANGUAGE=array();
 			@rewind($PAGE_CACHE_FILE);
+			@flock($PAGE_CACHE_FILE,LOCK_EX);
 			@ftruncate($PAGE_CACHE_FILE,0);
+			@flock($PAGE_CACHE_FILE,LOCK_UN);
 			$PAGE_CACHE_LAZY_LOAD=false;
 			$LANG_LOADED_LANG=array();
 			$PAGE_CACHE_LANGS_REQUESTED[]=array($codename,$lang);
@@ -798,8 +803,10 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 					{
 						open_page_cache_file();
 						@rewind($PAGE_CACHE_FILE);
+						@flock($PAGE_CACHE_FILE,LOCK_EX);
 						@ftruncate($PAGE_CACHE_FILE,0);
 						@fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));
+						@flock($PAGE_CACHE_FILE,LOCK_UN);
 					}
 				}
 				return $ret;
@@ -829,8 +836,10 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 					{
 						open_page_cache_file();
 						@rewind($PAGE_CACHE_FILE);
+						@flock($PAGE_CACHE_FILE,LOCK_EX);
 						@ftruncate($PAGE_CACHE_FILE,0);
 						@fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));
+						@flock($PAGE_CACHE_FILE,LOCK_UN);
 					}
 				}
 			}
@@ -867,8 +876,10 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			{
 				open_page_cache_file();
 				@rewind($PAGE_CACHE_FILE);
+				@flock($PAGE_CACHE_FILE,LOCK_EX);
 				@ftruncate($PAGE_CACHE_FILE,0);
 				@fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));
+				@flock($PAGE_CACHE_FILE,LOCK_UN);
 			}
 		}
 	}

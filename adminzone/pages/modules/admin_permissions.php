@@ -338,7 +338,7 @@ class Module_admin_permissions
 		require_code('ocf_groups_action2');
 		ocf_group_absorb_privileges_of($to,$from);
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:absord',do_lang_tempcode('ABSORB_PERMISSIONS'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:absorb',do_lang_tempcode('ABSORB_PERMISSIONS'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'absorb'),'_SELF');

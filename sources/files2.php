@@ -729,13 +729,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 							$text=$no_redirect?NULL:_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 							$DOWNLOAD_LEVEL--;
-							return $text;
+							return _detect_character_encoding($text);
 						}
 					}
 				}
 
 				$DOWNLOAD_LEVEL--;
-				return substr($line,$pos);
+				return _detect_character_encoding(substr($line,$pos));
 			}
 		}
 
@@ -982,7 +982,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						$text=$no_redirect?NULL:_http_download_file($matches[2],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 						if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 						$DOWNLOAD_LEVEL--;
-						return $text;
+						return _detect_character_encoding($text);
 					}
 					if (preg_match("#^Location: (.*)\r\n#i",$line,$matches)!=0)
 					{
@@ -996,7 +996,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 							$text=$no_redirect?NULL:_http_download_file($matches[1],$byte_limit,$trigger_error,false,$ua,NULL,$cookies,$accept,$accept_charset,$accept_language,$write_to_file);
 							if (is_null($HTTP_FILENAME)) $HTTP_FILENAME=$bak;
 							$DOWNLOAD_LEVEL--;
-							return $text;
+							return _detect_character_encoding($text);
 						}
 					}
 					if (preg_match("#HTTP/(\d*\.\d*) (\d*) #",$line,$matches)!=0)
@@ -1098,12 +1098,12 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			else $HTTP_MESSAGE_B=do_lang_tempcode('HTTP_DOWNLOAD_CUT_SHORT',escape_html($url),escape_html(integer_format($size_expected)),escape_html(integer_format($input_len)));
 			$DOWNLOAD_LEVEL--;
 			$HTTP_MESSAGE='short-data';
-			return $input;
+			return _detect_character_encoding($input);
 		}
 
 		$DOWNLOAD_LEVEL--;
 
-		return $input;
+		return _detect_character_encoding($input);
 	} else
 	{
 		if (($errno!=110) && (($errno!=10060) || (@ini_get('default_socket_timeout')=='1')) && (is_null($post_params)))
@@ -1130,7 +1130,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			if ($read_file!==false)
 			{
 				$DOWNLOAD_LEVEL--;
-				return $read_file;
+				return _detect_character_encoding($read_file);
 			}
 		}
 
@@ -1144,4 +1144,30 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$HTTP_MESSAGE='could not connect to host ('.$errstr.')';
 		return NULL;
 	}
+}
+
+/**
+ * Final filter for downloader output: try a bit harder to detect the character encoding, in case it was not in an HTTP filter.
+ * Manipulates the $HTTP_CHARSET global.
+ *
+ * @param  string			The HTTP stream we will look through
+ * @return string			Same as $out
+ */
+function _detect_character_encoding($out)
+{
+	global $HTTP_CHARSET;
+	if ($HTTP_CHARSET===NULL)
+	{
+		$matches=array();
+		if (preg_match('#<'.'?xml[^<>]*\s+encoding="([^"]+)"#',$out,$matches)!=0)
+		{
+			$HTTP_CHARSET=trim($matches[1]);
+		}
+		elseif (preg_match('#<meta\s+http-equiv="Content-Type"\s+content="[^"]*;\s*charset=([^"]+)"#i',$out,$matches)!=0)
+		{
+			$HTTP_CHARSET=trim($matches[1]);
+		}
+	}
+
+	return $out;
 }

@@ -18,7 +18,6 @@ The default zones in ocPortal are for the following purposes:
  - [b]Content Management[/b]: this is where content is added, edited and deleted
 And if you are using OCF, the following additional zones are usable:
  - [b]Forum[/b]: this is where the forum resides
- - [b]Account[/b]: this is where members change their settings
 
 [title="2"]Pages[/title]
 

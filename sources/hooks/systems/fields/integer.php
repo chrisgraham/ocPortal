@@ -115,7 +115,7 @@ class Hook_fields_integer
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		$ret=post_param($tmp_name,STRING_MAGIC_NULL);
+		$ret=post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 		if ($ret!=STRING_MAGIC_NULL && $ret!='') $ret=str_pad($ret,10,'0',STR_PAD_LEFT);
 		return $ret;
 	}

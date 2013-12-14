@@ -122,7 +122,7 @@ class Hook_fields_guid
 		{
 			return $this->get_field_guid();
 		}
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
 	}
 
 	/**

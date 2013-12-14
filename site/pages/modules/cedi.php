@@ -176,7 +176,7 @@ class Module_cedi
 			$GLOBALS['SITE_DB']->create_index('seedy_pages','sadd_date',array('add_date'));
 
 			$lang_key=lang_code_to_default_content('CEDI_HOME',false,1);
-			$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'hide_posts'=>0,'seedy_views'=>0,'add_date'=>time(),'description'=>insert_lang_comcode('',2),'notes'=>'','title'=>$lang_key));
+			$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()+1,'hide_posts'=>0,'seedy_views'=>0,'add_date'=>time(),'description'=>insert_lang_comcode('',2),'notes'=>'','title'=>$lang_key));
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 			{
@@ -627,7 +627,6 @@ class Module_cedi
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value('seedy_changes','COUNT(*)',array('the_action'=>'CEDI_MAKE_POST'));
 		$_id=get_param('id',NULL);
 		$id=NULL;
 		if (!is_null($_id))
@@ -636,6 +635,7 @@ class Module_cedi
 		}
 		$where=(!is_null($id))?('the_page='.strval($id)):(db_string_equal_to('the_action','CEDI_MAKE_POST').' OR '.db_string_equal_to('the_action','CEDI_EDIT_PAGE'));
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'seedy_changes WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'seedy_changes WHERE '.$where);
 		$fields=new ocp_tempcode();
 		require_code('templates_results_table');
 		foreach ($rows as $myrow)

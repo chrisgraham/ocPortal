@@ -92,7 +92,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 
 	// Load up as Tempcode
 	$_sheet=_css_compile($destination_theme,$theme,$css_file.'__tmp_copy',$temp_file,false);
-	unlink($temp_file);
+	@unlink($temp_file);
 	sync_file($temp_file);
 	$sheet=$_sheet[1];
 

@@ -29,7 +29,7 @@
 							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
 								if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
 								{
-									window.location='{$PAGE_LINK;,:}';
+									window.location='{$PAGE_LINK;,::refreshed_once=1}';
 								} else
 								{
 									window.top.location.reload();
@@ -43,7 +43,7 @@
 						var forms=document.getElementsByTagName('form');
 						for (var i=0;i<forms.length;i++)
 						{
-							if (forms[i].action.indexOf('{$PAGE_LINK*;,:login:logout}')!=-1)
+							if (forms[i].action.indexOf('{$PAGE_LINK;/,:login:logout}')!=-1)
 							{
 								forms[i].onsubmit=function(logout_link) { return function() {
 									FB.logout(function(response) {
@@ -67,7 +67,7 @@
 						window.setTimeout(function() { {$,Firefox needs us to wait a bit}
 							if ((window.location.href.indexOf('login')!=-1) && (window==window.top))
 							{
-								window.location='{$PAGE_LINK;,:}';
+								window.location='{$PAGE_LINK;,::refreshed_once=1}';
 							} else
 							{
 								window.top.location.reload();
