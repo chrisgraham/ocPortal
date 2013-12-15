@@ -181,10 +181,10 @@ foreach ($all_downloads_to_add as $i=>$d)
 
 if ((!$is_bleeding_edge) && (!$is_old_tree) && (isset($all_downloads_to_add[0]['download_id'])))
 {
-	$last_version_str=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','t.id',array('text_original'=>'This is the latest version.'),' AND id<>'.strval($all_downloads_to_add[0]['download_id']));
+	$last_version_str=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','t.id',array('text_original'=>'This is the latest version.'),' AND d.id<>'.strval($all_downloads_to_add[0]['download_id']));
 	if (!is_null($last_version_str))
 	{
-		$last_version_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','d.id',array('text_original'=>'This is the latest version.'),' AND id<>'.strval($all_downloads_to_add[0]['download_id']));
+		$last_version_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','d.id',array('text_original'=>'This is the latest version.'),' AND d.id<>'.strval($all_downloads_to_add[0]['download_id']));
 		if (!is_null($last_version_id))
 		{
 			$description="A new version, {$version_pretty} is available. Upgrading to {$version_pretty} is considered {$needed} by ocProducts{$justification}. There may have been other upgrades since {$version_pretty} - see [url=\"the ocProducts news archive\" target=\"_blank\"]http://ocportal.com/site/pg/news[/url].";
