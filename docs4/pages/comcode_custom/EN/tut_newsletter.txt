@@ -78,16 +78,16 @@ Creating templated newsletters is best shown by example (this is the newsletter 
 </head>
 <body>
 	<!-- Try and figure out the best greeting from the data available - we prefer to welcome people by forename but we might not have it-->
-	<p>Dear {+START,IF_NON_EMPTY,{forename}}{forename}{+END}{+START,IF_EMPTY,{forename}}{name}{+END},</p>
+	<p>Dear \{+START,IF_NON_EMPTY,{forename}\}{forename}\{+END\}\{+START,IF_EMPTY,{forename}\}{name}\{+END\},</p>
 
-	<p>Your text goes here.</p>
+	{$PARAGRAPH,{$?,{$IS_EMPTY,{CONTENT}},Your text goes here.,{CONTENT}}}
 
-	{+START,IF_NON_EMPTY,{unsub_url}}
+	\{+START,IF_NON_EMPTY,{unsub_url}\}
 	<p>You're receiving this newsletter because you subscribed at some point. Not interested anymore? <a href="{unsub_url*}">Unsubscribe</a>.</p>
-	{+END}
-	{+START,IF_EMPTY,{unsub_url}}
+	\{+END\}
+	\{+START,IF_EMPTY,{unsub_url}\}
 	<p>You're receiving this e-mail because you are a member on {$SITE_NAME*}.</p>
-	{+END}
+	\{+END\}
 </body>
 </html>[/semihtml]
 [/codebox]
