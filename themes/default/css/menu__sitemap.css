@@ -3,44 +3,81 @@
  Copyright (c) ocProducts, 2004-2014
 */
 
-.menu_type__sitemap ul {
+.menu_type__sitemap ul, .menu_type__sitemap li {
 	list-style-type: none;
 	list-style-image: none;
 	margin-left: 0;
 	padding-left: 0;
+}
+
+.menu_type__sitemap li {
+	padding: 0.25em 0;
+}
+
+.menu_type__sitemap li>span>* {
+	vertical-align: middle;
+}
+
+.menu_type__sitemap li>span {
+	display: block;
+}
+
+.menu_type__sitemap li>span:hover {
+	background-color: {$GET,area_faded_background};
+}
+
+/* Level 0 */
+
+.menu_type__sitemap ul {
+	margin: 1em 0;
 	font-size: 1.5em;
 }
 
-.menu_type__sitemap ul ul {
-	margin-left: 0;
-	padding-left: 0;
-	font-size: 1em;
+.menu_type__sitemap ul .has_img>span>img {
+	width: 24px;
 }
 
 .menu_type__sitemap ul li {
-	margin-top: 2em;
+	margin-left: 29px;
 	font-weight: bold;
-	font-size: 1.2em;
-	margin-left: 0;
-	padding-left: 0;
 }
 
+.menu_type__sitemap>ul>li>span>a.toggleable_tray_button img {
+	margin-top: 4px;
+}
+
+/* Level 1 */
+
+.menu_type__sitemap ul ul {
+	margin: 0.5em 0;
+	font-size: 0.9em;
+}
+
+.menu_type__sitemap ul ul .has_img>span>img {
+	width: 20px;
+}
+
+.menu_type__sitemap ul li li {
+	margin-left: 25px;
+}
+
+.menu_type__sitemap>ul>li>ul>li>span>a.toggleable_tray_button img {
+	margin-top: 3px;
+}
+
+/* Level 2 */
+
 .menu_type__sitemap ul ul ul {
-	margin-left: 0;
-	padding-left: 0;
-	padding-top: 0.5em;
+	margin: 0.5em 0;
 	list-style: circle;
 	font-size: 0.9em;
 }
 
-.menu_type__sitemap ul ul ul {
-	font-size: 0.8em;
+.menu_type__sitemap ul ul ul .has_img>span>img {
+	width: 17px;
 }
 
 .menu_type__sitemap ul li li {
-	margin-top: 0.5em;
 	font-weight: normal;
-	font-size: 0.9em;
-	margin-left: 2em;
-	padding-left: 0;
+	margin-left: 22px;
 }
