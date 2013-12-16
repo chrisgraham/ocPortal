@@ -636,7 +636,7 @@ var SortableTable = (function(){
             filter.filter.regex=true;
           }
           // If filter string is like "function (x) { ... }" then turn it into a function
-          /*else if (filter.filter.match(/^function\s*\(([^\)]*)\)\s*\{(.*)}\s*$/)) {
+          /*else if (filter.filter.match(/^function\s*\(([^\)]*)\)\s*\{(.*)}\s*$/)) {		Disabled for security
             filter.filter = Function(RegExp.$1,RegExp.$2);
           }*/
         }
