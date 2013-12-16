@@ -636,9 +636,9 @@ var SortableTable = (function(){
             filter.filter.regex=true;
           }
           // If filter string is like "function (x) { ... }" then turn it into a function
-          else if (filter.filter.match(/^function\s*\(([^\)]*)\)\s*\{(.*)}\s*$/)) {
+          /*else if (filter.filter.match(/^function\s*\(([^\)]*)\)\s*\{(.*)}\s*$/)) {
             filter.filter = Function(RegExp.$1,RegExp.$2);
-          }
+          }*/
         }
         // If some non-table object was passed in rather than a 'col' value, resolve it 
         // and assign it's column index to the filter if it doesn't have one. This way, 
