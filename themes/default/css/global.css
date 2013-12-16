@@ -3196,7 +3196,7 @@ NB: Form buttons are wrapped in either:
 */
 
 
-.menu___generic_admin__delete, .tabs__member_account__warnings, .buttons__report {
+.menu___generic_admin__delete, .tabs__member_account__warnings {
 	background-color: {$GET,red_highlight_background};
 	border-color: {$GET,red_highlight_text};
 }
