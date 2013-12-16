@@ -2163,6 +2163,7 @@ function get_site_salt()
  */
 function titleify($boring)
 {
+	if ($boring=='id') return 'ID';
 	$ret=ucwords(str_replace('_',' ',$boring));
 	$ret=str_replace('Ocportal','ocPortal',$ret);
 	if (substr($ret,0,3)=='Oc ') $ret='oc'.str_replace(' ','',substr($ret,3));

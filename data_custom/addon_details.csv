@@ -306,3 +306,11 @@ downloads_followup_email,New Feature,Jason Verhagen,No License/No copyright asse
 If you have any questions ask in the comments here or visit the official documentation and support topic at http://ocportal.com/forum/topicview/misc/addons/downloads-follow-up.htm
 
 Enjoy!",downloads,,,
+sortable_tables,New Feature,Chris Graham,Licensed on the same terms as ocPortal,"This addon creates a main_sortable_table block that shows the contents of a CSV file (or a database table) in a sortable and filterable table. To use, place the CSV file in uploads/website_specific, and place the block like:
+[code]
+[block=""example.csv""]main_sortable_table[/block]
+[/code]
+
+(example.csv is supplied with the addon)
+
+We will automatically detect what columns can be filtered, how to sort each column, and display numbers in an attractive way.",PHP5,,Matt Kruse,

@@ -4193,3 +4193,18 @@ downloads_followup_email
  - sources_custom/hooks/systems/notifications/downloads_followup_email.php
  - themes/default/templates_custom/DOWNLOADS_FOLLOWUP_EMAIL.tpl
  - themes/default/templates_custom/DOWNLOADS_FOLLOWUP_EMAIL_DOWNLOAD_LIST.tpl
+
+sortable_tables
+---------------
+ - lang_custom/EN/sortable_tables.ini
+ - themes/default/templates_custom/JAVASCRIPT_SORTABLE_TABLES.tpl
+ - themes/default/templates_custom/SORTABLE_TABLE.tpl
+ - themes/default/templates_custom/SORTABLE_TABLE_ROW.tpl
+ - themes/default/css_custom/sortable_tables.css
+ - sources_custom/blocks/main_sortable_table.php
+ - uploads/website_specific/example.csv
+ - themes/default/images_custom/sortable_tables/filter.gif
+ - themes/default/images_custom/sortable_tables/index.html
+ - themes/default/images_custom/sortable_tables/sortable.gif
+ - themes/default/images_custom/sortable_tables/sorted_down.gif
+ - themes/default/images_custom/sortable_tables/sorted_up.gif
