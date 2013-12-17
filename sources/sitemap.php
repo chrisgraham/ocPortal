@@ -88,6 +88,122 @@ function init__sitemap()
 }
 
 /**
+ * AJAX script for dynamically extended Sitemap.
+ */
+function sitemap_script()
+{
+	prepare_for_known_ajax_response();
+
+	require_code('zones2');
+	require_code('zones3');
+	require_code('xml');
+
+	// Usergroups we have
+	$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
+	$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+
+	if (!has_actual_page_access(get_member(),'admin_sitemap','adminzone')) exit();
+
+	if (function_exists('set_time_limit')) @set_time_limit(30);
+
+	disable_php_memory_limit(); // Needed for loading large amount of permissions (potentially)
+
+	// ======
+	// Saving
+	// ======
+
+	if (get_param_integer('set_perms',0)==1)
+	{
+		if (!has_actual_page_access(get_member(),'admin_permissions','adminzone')) exit();
+
+		// TODO
+
+		decache('menu');
+		require_code('caches3');
+		erase_block_cache();
+		erase_persistent_cache();
+
+		// Tra la la tada
+		return;
+	}
+
+	// =======
+	// Loading
+	// =======
+
+	$default=get_param('default',NULL,true);
+
+	header('Content-Type: text/xml');
+	$permissions_needed=(get_param_integer('get_perms',0)==1); // Whether we are limiting our tree to permission-supporting
+	@ini_set('ocproducts.xss_detect','0');
+
+	echo '<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>';
+	echo "\n".'<request><result>';
+	require_lang('permissions');
+	require_lang('zones');
+	$page_link=get_param('id','',true);
+
+	$max_recurse_depth=get_param_integer('max_recurse_depth',(($page_link=='')?2:1));
+	$node=retrieve_sitemap_node($page_link,/*$callback=*/NULL,/*$valid_node_types=*/NULL,/*$child_cutoff=*/NULL,$max_recurse_depth,$permissions_needed,/*$zone=*/'_SEARCH',/*$use_page_groupings=*/false,/*$consider_secondary_categories=*/false,/*$consider_validation=*/false,/*$meta_gather=*/0);
+	_sitemap_node_to_xml($node,$permissions_needed);
+
+	// Mark parent nodes for pre-expansion
+	if ((!is_null($default)) && ($default!='') && (strpos($default,':')!==false))
+	{
+		$parts==explode(':',$default);
+		echo "\n".'<expand>'.$parts[0].':</expand>';
+		$buildup=array_shift($parts);
+		foreach ($parts as $part)
+		{
+			$buildup.=':'.$part;
+			echo "\n".'<expand>'.$buildup.'</expand>';
+		}
+	}
+
+	echo "\n".'</result></request>';
+}
+
+/**
+ * Convert a Sitemap node into an XML representation.
+ *
+ * @param  array 			The Sitemap node.
+ * @param  boolean 		Whether we need selectable nodes to support some selectable permissions.
+ * @param  integer 		How deep in recursion we are.
+ */
+function _sitemap_node_to_xml($node,$permissions_needed,$recurse_level=0)
+{
+	$has_children=$node['has_possible_children'];
+
+	$selectable=(!$permissions_needed) || (count($node['permissions'])!=0);
+
+	$type=$node['content_type'];
+
+	$id=$node['content_id'];
+	if ($id===NULL) $id='';
+
+	echo str_replace('	',str_repeat('	',$recurse_level+1),'
+	<category
+	 serverid="'.xmlentities($node['page_link']).'"
+	 expanded="'.(($node['page_link']=='')?'true':'false').'"
+	 title="'.xmlentities(strip_html($node['title']->evaluate())).'"
+	 has_children="'.($has_children?'true':'false').'"
+	 selectable="'.($selectable?'true':'false').'"
+	 type="'.xmlentities($type).'"
+	 id="'.xmlentities($id).'"
+	>');
+
+	if (isset($node['children']))
+	{
+		foreach ($node['children'] as $child_node)
+		{
+			_sitemap_node_to_xml($child_node,$permissions_needed,$recurse_level+1);
+		}
+	}
+
+	echo "\n".str_repeat('	',$recurse_level+1).'</category>'."\n";
+}
+
+/**
  * Find details of a position in the Sitemap (shortcut into the object structure).
  *
  * @param  ID_TEXT 		The page-link we are finding (blank: root).

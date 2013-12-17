@@ -29,7 +29,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 	function handles_page_link($page_link)
 	{
 		$matches=array();
-		if (preg_match('#^([^:]*):admin_config(:misc)?$#',$page_link,$matches)!=0)
+		if (preg_match('#^([^:]*):admin_config(:misc)?(:|$)#',$page_link,$matches)!=0)
 		{
 			$zone=$matches[1];
 			$page='admin_config';
