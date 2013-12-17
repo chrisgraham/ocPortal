@@ -242,7 +242,7 @@ class Module_admin_stats
 			$this->title=get_screen_title('CLEAR_STATISTICS');
 		}
 
-		if ($type=='install_geolocation_data')
+		if ($type=='install_data')
 		{
 			$this->title=get_screen_title('INSTALL_GEOLOCATION_DATA');
 		}

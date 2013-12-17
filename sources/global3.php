@@ -374,7 +374,7 @@ function restore_output_state($just_tempcode=false,$merge_current=false,$keep=NU
 					{
 						if ($GLOBALS[$var]===NULL) $GLOBALS[$var]=new ocp_tempcode();
 						$GLOBALS[$var]->attach($val);
-					} elseif (!$merge_current || $GLOBALS[$var]===array() || $GLOBALS[$var]===NULL || $GLOBALS[$var]==='')
+					} elseif (!$merge_current || $GLOBALS[$var]===array() || $GLOBALS[$var]===NULL || $GLOBALS[$var]===false || $GLOBALS[$var]==='' || $var=='REFRESH_URL')
 					{
 						$GLOBALS[$var]=$val;
 					}
