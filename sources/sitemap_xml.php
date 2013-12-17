@@ -57,8 +57,8 @@ function sitemap_xml_build()
 	require_code('sitemap');
 
 	// Runs via a callback mechanism, so we don't need to load an arbitrary complex structure into memory.
-	sitemap_xml_initialise($path);
-	$callback='sitemap_xml_serialize_sitemap_node';
+	_sitemap_xml_initialise($path);
+	$callback='_sitemap_xml_serialize_sitemap_node';
 	$meta_gather=SITEMAP_GATHER_TIMES;
 	retrieve_sitemap_node(
 		'',
@@ -73,7 +73,7 @@ function sitemap_xml_build()
 		/*$consider_validation=*/false,
 		$meta_gather
 	);
-	sitemap_xml_finished();
+	_sitemap_xml_finished();
 
 	ping_sitemap_xml(get_custom_base_url().'/ocp_sitemap.xml');
 }
@@ -116,7 +116,7 @@ function ping_sitemap_xml($url)
  *
  * @param  PATH  		Where we will save to.
  */
-function sitemap_xml_initialise($file_path)
+function _sitemap_xml_initialise($file_path)
 {
 	global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH,$LOADED_MONIKERS_CACHE;
 	$SITEMAPS_OUT_TEMPPATH=ocp_tempnam('ocpsmap'); // We write to temporary path first to minimise the time our target file is invalid (during generation)
@@ -151,7 +151,7 @@ function sitemap_xml_initialise($file_path)
 /**
  * Finalise the writing to a Sitemap XML file.
  */
-function sitemap_xml_finished()
+function _sitemap_xml_finished()
 {
 	global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH;
 
@@ -174,7 +174,7 @@ function sitemap_xml_finished()
  *
  * @param  array		The Sitemap node.
  */
-function sitemap_xml_serialize_sitemap_node($node)
+function _sitemap_xml_serialize_sitemap_node($node)
 {
 	global $SITEMAPS_OUT_FILE;
 

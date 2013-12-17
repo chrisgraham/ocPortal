@@ -16,17 +16,18 @@
 /**
  * Callback for saving a page-link into static output.
  *
- * @param  string		The page-link.
- * @param  string		The parent page-link in the ocPortal sitemap.
- * @param  ?TIME		When the node was added (NULL: unknown).
- * @param  ?TIME 		When the node was last edited (NULL: unknown/never).
- * @param  float		The priority of this for spidering, 0.0-1.0.
- * @param  string		The title of the node.
- * @param  boolean	Whether the category is accessible by the user the sitemap is being generated for (Guest for a Sitemaps XML file).
+ * @param  array		The Sitemap node.
  */
-function _page_link_to_static($page_link,$parent_page_link,$add_date,$edit_date,$priority,$title,$accessible=true)
+function _sitemap_xml_serialize_sitemap_node($node)
 {
-	if (($accessible) && (strpos($page_link,':static_export')===false))
+	$page_link=$node['page_link'];
+	if ($page_link===NULL) return;
+	list($zone,$attributes,$hash)=page_link_decode($page_link);
+
+	$add_date=$node['extra_meta']['add_date'];
+	$edit_date=$node['extra_meta']['edit_date'];
+
+	if (strpos($page_link,':static_export')===false)
 	{
 		global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;
 

@@ -29,7 +29,7 @@ class Hook_task_sitemap
 	{
 		set_value('sitemap_building_in_progress','1');
 
-		require_code('sitemap');
+		require_code('sitemap_xml');
 		sitemap_xml_build();
 
 		set_value('sitemap_building_in_progress','0');

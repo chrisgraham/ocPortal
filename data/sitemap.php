@@ -39,4 +39,3 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'."\n".'<ht
 require_code('sitemap');
 sitemap_script();
 
-

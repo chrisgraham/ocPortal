@@ -222,7 +222,6 @@ The [tt]uninstall[/tt] function is usually very simple, with calls to the [tt]dr
 The following object methods are not actually called as methods, but actually as functions (using [tt]eval[/tt]):
  - [tt]info[/tt]
  - [tt]get_entry_points[/tt]
- - [tt]get_page_links[/tt]
  - [tt]install[/tt]
  - [tt]uninstall[/tt]
 This means that you cannot use '[tt]$this[/tt]' inside the code.

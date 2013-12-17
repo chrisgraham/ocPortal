@@ -82,7 +82,28 @@ require_code('sitemap');
 require_code('static_export');
 if (get_param_integer('save__pages',1)==1)
 {
-	spawn_page_crawl('_page_link_to_static',$GLOBALS['FORUM_DRIVER']->get_guest_id(),NULL,DEPTH__ENTRIES);
+	$member=get_member();
+	create_session($GLOBALS['FORUM_DRIVER']->get_guest_id());
+	clear_permissions_runtime_cache();
+
+	$callback='_page_link_to_static';
+	$meta_gather=SITEMAP_GATHER_TIMES;
+	retrieve_sitemap_node(
+		'',
+		$callback,
+		/*$valid_node_types=*/NULL,
+		/*$child_cutoff=*/NULL,
+		/*$max_recurse_depth=*/NULL,
+		/*$require_permission_support=*/false,
+		/*$zone=*/'_SEARCH',
+		/*$use_page_groupings=*/false,
+		/*$consider_secondary_categories=*/false,
+		/*$consider_validation=*/false,
+		$meta_gather
+	);
+
+	create_session($member);
+	clear_permissions_runtime_cache();
 }
 
 // Other media

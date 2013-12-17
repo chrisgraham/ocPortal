@@ -23,6 +23,24 @@
  */
 function init__permissions()
 {
+	global $SPAM_REMOVE_VALIDATION;
+	$SPAM_REMOVE_VALIDATION=false;
+
+	global $USERSUBMITBAN_MEMBER_CACHE;
+	$USERSUBMITBAN_MEMBER_CACHE=NULL;
+
+	clear_permissions_runtime_cache();
+
+	define('COMCODE_EDIT_NONE',0x0);
+	define('COMCODE_EDIT_OWN',0x1);
+	define('COMCODE_EDIT_ANY',0x2);
+}
+
+/**
+ * Clear permissions API run-time caching.
+ */
+function clear_permissions_runtime_cache()
+{
 	global $PRIVILEGE_CACHE;
 	$PRIVILEGE_CACHE=array();
 
@@ -48,16 +66,6 @@ function init__permissions()
 	global $PERMISSION_CHECK_LOGGER,$PERMISSIONS_ALREADY_LOGGED;
 	$PERMISSION_CHECK_LOGGER=NULL;
 	$PERMISSIONS_ALREADY_LOGGED=array();
-
-	global $SPAM_REMOVE_VALIDATION;
-	$SPAM_REMOVE_VALIDATION=false;
-
-	global $USERSUBMITBAN_MEMBER_CACHE;
-	$USERSUBMITBAN_MEMBER_CACHE=NULL;
-
-	define('COMCODE_EDIT_NONE',0x0);
-	define('COMCODE_EDIT_OWN',0x1);
-	define('COMCODE_EDIT_ANY',0x2);
 }
 
 /**

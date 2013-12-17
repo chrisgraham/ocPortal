@@ -381,7 +381,7 @@ function send_rss_ping($show_errors=true)
 		}
 	}
 
-	require_code('sitemap');
+	require_code('sitemap_xml');
 	$out.=ping_sitemap_xml($url);
 
 	return $out;
