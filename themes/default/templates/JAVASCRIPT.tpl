@@ -304,14 +304,14 @@ function initialise_error_mechanism()
 			}
 			return false;
 		};
-	add_event_listener_abstract(window,'unload',function() { window.onerror=null; } );
+	add_event_listener_abstract(window,'beforeunload',function() { window.onerror=null; } );
 }
 if ((typeof window.take_errors!='undefined') && (window.take_errors)) initialise_error_mechanism();
 if (typeof window.unloaded=='undefined')
 {
-	window.unloaded=false;
+	window.unloaded=false; // Serves as a flag to indicate any new errors are probably due to us transitioning
 }
-add_event_listener_abstract(window,'unload',function() { window.unloaded=true; } );
+add_event_listener_abstract(window,'beforeunload',function() { window.unloaded=true; } );
 
 /* Screen transition, for staff */
 function staff_unload_action()
