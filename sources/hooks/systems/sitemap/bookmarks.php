@@ -28,13 +28,20 @@ class Hook_sitemap_bookmarks extends Hook_sitemap_base
 	 */
 	function handles_page_link($page_link)
 	{
-		return SITEMAP_NODE_NOT_HANDLED; // TODO
-
-		/*if (preg_match('#^([^:]*):bookmarks$#',$page_link)!=0)
+		$matches=array();
+		if (preg_match('#^([^:]*):bookmarks$#',$page_link,$matches)!=0)
 		{
-			return SITEMAP_NODE_HANDLED_VIRTUALLY;
+			$zone=$matches[1];
+			$page='bookmarks';
+
+			require_code('site');
+			$test=_request_page($page,$zone);
+			if (($test!==false) && (($test[0]=='MODULES_CUSTOM') || ($test[0]=='MODULES'))) // Ensure the relevant module really does exist in the given zone
+			{
+				return SITEMAP_NODE_HANDLED_VIRTUALLY;
+			}
 		}
-		return SITEMAP_NODE_NOT_HANDLED;*/
+		return SITEMAP_NODE_NOT_HANDLED;
 	}
 
 	/**
@@ -57,8 +64,61 @@ class Hook_sitemap_bookmarks extends Hook_sitemap_base
 	 */
 	function get_virtual_nodes($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
 	{
-		// TODO
-		return NULL;
+		$nodes=($callback===NULL || $return_anyway)?array():mixed();
+
+		if (($valid_node_types!==NULL) && (!in_array('_bookmark_folder',$valid_node_types)))
+		{
+			return $nodes;
+		}
+
+		if ($require_permission_support)
+		{
+			return $nodes;
+		}
+
+		if (is_guest())
+		{
+			return $nodes;
+		}
+
+		if ($child_cutoff!==NULL)
+		{
+			$where=array('b_owner'=>get_member(),'b_folder'=>'');
+			$count=$GLOBALS['SITE_DB']->query_select_value('bookmarks','COUNT(*)',$where);
+			if ($count>$child_cutoff) return $nodes;
+		}
+
+		$page=$this->_make_zone_concrete($zone,$page_link);
+
+		$subfolder_rows=$GLOBALS['SITE_DB']->query_select('bookmarks',array('DISTINCT b_folder'),array('b_owner'=>get_member()),' AND '.db_string_not_equal_to('b_folder',''));
+		$children_rows=$GLOBALS['SITE_DB']->query_select('bookmarks',array('*'),array('b_owner'=>get_member(),'b_folder'=>''),'',1);
+
+		if ($child_cutoff!==NULL)
+		{
+			if (count($subfolder_rows)+count($children_rows)>$child_cutoff) return $nodes;
+		}
+
+		$children_folders=array();
+		foreach ($subfolder_rows as $child_row)
+		{
+			$child_page_link=$zone.':'.$page.':misc:'.urlencode($child_row['b_folder']);
+			$child_node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+			if ($child_node!==NULL)
+				$children_folders[]=$child_node;
+		}
+		sort_maps_by($children_folders,'title');
+
+		$children=array();
+		foreach ($children_rows as $child_row)
+		{
+			$child_page_link=$zone.':'.$page.':view:'.strval($child_row['id']);
+			$child_node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+			if ($child_node!==NULL)
+				$children[]=$child_node;
+		}
+		sort_maps_by($children,'title');
+
+		return is_null($nodes)?NULL:array_merge($children_folders,$children);
 	}
 
 	/**
@@ -82,7 +142,142 @@ class Hook_sitemap_bookmarks extends Hook_sitemap_base
 	 */
 	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
-		// TODO
-		return NULL;
+		if (($valid_node_types!==NULL) && (!in_array('_bookmark',$valid_node_types)))
+		{
+			return $nodes;
+		}
+
+		if ($require_permission_support)
+		{
+			return $nodes;
+		}
+
+		if (is_guest())
+		{
+			return $nodes;
+		}
+
+		$matches=array();
+		preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$page_link,$matches);
+		$screen=$matches[3];
+
+		$page=$this->_make_zone_concrete($zone,$page_link);
+
+		if ($screen=='view') // Bookmark (NB: a 'view' page-link isn't real, it's just used as a call identifier - the real page-link is what the bookmark says)
+		{
+			$id=intval($matches[4]);
+
+			if ($row===NULL)
+			{
+				$rows=$GLOBALS['SITE_DB']->query_select('bookmarks',array('*'),array('id'=>$id,'b_owner'=>get_member()/*over-specified to include a security check*/),'',1);
+				$row=$rows[0];
+			}
+
+			$struct=array(
+				'title'=>make_string_tempcode(escape_html($row['b_title'])),
+				'content_type'=>'_bookmark',
+				'content_id'=>NULL,
+				'modifiers'=>array(),
+				'only_on_page'=>'',
+				'page_link'=>$row['b_page_link'],
+				'url'=>NULL,
+				'extra_meta'=>array(
+					'description'=>NULL,
+					'image'=>(($meta_gather & SITEMAP_GATHER_IMAGE)!=0)?find_theme_image('icons/24x24/menu/_generic_spare/page'):NULL,
+					'image_2x'=>(($meta_gather & SITEMAP_GATHER_IMAGE)!=0)?find_theme_image('icons/48x48/menu/_generic_spare/page'):NULL,
+					'add_date'=>NULL,
+					'edit_date'=>NULL,
+					'submitter'=>NULL,
+					'views'=>NULL,
+					'rating'=>NULL,
+					'meta_keywords'=>NULL,
+					'meta_description'=>NULL,
+					'categories'=>NULL,
+					'validated'=>NULL,
+					'db_row'=>(($meta_gather & SITEMAP_GATHER_DB_ROW)!=0)?$row:NULL,
+				),
+				'permissions'=>array(),
+				'children'=>NULL,
+				'has_possible_children'=>true,
+
+				// These are likely to be changed in individual hooks
+				'sitemap_priority'=>SITEMAP_IMPORTANCE_NONE,
+				'sitemap_refreshfreq'=>'yearly',
+
+				'privilege_page'=>NULL,
+			);
+
+			if (!$this->_check_node_permissions($struct)) return NULL;
+
+			if ($callback!==NULL)
+				call_user_func($callback,$struct);
+
+		} else // Folder
+		{
+			if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
+			{
+				$folder=$matches[4];
+
+				$struct=array(
+					'title'=>make_string_tempcode(escape_html($folder)),
+					'content_type'=>'_bookmark_folder',
+					'content_id'=>NULL,
+					'modifiers'=>array(),
+					'only_on_page'=>'',
+					'page_link'=>'',
+					'url'=>NULL,
+					'extra_meta'=>array(
+						'description'=>NULL,
+						'image'=>(($meta_gather & SITEMAP_GATHER_IMAGE)!=0)?find_theme_image('icons/24x24/menu/_generic_admin/view_this_category'):NULL,
+						'image_2x'=>(($meta_gather & SITEMAP_GATHER_IMAGE)!=0)?find_theme_image('icons/48x48/menu/_generic_admin/view_this_category'):NULL,
+						'add_date'=>NULL,
+						'edit_date'=>NULL,
+						'submitter'=>NULL,
+						'views'=>NULL,
+						'rating'=>NULL,
+						'meta_keywords'=>NULL,
+						'meta_description'=>NULL,
+						'categories'=>NULL,
+						'validated'=>NULL,
+						'db_row'=>(($meta_gather & SITEMAP_GATHER_DB_ROW)!=0)?$row:NULL,
+					),
+					'permissions'=>array(),
+					'children'=>NULL,
+					'has_possible_children'=>true,
+
+					// These are likely to be changed in individual hooks
+					'sitemap_priority'=>SITEMAP_IMPORTANCE_NONE,
+					'sitemap_refreshfreq'=>'yearly',
+
+					'privilege_page'=>NULL,
+				);
+
+				if (!$this->_check_node_permissions($struct)) return NULL;
+
+				$children_rows=$GLOBALS['SITE_DB']->query_select('bookmarks',array('*'),array('b_owner'=>get_member(),'b_folder'=>$folder),'',1);
+
+				if ($child_cutoff!==NULL)
+				{
+					if (count($children_rows)>$child_cutoff) return $nodes;
+				}
+
+				$children=array();
+				foreach ($children_rows as $child_row)
+				{
+					$child_page_link=$zone.':'.$page.':view:'.strval($child_row['id']);
+					$child_node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+					if ($child_node!==NULL)
+						$children[]=$child_node;
+				}
+				sort_maps_by($children,'title');
+
+				$struct['children']=$children;
+
+				if ($callback!==NULL)
+					call_user_func($callback,$struct);
+			}
+		}
+
+		return ($callback===NULL || $return_anyway)?$struct:NULL;
 	}
 }

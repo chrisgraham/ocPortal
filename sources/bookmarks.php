@@ -124,12 +124,16 @@ function add_bookmark_form($post_url)
  */
 function add_bookmark($member,$folder,$title,$page_link)
 {
-	return $GLOBALS['SITE_DB']->query_insert('bookmarks',array(
+	$id=$GLOBALS['SITE_DB']->query_insert('bookmarks',array(
 		'b_owner'=>$member,
 		'b_folder'=>$folder,
 		'b_title'=>$title,
 		'b_page_link'=>$page_link,
 	),true);
+
+	decache('menu');
+
+	return $id;
 }
 
 /**
@@ -143,6 +147,8 @@ function add_bookmark($member,$folder,$title,$page_link)
 function edit_bookmark($id,$member,$title,$page_link)
 {
 	$GLOBALS['SITE_DB']->query_update('bookmarks',array('b_page_link'=>$page_link,'b_title'=>$title),array('id'=>$id,'b_owner'=>$member),'',1); // Second select param for needed security
+
+	decache('menu');
 }
 
 /**
@@ -156,5 +162,7 @@ function delete_bookmark($id,$member=NULL)
 	$where=array('id'=>$id);
 	if (!is_null($member)) $where['b_owner']=$member; // Second select param for needed security
 	$GLOBALS['SITE_DB']->query_delete('bookmarks',$where,'',1);
+
+	decache('menu');
 }
 

@@ -28,9 +28,18 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 	 */
 	function handles_page_link($page_link)
 	{
-		if (preg_match('#^([^:]*):admin_config(:misc)?$#',$page_link)!=0)
+		$matches=array();
+		if (preg_match('#^([^:]*):admin_config(:misc)?$#',$page_link,$matches)!=0)
 		{
-			return SITEMAP_NODE_HANDLED_VIRTUALLY;
+			$zone=$matches[1];
+			$page='admin_config';
+
+			require_code('site');
+			$test=_request_page($page,$zone);
+			if (($test!==false) && (($test[0]=='MODULES_CUSTOM') || ($test[0]=='MODULES'))) // Ensure the relevant module really does exist in the given zone
+			{
+				return SITEMAP_NODE_HANDLED_VIRTUALLY;
+			}
 		}
 		return SITEMAP_NODE_NOT_HANDLED;
 	}
@@ -57,7 +66,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 	{
 		$nodes=($callback===NULL || $return_anyway)?array():mixed();
 
-		if (($valid_node_types!==NULL) && (!in_array('config_category',$valid_node_types)))
+		if (($valid_node_types!==NULL) && (!in_array('_config_category',$valid_node_types)))
 		{
 			return $nodes;
 		}
@@ -136,7 +145,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 
 		$struct=array(
 			'title'=>$_category_name,
-			'content_type'=>NULL,
+			'content_type'=>'_config_category',
 			'content_id'=>NULL,
 			'modifiers'=>array(),
 			'only_on_page'=>'',

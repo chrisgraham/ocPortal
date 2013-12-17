@@ -14,12 +14,13 @@
 	padding: 0.25em 0;
 }
 
-.menu_type__sitemap li>span>* {
-	vertical-align: middle;
-}
-
 .menu_type__sitemap li>span {
 	display: block;
+	overflow: hidden;
+}
+
+.menu_type__sitemap li>span>* {
+	vertical-align: middle;
 }
 
 .menu_type__sitemap li>span:hover {
