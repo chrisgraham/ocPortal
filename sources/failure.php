@@ -1005,12 +1005,12 @@ function get_html_trace()
 							$__value=gettype($param);
 						} else
 						{
-							@ob_start();
 							if (is_float($param)) // So we know it is a float (var_export shows an integer if no decimals)
 							{
 								$__value=float_to_raw_string($param);
 							} else
 							{
+								@ob_start();
 								/*var_dump*/var_export($param);
 								$__value=ob_get_contents();
 								ob_end_clean();
