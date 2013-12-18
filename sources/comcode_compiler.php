@@ -125,7 +125,7 @@ function init__comcode_compiler()
 function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits=NULL,$on_behalf_of_member=NULL)
 {
 	global $LAX_COMCODE;
-	if ($LAX_COMCODE===NULL) $LAX_COMCODE=(get_option('lax_comcode')=='1');
+	if ($LAX_COMCODE===NULL && function_exists('get_option')) $LAX_COMCODE=(get_option('lax_comcode')=='1');
 
 	global $ADVERTISING_BANNERS_CACHE,$ALLOWED_ENTITIES,$POTENTIALLY_EMPTY_TAGS,$CODE_TAGS,$REVERSABLE_TAGS,$PUREHTML_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE;
 

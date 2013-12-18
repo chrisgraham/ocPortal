@@ -1244,7 +1244,8 @@ class Module_admin_stats
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
 		$ip_filter=$GLOBALS['DEV_MODE']?'':(' AND '.db_string_not_equal_to('ip',get_ip_address()));
-		$rows=$GLOBALS['SITE_DB']->query('SELECT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' ORDER BY '.$sortable.' '.$sort_order,10000/*reasonable limit*/);
+		$reasonable_max=10000;
+		$rows=$GLOBALS['SITE_DB']->query('SELECT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.')'.$ip_filter.' ORDER BY '.$sortable.' '.$sort_order,$reasonable_max/*reasonable limit*/);
 		if (count($rows)<1)
 		{
 			$list_views=new ocp_tempcode();

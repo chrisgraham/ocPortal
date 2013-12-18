@@ -420,6 +420,7 @@ class Hook_addon_registry_testing_platform
 			'_tests/tests/unit_tests/welcome_emails.php',
 			'_tests/tests/unit_tests/bot_list_sync.php',
 			'_tests/tests/unit_tests/installsql.php',
+			'_tests/tests/unit_tests/installer.php',
 			'_tests/tests/unit_tests/override_issues.php',
 			'_tests/tests/unit_tests/js_ssl_issues.php',
 			'_tests/tests/unit_tests/resource_fs.php',

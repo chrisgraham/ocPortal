@@ -1976,7 +1976,7 @@ function browser_matches($code)
 	$is_safari=strpos($browser,'applewebkit')!==false;
 	$is_chrome=strpos($browser,'chrome/')!==false;
 	$is_gecko=(strpos($browser,'gecko')!==false) && !$is_opera && !$is_konqueror && !$is_safari;
-	$is_ie=(strpos($browser,'msie')!==false) && !$is_opera;
+	$is_ie=((strpos($browser,'msie')!==false) || (strpos($browser,'trident')!==false)) && !$is_opera;
 	$is_ie8=(strpos($browser,'msie 8')!==false) && ($is_ie);
 	$is_ie9=(strpos($browser,'msie 9')!==false) && ($is_ie);
 	$is_ie8_plus=$is_ie; // Below IE8 not supported/recognised
@@ -2180,10 +2180,11 @@ function get_bot_type()
 	if ($BOT_TYPE_CACHE!==false) return $BOT_TYPE_CACHE;
 
 	$agent=ocp_srv('HTTP_USER_AGENT');
-	if (strpos($agent,'WebKit')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false)
+	if (strpos($agent,'WebKit')!==false || strpos($agent,'Trident')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false)
 	{
+		// Quick exit path
 		$BOT_TYPE_CACHE=NULL;
-		return NULL; // Quick exit path
+		return NULL;
 	}
 	$agent=strtolower($agent);
 

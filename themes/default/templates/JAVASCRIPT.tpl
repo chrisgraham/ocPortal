@@ -898,7 +898,7 @@ function browser_matches(code)
 	var is_safari=browser.indexOf('applewebkit')!=-1;
 	var is_chrome=browser.indexOf('chrome/')!=-1;
 	var is_gecko=(browser.indexOf('gecko')!=-1) && !_is_opera && !is_konqueror && !is_safari;
-	var _is_ie=(browser.indexOf('msie')!=-1) && !_is_opera;
+	var _is_ie=((browser.indexOf('msie')!=-1) || (browser.indexOf('trident')!=-1)) && !_is_opera;
 	var is_ie_8=(browser.indexOf('msie 8')!=-1) && (_is_ie);
 	var is_ie_8_plus=is_ie_8;
 	var is_ie_9=(browser.indexOf('msie 9')!=-1) && (_is_ie);
