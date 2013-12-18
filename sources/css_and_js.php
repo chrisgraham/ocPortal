@@ -179,6 +179,35 @@ function js_compile($j,$js_cache_path,$minify=true)
 	if (!$success_status)
 	{
 		touch($js_cache_path,time()-60*60*24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
+	} else
+	{
+		compress_ocp_stub_file($js_cache_path);
+	}
+}
+
+/**
+ * Compress a file, and save with a stem of .gz.
+ *
+ * @param  PATH			Full path to the file to compress
+ */
+function compress_ocp_stub_file($stub_file)
+{
+	if (function_exists('gzencode'))
+	{
+		$myfile=@fopen($stub_file.'.gz',GOOGLE_APPENGINE?'wb':'at');
+		if ($myfile!==false)
+		{
+			$compressed=gzencode(file_get_contents($stub_file),9);
+
+			@flock($myfile,LOCK_EX);
+			if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
+			if (fwrite($myfile,$compressed)<strlen($compressed))
+				warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			fclose($myfile);
+
+			fix_permissions($stub_file.'.gz');
+			sync_file($stub_file.'.gz');
+		}
 	}
 }
 
@@ -218,6 +247,9 @@ function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=t
 	if (!$success_status)
 	{
 		touch($css_cache_path,time()-60*60*24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
+	} else
+	{
+		compress_ocp_stub_file($css_cache_path);
 	}
 }
 

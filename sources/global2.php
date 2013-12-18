@@ -326,7 +326,8 @@ function init__global2()
 	} elseif (!$DEV_MODE) @ini_set('display_errors','0');
 
 	// G-zip?
-	@ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
+	@ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'2048':'Off'); // 2KB buffer is based on capturing repetition while not breaking output streaming
+	@ini_set('zlib.output_compression_level','2'); // Compression doesn't get much better after this, but performance drop
 
 	// Check installer not left behind
 	if ((!$MICRO_AJAX_BOOTUP) && (!$MICRO_BOOTUP) && ((!isset($SITE_INFO['no_installer_checks'])) || ($SITE_INFO['no_installer_checks']!='1')))

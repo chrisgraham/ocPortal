@@ -45,6 +45,7 @@ php_flag suhosin.sql.union off
 ErrorDocument 404 /index.php?page=404
 </FilesMatch>
 
+# Compress some static resources
 <IfModule mod_deflate.c>
 AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript
 </IfModule>
@@ -57,6 +58,20 @@ Options +FollowSymLinks
 RewriteEngine on
 
 # If rewrites are directing to bogus URLs, try adding a "RewriteBase /" line, or a "RewriteBase /subdir" line if you're in a subdirectory. Requirements vary from server to server.
+
+# Serve pre-compressed CSS/JS files if they exist and the client accepts gzip
+<FilesMatch "\.js\.gz($|\?)">
+ForceType text/javascript
+Header set Content-Encoding: gzip
+</FilesMatch>
+<FilesMatch "\.css\.gz($|\?)">
+ForceType text/css
+Header set Content-Encoding: gzip
+</FilesMatch>
+RewriteCond %{HTTP:Accept-encoding} gzip
+RewriteCond %{REQUEST_FILENAME}\.gz -s
+RewriteRule (.*/templates_cached/[^/]*/[^/]*\.(css|js)) $1.gz [QSA]
+SetEnvIfNoCase Request_URI (.*/templates_cached/[^/]*/[^/]*\.(css|js)) no-gzip
 
 # Anything that would point to a real file should actually be allowed to do so. If you have a "RewriteBase /subdir" command, you may need to change to "%{DOCUMENT_ROOT}/subdir/$1".
 RewriteCond $1 ^\d+.shtml [OR]

@@ -105,6 +105,9 @@ function _save_web_resource_merging($resources,$type,$write_path)
 		fclose($myfile);
 		fix_permissions($write_path,0777);
 		sync_file($write_path);
+
+		require_code('css_and_js');
+		compress_ocp_stub_file($write_path);
 	}
 
 	return $good_to_go;
