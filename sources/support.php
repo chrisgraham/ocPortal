@@ -1446,7 +1446,7 @@ function browser_matches($code)
 	$is_safari=strpos($browser,'applewebkit')!==false;
 	$is_chrome=strpos($browser,'chrome/')!==false;
 	$is_gecko=(strpos($browser,'gecko')!==false) && !$is_opera && !$is_konqueror && !$is_safari;
-	$is_ie=(strpos($browser,'msie')!==false) && !$is_opera;
+	$is_ie=((strpos($browser,'msie')!==false) || (strpos($browser,'trident')!==false)) && !$is_opera;
 	$is_ie_old=((strpos($browser,'msie 6')!==false) || (strpos($browser,'msie 5')!==false)) && ($is_ie);
 	$is_ie_decent=(!$is_ie_old) && (strpos($browser,'msie 7')===false) && $is_ie;
 	$is_ie5=(strpos($browser,'msie 5')!==false) && ($is_ie);

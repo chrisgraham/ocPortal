@@ -451,7 +451,7 @@ function create_scatter_graph($data,$x_label='X Axis',$y_label='Y Axis',$x_units
 */
 function create_pie_chart($data)
 {
-	if (!defined('PIE_RADIUS')) define('PIE_RADIUS',190.0);
+	if (!defined('PIE_RADIUS')) define('PIE_RADIUS',190);
 
 	arsort($data);
 
@@ -482,12 +482,12 @@ function create_pie_chart($data)
 		$angle+=$value;
 		$end_angle=$angle;
 
-		$plot.=_draw_segment($colour,$value,PIE_RADIUS,PIE_RADIUS+cos(deg2rad($start_angle))*PIE_RADIUS,PIE_RADIUS+sin(deg2rad($start_angle))*PIE_RADIUS,PIE_RADIUS+(cos(deg2rad($end_angle))*PIE_RADIUS),PIE_RADIUS+(sin(deg2rad($end_angle))*PIE_RADIUS));
+		$plot.=_draw_segment($colour,intval($value),PIE_RADIUS,PIE_RADIUS+intval(cos(deg2rad($start_angle))*PIE_RADIUS),PIE_RADIUS+intval(sin(deg2rad($start_angle))*PIE_RADIUS),PIE_RADIUS+intval((cos(deg2rad($end_angle))*PIE_RADIUS)),PIE_RADIUS+intval((sin(deg2rad($end_angle))*PIE_RADIUS)));
 		$colour=_get_next_colour($colour);
-		$data2[$key]=round(($value/360)*100,1);
+		$data2[$key]=round(($value/360.0)*100.0,1);
 	}
 
-	$output.=_draw_key($data2,'333333',2*PIE_RADIUS+3*X_PADDING,Y_PADDING,'%');
+	$output.=_draw_key($data2,'333333',intval(2*PIE_RADIUS+3*X_PADDING),intval(Y_PADDING),'%');
 	$output.=_finish_svg($plot);
 
 	return _filter_svg_css($output);
