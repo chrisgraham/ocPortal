@@ -2485,6 +2485,8 @@ function titleify($boring)
 	$boring=preg_replace('#([/\\\\])#','${1} ',$boring);
 	$ret=ucwords(str_replace('_',' ',$boring));
 
+	if ($boring=='id') return 'ID';
+
 	// Fixup ocPortal addon naming
 	$ret=str_replace('Ocportal','ocPortal',$ret);
 	$ret=str_replace('Ocselect','ocSelect',$ret);

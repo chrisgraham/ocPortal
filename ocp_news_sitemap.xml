@@ -2,17 +2,26 @@
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 	
 				<url>
+<<<<<<< HEAD
 					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_4</loc>
+=======
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_9</loc>
+>>>>>>> sortable_tables
 					<news:news>
 						<news:publication>
 							<news:name>(unnamed)</news:name>
 							<news:language>en</news:language>
 						</news:publication>
 			
+<<<<<<< HEAD
 						<news:access>Registration</news:access>
 					
 						<news:genres></news:genres>
 						<news:publication_date>2013-10-13T01:17:00+00:00</news:publication_date>
+=======
+						<news:genres></news:genres>
+						<news:publication_date>2013-12-11T16:22:25+00:00</news:publication_date>
+>>>>>>> sortable_tables
 						<news:title>test</news:title>
 						<news:keywords></news:keywords>
 			
@@ -20,17 +29,26 @@
 			  </url>
 			
 				<url>
+<<<<<<< HEAD
 					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_3</loc>
+=======
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_8</loc>
+>>>>>>> sortable_tables
 					<news:news>
 						<news:publication>
 							<news:name>(unnamed)</news:name>
 							<news:language>en</news:language>
 						</news:publication>
 			
+<<<<<<< HEAD
 						<news:access>Registration</news:access>
 					
 						<news:genres></news:genres>
 						<news:publication_date>2013-10-12T01:37:00+00:00</news:publication_date>
+=======
+						<news:genres></news:genres>
+						<news:publication_date>2013-12-11T16:21:38+00:00</news:publication_date>
+>>>>>>> sortable_tables
 						<news:title>test</news:title>
 						<news:keywords></news:keywords>
 			
@@ -38,17 +56,26 @@
 			  </url>
 			
 				<url>
+<<<<<<< HEAD
 					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest</loc>
+=======
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_7</loc>
+>>>>>>> sortable_tables
 					<news:news>
 						<news:publication>
 							<news:name>(unnamed)</news:name>
 							<news:language>en</news:language>
 						</news:publication>
 			
+<<<<<<< HEAD
 						<news:access>Registration</news:access>
 					
 						<news:genres></news:genres>
 						<news:publication_date>2013-10-12T01:37:00+00:00</news:publication_date>
+=======
+						<news:genres></news:genres>
+						<news:publication_date>2013-12-11T16:08:09+00:00</news:publication_date>
+>>>>>>> sortable_tables
 						<news:title>test</news:title>
 						<news:keywords></news:keywords>
 			
@@ -56,17 +83,106 @@
 			  </url>
 			
 				<url>
+<<<<<<< HEAD
 					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_2</loc>
+=======
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_6</loc>
+>>>>>>> sortable_tables
 					<news:news>
 						<news:publication>
 							<news:name>(unnamed)</news:name>
 							<news:language>en</news:language>
 						</news:publication>
 			
+<<<<<<< HEAD
 						<news:access>Registration</news:access>
 					
 						<news:genres></news:genres>
 						<news:publication_date>2013-10-12T01:37:00+00:00</news:publication_date>
+=======
+						<news:genres></news:genres>
+						<news:publication_date>2013-12-11T16:07:51+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_5</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:genres></news:genres>
+						<news:publication_date>2013-12-11T16:07:17+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_4</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:genres></news:genres>
+						<news:publication_date>2013-12-11T16:06:57+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_3</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:genres></news:genres>
+						<news:publication_date>2013-12-11T16:05:18+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_2</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:genres></news:genres>
+						<news:publication_date>2013-12-01T14:53:40+00:00</news:publication_date>
+						<news:title>test</news:title>
+						<news:keywords></news:keywords>
+			
+					</news:news>
+			  </url>
+			
+				<url>
+					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest</loc>
+					<news:news>
+						<news:publication>
+							<news:name>(unnamed)</news:name>
+							<news:language>en</news:language>
+						</news:publication>
+			
+						<news:genres></news:genres>
+						<news:publication_date>2013-11-19T11:50:54+00:00</news:publication_date>
+>>>>>>> sortable_tables
 						<news:title>test</news:title>
 						<news:keywords></news:keywords>
 			
