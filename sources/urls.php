@@ -219,7 +219,7 @@ function skippable_keep($key,$val)
 {
 	global $CACHE_BOT_TYPE;
 	if ($CACHE_BOT_TYPE===false) get_bot_type();
-	if ($CACHE_BOT_TYPE!==false)
+	if ($CACHE_BOT_TYPE!==NULL)
 	{
 		return true;
 	}
