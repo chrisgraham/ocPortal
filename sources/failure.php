@@ -1006,9 +1006,15 @@ function get_html_trace()
 						} else
 						{
 							@ob_start();
-							/*var_dump*/var_export($param);
-							$__value=ob_get_contents();
-							ob_end_clean();
+							if (is_float($param)) // So we know it is a float (var_export shows an integer if no decimals)
+							{
+								$__value=float_to_raw_string($param);
+							} else
+							{
+								/*var_dump*/var_export($param);
+								$__value=ob_get_contents();
+								ob_end_clean();
+							}
 						}
 						if ((strlen($__value)<MAX_STACK_TRACE_VALUE_LENGTH) || (defined('HIPHOP_PHP')))
 						{
@@ -1023,7 +1029,7 @@ function get_html_trace()
 			{
 				$value=mixed();
 				if (is_float($__value))
-					$value=float_format($__value);
+					$value=float_to_raw_string($__value);
 				elseif (is_integer($__value))
 					$value=integer_format($__value);
 				else $value=$__value;

@@ -1868,7 +1868,7 @@ function check_expression($e,$assignment=false,$equate_false=false,$function_gua
 				check_expression($param[0],false,false,$function_guard);
 				if (isset($param[1])) check_expression($param[1],false,false,$function_guard);
 			}
-			return array('array',$inner[1]);
+			return 'array';
 		case 'VARIABLE':
 			return check_variable($inner,true);
 	}
