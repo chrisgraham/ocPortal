@@ -225,8 +225,8 @@ class Module_admin_email_log
 		$fields->attach(form_input_line(do_lang_tempcode('FROM_NAME'),'','from_name',$from_name,false));
 		$fields->attach(form_input_line_multi(do_lang_tempcode('TO_EMAIL'),'','to_email_',$to_email,1));
 		$fields->attach(form_input_line_multi(do_lang_tempcode('TO_NAME'),'','to_name',$to_name,1));
-		$fields->attach(form_input_line_multi(do_lang_tempcode('EXTRA_CC_ADDRESSES'),'','extra_cc_addresses_',$extra_cc_addresses,1));
-		$fields->attach(form_input_line_multi(do_lang_tempcode('EXTRA_BCC_ADDRESSES'),'','extra_bcc_addresses_',$extra_bcc_addresses,1));
+		$fields->attach(form_input_line_multi(do_lang_tempcode('EXTRA_CC_ADDRESSES'),'','extra_cc_addresses_',$extra_cc_addresses,0));
+		$fields->attach(form_input_line_multi(do_lang_tempcode('EXTRA_BCC_ADDRESSES'),'','extra_bcc_addresses_',$extra_bcc_addresses,0));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MESSAGE'),'','message',$row['m_message'],true));
 
 		$radios=new ocp_tempcode();
