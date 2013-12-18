@@ -118,6 +118,7 @@ class Hook_addon_registry_core_comcode_pages
 			'sources/hooks/systems/config/comcode_page_default_review_freq.php',
 			'sources/hooks/systems/config/is_on_comcode_page_children.php',
 			'sources/hooks/systems/sitemap/comcode_page.php',
+			'themes/default/templates/COMCODE_PAGE_MANAGE_SCREEN.tpl',
 		);
 	}
 
@@ -133,7 +134,33 @@ class Hook_addon_registry_core_comcode_pages
 			'COMCODE_PAGE_SCREEN.tpl'=>'comcode_page_screen',
 			'COMCODE_PAGE_EDIT_ACTIONS.tpl'=>'comcode_page_edit_actions',
 			'COMCODE_PAGE_BOX.tpl'=>'comcode_page_preview'
+			'COMCODE_PAGE_MANAGE_SCREEN.tpl'=>'administrative__comcode_page_manage_screen'
 		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__administrative__comcode_page_manage_screen()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_MANAGE_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'TABLE'=>placeholder_table(),
+				'SUBMIT_NAME'=>lorem_word(),
+				'POST_URL'=>placeholder_url(),
+				'LINKS'=>array(
+					'LINK_IMAGE'=>placeholder_image_url(),
+					'LINK_URL'=>placeholder_url(),
+					'LINK_TEXT'=>lorem_phrase(),
+				),
+			)), NULL, '', true)
+		);
+
 	}
 
 	/**

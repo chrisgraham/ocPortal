@@ -29,7 +29,7 @@ class Hook_content_meta_aware_comcode_page
 	function info($zone=NULL)
 	{
 		return array(
-			'supports_custom_fields'=>false,
+			'supports_custom_fields'=>true,
 
 			'content_type_label'=>'zones:COMCODE_PAGE',
 

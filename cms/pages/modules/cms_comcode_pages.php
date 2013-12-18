@@ -541,14 +541,29 @@ class Module_cms_comcode_pages
 
 		$extra=$fields->is_empty()?new ocp_tempcode():do_template('FORM',array('FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>$submit_name,'SUBMIT_ICON'=>'menu___generic_admin__add_one'));
 
-		$tpl=do_template('COLUMNED_TABLE_SCREEN',array(
-			'_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a',
-			'TITLE'=>$this->title,
+		// Custom fields
+		require_code('fields');
+		$_links=manage_custom_fields_donext_link('comcode_page');
+		$links=array();
+		foreach ($_links as $_link)
+		{
+			$links[]=array(
+				'LINK_IMAGE'=>find_theme_image('bigicons/'.$_link[0]), // TODO: Change on v10
+				'LINK_URL'=>build_url(array('page'=>$_link[1][0])+$_link[1][1],$_link[1][2]),
+				'LINK_TEXT'=>$_link[2],
+			);
+		}
+
+		$tpl=do_template('COMCODE_PAGE_MANAGE_SCREEN',array(
+			'TITLE'=>$title,
 			'TEXT'=>$text,
 			'TABLE'=>$table,
+			'FIELDS'=>$fields,
 			'POST_URL'=>$post_url,
 			'GET'=>true,
 			'HIDDEN'=>$hidden,
+			'SUBMIT_NAME'=>$submit_name,
+			'LINKS'=>$links,
 			'SUB_TITLE'=>$fields->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_PAGE_ADD'),
 			'EXTRA'=>$extra,
 		));
@@ -794,6 +809,10 @@ class Module_cms_comcode_pages
 			if ($page!=$file) $pages->attach(form_input_list_entry($page,$parent_page==$page));
 		}
 
+		// Add in custom fields
+		require_code('fields');
+		append_form_custom_fields('comcode_page',$zone.':'.$file,$fields2,$hidden_fields);
+
 		if (!$validated) $validated=(get_param_integer('validated',0)==1);
 		if (has_bypass_validation_comcode_page_permission($zone))
 		{
@@ -962,6 +981,15 @@ class Module_cms_comcode_pages
 			check_delete_permission('high',$resource_owner);
 			unlink(get_custom_file_base().'/'.$path);
 			sync_file($path);
+
+			// Delete custom fields
+			require_code('fields');
+			delete_form_custom_fields('comcode_page',$zone.':'.$file);
+		} else
+		{
+			// Save custom fields
+			require_code('fields');
+			save_form_custom_fields('comcode_page',$zone.':'.$new_file,$zone.':'.$file);
 		}
 
 		// Look for bad title semantics

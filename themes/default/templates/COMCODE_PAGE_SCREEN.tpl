@@ -9,6 +9,9 @@
 
 	{$TRIM,{CONTENT}}
 
+	{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,comcode_page,{NATIVE_ZONE}:{NAME}}}
+	{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
+
 	{+START,IF,{SHOW_AS_EDIT}}{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
 		<div class="edited" role="note">
 			<img alt="" src="{$IMG*,1x/edited}" srcset="{$IMG*,2x/edited} 2x" />

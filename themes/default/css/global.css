@@ -4034,8 +4034,11 @@ td>.comcode_code_wrap>.comcode_quote, td>.comcode_code_wrap>.comcode_code {
 	margin: 1em;
 }
 /* Make inline images look a little nicer, including with Wordpress imports (but native too) */
-.alignleft, .alignright, .aligncenter, .alignnone, .alignnone, a[rel="lightbox"] img.attachment_img, .attachment_img img {
+.alignleft, .alignright, .aligncenter, .alignnone, a[rel="lightbox"] img.attachment_img, .attachment_img img {
 	border: 2px solid {$GET,pale_border};
+}
+.alignleft img, .alignright img, .aligncenter img, .alignnone img {
+	display: block;
 }
 
 a[rel="lightbox"] {

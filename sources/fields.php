@@ -285,12 +285,15 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$field_fi
  *
  * @param  ID_TEXT		Content type hook codename
  * @param  ID_TEXT		Content entry ID
+ * @param  ?ID_TEXT		Content entry ID (prior to possible rename) (NULL: definitely unchanged)
  */
-function save_form_custom_fields($content_type,$id)
+function save_form_custom_fields($content_type,$id,$old_id=NULL)
 {
 	if (fractional_edit()) return;
 
-	$existing=get_bound_content_entry($content_type,$id);
+	if (is_null($old_id)) $old_id=$id;
+
+	$existing=get_bound_content_entry($content_type,$old_id);
 
 	require_code('catalogues');
 
@@ -310,6 +313,11 @@ function save_form_custom_fields($content_type,$id)
 	}
 
 	$first_cat=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
+	if (is_null($first_cat))
+	{
+		require_code('catalogues2');
+		$first_cat=actual_add_catalogue_category('_'.$content_type,do_lang('DEFAULT'),'','',NULL);
+	}
 
 	require_code('catalogues2');
 
