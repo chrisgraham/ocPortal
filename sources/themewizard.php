@@ -269,7 +269,7 @@ function find_theme_image_themewizard_preview($id)
  * @param  boolean	Whether we are generating the standalone version (smaller, used in e-mails etc).
  * @return resource  The image resource.
  */
-function generate_logo($name,$font_choice='Vera',$logo_theme_image='logo/default_logos/1',$background_theme_image='logo/default_backgrounds/1',$raw=false,$theme=NULL,$standalone_version=false)
+function generate_logo($name,$font_choice='Vera',$logo_theme_image='logo/default_logos/1',$background_theme_image='logo/default_backgrounds/banner1',$raw=false,$theme=NULL,$standalone_version=false)
 {
 	require_code('character_sets');
 	require_code('files');
