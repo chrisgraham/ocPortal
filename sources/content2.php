@@ -143,11 +143,12 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
  * Get field values for meta data.
  *
  * @param  ID_TEXT		The type of resource (e.g. download)
- * @param  ?ID_TEXT		The ID of the resource (NULL: adding)
+ * @param  ?ID_TEXT		The old ID of the resource (NULL: adding)
  * @param  ?array			List of fields to NOT take in (NULL: empty list)
+ * @param  ?ID_TEXT		The new ID of the resource (NULL: not being renamed)
  * @return array			A map of standard meta data fields (name to value). If adding, this map is accurate for adding. If editing, NULLs mean do-not-edit or non-editable.
  */
-function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=NULL)
+function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=NULL,$new_content_id=NULL)
 {
 	require_lang('meta_data');
 
@@ -275,12 +276,26 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 					list($zone,$page)=explode(':',$content_id);
 					$type='';
 					$_content_id=$zone;
+
+					if (!is_null($new_content_id))
+					{
+						$GLOBALS['SITE_DB']->query_update('url_id_monikers',array(
+							'm_resource_page'=>$new_content_id,
+						),array('m_resource_page'=>$page,'m_resource_type'=>'','m_resource_id'=>$zone));
+					}
 				} else
 				{
 					list($zone,$attributes,)=page_link_decode($info['view_page_link_pattern']);
 					$page=$attributes['page'];
 					$type=$attributes['type'];
 					$_content_id=$content_id;
+
+					if (!is_null($new_content_id))
+					{
+						$GLOBALS['SITE_DB']->query_update('url_id_monikers',array(
+							'm_resource_id'=>$new_content_id,
+						),array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$content_id));
+					}
 				}
 
 				$ok=true;

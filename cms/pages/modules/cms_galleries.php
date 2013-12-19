@@ -2321,7 +2321,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
-		$meta_data=actual_meta_data_get_fields('gallery',$id);
+		$meta_data=actual_meta_data_get_fields('gallery',$id,NULL,$name);
 
 		edit_gallery(
 			$id,

@@ -452,9 +452,11 @@ class Module_cms_banners extends standard_crud_module
 
 		$validated=post_param_integer('validated',0);
 
-		$meta_data=actual_meta_data_get_fields('banner',$id);
+		$new_id=post_param('name');
 
-		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$meta_data['submitter'],$validated,$b_type,$meta_data['edit_time'],$meta_data['add_time'],true);
+		$meta_data=actual_meta_data_get_fields('banner',$id,NULL,$new_id);
+
+		edit_banner($id,$new_id,$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$meta_data['submitter'],$validated,$b_type,$meta_data['edit_time'],$meta_data['add_time'],true);
 
 		$this->new_id=post_param('name');
 
@@ -656,9 +658,11 @@ class Module_cms_banners_cat extends standard_crud_module
 		$max_file_size=post_param_integer('max_file_size');
 		$comcode_inline=post_param_integer('comcode_inline',0);
 
-		$meta_data=actual_meta_data_get_fields('banner_type',$id);
+		$new_id=post_param('new_id');
 
-		edit_banner_type($id,post_param('new_id'),$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
+		$meta_data=actual_meta_data_get_fields('banner_type',$id,NULL,$new_id);
+
+		edit_banner_type($id,$new_id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
 
 		$this->new_id=post_param('new_id');
 

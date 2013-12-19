@@ -921,7 +921,7 @@ class Module_cms_comcode_pages
 		$show_as_edit=post_param_integer('show_as_edit',0);
 		$text_raw=post_param('post');
 		require_code('content2');
-		$meta_data=actual_meta_data_get_fields('comcode_page',$zone.':'.$file);
+		$meta_data=actual_meta_data_get_fields('comcode_page',$zone.':'.$file,NULL,$new_file);
 
 		// Handle attachments
 		require_code('attachments2');

@@ -1919,7 +1919,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		}
 		$this->is_tree_catalogue=($is_tree==1);
 
-		$meta_data=actual_meta_data_get_fields('catalogue',$old_name);
+		$meta_data=actual_meta_data_get_fields('catalogue',$old_name,NULL,$name);
 
 		actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$meta_data['add_time']);
 
