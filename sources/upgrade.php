@@ -119,6 +119,7 @@ function upgrade_script()
 					$l_safe_mode=fu_link('index.php?keep_safe_mode=1',do_lang('FU_SAFE_MODE'));
 					$num_addons=$GLOBALS['SITE_DB']->query_select_value('addons','COUNT(*)');
 					$l_addon_management=fu_link('adminzone/index.php?page=admin_addons&keep_safe_mode=1',do_lang('FU_ADDON_MANAGEMENT',integer_format($num_addons)),$num_addons==0);
+					$l_remove_addon_files=fu_link('upgrader.php?type=addon_remove',do_lang('FU_REMOVE_ADDON_FILES'));
 					$l_customisations=do_lang('FU_CUSTOMISATIONS');
 					$closed=comcode_to_tempcode(get_option('closed'),NULL,true);
 					$closed_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'SITE'),get_module_zone('admin_config'),NULL,false,false,false,'group_CLOSED_SITE');
@@ -180,6 +181,7 @@ function upgrade_script()
 	<h2 style=\"margin-top: 2em\">{$l_error_correction}&hellip;</h2><ul class=\"compact_list\">
 		<li style=\"padding: 0.5em\">{$l_safe_mode}</li>
 		<li style=\"padding: 0.5em\">{$l_addon_management}</li>
+		<li style=\"padding: 0.5em\">{$l_remove_addon_files}</li>
 	</ul>
 </div>
 ";
@@ -451,6 +453,39 @@ function upgrade_script()
 
 				case 'ocf': // Only to be launched as a consequent of db_upgrade
 					if (ocf_upgrade()) echo '<p>'.do_lang('SUCCESS').'</p>'; else echo do_lang('FU_NO_OCF_UPGRADE');
+					break;
+
+				case 'addon_remove':
+					echo '<p>This addon removal tool remove all files from a given list of addons. It should only be used if you have placed files from addons (non-bundled or bundled) that are not actually installed/were uninstalled. Do not use it on addons that are installed (i.e. have tables and settings for them in the database already).</p>';
+					echo '<p>';
+					echo 'For example, it is useful if you have extracted the contents of the full manual installer package as part of an upgrade and need to now remove the files from addons you were not actually using (not a supported upgrade practice, but sometimes useful for developers to do).<br />';
+					echo 'If you backed up the original website files under <kbd>old</kbd> and were upgrading to <kbd>new</kbd>, this shell command would find the list of addon names to remove:<br />';
+					echo '<kbd>diff -rcw old/sources/hooks/systems/addon_registry new/sources/hooks/systems/addon_registry | sed -e "s/Only in new\/sources\/hooks\/systems\/addon_registry: \(.*\)\.php/\1/" -e \'tx\' -e \'d\' -e \':x\'</kbd>';
+					echo '</p>';
+					echo '<form action="upgrader.php?type=_addon_remove" method="post">';
+					echo '<p><label for="addons">Addons to remove:</label><br /><textarea name="addons" id="addons" class="wide_field" rows="10"></textarea>';
+					echo '<input class="menu___generic_admin__delete button_screen" type="submit" value="Remove addon files" />';
+					echo post_fields_relay();
+					echo '</form>';
+					break;
+
+				case '_addon_remove':
+					$_addons=post_param('addons');
+					$addons=explode("\n",$_addons);
+					$addon_files=array();
+					require_code('addons');
+					foreach ($addons as $addon)
+					{
+						$addon=trim($addon);
+						if ($addon=='') continue;
+						$details=read_addon_info($addon);
+						$addon_files=array_merge($addon_files,$details['files']);
+					}
+					foreach ($addon_files as $addon_file)
+					{
+						afm_delete_file($addon_file);
+					}
+					echo '<p>The files have been deleted. Now, you may want install TARs for any bundled addons that were removed, in <kbd>exports/addons</kbd>, so you can reinstall them when you want. To generate these from a development copy of ocPortal, go to <kbd>adminzone/index.php?page=build_addons&export_bundled_addons=1&export_addons=0</kbd> and then copy them over.</p>';
 					break;
 			}
 
