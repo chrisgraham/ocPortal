@@ -4,8 +4,7 @@
 {| 60%:37% wide floats
 | [block]main_staff_checklist[/block]
 | [block defer="1"]main_staff_new_version[/block]
-{+START,IF,{$OCF}}
-[block="Reported posts forum,Staff" title="Staff forum" limit="3" failsafe="1"]main_forum_topics[/block]{+END}
+{+START,IF,{$OCF}}[block="Reported posts forum,Staff" title="Staff forum" limit="3" failsafe="1"]main_forum_topics[/block]{+END}
 
 [box="Miscellaneous links" options="tray_open"]
 [list]
