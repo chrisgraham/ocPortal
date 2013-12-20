@@ -232,7 +232,7 @@ class Hook_fields_video_multi
 			do
 			{
 				$tmp_name='field_'.strval($id).'_'.strval($i);
-				$temp=get_url('',$tmp_name,$upload_dir,0,OCP_UPLOAD_VIDEO);
+				$temp=get_url($tmp_name.'_url',$tmp_name,$upload_dir,0,OCP_UPLOAD_VIDEO);
 				$_value=$temp[0];
 				if ($_value!='')
 				{

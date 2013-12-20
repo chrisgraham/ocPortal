@@ -191,7 +191,7 @@ class Hook_fields_upload_multi
 			do
 			{
 				$tmp_name='field_'.strval($id).'_'.strval($i);
-				$temp=get_url('',$tmp_name,$upload_dir,0,OCP_UPLOAD_ANYTHING);
+				$temp=get_url($tmp_name.'_url',$tmp_name,$upload_dir,0,OCP_UPLOAD_ANYTHING);
 				$_value=$temp[0];
 				if ($_value!='')
 				{

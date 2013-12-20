@@ -197,7 +197,7 @@ class Hook_fields_picture_multi
 			do
 			{
 				$tmp_name='field_'.strval($id).'_'.strval($i);
-				$temp=get_url('',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
+				$temp=get_url($tmp_name.'_url',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
 				$_value=$temp[0];
 				if ($_value!='')
 				{

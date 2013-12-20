@@ -152,7 +152,7 @@ class Hook_fields_upload
 		if (!fractional_edit())
 		{
 			require_code('uploads');
-			$temp=get_url('',$tmp_name,$upload_dir,3,OCP_UPLOAD_ANYTHING);
+			$temp=get_url($tmp_name.'_url',$tmp_name,$upload_dir,3,OCP_UPLOAD_ANYTHING);
 			$value=$temp[0];
 			if ($value!='')
 			{

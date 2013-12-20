@@ -161,7 +161,7 @@ class Hook_fields_picture
 		if (!fractional_edit())
 		{
 			require_code('uploads');
-			$temp=get_url('',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
+			$temp=get_url($tmp_name.'_url',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
 			$value=$temp[0];
 			if (($editing) && ($value=='') && (post_param_integer($tmp_name.'_unlink',0)!=1))
 				return is_null($old_value)?'':$old_value;
