@@ -36,7 +36,7 @@ You are allowed to specify that comparisons may work on multiple fields, by sepa
  - [tt]<>[/tt] (Not equal to, where blank means skip)
  - [tt]!=[/tt] (Not equal to, where blank means literally a blank value cannot be matched)
  - [tt]~=[/tt] (Contains substring)
- - [tt]~[/tt] (Seems to match, according to database full-text search matching)
+ - [tt]~[/tt] (Seems to match, according to database full-text search matching; minimum of 4 search characters required, matches words not substrings, inexact matching)
  - [tt]@[/tt] (Falls within a range, e.g. 1-4)
  - [tt]#[/tt] (Value on the right is within the comma-separated list field referenced on the left)
 

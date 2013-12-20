@@ -440,7 +440,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					foreach ($explode as $i=>$case)
 					{
 						if (strpos($case,'=')===false) continue;
-						list($compare_case,$value_case)=explode('=',$case);
+						list($compare_case,$value_case)=explode('=',$case,2);
 						$compare_case=trim($compare_case);
 						if (
 							((!$substring) && (!$regexp) && ($compare_case==$compare)) || // Exact match
