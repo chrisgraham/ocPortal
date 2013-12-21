@@ -3607,6 +3607,10 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
 }
 
+.tab_surround>div>.box:first-child {
+	margin-top: 0;
+}
+
 /* Tighten up subtab display */
 .tab_surround .tab_surround {
 	background-image: none;

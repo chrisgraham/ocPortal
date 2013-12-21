@@ -110,16 +110,20 @@ class Hook_fields_list
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
 	{
 		$default=$field['cf_default'];
+		if ($actual_value===$default || $actual_value==='') $actual_value=NULL;
 		$list=($default=='')?array():explode('|',$default);
 		$_list=new ocp_tempcode();
-		if (($field['cf_required']==0) || ($actual_value==$default) || ($actual_value=='') || (is_null($actual_value)))
+		if (($field['cf_required']==0) || (is_null($actual_value)))
 		{
-			if ((array_key_exists(0,$list)) && ($list[0]==do_lang('NOT_DISCLOSED')))
+			if (($field['cf_required']==0) || (!in_array(do_lang('OTHER'),$list)))
 			{
-				$actual_value=$list[0]; // "Not Disclosed" will become the default if it is there
-			} else
-			{
-				$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+				if ((array_key_exists(0,$list)) && ($list[0]==do_lang('NOT_DISCLOSED')))
+				{
+					$actual_value=$list[0]; // "Not Disclosed" will become the default if it is there
+				} else
+				{
+					$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+				}
 			}
 		}
 		$is_locations=((addon_installed('shopping')) && ($_cf_name==do_lang('shopping:SHIPPING_ADDRESS_COUNTRY')) && (is_file(get_file_base().'/sources_custom/locations.php')));
@@ -128,7 +132,8 @@ class Hook_fields_list
 		{
 			$l_nice=$l;
 			if (($is_locations) && (strlen($l)==2)) $l_nice=find_country_name_from_iso($l);
-			$_list->attach(form_input_list_entry($l,$l==$actual_value,$l_nice));
+			$selected=($l===$actual_value || is_null($actual_value) && $l==do_lang('OTHER') && $field['cf_required']==1);
+			$_list->attach(form_input_list_entry($l,$selected,$l_nice));
 		}
 		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);
 	}
