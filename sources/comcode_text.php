@@ -661,7 +661,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												if (preg_match('#\{\!([\w\d\_\:]+)(\}|$)#U',substr($comcode,$less_pos,$p_len-$less_pos),$matches)!=0) // Hacky code to extract the lang string name
 												{
 													$temp_lang_string=$matches[1];
-													$ret=comcode_lang_string($temp_lang_string); // Recreate as a Comcode lang string
+													$ret=new ocp_tempcode(); // Put into new Tempcode object to attach to, as what comcode_lang_string returns may be cached yet we may append to $ret
+													$ret->attach(static_evaluate_tempcode(comcode_lang_string($temp_lang_string))); // Recreate as a Comcode lang string
 												}
 											}
 										} else
