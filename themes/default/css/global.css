@@ -3733,6 +3733,9 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	white-space: nowrap;
 	display: inline-block;
 }
+figure {
+	margin: 1em 0;
+}
 /* Wordpress compatibility */
 .attachment.wp-caption {
 	white-space: normal;

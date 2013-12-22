@@ -32,6 +32,7 @@
 					{ type: "html5" }
 				],
 				provider: '{$?,{$EQ,{$LCASE,{$SUBSTR,{A_URL},-4}},.mp3},sound,video}'
+				{+START,IF_PASSED,A_THUMB_URL}{+START,IF_NON_EMPTY,{A_THUMB_URL}} image: "{SCRIPT*}?id={ID*}{SUP_PARAMS*}{+START,IF_NON_PASSED_OR_FALSE,WYSIWYG_SAFE}{$KEEP*,0,1}&amp;thumb=1&amp;for_session={$SESSION_HASHED*}{+END}&amp;no_count=1"{+END}{+END}
 			});
 		} );
 	//]]></script>

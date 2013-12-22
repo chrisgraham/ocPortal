@@ -1219,6 +1219,14 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if (substr($id,0,4)=='url_')
 				{
 					$attach_id=$connection->query_value_null_ok('attachments','id',array('a_url'=>$url));
+
+					if ((!is_null($attach_id)) && ($attributes['thumb_url']!=''))
+					{
+						if (($connection->query_value_null_ok('attachments','a_thumb_url',array('id'=>$attach_id))=='') && (!empty($attributes['thumb_url']))) // Update DB with the one that was referenced
+						{
+							$connection->query_update('attachments',array('a_thumb_url'=>$attributes['thumb_url']),array('id'=>$attach_id),'',1);
+						}
+					}
 				}
 
 				if (is_null($attach_id))

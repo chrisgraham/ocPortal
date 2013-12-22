@@ -98,7 +98,7 @@ function attachments_script()
 	$_full=get_custom_file_base().'/'.rawurldecode($full);
 	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
 	$size=filesize($_full);
-	$original_filename=$myrow['a_original_filename'];
+	$original_filename=($thumb==1 && $myrow['a_thumb_url']!='')?rawurldecode(basename($myrow['a_thumb_url'])):$myrow['a_original_filename'];
 	$extension=get_file_extension($original_filename);
 
 	require_code('files2');
@@ -398,6 +398,10 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 	$attachment['a_thumb']=array_key_exists('thumb',$attributes)?$attributes['thumb']:'1';
 	if ($attachment['a_thumb']!='0') $attachment['a_thumb']='1';
 	$attachment['a_thumb_url']=array_key_exists('thumb_url',$attributes)?$attributes['thumb_url']:$attachment['a_thumb_url'];
+	if ((url_is_local($attachment['a_thumb_url'])) && ($attachment['a_thumb_url']!=''))
+	{
+		$attachment['a_thumb_url']=get_custom_base_url().'/'.$attachment['a_thumb_url'];
+	}
 
 	switch ($type)
 	{
