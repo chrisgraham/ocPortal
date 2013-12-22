@@ -283,6 +283,7 @@ class Hook_addon_registry_core_ocf
 			'themes/default/images/bigicons/emoticons.png',
 			'themes/default/images/bigicons/merge_members.png',
 			'themes/default/images/EN/page/join.png',
+			'themes/default/images/EN/page/new_post.png', // Used by Wiki+ too
 			'themes/default/images/pagepics/addmember.png',
 			'themes/default/images/pagepics/editmember.png',
 			'themes/default/images/pagepics/emoticons.png',

@@ -230,7 +230,6 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/EN/page/send_message.png',
 			'themes/default/images/EN/page/mark_read.png',
 			'themes/default/images/EN/page/mark_unread.png',
-			'themes/default/images/EN/page/new_post.png',
 			'themes/default/images/EN/page/new_topic.png',
 			'themes/default/images/EN/page/quick_reply.png',
 			'themes/default/images/EN/page/reply.png',
