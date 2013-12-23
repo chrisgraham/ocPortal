@@ -68,9 +68,9 @@ function attachments_script()
 
 	if ($thumb==1)
 	{
-		$full=$myrow['a_thumb_url'];
 		require_code('images');
-		$myrow['a_thumb_url']=ensure_thumbnail($myrow['a_url'],$myrow['a_thumb_url'],'attachments','attachments',intval($myrow['id']),'a_thumb_url',NULL,true);
+		$myrow['a_thumb_url']=ensure_thumbnail($myrow['a_url'],$myrow['a_thumb_url'],'attachments','attachments',$id,'a_thumb_url',NULL,true);
+		$full=$myrow['a_thumb_url'];
 	}
 	else
 	{

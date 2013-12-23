@@ -558,17 +558,21 @@ function process_monikers($page_name)
 						warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 					}
 					$deprecated=$monikers[0]['m_deprecated']==1;
+
+					// Map back 'id'
+					$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
+
 					if (($deprecated) && (count($_POST)==0))
 					{
 						$correct_moniker=find_id_moniker(array('page'=>$page_name,'type'=>get_param('type','misc'),'id'=>$monikers[0]['m_resource_id']));
-						header('HTTP/1.0 301 Moved Permanently');
-						$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
-						$new_url=$_new_url->evaluate();
-						header('Location: '.$new_url);
-						exit();
-					} else // Map back 'id'
-					{
-						$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
+						if ($correct_moniker!=$url_id) // Just in case database corruption means ALL are deprecated
+						{
+							header('HTTP/1.0 301 Moved Permanently');
+							$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
+							$new_url=$_new_url->evaluate();
+							header('Location: '.$new_url);
+							exit();
+						}
 					}
 				}
 				break;
