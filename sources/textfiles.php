@@ -100,13 +100,23 @@ function write_text_file($codename,$lang,$out)
 	}
 	$path=str_replace(get_file_base().'/text/',get_custom_file_base().'/text_custom/',$xpath);
 
+	$out=unixify_line_format($out);
+
 	$myfile=@fopen($path,'at');
 	flock($myfile,LOCK_EX);
 	ftruncate($myfile,0);
 	if ($myfile===false) intelligent_write_error($path);
-	$out=unixify_line_format($out);
 	if (fwrite($myfile,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	flock($myfile,LOCK_UN);
+	fclose($myfile);
+	fix_permissions($path);
+	sync_file($path);
+
+	// Backup with a timestamp (useful if for example an addon update replaces changes)
+	$path.='.'.strval(time());
+	$myfile=@fopen($path,'at');
+	if ($myfile===false) intelligent_write_error($path);
+	if (fwrite($myfile,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($myfile);
 	fix_permissions($path);
 	sync_file($path);
