@@ -260,6 +260,7 @@ class Module_tickets
 			$_login_url=build_url(array('page'=>'login'));
 			$login_url=$_login_url->evaluate();
 			$message=do_lang_tempcode('NO_TICKETS_GUESTS',escape_html($login_url));
+			$tickets=array();
 		}
 
 		$map=array('page'=>'_SELF','type'=>'ticket');

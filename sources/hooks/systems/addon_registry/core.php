@@ -303,6 +303,7 @@ class Hook_addon_registry_core
 			'themes/default/images/icons/48x48/tool_buttons/top.png',
 			'themes/default/images/icons/24x24/buttons/upload.png',
 			'themes/default/images/icons/48x48/buttons/upload.png',
+			'themes/default/images/EN/upload.png',
 			'themes/default/images/icons/64x64/menu/adminzone/usage.png',
 			'themes/default/images/icons/24x24/menu/social/users_online.png',
 			'themes/default/images/icons/48x48/menu/social/users_online.png',

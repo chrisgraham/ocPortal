@@ -1816,10 +1816,10 @@ function replace_file_input(page_type,name,_btn_submit_id,posting_field_name,fil
 			upload_complete_handler : uploadComplete,
 
 			// Button Settings
-			button_image_url : '{$IMG;,icons/24x24/buttons/upload}'.replace(/^http:/,window.location.protocol),
+			button_image_url : '{$IMG;,upload}'.replace(/^http:/,window.location.protocol),
 			button_placeholder_id : 'spanButtonPlaceholder_'+name,
-			button_width: 66,
-			button_height: 20,
+			button_width: 64,
+			button_height: 27,
 			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
 			button_action : SWFUpload.BUTTON_ACTION.SELECT_FILE,
 
@@ -1841,7 +1841,8 @@ function replace_file_input(page_type,name,_btn_submit_id,posting_field_name,fil
 		newClearBtn.type='button';
 		newClearBtn.className='buttons__clear '+button_type+' clear_button';
 		newClearBtn.style.marginLeft='0.5em';
-		newClearBtn.value='{!UPLOAD;^}: {!CLEAR;^}';
+		newClearBtn.value='{!CLEAR;^}';
+		newClearBtn.title='{!UPLOAD;^}: {!CLEAR;^}';
 		subdiv.appendChild(newClearBtn);
 
 		newClearBtn.onclick=function() {
