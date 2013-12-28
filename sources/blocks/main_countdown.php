@@ -68,7 +68,7 @@ class Block_main_countdown
 		}
 
 		// Work out our numbers
-		$seconds_to_go=$target-time();
+		$seconds_to_go=$target-tz_time(time(),get_site_timezone());
 		if ($seconds_to_go>=0) $positive_seconds_to_go=$seconds_to_go; else $positive_seconds_to_go=-$seconds_to_go;
 		if ($tailing>=4)
 		{
