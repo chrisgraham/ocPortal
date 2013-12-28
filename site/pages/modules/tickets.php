@@ -458,7 +458,7 @@ class Module_tickets
 
 			$ticket_page_text=comcode_to_tempcode(get_option('ticket_text'),NULL,true);
 			$staff_details=new ocp_tempcode();
-			$types=$this->build_types_list(get_param('default',''));
+			$types=$this->build_types_list(get_param_integer('default',NULL));
 
 			$pagination=NULL;
 
