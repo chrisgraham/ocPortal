@@ -30,7 +30,7 @@ class Block_main_sortable_table
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('param','default_sort_column','max','labels','columns');
+		$info['parameters']=array('param','default_sort_column','max','labels','columns_display','columns_tooltip','guid');
 		return $info;
 	}
 
@@ -46,10 +46,19 @@ class Block_main_sortable_table
 		require_css('sortable_tables');
 
 		$labels=empty($map['labels'])?array():explode(',',$map['labels']);
-		$columns=empty($map['columns'])?array():array_map('intval',explode(',',$map['columns']));
+		$columns_display=empty($map['columns_display'])?array():array_map('intval',explode(',',$map['columns_display']));
+		$columns_tooltip=empty($map['columns_tooltip'])?array():array_map('intval',explode(',',$map['columns_tooltip']));
+
+		$guid=empty($map['guid'])?'':$map['guid'];
 
 		// What will we be reading?
 		$file=empty($map['param'])?'example.csv':$map['param'];
+
+		$headers=array();
+		$_rows=array();
+		$tooltip_headers=array();
+		$_rows_tooltip=array();
+		$_rows_raw=array();
 
 		// CSV file
 		if ((substr($file,-4)=='.csv') || (preg_match('#^[\w\.]+$#',$file)==0/*Not safe as a table name*/))
@@ -62,13 +71,50 @@ class Block_main_sortable_table
 			// Load data
 			$i=0;
 			$myfile=fopen($path,'rt');
+			$full_header_row=mixed();
 			while (($row=fgetcsv($myfile))!==false)
 			{
-				if ($columns!=array())
+				// Get tooltip columns
+				$row_tooltip=array();
+				foreach ($row as $j=>$val)
 				{
-					foreach (array_keys($row) as $j=>$key)
+					if (in_array($j+1,$columns_tooltip))
 					{
-						if (!in_array($j+1,$columns)) unset($row[$key]);
+						$row_tooltip[]=$val;
+					}
+				}
+				$_rows_tooltip[]=$row_tooltip;
+
+				if ($i!=0)
+				{
+					// Make sure row has the right column count
+					for ($j=count($row);$j<count($full_header_row);$j++) // Too few? Pad.
+					{
+						$row[$j]='';
+					}
+					for ($j=count($full_header_row);$j<count($row);$j++) // Too many? Truncate.
+					{
+						unset($row[$j]);
+					}
+
+					$_rows_raw[]=array_combine($full_header_row,$row);
+				} else
+				{
+					$full_header_row=$row;
+				}
+
+				// Filter to displayed table columns
+				if ($columns_display!=array() || $columns_tooltip!=array())
+				{
+					foreach (array_keys($row) as $key)
+					{
+						if ($columns_display==array())
+						{
+							if (in_array($key+1,$columns_tooltip)) unset($row[$key]);
+						} else
+						{
+							if (!in_array($key+1,$columns_display)) unset($row[$key]);
+						}
 					}
 					$row=array_values($row);
 				}
@@ -80,7 +126,6 @@ class Block_main_sortable_table
 			fclose($myfile);
 
 			// Work out header
-			$headers=array();
 			if (isset($_rows[0]))
 			{
 				$header_row=array_shift($_rows);
@@ -103,6 +148,11 @@ class Block_main_sortable_table
 					'FILTERABLE'=>array(),
 				);
 			}
+			$tooltip_header_row=array_shift($_rows_tooltip);
+			foreach ($tooltip_header_row as $j=>$_header)
+			{
+				$tooltip_headers[]=isset($labels[$j])?$labels[$j]:$_header;
+			}
 		} else
 		{
 			// Database table...
@@ -110,7 +160,6 @@ class Block_main_sortable_table
 			if (strpos(strtolower($file),'f_members')!==false)
 				return paragraph('Security filter disallows display of the '.escape_html($file).' table.','red_alert');
 
-			$_rows=array();
 			$records=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$file);
 			if (count($records)==0)
 			{
@@ -119,13 +168,38 @@ class Block_main_sortable_table
 			$header_row=array();
 			foreach ($records as $i=>$record)
 			{
-				if ($columns!=array())
+				// Get tooltip columns
+				$row_tooltip=array();
+				$j=0;
+				foreach ($record as $key=>$val)
+				{
+					if (in_array($j+1,$columns_tooltip))
+					{
+						$row_tooltip[$key]=$val;
+					}
+					$j++;
+				}
+				$_rows_tooltip[]=array_values($row_tooltip);
+
+				if ($i!=0)
+					$_rows_raw[]=$record;
+
+				// Filter to displayed table columns
+				if ($columns_display!=array() || $columns_tooltip!=array())
 				{
 					foreach (array_keys($record) as $j=>$key)
 					{
-						if (!in_array($j+1,$columns)) unset($record[$key]);
+						if ($columns_display==array())
+						{
+							if (in_array($j+1,$columns_tooltip)) unset($record[$key]);
+						} else
+						{
+							if (!in_array($j+1,$columns_display)) unset($record[$key]);
+						}
 					}
+					$row=array_values($record);
 				}
+				$_rows[]=@array_map('strval',array_values($record));
 
 				if ($i==0)
 				{
@@ -150,21 +224,12 @@ class Block_main_sortable_table
 							'FILTERABLE'=>NULL,
 						);
 					}
-				}
-				$_rows[]=@array_map('strval',array_values($record));
-			}
-		}
 
-		// Make sure each row has the right column count
-		foreach ($_rows as &$row)
-		{
-			for ($j=count($row);$j<count($headers);$j++) // Too few? Pad.
-			{
-				$row[$j]='';
-			}
-			for ($j=count($headers);$j<count($row);$j++) // Too many? Truncate.
-			{
-				unset($row[$j]);
+					foreach (array_keys($row_tooltip) as $j=>$key)
+					{
+						$tooltip_headers[]=isset($labels[$j])?$labels[$j]:titleify(preg_replace('#^'.preg_quote($prefix,'#').'#','',$key));
+					}
+				}
 			}
 		}
 
@@ -173,85 +238,7 @@ class Block_main_sortable_table
 		{
 			if ($header['SORTABLE_TYPE']!==NULL) continue; // Already known
 
-			$sortable_type=mixed();
-			foreach ($_rows as $row)
-			{
-				if ($row[$j]!='')
-				{
-					if ((is_numeric($row[$j])) && (strpos($row[$j],'.')===false))
-					{
-						if (is_null($sortable_type))
-						{
-							$sortable_type='integer';
-						} else
-						{
-							if ($sortable_type!='integer' && $sortable_type!='float'/*an integer value can also fit a float*/)
-							{
-								$sortable_type=NULL;
-								break;
-							}
-						}
-						continue;
-					}
-
-					if ((is_numeric($row[$j])) && (strpos($row[$j],'.')!==false))
-					{
-						if ((is_null($sortable_type)) || ($sortable_type=='integer'/*an integer value may upgrade to a float*/))
-						{
-							$sortable_type='float';
-						} else
-						{
-							if ($sortable_type!='float')
-							{
-								$sortable_type=NULL;
-								break;
-							}
-						}
-						continue;
-					}
-
-					if ((preg_match('#^\d\d\d\d-\d\d-\d\d$#',$row[$j])!=0) || (preg_match('#^\d\d-\d\d-\d\d\d\d$#',$row[$j])!=0))
-					{
-						if (is_null($sortable_type))
-						{
-							$sortable_type='date';
-						} else
-						{
-							if ($sortable_type!='date')
-							{
-								$sortable_type=NULL;
-								break;
-							}
-						}
-						continue;
-					}
-
-					if (addon_installed('ecommerce'))
-					{
-						require_code('ecommerce');
-						if (preg_match('#^'.preg_quote(ecommerce_get_currency_symbol(),'#').'#',$row[$j])!=0)
-						{
-							if (is_null($sortable_type))
-							{
-								$sortable_type='currency';
-							} else
-							{
-								if ($sortable_type!='currency')
-								{
-									$sortable_type=NULL;
-									break;
-								}
-							}
-							continue;
-						}
-					}
-
-					// No pattern matched, has to be alphanumeric
-					$sortable_type=NULL;
-					break;
-				}
-			}
-			$header['SORTABLE_TYPE']=is_null($sortable_type)?'alphanumeric':$sortable_type;
+			$header['SORTABLE_TYPE']=$this->determine_field_type($_rows,$j);
 		}
 
 		// Work out filterability
@@ -260,7 +247,7 @@ class Block_main_sortable_table
 			if ($header['FILTERABLE']!==NULL) continue; // Already known
 
 			$values=array();
-			foreach ($_rows as $row)
+			foreach ($_rows as &$row)
 			{
 				$values[]=$row[$j];
 			}
@@ -275,15 +262,30 @@ class Block_main_sortable_table
 
 		// Create template-ready data
 		$rows=new ocp_tempcode();
-		foreach ($_rows as $i=>$row)
+		$tooltip_headers_sortable=array();
+		foreach (array_keys($tooltip_headers) as $j)
+		{
+			$field_type=$this->determine_field_type($_rows_tooltip,$j);
+			$tooltip_headers_sortable[]=$field_type;
+		}
+		foreach ($_rows as $i=>&$row)
 		{
 			foreach ($row as $j=>&$value)
 			{
 				$value=$this->apply_formatting($value,$headers[$j]['SORTABLE_TYPE']);
 			}
 
+			$tooltip_values=array();
+			foreach ($tooltip_headers as $j=>&$header)
+			{
+				$tooltip_values[$header]=$this->apply_formatting($_rows_tooltip[$i][$j],$tooltip_headers_sortable[$j]);
+			}
+
 			$rows->attach(do_template('SORTABLE_TABLE_ROW',array(
+				'_GUID'=>$guid,
 				'VALUES'=>$row,
+				'TOOLTIP_VALUES'=>$tooltip_values,
+				'RAW_DATA'=>serialize($_rows_raw[$i]),
 			)));
 		}
 
@@ -295,6 +297,7 @@ class Block_main_sortable_table
 		$max=empty($map['max'])?20:intval($map['max']);
 
 		return do_template('SORTABLE_TABLE',array(
+			'_GUID'=>$guid,
 			'ID'=>$id,
 			'DEFAULT_SORT_COLUMN'=>strval($default_sort_column),
 			'MAX'=>strval($max),
@@ -302,6 +305,97 @@ class Block_main_sortable_table
 			'ROWS'=>$rows,
 			'NUM_ROWS'=>strval(count($_rows)),
 		));
+	}
+
+	/**
+	 * Find a field type for a row index.
+	 *
+	 * @param  array		Rows.
+	 * @param  integer	Column offset.
+	 * @return string		Field type.
+	 * @set integer float date currency alphanumeric
+	 */
+	function determine_field_type($_rows,$j)
+	{
+		$sortable_type=mixed();
+		foreach ($_rows as $row)
+		{
+			if ($row[$j]!='')
+			{
+				if ((is_numeric($row[$j])) && (strpos($row[$j],'.')===false))
+				{
+					if (is_null($sortable_type))
+					{
+						$sortable_type='integer';
+					} else
+					{
+						if ($sortable_type!='integer' && $sortable_type!='float'/*an integer value can also fit a float*/)
+						{
+							$sortable_type=NULL;
+							break;
+						}
+					}
+					continue;
+				}
+
+				if ((is_numeric($row[$j])) && (strpos($row[$j],'.')!==false))
+				{
+					if ((is_null($sortable_type)) || ($sortable_type=='integer'/*an integer value may upgrade to a float*/))
+					{
+						$sortable_type='float';
+					} else
+					{
+						if ($sortable_type!='float')
+						{
+							$sortable_type=NULL;
+							break;
+						}
+					}
+					continue;
+				}
+
+				if ((preg_match('#^\d\d\d\d-\d\d-\d\d$#',$row[$j])!=0) || (preg_match('#^\d\d-\d\d-\d\d\d\d$#',$row[$j])!=0))
+				{
+					if (is_null($sortable_type))
+					{
+						$sortable_type='date';
+					} else
+					{
+						if ($sortable_type!='date')
+						{
+							$sortable_type=NULL;
+							break;
+						}
+					}
+					continue;
+				}
+
+				if (addon_installed('ecommerce'))
+				{
+					require_code('ecommerce');
+					if (preg_match('#^'.preg_quote(ecommerce_get_currency_symbol(),'#').'#',$row[$j])!=0)
+					{
+						if (is_null($sortable_type))
+						{
+							$sortable_type='currency';
+						} else
+						{
+							if ($sortable_type!='currency')
+							{
+								$sortable_type=NULL;
+								break;
+							}
+						}
+						continue;
+					}
+				}
+
+				// No pattern matched, has to be alphanumeric
+				$sortable_type=NULL;
+				break;
+			}
+		}
+		return is_null($sortable_type)?'alphanumeric':$sortable_type;
 	}
 
 	/**

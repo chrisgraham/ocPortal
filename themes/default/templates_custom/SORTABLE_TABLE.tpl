@@ -1,5 +1,5 @@
 <div class="wide_table_wrap">
-	<table id="sortable_table_{ID*}" summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table sortable_table table-autosort:{DEFAULT_SORT_COLUMN*} table-autofilter table-autopage:{MAX*}">
+	<table id="sortable_table_{ID*}" summary="{!COLUMNED_TABLE}" class="results_table wide_table columned_table autosized_table sortable_table table-autosort:{DEFAULT_SORT_COLUMN*} table-autofilter table-autopage:{MAX*}">
 		<thead>
 			<tr>
 				{+START,LOOP,HEADERS}
