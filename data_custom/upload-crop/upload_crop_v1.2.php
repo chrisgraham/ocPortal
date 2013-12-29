@@ -96,11 +96,13 @@ function resizeImage($image,$width,$height,$scale) {
 		case "image/pjpeg":
 		case "image/jpeg":
 		case "image/jpg":
-	  		imagejpeg($newImage,$image,90); 
+	  		imagejpeg($newImage,$image,intval(get_option('jpeg_quality'))); 
 			break;
 		case "image/png":
 		case "image/x-png":
-			imagepng($newImage,$image);  
+			imagepng($newImage,$image,9);  
+			require_code('images_png');
+			png_compress($image);
 			break;
     }
 
@@ -137,11 +139,13 @@ function resizeThumbnailImage($thumb_image_name, $image, $width, $height, $start
       	case "image/pjpeg":
 		case "image/jpeg":
 		case "image/jpg":
-	  		imagejpeg($newImage,$thumb_image_name,90); 
+	  		imagejpeg($newImage,$thumb_image_name,intval(get_option('jpeg_quality'))); 
 			break;
 		case "image/png":
 		case "image/x-png":
-			imagepng($newImage,$thumb_image_name);  
+			imagepng($newImage,$thumb_image_name,9);  
+			require_code('images_png');
+			png_compress($thumb_image_name);
 			break;
     }
 	chmod($thumb_image_name, 0777);

@@ -871,25 +871,22 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	if ($ext2=='png')
 	{
 		if (strtolower(substr($to,-4))!='.png') $to.='.png';
-		$test=@imagepng($dest,$to);
+		$test=@imagepng($dest,$to,9);
 		if (!$test)
 		{
 			if ($exit_on_error) warn_exit(do_lang_tempcode('ERROR_IMAGE_SAVE',@strval($php_errormsg)));
 			require_code('site');
 			attach_message(do_lang_tempcode('ERROR_IMAGE_SAVE',@strval($php_errormsg)),'warn');
 			return false;
+		} else
+		{
+			require_code('images_png');
+			png_compress($to,$width<=300 && $width!=-1 || $height<=300 && $height!=-1 || $box_width<=300 && $box_width!=-1);
 		}
 	}
 	elseif (($ext2=='jpg') || ($ext2=='jpeg'))
 	{
-		$jpeg_quality=get_option('jpeg_quality');
-		if ($jpeg_quality!==NULL)
-		{
-			$test=@imagejpeg($dest,$to,intval($jpeg_quality));
-		} else
-		{
-			$test=@imagejpeg($dest,$to);
-		}
+		$test=@imagejpeg($dest,$to,intval(get_option('jpeg_quality')));
 		if (!$test)
 		{
 			if ($exit_on_error) warn_exit(do_lang_tempcode('ERROR_IMAGE_SAVE',@strval($php_errormsg)));

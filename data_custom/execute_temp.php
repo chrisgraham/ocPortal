@@ -53,4 +53,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	set_value('save_jpegs_as_png','1');
+	require_code('images_png');
+	png_compress(get_file_base().'/uploads/attachments/test.png',true);
 }

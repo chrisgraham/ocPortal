@@ -1062,6 +1062,7 @@ class Hook_addon_registry_core
 			'sources/input_filter.php',
 			'sources/failure.php',
 			'sources/images.php',
+			'sources/images_png.php',
 			'sources/exif.php',
 			'sources/index.html',
 			'sources/integrator.php',

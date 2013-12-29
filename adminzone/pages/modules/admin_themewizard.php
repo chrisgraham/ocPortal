@@ -486,16 +486,20 @@ class Module_admin_themewizard
 			}
 
 			$img=generate_logo(post_param('name'),$font,$logo_theme_image,$background_theme_image,false,$logo_save_theme);
-			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
+			@imagepng($img,get_custom_file_base().'/'.$path,9) OR intelligent_write_error($path);
 			imagedestroy($img);
+			require_code('images_png');
+			png_compress(get_custom_file_base().'/'.$path);
 			actual_edit_theme_image('logo/-logo',$logo_save_theme,user_lang(),'logo/-logo',$path);
 			if (addon_installed('collaboration_zone'))
 				actual_edit_theme_image('logo/collaboration-logo',$logo_save_theme,user_lang(),'logo/collaboration-logo',$path);
 			$rand=uniqid('',true);
 			$path='themes/'.$logo_save_theme.'/images_custom/'.$rand.'.png';
 			$img=generate_logo(post_param('name'),$font,$logo_theme_image,$background_theme_image,false,NULL,true);
-			@imagepng($img,get_custom_file_base().'/'.$path) OR intelligent_write_error($path);
+			@imagepng($img,get_custom_file_base().'/'.$path,9) OR intelligent_write_error($path);
 			imagedestroy($img);
+			require_code('images_png');
+			png_compress(get_custom_file_base().'/'.$path);
 			actual_edit_theme_image('logo/standalone_logo',$logo_save_theme,user_lang(),'logo/standalone_logo',$path);
 		}
 		persistent_cache_delete('THEME_IMAGES');

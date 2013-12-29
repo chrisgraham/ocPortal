@@ -154,10 +154,12 @@ if (function_exists('imagecolorallocatealpha'))
 					{
 						afm_make_directory($composite.substr($image_code,0,$pos),true,true);
 					}
-					@imagepng($image,$saveat) OR intelligent_write_error($saveat);
+					@imagepng($image,$saveat,9) OR intelligent_write_error($saveat);
 					imagedestroy($image);
 					fix_permissions($saveat);
 					sync_file($saveat);
+					require_code('images_png');
+					png_compress($saveat);
 					actual_edit_theme_image($image_code,$theme,'EN',$image_code,$saveat_url,true);
 
 					echo '<li>'.escape_html($image_code).'</li>';

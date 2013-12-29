@@ -126,8 +126,10 @@ class Block_main_custom_gfx
 				imagettftext($img,floatval($map['font_size']),0.0,$pos_x,$pos_y,$colour,$file_base.$font.'.ttf',$text);
 			}
 
-			imagepng($img,get_custom_file_base().'/uploads/auto_thumbs/'.$cache_id.'.png');
+			imagepng($img,get_custom_file_base().'/uploads/auto_thumbs/'.$cache_id.'.png',9);
 			imagedestroy($img);
+			require_code('images_png');
+			png_compress(get_custom_file_base().'/uploads/auto_thumbs/'.$cache_id.'.png');
 		}
 
 		$url=get_custom_base_url().'/uploads/auto_thumbs/'.$cache_id.'.png';

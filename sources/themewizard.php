@@ -528,10 +528,12 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 								{
 									afm_make_directory($composite.substr($image_code,0,$pos),true,true);
 								}
-								@imagepng($image,$saveat) OR intelligent_write_error($saveat);
+								@imagepng($image,$saveat,9) OR intelligent_write_error($saveat);
 								imagedestroy($image);
 								fix_permissions($saveat);
 								sync_file($saveat);
+								require_code('images_png');
+								png_compress($saveat);
 								actual_edit_theme_image($image_code,$themename,$lang,$image_code,$saveat_url,true);
 							}
 						} else // Still need to do the edit, as currently it'll have been mapped to the default theme when this theme was added

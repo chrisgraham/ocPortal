@@ -1443,9 +1443,10 @@ function imagejpeg($image,$filename=NULL,$quality=NULL)
  *
  * @param  resource  The image handle.
  * @param  ?string	The filename (NULL: output to browser).
+ * @param  integer	Compression level (0-9, 9 being highest compression).
  * @return boolean	Success status.
  */
-function imagepng($image,$filename=NULL)
+function imagepng($image,$filename=NULL,$quality=0)
 {
 	return true;
 }

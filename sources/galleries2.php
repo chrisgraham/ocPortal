@@ -699,7 +699,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 				$frame=$movie->getFrame(min($movie->getFrameCount(),25));
 				$gd_img=$frame->toGDImage();
 
-				@imagejpeg($gd_img,$expected_output_path);
+				@imagejpeg($gd_img,$expected_output_path,intval(get_option('jpeg_quality')));
 
 				if (file_exists($expected_output_path))
 				{
@@ -1103,9 +1103,20 @@ function watermark_gallery_image($gallery,$file_path,$filename)
 	// Save
 	imagealphablending($source,false);
 	if (function_exists('imagesavealpha')) imagesavealpha($source,true);
-	if ($ext=='png') imagepng($source,$file_path);
-	elseif (($ext=='jpg') || ($ext=='jpeg')) imagejpeg($source,$file_path);
-	elseif ((function_exists('imagegif')) && ($ext=='gif')) imagegif($source,$file_path);
+	if ($ext=='png')
+	{
+		imagepng($source,$file_path,9);
+		require_code('images_png');
+		png_compress($file_path);
+	}
+	elseif (($ext=='jpg') || ($ext=='jpeg'))
+	{
+		imagejpeg($source,$file_path,intval(get_option('jpeg_quality')));
+	}
+	elseif ((function_exists('imagegif')) && ($ext=='gif'))
+	{
+		imagegif($source,$file_path);
+	}
 
 	// Clean up
 	imagedestroy($source);

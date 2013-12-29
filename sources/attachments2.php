@@ -215,8 +215,10 @@ function _handle_data_url_attachments(&$comcode,$type,$id,$connection)
 							$new_path=get_custom_file_base().'/uploads/attachments/'.$new_filename;
 						}
 						while (file_exists($new_path));
-						imagepng($image,$new_path);
+						imagepng($image,$new_path,9);
 						imagedestroy($image);
+						require_code('images_png');
+						png_compress($new_path);
 
 						$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
 							'a_member_id'=>get_member(),

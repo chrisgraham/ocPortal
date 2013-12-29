@@ -338,6 +338,7 @@ We also have the following which are either unlikely to be useful, or potentiall
   - [tt]implicit_usergroup_sync[/tt] -- set this to '1' to enable synching of implicit usergroups (see the advanced members tutorial for more information)
   - [tt]shortened_tempcode[/tt] -- set this to '1' to not store parameter reference origins in Tempcode, which makes Tempcode use less memory/storage/CPU
   - [tt]advanced_admin_cache[/tt] -- set this to '1' to enable the Advanced Admin Cache (AAC). The AAC loads fully cached pages for administrators whilst checking the server for any updates. The result is that you see a cached page for about 1 second until the latest version is retrieved, making browsing feel much snappier. This feature is highly experimental, and only works on the very fast modern web browsers: Google Chrome, Opera, and Safari. It may be unstable even in these browsers though. If your site is on a shared domain where other users can run their own Javascript code then you should not use it as it will lead to a serious security vulnerability.
+  - [tt]save_jpegs_as_png[/tt] -- set this to '1' to allow ocPortal to detect when JPEG files would be smaller, and save JPEG data into PNG file extensions. It is a bit of a hack, and goes against standards, but works well
  - Performance tuning (negative)
   - [tt]allow_admin_in_other_zones[/tt] -- set this to '1' if you want to allow admin and CMS modules to run in other zones (small performance cost)
  - Easter eggs

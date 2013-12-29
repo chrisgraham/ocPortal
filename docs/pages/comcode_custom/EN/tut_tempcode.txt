@@ -1057,6 +1057,7 @@ where:
  - filename is the name of the thumbnail filename. If not provided it will be automatically chosen based on the source_image and an articulation of the thumbnail settings
  - fallback_image is the URL to the image to use if no thumbnail could be generated. If not provided the source_image will be used
  - type is either:
+  - "box" for an image which should be maximally fitted into the given box dimensions (the default)
   - "width" for an image which is stretched to the given width and a height in proportion to that
   - "height" for an image which is stretched to the given height and a width in proportion to that
   - "crop" for an image which has been shrunk until one of its dimensions matched that given and the rest has been chopped off
@@ -1067,7 +1068,7 @@ where:
   - "start"
   - "end"
   - "both" (assuming bottom-to-top and right-to-left)
-  - If the "where" option is ommitted for cropped thumbnails then it will be centred. For padded thumbnails it will resize the image to get rid of any need for padding (ie. "padding none").
+  - If the "where" option is omitted for cropped thumbnails then it will be centred. For padded thumbnails it will resize the image to get rid of any need for padding (ie. "padding none").
  - For "pad" types the background is used to pad the image:
   - a hex code for a specific color (with alpha)
   - or, "none" for no padding (ie. the image dimensions are not those given, but will fit inside them).
