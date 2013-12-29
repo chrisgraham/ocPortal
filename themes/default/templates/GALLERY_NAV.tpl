@@ -66,7 +66,7 @@
 			{+END}
 
 			{+START,IF,{$NOT,{SLIDESHOW}}}
-				{!PAGE_OF,{X*},{N*}}
+				{!GALLERY_MOBILE_PAGE_OF,{X*},{N*}}
 			{+END}
 		</span></div>
 	</div>
@@ -75,8 +75,10 @@
 	{+START,IF_NON_EMPTY,{SLIDESHOW_URL}}
 		{+START,IF,{$MOBILE}}
 			{+START,IF,{$JS_ON}}{+START,IF,{$NOT,{SLIDESHOW}}}
-				<div class="right">
-					<a class="link_exempt" rel="nofollow" target="_blank" title="{!SLIDESHOW}: {!NEW_WINDOW}" href="{SLIDESHOW_URL*}"><img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!SLIDESHOW}" alt="{!SLIDESHOW}" src="{$IMG*,page/slideshow}" /></a>
+				<div class="float_surrounder">
+					<div class="right">
+						<a class="link_exempt" rel="nofollow" target="_blank" title="{!SLIDESHOW}: {!NEW_WINDOW}" href="{SLIDESHOW_URL*}"><img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!SLIDESHOW}" alt="{!SLIDESHOW}" src="{$IMG*,page/slideshow}" /></a>
+					</div>
 				</div>
 			{+END}{+END}
 		{+END}

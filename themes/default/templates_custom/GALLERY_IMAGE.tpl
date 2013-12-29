@@ -56,8 +56,8 @@
 {+END}
 
 {+START,IF,{$NOT,{$GET,gallery_carousel}}}
-	<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','auto',null,null,false,true);">
-		<div class="img_thumb_wrap">
+	<div class="gallery_regular_thumb">
+		<div class="img_thumb_wrap" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','auto',null,null,false,true);">
 			<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
 		</div>
 

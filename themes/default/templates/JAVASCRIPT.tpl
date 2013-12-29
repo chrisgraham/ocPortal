@@ -1863,6 +1863,14 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		};
 	}
 
+	// This allows turning off tooltips by pressing anywhere, on iPhone (and probably Android etc). The clickability of body forces the simulated onmouseout events to fire.
+	var bi=document.getElementById('main_website_inner');
+	if (!bi) bi=document.body;
+	if ((typeof window.TouchEvent!='undefined') && (!bi.onmouseover))
+	{
+		bi.onmouseover=function() { return true; };
+	}
+
 	window.setTimeout(function() {
 		if (!ac.is_over) return;
 
@@ -1954,6 +1962,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 		{
 			x-=x_excess+20;
 		}
+		if (x<0) x=0;
 		if (bottom)
 		{
 			tooltip_element.style.top=(y-height)+'px';

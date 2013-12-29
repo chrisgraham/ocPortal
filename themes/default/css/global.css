@@ -1070,7 +1070,9 @@ input.button_hyperlink {
 .trinav_wrap {
 	overflow: hidden;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
-	margin-bottom: 2em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-bottom: 2em;
+	{+END}
 	{$BETA_CSS_PROPERTY,border-radius: 20px;}
 }
 .trinav_wrap.nograd {
@@ -1088,6 +1090,7 @@ input.button_hyperlink {
 	{+END}
 	{+START,IF,{$MOBILE}}
 		width: 33%;
+		margin-left: 0.5em;
 	{+END}
 	text-align: left;
 }
@@ -1111,6 +1114,7 @@ input.button_hyperlink {
 	{+END}
 	{+START,IF,{$MOBILE}}
 		width: 33%;
+		margin-right: 0.5em;
 	{+END}
 	text-align: right;
 }
