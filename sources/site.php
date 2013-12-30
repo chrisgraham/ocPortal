@@ -301,6 +301,16 @@ function attach_message($message,$type='inform')
 
 	$ATTACH_MESSAGE_CALLED--;
 
+	if ($GLOBALS['REFRESH_URL'][0]!='')
+	{
+		$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
+			'r_session_id'=>get_session_id(),
+			'r_message'=>is_object($message)?$message->evaluate():escape_html($message),
+			'r_type'=>$type,
+			'r_time'=>time(),
+		));
+	}
+
 	$am_looping=false;
 	return '';
 }

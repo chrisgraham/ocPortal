@@ -2941,6 +2941,7 @@ div.proceed_button_left_2 {
 	border: 0;
 	padding: 0;
 	margin: 0;
+	min-width: 0; /* Works around webkit bug, where it breaks max-width:100% inside because the size calculation has been inverted by the default "min-width: -webkit-min-content;" rule  */
 }
 
 /*
