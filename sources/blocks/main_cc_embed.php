@@ -164,6 +164,18 @@ class Block_main_cc_embed
 				break;
 		}
 
+		$cart_link=new ocp_tempcode();
+		$is_ecommerce=is_ecommerce_catalogue($catalogue_name,$catalogue);
+		if ($is_ecommerce)
+		{
+			if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF'));
+
+			require_code('shopping');
+			require_lang('shopping');
+
+			$cart_link=show_cart_link();
+		}
+
 		// Render
 		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array(
 			'_GUID'=>'dfdsfdsfsd3ffsdfsd',
@@ -174,6 +186,8 @@ class Block_main_cc_embed
 			'ENTRIES'=>$entry_buildup,
 			'SORTING'=>$sorting,
 			'PAGINATION'=>$pagination,
+
+			'CART_LINK'=>$cart_link,
 
 			'START'=>strval($start),
 			'MAX'=>strval($max),

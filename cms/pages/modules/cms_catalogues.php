@@ -968,7 +968,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 		require_code('form_templates');
 
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('UPLOAD_DESC'),'file_novalidate',true,NULL,NULL,true,'csv,txt'));
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('CSV_UPLOAD_DESC'),'file_novalidate',true,NULL,NULL,true,'csv,txt'));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
 

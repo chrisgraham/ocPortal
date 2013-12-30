@@ -2,12 +2,16 @@
 	{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 	<div id="{$GET*,wrapper_id}" class="box_wrapper">
 		{+START,SET,sorting}
-			{$SET,show_sort_button,1}
-			{+START,IF_NON_EMPTY,{SORTING}}
-				<div class="box category_sorter inline_block"><div class="box_inner">
-					{SORTING}
-				</div></div>
-			{+END}
+			<div class="cart_info">
+				{$SET,show_sort_button,1}
+				{+START,IF_NON_EMPTY,{SORTING}}
+					<div class="box category_sorter inline_block"><div class="box_inner">
+						{SORTING}
+					</div></div>
+				{+END}
+
+				{CART_LINK}
+			</div>
 		{+END}
 
 		{+START,IF,{$CONFIG_OPTION,infinite_scrolling}}

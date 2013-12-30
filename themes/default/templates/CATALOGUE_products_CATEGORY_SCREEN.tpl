@@ -10,12 +10,6 @@
 	</div></div>
 {+END}
 
-{+START,IF_NON_EMPTY,{SUBCATEGORIES}}
-	<div class="cart_info">
-		{$REPLACE, id="quantity", id="quantity2",{CART_LINK}}
-	</div>
-{+END}
-
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,catalogue_category,{ID}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
@@ -31,9 +25,10 @@
 
 {ENTRIES}
 
-<div class="cart_info">
-	{CART_LINK}
-</div>
+<p class="vertical_alignment">
+	<img alt="{!HELP}" src="{$IMG*,icons/16x16/help}" srcset="{$IMG*,icons/32x32/help} 2x" />
+	<span>{!HOVER_FOR_FULL}</span>
+</p>
 
 {$REVIEW_STATUS,catalogue_category,{ID}}
 

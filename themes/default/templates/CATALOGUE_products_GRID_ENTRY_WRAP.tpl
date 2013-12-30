@@ -16,7 +16,7 @@
 	</div>
 
 	<div class="buttons_group">
-		<a class="buttons__cart_add button_screen_item" href="{ADD_TO_CART*}"><span>{!ADD_TO_CART}</span></a>
-		<a class="buttons__more button_screen_item" href="{VIEW_URL*}"><span>{!GO_FOR_IT}</span></a>			
+		<a class="buttons__cart_add button_screen_item" href="{ADD_TO_CART*}" title="{!ADD_TO_CART}"><span>{!BUY}</span></a>
+		<a class="buttons__more button_screen_item" href="{VIEW_URL*}" title="{!VIEW_PRODUCT}"><span>{!VIEW}</span></a>			
 	</div>
 </div></section>

@@ -211,7 +211,7 @@ class Hook_addon_registry_catalogues
 			'CATALOGUE_ENTRIES_LIST_LINE.tpl'=>'catalogue_entries_list_line',
 			'CATALOGUE_CATEGORIES_LIST_LINE.tpl'=>'catalogue_categories_list_line',
 			'SEARCH_RESULT_CATALOGUE_ENTRIES.tpl'=>'search_result_catalogue_entries',
-			'CATALOGUE_DEFAULT_CATEGORY_EMBED.tpl'=>'fieldmap_catalogue_embed_screen',
+			'CATALOGUE_DEFAULT_CATEGORY_EMBED.tpl'=>'fieldmap_category_screen',
 
 			'CATALOGUE_CATEGORY_HEADING.tpl'=>'fieldmap_category_screen',
 			'CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl'=>'fieldmap_category_screen',
@@ -282,6 +282,21 @@ class Hook_addon_registry_catalogues
 			'VIEW_URL'=>placeholder_url(),
 			'FIELD_0'=>lorem_word()
 		));
+
+		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
+			'DISPLAY_TYPE'=>'GRID',
+			'ENTRIES'=>$entries,
+			'ROOT'=>placeholder_id(),
+			'BLOCK_PARAMS'=>'',
+
+			'CART_LINK'=>new ocp_tempcode(),
+
+			'START'=>'0',
+			'MAX'=>'10',
+			'START_PARAM'=>'x_start',
+			'MAX_PARAM'=>'x_max',
+		));
+
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
@@ -350,6 +365,21 @@ class Hook_addon_registry_catalogues
 				'ENTRIES'=>$content
 			)));
 		}
+
+		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
+			'DISPLAY_TYPE'=>'FIELDMAPS',
+			'ENTRIES'=>$entries,
+			'ROOT'=>placeholder_id(),
+			'BLOCK_PARAMS'=>'',
+
+			'CART_LINK'=>new ocp_tempcode(),
+
+			'START'=>'0',
+			'MAX'=>'10',
+			'START_PARAM'=>'x_start',
+			'MAX_PARAM'=>'x_max',
+		));
+
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
@@ -402,6 +432,21 @@ class Hook_addon_registry_catalogues
 			'LINK_FULLSCOPE'=>placeholder_url(),
 			'TAG'=>lorem_word()
 		));
+
+		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
+			'DISPLAY_TYPE'=>'TITLELIST',
+			'ENTRIES'=>$entries,
+			'ROOT'=>placeholder_id(),
+			'BLOCK_PARAMS'=>'',
+
+			'CART_LINK'=>new ocp_tempcode(),
+
+			'START'=>'0',
+			'MAX'=>'10',
+			'START_PARAM'=>'x_start',
+			'MAX_PARAM'=>'x_max',
+		));
+
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
@@ -474,6 +519,21 @@ class Hook_addon_registry_catalogues
 			'CONTENT'=>$row,
 			'FIELD_COUNT'=>"3"
 		));
+
+		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
+			'DISPLAY_TYPE'=>'TABULAR',
+			'ENTRIES'=>$content,
+			'ROOT'=>placeholder_id(),
+			'BLOCK_PARAMS'=>'',
+
+			'CART_LINK'=>new ocp_tempcode(),
+
+			'START'=>'0',
+			'MAX'=>'10',
+			'START_PARAM'=>'x_start',
+			'MAX_PARAM'=>'x_max',
+		));
+
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
@@ -486,7 +546,7 @@ class Hook_addon_registry_catalogues
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),
 				'EDIT_CATALOGUE_URL'=>placeholder_url(),
-				'ENTRIES'=>$content,
+				'ENTRIES'=>$entries,
 				'SUBCATEGORIES'=>$subcategories,
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
@@ -541,6 +601,21 @@ class Hook_addon_registry_catalogues
 			'CONTENT'=>$entries,
 			'FIELD_COUNT'=>"1"
 		));
+
+		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
+			'DISPLAY_TYPE'=>'TABULAR',
+			'ENTRIES'=>$content,
+			'ROOT'=>placeholder_id(),
+			'BLOCK_PARAMS'=>'',
+
+			'CART_LINK'=>new ocp_tempcode(),
+
+			'START'=>'0',
+			'MAX'=>'10',
+			'START_PARAM'=>'x_start',
+			'MAX_PARAM'=>'x_max',
+		));
+
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_SCREEN',array(
 				'ID'=>placeholder_id(),
@@ -553,7 +628,7 @@ class Hook_addon_registry_catalogues
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),
 				'EDIT_CATALOGUE_URL'=>placeholder_url(),
-				'ENTRIES'=>$content,
+				'ENTRIES'=>$entries,
 				'SUBCATEGORIES'=>$subcategories,
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
@@ -721,40 +796,6 @@ class Hook_addon_registry_catalogues
 				'BUILDUP'=>lorem_phrase(),
 				'NAME'=>lorem_word_html(),
 				'TITLE'=>lorem_word()
-			)),NULL,'',true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__fieldmap_catalogue_embed_screen()
-	{
-		$entries=new ocp_tempcode();
-
-		$entries->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP',array(
-			'ID'=>placeholder_id(),
-			'FIELDS'=>placeholder_fields(),
-			'VIEW_URL'=>placeholder_url(),
-			'FIELD_0'=>lorem_word(),
-			'GIVE_CONTEXT'=>false,
-		)));
-
-		return array(
-			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
-				'DISPLAY_TYPE'=>'FIELDMAPS',
-				'ENTRIES'=>$entries,
-				'ROOT'=>placeholder_id(),
-				'BLOCK_PARAMS'=>'',
-
-				'START'=>'0',
-				'MAX'=>'10',
-				'START_PARAM'=>'x_start',
-				'MAX_PARAM'=>'x_max',
 			)),NULL,'',true)
 		);
 	}

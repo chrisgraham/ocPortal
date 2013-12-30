@@ -155,6 +155,7 @@ class Hook_addon_registry_shopping
 			'themes/default/templates/ECOM_SHIPPING_ADDRESS.tpl',
 			'themes/default/templates/ECOM_CART_BUTTON_VIA_PAYPAL.tpl',
 			'themes/default/templates/ECOM_ITEM_DETAILS.tpl',
+			'themes/default/templates/CATALOGUE_products_CATEGORY_EMBED.tpl',
 		);
 	}
 
@@ -183,6 +184,7 @@ class Hook_addon_registry_shopping
 			'RESULTS_TABLE_cart_ENTRY.tpl'=>'shopping_cart_screen',
 			'RESULTS_TABLE_cart_FIELD.tpl'=>'shopping_cart_screen',
 			'ECOM_CART_LINK.tpl'=>'products_entry_screen',
+			'CATALOGUE_products_CATEGORY_EMBED.tpl'=>'grid_category_screen__products',
 			'CATALOGUE_products_ENTRY_SCREEN.tpl'=>'products_entry_screen',
 			'CATALOGUE_products_FIELDMAP_ENTRY_FIELD.tpl'=>'products_entry_screen',
 			'CATALOGUE_ENTRY_CART_BUTTONS.tpl'=>'products_entry_screen',
@@ -719,6 +721,20 @@ class Hook_addon_registry_shopping
 		);
 		$entry=do_lorem_template('CATALOGUE_products_GRID_ENTRY_WRAP', $map);
 
+		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
+			'DISPLAY_TYPE'=>'FIELDMAPS',
+			'ENTRIES'=>$entry,
+			'ROOT'=>placeholder_id(),
+			'BLOCK_PARAMS'=>'',
+
+			'CART_LINK'=>placeholder_link(),
+
+			'START'=>'0',
+			'MAX'=>'10',
+			'START_PARAM'=>'x_start',
+			'MAX_PARAM'=>'x_max',
+		));
+
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_products_CATEGORY_SCREEN', $map+array(
 				'ID'=>placeholder_id(),
@@ -731,7 +747,7 @@ class Hook_addon_registry_shopping
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),
 				'EDIT_CATALOGUE_URL'=>placeholder_url(),
-				'ENTRIES'=>$entry,
+				'ENTRIES'=>$entries,
 				'SUBCATEGORIES'=>'',
 				'DESCRIPTION'=>lorem_sentence(),
 				'CART_LINK'=>placeholder_link(),
