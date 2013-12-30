@@ -199,7 +199,7 @@ function install_ocf($upgrade_from=NULL)
 			{
 				foreach ($row as $key=>$val)
 				{
-					if (substr($key,0,6)=='field_')
+					if ((substr($key,0,6)=='field_') && (is_string($val)))
 					{
 						$val=str_replace('|',"\n",$val);
 						$row[$key]=$val;

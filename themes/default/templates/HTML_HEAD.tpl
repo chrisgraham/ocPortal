@@ -125,7 +125,7 @@
 {+START,IF_NON_EMPTY,{$CONFIG_OPTION,google_analytics}}{+START,IF,{$NOR,{$IS_STAFF},{$IS_ADMIN}}}
 	<script>
 		var _gaq=_gaq || [];
-		_gaq.push(['_setAccount','{$TRIM,{$CONFIG_OPTION*;,google_analytics}}']);
+		_gaq.push(['_setAccount','{$TRIM;/,{$CONFIG_OPTION,google_analytics}}']);
 		_gaq.push(['_trackPageview']);
 		{+START,IF,{$NOT,{$CONFIG_OPTION,long_google_cookies}}}
 			_gaq.push(['_setVisitorCookieTimeout', 0]);

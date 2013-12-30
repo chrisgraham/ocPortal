@@ -1434,7 +1434,7 @@ class Module_calendar
 		$warning_details=new ocp_tempcode();
 		if (($event['validated']==0) && (addon_installed('unvalidated')))
 		{
-			if ((!has_privilege(get_member(),'jump_to_unvalidated')) && ($event['e_submitter']!=get_member()) && ($event['e_member_calendar']!=get_member()))
+			if ((!has_privilege(get_member(),'jump_to_unvalidated')) && ((is_guest()) || ($event['e_submitter']!=get_member()) && ($event['e_member_calendar']!=get_member())))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));

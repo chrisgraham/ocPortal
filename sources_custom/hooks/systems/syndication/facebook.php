@@ -141,7 +141,7 @@ class Hook_Syndication_facebook
 	{
 		if (($this->is_available()) && ($this->auth_is_set($member_id)))
 		{
-			$page_syndicate=(get_option('facebook_member_syndicate_to_page')=='1' && get_long_value('facebook_syndicate_to_page__'.strval($member_id))==='1');
+			$page_syndicate=(get_option('facebook_member_syndicate_to_page')=='1' && get_option('facebook_uid')!='' && get_long_value('facebook_syndicate_to_page__'.strval($member_id))==='1');
 			return $this->_send(
 				get_long_value('facebook_oauth_token__'.strval($member_id)),
 				$row,
@@ -155,7 +155,17 @@ class Hook_Syndication_facebook
 
 	function auth_is_set_site()
 	{
-		return get_long_value('facebook_oauth_token')!==NULL;
+		if (get_long_value('facebook_oauth_token')===NULL) return false;
+
+		if (get_option('facebook_uid')=='') return false; // No configured target
+
+		global $FACEBOOK_CONNECT;
+		if (($this->auth_is_set(get_member())) && (get_option('facebook_uid')==strval($FACEBOOK_CONNECT->getUser())))
+		{
+			return false; // Avoid double syndication, will already go to the user
+		}
+
+		return true;
 	}
 
 	function syndicate_site_activity($row)

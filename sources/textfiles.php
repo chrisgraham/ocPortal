@@ -110,9 +110,17 @@ function write_text_file($codename,$lang,$out)
 	@flock($myfile,LOCK_EX);
 	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
 	if ($myfile===false) intelligent_write_error($path);
-	$out=unixify_line_format($out);
 	if (fwrite($myfile,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	@flock($myfile,LOCK_UN);
+	fclose($myfile);
+	fix_permissions($path);
+	sync_file($path);
+
+	// Backup with a timestamp (useful if for example an addon update replaces changes)
+	$path.='.'.strval(time());
+	$myfile=@fopen($path,GOOGLE_APPENGINE?'wb':'at');
+	if ($myfile===false) intelligent_write_error($path);
+	if (fwrite($myfile,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($myfile);
 	fix_permissions($path);
 	sync_file($path);

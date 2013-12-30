@@ -416,7 +416,7 @@ class Module_quiz
 		// Validation
 		if (($quiz['q_validated']==0) && (addon_installed('unvalidated')))
 		{
-			if (!has_privilege(get_member(),'jump_to_unvalidated'))
+			if ((!has_privilege(get_member(),'jump_to_unvalidated')) && ((is_guest()) || ($quiz['q_submitter']!=get_member())))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details=do_template('WARNING_BOX',array('_GUID'=>'fc690dedf8601cc456e011931dfec595','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));

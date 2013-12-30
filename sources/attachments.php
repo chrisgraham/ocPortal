@@ -206,9 +206,9 @@ function attachments_script()
 
 	if ($thumb==1)
 	{
-		$full=$myrow['a_thumb_url'];
 		require_code('images');
-		$myrow['a_thumb_url']=ensure_thumbnail($myrow['a_url'],$myrow['a_thumb_url'],'attachments','attachments',intval($myrow['id']),'a_thumb_url',NULL,true);
+		$myrow['a_thumb_url']=ensure_thumbnail($myrow['a_url'],$myrow['a_thumb_url'],'attachments','attachments',$id,'a_thumb_url',NULL,true);
+		$full=$myrow['a_thumb_url'];
 	}
 	else
 	{
@@ -234,7 +234,7 @@ function attachments_script()
 	$_full=get_custom_file_base().'/'.rawurldecode($full);
 	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
 	$size=filesize($_full);
-	$original_filename=$myrow['a_original_filename'];
+	$original_filename=($thumb==1 && $myrow['a_thumb_url']!='')?rawurldecode(basename($myrow['a_thumb_url'])):$myrow['a_original_filename'];
 	$extension=get_file_extension($original_filename);
 
 	require_code('files2');

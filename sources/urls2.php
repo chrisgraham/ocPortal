@@ -555,8 +555,8 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=fa
 		if (!is_null($old))
 		{
 			// See if it is same as current
-			$moniker=_choose_moniker($page,$type,$id,$moniker_src,$old);
-			$moniker=_give_moniker_scope($page,$type,$id,$zone,$moniker);
+			$scope=_give_moniker_scope($page,$type,$id,$zone,$moniker);
+			$moniker=$scope._choose_moniker($page,$type,$id,$moniker_src,$old,$scope);
 			if ($moniker==$old)
 			{
 				return $old; // hmm, ok it can stay actually
@@ -586,8 +586,8 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=fa
 		$moniker=$id;
 	} else
 	{
-		$moniker=_choose_moniker($page,$type,$id,$moniker_src);
-		$moniker=_give_moniker_scope($page,$type,$id,$zone,$moniker);
+		$scope=_give_moniker_scope($page,$type,$id,$zone,$moniker);
+		$moniker=$scope._choose_moniker($page,$type,$id,$moniker_src,NULL,$scope);
 
 		if (($page=='news') && ($type=='view') && (get_value('google_news_urls')==='1'))
 			$moniker.='-'.str_pad($id,3,'0',STR_PAD_LEFT);
@@ -620,9 +620,10 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=fa
  * @param  ID_TEXT		Resource ID.
  * @param  string			String from which a moniker will be chosen (may not be blank).
  * @param  ?string		Whether to skip the exists check for a certain moniker (will be used to pass "existing self" for edits) (NULL: nothing existing to check against).
+ * @param  ?string		Where the moniker will be placed in the moniker URL tree (NULL: unknown, so make so no duplicates anywhere).
  * @return string			Chosen moniker.
  */
-function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
+function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL,$scope_context=NULL)
 {
 	$moniker=_generate_moniker($moniker_src);
 
@@ -638,16 +639,26 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
 			if ($moniker==preg_replace('#^.*/#','',$no_exists_check_for)) return $moniker; // This one is okay, we know it is safe
 		}
 
-		$usql='SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page);
+		$dupe_sql='SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE ';
+		$dupe_sql.=db_string_equal_to('m_resource_page',$page);
 		if ($type=='')
 		{
-			$usql.=' AND '.db_string_equal_to('m_resource_id',$id);
+			$dupe_sql.=' AND '.db_string_equal_to('m_resource_id',$id);
 		} else
 		{
-			$usql.=' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id);
+			$dupe_sql.=' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id);
 		}
-		$usql.=' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')';
-		$test=$GLOBALS['SITE_DB']->query_value_if_there($usql);
+		$dupe_sql.=' AND (';
+		if (!is_null($scope_context))
+		{
+			$dupe_sql.=db_string_equal_to('m_moniker',$scope_context.$moniker);
+		} else
+		{
+			$dupe_sql.=db_string_equal_to('m_moniker',$moniker);
+			$dupe_sql.=' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\'';
+		}
+		$dupe_sql.=')';
+		$test=$GLOBALS['SITE_DB']->query_value_if_there($dupe_sql);
 		if (!is_null($test)) // Oh dear, will pass to next iteration, but trying a new moniker
 		{
 			$next_num++;

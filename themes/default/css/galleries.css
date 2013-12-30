@@ -75,7 +75,12 @@
 }
 
 .gallery_grid_cell {
-	float: {!en_left};
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_left};
+	{+END}
+	{+START,IF,{$MOBILE}}
+		text-align: center;
+	{+END}
 	padding: 0.4em;
 }
 
@@ -84,6 +89,9 @@
 	border: 1px solid {$GET,standard_border};
 	background-color: {$GET,area_background};
 	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
+	{+START,IF,{$MOBILE}}
+		display: inline-block;
+	{+END}
 }
 
 .img_thumb_wrap {
@@ -197,9 +205,11 @@
 	margin-top: 0;
 }
 
-.media_box .gallery_entry_details {
-	max-width: 18em;
-}
+{+START,IF,{$NOT,{$MOBILE}}}
+	.media_box .gallery_entry_details {
+		max-width: 18em;
+	}
+{+END}
 
 /* The timer countdown */
 .changer {

@@ -1148,7 +1148,9 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 .trinav_wrap {
 	overflow: hidden;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
-	margin-bottom: 2em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-bottom: 2em;
+	{+END}
 	{$BETA_CSS_PROPERTY,border-radius: 20px;}
 }
 .trinav_wrap.nograd {
@@ -1166,6 +1168,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 	{+END}
 	{+START,IF,{$MOBILE}}
 		width: 33%;
+		margin-left: 0.5em;
 	{+END}
 	text-align: left;
 }
@@ -1189,6 +1192,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 	{+END}
 	{+START,IF,{$MOBILE}}
 		width: 33%;
+		margin-right: 0.5em;
 	{+END}
 	text-align: right;
 }
@@ -3160,6 +3164,7 @@ div.proceed_button_left_2 {
 	border: 0;
 	padding: 0;
 	margin: 0;
+	min-width: 0; /* Works around webkit bug, where it breaks max-width:100% inside because the size calculation has been inverted by the default "min-width: -webkit-min-content;" rule  */
 }
 
 .mass_select_marker {
@@ -4016,6 +4021,9 @@ td>.comcode_code_wrap>.comcode_quote, td>.comcode_code_wrap>.comcode_code {
 	{+END}
 	font-size: 0.9em;
 	display: inline-block;
+}
+figure {
+	margin: 1em 0;
 }
 /* Wordpress compatibility */
 .attachment.wp-caption {

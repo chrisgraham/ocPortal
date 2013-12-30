@@ -98,6 +98,13 @@ class Hook_search_ocf_posts
 	 */
 	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
 	{
+		if (in_array($content,array(
+			do_lang('POSTS_WITHIN_TOPIC'),
+			do_lang('SEARCH_POSTS_WITHIN_TOPIC'),
+			do_lang('SEARCH_FORUM_POSTS'),
+			do_lang('_SEARCH_PRIVATE_TOPICS'),
+		))) return array(); // Search placeholder label, not real search
+
 		if (get_forum_type()!='ocf') return array();
 		require_code('ocf_forums');
 		require_code('ocf_posts');

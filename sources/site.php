@@ -358,6 +358,16 @@ function attach_message($message,$type='inform',$put_in_helper_panel=false)
 
 	$ATTACH_MESSAGE_CALLED--;
 
+	if ($GLOBALS['REFRESH_URL'][0]!='')
+	{
+		$GLOBALS['SITE_DB']->query_insert('messages_to_render',array(
+			'r_session_id'=>get_session_id(),
+			'r_message'=>is_object($message)?$message->evaluate():escape_html($message),
+			'r_type'=>$type,
+			'r_time'=>time(),
+		));
+	}
+
 	$am_looping=false;
 	return '';
 }
@@ -742,18 +752,22 @@ function process_url_monikers($page,$redirect_if_non_canonical=true)
 						{
 							warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 						}
+
+						// Map back 'id'
+						$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
+
 						$deprecated=$monikers[0]['m_deprecated']==1;
 						if (($deprecated) && (count($_POST)==0))
 						{
 							$correct_moniker=find_id_moniker(array('page'=>$page,'type'=>get_param('type','misc'),'id'=>$monikers[0]['m_resource_id']),$zone);
-							header('HTTP/1.0 301 Moved Permanently');
-							$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
-							$new_url=$_new_url->evaluate();
-							header('Location: '.$new_url);
-							exit();
-						} else // Map back 'id'
-						{
-							$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
+							if ($correct_moniker!=$url_id) // Just in case database corruption means ALL are deprecated
+							{
+								header('HTTP/1.0 301 Moved Permanently');
+								$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
+								$new_url=$_new_url->evaluate();
+								header('Location: '.$new_url);
+								exit();
+							}
 						}
 					}
 					return;
