@@ -1,11 +1,19 @@
 <div itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_view">
-	{TITLE}
+	<div class="fn product-name" itemprop="itemOffered">{TITLE}</div>
 
 	{$REQUIRE_CSS,shopping}
 
 	{WARNINGS}
 
-	{CART_LINK}
+	<div class="cart_info">
+		{+START,IF_NON_EMPTY,{RATING_DETAILS}}
+			<div class="rating_part">
+				<span class="field_name">{!RATING}:</span> {$RATING,catalogue_entry,{ID},,,,RATING_INLINE_DYNAMIC}
+			</div>
+		{+END}
+
+		{CART_LINK}
+	</div>
 
 	<div class="box box___catalogue_products_entry_screen"><div class="box_inner">
 		<div class="hproduct"{$?,{$MATCH_KEY_MATCH,_WILD:_WILD:misc}, itemscope="itemscope" itemtype="http://schema.org/Offer"}>
@@ -16,19 +24,12 @@
 					</p>
 				{+END}
 
-				{+START,IF_NON_EMPTY,{FIELD_0}}
-					<div class="fn product-name" itemprop="itemOffered">
-						{FIELD_0}{$,Product name}
-					</div>
-				{+END}
-				{+START,IF_NON_EMPTY,{FIELD_1}}
-					<p class="product-ids sku">{!PRODUCT_CODE} {FIELD_1}{$,Product code}</p>
-				{+END}
 				{+START,IF_NON_EMPTY,{FIELD_9}}
 					<div class="description" itemprop="description">
 						{FIELD_9}{$,Product description}
 					</div>
 				{+END}
+
 				{+START,IF_NON_EMPTY,{FIELD_2}}
 					<div class="price_box">
 						<span class="price">{!PRICE} <span itemprop="priceCurrency">{$CURRENCY_SYMBOL}</span><span itemprop="price">{$FLOAT_FORMAT,{FIELD_2}}</span>{$,Product price}</span>
@@ -53,22 +54,13 @@
 				</div>
 			{+END}
 
+			{+START,IF_NON_EMPTY,{FIELD_1}}
+				<p class="product-ids sku">{!PRODUCT_CODE} <kbd>{FIELD_1}</kbd>{$,Product code}</p>
+			{+END}
+
 			{CART_BUTTONS}
 		</div>
 	</div></div>
-
-	<div class="float_surrounder lined_up_boxes">
-		{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
-			<div class="trackbacks right">
-				{TRACKBACK_DETAILS}
-			</div>
-		{+END}
-		{+START,IF_NON_EMPTY,{RATING_DETAILS}}
-			<div class="ratings right">
-				{RATING_DETAILS}
-			</div>
-		{+END}
-	</div>
 
 	<div itemscope="itemscope" itemtype="http://schema.org/WebPage">
 		{$REVIEW_STATUS,catalogue_entry,{ID}}

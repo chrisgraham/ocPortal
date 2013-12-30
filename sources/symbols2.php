@@ -2208,10 +2208,17 @@ function ecv2_RATING($lang,$escaped,$param)
 			global $DISPLAYED_TITLE;
 
 			require_code('feedback');
-			$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
+			$display_tpl=array_key_exists(5,$param)?$param[5]:'RATING_FORM';
+			$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
 			if ($rating!==NULL)
 			{
-				$value=isset($rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING'])?$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING']:'';
+				if (array_key_exists(5,$param))
+				{
+					$value=static_evaluate_tempcode(do_template($display_tpl,$rating));
+				} else
+				{
+					$value=isset($rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING'])?$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING']:'';
+				}
 			} else
 			{
 				if ((!array_key_exists(2,$param)) || ($param[2]=='0'))

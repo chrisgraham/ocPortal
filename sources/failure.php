@@ -1112,7 +1112,7 @@ function put_value_in_stack_trace($value)
 			} else
 			{
 				$_value=$value->evaluate();
-				if (!is_string($_value)) $_value='Tempcode -> '.gettype($_value);
+				if (!is_string($_value)) $_value='Tempcode -> '.gettype($_value); else $_value='Tempcode -> '.$_value;
 			}
 		}
 		elseif ((is_array($value)) || (is_object($value)))

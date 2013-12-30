@@ -137,7 +137,7 @@ class Hook_addon_registry_shopping
 			'themes/default/templates/ECOM_SHOPPING_CART_SCREEN.tpl',
 			'themes/default/templates/ECOM_SHOPPING_ITEM_QUANTITY_FIELD.tpl',
 			'themes/default/templates/ECOM_SHOPPING_ITEM_REMOVE_FIELD.tpl',
-			'themes/default/templates/CATALOGUE_ENTRY_ADD_TO_CART.tpl',
+			'themes/default/templates/CATALOGUE_ENTRY_CART_BUTTONS.tpl',
 			'adminzone/pages/modules/admin_orders.php',
 			'lang/EN/shopping.ini',
 			'sources/hooks/systems/addon_registry/shopping.php',
@@ -185,7 +185,7 @@ class Hook_addon_registry_shopping
 			'ECOM_CART_LINK.tpl'=>'products_entry_screen',
 			'CATALOGUE_products_ENTRY_SCREEN.tpl'=>'products_entry_screen',
 			'CATALOGUE_products_FIELDMAP_ENTRY_FIELD.tpl'=>'products_entry_screen',
-			'CATALOGUE_ENTRY_ADD_TO_CART.tpl'=>'products_entry_screen',
+			'CATALOGUE_ENTRY_CART_BUTTONS.tpl'=>'products_entry_screen',
 			'CATALOGUE_products_CATEGORY_SCREEN.tpl'=>'grid_category_screen__products',
 			'CATALOGUE_products_GRID_ENTRY_FIELD.tpl'=>'grid_category_screen__products',
 			'CATALOGUE_products_GRID_ENTRY_WRAP.tpl'=>'grid_category_screen__products',
@@ -601,7 +601,7 @@ class Hook_addon_registry_shopping
 			$fields->attach($_field);
 		}
 
-		$cart_buttons=do_lorem_template('CATALOGUE_ENTRY_ADD_TO_CART',array(
+		$cart_buttons=do_lorem_template('CATALOGUE_ENTRY_CART_BUTTONS',array(
 			'OUT_OF_STOCK'=>lorem_phrase(),
 			'ACTION_URL'=>placeholder_url(),
 			'PRODUCT_ID'=>placeholder_id(),
@@ -684,7 +684,7 @@ class Hook_addon_registry_shopping
 			$fields->attach($_field);
 		}
 
-		$cart_buttons=do_lorem_template('CATALOGUE_ENTRY_ADD_TO_CART',array(
+		$cart_buttons=do_lorem_template('CATALOGUE_ENTRY_CART_BUTTONS',array(
 			'OUT_OF_STOCK'=>lorem_phrase(),
 			'ACTION_URL'=>placeholder_url(),
 			'PRODUCT_ID'=>placeholder_id(),

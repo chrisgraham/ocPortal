@@ -50,6 +50,23 @@
 	text-align: center;
 }
 
+/* Catalogue product entry screen */
+
+.catalogue_fields_table {
+	margin: 1em 0;
+	font-size: 0.85em;
+}
+
+.catalogue_fields_table th, .catalogue_fields_table td {
+	padding: 0.5em;
+	text-align: left;
+}
+
+.catalogue_entry_screen .ratings .rating_box {
+	float: left;
+	margin-right: 1em;
+}
+
 /* eCommerce cart button (logo) template */
 
 .cart_info {
@@ -57,11 +74,20 @@
 	margin: 1.5em 0;
 }
 
+.cart_info .rating_part {
+	padding-top: 1em;
+	float: left;
+}
+
+.cart_info img, .cart_info span {
+	vertical-align: middle;
+}
+
 .cart_link {
 	float: right;
 }
 
-/* eCommerce add to cart template */
+/* eCommerce cart buttons template */
 
 .add_to_cart {
 	width: 100px;
@@ -82,31 +108,21 @@
 .price_box {
 	font-weight: bold;
 	margin: 1em 0;
-	font-size: 1.2em;
+	font-size: 1.15em;
 }
 
 /* eCommerce product entries */
 
 /* eCommerce product entry screen */
 
-.catalogue_fields_table {
-	margin: 1em 0;
-	font-size: 0.85em;
-}
-
-.catalogue_fields_table th, .catalogue_fields_table td {
-	padding: 0.5em;
-	text-align: left;
-}
-
-.catalogue_entry_screen .ratings .rating_box {
-	float: left;
-	margin-right: 1em;
-}
-
 .product_view .catalogue_entry_box_thumbnail {
 	float: right;
 	margin: 3em 0 3em 3em;
+}
+
+.product_view .sku {
+	float: right;
+	padding-top: 0.5em;
 }
 
 /*

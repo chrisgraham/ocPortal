@@ -20,6 +20,7 @@
 		{+START,IF_NON_EMPTY,{POSTER}}
 			{+START,IF_PASSED,RATING}
 				<div class="ocf_post_details_rating">
+					<div class="accessibility_hidden">{!RATING}:</div>
 					{RATING}
 				</div>
 			{+END}

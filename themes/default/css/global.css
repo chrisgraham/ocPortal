@@ -3096,6 +3096,10 @@ div>.button_micro:first-child, div>.button_screen:first-child, div>.button_scree
 	margin-left: 2px; /* enough for the shadow */
 }
 
+.button_faded {
+	opacity: 0.5 !important;
+}
+
 .button_screen {
 	background-size: 24px 24px;
 	padding: 6px 39px 7px 7px;

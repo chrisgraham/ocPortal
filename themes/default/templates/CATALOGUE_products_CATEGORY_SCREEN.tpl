@@ -11,7 +11,9 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{SUBCATEGORIES}}
-	{$REPLACE, id="quantity", id="quantity2",{CART_LINK}}
+	<div class="cart_info">
+		{$REPLACE, id="quantity", id="quantity2",{CART_LINK}}
+	</div>
 {+END}
 
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,catalogue_category,{ID}}}
@@ -29,7 +31,9 @@
 
 {ENTRIES}
 
-{CART_LINK}
+<div class="cart_info">
+	{CART_LINK}
+</div>
 
 {$REVIEW_STATUS,catalogue_category,{ID}}
 

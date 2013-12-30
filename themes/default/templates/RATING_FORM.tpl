@@ -9,7 +9,6 @@
 				<div class="rating_type_title">
 					<a id="rating__{$GET,identifier}_jump" rel="dorating"></a>
 
-					{+START,IF_EMPTY,{TITLE}}<div class="accessibility_hidden">{!RATING}:</div>{+END}
 					{+START,IF_NON_EMPTY,{TITLE}}<strong>{TITLE*}:</strong>{+END}
 				</div>
 
