@@ -698,7 +698,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		} else $child_or_list='';
 		if ($child_or_list!='') $child_or_list.=' AND ';
 		$query='SELECT DISTINCT t_forum_id,t.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l_topic_id AND l_member_id='.strval((integer)get_member()).') WHERE '.$child_or_list.'t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND (l_time<t_cache_last_time OR l_time IS NULL)';
-		if (!has_specific_permission(get_member(),'jump_to_unvalidated')) $query.=' AND t_validated=1';
+		if (!has_specific_permission(get_member(),'see_unvalidated')) $query.=' AND t_validated=1';
 		$unread_forums=collapse_2d_complexity('t_forum_id','id',$GLOBALS['FORUM_DB']->query($query));
 	}
 

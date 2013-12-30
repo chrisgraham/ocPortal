@@ -1489,7 +1489,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	// Validation
 	if ($entry['ce_validated']==0)
 	{
-		if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+		if ((!has_specific_permission(get_member(),'jump_to_unvalidated')) && ((is_guest()) || ($entry['ce_submitter']!=get_member())))
 			access_denied('PRIVILEGE','jump_to_unvalidated');
 
 		$map['WARNINGS']=do_template('WARNING_BOX',array('_GUID'=>'bf604859a572ca53e969bec3d91f9cfb','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));

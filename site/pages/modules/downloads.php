@@ -599,7 +599,7 @@ class Module_downloads
 		// Validation
 		if ($myrow['validated']==0)
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if ((!has_specific_permission(get_member(),'jump_to_unvalidated')) && ((is_guest()) || ($myrow['submitter']!=get_member())))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'5b1781b8fbb1ef9b8f47693afcff02b9','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
