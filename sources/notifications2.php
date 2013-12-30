@@ -180,7 +180,7 @@ function notifications_ui($member_id_of)
 	{
 		$tmp_file=file_get_contents($css_path);
 		$matches=array();
-		if (preg_match('#(\n|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
+		if (preg_match('#(\s|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 		{
 			$color=$matches[3].'&fgcolor='.$matches[4];
 		}
@@ -296,7 +296,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	{
 		$tmp_file=file_get_contents($css_path);
 		$matches=array();
-		if (preg_match('#(\n|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
+		if (preg_match('#(\s|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 		{
 			$color=$matches[3].'&fgcolor='.$matches[4];
 		}
@@ -355,6 +355,9 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 					enable_notifications($notification_code,$notification_category);
 					$force_change_children_to_children=true;
 				}
+			} else
+			{
+				$force_change_children_to_children=false;
 			}
 		} else
 		{

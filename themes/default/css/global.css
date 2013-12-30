@@ -3741,6 +3741,9 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 figure {
 	margin: 1em 0;
 }
+.left>figure {
+	margin: 0;
+}
 /* Wordpress compatibility */
 .attachment.wp-caption {
 	white-space: normal;
