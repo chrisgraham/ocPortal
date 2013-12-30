@@ -60,7 +60,7 @@ For example:
 	color: inherit;
 }
 
-.menu_type__dropdown a.toplevel_link:after {
+.menu_type__dropdown .has_children>a.toplevel_link:after {
 	content: "\025BC"; /* Downward arrow */
 	vertical-align: middle;
 	padding-left: 0.5em;
