@@ -207,7 +207,12 @@
 
 {+START,IF,{$NOT,{$MOBILE}}}
 	.media_box .gallery_entry_details {
-		max-width: 18em;
+		margin-left: 1em;
+		max-width: 16em;
+	}
+
+	.media_box .gallery_entry_details table {
+		margin-top: 0;
 	}
 {+END}
 

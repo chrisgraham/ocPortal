@@ -10,62 +10,73 @@
 
 	{+START,SET,boxes}
 		<div class="gallery_entry_details right">
-			<div class="box box___gallery_entry_screen"><div class="box_inner" role="contentinfo">
-				<h2>{!DETAILS}</h2>
+			<table class="columned_table map_table results_table" role="contentinfo">
+				{+START,IF,{$NOT,{$MOBILE}}}
+					<colgroup>
+						<col class="gallery_entry_field_name_column" />
+						<col class="gallery_entry_field_value_column" />
+					</colgroup>
+				{+END}
 
-				<table class="map_table results_table">
-					{+START,IF,{$NOT,{$MOBILE}}}
-						<colgroup>
-							<col class="gallery_entry_field_name_column" />
-							<col class="gallery_entry_field_value_column" />
-						</colgroup>
+				<thead>
+					<th colspan="2">
+						{!DETAILS}
+					</th>
+				</thead>
+
+				<tbody>
+					<tr>
+						<th class="de_th meta_data_title">{!ADDED}</th>
+						<td>
+							<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{ADD_DATE*}</time>
+						</td>
+					</tr>
+
+					<tr>
+						<th class="de_th meta_data_title">{!BY}</th>
+						<td>
+							<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER},1}</a>
+
+							{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
+						</td>
+					</tr>
+
+					{+START,IF_NON_EMPTY,{RATING_DETAILS}}
+						<tr>
+							<th class="de_th meta_data_title">{!RATING}</th>
+							<td>{$RATING,{MEDIA_TYPE},{ID},,,,RATING_INLINE_DYNAMIC}</td>
+						</tr>
 					{+END}
 
-					<tbody>
+					{+START,IF_NON_EMPTY,{EDIT_DATE}}
 						<tr>
-							<th class="de_th meta_data_title">{!ADDED}</th>
-							<td>
-								<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{ADD_DATE*}</time>
-							</td>
+							<th class="de_th meta_data_title">{!EDITED}</th>
+							<td>{EDIT_DATE*}</td>
 						</tr>
+					{+END}
 
+					{+START,IF,{$INLINE_STATS}}
 						<tr>
-							<th class="de_th meta_data_title">{!BY}</th>
-							<td>
-								<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER},1}</a>
-
-								{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
-							</td>
+							<th class="de_th meta_data_title">{!COUNT_VIEWS}</th>
+							<td>{VIEWS*}</td>
 						</tr>
+					{+END}
 
-						{+START,IF_NON_EMPTY,{EDIT_DATE}}
-							<tr>
-								<th class="de_th meta_data_title">{!EDITED}</th>
-								<td>{EDIT_DATE*}</td>
-							</tr>
-						{+END}
-
-						{+START,IF,{$INLINE_STATS}}
-							<tr>
-								<th class="de_th meta_data_title">{!COUNT_VIEWS}</th>
-								<td>{VIEWS*}</td>
-							</tr>
-						{+END}
-
+					{+START,IF_NON_EMPTY,{$REVIEW_STATUS,{MEDIA_TYPE},{ID}}}
 						<tr>
 							<td colspan="2">
 								{$REVIEW_STATUS,{MEDIA_TYPE},{ID}}
 							</td>
 						</tr>
-					</tbody>
-				</table>
-
-				{+START,IF,{$ADDON_INSTALLED,recommend}}{+START,IF,{$CONFIG_OPTION,enable_ecards}}
-					{+START,IF_NON_PASSED,VIDEO}
-						<p class="associated_link vertical_alignment"><img src="{$IMG*,icons/16x16/filetypes/email_link}" srcset="{$IMG*,icons/16x16/filetypes/email_link} 2x" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></p>
 					{+END}
-				{+END}{+END}
-			</div></div>
+				</tbody>
+			</table>
+
+			{+START,IF,{$ADDON_INSTALLED,recommend}}{+START,IF,{$CONFIG_OPTION,enable_ecards}}
+				{+START,IF_NON_PASSED,VIDEO}
+					<p class="associated_link vertical_alignment"><img src="{$IMG*,icons/16x16/filetypes/email_link}" srcset="{$IMG*,icons/16x16/filetypes/email_link} 2x" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></p>
+				{+END}
+			{+END}{+END}
 		</div>
 
 		{+START,IF_NON_EMPTY,{MEMBER_DETAILS}}{+START,IF_PASSED,MEMBER_ID}
@@ -81,11 +92,6 @@
 		{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
 			<div class="trackbacks right">
 				{TRACKBACK_DETAILS}
-			</div>
-		{+END}
-		{+START,IF_NON_EMPTY,{RATING_DETAILS}}
-			<div class="ratings right">
-				{RATING_DETAILS}
 			</div>
 		{+END}
 	{+END}
@@ -143,12 +149,7 @@
 			</div>
 		{+END}
 
-		{+START,IF_NON_PASSED,VIDEO}
-			{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,image,{ID}}}
-		{+END}
-		{+START,IF_PASSED,VIDEO}
-			{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,video,{ID}}}
-		{+END}
+		{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,{MEDIA_TYPE},{ID}}}
 		{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 		{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}

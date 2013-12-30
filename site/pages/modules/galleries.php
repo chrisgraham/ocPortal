@@ -407,12 +407,14 @@ class Module_galleries
 				$this->title=get_screen_title((((get_translated_text($myrow['title'])=='')?'VIEW_':'_VIEW_').strtoupper($type)),true,array(make_fractionable_editable($type,$id,get_translated_text($myrow['title']))),NULL,$awards);
 			}
 
+			$title_plain=do_lang((((get_translated_text($myrow['title'])=='')?'VIEW_':'_VIEW_').strtoupper($type)),get_translated_text($myrow['title']));
+
 			$root=get_param('keep_gallery_root','root');
 
 			seo_meta_load_for($type,strval($id));
 
 			$breadcrumbs=gallery_breadcrumbs($cat,$root,false,get_module_zone('galleries'));
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('VIEW_'.strtoupper($type)).'</span>'));
+			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.escape_html($title_plain).'</span>'));
 
 			if ($type=='video')
 			{

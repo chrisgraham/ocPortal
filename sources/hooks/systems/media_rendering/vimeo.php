@@ -79,7 +79,7 @@ class Hook_media_rendering_vimeo
 			if ($test!==NULL) return $test;
 
 			// Vimeo API method
-			if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
+			if ((is_file(get_file_base().'/sources_custom/gallery_syndication.php')) && (!in_safe_mode()))
 			{
 				require_code('hooks/modules/video_syndication/vimeo');
 				$ob=object_factory('video_syndication_vimeo');

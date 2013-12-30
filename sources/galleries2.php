@@ -850,7 +850,7 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
 
-	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
+	if ((is_file(get_file_base().'/sources_custom/gallery_syndication.php')) && (!in_safe_mode()))
 	{
 		require_code('gallery_syndication');
 		if (function_exists('sync_video_syndication'))
@@ -989,7 +989,7 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 		process_overridden_comment_forum('videos',strval($id),$cat,$old_cat)
 	);
 
-	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
+	if ((is_file(get_file_base().'/sources_custom/gallery_syndication.php')) && (!in_safe_mode()))
 	{
 		require_code('gallery_syndication');
 		if (function_exists('sync_video_syndication'))
@@ -1039,7 +1039,7 @@ function delete_video($id,$delete_full=true)
 	decache('main_personal_galleries_list');
 	decache('main_gallery_embed');
 
-	if (is_file(get_file_base().'/sources_custom/gallery_syndication.php'))
+	if ((is_file(get_file_base().'/sources_custom/gallery_syndication.php')) && (!in_safe_mode()))
 	{
 		require_code('gallery_syndication');
 		if (function_exists('sync_video_syndication'))

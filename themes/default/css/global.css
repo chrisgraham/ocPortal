@@ -1152,6 +1152,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 		margin-bottom: 2em;
 	{+END}
 	{$BETA_CSS_PROPERTY,border-radius: 20px;}
+	color: {$GET,heading_text};
 }
 .trinav_wrap.nograd {
 	background-image: none;
@@ -4028,6 +4029,9 @@ td>.comcode_code_wrap>.comcode_quote, td>.comcode_code_wrap>.comcode_code {
 }
 figure {
 	margin: 1em 0;
+}
+.left>figure {
+	margin: 0;
 }
 /* Wordpress compatibility */
 .attachment.wp-caption {

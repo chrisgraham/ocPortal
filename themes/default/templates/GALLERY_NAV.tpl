@@ -26,7 +26,7 @@
 			{+START,IF_NON_EMPTY,{SLIDESHOW_URL}}
 				{+START,IF,{$NOT,{$MOBILE}}}
 					{+START,IF,{$JS_ON}}{+START,IF,{$NOT,{SLIDESHOW}}}
-						<a class="buttons__slideshow button_screen link_exempt" rel="nofollow" target="_blank" title="{!SLIDESHOW} {!LINK_NEW_WINDOW}" href="{SLIDESHOW_URL*}"><span>{!SLIDESHOW}</span></a>
+						<a class="buttons__slideshow button_screen" rel="nofollow" target="_blank" title="{!SLIDESHOW} {!LINK_NEW_WINDOW}" href="{SLIDESHOW_URL*}"><span>{!_SLIDESHOW}</span></a>
 					{+END}{+END}
 				{+END}
 			{+END}
@@ -76,7 +76,7 @@
 			{+START,IF,{$JS_ON}}{+START,IF,{$NOT,{SLIDESHOW}}}
 				<div class="float_surrounder">
 					<div class="right">
-						<a class="buttons__slideshow button_screen link_exempt" rel="nofollow" target="_blank" title="{!SLIDESHOW} {!LINK_NEW_WINDOW}" href="{SLIDESHOW_URL*}"><span>{!SLIDESHOW}</span></a>
+						<a class="buttons__slideshow button_screen" rel="nofollow" target="_blank" title="{!SLIDESHOW} {!LINK_NEW_WINDOW}" href="{SLIDESHOW_URL*}"><span>{!_SLIDESHOW}</span></a>
 					</div>
 				</div>
 			{+END}{+END}
