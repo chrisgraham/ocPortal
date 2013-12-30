@@ -208,7 +208,7 @@
 {+START,IF,{$NOT,{$MOBILE}}}
 	.media_box .gallery_entry_details {
 		margin-left: 1em;
-		max-width: 16em;
+		max-width: 18em;
 	}
 
 	.media_box .gallery_entry_details table {
