@@ -26,7 +26,7 @@
 	{+END}
 
 	<p class="purchase_button">
-		<input class="buttons__cart_checkout button_screen" type="submit" name="submit" value="{!PROCEED}" />
+		<input class="buttons__cart_checkout button_screen" type="submit" name="submit" value="{!shopping:CHECK_OUT}" />
 	</p>	
 </form>
 

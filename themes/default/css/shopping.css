@@ -3,35 +3,45 @@
  Copyright (c) ocProducts, 2004-2014
 */
 
-table.cart_table {
-	width: 100%;
-}
+/* Cart screen */
 
-table.cart_table thead {
-	font-size: 0.85em;
-}
-
-table.cart_table .product_fields {
-	font-size: 0.85em;
+table.cart_table td {
 	vertical-align: middle;
-	border-bottom: 1px solid {$GET,divider_line};
+}
+
+.cart_buttons {
+	overflow: hidden;
+}
+
+.cart_update_buttons {
+	float: left;
+}
+
+.cart_continue_button {
+	float: right;
 }
 
 table.cart_payment_summary {
 	width: 100%;
 	table-layout: fixed;
 	font-size: 1.2em;
+	margin: 2em 0;
+	border-top: 1px solid {$GET,pale_border};
+	border-bottom: 1px solid {$GET,pale_border};
 }
 
 table.cart_payment_summary th {
 	text-align: right;
-	padding-right: 2em;
 	width: 100%;
 }
 
 table.cart_payment_summary td {
-	text-align: left;
-	width: 10em;
+	text-align: right;
+	width: 6em;
+}
+
+table.cart_payment_summary th, table.cart_payment_summary td {
+	padding: 0.5em 0;
 }
 
 table.cart_payment_summary .price {
@@ -48,10 +58,21 @@ table.cart_payment_summary .price {
 
 .checkout_text {
 	color: {$GET,slightly_seeded_text};
-	font-size: 0.85em;
+	font-size: 0.9em;
 	margin-top: 1em;
 	margin-left: 1em;
 }
+
+.checkout_text input {
+	float: left;
+	margin-right: 1em;
+	margin-bottom: 1em; /* To prevent awkward wrapping of the label */
+}
+
+.checkout_text label {
+}
+
+/* Admin order management interface */
 
 .orders_actions_dropdown {
 	width: 10em;

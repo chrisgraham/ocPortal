@@ -333,7 +333,7 @@ class Module_shopping
 			$fields_title=results_field_title(
 				array(
 					'',
-					do_lang_tempcode('PRODUCT_NAME'),
+					do_lang_tempcode('_PRODUCT_NAME'),
 					do_lang_tempcode('UNIT_PRICE'),
 					do_lang_tempcode('QUANTITY'),	
 					do_lang_tempcode('ORDER_PRICE_AMT'),

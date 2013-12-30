@@ -240,7 +240,7 @@ class Hook_paypal
 
 		$ipn_url=$this->get_ipn_url();
 
-		$notification_text=do_lang_tempcode('CHECKOUT_NOTIFICATION_TEXT',$order_id);
+		$notification_text=do_lang_tempcode('CHECKOUT_NOTIFICATION_TEXT',strval($order_id));
 
 		$user_details=array();
 
