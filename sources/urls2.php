@@ -555,7 +555,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=fa
 		if (!is_null($old))
 		{
 			// See if it is same as current
-			$scope=_give_moniker_scope($page,$type,$id,$zone,$moniker);
+			$scope=_give_moniker_scope($page,$type,$id,$zone,'');
 			$moniker=$scope._choose_moniker($page,$type,$id,$moniker_src,$old,$scope);
 			if ($moniker==$old)
 			{
@@ -586,7 +586,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=fa
 		$moniker=$id;
 	} else
 	{
-		$scope=_give_moniker_scope($page,$type,$id,$zone,$moniker);
+		$scope=_give_moniker_scope($page,$type,$id,$zone,'');
 		$moniker=$scope._choose_moniker($page,$type,$id,$moniker_src,NULL,$scope);
 
 		if (($page=='news') && ($type=='view') && (get_value('google_news_urls')==='1'))
