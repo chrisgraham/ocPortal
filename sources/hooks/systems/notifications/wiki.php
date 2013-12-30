@@ -47,12 +47,16 @@ class Hook_Notification_wiki extends Hook_Notification
 		if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 
 		static $wiki_seen=array();
-		$page_links=get_wiki_page_tree($wiki_seen,is_null($id)?NULL:intval($id),NULL,NULL,false,false,5);
+		if ($id===NULL) $wiki_seen=array();
+		$page_links=get_wiki_page_tree($wiki_seen,is_null($id)?NULL:intval($id),NULL,NULL,false,false,is_null($id)?0:1);
+
 		$filtered=array();
 		foreach ($page_links as $p)
 		{
-			$filtered[]=$p;
+			if (strval($p['id'])!==$id)
+				$filtered[]=$p;
 		}
+
 		return $filtered;
 	}
 

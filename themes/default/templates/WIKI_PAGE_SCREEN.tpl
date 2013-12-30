@@ -58,16 +58,6 @@
 				{POSTS}
 			</div>
 		</div></div>
-
-		{+START,IF,{$AND,{$JS_ON},{STAFF_ACCESS}}}
-			<form title="{!MERGE_WIKI_POSTS}" action="{$PAGE_LINK*,_SEARCH:wiki:mg:{ID},1}" method="post">
-				<div class="float_surrounder">
-					<div class="wiki_merge_posts_button">
-						<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="menu___generic_admin__merge button_screen" type="submit" value="{!_MERGE_WIKI_POSTS}" />
-					</div>
-				</div>
-			</form>
-		{+END}
 	{+END}
 
 	{+START,IF,{$AND,{$NOT,{$PREG_MATCH,(^|&|\?)te\_\d+=1,{$QUERY_STRING}}},{HIDE_POSTS}}}
@@ -81,7 +71,17 @@
 			NOTIFICATIONS_ID={ID}
 		{+END}
 
-		{MENU}
+		{BUTTONS}
+
+		{+START,IF_NON_EMPTY,{POSTS}}
+			{+START,IF,{$AND,{$JS_ON},{STAFF_ACCESS}}}
+				<form class="inline" title="{!MERGE_WIKI_POSTS}" action="{$PAGE_LINK*,_SEARCH:wiki:mg:{ID},1}" method="post">
+					<div class="inline">
+						<input id="wiki_merge_button" onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="menu___generic_admin__merge button_screen button_faded" type="submit" value="{!_MERGE_WIKI_POSTS}" />
+					</div>
+				</form>
+			{+END}
+		{+END}
 	</div>
 
 	{$REVIEW_STATUS,wiki_page,{ID}}

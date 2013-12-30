@@ -325,7 +325,7 @@
 
 .ocf_post_details {
 	text-align: {!en_left};
-	padding: 0.6em 0.2em;
+	padding: 0.6em 0.2em !important;
 }
 
 .ocf_post_details_date {
@@ -397,6 +397,10 @@
 		padding: 0.5em;
 		text-align: center;
 	{+END}
+}
+.ocf_post_main_column .buttons_group {
+	margin: 0;
+	padding: 0;
 }
 
 .ocf_topic_post_area {

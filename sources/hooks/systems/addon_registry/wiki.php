@@ -302,6 +302,7 @@ class Hook_addon_registry_wiki
 				'TAGS'=>lorem_word_html(),
 				'HIDE_POSTS'=>placeholder_id(),
 				'ID'=>placeholder_id(),
+				'CHAIN'=>placeholder_id(),
 				'VIEWS'=>placeholder_number(),
 				'STAFF_ACCESS'=>'1',
 				'DESCRIPTION'=>lorem_paragraph_html(),
@@ -309,7 +310,7 @@ class Hook_addon_registry_wiki
 				'CHILDREN'=>$child,
 				'POSTS'=>$posts,
 				'NUM_POSTS'=>placeholder_number(),
-				'MENU'=>placeholder_button()
+				'BUTTONS'=>placeholder_button()
 			)),NULL,'',true)
 		);
 	}

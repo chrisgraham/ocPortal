@@ -570,13 +570,14 @@ class Module_wiki
 			attach_message(do_lang_tempcode('TOO_MANY_WIKI_POSTS'),'warn');
 		}
 
-		$menu=$this->do_menu($chain,$id,$include_expansion,$num_posts<300);
+		$buttons=$this->_render_buttons($chain,$id,$include_expansion,$num_posts<300);
 
 		return do_template('WIKI_PAGE_SCREEN',array(
 			'_GUID'=>'1840d6934be3344c4f93a159fc737a45',
 			'TAGS'=>get_loaded_tags('wiki_pages'),
 			'HIDE_POSTS'=>$page['hide_posts']==1,
 			'ID'=>strval($id),
+			'CHAIN'=>$chain,
 			'VIEWS'=>integer_format($page['wiki_views']),
 			'STAFF_ACCESS'=>$staff_access,
 			'DESCRIPTION'=>$description,
@@ -584,7 +585,7 @@ class Module_wiki
 			'CHILDREN'=>$children,
 			'POSTS'=>$posts,
 			'NUM_POSTS'=>integer_format($num_posts),
-			'MENU'=>$menu,
+			'BUTTONS'=>$buttons,
 		));
 	}
 
@@ -597,12 +598,12 @@ class Module_wiki
 	 * @param  boolean		Whether posting is generally allowed (may be passed false if too many posts)
 	 * @return tempcode		The button tempcode
 	 */
-	function do_menu($chain,$id,$include_expansion,$may_post=true)
+	function _render_buttons($chain,$id,$include_expansion,$may_post=true)
 	{
 		$page_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF');
 		$pos=strpos($chain,'/');
 		$id=intval(substr($chain,($pos===false)?0:($pos+1)));
-		/*if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search')))	Not enough space
+		/*if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search'))) // Not enough space
 		{
 			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
 			$search_button=do_template('BUTTON_SCREEN',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'buttons__search'));
@@ -628,9 +629,9 @@ class Module_wiki
 		$tpl=new ocp_tempcode();
 		$tpl->attach($search_button);
 		$tpl->attach($changes_button);
+		$tpl->attach($post_button);
 		$tpl->attach($tree_button);
 		$tpl->attach($edit_button);
-		$tpl->attach($post_button);
 		return $tpl;
 	}
 

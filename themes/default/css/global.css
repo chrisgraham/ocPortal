@@ -3206,7 +3206,7 @@ NB: Form buttons are wrapped in either:
 */
 
 
-.menu___generic_admin__delete, .tabs__member_account__warnings {
+.menu___generic_admin__delete, .tabs__member_account__warnings, .buttons_group .buttons__edit, .buttons_group .buttons__edit_tree, .buttons_group .menu___generic_admin__merge, .buttons_group .buttons__move {
 	background-color: {$GET,red_highlight_background};
 	border-color: {$GET,red_highlight_text};
 }

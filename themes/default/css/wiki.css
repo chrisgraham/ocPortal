@@ -11,25 +11,6 @@
 	padding-top: 0.5em;
 }
 
-.wiki_post_expand_button {
-	text-align: {!en_right};
-	padding: 11px 5px 0 5px;
-}
-
-.wiki_merge_posts_button {
-	padding-top: 1em;
-	float: {!en_right};
-}
-
-.wiki_rating_inside {
-	padding-left: 3em;
-}
-
-.wiki_poster_name {
-	padding: 0 !important;
-	font-size: 0.85em;
-}
-
 .wiki_page_children {
 	margin-bottom: 1.5em;
 }
@@ -43,8 +24,31 @@
 	padding: 0 !important;
 }
 
-.wiki_table>div>div>div:first-child {
-	width: 9em;
+/* Posts */
+
+.wiki_topic_poster_name {
+	float: {!en_left};
+	margin-{!en_left}: 0.5em;
+	padding-{!en_right}: 0.5em;
+	border-{!en_right}: 1px solid {$GET,standard_border};
+}
+
+.wiki_rating_inside {
+	padding-left: 3em;
+}
+
+.wiki_topic_post_area {
+	background-color: {$GET,area_5_background} !important;
+	padding: 1em !important;
+}
+
+.wiki_mass_select_marker {
+	float: right;
+	border: 0 !important;
+}
+
+.wiki_post_buttons {
+	padding: 0.5em !important;
 }
 
 /*
