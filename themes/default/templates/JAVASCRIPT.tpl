@@ -199,7 +199,13 @@ function new_html__initialise(element)
 				if (rel && rel.match(/(^|\s)lightbox($|\s)/))
 				{
 					element.onclick=function(element) { return function() {
-						open_image_into_lightbox(element);
+						if (element.getElementsByTagName('img').length>0)
+						{
+							open_image_into_lightbox(element);
+						} else
+						{
+							open_link_as_overlay(element);
+						}
 						return false;
 					} }(element);
 					element.title=element.title.replace('{!LINK_NEW_WINDOW;}','');
