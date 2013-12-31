@@ -987,6 +987,8 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 
 	$old_validated=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_validated');
 
+	$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
+
 	$GLOBALS['FORUM_DB']->query_update('f_members',$update,array('id'=>$member_id),'',1);
 
 	if (get_member()!=$member_id) log_it('EDIT_MEMBER_PROFILE',strval($member_id),$username);
@@ -996,7 +998,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		require_code('mail');
 		$_login_url=build_url(array('page'=>'login'),get_module_zone('login'),NULL,false,false,true);
 		$login_url=$_login_url->evaluate();
-		mail_wrap(do_lang('VALIDATED_MEMBER_SUBJECT',get_site_name(),NULL,get_lang($member_id)),do_lang('MEMBER_VALIDATED',get_site_name(),$username,$login_url,get_lang($member_id)),array($email_address),$username);
+		mail_wrap(do_lang('VALIDATED_MEMBER_SUBJECT',get_site_name(),NULL,get_lang($member_id)),do_lang('MEMBER_VALIDATED',get_site_name(),$username,$login_url,get_lang($member_id)),array($email_address),$username,'','',3,NULL,false,NULL,false,false,false,'MAIL',false,NULL,NULL,$join_time);
 	}
 
 	// Decache from run-time cache
@@ -1097,10 +1099,14 @@ function ocf_ban_member($member_id)
 
 	$username=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
 	$email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
+	$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
+
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>1),array('id'=>$member_id),'',1);
+
 	log_it('BAN_MEMBER',strval($member_id),$username);
+
 	$mail=do_lang('BAN_MEMBER_MAIL',$username,get_site_name(),array(),get_lang($member_id));
-	mail_wrap(do_lang('BAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2);
+	mail_wrap(do_lang('BAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2,NULL,false,NULL,false,false,false,'MAIL',false,NULL,NULL,$join_time);
 }
 
 /**
@@ -1114,10 +1120,14 @@ function ocf_unban_member($member_id)
 
 	$username=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
 	$email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
+	$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
+
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>0),array('id'=>$member_id),'',1);
+
 	log_it('UNBAN_MEMBER',strval($member_id),$username);
+
 	$mail=do_lang('UNBAN_MEMBER_MAIL',$username,get_site_name(),array(),get_lang($member_id));
-	mail_wrap(do_lang('UNBAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2);
+	mail_wrap(do_lang('UNBAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2,NULL,false,NULL,false,false,false,'MAIL',false,NULL,NULL,$join_time);
 }
 
 /**

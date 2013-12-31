@@ -187,6 +187,8 @@ class Module_lost_password
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		if ($email=='') warn_exit(do_lang_tempcode('MEMBER_NO_EMAIL_ADDRESS_RESET_TO'));
 
+		$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
+
 		$temporary_passwords=(get_option('password_reset_process')!='emailed');
 
 		// Send confirm mail
@@ -199,7 +201,7 @@ class Module_lost_password
 			$url_simple=$_url_simple->evaluate();
 			$message=do_lang($temporary_passwords?'LOST_PASSWORD_TEXT_TEMPORARY':'LOST_PASSWORD_TEXT',comcode_escape(get_site_name()),comcode_escape($username),array($url,comcode_escape($url_simple),strval($member_id),$code),get_lang($member_id));
 			require_code('mail');
-			mail_wrap(do_lang('LOST_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
+			mail_wrap(do_lang('LOST_PASSWORD',NULL,NULL,NULL,get_lang($member_id)),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true,NULL,NULL,$join_time);
 		} else
 		{
 			$old_php_self=ocp_srv('PHP_SELF');
@@ -300,6 +302,7 @@ class Module_lost_password
 		}
 
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
+		$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
 
 		require_code('crypt');
 		$new_password=get_rand_password();
@@ -313,7 +316,7 @@ class Module_lost_password
 			$login_url=$_login_url->evaluate();
 			$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,get_site_name());
 			require_code('mail');
-			mail_wrap(do_lang('LOST_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
+			mail_wrap(do_lang('LOST_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true,NULL,NULL,$join_time);
 		}
 
 		if ((get_value('no_password_hashing')==='1') && (!$temporary_passwords))

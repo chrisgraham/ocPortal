@@ -45,6 +45,7 @@ class Hook_cron_notification_digests
 					$to_member_id=$member['d_to_member_id'];
 					$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id,true);
 					$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to_member_id);
+					$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($to_member_id,'m_join_time');
 
 					$messages=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('d_subject','d_message','d_date_and_time'),array(
 						'd_to_member_id'=>$to_member_id,
@@ -68,7 +69,7 @@ class Hook_cron_notification_digests
 						$wrapped_message=do_lang('DIGEST_EMAIL_MESSAGE_WRAP',$_message,comcode_escape(get_site_name()));
 
 						require_code('mail');
-						mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,get_option('staff_address'),get_site_name(),3,NULL,true,A_FROM_SYSTEM_UNPRIVILEGED,false);
+						mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,get_option('staff_address'),get_site_name(),3,NULL,true,A_FROM_SYSTEM_UNPRIVILEGED,false,false,false,'MAIL',false,NULL,NULL,$join_time);
 					}
 
 					$GLOBALS['SITE_DB']->query_update('digestives_consumed',array(

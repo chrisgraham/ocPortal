@@ -207,6 +207,8 @@ class Module_contact_member
 		$email_address=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		if (is_null($email_address)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
+		$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
+
 		if (is_null($to_name)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 		$from_email=trim(post_param('email_address'));
@@ -265,7 +267,7 @@ class Module_contact_member
 		{
 			warn_exit(do_lang_tempcode('EXCEEDED_ATTACHMENT_SIZE',integer_format($size)));
 		}
-		mail_wrap(do_lang('EMAIL_MEMBER_SUBJECT',get_site_name(),post_param('subject'),NULL,get_lang($member_id)),post_param('message'),array($email_address),$to_name,$from_email,$from_name,3,$attachments,false,get_member(),false,false,false,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses);
+		mail_wrap(do_lang('EMAIL_MEMBER_SUBJECT',get_site_name(),post_param('subject'),NULL,get_lang($member_id)),post_param('message'),array($email_address),$to_name,$from_email,$from_name,3,$attachments,false,get_member(),false,false,false,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses,$join_time);
 
 		log_it('EMAIL',strval($member_id),$to_name);
 

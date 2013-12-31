@@ -409,6 +409,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 		if ($from_email=='') $from_email='';
 		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($from_member_id,true);*/
 	}
+	$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($to_member_id,'m_join_time');
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
@@ -466,7 +467,9 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 					false,
 					'MAIL',
 					$priority<3,
-					$attachments
+					$attachments,
+					NULL,
+					$join_time
 				);
 
 				$needs_manual_cc=false;
@@ -547,7 +550,26 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 		$to_email=get_option('cc_address');
 		if ($to_email!='')
 		{
-			mail_wrap($subject,$message,array($to_email),$to_name,$from_email,$from_name,$priority,NULL,true,($from_member_id<0)?NULL:$from_member_id,($from_member_id==A_FROM_SYSTEM_PRIVILEGED),false);
+			mail_wrap(
+				$subject,
+				$message,
+				array($to_email),
+				$to_name,
+				$from_email,
+				$from_name,
+				$priority,
+				NULL,
+				true,
+				($from_member_id<0)?NULL:$from_member_id,
+				($from_member_id==A_FROM_SYSTEM_PRIVILEGED),
+				false,
+				false,
+				'MAIL',
+				false,
+				NULL,
+				NULL,
+				$join_time
+			);
 		}
 	}
 

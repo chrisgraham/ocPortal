@@ -186,9 +186,9 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 					return $out;
 				}
 				break;
-	/*		case 'httpauth':
-				// This is handled in get_member()  */
-				break;
+			/*case 'httpauth':
+				// This is handled in get_member()
+				break;*/
 			case 'ldap':
 				if ($password_hashed!=$row['m_pass_hash_salted'])
 				{
@@ -239,7 +239,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 				$email_address=$row['m_email_address'];
 				if ($email_address=='') $email_address=get_option('staff_address');
 				if ((running_script('index')) || (running_script('iframe')))
-					mail_wrap(do_lang('IP_VERIFY_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($row['id'])),$mail,array($email_address),$row['m_username'],'','',1);
+					mail_wrap(do_lang('IP_VERIFY_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($row['id'])),$mail,array($email_address),$row['m_username'],'','',1,NULL,false,NULL,false,false,false,'MAIL',false,NULL,NULL,$row['m_join_time']);
 
 				$SENT_OUT_VALIDATE_NOTICE=true;
 			}

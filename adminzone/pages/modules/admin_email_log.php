@@ -311,8 +311,10 @@ class Module_admin_email_log
 					if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 					$row=$rows[0];
 
+					$join_time=$row['m_join_time'];
+
 					require_code('mail');
-					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses);
+					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses,$join_time);
 
 					$remap['m_queued']=0;
 				}
@@ -344,8 +346,9 @@ class Module_admin_email_log
 			$to_name=unserialize($row['m_to_name']);
 			$from_email=$row['m_from_email'];
 			$from_name=$row['m_from_name'];
+			$join_time=$row['m_join_time'];
 
-			mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses);
+			mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,'MAIL',false,$extra_cc_addresses,$extra_bcc_addresses,$join_time);
 		}
 
 		$GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued'=>0),array('m_queued'=>1));

@@ -24,12 +24,13 @@
  * @param  boolean		Whether to bypass queueing
  * @param  ?array			Extra CC addresses to use (NULL: none)
  * @param  ?array			Extra BCC addresses to use (NULL: none)
+ * @param  ?TIME			Implement the Require-Recipient-Valid-Since header (NULL: no restriction)
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false,$extra_cc_addresses=NULL,$extra_bcc_addresses=NULL)
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false,$extra_cc_addresses=NULL,$extra_bcc_addresses=NULL,$require_recipient_valid_since=NULL)
 {
 	if (get_option('smtp_sockets_use')=='0')
-		return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue,$mail_template='MAIL',$bypass_queue,$extra_cc_addresses,$extra_bcc_addresses);
+		return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue,$mail_template='MAIL',$bypass_queue,$extra_cc_addresses,$extra_bcc_addresses,$require_recipient_valid_since);
 
 	if (running_script('stress_test_loader')) return NULL;
 
@@ -73,6 +74,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			'm_to_name'=>serialize($to_name),
 			'm_extra_cc_addresses'=>serialize($extra_cc_addresses),
 			'm_extra_bcc_addresses'=>serialize($extra_bcc_addresses),
+			'm_join_time'=>$require_recipient_valid_since,
 			'm_from_email'=>$from_email,
 			'm_from_name'=>$from_name,
 			'm_priority'=>3,
@@ -380,6 +382,12 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	$message->setCc(array_unique($extra_cc_addresses));
 	$message->setBcc(array_unique($extra_bcc_addresses));
 
+	if ((count($to_email)==1) && (!is_null($require_recipient_valid_since)))
+	{
+		$headers=$message->getHeaders();
+		$_require_recipient_valid_since=date('D, j M Y H:i:s',$require_recipient_valid_since);
+		$headers->addTextHeader('Require-Recipient-Valid-Since',$to_email[0].'; '.$_require_recipient_valid_since);
+	}
 
 	// Attachments
 	foreach ($real_attachments as $r)
