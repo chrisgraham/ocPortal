@@ -683,15 +683,18 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
 		}
 
-		if (get_param_integer('keep_show_query',0)==1)
+		if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN']))
 		{
-			attach_message($query,'inform');
-		}
-		if (get_param_integer('keep_just_show_query',0)==1)
-		{
-			@ini_set('ocproducts.xss_detect','0');
-			header('Content-type: text/plain; charset='.get_charset());
-			exit($query);
+			if (get_param_integer('keep_show_query',0)==1)
+			{
+				attach_message($query,'inform');
+			}
+			if (get_param_integer('keep_just_show_query',0)==1)
+			{
+				@ini_set('ocproducts.xss_detect','0');
+				header('Content-type: text/plain; charset='.get_charset());
+				exit($query);
+			}
 		}
 
 		/*if ($group_by_ok)	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
@@ -749,7 +752,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 		$t_rows=$t_rows_new;
 	}
-	if (get_param_integer('keep_show_query',0)==1)
+	if ((get_param_integer('keep_show_query',0)==1) && (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN'])))
 	{
 		if ((array_key_exists(0,$t_rows)) && (array_key_exists('id',$t_rows[0])))
 		{
