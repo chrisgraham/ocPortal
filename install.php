@@ -1663,6 +1663,23 @@ function step_5_write_config()
 		fwrite($config_file_handle,preg_replace('#^\t\t\t#m','',$gae_live_code));
 	}
 
+	fwrite($config_file_handle,'
+
+/**
+ * Find the git branch name. This is useful for making this config file context-adaptive (i.e. dev settings vs production settings).
+ *
+ * @return ?ID_TEXT	Branch name (NULL: not in git)
+ */
+function git_repos()
+{
+    $path=dirname(__FILE__).\'/.git/HEAD\';
+    if (!is_file($path)) return \'\';
+    $lines=file($path);
+    $parts=explode(\'/\',$lines[0]);
+    return trim(end($parts));
+}
+');
+
 	// ---
 
 	fclose($config_file_handle);
