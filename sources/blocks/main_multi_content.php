@@ -109,8 +109,6 @@ class Block_main_multi_content
 
 		$guid=isset($map['guid'])?$map['guid']:'';
 		$sort=isset($map['sort'])?$map['sort']:'recent'; // recent|top|views|random|title or some manually typed sort order
-		if ($sort=='all') $sort='title'; // LEGACY
-		if ($sort=='rating') $sort='average_rating'; // LEGACY
 		$filter=isset($map['filter'])?$map['filter']:'';
 		$filter_b=isset($map['filter_b'])?$map['filter_b']:'';
 		if ($filter_b=='*') return new ocp_tempcode(); // Indicates some kind of referencing error, probably caused by Tempcode pre-processing - skip execution

@@ -51,10 +51,6 @@ class Hook_cron_mail_queue
 					$from_name=$row['m_from_name'];
 					$join_time=$row['m_join_time'];
 
-					if (is_string($to_email)) // LEGACY issue of bad data stuck in DB
-					{
-						$to_email=array($to_email);
-					}
 					if (!is_array($to_email)) continue;
 
 					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,$row['m_template'],false,$extra_cc_addresses,$extra_bcc_addresses,$join_time);

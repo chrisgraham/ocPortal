@@ -1613,44 +1613,12 @@ function ecv_HELPER_PANEL_TUTORIAL($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv_HELPER_PANEL_PIC($lang,$escaped,$param)
-{
-	// LEGACY
-	$value='';
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv_HELPER_PANEL_TEXT($lang,$escaped,$param)
 {
 	if ($GLOBALS['HELPER_PANEL_TEXT']===NULL) $GLOBALS['HELPER_PANEL_TEXT']='';
 	$value=is_object($GLOBALS['HELPER_PANEL_TEXT'])?$GLOBALS['HELPER_PANEL_TEXT']->evaluate():$GLOBALS['HELPER_PANEL_TEXT'];
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv_HELPER_PANEL_HTML($lang,$escaped,$param) // LEGACY
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
 }
 

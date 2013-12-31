@@ -38,7 +38,6 @@ class missing_block_params_test_set extends ocp_test_case
 				{
 					if ($matches[1][$i]=='block') continue;
 					if ($matches[1][$i]=='cache') continue;
-					if ($matches[1][$i]=='select') continue; // LEGACY
 
 					// Check param defined in block definition
 					if ((preg_match('/\$info\[\'parameters\'\]=array\([^\n]*\''.preg_quote($matches[1][$i]).'\'[^\n]*\);/',$contents)==0))

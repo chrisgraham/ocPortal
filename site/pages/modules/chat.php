@@ -224,6 +224,11 @@ class Module_chat
 				'p_show_as_edit'=>0
 			));
 		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<12))
+		{
+			$GLOBALS['SITE_DB']->query_update('adminlogs',array('the_type'=>'DELETE_CHATROOM'),array('the_type'=>'DELETE_ROOM'));
+		}
 	}
 
 	/**

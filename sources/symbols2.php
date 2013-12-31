@@ -1119,21 +1119,6 @@ function ecv2_DIV_CEIL($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
-function ecv2_DOCUMENT_HELP($lang,$escaped,$param) // LEGACY
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
 function ecv2_DOMAIN($lang,$escaped,$param)
 {
 	$value=get_domain();
@@ -1381,19 +1366,6 @@ function ecv2_FIND_URL_MONIKER_VIA_ID($lang,$escaped,$param)
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv2_FLAGRANT($lang,$escaped,$param) // LEGACY
-{
-	return ecv($lang,$escaped,TC_SYMBOL,'COMMUNITY_MESSAGE',$param);
 }
 
 /**
@@ -2721,19 +2693,6 @@ function ecv2_URLISE_LANG($lang,$escaped,$param)
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv2_USER($lang,$escaped,$param) // LEGACY
-{
-	return ecv_MEMBER($lang,$escaped,$param);
 }
 
 /**

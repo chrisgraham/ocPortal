@@ -70,7 +70,6 @@ class Block_main_cc_embed
 
 		// ocFilter
 		$filter=mixed();
-		if ((array_key_exists('select',$map)) && (!array_key_exists('filter',$map))) $map['filter']=$map['select']; // LEGACY
 		if ((!is_null($map)) && (array_key_exists('filter',$map)) && ($map['filter']!=''))
 		{
 			require_code('ocfiltering');

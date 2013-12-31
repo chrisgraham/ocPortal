@@ -1591,7 +1591,7 @@ function fu_rename_zone($zone,$new_zone,$dont_bother_with_main_row=false)
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	require_code('zones2');
-	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3'); // LEGACY
+	require_code('zones3');
 	actual_rename_zone_lite($zone,$new_zone,$dont_bother_with_main_row);
 	$pages=find_all_pages_wrap($zone,true,false,FIND_ALL_PAGES__ALL);
 	foreach ($pages as $page=>$type)
@@ -1616,7 +1616,7 @@ function upgrade_modules()
 	$out='';
 
 	require_code('zones2');
-	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3'); // LEGACY
+	require_code('zones3');
 
 	$ret=upgrade_module('adminzone','admin_version');
 	if ($ret==1) $out.='<li>'.do_lang('FU_UPGRADED_MODULE','<kbd>admin_version</kbd>').'</li>';
@@ -1645,7 +1645,7 @@ function upgrade_modules()
 	}
 
 	require_code('zones2');
-	if (file_exists(get_file_base().'/sources/zones3.php')) require_code('zones3'); // LEGACY
+	require_code('zones3');
 	$blocks=find_all_blocks();
 	foreach ($blocks as $block=>$type)
 	{
