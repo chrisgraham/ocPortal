@@ -116,17 +116,15 @@ function phase_0()
 
 function phase_1_pre()
 {
-	$year=date('Y');
 	echo '
 	<p>As this is a substantial new release make sure you have done the following:</p>
 	<ul>
 		<li>Run the <a href="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'plug_guid'),'adminzone'))).'" target="_blank">plug_guid</a> tool to build needed GUIDs into the PHP.</li>
-		<li>Update copyright dates in PHP code for the current year ('.escape_html($year).').</li>
 		<li>Build <kbd>install.sql</kbd> (taking into account it must run on different MySQL versions<!--- make sure the CREATE TABLE code is equivalent to the old version of the file, i.e. <kbd>DEFAULT CHARSET=utf8</kbd> is stripped-->). If you think you\'ve done it then the <a href="'.get_base_url().'/_tests/?id=unit_tests/installsql" target="_blank">installsql unit test</a> will confirm.</li>
-		<!--<li>Build <kbd>install*.sql</kbd> by cutting up <kbd>install.sql</kbd> to the same boundaries as was used in the old versions of the files.</li>-->
 		<li>Run the <a href="'.escape_html(get_base_url().'/_test').'">unit tests</a><!--, with debug mode on, on the custom ocPortal PHP version-->.</li>
 		<li>Test with a non-OCF forum driver (e.g. phpBB)</li>
 		<li>Test with the none forum driver (no forums and members)</li>
+		<li>Go through a full quick installer test install, and then through the full Setup Wizard</li>
 		<li>Write custom theme upgrading code into <kbd>sources/upgrade.php</kbd>. Make sure all ocProducts themes are up-to-date (CSS changes, template changes, theme image changes).</li>
 	</ul>
 	<p>Ideally do these at least on some major versions:</p>

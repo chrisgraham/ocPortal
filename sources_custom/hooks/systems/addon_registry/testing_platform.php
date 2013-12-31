@@ -329,6 +329,11 @@ class Hook_addon_registry_testing_platform
 			'_tests/tests/regression_tests/index.html',
 			'_tests/tests/testatom.cms',
 			'_tests/tests/testrss.cms',
+
+			// It is worth noting that most of these are not true unit tests, but integration tests, or other kinds of test
+			//  Pedantry aside - we just want to test as effectively and efficiently and broadly as we can ;-).
+			//   Whatever we can quickly achieve as a testing win for our total platform stability/coherence, we go with.
+			//   Contributions for deeper, detailed, testing, are very welcome.
 			'_tests/tests/unit_tests/.htaccess',
 			'_tests/tests/unit_tests/template_xss.php',
 			'_tests/tests/unit_tests/notifications_all_coded.php',
@@ -428,6 +433,8 @@ class Hook_addon_registry_testing_platform
 			'_tests/tests/unit_tests/tutorials_all_linked.php',
 			'_tests/tests/unit_tests/addon_setupwizard.php',
 			'_tests/tests/unit_tests/override_notes_consistency.php',
+			'_tests/tests/unit_tests/copyright.php',
+			'_tests/tests/unit_tests/image_compression.php',
 		);
 	}
 }
