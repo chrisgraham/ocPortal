@@ -404,7 +404,42 @@ function ocp_mb_chunk_split($str,$len=76,$glue="\r\n")
 }
 
 /**
- * Log an action
+ * Prevent double submission, by reference to recent matching admin log entries by the current member.
+ *
+ * @param  ID_TEXT		The type of activity just carried out (a lang string)
+ * @param  ?SHORT_TEXT	The most important parameter of the activity (e.g. id) (NULL: none / cannot match against)
+ * @param  ?SHORT_TEXT	A secondary (perhaps, human readable) parameter of the activity (e.g. caption) (NULL: none / cannot match against)
+ */
+function prevent_double_submit($type,$a=NULL,$b=NULL)
+{
+	$where=array(
+		'the_type'=>$type,
+		'member_id'=>get_member(),
+	);
+	if (!is_null($a))
+	{
+		if ($a=='') return; // Cannot work with this
+		$where+=array(
+			'param_a'=>substr($a,0,80),
+		);
+	}
+	if (!is_null($b))
+	{
+		if ($b=='') return; // Cannot work with this
+		$where+=array(
+			'param_b'=>substr($b,0,80),
+		);
+	}
+	$time_window=60*5; // 5 minutes seems reasonable
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','date_and_time',$where,' AND date_and_time>'.strval(time()-$time_window));
+	if (!is_null($test))
+	{
+		warn_exit(do_lang_tempcode('DOUBLE_SUBMISSION_PREVENTED',display_time_period($time_window),display_time_period($time_window-(time()-$test))));
+	}
+}
+
+/**
+ * Log an action.
  *
  * @param  ID_TEXT		The type of activity just carried out (a lang string)
  * @param  ?SHORT_TEXT	The most important parameter of the activity (e.g. id) (NULL: none)

@@ -28,10 +28,13 @@
  */
 function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_TICKET_TYPE',NULL,$ticket_type);
+
 	$ticket_type_lang=insert_lang($ticket_type,1);
 	$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>$ticket_type_lang,'guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq,'cache_lead_time'=>NULL));
 
-	log_it('ADD_TICKET_TYPE',$ticket_type);
+	log_it('ADD_TICKET_TYPE',strval($ticket_type_lang),$ticket_type);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{

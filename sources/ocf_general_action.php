@@ -29,6 +29,9 @@
  */
 function ocf_make_post_template($title,$text,$forum_multi_code,$use_default_forums)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_POST_TEMPLATE',NULL,$title);
+
 	$id=$GLOBALS['FORUM_DB']->query_insert('f_post_templates',array(
 		't_title'=>$title,
 		't_text'=>$text,
@@ -88,6 +91,9 @@ function ocf_make_emoticon($code,$theme_img_code,$relevance_level=1,$use_topics=
  */
 function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter=NULL,$usergroup=NULL,$usergroup_type='')
 {
+	require_code('global4');
+	prevent_double_submit('ADD_WELCOME_EMAIL',NULL,$subject);
+
 	$id=$GLOBALS['SITE_DB']->query_insert(
 		'f_welcome_emails',
 		array(

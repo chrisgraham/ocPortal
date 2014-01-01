@@ -71,6 +71,9 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 
 	check_comcode($content,NULL,false,NULL,true);
 
+	require_code('global4');
+	prevent_double_submit('ADD_CALENDAR_EVENT',NULL,$title);
+
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array(
 		'e_submitter'=>$submitter,
@@ -439,6 +442,9 @@ function delete_calendar_event($id)
  */
 function add_event_type($title,$logo,$external_feed='')
 {
+	require_code('global4');
+	prevent_double_submit('ADD_EVENT_TYPE',NULL,$title);
+
 	$id=$GLOBALS['SITE_DB']->query_insert('calendar_types',array(
 		't_title'=>insert_lang($title,2),
 		't_logo'=>$logo,

@@ -486,6 +486,9 @@ function get_cpf_storage_for($type)
  */
 function ocf_make_custom_field($name,$locked=0,$description='',$default='',$public_view=0,$owner_view=0,$owner_set=0,$encrypted=0,$type='long_text',$required=0,$show_in_posts=0,$show_in_post_previews=0,$order=NULL,$only_group='',$no_name_dupe=false,$show_on_join_form=0)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_CUSTOM_PROFILE_FIELD',NULL,$name);
+
 	$dbs_back=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 

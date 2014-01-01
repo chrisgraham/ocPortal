@@ -70,6 +70,9 @@
  */
 function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a9='',$a10='',$num_options=NULL,$current=0,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$time=NULL,$submitter=NULL,$use_time=NULL,$v1=0,$v2=0,$v3=0,$v4=0,$v5=0,$v6=0,$v7=0,$v8=0,$v9=0,$v10=0,$views=0,$edit_date=NULL)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_POLL',NULL,$question);
+
 	if (is_null($num_options))
 	{
 		$num_options=2;

@@ -295,11 +295,14 @@ function read_in_chat_perm_fields()
  * @param  BINARY				Whether it is an IM room
  * @return AUTO_LINK			The chat room ID
  */
-function add_chatroom($welcome,$roomname,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang,$is_im=0)
+function add_chatroom($welcome,$room_name,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang,$is_im=0)
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('chat_rooms',array('is_im'=>$is_im,'c_welcome'=>insert_lang($welcome,2),'room_name'=>$roomname,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),true);
+	require_code('global4');
+	prevent_double_submit('ADD_CHATROOM',NULL,$room_name);
 
-	log_it('ADD_CHATROOM',strval($id),$roomname);
+	$id=$GLOBALS['SITE_DB']->query_insert('chat_rooms',array('is_im'=>$is_im,'c_welcome'=>insert_lang($welcome,2),'room_name'=>$room_name,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),true);
+
+	log_it('ADD_CHATROOM',strval($id),$room_name);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
@@ -325,18 +328,18 @@ function add_chatroom($welcome,$roomname,$room_owner,$allow2,$allow2_groups,$dis
  * @param  LONG_TEXT			The comma-separated list of usergroups that may NOT access it (blank: no restriction)
  * @param  LANGUAGE_NAME	The room language
  */
-function edit_chatroom($id,$welcome,$roomname,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang)
+function edit_chatroom($id,$welcome,$room_name,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang)
 {
 	$c_welcome=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','c_welcome',array('id'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('chat_rooms',array('c_welcome'=>lang_remap($c_welcome,$welcome),'room_name'=>$roomname,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('chat_rooms',array('c_welcome'=>lang_remap($c_welcome,$welcome),'room_name'=>$room_name,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),array('id'=>$id),'',1);
 
 	decache('side_shoutbox');
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('chat','room',strval($id),'',$roomname);
+	suggest_new_idmoniker_for('chat','room',strval($id),'',$room_name);
 
-	log_it('EDIT_CHATROOM',strval($id),$roomname);
+	log_it('EDIT_CHATROOM',strval($id),$room_name);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{

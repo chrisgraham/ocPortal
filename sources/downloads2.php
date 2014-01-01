@@ -248,6 +248,9 @@ function dload_script()
  */
 function add_download_category($category,$parent_id,$description,$notes,$rep_image='',$id=NULL,$add_time=NULL,$meta_keywords='',$meta_description='')
 {
+	require_code('global4');
+	prevent_double_submit('ADD_DOWNLOAD_CATEGORY',NULL,$category);
+
 	if (is_null($add_time)) $add_time=time();
 
 	$map=array('rep_image'=>$rep_image,'add_date'=>$add_time,'notes'=>$notes,'category'=>insert_lang($category,2),'parent_id'=>$parent_id,'description'=>insert_lang_comcode($description,2));
@@ -701,6 +704,9 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
  */
 function add_download($category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence=NULL,$add_date=NULL,$num_downloads=0,$views=0,$submitter=NULL,$edit_date=NULL,$id=NULL,$meta_keywords='',$meta_description='',$default_pic=1)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_DOWNLOAD',NULL,$name);
+
 	if (is_null($add_date)) $add_date=time();
 	if (is_null($submitter)) $submitter=get_member();
 
@@ -1062,6 +1068,9 @@ function delete_download($id,$leave=false)
  */
 function add_download_licence($title,$text)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_DOWNLOAD_LICENCE',NULL,$title);
+
 	$id=$GLOBALS['SITE_DB']->query_insert('download_licences',array('l_title'=>$title,'l_text'=>$text),true);
 
 	log_it('ADD_DOWNLOAD_LICENCE',strval($id),$title);

@@ -24,10 +24,17 @@
  */
 function add_community_billboard_message($message,$days,$notes,$validated)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_COMMUNITY_BILLBOARD',NULL,$message);
+
 	$order_time=time();
+
 	$id=$GLOBALS['SITE_DB']->query_insert('community_billboard',array('notes'=>$notes,'activation_time'=>NULL,'active_now'=>0,'the_message'=>insert_lang_comcode($message,2),'days'=>$days,'order_time'=>$order_time,'member_id'=>get_member()),true);
+
 	log_it('ADD_COMMUNITY_BILLBOARD',strval($id),$message);
+
 	if ($validated==1) choose_community_billboard_message($id);
+
 	return $id;
 }
 

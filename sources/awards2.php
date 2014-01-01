@@ -31,6 +31,9 @@
  */
 function add_award_type($title,$description,$points,$content_type,$hide_awardee,$update_time_hours)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_AWARD_TYPE',NULL,$title);
+
 	$id=$GLOBALS['SITE_DB']->query_insert('award_types',array('a_title'=>insert_lang_comcode($title,2),'a_description'=>insert_lang($description,2),'a_points'=>$points,'a_content_type'=>filter_naughty_harsh($content_type),'a_hide_awardee'=>$hide_awardee,'a_update_time_hours'=>$update_time_hours),true);
 
 	log_it('ADD_AWARD_TYPE',strval($id),$title);

@@ -358,6 +358,9 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 
 	$title=$bookable_details['title'];
 
+	require_code('global4');
+	prevent_double_submit('ADD_BOOKABLE',NULL,$title);
+
 	$bookable_details['title']=insert_lang($bookable_details['title'],1);
 	$bookable_details['description']=insert_lang($bookable_details['description'],1);
 	$bookable_details['categorisation']=insert_lang($bookable_details['categorisation'],1);
@@ -521,6 +524,9 @@ function delete_bookable($bookable_id)
  */
 function add_bookable_supplement($details,$bookables=NULL)
 {
+	/*require_code('global4');	$title is not actually unique enough to do this
+	prevent_double_submit('ADD_BOOKABLE_SUPPLEMENT',NULL,$title);*/
+
 	if (is_null($bookables)) $bookables=array();
 
 	$title=$details['title'];

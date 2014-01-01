@@ -34,6 +34,9 @@ RSS IMPORT (works very well with Wordpress and Blogger, which use RSS as an inte
  */
 function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_NEWS_CATEGORY',NULL,$title);
+
 	$map=array('nc_title'=>insert_lang($title,1),'nc_img'=>$img,'notes'=>$notes,'nc_owner'=>$owner);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('news_categories',$map,true);
@@ -210,6 +213,9 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 
 	require_code('comcode_check');
 	check_comcode($news_article,NULL,false,NULL,true);
+
+	require_code('global4');
+	prevent_double_submit('ADD_NEWS',NULL,$title);
 
 	if (is_null($main_news_category))
 	{

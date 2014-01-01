@@ -33,6 +33,9 @@
  */
 function ocf_make_multi_moderation($name,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code='*',$title_suffix='')
 {
+	require_code('global4');
+	prevent_double_submit('ADD_MULTI_MODERATION',NULL,$name);
+
 	$id=$GLOBALS['FORUM_DB']->query_insert('f_multi_moderations',array(
 		'mm_name'=>insert_lang($name,3,$GLOBALS['FORUM_DB']),
 		'mm_post_text'=>$post_text,

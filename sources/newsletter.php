@@ -386,6 +386,9 @@ function newsletter_variable_substitution($message,$subject,$forename,$surname,$
  */
 function add_newsletter($title,$description)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_NEWSLETTER',NULL,$title);
+
 	$id=$GLOBALS['SITE_DB']->query_insert('newsletters',array('title'=>insert_lang($title,2),'description'=>insert_lang($description,2)),true);
 	log_it('ADD_NEWSLETTER',strval($id),$title);
 	return $id;

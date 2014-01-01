@@ -393,6 +393,9 @@ function _get_mov_details_do_atom_list($file,$atom_size=NULL)
  */
 function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL,$meta_keywords='',$meta_description='')
 {
+	require_code('global4');
+	prevent_double_submit('ADD_IMAGE',NULL,$title);
+
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
 
@@ -799,6 +802,9 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
  */
 function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL,$meta_keywords='',$meta_description='')
 {
+	require_code('global4');
+	prevent_double_submit('ADD_VIDEO',NULL,$title);
+
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
 

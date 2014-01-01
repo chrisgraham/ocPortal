@@ -583,6 +583,10 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 	if (is_null($add_date)) $add_date=time();
 	if (!is_integer($description)) $description=insert_lang_comcode($description,3);
 	if (!is_integer($title)) $title=insert_lang($title,2);
+
+	require_code('global4');
+	prevent_double_submit('ADD_CATALOGUE_CATEGORY',NULL,get_translated_text($title));
+
 	$map=array('cc_move_days_lower'=>$move_days_lower,'cc_move_days_higher'=>$move_days_higher,'cc_move_target'=>$move_target,'rep_image'=>$rep_image,'cc_add_date'=>$add_date,'c_name'=>$catalogue_name,'cc_title'=>$title,'cc_description'=>$description,'cc_notes'=>$notes,'cc_parent_id'=>$parent_id);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_categories',$map,true);
@@ -616,7 +620,7 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 	}
 
 	require_code('member_mentions');
-	dispatch_member_mention_notifications('catalogue_category',strval($id),$submitter);
+	dispatch_member_mention_notifications('catalogue_category',strval($id),get_member());
 
 	return $id;
 }
@@ -947,13 +951,20 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 		if (strpos($raw_type,'_trans')!==false)
 			check_comcode($val);
 	}
+
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_entries',$imap,true);
 	$title=NULL;
 	foreach ($map as $field_id=>$val)
 	{
 		if ($val==STRING_MAGIC_NULL) $val='';
 
-		if (is_null($title)) $title=$val;
+		if (is_null($title))
+		{
+			$title=$val;
+
+			require_code('global4');
+			prevent_double_submit('ADD_CATALOGUE_ENTRY',NULL,$title);
+		}
 
 		$type=$fields[$field_id];
 

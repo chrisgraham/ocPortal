@@ -35,6 +35,9 @@
  */
 function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$time=NULL,$submitter=NULL,$used=0,$use_time=NULL,$views=0,$edit_date=NULL)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_IOTD',NULL,$caption);
+
 	if (is_null($time)) $time=time();
 	if (is_null($submitter)) $submitter=get_member();
 

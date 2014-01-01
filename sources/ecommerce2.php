@@ -37,6 +37,9 @@
  */
 function add_usergroup_subscription($title,$description,$cost,$length,$length_units,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_USERGROUP_SUBSCRIPTION',NULL,$title);
+
 	$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 

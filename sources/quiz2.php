@@ -281,6 +281,9 @@ function _save_available_quiz_answers($id,$text,$type)
  */
 function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter=NULL,$points_for_passing=0,$tied_newsletter=NULL,$add_time=NULL,$meta_keywords='',$meta_description='')
 {
+	require_code('global4');
+	prevent_double_submit('ADD_QUIZ',NULL,$name);
+
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_time)) $add_time=time();
 

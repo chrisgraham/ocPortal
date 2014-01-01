@@ -28,6 +28,9 @@
  */
 function ocf_make_forum_grouping($title,$description,$expanded_by_default=1)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_FORUM_GROUPING',NULL,$title);
+
 	$forum_grouping_id=$GLOBALS['FORUM_DB']->query_insert('f_forum_groupings',array(
 		'c_title'=>$title,
 		'c_description'=>$description,
@@ -65,6 +68,9 @@ function ocf_make_forum_grouping($title,$description,$expanded_by_default=1)
  */
 function ocf_make_forum($name,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position=1,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post',$is_threaded=0)
 {
+	require_code('global4');
+	prevent_double_submit('ADD_FORUM',NULL,$name);
+
 	if ($forum_grouping_id==-1) $forum_grouping_id=NULL;
 	if ($parent_forum==-1) $parent_forum=NULL;
 
