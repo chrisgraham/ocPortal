@@ -88,9 +88,10 @@ class Block_main_staff_links
 				'Google Apps (free gmail for domains, etc)'=>'http://www.google.com/apps/intl/en/group/index.html',
 				'Google Chrome (web browser)'=>'http://www.google.com/chrome',
 				'Google Chrome addons'=>'https://chrome.google.com/extensions/featured/web_dev',
+				'SharedCount (social sharing stats)'=>'http://www.sharedcount.com/',
+				'Facebook Insights (Facebook Analytics)'=>'https://developers.facebook.com/docs/insights/',
 				'Firefox (web browser)'=>'http://www.getfirefox.com/',
 				'FireFox addons'=>'http://www.instantshift.com/2009/01/25/26-essential-firefox-add-ons-for-web-designers/',
-				'Opera (web browser)'=>'http://www.opera.com/',
 				'Internet Explorer Tester (for testing)'=>'http://www.my-debugbar.com/wiki/IETester/HomePage',
 				'Paint.net (free graphics tool)'=>'http://www.getpaint.net/',
 				'PNGGauntlet (compress PNG files, Windows)'=>'http://benhollis.net/software/pnggauntlet/',
@@ -100,11 +101,11 @@ class Block_main_staff_links
 				'Kompozer (Web design tool)'=>'http://www.kompozer.net/',
 				'DiffMerge'=>'http://www.sourcegear.com/diffmerge/',
 				'Jing (record screencasts)'=>'http://www.jingproject.com/',
-				'Rackspace Cloud hosting'=>'http://www.rackspacecloud.com/1043-0-3-13.html',
-				'GoDaddy (Domains and SSL certificates)'=>'http://www.jdoqocy.com/click-3972552-10378406',
 				'SiteRay (site quality auditing)'=>'http://www.silktide.com/siteray',
 				'Smashing Magazine (web design articles)'=>'http://www.smashingmagazine.com/',
 				'w3schools (learn web technologies)'=>'http://www.w3schools.com/',
+				// NB: Not including a web host, as the user will likely already have one
+				//'GoDaddy (Domains and SSL certificates)'=>'http://www.godaddy.com/', // A bit overly-specific, plus similar to the above
 			);
 			foreach ($default_links as $link_title=>$url)
 			{
