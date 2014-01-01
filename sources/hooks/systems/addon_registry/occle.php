@@ -192,6 +192,7 @@ class Hook_addon_registry_occle
 			'sources/hooks/systems/occle_commands/rm.php',
 			'sources/hooks/systems/occle_commands/rmdir.php',
 			'sources/hooks/systems/occle_commands/time.php',
+			'sources/hooks/systems/occle_commands/untar.php',
 			'sources/hooks/systems/occle_commands/users_online.php',
 			'sources/hooks/systems/occle_commands/version.php',
 			'sources/hooks/systems/occle_commands/whoami.php',
