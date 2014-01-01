@@ -106,7 +106,7 @@ class Block_main_bottom_bar
 
 		// Birthdays
 		$birthdays=new ocp_tempcode();
-		if (get_option('enable_birthdays')=='1')
+		if (get_option('enable_birthdays')!='0')
 		{
 			$_birthdays=ocf_find_birthdays();
 			foreach ($_birthdays as $_birthday)

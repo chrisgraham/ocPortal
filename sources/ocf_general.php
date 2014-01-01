@@ -188,8 +188,11 @@ function ocf_find_birthdays($time=NULL)
 {
 	if (is_null($time)) $time=time();
 
+	$upper_limit=intval(get_option('enable_birthdays'));
+
 	list($day,$month,$year)=explode(' ',date('j m Y',utctime_to_usertime($time)));
-	$rows=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username','m_reveal_age','m_dob_year'),array('m_dob_day'=>intval($day),'m_dob_month'=>intval($month)),'ORDER BY m_last_visit_time DESC',20);
+	$rows=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username','m_reveal_age','m_dob_year'),array('m_dob_day'=>intval($day),'m_dob_month'=>intval($month)),'ORDER BY m_last_visit_time DESC',$upper_limit);
+	if (count($rows)==$upper_limit) return array();
 
 	$birthdays=array();
 	foreach ($rows as $row)

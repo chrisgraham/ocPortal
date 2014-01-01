@@ -29,7 +29,7 @@ class Hook_config_enable_birthdays
 	{
 		return array(
 			'human_name'=>'ENABLE_BIRTHDAYS',
-			'type'=>'tick',
+			'type'=>'integer',
 			'category'=>'USERS',
 			'group'=>'MEMBERS',
 			'explanation'=>'CONFIG_OPTION_enable_birthdays',
@@ -48,7 +48,7 @@ class Hook_config_enable_birthdays
 	 */
 	function get_default()
 	{
-		return '1';
+		return '20';
 	}
 }
 
