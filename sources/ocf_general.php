@@ -187,10 +187,11 @@ function ocf_find_birthdays($time=NULL)
 {
 	if (is_null($time)) $time=time();
 
-	$num_members=$GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)');
-	if ($num_members>365*20) return array(); // 20 birthdays on average per day is more than worth reporting! And would kill performance
-
 	list($day,$month,$year)=explode(' ',date('j m Y',utctime_to_usertime($time)));
+
+	$num_members=$GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)',array('m_dob_day'=>intval($day),'m_dob_month'=>intval($month)));
+	if ($num_members>20) return array();
+
 	$rows=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username','m_reveal_age','m_dob_year'),array('m_dob_day'=>intval($day),'m_dob_month'=>intval($month)));
 
 	$birthdays=array();
