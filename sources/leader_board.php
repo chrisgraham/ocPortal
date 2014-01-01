@@ -33,7 +33,7 @@ function has_leader_board_since($cutoff)
 /**
  * Calculate the leader-board.
  *
- * @return boolean		Whether to retrieve results too
+ * @return boolean		Whether to retrieve results too (no retrieve -> faster call)
  * @return ?array			A map of member-IDs to points, sorted by leader-board status (NULL: not retrieving)
  */
 function calculate_latest_leader_board($retrieve=true)
@@ -87,6 +87,8 @@ function calculate_latest_leader_board($retrieve=true)
 
 		$i++;
 	}
+
+	if (!$retrieve) return NULL;
 
 	return $points;
 }
