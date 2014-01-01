@@ -230,12 +230,15 @@ function is_page_https($zone,$page)
 		$HTTPS_PAGES_CACHE=persistent_cache_get('HTTPS_PAGES_CACHE');
 	if ($HTTPS_PAGES_CACHE===NULL)
 	{
-		$results=$GLOBALS['SITE_DB']->query_select('https_pages',array('*'),NULL,'',NULL,NULL,true);
-		$HTTPS_PAGES_CACHE=array();
-		foreach ($results as $r)
-			$HTTPS_PAGES_CACHE[$r['https_page_name']]=1;
-		if (function_exists('persistent_cache_set'))
-			persistent_cache_set('HTTPS_PAGES_CACHE',$HTTPS_PAGES_CACHE);
+		if (isset($GLOBALS['SITE_DB']))
+		{
+			$results=$GLOBALS['SITE_DB']->query_select('https_pages',array('*'),NULL,'',NULL,NULL,true);
+			$HTTPS_PAGES_CACHE=array();
+			foreach ($results as $r)
+				$HTTPS_PAGES_CACHE[$r['https_page_name']]=1;
+			if (function_exists('persistent_cache_set'))
+				persistent_cache_set('HTTPS_PAGES_CACHE',$HTTPS_PAGES_CACHE);
+		}
 	}
 	return isset($HTTPS_PAGES_CACHE[$zone.':'.$page]);
 }

@@ -1,4 +1,4 @@
-# Disable inaccurate security scanning (ocPortal has it's own)
+# Disable inaccurate security scanning (ocPortal has it's own). This disablign only works with modsecurity1 unfortunately.
 <IfModule mod_security.c>
 SecFilterEngine Off
 SecFilterScanPOST Off
@@ -16,20 +16,21 @@ php_flag register_globals off
 
 # Put some limits up. ocPortal is stable enough not to cause problems- it'll only use higher limits when it really needs them
 php_value memory_limit "128M"
-php_value max_input_time "300"
 php_value max_execution_time "30"
-
 php_value max_input_vars "2000"
+
+# This causes unstability (and is known/documented to) but some hosts turn it on
 php_value mbstring.func_overload "0"
+
 # Suhosin can cause problems on configuration, language editing, and Catalogue forms, which use a lot of fields
 php_value suhosin.post.max_vars "2000"
 php_value suhosin.request.max_vars "2000"
-php_value suhosin.cookie.max_vars "400"
+php_value suhosin.cookie.max_vars "100"
 php_value suhosin.cookie.max_name_length "150"
 php_value suhosin.post.max_value_length "100000000"
 php_value suhosin.request.max_value_length "100000000"
-php_value suhosin.post.max_totalname_length "10000"
-php_value suhosin.request.max_totalname_length "10000"
+php_value suhosin.post.max_totalname_length "20000"
+php_value suhosin.request.max_totalname_length "20000"
 php_flag suhosin.cookie.encrypt off
 php_flag suhosin.sql.union off
 </IfModule>

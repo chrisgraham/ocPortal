@@ -178,12 +178,6 @@ class Module_admin_config
 		require_all_lang();
 		require_code('config2');
 
-		$val=ini_get('suhosin.post.max_vars');
-		if ((is_string($val)) && ($val!='') && (intval($val)<400))
-		{
-			attach_message(do_lang_tempcode('LOW_SUHOSIN_SETTING'),'warn');
-		}
-
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->config_choose(); // List of categories
@@ -607,6 +601,9 @@ class Module_admin_config
 	 */
 	function config_set()
 	{
+		require_code('input_filter_2');
+		rescue_shortened_post_request();
+
 		global $CONFIG_OPTIONS_CACHE;
 
 		$category=get_param('id','MAIN');

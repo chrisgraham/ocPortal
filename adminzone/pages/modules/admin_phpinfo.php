@@ -65,6 +65,25 @@ class Module_admin_phpinfo
 	{
 		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
+		// Various checks
+		$hooks=find_all_hooks('systems','checks');
+		$found_issues=false;
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/systems/checks/'.filter_naughty($hook));
+			$ob=object_factory('Hook_check_'.$hook);
+			$warning=$ob->run();
+			foreach ($warning as $_warning)
+			{
+				attach_message($_warning,'warn');
+				$found_issues=true;
+			}
+		}
+		if (!$found_issues)
+		{
+			attach_message(do_lang_tempcode('NO_SERVER_ISSUES_FOUND'),'inform',true);
+		}
+
 		require_lang('menus');
 
 		get_screen_title('PHPINFO');

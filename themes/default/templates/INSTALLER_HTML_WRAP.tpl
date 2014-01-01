@@ -155,7 +155,7 @@
 
 	<body id="installer_body" class="website_body" onload="install_stage_load();">
 		<div class="installer_main">
-			<img alt="ocPortal" src="{LOGO_URL*}" width="324" height="89" />
+			<img alt="ocPortal" src="{LOGO_URL*}" />
 		</div>
 
 		<script>// <![CDATA[

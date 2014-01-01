@@ -41,6 +41,23 @@ function adminzone_special_cases($codename)
 		set_helper_panel_tutorial('tut_msn');
 	}
 */
+
+	if ($codename=='start')
+	{
+		// Various checks
+		$hooks=find_all_hooks('systems','checks');
+		$found_issues=false;
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/systems/checks/'.filter_naughty($hook));
+			$ob=object_factory('Hook_check_'.$hook);
+			$warning=$ob->run();
+			foreach ($warning as $_warning)
+			{
+				attach_message($_warning,'warn');
+			}
+		}
+	}
 }
 
 /**

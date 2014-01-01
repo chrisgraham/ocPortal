@@ -424,6 +424,9 @@ class standard_crud_module
 	{
 		@ignore_user_abort(true); // Must keep going till completion
 
+		require_code('input_filter_2');
+		rescue_shortened_post_request();
+
 		require_code('form_templates');
 		require_code('feedback');
 		require_code('autosave');
