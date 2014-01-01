@@ -26,7 +26,7 @@ class Hook_cron_leader_board
 	function run()
 	{
 		require_code('leader_board');
-		calculate_latest_leader_board();
+		calculate_latest_leader_board(false);
 	}
 }
 

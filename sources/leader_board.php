@@ -33,14 +33,17 @@ function has_leader_board_since($cutoff)
 /**
  * Calculate the leader-board.
  *
- * @return array			A map of member-IDs to points, sorted by leader-board status, of the top posters (doing for points would be too inefficient)
+ * @return boolean		Whether to retrieve results too
+ * @return ?array			A map of member-IDs to points, sorted by leader-board status (NULL: not retrieving)
  */
-function calculate_latest_leader_board()
+function calculate_latest_leader_board($retrieve=true)
 {
 	// Already has?
 	$cutoff=time()-60*60*24*7;
 	if (has_leader_board_since($cutoff))
 	{
+		if (!$retrieve) return NULL;
+
 		$rows=$GLOBALS['SITE_DB']->query('SELECT lb_member,lb_points FROM '.get_table_prefix().'leader_board WHERE date_and_time>'.strval($cutoff));
 		$rows=collapse_2d_complexity('lb_member','lb_points',$rows);
 		arsort($rows);

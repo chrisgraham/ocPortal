@@ -93,7 +93,7 @@ class Module_leader_board
 
 		// Ensure the leader-board is getting calculated...
 		require_code('leader_board');
-		calculate_latest_leader_board();
+		calculate_latest_leader_board(false);
 
 		// Are there any rank images going to display?
 		$or_list='1=1';
