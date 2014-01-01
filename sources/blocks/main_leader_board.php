@@ -34,7 +34,7 @@ class Block_main_leader_board
 		$info['hack_version']=NULL;
 		$info['version']=3;
 		$info['locked']=false;
-		$info['parameters']=array('param','zone','staff');
+		$info['parameters']=array('zone');
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
@@ -47,8 +47,8 @@ class Block_main_leader_board
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(intval(array_key_exists(\'staff\',$map)?$map[\'staff\']:\'0\'),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'leader_board\'),array_key_exists(\'param\',$map)?intval($map[\'param\']):5)';
-		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
+		$info['cache_on']='array(array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'leader_board\'))';
+		$info['ttl']=60*15; // 15 minutes
 		return $info;
 	}
 
@@ -86,24 +86,15 @@ class Block_main_leader_board
 	 */
 	function run($map)
 	{
-		$limit=array_key_exists('param',$map)?intval($map['param']):5;
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('leader_board');
-		$staff=intval(array_key_exists('staff',$map)?$map['staff']:'0');
 
 		require_lang('leader_board');
 		require_code('points');
 		require_css('points');
 
-		$cutoff=time()-60*60*24*7;
-		$rows=$GLOBALS['SITE_DB']->query('SELECT lb_member,lb_points FROM '.get_table_prefix().'leader_board WHERE date_and_time>'.strval($cutoff));
-		$rows=collapse_2d_complexity('lb_member','lb_points',$rows);
-		if (count($rows)==0)
-		{
-			$rows=$this->calculate_leader_board($limit,$staff);
-		} else
-		{
-			arsort($rows);
-		}
+		require_code('leader_board');
+		$rows=calculate_latest_leader_board();
+
 		$out=new ocp_tempcode();
 		$i=0;
 
@@ -117,20 +108,12 @@ class Block_main_leader_board
 
 		foreach ($rows as $member=>$points)
 		{
-			if ($i==$limit) break;
-
-			if (is_guest($member)) continue; // Should not happen, but some forum drivers might suck ;)
-			if (count($rows)>=$limit) // We don't allow staff, if there are enough to show without
-			{
-				if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($member))) continue;
-			}
-
 			$points_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
-			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-			if (is_null($username)) continue;
 
-			if ($i==0) set_value('site_bestmember',$username);
+			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
+
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+			if (is_null($username)) continue; // Deleted member now
 
 			$out->attach(do_template('POINTS_LEADER_BOARD_ROW',array(
 				'_GUID'=>'68caa55091aade84bc7ca760e6655a45',
@@ -147,42 +130,12 @@ class Block_main_leader_board
 
 		$url=build_url(array('page'=>'leader_board'),$zone);
 
-		return do_template('POINTS_LEADER_BOARD',array('_GUID'=>'c875cce925e73f46408acc0a153a2902','URL'=>$url,'LIMIT'=>integer_format($limit),'ROWS'=>$out));
-	}
-
-	/**
-	 * Calculate the leader-board.
-	 *
-	 * @param  integer		The number to show on the leader-board
-	 * @param  BINARY			Whether to include staff
-	 * @return array			A map of member-ids to points, sorted by leader-board status, of the top posters (doing for points would be too inefficient)
-	 */
-	function calculate_leader_board($limit,$staff)
-	{
-		$all_members=$GLOBALS['FORUM_DRIVER']->get_top_posters(max(100,$limit));
-		$points=array();
-		foreach ($all_members as $member)
-		{
-			$id=$GLOBALS['FORUM_DRIVER']->mrow_id($member);
-			if (count($all_members)>=$limit) // We don't allow staff, if there are enough to show without
-			{
-				if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($id))) continue;
-			}
-			$points[$id]=total_points($id);
-		}
-
-		arsort($points);
-
-		$i=0;
-		$time=time();
-		foreach ($points as $id=>$num_points)
-		{
-			if ($i==$limit) break;
-			$GLOBALS['SITE_DB']->query_insert('leader_board',array('lb_member'=>$id,'lb_points'=>$num_points,'date_and_time'=>$time),false,true); // Allow failure due to race conditions
-
-			$i++;
-		}
-		return $points;
+		return do_template('POINTS_LEADER_BOARD',array(
+			'_GUID'=>'c875cce925e73f46408acc0a153a2902',
+			'URL'=>$url,
+			'LIMIT'=>integer_format(intval(get_option('leader_board_size'))),
+			'ROWS'=>$out,
+		));
 	}
 }
 

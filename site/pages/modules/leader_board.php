@@ -92,9 +92,8 @@ class Module_leader_board
 		$max=get_param_integer('lb_max',52);
 
 		// Ensure the leader-board is getting calculated...
-		$cutoff=time()-60*60*24*7;
-		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'leader_board WHERE date_and_time>'.strval($cutoff));
-		if ($test==0) do_block('main_leader_board',array());
+		require_code('leader_board');
+		calculate_latest_leader_board();
 
 		// Are there any rank images going to display?
 		$or_list='1=1';
@@ -121,9 +120,12 @@ class Module_leader_board
 			foreach ($rows as $member=>$points)
 			{
 				$points_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
+
 				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
+
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 				if (is_null($username)) $username=do_lang('UNKNOWN');
+
 				$week_tpl->attach(do_template('POINTS_LEADER_BOARD_ROW',array(
 					'_GUID'=>'6d323b4b5abea0e82a14cb4745c4af4f',
 					'POINTS_URL'=>$points_url,

@@ -125,7 +125,11 @@ table.points_summary_table .answer {
 /* Leaderboard */
 
 .box___points_leader_board_week {
-	max-width: 30em; /* Stop the wide table within being too big */
+	width: 30em; /* Stop the wide table within being too big */
+}
+
+.box___points_leader_board_week .leader_board_table th {
+	width: 10em;
 }
 
 .leader_board_table th, .leader_board_table td {

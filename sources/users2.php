@@ -142,7 +142,7 @@ function member_blocked($member_id,$member_blocker=NULL)
  * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: don't care)
  * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: don't care)
  * @param  boolean		Whether this has to be done over the forum driver (multi site network)
- * @return ?array			A map of member-ids to rows about them (NULL: Too many)
+ * @return ?array			A map of member-IDs to rows about them (NULL: Too many)
  */
 function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
 {
@@ -195,7 +195,7 @@ function get_members_viewing_wrap($page=NULL,$type=NULL,$id=NULL,$forum_layer=fa
  * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: environment current) (blank: don't care)
  * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: environment current) (blank: don't care)
  * @param  boolean		Whether this has to be done over the forum driver (multi site network)
- * @return ?array			A map of member-ids to rows about them (NULL: Too many / disabled)
+ * @return ?array			A map of member-IDs to rows about them (NULL: Too many / disabled)
  */
 function get_members_viewing($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
 {
