@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		galleries
+ * @package		image_slider
  */
 
-class Block_main_image_fader
+class Block_main_image_slider
 {
 	/**
 	 * Standard modular info function.
@@ -34,7 +34,7 @@ class Block_main_image_fader
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','time','zone','order','as_guest');
+		$info['parameters']=array('param','time','zone','order','as_guest','transitions','width','height');
 		return $info;
 	}
 
@@ -45,8 +45,10 @@ class Block_main_image_fader
 	 */
 	function cacheing_environment()
 	{
+		return NULL; // Not being decached anywhere, so don't cache
+
 		$info=array();
-		$info['cache_on']='((addon_installed(\'content_privacy\')) && (!(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false)))?NULL:array(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,array_key_exists(\'order\',$map)?$map[\'order\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['cache_on']='((addon_installed(\'content_privacy\')) && (!(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false)))?NULL:array(empty($map[\'width\'])?750:intval($map[\'width\']),empty($map[\'height\'])?300:intval($map[\'height\']),array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,array_key_exists(\'order\',$map)?$map[\'order\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'transitions\',$map)?$map[\'transitions\']:\'<default>\')';
 		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60;
 		return $info;
 	}
@@ -59,22 +61,24 @@ class Block_main_image_fader
 	 */
 	function run($map)
 	{
-		require_css('galleries');
-		require_lang('galleries');
+		require_css('skitter');
+		require_javascript('javascript_jquery');
+		require_javascript('javascript_skitter');
+
 		require_code('galleries');
 
 		$cat=empty($map['param'])?'root':$map['param'];
 		$mill=array_key_exists('time',$map)?intval($map['time']):8000; // milliseconds between animations
+		$width=empty($map['width'])?750:intval($map['width']);
+		$height=empty($map['height'])?300:intval($map['height']);
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
 		$order=array_key_exists('order',$map)?$map['order']:'';
 
+		$_transitions=array_key_exists('transitions',$map)?$map['transitions']:'cube|cubeRandom|block|cubeStop|cubeHide|cubeSize|horizontal|showBars|showBarsRandom|tube|fade|fadeFour|paralell|blind|blindHeight|blindWidth|directionTop|directionBottom|directionRight|directionLeft|cubeStopRandom|cubeSpread|cubeJelly|glassCube|glassBlock|circles|circlesInside|circlesRotate|cubeShow|upBars|downBars|hideBars|swapBars|swapBarsBack|swapBlocks|cut|random|randomSmart';
+		$transitions=($_transitions=='')?array():explode('|',$_transitions);
+
 		require_code('ocfiltering');
 		$cat_select=ocfilter_to_sqlfragment($cat,'cat','galleries','parent_id','cat','name',false,false);
-
-		$images=array();
-		$images_full=array();
-		$titles=array();
-		$html=array();
 
 		$extra_join_image='';
 		$extra_join_video='';
@@ -94,8 +98,8 @@ class Block_main_image_fader
 			$extra_where_video.=$privacy_where_video;
 		}
 
-		$image_rows=$GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,url,title,description FROM '.get_table_prefix().'images r '.$extra_join_image.' WHERE '.$cat_select.$extra_where_image.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true,array('title','description'));
-		$video_rows=$GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,thumb_url AS url,title,description FROM '.get_table_prefix().'videos r '.$extra_join_video.' WHERE '.$cat_select.$extra_where_video.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true,array('title','description'));
+		$image_rows=$GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,url,title,description,\'image\' AS content_type FROM '.get_table_prefix().'images r '.$extra_join_image.' WHERE '.$cat_select.$extra_where_image.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true,array('title','description'));
+		$video_rows=$GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,thumb_url AS url,title,description,\'video\' AS content_type FROM '.get_table_prefix().'videos r '.$extra_join_video.' WHERE '.$cat_select.$extra_where_video.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,NULL,false,true,array('title','description'));
 		$all_rows=array();
 		if ($order!='')
 		{
@@ -131,20 +135,33 @@ class Block_main_image_fader
 				}
 			}
 		}
+
 		$all_rows=array_merge($all_rows,$image_rows,$video_rows);
+
 		require_code('images');
-		foreach ($all_rows as $row)
+
+		$images=array();
+		foreach ($all_rows as $i=>$row)
 		{
 			$url=$row['thumb_url'];
 			if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
-			$images[]=$url;
 
 			$full_url=$row['url'];
 			if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
-			$images_full[]=$full_url;
 
-			$titles[]=get_translated_text($row['title']);
-			$html[]=get_translated_tempcode($row['description']);
+			$view_url=build_url(array('page'=>'galleries','type'=>$row['content_type'],'id'=>$row['id']),$zone);
+
+			$title=get_translated_text($row['title']);
+			$description=get_translated_tempcode($row['description']);
+
+			$images[]=array(
+				'URL'=>$url,
+				'FULL_URL'=>$full_url,
+				'VIEW_URL'=>$view_url,
+				'TITLE'=>$title,
+				'DESCRIPTION'=>$description,
+				'TRANSITION_TYPE'=>isset($transitions[$i])?$transitions[$i]:'',
+			);
 		}
 
 		if (count($images)==0)
@@ -155,7 +172,6 @@ class Block_main_image_fader
 				$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
 			}
 			return do_template('BLOCK_NO_ENTRIES',array(
-				'_GUID'=>'aa84d65b8dd134ba6cd7b1b7bde99de2',
 				'HIGH'=>false,
 				'TITLE'=>do_lang_tempcode('GALLERY'),
 				'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),
@@ -168,20 +184,12 @@ class Block_main_image_fader
 		if (preg_match('#^[\w\_]+$#',$nice_cat)==0) $nice_cat='root';
 		$gallery_url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$nice_cat),$zone);
 
-		return do_template('BLOCK_MAIN_IMAGE_FADER',array(
-			'_GUID'=>'92337749fa084393a97f97eedbcf81f6',
+		return do_template('BLOCK_MAIN_IMAGE_SLIDER',array(
 			'GALLERY_URL'=>$gallery_url,
-			'PREVIOUS_URL'=>$images[count($images)-1],
-			'PREVIOUS_URL_FULL'=>$images[count($images_full)-1],
-			'FIRST_URL'=>$images[0],
-			'FIRST_URL_FULL'=>$images_full[0],
-			'NEXT_URL'=>isset($images[1])?$images[1]:'',
-			'NEXT_URL_FULL'=>isset($images_full[1])?$images_full[1]:'',
 			'IMAGES'=>$images,
-			'IMAGES_FULL'=>$images_full,
-			'TITLES'=>$titles,
-			'HTML'=>$html,
 			'MILL'=>strval($mill),
+			'WIDTH'=>strval($width),
+			'HEIGHT'=>strval($height),
 		));
 	}
 }
