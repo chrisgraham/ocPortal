@@ -83,7 +83,7 @@ class Hook_addon_registry_oc_thanks
 	function get_description()
 	{
 		return 'Show the top performing members in a community. The addon adds a [tt]main_stars[/tt] block that ranks members on how many points they have been given in a certain category (also it changes the points module to allow selection of such categories when giving points). It also adds a block to show recent points transfers. Finally, it adds a line to member\'s profile screens that says how many topics they have created, and how many they have replied to, to give a reflection of whether they help more than they ask or vice-versa.
-		
+
 Usage:
 [code=\"Comcode\"][block max=\"10\"]side_recent_points[/block][/code]
 and
