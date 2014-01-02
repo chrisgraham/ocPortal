@@ -129,6 +129,7 @@ class Module_admin
 			array('uninstall','disable','remove'),
 			array('pruning','prune','lurkers'),
 			array('colour','color','css','font','background'),
+			array('dob','date of birth'),
 			array('sef','seo','google','search engine','search-engine-friendly','search-engine-optimisation'),
 			array('ban','suspend','suspension','probation','warn','punish','punitive'),
 			array('staff','moderator','admin', 'administrator','operator'),
