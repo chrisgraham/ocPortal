@@ -754,12 +754,16 @@ class Module_admin_setupwizard
 			require_code('addons');
 			$addons_installed=find_installed_addons();
 			$uninstalling=array();
-			foreach ($addons_installed as $addon_row)
+			foreach ($addons_installed as $i=>$addon_row)
 			{
+				$addon_row+=read_addon_info($addon_row['addon_name']);
+
 				if (post_param_integer('addon_'.$addon_row['addon_name'],0)==0)
 				{
 					$uninstalling[$addon_row['addon_name']]=$addon_row;
 				}
+
+				$addons_installed[$i]=$addon_row;
 			}
 			if (!file_exists(get_file_base().'/.svn')) // Only uninstall if we're not working from a SVN repository
 			{
@@ -770,7 +774,6 @@ class Module_admin_setupwizard
 					{
 						if (array_key_exists($addon_row['addon_name'],$uninstalling))
 						{
-							$addon_row+=read_addon_info($addon_row['addon_name']);
 							$addon_row['addon_author']=''; // Fudge, to stop it dying on warnings for official addons
 
 							// Check dependencies
