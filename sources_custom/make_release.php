@@ -89,6 +89,7 @@ function make_installers($skip_file_grab=false)
 	$make_mszip=(get_param_integer('skip_mszip',0)==0);
 	$make_debian=false;//(get_param_integer('skip_debian',0)==0);
 
+	if (function_exists('set_time_limit')) @set_time_limit(0);
 	disable_php_memory_limit();
 
 	// Build quick installer

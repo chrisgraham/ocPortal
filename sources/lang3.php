@@ -26,16 +26,22 @@
  */
 function _find_all_langs($even_empty_langs=false)
 {
-	$_dir=opendir(get_file_base().'/lang/');
 	$_langs=array();
-	while (false!==($file=readdir($_dir)))
+	$_dir=@opendir(get_file_base().'/lang/');
+	if ($_dir!==false)
 	{
-		if (($file[0]!='.') && /*(!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS)) && */(strlen($file)<=5))
+		while (false!==($file=readdir($_dir)))
 		{
-			if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
+			if (($file[0]!='.') && /*(!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS)) && */(strlen($file)<=5))
+			{
+				if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
+			}
 		}
+		closedir($_dir);
+	} else // Maybe in quick installer
+	{
+		$_langs[fallback_lang()]='lang';
 	}
-	closedir($_dir);
 	if (!in_safe_mode())
 	{
 		$_dir=@opendir(get_custom_file_base().'/lang_custom/');

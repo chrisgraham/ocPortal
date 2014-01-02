@@ -216,7 +216,7 @@ function find_cache_on($codename)
 	global $CACHE_ON;
 	if ($CACHE_ON===NULL)
 	{
-		$CACHE_ON=persistent_cache_get('CACHE_ON');
+		$CACHE_ON=function_exists('persistent_cache_get')?persistent_cache_get('CACHE_ON'):NULL;
 		if ($CACHE_ON===NULL)
 		{
 			$CACHE_ON=$GLOBALS['SITE_DB']->query_select('cache_on',array('*'));

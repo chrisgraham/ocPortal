@@ -18,6 +18,33 @@
  */
 class installer_test_set extends ocp_test_case
 {
+	function testQuickInstaller()
+	{
+		$_GET['skip_quick']='0';
+		$_GET['skip_manual']='0';
+		$_GET['skip_bundled']='0';
+		$_GET['skip_mszip']='0';
+		$_GET['skip_debian']='0';
+
+		require_code('version2');
+		require_code('make_release');
+
+		$builds_path=get_builds_path();
+		$version_dotted=get_version_dotted();
+		$install_path=$builds_path.'/builds/'.$version_dotted.'/install.php';
+
+		$url=get_custom_base_url().'/exports/builds/'.$version_dotted.'/install.php';
+
+		if (!is_file($install_path))
+		{
+			make_installers();
+		}
+
+		http_download_file($url);
+
+		$this->assertTrue($GLOBALS['HTTP_MESSAGE']=='200');
+	}
+
 	function testDoesNotFullycrash()
 	{
 		$test=http_download_file(get_base_url().'/install.php',NULL,false);

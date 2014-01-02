@@ -81,7 +81,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 	if (!isset($IMG_CODES[$site]))
 	{
 		$cache=NULL;
-		if ($site=='site')
+		if (($site=='site') && (function_exists('persistent_cache_get')))
 		{
 			$cache=persistent_cache_get('THEME_IMAGES');
 		}

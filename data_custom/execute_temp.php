@@ -55,21 +55,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$old_gallery_name='member_1_foo';
-	$to_id=2;
-	$new_gallery_name=preg_replace('#^member_\d+_#','member_'.strval($to_id).'_',$old_gallery_name);
-
-	$GLOBALS['SITE_DB']->query_update('galleries',array('parent_id'=>$new_gallery_name),array('parent_id'=>$old_gallery_name));
-	$GLOBALS['SITE_DB']->query_update('images',array('cat'=>$new_gallery_name),array('cat'=>$old_gallery_name));
-	$GLOBALS['SITE_DB']->query_update('videos',array('cat'=>$new_gallery_name),array('cat'=>$old_gallery_name));
-
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$new_gallery_name));
-	if ($test===NULL) // Rename
-	{
-		$GLOBALS['SITE_DB']->query_update('galleries',array('name'=>$new_gallery_name),array('name'=>$old_gallery_name),'',1);
-	} else // Delete
-	{
-		require_code('galleries2');
-		delete_gallery($old_gallery_name);
-	}
 }
