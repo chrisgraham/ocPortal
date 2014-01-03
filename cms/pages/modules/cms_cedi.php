@@ -426,7 +426,7 @@ class Module_cms_cedi
 		{
 			$child_id=$entry['child_id'];
 			$child_title=$entry['title'];
-			$children.=strval($child_id).'!'.$child_title."\n";
+			$children.=strval($child_id).'='.$child_title."\n";
 		}
 
 		$redir_url=get_param('redirect',NULL);
@@ -482,12 +482,13 @@ class Module_cms_cedi
 		require_code('seo2');
 		for ($i=0;$i<$no_children;$i++)
 		{
-			$length=strpos($childlinks,chr(10),$start)-$start;
-			$newlink=str_replace(chr(10),'',str_replace(chr(13),'',substr($childlinks,$start,$length)));
+			$length=strpos($childlinks,"\n",$start)-$start;
+			$newlink=trim(substr($childlinks,$start,$length));
+			$start=$start+$length+1;
 			if ($newlink!='')
 			{
 				// Find ID and title
-				$q_pos=strpos($newlink,'!');
+				$q_pos=strpos($newlink,'=');
 				$child_id_on_start=(($q_pos!==false) && ($q_pos>0) && (is_numeric(substr($newlink,0,$q_pos))));
 
 				if ($child_id_on_start) // Existing
@@ -496,7 +497,11 @@ class Module_cms_cedi
 					$child_id=intval(substr($newlink,0,$q_pos));
 					if ($child_id==$id) continue;
 					$title_id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>$child_id));
-					if (is_null($title_id)) continue;
+					if (is_null($title_id))
+					{
+						attach_message(do_lang_tempcode('BROKEN_WIKI_CHILD_LINK',strval($child_id)),'warn');
+						continue;
+					}
 					if ($title=='')
 					{
 						$title=get_translated_text($title_id);
@@ -526,7 +531,6 @@ class Module_cms_cedi
 				$GLOBALS['SITE_DB']->query_delete('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id),'',1); // Just in case it was repeated
 				$GLOBALS['SITE_DB']->query_insert('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id,'the_order'=>$i,'title'=>$title));
 			}
-			$start=$start+$length+1;
 		}
 
 		$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_TREE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
