@@ -650,7 +650,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					{
 						if (substr($param_value,0,1)=='@') $param_value=' @'.substr($param_value,1);
 					}
-					$_postdetails_params.=((array_key_exists('query',$url_parts)) || (!$first))?('&'.$param_key.'='.rawurlencode($param_value)):($param_key.'='.rawurlencode($param_value));
+					$_postdetails_params.=(!$first)?('&'.$param_key.'='.rawurlencode($param_value)):($param_key.'='.rawurlencode($param_value));
 					$first=false;
 				}
 			}
