@@ -16,7 +16,7 @@ Before you install ocPortal, you will need to make sure that your host covers ou
  - mySQL password
 Typically you can set these up yourself in your 'Web hosting control panel' (e.g. Plesk, cPanel, Ensim, or whatever else your webhost has provided to you to control your web hosting).
 
-ocPortal does not need its own database (i.e. it can share one), but if you are able to create a new one it is often preferable for reasons of tidyness. The database user needs full read/write/administer access over the database ocPortal will be installed in.
+ocPortal does not need its own database (i.e. it can share one), but if you are able to create a new one it is often preferable for reasons of tidyness. The database user needs full read/write/administer access over the database ocPortal will be installed in. Sometimes you set this access by ticking (checking) to have all permissions on your user. Sometimes you do it by setting the 'User role' to something such as 'dba' (e.g. h-sphere on Windows).
 
 Similar products require the same information.
 

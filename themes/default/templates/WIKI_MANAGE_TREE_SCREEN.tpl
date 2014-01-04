@@ -20,7 +20,7 @@
 
 	<div>
 		{+START,IF,{$JS_ON}}
-			<input style="display: none" type="text" id="mtp_tree" name="tree" value="" onchange="if (this.form.elements['tree'].value!='') document.getElementById('children').value+=this.value+'!'+this.selected_title+'\n';" />
+			<input style="display: none" type="text" id="mtp_tree" name="tree" value="" onchange="if (this.form.elements['tree'].value!='') document.getElementById('children').value+=this.value+'='+this.selected_title+'\n';" />
 			<div id="tree_list__root_mtp_tree">
 				<!-- List put in here -->
 			</div>
