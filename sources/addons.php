@@ -124,7 +124,8 @@ function find_installed_addons($just_non_bundled=false)
 		$row['addon_files']='';
 		foreach ($files_rows as $file_row_name)
 		{
-			$row['addon_files'].=$file_row_name.chr(10);
+			if ($row['addon_files']!='') $row['addon_files'].=chr(10);
+			$row['addon_files'].=$file_row_name;
 		}
 		$addons_installed[$row['addon_name']]=$row;
 	}
@@ -259,7 +260,8 @@ function find_available_addons()
 			$mtime=filemtime($full);
 			foreach ($files_rows as $file_row)
 			{
-				$info['files'].=$file_row['path'].chr(10);
+				if ($info['files']!='') $info['files'].=chr(10);
+				$info['files'].=$file_row['path'];
 			}
 			$info['mtime']=$mtime;
 
@@ -385,6 +387,8 @@ function read_addon_info($name)
 function create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,$organisation,$version,$description,$dir='exports/addons')
 {
 	require_code('tar');
+
+	$files=array_unique($files); // Sanity filter
 
 	$_full=get_custom_file_base().'/'.$dir.'/'.$file;
 	$tar=tar_open($_full,'wb');
