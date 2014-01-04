@@ -1917,7 +1917,47 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						$attach_size+=floatval($_file['size'])/1024.0/1024.0;
 					if (($size_uploaded_today+$attach_size)>floatval($daily_quota))
 					{
-						$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'89b7982164ccf8d98f3d0596ad425f78','WARNING'=>do_lang_tempcode('OVER_DAILY_QUOTA',integer_format($daily_quota),float_format($size_uploaded_today))));
+						$syn_services=array();
+						$hooks=find_all_hooks('systems','upload_syndication');
+						foreach (array_keys($hooks) as $hook)
+						{
+							require_code('hooks/systems/upload_syndication/'.filter_naughty($hook));
+							$ob=object_factory('Hook_upload_syndication_'.$hook);
+							if ($ob->is_enabled())
+							{
+								$syn_services[]=$ob->get_label();
+							}
+						}
+
+						require_code('upload_syndication');
+						list($syndication_json,)=get_upload_syndication_json(OCP_UPLOAD_ANYTHING);
+
+						if (($daily_quota>0) || (count($syn_services)==0))
+						{
+							$over_quota_str='OVER_DAILY_QUOTA';
+						} else
+						{
+							if (count($syn_services)>1)
+							{
+								$over_quota_str='_OVER_DAILY_QUOTA';
+							} else
+							{
+								$over_quota_str='__OVER_DAILY_QUOTA';
+							}
+						}
+
+						$temp_tpl=do_template('WARNING_BOX',array(
+							'_GUID'=>'89b7982164ccf8d98f3d0596ad425f78',
+							'WARNING'=>do_lang_tempcode($over_quota_str,
+								escape_html(integer_format($daily_quota)),
+								escape_html(float_format($size_uploaded_today)),
+								array(
+									escape_html($GLOBALS['FORUM_DRIVER']->get_username($source_member)),
+									escape_html(get_site_name()),
+									escape_html(isset($syn_services[0])?$syn_services[0]:''),
+								)
+							),
+						));
 						break;
 					}
 				}
