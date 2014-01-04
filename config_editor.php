@@ -163,7 +163,7 @@ END;
 		$notes='';
 		switch ($key)
 		{
-/*block_mod_rewrite
+/*
 custom_base_url_stub
 custom_share_domain
 custom_share_path
@@ -175,7 +175,8 @@ throttle_space_registered
 throttle_space_complementary
 vb_unique_id
 stronghold_cookies
-vb_version*/
+vb_version
+*/
 			case 'use_mem_cache':
 				$notes='Set this to \'1\' if persistent memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available). You should only do this if you have a well-configured PHP extension installed for this (e.g. APC), otherwise an inefficient filesystem cache will be used which may cause intermittent problems and higher memory usage.';
 				break;
