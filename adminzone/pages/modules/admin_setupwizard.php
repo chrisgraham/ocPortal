@@ -798,7 +798,7 @@ class Module_admin_setupwizard
 					if ($addon_row['addon_files']!='')
 					{
 						$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
-						create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
+						create_addon($file,explode(chr(10),trim($addon_row['addon_files'])),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
 					}
 
 					uninstall_addon($addon_row['addon_name']);
