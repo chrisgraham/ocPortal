@@ -343,19 +343,6 @@ The FTP password is required for some file-based operations, as PHP only has lim
 [b]How do I change the header text (title bar text) away from 'A site about ocPortal-?'?[/b]
 In order to change the ocPortal header text that is shown in page titles, you must choose to edit zones from the Admin Zone. This is because header text is defined on a per-zone basis, rather than globally. To change the text regular visitors see, edit the Welcome and Site Zones.
 
-[b]My custom HTML is corrupted[/b]
-ocPortal tries to turn XHTML from the WYSIWYG editor into Comcode, to keep things neat/consistent/tidy. This can cause some problems if you're trying to write custom HTML. For those without privileges it also applies some security restrictions like stripping scripting.
-
-There are a couple of different things you can do:
- - Turn off the WYSIWYG editor.
- - There's also a config option called "Convert XHTML to Comcode" which you can disable.
-
-Also, if there are specific things ocPortal is breaking, we can also look into it because it could be a bug.
-
-[b]Can I include PHP code in my templates?[/b]
-This is not possible: we could have very easily allowed this, but it would mean that themes could essentially be distributed that delete files, for instance. Templates could still be abused, to steal password cookies, for example: but direct server attacks are less likely.
-Instead, use our tempcode language, which provides all the power you should need: and if you need more power, you should be working with source code in conjunction with the templates.
-
 [b]Can new items be added to the Point Store?[/b]
 At this time, they can only be added via custom programming new Point Store 'hooks'.
 
@@ -418,7 +405,8 @@ Hold the mouse over it for a few seconds and an edit button will appear.
 Please read about the GUID feature in our [page="_SEARCH:tut_tempcode"]tempcode tutorial[/page].
 
 [b]Can I put PHP in templates?[/b]
-This is not supported for security and architectural reasons. Instead, you can create a miniblock, and then place that miniblock into a template using the [tt]BLOCK[/tt] symbol.
+This is not supported for security and architectural reasons. We could have very easily allowed this, but it would mean that themes could essentially be distributed that delete files, for instance. Templates could still be abused, to steal password cookies, for example: but direct server attacks are less likely.
+Instead, you can create a miniblock, and then place that miniblock into a template using the [tt]BLOCK[/tt] symbol.
 
 [b]Is there a CSS map?[/b]
 No, there is too much CSS to feasibly make a map as is often used for forum software. Instead, we would recommend using the Firefox 'Firebug' extension (or similar for other browsers) to identify what CSS is used where.
@@ -439,10 +427,10 @@ You may insert it using regular HTML via the 'html' Comcode tag, or you may use 
 [b]Can I include HTML?[/b]
 Yes, using the 'html' Comcode tag.
 
-If you have the WYSIWYG editor enabled:
+If you [i]don't[/i] have the WYSIWYG editor enabled:
 [indent]Put [tt][html][/tt] and [tt][/html][/tt] into your Comcode, then put the HTML you desire inbetween. If you want to mix HTML and Comcode more freely, use the [tt]semihtml[/tt] Comcode tag instead of the aforementioned [tt]html[/tt] Comcode tag.[/indent]
 
-If you [i]don't[/i] have the WYSIWYG editor enabled:
+If you have the WYSIWYG editor enabled:
 [indent]There is a button on the editor's toolbar to toggle HTML source viewing mode. When inside the HTML source viewing mode you can paste in your HTML directly.[/indent]
 
 [b]How can I add a block / How can I change how a block looks / How can I add a box?[/b]
