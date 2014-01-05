@@ -136,6 +136,8 @@ class Hook_sitemap_wiki_page extends Hook_sitemap_content
 
 		// Categories done after node callback, to ensure sensible ordering
 		$children=$this->_get_children_nodes($content_id,$page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+		if ($recurse_level>10)
+			$children=array(); // We really need to cutoff loops at some point
 		$struct['children']=$children;
 
 		return ($callback===NULL || $return_anyway)?$struct:NULL;
