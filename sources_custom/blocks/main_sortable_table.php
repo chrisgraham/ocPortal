@@ -45,6 +45,65 @@ class Block_main_sortable_table
 		require_javascript('javascript_sortable_tables');
 		require_css('sortable_tables');
 
+		$letters=array(
+			'A',
+			'B',
+			'C',
+			'D',
+			'E',
+			'F',
+			'G',
+			'H',
+			'I',
+			'J',
+			'K',
+			'L',
+			'M',
+			'N',
+			'O',
+			'P',
+			'Q',
+			'R',
+			'S',
+			'T',
+			'U',
+			'V',
+			'W',
+			'X',
+			'Y',
+			'Z',
+		);
+		$numbers=array(
+			'1',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9',
+			'10',
+			'11',
+			'12',
+			'13',
+			'14',
+			'15',
+			'16',
+			'17',
+			'18',
+			'19',
+			'20',
+			'21',
+			'22',
+			'23',
+			'24',
+			'25',
+			'26',
+		);
+		if (!empty($map['columns_display'])) $map['columns_display']=str_replace($letters,$numbers,$map['columns_display']);
+		if (!empty($map['columns_tooltip'])) $map['columns_tooltip']=str_replace($letters,$numbers,$map['columns_tooltip']);
+
 		$labels=empty($map['labels'])?array():explode(',',$map['labels']);
 		$columns_display=empty($map['columns_display'])?array():array_map('intval',explode(',',$map['columns_display']));
 		$columns_tooltip=empty($map['columns_tooltip'])?array():array_map('intval',explode(',',$map['columns_tooltip']));
@@ -74,6 +133,15 @@ class Block_main_sortable_table
 			$full_header_row=mixed();
 			while (($row=fgetcsv($myfile))!==false)
 			{
+				// Fix any bad unicode
+				if (get_charset()=='utf-8')
+				{
+					foreach ($row as $j=>$val)
+					{
+						$val=fix_bad_unicode($val);
+					}
+				}
+
 				// Get tooltip columns
 				$row_tooltip=array();
 				foreach ($row as $j=>$val)
@@ -145,7 +213,7 @@ class Block_main_sortable_table
 				$headers[]=array(
 					'LABEL'=>isset($labels[$j])?$labels[$j]:$_header,
 					'SORTABLE_TYPE'=>NULL,
-					'FILTERABLE'=>array(),
+					'FILTERABLE'=>NULL,
 				);
 			}
 			$tooltip_header_row=array_shift($_rows_tooltip);
