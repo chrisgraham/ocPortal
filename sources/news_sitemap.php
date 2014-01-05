@@ -65,6 +65,7 @@ function build_news_sitemap()
 			$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$row['news_category'])));
 
 			$has_guest_category_access=has_category_access($guest_id,'news',strval($row['news_category']));
+			$has_member_category_access=true;
 			if (!is_null($modal_member_id))
 				$has_member_category_access=has_category_access($modal_member_id,'news',strval($row['news_category']));
 
