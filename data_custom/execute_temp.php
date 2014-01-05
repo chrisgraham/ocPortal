@@ -55,4 +55,12 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$GLOBALS['SITE_DB']->query_delete('test_tbl'); // Wipe current table contents
+
+	// Put some stuff in, trying with both the enum values, and enum indexes
+	$GLOBALS['SITE_DB']->query_insert('test_tbl',array('test_col'=>'a'));
+	$GLOBALS['SITE_DB']->query_insert('test_tbl',array('test_col'=>2)); // 2nd index relates to 'b' (the second enum value)
+
+	// Should the contents
+	@print_r($GLOBALS['SITE_DB']->query_select('test_tbl'));
 }

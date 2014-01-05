@@ -52,6 +52,16 @@ On a Wiki+ page with a lot of thumb-nailed images, you may wish to click the exp
 
 Please note that when you do this you view with guest access -- so some pages may be missing from the view.
 
+[title="2"]The tree screen[/title]
+
+The tree shows the overall Wiki+ structure.
+
+A child page will only show on the tree:
+1) If the page does allows guest access. That's a limitation to do with how the caching works. You can easily assign guest access to the page though; [i]most[/i] users won't have a use for this (instead will just make the whole Wiki+ private if you want).
+2) If a page is a child of more than one parent (I know, weird terminology) it will only show under the first one in the tree. This is to stop repetition and potentially loops.
+
+(The tree feature is discontinued in v10, as it can be built using the Sitemap, via the [tt]menu[/tt] block, without the above limitations)
+
 [concepts
  1_key="Wiki+"   1_value="A collaborative and informal hierarchical database system in ocPortal"
 ]Concepts[/concepts]
