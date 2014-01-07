@@ -215,7 +215,10 @@ class Module_cms_wiki
 
 		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('SCREEN_TITLE'),do_lang_tempcode('SCREEN_TITLE_DESC'),'title',$title,true));
-		$fields2->attach(form_input_tick(do_lang_tempcode('HIDE_POSTS'),do_lang_tempcode('DESCRIPTION_HIDE_POSTS'),'hide_posts',$hide_posts==1));
+		if (get_option('wiki_enable_content_posts')=='1')
+		{
+			$fields2->attach(form_input_tick(do_lang_tempcode('HIDE_POSTS'),do_lang_tempcode('DESCRIPTION_HIDE_POSTS'),'hide_posts',$hide_posts==1));
+		}
 
 		require_lang('notifications');
 		$notify=($page_id==-1) || ($GLOBALS['SITE_DB']->query_select_value_if_there('wiki_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
@@ -293,7 +296,7 @@ class Module_cms_wiki
 		require_code('content2');
 		$meta_data=actual_meta_data_get_fields('wiki_page',NULL);
 
-		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),$meta_data['submitter'],$meta_data['add_time'],$meta_data['views'],false);
+		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),(get_option('wiki_enable_content_posts')=='1')?post_param_integer('hide_posts',0):1,$meta_data['submitter'],$meta_data['add_time'],$meta_data['views'],false);
 		require_code('permissions2');
 		set_category_permissions_from_environment('wiki_page',strval($id),'cms_wiki');
 
@@ -485,7 +488,7 @@ class Module_cms_wiki
 
 			require_code('permissions2');
 			set_category_permissions_from_environment('wiki_page',strval($id),'cms_wiki');
-			wiki_edit_page($id,post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),post_param('meta_keywords',''),post_param('meta_description',''),$meta_data['submitter'],$meta_data['add_time'],$meta_data['views']);
+			wiki_edit_page($id,post_param('title'),post_param('post'),post_param('notes',''),(get_option('wiki_enable_content_posts')=='1')?post_param_integer('hide_posts',0):1,post_param('meta_keywords',''),post_param('meta_description',''),$meta_data['submitter'],$meta_data['add_time'],$meta_data['views']);
 
 			require_code('fields');
 			if (has_tied_catalogue('wiki_page'))
@@ -522,6 +525,8 @@ class Module_cms_wiki
 	 */
 	function edit_tree()
 	{
+		if (get_option('wiki_enable_children')=='0') warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
 		$id=$this->id;
 		$chain=$this->chain;
 		$page=$this->page;
@@ -568,6 +573,8 @@ class Module_cms_wiki
 	 */
 	function _edit_tree()
 	{
+		if (get_option('wiki_enable_children')=='0') warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
 		$_title=get_screen_title('WIKI_EDIT_TREE');
 
 		$_id=get_param_wiki_chain('id');
@@ -581,6 +588,7 @@ class Module_cms_wiki
 		check_privilege('wiki_manage_tree',array('wiki_page',$id));
 
 		$hide_posts=$GLOBALS['SITE_DB']->query_select_value('wiki_pages','hide_posts',array('id'=>$id));
+		if (get_option('wiki_enable_content_posts')=='0') $hide_posts=1;
 
 		if ((substr($childlinks,-1,1)!="\n") && (strlen($childlinks)>0)) $childlinks.="\n";
 		$no_children=substr_count($childlinks,"\n");

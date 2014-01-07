@@ -454,6 +454,8 @@ class Module_wiki
 		// We will use OCF styling
 		require_lang('ocf');
 
+		if (get_option('wiki_enable_content_posts')=='0') $page['hide_posts']=1;
+
 		// Views
 		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
 		{
@@ -467,45 +469,49 @@ class Module_wiki
 		$description_comcode=get_translated_text($page['description']);
 
 		// Children Links
-		$children_rows=$GLOBALS['SITE_DB']->query_select('wiki_children c LEFT JOIN '.get_table_prefix().'wiki_pages p ON c.child_id=p.id',array('child_id'),array('c.parent_id'=>$id),'ORDER BY c.the_order');
 		$num_children=0;
 		$children=new ocp_tempcode();
-		$or_list='';
-		foreach ($children_rows as $myrow)
+		if (get_option('wiki_enable_children')=='1')
 		{
-			if ($or_list!='') $or_list.=' OR ';
-			$or_list.='id='.strval($myrow['child_id']);
-		}
-		$_subpage=($or_list=='')?array():list_to_map('id',$GLOBALS['SITE_DB']->query('SELECT id,title,hide_posts,description FROM '.get_table_prefix().'wiki_pages WHERE '.$or_list,NULL,NULL,false,true));
-		foreach ($children_rows as $myrow)
-		{
-			$child_id=$myrow['child_id'];
-			if (!array_key_exists($myrow['child_id'],$_subpage)) continue;
-			$subpage=$_subpage[$myrow['child_id']];
-			$_child_title=$subpage['title'];
-			$child_title=get_translated_text($_child_title);
-			$child_description=get_translated_text($subpage['description']);
-
-			$my_child_posts=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id'=>$child_id));
-			$my_child_children=$GLOBALS['SITE_DB']->query_select_value('wiki_children','COUNT(*)',array('parent_id'=>$child_id));
-
-			if (($my_child_posts>0) || ($my_child_children>0) || (trim($child_description)!=''))
+			$children_rows=$GLOBALS['SITE_DB']->query_select('wiki_children c LEFT JOIN '.get_table_prefix().'wiki_pages p ON c.child_id=p.id',array('child_id'),array('c.parent_id'=>$id),'ORDER BY c.the_order');
+			$or_list='';
+			foreach ($children_rows as $myrow)
 			{
-				$sup=do_template('WIKI_SUBCATEGORY_CHILDREN',array(
-					'_GUID'=>'90e9f1647fdad0cacccecca3cbf12888',
-					'MY_CHILD_POSTS'=>integer_format($my_child_posts),
-					'MY_CHILD_CHILDREN'=>integer_format($my_child_children),
-					'BODY_CONTENT'=>(trim($child_description)!='')?strval(strlen($child_description)):NULL,
-				));
-			} else
-			{
-				$sup=($subpage['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
+				if ($or_list!='') $or_list.=' OR ';
+				$or_list.='id='.strval($myrow['child_id']);
 			}
+			$_subpage=($or_list=='')?array():list_to_map('id',$GLOBALS['SITE_DB']->query('SELECT id,title,hide_posts,description FROM '.get_table_prefix().'wiki_pages WHERE '.$or_list,NULL,NULL,false,true));
+			foreach ($children_rows as $myrow)
+			{
+				$child_id=$myrow['child_id'];
+				if (!array_key_exists($myrow['child_id'],$_subpage)) continue;
+				$subpage=$_subpage[$myrow['child_id']];
+				if (get_option('wiki_enable_content_posts')=='0') $subpage['hide_posts']=1;
+				$_child_title=$subpage['title'];
+				$child_title=get_translated_text($_child_title);
+				$child_description=get_translated_text($subpage['description']);
 
-			$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>wiki_derive_chain($child_id)),'_SELF');
-			$children->attach(do_template('WIKI_SUBCATEGORY_LINK',array('_GUID'=>'e9f9b504093220dc23a1ab59b3e8e5df','URL'=>$url,'CHILD'=>$child_title,'SUP'=>$sup)));
+				$my_child_posts=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id'=>$child_id));
+				$my_child_children=$GLOBALS['SITE_DB']->query_select_value('wiki_children','COUNT(*)',array('parent_id'=>$child_id));
 
-			$num_children++;
+				if (($my_child_posts>0) || ($my_child_children>0) || (trim($child_description)!=''))
+				{
+					$sup=do_template('WIKI_SUBCATEGORY_CHILDREN',array(
+						'_GUID'=>'90e9f1647fdad0cacccecca3cbf12888',
+						'MY_CHILD_POSTS'=>integer_format($my_child_posts),
+						'MY_CHILD_CHILDREN'=>integer_format($my_child_children),
+						'BODY_CONTENT'=>(trim($child_description)!='')?strval(strlen($child_description)):NULL,
+					));
+				} else
+				{
+					$sup=($subpage['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
+				}
+
+				$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>wiki_derive_chain($child_id)),'_SELF');
+				$children->attach(do_template('WIKI_SUBCATEGORY_LINK',array('_GUID'=>'e9f9b504093220dc23a1ab59b3e8e5df','URL'=>$url,'CHILD'=>$child_title,'SUP'=>$sup)));
+
+				$num_children++;
+			}
 		}
 
 		$staff_access=has_privilege(get_member(),'edit_lowrange_content','cms_wiki',array('wiki_page',$id));
@@ -610,7 +616,7 @@ class Module_wiki
 		} else */$search_button=new ocp_tempcode();
 		$changes_url=build_url(array('page'=>'_SELF','type'=>'changes','id'=>$chain),'_SELF');
 		$changes_button=do_template('BUTTON_SCREEN',array('_GUID'=>'99ad7faac817326510583a69ac719d58','IMMEDIATE'=>false,'REL'=>'history','URL'=>$changes_url,'TITLE'=>do_lang_tempcode('WIKI_CHANGELOG'),'IMG'=>'buttons__changes'));
-		if ((has_privilege(get_member(),'wiki_manage_tree','cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
+		if ((get_option('wiki_enable_children')=='1') && (has_privilege(get_member(),'wiki_manage_tree','cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
 		{
 			$tree_url=build_url(array('page'=>'cms_wiki','type'=>'edit_tree','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
 			$tree_button=do_template('BUTTON_SCREEN',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('__WIKI_EDIT_TREE'),'IMG'=>'buttons__edit_tree'));

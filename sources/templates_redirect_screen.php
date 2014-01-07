@@ -29,7 +29,7 @@
  * @set    warn inform fatal
  * @return tempcode		Redirection message (likely to not actually be seen due to instant redirection)
  */
-function _redirect_screen($title,$url,$text,$intermediary_hop=false,$msg_type='inform')
+function _redirect_screen($title,$url,$text=NULL,$intermediary_hop=false,$msg_type='inform')
 {
 	if (is_object($url)) $url=$url->evaluate();
 
