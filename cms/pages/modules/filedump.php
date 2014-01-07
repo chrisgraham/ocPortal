@@ -154,8 +154,17 @@ class Module_filedump
 		if (substr($place,-1,1)!='/') $place.='/';
 
 		$type_filter=get_param('type_filter','');
+
 		$search=get_param('search','',true);
 		if ($search==do_lang('SEARCH')) $search='';
+
+		$sort=get_param('sort','time ASC');
+		if (strpos($sort,' ')===false)
+		{
+			$sort='time ASC';
+		}
+		list($order,$direction)=explode(' ',$sort,2);
+		if ($direction!='ASC' && $direction!='DESC') $direction='ASC';
 
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=filedump&filter='.$place;
 
@@ -223,9 +232,11 @@ class Module_filedump
 				if ($_description!='')
 				{
 					$description=make_string_tempcode($_description);
+					$description_2=$description;
 				} else
 				{
 					$description=($is_directory)?do_lang_tempcode('NA_EM'):do_lang_tempcode('NONE_EM');
+					$description_2=($is_directory)?do_lang_tempcode('FOLDER'):new ocp_tempcode();
 				}
 				if ($is_directory)
 				{
@@ -241,6 +252,7 @@ class Module_filedump
 				$files[]=array(
 					'filename'=>$is_directory?($filename.'/'):$filename,
 					'description'=>$description,
+					'description_2'=>$description_2,
 					'_size'=>$size,
 					'size'=>clean_file_size($size),
 					'_time'=>$timestamp,
@@ -251,6 +263,26 @@ class Module_filedump
 			}
 		}
 		closedir($handle);
+
+		switch ($order)
+		{
+			case 'time':
+				$M_SORT_KEY='_time'; // TODO: Update in v10
+				@usort($files,'multi_sort');
+				break;
+			case 'name':
+				$M_SORT_KEY='filename'; // TODO: Update in v10
+				@usort($files,'multi_sort');
+				break;
+			case 'size':
+				$M_SORT_KEY='_size'; // TODO: Update in v10
+				@usort($files,'multi_sort');
+				break;
+		}
+		if ($direction=='DESC')
+		{
+			$files=array_reverse($files);
+		}
 
 		$thumbnails=array();
 
@@ -272,7 +304,7 @@ class Module_filedump
 
 				if ($file['is_directory']) // Directory
 				{
-					$url=build_url(array('page'=>'_SELF','place'=>$place.$filename),'_SELF');
+					$url=build_url(array('page'=>'_SELF','place'=>$place.$filename,'sort'=>$sort,'type_filter'=>$type_filter,'search'=>$search),'_SELF');
 
 					$is_image=false;
 
@@ -305,13 +337,13 @@ class Module_filedump
 				}
 
 				// Thumbnail
-				$thumbnail=do_image_thumb($image_url,$file['description'],false,false,NULL,NULL,true);
+				$thumbnail=do_image_thumb($image_url,$file['description_2'],false,false,NULL,NULL,true);
 				$thumbnails[]=array(
 					'FILENAME'=>$filename,
 					'THUMBNAIL'=>$thumbnail,
 					'IS_IMAGE'=>$is_image,
 					'URL'=>$url,
-					'DESCRIPTION'=>$description,
+					'DESCRIPTION'=>$file['description_2'],
 					'_SIZE'=>is_null($file['_size'])?'':strval($file['_size']),
 					'SIZE'=>$file['size'],
 					'_TIME'=>is_null($file['_time'])?'':strval($file['_time']),
@@ -410,6 +442,7 @@ class Module_filedump
 			'CREATE_FOLDER_FORM'=>$create_folder_form,
 			'TYPE_FILTER'=>$type_filter,
 			'SEARCH'=>$search,
+			'SORT'=>$sort,
 		));
 	}
 
@@ -533,8 +566,10 @@ class Module_filedump
 			$path=get_custom_file_base().'/uploads/filedump'.$place.$file;
 			@unlink($path) OR intelligent_write_error($path);
 			sync_file('uploads/filedump/'.$file);
+		} else
+		{
+			access_denied('I_ERROR');
 		}
-		else access_denied('I_ERROR');
 
 		$return_url=build_url(array('page'=>'_SELF','type'=>'misc','place'=>$place),'_SELF');
 

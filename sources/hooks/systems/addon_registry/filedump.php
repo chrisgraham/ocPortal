@@ -143,6 +143,7 @@ class Hook_addon_registry_filedump
 				'CREATE_FOLDER_FORM'=>placeholder_form(),
 				'TYPE_FILTER'=>'',
 				'SEARCH'=>'',
+				'SORT'=>'time ASC',
 			)), NULL, '', true)
 		);
 	}

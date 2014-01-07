@@ -4,8 +4,8 @@
 	<div class="float_surrounder">
 		{+START,IF,{$ADDON_INSTALLED,search}}
 			{$SET,search_url,{$SELF_URL}}
-			<form role="search" title="{!SEARCH}" onsubmit="disable_button_just_clicked(this); action.href+=window.location.hash; if (this.elements['search'].value=='{!SEARCH;*}') this.elements['search'].value='';" action="{$URL_FOR_GET_FORM*,{$GET,search_url},search,type_filter}" method="get">
-				{$HIDDENS_FOR_GET_FORM,{$GET,search_url},search,type_filter}
+			<form role="search" title="{!SEARCH}" onsubmit="disable_button_just_clicked(this); action.href+=window.location.hash; if (this.elements['search'].value=='{!SEARCH;*}') this.elements['search'].value='';" action="{$URL_FOR_GET_FORM*,{$GET,search_url},search,type_filter,sort}" method="get">
+				{$HIDDENS_FOR_GET_FORM,{$GET,search_url},search,type_filter,sort}
 
 				<p class="left">
 					<label class="accessibility_hidden" for="search_filedump">{!SEARCH}</label>
@@ -19,7 +19,17 @@
 						<!--<option{+START,IF,{$EQ,{TYPE_FILTER},audio}} selected="selected"{+END} value="audios">{!AUDIOS}</option>-->
 					</select>
 
-					<input class="button_micro" type="submit" value="{!FILTER}" />
+					<label class="accessibility_hidden" for="sort_filedump">{!SORT}</label>
+					<select id="sort_filedump" name="sort">
+						<option{+START,IF,{$EQ,{SORT},time ASC}} selected="selected"{+END} value="time ASC">{!DATE_TIME},{!_ASCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},time DESC}} selected="selected"{+END} value="time DESC">{!DATE_TIME},{!_DESCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},name ASC}} selected="selected"{+END} value="name ASC">{!FILENAME},{!_ASCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},name DESC}} selected="selected"{+END} value="name DESC">{!FILENAME},{!_DESCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},size ASC}} selected="selected"{+END} value="size ASC">{!_FILE_SIZE},{!_ASCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},size DESC}} selected="selected"{+END} value="size DESC">{!_FILE_SIZE},{!_DESCENDING}</option>
+					</select>
+
+					<input class="button_micro" type="submit" value="{!PROCEED}" />
 				</p>
 			</form>
 		{+END}
