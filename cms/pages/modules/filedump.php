@@ -145,10 +145,17 @@ class Module_filedump
 	{
 		$title=get_screen_title('FILE_DUMP');
 
+		require_code('form_templates');
+		require_code('images');
+
 		disable_php_memory_limit();
 
 		$place=filter_naughty(get_param('place','/'));
 		if (substr($place,-1,1)!='/') $place.='/';
+
+		$type_filter=get_param('type_filter','');
+		$search=get_param('search','',true);
+		if ($search==do_lang('SEARCH')) $search='';
 
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=filedump&filter='.$place;
 
@@ -200,10 +207,22 @@ class Module_filedump
 				if (!file_exists($_full)) continue; // Broken symlink or (?) permission problem
 
 				$is_directory=!is_file($_full);
+
 				$db_row=isset($db_rows[$filename])?$db_rows[$filename]:NULL;
-				if (isset($db_row))
+
+				$_description=isset($db_row)?get_translated_text($dbrow['description']):'';
+
+				if ($is_directory)
 				{
-					$description=make_string_tempcode(get_translated_text($dbrows[0]['description']));
+					if (!$this->_recursive_search($place.$filename.'/',$_description,$search,$type_filter)) continue;
+				} else
+				{
+					if (!$this->_matches_filter($filename,$_description,$search,$type_filter)) continue;
+				}
+
+				if ($_description!='')
+				{
+					$description=make_string_tempcode($_description);
 				} else
 				{
 					$description=($is_directory)?do_lang_tempcode('NA_EM'):do_lang_tempcode('NONE_EM');
@@ -237,8 +256,6 @@ class Module_filedump
 
 		if (count($files)>0) // If there are some files
 		{
-			require_code('images');
-
 			require_code('templates_columned_table');
 			$header_row=columned_table_header_row(array(
 				do_lang_tempcode('FILENAME'),
@@ -334,8 +351,6 @@ class Module_filedump
 				$text->attach(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max/1024.0/1024.0)),escape_html(is_null($config_url)?'':$config_url)));
 			}
 
-			require_code('form_templates');
-
 			$fields=new ocp_tempcode();
 			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('_DESCRIPTION_UPLOAD'),'file',true));
 			$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description','',false));
@@ -365,8 +380,6 @@ class Module_filedump
 
 			$submit_name=do_lang_tempcode('FILEDUMP_CREATE_FOLDER');
 
-			require_code('form_templates');
-
 			$fields=form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name','',true);
 
 			$hidden=form_input_hidden('place',$place);
@@ -395,7 +408,93 @@ class Module_filedump
 			'LISTING'=>$listing,
 			'UPLOAD_FORM'=>$upload_form,
 			'CREATE_FOLDER_FORM'=>$create_folder_form,
+			'TYPE_FILTER'=>$type_filter,
+			'SEARCH'=>$search,
 		));
+	}
+
+	/**
+	 * Find whether a file matches the search filter. If there is no filter, anything will match.
+	 *
+	 * @param  PATH		Folder path.
+	 * @param  string		Folder description.
+	 * @param  string		Search filter.
+	 * @param  string		Type filter.
+	 * @set images videos audios 
+	 * @return boolean	Whether it passes the filter.
+	 */
+	function _recursive_search($place,$description,$search,$type_filter)
+	{
+		if ($search!='')
+		{
+			if ((strpos(basename($place),$search)!==false) || (strpos($description,$search)!==false)) // Directory itself matches
+				return true;
+		}
+
+		$db_rows=list_to_map('name',$GLOBALS['SITE_DB']->query_select('filedump',array('description','the_member'),array('path'=>$place)));
+
+		$handle=opendir(get_custom_file_base().'/uploads/filedump'.$place);
+		while (false!==($filename=readdir($handle)))
+		{
+			if (!should_ignore_file('uploads/filedump'.$place.$filename,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES))
+			{
+				$_full=get_custom_file_base().'/uploads/filedump'.$place.$filename;
+				if (!file_exists($_full)) continue; // Broken symlink or (?) permission problem
+
+				$is_directory=!is_file($_full);
+
+				$db_row=isset($db_rows[$filename])?$db_rows[$filename]:NULL;
+
+				$_description=isset($db_row)?get_translated_text($dbrow['description']):'';
+
+				if ($is_directory)
+				{
+					if ($this->_recursive_search($place.$filename.'/',$_description,$search,$type_filter)) return true; // Look deeper
+				} else
+				{
+					if ($this->_matches_filter($filename,$_description,$search,$type_filter)) return true; // File under matches
+				}
+			}
+		}
+		closedir($handle);
+
+		return false;
+	}
+
+	/**
+	 * Find whether a file matches the search filter. If there is no filter, anything will match.
+	 *
+	 * @param  ID_TEXT	Filename.
+	 * @param  string		File description.
+	 * @param  string		Search filter.
+	 * @param  string		Type filter.
+	 * @set images videos audios 
+	 * @return boolean	Whether it passes the filter.
+	 */
+	function _matches_filter($filename,$_description,$search,$type_filter)
+	{
+		if ($search!='')
+		{
+			if ((strpos($filename,$search)===false) && (strpos($_description,$search)===false))
+				return false;
+		}
+
+		switch ($type_filter)
+		{
+			case 'images':
+				if (!is_image($filename)) return false;
+				break;
+
+			case 'videos':
+				if (!is_video($filename)) return false;
+				break;
+
+			/*case 'audios':	TODO v10
+				if (!is_audio($filename)) return false;
+				break;*/
+		}
+
+		return true;
 	}
 
 	/**

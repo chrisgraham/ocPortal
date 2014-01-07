@@ -3,15 +3,23 @@
 {+START,SET,search}
 	<div class="float_surrounder">
 		{+START,IF,{$ADDON_INSTALLED,search}}
-			{$SET,search_url,{$PAGE_LINK,_SEARCH:search:results:filedump:specific=1:days=-1:search_under={$PREG_REPLACE,(^/|/$),,{PLACE}}}}
-			<form class="right" role="search" title="{!SEARCH}" onsubmit="if (typeof this.elements['content']=='undefined') { disable_button_just_clicked(this); return true; } if (check_field_for_blankness(this.elements['content'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{$URL_FOR_GET_FORM*,{$GET,search_url}}" method="get">
-				{$HIDDENS_FOR_GET_FORM,{$GET,search_url}}
+			{$SET,search_url,{$SELF_URL}}
+			<form role="search" title="{!SEARCH}" onsubmit="disable_button_just_clicked(this); action.href+=window.location.hash; if (this.elements['search'].value=='{!SEARCH;*}') this.elements['search'].value='';" action="{$URL_FOR_GET_FORM*,{$GET,search_url},search,type_filter}" method="get">
+				{$HIDDENS_FOR_GET_FORM,{$GET,search_url},search,type_filter}
 
-				<p>
+				<p class="left">
 					<label class="accessibility_hidden" for="search_filedump">{!SEARCH}</label>
-					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" onkeyup="update_ajax_search_list(this,event);" type="search" id="search_filedump" name="content" style="color: gray" onblur="if (this.value=='') { this.value='{!SEARCH;}'; this.style.color='gray'; }" onfocus="if (this.value=='{!SEARCH;}') this.value=''; this.style.color='black';" value="{!SEARCH}" />
+					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" type="search" id="search_filedump" name="search" style="color: gray" onblur="if (this.value=='') { this.value='{!SEARCH;}'; this.style.color='gray'; }" onfocus="if (this.value=='{!SEARCH;}') this.value=''; this.style.color='black';" value="{$?,{$IS_EMPTY,{SEARCH}},{!SEARCH},{SEARCH}}" />
 
-					<input class="button_micro" type="submit" value="{!SEARCH}" />
+					<label class="accessibility_hidden" for="type_filter_filedump">{!FILTER}</label>
+					<select id="type_filter_filedump" name="type_filter">
+						<option{+START,IF,{$EQ,{TYPE_FILTER},}} selected="selected"{+END} value="">{!ALL}</option>
+						<option{+START,IF,{$EQ,{TYPE_FILTER},images}} selected="selected"{+END} value="images">{!IMAGES}</option>
+						<option{+START,IF,{$EQ,{TYPE_FILTER},videos}} selected="selected"{+END} value="videos">{!VIDEOS}</option>
+						<!--<option{+START,IF,{$EQ,{TYPE_FILTER},audio}} selected="selected"{+END} value="audios">{!AUDIOS}</option>-->
+					</select>
+
+					<input class="button_micro" type="submit" value="{!FILTER}" />
 				</p>
 			</form>
 		{+END}

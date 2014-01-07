@@ -118,13 +118,31 @@ class Hook_addon_registry_filedump
 	{
 		require_css('forms');
 
+		$thumbnails=array();
+		$thumbnails[]=array(
+			'FILENAME'=>lorem_word(),
+			'THUMBNAIL'=>placeholder_image(),
+			'IS_IMAGE'=>true,
+			'URL'=>placeholder_url(),
+			'DESCRIPTION'=>lorem_paragraph(),
+			'_SIZE'=>placeholder_number(),
+			'SIZE'=>placeholder_number(),
+			'_TIME'=>placeholder_date_raw(),
+			'TIME'=>placeholder_date(),
+			'IS_DIRECTORY'=>false,
+			'DELETABLE'=>false,
+		);
+
 		return array(
 			lorem_globalise(do_lorem_template('FILE_DUMP_SCREEN', array(
 				'TITLE'=>lorem_title(),
-				'FILES'=>placeholder_table(),
+				'PLACE'=>placeholder_id(),
+				'THUMBNAILS'=>$thumbnails,
+				'LISTING'=>placeholder_table(),
 				'UPLOAD_FORM'=>placeholder_form(),
 				'CREATE_FOLDER_FORM'=>placeholder_form(),
-				'PLACE'=>placeholder_id()
+				'TYPE_FILTER'=>'',
+				'SEARCH'=>'',
 			)), NULL, '', true)
 		);
 	}
