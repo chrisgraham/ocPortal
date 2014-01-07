@@ -1,0 +1,19 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.filedump_thumbnails .box {
+	float: left;
+	margin-top: 0;
+	margin-bottom: 0.5em;
+	margin-right: 0.5em;
+}
+
+.filedump_thumbnails .box .box_inner {
+	width: {$CONFIG_OPTION,thumb_width}px;
+	height: {$CONFIG_OPTION,thumb_width}px;
+	text-align: center;
+	vertical-align: middle;
+	display: table-cell;
+}
