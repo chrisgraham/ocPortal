@@ -616,6 +616,7 @@ class Module_filedump
 		$title=get_screen_title('FILEDUMP_EMBED');
 
 		require_code('form_templates');
+		require_code('images');
 
 		$place=get_param('place');
 		$file=get_param('file');
@@ -677,7 +678,7 @@ class Module_filedump
 		foreach (explode('|',$_description) as $option)
 		{
 			list($option_val,$option_label)=explode('=',$option,2);
-			$list->attach(form_input_list_entry($option_val,($option_val==post_param('type','')),$option_label));
+			$list->attach(form_input_list_entry($option_val,($option_val==post_param('type',is_image($file)?'inline':'')),$option_label));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_type'),'','type',$list,NULL,false,false));
 
@@ -709,7 +710,7 @@ class Module_filedump
 		if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
 		$_description=preg_replace('#\s*'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\'](?-U)\.?(?U)#Ui','',$_description);
 		$thumb_ticked=true;
-		if (strtolower(ocp_srv('REQUEST_METHOD'))=='POST') $thumb_ticked=(post_param_integer('thumb')==1);
+		if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST') $thumb_ticked=(post_param_integer('thumb',0)==1);
 		$fields->attach(form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_thumb'),ucfirst(substr($_description,12)),'thumb',$thumb_ticked));
 
 		$_description=do_lang('COMCODE_TAG_attachment_PARAM_thumb_url');

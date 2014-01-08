@@ -97,7 +97,9 @@
 									<span class="filedump_select">{ACTIONS}</span>
 								{+END}
 
-								<p class="filedump_embed"><a href="{EMBED_URL*}" onclick="return open_link_as_overlay(this,800,680);">{!_FILEDUMP_EMBED}</a></p>
+								{+START,IF_PASSED,EMBED_URL}
+									<p class="filedump_embed"><a href="{EMBED_URL*}" onclick="return open_link_as_overlay(this,950,680);" class="link_exempt">{!_FILEDUMP_EMBED}</a></p>
+								{+END}
 
 								<p><a{+START,IF,{IS_IMAGE}} rel="lightbox"{+END} href="{URL*}">{THUMBNAIL}</a></p>
 

@@ -62,6 +62,9 @@
 	width: 100%;
 	background-color: {$GET,WB};
 	background-color: rgba(255,255,255,0.7);
+	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	padding: 0.25em;
 }
 
 /* Embed screen */
@@ -76,4 +79,6 @@
 .filedump_generated_preview {
 	margin-left: 1em;
 	float: right;
+	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
+	max-width: 560px;
 }
