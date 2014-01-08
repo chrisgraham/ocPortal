@@ -125,10 +125,13 @@ class Hook_addon_registry_filedump
 			'IS_IMAGE'=>true,
 			'URL'=>placeholder_url(),
 			'DESCRIPTION'=>lorem_paragraph(),
+			'ACTIONS'=>lorem_paragraph(),
 			'_SIZE'=>placeholder_number(),
 			'SIZE'=>placeholder_number(),
 			'_TIME'=>placeholder_date_raw(),
 			'TIME'=>placeholder_date(),
+			'WIDTH'=>placeholder_number(),
+			'HEIGHT'=>placeholder_number(),
 			'IS_DIRECTORY'=>false,
 			'DELETABLE'=>false,
 		);
@@ -144,6 +147,8 @@ class Hook_addon_registry_filedump
 				'TYPE_FILTER'=>'',
 				'SEARCH'=>'',
 				'SORT'=>'time ASC',
+				'POST_URL'=>placeholder_url(),
+				'DIRECTORIES'=>array(lorem_word()),
 			)), NULL, '', true)
 		);
 	}

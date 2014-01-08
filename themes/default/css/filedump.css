@@ -3,6 +3,10 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
+.filedump_filter .button_micro {
+	margin-left: 1em !important;
+}
+
 .filedump_thumbnails .box {
 	float: left;
 	margin-top: 0;
@@ -16,4 +20,39 @@
 	text-align: center;
 	vertical-align: middle;
 	display: table-cell;
+	position: relative;
+}
+
+.filedump_thumbnails .box .box_inner:hover .meta {
+	{$BETA_CSS_PROPERTY,opacity: 0.3;}
+}
+
+.filedump_thumbnails .box .box_inner p {
+	margin: 0;
+}
+
+.filedump_thumbnails .box .box_inner p img {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.filedump_thumbnails .box .box_inner .meta {
+	position: absolute;
+	left: 0;
+	bottom: 0.5em;
+	width: 100%;
+	background-color: {$GET,WB};
+	background-color: rgba(255,255,255,0.7);
+}
+
+.filedump_select {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0.5em;
+	border: 1px solid {$GET,standard_border};
+	padding: 0.5em;
+	background-color: {$GET,WB};
+	background-color: rgba(255,255,255,0.7);
+	z-index: 10;
 }
