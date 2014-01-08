@@ -16,7 +16,8 @@
 						<option{+START,IF,{$EQ,{TYPE_FILTER},}} selected="selected"{+END} value="">{!ALL}</option>
 						<option{+START,IF,{$EQ,{TYPE_FILTER},images}} selected="selected"{+END} value="images">{!IMAGES}</option>
 						<option{+START,IF,{$EQ,{TYPE_FILTER},videos}} selected="selected"{+END} value="videos">{!VIDEOS}</option>
-						<!--<option{+START,IF,{$EQ,{TYPE_FILTER},audio}} selected="selected"{+END} value="audios">{!AUDIOS}</option>-->
+						<option{+START,IF,{$EQ,{TYPE_FILTER},audios}} selected="selected"{+END} value="audios">{!AUDIOS}</option>
+						<option{+START,IF,{$EQ,{TYPE_FILTER},others}} selected="selected"{+END} value="others">{!OTHER}</option>
 					</select>
 
 					<label class="horiz_field_sep" for="sort_filedump_{$GET*,i}">{!SORT_BY}</label>
@@ -43,8 +44,13 @@
 		<div class="left">
 			<label for="action_{$GET*,i}">{!ACTION}:</label>
 			<select id="action_{$GET*,i}" name="action">
-				<option value=""></option>
-				<option value="delete">{!DELETE}</option>
+				{+START,IF,{$EQ,{$GET,i},1}}
+					<option value=""></option>
+				{+END}
+				{+START,IF,{$EQ,{$GET,i},2}}
+					<option value="edit">{!EDIT}</option>
+				{+END}
+				<option value="delete">{!DELETE_SELECTED}</option>
 				{+START,LOOP,DIRECTORIES}
 					<option value="/{_loop_var*}{+START,IF_NON_EMPTY,{_loop_var}}/{+END}">{!MOVE_TO,/{_loop_var*}}</option>
 				{+END}
@@ -156,11 +162,15 @@
 
 	function check_filedump_selections(form)
 	{
-		if (form.elements['action'].selectedIndex==0)
+		var action=form.elements['action'].options[form.elements['action'].selectedIndex].value;
+
+		if (action=='')
 		{
 			fauxmodal_alert('{!SELECT_AN_ACTION;}');
 			return false;
 		}
+
+		if (action=='edit') return true;
 
 		for (var i=0;i<form.elements.length;i++)
 		{
