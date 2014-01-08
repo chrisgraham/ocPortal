@@ -531,7 +531,7 @@ class Module_filedump
 			}
 		}
 
-		$db_rows=list_to_map('name',$GLOBALS['SITE_DB']->query_select('filedump',array('description','the_member'),array('path'=>$place)));
+		$db_rows=list_to_map('name',$GLOBALS['SITE_DB']->query_select('filedump',array('*'),array('path'=>$place)));
 
 		$handle=opendir(get_custom_file_base().'/uploads/filedump'.$place);
 		while (false!==($filename=readdir($handle)))
@@ -586,7 +586,9 @@ class Module_filedump
 				break;
 
 			case 'videos':
-				if (!is_video($filename)) return false;
+				if ((substr(strtolower($filename),-4)=='.mp3') || (substr(strtolower($filename),-4)=='.wav') || (substr(strtolower($filename),-4)=='.ogg'))
+					return false;
+				if (!is_video($filename,true)) return false;
 				break;
 
 			case 'audios':
@@ -597,7 +599,7 @@ class Module_filedump
 
 			case 'others':
 				if (is_image($filename)) return false;
-				if (is_video($filename)) return false;
+				if (is_video($filename,true)) return false;
 				if ((substr(strtolower($filename),-4)=='.mp3') || (substr(strtolower($filename),-4)=='.wav') || (substr(strtolower($filename),-4)=='.ogg'))
 					return false;
 				break;
