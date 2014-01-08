@@ -81,6 +81,7 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/do_next_menus/filedump.php',
 			'sources/hooks/modules/admin_import_types/filedump.php',
 			'FILE_DUMP_SCREEN.tpl',
+			'FILEDUMP_EMBED_SCREEN.tpl', // TODO in v10
 			'uploads/filedump/index.html',
 			'cms/pages/modules/filedump.php',
 			'lang/EN/filedump.ini',
@@ -103,7 +104,8 @@ class Hook_addon_registry_filedump
 	function tpl_previews()
 	{
 		return array(
-			'FILE_DUMP_SCREEN.tpl'=>'file_dump_screen'
+			'FILE_DUMP_SCREEN.tpl'=>'file_dump_screen',
+			'FILEDUMP_EMBED_SCREEN.tpl'=>'file_embed_screen',
 		);
 	}
 
@@ -133,7 +135,8 @@ class Hook_addon_registry_filedump
 			'WIDTH'=>placeholder_number(),
 			'HEIGHT'=>placeholder_number(),
 			'IS_DIRECTORY'=>false,
-			'DELETABLE'=>false,
+			'CHOOSABLE'=>false,
+			'EMBED_URL'=>placeholder_url(),
 		);
 
 		return array(
@@ -149,6 +152,23 @@ class Hook_addon_registry_filedump
 				'SORT'=>'time ASC',
 				'POST_URL'=>placeholder_url(),
 				'DIRECTORIES'=>array(lorem_word()),
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__file_dump_screen()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('FILEDUMP_EMBED_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'FORM'=>placeholder_form(),
 			)), NULL, '', true)
 		);
 	}

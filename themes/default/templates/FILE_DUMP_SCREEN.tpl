@@ -93,13 +93,17 @@
 					<div class="float_surrounder filedump_thumbnails">
 						{+START,LOOP,THUMBNAILS}
 							<div class="box"><div class="box_inner">
-								<span class="filedump_select">{ACTIONS}</span>
+								{+START,IF,{CHOOSABLE}}
+									<span class="filedump_select">{ACTIONS}</span>
+								{+END}
+
+								<p class="filedump_embed"><a href="{EMBED_URL*}" onclick="return open_link_as_overlay(this,800,680);">{!_FILEDUMP_EMBED}</a></p>
 
 								<p><a{+START,IF,{IS_IMAGE}} rel="lightbox"{+END} href="{URL*}">{THUMBNAIL}</a></p>
+
 								<p class="meta associated_details">
 									<strong>{FILENAME*}</strong><br />
 									<span class="associated_details">({+START,IF_NON_EMPTY,{_SIZE}}{SIZE*}{+END}{+START,IF_NON_EMPTY,{TIME}}{+START,IF_NON_EMPTY,{_SIZE}}, {+END}{TIME*}{+END}{+START,IF_NON_EMPTY,{WIDTH}}, {WIDTH*}&times;{HEIGHT*}{+END})</span>
-									<!-- {DELETABLE*} -->
 								</p>
 							</div></div>
 						{+END}

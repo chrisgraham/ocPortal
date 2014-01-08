@@ -1220,7 +1220,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					$attach_id=$connection->query_value_null_ok('attachments','id',array('a_url'=>$url));
 
-					if ((!is_null($attach_id)) && ($attributes['thumb_url']!=''))
+					if ((!is_null($attach_id)) && (array_key_exists('thumb_url',$attributes)) && ($attributes['thumb_url']!=''))
 					{
 						if (($connection->query_value_null_ok('attachments','a_thumb_url',array('id'=>$attach_id))=='') && (!empty($attributes['thumb_url']))) // Update DB with the one that was referenced
 						{

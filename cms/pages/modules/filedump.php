@@ -127,10 +127,11 @@ class Module_filedump
 
 		$type=get_param('type','misc');
 
+		if ($type=='misc') return $this->do_gui();
+		if ($type=='embed') return $this->do_embed();
+		if ($type=='mass') return $this->do_mass();
 		if ($type=='ac') return $this->do_add_folder();
 		if ($type=='ad') return $this->do_upload();
-		if ($type=='mass') return $this->do_mass();
-		if ($type=='misc') return $this->do_gui();
 
 		return new ocp_tempcode();
 	}
@@ -246,7 +247,7 @@ class Module_filedump
 					$filesize=filesize($_full);
 					$timestamp=filemtime($_full);
 				}
-				$deletable=((isset($db_row)) && ($db_row['the_member']==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump'));
+				$choosable=((!is_null($db_row)) && ($db_row['the_member']==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump'));
 
 				$width=mixed();
 				$height=mixed();
@@ -270,7 +271,7 @@ class Module_filedump
 					'_time'=>$timestamp,
 					'time'=>is_null($timestamp)?NULL:get_timezoned_date($timestamp,false),
 					'is_directory'=>$is_directory,
-					'deletable'=>$deletable,
+					'choosable'=>$choosable,
 				);
 			}
 		}
@@ -306,6 +307,7 @@ class Module_filedump
 				do_lang_tempcode('DESCRIPTION'),
 				do_lang_tempcode('SIZE'),
 				do_lang_tempcode('DATE_TIME'),
+				do_lang_tempcode('ACTIONS'),
 				do_lang_tempcode('CHOOSE'),
 			));
 
@@ -323,6 +325,8 @@ class Module_filedump
 					$is_image=false;
 
 					$image_url=find_theme_image('bigicons/view_this_category');
+
+					$embed_url=mixed();
 				} else // File
 				{
 					$url=get_custom_base_url().'/uploads/filedump'.str_replace('%2F','/',rawurlencode($place.$filename));
@@ -336,10 +340,12 @@ class Module_filedump
 						$is_image=false;
 						$image_url=find_theme_image('no_image');
 					}
+
+					$embed_url=build_url(array('page'=>'_SELF','type'=>'embed','place'=>$place,'file'=>$filename),'_SELF');
 				}
 
 				$actions=new ocp_tempcode();
-				if ($file['deletable'])
+				if ($file['choosable'])
 				{
 					$actions->attach(do_template('COLUMNED_TABLE_ROW_CELL_TICK',array(
 						'LABEL'=>do_lang_tempcode('CHOOSE'),
@@ -363,8 +369,9 @@ class Module_filedump
 					'WIDTH'=>is_null($file['width'])?'':strval($file['width']),
 					'HEIGHT'=>is_null($file['height'])?'':strval($file['height']),
 					'IS_DIRECTORY'=>$file['is_directory'],
-					'DELETABLE'=>$file['deletable'],
+					'CHOOSABLE'=>$file['choosable'],
 					'ACTIONS'=>$actions,
+					'EMBED_URL'=>$embed_url,
 				);
 
 				// Editable description
@@ -391,6 +398,7 @@ class Module_filedump
 					$description_field,
 					$size,
 					is_null($file['time'])?do_lang_tempcode('NA'):make_string_tempcode(escape_html($file['time'])),
+					is_null($embed_url)?new ocp_tempcode():hyperlink($embed_url,do_lang_tempcode('FILEDUMP_EMBED')),
 					$actions
 				)));
 			}
@@ -599,6 +607,133 @@ class Module_filedump
 	}
 
 	/**
+	 * The main user interface for the file dump.
+	 *
+	 * @return tempcode	The UI.
+	 */
+	function do_embed()
+	{
+		$title=get_screen_title('FILEDUMP_EMBED');
+
+		require_code('form_templates');
+
+		$place=get_param('place');
+		$file=get_param('file');
+
+		$generated=mixed();
+		$rendered=mixed();
+		if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST')
+		{
+			$generated='[attachment';
+			$param=post_param('description','');
+			if ($param!='')
+				$generated.=' description="'.comcode_escape($param).'"';
+			$param=post_param('type','');
+			if ($param!='')
+				$generated.=' type="'.comcode_escape($param).'"';
+			$param=post_param('width','');
+			if ($param!='')
+				$generated.=' width="'.comcode_escape($param).'"';
+			$param=post_param('height','');
+			if ($param!='')
+				$generated.=' height="'.comcode_escape($param).'"';
+			$param=post_param('align','');
+			if ($param!='')
+				$generated.=' align="'.comcode_escape($param).'"';
+			$param=post_param('float','');
+			if ($param!='')
+				$generated.=' float="'.comcode_escape($param).'"';
+			$param=post_param('thumb','0');
+			if ($param!='')
+				$generated.=' thumb="'.comcode_escape($param).'"';
+			$param=post_param('thumb_url','');
+			if ($param!='')
+				$generated.=' thumb_url="'.comcode_escape($param).'"';
+			$generated.=']url_uploads/filedump'.$place.$file.'[/attachment]'; // TODO: Update in v10 to media tag
+
+			$rendered=comcode_to_tempcode($generated);
+		}
+
+		$_description=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>$file,'path'=>$place));
+		if (is_null($_description))
+		{
+			$description=post_param('description','');
+		} else
+		{
+			$description=post_param('description',get_translated_text($_description));
+		}
+
+		require_lang('comcode');
+
+		$adv=do_lang('BLOCK_IND_ADVANCED');
+
+		$fields=new ocp_tempcode();
+
+		$fields->attach(form_input_line_comcode(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_description'),do_lang('COMCODE_TAG_attachment_PARAM_description'),'description',$description,false));
+
+		$_description=do_lang('COMCODE_TAG_attachment_PARAM_type');
+		if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
+		$list=new ocp_tempcode();
+		foreach (explode('|',$_description) as $option)
+		{
+			list($option_val,$option_label)=explode('=',$option,2);
+			$list->attach(form_input_list_entry($option_val,($option_val==post_param('type','')),$option_label));
+		}
+		$fields->attach(form_input_list(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_type'),'','type',$list,NULL,false,false));
+
+		$fields->attach(form_input_integer(do_lang_tempcode('WIDTH'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_width'),'width',post_param_integer('width',NULL),false));
+
+		$fields->attach(form_input_integer(do_lang_tempcode('HEIGHT'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_height'),'height',post_param_integer('height',NULL),false));
+
+		/*$_description=do_lang('COMCODE_TAG_attachment_PARAM_align');
+		if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
+		$list=new ocp_tempcode();
+		foreach (explode('|',$_description) as $option)
+		{
+			list($option_val,$option_label)=explode('=',$option,2);
+			$list->attach(form_input_list_entry($option_val,($option_val==post_param('align','')),$option_label));
+		}
+		$fields->attach(form_input_list(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_align'),'','align',$list,NULL,false,false));*/
+
+		$_description=do_lang('COMCODE_TAG_attachment_PARAM_float');
+		if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
+		$list=new ocp_tempcode();
+		foreach (explode('|',$_description) as $option)
+		{
+			list($option_val,$option_label)=explode('=',$option,2);
+			$list->attach(form_input_list_entry($option_val,($option_val==post_param('float','')),$option_label));
+		}
+		$fields->attach(form_input_list(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_float'),'','float',$list,NULL,false,false));
+
+		$_description=do_lang('COMCODE_TAG_attachment_PARAM_thumb');
+		if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
+		$_description=preg_replace('#\s*'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\'](?-U)\.?(?U)#Ui','',$_description);
+		$thumb_ticked=true;
+		if (strtolower(ocp_srv('REQUEST_METHOD'))=='POST') $thumb_ticked=(post_param_integer('thumb')==1);
+		$fields->attach(form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_thumb'),ucfirst(substr($_description,12)),'thumb',$thumb_ticked));
+
+		$_description=do_lang('COMCODE_TAG_attachment_PARAM_thumb_url');
+		if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
+		$fields->attach(form_input_line_comcode(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_thumb_url'),$_description,'thumb_url',post_param('thumb_url',NULL),false));
+
+		$form=do_template('FORM',array(
+			'FIELDS'=>$fields,
+			'HIDDEN'=>'',
+			'TEXT'=>'',
+			'URL'=>get_self_url(),
+			'SUBMIT_NAME'=>do_lang_tempcode('FILEDUMP_EMBED'),
+			'TARGET'=>'_self',
+		));
+
+		return do_template('FILEDUMP_EMBED_SCREEN',array(
+			'TITLE'=>$title,
+			'FORM'=>$form,
+			'GENERATED'=>$generated,
+			'RENDERED'=>$rendered,
+		));
+	}
+
+	/**
 	 * The actualiser for handling mass actions.
 	 *
 	 * @return tempcode	The UI.
@@ -651,7 +786,7 @@ class Module_filedump
 				{
 					$file=post_param('description_file_'.$matches[1]);
 					$files[]=$file;
-					$descriptions[$file]=post_param('description_value_'.$matches[1]);
+					$descriptions[$file]=post_param('description_value_'.$matches[1],'');
 				}
 			}
 		}
@@ -776,7 +911,7 @@ class Module_filedump
 				delete_lang($test);
 				$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>$name,'path'=>$place),'',1);
 			}
-			$description=post_param('description');
+			$description=post_param('description','');
 			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$name,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
 
 			log_it('FILEDUMP_CREATE_FOLDER',$name,$place);
@@ -864,7 +999,7 @@ class Module_filedump
 				delete_lang($test);
 				$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>$filename,'path'=>$place),'',1);
 			}
-			$description=post_param('description');
+			$description=post_param('description','');
 			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$filename,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
 
 			// Logging etc
