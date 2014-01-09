@@ -651,7 +651,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		if (get_forum_type()=='ocf')
 		{
 			require_code('ocf_groups');
-			$default_groups=ocf_get_all_default_groups(true);
+			$default_groups=ocf_get_all_default_groups(true,true);
 		}
 		foreach ($groups as $id=>$group)
 		{

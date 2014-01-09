@@ -186,22 +186,21 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 	{
 		if ($val==STRING_MAGIC_NULL) $actual_custom_fields[$key]='';
 	}
-	$groups=ocf_get_all_default_groups(true);
-	$additional_group=post_param_integer('additional_group',-1);
-	if (($additional_group!=-1) && (!in_array($additional_group,$groups)))
+	$groups=ocf_get_all_default_groups(true); // $groups will contain the built in default primary group too (it is not $secondary_groups)
+	$primary_group=post_param_integer('primary_group',NULL);
+	if (($primary_group!==NULL) && (!in_array($primary_group,$groups)/*= not built in default, which is automatically ok to join without extra security*/))
 	{
 		// Check security
-		$test=$GLOBALS['FORUM_DB']->query_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
+		$test=$GLOBALS['FORUM_DB']->query_value('f_groups','g_is_presented_at_install',array('id'=>$primary_group));
 		if ($test==1)
 		{
-			$groups=ocf_get_all_default_groups(false);
-			$groups[]=$additional_group;
-		} else $additional_group=-1;
-	} else $additional_group=-1;
-	if ($additional_group==-1)
+			$groups=ocf_get_all_default_groups(false); // Get it so it does not include the built in default primary group
+			$groups[]=$primary_group; // And add in the *chosen* primary group
+		} else $primary_group=NULL;
+	} else $primary_group=NULL;
+	if ($primary_group===NULL) // Security error, or built in default (which will already be in $groups)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array('g_is_presented_at_install'=>1));
-		if (!is_null($test)) $additional_group=$test;
+		$primary_group=get_first_default_group();
 	}
 
 	// Check that the given address isn't already used (if one_per_email_address on)
