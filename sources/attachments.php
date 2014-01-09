@@ -440,7 +440,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 				$_url=make_string_tempcode($url);
 			}
 
-			$temp_tpl=hyperlink($_url,($attachment['a_description']!='')?$attachment['a_description']:$attachment['a_original_filename'],true);
+			$temp_tpl=hyperlink($_url,(is_object($attachment['a_description'])?$attachment['a_description']->evaluate():$attachment['a_description']!='')?$attachment['a_description']:$attachment['a_original_filename'],true);
 			break;
 
 		default:
