@@ -30,7 +30,7 @@ class Block_main_sortable_table
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('param','default_sort_column','max','labels','columns_display','columns_tooltip','guid');
+		$info['parameters']=array('param','default_sort_column','max','labels','labels_tooltip','columns_display','columns_tooltip','guid');
 		return $info;
 	}
 
@@ -44,6 +44,8 @@ class Block_main_sortable_table
 	{
 		require_javascript('javascript_sortable_tables');
 		require_css('sortable_tables');
+
+		disable_php_memory_limit();
 
 		$letters=array(
 			'A',
@@ -105,6 +107,7 @@ class Block_main_sortable_table
 		if (!empty($map['columns_tooltip'])) $map['columns_tooltip']=str_replace($letters,$numbers,$map['columns_tooltip']);
 
 		$labels=empty($map['labels'])?array():explode(',',$map['labels']);
+		$labels_tooltip=empty($map['labels_tooltip'])?array():explode(',',$map['labels_tooltip']);
 		$columns_display=empty($map['columns_display'])?array():array_map('intval',explode(',',$map['columns_display']));
 		$columns_tooltip=empty($map['columns_tooltip'])?array():array_map('intval',explode(',',$map['columns_tooltip']));
 
@@ -142,17 +145,6 @@ class Block_main_sortable_table
 					}
 				}
 
-				// Get tooltip columns
-				$row_tooltip=array();
-				foreach ($row as $j=>$val)
-				{
-					if (in_array($j+1,$columns_tooltip))
-					{
-						$row_tooltip[]=$val;
-					}
-				}
-				$_rows_tooltip[]=$row_tooltip;
-
 				if ($i!=0)
 				{
 					// Make sure row has the right column count
@@ -165,26 +157,46 @@ class Block_main_sortable_table
 						unset($row[$j]);
 					}
 
-					$_rows_raw[]=array_combine($full_header_row,$row);
-				} else
+					// Get tooltip columns
+					$row_tooltip=array();
+					foreach ($columns_tooltip as $pos)
+					{
+						if (isset($row[$pos-1]))
+							$row_tooltip[]=$row[$pos-1];
+					}
+					$_rows_tooltip[]=$row_tooltip;
+				}
+
+				if ($i==0)
 				{
 					$full_header_row=$row;
+				}
+
+				if ($i!=0)
+				{
+					$_rows_raw[]=array_combine($full_header_row,$row);
 				}
 
 				// Filter to displayed table columns
 				if ($columns_display!=array() || $columns_tooltip!=array())
 				{
-					foreach (array_keys($row) as $key)
+					if ($columns_display==array())
 					{
-						if ($columns_display==array())
+						foreach ($row as $key=>$val)
 						{
 							if (in_array($key+1,$columns_tooltip)) unset($row[$key]);
-						} else
-						{
-							if (!in_array($key+1,$columns_display)) unset($row[$key]);
 						}
+						$row=array_values($row);
+					} else
+					{
+						$row_new=array();
+						foreach ($columns_display as $pos)
+						{
+							if (isset($row[$pos-1]))
+								$row_new[]=$row[$pos-1];
+						}
+						$row=$row_new;
 					}
-					$row=array_values($row);
 				}
 
 				if (implode('',$row)=='') continue;
@@ -216,10 +228,10 @@ class Block_main_sortable_table
 					'FILTERABLE'=>NULL,
 				);
 			}
-			$tooltip_header_row=array_shift($_rows_tooltip);
-			foreach ($tooltip_header_row as $j=>$_header)
+			foreach ($columns_tooltip as $j=>$pos)
 			{
-				$tooltip_headers[]=isset($labels[$j])?$labels[$j]:$_header;
+				if (isset($full_header_row[$pos-1]))
+					$tooltip_headers[]=isset($labels_tooltip[$j])?$labels_tooltip[$j]:$full_header_row[$pos-1];
 			}
 		} else
 		{
@@ -239,32 +251,37 @@ class Block_main_sortable_table
 				// Get tooltip columns
 				$row_tooltip=array();
 				$j=0;
-				foreach ($record as $key=>$val)
+				$keys=array_keys($record);
+				$values=array_values($record);
+				foreach ($columns_tooltip as $pos)
 				{
-					if (in_array($j+1,$columns_tooltip))
-					{
-						$row_tooltip[$key]=$val;
-					}
-					$j++;
+					if (isset($values[$pos-1]))
+						$row_tooltip[$keys[$pos-1]]=$values[$pos-1];
 				}
-				$_rows_tooltip[]=array_values($row_tooltip);
+				$_rows_tooltip[]=@array_map('strval',array_values($row_tooltip));
 
-				if ($i!=0)
-					$_rows_raw[]=$record;
+				$_rows_raw[]=$record;
 
 				// Filter to displayed table columns
 				if ($columns_display!=array() || $columns_tooltip!=array())
 				{
-					foreach (array_keys($record) as $j=>$key)
+					if ($columns_display==array())
 					{
-						if ($columns_display==array())
+						foreach (array_keys($record) as $j=>$key)
 						{
 							if (in_array($j+1,$columns_tooltip)) unset($record[$key]);
-						} else
-						{
-							if (!in_array($j+1,$columns_display)) unset($record[$key]);
 						}
+					} else
+					{
+						$record_new=array();
+						foreach ($columns_display as $pos)
+						{
+							if (isset($values[$pos-1]))
+								$record_new[$keys[$pos-1]]=$values[$pos-1];
+						}
+						$record=$record_new;
 					}
+
 					$row=array_values($record);
 				}
 				$_rows[]=@array_map('strval',array_values($record));
@@ -279,7 +296,7 @@ class Block_main_sortable_table
 					$prefixes=array_count_values($prefixes);
 					asort($prefixes);
 					$prefix='';
-					if (end($prefixes)>count($record)-3)
+					if (count($prefixes)>count($record)-3)
 					{
 						$prefix=key($prefixes);
 					}
@@ -295,7 +312,7 @@ class Block_main_sortable_table
 
 					foreach (array_keys($row_tooltip) as $j=>$key)
 					{
-						$tooltip_headers[]=isset($labels[$j])?$labels[$j]:titleify(preg_replace('#^'.preg_quote($prefix,'#').'#','',$key));
+						$tooltip_headers[]=isset($labels_tooltip[$j])?$labels_tooltip[$j]:titleify(preg_replace('#^'.preg_quote($prefix,'#').'#','',$key));
 					}
 				}
 			}
@@ -325,7 +342,7 @@ class Block_main_sortable_table
 			{
 				$values[$i]=$this->apply_formatting($values[$i],$headers[$j]['SORTABLE_TYPE']);
 			}
-			$header['FILTERABLE']=(count($values)>10)?array():$values;
+			$header['FILTERABLE']=(count($values)>20)?array():$values;
 		}
 
 		// Create template-ready data
