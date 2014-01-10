@@ -277,6 +277,7 @@ class Module_filedump
 		}
 		closedir($handle);
 
+		global $M_SORT_KEY;
 		switch ($order)
 		{
 			case 'time':
@@ -409,6 +410,21 @@ class Module_filedump
 			$listing=new ocp_tempcode();
 		}
 
+		// Find directories we could move stuff into / upload to
+		require_code('files2');
+		$directories=get_directory_contents(get_custom_file_base().'/uploads/filedump','',false,true,false);
+		$directories[]='';
+		sort($directories);
+		$other_directories=$directories;
+		foreach ($other_directories as $i=>$directory)
+		{
+			if ('/'.$directory.(($directory=='')?'':'/')==$place)
+			{
+				unset($other_directories[$i]);
+				break;
+			}
+		}
+
 		// Do a form so people can upload their own stuff
 		if (has_specific_permission(get_member(),'upload_filedump'))
 		{
@@ -425,11 +441,20 @@ class Module_filedump
 			}
 
 			$fields=new ocp_tempcode();
+
 			$fields->attach(form_input_upload_multi(do_lang_tempcode('FILES'),do_lang_tempcode('DESCRIPTION_FILES'),'files',true));
+
 			$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_FILES'),'description','',false));
 
+			$list=new ocp_tempcode();
+			foreach ($directories as $directory)
+			{
+				$_directory='/'.$directory.(($directory=='')?'':'/');
+				$list->attach(form_input_list_entry($_directory,($_directory==$place),'/'.$directory));
+			}
+			$fields->attach(form_input_list(do_lang_tempcode('FOLDER'),'','place',$list));
+
 			$hidden=new ocp_tempcode();
-			$hidden->attach(form_input_hidden('place',$place));
 			handle_max_file_size($hidden);
 
 			$upload_form=do_template('FORM',array(
@@ -454,7 +479,9 @@ class Module_filedump
 			$submit_name=do_lang_tempcode('FILEDUMP_CREATE_FOLDER');
 
 			$fields=new ocp_tempcode();
+
 			$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_FOLDER_NAME'),'name','',true));
+
 			$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),new ocp_tempcode(),'description','',false));
 
 			$hidden=form_input_hidden('place',$place);
@@ -477,20 +504,6 @@ class Module_filedump
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'mass','place'=>$place),'_SELF');
 
-		// Find directories we could move stuff into
-		require_code('files2');
-		$directories=get_directory_contents(get_custom_file_base().'/uploads/filedump','',false,true,false);
-		$directories[]='';
-		sort($directories);
-		foreach ($directories as $i=>$directory)
-		{
-			if ('/'.$directory.(($directory=='')?'':'/')==$place)
-			{
-				unset($directories[$i]);
-				break;
-			}
-		}
-
 		return do_template('FILE_DUMP_SCREEN',array(
 			'_GUID'=>'3f49a8277a11f543eff6488622949c84',
 			'TITLE'=>$title,
@@ -504,6 +517,7 @@ class Module_filedump
 			'SORT'=>$sort,
 			'POST_URL'=>$post_url,
 			'DIRECTORIES'=>$directories,
+			'OTHER_DIRECTORIES'=>$other_directories,
 		));
 	}
 
@@ -623,6 +637,9 @@ class Module_filedump
 		$place=get_param('place');
 		$file=get_param('file');
 
+		$url=get_custom_base_url().'/uploads/filedump'.str_replace('%2F','/',rawurlencode($place.$file));
+		$path=get_custom_file_base().'/uploads/filedump'.$place.$file;
+
 		$generated=mixed();
 		$rendered=mixed();
 		if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST')
@@ -724,15 +741,52 @@ class Module_filedump
 			'HIDDEN'=>'',
 			'TEXT'=>'',
 			'URL'=>get_self_url(),
-			'SUBMIT_NAME'=>do_lang_tempcode('FILEDUMP_EMBED'),
+			'SUBMIT_NAME'=>do_lang_tempcode('GENERATE_COMCODE'),
 			'TARGET'=>'_self',
 		));
+
+		$image_sizes=mixed();
+		if (is_image($file))
+		{
+			$size=@getimagesize($path);
+			if ($size!==false)
+			{
+				$ratio=floatval($size[0])/floatval($size[1]);
+
+				$_image_sizes=array();
+				if (intval(get_option('thumb_width'))<$size[0])
+					$_image_sizes[intval(get_option('thumb_width'))]='FILEDUMP_IMAGE_URLS_SMALL';
+				if (730<$size[0])
+					$_image_sizes[730]='FILEDUMP_IMAGE_URLS_MEDIUM';
+				$_image_sizes[$size[0]]='FILEDUMP_IMAGE_URLS_LARGE';
+
+				$image_sizes=array();
+				foreach ($_image_sizes as $width=>$lng_str)
+				{
+					$size_url=$url;
+					if ($width!=$size[0])
+					{
+						$size_url=symbol_tempcode('THUMBNAIL',array($url,strval($width)));
+					}
+
+					$height=intval(floatval($width)*$ratio);
+					$image_sizes[]=array(
+						'LABEL'=>do_lang_tempcode($lng_str,escape_html(strval($width)),escape_html(strval($height))),
+						'SIZE_URL'=>$size_url,
+						'SIZE_WIDTH'=>strval($width),
+						'SIZE_HEIGHT'=>strval($height),
+					);
+				}
+			}
+		}
 
 		return do_template('FILEDUMP_EMBED_SCREEN',array(
 			'TITLE'=>$title,
 			'FORM'=>$form,
 			'GENERATED'=>$generated,
 			'RENDERED'=>$rendered,
+			'URL'=>$url,
+			'IMAGE_SIZES'=>$image_sizes,
 		));
 	}
 
@@ -946,6 +1000,8 @@ class Module_filedump
 		require_code('uploads');
 		is_swf_upload(true);
 
+		$new_files=array();
+
 		foreach ($_FILES as $file)
 		{
 			// Error?
@@ -994,6 +1050,7 @@ class Module_filedump
 			}
 			fix_permissions($full);
 			sync_file($full);
+			$new_files[]=$filename;
 
 			// Add description
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>$filename,'path'=>$place));
@@ -1016,7 +1073,12 @@ class Module_filedump
 		}
 
 		// Done
-		$return_url=build_url(array('page'=>'_SELF','place'=>$place),'_SELF');
+		$url_map=array('page'=>'_SELF','place'=>$place);
+		if (count($new_files)==1)
+		{
+			$url_map['filename']=$new_files[0];
+		}
+		$return_url=build_url($url_map,'_SELF');
 		return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
 	}
 

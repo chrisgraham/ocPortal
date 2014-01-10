@@ -112,7 +112,7 @@ function _symbol_thumbnail($param)
 				$thumb_save_dir=basename(dirname(rawurldecode($orig_url)));
 			}
 			if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
-			if (!file_exists(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
+			if (!file_exists(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/auto_thumbs';
 			$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
 			$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
 			$value=get_custom_base_url().'/'.$thumb_save_dir.'/'.rawurlencode($dimensions.'__'.$filename);

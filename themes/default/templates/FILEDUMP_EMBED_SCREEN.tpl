@@ -34,4 +34,23 @@
 	//]]></script>
 {+END}
 
+{+START,IF_NON_PASSED,GENERATED}
+	<div class="filedump_image_sizes">
+		<p class="lonely_label">
+			{!FILEDUMP_IMAGE_URLS}:
+		</p>
+		<ul class="compact_list image_sizes">
+			{+START,LOOP,IMAGE_SIZES}
+				<li>
+					<label for="img_size_{SIZE_WIDTH*}">{LABEL*}</label>
+					<input onclick="this.select();" type="text" size="80" id="img_size_{SIZE_WIDTH*}" name="img_size_{SIZE_WIDTH*}" value="{SIZE_URL*}" />
+					<span class="associated_details">(<a rel="lightbox" href="{SIZE_URL*}">{!PREVIEW}</a>)</span>
+				</li>
+			{+END}
+		</ul>
+
+		<h2>{!_COMCODE}</h2>
+	</div>
+{+END}
+
 {FORM}

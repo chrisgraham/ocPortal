@@ -161,7 +161,19 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					if (isset($TEMPCODE_SETGET[$param[0]]))
 					{
-						if (is_object($TEMPCODE_SETGET[$param[0]])) $TEMPCODE_SETGET[$param[0]]=$TEMPCODE_SETGET[$param[0]]->evaluate();
+						if (is_object($TEMPCODE_SETGET[$param[0]]))
+						{
+							if ((array_key_exists(1,$param)) && ($param[1]=='1')) // no-cache
+							{
+								$TEMPCODE_SETGET[$param[0]]->decache();
+								$value=$TEMPCODE_SETGET[$param[0]]->evaluate();
+								$TEMPCODE_SETGET[$param[0]]->decache();
+								break;
+							}
+
+							$TEMPCODE_SETGET[$param[0]]=$TEMPCODE_SETGET[$param[0]]->evaluate();
+						}
+
 						$value=$TEMPCODE_SETGET[$param[0]];
 					}
 				}
@@ -2415,6 +2427,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						$value=$param[count($param)-1]->evaluate();
 					}
+				}
+				break;
+
+			case 'SET_NOPREEVAL':
+				if (isset($param[1]))
+				{
+					$var=$param[0]->evaluate();
+					$TEMPCODE_SETGET[$var]=$param[1]->bind($param['vars'],'');
 				}
 				break;
 

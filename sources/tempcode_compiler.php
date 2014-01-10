@@ -31,7 +31,7 @@ function init__tempcode_compiler()
 	define('PARSE_DIRECTIVE_INNER',5);
 
 	global $DIRECTIVES_NEEDING_VARS;
-	$DIRECTIVES_NEEDING_VARS=array('IF_PASSED_AND_TRUE'=>1,'IF_NON_PASSED_OR_FALSE'=>1,'PARAM_INFO'=>1,'IF_NOT_IN_ARRAY'=>1,'IF_IN_ARRAY'=>1,'IMPLODE'=>1,'COUNT'=>1,'IF_ARRAY_EMPTY'=>1,'IF_ARRAY_NON_EMPTY'=>1,'OF'=>1,'INCLUDE'=>1,'LOOP'=>1);
+	$DIRECTIVES_NEEDING_VARS=array('IF_PASSED_AND_TRUE'=>1,'IF_NON_PASSED_OR_FALSE'=>1,'PARAM_INFO'=>1,'IF_NOT_IN_ARRAY'=>1,'IF_IN_ARRAY'=>1,'IMPLODE'=>1,'COUNT'=>1,'IF_ARRAY_EMPTY'=>1,'IF_ARRAY_NON_EMPTY'=>1,'OF'=>1,'INCLUDE'=>1,'LOOP'=>1,'SET_NOPREEVAL'=>1);
 
 	// These are templates often used multiple times on a single screen. They are loaded as functions, rather than eval'd each time
 	global $FUNC_STYLE_TPL;
@@ -435,6 +435,20 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								$preprocessable_bits[]=$pp_bit;
 								break;
 						}
+						if ($directive_name=='SET_NOPREEVAL') // Needs to be dynamic
+						{
+							$myfunc='do_runtime_'.uniqid('',true)/*fast_uniqid()*/;
+							$_past_level_data=implode('.',$past_level_data);
+							$unset_code='';
+							if (strpos($_past_level_data,'isset($bound')!==false) // Horrible but efficient code needed to allow IF_PASSED/IF_NON_PASSED to keep working when templates are put adjacent to each other, where some have it, and don't. This is needed as eval does not set a scope block.
+								$reset_code="eval(\\\$FULL_RESET_VAR_CODE);";
+							elseif (strpos($_past_level_data,'$bound')!==false)
+								$reset_code="eval(\\\$RESET_VAR_CODE);";
+							else
+								$reset_code='';
+							$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"$reset_code echo ".php_addslashes($_past_level_data).";\";\n";
+							$past_level_data=array('new ocp_tempcode(array("'.php_addslashes($funcdef).'",array(array("'.$myfunc.'",array(),'.strval(TC_KNOWN).',\'\',\'\'))))');
+						}
 						switch ($directive_name)
 						{
 							case 'IF':
@@ -508,6 +522,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 							default:
 								if ($directive_params!='') $directive_params.=',';
 								$directive_params.=implode('.',$past_level_data);
+
 								if (isset($GLOBALS['DIRECTIVES_NEEDING_VARS'][$directive_name]))
 								{
 									$current_level_data[]='ecv($cl,array(),'.strval(TC_DIRECTIVE).','.implode('.',$directive_opener_params[1]).',array('.$directive_params.',\'vars\'=>$parameters))';

@@ -152,6 +152,7 @@ class Hook_addon_registry_filedump
 				'SORT'=>'time ASC',
 				'POST_URL'=>placeholder_url(),
 				'DIRECTORIES'=>array(lorem_word()),
+				'OTHER_DIRECTORIES'=>array(lorem_word()),
 			)), NULL, '', true)
 		);
 	}
@@ -169,6 +170,15 @@ class Hook_addon_registry_filedump
 			lorem_globalise(do_lorem_template('FILEDUMP_EMBED_SCREEN', array(
 				'TITLE'=>lorem_title(),
 				'FORM'=>placeholder_form(),
+				'IMAGE_SIZES'=>array(
+					array(
+						'LABEL'=>do_lang_tempcode('FILEDUMP_IMAGE_URLS_SMALL',escape_html(get_option('thumb_width')),escape_html(get_option('thumb_width'))),
+						'SIZE_URL'=>placeholder_image_url(),
+						'SIZE_WIDTH'=>get_option('thumb_width'),
+						'SIZE_HEIGHT'=>get_option('thumb_width'),
+					),
+				),
+				'URL'=>placeholder_image_url(),
 			)), NULL, '', true)
 		);
 	}

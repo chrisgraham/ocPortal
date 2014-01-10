@@ -82,3 +82,9 @@
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 	max-width: 560px;
 }
+
+.filedump_image_sizes label {
+	min-width: 16em;
+	display: inline-block;
+}
+
