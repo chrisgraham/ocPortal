@@ -104,7 +104,8 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/ajax_tree/choose_filedump_file.php',
 			'sources/hooks/systems/page_groupings/filedump.php',
 			'sources/hooks/modules/admin_import_types/filedump.php',
-			'themes/default/templates/FILEDUMP_SCREEN.tpl',
+			'themes/default/templates/FILE_DUMP_SCREEN.tpl',
+			'themes/default/templates/FILEDUMP_EMBED_SCREEN.tpl',
 			'uploads/filedump/index.html',
 			'cms/pages/modules/filedump.php',
 			'lang/EN/filedump.ini',
@@ -113,6 +114,7 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/rss/filedump.php',
 			'sources/hooks/systems/occle_fs/home.php',
 			'uploads/filedump/.htaccess',
+			'themes/default/css/filedump.css',
 		);
 	}
 
@@ -125,7 +127,8 @@ class Hook_addon_registry_filedump
 	function tpl_previews()
 	{
 		return array(
-			'FILEDUMP_SCREEN.tpl'=>'filedump_screen'
+			'FILEDUMP_SCREEN.tpl'=>'filedump_screen',
+			'FILEDUMP_EMBED_SCREEN.tpl'=>'file_embed_screen',
 		);
 	}
 
@@ -140,13 +143,65 @@ class Hook_addon_registry_filedump
 	{
 		require_css('forms');
 
+		$thumbnails=array();
+		$thumbnails[]=array(
+			'FILENAME'=>lorem_word(),
+			'THUMBNAIL'=>placeholder_image(),
+			'IS_IMAGE'=>true,
+			'URL'=>placeholder_url(),
+			'DESCRIPTION'=>lorem_paragraph(),
+			'ACTIONS'=>lorem_paragraph(),
+			'_SIZE'=>placeholder_number(),
+			'SIZE'=>placeholder_number(),
+			'_TIME'=>placeholder_date_raw(),
+			'TIME'=>placeholder_date(),
+			'WIDTH'=>placeholder_number(),
+			'HEIGHT'=>placeholder_number(),
+			'IS_DIRECTORY'=>false,
+			'CHOOSABLE'=>false,
+			'EMBED_URL'=>placeholder_url(),
+		);
+
 		return array(
 			lorem_globalise(do_lorem_template('FILEDUMP_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'FILES'=>placeholder_table(),
+				'PLACE'=>placeholder_id(),
+				'THUMBNAILS'=>$thumbnails,
+				'LISTING'=>placeholder_table(),
 				'UPLOAD_FORM'=>placeholder_form(),
 				'CREATE_FOLDER_FORM'=>placeholder_form(),
-				'PLACE'=>placeholder_id()
+				'TYPE_FILTER'=>'',
+				'SEARCH'=>'',
+				'SORT'=>'time ASC',
+				'POST_URL'=>placeholder_url(),
+				'DIRECTORIES'=>array(lorem_word()),
+				'OTHER_DIRECTORIES'=>array(lorem_word()),
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__file_dump_screen()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('FILEDUMP_EMBED_SCREEN',array(
+				'TITLE'=>lorem_title(),
+				'FORM'=>placeholder_form(),
+				'IMAGE_SIZES'=>array(
+					array(
+						'LABEL'=>do_lang_tempcode('FILEDUMP_IMAGE_URLS_SMALL',escape_html(get_option('thumb_width')),escape_html(get_option('thumb_width'))),
+						'SIZE_URL'=>placeholder_image_url(),
+						'SIZE_WIDTH'=>get_option('thumb_width'),
+						'SIZE_HEIGHT'=>get_option('thumb_width'),
+					),
+				),
+				'URL'=>placeholder_image_url(),
 			)),NULL,'',true)
 		);
 	}

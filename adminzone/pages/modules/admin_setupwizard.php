@@ -914,12 +914,16 @@ class Module_admin_setupwizard
 			require_code('addons2');
 			$addons_installed=find_installed_addons();
 			$uninstalling=array();
-			foreach ($addons_installed as $addon_info)
+			foreach ($addons_installed as $i=>$addon_info)
 			{
+				$addon_info+=read_addon_info($addon_info['name']);
+
 				if (post_param_integer('addon_'.$addon_info['name'],0)==0)
 				{
 					$uninstalling[$addon_info['name']]=$addon_info;
 				}
+
+				$addons_installed[$i]=$addon_info;
 			}
 			$addons_not_installed=find_available_addons(false);
 			$installing=array();
@@ -929,6 +933,8 @@ class Module_admin_setupwizard
 				{
 					$installing[]=$addon_info['name'];
 				}
+
+				$addons_installed[$i]=$addon_row;
 			}
 			do
 			{
@@ -937,7 +943,6 @@ class Module_admin_setupwizard
 				{
 					if (array_key_exists($addon_info['name'],$uninstalling))
 					{
-						$addon_info+=read_addon_info($addon_info['name']);
 						$addon_info['author']=''; // Fudge, to stop it dying on warnings for official addons
 
 						// Check dependencies

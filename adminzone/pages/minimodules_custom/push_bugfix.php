@@ -437,7 +437,7 @@ function create_forum_topic($forum_id,$topic_title,$post)
 
 function upload_to_tracker_issue($tracker_id,$tar_path)
 {
-	make_call('upload_to_tracker_issue',array('parameters'=>array($tracker_id)),$tar_path);
+	make_call('upload_to_tracker_issue',array('parameters'=>array(strval($tracker_id))),$tar_path);
 }
 
 function make_call($call,$params,$file=NULL)

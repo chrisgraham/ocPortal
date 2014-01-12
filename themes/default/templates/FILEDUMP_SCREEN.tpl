@@ -1,55 +1,210 @@
 {TITLE}
 
-<h2>{!FILES_IN_FOLDER}</h2>
+{+START,SET_NOPREEVAL,file_dump_search}
+	<div class="float_surrounder">
+		{+START,IF,{$ADDON_INSTALLED,search}}
+			{$SET,search_url,{$SELF_URL}}
+			<form class="filedump_filter" role="search" title="{!SEARCH}" onsubmit="disable_button_just_clicked(this); action.href+=window.location.hash; if (this.elements['search'].value=='{!SEARCH;*}') this.elements['search'].value='';" action="{$URL_FOR_GET_FORM*,{$GET,search_url},search,type_filter,sort,place}" method="get">
+				{$HIDDENS_FOR_GET_FORM,{$GET,search_url},search,type_filter,sort,place}
 
-{+START,IF_NON_EMPTY,{FILES}}
-	{FILES}
-{+END}
-{+START,IF_EMPTY,{FILES}}
-	<p class="nothing_here">{!NO_ENTRIES}</p>
-{+END}
+				<p class="left">
+					<label class="accessibility_hidden" for="search_filedump_{$GET*,i}">{!SEARCH}</label>
+					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" type="search" id="search_filedump_{$GET*,i}" name="search" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" value="{$?,{$IS_EMPTY,{SEARCH}},{!SEARCH},{SEARCH}}" />
 
-{+START,IF,{$ADDON_INSTALLED,search}}
-	{$SET,search_url,{$PAGE_LINK,_SEARCH:search:results:filedump:specific=1:days=-1:search_under={$PREG_REPLACE,(^/|/$),,{PLACE}}}}
-	<form class="left" role="search" title="{!SEARCH}" onsubmit="if (typeof this.elements['content']=='undefined') { disable_button_just_clicked(this); return true; } if (check_field_for_blankness(this.elements['content'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{$URL_FOR_GET_FORM*,{$GET,search_url}}" method="get">
-		{$HIDDENS_FOR_GET_FORM,{$GET,search_url}}
+					<label class="horiz_field_sep" for="type_filter_filedump_{$GET*,i}">{!SHOW}</label>
+					<select id="type_filter_filedump_{$GET*,i}" name="type_filter">
+						<option{+START,IF,{$EQ,{TYPE_FILTER},}} selected="selected"{+END} value="">{!ALL}</option>
+						<option{+START,IF,{$EQ,{TYPE_FILTER},images}} selected="selected"{+END} value="images">{!IMAGES}</option>
+						<option{+START,IF,{$EQ,{TYPE_FILTER},videos}} selected="selected"{+END} value="videos">{!VIDEOS}</option>
+						<option{+START,IF,{$EQ,{TYPE_FILTER},audios}} selected="selected"{+END} value="audios">{!AUDIOS}</option>
+						<option{+START,IF,{$EQ,{TYPE_FILTER},others}} selected="selected"{+END} value="others">{!OTHER}</option>
+					</select>
 
-		<p class="vertical_alignment">
-			<label class="accessibility_hidden" for="search_filedump">{!SEARCH}</label>
-			<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" onkeyup="update_ajax_search_list(this,event);" type="search" id="search_filedump" name="content" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" value="{!SEARCH}" /><input class="buttons__search button_micro" type="submit" value="{!SEARCH}" />
-		</p>
-	</form>
-{+END}
+					<label class="horiz_field_sep" for="jump_to_{$GET*,i}">{!JUMP_TO_FOLDER}</label>
+					<select id="jump_to_{$GET*,i}" name="place">
+						{+START,LOOP,DIRECTORIES}
+							<option{+START,IF,{$EQ,{$_GET,place,/},/{_loop_var*}{$?,{$IS_NON_EMPTY,{_loop_var}},/}}} selected="selected"{+END} value="/{_loop_var*}{$?,{$IS_NON_EMPTY,{_loop_var}},/}">/{_loop_var*}</option>
+						{+END}
+					</select>
 
-{+START,INCLUDE,NOTIFICATION_BUTTONS}
-	NOTIFICATIONS_TYPE=filedump
-	NOTIFICATIONS_ID={PLACE}
-	BREAK=1
-	RIGHT=1
-{+END}
+					<label class="horiz_field_sep" for="sort_filedump_{$GET*,i}">{!SORT_BY}</label>
+					<select id="sort_filedump_{$GET*,i}" name="sort">
+						<option{+START,IF,{$EQ,{SORT},time ASC}} selected="selected"{+END} value="time ASC">{!DATE_TIME},{!_ASCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},time DESC}} selected="selected"{+END} value="time DESC">{!DATE_TIME},{!_DESCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},name ASC}} selected="selected"{+END} value="name ASC">{!FILENAME},{!_ASCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},name DESC}} selected="selected"{+END} value="name DESC">{!FILENAME},{!_DESCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},size ASC}} selected="selected"{+END} value="size ASC">{!_FILE_SIZE},{!_ASCENDING}</option>
+						<option{+START,IF,{$EQ,{SORT},size DESC}} selected="selected"{+END} value="size DESC">{!_FILE_SIZE},{!_DESCENDING}</option>
+					</select>
 
-{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
-
-{+START,IF_NON_EMPTY,{UPLOAD_FORM}}
-	<div class="box box___filedump_screen"><div class="box_inner">
-		<h2>{!FILEDUMP_UPLOAD}</h2>
-
-		{UPLOAD_FORM}
-	</div></div>
-{+END}
-
-{+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}
-	<div class="box box___filedump_screen">
-		<h2 class="toggleable_tray_title">
-			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!FILEDUMP_CREATE_FOLDER}" title="{!EXPAND}" src="{$IMG*,1x/trays/expand2}" srcset="{$IMG*,2x/trays/expand2} 2x" /></a>
-			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!FILEDUMP_CREATE_FOLDER}</a>
-		</h2>
-
-		<div class="toggleable_tray" style="{$JS_ON,display: none,}" aria-expanded="false">
-			{CREATE_FOLDER_FORM}
-		</div>
+					<input class="buttons__filter button_micro" type="submit" value="{!FILTER}" />
+				</p>
+			</form>
+		{+END}
 	</div>
 {+END}
+
+{+START,SET_NOPREEVAL,file_dump_footer}
+	<hr class="spaced_rule" />
+
+	<div class="float_surrounder">
+		<div class="left">
+			<label for="action_{$GET*,i}">{!ACTION}:</label>
+			<select id="action_{$GET*,i}" name="action">
+				{+START,IF,{$EQ,{$GET,i},1}}
+					<option value=""></option>
+				{+END}
+				{+START,IF,{$EQ,{$GET,i},2}}
+					<option value="edit">{!EDIT_DESCRIPTIONS}</option>
+				{+END}
+				<option value="delete">{!DELETE_SELECTED}</option>
+				{+START,LOOP,OTHER_DIRECTORIES}
+					<option value="/{_loop_var*}{+START,IF_NON_EMPTY,{_loop_var}}/{+END}">{!MOVE_TO,/{_loop_var*}}</option>
+				{+END}
+			</select>
+
+			<input type="submit" value="{!PROCEED}" class="buttons__proceed button_micro" />
+		</div>
+
+		{+START,INCLUDE,NOTIFICATION_BUTTONS}
+			NOTIFICATIONS_TYPE=filedump
+			NOTIFICATIONS_ID={PLACE}
+			RIGHT=1
+		{+END}
+	</div>
+{+END}
+
+<div>
+	<div class="float_surrounder"><div class="tabs" role="tablist">
+		<a aria-controls="g_thumbnails" role="tab" href="#" id="t_thumbnails" class="tab tab_active tab_first" onclick="event.returnValue=false; select_tab('g','thumbnails'); return false;">{!VIEW_THUMBNAILS}</a>
+
+		<a aria-controls="g_listing" role="tab" href="#" id="t_listing" class="tab{+START,IF_EMPTY,{CREATE_FOLDER_FORM}{UPLOAD_FORM}} tab_last{+END}" onclick="event.returnValue=false; select_tab('g','listing'); return false;">{!VIEW_LISTING}</a>
+
+		{+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}
+			<a aria-controls="g_create_folder" role="tab" href="#" id="t_create_folder" class="tab{+START,IF_EMPTY,{UPLOAD_FORM}} tab_last{+END}" onclick="event.returnValue=false; select_tab('g','create_folder'); return false;">{!FILEDUMP_CREATE_FOLDER}</a>
+		{+END}
+
+		{+START,IF_NON_EMPTY,{UPLOAD_FORM}}
+			<a aria-controls="g_upload" role="tab" href="#" id="t_upload" class="tab tab_last" onclick="event.returnValue=false; select_tab('g','upload'); return false;">{!UPLOAD}</a>
+		{+END}
+	</div></div>
+	<div class="tab_surround">
+		<div aria-labeledby="t_thumbnails" role="tabpanel" id="g_thumbnails" style="display: block">
+			<a id="tab__thumbnails"></a>
+
+			{$SET,i,1}
+			{$GET,file_dump_search,1}
+
+			<form action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
+				{+START,IF_NON_EMPTY,{THUMBNAILS}}
+					<div class="float_surrounder filedump_thumbnails">
+						{+START,LOOP,THUMBNAILS}
+							<div class="box"><div class="box_inner">
+								{+START,IF,{CHOOSABLE}}
+									<span class="filedump_select">{ACTIONS}</span>
+								{+END}
+
+								{+START,IF_PASSED,EMBED_URL}
+									<p class="filedump_embed"><a id="embed_link_{FILENAME|*}" href="{EMBED_URL*}" onclick="return open_link_as_overlay(this,950,680);" class="link_exempt">{!_FILEDUMP_EMBED}</a></p>
+
+									{+START,IF,{$EQ,{FILENAME},{$_GET,filename}}}
+										<script type="text/javascript">// <![CDATA[
+											add_event_listener_abstract(window,'load',function () {
+												open_link_as_overlay(document.getElementById('embed_link_{FILENAME|/}'),950,700);
+											} );
+										//]]></script>
+									{+END}
+								{+END}
+
+								<p><a{+START,IF,{IS_IMAGE}} rel="lightbox"{+END} href="{URL*}">{THUMBNAIL}</a></p>
+
+								<p class="meta associated_details">
+									<strong>{FILENAME*}</strong><br />
+									<span class="associated_details">({+START,IF_NON_EMPTY,{_SIZE}}{SIZE*}{+END}{+START,IF_NON_EMPTY,{TIME}}{+START,IF_NON_EMPTY,{_SIZE}}, {+END}{TIME*}{+END}{+START,IF_NON_EMPTY,{WIDTH}}, {WIDTH*}&times;{HEIGHT*}{+END})</span>
+								</p>
+							</div></div>
+						{+END}
+					</div>
+				{+END}
+				{+START,IF_EMPTY,{THUMBNAILS}}
+					<p class="nothing_here">{!NO_ENTRIES}</p>
+				{+END}
+
+				{$SET,i,1}
+				{$GET,file_dump_footer,1}
+			</form>
+		</div>
+
+		<div aria-labeledby="t_listing" role="tabpanel" id="g_listing" style="display: {$?,{$JS_ON},none,block}">
+			<a id="tab__listing"></a>
+
+			{$SET,i,2}
+			{$GET,file_dump_search,1}
+
+			<form action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
+				{+START,IF_NON_EMPTY,{LISTING}}
+					{LISTING}
+				{+END}
+				{+START,IF_EMPTY,{LISTING}}
+					<p class="nothing_here">{!NO_ENTRIES}</p>
+				{+END}
+
+				{$SET,i,2}
+				{$GET,file_dump_footer,1}
+			</form>
+		</div>
+
+		{+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}
+			<div aria-labeledby="t_create_folder" role="tabpanel" id="g_create_folder" style="display: {$?,{$JS_ON},none,block}">
+				<a id="tab__create_folder"></a>
+
+				{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
+
+				{CREATE_FOLDER_FORM}
+			</div>
+		{+END}
+
+		{+START,IF_NON_EMPTY,{UPLOAD_FORM}}
+			<div aria-labeledby="t_upload" role="tabpanel" id="g_upload" style="display: {$?,{$JS_ON},none,block}">
+				<a id="tab__upload"></a>
+
+				{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
+
+				{UPLOAD_FORM}
+			</div>
+		{+END}
+	</div>
+</div>
+
+<script type="text/javascript">// <![CDATA[
+	add_event_listener_abstract(window,'load',function () {
+		find_url_tab();
+	} );
+
+	function check_filedump_selections(form)
+	{
+		var action=form.elements['action'].options[form.elements['action'].selectedIndex].value;
+
+		if (action=='')
+		{
+			fauxmodal_alert('{!SELECT_AN_ACTION;}');
+			return false;
+		}
+
+		if (action=='edit') return true;
+
+		for (var i=0;i<form.elements.length;i++)
+		{
+			if ((form.elements[i].name.match(/^select_\d+$/)) && (form.elements[i].checked))
+			{
+				return true;
+			}
+		}
+
+		fauxmodal_alert('{!NOTHING_SELECTED_YET;}');
+		return false;
+	}
+//]]></script>
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,IF,{$AND,{$SHOW_DOCS},{$HAS_PRIVILEGE,see_software_docs}}}

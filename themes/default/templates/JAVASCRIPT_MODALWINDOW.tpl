@@ -622,7 +622,7 @@ function ModalWindow()
 				}
 			}
 
-			this.button_container=this.element('div',{
+			this.button_container=this.element('p',{
 				'class': 'proceed_button'
 			});
 

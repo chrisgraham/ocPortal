@@ -364,6 +364,24 @@ function perform_local_payment()
 }
 
 /**
+ * Send an IPN call to a remote host for debugging purposes.
+ * Useful for making one ocP site (caller site) pretend to be PayPal, when talking to another (target site).
+ * Make sure the target site has the caller site listed as the backdoor_ip in the base config, or the verification will happen and fail.
+ *
+ * @param   URL		URL to send IPN to
+ * @param   string	Post parameters to send, in query string format
+ * @return  string	Output
+ */
+function dev__ipn_debug($ipn_target,$ipn_message)
+{
+	require_code('ecommerce');
+	$post_params=array();
+	parse_str($ipn_message,$post_params);
+
+	return http_download_file($ipn_target,NULL,false,false,'ocPortal-IPN-debug',$post_params)."\n".$GLOBALS['HTTP_MESSAGE'];
+}
+
+/**
  * Handle IPN's.
  *
  * @return ID_TEXT		The ID of the purchase-type (meaning depends on item_name)
@@ -436,7 +454,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	if ($item_name=='') // Subscription
 	{
 		$product=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_type_code',array('id'=>intval($purchase_id))); // Note that s_type_code is not numeric, it is a $product
-		if (is_null($product)) warn_exit(do_lang_tempcode('NO_SUCH_SUBSCRIPTION',strval($purchase_id)));
+		if (is_null($product)) my_exit(do_lang('NO_SUCH_SUBSCRIPTION',strval($purchase_id)));
 		$item_name='_'.$product;
 
 		// Check what we sold
@@ -445,19 +463,23 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 		{
 			$item_name=$found[4];
 		}
+
+		$subscription=true;
 	} else
 	{
 		// Check what we sold
 		list($found,$product)=find_product_row($item_name,true,true);
+
+		$subscription=false;
 	}
-	if (is_null($found)) my_exit(do_lang('PRODUCT_NO_SUCH').' - '.$item_name);
+	if (is_null($found)) my_exit(do_lang('PRODUCT_NO_SUCH').' - '.$item_name,true);
 
 	// Check price
 	if (($mc_gross!=$found[1]) && ($found[1]!='?'))
 	{
 		if ($payment_status=='SModified')
 			$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_state'=>'new'),array('id'=>intval($purchase_id)),'',1);
-		if (($payment_status!='SCancelled') && (substr($txn_id,0,6)!='manual')) my_exit(do_lang('PURCHASE_WRONG_PRICE',$item_name));
+		if (($payment_status!='SCancelled') && (substr($txn_id,0,6)!='manual')) my_exit(do_lang('PURCHASE_WRONG_PRICE',$item_name),$subscription);
 	}
 
 	if ($period!='')

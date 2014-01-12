@@ -650,6 +650,8 @@ function install_addon($file,$files=NULL)
 	foreach ($directory as $dir)
 	{
 		$addon_file=$dir['path'];
+		if ($addon_file=='addon.inf') continue;
+		if ($addon_file=='addon.php') continue;
 		if (substr($addon_file,-1)=='/') continue;
 		if ((is_null($files)) || (in_array($addon_file,$files)))
 		{

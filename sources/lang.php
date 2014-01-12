@@ -61,7 +61,7 @@ function init__lang()
 	$PAGE_CACHE_LANG_LOADED=array();
 	$PAGE_CACHE_LAZY_LOAD=false;
 	$PAGE_CACHE_LANGS_REQUESTED=array();
-	if (((function_exists('get_option')) && (get_option('is_on_lang_cache')=='1') && ((!array_key_exists('page',$_GET)) || (strpos($_GET['page'],'..')===false))))
+	if (((function_exists('get_option')) && (get_option('is_on_lang_cache')=='1') && ((!array_key_exists('page',$_GET)) || ((is_string($_GET['page'])) && (strpos($_GET['page'],'..')===false)))))
 	{
 		if (running_script('index'))
 		{

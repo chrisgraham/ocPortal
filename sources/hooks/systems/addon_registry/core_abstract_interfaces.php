@@ -126,6 +126,8 @@ class Hook_addon_registry_core_abstract_interfaces
 			'themes/default/templates/MAP_TABLE_SCREEN.tpl',
 			'themes/default/templates/COLUMNED_TABLE.tpl',
 			'themes/default/templates/COLUMNED_TABLE_SCREEN.tpl',
+			'themes/default/templates/COLUMNED_TABLE_ROW_CELL_TICK.tpl',
+			'themes/default/templates/COLUMNED_TABLE_ROW_CELL_LINE.tpl',
 			'themes/default/templates/COLUMNED_TABLE_ROW_CELL_SELECT.tpl',
 			'themes/default/templates/COLUMNED_TABLE_ACTION_DELETE_CATEGORY.tpl',
 			'themes/default/templates/COLUMNED_TABLE_ACTION_DELETE_ENTRY.tpl',
@@ -257,6 +259,8 @@ class Hook_addon_registry_core_abstract_interfaces
 			'COLUMNED_TABLE_ACTION_DOWNLOAD.tpl'=>'columned_table_action_download',
 			'COLUMNED_TABLE_ACTION_TRANSLATE.tpl'=>'administrative__columned_table_action_translate',
 			'COLUMNED_TABLE_ROW_CELL_SELECT.tpl'=>'full_table_screen',
+			'COLUMNED_TABLE_ROW_CELL_TICK.tpl'=>'full_table_screen',
+			'COLUMNED_TABLE_ROW_CELL_LINE.tpl'=>'full_table_screen',
 			'COLUMNED_TABLE_SCREEN.tpl'=>'administrative__columned_table_screen'
 		);
 	}
@@ -741,10 +745,22 @@ class Hook_addon_registry_core_abstract_interfaces
 				'URL'=>placeholder_url()
 			)));
 
+			$line=do_lorem_template('COLUMNED_TABLE_ROW_CELL_LINE',array(
+				'LABEL'=>lorem_phrase(),
+				'NAME'=>placeholder_random_id(),
+				'VALUE'=>lorem_phrase(),
+			));
+
 			$select=do_lorem_template('COLUMNED_TABLE_ROW_CELL_SELECT',array(
 				'LABEL'=>lorem_phrase(),
 				'NAME'=>placeholder_random_id(),
 				'LIST'=>placeholder_options()
+			));
+
+			$tick=do_lorem_template('COLUMNED_TABLE_ROW_CELL_TICK',array(
+				'LABEL'=>lorem_phrase(),
+				'NAME'=>placeholder_random_id(),
+				'VALUE'=>lorem_phrase(),
 			));
 
 			$values=array(
@@ -752,7 +768,9 @@ class Hook_addon_registry_core_abstract_interfaces
 				lorem_word(),
 				lorem_word(),
 				placeholder_time(),
+				$line,
 				$select,
+				$tick,
 				$actions
 			);
 			$cells=new ocp_tempcode();
@@ -774,6 +792,8 @@ class Hook_addon_registry_core_abstract_interfaces
 			lorem_word_2(),
 			lorem_word(),
 			lorem_word_2(),
+			lorem_word(),
+			lorem_word(),
 			lorem_word(),
 			lorem_word()
 		);

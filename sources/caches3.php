@@ -205,8 +205,12 @@ function erase_cached_language()
 		}
 	}
 
+	// Re-initialise language stuff
+	global $LANGS_REQUESTED;
+	$langs_requested_copy=$LANGS_REQUESTED;
 	init__lang();
-	require_all_lang();
+	$LANGS_REQUESTED=$langs_requested_copy;
+	require_all_open_lang_files();
 }
 
 /**

@@ -134,7 +134,7 @@ class Block_main_sortable_table
 			$i=0;
 			$myfile=fopen($path,'rt');
 			$full_header_row=mixed();
-			while (($row=fgetcsv($myfile))!==false)
+			while (($row=fgetcsv($myfile,8192))!==false)
 			{
 				// Fix any bad unicode
 				if (get_charset()=='utf-8')
@@ -376,7 +376,7 @@ class Block_main_sortable_table
 
 		// Final render...
 
-		$id=uniqid('');
+		$id=uniqid('',false);
 
 		$default_sort_column=max(0,empty($map['default_sort_column'])?0:(intval($map['default_sort_column'])-1));
 		$max=empty($map['max'])?20:intval($map['max']);

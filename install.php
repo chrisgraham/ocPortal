@@ -2171,8 +2171,14 @@ function require_code($codename)
 		flush();
 	}
 
+	global $FILE_BASE;
+
+	$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources/'.$codename.'.php'):('/'.preg_replace('#(sources|modules|minimodules)_custom#','${1}',$codename)));
+	if (!file_exists($path))
+		$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources_custom/'.$codename.'.php'):('/'.$codename));
+
 	$REQUIRED_BEFORE[$codename]=1;
-	if (@is_array($FILE_ARRAY))
+	if ((@is_array($FILE_ARRAY)) && ((!isset($_GET['keep_quick_hybrid'])) || (!file_exists($path))))
 	{
 		$file=file_array_get('sources/'.$codename.'.php');
 		$file=str_replace('<'.'?php','',$file);
@@ -2182,11 +2188,6 @@ function require_code($codename)
 	}
 	else
 	{
-		global $FILE_BASE;
-
-		$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources/'.$codename.'.php'):('/'.preg_replace('#(sources|modules|minimodules)_custom#','${1}',$codename)));
-		if (!file_exists($path))
-			$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources_custom/'.$codename.'.php'):('/'.$codename));
 		if (!file_exists($path))
 		{
 			exit('<!DOCTYPE html>'."\n".'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal installer startup error</h1><p>A required installation file, sources/'.$codename.'.php, could not be located. This is almost always due to an incomplete upload of the ocPortal manual installation package, so please check all files are uploaded correctly.</p><p>Only once all ocPortal files are in place can the installer can function. Please note that we have a quick installer package which requires uploading only two files, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');

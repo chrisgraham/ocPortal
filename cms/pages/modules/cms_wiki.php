@@ -542,7 +542,7 @@ class Module_cms_wiki
 		{
 			$child_id=$entry['child_id'];
 			$child_title=$entry['title'];
-			$children.=strval($child_id).'!'.$child_title."\n";
+			$children.=strval($child_id).'='.$child_title."\n";
 		}
 
 		$redir_url=get_param('redirect',NULL);
@@ -599,11 +599,12 @@ class Module_cms_wiki
 		for ($i=0;$i<$no_children;$i++)
 		{
 			$length=strpos($childlinks,"\n",$start)-$start;
-			$newlink=str_replace("\n",'',str_replace("\r",'',substr($childlinks,$start,$length)));
+			$newlink=trim(substr($childlinks,$start,$length));
+			$start=$start+$length+1;
 			if ($newlink!='')
 			{
 				// Find ID and title
-				$q_pos=strpos($newlink,'!');
+				$q_pos=strpos($newlink,'=');
 				$child_id_on_start=(($q_pos!==false) && ($q_pos>0) && (is_numeric(substr($newlink,0,$q_pos))));
 
 				if ($child_id_on_start) // Existing
@@ -612,7 +613,11 @@ class Module_cms_wiki
 					$child_id=intval(substr($newlink,0,$q_pos));
 					if ($child_id==$id) continue;
 					$title_id=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','title',array('id'=>$child_id));
-					if (is_null($title_id)) continue;
+					if (is_null($title_id))
+					{
+						attach_message(do_lang_tempcode('BROKEN_WIKI_CHILD_LINK',strval($child_id)),'warn');
+						continue;
+					}
 					if ($title=='')
 					{
 						$title=get_translated_text($title_id);
@@ -649,7 +654,6 @@ class Module_cms_wiki
 				require_code('notifications2');
 				copy_notifications_to_new_child('wiki',strval($id),strval($child_id));
 			}
-			$start=$start+$length+1;
 		}
 
 		$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_TREE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));

@@ -1683,7 +1683,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 		}
 	} else
 	{
-		$ip_bans=persistent_cache_get('IP_BANS');
+		$ip_bans=function_exists('persistent_cache_get')?persistent_cache_get('IP_BANS'):NULL;
 		if ($ip_bans===NULL)
 		{
 			$ip_bans=$GLOBALS['SITE_DB']->query_select('banned_ip',array('*'),NULL,'',NULL,NULL,true);
@@ -2340,7 +2340,7 @@ function mixed()
  */
 function seo_meta_get_for($type,$id)
 {
-	$cache=persistent_cache_get(array('seo',$type,$id));
+	$cache=function_exists('persistent_cache_get')?persistent_cache_get(array('seo',$type,$id)):NULL;
 	if ($cache!==NULL) return $cache;
 
 	$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('*'),array('meta_for_type'=>$type,'meta_for_id'=>$id),'',1);
@@ -2436,7 +2436,7 @@ function get_zone_default_page($zone_name)
 {
 	if ($zone_name=='_SELF') $zone_name=get_zone_name();
 
-	$p_test=persistent_cache_get(array('ZONE',$zone_name));
+	$p_test=function_exists('persistent_cache_get')?persistent_cache_get(array('ZONE',$zone_name)):NULL;
 	if ($p_test!==NULL)
 		return $p_test['zone_default_page'];
 
@@ -2450,7 +2450,7 @@ function get_zone_default_page($zone_name)
 		if (!isset($ZONE_DEFAULT_PAGES_CACHE[$zone_name]))
 		{
 			$_zone_default_page=NULL;
-			if (function_exists('persistent_cache_set'))
+			if (function_exists('persistent_cache_get'))
 			{
 				$temp=persistent_cache_get('ALL_ZONES_TITLED');
 				if ($temp!==NULL)

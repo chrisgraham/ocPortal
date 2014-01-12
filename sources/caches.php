@@ -196,7 +196,7 @@ function find_cache_on($codename)
 	global $BLOCK_CACHE_ON_CACHE;
 	if ($BLOCK_CACHE_ON_CACHE===NULL)
 	{
-		$BLOCK_CACHE_ON_CACHE=persistent_cache_get('BLOCK_CACHE_ON_CACHE');
+		$BLOCK_CACHE_ON_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('BLOCK_CACHE_ON_CACHE'):NULL;
 		if ($BLOCK_CACHE_ON_CACHE===NULL)
 		{
 			$BLOCK_CACHE_ON_CACHE=list_to_map('cached_for',$GLOBALS['SITE_DB']->query_select('cache_on',array('*')));

@@ -3,6 +3,7 @@
 	
 				<url>
 <<<<<<< HEAD
+<<<<<<< HEAD
 					<loc>http://chrispc/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_4</loc>
 =======
 					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest_9</loc>
@@ -173,6 +174,8 @@
 			  </url>
 			
 				<url>
+=======
+>>>>>>> filedump_improvements
 					<loc>http://192.168.1.100/git/site/index.php?page=news&amp;type=view&amp;id=art%2Ftest</loc>
 					<news:news>
 						<news:publication>
@@ -180,9 +183,15 @@
 							<news:language>en</news:language>
 						</news:publication>
 			
+						<news:access>Registration</news:access>
+					
 						<news:genres></news:genres>
+<<<<<<< HEAD
 						<news:publication_date>2013-11-19T11:50:54+00:00</news:publication_date>
 >>>>>>> sortable_tables
+=======
+						<news:publication_date>2014-01-03T14:33:29+00:00</news:publication_date>
+>>>>>>> filedump_improvements
 						<news:title>test</news:title>
 						<news:keywords></news:keywords>
 			

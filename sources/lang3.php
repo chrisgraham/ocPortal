@@ -147,14 +147,17 @@ function _find_all_langs($even_empty_langs=false)
 		}
 	}	
 	$_dir=opendir(get_file_base().'/lang/');
-	while (false!==($file=readdir($_dir)))
+	if ($_dir!==false)
 	{
-		if ((!isset($_langs[$file])) && ($file[0]!='.') && (!isset($file[5])) && (($file=='EN') || (!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS))))
+		while (false!==($file=readdir($_dir)))
 		{
-			if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
+			if ((!isset($_langs[$file])) && ($file[0]!='.') && (!isset($file[5])) && (($file=='EN') || (!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS))))
+			{
+				if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
+			}
 		}
+		closedir($_dir);
 	}
-	closedir($_dir);
 
 	return $_langs;
 }

@@ -169,7 +169,7 @@ class Hook_paypal
 		$receiver_email=post_param('receiver_email');
 
 		// post back to PayPal system to validate
-		if (!ecommerce_test_mode())
+		if ((!ecommerce_test_mode()) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())/*allow debugging if your test IP was intentionally back-doored*/))
 		{
 			require_code('files');
 			$pure_post=isset($GLOBALS['PURE_POST'])?$GLOBALS['PURE_POST']:$_POST;
@@ -203,7 +203,7 @@ class Hook_paypal
 			if (post_param_integer('recurring')!=1) my_exit(do_lang('IPN_SUB_RECURRING_WRONG'));
 			$txn_id=post_param('subscr_id');
 		}
-		elseif ($txn_type=='subscr_eot')
+		elseif ($txn_type=='subscr_eot' || $txn_type=='subscr_cancel')
 		{
 			$payment_status='SCancelled';
 			$txn_id=post_param('subscr_id').'-c';

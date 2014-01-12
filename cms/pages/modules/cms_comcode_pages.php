@@ -548,7 +548,7 @@ class Module_cms_comcode_pages
 		foreach ($_links as $_link)
 		{
 			$links[]=array(
-				'LINK_IMAGE'=>find_theme_image('bigicons/'.$_link[0]), // TODO: Change on v10
+				'LINK_IMAGE'=>find_theme_image($_link[0]),
 				'LINK_URL'=>build_url(array('page'=>$_link[1][0])+$_link[1][1],$_link[1][2]),
 				'LINK_TEXT'=>$_link[2],
 			);

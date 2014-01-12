@@ -633,10 +633,10 @@ function feof($handle)
  * Gets line from file pointer.
  *
  * @param  resource  The file pointer.
- * @param  integer	The maximum length of the line.
+ * @param  ?integer	The maximum length of the line (NULL: no limit).
  * @return string		The string read.
  */
-function fgets($handle,$length)
+function fgets($handle,$length=NULL)
 {
 	return '';
 }
@@ -4943,11 +4943,11 @@ function fgetc($handle)
  * Gets line from file pointer and parse for CSV fields.
  *
  * @param  resource  File handle.
- * @param  integer	Maximum length of line.
+ * @param  ?integer	The maximum length of the line (NULL: no limit).
  * @param  string		Delimiter.
  * @return ~array		Line (false: error).
  */
-function fgetcsv($handle,$length,$delimiter=',')
+function fgetcsv($handle,$length=NULL,$delimiter=',')
 {
 	return array();
 }
@@ -4956,11 +4956,11 @@ function fgetcsv($handle,$length,$delimiter=',')
  * Gets line from file pointer and strip HTML tags.
  *
  * @param  resource  File handle.
- * @param  integer	Maximum length of line.
+ * @param  ?integer	The maximum length of the line (NULL: no limit).
  * @param  string		Allowable HTML tags separated by spaces.
  * @return ~string	Line (false: error).
  */
-function fgetss($handle,$length,$allowable_tags='')
+function fgetss($handle,$length=NULL,$allowable_tags='')
 {
 	return '';
 }

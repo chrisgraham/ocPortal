@@ -814,7 +814,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			{
 				foreach ($post_params as $param_key=>$param_value)
 				{
-					$_postdetails_params.=((array_key_exists('query',$url_parts)) || (!$first))?('&'.$param_key.'='.rawurlencode($param_value)):($param_key.'='.rawurlencode($param_value));
+					$_postdetails_params.=(!$first)?('&'.$param_key.'='.rawurlencode($param_value)):($param_key.'='.rawurlencode($param_value));
 					$first=false;
 				}
 			}
@@ -1219,7 +1219,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		if (!array_key_exists('host',$base_url_parsed)) $base_url_parsed['host']='127.0.0.1';
 		if (($base_url_parsed['host']==$connect_to) && (function_exists('get_option')) && (get_option('ip_forwarding')=='1')) // For cases where we have IP-forwarding, and a strong firewall (i.e. blocked to our own domain's IP by default)
 		{
-			$connect_to='127.0.0.1'; // Localhost can fail due to IP6
+			$connect_to=ocp_srv('LOCAL_ADDR');
+			if ($connect_to=='') $connect_to='127.0.0.1'; // Localhost can fail due to IP6
 		} elseif (preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i',@ini_get('disable_functions'))==0) $connect_to=gethostbyname($connect_to); // for DNS cacheing
 		$proxy=function_exists('get_option')?get_option('proxy'):NULL;
 		if ($proxy=='') $proxy=NULL;
