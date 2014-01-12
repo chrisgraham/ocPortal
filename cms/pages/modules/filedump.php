@@ -583,7 +583,7 @@ class Module_filedump
 		{
 			if ($search!='')
 			{
-				if ((strpos(basename($place),$search)!==false) || (strpos($description,$search)!==false)) // Directory itself matches
+				if ((strpos(basename(strtolower($place)),strtolower($search))!==false) || (strpos(strtolower($description),strtolower($search))!==false)) // Directory itself matches
 					return true;
 			} else
 			{
@@ -635,7 +635,7 @@ class Module_filedump
 	{
 		if ($search!='')
 		{
-			if ((strpos($filename,$search)===false) && (strpos($_description,$search)===false))
+			if ((strpos(strtolower($filename),strtolower($search))===false) && (strpos(strtolower($_description),strtolower($search))===false))
 				return false;
 		}
 
