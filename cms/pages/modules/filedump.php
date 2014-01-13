@@ -273,7 +273,7 @@ class Module_filedump
 
 				if ($is_directory)
 				{
-					if (!$this->_recursive_search($place.$filename.'/',$_description,$search,$type_filter)) continue;
+					if (!$this->_folder_search($place.$filename.'/',$_description,$search,$type_filter)) continue;
 				} else
 				{
 					if (!$this->_matches_filter($filename,$_description,$search,$type_filter)) continue;
@@ -462,12 +462,22 @@ class Module_filedump
 		$directories[]='';
 		sort($directories);
 		$other_directories=$directories;
+		$filtered_directories=$directories;
 		foreach ($other_directories as $i=>$directory)
 		{
 			if ('/'.$directory.(($directory=='')?'':'/')==$place)
 			{
 				unset($other_directories[$i]);
 				break;
+			}
+		}
+		$filtered_directories_misses=array();
+		foreach ($filtered_directories as $i=>$directory)
+		{
+			if (!$this->_folder_search('/'.$directory.(($directory=='')?'':'/'),'',$search,$type_filter,false))
+			{
+				unset($filtered_directories[$i]);
+				$filtered_directories_misses[]=$directory;
 			}
 		}
 
@@ -564,6 +574,8 @@ class Module_filedump
 			'POST_URL'=>$post_url,
 			'DIRECTORIES'=>$directories,
 			'OTHER_DIRECTORIES'=>$other_directories,
+			'FILTERED_DIRECTORIES'=>$filtered_directories,
+			'FILTERED_DIRECTORIES_MISSES'=>$filtered_directories_misses,
 		));
 	}
 
@@ -575,9 +587,10 @@ class Module_filedump
 	 * @param  string		Search filter.
 	 * @param  string		Type filter.
 	 * @set images videos audios others 
+	 * @param  boolean	Whether to search recursively.
 	 * @return boolean	Whether it passes the filter.
 	 */
-	function _recursive_search($place,$description,$search,$type_filter)
+	function _folder_search($place,$description,$search,$type_filter,$recursive=true)
 	{
 		if ($type_filter=='')
 		{
@@ -607,9 +620,9 @@ class Module_filedump
 
 				$_description=isset($db_row)?get_translated_text($db_row['description']):'';
 
-				if ($is_directory)
+				if (($is_directory) && ($recursive))
 				{
-					if ($this->_recursive_search($place.$filename.'/',$_description,$search,$type_filter)) return true; // Look deeper
+					if ($this->_folder_search($place.$filename.'/',$_description,$search,$type_filter,$recursive)) return true; // Look deeper
 				} else
 				{
 					if ($this->_matches_filter($filename,$_description,$search,$type_filter)) return true; // File under matches

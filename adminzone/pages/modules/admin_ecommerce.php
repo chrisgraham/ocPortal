@@ -37,6 +37,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		var _length_units=document.getElementById('length_units'),_length=document.getElementById('length');
 		var adjust_lengths=function()
 		{
+			// Limits based on https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
 			var length_units=_length_units.options[_length_units.selectedIndex].value,length=_length.value;
 			if ((length_units=='d') && ((length<1) || (length>90)))
 				_length.value=(length<1)?1:90;

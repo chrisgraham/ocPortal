@@ -228,8 +228,10 @@ Aspects of ocPortal that support scheduling include:
 [title="3"]Help -- my web host does not support CRON![/title]
 
 In the event your hosting platform does not allow you access to CRON, there are a number of options available to you.
- - At http://www.mywebcron.com/ you can schedule the CRON script to be called up to every 5 minutes for free. There are others on the market but this one seems to be the easiest to use and didn't fail at all during our testing. Simply Sign up and  add the URL i.e. [tt]http://yourwebsiteaddress.com/data/cron_bridge.php[/tt] to the scheduler and set how often you want it to run.
- - Other free options are http://www.setcronjob.com/ (up to every 5 minutes but the schedule needs to be re-set every week) and http://www.onlinecronjobs.com/ (up to 5 jobs twice a day).
+ - EasyCron provide direct instructions for ocPortal, and free and paid plans: http://www.easycron.com/tutorials/how-to-set-up-cron-job-for-ocportal
+ - Other free options are http://www.mywebcron.com/ (up to every 5 minutes), http://www.setcronjob.com/ (up to every 5 minutes but the schedule needs to be re-set every week) and http://www.onlinecronjobs.com/ (up to 5 jobs twice a day).
+
+Simply sign up and  add the URL i.e. [tt]http://yourwebsiteaddress.com/data/cron_bridge.php[/tt] to the scheduler and set how often you want it to run.
 
 [title="2"]Closed site, and opening[/title]
 [surround]

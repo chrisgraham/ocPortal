@@ -176,6 +176,7 @@ class Hook_addon_registry_filedump
 				'POST_URL'=>placeholder_url(),
 				'DIRECTORIES'=>array(lorem_word()),
 				'OTHER_DIRECTORIES'=>array(lorem_word()),
+				'FILTERED_DIRECTORIES'=>array(lorem_word()),
 			)),NULL,'',true)
 		);
 	}

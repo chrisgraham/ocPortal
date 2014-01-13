@@ -9,7 +9,7 @@
 
 				<p class="left">
 					<label class="accessibility_hidden" for="search_filedump_{$GET*,i}">{!SEARCH}</label>
-					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" type="search" id="search_filedump_{$GET*,i}" name="search" onfocus="placeholder_focus(this);" onblur="placeholder_blur(this);" class="field_input_non_filled" value="{$?,{$IS_EMPTY,{SEARCH}},{!SEARCH},{SEARCH}}" />
+					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" type="search" id="search_filedump_{$GET*,i}" name="search" onfocus="placeholder_focus(this,'{!SEARCH;}');" onblur="placeholder_blur(this,'{!SEARCH;}');" class="{$?,{$IS_EMPTY,{SEARCH}},field_input_non_filled,field_input_filled}" value="{$?,{$IS_EMPTY,{SEARCH}},{!SEARCH},{SEARCH}}" />
 
 					<label class="horiz_field_sep" for="type_filter_filedump_{$GET*,i}">{!SHOW}</label>
 					<select id="type_filter_filedump_{$GET*,i}" name="type_filter">
@@ -22,8 +22,21 @@
 
 					<label class="horiz_field_sep" for="jump_to_{$GET*,i}">{!JUMP_TO_FOLDER}</label>
 					<select id="jump_to_{$GET*,i}" name="place">
-						{+START,LOOP,DIRECTORIES}
+						{+START,IF_NON_EMPTY,{FILTERED_DIRECTORIES_MISSES}}
+							<optgroup label="{!FILEDUMP_FOLDER_MATCHING}">
+						{+END}
+						{+START,LOOP,FILTERED_DIRECTORIES}
 							<option{+START,IF,{$EQ,{$_GET,place,/},/{_loop_var*}{$?,{$IS_NON_EMPTY,{_loop_var}},/}}} selected="selected"{+END} value="/{_loop_var*}{$?,{$IS_NON_EMPTY,{_loop_var}},/}">/{_loop_var*}</option>
+						{+END}
+						{+START,IF_NON_EMPTY,{FILTERED_DIRECTORIES_MISSES}}
+							</optgroup>
+						{+END}
+						{+START,IF_NON_EMPTY,{FILTERED_DIRECTORIES_MISSES}}
+							<optgroup label="{!FILEDUMP_FOLDER_NON_MATCHING}">
+								{+START,LOOP,FILTERED_DIRECTORIES_MISSES}
+									<option{+START,IF,{$EQ,{$_GET,place,/},/{_loop_var*}{$?,{$IS_NON_EMPTY,{_loop_var}},/}}} selected="selected"{+END} value="/{_loop_var*}{$?,{$IS_NON_EMPTY,{_loop_var}},/}">/{_loop_var*}</option>
+								{+END}
+							</optgroup>
 						{+END}
 					</select>
 

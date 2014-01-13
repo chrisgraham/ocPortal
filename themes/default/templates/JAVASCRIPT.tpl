@@ -366,19 +366,21 @@ function undo_staff_unload_action()
 	}
 }
 
-function placeholder_focus(ob)
+function placeholder_focus(ob,def)
 {
-	if (ob.value==ob.defaultValue)
+	if (typeof def=='undefined') def=ob.defaultValue;
+	if (ob.value==def)
 	{
 		ob.value='';
 		ob.className=ob.className.replace('field_input_non_filled','field_input_filled');
 	}
 }
-function placeholder_blur(ob)
+function placeholder_blur(ob,def)
 {
+	if (typeof def=='undefined') def=ob.defaultValue;
 	if (ob.value=='')
 	{
-		ob.value=ob.defaultValue;
+		ob.value=def;
 		ob.className=ob.className.replace('field_input_filled','field_input_non_filled');
 	}
 }
