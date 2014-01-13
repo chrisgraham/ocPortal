@@ -930,7 +930,7 @@ var SortableTable = (function(){
         // If we are going to auto sort on a column, we need to keep track of what kind of sort it will be
         if (args.col!=null) {
           if (args.col==table.getActualCellIndex(c)) {
-            tdata.sorttype=SortableTableSort['"+type+"'];
+            args.sorttype=SortableTableSort[type];
           }
         }
       }

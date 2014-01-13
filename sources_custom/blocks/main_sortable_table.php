@@ -378,7 +378,9 @@ class Block_main_sortable_table
 
 		$id=uniqid('',false);
 
-		$default_sort_column=max(0,empty($map['default_sort_column'])?0:(intval($map['default_sort_column'])-1));
+		$_default_sort_column=max(0,empty($map['default_sort_column'])?0:(intval(str_replace($letters,$numbers,$map['default_sort_column']))-1));
+		$default_sort_column=($columns_display==array())?$_default_sort_column:array_search($_default_sort_column+1,$columns_display);
+		if ($default_sort_column===false) $default_sort_column=0;
 		$max=empty($map['max'])?20:intval($map['max']);
 
 		return do_template('SORTABLE_TABLE',array(
