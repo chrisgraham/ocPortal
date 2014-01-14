@@ -516,7 +516,7 @@ class Module_admin_themes
 		require_code('type_validation');
 		if (!is_alphanumeric($theme))
 		{
-			$theme=preg_replace('#[^\w\-\.\d]#','_',$theme);
+			$theme=preg_replace('#[^\w\-\d]#','_',$theme);
 //			warn_exit(do_lang_tempcode('BAD_CODENAME'));
 		}
 		actual_add_theme($theme);
@@ -605,7 +605,7 @@ class Module_admin_themes
 				require_code('type_validation');
 				if (!is_alphanumeric($to))
 				{
-					$to=preg_replace('#[^\w\-\.\d]#','_',$to);
+					$to=preg_replace('#[^\w\-\d]#','_',$to);
 					//warn_exit(do_lang_tempcode('BAD_CODENAME'));
 				}
 

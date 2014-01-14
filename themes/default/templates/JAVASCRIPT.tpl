@@ -1689,24 +1689,27 @@ function key_pressed(event,key,no_error_if_bad)
 		return false;
 	}
 
-	/* Special cases */
-	if ((key=='-') && (event.keyCode==189)) key=189; /* Safari */
-	if ((key==190) && (event.keyCode==110)) key=110; /* Keypad '.' */
-	if (key=='-') key=109;
-	if ((key=='_') && (event.keyCode==189)) key=189; /* Safari */
-	else if (key=='_') key=0; /* This one is a real shame as the key code 0 is shared by lots of symbols */
+	/* Special cases, we remap what we accept if we detect an alternative was pressed */
+	if ((key=='-') && (event.keyCode==173)) key=173; /* Firefox '-' */
+	if ((key=='-') && (event.keyCode==189)) key=189; /* Safari '-' */
+	if (key=='-') key=109; /* Other browsers '-' */
+	if ((key=='.') && (event.keyCode==190)) key=190; /* Normal '.' */
+	if ((key=='.') && (event.keyCode==110)) key=110; /* Keypad '.' */
+	if ((key=='_') && (event.keyCode==173) && (event.shiftKey)) key=173; /* Firefox '_' */
+	if ((key=='_') && (event.keyCode==189) && (event.shiftKey)) key=189; /* Safari '_' */
+	if (key=='_') key=0; /* Other browsers '_'; This one is a real shame as the key code 0 is shared by lots of symbols */
 
 	/* Where we have an ASCII correspondance or can automap to one */
 	if (key.constructor==String) /* NB we are not case sensitive on letters. And we cannot otherwise pass in characters that need shift pressed. */
 	{
 		if ((event.shiftKey) && (key.toUpperCase()==key.toLowerCase())) return false; /* We are not case sensitive on letters but otherwise we have no way to map the shift key. As we have to assume shift is not pressed for any ASCII based symbol conversion (keycode is same whether shift pressed or not) we cannot handle shifted ones. */
 
-		key=key.toUpperCase().charCodeAt(0);
+		key=key.toUpperCase().charCodeAt(0); // Convert accepted key into ASCII
 
 		if ((event.keyCode) && (event.keyCode>=96) && (event.keyCode<106) && (key>=48) && (key<58)) key+=48; /* Numeric keypad special case */
 	}
 
-	return ((typeof event.keyCode!='undefined') && (event.keyCode==key));
+	return ((typeof event.keyCode!='undefined') && (event.keyCode==key)); // Whether we have a match to what was pressed
 }
 
 function convert_tooltip(element)

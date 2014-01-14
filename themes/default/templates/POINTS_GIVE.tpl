@@ -13,7 +13,7 @@
 	<form title="{!GIVE_POINTS}" method="post" onsubmit="return check_form(this);" action="{GIVE_URL*}#tab__points">
 		<div>
 			<label class="accessibility_hidden" for="give_amount">{!AMOUNT}</label>
-			<input maxlength="8" onkeydown="if (!key_pressed(event,[null,'-','0','1','2','3','4','5','6','7','8','9',190])) return false; return null;" size="7" id="give_amount" class="input_integer_required" value="{!AMOUNT}" onfocus="if (this.value=='{!AMOUNT;}') this.value=''; this.style.color='black';" onblur="if (this.value=='') { this.value='{!AMOUNT;}'; this.style.color='gray'; }" type="text" name="amount" style="color: gray" />
+			<input maxlength="8" onkeydown="if (!key_pressed(event,[null,'-','0','1','2','3','4','5','6','7','8','9','.'])) return false; return null;" size="7" id="give_amount" class="input_integer_required" value="{!AMOUNT}" onfocus="if (this.value=='{!AMOUNT;}') this.value=''; this.style.color='black';" onblur="if (this.value=='') { this.value='{!AMOUNT;}'; this.style.color='gray'; }" type="text" name="amount" style="color: gray" />
 
 			<label class="accessibility_hidden" for="give_reason">{!REASON}</label>
 			<input maxlength="255" size="26" id="give_reason" class="input_line_required" value="{!REASON}" onfocus="if (this.value=='{!REASON;}') this.value=''; this.className='field_input_filled';" onblur="if (this.value=='') { this.value='{!REASON;}'; this.className='field_input_non_filled'; }" type="text" name="reason" class="field_input_non_filled" />
@@ -41,7 +41,7 @@
 		<div>
 			<div class="points_give_shared_options">
 				<label class="accessibility_hidden" for="give_amount">{!AMOUNT}</label>
-				<input maxlength="10" onkeydown="if (!key_pressed(event,[null,'-','0','1','2','3','4','5','6','7','8','9',190])) return false; return null;" size="7" id="give_amount" class="input_integer_required" value="{!AMOUNT}" onfocus="if (this.value=='{!AMOUNT;}') this.value=''; this.style.color='black';" onblur="if (this.value=='') { this.value='{!AMOUNT;}'; this.style.color='gray'; }" type="text" name="amount" style="color: gray" />
+				<input maxlength="10" onkeydown="if (!key_pressed(event,[null,'-','0','1','2','3','4','5','6','7','8','9','.'])) return false; return null;" size="7" id="give_amount" class="input_integer_required" value="{!AMOUNT}" onfocus="if (this.value=='{!AMOUNT;}') this.value=''; this.style.color='black';" onblur="if (this.value=='') { this.value='{!AMOUNT;}'; this.style.color='gray'; }" type="text" name="amount" style="color: gray" />
 
 				<label class="accessibility_hidden" for="give_reason">{!REASON}</label>
 				<input maxlength="255" size="18" id="give_reason" class="input_line_required" value="{!REASON}" onfocus="if (this.value=='{!REASON;}') this.value=''; this.style.color='black';" onblur="if (this.value=='') { this.value='{!REASON;}'; this.style.color='gray'; }" type="text" name="reason" style="color: gray" />

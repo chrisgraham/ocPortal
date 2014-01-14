@@ -304,6 +304,9 @@ class Module_admin_custom_comcode extends standard_aed_module
 	{
 		$tag=post_param('tag');
 
+		require_code('type_validation');
+		if (!is_alphanumeric($tag,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 		global $VALID_COMCODE_TAGS;
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$tag));
 		if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
@@ -343,6 +346,9 @@ class Module_admin_custom_comcode extends standard_aed_module
 	function edit_actualisation($id)
 	{
 		$tag=post_param('tag');
+
+		require_code('type_validation');
+		if (!is_alphanumeric($tag,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		global $VALID_COMCODE_TAGS;
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$tag));

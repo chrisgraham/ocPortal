@@ -177,7 +177,7 @@ function catalogue_file_script()
 function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce=0,$send_view_reports='never')
 {
 	require_code('type_validation');
-	if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+	if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 	// Check doesn't already exist
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>$name));
@@ -290,7 +290,7 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 
 		require_code('type_validation');
-		if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 	}
 
 	$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_description','c_title'),array('c_name'=>$old_name),'',1);

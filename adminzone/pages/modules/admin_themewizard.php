@@ -256,7 +256,7 @@ class Module_admin_themewizard
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMEWIZARD'))));
 
 		require_code('type_validation');
-		if ((!is_alphanumeric($themename)) || (strlen($themename)>40)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if ((!is_alphanumeric($themename,true)) || (strlen($themename)>40)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 		make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark==1,$inherit_css==1);
 		$myfile=@fopen(get_custom_file_base().'/themes/'.filter_naughty($themename).'/theme.ini','wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($themename).'/theme.ini');
 		fwrite($myfile,'title='.$themename.chr(10));

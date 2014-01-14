@@ -953,7 +953,7 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 	if (is_null($add_date)) $add_date=time();
 
 	require_code('type_validation');
-	if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+	if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 	if (!$skip_exists_check)
 	{
@@ -1036,7 +1036,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	if ($old_name!=$name)
 	{
 		require_code('type_validation');
-		if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$name));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));

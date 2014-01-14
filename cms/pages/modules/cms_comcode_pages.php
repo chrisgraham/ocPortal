@@ -269,7 +269,7 @@ class Module_cms_comcode_pages
 				if (substr($file,0,strlen($find_for)+1)==$find_for.'.')
 				{
 					$temp=explode('.',$file);
-					if (isset($temp[2]))
+					if ((isset($temp[2])) && (is_numeric($temp[2])))
 						$filesarray[$zone.':'.$file]=array($zone.'/pages/'.$subdir.'/'.$file,intval($temp[2]));
 				}
 			}
@@ -597,7 +597,7 @@ class Module_cms_comcode_pages
 		if (($zone!='') && (!file_exists(get_file_base().'/'.$zone.'/pages'))) warn_exit(do_lang_tempcode('NO_SUCH_ZONE'));
 		$file=$page_link_parts[1];
 		require_code('type_validation');
-		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if (!is_alphanumeric($file,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		check_edit_permission('high',$resource_owner);
@@ -895,7 +895,7 @@ class Module_cms_comcode_pages
 		if ($file=='') $file=$new_file;
 
 		require_code('type_validation');
-		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if (!is_alphanumeric($file,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$file.'.txt');
 
@@ -903,7 +903,7 @@ class Module_cms_comcode_pages
 
 		if ($renaming_page)
 		{
-			if (!is_alphanumeric($new_file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+			if (!is_alphanumeric($new_file,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 			$langs=find_all_langs(true);
 			$rename_map=array();

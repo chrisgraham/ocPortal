@@ -208,6 +208,9 @@ class Module_admin_menus
 		if ($id=='') $id=get_param('id_new');
 		if (substr($id,0,1)=='_') warn_exit(do_lang_tempcode('MENU_UNDERSCORE_RESERVED'));
 
+		require_code('type_validation');
+		if (!is_alphanumeric($id,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 		$title=get_screen_title('_EDIT_MENU',true,array(escape_html($id)));
 
 		$clickable_sections=(get_param_integer('clickable_sections',0)==1); // This is set to '1 if we have a menu type where pop out sections may be clicked on to be loaded. If we do then we make no UI distinction between page nodes and contracted/expanded, so people don't get compelled to choose a URL for everything, it simply becomes an option for them.
