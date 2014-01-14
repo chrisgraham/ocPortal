@@ -65,6 +65,12 @@ function ocf_member_handle_promotion($member_id=NULL)
 				'join_time'=>time()
 			));
 
+			// Notify the member
+			$subject=do_lang('RANK_PROMOTED_MAIL_SUBJECT',ocf_get_group_name($_p),NULL,NULL,get_lang($member_id));
+			$mail=do_lang('RANK_PROMOTED_MAIL',comcode_escape(ocf_get_group_name($_p)),NULL,NULL,get_lang($member_id));
+			require_code('notifications');
+			dispatch_notification('ocf_rank_promoted',NULL,$subject,$mail,array($member_id));
+
 			// Carefully update run-time cacheing
 			global $USERS_GROUPS_CACHE;
 			foreach (array(true,false) as $a)
