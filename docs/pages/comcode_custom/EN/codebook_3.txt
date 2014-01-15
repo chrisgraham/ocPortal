@@ -158,24 +158,13 @@ There are a number of issues developers face when programming for ocPortal. Our 
 
 [title="3"]XHTML[/title]
 
-Not many developers realise that the XHTML doctype does not tell web browsers to render a page as XHTML. The doctype serves two purposes:
- - It specifies what rules the document should validate with (browsers do not do validation at all, so this is a non-issue from the rendering perspective)
- - It tells browsers to not render in "quirks mode". This is a fudge invented by Microsoft and Netscape programmers, and is nothing to do with XHTML -- it is to do with enabling correct CSS.
+ocPortal is coded against XHTML5, which is the XHTML version of HTML5. In other words, it is a stricter (in a good way) version of HTML5.
 
-XHTML rendering is in-fact enabled via a mime-type. In development mode, ocPortal turns on the XHTML mime type, which means sloppy non-XHTML practices will not work. Many developers are surprised by some of the restrictions this brings up as they thought they were already good XHTML developers and understood how to work with XHTML -- when the reality is they had always been developing for HTML renderers in the past. If you are one of these developers it is important you learn how XHTML really works.
+The extra strictness of XHTML is now largely historic, as no websites (including ocPortal) truly force the browser to enable the full XHTML-strictness, while browser XHTML modes aren't cut-down like they once were.
+Never-the-less, it encourages good coding discipline -- clean, intuitive code.
 
-The two biggest restrictions added by XHTML are as follows:
- - Basic XHTML errors like writing "&" instead of "&amp;" will cause the browser to not be able to render the page fully. In Firefox this is worst, as the whole page will fail to render at all.
- - You cannot use [tt].innerHTML[/tt] and some other Javascript properties. Instead you will need to use the [tt]set_inner_html[/tt] and [tt]get_inner_html[/tt] functions that ocPortal supplies to get around this issue. Our functions have been carefully tuned over the years to work on all browsers, but they correctly work in XML rather than by fiddling with an HTML "byte-dump". Some Javascript libraries use [tt].innerHTML[/tt] a lot, so if you use them with ocPortal and want development mode to work (or want to write XHTML correctly in general) then you'll need to alter them a bit.
-
-If you are seeing an XHTML error because ocPortal has died with some kind of error and it couldn't output fully correct XHTML in the process, you'll want to be able to see the error, but Firefox makes it hard due to it's total failure to render invalid XHTML. You can either look at the XHTML source, or here is a good quick tip:
- - Install this Firefox extension: https://addons.mozilla.org/en-US/firefox/addon/8207
- - If you see an error go to the View menu, the View As submenu, and choose "Web page".
- - You will see the page will re-load (the extension has forced the HTML renderer to be enabled for that page view).
-
-ocPortal tries very hard to output nice errors without ugly XHTML errors, but the following known situations cannot be handled due to limits in PHP:
- - The PHP time limit being exceeded (and development mode intentionally imposes a 10 second time limit). It is possible if you load a page with lots of iframes that the iframes could show XHTML errors due to overall server load being high due to simultaneous stress. Then when you look at the iframe source you see no error because it reloads outside of a stress situation.
- - See also the 'blank pages' section below, as blank pages will result in XHTML errors.
+ocPortal notes:
+ - Ideally do not use the [tt].innerHTML[/tt] Javascript property. Instead you will should use the ocPortal  [tt]set_inner_html[/tt] and [tt]get_inner_html[/tt] functions that ocPortal supplies. Our functions have been carefully tuned over the years to work on all browsers to handle things like embedded Javascript code in a consistent way.
 
 [title="3"]MySQL errors[/title]
 
