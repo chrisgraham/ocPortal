@@ -149,6 +149,7 @@ function js_compile($j,$js_cache_path,$minify=true)
 		}
 		$tpl_params['URL_PATTERNS']=array_values($url_patterns);
 	}
+	require_code('tempcode');
 	$js=do_template(strtoupper($j),$tpl_params);
 	$KEEP_MARKERS=$temp_keep_markers;
 	$SHOW_EDIT_LINKS=$temp_show_edit_links;

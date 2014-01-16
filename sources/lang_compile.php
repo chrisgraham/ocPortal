@@ -157,7 +157,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 			}
 
 			$file=@fopen($cache_path,GOOGLE_APPENGINE?'wb':'ab'); // Will fail if cache dir missing .. e.g. in quick installer
-			if ($file)
+			if ($file!==false)
 			{
 				@flock($file,LOCK_EX);
 				if (!GOOGLE_APPENGINE) ftruncate($file,0);

@@ -568,16 +568,17 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 	}
 	if (!$done)
 	{
-		if (($desire_cache) && (is_file($cache_path))) // Must have been dirty cache, so we need to kill compiled templates too (as lang is compiled into them)
+		require_code('lang_compile');
+		$bad=$bad || require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors);
+
+		// Must have been dirty cache, so we need to kill compiled templates too (as lang is compiled into them)
+		if (($desire_cache) && (is_file($cache_path)) && (filemtime($cache_path)==time()/*Was successfully rebuilt, no perm error*/))
 		{
 			require_code('caches3');
 			global $ERASED_TEMPLATES_ONCE;
 			if (!$ERASED_TEMPLATES_ONCE)
 				erase_cached_templates();
 		}
-
-		require_code('lang_compile');
-		$bad=$bad || require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors);
 	}
 
 	global $LANG_LOADED;

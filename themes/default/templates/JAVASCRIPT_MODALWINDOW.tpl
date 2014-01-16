@@ -101,7 +101,7 @@ function open_link_as_overlay(ob,width,height,target)
 					}
 				};
 
-				var lightbox_image=modal.topWindow.document.getElementById('lightbox_image');
+				var lightbox_image=modal.top_window.document.getElementById('lightbox_image');
 				var sup=lightbox_image.parentNode.parentNode;
 				sup.removeChild(lightbox_image.parentNode);
 				if (sup.childNodes.length!=0)
@@ -116,7 +116,7 @@ function open_link_as_overlay(ob,width,height,target)
 				sup.style.overflow='hidden';
 
 				dims_func();
-				modal.addEvent( window, 'resize', function() { dims_func(); } );
+				modal.add_event( window, 'resize', function() { dims_func(); } );
 			}
 			img.src=a.href;
 		},0);

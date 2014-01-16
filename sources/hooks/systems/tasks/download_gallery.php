@@ -116,6 +116,6 @@ class Hook_task_download_gallery
 
 		create_zip_file($array,false,false,$outfile_path);
 
-		return array('text/csv',array($filename,$outfile_path),$headers,$ini_set);
+		return array('application/octet-stream',array($filename,$outfile_path),$headers,$ini_set);
 	}
 }
