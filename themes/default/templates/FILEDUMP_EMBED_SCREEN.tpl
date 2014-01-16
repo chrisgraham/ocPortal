@@ -35,6 +35,10 @@
 {+END}
 
 {+START,IF_NON_PASSED,GENERATED}
+	<p>
+		{!FILEDUMP_EXISTING_COUNT,{$NUMBER_FORMAT,{EXISTING_COUNT}}}
+	</p>
+
 	<div class="filedump_image_sizes">
 		<p class="lonely_label">
 			{!FILEDUMP_IMAGE_URLS}:

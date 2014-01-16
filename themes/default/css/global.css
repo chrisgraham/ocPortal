@@ -2083,21 +2083,6 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 .pagination a:hover, .results_launcher a:hover, .pagination a.button_depressed {
 	background-color: {$GET,area_hover_2_background} !important;
 }
-{+START,IF,{$NOT,{$MOBILE}}}
-	.pagination a,
-	.pagination span,
-	.results_launcher a,
-	.results_launcher span {
-		margin-{!en_left}: -1px;
-	}
-
-	.pagination a:first-child,
-	.pagination span:first-child,
-	.results_launcher a:first-child,
-	.results_launcher span:first-child {
-		margin-{!en_left}: 0 !important;
-	}
-{+END}
 
 .pagination_load_more {
 	border-top: 1px solid {$GET,standard_border};
@@ -2147,9 +2132,6 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	display: inline-block;
 	text-decoration: none;
 	margin-top: 0;
-	{+START,IF,{$NOT,{$MOBILE}}}
-		margin-{!en_left}: -1px;
-	{+END}
 }
 .pagination a:hover,
 .results_launcher a:hover {
@@ -3285,6 +3267,9 @@ Formulaic bindings between CSS classes and icons, for our nice CSS buttons.
 }
 .buttons__proceed {
 	background-image: url('{$IMG,icons/24x24/buttons/proceed}') !important;
+}
+.menu__adminzone__tools__cleanup {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/tools/cleanup}') !important;
 }
 .buttons__copy {
 	background-image: url('{$IMG,icons/24x24/buttons/copy}') !important;

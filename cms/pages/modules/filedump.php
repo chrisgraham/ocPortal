@@ -102,9 +102,16 @@ class Module_filedump
 	 */
 	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
 	{
-		return array(
+		$ret=array(
 			'misc'=>array('FILEDUMP','menu/cms/filedump'),
 		);
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+		{
+			$ret+=array(
+				'broken'=>array('FIND_BROKEN_FILEDUMP_LINKS','menu/adminzone/tools/cleanup'),
+			);
+		}
+		return $ret;
 	}
 
 	var $title;
@@ -175,6 +182,11 @@ class Module_filedump
 					$this->title=get_screen_title('FILEDUMP_DELETE');
 					break;
 
+				case 'zip':
+					$GLOBALS['OUTPUT_STREAMING']=false;
+
+					$this->title=get_screen_title('FILEDUMP_ZIP');
+
 				default:
 					$this->title=get_screen_title('FILEDUMP_MOVE');
 					break;
@@ -186,6 +198,16 @@ class Module_filedump
 			{
 				breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
 			}
+		}
+
+		if ($type=='broken')
+		{
+			$this->title=get_screen_title('FIND_BROKEN_FILEDUMP_LINKS');
+		}
+
+		if ($type=='_broken')
+		{
+			$this->title=get_screen_title('FIX_BROKEN_FILEDUMP_LINKS');
 		}
 
 		return NULL;
@@ -200,6 +222,7 @@ class Module_filedump
 	{
 		require_lang('filedump');
 		require_css('filedump');
+		require_code('filedump');
 		require_code('files2');
 
 		$type=get_param('type','misc');
@@ -209,6 +232,8 @@ class Module_filedump
 		if ($type=='mass') return $this->do_mass();
 		if ($type=='ac') return $this->do_add_folder();
 		if ($type=='ad') return $this->do_upload();
+		if ($type=='broken') return $this->broken();
+		if ($type=='_broken') return $this->_broken();
 
 		return new ocp_tempcode();
 	}
@@ -240,6 +265,8 @@ class Module_filedump
 		list($order,$direction)=explode(' ',$sort,2);
 		if ($direction!='ASC' && $direction!='DESC') $direction='ASC';
 
+		$recurse=get_param_integer('recurse',0);
+
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=filedump&filter='.$place;
 
 		// Check directory exists
@@ -255,25 +282,33 @@ class Module_filedump
 		}
 
 		// Find all files in the filedump directory
-		$db_rows=list_to_map('name',$GLOBALS['SITE_DB']->query_select('filedump',array('*'),array('path'=>$place)));
-		$handle=opendir(get_custom_file_base().'/uploads/filedump'.$place);
+		$db_rows=array();
 		$files=array();
-		while (false!==($filename=readdir($handle)))
+		$dir_contents=get_directory_contents(get_custom_file_base().'/uploads/filedump'.$place,trim($place,'/'),false,$recurse==1);
+		foreach ($dir_contents as $filename)
 		{
-			if (!should_ignore_file('uploads/filedump'.$place.$filename,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES))
+			$_place=dirname($filename);
+			if ($_place=='.') $_place='';
+			$_place='/'.$_place.(($_place=='')?'':'/');
+			$filename=basename($filename);
+
+			if (!should_ignore_file('uploads/filedump'.$_place.$filename,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES))
 			{
-				$_full=get_custom_file_base().'/uploads/filedump'.$place.$filename;
+				$_full=get_custom_file_base().'/uploads/filedump'.$_place.$filename;
 				if (!file_exists($_full)) continue; // Broken symlink or (?) permission problem
+
+				if (!isset($db_rows[$_place]))
+					$db_rows[$_place]=list_to_map('name',$GLOBALS['SITE_DB']->query_select('filedump',array('*'),array('path'=>$_place)));
 
 				$is_directory=!is_file($_full);
 
-				$db_row=isset($db_rows[$filename])?$db_rows[$filename]:NULL;
+				$db_row=isset($db_rows[$_place][$filename])?$db_rows[$_place][$filename]:NULL;
 
 				$_description=isset($db_row)?get_translated_text($db_row['description']):'';
 
 				if ($is_directory)
 				{
-					if (!$this->_folder_search($place.$filename.'/',$_description,$search,$type_filter)) continue;
+					if (!$this->_folder_search($_place.$filename.'/',$_description,$search,$type_filter)) continue;
 				} else
 				{
 					if (!$this->_matches_filter($filename,$_description,$search,$type_filter)) continue;
@@ -312,6 +347,7 @@ class Module_filedump
 
 				$files[]=array(
 					'filename'=>$is_directory?($filename.'/'):$filename,
+					'place'=>$_place,
 					'description'=>$description,
 					'description_2'=>$description_2,
 					'width'=>$width,
@@ -319,14 +355,15 @@ class Module_filedump
 					'_size'=>$filesize,
 					'size'=>clean_file_size($filesize),
 					'_time'=>$timestamp,
+					'submitter'=>isset($db_row)?$db_row['the_member']:NULL,
 					'time'=>is_null($timestamp)?NULL:get_timezoned_date($timestamp,false),
 					'is_directory'=>$is_directory,
 					'choosable'=>$choosable,
 				);
 			}
 		}
-		closedir($handle);
 
+		// Sorting
 		switch ($order)
 		{
 			case 'time':
@@ -344,6 +381,12 @@ class Module_filedump
 			$files=array_reverse($files);
 		}
 
+		// Pagination
+		$max_rows=count($files);
+		$start=get_param_integer('start',0);
+		$max=get_param_integer('max',50);
+		$files=array_slice($files,$start,$max);
+
 		$thumbnails=array();
 
 		if (count($files)>0) // If there are some files
@@ -352,7 +395,8 @@ class Module_filedump
 			$header_row=columned_table_header_row(array(
 				do_lang_tempcode('FILENAME'),
 				do_lang_tempcode('DESCRIPTION'),
-				do_lang_tempcode('SIZE'),
+				do_lang_tempcode('LINK'),
+				do_lang_tempcode('SUBMITTER'),
 				do_lang_tempcode('DATE_TIME'),
 				do_lang_tempcode('ACTIONS'),
 				do_lang_tempcode('CHOOSE'),
@@ -364,10 +408,11 @@ class Module_filedump
 			foreach ($files as $i=>$file)
 			{
 				$filename=$file['filename'];
+				$_place=$file['place'];
 
 				if ($file['is_directory']) // Directory
 				{
-					$url=build_url(array('page'=>'_SELF','place'=>$place.$filename,'sort'=>$sort,'type_filter'=>$type_filter,'search'=>$search),'_SELF');
+					$url=build_url(array('page'=>'_SELF','place'=>$_place.$filename,'sort'=>$sort,'type_filter'=>$type_filter,'search'=>$search,'recurse'=>$recurse),'_SELF');
 
 					$is_image=false;
 
@@ -376,7 +421,7 @@ class Module_filedump
 					$embed_url=mixed();
 				} else // File
 				{
-					$url=get_custom_base_url().'/uploads/filedump'.str_replace('%2F','/',rawurlencode($place.$filename));
+					$url=get_custom_base_url().'/uploads/filedump'.str_replace('%2F','/',rawurlencode($_place.$filename));
 
 					if (is_image($url))
 					{
@@ -388,16 +433,17 @@ class Module_filedump
 						$image_url=find_theme_image('no_image');
 					}
 
-					$embed_url=build_url(array('page'=>'_SELF','type'=>'embed','place'=>$place,'file'=>$filename),'_SELF');
+					$embed_url=build_url(array('page'=>'_SELF','type'=>'embed','place'=>$_place,'file'=>$filename),'_SELF');
 				}
 
-				$actions=new ocp_tempcode();
+				$choose_action=new ocp_tempcode();
 				if ($file['choosable'])
 				{
-					$actions->attach(do_template('COLUMNED_TABLE_ROW_CELL_TICK',array(
+					$choose_action->attach(do_template('COLUMNED_TABLE_ROW_CELL_TICK',array(
 						'LABEL'=>do_lang_tempcode('CHOOSE'),
 						'NAME'=>'select_'.strval($i),
 						'VALUE'=>rtrim($filename,'/'),
+						'HIDDEN'=>form_input_hidden('place_file_'.strval($i),$_place),
 					)));
 				}
 
@@ -405,6 +451,7 @@ class Module_filedump
 				$thumbnail=do_image_thumb($image_url,$file['description_2'],false,false,NULL,NULL,true);
 				$thumbnails[]=array(
 					'FILENAME'=>$filename,
+					'PLACE'=>$_place,
 					'THUMBNAIL'=>$thumbnail,
 					'IS_IMAGE'=>$is_image,
 					'URL'=>$url,
@@ -417,9 +464,18 @@ class Module_filedump
 					'HEIGHT'=>is_null($file['height'])?'':strval($file['height']),
 					'IS_DIRECTORY'=>$file['is_directory'],
 					'CHOOSABLE'=>$file['choosable'],
-					'ACTIONS'=>$actions,
+					'ACTIONS'=>$choose_action,
 					'EMBED_URL'=>$embed_url,
 				);
+
+				// Editable filename
+				$filename_field=do_template('COLUMNED_TABLE_ROW_CELL_LINE',array(
+					'LABEL'=>do_lang_tempcode('FILENAME'),
+					'NAME'=>'filename_value_'.strval($i),
+					'VALUE'=>rtrim($filename,'/'),
+					'HIDDEN_NAME'=>'filename_file_'.strval($i),
+					'HIDDEN_VALUE'=>rtrim($filename,'/'),
+				));
 
 				// Editable description
 				$description_field=do_template('COLUMNED_TABLE_ROW_CELL_LINE',array(
@@ -438,15 +494,27 @@ class Module_filedump
 				{
 					$size=make_string_tempcode(escape_html($file['size']));
 				}
+				$size=hyperlink($url,$size,!$file['is_directory']/*files go to new window*/);
+
+				// Submitter
+				if (!is_null($file['submitter']))
+				{
+					$owner=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($file['submitter']);
+					if (is_null($owner)) $owner=do_lang_tempcode('DELETED');
+				} else
+				{
+					if (is_null($owner)) $owner=do_lang_tempcode('UNKNOWN');
+				}
 
 				// Listing row
 				$rows->attach(columned_table_row(array(
-					hyperlink($url,escape_html($filename),!$file['is_directory']/*files go to new window*/),
+					$filename_field,
 					$description_field,
 					$size,
+					escape_html($owner),
 					is_null($file['time'])?do_lang_tempcode('NA'):make_string_tempcode(escape_html($file['time'])),
-					is_null($embed_url)?new ocp_tempcode():hyperlink($embed_url,do_lang_tempcode('FILEDUMP_EMBED')),
-					$actions
+					is_null($embed_url)?($file['is_directory']?do_lang_tempcode('IS_DIRECTORY'):new ocp_tempcode()):hyperlink($embed_url,do_lang_tempcode('_FILEDUMP_EMBED')),
+					$choose_action
 				)));
 			}
 
@@ -457,18 +525,20 @@ class Module_filedump
 		}
 
 		// Find directories we could move stuff into / upload to
-		require_code('files2');
 		$directories=get_directory_contents(get_custom_file_base().'/uploads/filedump','',false,true,false);
 		$directories[]='';
 		sort($directories);
 		$other_directories=$directories;
 		$filtered_directories=$directories;
-		foreach ($other_directories as $i=>$directory)
+		if ($recurse==0)
 		{
-			if ('/'.$directory.(($directory=='')?'':'/')==$place)
+			foreach ($other_directories as $i=>$directory)
 			{
-				unset($other_directories[$i]);
-				break;
+				if ('/'.$directory.(($directory=='')?'':'/')==$place)
+				{
+					unset($other_directories[$i]);
+					break;
+				}
 			}
 		}
 		$filtered_directories_misses=array();
@@ -488,12 +558,12 @@ class Module_filedump
 
 			$submit_name=do_lang_tempcode('FILEDUMP_UPLOAD');
 
-			$max=floatval(get_max_file_size());
+			$max_filesize=floatval(get_max_file_size());
 			$text=new ocp_tempcode();
-			if ($max<30.0)
+			if ($max_filesize<30.0)
 			{
 				$config_url=get_upload_limit_config_url();
-				$text->attach(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max/1024.0/1024.0)),escape_html(is_null($config_url)?'':$config_url)));
+				$text->attach(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max_filesize>10.0)?integer_format(intval($max_filesize)):float_format($max_filesize/1024.0/1024.0)),escape_html(is_null($config_url)?'':$config_url)));
 			}
 
 			$fields=new ocp_tempcode();
@@ -558,7 +628,11 @@ class Module_filedump
 			$create_folder_form=new ocp_tempcode();
 		}
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'mass','place'=>$place),'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'mass','redirect'=>get_self_url(true)),'_SELF');
+
+		require_code('templates_pagination');
+		$pagination_listing=pagination(do_lang_tempcode('FILES'),$start,'start',$max,'max',$max_rows,false,5,NULL,'tab__listing');
+		$pagination_thumbnails=pagination(do_lang_tempcode('FILES'),$start,'start',$max,'max',$max_rows,false,5,NULL,'tab__thumbnails');
 
 		return do_template('FILEDUMP_SCREEN',array(
 			'_GUID'=>'3f49a8277a11f543eff6488622949c84',
@@ -571,6 +645,8 @@ class Module_filedump
 			'TYPE_FILTER'=>$type_filter,
 			'SEARCH'=>$search,
 			'SORT'=>$sort,
+			'PAGINATION_LISTING'=>$pagination_listing,
+			'PAGINATION_THUMBNAILS'=>$pagination_thumbnails,
 			'POST_URL'=>$post_url,
 			'DIRECTORIES'=>$directories,
 			'OTHER_DIRECTORIES'=>$other_directories,
@@ -834,7 +910,7 @@ class Module_filedump
 				$image_sizes=array();
 				foreach ($_image_sizes as $width=>$lng_str)
 				{
-					$size_url=$url;
+					$size_url=make_string_tempcode($url);
 					if ($width!=$size[0])
 					{
 						$size_url=symbol_tempcode('THUMBNAIL',array($url,strval($width)));
@@ -851,6 +927,15 @@ class Module_filedump
 			}
 		}
 
+		$_existing_count=find_filedump_links($place.$file);
+		if (isset($_existing_count[$place.$file]))
+		{
+			$existing_count=count($_existing_count[$place.$file]['references']);
+		} else
+		{
+			$existing_count=0;
+		}
+
 		return do_template('FILEDUMP_EMBED_SCREEN',array(
 			'TITLE'=>$this->title,
 			'FORM'=>$form,
@@ -858,6 +943,7 @@ class Module_filedump
 			'RENDERED'=>$rendered,
 			'URL'=>$url,
 			'IMAGE_SIZES'=>$image_sizes,
+			'EXISTING_COUNT'=>strval($existing_count),
 		));
 	}
 
@@ -871,6 +957,14 @@ class Module_filedump
 		$action=post_param('action');
 		switch ($action)
 		{
+			case 'zip':
+				require_code('zip');
+				$file_array=array();
+				break;
+
+			case 'edit':
+				break;
+
 			default:
 				$target=$action;
 				if ($target=='') warn_exit(do_lang_tempcode('SELECT_AN_ACTION'));
@@ -879,16 +973,22 @@ class Module_filedump
 				break;
 		}
 
-		$place=filter_naughty(get_param('place'));
-
+		$files_str='';
 		if ($action!='edit')
 		{
 			$files=array();
 			foreach (array_keys($_POST) as $key)
 			{
-				if (preg_match('#^select_\d+$#',$key)!=0)
+				$matches=array();
+				if (preg_match('#^select_(\d+)$#',$key,$matches)!=0)
 				{
-					$files[]=post_param($key);
+					$place=post_param('place_file_'.$matches[1]);
+
+					$file=post_param($key);
+					$files[]=array($file,$place);
+
+					if ($files_str!='') $files_str.=', ';
+					$files_str.=$file;
 				}
 			}
 		} else
@@ -900,27 +1000,78 @@ class Module_filedump
 				$matches=array();
 				if (preg_match('#^description_file_(\d+)$#',$key,$matches)!=0)
 				{
+					$place=post_param('place_file_'.$matches[1]);
+
 					$file=post_param('description_file_'.$matches[1]);
-					$files[]=$file;
-					$descriptions[$file]=post_param('description_value_'.$matches[1],'');
+					$files[]=array($file,$place);
+
+					if ($files_str!='') $files_str.=', ';
+					$files_str.=$file;
+
+					$description=post_param('description_value_'.$matches[1],'');
+					$descriptions[$place.$file]=$description;
+				}
+			}
+
+			foreach (array_keys($_POST) as $key)
+			{
+				$matches=array();
+				if (preg_match('#^filename_file_(\d+)$#',$key,$matches)!=0)
+				{
+					$place=post_param('place_file_'.$matches[1]);
+
+					$old_filename=post_param('filename_file_'.$matches[1]);
+					$new_filename=post_param('filename_value_'.$matches[1]);
+					if (($new_filename!='') && ($old_filename!=$new_filename))
+					{
+						$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','the_member',array('name'=>$old_filename,'path'=>$place));
+						if (((!is_null($owner)) && ($owner==get_member())) || (has_privilege(get_member(),'delete_anything_filedump')))
+						{
+							$old_filepath=get_custom_file_base().'/uploads/filedump'.$place.$old_filename;
+							$new_filepath=get_custom_file_base().'/uploads/filedump'.$place.$new_filename;
+
+							if (file_exists($new_filepath)) warn_exit(do_lang_tempcode('OVERWRITE_ERROR'));
+							rename($old_filepath,$new_filepath);
+							$GLOBALS['SITE_DB']->query_update('filedump',array('name'=>$new_filename),array('name'=>$old_filename,'path'=>$place),'',1);
+
+							foreach ($files as &$_file)
+							{
+								if ($_file[0]==$old_filename)
+									$_file[0]=$new_filename;
+							}
+
+							foreach ($descriptions as $filepath=>$description)
+							{
+								if ($filepath==$place.$old_filename)
+								{
+									unset($descriptions[$place.$old_filename]);
+									$descriptions[$place.$new_filename]=$description;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
-		if (count($files)==0) warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
+
+		if ($action!='edit')
+		{
+			if (count($files)==0) warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
+		}
 
 		// Confirm
-		if ((post_param_integer('confirmed',0)!=1) && ($action!='edit'/*edit too trivial/specific to need a confirm*/))
+		if ((post_param_integer('confirmed',0)!=1) && ($action!='zip') && ($action!='edit'/*edit too trivial/specific to need a confirm*/))
 		{
 			$url=get_self_url();
 
 			switch ($action)
 			{
 				case 'delete':
-					$text=do_lang_tempcode('CONFIRM_DELETE',implode(', ',$files));
+					$text=do_lang_tempcode('CONFIRM_DELETE',$files_str);
 					break;
 
 				case 'move':
-					$text=do_lang_tempcode('CONFIRM_MOVE',implode(', ',$files),$target);
+					$text=do_lang_tempcode('CONFIRM_MOVE',$files_str,$target);
 					break;
 			}
 
@@ -931,8 +1082,10 @@ class Module_filedump
 		}
 
 		// Perform action(s)
-		foreach ($files as $file)
+		foreach ($files as $_file)
 		{
+			list($file,$place)=$_file;
+
 			$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','the_member',array('name'=>$file,'path'=>$place));
 			if (((!is_null($owner)) && ($owner==get_member())) || (has_privilege(get_member(),'delete_anything_filedump')))
 			{
@@ -941,8 +1094,30 @@ class Module_filedump
 
 				switch ($action)
 				{
+					case 'zip':
+						if ($is_directory)
+						{
+							require_code('files2');
+							foreach (get_directory_contents($path) as $d_path)
+							{
+								$file_array[]=array(
+									'time'=>filemtime($path.'/'.$d_path),
+									'full_path'=>$path.'/'.$d_path,
+									'name'=>ltrim($place.$file,'/').'/'.$d_path,
+								);
+							}
+						} else
+						{
+							$file_array[]=array(
+								'time'=>filemtime($path),
+								'full_path'=>$path,
+								'name'=>ltrim($place.$file,'/'),
+							);
+						}
+						break;
+
 					case 'edit':
-						$description=$descriptions[$file];
+						$description=$descriptions[$place.$file];
 						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','description',array('name'=>$file,'path'=>$place));
 						if (!is_null($test))
 						{
@@ -980,6 +1155,8 @@ class Module_filedump
 
 						$test=$GLOBALS['SITE_DB']->query_update('filedump',array('path'=>$target),array('name'=>$file,'path'=>$place),'',1);
 
+						update_filedump_links($place.$file,$target.$file);
+
 						log_it('FILEDUMP_MOVE',$place.$file,$target.$file);
 
 						break;
@@ -990,9 +1167,18 @@ class Module_filedump
 			}
 		}
 
-		$return_url=build_url(array('page'=>'_SELF','type'=>'misc','place'=>$place),'_SELF');
+		if ($action=='zip')
+		{
+			header('Content-Type: application/octet-stream'.'; authoritative=true;');
+			header('Content-Disposition: filename="filedump-selection.zip"');
 
-		return redirect_screen($this->title,$return_url,do_lang_tempcode('SUCCESS'));
+			create_zip_file($file_array,true);
+			exit();
+		}
+
+		$redirect_url=get_param('redirect');
+
+		return redirect_screen($this->title,$redirect_url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -1015,7 +1201,7 @@ class Module_filedump
 		fix_permissions($path,0777);
 		sync_file($path);
 
-		$return_url=build_url(array('page'=>'_SELF','type'=>'misc','place'=>$place),'_SELF');
+		$redirect_url=build_url(array('page'=>'_SELF','type'=>'misc','place'=>$place),'_SELF');
 
 		// Add description
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','description',array('name'=>$name,'path'=>$place));
@@ -1029,7 +1215,7 @@ class Module_filedump
 
 		log_it('FILEDUMP_CREATE_FOLDER',$name,$place);
 
-		return redirect_screen($this->title,$return_url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($this->title,$redirect_url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**
@@ -1130,8 +1316,76 @@ class Module_filedump
 		{
 			$url_map['filename']=$new_files[0];
 		}
-		$return_url=build_url($url_map,'_SELF');
-		return redirect_screen($this->title,$return_url,do_lang_tempcode('SUCCESS'));
+		$redirect_url=build_url($url_map,'_SELF');
+		return redirect_screen($this->title,$redirect_url,do_lang_tempcode('SUCCESS'));
+	}
+
+	/**
+	 * Find URLs referenced that are broken.
+	 *
+	 * @return tempcode	The UI.
+	 */
+	function broken()
+	{
+		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+			access_denied('ADMIN_ONLY');
+
+		$broken=find_broken_filedump_links();
+
+		require_code('form_templates');
+
+		$hidden=new ocp_tempcode();
+
+		$fields=new ocp_tempcode();
+		$i=0;
+		foreach ($broken as $from=>$to)
+		{
+			$pretty=do_lang_tempcode('FILEDUMP_BROKEN',escape_html(basename($from)));
+			$description=do_lang_tempcode('DESCRIPTION_FILEDUMP_BROKEN',escape_html($from));
+			$name='to_'.strval($i);
+
+			$fields->attach(form_input_line($pretty,$description,$name,$to,false));
+
+			$hidden->attach(form_input_hidden('from_'.strval($i),$from));
+
+			$i++;
+		}
+
+		$url=build_url(array('page'=>'_SELF','type'=>'_broken'),'_SELF');
+
+		return do_template('FORM_SCREEN',array(
+			'TITLE'=>$this->title,
+			'FIELDS'=>$fields,
+			'HIDDEN'=>$hidden,
+			'URL'=>$url,
+			'TEXT'=>'',
+			'SUBMIT_NAME'=>do_lang_tempcode('FIX_BROKEN_FILEDUMP_LINKS'),
+			'SUBMIT_ICON'=>'menu__adminzone__tools__cleanup',
+		));
+	}
+
+	/**
+	 * Fix URLs referenced that are broken.
+	 *
+	 * @return tempcode	The UI.
+	 */
+	function _broken()
+	{
+		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+			access_denied('ADMIN_ONLY');
+
+		foreach (array_keys($_POST) as $key)
+		{
+			$matches=array();
+			if (preg_match('#^to\_(\d+)$#',$key,$matches)!=0)
+			{
+				$from=post_param('from_'.$matches[1]);
+				$to=post_param('to_'.$matches[1]);
+				update_filedump_links($from,$to);
+			}
+		}
+
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 
 }

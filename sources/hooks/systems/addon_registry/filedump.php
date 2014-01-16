@@ -115,6 +115,7 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/occle_fs/home.php',
 			'uploads/filedump/.htaccess',
 			'themes/default/css/filedump.css',
+			'sources/filedump.php',
 		);
 	}
 
@@ -146,6 +147,7 @@ class Hook_addon_registry_filedump
 		$thumbnails=array();
 		$thumbnails[]=array(
 			'FILENAME'=>lorem_word(),
+			'PLACE'=>placeholder_id(),
 			'THUMBNAIL'=>placeholder_image(),
 			'IS_IMAGE'=>true,
 			'URL'=>placeholder_url(),
@@ -173,6 +175,8 @@ class Hook_addon_registry_filedump
 				'TYPE_FILTER'=>'',
 				'SEARCH'=>'',
 				'SORT'=>'time ASC',
+				'PAGINATION_LISTING'=>placeholder_pagination(),
+				'PAGINATION_THUMBNAILS'=>placeholder_pagination(),
 				'POST_URL'=>placeholder_url(),
 				'DIRECTORIES'=>array(lorem_word()),
 				'OTHER_DIRECTORIES'=>array(lorem_word()),
@@ -203,6 +207,7 @@ class Hook_addon_registry_filedump
 					),
 				),
 				'URL'=>placeholder_image_url(),
+				'EXISTING_COUNT'=>placeholder_number(),
 			)),NULL,'',true)
 		);
 	}

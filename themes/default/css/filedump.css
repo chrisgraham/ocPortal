@@ -7,6 +7,10 @@
 	margin-left: 1em !important;
 }
 
+#jump_to_1, #jump_to_2 {
+	max-width: 10em;
+}
+
 .filedump_thumbnails .box {
 	float: left;
 	margin-top: 0;

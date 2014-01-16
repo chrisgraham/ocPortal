@@ -4,12 +4,15 @@
 	<div class="float_surrounder">
 		{+START,IF,{$ADDON_INSTALLED,search}}
 			{$SET,search_url,{$SELF_URL}}
-			<form class="filedump_filter" role="search" title="{!SEARCH}" onsubmit="disable_button_just_clicked(this); action.href+=window.location.hash; if (this.elements['search'].value=='{!SEARCH;*}') this.elements['search'].value='';" action="{$URL_FOR_GET_FORM*,{$GET,search_url},search,type_filter,sort,place}" method="get">
-				{$HIDDENS_FOR_GET_FORM,{$GET,search_url},search,type_filter,sort,place}
+			<form class="filedump_filter" role="search" title="{!SEARCH}" onsubmit="disable_button_just_clicked(this); action.href+=window.location.hash; if (this.elements['search'].value=='{!SEARCH;*}') this.elements['search'].value='';" action="{$URL_FOR_GET_FORM*,{$GET,search_url},search,type_filter,sort,place,recurse}" method="get">
+				{$HIDDENS_FOR_GET_FORM,{$GET,search_url},search,type_filter,sort,place,recurse}
 
 				<p class="left">
 					<label class="accessibility_hidden" for="search_filedump_{$GET*,i}">{!SEARCH}</label>
 					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" type="search" id="search_filedump_{$GET*,i}" name="search" onfocus="placeholder_focus(this,'{!SEARCH;}');" onblur="placeholder_blur(this,'{!SEARCH;}');" class="{$?,{$IS_EMPTY,{SEARCH}},field_input_non_filled,field_input_filled}" value="{$?,{$IS_EMPTY,{SEARCH}},{!SEARCH},{SEARCH}}" />
+
+					<label for="recurse_{$GET*,i}">{!INCLUDE_SUBFOLDERS}</label>
+					<input{+START,IF,{$NEQ,{$_GET,recurse},0}} checked="checked"{+END} type="checkbox" name="recurse" id="recurse_{$GET*,i}" />
 
 					<label class="horiz_field_sep" for="type_filter_filedump_{$GET*,i}">{!SHOW}</label>
 					<select id="type_filter_filedump_{$GET*,i}" name="type_filter">
@@ -74,6 +77,7 @@
 				{+START,LOOP,OTHER_DIRECTORIES}
 					<option value="/{_loop_var*}{+START,IF_NON_EMPTY,{_loop_var}}/{+END}">{!MOVE_TO,/{_loop_var*}}</option>
 				{+END}
+				<option value="zip">{!FILEDUMP_ZIP}</option>
 			</select>
 
 			<input type="submit" value="{!PROCEED}" class="buttons__proceed button_micro" />
@@ -138,6 +142,12 @@
 							</div></div>
 						{+END}
 					</div>
+
+					{+START,IF_NON_EMPTY,{PAGINATION_THUMBNAILS}}
+						<div class="float_surrounder force_margin">
+							{PAGINATION_THUMBNAILS}
+						</div>
+					{+END}
 				{+END}
 				{+START,IF_EMPTY,{THUMBNAILS}}
 					<p class="nothing_here">{!NO_ENTRIES}</p>
@@ -157,6 +167,12 @@
 			<form action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
 				{+START,IF_NON_EMPTY,{LISTING}}
 					{LISTING}
+
+					{+START,IF_NON_EMPTY,{PAGINATION_LISTING}}
+						<div class="float_surrounder force_margin">
+							{PAGINATION_LISTING}
+						</div>
+					{+END}
 				{+END}
 				{+START,IF_EMPTY,{LISTING}}
 					<p class="nothing_here">{!NO_ENTRIES}</p>
@@ -223,9 +239,16 @@
 {+START,IF,{$AND,{$SHOW_DOCS},{$HAS_PRIVILEGE,see_software_docs}}}
 	{+START,INCLUDE,STAFF_ACTIONS}
 		STAFF_ACTIONS_TITLE={!STAFF_ACTIONS}
+
 		1_URL={$TUTORIAL_URL*,tut_collaboration}
 		1_TITLE={!HELP}
 		1_REL=help
 		1_ICON=menu/pages/help
+
+		{+START,IF,{$IS_ADMIN}}
+			2_URL={$PAGE_LINK,_SELF:_SELF:broken}
+			2_TITLE={!FIND_BROKEN_FILEDUMP_LINKS}
+			2_ICON=menu/adminzone/tools/cleanup
+		{+END}
 	{+END}
 {+END}
