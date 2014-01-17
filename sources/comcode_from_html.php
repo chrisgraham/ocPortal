@@ -251,9 +251,9 @@ function debuttonise($matches)
 function convert_html_headers_to_titles($semihtml)
 {
 	$array_html_preg_replace=array();
-	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
-	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
-	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*>\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*>\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title">\s*<span class="inner">(.*)</span>\s*</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
 	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
 	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
 	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
@@ -316,7 +316,7 @@ function semihtml_to_comcode($semihtml,$force=false)
 		if ($count2==$count) // All HTML or attachments or headers, so we can encode mostly as 'html' (as opposed to 'semihtml')
 		{
 			if ($semihtml!='') $semihtml='[html]'.$semihtml.'[/html]';
-			$semihtml=preg_replace('#<h1[^>]*><span class="inner">(.*)</span></h1>#Us','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
+			$semihtml=preg_replace('#<h1[^>]*>\s*<span class="inner">(.*)</span>\s*</h1>#Us','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
 			$semihtml=preg_replace('#<h1[^>]*>(.*)</h1>#Us','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
 			$semihtml=str_replace('[attachment','[/html][semihtml][attachment',str_replace('[/attachment]','[/attachment][/semihtml][html]',$semihtml));
 			$semihtml=str_replace('[/html][html]','',$semihtml);
@@ -324,7 +324,7 @@ function semihtml_to_comcode($semihtml,$force=false)
 			return $semihtml;
 		}
 		if ($semihtml!='') $semihtml='[semihtml]'.$semihtml.'[/semihtml]';
-		$semihtml=preg_replace('#<h1[^>]*><span class="inner">(.*)</span></h1>#Us','[title]${1}[/title]',$semihtml);
+		$semihtml=preg_replace('#<h1[^>]*>\s*<span class="inner">(.*)</span>\s*</h1>#Us','[title]${1}[/title]',$semihtml);
 		$semihtml=preg_replace('#<h1[^>]*>(.*)</h1>#Us','[title]${1}[/title]',$semihtml);
 		return $semihtml;
 	}
