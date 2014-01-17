@@ -1045,10 +1045,13 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 		$GLOBALS['SITE_DB']->query_update('images',array('cat'=>$name),array('cat'=>$old_name));
 		$GLOBALS['SITE_DB']->query_update('videos',array('cat'=>$name),array('cat'=>$old_name));
 		$GLOBALS['SITE_DB']->query_update('galleries',array('parent_id'=>$name),array('parent_id'=>$old_name));
-		$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'gallery'));
-		foreach ($types as $type)
+		if (addon_installed('awards'))
 		{
-			$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$name),array('content_id'=>$old_name,'a_type_id'=>$type['id']));
+			$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'gallery'));
+			foreach ($types as $type)
+			{
+				$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$name),array('content_id'=>$old_name,'a_type_id'=>$type['id']));
+			}
 		}
 
 		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$name),array('cv_value'=>$old_name,'cf_type'=>'gallery'));
