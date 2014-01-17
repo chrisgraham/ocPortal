@@ -12,7 +12,7 @@
 					<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" size="25" type="search" id="search_filedump_{$GET*,i}" name="search" onfocus="placeholder_focus(this,'{!SEARCH;}');" onblur="placeholder_blur(this,'{!SEARCH;}');" class="{$?,{$IS_EMPTY,{SEARCH}},field_input_non_filled,field_input_filled}" value="{$?,{$IS_EMPTY,{SEARCH}},{!SEARCH},{SEARCH}}" />
 
 					<label for="recurse_{$GET*,i}">{!INCLUDE_SUBFOLDERS}</label>
-					<input{+START,IF,{$NEQ,{$_GET,recurse},0}} checked="checked"{+END} type="checkbox" name="recurse" id="recurse_{$GET*,i}" />
+					<input{+START,IF,{$NEQ,{$_GET,recurse},0}} checked="checked"{+END} type="checkbox" name="recurse" id="recurse_{$GET*,i}" value="1" />
 
 					<label class="horiz_field_sep" for="type_filter_filedump_{$GET*,i}">{!SHOW}</label>
 					<select id="type_filter_filedump_{$GET*,i}" name="type_filter">

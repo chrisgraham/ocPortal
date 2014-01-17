@@ -355,8 +355,8 @@ class Module_filedump
 					'_size'=>$filesize,
 					'size'=>clean_file_size($filesize),
 					'_time'=>$timestamp,
-					'submitter'=>isset($db_row)?$db_row['the_member']:NULL,
 					'time'=>is_null($timestamp)?NULL:get_timezoned_date($timestamp,false),
+					'submitter'=>isset($db_row)?$db_row['the_member']:NULL,
 					'is_directory'=>$is_directory,
 					'choosable'=>$choosable,
 				);
@@ -503,7 +503,7 @@ class Module_filedump
 					if (is_null($owner)) $owner=do_lang_tempcode('DELETED');
 				} else
 				{
-					if (is_null($owner)) $owner=do_lang_tempcode('UNKNOWN');
+					$owner=do_lang_tempcode('UNKNOWN');
 				}
 
 				// Listing row
@@ -511,7 +511,7 @@ class Module_filedump
 					$filename_field,
 					$description_field,
 					$size,
-					escape_html($owner),
+					$owner,
 					is_null($file['time'])?do_lang_tempcode('NA'):make_string_tempcode(escape_html($file['time'])),
 					is_null($embed_url)?($file['is_directory']?do_lang_tempcode('IS_DIRECTORY'):new ocp_tempcode()):hyperlink($embed_url,do_lang_tempcode('_FILEDUMP_EMBED')),
 					$choose_action
