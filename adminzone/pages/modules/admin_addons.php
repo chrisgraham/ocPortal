@@ -145,6 +145,8 @@ class Module_admin_addons
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addons';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';
 
+		if (function_exists('set_time_limit')) @set_time_limit(180); // So it can scan inside addons
+
 		$title=get_screen_title('ADDONS');
 
 		$addons_installed=find_installed_addons();
