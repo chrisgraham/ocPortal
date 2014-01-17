@@ -40,9 +40,14 @@
 	background-position: center left;
 	background-repeat: no-repeat;
 }
-.sortable_table select.table-autofilter {
+.sortable_table select.table-autofilter, .sortable_table input.table-autofilter {
 	font-size: smaller;
-	max-width: 9em;
 	float: right;
 	margin-top: 0;
+}
+.sortable_table select.table-autofilter {
+	max-width: 9em;
+}
+.sortable_table input.table-autofilter {
+	width: 8em;
 }

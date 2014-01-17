@@ -226,6 +226,7 @@ class Block_main_sortable_table
 					'LABEL'=>isset($labels[$j])?$labels[$j]:$_header,
 					'SORTABLE_TYPE'=>NULL,
 					'FILTERABLE'=>NULL,
+					'SEARCHABLE'=>NULL,
 				);
 			}
 			foreach ($columns_tooltip as $j=>$pos)
@@ -307,6 +308,7 @@ class Block_main_sortable_table
 							'LABEL'=>isset($labels[$j])?$labels[$j]:titleify(preg_replace('#^'.preg_quote($prefix,'#').'#','',$key)),
 							'SORTABLE_TYPE'=>NULL,
 							'FILTERABLE'=>NULL,
+							'SEARCHABLE'=>NULL,
 						);
 					}
 
@@ -342,7 +344,9 @@ class Block_main_sortable_table
 			{
 				$values[$i]=$this->apply_formatting($values[$i],$headers[$j]['SORTABLE_TYPE']);
 			}
-			$header['FILTERABLE']=(count($values)>20)?array():$values;
+			$too_much_to_filter=(count($values)>20);
+			$header['FILTERABLE']=($too_much_to_filter)?array():$values;
+			$header['SEARCHABLE']=($too_much_to_filter) && ($header['SORTABLE_TYPE']=='alphanumeric');
 		}
 
 		// Create template-ready data

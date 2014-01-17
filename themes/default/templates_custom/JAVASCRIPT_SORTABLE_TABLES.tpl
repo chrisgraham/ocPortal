@@ -234,6 +234,8 @@ var SortableTable = (function(){
     AutoFilterClassName:"table-autofilter",
     FilteredClassName:"table-filtered",
     FilterableClassName:"table-filterable",
+    SearchableClassName:"table-searchable",
+    SearchableSubstringsClassName:"table-searchable-with-substrings",
     FilteredRowcountPrefix:"table-filtered-rowcount:",
     RowcountPrefix:"table-rowcount:",
     FilterAllLabel:"{!sortable_tables:FILTER_ALL_LABEL#}",
@@ -600,9 +602,10 @@ var SortableTable = (function(){
   /**
   * Apply a filter to rows in a table and hide those that do not match.
   */
-  table.filter = function(o,filters,args) {
+  table.filter = function(o,filters,args,substring) {
     var cell;
     args = args || {};
+    substring = substring && true;
 
     var t = this.resolve(o,args);
     var tdata = this.tabledata[t.id];
@@ -619,7 +622,7 @@ var SortableTable = (function(){
       }
       // Also allow for a regular input
       if (typeof filters.nodeName!='undefined' && filters.nodeName.toUpperCase()=="INPUT" && filters.type=="text") {
-        filters={ 'filter':"/^"+filters.value+"/" };
+        filters={ 'filter':substring?("/"+filters.value+"/i"):("/^"+filters.value+"/i") };
       }
       // Force filters to be an array
       if (typeof(filters)=="object" && !filters.length) {
@@ -631,8 +634,8 @@ var SortableTable = (function(){
         var filter = filters[i];
         if (typeof(filter.filter)=="string") {
           // If a filter string is like "/expr/" then turn it into a Regex
-          if (filter.filter.match(/^\/(.*)\/$/)) {
-            filter.filter = new RegExp(RegExp.$1);
+          if (filter.filter.match(/^\/(.*)\/(\w*)$/)) {
+            filter.filter = new RegExp(RegExp.$1,RegExp.$2);
             filter.filter.regex=true;
           }
           // If filter string is like "function (x) { ... }" then turn it into a function
@@ -791,7 +794,10 @@ var SortableTable = (function(){
     // Loop through all THEADs and add/remove filtered class names
     this.processInnerCells(t,"THEAD",
       function(c) {
-        ((tdata.filters && def(tdata.filters[table.getCellIndex(c)]) && hasClass(c,table.FilterableClassName))?addClass:removeClass)(c,table.FilteredClassName);
+        if (tdata.filters && def(tdata.filters[table.getCellIndex(c)])) {
+          (hasClass(c,table.FilterableClassName)?addClass:removeClass)(c,table.FilteredClassName);
+          (hasClass(c,table.SearchableClassName)?addClass:removeClass)(c,table.SearchableClassName);
+        }
       }
     );
 
@@ -801,7 +807,7 @@ var SortableTable = (function(){
     }
 
     // Calculate some values to be returned for info and updating purposes
-    var pagecount = Math.floor(unfilteredrowcount/pagesize)+1;
+    var pagecount = Math.ceil(unfilteredrowcount/pagesize);
     if (def(page)) {
       // Update the page number/total containers if they exist
       if (tdata.container_number) {
@@ -1022,6 +1028,11 @@ var SortableTable = (function(){
             cell.innerHTML += " "+sel;
           }
         }
+      }
+
+      if (hasClass(cell,table.SearchableClassName)) {
+        var sel = '<input placeholder="{!SEARCH}" type="text" onkeyup="var _this=this; window.setTimeout(function() { SortableTable.filter(_this,_this,null,'+(hasClass(cell,table.SearchableSubstringsClassName)?'true':'false')+'); },0);" onclick="SortableTable.cancelBubble(event)" class="'+table.AutoFilterClassName+'" />';
+        cell.innerHTML += " "+sel;
       }
     });
     if (val = classValue(t,table.FilteredRowcountPrefix)) {
