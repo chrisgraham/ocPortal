@@ -314,15 +314,6 @@ class Module_filedump
 					if (!$this->_matches_filter($filename,$_description,$search,$type_filter)) continue;
 				}
 
-				if ($_description!='')
-				{
-					$description=make_string_tempcode($_description);
-					$description_2=$description;
-				} else
-				{
-					$description=new ocp_tempcode();
-					$description_2=($is_directory)?do_lang_tempcode('FOLDER'):new ocp_tempcode();
-				}
 				if ($is_directory)
 				{
 					$filesize=get_directory_size($_full);
@@ -332,33 +323,15 @@ class Module_filedump
 					$filesize=filesize($_full);
 					$timestamp=filemtime($_full);
 				}
-				$choosable=((!is_null($db_row)) && ($db_row['the_member']==get_member())) || (has_privilege(get_member(),'delete_anything_filedump'));
-
-				$width=mixed();
-				$height=mixed();
-				if (is_image($_full))
-				{
-					$dims=@getimagesize($_full);
-					if ($dims!==false)
-					{
-						list($width,$height)=$dims;
-					}
-				}
 
 				$files[]=array(
 					'filename'=>$is_directory?($filename.'/'):$filename,
 					'place'=>$_place,
-					'description'=>$description,
-					'description_2'=>$description_2,
-					'width'=>$width,
-					'height'=>$height,
+					'_description'=>$_description,
 					'_size'=>$filesize,
-					'size'=>clean_file_size($filesize),
 					'_time'=>$timestamp,
-					'time'=>is_null($timestamp)?NULL:get_timezoned_date($timestamp,false),
 					'submitter'=>isset($db_row)?$db_row['the_member']:NULL,
 					'is_directory'=>$is_directory,
-					'choosable'=>$choosable,
 				);
 			}
 		}
@@ -409,6 +382,41 @@ class Module_filedump
 			{
 				$filename=$file['filename'];
 				$_place=$file['place'];
+				$_full=get_custom_file_base().'/uploads/filedump'.$_place.$filename;
+
+				$_description=$file['_description'];
+				if ($_description!='')
+				{
+					$description=make_string_tempcode($_description);
+					$description_2=$description;
+				} else
+				{
+					$description=new ocp_tempcode();
+					$description_2=($is_directory)?do_lang_tempcode('FOLDER'):new ocp_tempcode();
+				}
+
+				$choosable=((!is_null($db_row)) && ($db_row['the_member']==get_member())) || (has_privilege(get_member(),'delete_anything_filedump'));
+
+				$width=mixed();
+				$height=mixed();
+				if (is_image($_full))
+				{
+					$dims=@getimagesize($_full);
+					if ($dims!==false)
+					{
+						list($width,$height)=$dims;
+					}
+				}
+
+				$file+=array(
+					'description'=>$description,
+					'description_2'=>$description_2,
+					'width'=>$width,
+					'height'=>$height,
+					'size'=>clean_file_size($file['_size']),
+					'time'=>is_null($file['_time'])?NULL:get_timezoned_date($file['_time'],false),
+					'choosable'=>$choosable,
+				);
 
 				if ($file['is_directory']) // Directory
 				{
@@ -898,7 +906,7 @@ class Module_filedump
 			$size=@getimagesize($path);
 			if ($size!==false)
 			{
-				$ratio=floatval($size[0])/floatval($size[1]);
+				$ratio=floatval($size[1])/floatval($size[0]);
 
 				$_image_sizes=array();
 				if (intval(get_option('thumb_width'))<$size[0])
@@ -1034,10 +1042,10 @@ class Module_filedump
 							rename($old_filepath,$new_filepath);
 							$GLOBALS['SITE_DB']->query_update('filedump',array('name'=>$new_filename),array('name'=>$old_filename,'path'=>$place),'',1);
 
-							foreach ($files as &$_file)
+							foreach ($files as $i=>$_file)
 							{
-								if ($_file[0]==$old_filename)
-									$_file[0]=$new_filename;
+								if ($_file[1].$_file[0]==$place.$old_filename)
+									$files[$i][0]=$new_filename;
 							}
 
 							foreach ($descriptions as $filepath=>$description)
@@ -1351,6 +1359,8 @@ class Module_filedump
 			$i++;
 		}
 
+		if (count($broken)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
+
 		$url=build_url(array('page'=>'_SELF','type'=>'_broken'),'_SELF');
 
 		return do_template('FORM_SCREEN',array(
@@ -1381,7 +1391,8 @@ class Module_filedump
 			{
 				$from=post_param('from_'.$matches[1]);
 				$to=post_param('to_'.$matches[1]);
-				update_filedump_links($from,$to);
+				if ($to!='')
+					update_filedump_links($from,$to);
 			}
 		}
 

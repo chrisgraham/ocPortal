@@ -21,37 +21,37 @@
 /**
  * Find broken filedump links, and try and find how to fix it.
  *
- * @return array		Filedump broken links, to replacement URL (or NULL).
+ * @return array		Filedump broken links, to replacement path (or NULL).
  */
 function find_broken_filedump_links()
 {
-	$urls_broken=array();
+	$paths_broken=array();
 
 	require_code('files2');
 	$all_files=get_directory_contents(get_custom_file_base().'/uploads/filedump','',false,true);
 
-	$urls_used=find_filedump_links();
-	foreach ($urls_used as $url=>$details)
+	$paths_used=find_filedump_links();
+	foreach ($paths_used as $path=>$details)
 	{
 		if (!$details['exists'])
 		{
 			foreach ($all_files as $file)
 			{
-				if (basename(rawurldecode($file))==basename($url))
+				if (basename($file)==basename($path))
 				{
-					$urls_broken[$url]='/'.$file;
+					$paths_broken[$path]='/'.$file;
 					continue 2;
 				}
 			}
-			$urls_broken[$url]=NULL;
+			$paths_broken[$path]=NULL;
 		}
 	}
 
-	return $urls_broken;
+	return $paths_broken;
 }
 
 /**
- * Re-map pre-existing filedump links from one URL to another.
+ * Re-map pre-existing filedump links from one path to another.
  *
  * @param  string		Old path (give a path relative to uploads/filedump, with leading slash)
  * @param  string		New path (give a path relative to uploads/filedump, with leading slash)
@@ -61,15 +61,18 @@ function update_filedump_links($from,$to)
 	if ($to=='') warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	if (substr($to,0,1)!='/') $to='/'.$to;
 
-	$from=str_replace('%2F','/',urlencode($from));
-	$to=str_replace('%2F','/',urlencode($to));
-
 	$current=find_filedump_links($from);
+
+	$from=str_replace('%2F','/',rawurlencode($from));
+	$to=str_replace('%2F','/',rawurlencode($to));
 
 	$patterns=array(
 		'#"uploads/filedump('.preg_quote($from,'#').')"#'=>'"uploads/filedump'.$to.'"',
 		'#\]uploads/filedump('.preg_quote($from,'#').')\[#'=>']uploads/filedump'.$to.'[',
 		'#\]url_uploads/filedump('.preg_quote($from,'#').')\[#'=>']url_uploads/filedump'.$to.'[',
+		'#"'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump('.preg_quote($from,'#').')"#'=>'"'.get_custom_base_url().'/uploads/filedump'.$to.'"',
+		'#\]'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump('.preg_quote($from,'#').')\[#'=>']'.get_custom_base_url().'/uploads/filedump'.$to.'[',
+		'#\]url_'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump('.preg_quote($from,'#').')\[#'=>']url_'.get_custom_base_url().'/uploads/filedump'.$to.'[',
 	);
 
 	foreach ($current as $details)
@@ -81,7 +84,7 @@ function update_filedump_links($from,$to)
 				$old_comcode=get_translated_text(intval($ref));
 			} else
 			{
-				list($zone,$page,$lang)=explode(':'.$ref,3);
+				list($zone,$page,$lang)=explode(':',$ref,3);
 				$path=get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$page.'.txt';
 				$old_comcode=file_get_contents($path);
 			}
@@ -94,7 +97,7 @@ function update_filedump_links($from,$to)
 
 			if (is_numeric($ref))
 			{
-				lang_remap(intval($ref),$new_comcode);
+				lang_remap_comcode(intval($ref),$new_comcode);
 			} else
 			{
 				file_put_contents($path,$new_comcode);
@@ -111,9 +114,9 @@ function update_filedump_links($from,$to)
  */
 function find_filedump_links($focus='')
 {
-	$urls_used=array();
+	$paths_used=array();
 
-	$_focus=str_replace('%2F','/',urlencode($focus));
+	$_focus=str_replace('%2F','/',rawurlencode($focus));
 
 	// Comcode
 	$query='SELECT id,text_original FROM '.get_table_prefix().'translate WHERE';
@@ -128,7 +131,7 @@ function find_filedump_links($focus='')
 	$results=$GLOBALS['SITE_DB']->query($query);
 	foreach ($results as $r)
 	{
-		extract_filedump_links($r['text_original'],strval($r['id']),$focus,$urls_used);
+		extract_filedump_links($r['text_original'],strval($r['id']),$focus,$paths_used);
 	}
 
 	// Comcode pages
@@ -146,13 +149,13 @@ function find_filedump_links($focus='')
 				if (is_file($path))
 				{
 					$comcode=file_get_contents($path);
-					extract_filedump_links($comcode,$zone.':'.$page.':'.$lang,$focus,$urls_used);
+					extract_filedump_links($comcode,$zone.':'.$page.':'.$lang,$focus,$paths_used);
 				}
 			}
 		}
 	}
 
-	return $urls_used;
+	return $paths_used;
 }
 
 /**
@@ -161,30 +164,32 @@ function find_filedump_links($focus='')
  * @param  string		Comcode to scan
  * @param  ID_TEXT	An identifier for where this Comcode was from
  * @param  string		Focus on a particular filedump file (give a path relative to uploads/filedump), with leading slash (blank: no filter)
- * @param  array		URLs found (passed by reference)
+ * @param  array		Paths found (passed by reference)
  */
-function extract_filedump_links($comcode,$identifier,$focus,&$urls_used)
+function extract_filedump_links($comcode,$identifier,$focus,&$paths_used)
 {
-	$_focus=str_replace('%2F','/',urlencode($focus));
+	$_focus=str_replace('%2F','/',rawurlencode($focus));
 
-	static $patterns=NULL;
-	if ($patterns===NULL)
+	if ($focus=='')
 	{
-		if ($focus=='')
-		{
-			$patterns=array(
-				'#"uploads/filedump(/[^"]+)"#',
-				'#\]uploads/filedump(/[^\[\]]+)\[#',
-				'#\]url_uploads/filedump(/[^\[\]]+)\[#',
-			);
-		} else
-		{
-			$patterns=array(
-				'#"uploads/filedump('.preg_quote($_focus,'#').')"#',
-				'#\]uploads/filedump('.preg_quote($_focus,'#').')\[#',
-				'#\]url_uploads/filedump('.preg_quote($_focus,'#').')\[#',
-			);
-		}
+		$patterns=array(
+			'#"uploads/filedump(/[^"]+)"#',
+			'#\]uploads/filedump(/[^\[\]]+)\[#',
+			'#\]url_uploads/filedump(/[^\[\]]+)\[#',
+			'#"'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump(/[^"]+)"#',
+			'#\]'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump(/[^\[\]]+)\[#',
+			'#\]url_'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump(/[^\[\]]+)\[#',
+		);
+	} else
+	{
+		$patterns=array(
+			'#"uploads/filedump('.preg_quote($_focus,'#').')"#',
+			'#\]uploads/filedump('.preg_quote($_focus,'#').')\[#',
+			'#\]url_uploads/filedump('.preg_quote($_focus,'#').')\[#',
+			'#"'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump('.preg_quote($_focus,'#').')"#',
+			'#\]'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump('.preg_quote($_focus,'#').')\[#',
+			'#\]url_'.preg_quote(get_custom_base_url(),'#').'/uploads/filedump('.preg_quote($_focus,'#').')\[#',
+		);
 	}
 
 	foreach ($patterns as $pattern)
@@ -193,20 +198,20 @@ function extract_filedump_links($comcode,$identifier,$focus,&$urls_used)
 		$num_matches=preg_match_all($pattern,$comcode,$matches);
 		for ($i=0;$i<$num_matches;$i++)
 		{
-			$decoded=html_entity_decode($matches[1][$i],ENT_QUOTES,get_charset()); // This is imperfect (raw naming that coincidentally matches entity encoding will break), but good enough
+			$decoded=urldecode(html_entity_decode($matches[1][$i],ENT_QUOTES,get_charset())); // This is imperfect (raw naming that coincidentally matches entity encoding will break), but good enough
 
-			$path=get_custom_file_base().'/uploads/filedump'.urldecode($decoded);
+			$path=get_custom_file_base().'/uploads/filedump'.$decoded;
 
-			if (!isset($urls_used[$decoded]))
+			if (!isset($paths_used[$decoded]))
 			{
-				$urls_used[$decoded]=array(
+				$paths_used[$decoded]=array(
 					'exists'=>is_file($path),
 					'references'=>array(),
 				);
 			}
 
-			if (!in_array($identifier,$urls_used[$decoded]['references']))
-				$urls_used[$decoded]['references'][]=$identifier;
+			if (!in_array($identifier,$paths_used[$decoded]['references']))
+				$paths_used[$decoded]['references'][]=$identifier;
 		}
 	}
 }
