@@ -119,8 +119,11 @@ function find_filedump_links($focus='')
 	$_focus=str_replace('%2F','/',rawurlencode($focus));
 
 	// Comcode
-	$query='SELECT id,text_original FROM '.get_table_prefix().'translate WHERE';
-	$query.=' MATCH(text_original) AGAINST (\'filedump\')';
+	$query='SELECT id,text_original FROM '.get_table_prefix().'translate WHERE 1=1';
+	if (db_has_full_text($GLOBALS['SITE_DB']->connection_read)) // For efficiency, pre-filter via full-text search
+	{
+		$query.=' AND '.preg_replace('#\?#','text_original',db_full_text_assemble('filedump',false));
+	}
 	if ($focus=='')
 	{
 		$query.=' AND text_original LIKE \''.db_encode_like('%uploads/filedump/%').'\'';
