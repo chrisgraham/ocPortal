@@ -112,6 +112,14 @@
 			{$SET,i,1}
 			{$GET,file_dump_search,1}
 
+			{+START,IF_NON_EMPTY,{$_GET,filename}}
+				<script type="text/javascript">// <![CDATA[
+					add_event_listener_abstract(window,'load',function () {
+						faux_open('{$PAGE_LINK;,_SELF:_SELF:embed:place={$_GET&,place}:file={$_GET&,filename}:wide_high=1}',null,'width=950;height=700','_top');
+					} );
+				//]]></script>
+			{+END}
+
 			<form action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
 				{+START,IF_NON_EMPTY,{THUMBNAILS}}
 					<div class="float_surrounder filedump_thumbnails">
@@ -123,14 +131,6 @@
 
 								{+START,IF_PASSED,EMBED_URL}
 									<p class="filedump_embed"><a id="embed_link_{FILENAME|*}" href="{EMBED_URL*}" onclick="return open_link_as_overlay(this,950,680);" class="link_exempt">{!_FILEDUMP_EMBED}</a></p>
-
-									{+START,IF,{$EQ,{FILENAME},{$_GET,filename}}}
-										<script type="text/javascript">// <![CDATA[
-											add_event_listener_abstract(window,'load',function () {
-												open_link_as_overlay(document.getElementById('embed_link_{FILENAME|/}'),950,700);
-											} );
-										//]]></script>
-									{+END}
 								{+END}
 
 								<p><a{+START,IF,{IS_IMAGE}} rel="lightbox"{+END} href="{URL*}">{THUMBNAIL}</a></p>
@@ -142,12 +142,6 @@
 							</div></div>
 						{+END}
 					</div>
-
-					{+START,IF_NON_EMPTY,{PAGINATION_THUMBNAILS}}
-						<div class="float_surrounder force_margin">
-							{PAGINATION_THUMBNAILS}
-						</div>
-					{+END}
 				{+END}
 				{+START,IF_EMPTY,{THUMBNAILS}}
 					<p class="nothing_here">{!NO_ENTRIES}</p>
@@ -156,6 +150,12 @@
 				{$SET,i,1}
 				{$GET,file_dump_footer,1}
 			</form>
+
+			{+START,IF_NON_EMPTY,{PAGINATION_THUMBNAILS}}
+				<div class="float_surrounder force_margin">
+					{PAGINATION_THUMBNAILS}
+				</div>
+			{+END}
 		</div>
 
 		<div aria-labeledby="t_listing" role="tabpanel" id="g_listing" style="display: {$?,{$JS_ON},none,block}">
@@ -167,12 +167,6 @@
 			<form action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
 				{+START,IF_NON_EMPTY,{LISTING}}
 					{LISTING}
-
-					{+START,IF_NON_EMPTY,{PAGINATION_LISTING}}
-						<div class="float_surrounder force_margin">
-							{PAGINATION_LISTING}
-						</div>
-					{+END}
 				{+END}
 				{+START,IF_EMPTY,{LISTING}}
 					<p class="nothing_here">{!NO_ENTRIES}</p>
@@ -181,6 +175,12 @@
 				{$SET,i,2}
 				{$GET,file_dump_footer,1}
 			</form>
+
+			{+START,IF_NON_EMPTY,{PAGINATION_LISTING}}
+				<div class="float_surrounder force_margin">
+					{PAGINATION_LISTING}
+				</div>
+			{+END}
 		</div>
 
 		{+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}

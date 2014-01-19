@@ -404,7 +404,7 @@ class Module_filedump
 
 				$width=mixed();
 				$height=mixed();
-				if (is_image($_full))
+				if (is_saveable_image($_full))
 				{
 					$dims=@getimagesize($_full);
 					if ($dims!==false)
@@ -436,7 +436,7 @@ class Module_filedump
 				{
 					$url=get_custom_base_url().'/uploads/filedump'.str_replace('%2F','/',rawurlencode($_place.$filename));
 
-					if (is_image($url))
+					if (is_saveable_image($url))
 					{
 						$is_image=true;
 						$image_url=$url;
@@ -906,7 +906,7 @@ class Module_filedump
 		));
 
 		$image_sizes=mixed();
-		if (is_image($file))
+		if (is_saveable_image($file))
 		{
 			$size=@getimagesize($path);
 			if ($size!==false)
