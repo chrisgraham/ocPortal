@@ -331,7 +331,7 @@ function get_member($quick_only=false)
 		foreach (array_keys($hooks) as $hook)
 		{
 			require_code('hooks/systems/upon_login/'.filter_naughty($hook));
-			$ob=object_factory('upon_login'.filter_naughty($hook),true);
+			$ob=object_factory('Hook_upon_login_'.filter_naughty($hook),true);
 			if ($ob===NULL) continue;
 			$ob->run(false,NULL,$member); // false means "not a new login attempt"
 		}

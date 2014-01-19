@@ -19,13 +19,13 @@
  */
 
 /**
- * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
+ * Find if the given member ID and password is valid. If username is NULL, then the member ID is used instead.
  * All authorisation, cookies, and form-logins, are passed through this function.
  * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
  *
  * @param  object			Link to the real forum driver
  * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
- * @param  ?MEMBER		The member id (NULL: use member name)
+ * @param  ?MEMBER		The member ID (NULL: use member name)
  * @param  MD5				The md5-hashed password
  * @param  string			The raw password
  * @param  boolean		Whether this is a cookie login, determines how the hashed password is treated for the value passed in
@@ -106,6 +106,20 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 
 	if ((!array_key_exists(0,$rows)) || ($rows[0]===NULL)) // All hands to lifeboats
 	{
+		// Run hooks for other interactive login possibilities, if any exist
+		$hooks=find_all_hooks('systems','login_providers_direct_auth');
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/systems/login_providers_direct_auth/'.filter_naughty($hook));
+			$ob=object_factory('Hook_login_providers_direct_auth_'.filter_naughty($hook),true);
+			if (is_null($ob)) continue;
+			$test=$ob->try_login($username,$userid,$password_hashed,$password_raw,$cookie_login=false);
+			if (!is_null($test))
+			{
+				return $test;
+			}
+		}
+
 		$out['error']=(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 		return $out;
 	}

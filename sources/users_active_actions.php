@@ -113,7 +113,7 @@ function handle_active_login($username)
 	foreach (array_keys($hooks) as $hook)
 	{
 		require_code('hooks/systems/upon_login/'.filter_naughty($hook));
-		$ob=object_factory('upon_login'.filter_naughty($hook),true);
+		$ob=object_factory('Hook_upon_login_'.filter_naughty($hook),true);
 		if (is_null($ob)) continue;
 		$ob->run(true,$username,$member); // true means "a new login attempt"
 	}
