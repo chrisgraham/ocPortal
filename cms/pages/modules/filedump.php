@@ -169,6 +169,11 @@ class Module_filedump
 			$this->title=get_screen_title('FILEDUMP_EMBED');
 		}
 
+		if ($type=='ad')
+		{
+			$this->title=get_screen_title('FILEDUMP_UPLOAD');
+		}
+
 		if ($type=='mass')
 		{
 			$action=post_param('action');
@@ -1324,6 +1329,7 @@ class Module_filedump
 		{
 			$url_map['filename']=$new_files[0];
 		}
+
 		$redirect_url=build_url($url_map,'_SELF');
 		return redirect_screen($this->title,$redirect_url,do_lang_tempcode('SUCCESS'));
 	}
