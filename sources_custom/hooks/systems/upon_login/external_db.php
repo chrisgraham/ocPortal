@@ -25,6 +25,7 @@ class Hook_upon_login_external_db
 	function run($new_attempt,$username,$member)
 	{
 		if (!$new_attempt) return; // We don't try and bind to a third-party login if we're dealing with re-establishing an existing ocPortal session
+		if (is_null($member) || is_guest($member)) return; // No login to speak of
 
 		// If we get a remote binding, we need to re-sync it...
 
