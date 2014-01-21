@@ -606,7 +606,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		fclose($tmp);
 	}
 
-	if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($html,'.innerHTML')!==false) && (!running_script('install')) && (strpos($html,'Parser hint: .innerHTML okay')===false))
+	if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($codename,'JAVASCRIPT_')!==false) && (strpos($html,'.innerHTML')!==false) && (!running_script('install')) && (strpos($html,'Parser hint: .innerHTML okay')===false))
 	{
 		attach_message('Do not use the .innerHTML property in your Javascript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.','warn');
 	}

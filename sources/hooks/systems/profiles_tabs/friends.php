@@ -96,6 +96,7 @@ class Hook_Profiles_Tabs_friends
 							break;
 						}
 					}
+					require_code('ocf_members');
 					require_code('ocf_members2');
 					$friend_username=$GLOBALS['FORUM_DRIVER']->get_username($f_id);
 					$friend_usergroup_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($f_id,'m_primary_group');
