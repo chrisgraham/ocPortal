@@ -19,7 +19,7 @@
  */
 
 /**
- * Put a member into a usergroup temporarily / extend such a temporary usergroup membership. Note that if people are subsequently removed from the usergroup they won't be put back in; this allows the admin to essentially cancel the subscription - however, if it is then extended, they do keep the time they had before too.
+ * Put a member into a usergroup temporarily / extend such a temporary usergroup membership.
  *
  * @param  MEMBER		The member going in the usergroup.
  * @param  GROUP		The usergroup.
@@ -27,6 +27,29 @@
  * @param  boolean	Whether to put the member into as a primary group if this is a new temporary membership (it is recommended to NOT use this, since we don't track the source group and hence on expiry the member is put back to the first default group - but also generally you probably don't want to box yourself in with moving people's primary group, it ties your future flexibility down a lot).
  */
 function bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for_primary_group=false)
+{
+	// Extend or add, depending on whether they're in it yet
+	$existing_timeout=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value_if_there('f_group_member_timeouts','timeout',array('member_id'=>$member_id,'group_id'=>$group_id));
+	if (is_null($existing_timeout))
+	{
+		$timestamp=time()+60*$num_minutes;
+	} else
+	{
+		$timestamp=$existing_timeout+60*$num_minutes;
+	}
+
+	set_member_group_timeout($member_id,$group_id,$timestamp,$prefer_for_primary_group);
+}
+
+/**
+ * Put a member into a usergroup temporarily. Note that if people are subsequently removed from the usergroup they won't be put back in; this allows the admin to essentially cancel the subscription - however, if it is then extended, they do keep the time they had before too.
+ *
+ * @param  MEMBER		The member going in the usergroup.
+ * @param  GROUP		The usergroup.
+ * @param  TIME		The expiry timestamp.
+ * @param  boolean	Whether to put the member into as a primary group if this is a new temporary membership (it is recommended to NOT use this, since we don't track the source group and hence on expiry the member is put back to the first default group - but also generally you probably don't want to box yourself in with moving people's primary group, it ties your future flexibility down a lot).
+ */
+function set_member_group_timeout($member_id,$group_id,$timestamp,$prefer_for_primary_group=false)
 {
 	// We don't want guests here!
 	if (is_guest($member_id)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -62,25 +85,18 @@ function bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for
 		}
 	}
 
-	// Extend or add, depending on whether they're in it yet
-	$existing_timeout=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value_if_there('f_group_member_timeouts','timeout',array('member_id'=>$member_id,'group_id'=>$group_id));
-	if (is_null($existing_timeout))
+	// Set
+	$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_member_timeouts',array(
+		'member_id'=>$member_id,
+		'group_id'=>$group_id,
+	),'',1);
+	if ($timestamp>time())
 	{
-		// Add
 		$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_insert('f_group_member_timeouts',array(
 			'member_id'=>$member_id,
 			'group_id'=>$group_id,
-			'timeout'=>time()+60*$num_minutes,
+			'timeout'=>$timestamp,
 		));
-	} else
-	{
-		// Extend
-		$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_update('f_group_member_timeouts',array(
-			'timeout'=>$existing_timeout+60*$num_minutes,
-		),array(
-			'member_id'=>$member_id,
-			'group_id'=>$group_id,
-		),'',1);
 	}
 
 	global $USERS_GROUPS_CACHE,$GROUP_MEMBERS_CACHE;

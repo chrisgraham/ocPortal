@@ -821,13 +821,11 @@ class Hook_addon_registry_core_form_interfaces
 		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
 			'UNLIMITED'=>false,
 			'NULL_OK'=>'',
-			'DISABLED'=>'',
 			'TABINDEX'=>placeholder_number(),
 			'YEARS'=>placeholder_options(),
 			'MONTHS'=>placeholder_options(),
 			'DAYS'=>placeholder_options(),
 			'STUB'=>$name,
-			'NULL'=>'',
 			'TIME'=>$time
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(

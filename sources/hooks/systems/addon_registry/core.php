@@ -1236,6 +1236,10 @@ class Hook_addon_registry_core
 			'themes/default/images/EN/1x/index.html',
 			'themes/default/images/EN/2x/index.html',
 			'themes/default/images/icons/16x16/index.html',
+			'sources/group_member_timeouts.php',
+			'adminzone/pages/modules/admin_group_member_timeouts.php',
+			'lang/EN/group_member_timeouts.ini',
+			'GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN.tpl',
 
 			// Admin theme
 			'themes/admin/css/index.html',
@@ -1325,6 +1329,7 @@ class Hook_addon_registry_core
 			'MASS_SELECT_DELETE_FORM.tpl'=>'mass_select_delete_form',
 			'DELETE_MARKER.tpl'=>'delete_marker',
 			'UPLOAD_SYNDICATION_SETUP_SCREEN.tpl'=>'upload_syndication_setup_screen',
+			'GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN.tpl'=>'group_member_timeout_manage_screen',
 		);
 	}
 
@@ -2261,6 +2266,34 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('UPLOAD_SYNDICATION_SETUP_SCREEN',array(
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__group_member_timeout_manage_screen()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN',array(
+				'TITLE'=>lorem_title(),
+				'TIMEOUTS'=>array(
+					array(
+						'USERNAME'=>lorem_word(),
+						'MEMBER_ID'=>placeholder_id(),
+						'GROUP_ID'=>placeholder_id(),
+						'DATE_INPUT'=>lorem_phrase(),
+					),
+				),
+				'GROUPS'=>array(placeholder_id()=>lorem_word()),
+				'DATE_INPUT'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'PAGINATION'=>placeholder_pagination(),
 			)),NULL,'',true)
 		);
 	}

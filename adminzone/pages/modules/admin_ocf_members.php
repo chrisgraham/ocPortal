@@ -59,7 +59,6 @@ class Module_admin_ocf_members
 			'delurk'=>array('DELETE_LURKERS','menu/adminzone/tools/users/delete_lurkers'),
 			'download_csv'=>array('DOWNLOAD_MEMBER_CSV','menu/_generic_admin/download_csv'),
 			'import_csv'=>array('IMPORT_MEMBER_CSV','menu/_generic_admin/import_csv'),
-			'group_member_timeouts'=>array('GROUP_MEMBER_TIMEOUTS','menu/adminzone/security/usergroups_temp'),
 		);
 
 		if ($support_crosslinks)
@@ -112,11 +111,6 @@ class Module_admin_ocf_members
 			breadcrumb_set_self(do_lang_tempcode('DETAILS'));
 		}
 
-		if ($type=='group_member_timeouts')
-		{
-			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc',do_lang_tempcode('MEMBERS'))));
-		}
-
 		if ($type=='delurk')
 		{
 			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc',do_lang_tempcode('MEMBERS'))));
@@ -147,11 +141,6 @@ class Module_admin_ocf_members
 		if ($type=='step1' || $type=='step2')
 		{
 			$this->title=get_screen_title('ADD_MEMBER');
-		}
-
-		if ($type=='group_member_timeouts' || $type=='_group_member_timeouts')
-		{
-			$this->title=get_screen_title('GROUP_MEMBER_TIMEOUTS');
 		}
 
 		if ($type=='delurk' || $type=='_delurk' || $type=='__delurk')
@@ -196,8 +185,6 @@ class Module_admin_ocf_members
 		if ($type=='download_csv') return $this->download_csv();
 		if ($type=='import_csv') return $this->import_csv();
 		if ($type=='_import_csv') return $this->_import_csv();
-		if ($type=='group_member_timeouts') return $this->group_member_timeouts();
-		if ($type=='_group_member_timeouts') return $this->_group_member_timeouts();
 
 		return new ocp_tempcode();
 	}
@@ -226,7 +213,6 @@ class Module_admin_ocf_members
 				addon_installed('ocf_cpfs')?array('menu/adminzone/tools/users/custom_profile_fields',array('admin_ocf_customprofilefields',array('type'=>'misc'),get_module_zone('admin_ocf_customprofilefields')),do_lang_tempcode('CUSTOM_PROFILE_FIELDS'),'DOC_CUSTOM_PROFILE_FIELDS'):NULL,
 				addon_installed('welcome_emails')?array('menu/adminzone/setup/welcome_emails',array('admin_ocf_welcome_emails',array('type'=>'misc'),get_module_zone('admin_ocf_welcome_emails')),do_lang_tempcode('WELCOME_EMAILS'),'DOC_WELCOME_EMAILS'):NULL,
 				addon_installed('securitylogging')?array('menu/adminzone/tools/users/investigate_user',array('admin_lookup',array(),get_module_zone('admin_lookup')),do_lang_tempcode('INVESTIGATE_USER'),'DOC_INVESTIGATE_USER'):NULL,
-				array('menu/adminzone/security/usergroups_temp',array('admin_ocf_members',array('type'=>'group_member_timeouts'),get_module_zone('admin_ocf_members')),do_lang_tempcode('GROUP_MEMBER_TIMEOUTS'),'DOC_GROUP_MEMBER_TIMEOUTS'),
 				addon_installed('ecommerce')?array('menu/adminzone/audit/ecommerce/ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),'DOC_ECOMMERCE'):NULL,
 				array('menu/social/groups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('USERGROUPS'),'DOC_GROUPS'),
 				addon_installed('staff')?array('menu/site_meta/staff',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('STAFF'),'DOC_STAFF'):NULL,
@@ -361,102 +347,6 @@ class Module_admin_ocf_members
 			NULL,
 			do_lang_tempcode('MEMBERS')
 		);
-	}
-
-	/**
-	 * The UI for managing temporary usergroup memberships.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function group_member_timeouts()
-	{
-		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(get_tutorial_url('tut_configuration'))),'warn');
-
-		require_code('form_templates');
-		require_code('templates_results_table');
-
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',100);
-		$max_rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_group_member_timeouts','COUNT(*)');
-		$fields_title=results_field_title(array(
-			do_lang_tempcode('USERNAME'),
-			do_lang_tempcode('GROUP'),
-			do_lang_tempcode('TIME'),
-		));
-
-		$timeouts=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select('f_group_member_timeouts',array('member_id','group_id','timeout'),NULL,'',$max,$start);
-
-		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-
-		$tfields=new ocp_tempcode();
-		foreach ($timeouts as $timeout)
-		{
-			$tfields->attach(results_entry(array(
-				$GLOBALS['FORUM_DRIVER']->get_username($timeout['member_id']),
-				isset($usergroups[$timeout['group_id']])?$usergroups[$timeout['group_id']]:do_lang('UNKNOWN'),
-				display_time_period($timeout['timeout']-time()),
-			),true));
-		}
-
-		if ($tfields->is_empty())
-		{
-			$results_table=new ocp_tempcode();
-		} else
-		{
-			$results_table=results_table(do_lang('GROUP_MEMBER_TIMEOUTS'),$start,'start',$max,'max',$max_rows,$fields_title,$tfields);
-		}
-
-		$fields=new ocp_tempcode();
-		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),'','username','',true));
-		$_usergroups=new ocp_tempcode();
-		foreach ($usergroups as $uid=>$name)
-		{
-			if ($uid!=db_get_first_id())
-				$_usergroups->attach(form_input_list_entry($uid,false,$name));
-		}
-		require_lang('dates');
-		$fields->attach(form_input_list(do_lang_tempcode('GROUP'),'','group_id',$_usergroups,NULL,false,true));
-		$fields->attach(form_input_integer(do_lang_tempcode('_MINUTES'),do_lang_tempcode('DESCRIPTION_GROUPMT_MINUTES'),'num_minutes',60,true));
-
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_group_member_timeouts'),'_SELF');
-		$submit_name=do_lang_tempcode('ADD');
-
-		$form=do_template('FORM',array('_GUID'=>'2afadffabe2becb6eac071db085edc57','TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_ICON'=>'menu___generic_admin__add_one','SUBMIT_NAME'=>$submit_name));
-
-		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'e9ce4084126653162ad84839fb7f47e3','TITLE'=>$this->title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
-
-		require_code('templates_internalise_screen');
-		return internalise_own_screen($tpl);
-	}
-
-	/**
-	 * The actualiser for managing temporary usergroup memberships.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function _group_member_timeouts()
-	{
-		$group_id=post_param_integer('group_id');
-
-		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // Security issue, don't allow privilege elevation
-		{
-			$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
-			if (in_array($group_id,$admin_groups)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		}
-
-		$username=post_param('username');
-		$num_minutes=post_param_integer('num_minutes');
-		$prefer_for_primary_group=false;//(post_param_integer('prefer_for_primary_group',0)==1); Don't promote this bad choice
-
-		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-		if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
-
-		require_code('group_member_timeouts');
-		bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for_primary_group);
-
-		$url=build_url(array('page'=>'_SELF','type'=>'group_member_timeouts'),'_SELF');
-
-		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
 	/**

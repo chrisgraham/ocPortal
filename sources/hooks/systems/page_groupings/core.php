@@ -64,6 +64,7 @@ class Hook_page_groupings_core
 
 			array('style','menu/adminzone/style/themes/themes',array('admin_themes',array('type'=>'misc'),get_module_zone('admin_themes')),do_lang_tempcode('THEMES'),'DOC_THEMES'),
 			(get_forum_type()!='ocf')?NULL:array('style','menu/adminzone/style/emoticons',array('admin_ocf_emoticons',array('type'=>'misc'),get_module_zone('admin_ocf_emoticons')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('EMOTICONS'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons','COUNT(*)',NULL,'',true))))),'ocf:DOC_EMOTICONS'),
+			(get_forum_type()!='ocf')?NULL:array('security','menu/adminzone/security/usergroups_temp',array('admin_group_member_timeouts',array('type'=>'misc'),get_module_zone('admin_group_member_timeouts')),do_lang_tempcode('group_member_timeouts:GROUP_MEMBER_TIMEOUTS'),'group_member_timeouts:DOC_MANAGE_GROUP_MEMBER_TIMEOUTS'),
 
 			array('setup','menu/adminzone/setup/config/config',array('admin_config',array('type'=>'misc'),get_module_zone('admin_config')),do_lang_tempcode('CONFIGURATION'),'DOC_CONFIGURATION'),
 			addon_installed('awards')?array('setup','menu/adminzone/setup/awards',array('admin_awards',array('type'=>'misc'),get_module_zone('admin_awards')),do_lang_tempcode('awards:AWARDS'),'awards:DOC_AWARDS'):NULL,
