@@ -42,11 +42,11 @@ class Hook_login_providers_direct_auth_external_db
 		$email_address_field=get_long_value('external_db_login__email_address_field');
 
 		// Handle active login
-		$query='SELECT * FROM '.$table.' WHERE ('.db_string_equal_to($username_field,$username);
+		$query='SELECT * FROM '.$table.' WHERE ('.$db->static_ob->db_string_equal_to($username_field,$username);
 		if (get_option('one_per_email_address')=='1')
-			$query.=' OR '.db_string_equal_to($email_address_field,$username);
+			$query.=' OR '.$db->static_ob->db_string_equal_to($email_address_field,$username);
 		$query.=')';
-		$query.=' AND '.db_string_equal_to($password_field,$password_raw);
+		$query.=' AND '.$db->static_ob->db_string_equal_to($password_field,$password_raw);
 		$records=$db->query($query);
 		if (isset($records[0]))
 		{

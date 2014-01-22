@@ -87,9 +87,10 @@ function external_db_user_from_session()
 	$context=stream_context_create($opts);
 	$url='https://'.$_SERVER['HTTP_HOST'].'/DumpSession.aspx'; // Call a script we made in ASP.net, grabbing the DB session ID
 	$session_id=file_get_contents($url,false,$context);
-	$sql='SELECT u.* FROM tblUserSession s JOIN tbllogin u ON s.IDUser=u.Userid WHERE '.$db->db_escape_string('s.IDUserSession',$session_id);
+        if ($session_id=='') return NULL;
+	$sql='SELECT u.* FROM tblUserSession s JOIN tbllogin u ON s.IDUser=u.Userid WHERE '.$db->static_ob->db_string_equal_to('s.IDSession',$session_id);
 	$records=$db->query($sql);
-	return isset($record[0])?$records[0]:NULL; // If not set it's odd, remote session for a non-existent remote user
+	return isset($records[0])?$records[0]:NULL; // If not set it's odd, remote session for a non-existent remote user
 }
 
 /**
@@ -104,20 +105,24 @@ function external_db_user_sync($member,$record)
 	$password_field=get_long_value('external_db_login__password_field');
 	$email_address_field=get_long_value('external_db_login__email_address_field');
 
+	$update_map=array(
+		'm_email_address'=>$record[$email_address_field],
+		'm_validated_email_confirm_code'=>'',
+		'm_password_compat_scheme'=>'',
+		'm_password_change_code'=>'',
+		'm_pass_hash_salted'=>$new,
+	);
+
+	$username=$record[$username_field];
+	if ($username!='') $update_map['m_username']=$username; // Ok, it's valid, so we can sync it
+
 	// Re-sync e-mail address and password, just in case it was changed in the other system
 	//  NB: We have no way of synching local changes back. You could consider blocking off the members module
 	//      This code has been originally written with the intent of providing a stepping stone, so we are not all that concerned about synching stuff back
 	//      You could of course edit the other system to re-sync with ocPortal upon login
 	$salt=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_pass_salt');
 	$new=md5($salt.md5($record[$password_field]));
-	$GLOBALS['FORUM_DB']->query_update('f_members',array(
-		'm_username'=>$record[$username_field],
-		'm_email_address'=>$record[$email_address_field],
-		'm_validated_email_confirm_code'=>'',
-		'm_password_compat_scheme'=>'',
-		'm_password_change_code'=>'',
-		'm_pass_hash_salted'=>$new,
-	),array('id'=>$member),'',1);
+	$GLOBALS['FORUM_DB']->query_update('f_members',$update_map,array('id'=>$member),'',1);
 }
 
 /**
@@ -135,6 +140,8 @@ function external_db_user_add($record)
 	$email_address_field=get_long_value('external_db_login__email_address_field');
 
 	$username=$record[$username_field];
+	$username=get_username_from_human_name($username);
+
 	$password=$record[$password_field];
 	$email_address=$record[$email_address_field];
 
