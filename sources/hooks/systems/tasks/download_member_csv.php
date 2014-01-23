@@ -42,14 +42,18 @@ class Hook_task_download_member_csv
 		$fields=array('id','m_username','m_email_address','m_last_visit_time','m_cache_num_posts','m_pass_hash_salted','m_pass_salt','m_password_compat_scheme','m_signature','m_validated','m_join_time','m_primary_group','m_is_perm_banned','m_dob_day','m_dob_month','m_dob_year','m_reveal_age','m_language','m_allow_emails','m_allow_emails_from_staff');
 		if (addon_installed('ocf_member_avatars')) $fields[]='m_avatar_url';
 		if (addon_installed('ocf_member_photos')) $fields[]='m_photo_url';
+		$member_count=$GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)');
+
+		// Read member groups
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,true);
 		$member_groups_count=$GLOBALS['FORUM_DB']->query_select_value('f_group_members','COUNT(*)',array('gm_validated'=>1));
 		if ($member_groups_count<500)
 		{
 			$member_groups=$GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_member_id','gm_group_id'),array('gm_validated'=>1));
 		} else $member_groups=array();
+
+		// Read CPFs
 		$cpfs=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type','cf_name'),NULL,'ORDER BY cf_order');
-		$member_count=$GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)');
 		if ($member_count<700)
 		{
 			$member_cpfs=list_to_map('mf_member_id',$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*')));
@@ -58,6 +62,7 @@ class Hook_task_download_member_csv
 			$member_cpfs=array();
 		}
 
+		// Work out headings
 		require_code('ocf_members_action2');
 		$headings=member_get_csv_headings();
 		foreach ($cpfs as $i=>$c) // CPFs take precedence over normal fields of the same name
@@ -66,6 +71,22 @@ class Hook_task_download_member_csv
 			$headings[$cpfs[$i]['text_original']]=NULL;
 		}
 
+		// Subscription types
+		$subscription_types=array();
+		$usergroup_subscription_rows=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id','s_title'));
+		foreach ($usergroup_subscription_rows as $usergroup_subscription_row)
+		{
+			$item_name=get_translated_text($usergroup_subscription_row['s_title']);
+			$headings[$item_name.' ('.do_lang('SUBSCRIPTION_START_TIME').')']=NULL;
+			$headings[$item_name.' ('.do_lang('SUBSCRIPTION_TERM_START_TIME').')']=NULL;
+			$headings[$item_name.' ('.do_lang('SUBSCRIPTION_TERM_END_TIME').')']=NULL;
+			$headings[$item_name.' ('.do_lang('SUBSCRIPTION_EXPIRY_TIME').')']=NULL;
+			$headings[$item_name.' ('.do_lang('PAYMENT_GATEWAY').')']=NULL;
+			$headings[$item_name.' ('.do_lang('STATUS').')']=NULL;
+			$subscription_types['USERGROUP'.strval($usergroup_subscription_row['id'])]=$item_name;
+		}
+
+		// Output headings
 		foreach (array_keys($headings) as $i=>$h)
 		{
 			if ($i!=0) fwrite($outfile,',');
@@ -73,8 +94,8 @@ class Hook_task_download_member_csv
 		}
 		fwrite($outfile,"\n");
 
+		// Output records
 		$at=mixed();
-
 		$start=0;
 		do
 		{
@@ -100,7 +121,7 @@ class Hook_task_download_member_csv
 					$member_groups=$GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_member_id','gm_group_id'),array('gm_validated'=>1,'gm_member_id'=>$m['id']));
 				}
 
-				$out=$this->_get_csv_member_record($member_cpfs,$m,$groups,$headings,$cpfs,$member_groups);
+				$out=$this->_get_csv_member_record($member_cpfs,$m,$groups,$headings,$cpfs,$member_groups,$subscription_types);
 				$i=0;
 				foreach ($out as $wider)
 				{
@@ -129,9 +150,10 @@ class Hook_task_download_member_csv
 	 * @param  array			List of headings to pull from the member row
 	 * @param  array			List of CPFS to pull
 	 * @param  array			List of member group membership records
+	 * @param  array			List of subscription types
 	 * @return array			The row
 	 */
-	function _get_csv_member_record($member_cpfs,$m,$groups,$headings,$cpfs,$member_groups)
+	function _get_csv_member_record($member_cpfs,$m,$groups,$headings,$cpfs,$member_groups,$subscription_types)
 	{
 		$at=mixed();
 		$out=array();
@@ -210,6 +232,42 @@ class Hook_task_download_member_csv
 			}
 			$out[$c['text_original']]=$at;
 		}
+
+		// Usergroup subscription details
+		if (addon_installed('ecommerce'))
+		{
+			require_code('ecommerce_subscriptions');
+			require_lang('ecommerce');
+			$subscriptions=find_member_subscriptions($m['id'],true);
+			foreach ($subscription_types as $type_code=>$item_name)
+			{
+				if (isset($subscriptions[$type_code]))
+				{
+					$sub=$subscriptions[$type_code];
+					$start_time=date('Y/m/d',tz_time($sub['start_time'],get_site_timezone()));
+					$term_start_time=date('Y/m/d',tz_time($sub['term_start_time'],get_site_timezone()));
+					$term_end_time=date('Y/m/d',tz_time($sub['term_end_time'],get_site_timezone()));
+					$expiry_time=date('Y/m/d',tz_time($sub['expiry_time'],get_site_timezone()));
+					$via=do_lang('PAYMENT_GATEWAY_'.$sub['via']);
+					$state=do_lang('PAYMENT_STATE_'.$sub['state']);
+				} else
+				{
+					$start_time='';
+					$term_start_time='';
+					$term_end_time='';
+					$expiry_time='';
+					$via='';
+					$state='';
+				}
+				$out[$item_name.' ('.do_lang('SUBSCRIPTION_START_TIME').')']=$start_time;
+				$out[$item_name.' ('.do_lang('SUBSCRIPTION_TERM_START_TIME').')']=$term_start_time;
+				$out[$item_name.' ('.do_lang('SUBSCRIPTION_TERM_END_TIME').')']=$term_end_time;
+				$out[$item_name.' ('.do_lang('SUBSCRIPTION_EXPIRY_TIME').')']=$expiry_time;
+				$out[$item_name.' ('.do_lang('PAYMENT_GATEWAY').')']=$via;
+				$out[$item_name.' ('.do_lang('STATUS').')']=$state;
+			}
+		}
+
 		return $out;
 	}
 }

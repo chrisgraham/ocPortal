@@ -232,34 +232,25 @@ function member_personal_links_and_details($member_id)
 	}
 
 	// Subscription expiry date
-	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')))
+	if (addon_installed('ecommerce'))
 	{
-		$subscriptions=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'),array('s_member_id'=>$member_id,'s_state'=>'active','s_via'=>'manual'));
-		if (count($subscriptions)>0)
+		if (get_option('manual_subscription_expiry_notice')!='')
 		{
-			require_code('ecommerce');
-			foreach ($subscriptions as $sub)
+			$manual_subscription_expiry_notice=intval(get_option('manual_subscription_expiry_notice'));
+
+			require_code('ecommerce_subscriptions');
+			$subscriptions=find_member_subscriptions($member_id);
+			foreach ($subscriptions as $subscription)
 			{
-				$product_obj=find_product($sub['s_type_code']);
-				if (is_null($product_obj)) continue;
-				$products=$product_obj->get_products(true);
-				$product_name=$products[$sub['s_type_code']][4];
-				$s_length=$products[$sub['s_type_code']][3]['length'];
-				$s_length_units=$products[$sub['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
-				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
-				$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$sub['s_time']);
-				/*if ($sub['s_via']!='manual')	Useful if recoding this to show even for auto-recuring subscriptions
+				$expiry_time=$subscription['expiry_time'];
+				if ((!is_null($expiry_time)) && (($expiry_time-time())<($manual_subscription_expiry_notice*24*60*60)) && ($expiry_time>=time()))
 				{
-					while ($expiry_time<time()) // Must have auto-renewed
-					{
-						$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$expiry_time);
-					}
-				}*/
-				if ((($expiry_time-time())<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60)) && ($expiry_time>=time()))
-				{
-					$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
 					require_lang('ecommerce');
-					$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'65180134fbc4cf7e227011463d466677','KEY'=>do_lang_tempcode('SUBSCRIPTION_EXPIRY_MESSAGE',escape_html($product_name)),'VALUE'=>do_lang_tempcode('SUBSCRIPTION_EXPIRY_DATE',escape_html($expiry_date)))));
+					$expiry_date=is_null($expiry_time)?do_lang('INTERNAL_ERROR'):get_timezoned_date($expiry_time,false,false,false,true);
+					$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array(
+						'KEY'=>do_lang_tempcode('SUBSCRIPTION_EXPIRY_MESSAGE',escape_html($subscription['item_name'])),
+						'VALUE'=>do_lang_tempcode('SUBSCRIPTION_EXPIRY_DATE',escape_html($expiry_date)),
+					)));
 				}
 			}
 		}

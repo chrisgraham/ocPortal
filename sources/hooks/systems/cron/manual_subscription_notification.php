@@ -25,6 +25,11 @@ class Hook_cron_manual_subscription_notification
 	 */
 	function run()
 	{
+		/*
+		Send staff notifications for expiring manual notifications.
+		This might be used by the staff in order to get someone to send in a cheque, for example.
+		*/
+
 		$_last_time=get_long_value('last_cron_manual_subscription_notification');
 		$last_time=is_null($_last_time)?mixed():intval($_last_time);
 		if (!is_null($last_time))
@@ -32,49 +37,55 @@ class Hook_cron_manual_subscription_notification
 			if ($last_time<60*60*24) return; // Only do once per day
 		}
 
-		$subscriptions=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'),array('s_state'=>'active','s_via'=>'manual'));
-		if (count($subscriptions)>0)
+		if (get_option('manual_subscription_expiry_notice')=='') return;
+		$manual_subscription_expiry_notice=intval(get_option('manual_subscription_expiry_notice'));
+
+		$max=1000;
+		$start=0;
+		do
 		{
-			require_code('ecommerce');
-			require_lang('ecommerce');
-
-			foreach ($subscriptions as $sub)
+			$subscribers=$GLOBALS['SITE_DB']->query_select('subscriptions',array('DISTINCT s_member_id'),array('s_state'=>'active'),'',$max,$start);
+			foreach ($subscribers as $subscriber)
 			{
-				$product_obj=find_product($sub['s_type_code']);
-				$products=$product_obj->get_products(true);
-				$product_name=$products[$sub['s_type_code']][4];
-				$s_length=$products[$sub['s_type_code']][3]['length'];
-				$s_length_units=$products[$sub['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
-				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
-				$expiry_time=$sub['s_time'];
-				while ($expiry_time<time())
-				{
-					$expiry_time=strtotime('+'.strval($s_length).' '.$time_period_units[$s_length_units],$expiry_time);
-				}
+				$member_id=$subscriber['s_member_id'];
 
-				if (!is_null($last_time))
+				require_code('ecommerce_subscriptions');
+				$subscriptions=find_member_subscriptions($member_id);
+				foreach ($subscriptions as $subscription)
 				{
-					if (($expiry_time-$last_time)<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60)) continue; // Notification already sent!
-				}
-
-				if (($expiry_time-time())<(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE*24*60*60))
-				{
-					$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
-					$member_name=$GLOBALS['FORUM_DRIVER']->get_username($sub['s_member_id']);
-					if (!is_null($member_name)) // If not a deleted member
+					$expiry_time=$subscription['expiry_time'];
+					if ((!is_null($expiry_time)) && (($expiry_time-time())<($manual_subscription_expiry_notice*24*60*60)) && ($expiry_time>=time()))
 					{
-						$member_profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url($sub['s_member_id']);
-						$cancel_url=build_url(array('page'=>'admin_ecommerce','type'=>'cancel_subscription','subscription_id'=>$sub['id']),get_module_zone('admin_ecommerce'),NULL,false,false,true);
+						if (!is_null($last_time))
+						{
+							if (($expiry_time-$last_time)<($manual_subscription_expiry_notice*24*60*60)) continue; // Notification already sent!
+						}
 
-						require_code('notifications');
-						$subject=do_lang('MANUAL_SUBSCRIPTION_NOTIFICATION_MAIL_SUBJECT',$member_name,$expiry_date);
-						$mail=do_lang('MANUAL_SUBSCRIPTION_NOTIFICATION_MAIL',escape_html($member_profile_url),escape_html($cancel_url->evaluate()),array(strval(MANUAL_SUBSCRIPTION_EXPIRY_NOTICE),$member_name,$expiry_date));
+						if (($expiry_time-time())<($manual_subscription_expiry_notice*24*60*60))
+						{
+							$expiry_date=get_timezoned_date($expiry_time,false,false,false,true);
+							$member_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+							if (!is_null($member_name)) // If not a deleted member
+							{
+								$member_profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url($member_id);
+								$cancel_url=build_url(array('page'=>'admin_ecommerce','type'=>'cancel_subscription','subscription_id'=>$subscription['subscription_id']),get_module_zone('admin_ecommerce'),NULL,false,false,true);
 
-						dispatch_notification('manual_subscription',NULL,$subject,$mail);
+								$item_name=$subscription['item_name'];
+
+								require_code('notifications');
+								$subject=do_lang('MANUAL_SUBSCRIPTION_NOTIFICATION_MAIL_SUBJECT',$member_name,$expiry_date,array($item_name));
+								$mail=do_lang('MANUAL_SUBSCRIPTION_NOTIFICATION_MAIL',comcode_escape($member_profile_url),comcode_escape($cancel_url->evaluate()),array(strval($manual_subscription_expiry_notice),comcode_escape($member_name),comcode_escape($expiry_date),comcode_escape($item_name)));
+
+								dispatch_notification('manual_subscription',NULL,$subject,$mail);
+							}
+						}
 					}
 				}
 			}
+
+			$start+=$max;
 		}
+		while (count($subscribers)==$max);
 
 		set_long_value('last_cron_manual_subscription_notification',strval(time()));
 	}

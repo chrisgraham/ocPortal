@@ -165,6 +165,7 @@ class Hook_addon_registry_ecommerce
 			'themes/default/templates/ECOM_TRANSACTION_LOGS_SCREEN.tpl',
 			'themes/default/templates/ECOM_VIEW_MANUAL_TRANSACTIONS_LINE.tpl',
 			'themes/default/templates/ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN.tpl',
+			'themes/default/templates/MEMBER_SUBSCRIPTION_STATUS.tpl',
 			'sources/hooks/systems/notifications/manual_subscription.php',
 			'sources/hooks/systems/cron/manual_subscription_notification.php',
 			'adminzone/pages/modules/admin_ecommerce.php',
@@ -182,6 +183,8 @@ class Hook_addon_registry_ecommerce
 			'sources/hooks/systems/notifications/service_paid_for_staff.php',
 			'sources/ecommerce.php',
 			'sources/ecommerce2.php',
+			'sources/ecommerce_subscriptions.php',
+			'sources/hooks/systems/config/manual_subscription_expiry_notice.php',
 			'sources/hooks/modules/members/ecommerce.php',
 			'sources/hooks/systems/page_groupings/ecommerce.php',
 			'sources/hooks/systems/ecommerce/.htaccess',
@@ -243,6 +246,7 @@ class Hook_addon_registry_ecommerce
 			'PURCHASE_WIZARD_STAGE_PAY.tpl'=>'purchase_wizard_stage_pay',
 			'ECOM_VIEW_MANUAL_TRANSACTIONS_LINE.tpl'=>'ecom_view_manual_transactions_screen',
 			'ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN.tpl'=>'ecom_view_manual_transactions_screen',
+			'MEMBER_SUBSCRIPTION_STATUS.tpl'=>'member_subscription_status_screen',
 		);
 	}
 
@@ -744,18 +748,36 @@ class Hook_addon_registry_ecommerce
 			'STATUS'=>lorem_phrase(),
 			'TRIGGER_URL'=>placeholder_url()
 		));
+
 		$subscriptions=array();
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$subscriptions[]=array(
-				'SUBSCRIPTION_TITLE'=>lorem_phrase(),
-				'ID'=>placeholder_id(),
+				'ITEM_NAME'=>lorem_phrase(),
+				'SUBSCRIPTION_ID'=>placeholder_id(),
 				'PER'=>lorem_word(),
+				'LENGTH'=>placeholder_number(),
+				'LENGTH_UNITS'=>'m',
 				'AMOUNT'=>placeholder_number(),
-				'TIME'=>placeholder_date(),
+				'_START_TIME'=>placeholder_date_raw(),
+				'_TERM_START_TIME'=>placeholder_date_raw(),
+				'_TERM_END_TIME'=>placeholder_date_raw(),
+				'_EXPIRY_TIME'=>placeholder_date_raw(),
+				'START_TIME'=>placeholder_date(),
+				'TERM_START_TIME'=>placeholder_date(),
+				'TERM_END_TIME'=>placeholder_date(),
+				'EXPIRY_TIME'=>placeholder_date(),
 				'STATE'=>lorem_word(),
+				'_STATE'=>lorem_word(),
 				'TYPE_CODE'=>lorem_word(),
-				'CANCEL_BUTTON'=>$button
+				'CANCEL_BUTTON'=>$button,
+				'USERGROUP_SUBSCRIPTION_TITLE'=>lorem_phrase(),
+				'USERGROUP_SUBSCRIPTION_DESCRIPTION'=>lorem_paragraph_html(),
+				'USERGROUP_SUBSCRIPTION_ID'=>placeholder_id(),
+				'USERGROUP_ID'=>placeholder_id(),
+				'USERGROUP_NAME'=>lorem_phrase(),
+				'_VIA'=>'manual',
+				'VIA'=>lorem_word(),
 			);
 		}
 
@@ -836,6 +858,60 @@ class Hook_addon_registry_ecommerce
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN',array(
 				'CONTENT'=>$lines,
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__member_subscription_status_screen()
+	{
+		$button=do_lorem_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER',array(
+			'STATUS'=>lorem_phrase(),
+			'TRIGGER_URL'=>placeholder_url()
+		));
+
+		$subscriptions=array();
+		foreach (placeholder_array() as $k=>$v)
+		{
+			$subscriptions[]=array(
+				'ITEM_NAME'=>lorem_phrase(),
+				'SUBSCRIPTION_ID'=>placeholder_id(),
+				'PER'=>lorem_word(),
+				'LENGTH'=>placeholder_number(),
+				'LENGTH_UNITS'=>'m',
+				'AMOUNT'=>placeholder_number(),
+				'_START_TIME'=>placeholder_date_raw(),
+				'_TERM_START_TIME'=>placeholder_date_raw(),
+				'_TERM_END_TIME'=>placeholder_date_raw(),
+				'_EXPIRY_TIME'=>placeholder_date_raw(),
+				'START_TIME'=>placeholder_date(),
+				'TERM_START_TIME'=>placeholder_date(),
+				'TERM_END_TIME'=>placeholder_date(),
+				'EXPIRY_TIME'=>placeholder_date(),
+				'STATE'=>lorem_word(),
+				'_STATE'=>lorem_word(),
+				'TYPE_CODE'=>lorem_word(),
+				'CANCEL_BUTTON'=>$button,
+				'USERGROUP_SUBSCRIPTION_TITLE'=>lorem_phrase(),
+				'USERGROUP_SUBSCRIPTION_DESCRIPTION'=>lorem_paragraph_html(),
+				'USERGROUP_SUBSCRIPTION_ID'=>placeholder_id(),
+				'USERGROUP_ID'=>placeholder_id(),
+				'USERGROUP_NAME'=>lorem_phrase(),
+				'_VIA'=>'manual',
+				'VIA'=>lorem_word(),
+			);
+		}
+
+		return array(
+			lorem_globalise(do_lorem_template('MEMBER_SUBSCRIPTION_STATUS',array(
+				'MEMBER_ID'=>placeholder_id(),
+				'SUBSCRIPTIONS'=>$subscriptions,
 			)),NULL,'',true)
 		);
 	}

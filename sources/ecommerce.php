@@ -40,8 +40,6 @@ function init__ecommerce()
 		define('ECOMMERCE_PRODUCT_OUT_OF_STOCK',5);
 		define('ECOMMERCE_PRODUCT_MISSING',6);
 		define('ECOMMERCE_PRODUCT_INTERNAL_ERROR',7);
-
-		define('MANUAL_SUBSCRIPTION_EXPIRY_NOTICE',7);
 	}
 
 	require_lang('ecommerce');

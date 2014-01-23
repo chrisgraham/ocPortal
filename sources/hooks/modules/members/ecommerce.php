@@ -31,13 +31,16 @@ class Hook_members_ecommerce
 		if (!addon_installed('ecommerce')) return array();
 
 		require_lang('ecommerce');
+
 		$modules=array();
+
+		/*	Now we provide this link under the embedded list of subscriptions
+		if ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)',array('s_member_id'=>$member_id))!=0)
+			$modules[]=array('views',do_lang_tempcode('MY_SUBSCRIPTIONS'),build_url(array('page'=>'subscriptions','type'=>'misc','id'=>$member_id),get_module_zone('subscriptions')),'menu/adminzone/audit/ecommerce/subscriptions');
+		*/
 
 		if ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id'=>$member_id))!=0)
 			$modules[]=array('views',do_lang_tempcode('MY_INVOICES'),build_url(array('page'=>'invoices','type'=>'misc','id'=>$member_id),get_module_zone('invoices')),'menu/adminzone/audit/ecommerce/invoices');
-
-		if ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)',array('s_member_id'=>$member_id))!=0)
-			$modules[]=array('views',do_lang_tempcode('MY_SUBSCRIPTIONS'),build_url(array('page'=>'subscriptions','type'=>'misc','id'=>$member_id),get_module_zone('subscriptions')),'menu/adminzone/audit/ecommerce/subscriptions');
 
 		if (has_actual_page_access(get_member(),'admin_ecommerce',get_module_zone('admin_ecommerce')))
 		{
@@ -46,6 +49,38 @@ class Hook_members_ecommerce
 		}
 
 		return $modules;
+	}
+
+	/**
+	 * Standard modular get sections function.
+	 *
+	 * @param  MEMBER		The ID of the member we are getting sections for
+	 * @return array		List of sections. Each tuple is Tempcode.
+	 */
+	function get_sections($member_id)
+	{
+		if (($member_id!=get_member()) && (!has_privilege(get_member(),'view_any_profile_field'))) return array();
+
+		if (!addon_installed('ecommerce')) return array();
+
+		require_code('ecommerce_subscriptions');
+		$_subscriptions=find_member_subscriptions($member_id);
+
+		// Note that this display is similar to the subscriptions module, but a bit more cut down, and showing only active subscriptions
+
+		$subscriptions=array();
+		foreach ($_subscriptions as $_subscription)
+		{
+			if (!$_subscription['is_active']) continue; // We only show active subscriptions here
+
+			$subscriptions[]=prepare_templated_subscription($_subscription);
+		}
+
+		if (count($subscriptions)==0) return array();
+
+		require_lang('ecommerce');
+
+		return array(do_template('MEMBER_SUBSCRIPTION_STATUS',array('SUBSCRIPTIONS'=>$subscriptions,'MEMBER_ID'=>strval($member_id))));
 	}
 }
 

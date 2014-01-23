@@ -83,6 +83,7 @@ class Module_admin_ecommerce_logs
 		$type=get_param('type','misc');
 
 		require_lang('ecommerce');
+		require_css('ecommerce');
 
 		if ($type=='logs')
 		{
@@ -112,9 +113,6 @@ class Module_admin_ecommerce_logs
 
 		if ($type=='misc')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ECOMMERCE'))));
-			breadcrumb_set_self(do_lang_tempcode('TRANSACTIONS'));
-
 			$this->title=get_screen_title('TRANSACTIONS');
 		}
 
@@ -431,6 +429,8 @@ class Module_admin_ecommerce_logs
 					's_auto_fund_source'=>'',
 					's_auto_fund_key'=>'',
 					's_via'=>'manual',
+					's_length'=>$products[$item_name][3]['length'],
+					's_length_units'=>$products[$item_name][3]['length_units'],
 				),true));
 			}
 

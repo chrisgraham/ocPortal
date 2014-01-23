@@ -216,6 +216,7 @@ class Module_purchase
 
 		$list=new ocp_tempcode();
 		$filter=get_param('filter','');
+		$type_filter=get_param_integer('type_filter',NULL);
 		$products=find_all_products();
 
 		foreach ($products as $product=>$details)
@@ -223,6 +224,11 @@ class Module_purchase
 			if ($filter!='')
 			{
 				if ((!is_string($product)) || (substr($product,0,strlen($filter))!=$filter)) continue;
+			}
+
+			if (!is_null($type_filter))
+			{
+				if ($details[0]!=$type_filter) continue;
 			}
 
 			$wizard_supported=(($details[0]==PRODUCT_PURCHASE_WIZARD) || ($details[0]==PRODUCT_SUBSCRIPTION) || ($details[0]==PRODUCT_CATALOGUE));
@@ -384,6 +390,8 @@ class Module_purchase
 					's_auto_fund_source'=>'',
 					's_auto_fund_key'=>'',
 					's_via'=>get_option('payment_gateway'),
+					's_length'=>$temp[$product][3]['length'],
+					's_length_units'=>$temp[$product][3]['length_units'],
 				),true));
 			} else
 			{

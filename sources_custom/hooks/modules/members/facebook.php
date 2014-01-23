@@ -15,10 +15,10 @@
 class Hook_members_facebook
 {
 	/**
-	 * Standard modular run function.
+	 * Standard modular get sections function.
 	 *
-	 * @param  MEMBER		The ID of the member we are getting link hooks for
-	 * @return array		List of tuples for results. Each tuple is: type,title,url
+	 * @param  MEMBER		The ID of the member we are getting sections for
+	 * @return array		List of sections. Each tuple is Tempcode.
 	 */
 	function get_sections($member_id)
 	{

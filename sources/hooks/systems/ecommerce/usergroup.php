@@ -143,7 +143,8 @@ class Hook_usergroup
 
 		$fields_inner=new ocp_tempcode();
 
-		$fields_inner->attach(form_input_list(do_lang_tempcode('FINISH_STARTED_ALREADY'),do_lang_tempcode('DESCRIPTION_FINISH_STARTED_ALREADY'),'purchase_id',$list,NULL,false,true));
+		if (!$list->is_empty())
+			$fields_inner->attach(form_input_list(do_lang_tempcode('FINISH_STARTED_ALREADY'),do_lang_tempcode('DESCRIPTION_FINISH_STARTED_ALREADY'),'purchase_id',$list,NULL,false,true));
 
 		$pretty_name=do_lang_tempcode('NEW_UGROUP_SUB_FOR');
 		$description=do_lang_tempcode('DESCRIPTION_NEW_UGROUP_SUB_FOR');

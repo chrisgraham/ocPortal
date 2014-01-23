@@ -1664,7 +1664,7 @@ function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$nu
  * @param  mixed			A human intelligible name for this input field
  * @param  mixed			A description for this input field
  * @param  ID_TEXT		The parameter name stub for this input field (it's actually a composite field, read in by passing this stub to post_param_date)
- * @param  boolean		Whether this is a required field
+ * @param  boolean		Whether this is not a required field
  * @param  boolean		Whether this field is empty by default
  * @param  boolean		Whether to input time for this field also
  * @param  ?mixed			The default timestamp to use (either TIME or array of time components) (NULL: now)
@@ -1679,7 +1679,9 @@ function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$nu
  */
 function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
 {
-	$input=_form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex,$required,$do_date,$timezone,$handle_timezone);
+	if (is_null($required)) $required=!$null_ok;
+
+	$input=_form_input_date($stub,$null_ok,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex,$required,$do_date,$timezone,$handle_timezone);
 	return _form_input($stub,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 
@@ -1702,8 +1704,6 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
  */
 function _form_input_date($stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
 {
-	if (is_null($required)) $required=!$null_ok;
-
 	$tabindex=get_form_field_tabindex($tabindex);
 
 	require_lang('dates');

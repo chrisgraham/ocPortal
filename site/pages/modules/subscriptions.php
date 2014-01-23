@@ -35,7 +35,7 @@ class Module_subscriptions
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=4;
+		$info['version']=5;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -77,7 +77,11 @@ class Module_subscriptions
 				's_time'=>'TIME',
 				's_auto_fund_source'=>'ID_TEXT', // Used by PayPal for nothing much, but is of real use if we need to schedule our own subscription transactions
 				's_auto_fund_key'=>'SHORT_TEXT', // Ditto as above: we can serialize cc numbers etc into here
-				's_via'=>'ID_TEXT',
+				's_via'=>'ID_TEXT', // An eCommerce hook or 'manual'
+
+				// Copied through from what the hook says at setup, in case the hook later changes
+				's_length'=>'INTEGER',
+				's_length_units'=>'SHORT_TEXT',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('f_usergroup_subs',array(
@@ -94,6 +98,28 @@ class Module_subscriptions
 				's_mail_uhoh'=>'LONG_TRANS',
 				's_uses_primary'=>'BINARY',
 			));
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('subscriptions','s_length','INTEGER',1);
+			$GLOBALS['SITE_DB']->add_table_field('subscriptions','s_length_units','SHORT_TEXT','m');
+			$subscriptions=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'));
+			foreach ($subscriptions as $sub)
+			{
+				if (substr($sub['s_type_code'],0,9)!='USERGROUP') continue;
+
+				$usergroup_subscription_id=intval(substr($sub['s_type_code'],9));
+				$usergroup_subscription_rows=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('*'),array('id'=>$usergroup_subscription_id),'',1);
+				if (!array_key_exists(0,$usergroup_subscription_rows)) continue;
+				$usergroup_subscription_row=$usergroup_subscription_rows[0];
+
+				$update_map=array(
+					's_length'=>$usergroup_subscription_row['s_length'],
+					's_length_units'=>$usergroup_subscription_row['s_length_units'],
+				);
+				$GLOBALS['SITE_DB']->query_update('subscriptions',$update_map,array('id'=>$sub['id']),'',1);
+			}
 		}
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
@@ -179,25 +205,14 @@ class Module_subscriptions
 		$member_id=get_member();
 		if (has_privilege(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
 
+		require_code('ecommerce_subscriptions');
+		$_subscriptions=find_member_subscriptions($member_id);
+
 		$subscriptions=array();
-		$rows=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'),array('s_member_id'=>$member_id));
-		foreach ($rows as $row)
+		foreach ($_subscriptions as $_subscription)
 		{
-			$product=$row['s_type_code'];
-			$object=find_product($product);
-			if (is_null($object)) continue;
-			$products=$object->get_products(false,$product);
-
-			$subscription_title=$products[$product][4];
-			$time=get_timezoned_date($row['s_time'],true,false,false,true);
-			$state=do_lang_tempcode('PAYMENT_STATE_'.$row['s_state']);
-
-			$cancel_button=make_cancel_button($row['s_auto_fund_key'],$row['s_via']);
-			$per=do_lang('_LENGTH_UNIT_'.$products[$product][3]['length_units'],integer_format($products[$product][3]['length']));
-
-			$subscriptions[]=array('SUBSCRIPTION_TITLE'=>$subscription_title,'ID'=>strval($row['id']),'PER'=>$per,'AMOUNT'=>$row['s_amount'],'TIME'=>$time,'STATE'=>$state,'TYPE_CODE'=>$row['s_type_code'],'CANCEL_BUTTON'=>$cancel_button);
+			$subscriptions[]=prepare_templated_subscription($_subscription);
 		}
-		if (count($subscriptions)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		return do_template('ECOM_SUBSCRIPTIONS_SCREEN',array('_GUID'=>'e39cd1883ba7b87599314c1f8b67902d','TITLE'=>$this->title,'SUBSCRIPTIONS'=>$subscriptions));
 	}
@@ -210,7 +225,8 @@ class Module_subscriptions
 	function cancel()
 	{
 		$id=get_param_integer('id');
-		$via=$GLOBALS['SITE_DB']->query_select_value('subscriptions','s_via',array('id'=>$id));
+		$via=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_via',array('id'=>$id));
+		if (is_null($via)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		if (($via!='manual') && ($via!=''))
 		{

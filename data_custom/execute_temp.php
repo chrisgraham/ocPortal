@@ -53,13 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	set_long_value('external_db_login__db_type','mysql');
-	set_long_value('external_db_login__db_name','ocf');
-	set_long_value('external_db_login__db_host','localhost');
-	set_long_value('external_db_login__db_user','root');
-	set_long_value('external_db_login__db_password','');
-	set_long_value('external_db_login__table','logins');
-	set_long_value('external_db_login__username_field','username');
-	set_long_value('external_db_login__password_field','password');
-	set_long_value('external_db_login__email_address_field','email');
+	require_code('ecommerce_subscriptions');
+	var_dump(find_member_subscriptions(get_member()));
 }
