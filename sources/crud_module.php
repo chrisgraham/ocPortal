@@ -355,11 +355,6 @@ class standard_crud_module
 				{
 					$doing='EDIT_'.$this->lang_type;
 
-					$success_message_str='SUCCESS_MESSAGE__'.$doing;
-					if (get_param('catalogue_name','')!='') $success_message_str.='_'.get_param('catalogue_name','');
-					if (is_null(do_lang($success_message_str,NULL,NULL,NULL,NULL,false)))
-						$success_message_str='SUCCESS';
-
 					if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 					{
 						$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
@@ -377,6 +372,11 @@ class standard_crud_module
 				}
 
 				breadcrumb_set_parents(array_merge($GLOBALS['BREADCRUMB_SET_PARENTS'],array(array('_SELF:_SELF:_e'.$this->type_code.':'.$id,(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang_tempcode($doing)))));
+
+				$success_message_str='SUCCESS_MESSAGE__'.$doing;
+				if (get_param('catalogue_name','')!='') $success_message_str.='_'.get_param('catalogue_name','');
+				if (is_null(do_lang($success_message_str,NULL,NULL,NULL,NULL,false)))
+					$success_message_str='SUCCESS';
 
 				$this->doing=$doing;
 				$this->success_message_str=$success_message_str;
