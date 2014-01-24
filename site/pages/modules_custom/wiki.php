@@ -18,7 +18,7 @@
  * @package		wiki_sync
  */
 
-function init__site__pages__modules_custom__wiki($code)
+/*function init__site__pages__modules_custom__wiki($code)		TODO: This will need to be done in Mx_wiki as we cannot mix code overrides with code rewriting
 {
 	$code=str_replace(
 		',$merge_url,new ocp_tempcode(),new ocp_tempcode());',
@@ -26,14 +26,14 @@ function init__site__pages__modules_custom__wiki($code)
 		$code
 	);
 	$code=str_replace(
-		',NULL,'',$specialisation,$parsed,$javascript);',
-		',NULL,'',$specialisation,$parsed,$javascript,NULL,true,true,get_option(\'wiki_enable_wysiwyg\')==\'0\');',
+		',NULL,\'\',$specialisation,$parsed,$javascript);',
+		',NULL,\'\',$specialisation,$parsed,$javascript,NULL,true,true,get_option(\'wiki_enable_wysiwyg\')==\'0\');',
 		$code
 	);
 	return $code;
-}
+}*/
 
-class Mx_wiki
+class Mx_wiki extends Module_wiki
 {
 	function changes()
 	{
