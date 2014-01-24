@@ -998,6 +998,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		require_code('mail');
 		$_login_url=build_url(array('page'=>'login'),get_module_zone('login'),NULL,false,false,true);
 		$login_url=$_login_url->evaluate();
+		// NB: Same mail also sent in settings.php (quick-validate feature)
 		mail_wrap(do_lang('VALIDATED_MEMBER_SUBJECT',get_site_name(),NULL,get_lang($member_id)),do_lang('MEMBER_VALIDATED',get_site_name(),$username,$login_url,get_lang($member_id)),array($email_address),$username,'','',3,NULL,false,NULL,false,false,false,'MAIL',false,NULL,NULL,$join_time);
 	}
 

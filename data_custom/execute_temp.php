@@ -53,6 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('ecommerce_subscriptions');
-	var_dump(find_member_subscriptions(get_member()));
 }
