@@ -38,11 +38,14 @@ class Mx_login extends Module_login
 	 */
 	function run()
 	{
-		$redirect_url=get_long_value('external_login_url');
-		if (!empty($redirect_url))
+		if (strtoupper(ocp_srv('REQUEST_METHOD'))=='GET')
 		{
-			header('Location: '.$redirect_url);
-			exit();
+			$redirect_url=get_long_value('external_login_url');
+			if (!empty($redirect_url))
+			{
+				header('Location: '.$redirect_url);
+				exit();
+			}
 		}
 
 		return parent::run();
