@@ -205,7 +205,7 @@ function activities_ajax_update_list_handler()
 
 	$can_remove_others=(has_zone_access($viewer_id,'adminzone'));
 
-	//Getting the member viewed ids if available, member viewing if not
+	//Getting the member viewed IDs if available, member viewing if not
 	$member_ids=array_map('intval',explode(',',post_param('member_ids',strval($viewer_id))));
 
 	list($proceed_selection,$where_clause)=get_activity_querying_sql($viewer_id,$mode,$member_ids);

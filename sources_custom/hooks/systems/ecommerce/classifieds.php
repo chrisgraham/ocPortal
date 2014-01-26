@@ -18,7 +18,7 @@ class Hook_classifieds
 	/**
 	 * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
 	 *
-	 * @param  ID_TEXT		Product type code.
+	 * @param  ID_TEXT		Product codename.
 	 * @return ?tempcode		Input field in standard Tempcode format for fields (NULL: no identifier).
 	 */
 	function get_identifier_manual_field_inputter($type_code)
@@ -82,13 +82,13 @@ class Hook_classifieds
 	 * @param  ID_TEXT	The product chosen.
 	 * @return ID_TEXT	The purchase ID.
 	 */
-	function set_needed_fields($product)
+	function set_needed_fields($type_code)
 	{
 		$entry_id=get_param_integer('id',NULL);
 		if (is_null($entry_id)) return '';
 
 		$matches=array();
-		if (preg_match('#^CLASSIFIEDS\_ADVERT\_(\d+)$#',$product,$matches)!=0)
+		if (preg_match('#^CLASSIFIEDS\_ADVERT\_(\d+)$#',$type_code,$matches)!=0)
 		{
 			$entry_catalogue_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','c_name',array('id'=>$entry_id));
 			if (is_null($entry_catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -110,12 +110,12 @@ class Hook_classifieds
  * Handling of a purchased classifieds advert.
  *
  * @param  ID_TEXT	The purchase ID.
- * @param  array		Details relating to the product.
- * @param  ID_TEXT	The product.
+ * @param  array		Details of the product.
+ * @param  ID_TEXT	The product codename.
  */
-function handle_classifieds_advert($purchase_id,$details,$product)
+function handle_classifieds_advert($purchase_id,$details,$type_code)
 {
-	$days=$GLOBALS['SITE_DB']->query_select_value_if_there('classifieds_prices','c_days',array('id'=>intval(substr($product,19))));
+	$days=$GLOBALS['SITE_DB']->query_select_value_if_there('classifieds_prices','c_days',array('id'=>intval(substr($type_code,19))));
 
 	// Make validated, bump up timer
 	$time=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','ce_last_moved',array('id'=>intval($purchase_id)));

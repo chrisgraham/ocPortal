@@ -109,9 +109,9 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Find if the login cookie contains the login name instead of the member id.
+	 * Find if the login cookie contains the login name instead of the member ID.
 	 *
-	 * @return boolean		Whether the login cookie contains a login name or a member id
+	 * @return boolean		Whether the login cookie contains a login name or a member ID
 	 */
 	function is_cookie_login_name()
 	{
@@ -129,7 +129,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Find the member id of the forum guest member.
+	 * Find the member ID of the forum guest member.
 	 *
 	 * @return MEMBER			The member ID of the forum guest member
 	 */
@@ -213,7 +213,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * From a member row, get the member's member id.
+	 * From a member row, get the member's member ID.
 	 *
 	 * @param  array			The profile-row
 	 * @return MEMBER			The member ID
@@ -350,9 +350,9 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Get a URL to the specified post id.
+	 * Get a URL to the specified post ID.
 	 *
-	 * @param  integer		The post id
+	 * @param  integer		The post ID
 	 * @param string			The forum ID
 	 * @return URLPATH		The URL to the post
 	 */
@@ -387,7 +387,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 * This is the opposite of the get_next_member function.
 	 *
 	 * @param  MEMBER			The member ID to decrement
-	 * @return ?MEMBER		The previous member id (NULL: no previous member)
+	 * @return ?MEMBER		The previous member ID (NULL: no previous member)
 	 */
 	function get_previous_member($member)
 	{
@@ -396,11 +396,11 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Get the member id of the next member after the given one, or NULL.
-	 * It cannot be assumed there are no gaps in member ids, as members may be deleted.
+	 * Get the member ID of the next member after the given one, or NULL.
+	 * It cannot be assumed there are no gaps in member IDs, as members may be deleted.
 	 *
 	 * @param  MEMBER			The member ID to increment
-	 * @return ?MEMBER		The next member id (NULL: no next member)
+	 * @return ?MEMBER		The next member ID (NULL: no next member)
 	 */
 	function get_next_member($member)
 	{
@@ -422,7 +422,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Get the e-mail address for the specified member id.
+	 * Get the e-mail address for the specified member ID.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return SHORT_TEXT	The e-mail address
@@ -433,7 +433,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Get the photo thumbnail URL for the specified member id.
+	 * Get the photo thumbnail URL for the specified member ID.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL (blank: none)
@@ -496,7 +496,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Find out if the given member id is banned.
+	 * Find out if the given member ID is banned.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is banned
@@ -516,7 +516,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Find if the specified member id is marked as staff or not.
+	 * Find if the specified member ID is marked as staff or not.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is staff
@@ -529,7 +529,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 
 	/**
-	 * Find if the specified member id is marked as a super admin or not.
+	 * Find if the specified member ID is marked as a super admin or not.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is a super admin
@@ -564,7 +564,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	/**
 	 * Get the IDs of the admin usergroups.
 	 *
-	 * @return array			The admin usergroup ids
+	 * @return array			The admin usergroup IDs
 	 */
 	function _get_super_admin_groups()
 	{
@@ -575,7 +575,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 * Get the IDs of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
 	 *
-	 * @return array			The moderator usergroup ids
+	 * @return array			The moderator usergroup IDs
 	 */
 	function _get_moderator_groups()
 	{

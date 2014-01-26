@@ -504,7 +504,7 @@ function _fields_api_ocselect_named($db,$info,$catalogue_name,&$extra_join,&$ext
 		$fields=get_catalogue_fields($_catalogue_name);
 		if (count($fields)!=0)
 		{
-			if ($filter_key=='id') // id field of a named catalogue (we need to handle this here, as otherwise a name prefix will be considered a real DB table name)
+			if ($filter_key=='id') // ID field of a named catalogue (we need to handle this here, as otherwise a name prefix will be considered a real DB table name)
 			{
 				$catalogue_key=generate_ocselect_join_key_from_string($_catalogue_name);
 				$table_join_code_here=$table_join_code.'_'.$catalogue_key;

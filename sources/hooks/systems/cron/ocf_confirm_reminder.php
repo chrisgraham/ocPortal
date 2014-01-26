@@ -28,9 +28,9 @@ class Hook_cron_ocf_confirm_reminder
 		if (get_forum_type()!='ocf') return;
 
 		$time=time();
-		$last_time=intval(get_value('last_confirm_reminder_time'));
+		$last_time=intval(get_long_value('last_confirm_reminder_time'));
 		if ($last_time>time()-24*60*60*2) return;
-		set_value('last_confirm_reminder_time',strval($time));
+		set_long_value('last_confirm_reminder_time',strval($time));
 
 		require_code('mail');
 		require_lang('ocf');

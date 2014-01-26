@@ -16,13 +16,13 @@
 /**
  * Handling of adding support credits to a member's account.
  *
- * @param  ID_TEXT	The key.
- * @param  array	Details relating to the product.
- * @param  ID_TEXT	The product.
+ * @param  ID_TEXT	The purchase ID.
+ * @param  array		Details of the product.
+ * @param  ID_TEXT	The product codename.
  */
-function handle_support_credits($_key,$details,$product)
+function handle_support_credits($purchase_id,$details,$type_code)
 {
-	$row=$GLOBALS['SITE_DB']->query_select('credit_purchases',array('member_id','num_credits'),array('purchase_validated'=>0,'purchase_id'=>intval($_key)),'',1);
+	$row=$GLOBALS['SITE_DB']->query_select('credit_purchases',array('member_id','num_credits'),array('purchase_validated'=>0,'purchase_id'=>intval($purchase_id)),'',1);
 	if (count($row)!=1) return;
 	$member_id=$row[0]['member_id'];
 	if (is_null($member_id)) return;
@@ -38,7 +38,7 @@ function handle_support_credits($_key,$details,$product)
 	ocf_set_custom_field($member_id,$cpf_id,intval($fields['field_'.strval($cpf_id)])+intval($num_credits));
 
 	// Update the row in the credit_purchases table
-	$GLOBALS['SITE_DB']->query_update('credit_purchases',array('purchase_validated'=>1),array('purchase_id'=>intval($_key)));
+	$GLOBALS['SITE_DB']->query_update('credit_purchases',array('purchase_validated'=>1),array('purchase_id'=>intval($purchase_id)));
 }
 
 /**
@@ -74,14 +74,19 @@ class Hook_support_credits
 	/**
 	 * Get the message for use in the purchase wizard.
 	 *
-	 * @param  string	The product in question.
+	 * @param  string		The product in question.
 	 * @return tempcode	The message.
 	 */
-	function get_message($product)
+	function get_message($type_code)
 	{
 		return do_lang('SUPPORT_CREDITS_PRODUCT_DESCRIPTION');
 	}
 
+	/**
+	 * Get the agreement for use in the purchase wizard.
+	 *
+	 * @return string		The message.
+	 */
 	function get_agreement()
 	{
 		require_code('textfiles');
@@ -89,16 +94,21 @@ class Hook_support_credits
 	}
 
 	/**
-	 * Find the corresponding member to a given key.
+	 * Find the corresponding member to a given purchase ID.
 	 *
-	 * @param  ID_TEXT		The key.
+	 * @param  ID_TEXT		The purchase ID.
 	 * @return ?MEMBER		The member (NULL: unknown / can't perform operation).
 	 */
-	function member_for($key)
+	function member_for($purchase_id)
 	{
-		return $GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases','member_id',array('purchase_id'=>intval($key)));
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases','member_id',array('purchase_id'=>intval($purchase_id)));
 	}
 
+	/**
+	 * Get fields that need to be filled in in the purchase wizard.
+	 *
+	 * @return ?array		The fields and message text (NULL: none).
+	 */
 	function get_needed_fields()
 	{
 		if (!has_actual_page_access(get_member(),'admin_ecommerce',get_module_zone('admin_ecommerce'))) return NULL;
@@ -113,14 +123,14 @@ class Hook_support_credits
 	/**
 	 * Get the filled in fields and do something with them.
 	 *
-	 * @param  ID_TEXT	The product name
-	 * @return ID_TEXT		The purchase id.
+	 * @param  ID_TEXT	The product codename.
+	 * @return ID_TEXT	The purchase ID.
 	 */
-	function set_needed_fields($product)
+	function set_needed_fields($type_code)
 	{
-		$product_array=explode('_',$product,2);
-		$num_credits = intval($product_array[0]);
-		if($num_credits == 0) return;
+		$product_array=explode('_',$type_code,2);
+		$num_credits=intval($product_array[0]);
+		if ($num_credits==0) return;
 		$manual=0;
 		$member_id=get_member();
 
@@ -148,13 +158,13 @@ class Hook_support_credits
 	}
 
 	/**
-	 * Check whether the product code is available for purchase by the member.
+	 * Check whether the product codename is available for purchase by the member.
 	 *
-	 * @param  ID_TEXT	The product.
+	 * @param  ID_TEXT	The product codename.
 	 * @param  MEMBER		The member.
 	 * @return boolean	Whether it is.
 	 */
-	function is_available($product,$member)
+	function is_available($type_code,$member)
 	{
 		return ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id())?ECOMMERCE_PRODUCT_AVAILABLE:ECOMMERCE_PRODUCT_NO_GUESTS;
 	}

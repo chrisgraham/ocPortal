@@ -477,11 +477,11 @@ admin_aggregate_types
  sync
   type
 
-admin_ecommerce
+admin_ecommerce_logs
  ad
   group_id
  trigger
-  item_name
+  type_code
 
 admin_ocf_forums
  ad

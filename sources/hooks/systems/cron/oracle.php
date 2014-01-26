@@ -27,11 +27,11 @@ class Hook_cron_oracle
 	{
 		if (get_db_type()=='oracle')
 		{
-			$oracle_index_cleanup_last_time=intval(get_value('oracle_index_cleanup_last_time'));
+			$oracle_index_cleanup_last_time=intval(get_long_value('oracle_index_cleanup_last_time'));
 
 			if ($oracle_index_cleanup_last_time<(time()-60*60*5)) // every 5 hours
 			{
-				set_value('oracle_index_cleanup_last_time',strval(time()));
+				set_long_value('oracle_index_cleanup_last_time',strval(time()));
 
 				$indices=$GLOBALS['SITE_DB']->query_select('db_meta_indices',array('i_name'));
 				foreach ($indices as $index)

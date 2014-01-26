@@ -24,7 +24,7 @@ class Hook_ocf_auth_converge
 	 * Try and authenticate for our password compatibility scheme.
 	 *
 	 * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
-	 * @param  ?MEMBER		The member id (NULL: use member name)
+	 * @param  ?MEMBER		The member ID (NULL: use member name)
 	 * @param  MD5				The md5-hashed password
 	 * @param  string			The raw password
 	 * @param  boolean		Whether this is a cookie login

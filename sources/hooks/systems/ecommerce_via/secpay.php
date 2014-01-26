@@ -60,7 +60,7 @@ class Hook_secpay
 	 * @param  ID_TEXT		The currency to use.
 	 * @return tempcode		The button
 	 */
-	function make_transaction_button($product,$item_name,$purchase_id,$amount,$currency)
+	function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
 	{
 		$username=$this->_get_username();
 		$ipn_url=$this->get_ipn_url();
@@ -80,7 +80,7 @@ class Hook_secpay
 		$digest=md5($trans_id.float_to_raw_string($amount).get_option('ipn_password'));
 		return do_template('ECOM_BUTTON_VIA_SECPAY',array(
 			'_GUID'=>'e68e80cb637f8448ef62cd7d73927722',
-			'PRODUCT'=>$product,
+			'TYPE_CODE'=>$type_code,
 			'DIGEST'=>$digest,
 			'TEST'=>ecommerce_test_mode(),
 			'TRANS_ID'=>$trans_id,
@@ -145,7 +145,7 @@ class Hook_secpay
 	 * @param  ID_TEXT		The currency to use.
 	 * @return tempcode		The button
 	 */
-	function make_subscription_button($product,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
+	function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
 	{
 		$username=$this->_get_username();
 		$ipn_url=$this->get_ipn_url();
@@ -166,7 +166,7 @@ class Hook_secpay
 		));
 		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY',array(
 			'_GUID'=>'e5e6d6835ee6da1a6cf02ff8c2476aa6',
-			'PRODUCT'=>$product,
+			'TYPE_CODE'=>$type_code,
 			'DIGEST'=>$digest,
 			'TEST'=>ecommerce_test_mode(),
 			'TRANS_ID'=>$trans_id,
@@ -219,7 +219,7 @@ class Hook_secpay
 	 */
 	function get_transaction_fee($amount)
 	{
-		return 0.39; // the fee for <60 transactions per month. If it's more, I'd hope ocPortal's simplistic accountancy wasn't being relied on!
+		return 0.39; // the fee for <60 transactions per month. If it's more, I'd hope ocPortal's simple accountancy wasn't being relied on (it shouldn't be)!
 	}
 
 	/**
@@ -293,7 +293,7 @@ class Hook_secpay
 		$message=$success?do_lang('ACCEPTED_MESSAGE',$message_raw):do_lang('DECLINED_MESSAGE',$message_raw);
 
 		$purchase_id=post_param_integer('customfld1','-1');
-		if(addon_installed('shopping'))
+		if (addon_installed('shopping'))
 		{
 			$this->store_shipping_address($purchase_id);
 		}
@@ -408,7 +408,7 @@ class Hook_secpay
 			$repeat=$this->_translate_subscription_details($transaction_row['e_length'],$transaction_row['e_length_units']);
 			$my_hash=md5('trans_id='.$txn_id.'&'.'req_cv2=true'.'&'.'repeat='.$repeat.'&'.get_option('ipn_digest'));
 		}
-		if ($hash!=$my_hash) my_exit(do_lang('IPN_UNVERIFIED'));
+		if ($hash!=$my_hash) fatal_ipn_exit(do_lang('IPN_UNVERIFIED'));
 
 		if ($success)
 		{
@@ -422,25 +422,25 @@ class Hook_secpay
 			if (!$success) $payment_status='SCancelled';
 		}
 
-		if ($success) $_url=build_url(array('page'=>'purchase','type'=>'finish','product'=>get_param('product',NULL)),get_module_zone('purchase'));
+		if ($success) $_url=build_url(array('page'=>'purchase','type'=>'finish','type_code'=>get_param('type_code',NULL)),get_module_zone('purchase'));
 		else $_url=build_url(array('page'=>'purchase','type'=>'finish','cancel'=>1,'message'=>do_lang_tempcode('DECLINED_MESSAGE',$message)),get_module_zone('purchase'));
 		$url=$_url->evaluate();
 
 		echo http_download_file($url);
 
-		if(addon_installed('shopping'))
+		if (addon_installed('shopping'))
 		{
 			$this->store_shipping_address($purchase_id);
 		}
 
-		return array($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,'');
+		return array($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,'','');
 	}
 
 	/**
 	 * Store shipping address for orders
 	 *
-	 * @param  AUTO_LINK		Order id
-	 * @return ?mixed			Address id (NULL: No address record found)
+	 * @param  AUTO_LINK		Order ID
+	 * @return ?mixed			Address ID (NULL: No address record found)
 	 */
 	function store_shipping_address($order_id)
 	{
@@ -450,12 +450,16 @@ class Hook_secpay
 		{
 			$shipping_address=array();
 			$shipping_address['order_id']=$order_id;
-			$shipping_address['address_name']=post_param('first_name','')." ".post_param('last_name','');
-			$shipping_address['address_street']=post_param('ship_addr_1','');
+			$shipping_address['address_name']=post_param('ship_addr_1','');
+			$shipping_address['address_street']=post_param('ship_addr_2','');
 			$shipping_address['address_zip']=post_param('ship_post_code','');
 			$shipping_address['address_city']=post_param('ship_city','');
-			$shipping_address['address_country']=	post_param('ship_country','');
-			$shipping_address['receiver_email']='';//post_param('receiver_email','');
+			$shipping_address['address_state']=post_param('ship_state','');
+			$shipping_address['address_country']=post_param('ship_country','');
+			$shipping_address['receiver_email']='';
+			$shipping_address['contact_phone']=post_param('ship_tel','');
+			$shipping_address['first_name']=trim(post_param('ship_name','').', '.post_param('ship_company',''),' ,');
+			$shipping_address['last_name']='';
 
 			return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses',$shipping_address,true);	
 		}

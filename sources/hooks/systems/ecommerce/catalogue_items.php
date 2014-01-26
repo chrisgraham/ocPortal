@@ -28,10 +28,10 @@ class Hook_catalogue_items
 	 *
 	 * @param  boolean	Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
 	 * @param  ?ID_TEXT	Product being searched for (NULL: none).
-	 * @param  boolean 	Whether $search refers to the product name rather than the product_id.
+	 * @param  boolean 	Whether $search refers to the item name rather than the product codename.
 	 * @return array		A map of product name to list of product details.
 	 */
-	function get_products($site_lang=false,$search=NULL,$search_titles_not_ids=false)
+	function get_products($site_lang=false,$search=NULL,$search_item_names=false)
 	{
 		if (is_null($search))
 		{
@@ -47,7 +47,7 @@ class Hook_catalogue_items
 		$where=array('c_ecommerce'=>1);
 		if (!is_null($search))
 		{
-			if (!$search_titles_not_ids)
+			if (!$search_item_names)
 			{
 				if (!is_numeric($search)) return array();
 				$where['id']=intval($search);
@@ -69,22 +69,20 @@ class Hook_catalogue_items
 
 				$product_title=$map[0]['effective_value_pure'];
 
-				if ((!is_null($search)) && ($search_titles_not_ids))
+				if ((!is_null($search)) && ($search_item_names))
 				{
 					if ($product_title!=$search) continue;
 				}
 
 				$item_price='0.0';
-				$tax=0.0;
-
-				$product_weight=0.0;
-
 				if (array_key_exists(2,$map))
 					$item_price=is_object($map[2]['effective_value'])?$map[2]['effective_value']->evaluate():$map[2]['effective_value'];
 
+				$tax=0.0;
 				if (array_key_exists(6,$map))
 					$tax=floatval(is_object($map[6]['effective_value'])?$map[6]['effective_value']->evaluate():$map[6]['effective_value']);
 
+				$product_weight=0.0;
 				if (array_key_exists(8,$map))
 					$product_weight=floatval(is_object($map[8]['effective_value'])?$map[8]['effective_value']->evaluate():$map[8]['effective_value']);
 
@@ -101,19 +99,18 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Check whether the product code is available for purchase by the member.
+	 * Check whether the product codename is available for purchase by the member.
 	 *
-	 * @param  ID_TEXT	The product.
+	 * @param  ID_TEXT	The product codename.
 	 * @param  ?MEMBER	The member we are checking against (NULL: current meber).
 	 * @param  integer	The number required.
 	 * @return integer	The availability code (a ECOMMERCE_PRODUCT_* constant).
 	 */
-	function is_available($product,$member=NULL,$req_quantity=1)
+	function is_available($type_code,$member=NULL,$req_quantity=1)
 	{
 		require_code('catalogues');
 
-		$res=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$product),'',1);
-
+		$res=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($type_code)),'',1);
 		if (!array_key_exists(0,$res)) return ECOMMERCE_PRODUCT_MISSING;
 
 		$product_det=$res[0];
@@ -135,7 +132,7 @@ class Hook_catalogue_items
 			$available_stock=intval($fields[3]['effective_value']);
 
 			// Locked order check
-			$item_count=$GLOBALS['SITE_DB']->query_select_value('shopping_order t1 JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id','SUM(t2.p_quantity) as qty',array('t1.order_status'=>'ORDER_STATUS_awaiting_payment','t2.p_id'=>intval($product)));
+			$item_count=$GLOBALS['SITE_DB']->query_select_value('shopping_order t1 JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id','SUM(t2.p_quantity) as qty',array('t1.order_status'=>'ORDER_STATUS_awaiting_payment','t2.p_id'=>intval($type_code)));
 			if (is_null($item_count))
 				$item_count=0;
 
@@ -146,17 +143,16 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Get currently available quantity of selected product
+	 * Get currently available quantity of selected product.
 	 *
-	 * @param  ID_TEXT	The product.
+	 * @param  ID_TEXT	The product codename.
 	 * @return ?integer	Quantity (NULL: no limit).
 	 */
-	function get_available_quantity($product)
+	function get_available_quantity($type_code)
 	{
 		require_code('catalogues');
 
-		$res=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$product));
-
+		$res=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($type_code)));
 		if (!array_key_exists(0,$res)) return 0;
 
 		$product_det=$res[0];
@@ -172,8 +168,8 @@ class Hook_catalogue_items
 		{
 			$available_stock=intval($fields[3]['effective_value']);
 
-			//Locked order check
-			$query='SELECT sum(t2.p_quantity) as qty FROM '.get_table_prefix().'shopping_order t1 JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id WHERE t1.c_member='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND add_date>'.strval(time()-60*60*24).' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_awaiting_payment').' AND t2.p_id='.strval(intval($product));
+			// Locked order check
+			$query='SELECT sum(t2.p_quantity) as qty FROM '.get_table_prefix().'shopping_order t1 JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id WHERE t1.c_member='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND add_date>'.strval(time()-60*60*24).' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_awaiting_payment').' AND t2.p_id='.strval(intval($type_code));
 			if (is_guest())
 			{
 				$query.=' AND t1.session_id<>'.strval(get_session_id());
@@ -197,36 +193,35 @@ class Hook_catalogue_items
 	/**
 	 * Get the message for use in the purchase wizard
 	 *
-	 * @param  AUTO_LINK		The product in question.
+	 * @param  ID_TEXT		The product in question.
 	 * @return tempcode		The message.
 	 */
-	function get_message($product)
+	function get_message($type_code)
 	{
 		require_code('catalogues');
 
-		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$product));
+		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>intval($type_code)));
 
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-
 		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',$catalogue_name));
 
 		$catalogue=$catalogues[0];
 
-		$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$product),'',1);
+		$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>intval($type_code)),'',1);
 
 		if (!array_key_exists(0,$entries)) return warn_screen(get_screen_title('CATALOGUES'),do_lang_tempcode('MISSING_RESOURCE'));
 
 		$entry=$entries[0];
 
-		$map=get_catalogue_entry_map($entry,$catalogue,'PAGE',$catalogue_name,$product,NULL,NULL,true,true);
+		$map=get_catalogue_entry_map($entry,$catalogue,'PAGE',$catalogue_name,intval($type_code),NULL,NULL,true,true);
 
 		return do_template('ECOM_ITEM_DETAILS',$map,NULL,false,'ECOM_ITEM_DETAILS');
 	}
 
 	/**
-	 * Get the products details
+	 * Get the product's details.
 	 *
-	 * @param	?AUTO_LINK	Product ID (NULL: read from environment, product_id)
+	 * @param	?AUTO_LINK	Product ID (NULL: read from environment, product_id).
 	 * @return 	array			A map of product name to list of product details.
 	 */
 	function get_product_details($pid=NULL)
@@ -267,7 +262,7 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Add an order
+	 * Add an order.
 	 *
 	 * @param  array			Array of product details.
 	 * @return AUTO_LINK		Order ID of newly added order.
@@ -305,7 +300,7 @@ class Hook_catalogue_items
 					'product_description'=>$product_det['description'],
 					'product_type'=>$product_det['product_type'],
 					'product_weight'=>$product_det['product_weight'],
-					'is_deleted' => 0,
+					'is_deleted'=>0,
 				)
 			);
 		}
@@ -334,11 +329,11 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Add order - (order coming from purchase module)
+	 * Add order - (order coming from purchase module).
 	 *
-	 * @param  AUTO_LINK		Product ID
-	 * @param  array			Product details
-	 * @return AUTO_LINK		Order ID
+	 * @param  AUTO_LINK		Product ID.
+	 * @param  array			Product details.
+	 * @return AUTO_LINK		Order ID.
 	 */
 	function add_purchase_order($product,$product_det)
 	{
@@ -392,7 +387,7 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Show shopping cart entries
+	 * Show shopping cart entries.
 	 *
 	 * @param  tempcode	Tempcode object of shopping cart result table.
 	 * @param  array		Details of new entry to the shopping cart.
@@ -468,7 +463,7 @@ class Hook_catalogue_items
 	 * Calculate tax of catalogue product.
 	 *
 	 * @param  float		Gross cost of product.
-	 * @param  float		Tax in percentage
+	 * @param  float		Tax in percentage.
 	 * @return float		Calculated tax for the product.
 	 */
 	function calculate_tax($gross_cost,$tax_percentage)
@@ -486,8 +481,8 @@ class Hook_catalogue_items
 	/**
 	 * Calculate shipping cost of product.
 	 *
-	 * @param  float		Weight of product
-	 * @return float		Calculated shipping cost for the product
+	 * @param  float		Weight of product.
+	 * @return float		Calculated shipping cost for the product.
 	 */
 	function calculate_shipping_cost($item_weight)
 	{
@@ -507,12 +502,12 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Calculate product price
+	 * Calculate product price.
 	 *
-	 * @param  float		Weight of product
-	 * @param  float		Tax in percentage
-	 * @param  integer	Weight of item
-	 * @return float		Calculated shipping cost for the product
+	 * @param  float		Weight of product.
+	 * @param  float		Tax in percentage.
+	 * @param  integer	Weight of item.
+	 * @return float		Calculated shipping cost for the product.
 	 */
 	function calculate_product_price($item_price,$tax,$item_weight)
 	{
@@ -531,11 +526,11 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Find product image for a specific catalogue product
+	 * Find product image for a specific catalogue product.
 	 *
-	 * @param  ID_TEXT		Catalogue name
-	 * @param  AUTO_LINK		Catalogue entry ID
-	 * @return ?SHORT_TEXT	Image name (NULL: no image)
+	 * @param  ID_TEXT		Catalogue name.
+	 * @param  AUTO_LINK		Catalogue entry ID.
+	 * @return ?SHORT_TEXT	Image name (NULL: no image).
 	 */
 	function get_product_image($catalogue_name,$entry_id)
 	{
@@ -552,10 +547,10 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Calculate product price
+	 * Calculate product price.
 	 *
-	 * @param  AUTO_LINK		Catalogue entry ID
-	 * @param  integer		Quantity to deduct
+	 * @param  AUTO_LINK		Catalogue entry ID.
+	 * @param  integer		Quantity to deduct.
 	 */
 	function update_stock($entry_id,$quantity)
 	{
@@ -577,7 +572,7 @@ class Hook_catalogue_items
 
 		$fields=get_catalogue_entry_field_values($catalogue_name,$entry_id,NULL,NULL,true);
 
-		if (array_key_exists(3,$fields))	//Stock level
+		if (array_key_exists(3,$fields))	// Stock level
 		{
 			if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 
@@ -587,7 +582,7 @@ class Hook_catalogue_items
 			$current_stock=intval($fields[3]['effective_value']);
 		}
 
-		if (array_key_exists(4,$fields))	//Stock maintained
+		if (array_key_exists(4,$fields))	// Stock maintained
 		{
 			if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
 
@@ -596,7 +591,7 @@ class Hook_catalogue_items
 			$stock_maintained=intval($fields[4]['effective_value'])==1;
 		}
 
-		if (array_key_exists(5,$fields))	//Stock level warn threshold
+		if (array_key_exists(5,$fields))	// Stock level warn threshold
 		{
 			if (is_object($fields[5]['effective_value'])) $fields[5]['effective_value']=$fields[5]['effective_value']->evaluate();
 
@@ -626,7 +621,7 @@ class Hook_catalogue_items
 	/**
 	 * Function to return dispatch type of product.
 	 *
-	 * @return  ID_TEXT		Dispatch type (manual/automatic)
+	 * @return  ID_TEXT		Dispatch type (manual/automatic).
 	 */
 	function get_product_dispatch_type()
 	{
@@ -634,10 +629,10 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Return product info details
+	 * Return product info details.
 	 *
-	 * @param  AUTO_LINK		Product ID
-	 * @return tempcode		Product information
+	 * @param  AUTO_LINK		Product ID.
+	 * @return tempcode		Product information.
 	 */
 	function product_info($id)
 	{
@@ -645,20 +640,18 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 * Get custom fields for ecommerce product
+	 * Get custom fields for ecommerce product.
 	 *
-	 * @param	AUTO_LINK	Product entry ID
-	 * @param	array			Map where product details are placed
+	 * @param	AUTO_LINK	Product entry ID.
+	 * @param	array			Map where product details are placed.
 	 */
 	function get_custom_product_map_fields($id,&$map)
 	{
 		require_code('feedback');
+		require_code('ecommerce');
+		require_code('images');
 
 		require_lang('shopping');
-
-		require_code('ecommerce');
-
-		require_code('images');
 
 		$shopping_cart_url=build_url(array('page'=>'shopping','type'=>'misc'),'_SELF');
 
@@ -690,7 +683,7 @@ class Hook_catalogue_items
 
 		$cart_url=build_url(array('page'=>'shopping','type'=>'add_item','hook'=>'catalogue_items'),'_SELF');
 
-		$purchase_mod_url=build_url(array('page'=>'purchase','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','product'=>strval($id),'id'=>$id),'_SELF');
+		$purchase_mod_url=build_url(array('page'=>'purchase','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','type_code'=>strval($id),'id'=>$id),'_SELF');
 
 		$map['CART_BUTTONS']=do_template('CATALOGUE_ENTRY_CART_BUTTONS',array(
 			'_GUID'=>'d4491c6e221b1f06375a6427da062bac',
@@ -707,7 +700,7 @@ class Hook_catalogue_items
 }
 
 /**
- * Update order status,transaction ID after transaction
+ * Update order status,transaction ID after transaction.
  *
  * @param  AUTO_LINK		Purchase/Order ID.
  * @param  array			Details of product.

@@ -59,9 +59,9 @@ function add_to_cart($product_det)
  */
 function update_cart($product_det)
 {
-	foreach ($product_det as $product)
+	foreach ($product_det as $product_row)
 	{
-		$where=array('product_id'=>$product['product_id'],'is_deleted'=>0);
+		$where=array('product_id'=>$product_row['product_id'],'is_deleted'=>0);
 		if (is_guest())
 		{
 			$where['session_id']=get_session_id();
@@ -70,11 +70,11 @@ function update_cart($product_det)
 			$where['ordered_by']=get_member();
 		}
 
-		if ($product['Quantity']>0)
+		if ($product_row['quantity']>0)
 		{	
 			$GLOBALS['SITE_DB']->query_update(
 				'shopping_cart',
-				array('quantity'=>$product['Quantity']),
+				array('quantity'=>$product_row['quantity']),
 				$where
 			);
 		} else
@@ -231,8 +231,8 @@ function find_products_in_cart()
 /**
  * Stock maintain warning mail
  *
- * @param  SHORT_TEXT	product name
- * @param  AUTO_LINK		Product id
+ * @param  SHORT_TEXT	Product name
+ * @param  AUTO_LINK		Product ID
  */
 function stock_maintain_warn_mail($product_name,$product_id)
 {
@@ -243,7 +243,7 @@ function stock_maintain_warn_mail($product_name,$product_id)
 
 	require_code('notifications');
 	dispatch_notification('low_stock',NULL,$subject,$message,NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
-}	
+}
 
 /**
  * Stock reduction
@@ -314,7 +314,7 @@ function payment_form()
 
 	foreach ($cart_items as $item)
 	{	
-		$product=$item['product_id'];
+		$type_code=$item['product_id'];
 
 		$hook=$item['product_type'];
 
@@ -323,16 +323,16 @@ function payment_form()
 		$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 		if (is_null($object)) continue;
 
-		$temp=$object->get_products(false,$product);
+		$temp=$object->get_products(false,$type_code);
 
-		if ($temp[$product][0]==PRODUCT_SUBSCRIPTION) continue;	//Subscription type skipped.
+		if ($temp[$type_code][0]==PRODUCT_SUBSCRIPTION) continue;	//Subscription type skipped.
 
-		$price=$temp[$product][1];
+		$price=$temp[$type_code][1];
 
-		$item_name=$temp[$product][4];				
+		$item_name=$temp[$type_code][4];				
 
 		if (method_exists($object,'set_needed_fields'))
-			$purchase_id=$object->set_needed_fields($product);
+			$purchase_id=$object->set_needed_fields($type_code);
 		else
 			$purchase_id=strval(get_member());
 
@@ -423,9 +423,9 @@ function get_order_tax_opt_out_status()
 }
 
 /**
- * Find current order id
+ * Find current order ID
  *
- * @return  AUTO_LINK		Order id
+ * @return  AUTO_LINK		Order ID
  */
 function get_current_order_id()
 {	
@@ -474,8 +474,8 @@ function get_order_status_list()
 /**
  * Return a string of order products to export as csv
  *
- * @param  AUTO_LINK	Order ID
- * @return LONG_TEXT	Products names and quantity
+ * @param  AUTO_LINK		Order ID
+ * @return LONG_TEXT		Products names and quantity
  */
 function get_ordered_product_list_string($order_id)
 {
@@ -485,7 +485,7 @@ function get_ordered_product_list_string($order_id)
 
 	foreach ($row as $key=>$product)
 	{
-		$product_det[]=$product['p_name']." x ".integer_format($product['p_quantity'])." @ ".do_lang('UNIT_PRICE')."=".float_format($product['p_price']);
+		$product_det[]=$product['p_name'].' x '.integer_format($product['p_quantity']).' @ '.do_lang('UNIT_PRICE').'='.float_format($product['p_price']);
 	}
 
 	return implode("\n",$product_det);

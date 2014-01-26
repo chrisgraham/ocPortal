@@ -33,24 +33,24 @@ class Hook_realtime_rain_ecommerce
 
 		if (has_actual_page_access(get_member(),'admin_ecommerce'))
 		{
-			$rows=$GLOBALS['SITE_DB']->query('SELECT amount,item,t_time AS timestamp FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'transactions WHERE t_time BETWEEN '.strval($from).' AND '.strval($to));
+			$rows=$GLOBALS['SITE_DB']->query('SELECT t_amount,t_type_code,t_time AS timestamp FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'transactions WHERE t_time BETWEEN '.strval($from).' AND '.strval($to));
 
 			foreach ($rows as $row)
 			{
 				require_code('ecommerce');
-				list($product,)=find_product_row($row['item']);
-				if (!is_null($product))
+				list($product_row,)=find_product_row($row['t_type_code']);
+				if (!is_null($product_row))
 				{
-					$title=$product[4];
+					$title=$product_row[4];
 				} else
 				{
 					require_lang('ecommerce');
 					$title=do_lang('SALE_MADE');
 				}
 
-				$timestamp=$row['timestamp'];
+				$timestamp=$row['t_timestamp'];
 
-				$ticker_text=do_lang('KA_CHING',ecommerce_get_currency_symbol(),$row['amount']);
+				$ticker_text=do_lang('KA_CHING',ecommerce_get_currency_symbol(),$row['t_amount']);
 
 				$drops[]=rain_get_special_icons(NULL,$timestamp,NULL,$ticker_text)+array(
 					'TYPE'=>'ecommerce',
@@ -68,7 +68,7 @@ class Hook_realtime_rain_ecommerce
 					// These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
 					'FROM_ID'=>NULL,
 					'TO_ID'=>NULL,
-					'GROUP_ID'=>'product_'.$row['item'],
+					'GROUP_ID'=>'product_'.$row['t_type_code'],
 				);
 			}
 		}

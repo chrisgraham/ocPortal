@@ -102,7 +102,7 @@ function ecommerce_get_currency_symbol()
 function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$length,$length_units)
 {
 	if (is_null($trans_id))
-	{	
+	{
 		$via=get_option('payment_gateway');
 		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 		$object=object_factory('Hook_'.$via);
@@ -134,7 +134,7 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	$fields->attach(form_input_integer(do_lang_tempcode('CARD_ISSUE_NUMBER'),do_lang_tempcode('DESCRIPTION_CARD_ISSUE_NUMBER'),'issue_number',intval(get_ocp_cpf('payment_card_issue_number')),false));
 	$fields->attach(form_input_line(do_lang_tempcode('CARD_CV2'),do_lang_tempcode('DESCRIPTION_CARD_CV2'),'cv2',ecommerce_test_mode()?'123':get_ocp_cpf('payment_card_cv2'),true));
 
-	//Shipping address fields
+	// Shipping address fields
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_firstname'),'','first_name',get_ocp_cpf('firstname'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_lastname'),'','last_name',get_ocp_cpf('last_name'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_building_name_or_number'),'','address1',get_ocp_cpf('building_name_or_number'),true));
@@ -143,7 +143,7 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_post_code'),'','zip',get_ocp_cpf('post_code'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_country'),'','country',get_ocp_cpf('country'),true));
 
-	//Set purchase id as hidden form field to get back after transaction
+	// Set purchase ID as hidden form field to get back after transaction
 	$fields->attach(form_input_hidden('customfld1',$purchase_id));
 
 	return $fields;
@@ -182,12 +182,12 @@ function get_transaction_fee($amount,$via)
  * @param  ?ID_TEXT		The service the payment will go via via (NULL: autodetect).
  * @return tempcode		The button
  */
-function make_transaction_button($product,$item_name,$purchase_id,$amount,$currency,$via=NULL)
+function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency,$via=NULL)
 {
 	if (is_null($via)) $via=get_option('payment_gateway');
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 	$object=object_factory('Hook_'.$via);
-	return $object->make_transaction_button($product,$item_name,$purchase_id,$amount,$currency);
+	return $object->make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency);
 }
 
 /**
@@ -204,12 +204,12 @@ function make_transaction_button($product,$item_name,$purchase_id,$amount,$curre
  * @param  ?ID_TEXT		The service the payment will go via via (NULL: autodetect).
  * @return tempcode		The button
  */
-function make_subscription_button($product,$item_name,$purchase_id,$amount,$length,$length_units,$currency,$via=NULL)
+function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency,$via=NULL)
 {
 	if (is_null($via)) $via=get_option('payment_gateway');
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 	$object=object_factory('Hook_'.$via);
-	return $object->make_subscription_button($product,$item_name,$purchase_id,$amount,$length,$length_units,$currency);
+	return $object->make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency);
 }
 
 /**
@@ -260,14 +260,14 @@ function find_all_products($site_lang=false)
 		$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 		if (is_null($object)) continue;
 		$_products=$object->get_products($site_lang);
-		foreach ($_products as $product=>$details)
+		foreach ($_products as $type_code=>$details)
 		{
 			if (!array_key_exists(4,$details))
 			{
-				$details[4]=do_lang('CUSTOM_PRODUCT_'.$product,NULL,NULL,NULL,$site_lang?get_site_default_lang():NULL);
+				$details[4]=do_lang('CUSTOM_PRODUCT_'.$type_code,NULL,NULL,NULL,$site_lang?get_site_default_lang():NULL);
 			}
 			$details[]=$object;
-			$products[$product]=$details;
+			$products[$type_code]=$details;
 		}
 	}
 	return $products;
@@ -276,12 +276,12 @@ function find_all_products($site_lang=false)
 /**
  * Find product.
  *
- * @param  ID_TEXT	The product name/product_id
+ * @param  ID_TEXT	The item name/product_id
  * @param  boolean	Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
- * @param  boolean 	Whether $search refers to the product name rather than the product_id
+ * @param  boolean 	Whether $search refers to the item name rather than the product codename
  * @return ?object	The product-class object (NULL: not found).
  */
-function find_product($search,$site_lang=false,$search_titles_not_ids=false)
+function find_product($search,$site_lang=false,$search_item_names=false)
 {
 	$_hooks=find_all_hooks('systems','ecommerce');
 	foreach (array_keys($_hooks) as $hook)
@@ -290,19 +290,19 @@ function find_product($search,$site_lang=false,$search_titles_not_ids=false)
 		$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 		if (is_null($object)) continue;
 
-		$_products=$object->get_products($site_lang,$search,$search_titles_not_ids);
+		$_products=$object->get_products($site_lang,$search,$search_item_names);
 
-		$product=mixed();
-		foreach ($_products as $product=>$product_row)
+		$type_code=mixed();
+		foreach ($_products as $type_code=>$product_row)
 		{
-			if (is_integer($product)) $product=strval($product);
+			if (is_integer($type_code)) $type_code=strval($type_code);
 
-			if ($search_titles_not_ids)
+			if ($search_item_names)
 			{
-				if (($product_row[4]==$search) || ('_'.$product==$search)) return $object;
+				if (($product_row[4]==$search) || ('_'.$type_code==$search)) return $object;
 			} else
 			{
-				if ($product==$search) return $object;
+				if ($type_code==$search) return $object;
 			}
 		}
 	}
@@ -312,12 +312,12 @@ function find_product($search,$site_lang=false,$search_titles_not_ids=false)
 /**
  * Find product info row.
  *
- * @param  ID_TEXT	The product name/product_id
+ * @param  ID_TEXT	The product codename/item name
  * @param  boolean	Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
- * @param  boolean 	Whether $search refers to the product name rather than the product_id
+ * @param  boolean 	Whether $search refers to the item name rather than the product codename
  * @return array		A pair: The product-class map, and the formal product name (both will be NULL if not found).
  */
-function find_product_row($search,$site_lang=false,$search_titles_not_ids=false)
+function find_product_row($search,$site_lang=false,$search_item_names=false)
 {
 	$_hooks=find_all_hooks('systems','ecommerce');
 	foreach (array_keys($_hooks) as $hook)
@@ -326,22 +326,22 @@ function find_product_row($search,$site_lang=false,$search_titles_not_ids=false)
 		$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 		if (is_null($object)) continue;
 
-		$_products=$object->get_products($site_lang,$search,$search_titles_not_ids);
+		$_products=$object->get_products($site_lang,$search,$search_item_names);
 
-		$product=mixed();
-		foreach ($_products as $product=>$product_row)
+		$type_code=mixed();
+		foreach ($_products as $type_code=>$product_row)
 		{
-			if (is_integer($product)) $product=strval($product);
+			if (is_integer($type_code)) $type_code=strval($type_code);
 
-			if ($search_titles_not_ids)
+			if ($search_item_names)
 			{
-				if (($product_row[4]==$search) || ('_'.$product==$search))
+				if (($product_row[4]==$search) || ('_'.$type_code==$search))
 				{
-					return array($product_row,$product);
+					return array($product_row,$type_code);
 				}
 			} else
 			{
-				if ($product==$search) return array($product_row,$product);
+				if ($type_code==$search) return array($product_row,$type_code);
 			}
 		}
 	}
@@ -390,6 +390,8 @@ function handle_transaction_script()
 	{
 		$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');
 		fwrite($myfile,serialize($_POST)."\n");
+		fwrite($myfile,serialize($_GET)."\n");
+		fwrite($myfile,"\n\n");
 		fclose($myfile);
 	}
 
@@ -398,38 +400,21 @@ function handle_transaction_script()
 	$object=object_factory('Hook_'.$via);
 
 	ob_start();
-	$test=false;
-	if (!$test)
-	{
-		list($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id)=$object->handle_transaction();
-	} else
-	{
-		$purchase_id='15';
-		$item_name=do_lang('CUSTOM_PRODUCT_OTHER');
-		$payment_status='Completed';
-		$reason_code='';
-		$pending_reason='bar';
-		$memo='foo';
-		$mc_gross='0.01';
-		$mc_currency=get_option('currency');
-		$txn_id='0';
-		$parent_txn_id='0';
-	}
 
-	handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$via,post_param('period3',''));
+	list($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period)=$object->handle_transaction();
+
+	handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period,$via);
 
 	return $purchase_id;
-
-	//my_exit(do_lang('SUCCESS'));
 }
 
 /**
  * Handle IPN's that have been confirmed as backed up by real money.
  *
  * @param  ID_TEXT		The ID of the purchase-type (meaning depends on item_name)
- * @param  SHORT_TEXT	The item being purchased (aka the product) (blank: subscription, so we need to look it up). One might wonder why we use $item_name instead of $product. This is because we pass human-readable-names (hopefully unique!!!) through payment gateways because they are visually shown to the user. (blank: it's a subscription, so look up via a key map across the subscriptions table)
- * @param  SHORT_TEXT	The status this transaction is telling of
- * @set    SModified SCancelled Completed Pending Failed
+ * @param  SHORT_TEXT	The item being purchased (aka the product) (blank: subscription, so we need to look it up). One might wonder why we use $item_name instead of $type_code. This is because we pass human-readable-names (hopefully unique!!!) through payment gateways because they are visually shown to the user. (blank: it's a subscription, so look up via a key map across the subscriptions table)
+ * @param  ID_TEXT		The status this transaction is telling of
+ * @set    Pending Completed SModified SCancelled
  * @param  SHORT_TEXT	The code that gives reason to the status
  * @param  SHORT_TEXT	The reason it is in pending status (if it is)
  * @param  SHORT_TEXT	A note attached to the transaction
@@ -437,102 +422,91 @@ function handle_transaction_script()
  * @param  SHORT_TEXT	The currency the amount is in
  * @param  SHORT_TEXT	The transaction ID
  * @param  SHORT_TEXT	The ID of the parent transaction
- * @param  ID_TEXT		The ID of a special source for the transaction
- * @param  string			The subscription period (blank: N/A)
+ * @param  string			The subscription period (blank: N/A / unknown: trust is correct on the gateway)
+ * @param  ID_TEXT		The payment gateway
  */
-function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$source='',$period='')
+function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period,$via)
 {
-	/*#####################################################################################*/
-	//Temporary setting - force payment setting to "completed" for test mode transactions
-	if (get_option('ecommerce_test_mode')=="1")
-		$payment_status='Completed';
-	/*#####################################################################################*/
+	$is_subscription=($item_name=='');
 
 	// Try and locate the product
-	if ($item_name=='') // Subscription
+	if ($is_subscription) // Subscription
 	{
-		$product=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_type_code',array('id'=>intval($purchase_id))); // Note that s_type_code is not numeric, it is a $product
-		if (is_null($product)) my_exit(do_lang('NO_SUCH_SUBSCRIPTION',strval($purchase_id)));
-		$item_name='_'.$product;
+		$type_code=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_type_code',array('id'=>intval($purchase_id)));
+		if (is_null($type_code)) fatal_ipn_exit(do_lang('NO_SUCH_SUBSCRIPTION',strval($purchase_id)));
+		$item_name='_'.$type_code;
 
-		// Check what we sold
-		list($found,)=find_product_row($product,true,false);
+		// Find what we sold
+		list($found,)=find_product_row($type_code,true,false);
 		if (!is_null($found))
 		{
 			$item_name=$found[4];
 		}
 
-		$subscription=true;
+		// Check subscription length
+		if ($period!='')
+		{
+			$length=array_key_exists('length',$found[3])?strval($found[3]['length']):'1';
+			$length_units=array_key_exists('length_units',$found[3])?$found[3]['length_units']:'m';
+			if (strtolower($period)!=strtolower($length.' '.$length_units)) fatal_ipn_exit(do_lang('IPN_SUB_PERIOD_WRONG'));
+		}
 	} else
 	{
-		// Check what we sold
-		list($found,$product)=find_product_row($item_name,true,true);
-
-		$subscription=false;
+		// Find what we sold
+		list($found,$type_code)=find_product_row($item_name,true,true);
 	}
-	if (is_null($found)) my_exit(do_lang('PRODUCT_NO_SUCH').' - '.$item_name,true);
+	if (is_null($found)) fatal_ipn_exit(do_lang('PRODUCT_NO_SUCH').' - '.$item_name,true);
 
-	// Check price
+	// Check price, if one defined
 	if (($mc_gross!=$found[1]) && ($found[1]!='?'))
 	{
-		if ($payment_status=='SModified')
-			$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_state'=>'new'),array('id'=>intval($purchase_id)),'',1);
-		if (($payment_status!='SCancelled') && (substr($txn_id,0,6)!='manual')) my_exit(do_lang('PURCHASE_WRONG_PRICE',$item_name),$subscription);
+		if (($payment_status=='Completed') && ($via!='manual')) fatal_ipn_exit(do_lang('PURCHASE_WRONG_PRICE',$item_name),$is_subscription);
 	}
-
-	if ($period!='')
+	if ($mc_currency!=get_option('currency'))
 	{
-		$length=array_key_exists('length',$found[3])?strval($found[3]['length']):'1';
-		$length_units=array_key_exists('length_units',$found[3])?$found[3]['length_units']:'m';
-		if (strtolower($period)!=strtolower($length.' '.$length_units)) my_exit(do_lang('IPN_SUB_PERIOD_WRONG'));
+		if (($payment_status!='SCancelled') && ($via!='manual')) fatal_ipn_exit(do_lang('PURCHASE_WRONG_CURRENCY'));
 	}
-
 
 	// Store
-	$GLOBALS['SITE_DB']->query_insert('transactions',array('id'=>$txn_id,'t_memo'=>$memo,'purchase_id'=>$purchase_id,'status'=>$payment_status,'pending_reason'=>$pending_reason,'reason'=>$reason_code,'amount'=>$mc_gross,'t_currency'=>$mc_currency,'linked'=>$parent_txn_id,'t_time'=>time(),'item'=>$product,'t_via'=>$source));
+	$GLOBALS['SITE_DB']->query_insert('transactions',array(
+		'id'=>$txn_id,
+		't_memo'=>$memo,
+		't_type_code'=>$type_code,
+		't_purchase_id'=>$purchase_id,
+		't_status'=>$payment_status,
+		't_pending_reason'=>$pending_reason,
+		't_reason'=>$reason_code,
+		't_amount'=>$mc_gross,
+		't_currency'=>$mc_currency,
+		't_parent_txn_id'=>$parent_txn_id,
+		't_time'=>time(),
+		't_via'=>$via,
+	));
 
 	$found['txn_id']=$txn_id;
 
-	// Check currency
-	if ($mc_currency!=get_option('currency'))
-	{
-		if ($payment_status=='SModified')
-			$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_state'=>'new'),array('id'=>intval($purchase_id)),'',1);
-		if (($payment_status!='SCancelled') && (substr($txn_id,0,6)!='manual')) my_exit(do_lang('PURCHASE_WRONG_CURRENCY'));
-	}
-
 	// Pending
-	if (($payment_status=='Pending') && ($found[0]==PRODUCT_INVOICE)) // Invoices have special support for tracking the order status
+	if ($payment_status=='Pending')
 	{
-		$GLOBALS['SITE_DB']->query_update('invoices',array('i_state'=>'pending'),array('id'=>intval($purchase_id)),'',1);
-	}
-	elseif (($payment_status=='Pending') && ($found[0]==PRODUCT_SUBSCRIPTION)) // Subscriptions have special support for tracking the order status
-	{
-		$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_state'=>'pending'),array('id'=>intval($purchase_id)),'',1);
-		if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$product,true)); // Run cancel code
-	}
-	elseif (($payment_status=='Pending') && ($item_name==do_lang('CART_ORDER',$purchase_id))) // Cart orders have special support for tracking the order status
-	{
-		$found['ORDER_STATUS']='ORDER_STATUS_awaiting_payment';
+		if ($found[0]==PRODUCT_INVOICE) // Invoices have special support for tracking the order status
+		{
+			$GLOBALS['SITE_DB']->query_update('invoices',array('i_state'=>'pending'),array('id'=>intval($purchase_id)),'',1);
+		}
+		elseif ($found[0]==PRODUCT_SUBSCRIPTION) // Subscriptions have special support for tracking the order status
+		{
+			$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_state'=>'pending'),array('id'=>intval($purchase_id)),'',1);
+			if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$type_code,true)); // Run cancel code
+		}
+		elseif ($item_name==do_lang('CART_ORDER',$purchase_id)) // Cart orders have special support for tracking the order status
+		{
+			$found['ORDER_STATUS']='ORDER_STATUS_awaiting_payment';
 
-		if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$product,true)); // Set order status
-	}
+			if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$type_code,$payment_status,$txn_id)); // Set order status
+		}
 
-	// Subscription: Cancelled
-	elseif (($payment_status=='SCancelled') && ($found[0]==PRODUCT_SUBSCRIPTION))
-	{
-		$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_auto_fund_source'=>$source,'s_auto_fund_key'=>$txn_id,'s_state'=>'cancelled'),array('id'=>intval($purchase_id)),'',1);
+		// Pending transactions stop here
+		fatal_ipn_exit(do_lang('TRANSACTION_NOT_COMPLETE',$type_code.':'.strval($purchase_id),$payment_status),true);
 	}
-
-	// Subscription: Made active
-	elseif (($payment_status=='Completed') && ($found[0]==PRODUCT_SUBSCRIPTION))
-	{
-		$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_auto_fund_source'=>$source,'s_auto_fund_key'=>$txn_id,'s_state'=>'active'),array('id'=>intval($purchase_id)),'',1);
-	}
-
-	// Check completed: if not, proceed no further
-	elseif (($payment_status!='Completed') && ($payment_status!='SCancelled') && (get_option('ecommerce_test_mode')!='1'))
-		my_exit(do_lang('TRANSACTION_NOT_COMPLETE',$product.':'.strval($purchase_id),$payment_status),true);
 
 	// Invoice: Check price
 	if ($found[0]==PRODUCT_INVOICE)
@@ -540,35 +514,65 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 		$price=$GLOBALS['SITE_DB']->query_select_value('invoices','i_amount',array('id'=>intval($purchase_id)));
 		if ($price!=$mc_gross)
 		{
-			if (substr($txn_id,0,6)!='manual')
-				my_exit(do_lang('PURCHASE_WRONG_PRICE',$item_name));
+			if ($via!='manual')
+				fatal_ipn_exit(do_lang('PURCHASE_WRONG_PRICE',$item_name));
 		}
 	}
 
-	/* At this point we know our order (or subscription cancellation) is good */
+	/*
+	At this point we know our transaction is good -- or a subscription cancellation.
+	Possible statuses: Completed|SModified|SCancelled
+	*/
 
-	// Dispatch
-	if (($payment_status=='Completed') || ($payment_status=='SCancelled'))
+	// Subscription: Completed (Made active)
+	if (($payment_status=='Completed') && ($found[0]==PRODUCT_SUBSCRIPTION))
 	{
-		//Find product hooks of this order to check dispatch type
+		$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_auto_fund_source'=>$via,'s_auto_fund_key'=>$txn_id,'s_state'=>'active'),array('id'=>intval($purchase_id)),'',1);
+	}
 
-		$object=find_product($product,true);
+	// Subscription: Modified
+	if (($payment_status=='SModified') && ($found[0]==PRODUCT_SUBSCRIPTION))
+	{
+		// No special action needed
+	}
 
-		if (is_object($object) && !method_exists($object,'get_product_dispatch_type'))	
-		{	//If hook does not have dispatch method setting take dispatch method as automatic
-			$found['ORDER_STATUS']='ORDER_STATUS_dispatched';	
-		}
-		elseif (is_object($object) && $object->get_product_dispatch_type($purchase_id)=='automatic')
-		{	
+	// Subscription: Cancelled
+	if (($payment_status=='SCancelled') && ($found[0]==PRODUCT_SUBSCRIPTION))
+	{
+		$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_auto_fund_source'=>$via,'s_auto_fund_key'=>$txn_id,'s_state'=>'cancelled'),array('id'=>intval($purchase_id)),'',1);
+	}
+
+	// Invoice handling
+	if (($payment_status=='Completed') && ($found[0]==PRODUCT_INVOICE))
+	{
+		$GLOBALS['SITE_DB']->query_update('invoices',array('i_state'=>'paid'),array('id'=>intval($purchase_id)),'',1);
+	}
+
+	// Set order dispatch status
+	if ($payment_status=='Completed')
+	{
+		$object=find_product($type_code,true);
+
+		if ((is_object($object)) && (!method_exists($object,'get_product_dispatch_type'))) // If hook does not have dispatch method setting take dispatch method as automatic
+		{
 			$found['ORDER_STATUS']='ORDER_STATUS_dispatched';
 		}
-		else
-		{	
-			$found['ORDER_STATUS']='ORDER_STATUS_payment_received';
+		elseif (is_object($object) && $object->get_product_dispatch_type($purchase_id)=='automatic')
+		{
+			$found['ORDER_STATUS']='ORDER_STATUS_dispatched';
+		} else
+		{
+			$found['ORDER_STATUS']='ORDER_STATUS_payment_received'; // Dispatch has to happen manually still
 		}
-		if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$product));
+	}
 
-		// Send out notification to staff
+	// Dispatch (all product types)
+	if ($payment_status!='SModified')
+	{
+		// Call completion/cancellation code
+		if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$type_code,$payment_status,$txn_id));
+
+		// Send out notification to staff for completion/cancellation
 		if ($found[0]==PRODUCT_SUBSCRIPTION)
 		{
 			require_code('notifications');
@@ -577,12 +581,12 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 			{
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 				if (is_null($username)) $username=do_lang('GUEST');
-				if ($payment_status=='Completed')
+				if ($payment_status=='Completed') // Completed
 				{
 					$subject=do_lang('SERVICE_PAID_FOR',$item_name,$username,get_site_name(),get_site_default_lang());
 					$body=do_lang('_SERVICE_PAID_FOR',$item_name,$username,get_site_name(),get_site_default_lang());
 					dispatch_notification('service_paid_for_staff',NULL,$subject,$body);
-				} else
+				} else // Must be SCancelled
 				{
 					$subject=do_lang('SERVICE_CANCELLED',$item_name,$username,get_site_name(),get_site_default_lang());
 					$body=do_lang('_SERVICE_CANCELLED',$item_name,$username,get_site_name(),get_site_default_lang());
@@ -590,18 +594,6 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 				}
 			}
 		}
-	}
-
-	// Invoice handling
-	if ($found[0]==PRODUCT_INVOICE)
-	{
-		$GLOBALS['SITE_DB']->query_update('invoices',array('i_state'=>'paid'),array('id'=>intval($purchase_id)),'',1);
-	}
-
-	// Subscription: Delete if cancelled
-	if (($payment_status=='SCancelled') && ($found[0]==PRODUCT_SUBSCRIPTION))
-	{
-		$GLOBALS['SITE_DB']->query_delete('subscriptions',array('id'=>intval($purchase_id)),'',1);
 	}
 }
 
@@ -611,7 +603,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
  * @param  string		The message.
  * @param  boolean	Dont trigger an error
  */
-function my_exit($error,$dont_trigger=false)
+function fatal_ipn_exit($error,$dont_trigger=false)
 {
 	echo $error."\n";
 	if (!$dont_trigger) trigger_error($error,E_USER_NOTICE);

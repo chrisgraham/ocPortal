@@ -19,10 +19,10 @@ Cheque processing is relatively straight forward, but more infrastructure is nee
  - by having a merchant account with a bank, using the banks infrastructure and your bank account to manage the transaction yourself
 
 [surround]
-[box="Important note" width="25em" float="right"]It is the webmasters responsibility to research any payment system before use, to convince themselves they are happy with the quality and terms of service. Whilst ocPortal by default only supports PayPal, WorldPay and SecPay, this should not be considered an endorsement of any of those services.[/box]
-ocPortal, by default, allows payment via PayPal, WorldPay and SecPay, although it could be extended to support any kind of payment gateway if extended and customised by an appropriate professional ([page="site:support"]ocProducts can do this for you[/page]).
+[box="Important note" width="25em" float="right"]It is the webmasters responsibility to research any payment system before use, to convince themselves they are happy with the quality and terms of service. Whilst ocPortal by default only supports PayPal, and has theoretically support for WorldPay and SecPay, this should not be considered an endorsement of any of those services.[/box]
+ocPortal, by default, allows payment via PayPal, WorldPay and SecPay, although it could be extended to support any kind of payment gateway if extended and customised by an appropriate professional ([page="site:support"]ocProducts can do this for you[/page]). PayPal is fully supported; WorldPay and SecPay are not regularly tested.
 
-PayPal was chosen because it is without doubt the leading form of payment on the Internet, easy to setup, and flexible in that it can provide support for funding direct from bank accounts, or cheque, as well as debit and credit card processing.
+PayPal was chosen because it is without doubt the leading form of payment on the Internet, easy to setup, and flexible in that it can provide support for funding direct from bank accounts, or cheque, as well as debit and credit card processing. Lots of people do not like PayPal policies, but we have no official position on this -- development priorities simply follow funding.
 WorldPay and SecPay are popular alternatives to PayPal.
 [/surround]
 

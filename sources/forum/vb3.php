@@ -166,7 +166,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	}
 
 	/**
-	 * Find out if the given member id is banned.
+	 * Find out if the given member ID is banned.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is banned
@@ -184,7 +184,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	}
 
 	/**
-	 * Find if the specified member id is marked as staff or not.
+	 * Find if the specified member ID is marked as staff or not.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is staff
@@ -197,7 +197,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	}
 
 	/**
-	 * Find if the specified member id is marked as a super admin or not.
+	 * Find if the specified member ID is marked as a super admin or not.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return boolean		Whether the member is a super admin
@@ -212,7 +212,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	/**
 	 * Get the IDs of the admin usergroups.
 	 *
-	 * @return array			The admin usergroup ids
+	 * @return array			The admin usergroup IDs
 	 */
 	function _get_super_admin_groups()
 	{
@@ -225,7 +225,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	 * Get the IDs of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
 	 *
-	 * @return array			The moderator usergroup ids
+	 * @return array			The moderator usergroup IDs
 	 */
 	function _get_moderator_groups()
 	{
@@ -245,7 +245,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	}
 
 	/**
-	 * Get the forum usergroup relating to the specified member id.
+	 * Get the forum usergroup relating to the specified member ID.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return array			The array of forum usergroups
@@ -280,7 +280,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	}
 
 	/**
-	 * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
+	 * Find if the given member ID and password is valid. If username is NULL, then the member ID is used instead.
 	 * All authorisation, cookies, and form-logins, are passed through this function.
 	 * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
 	 *

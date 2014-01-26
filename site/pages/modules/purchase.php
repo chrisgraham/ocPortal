@@ -35,7 +35,7 @@ class Module_purchase
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -91,18 +91,29 @@ class Module_purchase
 
 			$GLOBALS['SITE_DB']->create_table('transactions',array(
 				'id'=>'*ID_TEXT',
-				'purchase_id'=>'ID_TEXT',
-				'status'=>'SHORT_TEXT',
-				'reason'=>'SHORT_TEXT',
-				'amount'=>'SHORT_TEXT',
+				't_type_code'=>'ID_TEXT',
+				't_purchase_id'=>'ID_TEXT',
+				't_status'=>'SHORT_TEXT',
+				't_reason'=>'SHORT_TEXT',
+				't_amount'=>'SHORT_TEXT',
 				't_currency'=>'ID_TEXT',
-				'linked'=>'ID_TEXT',
+				't_parent_txn_id'=>'ID_TEXT',
 				't_time'=>'*TIME',
-				'item'=>'SHORT_TEXT',
-				'pending_reason'=>'SHORT_TEXT',
+				't_pending_reason'=>'SHORT_TEXT',
 				't_memo'=>'LONG_TEXT',
 				't_via'=>'ID_TEXT'
 			));
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('transactions','purchase_id','ID_TEXT','t_purchase_id');
+			$GLOBALS['SITE_DB']->alter_table_field('transactions','status','SHORT_TEXT','t_status');
+			$GLOBALS['SITE_DB']->alter_table_field('transactions','reason','SHORT_TEXT','t_reason');
+			$GLOBALS['SITE_DB']->alter_table_field('transactions','amount','SHORT_TEXT','t_amount');
+			$GLOBALS['SITE_DB']->alter_table_field('transactions','linked','ID_TEXT','t_parent_txn_id');
+			$GLOBALS['SITE_DB']->alter_table_field('transactions','item','SHORT_TEXT','t_type_code');
+			$GLOBALS['SITE_DB']->alter_table_field('transactions','pending_reason','SHORT_TEXT','t_pending_reason');
 		}
 	}
 
@@ -219,11 +230,11 @@ class Module_purchase
 		$type_filter=get_param_integer('type_filter',NULL);
 		$products=find_all_products();
 
-		foreach ($products as $product=>$details)
+		foreach ($products as $type_code=>$details)
 		{
 			if ($filter!='')
 			{
-				if ((!is_string($product)) || (substr($product,0,strlen($filter))!=$filter)) continue;
+				if ((!is_string($type_code)) || (substr($type_code,0,strlen($filter))!=$filter)) continue;
 			}
 
 			if (!is_null($type_filter))
@@ -236,7 +247,7 @@ class Module_purchase
 			$is_available=false; // Anything without is_available is not meant to be purchased directly
 			if (method_exists($details[count($details)-1],'is_available'))
 			{
-				$availability_status=$details[count($details)-1]->is_available($product,get_member());
+				$availability_status=$details[count($details)-1]->is_available($type_code,get_member());
 				$is_available=($availability_status==ECOMMERCE_PRODUCT_AVAILABLE) || ($availability_status==ECOMMERCE_PRODUCT_NO_GUESTS);
 			}
 
@@ -249,11 +260,11 @@ class Module_purchase
 				$description=$details[4];
 				if (strpos($details[4],(strpos($details[4],'.')===false)?preg_replace('#\.00($|[^\d])#','',$price):$price)===false)
 					$description.=(' ('.$price.')');
-				$list->attach(form_input_list_entry($product,false,protect_from_escaping($description)));
+				$list->attach(form_input_list_entry($type_code,false,protect_from_escaping($description)));
 			}
 		}
 		if ($list->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
-		$fields=form_input_huge_list(do_lang_tempcode('PRODUCT'),'','product',$list,NULL,true);
+		$fields=form_input_huge_list(do_lang_tempcode('PRODUCT'),'','type_code',$list,NULL,true);
 
 		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_CHOOSE',array('_GUID'=>'47c22d48313ff50e6323f05a78342eae','FIELDS'=>$fields,'TITLE'=>$this->title)),$this->title,$url,true);
 	}
@@ -267,25 +278,25 @@ class Module_purchase
 	{
 		require_code('form_templates');
 
-		$product=get_param('product');
+		$type_code=get_param('type_code');
 
 		$text=new ocp_tempcode();
-		$object=find_product($product);
+		$object=find_product($type_code);
 		if (is_null($object))
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$test=$this->_check_availability($product);
+		$test=$this->_check_availability($type_code);
 		if (!is_null($test)) return $test;
 
 		// Work out what next step is
-		$licence=method_exists($object,'get_agreement')?$object->get_agreement($product):'';
-		$fields=method_exists($object,'get_needed_fields')?$object->get_needed_fields($product):NULL;
+		$licence=method_exists($object,'get_agreement')?$object->get_agreement($type_code):'';
+		$fields=method_exists($object,'get_needed_fields')?$object->get_needed_fields($type_code):NULL;
 		if ((!is_null($fields)) && ($fields->is_empty())) $fields=NULL;
-		$url=build_url(array('page'=>'_SELF','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','product'=>$product,'id'=>get_param_integer('id',-1)),'_SELF',NULL,true);
+		$url=build_url(array('page'=>'_SELF','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','type_code'=>$type_code,'id'=>get_param_integer('id',-1)),'_SELF',NULL,true);
 
 		if (method_exists($object,'product_info'))
 		{
-			$text->attach($object->product_info(get_param_integer('product'),$this->title));
+			$text->attach($object->product_info(get_param_integer('type_code'),$this->title));
 		} else
 		{
 			if (!method_exists($object,'get_message'))
@@ -293,7 +304,7 @@ class Module_purchase
 				// Ah, not even a message to show - jump ahead
 				return redirect_screen($this->title,$url,'');
 			}
-			$text->attach(paragraph($object->get_message($product)));
+			$text->attach(paragraph($object->get_message($type_code)));
 		}
 
 		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_MESSAGE',array('_GUID'=>'8667b6b544c4cea645a52bb4d087f816','TITLE'=>'','TEXT'=>$text)),$this->title,$url);
@@ -310,18 +321,18 @@ class Module_purchase
 
 		require_code('form_templates');
 
-		$product=get_param('product');
+		$type_code=get_param('type_code');
 
-		$object=find_product($product);
+		$object=find_product($type_code);
 
-		$test=$this->_check_availability($product);
+		$test=$this->_check_availability($type_code);
 		if (!is_null($test)) return $test;
 
 		// Work out what next step is
-		$licence=$object->get_agreement($product);
-		$fields=$object->get_needed_fields($product);
+		$licence=$object->get_agreement($type_code);
+		$fields=$object->get_needed_fields($type_code);
 		if ((!is_null($fields)) && ($fields->is_empty())) $fields=NULL;
-		$url=build_url(array('page'=>'_SELF','type'=>is_null($fields)?'pay':'details','product'=>$product,'id'=>get_param_integer('id',-1)),'_SELF',NULL,true,true);
+		$url=build_url(array('page'=>'_SELF','type'=>is_null($fields)?'pay':'details','type_code'=>$type_code,'id'=>get_param_integer('id',-1)),'_SELF',NULL,true,true);
 
 		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_LICENCE',array('_GUID'=>'55c7bc550bb327535db1aebdac9d85f2','TITLE'=>$this->title,'URL'=>$url,'LICENCE'=>$licence)),$this->title,NULL);
 	}
@@ -335,16 +346,16 @@ class Module_purchase
 	{
 		require_code('form_templates');
 
-		$product=get_param('product');
+		$type_code=get_param('type_code');
 
-		$object=find_product($product);
+		$object=find_product($type_code);
 
-		$test=$this->_check_availability($product);
+		$test=$this->_check_availability($type_code);
 		if (!is_null($test)) return $test;
 
 		// Work out what next step is
-		$fields=$object->get_needed_fields($product,get_param_integer('id',-1));
-		$url=build_url(array('page'=>'_SELF','type'=>'pay','product'=>$product),'_SELF',NULL,true);
+		$fields=$object->get_needed_fields($type_code,get_param_integer('id',-1));
+		$url=build_url(array('page'=>'_SELF','type'=>'pay','type_code'=>$type_code),'_SELF',NULL,true);
 
 		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_DETAILS',array('_GUID'=>'7fcbb0be5e90e52163bfec01f22f4ea0','TEXT'=>is_array($fields)?$fields[1]:'','FIELDS'=>is_array($fields)?$fields[0]:$fields)),$this->title,$url);
 	}
@@ -356,50 +367,50 @@ class Module_purchase
 	 */
 	function pay()
 	{
-		$product=get_param('product');
-		$object=find_product($product);
+		$type_code=get_param('type_code');
+		$object=find_product($type_code);
 
-		$test=$this->_check_availability($product);
+		$test=$this->_check_availability($type_code);
 		if (!is_null($test)) return $test;
 
-		$temp=$object->get_products(true,$product);
-		$price=$temp[$product][1];
-		$item_name=$temp[$product][4];
+		$temp=$object->get_products(true,$type_code);
+		$price=$temp[$type_code][1];
+		$item_name=$temp[$type_code][4];
 
 		if (method_exists($object,'set_needed_fields'))
-			$purchase_id=$object->set_needed_fields($product);
+			$purchase_id=$object->set_needed_fields($type_code);
 		else
 			$purchase_id=strval(get_member());
 
-		if ($temp[$product][0]==PRODUCT_SUBSCRIPTION)
+		if ($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)
 		{
 			$_purchase_id=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','id',array(
-				's_type_code'=>$product,
+				's_type_code'=>$type_code,
 				's_member_id'=>get_member(),
 				's_state'=>'new'
 			));
 			if (is_null($_purchase_id))
 			{
 				$purchase_id=strval($GLOBALS['SITE_DB']->query_insert('subscriptions',array(
-					's_type_code'=>$product,
+					's_type_code'=>$type_code,
 					's_member_id'=>get_member(),
 					's_state'=>'new',
-					's_amount'=>$temp[$product][1],
-					's_special'=>$purchase_id,
+					's_amount'=>$temp[$type_code][1],
+					's_purchase_id'=>$purchase_id,
 					's_time'=>time(),
 					's_auto_fund_source'=>'',
 					's_auto_fund_key'=>'',
 					's_via'=>get_option('payment_gateway'),
-					's_length'=>$temp[$product][3]['length'],
-					's_length_units'=>$temp[$product][3]['length_units'],
+					's_length'=>$temp[$type_code][3]['length'],
+					's_length_units'=>$temp[$type_code][3]['length_units'],
 				),true));
 			} else
 			{
 				$purchase_id=strval($_purchase_id);
 			}
 
-			$length=array_key_exists('length',$temp[$product][3])?$temp[$product][3]['length']:1;
-			$length_units=array_key_exists('length_units',$temp[$product][3])?$temp[$product][3]['length_units']:'m';
+			$length=array_key_exists('length',$temp[$type_code][3])?$temp[$type_code][3]['length']:1;
+			$length_units=array_key_exists('length_units',$temp[$type_code][3])?$temp[$type_code][3]['length_units']:'m';
 		} else
 		{
 			$length=NULL;
@@ -408,7 +419,7 @@ class Module_purchase
 			//Add cataloue item order to shopping_orders
 			if (method_exists($object,'add_purchase_order'))
 			{
-				$purchase_id=strval($object->add_purchase_order($product,$temp[$product]));
+				$purchase_id=strval($object->add_purchase_order($type_code,$temp[$type_code]));
 			}
 		}
 
@@ -422,22 +433,22 @@ class Module_purchase
 			$parent_txn_id='';
 			$memo='Free';
 			$mc_gross='';
-			handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id);
+			handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,'','manual');
 			return inform_screen($this->title,do_lang_tempcode('FREE_PURCHASE'));
 		}
 
-		if (!array_key_exists(4,$temp[$product])) $item_name=do_lang('CUSTOM_PRODUCT_'.$product,NULL,NULL,NULL,get_site_default_lang());
+		if (!array_key_exists(4,$temp[$type_code])) $item_name=do_lang('CUSTOM_PRODUCT_'.$type_code,NULL,NULL,NULL,get_site_default_lang());
 
 		if (!perform_local_payment()) // Pass through to the gateway's HTTP server
 		{
-			if ($temp[$product][0]==PRODUCT_SUBSCRIPTION)
+			if ($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)
 			{
-				$transaction_button=make_subscription_button($product,$item_name,$purchase_id,floatval($price),$length,$length_units,get_option('currency'));
+				$transaction_button=make_subscription_button($type_code,$item_name,$purchase_id,floatval($price),$length,$length_units,get_option('currency'));
 			} else
 			{
-				$transaction_button=make_transaction_button($product,$item_name,$purchase_id,floatval($price),get_option('currency'));
+				$transaction_button=make_transaction_button($type_code,$item_name,$purchase_id,floatval($price),get_option('currency'));
 			}
-			$tpl=($temp[$product][0]==PRODUCT_SUBSCRIPTION)?'PURCHASE_WIZARD_STAGE_SUBSCRIBE':'PURCHASE_WIZARD_STAGE_PAY';
+			$tpl=($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?'PURCHASE_WIZARD_STAGE_SUBSCRIBE':'PURCHASE_WIZARD_STAGE_PAY';
 			$logos=method_exists($object,'get_logos')?$object->get_logos():new ocp_tempcode();
 			$result=do_template($tpl,array(
 				'LOGOS'=>$logos,
@@ -457,7 +468,7 @@ class Module_purchase
 				warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 			}
 
-			$fields=get_transaction_form_fields(NULL,$purchase_id,$item_name,float_to_raw_string($price),($temp[$product][0]==PRODUCT_SUBSCRIPTION)?intval($length):NULL,($temp[$product][0]==PRODUCT_SUBSCRIPTION)?$length_units:'');
+			$fields=get_transaction_form_fields(NULL,$purchase_id,$item_name,float_to_raw_string($price),($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?intval($length):NULL,($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?$length_units:'');
 
 			$finish_url=build_url(array('page'=>'_SELF','type'=>'finish'),'_SELF');
 
@@ -505,7 +516,7 @@ class Module_purchase
 				if (($success) || (!is_null($length)))
 				{
 					$status=((!is_null($length)) && (!$success))?'SCancelled':'Completed';
-					handle_confirmed_transaction($transaction_row['e_purchase_id'],$transaction_row['e_item_name'],$status,$message_raw,'','',$amount,get_option('currency'),$trans_id,'',$via,is_null($length)?'':strtolower(strval($length).' '.$length_units));
+					handle_confirmed_transaction($transaction_row['e_purchase_id'],$transaction_row['e_item_name'],$status,$message_raw,'','',$amount,get_option('currency'),$trans_id,'',is_null($length)?'':strtolower(strval($length).' '.$length_units),$via);
 				}
 
 				if ($success)
@@ -516,8 +527,8 @@ class Module_purchase
 				}
 			}
 
-			$product=get_param('product','');
-			if ($product!='')
+			$type_code=get_param('type_code','');
+			if ($type_code!='')
 			{
 				if (count($_POST)!=0)
 				{
@@ -526,10 +537,10 @@ class Module_purchase
 
 				attach_message(do_lang_tempcode('SUCCESS'),'inform');
 
-				$object=find_product($product);
+				$object=find_product($type_code);
 				if (method_exists($object,'get_finish_url'))
 				{
-					return redirect_screen($this->title,$object->get_finish_url($product),$message);
+					return redirect_screen($this->title,$object->get_finish_url($type_code),$message);
 				}
 			}
 
@@ -550,12 +561,12 @@ class Module_purchase
 	 * @param  ID_TEXT		The product code.
 	 * @return ?tempcode		Error screen (NULL: no error).
 	 */
-	function _check_availability($product)
+	function _check_availability($type_code)
 	{
-		$object=find_product($product);
+		$object=find_product($type_code);
 		if (!method_exists($object,'is_available')) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		$availability_status=$object->is_available($product,get_member());
+		$availability_status=$object->is_available($type_code,get_member());
 
 		switch ($availability_status)
 		{

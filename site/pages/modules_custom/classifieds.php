@@ -170,28 +170,28 @@ class Module_classifieds
 			$purchase_url=build_url(array('page'=>'purchase','type'=>'misc','filter'=>'CLASSIFIEDS_ADVERT','id'=>$row['id']),get_module_zone('purchase'));
 
 			// We'll show all transactions against this ad
-			$transaction_details=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'transactions WHERE purchase_id='.strval($row['id']).' AND item LIKE \''.db_encode_like('CLASSIFIEDS\_ADVERT\_%').'\'');
+			$transaction_details=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'transactions WHERE t_purchase_id='.strval($row['id']).' AND t_item LIKE \''.db_encode_like('CLASSIFIEDS\_ADVERT\_%').'\'');
 			$_transaction_details=array();
 			foreach ($transaction_details as $t)
 			{
-				list($found,)=find_product_row($t['item']);
+				list($found,)=find_product_row($t['t_item']);
 				if (!is_null($found))
 				{
 					$item_title=$found[4];
-				} else $item_title=$t['item'];
+				} else $item_title=$t['t_item'];
 
 				$_transaction_details[]=array(
 					'T_ID'=>strval($t['id']),
-					'PURCHASE_ID'=>strval($t['purchase_id']),
-					'STATUS'=>$t['status'],
-					'REASON'=>$t['reason'],
-					'AMOUNT'=>float_format($t['amount']),
+					'T_PURCHASE_ID'=>strval($t['t_purchase_id']),
+					'T_STATUS'=>$t['t_status'],
+					'T_REASON'=>$t['t_reason'],
+					'T_AMOUNT'=>float_format($t['t_amount']),
 					'T_CURRENCY'=>$t['t_currency'],
-					'LINKED'=>$t['linked'],
+					'T_PARENT_TXN_ID'=>$t['t_parent_txn_id'],
 					'T_TIME'=>strval($t['t_time']),
-					'ITEM'=>$t['item'],
-					'ITEM_TITLE'=>$item_title,
-					'PENDING_REASON'=>$t['pending_reason'],
+					'T_TYPE_CODE'=>$t['t_type_code'],
+					'T_ITEM_TITLE'=>$item_title,
+					'T_PENDING_REASON'=>$t['t_pending_reason'],
 					'T_MEMO'=>$t['t_memo'],
 					'T_VIA'=>$t['t_via']
 				);

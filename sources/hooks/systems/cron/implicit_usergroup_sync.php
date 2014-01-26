@@ -27,7 +27,7 @@ class Hook_cron_implicit_usergroup_sync
 	{
 		if (get_value('implicit_usergroup_sync')==='1')
 		{
-			$last=get_value('last_implicit_sync');
+			$last=get_long_value('last_implicit_sync');
 			if ((is_null($last)) || (intval($last)<time()-60*60))
 			{
 				$hooks=find_all_hooks('systems','ocf_implicit_usergroups');
@@ -64,7 +64,7 @@ class Hook_cron_implicit_usergroup_sync
 					}
 				}
 
-				set_value('last_implicit_sync',strval(time()));
+				set_long_value('last_implicit_sync',strval(time()));
 			}
 		}
 	}

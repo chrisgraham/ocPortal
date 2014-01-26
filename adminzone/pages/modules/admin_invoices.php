@@ -188,18 +188,18 @@ class Module_admin_invoices
 
 		$products=find_all_products();
 		$list=new ocp_tempcode();
-		foreach ($products as $product=>$details)
+		foreach ($products as $type_code=>$details)
 		{
 			if ($details[0]==PRODUCT_INVOICE)
 			{
-				$text=do_lang_tempcode('CUSTOM_PRODUCT_'.$product);
+				$text=do_lang_tempcode('CUSTOM_PRODUCT_'.$type_code);
 				if ($details[1]!='?') $text->attach(escape_html(' ('.$details[1].' '.get_option('currency').')'));
-				$list->attach(form_input_list_entry($product,false,$text));
+				$list->attach(form_input_list_entry($type_code,false,$text));
 			}
 		}
 		if ($list->is_empty()) inform_exit(do_lang_tempcode('NOTHING_TO_INVOICE_FOR'));
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_list(do_lang_tempcode('PRODUCT'),'','product',$list));
+		$fields->attach(form_input_list(do_lang_tempcode('PRODUCT'),'','type_code',$list));
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),do_lang_tempcode('DESCRIPTION_INVOICE_FOR'),'to',$to,true));
 		$fields->attach(form_input_float(do_lang_tempcode('AMOUNT'),do_lang_tempcode('INVOICE_AMOUNT_TEXT',escape_html(get_option('currency'))),'amount',NULL,false));
 		$fields->attach(form_input_line(do_lang_tempcode('INVOICE_SPECIAL'),do_lang_tempcode('DESCRIPTION_INVOICE_SPECIAL'),'special','',false));
@@ -218,14 +218,14 @@ class Module_admin_invoices
 	 */
 	function _ad()
 	{
-		$product=post_param('product');
-		$object=find_product($product);
+		$type_code=post_param('type_code');
+		$object=find_product($type_code);
 
 		$amount=post_param('amount','');
 		if ($amount=='')
 		{
-			$products=$object->get_products(false,$product);
-			$amount=$products[$product][1];
+			$products=$object->get_products(false,$type_code);
+			$amount=$products[$type_code][1];
 			if ($amount=='?') warn_exit(do_lang_tempcode('INVOICE_REQURIRED_AMOUNT'));
 		}
 
@@ -234,7 +234,7 @@ class Module_admin_invoices
 		if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$to));
 
 		$id=$GLOBALS['SITE_DB']->query_insert('invoices',array(
-			'i_type_code'=>$product,
+			'i_type_code'=>$type_code,
 			'i_member_id'=>$member_id,
 			'i_state'=>'new',
 			'i_amount'=>$amount,
@@ -243,7 +243,7 @@ class Module_admin_invoices
 			'i_note'=>post_param('note')
 		),true);
 
-		log_it('CREATE_INVOICE',strval($id),$product);
+		log_it('CREATE_INVOICE',strval($id),$type_code);
 
 		send_invoice_notification($member_id,$id);
 

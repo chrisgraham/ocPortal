@@ -98,7 +98,7 @@ function import_id_remap_get($type,$id_old,$fail_ok=false)
 }
 
 /**
- * Check to see if the given id of the given type has been imported (if it has a mapping).
+ * Check to see if the given ID of the given type has been imported (if it has a mapping).
  *
  * @param  ID_TEXT		An importation type code, from those ocPortal has defined
  * @param  string			The source (old, original) ID of the mapping

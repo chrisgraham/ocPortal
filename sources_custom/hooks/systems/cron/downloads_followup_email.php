@@ -90,11 +90,11 @@ This notification hook was created using the classifieds notification hook as a 
 			$zone=get_module_zone('downloads');
 			$count=0;
 			
-			if ($debug) echo "downloads_followup_email: preparing notification to id #$member_id ($member_name) language=$lang \n";
+			if ($debug) echo "downloads_followup_email: preparing notification to ID #$member_id ($member_name) language=$lang \n";
 			
-			// Do a query to get list of download ids the current member id has downloaded since last run and place them in a content variable
+			// Do a query to get list of download IDs the current member ID has downloaded since last run and place them in a content variable
 			$query="SELECT * FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."download_logging WHERE member_id=".$member_id." AND date_and_time>".$last;
-			if ($debug) echo "downloads_followup_email: download ids query = $query \n";
+			if ($debug) echo "downloads_followup_email: download IDs query = $query \n";
 			$downloads=$GLOBALS['SITE_DB']->query($query);
 			foreach ($downloads as $download)
 			{
@@ -114,10 +114,10 @@ This notification hook was created using the classifieds notification hook as a 
 			$s=''; // Can be used to pluralise the word download in the subject line in the language .ini file if we have more than one download (better than using download(s))
 			if ($count>1) $s='s';
 			$subject_line=do_lang('SUBJECT_DOWNLOADS_FOLLOWUP_EMAIL',get_site_name(),$member_name,$s,$lang,false);
-			// Pass download count, download list, and member id to template.
+			// Pass download count, download list, and member ID to template.
 			$message=static_evaluate_tempcode(do_template("$mail_template",array('MEMBER_ID'=>$member_id,'DOWNLOAD_LIST'=>$download_list,'DOWNLOAD_COUNT'=>strval($count))));
 
-			if ($debug) echo "downloads_followup_email: sending notification (if user allows download followup notifications) to id #$member_id ($member_name) \n";
+			if ($debug) echo "downloads_followup_email: sending notification (if user allows download followup notifications) to ID #$member_id ($member_name) \n";
 			if ($debug) echo "downloads_followup_email: notifications enabled = " . strval(notifications_enabled('downloads_followup_email',NULL,$member_id)) . " \n";
 			
 			// Send actual notification

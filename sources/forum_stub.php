@@ -51,9 +51,9 @@ class forum_driver_base
 	}
 
 	/**
-	 * Find the usergroup id of the forum guest member.
+	 * Find the usergroup ID of the forum guest member.
 	 *
-	 * @return GROUP			The usergroup id of the forum guest member
+	 * @return GROUP			The usergroup ID of the forum guest member
 	 */
 	function get_guest_group()
 	{

@@ -45,12 +45,12 @@
 				<td colspan="5">
 					{+START,LOOP,TRANSACTION_DETAILS}
 						<p class="mini_indent">
-							<span class="right">{STATUS*} ({$?,{$IS_EMPTY,{T_VIA}},{!ecommerce:MANUAL_TRANSACTION},{T_VIA*}})</span>
-							<strong>{$DATE_AND_TIME*,0,1,0,{T_TIME}}</strong>, {ITEM_TITLE*} @ {AMOUNT*} {T_CURRENCY*}
+							<span class="right">{T_STATUS*} ({$?,{$IS_EMPTY,{T_VIA}},{!ecommerce:MANUAL_TRANSACTION},{T_VIA*}})</span>
+							<strong>{$DATE_AND_TIME*,0,1,0,{T_TIME}}</strong>, {T_ITEM_TITLE*} @ {T_AMOUNT*} {T_CURRENCY*}
 						</p>
-						{+START,IF_NON_EMPTY,{PENDING_REASON}{REASON}{T_MEMO}}
+						{+START,IF_NON_EMPTY,{T_PENDING_REASON}{T_REASON}{T_MEMO}}
 							<p class="standard_indent">
-								<span class="field_name">{!DETAILS}:</span> {PENDING_REASON*}{REASON*}{T_MEMO*}
+								<span class="field_name">{!DETAILS}:</span> {T_PENDING_REASON*}{T_REASON*}{T_MEMO*}
 							</p>
 						{+END}
 					{+END}

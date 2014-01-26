@@ -35,7 +35,7 @@ class Module_shopping
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=7;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -71,8 +71,29 @@ class Module_shopping
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((is_null($upgrade_from)) || (!$GLOBALS['SITE_DB']->table_exists('shopping_order'))) // This was badly versioned
+		if (is_null($upgrade_from))
 		{
+			$GLOBALS['SITE_DB']->create_table('shopping_cart',array(
+				'id'=>'*AUTO',
+				'session_id'=>'INTEGER',
+				'ordered_by'=>'MEMBER',
+				'product_id'=>'AUTO_LINK',
+				'product_name'=>'SHORT_TEXT',
+				'product_code'=>'SHORT_TEXT',
+				'quantity'=>'INTEGER',
+				'price_pre_tax'=>'REAL',
+				'price'=>'REAL',
+				'product_description'=>'LONG_TEXT',
+				'product_type'=>'SHORT_TEXT',
+				'product_weight'=>'REAL',
+				'is_deleted'=>'BINARY', // Indicates an item is no longer in the cart because the user deleted it
+			));
+			$GLOBALS['SITE_DB']->create_index('shopping_cart','ordered_by',array('ordered_by'));
+			$GLOBALS['SITE_DB']->create_index('shopping_cart','session_id',array('session_id'));
+			$GLOBALS['SITE_DB']->create_index('shopping_cart','product_id',array('product_id'));
+
+			// Cart contents turns into order + details...
+
 			$GLOBALS['SITE_DB']->create_table('shopping_order',array(
 				'id'=>'*AUTO',
 				'c_member'=>'INTEGER',
@@ -89,32 +110,6 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->create_index('shopping_order','soc_member',array('c_member'));
 			$GLOBALS['SITE_DB']->create_index('shopping_order','sosession_id',array('session_id'));
 			$GLOBALS['SITE_DB']->create_index('shopping_order','soadd_date',array('add_date'));
-		} else
-		{
-			if (is_null($GLOBALS['SITE_DB']->query('SELECT COUNT(DISTINCT tax_opted_out) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'shopping_order',NULL,NULL,true)))
-				$GLOBALS['SITE_DB']->add_table_field('shopping_order','tax_opted_out','BINARY',0); // This was badly versioned
-		}
-
-		if (is_null($upgrade_from))
-		{	
-			$GLOBALS['SITE_DB']->create_table('shopping_cart',array(
-				'id'=>'*AUTO',
-				'session_id'=>'INTEGER',
-				'ordered_by'=>'*MEMBER',
-				'product_id'=>'*AUTO_LINK',
-				'product_name'=>'SHORT_TEXT',
-				'product_code'=>'SHORT_TEXT',
-				'quantity'=>'INTEGER',
-				'price_pre_tax'=>'REAL',
-				'price'=>'REAL',
-				'product_description'=>'LONG_TEXT',
-				'product_type'=>'SHORT_TEXT',
-				'product_weight'=>'REAL',
-				'is_deleted'=>'BINARY',
-			));
-			$GLOBALS['SITE_DB']->create_index('shopping_cart','ordered_by',array('ordered_by'));
-			$GLOBALS['SITE_DB']->create_index('shopping_cart','session_id',array('session_id'));
-			$GLOBALS['SITE_DB']->create_index('shopping_cart','product_id',array('product_id'));
 
 			$GLOBALS['SITE_DB']->create_table('shopping_order_details',array(
 				'id'=>'*AUTO',
@@ -139,27 +134,27 @@ class Module_shopping
 				'last_action'=>'SHORT_TEXT',
 				'date_and_time'=>'TIME'
 			));
+			$GLOBALS['SITE_DB']->create_index('shopping_logging','calculate_bandwidth',array('date_and_time'));
 
-			$GLOBALS['SITE_DB']->create_table('shopping_order_addresses',array(
+			$GLOBALS['SITE_DB']->create_table('shopping_order_addresses',array( // Field names are based upon PayPal ones; they are filled after an order is made (maybe via what comes back from IPN), and presented in the admin orders UI
 				'id'=>'*AUTO',
 				'order_id'=>'?AUTO_LINK',
 				'address_name'=>'SHORT_TEXT',
 				'address_street'=>'LONG_TEXT',
 				'address_city'=>'SHORT_TEXT',
+				'address_state'=>'SHORT_TEXT', // NB: Not in PayPal
 				'address_zip'=>'SHORT_TEXT',
 				'address_country'=>'SHORT_TEXT',
 				'receiver_email'=>'SHORT_TEXT',
+				'contact_phone'=>'SHORT_TEXT',
+				'first_name'=>'SHORT_TEXT', // NB: May be full-name, or include company name
+				'last_name'=>'SHORT_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('shopping_order_addresses','order_id',array('order_id'));
 
+			// CPFs for ecommerce purchase (may also be used by other things, so we will store in our generic format)...
+
 			require_lang('shopping');
-
-			$GLOBALS['SITE_DB']->create_index('shopping_order','recent_shopped',array('add_date'));
-
-			$GLOBALS['SITE_DB']->create_index('shopping_logging','calculate_bandwidth',array('date_and_time'));
-
-			// CPFs for ecommerce purchase...
-
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('firstname',20,1,0,0,0,'','short_text');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('lastname',20,1,0,0,0,'','short_text');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('building_name_or_number',100,1,0,0,0,'','long_text');
@@ -175,6 +170,14 @@ class Module_shopping
 			sort($_countries);
 			$countries='|'.implode('|',$_countries);
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('country',100,1,0,0,0,'','list',0,$countries);
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('shopping_order_addresses','contact_phone','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('shopping_order_addresses','address_state','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('shopping_order_addresses','first_name','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('shopping_order_addresses','last_name','SHORT_TEXT');
 		}
 	}
 
@@ -363,6 +366,7 @@ class Module_shopping
 				if (method_exists($object,'show_cart_entry'))
 					$object->show_cart_entry($shopping_cart,$value);
 
+				// Tax
 				$tax=0;
 				if (method_exists($object,'calculate_tax'))
 					$tax=$object->calculate_tax($value['price'],$value['price_pre_tax']);
@@ -409,7 +413,7 @@ class Module_shopping
 
 		$cont_shopping_url=is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
 
-		// Product id string for hidden field in Shopping cart
+		// Product ID string for hidden field in Shopping cart
 		$pro_ids_val=is_array($pro_ids)?implode(',',$pro_ids):'';
 
 		$allow_opt_out_tax=get_option('allow_opting_out_of_tax');
@@ -493,11 +497,11 @@ class Module_shopping
 					}
 				}
 
-				$product_details[]=array('product_id'=>$pid,'Quantity'=>$qty);
+				$product_details[]=array('product_id'=>$pid,'quantity'=>$qty);
 
 				$remove=post_param_integer('remove_'.$pid,0);
 
-				if ($remove==1)	$product_to_remove	[]=$pid;
+				if ($remove==1) $product_to_remove[]=$pid;
 			}
 		}
 
@@ -581,6 +585,7 @@ class Module_shopping
 
 			log_cart_actions('Completed payment');
 
+			// Take payment
 			if (perform_local_payment())
 			{
 				$trans_id=post_param('trans_id');
@@ -611,7 +616,7 @@ class Module_shopping
 				if (($success) || (!is_null($length)))
 				{
 					$status=((!is_null($length)) && (!$success))?'SCancelled':'Completed';
-					handle_confirmed_transaction($transaction_row['e_purchase_id'],$transaction_row['e_item_name'],$status,$message_raw,'','',$amount,get_option('currency'),$trans_id,'',$via,is_null($length)?'':strtolower(strval($length).' '.$length_units));
+					handle_confirmed_transaction($transaction_row['e_purchase_id'],$transaction_row['e_item_name'],$status,$message_raw,'','',$amount,get_option('currency'),$trans_id,'',is_null($length)?'':strtolower(strval($length).' '.$length_units),$via);
 				}
 
 				if ($success)
@@ -624,6 +629,7 @@ class Module_shopping
 
 			attach_message(do_lang_tempcode('SUCCESS'),'inform');
 
+			// Process transaction
 			if (count($_POST)!=0)
 			{
 				$order_id=handle_transaction_script();
@@ -669,8 +675,7 @@ class Module_shopping
 				$order_det_url=build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
 				$order_title=do_lang('CART_ORDER',$row['id']);
-			}
-			else
+			} else
 			{
 				$res=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('p_id','p_name'),array('order_id'=>$row['id']));
 
@@ -680,7 +685,6 @@ class Module_shopping
 				$order_title=$product_det['p_name'];
 
 				$order_det_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$product_det['p_id']),get_module_zone('catalogues'));
-
 			}
 
 			$orders[]=array('ORDER_TITLE'=>$order_title,'ID'=>strval($row['id']),'AMOUNT'=>strval($row['tot_price']),'TIME'=>get_timezoned_date($row['add_date'],true,false,true,true),'STATE'=>do_lang_tempcode($row['order_status']),'NOTE'=>'','ORDER_DET_URL'=>$order_det_url,'DELIVERABLE'=>'');
@@ -705,9 +709,9 @@ class Module_shopping
 		$rows=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$id));
 		foreach ($rows as $row)
 		{
-			$product_info_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['p_id']),get_module_zone('catalogues'));
+			$product_det_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['p_id']),get_module_zone('catalogues'));
 
-			$products[]=array('PRODUCT_NAME'=>$row['p_name'],'ID'=>strval($row['p_id']),'AMOUNT'=>strval($row['p_price']),'QUANTITY'=>strval($row['p_quantity']),'DISPATCH_STATUS'=>do_lang_tempcode($row['dispatch_status']),'PRODUCT_DET_URL'=>$product_info_url,'DELIVERABLE'=>'');
+			$products[]=array('PRODUCT_NAME'=>$row['p_name'],'ID'=>strval($row['p_id']),'AMOUNT'=>strval($row['p_price']),'QUANTITY'=>strval($row['p_quantity']),'DISPATCH_STATUS'=>do_lang_tempcode($row['dispatch_status']),'PRODUCT_DET_URL'=>$product_det_url,'DELIVERABLE'=>'');
 		}
 
 		if (count($products)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));

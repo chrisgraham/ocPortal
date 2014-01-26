@@ -55,13 +55,13 @@ class Hook_cron_catalogue_view_reports
 
 			if (!is_null($amount))
 			{
-				$last_time=intval(get_value('last_catalogue_reports_'.$catalogue['c_send_view_reports']));
+				$last_time=intval(get_long_value('last_catalogue_reports_'.$catalogue['c_send_view_reports']));
 				if ($last_time<=($time-$amount))
 				{
 					// Mark done
 					if (!$done_reports[$catalogue['c_send_view_reports']])
 					{
-						set_value('last_catalogue_reports_'.$catalogue['c_send_view_reports'],strval($time));
+						set_long_value('last_catalogue_reports_'.$catalogue['c_send_view_reports'],strval($time));
 						$done_reports[$catalogue['c_send_view_reports']]=true;
 					}
 

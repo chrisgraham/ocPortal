@@ -150,12 +150,12 @@ class Module_invoices
 		$rows=$GLOBALS['SITE_DB']->query_select('invoices',array('*'),array('i_member_id'=>$member_id));
 		foreach ($rows as $row)
 		{
-			$product=$row['i_type_code'];
-			$object=find_product($product);
+			$type_code=$row['i_type_code'];
+			$object=find_product($type_code);
 			if (is_null($object)) continue;
-			$products=$object->get_products(false,$product);
+			$products=$object->get_products(false,$type_code);
 
-			$invoice_title=$products[$product][4];
+			$invoice_title=$products[$type_code][4];
 			$time=get_timezoned_date($row['i_time'],true,false,false,true);
 			$payable=($row['i_state']=='new');
 			$deliverable=($row['i_state']=='paid');
@@ -204,10 +204,10 @@ class Module_invoices
 		$rows=$GLOBALS['SITE_DB']->query_select('invoices',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$row=$rows[0];
-		$product=$row['i_type_code'];
-		$object=find_product($product);
-		$products=$object->get_products(false,$product);
-		$invoice_title=$products[$product][4];
+		$type_code=$row['i_type_code'];
+		$object=find_product($type_code);
+		$products=$object->get_products(false,$type_code);
+		$invoice_title=$products[$type_code][4];
 
 		$fields=get_transaction_form_fields(NULL,strval($id),$invoice_title,float_to_raw_string($row['i_amount']),NULL,'');
 

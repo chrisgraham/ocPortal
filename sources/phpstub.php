@@ -2724,7 +2724,7 @@ function pathinfo($path)
 }
 
 /**
- * Return info about a user by user id. Does not exist on Windows.
+ * Return info about a user by user ID. Does not exist on Windows.
  *
  * @param  integer	The user ID.
  * @return ~array		A map of details of the user (false: failure).

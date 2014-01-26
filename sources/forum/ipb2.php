@@ -51,7 +51,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	}
 
 	/**
-	 * Get the name relating to the specified member id.
+	 * Get the name relating to the specified member ID.
 	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
 	 *
 	 * @param  MEMBER			The member ID
@@ -91,7 +91,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	}
 
 	/**
-	 * Get a member id from the given member's username.
+	 * Get a member ID from the given member's username.
 	 *
 	 * @param  SHORT_TEXT	The member name
 	 * @return MEMBER			The member ID
@@ -227,7 +227,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	}
 
 	/**
-	 * Get the avatar URL for the specified member id.
+	 * Get the avatar URL for the specified member ID.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return URLPATH		The URL (blank: none)
@@ -636,7 +636,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	}
 
 	/**
-	 * Get the forum usergroup relating to the specified member id.
+	 * Get the forum usergroup relating to the specified member ID.
 	 *
 	 * @param  MEMBER			The member ID
 	 * @return array			The array of forum usergroups
@@ -687,7 +687,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	}
 
 	/**
-	 * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
+	 * Find if the given member ID and password is valid. If username is NULL, then the member ID is used instead.
 	 * All authorisation, cookies, and form-logins, are passed through this function.
 	 * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
 	 *

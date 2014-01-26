@@ -144,7 +144,7 @@ function is_guest($member_id=NULL,$quick_only=false)
 
 /**
  * Get the ID of the currently active member.
- * It see's if the session exists / cookie is valid -- and gets the member id accordingly
+ * It see's if the session exists / cookie is valid -- and gets the member ID accordingly
  *
  * @param  boolean		Whether to just do a quick check, don't establish new sessions
  * @return MEMBER			The member requesting this web page (possibly the guest member - which strictly speaking, is not a member)
@@ -435,7 +435,7 @@ function is_httpauth_login()
 
 /**
  * Make sure that the given URL contains a session if cookies are disabled.
- * NB: This is used for login redirection. It had to add the session id into the redirect url.
+ * NB: This is used for login redirection. It had to add the session ID into the redirect url.
  *
  * @param  URLPATH		The URL to enforce results in session persistence for the user
  * @return URLPATH		The fixed URL (potentially nothing was done, depending on cookies)
@@ -454,7 +454,7 @@ function enforce_sessioned_url($url)
  * Find what sessions are expired and delete them, and recover an existing one for $member if there is one.
  *
  * @param  ?MEMBER		User to get a current session for (NULL: do not try, which guarantees a return result of NULL also)
- * @return ?AUTO_LINK	The session id we rebound to (NULL: did not rebind)
+ * @return ?AUTO_LINK	The session ID we rebound to (NULL: did not rebind)
  */
 function delete_expired_sessions_or_recover($member=NULL)
 {

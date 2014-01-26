@@ -1081,7 +1081,7 @@ function get_chatters_in_room_tpl($users)
 }
 
 /**
- * Get the textual name of the specified chatroom, from its room id.
+ * Get the textual name of the specified chatroom, from its room ID.
  *
  * @param  AUTO_LINK		The room ID
  * @param  boolean		Allow the chatroom to not be found (i.e. don't die if it can't be)

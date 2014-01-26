@@ -1572,6 +1572,14 @@ function version_specific()
 			$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'cms'),'',1);
 		}
 		set_value('version',float_to_raw_string($version_files,10,true));
+		delete_value('last_implicit_sync');
+		delete_value('last_newsletter_drip_send');
+		delete_value('last_confirm_reminder_time');
+		delete_value('oracle_index_cleanup_last_time');
+		delete_value('last_sitemap_time_calc');
+		delete_value('last_ticket_lead_time_calc');
+		set_long_value('last_welcome_mail_time',get_value('last_welcome_mail_time'));
+		delete_value('last_welcome_mail_time');
 
 		return true;
 	}

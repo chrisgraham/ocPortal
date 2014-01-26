@@ -114,6 +114,8 @@ class Module_admin_ecommerce_logs
 		if ($type=='misc')
 		{
 			$this->title=get_screen_title('TRANSACTIONS');
+
+			set_helper_panel_text(comcode_lang_string('DOC_ECOMMERCE'));
 		}
 
 		if ($type=='trigger')
@@ -126,13 +128,13 @@ class Module_admin_ecommerce_logs
 		if ($type=='_trigger')
 		{
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
-			$item_name=get_param('item_name',NULL);
-			if (is_null($item_name))
+			$type_code=get_param('type_code',NULL);
+			if (is_null($type_code))
 			{
 				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT'))));
 			} else
 			{
-				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT')),array('_SELF:_SELF:trigger:item_name='.$item_name,do_lang_tempcode('MANUAL_TRANSACTION'))));
+				breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT')),array('_SELF:_SELF:trigger:type_code='.$type_code,do_lang_tempcode('MANUAL_TRANSACTION'))));
 			}
 
 			$this->title=get_screen_title('MANUAL_TRANSACTION');
@@ -189,7 +191,7 @@ class Module_admin_ecommerce_logs
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager($this->title,comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager($this->title,new ocp_tempcode(),
 			array(
 				array('menu/adminzone/audit/ecommerce/cash_flow',array('_SELF',array('type'=>'cash_flow'),'_SELF'),do_lang('CASH_FLOW')),
 				array('menu/adminzone/audit/ecommerce/profit_loss',array('_SELF',array('type'=>'profit_loss'),'_SELF'),do_lang('PROFIT_LOSS')),
@@ -212,7 +214,7 @@ class Module_admin_ecommerce_logs
 	{
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
-		$sortables=array('t_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
+		$sortables=array('t_time'=>do_lang_tempcode('DATE'),'t_amount'=>do_lang_tempcode('AMOUNT'));
 		$test=explode(' ',get_param('sort','t_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
 		list($sortable,$sort_order)=$test;
@@ -220,14 +222,14 @@ class Module_admin_ecommerce_logs
 			log_hack_attack_and_exit('ORDERBY_HACK');
 
 		$where=NULL;
-		$product=get_param('product',NULL);
+		$type_code=get_param('type_code',NULL);
 		$id=get_param('id',NULL);
-		if (!is_null($product))
+		if (!is_null($type_code))
 		{
-			$where=array('item'=>$product);
+			$where=array('t_type_code'=>$type_code);
 			if ((!is_null($id)) && ($id!=''))
 			{
-				$where['purchase_id']=$id;
+				$where['t_purchase_id']=$id;
 			}
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('transactions','COUNT(*)',$where);
@@ -238,30 +240,59 @@ class Module_admin_ecommerce_logs
 		}
 		$fields=new ocp_tempcode();
 		require_code('templates_results_table');
-		$fields_title=results_field_title(array(do_lang('TRANSACTION'),do_lang('IDENTIFIER'),do_lang('LINKED_ID'),do_lang('DATE'),do_lang('AMOUNT'),do_lang('CURRENCY'),do_lang('PRODUCT'),do_lang('STATUS'),do_lang('REASON'),do_lang('PENDING_REASON'),do_lang('NOTES'),do_lang('MEMBER')),$sortables,'sort',$sortable.' '.$sort_order);
+		$fields_title=results_field_title(array(
+			do_lang('TRANSACTION'),
+			do_lang('IDENTIFIER'),
+			do_lang('LINKED_ID'),
+			do_lang('DATE'),
+			do_lang('AMOUNT'),
+			do_lang('CURRENCY'),
+			do_lang('PRODUCT'),
+			do_lang('STATUS'),
+			do_lang('REASON'),
+			do_lang('PENDING_REASON'),
+			do_lang('NOTES'),
+			do_lang('MEMBER')
+		),$sortables,'sort',$sortable.' '.$sort_order);
 		foreach ($rows as $myrow)
 		{
 			$date=get_timezoned_date($myrow['t_time']);
 
-			if ($myrow['status']!='Completed')
+			if ($myrow['t_status']!='Completed')
 			{
-				$trigger_url=build_url(array('page'=>'_SELF','type'=>'trigger','product'=>$myrow['item'],'id'=>$myrow['purchase_id']),'_SELF');
-				$status=do_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER',array('_GUID'=>'5e770b9b30db88032bcc56efe8e3dc23','STATUS'=>$myrow['status'],'TRIGGER_URL'=>$trigger_url));
-			} else $status=protect_from_escaping(escape_html($myrow['status']));
+				$trigger_url=build_url(array('page'=>'_SELF','type'=>'trigger','type_code'=>$myrow['t_type_code'],'id'=>$myrow['t_purchase_id']),'_SELF');
+				$status=do_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER',array('_GUID'=>'5e770b9b30db88032bcc56efe8e3dc23','STATUS'=>$myrow['t_status'],'TRIGGER_URL'=>$trigger_url));
+			} else
+			{
+				$status=protect_from_escaping(escape_html($myrow['t_status']));
+			}
 
 			// Find member link, if possible
 			$member_id=NULL;
-			$product_ob=find_product($myrow['item']);
+			$product_ob=find_product($myrow['t_type_code']);
 			if (!is_null($product_ob))
 			{
-				$member_id=method_exists($product_ob,'member_for')?$product_ob->member_for($myrow['purchase_id']):NULL;
+				$member_id=method_exists($product_ob,'member_for')?$product_ob->member_for($myrow['t_purchase_id']):NULL;
 			}
 			if (!is_null($member_id))
 			{
 				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,false,'',false);
 			} else $member_link=do_lang_tempcode('UNKNOWN_EM');
 
-			$fields->attach(results_entry(array(escape_html($myrow['id']),escape_html($myrow['purchase_id']),escape_html($myrow['linked']),escape_html($date),escape_html($myrow['amount']),escape_html($myrow['t_currency']),escape_html($myrow['item']),$status,escape_html($myrow['reason']),escape_html($myrow['pending_reason']),escape_html($myrow['t_memo']),$member_link)));
+			$fields->attach(results_entry(array(
+				escape_html($myrow['id']),
+				escape_html($myrow['t_purchase_id']),
+				escape_html($myrow['t_parent_txn_id']),
+				escape_html($date),
+				escape_html($myrow['t_amount']),
+				escape_html($myrow['t_currency']),
+				escape_html($myrow['t_type_code']),
+				$status,
+				escape_html($myrow['t_reason']),
+				escape_html($myrow['t_pending_reason']),
+				escape_html($myrow['t_memo']),
+				$member_link
+			)));
 		}
 
 		$results_table=results_table(do_lang('TRANSACTIONS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
@@ -269,10 +300,10 @@ class Module_admin_ecommerce_logs
 		$post_url=build_url(array('page'=>'_SELF','type'=>'logs'/*,'start'=>$start,'max'=>$max*/,'sort'=>$sortable.' '.$sort_order),'_SELF');
 
 		$products=new ocp_tempcode();
-		$product_rows=$GLOBALS['SITE_DB']->query_select('transactions',array('DISTINCT item'),NULL,'ORDER BY item');
+		$product_rows=$GLOBALS['SITE_DB']->query_select('transactions',array('DISTINCT t_type_code'),NULL,'ORDER BY t_type_code');
 		foreach ($product_rows as $p)
 		{
-			$products->attach(form_input_list_entry($p['item']));
+			$products->attach(form_input_list_entry($p['t_type_code']));
 		}
 
 		$tpl=do_template('ECOM_TRANSACTION_LOGS_SCREEN',array('_GUID'=>'a6ba07e4be36ecc85157511e3807df75','TITLE'=>$this->title,'PRODUCTS'=>$products,'URL'=>$post_url,'RESULTS_TABLE'=>$results_table));
@@ -294,23 +325,23 @@ class Module_admin_ecommerce_logs
 		url_default_parameters__enable();
 
 		// Choose product
-		$item_name=get_param('item_name',NULL);
-		if (is_null($item_name))
+		$type_code=get_param('type_code',NULL);
+		if (is_null($type_code))
 		{
 			$products=find_all_products();
 			$list=new ocp_tempcode();
-			foreach ($products as $product=>$details)
+			foreach ($products as $type_code=>$details)
 			{
-				if (!is_string($product)) $product=strval($product);
+				if (!is_string($type_code)) $type_code=strval($type_code);
 				$label=$details[4];
-				$label.=' ('.escape_html($product);
+				$label.=' ('.escape_html($type_code);
 
 				if ($details[1]!==NULL)
 					$label.=', '.ecommerce_get_currency_symbol().escape_html(is_float($details[1])?float_to_raw_string($details[1],2):$details[1]);
 				$label.=')';
-				$list->attach(form_input_list_entry($product,do_lang('CUSTOM_PRODUCT_'.$product,NULL,NULL,NULL,NULL,false)===get_param('product',NULL),protect_from_escaping($label)));
+				$list->attach(form_input_list_entry($type_code,do_lang('CUSTOM_PRODUCT_'.$type_code,NULL,NULL,NULL,NULL,false)===get_param('type_code',NULL),protect_from_escaping($label)));
 			}
-			$fields->attach(form_input_huge_list(do_lang_tempcode('PRODUCT'),'','item_name',$list,NULL,true));
+			$fields->attach(form_input_huge_list(do_lang_tempcode('PRODUCT'),'','type_code',$list,NULL,true));
 
 			$submit_name=do_lang('CHOOSE');
 
@@ -323,12 +354,12 @@ class Module_admin_ecommerce_logs
 		$text=do_lang('MANUAL_TRANSACTION_TEXT');
 		$submit_name=do_lang('MANUAL_TRANSACTION');
 
-		$product_ob=find_product($item_name);
+		$product_ob=find_product($type_code);
 
 		// To work out key
 		if (post_param_integer('got_purchase_key_dependencies',0)==0)
 		{
-			$needed_fields=method_exists($product_ob,'get_needed_fields')?$product_ob->get_needed_fields($item_name):NULL;
+			$needed_fields=method_exists($product_ob,'get_needed_fields')?$product_ob->get_needed_fields($type_code):NULL;
 			if (!is_null($needed_fields)) // Only do step if we actually have fields - create intermediary step. get_self_url ensures first product-choose step choice is propagated.
 			{
 				$submit_name=do_lang('PROCEED');
@@ -346,7 +377,7 @@ class Module_admin_ecommerce_logs
 		// Remaining fields, customised for product chosen
 		if (method_exists($product_ob,'get_identifier_manual_field_inputter'))
 		{
-			$f=$product_ob->get_identifier_manual_field_inputter($item_name);
+			$f=$product_ob->get_identifier_manual_field_inputter($type_code);
 			if (!is_null($f)) $fields->attach($f);
 		} else
 		{
@@ -354,7 +385,7 @@ class Module_admin_ecommerce_logs
 			if (is_null($default_purchase_id))
 			{	
 				if (method_exists($product_ob,'set_needed_fields'))
-					$default_purchase_id=$product_ob->set_needed_fields($item_name);
+					$default_purchase_id=$product_ob->set_needed_fields($type_code);
 				else
 					$default_purchase_id=strval(get_member());
 			}
@@ -364,14 +395,14 @@ class Module_admin_ecommerce_logs
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang('TRANSACTION_NOTES'),'memo','',false));
 
 		$products=$product_ob->get_products();
-		if ($products[$item_name][0]==PRODUCT_SUBSCRIPTION)
+		if ($products[$type_code][0]==PRODUCT_SUBSCRIPTION)
 			$fields->attach(form_input_date(do_lang_tempcode('CUSTOM_EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_CUSTOM_EXPIRY_DATE'),'cexpiry',true,false,false));
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'f4e52dff9353fb767afbe0be9808591c','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_float(do_lang_tempcode('AMOUNT'),do_lang_tempcode('MONEY_AMOUNT_DESCRIPTION',ecommerce_get_currency_symbol()),'amount',NULL,false));
 
 		$hidden=new ocp_tempcode();
-		$hidden->attach(form_input_hidden('item_name',$item_name));
+		$hidden->attach(form_input_hidden('type_code',$type_code));
 
 		url_default_parameters__disable();
 
@@ -385,18 +416,18 @@ class Module_admin_ecommerce_logs
 	 */
 	function _trigger()
 	{
-		$item_name=post_param('item_name');
+		$type_code=post_param('type_code');
 
 		$purchase_id=post_param('purchase_id','');
 		$memo=post_param('memo');
 		$mc_gross=post_param('amount','');
 		$custom_expiry=get_input_date('cexpiry');
 		
-		$object=find_product($item_name);
+		$object=find_product($type_code);
 		$products=$object->get_products(true);
 		if ($mc_gross=='')
 		{
-			$mc_gross=$products[$item_name][1];
+			$mc_gross=$products[$type_code][1];
 		}
 		$payment_status='Completed';
 		$reason_code='';
@@ -405,9 +436,9 @@ class Module_admin_ecommerce_logs
 		$txn_id='manual-'.substr(uniqid('',true),0,10);
 		$parent_txn_id='';
 
-		$_item_name=$products[$item_name][4];
+		$_type_code=$products[$type_code][4];
 
-		if ($products[$item_name][0]==PRODUCT_SUBSCRIPTION)
+		if ($products[$type_code][0]==PRODUCT_SUBSCRIPTION)
 		{
 			if ($purchase_id=='')
 			{
@@ -420,33 +451,47 @@ class Module_admin_ecommerce_logs
 				}
 
 				$purchase_id=strval($GLOBALS['SITE_DB']->query_insert('subscriptions',array(
-					's_type_code'=>$item_name,
+					's_type_code'=>$type_code,
 					's_member_id'=>$member_id,
 					's_state'=>'new',
-					's_amount'=>$products[$item_name][1],
-					's_special'=>$purchase_id,
+					's_amount'=>$products[$type_code][1],
+					's_purchase_id'=>$purchase_id,
 					's_time'=>time(),
 					's_auto_fund_source'=>'',
 					's_auto_fund_key'=>'',
 					's_via'=>'manual',
-					's_length'=>$products[$item_name][3]['length'],
-					's_length_units'=>$products[$item_name][3]['length_units'],
+					's_length'=>$products[$type_code][3]['length'],
+					's_length_units'=>$products[$type_code][3]['length_units'],
 				),true));
 			}
 
-			$_item_name=''; // Flag for handle_confirmed_transaction to know it's a subscription
+			$item_name=''; // Flag for handle_confirmed_transaction to know it's a subscription
 
 			if ($custom_expiry!==NULL)
 			{
-				$s_length=$products[$item_name][3]['length'];
-				$s_length_units=$products[$item_name][3]['length_units']; // y-year, m-month, w-week, d-day
+				$s_length=$products[$type_code][3]['length'];
+				$s_length_units=$products[$type_code][3]['length_units']; // y-year, m-month, w-week, d-day
 				$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
 				$new_s_time=strtotime('-'.strval($s_length).' '.$time_period_units[$s_length_units],$custom_expiry);
 				$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_time'=>$new_s_time),array('id'=>$purchase_id));
 			}
+		} else
+		{
+			if ($purchase_id=='')
+			{
+				$member_id=get_member();
+				$username=post_param('username','');
+				if ($username!='')
+				{
+					$_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+					if (!is_null($_member_id)) $member_id=$_member_id;
+				}
+
+				$purchase_id=strval($member_id);
+			}
 		}
 
-		handle_confirmed_transaction($purchase_id,$_item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id);
+		handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,'','manual');
 
 		$url=get_param('redirect',NULL);
 		if (!is_null($url)) return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
@@ -498,9 +543,9 @@ class Module_admin_ecommerce_logs
 			'INTEREST_PLUS'=>array('TYPE'=>do_lang_tempcode('M_INTEREST_PLUS'),'AMOUNT'=>0,'SPECIAL'=>false),
 		);
 		$products=find_all_products();
-		foreach ($products as $product=>$details)
+		foreach ($products as $type_code=>$details)
 		{
-			$types[$product]=array('TYPE'=>$details[4],'AMOUNT'=>0,'SPECIAL'=>false);
+			$types[$type_code]=array('TYPE'=>$details[4],'AMOUNT'=>0,'SPECIAL'=>false);
 		}
 		$types+=array(
 			'COST'=>array('TYPE'=>do_lang_tempcode('EXPENSES'),'AMOUNT'=>0,'SPECIAL'=>false),
@@ -514,53 +559,53 @@ class Module_admin_ecommerce_logs
 
 		require_code('currency');
 
-		$transactions=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'transactions WHERE t_time<'.strval($to).' AND '.db_string_equal_to('status','Completed').' ORDER BY t_time');
+		$transactions=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'transactions WHERE t_time<'.strval($to).' AND '.db_string_equal_to('t_status','Completed').' ORDER BY t_time');
 		foreach ($transactions as $transaction)
 		{
 			if ($transaction['t_time']>$from)
 			{
-				$types['TRANS']['AMOUNT']+=get_transaction_fee($transaction['amount'],$transaction['t_via']);
+				$types['TRANS']['AMOUNT']+=get_transaction_fee($transaction['t_amount'],$transaction['t_via']);
 			}
 
 			if ($unpaid_invoices_count)
 			{
-				foreach ($products as $product=>$details)
+				foreach ($products as $type_code=>$details)
 				{
-					if (($transaction['item']==$product) && ($details[0]==PRODUCT_INVOICE)) continue 2;
+					if (($transaction['t_type_code']==$type_code) && ($details[0]==PRODUCT_INVOICE)) continue 2;
 				}
 			}
 
-			$product=$transaction['item'];
+			$type_code=$transaction['t_type_code'];
 
-			$transaction['amount']=currency_convert(floatval($transaction['amount']),$transaction['t_currency'],get_option('currency'));
+			$transaction['t_amount']=currency_convert(floatval($transaction['t_amount']),$transaction['t_currency'],get_option('currency'));
 
-			$types['CLOSING']['AMOUNT']+=$transaction['amount'];
+			$types['CLOSING']['AMOUNT']+=$transaction['t_amount'];
 
 			if ($transaction['t_time']<$from)
 			{
-				$types['OPENING']['AMOUNT']+=$transaction['amount']-get_transaction_fee($transaction['amount'],$transaction['t_via']);
+				$types['OPENING']['AMOUNT']+=$transaction['t_amount']-get_transaction_fee($transaction['t_amount'],$transaction['t_via']);
 				continue;
 			}
 
-			if (($transaction['item']=='OTHER') && ($transaction['amount']<0))
+			if (($transaction['t_type_code']=='OTHER') && ($transaction['t_amount']<0))
 			{
-				$types['COST']['AMOUNT']+=$transaction['amount'];
+				$types['COST']['AMOUNT']+=$transaction['t_amount'];
 			}
-			elseif ($transaction['item']=='TAX')
+			elseif ($transaction['t_type_code']=='TAX')
 			{
-				$types['TAX']['AMOUNT']+=$transaction['amount'];
+				$types['TAX']['AMOUNT']+=$transaction['t_amount'];
 			}
-			elseif ($transaction['item']=='INTEREST')
+			elseif ($transaction['t_type_code']=='INTEREST')
 			{
-				$types[$product][($transaction['amount']<0)?'INTEREST_MINUS':'INTEREST_PLUS']['AMOUNT']+=$transaction['amount'];
+				$types[$type_code][($transaction['t_amount']<0)?'INTEREST_MINUS':'INTEREST_PLUS']['AMOUNT']+=$transaction['t_amount'];
 			}
-			elseif ($transaction['item']=='WAGE')
+			elseif ($transaction['t_type_code']=='WAGE')
 			{
-				$types['WAGE']['AMOUNT']+=$transaction['amount'];
+				$types['WAGE']['AMOUNT']+=$transaction['t_amount'];
 			} else
 			{
-				if (!array_key_exists($product,$types)) $types[$product]=array('TYPE'=>$product,'AMOUNT'=>0,'SPECIAL'=>false); // In case product no longer exists
-				$types[$product]['AMOUNT']+=$transaction['amount'];
+				if (!array_key_exists($type_code,$types)) $types[$type_code]=array('TYPE'=>$type_code,'AMOUNT'=>0,'SPECIAL'=>false); // In case product no longer exists
+				$types[$type_code]['AMOUNT']+=$transaction['t_amount'];
 			}
 		}
 
@@ -569,7 +614,7 @@ class Module_admin_ecommerce_logs
 			$invoices=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'invoices WHERE '.db_string_equal_to('i_state','new').' AND i_time<'.strval($to).' ORDER BY i_time');
 			foreach ($invoices as $invoice)
 			{
-				$product=$invoice['i_type_code'];
+				$type_code=$invoice['i_type_code'];
 
 				$types['CLOSING']['AMOUNT']+=$invoice['i_amount'];
 
@@ -579,7 +624,7 @@ class Module_admin_ecommerce_logs
 					continue;
 				}
 
-				$types[$product]['AMOUNT']+=$invoice['amount'];
+				$types[$type_code]['AMOUNT']+=$invoice['amount'];
 			}
 		}
 
@@ -669,7 +714,7 @@ class Module_admin_ecommerce_logs
 
 			$products=$product_obj->get_products(true);
 
-			$product_name=$products[$subs['s_type_code']][4];
+			$item_name=$products[$subs['s_type_code']][4];
 			$s_length=$products[$subs['s_type_code']][3]['length'];
 			$s_length_units=$products[$subs['s_type_code']][3]['length_units']; // y-year, m-month, w-week, d-day
 			$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
@@ -678,7 +723,7 @@ class Module_admin_ecommerce_logs
 			$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($subs['s_member_id'],true,'',false);
 			$cancel_url=build_url(array('page'=>'_SELF','type'=>'cancel_subscription','subscription_id'=>$subs['id']),'_SELF');
 
-			$data[$product_name][]=array($member_link,$expiry_date,$cancel_url,$subs['id']);
+			$data[$item_name][]=array($member_link,$expiry_date,$cancel_url,$subs['id']);
 		}
 
 		$result=new ocp_tempcode();
@@ -715,19 +760,19 @@ class Module_admin_ecommerce_logs
 
 		$product_obj=find_product($subscription[0]['s_type_code']);
 		$products=$product_obj->get_products(true);
-		$product_name=$products[$subscription[0]['s_type_code']][4];
+		$item_name=$products[$subscription[0]['s_type_code']][4];
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($subscription[0]['s_member_id']);
 
 		$repost_id=post_param_integer('id',NULL);
 		if (($repost_id!==NULL) && ($repost_id==$id))
 		{
 			require_code('ecommerce');
-			handle_confirmed_transaction(strval($id),'','SCancelled','','','','','','manual',''); // Runs a cancel
+			handle_confirmed_transaction(strval($id),'','SCancelled','','','','','','','manual'); // Runs a cancel
 			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
 
 		// We need to get confirmation via POST, for security/confirmation reasons
-		$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRIPTION_CONFIRM',$product_name,$username);
+		$preview=do_lang_tempcode('CANCEL_MANUAL_SUBSCRIPTION_CONFIRM',$item_name,$username);
 		$fields=form_input_hidden('id',strval($id));
 		$map=array('page'=>'_SELF','type'=>get_param('type'),'subscription_id'=>$id);
 		$url=build_url($map,'_SELF');

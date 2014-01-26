@@ -876,7 +876,7 @@ class Hook_ipb_base
 			{
 				for ($i=0;$i<intval($answer[2]);$i++) // For each vote of this answer
 				{
-					array_push($vote_list,$answers[$j]); // Push the mapped ocPortal vote id onto the list of votes
+					array_push($vote_list,$answers[$j]); // Push the mapped ocPortal vote ID onto the list of votes
 				}
 				$j++;
 			}

@@ -473,7 +473,7 @@ function wiki_delete_page($id)
 }
 
 /**
- * Get a chain script parameter or just an ID, in which case it does more work), and converts it into a id/chain pair
+ * Get a chain script parameter or just an ID, in which case it does more work), and converts it into a ID/chain pair
  *
  * @param  ID_TEXT		The name of the GET parameter that stores the chain
  * @param  ?string		The default value for the chain (NULL: no default)

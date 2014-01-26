@@ -166,16 +166,15 @@ class Hook_addon_registry_ecommerce
 			'themes/default/templates/ECOM_VIEW_MANUAL_TRANSACTIONS_LINE.tpl',
 			'themes/default/templates/ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN.tpl',
 			'themes/default/templates/MEMBER_SUBSCRIPTION_STATUS.tpl',
-			'sources/hooks/systems/notifications/manual_subscription.php',
 			'sources/hooks/systems/cron/manual_subscription_notification.php',
+			'sources/hooks/systems/cron/subscription_mails.php',
 			'adminzone/pages/modules/admin_ecommerce.php',
 			'adminzone/pages/modules/admin_ecommerce_logs.php',
 			'adminzone/pages/modules/admin_invoices.php',
 			'themes/default/css/ecommerce.css',
 			'data/ecommerce.php',
 			'lang/EN/ecommerce.ini',
-			'sources/hooks/systems/notifications/paid_subscription_started.php',
-			'sources/hooks/systems/notifications/paid_subscription_ended.php',
+			'sources/hooks/systems/notifications/paid_subscription_messages.php',
 			'sources/hooks/systems/notifications/payment_received.php',
 			'sources/hooks/systems/notifications/invoice.php',
 			'sources/hooks/systems/notifications/subscription_cancelled_staff.php',
@@ -398,7 +397,7 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_WORLDPAY',array(
-				'PRODUCT'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_phrase(),
 				'ITEM_NAME'=>lorem_word(),
 				'DIGEST'=>lorem_phrase(),
 				'TEST_MODE'=>lorem_phrase(),
@@ -423,7 +422,7 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY',array(
-				'PRODUCT'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_phrase(),
 				'DIGEST'=>lorem_phrase(),
 				'TEST'=>lorem_phrase(),
 				'LENGTH'=>lorem_phrase(),
@@ -469,7 +468,7 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_PAYPAL',array(
-				'PRODUCT'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_phrase(),
 				'ITEM_NAME'=>lorem_word(),
 				'PURCHASE_ID'=>placeholder_id(),
 				'AMOUNT'=>placeholder_number(),
@@ -492,7 +491,7 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL',array(
-				'PRODUCT'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_phrase(),
 				'ITEM_NAME'=>lorem_word_html(),
 				'LENGTH'=>lorem_phrase(),
 				'LENGTH_UNITS'=>lorem_phrase(),
@@ -532,7 +531,7 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_SECPAY',array(
-				'PRODUCT'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_phrase(),
 				'DIGEST'=>lorem_phrase(),
 				'TEST'=>lorem_phrase(),
 				'TRANS_ID'=>placeholder_id(),
@@ -557,7 +556,7 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY',array(
-				'PRODUCT'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_phrase(),
 				'DIGEST'=>lorem_phrase(),
 				'TEST'=>lorem_phrase(),
 				'TRANS_ID'=>placeholder_id(),

@@ -410,7 +410,7 @@ function _render_menu($menu,$source_member,$type,$as_admin=false)
  * Render a menu branch to Tempcode.
  *
  * @param  array			The branch
- * @param  SHORT_TEXT	An identifier for the menu (will be used as a unique id by menu Javascript code)
+ * @param  SHORT_TEXT	An identifier for the menu (will be used as a unique ID by menu Javascript code)
  * @param  MEMBER			The member the menu is being built as
  * @param  integer		The depth into the menu that this branch resides at
  * @param  ID_TEXT		The menu type (determines what templates get used)

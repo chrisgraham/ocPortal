@@ -141,7 +141,7 @@ class Block_youtube_channel
 			  $accesscontrols = $entry->{'yt$accessControl'};									//get video access controls - used to find out if video can be embedded
 			  $vidurl = $entry->{'media$group'}->{'media$player'}; 								//get video youtube page url
 			  $uploaded = $entry->{'media$group'}->{'yt$uploaded'}->{'$t'};						//get video upload date/time
-			  $video_id = $entry->{'media$group'}->{'yt$videoid'}->{'$t'};						//get video id
+			  $video_id = $entry->{'media$group'}->{'yt$videoid'}->{'$t'};						//get video ID
 
 			  if (isset($entry->{'yt$rating'})) $likes = $entry->{'yt$rating'}->numLikes;		//if video has been liked, get number of likes
 			  else $likes = 0;																	//if video has no likes, node will not be available - manually set it to 0

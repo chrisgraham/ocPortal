@@ -3,8 +3,8 @@
 	<input type="hidden" name="merchant" value="{USERNAME*}" />
 	<input type="hidden" name="digest" value="{DIGEST*}" />
 	<input type="hidden" name="amount" value="{AMOUNT*}" />
-	<input type="hidden" name="callback" value="{$FIND_SCRIPT*,ecommerce}?from=secpay&amp;product={PRODUCT*}" />
-	<input type="hidden" name="repeat_callback" value="{$FIND_SCRIPT*,ecommerce}?from=secpay&amp;subc=1&amp;product={PRODUCT*}" />
+	<input type="hidden" name="callback" value="{$FIND_SCRIPT*,ecommerce}?from=secpay&amp;type_code={TYPE_CODE*}" />
+	<input type="hidden" name="repeat_callback" value="{$FIND_SCRIPT*,ecommerce}?from=secpay&amp;subc=1&amp;type_code={TYPE_CODE*}" />
 	<input type="hidden" name="currency" value="{CURRENCY*}" />
 	<input type="hidden" name="cb_post" value="true" />
 	<input type="hidden" name="req_cv2" value="true" />

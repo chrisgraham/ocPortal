@@ -464,12 +464,25 @@ class Hook_ocp_merge
 					's_cost'=>$row['s_cost'],
 					's_length'=>$row['s_length'],
 					's_length_units'=>$row['s_length_units'],
+					's_auto_recur'=>array_key_exists('s_auto_recur',$row)?$row['s_auto_recur']:1,
 					's_group_id'=>$group_id,
 					's_enabled'=>$row['s_enabled'],
 					's_mail_start'=>insert_lang($this->get_lang_string($db,$row['s_mail_start']),2),
 					's_mail_end'=>insert_lang($this->get_lang_string($db,$row['s_mail_end']),2),
 					's_mail_uhoh'=>insert_lang($this->get_lang_string($db,$row['s_mail_uhoh']),2),
 				),true);
+
+				$mails=$db->query_select('f_usergroup_sub_mails',array('*'),array('m_usergroup_sub_id'=>$row['id']));
+				foreach ($mails as $mail)
+				{
+					$GLOBALS['SITE_DB']->query_insert('f_usergroup_sub_mails',array(
+						'm_usergroup_sub_id'=>$id_new,
+						'm_ref_point'=>$mail['m_ref_point'],
+						'm_ref_point_offset'=>$mail['m_ref_point_offset'],
+						'm_subject'=>insert_lang($this->get_lang_string($db,$mail['m_subject']),2),
+						'm_body'=>insert_lang($this->get_lang_string($db,$mail['m_body']),2),
+					));
+				}
 
 				import_id_remap_put('usergroup_sub',strval($row['id']),$id_new);
 			}

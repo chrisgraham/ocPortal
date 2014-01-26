@@ -607,14 +607,14 @@ A little aside explanation about the XHTML class attribute is probably required 
 [/code]
 In that example, the [tt]<span>[/tt] tag has two CSS classes attached. However, it should be noted that when naming CSS classes, you should name them for their [i]function[/i], rather than for their [i]appearance[/i]. This is for maintenance considerations: if you name a class 'red', then change the colour to blue, you'd have to rename it, and change all the references to it, or leave it as a mess.
 
-ID [i]selectors[/i] are another basic selector type, which apply properties to elements based upon their id attribute (for more information on the id attribute, see the Javascript section below).
+ID [i]selectors[/i] are another basic selector type, which apply properties to elements based upon their ID attribute (for more information on the ID attribute, see the Javascript section below).
 [code="CSS"]
 #main_doc
 {
 	property: property-value;
 }
 [/code]
-Note that this rule should (in theory) only be applied to [b]one[/b] tag in the entire page (if at all), as the id attribute of any tag should be [b]unique[/b]. Due to this, the ID selector isn't used as frequently as other selectors, and when it is used, it is usually used for basic page layout rules, such as positioning the title, main body, and menus. Note also that ID selectors can be coupled with type selectors, as with the class selector.
+Note that this rule should (in theory) only be applied to [b]one[/b] tag in the entire page (if at all), as the ID attribute of any tag should be [b]unique[/b]. Due to this, the ID selector isn't used as frequently as other selectors, and when it is used, it is usually used for basic page layout rules, such as positioning the title, main body, and menus. Note also that ID selectors can be coupled with type selectors, as with the class selector.
 [code="CSS"]
 h1#title
 {
@@ -862,7 +862,7 @@ function is_IE()
 
 If you are knowledgeable in the area of programming, you will notice that Javascript uses C-style syntax.
 
-Javascript is most powerful when applied to the DOM -- the Document Object Model, which is a way of accessing the properties and attributes of every node in the document tree of an XHTML (or XML, etc.) page. You don't need to know about how to use the DOM in Javascript, you just need to know that the DOM extensively references the IDs of XHTML elements, specified by their id tag.
+Javascript is most powerful when applied to the DOM -- the Document Object Model, which is a way of accessing the properties and attributes of every node in the document tree of an XHTML (or XML, etc.) page. You don't need to know about how to use the DOM in Javascript, you just need to know that the DOM extensively references the IDs of XHTML elements, specified by their ID tag.
 
 Another feature of Javascript is its event model. You can specify Javascript functions or code to be called when, for example, a link is clicked. You do this either via the event attributes in an XHTML document, or through event listening functions in Javascript.
 

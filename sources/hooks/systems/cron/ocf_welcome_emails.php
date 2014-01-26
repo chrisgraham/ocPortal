@@ -28,9 +28,9 @@ class Hook_cron_ocf_welcome_emails
 		//if (!running_script('execute_temp')) return;
 		$time_now=time();
 		//$time_now=1335726076;
-		$last_cron_time=intval(get_value('last_welcome_mail_time'));
+		$last_cron_time=intval(get_long_value('last_welcome_mail_time'));
 		if ($last_cron_time==0) $last_cron_time=$time_now-24*60*60*7;
-		set_value('last_welcome_mail_time',strval($time_now));
+		set_long_value('last_welcome_mail_time',strval($time_now));
 		//$last_cron_time=$time_now-60*60*1; Useful for debugging
 
 		require_code('mail');

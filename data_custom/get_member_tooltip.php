@@ -41,6 +41,6 @@ echo '<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>';
 echo '<request><result>';
 echo '<![CDATA[';
 $box=render_member_box($member_id,false,NULL,NULL,true,NULL,false);
-$box->evaluate_echo();	// '' will be returned if member id is invalid.
+$box->evaluate_echo();	// '' will be returned if member ID is invalid.
 echo ']]>';
 echo '</result></request>';

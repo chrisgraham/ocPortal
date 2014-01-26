@@ -151,8 +151,9 @@ class shopping_test_set extends ocp_test_case
 		$mc_currency=get_option('currency');
 		$txn_id='0';
 		$parent_txn_id='0';
+		$period='';
 		$via='paypal';
 
-		handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$via,post_param('period3',''));
+		handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period,$via);
 	}
 }

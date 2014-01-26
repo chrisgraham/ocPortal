@@ -64,7 +64,6 @@ class Hook_page_groupings_core
 
 			array('style','menu/adminzone/style/themes/themes',array('admin_themes',array('type'=>'misc'),get_module_zone('admin_themes')),do_lang_tempcode('THEMES'),'DOC_THEMES'),
 			(get_forum_type()!='ocf')?NULL:array('style','menu/adminzone/style/emoticons',array('admin_ocf_emoticons',array('type'=>'misc'),get_module_zone('admin_ocf_emoticons')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('EMOTICONS'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons','COUNT(*)',NULL,'',true))))),'ocf:DOC_EMOTICONS'),
-			(get_forum_type()!='ocf')?NULL:array('security','menu/adminzone/security/usergroups_temp',array('admin_group_member_timeouts',array('type'=>'misc'),get_module_zone('admin_group_member_timeouts')),do_lang_tempcode('group_member_timeouts:GROUP_MEMBER_TIMEOUTS'),'group_member_timeouts:DOC_MANAGE_GROUP_MEMBER_TIMEOUTS'),
 
 			array('setup','menu/adminzone/setup/config/config',array('admin_config',array('type'=>'misc'),get_module_zone('admin_config')),do_lang_tempcode('CONFIGURATION'),'DOC_CONFIGURATION'),
 			addon_installed('awards')?array('setup','menu/adminzone/setup/awards',array('admin_awards',array('type'=>'misc'),get_module_zone('admin_awards')),do_lang_tempcode('awards:AWARDS'),'awards:DOC_AWARDS'):NULL,
@@ -86,6 +85,7 @@ class Hook_page_groupings_core
 			addon_installed('securitylogging')?array('security','menu/adminzone/security/ip_ban',array('admin_ip_ban',array('type'=>'misc'),get_module_zone('admin_ip_ban')),do_lang_tempcode('submitban:BANNED_ADDRESSES'),'submitban:DOC_IP_BAN'):NULL,
 			array('security','menu/adminzone/security/permissions/privileges',array('admin_permissions',array('type'=>'privileges'),get_module_zone('admin_permissions')),do_lang_tempcode('permissions:GLOBAL_PRIVILEGES'),'permissions:DOC_PRIVILEGES'),
 			(get_forum_type()!='ocf')?NULL:array('security','menu/social/groups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups')),do_lang_tempcode('ocf:USERGROUPS'),'ocf:DOC_GROUPS'),
+			(get_forum_type()!='ocf')?NULL:array('security','menu/adminzone/security/usergroups_temp',array('admin_group_member_timeouts',array('type'=>'misc'),get_module_zone('admin_group_member_timeouts')),do_lang_tempcode('group_member_timeouts:GROUP_MEMBER_TIMEOUTS'),'group_member_timeouts:DOC_MANAGE_GROUP_MEMBER_TIMEOUTS'),
 			(get_forum_type()=='ocf')?NULL:array('security','menu/social/groups',array('admin_permissions',array('type'=>'absorb'),get_module_zone('admin_security')),do_lang_tempcode('permissions:ABSORB_PERMISSIONS'),'permissions:DOC_ABSORB_PERMISSIONS'),
 
 			//(get_comcode_zone('start',false)===NULL)?NULL:array('','menu/start',array('start',array(),get_comcode_zone('start')),do_lang_tempcode('HOME')),	Attached to zone, so this is not needed

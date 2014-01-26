@@ -324,7 +324,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 /**
  * Remap the specified language ID, and return the ID again - the ID isn't changed.
  *
- * @param  integer		The language entries id
+ * @param  integer		The language entry's ID
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether it is to be parsed as Comcode
@@ -332,7 +332,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
  * @param  ?MEMBER		The member performing the change (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @param  boolean		Whether to backup the language string before changing it
- * @return integer		The language entries id
+ * @return integer		The language entry's ID
  */
 function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_member=NULL,$as_admin=false,$backup_string=false)
 {

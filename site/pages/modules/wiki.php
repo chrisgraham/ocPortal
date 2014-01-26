@@ -246,7 +246,7 @@ class Module_wiki
 		{
 			// Find our page by whatever means
 			$find=get_param('find','');
-			if ($find!='')	// Allow quick 'find' remapping to a real id
+			if ($find!='')	// Allow quick 'find' remapping to a real ID
 			{
 				$id=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON p.title=t.id','p.id',array('text_original'=>$find));
 				if (is_null($id))

@@ -21,22 +21,21 @@
 /**
  * Handling of a usergroup subscription.
  *
- * @param  ID_TEXT	The purchase ID.
- * @param  array		Details relating to the product.
- * @param  ID_TEXT	The product.
+ * @param  ID_TEXT		The purchase ID.
+ * @param  array			Details of the product.
+ * @param  ID_TEXT		The product codename.
+ * @param  ID_TEXT		The status this transaction is telling of
+ * @set    Pending Completed SModified SCancelled
+ * @param  SHORT_TEXT	The transaction ID
  */
-function handle_usergroup_subscription($purchase_id,$details,$product)
+function handle_usergroup_subscription($purchase_id,$details,$type_code,$payment_status,$txn_id)
 {
-	$member_id=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
-
-	if (is_null($member_id)) return;
-
 	require_code('ocf_groups_action');
 	require_code('ocf_groups_action2');
 	require_code('ocf_members');
 	require_code('notifications');
 
-	$usergroup_subscription_id=intval(substr($product,9));
+	$usergroup_subscription_id=intval(substr($type_code,9));
 	$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 	$rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select('f_usergroup_subs',array('*'),array('id'=>$usergroup_subscription_id),'',1);
@@ -45,16 +44,22 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 	{
 		$myrow=$rows[0];
 		$new_group=$myrow['s_group_id'];
-		$object=find_product($product);
-	} else $object=NULL;
-
-	if (is_null($object))
+		$object=find_product($type_code);
+	} else
 	{
 		return; // The usergroup subscription has been deleted, and this was to remove the payment for it
 	}
 
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','id',array('s_state'=>'cancelled','id'=>$purchase_id));
-	if (!is_null($test))
+	if ($myrow['s_auto_recur']==1)
+	{
+		$member_id=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
+		if (is_null($member_id)) return;
+	} else
+	{
+		$member_id=intval($purchase_id);
+	}
+
+	if ($payment_status=='SCancelled') // Cancelled
 	{
 		$test=in_array($new_group,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id));
 		if ($test)
@@ -83,10 +88,10 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 					}
 				}
 
-				dispatch_notification('paid_subscription_ended',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_lang($member_id)),get_translated_text($myrow['s_mail_end'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
+				dispatch_notification('paid_subscription_messages',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_lang($member_id)),get_translated_text($myrow['s_mail_end'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 			}
 		}
-	} else
+	} else // Completed
 	{
 		$test=in_array($new_group,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id));
 		if (!$test)
@@ -112,8 +117,34 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 					ocf_add_member_to_group($member_id,$new_group);
 				}
 			}
-			dispatch_notification('paid_subscription_started',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 		}
+
+		if ($myrow['s_auto_recur']==0) // Purchase-wizard, so need to maintain group-member-timeout
+		{
+			$start_time=$GLOBALS['SITE_DB']->query_select_value_if_there('f_group_member_timeouts','MAX(timeout)',array(
+				'member_id'=>$member_id,
+				'group_id'=>$new_group,
+			));
+			if ((is_null($start_time)) || ($start_time<time()))
+			{
+				$start_time=time();
+			}
+			$GLOBALS['SITE_DB']->query_delete('f_group_member_timeouts',array(
+				'member_id'=>$member_id,
+				'group_id'=>$new_group,
+			));
+
+			$time_period_units=array('y'=>'year','m'=>'month','w'=>'week','d'=>'day');
+			$term_end_time=strtotime('+'.strval($myrow['s_length']).' '.$time_period_units[$myrow['s_length_units']],$start_time);
+
+			$GLOBALS['SITE_DB']->query_insert('f_group_member_timeouts',array(
+				'member_id'=>$member_id,
+				'group_id'=>$new_group,
+				'timeout'=>$term_end_time,
+			));
+		}
+
+		dispatch_notification('paid_subscription_messages',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 	}
 }
 
@@ -125,7 +156,7 @@ class Hook_usergroup
 	/**
 	 * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
 	 *
-	 * @param  ID_TEXT		Product type code.
+	 * @param  ID_TEXT		Product codename.
 	 * @return ?tempcode		Input field in standard Tempcode format for fields (NULL: no identifier).
 	 */
 	function get_identifier_manual_field_inputter($type_code)
@@ -188,7 +219,13 @@ class Hook_usergroup
 		{
 			$item_name=get_translated_text($sub['s_title'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB'],$site_lang?get_site_default_lang():NULL);
 
-			$products['USERGROUP'.strval($sub['id'])]=array(PRODUCT_SUBSCRIPTION,$sub['s_cost'],'handle_usergroup_subscription',array('length'=>$sub['s_length'],'length_units'=>$sub['s_length_units']),$item_name);
+			$products['USERGROUP'.strval($sub['id'])]=array(
+				($sub['s_auto_recur']==1)?PRODUCT_SUBSCRIPTION:PRODUCT_PURCHASE_WIZARD, // Technically a non-recurring usergroup subscription is NOT a subscription (i.e. conflicting semantics here...)
+				$sub['s_cost'],
+				'handle_usergroup_subscription',
+				array('length'=>$sub['s_length'],'length_units'=>$sub['s_length_units']),
+				$item_name
+			);
 		}
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
@@ -199,15 +236,15 @@ class Hook_usergroup
 	/**
 	 * Get the message for use in the purchase wizard.
 	 *
-	 * @param  string		The product in question.
+	 * @param  ID_TEXT	The product in question.
 	 * @return tempcode	The message.
 	 */
-	function get_message($product)
+	function get_message($type_code)
 	{
 		$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-		$id=intval(substr($product,9));
+		$id=intval(substr($type_code,9));
 		$_description=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_usergroup_subs','s_description',array('id'=>$id));
 		$ret=get_translated_tempcode($_description,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
 
@@ -227,25 +264,33 @@ class Hook_usergroup
 	}
 
 	/**
-	 * Check whether the product code is available for purchase by the member.
+	 * Check whether the product codename is available for purchase by the member.
 	 *
-	 * @param  ID_TEXT	The product.
-	 * @param  MEMBER	The member.
+	 * @param  ID_TEXT	The product codename.
+	 * @param  MEMBER		The member.
 	 * @return integer	The availability code (a ECOMMERCE_PRODUCT_* constant).
 	 */
-	function is_available($product,$member)
+	function is_available($type_code,$member)
 	{
 		if (is_guest($member)) return ECOMMERCE_PRODUCT_NO_GUESTS;
 		if ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)) return ECOMMERCE_PRODUCT_AVAILABLE;
 
-		$id=intval(substr($product,9));
+		$id=intval(substr($type_code,9));
 		$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		$group_id=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_usergroup_subs','s_group_id',array('id'=>$id));
+		$rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select('f_usergroup_subs',array('*'),array('id'=>$id));
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
+		if (!isset($rows[0])) return ECOMMERCE_PRODUCT_MISSING;
+		$sub=$rows[0];
+		$group_id=$sub['s_group_id'];
 
 		$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member);
-		if (in_array($group_id,$groups)) return ECOMMERCE_PRODUCT_ALREADY_HAS;
+
+		if ($sub['s_auto_recur']==1)
+		{
+			if (in_array($group_id,$groups)) return ECOMMERCE_PRODUCT_ALREADY_HAS;
+		} // Non-auto-recur can be topped up at will
+
 		return ECOMMERCE_PRODUCT_AVAILABLE;
 	}
 }

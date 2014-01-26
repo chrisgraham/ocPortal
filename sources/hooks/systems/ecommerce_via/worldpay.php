@@ -77,12 +77,12 @@ class Hook_worldpay
 	 *
 	 * @param  ID_TEXT		The product codename.
 	 * @param  SHORT_TEXT	The human-readable product title.
-	 * @param  AUTO_LINK		The purchase ID.
+	 * @param  ID_TEXT		The purchase ID.
 	 * @param  float			A transaction amount.
 	 * @param  ID_TEXT		The currency to use.
 	 * @return tempcode		The button
 	 */
-	function make_transaction_button($product,$item_name,$purchase_id,$amount,$currency)
+	function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
 	{
 		$username=$this->_get_username();
 		$ipn_url=$this->get_ipn_url();
@@ -103,7 +103,7 @@ class Hook_worldpay
 		));
 		return do_template('ECOM_BUTTON_VIA_WORLDPAY',array(
 			'_GUID'=>'56c78a4e16c0e7f36fcfbe57d37bc3d3',
-			'PRODUCT'=>$product,
+			'TYPE_CODE'=>$type_code,
 			'ITEM_NAME'=>$item_name,
 			'DIGEST'=>$digest,
 			'TEST_MODE'=>ecommerce_test_mode(),
@@ -121,7 +121,7 @@ class Hook_worldpay
 	 *
 	 * @param  ID_TEXT		The product codename.
 	 * @param  SHORT_TEXT	The human-readable product title.
-	 * @param  AUTO_LINK		The purchase ID.
+	 * @param  ID_TEXT		The purchase ID.
 	 * @param  float			A transaction amount.
 	 * @param  integer		The subscription length in the units.
 	 * @param  ID_TEXT		The length units.
@@ -129,7 +129,7 @@ class Hook_worldpay
 	 * @param  ID_TEXT		The currency to use.
 	 * @return tempcode		The button
 	 */
-	function make_subscription_button($product,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
+	function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
 	{
 		$username=$this->_get_username();
 		$ipn_url=$this->get_ipn_url();
@@ -170,7 +170,7 @@ class Hook_worldpay
 		));
 		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY',array(
 			'_GUID'=>'1f88716137762a467edbf5fbb980c6fe',
-			'PRODUCT'=>$product,
+			'TYPE_CODE'=>$type_code,
 			'DIGEST'=>$digest,
 			'TEST'=>ecommerce_test_mode(),
 			'LENGTH'=>strval($length),
@@ -226,9 +226,7 @@ class Hook_worldpay
 	 */
 	function handle_transaction()
 	{
-		//$myfile=fopen(get_file_base().'/data_custom/ecommerce.log',GOOGLE_APPENGINE?'wb':'wt');
-		//fwrite($myfile,serialize($_POST)."\n".serialize($_GET));
-		//fclose($myfile);
+		// Test case...
 		//$_POST=unserialize('a:36:{s:8:"testMode";s:3:"100";s:8:"authCost";s:4:"15.0";s:8:"currency";s:3:"GBP";s:7:"address";s:1:"a";s:13:"countryString";s:11:"South Korea";s:10:"callbackPW";s:10:"s35645dxr4";s:12:"installation";s:5:"84259";s:3:"fax";s:1:"a";s:12:"countryMatch";s:1:"B";s:7:"transId";s:9:"222873126";s:3:"AVS";s:4:"0000";s:12:"amountString";s:11:"&#163;15.00";s:8:"postcode";s:1:"a";s:7:"msgType";s:10:"authResult";s:4:"name";s:1:"a";s:3:"tel";s:1:"a";s:11:"transStatus";s:1:"Y";s:4:"desc";s:15:"Property Advert";s:8:"cardType";s:10:"Mastercard";s:4:"lang";s:2:"en";s:9:"transTime";s:13:"1171243476007";s:16:"authAmountString";s:11:"&#163;15.00";s:10:"authAmount";s:4:"15.0";s:9:"ipAddress";s:12:"84.9.162.135";s:4:"cost";s:4:"15.0";s:6:"instId";s:5:"84259";s:6:"amount";s:4:"15.0";s:8:"compName";s:32:"The Accessible Property Register";s:7:"country";s:2:"KR";s:11:"MC_callback";s:63:"www.kivi.co.uk/ClientFiles/APR/data/ecommerce.php?from=worldpay";s:14:"rawAuthMessage";s:22:"cardbe.msg.testSuccess";s:5:"email";s:16:"vaivak@gmail.com";s:12:"authCurrency";s:3:"GBP";s:11:"rawAuthCode";s:1:"A";s:6:"cartId";s:32:"3ecd645f632f0304067fb565e71b4dcd";s:8:"authMode";s:1:"A";}');
 		//$_GET=unserialize('a:3:{s:4:"from";s:8:"worldpay";s:7:"msgType";s:10:"authResult";s:12:"installation";s:5:"84259";}');
 
@@ -262,7 +260,7 @@ class Hook_worldpay
 		$mc_currency=post_param('authCurrency');
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
 
-		if (post_param('callbackPW')!=get_option('callback_password')) my_exit(do_lang('IPN_UNVERIFIED'));
+		if (post_param('callbackPW')!=get_option('callback_password')) fatal_ipn_exit(do_lang('IPN_UNVERIFIED'));
 
 		if ($success)
 		{
@@ -270,25 +268,25 @@ class Hook_worldpay
 			dispatch_notification('payment_received',NULL,do_lang('PAYMENT_RECEIVED_SUBJECT',$txn_id,NULL,NULL,get_lang($member_id)),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($mc_gross)),$mc_currency,get_site_name(),get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 		}
 
-		if ($success) $_url=build_url(array('page'=>'purchase','type'=>'finish','product'=>get_param('product',NULL),'message'=>'<WPDISPLAY ITEM=banner>'),get_module_zone('purchase'));
+		if ($success) $_url=build_url(array('page'=>'purchase','type'=>'finish','type_code'=>get_param('type_code',NULL),'message'=>'<WPDISPLAY ITEM=banner>'),get_module_zone('purchase'));
 		else $_url=build_url(array('page'=>'purchase','type'=>'finish','cancel'=>1,'message'=>do_lang_tempcode('DECLINED_MESSAGE',$message)),get_module_zone('purchase'));
 		$url=$_url->evaluate();
 
 		echo http_download_file($url);
 
-		if(addon_installed('shopping'))
+		if (addon_installed('shopping'))
 		{
 			$this->store_shipping_address($purchase_id);
 		}
 
-		return array($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,'');
+		return array($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,'','');
 	}
 
 	/**
 	 * Store shipping address for orders
 	 *
-	 * @param  AUTO_LINK		Order id
-	 * @return ?mixed			Address id (NULL: No address record found)
+	 * @param  AUTO_LINK		Order ID
+	 * @return ?mixed			Address ID (NULL: No address record found)
 	 */
 	function store_shipping_address($order_id)
 	{
@@ -302,8 +300,12 @@ class Hook_worldpay
 			$shipping_address['address_street']=post_param('delvAddress','');
 			$shipping_address['address_zip']=post_param('delvPostcode','');
 			$shipping_address['address_city']=post_param('city','');
-			$shipping_address['address_country']=	post_param('delvCountryString','');
+			$shipping_address['address_state']='';
+			$shipping_address['address_country']=post_param('delvCountryString','');
 			$shipping_address['receiver_email']=post_param('email','');
+			$shipping_address['contact_phone']=post_param('tel','');
+			$shipping_address['first_name']=post_param('delvName','');
+			$shipping_address['last_name']='';
 
 			return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses',$shipping_address,true);	
 		}

@@ -66,11 +66,11 @@ function find_member_subscriptions($member_id,$usergroup_subscriptions_only=fals
 				$usergroup_id=mixed();
 				$usergroup_name=mixed();
 
-				$product=$sub['s_type_code'];
-				$object=find_product($product);
+				$type_code=$sub['s_type_code'];
+				$object=find_product($type_code);
 				if (is_null($object)) continue;
-				$products=$object->get_products(false,$product);
-				$product_row=$products[$product];
+				$products=$object->get_products(false,$type_code);
+				$product_row=$products[$type_code];
 				$item_name=$product_row[4];
 			}
 
@@ -133,12 +133,7 @@ function find_member_subscriptions($member_id,$usergroup_subscriptions_only=fals
 				'start_time'=>$start_time,
 				'term_start_time'=>$term_start_time, // For non-recurring, this is the same as start_time
 				'term_end_time'=>$term_end_time, // For non-recurring, this is the same as expiry_time
-				'expiry_time'=>$expiry_time, // For recurring, expiry only happens on explicit cancellation or failed payment
-
-				'seconds_since_start'=>time()-$start_time,
-				'seconds_since_term_start'=>time()-$term_start_time,
-				'seconds_before_term_end'=>$term_end_time-time(),
-				'seconds_since_expiry'=>$is_active?($expiry_time-time()):NULL,
+				'expiry_time'=>$expiry_time, // May be NULL: For recurring, expiry only happens on explicit cancellation or failed payment
 			);
 			if (($is_active) || (!isset($subscriptions[$sub['s_type_code']]))) // We don't want to know multiple subscriptions to the same thing; prioritise active ones
 			{

@@ -1,5 +1,6 @@
 <form title="{!MAKE_PAYMENT}" class="right" action="{IPN_URL*}" method="post">
 	<input type="hidden" name="cmd" value="_cart" />
+	<input type="hidden" name="charset" value="{!charset}" />
 	<input type="hidden" name="upload" value="1" />
 	<input type="hidden" name="business" value="{PAYMENT_ADDRESS*}" />
 	<input type="hidden" name="return" value="{$PAGE_LINK*,_SEARCH:shopping:finish:from=paypal}" />

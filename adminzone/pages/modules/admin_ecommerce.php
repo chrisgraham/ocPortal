@@ -174,22 +174,26 @@ class Module_admin_ecommerce extends standard_crud_module
 	 * @param  integer		The length
 	 * @param  SHORT_TEXT	The units for the length
 	 * @set    y m d w
+	 * @param  BINARY			Auto-recur
 	 * @param  ?GROUP			The usergroup that purchasing gains membership to (NULL: super members)
 	 * @param  BINARY			Whether this is applied to primary usergroup membership
 	 * @param  BINARY			Whether this is currently enabled
 	 * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is start (NULL: default)
 	 * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is ended (NULL: default)
 	 * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (NULL: default)
+	 * @param  array			Other e-mails to send (NULL: none)
 	 * @param  ?AUTO_LINK	ID of existing subscription (NULL: new)
 	 * @return array			Tuple: The input fields, The hidden fields, The delete fields
 	 */
-	function get_form_fields($title='',$description='',$cost='9.99',$length=12,$length_units='m',$group_id=NULL,$uses_primary=0,$enabled=1,$mail_start=NULL,$mail_end=NULL,$mail_uhoh=NULL,$id=NULL)
+	function get_form_fields($title='',$description='',$cost='9.99',$length=12,$length_units='m',$auto_recur=1,$group_id=NULL,$uses_primary=0,$enabled=1,$mail_start=NULL,$mail_end=NULL,$mail_uhoh=NULL,$mails=NULL,$id=NULL)
 	{
 		if (($title=='') && (get_forum_type()=='ocf'))
 		{
 			$add_usergroup_url=build_url(array('page'=>'admin_ocf_groups','type'=>'ad'),get_module_zone('admin_ocf_groups'));
 			attach_message(do_lang_tempcode('ADD_USER_GROUP_FIRST',escape_html($add_usergroup_url->evaluate())),'inform',true);
 		}
+
+		$hidden=new ocp_tempcode();
 
 		if (is_null($group_id)) $group_id=get_param_integer('group_id',db_get_first_id()+3);
 		if (is_null($mail_start)) $mail_start=do_lang('_PAID_SUBSCRIPTION_STARTED',get_option('site_name'));
@@ -205,12 +209,21 @@ class Module_admin_ecommerce extends standard_crud_module
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_TITLE'),'title',$title,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_DESCRIPTION'),'description',$description,true));
 		$fields->attach(form_input_float(do_lang_tempcode('COST'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_COST'),'cost',floatval($cost),true));
+
 		$list=new ocp_tempcode();
 		foreach (array('d','w','m','y') as $unit)
 		{
 			$list->attach(form_input_list_entry($unit,$unit==$length_units,do_lang_tempcode('LENGTH_UNIT_'.$unit)));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('LENGTH_UNITS'),do_lang_tempcode('DESCRIPTION_LENGTH_UNITS'),'length_units',$list));
+		$fields->attach(form_input_integer(do_lang_tempcode('SUBSCRIPTION_LENGTH'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_LENGTH'),'length',$length,true));
+		if (cron_installed())
+		{
+			$fields->attach(form_input_tick(do_lang_tempcode('AUTO_RECUR'),do_lang_tempcode('DESCRIPTION_AUTO_RECUR'),'auto_recur',$auto_recur==1));
+		} else
+		{
+			$hidden->attach(form_input_hidden('auto_recur','1'));
+		}
 
 		$list=new ocp_tempcode();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
@@ -229,16 +242,40 @@ class Module_admin_ecommerce extends standard_crud_module
 			if ($id!=$GLOBALS['FORUM_DRIVER']->get_guest_id())
 				$list->attach(form_input_list_entry(strval($id),$id==$group_id,$group));
 		}
-
-		$fields->attach(form_input_integer(do_lang_tempcode('SUBSCRIPTION_LENGTH'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_LENGTH'),'length',$length,true));
 		$fields->attach(form_input_list(do_lang_tempcode('GROUP'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_GROUP'),'group_id',$list));
+
 		$fields->attach(form_input_tick(do_lang_tempcode('USES_PRIMARY'),do_lang_tempcode('DESCRIPTION_USES_PRIMARY'),'uses_primary',$uses_primary==1));
+
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_ENABLED'),'enabled',$enabled==1));
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'a03ec5b2afe5be764bd10694fc401fex','TITLE'=>do_lang_tempcode('SUBSCRIPTION_EVENT_EMAILS'))));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MAIL_START'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_MAIL_START'),'mail_start',$mail_start,true,NULL,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MAIL_END'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_MAIL_END'),'mail_end',$mail_end,true,NULL,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MAIL_UHOH'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_MAIL_UHOH'),'mail_uhoh',$mail_uhoh,false,NULL,true));
+
+		// Extra mails
+		if (is_null($mails)) $mails=array();
+		if (get_forum_type()=='ocf')
+		{
+			for ($i=0;$i<count($mails)+3/*Allow adding 3 on each edit*/;$i++)
+			{
+				$subject=isset($mails[$i])?$mails[$i]['subject']:'';
+				$body=isset($mails[$i])?$mails[$i]['body']:'';
+				$ref_point=isset($mails[$i])?$mails[$i]['ref_point']:'start';
+				$ref_point_offset=isset($mails[$i])?$mails[$i]['ref_point_offset']:0;
+
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('EXTRA_SUBSCRIPTION_MAIL',integer_format($i+1)),'SECTION_HIDDEN'=>($subject==''))));
+				$fields->attach(form_input_line_comcode(do_lang_tempcode('SUBJECT'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_SUBJECT'),'subject_'.strval($i),$subject,false));
+				$fields->attach(form_input_text_comcode(do_lang_tempcode('BODY'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_BODY'),'body_'.strval($i),$body,false,NULL,true));
+				$radios=new ocp_tempcode();
+				foreach (array('start','term_start','term_end','expiry') as $ref_point_type)
+				{
+					$radios->attach(form_input_radio_entry('ref_point_'.strval($i),$ref_point_type,$ref_point==$ref_point_type,do_lang_tempcode('_SUBSCRIPTION_'.strtoupper($ref_point_type).'_TIME')));
+				}
+				$fields->attach(form_input_radio(do_lang_tempcode('SUBSCRIPTION_REF_POINT'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_REF_POINT'),'ref_point_'.strval($i),$radios,true));
+				$fields->attach(form_input_integer(do_lang_tempcode('SUBSCRIPTION_REF_POINT_OFFSET'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_REF_POINT_OFFSET'),'ref_point_offset_'.strval($i),$ref_point_offset,true));
+			}
+		}
 
 		$delete_fields=NULL;
 		if ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)',array('s_type_code'=>'USERGROUP'.strval($id)))>0)
@@ -247,7 +284,7 @@ class Module_admin_ecommerce extends standard_crud_module
 			$delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_USERGROUP_SUB_DANGER'),'delete',false));
 		}
 
-		return array($fields,new ocp_tempcode(),$delete_fields,NULL,!is_null($delete_fields));
+		return array($fields,$hidden,$delete_fields,NULL,!is_null($delete_fields));
 	}
 
 	/**
@@ -335,11 +372,74 @@ class Module_admin_ecommerce extends standard_crud_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields(get_translated_text($r['s_title'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),get_translated_text($r['s_description'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),$r['s_cost'],$r['s_length'],$r['s_length_units'],$r['s_group_id'],$r['s_uses_primary'],$r['s_enabled'],get_translated_text($r['s_mail_start'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),get_translated_text($r['s_mail_end'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),get_translated_text($r['s_mail_uhoh'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),$id);
+		$_mails=$GLOBALS['FORUM_DB']->query_select('f_usergroup_sub_mails',array('*'),array('m_usergroup_sub_id'=>intval($id)),'ORDER BY id');
+		$mails=array();
+		foreach ($_mails as $_mail)
+		{
+			$mails[]=array(
+				'subject'=>get_translated_text($_mail['m_subject'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+				'body'=>get_translated_text($_mail['m_body'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+				'ref_point'=>$_mail['m_ref_point'],
+				'ref_point_offset'=>$_mail['m_ref_point_offset'],
+			);
+		}
+
+		$fields=$this->get_form_fields(
+			get_translated_text($r['s_title'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+			get_translated_text($r['s_description'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+			$r['s_cost'],
+			$r['s_length'],
+			$r['s_length_units'],
+			$r['s_auto_recur'],
+			$r['s_group_id'],
+			$r['s_uses_primary'],
+			$r['s_enabled'],
+			get_translated_text($r['s_mail_start'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+			get_translated_text($r['s_mail_end'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+			get_translated_text($r['s_mail_uhoh'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+			$mails,
+			$id
+		);
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 
 		return $fields;
+	}
+
+	/**
+	 * Get a mapping of extra mails for the usergroup subscription.
+	 *
+	 * @return array			Extra mails
+	 */
+	function _mails()
+	{
+		$mails=array();
+		foreach (array_keys($_POST) as $key)
+		{
+			$matches=array();
+			if (preg_match('#^subject_(\d+)$#',$key,$matches)!=0)
+			{
+				$subject=post_param('subject_'.$matches[1],'');
+				$body=post_param('body_'.$matches[1],'');
+				$ref_point=post_param('ref_point_'.$matches[1]);
+				$ref_point_offset=post_param_integer('ref_point_offset_'.$matches[1]);
+				if (($ref_point_offset<0) && ($ref_point!='expiry'))
+				{
+					$ref_point_offset=0;
+					attach_message(do_lang_tempcode('SUBSCRIPTION_REF_POINT_OFFSET_NEGATIVE_ERROR'),'warn');
+				}
+				if ($subject!='' && $body!='')
+				{
+					$mails[]=array(
+						'subject'=>$subject,
+						'body'=>$body,
+						'ref_point'=>$ref_point,
+						'ref_point_offset'=>$ref_point_offset,
+					);
+				}
+			}
+		}
+		return $mails;
 	}
 
 	/**
@@ -360,7 +460,10 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		$title=post_param('title');
 
-		return array(strval(add_usergroup_subscription($title,post_param('description'),post_param('cost'),post_param_integer('length'),post_param('length_units'),post_param_integer('group_id'),post_param_integer('uses_primary',0),post_param_integer('enabled',0),post_param('mail_start'),post_param('mail_end'),post_param('mail_uhoh'))),$text);
+		$mails=$this->_mails();
+
+		$id=add_usergroup_subscription($title,post_param('description'),post_param('cost'),post_param_integer('length'),post_param('length_units'),post_param_integer('auto_recur',0),post_param_integer('group_id'),post_param_integer('uses_primary',0),post_param_integer('enabled',0),post_param('mail_start'),post_param('mail_end'),post_param('mail_uhoh'),$mails);
+		return array(strval($id),$text);
 	}
 
 	/**
@@ -372,7 +475,9 @@ class Module_admin_ecommerce extends standard_crud_module
 	{
 		$title=post_param('title');
 
-		edit_usergroup_subscription(intval($id),$title,post_param('description'),post_param('cost'),post_param_integer('length'),post_param('length_units'),post_param_integer('group_id'),post_param_integer('uses_primary',0),post_param_integer('enabled',0),post_param('mail_start'),post_param('mail_end'),post_param('mail_uhoh'));
+		$mails=$this->_mails();
+
+		edit_usergroup_subscription(intval($id),$title,post_param('description'),post_param('cost'),post_param_integer('length'),post_param('length_units'),post_param_integer('auto_recur',0),post_param_integer('group_id'),post_param_integer('uses_primary',0),post_param_integer('enabled',0),post_param('mail_start'),post_param('mail_end'),post_param('mail_uhoh'),$mails);
 	}
 
 	/**

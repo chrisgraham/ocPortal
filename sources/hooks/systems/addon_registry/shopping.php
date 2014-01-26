@@ -126,17 +126,13 @@ class Hook_addon_registry_shopping
 			'sources/shopping.php',
 			'site/pages/modules/shopping.php',
 			'themes/default/templates/CATALOGUE_products_CATEGORY_SCREEN.tpl',
+			'themes/default/templates/CATALOGUE_products_CATEGORY_EMBED.tpl',
 			'themes/default/templates/CATALOGUE_products_ENTRY_SCREEN.tpl',
 			'themes/default/templates/CATALOGUE_products_GRID_ENTRY_FIELD.tpl',
 			'themes/default/templates/CATALOGUE_products_FIELDMAP_ENTRY_FIELD.tpl',
 			'themes/default/templates/CATALOGUE_products_GRID_ENTRY_WRAP.tpl',
 			'themes/default/templates/RESULTS_products_TABLE.tpl',
 			'themes/default/templates/JAVASCRIPT_SHOPPING.tpl',
-			'themes/default/templates/ECOM_SHOPPING_CART_PROCEED.tpl',
-			'themes/default/templates/ECOM_SHOPPING_CART_STAGE_PAY.tpl',
-			'themes/default/templates/ECOM_SHOPPING_CART_SCREEN.tpl',
-			'themes/default/templates/ECOM_SHOPPING_ITEM_QUANTITY_FIELD.tpl',
-			'themes/default/templates/ECOM_SHOPPING_ITEM_REMOVE_FIELD.tpl',
 			'themes/default/templates/CATALOGUE_ENTRY_CART_BUTTONS.tpl',
 			'adminzone/pages/modules/admin_orders.php',
 			'lang/EN/shopping.ini',
@@ -149,13 +145,17 @@ class Hook_addon_registry_shopping
 			'themes/default/templates/ECOM_ADMIN_ORDERS_SCREEN.tpl',
 			'themes/default/templates/ECOM_ORDERS_DETAILS_SCREEN.tpl',
 			'themes/default/templates/ECOM_ORDERS_SCREEN.tpl',
-			'themes/default/templates/RESULTS_cart_TABLE.tpl',
-			'themes/default/templates/RESULTS_TABLE_cart_ENTRY.tpl',
-			'themes/default/templates/RESULTS_TABLE_cart_FIELD.tpl',
 			'themes/default/templates/ECOM_SHIPPING_ADDRESS.tpl',
 			'themes/default/templates/ECOM_CART_BUTTON_VIA_PAYPAL.tpl',
 			'themes/default/templates/ECOM_ITEM_DETAILS.tpl',
-			'themes/default/templates/CATALOGUE_products_CATEGORY_EMBED.tpl',
+			'themes/default/templates/ECOM_SHOPPING_CART_PROCEED.tpl',
+			'themes/default/templates/ECOM_SHOPPING_CART_STAGE_PAY.tpl',
+			'themes/default/templates/ECOM_SHOPPING_CART_SCREEN.tpl',
+			'themes/default/templates/ECOM_SHOPPING_ITEM_QUANTITY_FIELD.tpl',
+			'themes/default/templates/ECOM_SHOPPING_ITEM_REMOVE_FIELD.tpl',
+			'themes/default/templates/RESULTS_cart_TABLE.tpl',
+			'themes/default/templates/RESULTS_TABLE_cart_ENTRY.tpl',
+			'themes/default/templates/RESULTS_TABLE_cart_FIELD.tpl',
 		);
 	}
 
@@ -225,12 +225,11 @@ class Hook_addon_registry_shopping
 			lorem_globalise(do_lorem_template('ECOM_ADMIN_ORDERS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CURRENCY'=>lorem_phrase(),
-				'ORDERS'=>placeholder_array(),
-				'PAGINATION'=>placeholder_pagination(),
 				'RESULTS_TABLE'=>placeholder_table(),
+				'PAGINATION'=>placeholder_pagination(),
 				'SEARCH_URL'=>placeholder_url(),
+				'SEARCH_VAL'=>lorem_phrase(),
 				'HIDDEN'=>'',
-				'SEARCH_VAL'=>lorem_phrase()
 			)),NULL,'',true)
 		);
 	}
@@ -323,29 +322,32 @@ class Hook_addon_registry_shopping
 		));
 
 		$shipping_address=do_lorem_template('ECOM_SHIPPING_ADDRESS',array(
+			'FIRST_NAME'=>lorem_phrase(),
+			'LAST_NAME'=>lorem_phrase(),
 			'ADDRESS_NAME'=>lorem_phrase(),
 			'ADDRESS_STREET'=>lorem_phrase(),
 			'ADDRESS_CITY'=>lorem_phrase(),
+			'ADDRESS_STATE'=>lorem_phrase(),
 			'ADDRESS_ZIP'=>lorem_phrase(),
 			'ADDRESS_COUNTRY'=>lorem_phrase(),
-			'RECEIVER_EMAIL'=>lorem_phrase()
+			'RECEIVER_EMAIL'=>lorem_phrase(),
+			'CONTACT_PHONE'=>lorem_phrase(),
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence(),
-				'CURRENCY'=>lorem_phrase(),
 				'RESULTS_TABLE'=>placeholder_table(),
 				'PAGINATION'=>placeholder_pagination(),
 				'ORDER_NUMBER'=>placeholder_number(),
 				'ADD_DATE'=>placeholder_date(),
+				'CURRENCY'=>lorem_phrase(),
 				'TOTAL_PRICE'=>placeholder_number(),
 				'ORDERED_BY_MEMBER_ID'=>placeholder_id(),
 				'ORDERED_BY_USERNAME'=>lorem_word(),
 				'ORDER_STATUS'=>lorem_phrase(),
 				'NOTES'=>lorem_phrase(),
-				'PURCHASED_VIA'=>lorem_phrase(),
 				'ORDER_ACTIONS'=>$order_actions,
 				'SHIPPING_ADDRESS'=>$shipping_address
 			)),NULL,'',true)

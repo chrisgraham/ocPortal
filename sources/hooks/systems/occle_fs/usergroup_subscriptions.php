@@ -81,6 +81,7 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
 			'mail_end'=>'LONG_TRANS',
 			'mail_uhoh'=>'LONG_TRANS',
 			'uses_primary'=>'BINARY',
+			'mails'=>'LONG_TEXT',
 		);
 	}
 
@@ -114,14 +115,17 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
 		$cost=$this->_default_property_int($properties,'cost');
 		$length=$this->_default_property_int($properties,'length');
 		$length_units=$this->_default_property_str($properties,'length_units');
+		$auto_recur=$this->_default_property_int($properties,'auto_recur');
 		$group_id=$this->_default_property_int($properties,'group_id');
 		$uses_primary=$this->_default_property_int($properties,'uses_primary');
 		$enabled=$this->_default_property_int($properties,'enabled');
 		$mail_start=$this->_default_property_str($properties,'mail_start');
 		$mail_end=$this->_default_property_str($properties,'mail_end');
 		$mail_uhoh=$this->_default_property_str($properties,'mail_uhoh');
+		$_mails=$this->_default_property_str($properties,'mails');
+		$mails=($_mails=='')?array():unserialize($_mails);
 
-		$id=add_usergroup_subscription($label,$description,$cost,$length,$length_units,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh);
+		$id=add_usergroup_subscription($label,$description,$cost,$length,$length_units,$auto_recur,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh,$mails);
 		return strval($id);
 	}
 
@@ -140,6 +144,23 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
 		if (!array_key_exists(0,$rows)) return false;
 		$row=$rows[0];
 
+		$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
+		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+
+		$_mails=$GLOBALS['FORUM_DB']->query_select('f_usergroup_sub_mails',array('*'),array('m_usergroup_sub_id'=>intval($resource_id)),'ORDER BY id');
+		$mails=array();
+		foreach ($_mails as $_mail)
+		{
+			$mails[]=array(
+				'subject'=>get_translated_text($_mail['m_subject'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+				'body'=>get_translated_text($_mail['m_body'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+				'ref_point'=>$_mail['m_ref_point'],
+				'ref_point_offset'=>$_mail['m_ref_point_offset'],
+			);
+		}
+
+		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
+
 		return array(
 			'label'=>$row['s_title'],
 			'description'=>$row['s_description'],
@@ -152,6 +173,7 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
 			'mail_end'=>$row['s_mail_end'],
 			'mail_uhoh'=>$row['s_mail_uhoh'],
 			'uses_primary'=>$row['s_uses_primary'],
+			'mails'=>serialize($mails),
 		);
 	}
 
@@ -175,14 +197,17 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
 		$cost=$this->_default_property_int($properties,'cost');
 		$length=$this->_default_property_int($properties,'length');
 		$length_units=$this->_default_property_str($properties,'length_units');
+		$auto_recur=$this->_default_property_int($properties,'auto_recur');
 		$group_id=$this->_default_property_int($properties,'group_id');
 		$uses_primary=$this->_default_property_int($properties,'uses_primary');
 		$enabled=$this->_default_property_int($properties,'enabled');
 		$mail_start=$this->_default_property_str($properties,'mail_start');
 		$mail_end=$this->_default_property_str($properties,'mail_end');
 		$mail_uhoh=$this->_default_property_str($properties,'mail_uhoh');
+		$_mails=$this->_default_property_str($properties,'mails');
+		$mails=($_mails=='')?array():unserialize($_mails);
 
-		edit_usergroup_subscription(intval($resource_id),$label,$description,$cost,$length,$length_units,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh);
+		edit_usergroup_subscription(intval($resource_id),$label,$description,$cost,$length,$length_units,$auto_recur,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh,$mails);
 
 		return $resource_id;
 	}

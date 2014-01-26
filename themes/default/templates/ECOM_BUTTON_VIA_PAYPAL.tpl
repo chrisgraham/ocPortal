@@ -1,10 +1,11 @@
 <form title="{!MAKE_PAYMENT}" class="left" action="{IPN_URL*}" method="post">
 	<input type="hidden" name="cmd" value="_xclick" />
+	<input type="hidden" name="charset" value="{!charset}" />
 	<input type="hidden" name="business" value="{PAYMENT_ADDRESS*}" />
 	<input type="hidden" name="amount" value="{AMOUNT*}" />
-	<input type="hidden" name="notify_url" value="{$FIND_SCRIPT*,ecommerce}?from=paypal&amp;product={PRODUCT*}" />
+	<input type="hidden" name="notify_url" value="{$FIND_SCRIPT*,ecommerce}?from=paypal&amp;type_code={TYPE_CODE*}" />
 	<input type="hidden" name="no_shipping" value="1" />
-	<input type="hidden" name="return" value="{$PAGE_LINK*,_SEARCH:purchase:finish:product={PRODUCT}:from=paypal}" />
+	<input type="hidden" name="return" value="{$PAGE_LINK*,_SEARCH:purchase:finish:type_code={TYPE_CODE}:from=paypal}" />
 	<input type="hidden" name="cancel_return" value="{$PAGE_LINK*,_SEARCH:purchase:finish:cancel=1:from=paypal}" />
 	<input type="hidden" name="currency_code" value="{CURRENCY*}" />
 	<input type="hidden" name="custom" value="{PURCHASE_ID*}" />

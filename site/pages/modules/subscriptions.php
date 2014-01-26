@@ -51,6 +51,7 @@ class Module_subscriptions
 		$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		$GLOBALS['SITE_DB']->drop_table_if_exists('f_usergroup_subs');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('f_usergroup_sub_mails');
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 	}
 
@@ -71,12 +72,12 @@ class Module_subscriptions
 				'id'=>'*AUTO', // linked to IPN with this
 				's_type_code'=>'ID_TEXT',
 				's_member_id'=>'MEMBER',
-				's_state'=>'ID_TEXT', // new|pending|active|cancelled (pending means payment has been requested)
+				's_state'=>'ID_TEXT', // pending|new|active|cancelled (pending means payment has been requested)
 				's_amount'=>'SHORT_TEXT', // can't always find this from s_type_code
-				's_special'=>'SHORT_TEXT', // depending on s_type_code, would trigger something special such as a key upgrade
+				's_purchase_id'=>'ID_TEXT',
 				's_time'=>'TIME',
-				's_auto_fund_source'=>'ID_TEXT', // Used by PayPal for nothing much, but is of real use if we need to schedule our own subscription transactions
-				's_auto_fund_key'=>'SHORT_TEXT', // Ditto as above: we can serialize cc numbers etc into here
+				's_auto_fund_source'=>'ID_TEXT', // The payment gateway
+				's_auto_fund_key'=>'SHORT_TEXT', // Used by PayPal for nothing much, but is of real use if we need to schedule our own subscription transactions
 				's_via'=>'ID_TEXT', // An eCommerce hook or 'manual'
 
 				// Copied through from what the hook says at setup, in case the hook later changes
@@ -91,6 +92,7 @@ class Module_subscriptions
 				's_cost'=>'SHORT_TEXT',
 				's_length'=>'INTEGER',
 				's_length_units'=>'SHORT_TEXT',
+				's_auto_recur'=>'BINARY',
 				's_group_id'=>'GROUP',
 				's_enabled'=>'BINARY',
 				's_mail_start'=>'LONG_TRANS',
@@ -100,8 +102,21 @@ class Module_subscriptions
 			));
 		}
 
+		if ((is_null($upgrade_from)) || ($upgrade_from<5))
+		{
+			$GLOBALS['SITE_DB']->create_table('f_usergroup_sub_mails',array(
+				'id'=>'*AUTO',
+				'm_usergroup_sub_id'=>'AUTO_LINK',
+				'm_ref_point'=>'ID_TEXT', // start|term_start|term_end|expiry
+				'm_ref_point_offset'=>'INTEGER',
+				'm_subject'=>'SHORT_TRANS',
+				'm_body'=>'LONG_TRANS',
+			));
+		}
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
+			$GLOBALS['SITE_DB']->alter_table_field('subscriptions','s_special','ID_TEXT','s_purchase_id');
 			$GLOBALS['SITE_DB']->add_table_field('subscriptions','s_length','INTEGER',1);
 			$GLOBALS['SITE_DB']->add_table_field('subscriptions','s_length_units','SHORT_TEXT','m');
 			$subscriptions=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'));
@@ -120,6 +135,8 @@ class Module_subscriptions
 				);
 				$GLOBALS['SITE_DB']->query_update('subscriptions',$update_map,array('id'=>$sub['id']),'',1);
 			}
+
+			$GLOBALS['SITE_DB']->add_table_field('f_usergroup_subs','s_auto_recur','BINARY',1);
 		}
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
@@ -235,7 +252,7 @@ class Module_subscriptions
 			if ($hook->auto_cancel($id)!==true)
 			{
 				require_code('notifications');
-				$trans_id=$GLOBALS['SITE_DB']->query_select_value('transactions','id',array('purchase_id'=>strval($id)));
+				$trans_id=$GLOBALS['SITE_DB']->query_select_value('transactions','id',array('t_purchase_id'=>strval($id)));
 				$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 				dispatch_notification('subscription_cancelled_staff',NULL,do_lang('SUBSCRIPTION_CANCELLED_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),do_lang('SUBSCRIPTION_CANCELLED_BODY',$trans_id,$username,NULL,get_site_default_lang()));
 			}

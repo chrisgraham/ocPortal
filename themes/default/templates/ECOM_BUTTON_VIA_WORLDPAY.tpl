@@ -1,6 +1,6 @@
 <form title="{!MAKE_PAYMENT}" class="left" action="{IPN_URL*}" method="post">
 	<input type="hidden" name="instId" value="{USERNAME*}" />
-	<input type="hidden" name="MC_callback" value="{$REPLACE,https://,,{$REPLACE,http://,,{$FIND_SCRIPT*,ecommerce}?from=worldpay&amp;product={PRODUCT*}}}" />
+	<input type="hidden" name="MC_callback" value="{$REPLACE,https://,,{$REPLACE,http://,,{$FIND_SCRIPT*,ecommerce}?from=worldpay&amp;type_code={TYPE_CODE*}}}" />
 	<input type="hidden" name="cartId" value="{PURCHASE_ID*}" />
 	<input type="hidden" name="amount" value="{AMOUNT*}" />
 	<input type="hidden" name="currency" value="{CURRENCY*}" />
