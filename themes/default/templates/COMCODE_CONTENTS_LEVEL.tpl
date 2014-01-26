@@ -1,4 +1,3 @@
-<ol style="list-style-type: {TYPE|}">
+<ol style="list-style-type: {$REPLACE*,;,,{TYPE}}">
 	{LINES}
 </ol>
-

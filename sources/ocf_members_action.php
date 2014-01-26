@@ -145,7 +145,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	}
 	if (is_null($secondary_groups))
 	{
-		$secondary_groups=ocf_get_all_default_groups();
+		$secondary_groups=ocf_get_all_default_groups(false);
 	}
 	foreach ($secondary_groups as $_g_id=>$g_id)
 	{

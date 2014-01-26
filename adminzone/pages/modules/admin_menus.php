@@ -191,6 +191,10 @@ class Module_admin_menus
 			require_code('templates_confirm_screen');
 			return confirm_screen($this->title,$preview,$confirm_url,NULL,array('copy_from'=>get_option('header_menu_call_string'),'switch_over'=>1));
 		}
+
+		require_code('type_validation');
+		if (!is_alphanumeric($id,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 		$copy_from=post_param('copy_from',NULL);
 		if ($copy_from!==NULL)
 		{

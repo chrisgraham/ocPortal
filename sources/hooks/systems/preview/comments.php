@@ -27,7 +27,7 @@ class Hook_Preview_comments
 	 */
 	function applies()
 	{
-		$applies=((get_param('page')!='topicview') && (post_param_integer('_comment_form_post',0)==1) && (is_null(post_param('hidFileID_file0',NULL))) && (is_null(post_param('file0',NULL))));
+		$applies=((addon_installed('ocf_forum')) && (get_param('page')!='topicview') && (post_param_integer('_comment_form_post',0)==1) && (is_null(post_param('hidFileID_file0',NULL))) && (is_null(post_param('file0',NULL))));
 		return array($applies,NULL,false);
 	}
 

@@ -276,8 +276,10 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 	$ignore_extensions=array( // Case insensitive, define in lower case
 		// Exports (effectively these are like temporary files - only intended for file transmission)
 		'tar'=>'(imports|exports)/.*',
-		'gz'=>'(imports|exports)/.*',
 		'txt'=>'(imports|exports)/.*',
+
+		// Exports/Cache files
+		'gz'=>'(themes/[^/]*/templates_cached|imports|exports)/.*',
 
 		// Cache files
 		'lcd'=>'(caches|lang_cached)/.*', // LEGACY
@@ -286,7 +288,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'tcd'=>'themes/[^/]*/templates_cached/.*',
 		'css'=>'themes/[^/]*/templates_cached/.*',
 		'js'=>'themes/[^/]*/templates_cached/.*',
-		'gz'=>'themes/[^/]*/templates_cached/.*',
 
 		// Logs
 		'log'=>'.*',

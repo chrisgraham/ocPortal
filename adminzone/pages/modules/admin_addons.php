@@ -313,6 +313,8 @@ class Module_admin_addons
 	 */
 	function gui()
 	{
+		if (function_exists('set_time_limit')) @set_time_limit(180); // So it can scan inside addons
+
 		$addons_installed=find_installed_addons();
 		$addons_available_for_installation=find_available_addons();
 

@@ -630,6 +630,9 @@ msgstr ""
 		$lang_new=get_param('lang_new',$lang);
 		if ($lang_new!='')
 		{
+			require_code('type_validation');
+			if (!is_alphanumeric($lang_new,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 			if (strlen($lang_new)>5)
 			{
 				warn_exit(do_lang_tempcode('INVALID_LANG_CODE'));

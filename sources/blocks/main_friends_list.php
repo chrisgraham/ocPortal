@@ -110,6 +110,7 @@ class Block_main_friends_list
 					}
 				}
 
+				require_code('ocf_members');
 				require_code('ocf_members2');
 				require_lang('ocf');
 

@@ -36,6 +36,9 @@
  */
 function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify=false)
 {
+	require_code('type_validation');
+	if (!is_alphanumeric($tag,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 	require_code('comcode_compiler');
 
 	global $VALID_COMCODE_TAGS;
@@ -94,6 +97,9 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
  */
 function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify=false)
 {
+	require_code('type_validation');
+	if (!is_alphanumeric($tag,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 	require_code('comcode_compiler');
 
 	global $VALID_COMCODE_TAGS;

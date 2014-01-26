@@ -100,7 +100,7 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
 function actual_add_zone($zone,$title,$default_page='start',$header_text='',$theme='default',$require_session=0,$uniqify=false,$base_url='')
 {
 	require_code('type_validation');
-	if (!is_alphanumeric($zone)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+	if (!is_alphanumeric($zone,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 	if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
@@ -727,7 +727,7 @@ function _find_all_pages($zone,$type,$ext='php',$keep_ext_on=false,$cutoff_time=
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if ((substr($file,-4)=='.'.$ext) && (file_exists($stub.'/'.$module_path.'/'.$file)) && (preg_match('#^[\w\-]*$#',substr($file,0,strlen($file)-4))!=0))
+			if ((substr($file,-4)=='.'.$ext) && (file_exists($stub.'/'.$module_path.'/'.$file)) && (preg_match('#^[\w\-\.]*$#',substr($file,0,strlen($file)-4))!=0))
 			{
 				if (!is_null($cutoff_time))
 					if (filectime($stub.'/'.$module_path.'/'.$file)<$cutoff_time) continue;

@@ -207,7 +207,7 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	if (is_null($add_time)) $add_time=time();
 
 	require_code('type_validation');
-	if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+	if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 	// Check doesn't already exist
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>$name));
@@ -363,7 +363,7 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 		}
 
 		require_code('type_validation');
-		if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 	}
 
 	$rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_description','c_title'),array('c_name'=>$old_name),'',1);

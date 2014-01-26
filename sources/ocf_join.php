@@ -62,16 +62,16 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 	$hidden->attach(build_keep_post_fields());
 
 	$groups=ocf_get_all_default_groups(true);
-	$additional_group=either_param_integer('additional_group',-1);
-	if (($additional_group!=-1) && (!in_array($additional_group,$groups)))
+	$primary_group=either_param_integer('primary_group',NULL);
+	if (($primary_group!==NULL) && (!in_array($primary_group,$groups)))
 	{
 		// Check security
-		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
+		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$primary_group));
 		if ($test==1)
 		{
 			$groups=ocf_get_all_default_groups(false);
-			$hidden=form_input_hidden('additional_group',strval($additional_group));
-			$groups[]=$additional_group;
+			$hidden=form_input_hidden('primary_group',strval($primary_group));
+			$groups[]=$primary_group;
 		}
 	}
 
@@ -259,22 +259,21 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	$language=post_param('language',get_site_default_lang());
 	$allow_emails=post_param_integer('allow_emails',0);
 	$allow_emails_from_staff=post_param_integer('allow_emails_from_staff',0);
-	$groups=ocf_get_all_default_groups(true);
-	$additional_group=post_param_integer('additional_group',-1);
-	if (($additional_group!=-1) && (!in_array($additional_group,$groups)))
+	$groups=ocf_get_all_default_groups(true); // $groups will contain the built in default primary group too (it is not $secondary_groups)
+	$primary_group=post_param_integer('primary_group',NULL);
+	if (($primary_group!==NULL) && (!in_array($primary_group,$groups)/*= not built in default, which is automatically ok to join without extra security*/))
 	{
 		// Check security
-		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
+		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$primary_group));
 		if ($test==1)
 		{
-			$groups=ocf_get_all_default_groups(false);
-			$groups[]=$additional_group;
-		} else $additional_group=-1;
-	} else $additional_group=-1;
-	if ($additional_group==-1)
+			$groups=ocf_get_all_default_groups(false); // Get it so it does not include the built in default primary group
+			$groups[]=$primary_group; // And add in the *chosen* primary group
+		} else $primary_group=NULL;
+	} else $primary_group=NULL;
+	if ($primary_group===NULL) // Security error, or built in default (which will already be in $groups)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array('g_is_presented_at_install'=>1));
-		if (!is_null($test)) $additional_group=$test;
+		$primary_group=get_first_default_group();
 	}
 	$custom_fields=ocf_get_all_custom_fields_match($groups,NULL,NULL,NULL,NULL,NULL,NULL,0,true);
 	$actual_custom_fields=ocf_read_in_custom_fields($custom_fields);
@@ -332,7 +331,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	$coppa=(get_option('is_on_coppa')=='1') && (utctime_to_usertime(time()-mktime(0,0,0,$dob_month,$dob_day,$dob_year))/31536000.0<13.0);
 	if (!$coppa_if_enabled) $coppa=false;
 	$validated=($require_new_member_validation || $coppa)?0:1;
-	if (is_null($member_id)) $member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,($additional_group!=-1)?$additional_group:NULL,$validated,time(),time(),'',NULL,'',0,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'','','',1,(get_option('allow_auto_notifications')=='0')?0:1,$language,$allow_emails,$allow_emails_from_staff,get_ip_address(),$validated_email_confirm_code,true,'','');
+	if (is_null($member_id)) $member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),time(),'',NULL,'',0,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'','','',1,(get_option('allow_auto_notifications')=='0')?0:1,$language,$allow_emails,$allow_emails_from_staff,get_ip_address(),$validated_email_confirm_code,true,'','');
 
 	// Send confirm mail
 	if (!$skip_confirm)

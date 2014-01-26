@@ -15,6 +15,7 @@ cacls caches\lang /e /g %user%:F
 cacls caches\lang\* /e /g %user%:F
 cacls lang_custom /e /g %user%:F
 cacls lang_custom\* /e /g %user%:F
+cacls lang_custom\*\* /e /g %user%:F
 cacls themes\map.ini /e /g %user%:F
 cacls themes\default /e /g %user%:F
 cacls themes\default\css_custom /e /g %user%:F

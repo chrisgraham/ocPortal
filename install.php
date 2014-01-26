@@ -1562,11 +1562,11 @@ function step_5_write_config()
  */
 function git_repos()
 {
-    $path=dirname(__FILE__).\'/.git/HEAD\';
-    if (!is_file($path)) return \'\';
-    $lines=file($path);
-    $parts=explode(\'/\',$lines[0]);
-    return trim(end($parts));
+	$path=dirname(__FILE__).\'/.git/HEAD\';
+	if (!is_file($path)) return \'\';
+	$lines=file($path);
+	$parts=explode(\'/\',$lines[0]);
+	return trim(end($parts));
 }
 ');
 

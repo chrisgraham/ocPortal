@@ -541,7 +541,7 @@ class Module_purchase
 
 				attach_message(do_lang_tempcode('SUCCESS'),'inform');
 
-				$object=find_product($type_code);
+				$product_object=find_product($type_code);
 
 				if (method_exists($product_object,'get_finish_url'))
 				{

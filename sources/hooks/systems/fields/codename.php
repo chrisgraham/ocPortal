@@ -121,7 +121,7 @@ class Hook_fields_codename
 		{
 			if ((strpos($value,'://')===false) && (substr($value,0,4)=='www.')) $value='http://'.$value;
 
-			if (!is_alphanumeric($value))
+			if (!is_alphanumeric($value,true))
 			{
 				if (strpos($value,'://')!==false) // strip out from URL, if full URL was entered
 				{

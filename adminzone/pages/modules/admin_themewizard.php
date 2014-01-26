@@ -320,7 +320,7 @@ class Module_admin_themewizard
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		require_code('type_validation');
-		if ((!is_alphanumeric($themename)) || (strlen($themename)>40)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if ((!is_alphanumeric($themename,true)) || (strlen($themename)>40)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 		make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark==1,$inherit_css==1);
 		$myfile=@fopen(get_custom_file_base().'/themes/'.filter_naughty($themename).'/theme.ini',GOOGLE_APPENGINE?'wb':'wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($themename).'/theme.ini');
 		fwrite($myfile,'title='.$themename."\n");

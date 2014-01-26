@@ -243,7 +243,7 @@ class Module_cms_comcode_pages
 				if (substr($file,0,strlen($find_for)+1)==$find_for.'.')
 				{
 					$temp=explode('.',$file);
-					if (isset($temp[2]))
+					if ((isset($temp[2])) && (is_numeric($temp[2])))
 						$filesarray[$zone.':'.$file]=array($zone.'/pages/'.$subdir.'/'.$file,intval($temp[2]));
 				}
 			}
@@ -609,7 +609,7 @@ class Module_cms_comcode_pages
 		if (($zone!='') && (!file_exists(get_file_base().'/'.$zone.'/pages'))) warn_exit(do_lang_tempcode('NO_SUCH_ZONE'));
 
 		require_code('type_validation');
-		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if (!is_alphanumeric($file,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$lang=choose_language(get_screen_title(($file=='')?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT'),true);
 		if (is_object($lang)) return $lang;
@@ -912,6 +912,10 @@ class Module_cms_comcode_pages
 			$new_file=filter_naughty(has_actual_page_access(get_member(),'admin_sitemap')?post_param('title',$file):$file);
 		} else $new_file=filter_naughty($file);
 		if ($file=='') $file=$new_file;
+
+		require_code('type_validation');
+		if (!is_alphanumeric($file,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 		$validated=post_param_integer('validated',0);
 		if (!addon_installed('unvalidated')) $validated=1;
 		require_code('antispam');

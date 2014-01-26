@@ -38,7 +38,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$requir
 	if ($zone!=$new_zone)
 	{
 		require_code('type_validation');
-		if (!is_alphanumeric($new_zone)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if (!is_alphanumeric($new_zone,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
